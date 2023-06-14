@@ -1,4 +1,3 @@
-import { ImagePosition } from 'graphql/generated';
 import React from 'react';
 import { createUseStyles } from 'react-jss';
 import { useStoreState } from 'state';
@@ -6,8 +5,6 @@ import { useStoreState } from 'state';
 const useStyles = createUseStyles({
   container: {
     position: 'relative',
-    width: '100%',
-    height: '100%',
     overflow: 'hidden',
   },
   imageContainer: {
@@ -45,44 +42,18 @@ const useStyles = createUseStyles({
       '-1px -1px 0 #212020, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000',
     userSelect: 'none',
   },
-  image: {
-    width: '100%',
-    height: '100%',
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'cover',
-    backgroundPosition: 'center center',
-    color: '#fff',
-  },
-  standardImage: {
-    maxHeight: '100vh',
-  },
 });
 
-const getPosition = (position?: ImagePosition): string => {
-  if (position === ImagePosition.CenterBottom) return 'center bottom';
-  if (position === ImagePosition.CenterTop) return 'center top';
-  if (position === ImagePosition.LeftBottom) return 'left bottom';
-  if (position === ImagePosition.LeftCenter) return 'left center';
-  if (position === ImagePosition.LeftTop) return 'left top';
-  if (position === ImagePosition.RightBottom) return 'right bottom';
-  if (position === ImagePosition.RightCenter) return 'right center';
-  if (position === ImagePosition.RightTop) return 'right top';
-  return 'center center';
-};
-
 interface Props {
-  url?: string | null;
-  image?: boolean;
-  position?: ImagePosition;
-  rotation?: number;
+  children: JSX.Element;
 }
 
-const WatermarkImage = ({ url, image, position, rotation = 0 }: Props) => {
+const WatermarkOverlay = ({ children }: Props) => {
   const classes = useStyles();
   const reference = useStoreState((state) => state.user.reference);
 
   return (
-    <div className={image ? classes.imageContainer : classes.container}>
+    <div className={classes.container}>
       <div className={classes.textOverlay} />
       <div style={{ left: '-70%' }} className={classes.textContainer}>
         <span className={classes.text}>{reference}</span>
@@ -149,25 +120,9 @@ const WatermarkImage = ({ url, image, position, rotation = 0 }: Props) => {
         <span className={classes.text}>{reference}</span>
         <span className={classes.text}>{reference}</span>
       </div>
-      {!image && (
-        <div
-          className={classes.image}
-          style={{
-            backgroundImage: `url(${url})`,
-            backgroundPosition: getPosition(position),
-            transform: `rotate(${rotation}deg)`,
-          }}
-        />
-      )}
-      {image && (
-        <img
-          className={classes.standardImage}
-          src={url || undefined}
-          alt="lightbox"
-        />
-      )}
+      {children}
     </div>
   );
 };
 
-export default WatermarkImage;
+export default WatermarkOverlay;

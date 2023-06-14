@@ -54,13 +54,9 @@ import { calcExpired } from 'utils/offender/get-offender-exclusion';
 import OffenderSideList from 'components/offenders/OffenderSideList';
 import moment from 'moment';
 import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
-import Lightbox from 'yet-another-react-lightbox';
-import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import UpdateContent from 'views/incidents/ViewIncident/Update.view';
 import UpdateBar from 'components/MessageInput/UpdateBar';
-import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
-import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import IncidentTable from 'components/tables/IncidentTable';
 import VehicleTable from 'components/tables/VehicleTable';
@@ -70,6 +66,8 @@ import MapCard from 'components/map/MapCard/MapCard.view';
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
 import AssociatedOffender from 'components/offenders/AssociatedOffender';
 import { calcDuration } from 'utils';
+import LightBox from 'components/images/LightBox/LightBox.container';
+import OffenderMatches from 'components/rekognition/OffenderMatches/OffenderMatches.container';
 import type { ViewAssociate } from './useViewOffender';
 import useStyles from './ViewOffender.styles';
 
@@ -87,9 +85,6 @@ interface Props {
   toggleLinkIncident: () => void;
   updateIncidentList: (value: string) => void;
   toggleSubscribe: () => void;
-  lightboxElements: {
-    src: string;
-  }[];
   scrolledToTop: () => void;
   loadMore: boolean;
   userId: string;
@@ -138,6 +133,8 @@ interface Props {
   associatesLoading: boolean;
   viewAssociate: ViewAssociate | null;
   toggleViewAssociate: (value: ViewAssociate | null) => void;
+  viewMatches: string | null;
+  toggleViewMatches: (offenderId: string | null) => void;
 }
 
 const ViewOffender = ({
@@ -152,7 +149,6 @@ const ViewOffender = ({
   toggleLinkIncident,
   updateIncidentList,
   toggleSubscribe,
-  lightboxElements,
   scrolledToTop,
   loadMore,
   userId,
@@ -181,6 +177,8 @@ const ViewOffender = ({
   associatesLoading,
   toggleViewAssociate,
   viewAssociate,
+  toggleViewMatches,
+  viewMatches,
 }: Props): JSX.Element => {
   const classes = useStyles();
   return (
@@ -192,6 +190,15 @@ const ViewOffender = ({
 
         <Col flex={1} className={classes.detailsContent}>
           <Row gutter={8} className={classes.headerBar} justify="end">
+            {data?.offender?.searchedMatches &&
+              data?.offender?.searchedMatches.length > 0 && (
+                <Col>
+                  <Button danger onClick={() => toggleViewMatches(offenderId)}>
+                    {data.offender.searchedMatches.length} Face ID Match
+                    {data.offender.searchedMatches.length > 1 ? 'es' : ''}
+                  </Button>
+                </Col>
+              )}
             <Col>
               <Tooltip
                 title={
@@ -267,6 +274,26 @@ const ViewOffender = ({
               </Col>
             ))}
           </Row>
+          {loading && (
+            <Row style={{ width: '100%', marginBottom: 20, marginLeft: 10 }}>
+              <Row gutter={8} className={classes.offenderRow}>
+                {Array.from({ length: 4 }).map((_, index) => (
+                  // eslint-disable-next-line react/no-array-index-key
+                  <Col key={index}>
+                    <Skeleton.Avatar
+                      active
+                      shape="square"
+                      style={{
+                        height: 200,
+                        width: 150,
+                        borderRadius: '0.625rem',
+                      }}
+                    />
+                  </Col>
+                ))}
+              </Row>
+            </Row>
+          )}
           <div className={classes.content}>
             <Card>
               <Title style={{ margin: 0 }} level={3}>
@@ -1121,7 +1148,7 @@ const ViewOffender = ({
           onChange={(e) => setEditUpdateInput(e.target.value)}
         />
       </Modal>
-      <Lightbox
+      {/* <Lightbox
         open={lightBoxOpen.open}
         close={() => openLightbox(0)}
         plugins={[Zoom]}
@@ -1135,7 +1162,23 @@ const ViewOffender = ({
             <WatermarkSlide slide={slide} />
           ),
         }}
+      /> */}
+
+      <LightBox
+        images={data?.offender?.images}
+        open={lightBoxOpen.open}
+        close={() => openLightbox(0)}
+        index={lightBoxOpen.index}
       />
+
+      <Drawer
+        open={viewMatches !== null}
+        onClose={() => toggleViewMatches(null)}
+        title="View Face AI matches"
+        width={800}
+      >
+        {viewMatches && <OffenderMatches offenderId={viewMatches} />}
+      </Drawer>
     </div>
   );
 };

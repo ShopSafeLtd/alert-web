@@ -5358,7 +5358,10 @@ export type BanScalarWhereInput = {
 export enum BanType {
   Cbo = 'CBO',
   CommunityBan = 'COMMUNITY_BAN',
+  Cpn = 'CPN',
+  Cpw = 'CPW',
   Other = 'OTHER',
+  Pspo = 'PSPO',
 }
 
 export type BanUpdateInput = {
@@ -13752,6 +13755,7 @@ export type Image = {
   position: ImagePosition;
   primary?: Maybe<Scalars['Boolean']>;
   reportIcons: Array<Scheme>;
+  rotation: Scalars['Int'];
   scheme: Scheme;
   update?: Maybe<Update>;
   updatedAt: Scalars['DateTime'];
@@ -13819,6 +13823,7 @@ export type ImageCreateInput = {
   recycled?: InputMaybe<Scalars['Boolean']>;
   rekImage?: InputMaybe<Scalars['String']>;
   reportIcons?: InputMaybe<SchemeCreateNestedManyWithoutReportIconsInput>;
+  rotation?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
   schemeDark?: InputMaybe<SchemeCreateNestedManyWithoutDarkLogoInput>;
   update?: InputMaybe<UpdateCreateNestedOneWithoutImagesInput>;
@@ -13845,6 +13850,7 @@ export type ImageCreateManyArticleColumnInput = {
   primary?: InputMaybe<Scalars['Boolean']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   rekImage?: InputMaybe<Scalars['String']>;
+  rotation?: InputMaybe<Scalars['Int']>;
   schemeId: Scalars['String'];
   updateId?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -13874,6 +13880,7 @@ export type ImageCreateManyIncidentInput = {
   primary?: InputMaybe<Scalars['Boolean']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   rekImage?: InputMaybe<Scalars['String']>;
+  rotation?: InputMaybe<Scalars['Int']>;
   schemeId: Scalars['String'];
   updateId?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -13903,6 +13910,7 @@ export type ImageCreateManyMessageInput = {
   primary?: InputMaybe<Scalars['Boolean']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   rekImage?: InputMaybe<Scalars['String']>;
+  rotation?: InputMaybe<Scalars['Int']>;
   schemeId: Scalars['String'];
   updateId?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -13933,6 +13941,7 @@ export type ImageCreateManySchemeInput = {
   primary?: InputMaybe<Scalars['Boolean']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   rekImage?: InputMaybe<Scalars['String']>;
+  rotation?: InputMaybe<Scalars['Int']>;
   updateId?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   uploaded?: InputMaybe<Scalars['Boolean']>;
@@ -13962,6 +13971,7 @@ export type ImageCreateManyUpdateInput = {
   primary?: InputMaybe<Scalars['Boolean']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   rekImage?: InputMaybe<Scalars['String']>;
+  rotation?: InputMaybe<Scalars['Int']>;
   schemeId: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   uploaded?: InputMaybe<Scalars['Boolean']>;
@@ -13991,6 +14001,7 @@ export type ImageCreateManyUploadedByInput = {
   primary?: InputMaybe<Scalars['Boolean']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   rekImage?: InputMaybe<Scalars['String']>;
+  rotation?: InputMaybe<Scalars['Int']>;
   schemeId: Scalars['String'];
   updateId?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -14228,6 +14239,7 @@ export type ImageCreateWithoutActionsInput = {
   recycled?: InputMaybe<Scalars['Boolean']>;
   rekImage?: InputMaybe<Scalars['String']>;
   reportIcons?: InputMaybe<SchemeCreateNestedManyWithoutReportIconsInput>;
+  rotation?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
   schemeDark?: InputMaybe<SchemeCreateNestedManyWithoutDarkLogoInput>;
   update?: InputMaybe<UpdateCreateNestedOneWithoutImagesInput>;
@@ -14263,6 +14275,7 @@ export type ImageCreateWithoutArticleColumnInput = {
   recycled?: InputMaybe<Scalars['Boolean']>;
   rekImage?: InputMaybe<Scalars['String']>;
   reportIcons?: InputMaybe<SchemeCreateNestedManyWithoutReportIconsInput>;
+  rotation?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
   schemeDark?: InputMaybe<SchemeCreateNestedManyWithoutDarkLogoInput>;
   update?: InputMaybe<UpdateCreateNestedOneWithoutImagesInput>;
@@ -14298,6 +14311,7 @@ export type ImageCreateWithoutArticleInput = {
   recycled?: InputMaybe<Scalars['Boolean']>;
   rekImage?: InputMaybe<Scalars['String']>;
   reportIcons?: InputMaybe<SchemeCreateNestedManyWithoutReportIconsInput>;
+  rotation?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
   schemeDark?: InputMaybe<SchemeCreateNestedManyWithoutDarkLogoInput>;
   update?: InputMaybe<UpdateCreateNestedOneWithoutImagesInput>;
@@ -14333,6 +14347,7 @@ export type ImageCreateWithoutArticlesInput = {
   recycled?: InputMaybe<Scalars['Boolean']>;
   rekImage?: InputMaybe<Scalars['String']>;
   reportIcons?: InputMaybe<SchemeCreateNestedManyWithoutReportIconsInput>;
+  rotation?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
   schemeDark?: InputMaybe<SchemeCreateNestedManyWithoutDarkLogoInput>;
   update?: InputMaybe<UpdateCreateNestedOneWithoutImagesInput>;
@@ -14368,6 +14383,7 @@ export type ImageCreateWithoutFacesInput = {
   recycled?: InputMaybe<Scalars['Boolean']>;
   rekImage?: InputMaybe<Scalars['String']>;
   reportIcons?: InputMaybe<SchemeCreateNestedManyWithoutReportIconsInput>;
+  rotation?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
   schemeDark?: InputMaybe<SchemeCreateNestedManyWithoutDarkLogoInput>;
   update?: InputMaybe<UpdateCreateNestedOneWithoutImagesInput>;
@@ -14403,6 +14419,7 @@ export type ImageCreateWithoutFeeditemsInput = {
   recycled?: InputMaybe<Scalars['Boolean']>;
   rekImage?: InputMaybe<Scalars['String']>;
   reportIcons?: InputMaybe<SchemeCreateNestedManyWithoutReportIconsInput>;
+  rotation?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
   schemeDark?: InputMaybe<SchemeCreateNestedManyWithoutDarkLogoInput>;
   update?: InputMaybe<UpdateCreateNestedOneWithoutImagesInput>;
@@ -14438,6 +14455,7 @@ export type ImageCreateWithoutIncidentInput = {
   recycled?: InputMaybe<Scalars['Boolean']>;
   rekImage?: InputMaybe<Scalars['String']>;
   reportIcons?: InputMaybe<SchemeCreateNestedManyWithoutReportIconsInput>;
+  rotation?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
   schemeDark?: InputMaybe<SchemeCreateNestedManyWithoutDarkLogoInput>;
   update?: InputMaybe<UpdateCreateNestedOneWithoutImagesInput>;
@@ -14474,6 +14492,7 @@ export type ImageCreateWithoutIntelInput = {
   recycled?: InputMaybe<Scalars['Boolean']>;
   rekImage?: InputMaybe<Scalars['String']>;
   reportIcons?: InputMaybe<SchemeCreateNestedManyWithoutReportIconsInput>;
+  rotation?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
   schemeDark?: InputMaybe<SchemeCreateNestedManyWithoutDarkLogoInput>;
   update?: InputMaybe<UpdateCreateNestedOneWithoutImagesInput>;
@@ -14509,6 +14528,7 @@ export type ImageCreateWithoutMessageInput = {
   recycled?: InputMaybe<Scalars['Boolean']>;
   rekImage?: InputMaybe<Scalars['String']>;
   reportIcons?: InputMaybe<SchemeCreateNestedManyWithoutReportIconsInput>;
+  rotation?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
   schemeDark?: InputMaybe<SchemeCreateNestedManyWithoutDarkLogoInput>;
   update?: InputMaybe<UpdateCreateNestedOneWithoutImagesInput>;
@@ -14544,6 +14564,7 @@ export type ImageCreateWithoutOffendersInput = {
   recycled?: InputMaybe<Scalars['Boolean']>;
   rekImage?: InputMaybe<Scalars['String']>;
   reportIcons?: InputMaybe<SchemeCreateNestedManyWithoutReportIconsInput>;
+  rotation?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
   schemeDark?: InputMaybe<SchemeCreateNestedManyWithoutDarkLogoInput>;
   update?: InputMaybe<UpdateCreateNestedOneWithoutImagesInput>;
@@ -14579,6 +14600,7 @@ export type ImageCreateWithoutReportIconsInput = {
   primary?: InputMaybe<Scalars['Boolean']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   rekImage?: InputMaybe<Scalars['String']>;
+  rotation?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
   schemeDark?: InputMaybe<SchemeCreateNestedManyWithoutDarkLogoInput>;
   update?: InputMaybe<UpdateCreateNestedOneWithoutImagesInput>;
@@ -14615,6 +14637,7 @@ export type ImageCreateWithoutSchemeDarkInput = {
   recycled?: InputMaybe<Scalars['Boolean']>;
   rekImage?: InputMaybe<Scalars['String']>;
   reportIcons?: InputMaybe<SchemeCreateNestedManyWithoutReportIconsInput>;
+  rotation?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
   update?: InputMaybe<UpdateCreateNestedOneWithoutImagesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -14650,6 +14673,7 @@ export type ImageCreateWithoutSchemeInput = {
   recycled?: InputMaybe<Scalars['Boolean']>;
   rekImage?: InputMaybe<Scalars['String']>;
   reportIcons?: InputMaybe<SchemeCreateNestedManyWithoutReportIconsInput>;
+  rotation?: InputMaybe<Scalars['Int']>;
   schemeDark?: InputMaybe<SchemeCreateNestedManyWithoutDarkLogoInput>;
   update?: InputMaybe<UpdateCreateNestedOneWithoutImagesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -14685,6 +14709,7 @@ export type ImageCreateWithoutUpdateInput = {
   recycled?: InputMaybe<Scalars['Boolean']>;
   rekImage?: InputMaybe<Scalars['String']>;
   reportIcons?: InputMaybe<SchemeCreateNestedManyWithoutReportIconsInput>;
+  rotation?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
   schemeDark?: InputMaybe<SchemeCreateNestedManyWithoutDarkLogoInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -14720,6 +14745,7 @@ export type ImageCreateWithoutUploadedByInput = {
   recycled?: InputMaybe<Scalars['Boolean']>;
   rekImage?: InputMaybe<Scalars['String']>;
   reportIcons?: InputMaybe<SchemeCreateNestedManyWithoutReportIconsInput>;
+  rotation?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
   schemeDark?: InputMaybe<SchemeCreateNestedManyWithoutDarkLogoInput>;
   update?: InputMaybe<UpdateCreateNestedOneWithoutImagesInput>;
@@ -14755,6 +14781,7 @@ export type ImageCreateWithoutVehiclesInput = {
   recycled?: InputMaybe<Scalars['Boolean']>;
   rekImage?: InputMaybe<Scalars['String']>;
   reportIcons?: InputMaybe<SchemeCreateNestedManyWithoutReportIconsInput>;
+  rotation?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
   schemeDark?: InputMaybe<SchemeCreateNestedManyWithoutDarkLogoInput>;
   update?: InputMaybe<UpdateCreateNestedOneWithoutImagesInput>;
@@ -14812,6 +14839,7 @@ export type ImageOrderByWithRelationInput = {
   recycled?: InputMaybe<SortOrder>;
   rekImage?: InputMaybe<SortOrder>;
   reportIcons?: InputMaybe<SchemeOrderByRelationAggregateInput>;
+  rotation?: InputMaybe<SortOrder>;
   scheme?: InputMaybe<SchemeOrderByWithRelationInput>;
   schemeDark?: InputMaybe<SchemeOrderByRelationAggregateInput>;
   schemeId?: InputMaybe<SortOrder>;
@@ -14857,6 +14885,7 @@ export type ImageScalarWhereInput = {
   primary?: InputMaybe<BoolNullableFilter>;
   recycled?: InputMaybe<BoolFilter>;
   rekImage?: InputMaybe<StringNullableFilter>;
+  rotation?: InputMaybe<IntFilter>;
   schemeId?: InputMaybe<StringFilter>;
   updateId?: InputMaybe<StringNullableFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
@@ -14891,6 +14920,7 @@ export type ImageUpdateInput = {
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rekImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reportIcons?: InputMaybe<SchemeUpdateManyWithoutReportIconsNestedInput>;
+  rotation?: InputMaybe<IntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesNestedInput>;
   schemeDark?: InputMaybe<SchemeUpdateManyWithoutDarkLogoNestedInput>;
   update?: InputMaybe<UpdateUpdateOneWithoutImagesNestedInput>;
@@ -14915,6 +14945,7 @@ export type ImageUpdateManyMutationInput = {
   primary?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rekImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  rotation?: InputMaybe<IntFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   uploaded?: InputMaybe<BoolFieldUpdateOperationsInput>;
   url?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -15293,6 +15324,7 @@ export type ImageUpdateWithoutActionsInput = {
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rekImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reportIcons?: InputMaybe<SchemeUpdateManyWithoutReportIconsNestedInput>;
+  rotation?: InputMaybe<IntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesNestedInput>;
   schemeDark?: InputMaybe<SchemeUpdateManyWithoutDarkLogoNestedInput>;
   update?: InputMaybe<UpdateUpdateOneWithoutImagesNestedInput>;
@@ -15328,6 +15360,7 @@ export type ImageUpdateWithoutArticleColumnInput = {
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rekImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reportIcons?: InputMaybe<SchemeUpdateManyWithoutReportIconsNestedInput>;
+  rotation?: InputMaybe<IntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesNestedInput>;
   schemeDark?: InputMaybe<SchemeUpdateManyWithoutDarkLogoNestedInput>;
   update?: InputMaybe<UpdateUpdateOneWithoutImagesNestedInput>;
@@ -15363,6 +15396,7 @@ export type ImageUpdateWithoutArticleInput = {
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rekImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reportIcons?: InputMaybe<SchemeUpdateManyWithoutReportIconsNestedInput>;
+  rotation?: InputMaybe<IntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesNestedInput>;
   schemeDark?: InputMaybe<SchemeUpdateManyWithoutDarkLogoNestedInput>;
   update?: InputMaybe<UpdateUpdateOneWithoutImagesNestedInput>;
@@ -15398,6 +15432,7 @@ export type ImageUpdateWithoutArticlesInput = {
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rekImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reportIcons?: InputMaybe<SchemeUpdateManyWithoutReportIconsNestedInput>;
+  rotation?: InputMaybe<IntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesNestedInput>;
   schemeDark?: InputMaybe<SchemeUpdateManyWithoutDarkLogoNestedInput>;
   update?: InputMaybe<UpdateUpdateOneWithoutImagesNestedInput>;
@@ -15433,6 +15468,7 @@ export type ImageUpdateWithoutFacesInput = {
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rekImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reportIcons?: InputMaybe<SchemeUpdateManyWithoutReportIconsNestedInput>;
+  rotation?: InputMaybe<IntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesNestedInput>;
   schemeDark?: InputMaybe<SchemeUpdateManyWithoutDarkLogoNestedInput>;
   update?: InputMaybe<UpdateUpdateOneWithoutImagesNestedInput>;
@@ -15468,6 +15504,7 @@ export type ImageUpdateWithoutFeeditemsInput = {
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rekImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reportIcons?: InputMaybe<SchemeUpdateManyWithoutReportIconsNestedInput>;
+  rotation?: InputMaybe<IntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesNestedInput>;
   schemeDark?: InputMaybe<SchemeUpdateManyWithoutDarkLogoNestedInput>;
   update?: InputMaybe<UpdateUpdateOneWithoutImagesNestedInput>;
@@ -15503,6 +15540,7 @@ export type ImageUpdateWithoutIncidentInput = {
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rekImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reportIcons?: InputMaybe<SchemeUpdateManyWithoutReportIconsNestedInput>;
+  rotation?: InputMaybe<IntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesNestedInput>;
   schemeDark?: InputMaybe<SchemeUpdateManyWithoutDarkLogoNestedInput>;
   update?: InputMaybe<UpdateUpdateOneWithoutImagesNestedInput>;
@@ -15538,6 +15576,7 @@ export type ImageUpdateWithoutIntelInput = {
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rekImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reportIcons?: InputMaybe<SchemeUpdateManyWithoutReportIconsNestedInput>;
+  rotation?: InputMaybe<IntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesNestedInput>;
   schemeDark?: InputMaybe<SchemeUpdateManyWithoutDarkLogoNestedInput>;
   update?: InputMaybe<UpdateUpdateOneWithoutImagesNestedInput>;
@@ -15573,6 +15612,7 @@ export type ImageUpdateWithoutMessageInput = {
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rekImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reportIcons?: InputMaybe<SchemeUpdateManyWithoutReportIconsNestedInput>;
+  rotation?: InputMaybe<IntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesNestedInput>;
   schemeDark?: InputMaybe<SchemeUpdateManyWithoutDarkLogoNestedInput>;
   update?: InputMaybe<UpdateUpdateOneWithoutImagesNestedInput>;
@@ -15608,6 +15648,7 @@ export type ImageUpdateWithoutOffendersInput = {
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rekImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reportIcons?: InputMaybe<SchemeUpdateManyWithoutReportIconsNestedInput>;
+  rotation?: InputMaybe<IntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesNestedInput>;
   schemeDark?: InputMaybe<SchemeUpdateManyWithoutDarkLogoNestedInput>;
   update?: InputMaybe<UpdateUpdateOneWithoutImagesNestedInput>;
@@ -15643,6 +15684,7 @@ export type ImageUpdateWithoutReportIconsInput = {
   primary?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rekImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  rotation?: InputMaybe<IntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesNestedInput>;
   schemeDark?: InputMaybe<SchemeUpdateManyWithoutDarkLogoNestedInput>;
   update?: InputMaybe<UpdateUpdateOneWithoutImagesNestedInput>;
@@ -15679,6 +15721,7 @@ export type ImageUpdateWithoutSchemeDarkInput = {
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rekImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reportIcons?: InputMaybe<SchemeUpdateManyWithoutReportIconsNestedInput>;
+  rotation?: InputMaybe<IntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesNestedInput>;
   update?: InputMaybe<UpdateUpdateOneWithoutImagesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -15714,6 +15757,7 @@ export type ImageUpdateWithoutSchemeInput = {
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rekImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reportIcons?: InputMaybe<SchemeUpdateManyWithoutReportIconsNestedInput>;
+  rotation?: InputMaybe<IntFieldUpdateOperationsInput>;
   schemeDark?: InputMaybe<SchemeUpdateManyWithoutDarkLogoNestedInput>;
   update?: InputMaybe<UpdateUpdateOneWithoutImagesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -15749,6 +15793,7 @@ export type ImageUpdateWithoutUpdateInput = {
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rekImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reportIcons?: InputMaybe<SchemeUpdateManyWithoutReportIconsNestedInput>;
+  rotation?: InputMaybe<IntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesNestedInput>;
   schemeDark?: InputMaybe<SchemeUpdateManyWithoutDarkLogoNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -15784,6 +15829,7 @@ export type ImageUpdateWithoutUploadedByInput = {
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rekImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reportIcons?: InputMaybe<SchemeUpdateManyWithoutReportIconsNestedInput>;
+  rotation?: InputMaybe<IntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesNestedInput>;
   schemeDark?: InputMaybe<SchemeUpdateManyWithoutDarkLogoNestedInput>;
   update?: InputMaybe<UpdateUpdateOneWithoutImagesNestedInput>;
@@ -15819,6 +15865,7 @@ export type ImageUpdateWithoutVehiclesInput = {
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rekImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reportIcons?: InputMaybe<SchemeUpdateManyWithoutReportIconsNestedInput>;
+  rotation?: InputMaybe<IntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesNestedInput>;
   schemeDark?: InputMaybe<SchemeUpdateManyWithoutDarkLogoNestedInput>;
   update?: InputMaybe<UpdateUpdateOneWithoutImagesNestedInput>;
@@ -15961,6 +16008,7 @@ export type ImageWhereInput = {
   recycled?: InputMaybe<BoolFilter>;
   rekImage?: InputMaybe<StringNullableFilter>;
   reportIcons?: InputMaybe<SchemeListRelationFilter>;
+  rotation?: InputMaybe<IntFilter>;
   scheme?: InputMaybe<SchemeWhereInput>;
   schemeDark?: InputMaybe<SchemeListRelationFilter>;
   schemeId?: InputMaybe<StringFilter>;
@@ -25964,6 +26012,7 @@ export type Mutation = {
   deleteCrimeGroup?: Maybe<CrimeGroup>;
   deleteCustomGallery?: Maybe<CustomGallery>;
   deleteExpired?: Maybe<SystemTask>;
+  deleteFace?: Maybe<RekFace>;
   deleteFeedItem?: Maybe<FeedItem>;
   deleteGroup?: Maybe<Group>;
   deleteGroupDefault?: Maybe<Group>;
@@ -25986,11 +26035,13 @@ export type Mutation = {
   deleteUserScheme?: Maybe<UserScheme>;
   deleteVehicle?: Maybe<Vehicle>;
   discImportData?: Maybe<SystemTask>;
+  dismissMatch?: Maybe<RekMatch>;
   editArticle?: Maybe<Article>;
   enableSchemeRekognition?: Maybe<RekCollection>;
   generateFeedItems?: Maybe<SystemTask>;
   indexExistingImages?: Maybe<SystemTask>;
   indexFaces?: Maybe<SystemTask>;
+  indexImage?: Maybe<Image>;
   inviteExistingUser?: Maybe<User>;
   linkBusinessToScheme: Business;
   linkOrgToDem?: Maybe<Business>;
@@ -26336,6 +26387,10 @@ export type MutationDeleteCustomGalleryArgs = {
   where: UniqueId;
 };
 
+export type MutationDeleteFaceArgs = {
+  where: RekFaceWhereUniqueInput;
+};
+
 export type MutationDeleteFeedItemArgs = {
   where: UniqueId;
 };
@@ -26426,6 +26481,10 @@ export type MutationDiscImportDataArgs = {
   data: DiscImportDataInput;
 };
 
+export type MutationDismissMatchArgs = {
+  where: RekMatchWhereUniqueInput;
+};
+
 export type MutationEditArticleArgs = {
   data: CreateArticleInput;
   where: UniqueId;
@@ -26438,6 +26497,10 @@ export type MutationEnableSchemeRekognitionArgs = {
 
 export type MutationGenerateFeedItemsArgs = {
   where: UniqueId;
+};
+
+export type MutationIndexImageArgs = {
+  where: ImageWhereUniqueInput;
 };
 
 export type MutationInviteExistingUserArgs = {
@@ -27187,6 +27250,7 @@ export type Offender = {
   reference?: Maybe<Scalars['Int']>;
   scheme: Scheme;
   schemeId: Scalars['String'];
+  searchedMatches: Array<RekMatch>;
   subscribed?: Maybe<Scalars['Boolean']>;
   tags: Array<Tag>;
   tempId?: Maybe<Scalars['String']>;
@@ -27323,6 +27387,14 @@ export type OffenderKnownAssociatesArgs = {
   groups?: InputMaybe<Array<UniqueId>>;
   linkedCrimeGroup?: InputMaybe<Scalars['Boolean']>;
   linkedIncidents?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type OffenderSearchedMatchesArgs = {
+  after?: InputMaybe<RekMatchWhereUniqueInput>;
+  before?: InputMaybe<RekMatchWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<RekMatchOrderByWithRelationInput>>;
 };
 
 export type OffenderTagsArgs = {
@@ -32662,6 +32734,16 @@ export type RekCollectionOrderByRelationAggregateInput = {
   _count?: InputMaybe<SortOrder>;
 };
 
+export type RekCollectionOrderByWithRelationInput = {
+  collectionId?: InputMaybe<SortOrder>;
+  createdAt?: InputMaybe<SortOrder>;
+  faces?: InputMaybe<RekFaceOrderByRelationAggregateInput>;
+  id?: InputMaybe<SortOrder>;
+  name?: InputMaybe<SortOrder>;
+  schemes?: InputMaybe<SchemeOrderByRelationAggregateInput>;
+  updatedAt?: InputMaybe<SortOrder>;
+};
+
 export type RekCollectionScalarWhereInput = {
   AND?: InputMaybe<Array<RekCollectionScalarWhereInput>>;
   NOT?: InputMaybe<Array<RekCollectionScalarWhereInput>>;
@@ -33026,6 +33108,28 @@ export type RekFaceListRelationFilter = {
 
 export type RekFaceOrderByRelationAggregateInput = {
   _count?: InputMaybe<SortOrder>;
+};
+
+export type RekFaceOrderByWithRelationInput = {
+  boundingHeight?: InputMaybe<SortOrder>;
+  boundingLeft?: InputMaybe<SortOrder>;
+  boundingTop?: InputMaybe<SortOrder>;
+  boundingWidth?: InputMaybe<SortOrder>;
+  collection?: InputMaybe<RekCollectionOrderByWithRelationInput>;
+  collectionId?: InputMaybe<SortOrder>;
+  confidence?: InputMaybe<SortOrder>;
+  createdAt?: InputMaybe<SortOrder>;
+  faceId?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  image?: InputMaybe<ImageOrderByWithRelationInput>;
+  imageId?: InputMaybe<SortOrder>;
+  offender?: InputMaybe<OffenderOrderByWithRelationInput>;
+  offenderId?: InputMaybe<SortOrder>;
+  qualityBrightness?: InputMaybe<SortOrder>;
+  qualitySharpness?: InputMaybe<SortOrder>;
+  rekMatchedFaces?: InputMaybe<RekMatchedFaceOrderByRelationAggregateInput>;
+  rekMatchedSearches?: InputMaybe<RekMatchOrderByRelationAggregateInput>;
+  updatedAt?: InputMaybe<SortOrder>;
 };
 
 export type RekFaceScalarWhereInput = {
@@ -33514,6 +33618,21 @@ export type RekMatchOrderByRelationAggregateInput = {
   _count?: InputMaybe<SortOrder>;
 };
 
+export type RekMatchOrderByWithRelationInput = {
+  createdAt?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  incident?: InputMaybe<IncidentOrderByWithRelationInput>;
+  incidentId?: InputMaybe<SortOrder>;
+  matchedFaces?: InputMaybe<RekMatchedFaceOrderByRelationAggregateInput>;
+  matchedId?: InputMaybe<SortOrder>;
+  matchedOffender?: InputMaybe<OffenderOrderByWithRelationInput>;
+  offenderId?: InputMaybe<SortOrder>;
+  rekFaceId?: InputMaybe<SortOrder>;
+  searchedFace?: InputMaybe<RekFaceOrderByWithRelationInput>;
+  searchedOffender?: InputMaybe<OffenderOrderByWithRelationInput>;
+  updatedAt?: InputMaybe<SortOrder>;
+};
+
 export type RekMatchScalarWhereInput = {
   AND?: InputMaybe<Array<RekMatchScalarWhereInput>>;
   NOT?: InputMaybe<Array<RekMatchScalarWhereInput>>;
@@ -33852,6 +33971,10 @@ export type RekMatchedFaceListRelationFilter = {
   every?: InputMaybe<RekMatchedFaceWhereInput>;
   none?: InputMaybe<RekMatchedFaceWhereInput>;
   some?: InputMaybe<RekMatchedFaceWhereInput>;
+};
+
+export type RekMatchedFaceOrderByRelationAggregateInput = {
+  _count?: InputMaybe<SortOrder>;
 };
 
 export type RekMatchedFaceScalarWhereInput = {
@@ -59709,6 +59832,99 @@ export type OffenderFeedQuery = {
   } | null> | null;
 };
 
+export type ViewOffenderMatchesQueryVariables = Exact<{
+  where: OffenderWhereUniqueInput;
+  orderBy?: InputMaybe<
+    Array<RekMatchOrderByWithRelationInput> | RekMatchOrderByWithRelationInput
+  >;
+}>;
+
+export type ViewOffenderMatchesQuery = {
+  __typename?: 'Query';
+  offender?: {
+    __typename?: 'Offender';
+    id: string;
+    name?: string | null;
+    reference?: number | null;
+    age?: Age | null;
+    build?: Build | null;
+    height?: Height | null;
+    gender?: Gender | null;
+    race?: Race | null;
+    searchedMatches: Array<{
+      __typename?: 'RekMatch';
+      id: string;
+      matchedFaces: Array<{
+        __typename?: 'RekMatchedFace';
+        id: string;
+        similarity: number;
+        rekFace: {
+          __typename?: 'RekFace';
+          id: string;
+          boundingHeight?: number | null;
+          boundingLeft?: number | null;
+          boundingTop?: number | null;
+          boundingWidth?: number | null;
+          image: {
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+            position: ImagePosition;
+            faces: Array<{
+              __typename?: 'RekFace';
+              id: string;
+              confidence?: number | null;
+              boundingHeight?: number | null;
+              boundingLeft?: number | null;
+              boundingTop?: number | null;
+              boundingWidth?: number | null;
+              offender?: {
+                __typename?: 'Offender';
+                id: string;
+                name?: string | null;
+                reference?: number | null;
+                age?: Age | null;
+                gender?: Gender | null;
+                race?: Race | null;
+                build?: Build | null;
+                height?: Height | null;
+              } | null;
+              rekMatchedSearches: Array<{
+                __typename?: 'RekMatch';
+                id: string;
+              }>;
+            }>;
+          };
+        };
+      }>;
+      matchedOffender?: {
+        __typename?: 'Offender';
+        id: string;
+        name?: string | null;
+        reference?: number | null;
+        age?: Age | null;
+        build?: Build | null;
+        height?: Height | null;
+        gender?: Gender | null;
+        race?: Race | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          position: ImagePosition;
+          optimised?: string | null;
+        }>;
+      } | null;
+    }>;
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      position: ImagePosition;
+      optimised?: string | null;
+    }>;
+  } | null;
+};
+
 export type SearchOffendersQueryVariables = Exact<{
   scheme: SchemeWhereUniqueInput;
   where?: InputMaybe<OffenderWhereInput>;
@@ -59796,6 +60012,21 @@ export type ViewOffenderQuery = {
       url?: string | null;
       optimised?: string | null;
       position: ImagePosition;
+      faces: Array<{
+        __typename?: 'RekFace';
+        id: string;
+        confidence?: number | null;
+        boundingHeight?: number | null;
+        boundingLeft?: number | null;
+        boundingTop?: number | null;
+        boundingWidth?: number | null;
+        offender?: {
+          __typename?: 'Offender';
+          id: string;
+          name?: string | null;
+        } | null;
+        rekMatchedSearches: Array<{ __typename?: 'RekMatch'; id: string }>;
+      }>;
     }>;
     addresses: Array<{
       __typename?: 'Address';
@@ -60050,6 +60281,7 @@ export type ViewOffenderQuery = {
         };
       }>;
     }>;
+    searchedMatches: Array<{ __typename?: 'RekMatch'; id: string }>;
   } | null;
 };
 
@@ -60220,68 +60452,56 @@ export type RecycledItemsQuery = {
   } | null> | null;
 };
 
-export type ListRekMatchesQueryVariables = Exact<{
-  where?: InputMaybe<RekMatchWhereInput>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
+export type DeleteFaceMutationVariables = Exact<{
+  where: RekFaceWhereUniqueInput;
 }>;
 
-export type ListRekMatchesQuery = {
-  __typename?: 'Query';
-  listRekMatches: {
-    __typename?: 'ListRekMatches';
-    total: number;
-    matches: Array<{
-      __typename?: 'RekMatch';
+export type DeleteFaceMutation = {
+  __typename?: 'Mutation';
+  deleteFace?: {
+    __typename?: 'RekFace';
+    id: string;
+    faceId?: string | null;
+  } | null;
+};
+
+export type DismissMatchMutationVariables = Exact<{
+  where: RekMatchWhereUniqueInput;
+}>;
+
+export type DismissMatchMutation = {
+  __typename?: 'Mutation';
+  dismissMatch?: { __typename?: 'RekMatch'; id: string } | null;
+};
+
+export type IndexImageMutationVariables = Exact<{
+  where: ImageWhereUniqueInput;
+}>;
+
+export type IndexImageMutation = {
+  __typename?: 'Mutation';
+  indexImage?: {
+    __typename?: 'Image';
+    id: string;
+    url?: string | null;
+    optimised?: string | null;
+    position: ImagePosition;
+    faces: Array<{
+      __typename?: 'RekFace';
       id: string;
-      createdAt: any;
-      rekFaceId: string;
-      avgSimilarity?: number | null;
-      searchedFace: {
-        __typename?: 'RekFace';
-        boundingHeight?: number | null;
-        boundingLeft?: number | null;
-        boundingTop?: number | null;
-        boundingWidth?: number | null;
-        confidence?: number | null;
-        id: string;
-        qualityBrightness?: number | null;
-        qualitySharpness?: number | null;
-        image: { __typename?: 'Image'; id: string; optimised?: string | null };
-      };
-      matchedFaces: Array<{
-        __typename?: 'RekMatchedFace';
-        id: string;
-        similarity: number;
-        rekFace: {
-          __typename?: 'RekFace';
-          id: string;
-          boundingHeight?: number | null;
-          boundingLeft?: number | null;
-          boundingTop?: number | null;
-          boundingWidth?: number | null;
-          confidence?: number | null;
-          qualityBrightness?: number | null;
-          qualitySharpness?: number | null;
-          image: {
-            __typename?: 'Image';
-            id: string;
-            optimised?: string | null;
-          };
-          offender?: {
-            __typename?: 'Offender';
-            id: string;
-            name?: string | null;
-          } | null;
-        };
-      }>;
-      matchedOffender?: {
+      confidence?: number | null;
+      boundingHeight?: number | null;
+      boundingLeft?: number | null;
+      boundingTop?: number | null;
+      boundingWidth?: number | null;
+      offender?: {
         __typename?: 'Offender';
         id: string;
         name?: string | null;
       } | null;
+      rekMatchedSearches: Array<{ __typename?: 'RekMatch'; id: string }>;
     }>;
-  };
+  } | null;
 };
 
 export type SchemeRekognitionQueryVariables = Exact<{
@@ -71120,6 +71340,118 @@ export type OffenderFeedQueryResult = Apollo.QueryResult<
   OffenderFeedQuery,
   OffenderFeedQueryVariables
 >;
+export const ViewOffenderMatchesDocument = gql`
+  query ViewOffenderMatches(
+    $where: OffenderWhereUniqueInput!
+    $orderBy: [RekMatchOrderByWithRelationInput!]
+  ) {
+    offender(where: $where) {
+      id
+      name
+      reference
+      age
+      build
+      height
+      gender
+      race
+      searchedMatches(orderBy: $orderBy) {
+        id
+        matchedFaces {
+          id
+          similarity
+          rekFace {
+            id
+            boundingHeight
+            boundingLeft
+            boundingTop
+            boundingWidth
+            image {
+              id
+              url
+              optimised
+              position
+              faces {
+                id
+                confidence
+                boundingHeight
+                boundingLeft
+                boundingTop
+                boundingWidth
+                offender {
+                  id
+                  name
+                  reference
+                  age
+                  gender
+                  race
+                  build
+                  height
+                }
+                rekMatchedSearches {
+                  id
+                }
+              }
+            }
+          }
+        }
+        matchedOffender {
+          id
+          name
+          reference
+          age
+          build
+          height
+          gender
+          race
+          images {
+            id
+            position
+            optimised
+          }
+        }
+      }
+      images {
+        id
+        position
+        optimised
+      }
+    }
+  }
+`;
+export function useViewOffenderMatchesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ViewOffenderMatchesQuery,
+    ViewOffenderMatchesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    ViewOffenderMatchesQuery,
+    ViewOffenderMatchesQueryVariables
+  >(ViewOffenderMatchesDocument, options);
+}
+export function useViewOffenderMatchesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ViewOffenderMatchesQuery,
+    ViewOffenderMatchesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ViewOffenderMatchesQuery,
+    ViewOffenderMatchesQueryVariables
+  >(ViewOffenderMatchesDocument, options);
+}
+export type ViewOffenderMatchesQueryHookResult = ReturnType<
+  typeof useViewOffenderMatchesQuery
+>;
+export type ViewOffenderMatchesLazyQueryHookResult = ReturnType<
+  typeof useViewOffenderMatchesLazyQuery
+>;
+export type ViewOffenderMatchesQueryResult = Apollo.QueryResult<
+  ViewOffenderMatchesQuery,
+  ViewOffenderMatchesQueryVariables
+>;
 export const SearchOffendersDocument = gql`
   query searchOffenders(
     $scheme: SchemeWhereUniqueInput!
@@ -71241,6 +71573,21 @@ export const ViewOffenderDocument = gql`
         url
         optimised
         position
+        faces {
+          id
+          confidence
+          boundingHeight
+          boundingLeft
+          boundingTop
+          boundingWidth
+          offender {
+            id
+            name
+          }
+          rekMatchedSearches {
+            id
+          }
+        }
       }
       addresses {
         id
@@ -71479,6 +71826,9 @@ export const ViewOffenderDocument = gql`
             }
           }
         }
+      }
+      searchedMatches {
+        id
       }
     }
   }
@@ -71827,92 +72177,120 @@ export type RecycledItemsQueryResult = Apollo.QueryResult<
   RecycledItemsQuery,
   RecycledItemsQueryVariables
 >;
-export const ListRekMatchesDocument = gql`
-  query ListRekMatches($where: RekMatchWhereInput, $skip: Int, $take: Int) {
-    listRekMatches(where: $where, skip: $skip, take: $take) {
-      total
-      matches {
+export const DeleteFaceDocument = gql`
+  mutation DeleteFace($where: RekFaceWhereUniqueInput!) {
+    deleteFace(where: $where) {
+      id
+      faceId
+    }
+  }
+`;
+export type DeleteFaceMutationFn = Apollo.MutationFunction<
+  DeleteFaceMutation,
+  DeleteFaceMutationVariables
+>;
+export function useDeleteFaceMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteFaceMutation,
+    DeleteFaceMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<DeleteFaceMutation, DeleteFaceMutationVariables>(
+    DeleteFaceDocument,
+    options
+  );
+}
+export type DeleteFaceMutationHookResult = ReturnType<
+  typeof useDeleteFaceMutation
+>;
+export type DeleteFaceMutationResult =
+  Apollo.MutationResult<DeleteFaceMutation>;
+export type DeleteFaceMutationOptions = Apollo.BaseMutationOptions<
+  DeleteFaceMutation,
+  DeleteFaceMutationVariables
+>;
+export const DismissMatchDocument = gql`
+  mutation DismissMatch($where: RekMatchWhereUniqueInput!) {
+    dismissMatch(where: $where) {
+      id
+    }
+  }
+`;
+export type DismissMatchMutationFn = Apollo.MutationFunction<
+  DismissMatchMutation,
+  DismissMatchMutationVariables
+>;
+export function useDismissMatchMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DismissMatchMutation,
+    DismissMatchMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DismissMatchMutation,
+    DismissMatchMutationVariables
+  >(DismissMatchDocument, options);
+}
+export type DismissMatchMutationHookResult = ReturnType<
+  typeof useDismissMatchMutation
+>;
+export type DismissMatchMutationResult =
+  Apollo.MutationResult<DismissMatchMutation>;
+export type DismissMatchMutationOptions = Apollo.BaseMutationOptions<
+  DismissMatchMutation,
+  DismissMatchMutationVariables
+>;
+export const IndexImageDocument = gql`
+  mutation IndexImage($where: ImageWhereUniqueInput!) {
+    indexImage(where: $where) {
+      id
+      url
+      optimised
+      position
+      faces {
         id
-        createdAt
-        rekFaceId
-        avgSimilarity
-        searchedFace {
-          boundingHeight
-          boundingLeft
-          boundingTop
-          boundingWidth
-          confidence
-          id
-          image {
-            id
-            optimised
-          }
-          qualityBrightness
-          qualitySharpness
-        }
-        matchedFaces {
-          id
-          similarity
-          rekFace {
-            id
-            boundingHeight
-            boundingLeft
-            boundingTop
-            boundingWidth
-            confidence
-            qualityBrightness
-            qualitySharpness
-            image {
-              id
-              optimised
-            }
-            offender {
-              id
-              name
-            }
-          }
-        }
-        matchedOffender {
+        confidence
+        boundingHeight
+        boundingLeft
+        boundingTop
+        boundingWidth
+        offender {
           id
           name
+        }
+        rekMatchedSearches {
+          id
         }
       }
     }
   }
 `;
-export function useListRekMatchesQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    ListRekMatchesQuery,
-    ListRekMatchesQueryVariables
+export type IndexImageMutationFn = Apollo.MutationFunction<
+  IndexImageMutation,
+  IndexImageMutationVariables
+>;
+export function useIndexImageMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    IndexImageMutation,
+    IndexImageMutationVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<ListRekMatchesQuery, ListRekMatchesQueryVariables>(
-    ListRekMatchesDocument,
+  return Apollo.useMutation<IndexImageMutation, IndexImageMutationVariables>(
+    IndexImageDocument,
     options
   );
 }
-export function useListRekMatchesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    ListRekMatchesQuery,
-    ListRekMatchesQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<ListRekMatchesQuery, ListRekMatchesQueryVariables>(
-    ListRekMatchesDocument,
-    options
-  );
-}
-export type ListRekMatchesQueryHookResult = ReturnType<
-  typeof useListRekMatchesQuery
+export type IndexImageMutationHookResult = ReturnType<
+  typeof useIndexImageMutation
 >;
-export type ListRekMatchesLazyQueryHookResult = ReturnType<
-  typeof useListRekMatchesLazyQuery
->;
-export type ListRekMatchesQueryResult = Apollo.QueryResult<
-  ListRekMatchesQuery,
-  ListRekMatchesQueryVariables
+export type IndexImageMutationResult =
+  Apollo.MutationResult<IndexImageMutation>;
+export type IndexImageMutationOptions = Apollo.BaseMutationOptions<
+  IndexImageMutation,
+  IndexImageMutationVariables
 >;
 export const SchemeRekognitionDocument = gql`
   query SchemeRekognition($where: SchemeWhereUniqueInput!) {

@@ -1,0 +1,23 @@
+mutation IndexImage($where: ImageWhereUniqueInput!) {
+  indexImage(where: $where) {
+    id
+    url
+    optimised
+    position
+    faces {
+      id
+      confidence
+      boundingHeight
+      boundingLeft
+      boundingTop
+      boundingWidth
+      offender {
+        id
+        name
+      }
+      rekMatchedSearches {
+        id
+      }
+    }
+  }
+}

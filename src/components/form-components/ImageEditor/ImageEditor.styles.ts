@@ -3,7 +3,7 @@ import type { Theme } from 'configs/ThemeConfig';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   toolbar: {
-    backgroundColor: '#FFF',
+    backgroundColor: theme.bodyBackground,
     padding: 10,
   },
   cardPreviewSection: {
@@ -16,20 +16,21 @@ const useStyles = createUseStyles((theme: Theme) => ({
   mockupCard: {
     height: 400,
     width: 300,
-    backgroundColor: '#fff',
-    borderRadius: 10,
+    backgroundColor: theme.componentBackground,
     overflow: 'hidden',
     border: `1px solid ${theme.borderColor}`,
+    borderRadius: 10,
   },
   cardImage: {
     width: '100%',
     height: 200,
   },
   cardBody: {
+    backgroundColor: theme.componentBackground,
     padding: '15px 10px',
   },
   select: {
-    width: 200,
+    width: 150,
   },
 }));
 
