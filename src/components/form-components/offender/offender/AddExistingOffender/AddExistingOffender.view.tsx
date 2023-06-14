@@ -67,6 +67,7 @@ interface Props {
   hair: string;
   peculiarities: string;
   clearFilters: () => void;
+  addOverride?: string;
 }
 
 const AddExistingOffender = ({
@@ -94,6 +95,7 @@ const AddExistingOffender = ({
   setHair,
   setPeculiarities,
   clearFilters,
+  addOverride,
 }: Props): JSX.Element => {
   const classes = useStyles();
 
@@ -265,13 +267,13 @@ const AddExistingOffender = ({
       </Row>
 
       <Modal
-        visible={!!selectedOffender}
+        open={!!selectedOffender}
         zIndex={1010}
-        okText="Add Offender"
+        okText={`${addOverride || 'Add'} Offender`}
         onOk={() => onSubmit(selectedOffender?.id)}
         onCancel={() => setCurrentId(undefined)}
         bodyStyle={{ padding: 0 }}
-        title={`Add ${selectedOffender?.name} to incident?`}
+        title={`${addOverride || 'Add'} ${selectedOffender?.name}`}
       >
         <Row gutter={16} wrap={false}>
           {selectedOffender && selectedOffender.images.length > 0 && (

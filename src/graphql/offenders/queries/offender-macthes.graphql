@@ -1,0 +1,76 @@
+query ViewOffenderMatches(
+  $where: OffenderWhereUniqueInput!
+  $orderBy: [RekMatchOrderByWithRelationInput!]
+) {
+  offender(where: $where) {
+    id
+    name
+    reference
+    age
+    build
+    height
+    gender
+    race
+    searchedMatches(orderBy: $orderBy) {
+      id
+      matchedFaces {
+        id
+        similarity
+        rekFace {
+          id
+          boundingHeight
+          boundingLeft
+          boundingTop
+          boundingWidth
+          image {
+            id
+            url
+            optimised
+            position
+            faces {
+              id
+              confidence
+              boundingHeight
+              boundingLeft
+              boundingTop
+              boundingWidth
+              offender {
+                id
+                name
+                reference
+                age
+                gender
+                race
+                build
+                height
+              }
+              rekMatchedSearches {
+                id
+              }
+            }
+          }
+        }
+      }
+      matchedOffender {
+        id
+        name
+        reference
+        age
+        build
+        height
+        gender
+        race
+        images {
+          id
+          position
+          optimised
+        }
+      }
+    }
+    images {
+      id
+      position
+      optimised
+    }
+  }
+}

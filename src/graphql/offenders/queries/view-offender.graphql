@@ -27,6 +27,21 @@ query ViewOffender(
       url
       optimised
       position
+      faces {
+        id
+        confidence
+        boundingHeight
+        boundingLeft
+        boundingTop
+        boundingWidth
+        offender {
+          id
+          name
+        }
+        rekMatchedSearches {
+          id
+        }
+      }
     }
     addresses {
       id
@@ -265,6 +280,9 @@ query ViewOffender(
           }
         }
       }
+    }
+    searchedMatches {
+      id
     }
   }
 }

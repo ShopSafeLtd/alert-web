@@ -1,17 +1,10 @@
-import type {
-  ListRekMatchesQuery,
-  SchemeRekognitionQuery,
-} from 'graphql/generated';
-import {
-  useListRekMatchesQuery,
-  useSchemeRekognitionQuery,
-} from 'graphql/generated';
+import type { SchemeRekognitionQuery } from 'graphql/generated';
+import { useSchemeRekognitionQuery } from 'graphql/generated';
 import { useStoreState } from 'state';
 
 interface Return {
   loading: boolean;
   data: SchemeRekognitionQuery | undefined;
-  matchesData: ListRekMatchesQuery | undefined;
 }
 
 const useDashboard = (): Return => {
@@ -25,26 +18,9 @@ const useDashboard = (): Return => {
     },
   });
 
-  const { data: matchesData } = useListRekMatchesQuery({
-    variables: {
-      where: {
-        searchedFace: {
-          image: {
-            scheme: {
-              id: {
-                equals: currentScheme,
-              },
-            },
-          },
-        },
-      },
-    },
-  });
-
   return {
     loading,
     data,
-    matchesData,
   };
 };
 

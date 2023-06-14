@@ -1,8 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import type { UploadFile } from 'antd';
-import { Switch, Form, Select, Skeleton, Col, Modal, Row } from 'antd';
+import { Button, Switch, Form, Select, Skeleton, Col, Modal, Row } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import { ImagePosition } from 'graphql/generated';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faRotateBackward,
+  faRotateForward,
+} from '@fortawesome/pro-light-svg-icons';
 import useStyles from './ImageEditor.styles';
 
 const positionOptions = [
@@ -68,10 +73,7 @@ const ImageEditor = ({ open, image, submitImage, onClose }: Props) => {
   const classes = useStyles();
   const [position, setPosition] = useState(ImagePosition.CenterCenter);
   const [primary, setPrimary] = useState(false);
-
-  useEffect(() => {
-    setPosition(image?.position || ImagePosition.CenterCenter);
-  }, [image]);
+  const [rotation, setRotation] = useState(0);
 
   const handleSubmit = () => {
     if (image) {
@@ -83,9 +85,17 @@ const ImageEditor = ({ open, image, submitImage, onClose }: Props) => {
     setPosition(ImagePosition.CenterCenter);
   };
 
+  const onRotateRight = () => {
+    setRotation(rotation + 90);
+  };
+
+  const onRotateLeft = () => {
+    setRotation(rotation - 90);
+  };
+
   return (
     <Modal
-      width={700}
+      width={600}
       open={open}
       title="Edit Image"
       bodyStyle={{ padding: 0 }}
@@ -93,61 +103,73 @@ const ImageEditor = ({ open, image, submitImage, onClose }: Props) => {
       onOk={handleSubmit}
       onCancel={onClose}
     >
-      <Row wrap={false}>
-        <Col className={classes.toolbar}>
-          <Form
-            className={classes.select}
-            layout="vertical"
-            // initialValues={{}}
-            // onFinish={onSubmit}
-          >
-            <Row>
-              <Col flex={1}>
-                <Form.Item label="Image Position">
-                  <Select
-                    value={position}
-                    onChange={setPosition}
-                    options={positionOptions}
+      {open && (
+        <Row wrap={false}>
+          <Col className={classes.toolbar}>
+            <Form
+              className={classes.select}
+              layout="vertical"
+              // initialValues={{}}
+              // onFinish={onSubmit}
+            >
+              <Form.Item label="Image Position">
+                <Select
+                  value={position}
+                  onChange={setPosition}
+                  options={positionOptions}
+                />
+              </Form.Item>
+              <Form.Item label="Rotation">
+                <Row gutter={8}>
+                  <Col>
+                    <Button size="small" onClick={onRotateLeft}>
+                      <FontAwesomeIcon icon={faRotateBackward} />
+                    </Button>
+                  </Col>
+                  <Col>
+                    <Button size="small" onClick={onRotateRight}>
+                      <FontAwesomeIcon icon={faRotateForward} />
+                    </Button>
+                  </Col>
+                </Row>
+              </Form.Item>
+              <Form.Item
+                label="Set as primary image"
+                name="primaryImage"
+                valuePropName="checked"
+                style={{
+                  marginBottom: 0,
+                  flexDirection: 'row',
+                  justifyItems: 'center',
+                }}
+              >
+                <Switch
+                  // disabled={saving}
+                  checked={primary}
+                  onChange={() => setPrimary(!primary)}
+                  style={{ marginLeft: 10, marginTop: -20 }}
+                />
+              </Form.Item>
+            </Form>
+          </Col>
+          <Col flex={1}>
+            <div className={classes.cardPreviewSection}>
+              <div className={classes.mockupCard}>
+                <div className={classes.cardImage}>
+                  <WatermarkImage
+                    url={image?.url}
+                    position={position}
+                    rotation={rotation}
                   />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col flex={1}>
-                <Form.Item
-                  label="Set as primary image"
-                  name="primaryImage"
-                  valuePropName="checked"
-                  style={{
-                    marginBottom: 0,
-                    flexDirection: 'row',
-                    justifyItems: 'center',
-                  }}
-                >
-                  <Switch
-                    // disabled={saving}
-                    checked={primary}
-                    onChange={() => setPrimary(!primary)}
-                    style={{ marginLeft: 10, marginTop: -20 }}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-          </Form>
-        </Col>
-        <Col flex={1}>
-          <div className={classes.cardPreviewSection}>
-            <div className={classes.mockupCard}>
-              <div className={classes.cardImage}>
-                <WatermarkImage url={image?.url} position={position} />
-              </div>
-              <div className={classes.cardBody}>
-                <Skeleton />
+                </div>
+                <div className={classes.cardBody}>
+                  <Skeleton />
+                </div>
               </div>
             </div>
-          </div>
-        </Col>
-      </Row>
+          </Col>
+        </Row>
+      )}
     </Modal>
   );
 };

@@ -38,6 +38,7 @@ describe('List Officer View', () => {
           optimised: null,
           url: null,
           position: ImagePosition.CenterCenter,
+          faces: [],
         },
       ],
       incidents: [],
@@ -46,6 +47,7 @@ describe('List Officer View', () => {
       idVerified: false,
       addresses: [],
       alias: [],
+      searchedMatches: [],
     },
   };
 

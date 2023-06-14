@@ -53,12 +53,14 @@ interface Props {
   onClose: () => void;
   update: (value: OffenderData) => void;
   offenderIds: string[] | undefined;
+  addOverride?: string;
 }
 
 const AddExistingOffender = ({
   onClose,
   update,
   offenderIds,
+  addOverride,
 }: Props): JSX.Element => {
   const {
     onSubmit,
@@ -113,6 +115,7 @@ const AddExistingOffender = ({
       setHair={setHair}
       setPeculiarities={setPeculiarities}
       clearFilters={clearFilters}
+      addOverride={addOverride}
     />
   );
 };

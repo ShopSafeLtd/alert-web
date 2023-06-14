@@ -1,0 +1,6 @@
+mutation DeleteFace($where: RekFaceWhereUniqueInput!) {
+  deleteFace(where: $where) {
+    id
+    faceId
+  }
+}

@@ -102,6 +102,8 @@ interface Return {
   associateFilters: (string | undefined)[];
   viewAssociate: ViewAssociate | null;
   toggleViewAssociate: (value: ViewAssociate | null) => void;
+  viewMatches: string | null;
+  toggleViewMatches: (offenderId: string | null) => void;
 }
 
 const useViewOffender = (offenderId: string): Return => {
@@ -115,6 +117,7 @@ const useViewOffender = (offenderId: string): Return => {
   const userId = useStoreState((state) => state.user.id);
   const [saving, setSaving] = useState(false);
 
+  const [viewMatches, toggleViewMatches] = useState<string | null>(null);
   const [optionRowShow, setOptionRowShow] = useState(false);
   const [linkIncident, setLinkIncident] = useState(false);
   const [optionMenuItems, setOptionsMenuItems] = useState<ItemType[]>([]);
@@ -563,6 +566,8 @@ const useViewOffender = (offenderId: string): Return => {
     associateFilters,
     viewAssociate,
     toggleViewAssociate: setViewAssociate,
+    toggleViewMatches,
+    viewMatches,
   };
 };
 

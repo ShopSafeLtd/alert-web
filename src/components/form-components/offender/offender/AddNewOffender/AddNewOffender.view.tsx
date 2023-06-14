@@ -42,6 +42,7 @@ interface Props {
   beforeUpload: (value: RcFile) => void;
   fileList: UploadFile[];
   hideImages?: boolean;
+  addOverride?: string;
 }
 
 const AddNewOffender = ({
@@ -54,6 +55,7 @@ const AddNewOffender = ({
   beforeUpload,
   fileList,
   hideImages,
+  addOverride,
 }: Props): JSX.Element => {
   const classes = useStyles();
   return (
@@ -209,7 +211,7 @@ const AddNewOffender = ({
               type="primary"
               htmlType="submit"
             >
-              Add Offender
+              {addOverride || 'Add'} Offender
             </Button>
           </Col>
         </Row>
