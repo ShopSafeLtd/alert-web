@@ -116,18 +116,29 @@ const IncidentCard = ({
           </Button>
         </Dropdown>
       )}
-      {/* <div className="incident-card-tags">
+
+      <div className="incident-card-tags">
         <Row gutter={8}>
-          {incident?.crimeTypes.map((crimeType, i) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <Col key={i}>
+          {incident?.crimeTypes.slice(0, 2).map((crimeType) => (
+            <Col key={crimeType.id}>
               <Tag className="incident-card-tag" color="red">
                 {crimeType.name}
               </Tag>
             </Col>
           ))}
+          {incident.crimeTypes.length > 2 && (
+            <Tooltip
+              title={incident.crimeTypes
+                .map((item) => ` ${item.name}`)
+                .toString()}
+            >
+              <Tag className="incident-card-tag" color="red">
+                + {incident.crimeTypes.length - 1} more
+              </Tag>
+            </Tooltip>
+          )}
         </Row>
-      </div> */}
+      </div>
       <div>
         {incident && incident.images.length > 0 ? (
           <Carousel ref={imagesRef}>
@@ -189,10 +200,14 @@ const IncidentCard = ({
             {incident?.policeRef ? `/ Crime Ref: ${incident.policeRef}` : ''}
           </Text>
         </div>
-        {incident.offenders.length > 0 && (
+        {incident.offenders.length > 0 ? (
           <Row wrap={false} style={{ overflowX: 'auto', marginBottom: 10 }}>
             {incident.offenders.slice(0, 2).map((offender) => (
-              <Tag key={offender.id}>{offender.name || 'Unknown Offender'}</Tag>
+              <Link to={`/app/offenders/view/${offender?.id}`}>
+                <Tag key={offender.id}>
+                  {offender.name || 'Unknown Offender'}
+                </Tag>
+              </Link>
             ))}
             {incident.offenders.length > 2 && (
               <Tooltip
@@ -204,6 +219,8 @@ const IncidentCard = ({
               </Tooltip>
             )}
           </Row>
+        ) : (
+          <div style={{ marginBottom: 10 }} />
         )}
         <Link to={`/app/incidents/view/${incident?.id}`}>
           <Row
@@ -242,58 +259,59 @@ const IncidentCard = ({
               </Row>
             </Col>
           </Row>
-        </Link>
-        <Link to={`/app/incidents/view/${incident?.id}`}>
+
           <Paragraph
+            // style={{ height: incident.offenders.length > 0 ? 24 : 66 }}
+            // className="incident-card-desc"
             style={{
               height: incident.offenders.length > 0 ? 60 : 95,
               marginBottom: 10,
             }}
-            className="incident-card-desc"
             type="secondary"
+            ellipsis={{ rows: 2 }}
           >
             {incident?.description}
           </Paragraph>
-        </Link>
-
-        <Row
-          wrap={false}
-          style={{
-            overflowX: 'auto',
-            marginBottom: incident.offenders.length > 2 ? 3 : 15,
-          }}
-        >
-          <Col style={{ minWidth: 60 }}>
-            <Text strong type="secondary">
-              Groups:
-            </Text>
-          </Col>
-          {incident.groups.slice(0, 1).map((group) => (
-            <Col key={group.id}>
-              <Tag>{group.name || 'Unknown Offender'}</Tag>
+          <Row
+            wrap={false}
+            align="middle"
+            style={{
+              overflowX: 'auto',
+              // marginBottom: incident.offenders.length > 2 ? 3 : 15,
+            }}
+          >
+            <Col style={{ minWidth: 60 }}>
+              <Text strong type="secondary">
+                Groups:
+              </Text>
             </Col>
-          ))}
-          {incident.groups.length > 1 && (
+            {incident.groups.slice(0, 1).map((group) => (
+              <Col key={group.id}>
+                <Tag>{group.name}</Tag>
+              </Col>
+            ))}
+            {incident.groups.length > 1 && (
+              <Col>
+                <Tooltip
+                  title={incident.groups
+                    .map((item) => ` ${item.name}`)
+                    .toString()}
+                >
+                  <Tag>+{incident.groups.length - 1} more</Tag>
+                </Tooltip>
+              </Col>
+            )}
+          </Row>
+          <Row justify="center" style={{ marginTop: 10 }}>
             <Col>
-              <Tooltip
-                title={incident.groups
-                  .map((item) => ` ${item.name}`)
-                  .toString()}
-              >
-                <Tag>+{incident.groups.length - 1} more</Tag>
-              </Tooltip>
+              <Link to={`/app/incidents/view/${incident?.id}`}>
+                <Button size="small" type="text">
+                  View Full Incident
+                </Button>
+              </Link>
             </Col>
-          )}
-        </Row>
-        <Row justify="center">
-          <Col>
-            <Link to={`/app/incidents/view/${incident?.id}`}>
-              <Button size="small" type="text">
-                View Full Incident
-              </Button>
-            </Link>
-          </Col>
-        </Row>
+          </Row>
+        </Link>
       </div>
     </Card>
   );

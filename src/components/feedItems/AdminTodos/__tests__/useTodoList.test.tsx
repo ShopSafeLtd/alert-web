@@ -40,7 +40,10 @@ const mocks = [
 ];
 
 const UseGroupListTest = () => {
-  const { data, loading } = useAdminTodos({ fullSearch: 'a' });
+  const { data, loading } = useAdminTodos({
+    fullSearch: 'a',
+    groupsFilter: [],
+  });
   const uncompletedTodos =
     data &&
     data.uncompletedTodos?.map((el) => (

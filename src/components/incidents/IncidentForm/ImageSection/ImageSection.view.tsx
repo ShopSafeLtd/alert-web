@@ -281,12 +281,14 @@ const ImageSection = ({
             {fileList.length < 10 && '+ Upload'}
           </Upload>
         </Form.Item>
-
+        {/* TODO! */}
         <ImageEditor
           submitImage={handleEditSubmit}
           onClose={() => setEditImage(null)}
           open={!!editImage}
           image={editImage}
+          primaryImage=""
+          setPrimaryImage={() => {}}
         />
       </Col>
     </Row>

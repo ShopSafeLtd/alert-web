@@ -115,6 +115,7 @@ const useViewOffender = (offenderId: string): Return => {
   const role = useStoreState((state) => state.user.role);
   const groups = useStoreState((state) => state.user.groups);
   const userId = useStoreState((state) => state.user.id);
+
   const [saving, setSaving] = useState(false);
 
   const [viewMatches, toggleViewMatches] = useState<string | null>(null);

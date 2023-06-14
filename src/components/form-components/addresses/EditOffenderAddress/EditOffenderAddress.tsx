@@ -30,7 +30,11 @@ const EditOffenderAddress = ({ onClose, onSubmit, data }: Props) => (
   >
     <Row gutter={16}>
       <Col span={12}>
-        <Form.Item name="alias" label="Alias">
+        <Form.Item
+          name="alias"
+          label="Label"
+          tooltip="A friendly name for the address to identify it, such as home"
+        >
           <Input />
         </Form.Item>
       </Col>

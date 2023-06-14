@@ -499,6 +499,10 @@ query FeedItems(
         reference
         updatedAt
         age
+        tags {
+          id
+          name
+        }
         bans {
           id
           title

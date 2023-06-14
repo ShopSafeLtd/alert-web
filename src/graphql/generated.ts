@@ -54965,9 +54965,14 @@ export type ListArticlesQuery = {
       createdBy: {
         __typename?: 'User';
         fullName: string;
-        organisation: string;
         id: string;
+        businesses: Array<{
+          __typename?: 'Business';
+          id: string;
+          name: string;
+        }>;
       };
+      groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     }>;
   };
 };
@@ -54982,6 +54987,7 @@ export type ArticleQuery = {
     __typename?: 'Article';
     id: string;
     createdAt: any;
+    updatedAt: any;
     priority: ArticlePriority;
     title: string;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
@@ -55748,6 +55754,28 @@ export type SchemeChatsQuery = {
   }>;
 };
 
+export type ListCustomGalleriesQueryVariables = Exact<{
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<CustomGalleryWhereInput>;
+  order?: InputMaybe<CustomGalleryOrderByWithRelationInput>;
+}>;
+
+export type ListCustomGalleriesQuery = {
+  __typename?: 'Query';
+  listCustomGalleries: {
+    __typename?: 'ListCustomGalleries';
+    total: number;
+    customGalleries: Array<{
+      __typename?: 'CustomGallery';
+      description?: string | null;
+      id: string;
+      name: string;
+      groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+    }>;
+  };
+};
+
 export type CreateCrimeGroupMutationVariables = Exact<{
   data: CreateCrimeGroupDataInput;
 }>;
@@ -55979,6 +56007,7 @@ export type CrimeGroupQuery = {
     totalValue?: number | null;
     subscribed?: boolean | null;
     alias?: string | null;
+    groups: Array<{ __typename?: 'Group'; id: string }>;
     offenders: Array<{
       __typename?: 'Offender';
       id: string;
@@ -56941,6 +56970,7 @@ export type FeedItemsQuery = {
         subscribed?: boolean | null;
         uploaded?: boolean | null;
         active?: boolean | null;
+        tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
         bans: Array<{
           __typename?: 'Ban';
           id: string;
@@ -57052,7 +57082,6 @@ export type FeedItemsQuery = {
           position: ImagePosition;
           card?: string | null;
         }>;
-        tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
         groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
         createdBy: {
           __typename?: 'User';
@@ -59997,6 +60026,8 @@ export type ViewOffenderQuery = {
     dateSource?: string | null;
     hair?: string | null;
     gender?: Gender | null;
+    height?: Height | null;
+    comment?: string | null;
     name?: string | null;
     reference?: number | null;
     race?: Race | null;
@@ -60006,6 +60037,11 @@ export type ViewOffenderQuery = {
     active?: boolean | null;
     idVerified: boolean;
     idSource?: IdSource | null;
+    customGalleries: Array<{
+      __typename?: 'CustomGallery';
+      id: string;
+      name: string;
+    }>;
     images: Array<{
       __typename?: 'Image';
       id: string;
@@ -63290,6 +63326,11 @@ export type CreateVehicleMutation = {
       id: string;
       reference?: number | null;
     }>;
+    customGalleries: Array<{
+      __typename?: 'CustomGallery';
+      id: string;
+      name: string;
+    }>;
   };
 };
 
@@ -63440,6 +63481,11 @@ export type VehicleQuery = {
     subscribed?: boolean | null;
     updatedAt: any;
     colour?: string | null;
+    customGalleries: Array<{
+      __typename?: 'CustomGallery';
+      id: string;
+      name: string;
+    }>;
     images: Array<{
       __typename?: 'Image';
       id: string;
@@ -64264,8 +64310,15 @@ export const ListArticlesDocument = gql`
         }
         createdBy {
           fullName
-          organisation
+          businesses {
+            id
+            name
+          }
           id
+        }
+        groups {
+          id
+          name
         }
         title
         updatedAt
@@ -64326,6 +64379,7 @@ export const ArticleDocument = gql`
         fullName
       }
       createdAt
+      updatedAt
       priority
       tags {
         name
@@ -65681,6 +65735,66 @@ export type SchemeChatsQueryResult = Apollo.QueryResult<
   SchemeChatsQuery,
   SchemeChatsQueryVariables
 >;
+export const ListCustomGalleriesDocument = gql`
+  query listCustomGalleries(
+    $take: Int
+    $skip: Int
+    $where: CustomGalleryWhereInput
+    $order: CustomGalleryOrderByWithRelationInput
+  ) {
+    listCustomGalleries(
+      take: $take
+      skip: $skip
+      where: $where
+      order: $order
+    ) {
+      customGalleries {
+        description
+        groups {
+          id
+          name
+        }
+        id
+        name
+      }
+      total
+    }
+  }
+`;
+export function useListCustomGalleriesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    ListCustomGalleriesQuery,
+    ListCustomGalleriesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    ListCustomGalleriesQuery,
+    ListCustomGalleriesQueryVariables
+  >(ListCustomGalleriesDocument, options);
+}
+export function useListCustomGalleriesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListCustomGalleriesQuery,
+    ListCustomGalleriesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ListCustomGalleriesQuery,
+    ListCustomGalleriesQueryVariables
+  >(ListCustomGalleriesDocument, options);
+}
+export type ListCustomGalleriesQueryHookResult = ReturnType<
+  typeof useListCustomGalleriesQuery
+>;
+export type ListCustomGalleriesLazyQueryHookResult = ReturnType<
+  typeof useListCustomGalleriesLazyQuery
+>;
+export type ListCustomGalleriesQueryResult = Apollo.QueryResult<
+  ListCustomGalleriesQuery,
+  ListCustomGalleriesQueryVariables
+>;
 export const CreateCrimeGroupDocument = gql`
   mutation CreateCrimeGroup($data: CreateCrimeGroupDataInput!) {
     createCrimeGroup(data: $data) {
@@ -66065,6 +66179,9 @@ export const CrimeGroupDocument = gql`
       totalValue
       subscribed
       alias
+      groups {
+        id
+      }
       offenders {
         id
         name
@@ -67198,6 +67315,10 @@ export const FeedItemsDocument = gql`
           reference
           updatedAt
           age
+          tags {
+            id
+            name
+          }
           bans {
             id
             title
@@ -71559,6 +71680,8 @@ export const ViewOffenderDocument = gql`
       dateSource
       hair
       gender
+      height
+      comment
       name
       reference
       race
@@ -71568,6 +71691,10 @@ export const ViewOffenderDocument = gql`
       active
       idVerified
       idSource
+      customGalleries {
+        id
+        name
+      }
       images {
         id
         url
@@ -76192,6 +76319,10 @@ export const CreateVehicleDocument = gql`
         id
         reference
       }
+      customGalleries {
+        id
+        name
+      }
     }
   }
 `;
@@ -76464,6 +76595,10 @@ export const VehicleDocument = gql`
       totalCrimeGroups
       reference
       subscribed
+      customGalleries {
+        id
+        name
+      }
       images {
         id
         optimised

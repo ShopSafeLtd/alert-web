@@ -17,7 +17,7 @@ const AddOffender = (): JSX.Element => {
     fileList,
     addOffenderTag,
     toggleAddOffenderTag,
-    updateOffenderTag,
+    updateNewOffenderTagData,
     addExclusion,
     toggleAddExclusion,
     editExclusion,
@@ -29,8 +29,7 @@ const AddOffender = (): JSX.Element => {
     deleteConfirm,
     ageCheck,
     setAgeCheck,
-    selectedItems,
-    setSelectedItems,
+
     form,
     adminRights,
     vehiclesData,
@@ -47,6 +46,13 @@ const AddOffender = (): JSX.Element => {
     onRemoveCrimeGroup,
     onRemoveImage,
     onRemoveVehicle,
+    primaryImage,
+    setPrimaryImage,
+    customGalleries,
+    customGalleriesLoading,
+    addCustomGallery,
+    toggleAddCustomGallery,
+    updateNewCustomGalleryData,
   } = useAddOffender();
 
   return (
@@ -59,8 +65,6 @@ const AddOffender = (): JSX.Element => {
         onRemoveImage={onRemoveImage}
         onRemoveVehicle={onRemoveVehicle}
         form={form}
-        selectedItems={selectedItems}
-        setSelectedItems={setSelectedItems}
         onSubmit={onSubmit}
         bansData={bansData}
         saving={saving}
@@ -74,7 +78,7 @@ const AddOffender = (): JSX.Element => {
         fileList={fileList}
         addOffenderTag={addOffenderTag}
         toggleAddOffenderTag={toggleAddOffenderTag}
-        updateOffenderTag={updateOffenderTag}
+        updateNewOffenderTagData={updateNewOffenderTagData}
         addExclusion={addExclusion}
         toggleAddExclusion={toggleAddExclusion}
         editExclusion={editExclusion}
@@ -94,6 +98,13 @@ const AddOffender = (): JSX.Element => {
         editImage={editImage}
         onEditImage={onEditImage}
         toggleEditImage={toggleEditImage}
+        primaryImage={primaryImage}
+        setPrimaryImage={setPrimaryImage}
+        customGalleries={customGalleries}
+        customGalleriesLoading={customGalleriesLoading}
+        addCustomGallery={addCustomGallery}
+        toggleAddCustomGallery={toggleAddCustomGallery}
+        updateNewCustomGalleryData={updateNewCustomGalleryData}
       />
     </div>
   );

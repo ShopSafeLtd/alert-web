@@ -3,6 +3,9 @@ import type {
   Age,
   Build,
   Gender,
+  Height,
+  IdSource,
+  ImagePosition,
   Race,
   SearchOffendersQuery,
   SearchOffendersQueryVariables,
@@ -13,54 +16,41 @@ import {
   SortOrder,
 } from 'graphql/generated';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-import { message, Upload } from 'antd';
+import type { FormInstance } from 'antd';
+import { Form, message, Upload } from 'antd';
 import { useApolloClient } from '@apollo/client';
 import { useStoreState } from 'state';
+import update from 'immutability-helper';
+import type { OffenderData } from 'types/DataType';
 import OffenderItem from './OffenderItem';
 
-interface FormData {
+export interface FormData {
   name: string;
+  alias?: string[];
   age: Age;
   gender: Gender;
   race: Race;
   build: Build;
+  height: Height;
   hair: string;
   peculiarities: string;
+  comment: string;
   dateSource: string;
   dateOfBirth: Date;
+  groups: string[];
+  idVerified?: boolean;
+  idSource?: IdSource;
 }
-interface OffenderData {
-  id: string;
-  name?: string | null;
-  age?: Age | null;
-  gender?: Gender | null;
-  race?: Race | null;
-  build?: Build | null;
-  dateOfBirth?: Date | null;
-  hair?: string | null;
-  dateSource?: string | null;
-  peculiarities?: string | null;
-  approved?: boolean | null;
-  groups?:
-    | {
-        id: string;
-        name: string;
-      }[]
-    | undefined;
-  images?: {
-    id: string;
-    optimised?: string | null;
-    url?: string | null;
-    fileName?: string | null;
-    type?: string | null;
-    new?: boolean;
-  }[];
+
+export interface Image extends UploadFile {
+  position?: ImagePosition;
+  primary?: boolean;
+  policeImage?: boolean;
 }
 interface Props {
   onClose: () => void;
   update: (value: OffenderData) => void;
 }
-
 interface Return {
   onSubmit: (value: FormData) => void;
   saving: boolean;
@@ -68,44 +58,35 @@ interface Return {
   setAgeCheck: (value: boolean) => void;
   imgChange: UploadProps['onChange'];
   beforeUpload: (value: RcFile) => void;
-  fileList: UploadFile[];
+  fileList: Image[];
+  primaryImage: string;
+  setPrimaryImage: (value: string) => void;
+  editImage: Image | null;
+  onEditImage: (value: Image) => void;
+  onRemoveImage: (imageId: string) => void;
+  toggleEditImage: (value?: Image) => void;
   onSearchOffender: (
     value: string
   ) => Promise<{ label: React.ReactNode; value: string }[]>;
+  idVerified: boolean;
+  onValuesChange: (changedValues: FormData, values: FormData) => void;
+  form: FormInstance<FormData>;
 }
 
-const useAddNewOffender = ({ onClose, update }: Props): Return => {
+const useAddNewOffender = ({
+  onClose,
+  update: updateOffender,
+}: Props): Return => {
   const client = useApolloClient();
+  const [form] = Form.useForm<FormData>();
+  const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
   const [ageCheck, setAgeCheck] = useState(false);
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [fileList, setFileList] = useState<Image[]>([]);
   const [imageChange, setImageChange] = useState(false);
-  const schemeId = useStoreState((state) => state.scheme.id);
-
-  const beforeUpload = (file: RcFile) => {
-    const isFileDuplicate = fileList.find((item) => item.name === file.name);
-    if (isFileDuplicate) {
-      message.error('This image already exists, please choose another one.');
-    }
-    return !isFileDuplicate || Upload.LIST_IGNORE;
-  };
-  const imgChange: UploadProps['onChange'] = (info) => {
-    if (info.file.response && info.file.status === 'done') {
-      setFileList([
-        ...fileList.filter((item) => item.uid !== info.file.uid),
-        {
-          ...info.file,
-          url: info.file.response[0].url,
-          fileName: info.file.response[0].blobName,
-          type: info.file.response[0].mimetype,
-        },
-      ]);
-      setImageChange(true);
-    } else {
-      setFileList(info.fileList);
-      setImageChange(true);
-    }
-  };
+  const [editImage, setEditImage] = useState<Image | null>(null);
+  const [primaryImage, setPrimaryImage] = useState<string>('');
+  const [idVerified, setIDVerified] = useState(false);
 
   const onSearchOffender = async (value: string) => {
     if (value.length < 2) {
@@ -147,7 +128,7 @@ const useAddNewOffender = ({ onClose, update }: Props): Return => {
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
-    update({
+    updateOffender({
       id: Math.floor(Math.random() * 1000).toString(),
       name: data.name,
       gender: data.gender || null,
@@ -158,6 +139,8 @@ const useAddNewOffender = ({ onClose, update }: Props): Return => {
       age: ageCheck ? null : data.age || null,
       dateSource: ageCheck ? data.dateSource || null : null,
       dateOfBirth: ageCheck ? data.dateOfBirth || null : null,
+      idVerified: data.idVerified,
+      idSource: data.idSource,
       images: imageChange
         ? fileList.map((el) => ({
             id: el.uid,
@@ -166,12 +149,65 @@ const useAddNewOffender = ({ onClose, update }: Props): Return => {
             fileName: el.fileName,
             type: el.type,
             new: true,
+            position: el.position,
+            primary: el.uid === primaryImage,
+            policeImage: el.policeImage,
           }))
         : undefined,
     });
 
     onClose();
     setSaving(false);
+  };
+
+  // image
+  const beforeUpload = (file: RcFile) => {
+    const isFileDuplicate = fileList.find((item) => item.name === file.name);
+    if (isFileDuplicate) {
+      message.error('This image already exists, please choose another one.');
+    }
+    return !isFileDuplicate || Upload.LIST_IGNORE;
+  };
+  const imgChange: UploadProps['onChange'] = (info) => {
+    if (info.file.response && info.file.status === 'done') {
+      setFileList([
+        ...fileList.filter((item) => item.uid !== info.file.uid),
+        {
+          ...info.file,
+          url: info.file.response[0].url,
+          fileName: info.file.response[0].blobName,
+          type: info.file.response[0].mimetype,
+        },
+      ]);
+      setImageChange(true);
+    } else {
+      setFileList(info.fileList);
+      setImageChange(true);
+    }
+  };
+  const onEditImage = (value: Image) => {
+    setEditImage(null);
+    const index = fileList.map((item) => item.uid).indexOf(value.uid);
+    setFileList(
+      update(fileList, {
+        [index]: {
+          $set: value,
+        },
+      })
+    );
+  };
+
+  const onRemoveImage = (imageId: string) => {
+    setFileList(fileList.filter((item) => item.uid !== imageId));
+  };
+
+  const toggleEditImage = (image?: Image) => {
+    setEditImage(image || null);
+  };
+  const onValuesChange = (changedValues: FormData) => {
+    if (changedValues.idVerified !== undefined) {
+      setIDVerified(changedValues.idVerified);
+    }
   };
 
   return {
@@ -182,7 +218,16 @@ const useAddNewOffender = ({ onClose, update }: Props): Return => {
     imgChange,
     beforeUpload,
     fileList,
+    onRemoveImage,
+    onEditImage,
+    toggleEditImage,
+    editImage,
+    primaryImage,
+    setPrimaryImage,
     onSearchOffender,
+    onValuesChange,
+    idVerified,
+    form,
   };
 };
 

@@ -7,17 +7,25 @@ interface Props {
   onClose: () => void;
   update: (value: VehicleData) => void;
   editData: VehicleData | undefined | null;
-
+  showGroups?: boolean;
+  fromIncident?: boolean | undefined;
+  fromOffender?: boolean | undefined;
   // editData:
   //   | Exclude<VehicleQuery['vehicle'], undefined | null>
   //   | undefined
   //   | null;
 }
 
-const EditVehicle = ({ onClose, update, editData }: Props): JSX.Element => {
+const EditVehicle = ({
+  onClose,
+  update,
+  editData,
+  showGroups,
+  fromIncident,
+  fromOffender,
+}: Props): JSX.Element => {
   const {
     onSubmit,
-
     CrimeGroupsData,
     CrimeGroupsLoading,
     saving,
@@ -35,6 +43,20 @@ const EditVehicle = ({ onClose, update, editData }: Props): JSX.Element => {
     imgChange,
     beforeUpload,
     fileList,
+    onRemoveImage,
+    onEditImage,
+    toggleEditImage,
+    editImage,
+    primaryImage,
+    setPrimaryImage,
+    groups,
+    groupsLoading,
+    customGalleries,
+    customGalleriesLoading,
+    addCustomGallery,
+    toggleAddCustomGallery,
+    updateNewCustomGalleryData,
+    form,
   } = useEditVehicle({
     onClose,
     update,
@@ -62,7 +84,24 @@ const EditVehicle = ({ onClose, update, editData }: Props): JSX.Element => {
       imgChange={imgChange}
       beforeUpload={beforeUpload}
       fileList={fileList}
+      onRemoveImage={onRemoveImage}
+      editImage={editImage}
+      onEditImage={onEditImage}
+      toggleEditImage={toggleEditImage}
+      primaryImage={primaryImage}
+      setPrimaryImage={setPrimaryImage}
       editData={editData}
+      showGroups={showGroups}
+      groups={groups}
+      groupsLoading={groupsLoading}
+      fromIncident={fromIncident}
+      fromOffender={fromOffender}
+      customGalleries={customGalleries}
+      customGalleriesLoading={customGalleriesLoading}
+      addCustomGallery={addCustomGallery}
+      toggleAddCustomGallery={toggleAddCustomGallery}
+      updateNewCustomGalleryData={updateNewCustomGalleryData}
+      form={form}
     />
   );
 };

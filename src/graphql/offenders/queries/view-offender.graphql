@@ -13,6 +13,8 @@ query ViewOffender(
     dateSource
     hair
     gender
+    height
+    comment
     name
     reference
     race
@@ -22,6 +24,10 @@ query ViewOffender(
     active
     idVerified
     idSource
+    customGalleries {
+      id
+      name
+    }
     images {
       id
       url
@@ -42,6 +48,8 @@ query ViewOffender(
           id
         }
       }
+      policeImage
+      primary
     }
     addresses {
       id

@@ -1,36 +1,27 @@
 import React from 'react';
-import type { Age, Build, Gender, Race } from 'graphql/generated';
 
+import type { FormInstance } from 'antd';
 import {
   Button,
   Col,
   DatePicker,
   Form,
   Input,
+  Radio,
   Row,
   Select,
   Switch,
   Typography,
-  Upload,
 } from 'antd';
 
 import { ageValues, buildValues, genderValues, raceValues } from 'types/enums';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 // import DebounceSelect from 'components/form-components/DebounceSelect';
+import UploadImage from 'components/images/UploadImage.view';
+import { heightValues } from 'types/enums/height';
+import { IdSource } from 'graphql/generated';
 import useStyles from './AddNewOffender.style';
-
-interface FormData {
-  name: string;
-  age: Age;
-  gender: Gender;
-  race: Race;
-  build: Build;
-  hair: string;
-  peculiarities: string;
-  dateSource: string;
-  dateOfBirth: Date;
-  images?: [{ id: string; url: string; optimised: string }];
-}
+import type { FormData, Image } from './useAddNewOffender';
 
 interface Props {
   onClose: () => void;
@@ -41,7 +32,16 @@ interface Props {
   imgChange: UploadProps['onChange'];
   beforeUpload: (value: RcFile) => void;
   fileList: UploadFile[];
+  primaryImage: string;
+  setPrimaryImage: (value: string) => void;
+  editImage: Image | null;
+  onEditImage: (value: Image) => void;
+  onRemoveImage: (imageId: string) => void;
+  toggleEditImage: (value?: Image) => void;
   hideImages?: boolean;
+  form: FormInstance<FormData>;
+  idVerified: boolean;
+  onValuesChange: (changedValues: FormData, values: FormData) => void;
   addOverride?: string;
 }
 
@@ -56,12 +56,26 @@ const AddNewOffender = ({
   fileList,
   hideImages,
   addOverride,
+  onRemoveImage,
+  onEditImage,
+  toggleEditImage,
+  editImage,
+  primaryImage,
+  setPrimaryImage,
+  idVerified,
+  form,
+  onValuesChange,
 }: Props): JSX.Element => {
   const classes = useStyles();
   return (
-    <Form layout="vertical" onFinish={onSubmit}>
+    <Form
+      form={form}
+      layout="vertical"
+      onFinish={onSubmit}
+      onValuesChange={onValuesChange}
+    >
       <Row gutter={16}>
-        <Col span={24}>
+        <Col span={12}>
           <Form.Item
             name="name"
             label="Name"
@@ -69,6 +83,15 @@ const AddNewOffender = ({
                 blank."
           >
             <Input className={classes.nameSelect} disabled={saving} />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            name="alias"
+            label="Alias"
+            tooltip="Select the alias of the offender if known."
+          >
+            <Select disabled={saving} mode="tags" />
           </Form.Item>
         </Col>
       </Row>
@@ -80,6 +103,15 @@ const AddNewOffender = ({
             tooltip="Select the build of the offender if known."
           >
             <Select options={buildValues} disabled={saving} />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            name="height"
+            label="Height"
+            tooltip="Select the height of the offender if known."
+          >
+            <Select options={heightValues} disabled={saving} />
           </Form.Item>
         </Col>
         <Col span={12}>
@@ -100,10 +132,7 @@ const AddNewOffender = ({
             <Select options={raceValues} disabled={saving} />
           </Form.Item>
         </Col>
-      </Row>
-
-      <Row gutter={16} wrap>
-        <Col span={24}>
+        <Col span={12}>
           <Form.Item
             name="hair"
             label="Hair"
@@ -112,11 +141,23 @@ const AddNewOffender = ({
             <Input disabled={saving} />
           </Form.Item>
         </Col>
+      </Row>
+
+      <Row gutter={16} wrap>
         <Col span={24}>
           <Form.Item
             name="peculiarities"
             label="Peculiarities"
             tooltip="Anything distinctive features of the offender."
+          >
+            <Input.TextArea disabled={saving} />
+          </Form.Item>
+        </Col>
+        <Col span={24}>
+          <Form.Item
+            name="comment"
+            label="Comment"
+            tooltip="Leave a comment for the offender."
           >
             <Input.TextArea disabled={saving} />
           </Form.Item>
@@ -172,29 +213,75 @@ const AddNewOffender = ({
           </Col>
         )}
       </Row>
-      {!hideImages && (
-        <Row>
+      <Row gutter={50}>
+        <Col>
+          <Form.Item
+            name="idVerified"
+            label="Has the offenders ID been verified?"
+            tooltip="Have you confirmed the offenders ID using an accepted method?"
+          >
+            <Radio.Group disabled={saving}>
+              <Radio.Button value>Yes</Radio.Button>
+              <Radio.Button value={false}>No</Radio.Button>
+            </Radio.Group>
+          </Form.Item>
+        </Col>
+        {idVerified && (
           <Col>
             <Form.Item
-              name="images"
-              label="Images"
-              tooltip="Please add any images that you have of the offender."
+              name="idSource"
+              label="ID Source"
+              tooltip="How did you confirm the ID?"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please enter the source of the ID.',
+                },
+              ]}
             >
-              <Upload
-                action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
-                className="upload-images"
-                style={{ width: '50%', height: '50%' }}
-                listType="picture-card"
-                fileList={fileList}
-                onChange={imgChange}
-                beforeUpload={beforeUpload}
-                accept=".png,.jpeg,.webp"
-              >
-                {fileList.length < 10 && '+ Upload'}
-              </Upload>
+              <Select
+                style={{ width: 200 }}
+                disabled={saving}
+                options={[
+                  {
+                    label: 'Driving Licence',
+                    value: IdSource.DrivingLicence,
+                  },
+                  {
+                    label: 'ID Card',
+                    value: IdSource.IdCard,
+                  },
+                  {
+                    label: 'Known Offender',
+                    value: IdSource.Known,
+                  },
+                  {
+                    label: 'Other',
+                    value: IdSource.Other,
+                  },
+                  {
+                    label: 'Passport',
+                    value: IdSource.Passport,
+                  },
+                ]}
+              />
             </Form.Item>
           </Col>
-        </Row>
+        )}
+      </Row>
+      {!hideImages && (
+        <UploadImage
+          imgChange={imgChange}
+          beforeUpload={beforeUpload}
+          fileList={fileList}
+          editImage={editImage}
+          onEditImage={onEditImage}
+          toggleEditImage={toggleEditImage}
+          onRemoveImage={onRemoveImage}
+          primaryImage={primaryImage}
+          setPrimaryImage={setPrimaryImage}
+          title="offender"
+        />
       )}
 
       <Form.Item>

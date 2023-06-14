@@ -3,12 +3,14 @@ import type {
   Age,
   Build,
   Gender,
+  ListCustomGalleriesQuery,
   ListOffendersQuery,
   Race,
   RecycleOffenderMutation,
   SearchBusinessesQuery,
 } from 'graphql/generated';
 import {
+  useListCustomGalleriesQuery,
   ListOffendersDocument,
   Model,
   QueryMode,
@@ -80,6 +82,11 @@ interface Return {
   businessData: SearchBusinessesQuery | undefined;
   businessesLoading: boolean;
   setCreatedAtFilter: (value: DateType | undefined) => void;
+  customGalleriesData: ListCustomGalleriesQuery | undefined;
+  adminRights: boolean;
+  onSelectCustomGalleries: (values: string) => void;
+  customGalleries: string[];
+  onSelectGallery: (value: string) => void;
 }
 
 const getSizeOptions = () => {
@@ -124,6 +131,7 @@ const useOffenderFeed = (): Return => {
   const [hair, setHair] = useState('');
   const [peculiarities, setPeculiarities] = useState('');
   const [gallery, setGallery] = useState<string[]>([]);
+  const [customGalleries, setCustomGalleries] = useState<string[]>([]);
   const [businesses, setBusinesses] = useState<string[]>([]);
   const [createdAtFilter, setCreatedAtFilter] = useState<
     DateType | undefined
@@ -213,7 +221,16 @@ const useOffenderFeed = (): Return => {
             },
           }
         : undefined,
-
+      customGalleries:
+        customGalleries && customGalleries.length > 0
+          ? {
+              some: {
+                id: {
+                  in: customGalleries,
+                },
+              },
+            }
+          : undefined,
       gender:
         sex.length > 0
           ? {
@@ -313,7 +330,6 @@ const useOffenderFeed = (): Return => {
       },
       order,
     });
-    // eslint-disable-next-line
   }, []);
 
   // Fetch scheme tags
@@ -357,7 +373,24 @@ const useOffenderFeed = (): Return => {
         },
       },
     });
-
+  // custom galleries
+  const { data: customGalleriesData } = useListCustomGalleriesQuery({
+    fetchPolicy: 'cache-and-network',
+    variables: {
+      order: {
+        updatedAt: SortOrder.Desc,
+      },
+      where: {
+        schemes: {
+          some: {
+            id: {
+              equals: schemeId,
+            },
+          },
+        },
+      },
+    },
+  });
   // update Offender list after deleting an item
   const updateOffenderList: MutationUpdaterFn<RecycleOffenderMutation> = (
     store,
@@ -464,6 +497,25 @@ const useOffenderFeed = (): Return => {
     setSortFilter(!sortFilter);
   };
 
+  const onSelectCustomGalleries = (id: string) => {
+    if (id) {
+      if (customGalleries.includes(id)) {
+        setCustomGalleries(customGalleries.filter((index) => index !== id));
+      } else {
+        setCustomGalleries([...customGalleries, id]);
+      }
+    }
+  };
+
+  const onSelectGallery = (id: string) => {
+    if (id) {
+      if (customGalleries.includes(id)) {
+        setGallery(customGalleries.filter((index) => index !== id));
+      } else {
+        setGallery([...customGalleries, id]);
+      }
+    }
+  };
   const clearFilters = () => {
     setGroupsFilter([]);
     setWarnings([]);
@@ -532,6 +584,11 @@ const useOffenderFeed = (): Return => {
     setBusinesses,
     businessesLoading,
     setCreatedAtFilter,
+    customGalleriesData,
+    adminRights: role !== Role.User,
+    customGalleries,
+    onSelectCustomGalleries,
+    onSelectGallery,
   };
 };
 

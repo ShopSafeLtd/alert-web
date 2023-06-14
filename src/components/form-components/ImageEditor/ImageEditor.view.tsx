@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { UploadFile } from 'antd';
-import { Button, Switch, Form, Select, Skeleton, Col, Modal, Row } from 'antd';
+import { Button, Switch, Form, Select, Col, Modal, Row } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import { ImagePosition } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -55,34 +55,51 @@ interface Image extends UploadFile {
     name?: string | undefined | null;
   }[];
   position?: ImagePosition;
-  primary?: boolean;
+  policeImage?: boolean;
 }
-// interface FormData {
-//   position?: ImagePosition;
-//   primary?: boolean;
-// }
 
 interface Props {
   open: boolean;
   image: Image | null;
   submitImage: (value: Image) => void;
   onClose: () => void;
+  primaryImage: string;
+  setPrimaryImage: (value: string) => void;
 }
 
-const ImageEditor = ({ open, image, submitImage, onClose }: Props) => {
+const ImageEditor = ({
+  open,
+  image,
+  submitImage,
+  onClose,
+  primaryImage,
+  setPrimaryImage,
+}: Props) => {
   const classes = useStyles();
   const [position, setPosition] = useState(ImagePosition.CenterCenter);
-  const [primary, setPrimary] = useState(false);
+  const [policeImage, setPoliceImage] = useState(false);
+  const [isPrimaryImage, setIsPrimaryImage] = useState(false);
   const [rotation, setRotation] = useState(0);
+
+  useEffect(() => {
+    setPosition(image?.position || ImagePosition.CenterCenter);
+    setPoliceImage(image?.policeImage || false);
+    setIsPrimaryImage(image?.uid === primaryImage || false);
+  }, [image]);
 
   const handleSubmit = () => {
     if (image) {
       submitImage({
         ...image,
         position,
+        policeImage,
       });
+      if (isPrimaryImage) setPrimaryImage(image.uid);
+      if (!isPrimaryImage && image.uid === primaryImage) setPrimaryImage('');
     }
     setPosition(ImagePosition.CenterCenter);
+    setIsPrimaryImage(false);
+    setPoliceImage(false);
   };
 
   const onRotateRight = () => {
@@ -95,30 +112,32 @@ const ImageEditor = ({ open, image, submitImage, onClose }: Props) => {
 
   return (
     <Modal
-      width={600}
+      width={700}
+      zIndex={2000}
       open={open}
       title="Edit Image"
       bodyStyle={{ padding: 0 }}
       okText="Save Image"
       onOk={handleSubmit}
-      onCancel={onClose}
+      onCancel={() => {
+        onClose();
+      }}
     >
       {open && (
         <Row wrap={false}>
           <Col className={classes.toolbar}>
-            <Form
-              className={classes.select}
-              layout="vertical"
-              // initialValues={{}}
-              // onFinish={onSubmit}
-            >
-              <Form.Item label="Image Position">
-                <Select
-                  value={position}
-                  onChange={setPosition}
-                  options={positionOptions}
-                />
-              </Form.Item>
+            <Form className={classes.select} layout="vertical">
+              <Row>
+                <Col flex={1}>
+                  <Form.Item label="Image Position">
+                    <Select
+                      value={position}
+                      onChange={setPosition}
+                      options={positionOptions}
+                    />
+                  </Form.Item>
+                </Col>
+              </Row>
               <Form.Item label="Rotation">
                 <Row gutter={8}>
                   <Col>
@@ -133,37 +152,51 @@ const ImageEditor = ({ open, image, submitImage, onClose }: Props) => {
                   </Col>
                 </Row>
               </Form.Item>
-              <Form.Item
-                label="Set as primary image"
-                name="primaryImage"
-                valuePropName="checked"
-                style={{
-                  marginBottom: 0,
-                  flexDirection: 'row',
-                  justifyItems: 'center',
-                }}
-              >
-                <Switch
-                  // disabled={saving}
-                  checked={primary}
-                  onChange={() => setPrimary(!primary)}
-                  style={{ marginLeft: 10, marginTop: -20 }}
-                />
-              </Form.Item>
+              <Row>
+                <Col flex={1}>
+                  <Form.Item
+                    label="Set as primary image"
+                    valuePropName="checked"
+                    style={{
+                      marginBottom: 0,
+                      flexDirection: 'row',
+                      justifyItems: 'center',
+                    }}
+                  >
+                    <Switch
+                      checked={isPrimaryImage}
+                      onChange={() => setIsPrimaryImage(!isPrimaryImage)}
+                      style={{ marginLeft: 10, marginTop: -20 }}
+                    />
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row>
+                <Col flex={1}>
+                  <Form.Item
+                    label="Received from the police"
+                    valuePropName="checked"
+                    style={{
+                      marginBottom: 0,
+                      flexDirection: 'row',
+                      justifyItems: 'center',
+                    }}
+                  >
+                    <Switch
+                      checked={policeImage}
+                      onChange={() => setPoliceImage(!policeImage)}
+                      style={{ marginLeft: 10, marginTop: -20 }}
+                    />
+                  </Form.Item>
+                </Col>
+              </Row>
             </Form>
           </Col>
           <Col flex={1}>
             <div className={classes.cardPreviewSection}>
               <div className={classes.mockupCard}>
                 <div className={classes.cardImage}>
-                  <WatermarkImage
-                    url={image?.url}
-                    position={position}
-                    rotation={rotation}
-                  />
-                </div>
-                <div className={classes.cardBody}>
-                  <Skeleton />
+                  <WatermarkImage url={image?.url} position={position} />
                 </div>
               </div>
             </div>

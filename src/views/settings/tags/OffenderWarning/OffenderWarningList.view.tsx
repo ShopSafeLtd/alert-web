@@ -10,30 +10,29 @@ import {
   Tooltip,
 } from 'antd';
 
-import type { CreateTagMutation, TagsQuery } from 'graphql/generated';
-import AddOffender from 'components/form-components/tags/offenderWarnings/AddOffenderWarning';
-import EditOffender from 'components/form-components/tags/offenderWarnings/EditOffenderWarning';
-
-import type { MutationUpdaterFn } from '@apollo/client';
+import type { TagsQuery } from 'graphql/generated';
+import AddOffenderWarning from 'components/form-components/tags/offenderWarnings/AddOffenderWarning';
+import EditOffenderWarning from 'components/form-components/tags/offenderWarnings/EditOffenderWarning';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faPenToSquare,
   faPlus,
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
+import type { TagData } from 'types/DataType';
 
 interface Props {
   data: TagsQuery | undefined;
   loading: boolean;
   search: string;
   setSearch: (value: string) => void;
-  addOffender: boolean;
-  toggleAddOffender: () => void;
-  updateOffenderWarningList: MutationUpdaterFn<CreateTagMutation>;
+  addOffenderWarning: boolean;
+  toggleAddOffenderWarning: () => void;
+  onAddOffenderWarning: (value: TagData) => void;
   offenderId: string;
   setOffenderId: (value: string) => void;
-  editOffender: boolean;
-  toggleEditOffender: () => void;
+  editOffenderWarning: boolean;
+  toggleEditOffenderWarning: () => void;
   saving: boolean;
   deleteConfirm: (value: string) => void;
 }
@@ -43,11 +42,11 @@ const OffenderWarningList = ({
   loading,
   search,
   setSearch,
-  editOffender,
-  toggleEditOffender,
-  addOffender,
-  toggleAddOffender,
-  updateOffenderWarningList,
+  editOffenderWarning,
+  toggleEditOffenderWarning,
+  addOffenderWarning,
+  toggleAddOffenderWarning,
+  onAddOffenderWarning,
   offenderId,
   setOffenderId,
   saving,
@@ -67,7 +66,7 @@ const OffenderWarningList = ({
       <Col>
         <Button
           type="primary"
-          onClick={toggleAddOffender}
+          onClick={toggleAddOffenderWarning}
           icon={
             <FontAwesomeIcon
               icon={faPlus}
@@ -100,7 +99,7 @@ const OffenderWarningList = ({
               disabled={saving}
               onClick={() => {
                 setOffenderId(record.key);
-                toggleEditOffender();
+                toggleEditOffenderWarning();
               }}
             >
               {value}
@@ -128,7 +127,7 @@ const OffenderWarningList = ({
                     disabled={saving}
                     onClick={() => {
                       setOffenderId(record.key);
-                      toggleEditOffender();
+                      toggleEditOffenderWarning();
                     }}
                     icon={<FontAwesomeIcon icon={faPenToSquare} />}
                   />
@@ -159,14 +158,15 @@ const OffenderWarningList = ({
 
     <Drawer
       title="Add Offender Warning"
-      visible={addOffender}
+      visible={addOffenderWarning}
       width="400"
-      onClose={toggleAddOffender}
+      onClose={toggleAddOffenderWarning}
     >
-      {addOffender ? (
-        <AddOffender
-          update={updateOffenderWarningList}
-          onClose={toggleAddOffender}
+      {addOffenderWarning ? (
+        <AddOffenderWarning
+          update={onAddOffenderWarning}
+          onClose={toggleAddOffenderWarning}
+          saving={saving}
         />
       ) : (
         <div />
@@ -174,11 +174,14 @@ const OffenderWarningList = ({
     </Drawer>
     <Drawer
       title="Edit Offender Warning"
-      visible={editOffender}
+      visible={editOffenderWarning}
       width="400"
-      onClose={toggleEditOffender}
+      onClose={toggleEditOffenderWarning}
     >
-      <EditOffender offenderId={offenderId} onClose={toggleEditOffender} />
+      <EditOffenderWarning
+        offenderId={offenderId}
+        onClose={toggleEditOffenderWarning}
+      />
     </Drawer>
   </div>
 );

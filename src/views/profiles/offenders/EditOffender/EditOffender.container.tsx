@@ -24,7 +24,6 @@ const EditOffender = ({ reviewed }: Props): JSX.Element => {
     fileList,
     addOffenderTag,
     toggleAddOffenderTag,
-    updateOffenderTag,
     addExclusion,
     toggleAddExclusion,
     editExclusion,
@@ -39,8 +38,7 @@ const EditOffender = ({ reviewed }: Props): JSX.Element => {
     ageCheck,
     setAgeCheck,
     onReject,
-    selectedItems,
-    setSelectedItems,
+
     form,
     vehiclesData,
     crimeGroupsData,
@@ -64,16 +62,20 @@ const EditOffender = ({ reviewed }: Props): JSX.Element => {
     onAddCrimeGroup,
     onRemoveCrimeGroup,
     onRemoveImage,
+    primaryImage,
+    setPrimaryImage,
+    customGalleries,
+    customGalleriesLoading,
+    toggleAddCustomGallery,
+    updateNewOffenderTagData,
+    addCustomGallery,
+    updateNewCustomGalleryData,
   } = useEditOffender({ offenderId, reviewed });
-  console.log('data.name', data?.offender?.id);
-  console.log('data.alias', data?.offender?.alias);
 
   return (
     <div>
       <View
         form={form}
-        selectedItems={selectedItems}
-        setSelectedItems={setSelectedItems}
         onSubmit={onSubmit}
         data={data}
         loading={loading}
@@ -88,7 +90,6 @@ const EditOffender = ({ reviewed }: Props): JSX.Element => {
         fileList={fileList}
         addOffenderTag={addOffenderTag}
         toggleAddOffenderTag={toggleAddOffenderTag}
-        updateOffenderTag={updateOffenderTag}
         addExclusion={addExclusion}
         toggleAddExclusion={toggleAddExclusion}
         editExclusion={editExclusion}
@@ -126,6 +127,14 @@ const EditOffender = ({ reviewed }: Props): JSX.Element => {
         onEditVehicle={onEditVehicle}
         onRemoveVehicle={onRemoveVehicle}
         onRemoveImage={onRemoveImage}
+        primaryImage={primaryImage}
+        setPrimaryImage={setPrimaryImage}
+        customGalleries={customGalleries}
+        customGalleriesLoading={customGalleriesLoading}
+        toggleAddCustomGallery={toggleAddCustomGallery}
+        updateNewOffenderTagData={updateNewOffenderTagData}
+        addCustomGallery={addCustomGallery}
+        updateNewCustomGalleryData={updateNewCustomGalleryData}
       />
     </div>
   );

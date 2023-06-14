@@ -170,7 +170,7 @@ const AdminTodos = ({
               dataIndex: 'dueDate',
               title: 'Due Date',
               width: 120,
-              render: (value) => moment(value).calendar('dd/mm/yyyy'),
+              render: (value) => moment(value).calendar('mm/dd/yyyy'),
             },
           ]}
           expandable={{
@@ -257,7 +257,7 @@ const AdminTodos = ({
                   dataIndex: 'completedDate',
                   title: 'Completed Date',
                   width: 120,
-                  render: (value) => moment(value).calendar('dd/mm/yyyy'),
+                  render: (value) => moment(value).calendar('mm/dd/yyyy'),
                 },
               ]}
               // expandable={{

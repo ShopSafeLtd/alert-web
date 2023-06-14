@@ -9,6 +9,9 @@ query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
     totalValue
     subscribed
     alias
+    groups {
+      id
+    }
     offenders {
       id
       name

@@ -23,6 +23,15 @@ const AddNewOffender = ({
     imgChange,
     beforeUpload,
     fileList,
+    onRemoveImage,
+    onEditImage,
+    toggleEditImage,
+    editImage,
+    primaryImage,
+    setPrimaryImage,
+    idVerified,
+    onValuesChange,
+    form,
   } = useAddNewOffender({
     onClose,
     update,
@@ -38,7 +47,16 @@ const AddNewOffender = ({
         imgChange={imgChange}
         beforeUpload={beforeUpload}
         fileList={fileList}
+        onRemoveImage={onRemoveImage}
+        editImage={editImage}
+        onEditImage={onEditImage}
+        toggleEditImage={toggleEditImage}
+        primaryImage={primaryImage}
+        setPrimaryImage={setPrimaryImage}
         hideImages={hideImages}
+        idVerified={idVerified}
+        onValuesChange={onValuesChange}
+        form={form}
         // onSearchOffender={onSearchOffender}
         addOverride={addOverride}
       />

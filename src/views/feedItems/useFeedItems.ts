@@ -20,6 +20,7 @@ import { useNavigate } from 'react-router-dom';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { notification } from 'antd';
 import type { DateType, PaginationModel } from 'types/DataType';
+import errorNotification from 'types/error_notification';
 
 interface Return {
   data: FeedItemsQuery | undefined;
@@ -322,11 +323,7 @@ const useFeedItems = (): Return => {
     },
     onError: () => {
       setSaving(false);
-      notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
     update: updateFeedItemList,
   });

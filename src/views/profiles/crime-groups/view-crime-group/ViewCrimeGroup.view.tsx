@@ -712,9 +712,9 @@ const ViewCrimeGroup = ({
       <Drawer
         title="Add New Offender"
         visible={addOffender}
-        width="600"
+        width="700"
         onClose={toggleAddOffender}
-        zIndex={1001}
+        zIndex={999}
       >
         {addOffender ? (
           <AddOffender
@@ -748,7 +748,8 @@ const ViewCrimeGroup = ({
       <Drawer
         title="Add New Vehicle"
         open={addNewVehicle}
-        width="600"
+        width="700"
+        zIndex={999}
         onClose={toggleAddNewVehicle}
       >
         {addNewVehicle ? (

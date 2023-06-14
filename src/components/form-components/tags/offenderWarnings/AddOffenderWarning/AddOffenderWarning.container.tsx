@@ -1,17 +1,20 @@
-import type { MutationUpdaterFn } from '@apollo/client';
-import type { CreateTagMutation } from 'graphql/generated';
 import React from 'react';
+import type { TagData } from 'types/DataType';
 import View from './AddOffenderWarning.view';
 import useAddOffenderWarning from './useAddOffenderWarning';
 
 interface Props {
   onClose: () => void;
-  update: MutationUpdaterFn<CreateTagMutation>;
+  update: (value: TagData) => void;
+  saving?: boolean;
 }
 
-const AddOffenderWarning = ({ onClose, update }: Props): JSX.Element => {
-  const { onSubmit, saving, userSchemes, schemeId } = useAddOffenderWarning({
-    onClose,
+const AddOffenderWarning = ({
+  onClose,
+  update,
+  saving,
+}: Props): JSX.Element => {
+  const { onSubmit, userSchemes, schemeId } = useAddOffenderWarning({
     update,
   });
 
@@ -19,7 +22,7 @@ const AddOffenderWarning = ({ onClose, update }: Props): JSX.Element => {
     <View
       onSubmit={onSubmit}
       onClose={onClose}
-      saving={saving}
+      saving={saving || false}
       userSchemes={userSchemes}
       schemeId={schemeId}
     />

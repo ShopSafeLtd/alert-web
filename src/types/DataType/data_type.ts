@@ -3,6 +3,9 @@ import type {
   BanType,
   Build,
   Gender,
+  Height,
+  IdSource,
+  ImagePosition,
   ListIncidentsQuery,
   Race,
 } from 'graphql/generated';
@@ -27,10 +30,12 @@ export interface OffenderData {
   gender?: Gender | null;
   race?: Race | null;
   build?: Build | null;
+  height?: Height | null;
   dateOfBirth?: Date | null;
   hair?: string | null;
   dateSource?: string | null;
   peculiarities?: string | null;
+  comment?: string | null;
   approved?: boolean | null;
   groups?:
     | {
@@ -45,9 +50,14 @@ export interface OffenderData {
     fileName?: string | null;
     type?: string | null;
     new?: boolean;
+    position?: ImagePosition;
+    primary?: boolean;
+    policeImage?: boolean;
   }[];
   imageUid?: string[] | undefined;
   bans?: BanData[] | undefined;
+  idVerified?: boolean;
+  idSource?: IdSource;
 }
 
 export interface OffenderCardData {
@@ -86,14 +96,23 @@ export interface VehicleData {
   totalOffenders?: number | null;
   registration?: string | null | undefined;
   crimeGroup?: string[];
+  groups?: string[];
   incidents?: string[];
   offenders?: string[];
+  customGalleries?: string[];
+  newCustomGalleriesData?: CustomGalleryData[];
   images?: Array<{
     id: string;
     url?: string | null;
     optimised?: string | null;
     fileName?: string | null;
     type?: string | null;
+    position?: ImagePosition;
+    primary?: boolean;
+    policeImage?: boolean;
+    edited?: boolean;
+    new?: boolean;
+    deleted?: boolean;
   }>;
 }
 
@@ -215,6 +234,23 @@ export interface BusinessData {
         full?: string | null | undefined;
       }[];
   // | undefined;
+  isConnected?: boolean;
+  isNew?: boolean;
+}
+export interface CustomGalleryData {
+  id: string;
+  name: string;
+  description?: string;
+  groups?: string[];
+  schemes?: string[];
+  isConnected?: boolean;
+  isNew?: boolean;
+}
+export interface TagData {
+  id: string;
+  name: string;
+  description?: string;
+  schemes: string[];
   isConnected?: boolean;
   isNew?: boolean;
 }
