@@ -17,7 +17,6 @@ const ViewOffender = (): JSX.Element => {
     toggleLinkIncident,
     updateIncidentList,
     toggleSubscribe,
-    lightboxElements,
     confirmDeleteUpdate,
     confirmUpdateImages,
     editUpdate,
@@ -46,6 +45,8 @@ const ViewOffender = (): JSX.Element => {
     associateFilters,
     toggleViewAssociate,
     viewAssociate,
+    toggleViewMatches,
+    viewMatches,
   } = useViewOffender(offenderId);
 
   return (
@@ -63,7 +64,6 @@ const ViewOffender = (): JSX.Element => {
       linkIncident={linkIncident}
       toggleLinkIncident={toggleLinkIncident}
       updateIncidentList={updateIncidentList}
-      lightboxElements={lightboxElements}
       toggleSubscribe={toggleSubscribe}
       confirmDeleteUpdate={confirmDeleteUpdate}
       confirmUpdateImages={confirmUpdateImages}
@@ -90,6 +90,8 @@ const ViewOffender = (): JSX.Element => {
       associateFilters={associateFilters}
       toggleViewAssociate={toggleViewAssociate}
       viewAssociate={viewAssociate}
+      toggleViewMatches={toggleViewMatches}
+      viewMatches={viewMatches}
     />
   );
 };

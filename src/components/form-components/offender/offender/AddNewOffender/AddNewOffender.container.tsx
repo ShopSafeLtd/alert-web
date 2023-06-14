@@ -7,11 +7,13 @@ interface Props {
   onClose: () => void;
   update: (value: OffenderData) => void;
   hideImages?: boolean;
+  addOverride?: string;
 }
 const AddNewOffender = ({
   onClose,
   update,
   hideImages = false,
+  addOverride,
 }: Props): JSX.Element => {
   const {
     onSubmit,
@@ -38,6 +40,7 @@ const AddNewOffender = ({
         fileList={fileList}
         hideImages={hideImages}
         // onSearchOffender={onSearchOffender}
+        addOverride={addOverride}
       />
     </div>
   );

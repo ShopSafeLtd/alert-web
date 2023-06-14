@@ -53,6 +53,7 @@ describe('Detail Officer View', () => {
         {
           id: 'cl6owsuzo33227f9pe9zk4wone',
           position: ImagePosition.CenterCenter,
+          faces: [],
         },
       ],
       bans: [],
@@ -61,6 +62,7 @@ describe('Detail Officer View', () => {
       idVerified: false,
       addresses: [],
       alias: [],
+      searchedMatches: [],
     },
   };
   it('renders the page', () => {
@@ -92,7 +94,6 @@ describe('Detail Officer View', () => {
               toggleLinkIncident={jest.fn()}
               onDelete={jest.fn()}
               toggleSubscribe={jest.fn()}
-              lightboxElements={[]}
               scrolledToTop={jest.fn()}
               loadMore={false}
               userId=""
@@ -112,6 +113,8 @@ describe('Detail Officer View', () => {
               onAssociateFilterChange={jest.fn()}
               toggleViewAssociate={jest.fn()}
               viewAssociate={null}
+              toggleViewMatches={jest.fn()}
+              viewMatches={null}
             />
           </MockedProvider>
         </MemoryRouter>
