@@ -333,7 +333,6 @@ const OffenderCard = ({
           </Row>
           {offender?.groups && offender.groups.length > 0 && (
             <Row wrap={false} style={{ overflowX: 'auto' }} align="middle">
-              {/* <Col style={{ marginRight: 8, color: 'black' }}>Groups:</Col> */}
               {offender.groups.map((group) => (
                 <Col key={group.id}>
                   <Tag color="red">{group.name}</Tag>
