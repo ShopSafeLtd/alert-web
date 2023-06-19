@@ -31,7 +31,7 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import { Role } from 'graphql/generated';
 export enum BadgeTypes {
-  todo = 'TASK',
+  todo = 'TODO',
   notification = 'NOTIFICATION',
 }
 export interface MenuItem {

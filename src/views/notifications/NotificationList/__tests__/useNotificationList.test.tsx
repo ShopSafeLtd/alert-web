@@ -5,38 +5,50 @@ import { createStore, StoreProvider } from 'easy-peasy';
 import { storeModel } from 'state';
 
 import { MemoryRouter } from 'react-router-dom';
-import { QueryMode, SchemeGroupsDocument } from 'graphql/generated';
+import { UserNotificationsDocument } from 'graphql/generated';
 import useGroupList from '../useNotificationList';
 
 const mocks = [
   {
     request: {
-      query: SchemeGroupsDocument,
+      query: UserNotificationsDocument,
       variables: {
         where: {
-          scheme: { id: { equals: 'testScheme' } },
-          OR: [
-            {
-              name: {
-                contains: '',
-                mode: QueryMode.Insensitive,
-              },
-            },
-            {
-              description: {
-                contains: '',
-                mode: QueryMode.Insensitive,
-              },
-            },
-          ],
+          id: 'userId',
+          // OR: [
+          //   {
+          //     name: {
+          //       contains: '',
+          //       mode: QueryMode.Insensitive,
+          //     },
+          //   },
+          //   {
+          //     description: {
+          //       contains: '',
+          //       mode: QueryMode.Insensitive,
+          //     },
+          //   },
+          // ],
         },
       },
     },
     result: {
       data: {
-        uncompletedTodos: [
-          { id: 'testId', name: 'TestName', description: null },
+        notifications: [
+          {
+            id: 'testId',
+            read: false,
+            createdAt: '2022-08-10T10:40:09.985Z',
+            notification: {
+              id: 'id',
+              title: 'title',
+              createdAt: '2022-08-10T10:40:09.985Z',
+              schemes: [{ id: 'id' }],
+            },
+          },
         ],
+        totalNotifications: 1,
+        id: 'id',
       },
     },
   },
@@ -46,10 +58,10 @@ const UseGroupListTest = () => {
   const { data, loading } = useGroupList();
   const Groups =
     data &&
-    data.uncompletedTodos?.map((el) => (
+    data.notifications?.map((el) => (
       <div key={el.id}>
         <span>{el.id}</span>
-        <span>{el.name}</span>
+        <span>{el.notification.title}</span>
       </div>
     ));
 
@@ -80,7 +92,7 @@ describe('useListGroups - hook', () => {
       </StoreProvider>
     );
 
-    expect(await findByText('TestName')).toBeInTheDocument();
+    expect(await findByText('title')).toBeInTheDocument();
     expect(await findByText('false')).toBeInTheDocument();
   });
 });

@@ -17,7 +17,6 @@ const NotificationLists = (): JSX.Element => {
     currentPage,
     currentPageSize,
   } = useNotificationLists();
-  console.log('dd', data?.totalNotifications);
 
   return (
     <View

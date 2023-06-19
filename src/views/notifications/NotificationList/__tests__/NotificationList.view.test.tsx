@@ -5,35 +5,21 @@ import TodoList from '../NotificationList.view';
 
 describe('List Officer View', () => {
   const data = {
-    uncompletedTodos: [
+    notifications: [
       {
-        id: 'test',
-        name: 'uncompletedTodos',
-        description: null,
-        assignedUsers: [],
-        completed: false,
-        completedBy: null,
-        createdBy: null,
-        completedDate: '2023-04-25T21:46:40.796Z',
-        dueDate: '2023-04-25T21:46:40.796Z',
+        id: 'testId',
+        read: false,
+        createdAt: '2022-08-10T10:40:09.985Z',
+        notification: {
+          id: 'id',
+          title: 'title',
+          createdAt: '2022-08-10T10:40:09.985Z',
+          schemes: [{ id: 'id' }],
+        },
       },
     ],
-    completedTodos: [
-      {
-        id: 'test',
-        name: 'completedTodos',
-        description: null,
-        assignedUsers: [],
-        completed: true,
-        completedBy: { id: 'completedTodos', fullName: 'completedTodos' },
-        createdBy: null,
-        completedDate: '2023-04-25T21:46:40.796Z',
-        dueDate: '2023-04-25T21:46:40.796Z',
-      },
-    ],
-    uncompletedTotal: 1,
-    completedTotal: 1,
-    totalUserTodos: 1,
+    totalNotifications: 1,
+    id: 'id',
   };
   it('renders the page', () => {
     const { getByText } = render(
@@ -43,11 +29,10 @@ describe('List Officer View', () => {
           loading={false}
           setSearch={jest.fn()}
           saving={false}
-          onCompletedTodo={jest.fn()}
-          onUncompletedTodo={jest.fn()}
-          addTodo={false}
-          toggleAddTodo={jest.fn()}
-          updateTodoList={jest.fn()}
+          takeAllSchemes={false}
+          toggleTakeAllSchemes={jest.fn()}
+          handleMarkAsRead={jest.fn()}
+          handleMarkAllRead={jest.fn()}
           onPaginationChange={jest.fn()}
           currentPage={1}
           currentPageSize={1}
