@@ -11,7 +11,7 @@ const formatCalendar = (date: Moment | Date): string => {
     nextWeek: `dddd - [${timeIn24HourFormat}]`,
     lastDay: `[Yesterday - ${timeIn24HourFormat}]`,
     lastWeek: `[Last] dddd - [${timeIn24HourFormat}]`,
-    sameElse: `[${moment(date).format('MM/DD/YYYY')}]`,
+    sameElse: `[${moment(date).format('DD/MM/YYYY')}]`,
   });
 };
 

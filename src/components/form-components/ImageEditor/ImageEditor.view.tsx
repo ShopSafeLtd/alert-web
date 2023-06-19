@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import type { UploadFile } from 'antd';
-import { Button, Switch, Form, Select, Col, Modal, Row } from 'antd';
+import { Skeleton, Button, Switch, Form, Select, Col, Modal, Row } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import { ImagePosition } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -94,7 +94,8 @@ const ImageEditor = ({
         position,
         policeImage,
       });
-      if (isPrimaryImage) setPrimaryImage(image.uid);
+      if (isPrimaryImage && image.uid !== primaryImage)
+        setPrimaryImage(image.uid);
       if (!isPrimaryImage && image.uid === primaryImage) setPrimaryImage('');
     }
     setPosition(ImagePosition.CenterCenter);
@@ -113,7 +114,7 @@ const ImageEditor = ({
   return (
     <Modal
       width={700}
-      zIndex={2000}
+      zIndex={1001}
       open={open}
       title="Edit Image"
       bodyStyle={{ padding: 0 }}
@@ -139,18 +140,22 @@ const ImageEditor = ({
                 </Col>
               </Row>
               <Form.Item label="Rotation">
-                <Row gutter={8}>
-                  <Col>
-                    <Button size="small" onClick={onRotateLeft}>
-                      <FontAwesomeIcon icon={faRotateBackward} />
-                    </Button>
-                  </Col>
-                  <Col>
-                    <Button size="small" onClick={onRotateRight}>
-                      <FontAwesomeIcon icon={faRotateForward} />
-                    </Button>
-                  </Col>
-                </Row>
+                {/* <Row gutter={8}>
+                  <Col> */}
+                <Button
+                  size="small"
+                  onClick={onRotateLeft}
+                  style={{ marginRight: 10 }}
+                >
+                  <FontAwesomeIcon icon={faRotateBackward} />
+                </Button>
+                {/* </Col>
+                  <Col> */}
+                <Button size="small" onClick={onRotateRight}>
+                  <FontAwesomeIcon icon={faRotateForward} />
+                </Button>
+                {/* </Col>
+                </Row> */}
               </Form.Item>
               <Row>
                 <Col flex={1}>
@@ -177,6 +182,7 @@ const ImageEditor = ({
                     label="Received from the police"
                     valuePropName="checked"
                     style={{
+                      width: 200,
                       marginBottom: 0,
                       flexDirection: 'row',
                       justifyItems: 'center',
@@ -197,6 +203,9 @@ const ImageEditor = ({
               <div className={classes.mockupCard}>
                 <div className={classes.cardImage}>
                   <WatermarkImage url={image?.url} position={position} />
+                </div>
+                <div className={classes.cardBody}>
+                  <Skeleton />
                 </div>
               </div>
             </div>

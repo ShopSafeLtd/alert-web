@@ -51,6 +51,7 @@ mutation updateIncident($where: UniqueId!, $data: IncidentUpdateInput!) {
       updatedAt
       age
       build
+      height
       dateOfBirth
       dateSource
       gender

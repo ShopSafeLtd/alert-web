@@ -76,7 +76,12 @@ import type { ViewAssociate } from './useViewOffender';
 import useStyles from './ViewOffender.styles';
 
 const { Title, Text, Paragraph } = Typography;
-
+interface TableItem {
+  description: string | null | undefined;
+  endDate: Date;
+  location?: string | undefined;
+  activeDay?: string | undefined;
+}
 interface Props {
   data: ViewOffenderQuery | undefined;
   loading: boolean;
@@ -185,6 +190,11 @@ const ViewOffender = ({
   viewMatches,
 }: Props): JSX.Element => {
   const classes = useStyles();
+  const expandedRowRender = (record: TableItem) => (
+    <Text style={{ fontSize: 14, padding: 0, margin: 0 }}>
+      Description: {record.description}
+    </Text>
+  );
   return (
     <div className="page-container">
       <Row wrap={false}>
@@ -707,6 +717,10 @@ const ViewOffender = ({
                       }
                     : false
                 }
+                expandable={{
+                  expandedRowRender,
+                  rowExpandable: (record) => !!record.description,
+                }}
                 columns={[
                   {
                     key: 'duration',
@@ -751,17 +765,7 @@ const ViewOffender = ({
                     dataIndex: 'location',
                     ellipsis: true,
                   },
-                  {
-                    key: 'description',
-                    title: 'Description',
-                    dataIndex: 'description',
-                    ellipsis: true,
-                    render: (value) => (
-                      <Tooltip title={value} placement="bottomLeft">
-                        {value}
-                      </Tooltip>
-                    ),
-                  },
+
                   {
                     key: 'type',
                     title: 'Type',

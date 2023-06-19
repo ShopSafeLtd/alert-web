@@ -398,13 +398,13 @@ const useAddOffender = (): Return => {
           : undefined,
     });
     const getCustomGalleries = (): CreateOffenderData['customGalleries'] => {
-      const customGalleriesIds = data.customGalleries.map((el) => {
-        if (typeof el === 'object') {
-          return el.value;
-        }
-        return el;
-      });
-      if (customGalleriesIds) {
+      if (data.customGalleries) {
+        const customGalleriesIds = data.customGalleries.map((el) => {
+          if (typeof el === 'object') {
+            return el.value;
+          }
+          return el;
+        });
         const newCustomGalleries = customGalleryData.filter(
           (item) => item.isNew && customGalleriesIds.includes(item.id)
         );
@@ -440,14 +440,13 @@ const useAddOffender = (): Return => {
     };
 
     const getOffenderTags = (): CreateOffenderData['tags'] => {
-      const offenderTagIds = data.tags.map((el) => {
-        if (typeof el === 'object') {
-          return el.value;
-        }
-        return el;
-      });
-
-      if (offenderTagIds) {
+      if (data.tags) {
+        const offenderTagIds = data.tags.map((el) => {
+          if (typeof el === 'object') {
+            return el.value;
+          }
+          return el;
+        });
         const newOffenderTags = offenderTagsData.filter(
           (item) => item.isNew && offenderTagIds.includes(item.id)
         );

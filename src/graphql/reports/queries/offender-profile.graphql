@@ -22,6 +22,7 @@ query OffenderProfile(
     gender
     hair
     build
+    height
     id
     incidentsByHour {
       name

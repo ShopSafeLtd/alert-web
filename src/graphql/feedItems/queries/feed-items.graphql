@@ -151,6 +151,7 @@ query FeedItems(
             updatedAt
             age
             build
+            height
             dateOfBirth
             name
             race
@@ -247,6 +248,7 @@ query FeedItems(
             updatedAt
             age
             build
+            height
             dateOfBirth
             name
             race
@@ -346,6 +348,7 @@ query FeedItems(
             updatedAt
             age
             build
+            height
             dateOfBirth
             name
             race
@@ -441,6 +444,7 @@ query FeedItems(
             updatedAt
             age
             build
+            height
             dateOfBirth
             name
             race
@@ -512,6 +516,7 @@ query FeedItems(
           endDate
         }
         build
+        height
         dateOfBirth
         dateSource
         gender
@@ -586,6 +591,7 @@ query FeedItems(
             updatedAt
             age
             build
+            height
             dateOfBirth
             name
             race

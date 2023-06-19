@@ -133,8 +133,6 @@ const useListBusinesses = (): Return => {
   });
 
   const onSubmit = (values: BusinessData) => {
-    console.log('BusinessData', values);
-
     createBusiness({
       variables: {
         data: {

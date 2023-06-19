@@ -45,6 +45,7 @@ mutation createIncident($data: CreateIncidentData!) {
       updatedAt
       age
       build
+      height
       dateOfBirth
       dateSource
       gender

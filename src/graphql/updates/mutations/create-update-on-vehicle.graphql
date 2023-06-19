@@ -55,6 +55,7 @@ mutation CreateUpdateOnVehicle($vehicle: UniqueId!, $data: CreateUpdateData!) {
       updatedAt
       age
       build
+      height
       dateOfBirth
       name
       race
@@ -131,6 +132,7 @@ mutation CreateUpdateOnVehicle($vehicle: UniqueId!, $data: CreateUpdateData!) {
         updatedAt
         age
         build
+        height
         dateOfBirth
         name
         race

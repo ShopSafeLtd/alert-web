@@ -60,6 +60,7 @@ query ChatMessages($where: ChatMessagesWhereInput!, $take: Int, $skip: Int) {
       updatedAt
       age
       build
+      height
       dateOfBirth
       name
       race

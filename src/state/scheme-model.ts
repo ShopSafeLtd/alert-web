@@ -11,6 +11,7 @@ export interface SetSchemePayload {
   logo?: string | null | undefined;
   darkLogo?: string | null | undefined;
   userTodos?: number | null | undefined;
+  userNotifications?: number | null | undefined;
 }
 
 export interface SchemeModel {
@@ -24,6 +25,7 @@ export interface SchemeModel {
   logo?: string | null | undefined;
   darkLogo?: string | null | undefined;
   userTodos?: number | null | undefined;
+  userNotifications?: number | null | undefined;
 }
 
 const userModel: SchemeModel = {
@@ -35,7 +37,7 @@ const userModel: SchemeModel = {
   logo: '',
   darkLogo: '',
   userTodos: 0,
-
+  userNotifications: 0,
   setScheme: action((state, payload) => {
     state.id = payload.id;
     state.autoApproveIncidents = payload.autoApproveIncidents;
@@ -45,6 +47,7 @@ const userModel: SchemeModel = {
     state.logo = payload.logo;
     state.darkLogo = payload.darkLogo;
     state.userTodos = payload.userTodos;
+    state.userNotifications = payload.userNotifications;
   }),
   clearScheme: action((state) => {
     state.id = '';
@@ -55,6 +58,7 @@ const userModel: SchemeModel = {
     state.logo = '';
     state.darkLogo = '';
     state.userTodos = 0;
+    state.userNotifications = 0;
   }),
 };
 

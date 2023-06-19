@@ -35,6 +35,7 @@ query offenderFeed(
     reference
     age
     build
+    height
     dateOfBirth
     dateSource
     gender

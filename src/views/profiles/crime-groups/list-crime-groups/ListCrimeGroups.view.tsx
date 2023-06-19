@@ -158,7 +158,7 @@ const ListCrimeGroups = ({
             key: 'updatedAt',
             dataIndex: 'updatedAt',
             title: 'UpdatedAt',
-            render: (value) => moment(value || moment()).calendar('MM/DD/YYYY'),
+            render: (value) => moment(value || moment()).calendar('DD/MM/YYYY'),
           },
         ]}
         pagination={{

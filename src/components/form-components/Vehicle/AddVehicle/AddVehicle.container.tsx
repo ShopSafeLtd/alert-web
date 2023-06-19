@@ -54,7 +54,6 @@ const AddVehicle = ({
     updateNewCustomGalleryData,
     form,
   } = useAddVehicle({
-    onClose,
     update,
   });
 

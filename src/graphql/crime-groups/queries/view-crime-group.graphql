@@ -26,6 +26,7 @@ query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
       dateOfBirth
       dateSource
       build
+      height
       age
       gender
       images {
@@ -129,6 +130,7 @@ query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
         updatedAt
         age
         build
+        height
         dateOfBirth
         name
         race
@@ -205,6 +207,7 @@ query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
           updatedAt
           age
           build
+          height
           dateOfBirth
           name
           race

@@ -22,7 +22,6 @@ import update from 'immutability-helper';
 
 interface Props {
   update: (value: VehicleData) => void;
-  onClose: () => void;
 }
 export interface Image extends UploadFile {
   position?: ImagePosition;
@@ -78,7 +77,7 @@ interface Return {
   form: FormInstance<FormData>;
 }
 
-const useAddVehicle = ({ update: updateVehicle, onClose }: Props): Return => {
+const useAddVehicle = ({ update: updateVehicle }: Props): Return => {
   const [form] = Form.useForm<FormData>();
   const { role, id: userId, groups } = useStoreState((state) => state.user);
   const schemeId = useStoreState((state) => state.scheme.id);
@@ -207,7 +206,6 @@ const useAddVehicle = ({ update: updateVehicle, onClose }: Props): Return => {
             }))
           : [],
     });
-    onClose();
   };
   // function
   const toggleLinkIncident = () => {

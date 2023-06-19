@@ -87,6 +87,7 @@ mutation CreateArticle($data: CreateArticleInput!) {
           updatedAt
           age
           build
+          height
           dateOfBirth
           dateSource
           hair

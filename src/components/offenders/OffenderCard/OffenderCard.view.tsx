@@ -20,6 +20,7 @@ import {
   faEdit,
   faEllipsisV,
   faExclamationCircle,
+  faHeadSide,
   faLocationDot,
   faMarsAndVenus,
   faPeople,
@@ -38,6 +39,7 @@ import {
   getOffenderAge,
   getOffenderBuild,
   getOffenderGender,
+  getOffenderHeight,
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
 
@@ -81,8 +83,8 @@ const OffenderCard = ({
     <Card
       className="offender-card"
       key={offender.id || ''}
-      style={{ overflow: 'hidden' }}
-      bodyStyle={{ height: '100%' }}
+      style={{ overflow: 'hidden', marginBottom: 0 }}
+      // bodyStyle={{ height: '100%' }}
     >
       {!offender?.approved && (
         <div className="offender-card-overlay">
@@ -243,7 +245,7 @@ const OffenderCard = ({
           </div>
 
           <Row gutter={16}>
-            <Col>
+            <Col span={12}>
               <FontAwesomeIcon
                 size="sm"
                 className="offender-card-icon"
@@ -256,7 +258,20 @@ const OffenderCard = ({
                   : getOffenderAge(offender.age)}
               </Text>
             </Col>
-            <Col>
+
+            <Col span={12}>
+              <FontAwesomeIcon
+                size="sm"
+                className="offender-card-icon"
+                icon={faMarsAndVenus}
+              />
+              <Text type="secondary">
+                Sex: {getOffenderGender(offender.gender)}
+              </Text>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
               <FontAwesomeIcon
                 size="sm"
                 className="offender-card-icon"
@@ -266,14 +281,14 @@ const OffenderCard = ({
                 Build:{getOffenderBuild(offender.build)}
               </Text>
             </Col>
-            <Col flex={1}>
+            <Col span={12}>
               <FontAwesomeIcon
                 size="sm"
                 className="offender-card-icon"
-                icon={faMarsAndVenus}
+                icon={faHeadSide}
               />
               <Text type="secondary">
-                Sex: {getOffenderGender(offender.gender)}
+                Height: {getOffenderHeight(offender.height)}
               </Text>
             </Col>
           </Row>
@@ -290,7 +305,7 @@ const OffenderCard = ({
             </Col>
           </Row>
         </Link>
-        <Row style={{}}>
+        <Row>
           <Col>
             <FontAwesomeIcon
               size="sm"
@@ -312,7 +327,7 @@ const OffenderCard = ({
               : ''
           }
         >
-          <Row gutter={8}>
+          <Row gutter={8} style={{ marginTop: 5 }}>
             <Col span={1}>
               <FontAwesomeIcon
                 size="sm"
@@ -331,26 +346,39 @@ const OffenderCard = ({
               </Text>
             </Col>
           </Row>
+        </Link>
+        <Link
+          to={
+            isArticle
+              ? `/app/offenders/view/${offender?.id}`
+              : `view/${offender?.id}`
+          }
+        >
           {offender?.groups && offender.groups.length > 0 && (
             <Row wrap={false} style={{ overflowX: 'auto' }} align="middle">
-              {offender.groups.map((group) => (
+              <Col style={{ minWidth: 60 }}>
+                <Text type="secondary">Groups:</Text>
+              </Col>
+              {offender.groups.slice(0, 1).map((group) => (
                 <Col key={group.id}>
-                  <Tag color="red">{group.name}</Tag>
+                  <Tag>{group.name}</Tag>
                 </Col>
               ))}
+              {offender.groups.length > 1 && (
+                <Col>
+                  <Tooltip
+                    title={offender.groups
+                      .map((item) => ` ${item.name}`)
+                      .toString()}
+                  >
+                    <Tag>+{offender.groups.length - 1} more</Tag>
+                  </Tooltip>
+                </Col>
+              )}
             </Row>
           )}
-          {/* <Row gutter={8}>
-            {offender?.groups?.map((group) => (
-              <Col key={group.id}>
-                <Text type="danger" ellipsis>
-                  {group.name}
-                </Text>
-              </Col>
-            ))}
-          </Row> */}
         </Link>
-        <Row justify="center" style={{ marginTop: 10 }}>
+        <Row justify="center">
           <Col>
             <Link
               to={
@@ -359,7 +387,7 @@ const OffenderCard = ({
                   : `view/${offender?.id}`
               }
             >
-              <Button size="small" type="text">
+              <Button size="small" type="text" style={{ marginTop: 10 }}>
                 View Full Offender
               </Button>
             </Link>

@@ -4,6 +4,7 @@ query ViewOffenderCompare($where: OffenderWhereUniqueInput!) {
     updatedAt
     age
     build
+    height
     dateOfBirth
     dateSource
     hair

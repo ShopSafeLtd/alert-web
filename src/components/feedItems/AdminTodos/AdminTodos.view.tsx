@@ -70,7 +70,7 @@ const AdminTodos = ({
   const classes = useStyles();
   const expandedRowRender = (record: TableItem) => (
     <Text style={{ fontSize: 14, padding: 0, margin: 0 }}>
-      {record.description}
+      Description: {record.description}
     </Text>
   );
 
@@ -170,7 +170,7 @@ const AdminTodos = ({
               dataIndex: 'dueDate',
               title: 'Due Date',
               width: 120,
-              render: (value) => moment(value).calendar('mm/dd/yyyy'),
+              render: (value) => moment(value).calendar('dd/mm/yyyy'),
             },
           ]}
           expandable={{
@@ -257,7 +257,7 @@ const AdminTodos = ({
                   dataIndex: 'completedDate',
                   title: 'Completed Date',
                   width: 120,
-                  render: (value) => moment(value).calendar('mm/dd/yyyy'),
+                  render: (value) => moment(value).calendar('dd/mm/yyyy'),
                 },
               ]}
               // expandable={{

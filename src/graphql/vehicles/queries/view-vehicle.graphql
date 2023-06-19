@@ -53,6 +53,7 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
       dateOfBirth
       dateSource
       build
+      height
       age
       gender
       images {
@@ -133,6 +134,7 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
         updatedAt
         age
         build
+        height
         dateOfBirth
         name
         race
@@ -209,6 +211,7 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
           updatedAt
           age
           build
+          height
           dateOfBirth
           name
           race

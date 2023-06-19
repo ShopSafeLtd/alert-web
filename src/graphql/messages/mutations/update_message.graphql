@@ -65,6 +65,7 @@ mutation updateMessage(
       updatedAt
       age
       build
+      height
       dateOfBirth
       name
       race

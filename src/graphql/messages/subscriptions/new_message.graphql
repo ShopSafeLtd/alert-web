@@ -64,6 +64,7 @@ subscription MessagesSubscription($chat: ID!, $user: ID!) {
       updatedAt
       age
       build
+      height
       dateOfBirth
       name
       race

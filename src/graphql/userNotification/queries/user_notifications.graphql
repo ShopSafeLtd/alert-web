@@ -1,0 +1,39 @@
+query userNotifications(
+  $where: UserWhereUniqueInput!
+  $orderBy: [UserNotificationOrderByWithRelationInput!]
+  $notificationWhere: UserNotificationWhereInput
+) {
+  user(where: $where) {
+    id
+    totalNotifications
+    notifications(where: $notificationWhere, orderBy: $orderBy) {
+      id
+      read
+      createdAt
+      notification {
+        id
+        crimeGroupId
+        createdAt
+        chatId
+        body
+        articleId
+        incidentId
+        investigationId
+        offenderId
+        schemes {
+          id
+        }
+        title
+        type
+        vehicleId
+        ban {
+          id
+          offender {
+            id
+          }
+        }
+        userId
+      }
+    }
+  }
+}

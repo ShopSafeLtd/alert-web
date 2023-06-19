@@ -60,6 +60,7 @@ mutation createMessage($data: MessageCreateWithoutActionsInput!) {
       updatedAt
       age
       build
+      height
       dateOfBirth
       name
       race

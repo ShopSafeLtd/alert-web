@@ -9,11 +9,11 @@ query ViewOffender(
     updatedAt
     age
     build
+    height
     dateOfBirth
     dateSource
     hair
     gender
-    height
     comment
     name
     reference
@@ -191,6 +191,7 @@ query ViewOffender(
         updatedAt
         age
         build
+        height
         dateOfBirth
         name
         race
@@ -267,6 +268,7 @@ query ViewOffender(
           updatedAt
           age
           build
+          height
           dateOfBirth
           name
           race
