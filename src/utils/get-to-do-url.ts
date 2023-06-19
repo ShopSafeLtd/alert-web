@@ -11,25 +11,36 @@ export interface TodoData {
 }
 // calculate the difference in days between start and end date
 const getTodoUrl = (todo: TodoData) => {
-  // approve
-  if (todo.type === TodoType.IncidentApprove)
-    return `/app/incidents/review/${todo.incidentId}`;
-  if (todo.type === TodoType.OffenderApprove)
-    return `/app/offenders/review/${todo.offenderId}`;
-
-  // mention
-  if (todo.type === TodoType.IncidentUpdate)
-    return `/app/offenders/view/${todo.incidentId}`;
-  if (todo.type === TodoType.OffenderUpdate)
-    return `/app/offenders/view/${todo.offenderId}`;
-  if (todo.type === TodoType.InvestigationUpdate)
-    return `/app/investigations/view/${todo.investigationId}`;
-  if (todo.type === TodoType.VehicleUpdate)
-    return `/app/vehicles/view/${todo.vehicleId}`;
-  if (todo.type === TodoType.CrimegroupUpdate)
-    return `/app/crime-groups/view/${todo.crimeGroupId}`;
-  if (todo.type === TodoType.ChatMessage) return `/app/chat/${todo.chatId}`;
-  return `/app/adminTodo`;
+  switch (todo.type) {
+    // approve
+    case TodoType.IncidentApprove: {
+      return `/app/incidents/review/${todo.incidentId}`;
+    }
+    case TodoType.OffenderApprove: {
+      return `/app/offenders/review/${todo.offenderId}`;
+    }
+    // mention
+    case TodoType.IncidentUpdate: {
+      return `/app/incidents/view/${todo.incidentId}`;
+    }
+    case TodoType.OffenderUpdate: {
+      return `/app/offenders/view/${todo.offenderId}`;
+    }
+    case TodoType.InvestigationUpdate: {
+      return `/app/investigations/view/${todo.investigationId}`;
+    }
+    case TodoType.VehicleUpdate: {
+      return `/app/vehicles/view/${todo.vehicleId}`;
+    }
+    case TodoType.CrimegroupUpdate: {
+      return `/app/crime-groups/view/${todo.vehicleId}`;
+    }
+    case TodoType.ChatMessage: {
+      return `/app/chat/${todo.chatId}`;
+    }
+    default: {
+      return `/app/adminTodo`;
+    }
+  }
 };
-
 export default getTodoUrl;

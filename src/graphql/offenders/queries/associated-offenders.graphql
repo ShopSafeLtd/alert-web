@@ -21,6 +21,7 @@ query AssociatedOffenders(
       age
       gender
       build
+      height
       race
       hair
       peculiarities

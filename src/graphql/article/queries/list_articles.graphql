@@ -36,8 +36,15 @@ query listArticles(
       }
       createdBy {
         fullName
-        organisation
+        businesses {
+          id
+          name
+        }
         id
+      }
+      groups {
+        id
+        name
       }
       title
       updatedAt

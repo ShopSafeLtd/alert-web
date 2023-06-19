@@ -87,6 +87,7 @@ mutation EditArticle($data: CreateArticleInput!, $where: UniqueId!) {
           updatedAt
           age
           build
+          height
           dateOfBirth
           dateSource
           hair

@@ -25,6 +25,7 @@ mutation updateCrimeGroup(
       dateOfBirth
       dateSource
       build
+      height
       age
       gender
       images {

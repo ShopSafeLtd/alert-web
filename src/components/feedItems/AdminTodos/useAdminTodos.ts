@@ -12,6 +12,7 @@ import type { MutationUpdaterFn } from '@apollo/client';
 
 interface Props {
   fullSearch: string;
+  groupsFilter: string[];
 }
 interface Return {
   data:
@@ -31,7 +32,7 @@ interface Return {
   currentPageSize: number;
 }
 
-const useAdminTodos = ({ fullSearch }: Props): Return => {
+const useAdminTodos = ({ fullSearch, groupsFilter }: Props): Return => {
   const userId = useStoreState((state) => state.user.id);
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
@@ -39,12 +40,9 @@ const useAdminTodos = ({ fullSearch }: Props): Return => {
   const [search, setSearch] = useState('');
   const [pageSize, setPageSize] = useState(10);
   const [page, setPage] = useState(1);
-  // ???
+
   const setTodoList = useStoreActions((actions) => actions.user.setTodos);
   const userTodos = useStoreState((state) => state.user.userTodos);
-  // useEffect(() => {
-  //   if (!search && fullSearch) setSearch(fullSearch);
-  // }, [fullSearch]);
 
   const variables = {
     orderBy: {
@@ -60,6 +58,16 @@ const useAdminTodos = ({ fullSearch }: Props): Return => {
           },
         },
       },
+      groups:
+        groupsFilter.length > 0
+          ? {
+              some: {
+                id: {
+                  in: groupsFilter,
+                },
+              },
+            }
+          : undefined,
       assignedUsers: {
         some: {
           id: {

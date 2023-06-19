@@ -8,9 +8,13 @@ import SkeletonImage from 'components/images/SkeletonImage.view';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamationCircle } from '@fortawesome/pro-solid-svg-icons';
 
-import { faClock, faUser } from '@fortawesome/pro-light-svg-icons';
-import moment from 'moment';
+import {
+  faArrowsMaximize,
+  faClock,
+  faUser,
+} from '@fortawesome/pro-light-svg-icons';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import formatCalendar from 'utils/format-calendar-24h';
 import useStyles from './ArticleCard.styles';
 
 const { Title, Paragraph, Text } = Typography;
@@ -23,14 +27,15 @@ interface Props {
       >['articles'][0]
     | null
     | undefined;
+  openLightbox?: (elements: { src: string }[], index: number) => void;
 }
 
-const ArticleCard = ({ article }: Props): JSX.Element => {
+const ArticleCard = ({ article, openLightbox }: Props): JSX.Element => {
   // const imagesRef = useRef<CarouselRef>(null);
   const {
     id,
     title,
-    tags,
+    groups,
     images,
     previewText,
     updatedAt,
@@ -58,11 +63,23 @@ const ArticleCard = ({ article }: Props): JSX.Element => {
         ) : (
           <SkeletonImage height={200} />
         )}
-        <div
-          className="feedItem-card-content"
-          style={{ padding: '10px 20px 20px', alignItems: 'stretch' }}
-        >
-          <div style={{ height: 125 }}>
+        {openLightbox && images && images.length > 0 && (
+          <FontAwesomeIcon
+            size="lg"
+            className={classes.imageExpand}
+            icon={faArrowsMaximize}
+            onClick={() =>
+              openLightbox(
+                images.map((image) => ({
+                  src: image.optimised || '',
+                })) || [],
+                0
+              )
+            }
+          />
+        )}
+        <div className={classes.content}>
+          <div className={classes.details}>
             <Title level={4}>
               {priority === ArticlePriority.High && (
                 <FontAwesomeIcon
@@ -74,11 +91,10 @@ const ArticleCard = ({ article }: Props): JSX.Element => {
               )}
               {title?.replace(/^\S/, (s) => s.toUpperCase())}
             </Title>
-            <Paragraph className="feedItem-card-desc" ellipsis={{ rows: 2 }}>
-              {previewText}
-            </Paragraph>
+            <Paragraph ellipsis={{ rows: 3 }}>{previewText}</Paragraph>
           </div>
-          <Row style={{ marginBottom: 10, alignItems: 'flex-end' }}>
+
+          <Row style={{ marginBottom: 5 }}>
             <Col flex={1}>
               <FontAwesomeIcon
                 size="sm"
@@ -95,39 +111,20 @@ const ArticleCard = ({ article }: Props): JSX.Element => {
                 icon={faClock}
                 style={{ marginRight: 5 }}
               />
-              <Text>{moment(updatedAt).calendar()}</Text>
+              <Text>{formatCalendar(updatedAt)}</Text>
             </Col>
           </Row>
-
-          {tags && tags.length > 0 ? (
-            <Row
-              wrap={false}
-              style={{
-                overflowX: 'auto',
-                alignItems: 'flex-end',
-                alignContent: 'flex-end',
-              }}
-              className="feedItem-card-tags-row"
-              gutter={5}
-            >
-              {tags.map((tag) => (
-                <Col
-                  key={tag.id}
-                  style={{
-                    marginBottom: 5,
-                  }}
-                >
-                  <Tag
-                    key={tag.id}
-                    className="feedItem-card-tag"
-                    style={{ alignItems: 'flex-end', alignContent: 'flex-end' }}
-                  >
-                    {tag.name}
-                  </Tag>
+          {groups && groups.length > 0 ? (
+            <Row wrap={false} className={classes.tagRow}>
+              {groups.map((group) => (
+                <Col key={group.id}>
+                  <Tag key={group.id}>{group.name}</Tag>
                 </Col>
               ))}
             </Row>
-          ) : null}
+          ) : (
+            <div style={{ marginBottom: 5 }} />
+          )}
         </div>
       </div>
     </Link>

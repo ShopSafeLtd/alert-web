@@ -2,17 +2,14 @@ import { useState } from 'react';
 import type {
   Age,
   Build,
-  CreateTagMutation,
   Gender,
   OffenderUpdateInput,
   Race,
-  TagsQuery,
   ViewOffenderQuery,
 } from 'graphql/generated';
 import {
   Model,
   Role,
-  TagsDocument,
   useRecycleOffenderMutation,
   useSchemeGroupsQuery,
   useTagsQuery,
@@ -23,9 +20,10 @@ import type { FormInstance } from 'antd';
 import { Form, message, Modal, notification, Upload } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-import type { MutationUpdaterFn } from '@apollo/client';
+
 import { useNavigate } from 'react-router';
 import errorNotification from 'types/error_notification';
+import type { TagData } from 'types/DataType';
 
 export interface OffenderData {
   id: string;
@@ -108,7 +106,8 @@ interface Return {
   fileList: UploadFile[];
   addOffenderTag: boolean;
   toggleAddOffenderTag: () => void;
-  updateOffenderTag: MutationUpdaterFn<CreateTagMutation>;
+  updateNewOffenderTagData: (values: TagData) => void;
+
   addExclusion: boolean;
   toggleAddExclusion: () => void;
   editExclusion: boolean;
@@ -150,6 +149,7 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
   const [bansData, setBansData] = useState<BanData[]>([]);
   const [banData, setBanData] = useState<BanData | null>(null);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [offenderTagsData, setOffenderTagsData] = useState<TagData[]>([]);
 
   const { data: offenderData, loading } = useViewOffenderQuery({
     variables: {
@@ -355,44 +355,6 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
       },
     });
   };
-  // update tag list after adding a new item
-  const updateOffenderTag: MutationUpdaterFn<CreateTagMutation> = (
-    store,
-    { data: res }
-  ) => {
-    if (res === null || res === undefined) return;
-
-    const existingData = store.readQuery<TagsQuery>({
-      query: TagsDocument,
-      variables: {
-        where: {
-          scheme: { id: { equals: schemeId } },
-          dataType: {
-            equals: Model.Offender,
-          },
-        },
-      },
-    });
-    setSelectedItems([...selectedItems, res.createTag.id]);
-    form.setFieldsValue({ tags: [...selectedItems, res.createTag.id] });
-    if (existingData === null) return;
-
-    store.writeQuery<TagsQuery>({
-      query: TagsDocument,
-      data: {
-        tags: [...existingData.tags, res.createTag],
-        __typename: 'Query',
-      },
-      variables: {
-        where: {
-          scheme: { id: { equals: schemeId } },
-          dataType: {
-            equals: Model.Offender,
-          },
-        },
-      },
-    });
-  };
 
   // delete incident
   const [recycleOffender] = useRecycleOffenderMutation({
@@ -507,6 +469,14 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
       setBansData([value]);
     }
   };
+  const updateNewOffenderTagData = (values: TagData) => {
+    setAddOffenderTag(false);
+    const selectedOffenderTag = form.getFieldValue('tags');
+    form.setFieldsValue({
+      tags: [...selectedOffenderTag, { value: values.id, label: values.name }],
+    });
+    setOffenderTagsData([...offenderTagsData, { ...values, isNew: true }]);
+  };
 
   return {
     onSubmit,
@@ -530,7 +500,7 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
     fileList,
     addOffenderTag,
     toggleAddOffenderTag,
-    updateOffenderTag,
+    updateNewOffenderTagData,
     addExclusion,
     toggleAddExclusion,
     editExclusion,

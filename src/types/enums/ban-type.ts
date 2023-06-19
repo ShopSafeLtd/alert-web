@@ -1,15 +1,29 @@
+import { BanType } from 'graphql/generated';
+
 const BanTypeValues = [
   {
-    value: 'CBO',
+    value: BanType.Cbo,
     label: 'CBO',
   },
   {
-    value: 'COMMUNITY_BAN',
+    value: BanType.CommunityBan,
     label: 'Community_Ban',
   },
   {
-    value: 'OTHER',
+    value: BanType.Other,
     label: 'Other',
+  },
+  {
+    value: BanType.Cpn,
+    label: 'CPN',
+  },
+  {
+    value: BanType.Cpw,
+    label: 'CPW',
+  },
+  {
+    value: BanType.Pspo,
+    label: 'PSPO',
   },
 ];
 export default BanTypeValues;

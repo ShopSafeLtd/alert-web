@@ -1,5 +1,3 @@
-// import type { MutationUpdaterFn } from '@apollo/client';
-// import type { CreateVehicleMutation } from 'graphql/generated';
 import React from 'react';
 import type { VehicleData } from 'types/DataType';
 import View from './AddVehicle.view';
@@ -7,11 +5,11 @@ import useAddVehicle from './useAddVehicle';
 
 interface Props {
   onClose: () => void;
-  // update: MutationUpdaterFn<CreateVehicleMutation>;
   update: (value: VehicleData) => void;
   fromIncident?: boolean | undefined;
   fromOffender?: boolean | undefined;
   saving?: boolean;
+  showGroups?: boolean;
 }
 
 const AddVehicle = ({
@@ -19,6 +17,7 @@ const AddVehicle = ({
   update,
   fromIncident,
   fromOffender,
+  showGroups,
   saving,
 }: Props): JSX.Element => {
   const {
@@ -39,8 +38,22 @@ const AddVehicle = ({
     imgChange,
     beforeUpload,
     fileList,
+
+    onRemoveImage,
+    onEditImage,
+    toggleEditImage,
+    editImage,
+    primaryImage,
+    setPrimaryImage,
+    groups,
+    groupsLoading,
+    customGalleries,
+    customGalleriesLoading,
+    addCustomGallery,
+    toggleAddCustomGallery,
+    updateNewCustomGalleryData,
+    form,
   } = useAddVehicle({
-    onClose,
     update,
   });
 
@@ -65,8 +78,23 @@ const AddVehicle = ({
       imgChange={imgChange}
       beforeUpload={beforeUpload}
       fileList={fileList}
+      onRemoveImage={onRemoveImage}
+      editImage={editImage}
+      onEditImage={onEditImage}
+      toggleEditImage={toggleEditImage}
+      primaryImage={primaryImage}
+      setPrimaryImage={setPrimaryImage}
       fromIncident={fromIncident}
       fromOffender={fromOffender}
+      showGroups={showGroups}
+      groups={groups}
+      groupsLoading={groupsLoading}
+      customGalleries={customGalleries}
+      customGalleriesLoading={customGalleriesLoading}
+      addCustomGallery={addCustomGallery}
+      toggleAddCustomGallery={toggleAddCustomGallery}
+      updateNewCustomGalleryData={updateNewCustomGalleryData}
+      form={form}
     />
   );
 };

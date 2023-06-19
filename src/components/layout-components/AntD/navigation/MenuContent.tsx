@@ -2,15 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Badge, Grid, Menu, Typography } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import IntlMessage from '../../../util-components/AntD/IntlMessage';
-import navConfig, { NavItem } from 'configs/NavigationConfig';
+import type { NavItem } from 'configs/NavigationConfig';
+import navConfig, { BadgeTypes } from 'configs/NavigationConfig';
 import utils from 'utils';
 import { NavType, SideNavTheme, useStoreActions, useStoreState } from 'state';
 import { APP_NAME } from 'configs/AppConfig';
+import { useStore } from 'easy-peasy';
 import NavScheme from './NavScheme';
 import NavProfile from './NavProfile';
 import Logo from './Logo';
-import { useStore } from 'easy-peasy';
+import IntlMessage from '../../../util-components/AntD/IntlMessage';
 
 const { SubMenu } = Menu;
 const { useBreakpoint } = Grid;
@@ -19,12 +20,11 @@ const setLocale = (isLocaleOn: boolean, localeKey: string) =>
   isLocaleOn ? <IntlMessage id={localeKey} /> : localeKey.toString();
 
 const setDefaultOpen = (key: string) => {
-  let keyList = [];
+  const keyList = [];
   let keyString = '';
   if (key) {
     const arr = key.split('-');
-    for (let index = 0; index < arr.length; index++) {
-      const elm = arr[index];
+    for (const [index, elm] of arr.entries()) {
       index === 0 ? (keyString = elm) : (keyString = `${keyString}-${elm}`);
       keyList.push(keyString);
     }
@@ -54,6 +54,7 @@ interface SideNavContentProps {
   hideGroupTitle?: boolean;
   localization: boolean;
   todos: number;
+  notifications: number;
   onMobileNavToggle(value: boolean): void;
 }
 
@@ -85,6 +86,7 @@ const SideNavContent = (props: SideNavContentProps) => {
     localization,
     onMobileNavToggle,
     todos,
+    notifications,
   } = props;
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
   const isMobile = !utils.getBreakPoint(useBreakpoint()).includes('lg');
@@ -98,6 +100,11 @@ const SideNavContent = (props: SideNavContentProps) => {
     el.roles?.includes(userRole)
   );
   const customLogo = !!window.localStorage.getItem('logo');
+
+  const getBadgeCount = {
+    [BadgeTypes.todo]: todos,
+    [BadgeTypes.notification]: notifications,
+  };
 
   return (
     <div
@@ -176,7 +183,7 @@ const SideNavContent = (props: SideNavContentProps) => {
                 <Badge
                   offset={[9, 0]}
                   size="small"
-                  count={todos}
+                  count={getBadgeCount[menu.badge]}
                   showZero
                   style={{ height: 20, padding: 3 }}
                 >
@@ -313,18 +320,27 @@ const MenuContent = (props: Props) => {
     (actions) => actions.theme.toggleMobileNav
   );
   const userTodos = useStoreState((state) => state.user.userTodos);
-
+  const userNotifications = useStoreState(
+    (state) => state.user.userNotifications
+  );
   const [todoCount, setTodoCount] = useState(0);
+  const [notificationCount, setNotificationCount] = useState(0);
+
   const store = useStore();
 
   useEffect(() => {
     setTodoCount(userTodos || 0);
   }, [userTodos]);
 
+  useEffect(() => {
+    setNotificationCount(userNotifications || 0);
+  }, [userNotifications]);
+
   return props.type === NavType.SIDE ? (
     <SideNavContent
       {...props}
       todos={todoCount}
+      notifications={notificationCount}
       onMobileNavToggle={onMobileNavToggle}
       sideNavTheme={sideNavTheme}
     />

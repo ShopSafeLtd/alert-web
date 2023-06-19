@@ -20,9 +20,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { DateType } from 'types/DataType';
 import { faFilter } from '@fortawesome/pro-light-svg-icons';
 import useStyles from './ArticlesSection.styles';
-import ArticleSkeletonCard from '../ArticleSkeletonCard';
+import ArticleSkeletonCard from '../../../Articles/ArticleSkeletonCard';
 import ArticleCard from '../ArticleCard';
-import ArticleFilter from '../ArticleFilter';
+import ArticleFilter from '../../../Articles/ArticleFilter';
 
 const { Title } = Typography;
 
@@ -124,11 +124,15 @@ const ArticlesSection = ({
 
       <Divider style={{ margin: '0 0' }} />
 
-      <Row gutter={[8, 8]} style={{ padding: 10 }}>
+      <Row
+        gutter={[8, 8]}
+        align="stretch"
+        style={{ padding: 10, alignItems: 'stretch' }}
+      >
         {loading ? (
           Array.from({ length: 24 }).map((_, index) => (
             // eslint-disable-next-line react/no-array-index-key
-            <Col key={index} xxl={8} span={24}>
+            <Col key={index} span={adminRights ? 24 : 12} xxl={12}>
               <ArticleSkeletonCard />
             </Col>
           ))

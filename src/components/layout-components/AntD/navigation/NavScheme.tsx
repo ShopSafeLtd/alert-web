@@ -12,13 +12,19 @@ const { Text } = Typography;
 
 export const NavScheme = () => {
   const { schemes } = useStoreState((state) => state.user);
-  const { id: activeScheme, userTodos } = useStoreState(
-    (state) => state.scheme
-  );
+  const {
+    id: activeScheme,
+    userTodos,
+    userNotifications,
+  } = useStoreState((state) => state.scheme);
   const activeSchemeName = useStoreState((state) => state.scheme.name);
   const setScheme = useStoreActions((actions) => actions.scheme.setScheme);
 
   const setTodos = useStoreActions((actions) => actions.user.setTodos);
+  const setNotifications = useStoreActions(
+    (actions) => actions.user.setNotifications
+  );
+
   const [visible, setVisible] = useState(false);
 
   const handleVisibleChange = (flag: boolean) => {
@@ -53,8 +59,13 @@ export const NavScheme = () => {
       logo: scheme.scheme.logo?.optimisedPersisted,
       darkLogo: scheme.scheme.darkLogo?.optimisedPersisted,
       userTodos: scheme.scheme.userTodos,
+      userNotifications: scheme.scheme.userNotifications,
     });
     setTodos({ userTodos: scheme.scheme.userTodos || 0 });
+    setNotifications({
+      userNotifications: scheme.scheme.userNotifications || 0,
+    });
+
     handleVisibleChange(false);
   };
 

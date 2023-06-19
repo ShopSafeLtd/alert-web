@@ -24,7 +24,9 @@ const Documents = lazy(() => import(`./documents/router`));
 const Vehicles = lazy(() => import(`./vehicles/router`));
 const CrimeGroups = lazy(() => import(`./crime-groups/router`));
 const FeedItems = lazy(() => import(`./feedItems/router`));
-const AdminTodos = lazy(() => import(`./adminTodo/router`));
+const Tasks = lazy(() => import(`./tasks/router`));
+const Notifications = lazy(() => import(`./notifications/router`));
+
 const Mg11 = lazy(() => import(`./mg11/router`));
 const FaceAi = lazy(() => import(`./face-ai/router`));
 
@@ -61,7 +63,10 @@ export const AppViews = (): JSX.Element => {
           />
         )}
         <Route key="dashboard" path="dashboard/*" element={<FeedItems />} />,
-        <Route key="adminTodo" path="adminTodo/*" element={<AdminTodos />} />,
+        {role !== 'USER' && (
+          <Route key="tasks" path="tasks/*" element={<Tasks />} />
+        )}
+        ,
         <Route key="incidents" path="incidents/*" element={<Incidents />} />,
         <Route
           key="crime-groups"
@@ -72,6 +77,11 @@ export const AppViews = (): JSX.Element => {
         <Route key="vehicles" path="vehicles/*" element={<Vehicles />} />,
         <Route key="offenders" path="offenders/*" element={<Offenders />} />,
         <Route key="chat" path="chat/*" element={<Chat />} />,
+        <Route
+          key="notifications"
+          path="notifications/*"
+          element={<Notifications />}
+        />
         <Route key="user" path="user-settings/*" element={<User />} />
         {role === 'SCHEME_ADMIN' && (
           <Route key="scheme" path="scheme-settings/*" element={<Scheme />} />

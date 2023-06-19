@@ -12,6 +12,13 @@ const useStyles = createUseStyles({
     fontWeight: 600,
     marginBottom: '5px !important',
   },
+  selectBox: {
+    // border: `1px solid ${theme.borderColor}`,
+    padding: '5px 10px 5px 5px',
+    borderRadius: 100,
+    cursor: 'pointer',
+    position: 'relative',
+  },
 });
 
 export default useStyles;

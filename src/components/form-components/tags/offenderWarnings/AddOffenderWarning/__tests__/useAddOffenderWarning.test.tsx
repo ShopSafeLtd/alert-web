@@ -40,7 +40,6 @@ const mocks = [
 
 const UseAddOffenderWarningTest = () => {
   const { onSubmit } = useAddOffenderWarning({
-    onClose: jest.fn(),
     update: jest.fn(),
   });
 

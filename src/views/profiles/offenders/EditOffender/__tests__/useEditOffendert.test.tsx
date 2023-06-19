@@ -14,6 +14,7 @@ import {
   Role,
   ViewOffenderDocument,
   UpdateOffenderDocument,
+  Height,
 } from 'graphql/generated';
 import { OffenderSort, storeModel } from 'state';
 import useEditOffender from '../useEditOffender';
@@ -234,6 +235,8 @@ const UseEditOffenderTest = () => {
             age: Age.Unknown,
             groups: ['groupId'],
             tags: ['tagId'],
+            height: Height.Unknown,
+            comment: 'comment',
           })
         }
       >

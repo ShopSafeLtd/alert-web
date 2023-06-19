@@ -1,15 +1,23 @@
 import React from 'react';
-import { Button, Card, Col, List, Row, Typography } from 'antd';
+import { Button, Card, Col, List, Row, Tag, Typography } from 'antd';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash } from '@fortawesome/pro-light-svg-icons';
+import {
+  faClock,
+  faEdit,
+  faTrash,
+  faUser,
+} from '@fortawesome/pro-light-svg-icons';
 import { Role } from 'graphql/generated';
+import formatCalendar from 'utils/format-calendar-24h';
 import type { ReturnProps as Props } from './types/ViewArticle';
 import IncidentCard from '../../../components/incidents/IncidentCard';
 import OffenderCard from '../../../components/offenders/OffenderCard';
+
+const { Title, Text } = Typography;
 
 const ViewArticleView = ({
   data,
@@ -40,9 +48,52 @@ const ViewArticleView = ({
         </Row>
       )}
       <Card style={{ marginLeft: 20, marginRight: 20 }} loading={loading}>
-        <Typography.Title level={2}>{data?.article?.title}</Typography.Title>
+        <Title level={2}>{data?.article?.title}</Title>
+        <Row style={{ marginBottom: 5 }} gutter={60}>
+          <Col>
+            <FontAwesomeIcon
+              size="sm"
+              className="feedItem-card-icon"
+              icon={faUser}
+              style={{ marginRight: 5 }}
+            />
+            <Text style={{ fontSize: 16, fontWeight: 400 }}>Author: </Text>
+            <Text>{data?.article?.createdBy?.fullName}</Text>
+          </Col>
+          <Col>
+            <FontAwesomeIcon
+              className="feedItem-card-icon"
+              icon={faClock}
+              style={{ marginRight: 5 }}
+            />
+            <Text style={{ fontSize: 16, fontWeight: 400 }}>Published: </Text>
+            <Text>{formatCalendar(data?.article?.createdAt)} </Text>
+            {data?.article?.createdAt !== data?.article?.updatedAt && (
+              <>
+                <Text style={{ fontSize: 16, fontWeight: 400 }}>
+                  | Updated:
+                </Text>
+                <Text>{formatCalendar(data?.article?.updatedAt)}</Text>
+              </>
+            )}
+          </Col>
+        </Row>
+        <Row align="middle">
+          <Col style={{ marginRight: 5 }}>
+            {/* <FontAwesomeIcon icon={faUsers} style={{ marginRight: 5 }} /> */}
+            <Text style={{ fontSize: 16, fontWeight: 400 }}>Groups:</Text>
+          </Col>
+
+          {data?.article?.groups.map((group) => (
+            <Col key={group.id}>
+              <Tag key={group.id} color="red">
+                {group.name}
+              </Tag>
+            </Col>
+          ))}
+        </Row>
         <div
-          style={{ width: '100%', height: '100%' }}
+          style={{ width: '100%', height: '100%', marginTop: 20 }}
           // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{
             __html: data?.article?.rows[0].columns[0].text || '',

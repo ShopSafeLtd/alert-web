@@ -57,9 +57,9 @@ const ProfileDrawer = ({
     <Drawer
       title="Add New Offender"
       open={addOffender}
-      width="600"
+      width="700"
+      zIndex={999}
       onClose={toggleAddOffender}
-      zIndex={1001}
     >
       {addOffender ? (
         <AddOffender
@@ -126,7 +126,8 @@ const ProfileDrawer = ({
     <Drawer
       title="Add New Vehicle"
       open={addNewVehicle}
-      width="600"
+      width="700"
+      zIndex={999}
       onClose={toggleAddNewVehicle}
     >
       {addNewVehicle ? (
@@ -142,11 +143,13 @@ const ProfileDrawer = ({
     <Drawer
       title="Edit Vehicle Details"
       open={!!editVehicleId}
-      width="600"
+      width="700"
+      zIndex={999}
       onClose={() => setEditVehicleId('')}
     >
       {editVehicleId ? (
         <EditVehicle
+          fromIncident
           onClose={() => setEditVehicleId('')}
           update={onEditVehicle}
           editData={vehiclesData.find(({ id }) => id === editVehicleId)}

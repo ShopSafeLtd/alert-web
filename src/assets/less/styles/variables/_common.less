@@ -3,17 +3,18 @@
 @theme: light;
 
 // Background color for `<body>`
-@body-background:    #fafafb;
+@body-background: #fafafb;
 // Base background color for most components
 @component-background: @white;
 // Popover background color
 @popover-background: @component-background;
 @popover-customize-border-color: @border-color-split;
 
-@font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
-  'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-  'Noto Color Emoji';
-@code-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+@font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+  'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji',
+  'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+@code-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier,
+  monospace;
 @text-color: @gray;
 @text-color-secondary: @gray-light;
 @text-muted: rgba(@gray-light, 0.7);
@@ -38,7 +39,7 @@
 @line-height-base: 1.5;
 @border-radius-base: 0.625rem;
 @border-radius-sm: 0.25rem;
-@border-radius-lg:  0.3rem;
+@border-radius-lg: 0.3rem;
 @rounded-pill: 50rem;
 
 @font-weight-lighter: lighter;
@@ -114,7 +115,11 @@
 @outline-color: @primary-color;
 @outline-fade: 20%;
 
-@background-color-light: hsv(0, 0, 98%); // background of header and selected item
+@background-color-light: hsv(
+  0,
+  0,
+  98%
+); // background of header and selected item
 @background-color-base: hsv(0, 0, 96%); // Default grey background color
 
 // Disabled states
@@ -126,17 +131,16 @@
 @shadow-color: rgba(0, 0, 0, 0.15);
 @shadow-color-inverse: @component-background;
 @box-shadow-base: @shadow-2;
-@shadow-1-up: 0 -6px 16px -8px rgba(0, 0, 0, 0.08), 0 -9px 28px 0 rgba(0, 0, 0, 0.05),
-  0 -12px 48px 16px rgba(0, 0, 0, 0.03);
-@shadow-1-down: 0 6px 16px -8px rgba(0, 0, 0, 0.08), 0 9px 28px 0 rgba(0, 0, 0, 0.05),
-  0 12px 48px 16px rgba(0, 0, 0, 0.03);
-@shadow-1-left: -6px 0 16px -8px rgba(0, 0, 0, 0.08), -9px 0 28px 0 rgba(0, 0, 0, 0.05),
-  -12px 0 48px 16px rgba(0, 0, 0, 0.03);
-@shadow-1-right: 6px 0 16px -8px rgba(0, 0, 0, 0.08), 9px 0 28px 0 rgba(0, 0, 0, 0.05),
-  12px 0 48px 16px rgba(0, 0, 0, 0.03);
+@shadow-1-up: 0 -6px 16px -8px rgba(0, 0, 0, 0.08),
+  0 -9px 28px 0 rgba(0, 0, 0, 0.05), 0 -12px 48px 16px rgba(0, 0, 0, 0.03);
+@shadow-1-down: 0 6px 16px -8px rgba(0, 0, 0, 0.08),
+  0 9px 28px 0 rgba(0, 0, 0, 0.05), 0 12px 48px 16px rgba(0, 0, 0, 0.03);
+@shadow-1-left: -6px 0 16px -8px rgba(0, 0, 0, 0.08),
+  -9px 0 28px 0 rgba(0, 0, 0, 0.05), -12px 0 48px 16px rgba(0, 0, 0, 0.03);
+@shadow-1-right: 6px 0 16px -8px rgba(0, 0, 0, 0.08),
+  9px 0 28px 0 rgba(0, 0, 0, 0.05), 12px 0 48px 16px rgba(0, 0, 0, 0.03);
 @shadow-2: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08),
   0 9px 28px 8px rgba(0, 0, 0, 0.05);
-
 
 @chat-message-bg: rgba(222, 68, 54, 0.1);
 
@@ -197,7 +201,6 @@
 @btn-link-hover-bg: transparent;
 @btn-text-hover-bg: rgba(0, 0, 0, 0.018);
 
-
 // Checkbox
 @checkbox-size: 20px;
 @checkbox-color: @primary-color;
@@ -205,7 +208,6 @@
 @checkbox-check-bg: @checkbox-check-color;
 @checkbox-border-width: @border-width-base;
 @checkbox-group-item-margin-right: 10px;
-
 
 // Descriptions
 @descriptions-bg: @gray-lightest;
@@ -230,7 +232,6 @@
 
 // Empty
 @empty-font-size: @font-size-base;
-
 
 // Radio
 @radio-size: 20px;
@@ -286,10 +287,10 @@
 @screen-xl-max: (@screen-xxl-min - 1px);
 
 @grid-breakpoints: {
-	xs: @screen-xs;
-	sm: @screen-sm;
-	md: @screen-md;
-	lg: @screen-lg;
+  xs: @screen-xs;
+  sm: @screen-sm;
+  md: @screen-md;
+  lg: @screen-lg;
   xl: @screen-xl;
   xxl: @screen-xxl;
 };
@@ -350,7 +351,6 @@
 @dropdown-font-size: @font-size-base;
 @dropdown-line-height: 1.5;
 
-
 // Form
 // ---
 @label-required-color: @highlight-color;
@@ -376,17 +376,19 @@
 @input-padding-horizontal-sm: @control-padding-horizontal-sm - 1px;
 @input-padding-horizontal-lg: @input-padding-horizontal;
 @input-padding-vertical-base: max(
-  round((@input-height-base - @font-size-base * @line-height-base) / 2 * 10) / 10 -
-    @border-width-base,
+  round((@input-height-base - @font-size-base * @line-height-base) / 2 * 10) /
+    10 - @border-width-base,
   3px
 );
 @input-padding-vertical-sm: max(
-  round((@input-height-sm - @font-size-base * @line-height-base) / 2 * 10) / 10 - @border-width-base,
+  round((@input-height-sm - @font-size-base * @line-height-base) / 2 * 10) / 10 -
+    @border-width-base,
   0
 );
-@input-padding-vertical-lg: ceil((@input-height-lg - @font-size-lg * @line-height-base) / 2 * 10) /
-  10 - @border-width-base;
-@input-placeholder-color: rgba(@gray-light, .4);
+@input-padding-vertical-lg: ceil(
+    (@input-height-lg - @font-size-lg * @line-height-base) / 2 * 10
+  ) / 10 - @border-width-base;
+@input-placeholder-color: rgba(@gray-light, 0.4);
 @input-color: @text-color;
 @input-icon-color: @input-color;
 @input-border-color: @border-color-base;
@@ -425,7 +427,8 @@
 @select-selection-item-bg: @background-color-base;
 @select-selection-item-border-color: @border-color-split;
 @select-single-item-height-lg: 40px;
-@select-multiple-item-height: @input-height-base - @input-padding-vertical-base * 2; // Normal 24px
+@select-multiple-item-height: @input-height-base - @input-padding-vertical-base *
+  2; // Normal 24px
 @select-multiple-item-height-lg: 32px;
 @select-multiple-item-spacing-half: ceil(@input-padding-vertical-base / 2);
 @select-multiple-disabled-background: @input-disabled-bg;
@@ -495,7 +498,8 @@
 @modal-header-padding-horizontal: @padding-lg;
 @modal-body-padding: @padding-lg;
 @modal-header-bg: @component-background;
-@modal-header-padding: @modal-header-padding-vertical @modal-header-padding-horizontal;
+@modal-header-padding: @modal-header-padding-vertical
+  @modal-header-padding-horizontal;
 @modal-header-border-width: @border-width-base;
 @modal-header-border-style: @border-style-base;
 @modal-header-title-line-height: 22px;
@@ -534,7 +538,7 @@
 @menu-item-color: @text-color;
 @menu-highlight-color: @primary-color;
 @menu-highlight-danger-color: @error-color;
-@menu-item-active-bg: rgba(@menu-highlight-color, .1);
+@menu-item-active-bg: rgba(@menu-highlight-color, 0.1);
 @menu-item-active-danger-bg: @red-1;
 @menu-item-active-border-width: 3px;
 @menu-item-group-title-color: @text-color-secondary;
@@ -575,7 +579,7 @@
 @table-body-sort-bg: #fafafa;
 @table-row-hover-bg: @background-color-light;
 @table-selected-row-color: inherit;
-@table-selected-row-bg: rgba(@primary-color: .1);
+@table-selected-row-bg: rgba(@primary-color: 0.1);
 @table-body-selected-sort-bg: @table-selected-row-bg;
 @table-selected-row-hover-bg: darken(@table-selected-row-bg, 2%);
 @table-expanded-row-bg: #fbfbfb;
@@ -616,7 +620,7 @@
 // ---
 @picker-bg: @component-background;
 @picker-basic-cell-hover-color: @item-hover-bg;
-@picker-basic-cell-active-with-range-color: rgba(@primary-color, .1);
+@picker-basic-cell-active-with-range-color: rgba(@primary-color, 0.1);
 @picker-basic-cell-hover-with-range-color: lighten(@primary-color, 35%);
 @picker-basic-cell-disabled-bg: @disabled-bg;
 @picker-border-color: @border-color-split;
@@ -647,7 +651,7 @@
 
 // Badge
 // ---
-@badge-height: 20px;
+@-height: 20px;
 @badge-height-sm: 14px;
 @badge-dot-size: 7px;
 @badge-font-size: @font-size-sm;
@@ -681,8 +685,8 @@
 @card-actions-li-margin: 12px 0;
 @card-skeleton-bg: #cfd8dc;
 @card-background: @component-background;
-@card-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.16), 0 3px 6px 0 rgba(0, 0, 0, 0.12),
-  0 5px 12px 4px rgba(0, 0, 0, 0.09);
+@card-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.16),
+  0 3px 6px 0 rgba(0, 0, 0, 0.12), 0 5px 12px 4px rgba(0, 0, 0, 0.09);
 @card-radius: @border-radius-base;
 @card-head-tabs-margin-bottom: -17px;
 @card-head-extra-color: @text-color;
@@ -707,8 +711,9 @@
 @tabs-card-head-background: @background-color-light;
 @tabs-card-height: 40px;
 @tabs-card-active-color: @primary-color;
-@tabs-card-horizontal-padding: (@tabs-card-height - floor(@font-size-base * @line-height-base)) / 2 -
-  @border-width-base @padding-md;
+@tabs-card-horizontal-padding: (
+    @tabs-card-height - floor(@font-size-base * @line-height-base)
+  ) / 2 - @border-width-base @padding-md;
 @tabs-card-horizontal-padding-sm: 6px @padding-md;
 @tabs-card-horizontal-padding-lg: 7px @padding-md 6px;
 @tabs-title-font-size: @font-size-base;
@@ -895,8 +900,10 @@
 @alert-with-description-no-icon-padding-vertical: @padding-md - 1px;
 @alert-with-description-padding-vertical: @padding-md - 1px;
 @alert-with-description-padding: @alert-with-description-padding-vertical 15px
-  @alert-with-description-no-icon-padding-vertical @alert-with-description-icon-size;
-@alert-icon-top: 8px + @font-size-base * @line-height-base / 2 - @font-size-base / 2;
+  @alert-with-description-no-icon-padding-vertical
+  @alert-with-description-icon-size;
+@alert-icon-top: 8px + @font-size-base * @line-height-base / 2 - @font-size-base /
+  2;
 @alert-with-description-icon-size: 24px;
 
 // List
@@ -993,14 +1000,17 @@
 @image-color: #fff;
 @image-preview-operation-size: 18px;
 @image-preview-operation-color: @text-color-dark;
-@image-preview-operation-disabled-color: fade(@image-preview-operation-color, 25%);
+@image-preview-operation-disabled-color: fade(
+  @image-preview-operation-color,
+  25%
+);
 
 @sizes: {
-	25:   25%;
-	50:   50%;
-	75:   75%;
-	100:  100%;
-	auto: auto;
+  25: 25%;
+  50: 50%;
+  75: 75%;
+  100: 100%;
+  auto: auto;
 };
 
 @emphasized-link-hover-darken-percentage: 15%;

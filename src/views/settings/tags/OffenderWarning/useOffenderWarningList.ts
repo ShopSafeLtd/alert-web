@@ -1,10 +1,7 @@
 import { useState } from 'react';
-import type {
-  TagsQuery,
-  CreateTagMutation,
-  UpdateTagMutation,
-} from 'graphql/generated';
+import type { TagsQuery, TagsQueryVariables } from 'graphql/generated';
 import {
+  useCreateTagMutation,
   QueryMode,
   useTagsQuery,
   TagsDocument,
@@ -12,8 +9,10 @@ import {
   Model,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
-import type { MutationUpdaterFn } from '@apollo/client';
+
 import { notification, Modal } from 'antd';
+import errorNotification from 'types/error_notification';
+import type { TagData } from 'types/DataType';
 
 const { confirm } = Modal;
 
@@ -22,218 +21,125 @@ interface Return {
   loading: boolean;
   search: string;
   setSearch: (value: string) => void;
-  addOffender: boolean;
-  toggleAddOffender: () => void;
-  updateOffenderWarningList: MutationUpdaterFn<CreateTagMutation>;
+  addOffenderWarning: boolean;
+  toggleAddOffenderWarning: () => void;
   offenderId: string;
   setOffenderId: (value: string) => void;
-  editOffender: boolean;
-  toggleEditOffender: () => void;
+  editOffenderWarning: boolean;
+  toggleEditOffenderWarning: () => void;
   saving: boolean;
   deleteConfirm: (value: string) => void;
+  onAddOffenderWarning: (value: TagData) => void;
 }
 
 const useOffenderWarningList = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const schemeName = useStoreState((state) => state.scheme.name);
+  const userId = useStoreState((state) => state.user.id);
   const [offenderId, setOffenderId] = useState('');
   const [search, setSearch] = useState('');
   const [saving, setSaving] = useState(false);
-  const [addOffender, setAddOffender] = useState(false);
-  const [editOffender, setEditOffender] = useState(false);
+  const [addOffenderWarning, setAddOffenderWarning] = useState(false);
+  const [editOffenderWarning, setEditOffenderWarning] = useState(false);
 
-  const toggleAddOffender = () => {
-    setAddOffender(!addOffender);
+  const variables = {
+    where: {
+      schemes: {
+        some: {
+          id: {
+            in: [schemeId],
+          },
+        },
+      },
+      dataType: {
+        equals: Model.Offender,
+      },
+      OR: [
+        {
+          name: {
+            contains: search,
+            mode: QueryMode.Insensitive,
+          },
+        },
+        {
+          description: {
+            contains: search,
+            mode: QueryMode.Insensitive,
+          },
+        },
+      ],
+    },
   };
-  const toggleEditOffender = () => {
-    setEditOffender(!editOffender);
-  };
-
   const { data, loading } = useTagsQuery({
     fetchPolicy: 'cache-and-network',
-    variables: {
-      where: {
-        schemes: {
-          some: {
-            id: {
-              in: [schemeId],
-            },
-          },
+    variables,
+  });
+
+  // createTag
+  const [createTag] = useCreateTagMutation({
+    onCompleted: () => {
+      setSaving(false);
+      setAddOffenderWarning(false);
+      notification.success({
+        message: 'Successfully Added!',
+        description: 'The offender warning has been added! ',
+        placement: 'bottomRight',
+      });
+    },
+    onError: () => {
+      setSaving(false);
+      errorNotification();
+    },
+    update: (store, { data: res }) => {
+      if (res === null || res === undefined) return;
+
+      const existingData = store.readQuery<TagsQuery, TagsQueryVariables>({
+        query: TagsDocument,
+        variables,
+      });
+
+      if (existingData === null) return;
+
+      store.writeQuery<TagsQuery, TagsQueryVariables>({
+        query: TagsDocument,
+        data: {
+          tags: [...existingData.tags, res.createTag],
+          __typename: 'Query',
         },
-        dataType: {
-          equals: Model.Offender,
-        },
-        OR: [
-          {
-            name: {
-              contains: search,
-              mode: QueryMode.Insensitive,
-            },
-          },
-          {
-            description: {
-              contains: search,
-              mode: QueryMode.Insensitive,
-            },
-          },
-        ],
-      },
+        variables,
+      });
     },
   });
 
-  // update tag list after adding a new item
-  const updateOffenderWarningList: MutationUpdaterFn<CreateTagMutation> = (
-    store,
-    { data: res }
-  ) => {
-    if (res === null || res === undefined) return;
-
-    const existingData = store.readQuery<TagsQuery>({
-      query: TagsDocument,
+  const onAddOffenderWarning = (value: TagData) => {
+    createTag({
       variables: {
-        where: {
+        data: {
+          name: value.name,
+          description: value.description || '',
           schemes: {
-            some: {
-              id: {
-                in: [schemeId],
-              },
-            },
+            connect: value.schemes.map((id) => ({
+              id,
+            })),
           },
-          dataType: {
-            equals: Model.Offender,
-          },
-          OR: [
-            {
-              name: {
-                contains: search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-            {
-              description: {
-                contains: search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-          ],
+          createdBy: { connect: { id: userId } },
+          dataType: Model.Offender,
         },
       },
-    });
+      update: (store, result) => {
+        const existingData = store.readQuery<TagsQuery, TagsQueryVariables>({
+          query: TagsDocument,
+          variables,
+        });
 
-    if (existingData === null) return;
-
-    store.writeQuery<TagsQuery>({
-      query: TagsDocument,
-      data: {
-        tags: [...existingData.tags, res.createTag],
-        __typename: 'Query',
-      },
-      variables: {
-        where: {
-          schemes: {
-            some: {
-              id: {
-                in: [schemeId],
-              },
+        if (existingData && result.data)
+          store.writeQuery<TagsQuery, TagsQueryVariables>({
+            query: TagsDocument,
+            variables,
+            data: {
+              tags: [...existingData.tags, result.data?.createTag],
             },
-          },
-          dataType: {
-            equals: Model.Offender,
-          },
-          OR: [
-            {
-              name: {
-                contains: search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-            {
-              description: {
-                contains: search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-          ],
-        },
-      },
-    });
-  };
-  // update list after deleting an item
-  const update: MutationUpdaterFn<UpdateTagMutation> = (
-    store,
-    { data: res }
-  ) => {
-    if (res === null || res === undefined) return;
-
-    // get existing Offender list data from Apollo store
-    const existingData = store.readQuery<TagsQuery>({
-      query: TagsDocument,
-      variables: {
-        where: {
-          schemes: {
-            some: {
-              id: {
-                in: [schemeId],
-              },
-            },
-          },
-          dataType: {
-            equals: Model.Offender,
-          },
-          OR: [
-            {
-              name: {
-                contains: search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-            {
-              description: {
-                contains: search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-          ],
-        },
-      },
-    });
-
-    if (existingData === null) return;
-
-    // write the new data to the Apollo store
-    store.writeQuery<TagsQuery>({
-      query: TagsDocument,
-      data: {
-        tags: existingData.tags.filter((tag) => tag.id !== res?.updateTag?.id),
-        __typename: 'Query',
-      },
-      variables: {
-        where: {
-          schemes: {
-            some: {
-              id: {
-                in: [schemeId],
-              },
-            },
-          },
-          dataType: {
-            equals: Model.Offender,
-          },
-          OR: [
-            {
-              name: {
-                contains: search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-            {
-              description: {
-                contains: search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-          ],
-        },
+          });
       },
     });
   };
@@ -256,7 +162,29 @@ const useOffenderWarningList = (): Return => {
         placement: 'bottomRight',
       });
     },
-    update,
+    update: (store, { data: res }) => {
+      if (res === null || res === undefined) return;
+
+      // get existing Offender list data from Apollo store
+      const existingData = store.readQuery<TagsQuery>({
+        query: TagsDocument,
+        variables,
+      });
+
+      if (existingData === null) return;
+
+      // write the new data to the Apollo store
+      store.writeQuery<TagsQuery>({
+        query: TagsDocument,
+        data: {
+          tags: existingData.tags.filter(
+            (tag) => tag.id !== res?.updateTag?.id
+          ),
+          __typename: 'Query',
+        },
+        variables,
+      });
+    },
   });
   const openDelete = (currentId: string) => {
     setSaving(true);
@@ -288,21 +216,27 @@ const useOffenderWarningList = (): Return => {
       },
     });
   };
+  const toggleAddOffenderWarning = () => {
+    setAddOffenderWarning(!addOffenderWarning);
+  };
+  const toggleEditOffenderWarning = () => {
+    setEditOffenderWarning(!editOffenderWarning);
+  };
 
   return {
     data,
     loading,
     search,
     setSearch,
-    addOffender,
-    toggleAddOffender,
-    updateOffenderWarningList,
+    addOffenderWarning,
+    toggleAddOffenderWarning,
     offenderId,
     setOffenderId,
-    editOffender,
-    toggleEditOffender,
+    editOffenderWarning,
+    toggleEditOffenderWarning,
     saving,
     deleteConfirm,
+    onAddOffenderWarning,
   };
 };
 

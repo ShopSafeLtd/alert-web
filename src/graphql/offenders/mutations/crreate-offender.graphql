@@ -5,6 +5,7 @@ mutation createOffender($data: CreateOffenderData!) {
     updatedAt
     age
     build
+    height
     dateOfBirth
     dateSource
     hair

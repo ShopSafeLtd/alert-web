@@ -1,0 +1,31 @@
+mutation updateUserNotifications($where: UserNotificationWhereInput!) {
+  updateUserNotifications(where: $where) {
+    id
+    read
+    createdAt
+    notification {
+      id
+      crimeGroupId
+      createdAt
+      chatId
+      body
+      articleId
+      incidentId
+      investigationId
+      offenderId
+      schemes {
+        id
+      }
+      title
+      type
+      vehicleId
+      ban {
+        id
+        offender {
+          id
+        }
+      }
+      userId
+    }
+  }
+}

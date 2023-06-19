@@ -30,7 +30,9 @@ const useAuth = (): Return => {
   const handleSignOut = useStoreActions((actions) => actions.auth.signOut);
   const setUser = useStoreActions((actions) => actions.user.setUser);
   const clearUser = useStoreActions((actions) => actions.user.clearUser);
-  const { setRole, setTodos } = useStoreActions((actions) => actions.user);
+  const { setRole, setTodos, setNotifications } = useStoreActions(
+    (actions) => actions.user
+  );
 
   const setScheme = useStoreActions((actions) => actions.scheme.setScheme);
   const setAuthMessage = useStoreActions(
@@ -70,8 +72,12 @@ const useAuth = (): Return => {
         logo: schemeDetails?.logo?.optimisedPersisted,
         darkLogo: schemeDetails?.darkLogo?.optimisedPersisted,
         userTodos: schemeDetails?.userTodos || 0,
+        userNotifications: schemeDetails?.userNotifications || 0,
       });
       setTodos({ userTodos: schemes[0]?.scheme?.userTodos || 0 });
+      setNotifications({
+        userNotifications: schemes[0]?.scheme?.userNotifications || 0,
+      });
     };
 
     const scheme =
@@ -94,8 +100,12 @@ const useAuth = (): Return => {
           logo: schemeDetails.scheme.logo?.optimisedPersisted,
           darkLogo: schemeDetails.scheme.darkLogo?.optimisedPersisted,
           userTodos: schemeDetails.scheme.userTodos,
+          userNotifications: schemeDetails?.scheme.userNotifications,
         });
         setTodos({ userTodos: schemeDetails?.scheme?.userTodos || 0 });
+        setNotifications({
+          userNotifications: schemes[0]?.scheme?.userNotifications || 0,
+        });
       } else {
         handleNoValidScheme();
       }

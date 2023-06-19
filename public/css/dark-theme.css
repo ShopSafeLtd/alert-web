@@ -30125,7 +30125,7 @@ tr > .ant-picker-cell-in-view.ant-picker-cell-range-hover:first-child::after {
 }
 .incident-card .incident-card-content {
   padding: 10px 10px 5px;
-  height: 235px;
+  height: 260px;
   overflow: auto;
 }
 .incident-card .incident-card-desc {
@@ -30512,11 +30512,14 @@ tr > .ant-picker-cell-in-view.ant-picker-cell-range-hover:first-child::after {
   right: -5px;
   z-index: 100;
 }
-.update-info-container .ant-upload-list-picture-card-container,
-.upload-images .ant-upload-list-picture-card-container,
-.upload-images .ant-upload-select-picture-card {
+.update-info-container .ant-upload-list-picture-card-container {
   width: 100px;
   height: 100px;
+}
+.upload-images .ant-upload-list-picture-card-container,
+.upload-images .ant-upload-select-picture-card {
+  width: 150px;
+  height: 150px;
 }
 .incident-form-offender-card {
   width: 120;
@@ -30632,7 +30635,7 @@ tr > .ant-picker-cell-in-view.ant-picker-cell-range-hover:first-child::after {
 }
 .offender-card {
   height: 100%;
-  margin: 5px 5px 10px;
+  margin: 5px 5px 10px 0;
 }
 .offender-card .ant-card-body {
   position: relative;
@@ -30686,6 +30689,7 @@ tr > .ant-picker-cell-in-view.ant-picker-cell-range-hover:first-child::after {
 }
 .offender-card .offender-card-content {
   padding: 10px 10px 5px;
+  height: 265px;
   overflow: auto;
 }
 .offender-card .offender-card-desc {

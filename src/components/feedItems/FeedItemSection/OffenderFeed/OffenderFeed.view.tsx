@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Row, Typography } from 'antd';
+import { Col, Row, Tag, Typography } from 'antd';
 import type { FeedItemsQuery, ImagePosition } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -66,6 +66,7 @@ const OffenderFeed = ({
     id,
     updates,
     images,
+    tags,
     // lastActive,
     // incidents,
   } = feedItem?.offender || {};
@@ -105,6 +106,17 @@ const OffenderFeed = ({
                   </Text>
                 </Col>
               </Row>
+              {tags && tags.length > 0 ? (
+                <Row style={{ marginBottom: 5 }}>
+                  {tags.map((tag) => (
+                    <Col key={tag.id}>
+                      <Tag color="red">{tag.name}</Tag>
+                    </Col>
+                  ))}
+                </Row>
+              ) : (
+                <div style={{ marginBottom: 5 }} />
+              )}
               <Row>
                 <Col>
                   <FontAwesomeIcon

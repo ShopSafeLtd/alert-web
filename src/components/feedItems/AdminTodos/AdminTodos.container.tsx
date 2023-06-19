@@ -5,8 +5,9 @@ import useAdminTodos from './useAdminTodos';
 
 interface Props {
   fullSearch: string;
+  groupsFilter: string[];
 }
-const AdminTodos = ({ fullSearch }: Props): JSX.Element => {
+const AdminTodos = ({ fullSearch, groupsFilter }: Props): JSX.Element => {
   const {
     data,
     loading,
@@ -20,7 +21,7 @@ const AdminTodos = ({ fullSearch }: Props): JSX.Element => {
     onPaginationChange,
     currentPage,
     currentPageSize,
-  } = useAdminTodos({ fullSearch });
+  } = useAdminTodos({ fullSearch, groupsFilter });
 
   return (
     <View

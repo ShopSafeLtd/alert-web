@@ -725,8 +725,10 @@ const useEditIncident = (): Return => {
                     gender: offender.gender || null,
                     race: offender.race || null,
                     build: offender.build || null,
+                    height: offender.height || null,
                     hair: offender.hair || null,
                     peculiarities: offender.peculiarities || null,
+                    comment: offender.comment || null,
                     age: offender.age || null,
                     dateSource: offender.dateSource || null,
                     dateOfBirth: offender.dateOfBirth || null,
@@ -739,6 +741,21 @@ const useEditIncident = (): Return => {
                     scheme: { connect: { id: schemeId } },
                     createdBy: { connect: { id: userId } },
                     localId: offender.id,
+                    images: {
+                      upload:
+                        offender.images && offender.images.length > 0
+                          ? offender.images.map((item) => ({
+                              url: {
+                                filename: item.fileName || '',
+                                mimetype: item.type || '',
+                                url: item.url || '',
+                              },
+                              position: item.position,
+                              primary: item.primary,
+                              policeImage: item.policeImage,
+                            }))
+                          : undefined,
+                    },
                   }))
                 : undefined,
           };
@@ -776,6 +793,12 @@ const useEditIncident = (): Return => {
                 vehicle.offenders && vehicle.offenders.length > 0
                   ? { connect: vehicle.offenders.map((id) => ({ id })) }
                   : undefined,
+              groups: {
+                connect:
+                  groupData?.groups && groupData.groups.length === 1
+                    ? groupData?.groups.map(({ id }) => ({ id }))
+                    : data.groups.map((id) => ({ id })),
+              },
             },
           })),
 
@@ -794,6 +817,12 @@ const useEditIncident = (): Return => {
                     vehicle.offenders && vehicle.offenders.length > 0
                       ? { connect: vehicle.offenders.map((id) => ({ id })) }
                       : undefined,
+                  groups: {
+                    connect:
+                      groupData?.groups && groupData.groups.length === 1
+                        ? groupData?.groups.map(({ id }) => ({ id }))
+                        : data.groups.map((id) => ({ id })),
+                  },
                 }))
               : undefined,
         };

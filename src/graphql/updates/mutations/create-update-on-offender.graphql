@@ -58,6 +58,7 @@ mutation createUpdateOnOffender(
       updatedAt
       age
       build
+      height
       dateOfBirth
       name
       race
@@ -134,6 +135,7 @@ mutation createUpdateOnOffender(
         updatedAt
         age
         build
+        height
         dateOfBirth
         name
         race

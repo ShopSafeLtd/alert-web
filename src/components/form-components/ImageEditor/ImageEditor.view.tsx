@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { UploadFile } from 'antd';
-import { Button, Switch, Form, Select, Skeleton, Col, Modal, Row } from 'antd';
+import { Button, Col, Form, Modal, Row, Select, Skeleton, Switch } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import { ImagePosition } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -56,6 +56,7 @@ interface Image extends UploadFile {
   }[];
   position?: ImagePosition;
   primary?: boolean;
+  policeImage?: boolean;
 }
 // interface FormData {
 //   position?: ImagePosition;
@@ -67,22 +68,37 @@ interface Props {
   image: Image | null;
   submitImage: (value: Image) => void;
   onClose: () => void;
+  primaryImage: string;
+  setPrimaryImage: (value: string) => void;
 }
 
-const ImageEditor = ({ open, image, submitImage, onClose }: Props) => {
+const ImageEditor = ({
+  open,
+  image,
+  submitImage,
+  onClose,
+  primaryImage,
+  setPrimaryImage,
+}: Props) => {
   const classes = useStyles();
   const [position, setPosition] = useState(ImagePosition.CenterCenter);
-  const [primary, setPrimary] = useState(false);
   const [rotation, setRotation] = useState(0);
+  const [policeImage, setPoliceImage] = useState(false);
+  const [isPrimaryImage, setIsPrimaryImage] = useState(false);
 
   const handleSubmit = () => {
     if (image) {
       submitImage({
         ...image,
         position,
+        policeImage,
       });
+      if (isPrimaryImage) setPrimaryImage(image.uid);
+      if (!isPrimaryImage && image.uid === primaryImage) setPrimaryImage('');
     }
     setPosition(ImagePosition.CenterCenter);
+    setIsPrimaryImage(false);
+    setPoliceImage(false);
   };
 
   const onRotateRight = () => {
@@ -101,7 +117,9 @@ const ImageEditor = ({ open, image, submitImage, onClose }: Props) => {
       bodyStyle={{ padding: 0 }}
       okText="Save Image"
       onOk={handleSubmit}
-      onCancel={onClose}
+      onCancel={() => {
+        onClose();
+      }}
     >
       {open && (
         <Row wrap={false}>
@@ -145,8 +163,25 @@ const ImageEditor = ({ open, image, submitImage, onClose }: Props) => {
               >
                 <Switch
                   // disabled={saving}
-                  checked={primary}
-                  onChange={() => setPrimary(!primary)}
+                  checked={isPrimaryImage}
+                  onChange={() => setIsPrimaryImage(!isPrimaryImage)}
+                  style={{ marginLeft: 10, marginTop: -20 }}
+                />
+              </Form.Item>
+              <Form.Item
+                label="Received from the police"
+                name="policeImage"
+                valuePropName="checked"
+                style={{
+                  marginBottom: 0,
+                  flexDirection: 'row',
+                  justifyItems: 'center',
+                }}
+              >
+                <Switch
+                  // disabled={saving}
+                  checked={policeImage}
+                  onChange={() => setPoliceImage(!policeImage)}
                   style={{ marginLeft: 10, marginTop: -20 }}
                 />
               </Form.Item>

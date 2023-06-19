@@ -1,17 +1,35 @@
 import React from 'react';
-import { Button, Col, Drawer, Input, Row, Table } from 'antd';
+import {
+  Button,
+  Checkbox,
+  Col,
+  Drawer,
+  Dropdown,
+  Input,
+  Menu,
+  Row,
+  Table,
+} from 'antd';
 import type {
+  ListCustomGalleriesQuery,
   // CreateVehicleMutation,
   ListVehiclesQuery,
+  SortOrder,
 } from 'graphql/generated';
 import { Link } from 'react-router-dom';
 // import type { MutationUpdaterFn } from '@apollo/client';
 import AddVehicle from 'components/form-components/Vehicle/AddVehicle';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowUpRightFromSquare } from '@fortawesome/pro-light-svg-icons';
+import {
+  faArrowUpRightFromSquare,
+  faChevronDown,
+  faFilter,
+} from '@fortawesome/pro-light-svg-icons';
 import { useNavigate } from 'react-router';
-import type { VehicleData } from 'types/DataType';
+import type { DateType, VehicleData } from 'types/DataType';
+import CheckTags from 'components/form-components/check-tags/CheckTags.view';
+import VehicleFilter from 'components/vehicles/VehicleFilter';
 import useStyles from './ListVehicles.styles';
 
 interface Props {
@@ -23,6 +41,21 @@ interface Props {
   toggleAddVehicle: () => void;
   // updateVehicleList: MutationUpdaterFn<CreateVehicleMutation>;
   onSubmit: (value: VehicleData) => void;
+  groups: { value: string; label: string }[];
+  groupsLoading: boolean;
+  clearFilters: () => void;
+  sortFilter: boolean;
+  toggleSortFilter: () => void;
+  gallery: string[];
+  setGallery: (values: string[]) => void;
+  groupsFilter: string[];
+  setGroupsFilter: (value: string[]) => void;
+  setCreatedAtFilter: (value: DateType | undefined) => void;
+  customGalleriesData: ListCustomGalleriesQuery | undefined;
+  onSelectCustomGalleries: (values: string) => void;
+  customGalleries: string[];
+  order: SortOrder;
+  setOrder: (value: SortOrder) => void;
 }
 
 const ListVehicles = ({
@@ -34,21 +67,108 @@ const ListVehicles = ({
   toggleAddVehicle,
   // updateVehicleList,
   onSubmit,
+  groups,
+  groupsLoading,
+  groupsFilter,
+  setGroupsFilter,
+  setCreatedAtFilter,
+  clearFilters,
+  sortFilter,
+  toggleSortFilter,
+  customGalleriesData,
+  customGalleries,
+  onSelectCustomGalleries,
+  gallery,
+  setGallery,
+  order,
+  setOrder,
 }: Props) => {
   const classes = useStyles();
   const navigate = useNavigate();
-
+  const galleryOptions = [
+    {
+      label: 'Following',
+      value: 'FOLLOWING',
+    },
+    {
+      label: 'My Data',
+      value: 'MYDATA',
+    },
+  ];
+  const menu = () => (
+    <Menu>
+      {customGalleriesData?.listCustomGalleries.customGalleries.map(
+        ({ id, name }) => (
+          <Menu.Item key={id}>
+            <Checkbox
+              key={id}
+              checked={customGalleries.includes(id)}
+              onChange={() => {
+                onSelectCustomGalleries(id);
+              }}
+            >
+              {name}
+            </Checkbox>
+          </Menu.Item>
+        )
+      )}
+    </Menu>
+  );
   return (
     <div className={classes.page}>
-      <Row className={classes.headerRow}>
-        <Col flex={1}>
+      <Row align="middle" gutter={16} className={classes.headerRow}>
+        <Col span={8} xxl={6}>
           <Input
             value={search}
             onChange={(event) => setSearch(event.target.value)}
             allowClear
-            className={classes.searchInput}
             placeholder="Search vehicles..."
           />
+        </Col>
+        <Col>
+          <CheckTags
+            mode="check"
+            value={gallery}
+            onChange={setGallery}
+            options={galleryOptions}
+          />
+        </Col>
+        <Col flex={1}>
+          {customGalleriesData?.listCustomGalleries.total ? (
+            <Dropdown
+              // trigger={['click']}
+              overlay={menu}
+              placement="bottom"
+              arrow={{ pointAtCenter: true }}
+            >
+              <Button className={classes.selectBox}>
+                {/* <FontAwesomeIcon
+                      size="lg"
+                      style={{ marginRight: 5 }}
+                      icon={faUserTag}
+                    /> */}
+                Custom Gallery
+                <FontAwesomeIcon
+                  icon={faChevronDown}
+                  style={{ marginLeft: 10 }}
+                />
+              </Button>
+            </Dropdown>
+          ) : null}
+        </Col>
+        <Col>
+          <Button
+            onClick={toggleSortFilter}
+            icon={
+              <FontAwesomeIcon
+                icon={faFilter}
+                size="lg"
+                style={{ marginRight: 5 }}
+              />
+            }
+          >
+            Sort &amp; Filter
+          </Button>
         </Col>
         <Col>
           <Button type="primary" onClick={toggleAddVehicle}>
@@ -71,6 +191,11 @@ const ListVehicles = ({
         }))}
         loading={loading}
         size="small"
+        pagination={{
+          hideOnSinglePage: true,
+          defaultPageSize: 20,
+          pageSize: 20,
+        }}
         columns={[
           {
             key: 'reference',
@@ -141,14 +266,32 @@ const ListVehicles = ({
       <Drawer
         title="Add New Vehicle"
         visible={addVehicle}
-        width="600"
+        width="700"
+        zIndex={999}
         onClose={toggleAddVehicle}
       >
         {addVehicle ? (
-          <AddVehicle update={onSubmit} onClose={toggleAddVehicle} />
+          <AddVehicle update={onSubmit} onClose={toggleAddVehicle} showGroups />
         ) : (
           <div />
         )}
+      </Drawer>
+      <Drawer
+        title="Vehicle Filters"
+        visible={sortFilter}
+        onClose={toggleSortFilter}
+        width={500}
+      >
+        <VehicleFilter
+          order={order}
+          setOrder={setOrder}
+          groups={groups}
+          groupsLoading={groupsLoading}
+          groupsFilter={groupsFilter}
+          setGroupsFilter={setGroupsFilter}
+          clearFilters={clearFilters}
+          setCreatedAtFilter={setCreatedAtFilter}
+        />
       </Drawer>
     </div>
   );

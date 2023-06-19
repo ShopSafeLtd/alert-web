@@ -1,4 +1,5 @@
 import React from 'react';
+import type { FormInstance } from 'antd';
 import {
   Button,
   Col,
@@ -12,7 +13,6 @@ import {
   Skeleton,
   Table,
   Tooltip,
-  Upload,
 } from 'antd';
 import type { ListCrimeGroupsQuery } from 'graphql/generated';
 import type { OffenderData } from 'components/viewChat/ViewMessage/useViewMessage';
@@ -21,17 +21,24 @@ import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-import type { IncidentCardData, VehicleData } from 'types/DataType';
+import type { RcFile, UploadProps } from 'antd/es/upload/interface';
+import type {
+  CustomGalleryData,
+  IncidentCardData,
+  VehicleData,
+} from 'types/DataType';
 
+import UploadImage from 'components/images/UploadImage.view';
+import AddCustomGallery from 'components/form-components/customGalleries/AddCustomGallery';
 import useStyles from './EditVehicle.styles';
+import type { FormData, Image } from './useEditVehicle';
 
 const { confirm } = Modal;
 
 interface Props {
   onClose: () => void;
   editData: VehicleData | undefined | null;
-  onSubmit: (value: VehicleData) => void;
+  onSubmit: (value: FormData) => void;
   CrimeGroupsData: ListCrimeGroupsQuery | undefined;
   CrimeGroupsLoading: boolean;
   saving: boolean;
@@ -48,7 +55,24 @@ interface Props {
   adminRights: boolean;
   imgChange: UploadProps['onChange'];
   beforeUpload: (value: RcFile) => void;
-  fileList: UploadFile[];
+  fileList: Image[];
+  primaryImage: string;
+  setPrimaryImage: (value: string) => void;
+  editImage: Image | null;
+  onEditImage: (value: Image) => void;
+  onRemoveImage: (imageId: string) => void;
+  toggleEditImage: (value?: Image) => void;
+  groups: { value: string; label: string }[];
+  groupsLoading: boolean;
+  showGroups?: boolean;
+  fromIncident?: boolean;
+  fromOffender?: boolean;
+  customGalleries: { value: string; label: string }[];
+  customGalleriesLoading: boolean;
+  addCustomGallery: boolean;
+  toggleAddCustomGallery: () => void;
+  updateNewCustomGalleryData: (values: CustomGalleryData) => void;
+  form: FormInstance<FormData>;
 }
 
 const EditVehicle = ({
@@ -72,11 +96,28 @@ const EditVehicle = ({
   imgChange,
   beforeUpload,
   fileList,
+  onRemoveImage,
+  onEditImage,
+  toggleEditImage,
+  editImage,
+  primaryImage,
+  setPrimaryImage,
+  groups,
+  groupsLoading,
+  showGroups,
+  fromIncident,
+  fromOffender,
+  customGalleries,
+  customGalleriesLoading,
+  addCustomGallery,
+  toggleAddCustomGallery,
+  updateNewCustomGalleryData,
+  form,
 }: Props): JSX.Element => {
   const classes = useStyles();
   return editData ? (
     <div>
-      <Form
+      <Form<FormData>
         initialValues={{
           make: editData.make || '',
           model: editData.model || '',
@@ -86,22 +127,18 @@ const EditVehicle = ({
             editData.crimeGroup && editData.crimeGroup.length > 0
               ? editData.crimeGroup.map((id) => id)
               : [],
+          customGalleries:
+            editData?.customGalleries && editData?.customGalleries.length > 0
+              ? editData.customGalleries.map((id) => id)
+              : [],
         }}
         layout="vertical"
         onFinish={onSubmit}
+        form={form}
       >
         <Row gutter={16}>
           <Col span={12}>
-            <Form.Item
-              name="make"
-              label="Make"
-              // rules={[
-              //   {
-              //     required: true,
-              //     message: 'Please enter a make for the new vehicle.',
-              //   },
-              // ]}
-            >
+            <Form.Item name="make" label="Make">
               <Input disabled={saving} />
             </Form.Item>
           </Col>
@@ -124,8 +161,38 @@ const EditVehicle = ({
           </Col>
         </Row>
 
-        {adminRights && (
-          <Row gutter={16}>
+        <Row gutter={16}>
+          {showGroups && (
+            <Col span={12}>
+              <Form.Item
+                name="groups"
+                label="Groups"
+                tooltip="Please select the relevant groups that you would like this vehicle to be visible to."
+                rules={[
+                  {
+                    required: true,
+                    message:
+                      'Please select at least one group for the vehicle.',
+                  },
+                ]}
+              >
+                <Select
+                  loading={groupsLoading}
+                  disabled={saving}
+                  mode="multiple"
+                  maxTagCount={3}
+                  placeholder="Select groups..."
+                >
+                  {groups.map((group) => (
+                    <Select.Option key={group.value} value={group.value}>
+                      {group.label}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+          )}
+          {adminRights && (
             <Col span={12}>
               <Form.Item name="crimeGroup" label="Crime Groups">
                 <Select
@@ -135,44 +202,80 @@ const EditVehicle = ({
                   maxTagCount={3}
                   filterOption
                   optionFilterProp="label"
-                  optionLabelProp="label"
                   options={CrimeGroupsData?.listCrimeGroups.crimeGroups.map(
                     (crimeGroup) => ({
                       value: crimeGroup.id,
-                      label: crimeGroup.reference,
+                      label: `CG-${crimeGroup.reference}`,
                     })
                   )}
                 />
               </Form.Item>
             </Col>
-          </Row>
-        )}
-        <Row>
-          <Col>
-            <Form.Item
-              name="images"
-              label="Images"
-              tooltip="Please add any images that you have of the vehicle."
-            >
-              <Upload
-                action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
-                className="upload-images"
-                style={{ width: '50%', height: '50%' }}
-                listType="picture-card"
-                fileList={fileList}
-                onChange={imgChange}
-                beforeUpload={beforeUpload}
-                accept=".png,.jpeg,.webp"
-              >
-                {fileList.length < 10 && '+ Upload'}
-              </Upload>
-            </Form.Item>
-          </Col>
+          )}
         </Row>
 
+        {showGroups && (
+          <Row gutter={16}>
+            <Col span={24}>
+              <Row gutter={16} align="middle">
+                <Col span={12}>
+                  <Form.Item
+                    name="customGalleries"
+                    label="Custom Galleries"
+                    tooltip="select any custom galleries that are relevant to this offender or add your own."
+                  >
+                    <Select
+                      loading={customGalleriesLoading}
+                      disabled={saving}
+                      mode="multiple"
+                      maxTagCount={3}
+                      optionFilterProp="label"
+                      // value={selectedItems}
+                      // onChange={onSelectCustomGallery}
+                    >
+                      {customGalleries.map((el) => (
+                        <Select.Option value={el.value} label={el.label}>
+                          {el.label}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  </Form.Item>
+                </Col>
+                <Col>
+                  <Button
+                    disabled={saving}
+                    style={{ color: 'red', padding: 8 }}
+                    onClick={toggleAddCustomGallery}
+                    icon={
+                      <FontAwesomeIcon
+                        icon={faPlus}
+                        style={{ marginRight: 5 }}
+                      />
+                    }
+                  >
+                    Add Custom Gallery
+                  </Button>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        )}
+
+        <UploadImage
+          imgChange={imgChange}
+          beforeUpload={beforeUpload}
+          fileList={fileList}
+          editImage={editImage}
+          onEditImage={onEditImage}
+          toggleEditImage={toggleEditImage}
+          onRemoveImage={onRemoveImage}
+          primaryImage={primaryImage}
+          setPrimaryImage={setPrimaryImage}
+          title="vehicle"
+        />
         {adminRights && (
           <Row gutter={16}>
-            {!(incidentsData && incidentsData.length > 0) && (
+            {!fromIncident && (
               <Col>
                 <Button
                   onClick={toggleLinkIncident}
@@ -189,7 +292,8 @@ const EditVehicle = ({
                 </Button>
               </Col>
             )}
-            {!(offendersData && offendersData.length > 0) && (
+
+            {!fromOffender && (
               <Col>
                 <div>
                   <Button
@@ -235,7 +339,7 @@ const EditVehicle = ({
                   key: 'Options',
                   title: 'Delete',
                   dataIndex: 'Options',
-                  // width: 100,
+                  width: 5,
                   render: (_, record) => (
                     <Row>
                       <Col>
@@ -271,26 +375,6 @@ const EditVehicle = ({
               pagination={false}
               size="small"
             />
-            {adminRights && (
-              <Row gutter={16} style={{ marginTop: 5 }}>
-                <Col flex={1} />
-                <Col>
-                  <Button
-                    onClick={toggleLinkIncident}
-                    disabled={saving || linkOffender}
-                    icon={
-                      <FontAwesomeIcon
-                        className="button-icon"
-                        icon={faPlus}
-                        size="lg"
-                      />
-                    }
-                  >
-                    Link Incident
-                  </Button>
-                </Col>
-              </Row>
-            )}
           </>
         ) : null}
 
@@ -310,7 +394,6 @@ const EditVehicle = ({
                         <div className={classes.searchImage}>
                           <WatermarkImage url={images[0]?.optimised} />
                         </div>
-                        s
                       </div>
                     ) : (
                       <Skeleton.Image className={classes.imageSkeleton} />
@@ -362,26 +445,6 @@ const EditVehicle = ({
               pagination={false}
               size="small"
             />
-            {adminRights && (
-              <Row gutter={16} style={{ marginTop: 5 }}>
-                <Col flex={1} />
-                <Col>
-                  <Button
-                    onClick={toggleLinkOffender}
-                    disabled={saving || linkOffender}
-                    icon={
-                      <FontAwesomeIcon
-                        className="button-icon"
-                        icon={faPlus}
-                        size="lg"
-                      />
-                    }
-                  >
-                    Link Offender
-                  </Button>
-                </Col>
-              </Row>
-            )}
           </>
         ) : null}
 
@@ -432,6 +495,21 @@ const EditVehicle = ({
             update={updateIncidentList}
             onClose={toggleLinkIncident}
             incidentIds={incidentsData?.map(({ id }) => id)}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <Drawer
+        title="Add Custom Gallery"
+        visible={addCustomGallery}
+        width="400"
+        onClose={toggleAddCustomGallery}
+      >
+        {addCustomGallery ? (
+          <AddCustomGallery
+            update={updateNewCustomGalleryData}
+            onClose={toggleAddCustomGallery}
           />
         ) : (
           <div />

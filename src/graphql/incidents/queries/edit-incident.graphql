@@ -40,8 +40,9 @@ query EditIncident($where: IncidentWhereUniqueInput!) {
     location {
       id
       building
+
       street
-      townCity 
+      townCity
       county
       postcode
     }
@@ -107,6 +108,7 @@ query EditIncident($where: IncidentWhereUniqueInput!) {
       updatedAt
       age
       build
+      height
       dateOfBirth
       dateSource
       gender
@@ -191,6 +193,7 @@ query EditIncident($where: IncidentWhereUniqueInput!) {
         updatedAt
         age
         build
+        height
         dateOfBirth
         name
         race
@@ -273,6 +276,7 @@ query EditIncident($where: IncidentWhereUniqueInput!) {
           updatedAt
           age
           build
+          height
           dateOfBirth
           name
           race

@@ -4,7 +4,7 @@ import { MockedProvider } from '@apollo/client/testing';
 import { createStore, StoreProvider } from 'easy-peasy';
 import { storeModel } from 'state';
 import { MemoryRouter } from 'react-router-dom';
-import { Age, Gender, Race, Build } from 'graphql/generated';
+import { Age, Gender, Race, Build, Height, IdSource } from 'graphql/generated';
 import useAddNewOffender from '../useAddNewOffender';
 
 const UseAddNewOffenderTest = () => {
@@ -28,6 +28,11 @@ const UseAddNewOffenderTest = () => {
             peculiarities: 'unknown',
             dateSource: 'unknown',
             dateOfBirth: new Date(),
+            groups: [],
+            idVerified: true,
+            idSource: IdSource.IdCard,
+            height: Height.Unknown,
+            comment: 'unknown',
           })
         }
       >

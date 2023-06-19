@@ -5,6 +5,7 @@ mutation updateOffender($where: UniqueId!, $data: OffenderUpdateInput!) {
     updatedAt
     age
     build
+    height
     dateOfBirth
     dateSource
     hair

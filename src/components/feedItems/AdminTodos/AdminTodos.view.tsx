@@ -70,7 +70,7 @@ const AdminTodos = ({
   const classes = useStyles();
   const expandedRowRender = (record: TableItem) => (
     <Text style={{ fontSize: 14, padding: 0, margin: 0 }}>
-      {record.description}
+      Description: {record.description}
     </Text>
   );
 
