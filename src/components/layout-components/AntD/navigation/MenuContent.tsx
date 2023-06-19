@@ -2,15 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Badge, Grid, Menu, Typography } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import IntlMessage from '../../../util-components/AntD/IntlMessage';
-import navConfig, { BadgeTypes, NavItem } from 'configs/NavigationConfig';
+import type { NavItem } from 'configs/NavigationConfig';
+import navConfig, { BadgeTypes } from 'configs/NavigationConfig';
 import utils from 'utils';
 import { NavType, SideNavTheme, useStoreActions, useStoreState } from 'state';
 import { APP_NAME } from 'configs/AppConfig';
+import { useStore } from 'easy-peasy';
 import NavScheme from './NavScheme';
 import NavProfile from './NavProfile';
 import Logo from './Logo';
-import { useStore } from 'easy-peasy';
+import IntlMessage from '../../../util-components/AntD/IntlMessage';
 
 const { SubMenu } = Menu;
 const { useBreakpoint } = Grid;
@@ -19,12 +20,11 @@ const setLocale = (isLocaleOn: boolean, localeKey: string) =>
   isLocaleOn ? <IntlMessage id={localeKey} /> : localeKey.toString();
 
 const setDefaultOpen = (key: string) => {
-  let keyList = [];
+  const keyList = [];
   let keyString = '';
   if (key) {
     const arr = key.split('-');
-    for (let index = 0; index < arr.length; index++) {
-      const elm = arr[index];
+    for (const [index, elm] of arr.entries()) {
       index === 0 ? (keyString = elm) : (keyString = `${keyString}-${elm}`);
       keyList.push(keyString);
     }
@@ -333,7 +333,7 @@ const MenuContent = (props: Props) => {
   }, [userTodos]);
 
   useEffect(() => {
-    setTodoCount(userNotifications || 0);
+    setNotificationCount(userNotifications || 0);
   }, [userNotifications]);
 
   return props.type === NavType.SIDE ? (
