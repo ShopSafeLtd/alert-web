@@ -38,6 +38,7 @@ import type {
   OffenderData as OffenderDataGlobal,
   VehicleData,
 } from 'types/DataType';
+import errorNotification from 'types/error_notification';
 
 const { confirm } = Modal;
 
@@ -403,11 +404,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     },
     onError: () => {
       setSaving(false);
-      notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
   });
 
@@ -423,11 +420,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
       });
     },
     onError: () => {
-      notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
   });
   const onReject = () => {
@@ -831,8 +824,10 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
                   gender: offender.gender || null,
                   race: offender.race || null,
                   build: offender.build || null,
+                  height: offender.height || null,
                   hair: offender.hair || null,
                   peculiarities: offender.peculiarities || null,
+                  comment: offender.comment || null,
                   age: offender.age || null,
                   dateSource: offender.dateSource || null,
                   dateOfBirth: offender.dateOfBirth || null,
@@ -843,6 +838,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
                   scheme: { connect: { id: schemeId } },
                   createdBy: { connect: { id: userId } },
                   localId: offender.id,
+                  // ???
                   images:
                     offender?.images &&
                     offender.images.length > 0 &&
@@ -901,6 +897,12 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
                 vehicle.offenders && vehicle.offenders.length > 0
                   ? { connect: vehicle.offenders.map((id) => ({ id })) }
                   : undefined,
+              groups: {
+                connect:
+                  groupData?.groups && groupData.groups.length === 1
+                    ? groupData?.groups.map(({ id }) => ({ id }))
+                    : data.groups.map((id) => ({ id })),
+              },
             },
           })),
 
@@ -919,6 +921,12 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
                     vehicle.offenders && vehicle.offenders.length > 0
                       ? { connect: vehicle.offenders.map((id) => ({ id })) }
                       : undefined,
+                  groups: {
+                    connect:
+                      groupData?.groups && groupData.groups.length === 1
+                        ? groupData?.groups.map(({ id }) => ({ id }))
+                        : data.groups.map((id) => ({ id })),
+                  },
                 }))
               : undefined,
         };

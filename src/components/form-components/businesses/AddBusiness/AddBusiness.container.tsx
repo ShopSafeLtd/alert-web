@@ -11,7 +11,6 @@ interface Props {
 
 const AddBusiness = ({ onClose, update, saving }: Props) => {
   const { onSubmit, onSearchBusiness } = useAddBusiness({
-    // onClose,
     update,
   });
 

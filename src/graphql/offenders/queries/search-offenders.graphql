@@ -17,6 +17,7 @@ query searchOffenders(
       updatedAt
       age
       build
+      height
       dateOfBirth
       dateSource
       hair

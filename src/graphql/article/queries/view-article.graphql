@@ -5,7 +5,6 @@ query Article($where: ArticleWhereUniqueInput!) {
       id
       name
     }
-
     documents {
       id
       name
@@ -15,6 +14,7 @@ query Article($where: ArticleWhereUniqueInput!) {
       fullName
     }
     createdAt
+    updatedAt
     priority
     tags {
       name
@@ -88,6 +88,7 @@ query Article($where: ArticleWhereUniqueInput!) {
           updatedAt
           age
           build
+          height
           dateOfBirth
           dateSource
           hair

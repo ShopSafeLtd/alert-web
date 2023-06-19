@@ -45,6 +45,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
     paddingBottom: '8px !important',
     overflow: 'auto',
   },
+  detailTag: { paddingBottom: '5px !important', overflow: 'auto' },
   images: {
     width: '100%',
     padding: '0px 10px',
@@ -99,6 +100,10 @@ const useStyles = createUseStyles((theme: Theme) => ({
   },
   offenderRow: {
     cursor: 'pointer',
+  },
+  tagLabel: { marginTop: 2 },
+  tag: {
+    marginBottom: 3,
   },
 }));
 

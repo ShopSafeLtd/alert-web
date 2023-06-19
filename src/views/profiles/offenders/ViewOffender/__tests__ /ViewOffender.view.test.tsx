@@ -62,6 +62,7 @@ describe('Detail Officer View', () => {
       idVerified: false,
       addresses: [],
       alias: [],
+      customGalleries: [],
       searchedMatches: [],
     },
   };

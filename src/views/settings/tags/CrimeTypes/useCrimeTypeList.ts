@@ -238,14 +238,12 @@ const useCrimeTypeList = (): Return => {
     variables: impactTagsVars,
   });
 
-  // update list after adding a new item
   const updateImpactList: MutationUpdaterFn<CreateTagMutation> = (
     store,
     { data: res }
   ) => {
     if (res === null || res === undefined) return;
 
-    // get existing Incident list data from Apollo store
     const existingData = store.readQuery<TagsQuery>({
       query: TagsDocument,
       variables: impactTagsVars,
@@ -253,7 +251,6 @@ const useCrimeTypeList = (): Return => {
 
     if (existingData === null) return;
 
-    // write the new data to the Apollo store
     store.writeQuery<TagsQuery>({
       query: TagsDocument,
       data: {
@@ -270,7 +267,6 @@ const useCrimeTypeList = (): Return => {
   ) => {
     if (res === null || res === undefined) return;
 
-    // get existing Incident list data from Apollo store
     const existingData = store.readQuery<TagsQuery>({
       query: TagsDocument,
       variables: involvedTagsVars,
@@ -278,7 +274,6 @@ const useCrimeTypeList = (): Return => {
 
     if (existingData === null) return;
 
-    // write the new data to the Apollo store
     store.writeQuery<TagsQuery>({
       query: TagsDocument,
       data: {
@@ -295,7 +290,6 @@ const useCrimeTypeList = (): Return => {
   ) => {
     if (res === null || res === undefined) return;
 
-    // get existing Incident list data from Apollo store
     const existingData = store.readQuery<TagsQuery>({
       query: TagsDocument,
       variables: crimeTypesVars,
@@ -303,7 +297,6 @@ const useCrimeTypeList = (): Return => {
 
     if (existingData === null) return;
 
-    // write the new data to the Apollo store
     store.writeQuery<TagsQuery>({
       query: TagsDocument,
       data: {
@@ -321,7 +314,6 @@ const useCrimeTypeList = (): Return => {
   ) => {
     if (res === null || res === undefined) return;
 
-    // get existing Incident list data from Apollo store
     const existingData = store.readQuery<TagsQuery>({
       query: TagsDocument,
       variables: crimeTypesVars,
@@ -335,7 +327,6 @@ const useCrimeTypeList = (): Return => {
       variables: impactTagsVars,
     });
 
-    // write the new data to the Apollo store
     if (existingData)
       store.writeQuery<TagsQuery>({
         query: TagsDocument,

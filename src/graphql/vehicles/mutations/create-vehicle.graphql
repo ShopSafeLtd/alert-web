@@ -28,5 +28,9 @@ mutation CreateVehicle($data: CreateVehicleDataInput!) {
       id
       reference
     }
+    customGalleries {
+      id
+      name
+    }
   }
 }

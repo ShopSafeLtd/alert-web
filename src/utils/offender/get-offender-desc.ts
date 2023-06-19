@@ -1,5 +1,5 @@
 import type { Incident } from 'graphql/generated';
-import { Age, Build, Gender, IdSource, Race } from 'graphql/generated';
+import { Height, Age, Build, Gender, IdSource, Race } from 'graphql/generated';
 
 export const getOffenderGender = (
   gender: Gender | undefined | null
@@ -35,6 +35,15 @@ export const getOffenderBuild = (build: Build | undefined | null): string => {
   if (build === Build.Large) return 'Large';
   if (build === Build.Medium) return 'Medium';
   if (build === Build.Small) return 'Small';
+  return 'Unknown';
+};
+
+export const getOffenderHeight = (
+  height: Height | undefined | null
+): string => {
+  if (height === Height.Tall) return 'Tall';
+  if (height === Height.Average) return 'Average';
+  if (height === Height.Short) return 'Short';
   return 'Unknown';
 };
 

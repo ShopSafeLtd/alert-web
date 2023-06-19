@@ -118,7 +118,7 @@ const IncidentFeed = ({
     <Affix offsetTop={5}>
       <Card bodyStyle={{ padding: 10 }} style={{ marginBottom: 5 }}>
         <Row align="middle" gutter={16}>
-          <Col span={4} xxl={6}>
+          <Col span={8} xxl={6}>
             <Input
               size="small"
               // style={{ width: 350 }}

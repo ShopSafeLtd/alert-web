@@ -2,25 +2,26 @@ import { useState } from 'react';
 import { useStoreState } from 'state';
 import type {
   Role,
-  UserQuery,
   SearchBusinessesQuery,
   SearchBusinessesQueryVariables,
+  UserQuery,
   UserUpdateInput,
 } from 'graphql/generated';
 import {
-  SortOrder,
-  useSchemeGroupsQuery,
-  useSchemeChatsQuery,
-  useUserQuery,
-  useUpdateUserMutation,
-  SearchBusinessesDocument,
   QueryMode,
+  SearchBusinessesDocument,
+  SortOrder,
+  useSchemeChatsQuery,
+  useSchemeGroupsQuery,
+  useUpdateUserMutation,
+  useUserQuery,
 } from 'graphql/generated';
 import type { FormInstance } from 'antd';
 import { notification } from 'antd';
 import { useApolloClient } from '@apollo/client';
 import type { BusinessData, SelectOptions } from 'types/DataType';
 import { useForm } from 'antd/lib/form/Form';
+import errorNotification from 'types/error_notification';
 
 export interface FormData {
   fullName: string;
@@ -154,11 +155,7 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
     },
     onError: () => {
       setSaving(false);
-      notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
   });
 
@@ -386,7 +383,9 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
     const selectedBusinesses = form.getFieldValue('businesses');
     form.setFieldsValue({
       businesses: [
-        ...selectedBusinesses,
+        ...(selectedBusinesses && selectedBusinesses.length > 0
+          ? selectedBusinesses
+          : []),
         { value: values.id, label: values.name },
       ],
     });

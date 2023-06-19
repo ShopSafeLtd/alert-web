@@ -4,6 +4,7 @@ import type {
   CrimeGroupQueryVariables,
   SuggestedCrimeGroupMembersQuery,
   SuggestedCrimeGroupMembersQueryVariables,
+  VehicleCreateWithoutCrimeGroupInput,
 } from 'graphql/generated';
 import {
   SuggestedCrimeGroupMembersDocument,
@@ -81,8 +82,7 @@ interface Return {
 }
 
 const useViewCrimeGroup = (crimeGroupId: string): Return => {
-  const userId = useStoreState((state) => state.user.id);
-  const role = useStoreState((state) => state.user.role);
+  const { id: userId, groups, role } = useStoreState((state) => state.user);
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
   const [addOffender, setAddOffender] = useState(false);
@@ -190,13 +190,20 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
                 gender: data.gender || null,
                 race: data.race || null,
                 build: data.build || null,
+                height: data.height || null,
                 hair: data.hair || null,
                 peculiarities: data.peculiarities || null,
+                comment: data.comment || null,
                 age: data.age || null,
                 dateSource: data.dateSource || null,
                 dateOfBirth: data.dateOfBirth || null,
                 createdBy: { connect: { id: userId } },
                 scheme: { connect: { id: schemeId } },
+                groups: {
+                  connect: crimeGroupsData?.crimeGroup?.groups.map(
+                    ({ id }) => ({ id })
+                  ),
+                },
                 images: {
                   upload:
                     data.images && data.images.length > 0
@@ -206,6 +213,9 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
                             mimetype: item.type || '',
                             url: item.url || '',
                           },
+                          position: item.position,
+                          primary: item.primary,
+                          policeImage: item.policeImage,
                         }))
                       : undefined,
                 },
@@ -253,6 +263,45 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
   };
   const submitNewVehicle = (data: VehicleData) => {
     setSaving(true);
+    const getCustomGalleries =
+      (): VehicleCreateWithoutCrimeGroupInput['customGalleries'] => {
+        if (data.customGalleries) {
+          const connectedCustomGalleries = data.customGalleries.filter(
+            (id) =>
+              !data.newCustomGalleriesData?.map((el) => el.id).includes(id)
+          );
+          return {
+            connect:
+              connectedCustomGalleries && connectedCustomGalleries.length > 0
+                ? connectedCustomGalleries.map((id) => ({ id }))
+                : undefined,
+            create:
+              data.newCustomGalleriesData &&
+              data.newCustomGalleriesData.length > 0
+                ? data.newCustomGalleriesData.map((value) => ({
+                    name: value.name,
+                    description: value.description || '',
+                    schemes: { connect: [{ id: schemeId }] },
+                    groups: {
+                      connect:
+                        crimeGroupsData?.crimeGroup?.groups &&
+                        crimeGroupsData?.crimeGroup?.groups.length > 0
+                          ? crimeGroupsData?.crimeGroup?.groups.map(
+                              ({ id }) => ({
+                                id,
+                              })
+                            )
+                          : groups.map(({ id }) => ({ id })),
+                    },
+                  }))
+                : undefined,
+          };
+        }
+        return {
+          connect: undefined,
+          create: undefined,
+        };
+      };
     updateCrimeGroup({
       variables: {
         where: {
@@ -278,6 +327,52 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
                       ? data.offenders.map((id) => ({ id }))
                       : undefined,
                 },
+                groups: {
+                  connect:
+                    crimeGroupsData?.crimeGroup?.groups &&
+                    crimeGroupsData?.crimeGroup?.groups.length > 0
+                      ? crimeGroupsData?.crimeGroup?.groups.map(({ id }) => ({
+                          id,
+                        }))
+                      : groups.map(({ id }) => ({ id })),
+                },
+                customGalleries: getCustomGalleries(),
+                schemes: { connect: [{ id: schemeId }] },
+                // ???
+                // images: {
+                //   create:
+                //     data.images && data.images.length > 0
+                //       ? data.images.map((item) => ({
+                //           url: {
+                //             filename: item.fileName || '',
+                //             mimetype: item.type || '',
+                //             url: item.url || '',
+                //           },
+                //           position: item.position,
+                //           primary: item.primary,
+                //           policeImage: item.policeImage,
+                //           scheme: {
+                //             connect: { id: schemeId },
+                //           },
+                //           uploadedBy: { connect: { id: userId } },
+                //         }))
+                //       : undefined,
+                // },
+                // image: {
+                //   upload:
+                //     data.images && data.images.length > 0
+                //       ? data.images.map((item) => ({
+                //           url: {
+                //             filename: item.fileName || '',
+                //             mimetype: item.type || '',
+                //             url: item.url || '',
+                //           },
+                //           position: item.position,
+                //           primary: item.primary,
+                //           policeImage: item.policeImage,
+                //         }))
+                //       : undefined,
+                // },
               },
             ],
           },
@@ -298,11 +393,7 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
     },
     onError: () => {
       setSaving(false);
-      notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
   });
 

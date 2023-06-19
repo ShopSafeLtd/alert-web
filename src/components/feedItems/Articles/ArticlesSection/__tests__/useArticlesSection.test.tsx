@@ -78,6 +78,7 @@ const UseArticleListTest = () => {
     fullSearch: 'a',
     searchMydata: false,
     fullCreatedAtFilter: undefined,
+    fullGroupFilter: [],
   });
   const articles =
     data &&

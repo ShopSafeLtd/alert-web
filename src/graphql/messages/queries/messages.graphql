@@ -71,6 +71,7 @@ query messages($chat: String, $before: MessageWhereUniqueInput) {
       updatedAt
       age
       build
+      height
       dateOfBirth
       name
       race

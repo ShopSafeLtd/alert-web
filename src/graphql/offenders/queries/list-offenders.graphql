@@ -21,6 +21,7 @@ query listOffenders(
       reference
       age
       build
+      height
       dateOfBirth
       dateSource
       hair

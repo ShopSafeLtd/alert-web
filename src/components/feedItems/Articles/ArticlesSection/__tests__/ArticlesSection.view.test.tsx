@@ -12,7 +12,7 @@ describe('List Officer View', () => {
         createdBy: {
           fullName: 'Alex Nicholls',
           id: 'cl4y3a97h2589631op4xk29hjc4',
-          organisation: 'Shopsafe',
+          businesses: [{ name: 'user business', id: '' }],
         },
         id: 'clhqk6of6000r070vpc1830ot',
         image: {
@@ -30,6 +30,7 @@ describe('List Officer View', () => {
         tags: [],
         title: 'test',
         updatedAt: '2023-05-16T17:39:30.210Z',
+        groups: [],
       },
     ],
   };

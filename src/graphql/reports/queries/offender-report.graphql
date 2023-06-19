@@ -81,6 +81,7 @@ query OffenderReport(
       peculiarities
       dateOfBirth
       build
+      height
       hair
       race
       reference
