@@ -1,7 +1,6 @@
 import { APP_PREFIX_PATH } from 'configs/AppConfig';
 import {
   faAddressCard,
-  faBell,
   faBuilding,
   faCalendarCheck,
   faCar,
@@ -27,9 +26,9 @@ import {
   faTrash,
   faUser,
   faUsers,
-  faUsersViewfinder,
 } from '@fortawesome/pro-light-svg-icons';
 import { Role } from 'graphql/generated';
+
 export enum BadgeTypes {
   todo = 'TODO',
   notification = 'NOTIFICATION',
@@ -145,16 +144,17 @@ const userOnlyItems: NavItem[] = [
     submenu: [],
     roles: [Role.User, Role.ContentAdmin, Role.SchemeAdmin, Role.ShopsafeAdmin],
   },
-  {
-    key: 'notification',
-    path: `${APP_PREFIX_PATH}/notifications`,
-    title: 'Notifications',
-    icon: faBell,
-    breadcrumb: false,
-    submenu: [],
-    roles: [Role.User, Role.ContentAdmin, Role.SchemeAdmin, Role.ShopsafeAdmin],
-    badge: BadgeTypes.notification,
-  },
+  // TODO: add back
+  // {
+  //   key: 'notification',
+  //   path: `${APP_PREFIX_PATH}/notifications`,
+  //   title: 'Notifications',
+  //   icon: faBell,
+  //   breadcrumb: false,
+  //   submenu: [],
+  //   roles: [Role.User, Role.ContentAdmin, Role.SchemeAdmin, Role.ShopsafeAdmin],
+  //   badge: BadgeTypes.notification,
+  // },
   {
     key: 'bulletins',
     path: `${APP_PREFIX_PATH}/article`,

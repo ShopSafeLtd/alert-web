@@ -1,15 +1,15 @@
 import { useStoreActions, useStoreState } from 'state';
 import type {
-  UserNotificationsQuery,
   UpdateUserNotificationsMutation,
+  UserNotificationsQuery,
 } from 'graphql/generated';
 import {
-  useUpdateUserNotificationsMutation,
   Model,
-  useUserNotificationsQuery,
-  UserNotificationsDocument,
-  // QueryMode,
+  QueryMode,
   SortOrder,
+  UserNotificationsDocument,
+  useUpdateUserNotificationsMutation,
+  useUserNotificationsQuery,
 } from 'graphql/generated';
 import { useState } from 'react';
 import type { MutationUpdaterFn } from '@apollo/client';
@@ -111,7 +111,6 @@ const useNotificationLists = (): Return => {
   //     }
   //   }
   // };
-  console.log('search', search);
 
   const getUserNotificationType = (value: NotificationData) => {
     switch (value.type) {
@@ -192,52 +191,106 @@ const useNotificationLists = (): Return => {
       }
     }
   };
+
   const variables = {
     skip: (page - 1) * pageSize,
     take: pageSize,
     where: {
       id: userId,
-      // OR: [
-      //   {
-      //     notification: {
-      //       OR: [
-      //         {
-      //           title: {
-      //             contains: search,
-      //             mode: QueryMode.Insensitive,
-      //           },
-      //         },
-
-      //         {
-      //           body: {
-      //             contains: search,
-      //             mode: QueryMode.Insensitive,
-      //           },
-      //         },
-      //       ],
-      //     },
-      //   },
-      // ],
     },
     notificationWhere: {
-      notification: {
-        schemes: {
-          some: {
-            id: {
-              in: takeAllSchemes
-                ? userSchemes.map((item) => item.scheme.id)
-                : [schemeId],
+      AND: [
+        {
+          OR: [
+            {
+              notification: {
+                title: {
+                  contains: search,
+                  mode: QueryMode.Insensitive,
+                },
+              },
+            },
+            {
+              notification: {
+                body: {
+                  contains: search,
+                  mode: QueryMode.Insensitive,
+                },
+              },
+            },
+          ],
+          notification: {
+            schemes: {
+              some: {
+                id: {
+                  in: takeAllSchemes
+                    ? userSchemes.map((item) => item.scheme.id)
+                    : [schemeId],
+                },
+              },
             },
           },
         },
-      },
+      ],
     },
-    orderBy: {
-      notification: {
-        createdAt: SortOrder.Desc,
+    orderBy: [
+      {
+        notification: {
+          createdAt: SortOrder.Desc,
+        },
       },
-    },
+    ],
   };
+
+  // const variables = {
+  //   skip: (page - 1) * pageSize,
+  //   take: pageSize,
+  //   where: {
+  //     AND: [
+  //       {
+  //         id: userId,
+  //       },
+  //
+  //       {
+  //         notification: {
+  //           OR: [
+  //             {
+  //               title: {
+  //                 contains: search,
+  //                 mode: QueryMode.Insensitive,
+  //               },
+  //             },
+  //
+  //             {
+  //               body: {
+  //                 contains: search,
+  //                 mode: QueryMode.Insensitive,
+  //               },
+  //             },
+  //           ],
+  //         },
+  //       },
+  //     ],
+  //   },
+  //   notificationWhere: {
+  //     notification: {
+  //       schemes: {
+  //         some: {
+  //           id: {
+  //             in: takeAllSchemes
+  //               ? userSchemes.map((item) => item.scheme.id)
+  //               : [schemeId],
+  //           },
+  //         },
+  //       },
+  //     },
+  //   },
+  //   orderBy: {
+  //     notification: {
+  //       createdAt: SortOrder.Desc,
+  //     },
+  //   },
+  // };
   const { data, loading } = useUserNotificationsQuery({
     fetchPolicy: 'cache-and-network',
     variables,

@@ -216,7 +216,7 @@ const OffenderCard = ({
           }
         />
       )}
-      <div className="offender-card-content" style={{ height: '240px' }}>
+      <div className="offender-card-content">
         <Link
           to={
             isArticle

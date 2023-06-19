@@ -100,10 +100,12 @@ const SideNavContent = (props: SideNavContentProps) => {
     el.roles?.includes(userRole)
   );
   const customLogo = !!window.localStorage.getItem('logo');
+
   const getBadgeCount = {
     [BadgeTypes.todo]: todos,
     [BadgeTypes.notification]: notifications,
   };
+
   return (
     <div
       style={{
