@@ -117,7 +117,9 @@ const ImageEditor = ({
       bodyStyle={{ padding: 0 }}
       okText="Save Image"
       onOk={handleSubmit}
-      onCancel={onClose}
+      onCancel={() => {
+        onClose();
+      }}
     >
       {open && (
         <Row wrap={false}>
