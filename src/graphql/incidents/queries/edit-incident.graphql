@@ -64,6 +64,8 @@ query EditIncident($where: IncidentWhereUniqueInput!) {
       optimised
       url
       position
+      primary
+      policeImage
       offenders {
         id
         name

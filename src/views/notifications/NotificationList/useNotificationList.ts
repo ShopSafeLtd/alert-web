@@ -16,6 +16,7 @@ import type { MutationUpdaterFn } from '@apollo/client';
 import { notification } from 'antd';
 import errorNotification from 'types/error_notification';
 import { useNavigate } from 'react-router';
+import { LocalStorageKeys } from 'types';
 
 export interface NotificationData {
   id: string;
@@ -32,6 +33,28 @@ export interface NotificationData {
     offender: { id: string | null };
   } | null;
   userId?: string | null;
+  schemes: Scheme[];
+}
+interface Scheme {
+  id: string;
+  name: string;
+  autoApproveIncidents: boolean;
+  autoApproveOffenders: boolean;
+  defaultPublicOffenderDOB: boolean;
+  userTodos?: number | null | undefined;
+  userNotifications?: number | null | undefined;
+  logo?:
+    | {
+        optimisedPersisted?: string | null | undefined;
+      }
+    | null
+    | undefined;
+  darkLogo?:
+    | {
+        optimisedPersisted?: string | null | undefined;
+      }
+    | null
+    | undefined;
 }
 interface Return {
   data:
@@ -54,63 +77,18 @@ const useNotificationLists = (): Return => {
   const navigate = useNavigate();
 
   const userId = useStoreState((state) => state.user.id);
-  const schemeId = useStoreState((state) => state.scheme.id);
   const userSchemes = useStoreState((state) => state.user.schemes);
+  const schemeId = useStoreState((state) => state.scheme.id);
+  const setScheme = useStoreActions((actions) => actions.scheme.setScheme);
+  const setNotifications = useStoreActions(
+    (actions) => actions.user.setNotifications
+  );
+  const setTodos = useStoreActions((actions) => actions.user.setTodos);
   const [saving, setSaving] = useState(false);
   const [takeAllSchemes, setTakeAllSchemes] = useState(false);
   const [search, setSearch] = useState('');
   const [pageSize, setPageSize] = useState(20);
   const [page, setPage] = useState(1);
-  const setNotificationList = useStoreActions(
-    (actions) => actions.user.setNotifications
-  );
-  // const userNotifications = useStoreState(
-  //   (state) => state.user.userNotifications
-  // );
-  // const getNotificationUrl = (value: NotificationData) => {
-  //   switch (value.type) {
-  //     case Model.Article: {
-  //       navigate(`/app/article/view/${value.articleId}`);
-  //       break;
-  //     }
-  //     case Model.Incident: {
-  //       navigate(`/app/incidents/view/${value.incidentId}`);
-  //       break;
-  //     }
-  //     case Model.Offender: {
-  //       navigate(`/app/offenders/view/${value.offenderId}`);
-  //       break;
-  //     }
-  //     case Model.Ban: {
-  //       navigate(`/app/offenders/view/${value.ban?.offender.id}`);
-  //       break;
-  //       return `/app/offenders/view/${value.offenderId}`;
-  //     }
-  //     case Model.Investigation: {
-  //       navigate(`/app/investigations/view/${value.investigationId}`);
-  //       break;
-  //     }
-  //     case Model.Vehicle: {
-  //       navigate(`/app/vehicles/view/${value.vehicleId}`);
-  //       break;
-  //     }
-  //     case Model.CrimeGroup: {
-  //       navigate(`/app/crime-groups/view/${value.vehicleId}`);
-  //       break;
-  //     }
-  //     case Model.Chat: {
-  //       navigate(`/app/chat/${value.chatId}`);
-  //       break;
-  //     }
-  //     case Model.User: {
-  //       navigate(`/app/scheme-settings/users/view/${value.userId}`);
-  //       break;
-  //     }
-  //     default: {
-  //       break;
-  //     }
-  //   }
-  // };
 
   const getUserNotificationType = (value: NotificationData) => {
     switch (value.type) {
@@ -242,62 +220,16 @@ const useNotificationLists = (): Return => {
     ],
   };
 
-  // const variables = {
-  //   skip: (page - 1) * pageSize,
-  //   take: pageSize,
-  //   where: {
-  //     AND: [
-  //       {
-  //         id: userId,
-  //       },
-  //
-  //       {
-  //         notification: {
-  //           OR: [
-  //             {
-  //               title: {
-  //                 contains: search,
-  //                 mode: QueryMode.Insensitive,
-  //               },
-  //             },
-  //
-  //             {
-  //               body: {
-  //                 contains: search,
-  //                 mode: QueryMode.Insensitive,
-  //               },
-  //             },
-  //           ],
-  //         },
-  //       },
-  //     ],
-  //   },
-  //   notificationWhere: {
-  //     notification: {
-  //       schemes: {
-  //         some: {
-  //           id: {
-  //             in: takeAllSchemes
-  //               ? userSchemes.map((item) => item.scheme.id)
-  //               : [schemeId],
-  //           },
-  //         },
-  //       },
-  //     },
-  //   },
-  //   orderBy: {
-  //     notification: {
-  //       createdAt: SortOrder.Desc,
-  //     },
-  //   },
-  // };
   const { data, loading } = useUserNotificationsQuery({
     fetchPolicy: 'cache-and-network',
     variables,
     onCompleted: (res) => {
-      if (res.user?.totalNotifications && res.user?.totalNotifications > 0) {
-        setNotificationList({
-          userNotifications: res.user.totalNotifications || 0,
+      if (
+        res.user?.totalUnreadNotifications &&
+        res.user?.totalUnreadNotifications > 0
+      ) {
+        setNotifications({
+          userNotifications: res.user.totalUnreadNotifications || 0,
         });
       }
     },
@@ -364,9 +296,38 @@ const useNotificationLists = (): Return => {
     },
     update,
   });
+  const handleSchemeChange = (scheme: Scheme) => {
+    window.localStorage.removeItem(LocalStorageKeys.INCIDENT_FILTER);
+    window.localStorage.removeItem(LocalStorageKeys.OFFENDER_FILTER);
+    window.localStorage.setItem('currentScheme', scheme.id);
+    window.localStorage.setItem('logo', scheme.logo?.optimisedPersisted || '');
+    window.localStorage.setItem(
+      'logo-dark',
+      scheme.darkLogo?.optimisedPersisted || ''
+    );
+
+    setScheme({
+      autoApproveIncidents: scheme.autoApproveIncidents,
+      autoApproveOffenders: scheme.autoApproveOffenders,
+      defaultPublicOffenderDOB: scheme.defaultPublicOffenderDOB,
+      id: scheme.id,
+      name: scheme.name,
+      logo: scheme.logo?.optimisedPersisted,
+      darkLogo: scheme.darkLogo?.optimisedPersisted,
+      userTodos: scheme.userTodos,
+      userNotifications: scheme.userNotifications,
+    });
+    setTodos({ userTodos: scheme.userTodos || 0 });
+    setNotifications({
+      userNotifications: scheme.userNotifications || 0,
+    });
+  };
   const handleMarkAsRead = (value: NotificationData) => {
     if (value) {
       setSaving(true);
+      if (schemeId !== value.schemes[0].id) {
+        handleSchemeChange(value.schemes[0]);
+      }
       updateUserNotification({
         variables: {
           where: {

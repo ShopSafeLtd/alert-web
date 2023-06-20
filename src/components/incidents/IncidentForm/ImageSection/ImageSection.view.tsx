@@ -91,6 +91,8 @@ interface Props {
   onPreview?: (value: Image) => void;
   disabled?: boolean;
   onEditImage: (value: ImagePayload) => void;
+  primaryImage: string;
+  setPrimaryImage: (value: string) => void;
 }
 
 const ImageSection = ({
@@ -104,6 +106,8 @@ const ImageSection = ({
   onPreview,
   disabled,
   onEditImage,
+  primaryImage,
+  setPrimaryImage,
 }: Props): JSX.Element => {
   const [editImage, setEditImage] = useState<Image | null>(null);
 
@@ -287,8 +291,8 @@ const ImageSection = ({
           onClose={() => setEditImage(null)}
           open={!!editImage}
           image={editImage}
-          primaryImage=""
-          setPrimaryImage={() => {}}
+          primaryImage={primaryImage}
+          setPrimaryImage={setPrimaryImage}
         />
       </Col>
     </Row>

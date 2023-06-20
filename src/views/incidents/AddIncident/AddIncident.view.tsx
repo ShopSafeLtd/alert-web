@@ -126,6 +126,8 @@ interface Props {
   onAddVehicle: (value: VehicleData, existing: boolean) => void;
   onEditVehicle: (value: VehicleData) => void;
   onRemoveVehicle: (vehicleId: string) => void;
+  primaryImage: string;
+  setPrimaryImage: (value: string) => void;
 }
 
 const EditIncident = ({
@@ -174,6 +176,8 @@ const EditIncident = ({
   onAddVehicle,
   onEditVehicle,
   onRemoveVehicle,
+  primaryImage,
+  setPrimaryImage,
 }: Props): JSX.Element => {
   const classes = useStyles();
 
@@ -606,6 +610,8 @@ const EditIncident = ({
             removeImage={removeImage}
             disabled={saving}
             onEditImage={onEditImage}
+            primaryImage={primaryImage}
+            setPrimaryImage={setPrimaryImage}
           />
         </Card>
 

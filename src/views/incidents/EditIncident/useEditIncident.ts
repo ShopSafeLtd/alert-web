@@ -99,6 +99,8 @@ interface Image extends UploadFile {
   optimised?: string | null;
   edited?: boolean;
   position: ImagePosition;
+  primary?: boolean;
+  policeImage?: boolean;
   new?: boolean;
 }
 
@@ -171,6 +173,8 @@ interface Return {
   onAddVehicle: (data: VehicleData, existing: boolean) => void;
   onEditVehicle: (data: VehicleData) => void;
   onRemoveVehicle: (vehicleId: string) => void;
+  primaryImage: string;
+  setPrimaryImage: (value: string) => void;
 }
 
 const onPreview = async (file: UploadFile) => {
@@ -220,6 +224,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
   const [editedOffender, setEditedOffender] = useState<
     OffenderData | undefined
   >();
+  const [primaryImage, setPrimaryImage] = useState<string>('');
 
   const [vehiclesData, setVehiclesData] = useState<VehicleType[]>([]);
 
@@ -278,9 +283,15 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
             offenders: image.offenders,
             edited: false,
             position: image.position,
+            primary: image.primary || false,
+            policeImage: image.policeImage || false,
             new: false,
           }))
         );
+        const findPrimaryImage = incident?.images.find(
+          ({ primary }) => primary
+        )?.id;
+        if (findPrimaryImage) setPrimaryImage(findPrimaryImage);
       }
     },
   });
@@ -948,6 +959,8 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
                       url: item.url || '',
                     },
                     position: item.position,
+                    primary: item.uid === primaryImage,
+                    policeImage: item.policeImage,
                   }))
                   .filter((obj) => obj.url !== undefined)
               : undefined,
@@ -963,6 +976,8 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
               ? editedImages.map((item) => ({
                   data: {
                     position: { set: item.position },
+                    primary: { set: item.uid === primaryImage },
+                    policeImage: { set: item.policeImage },
                   },
                   where: {
                     id: item.uid,
@@ -1208,6 +1223,8 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     onAddVehicle,
     onEditVehicle,
     onRemoveVehicle,
+    primaryImage,
+    setPrimaryImage,
   };
 };
 

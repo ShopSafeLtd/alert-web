@@ -102,6 +102,8 @@ describe('List Officer View', () => {
           onAddVehicle={jest.fn()}
           onEditVehicle={jest.fn()}
           onRemoveVehicle={jest.fn()}
+          primaryImage="primaryImage"
+          setPrimaryImage={jest.fn()}
         />
       </MemoryRouter>
     );

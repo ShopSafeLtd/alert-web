@@ -83,13 +83,13 @@ const AdminTodos = ({
         width: '100%',
       }}
     >
-      <Row align="middle" gutter={8} wrap={false} style={{ marginBottom: 10 }}>
-        <Col>
+      <Row align="middle" gutter={5} wrap={false} style={{ marginBottom: 10 }}>
+        <Col span={4}>
           <Title className={classes.title} level={4}>
             Tasks
           </Title>
         </Col>
-        <Col flex={1}>
+        <Col flex={1} style={{ marginRight: -10 }}>
           <Input
             placeholder="Search for a task..."
             // value={inputValue}
@@ -101,7 +101,7 @@ const AdminTodos = ({
           <Button
             type="text"
             // size="small"
-            style={{ marginRight: -7 }}
+            style={{ marginRight: -5 }}
             danger
             disabled={saving}
             icon={<FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />}
