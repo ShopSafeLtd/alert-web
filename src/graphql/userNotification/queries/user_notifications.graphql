@@ -6,6 +6,8 @@ query userNotifications(
   user(where: $where) {
     id
     totalNotifications
+    totalUnreadNotifications
+
     notifications(where: $notificationWhere, orderBy: $orderBy) {
       id
       read
@@ -22,6 +24,20 @@ query userNotifications(
         offenderId
         schemes {
           id
+          name
+          autoApproveIncidents
+          autoApproveOffenders
+          defaultPublicOffenderDOB
+          userTodos
+          userNotifications
+          logo {
+            optimisedPersisted
+            id
+          }
+          darkLogo {
+            id
+            optimisedPersisted
+          }
         }
         title
         type

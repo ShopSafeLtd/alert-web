@@ -11,6 +11,10 @@ query ChatMessages($where: ChatMessagesWhereInput!, $take: Int, $skip: Int) {
       origName
       origFirstLetter
       firstLetter
+      businesses {
+        id
+        fullName
+      }
     }
     sent
     showUser

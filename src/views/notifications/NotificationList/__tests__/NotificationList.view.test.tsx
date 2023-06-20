@@ -14,11 +14,21 @@ describe('List Officer View', () => {
           id: 'id',
           title: 'title',
           createdAt: '2022-08-10T10:40:09.985Z',
-          schemes: [{ id: 'id' }],
+          schemes: [
+            {
+              id: 'id',
+              name: 'scheme',
+              autoApproveIncidents: false,
+              autoApproveOffenders: false,
+              defaultPublicOffenderDOB: false,
+            },
+          ],
         },
       },
     ],
     totalNotifications: 1,
+    totalUnreadNotifications: 1,
+
     id: 'id',
   };
   it('renders the page', () => {

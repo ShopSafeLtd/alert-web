@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Button,
   Card,
-  Checkbox,
+  // Checkbox,
   Col,
   Empty,
   Input,
@@ -12,9 +12,15 @@ import {
 } from 'antd';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSquareCheck } from '@fortawesome/pro-light-svg-icons';
+import {
+  faSquareCheck,
+  faRotate,
+  faBellOn,
+  faBellSlash,
+} from '@fortawesome/pro-light-svg-icons';
 import type { UserNotificationsQuery } from 'graphql/generated';
 // import { calcDuration } from 'utils';
+
 import useStyles from './NotificationList.styles';
 import type { NotificationData } from './useNotificationList';
 
@@ -61,6 +67,7 @@ const NotificationLists = ({
             allowClear
           />
         </Col>
+        <Col flex={1} />
         <Col>
           <Button
             type={takeAllSchemes ? 'default' : 'primary'}
@@ -76,6 +83,20 @@ const NotificationLists = ({
           >
             Current Scheme
           </Button>
+        </Col>
+        <Col>
+          <Button
+            type="text"
+            onClick={toggleTakeAllSchemes}
+            disabled={saving}
+            icon={
+              <FontAwesomeIcon
+                icon={faRotate}
+                size="10x"
+                // style={{ marginTop: 5 }}
+              />
+            }
+          />
         </Col>
         <Col>
           <Button
@@ -96,6 +117,7 @@ const NotificationLists = ({
         <Col>
           <Button
             type="text"
+            danger
             onClick={handleMarkAllRead}
             disabled={saving}
             icon={
@@ -106,10 +128,9 @@ const NotificationLists = ({
               />
             }
           >
-            All Read
+            View ALL
           </Button>
         </Col>
-        <Col flex={1} />
       </Row>
       <Card loading={loading}>
         {loading ? (
@@ -128,10 +149,11 @@ const NotificationLists = ({
               notification: el.notification,
               // expireDay: calcDuration(
               //   new Date(el.createdAt),
-              //   new Date(el.createdAt + 30)
+              //   new Date(new Date().setDate(el.createdAt.getDate() - 30))
               // ),
             }))}
             loading={loading}
+            style={{ cursor: 'pointer' }}
             size="small"
             pagination={{
               hideOnSinglePage: true,
@@ -151,26 +173,18 @@ const NotificationLists = ({
                 dataIndex: 'actions',
                 key: 'actions',
                 width: 80,
-                render: (_, record) => <Checkbox checked={!!record.read} />,
+                render: (_, record) => (
+                  <FontAwesomeIcon
+                    icon={record.read ? faBellSlash : faBellOn}
+                    size="lg"
+                    className={record.read ? classes.read : classes.unread}
+                  />
+                ),
               },
               {
                 key: 'title',
                 dataIndex: 'title',
                 title: 'Title',
-                // render: (value, record) => (
-                //   // <Link to={`${getNotificationUrl(record.notification)}`}>{title}</Link>
-                //   <Button
-                //     type="primary"
-                //     onClick={() => handleMarkAsRead(record.notification)}
-                //     icon={
-                //       <FontAwesomeIcon
-                //         icon={faPlus}
-                //         size="lg"
-                //         style={{ marginRight: 5 }}
-                //       />
-                //     }
-                //   />
-                // ),
               },
               {
                 key: 'body',
@@ -183,14 +197,14 @@ const NotificationLists = ({
                 key: 'createdAt',
                 dataIndex: 'createdAt',
                 title: 'Created At',
-                width: 100,
+                width: 120,
                 render: (value) => moment(value).calendar('dd/mm/yyyy'),
               },
               // {
               //   key: 'expireDay',
               //   dataIndex: 'expireDay',
               //   title: 'Expire In',
-              //   render: (value) => moment(value).calendar('dd/mm/yyyy'),
+              //   width: 120,
               // },
             ]}
           />

@@ -89,6 +89,8 @@ interface Image extends UploadFile {
     new?: boolean;
   }[];
   position?: ImagePosition;
+  primary?: boolean;
+  policeImage?: boolean;
 }
 
 interface VehicleType extends VehicleData {
@@ -164,6 +166,8 @@ interface Return {
   onAddVehicle: (value: VehicleData, existing: boolean) => void;
   onEditVehicle: (value: VehicleData) => void;
   onRemoveVehicle: (vehicleId: string) => void;
+  primaryImage: string;
+  setPrimaryImage: (value: string) => void;
 }
 
 const useEditIncident = (): Return => {
@@ -186,6 +190,7 @@ const useEditIncident = (): Return => {
   const [goodsVisible, setGoodsVisible] = useState(false);
   const [addNewAddress, setAddNewAddress] = useState(false);
   const [newAddressData, setNewAddressData] = useState<LocationData>();
+  const [primaryImage, setPrimaryImage] = useState<string>('');
 
   const [formStages, setFormStages] = useState({
     crimeTypes: true,
@@ -722,6 +727,7 @@ const useEditIncident = (): Return => {
               newOffenders.length > 0
                 ? newOffenders.map((offender) => ({
                     name: offender.name,
+                    alias: { set: offender.alias },
                     gender: offender.gender || null,
                     race: offender.race || null,
                     build: offender.build || null,
@@ -741,21 +747,6 @@ const useEditIncident = (): Return => {
                     scheme: { connect: { id: schemeId } },
                     createdBy: { connect: { id: userId } },
                     localId: offender.id,
-                    images: {
-                      upload:
-                        offender.images && offender.images.length > 0
-                          ? offender.images.map((item) => ({
-                              url: {
-                                filename: item.fileName || '',
-                                mimetype: item.type || '',
-                                url: item.url || '',
-                              },
-                              position: item.position,
-                              primary: item.primary,
-                              policeImage: item.policeImage,
-                            }))
-                          : undefined,
-                    },
                   }))
                 : undefined,
           };
@@ -767,7 +758,6 @@ const useEditIncident = (): Return => {
       };
       const getVehicles = (): CreateIncidentData['vehicles'] => {
         const newVehicles = vehiclesData.filter((item) => item.new);
-
         const existingVehicles = vehiclesData.filter((item) => item.existing);
         const editedVehicles = existingVehicles.filter((item) => item.edited);
         return {
@@ -920,6 +910,8 @@ const useEditIncident = (): Return => {
                           new: offender.new || false,
                         })),
                         position: item.position,
+                        primary: item.uid === primaryImage,
+                        policeImage: item.policeImage,
                       }))
                       .filter((object) => object.url !== undefined)
                   : undefined,
@@ -1236,6 +1228,8 @@ const useEditIncident = (): Return => {
     onAddVehicle,
     onEditVehicle,
     onRemoveVehicle,
+    primaryImage,
+    setPrimaryImage,
   };
 };
 

@@ -166,6 +166,8 @@ interface Props {
   onAddVehicle: (data: VehicleData, existing: boolean) => void;
   onEditVehicle: (data: VehicleData) => void;
   onRemoveVehicle: (vehicleId: string) => void;
+  primaryImage: string;
+  setPrimaryImage: (value: string) => void;
 }
 
 const EditIncident = ({
@@ -212,6 +214,8 @@ const EditIncident = ({
   onAddVehicle,
   onEditVehicle,
   onRemoveVehicle,
+  primaryImage,
+  setPrimaryImage,
 }: Props): JSX.Element => (
   <div className="list-view">
     <PageHeader
@@ -705,6 +709,8 @@ const EditIncident = ({
             removeImage={removeImage}
             onPreview={onPreview}
             onEditImage={onEditImage}
+            primaryImage={primaryImage}
+            setPrimaryImage={setPrimaryImage}
           />
         </Card>
         {/* {groups.length > 1 && ( */}

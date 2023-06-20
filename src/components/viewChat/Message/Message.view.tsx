@@ -107,6 +107,7 @@ interface Props {
         firstLetter?: string | null | undefined;
         origName?: string | null | undefined;
         origFirstLetter?: string | null | undefined;
+        businesses: { id: string; fullName: string }[] | null;
       }
     | undefined
     | null;
@@ -183,7 +184,11 @@ const Content = ({
               }}
             >
               <Text style={{ fontSize: 13 }} strong>
-                {from?.fullName}
+                {`${from?.fullName}${
+                  from?.businesses && from?.businesses[0]?.fullName
+                    ? `(${from?.businesses[0].fullName})`
+                    : ''
+                }`}
               </Text>
             </Col>
           )}

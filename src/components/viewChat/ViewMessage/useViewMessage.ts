@@ -884,6 +884,8 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
               id: userId,
               firstLetter: userOrigName.slice(1)[0],
               origName: userOrigName,
+              // TODO
+              businesses: [{ id: '', fullName: '' }],
             },
             paddingTop: true,
             showUser: false,
