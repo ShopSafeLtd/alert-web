@@ -131,6 +131,10 @@ const useAddNewOffender = ({
     updateOffender({
       id: Math.floor(Math.random() * 1000).toString(),
       name: data.name,
+      alias:
+        data.alias && data.alias.length > 0
+          ? [...new Set(data.alias?.map((el) => el.trim().toLowerCase()))]
+          : [],
       gender: data.gender || null,
       race: data.race || null,
       build: data.build || null,

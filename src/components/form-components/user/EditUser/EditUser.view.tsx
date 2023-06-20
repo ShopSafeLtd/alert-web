@@ -3,16 +3,16 @@ import type { UserQuery } from 'graphql/generated';
 import { Role } from 'graphql/generated';
 import type { FormInstance } from 'antd';
 import {
-  Drawer,
   Button,
   Col,
+  Drawer,
   Form,
   Input,
   Row,
   Select,
-  Typography,
   Skeleton,
   Switch,
+  Typography,
 } from 'antd';
 import DebounceSelect from 'components/form-components/DebounceSelect';
 import type { BusinessData, SelectOptions } from 'types/DataType';
@@ -74,7 +74,7 @@ const EditUser = ({
       initialValues={{
         fullName: data?.user?.fullName,
         email: data?.user?.email,
-        business: data?.user?.businesses.map(({ id, name }) => ({
+        businesses: data?.user?.businesses.map(({ id, name }) => ({
           label: name,
           value: id,
         })),
@@ -142,7 +142,7 @@ const EditUser = ({
           <Row gutter={20} align="middle">
             <Col flex={1}>
               <Form.Item
-                name="business"
+                name="businesses"
                 label="Business"
                 rules={[
                   {
@@ -198,7 +198,7 @@ const EditUser = ({
                   type="secondary"
                   style={{ fontSize: 13, margin: 0 }}
                 >
-                  A basic user account that all submitting data but <br /> no
+                  A basic user account that is able to submit data but <br /> no
                   admin features.
                 </Typography.Paragraph>
               </Select.Option>

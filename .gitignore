@@ -12,3 +12,5 @@ yarn-error.log
 schema.graphql
 
 .sentryclirc
+
+coverage-ts

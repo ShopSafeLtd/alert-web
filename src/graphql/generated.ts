@@ -36789,6 +36789,7 @@ export type Scheme = {
   topContributors?: Maybe<Array<TopContributors>>;
   updatedAt: Scalars['DateTime'];
   updatesCreated?: Maybe<Scalars['Int']>;
+  userNotifications?: Maybe<Scalars['Int']>;
   userTodos?: Maybe<Scalars['Int']>;
   vehicles: Array<Vehicle>;
 };
@@ -47267,6 +47268,8 @@ export type User = {
   timeSigned?: Maybe<Scalars['DateTime']>;
   totalChats?: Maybe<Scalars['Int']>;
   totalNotifications?: Maybe<Scalars['Int']>;
+  totalUnreadNotifications?: Maybe<Scalars['Int']>;
+  unreadNotifications?: Maybe<Array<Maybe<UserNotification>>>;
   updatedAt: Scalars['DateTime'];
   uploaded: Scalars['Boolean'];
 };
@@ -60908,6 +60911,8 @@ export type EditIncidentQuery = {
       optimised?: string | null;
       url?: string | null;
       position: ImagePosition;
+      primary?: boolean | null;
+      policeImage?: boolean | null;
       offenders: Array<{
         __typename?: 'Offender';
         id: string;
@@ -62275,6 +62280,11 @@ export type CreateMessageMutation = {
       firstLetter?: string | null;
       origFirstLetter?: string | null;
       origName: string;
+      businesses: Array<{
+        __typename?: 'Business';
+        id: string;
+        fullName: string;
+      }>;
     } | null;
     images: Array<{
       __typename?: 'Image';
@@ -62467,6 +62477,11 @@ export type ChatMessagesQuery = {
       origName: string;
       origFirstLetter?: string | null;
       firstLetter?: string | null;
+      businesses: Array<{
+        __typename?: 'Business';
+        id: string;
+        fullName: string;
+      }>;
     } | null;
     images: Array<{
       __typename?: 'Image';
@@ -66506,6 +66521,7 @@ export type UserNotificationsQuery = {
     __typename?: 'User';
     id: string;
     totalNotifications?: number | null;
+    totalUnreadNotifications?: number | null;
     notifications: Array<{
       __typename?: 'UserNotification';
       id: string;
@@ -66526,7 +66542,26 @@ export type UserNotificationsQuery = {
         type?: Model | null;
         vehicleId?: string | null;
         userId?: string | null;
-        schemes: Array<{ __typename?: 'Scheme'; id: string }>;
+        schemes: Array<{
+          __typename?: 'Scheme';
+          id: string;
+          name: string;
+          autoApproveIncidents: boolean;
+          autoApproveOffenders: boolean;
+          defaultPublicOffenderDOB: boolean;
+          userTodos?: number | null;
+          userNotifications?: number | null;
+          logo?: {
+            __typename?: 'Image';
+            optimisedPersisted?: string | null;
+            id: string;
+          } | null;
+          darkLogo?: {
+            __typename?: 'Image';
+            id: string;
+            optimisedPersisted?: string | null;
+          } | null;
+        }>;
         ban?: {
           __typename?: 'Ban';
           id: string;
@@ -71774,6 +71809,8 @@ export const EditIncidentDocument = gql`
         optimised
         url
         position
+        primary
+        policeImage
         offenders {
           id
           name
@@ -73553,6 +73590,10 @@ export const CreateMessageDocument = gql`
         firstLetter
         origFirstLetter
         origName
+        businesses {
+          id
+          fullName
+        }
       }
       sent
       showUser
@@ -73796,6 +73837,10 @@ export const ChatMessagesDocument = gql`
         origName
         origFirstLetter
         firstLetter
+        businesses {
+          id
+          fullName
+        }
       }
       sent
       showUser
@@ -79418,6 +79463,7 @@ export const UserNotificationsDocument = gql`
     user(where: $where) {
       id
       totalNotifications
+      totalUnreadNotifications
       notifications(where: $notificationWhere, orderBy: $orderBy) {
         id
         read
@@ -79434,6 +79480,20 @@ export const UserNotificationsDocument = gql`
           offenderId
           schemes {
             id
+            name
+            autoApproveIncidents
+            autoApproveOffenders
+            defaultPublicOffenderDOB
+            userTodos
+            userNotifications
+            logo {
+              optimisedPersisted
+              id
+            }
+            darkLogo {
+              id
+              optimisedPersisted
+            }
           }
           title
           type

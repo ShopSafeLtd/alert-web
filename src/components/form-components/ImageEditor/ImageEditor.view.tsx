@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import type { UploadFile } from 'antd';
-import { Skeleton, Button, Switch, Form, Select, Col, Modal, Row } from 'antd';
+import { Button, Col, Form, Modal, Row, Select, Skeleton, Switch } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import { ImagePosition } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -55,8 +55,13 @@ interface Image extends UploadFile {
     name?: string | undefined | null;
   }[];
   position?: ImagePosition;
+  primary?: boolean;
   policeImage?: boolean;
 }
+// interface FormData {
+//   position?: ImagePosition;
+//   primary?: boolean;
+// }
 
 interface Props {
   open: boolean;
@@ -77,15 +82,9 @@ const ImageEditor = ({
 }: Props) => {
   const classes = useStyles();
   const [position, setPosition] = useState(ImagePosition.CenterCenter);
+  const [rotation, setRotation] = useState(0);
   const [policeImage, setPoliceImage] = useState(false);
   const [isPrimaryImage, setIsPrimaryImage] = useState(false);
-  const [rotation, setRotation] = useState(0);
-
-  useEffect(() => {
-    setPosition(image?.position || ImagePosition.CenterCenter);
-    setPoliceImage(image?.policeImage || false);
-    setIsPrimaryImage(image?.uid === primaryImage || false);
-  }, [image]);
 
   const handleSubmit = () => {
     if (image) {
@@ -94,8 +93,7 @@ const ImageEditor = ({
         position,
         policeImage,
       });
-      if (isPrimaryImage && image.uid !== primaryImage)
-        setPrimaryImage(image.uid);
+      if (isPrimaryImage) setPrimaryImage(image.uid);
       if (!isPrimaryImage && image.uid === primaryImage) setPrimaryImage('');
     }
     setPosition(ImagePosition.CenterCenter);
@@ -113,8 +111,7 @@ const ImageEditor = ({
 
   return (
     <Modal
-      width={700}
-      zIndex={1001}
+      width={600}
       open={open}
       title="Edit Image"
       bodyStyle={{ padding: 0 }}
@@ -127,82 +124,78 @@ const ImageEditor = ({
       {open && (
         <Row wrap={false}>
           <Col className={classes.toolbar}>
-            <Form className={classes.select} layout="vertical">
-              <Row>
-                <Col flex={1}>
-                  <Form.Item label="Image Position">
-                    <Select
-                      value={position}
-                      onChange={setPosition}
-                      options={positionOptions}
-                    />
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Form.Item label="Rotation">
-                {/* <Row gutter={8}>
-                  <Col> */}
-                <Button
-                  size="small"
-                  onClick={onRotateLeft}
-                  style={{ marginRight: 10 }}
-                >
-                  <FontAwesomeIcon icon={faRotateBackward} />
-                </Button>
-                {/* </Col>
-                  <Col> */}
-                <Button size="small" onClick={onRotateRight}>
-                  <FontAwesomeIcon icon={faRotateForward} />
-                </Button>
-                {/* </Col>
-                </Row> */}
+            <Form
+              className={classes.select}
+              layout="vertical"
+              // initialValues={{}}
+              // onFinish={onSubmit}
+            >
+              <Form.Item label="Image Position">
+                <Select
+                  value={position}
+                  onChange={setPosition}
+                  options={positionOptions}
+                />
               </Form.Item>
-              <Row>
-                <Col flex={1}>
-                  <Form.Item
-                    label="Set as primary image"
-                    valuePropName="checked"
-                    style={{
-                      marginBottom: 0,
-                      flexDirection: 'row',
-                      justifyItems: 'center',
-                    }}
-                  >
-                    <Switch
-                      checked={isPrimaryImage}
-                      onChange={() => setIsPrimaryImage(!isPrimaryImage)}
-                      style={{ marginLeft: 10, marginTop: -20 }}
-                    />
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row>
-                <Col flex={1}>
-                  <Form.Item
-                    label="Received from the police"
-                    valuePropName="checked"
-                    style={{
-                      width: 200,
-                      marginBottom: 0,
-                      flexDirection: 'row',
-                      justifyItems: 'center',
-                    }}
-                  >
-                    <Switch
-                      checked={policeImage}
-                      onChange={() => setPoliceImage(!policeImage)}
-                      style={{ marginLeft: 10, marginTop: -20 }}
-                    />
-                  </Form.Item>
-                </Col>
-              </Row>
+              <Form.Item label="Rotation">
+                <Row gutter={8}>
+                  <Col>
+                    <Button size="small" onClick={onRotateLeft}>
+                      <FontAwesomeIcon icon={faRotateBackward} />
+                    </Button>
+                  </Col>
+                  <Col>
+                    <Button size="small" onClick={onRotateRight}>
+                      <FontAwesomeIcon icon={faRotateForward} />
+                    </Button>
+                  </Col>
+                </Row>
+              </Form.Item>
+              <Form.Item
+                label="Set as primary image"
+                name="primaryImage"
+                valuePropName="checked"
+                style={{
+                  marginBottom: 0,
+                  flexDirection: 'row',
+                  justifyItems: 'center',
+                }}
+              >
+                <Switch
+                  // disabled={saving}
+                  checked={isPrimaryImage}
+                  onChange={() => setIsPrimaryImage(!isPrimaryImage)}
+                  style={{ marginLeft: 10, marginTop: -20 }}
+                />
+              </Form.Item>
+              <Form.Item
+                label="Received from the police"
+                name="policeImage"
+                valuePropName="checked"
+                style={{
+                  marginBottom: 0,
+                  flexDirection: 'row',
+                  justifyItems: 'center',
+                }}
+              >
+                <Switch
+                  // disabled={saving}
+                  checked={policeImage}
+                  onChange={() => setPoliceImage(!policeImage)}
+                  style={{ marginLeft: 10, marginTop: -20 }}
+                />
+              </Form.Item>
             </Form>
           </Col>
           <Col flex={1}>
             <div className={classes.cardPreviewSection}>
               <div className={classes.mockupCard}>
                 <div className={classes.cardImage}>
-                  <WatermarkImage url={image?.url} position={position} />
+                  <WatermarkImage
+                    url={image?.url}
+                    position={position}
+                    rotation={rotation}
+                  />
                 </div>
                 <div className={classes.cardBody}>
                   <Skeleton />

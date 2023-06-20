@@ -49,6 +49,8 @@ const EditIncident = (): JSX.Element => {
     onAddVehicle,
     onEditVehicle,
     onRemoveVehicle,
+    primaryImage,
+    setPrimaryImage,
   } = useAddIncident();
 
   return (
@@ -99,6 +101,8 @@ const EditIncident = (): JSX.Element => {
         onAddVehicle={onAddVehicle}
         onEditVehicle={onEditVehicle}
         onRemoveVehicle={onRemoveVehicle}
+        primaryImage={primaryImage}
+        setPrimaryImage={setPrimaryImage}
       />
     </div>
   );

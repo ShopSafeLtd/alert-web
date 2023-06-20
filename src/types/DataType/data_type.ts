@@ -26,6 +26,7 @@ export interface OffenderData {
   id: string;
   reference?: number | null;
   name?: string | null;
+  alias?: string[] | null;
   age?: Age | null;
   gender?: Gender | null;
   race?: Race | null;
