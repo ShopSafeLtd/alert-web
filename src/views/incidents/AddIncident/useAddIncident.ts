@@ -741,21 +741,21 @@ const useEditIncident = (): Return => {
                     scheme: { connect: { id: schemeId } },
                     createdBy: { connect: { id: userId } },
                     localId: offender.id,
-                    images: {
-                      upload:
-                        offender.images && offender.images.length > 0
-                          ? offender.images.map((item) => ({
-                              url: {
-                                filename: item.fileName || '',
-                                mimetype: item.type || '',
-                                url: item.url || '',
-                              },
-                              position: item.position,
-                              primary: item.primary,
-                              policeImage: item.policeImage,
-                            }))
-                          : undefined,
-                    },
+                    // images: {
+                    //   upload:
+                    //     offender.images && offender.images.length > 0
+                    //       ? offender.images.map((item) => ({
+                    //           url: {
+                    //             filename: item.fileName || '',
+                    //             mimetype: item.type || '',
+                    //             url: item.url || '',
+                    //           },
+                    //           position: item.position,
+                    //           primary: item.primary,
+                    //           policeImage: item.policeImage,
+                    //         }))
+                    //       : undefined,
+                    // },
                   }))
                 : undefined,
           };
