@@ -53,6 +53,8 @@ const EditIncident = ({ reviewed }: Props): JSX.Element => {
     onAddVehicle,
     onEditVehicle,
     onRemoveVehicle,
+    primaryImage,
+    setPrimaryImage,
   } = useEditIncident({ incidentId, reviewed });
   return (
     <div>
@@ -100,6 +102,8 @@ const EditIncident = ({ reviewed }: Props): JSX.Element => {
         onAddVehicle={onAddVehicle}
         onEditVehicle={onEditVehicle}
         onRemoveVehicle={onRemoveVehicle}
+        primaryImage={primaryImage}
+        setPrimaryImage={setPrimaryImage}
       />
     </div>
   );

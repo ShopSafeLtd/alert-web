@@ -132,7 +132,10 @@ const ProfileDrawer = ({
     >
       {addNewVehicle ? (
         <AddVehicle
-          update={(data) => onAddVehicle(data, false)}
+          update={(data) => {
+            onAddVehicle(data, false);
+            toggleAddNewVehicle();
+          }}
           onClose={toggleAddNewVehicle}
           fromIncident={!!fromIncident}
         />
