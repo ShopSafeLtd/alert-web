@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   Card,
@@ -7,6 +7,7 @@ import {
   Form,
   Input,
   InputNumber,
+  Pagination,
   Popconfirm,
   Radio,
   Row,
@@ -350,29 +351,50 @@ const NewIncidentTable = ({
   newBusinesses = [],
   newUsers = [],
   onUpdateIncident,
-}: Props) => (
-  <Card
-    title={`Incidents (${newIncidents.length})`}
-    extra={
-      <Button type="primary" style={{ marginBottom: 16 }} onClick={onAdd}>
-        Add Incident
-      </Button>
-    }
-  >
-    {newIncidents.map((incident) => (
-      <NewOffenderRow
-        key={incident.id}
-        incident={incident}
-        onDelete={() => {}}
-        groupsData={groupsData}
-        tagsData={tagsData}
-        newOffenders={newOffenders}
-        newBusinesses={newBusinesses}
-        newUsers={newUsers}
-        onUpdateIncident={onUpdateIncident}
+}: Props) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [activeIncidents, setActiveIncidents] = useState<NewIncident[]>(
+    newIncidents.slice(0, 10)
+  );
+
+  useEffect(() => {
+    setActiveIncidents(
+      newIncidents.slice((currentPage - 1) * 10, 10 * currentPage)
+    );
+  }, [currentPage]);
+
+  return (
+    <Card
+      title={`Incidents (${newIncidents.length})`}
+      extra={
+        <Button type="primary" style={{ marginBottom: 16 }} onClick={onAdd}>
+          Add Incident
+        </Button>
+      }
+    >
+      {activeIncidents.map((incident) => (
+        <NewOffenderRow
+          key={incident.id}
+          incident={incident}
+          onDelete={() => {}}
+          groupsData={groupsData}
+          tagsData={tagsData}
+          newOffenders={newOffenders}
+          newBusinesses={newBusinesses}
+          newUsers={newUsers}
+          onUpdateIncident={onUpdateIncident}
+        />
+      ))}
+
+      <Pagination
+        current={currentPage}
+        onChange={setCurrentPage}
+        total={newOffenders.length}
+        showTotal={(total) => `Total Incidents: ${total}`}
+        pageSizeOptions={[10]}
       />
-    ))}
-  </Card>
-);
+    </Card>
+  );
+};
 
 export default React.memo(NewIncidentTable);
