@@ -8,6 +8,7 @@ export interface Theme {
   gradientBackground: string;
   logo: string;
   colorScheme: string;
+  hoverBackground: string;
 }
 
 const theme: {
@@ -24,6 +25,7 @@ const theme: {
     gradientBackground: 'linear-gradient(90deg, #4c5c78 0%, #2b3a57 60%)',
     logo: 'url(/img/light-logo.svg)',
     colorScheme: 'dark',
+    hoverBackground: 'rgb(92, 102, 123)',
   },
   light: {
     componentBackground: '#FFF',
@@ -35,6 +37,7 @@ const theme: {
     gradientBackground: 'linear-gradient(to right, #cb2d3e, #ef473a)',
     logo: 'url(/img/dark-logo.svg)',
     colorScheme: 'light',
+    hoverBackground: 'rgba(0, 0, 0, 0.018)',
   },
 };
 
