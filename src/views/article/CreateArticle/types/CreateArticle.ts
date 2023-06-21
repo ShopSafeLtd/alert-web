@@ -43,7 +43,7 @@ export interface Props {
   offenders: OffenderData[];
   removeIncident: (id: string) => void;
   removeOffender: (id: string) => void;
-
+  selectedSchemes: string[];
   exampleImageUploadHandler(
     blobInfo: { blob: () => string | Blob; filename: () => string | undefined },
     progress: (arg0: number) => void

@@ -14,7 +14,6 @@ const EditArticleContainer = () => {
     setPreviewText,
     previewImage,
     setPreviewImage,
-
     groups,
     groupsLoading,
     onGroupsChange,
@@ -36,6 +35,7 @@ const EditArticleContainer = () => {
     removeIncident,
     offenders,
     incidents,
+    selectedSchemes,
   } = useEditArticle();
 
   const { drawer } = useDrawerState<AddOffender | AddIncident>();
@@ -72,6 +72,7 @@ const EditArticleContainer = () => {
       setPreviewImage={setPreviewImage}
       drawer={drawer}
       insertIncident={insertIncident}
+      selectedSchemes={selectedSchemes}
     />
   );
 };

@@ -55,26 +55,42 @@ const EditArticleView = ({
   removeOffender,
   removeIncident,
   loading,
+  selectedSchemes,
 }: ViewProps) => {
+  const noSchemes = selectedSchemes;
   const forms = {
     // eslint-disable-next-line react/jsx-no-useless-fragment
     null: <></>,
-    addIncident: (
-      <LinkIncident
-        getIncident={insertIncident}
-        incidentIds={
-          incidents ? incidents.map((incident) => incident.incident.id) : []
-        }
-        onClose={drawer.close}
-      />
-    ),
-    addOffender: (
-      <AddExistingOffender
-        update={insertOffender}
-        offenderIds={offenders ? offenders.map((offender) => offender.id) : []}
-        onClose={drawer.close}
-      />
-    ),
+    addIncident:
+      !noSchemes || (noSchemes && noSchemes?.length <= 1) ? (
+        <LinkIncident
+          getIncident={insertIncident}
+          incidentIds={
+            incidents ? incidents.map((incident) => incident.incident.id) : []
+          }
+          onClose={drawer.close}
+        />
+      ) : (
+        <div>
+          At the moment adding an incident to a multi-scheme article is not
+          supported.
+        </div>
+      ),
+    addOffender:
+      !noSchemes || (noSchemes && noSchemes?.length <= 1) ? (
+        <AddExistingOffender
+          update={insertOffender}
+          offenderIds={
+            offenders ? offenders.map((offender) => offender.id) : []
+          }
+          onClose={drawer.close}
+        />
+      ) : (
+        <div>
+          At the moment adding an offender to a multi-scheme article is not
+          supported.
+        </div>
+      ),
   };
   // const previewButtons = () => (
   //   <>
@@ -102,78 +118,86 @@ const EditArticleView = ({
                 groups: [],
                 categories: [],
                 importance: 'Normal',
+                schemes: [],
               }
             }
             onFinish={onSubmit}
           >
-            <Row gutter={16} style={{ marginLeft: 10, marginRight: 10 }}>
-              <Col span={8}>
-                <Form.Item
-                  name="title"
-                  label="Title"
-                  rules={[{ required: true, message: 'Please input title!' }]}
-                >
-                  <Input placeholder="Title" />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16} style={{ marginLeft: 10, marginRight: 10 }}>
-              <Col span={8}>
-                <Form.Item
-                  name="groups"
-                  label="Groups"
-                  rules={[{ required: true, message: 'Please select groups!' }]}
-                >
-                  <Select
-                    placeholder="Groups"
-                    mode="multiple"
-                    size="small"
-                    maxTagCount={2}
-                    style={{ minWidth: 200 }}
-                    loading={groupsLoading}
-                    onChange={onGroupsChange}
-                    optionFilterProp="label"
+            <Card loading={loading} style={{ border: 'none' }}>
+              <Row gutter={16} style={{ marginLeft: 10, marginRight: 10 }}>
+                <Col span={8}>
+                  <Form.Item
+                    name="title"
+                    label="Title"
+                    rules={[{ required: true, message: 'Please input title!' }]}
                   >
-                    {groups.map((group) => (
-                      <Select.Option value={group.value} label={group.label}>
-                        {group.label}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item
-                  name="importance"
-                  label="Importance"
-                  rules={[
-                    { required: true, message: 'Please select importance!' },
-                  ]}
-                >
-                  <Select placeholder="Type" style={{ minWidth: 200 }}>
-                    {Object.keys(ArticlePriority).map((priority) => (
-                      <Select.Option value={priority}>{priority}</Select.Option>
-                    ))}
-                  </Select>
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item name="categories" label="Category">
-                  <Select
-                    placeholder="Category"
-                    mode="tags"
-                    size="small"
-                    maxTagCount={2}
-                    style={{ minWidth: 200 }}
-                    loading={categoriesLoading}
-                    onChange={categoriesChange}
-                    options={categories}
-                    optionFilterProp="value"
-                    labelInValue
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
+                    <Input placeholder="Title" />
+                  </Form.Item>
+                </Col>
+              </Row>
+
+              <Row gutter={16} style={{ marginLeft: 10, marginRight: 10 }}>
+                <Col span={10}>
+                  <Form.Item
+                    name="groups"
+                    label="Groups"
+                    rules={[
+                      { required: true, message: 'Please select groups!' },
+                    ]}
+                  >
+                    <Select
+                      placeholder="Groups"
+                      mode="multiple"
+                      size="small"
+                      maxTagCount={2}
+                      style={{ minWidth: 200 }}
+                      loading={groupsLoading}
+                      onChange={onGroupsChange}
+                      optionFilterProp="label"
+                    >
+                      {groups.map((group) => (
+                        <Select.Option value={group.value} label={group.label}>
+                          {group.label}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  </Form.Item>
+                </Col>
+                <Col span={6}>
+                  <Form.Item
+                    name="importance"
+                    label="Importance"
+                    rules={[
+                      { required: true, message: 'Please select importance!' },
+                    ]}
+                  >
+                    <Select placeholder="Type" style={{ minWidth: 200 }}>
+                      {Object.keys(ArticlePriority).map((priority) => (
+                        <Select.Option value={priority}>
+                          {priority}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item name="categories" label="Category">
+                    <Select
+                      placeholder="Category"
+                      mode="tags"
+                      size="small"
+                      maxTagCount={2}
+                      style={{ minWidth: 200 }}
+                      loading={categoriesLoading}
+                      onChange={categoriesChange}
+                      options={categories}
+                      optionFilterProp="value"
+                      labelInValue
+                    />
+                  </Form.Item>
+                </Col>
+              </Row>
+            </Card>
             <div style={{ margin: 25 }}>
               <Editor
                 onInit={(evt, editor) => {

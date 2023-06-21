@@ -7340,7 +7340,7 @@ export type CreateArticleInput = {
   previewImage?: InputMaybe<Scalars['String']>;
   previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
-  schemeId: Scalars['String'];
+  schemes: Array<Scalars['String']>;
   title: Scalars['String'];
 };
 
@@ -9751,8 +9751,9 @@ export type DeviceInfo = {
 };
 
 export type DiscImportBusinessesInput = {
-  connect?: InputMaybe<DiscImportConnectBusinessInput>;
-  create?: InputMaybe<DiscImportCreateBusinessInput>;
+  connect: DiscImportConnectBusinessInput;
+  create: DiscImportCreateBusinessInput;
+  existing: DiscImportExistingBusinessInput;
 };
 
 export type DiscImportConnectBusinessInput = {
@@ -9794,6 +9795,14 @@ export type DiscImportDataInput = {
   offenders: Array<DiscImportOffendersInput>;
   scheme: UniqueId;
   users: Array<DiscImportUsersInput>;
+};
+
+export type DiscImportExistingBusinessInput = {
+  importId: Scalars['String'];
+};
+
+export type DiscImportExistingUserInput = {
+  importId: Scalars['String'];
 };
 
 export type DiscImportHistoricIncidentsInput = {
@@ -9861,8 +9870,9 @@ export type DiscImportOffendersInput = {
 };
 
 export type DiscImportUsersInput = {
-  connect?: InputMaybe<DiscImportConnectUserInput>;
-  create?: InputMaybe<DiscImportCreateUserInput>;
+  connect: DiscImportConnectUserInput;
+  create: DiscImportCreateUserInput;
+  existing: DiscImportExistingUserInput;
 };
 
 export type Document = {
@@ -26641,6 +26651,7 @@ export type Mutation = {
   createOffender?: Maybe<Offender>;
   createOffenderDefault: Offender;
   createOneMG11: Mg11;
+  createOneStatementTemplate: StatementTemplate;
   createReportTemplate: ReportTemplate;
   createScheme: Scheme;
   createTag: Tag;
@@ -26681,6 +26692,7 @@ export type Mutation = {
   deleteMessage?: Maybe<Message>;
   deleteOffender?: Maybe<Offender>;
   deleteOffenderDefault?: Maybe<Offender>;
+  deleteOneStatementTemplate?: Maybe<StatementTemplate>;
   deleteReportTemplate?: Maybe<ReportTemplate>;
   deleteScheme?: Maybe<Scheme>;
   deleteTag?: Maybe<Tag>;
@@ -26763,6 +26775,7 @@ export type Mutation = {
   updateOffenderDefault?: Maybe<Offender>;
   updateOneIncident?: Maybe<Incident>;
   updateOneMG11?: Maybe<Mg11>;
+  updateOneStatementTemplate?: Maybe<StatementTemplate>;
   updateOneUserNotification?: Maybe<UserNotification>;
   updatePassword?: Maybe<User>;
   updateReportTemplate?: Maybe<ReportTemplate>;
@@ -26933,6 +26946,10 @@ export type MutationCreateOneMg11Args = {
   data: Mg11CreateInput;
 };
 
+export type MutationCreateOneStatementTemplateArgs = {
+  data: StatementTemplateCreateInput;
+};
+
 export type MutationCreateReportTemplateArgs = {
   data: ReportTemplateCreateInput;
 };
@@ -27091,6 +27108,10 @@ export type MutationDeleteOffenderArgs = {
 
 export type MutationDeleteOffenderDefaultArgs = {
   where: OffenderWhereUniqueInput;
+};
+
+export type MutationDeleteOneStatementTemplateArgs = {
+  where: StatementTemplateWhereUniqueInput;
 };
 
 export type MutationDeleteReportTemplateArgs = {
@@ -27399,6 +27420,11 @@ export type MutationUpdateOneIncidentArgs = {
 export type MutationUpdateOneMg11Args = {
   data: Mg11UpdateInput;
   where: Mg11WhereUniqueInput;
+};
+
+export type MutationUpdateOneStatementTemplateArgs = {
+  data: StatementTemplateUpdateInput;
+  where: StatementTemplateWhereUniqueInput;
 };
 
 export type MutationUpdateOneUserNotificationArgs = {
@@ -33975,6 +34001,8 @@ export type Query = {
   reportUserLogin?: Maybe<User>;
   scheme?: Maybe<Scheme>;
   schemes: Array<Scheme>;
+  statementTemplate?: Maybe<StatementTemplate>;
+  statementTemplates: Array<StatementTemplate>;
   tag?: Maybe<Tag>;
   tags: Array<Tag>;
   targetedGoods?: Maybe<ListTargetedGoods>;
@@ -34393,6 +34421,19 @@ export type QuerySchemesArgs = {
   last?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<SchemeOrderByWithRelationInput>>;
   where?: InputMaybe<SchemeWhereInput>;
+};
+
+export type QueryStatementTemplateArgs = {
+  where: StatementTemplateWhereUniqueInput;
+};
+
+export type QueryStatementTemplatesArgs = {
+  after?: InputMaybe<StatementTemplateWhereUniqueInput>;
+  before?: InputMaybe<StatementTemplateWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<StatementTemplateOrderByWithRelationInput>>;
+  where?: InputMaybe<StatementTemplateWhereInput>;
 };
 
 export type QueryTagArgs = {
@@ -36773,6 +36814,7 @@ export type Scheme = {
   reportIcons: Array<Image>;
   reportTemplates: Array<ReportTemplate>;
   schemeTags: Array<Tag>;
+  statementTemplates: Array<StatementTemplate>;
   tags: Array<Tag>;
   terms: Array<TermsAndCondition>;
   termsInScheme: Array<TermsAndCondition>;
@@ -36960,6 +37002,13 @@ export type SchemeSchemeTagsArgs = {
   where?: InputMaybe<TagWhereInput>;
 };
 
+export type SchemeStatementTemplatesArgs = {
+  after?: InputMaybe<StatementTemplateWhereUniqueInput>;
+  before?: InputMaybe<StatementTemplateWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
 export type SchemeTagsArgs = {
   after?: InputMaybe<TagWhereUniqueInput>;
   before?: InputMaybe<TagWhereUniqueInput>;
@@ -37049,6 +37098,7 @@ export type SchemeCreateInput = {
   reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
   reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
   schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
@@ -37228,6 +37278,14 @@ export type SchemeCreateNestedManyWithoutSchemeTagsInput = {
     Array<SchemeCreateOrConnectWithoutSchemeTagsInput>
   >;
   create?: InputMaybe<Array<SchemeCreateWithoutSchemeTagsInput>>;
+};
+
+export type SchemeCreateNestedManyWithoutStatementTemplatesInput = {
+  connect?: InputMaybe<Array<SchemeWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<SchemeCreateOrConnectWithoutStatementTemplatesInput>
+  >;
+  create?: InputMaybe<Array<SchemeCreateWithoutStatementTemplatesInput>>;
 };
 
 export type SchemeCreateNestedManyWithoutTermsInSchemeInput = {
@@ -37494,6 +37552,11 @@ export type SchemeCreateOrConnectWithoutSchemeTagsInput = {
   where: SchemeWhereUniqueInput;
 };
 
+export type SchemeCreateOrConnectWithoutStatementTemplatesInput = {
+  create: SchemeCreateWithoutStatementTemplatesInput;
+  where: SchemeWhereUniqueInput;
+};
+
 export type SchemeCreateOrConnectWithoutTagOrdersInput = {
   create: SchemeCreateWithoutTagOrdersInput;
   where: SchemeWhereUniqueInput;
@@ -37572,6 +37635,7 @@ export type SchemeCreateWithoutActionsInSchemeInput = {
   reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
   reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
   schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
@@ -37629,6 +37693,7 @@ export type SchemeCreateWithoutActionsInput = {
   reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
   reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
   schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
@@ -37686,6 +37751,7 @@ export type SchemeCreateWithoutArticlesInput = {
   reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
   reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
   schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
@@ -37743,6 +37809,7 @@ export type SchemeCreateWithoutBansInput = {
   reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
   reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
   schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
@@ -37800,6 +37867,7 @@ export type SchemeCreateWithoutBusinessesInput = {
   reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
   reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
   schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
@@ -37857,6 +37925,7 @@ export type SchemeCreateWithoutChatsInput = {
   reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
   reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
   schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
@@ -37914,6 +37983,7 @@ export type SchemeCreateWithoutContactsInput = {
   reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
   reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
   schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
@@ -37971,6 +38041,7 @@ export type SchemeCreateWithoutCrimeGroupsInput = {
   reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
   reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
   schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
@@ -38028,6 +38099,7 @@ export type SchemeCreateWithoutCustomGalleriesInput = {
   reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
   reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
   schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
@@ -38085,6 +38157,7 @@ export type SchemeCreateWithoutDarkLogoInput = {
   reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
   reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
   schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
@@ -38142,6 +38215,7 @@ export type SchemeCreateWithoutDocumentsInput = {
   reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
   reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
   schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
@@ -38199,6 +38273,7 @@ export type SchemeCreateWithoutFeedItemsInput = {
   reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
   reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
   schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
@@ -38256,6 +38331,7 @@ export type SchemeCreateWithoutGroupsInput = {
   reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
   reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
   schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
@@ -38313,6 +38389,7 @@ export type SchemeCreateWithoutImagesInput = {
   reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
   reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
   schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
@@ -38370,6 +38447,7 @@ export type SchemeCreateWithoutIncidentsInput = {
   reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
   reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
   schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
@@ -38427,6 +38505,7 @@ export type SchemeCreateWithoutIntelInput = {
   reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
   reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
   schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
@@ -38484,6 +38563,7 @@ export type SchemeCreateWithoutInvestigationsInSchemeInput = {
   reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
   reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
   schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
@@ -38541,6 +38621,7 @@ export type SchemeCreateWithoutInvestigationsInput = {
   reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
   reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
   schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
@@ -38598,6 +38679,7 @@ export type SchemeCreateWithoutLogoInput = {
   reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
   reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
   schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
@@ -38655,6 +38737,7 @@ export type SchemeCreateWithoutMembersInput = {
   reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
   reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
   schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
@@ -38712,6 +38795,7 @@ export type SchemeCreateWithoutMessagesInput = {
   reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
   reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
   schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
@@ -38769,6 +38853,7 @@ export type SchemeCreateWithoutNotificationsInput = {
   reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
   reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
   schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
@@ -38826,6 +38911,7 @@ export type SchemeCreateWithoutOffendersInput = {
   reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
   reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
   schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
@@ -38883,6 +38969,7 @@ export type SchemeCreateWithoutRecycledItemsInput = {
   reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
   reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
   schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
@@ -38940,6 +39027,7 @@ export type SchemeCreateWithoutRekCollectionsInput = {
   reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
   reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
   schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
@@ -38997,6 +39085,7 @@ export type SchemeCreateWithoutReportIconsInput = {
   rekCollections?: InputMaybe<RekCollectionCreateNestedManyWithoutSchemesInput>;
   reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
   schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
@@ -39054,6 +39143,7 @@ export type SchemeCreateWithoutReportTemplatesInput = {
   rekCollections?: InputMaybe<RekCollectionCreateNestedManyWithoutSchemesInput>;
   reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
   schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
@@ -39111,6 +39201,65 @@ export type SchemeCreateWithoutSchemeTagsInput = {
   rekCollections?: InputMaybe<RekCollectionCreateNestedManyWithoutSchemesInput>;
   reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
   reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
+  tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
+  tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
+  terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
+  termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
+  todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+};
+
+export type SchemeCreateWithoutStatementTemplatesInput = {
+  actions?: InputMaybe<ActionCreateNestedManyWithoutSchemeInput>;
+  actionsInScheme?: InputMaybe<ActionCreateNestedManyWithoutInSchemeInput>;
+  approvalDueDays?: InputMaybe<Scalars['Int']>;
+  articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
+  autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
+  autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
+  businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
+  chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
+  darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
+  defaultIncidentEmail?: InputMaybe<Scalars['Boolean']>;
+  defaultIncidentPush?: InputMaybe<Scalars['Boolean']>;
+  defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
+  defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
+  defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
+  defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
+  defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
+  documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
+  facialRecognition?: InputMaybe<Scalars['Boolean']>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutSchemesInput>;
+  groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
+  id?: InputMaybe<Scalars['String']>;
+  images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  incidentImpact?: InputMaybe<Scalars['Boolean']>;
+  incidentRetention?: InputMaybe<Scalars['Int']>;
+  incidents?: InputMaybe<IncidentCreateNestedManyWithoutSchemeInput>;
+  intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
+  investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
+  investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
+  members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
+  mentionDueDays?: InputMaybe<Scalars['Int']>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutSchemeInput>;
+  mg11Available?: InputMaybe<Scalars['Boolean']>;
+  name: Scalars['String'];
+  notifications?: InputMaybe<NotificationCreateNestedManyWithoutSchemesInput>;
+  offenderRetention?: InputMaybe<Scalars['Int']>;
+  offenders?: InputMaybe<OffenderCreateNestedManyWithoutSchemeInput>;
+  recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutSchemeInput>;
+  rekCollections?: InputMaybe<RekCollectionCreateNestedManyWithoutSchemesInput>;
+  reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
+  reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
+  schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
@@ -39169,6 +39318,7 @@ export type SchemeCreateWithoutTagOrdersInput = {
   reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
   reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
   schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
@@ -39226,6 +39376,7 @@ export type SchemeCreateWithoutTagsInput = {
   reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
   reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
   schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
@@ -39283,6 +39434,7 @@ export type SchemeCreateWithoutTermsInSchemeInput = {
   reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
   reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
   schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
@@ -39340,6 +39492,7 @@ export type SchemeCreateWithoutTermsInput = {
   reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
   reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
   schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
@@ -39397,6 +39550,7 @@ export type SchemeCreateWithoutTodosInput = {
   reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
   reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
   schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
@@ -39454,6 +39608,7 @@ export type SchemeCreateWithoutVehiclesInput = {
   reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
   reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
   schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
@@ -39523,6 +39678,7 @@ export type SchemeOrderByWithRelationInput = {
   reportIcons?: InputMaybe<ImageOrderByRelationAggregateInput>;
   reportTemplates?: InputMaybe<ReportTemplateOrderByRelationAggregateInput>;
   schemeTags?: InputMaybe<TagOrderByRelationAggregateInput>;
+  statementTemplates?: InputMaybe<StatementTemplateOrderByRelationAggregateInput>;
   tagOrders?: InputMaybe<TagOrderOrderByRelationAggregateInput>;
   tags?: InputMaybe<TagOrderByRelationAggregateInput>;
   terms?: InputMaybe<TermsAndConditionOrderByRelationAggregateInput>;
@@ -39615,6 +39771,7 @@ export type SchemeUpdateInput = {
   reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
   reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
   schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
@@ -39714,6 +39871,11 @@ export type SchemeUpdateManyWithWhereWithoutReportTemplatesInput = {
 };
 
 export type SchemeUpdateManyWithWhereWithoutSchemeTagsInput = {
+  data: SchemeUpdateManyMutationInput;
+  where: SchemeScalarWhereInput;
+};
+
+export type SchemeUpdateManyWithWhereWithoutStatementTemplatesInput = {
   data: SchemeUpdateManyMutationInput;
   where: SchemeScalarWhereInput;
 };
@@ -39991,6 +40153,27 @@ export type SchemeUpdateManyWithoutSchemeTagsNestedInput = {
   upsert?: InputMaybe<Array<SchemeUpsertWithWhereUniqueWithoutSchemeTagsInput>>;
 };
 
+export type SchemeUpdateManyWithoutStatementTemplatesNestedInput = {
+  connect?: InputMaybe<Array<SchemeWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<SchemeCreateOrConnectWithoutStatementTemplatesInput>
+  >;
+  create?: InputMaybe<Array<SchemeCreateWithoutStatementTemplatesInput>>;
+  delete?: InputMaybe<Array<SchemeWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<SchemeScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<SchemeWhereUniqueInput>>;
+  set?: InputMaybe<Array<SchemeWhereUniqueInput>>;
+  update?: InputMaybe<
+    Array<SchemeUpdateWithWhereUniqueWithoutStatementTemplatesInput>
+  >;
+  updateMany?: InputMaybe<
+    Array<SchemeUpdateManyWithWhereWithoutStatementTemplatesInput>
+  >;
+  upsert?: InputMaybe<
+    Array<SchemeUpsertWithWhereUniqueWithoutStatementTemplatesInput>
+  >;
+};
+
 export type SchemeUpdateManyWithoutTermsInSchemeNestedInput = {
   connect?: InputMaybe<Array<SchemeWhereUniqueInput>>;
   connectOrCreate?: InputMaybe<
@@ -40254,6 +40437,11 @@ export type SchemeUpdateWithWhereUniqueWithoutSchemeTagsInput = {
   where: SchemeWhereUniqueInput;
 };
 
+export type SchemeUpdateWithWhereUniqueWithoutStatementTemplatesInput = {
+  data: SchemeUpdateWithoutStatementTemplatesInput;
+  where: SchemeWhereUniqueInput;
+};
+
 export type SchemeUpdateWithWhereUniqueWithoutTermsInSchemeInput = {
   data: SchemeUpdateWithoutTermsInSchemeInput;
   where: SchemeWhereUniqueInput;
@@ -40317,6 +40505,7 @@ export type SchemeUpdateWithoutActionsInSchemeInput = {
   reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
   reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
   schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
@@ -40374,6 +40563,7 @@ export type SchemeUpdateWithoutActionsInput = {
   reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
   reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
   schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
@@ -40431,6 +40621,7 @@ export type SchemeUpdateWithoutArticlesInput = {
   reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
   reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
   schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
@@ -40488,6 +40679,7 @@ export type SchemeUpdateWithoutBansInput = {
   reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
   reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
   schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
@@ -40545,6 +40737,7 @@ export type SchemeUpdateWithoutBusinessesInput = {
   reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
   reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
   schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
@@ -40602,6 +40795,7 @@ export type SchemeUpdateWithoutChatsInput = {
   reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
   reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
   schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
@@ -40659,6 +40853,7 @@ export type SchemeUpdateWithoutContactsInput = {
   reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
   reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
   schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
@@ -40716,6 +40911,7 @@ export type SchemeUpdateWithoutCrimeGroupsInput = {
   reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
   reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
   schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
@@ -40773,6 +40969,7 @@ export type SchemeUpdateWithoutCustomGalleriesInput = {
   reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
   reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
   schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
@@ -40830,6 +41027,7 @@ export type SchemeUpdateWithoutDarkLogoInput = {
   reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
   reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
   schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
@@ -40887,6 +41085,7 @@ export type SchemeUpdateWithoutDocumentsInput = {
   reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
   reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
   schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
@@ -40944,6 +41143,7 @@ export type SchemeUpdateWithoutFeedItemsInput = {
   reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
   reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
   schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
@@ -41001,6 +41201,7 @@ export type SchemeUpdateWithoutGroupsInput = {
   reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
   reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
   schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
@@ -41058,6 +41259,7 @@ export type SchemeUpdateWithoutImagesInput = {
   reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
   reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
   schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
@@ -41115,6 +41317,7 @@ export type SchemeUpdateWithoutIncidentsInput = {
   reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
   reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
   schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
@@ -41172,6 +41375,7 @@ export type SchemeUpdateWithoutIntelInput = {
   reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
   reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
   schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
@@ -41229,6 +41433,7 @@ export type SchemeUpdateWithoutInvestigationsInSchemeInput = {
   reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
   reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
   schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
@@ -41286,6 +41491,7 @@ export type SchemeUpdateWithoutInvestigationsInput = {
   reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
   reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
   schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
@@ -41343,6 +41549,7 @@ export type SchemeUpdateWithoutLogoInput = {
   reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
   reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
   schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
@@ -41400,6 +41607,7 @@ export type SchemeUpdateWithoutMembersInput = {
   reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
   reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
   schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
@@ -41457,6 +41665,7 @@ export type SchemeUpdateWithoutMessagesInput = {
   reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
   reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
   schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
@@ -41514,6 +41723,7 @@ export type SchemeUpdateWithoutNotificationsInput = {
   reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
   reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
   schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
@@ -41571,6 +41781,7 @@ export type SchemeUpdateWithoutOffendersInput = {
   reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
   reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
   schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
@@ -41628,6 +41839,7 @@ export type SchemeUpdateWithoutRecycledItemsInput = {
   reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
   reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
   schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
@@ -41685,6 +41897,7 @@ export type SchemeUpdateWithoutRekCollectionsInput = {
   reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
   reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
   schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
@@ -41742,6 +41955,7 @@ export type SchemeUpdateWithoutReportIconsInput = {
   rekCollections?: InputMaybe<RekCollectionUpdateManyWithoutSchemesNestedInput>;
   reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
   schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
@@ -41799,6 +42013,7 @@ export type SchemeUpdateWithoutReportTemplatesInput = {
   rekCollections?: InputMaybe<RekCollectionUpdateManyWithoutSchemesNestedInput>;
   reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
   schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
@@ -41856,6 +42071,65 @@ export type SchemeUpdateWithoutSchemeTagsInput = {
   rekCollections?: InputMaybe<RekCollectionUpdateManyWithoutSchemesNestedInput>;
   reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
   reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
+  tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
+  tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
+  terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
+  termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
+  todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+};
+
+export type SchemeUpdateWithoutStatementTemplatesInput = {
+  actions?: InputMaybe<ActionUpdateManyWithoutSchemeNestedInput>;
+  actionsInScheme?: InputMaybe<ActionUpdateManyWithoutInSchemeNestedInput>;
+  approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
+  autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
+  businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
+  chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
+  darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
+  defaultIncidentEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultIncidentPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
+  facialRecognition?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutSchemesNestedInput>;
+  groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  incidents?: InputMaybe<IncidentUpdateManyWithoutSchemeNestedInput>;
+  intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
+  investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
+  investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
+  members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
+  mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutSchemeNestedInput>;
+  mg11Available?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  notifications?: InputMaybe<NotificationUpdateManyWithoutSchemesNestedInput>;
+  offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  offenders?: InputMaybe<OffenderUpdateManyWithoutSchemeNestedInput>;
+  recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutSchemeNestedInput>;
+  rekCollections?: InputMaybe<RekCollectionUpdateManyWithoutSchemesNestedInput>;
+  reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
+  reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
+  schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
@@ -41914,6 +42188,7 @@ export type SchemeUpdateWithoutTagOrdersInput = {
   reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
   reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
   schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
@@ -41971,6 +42246,7 @@ export type SchemeUpdateWithoutTagsInput = {
   reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
   reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
   schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
@@ -42028,6 +42304,7 @@ export type SchemeUpdateWithoutTermsInSchemeInput = {
   reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
   reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
   schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
@@ -42085,6 +42362,7 @@ export type SchemeUpdateWithoutTermsInput = {
   reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
   reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
   schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
@@ -42142,6 +42420,7 @@ export type SchemeUpdateWithoutTodosInput = {
   reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
   reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
   schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
@@ -42199,6 +42478,7 @@ export type SchemeUpdateWithoutVehiclesInput = {
   reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
   reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
   schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
@@ -42288,6 +42568,12 @@ export type SchemeUpsertWithWhereUniqueWithoutReportTemplatesInput = {
 export type SchemeUpsertWithWhereUniqueWithoutSchemeTagsInput = {
   create: SchemeCreateWithoutSchemeTagsInput;
   update: SchemeUpdateWithoutSchemeTagsInput;
+  where: SchemeWhereUniqueInput;
+};
+
+export type SchemeUpsertWithWhereUniqueWithoutStatementTemplatesInput = {
+  create: SchemeCreateWithoutStatementTemplatesInput;
+  update: SchemeUpdateWithoutStatementTemplatesInput;
   where: SchemeWhereUniqueInput;
 };
 
@@ -42448,6 +42734,7 @@ export type SchemeWhereInput = {
   reportIcons?: InputMaybe<ImageListRelationFilter>;
   reportTemplates?: InputMaybe<ReportTemplateListRelationFilter>;
   schemeTags?: InputMaybe<TagListRelationFilter>;
+  statementTemplates?: InputMaybe<StatementTemplateListRelationFilter>;
   tagOrders?: InputMaybe<TagOrderListRelationFilter>;
   tags?: InputMaybe<TagListRelationFilter>;
   terms?: InputMaybe<TermsAndConditionListRelationFilter>;
@@ -42488,6 +42775,161 @@ export enum SortOrder {
   Asc = 'asc',
   Desc = 'desc',
 }
+
+export type StatementTemplate = {
+  __typename?: 'StatementTemplate';
+  content: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  id: Scalars['String'];
+  name: Scalars['String'];
+  schemes: Array<Scheme>;
+  updatedAt: Scalars['DateTime'];
+};
+
+export type StatementTemplateSchemesArgs = {
+  after?: InputMaybe<SchemeWhereUniqueInput>;
+  before?: InputMaybe<SchemeWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+export type StatementTemplateCreateInput = {
+  content: Scalars['String'];
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  id?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+  schemes?: InputMaybe<SchemeCreateNestedManyWithoutStatementTemplatesInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type StatementTemplateCreateNestedManyWithoutSchemesInput = {
+  connect?: InputMaybe<Array<StatementTemplateWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<StatementTemplateCreateOrConnectWithoutSchemesInput>
+  >;
+  create?: InputMaybe<Array<StatementTemplateCreateWithoutSchemesInput>>;
+};
+
+export type StatementTemplateCreateOrConnectWithoutSchemesInput = {
+  create: StatementTemplateCreateWithoutSchemesInput;
+  where: StatementTemplateWhereUniqueInput;
+};
+
+export type StatementTemplateCreateWithoutSchemesInput = {
+  content: Scalars['String'];
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  id?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type StatementTemplateListRelationFilter = {
+  every?: InputMaybe<StatementTemplateWhereInput>;
+  none?: InputMaybe<StatementTemplateWhereInput>;
+  some?: InputMaybe<StatementTemplateWhereInput>;
+};
+
+export type StatementTemplateOrderByRelationAggregateInput = {
+  _count?: InputMaybe<SortOrder>;
+};
+
+export type StatementTemplateOrderByWithRelationInput = {
+  content?: InputMaybe<SortOrder>;
+  createdAt?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  name?: InputMaybe<SortOrder>;
+  schemes?: InputMaybe<SchemeOrderByRelationAggregateInput>;
+  updatedAt?: InputMaybe<SortOrder>;
+};
+
+export type StatementTemplateScalarWhereInput = {
+  AND?: InputMaybe<Array<StatementTemplateScalarWhereInput>>;
+  NOT?: InputMaybe<Array<StatementTemplateScalarWhereInput>>;
+  OR?: InputMaybe<Array<StatementTemplateScalarWhereInput>>;
+  content?: InputMaybe<StringFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  id?: InputMaybe<StringFilter>;
+  name?: InputMaybe<StringFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type StatementTemplateUpdateInput = {
+  content?: InputMaybe<StringFieldUpdateOperationsInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  schemes?: InputMaybe<SchemeUpdateManyWithoutStatementTemplatesNestedInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type StatementTemplateUpdateManyMutationInput = {
+  content?: InputMaybe<StringFieldUpdateOperationsInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type StatementTemplateUpdateManyWithWhereWithoutSchemesInput = {
+  data: StatementTemplateUpdateManyMutationInput;
+  where: StatementTemplateScalarWhereInput;
+};
+
+export type StatementTemplateUpdateManyWithoutSchemesNestedInput = {
+  connect?: InputMaybe<Array<StatementTemplateWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<StatementTemplateCreateOrConnectWithoutSchemesInput>
+  >;
+  create?: InputMaybe<Array<StatementTemplateCreateWithoutSchemesInput>>;
+  delete?: InputMaybe<Array<StatementTemplateWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<StatementTemplateScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<StatementTemplateWhereUniqueInput>>;
+  set?: InputMaybe<Array<StatementTemplateWhereUniqueInput>>;
+  update?: InputMaybe<
+    Array<StatementTemplateUpdateWithWhereUniqueWithoutSchemesInput>
+  >;
+  updateMany?: InputMaybe<
+    Array<StatementTemplateUpdateManyWithWhereWithoutSchemesInput>
+  >;
+  upsert?: InputMaybe<
+    Array<StatementTemplateUpsertWithWhereUniqueWithoutSchemesInput>
+  >;
+};
+
+export type StatementTemplateUpdateWithWhereUniqueWithoutSchemesInput = {
+  data: StatementTemplateUpdateWithoutSchemesInput;
+  where: StatementTemplateWhereUniqueInput;
+};
+
+export type StatementTemplateUpdateWithoutSchemesInput = {
+  content?: InputMaybe<StringFieldUpdateOperationsInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type StatementTemplateUpsertWithWhereUniqueWithoutSchemesInput = {
+  create: StatementTemplateCreateWithoutSchemesInput;
+  update: StatementTemplateUpdateWithoutSchemesInput;
+  where: StatementTemplateWhereUniqueInput;
+};
+
+export type StatementTemplateWhereInput = {
+  AND?: InputMaybe<Array<StatementTemplateWhereInput>>;
+  NOT?: InputMaybe<Array<StatementTemplateWhereInput>>;
+  OR?: InputMaybe<Array<StatementTemplateWhereInput>>;
+  content?: InputMaybe<StringFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  id?: InputMaybe<StringFilter>;
+  name?: InputMaybe<StringFilter>;
+  schemes?: InputMaybe<SchemeListRelationFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type StatementTemplateWhereUniqueInput = {
+  id?: InputMaybe<Scalars['String']>;
+};
 
 export type StringFieldUpdateOperationsInput = {
   set?: InputMaybe<Scalars['String']>;
@@ -58334,7 +58776,12 @@ export type ArticleQuery = {
     updatedAt: any;
     priority: ArticlePriority;
     title: string;
-    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+    groups: Array<{
+      __typename?: 'Group';
+      id: string;
+      name: string;
+      scheme: { __typename?: 'Scheme'; id: string; name: string };
+    }>;
     documents: Array<{
       __typename?: 'Document';
       id: string;
@@ -58343,6 +58790,7 @@ export type ArticleQuery = {
     }>;
     createdBy: { __typename?: 'User'; fullName: string };
     tags: Array<{ __typename?: 'Tag'; name: string; id: string }>;
+    schemes: Array<{ __typename?: 'Scheme'; id: string; name: string }>;
     images: Array<{
       __typename?: 'Image';
       id: string;
@@ -60589,6 +61037,7 @@ export type SchemeGroupsQuery = {
     id: string;
     name: string;
     description?: string | null;
+    scheme: { __typename?: 'Scheme'; id: string; name: string };
     approver: Array<{ __typename?: 'User'; id: string; fullName: string }>;
   }>;
 };
@@ -64926,6 +65375,61 @@ export type SchemeQuery = {
   } | null;
 };
 
+export type CreateOneStatementTemplateMutationVariables = Exact<{
+  data: StatementTemplateCreateInput;
+}>;
+
+export type CreateOneStatementTemplateMutation = {
+  __typename?: 'Mutation';
+  createOneStatementTemplate: {
+    __typename?: 'StatementTemplate';
+    id: string;
+    name: string;
+  };
+};
+
+export type UpdateOneStatementTemplateMutationVariables = Exact<{
+  data: StatementTemplateUpdateInput;
+  where: StatementTemplateWhereUniqueInput;
+}>;
+
+export type UpdateOneStatementTemplateMutation = {
+  __typename?: 'Mutation';
+  updateOneStatementTemplate?: {
+    __typename?: 'StatementTemplate';
+    id: string;
+    name: string;
+  } | null;
+};
+
+export type StatementTemplateQueryVariables = Exact<{
+  where: StatementTemplateWhereUniqueInput;
+}>;
+
+export type StatementTemplateQuery = {
+  __typename?: 'Query';
+  statementTemplate?: {
+    __typename?: 'StatementTemplate';
+    id: string;
+    name: string;
+    content: string;
+  } | null;
+};
+
+export type ListStatementTemplatesQueryVariables = Exact<{
+  where?: InputMaybe<StatementTemplateWhereInput>;
+}>;
+
+export type ListStatementTemplatesQuery = {
+  __typename?: 'Query';
+  statementTemplates: Array<{
+    __typename?: 'StatementTemplate';
+    id: string;
+    name: string;
+    content: string;
+  }>;
+};
+
 export type DeleteTagMutationVariables = Exact<{
   id: Scalars['String'];
 }>;
@@ -67885,6 +68389,10 @@ export const ArticleDocument = gql`
       groups {
         id
         name
+        scheme {
+          id
+          name
+        }
       }
       documents {
         id
@@ -67900,6 +68408,10 @@ export const ArticleDocument = gql`
       tags {
         name
         id
+      }
+      schemes {
+        id
+        name
       }
       images {
         id
@@ -71273,6 +71785,10 @@ export const SchemeGroupsDocument = gql`
       id
       name
       description
+      scheme {
+        id
+        name
+      }
       approver {
         id
         fullName
@@ -77339,6 +77855,163 @@ export type SchemeLazyQueryHookResult = ReturnType<typeof useSchemeLazyQuery>;
 export type SchemeQueryResult = Apollo.QueryResult<
   SchemeQuery,
   SchemeQueryVariables
+>;
+export const CreateOneStatementTemplateDocument = gql`
+  mutation CreateOneStatementTemplate($data: StatementTemplateCreateInput!) {
+    createOneStatementTemplate(data: $data) {
+      id
+      name
+    }
+  }
+`;
+export type CreateOneStatementTemplateMutationFn = Apollo.MutationFunction<
+  CreateOneStatementTemplateMutation,
+  CreateOneStatementTemplateMutationVariables
+>;
+export function useCreateOneStatementTemplateMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateOneStatementTemplateMutation,
+    CreateOneStatementTemplateMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateOneStatementTemplateMutation,
+    CreateOneStatementTemplateMutationVariables
+  >(CreateOneStatementTemplateDocument, options);
+}
+export type CreateOneStatementTemplateMutationHookResult = ReturnType<
+  typeof useCreateOneStatementTemplateMutation
+>;
+export type CreateOneStatementTemplateMutationResult =
+  Apollo.MutationResult<CreateOneStatementTemplateMutation>;
+export type CreateOneStatementTemplateMutationOptions =
+  Apollo.BaseMutationOptions<
+    CreateOneStatementTemplateMutation,
+    CreateOneStatementTemplateMutationVariables
+  >;
+export const UpdateOneStatementTemplateDocument = gql`
+  mutation UpdateOneStatementTemplate(
+    $data: StatementTemplateUpdateInput!
+    $where: StatementTemplateWhereUniqueInput!
+  ) {
+    updateOneStatementTemplate(data: $data, where: $where) {
+      id
+      name
+    }
+  }
+`;
+export type UpdateOneStatementTemplateMutationFn = Apollo.MutationFunction<
+  UpdateOneStatementTemplateMutation,
+  UpdateOneStatementTemplateMutationVariables
+>;
+export function useUpdateOneStatementTemplateMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateOneStatementTemplateMutation,
+    UpdateOneStatementTemplateMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateOneStatementTemplateMutation,
+    UpdateOneStatementTemplateMutationVariables
+  >(UpdateOneStatementTemplateDocument, options);
+}
+export type UpdateOneStatementTemplateMutationHookResult = ReturnType<
+  typeof useUpdateOneStatementTemplateMutation
+>;
+export type UpdateOneStatementTemplateMutationResult =
+  Apollo.MutationResult<UpdateOneStatementTemplateMutation>;
+export type UpdateOneStatementTemplateMutationOptions =
+  Apollo.BaseMutationOptions<
+    UpdateOneStatementTemplateMutation,
+    UpdateOneStatementTemplateMutationVariables
+  >;
+export const StatementTemplateDocument = gql`
+  query StatementTemplate($where: StatementTemplateWhereUniqueInput!) {
+    statementTemplate(where: $where) {
+      id
+      name
+      content
+    }
+  }
+`;
+export function useStatementTemplateQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    StatementTemplateQuery,
+    StatementTemplateQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    StatementTemplateQuery,
+    StatementTemplateQueryVariables
+  >(StatementTemplateDocument, options);
+}
+export function useStatementTemplateLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    StatementTemplateQuery,
+    StatementTemplateQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    StatementTemplateQuery,
+    StatementTemplateQueryVariables
+  >(StatementTemplateDocument, options);
+}
+export type StatementTemplateQueryHookResult = ReturnType<
+  typeof useStatementTemplateQuery
+>;
+export type StatementTemplateLazyQueryHookResult = ReturnType<
+  typeof useStatementTemplateLazyQuery
+>;
+export type StatementTemplateQueryResult = Apollo.QueryResult<
+  StatementTemplateQuery,
+  StatementTemplateQueryVariables
+>;
+export const ListStatementTemplatesDocument = gql`
+  query ListStatementTemplates($where: StatementTemplateWhereInput) {
+    statementTemplates(where: $where) {
+      id
+      name
+      content
+    }
+  }
+`;
+export function useListStatementTemplatesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    ListStatementTemplatesQuery,
+    ListStatementTemplatesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    ListStatementTemplatesQuery,
+    ListStatementTemplatesQueryVariables
+  >(ListStatementTemplatesDocument, options);
+}
+export function useListStatementTemplatesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListStatementTemplatesQuery,
+    ListStatementTemplatesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ListStatementTemplatesQuery,
+    ListStatementTemplatesQueryVariables
+  >(ListStatementTemplatesDocument, options);
+}
+export type ListStatementTemplatesQueryHookResult = ReturnType<
+  typeof useListStatementTemplatesQuery
+>;
+export type ListStatementTemplatesLazyQueryHookResult = ReturnType<
+  typeof useListStatementTemplatesLazyQuery
+>;
+export type ListStatementTemplatesQueryResult = Apollo.QueryResult<
+  ListStatementTemplatesQuery,
+  ListStatementTemplatesQueryVariables
 >;
 export const DeleteTagDocument = gql`
   mutation deleteTag($id: String!) {

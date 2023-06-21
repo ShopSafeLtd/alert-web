@@ -29,6 +29,7 @@ interface FormData {
   groups: string[];
   categories: SelectProps['options'];
   importance: ArticlePriority;
+  schemes: string[];
 }
 
 export type { FormData };
@@ -37,14 +38,17 @@ const useEditArticle = (): Props => {
   const { id: articleId } = useParams();
   const siteUrl = `${window.location.href.split('/app/')[0]}`;
   const schemeId = useStoreState((state) => state.scheme.id);
-  const userId = useStoreState((state) => state.user.id);
+  const { schemes, id: userId } = useStoreState((state) => state.user);
   const [form] = useForm<FormData>();
+  const [selectedSchemes, setSelectedSchemes] = useState<string[]>([]);
+
   const [data, setData] = useState<FormData>({
     title: '',
     content: '',
     groups: [],
     categories: [],
     importance: ArticlePriority.Normal,
+    schemes: [],
   });
 
   const [fileList, setFileList] = useState<UploadFile[]>([]);
@@ -86,8 +90,15 @@ const useEditArticle = (): Props => {
           label: tag.name || '',
         })) || [],
       importance: result?.article?.priority || ArticlePriority.Normal,
+      schemes:
+        result?.article?.groups.map((group) => group.scheme.id || '') || [],
     });
-
+    setSelectedSchemes(
+      result?.article?.groups.map((group) => group.scheme.id || '') || []
+    );
+    setSelectedGroups(
+      result?.article?.groups.map((group) => group.id || '') || []
+    );
     setOffenders(
       (result?.article?.rows[0].columns[0].offenders as OffenderData[]) || []
     );
@@ -149,19 +160,19 @@ const useEditArticle = (): Props => {
           label: tag.name || '',
         })) || [],
       importance: result?.article?.priority || ArticlePriority.Normal,
+      schemes: [],
     });
-
     editorRef.current?.setContent(
       result?.article?.rows[0].columns[0].text || ''
     );
   }, [result]);
 
-  const { loading: groupsLoading } = useSchemeGroupsQuery({
+  const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
     variables: {
       where: {
         scheme: {
           id: {
-            equals: schemeId,
+            in: schemes?.map((scheme) => scheme?.scheme?.id || '') || [],
           },
         },
       },
@@ -170,7 +181,7 @@ const useEditArticle = (): Props => {
     onCompleted: (res) => {
       const groupsFormatted = res.groups.map((group) => ({
         value: group.id,
-        label: group.name,
+        label: `${group.name} (${group.scheme.name})`,
       }));
       setGroups(groupsFormatted);
     },
@@ -223,8 +234,13 @@ const useEditArticle = (): Props => {
 
   const onGroupsChange = (values: string[]) => {
     setSelectedGroups(values);
+    setSelectedSchemes(
+      groupsData?.groups
+        .filter((group) => values.includes(group.id))
+        .map((group) => group.scheme.id)
+        .filter((value, index, self) => self.indexOf(value) === index) || []
+    );
   };
-
   const categoriesChange = (values: { value: string }[]) => {
     const formattedValues: string[] = [];
     // eslint-disable-next-line no-restricted-syntax
@@ -509,6 +525,7 @@ const useEditArticle = (): Props => {
   // });
   const onSubmit = async () => {
     setSaving(true);
+
     const formCategories: SelectProps['options'] =
       form.getFieldValue('categories');
     const selectedCategoryIds =
@@ -533,6 +550,7 @@ const useEditArticle = (): Props => {
     const htmlWithDefaultWidth = extracted(
       editorRef.current?.getContent() || ''
     );
+    const submittedSchemes: string[] = selectedSchemes;
 
     await submitArticle({
       variables: {
@@ -553,10 +571,19 @@ const useEditArticle = (): Props => {
           htmlBody: htmlWithDefaultWidth || '',
           previewImage: img,
           previewText: text,
-          schemeId,
+          schemes:
+            submittedSchemes && submittedSchemes.length > 1
+              ? submittedSchemes.map((scheme) => scheme)
+              : [schemeId],
           priority,
-          incidents: incidents.map((incident) => incident.incident.id),
-          offenders: offenders.map((offender) => offender.id),
+          incidents:
+            submittedSchemes && submittedSchemes.length > 1
+              ? []
+              : incidents.map((incident) => incident.incident.id),
+          offenders:
+            submittedSchemes && submittedSchemes.length > 1
+              ? []
+              : offenders.map((offender) => offender.id),
           images: {
             upload:
               articleImages && articleImages.length > 0
@@ -620,25 +647,29 @@ const useEditArticle = (): Props => {
   };
 
   const insertIncident = (incident: Incident) => {
-    setIncidents((prev) => [...prev, incident]);
-    // TODO: for some reason it ignores everything in the ${} but if you put just /app/offenders/view/${offender.id} it just returns offenders/view.. which makes no sense
-    editorRef.current?.insertContent(
-      `
+    if (selectedSchemes && selectedSchemes?.length <= 1) {
+      setIncidents((prev) => [...prev, incident]);
+      // TODO: for some reason it ignores everything in the ${} but if you put just /app/offenders/view/${offender.id} it just returns offenders/view.. which makes no sense
+      editorRef.current?.insertContent(
+        `
         <a target="_blank" rel="noopener noreferrer"  href="${siteUrl}/app/incidents/view/${incident.incident.id}">
         <b>${incident.incident.description}</b>
 </a>`,
-      { format: 'raw' }
-    );
+        { format: 'raw' }
+      );
+    }
   };
 
   const insertOffender = (offender: OffenderData) => {
-    setOffenders((prev) => [...prev, offender]);
-    // TODO: for some reason it ignores everything in the ${} but if you put just /app/offenders/view/${offender.id} it just returns offenders/view.. which makes no sense
-    const url = `${siteUrl}/app/offenders/view/${offender.id}`;
-    editorRef.current?.insertContent(
-      `<a target="_blank" rel="noopener noreferrer" href="${url}">       <b>${offender.name}</b></a>`,
-      { format: 'raw' }
-    );
+    if (selectedSchemes && selectedSchemes?.length <= 1) {
+      setOffenders((prev) => [...prev, offender]);
+      // TODO: for some reason it ignores everything in the ${} but if you put just /app/offenders/view/${offender.id} it just returns offenders/view.. which makes no sense
+      const url = `${siteUrl}/app/offenders/view/${offender.id}`;
+      editorRef.current?.insertContent(
+        `<a target="_blank" rel="noopener noreferrer" href="${url}">       <b>${offender.name}</b></a>`,
+        { format: 'raw' }
+      );
+    }
   };
 
   const removeOffender = (id: string) => {
@@ -682,6 +713,7 @@ const useEditArticle = (): Props => {
     incidents,
     removeOffender,
     removeIncident,
+    selectedSchemes,
   };
 };
 

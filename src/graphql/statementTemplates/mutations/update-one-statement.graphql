@@ -1,0 +1,6 @@
+mutation UpdateOneStatementTemplate($data: StatementTemplateUpdateInput!, $where: StatementTemplateWhereUniqueInput!) {
+  updateOneStatementTemplate(data: $data, where: $where) {
+    id
+    name
+  }
+}
