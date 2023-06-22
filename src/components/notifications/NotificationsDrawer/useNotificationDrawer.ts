@@ -68,9 +68,8 @@ interface Return {
   takeAllSchemes: boolean;
   toggleTakeAllSchemes: () => void;
   setSearch: (value: string) => void;
-  onPaginationChange: (page: number, pageSize: number) => void;
-  currentPage: number;
-  currentPageSize: number;
+  refreshing: boolean;
+  onRefresh: () => void;
 }
 
 const useNotificationLists = (): Return => {
@@ -85,10 +84,9 @@ const useNotificationLists = (): Return => {
   );
   const setTodos = useStoreActions((actions) => actions.user.setTodos);
   const [saving, setSaving] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [takeAllSchemes, setTakeAllSchemes] = useState(true);
   const [search, setSearch] = useState('');
-  const [pageSize, setPageSize] = useState(20);
-  const [page, setPage] = useState(1);
 
   const getUserNotificationType = (value: NotificationData) => {
     switch (value.type) {
@@ -171,8 +169,7 @@ const useNotificationLists = (): Return => {
   };
 
   const variables = {
-    skip: (page - 1) * pageSize,
-    take: pageSize,
+    take: 20,
     where: {
       id: userId,
     },
@@ -220,7 +217,7 @@ const useNotificationLists = (): Return => {
     ],
   };
 
-  const { data, loading } = useUserNotificationsQuery({
+  const { data, loading, refetch } = useUserNotificationsQuery({
     fetchPolicy: 'cache-and-network',
     variables,
     onCompleted: (res) => {
@@ -361,10 +358,13 @@ const useNotificationLists = (): Return => {
   const toggleTakeAllSchemes = () => {
     setTakeAllSchemes(!takeAllSchemes);
   };
-  const onPaginationChange = (pageVale: number, pageSizeValue: number) => {
-    setPage(pageVale);
-    setPageSize(pageSizeValue);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
   };
+
   return {
     data: data?.user,
     loading: (data === null || data === undefined) && loading,
@@ -374,9 +374,8 @@ const useNotificationLists = (): Return => {
     handleMarkAsRead,
     handleMarkAllRead,
     setSearch,
-    onPaginationChange,
-    currentPage: page,
-    currentPageSize: pageSize,
+    onRefresh,
+    refreshing,
   };
 };
 

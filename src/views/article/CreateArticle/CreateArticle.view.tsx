@@ -54,26 +54,42 @@ const CreateArticleView = ({
   offenders,
   removeOffender,
   removeIncident,
+  selectedSchemes,
 }: ViewProps) => {
+  const noSchemes = selectedSchemes;
   const forms = {
     // eslint-disable-next-line react/jsx-no-useless-fragment
     null: <></>,
-    addIncident: (
-      <LinkIncident
-        getIncident={insertIncident}
-        incidentIds={
-          incidents ? incidents.map((incident) => incident.incident.id) : []
-        }
-        onClose={drawer.close}
-      />
-    ),
-    addOffender: (
-      <AddExistingOffender
-        update={insertOffender}
-        offenderIds={offenders ? offenders.map((offender) => offender.id) : []}
-        onClose={drawer.close}
-      />
-    ),
+    addIncident:
+      !noSchemes || (noSchemes && noSchemes?.length <= 1) ? (
+        <LinkIncident
+          getIncident={insertIncident}
+          incidentIds={
+            incidents ? incidents.map((incident) => incident.incident.id) : []
+          }
+          onClose={drawer.close}
+        />
+      ) : (
+        <div>
+          At the moment adding an incident to a multi-scheme article is not
+          supported.
+        </div>
+      ),
+    addOffender:
+      !noSchemes || (noSchemes && noSchemes?.length <= 1) ? (
+        <AddExistingOffender
+          update={insertOffender}
+          offenderIds={
+            offenders ? offenders.map((offender) => offender.id) : []
+          }
+          onClose={drawer.close}
+        />
+      ) : (
+        <div>
+          At the moment adding an offender to a multi-scheme article is not
+          supported.
+        </div>
+      ),
   };
   // const previewButtons = () => (
   //   <>
@@ -102,6 +118,7 @@ const CreateArticleView = ({
                 groups: [],
                 categories: [],
                 importance: 'Normal',
+                schemes: [],
               }
             }
             onFinish={onSubmit}
@@ -118,7 +135,7 @@ const CreateArticleView = ({
               </Col>
             </Row>
             <Row gutter={16} style={{ marginLeft: 10, marginRight: 10 }}>
-              <Col span={8}>
+              <Col span={10}>
                 <Form.Item
                   name="groups"
                   label="Groups"
@@ -142,7 +159,7 @@ const CreateArticleView = ({
                   </Select>
                 </Form.Item>
               </Col>
-              <Col span={8}>
+              <Col span={6}>
                 <Form.Item
                   name="importance"
                   label="Importance"
@@ -228,6 +245,7 @@ const CreateArticleView = ({
                             },
                           },
                         ];
+
                         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                         // @ts-ignore ts error from tinymce, nested menus !== string
                         callback(items);

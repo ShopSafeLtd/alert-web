@@ -38,6 +38,13 @@ const DiscImport = () => {
     onSubmit,
     onUpdateOffender,
     onUpdateIncident,
+    onUpdateBusiness,
+    onUpdateUser,
+    mappingForm,
+    areas,
+    galleries,
+    currentStep,
+    onStepChange,
   } = useDiscImport();
 
   return (
@@ -76,6 +83,13 @@ const DiscImport = () => {
       onSubmit={onSubmit}
       onUpdateOffender={onUpdateOffender}
       onUpdateIncident={onUpdateIncident}
+      onUpdateBusiness={onUpdateBusiness}
+      onUpdateUser={onUpdateUser}
+      mappingForm={mappingForm}
+      areas={areas}
+      galleries={galleries}
+      currentStep={currentStep}
+      onStepChange={onStepChange}
     />
   );
 };

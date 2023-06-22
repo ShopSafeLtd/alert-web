@@ -1,22 +1,43 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Dropdown, List, Menu, Row, Typography } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight, faCaretDown } from '@fortawesome/pro-light-svg-icons';
+import { faArrowRight } from '@fortawesome/pro-light-svg-icons';
+import { faCaretDown } from '@fortawesome/pro-solid-svg-icons';
 import { LocalStorageKeys } from 'types';
 
 import { Scheme, useStoreActions, useStoreState } from 'state';
 import { useNavigate } from 'react-router';
 import { useLocation } from 'react-router-dom';
+import { createUseStyles } from 'react-jss';
+import { Theme } from 'configs/ThemeConfig';
 
 const { Text } = Typography;
 
+const useStyles = createUseStyles((theme: Theme) => ({
+  notificationCol: {
+    borderBottom: `1px solid ${theme.borderColor}`,
+    cursor: 'pointer',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    '&:hover': {
+      backgroundColor: theme.hoverBackground,
+    },
+    paddingTop: 10,
+    paddingBottom: 10,
+    borderTop: `1px solid ${theme.borderColor}`,
+  },
+  active: {
+    backgroundColor: theme.imageBackgroundColor,
+  },
+}));
+
 export const NavScheme = () => {
+  const classes = useStyles();
+
   const { schemes } = useStoreState((state) => state.user);
-  const {
-    id: activeScheme,
-    userTodos,
-    userNotifications,
-  } = useStoreState((state) => state.scheme);
+  const { id: activeScheme } = useStoreState((state) => state.scheme);
+  const currentTheme = useStoreState((state) => state.theme.currentTheme);
   const activeSchemeName = useStoreState((state) => state.scheme.name);
   const setScheme = useStoreActions((actions) => actions.scheme.setScheme);
 
@@ -69,87 +90,64 @@ export const NavScheme = () => {
     handleVisibleChange(false);
   };
 
-  const schemeList = (
-    <div className="nav-dropdown nav-notification">
-      <div className="nav-notification-header d-flex justify-content-between align-items-center">
-        <h4 className="mb-0">Your Schemes</h4>
-      </div>
-      <div className="nav-notification-body">
-        <List<Scheme>
-          size="small"
-          itemLayout="horizontal"
-          dataSource={schemes}
-          renderItem={(item) => (
-            <List.Item
-              className={
-                activeScheme === item.scheme.id ? '' : 'list-clickable'
-              }
-              onClick={() =>
-                activeScheme !== item.scheme.id && handleSchemeChange(item)
-              }
-            >
-              <Row
-                align="middle"
-                style={{ width: '100%', paddingRight: 10, paddingLeft: 10 }}
-              >
-                <Col flex={1}>
-                  <span className="text-dark">{item.scheme.name} </span>
-                </Col>
-                {activeScheme === item.scheme.id ? (
-                  <Col>
-                    <Text type="success">Selected</Text>
-                  </Col>
-                ) : (
-                  <Col>
-                    <FontAwesomeIcon
-                      icon={faArrowRight}
-                      style={{ fontSize: 16, marginLeft: 10 }}
-                    />
-                  </Col>
-                )}
-              </Row>
-            </List.Item>
-          )}
-        />
-      </div>
-    </div>
-  );
-
   return schemes.length > 1 ? (
     <Dropdown
+      open={visible}
+      onOpenChange={handleVisibleChange}
+      menu={{
+        style: {
+          maxHeight: 400,
+          overflowY: 'auto',
+          colorScheme: currentTheme,
+        },
+        items: schemes.map((scheme) => ({
+          key: scheme.id,
+          className:
+            activeScheme === scheme.scheme.id ? classes.active : undefined,
+          label: (
+            <Row
+              align="middle"
+              style={{
+                width: '100%',
+                paddingRight: 10,
+                paddingLeft: 10,
+                paddingTop: 4,
+                paddingBottom: 4,
+              }}
+              onClick={() => handleSchemeChange(scheme)}
+            >
+              <Col flex={1}>
+                <span className="text-dark">{scheme.scheme.name} </span>
+              </Col>
+              {activeScheme === scheme.scheme.id ? (
+                <Col>
+                  <Text type="success">Selected</Text>
+                </Col>
+              ) : (
+                <Col>
+                  <FontAwesomeIcon
+                    icon={faArrowRight}
+                    style={{ fontSize: 16, marginLeft: 10 }}
+                  />
+                </Col>
+              )}
+            </Row>
+          ),
+        })),
+      }}
       placement="topRight"
-      overlay={schemeList}
-      onVisibleChange={handleVisibleChange}
-      visible={visible}
-      trigger={['click']}
     >
-      <Menu
-        mode="horizontal"
-        style={{ width: '100%' }}
-        items={[
-          {
-            key: 0,
-            style: {
-              width: '100%',
-              padding: 0,
-            },
-            label: (
-              <div style={{ padding: '0 20px', maxWidth: '100%' }}>
-                <Text ellipsis>{activeSchemeName}</Text>
-                <FontAwesomeIcon
-                  style={{
-                    fontSize: 20,
-                    color: '#424242',
-                    marginLeft: 10,
-                    marginBottom: -3,
-                  }}
-                  icon={faCaretDown}
-                />
-              </div>
-            ),
-          },
-        ]}
-      />
+      <div className={classes.notificationCol}>
+        <Text ellipsis>{activeSchemeName}</Text>
+        <FontAwesomeIcon
+          style={{
+            fontSize: 18,
+            marginLeft: 10,
+            marginTop: -2,
+          }}
+          icon={faCaretDown}
+        />
+      </div>
     </Dropdown>
   ) : (
     <div />

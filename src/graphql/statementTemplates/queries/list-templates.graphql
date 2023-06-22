@@ -1,0 +1,7 @@
+query ListStatementTemplates($where: StatementTemplateWhereInput) {
+  statementTemplates(where: $where) {
+    id
+    name
+    content
+  }
+}

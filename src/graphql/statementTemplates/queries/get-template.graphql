@@ -1,0 +1,7 @@
+query StatementTemplate($where: StatementTemplateWhereUniqueInput!) {
+  statementTemplate(where: $where) {
+    id
+    name
+    content
+  }
+}

@@ -4,6 +4,10 @@ query Article($where: ArticleWhereUniqueInput!) {
     groups {
       id
       name
+      scheme {
+        id
+        name
+      }
     }
     documents {
       id
@@ -19,6 +23,10 @@ query Article($where: ArticleWhereUniqueInput!) {
     tags {
       name
       id
+    }
+    schemes {
+    id
+    name
     }
     images {
       id

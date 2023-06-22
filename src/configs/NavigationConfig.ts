@@ -145,17 +145,6 @@ const userOnlyItems: NavItem[] = [
     submenu: [],
     roles: [Role.User, Role.ContentAdmin, Role.SchemeAdmin, Role.ShopsafeAdmin],
   },
-  // TODO: add back
-  {
-    key: 'notification',
-    path: `${APP_PREFIX_PATH}/notifications`,
-    title: 'Notifications',
-    icon: faBell,
-    breadcrumb: false,
-    submenu: [],
-    roles: [Role.User, Role.ContentAdmin, Role.SchemeAdmin, Role.ShopsafeAdmin],
-    badge: BadgeTypes.notification,
-  },
   {
     key: 'bulletins',
     path: `${APP_PREFIX_PATH}/article`,

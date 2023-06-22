@@ -14,7 +14,6 @@ const CreateArticleContainer = () => {
     setPreviewText,
     previewImage,
     setPreviewImage,
-
     groups,
     groupsLoading,
     onGroupsChange,
@@ -36,12 +35,14 @@ const CreateArticleContainer = () => {
     removeIncident,
     offenders,
     incidents,
+    selectedSchemes,
   } = useCreateArticle();
 
   const { drawer } = useDrawerState<AddOffender | AddIncident>();
 
   return (
     <View
+      selectedSchemes={selectedSchemes}
       incidents={incidents}
       removeIncident={removeIncident}
       offenders={offenders}

@@ -1,5 +1,14 @@
 import React from 'react';
-import { Avatar, Dropdown, Menu, Row, Switch, Typography } from 'antd';
+import {
+  Avatar,
+  Button,
+  Col,
+  Dropdown,
+  Menu,
+  Row,
+  Switch,
+  Typography,
+} from 'antd';
 import { LogoutOutlined } from '@ant-design/icons';
 import { useStoreActions, useStoreState } from 'state';
 import { useAuth } from 'hooks';
@@ -7,9 +16,32 @@ import { APP_PREFIX_PATH } from 'configs/AppConfig';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMoon, faSun } from '@fortawesome/pro-light-svg-icons';
+import {
+  faFileContract,
+  faMoon,
+  faSignOut,
+  faSun,
+} from '@fortawesome/pro-light-svg-icons';
 import { useThemeSwitcher } from 'react-css-theme-switcher/src';
 import { LocalStorageKeys, typedLocalStorage } from 'utils';
+import { createUseStyles } from 'react-jss';
+import type { Theme } from 'configs/ThemeConfig';
+
+const useStyles = createUseStyles((theme: Theme) => ({
+  notificationCol: {
+    borderBottom: `1px solid ${theme.borderColor}`,
+    cursor: 'pointer',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    '&:hover': {
+      backgroundColor: theme.hoverBackground,
+    },
+    paddingTop: 10,
+    paddingBottom: 10,
+    borderRight: `1px solid ${theme.borderColor}`,
+  },
+}));
 
 interface MenuItem {
   title: string;
@@ -28,26 +60,11 @@ const menuItem: MenuItem[] = [
     icon: '', //EditOutlined,
     path: `${APP_PREFIX_PATH}/user-settings/terms`,
   },
-
-  // {
-  //   title: "Account Setting",
-  //   icon: "", // SettingOutlined,
-  //   path: `${APP_PREFIX_PATH}/`,
-  // },
-  // {
-  //   title: "Billing",
-  //   icon: "", // ShopOutlined,
-  //   path: `${APP_PREFIX_PATH}/`,
-  // },
-  // {
-  //   title: "Help Center",
-  //   icon: "", // QuestionCircleOutlined,
-  //   path: `${APP_PREFIX_PATH}/`,
-  // },
 ];
 
 export const NavProfile = () => {
   const { switcher, themes } = useThemeSwitcher();
+  const classes = useStyles();
 
   const name = useStoreState((state) => state.user.fullName);
   const email = useStoreState((state) => state.user.email);
@@ -73,25 +90,6 @@ export const NavProfile = () => {
         </div>
       </div>
       <div className="nav-profile-body">
-        <div style={{ padding: '0 15px 10px' }}>
-          <Typography.Text>Theme Mode: </Typography.Text>
-          <Switch
-            checkedChildren={<FontAwesomeIcon color="#F5F3CE" icon={faMoon} />}
-            unCheckedChildren={
-              <FontAwesomeIcon color="GoldenRod" icon={faSun} />
-            }
-            checked={currentTheme === 'dark'}
-            onChange={(value) => {
-              switchTheme(value ? 'dark' : 'light');
-              typedLocalStorage.set(
-                LocalStorageKeys.theme,
-                value ? 'dark' : 'light'
-              );
-
-              switcher({ theme: value ? themes.dark : themes.light });
-            }}
-          />
-        </div>
         <Menu>
           {menuItem.map((el, i) => {
             return (
@@ -121,35 +119,120 @@ export const NavProfile = () => {
       </div>
     </div>
   );
+
   return (
-    <Dropdown placement="topRight" overlay={profileMenu} trigger={['click']}>
-      <Menu
-        className="d-flex align-item-center"
-        mode="horizontal"
-        style={{ width: '100%' }}
-        items={[
+    <Dropdown
+      menu={{
+        items: [
           {
-            key: 0,
-            style: {
-              width: '100%',
-            },
+            key: '1',
             label: (
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Avatar
-                  size="small"
-                  style={{
-                    backgroundColor: 'rgb(222, 68, 54)',
-                    marginRight: 10,
-                  }}
-                >
-                  {name?.charAt(0)}
-                </Avatar>
-                <Typography.Text className="mb-0">{name}</Typography.Text>
-              </div>
+              <Row>
+                <Col>
+                  <Avatar
+                    style={{
+                      backgroundColor: 'rgb(222, 68, 54)',
+                      minWidth: 35,
+                    }}
+                    size={35}
+                  >
+                    {name?.charAt(0)}
+                  </Avatar>
+                </Col>
+                <Col>
+                  <div className="pl-2">
+                    <h4 className="mb-0">{name}</h4>
+                    <span className="text-muted">{email}</span>
+                  </div>
+                </Col>
+              </Row>
             ),
           },
-        ]}
-      />
+          {
+            key: '2',
+            label: (
+              <Row gutter={8}>
+                <Col>
+                  <Typography.Text>Theme Mode: </Typography.Text>
+                </Col>
+                <Col>
+                  <Switch
+                    checkedChildren={
+                      <FontAwesomeIcon color="#F5F3CE" icon={faMoon} />
+                    }
+                    unCheckedChildren={
+                      <FontAwesomeIcon color="GoldenRod" icon={faSun} />
+                    }
+                    checked={currentTheme === 'dark'}
+                    onChange={(value) => {
+                      switchTheme(value ? 'dark' : 'light');
+                      typedLocalStorage.set(
+                        LocalStorageKeys.theme,
+                        value ? 'dark' : 'light'
+                      );
+
+                      switcher({ theme: value ? themes.dark : themes.light });
+                    }}
+                  />
+                </Col>
+              </Row>
+            ),
+          },
+          {
+            key: '3',
+            label: (
+              <Link to={`${APP_PREFIX_PATH}/user-settings`}>
+                <Row>
+                  <span className="font-weight-normal">User Settings</span>
+                </Row>
+              </Link>
+            ),
+          },
+          {
+            key: '4',
+            label: (
+              <Link to={`${APP_PREFIX_PATH}/user-settings/terms`}>
+                <Row gutter={8}>
+                  <Col>
+                    <FontAwesomeIcon icon={faFileContract} />
+                  </Col>
+                  <Col>
+                    <span className="font-weight-normal">
+                      Terms & Conditions
+                    </span>
+                  </Col>
+                </Row>
+              </Link>
+            ),
+          },
+          {
+            key: '5',
+            label: (
+              <Row gutter={8}>
+                <Col>
+                  <FontAwesomeIcon icon={faSignOut} />
+                </Col>
+                <Col>
+                  <span className="font-weight-normal">Sign Out</span>
+                </Col>
+              </Row>
+            ),
+          },
+        ],
+      }}
+      placement="topRight"
+    >
+      <div className={classes.notificationCol}>
+        <Avatar
+          size="small"
+          style={{
+            backgroundColor: 'rgb(222, 68, 54)',
+            marginRight: 10,
+          }}
+        >
+          {name?.charAt(0)}
+        </Avatar>
+      </div>
     </Dropdown>
   );
 };

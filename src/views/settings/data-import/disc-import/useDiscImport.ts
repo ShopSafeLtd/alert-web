@@ -1,5 +1,6 @@
-import { useState } from 'react';
-import type { UploadFile, UploadProps } from 'antd';
+import { useEffect, useState } from 'react';
+import type { UploadFile, UploadProps, FormInstance } from 'antd';
+import { Form } from 'antd';
 import type { SchemeGroupsQuery, TagsQuery } from 'graphql/generated';
 import {
   Height,
@@ -13,6 +14,8 @@ import {
   useSchemeGroupsQuery,
   SortOrder,
   TagType,
+  Role,
+  useListUsersQuery,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
 import { v4 as uuidv4 } from 'uuid';
@@ -113,9 +116,18 @@ interface Return {
   onSubmit: () => void;
   onUpdateOffender: (data: NewOffender) => void;
   onUpdateIncident: (data: NewIncident) => void;
+  onUpdateBusiness: (data: NewBusiness) => void;
+  onUpdateUser: (data: NewUser) => void;
+  mappingForm: FormInstance<GenerateData>;
+  areas: string[];
+  galleries: string[];
+  currentStep: number;
+  onStepChange: (value: number) => void;
 }
 
 const useDiscImport = (): Return => {
+  const [mappingForm] = Form.useForm<GenerateData>();
+
   const schemeId = useStoreState((state) => state.scheme.id);
 
   const [idSought, setIdSought] = useState<IDSought[]>([]);
@@ -132,6 +144,9 @@ const useDiscImport = (): Return => {
   const [newHistoricIncidents, setNewHistoricIncidents] = useState<
     HistoricIncident[]
   >([]);
+  const [currentStep, setCurrentStep] = useState<number>(0);
+  const [areas, setAreas] = useState<string[]>([]);
+  const [galleries, setGalleries] = useState<string[]>([]);
   const [activeTags, setActiveTags] = useState<IncidentTags>({
     assaultViolenceAffray: false,
     beggingPersistent: false,
@@ -184,6 +199,32 @@ const useDiscImport = (): Return => {
   const [incidentModalOpen, setIncidentModalOpen] = useState<boolean>(false);
   const [imageModalOpen, setImageModalOpen] = useState<boolean>(false);
 
+  const { data: usersData } = useListUsersQuery({
+    variables: {
+      groupWhere: {
+        scheme: {
+          id: {
+            equals: schemeId,
+          },
+        },
+      },
+      orderBy: {
+        fullName: SortOrder.Asc,
+      },
+      where: {
+        schemes: {
+          some: {
+            scheme: {
+              id: {
+                equals: schemeId,
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+
   const { data: groupsData } = useSchemeGroupsQuery({
     variables: {
       where: {
@@ -219,6 +260,26 @@ const useDiscImport = (): Return => {
     },
   });
 
+  useEffect(() => {
+    mappingForm.setFieldsValue({
+      areas: areas.map((area) => ({
+        area,
+        group: groupsData?.groups[0]?.id || undefined,
+        key: area,
+      })),
+    });
+  }, [areas]);
+
+  useEffect(() => {
+    mappingForm.setFieldsValue({
+      galleries: galleries.map((gallery) => ({
+        gallery,
+        group: undefined,
+        key: gallery,
+      })),
+    });
+  }, [galleries]);
+
   const [importData] = useDiscImportDataMutation();
 
   const toggleMemberModal = () => setMemberModalOpen(!memberModalOpen);
@@ -229,35 +290,46 @@ const useDiscImport = (): Return => {
   const toggleImageModal = () => setImageModalOpen(!imageModalOpen);
 
   const onKnownSubjectFileLoaded = (data: CSVData) => {
-    setKnownSubjects(
-      data
-        .map((item) => ({
-          workspaceId: item[0],
-          workspaceName: item[1],
-          memberEmail: item[2],
-          id: item[3],
-          firstName: item[4],
-          lastName: item[5],
-          nicknames: item[6],
-          gender: item[7],
-          dateOfBirth: item[8],
-          prohibitions: item[9]?.replace(/(<([^>]+)>)/gi, ''),
-          icCodes: item[10],
-          ageRange: item[11],
-          height: item[12],
-          build: item[13],
-          distinguishingFeatures: item[14],
-          comments: item[15],
-          address: item[16],
-          postcode: item[17],
-          incidentCount: item[18],
-          dateAdded: item[19],
-          databaseDeletionDate: item[20],
-          galleryStatus: item[21],
-        }))
-        .filter((item) => item.workspaceId !== 'Workspace Id')
-        .filter((item) => item.workspaceId !== '')
-    );
+    const knownSubjectData = data
+      .map((item) => ({
+        workspaceId: item[0],
+        workspaceName: item[1],
+        memberEmail: item[2],
+        id: item[3],
+        firstName: item[4],
+        lastName: item[5],
+        nicknames: item[6],
+        gender: item[7],
+        dateOfBirth: item[8],
+        prohibitions: item[9]?.replace(/(<([^>]+)>)/gi, ''),
+        icCodes: item[10],
+        ageRange: item[11],
+        height: item[12],
+        build: item[13],
+        distinguishingFeatures: item[14],
+        comments: item[15],
+        address: item[16],
+        postcode: item[17],
+        incidentCount: item[18],
+        dateAdded: item[19],
+        databaseDeletionDate: item[20],
+        galleryStatus: item[21],
+      }))
+      .filter((item) => item.workspaceId !== 'Workspace Id')
+      .filter((item) => item.workspaceId !== '');
+
+    const activeGalleries = [
+      ...new Set([
+        ...galleries,
+        ...knownSubjectData.flatMap((item) =>
+          item.galleryStatus.split('; ').map((value) => value.split(', ')[0])
+        ),
+      ]),
+    ].filter((area) => area !== '');
+
+    setGalleries(activeGalleries);
+
+    setKnownSubjects(knownSubjectData);
   };
 
   const onMembersFileLoaded = (data: CSVData) => {
@@ -270,6 +342,7 @@ const useDiscImport = (): Return => {
       placeOfWork: item[5],
       premises: item[6],
       categories: item[7],
+      areas: item[8],
       lastSignedIn: item[9],
     }));
     const filteredMembers = importedMembers
@@ -277,6 +350,11 @@ const useDiscImport = (): Return => {
       .filter((item) => item.id !== 'Member Id')
       .filter((item) => item.lastSignedIn);
 
+    const activeAreas = [
+      ...new Set(filteredMembers.flatMap((item) => item.areas.split(', '))),
+    ].filter((area) => area !== '');
+
+    setAreas(activeAreas);
     setMembers(filteredMembers);
     setBusinesses(
       filteredMembers.map((item) => ({
@@ -286,35 +364,46 @@ const useDiscImport = (): Return => {
   };
 
   const onIDSoughtFileLoaded = (data: CSVData) => {
-    setIdSought(
-      data
-        .map((item) => ({
-          workspaceId: item[0],
-          workspaceName: item[1],
-          memberEmail: item[2],
-          id: item[3],
-          firstName: item[4],
-          lastName: item[5],
-          nicknames: item[6],
-          gender: item[7],
-          dateOfBirth: item[8],
-          prohibitions: item[9]?.replace(/(<([^>]+)>)/gi, ''),
-          icCodes: item[10],
-          ageRange: item[11],
-          height: item[12],
-          build: item[13],
-          distinguishingFeatures: item[14],
-          comments: item[15],
-          address: item[16],
-          postcode: item[17],
-          incidentCount: item[18],
-          dateAdded: item[19],
-          databaseDeletionDate: item[20],
-          galleryStatus: item[21],
-        }))
-        .filter((item) => item.workspaceId !== 'Workspace Id')
-        .filter((item) => item.workspaceId !== '')
-    );
+    const idSoughtData = data
+      .map((item) => ({
+        workspaceId: item[0],
+        workspaceName: item[1],
+        memberEmail: item[2],
+        id: item[3],
+        firstName: item[4],
+        lastName: item[5],
+        nicknames: item[6],
+        gender: item[7],
+        dateOfBirth: item[8],
+        prohibitions: item[9]?.replace(/(<([^>]+)>)/gi, ''),
+        icCodes: item[10],
+        ageRange: item[11],
+        height: item[12],
+        build: item[13],
+        distinguishingFeatures: item[14],
+        comments: item[15],
+        address: item[16],
+        postcode: item[17],
+        incidentCount: item[18],
+        dateAdded: item[19],
+        databaseDeletionDate: item[20],
+        galleryStatus: item[21],
+      }))
+      .filter((item) => item.workspaceId !== 'Workspace Id')
+      .filter((item) => item.workspaceId !== '');
+
+    const activeGalleries = [
+      ...new Set([
+        ...galleries,
+        ...idSoughtData.flatMap((item) =>
+          item.galleryStatus.split('; ').map((value) => value.split(', ')[0])
+        ),
+      ]),
+    ].filter((area) => area !== '');
+
+    setGalleries(activeGalleries);
+
+    setIdSought(idSoughtData);
   };
 
   const onIncidentFileLoaded = (data: CSVData) => {
@@ -587,7 +676,6 @@ const useDiscImport = (): Return => {
   const onGenerateData = async (values: GenerateData) => {
     setGenerating(true);
     const offenderData = [...knownSubjects, ...idSought];
-
     const newBusinessData = await Promise.all(
       businesses
         .filter(
@@ -596,6 +684,7 @@ const useDiscImport = (): Return => {
         )
         .map((business) => generateBusiness(business))
     );
+    const schemeGroupsIds = groupsData?.groups.map((group) => group.id) || [];
 
     const generateUser = (user: Member) =>
       new Promise<NewUser>((resolve) => {
@@ -606,10 +695,24 @@ const useDiscImport = (): Return => {
           )?.id,
           email: user.email,
           fullName: `${user.firstName} ${user.lastName}`,
-          groups: [...(values.defaultGroup || '')].filter(
-            (item) => item !== ''
-          ),
+          groups: [
+            ...(values.defaultGroup || ''),
+            ...schemeGroupsIds.filter((id) =>
+              user.areas
+                .split(', ')
+                .map(
+                  (area) =>
+                    values.areas.find((value) => value.area === area)?.group ||
+                    ''
+                )
+                .includes(id)
+            ),
+          ].filter((item) => item !== ''),
           role: undefined,
+          lastLogin: new Date(user.lastSignedIn),
+          existing:
+            usersData?.listUsers.users.find((item) => item.email === user.email)
+              ?.id || undefined,
         });
       });
 
@@ -637,9 +740,20 @@ const useDiscImport = (): Return => {
           peculiarities: offender.distinguishingFeatures,
           comments: offender.comments,
           age: calcAge(offender.ageRange),
-          groups: [...(values.defaultGroup || '')].filter(
-            (item) => item !== ''
-          ),
+          groups: [
+            ...(values.defaultGroup || ''),
+            ...schemeGroupsIds.filter((id) =>
+              offender.galleryStatus
+                .split('; ')
+                .map((value) => value.split(', ')[0])
+                .map(
+                  (gallery) =>
+                    values.galleries.find((value) => value.gallery === gallery)
+                      ?.group || ''
+                )
+                .includes(id)
+            ),
+          ].filter((item) => item !== ''),
         });
       });
 
@@ -992,6 +1106,9 @@ const useDiscImport = (): Return => {
           recoveredValue: Number(incident.lossRecovered),
           street: incident.address,
           postcode: incident.postcode,
+          business: newUserData.find(
+            (user) => user.email === incident.memberEmail
+          )?.business,
           crimeTypes: [
             ...new Set(
               [
@@ -1274,7 +1391,7 @@ const useDiscImport = (): Return => {
     setNewIncidents(filteredIncidents);
     setNewHistoricIncidents(filteredHistoricIncidents);
     setGenerating(false);
-    console.log(newHistoricIncidents);
+    setCurrentStep(2);
   };
 
   const onDeleteNewBusiness = (id: string) => {
@@ -1302,9 +1419,31 @@ const useDiscImport = (): Return => {
   };
 
   const onUpdateIncident = (data: NewIncident) => {
-    const index = newOffenders.map(({ id }) => id).indexOf(data.id);
+    const index = newIncidents.map(({ id }) => id).indexOf(data.id);
     setNewIncidents(
       update(newIncidents, {
+        [index]: {
+          $set: data,
+        },
+      })
+    );
+  };
+
+  const onUpdateBusiness = (data: NewBusiness) => {
+    const index = newOffenders.map(({ id }) => id).indexOf(data.id);
+    setNewBusinesses(
+      update(newBusinesses, {
+        [index]: {
+          $set: data,
+        },
+      })
+    );
+  };
+
+  const onUpdateUser = (data: NewUser) => {
+    const index = newUsers.map(({ id }) => id).indexOf(data.id);
+    setNewUsers(
+      update(newUsers, {
         [index]: {
           $set: data,
         },
@@ -1316,11 +1455,30 @@ const useDiscImport = (): Return => {
     importData({
       variables: {
         data: {
-          businesses: [],
+          businesses: newBusinesses.map((business) => ({
+            connect: business.existing
+              ? {
+                  id: business.existing,
+                  importId: business.id,
+                }
+              : undefined,
+            create: business.existing
+              ? undefined
+              : {
+                  importId: business.id,
+                  name: business.name,
+                  postcode: business.postcode,
+                  street: business.street,
+                  building: business.street,
+                  county: business.county,
+                  townCity: business.townCity,
+                },
+          })),
           historicIncidents: newHistoricIncidents.map((incident) => ({
             importId: incident.id,
             building: '',
             county: '',
+            business: incident.business ? { id: incident.business } : undefined,
             crimeTypes: [
               ...incident.crimeTypes,
               ...incident.impactTypes,
@@ -1389,7 +1547,28 @@ const useDiscImport = (): Return => {
           scheme: {
             id: schemeId,
           },
-          users: [],
+          users: newUsers.map((user) => ({
+            connect: user.existing
+              ? {
+                  id: user.existing,
+                  importId: user.id,
+                  role: user.role || Role.User,
+                  groups: user.groups.map((id) => ({ id })),
+                }
+              : undefined,
+            create: user.existing
+              ? undefined
+              : {
+                  business: {
+                    id: user.business as string,
+                  },
+                  email: user.email,
+                  fullName: user.fullName,
+                  importId: user.id,
+                  role: user.role || Role.User,
+                  groups: user.groups.map((id) => ({ id })),
+                },
+          })),
         },
       },
     });
@@ -1430,6 +1609,13 @@ const useDiscImport = (): Return => {
     onSubmit,
     onUpdateOffender,
     onUpdateIncident,
+    onUpdateBusiness,
+    onUpdateUser,
+    mappingForm,
+    areas,
+    galleries,
+    currentStep,
+    onStepChange: setCurrentStep,
   };
 };
 

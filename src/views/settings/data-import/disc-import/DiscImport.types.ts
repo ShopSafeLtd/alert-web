@@ -187,6 +187,7 @@ export interface Member {
   placeOfWork: string;
   premises: string;
   categories: string;
+  areas: string;
   lastSignedIn: string;
 }
 
@@ -209,6 +210,7 @@ export interface NewUser {
   business: string | undefined;
   groups: string[];
   existing?: string;
+  lastLogin?: Date;
 }
 
 export interface NewBusiness {
@@ -283,6 +285,7 @@ export interface HistoricIncident {
   crimeTypes: string[];
   impactTypes: string[];
   involvedTypes: string[];
+  business: string | undefined;
 }
 
 export interface GenerateData {
@@ -329,6 +332,16 @@ export interface GenerateData {
   otherBreachBan: string[];
   fareEvasion: string[];
   covidRelated: string[];
+  areas: {
+    key: string;
+    area: string;
+    group?: string;
+  }[];
+  galleries: {
+    key: string;
+    gallery: string;
+    group?: string;
+  }[];
 }
 
 export interface IncidentTags {

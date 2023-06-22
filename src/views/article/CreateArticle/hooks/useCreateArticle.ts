@@ -26,6 +26,7 @@ interface FormData {
   groups: string[];
   categories: string[];
   importance: ArticlePriority;
+  schemes: string[];
 }
 
 export type { FormData };
@@ -33,7 +34,7 @@ export type { FormData };
 const useCreateArticle = (): Props => {
   const siteUrl = `${window.location.href.split('/app/')[0]}`;
   const schemeId = useStoreState((state) => state.scheme.id);
-  const userId = useStoreState((state) => state.user.id);
+  const { schemes, id: userId } = useStoreState((state) => state.user);
   const [form] = useForm<FormData>();
   const [data] = useState<FormData>({
     title: '',
@@ -41,8 +42,10 @@ const useCreateArticle = (): Props => {
     groups: [],
     categories: [],
     importance: ArticlePriority.Normal,
+    schemes: [],
   });
 
+  const [selectedSchemes, setSelectedSchemes] = useState<string[]>([]);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const editorRef = useRef<Editor | null>(null);
 
@@ -63,12 +66,12 @@ const useCreateArticle = (): Props => {
   >([]);
 
   const navigate = useNavigate();
-  const { loading: groupsLoading } = useSchemeGroupsQuery({
+  const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
     variables: {
       where: {
         scheme: {
           id: {
-            equals: schemeId,
+            in: schemes?.map((scheme) => scheme?.scheme?.id || '') || [],
           },
         },
       },
@@ -77,7 +80,7 @@ const useCreateArticle = (): Props => {
     onCompleted: (result) => {
       const groupsFormatted = result.groups.map((group) => ({
         value: group.id,
-        label: group.name,
+        label: `${group.name} (${group.scheme.name})`,
       }));
       setGroups(groupsFormatted);
     },
@@ -130,6 +133,12 @@ const useCreateArticle = (): Props => {
 
   const onGroupsChange = (values: string[]) => {
     setSelectedGroups(values);
+    setSelectedSchemes(
+      groupsData?.groups
+        .filter((group) => values.includes(group.id))
+        .map((group) => group.scheme.id)
+        .filter((value, index, self) => self.indexOf(value) === index) || []
+    );
   };
 
   const categoriesChange = (values: { value: string }[]) => {
@@ -426,6 +435,7 @@ const useCreateArticle = (): Props => {
       editorRef.current?.getContent() || ''
     );
 
+    const submittedSchemes: string[] = selectedSchemes;
     await submitArticle({
       variables: {
         data: {
@@ -442,10 +452,19 @@ const useCreateArticle = (): Props => {
           htmlBody: htmlWithDefaultWidth || '',
           previewImage: img,
           previewText: text,
-          schemeId,
+          schemes:
+            submittedSchemes && submittedSchemes.length > 1
+              ? submittedSchemes.map((scheme) => scheme)
+              : [schemeId],
           priority,
-          incidents: incidents.map((incident) => incident.incident.id),
-          offenders: offenders.map((offender) => offender.id),
+          incidents:
+            submittedSchemes && submittedSchemes.length > 1
+              ? []
+              : incidents.map((incident) => incident.incident.id),
+          offenders:
+            submittedSchemes && submittedSchemes.length > 1
+              ? []
+              : offenders.map((offender) => offender.id),
           images: {
             upload:
               articleImages && articleImages.length > 0
@@ -509,25 +528,27 @@ const useCreateArticle = (): Props => {
   };
 
   const insertIncident = (incident: Incident) => {
-    setIncidents((prev) => [...prev, incident]);
-    // TODO: for some reason it ignores everything in the ${} but if you put just /app/offenders/view/${offender.id} it just returns offenders/view.. which makes no sense
-    editorRef.current?.insertContent(
-      `
+    if (selectedSchemes && selectedSchemes?.length <= 1) {
+      setIncidents((prev) => [...prev, incident]);
+      editorRef.current?.insertContent(
+        `
         <a target="_blank" rel="noopener noreferrer"  href="${siteUrl}/app/incidents/view/${incident.incident.id}">
         <b>${incident.incident.description}</b>
 </a>`,
-      { format: 'raw' }
-    );
+        { format: 'raw' }
+      );
+    }
   };
 
   const insertOffender = (offender: OffenderData) => {
-    setOffenders((prev) => [...prev, offender]);
-    // TODO: for some reason it ignores everything in the ${} but if you put just /app/offenders/view/${offender.id} it just returns offenders/view.. which makes no sense
-    const url = `${siteUrl}/app/offenders/view/${offender.id}`;
-    editorRef.current?.insertContent(
-      `<a target="_blank" rel="noopener noreferrer" href="${url}">       <b>${offender.name}</b></a>`,
-      { format: 'raw' }
-    );
+    if (selectedSchemes && selectedSchemes?.length <= 1) {
+      setOffenders((prev) => [...prev, offender]);
+      const url = `${siteUrl}/app/offenders/view/${offender.id}`;
+      editorRef.current?.insertContent(
+        `<a target="_blank" rel="noopener noreferrer" href="${url}">       <b>${offender.name}</b></a>`,
+        { format: 'raw' }
+      );
+    }
   };
 
   const removeOffender = (id: string) => {
@@ -571,6 +592,7 @@ const useCreateArticle = (): Props => {
     incidents,
     removeOffender,
     removeIncident,
+    selectedSchemes,
   };
 };
 
