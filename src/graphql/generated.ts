@@ -61011,6 +61011,7 @@ export type CreateGroupMutation = {
     description?: string | null;
     users: Array<{ __typename?: 'User'; id: string; fullName: string }>;
     approver: Array<{ __typename?: 'User'; id: string; fullName: string }>;
+    scheme: { __typename?: 'Scheme'; id: string; name: string };
   };
 };
 
@@ -71738,6 +71739,10 @@ export const CreateGroupDocument = gql`
       approver {
         id
         fullName
+      }
+      scheme {
+        id
+        name
       }
     }
   }
