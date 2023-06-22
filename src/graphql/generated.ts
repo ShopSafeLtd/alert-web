@@ -9751,9 +9751,8 @@ export type DeviceInfo = {
 };
 
 export type DiscImportBusinessesInput = {
-  connect: DiscImportConnectBusinessInput;
-  create: DiscImportCreateBusinessInput;
-  existing: DiscImportExistingBusinessInput;
+  connect?: InputMaybe<DiscImportConnectBusinessInput>;
+  create?: InputMaybe<DiscImportCreateBusinessInput>;
 };
 
 export type DiscImportConnectBusinessInput = {
@@ -9795,14 +9794,6 @@ export type DiscImportDataInput = {
   offenders: Array<DiscImportOffendersInput>;
   scheme: UniqueId;
   users: Array<DiscImportUsersInput>;
-};
-
-export type DiscImportExistingBusinessInput = {
-  importId: Scalars['String'];
-};
-
-export type DiscImportExistingUserInput = {
-  importId: Scalars['String'];
 };
 
 export type DiscImportHistoricIncidentsInput = {
@@ -9870,9 +9861,8 @@ export type DiscImportOffendersInput = {
 };
 
 export type DiscImportUsersInput = {
-  connect: DiscImportConnectUserInput;
-  create: DiscImportCreateUserInput;
-  existing: DiscImportExistingUserInput;
+  connect?: InputMaybe<DiscImportConnectUserInput>;
+  create?: InputMaybe<DiscImportCreateUserInput>;
 };
 
 export type Document = {
@@ -27842,6 +27832,7 @@ export type Notification = {
   title?: Maybe<Scalars['String']>;
   type?: Maybe<Model>;
   updatedAt: Scalars['DateTime'];
+  user?: Maybe<User>;
   userId?: Maybe<Scalars['String']>;
   vehicleId?: Maybe<Scalars['String']>;
 };
