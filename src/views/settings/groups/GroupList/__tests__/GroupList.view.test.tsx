@@ -5,14 +5,7 @@ import GroupList from '../GroupList.view';
 
 describe('List Officer View', () => {
   const data = {
-    groups: [
-      {
-        id: 'test',
-        name: 'test group',
-        description: null,
-        approver: [],
-      },
-    ],
+    groups: [],
   };
   it('renders the page', () => {
     const { getByText } = render(
