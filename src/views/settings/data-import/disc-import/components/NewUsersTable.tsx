@@ -5,6 +5,7 @@ import {
   Col,
   Form,
   Input,
+  Pagination,
   Popconfirm,
   Row,
   Select,
@@ -43,10 +44,17 @@ interface NewUserRowProps {
   newBusinesses: NewBusiness[];
   user: NewUser;
   onDelete: (id: string) => void;
+  onUpdateUser: (data: NewUser) => void;
 }
 
 const NewUserRow = React.memo(
-  ({ groupsData, newBusinesses, user, onDelete }: NewUserRowProps) => {
+  ({
+    groupsData,
+    newBusinesses,
+    user,
+    onDelete,
+    onUpdateUser,
+  }: NewUserRowProps) => {
     const [form] = Form.useForm<NewUser>();
     const currentSchemeId = useStoreState((state) => state.scheme.id);
     const [link, setLink] = useState(false);
@@ -82,6 +90,10 @@ const NewUserRow = React.memo(
         },
       },
     });
+
+    useEffect(() => {
+      if (user.existing) setLink(true);
+    }, []);
 
     useEffect(() => {
       form.setFieldsValue({
@@ -121,8 +133,7 @@ const NewUserRow = React.memo(
 
     const onBlur = async () => {
       const values = await form.validateFields();
-
-      console.log(values);
+      onUpdateUser({ ...user, ...values });
     };
 
     return (
@@ -141,7 +152,7 @@ const NewUserRow = React.memo(
               name="email"
               rules={[{ required: true, message: 'Enter an email' }]}
             >
-              <Input disabled={link} />
+              <Input onBlur={onBlur} disabled={link} />
             </Form.Item>
           </Col>
           <Col className={classes.cell} style={{ width: 160 }}>
@@ -152,6 +163,7 @@ const NewUserRow = React.memo(
               <Select
                 disabled={link}
                 style={{ width: 150 }}
+                onBlur={onBlur}
                 options={[
                   {
                     value: Role.User,
@@ -176,6 +188,7 @@ const NewUserRow = React.memo(
             >
               <Select
                 disabled={link}
+                onBlur={onBlur}
                 options={newBusinesses.map((item) => ({
                   value: item.id,
                   label: item.name,
@@ -190,6 +203,7 @@ const NewUserRow = React.memo(
             >
               <Select
                 disabled={link}
+                onBlur={onBlur}
                 options={groupsData?.groups?.map((item) => ({
                   value: item.id,
                   label: item.name,
@@ -215,6 +229,7 @@ const NewUserRow = React.memo(
                   >
                     <Select
                       style={{ width: 160 }}
+                      onBlur={onBlur}
                       options={data?.users.map((item) => ({
                         value: item.id,
                         label: item.fullName,
@@ -254,6 +269,7 @@ interface Props {
   onAdd: () => void;
   newUsers: NewUser[];
   newBusinesses: NewBusiness[];
+  onUpdateUser: (data: NewUser) => void;
 }
 
 const NewUsersTable = ({
@@ -261,8 +277,18 @@ const NewUsersTable = ({
   onAdd,
   newUsers,
   newBusinesses,
+  onUpdateUser,
 }: Props) => {
   const classes = useStyles();
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [activeUsers, setActiveUsers] = useState<NewUser[]>(
+    newUsers.slice(0, 10)
+  );
+
+  useEffect(() => {
+    setActiveUsers(newUsers.slice((currentPage - 1) * 10, 10 * currentPage));
+  }, [currentPage]);
 
   return (
     <Card
@@ -309,15 +335,24 @@ const NewUsersTable = ({
         </Col>
       </Row>
 
-      {newUsers.map((user) => (
+      {activeUsers.map((user) => (
         <NewUserRow
           key={user.id}
           user={user}
           newBusinesses={newBusinesses}
           groupsData={groupsData}
           onDelete={() => {}}
+          onUpdateUser={onUpdateUser}
         />
       ))}
+
+      <Pagination
+        current={currentPage}
+        onChange={setCurrentPage}
+        total={newUsers.length}
+        showTotal={(total) => `Total Users: ${total}`}
+        pageSizeOptions={[10]}
+      />
     </Card>
   );
 };

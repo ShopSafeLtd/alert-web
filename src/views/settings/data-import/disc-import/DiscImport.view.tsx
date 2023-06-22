@@ -1,6 +1,6 @@
 import React from 'react';
 import CSVReader from 'react-csv-reader';
-import type { UploadFile, UploadProps } from 'antd';
+import type { FormInstance, UploadFile, UploadProps } from 'antd';
 import {
   Select,
   Drawer,
@@ -14,6 +14,9 @@ import {
   Table,
   Typography,
   Upload,
+  Input,
+  Space,
+  Steps,
 } from 'antd';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -82,6 +85,13 @@ interface Props {
   onSubmit: () => void;
   onUpdateOffender: (data: NewOffender) => void;
   onUpdateIncident: (data: NewIncident) => void;
+  onUpdateBusiness: (data: NewBusiness) => void;
+  onUpdateUser: (data: NewUser) => void;
+  mappingForm: FormInstance<GenerateData>;
+  areas: string[];
+  galleries: string[];
+  currentStep: number;
+  onStepChange: (value: number) => void;
 }
 
 const DiscImport = ({
@@ -119,133 +129,926 @@ const DiscImport = ({
   onSubmit,
   onUpdateOffender,
   onUpdateIncident,
+  onUpdateBusiness,
+  onUpdateUser,
+  mappingForm,
+  areas,
+  galleries,
+  currentStep,
+  onStepChange,
 }: Props) => (
   <div style={{ padding: 20 }}>
-    <Card title="DISC Data">
-      <Row gutter={16}>
-        <Col>
-          <Title level={5}>Members CSV</Title>
-          <CSVReader onFileLoaded={onMembersFileLoaded} />
-        </Col>
-        <Col>
-          <Title level={5}>Known Subjects CSV</Title>
-          <CSVReader onFileLoaded={onKnownSubjectFileLoaded} />
-        </Col>
-        <Col>
-          <Title level={5}>ID Sought CSV</Title>
-          <CSVReader onFileLoaded={onIDSoughtFileLoaded} />
-        </Col>
-        <Col>
-          <Title level={5}>Incidents CSV</Title>
-          <CSVReader onFileLoaded={onIncidentFileLoaded} />
-        </Col>
-        <Col>
-          <Title level={5}>Images ZIP</Title>
-          <Upload
-            action="http://localhost:4000/import-zip"
-            fileList={fileList}
-            onChange={handleFileListChange}
-            accept=".zip"
-          >
-            <Button
-              icon={
-                <FontAwesomeIcon style={{ marginRight: 10 }} icon={faUpload} />
-              }
-            >
-              Click to Upload
-            </Button>
-          </Upload>
-        </Col>
-      </Row>
-    </Card>
+    <Steps
+      current={currentStep}
+      style={{ marginBottom: 20 }}
+      onChange={onStepChange}
+      items={[
+        {
+          title: 'DISC Data',
+        },
+        {
+          title: 'Import Settings',
+        },
+        {
+          title: 'Business',
+        },
+        {
+          title: 'Users',
+        },
+        {
+          title: 'Offenders',
+        },
+        {
+          title: 'Incidents',
+        },
+      ]}
+    />
 
-    <Row gutter={[16, 16]}>
-      <Col>
-        <Card
-          title="DISC Members"
-          onClick={toggleMemberModal}
-          style={{ cursor: 'pointer', margin: 0 }}
-          bodyStyle={{ padding: 10 }}
-          extra={
-            <Badge style={{ marginLeft: 10 }} showZero count={members.length} />
-          }
-        />
-      </Col>
-      <Col>
-        <Card
-          title="DISC Known Subjects"
-          style={{ cursor: 'pointer', margin: 0 }}
-          bodyStyle={{ padding: 10 }}
-          extra={
-            <Badge
-              style={{ marginLeft: 10 }}
-              showZero
-              count={knownSubjects.length}
-            />
-          }
-          onClick={toggleKnownSubjectModal}
-        />
-      </Col>
-      <Col>
-        <Card
-          title="DISC ID Sought"
-          style={{ cursor: 'pointer', margin: 0 }}
-          bodyStyle={{ padding: 10 }}
-          extra={
-            <Badge
-              style={{ marginLeft: 10 }}
-              showZero
-              count={idSought.length}
-            />
-          }
-          onClick={toggleIdSoughtModal}
-        />
-      </Col>
-      <Col>
-        <Card
-          title="DISC Incidents"
-          style={{ cursor: 'pointer', margin: 0 }}
-          bodyStyle={{ padding: 10 }}
-          extra={
-            <Badge
-              style={{ marginLeft: 10 }}
-              showZero
-              count={incidents.length}
-            />
-          }
-          onClick={toggleIncidentModal}
-        />
-      </Col>
-      <Col>
-        <Card
-          title="DISC Images"
-          style={{ cursor: 'pointer', margin: 0 }}
-          bodyStyle={{ padding: 10 }}
-          extra={
-            <Badge style={{ marginLeft: 10 }} showZero count={images.length} />
-          }
-          onClick={toggleImageModal}
-        />
-      </Col>
-    </Row>
-
-    <Card title="Import Settings" style={{ marginTop: 20 }}>
-      <Form
-        onFinish={onGenerateData}
-        initialValues={{ excludeDate: moment().add(-1, 'year') }}
-      >
-        <Row gutter={8}>
+    {currentStep === 0 && (
+      <Card title="DISC Data">
+        <Row gutter={16}>
           <Col>
-            <Form.Item
-              name="excludeDate"
-              label="Exclude data older than:"
-              required
-            >
-              <DatePicker format="DD/MM/YYYY" />
-            </Form.Item>
+            <Title level={5}>Members CSV</Title>
+            <CSVReader onFileLoaded={onMembersFileLoaded} />
           </Col>
           <Col>
-            <Form.Item name="defaultGroup" label="Default Group">
+            <Title level={5}>Known Subjects CSV</Title>
+            <CSVReader onFileLoaded={onKnownSubjectFileLoaded} />
+          </Col>
+          <Col>
+            <Title level={5}>ID Sought CSV</Title>
+            <CSVReader onFileLoaded={onIDSoughtFileLoaded} />
+          </Col>
+          <Col>
+            <Title level={5}>Incidents CSV</Title>
+            <CSVReader onFileLoaded={onIncidentFileLoaded} />
+          </Col>
+          <Col>
+            <Title level={5}>Images ZIP</Title>
+            <Upload
+              action="http://localhost:4000/import-zip"
+              fileList={fileList}
+              onChange={handleFileListChange}
+              accept=".zip"
+            >
+              <Button
+                icon={
+                  <FontAwesomeIcon
+                    style={{ marginRight: 10 }}
+                    icon={faUpload}
+                  />
+                }
+              >
+                Click to Upload
+              </Button>
+            </Upload>
+          </Col>
+        </Row>
+      </Card>
+    )}
+
+    {currentStep === 0 && (
+      <Row gutter={[16, 16]}>
+        <Col>
+          <Card
+            title="DISC Members"
+            onClick={toggleMemberModal}
+            style={{ cursor: 'pointer', margin: 0 }}
+            bodyStyle={{ padding: 10 }}
+            extra={
+              <Badge
+                style={{ marginLeft: 10 }}
+                showZero
+                count={members.length}
+              />
+            }
+          />
+        </Col>
+        <Col>
+          <Card
+            title="DISC Known Subjects"
+            style={{ cursor: 'pointer', margin: 0 }}
+            bodyStyle={{ padding: 10 }}
+            extra={
+              <Badge
+                style={{ marginLeft: 10 }}
+                showZero
+                count={knownSubjects.length}
+              />
+            }
+            onClick={toggleKnownSubjectModal}
+          />
+        </Col>
+        <Col>
+          <Card
+            title="DISC ID Sought"
+            style={{ cursor: 'pointer', margin: 0 }}
+            bodyStyle={{ padding: 10 }}
+            extra={
+              <Badge
+                style={{ marginLeft: 10 }}
+                showZero
+                count={idSought.length}
+              />
+            }
+            onClick={toggleIdSoughtModal}
+          />
+        </Col>
+        <Col>
+          <Card
+            title="DISC Incidents"
+            style={{ cursor: 'pointer', margin: 0 }}
+            bodyStyle={{ padding: 10 }}
+            extra={
+              <Badge
+                style={{ marginLeft: 10 }}
+                showZero
+                count={incidents.length}
+              />
+            }
+            onClick={toggleIncidentModal}
+          />
+        </Col>
+        <Col>
+          <Card
+            title="DISC Images"
+            style={{ cursor: 'pointer', margin: 0 }}
+            bodyStyle={{ padding: 10 }}
+            extra={
+              <Badge
+                style={{ marginLeft: 10 }}
+                showZero
+                count={images.length}
+              />
+            }
+            onClick={toggleImageModal}
+          />
+        </Col>
+      </Row>
+    )}
+
+    {currentStep === 1 && (
+      <Card title="Import Settings" style={{ marginTop: 20 }}>
+        <Form
+          form={mappingForm}
+          onFinish={onGenerateData}
+          initialValues={{ excludeDate: moment().add(-1, 'year') }}
+        >
+          <Row gutter={8}>
+            <Col>
+              <Form.Item
+                name="excludeDate"
+                label="Exclude data older than:"
+                required
+              >
+                <DatePicker format="DD/MM/YYYY" />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Title level={4}>Tag Mapping</Title>
+          <Row gutter={16}>
+            {activeTags.assaultViolenceAffray && (
+              <Col span={12}>
+                <Form.Item
+                  name="assaultViolenceAffray"
+                  label="Assault/Violence/Affray"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    mode="multiple"
+                    maxTagCount={2}
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.beggingPersistent && (
+              <Col span={12}>
+                <Form.Item
+                  name="beggingPersistent"
+                  label="Begging, persistent"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.begging && (
+              <Col span={12}>
+                <Form.Item
+                  name="begging"
+                  label="Begging"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.criminalDamageGraffitiVandalism && (
+              <Col span={12}>
+                <Form.Item
+                  name="criminalDamageGraffitiVandalism"
+                  label="Criminal Damage/Graffiti/Vandalism"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.possessionWithIntentToSupplyDrugs && (
+              <Col span={12}>
+                <Form.Item
+                  name="possessionWithIntentToSupplyDrugs"
+                  label="Possession with intent to supply drugs"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.harassmentThreateningBehaviour && (
+              <Col span={12}>
+                <Form.Item
+                  name="harassmentThreateningBehaviour"
+                  label="Harassment/Threatening Behaviour"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.joyRiding && (
+              <Col span={12}>
+                <Form.Item
+                  name="joyRiding"
+                  label="Joyriding"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.kerbCrawling && (
+              <Col span={12}>
+                <Form.Item
+                  name="kerbCrawling"
+                  label="Kerbcrawling"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.noiseNuisance && (
+              <Col span={12}>
+                <Form.Item
+                  name="noiseNuisance"
+                  label="Noise Nuisance"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.inappropriateSexualContact && (
+              <Col span={12}>
+                <Form.Item
+                  name="inappropriateSexualContact"
+                  label="Inappropriate sexual contact"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.racialAbuse && (
+              <Col span={12}>
+                <Form.Item
+                  name="racialAbuse"
+                  label="Racial Abuse"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.smokingUnderageOrInProhibitedArea && (
+              <Col span={12}>
+                <Form.Item
+                  name="smokingUnderageOrInProhibitedArea"
+                  label="Smoking, underage or in prohibited area"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.streetDrinking && (
+              <Col span={12}>
+                <Form.Item
+                  name="streetDrinking"
+                  label="Street drinking"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    mode="multiple"
+                    maxTagCount={2}
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.possessionOfDrugs && (
+              <Col span={12}>
+                <Form.Item
+                  name="possessionOfDrugs"
+                  label="Possession of Drugs"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.theft && (
+              <Col span={12}>
+                <Form.Item
+                  name="theft"
+                  label="Theft"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.verbalAbuse && (
+              <Col span={12}>
+                <Form.Item
+                  name="verbalAbuse"
+                  label="Verbal Abuse"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.beingOnPremisesWhilstBanned && (
+              <Col span={12}>
+                <Form.Item
+                  name="beingOnPremisesWhilstBanned"
+                  label="Being On Premises Whilst Banned"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.breachOfSection35Order && (
+              <Col span={12}>
+                <Form.Item
+                  name="breachOfSection35Order"
+                  label="Breach of Section 35 (was 27) Order"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.other && (
+              <Col span={12}>
+                <Form.Item
+                  name="other"
+                  label="Other"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.unlicensedTaxiCab && (
+              <Col span={12}>
+                <Form.Item
+                  name="unlicensedTaxiCab"
+                  label="Unlicensed Taxi Cab"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.unlicensedStreetTrading && (
+              <Col span={12}>
+                <Form.Item
+                  name="unlicensedStreetTrading"
+                  label="Unlicensed Street Trading"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.misuseOfID && (
+              <Col span={12}>
+                <Form.Item
+                  name="misuseOfID"
+                  label="Misuse of ID"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.underageIntoxication && (
+              <Col span={12}>
+                <Form.Item
+                  name="underageIntoxication"
+                  label="Underage Intoxication"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.goingEquippedToSteal && (
+              <Col span={12}>
+                <Form.Item
+                  name="goingEquippedToSteal"
+                  label="Going equipped to steal"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.hateCrime && (
+              <Col span={12}>
+                <Form.Item
+                  name="hateCrime"
+                  label="Hate Crime"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.roughSleeping && (
+              <Col span={12}>
+                <Form.Item
+                  name="roughSleeping"
+                  label="Rough Sleeping"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.breachOfBan && (
+              <Col span={12}>
+                <Form.Item
+                  name="breachOfBan"
+                  label="Breach of an order/ban etc"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.drunkenDisorderlyBehaviour && (
+              <Col span={12}>
+                <Form.Item
+                  name="drunkenDisorderlyBehaviour"
+                  label="Drunken and disorderly behaviour"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.possessionOfAnOffensiveWeapon && (
+              <Col span={12}>
+                <Form.Item
+                  name="possessionOfAnOffensiveWeapon"
+                  label="Possession of an offensive weapon"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.attemptedTheft && (
+              <Col span={12}>
+                <Form.Item
+                  name="attemptedTheft"
+                  label="Attempted theft"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.illegalGambling && (
+              <Col span={12}>
+                <Form.Item
+                  name="illegalGambling"
+                  label="Illegal gambling"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.robbery && (
+              <Col span={12}>
+                <Form.Item
+                  name="robbery"
+                  label="Robbery"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.section35Issued && (
+              <Col span={12}>
+                <Form.Item
+                  name="section35Issued"
+                  label="Section 35 issued"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.breachPoliceBail && (
+              <Col span={12}>
+                <Form.Item
+                  name="breachPoliceBail"
+                  label="Breach of Police bail"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.otherAlcoholDrugRelated && (
+              <Col span={12}>
+                <Form.Item
+                  name="otherAlcoholDrugRelated"
+                  label="Other Alcohol/Drug-related"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.otherAntiSocialBehaviour && (
+              <Col span={12}>
+                <Form.Item
+                  name="otherAntiSocialBehaviour"
+                  label="Other Anti-Social Behaviour"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.otherTheftFraud && (
+              <Col span={12}>
+                <Form.Item
+                  name="otherTheftFraud"
+                  label="Other Theft/Fraud"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.otherViolentOffensiveBehaviour && (
+              <Col span={12}>
+                <Form.Item
+                  name="otherViolentOffensiveBehaviour"
+                  label="Other Violent or offensive behaviour"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.otherBreachBan && (
+              <Col span={12}>
+                <Form.Item
+                  name="otherBreachBan"
+                  label="Other Breach of an order/ban etc"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.fareEvasion && (
+              <Col span={12}>
+                <Form.Item
+                  name="fareEvasion"
+                  label="Fare evasion"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {activeTags.covidRelated && (
+              <Col span={12}>
+                <Form.Item
+                  name="covidRelated"
+                  label="Covid-related"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    maxTagCount={2}
+                    mode="multiple"
+                    options={tagData?.tags.map((tag) => ({
+                      value: tag.id,
+                      label: `${tag.name} (${getTagText(tag.type)})`,
+                    }))}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+          </Row>
+
+          {areas.length === 0 && (
+            <Form.Item name="defaultUserGroup" label="Default User Group">
               <Select
                 mode="multiple"
                 style={{ width: 200 }}
@@ -255,798 +1058,193 @@ const DiscImport = ({
                 }))}
               />
             </Form.Item>
-          </Col>
-        </Row>
+          )}
+          {areas.length > 0 && (
+            <>
+              <Title level={4}>Area To User Group Mapping</Title>
+              <Form.List name="areas">
+                {(fields) => (
+                  <>
+                    {fields.map(({ key, name, ...restField }) => (
+                      <Space
+                        key={key}
+                        style={{ display: 'flex', marginBottom: 8 }}
+                        align="baseline"
+                      >
+                        <Form.Item
+                          // eslint-disable-next-line react/jsx-props-no-spreading
+                          {...restField}
+                          name={[name, 'area']}
+                          rules={[{ required: true, message: 'Missing Area' }]}
+                        >
+                          <Input readOnly placeholder="" />
+                        </Form.Item>
+                        <Form.Item
+                          // eslint-disable-next-line react/jsx-props-no-spreading
+                          {...restField}
+                          name={[name, 'group']}
+                          rules={[{ required: true, message: 'Missing group' }]}
+                        >
+                          <Select
+                            mode="multiple"
+                            style={{ width: 200 }}
+                            options={groupsData?.groups.map((group) => ({
+                              value: group.id,
+                              label: group.name,
+                            }))}
+                          />
+                        </Form.Item>
+                      </Space>
+                    ))}
+                  </>
+                )}
+              </Form.List>
+            </>
+          )}
 
-        <Title level={4}>Tag Mapping</Title>
-        <Row gutter={16}>
-          {activeTags.assaultViolenceAffray && (
-            <Col span={12}>
-              <Form.Item
-                name="assaultViolenceAffray"
-                label="Assault/Violence/Affray"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  mode="multiple"
-                  maxTagCount={2}
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
+          {galleries.length === 0 && (
+            <Form.Item
+              name="defaultOffenderGroup"
+              label="Default Offender Group"
+            >
+              <Select
+                mode="multiple"
+                style={{ width: 200 }}
+                options={groupsData?.groups.map((group) => ({
+                  value: group.id,
+                  label: group.name,
+                }))}
+              />
+            </Form.Item>
           )}
-          {activeTags.beggingPersistent && (
-            <Col span={12}>
-              <Form.Item
-                name="beggingPersistent"
-                label="Begging, persistent"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
+          {galleries.length > 0 && (
+            <>
+              <Title level={4}>Galleries To Offender Group Mapping</Title>
+              <Form.List name="galleries">
+                {(fields) => (
+                  <>
+                    {fields.map(({ key, name, ...restField }) => (
+                      <Space
+                        key={key}
+                        style={{ display: 'flex', marginBottom: 8 }}
+                        align="baseline"
+                      >
+                        <Form.Item
+                          // eslint-disable-next-line react/jsx-props-no-spreading
+                          {...restField}
+                          name={[name, 'gallery']}
+                          rules={[
+                            { required: true, message: 'Missing Gallery' },
+                          ]}
+                        >
+                          <Input readOnly placeholder="" />
+                        </Form.Item>
+                        <Form.Item
+                          // eslint-disable-next-line react/jsx-props-no-spreading
+                          {...restField}
+                          name={[name, 'group']}
+                          rules={[{ required: true, message: 'Missing group' }]}
+                        >
+                          <Select
+                            mode="multiple"
+                            style={{ width: 200 }}
+                            options={groupsData?.groups.map((group) => ({
+                              value: group.id,
+                              label: group.name,
+                            }))}
+                          />
+                        </Form.Item>
+                      </Space>
+                    ))}
+                  </>
+                )}
+              </Form.List>
+            </>
           )}
-          {activeTags.begging && (
-            <Col span={12}>
-              <Form.Item
-                name="begging"
-                label="Begging"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.criminalDamageGraffitiVandalism && (
-            <Col span={12}>
-              <Form.Item
-                name="criminalDamageGraffitiVandalism"
-                label="Criminal Damage/Graffiti/Vandalism"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.possessionWithIntentToSupplyDrugs && (
-            <Col span={12}>
-              <Form.Item
-                name="possessionWithIntentToSupplyDrugs"
-                label="Possession with intent to supply drugs"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.harassmentThreateningBehaviour && (
-            <Col span={12}>
-              <Form.Item
-                name="harassmentThreateningBehaviour"
-                label="Harassment/Threatening Behaviour"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.joyRiding && (
-            <Col span={12}>
-              <Form.Item
-                name="joyRiding"
-                label="Joyriding"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.kerbCrawling && (
-            <Col span={12}>
-              <Form.Item
-                name="kerbCrawling"
-                label="Kerbcrawling"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.noiseNuisance && (
-            <Col span={12}>
-              <Form.Item
-                name="noiseNuisance"
-                label="Noise Nuisance"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.inappropriateSexualContact && (
-            <Col span={12}>
-              <Form.Item
-                name="inappropriateSexualContact"
-                label="Inappropriate sexual contact"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.racialAbuse && (
-            <Col span={12}>
-              <Form.Item
-                name="racialAbuse"
-                label="Racial Abuse"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.smokingUnderageOrInProhibitedArea && (
-            <Col span={12}>
-              <Form.Item
-                name="smokingUnderageOrInProhibitedArea"
-                label="Smoking, underage or in prohibited area"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.streetDrinking && (
-            <Col span={12}>
-              <Form.Item
-                name="streetDrinking"
-                label="Street drinking"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  mode="multiple"
-                  maxTagCount={2}
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.possessionOfDrugs && (
-            <Col span={12}>
-              <Form.Item
-                name="possessionOfDrugs"
-                label="Possession of Drugs"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.theft && (
-            <Col span={12}>
-              <Form.Item
-                name="theft"
-                label="Theft"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.verbalAbuse && (
-            <Col span={12}>
-              <Form.Item
-                name="verbalAbuse"
-                label="Verbal Abuse"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.beingOnPremisesWhilstBanned && (
-            <Col span={12}>
-              <Form.Item
-                name="beingOnPremisesWhilstBanned"
-                label="Being On Premises Whilst Banned"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.breachOfSection35Order && (
-            <Col span={12}>
-              <Form.Item
-                name="breachOfSection35Order"
-                label="Breach of Section 35 (was 27) Order"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.other && (
-            <Col span={12}>
-              <Form.Item
-                name="other"
-                label="Other"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.unlicensedTaxiCab && (
-            <Col span={12}>
-              <Form.Item
-                name="unlicensedTaxiCab"
-                label="Unlicensed Taxi Cab"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.unlicensedStreetTrading && (
-            <Col span={12}>
-              <Form.Item
-                name="unlicensedStreetTrading"
-                label="Unlicensed Street Trading"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.misuseOfID && (
-            <Col span={12}>
-              <Form.Item
-                name="misuseOfID"
-                label="Misuse of ID"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.underageIntoxication && (
-            <Col span={12}>
-              <Form.Item
-                name="underageIntoxication"
-                label="Underage Intoxication"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.goingEquippedToSteal && (
-            <Col span={12}>
-              <Form.Item
-                name="goingEquippedToSteal"
-                label="Going equipped to steal"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.hateCrime && (
-            <Col span={12}>
-              <Form.Item
-                name="hateCrime"
-                label="Hate Crime"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.roughSleeping && (
-            <Col span={12}>
-              <Form.Item
-                name="roughSleeping"
-                label="Rough Sleeping"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.breachOfBan && (
-            <Col span={12}>
-              <Form.Item
-                name="breachOfBan"
-                label="Breach of an order/ban etc"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.drunkenDisorderlyBehaviour && (
-            <Col span={12}>
-              <Form.Item
-                name="drunkenDisorderlyBehaviour"
-                label="Drunken and disorderly behaviour"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.possessionOfAnOffensiveWeapon && (
-            <Col span={12}>
-              <Form.Item
-                name="possessionOfAnOffensiveWeapon"
-                label="Possession of an offensive weapon"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.attemptedTheft && (
-            <Col span={12}>
-              <Form.Item
-                name="attemptedTheft"
-                label="Attempted theft"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.illegalGambling && (
-            <Col span={12}>
-              <Form.Item
-                name="illegalGambling"
-                label="Illegal gambling"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.robbery && (
-            <Col span={12}>
-              <Form.Item
-                name="robbery"
-                label="Robbery"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.section35Issued && (
-            <Col span={12}>
-              <Form.Item
-                name="section35Issued"
-                label="Section 35 issued"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.breachPoliceBail && (
-            <Col span={12}>
-              <Form.Item
-                name="breachPoliceBail"
-                label="Breach of Police bail"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.otherAlcoholDrugRelated && (
-            <Col span={12}>
-              <Form.Item
-                name="otherAlcoholDrugRelated"
-                label="Other Alcohol/Drug-related"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.otherAntiSocialBehaviour && (
-            <Col span={12}>
-              <Form.Item
-                name="otherAntiSocialBehaviour"
-                label="Other Anti-Social Behaviour"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.otherTheftFraud && (
-            <Col span={12}>
-              <Form.Item
-                name="otherTheftFraud"
-                label="Other Theft/Fraud"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.otherViolentOffensiveBehaviour && (
-            <Col span={12}>
-              <Form.Item
-                name="otherViolentOffensiveBehaviour"
-                label="Other Violent or offensive behaviour"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.otherBreachBan && (
-            <Col span={12}>
-              <Form.Item
-                name="otherBreachBan"
-                label="Other Breach of an order/ban etc"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.fareEvasion && (
-            <Col span={12}>
-              <Form.Item
-                name="fareEvasion"
-                label="Fare evasion"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-          {activeTags.covidRelated && (
-            <Col span={12}>
-              <Form.Item
-                name="covidRelated"
-                label="Covid-related"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  maxTagCount={2}
-                  mode="multiple"
-                  options={tagData?.tags.map((tag) => ({
-                    value: tag.id,
-                    label: `${tag.name} (${getTagText(tag.type)})`,
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          )}
-        </Row>
-        <Form.Item>
-          <Row style={{ width: '100%' }} justify="end">
-            <Col>
-              <Button
-                htmlType="submit"
-                type="primary"
-                loading={generating}
-                disabled={generating}
-              >
-                Generate Alert Data
-              </Button>
-            </Col>
-          </Row>
-        </Form.Item>
-      </Form>
-    </Card>
 
-    <NewBusinessTable
-      newBusinesses={newBusinesses}
-      onAdd={() => {}}
-      onDelete={onDeleteNewBusiness}
-    />
+          <Form.Item>
+            <Row gutter={8} style={{ width: '100%' }} justify="end">
+              <Col>
+                <Button onClick={() => onStepChange(currentStep - 1)}>
+                  Back
+                </Button>
+              </Col>
+              <Col>
+                <Button
+                  htmlType="submit"
+                  type="primary"
+                  loading={generating}
+                  disabled={generating}
+                >
+                  Generate Alert Data
+                </Button>
+              </Col>
+            </Row>
+          </Form.Item>
+        </Form>
+      </Card>
+    )}
 
-    <NewUsersTable
-      groupsData={groupsData}
-      newBusinesses={newBusinesses}
-      newUsers={newUsers}
-      onAdd={() => {}}
-    />
+    {currentStep === 2 && (
+      <NewBusinessTable
+        newBusinesses={newBusinesses}
+        onAdd={() => {}}
+        onDelete={onDeleteNewBusiness}
+        onUpdateBusiness={onUpdateBusiness}
+      />
+    )}
 
-    <NewOffenderTable
-      newOffenders={newOffenders}
-      onAdd={() => {}}
-      groupsData={groupsData}
-      onUpdateOffender={onUpdateOffender}
-    />
+    {currentStep === 3 && (
+      <NewUsersTable
+        groupsData={groupsData}
+        newBusinesses={newBusinesses}
+        newUsers={newUsers}
+        onAdd={() => {}}
+        onUpdateUser={onUpdateUser}
+      />
+    )}
 
-    <NewIncidentTable
-      newIncidents={newIncidents}
-      onAdd={() => {}}
-      groupsData={groupsData}
-      tagsData={tagData}
-      newOffenders={newOffenders}
-      newBusinesses={newBusinesses}
-      newUsers={newUsers}
-      onUpdateIncident={onUpdateIncident}
-    />
+    {currentStep === 4 && (
+      <NewOffenderTable
+        newOffenders={newOffenders}
+        onAdd={() => {}}
+        groupsData={groupsData}
+        onUpdateOffender={onUpdateOffender}
+      />
+    )}
 
-    <Button onClick={onSubmit}>Submit</Button>
+    {currentStep === 5 && (
+      <NewIncidentTable
+        newIncidents={newIncidents}
+        onAdd={() => {}}
+        groupsData={groupsData}
+        tagsData={tagData}
+        newOffenders={newOffenders}
+        newBusinesses={newBusinesses}
+        newUsers={newUsers}
+        onUpdateIncident={onUpdateIncident}
+      />
+    )}
+
+    <Row gutter={8} style={{ marginTop: 20 }} justify="end">
+      {[2, 3, 4].includes(currentStep) && (
+        <Col>
+          <Button onClick={() => onStepChange(currentStep - 1)}>Back</Button>
+        </Col>
+      )}
+      {[0, 2, 3, 4].includes(currentStep) && (
+        <Col>
+          <Button onClick={() => onStepChange(currentStep + 1)} type="primary">
+            Next
+          </Button>
+        </Col>
+      )}
+      {currentStep === 5 && (
+        <Col>
+          <Button onClick={onSubmit}>Submit</Button>
+        </Col>
+      )}
+    </Row>
 
     <Drawer
       open={memberModalOpen}

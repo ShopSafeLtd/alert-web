@@ -5,6 +5,7 @@ import {
   Col,
   Form,
   Input,
+  Pagination,
   Popconfirm,
   Row,
   Select,
@@ -40,10 +41,11 @@ const useStyles = createUseStyles(() => ({
 interface NewBusinessRowProps {
   business: NewBusiness;
   onDelete: (id: string) => void;
+  onUpdateBusiness: (data: NewBusiness) => void;
 }
 
 const NewBusinessRow = React.memo(
-  ({ business, onDelete }: NewBusinessRowProps) => {
+  ({ business, onDelete, onUpdateBusiness }: NewBusinessRowProps) => {
     const [form] = Form.useForm<NewBusiness>();
     const [link, setLink] = useState(false);
     const currentSchemeId = useStoreState((state) => state.scheme.id);
@@ -70,6 +72,11 @@ const NewBusinessRow = React.memo(
       });
       form.validateFields();
     }, [business]);
+
+    const onBlur = () => {
+      const values = form.getFieldsValue();
+      onUpdateBusiness({ ...business, ...values });
+    };
 
     const onValuesChange = (changedValues: NewBusiness) => {
       if (changedValues.existing) {
@@ -103,12 +110,12 @@ const NewBusinessRow = React.memo(
               name="name"
               rules={[{ required: true, message: 'Enter a name' }]}
             >
-              <Input readOnly={link} />
+              <Input onBlur={onBlur} readOnly={link} />
             </Form.Item>
           </Col>
           <Col span={3} className={classes.cell}>
             <Form.Item name="building">
-              <Input readOnly={link} />
+              <Input onBlur={onBlur} readOnly={link} />
             </Form.Item>
           </Col>
           <Col span={3} className={classes.cell} style={{ maxWidth: 200 }}>
@@ -116,7 +123,7 @@ const NewBusinessRow = React.memo(
               name="street"
               rules={[{ required: true, message: 'Enter a street' }]}
             >
-              <Input readOnly={link} />
+              <Input onBlur={onBlur} readOnly={link} />
             </Form.Item>
           </Col>
           <Col span={3} className={classes.cell} style={{ maxWidth: 250 }}>
@@ -124,12 +131,12 @@ const NewBusinessRow = React.memo(
               name="townCity"
               rules={[{ required: true, message: 'Enter a business' }]}
             >
-              <Input readOnly={link} />
+              <Input onBlur={onBlur} readOnly={link} />
             </Form.Item>
           </Col>
           <Col span={3} className={classes.cell} style={{ maxWidth: 250 }}>
             <Form.Item name="county">
-              <Input readOnly={link} />
+              <Input onBlur={onBlur} readOnly={link} />
             </Form.Item>
           </Col>
           <Col span={2} className={classes.cell} style={{ maxWidth: 250 }}>
@@ -137,7 +144,7 @@ const NewBusinessRow = React.memo(
               name="postcode"
               rules={[{ required: true, message: 'Enter a postcode' }]}
             >
-              <Input readOnly={link} />
+              <Input onBlur={onBlur} readOnly={link} />
             </Form.Item>
           </Col>
           <Col>
@@ -161,6 +168,7 @@ const NewBusinessRow = React.memo(
                         value: item.id,
                         label: item.name,
                       }))}
+                      onBlur={onBlur}
                     />
                   </Form.Item>
                 </Col>
@@ -195,10 +203,27 @@ interface Props {
   onAdd: () => void;
   onDelete: (id: string) => void;
   newBusinesses: NewBusiness[];
+  onUpdateBusiness: (data: NewBusiness) => void;
 }
 
-const NewBusinessTable = ({ onAdd, newBusinesses, onDelete }: Props) => {
+const NewBusinessTable = ({
+  onAdd,
+  newBusinesses,
+  onDelete,
+  onUpdateBusiness,
+}: Props) => {
   const classes = useStyles();
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [activeIncidents, setActiveIncidents] = useState<NewBusiness[]>(
+    newBusinesses.slice(0, 10)
+  );
+
+  useEffect(() => {
+    setActiveIncidents(
+      newBusinesses.slice((currentPage - 1) * 10, 10 * currentPage)
+    );
+  }, [currentPage]);
 
   return (
     <Card
@@ -250,13 +275,22 @@ const NewBusinessTable = ({ onAdd, newBusinesses, onDelete }: Props) => {
         </Col>
       </Row>
 
-      {newBusinesses.map((business) => (
+      {activeIncidents.map((business) => (
         <NewBusinessRow
           key={business.id}
           business={business}
           onDelete={onDelete}
+          onUpdateBusiness={onUpdateBusiness}
         />
       ))}
+
+      <Pagination
+        current={currentPage}
+        onChange={setCurrentPage}
+        total={newBusinesses.length}
+        showTotal={(total) => `Total Businesses: ${total}`}
+        pageSizeOptions={[10]}
+      />
     </Card>
   );
 };

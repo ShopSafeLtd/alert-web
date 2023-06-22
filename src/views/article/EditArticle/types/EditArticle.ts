@@ -36,6 +36,7 @@ export interface Props {
   data: FormData;
   loading: boolean;
   fileList: UploadFile[];
+  selectedSchemes: string[];
   documentUploadProps: UploadProps;
   insertOffender: (offender: OffenderData) => void;
   insertIncident: (value: Incident) => void;

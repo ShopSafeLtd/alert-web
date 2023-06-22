@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Badge, Grid, Menu, Typography } from 'antd';
+import { Badge, Button, Col, Drawer, Grid, Menu, Row, Typography } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { NavItem } from 'configs/NavigationConfig';
 import navConfig, { BadgeTypes } from 'configs/NavigationConfig';
@@ -12,6 +12,24 @@ import NavScheme from './NavScheme';
 import NavProfile from './NavProfile';
 import Logo from './Logo';
 import IntlMessage from '../../../util-components/AntD/IntlMessage';
+import { faBell } from '@fortawesome/pro-light-svg-icons';
+import { createUseStyles } from 'react-jss';
+import { Theme } from 'configs/ThemeConfig';
+import NotificationsDrawer from 'components/notifications/NotificationsDrawer/NotificationDrawer.container';
+import { useUserNotificationsQuery } from 'graphql/generated';
+
+const useStyles = createUseStyles((theme: Theme) => ({
+  notificationCol: {
+    borderBottom: `1px solid ${theme.borderColor}`,
+    cursor: 'pointer',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    '&:hover': {
+      backgroundColor: theme.hoverBackground,
+    },
+  },
+}));
 
 const { SubMenu } = Menu;
 const { useBreakpoint } = Grid;
@@ -79,6 +97,8 @@ const getLogo = (props: GetLogoArgs) => {
 };
 
 const SideNavContent = (props: SideNavContentProps) => {
+  const classes = useStyles();
+
   const {
     sideNavTheme,
     routeInfo,
@@ -88,14 +108,32 @@ const SideNavContent = (props: SideNavContentProps) => {
     todos,
     notifications,
   } = props;
+
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
+  const userRole = useStoreState((state) => state.user.role);
+  const userId = useStoreState((state) => state.user.id);
+
+  const variables = {
+    where: {
+      id: userId,
+    },
+  };
+
+  const { data } = useUserNotificationsQuery({
+    fetchPolicy: 'cache-and-network',
+    variables,
+  });
+
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+
+  const toggleNotificationOpen = () => setNotificationsOpen(!notificationsOpen);
+
   const isMobile = !utils.getBreakPoint(useBreakpoint()).includes('lg');
   const closeMobileNav = () => {
     if (isMobile) {
       onMobileNavToggle(false);
     }
   };
-  const userRole = useStoreState((state) => state.user.role);
   const navigationConfig = navConfig.filter((el) =>
     el.roles?.includes(userRole)
   );
@@ -200,7 +238,24 @@ const SideNavContent = (props: SideNavContentProps) => {
         )}
       </Menu>
       <NavScheme />
-      <NavProfile />
+      <Row style={{ width: '100%' }}>
+        <Col span={12}>
+          <NavProfile />
+        </Col>
+        <Col
+          span={12}
+          className={classes.notificationCol}
+          onClick={toggleNotificationOpen}
+        >
+          <Badge
+            offset={[8, 0]}
+            size="small"
+            count={data?.user?.totalUnreadNotifications}
+          >
+            <FontAwesomeIcon size="xl" icon={faBell} />
+          </Badge>
+        </Col>
+      </Row>
       {customLogo && (
         <img
           src={getLogo({
@@ -208,7 +263,12 @@ const SideNavContent = (props: SideNavContentProps) => {
             navCollapsed: false,
           })}
           alt={`${APP_NAME} logo`}
-          style={{ width: 80, marginLeft: 10, marginTop: 10 }}
+          style={{
+            width: 100,
+            marginLeft: 20,
+            marginTop: 15,
+            marginBottom: 10,
+          }}
         />
       )}
       <Typography.Text
@@ -225,6 +285,18 @@ const SideNavContent = (props: SideNavContentProps) => {
         <span className="font-weight-semibold"> {`${APP_NAME}`} </span>
         All rights reserved.
       </Typography.Text>
+
+      <Drawer
+        title="Notifications"
+        width={600}
+        onClose={toggleNotificationOpen}
+        open={notificationsOpen}
+        bodyStyle={{ padding: 0, colorScheme: currentTheme }}
+      >
+        {notificationsOpen && (
+          <NotificationsDrawer onClose={toggleNotificationOpen} />
+        )}
+      </Drawer>
     </div>
   );
 };
@@ -291,7 +363,13 @@ const TopNavContent = (props: TopNavContentProps) => {
           <Menu.Item key={menu.key}>
             {menu.icon ? <Icon icon={menu?.icon} /> : null}
             {menu.badge ? (
-              <Badge offset={[8, 0]} size="small" count={0} showZero>
+              <Badge
+                style={{ height: 20, padding: 3 }}
+                offset={[8, 0]}
+                size="small"
+                count={0}
+                showZero
+              >
                 <span>{setLocale(localization, menu?.title)}</span>
               </Badge>
             ) : (

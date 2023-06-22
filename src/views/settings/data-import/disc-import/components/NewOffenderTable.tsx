@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   Card,
@@ -6,6 +6,7 @@ import {
   DatePicker,
   Form,
   Input,
+  Pagination,
   Popconfirm,
   Row,
   Select,
@@ -328,25 +329,45 @@ const NewOffenderTable = ({
   newOffenders,
   groupsData,
   onUpdateOffender,
-}: Props) => (
-  <Card
-    title={`Offenders (${newOffenders.length})`}
-    extra={
-      <Button type="primary" style={{ marginBottom: 16 }} onClick={onAdd}>
-        Add Offender
-      </Button>
-    }
-  >
-    {newOffenders.map((offender) => (
-      <NewOffenderRow
-        key={offender.id}
-        offender={offender}
-        onDelete={() => {}}
-        groupsData={groupsData}
-        onUpdateOffender={onUpdateOffender}
+}: Props) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [activeOffenders, setActiveOffenders] = useState<NewOffender[]>(
+    newOffenders.slice(0, 10)
+  );
+
+  useEffect(() => {
+    setActiveOffenders(
+      newOffenders.slice((currentPage - 1) * 10, 10 * currentPage)
+    );
+  }, [currentPage]);
+
+  return (
+    <Card
+      title={`Offenders (${newOffenders.length})`}
+      extra={
+        <Button type="primary" style={{ marginBottom: 16 }} onClick={onAdd}>
+          Add Offender
+        </Button>
+      }
+    >
+      {activeOffenders.map((offender) => (
+        <NewOffenderRow
+          key={offender.id}
+          offender={offender}
+          onDelete={() => {}}
+          groupsData={groupsData}
+          onUpdateOffender={onUpdateOffender}
+        />
+      ))}
+      <Pagination
+        current={currentPage}
+        onChange={setCurrentPage}
+        total={newOffenders.length}
+        showTotal={(total) => `Total Offenders: ${total}`}
+        pageSizeOptions={[10]}
       />
-    ))}
-  </Card>
-);
+    </Card>
+  );
+};
 
 export default React.memo(NewOffenderTable);

@@ -914,6 +914,7 @@ const useEditIncident = (): Return => {
                         policeImage: item.policeImage,
                       }))
                       .filter((object) => object.url !== undefined)
+                      .filter((object) => object.url.url !== undefined)
                   : undefined,
             },
             location: getLocation(),

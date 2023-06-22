@@ -6,6 +6,10 @@ query schemeGroups(
     id
     name
     description
+    scheme {
+      id
+      name
+    }
     approver {
       id
       fullName

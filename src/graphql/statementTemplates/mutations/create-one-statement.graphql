@@ -1,0 +1,6 @@
+mutation CreateOneStatementTemplate($data: StatementTemplateCreateInput!) {
+  createOneStatementTemplate(data: $data) {
+    id
+    name
+  }
+}
