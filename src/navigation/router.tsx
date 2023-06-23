@@ -19,7 +19,7 @@ import { GuestLayout } from '../layouts/guest-layout';
 
 const SentryRoutes = withSentryReactRouterV6Routing(Routes);
 
-export const Views = (): JSX.Element => {
+const Views = () => {
   const { isLoading } = useAuth0();
   const location = useLocation();
   const currentRoute = location.pathname;
@@ -29,11 +29,18 @@ export const Views = (): JSX.Element => {
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
   const t = localStorage.getItem('theme');
   const switchTheme = useStoreActions((actions) => actions.theme.switchTheme);
-  if (!t) {
+  if (t) {
+    document.documentElement.setAttribute('style', `color-scheme: ${t}`);
+  } else {
     // get browser theme preference
     const darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
     localStorage.setItem('theme', darkMode ? 'dark' : 'light');
     switchTheme(darkMode ? 'dark' : 'light');
+    // set color-scheme: dark or light on the html element
+    document.documentElement.setAttribute(
+      'style',
+      `color-scheme: ${darkMode ? 'dark' : 'light'}`
+    );
   }
 
   const isSet = useStoreState((state) => state.auth.isSet);
@@ -45,24 +52,7 @@ export const Views = (): JSX.Element => {
 
   useEffect(() => {
     if (!guestRoute) rehydrateAuth();
-    // eslint-disable-next-line
   }, []);
-
-  // // useEffect(() => {
-  // //   const newUserIdCheck = location?.pathname?.split('/onboarding/')[1] || '';
-  // //   if (newUserIdCheck !== 'password') {
-  // //     setNewUserId(newUserIdCheck);
-  // //   }
-  // // }, []);
-  // useEffect(() => {
-  //   if (!isLoading) {
-  //     const newUserIdCheck = location?.pathname?.split('/onboarding/')[1] || '';
-  //
-  //     if (newUserIdCheck !== 'password') {
-  //       setNewUserId(newUserIdCheck);
-  //     }
-  //   }
-  // }, [isLoading]);
 
   const { data } = useUserNewQuery({
     fetchPolicy: 'network-only',
@@ -76,9 +66,12 @@ export const Views = (): JSX.Element => {
       }
     },
   });
-  if ((loading || isLoading || !isSet) && !guestRoute) return <Loading />;
 
-  if (guestRoute)
+  if ((loading || isLoading || !isSet) && !guestRoute) {
+    return <Loading />;
+  }
+
+  if (guestRoute) {
     return (
       <div style={{ colorScheme: currentTheme }}>
         <ThemeProvider theme={theme[currentTheme]}>
@@ -88,9 +81,11 @@ export const Views = (): JSX.Element => {
         </ThemeProvider>
       </div>
     );
+  }
+
   return (
-    <ErrorBoundary>
-      <div style={{ colorScheme: currentTheme }}>
+    <div style={{ colorScheme: currentTheme }}>
+      <ErrorBoundary>
         <ThemeProvider theme={theme[currentTheme]}>
           <IntlProvider
             locale={currentAppLocale.locale}
@@ -119,8 +114,8 @@ export const Views = (): JSX.Element => {
             </ConfigProvider>
           </IntlProvider>
         </ThemeProvider>
-      </div>
-    </ErrorBoundary>
+      </ErrorBoundary>
+    </div>
   );
 };
 

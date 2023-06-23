@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-  Avatar,
-  Button,
-  Col,
-  Dropdown,
-  Menu,
-  Row,
-  Switch,
-  Typography,
-} from 'antd';
+import { Avatar, Col, Dropdown, Menu, Row, Switch, Typography } from 'antd';
 import { LogoutOutlined } from '@ant-design/icons';
 import { useStoreActions, useStoreState } from 'state';
 import { useAuth } from 'hooks';
@@ -170,7 +161,10 @@ export const NavProfile = () => {
                         LocalStorageKeys.theme,
                         value ? 'dark' : 'light'
                       );
-
+                      document.documentElement.setAttribute(
+                        'style',
+                        `color-scheme: ${value ? 'dark' : 'light'}`
+                      );
                       switcher({ theme: value ? themes.dark : themes.light });
                     }}
                   />
