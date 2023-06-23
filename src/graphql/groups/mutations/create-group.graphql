@@ -11,5 +11,9 @@ mutation createGroup($data: GroupCreateInput!) {
       id
       fullName
     }
+    scheme {
+      id
+      name
+    }
   }
 }
