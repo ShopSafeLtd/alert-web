@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Avatar,
   Button,
   Card,
   Checkbox,
@@ -13,6 +14,7 @@ import {
   Row,
   Skeleton,
   Table,
+  Tooltip,
 } from 'antd';
 import type { CreateTodoMutation, ListTodosQuery } from 'graphql/generated';
 import moment from 'moment';
@@ -118,9 +120,7 @@ const AdminTodos = ({
               description: todo?.description,
               dueDate: todo.dueDate,
               completed: todo.completed,
-              assignedUsers: todo.assignedUsers.map(({ fullName }, index) =>
-                index === 0 ? `${fullName}` : `, ${fullName}`
-              ),
+              assignedUsers: todo.assignedUsers,
               todo,
             }))}
             // onRow={(record) =>
@@ -184,6 +184,26 @@ const AdminTodos = ({
                 dataIndex: 'assignedUsers',
                 title: 'Assigned Users',
                 ellipsis: true,
+                render: (value: { id: string; fullName: string }[]) => (
+                  <Row gutter={4}>
+                    {value.map((item) => (
+                      <Col key={item.id}>
+                        <Tooltip title={item.fullName}>
+                          <Avatar
+                            style={{ cursor: 'pointer', fontSize: 14 }}
+                            size={30}
+                          >
+                            {item.fullName
+                              .split(' ')
+                              .map((split) => split.slice(0, 1).toUpperCase())
+                              .toString()
+                              .replace(',', '')}
+                          </Avatar>
+                        </Tooltip>
+                      </Col>
+                    ))}
+                  </Row>
+                ),
               },
             ]}
           />
