@@ -9,6 +9,7 @@ import {
   Empty,
   Input,
   Popconfirm,
+  Radio,
   Row,
   Skeleton,
   Table,
@@ -40,6 +41,8 @@ interface Props {
   onPaginationChange: (page: number, pageSize: number) => void;
   currentPage: number;
   currentPageSize: number;
+  toggleAllUsers: () => void;
+  toggleAllSchemes: () => void;
 }
 
 const AdminTodos = ({
@@ -55,6 +58,8 @@ const AdminTodos = ({
   onPaginationChange,
   currentPage,
   currentPageSize,
+  toggleAllUsers,
+  toggleAllSchemes,
 }: Props): JSX.Element => {
   const classes = useStyles();
 
@@ -70,6 +75,18 @@ const AdminTodos = ({
           />
         </Col>
         <Col flex={1} />
+        <Col>
+          <Radio.Group defaultValue="CURRENT" onChange={toggleAllSchemes}>
+            <Radio.Button value="CURRENT">Current Scheme</Radio.Button>
+            <Radio.Button value="ALL">All Schemes</Radio.Button>
+          </Radio.Group>
+        </Col>
+        <Col>
+          <Radio.Group defaultValue="YOUR" onChange={toggleAllUsers}>
+            <Radio.Button value="YOUR">Your Tasks</Radio.Button>
+            <Radio.Button value="ALL">All Tasks</Radio.Button>
+          </Radio.Group>
+        </Col>
         <Col>
           <Button
             type="primary"
@@ -225,7 +242,7 @@ const AdminTodos = ({
                     width: 100,
                     render: (_, record) => (
                       <Popconfirm
-                        title="Uncompleted this task?"
+                        title="Mark this task uncompleted?"
                         // description="Do you complete this task?"
                         onConfirm={() => onUncompletedTodo(record.key)}
                         okText="Yes"

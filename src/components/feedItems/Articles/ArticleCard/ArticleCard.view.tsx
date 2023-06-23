@@ -1,7 +1,7 @@
 import React from 'react';
 import { Col, Row, Tag, Typography } from 'antd';
 import type { ListArticlesQuery } from 'graphql/generated';
-import { ArticlePriority } from 'graphql/generated';
+import { ArticlePriority, Role } from 'graphql/generated';
 import { Link } from 'react-router-dom';
 import SkeletonImage from 'components/images/SkeletonImage.view';
 
@@ -15,6 +15,7 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import formatCalendar from 'utils/format-calendar-24h';
+import { useStoreState } from 'state';
 import useStyles from './ArticleCard.styles';
 
 const { Title, Paragraph, Text } = Typography;
@@ -43,6 +44,8 @@ const ArticleCard = ({ article, openLightbox }: Props): JSX.Element => {
     createdBy,
   } = article || {};
   const classes = useStyles();
+  const userGroups = useStoreState((state) => state.user.groups);
+  const role = useStoreState((state) => state.user.role);
 
   return (
     <Link to={`/app/article/view/${id}`}>
@@ -114,7 +117,10 @@ const ArticleCard = ({ article, openLightbox }: Props): JSX.Element => {
               <Text>{formatCalendar(updatedAt)}</Text>
             </Col>
           </Row>
-          {groups && groups.length > 0 ? (
+          {userGroups.length > 0 &&
+          role !== Role.User &&
+          groups &&
+          groups.length > 0 ? (
             <Row wrap={false} className={classes.tagRow}>
               {groups.map((group) => (
                 <Col key={group.id}>

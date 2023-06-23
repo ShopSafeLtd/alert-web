@@ -49,6 +49,8 @@ describe('List Officer View', () => {
           toggleAddTodo={jest.fn()}
           updateTodoList={jest.fn()}
           onPaginationChange={jest.fn()}
+          toggleAllSchemes={jest.fn()}
+          toggleAllUsers={jest.fn()}
           currentPage={1}
           currentPageSize={1}
         />

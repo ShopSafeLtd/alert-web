@@ -130,7 +130,7 @@ const useAddNewOffender = ({
     setSaving(true);
     updateOffender({
       id: Math.floor(Math.random() * 1000).toString(),
-      name: data.name,
+      name: data.name || 'Unidentified Offender',
       alias:
         data.alias && data.alias.length > 0
           ? [...new Set(data.alias?.map((el) => el.trim().toLowerCase()))]

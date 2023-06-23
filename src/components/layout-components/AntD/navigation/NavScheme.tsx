@@ -115,9 +115,16 @@ export const NavScheme = () => {
                 paddingBottom: 4,
               }}
               onClick={() => handleSchemeChange(scheme)}
+              wrap={false}
             >
               <Col flex={1}>
-                <span className="text-dark">{scheme.scheme.name} </span>
+                <Text
+                  ellipsis
+                  style={{ maxWidth: 180, marginRight: 20 }}
+                  className="text-dark"
+                >
+                  {scheme.scheme.name}{' '}
+                </Text>
               </Col>
               {activeScheme === scheme.scheme.id ? (
                 <Col>
@@ -138,7 +145,9 @@ export const NavScheme = () => {
       placement="topRight"
     >
       <div className={classes.notificationCol}>
-        <Text ellipsis>{activeSchemeName}</Text>
+        <Text style={{ maxWidth: 120 }} ellipsis>
+          {activeSchemeName}
+        </Text>
         <FontAwesomeIcon
           style={{
             fontSize: 18,

@@ -353,7 +353,7 @@ const adminOnlyItems: NavItem[] = [
       },
       {
         key: 'data-import',
-        path: `${APP_PREFIX_PATH}/scheme-settings/data-import/disc`,
+        path: `${APP_PREFIX_PATH}/scheme-settings/data-import`,
         title: 'Data Import',
         icon: faFileImport,
         breadcrumb: true,

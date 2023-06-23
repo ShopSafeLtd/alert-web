@@ -44,7 +44,6 @@ describe('List Officer View', () => {
           setSearch={jest.fn()}
           saving={false}
           onCompletedTodo={jest.fn()}
-          onUncompletedTodo={jest.fn()}
           addTodo={false}
           toggleAddTodo={jest.fn()}
           updateTodoList={jest.fn()}

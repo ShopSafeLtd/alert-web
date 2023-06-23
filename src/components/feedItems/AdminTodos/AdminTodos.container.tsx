@@ -13,7 +13,6 @@ const AdminTodos = ({ fullSearch, groupsFilter }: Props): JSX.Element => {
     loading,
     saving,
     onCompletedTodo,
-    onUncompletedTodo,
     addTodo,
     toggleAddTodo,
     updateTodoList,
@@ -29,7 +28,6 @@ const AdminTodos = ({ fullSearch, groupsFilter }: Props): JSX.Element => {
       loading={loading}
       saving={saving}
       onCompletedTodo={onCompletedTodo}
-      onUncompletedTodo={onUncompletedTodo}
       addTodo={addTodo}
       toggleAddTodo={toggleAddTodo}
       updateTodoList={updateTodoList}

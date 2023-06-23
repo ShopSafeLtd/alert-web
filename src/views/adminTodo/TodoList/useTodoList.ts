@@ -26,13 +26,20 @@ interface Return {
   onPaginationChange: (page: number, pageSize: number) => void;
   currentPage: number;
   currentPageSize: number;
+  allUsers: boolean;
+  toggleAllUsers: () => void;
+  allSchemes: boolean;
+  toggleAllSchemes: () => void;
 }
 
 const useAdminTodos = (): Return => {
   const userId = useStoreState((state) => state.user.id);
   const schemeId = useStoreState((state) => state.scheme.id);
+  const userSchemes = useStoreState((state) => state.user.schemes);
   const [saving, setSaving] = useState(false);
   const [addTodo, setAddTodo] = useState(false);
+  const [allUsers, setAllUsers] = useState(false);
+  const [allSchemes, setAllSchemes] = useState(false);
   const [search, setSearch] = useState('');
   const [pageSize, setPageSize] = useState(20);
   const [page, setPage] = useState(1);
@@ -47,18 +54,24 @@ const useAdminTodos = (): Return => {
     where: {
       schemes: {
         some: {
-          id: {
-            equals: schemeId,
-          },
+          id: allSchemes
+            ? {
+                in: userSchemes.map((scheme) => scheme.scheme.id),
+              }
+            : {
+                equals: schemeId,
+              },
         },
       },
-      assignedUsers: {
-        some: {
-          id: {
-            in: [userId],
+      assignedUsers: allUsers
+        ? undefined
+        : {
+            some: {
+              id: {
+                in: [userId],
+              },
+            },
           },
-        },
-      },
       OR: [
         {
           name: {
@@ -239,6 +252,13 @@ const useAdminTodos = (): Return => {
     setPage(pageVale);
     setPageSize(pageSizeValue);
   };
+  const toggleAllUsers = () => {
+    setAllUsers(!allUsers);
+  };
+  const toggleAllSchemes = () => {
+    setAllSchemes(!allSchemes);
+  };
+
   return {
     data: data?.listTodos,
     loading: (data === null || data === undefined) && loading,
@@ -252,6 +272,10 @@ const useAdminTodos = (): Return => {
     onPaginationChange,
     currentPage: page,
     currentPageSize: pageSize,
+    allUsers,
+    toggleAllUsers,
+    allSchemes,
+    toggleAllSchemes,
   };
 };
 

@@ -28,9 +28,8 @@ const ImageContainer = ({
 }) => (
   <div
     style={{
-      width: 140,
-      height: 160,
-      borderRadius: 5,
+      width: 150,
+      height: 180,
     }}
   >
     <WatermarkImage url={src} position={position} />
@@ -79,7 +78,7 @@ const IncidentFeed = ({
           </Col>
         ) : null}
 
-        <Col flex={1}>
+        <Col flex={1} style={{ padding: 10 }}>
           {!isNewIncident && updates && updates.length > 0 ? (
             <UpdateContent title={subject || ''} update={updates[0]} />
           ) : (

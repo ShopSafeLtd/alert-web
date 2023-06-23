@@ -30,9 +30,8 @@ const ImageContainer = ({
 }) => (
   <div
     style={{
-      width: 140,
-      height: 160,
-      borderRadius: 5,
+      width: 150,
+      height: 180,
     }}
   >
     <WatermarkImage url={src} position={position} />

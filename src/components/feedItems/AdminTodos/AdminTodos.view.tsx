@@ -4,7 +4,6 @@ import {
   Card,
   Checkbox,
   Col,
-  Collapse,
   Drawer,
   Empty,
   Input,
@@ -26,7 +25,6 @@ import getTodoUrl from '../../../utils/get-to-do-url';
 import useStyles from './AdminTodos.styles';
 
 const { Title, Text } = Typography;
-const { Panel } = Collapse;
 interface Props {
   data:
     | Exclude<ListTodosQuery['listTodos'], undefined | null>
@@ -35,7 +33,7 @@ interface Props {
   loading: boolean;
   saving: boolean;
   onCompletedTodo: (id: string) => void;
-  onUncompletedTodo: (id: string) => void;
+  // onUncompletedTodo: (id: string) => void;
   addTodo: boolean;
   toggleAddTodo: () => void;
   updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
@@ -58,7 +56,7 @@ const AdminTodos = ({
   loading,
   saving,
   onCompletedTodo,
-  onUncompletedTodo,
+  // onUncompletedTodo,
   addTodo,
   toggleAddTodo,
   updateTodoList,
@@ -81,6 +79,8 @@ const AdminTodos = ({
         overflow: 'auto',
         height: 'calc(100vh - 300px)',
         width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
       }}
     >
       <Row align="middle" gutter={5} wrap={false} style={{ marginBottom: 10 }}>
@@ -189,12 +189,12 @@ const AdminTodos = ({
         >
           <Empty
             image={Empty.PRESENTED_IMAGE_SIMPLE}
-            description="Nothing to complete"
+            description="You have no open tasks"
           />
         </div>
       )}
 
-      <Collapse className={classes.title}>
+      {/* <Collapse className={classes.title}>
         <Panel header="Completed Tasks" key="1">
           {loading ? (
             Array.from({ length: 5 }).map((_, index) => (
@@ -281,7 +281,7 @@ const AdminTodos = ({
             </div>
           )}
         </Panel>
-      </Collapse>
+      </Collapse> */}
       <Drawer
         title="New Task"
         open={addTodo}

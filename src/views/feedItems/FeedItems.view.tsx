@@ -218,10 +218,14 @@ const FeedItem = ({
                 <Card
                   style={{
                     width: '99%',
-                    marginBottom: 10,
+                    marginBottom: 20,
                   }}
                   key={feedItem?.id}
-                  bodyStyle={{ padding: 0, marginLeft: 5 }}
+                  bodyStyle={{
+                    padding: 0,
+                    overflow: 'hidden',
+                    borderRadius: 10,
+                  }}
                   loading={loading}
                 >
                   <>
@@ -275,7 +279,7 @@ const FeedItem = ({
                       ) : null}
                     </Row>
                     <Divider style={{ margin: 0 }} />
-                    <div style={{ padding: 10 }}>
+                    <div style={{ padding: 0 }}>
                       {/* create new incident/offender */}
                       {feedItem?.type === FeedItemType.NewIncident && (
                         <IncidentFeed feedItem={feedItem} isNewIncident />
@@ -519,7 +523,7 @@ const FeedItem = ({
       </Row>
       <Drawer
         title="Feed Item Filters"
-        visible={sortFilter}
+        open={sortFilter}
         onClose={toggleSortFilter}
         width={500}
       >
