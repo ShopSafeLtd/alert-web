@@ -103,7 +103,7 @@ const useSignMg11 = (): Return => {
       });
       setSign(
         `<svg xmlns="http://www.w3.org/2000/svg" style="background:#ffffff00" height="100" width="300" viewBox="0 0 300 100" class="signature-svg" data-reactroot=""><text x="20" y="60" font-family="Caveat" font-size="30" fill="black">
-      ${data.name}
+      ${data.name || ''}
 </text></svg>`
       );
     },

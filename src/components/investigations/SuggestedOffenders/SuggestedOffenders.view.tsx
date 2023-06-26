@@ -26,6 +26,7 @@ import {
 import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
 import CrimeGroupTable from 'components/tables/CrimeGroupTable/CrimeGroupTable.view';
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
+import { useIntl } from 'react-intl';
 import useStyles from './SuggestedOffenders.style';
 
 const { Paragraph, Title, Text } = Typography;
@@ -41,6 +42,7 @@ const SuggestedOffenders = ({
   onClose,
   handleAddSuggestion,
 }: Props) => {
+  const intl = useIntl();
   const classes = useStyles();
   const publicOffenderDOB = useStoreState(
     (state) => state.scheme.defaultPublicOffenderDOB
@@ -96,10 +98,20 @@ const SuggestedOffenders = ({
           <Title level={3} style={{ margin: 0 }}>
             {offender.name}
           </Title>
-          <Text>Alert ID: {offender.reference}</Text>
+          <Text>
+            {intl.formatMessage(
+              { defaultMessage: 'Alert ID: {ref}', id: 'umL9sI' },
+              { ref: offender.reference }
+            )}
+          </Text>
           <Descriptions style={{ marginTop: 20, marginBottom: 20 }}>
             {offender.alias.length > 0 ? (
-              <Descriptions.Item label="Alias ">
+              <Descriptions.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Alias: ',
+                  id: 'eZm/Sa',
+                })}
+              >
                 {offender.alias.map((item) => (
                   <Text>{item}</Text>
                 ))}
@@ -113,7 +125,10 @@ const SuggestedOffenders = ({
                       className={classes.descIcon}
                       icon={faUserClock}
                     />
-                    Age
+                    {intl.formatMessage({
+                      defaultMessage: 'Age',
+                      id: '9oNQSC',
+                    })}
                   </span>
                 }
               >
@@ -129,7 +144,7 @@ const SuggestedOffenders = ({
                     className={classes.descIcon}
                     icon={faMarsAndVenus}
                   />
-                  Sex
+                  {intl.formatMessage({ defaultMessage: 'Sex', id: 'eWJHGp' })}
                 </span>
               }
             >
@@ -142,7 +157,10 @@ const SuggestedOffenders = ({
                     className={classes.descIcon}
                     icon={faUserTag}
                   />
-                  Build
+                  {intl.formatMessage({
+                    defaultMessage: 'Build',
+                    id: 'RSctv1',
+                  })}
                 </span>
               }
             >
@@ -155,7 +173,10 @@ const SuggestedOffenders = ({
                     className={classes.descIcon}
                     icon={faEarth}
                   />
-                  Ethnicity
+                  {intl.formatMessage({
+                    defaultMessage: 'Ethnicity',
+                    id: 'XtCAFo',
+                  })}
                 </span>
               }
             >
@@ -169,7 +190,10 @@ const SuggestedOffenders = ({
                       className={classes.descIcon}
                       icon={faUserHair}
                     />
-                    Hair
+                    {intl.formatMessage({
+                      defaultMessage: 'Hair',
+                      id: 'e4YBbX',
+                    })}
                   </span>
                 }
               >
@@ -186,7 +210,10 @@ const SuggestedOffenders = ({
                       className={classes.descIcon}
                       icon={faCircleInfo}
                     />
-                    Additional Info
+                    {intl.formatMessage({
+                      defaultMessage: 'Additional Information',
+                      id: 'laUK3e',
+                    })}
                   </span>
                 }
               >
@@ -198,8 +225,16 @@ const SuggestedOffenders = ({
             offender.associatedIncidents.length > 0 && (
               <div className={classes.tableContainer}>
                 <Paragraph className={classes.explainText}>
-                  This offender shares {offender.totalAssociatedIncidents}{' '}
-                  incidents with offenders in this investigation
+                  {intl.formatMessage(
+                    {
+                      defaultMessage:
+                        'This offender shares {noIncidents} incidents with offenders in this investigation',
+                      id: 'p6oMeZ',
+                    },
+                    {
+                      noIncidents: offender.totalAssociatedIncidents,
+                    }
+                  )}
                 </Paragraph>
                 <IncidentTable
                   incidents={offender?.associatedIncidents || []}
@@ -211,8 +246,16 @@ const SuggestedOffenders = ({
             offender.associatedCrimeGroups.length > 0 && (
               <div className={classes.tableContainer}>
                 <Paragraph className={classes.explainText}>
-                  This offender shares {offender.totalAssociatedCrimeGroups}{' '}
-                  crime group with offenders in this investigation
+                  {intl.formatMessage(
+                    {
+                      defaultMessage:
+                        'This offender shares {total} crime groups with offenders in this investigation',
+                      id: 'JBGYtO',
+                    },
+                    {
+                      total: offender.totalAssociatedCrimeGroups,
+                    }
+                  )}
                 </Paragraph>
                 <CrimeGroupTable
                   crimeGroups={offender?.associatedCrimeGroups || []}
@@ -223,7 +266,12 @@ const SuggestedOffenders = ({
           <Row gutter={8} justify="end">
             <Col>
               <Link to={`/app/offenders/view/${offender.id}`} onClick={onClose}>
-                <Button>View Offender</Button>
+                <Button>
+                  {intl.formatMessage({
+                    defaultMessage: 'View Offender',
+                    id: 'GszQTo',
+                  })}
+                </Button>
               </Link>
             </Col>
             <Col>
@@ -232,7 +280,10 @@ const SuggestedOffenders = ({
                 type="ghost"
                 onClick={() => handleAddSuggestion(offender.id)}
               >
-                Add To Investigation
+                {intl.formatMessage({
+                  defaultMessage: 'Add To Investigation',
+                  id: 'zEXZIx',
+                })}
               </Button>
             </Col>
           </Row>

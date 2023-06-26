@@ -2,6 +2,7 @@ import React from 'react';
 import type { UploadProps } from 'antd';
 import { Button, Card, Col, Form, Row, Upload } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
+import { FormattedMessage } from 'react-intl';
 
 interface OnSubmitValues {
   url: string;
@@ -39,7 +40,7 @@ const AddLogoView = ({
                 }}
               />
             </div>
-          </Col>{' '}
+          </Col>
           <Col span={6}>
             <div
               style={{
@@ -50,7 +51,7 @@ const AddLogoView = ({
               }}
             >
               <Button type="primary" onClick={() => selectLogo(logo)}>
-                Select
+                <FormattedMessage id="kQAf2d" defaultMessage="Select" />
               </Button>
             </div>
           </Col>
@@ -70,14 +71,16 @@ const AddLogoView = ({
           style={{ display: 'flex' }}
           maxCount={1}
         >
-          <Button icon={<UploadOutlined />}>Upload Logo</Button>
+          <Button icon={<UploadOutlined />}>
+            <FormattedMessage id="4VDu+5" defaultMessage="Upload Logo" />
+          </Button>
         </Upload>
       </Row>
       <Form.Item>
         <Row style={{ marginTop: 30 }} gutter={10} justify="end">
           <Col>
             <Button disabled={saving} onClick={onClose}>
-              Cancel
+              <FormattedMessage id="47FYwb" defaultMessage="Cancel" />
             </Button>
           </Col>
           <Col>
@@ -87,7 +90,7 @@ const AddLogoView = ({
               type="primary"
               htmlType="submit"
             >
-              Submit
+              <FormattedMessage id="wSZR47" defaultMessage="Submit" />
             </Button>
           </Col>
         </Row>

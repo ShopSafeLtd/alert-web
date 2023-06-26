@@ -13,6 +13,7 @@ import {
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import type { OffenderCardData } from 'types/DataType';
 import moment from 'moment';
+import { useIntl } from 'react-intl';
 
 const { Title } = Typography;
 
@@ -22,64 +23,80 @@ interface Props {
   saving?: boolean;
 }
 
-const OffenderCard = ({ offender, removeOffender, saving }: Props) => (
-  <Card
-    style={{
-      margin: removeOffender ? 0 : 5,
-      maxWidth: 370,
-      overflow: 'hidden',
-    }}
-    bodyStyle={{
-      padding: 0,
-      marginLeft: -2,
-    }}
-    size="small"
-    className="message-card"
-  >
-    <Row gutter={5} wrap={false}>
-      {removeOffender && (
-        <Popconfirm
-          placement="topLeft"
-          trigger="click"
-          title="Remove the offender?"
-          onConfirm={() => removeOffender(offender.id)}
-          okText="Yes"
-          cancelText="No"
-          overlayInnerStyle={{ padding: 10 }}
-        >
-          <Button
-            size="small"
-            disabled={saving}
-            className="info-remove-button"
-            shape="circle"
-            type="text"
-            icon={<FontAwesomeIcon icon={faCircleXmark} size="lg" />}
-          />
-        </Popconfirm>
-      )}
-
-      <Col>
-        {offender.images && offender.images.length > 0 && (
-          <div style={{ width: 100, height: 100 }}>
-            <WatermarkImage
-              url={offender.images[0].optimised || offender.images[0].url || ''}
+const OffenderCard = ({ offender, removeOffender, saving }: Props) => {
+  const intl = useIntl();
+  return (
+    <Card
+      style={{
+        margin: removeOffender ? 0 : 5,
+        maxWidth: 370,
+        overflow: 'hidden',
+      }}
+      bodyStyle={{
+        padding: 0,
+        marginLeft: -2,
+      }}
+      size="small"
+      className="message-card"
+    >
+      <Row gutter={5} wrap={false}>
+        {removeOffender && (
+          <Popconfirm
+            placement="topLeft"
+            trigger="click"
+            title={intl.formatMessage({
+              defaultMessage: 'Remove the offender?',
+              id: 'ttuPSC',
+            })}
+            onConfirm={() => removeOffender(offender.id)}
+            okText={intl.formatMessage({ defaultMessage: 'Yes', id: 'a5msuh' })}
+            cancelText={intl.formatMessage({
+              defaultMessage: 'No',
+              id: 'oUWADl',
+            })}
+            overlayInnerStyle={{ padding: 10 }}
+          >
+            <Button
+              size="small"
+              disabled={saving}
+              className="info-remove-button"
+              shape="circle"
+              type="text"
+              icon={<FontAwesomeIcon icon={faCircleXmark} size="lg" />}
             />
-          </div>
+          </Popconfirm>
         )}
-      </Col>
 
-      <Col flex={1} style={{ marginTop: 10, marginLeft: 5 }}>
-        <Title level={4}> {offender.name}</Title>
-        <Descriptions size="small">
-          <Descriptions.Item label="Last Active">
-            {moment(offender.updatedAt || moment()).format(
-              `ddd MMM DD YYYY - HH:mm`
-            )}
-          </Descriptions.Item>
-        </Descriptions>
-      </Col>
-    </Row>
-  </Card>
-);
+        <Col>
+          {offender.images && offender.images.length > 0 && (
+            <div style={{ width: 100, height: 100 }}>
+              <WatermarkImage
+                url={
+                  offender.images[0].optimised || offender.images[0].url || ''
+                }
+              />
+            </div>
+          )}
+        </Col>
+
+        <Col flex={1} style={{ marginTop: 10, marginLeft: 5 }}>
+          <Title level={4}> {offender.name}</Title>
+          <Descriptions size="small">
+            <Descriptions.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Last Active',
+                id: 'l/6hum',
+              })}
+            >
+              {moment(offender.updatedAt || moment()).format(
+                `ddd MMM DD YYYY - HH:mm`
+              )}
+            </Descriptions.Item>
+          </Descriptions>
+        </Col>
+      </Row>
+    </Card>
+  );
+};
 
 export default OffenderCard;

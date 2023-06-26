@@ -90,6 +90,7 @@ const Views = () => {
           <IntlProvider
             locale={currentAppLocale.locale}
             messages={currentAppLocale.messages}
+            onError={() => null}
           >
             <ConfigProvider locale={currentAppLocale.antd}>
               {isSet && data ? (

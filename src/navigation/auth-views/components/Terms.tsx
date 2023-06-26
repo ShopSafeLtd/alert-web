@@ -1,4 +1,4 @@
-/* eslint-disable no-irregular-whitespace */
+/* eslint-disable no-irregular-whitespace,formatjs/no-literal-string-in-jsx */
 import React from 'react';
 import styled from 'styled-components';
 import { Typography } from 'antd';

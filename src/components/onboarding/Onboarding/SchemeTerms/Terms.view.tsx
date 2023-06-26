@@ -1,3 +1,5 @@
+/* eslint-disable formatjs/no-literal-string-in-jsx */
+
 import React, { useState } from 'react';
 import {
   Button,

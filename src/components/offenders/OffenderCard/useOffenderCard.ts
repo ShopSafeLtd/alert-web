@@ -4,6 +4,7 @@ import { Role, useRecycleOffenderMutation } from 'graphql/generated';
 import { notification } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import type { MutationUpdaterFn } from '@apollo/client';
+import { useIntl } from 'react-intl';
 
 interface Props {
   createdById: string | undefined;
@@ -20,7 +21,7 @@ const useOffenderCard = ({ createdById, update }: Props): Return => {
   const navigate = useNavigate();
   const role = useStoreState((state) => state.user.role);
   const userId = useStoreState((state) => state.user.id);
-
+  const intl = useIntl();
   const approvalRights = update ? role !== Role.User : false;
   const menuRights = update
     ? role !== Role.User || userId === createdById
@@ -38,16 +39,25 @@ const useOffenderCard = ({ createdById, update }: Props): Return => {
   const [recycleOffender] = useRecycleOffenderMutation({
     onCompleted: () => {
       notification.success({
-        message: 'Successfully Deleted',
-        description:
-          'The offender has been deleted from the feed and moved to the recycle bin.',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Deleted',
+          id: 'zJsyF1',
+        }),
+        description: intl.formatMessage({
+          defaultMessage:
+            'The offender has been deleted from the feed and moved to the recycle bin.',
+          id: 'nQ1eW+',
+        }),
         placement: 'bottomRight',
       });
     },
     onError: () => {
       notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
+        message: intl.formatMessage({ defaultMessage: 'Error!', id: 'DIDBlF' }),
+        description: intl.formatMessage({
+          defaultMessage: 'Whoops, there are some errors. Please try again.',
+          id: 'tPB3Wl',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -56,7 +66,7 @@ const useOffenderCard = ({ createdById, update }: Props): Return => {
 
   const onDelete = (id: string) => {
     if (deleteRights)
-      recycleOffender({
+      void recycleOffender({
         variables: {
           where: { id },
         },

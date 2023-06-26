@@ -2,15 +2,17 @@ import React from 'react';
 import { Card, Col, Row, Typography } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock, faLocationDot } from '@fortawesome/pro-light-svg-icons';
-import { Incident } from '../incident-details-node';
+import { useIntl } from 'react-intl';
+import type { Incident } from '../incident-details-node';
 
-const { Title, Text, Paragraph } = Typography;
+const { Title, Text } = Typography;
 
 interface Props {
   incident: Incident;
 }
 
 const IncidentCard = ({ incident }: Props): JSX.Element => {
+  const intl = useIntl();
   return (
     <Card
       className="incident-card"
@@ -21,7 +23,17 @@ const IncidentCard = ({ incident }: Props): JSX.Element => {
         <Title level={4} ellipsis style={{ marginBottom: 2 }}>
           {incident?.description}
         </Title>
-        <Text type="secondary">Alert ID: {incident?.reference}</Text>
+        <Text type="secondary">
+          {intl.formatMessage(
+            {
+              defaultMessage: 'Alert ID: {ref}',
+              id: 'umL9sI',
+            },
+            {
+              ref: incident?.reference,
+            }
+          )}
+        </Text>
         <Row>
           <Col flex={1}>
             <FontAwesomeIcon

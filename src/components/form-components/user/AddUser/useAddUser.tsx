@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment */
 import { useEffect, useState } from 'react';
 import type {
   CreateUserInDatabaseMutation,
@@ -344,7 +345,7 @@ const useAddUser = ({
     });
 
     if (existingUser && userData?.user) {
-      inviteExistingUser({
+      void inviteExistingUser({
         variables: {
           where: {
             id: userData.user.id,
@@ -388,7 +389,7 @@ const useAddUser = ({
         },
       });
     } else {
-      createUserInDatabase({
+      void createUserInDatabase({
         variables: {
           data: {
             email: data.email,

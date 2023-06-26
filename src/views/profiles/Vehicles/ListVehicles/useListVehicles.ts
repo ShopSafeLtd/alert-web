@@ -7,19 +7,20 @@ import type {
   ListVehiclesQuery,
 } from 'graphql/generated';
 import {
-  Role,
-  useListCustomGalleriesQuery,
-  useSchemeGroupsQuery,
-  useCreateVehicleMutation,
   ListVehiclesDocument,
   QueryMode,
+  Role,
   SortOrder,
+  useCreateVehicleMutation,
+  useListCustomGalleriesQuery,
   useListVehiclesQuery,
+  useSchemeGroupsQuery,
 } from 'graphql/generated';
 import { useState } from 'react';
 import { useStoreState } from 'state';
 import type { DateType, VehicleData } from 'types/DataType';
 import errorNotification from 'types/error_notification';
+import { useIntl } from 'react-intl';
 
 interface Return {
   data: ListVehiclesQuery | undefined;
@@ -47,6 +48,7 @@ interface Return {
 }
 
 const useListVehicles = (): Return => {
+  const intl = useIntl();
   const schemeId = useStoreState((state) => state.scheme.id);
   const { role, groups, id: userId } = useStoreState((state) => state.user);
   const [addVehicle, setAddVehicle] = useState(false);
@@ -128,6 +130,8 @@ const useListVehicles = (): Return => {
   };
   const { data: vehiclesData, loading } = useListVehiclesQuery({
     fetchPolicy: 'cache-and-network',
+
+    // @ts-expect-error TODO check the dates on variables, can be Moment or date
     variables,
   });
   const { data: groupData, loading: groupsLoading } = useSchemeGroupsQuery({
@@ -184,6 +188,7 @@ const useListVehicles = (): Return => {
       data: {
         listVehicles: {
           ...existingData.listVehicles,
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           vehicles:
             existingData?.listVehicles?.vehicles &&
             existingData.listVehicles.vehicles.length > 0
@@ -241,8 +246,14 @@ const useListVehicles = (): Return => {
       // setSaving(false);
       toggleAddVehicle();
       notification.success({
-        message: 'Successfully Added!',
-        description: 'The vehicle has been added! ',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Added!',
+          id: '5Hvk21',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The vehicle has been added!',
+          id: 'htkq75',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -289,7 +300,7 @@ const useListVehicles = (): Return => {
           create: undefined,
         };
       };
-    createVehicle({
+    void createVehicle({
       variables: {
         data: {
           make: data.make || '',

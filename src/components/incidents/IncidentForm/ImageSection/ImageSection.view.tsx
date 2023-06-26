@@ -21,6 +21,7 @@ import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import ImageEditor from 'components/form-components/ImageEditor/ImageEditor.view';
 import { ImagePosition } from 'graphql/generated';
+import { useIntl } from 'react-intl';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -57,11 +58,14 @@ const OffenderTag = ({
     e.preventDefault();
     setConfirmOpen(true);
   };
-
+  const intl = useIntl();
   return (
     <Popconfirm
       placement="topLeft"
-      title="Remove the image from the offender?"
+      title={intl.formatMessage({
+        defaultMessage: 'Remove the image from the offender?',
+        id: 'mJMb3v',
+      })}
       open={confirmOpen}
       onConfirm={() => {
         removeImageFromOffender({
@@ -69,8 +73,8 @@ const OffenderTag = ({
           offenderId: offender.id,
         });
       }}
-      okText="Yes"
-      cancelText="No"
+      okText={intl.formatMessage({ defaultMessage: 'Yes', id: 'a5msuh' })}
+      cancelText={intl.formatMessage({ defaultMessage: 'No', id: 'oUWADl' })}
       overlayInnerStyle={{ padding: 10 }}
     >
       <Tag color="blue" closable onClose={preventDefault}>
@@ -110,7 +114,7 @@ const ImageSection = ({
   setPrimaryImage,
 }: Props): JSX.Element => {
   const [editImage, setEditImage] = useState<Image | null>(null);
-
+  const intl = useIntl();
   const handleEditSubmit = (value: Image) => {
     onEditImage({
       ...value,
@@ -125,12 +129,13 @@ const ImageSection = ({
         <Row align="middle" style={{ marginBottom: 20 }}>
           <Col>
             <Title style={{ marginBottom: 0 }} level={4}>
+              {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
               {`${titleOrder}.`}
             </Title>
           </Col>
           <Col>
             <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
-              Images
+              {intl.formatMessage({ defaultMessage: 'Images', id: 'Fip4H8' })}
             </Title>
           </Col>
           <Col>
@@ -139,7 +144,11 @@ const ImageSection = ({
               type="secondary"
               italic
             >
-              - Please add any images that you have of the incident.
+              {intl.formatMessage({
+                defaultMessage:
+                  '- Please add any images that you have of the incident.',
+                id: 'V72sYf',
+              })}{' '}
             </Paragraph>
           </Col>
           <Col style={{ marginLeft: 30 }}>
@@ -159,7 +168,10 @@ const ImageSection = ({
                 }
                 style={{ color: 'red' }}
               >
-                Upload Image
+                {intl.formatMessage({
+                  defaultMessage: 'Upload Image',
+                  id: 'MntrZe',
+                })}
               </Button>
             </Upload>
           </Col>
@@ -204,10 +216,19 @@ const ImageSection = ({
                         <Popconfirm
                           placement="topLeft"
                           trigger="hover"
-                          title="Remove the image?"
+                          title={intl.formatMessage({
+                            defaultMessage: 'Remove the image?',
+                            id: 'bRha+v',
+                          })}
                           onConfirm={() => removeImage(file.uid)}
-                          okText="Yes"
-                          cancelText="No"
+                          okText={intl.formatMessage({
+                            defaultMessage: 'Yes',
+                            id: 'a5msuh',
+                          })}
+                          cancelText={intl.formatMessage({
+                            defaultMessage: 'No',
+                            id: 'oUWADl',
+                          })}
                           overlayInnerStyle={{ padding: 10 }}
                         >
                           <Button
@@ -221,10 +242,19 @@ const ImageSection = ({
                   </div>
                 </div>
                 <div className="image-card-offenders">
-                  <Text strong>Offenders:</Text>
+                  <Text strong>
+                    {intl.formatMessage({
+                      defaultMessage: 'Offenders:',
+                      id: 'HEnuMU',
+                    })}
+                  </Text>
                   {file.offenders && file.offenders.length === 0 && (
                     <Paragraph>
-                      You have not assigned any offender to this image.
+                      {intl.formatMessage({
+                        defaultMessage:
+                          'You have not assigned any offender to this image.',
+                        id: 'NuUp/9',
+                      })}
                     </Paragraph>
                   )}
                   <Row gutter={[8, 8]}>
@@ -276,13 +306,17 @@ const ImageSection = ({
                       />
                     }
                   >
-                    Assign Offenders
+                    {intl.formatMessage({
+                      defaultMessage: 'Assign Offenders',
+                      id: 'GFrwvj',
+                    })}
                   </Button>
                 </div>
               </div>
             )}
           >
-            {fileList.length < 10 && '+ Upload'}
+            {fileList.length < 10 &&
+              intl.formatMessage({ defaultMessage: '+ Upload', id: '3QJWLZ' })}
           </Upload>
         </Form.Item>
         {/* TODO! */}

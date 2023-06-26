@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { TodoType } from 'graphql/generated';
 
 export interface TodoData {

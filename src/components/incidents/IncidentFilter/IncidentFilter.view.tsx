@@ -11,6 +11,7 @@ import {
 } from 'antd';
 import { IncidentSort } from 'state';
 import type { DateType } from 'types/DataType';
+import { useIntl } from 'react-intl';
 import useStyles from './IncidentFilter.styles';
 
 const { RangePicker } = DatePicker;
@@ -71,7 +72,7 @@ const IncidentFilter = ({
 }: Props): JSX.Element => {
   const classes = useStyles();
   const [form] = useForm<FormData>();
-
+  const intl = useIntl();
   return (
     <Form<FormData> form={form}>
       <Row justify="end">
@@ -86,7 +87,10 @@ const IncidentFilter = ({
               });
             }}
           >
-            Clear Filters
+            {intl.formatMessage({
+              id: 'MsGXc3',
+              defaultMessage: 'Clear Filters',
+            })}
           </Button>
         </Col>
       </Row>
@@ -94,7 +98,7 @@ const IncidentFilter = ({
       <Row gutter={16}>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
-            Sort Order
+            {intl.formatMessage({ id: 'Hw6crD', defaultMessage: 'Sort Order' })}
           </Typography.Paragraph>
           <Select
             className={classes.select}
@@ -103,10 +107,16 @@ const IncidentFilter = ({
             size="small"
           >
             <Select.Option value={IncidentSort.createdAtDesc}>
-              Newest First
+              {intl.formatMessage({
+                id: 'dZYazP',
+                defaultMessage: 'Newest First',
+              })}
             </Select.Option>
             <Select.Option value={IncidentSort.createdAtAsc}>
-              Oldest First
+              {intl.formatMessage({
+                id: 'dZYazP',
+                defaultMessage: 'Newest First',
+              })}
             </Select.Option>
           </Select>
         </Col>
@@ -115,7 +125,10 @@ const IncidentFilter = ({
       <Row gutter={16}>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
-            Created Between
+            {intl.formatMessage({
+              id: 'hGJYON',
+              defaultMessage: 'Created Between',
+            })}
           </Typography.Paragraph>
 
           <Form.Item name="date">
@@ -135,7 +148,10 @@ const IncidentFilter = ({
       <Row gutter={16}>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
-            Occurred Between
+            {intl.formatMessage({
+              defaultMessage: 'Occurred Between',
+              id: '2u26fg',
+            })}
           </Typography.Paragraph>
           <RangePicker
             className={classes.select}
@@ -152,11 +168,14 @@ const IncidentFilter = ({
       <Row gutter={16}>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
-            Groups
+            {intl.formatMessage({ defaultMessage: 'Groups', id: 'hzmswI' })}
           </Typography.Paragraph>
           <Select
             className={classes.select}
-            placeholder="Groups"
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Groups',
+              id: 'hzmswI',
+            })}
             mode="multiple"
             size="small"
             maxTagCount={2}
@@ -174,11 +193,17 @@ const IncidentFilter = ({
       <Row>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
-            Crime Types
+            {intl.formatMessage({
+              defaultMessage: 'Crime Types',
+              id: 'Piba4q',
+            })}
           </Typography.Paragraph>
           <Select
             className={classes.select}
-            placeholder="Crime Types"
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Crime Types',
+              id: 'Piba4q',
+            })}
             mode="multiple"
             size="small"
             allowClear
@@ -194,16 +219,22 @@ const IncidentFilter = ({
         </Col>
       </Row>
       <Typography.Paragraph className={classes.filtersTitle}>
-        Details
+        {intl.formatMessage({ defaultMessage: 'Details', id: 'Lv0zJu' })}
       </Typography.Paragraph>
       <Row gutter={16}>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
-            Goods Involved
+            {intl.formatMessage({
+              defaultMessage: 'Goods Involved',
+              id: 'oXvpCQ',
+            })}
           </Typography.Paragraph>
           <Select
             className={classes.select}
-            placeholder="Goods Involved"
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Goods Involved',
+              id: 'oXvpCQ',
+            })}
             mode="multiple"
             size="small"
             allowClear
@@ -221,7 +252,10 @@ const IncidentFilter = ({
       <Row>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
-            Peculiarities
+            {intl.formatMessage({
+              defaultMessage: 'Peculiarities',
+              id: '9s+ZmX',
+            })}
           </Typography.Paragraph>
           <Input.TextArea
             value={peculiarities}
@@ -232,17 +266,23 @@ const IncidentFilter = ({
       </Row>
 
       <Typography.Paragraph className={classes.filtersTitle}>
-        Locations
+        {intl.formatMessage({ defaultMessage: 'Locations', id: 'qGb+T3' })}
       </Typography.Paragraph>
       <Row gutter={16}>
         <Col span={24}>
           <Typography.Paragraph className={classes.selectTitle}>
-            Incident has happened at...
+            {intl.formatMessage({
+              defaultMessage: 'Incident has happened at...',
+              id: 'ZNawcf',
+            })}
           </Typography.Paragraph>
           <Select
             mode="multiple"
             allowClear
-            placeholder="Select Businesses"
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Select Businesses',
+              id: 'MZynHZ',
+            })}
             className={classes.select}
             value={businessesFilter}
             onChange={setBusinessesFilter}

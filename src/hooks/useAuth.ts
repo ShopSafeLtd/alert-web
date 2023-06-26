@@ -179,6 +179,7 @@ const useAuth = (): Return => {
         groups: currentUser?.groups || [],
         demId: currentUser?.demId || '',
         isSet: true,
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         reference: `${currentUser?.reference}` || '',
       });
     },
@@ -190,9 +191,9 @@ const useAuth = (): Return => {
     if (user !== undefined) {
       if (Date.now() < user.exp * 1000) {
         if (user.iss === 'https://alert.eu.auth0.com/') {
-          getCurrentUser();
+          void getCurrentUser();
         } else if (isAuthenticated) {
-          getCurrentUser();
+          void getCurrentUser();
         } else {
           expired();
         }
@@ -200,7 +201,7 @@ const useAuth = (): Return => {
         expired();
       }
     } else if (isAuthenticated) {
-      getCurrentUser();
+      void getCurrentUser();
     } else {
       expired();
     }
@@ -318,7 +319,7 @@ const useAuth = (): Return => {
   // }, [isAuthenticated]);
   useEffect(() => {
     if (isAuthenticated) {
-      (async () => {
+      void (async () => {
         try {
           const newToken = await getAccessTokenSilently();
 
@@ -360,6 +361,7 @@ const useAuth = (): Return => {
     rehydrateAuth,
     signOut,
     onLoginSuccess,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     getCurrentUser,
   };
 };

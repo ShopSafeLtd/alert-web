@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useRef } from 'react';
-import { ListOffendersQuery } from 'graphql/generated';
+import type { ListOffendersQuery } from 'graphql/generated';
 import { Button, Carousel, Col, Descriptions, Row, Typography } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -28,12 +28,12 @@ import moment from 'moment';
 import OffenderTile from 'components/offenders/OffenderTile';
 import OffenderTileSkeleton from 'components/offenders/OffenderTileSkeleton';
 import Lightbox from 'yet-another-react-lightbox';
-import { CarouselRef } from 'antd/lib/carousel';
+import type { CarouselRef } from 'antd/lib/carousel';
 import { faAngleLeft, faAngleRight } from '@fortawesome/pro-solid-svg-icons';
-import WatermarkSlide, {
-  WatermarkSlideType,
-} from 'components/images/WatermartkSlide.view';
+import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
+import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 const { Title } = Typography;
 
@@ -68,12 +68,12 @@ const AddExistingOffender = ({
   lightBoxOpen,
 }: Props): JSX.Element => {
   const imagesRef = useRef<CarouselRef>(null);
-
+  const intl = useIntl();
   const existingOffenders = (): JSX.Element => {
     if (!data?.listOffenders && loading)
       return (
         <Row wrap gutter={16}>
-          {Array(data?.listOffenders?.total || 24)
+          {Array.from({ length: data?.listOffenders?.total || 24 })
             .fill(0)
             .map(() => (
               <Col span={4} className="offender-item">
@@ -103,7 +103,9 @@ const AddExistingOffender = ({
     return (
       <Row justify="center" align="middle" className="no-offenders">
         <Col>
-          <Title level={4}>No Offenders Found</Title>
+          <Title level={4}>
+            <FormattedMessage defaultMessage="No Offenders Found" id="IhHcoJ" />
+          </Title>
         </Col>
       </Row>
     );
@@ -176,7 +178,10 @@ const AddExistingOffender = ({
                           className="offender-description-icon"
                           icon={faClock}
                         />
-                        Last updated
+                        {intl.formatMessage({
+                          defaultMessage: 'Last updated',
+                          id: '0ICwq5',
+                        })}
                       </span>
                     }
                   >
@@ -191,7 +196,10 @@ const AddExistingOffender = ({
                           className="offender-description-icon"
                           icon={faUserClock}
                         />
-                        Age
+                        {intl.formatMessage({
+                          defaultMessage: 'Age',
+                          id: '9oNQSC',
+                        })}
                       </span>
                     }
                   >
@@ -206,7 +214,10 @@ const AddExistingOffender = ({
                           className="offender-description-icon"
                           icon={faMarsAndVenus}
                         />
-                        Sex
+                        {intl.formatMessage({
+                          defaultMessage: 'Sex',
+                          id: 'eWJHGp',
+                        })}
                       </span>
                     }
                   >
@@ -221,7 +232,10 @@ const AddExistingOffender = ({
                             className="offender-description-icon"
                             icon={faUserHair}
                           />
-                          Hair
+                          {intl.formatMessage({
+                            defaultMessage: 'Hair',
+                            id: 'e4YBbX',
+                          })}
                         </span>
                       }
                     >
@@ -229,14 +243,16 @@ const AddExistingOffender = ({
                     </Descriptions.Item>
                   )}
                   <Descriptions.Item
-                    //
                     label={
                       <span>
                         <FontAwesomeIcon
                           className="offender-description-icon"
                           icon={faUserTag}
                         />
-                        Build
+                        {intl.formatMessage({
+                          defaultMessage: 'Build',
+                          id: 'RSctv1',
+                        })}
                       </span>
                     }
                   >
@@ -249,7 +265,10 @@ const AddExistingOffender = ({
                           className="offender-description-icon"
                           icon={faEarth}
                         />
-                        Ethnicity
+                        {intl.formatMessage({
+                          defaultMessage: 'Ethnicity',
+                          id: 'XtCAFo',
+                        })}
                       </span>
                     }
                   >
@@ -264,7 +283,10 @@ const AddExistingOffender = ({
                             className="offender-description-icon"
                             icon={faCircleInfo}
                           />
-                          Additional Info
+                          {intl.formatMessage({
+                            defaultMessage: 'Additional Info',
+                            id: '3XOciw',
+                          })}
                         </span>
                       }
                     >
@@ -280,7 +302,10 @@ const AddExistingOffender = ({
                             className="offender-description-icon"
                             icon={faLocationDot}
                           />
-                          Last offence
+                          {intl.formatMessage({
+                            defaultMessage: 'Last offence',
+                            id: 'A0w5MM',
+                          })}
                         </span>
                       }
                     >
@@ -292,14 +317,22 @@ const AddExistingOffender = ({
             </Row>
             <Row style={{ marginTop: 30 }} gutter={10} justify="end">
               <Col>
-                <Button onClick={onClose}>Cancel</Button>
+                <Button onClick={onClose}>
+                  {intl.formatMessage({
+                    defaultMessage: 'Cancel',
+                    id: '47FYwb',
+                  })}
+                </Button>
               </Col>
               <Col>
                 <Button
                   type="primary"
                   onClick={() => onSubmit(selectedOffender?.id)}
                 >
-                  Add Offender
+                  {intl.formatMessage({
+                    defaultMessage: 'Add Offender',
+                    id: 'm3ChN4',
+                  })}
                 </Button>
               </Col>
             </Row>

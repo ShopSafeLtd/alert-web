@@ -1,14 +1,17 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Button, Drawer } from 'antd';
 import React, { memo, useCallback } from 'react';
 import { Handle, NodeToolbar, Position, useStore } from 'reactflow';
 import '@reactflow/node-resizer/dist/style.css';
 import { useParams } from 'react-router-dom';
+import { NodeResizer } from '@reactflow/node-resizer';
+import { useIntl } from 'react-intl';
 import useStyles from './style.module';
 import useFlow from '../../../views/investigations/ViewInvestigation/views/Flow/hooks/useFlow';
 import { useDrawerState } from '../../../hooks';
 import { useStoreState } from '../../../state';
 import LinkIncident from '../form/SelectIncident';
-import { NodeResizer } from '@reactflow/node-resizer';
+// eslint-disable-next-line import/no-cycle
 import IncidentCard from './components/incident-details-card.view';
 
 export interface Incident {
@@ -58,7 +61,7 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
       ...currentNode,
       data: {
         ...currentNode.data,
-        incident: incident,
+        incident,
         isEditing: { user: '', editing: false },
       },
     });
@@ -83,7 +86,7 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
       data: { ...currentNode.data, isEditing: { user: fullName, editing } },
     });
   }, []);
-
+  const intl = useIntl();
   return (
     <>
       <NodeToolbar isVisible={selected} position={Position.Top}>
@@ -91,12 +94,18 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
           onClick={() => {
             setIsEditing(true);
             drawer.open({
-              defaultTitle: 'Select Incident',
+              defaultTitle: intl.formatMessage({
+                defaultMessage: 'Select incident',
+                id: 'Vea8nA',
+              }),
               id: 'incidentSelect',
             });
           }}
         >
-          select incident
+          {intl.formatMessage({
+            defaultMessage: 'Select incident',
+            id: 'Vea8nA',
+          })}
         </Button>
       </NodeToolbar>
       <div className={classes.node}>
@@ -109,10 +118,13 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
         />
         <div className={classes.nodeContainer}>
           {data.incident && data.incident.description ? (
-            <IncidentCard incident={data.incident!} />
+            <IncidentCard incident={data.incident} />
           ) : (
             <div style={{ height: '100%', zIndex: 4, position: 'relative' }}>
-              Incident: Please choose an incident
+              {intl.formatMessage({
+                defaultMessage: 'Select incident',
+                id: 'Vea8nA',
+              })}
             </div>
           )}
         </div>

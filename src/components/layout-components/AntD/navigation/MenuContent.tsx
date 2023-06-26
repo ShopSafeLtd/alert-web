@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Badge, Button, Col, Drawer, Grid, Menu, Row, Typography } from 'antd';

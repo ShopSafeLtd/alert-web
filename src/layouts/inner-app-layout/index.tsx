@@ -34,6 +34,7 @@ interface SideContentMobileProps {
 }
 
 const SideContentMobile = (props: SideContentMobileProps) => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { sideContent, visible, onSideContentClose } = props;
   return (
     <Drawer

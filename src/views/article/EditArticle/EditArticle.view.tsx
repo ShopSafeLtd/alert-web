@@ -17,6 +17,7 @@ import {
 } from 'antd';
 import { ArticlePriority } from 'graphql/generated';
 import { UploadOutlined } from '@ant-design/icons';
+import { useIntl } from 'react-intl';
 import type { ViewProps } from './types/EditArticle';
 import AddExistingOffender from '../../../components/form-components/offender/offender/AddExistingOffender/AddExistingOffender.container';
 import LinkIncident from '../../../components/form-components/linkOptions/LinkIncident';
@@ -57,6 +58,7 @@ const EditArticleView = ({
   loading,
   selectedSchemes,
 }: ViewProps) => {
+  const intl = useIntl();
   const noSchemes = selectedSchemes;
   const forms = {
     // eslint-disable-next-line react/jsx-no-useless-fragment
@@ -68,12 +70,15 @@ const EditArticleView = ({
           incidentIds={
             incidents ? incidents.map((incident) => incident.incident.id) : []
           }
-          onClose={drawer.close}
+          onClose={() => drawer.close()}
         />
       ) : (
         <div>
-          At the moment adding an incident to a multi-scheme article is not
-          supported.
+          {intl.formatMessage({
+            defaultMessage:
+              'At the moment adding an incident to a multi-scheme article is not supported.',
+            id: '1rIGfA',
+          })}
         </div>
       ),
     addOffender:
@@ -83,12 +88,15 @@ const EditArticleView = ({
           offenderIds={
             offenders ? offenders.map((offender) => offender.id) : []
           }
-          onClose={drawer.close}
+          onClose={() => drawer.close()}
         />
       ) : (
         <div>
-          At the moment adding an offender to a multi-scheme article is not
-          supported.
+          {intl.formatMessage({
+            defaultMessage:
+              'At the moment adding an offender to a multi-scheme article is not supported.',
+            id: 'sZrY8p',
+          })}
         </div>
       ),
   };
@@ -107,7 +115,12 @@ const EditArticleView = ({
   return (
     <>
       <div className="page-view">
-        <PageHeader title="Edit Article" />
+        <PageHeader
+          title={intl.formatMessage({
+            defaultMessage: 'Edit Article',
+            id: 'oZPIFV',
+          })}
+        />
         <Card style={{ marginLeft: 20, marginRight: 20, minHeight: 600 }}>
           <Form<FormData>
             form={form}
@@ -128,10 +141,26 @@ const EditArticleView = ({
                 <Col span={8}>
                   <Form.Item
                     name="title"
-                    label="Title"
-                    rules={[{ required: true, message: 'Please input title!' }]}
+                    label={intl.formatMessage({
+                      defaultMessage: 'Title',
+                      id: '9a9+ww',
+                    })}
+                    rules={[
+                      {
+                        required: true,
+                        message: intl.formatMessage({
+                          defaultMessage: 'Please enter a title!',
+                          id: 'tl/J0C',
+                        }),
+                      },
+                    ]}
                   >
-                    <Input placeholder="Title" />
+                    <Input
+                      placeholder={intl.formatMessage({
+                        defaultMessage: 'Title',
+                        id: '9a9+ww',
+                      })}
+                    />
                   </Form.Item>
                 </Col>
               </Row>
@@ -140,13 +169,25 @@ const EditArticleView = ({
                 <Col span={10}>
                   <Form.Item
                     name="groups"
-                    label="Groups"
+                    label={intl.formatMessage({
+                      defaultMessage: 'Groups',
+                      id: 'hzmswI',
+                    })}
                     rules={[
-                      { required: true, message: 'Please select groups!' },
+                      {
+                        required: true,
+                        message: intl.formatMessage({
+                          defaultMessage: 'Please select groups!',
+                          id: 'dPaSVi',
+                        }),
+                      },
                     ]}
                   >
                     <Select
-                      placeholder="Groups"
+                      placeholder={intl.formatMessage({
+                        defaultMessage: 'Groups',
+                        id: 'hzmswI',
+                      })}
                       mode="multiple"
                       size="small"
                       maxTagCount={2}
@@ -166,12 +207,27 @@ const EditArticleView = ({
                 <Col span={6}>
                   <Form.Item
                     name="importance"
-                    label="Importance"
+                    label={intl.formatMessage({
+                      defaultMessage: 'Importance',
+                      id: 'DBZGY7',
+                    })}
                     rules={[
-                      { required: true, message: 'Please select importance!' },
+                      {
+                        required: true,
+                        message: intl.formatMessage({
+                          defaultMessage: 'Please select importance!',
+                          id: 'ZUR1Zs',
+                        }),
+                      },
                     ]}
                   >
-                    <Select placeholder="Type" style={{ minWidth: 200 }}>
+                    <Select
+                      placeholder={intl.formatMessage({
+                        defaultMessage: 'Type',
+                        id: '+U6ozc',
+                      })}
+                      style={{ minWidth: 200 }}
+                    >
                       {Object.keys(ArticlePriority).map((priority) => (
                         <Select.Option value={priority}>
                           {priority}
@@ -181,9 +237,18 @@ const EditArticleView = ({
                   </Form.Item>
                 </Col>
                 <Col span={8}>
-                  <Form.Item name="categories" label="Category">
+                  <Form.Item
+                    name="categories"
+                    label={intl.formatMessage({
+                      defaultMessage: 'Categories',
+                      id: 'VKb1MS',
+                    })}
+                  >
                     <Select
-                      placeholder="Category"
+                      placeholder={intl.formatMessage({
+                        defaultMessage: 'Categories',
+                        id: 'VKb1MS',
+                      })}
                       mode="tags"
                       size="small"
                       maxTagCount={2}
@@ -205,9 +270,7 @@ const EditArticleView = ({
                   editorRef.current = editor;
                 }}
                 tinymceScriptSrc="/tinymce/tinymce.min.js"
-                initialValue={
-                  data?.content || '<p>Create a new document here...</p>'
-                }
+                initialValue={data?.content || '<p> Enter content... </p>'}
                 init={{
                   skin: theme ? 'oxide-dark' : undefined,
                   content_css: theme ? 'dark' : undefined,
@@ -218,27 +281,42 @@ const EditArticleView = ({
                         const items = [
                           {
                             type: 'menuitem',
-                            text: 'Add Incident',
+                            text: intl.formatMessage({
+                              defaultMessage: 'Add Incident',
+                              id: 'kG1p3q',
+                            }),
                             onAction() {
                               drawer.open({
-                                defaultTitle: 'Add Incident',
+                                defaultTitle: intl.formatMessage({
+                                  defaultMessage: 'Add Incident',
+                                  id: 'kG1p3q',
+                                }),
                                 id: 'addIncident',
                               });
                             },
                           },
                           {
                             type: 'menuitem',
-                            text: 'Add Offender',
+                            text: intl.formatMessage({
+                              defaultMessage: 'Add Offender',
+                              id: 'm3ChN4',
+                            }),
                             onAction() {
                               drawer.open({
-                                defaultTitle: 'Add Offender',
+                                defaultTitle: intl.formatMessage({
+                                  defaultMessage: 'Add Offender',
+                                  id: 'm3ChN4',
+                                }),
                                 id: 'addOffender',
                               });
                             },
                           },
                           {
                             type: 'menuitem',
-                            text: 'Add Document link',
+                            text: intl.formatMessage({
+                              defaultMessage: 'Add Document Link',
+                              id: 'F8UHCF',
+                            }),
                             onAction() {
                               filePickerCallback(
                                 (file, { title }) => {
@@ -311,7 +389,10 @@ const EditArticleView = ({
                   style={{ marginLeft: 20, marginTop: 20 }}
                   level={4}
                 >
-                  Incidents:
+                  {intl.formatMessage({
+                    defaultMessage: 'Incidents:',
+                    id: '+nRUf9',
+                  })}
                 </Typography.Title>
                 <Row>
                   <List
@@ -327,12 +408,23 @@ const EditArticleView = ({
                             type="ghost"
                             danger
                           >
-                            remove
+                            {intl.formatMessage({
+                              defaultMessage: 'remove',
+                              id: '1LmW+v',
+                            })}
                           </Button>,
                         ]}
                       >
                         <List.Item.Meta
-                          title={`Incident: ${item.incident.reference}`}
+                          title={intl.formatMessage(
+                            {
+                              defaultMessage: `Incident: {reference}`,
+                              id: 'vNNXAE',
+                            },
+                            {
+                              reference: item.incident.reference,
+                            }
+                          )}
                           description={item.incident.description}
                         />
                       </List.Item>
@@ -347,7 +439,10 @@ const EditArticleView = ({
                   style={{ marginLeft: 20, marginTop: 20 }}
                   level={4}
                 >
-                  Offenders:
+                  {intl.formatMessage({
+                    defaultMessage: 'Offenders:',
+                    id: 'HEnuMU',
+                  })}
                 </Typography.Title>
                 <Row>
                   <List
@@ -362,7 +457,10 @@ const EditArticleView = ({
                             danger
                             onClick={() => removeOffender(item.id)}
                           >
-                            remove
+                            {intl.formatMessage({
+                              defaultMessage: 'remove',
+                              id: '1LmW+v',
+                            })}
                           </Button>,
                         ]}
                       >
@@ -390,7 +488,12 @@ const EditArticleView = ({
                 style={{ display: 'flex' }}
                 fileList={fileList}
               >
-                <Button icon={<UploadOutlined />}>Upload Documents</Button>
+                <Button icon={<UploadOutlined />}>
+                  {intl.formatMessage({
+                    defaultMessage: 'Upload Document',
+                    id: 'Kc9MAV',
+                  })}
+                </Button>
               </Upload>
             </Row>
             <Form.Item>
@@ -400,7 +503,10 @@ const EditArticleView = ({
                     loading={loading}
                     onClick={() => window.history.back()}
                   >
-                    Cancel
+                    {intl.formatMessage({
+                      defaultMessage: 'Cancel',
+                      id: '47FYwb',
+                    })}
                   </Button>
                 </Col>
                 <Col>
@@ -410,7 +516,10 @@ const EditArticleView = ({
                     type="primary"
                     htmlType="submit"
                   >
-                    Save Bulletin
+                    {intl.formatMessage({
+                      defaultMessage: 'Save',
+                      id: 'jvo0vs',
+                    })}
                   </Button>
                 </Col>
               </Row>
@@ -422,7 +531,7 @@ const EditArticleView = ({
         title={drawer.defaultTitle}
         width={1000}
         visible={drawer.visible}
-        onClose={drawer.close}
+        onClose={() => drawer.close()}
       >
         {forms[drawer.id]}
       </Drawer>

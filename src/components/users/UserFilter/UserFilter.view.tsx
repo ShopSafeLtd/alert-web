@@ -5,6 +5,7 @@ import type { UserStatus } from 'types/enums/user_status';
 import { userStatusValues } from 'types/enums/user_status';
 import type { UserSort } from 'types/enums/user_sort';
 import { userSortValues } from 'types/enums/user_sort';
+import { FormattedMessage, useIntl } from 'react-intl';
 import useStyles from './UserFilter.styles';
 
 interface Props {
@@ -35,27 +36,35 @@ const UserFilter = ({
   setUserRole,
 }: Props): JSX.Element => {
   const classes = useStyles();
+  const intl = useIntl();
+
   return (
     <>
       <Row justify="end">
         <Col>
           <Button type="text" danger onClick={clearFilters}>
-            Clear Filters
+            <FormattedMessage id="MsGXc3" defaultMessage="Clear Filters" />
           </Button>
         </Col>
       </Row>
       <Row gutter={16}>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
-            Sort Order
+            <FormattedMessage id="Hw6crD" defaultMessage="Sort Order" />
           </Typography.Paragraph>
           <Select
             className={classes.select}
             value={order}
             onChange={setOrder}
             size="small"
-            placeholder="Sort Order"
-            options={userSortValues}
+            placeholder={intl.formatMessage({
+              id: 'Hw6crD',
+              defaultMessage: 'Sort Order',
+            })}
+            options={userSortValues.map((value) => ({
+              label: value,
+              value,
+            }))}
           />
         </Col>
       </Row>
@@ -63,46 +72,62 @@ const UserFilter = ({
       <Row gutter={16}>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
-            Status
+            <FormattedMessage id="tzMNF3" defaultMessage="Status" />
           </Typography.Paragraph>
           <Select
-            placeholder="Status"
+            placeholder={intl.formatMessage({
+              id: 'tzMNF3',
+              defaultMessage: 'Status',
+            })}
             className={classes.select}
             allowClear
             value={userStatus}
             onChange={setUserStatus}
-            options={userStatusValues}
+            options={userStatusValues.map((value) => ({
+              label: value,
+              value,
+            }))}
           />
         </Col>
       </Row>
       <Row gutter={16}>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
-            Role
+            <FormattedMessage id="1ZgrhW" defaultMessage="Role" />
           </Typography.Paragraph>
           <Select
             allowClear
-            placeholder="Role"
+            placeholder={intl.formatMessage({
+              id: '1ZgrhW',
+              defaultMessage: 'Role',
+            })}
             className={classes.select}
             value={userRole}
             onChange={setUserRole}
           >
-            <Select.Option value={Role.User}>User</Select.Option>
-            <Select.Option value={Role.ContentAdmin}>
-              ContentAdmin
+            <Select.Option value={Role.User}>
+              <FormattedMessage id="EwRIOm" defaultMessage="User" />
             </Select.Option>
-            <Select.Option value={Role.SchemeAdmin}>SchemeAdmin</Select.Option>
+            <Select.Option value={Role.ContentAdmin}>
+              <FormattedMessage id="juchkY" defaultMessage="Content Admin" />
+            </Select.Option>
+            <Select.Option value={Role.SchemeAdmin}>
+              <FormattedMessage id="ZENz1B" defaultMessage="Scheme Admin" />
+            </Select.Option>
           </Select>
         </Col>
       </Row>
       <Row gutter={16}>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
-            Groups
+            <FormattedMessage id="hzmswI" defaultMessage="Groups" />
           </Typography.Paragraph>
           <Select
             className={classes.select}
-            placeholder="Groups"
+            placeholder={intl.formatMessage({
+              id: 'hzmswI',
+              defaultMessage: 'Groups',
+            })}
             mode="multiple"
             size="small"
             maxTagCount={2}
@@ -112,7 +137,9 @@ const UserFilter = ({
             value={groupsFilter}
           >
             {groups.map((group) => (
-              <Select.Option value={group.value}>{group.label}</Select.Option>
+              <Select.Option key={group.value} value={group.value}>
+                {group.label}
+              </Select.Option>
             ))}
           </Select>
         </Col>

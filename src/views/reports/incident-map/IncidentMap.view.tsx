@@ -19,6 +19,7 @@ import { Layer, Map, Source } from 'react-map-gl';
 import type { Scheme } from 'state';
 import { useStoreState } from 'state';
 import mapboxgl from 'mapbox-gl';
+import { useIntl } from 'react-intl';
 import useStyles from './IncidentMap.styles';
 
 const { Title } = Typography;
@@ -200,21 +201,7 @@ const IncidentMap = ({
     mapRef.current?.moveLayer('cluster-count');
   }, [showHeatmap, showMarkers]);
 
-  // useEffect(() => {
-  //   if (data?.incidents && data?.incidents.length > 0) {
-  //     const arr = data.incidents.map((item) => ({
-  //       lat: item.location?.geoLat || 0,
-  //       lng: item.location?.geoLng || 0,
-  //     }));
-
-  //     if (arr.length > 2)
-  //       mapRef.current?.fitBounds(
-  //         // @ts-expect-error needs 2
-  //         arr,
-  //         { animate: false, zoom: 11 }
-  //       );
-  //   }
-  // }, [data]);
+  const intl = useIntl();
 
   const classes = useStyles();
   return (
@@ -223,28 +210,54 @@ const IncidentMap = ({
         <Row gutter={16} align="middle" className={classes.headerRow}>
           <Col flex={1}>
             <Title className={classes.title} level={3}>
-              Incident Map
+              {intl.formatMessage({
+                defaultMessage: 'Incident Map',
+                id: '8vWvqg',
+              })}
             </Title>
           </Col>
           <Col>
-            <Form.Item label="Show Businesses">
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Show Businesses',
+                id: 'NOT1VO',
+              })}
+            >
               <Switch onClick={toggleBusinesses} checked={showBusinesses} />
             </Form.Item>
           </Col>
           <Col>
-            <Form.Item label="Show Incidents">
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Show Incidents',
+                id: 'RVBwrX',
+              })}
+            >
               <Switch onClick={toggleMarkers} checked={showMarkers} />
             </Form.Item>
           </Col>
           <Col>
-            <Form.Item label="Show Heatmap">
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Show Heatmap',
+                id: 'JNbVtq',
+              })}
+            >
               <Switch onClick={toggleHeatmap} checked={showHeatmap} />
             </Form.Item>
           </Col>
           <Col>
-            <Form.Item label="Schemes">
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Schemes',
+                id: 'QgGevU',
+              })}
+            >
               <Select
-                placeholder="Select Scheme"
+                placeholder={intl.formatMessage({
+                  defaultMessage: 'Select Scheme',
+                  id: 'bfRA48',
+                })}
                 className={classes.groupSelect}
                 onChange={onChangeSchemes}
                 value={selectedSchemes}
@@ -264,9 +277,17 @@ const IncidentMap = ({
             </Form.Item>
           </Col>
           <Col>
-            <Form.Item label="Groups">
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Groups',
+                id: 'hzmswI',
+              })}
+            >
               <Select
-                placeholder="Select Groups"
+                placeholder={intl.formatMessage({
+                  defaultMessage: 'Select Groups',
+                  id: 'q2cuIU',
+                })}
                 className={classes.groupSelect}
                 style={{ minWidth: 150 }}
                 onChange={onChangeGroups}
@@ -287,7 +308,12 @@ const IncidentMap = ({
             </Form.Item>
           </Col>
           <Col>
-            <Form.Item label="Date Filter">
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Date Filter',
+                id: 'cMfoug',
+              })}
+            >
               <RangePicker
                 onChange={(value) => {
                   if (value && value[0] && value[1])

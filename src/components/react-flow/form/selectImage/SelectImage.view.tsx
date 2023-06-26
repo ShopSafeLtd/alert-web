@@ -1,7 +1,8 @@
 import React from 'react';
 import { Button, Col, Row } from 'antd';
-import { ImagesData } from './useSelectImage';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import { FormattedMessage } from 'react-intl';
+import type { ImagesData } from './useSelectImage';
 
 interface Props {
   data: ImagesData | undefined;
@@ -14,6 +15,7 @@ const LinkIncident = ({
   data,
   onSubmit,
   onClose,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   loading,
 }: Props): JSX.Element => (
   <div>
@@ -24,6 +26,7 @@ const LinkIncident = ({
           <Row gutter={16}>
             {offender.images?.map(({ url }) => (
               <Col span={6}>
+                {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
                 <div
                   onClick={() => onSubmit({ key: url })}
                   style={{
@@ -41,7 +44,7 @@ const LinkIncident = ({
     <Row gutter={16} style={{ paddingBottom: 30 }} justify="end">
       <Col>
         <Button onClick={onClose} type="text">
-          Cancel
+          <FormattedMessage defaultMessage="Cancel" id="47FYwb" />
         </Button>
       </Col>
     </Row>

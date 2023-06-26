@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useStoreState } from 'state';
 import { Modal } from 'antd';
 import { useNavigate } from 'react-router';
+import { useIntl } from 'react-intl';
 import type {
   ListArticlesQuery,
   ListArticlesQueryVariables,
@@ -16,6 +17,7 @@ import {
 import type { Props, ReturnProps } from '../types/ViewArticle';
 
 const useViewArticle = ({ id }: Props): ReturnProps => {
+  const intl = useIntl();
   const navigation = useNavigate();
   const schemeId = useStoreState((state) => state.scheme.id);
   const role = useStoreState((state) => state.user.role);
@@ -82,10 +84,16 @@ const useViewArticle = ({ id }: Props): ReturnProps => {
 
   const onDeleteArticle = () => {
     Modal.confirm({
-      title: 'Are you sure?',
-      content: 'This will delete the bulletin and move it to the recycle bin.',
+      title: intl.formatMessage({
+        defaultMessage: 'Are you sure?',
+        id: '2oCaym',
+      }),
+      content: intl.formatMessage({
+        defaultMessage: 'Are you sure you want to delete this article?',
+        id: 'AjSz/I',
+      }),
       onOk() {
-        deleteArticle({
+        void deleteArticle({
           variables: {
             where: {
               id,

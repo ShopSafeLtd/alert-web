@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import React, { useState } from 'react';
 import {
   Button,
@@ -20,16 +21,13 @@ import {
 import type { CrimeGroupData, VehicleData } from 'types/DataType';
 
 import type { ListVehiclesQuery } from 'graphql/generated';
+import { useIntl } from 'react-intl';
 import ProfileDrawer from '../ProfileDrawer';
 
 const { Title, Paragraph } = Typography;
 
 interface Props {
-  // titleOrder: number;
-  // adminRights: boolean;
   saving: boolean;
-  // editCrimeGroupId: string;
-  // setEditCrimeGroupId: (value: string) => void;
   listVehiclesData: ListVehiclesQuery | undefined;
   titleNumber?: number;
   vehiclesData: VehicleData[];
@@ -68,6 +66,8 @@ const Profiles = ({
     setAddExistingVehicle(!addExistingVehicle);
   };
 
+  const intl = useIntl();
+
   return (
     <div style={{ width: '100%' }}>
       <Row
@@ -77,17 +77,25 @@ const Profiles = ({
       >
         <Col>
           <Title style={{ marginBottom: 0 }} level={4}>
+            {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
             {titleNumber}.
           </Title>
         </Col>
         <Col>
           <Title style={{ marginBottom: 0 }} level={4}>
-            Profiles
+            {intl.formatMessage({
+              id: '2zJXeA',
+              defaultMessage: 'Profiles',
+            })}
           </Title>
         </Col>
         <Col style={{ marginRight: 20 }}>
           <Paragraph style={{ marginBottom: 1 }} type="secondary" italic>
-            - Please add the profiles that were involved in the offender.
+            {intl.formatMessage({
+              id: 'anuHw8',
+              defaultMessage:
+                '- Please add the profiles that were involved in the offender.',
+            })}
           </Paragraph>
         </Col>
 
@@ -97,7 +105,10 @@ const Profiles = ({
               <Menu
                 items={[
                   {
-                    label: 'Add Existing Vehicles',
+                    label: intl.formatMessage({
+                      id: 'goP1s6',
+                      defaultMessage: 'Add Existing Vehicles',
+                    }),
                     key: '1',
                     icon: (
                       <FontAwesomeIcon
@@ -109,7 +120,10 @@ const Profiles = ({
                     onClick: () => toggleAddExistingVehicle(),
                   },
                   {
-                    label: 'Create New Vehicle',
+                    label: intl.formatMessage({
+                      id: 'xiAZxN',
+                      defaultMessage: 'Create New Vehicle',
+                    }),
                     key: '2',
                     icon: (
                       <FontAwesomeIcon
@@ -129,7 +143,10 @@ const Profiles = ({
                 <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
               }
             >
-              Vehicles
+              {intl.formatMessage({
+                id: 'r6wuJ3',
+                defaultMessage: 'Vehicles',
+              })}
             </Button>
           </Dropdown>
         </Col>
@@ -139,7 +156,10 @@ const Profiles = ({
             onClick={toggleAddExistingCrimeGroup}
             icon={<FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />}
           >
-            Crime Groups
+            {intl.formatMessage({
+              id: 'a0aLil',
+              defaultMessage: 'Crime Groups',
+            })}
           </Button>
         </Col>
       </Row>
@@ -151,25 +171,32 @@ const Profiles = ({
             <>
               {vehiclesData && vehiclesData.length > 0 ? (
                 <>
-                  <Divider>Vehicles</Divider>
+                  <Divider>
+                    {intl.formatMessage({
+                      id: 'r6wuJ3',
+                      defaultMessage: 'Vehicles',
+                    })}
+                  </Divider>
                   <Table
                     columns={[
                       {
                         key: 'reference',
                         dataIndex: 'reference',
-                        title: 'Alert ID',
+                        title: intl.formatMessage({
+                          id: 'k8ZNgH',
+                          defaultMessage: 'Alert ID',
+                        }),
                         width: 100,
                       },
                       {
                         key: 'images',
-                        title: 'Image',
+                        title: intl.formatMessage({
+                          id: '+0zv6g',
+                          defaultMessage: 'Image',
+                        }),
                         dataIndex: 'images',
                         width: 150,
-                        render: (
-                          _,
-                          record
-                          // images?: { id: string; optimised: string }[],
-                        ) => {
+                        render: (_, record) => {
                           if (record.images && record.images.length > 0) {
                             return (
                               <img
@@ -186,50 +213,61 @@ const Profiles = ({
                       {
                         key: 'registration',
                         dataIndex: 'registration',
-                        title: 'Registration',
+                        title: intl.formatMessage({
+                          id: 'qv7ied',
+                          defaultMessage: 'Registration',
+                        }),
                       },
                       {
                         key: 'make',
                         dataIndex: 'make',
-                        title: 'Make',
+                        title: intl.formatMessage({
+                          id: '6AAM0P',
+                          defaultMessage: 'Make',
+                        }),
                       },
                       {
                         key: 'model',
                         dataIndex: 'model',
-                        title: 'Model',
+                        title: intl.formatMessage({
+                          id: 'rhSI1/',
+                          defaultMessage: 'Model',
+                        }),
                       },
                       {
                         key: 'colour',
                         dataIndex: 'colour',
-                        title: 'Colour',
+                        title: intl.formatMessage({
+                          id: '+e8vAT',
+                          defaultMessage: 'Colour',
+                        }),
                       },
-                      // {
-                      //   key: 'edit',
-                      //   title: 'Edit',
-                      //   dataIndex: '',
-                      //   width: 50,
-                      //   render: (_, record) => (
-                      //     <Button
-                      //       onClick={() => setEditVehicleId(record.key)}
-                      //       disabled
-                      //       icon={<FontAwesomeIcon icon={faEdit} />}
-                      //     />
-                      //   ),
-                      // },
                       {
                         key: 'delete',
-                        title: 'Delete',
+                        title: intl.formatMessage({
+                          id: 'K3r6DQ',
+                          defaultMessage: 'Delete',
+                        }),
                         dataIndex: 'delete',
                         width: 50,
                         render: (_, record) => (
                           <Popconfirm
                             placement="topLeft"
-                            title="Remove the vehicle?"
+                            title={intl.formatMessage({
+                              id: 'hHs0lD',
+                              defaultMessage: 'Remove the vehicle?',
+                            })}
                             onConfirm={() => {
                               onRemoveVehicle(record.key);
                             }}
-                            okText="Yes"
-                            cancelText="No"
+                            okText={intl.formatMessage({
+                              id: 'a5msuh',
+                              defaultMessage: 'Yes',
+                            })}
+                            cancelText={intl.formatMessage({
+                              id: 'oUWADl',
+                              defaultMessage: 'No',
+                            })}
                             overlayInnerStyle={{ padding: 10 }}
                           >
                             <Button
@@ -262,74 +300,100 @@ const Profiles = ({
               ) : null}
               {crimeGroupsData && crimeGroupsData.length > 0 ? (
                 <>
-                  <Divider>Crime Groups</Divider>
+                  <Divider>
+                    {intl.formatMessage({
+                      id: 'a0aLil',
+                      defaultMessage: 'Crime Groups',
+                    })}
+                  </Divider>
                   <Table
                     columns={[
                       {
                         key: 'reference',
                         dataIndex: 'reference',
-                        title: 'Alert ID',
+                        title: intl.formatMessage({
+                          id: 'k8ZNgH',
+                          defaultMessage: 'Alert ID',
+                        }),
                       },
                       {
                         key: 'alias',
                         dataIndex: 'alias',
-                        title: 'Alias',
+                        title: intl.formatMessage({
+                          id: 'Ri9jA7',
+                          defaultMessage: 'Alias',
+                        }),
                       },
                       {
                         key: 'totalOffenders',
                         dataIndex: 'totalOffenders',
-                        title: 'Members',
+                        title: intl.formatMessage({
+                          id: '+a+2ug',
+                          defaultMessage: 'Members',
+                        }),
                       },
                       {
                         key: 'totalIncidents',
                         dataIndex: 'totalIncidents',
-                        title: 'Incidents',
+                        title: intl.formatMessage({
+                          id: 'mtr3R4',
+                          defaultMessage: 'Incidents',
+                        }),
                       },
                       {
                         key: 'totalValue',
                         dataIndex: 'totalValue',
-                        title: 'Lost Value',
+                        title: intl.formatMessage({
+                          id: '3YYDlc',
+                          defaultMessage: 'Lost Value',
+                        }),
                         render: (value) => `£${value || 0}`,
                       },
                       {
                         key: 'totalRecoveredValue',
                         dataIndex: 'totalRecoveredValue',
-                        title: 'Recovered Value',
+                        title: intl.formatMessage({
+                          id: 'bGwFFv',
+                          defaultMessage: 'Recovered Value',
+                        }),
                         render: (value) => `£${value || 0}`,
                       },
                       {
                         key: 'totalTheftSuccess',
                         dataIndex: 'totalTheftSuccess',
-                        title: 'Success Rate',
+                        title: intl.formatMessage({
+                          id: 'IaZkrc',
+                          defaultMessage: 'Success Rate',
+                        }),
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
                         render: (value) => `${value?.toFixed(0) || 0}%`,
                       },
-                      // {
-                      //   key: 'edit',
-                      //   title: 'Edit',
-                      //   dataIndex: '',
-                      //   width: 50,
-                      //   render: (_, record) => (
-                      //     <Button
-                      //       onClick={() => setEditVehicleId(record.key)}
-                      //       disabled
-                      //       icon={<FontAwesomeIcon icon={faEdit} />}
-                      //     />
-                      //   ),
-                      // },
                       {
                         key: 'delete',
-                        title: 'Delete',
+                        title: intl.formatMessage({
+                          id: 'K3r6DQ',
+                          defaultMessage: 'Delete',
+                        }),
                         dataIndex: 'delete',
                         width: 50,
                         render: (_, record) => (
                           <Popconfirm
                             placement="topLeft"
-                            title="Remove the crime group?"
+                            title={intl.formatMessage({
+                              id: 'Ek+T43',
+                              defaultMessage: 'Remove the crime group?',
+                            })}
                             onConfirm={() => {
                               onRemoveCrimeGroup(record.key);
                             }}
-                            okText="Yes"
-                            cancelText="No"
+                            okText={intl.formatMessage({
+                              id: 'a5msuh',
+                              defaultMessage: 'Yes',
+                            })}
+                            cancelText={intl.formatMessage({
+                              id: 'oUWADl',
+                              defaultMessage: 'No',
+                            })}
                             overlayInnerStyle={{ padding: 10 }}
                           >
                             <Button
@@ -365,14 +429,20 @@ const Profiles = ({
           ) : (
             <Row justify="start">
               <Empty
-                image={Empty.PRESENTED_IMAGE_SIMPLE}
-                description="There are no profiles for this offender."
-                style={{ marginLeft: 150 }}
+                description={
+                  <span>
+                    {intl.formatMessage({
+                      id: 'PNTO/p',
+                      defaultMessage: 'No profiles added yet.',
+                    })}
+                  </span>
+                }
               />
             </Row>
           )}
         </Col>
       </Row>
+
       <ProfileDrawer
         addExistingVehicle={addExistingVehicle}
         editVehicleId={editVehicleId}
@@ -392,4 +462,5 @@ const Profiles = ({
     </div>
   );
 };
+
 export default Profiles;

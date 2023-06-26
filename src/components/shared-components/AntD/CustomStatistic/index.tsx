@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface ValueProps {
   size: string;
@@ -8,17 +8,21 @@ interface ValueProps {
 const Value = (props: ValueProps) => {
   let value;
   switch (props.size) {
-    case "lg":
+    case 'lg': {
       value = <h1 className="mb-0 font-weight-bold">{props.value}</h1>;
       break;
-    case "md":
+    }
+    case 'md': {
       value = <h2 className="mb-0 font-weight-bold">{props.value}</h2>;
       break;
-    case "sm":
+    }
+    case 'sm': {
       value = <h3 className="mb-0 font-weight-bold">{props.value}</h3>;
       break;
-    default:
+    }
+    default: {
       value = <h3 className="mb-0 font-weight-bold">{props.value}</h3>;
+    }
   }
   return value;
 };
@@ -30,7 +34,7 @@ interface Props {
 }
 
 export const CustomStatistic = (props: Props) => {
-  const { size = "md", value, title } = props;
+  const { size = 'md', value, title } = props;
   return (
     <div>
       <Value value={value} size={size} />

@@ -1,16 +1,20 @@
-import React from "react";
-import utils from "utils";
-import MenuContent from "./MenuContent";
-import { useStoreState, NavType } from "state";
-import { NavItem } from 'configs/NavigationConfig'
+import React from 'react';
+import utils from 'utils';
+import { useStoreState, NavType } from 'state';
+import type { NavItem } from 'configs/NavigationConfig';
+import MenuContent from './MenuContent';
 
 interface Props {
-	localization?: true;
-	routeInfo: NavItem;
-	hideGroupTitle?: boolean;
+  localization?: true;
+  routeInfo: NavItem;
+  hideGroupTitle?: boolean;
 }
 
-export const TopNav = ({ localization = true, routeInfo, hideGroupTitle }: Props) => {
+export const TopNav = ({
+  localization = true,
+  routeInfo,
+  hideGroupTitle,
+}: Props) => {
   const topNavColor = useStoreState((state) => state.theme.topNavColor);
 
   const props = { topNavColor, localization, routeInfo, hideGroupTitle };
@@ -20,6 +24,7 @@ export const TopNav = ({ localization = true, routeInfo, hideGroupTitle }: Props
       style={{ backgroundColor: topNavColor }}
     >
       <div className="top-nav-wrapper">
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <MenuContent type={NavType.TOP} {...props} />
       </div>
     </div>

@@ -19,7 +19,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  DateTime: any;
+  DateTime: Date;
   Json: any;
   /** The `Upload` scalar type represents a file upload. */
   Upload: any;
@@ -58303,7 +58303,7 @@ export type ListActionsQuery = {
       description?: string | null;
       dataType: Model;
       reason?: string | null;
-      createdAt: any;
+      createdAt: Date;
       byUser: {
         __typename?: 'User';
         id: string;
@@ -58328,7 +58328,7 @@ export type CreateArticleMutation = {
   createArticle?: {
     __typename?: 'Article';
     id: string;
-    createdAt: any;
+    createdAt: Date;
     priority: ArticlePriority;
     title: string;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
@@ -58406,12 +58406,12 @@ export type CreateArticleMutation = {
         offenders: Array<{
           __typename?: 'Offender';
           id: string;
-          createdAt: any;
-          updatedAt: any;
+          createdAt: Date;
+          updatedAt: Date;
           age?: Age | null;
           build?: Build | null;
           height?: Height | null;
-          dateOfBirth?: any | null;
+          dateOfBirth?: Date | null;
           dateSource?: string | null;
           hair?: string | null;
           gender?: Gender | null;
@@ -58450,7 +58450,7 @@ export type CreateArticleMutation = {
             subject?: string | null;
             description: string;
             dayTime?: string | null;
-            date: any;
+            date: Date;
             approved?: boolean | null;
             crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
             location?: {
@@ -58501,7 +58501,7 @@ export type EditArticleMutation = {
   editArticle?: {
     __typename?: 'Article';
     id: string;
-    createdAt: any;
+    createdAt: Date;
     priority: ArticlePriority;
     title: string;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
@@ -58579,12 +58579,12 @@ export type EditArticleMutation = {
         offenders: Array<{
           __typename?: 'Offender';
           id: string;
-          createdAt: any;
-          updatedAt: any;
+          createdAt: Date;
+          updatedAt: Date;
           age?: Age | null;
           build?: Build | null;
           height?: Height | null;
-          dateOfBirth?: any | null;
+          dateOfBirth?: Date | null;
           dateSource?: string | null;
           hair?: string | null;
           gender?: Gender | null;
@@ -58623,7 +58623,7 @@ export type EditArticleMutation = {
             subject?: string | null;
             description: string;
             dayTime?: string | null;
-            date: any;
+            date: Date;
             approved?: boolean | null;
             crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
             location?: {
@@ -58670,7 +58670,7 @@ export type ArticlesQuery = {
     previewText?: string | null;
     priority: ArticlePriority;
     title: string;
-    updatedAt: any;
+    updatedAt: Date;
     id: string;
     tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
     images: Array<{
@@ -58721,7 +58721,7 @@ export type ListArticlesQuery = {
       previewText?: string | null;
       priority: ArticlePriority;
       title: string;
-      updatedAt: any;
+      updatedAt: Date;
       id: string;
       tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
       images: Array<{
@@ -58763,8 +58763,8 @@ export type ArticleQuery = {
   article?: {
     __typename?: 'Article';
     id: string;
-    createdAt: any;
-    updatedAt: any;
+    createdAt: Date;
+    updatedAt: Date;
     priority: ArticlePriority;
     title: string;
     groups: Array<{
@@ -58848,12 +58848,12 @@ export type ArticleQuery = {
         offenders: Array<{
           __typename?: 'Offender';
           id: string;
-          createdAt: any;
-          updatedAt: any;
+          createdAt: Date;
+          updatedAt: Date;
           age?: Age | null;
           build?: Build | null;
           height?: Height | null;
-          dateOfBirth?: any | null;
+          dateOfBirth?: Date | null;
           dateSource?: string | null;
           hair?: string | null;
           gender?: Gender | null;
@@ -58892,7 +58892,7 @@ export type ArticleQuery = {
             subject?: string | null;
             description: string;
             dayTime?: string | null;
-            date: any;
+            date: Date;
             approved?: boolean | null;
             crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
             location?: {
@@ -58981,10 +58981,10 @@ export type UpdateBanMutation = {
     id: string;
     active: boolean;
     location: string;
-    startDate: any;
-    endDate: any;
+    startDate: Date;
+    endDate: Date;
     description?: string | null;
-    createdAt: any;
+    createdAt: Date;
     createdBy: { __typename?: 'User'; id: string; fullName: string };
   } | null;
 };
@@ -59000,10 +59000,10 @@ export type BanQuery = {
     id: string;
     active: boolean;
     location: string;
-    startDate: any;
-    endDate: any;
+    startDate: Date;
+    endDate: Date;
     description?: string | null;
-    createdAt: any;
+    createdAt: Date;
     createdBy: { __typename?: 'User'; id: string; fullName: string };
   } | null;
 };
@@ -59019,8 +59019,8 @@ export type CreateBanMutation = {
     id: string;
     location: string;
     description?: string | null;
-    startDate: any;
-    endDate: any;
+    startDate: Date;
+    endDate: Date;
   };
 };
 
@@ -59034,8 +59034,8 @@ export type BansQuery = {
     __typename?: 'Ban';
     id: string;
     location: string;
-    startDate: any;
-    endDate: any;
+    startDate: Date;
+    endDate: Date;
     description?: string | null;
   }>;
 };
@@ -59059,7 +59059,7 @@ export type AddUsersToBusinessMutation = {
       fullName: string;
       status?: string | null;
       publicName: boolean;
-      loginEvents: Array<{ __typename?: 'LoginEvent'; loginTime: any }>;
+      loginEvents: Array<{ __typename?: 'LoginEvent'; loginTime: Date }>;
       groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     }>;
   };
@@ -59137,7 +59137,7 @@ export type RemoveUserFromBusinessMutation = {
       fullName: string;
       status?: string | null;
       publicName: boolean;
-      loginEvents: Array<{ __typename?: 'LoginEvent'; loginTime: any }>;
+      loginEvents: Array<{ __typename?: 'LoginEvent'; loginTime: Date }>;
       groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     }>;
   };
@@ -59218,12 +59218,12 @@ export type BusinessReportQuery = {
       __typename?: 'Incident';
       id: string;
       subject?: string | null;
-      createdAt: any;
+      createdAt: Date;
       reference?: number | null;
       policeRef?: string | null;
       totalRecoveredValue?: number | null;
       totalValue?: number | null;
-      date: any;
+      date: Date;
       crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
       createdBy: {
         __typename?: 'User';
@@ -59489,15 +59489,15 @@ export type CreateChatMutation = {
     id: string;
     name: string;
     description?: string | null;
-    updatedAt: any;
-    createdAt: any;
+    updatedAt: Date;
+    createdAt: Date;
     members: Array<{
       __typename?: 'UserChat';
       id: string;
       newMessages?: boolean | null;
       mentioned?: boolean | null;
-      updatedAt: any;
-      createdAt: any;
+      updatedAt: Date;
+      createdAt: Date;
       chat: {
         __typename?: 'Chat';
         id: string;
@@ -59508,7 +59508,7 @@ export type CreateChatMutation = {
           __typename?: 'Message';
           id: string;
           content: string;
-          createdAt: any;
+          createdAt: Date;
           from: { __typename?: 'User'; id: string; origName: string };
           images: Array<{ __typename?: 'Image'; id: string }>;
           incidents: Array<{ __typename?: 'Incident'; id: string }>;
@@ -59576,7 +59576,7 @@ export type CreateCrimeGroupMutation = {
     totalTheftSuccess?: number | null;
     totalValue?: number | null;
     alias?: string | null;
-    updatedAt: any;
+    updatedAt: Date;
   };
 };
 
@@ -59640,7 +59640,7 @@ export type UpdateCrimeGroupMutation = {
       hair?: string | null;
       peculiarities?: string | null;
       race?: Race | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       dateSource?: string | null;
       build?: Build | null;
       height?: Height | null;
@@ -59708,7 +59708,7 @@ export type ListCrimeGroupsQuery = {
       totalTheftSuccess?: number | null;
       totalValue?: number | null;
       alias?: string | null;
-      updatedAt: any;
+      updatedAt: Date;
     }>;
   };
 };
@@ -59730,7 +59730,7 @@ export type SuggestedCrimeGroupMembersQuery = {
       name?: string | null;
       alias: Array<string>;
       reference?: number | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       age?: Age | null;
       gender?: Gender | null;
       build?: Build | null;
@@ -59802,7 +59802,7 @@ export type CrimeGroupQuery = {
       hair?: string | null;
       peculiarities?: string | null;
       race?: Race | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       dateSource?: string | null;
       build?: Build | null;
       height?: Height | null;
@@ -59830,7 +59830,7 @@ export type CrimeGroupQuery = {
       reference?: number | null;
       make?: string | null;
       model?: string | null;
-      updatedAt: any;
+      updatedAt: Date;
       colour?: string | null;
       registration?: string | null;
       totalOffenders?: number | null;
@@ -59842,7 +59842,7 @@ export type CrimeGroupQuery = {
       id: string;
       reference?: number | null;
       dayTime?: string | null;
-      date: any;
+      date: Date;
       crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
       createdBy: {
         __typename?: 'User';
@@ -59866,7 +59866,7 @@ export type CrimeGroupQuery = {
       id: string;
       text?: string | null;
       type: UpdateType;
-      createdAt: any;
+      createdAt: Date;
       images: Array<{
         __typename?: 'Image';
         id: string;
@@ -59885,11 +59885,11 @@ export type CrimeGroupQuery = {
         totalRecoveredValue?: number | null;
         totalTheftSuccess?: number | null;
         totalValue?: number | null;
-        updatedAt: any;
+        updatedAt: Date;
       }>;
       linkedVehicles: Array<{
         __typename?: 'Vehicle';
-        updatedAt: any;
+        updatedAt: Date;
         totalOffenders?: number | null;
         registration?: string | null;
         reference?: number | null;
@@ -59922,11 +59922,11 @@ export type CrimeGroupQuery = {
       linkedOffenders: Array<{
         __typename?: 'Offender';
         id: string;
-        updatedAt: any;
+        updatedAt: Date;
         age?: Age | null;
         build?: Build | null;
         height?: Height | null;
-        dateOfBirth?: any | null;
+        dateOfBirth?: Date | null;
         name?: string | null;
         race?: Race | null;
         gender?: Gender | null;
@@ -59954,7 +59954,7 @@ export type CrimeGroupQuery = {
         id: string;
         text?: string | null;
         type: UpdateType;
-        createdAt: any;
+        createdAt: Date;
         images: Array<{
           __typename?: 'Image';
           id: string;
@@ -59973,11 +59973,11 @@ export type CrimeGroupQuery = {
           totalRecoveredValue?: number | null;
           totalTheftSuccess?: number | null;
           totalValue?: number | null;
-          updatedAt: any;
+          updatedAt: Date;
         }>;
         linkedVehicles: Array<{
           __typename?: 'Vehicle';
-          updatedAt: any;
+          updatedAt: Date;
           totalOffenders?: number | null;
           registration?: string | null;
           reference?: number | null;
@@ -60010,11 +60010,11 @@ export type CrimeGroupQuery = {
         linkedOffenders: Array<{
           __typename?: 'Offender';
           id: string;
-          updatedAt: any;
+          updatedAt: Date;
           age?: Age | null;
           build?: Build | null;
           height?: Height | null;
-          dateOfBirth?: any | null;
+          dateOfBirth?: Date | null;
           name?: string | null;
           race?: Race | null;
           gender?: Gender | null;
@@ -60130,7 +60130,7 @@ export type ListDemEvidenceQuery = {
       playbackUrl?: string | null;
       importance?: string | null;
       id?: string | null;
-      createdAt?: any | null;
+      createdAt?: Date | null;
     }>;
   };
 };
@@ -60165,8 +60165,8 @@ export type CreateDocumentMutation = {
     name: string;
     thumbnailUrl?: string | null;
     url: string;
-    createdAt: any;
-    updatedAt: any;
+    createdAt: Date;
+    updatedAt: Date;
     tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
   } | null;
 };
@@ -60185,7 +60185,7 @@ export type ListDocumentsOnSchemeQuery = {
       name: string;
       url: string;
       thumbnailUrl?: string | null;
-      createdAt: any;
+      createdAt: Date;
       tags: Array<{ __typename?: 'Tag'; name: string; id: string }>;
     }>;
   } | null;
@@ -60220,8 +60220,8 @@ export type FeedItemsQuery = {
       __typename?: 'FeedItem';
       type: FeedItemType;
       articleId?: string | null;
-      createdAt: any;
-      updatedAt: any;
+      createdAt: Date;
+      updatedAt: Date;
       message: string;
       model?: Model | null;
       crimeGroupId?: string | null;
@@ -60232,9 +60232,9 @@ export type FeedItemsQuery = {
       offenderId?: string | null;
       ban?: {
         __typename?: 'Ban';
-        endDate: any;
-        startDate: any;
-        updatedAt: any;
+        endDate: Date;
+        startDate: Date;
+        updatedAt: Date;
         title?: string | null;
         type?: BanType | null;
         active: boolean;
@@ -60259,7 +60259,7 @@ export type FeedItemsQuery = {
         __typename?: 'Article';
         id: string;
         title: string;
-        updatedAt: any;
+        updatedAt: Date;
         previewImage?: string | null;
         previewText?: string | null;
         priority: ArticlePriority;
@@ -60303,14 +60303,14 @@ export type FeedItemsQuery = {
         totalRecoveredValue?: number | null;
         totalTheftSuccess?: number | null;
         totalValue?: number | null;
-        updatedAt: any;
+        updatedAt: Date;
         updates: Array<{
           __typename?: 'Update';
           id: string;
           text?: string | null;
           icon: UpdateIcon;
           type: UpdateType;
-          createdAt: any;
+          createdAt: Date;
           images: Array<{
             __typename?: 'Image';
             id: string;
@@ -60329,11 +60329,11 @@ export type FeedItemsQuery = {
             totalRecoveredValue?: number | null;
             totalTheftSuccess?: number | null;
             totalValue?: number | null;
-            updatedAt: any;
+            updatedAt: Date;
           }>;
           linkedVehicles: Array<{
             __typename?: 'Vehicle';
-            updatedAt: any;
+            updatedAt: Date;
             totalOffenders?: number | null;
             registration?: string | null;
             reference?: number | null;
@@ -60366,11 +60366,11 @@ export type FeedItemsQuery = {
           linkedOffenders: Array<{
             __typename?: 'Offender';
             id: string;
-            updatedAt: any;
+            updatedAt: Date;
             age?: Age | null;
             build?: Build | null;
             height?: Height | null;
-            dateOfBirth?: any | null;
+            dateOfBirth?: Date | null;
             name?: string | null;
             race?: Race | null;
             gender?: Gender | null;
@@ -60397,7 +60397,7 @@ export type FeedItemsQuery = {
       } | null;
       vehicle?: {
         __typename?: 'Vehicle';
-        updatedAt: any;
+        updatedAt: Date;
         totalOffenders?: number | null;
         totalUpdates?: number | null;
         registration?: string | null;
@@ -60419,7 +60419,7 @@ export type FeedItemsQuery = {
           text?: string | null;
           icon: UpdateIcon;
           type: UpdateType;
-          createdAt: any;
+          createdAt: Date;
           images: Array<{
             __typename?: 'Image';
             id: string;
@@ -60438,11 +60438,11 @@ export type FeedItemsQuery = {
             totalRecoveredValue?: number | null;
             totalTheftSuccess?: number | null;
             totalValue?: number | null;
-            updatedAt: any;
+            updatedAt: Date;
           }>;
           linkedVehicles: Array<{
             __typename?: 'Vehicle';
-            updatedAt: any;
+            updatedAt: Date;
             totalOffenders?: number | null;
             registration?: string | null;
             reference?: number | null;
@@ -60475,11 +60475,11 @@ export type FeedItemsQuery = {
           linkedOffenders: Array<{
             __typename?: 'Offender';
             id: string;
-            updatedAt: any;
+            updatedAt: Date;
             age?: Age | null;
             build?: Build | null;
             height?: Height | null;
-            dateOfBirth?: any | null;
+            dateOfBirth?: Date | null;
             name?: string | null;
             race?: Race | null;
             gender?: Gender | null;
@@ -60514,7 +60514,7 @@ export type FeedItemsQuery = {
         totalCrimeGroups?: number | null;
         totalUpdates?: number | null;
         description?: string | null;
-        updatedAt: any;
+        updatedAt: Date;
         createdBy: {
           __typename?: 'User';
           id: string;
@@ -60532,7 +60532,7 @@ export type FeedItemsQuery = {
           text?: string | null;
           icon: UpdateIcon;
           type: UpdateType;
-          createdAt: any;
+          createdAt: Date;
           images: Array<{
             __typename?: 'Image';
             id: string;
@@ -60551,11 +60551,11 @@ export type FeedItemsQuery = {
             totalRecoveredValue?: number | null;
             totalTheftSuccess?: number | null;
             totalValue?: number | null;
-            updatedAt: any;
+            updatedAt: Date;
           }>;
           linkedVehicles: Array<{
             __typename?: 'Vehicle';
-            updatedAt: any;
+            updatedAt: Date;
             totalOffenders?: number | null;
             registration?: string | null;
             reference?: number | null;
@@ -60588,11 +60588,11 @@ export type FeedItemsQuery = {
           linkedOffenders: Array<{
             __typename?: 'Offender';
             id: string;
-            updatedAt: any;
+            updatedAt: Date;
             age?: Age | null;
             build?: Build | null;
             height?: Height | null;
-            dateOfBirth?: any | null;
+            dateOfBirth?: Date | null;
             name?: string | null;
             race?: Race | null;
             gender?: Gender | null;
@@ -60626,7 +60626,7 @@ export type FeedItemsQuery = {
         reference?: number | null;
         description: string;
         dayTime?: string | null;
-        date: any;
+        date: Date;
         totalOffenders?: number | null;
         totalUpdates?: number | null;
         approved?: boolean | null;
@@ -60636,7 +60636,7 @@ export type FeedItemsQuery = {
           text?: string | null;
           icon: UpdateIcon;
           type: UpdateType;
-          createdAt: any;
+          createdAt: Date;
           images: Array<{
             __typename?: 'Image';
             id: string;
@@ -60655,11 +60655,11 @@ export type FeedItemsQuery = {
             totalRecoveredValue?: number | null;
             totalTheftSuccess?: number | null;
             totalValue?: number | null;
-            updatedAt: any;
+            updatedAt: Date;
           }>;
           linkedVehicles: Array<{
             __typename?: 'Vehicle';
-            updatedAt: any;
+            updatedAt: Date;
             totalOffenders?: number | null;
             registration?: string | null;
             reference?: number | null;
@@ -60692,11 +60692,11 @@ export type FeedItemsQuery = {
           linkedOffenders: Array<{
             __typename?: 'Offender';
             id: string;
-            updatedAt: any;
+            updatedAt: Date;
             age?: Age | null;
             build?: Build | null;
             height?: Height | null;
-            dateOfBirth?: any | null;
+            dateOfBirth?: Date | null;
             name?: string | null;
             race?: Race | null;
             gender?: Gender | null;
@@ -60745,13 +60745,13 @@ export type FeedItemsQuery = {
       offender?: {
         __typename?: 'Offender';
         id: string;
-        createdAt: any;
+        createdAt: Date;
         reference?: number | null;
-        updatedAt: any;
+        updatedAt: Date;
         age?: Age | null;
         build?: Build | null;
         height?: Height | null;
-        dateOfBirth?: any | null;
+        dateOfBirth?: Date | null;
         dateSource?: string | null;
         gender?: Gender | null;
         hair?: string | null;
@@ -60771,8 +60771,8 @@ export type FeedItemsQuery = {
           title?: string | null;
           location: string;
           description?: string | null;
-          startDate: any;
-          endDate: any;
+          startDate: Date;
+          endDate: Date;
         }>;
         lastActive?: {
           __typename?: 'Incident';
@@ -60785,7 +60785,7 @@ export type FeedItemsQuery = {
           text?: string | null;
           icon: UpdateIcon;
           type: UpdateType;
-          createdAt: any;
+          createdAt: Date;
           images: Array<{
             __typename?: 'Image';
             id: string;
@@ -60804,11 +60804,11 @@ export type FeedItemsQuery = {
             totalRecoveredValue?: number | null;
             totalTheftSuccess?: number | null;
             totalValue?: number | null;
-            updatedAt: any;
+            updatedAt: Date;
           }>;
           linkedVehicles: Array<{
             __typename?: 'Vehicle';
-            updatedAt: any;
+            updatedAt: Date;
             totalOffenders?: number | null;
             registration?: string | null;
             reference?: number | null;
@@ -60841,11 +60841,11 @@ export type FeedItemsQuery = {
           linkedOffenders: Array<{
             __typename?: 'Offender';
             id: string;
-            updatedAt: any;
+            updatedAt: Date;
             age?: Age | null;
             build?: Build | null;
             height?: Height | null;
-            dateOfBirth?: any | null;
+            dateOfBirth?: Date | null;
             name?: string | null;
             race?: Race | null;
             gender?: Gender | null;
@@ -61079,8 +61079,8 @@ export type CreateIncidentMutation = {
     subject?: string | null;
     description: string;
     dayTime?: string | null;
-    date: any;
-    time: any;
+    date: Date;
+    time: Date;
     value?: number | null;
     recoveredValue?: number | null;
     policeReported: boolean;
@@ -61115,12 +61115,12 @@ export type CreateIncidentMutation = {
     offenders: Array<{
       __typename?: 'Offender';
       id: string;
-      createdAt: any;
-      updatedAt: any;
+      createdAt: Date;
+      updatedAt: Date;
       age?: Age | null;
       build?: Build | null;
       height?: Height | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       dateSource?: string | null;
       gender?: Gender | null;
       hair?: string | null;
@@ -61191,8 +61191,8 @@ export type UpdateIncidentMutation = {
     subject?: string | null;
     description: string;
     dayTime?: string | null;
-    date: any;
-    time: any;
+    date: Date;
+    time: Date;
     value?: number | null;
     recoveredValue?: number | null;
     policeReported: boolean;
@@ -61233,12 +61233,12 @@ export type UpdateIncidentMutation = {
     offenders: Array<{
       __typename?: 'Offender';
       id: string;
-      createdAt: any;
-      updatedAt: any;
+      createdAt: Date;
+      updatedAt: Date;
       age?: Age | null;
       build?: Build | null;
       height?: Height | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       dateSource?: string | null;
       gender?: Gender | null;
       hair?: string | null;
@@ -61292,8 +61292,8 @@ export type EditIncidentQuery = {
     subject?: string | null;
     description: string;
     dayTime?: string | null;
-    date: any;
-    time: any;
+    date: Date;
+    time: Date;
     reference?: number | null;
     ref?: string | null;
     policeReported: boolean;
@@ -61373,7 +61373,7 @@ export type EditIncidentQuery = {
       totalCrimeGroups?: number | null;
       totalIncidents?: number | null;
       totalOffenders?: number | null;
-      updatedAt: any;
+      updatedAt: Date;
       images: Array<{
         __typename?: 'Image';
         id: string;
@@ -61386,12 +61386,12 @@ export type EditIncidentQuery = {
       __typename?: 'Offender';
       id: string;
       reference?: number | null;
-      createdAt: any;
-      updatedAt: any;
+      createdAt: Date;
+      updatedAt: Date;
       age?: Age | null;
       build?: Build | null;
       height?: Height | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       dateSource?: string | null;
       gender?: Gender | null;
       hair?: string | null;
@@ -61416,7 +61416,7 @@ export type EditIncidentQuery = {
       id: string;
       text?: string | null;
       type: UpdateType;
-      createdAt: any;
+      createdAt: Date;
       images: Array<{
         __typename?: 'Image';
         id: string;
@@ -61435,11 +61435,11 @@ export type EditIncidentQuery = {
         totalRecoveredValue?: number | null;
         totalTheftSuccess?: number | null;
         totalValue?: number | null;
-        updatedAt: any;
+        updatedAt: Date;
       }>;
       linkedVehicles: Array<{
         __typename?: 'Vehicle';
-        updatedAt: any;
+        updatedAt: Date;
         totalOffenders?: number | null;
         registration?: string | null;
         reference?: number | null;
@@ -61472,11 +61472,11 @@ export type EditIncidentQuery = {
       linkedOffenders: Array<{
         __typename?: 'Offender';
         id: string;
-        updatedAt: any;
+        updatedAt: Date;
         age?: Age | null;
         build?: Build | null;
         height?: Height | null;
-        dateOfBirth?: any | null;
+        dateOfBirth?: Date | null;
         name?: string | null;
         race?: Race | null;
         gender?: Gender | null;
@@ -61504,7 +61504,7 @@ export type EditIncidentQuery = {
         id: string;
         text?: string | null;
         type: UpdateType;
-        createdAt: any;
+        createdAt: Date;
         images: Array<{
           __typename?: 'Image';
           id: string;
@@ -61523,11 +61523,11 @@ export type EditIncidentQuery = {
           totalRecoveredValue?: number | null;
           totalTheftSuccess?: number | null;
           totalValue?: number | null;
-          updatedAt: any;
+          updatedAt: Date;
         }>;
         linkedVehicles: Array<{
           __typename?: 'Vehicle';
-          updatedAt: any;
+          updatedAt: Date;
           totalOffenders?: number | null;
           registration?: string | null;
           reference?: number | null;
@@ -61560,11 +61560,11 @@ export type EditIncidentQuery = {
         linkedOffenders: Array<{
           __typename?: 'Offender';
           id: string;
-          updatedAt: any;
+          updatedAt: Date;
           age?: Age | null;
           build?: Build | null;
           height?: Height | null;
-          dateOfBirth?: any | null;
+          dateOfBirth?: Date | null;
           name?: string | null;
           race?: Race | null;
           gender?: Gender | null;
@@ -61731,7 +61731,7 @@ export type ListUnapprovedIncidentsQuery = {
       id: string;
       subject?: string | null;
       dayTime?: string | null;
-      date: any;
+      date: Date;
       reference?: number | null;
       approved?: boolean | null;
       business?: { __typename?: 'Business'; id: string; name: string } | null;
@@ -61770,8 +61770,8 @@ export type ViewIncidentQuery = {
     subject?: string | null;
     description: string;
     dayTime?: string | null;
-    date: any;
-    time: any;
+    date: Date;
+    time: Date;
     reference?: number | null;
     ref?: string | null;
     policeReported: boolean;
@@ -61843,7 +61843,7 @@ export type ViewIncidentQuery = {
       totalCrimeGroups?: number | null;
       totalIncidents?: number | null;
       totalOffenders?: number | null;
-      updatedAt: any;
+      updatedAt: Date;
       images: Array<{
         __typename?: 'Image';
         id: string;
@@ -61856,12 +61856,12 @@ export type ViewIncidentQuery = {
       __typename?: 'Offender';
       id: string;
       reference?: number | null;
-      createdAt: any;
-      updatedAt: any;
+      createdAt: Date;
+      updatedAt: Date;
       age?: Age | null;
       build?: Build | null;
       height?: Height | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       dateSource?: string | null;
       gender?: Gender | null;
       hair?: string | null;
@@ -61886,7 +61886,7 @@ export type ViewIncidentQuery = {
       id: string;
       text?: string | null;
       type: UpdateType;
-      createdAt: any;
+      createdAt: Date;
       images: Array<{
         __typename?: 'Image';
         id: string;
@@ -61905,11 +61905,11 @@ export type ViewIncidentQuery = {
         totalRecoveredValue?: number | null;
         totalTheftSuccess?: number | null;
         totalValue?: number | null;
-        updatedAt: any;
+        updatedAt: Date;
       }>;
       linkedVehicles: Array<{
         __typename?: 'Vehicle';
-        updatedAt: any;
+        updatedAt: Date;
         totalOffenders?: number | null;
         registration?: string | null;
         reference?: number | null;
@@ -61942,11 +61942,11 @@ export type ViewIncidentQuery = {
       linkedOffenders: Array<{
         __typename?: 'Offender';
         id: string;
-        updatedAt: any;
+        updatedAt: Date;
         age?: Age | null;
         build?: Build | null;
         height?: Height | null;
-        dateOfBirth?: any | null;
+        dateOfBirth?: Date | null;
         name?: string | null;
         race?: Race | null;
         gender?: Gender | null;
@@ -61974,7 +61974,7 @@ export type ViewIncidentQuery = {
         id: string;
         text?: string | null;
         type: UpdateType;
-        createdAt: any;
+        createdAt: Date;
         images: Array<{
           __typename?: 'Image';
           id: string;
@@ -61993,11 +61993,11 @@ export type ViewIncidentQuery = {
           totalRecoveredValue?: number | null;
           totalTheftSuccess?: number | null;
           totalValue?: number | null;
-          updatedAt: any;
+          updatedAt: Date;
         }>;
         linkedVehicles: Array<{
           __typename?: 'Vehicle';
-          updatedAt: any;
+          updatedAt: Date;
           totalOffenders?: number | null;
           registration?: string | null;
           reference?: number | null;
@@ -62030,11 +62030,11 @@ export type ViewIncidentQuery = {
         linkedOffenders: Array<{
           __typename?: 'Offender';
           id: string;
-          updatedAt: any;
+          updatedAt: Date;
           age?: Age | null;
           build?: Build | null;
           height?: Height | null;
-          dateOfBirth?: any | null;
+          dateOfBirth?: Date | null;
           name?: string | null;
           race?: Race | null;
           gender?: Gender | null;
@@ -62178,7 +62178,7 @@ export type UpdateInvestigationMutation = {
       model?: string | null;
       colour?: string | null;
       registration?: string | null;
-      updatedAt: any;
+      updatedAt: Date;
       totalCrimeGroups?: number | null;
       totalOffenders?: number | null;
       totalIncidents?: number | null;
@@ -62197,7 +62197,7 @@ export type UpdateInvestigationMutation = {
       dayTime?: string | null;
       reference?: number | null;
       subject?: string | null;
-      date: any;
+      date: Date;
       value?: number | null;
       recoveredValue?: number | null;
       createdBy: { __typename?: 'User'; organisation: string };
@@ -62254,7 +62254,7 @@ export type InvestigationSuggestionsQuery = {
       name?: string | null;
       alias: Array<string>;
       reference?: number | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       age?: Age | null;
       gender?: Gender | null;
       build?: Build | null;
@@ -62352,7 +62352,7 @@ export type InvestigationSuggestionsQuery = {
         race?: Race | null;
         build?: Build | null;
         height?: Height | null;
-        dateOfBirth?: any | null;
+        dateOfBirth?: Date | null;
         hair?: string | null;
         peculiarities?: string | null;
         alias: Array<string>;
@@ -62420,7 +62420,7 @@ export type ViewInvestigationQuery = {
       model?: string | null;
       colour?: string | null;
       registration?: string | null;
-      updatedAt: any;
+      updatedAt: Date;
       totalCrimeGroups?: number | null;
       totalOffenders?: number | null;
       totalIncidents?: number | null;
@@ -62431,7 +62431,7 @@ export type ViewInvestigationQuery = {
       id: string;
       text?: string | null;
       type: UpdateType;
-      createdAt: any;
+      createdAt: Date;
       images: Array<{
         __typename?: 'Image';
         id: string;
@@ -62451,11 +62451,11 @@ export type ViewInvestigationQuery = {
         totalRecoveredValue?: number | null;
         totalTheftSuccess?: number | null;
         totalValue?: number | null;
-        updatedAt: any;
+        updatedAt: Date;
       }>;
       linkedVehicles: Array<{
         __typename?: 'Vehicle';
-        updatedAt: any;
+        updatedAt: Date;
         totalOffenders?: number | null;
         registration?: string | null;
         reference?: number | null;
@@ -62490,11 +62490,11 @@ export type ViewInvestigationQuery = {
       linkedOffenders: Array<{
         __typename?: 'Offender';
         id: string;
-        updatedAt: any;
+        updatedAt: Date;
         age?: Age | null;
         build?: Build | null;
         height?: Height | null;
-        dateOfBirth?: any | null;
+        dateOfBirth?: Date | null;
         name?: string | null;
         race?: Race | null;
         gender?: Gender | null;
@@ -62523,7 +62523,7 @@ export type ViewInvestigationQuery = {
         id: string;
         text?: string | null;
         type: UpdateType;
-        createdAt: any;
+        createdAt: Date;
         images: Array<{
           __typename?: 'Image';
           id: string;
@@ -62543,11 +62543,11 @@ export type ViewInvestigationQuery = {
           totalRecoveredValue?: number | null;
           totalTheftSuccess?: number | null;
           totalValue?: number | null;
-          updatedAt: any;
+          updatedAt: Date;
         }>;
         linkedVehicles: Array<{
           __typename?: 'Vehicle';
-          updatedAt: any;
+          updatedAt: Date;
           totalOffenders?: number | null;
           registration?: string | null;
           reference?: number | null;
@@ -62581,11 +62581,11 @@ export type ViewInvestigationQuery = {
         linkedOffenders: Array<{
           __typename?: 'Offender';
           id: string;
-          updatedAt: any;
+          updatedAt: Date;
           age?: Age | null;
           build?: Build | null;
           height?: Height | null;
-          dateOfBirth?: any | null;
+          dateOfBirth?: Date | null;
           name?: string | null;
           race?: Race | null;
           gender?: Gender | null;
@@ -62622,7 +62622,7 @@ export type ViewInvestigationQuery = {
       race?: Race | null;
       build?: Build | null;
       height?: Height | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       images: Array<{
         __typename?: 'Image';
         id: string;
@@ -62638,7 +62638,7 @@ export type ViewInvestigationQuery = {
       dayTime?: string | null;
       reference?: number | null;
       subject?: string | null;
-      date: any;
+      date: Date;
       totalValue?: number | null;
       totalRecoveredValue?: number | null;
       createdBy: { __typename?: 'User'; organisation: string };
@@ -62658,7 +62658,7 @@ export type ViewInvestigationQuery = {
     }>;
     flows: Array<{
       __typename?: 'Flow';
-      updatedAt: any;
+      updatedAt: Date;
       name: string;
       id: string;
       description?: string | null;
@@ -62697,7 +62697,7 @@ export type CreateMessageMutation = {
     __typename?: 'MessageItem';
     id: string;
     content: string;
-    createdAt: any;
+    createdAt: Date;
     currentUser?: boolean | null;
     formattedDateTime?: string | null;
     sent: boolean;
@@ -62765,11 +62765,11 @@ export type CreateMessageMutation = {
     offenders: Array<{
       __typename?: 'Offender';
       id: string;
-      updatedAt: any;
+      updatedAt: Date;
       age?: Age | null;
       build?: Build | null;
       height?: Height | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       name?: string | null;
       race?: Race | null;
       gender?: Gender | null;
@@ -62805,7 +62805,7 @@ export type UpdateMessageMutation = {
     id: string;
     sent?: boolean | null;
     content: string;
-    createdAt: any;
+    createdAt: Date;
     from: {
       __typename?: 'User';
       id: string;
@@ -62863,11 +62863,11 @@ export type UpdateMessageMutation = {
     offenders: Array<{
       __typename?: 'Offender';
       id: string;
-      updatedAt: any;
+      updatedAt: Date;
       age?: Age | null;
       build?: Build | null;
       height?: Height | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       name?: string | null;
       race?: Race | null;
       gender?: Gender | null;
@@ -62894,7 +62894,7 @@ export type ChatMessagesQuery = {
     __typename?: 'MessageItem';
     id: string;
     content: string;
-    createdAt: any;
+    createdAt: Date;
     currentUser?: boolean | null;
     formattedDateTime?: string | null;
     sent: boolean;
@@ -62962,11 +62962,11 @@ export type ChatMessagesQuery = {
     offenders: Array<{
       __typename?: 'Offender';
       id: string;
-      updatedAt: any;
+      updatedAt: Date;
       age?: Age | null;
       build?: Build | null;
       height?: Height | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       name?: string | null;
       race?: Race | null;
       gender?: Gender | null;
@@ -62993,7 +62993,7 @@ export type MessagesQuery = {
     id: string;
     sent?: boolean | null;
     content: string;
-    createdAt: any;
+    createdAt: Date;
     from: {
       __typename?: 'User';
       id: string;
@@ -63018,11 +63018,11 @@ export type MessagesQuery = {
       totalRecoveredValue?: number | null;
       totalTheftSuccess?: number | null;
       totalValue?: number | null;
-      updatedAt: any;
+      updatedAt: Date;
     }>;
     vehicles: Array<{
       __typename?: 'Vehicle';
-      updatedAt: any;
+      updatedAt: Date;
       totalOffenders?: number | null;
       registration?: string | null;
       reference?: number | null;
@@ -63055,11 +63055,11 @@ export type MessagesQuery = {
     offenders: Array<{
       __typename?: 'Offender';
       id: string;
-      updatedAt: any;
+      updatedAt: Date;
       age?: Age | null;
       build?: Build | null;
       height?: Height | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       name?: string | null;
       race?: Race | null;
       gender?: Gender | null;
@@ -63085,7 +63085,7 @@ export type MessagesSubscriptionSubscription = {
     __typename?: 'MessageItem';
     id: string;
     content: string;
-    createdAt: any;
+    createdAt: Date;
     currentUser?: boolean | null;
     formattedDateTime?: string | null;
     sent: boolean;
@@ -63115,11 +63115,11 @@ export type MessagesSubscriptionSubscription = {
       totalRecoveredValue?: number | null;
       totalTheftSuccess?: number | null;
       totalValue?: number | null;
-      updatedAt: any;
+      updatedAt: Date;
     }>;
     vehicles: Array<{
       __typename?: 'Vehicle';
-      updatedAt: any;
+      updatedAt: Date;
       totalOffenders?: number | null;
       registration?: string | null;
       reference?: number | null;
@@ -63152,11 +63152,11 @@ export type MessagesSubscriptionSubscription = {
     offenders: Array<{
       __typename?: 'Offender';
       id: string;
-      updatedAt: any;
+      updatedAt: Date;
       age?: Age | null;
       build?: Build | null;
       height?: Height | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       name?: string | null;
       race?: Race | null;
       gender?: Gender | null;
@@ -63233,7 +63233,7 @@ export type FetchMg11Query = {
     civilProceedingsRelease?: string | null;
     witnessServiceDisclose?: boolean | null;
     witnessSignature?: string | null;
-    witnessSignatureDate?: any | null;
+    witnessSignatureDate?: Date | null;
     interviewerSignature?: string | null;
     station?: string | null;
     statementWhereWhen?: string | null;
@@ -63270,12 +63270,12 @@ export type CreateOffenderMutation = {
   createOffender?: {
     __typename?: 'Offender';
     id: string;
-    createdAt: any;
-    updatedAt: any;
+    createdAt: Date;
+    updatedAt: Date;
     age?: Age | null;
     build?: Build | null;
     height?: Height | null;
-    dateOfBirth?: any | null;
+    dateOfBirth?: Date | null;
     dateSource?: string | null;
     hair?: string | null;
     gender?: Gender | null;
@@ -63301,8 +63301,8 @@ export type CreateOffenderMutation = {
       title?: string | null;
       location: string;
       description?: string | null;
-      startDate: any;
-      endDate: any;
+      startDate: Date;
+      endDate: Date;
       type?: BanType | null;
     }>;
     createdBy: {
@@ -63316,7 +63316,7 @@ export type CreateOffenderMutation = {
       id: string;
       subject?: string | null;
       description: string;
-      date: any;
+      date: Date;
       dayTime?: string | null;
       crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
       location?: {
@@ -63386,12 +63386,12 @@ export type UpdateOffenderMutation = {
   updateOffender?: {
     __typename?: 'Offender';
     id: string;
-    createdAt: any;
-    updatedAt: any;
+    createdAt: Date;
+    updatedAt: Date;
     age?: Age | null;
     build?: Build | null;
     height?: Height | null;
-    dateOfBirth?: any | null;
+    dateOfBirth?: Date | null;
     dateSource?: string | null;
     hair?: string | null;
     gender?: Gender | null;
@@ -63416,8 +63416,8 @@ export type UpdateOffenderMutation = {
       id: string;
       location: string;
       description?: string | null;
-      startDate: any;
-      endDate: any;
+      startDate: Date;
+      endDate: Date;
       type?: BanType | null;
     }>;
     createdBy: {
@@ -63449,7 +63449,7 @@ export type AssociatedOffendersQuery = {
       name?: string | null;
       alias: Array<string>;
       reference?: number | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       age?: Age | null;
       gender?: Gender | null;
       build?: Build | null;
@@ -63513,11 +63513,11 @@ export type ViewOffenderCompareQuery = {
   offender?: {
     __typename?: 'Offender';
     id: string;
-    updatedAt: any;
+    updatedAt: Date;
     age?: Age | null;
     build?: Build | null;
     height?: Height | null;
-    dateOfBirth?: any | null;
+    dateOfBirth?: Date | null;
     dateSource?: string | null;
     hair?: string | null;
     gender?: Gender | null;
@@ -63556,13 +63556,13 @@ export type ListOffendersQuery = {
       __typename?: 'Offender';
       id: string;
       reference?: number | null;
-      createdAt: any;
-      updatedAt: any;
+      createdAt: Date;
+      updatedAt: Date;
       totalIncidents?: number | null;
       age?: Age | null;
       build?: Build | null;
       height?: Height | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       dateSource?: string | null;
       hair?: string | null;
       gender?: Gender | null;
@@ -63602,7 +63602,7 @@ export type ListOffendersQuery = {
         subject?: string | null;
         description: string;
         dayTime?: string | null;
-        date: any;
+        date: Date;
         approved?: boolean | null;
         crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
         location?: {
@@ -63658,14 +63658,14 @@ export type OffenderFeedQuery = {
   offenderFeed?: Array<{
     __typename?: 'Offender';
     id: string;
-    createdAt: any;
-    updatedAt: any;
+    createdAt: Date;
+    updatedAt: Date;
     totalIncidents?: number | null;
     reference?: number | null;
     age?: Age | null;
     build?: Build | null;
     height?: Height | null;
-    dateOfBirth?: any | null;
+    dateOfBirth?: Date | null;
     dateSource?: string | null;
     gender?: Gender | null;
     hair?: string | null;
@@ -63803,11 +63803,11 @@ export type SearchOffendersQuery = {
     offenders: Array<{
       __typename?: 'Offender';
       id: string;
-      updatedAt: any;
+      updatedAt: Date;
       age?: Age | null;
       build?: Build | null;
       height?: Height | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       dateSource?: string | null;
       hair?: string | null;
       gender?: Gender | null;
@@ -63852,12 +63852,12 @@ export type ViewOffenderQuery = {
     __typename?: 'Offender';
     id: string;
     alias: Array<string>;
-    createdAt: any;
-    updatedAt: any;
+    createdAt: Date;
+    updatedAt: Date;
     age?: Age | null;
     build?: Build | null;
     height?: Height | null;
-    dateOfBirth?: any | null;
+    dateOfBirth?: Date | null;
     dateSource?: string | null;
     hair?: string | null;
     gender?: Gender | null;
@@ -63919,8 +63919,8 @@ export type ViewOffenderQuery = {
       title?: string | null;
       location: string;
       description?: string | null;
-      startDate: any;
-      endDate: any;
+      startDate: Date;
+      endDate: Date;
       type?: BanType | null;
     }>;
     crimeGroups: Array<{
@@ -63945,7 +63945,7 @@ export type ViewOffenderQuery = {
       totalCrimeGroups?: number | null;
       totalIncidents?: number | null;
       totalOffenders?: number | null;
-      updatedAt: any;
+      updatedAt: Date;
     }>;
     createdBy: {
       __typename?: 'User';
@@ -63958,7 +63958,7 @@ export type ViewOffenderQuery = {
       id: string;
       reference?: number | null;
       dayTime?: string | null;
-      date: any;
+      date: Date;
       crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
       createdBy: {
         __typename?: 'User';
@@ -63982,7 +63982,7 @@ export type ViewOffenderQuery = {
       id: string;
       text?: string | null;
       type: UpdateType;
-      createdAt: any;
+      createdAt: Date;
       images: Array<{
         __typename?: 'Image';
         id: string;
@@ -64001,11 +64001,11 @@ export type ViewOffenderQuery = {
         totalRecoveredValue?: number | null;
         totalTheftSuccess?: number | null;
         totalValue?: number | null;
-        updatedAt: any;
+        updatedAt: Date;
       }>;
       linkedVehicles: Array<{
         __typename?: 'Vehicle';
-        updatedAt: any;
+        updatedAt: Date;
         totalOffenders?: number | null;
         registration?: string | null;
         reference?: number | null;
@@ -64038,11 +64038,11 @@ export type ViewOffenderQuery = {
       linkedOffenders: Array<{
         __typename?: 'Offender';
         id: string;
-        updatedAt: any;
+        updatedAt: Date;
         age?: Age | null;
         build?: Build | null;
         height?: Height | null;
-        dateOfBirth?: any | null;
+        dateOfBirth?: Date | null;
         name?: string | null;
         race?: Race | null;
         gender?: Gender | null;
@@ -64070,7 +64070,7 @@ export type ViewOffenderQuery = {
         id: string;
         text?: string | null;
         type: UpdateType;
-        createdAt: any;
+        createdAt: Date;
         images: Array<{
           __typename?: 'Image';
           id: string;
@@ -64089,11 +64089,11 @@ export type ViewOffenderQuery = {
           totalRecoveredValue?: number | null;
           totalTheftSuccess?: number | null;
           totalValue?: number | null;
-          updatedAt: any;
+          updatedAt: Date;
         }>;
         linkedVehicles: Array<{
           __typename?: 'Vehicle';
-          updatedAt: any;
+          updatedAt: Date;
           totalOffenders?: number | null;
           registration?: string | null;
           reference?: number | null;
@@ -64126,11 +64126,11 @@ export type ViewOffenderQuery = {
         linkedOffenders: Array<{
           __typename?: 'Offender';
           id: string;
-          updatedAt: any;
+          updatedAt: Date;
           age?: Age | null;
           build?: Build | null;
           height?: Height | null;
-          dateOfBirth?: any | null;
+          dateOfBirth?: Date | null;
           name?: string | null;
           race?: Race | null;
           gender?: Gender | null;
@@ -64218,7 +64218,7 @@ export type RecycledItemQuery = {
     incident?: {
       __typename?: 'Incident';
       id: string;
-      date: any;
+      date: Date;
       recycled: boolean;
       subject?: string | null;
       createdBy: {
@@ -64247,7 +64247,7 @@ export type RecycledItemQuery = {
       incidents: Array<{
         __typename?: 'Incident';
         id: string;
-        date: any;
+        date: Date;
         location?: {
           __typename?: 'Address';
           id: string;
@@ -64273,8 +64273,8 @@ export type RecycledItemsQuery = {
   recycledItems?: Array<{
     __typename?: 'RecycledItem';
     id: string;
-    deletedAt: any;
-    expiresAt: any;
+    deletedAt: Date;
+    expiresAt: Date;
     systemTask: boolean;
     deletedBy?: {
       __typename?: 'User';
@@ -64285,7 +64285,7 @@ export type RecycledItemsQuery = {
     incident?: {
       __typename?: 'Incident';
       id: string;
-      date: any;
+      date: Date;
       recycled: boolean;
       subject?: string | null;
       createdBy: {
@@ -64314,7 +64314,7 @@ export type RecycledItemsQuery = {
       incidents: Array<{
         __typename?: 'Incident';
         id: string;
-        date: any;
+        date: Date;
         location?: {
           __typename?: 'Address';
           id: string;
@@ -64411,8 +64411,8 @@ export type CreateReportTemplateMutation = {
     layout: Array<{
       __typename?: 'ReportLayout';
       id: string;
-      createdAt: any;
-      updatedAt: any;
+      createdAt: Date;
+      updatedAt: Date;
       h: number;
       w: number;
       x: number;
@@ -64444,8 +64444,8 @@ export type UpdateReportTemplateMutation = {
     layout: Array<{
       __typename?: 'ReportLayout';
       id: string;
-      createdAt: any;
-      updatedAt: any;
+      createdAt: Date;
+      updatedAt: Date;
       h: number;
       w: number;
       x: number;
@@ -64531,7 +64531,7 @@ export type TargetedBusinessReportQuery = {
       __typename?: 'IncidentSummary';
       totalIncidents: number;
       mostCommonCrimeType: string;
-      lastIncidentDate?: any | null;
+      lastIncidentDate?: Date | null;
       incidentsWherePoliceAttended: number;
       incidentsReportedToPolice: number;
     } | null;
@@ -64547,7 +64547,7 @@ export type TargetedBusinessReportQuery = {
         __typename?: 'Incident';
         id: string;
         reference?: number | null;
-        date: any;
+        date: Date;
         totalOffenders?: number | null;
         policeReported: boolean;
         policeInvolved: boolean;
@@ -64636,7 +64636,7 @@ export type CrimeGroupReportQuery = {
       __typename?: 'IncidentSummary';
       mostCommonCrimeType: string;
       totalIncidents: number;
-      lastIncidentDate?: any | null;
+      lastIncidentDate?: Date | null;
       incidentsWherePoliceAttended: number;
       incidentsReportedToPolice: number;
     } | null;
@@ -64652,7 +64652,7 @@ export type CrimeGroupReportQuery = {
         __typename?: 'Incident';
         id: string;
         reference?: number | null;
-        date: any;
+        date: Date;
         totalOffenders?: number | null;
         policeReported: boolean;
         policeInvolved: boolean;
@@ -64699,7 +64699,7 @@ export type CrimeGroupReportQuery = {
       totalLostValue: number;
       totalRecoveredValue: number;
       totalSuccessRate: number;
-      lastIncidentDate?: any | null;
+      lastIncidentDate?: Date | null;
     }>;
   } | null;
   businessContribution?: {
@@ -64773,7 +64773,7 @@ export type OffenderProfileQuery = {
   offender?: {
     __typename?: 'Offender';
     age?: Age | null;
-    dateOfBirth?: any | null;
+    dateOfBirth?: Date | null;
     dateSource?: string | null;
     gender?: Gender | null;
     hair?: string | null;
@@ -64788,13 +64788,13 @@ export type OffenderProfileQuery = {
     totalRecoveredValue?: number | null;
     totalTheftSuccess?: number | null;
     totalValue?: number | null;
-    updatedAt: any;
+    updatedAt: Date;
     bans: Array<{
       __typename?: 'Ban';
       id: string;
-      endDate: any;
+      endDate: Date;
       active: boolean;
-      startDate: any;
+      startDate: Date;
       title?: string | null;
     }>;
     crimeGroups: Array<{
@@ -64847,7 +64847,7 @@ export type OffenderProfileQuery = {
       __typename?: 'Incident';
       id: string;
       dayTime?: string | null;
-      date: any;
+      date: Date;
       value?: number | null;
       recoveredValue?: number | null;
       reference?: number | null;
@@ -64866,7 +64866,7 @@ export type OffenderProfileQuery = {
       __typename?: 'Incident';
       id: string;
       dayTime?: string | null;
-      date: any;
+      date: Date;
       value?: number | null;
       recoveredValue?: number | null;
       reference?: number | null;
@@ -64931,7 +64931,7 @@ export type OffenderReportQuery = {
       __typename?: 'IncidentSummary';
       totalIncidents: number;
       mostCommonCrimeType: string;
-      lastIncidentDate?: any | null;
+      lastIncidentDate?: Date | null;
       incidentsWherePoliceAttended: number;
       incidentsReportedToPolice: number;
     } | null;
@@ -64947,7 +64947,7 @@ export type OffenderReportQuery = {
         __typename?: 'Incident';
         id: string;
         reference?: number | null;
-        date: any;
+        date: Date;
         totalOffenders?: number | null;
         policeReported: boolean;
         policeInvolved: boolean;
@@ -64982,7 +64982,7 @@ export type OffenderReportQuery = {
       age?: Age | null;
       dateSource?: string | null;
       peculiarities?: string | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       build?: Build | null;
       height?: Height | null;
       hair?: string | null;
@@ -65057,7 +65057,7 @@ export type PerformanceReportQuery = {
     incidentSummary?: {
       __typename?: 'IncidentSummary';
       totalIncidents: number;
-      lastIncidentDate?: any | null;
+      lastIncidentDate?: Date | null;
       incidentsReportedToPolice: number;
       incidentsWherePoliceAttended: number;
       mostCommonCrimeType: string;
@@ -65108,7 +65108,7 @@ export type PerformanceReportQuery = {
       totalLostValue: number;
       totalRecoveredValue: number;
       totalSuccessRate: number;
-      lastIncidentDate?: any | null;
+      lastIncidentDate?: Date | null;
     }>;
   } | null;
   businessContribution?: {
@@ -65141,7 +65141,7 @@ export type PerformanceReportQuery = {
       totalOffenders: number;
       totalLostValue: number;
       totalIncidents: number;
-      lastIncident?: any | null;
+      lastIncident?: Date | null;
       alias: string;
       alertId: string;
     }>;
@@ -65509,8 +65509,8 @@ export type CreateTodoMutation = {
     __typename?: 'Todo';
     type?: TodoType | null;
     description?: string | null;
-    dueDate?: any | null;
-    completedDate?: any | null;
+    dueDate?: Date | null;
+    completedDate?: Date | null;
     completed?: boolean | null;
     id: string;
     name?: string | null;
@@ -65530,8 +65530,8 @@ export type UpdateTodoMutation = {
     __typename?: 'Todo';
     type?: TodoType | null;
     description?: string | null;
-    dueDate?: any | null;
-    completedDate?: any | null;
+    dueDate?: Date | null;
+    completedDate?: Date | null;
     completed?: boolean | null;
     id: string;
     name?: string | null;
@@ -65550,8 +65550,8 @@ export type UpdateTodoMentionMutation = {
   updateTodoMention?: Array<{
     __typename?: 'Todo';
     description?: string | null;
-    dueDate?: any | null;
-    completedDate?: any | null;
+    dueDate?: Date | null;
+    completedDate?: Date | null;
     completed?: boolean | null;
     id: string;
     name?: string | null;
@@ -65579,8 +65579,8 @@ export type ListTodosQuery = {
       __typename?: 'Todo';
       type?: TodoType | null;
       description?: string | null;
-      dueDate?: any | null;
-      completedDate?: any | null;
+      dueDate?: Date | null;
+      completedDate?: Date | null;
       id: string;
       name?: string | null;
       completed?: boolean | null;
@@ -65606,8 +65606,8 @@ export type ListTodosQuery = {
       __typename?: 'Todo';
       type?: TodoType | null;
       description?: string | null;
-      dueDate?: any | null;
-      completedDate?: any | null;
+      dueDate?: Date | null;
+      completedDate?: Date | null;
       id: string;
       name?: string | null;
       completed?: boolean | null;
@@ -65638,7 +65638,7 @@ export type CreateUpdateOnCrimeGroupMutation = {
     id: string;
     text?: string | null;
     type: UpdateType;
-    createdAt: any;
+    createdAt: Date;
     images: Array<{
       __typename?: 'Image';
       id: string;
@@ -65657,11 +65657,11 @@ export type CreateUpdateOnCrimeGroupMutation = {
       totalRecoveredValue?: number | null;
       totalTheftSuccess?: number | null;
       totalValue?: number | null;
-      updatedAt: any;
+      updatedAt: Date;
     }>;
     linkedVehicles: Array<{
       __typename?: 'Vehicle';
-      updatedAt: any;
+      updatedAt: Date;
       totalOffenders?: number | null;
       registration?: string | null;
       reference?: number | null;
@@ -65694,11 +65694,11 @@ export type CreateUpdateOnCrimeGroupMutation = {
     linkedOffenders: Array<{
       __typename?: 'Offender';
       id: string;
-      updatedAt: any;
+      updatedAt: Date;
       age?: Age | null;
       build?: Build | null;
       height?: Height | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       name?: string | null;
       race?: Race | null;
       gender?: Gender | null;
@@ -65722,7 +65722,7 @@ export type CreateUpdateOnCrimeGroupMutation = {
       id: string;
       text?: string | null;
       type: UpdateType;
-      createdAt: any;
+      createdAt: Date;
       images: Array<{
         __typename?: 'Image';
         id: string;
@@ -65741,11 +65741,11 @@ export type CreateUpdateOnCrimeGroupMutation = {
         totalRecoveredValue?: number | null;
         totalTheftSuccess?: number | null;
         totalValue?: number | null;
-        updatedAt: any;
+        updatedAt: Date;
       }>;
       linkedVehicles: Array<{
         __typename?: 'Vehicle';
-        updatedAt: any;
+        updatedAt: Date;
         totalOffenders?: number | null;
         registration?: string | null;
         reference?: number | null;
@@ -65778,11 +65778,11 @@ export type CreateUpdateOnCrimeGroupMutation = {
       linkedOffenders: Array<{
         __typename?: 'Offender';
         id: string;
-        updatedAt: any;
+        updatedAt: Date;
         age?: Age | null;
         build?: Build | null;
         height?: Height | null;
-        dateOfBirth?: any | null;
+        dateOfBirth?: Date | null;
         name?: string | null;
         race?: Race | null;
         gender?: Gender | null;
@@ -65821,7 +65821,7 @@ export type CreateUpdateOnIncidentMutation = {
     id: string;
     text?: string | null;
     type: UpdateType;
-    createdAt: any;
+    createdAt: Date;
     images: Array<{
       __typename?: 'Image';
       id: string;
@@ -65840,11 +65840,11 @@ export type CreateUpdateOnIncidentMutation = {
       totalRecoveredValue?: number | null;
       totalTheftSuccess?: number | null;
       totalValue?: number | null;
-      updatedAt: any;
+      updatedAt: Date;
     }>;
     linkedVehicles: Array<{
       __typename?: 'Vehicle';
-      updatedAt: any;
+      updatedAt: Date;
       totalOffenders?: number | null;
       registration?: string | null;
       reference?: number | null;
@@ -65877,11 +65877,11 @@ export type CreateUpdateOnIncidentMutation = {
     linkedOffenders: Array<{
       __typename?: 'Offender';
       id: string;
-      updatedAt: any;
+      updatedAt: Date;
       age?: Age | null;
       build?: Build | null;
       height?: Height | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       name?: string | null;
       race?: Race | null;
       gender?: Gender | null;
@@ -65905,7 +65905,7 @@ export type CreateUpdateOnIncidentMutation = {
       id: string;
       text?: string | null;
       type: UpdateType;
-      createdAt: any;
+      createdAt: Date;
       images: Array<{
         __typename?: 'Image';
         id: string;
@@ -65924,11 +65924,11 @@ export type CreateUpdateOnIncidentMutation = {
         totalRecoveredValue?: number | null;
         totalTheftSuccess?: number | null;
         totalValue?: number | null;
-        updatedAt: any;
+        updatedAt: Date;
       }>;
       linkedVehicles: Array<{
         __typename?: 'Vehicle';
-        updatedAt: any;
+        updatedAt: Date;
         totalOffenders?: number | null;
         registration?: string | null;
         reference?: number | null;
@@ -65961,11 +65961,11 @@ export type CreateUpdateOnIncidentMutation = {
       linkedOffenders: Array<{
         __typename?: 'Offender';
         id: string;
-        updatedAt: any;
+        updatedAt: Date;
         age?: Age | null;
         build?: Build | null;
         height?: Height | null;
-        dateOfBirth?: any | null;
+        dateOfBirth?: Date | null;
         name?: string | null;
         race?: Race | null;
         gender?: Gender | null;
@@ -66004,7 +66004,7 @@ export type CreateUpdateOnInvestigationMutation = {
     id: string;
     text?: string | null;
     type: UpdateType;
-    createdAt: any;
+    createdAt: Date;
     images: Array<{
       __typename?: 'Image';
       id: string;
@@ -66030,11 +66030,11 @@ export type CreateUpdateOnInvestigationMutation = {
     linkedOffenders: Array<{
       __typename?: 'Offender';
       id: string;
-      updatedAt: any;
+      updatedAt: Date;
       age?: Age | null;
       build?: Build | null;
       height?: Height | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       name?: string | null;
       race?: Race | null;
       gender?: Gender | null;
@@ -66056,11 +66056,11 @@ export type CreateUpdateOnInvestigationMutation = {
       totalRecoveredValue?: number | null;
       totalTheftSuccess?: number | null;
       totalValue?: number | null;
-      updatedAt: any;
+      updatedAt: Date;
     }>;
     linkedVehicles: Array<{
       __typename?: 'Vehicle';
-      updatedAt: any;
+      updatedAt: Date;
       totalOffenders?: number | null;
       registration?: string | null;
       reference?: number | null;
@@ -66088,7 +66088,7 @@ export type CreateUpdateOnInvestigationMutation = {
       id: string;
       text?: string | null;
       type: UpdateType;
-      createdAt: any;
+      createdAt: Date;
       images: Array<{
         __typename?: 'Image';
         id: string;
@@ -66107,11 +66107,11 @@ export type CreateUpdateOnInvestigationMutation = {
         totalRecoveredValue?: number | null;
         totalTheftSuccess?: number | null;
         totalValue?: number | null;
-        updatedAt: any;
+        updatedAt: Date;
       }>;
       linkedVehicles: Array<{
         __typename?: 'Vehicle';
-        updatedAt: any;
+        updatedAt: Date;
         totalOffenders?: number | null;
         registration?: string | null;
         reference?: number | null;
@@ -66144,11 +66144,11 @@ export type CreateUpdateOnInvestigationMutation = {
       linkedOffenders: Array<{
         __typename?: 'Offender';
         id: string;
-        updatedAt: any;
+        updatedAt: Date;
         age?: Age | null;
         build?: Build | null;
         height?: Height | null;
-        dateOfBirth?: any | null;
+        dateOfBirth?: Date | null;
         name?: string | null;
         race?: Race | null;
         gender?: Gender | null;
@@ -66187,7 +66187,7 @@ export type CreateUpdateOnOffenderMutation = {
     id: string;
     text?: string | null;
     type: UpdateType;
-    createdAt: any;
+    createdAt: Date;
     images: Array<{
       __typename?: 'Image';
       id: string;
@@ -66206,11 +66206,11 @@ export type CreateUpdateOnOffenderMutation = {
       totalRecoveredValue?: number | null;
       totalTheftSuccess?: number | null;
       totalValue?: number | null;
-      updatedAt: any;
+      updatedAt: Date;
     }>;
     linkedVehicles: Array<{
       __typename?: 'Vehicle';
-      updatedAt: any;
+      updatedAt: Date;
       totalOffenders?: number | null;
       registration?: string | null;
       reference?: number | null;
@@ -66243,11 +66243,11 @@ export type CreateUpdateOnOffenderMutation = {
     linkedOffenders: Array<{
       __typename?: 'Offender';
       id: string;
-      updatedAt: any;
+      updatedAt: Date;
       age?: Age | null;
       build?: Build | null;
       height?: Height | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       name?: string | null;
       race?: Race | null;
       gender?: Gender | null;
@@ -66271,7 +66271,7 @@ export type CreateUpdateOnOffenderMutation = {
       id: string;
       text?: string | null;
       type: UpdateType;
-      createdAt: any;
+      createdAt: Date;
       images: Array<{
         __typename?: 'Image';
         id: string;
@@ -66290,11 +66290,11 @@ export type CreateUpdateOnOffenderMutation = {
         totalRecoveredValue?: number | null;
         totalTheftSuccess?: number | null;
         totalValue?: number | null;
-        updatedAt: any;
+        updatedAt: Date;
       }>;
       linkedVehicles: Array<{
         __typename?: 'Vehicle';
-        updatedAt: any;
+        updatedAt: Date;
         totalOffenders?: number | null;
         registration?: string | null;
         reference?: number | null;
@@ -66327,11 +66327,11 @@ export type CreateUpdateOnOffenderMutation = {
       linkedOffenders: Array<{
         __typename?: 'Offender';
         id: string;
-        updatedAt: any;
+        updatedAt: Date;
         age?: Age | null;
         build?: Build | null;
         height?: Height | null;
-        dateOfBirth?: any | null;
+        dateOfBirth?: Date | null;
         name?: string | null;
         race?: Race | null;
         gender?: Gender | null;
@@ -66370,7 +66370,7 @@ export type CreateUpdateOnVehicleMutation = {
     id: string;
     text?: string | null;
     type: UpdateType;
-    createdAt: any;
+    createdAt: Date;
     images: Array<{
       __typename?: 'Image';
       id: string;
@@ -66389,11 +66389,11 @@ export type CreateUpdateOnVehicleMutation = {
       totalRecoveredValue?: number | null;
       totalTheftSuccess?: number | null;
       totalValue?: number | null;
-      updatedAt: any;
+      updatedAt: Date;
     }>;
     linkedVehicles: Array<{
       __typename?: 'Vehicle';
-      updatedAt: any;
+      updatedAt: Date;
       totalOffenders?: number | null;
       registration?: string | null;
       reference?: number | null;
@@ -66426,11 +66426,11 @@ export type CreateUpdateOnVehicleMutation = {
     linkedOffenders: Array<{
       __typename?: 'Offender';
       id: string;
-      updatedAt: any;
+      updatedAt: Date;
       age?: Age | null;
       build?: Build | null;
       height?: Height | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       name?: string | null;
       race?: Race | null;
       gender?: Gender | null;
@@ -66454,7 +66454,7 @@ export type CreateUpdateOnVehicleMutation = {
       id: string;
       text?: string | null;
       type: UpdateType;
-      createdAt: any;
+      createdAt: Date;
       images: Array<{
         __typename?: 'Image';
         id: string;
@@ -66473,11 +66473,11 @@ export type CreateUpdateOnVehicleMutation = {
         totalRecoveredValue?: number | null;
         totalTheftSuccess?: number | null;
         totalValue?: number | null;
-        updatedAt: any;
+        updatedAt: Date;
       }>;
       linkedVehicles: Array<{
         __typename?: 'Vehicle';
-        updatedAt: any;
+        updatedAt: Date;
         totalOffenders?: number | null;
         registration?: string | null;
         reference?: number | null;
@@ -66510,11 +66510,11 @@ export type CreateUpdateOnVehicleMutation = {
       linkedOffenders: Array<{
         __typename?: 'Offender';
         id: string;
-        updatedAt: any;
+        updatedAt: Date;
         age?: Age | null;
         build?: Build | null;
         height?: Height | null;
-        dateOfBirth?: any | null;
+        dateOfBirth?: Date | null;
         name?: string | null;
         race?: Race | null;
         gender?: Gender | null;
@@ -66768,8 +66768,8 @@ export type CreateUserChatMutation = {
     id: string;
     newMessages?: boolean | null;
     mentioned?: boolean | null;
-    updatedAt: any;
-    createdAt: any;
+    updatedAt: Date;
+    createdAt: Date;
     user: {
       __typename?: 'User';
       id: string;
@@ -66788,7 +66788,7 @@ export type CreateUserChatMutation = {
         __typename?: 'Message';
         id: string;
         content: string;
-        createdAt: any;
+        createdAt: Date;
         from: {
           __typename?: 'User';
           id: string;
@@ -66853,8 +66853,8 @@ export type UpdateUserChatMutation = {
       id: string;
       newMessages?: boolean | null;
       mentioned?: boolean | null;
-      updatedAt: any;
-      createdAt: any;
+      updatedAt: Date;
+      createdAt: Date;
       user: {
         __typename?: 'User';
         id: string;
@@ -66871,7 +66871,7 @@ export type UpdateUserChatMutation = {
           __typename?: 'Message';
           id: string;
           content: string;
-          createdAt: any;
+          createdAt: Date;
           from: {
             __typename?: 'User';
             id: string;
@@ -66931,8 +66931,8 @@ export type UserChatsQuery = {
       id: string;
       newMessages?: boolean | null;
       mentioned?: boolean | null;
-      updatedAt: any;
-      createdAt: any;
+      updatedAt: Date;
+      createdAt: Date;
       chat: {
         __typename?: 'Chat';
         id: string;
@@ -66943,7 +66943,7 @@ export type UserChatsQuery = {
           __typename?: 'Message';
           id: string;
           content: string;
-          createdAt: any;
+          createdAt: Date;
           from: { __typename?: 'User'; id: string; origName: string };
           images: Array<{ __typename?: 'Image'; id: string }>;
           incidents: Array<{ __typename?: 'Incident'; id: string }>;
@@ -66966,12 +66966,12 @@ export type UpdateUserNotificationsMutation = {
     __typename?: 'UserNotification';
     id: string;
     read: boolean;
-    createdAt: any;
+    createdAt: Date;
     notification: {
       __typename?: 'Notification';
       id: string;
       crimeGroupId?: string | null;
-      createdAt: any;
+      createdAt: Date;
       chatId?: string | null;
       body?: string | null;
       articleId?: string | null;
@@ -67012,12 +67012,12 @@ export type UserNotificationsQuery = {
       __typename?: 'UserNotification';
       id: string;
       read: boolean;
-      createdAt: any;
+      createdAt: Date;
       notification: {
         __typename?: 'Notification';
         id: string;
         crimeGroupId?: string | null;
-        createdAt: any;
+        createdAt: Date;
         chatId?: string | null;
         body?: string | null;
         articleId?: string | null;
@@ -67083,7 +67083,7 @@ export type CreateUserInDatabaseMutation = {
     }>;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     approverGroups: Array<{ __typename?: 'Group'; id: string; name: string }>;
-    loginEvents: Array<{ __typename?: 'LoginEvent'; loginTime: any }>;
+    loginEvents: Array<{ __typename?: 'LoginEvent'; loginTime: Date }>;
   } | null;
 };
 
@@ -67113,7 +67113,7 @@ export type InviteExistingUserMutation = {
     }>;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     approverGroups: Array<{ __typename?: 'Group'; id: string; name: string }>;
-    loginEvents: Array<{ __typename?: 'LoginEvent'; loginTime: any }>;
+    loginEvents: Array<{ __typename?: 'LoginEvent'; loginTime: Date }>;
   } | null;
 };
 
@@ -67133,7 +67133,7 @@ export type ListBusinessUsersQuery = {
     fullName: string;
     status?: string | null;
     publicName: boolean;
-    loginEvents: Array<{ __typename?: 'LoginEvent'; loginTime: any }>;
+    loginEvents: Array<{ __typename?: 'LoginEvent'; loginTime: Date }>;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
   }>;
 };
@@ -67309,7 +67309,7 @@ export type CreateVehicleMutation = {
     totalIncidents?: number | null;
     totalCrimeGroups?: number | null;
     reference?: number | null;
-    updatedAt: any;
+    updatedAt: Date;
     colour?: string | null;
     images: Array<{
       __typename?: 'Image';
@@ -67392,7 +67392,7 @@ export type UpdateVehicleMutation = {
     reference?: number | null;
     totalOffenders?: number | null;
     totalIncidents?: number | null;
-    updatedAt: any;
+    updatedAt: Date;
     colour?: string | null;
     images: Array<{
       __typename?: 'Image';
@@ -67441,7 +67441,7 @@ export type ListVehiclesQuery = {
       totalOffenders?: number | null;
       totalIncidents?: number | null;
       reference?: number | null;
-      updatedAt: any;
+      updatedAt: Date;
       colour?: string | null;
       images: Array<{
         __typename?: 'Image';
@@ -67486,7 +67486,7 @@ export type VehicleQuery = {
     totalCrimeGroups?: number | null;
     reference?: number | null;
     subscribed?: boolean | null;
-    updatedAt: any;
+    updatedAt: Date;
     colour?: string | null;
     customGalleries: Array<{
       __typename?: 'CustomGallery';
@@ -67505,7 +67505,7 @@ export type VehicleQuery = {
       id: string;
       reference?: number | null;
       dayTime?: string | null;
-      date: any;
+      date: Date;
       policeRef?: string | null;
       subject?: string | null;
       value?: number | null;
@@ -67528,7 +67528,7 @@ export type VehicleQuery = {
       hair?: string | null;
       peculiarities?: string | null;
       race?: Race | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       dateSource?: string | null;
       build?: Build | null;
       height?: Height | null;
@@ -67566,7 +67566,7 @@ export type VehicleQuery = {
       id: string;
       text?: string | null;
       type: UpdateType;
-      createdAt: any;
+      createdAt: Date;
       images: Array<{
         __typename?: 'Image';
         id: string;
@@ -67585,11 +67585,11 @@ export type VehicleQuery = {
         totalRecoveredValue?: number | null;
         totalTheftSuccess?: number | null;
         totalValue?: number | null;
-        updatedAt: any;
+        updatedAt: Date;
       }>;
       linkedVehicles: Array<{
         __typename?: 'Vehicle';
-        updatedAt: any;
+        updatedAt: Date;
         totalOffenders?: number | null;
         registration?: string | null;
         reference?: number | null;
@@ -67622,11 +67622,11 @@ export type VehicleQuery = {
       linkedOffenders: Array<{
         __typename?: 'Offender';
         id: string;
-        updatedAt: any;
+        updatedAt: Date;
         age?: Age | null;
         build?: Build | null;
         height?: Height | null;
-        dateOfBirth?: any | null;
+        dateOfBirth?: Date | null;
         name?: string | null;
         race?: Race | null;
         gender?: Gender | null;
@@ -67654,7 +67654,7 @@ export type VehicleQuery = {
         id: string;
         text?: string | null;
         type: UpdateType;
-        createdAt: any;
+        createdAt: Date;
         images: Array<{
           __typename?: 'Image';
           id: string;
@@ -67673,11 +67673,11 @@ export type VehicleQuery = {
           totalRecoveredValue?: number | null;
           totalTheftSuccess?: number | null;
           totalValue?: number | null;
-          updatedAt: any;
+          updatedAt: Date;
         }>;
         linkedVehicles: Array<{
           __typename?: 'Vehicle';
-          updatedAt: any;
+          updatedAt: Date;
           totalOffenders?: number | null;
           registration?: string | null;
           reference?: number | null;
@@ -67710,11 +67710,11 @@ export type VehicleQuery = {
         linkedOffenders: Array<{
           __typename?: 'Offender';
           id: string;
-          updatedAt: any;
+          updatedAt: Date;
           age?: Age | null;
           build?: Build | null;
           height?: Height | null;
-          dateOfBirth?: any | null;
+          dateOfBirth?: Date | null;
           name?: string | null;
           race?: Race | null;
           gender?: Gender | null;

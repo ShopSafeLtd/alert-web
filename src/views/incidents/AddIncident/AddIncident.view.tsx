@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading,@typescript-eslint/no-unsafe-member-access,formatjs/no-literal-string-in-jsx */
 import React from 'react';
 import type {
   AddressesQuery,
@@ -42,6 +43,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
 import AddLocation from 'components/form-components/incident/location/AddLocation';
+import { useIntl } from 'react-intl';
 import useStyles from './AddIncident.styles';
 import type { FormData } from './useAddIncident';
 
@@ -180,10 +182,16 @@ const EditIncident = ({
   setPrimaryImage,
 }: Props): JSX.Element => {
   const classes = useStyles();
-
+  const intl = useIntl();
   return (
     <div className="page-view">
-      <PageHeader onBack={() => window.history.back()} title="Add Incident" />
+      <PageHeader
+        onBack={() => window.history.back()}
+        title={intl.formatMessage({
+          defaultMessage: 'Add Incident',
+          id: 'kG1p3q',
+        })}
+      />
       <Form<FormData>
         form={form}
         initialValues={{
@@ -199,13 +207,17 @@ const EditIncident = ({
         <Card className={classes.card}>
           <Row align="bottom" style={{ marginBottom: 20 }}>
             <Col>
+              {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
               <Title style={{ marginBottom: 0 }} level={4}>
                 1.
               </Title>
             </Col>
             <Col>
               <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
-                What incident are you reporting?
+                {intl.formatMessage({
+                  defaultMessage: 'What incident are you reporting?',
+                  id: 'hyvrCv',
+                })}
               </Title>
             </Col>
             <Col>
@@ -214,20 +226,34 @@ const EditIncident = ({
                 type="secondary"
                 italic
               >
-                - Select a the types that apply to this incident.
+                {intl.formatMessage({
+                  defaultMessage:
+                    '- Select the types that apply to this incident.',
+                  id: '1VKite',
+                })}
               </Paragraph>
             </Col>
           </Row>
           <Form.Item
             name="tags"
-            tooltip="Select the relevant crime types for this incident, these help to categorise the incident."
+            tooltip={intl.formatMessage({
+              defaultMessage:
+                'Select the relevant crime types for this incident, these help to categorize the incident.',
+              id: 'KxHHjU',
+            })}
             rules={[
               {
                 required: true,
-                message: 'Please add at least one crime type.',
+                message: intl.formatMessage({
+                  defaultMessage: 'Please add at least one crime type.',
+                  id: 'eSRsUW',
+                }),
               },
             ]}
-            label="Incident Type"
+            label={intl.formatMessage({
+              defaultMessage: 'Incident Type',
+              id: '3OwM2P',
+            })}
           >
             <CheckTags
               loading={tagsLoading}
@@ -239,12 +265,22 @@ const EditIncident = ({
           </Form.Item>
           <Form.Item
             name="involvedTags"
-            tooltip="Select the relevant crime types for this incident, these help to categorise the incident,"
-            label="Did this incident involve any of the following?"
+            tooltip={intl.formatMessage({
+              defaultMessage:
+                'Select the relevant crime types for this incident, these help to categorize the incident.',
+              id: 'KxHHjU',
+            })}
+            label={intl.formatMessage({
+              defaultMessage: 'Did this incident involve any of the following?',
+              id: 'cSg8/M',
+            })}
             rules={[
               {
                 required: true,
-                message: 'Please select an option for this field',
+                message: intl.formatMessage({
+                  defaultMessage: 'Please select an option for this field',
+                  id: '1f5eBz',
+                }),
               },
             ]}
           >
@@ -255,15 +291,24 @@ const EditIncident = ({
               )}
             />
           </Form.Item>
-
           <Form.Item
             name="fellingTags"
-            tooltip="Select the relevant crime types for this incident, these help to categorise the incident,"
-            label="How did this make you feel?"
+            tooltip={intl.formatMessage({
+              defaultMessage:
+                'Select the relevant crime types for this incident, these help to categorize the incident.',
+              id: 'KxHHjU',
+            })}
+            label={intl.formatMessage({
+              defaultMessage: 'How did this make you feel?',
+              id: '05xT64',
+            })}
             rules={[
               {
                 required: true,
-                message: 'Please select an option for this field',
+                message: intl.formatMessage({
+                  defaultMessage: 'Please select an option for this field',
+                  id: '1f5eBz',
+                }),
               },
             ]}
           >
@@ -285,12 +330,24 @@ const EditIncident = ({
           <Row align="bottom" style={{ marginBottom: 20 }}>
             <Col>
               <Title style={{ marginBottom: 0 }} level={4}>
-                2.
+                {intl.formatMessage(
+                  {
+                    defaultMessage: '2.',
+                    id: 'VLt5sV',
+                  },
+                  {}
+                )}
               </Title>
             </Col>
             <Col>
               <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
-                Where & When did this incident happen?
+                {intl.formatMessage(
+                  {
+                    defaultMessage: 'Where & When did this incident happen?',
+                    id: 'oY9x8s',
+                  },
+                  {}
+                )}
               </Title>
             </Col>
             <Col>
@@ -299,7 +356,14 @@ const EditIncident = ({
                 type="secondary"
                 italic
               >
-                - Select a the business that this incident relates to.
+                {intl.formatMessage(
+                  {
+                    defaultMessage:
+                      '- Select a the business that this incident relates to.',
+                    id: 'hCXJmL',
+                  },
+                  {}
+                )}
               </Paragraph>
             </Col>
           </Row>
@@ -309,12 +373,24 @@ const EditIncident = ({
                 <Col>
                   <Row>
                     <Col>
-                      <Form.Item name="business" label="Business">
+                      <Form.Item
+                        name="business"
+                        label={intl.formatMessage(
+                          { defaultMessage: 'Business', id: 'w1Fanr' },
+                          {}
+                        )}
+                      >
                         <DebounceSelect
                           showSearch
                           allowClear
                           disabled={saving}
-                          placeholder="Search for a business..."
+                          placeholder={intl.formatMessage(
+                            {
+                              defaultMessage: 'Search for a business...',
+                              id: 'qaJxSS',
+                            },
+                            {}
+                          )}
                           fetchOptions={onSearchBusiness}
                           style={{ width: 300 }}
                         />
@@ -331,7 +407,10 @@ const EditIncident = ({
                           />
                         }
                       >
-                        Enter Address
+                        {intl.formatMessage(
+                          { defaultMessage: 'Enter Address', id: 'kGBG2S' },
+                          {}
+                        )}
                       </Button>
                     </Col>
                   </Row>
@@ -339,12 +418,29 @@ const EditIncident = ({
                 <Col>
                   <Form.Item
                     name="date"
-                    label="Time &amp; Date"
-                    tooltip="The date and time that the incident occurred."
+                    label={intl.formatMessage(
+                      { defaultMessage: 'Time & Date', id: 'rXTgTq' },
+                      {}
+                    )}
+                    tooltip={intl.formatMessage(
+                      {
+                        defaultMessage:
+                          'The date and time that the incident occurred.',
+                        id: '4eTajC',
+                      },
+                      {}
+                    )}
                     rules={[
                       {
                         required: true,
-                        message: 'Please select a date for the incident.',
+                        message: intl.formatMessage(
+                          {
+                            defaultMessage:
+                              'Please select a date for the incident.',
+                            id: 'Cgy3GX',
+                          },
+                          {}
+                        ),
                       },
                     ]}
                   >
@@ -353,21 +449,31 @@ const EditIncident = ({
                       disabledDate={(current) =>
                         current && current.valueOf() > Date.now()
                       }
-                      format="HH:mm - DD/MM/YY"
+                      format={intl.formatMessage(
+                        { defaultMessage: 'HH:mm - DD/MM/YY', id: '/b3fJF' },
+                        {}
+                      )}
                       showTime={{ showSecond: false, showNow: true }}
-                      placeholder="Set Date &amp; Time"
+                      placeholder={intl.formatMessage(
+                        { defaultMessage: 'Set Date & Time', id: 'hQHL0E' },
+                        {}
+                      )}
                     />
                   </Form.Item>
                 </Col>
               </Row>
             </Col>
           </Row>
+
           {newAddressData && (
             <>
               <Row gutter={8}>
                 <Col>
                   <Title level={4} style={{ fontSize: 15, marginTop: 5 }}>
-                    Location:
+                    {intl.formatMessage(
+                      { defaultMessage: 'Location:', id: 'A5vVzY' },
+                      {}
+                    )}
                   </Title>
                 </Col>
               </Row>
@@ -404,14 +510,20 @@ const EditIncident = ({
             <Row align="bottom" style={{ marginBottom: 20 }}>
               <Col>
                 <Title style={{ marginBottom: 0 }} level={4}>
-                  3.
+                  {intl.formatMessage({ defaultMessage: '3.', id: 'LOHgf/' })}
                 </Title>
               </Col>
               <Col>
                 <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
                   {goodsVisible
-                    ? 'What goods were involved?'
-                    : 'Do you know what goods were involved?'}
+                    ? intl.formatMessage({
+                        defaultMessage: 'What goods were involved?',
+                        id: '6L5/Qv',
+                      })
+                    : intl.formatMessage({
+                        defaultMessage: 'Do you know what goods were involved?',
+                        id: '+eY3nZ',
+                      })}
                 </Title>
               </Col>
               <Col>
@@ -420,7 +532,11 @@ const EditIncident = ({
                   type="secondary"
                   italic
                 >
-                  - Please provide information about the lost/recovered goods.
+                  {intl.formatMessage({
+                    defaultMessage:
+                      '- Please provide information about the lost/recovered goods.',
+                    id: '3kptQz',
+                  })}
                 </Paragraph>
               </Col>
             </Row>
@@ -431,7 +547,12 @@ const EditIncident = ({
                   {
                     validator: async (rule, value) => {
                       if (value.length === 0)
-                        throw new Error('Something wrong!');
+                        throw new Error(
+                          intl.formatMessage({
+                            defaultMessage: 'Something wrong!',
+                            id: 'QL7Ixv',
+                          })
+                        );
                     },
                   },
                 ]}
@@ -442,19 +563,31 @@ const EditIncident = ({
                       <Row key={key} gutter={8}>
                         <Col>
                           <Form.Item
-                            // eslint-disable-next-line
                             {...restField}
-                            label={index ? '' : 'Type of Goods'}
+                            label={
+                              index
+                                ? ''
+                                : intl.formatMessage({
+                                    defaultMessage: 'Type of Goods',
+                                    id: 'awr2tc',
+                                  })
+                            }
                             name={[name, 'goodsType']}
                             rules={[
                               {
                                 required: index === 0,
-                                message: 'Please enter a type',
+                                message: intl.formatMessage({
+                                  defaultMessage: 'Please enter a type',
+                                  id: 'pd8FHc',
+                                }),
                               },
                             ]}
                           >
                             <Select
-                              placeholder="Select goods..."
+                              placeholder={intl.formatMessage({
+                                defaultMessage: 'Select goods...',
+                                id: 'p4Hiyr',
+                              })}
                               style={{ width: 300 }}
                               allowClear
                               options={goodsTypesData?.listGoodsTypes.goodsTypes.map(
@@ -468,17 +601,30 @@ const EditIncident = ({
                         </Col>
                         <Col>
                           <Form.Item
-                            // eslint-disable-next-line
                             {...restField}
                             name={[name, 'value']}
-                            label={index ? '' : 'Value'}
+                            label={
+                              index
+                                ? ''
+                                : intl.formatMessage({
+                                    defaultMessage: 'Value',
+                                    id: 'GufXy5',
+                                  })
+                            }
                             rules={[
                               {
                                 required: index === 0,
-                                message: 'Please enter a value',
+                                message: intl.formatMessage({
+                                  defaultMessage: 'Please enter a value',
+                                  id: 'Umf5pG',
+                                }),
                               },
                             ]}
-                            tooltip="The value of the goods involved in the incident, both lost and recovered."
+                            tooltip={intl.formatMessage({
+                              defaultMessage:
+                                'The value of the goods involved in the incident, both lost and recovered.',
+                              id: 'MPzA66',
+                            })}
                           >
                             <InputNumber
                               style={{ width: 150 }}
@@ -490,17 +636,30 @@ const EditIncident = ({
                         </Col>
                         <Col>
                           <Form.Item
-                            // eslint-disable-next-line
                             {...restField}
                             name={[name, 'recoveredValue']}
-                            label={index ? '' : 'Value Recovered'}
+                            label={
+                              index
+                                ? ''
+                                : intl.formatMessage({
+                                    defaultMessage: 'Value Recovered',
+                                    id: 'FqEGSY',
+                                  })
+                            }
                             rules={[
                               {
                                 required: index === 0,
-                                message: 'Please enter a value',
+                                message: intl.formatMessage({
+                                  defaultMessage: 'Please enter a value',
+                                  id: 'Umf5pG',
+                                }),
                               },
                             ]}
-                            tooltip="The value of the goods that were recovered."
+                            tooltip={intl.formatMessage({
+                              defaultMessage:
+                                'The value of the goods that were recovered.',
+                              id: 'JuhI7q',
+                            })}
                           >
                             <InputNumber
                               style={{ width: 150 }}
@@ -540,7 +699,10 @@ const EditIncident = ({
                               />
                             }
                           >
-                            Add Item
+                            {intl.formatMessage({
+                              defaultMessage: 'Add Item',
+                              id: 'kNLPWW',
+                            })}
                           </Button>
                         </Col>
                       </Row>
@@ -553,12 +715,18 @@ const EditIncident = ({
                 <Row gutter={16}>
                   <Col>
                     <Button onClick={knowGoods} danger>
-                      I know the goods involved
+                      {intl.formatMessage({
+                        defaultMessage: 'I know the goods involved',
+                        id: '5RSz8i',
+                      })}
                     </Button>
                   </Col>
                   <Col>
                     <Button onClick={dontKnowGoods}>
-                      I don&apos;t know the goods involved
+                      {intl.formatMessage({
+                        defaultMessage: "I don't know the goods involved",
+                        id: 'Syf67T',
+                      })}
                     </Button>
                   </Col>
                 </Row>
@@ -624,12 +792,15 @@ const EditIncident = ({
           <Row align="bottom" style={{ marginBottom: 20 }}>
             <Col>
               <Title style={{ marginBottom: 0 }} level={4}>
-                {isTheft ? 6 : 5}.
+                {isTheft ? '6.' : '5.'}
               </Title>
             </Col>
             <Col>
               <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
-                Police involvement
+                {intl.formatMessage({
+                  defaultMessage: 'Police involvement',
+                  id: 'eMpXMz',
+                })}
               </Title>
             </Col>
           </Row>
@@ -638,13 +809,32 @@ const EditIncident = ({
               <Form.Item
                 name="policeReported"
                 valuePropName="checked"
-                tooltip="The incident has been reported to the police"
-                label="Was this incident reported to the police?"
+                tooltip={intl.formatMessage({
+                  defaultMessage:
+                    'The incident has been reported to the police',
+                  id: 'hLeud7',
+                })}
+                label={intl.formatMessage({
+                  defaultMessage: 'Was this incident reported to the police?',
+                  id: 'dVzhQl',
+                })}
               >
                 <Radio.Group
                   options={[
-                    { label: 'Yes', value: true },
-                    { label: 'No', value: false },
+                    {
+                      label: intl.formatMessage({
+                        defaultMessage: 'Yes',
+                        id: 'a5msuh',
+                      }),
+                      value: true,
+                    },
+                    {
+                      label: intl.formatMessage({
+                        defaultMessage: 'No',
+                        id: 'oUWADl',
+                      }),
+                      value: false,
+                    },
                   ]}
                   optionType="button"
                   disabled={saving}
@@ -653,13 +843,31 @@ const EditIncident = ({
               <Form.Item
                 name="policeInvolved"
                 valuePropName="checked"
-                tooltip="Did the police attend this incident."
-                label="Did the police attend this incident?"
+                tooltip={intl.formatMessage({
+                  defaultMessage: 'Did the police attend this incident.',
+                  id: '367usW',
+                })}
+                label={intl.formatMessage({
+                  defaultMessage: 'Did the police attend this incident?',
+                  id: 'GV2eOn',
+                })}
               >
                 <Radio.Group
                   options={[
-                    { label: 'Yes', value: true },
-                    { label: 'No', value: false },
+                    {
+                      label: intl.formatMessage({
+                        defaultMessage: 'Yes',
+                        id: 'a5msuh',
+                      }),
+                      value: true,
+                    },
+                    {
+                      label: intl.formatMessage({
+                        defaultMessage: 'No',
+                        id: 'oUWADl',
+                      }),
+                      value: false,
+                    },
                   ]}
                   optionType="button"
                   disabled={saving}
@@ -670,15 +878,29 @@ const EditIncident = ({
             <Col>
               <Form.Item
                 name="policeRef"
-                label="Crime Ref No."
-                tooltip="The crime reference number provided by the police."
+                label={intl.formatMessage({
+                  defaultMessage: 'Crime Ref No.',
+                  id: 'lXj6/P',
+                })}
+                tooltip={intl.formatMessage({
+                  defaultMessage:
+                    'The crime reference number provided by the police.',
+                  id: 'tMiPZU',
+                })}
               >
                 <Input disabled={saving} />
               </Form.Item>
               <Form.Item
                 name="policeNo"
-                label="Officer Collar No."
-                tooltip="The collar number of the officers involved in this incident."
+                label={intl.formatMessage({
+                  defaultMessage: 'Officer Collar No.',
+                  id: '6gfZFu',
+                })}
+                tooltip={intl.formatMessage({
+                  defaultMessage:
+                    'The collar number of the officers involved in this incident.',
+                  id: 'erIvhR',
+                })}
               >
                 <Input disabled={saving} />
               </Form.Item>
@@ -706,12 +928,15 @@ const EditIncident = ({
               <Row align="bottom" style={{ marginBottom: 20 }}>
                 <Col>
                   <Title style={{ marginBottom: 0 }} level={4}>
-                    {isTheft ? 8 : 7}.
+                    {isTheft ? '8.' : '7.'}
                   </Title>
                 </Col>
                 <Col>
                   <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
-                    Who is this incident relevant to?
+                    {intl.formatMessage({
+                      defaultMessage: 'Who is this incident relevant to?',
+                      id: 'EeN7DX',
+                    })}
                   </Title>
                 </Col>
                 <Col>
@@ -720,7 +945,12 @@ const EditIncident = ({
                     type="secondary"
                     italic
                   >
-                    - Please select the groups that this incident is for.
+                    -{' '}
+                    {intl.formatMessage({
+                      defaultMessage:
+                        'Please select the groups that this incident is for.',
+                      id: 'G+tr7D',
+                    })}
                   </Paragraph>
                 </Col>
               </Row>
@@ -728,12 +958,19 @@ const EditIncident = ({
                 <Col span={8}>
                   <Form.Item
                     name="groups"
-                    tooltip="Please select the relevant groups to report this incident to, for GDPR it is important that the data is relevant to the groups."
+                    tooltip={intl.formatMessage({
+                      defaultMessage:
+                        'Please select the relevant groups to report this incident to, for GDPR it is important that the data is relevant to the groups.',
+                      id: 'vi+XKb',
+                    })}
                     rules={[
                       {
                         required: true,
-                        message:
-                          'Please add at least one group that you would like this incident to be visible to.',
+                        message: intl.formatMessage({
+                          defaultMessage:
+                            'Please add at least one group that you would like this incident to be visible to.',
+                          id: 'ukeLzq',
+                        }),
                       },
                     ]}
                   >
@@ -742,7 +979,10 @@ const EditIncident = ({
                       disabled={saving}
                       mode="multiple"
                       maxTagCount={3}
-                      placeholder="Select groups..."
+                      placeholder={intl.formatMessage({
+                        defaultMessage: 'Select groups...',
+                        id: 'aVKXev',
+                      })}
                     >
                       {groups.map((group) => (
                         <Select.Option key={group.value} value={group.value}>
@@ -762,7 +1002,7 @@ const EditIncident = ({
           <Row style={{ marginTop: 10 }} gutter={10} justify="end">
             <Col>
               <Button disabled={saving} onClick={() => window.history.back()}>
-                Cancel
+                {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
               </Button>
             </Col>
             <Col>
@@ -772,7 +1012,10 @@ const EditIncident = ({
                 type="primary"
                 htmlType="submit"
               >
-                Create Incident
+                {intl.formatMessage({
+                  defaultMessage: 'Create Incident',
+                  id: 'qbNNUK',
+                })}
               </Button>
             </Col>
           </Row>
@@ -780,7 +1023,10 @@ const EditIncident = ({
       </Form>
 
       <Drawer
-        title="Add Crime Type"
+        title={intl.formatMessage({
+          defaultMessage: 'Add Crime Type',
+          id: 'OAVeBQ',
+        })}
         open={addIncidentTag}
         width="400"
         onClose={toggleAddIncidentTag}
@@ -795,7 +1041,10 @@ const EditIncident = ({
         )}
       </Drawer>
       <Drawer
-        title="Enter Address"
+        title={intl.formatMessage({
+          defaultMessage: 'Enter Address',
+          id: 'kGBG2S',
+        })}
         open={addNewAddress}
         width="600"
         onClose={toggleAddNewAddress}
@@ -807,6 +1056,7 @@ const EditIncident = ({
           />
         )}
       </Drawer>
+
       <AssignImageOffender
         image={newImage || undefined}
         offenderData={offendersData || []}

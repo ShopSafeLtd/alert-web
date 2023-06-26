@@ -41,13 +41,13 @@ import {
   TargetGoodsColumns,
 } from 'components/reports/tableColumns';
 import moment from 'moment';
+import { useIntl } from 'react-intl';
 import type { OffenderReportQuery } from '../../../../graphql/generated';
 import { Age, Build, Gender, Race } from '../../../../graphql/generated';
 import useStyles from '../../styles/report.styles';
 import WatermarkImage from '../../../../components/images/WatermarkImage.view';
 import RadialGraph from '../../../../components/reports/graphs/radialGraph';
-import type { AllowedValue, Elements } from '../../types';
-import { MetaData } from '../../types';
+import type { AllowedValue, Elements, MetaData } from '../../types';
 
 const { Title, Text } = Typography;
 
@@ -92,6 +92,7 @@ const OffenderReportLayout = ({
       rowHeight * targetH + margin[1] * (targetH - 1) - (offset || 0)
     }px`;
   };
+  const intl = useIntl();
   const components: Elements = {
     offenderSummary: (
       <Card
@@ -133,20 +134,43 @@ const OffenderReportLayout = ({
               {data?.offenderReport?.offenderSummary?.name}
             </Title>
             <Text type="secondary">
-              Alert ID: {data?.offenderReport?.offenderSummary?.reference}
+              {intl.formatMessage(
+                {
+                  defaultMessage: 'Alert ID: {ref}',
+                  id: 'umL9sI',
+                },
+                {
+                  ref: data?.offenderReport?.offenderSummary?.reference,
+                }
+              )}
             </Text>
             <Title level={4} type="secondary">
-              Details
+              {intl.formatMessage({
+                defaultMessage: 'Details',
+                id: 'Lv0zJu',
+              })}
             </Title>
             <Descriptions column={2} className={classes.descriptions}>
-              <Descriptions.Item className={classes.descItem} label="Gender">
+              <Descriptions.Item
+                className={classes.descItem}
+                label={intl.formatMessage({
+                  defaultMessage: 'Gender',
+                  id: 'm8/n8c',
+                })}
+              >
                 {getSex(
                   data?.offenderReport?.offenderSummary?.gender ||
                     Gender.Unknown
                 )}
               </Descriptions.Item>
               {!data?.offenderReport?.offenderSummary?.dateOfBirth && (
-                <Descriptions.Item className={classes.descItem} label="Age">
+                <Descriptions.Item
+                  className={classes.descItem}
+                  label={intl.formatMessage({
+                    defaultMessage: 'Age',
+                    id: '9oNQSC',
+                  })}
+                >
                   {getAge(
                     data?.offenderReport?.offenderSummary?.age || Age.Unknown
                   )}
@@ -155,7 +179,10 @@ const OffenderReportLayout = ({
               {data?.offenderReport?.offenderSummary?.dateOfBirth && (
                 <Descriptions.Item
                   className={classes.descItem}
-                  label="Date of Birth"
+                  label={intl.formatMessage({
+                    defaultMessage: 'Date of Birth',
+                    id: 'e9Z+tg',
+                  })}
                 >
                   {moment(
                     data?.offenderReport?.offenderSummary?.dateOfBirth
@@ -165,32 +192,63 @@ const OffenderReportLayout = ({
               {data?.offenderReport?.offenderSummary?.dateSource && (
                 <Descriptions.Item
                   className={classes.descItem}
-                  label="DoB Source"
+                  label={intl.formatMessage({
+                    defaultMessage: 'DoB Source',
+                    id: 'buqD4b',
+                  })}
                 >
                   {data?.offenderReport?.offenderSummary?.dateSource}
                 </Descriptions.Item>
               )}
-              <Descriptions.Item className={classes.descItem} label="Build">
+              <Descriptions.Item
+                className={classes.descItem}
+                label={intl.formatMessage({
+                  defaultMessage: 'Build',
+                  id: 'RSctv1',
+                })}
+              >
                 {getBuild(
                   data?.offenderReport?.offenderSummary?.build || Build.Unknown
                 )}
               </Descriptions.Item>
-              <Descriptions.Item className={classes.descItem} label="Ethnicity">
+              <Descriptions.Item
+                className={classes.descItem}
+                label={intl.formatMessage({
+                  defaultMessage: 'Ethnicity',
+                  id: 'XtCAFo',
+                })}
+              >
                 {getEthnicity(
                   data?.offenderReport?.offenderSummary?.race || Race.Unknown
                 )}
               </Descriptions.Item>
             </Descriptions>
             <Descriptions column={1}>
-              <Descriptions.Item className={classes.descItem} label="Hair">
-                {data?.offenderReport?.offenderSummary?.hair || 'Unknown'}
+              <Descriptions.Item
+                className={classes.descItem}
+                label={intl.formatMessage({
+                  defaultMessage: 'Hair',
+                  id: 'e4YBbX',
+                })}
+              >
+                {data?.offenderReport?.offenderSummary?.hair ||
+                  intl.formatMessage({
+                    defaultMessage: 'Unknown',
+                    id: '5jeq8P',
+                  })}
               </Descriptions.Item>
               <Descriptions.Item
                 className={classes.descItem}
-                label="Peculiarities"
+                label={intl.formatMessage({
+                  defaultMessage: 'Peculiarities',
+                  id: '9s+ZmX',
+                })}
               >
                 {data?.offenderReport?.offenderSummary?.peculiarities ||
-                  'None documented'}
+                  intl.formatMessage({
+                    defaultMessage: 'None documented',
+                    id: '+CkDvs',
+                  })}
               </Descriptions.Item>
             </Descriptions>
           </Col>
@@ -215,18 +273,29 @@ const OffenderReportLayout = ({
         />
         <Row>
           <Col span={12}>
-            <Title level={4}>Incidents Summary</Title>
+            <Title level={4}>
+              {intl.formatMessage({
+                defaultMessage: 'Incidents Summary',
+                id: 'DGld1Y',
+              })}
+            </Title>
           </Col>
           <Row className="stats-row">
             <Statistic
               className={classes.stats}
-              title="Last Incident (in range)"
+              title={intl.formatMessage({
+                defaultMessage: 'Last Incident (in range)',
+                id: 'lI3BDd',
+              })}
               value={
                 data?.offenderReport?.incidentSummary?.lastIncidentDate
                   ? new Date(
                       data?.offenderReport?.incidentSummary?.lastIncidentDate
                     ).toLocaleDateString()
-                  : 'unknown'
+                  : intl.formatMessage({
+                      defaultMessage: 'Unknown',
+                      id: '5jeq8P',
+                    })
               }
               prefix={
                 <FontAwesomeIcon
@@ -238,7 +307,10 @@ const OffenderReportLayout = ({
 
             <Statistic
               className={classes.stats}
-              title="Reported to Police"
+              title={intl.formatMessage({
+                defaultMessage: 'Reported to Police',
+                id: 'LhTpVN',
+              })}
               value={
                 data?.offenderReport?.incidentSummary
                   ?.incidentsReportedToPolice || 0
@@ -253,7 +325,10 @@ const OffenderReportLayout = ({
 
             <Statistic
               className={classes.stats}
-              title="Police Attended"
+              title={intl.formatMessage({
+                defaultMessage: 'Police Attended',
+                id: 'ES0Nc8',
+              })}
               value={
                 data?.offenderReport?.incidentSummary
                   ?.incidentsWherePoliceAttended || 0
@@ -268,7 +343,10 @@ const OffenderReportLayout = ({
 
             <Statistic
               className={classes.stats}
-              title="Most common crime type"
+              title={intl.formatMessage({
+                defaultMessage: 'Most Common Crime Type',
+                id: 'jbbNOa',
+              })}
               value={
                 data?.offenderReport?.incidentSummary?.mostCommonCrimeType || ''
               }
@@ -301,18 +379,29 @@ const OffenderReportLayout = ({
         />
         <Row>
           <Col span={12}>
-            <Title level={4}>Loss Summary</Title>
+            <Title level={4}>
+              {intl.formatMessage({
+                defaultMessage: 'Loss Summary',
+                id: 'O0DXtz',
+              })}
+            </Title>
           </Col>
           <Row className="stats-row">
             <Statistic
               className={classes.stats}
-              title="Total lost value"
+              title={intl.formatMessage({
+                defaultMessage: 'Total lost value',
+                id: 'xhO9Od',
+              })}
               value={
                 data?.offenderReport?.lossTotals?.totalLostValue
                   ? `£${data?.offenderReport?.lossTotals?.totalLostValue.toFixed(
                       2
                     )}`
-                  : 'No Losses'
+                  : intl.formatMessage({
+                      defaultMessage: 'No Losses',
+                      id: '9RLqIM',
+                    })
               }
               prefix={
                 <FontAwesomeIcon
@@ -324,13 +413,19 @@ const OffenderReportLayout = ({
             />
             <Statistic
               className={classes.stats}
-              title="Total recovered value"
+              title={intl.formatMessage({
+                defaultMessage: 'Total recovered value',
+                id: 'OorvGS',
+              })}
               value={
                 data?.offenderReport?.lossTotals?.totalRecoveredValue
                   ? `£${data?.offenderReport?.lossTotals?.totalRecoveredValue.toFixed(
                       2
                     )}`
-                  : 'No Recoveries'
+                  : intl.formatMessage({
+                      defaultMessage: 'No Recoveries',
+                      id: 'i7IHf9',
+                    })
               }
               prefix={
                 <FontAwesomeIcon
@@ -342,7 +437,10 @@ const OffenderReportLayout = ({
             />
             <Statistic
               className={classes.stats}
-              title="Average Success Rate"
+              title={intl.formatMessage({
+                defaultMessage: 'Average Success Rate',
+                id: 'G+JbdY',
+              })}
               value={`${(
                 (data?.offenderReport?.lossTotals?.averageSuccessRate || 0) *
                 100
@@ -356,11 +454,14 @@ const OffenderReportLayout = ({
             />
             <Statistic
               className={classes.stats}
-              title="Average Loss per Incident"
+              title={intl.formatMessage({
+                defaultMessage: 'Average Loss per Incident',
+                id: 'k62cVY',
+              })}
               value={
-                `£${data?.offenderReport?.lossTotals?.averagePerIncident.toFixed(
-                  2
-                )}` || ''
+                `£${(
+                  data?.offenderReport?.lossTotals?.averagePerIncident || 0
+                ).toFixed(2)}` || ''
               }
               prefix={
                 <FontAwesomeIcon
@@ -370,12 +471,15 @@ const OffenderReportLayout = ({
               }
             />
           </Row>
-        </Row>{' '}
+        </Row>
       </Card>
     ),
     crimeTypesDonut: (
       <Card
-        title="Crime Types"
+        title={intl.formatMessage({
+          defaultMessage: 'Crime Types',
+          id: 'Piba4q',
+        })}
         className="no-break"
         loading={loading}
         style={{ height: calculateHeight('crimeTypesDonut') }}
@@ -432,7 +536,10 @@ const OffenderReportLayout = ({
           'pie' ? (
           <DonutGraph
             data={data?.offenderReport?.crimeTypeDonut}
-            emptyLabel="No Crime Types"
+            emptyLabel={intl.formatMessage({
+              defaultMessage: 'No Crime Types',
+              id: 'BbTEjZ',
+            })}
             type={
               metadata.find((item) => item.key === 'crimeTypesDonut')?.type as
                 | 'donut'
@@ -442,15 +549,24 @@ const OffenderReportLayout = ({
         ) : (
           <BarGraph
             data={data?.offenderReport?.crimeTypeDonut}
-            emptyLabel="No Crime Types"
-            labelFormat="Incidents"
+            emptyLabel={intl.formatMessage({
+              defaultMessage: 'No Crime Types',
+              id: 'BbTEjZ',
+            })}
+            labelFormat={intl.formatMessage({
+              defaultMessage: 'Incidents',
+              id: 'mtr3R4',
+            })}
           />
         )}
       </Card>
     ),
     crimeTypesByBusinessRadial: (
       <Card
-        title="Crime Types By Business"
+        title={intl.formatMessage({
+          defaultMessage: 'Crime Types by Business',
+          id: '2pC0Hc',
+        })}
         className="no-break"
         loading={loading}
         style={{ height: calculateHeight('crimeTypesByBusinessRadial') }}
@@ -468,13 +584,19 @@ const OffenderReportLayout = ({
         />
         <RadialGraph
           data={data?.offenderReport?.crimeTypeBusinessRadial}
-          emptyLabel="No Crime Types"
+          emptyLabel={intl.formatMessage({
+            defaultMessage: 'No Crime Types',
+            id: 'BbTEjZ',
+          })}
         />
       </Card>
     ),
     goodsTypeLossRecoveredRadial: (
       <Card
-        title="Loss/Recovered by Goods Type"
+        title={intl.formatMessage({
+          defaultMessage: 'Loss/Recovered by Goods Type',
+          id: 'PziBb1',
+        })}
         className="no-break"
         loading={loading}
         style={{
@@ -495,14 +617,20 @@ const OffenderReportLayout = ({
         />
         <RadialGraph
           data={data?.offenderReport?.goodsTypeLossRecovered}
-          emptyLabel="No Crime Types"
+          emptyLabel={intl.formatMessage({
+            defaultMessage: 'No Crime Types',
+            id: 'BbTEjZ',
+          })}
         />
       </Card>
     ),
 
     incidentTimeOfDayDonut: (
       <Card
-        title="Incidents Time of Day"
+        title={intl.formatMessage({
+          defaultMessage: 'Incident Time of Day',
+          id: 'CPGEqg',
+        })}
         className="no-break"
         loading={loading}
         style={{ height: calculateHeight('incidentTimeOfDayDonut') }}
@@ -559,7 +687,10 @@ const OffenderReportLayout = ({
           'pie' ? (
           <DonutGraph
             data={data?.offenderReport?.incidentTimeOfDayDonut}
-            emptyLabel="No goods count"
+            emptyLabel={intl.formatMessage({
+              defaultMessage: 'No Incidents',
+              id: '+nJOH5',
+            })}
             type={
               metadata.find((item) => item.key === 'crimeTypesDonut')?.type as
                 | 'donut'
@@ -569,8 +700,14 @@ const OffenderReportLayout = ({
         ) : (
           <BarGraph
             data={data?.offenderReport?.incidentTimeOfDayDonut}
-            emptyLabel="No goods count"
-            labelFormat="Incidents"
+            emptyLabel={intl.formatMessage({
+              defaultMessage: 'No Incidents',
+              id: '+nJOH5',
+            })}
+            labelFormat={intl.formatMessage({
+              defaultMessage: 'Incidents',
+              id: 'mtr3R4',
+            })}
           />
         )}
       </Card>
@@ -578,7 +715,10 @@ const OffenderReportLayout = ({
 
     incidentMonthDonut: (
       <Card
-        title="Incidents Month"
+        title={intl.formatMessage({
+          defaultMessage: 'Incident Month',
+          id: 'R3Hr1/',
+        })}
         className="no-break"
         loading={loading}
         style={{ height: calculateHeight('incidentMonthDonut') }}
@@ -635,7 +775,10 @@ const OffenderReportLayout = ({
           'pie' ? (
           <DonutGraph
             data={data?.offenderReport?.incidentMonthGraph}
-            emptyLabel="No incidents"
+            emptyLabel={intl.formatMessage({
+              defaultMessage: 'No Incidents',
+              id: '+nJOH5',
+            })}
             type={
               metadata.find((item) => item.key === 'crimeTypesDonut')?.type as
                 | 'donut'
@@ -645,8 +788,14 @@ const OffenderReportLayout = ({
         ) : (
           <BarGraph
             data={data?.offenderReport?.incidentMonthGraph}
-            emptyLabel="No incidents"
-            labelFormat="Incidents"
+            emptyLabel={intl.formatMessage({
+              defaultMessage: 'No Incidents',
+              id: '+nJOH5',
+            })}
+            labelFormat={intl.formatMessage({
+              defaultMessage: 'Incidents',
+              id: 'mtr3R4',
+            })}
           />
         )}
       </Card>
@@ -670,10 +819,19 @@ const OffenderReportLayout = ({
           onClick={() => removeItem('incidentsDayOfWeekGraph')}
         />
         <LineGraph
-          label="Incidents by day of week"
+          label={intl.formatMessage({
+            defaultMessage: 'Incidents by Day of Week',
+            id: 'B9s5+4',
+          })}
           data={data?.offenderReport?.incidentDayOfWeekGraph}
-          dataLabel="incidents"
-          emptyLabel="No incidents"
+          dataLabel={intl.formatMessage({
+            defaultMessage: 'Incidents',
+            id: 'mtr3R4',
+          })}
+          emptyLabel={intl.formatMessage({
+            defaultMessage: 'No Incidents',
+            id: '+nJOH5',
+          })}
         />
       </Card>
     ),
@@ -695,7 +853,12 @@ const OffenderReportLayout = ({
           size="small"
           onClick={() => removeItem('incidentsTable')}
         />
-        <Title level={4}>Incidents</Title>
+        <Title level={4}>
+          {intl.formatMessage({
+            defaultMessage: 'Incidents',
+            id: 'mtr3R4',
+          })}
+        </Title>
         <Table
           size="small"
           className="no-break"
@@ -731,7 +894,12 @@ const OffenderReportLayout = ({
           size="small"
           onClick={() => removeItem('targetedBusinessTable')}
         />
-        <Title level={4}>Targeted Business</Title>
+        <Title level={4}>
+          {intl.formatMessage({
+            defaultMessage: 'Targeted Businesses',
+            id: 'H79fAf',
+          })}
+        </Title>
         <Table
           size="small"
           className="no-break"
@@ -770,7 +938,12 @@ const OffenderReportLayout = ({
           size="small"
           onClick={() => removeItem('targetedGoodsTable')}
         />
-        <Title level={4}>Targeted Goods</Title>
+        <Title level={4}>
+          {intl.formatMessage({
+            defaultMessage: 'Targeted Goods',
+            id: 'dLBbg0',
+          })}
+        </Title>
         <Table
           size="small"
           className="no-break"
@@ -812,7 +985,10 @@ const OffenderReportLayout = ({
           onClick={() => removeItem('incidentsHeatMap')}
         />
         <HeatMapGoogle
-          label="Incidents heatmap"
+          label={intl.formatMessage({
+            defaultMessage: 'Incidents Heat Map',
+            id: 'q7E1ai',
+          })}
           data={
             data?.offenderReport?.incidentsTable?.incidents
               ?.filter(
@@ -839,7 +1015,10 @@ const OffenderReportLayout = ({
                 )
               : undefined
           }
-          emptyLabel="No incidents"
+          emptyLabel={intl.formatMessage({
+            defaultMessage: 'No incidents to display',
+            id: 'Rp6Hio',
+          })}
         />
       </Card>
     ),
@@ -854,7 +1033,12 @@ const OffenderReportLayout = ({
           zIndex: 100,
         }}
       >
-        <Typography.Paragraph>Page 1</Typography.Paragraph>
+        <Typography.Paragraph>
+          {intl.formatMessage({
+            defaultMessage: 'Page 1',
+            id: 'hEAGzW',
+          })}
+        </Typography.Paragraph>
       </div>
     ),
     pageBreak2: (
@@ -868,7 +1052,12 @@ const OffenderReportLayout = ({
           zIndex: 100,
         }}
       >
-        <Typography.Paragraph>Page 2</Typography.Paragraph>
+        <Typography.Paragraph>
+          {intl.formatMessage({
+            defaultMessage: 'Page 2',
+            id: 'Q3p9d3',
+          })}
+        </Typography.Paragraph>
       </div>
     ),
   };

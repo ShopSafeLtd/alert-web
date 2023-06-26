@@ -8,6 +8,7 @@ const EditArticleContainer = () => {
   const {
     log,
     editorRef,
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     exampleImageUploadHandler,
     preview,
     previewText,

@@ -1,3 +1,4 @@
+/* eslint-disable formatjs/no-literal-string-in-jsx */
 import React from 'react';
 import type { SearchOffendersQuery } from 'graphql/generated';
 import { createUseStyles } from 'react-jss';

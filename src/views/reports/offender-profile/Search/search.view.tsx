@@ -12,6 +12,7 @@ import {
 import type { SearchOffendersQuery } from 'graphql/generated';
 import { getAge, getBuild, getEthnicity, getSex } from 'utils';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import { useIntl } from 'react-intl';
 import useStyles from './search.styles';
 
 const { Title } = Typography;
@@ -36,13 +37,26 @@ const OffenderProfile = ({
   onSearchPageChange,
 }: Props) => {
   const classes = useStyles();
+  const intl = useIntl();
+  const unknown = intl.formatMessage({
+    defaultMessage: 'Unknown',
+    id: '5jeq8P',
+  });
   return (
     <div className={classes.searchPage}>
-      <Title level={3}>Select an offender to view</Title>
+      <Title level={3}>
+        {intl.formatMessage({
+          defaultMessage: 'Select an offender to view',
+          id: 'ioDzAV',
+        })}
+      </Title>
       <Row className={classes.toolbar}>
         <Col span={8}>
           <Input
-            placeholder="Search for an offender..."
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Search for an offender...',
+              id: 'KBPSuo',
+            })}
             value={searchValue}
             onChange={handleSearchChange}
           />
@@ -72,27 +86,42 @@ const OffenderProfile = ({
           {
             key: 'name',
             dataIndex: 'name',
-            title: 'Name',
+            title: intl.formatMessage({
+              defaultMessage: 'Name',
+              id: 'HAlOn1',
+            }),
           },
           {
             key: 'age',
             dataIndex: 'age',
-            title: 'Age',
+            title: intl.formatMessage({
+              defaultMessage: 'Age',
+              id: '9oNQSC',
+            }),
           },
           {
             key: 'build',
             dataIndex: 'build',
-            title: 'Build',
+            title: intl.formatMessage({
+              defaultMessage: 'Build',
+              id: 'RSctv1',
+            }),
           },
           {
             key: 'gender',
             dataIndex: 'gender',
-            title: 'Gender',
+            title: intl.formatMessage({
+              defaultMessage: 'gender',
+              id: 'D1GrfQ',
+            }),
           },
           {
             key: 'tags',
             dataIndex: 'tags',
-            title: 'Tags',
+            title: intl.formatMessage({
+              defaultMessage: 'Tags',
+              id: '1EYCdR',
+            }),
             render: (tags: { id: string; name: string }[]) =>
               tags.map((tag) => <Tag key={tag.id}>{tag.name}</Tag>),
           },
@@ -102,7 +131,10 @@ const OffenderProfile = ({
             title: '',
             render: (_, item) => (
               <Button onClick={() => setSelectedOffender(item.key)}>
-                Select
+                {intl.formatMessage({
+                  defaultMessage: 'Select',
+                  id: 'kQAf2d',
+                })}
               </Button>
             ),
             onCell: () => ({
@@ -116,10 +148,10 @@ const OffenderProfile = ({
             key: offender.id,
             name: offender.name,
             images: offender.images,
-            age: offender.age ? getAge(offender.age) : 'Unknown',
-            build: offender.build ? getBuild(offender.build) : 'Unknown',
-            race: offender.race ? getEthnicity(offender.race) : 'Unknown',
-            gender: offender.gender ? getSex(offender.gender) : 'Unknown',
+            age: offender.age ? getAge(offender.age) : unknown,
+            build: offender.build ? getBuild(offender.build) : unknown,
+            race: offender.race ? getEthnicity(offender.race) : unknown,
+            gender: offender.gender ? getSex(offender.gender) : unknown,
             tags: offender.tags,
           })
         )}
@@ -130,7 +162,16 @@ const OffenderProfile = ({
           total: searchOffendersData?.listOffenders?.total,
           pageSizeOptions: ['20', '50', '100'],
           defaultPageSize: 20,
-          showTotal: (total) => `Total offenders: ${total}`,
+          showTotal: (total) =>
+            intl.formatMessage(
+              {
+                defaultMessage: 'Total offenders: {total}',
+                id: 'LFId63',
+              },
+              {
+                total,
+              }
+            ),
         }}
         size="small"
       />

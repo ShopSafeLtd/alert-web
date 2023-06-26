@@ -1,7 +1,7 @@
 import React from 'react';
+import type { Incident } from 'components/react-flow/nodes/list-incidents-node';
 import View from './LinkIncident.view';
 import useLinkIncident from './useLinkIncident';
-import { Incident } from 'components/react-flow/nodes/list-incidents-node';
 
 interface Props {
   onClose: () => void;

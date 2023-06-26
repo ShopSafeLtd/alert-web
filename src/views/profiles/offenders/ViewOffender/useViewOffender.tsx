@@ -25,6 +25,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faPeople, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { useNavigate } from 'react-router';
 import update from 'immutability-helper';
+import { useIntl } from 'react-intl';
 
 const { confirm } = Modal;
 
@@ -115,7 +116,7 @@ const useViewOffender = (offenderId: string): Return => {
   const role = useStoreState((state) => state.user.role);
   const groups = useStoreState((state) => state.user.groups);
   const userId = useStoreState((state) => state.user.id);
-
+  const intl = useIntl();
   const [saving, setSaving] = useState(false);
 
   const [viewMatches, toggleViewMatches] = useState<string | null>(null);
@@ -233,16 +234,28 @@ const useViewOffender = (offenderId: string): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: 'Successfully Linked!',
-        description: 'The offenders have been Linked to this incidents!',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Linked!',
+          id: 'y2UHQ1',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The offenders have been Linked to this incidents!',
+          id: 'fFQgTY',
+        }),
         placement: 'bottomRight',
       });
     },
     onError: () => {
       setSaving(false);
       notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
+        message: intl.formatMessage({
+          defaultMessage: 'Error',
+          id: 'KN7zKn',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'Whoops, there are some errors. Please try again. ',
+          id: 'YNC1/h',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -251,7 +264,7 @@ const useViewOffender = (offenderId: string): Return => {
   const updateIncidentList = (selectedIncidentId: string) => {
     setSaving(true);
     if (offenderId && selectedIncidentId) {
-      updateOffender({
+      void updateOffender({
         variables: {
           where: {
             id: offenderId,
@@ -269,16 +282,28 @@ const useViewOffender = (offenderId: string): Return => {
     onCompleted: () => {
       window.history.back();
       notification.success({
-        message: 'Successfully Deleted!',
-        description:
-          'The offender has been deleted from the feed and moved to the recycle bin.',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Deleted!',
+          id: 'dvDKi/',
+        }),
+        description: intl.formatMessage({
+          defaultMessage:
+            'The offender has been deleted from the feed and moved to the recycle bin.',
+          id: 'nQ1eW+',
+        }),
         placement: 'bottomRight',
       });
     },
     onError: () => {
       notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
+        message: intl.formatMessage({
+          defaultMessage: 'Error',
+          id: 'KN7zKn',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'Whoops, there are some errors. Please try again. ',
+          id: 'YNC1/h',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -286,12 +311,21 @@ const useViewOffender = (offenderId: string): Return => {
 
   const onDelete = (id: string) => {
     confirm({
-      title: 'Are you sure?',
-      content:
-        'Click delete if you wish to delete this offender. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
-      okText: 'Delete',
+      title: intl.formatMessage({
+        defaultMessage: 'Are you sure you want to delete this offender?',
+        id: 'lOgZfN',
+      }),
+      content: intl.formatMessage({
+        defaultMessage:
+          'Click delete if you wish to delete this offender. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
+        id: 'J35F/I',
+      }),
+      okText: intl.formatMessage({
+        defaultMessage: 'Delete',
+        id: 'K3r6DQ',
+      }),
       onOk() {
-        recycleOffender({
+        void recycleOffender({
           variables: {
             where: { id },
           },
@@ -306,7 +340,7 @@ const useViewOffender = (offenderId: string): Return => {
   const [subscribe] = useSubscribeToOffenderMutation();
 
   const toggleSubscribe = () => {
-    subscribe({
+    void subscribe({
       variables: {
         where: {
           id: offenderId,
@@ -330,7 +364,7 @@ const useViewOffender = (offenderId: string): Return => {
   const [deleteUpdate] = useDeleteUpdateMutation();
 
   const handleDeleteUpdate = (updateId: string) => {
-    deleteUpdate({
+    void deleteUpdate({
       variables: {
         where: {
           id: updateId,
@@ -417,19 +451,28 @@ const useViewOffender = (offenderId: string): Return => {
 
   const confirmDeleteUpdate = (updateId: string) => {
     confirm({
-      title: 'Are you sure?',
-      content: 'The update will be permanently deleted.',
+      title: intl.formatMessage({
+        defaultMessage: 'Are you sure?',
+        id: '2oCaym',
+      }),
+      content: intl.formatMessage({
+        defaultMessage: 'The update will be permanently deleted.',
+        id: 'gwznO0',
+      }),
       onOk() {
         handleDeleteUpdate(updateId);
       },
-      okText: 'Delete',
+      okText: intl.formatMessage({
+        defaultMessage: 'Delete',
+        id: 'K3r6DQ',
+      }),
     });
   };
 
   const [addImagesToIncident] = useAddImagesToOffenderMutation();
 
   const addUpdateImages = (images: { id: string }[]) => {
-    addImagesToIncident({
+    void addImagesToIncident({
       variables: {
         images,
         offender: {
@@ -446,13 +489,22 @@ const useViewOffender = (offenderId: string): Return => {
       setAddImages(images);
     } else {
       confirm({
-        title: 'Are you sure?',
-        content:
-          'Adding this image will notify any other users following the incident.',
+        title: intl.formatMessage({
+          defaultMessage: 'Are you sure?',
+          id: '2oCaym',
+        }),
+        content: intl.formatMessage({
+          defaultMessage:
+            'Adding this image will notify any other users following the incident.',
+          id: 'qfS4of',
+        }),
         onOk() {
           addUpdateImages(images.map(({ id }) => ({ id })));
         },
-        okText: 'Add Images',
+        okText: intl.formatMessage({
+          defaultMessage: 'Add Images',
+          id: 'b4GGYZ',
+        }),
       });
     }
   };
@@ -461,7 +513,7 @@ const useViewOffender = (offenderId: string): Return => {
 
   const handleEditUpdate = () => {
     if (editUpdate !== null)
-      updateUpdate({
+      void updateUpdate({
         variables: {
           data: {
             text: editUpdateInput,
@@ -501,19 +553,28 @@ const useViewOffender = (offenderId: string): Return => {
     ) {
       setOptionsMenuItems([
         {
-          label: 'Compare',
+          label: intl.formatMessage({
+            defaultMessage: 'Compare',
+            id: '493J7R',
+          }),
           key: '0',
           icon: <FontAwesomeIcon size="3x" icon={faPeople} />,
           onClick: () => navigate(`/app/offenders/compare/${offenderId}`),
         },
         {
-          label: 'Edit',
+          label: intl.formatMessage({
+            defaultMessage: 'Edit',
+            id: 'wEQDC6',
+          }),
           key: '1',
           icon: <FontAwesomeIcon size="3x" icon={faEdit} />,
           onClick: () => navigate(`/app/offenders/edit/${offenderId}`),
         },
         {
-          label: 'Delete',
+          label: intl.formatMessage({
+            defaultMessage: 'Delete',
+            id: 'K3r6DQ',
+          }),
           key: '2',
           icon: <FontAwesomeIcon icon={faTrash} />,
           onClick: () => onDelete(offenderId),

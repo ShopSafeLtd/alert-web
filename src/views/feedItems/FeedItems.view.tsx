@@ -48,6 +48,7 @@ import AdminTodos from 'components/feedItems/AdminTodos';
 import BanFeed from 'components/feedItems/FeedItemSection/BanFeed';
 import ArticlesSection from 'components/feedItems/Articles/ArticlesSection';
 import formatCalendar from 'utils/format-calendar-24h';
+import { useIntl } from 'react-intl';
 import useStyles from './FeedItem.styles';
 
 const { Title, Paragraph, Text } = Typography;
@@ -114,7 +115,7 @@ const FeedItem = ({
   createdAtFilter,
 }: Props): JSX.Element => {
   const classes = useStyles();
-
+  const intl = useIntl();
   return (
     <div
       className="feed-container"
@@ -125,7 +126,10 @@ const FeedItem = ({
           <Col span={4} xxl={6}>
             <Input
               size="small"
-              placeholder="Search for anything in alert..."
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Search for anything in alert...',
+                id: 'FZ9gwb',
+              })}
               // value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -137,16 +141,25 @@ const FeedItem = ({
               onChange={setGallery}
               options={[
                 {
-                  label: 'Not Approved',
+                  label: intl.formatMessage({
+                    id: 'VwMCyX',
+                    defaultMessage: 'Not Approved',
+                  }),
                   value: 'NOT APPROVED',
                   needAdminRight: true,
                 },
                 {
-                  label: 'Following',
+                  label: intl.formatMessage({
+                    id: 'cPIKU2',
+                    defaultMessage: 'Following',
+                  }),
                   value: 'FOLLOWING',
                 },
                 {
-                  label: 'My Data',
+                  label: intl.formatMessage({
+                    id: 'dr0ueW',
+                    defaultMessage: 'My Data',
+                  }),
                   value: 'MYDATA',
                 },
               ]}
@@ -163,7 +176,10 @@ const FeedItem = ({
                 />
               }
             >
-              Sort &amp; Filter
+              {intl.formatMessage({
+                id: 'f2g3SM',
+                defaultMessage: 'Sort & Filter',
+              })}
             </Button>
           </Col>
           <Col>
@@ -173,7 +189,10 @@ const FeedItem = ({
                   icon={faExclamationCircle}
                   style={{ marginRight: 10 }}
                 />
-                Add Incident
+                {intl.formatMessage({
+                  id: 'kG1p3q',
+                  defaultMessage: 'Add Incident',
+                })}
               </Button>
             </Link>
           </Col>
@@ -181,19 +200,26 @@ const FeedItem = ({
             <Link to="/app/offenders/add">
               <Button size="small" type="primary">
                 <FontAwesomeIcon icon={faUsers} style={{ marginRight: 10 }} />
-                Add Offender
+                {intl.formatMessage({
+                  id: 'm3ChN4',
+                  defaultMessage: 'Add Offender',
+                })}
               </Button>
             </Link>
           </Col>
+
           {adminRights && (
             <Col>
-              <Link to="/app/article/add ">
+              <Link to="/app/article/add">
                 <Button size="small" type="primary">
                   <FontAwesomeIcon
                     icon={faNewspaper}
                     style={{ marginRight: 10 }}
                   />
-                  Add Bulletin
+                  {intl.formatMessage({
+                    id: 'x52+I1',
+                    defaultMessage: 'Add Bulletin',
+                  })}
                 </Button>
               </Link>
             </Col>
@@ -379,8 +405,15 @@ const FeedItem = ({
               <Empty
                 description={
                   search === ''
-                    ? 'No Feed Items'
-                    : 'No feed items match your search criteria'
+                    ? intl.formatMessage({
+                        defaultMessage: 'No Feed Items',
+                        id: 'mOem22',
+                      })
+                    : intl.formatMessage({
+                        defaultMessage:
+                          'No feed items match your search criteria',
+                        id: 'pQjC2k',
+                      })
                 }
               />
             </Card>
@@ -396,7 +429,10 @@ const FeedItem = ({
                 marginBottom: 0,
               }}
             >
-              Recently Active Offenders
+              {intl.formatMessage({
+                defaultMessage: 'Recently Active Offenders',
+                id: '3CqKJ0',
+              })}
             </Title>
 
             {recentOffenderLoading ? (
@@ -424,7 +460,13 @@ const FeedItem = ({
                       <Col key={offender.id}>
                         <Tooltip
                           placement="bottom"
-                          title={`View ${offender.name} `}
+                          title={intl.formatMessage(
+                            {
+                              defaultMessage: 'View {offenderName} ',
+                              id: 'PnleGP',
+                            },
+                            { offenderName: offender.name }
+                          )}
                         >
                           <Link to={`/app/offenders/view/${offender.id}`}>
                             <Card
@@ -462,7 +504,14 @@ const FeedItem = ({
                                   top: 0,
                                 }}
                               >
-                                Alert ID: {offender.reference}
+                                {intl.formatMessage(
+                                  {
+                                    defaultMessage:
+                                      'Alert ID: {offenderReference}',
+                                    id: 'Rdz6pw',
+                                  },
+                                  { offenderReference: offender.reference }
+                                )}
                               </Paragraph>
                               <Paragraph
                                 className={classes.offenderParagraph}
@@ -490,8 +539,15 @@ const FeedItem = ({
                     <Empty
                       description={
                         search === ''
-                          ? 'No Offenders'
-                          : 'No offenders match your search criteria'
+                          ? intl.formatMessage({
+                              defaultMessage: 'No Offenders',
+                              id: 'hO5g1p',
+                            })
+                          : intl.formatMessage({
+                              defaultMessage:
+                                'No offenders match your search criteria',
+                              id: 'i7eap9',
+                            })
                       }
                     />
                   </div>
@@ -522,7 +578,10 @@ const FeedItem = ({
         </Col>
       </Row>
       <Drawer
-        title="Feed Item Filters"
+        title={intl.formatMessage({
+          defaultMessage: 'Feed Item Filters',
+          id: 'SYqxvY',
+        })}
         open={sortFilter}
         onClose={toggleSortFilter}
         width={500}

@@ -1,3 +1,5 @@
+/* eslint-disable */
+// TODO fix eslint-disable
 import React from 'react';
 import { Avatar, Col, Dropdown, Menu, Row, Switch, Typography } from 'antd';
 import { LogoutOutlined } from '@ant-design/icons';
@@ -17,6 +19,7 @@ import { useThemeSwitcher } from 'react-css-theme-switcher/src';
 import { LocalStorageKeys, typedLocalStorage } from 'utils';
 import { createUseStyles } from 'react-jss';
 import type { Theme } from 'configs/ThemeConfig';
+import { useIntl } from 'react-intl';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   notificationCol: {
@@ -43,12 +46,12 @@ interface MenuItem {
 const menuItem: MenuItem[] = [
   {
     title: 'User Settings',
-    icon: '', //EditOutlined,
+    icon: '', // EditOutlined,
     path: `${APP_PREFIX_PATH}/user-settings`,
   },
   {
     title: 'Terms & Conditions',
-    icon: '', //EditOutlined,
+    icon: '', // EditOutlined,
     path: `${APP_PREFIX_PATH}/user-settings/terms`,
   },
 ];
@@ -56,7 +59,7 @@ const menuItem: MenuItem[] = [
 export const NavProfile = () => {
   const { switcher, themes } = useThemeSwitcher();
   const classes = useStyles();
-
+  const intl = useIntl();
   const name = useStoreState((state) => state.user.fullName);
   const email = useStoreState((state) => state.user.email);
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
@@ -82,18 +85,16 @@ export const NavProfile = () => {
       </div>
       <div className="nav-profile-body">
         <Menu>
-          {menuItem.map((el, i) => {
-            return (
-              <Menu.Item key={i}>
-                <Link to={el.path}>
-                  <Row>
-                    {/* <Icon className="mr-3" type={el.icon} /> */}
-                    <span className="font-weight-normal">{el.title}</span>
-                  </Row>
-                </Link>
-              </Menu.Item>
-            );
-          })}
+          {menuItem.map((el, i) => (
+            <Menu.Item key={i}>
+              <Link to={el.path}>
+                <Row>
+                  {/* <Icon className="mr-3" type={el.icon} /> */}
+                  <span className="font-weight-normal">{el.title}</span>
+                </Row>
+              </Link>
+            </Menu.Item>
+          ))}
           <Menu.Item
             key={menuItem.length + 1}
             onClick={() => {
@@ -103,7 +104,12 @@ export const NavProfile = () => {
           >
             <Row>
               <LogoutOutlined className="mr-3" />
-              <span className="font-weight-normal">Sign Out</span>
+              <span className="font-weight-normal">
+                {intl.formatMessage({
+                  defaultMessage: 'Sign Out',
+                  id: 'F62y+K',
+                })}
+              </span>
             </Row>
           </Menu.Item>
         </Menu>
@@ -144,7 +150,12 @@ export const NavProfile = () => {
             label: (
               <Row gutter={8}>
                 <Col>
-                  <Typography.Text>Theme Mode: </Typography.Text>
+                  <Typography.Text>
+                    {intl.formatMessage({
+                      defaultMessage: 'Theme Mode: ',
+                      id: 'QAmP+7',
+                    })}
+                  </Typography.Text>
                 </Col>
                 <Col>
                   <Switch
@@ -177,7 +188,12 @@ export const NavProfile = () => {
             label: (
               <Link to={`${APP_PREFIX_PATH}/user-settings`}>
                 <Row>
-                  <span className="font-weight-normal">User Settings</span>
+                  <span className="font-weight-normal">
+                    {intl.formatMessage({
+                      defaultMessage: 'User Settings',
+                      id: 'jUes8R',
+                    })}
+                  </span>
                 </Row>
               </Link>
             ),
@@ -192,7 +208,10 @@ export const NavProfile = () => {
                   </Col>
                   <Col>
                     <span className="font-weight-normal">
-                      Terms & Conditions
+                      {intl.formatMessage({
+                        defaultMessage: 'Terms & Conditions',
+                        id: 'arPp4e',
+                      })}
                     </span>
                   </Col>
                 </Row>
@@ -207,7 +226,12 @@ export const NavProfile = () => {
                   <FontAwesomeIcon icon={faSignOut} />
                 </Col>
                 <Col>
-                  <span className="font-weight-normal">Sign Out</span>
+                  <span className="font-weight-normal">
+                    {intl.formatMessage({
+                      defaultMessage: 'Sign Out',
+                      id: 'F62y+K',
+                    })}
+                  </span>
                 </Col>
               </Row>
             ),

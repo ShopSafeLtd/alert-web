@@ -21,6 +21,7 @@ import type { MutationUpdaterFn } from '@apollo/client';
 import { notification } from 'antd';
 import type { DateType, PaginationModel } from 'types/DataType';
 import errorNotification from 'types/error_notification';
+import { useIntl } from 'react-intl';
 
 interface Return {
   data: FeedItemsQuery | undefined;
@@ -60,7 +61,7 @@ interface Return {
 const useFeedItems = (): Return => {
   const navigate = useNavigate();
   const onNavigate = () => navigate(`/app/incidents/add`);
-
+  const intl = useIntl();
   // Global State
   const schemeId = useStoreState((state) => state.scheme.id);
   const { role, groups, id: userId } = useStoreState((state) => state.user);
@@ -223,6 +224,7 @@ const useFeedItems = (): Return => {
   }, []);
 
   const { data, loading } = useFeedItemsQuery({
+    // @ts-expect-error TODO: Fix type
     variables: queryVariables,
     fetchPolicy: 'cache-and-network',
   });
@@ -239,6 +241,7 @@ const useFeedItems = (): Return => {
         },
         take: 10,
         where: {
+          // @ts-expect-error TODO: Fix type
           createdAt: createdAtFilter
             ? {
                 gte: createdAtFilter.startDate,
@@ -316,8 +319,14 @@ const useFeedItems = (): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: 'Successfully Deleted!',
-        description: 'The message has been deleted!',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Deleted!',
+          id: 'dvDKi/',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The message has been deleted!',
+          id: 'IGVq4m',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -330,7 +339,7 @@ const useFeedItems = (): Return => {
   const onDeleteFeedItem = (currentId: string) => {
     setSaving(true);
     if (currentId) {
-      deleteFeedItem({
+      void deleteFeedItem({
         variables: {
           id: currentId,
         },

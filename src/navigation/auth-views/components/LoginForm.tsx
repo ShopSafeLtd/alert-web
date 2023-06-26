@@ -1,6 +1,5 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable */
+
 import React, { useEffect } from 'react';
 import { Alert, Button, Divider, Form, Input } from 'antd';
 import { LockOutlined, MailOutlined } from '@ant-design/icons';

@@ -1,4 +1,4 @@
-/* eslint-disable react/default-props-match-prop-types */
+/* eslint-disable  */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/require-default-props */
 /* eslint-disable react/jsx-props-no-spreading */

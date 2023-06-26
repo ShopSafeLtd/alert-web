@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment */
 import { useEffect, useState } from 'react';
 import type {
   CreateTagMutation,
@@ -39,6 +40,7 @@ import type {
   VehicleData,
 } from 'types/DataType';
 import errorNotification from 'types/error_notification';
+import { useIntl } from 'react-intl';
 
 const { confirm } = Modal;
 
@@ -195,7 +197,7 @@ const onPreview = async (file: UploadFile) => {
 const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
   const navigate = useNavigate();
   const client = useApolloClient();
-
+  const intl = useIntl();
   const schemeId = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
   const groups = useStoreState((state) => state.user.groups).filter(
@@ -278,8 +280,8 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
             uid: `${image.id}`,
             name: `${image.id}.png`,
             status: 'done',
-            url: `${image.optimised}`,
-            optimised: `${image.optimised}`,
+            url: `${image.optimised || ''}`,
+            optimised: `${image.optimised || ''}`,
             offenders: image.offenders,
             edited: false,
             position: image.position,
@@ -405,10 +407,19 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: 'Successfully Updated!',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
+          id: 'w5Yfkf',
+        }),
         description: reviewed
-          ? 'The Incident has been approved!'
-          : 'The Incident has been updated!',
+          ? intl.formatMessage({
+              defaultMessage: 'The Incident has been approved!',
+              id: '05bSdr',
+            })
+          : intl.formatMessage({
+              defaultMessage: 'The Incident has been updated!',
+              id: 'OkjwIC',
+            }),
         placement: 'bottomRight',
       });
       navigate(`/app/incidents/view/${incidentId}`);
@@ -424,9 +435,15 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     onCompleted: () => {
       navigate(`/app/incidents`);
       notification.success({
-        message: 'Successfully Rejected!',
-        description:
-          'The incident has been deleted from the feed and moved to the recycle bin.',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Rejected!',
+          id: 'C0DMPx',
+        }),
+        description: intl.formatMessage({
+          defaultMessage:
+            'The incident has been deleted from the feed and moved to the recycle bin.',
+          id: 'YagqVR',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -436,12 +453,18 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
   });
   const onReject = () => {
     confirm({
-      title: 'Are you sure?',
-      content:
-        'Click reject if you wish to reject the approvement of this incident. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
-      okText: 'Reject',
+      title: intl.formatMessage({
+        defaultMessage: 'Are you sure?',
+        id: '2oCaym',
+      }),
+      content: intl.formatMessage({
+        defaultMessage:
+          'Click reject if you wish to reject the approvement of this incident. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
+        id: '1sLyNm',
+      }),
+      okText: intl.formatMessage({ defaultMessage: 'Reject', id: 'VzIOKf' }),
       onOk() {
-        recycleIncident({
+        void recycleIncident({
           variables: {
             where: { id: incidentId },
           },
@@ -454,7 +477,13 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
   const beforeUpload = (file: RcFile) => {
     const isFileDuplicate = fileList.find((item) => item.name === file.name);
     if (isFileDuplicate) {
-      message.error('This image already exists, please choose another one.');
+      void message.error(
+        intl.formatMessage({
+          id: 'ILB9M+',
+          defaultMessage:
+            'This image already exists, please choose another one.',
+        })
+      );
     }
 
     return !isFileDuplicate || Upload.LIST_IGNORE;
@@ -987,7 +1016,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
         };
       };
 
-      updateIncident({
+      void updateIncident({
         variables: {
           where: {
             id: incidentId,
@@ -1096,16 +1125,25 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
       });
     } else {
       confirm({
-        title: 'No Offenders',
-        content: 'Please select or add at least one offender for the incident.',
-        cancelText: 'Find Offenders',
-        onCancel() {
-          toggleAddExistingOffender();
-        },
-        okText: 'Add New Offender',
-        onOk() {
-          toggleAddOffender();
-        },
+        title: intl.formatMessage({
+          id: 'hO5g1p',
+          defaultMessage: 'No Offenders',
+        }),
+        content: intl.formatMessage({
+          id: 'o0nzyY',
+          defaultMessage:
+            'Please select or add at least one offender for the incident.',
+        }),
+        cancelText: intl.formatMessage({
+          id: 'c1BgIE',
+          defaultMessage: 'Find Offenders',
+        }),
+        onCancel: toggleAddExistingOffender,
+        okText: intl.formatMessage({
+          id: 'V+RsEq',
+          defaultMessage: 'Add New Offender',
+        }),
+        onOk: toggleAddOffender,
       });
       setSaving(false);
     }
@@ -1156,7 +1194,10 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
             }))
           : [
               {
-                label: 'No results found',
+                label: intl.formatMessage({
+                  id: 'hX5PAb',
+                  defaultMessage: 'No results found',
+                }),
                 value: '',
                 disabled: true,
               },
@@ -1187,6 +1228,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     offenderImgChange,
     offendersData: offendersData.filter((item) => !item.deleted),
     onCancelNewImage,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onPreview,
     onReject,
     onSearchBusiness,
