@@ -43,7 +43,7 @@ export interface MenuItem {
   roles?: Role[];
   // badge?: boolean;
   badge?: BadgeTypes;
-  intl?: { id: string; defaultMessage: string };
+  intl: { id: string; defaultMessage: string };
 }
 
 export interface SubMenuItem extends MenuItem {
