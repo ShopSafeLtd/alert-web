@@ -267,6 +267,7 @@ const useIncidentFeed = (): Return => {
   // Queries
   // Fetch incidents
   const { data, loading } = useListIncidentsQuery({
+    // @ts-expect-error TODO fix date type
     variables: queryVariables,
     fetchPolicy: 'cache-and-network',
   });

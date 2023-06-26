@@ -9,11 +9,11 @@ describe('List Officer View', () => {
       {
         id: 'testId',
         read: false,
-        createdAt: '2022-08-10T10:40:09.985Z',
+        createdAt: new Date('2022-07-25T08:57:55.299Z'),
         notification: {
           id: 'id',
           title: 'title',
-          createdAt: '2022-08-10T10:40:09.985Z',
+          createdAt: new Date('2022-07-25T08:57:55.299Z'),
           schemes: [
             {
               id: 'id',
