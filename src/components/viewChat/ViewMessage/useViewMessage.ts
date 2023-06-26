@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment */
 import { useEffect, useState } from 'react';
 import type {
   Age,
@@ -42,6 +43,7 @@ import type {
   VehicleData,
 } from 'types/DataType';
 import errorNotification from 'types/error_notification';
+import { useIntl } from 'react-intl';
 
 const { confirm } = Modal;
 const { getMentions } = Mentions;
@@ -144,7 +146,7 @@ interface Return {
 
 const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   const apolloStore = useApolloClient();
-
+  const intl = useIntl();
   const {
     role,
     id: userId,
@@ -514,8 +516,14 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: 'Successfully Deleted!',
-        description: 'The message has been deleted!',
+        message: intl.formatMessage({
+          id: 'dvDKi/',
+          defaultMessage: 'Successfully Deleted!',
+        }),
+        description: intl.formatMessage({
+          id: 'ihAHg9',
+          defaultMessage: 'The task has been deleted!',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -529,7 +537,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   const openDelete = (currentId: string) => {
     setSaving(true);
     if (currentId) {
-      deleteMessage({
+      void deleteMessage({
         variables: {
           id: currentId,
         },
@@ -538,8 +546,14 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   };
   const deleteMessageConfirm = (currentId: string) => {
     confirm({
-      title: 'Do you want to delete the message?',
-      content: 'This action cannot be undone.',
+      title: intl.formatMessage({
+        id: 'Dg5ys8',
+        defaultMessage: 'Do you want to delete the task?',
+      }),
+      content: intl.formatMessage({
+        id: 'JDJoIZ',
+        defaultMessage: 'This action cannot be undone.',
+      }),
       onOk() {
         openDelete(currentId);
       },
@@ -551,8 +565,14 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       setSaving(false);
       navigate('/app/chat');
       notification.success({
-        message: 'Successfully Deleted!',
-        description: 'The chat has been deleted!',
+        message: intl.formatMessage({
+          id: 'dvDKi/',
+          defaultMessage: 'Successfully Deleted!',
+        }),
+        description: intl.formatMessage({
+          id: 'ihAHg9',
+          defaultMessage: 'The task has been deleted!',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -564,13 +584,22 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   });
   const deleteChatConfirm = () => {
     confirm({
-      title: 'Do you want to delete the chat?',
-      content: 'This action cannot be undone.',
-      okText: 'Delete',
+      title: intl.formatMessage({
+        id: 'XX7iFo',
+        defaultMessage: 'Do you want to delete the chat?',
+      }),
+      content: intl.formatMessage({
+        id: 'JDJoIZ',
+        defaultMessage: 'This action cannot be undone.',
+      }),
+      okText: intl.formatMessage({
+        id: 'K3r6DQ',
+        defaultMessage: 'Delete',
+      }),
       onOk() {
         setSaving(true);
         if (chatId)
-          deleteChat({
+          void deleteChat({
             variables: {
               id: chatId,
             },
@@ -650,7 +679,13 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   const beforeUpload = (file: RcFile) => {
     const isFileDuplicate = fileList.find((item) => item.name === file.name);
     if (isFileDuplicate) {
-      message.error('This image already exists, please choose another one.');
+      void message.error(
+        intl.formatMessage({
+          defaultMessage:
+            'This image already exists, please choose another one.',
+          id: 'ILB9M+',
+        })
+      );
     }
     return !isFileDuplicate || Upload.LIST_IGNORE;
   };
@@ -736,10 +771,15 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       vehiclesData.length === 0 &&
       crimeGroupsData.length === 0
     ) {
-      message.info('The message cannot be empty!');
+      void message.info(
+        intl.formatMessage({
+          defaultMessage: 'The message cannot be empty!',
+          id: 'wkhZ0u',
+        })
+      );
     } else {
       setSaving(true);
-      sendMessage({
+      void sendMessage({
         variables: {
           data: {
             chat: {
@@ -841,7 +881,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                         ...image,
                         position: ImagePosition.CenterCenter,
                       })) || [],
-                    updatedAt: offender.updatedAt,
+                    updatedAt: offender.updatedAt || new Date(),
                     age: offender.age,
                     build: offender.build,
                     dateOfBirth: offender.dateOfBirth,

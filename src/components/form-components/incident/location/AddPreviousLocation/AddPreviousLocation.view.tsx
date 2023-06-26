@@ -1,10 +1,7 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import type { AddressesQuery } from 'graphql/generated';
 import { Button, Col, Form, Radio, Row, Skeleton, Typography } from 'antd';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faLocationDot } from '@fortawesome/pro-light-svg-icons';
+import { useIntl } from 'react-intl';
 
 const { Paragraph } = Typography;
 
@@ -26,18 +23,27 @@ const ViewOffender = ({
   saving,
   data,
   loading,
-}: Props): JSX.Element =>
-  !data && loading ? (
+}: Props): JSX.Element => {
+  const intl = useIntl();
+
+  return !data && loading ? (
     <Skeleton />
   ) : (
     <Form layout="vertical" onFinish={onSubmit} className="previous-location">
       <Form.Item
         name="selectedLocation"
-        label="Previous Locations:"
+        label={intl.formatMessage({
+          defaultMessage: 'Previous Locations:',
+          id: 'tIUIJt',
+        })}
         rules={[
           {
             required: true,
-            message: 'Please at least select an location for the incident.',
+            message: intl.formatMessage({
+              defaultMessage:
+                'Please select at least one location for the incident.',
+              id: 'AG8qKq',
+            }),
           },
         ]}
       >
@@ -63,7 +69,7 @@ const ViewOffender = ({
         <Row style={{ marginTop: 30 }} gutter={10} justify="end">
           <Col>
             <Button disabled={saving} onClick={onClose}>
-              Cancel
+              {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
             </Button>
           </Col>
           <Col>
@@ -73,12 +79,16 @@ const ViewOffender = ({
               type="primary"
               htmlType="submit"
             >
-              Select Location
+              {intl.formatMessage({
+                defaultMessage: 'Select Location',
+                id: 'yNCChc',
+              })}
             </Button>
           </Col>
         </Row>
       </Form.Item>
     </Form>
   );
+};
 
 export default ViewOffender;

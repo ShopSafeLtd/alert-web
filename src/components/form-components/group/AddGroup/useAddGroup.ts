@@ -92,7 +92,7 @@ const useAddGroup = ({ onClose, update }: Props): Return => {
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
-    createGroup({
+    void createGroup({
       variables: {
         data: {
           name: data.name,

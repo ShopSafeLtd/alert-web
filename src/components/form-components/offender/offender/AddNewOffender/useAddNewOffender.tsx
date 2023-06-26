@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment */
 import React, { useState } from 'react';
 import type {
   Age,
@@ -168,7 +169,9 @@ const useAddNewOffender = ({
   const beforeUpload = (file: RcFile) => {
     const isFileDuplicate = fileList.find((item) => item.name === file.name);
     if (isFileDuplicate) {
-      message.error('This image already exists, please choose another one.');
+      void message.error(
+        'This image already exists, please choose another one.'
+      );
     }
     return !isFileDuplicate || Upload.LIST_IGNORE;
   };

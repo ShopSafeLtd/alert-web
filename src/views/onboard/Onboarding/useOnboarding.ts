@@ -10,6 +10,7 @@ import {
   useUpdateUserMutation,
 } from 'graphql/generated';
 import { useNavigate } from 'react-router-dom';
+import { useIntl } from 'react-intl';
 
 interface AccountData {
   fullName: string;
@@ -30,6 +31,7 @@ interface Return {
 }
 
 const useOnboarding = (): Return => {
+  const intl = useIntl();
   const userId = useStoreState((state) => state.user.id);
   const schemeId = useStoreState((state) => state.scheme.id);
   const [current, setCurrent] = useState(0);
@@ -79,8 +81,14 @@ const useOnboarding = (): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: 'Successfully Updated!',
-        description: 'Your account has been updated! ',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
+          id: 'w5Yfkf',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'Your account has been updated!',
+          id: 'W19COr',
+        }),
         placement: 'bottomRight',
       });
       navigate('/app/dashboard');
@@ -88,8 +96,14 @@ const useOnboarding = (): Return => {
     onError: () => {
       setSaving(false);
       notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
+        message: intl.formatMessage({
+          defaultMessage: 'Error!',
+          id: 'DIDBlF',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'Whoops, there are some errors. Please try again.',
+          id: 'tPB3Wl',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -110,7 +124,7 @@ const useOnboarding = (): Return => {
         setTermsSigned(false);
       }
     } else if (termsSigned && accountDetail) {
-      updateUser({
+      void updateUser({
         variables: {
           where: {
             id: userId,
@@ -145,7 +159,7 @@ const useOnboarding = (): Return => {
       current === 2 &&
       SchemeTerms?.scheme?.currentTerms?.id
     ) {
-      signTerms({
+      void signTerms({
         variables: {
           data: {
             signature: schemeTermsSigned,
@@ -153,7 +167,7 @@ const useOnboarding = (): Return => {
           },
         },
       });
-      updateUser({
+      void updateUser({
         variables: {
           where: {
             id: userId,

@@ -96,7 +96,7 @@ const useEditChat = ({ onClose, chatId }: Props): Return => {
   const onSubmit = (data: FormData) => {
     setSaving(true);
     if (chatId)
-      updateChat({
+      void updateChat({
         variables: {
           where: {
             id: chatId,

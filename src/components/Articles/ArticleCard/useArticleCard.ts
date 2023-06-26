@@ -6,6 +6,7 @@ import { notification } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import type { MutationUpdaterFn } from '@apollo/client';
 import errorNotification from 'types/error_notification';
+import { useIntl } from 'react-intl';
 
 interface Props {
   createdById: string | undefined;
@@ -19,7 +20,7 @@ interface Return {
 }
 const useArticleCard = ({ createdById, update }: Props): Return => {
   const navigate = useNavigate();
-
+  const intl = useIntl();
   const role = useStoreState((state) => state.user.role);
   const userId = useStoreState((state) => state.user.id);
   const menuRights = update
@@ -31,8 +32,14 @@ const useArticleCard = ({ createdById, update }: Props): Return => {
   const [deleteArticle] = useDeleteArticleMutation({
     onCompleted: () => {
       notification.success({
-        message: 'Successfully Deleted',
-        description: 'The article has been deleted.',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Deleted',
+          id: 'zJsyF1',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The article has been deleted.',
+          id: 'Bwx7T/',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -44,7 +51,7 @@ const useArticleCard = ({ createdById, update }: Props): Return => {
 
   const onDelete = (id: string) => {
     if (deleteRights)
-      deleteArticle({
+      void deleteArticle({
         variables: {
           where: { id },
         },

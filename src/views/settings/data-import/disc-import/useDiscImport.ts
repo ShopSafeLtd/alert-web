@@ -1,41 +1,41 @@
 import { useEffect, useState } from 'react';
-import type { UploadFile, UploadProps, FormInstance } from 'antd';
+import type { FormInstance, UploadFile, UploadProps } from 'antd';
 import { Form } from 'antd';
 import type { SchemeGroupsQuery, TagsQuery } from 'graphql/generated';
 import {
-  Height,
-  useDiscImportDataMutation,
-  Model,
-  useTagsQuery,
-  Gender,
-  Race,
   Age,
   Build,
-  useSchemeGroupsQuery,
+  Gender,
+  Height,
+  Model,
+  Race,
+  Role,
   SortOrder,
   TagType,
-  Role,
+  useDiscImportDataMutation,
   useListUsersQuery,
+  useSchemeGroupsQuery,
+  useTagsQuery,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
 import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment';
 import update from 'immutability-helper';
 import type {
-  KnownSubject,
-  CSVData,
-  Member,
   Business,
-  IDSought,
-  Incident,
-  NewBusiness,
-  NewOffender,
-  Image,
-  NewUser,
-  NewIncident,
+  CSVData,
   GenerateData,
-  IncidentTags,
   HistoricIncident,
+  IDSought,
+  Image,
+  Incident,
+  IncidentTags,
+  KnownSubject,
+  Member,
+  NewBusiness,
+  NewIncident,
+  NewOffender,
+  NewUser,
 } from './DiscImport.types';
 
 const calcAge = (value: string) => {
@@ -1401,6 +1401,7 @@ const useDiscImport = (): Return => {
   const handleFileListChange: UploadProps['onChange'] = (info) => {
     if (info.file.response && info.file.status === 'done') {
       setImages(
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
         info.file.response.map((item: Image) => ({ ...item, id: uuidv4() }))
       );
     }
@@ -1452,7 +1453,7 @@ const useDiscImport = (): Return => {
   };
 
   const onSubmit = () => {
-    importData({
+    void importData({
       variables: {
         data: {
           businesses: newBusinesses.map((business) => ({
@@ -1484,14 +1485,16 @@ const useDiscImport = (): Return => {
               ...incident.impactTypes,
               ...incident.involvedTypes,
             ].map((id) => ({ id })),
-            date: incident.date,
+            // TODO check
+            date: moment(incident.date).toDate(),
             lostValue: incident.lostValue,
             policeInvolved: incident.policeInvolved,
             policeReported: incident.policeReported,
             postcode: incident.postcode,
             recoveredValue: incident.recoveredValue,
             street: incident.street,
-            time: incident.time,
+            // TODO check
+            time: moment(incident.time).toDate(),
             townCity: '',
           })),
           images: images.map((image) => ({
@@ -1513,7 +1516,8 @@ const useDiscImport = (): Return => {
               ...incident.impactTypes,
               ...incident.involvedTypes,
             ].map((id) => ({ id })),
-            date: incident.date,
+            // TODO check
+            date: moment(incident.date).toDate(),
             description: incident.description,
             groups: incident.groups.map((id) => ({ id })),
             images: incident.images.map(({ id }) => ({ id })),
@@ -1525,7 +1529,8 @@ const useDiscImport = (): Return => {
             postcode: incident.postcode,
             recoveredValue: incident.recoveredValue,
             street: incident.street,
-            time: incident.time,
+            // TODO check
+            time: moment(incident.time).toDate(),
             townCity: '',
           })),
           offenders: newOffenders
@@ -1535,7 +1540,9 @@ const useDiscImport = (): Return => {
               age: offender.age,
               build: offender.build,
               comment: offender.comments,
-              dateOfBirth: offender.dateOfBirth,
+              dateOfBirth: offender.dateOfBirth
+                ? moment(offender.dateOfBirth).toDate()
+                : undefined,
               gender: offender.gender,
               groups: offender.groups.map((id) => ({ id })),
               height: offender.height,
@@ -1571,7 +1578,7 @@ const useDiscImport = (): Return => {
           })),
         },
       },
-    });
+    }).then(() => {});
   };
 
   return {
@@ -1583,6 +1590,7 @@ const useDiscImport = (): Return => {
     members,
     idSought,
     incidents,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onGenerateData,
     newBusinesses,
     onDeleteNewBusiness,

@@ -2,13 +2,14 @@ import React, { useMemo } from 'react';
 import type { MenuProps } from 'antd';
 import { Button, Col, Drawer, Dropdown, Row, Select, Typography } from 'antd';
 import DatePicker from 'components/util-components/DatePicker';
-import Page from 'components/shared-components/AntD/Page/Page';
+import { Page } from 'components/shared-components/AntD/Page/Page';
 import RGL, { WidthProvider } from 'react-grid-layout';
 import { margin, rowHeight } from 'components/reports/utils/utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
+import { useIntl } from 'react-intl';
 import AddLogo from '../../../components/reports/addLogo';
 
 import PerformanceReportLayout from './layout/PerformanceReportLayout';
@@ -71,15 +72,23 @@ const PerformanceReport = ({
     }
   };
 
+  const intl = useIntl();
+
   const items: MenuProps['items'] = [
     {
       key: '1',
-      label: 'Save As',
+      label: intl.formatMessage({
+        defaultMessage: 'Save as',
+        id: 'nCsL6d',
+      }),
     },
     {
       key: '2',
       disabled: selectedTemplate === 'default',
-      label: 'Update current template',
+      label: intl.formatMessage({
+        defaultMessage: 'Update template',
+        id: 'jS/UOn',
+      }),
     },
   ];
 
@@ -102,7 +111,15 @@ const PerformanceReport = ({
           type="default"
           hidden={!editMode}
         >
-          {minDrawer ? 'Hide Drawer' : 'Show Drawer'}
+          {minDrawer
+            ? intl.formatMessage({
+                defaultMessage: 'Hide Drawer',
+                id: 'bfZEmd',
+              })
+            : intl.formatMessage({
+                defaultMessage: 'Show Drawer',
+                id: 'Ri86Tj',
+              })}
         </Button>
         <Button
           style={{ marginRight: 10 }}
@@ -110,10 +127,21 @@ const PerformanceReport = ({
           onClick={() => setEditMode(!editMode)}
           type={editMode ? 'primary' : 'default'}
         >
-          {editMode ? 'Lock' : 'Edit'}
+          {editMode
+            ? intl.formatMessage({
+                defaultMessage: 'Lock',
+                id: 'Zl4/y9',
+              })
+            : intl.formatMessage({
+                defaultMessage: 'Edit',
+                id: 'wEQDC6',
+              })}
         </Button>
         <Button type="primary" onClick={handlePrint}>
-          Print
+          {intl.formatMessage({
+            defaultMessage: 'Print',
+            id: 'CXRlIo',
+          })}
         </Button>
       </div>
       <div
@@ -147,14 +175,18 @@ const PerformanceReport = ({
           right: 20,
         }}
       >
-        {' '}
         <Dropdown
           menu={{ items, onClick: handleMenuClick }}
           placement="bottomLeft"
           overlayStyle={{ zIndex: 1000 }}
           className="no-print overlay"
         >
-          <Button>Save</Button>
+          <Button>
+            {intl.formatMessage({
+              defaultMessage: 'Save',
+              id: 'jvo0vs',
+            })}
+          </Button>
         </Dropdown>
       </div>
       <div ref={componentRef} className="print-page">
@@ -179,6 +211,7 @@ const PerformanceReport = ({
                     marginRight: array.length - 1 === _i ? 0 : 10,
                   }}
                   src={url || ''}
+                  // eslint-disable-next-line formatjs/no-literal-string-in-jsx
                   alt="logo"
                 />
               </>
@@ -190,12 +223,23 @@ const PerformanceReport = ({
             type="primary"
             style={{ marginLeft: 10 }}
           >
-            Add Logo
+            {intl.formatMessage({
+              defaultMessage: 'Add Logo',
+              id: 'pn9DSF',
+            })}
           </Button>
         </div>
         <Title level={2} className="print-title">
-          Performance Report: {dateRange.startDate.toLocaleDateString()} -{' '}
-          {dateRange.endDate.toLocaleDateString()}
+          {intl.formatMessage(
+            {
+              defaultMessage: 'Performance Report: {startDate} - {endDate}',
+              id: 'DgIVkj',
+            },
+            {
+              startDate: dateRange.startDate.toLocaleDateString(),
+              endDate: dateRange.endDate.toLocaleDateString(),
+            }
+          )}
         </Title>
         <Row
           className="no-print"
@@ -203,7 +247,10 @@ const PerformanceReport = ({
         >
           <Col span={6}>
             <Select
-              placeholder="Select Groups"
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Select Groups',
+                id: 'q2cuIU',
+              })}
               mode="multiple"
               maxTagCount="responsive"
               onChange={(value) => {
@@ -295,7 +342,10 @@ const PerformanceReport = ({
         </div>
       </div>
       <Drawer
-        title="Charts available"
+        title={intl.formatMessage({
+          defaultMessage: 'Charts available to add',
+          id: 'zNsljc',
+        })}
         placement="bottom"
         mask={false}
         closable
@@ -322,14 +372,20 @@ const PerformanceReport = ({
           {layout.length === PerformanceLayout.length && (
             <Col>
               <Typography.Title level={5}>
-                All charts have been added
+                {intl.formatMessage({
+                  defaultMessage: 'No more charts to add',
+                  id: '2vcxv5',
+                })}
               </Typography.Title>
             </Col>
           )}
         </Row>
       </Drawer>
       <Drawer
-        title="Add Logo"
+        title={intl.formatMessage({
+          defaultMessage: 'Add Logo',
+          id: 'pn9DSF',
+        })}
         placement="right"
         closable
         open={editMode && addLogoDrawer}
@@ -344,7 +400,10 @@ const PerformanceReport = ({
         />
       </Drawer>
       <Drawer
-        title="Save As"
+        title={intl.formatMessage({
+          defaultMessage: 'Save As',
+          id: '/XPfp1',
+        })}
         placement="right"
         closable
         open={saveAsDrawer}

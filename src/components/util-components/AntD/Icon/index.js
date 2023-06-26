@@ -1,4 +1,4 @@
-/* eslint-disable react/prefer-stateless-function */
+/* eslint-disable  */
 /* eslint-disable react/prop-types */
 import React, { Component } from 'react';
 

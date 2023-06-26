@@ -38,6 +38,7 @@ const ArticleFeed = ({ feedItem }: Props): JSX.Element => {
     feedItem?.article || {};
 
   return (
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     <Link to={`/app/article/view/${id}`}>
       <Row gutter={15} wrap={false} key={id || ''} style={{ width: '100%' }}>
         {image ? (
@@ -89,7 +90,7 @@ const ArticleFeed = ({ feedItem }: Props): JSX.Element => {
             </Row>
           ) : null}
         </Col>
-      </Row>{' '}
+      </Row>
     </Link>
   );
 };

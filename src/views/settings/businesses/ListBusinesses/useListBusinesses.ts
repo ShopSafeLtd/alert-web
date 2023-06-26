@@ -5,9 +5,9 @@ import type {
 } from 'graphql/generated';
 import {
   ListBusinessesDocument,
-  useCreateBusinessMutation,
   QueryMode,
   SortOrder,
+  useCreateBusinessMutation,
   useListBusinessesQuery,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
@@ -133,7 +133,7 @@ const useListBusinesses = (): Return => {
   });
 
   const onSubmit = (values: BusinessData) => {
-    createBusiness({
+    void createBusiness({
       variables: {
         data: {
           name: values.name,
@@ -177,6 +177,7 @@ const useListBusinesses = (): Return => {
           locations: [
             {
               id: `${Math.random()}`,
+              // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
               full: `${values.locations[0].building}, ${values.locations[0].street}, ${values.locations[0].townCity}, ${values.locations[0].county}, ${values.locations[0].postcode}`,
             },
           ],

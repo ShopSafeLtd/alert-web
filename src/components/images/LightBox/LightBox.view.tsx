@@ -12,6 +12,7 @@ import type { CarouselRef } from 'antd/lib/carousel';
 import AddExistingOffender from 'components/form-components/offender/offender/AddExistingOffender';
 import AddNewOffender from 'components/form-components/offender/offender/AddNewOffender';
 import OffenderMatches from 'components/rekognition/OffenderMatches/OffenderMatches.container';
+import { useIntl } from 'react-intl';
 import LightBoxFace from './LightBoxFace.view';
 import Slide from './LightBoxSlide.view';
 import type { Image } from './LightBox.types';
@@ -123,7 +124,7 @@ const LightBox = ({
   useEffect(() => {
     carouselRef.current?.goTo(index);
   }, [index]);
-
+  const intl = useIntl();
   return open ? (
     <div className={classes.page}>
       <Row>
@@ -167,7 +168,16 @@ const LightBox = ({
           <Row gutter={8} justify="end" style={{ marginBottom: 20 }}>
             <Col>
               <Button onClick={toggleBoxes}>
-                {showBoxes ? 'Hide' : 'Show'} Boxes
+                {intl.formatMessage(
+                  {
+                    defaultMessage:
+                      '{showboxes, plural, =0 {Hide} =1{Show} other{}} Boxes',
+                    id: 'bEeWYD',
+                  },
+                  {
+                    showboxes: showBoxes ? 0 : 1,
+                  }
+                )}
               </Button>
             </Col>
             {isAdmin && (
@@ -177,7 +187,10 @@ const LightBox = ({
                   disabled={reIndexing}
                   onClick={() => onReIndex(currentImage?.id)}
                 >
-                  Search Image
+                  {intl.formatMessage({
+                    defaultMessage: 'Search Image',
+                    id: 'EwWYUF',
+                  })}
                 </Button>
               </Col>
             )}
@@ -208,14 +221,23 @@ const LightBox = ({
 
       <Drawer
         width={linkNewOffender ? 600 : 800}
-        title="Link an offender to face"
+        title={intl.formatMessage({
+          defaultMessage: 'Link an offender to face',
+          id: '70s5j7',
+        })}
         open={linkOffender !== null}
         onClose={() => toggleLinkOffender(null)}
         extra={
           <Button onClick={toggleLinkNewOffender}>
             {linkNewOffender
-              ? 'Search Existing Offenders'
-              : 'Add A New Offender'}
+              ? intl.formatMessage({
+                  defaultMessage: 'Search Existing Offenders',
+                  id: 'VGN48N',
+                })
+              : intl.formatMessage({
+                  defaultMessage: 'Add A New Offender',
+                  id: '89cjOr',
+                })}
           </Button>
         }
       >
@@ -239,7 +261,10 @@ const LightBox = ({
       <Drawer
         open={viewMatches !== null}
         onClose={() => toggleViewMatches(null)}
-        title="View Face AI matches"
+        title={intl.formatMessage({
+          defaultMessage: 'View Face AI matches',
+          id: 'weQa+I',
+        })}
         width={800}
       >
         {viewMatches && <OffenderMatches offenderId={viewMatches} />}

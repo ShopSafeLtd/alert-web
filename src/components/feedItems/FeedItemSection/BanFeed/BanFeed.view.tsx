@@ -11,6 +11,7 @@ import {
 import { Link } from 'react-router-dom';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import formatCalendar from 'utils/format-calendar-24h';
+import { useIntl } from 'react-intl';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -53,8 +54,9 @@ const BanFeed = ({ feedItem }: Props): JSX.Element => {
     offender,
     description,
   } = feedItem?.ban || {};
-
+  const intl = useIntl();
   return (
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     <Link to={`/app/offenders/view/${offender?.id}`}>
       <Row gutter={20} wrap={false} style={{ width: '100%' }}>
         {offender?.images && offender?.images.length > 0 ? (
@@ -82,9 +84,19 @@ const BanFeed = ({ feedItem }: Props): JSX.Element => {
             </Row> */}
             <div style={{ marginTop: -5, marginBottom: 10 }}>
               {expired ? (
-                <Tag color="red">EXPIRED</Tag>
+                <Tag color="red">
+                  {intl.formatMessage({
+                    defaultMessage: 'EXPIRED',
+                    id: 'GftNg3',
+                  })}
+                </Tag>
               ) : (
-                <Tag color="green">ACTIVE</Tag>
+                <Tag color="green">
+                  {intl.formatMessage({
+                    defaultMessage: 'ACTIVE',
+                    id: 'LQPOVs',
+                  })}
+                </Tag>
               )}
             </div>
 
@@ -97,8 +109,11 @@ const BanFeed = ({ feedItem }: Props): JSX.Element => {
                   icon={faCalendarPen}
                 />
                 <Text style={{ fontSize: 14 }} type="secondary">
-                  Start:
-                  {formatCalendar(startDate)}
+                  {intl.formatMessage({
+                    defaultMessage: 'Start: ',
+                    id: 'npEJui',
+                  })}
+                  {formatCalendar(startDate || new Date())}
                 </Text>
               </Col>
             </Row>
@@ -111,8 +126,11 @@ const BanFeed = ({ feedItem }: Props): JSX.Element => {
                   icon={faCalendarStar}
                 />
                 <Text style={{ fontSize: 14 }} type="secondary">
-                  End:
-                  {formatCalendar(endDate)}
+                  {intl.formatMessage({
+                    defaultMessage: 'End: ',
+                    id: 'bOhJPQ',
+                  })}
+                  {formatCalendar(endDate || new Date())}
                 </Text>
               </Col>
             </Row>
@@ -126,7 +144,10 @@ const BanFeed = ({ feedItem }: Props): JSX.Element => {
                     icon={faUserClock}
                   />
                   <Text style={{ fontSize: 14 }} type="secondary">
-                    Type:
+                    {intl.formatMessage({
+                      defaultMessage: 'Type: ',
+                      id: 'iAfc5K',
+                    })}
                     {type}
                   </Text>
                 </Col>

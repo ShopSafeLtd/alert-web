@@ -130,7 +130,7 @@ const usePerformanceReport = (): Return => {
 
   const businessContributionTableData =
     data?.businessContribution?.businessContributions?.map((business, i) => ({
-      key: business.name + i,
+      key: business.name + i.toString(),
       fullName: business.name,
       incidentsCreated: business.totalIncidents,
       offendersCreated: business.totalOffenders,
@@ -142,7 +142,7 @@ const usePerformanceReport = (): Return => {
 
   const userContributionTableData =
     data?.userContributions?.userContributions?.map((user, index) => ({
-      key: user.name + index,
+      key: user.name + index.toString(),
       fullName: user.name,
       incidentsCreated: user.totalIncidents,
       offendersCreated: user.totalOffenders,
@@ -154,7 +154,7 @@ const usePerformanceReport = (): Return => {
   const offendersTableData =
     data?.offendersPerformance?.offenderPerformance?.map((offender, i) => ({
       totalIncidents: offender.totalIncidents,
-      key: offender.name + i,
+      key: offender.name + i.toString(),
       alertId: offender.alertId,
       fullName: offender.name,
       image: offender.primaryPhoto,
@@ -170,7 +170,7 @@ const usePerformanceReport = (): Return => {
     data?.crimeGroupPerformance?.crimeGroupPerformance?.map(
       (crimeGroup, i) => ({
         totalIncidents: crimeGroup.totalIncidents,
-        key: crimeGroup.alias + i,
+        key: `${crimeGroup.alias}${i}`,
         alertId: crimeGroup.alertId,
         fullName: crimeGroup.alias,
         totalOffenders: crimeGroup.totalOffenders,
@@ -188,7 +188,7 @@ const usePerformanceReport = (): Return => {
       ?.filter((business) => business.totalIncidents > 0)
 
       .map((business, i) => ({
-        key: business.name + i,
+        key: `${business.name}${i}`,
         fullName: business.name,
         incidentsCreated: business.totalIncidents,
         offendersCreated: business.totalOffenders,
@@ -205,7 +205,7 @@ const usePerformanceReport = (): Return => {
       ?.filter((good) => good.totalIncidents > 0)
 
       .map((good, i) => ({
-        key: good.name + i,
+        key: `${good.name}${i}`,
         fullName: good.name,
         incidentsCreated: good.totalIncidents,
         offendersCreated: good.totalOffenders,

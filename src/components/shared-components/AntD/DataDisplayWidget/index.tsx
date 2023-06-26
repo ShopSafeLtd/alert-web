@@ -1,7 +1,8 @@
-import React from "react";
-import { Card, Avatar } from "antd";
-import Flex from "../Flex";
-import CustomStatistic from "../CustomStatistic";
+/* eslint-disable  */
+import React from 'react';
+import { Card, Avatar } from 'antd';
+import Flex from '../Flex';
+import { CustomStatistic } from '../CustomStatistic';
 
 interface Props {
   size: string;
@@ -13,7 +14,7 @@ interface Props {
   vertical: boolean;
 }
 
-const DataDisplayWidget = (props:Props) => {
+const DataDisplayWidget = (props: Props) => {
   const {
     size,
     value,
@@ -26,14 +27,14 @@ const DataDisplayWidget = (props:Props) => {
   const customStatisticProps = { size, value, title };
   return (
     <Card>
-      <Flex alignItems="center" flexDirection={vertical ? "column" : "row"}>
+      <Flex alignItems="center" flexDirection={vertical ? 'column' : 'row'}>
         <Avatar
           size={avatarSize}
           shape="square"
           icon={icon}
           className={`ant-avatar-${color}`}
         />
-        <div className={vertical ? "mt-3 text-center" : "ml-3"}>
+        <div className={vertical ? 'mt-3 text-center' : 'ml-3'}>
           <CustomStatistic {...customStatisticProps} />
         </div>
       </Flex>

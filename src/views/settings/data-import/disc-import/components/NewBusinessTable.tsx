@@ -21,6 +21,7 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import { useListBusinessesLocationsQuery } from 'graphql/generated';
 import { useStoreState } from 'state';
+import { useIntl } from 'react-intl';
 import type { NewBusiness } from '../DiscImport.types';
 
 const { Text } = Typography;
@@ -49,7 +50,7 @@ const NewBusinessRow = React.memo(
     const [form] = Form.useForm<NewBusiness>();
     const [link, setLink] = useState(false);
     const currentSchemeId = useStoreState((state) => state.scheme.id);
-
+    const intl = useIntl();
     const classes = useStyles();
 
     const { data } = useListBusinessesLocationsQuery({
@@ -70,7 +71,7 @@ const NewBusinessRow = React.memo(
       form.setFieldsValue({
         ...business,
       });
-      form.validateFields();
+      void form.validateFields();
     }, [business]);
 
     const onBlur = () => {
@@ -108,7 +109,15 @@ const NewBusinessRow = React.memo(
           <Col span={4} className={classes.cell}>
             <Form.Item
               name="name"
-              rules={[{ required: true, message: 'Enter a name' }]}
+              rules={[
+                {
+                  required: true,
+                  message: intl.formatMessage({
+                    defaultMessage: 'Enter a name',
+                    id: 'uqBy7y',
+                  }),
+                },
+              ]}
             >
               <Input onBlur={onBlur} readOnly={link} />
             </Form.Item>
@@ -121,7 +130,15 @@ const NewBusinessRow = React.memo(
           <Col span={3} className={classes.cell} style={{ maxWidth: 200 }}>
             <Form.Item
               name="street"
-              rules={[{ required: true, message: 'Enter a street' }]}
+              rules={[
+                {
+                  required: true,
+                  message: intl.formatMessage({
+                    defaultMessage: 'Enter a street',
+                    id: 'M3C0JK',
+                  }),
+                },
+              ]}
             >
               <Input onBlur={onBlur} readOnly={link} />
             </Form.Item>
@@ -129,7 +146,15 @@ const NewBusinessRow = React.memo(
           <Col span={3} className={classes.cell} style={{ maxWidth: 250 }}>
             <Form.Item
               name="townCity"
-              rules={[{ required: true, message: 'Enter a business' }]}
+              rules={[
+                {
+                  required: true,
+                  message: intl.formatMessage({
+                    defaultMessage: 'Enter a town/city',
+                    id: '0rPJ0H',
+                  }),
+                },
+              ]}
             >
               <Input onBlur={onBlur} readOnly={link} />
             </Form.Item>
@@ -142,14 +167,27 @@ const NewBusinessRow = React.memo(
           <Col span={2} className={classes.cell} style={{ maxWidth: 250 }}>
             <Form.Item
               name="postcode"
-              rules={[{ required: true, message: 'Enter a postcode' }]}
+              rules={[
+                {
+                  required: true,
+                  message: intl.formatMessage({
+                    defaultMessage: 'Enter a postcode',
+                    id: 'ysScN/',
+                  }),
+                },
+              ]}
             >
               <Input onBlur={onBlur} readOnly={link} />
             </Form.Item>
           </Col>
           <Col>
             {!link && (
-              <Tooltip title="Link to an existing business">
+              <Tooltip
+                title={intl.formatMessage({
+                  defaultMessage: 'Link to existing business',
+                  id: 'PSUx8Z',
+                })}
+              >
                 <Button size="small" onClick={() => setLink(true)}>
                   <FontAwesomeIcon icon={faMagnifyingGlass} />
                 </Button>
@@ -160,7 +198,15 @@ const NewBusinessRow = React.memo(
                 <Col>
                   <Form.Item
                     name="existing"
-                    rules={[{ required: true, message: 'Select a business' }]}
+                    rules={[
+                      {
+                        required: true,
+                        message: intl.formatMessage({
+                          defaultMessage: 'Select a business',
+                          id: 'jkpwh9',
+                        }),
+                      },
+                    ]}
                   >
                     <Select
                       style={{ width: 160 }}
@@ -173,7 +219,12 @@ const NewBusinessRow = React.memo(
                   </Form.Item>
                 </Col>
                 <Col>
-                  <Tooltip title="Clear Link">
+                  <Tooltip
+                    title={intl.formatMessage({
+                      defaultMessage: 'Clear link',
+                      id: 'niNmLF',
+                    })}
+                  >
                     <Button size="small" onClick={clearLink}>
                       <FontAwesomeIcon icon={faClose} />
                     </Button>
@@ -185,7 +236,11 @@ const NewBusinessRow = React.memo(
           <Col>
             <Popconfirm
               overlayInnerStyle={{ padding: 10 }}
-              title="Are you sure you want to remove this business?"
+              title={intl.formatMessage({
+                defaultMessage:
+                  'Are you sure you want to remove this business?',
+                id: 'sLEQ0e',
+              })}
               onConfirm={() => onDelete(business.id)}
             >
               <Button size="small">
@@ -224,13 +279,19 @@ const NewBusinessTable = ({
       newBusinesses.slice((currentPage - 1) * 10, 10 * currentPage)
     );
   }, [currentPage]);
-
+  const intl = useIntl();
   return (
     <Card
-      title="Businesses"
+      title={intl.formatMessage({
+        defaultMessage: 'Businesses',
+        id: 'D0tMhW',
+      })}
       extra={
         <Button type="primary" style={{ marginBottom: 16 }} onClick={onAdd}>
-          Add Business
+          {intl.formatMessage({
+            defaultMessage: 'Add business',
+            id: '5MBl1V',
+          })}
         </Button>
       }
     >
@@ -245,32 +306,50 @@ const NewBusinessTable = ({
           style={{ borderTopLeftRadius: 10 }}
         >
           <Text style={{ paddingLeft: 5 }} strong>
-            Name
+            {intl.formatMessage({
+              defaultMessage: 'Name',
+              id: 'HAlOn1',
+            })}
           </Text>
         </Col>
         <Col span={3} className={classes.headerCell}>
           <Text style={{ paddingLeft: 5 }} strong>
-            Building
+            {intl.formatMessage({
+              defaultMessage: 'Building',
+              id: 'oS/nae',
+            })}
           </Text>
         </Col>
         <Col span={3} className={classes.headerCell}>
           <Text style={{ paddingLeft: 5 }} strong>
-            Street
+            {intl.formatMessage({
+              defaultMessage: 'Street',
+              id: 'BaIwdV',
+            })}
           </Text>
         </Col>
         <Col span={3} className={classes.headerCell}>
           <Text style={{ paddingLeft: 5 }} strong>
-            Town/City
+            {intl.formatMessage({
+              defaultMessage: 'Town/City',
+              id: 'byaTQZ',
+            })}
           </Text>
         </Col>
         <Col span={3} className={classes.headerCell}>
           <Text style={{ paddingLeft: 5 }} strong>
-            County
+            {intl.formatMessage({
+              defaultMessage: 'County',
+              id: 'B+KJhc',
+            })}
           </Text>
         </Col>
         <Col span={2} className={classes.headerCell}>
           <Text style={{ paddingLeft: 5 }} strong>
-            Postcode
+            {intl.formatMessage({
+              defaultMessage: 'Postcode',
+              id: 'FJhjgz',
+            })}
           </Text>
         </Col>
       </Row>
@@ -288,7 +367,17 @@ const NewBusinessTable = ({
         current={currentPage}
         onChange={setCurrentPage}
         total={newBusinesses.length}
-        showTotal={(total) => `Total Businesses: ${total}`}
+        showTotal={(total) =>
+          intl.formatMessage(
+            {
+              defaultMessage: `Total Businesses: {total}`,
+              id: 'IU3Z4K',
+            },
+            {
+              total,
+            }
+          )
+        }
         pageSizeOptions={[10]}
       />
     </Card>

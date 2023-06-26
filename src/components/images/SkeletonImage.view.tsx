@@ -35,6 +35,7 @@ const SkeletonImage = ({ height = 280 }: { height?: number }) => {
               ? lightLogo || 'https://app.shopsafealert.co.uk/img/dark-logo.svg'
               : darkLogo || 'https://app.shopsafealert.co.uk/img/light-logo.svg'
           }
+          // eslint-disable-next-line formatjs/no-literal-string-in-jsx
           alt="logo"
         />
       )}

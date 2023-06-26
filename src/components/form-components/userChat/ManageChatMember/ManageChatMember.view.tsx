@@ -17,6 +17,7 @@ import { faTrash, faUser } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AddUserToChat from 'components/form-components/userChat/AddUserToChat';
 import type { ListSchemeUsersQuery } from 'graphql/generated';
+import { useIntl } from 'react-intl';
 import type { MemberData } from './useManageChatMember';
 
 const { Title } = Typography;
@@ -52,8 +53,9 @@ const EditChat = ({
   toggleAddMember,
   membersData,
   deleteConfirm,
-}: Props): JSX.Element =>
-  !usersData && loading ? (
+}: Props): JSX.Element => {
+  const intl = useIntl();
+  return !usersData && loading ? (
     <Skeleton />
   ) : (
     <div>
@@ -95,6 +97,7 @@ const EditChat = ({
                         <Title level={4}>{origName}</Title>
                       </Col>
                       <Col flex={1}>
+                        {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
                         <Tag color="red" style={{ padding: 3 }}>
                           -- {businesses[0]?.name}
                         </Tag>
@@ -129,7 +132,10 @@ const EditChat = ({
                   <FontAwesomeIcon icon={faUser} style={{ marginRight: 5 }} />
                 }
               >
-                Add Chat Members
+                {intl.formatMessage({
+                  defaultMessage: 'Add Chat Members',
+                  id: '74pOam',
+                })}
               </Button>
             </Col>
           </Row>
@@ -138,7 +144,7 @@ const EditChat = ({
           <Row style={{ marginTop: 30 }} gutter={10} justify="end">
             <Col>
               <Button disabled={saving} onClick={onClose}>
-                Cancel
+                {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
               </Button>
             </Col>
             <Col>
@@ -148,7 +154,7 @@ const EditChat = ({
                 type="primary"
                 htmlType="submit"
               >
-                Save
+                {intl.formatMessage({ defaultMessage: 'Save', id: 'jvo0vs' })}
               </Button>
             </Col>
           </Row>
@@ -156,7 +162,10 @@ const EditChat = ({
       </Form>
 
       <Drawer
-        title="Add Chat Members"
+        title={intl.formatMessage({
+          defaultMessage: 'Add Chat Members',
+          id: '74pOam',
+        })}
         visible={addMember}
         width="400"
         onClose={toggleAddMember}
@@ -173,5 +182,6 @@ const EditChat = ({
       </Drawer>
     </div>
   );
+};
 
 export default EditChat;

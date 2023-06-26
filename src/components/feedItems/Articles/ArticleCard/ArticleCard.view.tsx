@@ -48,6 +48,7 @@ const ArticleCard = ({ article, openLightbox }: Props): JSX.Element => {
   const role = useStoreState((state) => state.user.role);
 
   return (
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     <Link to={`/app/article/view/${id}`}>
       <div className={classes.card}>
         {images && images.length > 0 ? (
@@ -114,7 +115,7 @@ const ArticleCard = ({ article, openLightbox }: Props): JSX.Element => {
                 icon={faClock}
                 style={{ marginRight: 5 }}
               />
-              <Text>{formatCalendar(updatedAt)}</Text>
+              <Text>{formatCalendar(updatedAt || new Date())}</Text>
             </Col>
           </Row>
           {userGroups.length > 0 &&

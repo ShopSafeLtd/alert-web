@@ -1,6 +1,7 @@
 import React from 'react';
 import type { TagQuery } from 'graphql/generated';
 import { Button, Col, Form, Input, Row, Skeleton, Typography } from 'antd';
+import { useIntl } from 'react-intl';
 
 const { Text } = Typography;
 
@@ -23,8 +24,9 @@ const EditOffenderWarning = ({
   data,
   loading,
   saving,
-}: Props): JSX.Element =>
-  !data && loading ? (
+}: Props): JSX.Element => {
+  const intl = useIntl();
+  return !data && loading ? (
     <Skeleton />
   ) : (
     <Form
@@ -38,7 +40,11 @@ const EditOffenderWarning = ({
       <Row style={{ marginBottom: 30 }}>
         <Col>
           <Text type="secondary">
-            Update the necessary fields for the offender warning.
+            {intl.formatMessage({
+              defaultMessage:
+                'Update the necessary fields for the offender warning.',
+              id: 'UHXcnM',
+            })}
           </Text>
         </Col>
       </Row>
@@ -46,11 +52,15 @@ const EditOffenderWarning = ({
         <Col span={23}>
           <Form.Item
             name="name"
-            label="Name"
+            label={intl.formatMessage({ defaultMessage: 'Name', id: 'HAlOn1' })}
             rules={[
               {
                 required: true,
-                message: 'Please enter a name for the offender warning.',
+                message: intl.formatMessage({
+                  defaultMessage:
+                    'Please enter a name for the offender warning.',
+                  id: '5988Gb',
+                }),
               },
             ]}
           >
@@ -60,7 +70,13 @@ const EditOffenderWarning = ({
       </Row>
       <Row gutter={16}>
         <Col span={23}>
-          <Form.Item name="description" label="Description">
+          <Form.Item
+            name="description"
+            label={intl.formatMessage({
+              defaultMessage: 'Description',
+              id: 'Q8Qw5B',
+            })}
+          >
             <Input.TextArea rows={10} disabled={saving} />
           </Form.Item>
         </Col>
@@ -70,7 +86,7 @@ const EditOffenderWarning = ({
         <Row style={{ marginTop: 30 }} gutter={16} justify="end">
           <Col>
             <Button disabled={saving} onClick={onClose}>
-              Cancel
+              {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
             </Button>
           </Col>
           <Col>
@@ -80,12 +96,13 @@ const EditOffenderWarning = ({
               type="primary"
               htmlType="submit"
             >
-              Save
+              {intl.formatMessage({ defaultMessage: 'Save', id: 'jvo0vs' })}
             </Button>
           </Col>
         </Row>
       </Form.Item>
     </Form>
   );
+};
 
 export default EditOffenderWarning;

@@ -1,3 +1,4 @@
+/* eslint-disable formatjs/no-literal-string-in-jsx */
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
@@ -5,16 +6,16 @@ import { createStore, StoreProvider } from 'easy-peasy';
 import { MemoryRouter } from 'react-router-dom';
 import {
   Age,
-  Gender,
-  Race,
   Build,
+  Gender,
+  Height,
+  Model,
+  Race,
+  Role,
   SchemeGroupsDocument,
   TagsDocument,
-  Model,
-  Role,
-  ViewOffenderDocument,
   UpdateOffenderDocument,
-  Height,
+  ViewOffenderDocument,
 } from 'graphql/generated';
 import { OffenderSort, storeModel } from 'state';
 import useEditOffender from '../useEditOffender';

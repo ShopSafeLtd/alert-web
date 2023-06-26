@@ -2,6 +2,7 @@ import React from 'react';
 import type { GroupQuery } from 'graphql/generated';
 import { Button, Col, Form, Input, Row, Select, Skeleton } from 'antd';
 import type { SelectOptions } from 'types/DataType';
+import { useIntl } from 'react-intl';
 import type { FormData } from './useEditGroup';
 
 interface Props {
@@ -28,8 +29,10 @@ const EditGroup = ({
   saving,
   selectedUsers,
   setSelectedUsers,
-}: Props): JSX.Element =>
-  !data && loading ? (
+}: Props): JSX.Element => {
+  const intl = useIntl();
+
+  return !data && loading ? (
     <Skeleton />
   ) : (
     <Form
@@ -52,11 +55,17 @@ const EditGroup = ({
         <Col span={23}>
           <Form.Item
             name="name"
-            label="Name"
+            label={intl.formatMessage({
+              defaultMessage: 'Name',
+              id: 'HAlOn1',
+            })}
             rules={[
               {
                 required: true,
-                message: 'Please enter a name for the group.',
+                message: intl.formatMessage({
+                  defaultMessage: 'Please enter a name for the group.',
+                  id: 'H2pLHC',
+                }),
               },
             ]}
           >
@@ -66,7 +75,13 @@ const EditGroup = ({
       </Row>
       <Row gutter={16}>
         <Col span={23}>
-          <Form.Item name="description" label="Description">
+          <Form.Item
+            name="description"
+            label={intl.formatMessage({
+              defaultMessage: 'Description',
+              id: 'Q8Qw5B',
+            })}
+          >
             <Input.TextArea disabled={saving} />
           </Form.Item>
         </Col>
@@ -75,11 +90,18 @@ const EditGroup = ({
         <Col span={23}>
           <Form.Item
             name="users"
-            label="Users"
+            label={intl.formatMessage({
+              defaultMessage: 'Users',
+              id: 'YDMrKK',
+            })}
             rules={[
               {
                 required: true,
-                message: 'Please selected at least one user for the new group.',
+                message: intl.formatMessage({
+                  defaultMessage:
+                    'Please select at least one user for the new group.',
+                  id: 'mduNlp',
+                }),
               },
             ]}
           >
@@ -91,6 +113,7 @@ const EditGroup = ({
               filterOption
               optionFilterProp="label"
               options={usersData}
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
               onChange={(value) => setSelectedUsers(value)}
             />
           </Form.Item>
@@ -99,7 +122,13 @@ const EditGroup = ({
       {selectedUsers && selectedUsers.length > 0 && (
         <Row gutter={16}>
           <Col span={23}>
-            <Form.Item name="approvers" label="Approvers">
+            <Form.Item
+              name="approvers"
+              label={intl.formatMessage({
+                defaultMessage: 'Approvers',
+                id: 'Nm9Hsa',
+              })}
+            >
               <Select
                 loading={usersLoading}
                 disabled={saving}
@@ -120,7 +149,10 @@ const EditGroup = ({
         <Row style={{ marginTop: 30 }} gutter={16} justify="end">
           <Col>
             <Button disabled={saving} onClick={onClose}>
-              Cancel
+              {intl.formatMessage({
+                defaultMessage: 'Cancel',
+                id: '47FYwb',
+              })}
             </Button>
           </Col>
           <Col>
@@ -130,12 +162,16 @@ const EditGroup = ({
               type="primary"
               htmlType="submit"
             >
-              Save
+              {intl.formatMessage({
+                defaultMessage: 'Save',
+                id: 'jvo0vs',
+              })}
             </Button>
           </Col>
         </Row>
       </Form.Item>
     </Form>
   );
+};
 
 export default EditGroup;

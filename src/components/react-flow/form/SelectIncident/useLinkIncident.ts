@@ -1,15 +1,10 @@
 import { useState } from 'react';
 
-import {
-  ListIncidentsQuery,
-  QueryMode,
-  SortOrder,
-  useListIncidentsQuery,
-} from 'graphql/generated';
+import type { ListIncidentsQuery } from 'graphql/generated';
+import { QueryMode, SortOrder, useListIncidentsQuery } from 'graphql/generated';
 
 import { useStoreActions, useStoreState } from 'state';
-import { IncidentTable } from './LinkIncident.view';
-import { Incident } from 'components/react-flow/nodes/incident-details-node';
+import type { Incident } from 'components/react-flow/nodes/incident-details-node';
 
 interface Props {
   onClose: () => void;
@@ -37,7 +32,7 @@ const useLinkIncident = ({ onClose, onSelect }: Props): Return => {
   const setIncidentsState = useStoreActions(
     (actions) => actions.data.setIncidents
   );
-  const [selectedRowsData, setSelectedRowsData] = useState<IncidentTable[]>([]);
+
   const { data, loading } = useListIncidentsQuery({
     variables: {
       scheme: {
@@ -119,6 +114,7 @@ const useLinkIncident = ({ onClose, onSelect }: Props): Return => {
         dayTime: incident?.dayTime,
         location: incident?.createdBy.businesses[0]?.name,
         offenders: incident?.offenders
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
           .map((type, index) => `${index > 0 ? ' ' : ''}${type.name}`)
           .toString(),
         id: incident?.id,

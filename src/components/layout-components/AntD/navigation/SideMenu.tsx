@@ -1,3 +1,4 @@
+/* eslint-disable  */
 import React, { useState } from 'react';
 import { Menu } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -47,7 +48,7 @@ export const SideMenu: <T>(props: Props<T>) => JSX.Element = ({
       defaultSelectedKeys={[]}
       mode="inline"
       style={{
-        width: width ? width : 250,
+        width: width || 250,
         borderRight: '1px solid #edf2f9',
         flex: 1,
       }}

@@ -1,10 +1,9 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import type { ListDemEvidenceQuery } from 'graphql/generated';
 import { Button, Col, Row, Skeleton, Table } from 'antd';
 import moment from 'moment';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import { useIntl } from 'react-intl';
 
 interface Props {
   onClose: () => void;
@@ -22,80 +21,103 @@ const LinkDemCompany = ({
   data,
   loading,
   onSelect,
-}: Props): JSX.Element => (
-  <div className="add-existing-offender">
-    <Table
-      columns={[
-        {
-          title: 'Thumbnail',
-          dataIndex: 'thumbnail',
-          key: 'thumbnail',
-          render: (thumbnail: string | null | undefined) =>
-            thumbnail ? (
-              <div style={{ width: 180, height: 180 }}>
-                <WatermarkImage url={thumbnail} />
-              </div>
-            ) : (
-              <Skeleton.Image style={{ width: 180 }} />
-            ),
-        },
-        {
-          title: 'Type',
-          dataIndex: 'type',
-          key: 'type',
-        },
-        {
-          title: 'Importance',
-          dataIndex: 'importance',
-          key: 'importance',
-        },
-        {
-          title: 'Recorded On',
-          dataIndex: 'createdAt',
-          key: 'createdAt',
-          render: (value) => moment(value).format('DD/MM/YYYY'),
-        },
-      ]}
-      dataSource={data?.listDemEvidence.demEvidence.map((evidence) => ({
-        key: evidence.id || '',
-        thumbnail: evidence.thumbnailUrl || '',
-        url: evidence.playbackUrl || '',
-        type: evidence.type || '',
-        importance: evidence.importance || '',
-        createdAt: evidence.createdAt,
-      }))}
-      rowSelection={{
-        type: 'radio',
-        onSelect,
-      }}
-      pagination={{
-        hideOnSinglePage: true,
-        total: data?.listDemEvidence?.total,
-        pageSize: 24,
-        showSizeChanger: false,
-        position: ['bottomCenter'],
-      }}
-      loading={loading}
-      size="small"
-    />
-    <Row gutter={16} style={{ paddingBottom: 30 }} justify="end">
-      <Col>
-        <Button onClick={onClose} disabled={saving} type="text">
-          Cancel
-        </Button>
-      </Col>
-      <Col>
-        <Button
-          loading={saving}
-          disabled={saving}
-          onClick={onSubmit}
-          type="primary"
-        >
-          Import Evidence
-        </Button>
-      </Col>
-    </Row>
-  </div>
-);
+}: Props): JSX.Element => {
+  const intl = useIntl();
+
+  return (
+    <div className="add-existing-offender">
+      <Table
+        columns={[
+          {
+            title: intl.formatMessage({
+              defaultMessage: 'Thumbnail',
+              id: 'RGYBjE',
+            }),
+            dataIndex: 'thumbnail',
+            key: 'thumbnail',
+            render: (thumbnail: string | null | undefined) =>
+              thumbnail ? (
+                <div style={{ width: 180, height: 180 }}>
+                  <WatermarkImage url={thumbnail} />
+                </div>
+              ) : (
+                <Skeleton.Image style={{ width: 180 }} />
+              ),
+          },
+          {
+            title: intl.formatMessage({
+              defaultMessage: 'Type',
+              id: '+U6ozc',
+            }),
+            dataIndex: 'type',
+            key: 'type',
+          },
+          {
+            title: intl.formatMessage({
+              defaultMessage: 'Importance',
+              id: 'DBZGY7',
+            }),
+            dataIndex: 'importance',
+            key: 'importance',
+          },
+          {
+            title: intl.formatMessage({
+              defaultMessage: 'Recorded On',
+              id: '2Rpk/e',
+            }),
+            dataIndex: 'createdAt',
+            key: 'createdAt',
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+            render: (value) => moment(value).format('DD/MM/YYYY'),
+          },
+        ]}
+        dataSource={data?.listDemEvidence.demEvidence.map((evidence) => ({
+          key: evidence.id || '',
+          thumbnail: evidence.thumbnailUrl || '',
+          url: evidence.playbackUrl || '',
+          type: evidence.type || '',
+          importance: evidence.importance || '',
+          createdAt: evidence.createdAt,
+        }))}
+        rowSelection={{
+          type: 'radio',
+          onSelect,
+        }}
+        pagination={{
+          hideOnSinglePage: true,
+          total: data?.listDemEvidence?.total,
+          pageSize: 24,
+          showSizeChanger: false,
+          position: ['bottomCenter'],
+        }}
+        loading={loading}
+        size="small"
+      />
+      <Row gutter={16} style={{ paddingBottom: 30 }} justify="end">
+        <Col>
+          <Button onClick={onClose} disabled={saving} type="text">
+            {intl.formatMessage({
+              defaultMessage: 'Cancel',
+              id: '47FYwb',
+            })}
+          </Button>
+        </Col>
+        <Col>
+          <Button
+            loading={saving}
+            disabled={saving}
+            onClick={onSubmit}
+            type="primary"
+          >
+            {intl.formatMessage({
+              defaultMessage: 'Import Evidence',
+              id: 'nzan7S',
+            })}
+          </Button>
+        </Col>
+      </Row>
+    </div>
+  );
+};
 
 export default LinkDemCompany;

@@ -1,14 +1,17 @@
 import React from 'react';
-import { Button, Col, Row, Select, Typography, DatePicker, Form } from 'antd';
+import { Button, Col, DatePicker, Form, Row, Select, Typography } from 'antd';
 import { SortOrder } from 'graphql/generated';
 import type { DateType } from 'types/DataType';
+import { FormattedMessage } from 'react-intl';
 import useStyles from './VehicleFilter.styles';
 
 const { RangePicker } = DatePicker;
 const { useForm } = Form;
+
 interface FormData {
   date: Date;
 }
+
 interface Props {
   order: SortOrder;
   setOrder: (value: SortOrder) => void;
@@ -47,7 +50,7 @@ const VehicleFilter = ({
               });
             }}
           >
-            Clear Filters
+            <FormattedMessage id="MsGXc3" defaultMessage="Clear Filters" />
           </Button>
         </Col>
       </Row>
@@ -55,7 +58,7 @@ const VehicleFilter = ({
       <Row gutter={16}>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
-            Sort Order
+            <FormattedMessage id="Hw6crD" defaultMessage="Sort Order" />
           </Typography.Paragraph>
           <Select
             className={classes.select}
@@ -63,15 +66,19 @@ const VehicleFilter = ({
             onChange={setOrder}
             size="small"
           >
-            <Select.Option value={SortOrder.Desc}>Newest First</Select.Option>
-            <Select.Option value={SortOrder.Asc}>Oldest First</Select.Option>
+            <Select.Option value={SortOrder.Desc}>
+              <FormattedMessage id="dZYazP" defaultMessage="Newest First" />
+            </Select.Option>
+            <Select.Option value={SortOrder.Asc}>
+              <FormattedMessage id="FqI37D" defaultMessage="Oldest First" />
+            </Select.Option>
           </Select>
         </Col>
       </Row>
       <Row gutter={16}>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
-            Created Between
+            <FormattedMessage id="hGJYON" defaultMessage="Created Between" />
           </Typography.Paragraph>
 
           <Form.Item name="date">
@@ -91,11 +98,13 @@ const VehicleFilter = ({
       <Row gutter={16}>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
-            Groups
+            <FormattedMessage id="hzmswI" defaultMessage="Groups" />
           </Typography.Paragraph>
           <Select
             className={classes.select}
-            placeholder="Groups"
+            placeholder={
+              <FormattedMessage id="hzmswI" defaultMessage="Groups" />
+            }
             mode="multiple"
             size="small"
             maxTagCount={2}
@@ -105,7 +114,9 @@ const VehicleFilter = ({
             value={groupsFilter}
           >
             {groups.map((group) => (
-              <Select.Option value={group.value}>{group.label}</Select.Option>
+              <Select.Option key={group.value} value={group.value}>
+                {group.label}
+              </Select.Option>
             ))}
           </Select>
         </Col>

@@ -8,6 +8,7 @@ import CrimeGroupFilter from 'components/crimeGroups/CrimeGroupFilter';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter } from '@fortawesome/pro-light-svg-icons';
 import type { DateType } from 'types/DataType';
+import { useIntl } from 'react-intl';
 import useStyles from './ListCrimeGroups.styles';
 
 interface Props {
@@ -48,16 +49,24 @@ const ListCrimeGroups = ({
   groupsLoading,
 }: Props) => {
   const classes = useStyles();
+  const intl = useIntl();
   const galleryOptions = [
     {
-      label: 'Following',
-      value: 'FOLLOWING',
+      label: intl.formatMessage({
+        defaultMessage: 'Followed Groups',
+        id: 'Ly+ku5',
+      }),
+      value: 'FOLLOWED_GROUPS',
     },
     {
-      label: 'My Data',
-      value: 'MYDATA',
+      label: intl.formatMessage({
+        defaultMessage: 'My Groups',
+        id: 'kkghcT',
+      }),
+      value: 'MY_GROUPS',
     },
   ];
+
   return (
     <div className={classes.page}>
       <Row align="middle" gutter={16} className={classes.headerRow}>
@@ -66,7 +75,10 @@ const ListCrimeGroups = ({
             value={search}
             onChange={(event) => setSearch(event.target.value)}
             allowClear
-            placeholder="Search crime groups..."
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Search crime groups...',
+              id: 'q5vT3Z',
+            })}
           />
         </Col>
         <Col flex={1}>
@@ -88,12 +100,20 @@ const ListCrimeGroups = ({
               />
             }
           >
-            Sort &amp; Filter
+            {intl.formatMessage({
+              defaultMessage: 'Sort & Filter',
+              id: 'f2g3SM',
+            })}
           </Button>
         </Col>
         <Col>
           <Link to="create">
-            <Button type="primary">Create Crime Group</Button>
+            <Button type="primary">
+              {intl.formatMessage({
+                defaultMessage: 'Create Crime Group',
+                id: 'Bju8fW',
+              })}
+            </Button>
           </Link>
         </Col>
       </Row>
@@ -115,50 +135,75 @@ const ListCrimeGroups = ({
           {
             key: 'reference',
             dataIndex: 'reference',
-            title: 'Alert ID',
+            title: intl.formatMessage({
+              defaultMessage: 'Alert ID',
+              id: 'k8ZNgH',
+            }),
             render: (value, item) => (
+              // eslint-disable-next-line formatjs/no-literal-string-in-jsx
               <Link to={`view/${item.key}`}>CG-{value}</Link>
             ),
           },
           {
             key: 'alias',
             dataIndex: 'alias',
-            title: 'Alias',
+            title: intl.formatMessage({
+              defaultMessage: 'Alias',
+              id: 'Ri9jA7',
+            }),
           },
-
           {
             key: 'totalOffenders',
             dataIndex: 'totalOffenders',
-            title: 'Members',
+            title: intl.formatMessage({
+              defaultMessage: 'Members',
+              id: '+a+2ug',
+            }),
           },
           {
             key: 'totalIncidents',
             dataIndex: 'totalIncidents',
-            title: 'Incidents',
+            title: intl.formatMessage({
+              defaultMessage: 'Incidents',
+              id: 'mtr3R4',
+            }),
           },
           {
             key: 'totalValue',
             dataIndex: 'totalValue',
-            title: 'Lost Value',
-            render: (value) => `£${value || 0}`,
+            title: intl.formatMessage({
+              defaultMessage: 'Lost Value',
+              id: '3YYDlc',
+            }),
+            render: (value: number | undefined) => `£${value || 0}`,
           },
           {
             key: 'totalRecoveredValue',
             dataIndex: 'totalRecoveredValue',
-            title: 'Recovered Value',
-            render: (value) => `£${value || 0}`,
+            title: intl.formatMessage({
+              defaultMessage: 'Recovered Value',
+              id: 'bGwFFv',
+            }),
+            render: (value: number | undefined) => `£${value || 0}`,
           },
           {
             key: 'totalTheftSuccess',
             dataIndex: 'totalTheftSuccess',
-            title: 'Success Rate',
-            render: (value) => `${value?.toFixed(0) || 0}%`,
+            title: intl.formatMessage({
+              defaultMessage: 'Success Rate',
+              id: 'IaZkrc',
+            }),
+            render: (value: number | undefined) => `${value?.toFixed(0) || 0}%`,
           },
           {
             key: 'updatedAt',
             dataIndex: 'updatedAt',
-            title: 'UpdatedAt',
-            render: (value) => moment(value || moment()).calendar('DD/MM/YYYY'),
+            title: intl.formatMessage({
+              defaultMessage: 'Updated At',
+              id: 'ECx6bx',
+            }),
+            render: (value: Date | undefined) =>
+              moment(value || moment()).calendar('DD/MM/YYYY'),
           },
         ]}
         pagination={{
@@ -168,7 +213,10 @@ const ListCrimeGroups = ({
         }}
       />
       <Drawer
-        title="Crime Group Filters"
+        title={intl.formatMessage({
+          defaultMessage: 'Crime Group Filters',
+          id: 'Dz/qC3',
+        })}
         visible={sortFilter}
         onClose={toggleSortFilter}
         width={500}

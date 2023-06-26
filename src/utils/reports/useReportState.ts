@@ -203,7 +203,7 @@ const useReportState = ({
           {
             id: d.createReportTemplate.id || '',
             name: d.createReportTemplate.name || '',
-            metaData: d.createReportTemplate.metaData || [],
+            metaData: (d.createReportTemplate.metaData as MetaData[]) || [],
             layout:
               (d.createReportTemplate.layout.map((item) => ({
                 ...item,
@@ -326,7 +326,7 @@ const useReportState = ({
           {
             id: d.updateReportTemplate.id || '',
             name: d.updateReportTemplate.name || '',
-            metaData: d.updateReportTemplate.metaData || [],
+            metaData: (d.updateReportTemplate.metaData as MetaData[]) || [],
             layout:
               (d.updateReportTemplate.layout.map((item) => ({
                 ...item,
@@ -515,6 +515,7 @@ const useReportState = ({
     metadata,
     removeLogo,
     saveAsDrawer,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     saveTemplate,
     selectTemplate,
     selectedTemplate,

@@ -17,6 +17,7 @@ import { notification } from 'antd';
 import errorNotification from 'types/error_notification';
 import { useNavigate } from 'react-router';
 import { LocalStorageKeys } from 'types';
+import { useIntl } from 'react-intl';
 
 export interface NotificationData {
   id: string;
@@ -75,7 +76,7 @@ interface Return {
 
 const useNotificationLists = (): Return => {
   const navigate = useNavigate();
-
+  const intl = useIntl();
   const userId = useStoreState((state) => state.user.id);
   const userSchemes = useStoreState((state) => state.user.schemes);
   const schemeId = useStoreState((state) => state.scheme.id);
@@ -93,7 +94,7 @@ const useNotificationLists = (): Return => {
   const getUserNotificationType = (value: NotificationData) => {
     switch (value.type) {
       case Model.Article: {
-        navigate(`/app/article/view/${value.articleId}`);
+        navigate(`/app/article/view/${value.articleId || ''}`);
         return {
           articleId: {
             equals: value.articleId,
@@ -101,7 +102,7 @@ const useNotificationLists = (): Return => {
         };
       }
       case Model.Incident: {
-        navigate(`/app/incidents/view/${value.incidentId}`);
+        navigate(`/app/incidents/view/${value.incidentId || ''}`);
         return {
           incidentId: {
             equals: value.incidentId,
@@ -109,7 +110,7 @@ const useNotificationLists = (): Return => {
         };
       }
       case Model.Offender: {
-        navigate(`/app/offenders/view/${value.offenderId}`);
+        navigate(`/app/offenders/view/${value.offenderId || ''}`);
         return {
           offenderId: {
             equals: value.offenderId,
@@ -117,7 +118,7 @@ const useNotificationLists = (): Return => {
         };
       }
       case Model.Ban: {
-        navigate(`/app/offenders/view/${value.ban?.offender.id}`);
+        navigate(`/app/offenders/view/${value.ban?.offender.id || ''}`);
         return {
           offenderId: {
             equals: value.ban?.offender.id,
@@ -125,7 +126,7 @@ const useNotificationLists = (): Return => {
         };
       }
       case Model.Investigation: {
-        navigate(`/app/investigations/view/${value.investigationId}`);
+        navigate(`/app/investigations/view/${value.investigationId || ''}`);
         return {
           investigationId: {
             equals: value.investigationId,
@@ -133,7 +134,7 @@ const useNotificationLists = (): Return => {
         };
       }
       case Model.Vehicle: {
-        navigate(`/app/vehicles/view/${value.vehicleId}`);
+        navigate(`/app/vehicles/view/${value.vehicleId || ''}`);
         return {
           vehicleId: {
             equals: value.vehicleId,
@@ -141,7 +142,7 @@ const useNotificationLists = (): Return => {
         };
       }
       case Model.CrimeGroup: {
-        navigate(`/app/crime-groups/view/${value.vehicleId}`);
+        navigate(`/app/crime-groups/view/${value.vehicleId || ''}`);
         return {
           crimeGroupId: {
             equals: value.crimeGroupId,
@@ -149,7 +150,7 @@ const useNotificationLists = (): Return => {
         };
       }
       case Model.Chat: {
-        navigate(`/app/chat/${value.chatId}`);
+        navigate(`/app/chat/${value.chatId || ''}`);
         return {
           chatId: {
             equals: value.chatId,
@@ -157,7 +158,7 @@ const useNotificationLists = (): Return => {
         };
       }
       case Model.User: {
-        navigate(`/app/scheme-settings/users/view/${value.userId}`);
+        navigate(`/app/scheme-settings/users/view/${value.userId || ''}`);
         return {
           id: {
             equals: value.id,
@@ -285,8 +286,14 @@ const useNotificationLists = (): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: 'Successfully Updated!',
-        description: 'All notifications has been updated to read! ',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
+          id: 'w5Yfkf',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'All notifications have been updated to read!',
+          id: 'dI0d71',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -328,7 +335,7 @@ const useNotificationLists = (): Return => {
       if (schemeId !== value.schemes[0].id) {
         handleSchemeChange(value.schemes[0]);
       }
-      updateUserNotification({
+      void updateUserNotification({
         variables: {
           where: {
             notification: getUserNotificationType(value),
@@ -340,7 +347,7 @@ const useNotificationLists = (): Return => {
 
   const handleMarkAllRead = () => {
     setSaving(true);
-    updateAllUserNotifications({
+    void updateAllUserNotifications({
       variables: {
         where: {
           notification: {

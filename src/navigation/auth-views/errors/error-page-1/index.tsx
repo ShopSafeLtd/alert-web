@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React from 'react';
 import { Button, Row, Col } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
@@ -25,8 +27,8 @@ const ErrorOne = (): JSX.Element => {
                 Page not found
               </h1>
               <p className="font-size-md mb-4">
-                We&apos;ve noticed you lost your way, no worries, we will help you to
-                found the correct path.
+                We&apos;ve noticed you lost your way, no worries, we will help
+                you to found the correct path.
               </p>
               <Link to="/app">
                 <Button type="primary" icon={<ArrowLeftOutlined />}>

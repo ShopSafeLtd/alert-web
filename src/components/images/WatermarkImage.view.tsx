@@ -153,6 +153,7 @@ const WatermarkImage = ({ url, image, position, rotation = 0 }: Props) => {
         <div
           className={classes.image}
           style={{
+            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
             backgroundImage: `url(${url})`,
             backgroundPosition: getPosition(position),
             transform: `rotate(${rotation}deg)`,
@@ -163,6 +164,7 @@ const WatermarkImage = ({ url, image, position, rotation = 0 }: Props) => {
         <img
           className={classes.standardImage}
           src={url || undefined}
+          // eslint-disable-next-line formatjs/no-literal-string-in-jsx
           alt="lightbox"
         />
       )}

@@ -21,12 +21,13 @@ import {
   faSave,
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
-import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
+import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 import type { Layout } from 'react-grid-layout';
 import GridLayout from 'react-grid-layout';
 import AddExisitingOffender from 'components/form-components/offender/offender/AddExistingOffender';
 import type { OffenderData } from 'components/form-components/offender/offender/AddExistingOffender/AddExistingOffender.container';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import { useIntl } from 'react-intl';
 import useStyles from './CompareOffender.styles';
 import type { OffenderField, Selected } from './useCompareIncident';
 
@@ -135,19 +136,25 @@ const CompareIncident = ({
   const pageRef = useRef<HTMLDivElement>(null);
   const classes = useStyles();
   const [layout, setLayout] = useState<Layout[]>([]);
-
+  const intl = useIntl();
   return (
     <div ref={pageRef} className={classes.page}>
       <Row justify="end" gutter={16} style={{ marginBottom: 10 }}>
         <Col>
           <Button onClick={toggleAddOffender} type="ghost" danger>
-            Add Offender
+            {intl.formatMessage({
+              defaultMessage: 'Add Offender',
+              id: 'm3ChN4',
+            })}
           </Button>
         </Col>
         {mode === 'grid' && (
           <Col>
             <Button onClick={() => setMode('column')} type="ghost">
-              Cancel
+              {intl.formatMessage({
+                defaultMessage: 'Cancel',
+                id: '47FYwb',
+              })}
             </Button>
           </Col>
         )}
@@ -159,7 +166,10 @@ const CompareIncident = ({
                 style={{ marginRight: 10 }}
                 icon={faImages}
               />
-              Image Comparison
+              {intl.formatMessage({
+                defaultMessage: 'Image Comparison',
+                id: 'Ssi2B7',
+              })}
             </Button>
           )}
           {mode === 'grid' && (
@@ -173,7 +183,10 @@ const CompareIncident = ({
                 style={{ marginRight: 10 }}
                 icon={faColumns}
               />
-              Select Images & Compare Fields
+              {intl.formatMessage({
+                defaultMessage: 'Select Images & Compare Fields\n',
+                id: 'GYWlm+',
+              })}
             </Button>
           )}
         </Col>
@@ -185,7 +198,10 @@ const CompareIncident = ({
                 style={{ marginRight: 10 }}
                 icon={faSave}
               />
-              Save &amp; Merge
+              {intl.formatMessage({
+                defaultMessage: 'Save & Merge',
+                id: 'OvPg13',
+              })}
             </Button>
           </Col>
         )}
@@ -197,39 +213,84 @@ const CompareIncident = ({
               <div className={classes.imagePlaceholder} />
               <Divider style={{ margin: 0 }} />
               <div className={classes.titleField}>
-                <Text strong>Offender Name:</Text>
+                <Text strong>
+                  {intl.formatMessage({
+                    defaultMessage: 'Offender Name:',
+                    id: 'CqQV1G',
+                  })}
+                </Text>
               </div>
               <Divider style={{ margin: 0 }} />
               <div className={classes.titleField}>
-                <Text strong>Age:</Text>
+                <Text strong>
+                  {intl.formatMessage({
+                    defaultMessage: 'Age:',
+                    id: 'S9GJ93',
+                  })}
+                </Text>
               </div>
               <Divider style={{ margin: 0 }} />
               <div className={classes.titleField}>
-                <Text strong>Date of Birth:</Text>
+                <Text strong>
+                  {intl.formatMessage({
+                    defaultMessage: 'Date of Birth:',
+                    id: 'sYTUgV',
+                  })}
+                </Text>
               </div>
               <Divider style={{ margin: 0 }} />
               <div className={classes.titleField}>
-                <Text strong>DoB source:</Text>
+                <Text strong>
+                  {intl.formatMessage({
+                    defaultMessage: 'DoB Source:',
+                    id: '+WLvff',
+                  })}
+                </Text>
               </div>
               <Divider style={{ margin: 0 }} />
               <div className={classes.titleField}>
-                <Text strong>Sex:</Text>
+                <Text strong>
+                  {intl.formatMessage({
+                    defaultMessage: 'Sex:',
+                    id: 'Oz0DsA',
+                  })}
+                </Text>
               </div>
               <Divider style={{ margin: 0 }} />
               <div className={classes.titleField}>
-                <Text strong>Ethnicity:</Text>
+                <Text strong>
+                  {intl.formatMessage({
+                    defaultMessage: 'Ethnicity:',
+                    id: 'JzYph5',
+                  })}
+                </Text>
               </div>
               <Divider style={{ margin: 0 }} />
               <div className={classes.titleField}>
-                <Text strong>Build:</Text>
+                <Text strong>
+                  {intl.formatMessage({
+                    defaultMessage: 'Build:',
+                    id: '0qjl3+',
+                  })}
+                </Text>
               </div>
               <Divider style={{ margin: 0 }} />
               <div className={classes.titleField}>
-                <Text strong>Hair:</Text>
+                <Text strong>
+                  {intl.formatMessage({
+                    defaultMessage: 'Hair:',
+                    id: '2x7zoS',
+                  })}
+                </Text>
               </div>
               <Divider style={{ margin: 0 }} />
               <div className={classes.titleField}>
-                <Text strong>Peculiarities:</Text>
+                <Text strong>
+                  {intl.formatMessage({
+                    defaultMessage: 'Perculiarities:',
+                    id: '242AjY',
+                  })}
+                </Text>
               </div>
             </Card>
           </Col>
@@ -240,7 +301,15 @@ const CompareIncident = ({
                   <Row align="middle" className={classes.headerRow}>
                     <Col flex={1}>
                       <Title className={classes.cardTitle} level={4}>
-                        Offender {index + 1}
+                        {intl.formatMessage(
+                          {
+                            defaultMessage: 'Offender {index}',
+                            id: 'hO4ExD',
+                          },
+                          {
+                            index: index + 1,
+                          }
+                        )}
                       </Title>
                     </Col>
                     {offenders.length > 1 && (
@@ -249,7 +318,10 @@ const CompareIncident = ({
                           overlayInnerStyle={{
                             padding: '12px 16px',
                           }}
-                          title="Are you sure?"
+                          title={intl.formatMessage({
+                            defaultMessage: 'Are you sure?',
+                            id: '2oCaym',
+                          })}
                           onConfirm={() => removeOffender(offender)}
                         >
                           <Button size="small">
@@ -305,7 +377,15 @@ const CompareIncident = ({
                     <Divider style={{ margin: 0 }} />
                     <div className={classes.field}>
                       <div className={classes.text}>
-                        <Text>{getAge(offender.dateOfBirth || 'Unknown')}</Text>
+                        <Text>
+                          {getAge(
+                            offender?.dateOfBirth?.toString() ||
+                              intl.formatMessage({
+                                defaultMessage: 'Unknown',
+                                id: '5jeq8P',
+                              })
+                          )}
+                        </Text>
                       </div>
                       <Checkbox
                         checked={selected.dateOfBirth === offender.id}
@@ -315,7 +395,15 @@ const CompareIncident = ({
                     <Divider style={{ margin: 0 }} />
                     <div className={classes.field}>
                       <div className={classes.text}>
-                        <Text>{getAge(offender.dateSource || 'None')}</Text>
+                        <Text>
+                          {getAge(
+                            offender.dateSource ||
+                              intl.formatMessage({
+                                defaultMessage: 'None',
+                                id: '450Fty',
+                              })
+                          )}
+                        </Text>
                       </div>
                       <Checkbox
                         checked={selected.dateSource === offender.id}
@@ -357,7 +445,13 @@ const CompareIncident = ({
                     <Divider style={{ margin: 0 }} />
                     <div className={classes.field}>
                       <div className={classes.text}>
-                        <Text>{offender.hair || 'None'}</Text>
+                        <Text>
+                          {offender.hair ||
+                            intl.formatMessage({
+                              defaultMessage: 'None',
+                              id: '450Fty',
+                            })}
+                        </Text>
                       </div>
                       <Checkbox
                         checked={selected.hair === offender.id}
@@ -367,7 +461,13 @@ const CompareIncident = ({
                     <Divider style={{ margin: 0 }} />
                     <div className={classes.field}>
                       <div className={classes.text}>
-                        <Text>{offender.peculiarities || 'None'}</Text>
+                        <Text>
+                          {offender.peculiarities ||
+                            intl.formatMessage({
+                              defaultMessage: 'None',
+                              id: '450Fty',
+                            })}
+                        </Text>
                       </div>
                     </div>
                   </Card>
@@ -375,7 +475,10 @@ const CompareIncident = ({
               ))}
               <Col className={classes.addContainer}>
                 <Button onClick={toggleAddOffender} type="primary">
-                  Add Offender
+                  {intl.formatMessage({
+                    defaultMessage: 'Add Offender',
+                    id: 'm3ChN4',
+                  })}
                 </Button>
               </Col>
             </Row>
@@ -384,7 +487,10 @@ const CompareIncident = ({
             <Row align="middle" className={classes.headerRow}>
               <Col flex={1}>
                 <Title className={classes.cardTitle} level={4}>
-                  Preview
+                  {intl.formatMessage({
+                    defaultMessage: 'Preview',
+                    id: 'TJo5E6',
+                  })}
                 </Title>
               </Col>
             </Row>
@@ -414,11 +520,27 @@ const CompareIncident = ({
               </div>
               <Divider style={{ margin: 0 }} />
               <div className={classes.field}>
-                <Text>{getAge(preview.dateOfBirth || 'Unknown')}</Text>
+                <Text>
+                  {getAge(
+                    preview?.dateOfBirth?.toString() ||
+                      intl.formatMessage({
+                        defaultMessage: 'Unknown',
+                        id: '5jeq8P',
+                      })
+                  )}
+                </Text>
               </div>
               <Divider style={{ margin: 0 }} />
               <div className={classes.field}>
-                <Text>{getAge(preview.dateSource || 'None')}</Text>
+                <Text>
+                  {getAge(
+                    preview.dateSource ||
+                      intl.formatMessage({
+                        defaultMessage: 'None',
+                        id: '450Fty',
+                      })
+                  )}
+                </Text>
               </div>
               <Divider style={{ margin: 0 }} />
               <div className={classes.field}>
@@ -434,11 +556,23 @@ const CompareIncident = ({
               </div>
               <Divider style={{ margin: 0 }} />
               <div className={classes.field}>
-                <Text>{preview.hair || 'None'}</Text>
+                <Text>
+                  {preview.hair ||
+                    intl.formatMessage({
+                      defaultMessage: 'None',
+                      id: '450Fty',
+                    })}
+                </Text>
               </div>
               <Divider style={{ margin: 0 }} />
               <div className={classes.field}>
-                <Text>{preview.peculiarities || 'None'}</Text>
+                <Text>
+                  {preview.peculiarities ||
+                    intl.formatMessage({
+                      defaultMessage: 'None',
+                      id: '450Fty',
+                    })}
+                </Text>
               </div>
             </Card>
           </Col>
@@ -497,7 +631,10 @@ const CompareIncident = ({
         </GridLayout>
       )}
       <Drawer
-        title="Add Offenders"
+        title={intl.formatMessage({
+          defaultMessage: 'Add Offender',
+          id: 'm3ChN4',
+        })}
         visible={addOffender}
         width="800"
         onClose={toggleAddOffender}

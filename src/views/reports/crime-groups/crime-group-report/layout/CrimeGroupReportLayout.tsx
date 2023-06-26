@@ -33,11 +33,11 @@ import {
   TargetGoodsColumns,
 } from 'components/reports/tableColumns';
 import RadialGraph from 'components/reports/graphs/radialGraph';
+import { useIntl } from 'react-intl';
 import useStyles from '../../../styles/report.styles';
 import type { CrimeGroupReportQuery } from '../../../../../graphql/generated';
 import MultiBarGraph from '../../../../../components/reports/graphs/multiBarGraph';
-import type { AllowedValue, Elements } from '../../../types';
-import { MetaData } from '../../../types';
+import type { AllowedValue, Elements, MetaData } from '../../../types';
 
 const { Title } = Typography;
 
@@ -83,7 +83,7 @@ const CrimeGroupReport = ({
       rowHeight * targetH + margin[1] * (targetH - 1) - (offset || 0)
     }px`;
   };
-
+  const intl = useIntl();
   const components: Elements = {
     incidentsSummary: (
       <Card
@@ -103,18 +103,29 @@ const CrimeGroupReport = ({
         />
         <Row>
           <Col span={12}>
-            <Title level={4}>Incidents Summary</Title>
+            <Title level={4}>
+              {intl.formatMessage({
+                defaultMessage: 'Incidents Summary',
+                id: 'DGld1Y',
+              })}
+            </Title>
           </Col>
           <Row className="stats-row">
             <Statistic
               className={classes.stats}
-              title="Last Incident (in range)"
+              title={intl.formatMessage({
+                defaultMessage: 'Last Incident (in range)',
+                id: 'lI3BDd',
+              })}
               value={
                 data?.crimeGroupReport?.incidentSummary?.lastIncidentDate
                   ? new Date(
                       data?.crimeGroupReport?.incidentSummary?.lastIncidentDate
                     ).toLocaleDateString()
-                  : 'unknown'
+                  : intl.formatMessage({
+                      defaultMessage: 'Unknown',
+                      id: '5jeq8P',
+                    })
               }
               prefix={
                 <FontAwesomeIcon
@@ -126,7 +137,10 @@ const CrimeGroupReport = ({
 
             <Statistic
               className={classes.stats}
-              title="Reported to Police"
+              title={intl.formatMessage({
+                defaultMessage: 'Reported to Police',
+                id: 'LhTpVN',
+              })}
               value={
                 data?.crimeGroupReport?.incidentSummary
                   ?.incidentsReportedToPolice || 0
@@ -141,7 +155,10 @@ const CrimeGroupReport = ({
 
             <Statistic
               className={classes.stats}
-              title="Police Attended"
+              title={intl.formatMessage({
+                defaultMessage: 'Police Attended',
+                id: 'ES0Nc8',
+              })}
               value={
                 data?.crimeGroupReport?.incidentSummary
                   ?.incidentsWherePoliceAttended || 0
@@ -156,7 +173,10 @@ const CrimeGroupReport = ({
 
             <Statistic
               className={classes.stats}
-              title="Most common crime type"
+              title={intl.formatMessage({
+                defaultMessage: 'Most Common Crime Type',
+                id: 'jbbNOa',
+              })}
               value={
                 data?.crimeGroupReport?.incidentSummary?.mostCommonCrimeType ||
                 ''
@@ -190,18 +210,29 @@ const CrimeGroupReport = ({
         />
         <Row>
           <Col span={12}>
-            <Title level={4}>Loss Summary</Title>
+            <Title level={4}>
+              {intl.formatMessage({
+                defaultMessage: 'Loss Summary',
+                id: 'O0DXtz',
+              })}
+            </Title>
           </Col>
           <Row className="stats-row">
             <Statistic
               className={classes.stats}
-              title="Total lost value"
+              title={intl.formatMessage({
+                defaultMessage: 'Total Lost Value',
+                id: '3LZ6MG',
+              })}
               value={
                 data?.crimeGroupReport?.lossTotals?.totalLostValue
                   ? `£${data?.crimeGroupReport?.lossTotals?.totalLostValue.toFixed(
                       2
                     )}`
-                  : 'No Losses'
+                  : intl.formatMessage({
+                      defaultMessage: 'No Losses',
+                      id: '9RLqIM',
+                    })
               }
               prefix={
                 <FontAwesomeIcon
@@ -213,13 +244,19 @@ const CrimeGroupReport = ({
             />
             <Statistic
               className={classes.stats}
-              title="Total recovered value"
+              title={intl.formatMessage({
+                defaultMessage: 'Total Recovered Value',
+                id: 'pambF6',
+              })}
               value={
                 data?.crimeGroupReport?.lossTotals?.totalRecoveredValue
                   ? `£${data?.crimeGroupReport?.lossTotals?.totalRecoveredValue.toFixed(
                       2
                     )}`
-                  : 'No Recoveries'
+                  : intl.formatMessage({
+                      defaultMessage: 'No Recoveries',
+                      id: 'i7IHf9',
+                    })
               }
               prefix={
                 <FontAwesomeIcon
@@ -231,7 +268,10 @@ const CrimeGroupReport = ({
             />
             <Statistic
               className={classes.stats}
-              title="Average Success Rate"
+              title={intl.formatMessage({
+                defaultMessage: 'Average Success Rate',
+                id: 'G+JbdY',
+              })}
               value={`${(
                 (data?.crimeGroupReport?.lossTotals?.averageSuccessRate || 0) *
                 100
@@ -245,11 +285,14 @@ const CrimeGroupReport = ({
             />
             <Statistic
               className={classes.stats}
-              title="Average Loss per Incident"
+              title={intl.formatMessage({
+                defaultMessage: 'Average Loss Per Incident',
+                id: 'C1FYp6',
+              })}
               value={
-                `£${data?.crimeGroupReport?.lossTotals?.averagePerIncident.toFixed(
-                  2
-                )}` || ''
+                `£${(
+                  data?.crimeGroupReport?.lossTotals?.averagePerIncident || 0
+                ).toFixed(2)}` || ''
               }
               prefix={
                 <FontAwesomeIcon
@@ -259,7 +302,7 @@ const CrimeGroupReport = ({
               }
             />
           </Row>
-        </Row>{' '}
+        </Row>
       </Card>
     ),
     offendersTable: (
@@ -279,7 +322,12 @@ const CrimeGroupReport = ({
           size="small"
           onClick={() => removeItem('offendersTable')}
         />
-        <Title level={4}>Offenders</Title>
+        <Title level={4}>
+          {intl.formatMessage({
+            defaultMessage: 'Offenders',
+            id: 'xb54TN',
+          })}
+        </Title>
         <Table
           size="small"
           className="no-break"
@@ -299,7 +347,10 @@ const CrimeGroupReport = ({
     ),
     crimeTypesByOffender: (
       <Card
-        title="Crime Types"
+        title={intl.formatMessage({
+          defaultMessage: 'Crime Types',
+          id: 'Piba4q',
+        })}
         className="no-break"
         loading={loading}
         style={{ height: calculateHeight('crimeTypesByOffender') }}
@@ -317,13 +368,19 @@ const CrimeGroupReport = ({
         />
         <MultiBarGraph
           data={data?.crimeGroupReport?.crimeTypeByOffender}
-          emptyLabel="No crime types or offenders"
+          emptyLabel={intl.formatMessage({
+            defaultMessage: 'No Crime Types or Offenders',
+            id: 'e3gI+W',
+          })}
         />
       </Card>
     ),
     offenderGoodsTypeValue: (
       <Card
-        title="Crime Types"
+        title={intl.formatMessage({
+          defaultMessage: 'Crime Types',
+          id: 'Piba4q',
+        })}
         className="no-break"
         loading={loading}
         style={{ height: calculateHeight('offenderGoodsTypeValue') }}
@@ -341,13 +398,19 @@ const CrimeGroupReport = ({
         />
         <MultiBarGraph
           data={data?.crimeGroupReport?.offenderGoodsTypeValue}
-          emptyLabel="No crime types or offenders"
+          emptyLabel={intl.formatMessage({
+            defaultMessage: 'No Crime Types or Offenders',
+            id: 'e3gI+W',
+          })}
         />
       </Card>
     ),
     goodsTypeLossRecoveredRadial: (
       <Card
-        title="Loss/Recovered by Goods Type"
+        title={intl.formatMessage({
+          defaultMessage: 'Loss/Recovered by Goods Type',
+          id: 'PziBb1',
+        })}
         className="no-break"
         loading={loading}
         style={{
@@ -368,13 +431,19 @@ const CrimeGroupReport = ({
         />
         <RadialGraph
           data={data?.crimeGroupReport?.goodsTypeLossRecovered}
-          emptyLabel="No Crime Types"
+          emptyLabel={intl.formatMessage({
+            defaultMessage: 'No Crime Types or Offenders',
+            id: 'e3gI+W',
+          })}
         />
       </Card>
     ),
     incidentTimeOfDayDonut: (
       <Card
-        title="Incidents Time of Day"
+        title={intl.formatMessage({
+          defaultMessage: 'Incidents Time of Day',
+          id: 'TQgPcd',
+        })}
         className="no-break"
         loading={loading}
         style={{ height: calculateHeight('incidentTimeOfDayDonut') }}
@@ -431,7 +500,10 @@ const CrimeGroupReport = ({
           'pie' ? (
           <DonutGraph
             data={data?.crimeGroupReport?.incidentTimeOfDayDonut}
-            emptyLabel="No goods count"
+            emptyLabel={intl.formatMessage({
+              defaultMessage: 'No goods count',
+              id: '2t8hXG',
+            })}
             type={
               metadata.find((item) => item.key === 'crimeTypesDonut')?.type as
                 | 'donut'
@@ -441,15 +513,24 @@ const CrimeGroupReport = ({
         ) : (
           <BarGraph
             data={data?.crimeGroupReport?.incidentTimeOfDayDonut}
-            emptyLabel="No goods count"
-            labelFormat="Incidents"
+            emptyLabel={intl.formatMessage({
+              defaultMessage: 'No goods count',
+              id: '2t8hXG',
+            })}
+            labelFormat={intl.formatMessage({
+              defaultMessage: 'Incidents',
+              id: 'mtr3R4',
+            })}
           />
         )}
       </Card>
     ),
     incidentMonthDonut: (
       <Card
-        title="Incidents Month"
+        title={intl.formatMessage({
+          defaultMessage: 'Incidents by Month',
+          id: '+Prn0X',
+        })}
         className="no-break"
         loading={loading}
         style={{ height: calculateHeight('incidentMonthDonut') }}
@@ -506,7 +587,10 @@ const CrimeGroupReport = ({
           'pie' ? (
           <DonutGraph
             data={data?.crimeGroupReport?.incidentMonthGraph}
-            emptyLabel="No incidents"
+            emptyLabel={intl.formatMessage({
+              defaultMessage: 'No incidents',
+              id: '7UNuAl',
+            })}
             type={
               metadata.find((item) => item.key === 'crimeTypesDonut')?.type as
                 | 'donut'
@@ -516,8 +600,14 @@ const CrimeGroupReport = ({
         ) : (
           <BarGraph
             data={data?.crimeGroupReport?.incidentMonthGraph}
-            emptyLabel="No incidents"
-            labelFormat="Incidents"
+            emptyLabel={intl.formatMessage({
+              defaultMessage: 'No incidents',
+              id: '7UNuAl',
+            })}
+            labelFormat={intl.formatMessage({
+              defaultMessage: 'Incidents',
+              id: 'mtr3R4',
+            })}
           />
         )}
       </Card>
@@ -541,10 +631,19 @@ const CrimeGroupReport = ({
           onClick={() => removeItem('incidentsDayOfWeekGraph')}
         />
         <LineGraph
-          label="Incidents by day of week"
+          label={intl.formatMessage({
+            defaultMessage: 'Incidents by Day of Week',
+            id: 'B9s5+4',
+          })}
           data={data?.crimeGroupReport?.incidentDayOfWeekGraph}
-          dataLabel="incidents"
-          emptyLabel="No incidents"
+          dataLabel={intl.formatMessage({
+            defaultMessage: 'Incidents',
+            id: 'mtr3R4',
+          })}
+          emptyLabel={intl.formatMessage({
+            defaultMessage: 'No incidents',
+            id: '7UNuAl',
+          })}
         />
       </Card>
     ),
@@ -566,7 +665,12 @@ const CrimeGroupReport = ({
           size="small"
           onClick={() => removeItem('incidentsTable')}
         />
-        <Title level={4}>Incidents</Title>
+        <Title level={4}>
+          {intl.formatMessage({
+            defaultMessage: 'Incidents',
+            id: 'mtr3R4',
+          })}
+        </Title>
         <Table
           size="small"
           className="no-break"
@@ -601,7 +705,12 @@ const CrimeGroupReport = ({
           size="small"
           onClick={() => removeItem('targetedBusinessTable')}
         />
-        <Title level={4}>Targeted Business</Title>
+        <Title level={4}>
+          {intl.formatMessage({
+            defaultMessage: 'Targeted Businesses',
+            id: 'H79fAf',
+          })}
+        </Title>
         <Table
           size="small"
           className="no-break"
@@ -639,7 +748,12 @@ const CrimeGroupReport = ({
           size="small"
           onClick={() => removeItem('targetedGoodsTable')}
         />
-        <Title level={4}>Targeted Goods</Title>
+        <Title level={4}>
+          {intl.formatMessage({
+            defaultMessage: 'Targeted Goods',
+            id: 'dLBbg0',
+          })}
+        </Title>
         <Table
           size="small"
           className="no-break"
@@ -680,7 +794,10 @@ const CrimeGroupReport = ({
           onClick={() => removeItem('incidentsHeatMap')}
         />
         <HeatMapGoogle
-          label="Incidents heatmap"
+          label={intl.formatMessage({
+            defaultMessage: 'Incidents Heat Map',
+            id: 'q7E1ai',
+          })}
           data={
             data?.crimeGroupReport?.crimeGroupMap?.incidentsCoords
               ?.filter((incident) => incident?.lat && incident?.lng)
@@ -695,7 +812,7 @@ const CrimeGroupReport = ({
               ? data?.crimeGroupReport?.crimeGroupMap?.offenderMarkers.map(
                   (address, i) => ({
                     label: address?.name || '',
-                    key: (address?.name || '') + i,
+                    key: (address?.name || '') + i.toString(),
                     position: {
                       lat: address?.coords?.lat || 0,
                       lng: address?.coords?.lng || 0,
@@ -704,7 +821,10 @@ const CrimeGroupReport = ({
                 )
               : undefined
           }
-          emptyLabel="No incidents"
+          emptyLabel={intl.formatMessage({
+            defaultMessage: 'No incidents to display',
+            id: 'Rp6Hio',
+          })}
         />
       </Card>
     ),
@@ -719,7 +839,12 @@ const CrimeGroupReport = ({
           zIndex: 100,
         }}
       >
-        <Typography.Paragraph>Page 1</Typography.Paragraph>
+        <Typography.Paragraph>
+          {intl.formatMessage({
+            defaultMessage: 'Page 1',
+            id: 'hEAGzW',
+          })}
+        </Typography.Paragraph>
       </div>
     ),
     pageBreak2: (
@@ -733,7 +858,12 @@ const CrimeGroupReport = ({
           zIndex: 100,
         }}
       >
-        <Typography.Paragraph>Page 2</Typography.Paragraph>
+        <Typography.Paragraph>
+          {intl.formatMessage({
+            defaultMessage: 'Page 2',
+            id: 'Q3p9d3',
+          })}
+        </Typography.Paragraph>
       </div>
     ),
   };

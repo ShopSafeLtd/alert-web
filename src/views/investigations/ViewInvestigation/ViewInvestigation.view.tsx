@@ -8,6 +8,7 @@ import AddExistingOffender from 'components/form-components/offender/offender/Ad
 import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
 import { faBell, faBellSlash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FormattedMessage, useIntl } from 'react-intl';
 import type { ViewInvestigationQuery } from '../../../graphql/generated';
 import Flow from './views/Flow/Flow.container';
 import ViewDetails from './views/Details';
@@ -83,7 +84,7 @@ const ViewInvestigation = ({
   toggleSubscribe,
 }: Props) => {
   const classes = useStyles();
-
+  const intl = useIntl();
   return (
     <div style={{ height: '100vh' }}>
       <div className={classes.sideListContent}>
@@ -92,8 +93,14 @@ const ViewInvestigation = ({
             <Tooltip
               title={
                 data?.investigation?.subscribed
-                  ? 'Stop getting notified about updates.'
-                  : 'Get notified about updates.'
+                  ? intl.formatMessage({
+                      defaultMessage: 'Stop getting notified about updates.',
+                      id: 'WpTY6U',
+                    })
+                  : intl.formatMessage({
+                      defaultMessage: 'Get notified about updates.',
+                      id: 'icr+Hj',
+                    })
               }
             >
               <Button
@@ -107,13 +114,22 @@ const ViewInvestigation = ({
                   icon={data?.investigation?.subscribed ? faBellSlash : faBell}
                 />
                 {data?.investigation?.subscribed
-                  ? 'Un-follow Updates'
-                  : 'Follow Updates'}
+                  ? intl.formatMessage({
+                      defaultMessage: 'Un-follow Updates',
+                      id: '45gIlS',
+                    })
+                  : intl.formatMessage({
+                      defaultMessage: 'Follow Updates',
+                      id: 'gBN+ok',
+                    })}
               </Button>
             </Tooltip>
           }
         >
-          <Tabs.TabPane key="Dashboard" tab="Details">
+          <Tabs.TabPane
+            key="Dashboard"
+            tab={<FormattedMessage defaultMessage="Details" id="Lv0zJu" />}
+          >
             <ViewDetails
               toggleAddExistingOffender={toggleAddExistingOffender}
               toggleAddExistingIncident={toggleAddExistingIncident}
@@ -123,7 +139,11 @@ const ViewInvestigation = ({
           </Tabs.TabPane>
           <Tabs.TabPane
             key="Flow"
-            tab={<Typography.Text>Flow Map</Typography.Text>}
+            tab={
+              <Typography.Text>
+                <FormattedMessage defaultMessage="Flow Map" id="Xq/6U0" />
+              </Typography.Text>
+            }
           >
             <Flow importData={data} />
           </Tabs.TabPane>
@@ -136,7 +156,9 @@ const ViewInvestigation = ({
                 count={data?.investigation?.documents?.length || 0}
                 showZero
               >
-                <Typography.Text>Evidence</Typography.Text>
+                <Typography.Text>
+                  <FormattedMessage defaultMessage="Evidence" id="6g7+6N" />
+                </Typography.Text>
               </Badge>
             }
           >
@@ -150,7 +172,12 @@ const ViewInvestigation = ({
         </Tabs>
       </div>
       <Drawer
-        title="Add Existing Offenders"
+        title={
+          <FormattedMessage
+            defaultMessage="Add Existing Offenders"
+            id="1FbM4r"
+          />
+        }
         visible={addExistingOffender}
         width="800"
         onClose={toggleAddExistingOffender}
@@ -167,7 +194,12 @@ const ViewInvestigation = ({
         )}
       </Drawer>
       <Drawer
-        title="Add Existing Vehicles"
+        title={
+          <FormattedMessage
+            defaultMessage="Add Existing Vehicles"
+            id="goP1s6"
+          />
+        }
         visible={addExistingVehicle}
         width="800"
         onClose={toggleAddExistingVehicle}
@@ -184,7 +216,12 @@ const ViewInvestigation = ({
         )}
       </Drawer>
       <Drawer
-        title="Add Existing Crime Groups"
+        title={
+          <FormattedMessage
+            defaultMessage="Add Existing Crime Groups"
+            id="3HDZC+"
+          />
+        }
         visible={addExistingCrimeGroup}
         width="800"
         onClose={toggleAddExistingCrimeGroup}
@@ -201,7 +238,12 @@ const ViewInvestigation = ({
         )}
       </Drawer>
       <Drawer
-        title="Add Existing incident"
+        title={
+          <FormattedMessage
+            defaultMessage="Add Existing incident"
+            id="1GC81u"
+          />
+        }
         visible={addExistingIncident}
         width="800"
         onClose={toggleAddExistingIncident}
@@ -218,7 +260,7 @@ const ViewInvestigation = ({
         )}
       </Drawer>
       <Drawer
-        title="Add Evidence"
+        title={<FormattedMessage defaultMessage="Add Document" id="r9vGqd" />}
         visible={addDocument}
         width="800"
         onClose={toggleAddDocument}
@@ -234,7 +276,9 @@ const ViewInvestigation = ({
         )}
       </Drawer>
       <Drawer
-        title="Import DEM Evidence"
+        title={
+          <FormattedMessage defaultMessage="Add DEM Document" id="gDnUVp" />
+        }
         visible={addDemDocument}
         width="800"
         onClose={toggleAddDemDocument}

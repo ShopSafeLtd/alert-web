@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React from 'react';
 import IntlMessage from '../../util-components/AntD/IntlMessage';
 import { Col, Row } from 'antd';

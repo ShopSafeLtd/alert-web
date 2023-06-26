@@ -1,22 +1,23 @@
+/* eslint-disable formatjs/no-literal-string-in-jsx */
 import React from 'react';
 import CSVReader from 'react-csv-reader';
 import type { FormInstance, UploadFile, UploadProps } from 'antd';
 import {
-  Select,
-  Drawer,
   Badge,
   Button,
   Card,
   Col,
   DatePicker,
+  Drawer,
   Form,
+  Input,
   Row,
+  Select,
+  Space,
+  Steps,
   Table,
   Typography,
   Upload,
-  Input,
-  Space,
-  Steps,
 } from 'antd';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -24,18 +25,18 @@ import { faUpload } from '@fortawesome/pro-light-svg-icons';
 import type { SchemeGroupsQuery, TagsQuery } from 'graphql/generated';
 import { TagType } from 'graphql/generated';
 import type {
+  CSVData,
+  GenerateData,
+  IDSought,
+  Image,
+  Incident,
+  IncidentTags,
   KnownSubject,
   Member,
-  CSVData,
-  IDSought,
-  Incident,
   NewBusiness,
-  NewOffender,
-  Image,
-  NewUser,
   NewIncident,
-  GenerateData,
-  IncidentTags,
+  NewOffender,
+  NewUser,
 } from './DiscImport.types';
 import NewUsersTable from './components/NewUsersTable';
 import NewOffenderTable from './components/NewOffenderTable';

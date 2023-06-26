@@ -234,7 +234,7 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
               : undefined,
         };
       };
-      updateUser({
+      void updateUser({
         variables: {
           where: {
             id: userId,
@@ -380,9 +380,11 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
   };
   const updateNewBusinessData = (values: BusinessData) => {
     setAddBusinessVisible(false);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const selectedBusinesses = form.getFieldValue('businesses');
     form.setFieldsValue({
       businesses: [
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
         ...(selectedBusinesses && selectedBusinesses.length > 0
           ? selectedBusinesses
           : []),

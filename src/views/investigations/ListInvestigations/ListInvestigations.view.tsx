@@ -7,6 +7,7 @@ import type {
 import { Link } from 'react-router-dom';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router';
+import { FormattedMessage } from 'react-intl';
 import useStyles from './ListInvestigations.styles';
 import AddInvestigation from '../../../components/form-components/Investigation/AddInvestigation';
 
@@ -18,7 +19,7 @@ interface Props {
   updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
 }
 
-const listInvestigations = ({
+const ListInvestigations = ({
   data,
   loading,
   addInvestigation,
@@ -42,7 +43,10 @@ const listInvestigations = ({
         {/*  </Col> */}
         <Col>
           <Button type="primary" onClick={toggleAddInvestigation}>
-            Add New Investigation
+            <FormattedMessage
+              defaultMessage="Add New Investigation"
+              id="QaKS9A"
+            />
           </Button>
         </Col>
       </Row>
@@ -63,21 +67,27 @@ const listInvestigations = ({
           {
             key: 'name',
             dataIndex: 'name',
-            title: 'Name',
+            title: <FormattedMessage defaultMessage="Name" id="HAlOn1" />,
             render: (value, item) => (
               <Link to={`view/${item.key}`}>{value}</Link>
             ),
           },
-
           {
             key: 'description',
             dataIndex: 'description',
-            title: 'Description',
+            title: (
+              <FormattedMessage defaultMessage="Description" id="Q8Qw5B" />
+            ),
           },
         ]}
       />
       <Drawer
-        title="Add New Investigation"
+        title={
+          <FormattedMessage
+            defaultMessage="Add New Investigation"
+            id="QaKS9A"
+          />
+        }
         visible={addInvestigation}
         width="600"
         onClose={toggleAddInvestigation}
@@ -95,4 +105,4 @@ const listInvestigations = ({
   );
 };
 
-export default listInvestigations;
+export default ListInvestigations;

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { Component } from 'react';
 import { SettingOutlined } from '@ant-design/icons';
 import { Drawer, Menu } from 'antd';
@@ -16,10 +17,10 @@ export class NavPanel extends Component {
     this.setState({
       visible: false,
     });
-	};
-	
-	render() {
-		return (
+  };
+
+  render() {
+    return (
       <>
         <Menu mode="horizontal">
           <Menu.Item onClick={this.showDrawer}>
@@ -33,11 +34,11 @@ export class NavPanel extends Component {
           onClose={this.onClose}
           visible={this.state.visible}
         >
-          <ThemeConfigurator/>
+          <ThemeConfigurator />
         </Drawer>
       </>
     );
-	}
+  }
 }
 
 export default NavPanel;

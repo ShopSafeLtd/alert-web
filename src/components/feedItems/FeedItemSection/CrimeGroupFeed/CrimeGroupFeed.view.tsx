@@ -9,6 +9,7 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 
 import { Link } from 'react-router-dom';
+import { useIntl } from 'react-intl';
 import UpdateContent from '../UpdateContent';
 
 const { Title, Text } = Typography;
@@ -34,21 +35,36 @@ const CrimeGroupFeed = ({ feedItem, isNewCrimeGroup }: Props): JSX.Element => {
     reference,
     totalValue,
   } = feedItem?.crimeGroup || {};
-
+  const intl = useIntl();
   return (
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     <Link to={`/app/crimeGroups/view/${id}`}>
       <Row gutter={20} wrap={false} style={{ width: '100%' }}>
         <Col flex={1}>
           {isNewCrimeGroup ? (
             <>
               <Title level={4} ellipsis>
-                {alias || `Alert ID: ${reference}`}
+                {alias ||
+                  intl.formatMessage(
+                    { defaultMessage: 'Alert ID: {reference}', id: '377fsC' },
+                    {
+                      reference,
+                    }
+                  )}
               </Title>
               {alias ? (
                 <Row style={{ marginTop: -5, marginBottom: 5 }}>
                   <Col>
                     <Text style={{ fontSize: 14 }} type="secondary">
-                      Alert ID: {reference}
+                      {intl.formatMessage(
+                        {
+                          defaultMessage: 'Alert ID: {reference}',
+                          id: '377fsC',
+                        },
+                        {
+                          reference,
+                        }
+                      )}
                     </Text>
                   </Col>
                 </Row>
@@ -62,7 +78,15 @@ const CrimeGroupFeed = ({ feedItem, isNewCrimeGroup }: Props): JSX.Element => {
                     icon={faUser}
                   />
                   <Text style={{ fontSize: 14 }} type="secondary">
-                    Members: {totalOffenders || 0}
+                    {intl.formatMessage(
+                      {
+                        defaultMessage: 'Members: {totalOffenders}',
+                        id: 'j/FtxW',
+                      },
+                      {
+                        totalOffenders: totalOffenders || 0,
+                      }
+                    )}
                   </Text>
                 </Col>
               </Row>
@@ -75,7 +99,15 @@ const CrimeGroupFeed = ({ feedItem, isNewCrimeGroup }: Props): JSX.Element => {
                     icon={faExclamationCircle}
                   />
                   <Text style={{ fontSize: 14 }} type="secondary">
-                    Total Incidents: {totalIncidents || 0}
+                    {intl.formatMessage(
+                      {
+                        defaultMessage: 'Total Incidents: {totalIncidents}',
+                        id: 'zlX6V5',
+                      },
+                      {
+                        totalIncidents: totalIncidents || 0,
+                      }
+                    )}
                   </Text>
                 </Col>
               </Row>
@@ -88,14 +120,30 @@ const CrimeGroupFeed = ({ feedItem, isNewCrimeGroup }: Props): JSX.Element => {
                     icon={faSterlingSign}
                   />
                   <Text style={{ fontSize: 14 }} type="secondary">
-                    Total Lost value: {`${totalValue || 0}`}
+                    {intl.formatMessage(
+                      {
+                        defaultMessage: 'Total Lost value: : {value}',
+                        id: 'JLznCv',
+                      },
+                      {
+                        value: totalValue || 0,
+                      }
+                    )}
                   </Text>
                 </Col>
               </Row>
             </>
           ) : updates && updates.length > 0 ? (
             <UpdateContent
-              title={alias || `Alert ID: ${reference}`}
+              title={
+                alias ||
+                intl.formatMessage(
+                  { defaultMessage: 'Alert ID: {reference}', id: '377fsC' },
+                  {
+                    reference,
+                  }
+                )
+              }
               update={updates[0]}
             />
           ) : null}

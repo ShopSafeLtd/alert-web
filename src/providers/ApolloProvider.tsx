@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/restrict-template-expressions,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import {
@@ -107,7 +107,7 @@ const Apollo = ({ children }: Props): JSX.Element => {
             extensions?.code === '401'
           ) {
             const oldHeaders = operation.getContext().headers;
-            getNewToken().then((token) => {
+            void getNewToken().then((token) => {
               operation.setContext({
                 headers: {
                   ...oldHeaders,
@@ -152,20 +152,20 @@ const Apollo = ({ children }: Props): JSX.Element => {
         if (error instanceof Error) {
           if (error.message === 'login_required') {
             if (localStorage.getItem('logo')?.endsWith('.webp')) {
-              loginWithRedirect({
+              void loginWithRedirect({
                 'ext-logo': localStorage.getItem('logo'),
               });
             } else {
-              loginWithRedirect();
+              void loginWithRedirect();
             }
           }
           if (error.message === 'consent_required') {
             if (localStorage.getItem('logo')?.endsWith('.webp')) {
-              loginWithRedirect({
+              void loginWithRedirect({
                 'ext-logo': localStorage.getItem('logo'),
               });
             } else {
-              loginWithRedirect();
+              void loginWithRedirect();
             }
           }
         }

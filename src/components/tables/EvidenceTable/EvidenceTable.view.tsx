@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Table } from 'antd';
 import { createUseStyles } from 'react-jss';
 import type { FileType } from 'graphql/generated';
+import { useIntl } from 'react-intl';
 
 const useStyles = createUseStyles({
   row: { cursor: 'pointer' },
@@ -19,6 +20,7 @@ interface Props {
 
 const EvidenceTable = ({ evidence }: Props): JSX.Element => {
   const classes = useStyles();
+  const intl = useIntl();
   return (
     <Table
       size="small"
@@ -27,7 +29,10 @@ const EvidenceTable = ({ evidence }: Props): JSX.Element => {
         {
           key: 'name',
           dataIndex: 'name',
-          title: 'Name',
+          title: intl.formatMessage({
+            id: 'HAlOn1',
+            defaultMessage: 'Name',
+          }),
           width: '80%',
         },
         {
@@ -41,7 +46,10 @@ const EvidenceTable = ({ evidence }: Props): JSX.Element => {
                 window.open(fileUrl);
               }}
             >
-              Download
+              {intl.formatMessage({
+                id: '5q3qC0',
+                defaultMessage: 'Download',
+              })}
             </Button>
           ),
         },

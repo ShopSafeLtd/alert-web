@@ -31,6 +31,7 @@ import { Link } from 'react-router-dom';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import SkeletonImage from 'components/images/SkeletonImage.view';
 import formatCalendar from 'utils/format-calendar-24h';
+import { FormattedMessage } from 'react-intl';
 import useStyles from './ArticleCard.styles';
 
 const { Title, Text, Paragraph } = Typography;
@@ -82,19 +83,40 @@ const ArticleCard = ({
               items={[
                 {
                   key: 0,
-                  label: 'Edit Article',
+                  label: (
+                    <FormattedMessage
+                      id="oZPIFV"
+                      defaultMessage="Edit Article"
+                    />
+                  ),
                   onClick: () => onNavigate(id || ''),
                   icon: <FontAwesomeIcon icon={faEdit} />,
                 },
                 {
                   key: 1,
-                  label: 'Delete Article',
+                  label: (
+                    <FormattedMessage
+                      id="fbn/t1"
+                      defaultMessage="Delete Article"
+                    />
+                  ),
                   onClick: () =>
                     confirm({
-                      title: 'Are you sure?',
-                      content:
-                        'Click delete if you wish to delete this article. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
-                      okText: 'Delete',
+                      title: (
+                        <FormattedMessage
+                          id="2oCaym"
+                          defaultMessage="Are you sure?"
+                        />
+                      ),
+                      content: (
+                        <FormattedMessage
+                          id="sZjntV"
+                          defaultMessage="Click delete if you wish to delete this article. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted."
+                        />
+                      ),
+                      okText: (
+                        <FormattedMessage id="K3r6DQ" defaultMessage="Delete" />
+                      ),
                       onOk: () => onDelete(id || ''),
                     }),
                   icon: <FontAwesomeIcon icon={faTrash} />,
@@ -202,6 +224,7 @@ const ArticleCard = ({
               icon={faClock}
               style={{ marginRight: 5 }}
             />
+            {/* @ts-expect-error TODO fix */}
             <Text>{formatCalendar(updatedAt)}</Text>
           </Col>
         </Row>
@@ -221,9 +244,13 @@ const ArticleCard = ({
 
         <Row justify="center" style={{ marginBottom: -5, padding: 0 }}>
           <Col>
+            {/* eslint-disable-next-line @typescript-eslint/restrict-template-expressions */}
             <Link to={`/app/article/view/${id}`}>
               <Button size="small" type="text">
-                View Full Article
+                <FormattedMessage
+                  id="Pgum6c"
+                  defaultMessage="View Full Article"
+                />
               </Button>
             </Link>
           </Col>

@@ -209,7 +209,7 @@ const useAdminTodos = (): Return => {
     setTodoList({
       userTodos: userTodos ? userTodos - 1 : 0,
     });
-    updateTodo({
+    void updateTodo({
       variables: {
         where: {
           id: todoId,
@@ -229,7 +229,7 @@ const useAdminTodos = (): Return => {
   const onUncompletedTodo = (todoId: string) => {
     setSaving(true);
 
-    updateTodo({
+    void updateTodo({
       variables: {
         where: {
           id: todoId,

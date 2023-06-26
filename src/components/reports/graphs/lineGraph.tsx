@@ -29,6 +29,7 @@ const LineGraph = ({
         border: '1px solid #ccc',
       }}
     >
+      {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
       <Typography.Text strong>{point.data.xFormatted}: </Typography.Text>
       <Typography.Text>
         {point.data.yFormatted} {dataLabel}
@@ -73,6 +74,7 @@ const LineGraph = ({
             tickPadding: 15,
             tickSize: 1,
             legend: 'Incidents',
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
             format: (value) => (value % 1 === 0 ? value : ''),
             legendOffset: -44,
             legendPosition: 'middle',

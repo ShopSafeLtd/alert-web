@@ -54,7 +54,7 @@ const useEditCrimeType = ({ onClose, incidentId }: Props): Return => {
   const onSubmit = (data: FormData) => {
     setSaving(true);
     if (incidentId)
-      updateTag({
+      void updateTag({
         variables: {
           where: {
             id: incidentId,

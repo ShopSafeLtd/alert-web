@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Card, Col, Row } from 'antd';
 import type { Editor as EditorType } from 'tinymce';
 import { Editor } from '@tinymce/tinymce-react';
+import { FormattedMessage } from 'react-intl';
 
 interface Props {
   data: string | null;
@@ -53,10 +54,10 @@ const EditText = ({
     <Row gutter={16} style={{ paddingBottom: 30 }} justify="end">
       <Col>
         <Button onClick={onClose} type="default" style={{ marginRight: 10 }}>
-          Cancel
+          <FormattedMessage defaultMessage="Cancel" id="47FYwb" />
         </Button>
         <Button onClick={onSubmit} type="primary">
-          Submit
+          <FormattedMessage defaultMessage="Submit" id="wSZR47" />
         </Button>
       </Col>
     </Row>

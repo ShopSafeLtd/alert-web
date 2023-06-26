@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Dropdown, List, Menu, Row, Typography } from 'antd';
+import { Col, Dropdown, Row, Typography } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/pro-light-svg-icons';
 import { faCaretDown } from '@fortawesome/pro-solid-svg-icons';
 import { LocalStorageKeys } from 'types';
 
-import { Scheme, useStoreActions, useStoreState } from 'state';
+import type { Scheme } from 'state';
+import { useStoreActions, useStoreState } from 'state';
 import { useNavigate } from 'react-router';
 import { useLocation } from 'react-router-dom';
 import { createUseStyles } from 'react-jss';
-import { Theme } from 'configs/ThemeConfig';
+import type { Theme } from 'configs/ThemeConfig';
+import { useIntl } from 'react-intl';
 
 const { Text } = Typography;
 
@@ -34,7 +36,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
 
 export const NavScheme = () => {
   const classes = useStyles();
-
+  const intl = useIntl();
   const { schemes } = useStoreState((state) => state.user);
   const { id: activeScheme } = useStoreState((state) => state.scheme);
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
@@ -123,12 +125,18 @@ export const NavScheme = () => {
                   style={{ maxWidth: 180, marginRight: 20 }}
                   className="text-dark"
                 >
+                  {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
                   {scheme.scheme.name}{' '}
                 </Text>
               </Col>
               {activeScheme === scheme.scheme.id ? (
                 <Col>
-                  <Text type="success">Selected</Text>
+                  <Text type="success">
+                    {intl.formatMessage({
+                      defaultMessage: 'Selected',
+                      id: 'byP6IC',
+                    })}
+                  </Text>
                 </Col>
               ) : (
                 <Col>
