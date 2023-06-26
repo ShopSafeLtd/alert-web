@@ -155,7 +155,6 @@ const MapCard = ({ height, width, markers }: Props) => {
       >
         <FontAwesomeIcon size="lg" color="#FFF" icon={faArrowsMaximize} />
         <Text className={classes.mapText}>
-          {' '}
           {intl.formatMessage({
             defaultMessage: 'View Larger Map',
             id: '3LkujO',

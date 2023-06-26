@@ -12,6 +12,7 @@ import Lightbox from 'yet-another-react-lightbox';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
+import { useIntl } from 'react-intl';
 import useStyles from './LinkVehicle.styles';
 import VehicleTile from '../VehicleTile';
 
@@ -53,6 +54,7 @@ const LinkVehicle = ({
 }: Props): JSX.Element => {
   const classes = useStyles();
 
+  const intl = useIntl();
   const existingVehicles = (): JSX.Element => {
     if (!data?.listVehicles && loading)
       return (
@@ -83,7 +85,12 @@ const LinkVehicle = ({
     return (
       <Row justify="center" align="middle" className="no-offenders">
         <Col>
-          <Empty description="No matching vehicles found" />
+          <Empty
+            description={intl.formatMessage({
+              defaultMessage: 'No matching vehicles found',
+              id: 'b4xRGE',
+            })}
+          />
         </Col>
       </Row>
     );
@@ -96,7 +103,10 @@ const LinkVehicle = ({
             value={search}
             className={classes.searchBar}
             onChange={(event) => setSearch(event.target.value)}
-            placeholder="Search Vehicles..."
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Search Vehicles...',
+              id: 'LwoWFl',
+            })}
             allowClear
           />
           <div className="add-existing-offender-row">
@@ -122,11 +132,27 @@ const LinkVehicle = ({
       <Modal
         visible={!!selectedVehicle}
         zIndex={1010}
-        okText="Add Vehicle"
+        okText={intl.formatMessage({
+          defaultMessage: 'Add Vehicle',
+          id: '7vPZdr',
+        })}
         onOk={() => onSubmit(selectedVehicle?.id)}
         onCancel={() => setCurrentId(undefined)}
         bodyStyle={{ padding: 0 }}
-        title={`Add ${selectedVehicle?.make || 'this veheicle'} to the chat?`}
+        title={intl.formatMessage(
+          {
+            defaultMessage: 'Add {make} to the chat?',
+            id: 'FghSV+',
+          },
+          {
+            make:
+              selectedVehicle?.make ||
+              intl.formatMessage({
+                defaultMessage: 'this vehicle',
+                id: 'pRx/92',
+              }),
+          }
+        )}
       >
         <Row gutter={16} wrap={false}>
           {selectedVehicle && selectedVehicle.images.length > 0 && (
@@ -146,22 +172,68 @@ const LinkVehicle = ({
           )}
           <Col style={{ padding: '10px 20px' }}>
             <Descriptions column={1} size="small">
-              <Descriptions.Item label="Registration">
-                {selectedVehicle?.registration || 'Unknown'}
+              <Descriptions.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Registration',
+                  id: 'qv7ied',
+                })}
+              >
+                {selectedVehicle?.registration ||
+                  intl.formatMessage({
+                    defaultMessage: 'Unknown',
+                    id: '5jeq8P',
+                  })}
               </Descriptions.Item>
-              <Descriptions.Item label="Make">
-                {selectedVehicle?.make || 'Unknown'}
+              <Descriptions.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Make',
+                  id: '6AAM0P',
+                })}
+              >
+                {selectedVehicle?.make ||
+                  intl.formatMessage({
+                    defaultMessage: 'Unknown',
+                    id: '5jeq8P',
+                  })}
               </Descriptions.Item>
-              <Descriptions.Item label="Colour">
-                {selectedVehicle?.colour || 'Unknown'}
+              <Descriptions.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Colour',
+                  id: '+e8vAT',
+                })}
+              >
+                {selectedVehicle?.colour ||
+                  intl.formatMessage({
+                    defaultMessage: 'Unknown',
+                    id: '5jeq8P',
+                  })}
               </Descriptions.Item>
-              <Descriptions.Item label="Model">
-                {selectedVehicle?.model || 'Unknown'}
+              <Descriptions.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Model',
+                  id: 'rhSI1/',
+                })}
+              >
+                {selectedVehicle?.model ||
+                  intl.formatMessage({
+                    defaultMessage: 'Unknown',
+                    id: '5jeq8P',
+                  })}
               </Descriptions.Item>
-              <Descriptions.Item label="TotalOffenders">
+              <Descriptions.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Total Offenders',
+                  id: 'Pyo0l3',
+                })}
+              >
                 {selectedVehicle?.totalOffenders || 0}
               </Descriptions.Item>
-              <Descriptions.Item label="TotalCrimeGroups">
+              <Descriptions.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Total Crime Groups',
+                  id: 'PwRU00',
+                })}
+              >
                 {selectedVehicle?.totalCrimeGroups || 0}
               </Descriptions.Item>
             </Descriptions>

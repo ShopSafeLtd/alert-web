@@ -128,7 +128,7 @@ const useLinkIncident = ({ onClose, incidentIds }: Props): Return => {
   const onSubmit = () => {
     setSaving(true);
     if (selected) {
-      updateInvestigation({
+      void updateInvestigation({
         variables: {
           where: {
             id: params.id || '',

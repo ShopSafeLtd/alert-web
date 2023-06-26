@@ -84,8 +84,8 @@ const UserList = ({
             value={search}
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
-              defaultMessage: '"Search for a user..."',
-              id: 'DN4uB3',
+              defaultMessage: 'Search for a user...',
+              id: 'jNlSdL',
             })}
             allowClear
           />

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useIntl } from 'react-intl';
 import type { ListVehiclesQuery } from 'graphql/generated';
 import { Button, Col, Input, Row, Table } from 'antd';
 
@@ -22,107 +23,127 @@ const AddExistingVehicle = ({
   search,
   setSearch,
   onSelect,
-}: // onPaginationChange,
-// setCurrentId,
-// openLightbox,
-// selectedOffender,
-// lightBoxOpen,
-Props): JSX.Element => (
-  <div className="add-existing-offender">
-    <Row gutter={8} className="search-offender">
-      <Col span={18}>
-        <Input
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-          placeholder="Search Vehicles..."
-          allowClear
-        />
-      </Col>
-    </Row>
+}: Props): JSX.Element => {
+  const intl = useIntl();
 
-    <Table
-      columns={[
-        {
-          key: 'make',
-          dataIndex: 'make',
-          title: 'Make',
-        },
-        {
-          key: 'colour',
-          dataIndex: 'colour',
-          title: 'Colour',
-        },
-        {
-          key: 'model',
-          dataIndex: 'model',
-          title: 'Model',
-        },
-        {
-          key: 'totalOffenders',
-          dataIndex: 'totalOffenders',
-          title: 'Members',
-        },
-        {
-          key: 'totalIncidents',
-          dataIndex: 'totalIncidents',
-          title: 'Incidents',
-        },
-        {
-          key: 'totalCrimeGroups',
-          dataIndex: 'totalCrimeGroups',
-          title: 'Crime Groups',
-        },
-        {
-          key: 'registration',
-          dataIndex: 'registration',
-          title: 'Registration',
-          // render: (value) => `${value?.toFixed(0) || 0}%`,
-        },
-      ]}
-      dataSource={data?.listVehicles?.vehicles.map((vehicle) => ({
-        key: vehicle.id,
-        make: vehicle.make,
-        colour: vehicle.colour,
-        model: vehicle.model,
-        registration: vehicle.registration,
-        updatedAt: vehicle.updatedAt,
-        totalCrimeGroup: vehicle.totalCrimeGroups,
-        totalOffenders: vehicle.totalOffenders,
-        totalIncidents: vehicle.totalIncidents,
-      }))}
-      rowSelection={{
-        type: 'radio',
-        onSelect,
-      }}
-      // pagination={{
-      // hideOnSinglePage: true,
-      //   total: data?.listIncidents?.total,
-      //   onChange: onPaginationChange,
-      //   pageSize: 24,
-      //   showSizeChanger: false,
-      //   position: ['bottomCenter'],
-      // }}
-      loading={loading}
-      size="small"
-    />
-    <Row gutter={16} style={{ paddingBottom: 30 }} justify="end">
-      <Col>
-        <Button onClick={onClose} disabled={saving} type="text">
-          Cancel
-        </Button>
-      </Col>
-      <Col>
-        <Button
-          loading={saving}
-          disabled={saving}
-          onClick={onSubmit}
-          type="primary"
-        >
-          Add Vehicle
-        </Button>
-      </Col>
-    </Row>
-  </div>
-);
+  return (
+    <div className="add-existing-offender">
+      <Row gutter={8} className="search-offender">
+        <Col span={18}>
+          <Input
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            placeholder={intl.formatMessage({
+              id: 'LwoWFl',
+              defaultMessage: 'Search Vehicles...',
+            })}
+            allowClear
+          />
+        </Col>
+      </Row>
+
+      <Table
+        columns={[
+          {
+            key: 'make',
+            dataIndex: 'make',
+            title: intl.formatMessage({
+              id: '6AAM0P',
+              defaultMessage: 'Make',
+            }),
+          },
+          {
+            key: 'colour',
+            dataIndex: 'colour',
+            title: intl.formatMessage({
+              id: '+e8vAT',
+              defaultMessage: 'Colour',
+            }),
+          },
+          {
+            key: 'model',
+            dataIndex: 'model',
+            title: intl.formatMessage({
+              id: 'rhSI1/',
+              defaultMessage: 'Model',
+            }),
+          },
+          {
+            key: 'totalOffenders',
+            dataIndex: 'totalOffenders',
+            title: intl.formatMessage({
+              id: '+a+2ug',
+              defaultMessage: 'Members',
+            }),
+          },
+          {
+            key: 'totalIncidents',
+            dataIndex: 'totalIncidents',
+            title: intl.formatMessage({
+              id: 'mtr3R4',
+              defaultMessage: 'Incidents',
+            }),
+          },
+          {
+            key: 'totalCrimeGroups',
+            dataIndex: 'totalCrimeGroups',
+            title: intl.formatMessage({
+              id: 'a0aLil',
+              defaultMessage: 'Crime Groups',
+            }),
+          },
+          {
+            key: 'registration',
+            dataIndex: 'registration',
+            title: intl.formatMessage({
+              id: 'qv7ied',
+              defaultMessage: 'Registration',
+            }),
+          },
+        ]}
+        dataSource={data?.listVehicles?.vehicles.map((vehicle) => ({
+          key: vehicle.id,
+          make: vehicle.make,
+          colour: vehicle.colour,
+          model: vehicle.model,
+          registration: vehicle.registration,
+          updatedAt: vehicle.updatedAt,
+          totalCrimeGroup: vehicle.totalCrimeGroups,
+          totalOffenders: vehicle.totalOffenders,
+          totalIncidents: vehicle.totalIncidents,
+        }))}
+        rowSelection={{
+          type: 'radio',
+          onSelect,
+        }}
+        loading={loading}
+        size="small"
+      />
+      <Row gutter={16} style={{ paddingBottom: 30 }} justify="end">
+        <Col>
+          <Button onClick={onClose} disabled={saving} type="text">
+            {intl.formatMessage({
+              id: '47FYwb',
+              defaultMessage: 'Cancel',
+            })}
+          </Button>
+        </Col>
+        <Col>
+          <Button
+            loading={saving}
+            disabled={saving}
+            onClick={onSubmit}
+            type="primary"
+          >
+            {intl.formatMessage({
+              id: '7vPZdr',
+              defaultMessage: 'Add Vehicle',
+            })}
+          </Button>
+        </Col>
+      </Row>
+    </div>
+  );
+};
 
 export default AddExistingVehicle;

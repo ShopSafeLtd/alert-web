@@ -37,7 +37,7 @@ const IncidentDetails = ({ saving, number }: Props): JSX.Element => {
             {intl.formatMessage({
               defaultMessage: '- Please complete the details for the incident.',
               id: '27//14',
-            })}{' '}
+            })}
           </Paragraph>
         </Col>
       </Row>

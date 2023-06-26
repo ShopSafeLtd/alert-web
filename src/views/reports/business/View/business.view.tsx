@@ -151,8 +151,8 @@ const Business = ({
                   <Card>
                     <Title level={4}>
                       <FormattedMessage
-                        defaultMessage="Goods Types By Value Losts"
-                        id="3jmLAF"
+                        defaultMessage="Goods Types By Value Lost"
+                        id="Iyt31T"
                       />
                     </Title>
                     <Chart

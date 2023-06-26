@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Col, Form, Input, Row, Select } from 'antd';
+import { useIntl } from 'react-intl';
 import type { ListSchemeUsersQuery } from 'graphql/generated';
 
 interface FormData {
@@ -22,79 +23,102 @@ const AddChat = ({
   usersData,
   usersLoading,
   saving,
-}: Props): JSX.Element => (
-  <Form layout="vertical" onFinish={onSubmit}>
-    <Row gutter={16}>
-      <Col span={23}>
-        <Form.Item
-          name="name"
-          label="Name"
-          rules={[
-            {
-              required: true,
-              message: 'Please enter a name for the new chat group.',
-            },
-          ]}
-        >
-          <Input disabled={saving} />
-        </Form.Item>
-      </Col>
+}: Props): JSX.Element => {
+  const intl = useIntl();
 
-      <Col span={23}>
-        <Form.Item name="description" label="Description">
-          <Input.TextArea disabled={saving} />
-        </Form.Item>
-      </Col>
-    </Row>
-
-    <Row gutter={16}>
-      <Col span={23}>
-        <Form.Item
-          name="users"
-          label="Users"
-          rules={[
-            {
-              required: true,
-              message: 'Please added at least one user for the new chat group.',
-            },
-          ]}
-        >
-          <Select
-            loading={usersLoading}
-            disabled={saving}
-            mode="multiple"
-            maxTagCount={3}
-            filterOption
-            optionFilterProp="label"
-            options={usersData?.users.map((user) => ({
-              value: user.id,
-              label: `${user.fullName} (${user.businesses[0]?.name})`,
-            }))}
-          />
-        </Form.Item>
-      </Col>
-    </Row>
-
-    <Form.Item>
-      <Row style={{ marginTop: 30 }} gutter={16} justify="end">
-        <Col>
-          <Button disabled={saving} onClick={onClose}>
-            Cancel
-          </Button>
-        </Col>
-        <Col>
-          <Button
-            type="primary"
-            htmlType="submit"
-            disabled={saving}
-            loading={saving}
+  return (
+    <Form layout="vertical" onFinish={onSubmit}>
+      <Row gutter={16}>
+        <Col span={23}>
+          <Form.Item
+            name="name"
+            label={intl.formatMessage({ defaultMessage: 'Name', id: 'HAlOn1' })}
+            rules={[
+              {
+                required: true,
+                message: intl.formatMessage({
+                  defaultMessage: 'Please enter a name for the new chat group.',
+                  id: 'DqoZy3',
+                }),
+              },
+            ]}
           >
-            Create Chat Group
-          </Button>
+            <Input disabled={saving} />
+          </Form.Item>
+        </Col>
+
+        <Col span={23}>
+          <Form.Item
+            name="description"
+            label={intl.formatMessage({
+              defaultMessage: 'Description',
+              id: 'Q8Qw5B',
+            })}
+          >
+            <Input.TextArea disabled={saving} />
+          </Form.Item>
         </Col>
       </Row>
-    </Form.Item>
-  </Form>
-);
+
+      <Row gutter={16}>
+        <Col span={23}>
+          <Form.Item
+            name="users"
+            label={intl.formatMessage({
+              defaultMessage: 'Users',
+              id: 'YDMrKK',
+            })}
+            rules={[
+              {
+                required: true,
+                message: intl.formatMessage({
+                  defaultMessage:
+                    'Please add at least one user for the new chat group.',
+                  id: 'c8IWbz',
+                }),
+              },
+            ]}
+          >
+            <Select
+              loading={usersLoading}
+              disabled={saving}
+              mode="multiple"
+              maxTagCount={3}
+              filterOption
+              optionFilterProp="label"
+              options={usersData?.users.map((user) => ({
+                value: user.id,
+                label: `${user.fullName} (${user.businesses[0]?.name})`,
+              }))}
+            />
+          </Form.Item>
+        </Col>
+      </Row>
+
+      <Form.Item>
+        <Row style={{ marginTop: 30 }} gutter={16} justify="end">
+          <Col>
+            <Button disabled={saving} onClick={onClose}>
+              {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+            </Button>
+          </Col>
+          <Col>
+            <Button
+              type="primary"
+              htmlType="submit"
+              disabled={saving}
+              loading={saving}
+            >
+              {intl.formatMessage({
+                defaultMessage: 'Create Chat Group',
+                id: 'z0zYUX',
+              })}
+            </Button>
+          </Col>
+        </Row>
+      </Form.Item>
+    </Form>
+  );
+};
 
 export default AddChat;

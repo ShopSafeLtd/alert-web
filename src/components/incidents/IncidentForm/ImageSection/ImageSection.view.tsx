@@ -148,7 +148,7 @@ const ImageSection = ({
                 defaultMessage:
                   '- Please add any images that you have of the incident.',
                 id: 'V72sYf',
-              })}{' '}
+              })}
             </Paragraph>
           </Col>
           <Col style={{ marginLeft: 30 }}>

@@ -216,7 +216,7 @@ const SuggestedMembers = ({
                     {intl.formatMessage({
                       defaultMessage: 'Additional Information',
                       id: 'laUK3e',
-                    })}{' '}
+                    })}
                   </span>
                 }
               >
@@ -265,7 +265,7 @@ const SuggestedMembers = ({
                 {intl.formatMessage({
                   defaultMessage: 'Add Offender',
                   id: 'm3ChN4',
-                })}{' '}
+                })}
               </Button>
             </Col>
           </Row>

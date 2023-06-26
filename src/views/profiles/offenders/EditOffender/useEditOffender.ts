@@ -875,8 +875,8 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
       }),
       content: intl.formatMessage({
         defaultMessage:
-          'Click reject if you wish to reject the approvement of this offender. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
-        id: 'o2RxIM',
+          'Click reject if you wish to reject the approving of this offender. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
+        id: '5YfZun',
       }),
       okText: intl.formatMessage({
         defaultMessage: 'Reject',

@@ -192,7 +192,6 @@ const NotificationsDrawer = ({
         <Row justify="center" style={{ marginBottom: 10 }}>
           <Col>
             <Button size="small">
-              {' '}
               {intl.formatMessage({
                 defaultMessage: 'View All Notifications',
                 id: 'HTKZYW',

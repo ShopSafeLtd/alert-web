@@ -6,6 +6,7 @@ import { faLocationDot } from '@fortawesome/pro-light-svg-icons';
 
 import { Link } from 'react-router-dom';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import { useIntl } from 'react-intl';
 import UpdateContent from '../UpdateContent';
 
 const { Title, Text, Paragraph } = Typography;
@@ -55,8 +56,9 @@ const IncidentFeed = ({
     // totalOffenders,
     // offenders,
   } = feedItem?.incident || {};
-
+  const intl = useIntl();
   return (
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     <Link to={`/app/incidents/view/${id}`}>
       <Row gutter={15} wrap={false} key={id || ''} style={{ width: '100%' }}>
         {!isNewImage && updates && updates[0]?.images[0] ? (
@@ -89,7 +91,12 @@ const IncidentFeed = ({
               <Row style={{ marginTop: -5, marginBottom: 5 }}>
                 <Col>
                   <Text style={{ fontSize: 14 }} type="secondary">
-                    Alert ID: {reference}
+                    {intl.formatMessage(
+                      { defaultMessage: 'Alert ID: {reference}', id: '377fsC' },
+                      {
+                        reference,
+                      }
+                    )}
                   </Text>
                 </Col>
               </Row>

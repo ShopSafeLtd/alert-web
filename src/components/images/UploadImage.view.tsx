@@ -129,8 +129,8 @@ const UploadImage = ({
                 </Card>
               )}
             >
-              {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
               {fileList.length < 6 &&
+                // eslint-disable-next-line formatjs/no-literal-string-in-jsx
                 `+ ${intl.formatMessage({
                   defaultMessage: 'Upload',
                   id: 'p4N05H',

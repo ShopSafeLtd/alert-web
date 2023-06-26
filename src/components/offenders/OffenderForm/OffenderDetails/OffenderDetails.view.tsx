@@ -83,7 +83,6 @@ const OffenderDetails = ({
             type="secondary"
             italic
           >
-            {' '}
             {intl.formatMessage({
               defaultMessage:
                 '- Please complete the basic details for the offender.',

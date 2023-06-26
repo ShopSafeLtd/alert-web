@@ -89,7 +89,7 @@ const useAddExistingCrimeGroup = ({
       (el) => el.id === selected
     );
     if (selectedData) {
-      updateInvestigation({
+      void updateInvestigation({
         variables: {
           where: {
             id: params.id || '',

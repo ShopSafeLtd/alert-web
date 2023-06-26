@@ -93,12 +93,11 @@ const OffenderCard = ({
             {intl.formatMessage({
               defaultMessage: 'This offender is awaiting approval',
               id: 'Om/2W/',
-            })}{' '}
+            })}
           </Title>
           {approvalRights && (
             <Link to={`review/${offender?.id}`}>
               <Button>
-                {' '}
                 {intl.formatMessage({
                   defaultMessage: 'Review Offender',
                   id: 'i7Qzld',

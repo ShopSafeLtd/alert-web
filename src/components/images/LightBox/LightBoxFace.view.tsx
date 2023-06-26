@@ -157,7 +157,7 @@ const LightBoxFace = ({
                     {intl.formatMessage({
                       defaultMessage: 'Link Offender',
                       id: 'IWqg0R',
-                    })}{' '}
+                    })}
                   </Button>
                 </Col>
                 <Col>

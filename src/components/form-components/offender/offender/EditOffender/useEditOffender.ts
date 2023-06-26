@@ -377,7 +377,7 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
     confirm({
       title: 'Are you sure?',
       content:
-        'Click reject if you wish to reject the approvement of this offender. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
+        'Click reject if you wish to reject the approving of this offender. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
       okText: 'Reject',
       onOk() {
         void recycleOffender({

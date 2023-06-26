@@ -190,7 +190,7 @@ const LightBox = ({
                   {intl.formatMessage({
                     defaultMessage: 'Search Image',
                     id: 'EwWYUF',
-                  })}{' '}
+                  })}
                 </Button>
               </Col>
             )}

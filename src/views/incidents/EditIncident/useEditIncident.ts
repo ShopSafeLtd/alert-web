@@ -459,8 +459,8 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
       }),
       content: intl.formatMessage({
         defaultMessage:
-          'Click reject if you wish to reject the approvement of this incident. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
-        id: '1sLyNm',
+          'Click reject if you wish to reject the approving of this incident. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
+        id: '51xeBs',
       }),
       okText: intl.formatMessage({ defaultMessage: 'Reject', id: 'VzIOKf' }),
       onOk() {
