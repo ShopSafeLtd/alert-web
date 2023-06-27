@@ -1,5 +1,6 @@
+/* eslint-disable formatjs/no-literal-string-in-jsx */
 import React from 'react';
-import { Card, Typography, Row, Col, Space } from 'antd';
+import { Card, Col, Row, Space, Typography } from 'antd';
 
 const { Text, Title, Paragraph } = Typography;
 const SchemeTerms = (): JSX.Element => (

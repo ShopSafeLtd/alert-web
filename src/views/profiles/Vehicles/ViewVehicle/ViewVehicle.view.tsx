@@ -42,6 +42,7 @@ import OffenderTable from 'components/tables/OffenderTable';
 import CrimeGroupTable from 'components/tables/CrimeGroupTable';
 import IncidentTable from 'components/tables/IncidentTable';
 import type { VehicleData } from 'types/DataType';
+import { FormattedMessage, useIntl } from 'react-intl';
 import useStyles from './ViewVehicle.styles';
 
 const { Title } = Typography;
@@ -124,21 +125,34 @@ const ViewVehicle = ({
   submitEditVehicle,
 }: Props) => {
   const classes = useStyles();
+  const intl = useIntl();
   const optionMenuItems = [
     {
-      label: 'Edit',
+      label: intl.formatMessage({
+        defaultMessage: 'Edit',
+        id: 'wEQDC6',
+      }),
       key: '1',
       icon: <FontAwesomeIcon size="3x" icon={faEdit} />,
       onClick: toggleEditVehicle,
     },
     {
-      label: 'Delete',
+      label: intl.formatMessage({
+        defaultMessage: 'Delete',
+        id: 'K3r6DQ',
+      }),
       key: '2',
       icon: <FontAwesomeIcon icon={faTrash} />,
       onClick: () => {
         confirm({
-          title: 'Do you want to delete the vehicle?',
-          content: 'This action cannot be undone.',
+          title: intl.formatMessage({
+            defaultMessage: 'Do you want to delete the vehicle?',
+            id: 'dZ4nD4',
+          }),
+          content: intl.formatMessage({
+            defaultMessage: 'This action cannot be undone.',
+            id: 'JDJoIZ',
+          }),
           onOk() {
             onDeleteVehicle();
           },
@@ -147,6 +161,10 @@ const ViewVehicle = ({
     },
   ];
 
+  const unknown = intl.formatMessage({
+    defaultMessage: 'Unknown',
+    id: '5jeq8P',
+  });
   return (
     <div className="page-container">
       <Row className={classes.headerBar}>
@@ -154,8 +172,13 @@ const ViewVehicle = ({
           <Row>
             <Col className={classes.centerCell} flex={1}>
               <Title className={classes.headerTitle} level={4}>
-                {data?.vehicle?.registration ||
-                  `Alert ID: ${data?.vehicle?.reference}`}
+                {data?.vehicle?.registration || (
+                  <FormattedMessage
+                    defaultMessage="Alert ID: {reference}"
+                    id="377fsC"
+                    values={{ reference: data?.vehicle?.reference }}
+                  />
+                )}
               </Title>
             </Col>
 
@@ -163,7 +186,7 @@ const ViewVehicle = ({
               <Dropdown overlay={<Menu items={optionMenuItems} />}>
                 <Button type="text">
                   <Space>
-                    Options
+                    <FormattedMessage defaultMessage="Options" id="NDV5Mq" />
                     <FontAwesomeIcon icon={faChevronDown} />
                   </Space>
                 </Button>
@@ -175,15 +198,21 @@ const ViewVehicle = ({
           <Row>
             <Col className={classes.centerCell} flex={1}>
               <Title className={classes.headerTitle} level={4}>
-                Updates
+                <FormattedMessage defaultMessage="Updates" id="recCg9" />
               </Title>
             </Col>
             <Col>
               <Tooltip
                 title={
                   data?.vehicle?.subscribed
-                    ? 'Stop getting notified about updates.'
-                    : 'Get notified about updates.'
+                    ? intl.formatMessage({
+                        defaultMessage: 'Stop getting notified about updates.',
+                        id: 'WpTY6U',
+                      })
+                    : intl.formatMessage({
+                        defaultMessage: 'Get notified about updates.',
+                        id: 'icr+Hj',
+                      })
                 }
               >
                 <Button
@@ -198,9 +227,17 @@ const ViewVehicle = ({
                     style={{ marginRight: 8 }}
                     icon={data?.vehicle?.subscribed ? faBellSlash : faBell}
                   />
-                  {data?.vehicle?.subscribed
-                    ? 'Un-follow Updates'
-                    : 'Follow Updates'}
+                  {data?.vehicle?.subscribed ? (
+                    <FormattedMessage
+                      defaultMessage="Un-follow Updates"
+                      id="45gIlS"
+                    />
+                  ) : (
+                    <FormattedMessage
+                      defaultMessage="Follow Updates"
+                      id="gBN+ok"
+                    />
+                  )}
                 </Button>
               </Tooltip>
             </Col>
@@ -254,27 +291,67 @@ const ViewVehicle = ({
                       column={2}
                       // layout="vertical"
                     >
-                      <Descriptions.Item label="Registration">
-                        {data?.vehicle?.registration || 'Unknown'}
+                      <Descriptions.Item
+                        label={
+                          <FormattedMessage
+                            defaultMessage="Registration"
+                            id="qv7ied"
+                          />
+                        }
+                      >
+                        {data?.vehicle?.registration || unknown}
                       </Descriptions.Item>
-                      <Descriptions.Item label="Make">
-                        {data?.vehicle?.make || 'Unknown'}
+                      <Descriptions.Item
+                        label={
+                          <FormattedMessage defaultMessage="Make" id="6AAM0P" />
+                        }
+                      >
+                        {data?.vehicle?.make || unknown}
                       </Descriptions.Item>
-                      <Descriptions.Item label="Model">
-                        {data?.vehicle?.model || 'Unknown'}
+                      <Descriptions.Item
+                        label={
+                          <FormattedMessage
+                            defaultMessage="Model"
+                            id="rhSI1/"
+                          />
+                        }
+                      >
+                        {data?.vehicle?.model || unknown}
                       </Descriptions.Item>
-                      <Descriptions.Item label="Colour">
-                        {data?.vehicle?.colour || 'Unknown'}
+                      <Descriptions.Item
+                        label={
+                          <FormattedMessage
+                            defaultMessage="Colour"
+                            id="+e8vAT"
+                          />
+                        }
+                      >
+                        {data?.vehicle?.colour || unknown}
                       </Descriptions.Item>
 
                       {data?.vehicle?.model && (
-                        <Descriptions.Item label="Model">
-                          {data?.vehicle?.model || 'Unknown'}
+                        <Descriptions.Item
+                          label={
+                            <FormattedMessage
+                              defaultMessage="Model"
+                              id="rhSI1/"
+                            />
+                          }
+                        >
+                          {data?.vehicle?.model || unknown}
                         </Descriptions.Item>
                       )}
 
                       {data?.vehicle?.updatedAt && (
-                        <Descriptions.Item label="Updated At" span={2}>
+                        <Descriptions.Item
+                          label={
+                            <FormattedMessage
+                              defaultMessage="Updated At"
+                              id="ECx6bx"
+                            />
+                          }
+                          span={2}
+                        >
                           {moment(data.vehicle.updatedAt || moment()).format(
                             `ddd MMM DD YYYY - HH:mm`
                           )}
@@ -294,19 +371,34 @@ const ViewVehicle = ({
                     <Row gutter={64}>
                       <Col>
                         <Statistic
-                          title="Total Incidents"
+                          title={
+                            <FormattedMessage
+                              defaultMessage="Total Incidents"
+                              id="pUlxda"
+                            />
+                          }
                           value={data?.vehicle?.totalIncidents || 0}
                         />
                       </Col>
                       <Col>
                         <Statistic
-                          title="Total Offenders"
+                          title={
+                            <FormattedMessage
+                              defaultMessage="Total Offenders"
+                              id="Pyo0l3"
+                            />
+                          }
                           value={data?.vehicle?.totalOffenders || 0}
                         />
                       </Col>
                       <Col>
                         <Statistic
-                          title="Total Crime Groups"
+                          title={
+                            <FormattedMessage
+                              defaultMessage="Total Crime Groups"
+                              id="PwRU00"
+                            />
+                          }
                           value={data?.vehicle?.totalCrimeGroups || 0}
                         />
                       </Col>
@@ -316,7 +408,9 @@ const ViewVehicle = ({
               </Row>
             )}
             <Card loading={loading}>
-              <Title level={4}>Offenders</Title>
+              <Title level={4}>
+                <FormattedMessage defaultMessage="Offenders" id="xb54TN" />
+              </Title>
               {data?.vehicle?.offenders.length && !loading ? (
                 <OffenderTable
                   offenders={data?.vehicle?.offenders}
@@ -324,13 +418,20 @@ const ViewVehicle = ({
                 />
               ) : (
                 <Empty
-                  description="No offenders for this vehicle"
+                  description={
+                    <FormattedMessage
+                      defaultMessage="No offenders for this vehicle"
+                      id="R72ORA"
+                    />
+                  }
                   image={Empty.PRESENTED_IMAGE_SIMPLE}
                 />
               )}
             </Card>
             <Card loading={loading}>
-              <Title level={4}>Incidents</Title>
+              <Title level={4}>
+                <FormattedMessage defaultMessage="Incidents" id="mtr3R4" />
+              </Title>
               {data?.vehicle?.incidents.length && !loading ? (
                 <IncidentTable
                   incidents={data?.vehicle?.incidents}
@@ -338,13 +439,20 @@ const ViewVehicle = ({
                 />
               ) : (
                 <Empty
-                  description="No incidents for this vehicle"
+                  description={
+                    <FormattedMessage
+                      defaultMessage="No incidents for this vehicle"
+                      id="eMIzkc"
+                    />
+                  }
                   image={Empty.PRESENTED_IMAGE_SIMPLE}
                 />
               )}
             </Card>
             <Card loading={loading}>
-              <Title level={4}>Crime Groups</Title>
+              <Title level={4}>
+                <FormattedMessage defaultMessage="Crime Groups" id="a0aLil" />
+              </Title>
               {data?.vehicle?.crimeGroup.length && !loading ? (
                 <CrimeGroupTable
                   crimeGroups={data?.vehicle?.crimeGroup}
@@ -352,7 +460,12 @@ const ViewVehicle = ({
                 />
               ) : (
                 <Empty
-                  description="No crime groups for this vehicle"
+                  description={
+                    <FormattedMessage
+                      defaultMessage="No crime groups for this vehicle"
+                      id="yhLYu7"
+                    />
+                  }
                   image={Empty.PRESENTED_IMAGE_SIMPLE}
                 />
               )}
@@ -380,7 +493,12 @@ const ViewVehicle = ({
               loader={
                 <div className="message-date">
                   <div className="date-line" />
-                  <div className="date">Loading...</div>
+                  <div className="date">
+                    {intl.formatMessage({
+                      defaultMessage: 'Loading...',
+                      id: 'gjBiyj',
+                    })}
+                  </div>
                   <div className="date-line" />
                 </div>
               }
@@ -419,7 +537,10 @@ const ViewVehicle = ({
                             }}
                             size="small"
                           >
-                            Edit Update
+                            {intl.formatMessage({
+                              defaultMessage: 'Edit Update',
+                              id: 'pCzvx3',
+                            })}
                           </Button>
                           <Button
                             type="text"
@@ -436,7 +557,10 @@ const ViewVehicle = ({
                             }}
                             size="small"
                           >
-                            Delete Update
+                            {intl.formatMessage({
+                              defaultMessage: 'Delete Update',
+                              id: 'ef1dfd',
+                            })}
                           </Button>
                         </div>
                       }
@@ -445,7 +569,7 @@ const ViewVehicle = ({
                         <UpdateContent
                           userId={userId}
                           content={update.text}
-                          createdAt={update.createdAt}
+                          createdAt={moment(update.createdAt)}
                           from={update.createdBy}
                           id={update.id}
                           images={update.images}
@@ -462,7 +586,7 @@ const ViewVehicle = ({
                     <UpdateContent
                       userId={userId}
                       content={update.text}
-                      createdAt={update.createdAt}
+                      createdAt={moment(update.createdAt)}
                       from={update.createdBy}
                       id={update.id}
                       images={update.images}
@@ -508,7 +632,10 @@ const ViewVehicle = ({
                                 }}
                                 size="small"
                               >
-                                Edit Update
+                                {intl.formatMessage({
+                                  defaultMessage: 'Edit Update',
+                                  id: 'pCzvx3',
+                                })}
                               </Button>
                               <Button
                                 type="text"
@@ -525,7 +652,10 @@ const ViewVehicle = ({
                                 }}
                                 size="small"
                               >
-                                Delete Update
+                                {intl.formatMessage({
+                                  defaultMessage: 'Delete Update',
+                                  id: 'ef1dfd',
+                                })}
                               </Button>
                             </div>
                           }
@@ -534,7 +664,7 @@ const ViewVehicle = ({
                             <UpdateContent
                               userId={userId}
                               content={reply.text}
-                              createdAt={reply.createdAt}
+                              createdAt={moment(reply.createdAt)}
                               from={reply.createdBy}
                               id={reply.id}
                               images={reply.images}
@@ -551,7 +681,7 @@ const ViewVehicle = ({
                         <UpdateContent
                           userId={userId}
                           content={reply.text}
-                          createdAt={reply.createdAt}
+                          createdAt={moment(reply.createdAt)}
                           from={reply.createdBy}
                           id={reply.id}
                           images={reply.images}
@@ -577,7 +707,7 @@ const ViewVehicle = ({
                           size="small"
                           onClick={() =>
                             setReplyTo({
-                              createdAt: update.createdAt,
+                              createdAt: update.createdAt.toString(),
                               createdBy:
                                 userId === update.createdBy.id
                                   ? 'You'
@@ -587,7 +717,10 @@ const ViewVehicle = ({
                             })
                           }
                         >
-                          Reply
+                          {intl.formatMessage({
+                            defaultMessage: 'Reply',
+                            id: '9HU8vw',
+                          })}
                         </Button>
                       </Col>
                     )}
@@ -606,9 +739,14 @@ const ViewVehicle = ({
         </Col>
 
         <Drawer
-          title="Edit Vehicle Details"
+          title={
+            <FormattedMessage
+              defaultMessage="Edit Vehicle Details"
+              id="AWN+hV"
+            />
+          }
           visible={editVehicle}
-          width="700"
+          width={700}
           zIndex={999}
           onClose={toggleEditVehicle}
         >
@@ -633,11 +771,16 @@ const ViewVehicle = ({
           )}
         </Drawer>
         <Modal
-          title="Edit Update Content"
+          title={
+            <FormattedMessage
+              defaultMessage="Edit Update Content"
+              id="8sZeJM"
+            />
+          }
           visible={editUpdate !== null}
           onOk={handleEditUpdate}
           onCancel={() => setEditUpdate(null)}
-          okText="Save"
+          okText={<FormattedMessage defaultMessage="Save" id="jvo0vs" />}
         >
           <Input
             value={editUpdateInput}

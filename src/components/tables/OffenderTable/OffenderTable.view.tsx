@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
 import React from 'react';
 import { Table } from 'antd';
 import { useNavigate } from 'react-router';
@@ -17,10 +18,12 @@ import type {
   Race,
 } from 'graphql/generated';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import { useIntl } from 'react-intl';
 
 const useStyles = createUseStyles({
   row: { cursor: 'pointer' },
 });
+
 interface Props {
   offenders:
     | {
@@ -47,6 +50,8 @@ interface Props {
 const OffenderTable = ({ offenders, hasNavigation }: Props): JSX.Element => {
   const classes = useStyles();
   const navigate = useNavigate();
+  const intl = useIntl();
+
   return (
     <Table
       size="small"
@@ -75,32 +80,38 @@ const OffenderTable = ({ offenders, hasNavigation }: Props): JSX.Element => {
         {
           key: 'reference',
           dataIndex: 'reference',
-          title: 'Alert ID',
+          title: intl.formatMessage({
+            id: 'k8ZNgH',
+            defaultMessage: 'Alert ID',
+          }),
           width: 100,
         },
 
         {
-          title: 'Name',
+          title: intl.formatMessage({ id: 'HAlOn1', defaultMessage: 'Name' }),
           dataIndex: 'name',
           key: 'name',
         },
         {
-          title: 'Gender',
+          title: intl.formatMessage({ id: 'm8/n8c', defaultMessage: 'Gender' }),
           dataIndex: 'gender',
           key: 'gender',
         },
         {
-          title: 'Ethnicity',
+          title: intl.formatMessage({
+            id: 'XtCAFo',
+            defaultMessage: 'Ethnicity',
+          }),
           dataIndex: 'ethnicity',
           key: 'ethnicity',
         },
         {
-          title: 'Age',
+          title: intl.formatMessage({ id: '9oNQSC', defaultMessage: 'Age' }),
           dataIndex: 'age',
           key: 'age',
         },
         {
-          title: 'Build',
+          title: intl.formatMessage({ id: 'RSctv1', defaultMessage: 'Build' }),
           dataIndex: 'build',
           key: 'build',
         },
@@ -138,4 +149,5 @@ const OffenderTable = ({ offenders, hasNavigation }: Props): JSX.Element => {
     />
   );
 };
+
 export default OffenderTable;

@@ -106,6 +106,7 @@ const useListCrimeGroups = (): Return => {
   };
   const { data, loading } = useListCrimeGroupsQuery({
     fetchPolicy: 'cache-and-network',
+    // @ts-expect-error TODO fix this date issue
     variables,
   });
   const { data: groupData, loading: groupsLoading } = useSchemeGroupsQuery({

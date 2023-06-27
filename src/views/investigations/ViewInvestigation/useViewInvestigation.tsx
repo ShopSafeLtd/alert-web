@@ -8,6 +8,7 @@ import {
 } from 'graphql/generated';
 import { useState } from 'react';
 import errorNotification from 'types/error_notification';
+import { useIntl } from 'react-intl';
 import { useStoreState } from '../../../state';
 
 interface Return {
@@ -37,6 +38,7 @@ interface Return {
   toggleSubscribe: () => void;
 }
 const useViewInvestigation = (investigationId: string): Return => {
+  const intl = useIntl();
   const [offenderIds, setOffenderIds] = useState<string[]>([]);
   const [vehicleIds, setVehicleIds] = useState<string[]>([]);
   const [crimeGroupIds, setCrimeGroupIds] = useState<string[]>([]);
@@ -78,8 +80,14 @@ const useViewInvestigation = (investigationId: string): Return => {
   const [updateInvestigation] = useUpdateInvestigationMutation({
     onCompleted: () => {
       notification.success({
-        message: 'Successfully Updated!',
-        description: 'The investigation has been updated! ',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
+          id: 'w5Yfkf',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The investigation has been updated!',
+          id: 'KNIQ3m',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -89,7 +97,7 @@ const useViewInvestigation = (investigationId: string): Return => {
   });
   const submitOffender = (value: string) => {
     if (value) {
-      updateInvestigation({
+      void updateInvestigation({
         variables: {
           where: {
             id: investigationId,
@@ -103,7 +111,7 @@ const useViewInvestigation = (investigationId: string): Return => {
   };
   const submitVehicle = (value: string) => {
     if (value) {
-      updateInvestigation({
+      void updateInvestigation({
         variables: {
           where: {
             id: investigationId,
@@ -117,7 +125,7 @@ const useViewInvestigation = (investigationId: string): Return => {
   };
   const submitCrimeGroup = (value: string) => {
     if (value) {
-      updateInvestigation({
+      void updateInvestigation({
         variables: {
           where: {
             id: investigationId,
@@ -131,7 +139,7 @@ const useViewInvestigation = (investigationId: string): Return => {
   };
   const submitIncident = (value: string) => {
     if (value) {
-      updateInvestigation({
+      void updateInvestigation({
         variables: {
           where: {
             id: investigationId,
@@ -169,7 +177,7 @@ const useViewInvestigation = (investigationId: string): Return => {
 
   const toggleSubscribe = () => {
     if (data?.investigation?.subscribed) {
-      unsubscribeFromInvestigation({
+      void unsubscribeFromInvestigation({
         variables: {
           where: { id: investigationId },
         },
@@ -183,7 +191,7 @@ const useViewInvestigation = (investigationId: string): Return => {
         },
       });
     } else {
-      subscribeToInvestigation({
+      void subscribeToInvestigation({
         variables: {
           where: { id: investigationId },
         },

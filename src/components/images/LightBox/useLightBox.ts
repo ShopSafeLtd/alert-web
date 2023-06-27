@@ -58,6 +58,7 @@ const useLightBox = (): Return => {
   };
 
   return {
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onReIndex,
     reIndexing,
     isAdmin,

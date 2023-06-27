@@ -7,17 +7,17 @@ import type {
   VehicleCreateWithoutCrimeGroupInput,
 } from 'graphql/generated';
 import {
-  SuggestedCrimeGroupMembersDocument,
-  TagType,
-  useSuggestedCrimeGroupMembersQuery,
-  useUpdateCrimeGroupMutation,
   CrimeGroupDocument,
   Role,
+  SuggestedCrimeGroupMembersDocument,
+  TagType,
   useCrimeGroupQuery,
   useDeleteCrimeGroupMutation,
   useDeleteUpdateMutation,
   useSubscribeToCrimeGroupMutation,
+  useSuggestedCrimeGroupMembersQuery,
   useUnsubscribeToCrimeGroupMutation,
+  useUpdateCrimeGroupMutation,
   useUpdateUpdateMutation,
 } from 'graphql/generated';
 import { useEffect, useState } from 'react';
@@ -25,6 +25,7 @@ import update from 'immutability-helper';
 import { useStoreState } from 'state';
 import type { OffenderData, VehicleData } from 'types/DataType';
 import errorNotification from 'types/error_notification';
+import { useIntl } from 'react-intl';
 
 const { confirm } = Modal;
 interface Return {
@@ -82,6 +83,7 @@ interface Return {
 }
 
 const useViewCrimeGroup = (crimeGroupId: string): Return => {
+  const intl = useIntl();
   const { id: userId, groups, role } = useStoreState((state) => state.user);
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
@@ -165,8 +167,14 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: 'Successfully Updated!',
-        description: 'The crime group has been updated!',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
+          id: 'w5Yfkf',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The crime group has been updated!',
+          id: '3lIfgt',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -177,7 +185,7 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
   });
   const submitNewOffender = (data: OffenderData) => {
     setSaving(true);
-    updateCrimeGroup({
+    void updateCrimeGroup({
       variables: {
         where: {
           id: crimeGroupId,
@@ -229,7 +237,7 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
   const submitOffender = (value: string) => {
     setSaving(true);
     if (value) {
-      updateCrimeGroup({
+      void updateCrimeGroup({
         variables: {
           where: {
             id: crimeGroupId,
@@ -246,7 +254,7 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
   const submitVehicle = (value: string) => {
     setSaving(true);
     if (value) {
-      updateCrimeGroup({
+      void updateCrimeGroup({
         variables: {
           where: {
             id: crimeGroupId,
@@ -302,7 +310,7 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
           create: undefined,
         };
       };
-    updateCrimeGroup({
+    void updateCrimeGroup({
       variables: {
         where: {
           id: crimeGroupId,
@@ -386,8 +394,14 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
       setSaving(false);
       window.history.back();
       notification.success({
-        message: 'Successfully Deleted!',
-        description: 'The vehicle has been deleted!',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Deleted!',
+          id: 'dvDKi/',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The vehicle has been deleted!',
+          id: 'QPIR1s',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -399,7 +413,7 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
 
   const onDeleteCrimeGroup = () => {
     setSaving(true);
-    deleteCrimeGroup({
+    void deleteCrimeGroup({
       variables: {
         id: crimeGroupId,
       },
@@ -409,7 +423,7 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
   const [deleteUpdate] = useDeleteUpdateMutation();
 
   const handleDeleteUpdate = (updateId: string) => {
-    deleteUpdate({
+    void deleteUpdate({
       variables: {
         where: {
           id: updateId,
@@ -493,12 +507,18 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
   };
   const confirmDeleteUpdate = (updateId: string) => {
     confirm({
-      title: 'Are you sure?',
-      content: 'The update will be permanently deleted.',
+      title: intl.formatMessage({
+        defaultMessage: 'Are you sure?',
+        id: '2oCaym',
+      }),
+      content: intl.formatMessage({
+        defaultMessage: 'The update will be permanently deleted.',
+        id: 'gwznO0',
+      }),
       onOk() {
         handleDeleteUpdate(updateId);
       },
-      okText: 'Delete',
+      okText: intl.formatMessage({ defaultMessage: 'Delete', id: 'K3r6DQ' }),
     });
   };
 
@@ -506,7 +526,7 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
 
   const handleEditUpdate = () => {
     if (editUpdate !== null)
-      updateUpdate({
+      void updateUpdate({
         variables: {
           data: {
             text: editUpdateInput,
@@ -532,7 +552,7 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
 
   const toggleSubscribe = () => {
     if (crimeGroupsData?.crimeGroup?.subscribed) {
-      unsubscribeFromCrimeGroup({
+      void unsubscribeFromCrimeGroup({
         variables: {
           where: { id: crimeGroupId },
         },
@@ -546,7 +566,7 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
         },
       });
     } else {
-      subscribeToCrimeGroup({
+      void subscribeToCrimeGroup({
         variables: {
           where: { id: crimeGroupId },
         },
@@ -571,7 +591,7 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
 
   const handleAddSuggestion = (id: string) => {
     setViewSuggestedOpen(false);
-    updateCrimeGroup({
+    void updateCrimeGroup({
       variables: {
         data: {
           offenders: {

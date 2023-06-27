@@ -18,6 +18,7 @@ import {
 } from 'utils/offender/get-offender-desc';
 import type { UploadFile } from 'antd/lib/upload/interface';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import { useIntl } from 'react-intl';
 import AddExistingOffender from '../../../offender/offender/AddExistingOffender';
 import AddOffender from '../../../offender/offender/AddNewOffender';
 
@@ -89,135 +90,188 @@ const AssignImageOffender = ({
   toggleOffender,
   onCancel,
   onSubmit,
-}: Props): JSX.Element => (
-  <Modal
-    open={image !== undefined}
-    title="Are there offenders in your image?"
-    bodyStyle={{ padding: 0 }}
-    okText="Assign Offenders"
-    cancelText="No Offenders"
-    width={900}
-    zIndex={1000}
-    onCancel={onCancel}
-    onOk={onSubmit}
-  >
-    <div className="incident-form-assign">
-      <div className="incident-form-assign-image">
-        <WatermarkImage url={image?.url} />
-      </div>
-      <div className="incident-form-assign-offenders">
-        <Title level={4} className="offender-title">
-          {offendersData && offendersData.length > 0 ? 'Select' : 'Add'}{' '}
-          Offenders
-        </Title>
-        {offendersData && offendersData.length === 0 && (
-          <Paragraph>
-            You have not added any offenders to the incident yet, please add
-            offenders if any are present in the image.
-          </Paragraph>
-        )}
-        <div className="incident-form-assign-offender-list">
-          {offendersData.map((offender) => (
-            <Row
-              className="incident-form-assign-offender"
-              key={offender.id}
-              onClick={() => toggleOffender(offender.id)}
-              wrap={false}
-            >
-              {offender.images && offender.images.length > 0 ? (
-                <Col>
-                  <div className="incident-form-assign-offender-image">
-                    <WatermarkImage url={offender.images[0]?.optimised} />
-                  </div>
-                </Col>
-              ) : (
-                <Col>
-                  <Skeleton.Image style={{ height: 80, width: 80 }} />
-                </Col>
-              )}
-              <Col className="incident-form-assign-offender-content">
-                <Text strong>{offender.name}</Text>
-                <Paragraph>
-                  {`Age: ${
-                    offender.age ? getOffenderAge(offender.age) : 'Unknown'
-                  }, Build: ${
-                    offender.build
-                      ? getOffenderBuild(offender.build)
-                      : 'Unknown'
-                  }, Ethnicity: ${
-                    offender.race
-                      ? getOffenderRace(offender.race, true)
-                      : 'Unknown'
-                  }, Sex: ${
-                    offender.gender
-                      ? getOffenderGender(offender.gender)
-                      : 'Unknown'
-                  }`}
-                </Paragraph>
-              </Col>
-              <Col className="incident-form-assign-offender-check">
-                <Checkbox
-                  onChange={() => toggleOffender(offender.id)}
-                  checked={selected.includes(offender.id)}
-                />
-              </Col>
-            </Row>
-          ))}
+}: Props): JSX.Element => {
+  const intl = useIntl();
+
+  return (
+    <Modal
+      open={image !== undefined}
+      title={intl.formatMessage({
+        defaultMessage: 'Are there offenders in your image?',
+        id: 'cLrIqr',
+      })}
+      bodyStyle={{ padding: 0 }}
+      okText={intl.formatMessage({
+        defaultMessage: 'Assign Offenders',
+        id: 'GFrwvj',
+      })}
+      cancelText={intl.formatMessage({
+        defaultMessage: 'No Offenders',
+        id: 'hO5g1p',
+      })}
+      width={900}
+      zIndex={1000}
+      onCancel={onCancel}
+      onOk={onSubmit}
+    >
+      <div className="incident-form-assign">
+        <div className="incident-form-assign-image">
+          <WatermarkImage url={image?.url} />
         </div>
-        <Row gutter={8}>
-          <Col>
-            <Button
-              onClick={toggleAddOffender}
-              size="small"
-              style={{ color: 'red' }}
-            >
-              Add New Offender
-            </Button>
-          </Col>
-          <Col>
-            <Button
-              onClick={toggleAddExistingOffender}
-              size="small"
-              style={{ color: 'red' }}
-            >
-              Add Existing Offender
-            </Button>
-          </Col>
-        </Row>
+        <div className="incident-form-assign-offenders">
+          <Title level={4} className="offender-title">
+            {offendersData && offendersData.length > 0
+              ? intl.formatMessage({
+                  defaultMessage: 'Select Offenders',
+                  id: 'nNFHrE',
+                })
+              : intl.formatMessage({
+                  defaultMessage: 'Add Offenders',
+                  id: 'KaNxum',
+                })}
+          </Title>
+          {offendersData && offendersData.length === 0 && (
+            <Paragraph>
+              {intl.formatMessage({
+                defaultMessage:
+                  'You have not added any offenders to the incident yet, please add offenders if any are present in the image.',
+                id: 'mjoJ/I',
+              })}
+            </Paragraph>
+          )}
+          <div className="incident-form-assign-offender-list">
+            {offendersData.map((offender) => (
+              <Row
+                className="incident-form-assign-offender"
+                key={offender.id}
+                onClick={() => toggleOffender(offender.id)}
+                wrap={false}
+              >
+                {offender.images && offender.images.length > 0 ? (
+                  <Col>
+                    <div className="incident-form-assign-offender-image">
+                      <WatermarkImage url={offender.images[0]?.optimised} />
+                    </div>
+                  </Col>
+                ) : (
+                  <Col>
+                    <Skeleton.Image style={{ height: 80, width: 80 }} />
+                  </Col>
+                )}
+                <Col className="incident-form-assign-offender-content">
+                  <Text strong>{offender.name}</Text>
+                  <Paragraph>
+                    {intl.formatMessage(
+                      {
+                        defaultMessage:
+                          'Age: {age}, Build: {build}, Ethnicity: {ethnicity}, Sex: {sex}',
+                        id: 'RkYfRn',
+                      },
+                      {
+                        age: offender.age
+                          ? getOffenderAge(offender.age)
+                          : intl.formatMessage({
+                              defaultMessage: 'Unknown',
+                              id: '5jeq8P',
+                            }),
+                        build: offender.build
+                          ? getOffenderBuild(offender.build)
+                          : intl.formatMessage({
+                              defaultMessage: 'Unknown',
+                              id: '5jeq8P',
+                            }),
+                        ethnicity: offender.race
+                          ? getOffenderRace(offender.race, true)
+                          : intl.formatMessage({
+                              defaultMessage: 'Unknown',
+                              id: '5jeq8P',
+                            }),
+                        sex: offender.gender
+                          ? getOffenderGender(offender.gender)
+                          : intl.formatMessage({
+                              defaultMessage: 'Unknown',
+                              id: '5jeq8P',
+                            }),
+                      }
+                    )}
+                  </Paragraph>
+                </Col>
+                <Col className="incident-form-assign-offender-check">
+                  <Checkbox
+                    onChange={() => toggleOffender(offender.id)}
+                    checked={selected.includes(offender.id)}
+                  />
+                </Col>
+              </Row>
+            ))}
+          </div>
+          <Row gutter={8}>
+            <Col>
+              <Button
+                onClick={toggleAddOffender}
+                size="small"
+                style={{ color: 'red' }}
+              >
+                {intl.formatMessage({
+                  defaultMessage: 'Add New Offender',
+                  id: 'V+RsEq',
+                })}
+              </Button>
+            </Col>
+            <Col>
+              <Button
+                onClick={toggleAddExistingOffender}
+                size="small"
+                style={{ color: 'red' }}
+              >
+                {intl.formatMessage({
+                  defaultMessage: 'Add Existing Offender',
+                  id: 'w4XD3a',
+                })}
+              </Button>
+            </Col>
+          </Row>
+        </div>
+
+        <Drawer
+          visible={addOffender}
+          onClose={toggleAddOffender}
+          title={intl.formatMessage({
+            defaultMessage: 'Add New Offender',
+            id: 'V+RsEq',
+          })}
+          width="600"
+          zIndex={1001}
+        >
+          {addOffender && (
+            <AddOffender
+              onClose={toggleAddOffender}
+              update={(data) => onAddOffender(data, false)}
+            />
+          )}
+        </Drawer>
+
+        <Drawer
+          visible={addExistingOffender}
+          onClose={toggleAddExistingOffender}
+          title={intl.formatMessage({
+            defaultMessage: 'Add Existing Offenders',
+            id: '1FbM4r',
+          })}
+          width="800"
+          zIndex={1001}
+        >
+          {addExistingOffender && (
+            <AddExistingOffender
+              onClose={toggleAddExistingOffender}
+              offenderIds={offendersData.map(({ id }) => id)}
+              update={(data) => onAddOffender(data, true)}
+            />
+          )}
+        </Drawer>
       </div>
-
-      <Drawer
-        visible={addOffender}
-        onClose={toggleAddOffender}
-        title="Add New Offender"
-        width="600"
-        zIndex={1001}
-      >
-        {addOffender && (
-          <AddOffender
-            onClose={toggleAddOffender}
-            update={(data) => onAddOffender(data, false)}
-          />
-        )}
-      </Drawer>
-
-      <Drawer
-        visible={addExistingOffender}
-        onClose={toggleAddExistingOffender}
-        title="Add Existing Offenders"
-        width="800"
-        zIndex={1001}
-      >
-        {addExistingOffender && (
-          <AddExistingOffender
-            onClose={toggleAddExistingOffender}
-            offenderIds={offendersData.map(({ id }) => id)}
-            update={(data) => onAddOffender(data, true)}
-          />
-        )}
-      </Drawer>
-    </div>
-  </Modal>
-);
+    </Modal>
+  );
+};
 
 export default AssignImageOffender;

@@ -1,5 +1,6 @@
 /* eslint-disable react/require-default-props */
-import React, { ReactNode } from "react";
+import type { ReactNode } from 'react';
+import React from 'react';
 
 interface Props {
   children: ReactNode;
@@ -19,13 +20,13 @@ const Flex = (props: Props) => {
     mobileFlex = true,
     flexDirection = 'row',
   } = props;
-  const getFlexResponsive = () => (mobileFlex ? "d-flex" : "d-md-flex");
+  const getFlexResponsive = () => (mobileFlex ? 'd-flex' : 'd-md-flex');
   return (
     <div
       className={`${getFlexResponsive()} ${className} ${
-        flexDirection ? `flex-${  flexDirection}` : ""
-      } ${alignItems ? `align-items-${  alignItems}` : ""} ${
-        justifyContent ? `justify-content-${  justifyContent}` : ""
+        flexDirection ? `flex-${flexDirection}` : ''
+      } ${alignItems ? `align-items-${alignItems}` : ''} ${
+        justifyContent ? `justify-content-${justifyContent}` : ''
       }`}
     >
       {children}

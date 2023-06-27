@@ -8,6 +8,7 @@ interface Props {
 }
 
 const ViewContent = ({ children, style, className }: Props): JSX.Element => (
+  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
   <Layout className={`view-content ${className}`} style={style}>
     {children}
   </Layout>

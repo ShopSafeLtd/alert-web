@@ -18,6 +18,7 @@ import {
 } from 'utils/offender/get-offender-desc';
 import { Link } from 'react-router-dom';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import { useIntl } from 'react-intl';
 import UpdateContent from '../UpdateContent';
 
 const { Title, Text } = Typography;
@@ -69,8 +70,9 @@ const OffenderFeed = ({
     // lastActive,
     // incidents,
   } = feedItem?.offender || {};
-
+  const intl = useIntl();
   return (
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     <Link to={`/app/offenders/view/${id}`}>
       <Row gutter={20} wrap={false} style={{ width: '100%' }}>
         {(isNewOffender || isNewImage) && images && images.length > 0 ? (
@@ -101,7 +103,12 @@ const OffenderFeed = ({
               <Row style={{ marginTop: -5, marginBottom: 5 }}>
                 <Col>
                   <Text style={{ fontSize: 14 }} type="secondary">
-                    Alert ID: {reference}
+                    {intl.formatMessage(
+                      { defaultMessage: 'Alert ID: {reference}', id: '377fsC' },
+                      {
+                        reference,
+                      }
+                    )}
                   </Text>
                 </Col>
               </Row>
@@ -125,7 +132,10 @@ const OffenderFeed = ({
                     icon={faUserClock}
                   />
                   <Text style={{ fontSize: 14 }} type="secondary">
-                    Age:
+                    {intl.formatMessage({
+                      defaultMessage: 'Age: ',
+                      id: 'anqdpr',
+                    })}
                     {dateOfBirth ? calcAge(dateOfBirth) : getOffenderAge(age)}
                   </Text>
                 </Col>
@@ -139,7 +149,11 @@ const OffenderFeed = ({
                     icon={faUserTag}
                   />
                   <Text style={{ fontSize: 14 }} type="secondary">
-                    Build:{getOffenderBuild(build)}
+                    {intl.formatMessage({
+                      defaultMessage: 'Build: ',
+                      id: 'iXQkAi',
+                    })}
+                    {getOffenderBuild(build)}
                   </Text>
                 </Col>
               </Row>
@@ -152,7 +166,11 @@ const OffenderFeed = ({
                     icon={faMarsAndVenus}
                   />
                   <Text style={{ fontSize: 14 }} type="secondary">
-                    Sex: {getOffenderGender(gender)}
+                    {intl.formatMessage({
+                      defaultMessage: 'Sex: ',
+                      id: 'j3ULId',
+                    })}
+                    {getOffenderGender(gender)}
                   </Text>
                 </Col>
               </Row>
@@ -165,14 +183,24 @@ const OffenderFeed = ({
                     icon={faEarth}
                   />
                   <Text style={{ fontSize: 14 }} type="secondary">
-                    Ethnicity: {getOffenderRace(race, false)}
+                    {intl.formatMessage({
+                      defaultMessage: 'Ethnicity: ',
+                      id: 'H+Sv5C',
+                    })}
+                    {getOffenderRace(race, false)}
                   </Text>
                 </Col>
               </Row>
             </>
           ) : updates && updates.length > 0 ? (
             <UpdateContent
-              title={name || 'Unidentified Offender'}
+              title={
+                name ||
+                intl.formatMessage({
+                  defaultMessage: 'Unidentified Offender',
+                  id: 'tHTxaO',
+                })
+              }
               update={updates[0]}
             />
           ) : null}

@@ -3,11 +3,12 @@
 import React from 'react';
 import { Input } from 'antd';
 import {
-  SearchOutlined,
-  FilterOutlined,
-  ArrowUpOutlined,
   ArrowDownOutlined,
+  ArrowUpOutlined,
+  FilterOutlined,
+  SearchOutlined,
 } from '@ant-design/icons';
+import { useIntl } from 'react-intl';
 
 interface Props {
   searchInput: string;
@@ -28,23 +29,29 @@ const SearchFilterBar: React.FC<Props> = ({
   searchInput,
   setSearchInput,
   openFilter,
-}: Props) => (
-  <div className="search-filter-bar">
-    <div className="input-container">
-      <Input
-        placeholder="Search..."
-        size="large"
-        prefix={<SearchOutlined className="search-icon" />}
-        value={searchInput}
-        onChange={(e) => setSearchInput(e.target.value)}
-      />
+}: Props) => {
+  const intl = useIntl();
+  return (
+    <div className="search-filter-bar">
+      <div className="input-container">
+        <Input
+          placeholder={intl.formatMessage({
+            defaultMessage: 'Search...',
+            id: '0BUTMv',
+          })}
+          size="large"
+          prefix={<SearchOutlined className="search-icon" />}
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+        />
+      </div>
+      <div className="icons-container" onClick={openFilter}>
+        <FilterOutlined className="icon filter" />
+        <ArrowUpOutlined className="icon arrow up" />
+        <ArrowDownOutlined className="icon arrow down" />
+      </div>
     </div>
-    <div className="icons-container" onClick={openFilter}>
-      <FilterOutlined className="icon filter" />
-      <ArrowUpOutlined className="icon arrow up" />
-      <ArrowDownOutlined className="icon arrow down" />
-    </div>
-  </div>
-);
+  );
+};
 
 export default SearchFilterBar;

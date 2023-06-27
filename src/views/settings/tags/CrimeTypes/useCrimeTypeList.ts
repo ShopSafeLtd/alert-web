@@ -1,20 +1,20 @@
 import { useEffect, useState } from 'react';
 import type {
-  TagsQuery,
   CreateTagMutation,
+  TagsQuery,
   UpdateTagMutation,
 } from 'graphql/generated';
 import {
-  QueryMode,
-  useTagsQuery,
-  TagsDocument,
   Model,
+  QueryMode,
+  TagsDocument,
   TagType,
+  useTagsQuery,
   useUpdateTagMutation,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
-import { notification, Modal } from 'antd';
+import { Modal, notification } from 'antd';
 
 const { confirm } = Modal;
 
@@ -400,6 +400,8 @@ const useCrimeTypeList = (): Return => {
             },
           },
         },
+      }).finally(() => {
+        setSaving(false);
       });
   };
 

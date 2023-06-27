@@ -352,6 +352,7 @@ const useOffenderFeed = (): Return => {
 
   // Fetch Offenders
   const { data, loading } = useListOffendersQuery({
+    // @ts-expect-error TODO fix date mismatch
     variables: queryVariables,
     fetchPolicy: 'cache-and-network',
   });

@@ -1,6 +1,8 @@
-import React, { useRef, useEffect, useState, ReactNode } from "react";
-import PropTypes from "prop-types";
-import { useStoreState, NavType } from "state";
+/* eslint-disable */
+
+import React, { useRef, useEffect, useState, ReactNode } from 'react';
+import PropTypes from 'prop-types';
+import { useStoreState, NavType } from 'state';
 
 interface Props {
   children: ReactNode;
@@ -29,13 +31,13 @@ export const PageHeaderAlt = ({
   }, [navType]);
 
   const getStyle = () => {
-    let style:{
-			backgroundImage: string;
-			marginRight?: number;
-			marginLeft?: number;
-			paddingLeft?: number;
-			paddingRight?: number;
-		} = { backgroundImage: background ? `url(${background})` : "none" };
+    let style: {
+      backgroundImage: string;
+      marginRight?: number;
+      marginLeft?: number;
+      paddingLeft?: number;
+      paddingRight?: number;
+    } = { backgroundImage: background ? `url(${background})` : 'none' };
     if (navType === NavType.TOP) {
       style.marginRight = -widthOffset;
       style.marginLeft = -widthOffset;
@@ -48,8 +50,8 @@ export const PageHeaderAlt = ({
   return (
     <div
       ref={ref}
-      className={`page-header-alt ${className ? className : ""} ${
-        overlap && "overlap"
+      className={`page-header-alt ${className ? className : ''} ${
+        overlap && 'overlap'
       }`}
       style={getStyle()}
     >

@@ -34,9 +34,9 @@ import {
   faBuilding,
   faClock,
   faEdit,
+  faPage,
   faSirenOn,
   faTags,
-  faPage,
   faTrash,
   faUsers,
   faUserTag,
@@ -54,6 +54,8 @@ import WatermarkImage from 'components/images/WatermarkImage.view';
 import OffenderTable from 'components/tables/OffenderTable';
 import VehicleTable from 'components/tables/VehicleTable';
 import MapCard from 'components/map/MapCard/MapCard.view';
+import { useIntl } from 'react-intl';
+import moment from 'moment';
 import UpdateContent from './Update.view';
 import useStyles from './ViewIncident.styles';
 import EvidenceTable from '../../../components/tables/EvidenceTable';
@@ -183,7 +185,7 @@ const ViewIncident = ({
   onDelete,
 }: Props): JSX.Element => {
   const classes = useStyles();
-
+  const intl = useIntl();
   return (
     <div className="page-container">
       <Row wrap={false}>
@@ -200,8 +202,15 @@ const ViewIncident = ({
                     <Tooltip
                       title={
                         data?.incident?.subscribed
-                          ? 'Stop getting notified about updates.'
-                          : 'Get notified about updates.'
+                          ? intl.formatMessage({
+                              defaultMessage:
+                                'Stop getting notified about updates.',
+                              id: 'WpTY6U',
+                            })
+                          : intl.formatMessage({
+                              defaultMessage: 'Get notified about updates.',
+                              id: 'icr+Hj',
+                            })
                       }
                     >
                       <Button
@@ -220,7 +229,15 @@ const ViewIncident = ({
                             data?.incident?.subscribed ? faBellSlash : faBell
                           }
                         />
-                        {data?.incident?.subscribed ? 'Un-follow' : 'Follow'}
+                        {data?.incident?.subscribed
+                          ? intl.formatMessage({
+                              defaultMessage: 'Un-follow',
+                              id: 'U9yypY',
+                            })
+                          : intl.formatMessage({
+                              defaultMessage: 'Follow',
+                              id: 'ieGrWo',
+                            })}
                       </Button>
                     </Tooltip>
                   </Col>
@@ -233,7 +250,10 @@ const ViewIncident = ({
                             style={{ marginRight: 8 }}
                             icon={faEdit}
                           />
-                          Edit
+                          {intl.formatMessage({
+                            defaultMessage: 'Edit',
+                            id: 'wEQDC6',
+                          })}
                         </Button>
                       </Link>
                     </Col>
@@ -248,7 +268,10 @@ const ViewIncident = ({
                             style={{ marginRight: 8 }}
                             icon={faPage}
                           />
-                          Create MG11
+                          {intl.formatMessage({
+                            defaultMessage: 'Create MG11',
+                            id: 'CpvwMZ',
+                          })}
                         </Button>
                       </Link>
                     </Col>
@@ -261,7 +284,10 @@ const ViewIncident = ({
                           style={{ marginRight: 8 }}
                           icon={faTrash}
                         />
-                        Delete
+                        {intl.formatMessage({
+                          defaultMessage: 'Delete',
+                          id: 'K3r6DQ',
+                        })}
                       </Button>
                     </Col>
                   )}
@@ -307,7 +333,17 @@ const ViewIncident = ({
                         <Title className={classes.headerTitle} level={4}>
                           {data?.incident?.subject}
                         </Title>
-                        <Text>Alert ID: {data?.incident?.reference}</Text>
+                        <Text>
+                          {intl.formatMessage(
+                            {
+                              defaultMessage: 'Alert ID: {ref}',
+                              id: 'umL9sI',
+                            },
+                            {
+                              ref: data?.incident?.reference,
+                            }
+                          )}
+                        </Text>
                         <Paragraph type="secondary" style={{ marginTop: 10 }}>
                           {data?.incident?.description}
                         </Paragraph>
@@ -321,13 +357,18 @@ const ViewIncident = ({
                                   className={classes.descIcon}
                                   icon={faBuilding}
                                 />
-                                Business
+                                {intl.formatMessage({
+                                  defaultMessage: 'Business',
+                                  id: 'w1Fanr',
+                                })}
                               </span>
                             }
                           >
                             {editRights ? (
                               <Link
-                                to={`/app/scheme-settings/business/view/${data?.incident?.business?.id}`}
+                                to={`/app/scheme-settings/business/view/${
+                                  data?.incident?.business?.id || ''
+                                }`}
                               >
                                 {data?.incident?.business?.name}
                               </Link>
@@ -343,7 +384,10 @@ const ViewIncident = ({
                                   className={classes.descIcon}
                                   icon={faClock}
                                 />
-                                Date &amp; Time
+                                {intl.formatMessage({
+                                  defaultMessage: 'Date & Time',
+                                  id: 'io/Qlk',
+                                })}
                               </span>
                             }
                           >
@@ -360,7 +404,10 @@ const ViewIncident = ({
                                   className={classes.descIcon}
                                   icon={faUsers}
                                 />
-                                Groups
+                                {intl.formatMessage({
+                                  defaultMessage: 'Groups',
+                                  id: 'hzmswI',
+                                })}
                               </span>
                             }
                           >
@@ -380,7 +427,10 @@ const ViewIncident = ({
                                   className={classes.descIcon}
                                   icon={faSirenOn}
                                 />
-                                Crime Types
+                                {intl.formatMessage({
+                                  defaultMessage: 'Crime Types',
+                                  id: 'Piba4q',
+                                })}
                               </span>
                             }
                           >
@@ -393,7 +443,11 @@ const ViewIncident = ({
                                 >
                                   {tag.name}
                                 </Tag>
-                              )) || 'None'}
+                              )) ||
+                                intl.formatMessage({
+                                  defaultMessage: 'None',
+                                  id: '450Fty',
+                                })}
                             </Row>
                           </Descriptions.Item>
                           <Descriptions.Item
@@ -404,7 +458,10 @@ const ViewIncident = ({
                                   className={classes.descIcon}
                                   icon={faTags}
                                 />
-                                Involved Tags
+                                {intl.formatMessage({
+                                  defaultMessage: 'Involved Tags',
+                                  id: 'hqB+1X',
+                                })}
                               </span>
                             }
                           >
@@ -417,7 +474,11 @@ const ViewIncident = ({
                                 >
                                   {tag.name}
                                 </Tag>
-                              )) || 'None'}
+                              )) ||
+                                intl.formatMessage({
+                                  defaultMessage: 'None',
+                                  id: '450Fty',
+                                })}
                             </Row>
                           </Descriptions.Item>
 
@@ -429,7 +490,10 @@ const ViewIncident = ({
                                   className={classes.descIcon}
                                   icon={faUserTag}
                                 />
-                                Impact Tags
+                                {intl.formatMessage({
+                                  defaultMessage: 'Impact Tags',
+                                  id: 'JZVMXj',
+                                })}
                               </span>
                             }
                           >
@@ -442,7 +506,11 @@ const ViewIncident = ({
                                 >
                                   {tag.name}
                                 </Tag>
-                              )) || 'None'}
+                              )) ||
+                                intl.formatMessage({
+                                  defaultMessage: 'None',
+                                  id: '450Fty',
+                                })}
                             </Row>
                           </Descriptions.Item>
                         </Descriptions>
@@ -462,7 +530,12 @@ const ViewIncident = ({
                         </Col>
                         <Col xs={24} xl={12}>
                           <Card>
-                            <Title level={4}>Police Information</Title>
+                            <Title level={4}>
+                              {intl.formatMessage({
+                                defaultMessage: 'Police Information',
+                                id: 'bhVnhl',
+                              })}
+                            </Title>
                             <Descriptions
                               column={1}
                               style={{ marginTop: 10 }}
@@ -470,27 +543,75 @@ const ViewIncident = ({
                             >
                               <Descriptions.Item
                                 className={classes.detail}
-                                label={<span>Report To Police</span>}
+                                label={
+                                  <span>
+                                    {intl.formatMessage({
+                                      defaultMessage: 'Police Reported',
+                                      id: 'KrBn25',
+                                    })}
+                                  </span>
+                                }
                               >
-                                {data?.incident?.policeReported ? 'Yes' : 'No'}
+                                {data?.incident?.policeReported
+                                  ? intl.formatMessage({
+                                      defaultMessage: 'Yes',
+                                      id: 'a5msuh',
+                                    })
+                                  : intl.formatMessage({
+                                      defaultMessage: 'No',
+                                      id: 'oUWADl',
+                                    })}
                               </Descriptions.Item>
                               <Descriptions.Item
                                 className={classes.detail}
-                                label={<span>Police Attended</span>}
+                                label={
+                                  <span>
+                                    {intl.formatMessage({
+                                      defaultMessage: 'Police Attenteded',
+                                      id: 'qT9KAx',
+                                    })}
+                                  </span>
+                                }
                               >
-                                {data?.incident?.policeInvolved ? 'Yes' : 'No'}
+                                {data?.incident?.policeInvolved
+                                  ? intl.formatMessage({
+                                      defaultMessage: 'Yes',
+                                      id: 'a5msuh',
+                                    })
+                                  : intl.formatMessage({
+                                      defaultMessage: 'No',
+                                      id: 'oUWADl',
+                                    })}
                               </Descriptions.Item>
                               <Descriptions.Item
                                 className={classes.detail}
-                                label="Crime Ref"
+                                label={intl.formatMessage({
+                                  defaultMessage: 'Crime Ref',
+                                  id: '03pSDv',
+                                })}
                               >
-                                {data?.incident?.policeRef || 'Not Provided'}
+                                {data?.incident?.policeRef ||
+                                  intl.formatMessage({
+                                    defaultMessage: 'Not Provided',
+                                    id: 'rVkCib',
+                                  })}
                               </Descriptions.Item>
                               <Descriptions.Item
                                 className={classes.detail}
-                                label={<span>Officer Collar Number</span>}
+                                label={
+                                  <span>
+                                    {intl.formatMessage({
+                                      defaultMessage: 'Officer Collar Number',
+                                      id: 'r4EMV1',
+                                    })}
+                                  </span>
+                                }
                               >
-                                {data?.incident?.policeNo || 'Not Provided'}
+                                {data?.incident?.policeNo ||
+                                  intl.formatMessage({
+                                    defaultMessage: 'Not Provided',
+                                    id: 'rVkCib',
+                                  })}
                               </Descriptions.Item>
                             </Descriptions>
                           </Card>
@@ -501,25 +622,41 @@ const ViewIncident = ({
                         .map((item) => item.crimeType)
                         .includes(CrimeType.TheftHandling) && (
                         <Card style={{ marginBottom: 20 }}>
-                          <Title level={4}>Goods</Title>
+                          <Title level={4}>
+                            {intl.formatMessage({
+                              defaultMessage: 'Items',
+                              id: 'yNmV/R',
+                            })}
+                          </Title>
                           <Table
                             columns={[
                               {
-                                title: 'Name',
+                                title: intl.formatMessage({
+                                  defaultMessage: 'Name',
+                                  id: 'HAlOn1',
+                                }),
                                 dataIndex: 'name',
                                 key: 'name',
                               },
                               {
-                                title: 'Value',
+                                title: intl.formatMessage({
+                                  defaultMessage: 'Value',
+                                  id: 'GufXy5',
+                                }),
                                 dataIndex: 'value',
                                 key: 'value',
-                                render: (value) => `£${value.toFixed(2)}`,
+                                render: (value: number) =>
+                                  `£${value.toFixed(2)}`,
                               },
                               {
-                                title: 'Recovered Value',
+                                title: intl.formatMessage({
+                                  defaultMessage: 'Recovered Value',
+                                  id: 'bGwFFv',
+                                }),
                                 dataIndex: 'recoveredValue',
                                 key: 'recoveredValue',
-                                render: (value) => `£${value.toFixed(2)}`,
+                                render: (value: number) =>
+                                  `£${value.toFixed(2)}`,
                               },
                             ]}
                             dataSource={data?.incident?.incidentItems.map(
@@ -545,11 +682,16 @@ const ViewIncident = ({
                               return (
                                 <Table.Summary.Row>
                                   <Table.Summary.Cell index={0}>
-                                    Total:
+                                    {intl.formatMessage({
+                                      defaultMessage: 'Total: ',
+                                      id: 'ILhZuX',
+                                    })}
                                   </Table.Summary.Cell>
+                                  {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
                                   <Table.Summary.Cell index={1}>
                                     £{totalValue.toFixed(2)}
                                   </Table.Summary.Cell>
+                                  {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
                                   <Table.Summary.Cell index={1}>
                                     £{totalRecovered.toFixed(2)}
                                   </Table.Summary.Cell>
@@ -561,7 +703,12 @@ const ViewIncident = ({
                       )}
 
                       <Card>
-                        <Title level={4}>Offenders</Title>
+                        <Title level={4}>
+                          {intl.formatMessage({
+                            defaultMessage: 'Offenders',
+                            id: 'xb54TN',
+                          })}
+                        </Title>
                         {data?.incident?.offenders.length && !loading ? (
                           <OffenderTable
                             offenders={data?.incident?.offenders}
@@ -569,14 +716,22 @@ const ViewIncident = ({
                           />
                         ) : (
                           <Empty
-                            description="No offenders for this incident"
+                            description={intl.formatMessage({
+                              defaultMessage: 'No offenders for this incident',
+                              id: '+qw0ns',
+                            })}
                             image={Empty.PRESENTED_IMAGE_SIMPLE}
                           />
                         )}
                       </Card>
 
                       <Card style={{ marginTop: 20 }}>
-                        <Title level={4}>Vehicles</Title>
+                        <Title level={4}>
+                          {intl.formatMessage({
+                            defaultMessage: 'Vehicles',
+                            id: 'r6wuJ3',
+                          })}
+                        </Title>
                         {data?.incident?.vehicles.length && !loading ? (
                           <VehicleTable
                             vehicles={data?.incident?.vehicles}
@@ -584,21 +739,32 @@ const ViewIncident = ({
                           />
                         ) : (
                           <Empty
-                            description="No vehicles for this incident"
+                            description={intl.formatMessage({
+                              defaultMessage: 'No vehicles for this incident',
+                              id: 'EOkcI5',
+                            })}
                             image={Empty.PRESENTED_IMAGE_SIMPLE}
                           />
                         )}
                       </Card>
                       {data?.incident?.scheme.mg11Available && (
                         <Card style={{ marginTop: 20 }}>
-                          <Title level={4}>Evidence</Title>
+                          <Title level={4}>
+                            {intl.formatMessage({
+                              defaultMessage: 'Evidence',
+                              id: '6g7+6N',
+                            })}
+                          </Title>
                           {data?.incident?.evidence.length && !loading ? (
                             <EvidenceTable
                               evidence={data?.incident?.evidence}
                             />
                           ) : (
                             <Empty
-                              description="No evidence for this incident"
+                              description={intl.formatMessage({
+                                defaultMessage: 'No evidence for this incident',
+                                id: 'GkZRlh',
+                              })}
                               image={Empty.PRESENTED_IMAGE_SIMPLE}
                             />
                           )}
@@ -631,7 +797,12 @@ const ViewIncident = ({
                     loader={
                       <div className="message-date">
                         <div className="date-line" />
-                        <div className="date">Loading...</div>
+                        <div className="date">
+                          {intl.formatMessage({
+                            defaultMessage: 'Loading...',
+                            id: 'gjBiyj',
+                          })}
+                        </div>
                         <div className="date-line" />
                       </div>
                     }
@@ -670,7 +841,10 @@ const ViewIncident = ({
                                   }}
                                   size="small"
                                 >
-                                  Edit Update
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Edit Update',
+                                    id: 'pCzvx3',
+                                  })}
                                 </Button>
                                 <Button
                                   type="text"
@@ -687,7 +861,10 @@ const ViewIncident = ({
                                   }}
                                   size="small"
                                 >
-                                  Delete Update
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Delete Update',
+                                    id: 'ef1dfd',
+                                  })}
                                 </Button>
                               </div>
                             }
@@ -696,7 +873,7 @@ const ViewIncident = ({
                               <UpdateContent
                                 userId={userId}
                                 content={update.text}
-                                createdAt={update.createdAt}
+                                createdAt={moment(update.createdAt)}
                                 from={update.createdBy}
                                 id={update.id}
                                 images={update.images}
@@ -713,7 +890,7 @@ const ViewIncident = ({
                           <UpdateContent
                             userId={userId}
                             content={update.text}
-                            createdAt={update.createdAt}
+                            createdAt={moment(update.createdAt)}
                             from={update.createdBy}
                             id={update.id}
                             images={update.images}
@@ -761,7 +938,10 @@ const ViewIncident = ({
                                       }}
                                       size="small"
                                     >
-                                      Edit Update
+                                      {intl.formatMessage({
+                                        defaultMessage: 'Edit Update',
+                                        id: 'pCzvx3',
+                                      })}
                                     </Button>
                                     <Button
                                       type="text"
@@ -778,7 +958,10 @@ const ViewIncident = ({
                                       }}
                                       size="small"
                                     >
-                                      Delete Update
+                                      {intl.formatMessage({
+                                        defaultMessage: 'Delete Update',
+                                        id: 'ef1dfd',
+                                      })}
                                     </Button>
                                   </div>
                                 }
@@ -787,7 +970,7 @@ const ViewIncident = ({
                                   <UpdateContent
                                     userId={userId}
                                     content={reply.text}
-                                    createdAt={reply.createdAt}
+                                    createdAt={moment(reply.createdAt)}
                                     from={reply.createdBy}
                                     id={reply.id}
                                     images={reply.images}
@@ -802,7 +985,7 @@ const ViewIncident = ({
                               <UpdateContent
                                 userId={userId}
                                 content={reply.text}
-                                createdAt={reply.createdAt}
+                                createdAt={moment(reply.createdAt)}
                                 from={reply.createdBy}
                                 id={reply.id}
                                 images={reply.images}
@@ -827,7 +1010,7 @@ const ViewIncident = ({
                                 size="small"
                                 onClick={() =>
                                   setReplyTo({
-                                    createdAt: update.createdAt,
+                                    createdAt: update.createdAt.toString(),
                                     createdBy:
                                       userId === update.createdBy.id
                                         ? 'You'
@@ -837,7 +1020,10 @@ const ViewIncident = ({
                                   })
                                 }
                               >
-                                Reply
+                                {intl.formatMessage({
+                                  defaultMessage: 'Reply',
+                                  id: '9HU8vw',
+                                })}
                               </Button>
                             </Col>
                           )}
@@ -860,7 +1046,10 @@ const ViewIncident = ({
                                   )
                                 }
                               >
-                                Add Image To Incident
+                                {intl.formatMessage({
+                                  defaultMessage: 'Add Image to Incident',
+                                  id: 'VN9g7W',
+                                })}
                               </Button>
                             </Col>
                           )}
@@ -881,14 +1070,19 @@ const ViewIncident = ({
           </div>
         </Col>
       </Row>
-
       <Modal
-        title="Select Images To Add"
+        title={intl.formatMessage({
+          defaultMessage: 'Select Images To Add',
+          id: 'eSO3MA',
+        })}
         open={addImages !== null}
         onOk={() => addUpdateImages(selectedImages.map((id) => ({ id })))}
         onCancel={closeAddImages}
         width={addImages ? addImages.length * 250 : 400}
-        okText="Add Images"
+        okText={intl.formatMessage({
+          defaultMessage: 'Add Images',
+          id: 'b4GGYZ',
+        })}
       >
         <Row justify="center" gutter={8}>
           {addImages?.map((image) => (
@@ -917,11 +1111,14 @@ const ViewIncident = ({
       </Modal>
 
       <Modal
-        title="Edit Update Content"
+        title={intl.formatMessage({
+          defaultMessage: 'Edit Update Content',
+          id: '8sZeJM',
+        })}
         open={editUpdate !== null}
         onOk={handleEditUpdate}
         onCancel={() => setEditUpdate(null)}
-        okText="Save"
+        okText={intl.formatMessage({ defaultMessage: 'Save', id: 'jvo0vs' })}
       >
         <Input
           value={editUpdateInput}
@@ -930,7 +1127,10 @@ const ViewIncident = ({
       </Modal>
 
       <Drawer
-        title="Link Offenders"
+        title={intl.formatMessage({
+          defaultMessage: 'Link Offenders',
+          id: 'UhSUQG',
+        })}
         open={linkOffender}
         width="800"
         onClose={toggleLinkOffender}

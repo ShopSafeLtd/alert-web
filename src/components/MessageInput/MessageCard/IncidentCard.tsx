@@ -12,6 +12,7 @@ import {
 } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import type { IncidentCardData } from 'types/DataType';
+import { useIntl } from 'react-intl';
 
 const { Paragraph } = Typography;
 
@@ -21,84 +22,100 @@ interface Props {
   saving?: boolean;
 }
 
-const IncidentCard = ({ incident, removeIncident, saving }: Props) => (
-  <Card
-    style={{
-      margin: removeIncident ? 0 : 5,
-      maxWidth: 370,
-      overflow: 'hidden',
-    }}
-    bodyStyle={{
-      padding: 0,
-      marginLeft: -2,
-    }}
-    size="small"
-    className="message-card"
-  >
-    <Row gutter={5} wrap={false}>
-      {removeIncident && (
-        <Popconfirm
-          placement="topLeft"
-          trigger="click"
-          title="Remove the incident?"
-          onConfirm={() => removeIncident(incident.id)}
-          okText="Yes"
-          cancelText="No"
-          overlayInnerStyle={{ padding: 10 }}
-        >
-          <Button
-            size="small"
-            disabled={saving}
-            className="info-remove-button"
-            shape="circle"
-            type="text"
-            icon={<FontAwesomeIcon icon={faCircleXmark} size="lg" />}
-          />
-        </Popconfirm>
-      )}
-      <Col>
-        {incident?.images && incident.images.length > 0 && (
-          <div style={{ width: 100, height: 100 }}>
-            <WatermarkImage
-              url={incident.images[0].optimised || incident.images[0].url || ''}
+const IncidentCard = ({ incident, removeIncident, saving }: Props) => {
+  const intl = useIntl();
+  return (
+    <Card
+      style={{
+        margin: removeIncident ? 0 : 5,
+        maxWidth: 370,
+        overflow: 'hidden',
+      }}
+      bodyStyle={{
+        padding: 0,
+        marginLeft: -2,
+      }}
+      size="small"
+      className="message-card"
+    >
+      <Row gutter={5} wrap={false}>
+        {removeIncident && (
+          <Popconfirm
+            placement="topLeft"
+            trigger="click"
+            title={intl.formatMessage({
+              defaultMessage: 'Remove the incident?',
+              id: '+pfPgu',
+            })}
+            onConfirm={() => removeIncident(incident.id)}
+            okText={intl.formatMessage({ defaultMessage: 'Yes', id: 'a5msuh' })}
+            cancelText={intl.formatMessage({
+              defaultMessage: 'No',
+              id: 'oUWADl',
+            })}
+            overlayInnerStyle={{ padding: 10 }}
+          >
+            <Button
+              size="small"
+              disabled={saving}
+              className="info-remove-button"
+              shape="circle"
+              type="text"
+              icon={<FontAwesomeIcon icon={faCircleXmark} size="lg" />}
             />
-          </div>
+          </Popconfirm>
         )}
-      </Col>
-      <Col
-        flex={1}
-        style={{
-          marginTop: 10,
-          marginLeft: 5,
-        }}
-      >
-        <Paragraph
-          strong
-          ellipsis
+        <Col>
+          {incident?.images && incident.images.length > 0 && (
+            <div style={{ width: 100, height: 100 }}>
+              <WatermarkImage
+                url={
+                  incident.images[0].optimised || incident.images[0].url || ''
+                }
+              />
+            </div>
+          )}
+        </Col>
+        <Col
+          flex={1}
           style={{
-            marginBottom: '0.5rem',
-            fontSize: 15,
+            marginTop: 10,
+            marginLeft: 5,
           }}
         >
-          {incident.subject}
-        </Paragraph>
-        <Descriptions size="small">
-          <Descriptions.Item label="Created At">
-            {incident.dayTime}
-          </Descriptions.Item>
-        </Descriptions>
-        <Paragraph
-          type="secondary"
-          ellipsis
-          style={{
-            marginBottom: '0.5rem',
-          }}
-        >
-          {incident.description}
-        </Paragraph>
-      </Col>
-    </Row>
-  </Card>
-);
+          <Paragraph
+            strong
+            ellipsis
+            style={{
+              marginBottom: '0.5rem',
+              fontSize: 15,
+            }}
+          >
+            {incident.subject}
+          </Paragraph>
+          <Descriptions size="small">
+            <Descriptions.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Created At',
+                id: 'wittYy',
+              })}
+            >
+              {incident.dayTime}
+            </Descriptions.Item>
+          </Descriptions>
+          <Paragraph
+            type="secondary"
+            ellipsis
+            style={{
+              marginBottom: '0.5rem',
+            }}
+          >
+            {incident.description}
+          </Paragraph>
+        </Col>
+      </Row>
+    </Card>
+  );
+};
 
 export default IncidentCard;

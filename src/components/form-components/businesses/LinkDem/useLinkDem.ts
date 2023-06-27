@@ -35,7 +35,7 @@ const useLinkDem = ({ onClose, businessId }: Props): Return => {
         (item) => item.id === selected
       );
       if (company) {
-        linkToDem({
+        void linkToDem({
           variables: {
             where: {
               id: businessId,

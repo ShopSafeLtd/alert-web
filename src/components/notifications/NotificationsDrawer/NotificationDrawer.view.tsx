@@ -19,6 +19,7 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import type { ListUserNotificationsQuery } from 'graphql/generated';
 import { Link } from 'react-router-dom';
+import { useIntl } from 'react-intl';
 import useStyles from './NotificationDrawer.styles';
 import type { NotificationData } from './useNotificationDrawer';
 
@@ -52,24 +53,33 @@ const NotificationsDrawer = ({
   onClose,
 }: Props): JSX.Element => {
   const classes = useStyles();
-
+  const intl = useIntl();
   return (
     <div>
       <Row justify="end" gutter={8} className={classes.head}>
         <Col>
           <Link to="/app/notifications">
             <Button onClick={onClose} size="small">
-              All Notifications
+              {intl.formatMessage({
+                defaultMessage: 'All Notifications',
+                id: '9GcvKL',
+              })}
             </Button>
           </Link>
         </Col>
         <Col>
           <Radio.Group size="small" defaultValue="ALL">
             <Radio.Button onClick={toggleTakeAllSchemes} value="ALL">
-              All Schemes
+              {intl.formatMessage({
+                defaultMessage: 'All Schemes',
+                id: '4zN3gE',
+              })}
             </Radio.Button>
             <Radio.Button onClick={toggleTakeAllSchemes} value="Current">
-              Current Scheme
+              {intl.formatMessage({
+                defaultMessage: 'Current Scheme',
+                id: 'qWFImB',
+              })}
             </Radio.Button>
           </Radio.Group>
         </Col>
@@ -86,7 +96,7 @@ const NotificationsDrawer = ({
               />
             }
           >
-            Clear All
+            {intl.formatMessage({ defaultMessage: 'Clear All', id: 'cqlObT' })}
           </Button>
         </Col>
         <Col>
@@ -174,14 +184,22 @@ const NotificationsDrawer = ({
         >
           <Empty
             image={Empty.PRESENTED_IMAGE_SIMPLE}
-            description="There's no new notification"
+            description={intl.formatMessage({
+              defaultMessage: "There's no new notification",
+              id: '7cQ0NO',
+            })}
           />
         </div>
       )}
       {(data?.total || 0) > 15 && (
         <Row justify="center" style={{ marginBottom: 20, marginTop: 20 }}>
           <Col>
-            <Button size="small">View All Notifications</Button>
+            <Button size="small">
+              {intl.formatMessage({
+                defaultMessage: 'View All Notifications',
+                id: 'HTKZYW',
+              })}
+            </Button>
           </Col>
         </Row>
       )}

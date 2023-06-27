@@ -1,14 +1,14 @@
-/* eslint-disable no-plusplus */
-import React, { useState } from "react";
-import { Card, Row, Col, Badge, Grid } from "antd";
-import { ComposableMap, Geographies, Geography } from "react-simple-maps";
-import ReactTooltip from "react-tooltip";
-import WorldMap from "assets/maps/world-countries-sans-antarctica.json";
-import utils from "utils";
+/* eslint-disable */
+import React, { useState } from 'react';
+import { Card, Row, Col, Badge, Grid } from 'antd';
+import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
+import ReactTooltip from 'react-tooltip';
+import WorldMap from 'assets/maps/world-countries-sans-antarctica.json';
+import utils from 'utils';
 
 const { useBreakpoint } = Grid;
 const geoUrl = WorldMap;
-const mapColor = "#F5F4F6";
+const mapColor = '#F5F4F6';
 const hoverPercentage = -10;
 
 const getHighlightedRegion = (name: string, data: ListData[]) => {
@@ -45,16 +45,16 @@ const getRegionValue = (name: string, data: ListData[]) => {
         return `${elm.name} — ${elm.value}`;
       }
     }
-    return "";
+    return '';
   }
-  return "";
+  return '';
 };
 
 interface MapChartProps {
-	setTooltipContent(value: string): void;
-	data: ListData[]
-	mapSource: string;
-	mapType: string; 
+  setTooltipContent(value: string): void;
+  data: ListData[];
+  mapSource: string;
+  mapType: string;
 }
 
 const MapChart = ({
@@ -63,54 +63,54 @@ const MapChart = ({
   mapSource,
   mapType,
 }: MapChartProps) => (
-    <ComposableMap
-      style={{
-        transform: `${mapType === "world" ? "translateY(20px)" : "none"}`,
-      }}
-      data-tip=""
-      height={380}
-      projectionConfig={{ scale: 145 }}
-    >
-      <Geographies geography={mapSource}>
-        {({ geographies }) =>
-          geographies.map((geo) => {
-            const geoName =
-              mapType === "world" ? geo.properties.name : geo.properties.NAME_1;
-            return (
-              <Geography
-                key={geo.rsmKey}
-                geography={geo}
-                onMouseEnter={() => {
-                  setTooltipContent(getRegionValue(geoName, data));
-                }}
-                onMouseLeave={() => {
-                  setTooltipContent("");
-                }}
-                fill={getHighlightedRegion(geoName, data)}
-                stroke="#D6D6DA"
-                style={{
-                  hover: {
-                    fill: getRegionHoverColor(geoName, data),
-                    outline: "none",
-                  },
-                }}
-              />
-            );
-          })
-        }
-      </Geographies>
-    </ComposableMap>
-  );
+  <ComposableMap
+    style={{
+      transform: `${mapType === 'world' ? 'translateY(20px)' : 'none'}`,
+    }}
+    data-tip=""
+    height={380}
+    projectionConfig={{ scale: 145 }}
+  >
+    <Geographies geography={mapSource}>
+      {({ geographies }) =>
+        geographies.map((geo) => {
+          const geoName =
+            mapType === 'world' ? geo.properties.name : geo.properties.NAME_1;
+          return (
+            <Geography
+              key={geo.rsmKey}
+              geography={geo}
+              onMouseEnter={() => {
+                setTooltipContent(getRegionValue(geoName, data));
+              }}
+              onMouseLeave={() => {
+                setTooltipContent('');
+              }}
+              fill={getHighlightedRegion(geoName, data)}
+              stroke="#D6D6DA"
+              style={{
+                hover: {
+                  fill: getRegionHoverColor(geoName, data),
+                  outline: 'none',
+                },
+              }}
+            />
+          );
+        })
+      }
+    </Geographies>
+  </ComposableMap>
+);
 
 interface Props {
-	data: ListData[];
-	mapSource: string;
-	mapType: string;
+  data: ListData[];
+  mapSource: string;
+  mapType: string;
 }
 
 const Map = (props: Props) => {
   const { data, mapSource, mapType } = props;
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState('');
   return (
     <>
       <MapChart
@@ -157,8 +157,15 @@ interface RegionDataWidgetProps {
 }
 
 export const RegionDataWidget = (props: RegionDataWidgetProps) => {
-  const { data = [], mapSource = geoUrl, mapType = 'world', title, content, list } = props;
-  const isMobile = !utils.getBreakPoint(useBreakpoint()).includes("lg");
+  const {
+    data = [],
+    mapSource = geoUrl,
+    mapType = 'world',
+    title,
+    content,
+    list,
+  } = props;
+  const isMobile = !utils.getBreakPoint(useBreakpoint()).includes('lg');
   return (
     <Card bodyStyle={{ padding: 0 }}>
       <Row>

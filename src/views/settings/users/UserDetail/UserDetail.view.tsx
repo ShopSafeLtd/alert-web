@@ -1,6 +1,7 @@
 import React from 'react';
 import type { UserQuery } from 'graphql/generated';
 import { RoleValues } from 'types';
+import { FormattedMessage } from 'react-intl';
 
 import {
   Button,
@@ -59,7 +60,11 @@ const userDetail = ({
     <PageHeader
       onBack={() => window.history.back()}
       title={data?.user?.fullName}
-      subTitle={data?.user?.disabled && 'User Disabled'}
+      subTitle={
+        data?.user?.disabled && (
+          <FormattedMessage defaultMessage="User Disabled" id="cFQJf4" />
+        )
+      }
       extra={[
         <Button
           key="3"
@@ -67,7 +72,7 @@ const userDetail = ({
           disabled
           onClick={toggleDemLink}
         >
-          Link Dem User
+          <FormattedMessage defaultMessage="Link Dem User" id="n6qFde" />
         </Button>,
         <Button
           key="4"
@@ -81,7 +86,7 @@ const userDetail = ({
             />
           }
         >
-          Resend Invite
+          <FormattedMessage defaultMessage="Resend Invite" id="uVl/Bo" />
         </Button>,
         data?.user?.disabled ? (
           <Button
@@ -96,7 +101,7 @@ const userDetail = ({
               />
             }
           >
-            Enable User
+            <FormattedMessage defaultMessage="Enable User" id="59gCcZ" />
           </Button>
         ) : (
           <Button
@@ -111,7 +116,7 @@ const userDetail = ({
               />
             }
           >
-            Disable User
+            <FormattedMessage defaultMessage="Disable User" id="ibMD0D" />
           </Button>
         ),
         <Button
@@ -126,7 +131,7 @@ const userDetail = ({
             />
           }
         >
-          Delete User
+          <FormattedMessage defaultMessage="Delete User" id="mJbA00" />
         </Button>,
       ]}
     />
@@ -135,7 +140,7 @@ const userDetail = ({
       <Col span={16} xxl={12}>
         <Card loading={loading}>
           <Descriptions
-            title="Details"
+            title={<FormattedMessage defaultMessage="Details" id="Lv0zJu" />}
             column={1}
             extra={
               <Button
@@ -148,55 +153,93 @@ const userDetail = ({
                 }
                 onClick={toggleEditUser}
               >
-                Edit Details
+                <FormattedMessage defaultMessage="Edit Details" id="A2fHI3" />
               </Button>
             }
           >
-            <Descriptions.Item label="Full Name" style={{ paddingBottom: 8 }}>
+            <Descriptions.Item
+              label={
+                <FormattedMessage defaultMessage="Full Name" id="TemVby" />
+              }
+              style={{ paddingBottom: 8 }}
+            >
               {data?.user?.fullName}
             </Descriptions.Item>
-            <Descriptions.Item label="Status" style={{ paddingBottom: 8 }}>
+            <Descriptions.Item
+              label={<FormattedMessage defaultMessage="Status" id="tzMNF3" />}
+              style={{ paddingBottom: 8 }}
+            >
               <Typography.Text
                 type={data?.user?.status === 'Enabled' ? 'success' : 'warning'}
               >
                 {data?.user?.status}
               </Typography.Text>
             </Descriptions.Item>
-            <Descriptions.Item label="Business" style={{ paddingBottom: 8 }}>
+            <Descriptions.Item
+              label={<FormattedMessage defaultMessage="Business" id="w1Fanr" />}
+              style={{ paddingBottom: 8 }}
+            >
               <Link
-                to={`/app/scheme-settings/businesses/view/${data?.user?.businesses[0]?.id}`}
+                to={`/app/scheme-settings/businesses/view/${
+                  data?.user?.businesses[0]?.id || ''
+                }`}
               >
                 {data?.user?.businesses[0]?.name}
               </Link>
             </Descriptions.Item>
             <Descriptions.Item
-              label="Email Address"
+              label={
+                <FormattedMessage defaultMessage="Email Address" id="xxQxLE" />
+              }
               style={{ paddingBottom: 8 }}
             >
               {data?.user?.email}
             </Descriptions.Item>
-            <Descriptions.Item label="Role" style={{ paddingBottom: 8 }}>
+            <Descriptions.Item
+              label={<FormattedMessage defaultMessage="Role" id="1ZgrhW" />}
+              style={{ paddingBottom: 8 }}
+            >
               {data?.user?.schemes && RoleValues[data?.user?.schemes[0].role]}
             </Descriptions.Item>
-            <Descriptions.Item label="Groups">
+            <Descriptions.Item
+              label={<FormattedMessage defaultMessage="Groups" id="hzmswI" />}
+            >
               <Row gutter={[0, 8]}>
                 {data?.user?.groups.map(({ name, id }) => (
                   <Col key={id}>
                     <Tag color="blue">{name}</Tag>
                   </Col>
-                )) || 'No Groups'}
+                )) || (
+                  <FormattedMessage defaultMessage="No Groups" id="xt8fV1" />
+                )}
               </Row>
             </Descriptions.Item>
-            <Descriptions.Item label="Approver Groups">
+            <Descriptions.Item
+              label={
+                <FormattedMessage
+                  defaultMessage="Approver Groups"
+                  id="D/FCTs"
+                />
+              }
+            >
               <Row gutter={[0, 8]}>
                 {data?.user?.approverGroups.map(({ name, id }) => (
                   <Col key={id}>
                     <Tag color="blue">{name}</Tag>
                   </Col>
-                )) || 'No Approver Groups'}
+                )) || (
+                  <FormattedMessage
+                    defaultMessage="No Approver Groups"
+                    id="oujtV2"
+                  />
+                )}
               </Row>
             </Descriptions.Item>
-            <Descriptions.Item label="Chat Groups">
+            <Descriptions.Item
+              label={
+                <FormattedMessage defaultMessage="Chat Groups" id="8TntzL" />
+              }
+            >
               <Row gutter={[0, 8]}>
                 {data?.user?.chats
                   .map(({ chat }) => chat)
@@ -204,7 +247,12 @@ const userDetail = ({
                     <Col key={id}>
                       <Tag color="blue">{name}</Tag>
                     </Col>
-                  )) || 'No Chat Groups'}
+                  )) || (
+                  <FormattedMessage
+                    defaultMessage="No Chat Groups"
+                    id="8b6ooN"
+                  />
+                )}
               </Row>
             </Descriptions.Item>
           </Descriptions>
@@ -212,16 +260,22 @@ const userDetail = ({
       </Col>
       <Col span={8} xxl={12}>
         <Card>
-          <Typography.Title level={4}>Recent Activity</Typography.Title>
+          <Typography.Title level={4}>
+            <FormattedMessage defaultMessage="Recent Activity" id="nc8QpJ" />
+          </Typography.Title>
           <Empty
-            description="No Activity"
+            description={
+              <FormattedMessage defaultMessage="No Activity" id="vugtF7" />
+            }
             image={Empty.PRESENTED_IMAGE_SIMPLE}
           />
         </Card>
       </Col>
     </Row>
     <Drawer
-      title="Edit User Details"
+      title={
+        <FormattedMessage defaultMessage="Edit User Details" id="OaNQvU" />
+      }
       visible={editUser}
       width="800"
       onClose={toggleEditUser}
@@ -229,7 +283,7 @@ const userDetail = ({
       {editUser ? <EditUser onClose={toggleEditUser} /> : <div />}
     </Drawer>
     <Drawer
-      title="Link to dem user"
+      title={<FormattedMessage defaultMessage="Link to dem user" id="lk9fDC" />}
       visible={demLink && !!demId}
       width="800"
       onClose={toggleDemLink}

@@ -12,7 +12,6 @@ import {
 } from 'antd';
 import type {
   ListCustomGalleriesQuery,
-  // CreateVehicleMutation,
   ListVehiclesQuery,
   SortOrder,
 } from 'graphql/generated';
@@ -30,6 +29,7 @@ import { useNavigate } from 'react-router';
 import type { DateType, VehicleData } from 'types/DataType';
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
 import VehicleFilter from 'components/vehicles/VehicleFilter';
+import { useIntl } from 'react-intl';
 import useStyles from './ListVehicles.styles';
 
 interface Props {
@@ -83,6 +83,7 @@ const ListVehicles = ({
   order,
   setOrder,
 }: Props) => {
+  const intl = useIntl();
   const classes = useStyles();
   const navigate = useNavigate();
   const galleryOptions = [
@@ -122,7 +123,10 @@ const ListVehicles = ({
             value={search}
             onChange={(event) => setSearch(event.target.value)}
             allowClear
-            placeholder="Search vehicles..."
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Search vehicles...',
+              id: 'PoSlBr',
+            })}
           />
         </Col>
         <Col>
@@ -136,18 +140,15 @@ const ListVehicles = ({
         <Col flex={1}>
           {customGalleriesData?.listCustomGalleries.total ? (
             <Dropdown
-              // trigger={['click']}
               overlay={menu}
               placement="bottom"
               arrow={{ pointAtCenter: true }}
             >
               <Button className={classes.selectBox}>
-                {/* <FontAwesomeIcon
-                      size="lg"
-                      style={{ marginRight: 5 }}
-                      icon={faUserTag}
-                    /> */}
-                Custom Gallery
+                {intl.formatMessage({
+                  defaultMessage: 'Custom Gallery',
+                  id: '/b4BmP',
+                })}
                 <FontAwesomeIcon
                   icon={faChevronDown}
                   style={{ marginLeft: 10 }}
@@ -167,12 +168,18 @@ const ListVehicles = ({
               />
             }
           >
-            Sort &amp; Filter
+            {intl.formatMessage({
+              defaultMessage: 'Sort & Filter',
+              id: 'f2g3SM',
+            })}
           </Button>
         </Col>
         <Col>
           <Button type="primary" onClick={toggleAddVehicle}>
-            Add New Vehicle
+            {intl.formatMessage({
+              defaultMessage: 'Add New Vehicle',
+              id: 'cHbTr7',
+            })}
           </Button>
         </Col>
       </Row>
@@ -200,15 +207,22 @@ const ListVehicles = ({
           {
             key: 'reference',
             dataIndex: 'reference',
-            title: 'Alert ID',
+            title: intl.formatMessage({
+              defaultMessage: 'Alert ID',
+              id: 'k8ZNgH',
+            }),
             render: (value, item) => (
+              // eslint-disable-next-line formatjs/no-literal-string-in-jsx
               <Link to={`view/${item.key}`}>V-{value}</Link>
             ),
           },
           {
             key: 'registration',
             dataIndex: 'registration',
-            title: 'Registration',
+            title: intl.formatMessage({
+              defaultMessage: 'Registration',
+              id: 'qv7ied',
+            }),
             render: (value, item) => (
               <Link to={`view/${item.key}`}>{value}</Link>
             ),
@@ -216,39 +230,57 @@ const ListVehicles = ({
           {
             key: 'make',
             dataIndex: 'make',
-            title: 'Make',
+            title: intl.formatMessage({ defaultMessage: 'Make', id: '6AAM0P' }),
           },
-
           {
             key: 'colour',
             dataIndex: 'colour',
-            title: 'Colour',
+            title: intl.formatMessage({
+              defaultMessage: 'Colour',
+              id: '+e8vAT',
+            }),
           },
           {
             key: 'model',
             dataIndex: 'model',
-            title: 'Model',
+            title: intl.formatMessage({
+              defaultMessage: 'Model',
+              id: 'rhSI1/',
+            }),
           },
           {
             key: 'updatedAt',
             dataIndex: 'updatedAt',
-            title: 'UpdatedAt',
-            render: (value) => moment(value || moment()).calendar(),
+            title: intl.formatMessage({
+              defaultMessage: 'UpdatedAt',
+              id: 'tjQ2Mx',
+            }),
+            render: (value: Date | undefined) =>
+              moment(value || moment()).calendar(),
           },
           {
             key: 'totalOffenders',
             dataIndex: 'totalOffenders',
-            title: 'Members',
+            title: intl.formatMessage({
+              defaultMessage: 'Members',
+              id: '+a+2ug',
+            }),
           },
           {
             key: 'totalIncidents',
             dataIndex: 'totalIncidents',
-            title: 'Incidents',
+            title: intl.formatMessage({
+              defaultMessage: 'Incidents',
+              id: 'mtr3R4',
+            }),
           },
           {
             key: 'totalCrimeGroups',
             dataIndex: 'totalCrimeGroups',
-            title: 'Crime Groups',
+            title: intl.formatMessage({
+              defaultMessage: 'Crime Groups',
+              id: 'a0aLil',
+            }),
           },
           {
             title: '',
@@ -264,7 +296,10 @@ const ListVehicles = ({
         ]}
       />
       <Drawer
-        title="Add New Vehicle"
+        title={intl.formatMessage({
+          defaultMessage: 'Add New Vehicle',
+          id: 'cHbTr7',
+        })}
         visible={addVehicle}
         width="700"
         zIndex={999}
@@ -277,7 +312,10 @@ const ListVehicles = ({
         )}
       </Drawer>
       <Drawer
-        title="Vehicle Filters"
+        title={intl.formatMessage({
+          defaultMessage: 'Vehicle Filters',
+          id: '1KlEM/',
+        })}
         visible={sortFilter}
         onClose={toggleSortFilter}
         width={500}

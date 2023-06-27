@@ -11,6 +11,7 @@ import {
   Skeleton,
   Typography,
 } from 'antd';
+import { useIntl } from 'react-intl';
 
 const { Text } = Typography;
 
@@ -34,8 +35,9 @@ const EditCrimeType = ({
   data,
   loading,
   saving,
-}: Props): JSX.Element =>
-  !data && loading ? (
+}: Props): JSX.Element => {
+  const intl = useIntl();
+  return !data && loading ? (
     <Skeleton />
   ) : (
     <Form
@@ -50,8 +52,11 @@ const EditCrimeType = ({
       <Row style={{ marginBottom: 30 }}>
         <Col>
           <Text type="secondary">
-            Crime types are used to catagories incidents that are submitted by
-            members.
+            {intl.formatMessage({
+              defaultMessage:
+                'Crime types are used to categorize incidents that are submitted by members.',
+              id: 'd4sshx',
+            })}
           </Text>
         </Col>
       </Row>
@@ -59,11 +64,14 @@ const EditCrimeType = ({
         <Col span={23}>
           <Form.Item
             name="name"
-            label="Name"
+            label={intl.formatMessage({ defaultMessage: 'Name', id: 'HAlOn1' })}
             rules={[
               {
                 required: true,
-                message: 'Please enter a name for the crime type.',
+                message: intl.formatMessage({
+                  defaultMessage: 'Please enter a name for the crime type.',
+                  id: 'H+p9nh',
+                }),
               },
             ]}
           >
@@ -73,7 +81,13 @@ const EditCrimeType = ({
       </Row>
       <Row gutter={16}>
         <Col span={24}>
-          <Form.Item name="description" label="Description">
+          <Form.Item
+            name="description"
+            label={intl.formatMessage({
+              defaultMessage: 'Description',
+              id: 'Q8Qw5B',
+            })}
+          >
             <Input.TextArea rows={10} disabled={saving} />
           </Form.Item>
         </Col>
@@ -81,36 +95,76 @@ const EditCrimeType = ({
           <Col span={24}>
             <Form.Item
               name="crimeType"
-              label="Crime Type Category"
+              label={intl.formatMessage({
+                defaultMessage: 'Crime Type Category',
+                id: 'vXvK25',
+              })}
               rules={[
                 {
                   required: true,
-                  message: 'Please select a category for the new crime type.',
+                  message: intl.formatMessage({
+                    defaultMessage:
+                      'Please select a category for the new crime type.',
+                    id: 'bav6vT',
+                  }),
                 },
               ]}
             >
               <Select disabled={saving}>
                 <Select.Option value={CrimeType.Burglary}>
-                  Burglary
+                  {intl.formatMessage({
+                    defaultMessage: 'Burglary',
+                    id: 'f2A9g8',
+                  })}
                 </Select.Option>
                 <Select.Option value={CrimeType.CriminalDamage}>
-                  Criminal Damage
+                  {intl.formatMessage({
+                    defaultMessage: 'Criminal Damage',
+                    id: 'FAQLEy',
+                  })}
                 </Select.Option>
-                <Select.Option value={CrimeType.Drugs}>Drugs</Select.Option>
+                <Select.Option value={CrimeType.Drugs}>
+                  {intl.formatMessage({
+                    defaultMessage: 'Drugs',
+                    id: '8xjLZ0',
+                  })}
+                </Select.Option>
                 <Select.Option value={CrimeType.FraudForgery}>
-                  Fraud & Forgery
+                  {intl.formatMessage({
+                    defaultMessage: 'Fraud & Forgery',
+                    id: 'zAWiMb',
+                  })}
                 </Select.Option>
-                <Select.Option value={CrimeType.Robbery}>Robbery</Select.Option>
+                <Select.Option value={CrimeType.Robbery}>
+                  {intl.formatMessage({
+                    defaultMessage: 'Robbery',
+                    id: 'wHRKby',
+                  })}
+                </Select.Option>
                 <Select.Option value={CrimeType.SexualOffences}>
-                  Sexual Offences
+                  {intl.formatMessage({
+                    defaultMessage: 'Sexual Offences',
+                    id: 'znM5dX',
+                  })}
                 </Select.Option>
                 <Select.Option value={CrimeType.TheftHandling}>
-                  Theft & Handling
+                  {intl.formatMessage({
+                    defaultMessage: 'Theft & Handling',
+                    id: 'WD3oHm',
+                  })}
                 </Select.Option>
                 <Select.Option value={CrimeType.Violence}>
-                  Violence Against The Person
+                  {intl.formatMessage({
+                    defaultMessage: 'Violence Against The Person',
+                    id: 'oOGhLO',
+                  })}
                 </Select.Option>
-                <Select.Option value={CrimeType.Other}>Other</Select.Option>
+                <Select.Option value={CrimeType.Other}>
+                  {intl.formatMessage({
+                    defaultMessage: 'Other',
+                    id: '/VnDMl',
+                  })}
+                </Select.Option>
               </Select>
             </Form.Item>
           </Col>
@@ -121,7 +175,7 @@ const EditCrimeType = ({
         <Row style={{ marginTop: 30 }} gutter={16} justify="end">
           <Col>
             <Button disabled={saving} onClick={onClose}>
-              Cancel
+              {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
             </Button>
           </Col>
           <Col>
@@ -131,12 +185,13 @@ const EditCrimeType = ({
               type="primary"
               htmlType="submit"
             >
-              Save
+              {intl.formatMessage({ defaultMessage: 'Save', id: 'jvo0vs' })}
             </Button>
           </Col>
         </Row>
       </Form.Item>
     </Form>
   );
+};
 
 export default EditCrimeType;

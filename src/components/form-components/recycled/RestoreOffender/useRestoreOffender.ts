@@ -69,7 +69,7 @@ const useRestoreOffender = ({
   const onSubmit = () => {
     setSaving(true);
     if (offenderId && recycledId)
-      restoreOffender({
+      void restoreOffender({
         variables: {
           id: offenderId,
           recycledId,
@@ -101,7 +101,7 @@ const useRestoreOffender = ({
   const onDelete = () => {
     setSaving(true);
     if (offenderId)
-      deleteOffender({
+      void deleteOffender({
         variables: { where: { id: offenderId } },
       });
   };

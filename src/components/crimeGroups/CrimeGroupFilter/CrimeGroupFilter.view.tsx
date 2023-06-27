@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Col, Row, Select, Typography, DatePicker, Form } from 'antd';
 import { SortOrder } from 'graphql/generated';
 import type { DateType } from 'types/DataType';
+import { useIntl } from 'react-intl';
 import useStyles from './CrimeGroupFilter.styles';
 
 const { RangePicker } = DatePicker;
@@ -32,6 +33,7 @@ const CrimeGroupFilter = ({
 }: Props): JSX.Element => {
   const classes = useStyles();
   const [form] = useForm<FormData>();
+  const intl = useIntl();
 
   return (
     <Form<FormData> form={form}>
@@ -47,7 +49,10 @@ const CrimeGroupFilter = ({
               });
             }}
           >
-            Clear Filters
+            {intl.formatMessage({
+              defaultMessage: 'Clear Filters',
+              id: 'MsGXc3',
+            })}
           </Button>
         </Col>
       </Row>
@@ -55,7 +60,7 @@ const CrimeGroupFilter = ({
       <Row gutter={16}>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
-            Sort Order
+            {intl.formatMessage({ defaultMessage: 'Sort Order', id: 'Hw6crD' })}
           </Typography.Paragraph>
           <Select
             className={classes.select}
@@ -63,15 +68,28 @@ const CrimeGroupFilter = ({
             onChange={setOrder}
             size="small"
           >
-            <Select.Option value={SortOrder.Desc}>Newest First</Select.Option>
-            <Select.Option value={SortOrder.Asc}>Oldest First</Select.Option>
+            <Select.Option value={SortOrder.Desc}>
+              {intl.formatMessage({
+                defaultMessage: 'Newest First',
+                id: 'dZYazP',
+              })}
+            </Select.Option>
+            <Select.Option value={SortOrder.Asc}>
+              {intl.formatMessage({
+                defaultMessage: 'Oldest First',
+                id: 'FqI37D',
+              })}
+            </Select.Option>
           </Select>
         </Col>
       </Row>
       <Row gutter={16}>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
-            Created Between
+            {intl.formatMessage({
+              defaultMessage: 'Created Between',
+              id: 'hGJYON',
+            })}
           </Typography.Paragraph>
 
           <Form.Item name="date">
@@ -91,11 +109,14 @@ const CrimeGroupFilter = ({
       <Row gutter={16}>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
-            Groups
+            {intl.formatMessage({ defaultMessage: 'Groups', id: 'hzmswI' })}
           </Typography.Paragraph>
           <Select
             className={classes.select}
-            placeholder="Groups"
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Groups',
+              id: 'hzmswI',
+            })}
             mode="multiple"
             size="small"
             maxTagCount={2}

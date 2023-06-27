@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { Card, Carousel, Col, Row, Skeleton, Typography } from 'antd';
 
-import { Age, Build, Gender, Race } from 'graphql/generated';
+import type { Age, Build, Gender, Race } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faClock,
@@ -25,8 +25,9 @@ import {
 } from 'utils/offender/get-offender-desc';
 
 import moment from 'moment';
-import { CarouselRef } from 'antd/lib/carousel';
+import type { CarouselRef } from 'antd/lib/carousel';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import { useIntl } from 'react-intl';
 
 const { Title, Text } = Typography;
 
@@ -55,7 +56,7 @@ interface Props {
 
 const OffenderCard = ({ offender }: Props): JSX.Element => {
   const imagesRef = useRef<CarouselRef>(null);
-
+  const intl = useIntl();
   return (
     <Card
       className="offender-card"
@@ -123,7 +124,17 @@ const OffenderCard = ({ offender }: Props): JSX.Element => {
               </Text>
             </Col>
           </Row>
-          <Text type="secondary">Alert ID: {offender?.reference}</Text>
+          <Text type="secondary">
+            {intl.formatMessage(
+              {
+                id: 'umL9sI',
+                defaultMessage: 'Alert ID: {ref}',
+              },
+              {
+                ref: offender?.reference,
+              }
+            )}
+          </Text>
           <Row style={{ marginTop: 5, marginBottom: 10 }}>
             <Col>
               <FontAwesomeIcon
@@ -132,9 +143,16 @@ const OffenderCard = ({ offender }: Props): JSX.Element => {
                 icon={faClock}
               />
               <Text type="secondary">
-                Last updated:{' '}
-                {moment(offender?.updatedAt || moment()).format(
-                  `ddd MMM DD YYYY - HH:mm`
+                {intl.formatMessage(
+                  {
+                    id: 'ZdCdo5',
+                    defaultMessage: 'Last updated: {date}',
+                  },
+                  {
+                    date: moment(offender?.updatedAt || moment()).format(
+                      `ddd MMM DD YYYY - HH:mm`
+                    ),
+                  }
                 )}
               </Text>
             </Col>
@@ -149,7 +167,10 @@ const OffenderCard = ({ offender }: Props): JSX.Element => {
               icon={faUserClock}
             />
             <Text type="secondary">
-              Age:{' '}
+              {intl.formatMessage({
+                defaultMessage: 'Age: ',
+                id: 'anqdpr',
+              })}
               {offender.dateOfBirth
                 ? calcAge(offender.dateOfBirth)
                 : getOffenderAge(offender.age)}
@@ -162,7 +183,11 @@ const OffenderCard = ({ offender }: Props): JSX.Element => {
               icon={faUserTag}
             />
             <Text type="secondary">
-              Build:{getOffenderBuild(offender.build)}
+              {intl.formatMessage({
+                defaultMessage: 'Build: ',
+                id: 'iXQkAi',
+              })}
+              {getOffenderBuild(offender.build)}
             </Text>
           </Col>
           <Col flex={1}>
@@ -172,7 +197,11 @@ const OffenderCard = ({ offender }: Props): JSX.Element => {
               icon={faMarsAndVenus}
             />
             <Text type="secondary">
-              Sex: {getOffenderGender(offender.gender)}
+              {intl.formatMessage({
+                defaultMessage: 'Sex: ',
+                id: 'j3ULId',
+              })}
+              {getOffenderGender(offender.gender)}
             </Text>
           </Col>
         </Row>
@@ -184,7 +213,11 @@ const OffenderCard = ({ offender }: Props): JSX.Element => {
               icon={faEarth}
             />
             <Text type="secondary">
-              Ethnicity: {getOffenderRace(offender.race, false)}
+              {intl.formatMessage({
+                defaultMessage: 'Ethnicity: ',
+                id: 'H+Sv5C',
+              })}
+              {getOffenderRace(offender.race, false)}
             </Text>
           </Col>
         </Row>

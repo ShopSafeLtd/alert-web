@@ -53,7 +53,7 @@ const useEditOffenderWarning = ({ onClose, offenderId }: Props): Return => {
   const onSubmit = (data: FormData) => {
     setSaving(true);
     if (offenderId)
-      updateTag({
+      void updateTag({
         variables: {
           where: {
             id: offenderId,

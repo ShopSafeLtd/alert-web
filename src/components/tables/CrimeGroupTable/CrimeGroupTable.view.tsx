@@ -3,6 +3,7 @@ import { Table } from 'antd';
 import { useNavigate } from 'react-router';
 import { createUseStyles } from 'react-jss';
 import type { ColumnsType } from 'antd/es/table/interface';
+import { FormattedMessage } from 'react-intl';
 
 const useStyles = createUseStyles({
   row: { cursor: 'pointer' },
@@ -33,29 +34,29 @@ const columns: ColumnsType<CrimeGroupsTable> = [
   {
     key: 'reference',
     dataIndex: 'reference',
-    title: 'Alert ID',
+    title: <FormattedMessage id="k8ZNgH" defaultMessage="Alert ID" />,
     width: 100,
   },
   {
     key: 'alias',
     dataIndex: 'alias',
-    title: 'Alias',
+    title: <FormattedMessage id="Ri9jA7" defaultMessage="Alias" />,
   },
   {
     key: 'totalOffenders',
     dataIndex: 'totalOffenders',
-    title: 'Members',
+    title: <FormattedMessage id="xb54TN" defaultMessage="Offenders" />,
   },
   {
     key: 'totalIncidents',
     dataIndex: 'totalIncidents',
-    title: 'Incidents',
+    title: <FormattedMessage id="mtr3R4" defaultMessage="Incidents" />,
   },
   {
     key: 'totalValue',
     dataIndex: 'totalValue',
-    title: 'Lost Value',
-    render: (value) => `£${value.toLocaleString() || 0}`,
+    title: <FormattedMessage id="MoJx/h" defaultMessage="Total Value" />,
+    render: (value: number) => `£${value.toLocaleString() || 0}`,
   },
   // {
   //   key: 'totalRecoveredValue',

@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Badge, Button, Col, Drawer, Grid, Menu, Row, Typography } from 'antd';
@@ -172,7 +174,7 @@ const SideNavContent = (props: SideNavContentProps) => {
             <Menu.SubMenu
               key={menu.key}
               icon={<Icon icon={menu.icon} />}
-              title={setLocale(localization, menu.title)}
+              title={setLocale(localization, menu.intl.id)}
             >
               {menu.submenu.map((subMenuFirst) =>
                 subMenuFirst.submenu.length > 0 ? (
@@ -183,7 +185,7 @@ const SideNavContent = (props: SideNavContentProps) => {
                       ) : null
                     }
                     key={subMenuFirst.key}
-                    title={setLocale(localization, subMenuFirst.title)}
+                    title={setLocale(localization, subMenuFirst.intl.id)}
                   >
                     {subMenuFirst.submenu.map((subMenuSecond) => (
                       <Menu.Item key={subMenuSecond.key}>
@@ -191,7 +193,7 @@ const SideNavContent = (props: SideNavContentProps) => {
                           <Icon icon={subMenuSecond?.icon} />
                         ) : null}
                         <span>
-                          {setLocale(localization, subMenuSecond.title)}
+                          {setLocale(localization, subMenuSecond.intl.id)}
                         </span>
                         <Link
                           onClick={() => closeMobileNav()}
@@ -205,7 +207,7 @@ const SideNavContent = (props: SideNavContentProps) => {
                     {subMenuFirst.icon ? (
                       <SubIcon icon={subMenuFirst.icon} />
                     ) : null}
-                    <span>{setLocale(localization, subMenuFirst.title)}</span>
+                    <span>{setLocale(localization, subMenuFirst.intl.id)}</span>
                     <Link
                       onClick={() => closeMobileNav()}
                       to={subMenuFirst.path}
@@ -225,10 +227,10 @@ const SideNavContent = (props: SideNavContentProps) => {
                   showZero
                   style={{ height: 20, padding: 3 }}
                 >
-                  <span>{setLocale(localization, menu?.title)}</span>
+                  <span>{setLocale(localization, menu?.intl.id)}</span>
                 </Badge>
               ) : (
-                <span>{setLocale(localization, menu?.title)}</span>
+                <span>{setLocale(localization, menu?.intl.id)}</span>
               )}{' '}
               {menu.path ? (
                 <Link onClick={() => closeMobileNav()} to={menu.path} />

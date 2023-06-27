@@ -8,8 +8,8 @@ describe('List Officer View', () => {
     recycledItems: [
       {
         id: 'testId',
-        deletedAt: '2022-07-25T08:57:55.299Z',
-        expiresAt: '2022-07-25T08:57:55.299Z',
+        deletedAt: new Date('2022-07-25T08:57:55.299Z'),
+        expiresAt: new Date('2022-07-25T08:57:55.299Z'),
         systemTask: false,
         scheme: { id: 'schemeId' },
         offender: null,
@@ -20,7 +20,7 @@ describe('List Officer View', () => {
         },
         incident: {
           id: 'incidentId',
-          date: '2022-08-01T16:44:33.355Z',
+          date: new Date('2022-07-25T08:57:55.299Z'),
           recycled: true,
           subject: 'test subject',
           location: null,

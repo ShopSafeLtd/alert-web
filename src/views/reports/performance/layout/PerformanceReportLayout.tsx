@@ -41,10 +41,10 @@ import {
   TargetedBusinessColumns,
   TargetGoodsColumns,
 } from 'components/reports/tableColumns';
+import { useIntl } from 'react-intl';
 import type { PerformanceReportQuery } from '../../../../graphql/generated';
 import useStyles from '../../styles/report.styles';
-import type { AllowedValue, Elements } from '../../types';
-import { MetaData } from '../../types';
+import type { AllowedValue, Elements, MetaData } from '../../types';
 
 interface ContributorTable {
   key: string;
@@ -104,7 +104,7 @@ const PerformanceReportLayout = ({
       rowHeight * targetH + margin[1] * (targetH - 1) - (offset || 0)
     }px`;
   };
-
+  const intl = useIntl();
   const components: Elements = {
     createdSummary: (
       <Card
@@ -125,12 +125,20 @@ const PerformanceReportLayout = ({
 
         <Row>
           <Col span={12}>
-            <Title level={4}>Created Summary</Title>
+            <Title level={4}>
+              {intl.formatMessage({
+                defaultMessage: 'Created Summary',
+                id: 'gNrgvu',
+              })}
+            </Title>
           </Col>
           <Row className="stats-row">
             <Statistic
               className={classes.stats}
-              title="Incidents Created"
+              title={intl.formatMessage({
+                defaultMessage: 'Incidents Created',
+                id: 'UOcKMI',
+              })}
               value={data?.performanceReport?.createdDataCounts?.incidents || 0}
               prefix={
                 <FontAwesomeIcon
@@ -142,7 +150,10 @@ const PerformanceReportLayout = ({
 
             <Statistic
               className={classes.stats}
-              title="Offenders Created"
+              title={intl.formatMessage({
+                defaultMessage: 'Offenders Created',
+                id: 'kNP3in',
+              })}
               value={data?.performanceReport?.createdDataCounts?.offenders || 0}
               prefix={
                 <FontAwesomeIcon
@@ -154,7 +165,10 @@ const PerformanceReportLayout = ({
 
             <Statistic
               className={classes.stats}
-              title="Updated Submitted"
+              title={intl.formatMessage({
+                defaultMessage: 'Updates Submitted',
+                id: 'E/xqrh',
+              })}
               value={data?.performanceReport?.createdDataCounts?.updates || 0}
               prefix={
                 <FontAwesomeIcon
@@ -166,7 +180,10 @@ const PerformanceReportLayout = ({
 
             <Statistic
               className={classes.stats}
-              title="Messages Sent"
+              title={intl.formatMessage({
+                defaultMessage: 'Messages Sent',
+                id: 'QGQoOa',
+              })}
               value={data?.performanceReport?.createdDataCounts?.messages || 0}
               prefix={
                 <FontAwesomeIcon
@@ -178,7 +195,10 @@ const PerformanceReportLayout = ({
 
             <Statistic
               className={classes.stats}
-              title="Vehicles Created"
+              title={intl.formatMessage({
+                defaultMessage: 'Vehicles Created',
+                id: 'PX1DHW',
+              })}
               value={
                 data?.performanceReport?.createdDataCounts?.vehicles || 0 || 0
               }
@@ -189,7 +209,10 @@ const PerformanceReportLayout = ({
 
             <Statistic
               className={classes.stats}
-              title="Crime Groups Created"
+              title={intl.formatMessage({
+                defaultMessage: 'Crime Groups Created',
+                id: '4bsmSr',
+              })}
               value={
                 data?.performanceReport?.createdDataCounts?.crimeGroups || 0
               }
@@ -222,12 +245,20 @@ const PerformanceReportLayout = ({
         />
         <Row>
           <Col span={12}>
-            <Title level={4}>Incidents Summary</Title>
+            <Title level={4}>
+              {intl.formatMessage({
+                defaultMessage: 'Incidents Summary',
+                id: 'DGld1Y',
+              })}
+            </Title>
           </Col>
           <Row className="stats-row">
             <Statistic
               className={classes.stats}
-              title="Last Incident (in range)"
+              title={intl.formatMessage({
+                defaultMessage: 'Last Incident (in range)',
+                id: 'lI3BDd',
+              })}
               value={
                 data?.performanceReport?.incidentSummary?.lastIncidentDate
                   ? new Date(
@@ -245,7 +276,10 @@ const PerformanceReportLayout = ({
 
             <Statistic
               className={classes.stats}
-              title="Reported to Police"
+              title={intl.formatMessage({
+                defaultMessage: 'Reported to Police',
+                id: 'LhTpVN',
+              })}
               value={
                 data?.performanceReport?.incidentSummary
                   ?.incidentsReportedToPolice || 0
@@ -260,7 +294,10 @@ const PerformanceReportLayout = ({
 
             <Statistic
               className={classes.stats}
-              title="Police Attended"
+              title={intl.formatMessage({
+                defaultMessage: 'Police Attended',
+                id: 'ES0Nc8',
+              })}
               value={
                 data?.performanceReport?.incidentSummary
                   ?.incidentsWherePoliceAttended || 0
@@ -275,7 +312,10 @@ const PerformanceReportLayout = ({
 
             <Statistic
               className={classes.stats}
-              title="Most common crime type"
+              title={intl.formatMessage({
+                defaultMessage: 'Most Common Crime Type',
+                id: 'jbbNOa',
+              })}
               value={
                 data?.performanceReport?.incidentSummary?.mostCommonCrimeType ||
                 ''
@@ -290,7 +330,10 @@ const PerformanceReportLayout = ({
 
             <Statistic
               className={classes.stats}
-              title="Crime Groups"
+              title={intl.formatMessage({
+                defaultMessage: 'Crime Groups',
+                id: 'a0aLil',
+              })}
               value={
                 data?.performanceReport?.createdDataCounts?.crimeGroups || 0
               }
@@ -323,18 +366,29 @@ const PerformanceReportLayout = ({
         />
         <Row>
           <Col span={12}>
-            <Title level={4}>Loss Summary</Title>
+            <Title level={4}>
+              {intl.formatMessage({
+                defaultMessage: 'Loss Summary',
+                id: 'O0DXtz',
+              })}
+            </Title>
           </Col>
           <Row className="stats-row">
             <Statistic
               className={classes.stats}
-              title="Total lost value"
+              title={intl.formatMessage({
+                defaultMessage: 'Total lost value',
+                id: 'xhO9Od',
+              })}
               value={
                 data?.performanceReport?.lossTotals?.totalLostValue
                   ? `£${data?.performanceReport?.lossTotals?.totalLostValue.toFixed(
                       2
                     )}`
-                  : 'No Losses'
+                  : intl.formatMessage({
+                      defaultMessage: 'No Losses',
+                      id: '9RLqIM',
+                    })
               }
               prefix={
                 <FontAwesomeIcon
@@ -346,13 +400,19 @@ const PerformanceReportLayout = ({
             />
             <Statistic
               className={classes.stats}
-              title="Total recovered value"
+              title={intl.formatMessage({
+                defaultMessage: 'Total recovered value',
+                id: 'OorvGS',
+              })}
               value={
                 data?.performanceReport?.lossTotals?.totalRecoveredValue
                   ? `£${data?.performanceReport?.lossTotals?.totalRecoveredValue.toFixed(
                       2
                     )}`
-                  : 'No Recoveries'
+                  : intl.formatMessage({
+                      defaultMessage: 'No Recoveries',
+                      id: 'i7IHf9',
+                    })
               }
               prefix={
                 <FontAwesomeIcon
@@ -364,7 +424,10 @@ const PerformanceReportLayout = ({
             />
             <Statistic
               className={classes.stats}
-              title="Average Success Rate"
+              title={intl.formatMessage({
+                defaultMessage: 'Average Success Rate',
+                id: 'G+JbdY',
+              })}
               value={`${(
                 (data?.performanceReport?.lossTotals?.averageSuccessRate || 0) *
                 100
@@ -378,11 +441,14 @@ const PerformanceReportLayout = ({
             />
             <Statistic
               className={classes.stats}
-              title="Average Loss per Incident"
+              title={intl.formatMessage({
+                defaultMessage: 'Average Loss per Incident',
+                id: 'k62cVY',
+              })}
               value={
-                `£${data?.performanceReport?.lossTotals?.averagePerIncident.toFixed(
-                  2
-                )}` || ''
+                `£${(
+                  data?.performanceReport?.lossTotals?.averagePerIncident || 0
+                ).toFixed(2)}` || ''
               }
               prefix={
                 <FontAwesomeIcon
@@ -392,12 +458,15 @@ const PerformanceReportLayout = ({
               }
             />
           </Row>
-        </Row>{' '}
+        </Row>
       </Card>
     ),
     crimeTypesDonut: (
       <Card
-        title="Crime Types"
+        title={intl.formatMessage({
+          defaultMessage: 'Crime Types',
+          id: 'Piba4q',
+        })}
         className="no-break"
         loading={loading}
         style={{ height: calculateHeight('crimeTypesDonut') }}
@@ -464,15 +533,24 @@ const PerformanceReportLayout = ({
         ) : (
           <BarGraph
             data={data?.performanceReport?.crimeTypeDonut}
-            emptyLabel="No Crime Types"
-            labelFormat="Incidents"
+            emptyLabel={intl.formatMessage({
+              defaultMessage: 'No Crime Types',
+              id: 'BbTEjZ',
+            })}
+            labelFormat={intl.formatMessage({
+              defaultMessage: 'Incidents',
+              id: 'mtr3R4',
+            })}
           />
         )}
       </Card>
     ),
     involvedTagsDonut: (
       <Card
-        title="Involved Tags"
+        title={intl.formatMessage({
+          defaultMessage: 'Involved Tags',
+          id: 'hqB+1X',
+        })}
         className="no-break"
         loading={loading}
         style={{ height: calculateHeight('involvedTagsDonut') }}
@@ -539,8 +617,14 @@ const PerformanceReportLayout = ({
         ) : (
           <BarGraph
             data={data?.performanceReport?.involvedTagCountDonut}
-            emptyLabel="No Involved Tags"
-            labelFormat="Incidents"
+            emptyLabel={intl.formatMessage({
+              defaultMessage: 'No Involved Tags',
+              id: 'N26vgU',
+            })}
+            labelFormat={intl.formatMessage({
+              defaultMessage: 'Incidents',
+              id: 'mtr3R4',
+            })}
           />
         )}
       </Card>
@@ -548,7 +632,10 @@ const PerformanceReportLayout = ({
 
     goodsTypeDonut: (
       <Card
-        title="Goods type count"
+        title={intl.formatMessage({
+          defaultMessage: 'Goods Type Count',
+          id: 'z1wXYP',
+        })}
         className="no-break"
         loading={loading}
         key="goodsTypeDonut"
@@ -606,7 +693,10 @@ const PerformanceReportLayout = ({
           'pie' ? (
           <DonutGraph
             data={data?.performanceReport?.goodsTypeCountDonut}
-            emptyLabel="No goods count"
+            emptyLabel={intl.formatMessage({
+              defaultMessage: 'No goods count',
+              id: '2t8hXG',
+            })}
             type={
               metadata.find((item) => item.key === 'goodsTypeDonut')?.type as
                 | 'donut'
@@ -616,15 +706,24 @@ const PerformanceReportLayout = ({
         ) : (
           <BarGraph
             data={data?.performanceReport?.goodsTypeCountDonut}
-            emptyLabel="No goods count"
-            labelFormat="Incidents"
+            emptyLabel={intl.formatMessage({
+              defaultMessage: 'No goods count',
+              id: '2t8hXG',
+            })}
+            labelFormat={intl.formatMessage({
+              defaultMessage: 'Incidents',
+              id: 'mtr3R4',
+            })}
           />
         )}
       </Card>
     ),
     goodsValueDonut: (
       <Card
-        title="Goods type value"
+        title={intl.formatMessage({
+          defaultMessage: 'Goods type value',
+          id: 'YQkHXw',
+        })}
         className="no-break"
         loading={loading}
         key="goodsValueDonut"
@@ -683,7 +782,10 @@ const PerformanceReportLayout = ({
           <DonutGraph
             labelFormat="£"
             data={data?.performanceReport?.goodsTypeValueDonut}
-            emptyLabel="No goods values"
+            emptyLabel={intl.formatMessage({
+              defaultMessage: 'No goods values',
+              id: 'pbIqi6',
+            })}
             type={
               metadata.find((item) => item.key === 'goodsValueDonut')?.type as
                 | 'donut'
@@ -693,7 +795,10 @@ const PerformanceReportLayout = ({
         ) : (
           <BarGraph
             data={data?.performanceReport?.goodsTypeValueDonut}
-            emptyLabel="No goods values"
+            emptyLabel={intl.formatMessage({
+              defaultMessage: 'No goods values',
+              id: 'pbIqi6',
+            })}
             labelFormat="£"
           />
         )}
@@ -717,7 +822,10 @@ const PerformanceReportLayout = ({
           onClick={() => removeItem('incidentsDayOfWeekGraph')}
         />
         <LineGraph
-          label="Incidents by day of week"
+          label={intl.formatMessage({
+            defaultMessage: 'Incidents by day of week',
+            id: 'LPtzWr',
+          })}
           data={data?.performanceReport?.incidentDayOfWeekLine}
           dataLabel="incidents"
           emptyLabel="No incidents"
@@ -742,7 +850,10 @@ const PerformanceReportLayout = ({
           onClick={() => removeItem('incidentsHeatMap')}
         />
         <HeatMapGoogle
-          label="Incidents heatmap"
+          label={intl.formatMessage({
+            defaultMessage: 'Incidents heatmap',
+            id: 'UTvOxQ',
+          })}
           data={
             data?.incidentHeatPerformance?.incidents
               ?.filter(
@@ -775,7 +886,12 @@ const PerformanceReportLayout = ({
           size="small"
           onClick={() => removeItem('businessContributionTable')}
         />
-        <Title level={4}>Business Contributions</Title>
+        <Title level={4}>
+          {intl.formatMessage({
+            defaultMessage: 'Business contribution',
+            id: '5ETgSz',
+          })}
+        </Title>
         <Table
           size="small"
           className="no-break"
@@ -811,7 +927,12 @@ const PerformanceReportLayout = ({
           size="small"
           onClick={() => removeItem('topContributors')}
         />
-        <Title level={4}>Top Contributors</Title>
+        <Title level={4}>
+          {intl.formatMessage({
+            defaultMessage: 'Top Contributors',
+            id: 'r67UpQ',
+          })}
+        </Title>
         <Table<ContributorTable>
           size="small"
           className="no-break"
@@ -847,7 +968,12 @@ const PerformanceReportLayout = ({
           size="small"
           onClick={() => removeItem('offendersTable')}
         />
-        <Title level={4}>Offenders Table</Title>
+        <Title level={4}>
+          {intl.formatMessage({
+            defaultMessage: 'Offenders Table',
+            id: 'pSy8jU',
+          })}
+        </Title>
         <Table
           size="small"
           className="no-break"
@@ -883,7 +1009,12 @@ const PerformanceReportLayout = ({
           size="small"
           onClick={() => removeItem('crimeGroupTable')}
         />
-        <Title level={4}>Crime group table</Title>
+        <Title level={4}>
+          {intl.formatMessage({
+            defaultMessage: 'Crime Group Table',
+            id: 'RBV3cF',
+          })}
+        </Title>
         <Table
           size="small"
           className="no-break"
@@ -919,7 +1050,12 @@ const PerformanceReportLayout = ({
           size="small"
           onClick={() => removeItem('targetedBusinessTable')}
         />
-        <Title level={4}>Targeted Business</Title>
+        <Title level={4}>
+          {intl.formatMessage({
+            defaultMessage: 'Targeted Business',
+            id: 'CA+Z1B',
+          })}
+        </Title>
         <Table
           size="small"
           className="no-break"
@@ -958,7 +1094,12 @@ const PerformanceReportLayout = ({
           size="small"
           onClick={() => removeItem('targetedGoodsTable')}
         />
-        <Title level={4}>Targeted Goods</Title>
+        <Title level={4}>
+          {intl.formatMessage({
+            defaultMessage: 'Targeted Goods',
+            id: 'dLBbg0',
+          })}
+        </Title>
         <Table
           size="small"
           className="no-break"
@@ -991,7 +1132,12 @@ const PerformanceReportLayout = ({
           zIndex: 100,
         }}
       >
-        <Typography.Paragraph>Page 1</Typography.Paragraph>
+        <Typography.Paragraph>
+          {intl.formatMessage({
+            defaultMessage: 'Page 1',
+            id: 'hEAGzW',
+          })}
+        </Typography.Paragraph>
       </div>
     ),
     pageBreak2: (
@@ -1005,7 +1151,12 @@ const PerformanceReportLayout = ({
           zIndex: 100,
         }}
       >
-        <Typography.Paragraph>Page 2</Typography.Paragraph>
+        <Typography.Paragraph>
+          {intl.formatMessage({
+            defaultMessage: 'Page 2',
+            id: 'Q3p9d3',
+          })}
+        </Typography.Paragraph>
       </div>
     ),
   };

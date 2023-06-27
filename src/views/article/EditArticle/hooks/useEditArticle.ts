@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-argument */
 import { useEffect, useRef, useState } from 'react';
 import type { SelectProps, UploadProps } from 'antd';
 import { Form } from 'antd';
@@ -251,7 +252,7 @@ const useEditArticle = (): Props => {
       if (found) {
         formattedValues.push(value.value);
       } else {
-        createTag({
+        void createTag({
           variables: {
             data: {
               name: value.value,
@@ -383,7 +384,7 @@ const useEditArticle = (): Props => {
       };
 
       const formData = new FormData();
-      formData.append('file', blobInfo.blob(), blobInfo.filename());
+      formData.append('file', blobInfo.blob() as Blob, blobInfo.filename());
 
       xhr.send(formData);
     });
@@ -462,29 +463,30 @@ const useEditArticle = (): Props => {
         const { blobCache } = (window as any).tinymce.activeEditor.editorUpload;
         const base64 = (reader.result as string).split(',')[1];
         const blobInfo = blobCache.create(id, file, base64);
-        upload({ blob: blobInfo.blob(), fileName: blobInfo.filename() }).then(
-          (url) => {
-            blobCache.add(blobInfo);
+        void upload({
+          blob: blobInfo.blob(),
+          fileName: blobInfo.filename(),
+        }).then((url) => {
+          blobCache.add(blobInfo);
 
-            if (meta.filetype === 'file') {
-              fileList.push({
-                ...file,
-                url,
-                name: file.name,
-                uid: id,
-              } as UploadFile);
-            }
-            if (meta.filetype === 'image') {
-              imageList.push({
-                ...file,
-                url,
-                name: file.name,
-                uid: id,
-              } as UploadFile);
-            }
-            callback(url, { title: file.name });
+          if (meta.filetype === 'file') {
+            fileList.push({
+              ...file,
+              url,
+              name: file.name,
+              uid: id,
+            } as UploadFile);
           }
-        );
+          if (meta.filetype === 'image') {
+            imageList.push({
+              ...file,
+              url,
+              name: file.name,
+              uid: id,
+            } as UploadFile);
+          }
+          callback(url, { title: file.name });
+        });
         // blobCache.add(blobInfo);
         // callback(blobInfo.blobUri(), { title: file.name });
       });
@@ -703,6 +705,7 @@ const useEditArticle = (): Props => {
     selectedCategories,
     form,
     data,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onSubmit,
     loading: tagsLoading || loading || saving,
     fileList,

@@ -5,10 +5,11 @@ import { createStore, StoreProvider } from 'easy-peasy';
 import { storeModel } from 'state';
 import { MemoryRouter } from 'react-router-dom';
 import {
-  QueryMode,
   ListSchemeUsersDocument,
+  QueryMode,
   SchemeGroupsDocument,
 } from 'graphql/generated';
+import { FormattedMessage } from 'react-intl';
 import useUserList from '../useUserList';
 
 const mocks = [
@@ -21,6 +22,7 @@ const mocks = [
             some: {
               scheme: {
                 id: {
+                  // eslint-disable-next-line sonarjs/no-duplicate-string
                   equals: 'test schemeId',
                 },
               },
@@ -114,8 +116,20 @@ const UseUserListTest = () => {
   return (
     <div>
       {Users}
-      <span>{loading ? 'true' : 'false'}</span>
-      <span>{groupsLoading ? 'true' : 'false'}</span>
+      <span>
+        {loading ? (
+          <FormattedMessage defaultMessage="true" id="kSDNX6" />
+        ) : (
+          <FormattedMessage defaultMessage="false" id="cZ+mfu" />
+        )}
+      </span>
+      <span>
+        {groupsLoading ? (
+          <FormattedMessage defaultMessage="true" id="kSDNX6" />
+        ) : (
+          <FormattedMessage defaultMessage="false" id="cZ+mfu" />
+        )}
+      </span>
     </div>
   );
 };

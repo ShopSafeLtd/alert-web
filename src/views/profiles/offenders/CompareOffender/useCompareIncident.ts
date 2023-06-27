@@ -87,7 +87,7 @@ const compareIncident = (): Return => {
   const [queryOffender, { data }] = useViewOffenderCompareLazyQuery();
 
   useEffect(() => {
-    queryOffender({
+    void queryOffender({
       variables: {
         where: {
           id: offenderId,
@@ -122,11 +122,13 @@ const compareIncident = (): Return => {
 
   const addOffenders = (value: OffenderData) => {
     setOffenders([
+      // @ts-expect-error Date or null
       ...offenders,
       {
         id: value.id,
         images: value.images || [],
         tags: value.tags,
+        // @ts-expect-error Date or null
         updatedAt: value.updatedAt,
         age: value.age,
         build: value.build,
@@ -254,7 +256,7 @@ const compareIncident = (): Return => {
     //   tags: preview.tags.map(({ id }) => ({ id })),
     // };
     // const otherOffenders = offenders.filter(({ id }) => id !== preview.id);
-    mergeOffenders({
+    void mergeOffenders({
       variables: {
         data: {
           name: preview.name,

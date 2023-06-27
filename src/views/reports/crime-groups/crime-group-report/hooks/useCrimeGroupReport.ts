@@ -151,7 +151,7 @@ const useCrimeGroupReport = (): Return => {
       ?.filter((good) => good.totalIncidents > 0)
 
       .map((good, i) => ({
-        key: good.name + i,
+        key: good.name + i.toString(),
         fullName: good.name,
         incidentsCreated: good.totalIncidents,
         offendersCreated: good.totalOffenders,
@@ -166,7 +166,7 @@ const useCrimeGroupReport = (): Return => {
       ?.filter((business) => business.totalIncidents > 0)
 
       .map((business, i) => ({
-        key: business.name + i,
+        key: business.name + i.toString(),
         fullName: business.name,
         incidentsCreated: business.totalIncidents,
         offendersCreated: business.totalOffenders,
@@ -181,7 +181,7 @@ const useCrimeGroupReport = (): Return => {
   const offendersTableData =
     data?.offendersPerformance?.offenderPerformance?.map((offender, i) => ({
       totalIncidents: offender.totalIncidents,
-      key: offender.name + i,
+      key: offender.name + i.toString(),
       alertId: offender.alertId,
       fullName: offender.name,
       image: offender.primaryPhoto,

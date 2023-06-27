@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Col, Input, Row, Table, Typography } from 'antd';
 import type { SearchBusinessesQuery } from 'graphql/generated';
+import { useIntl } from 'react-intl';
 import useStyles from './search.styles';
 
 const { Title } = Typography;
@@ -25,13 +26,23 @@ const SearchBusiness = ({
   onSearchPageChange,
 }: Props) => {
   const classes = useStyles();
+  const intl = useIntl();
+
   return (
     <div className={classes.searchPage}>
-      <Title level={3}>Select an business to view</Title>
+      <Title level={3}>
+        {intl.formatMessage({
+          defaultMessage: 'Select an business to view',
+          id: '4Y/QAD',
+        })}
+      </Title>
       <Row className={classes.toolbar}>
         <Col span={8}>
           <Input
-            placeholder="Search for an business..."
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Search for an business...',
+              id: 'K/tzzI',
+            })}
             value={searchValue}
             onChange={handleSearchChange}
           />
@@ -42,12 +53,18 @@ const SearchBusiness = ({
           {
             key: 'name',
             dataIndex: 'name',
-            title: 'Name',
+            title: intl.formatMessage({
+              defaultMessage: 'Name',
+              id: 'HAlOn1',
+            }),
           },
           {
             key: 'location',
             dataIndex: 'location',
-            title: 'location',
+            title: intl.formatMessage({
+              defaultMessage: 'Location',
+              id: 'rvirM2',
+            }),
           },
           {
             key: 'action',
@@ -55,7 +72,10 @@ const SearchBusiness = ({
             title: '',
             render: (_, item) => (
               <Button onClick={() => setSelectedBusiness(item.key)}>
-                Select
+                {intl.formatMessage({
+                  defaultMessage: 'Select',
+                  id: 'kQAf2d',
+                })}
               </Button>
             ),
             onCell: () => ({
@@ -78,7 +98,16 @@ const SearchBusiness = ({
           total: searchBusinessData?.listBusinesses?.total,
           pageSizeOptions: ['20', '50', '100'],
           defaultPageSize: 20,
-          showTotal: (total) => `Total businesses: ${total}`,
+          showTotal: (total) =>
+            intl.formatMessage(
+              {
+                defaultMessage: 'Total businesses: {total}',
+                id: 'HbFVjB',
+              },
+              {
+                total,
+              }
+            ),
         }}
         size="small"
       />

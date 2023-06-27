@@ -179,7 +179,7 @@ const useViewBusiness = (): Return => {
   });
 
   const onRemoveBusiness = (userId: string) => {
-    removeUserFromBusiness({
+    void removeUserFromBusiness({
       variables: {
         data: {
           id: userId,
@@ -282,143 +282,141 @@ const useViewBusiness = (): Return => {
     });
   };
 
-  const updateUsersListExisting: MutationUpdaterFn<InviteExistingUserMutation> =
-    (store, { data: res }) => {
-      if (
-        res?.inviteExistingUser === null ||
-        res?.inviteExistingUser === undefined
-      )
-        return;
+  const updateUsersListExisting: MutationUpdaterFn<
+    InviteExistingUserMutation
+  > = (store, { data: res }) => {
+    if (
+      res?.inviteExistingUser === null ||
+      res?.inviteExistingUser === undefined
+    )
+      return;
 
-      // get existing group list data from Apollo store
-      const existingData = store.readQuery<
-        ListBusinessUsersQuery,
-        ListBusinessUsersQueryVariables
-      >({
-        query: ListBusinessUsersDocument,
-        variables: {
-          groupWhere: {
-            scheme: {
-              id: {
-                equals: currentScheme,
-              },
+    // get existing group list data from Apollo store
+    const existingData = store.readQuery<
+      ListBusinessUsersQuery,
+      ListBusinessUsersQueryVariables
+    >({
+      query: ListBusinessUsersDocument,
+      variables: {
+        groupWhere: {
+          scheme: {
+            id: {
+              equals: currentScheme,
             },
           },
-          where: {
-            businesses: {
-              some: {
-                id: {
-                  equals: params.id,
-                },
+        },
+        where: {
+          businesses: {
+            some: {
+              id: {
+                equals: params.id,
               },
             },
           },
         },
-      });
+      },
+    });
 
-      if (existingData === null) return;
+    if (existingData === null) return;
 
-      // write the new data to the Apollo store
-      store.writeQuery<ListBusinessUsersQuery, ListBusinessUsersQueryVariables>(
-        {
-          query: ListBusinessUsersDocument,
-          data: {
-            users: [...existingData.users, res.inviteExistingUser],
-            __typename: 'Query',
-          },
-          variables: {
-            groupWhere: {
-              scheme: {
-                id: {
-                  equals: currentScheme,
-                },
-              },
+    // write the new data to the Apollo store
+    store.writeQuery<ListBusinessUsersQuery, ListBusinessUsersQueryVariables>({
+      query: ListBusinessUsersDocument,
+      data: {
+        users: [...existingData.users, res.inviteExistingUser],
+        __typename: 'Query',
+      },
+      variables: {
+        groupWhere: {
+          scheme: {
+            id: {
+              equals: currentScheme,
             },
-            where: {
-              businesses: {
-                some: {
-                  id: {
-                    equals: params.id,
-                  },
-                },
-              },
-            },
-          },
-        }
-      );
-    };
-
-  const updateAddUsersToBusiness: MutationUpdaterFn<AddUsersToBusinessMutation> =
-    (store, { data: res }) => {
-      if (
-        res?.addUsersToBusiness === null ||
-        res?.addUsersToBusiness === undefined
-      )
-        return;
-
-      // get existing group list data from Apollo store
-      const existingData = store.readQuery<
-        ListBusinessUsersQuery,
-        ListBusinessUsersQueryVariables
-      >({
-        query: ListBusinessUsersDocument,
-        variables: {
-          groupWhere: {
-            scheme: {
-              id: {
-                equals: currentScheme,
-              },
-            },
-          },
-          where: {
-            businesses: {
-              some: {
-                id: {
-                  equals: params.id,
-                },
-              },
-            },
-          },
-          orderBy: {
-            fullName: SortOrder.Asc,
           },
         },
-      });
-
-      if (existingData === null) return;
-
-      // write the new data to the Apollo store
-      store.writeQuery<ListBusinessUsersQuery, ListBusinessUsersQueryVariables>(
-        {
-          query: ListBusinessUsersDocument,
-          data: {
-            users: [...existingData.users, ...res.addUsersToBusiness.users],
-            __typename: 'Query',
-          },
-          variables: {
-            groupWhere: {
-              scheme: {
-                id: {
-                  equals: currentScheme,
-                },
+        where: {
+          businesses: {
+            some: {
+              id: {
+                equals: params.id,
               },
             },
-            where: {
-              businesses: {
-                some: {
-                  id: {
-                    equals: params.id,
-                  },
-                },
-              },
-            },
-            orderBy: {
-              fullName: SortOrder.Asc,
+          },
+        },
+      },
+    });
+  };
+
+  const updateAddUsersToBusiness: MutationUpdaterFn<
+    AddUsersToBusinessMutation
+  > = (store, { data: res }) => {
+    if (
+      res?.addUsersToBusiness === null ||
+      res?.addUsersToBusiness === undefined
+    )
+      return;
+
+    // get existing group list data from Apollo store
+    const existingData = store.readQuery<
+      ListBusinessUsersQuery,
+      ListBusinessUsersQueryVariables
+    >({
+      query: ListBusinessUsersDocument,
+      variables: {
+        groupWhere: {
+          scheme: {
+            id: {
+              equals: currentScheme,
             },
           },
-        }
-      );
-    };
+        },
+        where: {
+          businesses: {
+            some: {
+              id: {
+                equals: params.id,
+              },
+            },
+          },
+        },
+        orderBy: {
+          fullName: SortOrder.Asc,
+        },
+      },
+    });
+
+    if (existingData === null) return;
+
+    // write the new data to the Apollo store
+    store.writeQuery<ListBusinessUsersQuery, ListBusinessUsersQueryVariables>({
+      query: ListBusinessUsersDocument,
+      data: {
+        users: [...existingData.users, ...res.addUsersToBusiness.users],
+        __typename: 'Query',
+      },
+      variables: {
+        groupWhere: {
+          scheme: {
+            id: {
+              equals: currentScheme,
+            },
+          },
+        },
+        where: {
+          businesses: {
+            some: {
+              id: {
+                equals: params.id,
+              },
+            },
+          },
+        },
+        orderBy: {
+          fullName: SortOrder.Asc,
+        },
+      },
+    });
+  };
 
   return {
     data,

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
 import type { FormInstance } from 'antd';
 import { Form, Mentions, message } from 'antd';
 import type { RcFile } from 'antd/lib/upload';
@@ -51,6 +52,7 @@ import type {
   VehicleData,
 } from 'types/DataType';
 import errorNotification from 'types/error_notification';
+import { useIntl } from 'react-intl';
 
 const { getMentions } = Mentions;
 
@@ -321,12 +323,19 @@ const useUpdateBar = ({
       errorNotification();
     },
   });
+  const intl = useIntl();
   const beforeUpdateImageUpload = (value: RcFile) => {
     const isFileDuplicate = updateFileList.find(
       (item) => item.name === value.name
     );
     if (isFileDuplicate) {
-      message.error('This image already exists, please choose another one.');
+      void message.error(
+        intl.formatMessage({
+          defaultMessage:
+            'This image already exists, please choose another one.',
+          id: 'ILB9M+',
+        })
+      );
     }
     return !isFileDuplicate || Upload.LIST_IGNORE;
   };
@@ -339,11 +348,16 @@ const useUpdateBar = ({
       vehiclesData.length === 0 &&
       crimeGroupsData.length === 0
     ) {
-      message.info('The message cannot be empty!');
+      void message.info(
+        intl.formatMessage({
+          defaultMessage: 'The message cannot be empty!',
+          id: 'wkhZ0u',
+        })
+      );
     } else {
       if (!subscribed) {
         if (crimeGroupId) {
-          subscribeToCrimeGroup({
+          void subscribeToCrimeGroup({
             variables: {
               where: {
                 id: crimeGroupId,
@@ -360,7 +374,7 @@ const useUpdateBar = ({
           });
         }
         if (vehicleId) {
-          subscribeToVehicle({
+          void subscribeToVehicle({
             variables: {
               where: {
                 id: vehicleId,
@@ -377,7 +391,7 @@ const useUpdateBar = ({
           });
         }
         if (investigationId) {
-          subscribeToInvestigation({
+          void subscribeToInvestigation({
             variables: {
               where: {
                 id: investigationId,
@@ -394,7 +408,7 @@ const useUpdateBar = ({
           });
         }
         if (incidentId) {
-          subscribeToIncident({
+          void subscribeToIncident({
             variables: {
               where: {
                 id: incidentId,
@@ -411,7 +425,7 @@ const useUpdateBar = ({
           });
         }
         if (offenderId) {
-          subscribeToOffender({
+          void subscribeToOffender({
             variables: {
               where: {
                 id: offenderId,
@@ -497,7 +511,7 @@ const useUpdateBar = ({
       };
 
       if (incidentId) {
-        createIncidentUpdate({
+        void createIncidentUpdate({
           variables: {
             data,
             incident: {
@@ -586,7 +600,7 @@ const useUpdateBar = ({
         });
       }
       if (offenderId) {
-        createOffenderUpdate({
+        void createOffenderUpdate({
           variables: {
             data,
             offender: {
@@ -675,7 +689,7 @@ const useUpdateBar = ({
         });
       }
       if (investigationId) {
-        createInvestigationUpdate({
+        void createInvestigationUpdate({
           variables: {
             data,
             investigation: {
@@ -767,7 +781,7 @@ const useUpdateBar = ({
         });
       }
       if (crimeGroupId) {
-        createCrimeGroupUpdate({
+        void createCrimeGroupUpdate({
           variables: {
             data,
             crimeGroup: {
@@ -854,7 +868,7 @@ const useUpdateBar = ({
         });
       }
       if (vehicleId) {
-        createVehicleUpdate({
+        void createVehicleUpdate({
           variables: {
             data,
             vehicle: {
@@ -1072,7 +1086,7 @@ const useUpdateBar = ({
   };
 
   const handleMarkAsRead = () => {
-    updateTodoMention({
+    void updateTodoMention({
       variables: {
         where: {
           userId,
@@ -1087,6 +1101,7 @@ const useUpdateBar = ({
     beforeUpdateImageUpload,
     onSubmitUpdate,
     onUpdateImageChange,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onUpdateImagePreview,
     removeUpdateImage,
     removeUpdateIncident,

@@ -27,6 +27,7 @@ import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
 import IncidentFilter from 'components/incidents/IncidentFilter';
 import type { DateType } from 'types/DataType';
+import { useIntl } from 'react-intl';
 
 interface Props {
   data: ListIncidentsQuery | undefined;
@@ -113,174 +114,212 @@ const IncidentFeed = ({
   setCrimeTypesFilter,
   setIncidentDateFilter,
   setCreatedAtFilter,
-}: Props): JSX.Element => (
-  <div className="feed-container" style={{ padding: 10 }}>
-    <Affix offsetTop={5}>
-      <Card bodyStyle={{ padding: 10 }} style={{ marginBottom: 5 }}>
-        <Row align="middle" gutter={16}>
-          <Col span={8} xxl={6}>
-            <Input
-              size="small"
-              // style={{ width: 350 }}
-              placeholder="Search Incidents..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </Col>
-          <Col flex={1}>
-            <CheckTags
-              mode="radio"
-              value={gallery}
-              onChange={setGallery}
-              options={[
-                {
-                  label: 'Following',
-                  value: 'FOLLOWING',
-                },
-                {
-                  label: 'My Data',
-                  value: 'MYDATA',
-                },
-                {
-                  label: 'Not Approved',
-                  value: 'NOT APPROVED',
-                  needAdminRight: true,
-                },
-              ]}
-            />
-          </Col>
-          <Col>
-            <Button
-              onClick={toggleSortFilter}
-              icon={
-                <FontAwesomeIcon
-                  icon={faFilter}
-                  size="lg"
-                  style={{ marginRight: 5 }}
-                />
-              }
-            >
-              Sort &amp; Filter
-            </Button>
-          </Col>
-          <Col>
-            <Button
-              type="primary"
-              onClick={onNavigate}
-              icon={
-                <FontAwesomeIcon
-                  icon={faPlus}
-                  size="lg"
-                  style={{ marginRight: 5 }}
-                />
-              }
-            >
-              Add Incident
-            </Button>
-          </Col>
-        </Row>
-      </Card>
-    </Affix>
-
-    <div style={{ paddingBottom: 10 }}>
-      <Row gutter={8}>
-        {loading ? (
-          Array.from({ length: 24 }).map((_, index) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <Col key={index} sm={24} md={12} lg={8} xl={8} xxl={6}>
-              <IncidentSkeletonCard />
-            </Col>
-          ))
-        ) : data?.listIncidents?.total ? (
-          data?.listIncidents?.incidents?.map((el) => (
-            <Col sm={24} md={12} lg={8} xl={8} xxl={6} key={el?.id}>
-              <IncidentCard
-                incident={el}
-                openLightbox={openLightbox}
-                update={updateIncidentList}
+}: Props): JSX.Element => {
+  const intl = useIntl();
+  return (
+    <div className="feed-container" style={{ padding: 10 }}>
+      <Affix offsetTop={5}>
+        <Card bodyStyle={{ padding: 10 }} style={{ marginBottom: 5 }}>
+          <Row align="middle" gutter={16}>
+            <Col span={8} xxl={6}>
+              <Input
+                size="small"
+                // style={{ width: 350 }}
+                placeholder={intl.formatMessage({
+                  defaultMessage: 'Search Incidents...',
+                  id: 'gvqTQ8',
+                })}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
               />
             </Col>
-          ))
-        ) : (
-          <div
-            style={{
-              display: 'flex',
-              flex: 1,
-              height: 'calc(100vh - 100px)',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Empty
-              description={
-                search === ''
-                  ? 'No Incidents'
-                  : 'No incidents match your search criteria'
+            <Col flex={1}>
+              <CheckTags
+                mode="radio"
+                value={gallery}
+                onChange={setGallery}
+                options={[
+                  {
+                    label: intl.formatMessage({
+                      defaultMessage: 'Following',
+                      id: 'cPIKU2',
+                    }),
+                    value: 'FOLLOWING',
+                  },
+                  {
+                    label: intl.formatMessage({
+                      defaultMessage: 'My Data',
+                      id: 'dr0ueW',
+                    }),
+                    value: 'MYDATA',
+                  },
+                  {
+                    label: intl.formatMessage({
+                      defaultMessage: 'Not Approved',
+                      id: 'VwMCyX',
+                    }),
+                    value: 'NOT APPROVED',
+                    needAdminRight: true,
+                  },
+                ]}
+              />
+            </Col>
+            <Col>
+              <Button
+                onClick={toggleSortFilter}
+                icon={
+                  <FontAwesomeIcon
+                    icon={faFilter}
+                    size="lg"
+                    style={{ marginRight: 5 }}
+                  />
+                }
+              >
+                {intl.formatMessage({
+                  defaultMessage: 'Sort & Filter',
+                  id: 'f2g3SM',
+                })}
+              </Button>
+            </Col>
+            <Col>
+              <Button
+                type="primary"
+                onClick={onNavigate}
+                icon={
+                  <FontAwesomeIcon
+                    icon={faPlus}
+                    size="lg"
+                    style={{ marginRight: 5 }}
+                  />
+                }
+              >
+                {intl.formatMessage({
+                  defaultMessage: 'Add Incident',
+                  id: 'kG1p3q',
+                })}
+              </Button>
+            </Col>
+          </Row>
+        </Card>
+      </Affix>
+
+      <div style={{ paddingBottom: 10 }}>
+        <Row gutter={8}>
+          {loading ? (
+            Array.from({ length: 24 }).map((_, index) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <Col key={index} sm={24} md={12} lg={8} xl={8} xxl={6}>
+                <IncidentSkeletonCard />
+              </Col>
+            ))
+          ) : data?.listIncidents?.total ? (
+            data?.listIncidents?.incidents?.map((el) => (
+              <Col sm={24} md={12} lg={8} xl={8} xxl={6} key={el?.id}>
+                <IncidentCard
+                  incident={el}
+                  openLightbox={openLightbox}
+                  update={updateIncidentList}
+                />
+              </Col>
+            ))
+          ) : (
+            <div
+              style={{
+                display: 'flex',
+                flex: 1,
+                height: 'calc(100vh - 100px)',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Empty
+                description={
+                  search === ''
+                    ? intl.formatMessage({
+                        defaultMessage: 'No Incidents',
+                        id: '+nJOH5',
+                      })
+                    : intl.formatMessage({
+                        defaultMessage:
+                          'No incidents match your search criteria',
+                        id: '3vA0/l',
+                      })
+                }
+              />
+            </div>
+          )}
+        </Row>
+        <Row justify="center">
+          <Col>
+            <Pagination
+              total={data?.listIncidents?.total}
+              pageSizeOptions={pagination.sizeOptions}
+              pageSize={pagination.pageSize}
+              current={pagination.page}
+              onChange={onPaginationChange}
+              showTotal={(total) =>
+                intl.formatMessage(
+                  { defaultMessage: `Total Incidents: {total}`, id: 'SHEopq' },
+                  { total }
+                )
               }
+              hideOnSinglePage
             />
-          </div>
-        )}
-      </Row>
-      <Row justify="center">
-        <Col>
-          <Pagination
-            total={data?.listIncidents?.total}
-            pageSizeOptions={pagination.sizeOptions}
-            pageSize={pagination.pageSize}
-            current={pagination.page}
-            onChange={onPaginationChange}
-            showTotal={(total) => `Total Incidents: ${total}`}
-            hideOnSinglePage
-          />
-        </Col>
-      </Row>
-    </div>
-    <Drawer
-      title="Incident Filters"
-      visible={sortFilter}
-      onClose={toggleSortFilter}
-      width={500}
-    >
-      <IncidentFilter
-        order={order}
-        setOrder={setOrder}
-        groups={groups}
-        groupsLoading={groupsLoading}
-        groupsFilter={groupsFilter}
-        setGroupsFilter={setGroupsFilter}
-        crimeTypes={crimeTypes}
-        crimeTypesFilter={crimeTypesFilter}
-        tagsLoading={tagsLoading}
-        setCrimeTypesFilter={setCrimeTypesFilter}
-        clearFilters={clearFilters}
-        peculiarities={peculiarities}
-        setPeculiarities={setPeculiarities}
-        goods={goods}
-        setGoodsFilter={setGoodsFilter}
-        goodsFilter={goodsFilter}
-        businessesFilter={businessesFilter}
-        businesses={businesses}
-        setBusinessesFilter={setBusinessesFilter}
-        goodsLoading={goodsLoading}
-        businessesLoading={businessesLoading}
-        setIncidentDateFilter={setIncidentDateFilter}
-        setCreatedAtFilter={setCreatedAtFilter}
+          </Col>
+        </Row>
+      </div>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Incident Filters',
+          id: 'd3tEdR',
+        })}
+        visible={sortFilter}
+        onClose={toggleSortFilter}
+        width={500}
+      >
+        <IncidentFilter
+          order={order}
+          setOrder={setOrder}
+          groups={groups}
+          groupsLoading={groupsLoading}
+          groupsFilter={groupsFilter}
+          setGroupsFilter={setGroupsFilter}
+          crimeTypes={crimeTypes}
+          crimeTypesFilter={crimeTypesFilter}
+          tagsLoading={tagsLoading}
+          setCrimeTypesFilter={setCrimeTypesFilter}
+          clearFilters={clearFilters}
+          peculiarities={peculiarities}
+          setPeculiarities={setPeculiarities}
+          goods={goods}
+          setGoodsFilter={setGoodsFilter}
+          goodsFilter={goodsFilter}
+          businessesFilter={businessesFilter}
+          businesses={businesses}
+          setBusinessesFilter={setBusinessesFilter}
+          goodsLoading={goodsLoading}
+          businessesLoading={businessesLoading}
+          setIncidentDateFilter={setIncidentDateFilter}
+          setCreatedAtFilter={setCreatedAtFilter}
+        />
+      </Drawer>
+      <Lightbox
+        open={lightBoxOpen.open}
+        close={() => openLightbox([], 0)}
+        plugins={[Zoom]}
+        index={lightBoxOpen.index}
+        slides={lightboxElements}
+        controller={{
+          closeOnBackdropClick: true,
+        }}
+        render={{
+          slide: (slide: WatermarkSlideType) => (
+            <WatermarkSlide slide={slide} />
+          ),
+        }}
       />
-    </Drawer>
-    <Lightbox
-      open={lightBoxOpen.open}
-      close={() => openLightbox([], 0)}
-      plugins={[Zoom]}
-      index={lightBoxOpen.index}
-      slides={lightboxElements}
-      controller={{
-        closeOnBackdropClick: true,
-      }}
-      render={{
-        slide: (slide: WatermarkSlideType) => <WatermarkSlide slide={slide} />,
-      }}
-    />
-  </div>
-);
+    </div>
+  );
+};
 
 export default IncidentFeed;

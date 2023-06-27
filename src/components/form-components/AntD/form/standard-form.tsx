@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import type { FormInstance, FormItemProps } from 'antd';
 import { Button, Form, Row } from 'antd';
 import { Grow } from 'components/layout-components/AntD';
+import { useIntl } from 'react-intl';
 
 interface Field extends FormItemProps {
   checkbox?: boolean;
@@ -52,10 +53,11 @@ export const StandardForm = <T,>({
   const handleSubmit = async (inputData: T) => {
     onSubmit(inputData);
   };
-
+  const intl = useIntl();
   return (
     <Form
       name="basic"
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
       onFinish={handleSubmit}
       onFinishFailed={() => {}}
       ref={formRef}
@@ -87,7 +89,10 @@ export const StandardForm = <T,>({
             style={{ marginRight: 15 }}
             disabled={loading || saving}
           >
-            Cancel
+            {intl.formatMessage({
+              defaultMessage: 'Cancel',
+              id: '47FYwb',
+            })}
           </Button>
           <Button
             type="primary"
@@ -95,7 +100,10 @@ export const StandardForm = <T,>({
             loading={saving}
             disabled={loading}
           >
-            Submit
+            {intl.formatMessage({
+              defaultMessage: 'Submit',
+              id: 'wSZR47',
+            })}
           </Button>
         </Row>
       </Form.Item>

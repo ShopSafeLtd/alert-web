@@ -66,21 +66,21 @@ const useViewChat = ({ chatId }: Props): Return => {
   });
 
   useEffect(() => {
-    refetch();
+    void refetch();
     navigate('/app/chat');
   }, [schemeId]);
 
   const [updateUserChat] = useUpdateUserChatMutation({
     onCompleted: () => {
       setSaving(false);
-      refetch();
+      void refetch();
     },
   });
   const [updateTodoMention] = useUpdateTodoMentionMutation();
   const handleMarkAsRead = (userChatId: string | undefined) => {
     if (userChatId) {
       setSaving(true);
-      updateUserChat({
+      void updateUserChat({
         variables: {
           where: {
             id: userId,
@@ -103,7 +103,7 @@ const useViewChat = ({ chatId }: Props): Return => {
         },
       });
 
-      updateTodoMention({
+      void updateTodoMention({
         variables: {
           where: {
             userId,
@@ -240,6 +240,7 @@ const useViewChat = ({ chatId }: Props): Return => {
     updateAddUserChat,
     updateDeletedUserChat,
     adminRights: role !== Role.User,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     refetch,
   };
 };

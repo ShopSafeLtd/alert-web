@@ -12,6 +12,7 @@ import IncidentCard from 'components/MessageInput/MessageCard/IncidentCard';
 import VehicleCard from 'components/MessageInput/MessageCard/VehicleCard';
 import OffenderCard from 'components/MessageInput/MessageCard/OffenderCard';
 import CrimeGroupList from 'components/MessageInput/MessageCard/CrimeGroupList';
+import { useIntl } from 'react-intl';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -45,18 +46,19 @@ const getContent = (content: string) =>
     if (item.includes('@[')) {
       return (
         <Text strong key={item}>
-          {item.replace('@[', '').replace(/(]\(.*?\))/, '')}{' '}
+          {item.replace('@[', '').replace(/(]\(.*?\))/, '')}
         </Text>
       );
     }
     return <Text key={item}>{item}</Text>;
   });
 
-const UpdateContent = ({ update, title }: Props): JSX.Element =>
-  update?.linkedIncidents.length ||
-  update?.linkedOffenders.length ||
-  update?.linkedCrimeGroups.length ||
-  update?.linkedVehicles.length ? (
+const UpdateContent = ({ update, title }: Props): JSX.Element => {
+  const intl = useIntl();
+  return update?.linkedIncidents.length ||
+    update?.linkedOffenders.length ||
+    update?.linkedCrimeGroups.length ||
+    update?.linkedVehicles.length ? (
     <>
       {update?.linkedIncidents[0] ? (
         <>
@@ -66,7 +68,12 @@ const UpdateContent = ({ update, title }: Props): JSX.Element =>
               className="feedItem-card-icon"
               icon={faMessageDots}
             />
-            {update?.text ? getContent(update?.text) : 'Link an incident'}
+            {update?.text
+              ? getContent(update?.text)
+              : intl.formatMessage({
+                  defaultMessage: 'Link an incident',
+                  id: 'SeBe5K',
+                })}
           </Title>
           <IncidentCard incident={update.linkedIncidents[0]} />
         </>
@@ -79,7 +86,12 @@ const UpdateContent = ({ update, title }: Props): JSX.Element =>
               className="feedItem-card-icon"
               icon={faMessageDots}
             />
-            {update?.text ? getContent(update?.text) : 'Link an offender'}
+            {update?.text
+              ? getContent(update?.text)
+              : intl.formatMessage({
+                  defaultMessage: 'Link an offender',
+                  id: 'BxIzUN',
+                })}
           </Title>
           <OffenderCard offender={update.linkedOffenders[0]} />
         </>
@@ -92,7 +104,12 @@ const UpdateContent = ({ update, title }: Props): JSX.Element =>
               className="feedItem-card-icon"
               icon={faMessageDots}
             />
-            {update?.text ? getContent(update?.text) : 'Link a vehicle'}
+            {update?.text
+              ? getContent(update?.text)
+              : intl.formatMessage({
+                  defaultMessage: 'Link a vehicle',
+                  id: '1lpfu7',
+                })}
           </Title>
           <VehicleCard vehicle={update.linkedVehicles[0]} />
         </>
@@ -105,7 +122,12 @@ const UpdateContent = ({ update, title }: Props): JSX.Element =>
               className="feedItem-card-icon"
               icon={faMessageDots}
             />
-            {update?.text ? getContent(update?.text) : 'Link crime groups'}
+            {update?.text
+              ? getContent(update?.text)
+              : intl.formatMessage({
+                  defaultMessage: 'Link crime groups',
+                  id: 'j6a7pa',
+                })}
           </Title>
           <CrimeGroupList crimeGroups={update.linkedCrimeGroups} isIntel />
         </>
@@ -133,5 +155,6 @@ const UpdateContent = ({ update, title }: Props): JSX.Element =>
       ) : null}
     </div>
   );
+};
 
 export default UpdateContent;

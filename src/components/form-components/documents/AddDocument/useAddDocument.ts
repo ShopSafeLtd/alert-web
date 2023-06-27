@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
 import type { SelectProps, UploadProps } from 'antd';
 import type {
   ListDocumentsOnSchemeQuery,
@@ -106,7 +107,7 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
       if (found) {
         formattedValues.push(value.value);
       } else {
-        createTag({
+        void createTag({
           variables: {
             data: {
               name: value.value,
@@ -230,7 +231,7 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
       })
       .map((id) => id || '');
     if (fileList[0].url) {
-      createDocument({
+      void createDocument({
         variables: {
           data: {
             investigationId: investigationId || null,

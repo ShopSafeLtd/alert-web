@@ -207,7 +207,7 @@ const useAdminTodos = ({ fullSearch, groupsFilter }: Props): Return => {
     setTodoList({
       userTodos: userTodos ? userTodos - 1 : 0,
     });
-    updateTodo({
+    void updateTodo({
       variables: {
         where: {
           id: todoId,
@@ -229,7 +229,7 @@ const useAdminTodos = ({ fullSearch, groupsFilter }: Props): Return => {
     setTodoList({
       userTodos: userTodos ? userTodos + 1 : 1,
     });
-    updateTodo({
+    void updateTodo({
       variables: {
         where: {
           id: todoId,

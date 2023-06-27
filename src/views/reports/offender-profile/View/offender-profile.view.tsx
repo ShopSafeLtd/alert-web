@@ -1,16 +1,16 @@
 import React from 'react';
 import {
-  Col,
-  Row,
-  Spin,
-  Typography,
-  Skeleton,
-  Descriptions,
-  Statistic,
+  Button,
   Card,
+  Col,
+  Descriptions,
+  Row,
+  Skeleton,
+  Spin,
+  Statistic,
   Table,
   Tag,
-  Button,
+  Typography,
 } from 'antd';
 import OffenderSideList from 'components/offenders/OffenderSideList';
 import type { OffenderProfileQuery } from 'graphql/generated';
@@ -23,6 +23,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload } from '@fortawesome/pro-light-svg-icons';
 import { useStoreState } from 'state';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import { useIntl } from 'react-intl';
 import useStyles from './offender-profile.styles';
 
 const { Title, Text } = Typography;
@@ -40,6 +41,7 @@ const OffenderProfile = ({
 }: Props) => {
   const classes = useStyles();
   const theme = useStoreState((state) => state.theme.currentTheme);
+  const intl = useIntl();
   return (
     <Row wrap={false}>
       <Col>
@@ -62,7 +64,10 @@ const OffenderProfile = ({
                     icon={faDownload}
                     className={classes.buttonIcon}
                   />
-                  Download Report
+                  {intl.formatMessage({
+                    defaultMessage: 'Download Report',
+                    id: 'iHdvdj',
+                  })}
                 </Button>
               </Col>
             </Row>
@@ -88,15 +93,29 @@ const OffenderProfile = ({
                       {offenderProfileData?.offender?.name}
                     </Title>
                     <Text type="secondary">
-                      Alert ID: {offenderProfileData?.offender?.reference}
+                      {intl.formatMessage(
+                        {
+                          defaultMessage: 'Alert ID: {ref}',
+                          id: 'umL9sI',
+                        },
+                        {
+                          ref: offenderProfileData?.offender?.reference,
+                        }
+                      )}
                     </Text>
                     <Title level={4} type="secondary">
-                      Details
+                      {intl.formatMessage({
+                        defaultMessage: 'Offender Details',
+                        id: 'fQT6Wx',
+                      })}
                     </Title>
                     <Descriptions column={2} className={classes.descriptions}>
                       <Descriptions.Item
                         className={classes.descItem}
-                        label="Gender"
+                        label={intl.formatMessage({
+                          defaultMessage: 'Gender',
+                          id: 'm8/n8c',
+                        })}
                       >
                         {getSex(
                           offenderProfileData?.offender?.gender ||
@@ -106,7 +125,10 @@ const OffenderProfile = ({
                       {!offenderProfileData?.offender?.dateOfBirth && (
                         <Descriptions.Item
                           className={classes.descItem}
-                          label="Age"
+                          label={intl.formatMessage({
+                            defaultMessage: 'Age',
+                            id: '9oNQSC',
+                          })}
                         >
                           {getAge(
                             offenderProfileData?.offender?.age || Age.Unknown
@@ -116,7 +138,10 @@ const OffenderProfile = ({
                       {offenderProfileData?.offender?.dateOfBirth && (
                         <Descriptions.Item
                           className={classes.descItem}
-                          label="Date of Birth"
+                          label={intl.formatMessage({
+                            defaultMessage: 'Date of Birth',
+                            id: 'e9Z+tg',
+                          })}
                         >
                           {moment(
                             offenderProfileData?.offender?.dateOfBirth
@@ -126,14 +151,20 @@ const OffenderProfile = ({
                       {offenderProfileData?.offender?.dateSource && (
                         <Descriptions.Item
                           className={classes.descItem}
-                          label="DoB Source"
+                          label={intl.formatMessage({
+                            defaultMessage: 'DoB Source',
+                            id: 'buqD4b',
+                          })}
                         >
                           {offenderProfileData?.offender?.dateSource}
                         </Descriptions.Item>
                       )}
                       <Descriptions.Item
                         className={classes.descItem}
-                        label="Build"
+                        label={intl.formatMessage({
+                          defaultMessage: 'Build',
+                          id: 'RSctv1',
+                        })}
                       >
                         {getBuild(
                           offenderProfileData?.offender?.build || Build.Unknown
@@ -141,7 +172,10 @@ const OffenderProfile = ({
                       </Descriptions.Item>
                       <Descriptions.Item
                         className={classes.descItem}
-                        label="Ethnicity"
+                        label={intl.formatMessage({
+                          defaultMessage: 'Ethnicity',
+                          id: 'XtCAFo',
+                        })}
                       >
                         {getEthnicity(
                           offenderProfileData?.offender?.race || Race.Unknown
@@ -151,23 +185,41 @@ const OffenderProfile = ({
                     <Descriptions column={1}>
                       <Descriptions.Item
                         className={classes.descItem}
-                        label="Hair"
+                        label={intl.formatMessage({
+                          defaultMessage: 'Hair',
+                          id: 'e4YBbX',
+                        })}
                       >
-                        {offenderProfileData?.offender?.hair || 'Unknown'}
+                        {offenderProfileData?.offender?.hair ||
+                          intl.formatMessage({
+                            defaultMessage: 'Unknown',
+                            id: '5jeq8P',
+                          })}
                       </Descriptions.Item>
                       <Descriptions.Item
                         className={classes.descItem}
-                        label="Peculiarities"
+                        label={intl.formatMessage({
+                          defaultMessage: 'Peculiarities',
+                          id: '9s+ZmX',
+                        })}
                       >
                         {offenderProfileData?.offender?.peculiarities ||
-                          'None documented'}
+                          intl.formatMessage({
+                            defaultMessage: 'None documented',
+                            id: '+CkDvs',
+                          })}
                       </Descriptions.Item>
                     </Descriptions>
                   </Col>
                 </Row>
               </Card>
               <div className={classes.incidentSummary}>
-                <Title level={3}>Incident Summery</Title>
+                <Title level={3}>
+                  {intl.formatMessage({
+                    defaultMessage: 'Incident Summary',
+                    id: 'OgfKP9',
+                  })}
+                </Title>
                 <Row gutter={16}>
                   <Col>
                     <Card>
@@ -175,7 +227,10 @@ const OffenderProfile = ({
                         value={
                           offenderProfileData?.offender?.totalIncidents || 0
                         }
-                        title="Total Incidents"
+                        title={intl.formatMessage({
+                          defaultMessage: 'Total Incidents',
+                          id: 'pUlxda',
+                        })}
                       />
                     </Card>
                   </Col>
@@ -187,9 +242,15 @@ const OffenderProfile = ({
                             ? moment(
                                 offenderProfileData?.offender?.lastActive?.date
                               ).format('DD/MM/YY')
-                            : 'None'
+                            : intl.formatMessage({
+                                defaultMessage: 'None',
+                                id: '450Fty',
+                              })
                         }
-                        title="Last Incident"
+                        title={intl.formatMessage({
+                          defaultMessage: 'Last Active',
+                          id: 'l/6hum',
+                        })}
                       />
                     </Card>
                   </Col>
@@ -199,7 +260,10 @@ const OffenderProfile = ({
                         value={`£${
                           offenderProfileData?.offender?.totalValue || 0
                         }`}
-                        title="Total Value Lost"
+                        title={intl.formatMessage({
+                          defaultMessage: 'Total Value Lost',
+                          id: 'fWpZ4S',
+                        })}
                       />
                     </Card>
                   </Col>
@@ -210,7 +274,10 @@ const OffenderProfile = ({
                           offenderProfileData?.offender?.totalRecoveredValue ||
                           0
                         }`}
-                        title="Total Value Recovered"
+                        title={intl.formatMessage({
+                          defaultMessage: 'Total Value Recovered',
+                          id: 't+iLve',
+                        })}
                       />
                     </Card>
                   </Col>
@@ -220,13 +287,21 @@ const OffenderProfile = ({
                         value={`${
                           offenderProfileData?.offender?.totalTheftSuccess || 0
                         }%`}
-                        title="Success Rate"
+                        title={intl.formatMessage({
+                          defaultMessage: 'Success Rate',
+                          id: 'IaZkrc',
+                        })}
                       />
                     </Card>
                   </Col>
                 </Row>
                 <Card>
-                  <Title level={4}>Incidents Over Last 12 Months</Title>
+                  <Title level={4}>
+                    {intl.formatMessage({
+                      defaultMessage: 'Incidents over the last 12 months',
+                      id: 'I/u2cD',
+                    })}
+                  </Title>
                   <div
                     className="printable-table"
                     style={{ height: 300, width: 950 }}
@@ -298,20 +373,6 @@ const OffenderProfile = ({
                           spacing: 10,
                         },
                       ]}
-                      fill={[
-                        {
-                          match: {
-                            id: 'fries',
-                          },
-                          id: 'dots',
-                        },
-                        {
-                          match: {
-                            id: 'sandwich',
-                          },
-                          id: 'lines',
-                        },
-                      ]}
                       borderColor={{
                         from: 'color',
                         modifiers: [['darker', 1.6]],
@@ -330,7 +391,10 @@ const OffenderProfile = ({
                         tickSize: 5,
                         tickPadding: 5,
                         tickRotation: 0,
-                        legend: 'Incidents',
+                        legend: intl.formatMessage({
+                          defaultMessage: 'Incidents',
+                          id: 'mtr3R4',
+                        }),
                         legendPosition: 'middle',
                         legendOffset: -40,
                       }}
@@ -384,12 +448,17 @@ const OffenderProfile = ({
                         },
                       ]}
                       role="application"
-                      ariaLabel="Nivo bar chart demo"
+                      ariaLabel="bar chart"
                     />
                   </div>
                 </Card>
                 <Card>
-                  <Title level={4}>All Incidents</Title>
+                  <Title level={4}>
+                    {intl.formatMessage({
+                      defaultMessage: 'All Incidents',
+                      id: 'wE2z2t',
+                    })}
+                  </Title>
                   <Table
                     size="small"
                     pagination={false}
@@ -397,36 +466,55 @@ const OffenderProfile = ({
                       {
                         key: 'reference',
                         dataIndex: 'reference',
-                        title: 'Alert ID',
+                        title: intl.formatMessage({
+                          defaultMessage: 'Alert ID',
+                          id: 'k8ZNgH',
+                        }),
                       },
                       {
                         key: 'date',
                         dataIndex: 'date',
-                        title: 'Date',
-                        render: (value) => moment(value).format('DD/MM/YY'),
+                        title: intl.formatMessage({
+                          defaultMessage: 'Date',
+                          id: 'P7PLVj',
+                        }),
+                        render: (value: Date) =>
+                          moment(value).format('DD/MM/YY'),
                       },
                       {
                         key: 'value',
                         dataIndex: 'value',
-                        title: 'Value',
-                        render: (value) => `£${value}`,
+                        title: intl.formatMessage({
+                          defaultMessage: 'Value',
+                          id: 'GufXy5',
+                        }),
+                        render: (value: string) => `£${value}`,
                       },
                       {
                         key: 'recoveredValue',
                         dataIndex: 'recoveredValue',
-                        title: 'Recovered Value',
-                        render: (value) => `£${value}`,
+                        title: intl.formatMessage({
+                          defaultMessage: 'Recovered Value',
+                          id: 'bGwFFv',
+                        }),
+                        render: (value: string) => `£${value}`,
                       },
                       {
                         key: 'createdBy',
                         dataIndex: 'createdBy',
-                        title: 'Created by',
+                        title: intl.formatMessage({
+                          defaultMessage: 'Created By',
+                          id: 'uAfuJA',
+                        }),
                       },
                       {
                         key: 'crimeTypes',
                         dataIndex: 'crimeTypes',
-                        title: 'Types',
-                        render: (value) =>
+                        title: intl.formatMessage({
+                          defaultMessage: 'Types',
+                          id: 'kxP9GJ',
+                        }),
+                        render: (value: { id: string; name: string }[]) =>
                           value.map(
                             // eslint-disable-next-line
                             ({ id, name }: { id: string; name: string }) => (
@@ -451,7 +539,12 @@ const OffenderProfile = ({
                 <Row gutter={8} className={classes.dateRow}>
                   <Col>
                     <Card>
-                      <Title level={4}>Incidents By Hour</Title>
+                      <Title level={4}>
+                        {intl.formatMessage({
+                          defaultMessage: 'Incidents by Hour',
+                          id: '++g1VR',
+                        })}
+                      </Title>
                       <div
                         className="printable-table"
                         style={{ height: 300, width: 298 }}
@@ -505,63 +598,18 @@ const OffenderProfile = ({
                               spacing: 10,
                             },
                           ]}
-                          fill={[
-                            {
-                              match: {
-                                id: 'ruby',
-                              },
-                              id: 'dots',
-                            },
-                            {
-                              match: {
-                                id: 'c',
-                              },
-                              id: 'dots',
-                            },
-                            {
-                              match: {
-                                id: 'go',
-                              },
-                              id: 'dots',
-                            },
-                            {
-                              match: {
-                                id: 'python',
-                              },
-                              id: 'dots',
-                            },
-                            {
-                              match: {
-                                id: 'scala',
-                              },
-                              id: 'lines',
-                            },
-                            {
-                              match: {
-                                id: 'lisp',
-                              },
-                              id: 'lines',
-                            },
-                            {
-                              match: {
-                                id: 'elixir',
-                              },
-                              id: 'lines',
-                            },
-                            {
-                              match: {
-                                id: 'javascript',
-                              },
-                              id: 'lines',
-                            },
-                          ]}
                         />
                       </div>
                     </Card>
                   </Col>
                   <Col>
                     <Card>
-                      <Title level={4}>Incidents By Day</Title>
+                      <Title level={4}>
+                        {intl.formatMessage({
+                          defaultMessage: 'Incidents by Day',
+                          id: 'YiU0H0',
+                        })}
+                      </Title>
                       <div
                         className="printable-table"
                         style={{ height: 300, width: 298 }}
@@ -615,63 +663,18 @@ const OffenderProfile = ({
                               spacing: 10,
                             },
                           ]}
-                          fill={[
-                            {
-                              match: {
-                                id: 'ruby',
-                              },
-                              id: 'dots',
-                            },
-                            {
-                              match: {
-                                id: 'c',
-                              },
-                              id: 'dots',
-                            },
-                            {
-                              match: {
-                                id: 'go',
-                              },
-                              id: 'dots',
-                            },
-                            {
-                              match: {
-                                id: 'python',
-                              },
-                              id: 'dots',
-                            },
-                            {
-                              match: {
-                                id: 'scala',
-                              },
-                              id: 'lines',
-                            },
-                            {
-                              match: {
-                                id: 'lisp',
-                              },
-                              id: 'lines',
-                            },
-                            {
-                              match: {
-                                id: 'elixir',
-                              },
-                              id: 'lines',
-                            },
-                            {
-                              match: {
-                                id: 'javascript',
-                              },
-                              id: 'lines',
-                            },
-                          ]}
                         />
                       </div>
                     </Card>
                   </Col>
                   <Col>
                     <Card>
-                      <Title level={4}>Incidents by Month</Title>
+                      <Title level={4}>
+                        {intl.formatMessage({
+                          defaultMessage: 'Incidents by Month',
+                          id: '+Prn0X',
+                        })}
+                      </Title>
                       <div
                         className="printable-table"
                         style={{ height: 300, width: 298 }}
@@ -725,93 +728,63 @@ const OffenderProfile = ({
                               spacing: 10,
                             },
                           ]}
-                          fill={[
-                            {
-                              match: {
-                                id: 'ruby',
-                              },
-                              id: 'dots',
-                            },
-                            {
-                              match: {
-                                id: 'c',
-                              },
-                              id: 'dots',
-                            },
-                            {
-                              match: {
-                                id: 'go',
-                              },
-                              id: 'dots',
-                            },
-                            {
-                              match: {
-                                id: 'python',
-                              },
-                              id: 'dots',
-                            },
-                            {
-                              match: {
-                                id: 'scala',
-                              },
-                              id: 'lines',
-                            },
-                            {
-                              match: {
-                                id: 'lisp',
-                              },
-                              id: 'lines',
-                            },
-                            {
-                              match: {
-                                id: 'elixir',
-                              },
-                              id: 'lines',
-                            },
-                            {
-                              match: {
-                                id: 'javascript',
-                              },
-                              id: 'lines',
-                            },
-                          ]}
                         />
                       </div>
                     </Card>
                   </Col>
                 </Row>
                 <Card>
-                  <Title level={4}>Targeted Goods</Title>
+                  <Title level={4}>
+                    {intl.formatMessage({
+                      defaultMessage: 'Targeted Goods',
+                      id: 'dLBbg0',
+                    })}
+                  </Title>
                   <Table
                     columns={[
                       {
                         key: 'name',
                         dataIndex: 'name',
-                        title: 'Name',
+                        title: intl.formatMessage({
+                          defaultMessage: 'Name',
+                          id: 'HAlOn1',
+                        }),
                       },
                       {
                         key: 'lost',
                         dataIndex: 'lost',
-                        title: 'Total Lost',
-                        render: (value) => `£${value.toFixed(2)}`,
+                        title: intl.formatMessage({
+                          defaultMessage: 'Total Lost',
+                          id: 'TpqK2W',
+                        }),
+                        render: (value: number) => `£${value.toFixed(2)}`,
                       },
                       {
                         key: 'recovered',
                         dataIndex: 'recovered',
-                        title: 'Total Recovered',
-                        render: (value) => `£${value.toFixed(2)}`,
+                        title: intl.formatMessage({
+                          defaultMessage: 'Total Recovered',
+                          id: '/YBJ85',
+                        }),
+                        render: (value: number) => `£${value.toFixed(2)}`,
                       },
                       {
                         key: 'successRate',
                         dataIndex: 'successRate',
-                        title: 'Success Rate',
-                        render: (value) => `${value.toFixed(0)}%`,
+                        title: intl.formatMessage({
+                          defaultMessage: 'Success Rate',
+                          id: 'IaZkrc',
+                        }),
+                        render: (value: number) => `${value.toFixed(0)}%`,
                       },
                       {
                         key: 'avgLost',
                         dataIndex: 'avgLost',
-                        title: 'Avg Loss',
-                        render: (value) => `£${value.toFixed(2)}`,
+                        title: intl.formatMessage({
+                          defaultMessage: 'Avg Lost',
+                          id: 'C70bmG',
+                        }),
+                        render: (value: number) => `£${value.toFixed(2)}`,
                       },
                     ]}
                     dataSource={offenderProfileData?.offender?.goodsTypesTotals
@@ -838,67 +811,107 @@ const OffenderProfile = ({
                   />
                 </Card>
                 <Card>
-                  <Title level={4}>Crime Groups</Title>
+                  <Title level={4}>
+                    {intl.formatMessage({
+                      defaultMessage: 'Crime Groups',
+                      id: 'a0aLil',
+                    })}
+                  </Title>
                   <Table
                     size="small"
                     columns={[
                       {
                         key: 'reference',
                         dataIndex: 'reference',
-                        title: 'Alert ID',
+                        title: intl.formatMessage({
+                          defaultMessage: 'Alert ID',
+                          id: 'k8ZNgH',
+                        }),
                       },
                       {
                         key: 'alias',
                         dataIndex: 'alias',
-                        title: 'Alias',
+                        title: intl.formatMessage({
+                          defaultMessage: 'Alias',
+                          id: 'Ri9jA7',
+                        }),
                       },
                       {
                         key: 'members',
                         dataIndex: 'members',
-                        title: 'Members',
+                        title: intl.formatMessage({
+                          defaultMessage: 'Members',
+                          id: '+a+2ug',
+                        }),
                       },
                       {
                         key: 'value',
                         dataIndex: 'value',
-                        title: 'Value',
+                        title: intl.formatMessage({
+                          defaultMessage: 'Value',
+                          id: 'GufXy5',
+                        }),
                       },
                       {
                         key: 'recoveredValue',
                         dataIndex: 'recoveredValue',
-                        title: 'Recovered Value',
+                        title: intl.formatMessage({
+                          defaultMessage: 'Recovered Value',
+                          id: 'bGwFFv',
+                        }),
                       },
                       {
                         key: 'lastActivity',
                         dataIndex: 'lastActivity',
-                        title: 'Last Incident',
+                        title: intl.formatMessage({
+                          defaultMessage: 'Last Incident',
+                          id: 'kJuP0b',
+                        }),
                       },
                     ]}
                   />
                 </Card>
                 <Card>
-                  <Title level={4}>Vehicles</Title>
+                  <Title level={4}>
+                    {intl.formatMessage({
+                      defaultMessage: 'Vehicles',
+                      id: 'r6wuJ3',
+                    })}
+                  </Title>
                   <Table
                     size="small"
                     columns={[
                       {
                         key: 'make',
                         dataIndex: 'make',
-                        title: 'Make',
+                        title: intl.formatMessage({
+                          defaultMessage: 'Make',
+                          id: '6AAM0P',
+                        }),
                       },
                       {
                         key: 'model',
                         dataIndex: 'model',
-                        title: 'Model',
+                        title: intl.formatMessage({
+                          defaultMessage: 'Model',
+                          id: 'rhSI1/',
+                        }),
                       },
                       {
                         key: 'registration',
                         dataIndex: 'registration',
-                        title: 'Registration',
+                        title: intl.formatMessage({
+                          defaultMessage: 'Registration',
+                          id: 'qv7ied',
+                        }),
                       },
                       {
                         key: 'colour',
                         dataIndex: 'colour',
-                        title: 'Colour',
+                        title: intl.formatMessage({
+                          defaultMessage: 'Colour',
+                          id: '+e8vAT',
+                        }),
                       },
                     ]}
                   />

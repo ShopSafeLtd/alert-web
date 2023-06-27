@@ -142,7 +142,7 @@ const useAddExistingOffender = ({ onClose, offenderIds }: Props): Return => {
       data.listOffenders.offenders.length > 0 &&
       selectedOffender
     ) {
-      updateInvestigation({
+      void updateInvestigation({
         variables: {
           where: {
             id: params.id || '',

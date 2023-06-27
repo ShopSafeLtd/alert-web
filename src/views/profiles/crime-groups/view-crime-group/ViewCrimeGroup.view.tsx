@@ -47,6 +47,8 @@ import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
 import CrimeGroupSideList from 'components/crimeGroups/sidelist';
 import SuggestedMembers from 'components/crimeGroups/SuggestedMembers/SuggestedMembers.view';
 import MapCard from 'components/map/MapCard/MapCard.view';
+import { useIntl } from 'react-intl';
+import moment from 'moment';
 import useStyles from './ViewCrimeGroup.styles';
 
 const { Title } = Typography;
@@ -150,22 +152,28 @@ const ViewCrimeGroup = ({
   handleAddSuggestion,
 }: Props) => {
   const classes = useStyles();
-
+  const intl = useIntl();
   const optionMenuItems = [
     {
-      label: 'Add Alias',
+      label: intl.formatMessage({ defaultMessage: 'Add Alias', id: 'KDH1mp' }),
       key: '1',
       icon: <FontAwesomeIcon size="3x" icon={faPlus} />,
       onClick: toggleAddAlias,
     },
     {
-      label: 'Delete',
+      label: intl.formatMessage({ defaultMessage: 'Delete', id: 'K3r6DQ' }),
       key: '2',
       icon: <FontAwesomeIcon icon={faTrash} />,
       onClick: () => {
         confirm({
-          title: 'Do you want to delete the crime group?',
-          content: 'This action cannot be undone.',
+          title: intl.formatMessage({
+            defaultMessage: 'Do you want to delete the crime group?',
+            id: 'sozjTX',
+          }),
+          content: intl.formatMessage({
+            defaultMessage: 'This action cannot be undone.',
+            id: 'JDJoIZ',
+          }),
           onOk() {
             onDeleteCrimeGroup();
           },
@@ -173,6 +181,7 @@ const ViewCrimeGroup = ({
       },
     },
   ];
+
   return (
     <div className="page-container">
       <Row wrap={false}>
@@ -185,8 +194,14 @@ const ViewCrimeGroup = ({
               <Tooltip
                 title={
                   data?.crimeGroup?.subscribed
-                    ? 'Stop getting notified about updates.'
-                    : 'Get notified about updates.'
+                    ? intl.formatMessage({
+                        defaultMessage: 'Stop getting notified about updates.',
+                        id: 'WpTY6U',
+                      })
+                    : intl.formatMessage({
+                        defaultMessage: 'Get notified about updates.',
+                        id: 'icr+Hj',
+                      })
                 }
               >
                 <Button
@@ -202,8 +217,14 @@ const ViewCrimeGroup = ({
                     icon={data?.crimeGroup?.subscribed ? faBellSlash : faBell}
                   />
                   {data?.crimeGroup?.subscribed
-                    ? 'Un-follow Updates'
-                    : 'Follow Updates'}
+                    ? intl.formatMessage({
+                        defaultMessage: 'Un-follow Updates',
+                        id: '45gIlS',
+                      })
+                    : intl.formatMessage({
+                        defaultMessage: 'Follow Updates',
+                        id: 'gBN+ok',
+                      })}
                 </Button>
               </Tooltip>
             </Col>
@@ -212,7 +233,10 @@ const ViewCrimeGroup = ({
                 <Dropdown overlay={<Menu items={optionMenuItems} />}>
                   <Button type="text">
                     <Space>
-                      Options
+                      {intl.formatMessage({
+                        defaultMessage: 'Options',
+                        id: 'NDV5Mq',
+                      })}
                       <FontAwesomeIcon icon={faChevronDown} />
                     </Space>
                   </Button>
@@ -224,27 +248,44 @@ const ViewCrimeGroup = ({
             <div className={classes.details}>
               <Card loading={loading}>
                 <Title level={3}>
-                  Alert ID: {data?.crimeGroup?.reference}{' '}
-                  {data?.crimeGroup?.alias
-                    ? `(${data?.crimeGroup?.alias})`
-                    : ''}
+                  {intl.formatMessage(
+                    {
+                      defaultMessage: 'Alert ID: {ref} {alias}',
+                      id: 'FGm79Y',
+                    },
+                    {
+                      ref: data?.crimeGroup?.reference || '',
+                      alias: data?.crimeGroup?.alias
+                        ? `(${data?.crimeGroup?.alias})`
+                        : '',
+                    }
+                  )}
                 </Title>
                 <Row gutter={32}>
                   <Col>
                     <Statistic
-                      title="Total Incidents"
+                      title={intl.formatMessage({
+                        defaultMessage: 'Total Incidents',
+                        id: 'pUlxda',
+                      })}
                       value={data?.crimeGroup?.totalIncidents || 0}
                     />
                   </Col>
                   <Col>
                     <Statistic
-                      title="Total Offenders"
+                      title={intl.formatMessage({
+                        defaultMessage: 'Total Offenders',
+                        id: 'Pyo0l3',
+                      })}
                       value={data?.crimeGroup?.totalOffenders || 0}
                     />
                   </Col>
                   <Col>
                     <Statistic
-                      title="Total Loss"
+                      title={intl.formatMessage({
+                        defaultMessage: 'Total Loss',
+                        id: 'LPr3Nh',
+                      })}
                       value={`£${
                         data?.crimeGroup?.totalValue?.toLocaleString() || 0
                       }`}
@@ -252,7 +293,10 @@ const ViewCrimeGroup = ({
                   </Col>
                   <Col>
                     <Statistic
-                      title="Total Value Recovered"
+                      title={intl.formatMessage({
+                        defaultMessage: 'Total Value Recovered',
+                        id: 't+iLve',
+                      })}
                       value={`£${
                         data?.crimeGroup?.totalRecoveredValue?.toLocaleString() ||
                         0
@@ -261,7 +305,10 @@ const ViewCrimeGroup = ({
                   </Col>
                   <Col>
                     <Statistic
-                      title="Loss Rate"
+                      title={intl.formatMessage({
+                        defaultMessage: 'Loss Rate',
+                        id: 'mQPFSj',
+                      })}
                       value={`${
                         data?.crimeGroup?.totalTheftSuccess?.toFixed(0) || 0
                       }%`}
@@ -272,7 +319,12 @@ const ViewCrimeGroup = ({
               <Card loading={loading}>
                 <Row gutter={8} align="middle" style={{ marginBottom: 10 }}>
                   <Col flex={1}>
-                    <Title level={4}>Offenders</Title>
+                    <Title level={4}>
+                      {intl.formatMessage({
+                        defaultMessage: 'Offenders',
+                        id: 'xb54TN',
+                      })}
+                    </Title>
                   </Col>
                   {suggestedData?.crimeGroup?.suggestedMembers &&
                     suggestedData.crimeGroup.suggestedMembers.length > 0 && (
@@ -283,8 +335,11 @@ const ViewCrimeGroup = ({
                           size="small"
                           type="ghost"
                         >
-                          {suggestedData.crimeGroup.suggestedMembers.length}{' '}
-                          Suggested Members
+                          {suggestedData.crimeGroup.suggestedMembers.length}
+                          {intl.formatMessage({
+                            defaultMessage: 'Suggested Members',
+                            id: 'TxnvVF',
+                          })}
                         </Button>
                       </Col>
                     )}
@@ -294,7 +349,10 @@ const ViewCrimeGroup = ({
                         <Menu
                           items={[
                             {
-                              label: 'Add Existing Offenders',
+                              label: intl.formatMessage({
+                                defaultMessage: 'Add Existing Offenders',
+                                id: '1FbM4r',
+                              }),
                               key: '1',
                               icon: (
                                 <FontAwesomeIcon
@@ -305,7 +363,10 @@ const ViewCrimeGroup = ({
                               onClick: () => toggleAddExistingOffender(),
                             },
                             {
-                              label: 'Create New Offender',
+                              label: intl.formatMessage({
+                                defaultMessage: 'Create New Offender',
+                                id: '58ir77',
+                              }),
                               key: '2',
                               icon: (
                                 <FontAwesomeIcon
@@ -328,7 +389,10 @@ const ViewCrimeGroup = ({
                           />
                         }
                       >
-                        Offenders
+                        {intl.formatMessage({
+                          defaultMessage: 'Offenders',
+                          id: 'xb54TN',
+                        })}
                       </Button>
                     </Dropdown>
                   </Col>
@@ -341,12 +405,14 @@ const ViewCrimeGroup = ({
                   />
                 ) : (
                   <Empty
-                    description="No offenders for this crime group"
+                    description={intl.formatMessage({
+                      defaultMessage: 'No offenders for this crime group',
+                      id: '3x8wG/',
+                    })}
                     image={Empty.PRESENTED_IMAGE_SIMPLE}
                   />
                 )}
               </Card>
-
               {data?.crimeGroup?.incidents &&
                 data?.crimeGroup?.incidents.length > 0 && (
                   <MapCard
@@ -360,11 +426,15 @@ const ViewCrimeGroup = ({
                     }
                   />
                 )}
-
               <Card loading={loading}>
                 <Row align="middle" style={{ marginBottom: 10 }}>
                   <Col flex={1}>
-                    <Title level={4}>Vehicles</Title>
+                    <Title level={4}>
+                      {intl.formatMessage({
+                        defaultMessage: 'Vehicles',
+                        id: 'r6wuJ3',
+                      })}
+                    </Title>
                   </Col>
                   <Col>
                     <Dropdown
@@ -372,7 +442,10 @@ const ViewCrimeGroup = ({
                         <Menu
                           items={[
                             {
-                              label: 'Add Existing Vehicles',
+                              label: intl.formatMessage({
+                                defaultMessage: 'Add Existing Vehicles',
+                                id: 'goP1s6',
+                              }),
                               key: '1',
                               icon: (
                                 <FontAwesomeIcon
@@ -383,7 +456,10 @@ const ViewCrimeGroup = ({
                               onClick: () => toggleAddExistingVehicle(),
                             },
                             {
-                              label: 'Create New Vehicle',
+                              label: intl.formatMessage({
+                                defaultMessage: 'Create New Vehicle',
+                                id: 'xiAZxN',
+                              }),
                               key: '2',
                               icon: (
                                 <FontAwesomeIcon
@@ -406,7 +482,10 @@ const ViewCrimeGroup = ({
                           />
                         }
                       >
-                        Vehicles
+                        {intl.formatMessage({
+                          defaultMessage: 'Vehicles',
+                          id: 'r6wuJ3',
+                        })}
                       </Button>
                     </Dropdown>
                   </Col>
@@ -419,18 +498,25 @@ const ViewCrimeGroup = ({
                   />
                 ) : (
                   <Empty
-                    description="No vehicles for this crime group"
+                    description={intl.formatMessage({
+                      defaultMessage: 'No vehicles for this crime group',
+                      id: 'dtAhMN',
+                    })}
                     image={Empty.PRESENTED_IMAGE_SIMPLE}
                   />
                 )}
               </Card>
               <Card loading={loading}>
-                <Title level={4}>Incidents</Title>
+                <Title level={4}>
+                  {intl.formatMessage({
+                    defaultMessage: 'Incidents',
+                    id: 'mtr3R4',
+                  })}
+                </Title>
                 {data?.crimeGroup?.incidents &&
                 data?.crimeGroup?.incidents.length > 0 &&
                 !loading ? (
-                  <IncidentTable
-                    // TODO
+                  <IncidentTable // TODO
                     // @ts-expect-error says can be null
                     incidents={data?.crimeGroup?.incidents.filter(
                       (incident) => incident !== null
@@ -440,7 +526,10 @@ const ViewCrimeGroup = ({
                   />
                 ) : (
                   <Empty
-                    description="No incidents for this crime group"
+                    description={intl.formatMessage({
+                      defaultMessage: 'No incidents for this crime group',
+                      id: 'uFO+ib',
+                    })}
                     image={Empty.PRESENTED_IMAGE_SIMPLE}
                   />
                 )}
@@ -448,11 +537,17 @@ const ViewCrimeGroup = ({
             </div>
 
             <Modal
-              title="Edit Update Content"
+              title={intl.formatMessage({
+                id: '8sZeJM',
+                defaultMessage: 'Edit Update Content',
+              })}
               visible={editUpdate !== null}
               onOk={handleEditUpdate}
               onCancel={() => setEditUpdate(null)}
-              okText="Save"
+              okText={intl.formatMessage({
+                id: 'jvo0vs',
+                defaultMessage: 'Save',
+              })}
             >
               <Input
                 value={editUpdateInput}
@@ -482,7 +577,12 @@ const ViewCrimeGroup = ({
               loader={
                 <div className="message-date">
                   <div className="date-line" />
-                  <div className="date">Loading...</div>
+                  <div className="date">
+                    {intl.formatMessage({
+                      id: 'gjBiyj',
+                      defaultMessage: 'Loading...',
+                    })}
+                  </div>
                   <div className="date-line" />
                 </div>
               }
@@ -521,7 +621,10 @@ const ViewCrimeGroup = ({
                             }}
                             size="small"
                           >
-                            Edit Update
+                            {intl.formatMessage({
+                              id: 'pCzvx3',
+                              defaultMessage: 'Edit Update',
+                            })}
                           </Button>
                           <Button
                             type="text"
@@ -538,7 +641,10 @@ const ViewCrimeGroup = ({
                             }}
                             size="small"
                           >
-                            Delete Update
+                            {intl.formatMessage({
+                              id: 'ef1dfd',
+                              defaultMessage: 'Delete Update',
+                            })}
                           </Button>
                         </div>
                       }
@@ -547,7 +653,7 @@ const ViewCrimeGroup = ({
                         <UpdateContent
                           userId={userId}
                           content={update.text}
-                          createdAt={update.createdAt}
+                          createdAt={moment(update.createdAt)}
                           from={update.createdBy}
                           id={update.id}
                           images={update.images}
@@ -564,7 +670,7 @@ const ViewCrimeGroup = ({
                     <UpdateContent
                       userId={userId}
                       content={update.text}
-                      createdAt={update.createdAt}
+                      createdAt={moment(update.createdAt)}
                       from={update.createdBy}
                       id={update.id}
                       images={update.images}
@@ -610,7 +716,10 @@ const ViewCrimeGroup = ({
                                 }}
                                 size="small"
                               >
-                                Edit Update
+                                {intl.formatMessage({
+                                  id: 'pCzvx3',
+                                  defaultMessage: 'Edit Update',
+                                })}
                               </Button>
                               <Button
                                 type="text"
@@ -627,7 +736,10 @@ const ViewCrimeGroup = ({
                                 }}
                                 size="small"
                               >
-                                Delete Update
+                                {intl.formatMessage({
+                                  defaultMessage: 'Delete Update',
+                                  id: 'ef1dfd',
+                                })}
                               </Button>
                             </div>
                           }
@@ -636,7 +748,7 @@ const ViewCrimeGroup = ({
                             <UpdateContent
                               userId={userId}
                               content={reply.text}
-                              createdAt={reply.createdAt}
+                              createdAt={moment(reply.createdAt)}
                               from={reply.createdBy}
                               id={reply.id}
                               images={reply.images}
@@ -653,7 +765,7 @@ const ViewCrimeGroup = ({
                         <UpdateContent
                           userId={userId}
                           content={reply.text}
-                          createdAt={reply.createdAt}
+                          createdAt={moment(reply.createdAt)}
                           from={reply.createdBy}
                           id={reply.id}
                           images={reply.images}
@@ -679,17 +791,23 @@ const ViewCrimeGroup = ({
                           size="small"
                           onClick={() =>
                             setReplyTo({
-                              createdAt: update.createdAt,
+                              createdAt: update.createdAt.toString(),
                               createdBy:
                                 userId === update.createdBy.id
-                                  ? 'You'
+                                  ? intl.formatMessage({
+                                      defaultMessage: 'You',
+                                      id: 'kJ5W29',
+                                    })
                                   : `${update.createdBy.fullName} - ${update.createdBy.businesses[0]?.name}`,
                               id: update.id,
                               text: update.text || '',
                             })
                           }
                         >
-                          Reply
+                          {intl.formatMessage({
+                            defaultMessage: 'Reply',
+                            id: '9HU8vw',
+                          })}
                         </Button>
                       </Col>
                     )}
@@ -708,11 +826,13 @@ const ViewCrimeGroup = ({
         </Col>
       </Row>
 
-      {/* offeder */}
       <Drawer
-        title="Add New Offender"
+        title={intl.formatMessage({
+          id: 'V+RsEq',
+          defaultMessage: 'Add New Offender',
+        })}
         visible={addOffender}
-        width="700"
+        width={700}
         onClose={toggleAddOffender}
         zIndex={999}
       >
@@ -727,9 +847,12 @@ const ViewCrimeGroup = ({
         )}
       </Drawer>
       <Drawer
-        title="Add Existing Offenders"
+        title={intl.formatMessage({
+          id: '1FbM4r',
+          defaultMessage: 'Add Existing Offenders',
+        })}
         visible={addExistingOffender}
-        width="800"
+        width={800}
         onClose={toggleAddExistingOffender}
         zIndex={1001}
       >
@@ -746,9 +869,12 @@ const ViewCrimeGroup = ({
 
       {/* vehicle */}
       <Drawer
-        title="Add New Vehicle"
+        title={intl.formatMessage({
+          id: 'cHbTr7',
+          defaultMessage: 'Add New Vehicle',
+        })}
         open={addNewVehicle}
-        width="700"
+        width={700}
         zIndex={999}
         onClose={toggleAddNewVehicle}
       >
@@ -763,9 +889,12 @@ const ViewCrimeGroup = ({
         )}
       </Drawer>
       <Drawer
-        title="Add Existing Vehicles"
+        title={intl.formatMessage({
+          id: 'goP1s6',
+          defaultMessage: 'Add Existing Vehicles',
+        })}
         open={addExistingVehicle}
-        width="800"
+        width={800}
         onClose={toggleAddExistingVehicle}
         zIndex={1001}
       >
@@ -780,17 +909,23 @@ const ViewCrimeGroup = ({
         )}
       </Drawer>
       <Drawer
-        title="Add New Alias"
+        title={intl.formatMessage({
+          id: '9p+uZ/',
+          defaultMessage: 'Add New Alias',
+        })}
         open={addAlias}
-        width="600"
+        width={600}
         onClose={toggleAddAlias}
       >
         {addAlias ? <AddAlias onClose={toggleAddAlias} /> : <div />}
       </Drawer>
       <Drawer
-        title="Suggested Group Members"
+        title={intl.formatMessage({
+          id: 'jxHIQ/',
+          defaultMessage: 'Suggested Group Members',
+        })}
         open={viewSuggestedOpen}
-        width="900"
+        width={900}
         onClose={toggleViewSuggested}
         bodyStyle={{ paddingLeft: 0, paddingRight: 0 }}
       >

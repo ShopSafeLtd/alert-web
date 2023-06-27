@@ -1,7 +1,7 @@
+import type { ReactNode } from 'react';
 import React from 'react';
 import { Card } from 'antd';
 import type { Theme } from 'configs/ThemeConfig';
-import type { ReactNode } from 'react';
 import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles((theme: Theme) => ({
@@ -31,6 +31,7 @@ const SideList = ({ children, current }: Props) => {
 
   return (
     <Card
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       className={`${classes.item} ${current ? 'current' : undefined}`}
       bodyStyle={{ padding: 0 }}
     >

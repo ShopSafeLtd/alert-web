@@ -49,6 +49,7 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import SkeletonImage from 'components/images/SkeletonImage.view';
+import { useIntl } from 'react-intl';
 
 const { Title, Text } = Typography;
 const { confirm } = Modal;
@@ -78,7 +79,7 @@ const OffenderCard = ({
   isArticle,
 }: Props): JSX.Element => {
   const imagesRef = useRef<CarouselRef>(null);
-
+  const intl = useIntl();
   return (
     <Card
       className="offender-card"
@@ -89,11 +90,19 @@ const OffenderCard = ({
       {!offender?.approved && (
         <div className="offender-card-overlay">
           <Title level={4} className="offender-card-approval-title">
-            This offender is awaiting approval
+            {intl.formatMessage({
+              defaultMessage: 'This offender is awaiting approval',
+              id: 'Om/2W/',
+            })}
           </Title>
           {approvalRights && (
             <Link to={`review/${offender?.id}`}>
-              <Button>Review Offender</Button>
+              <Button>
+                {intl.formatMessage({
+                  defaultMessage: 'Review Offender',
+                  id: 'i7Qzld',
+                })}
+              </Button>
             </Link>
           )}
         </div>
@@ -106,13 +115,19 @@ const OffenderCard = ({
               items={[
                 {
                   key: 0,
-                  label: 'Edit Offender',
+                  label: intl.formatMessage({
+                    defaultMessage: 'Edit Offender',
+                    id: '+OfJ4/',
+                  }),
                   onClick: () => onNavigate(offender?.id || ''),
                   icon: <FontAwesomeIcon size="lg" icon={faEdit} />,
                 },
                 {
                   key: 1,
-                  label: 'Compare Offender',
+                  label: intl.formatMessage({
+                    defaultMessage: 'Compare Offender',
+                    id: 'Y64oGy',
+                  }),
                   onClick: () =>
                     onNavigate(
                       undefined,
@@ -122,13 +137,25 @@ const OffenderCard = ({
                 },
                 {
                   key: 2,
-                  label: 'Delete Offender',
+                  label: intl.formatMessage({
+                    defaultMessage: 'Delete Offender',
+                    id: 'IyEJgq',
+                  }),
                   onClick: () =>
                     confirm({
-                      title: 'Are you sure?',
-                      content:
-                        'Click delete if you wish to delete this offender. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
-                      okText: 'Delete',
+                      title: intl.formatMessage({
+                        defaultMessage: 'Are you sure?',
+                        id: '2oCaym',
+                      }),
+                      content: intl.formatMessage({
+                        defaultMessage:
+                          'Click delete if you wish to delete this offender. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
+                        id: 'J35F/I',
+                      }),
+                      okText: intl.formatMessage({
+                        defaultMessage: 'Delete',
+                        id: 'K3r6DQ',
+                      }),
                       onOk: () => onDelete(offender?.id || ''),
                     }),
                   icon: <FontAwesomeIcon size="lg" icon={faTrash} />,
@@ -157,8 +184,9 @@ const OffenderCard = ({
             <Tooltip
               title={offender?.tags.map((item) => ` ${item.name}`).toString()}
             >
+              {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
               <Tag className="incident-card-tag" color="red">
-                + {offender.tags.length - 1} more
+                + {offender.tags.length - 1}
               </Tag>
             </Tooltip>
           )}
@@ -241,7 +269,12 @@ const OffenderCard = ({
                 </Text>
               </Col>
             </Row>
-            <Text type="secondary">Alert ID: {offender?.reference}</Text>
+            <Text type="secondary">
+              {intl.formatMessage(
+                { defaultMessage: 'Alert ID: {ref}', id: 'umL9sI' },
+                { ref: offender?.reference }
+              )}
+            </Text>
           </div>
 
           <Row gutter={16}>
@@ -252,10 +285,17 @@ const OffenderCard = ({
                 icon={faUserClock}
               />
               <Text type="secondary">
-                Age:{' '}
-                {offender.dateOfBirth
-                  ? calcAge(offender.dateOfBirth)
-                  : getOffenderAge(offender.age)}
+                {intl.formatMessage(
+                  {
+                    defaultMessage: 'Age: {age}',
+                    id: '9kQMmf',
+                  },
+                  {
+                    age: offender.dateOfBirth
+                      ? calcAge(offender.dateOfBirth)
+                      : getOffenderAge(offender.age),
+                  }
+                )}
               </Text>
             </Col>
 
@@ -266,7 +306,15 @@ const OffenderCard = ({
                 icon={faMarsAndVenus}
               />
               <Text type="secondary">
-                Sex: {getOffenderGender(offender.gender)}
+                {intl.formatMessage(
+                  {
+                    defaultMessage: 'Sex: {gender}',
+                    id: 'ulwh+J',
+                  },
+                  {
+                    gender: getOffenderGender(offender.gender),
+                  }
+                )}
               </Text>
             </Col>
           </Row>
@@ -278,7 +326,15 @@ const OffenderCard = ({
                 icon={faUserTag}
               />
               <Text type="secondary">
-                Build:{getOffenderBuild(offender.build)}
+                {intl.formatMessage(
+                  {
+                    defaultMessage: 'Build: {build}',
+                    id: 'B0zBf8',
+                  },
+                  {
+                    build: getOffenderBuild(offender.build),
+                  }
+                )}
               </Text>
             </Col>
             <Col span={12}>
@@ -288,7 +344,15 @@ const OffenderCard = ({
                 icon={faHeadSide}
               />
               <Text type="secondary">
-                Height: {getOffenderHeight(offender.height)}
+                {intl.formatMessage(
+                  {
+                    defaultMessage: 'Height: {height}',
+                    id: 'f9Kbe7',
+                  },
+                  {
+                    height: getOffenderHeight(offender.height),
+                  }
+                )}
               </Text>
             </Col>
           </Row>
@@ -300,7 +364,15 @@ const OffenderCard = ({
                 icon={faEarth}
               />
               <Text type="secondary">
-                Ethnicity: {getOffenderRace(offender.race, false)}
+                {intl.formatMessage(
+                  {
+                    defaultMessage: 'Ethnicity: {race}',
+                    id: 'ht++Mj',
+                  },
+                  {
+                    race: getOffenderRace(offender.race, false),
+                  }
+                )}
               </Text>
             </Col>
           </Row>
@@ -313,9 +385,16 @@ const OffenderCard = ({
               icon={faClock}
             />
             <Text type="secondary">
-              Last updated:{' '}
-              {moment(offender?.updatedAt || moment()).format(
-                `ddd MMM DD YYYY - HH:mm`
+              {intl.formatMessage(
+                {
+                  defaultMessage: 'Last updated: {updatedAt}',
+                  id: 'SYtNVL',
+                },
+                {
+                  updatedAt: moment(offender?.updatedAt || moment()).format(
+                    'ddd MMM DD YYYY - HH:mm'
+                  ),
+                }
               )}
             </Text>
           </Col>
@@ -323,7 +402,8 @@ const OffenderCard = ({
         <Link
           to={
             getLastOffence(offender.incidents).id
-              ? `/app/incidents/view/${getLastOffence(offender.incidents).id}`
+              ? // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+                `/app/incidents/view/${getLastOffence(offender.incidents).id}`
               : ''
           }
         >
@@ -342,11 +422,20 @@ const OffenderCard = ({
                 ellipsis
                 type="secondary"
               >
-                Last offence: {getLastOffence(offender.incidents).message}
+                {intl.formatMessage(
+                  {
+                    defaultMessage: 'Last offence: {lastOffence}',
+                    id: '9eFYpD',
+                  },
+                  {
+                    lastOffence: getLastOffence(offender.incidents).message,
+                  }
+                )}
               </Text>
             </Col>
           </Row>
         </Link>
+
         <Link
           to={
             isArticle
@@ -357,7 +446,12 @@ const OffenderCard = ({
           {offender?.groups && offender.groups.length > 0 && (
             <Row wrap={false} style={{ overflowX: 'auto' }} align="middle">
               <Col style={{ minWidth: 60 }}>
-                <Text type="secondary">Groups:</Text>
+                <Text type="secondary">
+                  {intl.formatMessage({
+                    defaultMessage: 'Groups:',
+                    id: 'JcJ/mL',
+                  })}
+                </Text>
               </Col>
               {offender.groups.slice(0, 1).map((group) => (
                 <Col key={group.id}>
@@ -371,13 +465,24 @@ const OffenderCard = ({
                       .map((item) => ` ${item.name}`)
                       .toString()}
                   >
-                    <Tag>+{offender.groups.length - 1} more</Tag>
+                    <Tag>
+                      {intl.formatMessage(
+                        {
+                          defaultMessage: '+{count} more',
+                          id: '/zFGgP',
+                        },
+                        {
+                          count: offender.groups.length - 1,
+                        }
+                      )}
+                    </Tag>
                   </Tooltip>
                 </Col>
               )}
             </Row>
           )}
         </Link>
+
         <Row justify="center">
           <Col>
             <Link
@@ -388,7 +493,10 @@ const OffenderCard = ({
               }
             >
               <Button size="small" type="text" style={{ marginTop: 10 }}>
-                View Full Offender
+                {intl.formatMessage({
+                  defaultMessage: 'View Full Offender',
+                  id: 'm94i2s',
+                })}
               </Button>
             </Link>
           </Col>

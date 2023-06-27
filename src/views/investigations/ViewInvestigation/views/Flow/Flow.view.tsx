@@ -28,6 +28,7 @@ import type { FullScreenHandle } from 'react-full-screen';
 import { FullScreen } from 'react-full-screen';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExpandArrows } from '@fortawesome/pro-light-svg-icons';
+import { useIntl } from 'react-intl';
 import Sidebar from './sidebar/Sidebar';
 import 'reactflow/dist/style.css';
 import './styles.css';
@@ -108,7 +109,7 @@ FlowProps) => {
     }),
     []
   );
-
+  const intl = useIntl();
   const darkTheme =
     useStoreState((state) => state.theme.currentTheme) === 'dark';
 
@@ -145,18 +146,32 @@ FlowProps) => {
               onClick={downloadImage}
               type="default"
             >
-              Print
+              {intl.formatMessage({
+                defaultMessage: 'Print',
+                id: 'CXRlIo',
+              })}
             </Button>
             <Button className="download-btn" onClick={onSave} type="primary">
-              Save
+              {intl.formatMessage({
+                defaultMessage: 'Save',
+                id: 'jvo0vs',
+              })}
             </Button>
             <p className="info">
-              Synced: <Status success={isSynced || clientCount === 0} />
-              Last Saved:{' '}
+              {intl.formatMessage({
+                defaultMessage: 'Synced: ',
+                id: 'ytshKn',
+              })}
+              <Status success={isSynced || clientCount === 0} />
+              {intl.formatMessage({
+                defaultMessage: 'Last Saved: ',
+                id: 'H7OJNn',
+              })}
               {saving || loading ? (
                 <Spin style={{ marginLeft: 5 }} indicator={antIcon} />
               ) : (
-                savedWhen || 'never'
+                savedWhen ||
+                intl.formatMessage({ defaultMessage: 'never', id: 'md4Qkb' })
               )}
             </p>
             <Sidebar />
@@ -182,39 +197,17 @@ FlowProps) => {
                   fitView
                   edgeTypes={edgeTypes}
                   nodeTypes={nodeTypes}
-                  // onPointerMove={handlePointMove}
                   proOptions={{ hideAttribution: true }}
                   minZoom={0.1}
                 >
-                  {/* {Array.from(users.entries()).map(([key, value]) => { */}
-                  {/*  if (!value) return null; */}
-                  {/*  if (key === provider.awareness.clientID) return null; */}
-                  {/*  if ( */}
-                  {/*    !value.cursor || */}
-                  {/*    !value.user || */}
-                  {/*    !value.user.color || */}
-                  {/*    !value.user.name */}
-                  {/*  ) */}
-                  {/*    return null; */}
-                  {/*  return ( */}
-                  {/*    <Cursor */}
-                  {/*      key={key} */}
-                  {/*      cursor={ */}
-                  {/*        value.cursor as ComponentProps<typeof Cursor>['cursor'] */}
-                  {/*      } */}
-                  {/*      color={ */}
-                  {/*        value.user.color as ComponentProps< */}
-                  {/*          typeof Cursor */}
-                  {/*        >['color'] */}
-                  {/*      } */}
-                  {/*      name={ */}
-                  {/*        value.user.name as ComponentProps<typeof Cursor>['name'] */}
-                  {/*      } */}
-                  {/*    /> */}
-                  {/*  ); */}
-                  {/* })} */}
                   <Controls showInteractive={!isFullScreen}>
-                    <ControlButton onClick={setFullScreen} title="fullscreen">
+                    <ControlButton
+                      onClick={setFullScreen}
+                      title={intl.formatMessage({
+                        defaultMessage: 'Full Screen',
+                        id: 'bRjypX',
+                      })}
+                    >
                       <FontAwesomeIcon
                         size="sm"
                         icon={faExpandArrows}

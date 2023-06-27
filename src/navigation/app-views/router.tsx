@@ -62,21 +62,19 @@ export const AppViews = (): JSX.Element => {
             element={<Onboarding />}
           />
         )}
-        <Route key="dashboard" path="dashboard/*" element={<FeedItems />} />,
+        <Route key="dashboard" path="dashboard/*" element={<FeedItems />} />
         {role !== 'USER' && (
           <Route key="tasks" path="tasks/*" element={<Tasks />} />
         )}
-        ,
-        <Route key="incidents" path="incidents/*" element={<Incidents />} />,
+        <Route key="incidents" path="incidents/*" element={<Incidents />} />
         <Route
           key="crime-groups"
           path="crime-groups/*"
           element={<CrimeGroups />}
         />
-        ,
-        <Route key="vehicles" path="vehicles/*" element={<Vehicles />} />,
-        <Route key="offenders" path="offenders/*" element={<Offenders />} />,
-        <Route key="chat" path="chat/*" element={<Chat />} />,
+        <Route key="vehicles" path="vehicles/*" element={<Vehicles />} />
+        <Route key="offenders" path="offenders/*" element={<Offenders />} />
+        <Route key="chat" path="chat/*" element={<Chat />} />
         <Route
           key="notifications"
           path="notifications/*"

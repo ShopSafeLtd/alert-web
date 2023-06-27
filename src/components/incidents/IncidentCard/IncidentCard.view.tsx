@@ -30,6 +30,7 @@ import type { CarouselRef } from 'antd/lib/carousel';
 import { Link } from 'react-router-dom';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import SkeletonImage from 'components/images/SkeletonImage.view';
+import { useIntl } from 'react-intl';
 
 const { Title, Text, Paragraph } = Typography;
 const { confirm } = Modal;
@@ -57,7 +58,7 @@ const IncidentCard = ({
   onDelete,
 }: Props): JSX.Element => {
   const imagesRef = useRef<CarouselRef>(null);
-
+  const intl = useIntl();
   return (
     <Card
       className="incident-card"
@@ -67,11 +68,19 @@ const IncidentCard = ({
       {!incident?.approved && (
         <div className="incident-card-overlay">
           <Title level={4} className="incident-card-approval-title">
-            This incident is awaiting approval
+            {intl.formatMessage({
+              defaultMessage: 'This incident is awaiting approval',
+              id: 'ONEXvQ',
+            })}
           </Title>
           {approvalRights && (
             <Link to={`review/${incident?.id}`}>
-              <Button>Review Incident</Button>
+              <Button>
+                {intl.formatMessage({
+                  defaultMessage: 'Review Incident',
+                  id: 'c+kQCf',
+                })}
+              </Button>
             </Link>
           )}
         </div>
@@ -84,19 +93,34 @@ const IncidentCard = ({
               items={[
                 {
                   key: 0,
-                  label: 'Edit Incident',
+                  label: intl.formatMessage({
+                    defaultMessage: 'Edit Incident',
+                    id: 'E6VJFN',
+                  }),
                   onClick: () => onNavigate(incident?.id || ''),
                   icon: <FontAwesomeIcon icon={faEdit} />,
                 },
                 {
                   key: 1,
-                  label: 'Delete Incident',
+                  label: intl.formatMessage({
+                    defaultMessage: 'Delete Incident',
+                    id: 's8QPty',
+                  }),
                   onClick: () =>
                     confirm({
-                      title: 'Are you sure?',
-                      content:
-                        'Click delete if you wish to delete this incident. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
-                      okText: 'Delete',
+                      title: intl.formatMessage({
+                        defaultMessage: 'Are you sure?',
+                        id: '2oCaym',
+                      }),
+                      content: intl.formatMessage({
+                        defaultMessage:
+                          'Click delete if you wish to delete this incident. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
+                        id: 'TNOl3z',
+                      }),
+                      okText: intl.formatMessage({
+                        defaultMessage: 'Delete',
+                        id: 'K3r6DQ',
+                      }),
                       onOk: () => onDelete(incident?.id || ''),
                     }),
                   icon: <FontAwesomeIcon icon={faTrash} />,
@@ -133,7 +157,15 @@ const IncidentCard = ({
                 .toString()}
             >
               <Tag className="incident-card-tag" color="red">
-                + {incident.crimeTypes.length - 1} more
+                {intl.formatMessage(
+                  {
+                    defaultMessage: '+ {num} more',
+                    id: 'fi2Xie',
+                  },
+                  {
+                    num: incident.crimeTypes.length - 1,
+                  }
+                )}
               </Tag>
             </Tooltip>
           )}
@@ -196,8 +228,18 @@ const IncidentCard = ({
         </Title>
         <div style={{ marginBottom: 10 }}>
           <Text type="secondary">
-            Alert ID: {incident?.reference}
-            {incident?.policeRef ? `/ Crime Ref: ${incident.policeRef}` : ''}
+            {intl.formatMessage(
+              {
+                defaultMessage:
+                  'Alert ID: {incidentReference} {policeRef, plural, =1 {{policeRefS}} other {}}',
+                id: '2rCZPy',
+              },
+              {
+                incidentReference: incident?.reference,
+                policeRefS: incident.policeRef,
+                policeRef: incident.policeRef ? 1 : 0,
+              }
+            )}
           </Text>
         </div>
         {incident.offenders.length > 0 ? (
@@ -205,17 +247,32 @@ const IncidentCard = ({
             {incident.offenders.slice(0, 2).map((offender) => (
               <Link to={`/app/offenders/view/${offender?.id}`}>
                 <Tag key={offender.id}>
-                  {offender.name || 'Unknown Offender'}
+                  {offender.name ||
+                    intl.formatMessage({
+                      defaultMessage: 'Unknown Offender',
+                      id: 'wS+Y5g',
+                    })}
                 </Tag>
               </Link>
             ))}
             {incident.offenders.length > 2 && (
               <Tooltip
                 title={incident.offenders
+                  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
                   .map((item) => ` ${item.name}`)
                   .toString()}
               >
-                <Tag>+ {incident.offenders.length - 1} more</Tag>
+                <Tag>
+                  {intl.formatMessage(
+                    {
+                      defaultMessage: '+ {num} more',
+                      id: 'fi2Xie',
+                    },
+                    {
+                      num: incident.offenders.length - 1,
+                    }
+                  )}
+                </Tag>
               </Tooltip>
             )}
           </Row>
@@ -282,7 +339,10 @@ const IncidentCard = ({
           >
             <Col style={{ minWidth: 60 }}>
               <Text strong type="secondary">
-                Groups:
+                {intl.formatMessage({
+                  defaultMessage: 'Groups:',
+                  id: 'JcJ/mL',
+                })}
               </Text>
             </Col>
             {incident.groups.slice(0, 1).map((group) => (
@@ -297,7 +357,17 @@ const IncidentCard = ({
                     .map((item) => ` ${item.name}`)
                     .toString()}
                 >
-                  <Tag>+{incident.groups.length - 1} more</Tag>
+                  <Tag>
+                    {intl.formatMessage(
+                      {
+                        defaultMessage: '+ {num} more',
+                        id: 'fi2Xie',
+                      },
+                      {
+                        num: incident.groups.length - 1,
+                      }
+                    )}
+                  </Tag>
                 </Tooltip>
               </Col>
             )}
@@ -306,7 +376,10 @@ const IncidentCard = ({
             <Col>
               <Link to={`/app/incidents/view/${incident?.id}`}>
                 <Button size="small" type="text">
-                  View Full Incident
+                  {intl.formatMessage({
+                    defaultMessage: 'View Incident',
+                    id: 'f4Tgpp',
+                  })}
                 </Button>
               </Link>
             </Col>

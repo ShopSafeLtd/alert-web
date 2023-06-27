@@ -1,5 +1,6 @@
 import React from 'react';
-import { Card, Progress, ProgressProps } from 'antd';
+import type { ProgressProps } from 'antd';
+import { Card, Progress } from 'antd';
 
 interface Props extends ProgressProps {
   title: string;
