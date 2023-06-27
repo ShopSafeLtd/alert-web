@@ -292,16 +292,45 @@ const DiscImport = ({
         <Form
           form={mappingForm}
           onFinish={onGenerateData}
-          initialValues={{ excludeDate: moment().add(-1, 'year') }}
+          initialValues={{
+            excludeIncidentDate: moment().add(-1, 'year'),
+            excludeUserDate: moment().add(-3, 'month'),
+          }}
         >
           <Row gutter={8}>
             <Col>
               <Form.Item
-                name="excludeDate"
-                label="Exclude data older than:"
+                name="excludeIncidentDate"
+                label="Exclude data older than"
                 required
               >
                 <DatePicker format="DD/MM/YYYY" />
+              </Form.Item>
+            </Col>
+            <Col>
+              <Form.Item
+                name="excludeUserDate"
+                label="Exclude users that haven't logged in since"
+                required
+              >
+                <DatePicker format="DD/MM/YYYY" />
+              </Form.Item>
+            </Col>
+            <Col>
+              <Form.Item name="townCity" label="Town City Override" required>
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col>
+              <Form.Item name="fallbackGroup" label="Fallback Group" required>
+                <Select
+                  mode="multiple"
+                  style={{ width: 200 }}
+                  options={groupsData?.groups.map((group) => ({
+                    value: group.id,
+                    label: group.name,
+                  }))}
+                />
               </Form.Item>
             </Col>
           </Row>
@@ -1083,7 +1112,6 @@ const DiscImport = ({
                           // eslint-disable-next-line react/jsx-props-no-spreading
                           {...restField}
                           name={[name, 'group']}
-                          rules={[{ required: true, message: 'Missing group' }]}
                         >
                           <Select
                             mode="multiple"
@@ -1143,7 +1171,6 @@ const DiscImport = ({
                           // eslint-disable-next-line react/jsx-props-no-spreading
                           {...restField}
                           name={[name, 'group']}
-                          rules={[{ required: true, message: 'Missing group' }]}
                         >
                           <Select
                             mode="multiple"
@@ -1227,7 +1254,7 @@ const DiscImport = ({
     )}
 
     <Row gutter={8} style={{ marginTop: 20 }} justify="end">
-      {[2, 3, 4].includes(currentStep) && (
+      {[2, 3, 4, 5].includes(currentStep) && (
         <Col>
           <Button onClick={() => onStepChange(currentStep - 1)}>Back</Button>
         </Col>

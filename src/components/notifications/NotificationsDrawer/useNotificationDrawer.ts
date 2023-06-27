@@ -1,5 +1,7 @@
 import { useStoreActions, useStoreState } from 'state';
 import type {
+  ListUserNotificationsQuery,
+  ListUserNotificationsQueryVariables,
   UpdateUserNotificationsMutation,
   UserNotificationsQuery,
 } from 'graphql/generated';
@@ -8,8 +10,8 @@ import {
   QueryMode,
   SortOrder,
   UserNotificationsDocument,
+  useListUserNotificationsQuery,
   useUpdateUserNotificationsMutation,
-  useUserNotificationsQuery,
 } from 'graphql/generated';
 import { useState } from 'react';
 import type { MutationUpdaterFn } from '@apollo/client';
@@ -58,7 +60,10 @@ interface Scheme {
 }
 interface Return {
   data:
-    | Exclude<UserNotificationsQuery['user'], undefined | null>
+    | Exclude<
+        ListUserNotificationsQuery['listUserNotifications'],
+        undefined | null
+      >
     | null
     | undefined;
   loading: boolean;
@@ -168,12 +173,15 @@ const useNotificationLists = (): Return => {
     }
   };
 
-  const variables = {
+  const variables: ListUserNotificationsQueryVariables = {
     take: 20,
+    skip: 0,
     where: {
-      id: userId,
-    },
-    notificationWhere: {
+      user: {
+        id: {
+          equals: userId,
+        },
+      },
       AND: [
         {
           OR: [
@@ -217,19 +225,9 @@ const useNotificationLists = (): Return => {
     ],
   };
 
-  const { data, loading, refetch } = useUserNotificationsQuery({
+  const { data, loading, refetch } = useListUserNotificationsQuery({
     fetchPolicy: 'cache-and-network',
     variables,
-    onCompleted: (res) => {
-      if (
-        res.user?.totalUnreadNotifications &&
-        res.user?.totalUnreadNotifications > 0
-      ) {
-        setNotifications({
-          userNotifications: res.user.totalUnreadNotifications || 0,
-        });
-      }
-    },
   });
 
   const update: MutationUpdaterFn<UpdateUserNotificationsMutation> = (
@@ -366,7 +364,7 @@ const useNotificationLists = (): Return => {
   };
 
   return {
-    data: data?.user,
+    data: data?.listUserNotifications,
     loading: (data === null || data === undefined) && loading,
     saving,
     takeAllSchemes,

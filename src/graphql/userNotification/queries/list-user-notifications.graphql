@@ -1,16 +1,16 @@
-query userNotifications(
-  $where: UserWhereUniqueInput!
+query listUserNotifications(
+  $take: Int
+  $skip: Int
+  $where: UserNotificationWhereInput
   $orderBy: [UserNotificationOrderByWithRelationInput!]
-  $notificationWhere: UserNotificationWhereInput
 ) {
-  user(where: $where) {
-    id
-    totalNotifications
-    totalUnreadNotifications
-    notifications(
-      where: $notificationWhere
-      orderBy: $orderBy
-    ) {
+  listUserNotifications(
+    take: $take
+    skip: $skip
+    where: $where
+    orderBy: $orderBy
+  ) {
+    notifications {
       id
       read
       createdAt
@@ -53,5 +53,6 @@ query userNotifications(
         userId
       }
     }
+    total
   }
 }

@@ -132,7 +132,8 @@ const NewUserRow = React.memo(
     };
 
     const onBlur = async () => {
-      const values = await form.validateFields();
+      const values = await form.getFieldsValue();
+      console.log(values);
       onUpdateUser({ ...user, ...values });
     };
 
@@ -161,7 +162,6 @@ const NewUserRow = React.memo(
               rules={[{ required: true, message: 'Choose a role' }]}
             >
               <Select
-                disabled={link}
                 style={{ width: 150 }}
                 onBlur={onBlur}
                 options={[

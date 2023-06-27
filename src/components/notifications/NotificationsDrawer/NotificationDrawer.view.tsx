@@ -17,14 +17,17 @@ import {
   faBellOn,
   faBellSlash,
 } from '@fortawesome/pro-light-svg-icons';
-import type { UserNotificationsQuery } from 'graphql/generated';
+import type { ListUserNotificationsQuery } from 'graphql/generated';
 import { Link } from 'react-router-dom';
 import useStyles from './NotificationDrawer.styles';
 import type { NotificationData } from './useNotificationDrawer';
 
 interface Props {
   data:
-    | Exclude<UserNotificationsQuery['user'], undefined | null>
+    | Exclude<
+        ListUserNotificationsQuery['listUserNotifications'],
+        undefined | null
+      >
     | null
     | undefined;
   loading: boolean;
@@ -109,7 +112,7 @@ const NotificationsDrawer = ({
             <Skeleton key={index} />
           </div>
         ))
-      ) : data?.totalNotifications && data?.totalNotifications > 0 ? (
+      ) : data?.total && data?.total > 0 ? (
         <List
           itemLayout="horizontal"
           className={classes.list}
@@ -175,8 +178,8 @@ const NotificationsDrawer = ({
           />
         </div>
       )}
-      {(data?.totalNotifications || 0) > 15 && (
-        <Row justify="center" style={{ marginBottom: 10 }}>
+      {(data?.total || 0) > 15 && (
+        <Row justify="center" style={{ marginBottom: 20, marginTop: 20 }}>
           <Col>
             <Button size="small">View All Notifications</Button>
           </Col>
