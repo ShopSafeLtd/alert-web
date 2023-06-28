@@ -93,6 +93,17 @@ const BusinessReport = ({
           <Row className="stats-row">
             <Statistic
               className={classes.stats}
+              title="Total Incidents"
+              value={data?.businessReport?.incidentSummary?.totalIncidents || 0}
+              prefix={
+                <FontAwesomeIcon
+                  className={classes.prefixIcon}
+                  icon={faUserPolice}
+                />
+              }
+            />
+            <Statistic
+              className={classes.stats}
               title="Last Incident (in range)"
               value={
                 data?.businessReport?.incidentSummary?.lastIncidentDate

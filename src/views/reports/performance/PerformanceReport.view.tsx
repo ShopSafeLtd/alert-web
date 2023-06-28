@@ -1,12 +1,12 @@
-import React, { useMemo } from 'react';
-import type { MenuProps } from 'antd';
-import { Button, Col, Drawer, Dropdown, Row, Select, Typography } from 'antd';
+import React, {useMemo} from 'react';
+import type {MenuProps} from 'antd';
+import {Button, Col, Drawer, Dropdown, Row, Select, Typography} from 'antd';
 import DatePicker from 'components/util-components/DatePicker';
-import Page from 'components/shared-components/AntD/Page/Page';
-import RGL, { WidthProvider } from 'react-grid-layout';
-import { margin, rowHeight } from 'components/reports/utils/utils';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/pro-light-svg-icons';
+import {Page} from 'components/shared-components/AntD/Page/Page';
+import RGL, {WidthProvider} from 'react-grid-layout';
+import {margin, rowHeight} from 'components/reports/utils/utils';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faTrash} from '@fortawesome/pro-light-svg-icons';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import AddLogo from '../../../components/reports/addLogo';
@@ -14,8 +14,8 @@ import AddLogo from '../../../components/reports/addLogo';
 import PerformanceReportLayout from './layout/PerformanceReportLayout';
 import PerformanceLayout from './hooks/initLayout';
 import SaveAs from '../../../components/reports/saveAs';
-import type { Props } from './hooks/types';
-import { layoutMap } from '../types';
+import type {Props} from './hooks/types';
+import {layoutMap} from '../types';
 
 // const ReactGridLayout = WidthProvider(RGL);
 
@@ -105,7 +105,7 @@ const PerformanceReport = ({
           {minDrawer ? 'Hide Drawer' : 'Show Drawer'}
         </Button>
         <Button
-          style={{ marginRight: 10 }}
+          style={{ marginRight: 10, zIndex: 1000 }}
           key="1"
           onClick={() => setEditMode(!editMode)}
           type={editMode ? 'primary' : 'default'}
@@ -224,7 +224,7 @@ const PerformanceReport = ({
               ))}
             </Select>
           </Col>
-          <Col span={4}>
+          <Col span={6}>
             <DatePicker.RangePicker
               style={{ width: '100%', marginLeft: 10 }}
               defaultValue={[dateRange.startDate, dateRange.endDate]}

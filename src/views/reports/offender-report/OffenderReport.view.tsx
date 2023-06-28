@@ -244,7 +244,7 @@ const PerformanceReport = ({
             </Select>
           </Col>
 
-          <Col span={5}>
+          <Col span={7}>
             <DatePicker.RangePicker
               style={{ width: '100%', marginLeft: 10 }}
               defaultValue={[dateRange.startDate, dateRange.endDate]}

@@ -143,7 +143,7 @@ const BusinessReportLayout: RGL.Layout[] = [
   },
   {
     w: 2,
-    h: 15,
+    h: 16,
     x: 0,
     minW: 2,
 

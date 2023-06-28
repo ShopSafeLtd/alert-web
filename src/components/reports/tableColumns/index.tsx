@@ -438,7 +438,8 @@ export const IncidentsColumns: ColumnsType<IncidentsTableData> = [
     key: 'date',
     dataIndex: 'date',
     title: 'Date',
-    sorter: (a, b) => a.date.localeCompare(b.date),
+    // compare dates
+    sorter: (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
     defaultSortOrder: 'descend',
   },
   {
