@@ -6275,7 +6275,7 @@ export type BusinessReport = {
 
 export type BusinessReportInput = {
   businessId: Scalars['String'];
-  crimeGroupIds: Array<Scalars['String']>;
+  crimeGroupIds?: InputMaybe<Array<Scalars['String']>>;
   dateRange: DateRangeInput;
   groupIds: Array<Scalars['String']>;
   offenderIds?: InputMaybe<Array<Scalars['String']>>;
