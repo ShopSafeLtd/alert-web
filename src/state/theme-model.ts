@@ -41,7 +41,10 @@ export const ThemeConfig = {
 
   navCollapsed: false,
   sideNavTheme: SideNavTheme.LIGHT,
-  locale: 'en',
+  locale:
+    typedLocalStorage.get(LocalStorageKeys.lang) ||
+    navigator.language.split('-')[0] ||
+    'en',
   navType: NavType.SIDE,
   topNavColor: '#3e82f7',
   headerNavColor: '',
