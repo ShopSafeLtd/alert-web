@@ -50,7 +50,7 @@ const DonutGraph = ({
               translateY: -20,
               itemWidth: 100,
               itemHeight: 20,
-              itemsSpacing: 0,
+              itemsSpacing: 1,
               symbolSize: 20,
               itemDirection: 'left-to-right',
               itemTextColor: darkMode ? '#fff' : '#3a3a3a',

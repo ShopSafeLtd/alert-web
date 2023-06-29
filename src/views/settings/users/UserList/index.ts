@@ -1,1 +1,1 @@
-export { default } from './UserList.container'
+export { default } from './UserList.container';

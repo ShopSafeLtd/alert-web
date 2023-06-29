@@ -67,6 +67,7 @@ export const NavProfile = () => {
   const { signOut } = useAuth();
   const { logout } = useAuth0();
 
+  // TODO REMOVE
   const profileMenu = (
     <div className="nav-profile nav-dropdown">
       <div className="nav-profile-header">
@@ -102,7 +103,12 @@ export const NavProfile = () => {
               logout({ returnTo: window.location.origin });
             }}
           >
-            <Row>
+            <Row
+              onClick={() => {
+                signOut();
+                logout({ returnTo: window.location.origin });
+              }}
+            >
               <LogoutOutlined className="mr-3" />
               <span className="font-weight-normal">
                 {intl.formatMessage({
@@ -221,7 +227,13 @@ export const NavProfile = () => {
           {
             key: '5',
             label: (
-              <Row gutter={8}>
+              <Row
+                gutter={8}
+                onClick={() => {
+                  signOut();
+                  logout({ returnTo: window.location.origin });
+                }}
+              >
                 <Col>
                   <FontAwesomeIcon icon={faSignOut} />
                 </Col>

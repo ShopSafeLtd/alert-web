@@ -1,1 +1,1 @@
-export { default } from './AddUser.container'
+export { default } from './AddUser.container';

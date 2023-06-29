@@ -40,6 +40,10 @@ query userNotifications(
             id
             optimisedPersisted
           }
+          members {
+            id
+            role
+          }
         }
         title
         type

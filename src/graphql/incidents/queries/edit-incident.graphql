@@ -214,6 +214,7 @@ query EditIncident($where: IncidentWhereUniqueInput!) {
         businesses {
           id
           name
+          fullName
         }
       }
       replies {
@@ -297,6 +298,7 @@ query EditIncident($where: IncidentWhereUniqueInput!) {
           businesses {
             id
             name
+            fullName
           }
         }
       }

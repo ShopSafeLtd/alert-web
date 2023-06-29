@@ -15,7 +15,6 @@ import {
   Tooltip,
 } from 'antd';
 import type { ListCrimeGroupsQuery } from 'graphql/generated';
-import type { OffenderData } from 'components/viewChat/ViewMessage/useViewMessage';
 import LinkOffender from 'components/form-components/offender/offender/AddExistingOffender';
 import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -25,9 +24,9 @@ import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import type {
   CustomGalleryData,
   IncidentCardData,
-  VehicleData,
+  VehicleCardData,
+  OffenderData,
 } from 'types/DataType';
-
 import UploadImage from 'components/images/UploadImage.view';
 import AddCustomGallery from 'components/form-components/customGalleries/AddCustomGallery';
 import { useIntl } from 'react-intl';
@@ -38,7 +37,7 @@ const { confirm } = Modal;
 
 interface Props {
   onClose: () => void;
-  editData: VehicleData | undefined | null;
+  editData: VehicleCardData | undefined | null;
   onSubmit: (value: FormData) => void;
   CrimeGroupsData: ListCrimeGroupsQuery | undefined;
   CrimeGroupsLoading: boolean;
@@ -125,6 +124,10 @@ const EditVehicle = ({
           model: editData.model || '',
           colour: editData.colour || '',
           registration: editData.registration || '',
+          groups:
+            editData.groups && editData.groups.length > 0
+              ? editData.groups.map((id) => id)
+              : [],
           crimeGroup:
             editData.crimeGroup && editData.crimeGroup.length > 0
               ? editData.crimeGroup.map((id) => id)

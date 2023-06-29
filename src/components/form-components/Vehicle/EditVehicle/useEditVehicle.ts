@@ -11,19 +11,21 @@ import {
 import type { FormInstance } from 'antd';
 import { Form, message, Upload } from 'antd';
 import { useStoreState } from 'state';
-import type { OffenderData } from 'components/viewChat/ViewMessage/useViewMessage';
+
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import type {
   CustomGalleryData,
   IncidentCardData,
   VehicleData,
+  OffenderData,
+  VehicleCardData,
 } from 'types/DataType';
 import update from 'immutability-helper';
 
 interface Props {
   onClose: () => void;
   update: (value: VehicleData) => void;
-  editData: VehicleData | undefined | null;
+  editData: VehicleCardData | undefined | null;
 }
 export interface Image extends UploadFile {
   optimised?: string | null;

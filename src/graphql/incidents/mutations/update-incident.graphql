@@ -40,6 +40,7 @@ mutation updateIncident($where: UniqueId!, $data: IncidentUpdateInput!) {
       optimised
       position
       url
+      card
     }
     groups {
       id

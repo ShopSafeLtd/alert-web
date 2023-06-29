@@ -209,6 +209,7 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
         businesses {
           id
           name
+          fullName
         }
       }
       replies {
@@ -292,6 +293,7 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
           businesses {
             id
             name
+            fullName
           }
         }
       }

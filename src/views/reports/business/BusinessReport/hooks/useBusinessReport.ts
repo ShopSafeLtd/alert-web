@@ -142,7 +142,7 @@ const useBusinessReport = (): Return => {
         })
       );
       setCrimeGroups(crimeGroupsFormatted);
-      setSelectedCrimeGroups(crimeGroupsFormatted.map((item) => item.value));
+      // setSelectedCrimeGroups(crimeGroupsFormatted.map((item) => item.value));
       const offendersFormatted = filterData.schemes[0].offenders.map(
         (offender) => ({
           label: offender.name || offender?.reference?.toString() || 'No Alias',
@@ -168,7 +168,7 @@ const useBusinessReport = (): Return => {
         schemeIds: [currentScheme],
         groupIds: selectedGroups,
         businessId: selectedBusiness || '',
-        crimeGroupIds: selectedCrimeGroups,
+        crimeGroupIds: selectedCrimeGroups || [],
         offenderIds:
           selectedOffenders.length > 0 ? selectedOffenders : undefined,
       },

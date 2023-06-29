@@ -72,6 +72,29 @@ const useReportState = ({
   ReportType,
 }: Props): Return => {
   const { id: currentScheme, logo } = useStoreState((state) => state.scheme);
+
+  const isDemo =
+    currentScheme === 'ckdhbosuv01028oiblmjgeuii' ||
+    currentScheme === 'ck6zhwkwv00019ourjkgk5bdt';
+  // new date 2 years ago at 00:00:00
+  const startDateDemo = new Date(
+    new Date(new Date().setFullYear(new Date().getFullYear() - 2)).setHours(
+      0,
+      0,
+      59
+    )
+  );
+
+  const initDate = isDemo
+    ? startDateDemo
+    : new Date(
+        new Date(new Date().setMonth(new Date().getMonth() - 1)).setHours(
+          0,
+          0,
+          59
+        )
+      );
+
   const businesses = useStoreState((state) => state.user.businesses);
   const [addLogoDrawer, setAddLogoDrawer] = useState(false);
 
@@ -87,14 +110,7 @@ const useReportState = ({
     startDate: Date;
     endDate: Date;
   }>({
-    // new date 1 month ago at 00:00:00
-    startDate: new Date(
-      new Date(new Date().setMonth(new Date().getMonth() - 1)).setHours(
-        0,
-        0,
-        59
-      )
-    ),
+    startDate: initDate,
     // today at 23:59:59
     endDate: new Date(new Date().setHours(23, 59, 59)),
   });

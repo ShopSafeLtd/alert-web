@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { useStoreActions, useStoreState } from 'state';
 import type {
+  Role,
   UpdateUserNotificationsMutation,
   UserNotificationsQuery,
 } from 'graphql/generated';
@@ -56,6 +58,10 @@ interface Scheme {
       }
     | null
     | undefined;
+  members: {
+    id: string;
+    role: Role;
+  }[];
 }
 interface Return {
   data:
@@ -90,86 +96,6 @@ const useNotificationLists = (): Return => {
   const [search, setSearch] = useState('');
   const [pageSize, setPageSize] = useState(20);
   const [page, setPage] = useState(1);
-
-  const getUserNotificationType = (value: NotificationData) => {
-    switch (value.type) {
-      case Model.Article: {
-        navigate(`/app/article/view/${value.articleId || ''}`);
-        return {
-          articleId: {
-            equals: value.articleId,
-          },
-        };
-      }
-      case Model.Incident: {
-        navigate(`/app/incidents/view/${value.incidentId || ''}`);
-        return {
-          incidentId: {
-            equals: value.incidentId,
-          },
-        };
-      }
-      case Model.Offender: {
-        navigate(`/app/offenders/view/${value.offenderId || ''}`);
-        return {
-          offenderId: {
-            equals: value.offenderId,
-          },
-        };
-      }
-      case Model.Ban: {
-        navigate(`/app/offenders/view/${value.ban?.offender.id || ''}`);
-        return {
-          offenderId: {
-            equals: value.ban?.offender.id,
-          },
-        };
-      }
-      case Model.Investigation: {
-        navigate(`/app/investigations/view/${value.investigationId || ''}`);
-        return {
-          investigationId: {
-            equals: value.investigationId,
-          },
-        };
-      }
-      case Model.Vehicle: {
-        navigate(`/app/vehicles/view/${value.vehicleId || ''}`);
-        return {
-          vehicleId: {
-            equals: value.vehicleId,
-          },
-        };
-      }
-      case Model.CrimeGroup: {
-        navigate(`/app/crime-groups/view/${value.vehicleId || ''}`);
-        return {
-          crimeGroupId: {
-            equals: value.crimeGroupId,
-          },
-        };
-      }
-      case Model.Chat: {
-        navigate(`/app/chat/${value.chatId || ''}`);
-        return {
-          chatId: {
-            equals: value.chatId,
-          },
-        };
-      }
-      case Model.User: {
-        navigate(`/app/scheme-settings/users/view/${value.userId || ''}`);
-        return {
-          id: {
-            equals: value.id,
-          },
-        };
-      }
-      default: {
-        return undefined;
-      }
-    }
-  };
 
   const variables = {
     skip: (page - 1) * pageSize,
@@ -273,6 +199,7 @@ const useNotificationLists = (): Return => {
   };
 
   // function
+
   const [updateUserNotification] = useUpdateUserNotificationsMutation({
     onCompleted: () => {
       setSaving(false);
@@ -303,6 +230,85 @@ const useNotificationLists = (): Return => {
     },
     update,
   });
+  const getUserNotificationType = (value: NotificationData) => {
+    switch (value.type) {
+      case Model.Article: {
+        navigate(`/app/article/view/${value?.articleId}`);
+        return {
+          articleId: {
+            equals: value.articleId,
+          },
+        };
+      }
+      case Model.Incident: {
+        navigate(`/app/incidents/view/${value.incidentId}`);
+        return {
+          incidentId: {
+            equals: value.incidentId,
+          },
+        };
+      }
+      case Model.Offender: {
+        navigate(`/app/offenders/view/${value.offenderId}`);
+        return {
+          offenderId: {
+            equals: value.offenderId,
+          },
+        };
+      }
+      case Model.Ban: {
+        navigate(`/app/offenders/view/${value.ban?.offender.id}`);
+        return {
+          offenderId: {
+            equals: value.ban?.offender.id,
+          },
+        };
+      }
+      case Model.Investigation: {
+        navigate(`/app/investigations/view/${value.investigationId}`);
+        return {
+          investigationId: {
+            equals: value.investigationId,
+          },
+        };
+      }
+      case Model.Vehicle: {
+        navigate(`/app/vehicles/view/${value.vehicleId}`);
+        return {
+          vehicleId: {
+            equals: value.vehicleId,
+          },
+        };
+      }
+      case Model.CrimeGroup: {
+        navigate(`/app/crime-groups/view/${value.vehicleId}`);
+        return {
+          crimeGroupId: {
+            equals: value.crimeGroupId,
+          },
+        };
+      }
+      case Model.Chat: {
+        navigate(`/app/chat/${value.chatId}`);
+        return {
+          chatId: {
+            equals: value.chatId,
+          },
+        };
+      }
+      case Model.User: {
+        navigate(`/app/scheme-settings/users/view/${value.userId}`);
+        return {
+          id: {
+            equals: value.id,
+          },
+        };
+      }
+      default: {
+        return undefined;
+      }
+    }
+  };
   const handleSchemeChange = (scheme: Scheme) => {
     window.localStorage.removeItem(LocalStorageKeys.INCIDENT_FILTER);
     window.localStorage.removeItem(LocalStorageKeys.OFFENDER_FILTER);
@@ -332,6 +338,9 @@ const useNotificationLists = (): Return => {
   const handleMarkAsRead = (value: NotificationData) => {
     if (value) {
       setSaving(true);
+      console.log('value', value);
+      console.log('schemes', value.schemes);
+
       if (schemeId !== value.schemes[0].id) {
         handleSchemeChange(value.schemes[0]);
       }

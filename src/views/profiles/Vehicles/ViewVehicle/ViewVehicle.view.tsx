@@ -758,11 +758,17 @@ const ViewVehicle = ({
                 ...data?.vehicle,
                 id: data?.vehicle?.id || '',
                 crimeGroup: data?.vehicle?.crimeGroup.map(({ id }) => id || ''),
-                incidents: data?.vehicle?.incidents.map(({ id }) => id || ''),
-                offenders: data?.vehicle?.offenders.map(({ id }) => id || ''),
+                incidents: data?.vehicle?.incidents,
+                offenders: data?.vehicle?.offenders,
                 customGalleries: data?.vehicle?.customGalleries.map(
                   ({ id }) => id || ''
                 ),
+                groups: data?.vehicle?.groups.map(({ id }) => id || ''),
+                images: data?.vehicle?.images.map((el) => ({
+                  ...el,
+                  policeImage: el.policeImage || false,
+                  primary: el.primary || false,
+                })),
               }}
               showGroups
             />

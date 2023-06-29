@@ -2,6 +2,7 @@ import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import TodoList from '../NotificationList.view';
+import { Role } from 'graphql/generated';
 
 describe('List Officer View', () => {
   const data = {
@@ -21,6 +22,12 @@ describe('List Officer View', () => {
               autoApproveIncidents: false,
               autoApproveOffenders: false,
               defaultPublicOffenderDOB: false,
+              members: [
+                {
+                  id: 'id',
+                  role: Role.ContentAdmin,
+                },
+              ],
             },
           ],
         },

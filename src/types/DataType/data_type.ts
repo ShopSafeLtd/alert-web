@@ -38,6 +38,7 @@ export interface OffenderData {
   peculiarities?: string | null;
   comment?: string | null;
   approved?: boolean | null;
+  updatedAt?: Date;
   groups?:
     | {
         id: string;
@@ -82,9 +83,13 @@ export interface IncidentCardData {
   id: string;
   reference?: number | null;
   subject?: string | null;
-  description: string;
+  description?: string;
   dayTime?: string | null;
-  images: Array<{ id: string; url?: string | null; optimised?: string | null }>;
+  images?: Array<{
+    id: string;
+    url?: string | null;
+    optimised?: string | null;
+  }>;
 }
 
 // Vehicle
@@ -119,12 +124,16 @@ export interface VehicleData {
 
 export interface VehicleCardData {
   id: string;
-  updatedAt: Date;
+  updatedAt?: Date;
   make?: string | null;
   model?: string | null;
+  colour?: string | null | undefined;
   registration?: string | null;
   reference?: number | null;
   totalOffenders?: number | null;
+  groups?: string[];
+  crimeGroup?: string[];
+  customGalleries?: string[];
   images?: Array<{
     id: string;
     optimised?: string | null;
@@ -132,7 +141,12 @@ export interface VehicleCardData {
     fileName?: string | null;
     type?: string | null;
     new?: boolean;
+    position?: ImagePosition;
+    primary?: boolean;
+    policeImage?: boolean;
   }>;
+  incidents?: IncidentCardData[];
+  offenders?: OffenderData[];
 }
 
 // CrimeGroupData

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-misused-promises,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment */
 import { useEffect, useState } from 'react';
 import type {
   Age,
@@ -284,7 +283,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                         $set: [
                           {
                             content: newMessage.content,
-                            createdAt: newMessage.createdAt,
+                            createdAt: newMessage?.createdAt,
                             from: {
                               origName: newMessage.from?.fullName || '',
                               id: newMessage.id || '',
@@ -696,8 +695,11 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
         ...fileList.filter((item) => item.uid !== info.file.uid),
         {
           ...info.file,
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
           url: info.file.response[0].url,
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
           fileName: info.file.response[0].blobName,
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
           type: info.file.response[0].mimetype,
         },
       ]);
@@ -868,7 +870,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                       })) || [],
                     reference: incident.reference,
                     subject: incident.subject,
-                    description: incident.description,
+                    description: incident.description || '',
                     dayTime: incident.dayTime,
                   }))
                 : [],
@@ -946,12 +948,14 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   };
 
   return {
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onSubmit,
     data,
     loading,
     chatData,
     form,
     saving,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     scrolledToTop,
     userId,
     deleteMessageConfirm,
@@ -965,6 +969,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     showPicker,
     toggleShowPicker,
     imgChange,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onPreview,
     beforeUpload,
     fileList,

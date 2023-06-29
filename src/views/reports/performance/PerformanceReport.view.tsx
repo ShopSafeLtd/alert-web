@@ -122,7 +122,7 @@ const PerformanceReport = ({
               })}
         </Button>
         <Button
-          style={{ marginRight: 10 }}
+          style={{ marginRight: 10, zIndex: 1000 }}
           key="1"
           onClick={() => setEditMode(!editMode)}
           type={editMode ? 'primary' : 'default'}
@@ -271,7 +271,7 @@ const PerformanceReport = ({
               ))}
             </Select>
           </Col>
-          <Col span={4}>
+          <Col span={6}>
             <DatePicker.RangePicker
               style={{ width: '100%', marginLeft: 10 }}
               defaultValue={[dateRange.startDate, dateRange.endDate]}

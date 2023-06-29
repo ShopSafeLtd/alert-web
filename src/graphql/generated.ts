@@ -27563,7 +27563,7 @@ export type MutationUpdateUserSchemeArgs = {
 };
 
 export type MutationUpdateVehicleArgs = {
-  data: CreateVehicleDataInput;
+  data: VehicleUpdateInput;
   where: UniqueId;
 };
 
@@ -59990,6 +59990,7 @@ export type CrimeGroupQuery = {
           __typename?: 'Business';
           id: string;
           name: string;
+          fullName: string;
         }>;
       };
       location?: {
@@ -60086,6 +60087,7 @@ export type CrimeGroupQuery = {
           __typename?: 'Business';
           id: string;
           name: string;
+          fullName: string;
         }>;
       };
       replies: Array<{
@@ -60174,6 +60176,7 @@ export type CrimeGroupQuery = {
             __typename?: 'Business';
             id: string;
             name: string;
+            fullName: string;
           }>;
         };
       }>;
@@ -61367,6 +61370,7 @@ export type UpdateIncidentMutation = {
       optimised?: string | null;
       position: ImagePosition;
       url?: string | null;
+      card?: string | null;
     }>;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     offenders: Array<{
@@ -61636,6 +61640,7 @@ export type EditIncidentQuery = {
           __typename?: 'Business';
           id: string;
           name: string;
+          fullName: string;
         }>;
       };
       replies: Array<{
@@ -61724,6 +61729,7 @@ export type EditIncidentQuery = {
             __typename?: 'Business';
             id: string;
             name: string;
+            fullName: string;
           }>;
         };
       }>;
@@ -62106,6 +62112,7 @@ export type ViewIncidentQuery = {
           __typename?: 'Business';
           id: string;
           name: string;
+          fullName: string;
         }>;
       };
       replies: Array<{
@@ -62194,6 +62201,7 @@ export type ViewIncidentQuery = {
             __typename?: 'Business';
             id: string;
             name: string;
+            fullName: string;
           }>;
         };
       }>;
@@ -62655,6 +62663,7 @@ export type ViewInvestigationQuery = {
           __typename?: 'Business';
           id: string;
           name: string;
+          fullName: string;
         }>;
       };
       replies: Array<{
@@ -62746,6 +62755,7 @@ export type ViewInvestigationQuery = {
             __typename?: 'Business';
             id: string;
             name: string;
+            fullName: string;
           }>;
         };
       }>;
@@ -63515,6 +63525,19 @@ export type SubscribeToOffenderMutation = {
   } | null;
 };
 
+export type UnsubscribeFromOffenderMutationVariables = Exact<{
+  where: OffenderWhereUniqueInput;
+}>;
+
+export type UnsubscribeFromOffenderMutation = {
+  __typename?: 'Mutation';
+  unsubscribeFromOffender?: {
+    __typename?: 'Offender';
+    id: string;
+    subscribed?: boolean | null;
+  } | null;
+};
+
 export type UpdateOffenderMutationVariables = Exact<{
   where: UniqueId;
   data: OffenderUpdateInput;
@@ -64106,6 +64129,7 @@ export type ViewOffenderQuery = {
           __typename?: 'Business';
           id: string;
           name: string;
+          fullName: string;
         }>;
       };
       location?: {
@@ -64202,6 +64226,7 @@ export type ViewOffenderQuery = {
           __typename?: 'Business';
           id: string;
           name: string;
+          fullName: string;
         }>;
       };
       replies: Array<{
@@ -64290,6 +64315,7 @@ export type ViewOffenderQuery = {
             __typename?: 'Business';
             id: string;
             name: string;
+            fullName: string;
           }>;
         };
       }>;
@@ -64998,6 +65024,7 @@ export type OffenderProfileQuery = {
           __typename?: 'Business';
           id: string;
           name: string;
+          fullName: string;
         }>;
       };
     }>;
@@ -65017,6 +65044,7 @@ export type OffenderProfileQuery = {
           __typename?: 'Business';
           id: string;
           name: string;
+          fullName: string;
         }>;
       };
     } | null;
@@ -65942,6 +65970,7 @@ export type CreateUpdateOnCrimeGroupMutation = {
           __typename?: 'Business';
           id: string;
           name: string;
+          fullName: string;
         }>;
       };
     }>;
@@ -66125,6 +66154,7 @@ export type CreateUpdateOnIncidentMutation = {
           __typename?: 'Business';
           id: string;
           name: string;
+          fullName: string;
         }>;
       };
     }>;
@@ -66308,6 +66338,7 @@ export type CreateUpdateOnInvestigationMutation = {
           __typename?: 'Business';
           id: string;
           name: string;
+          fullName: string;
         }>;
       };
     }>;
@@ -66491,6 +66522,7 @@ export type CreateUpdateOnOffenderMutation = {
           __typename?: 'Business';
           id: string;
           name: string;
+          fullName: string;
         }>;
       };
     }>;
@@ -66674,6 +66706,7 @@ export type CreateUpdateOnVehicleMutation = {
           __typename?: 'Business';
           id: string;
           name: string;
+          fullName: string;
         }>;
       };
     }>;
@@ -67150,12 +67183,12 @@ export type ListUserNotificationsQuery = {
       __typename?: 'UserNotification';
       id: string;
       read: boolean;
-      createdAt: any;
+      createdAt: Date;
       notification: {
         __typename?: 'Notification';
         id: string;
         crimeGroupId?: string | null;
-        createdAt: any;
+        createdAt: Date;
         chatId?: string | null;
         body?: string | null;
         articleId?: string | null;
@@ -67251,6 +67284,7 @@ export type UserNotificationsQuery = {
             id: string;
             optimisedPersisted?: string | null;
           } | null;
+          members: Array<{ __typename?: 'UserScheme'; id: string; role: Role }>;
         }>;
         ban?: {
           __typename?: 'Ban';
@@ -67413,7 +67447,6 @@ export type ListUsersQuery = {
         fullName: string;
       }>;
       groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
-      approverGroups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     }>;
   };
 };
@@ -67582,7 +67615,7 @@ export type UnsubscribeToVehicleMutation = {
 
 export type UpdateVehicleMutationVariables = Exact<{
   where: UniqueId;
-  data: CreateVehicleDataInput;
+  data: VehicleUpdateInput;
 }>;
 
 export type UpdateVehicleMutation = {
@@ -67604,7 +67637,15 @@ export type UpdateVehicleMutation = {
       optimised?: string | null;
       url?: string | null;
       position: ImagePosition;
+      policeImage?: boolean | null;
+      primary?: boolean | null;
     }>;
+    customGalleries: Array<{
+      __typename?: 'CustomGallery';
+      id: string;
+      name: string;
+    }>;
+    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     incidents: Array<{
       __typename?: 'Incident';
       id: string;
@@ -67697,12 +67738,15 @@ export type VehicleQuery = {
       id: string;
       name: string;
     }>;
+    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     images: Array<{
       __typename?: 'Image';
       id: string;
       optimised?: string | null;
       url?: string | null;
       position: ImagePosition;
+      policeImage?: boolean | null;
+      primary?: boolean | null;
     }>;
     incidents: Array<{
       __typename?: 'Incident';
@@ -67721,6 +67765,7 @@ export type VehicleQuery = {
           __typename?: 'Business';
           id: string;
           name: string;
+          fullName: string;
         }>;
       };
     }>;
@@ -67851,6 +67896,7 @@ export type VehicleQuery = {
           __typename?: 'Business';
           id: string;
           name: string;
+          fullName: string;
         }>;
       };
       replies: Array<{
@@ -67939,6 +67985,7 @@ export type VehicleQuery = {
             __typename?: 'Business';
             id: string;
             name: string;
+            fullName: string;
           }>;
         };
       }>;
@@ -69376,6 +69423,7 @@ export const BusinessReportDocument = gql`
             id
             name
             fullName
+            fullName
           }
         }
       }
@@ -70462,6 +70510,7 @@ export const CrimeGroupDocument = gql`
           businesses {
             id
             name
+            fullName
           }
         }
         location {
@@ -70546,6 +70595,7 @@ export const CrimeGroupDocument = gql`
           businesses {
             id
             name
+            fullName
           }
         }
         replies {
@@ -70623,6 +70673,7 @@ export const CrimeGroupDocument = gql`
             businesses {
               id
               name
+              fullName
             }
           }
         }
@@ -72344,6 +72395,7 @@ export const UpdateIncidentDocument = gql`
         optimised
         position
         url
+        card
       }
       groups {
         id
@@ -72665,6 +72717,7 @@ export const EditIncidentDocument = gql`
           businesses {
             id
             name
+            fullName
           }
         }
         replies {
@@ -72748,6 +72801,7 @@ export const EditIncidentDocument = gql`
             businesses {
               id
               name
+              fullName
             }
           }
         }
@@ -73326,6 +73380,7 @@ export const ViewIncidentDocument = gql`
           businesses {
             id
             name
+            fullName
           }
         }
         replies {
@@ -73409,6 +73464,7 @@ export const ViewIncidentDocument = gql`
             businesses {
               id
               name
+              fullName
             }
           }
         }
@@ -74085,6 +74141,7 @@ export const ViewInvestigationDocument = gql`
           businesses {
             id
             name
+            fullName
           }
         }
         replies {
@@ -74165,6 +74222,7 @@ export const ViewInvestigationDocument = gql`
             businesses {
               id
               name
+              fullName
             }
           }
         }
@@ -75249,6 +75307,39 @@ export type SubscribeToOffenderMutationOptions = Apollo.BaseMutationOptions<
   SubscribeToOffenderMutation,
   SubscribeToOffenderMutationVariables
 >;
+export const UnsubscribeFromOffenderDocument = gql`
+  mutation UnsubscribeFromOffender($where: OffenderWhereUniqueInput!) {
+    unsubscribeFromOffender(where: $where) {
+      id
+      subscribed
+    }
+  }
+`;
+export type UnsubscribeFromOffenderMutationFn = Apollo.MutationFunction<
+  UnsubscribeFromOffenderMutation,
+  UnsubscribeFromOffenderMutationVariables
+>;
+export function useUnsubscribeFromOffenderMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UnsubscribeFromOffenderMutation,
+    UnsubscribeFromOffenderMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UnsubscribeFromOffenderMutation,
+    UnsubscribeFromOffenderMutationVariables
+  >(UnsubscribeFromOffenderDocument, options);
+}
+export type UnsubscribeFromOffenderMutationHookResult = ReturnType<
+  typeof useUnsubscribeFromOffenderMutation
+>;
+export type UnsubscribeFromOffenderMutationResult =
+  Apollo.MutationResult<UnsubscribeFromOffenderMutation>;
+export type UnsubscribeFromOffenderMutationOptions = Apollo.BaseMutationOptions<
+  UnsubscribeFromOffenderMutation,
+  UnsubscribeFromOffenderMutationVariables
+>;
 export const UpdateOffenderDocument = gql`
   mutation updateOffender($where: UniqueId!, $data: OffenderUpdateInput!) {
     updateOffender(where: $where, data: $data) {
@@ -76071,6 +76162,7 @@ export const ViewOffenderDocument = gql`
           businesses {
             id
             name
+            fullName
           }
         }
         location {
@@ -76159,6 +76251,7 @@ export const ViewOffenderDocument = gql`
           businesses {
             id
             name
+            fullName
           }
         }
         replies {
@@ -76236,6 +76329,7 @@ export const ViewOffenderDocument = gql`
             businesses {
               id
               name
+              fullName
             }
           }
         }
@@ -77336,6 +77430,7 @@ export const OffenderProfileDocument = gql`
           businesses {
             id
             name
+            fullName
           }
         }
       }
@@ -77352,6 +77447,7 @@ export const OffenderProfileDocument = gql`
           businesses {
             id
             name
+            fullName
           }
         }
         value
@@ -78762,6 +78858,7 @@ export const CreateUpdateOnCrimeGroupDocument = gql`
           businesses {
             id
             name
+            fullName
           }
         }
       }
@@ -78951,6 +79048,7 @@ export const CreateUpdateOnIncidentDocument = gql`
           businesses {
             id
             name
+            fullName
           }
         }
       }
@@ -79139,6 +79237,7 @@ export const CreateUpdateOnInvestigationDocument = gql`
           businesses {
             id
             name
+            fullName
           }
         }
       }
@@ -79328,6 +79427,7 @@ export const CreateUpdateOnOffenderDocument = gql`
           businesses {
             id
             name
+            fullName
           }
         }
       }
@@ -79516,6 +79616,7 @@ export const CreateUpdateOnVehicleDocument = gql`
           businesses {
             id
             name
+            fullName
           }
         }
       }
@@ -80451,6 +80552,10 @@ export const UserNotificationsDocument = gql`
               id
               optimisedPersisted
             }
+            members {
+              id
+              role
+            }
           }
           title
           type
@@ -80771,10 +80876,6 @@ export const ListUsersDocument = gql`
         }
         status
         groups(where: $groupWhere) {
-          id
-          name
-        }
-        approverGroups {
           id
           name
         }
@@ -81147,7 +81248,7 @@ export type UnsubscribeToVehicleMutationOptions = Apollo.BaseMutationOptions<
   UnsubscribeToVehicleMutationVariables
 >;
 export const UpdateVehicleDocument = gql`
-  mutation updateVehicle($where: UniqueId!, $data: CreateVehicleDataInput!) {
+  mutation updateVehicle($where: UniqueId!, $data: VehicleUpdateInput!) {
     updateVehicle(where: $where, data: $data) {
       id
       make
@@ -81161,6 +81262,16 @@ export const UpdateVehicleDocument = gql`
         optimised
         url
         position
+        policeImage
+        primary
+      }
+      customGalleries {
+        id
+        name
+      }
+      groups {
+        id
+        name
       }
       incidents {
         id
@@ -81296,11 +81407,17 @@ export const VehicleDocument = gql`
         id
         name
       }
+      groups {
+        id
+        name
+      }
       images {
         id
         optimised
         url
         position
+        policeImage
+        primary
       }
       incidents {
         id
@@ -81319,6 +81436,7 @@ export const VehicleDocument = gql`
           businesses {
             id
             name
+            fullName
           }
         }
       }
@@ -81436,6 +81554,7 @@ export const VehicleDocument = gql`
           businesses {
             id
             name
+            fullName
           }
         }
         replies {
@@ -81513,6 +81632,7 @@ export const VehicleDocument = gql`
             businesses {
               id
               name
+              fullName
             }
           }
         }

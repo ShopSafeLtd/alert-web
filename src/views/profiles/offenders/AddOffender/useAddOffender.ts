@@ -153,7 +153,6 @@ const useAddOffender = (): Return => {
   const [form] = Form.useForm<FormData>();
   const schemeId = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
-  const groups = useStoreState((state) => state.user.groups);
   const role = useStoreState((state) => state.user.role);
   const pagination = useStoreState((state) => state.data.offenders.pagination);
   const variables = useStoreState((state) => state.data.offenders.variables);
@@ -523,10 +522,10 @@ const useAddOffender = (): Return => {
                 ? groupData?.groups.map(({ id }) => ({ id }))
                 : data.groups.map((id) => ({ id })),
           },
-          tags: getOffenderTags(),
           scheme: schemeId,
           vehicles: getVehicles(),
           crimeGroups: getCrimeGroups(),
+          tags: getOffenderTags(),
           customGalleries: getCustomGalleries(),
           image: {
             upload:
@@ -769,12 +768,16 @@ const useAddOffender = (): Return => {
     onSubmit,
     saving,
     groups:
-      role === Role.SchemeAdmin
-        ? groupData?.groups.map((group) => ({
-            value: group.id,
-            label: group.name,
-          })) || []
-        : groups.map((group) => ({ value: group.id, label: group.name })),
+      groupData?.groups.map((group) => ({
+        value: group.id,
+        label: group.name,
+      })) || [],
+    // role === Role.SchemeAdmin
+    //   ? groupData?.groups.map((group) => ({
+    //       value: group.id,
+    //       label: group.name,
+    //     })) || []
+    //   : groups.map((group) => ({ value: group.id, label: group.name })),
     groupsLoading,
     tags:
       tagsData?.tags.map((tag) => ({ value: tag.id, label: tag.name })) || [],

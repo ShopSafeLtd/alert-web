@@ -120,7 +120,7 @@ const BusinessReportView = ({
               })}
         </Button>
         <Button
-          style={{ marginRight: 10 }}
+          style={{ marginRight: 10, zIndex: 1000 }}
           key="1"
           onClick={() => setEditMode(!editMode)}
           type={editMode ? 'primary' : 'default'}
@@ -244,6 +244,7 @@ const BusinessReportView = ({
         <Row
           className="no-print"
           style={{ marginBottom: 10, justifyContent: 'center' }}
+          gutter={10}
         >
           <Col span={6}>
             <Select
@@ -279,6 +280,7 @@ const BusinessReportView = ({
               })}
               mode="multiple"
               maxTagCount="responsive"
+              allowClear
               onChange={(value) => {
                 setSelectedCrimeGroups(value || []);
               }}

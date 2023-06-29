@@ -122,6 +122,7 @@ query ViewOffender(
         businesses {
           id
           name
+          fullName
         }
       }
       location {
@@ -210,6 +211,7 @@ query ViewOffender(
         businesses {
           id
           name
+          fullName
         }
       }
       replies {
@@ -287,6 +289,7 @@ query ViewOffender(
           businesses {
             id
             name
+            fullName
           }
         }
       }
