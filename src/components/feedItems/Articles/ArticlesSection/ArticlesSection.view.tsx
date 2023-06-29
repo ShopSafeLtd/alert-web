@@ -147,7 +147,7 @@ const ArticlesSection = ({
         ) : data?.total ? (
           data?.articles.map((article) => (
             <Col span={adminRights ? 24 : 12} xxl={12}>
-              <ArticleCard article={article} />
+              <ArticleCard key={article.id} article={article} />
             </Col>
           ))
         ) : (

@@ -3,6 +3,8 @@ import type { Locale } from 'antd/lib/locale-provider';
 import enLang from './entries/en_US';
 import frLang from './entries/fr_FR';
 
+export type AvailableLanguages = 'en' | 'fr';
+
 interface AppLocaleType {
   en: LocaleType;
   fr: LocaleType;

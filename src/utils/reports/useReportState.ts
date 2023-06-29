@@ -72,7 +72,6 @@ const useReportState = ({
   ReportType,
 }: Props): Return => {
   const { id: currentScheme, logo } = useStoreState((state) => state.scheme);
-
   const isDemo =
     currentScheme === 'ckdhbosuv01028oiblmjgeuii' ||
     currentScheme === 'ck6zhwkwv00019ourjkgk5bdt';

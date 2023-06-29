@@ -101,6 +101,20 @@ const BusinessReport = ({
             <Statistic
               className={classes.stats}
               title={intl.formatMessage({
+                defaultMessage: 'Total Incidents',
+                id: 'pUlxda',
+              })}
+              value={data?.businessReport?.incidentSummary?.totalIncidents || 0}
+              prefix={
+                <FontAwesomeIcon
+                  className={classes.prefixIcon}
+                  icon={faUserPolice}
+                />
+              }
+            />
+            <Statistic
+              className={classes.stats}
+              title={intl.formatMessage({
                 defaultMessage: 'Last Incident (in range)',
                 id: 'lI3BDd',
               })}

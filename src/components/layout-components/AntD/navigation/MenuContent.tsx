@@ -1,8 +1,9 @@
 /* eslint-disable */
+// TODO - Fix this
 
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Badge, Button, Col, Drawer, Grid, Menu, Row, Typography } from 'antd';
+import { Badge, Col, Drawer, Grid, Menu, Row, Typography } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { NavItem } from 'configs/NavigationConfig';
 import navConfig, { BadgeTypes } from 'configs/NavigationConfig';

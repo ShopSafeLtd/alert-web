@@ -439,7 +439,8 @@ export const IncidentsColumns: ColumnsType<IncidentsTableData> = [
     key: 'date',
     dataIndex: 'date',
     title: <FormattedMessage defaultMessage="Date" id="P7PLVj" />,
-    sorter: (a, b) => a.date.localeCompare(b.date),
+    // compare dates
+    sorter: (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
     defaultSortOrder: 'descend',
   },
   {

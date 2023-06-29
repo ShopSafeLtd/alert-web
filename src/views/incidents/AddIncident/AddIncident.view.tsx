@@ -449,10 +449,7 @@ const EditIncident = ({
                       disabledDate={(current) =>
                         current && current.valueOf() > Date.now()
                       }
-                      format={intl.formatMessage(
-                        { defaultMessage: 'HH:mm - DD/MM/YY', id: '/b3fJF' },
-                        {}
-                      )}
+                      format="HH:mm - DD/MM/YY"
                       showTime={{ showSecond: false, showNow: true }}
                       placeholder={intl.formatMessage(
                         { defaultMessage: 'Set Date & Time', id: 'hQHL0E' },

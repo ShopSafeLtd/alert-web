@@ -166,9 +166,11 @@
     "dev": "concurrently \"vite\" \"gulp watch\"",
     "generate": "graphql-codegen --config codegen.yml",
     "postinstall": "node ./postInstall.js",
-    "extract-compile": "formatjs extract 'src/**/*.ts*' --ignore='**/*.d.ts' --out-file temp.json --flatten --id-interpolation-pattern '[sha512:contenthash:base64:6]' && formatjs compile 'temp.json' --out-file src/lang/locales/en_US.json && rm temp.json",
-    "upload-i18n": "simplelocalize upload --apiKey 2A0476a1e7255CD53632053939df0d6e7d02396F7DE6Be16eE887564A5b62ab0  --uploadPath en/lang.json --uploadFormat simplelocalize-json --languageKey en_US",
-    "download-i18n": "simplelocalize download --apiKey 2A0476a1e7255CD53632053939df0d6e7d02396F7DE6Be16eE887564A5b62ab0  --downloadPath ./translations/{lang}.json  --downloadFormat single-language-json"
+    "extract": "formatjs extract 'src/**/*.ts*' --ignore='**/*.d.ts' --out-file en/lang.json",
+    "compile": "formatjs compile",
+    "extract-compile": "formatjs extract 'src/**/*.ts*' --ignore='**/*.d.ts' --out-file temp.json --flatten --id-interpolation-pattern '[sha512:contenthash:base64:6]' && formatjs compile 'temp.json' --out-file lang.json && rm temp.json",
+    "upload-i18n": "simplelocalize upload --apiKey e79c3F36e902c75AD5dDdddc9c4FaCF48804d6fd8Dc25Ba5  --uploadPath en/lang.json --uploadFormat simplelocalize-json --languageKey en_US",
+    "download-i18n": "simplelocalize download --apiKey e79c3F36e902c75AD5dDdddc9c4FaCF48804d6fd8Dc25Ba5  --downloadPath ./src/lang/locales/{lang}.json  --downloadFormat single-language-json"
   },
   "eslintConfig": {
     "extends": [

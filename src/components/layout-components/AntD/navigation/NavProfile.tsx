@@ -1,8 +1,5 @@
-/* eslint-disable */
-// TODO fix eslint-disable
 import React from 'react';
-import { Avatar, Col, Dropdown, Menu, Row, Switch, Typography } from 'antd';
-import { LogoutOutlined } from '@ant-design/icons';
+import { Avatar, Col, Dropdown, Row, Select, Switch, Typography } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
 import { useAuth } from 'hooks';
 import { APP_PREFIX_PATH } from 'configs/AppConfig';
@@ -20,6 +17,7 @@ import { LocalStorageKeys, typedLocalStorage } from 'utils';
 import { createUseStyles } from 'react-jss';
 import type { Theme } from 'configs/ThemeConfig';
 import { useIntl } from 'react-intl';
+import type { AvailableLanguages } from 'lang';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   notificationCol: {
@@ -37,24 +35,24 @@ const useStyles = createUseStyles((theme: Theme) => ({
   },
 }));
 
-interface MenuItem {
-  title: string;
-  icon: string;
-  path: string;
-}
+// interface MenuItem {
+//   title: string;
+//   icon: string;
+//   path: string;
+// }
 
-const menuItem: MenuItem[] = [
-  {
-    title: 'User Settings',
-    icon: '', // EditOutlined,
-    path: `${APP_PREFIX_PATH}/user-settings`,
-  },
-  {
-    title: 'Terms & Conditions',
-    icon: '', // EditOutlined,
-    path: `${APP_PREFIX_PATH}/user-settings/terms`,
-  },
-];
+// const menuItem: MenuItem[] = [
+//   {
+//     title: 'User Settings',
+//     icon: '', // EditOutlined,
+//     path: `${APP_PREFIX_PATH}/user-settings`,
+//   },
+//   {
+//     title: 'Terms & Conditions',
+//     icon: '', // EditOutlined,
+//     path: `${APP_PREFIX_PATH}/user-settings/terms`,
+//   },
+// ];
 
 export const NavProfile = () => {
   const { switcher, themes } = useThemeSwitcher();
@@ -64,64 +62,65 @@ export const NavProfile = () => {
   const email = useStoreState((state) => state.user.email);
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
   const switchTheme = useStoreActions((actions) => actions.theme.switchTheme);
+  const switchLocale = useStoreActions((actions) => actions.theme.changeLocale);
+  const locale = useStoreState((state) => state.theme.locale);
   const { signOut } = useAuth();
   const { logout } = useAuth0();
 
-  // TODO REMOVE
-  const profileMenu = (
-    <div className="nav-profile nav-dropdown">
-      <div className="nav-profile-header">
-        <div className="d-flex" style={{ alignItems: 'center' }}>
-          <Avatar
-            style={{ backgroundColor: 'rgb(222, 68, 54)', minWidth: 35 }}
-            size={35}
-          >
-            {name?.charAt(0)}
-          </Avatar>
-          <div className="pl-2">
-            <h4 className="mb-0">{name}</h4>
-            <span className="text-muted">{email}</span>
-          </div>
-        </div>
-      </div>
-      <div className="nav-profile-body">
-        <Menu>
-          {menuItem.map((el, i) => (
-            <Menu.Item key={i}>
-              <Link to={el.path}>
-                <Row>
-                  {/* <Icon className="mr-3" type={el.icon} /> */}
-                  <span className="font-weight-normal">{el.title}</span>
-                </Row>
-              </Link>
-            </Menu.Item>
-          ))}
-          <Menu.Item
-            key={menuItem.length + 1}
-            onClick={() => {
-              signOut();
-              logout({ returnTo: window.location.origin });
-            }}
-          >
-            <Row
-              onClick={() => {
-                signOut();
-                logout({ returnTo: window.location.origin });
-              }}
-            >
-              <LogoutOutlined className="mr-3" />
-              <span className="font-weight-normal">
-                {intl.formatMessage({
-                  defaultMessage: 'Sign Out',
-                  id: 'F62y+K',
-                })}
-              </span>
-            </Row>
-          </Menu.Item>
-        </Menu>
-      </div>
-    </div>
-  );
+  const handleChangeLang = (value: AvailableLanguages) => {
+    switchLocale(value as string);
+    typedLocalStorage.set(LocalStorageKeys.lang, value as string);
+  };
+  // // TODO REMOVE
+  // const profileMenu = (
+  //   <div className="nav-profile nav-dropdown">
+  //     <div className="nav-profile-header">
+  //       <div className="d-flex" style={{ alignItems: 'center' }}>
+  //         <Avatar
+  //           style={{ backgroundColor: 'rgb(222, 68, 54)', minWidth: 35 }}
+  //           size={35}
+  //         >
+  //           {name?.charAt(0)}
+  //         </Avatar>
+  //         <div className="pl-2">
+  //           <h4 className="mb-0">{name}</h4>
+  //           <span className="text-muted">{email}</span>
+  //         </div>
+  //       </div>
+  //     </div>
+  //     <div className="nav-profile-body">
+  //       <Menu>
+  //         {menuItem.map((el, i) => (
+  //           <Menu.Item key={i}>
+  //             <Link to={el.path}>
+  //               <Row>
+  //                 {/* <Icon className="mr-3" type={el.icon} /> */}
+  //                 <span className="font-weight-normal">{el.title}</span>
+  //               </Row>
+  //             </Link>
+  //           </Menu.Item>
+  //         ))}
+  //         <Menu.Item
+  //           key={menuItem.length + 1}
+  //           onClick={() => {
+  //             signOut();
+  //             logout({ returnTo: window.location.origin });
+  //           }}
+  //         >
+  //           <Row>
+  //             <LogoutOutlined className="mr-3" />
+  //             <span className="font-weight-normal">
+  //               {intl.formatMessage({
+  //                 defaultMessage: 'Sign Out',
+  //                 id: 'F62y+K',
+  //               })}
+  //             </span>
+  //           </Row>
+  //         </Menu.Item>
+  //       </Menu>
+  //     </div>
+  //   </div>
+  // );
 
   return (
     <Dropdown
@@ -186,6 +185,43 @@ export const NavProfile = () => {
                     }}
                   />
                 </Col>
+              </Row>
+            ),
+          },
+          {
+            key: 'lang',
+            onClick: () => {},
+            disabled: true,
+            style: {
+              padding: 0,
+              cursor: 'default',
+            },
+            label: (
+              <Row>
+                <Select
+                  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                  defaultValue={locale as AvailableLanguages}
+                  value={locale as AvailableLanguages}
+                  bordered={false}
+                  style={{ width: '100%', paddingLeft: 8 }}
+                  onChange={handleChangeLang}
+                  options={[
+                    {
+                      value: 'en',
+                      label: intl.formatMessage({
+                        defaultMessage: 'English 🇬🇧',
+                        id: 'j66p6j',
+                      }),
+                    },
+                    {
+                      value: 'fr',
+                      label: intl.formatMessage({
+                        defaultMessage: 'French 🇫🇷',
+                        id: '115KOd',
+                      }),
+                    },
+                  ]}
+                />
               </Row>
             ),
           },

@@ -279,8 +279,8 @@ const BusinessReportView = ({
                 id: 'Ze/CG9',
               })}
               mode="multiple"
-              maxTagCount="responsive"
               allowClear
+              maxTagCount="responsive"
               onChange={(value) => {
                 setSelectedCrimeGroups(value || []);
               }}
