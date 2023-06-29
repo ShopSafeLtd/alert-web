@@ -184,7 +184,7 @@ const Content = ({
               }}
             >
               <Text style={{ fontSize: 13 }} strong>
-                {`${from?.fullName}${
+                {`${from?.origName}${
                   from?.businesses && from?.businesses[0]?.fullName
                     ? `(${from?.businesses[0].fullName})`
                     : ''

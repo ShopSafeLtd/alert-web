@@ -123,6 +123,12 @@ const useListVehicles = (): Return => {
             mode: QueryMode.Insensitive,
           },
         },
+        {
+          model: {
+            contains: search,
+            mode: QueryMode.Insensitive,
+          },
+        },
       ],
     },
   };

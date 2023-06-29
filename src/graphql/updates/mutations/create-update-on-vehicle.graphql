@@ -151,6 +151,7 @@ mutation CreateUpdateOnVehicle($vehicle: UniqueId!, $data: CreateUpdateData!) {
         businesses {
           id
           name
+          fullName
         }
       }
     }

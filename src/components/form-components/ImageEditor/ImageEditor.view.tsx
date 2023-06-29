@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { UploadFile } from 'antd';
 import { Button, Col, Form, Modal, Row, Select, Skeleton, Switch } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
@@ -85,20 +85,30 @@ const ImageEditor = ({
   const [rotation, setRotation] = useState(0);
   const [policeImage, setPoliceImage] = useState(false);
   const [isPrimaryImage, setIsPrimaryImage] = useState(false);
+  // ???
+  useEffect(() => {
+    setPosition(image?.position || ImagePosition.CenterCenter);
+    setPoliceImage(image?.policeImage || false);
+    setIsPrimaryImage(image?.uid === primaryImage || false);
+  }, [image]);
 
   const handleSubmit = () => {
     if (image) {
+      console.log(22);
+
       submitImage({
         ...image,
         position,
         policeImage,
       });
-      if (isPrimaryImage) setPrimaryImage(image.uid);
+      if (isPrimaryImage && image.uid !== primaryImage)
+        setPrimaryImage(image.uid);
       if (!isPrimaryImage && image.uid === primaryImage) setPrimaryImage('');
     }
     setPosition(ImagePosition.CenterCenter);
     setIsPrimaryImage(false);
     setPoliceImage(false);
+    console.log(11);
   };
 
   const onRotateRight = () => {

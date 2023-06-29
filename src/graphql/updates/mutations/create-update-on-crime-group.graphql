@@ -154,6 +154,7 @@ mutation CreateUpdateOnCrimeGroup(
         businesses {
           id
           name
+          fullName
         }
       }
     }

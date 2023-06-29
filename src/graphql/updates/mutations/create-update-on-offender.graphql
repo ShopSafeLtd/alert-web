@@ -154,6 +154,7 @@ mutation createUpdateOnOffender(
         businesses {
           id
           name
+          fullName
         }
       }
     }

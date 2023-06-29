@@ -5,6 +5,7 @@ import type {
   ViewOffenderQueryVariables,
 } from 'graphql/generated';
 import {
+  useUnsubscribeFromOffenderMutation,
   Role,
   TagType,
   useAddImagesToOffenderMutation,
@@ -304,23 +305,42 @@ const useViewOffender = (offenderId: string): Return => {
   };
 
   const [subscribe] = useSubscribeToOffenderMutation();
+  const [unsubscribeFromOffender] = useUnsubscribeFromOffenderMutation();
 
   const toggleSubscribe = () => {
-    subscribe({
-      variables: {
-        where: {
-          id: offenderId,
+    if (data?.offender?.subscribed) {
+      subscribe({
+        variables: {
+          where: {
+            id: offenderId,
+          },
         },
-      },
-      optimisticResponse: {
-        __typename: 'Mutation',
-        subscribeToOffender: {
-          id: offenderId,
-          __typename: 'Offender',
-          subscribed: data?.offender?.subscribed,
+        optimisticResponse: {
+          __typename: 'Mutation',
+          subscribeToOffender: {
+            id: offenderId,
+            __typename: 'Offender',
+            subscribed: false,
+          },
         },
-      },
-    });
+      });
+    } else {
+      unsubscribeFromOffender({
+        variables: {
+          where: {
+            id: offenderId,
+          },
+        },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          unsubscribeFromOffender: {
+            id: offenderId,
+            __typename: 'Offender',
+            subscribed: true,
+          },
+        },
+      });
+    }
   };
 
   const scrolledToTop = () => {

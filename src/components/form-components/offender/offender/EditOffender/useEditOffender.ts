@@ -312,6 +312,7 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
           dateSource: { set: ageCheck ? data.dateSource || null : null },
           dateOfBirth: { set: ageCheck ? data.dateOfBirth || null : null },
           groups: {
+            // ???
             set:
               groups.length > 1
                 ? data.groups.map((id) => ({ id }))
@@ -484,12 +485,10 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
     loading,
     saving,
     groups:
-      role === Role.SchemeAdmin
-        ? groupData?.groups.map((group) => ({
-            value: group.id,
-            label: group.name,
-          })) || []
-        : groups.map((group) => ({ value: group.id, label: group.name })),
+      groupData?.groups.map((group) => ({
+        value: group.id,
+        label: group.name,
+      })) || [],
     groupsLoading,
     tags:
       tagsData?.tags.map((tag) => ({ value: tag.id, label: tag.name })) || [],

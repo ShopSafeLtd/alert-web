@@ -143,7 +143,7 @@ const NotificationLists = ({
             dataSource={data?.notifications?.map((el) => ({
               key: el.id,
               title: el.notification.title,
-              body: el.notification.body,
+              body: el.notification.body || '',
               createdAt: el.createdAt,
               read: el.read,
               notification: el.notification,

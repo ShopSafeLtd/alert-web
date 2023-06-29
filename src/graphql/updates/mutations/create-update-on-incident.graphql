@@ -154,6 +154,7 @@ mutation CreateUpdateOnIncident(
         businesses {
           id
           name
+          fullName
         }
       }
     }

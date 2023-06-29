@@ -264,31 +264,7 @@ const ViewOffender = ({
               </Col>
             )}
           </Row>
-          <Row
-            gutter={8}
-            justify="start"
-            align="middle"
-            wrap={false}
-            className={classes.images}
-            style={{
-              height:
-                data?.offender?.images && data?.offender?.images.length > 0
-                  ? undefined
-                  : 0,
-            }}
-          >
-            {data?.offender?.images.map((image, i) => (
-              <Col key={image.id}>
-                <div onClick={() => openLightbox(i)} className={classes.image}>
-                  <WatermarkImage
-                    url={image.optimised}
-                    position={image.position}
-                  />
-                </div>
-              </Col>
-            ))}
-          </Row>
-          {loading && (
+          {loading ? (
             <Row style={{ width: '100%', marginBottom: 20, marginLeft: 10 }}>
               <Row gutter={8} className={classes.offenderRow}>
                 {Array.from({ length: 4 }).map((_, index) => (
@@ -307,7 +283,36 @@ const ViewOffender = ({
                 ))}
               </Row>
             </Row>
+          ) : (
+            <Row
+              gutter={[8, 8]}
+              justify="start"
+              align="middle"
+              wrap={false}
+              className={classes.images}
+              style={{
+                height:
+                  data?.offender?.images && data?.offender?.images.length > 0
+                    ? undefined
+                    : 0,
+              }}
+            >
+              {data?.offender?.images.map((image, i) => (
+                <Col key={image.id}>
+                  <div
+                    onClick={() => openLightbox(i)}
+                    className={classes.image}
+                  >
+                    <WatermarkImage
+                      url={image.optimised}
+                      position={image.position}
+                    />
+                  </div>
+                </Col>
+              ))}
+            </Row>
           )}
+
           <div className={classes.content}>
             <Card>
               <Row align="middle" gutter={10}>

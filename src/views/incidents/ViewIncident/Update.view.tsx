@@ -27,7 +27,7 @@ interface DatedMessages {
   from?: {
     id: string;
     origName: string;
-    businesses: { id: string; name: string }[];
+    businesses: { id: string; name: string; fullName: string }[];
   };
   images?: ImageCardData[];
   offenders?: OffenderCardData[];
@@ -190,7 +190,13 @@ const UpdateContent = ({
               flex={1}
             >
               <Text ellipsis style={{ fontSize: 13 }} strong>
-                {userId === from?.id ? 'You' : from?.origName}
+                {userId === from?.id
+                  ? 'You'
+                  : `${from?.origName}${
+                      from?.businesses && from?.businesses[0]?.fullName
+                        ? `(${from?.businesses[0].fullName})`
+                        : ''
+                    }`}
               </Text>
             </Col>
             <Col>
