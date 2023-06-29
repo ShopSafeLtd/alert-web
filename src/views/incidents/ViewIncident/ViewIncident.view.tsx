@@ -1013,7 +1013,10 @@ const ViewIncident = ({
                                     createdAt: update.createdAt.toString(),
                                     createdBy:
                                       userId === update.createdBy.id
-                                        ? 'You'
+                                        ? intl.formatMessage({
+                                            defaultMessage: 'You',
+                                            id: 'kJ5W29',
+                                          })
                                         : `${update.createdBy.fullName} - ${update.createdBy.businesses[0]?.name}`,
                                     id: update.id,
                                     text: update.text || '',
