@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import type { UploadFile } from 'antd';
 import { Button, Col, Form, Modal, Row, Select, Skeleton, Switch } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
@@ -81,36 +81,32 @@ const ImageEditor = ({
   primaryImage,
   setPrimaryImage,
 }: Props) => {
+  if (!image) return <div />;
   const intl = useIntl();
   const classes = useStyles();
-  const [position, setPosition] = useState(ImagePosition.CenterCenter);
+  const [position, setPosition] = useState(
+    image?.position || ImagePosition.CenterCenter
+  );
   const [rotation, setRotation] = useState(0);
-  const [policeImage, setPoliceImage] = useState(false);
-  const [isPrimaryImage, setIsPrimaryImage] = useState(false);
-  // ???
-  useEffect(() => {
-    setPosition(image?.position || ImagePosition.CenterCenter);
-    setPoliceImage(image?.policeImage || false);
-    setIsPrimaryImage(image?.uid === primaryImage || false);
-  }, [image]);
+  const [policeImage, setPoliceImage] = useState(image?.policeImage);
+  const [isPrimaryImage, setIsPrimaryImage] = useState(
+    image?.uid === primaryImage
+  );
 
   const handleSubmit = () => {
     if (image) {
-      console.log(22);
-
+      if (isPrimaryImage && image.uid !== primaryImage)
+        setPrimaryImage(image.uid);
+      if (!isPrimaryImage && image.uid === primaryImage) setPrimaryImage('');
       submitImage({
         ...image,
         position,
         policeImage,
       });
-      if (isPrimaryImage && image.uid !== primaryImage)
-        setPrimaryImage(image.uid);
-      if (!isPrimaryImage && image.uid === primaryImage) setPrimaryImage('');
     }
     setPosition(ImagePosition.CenterCenter);
     setIsPrimaryImage(false);
     setPoliceImage(false);
-    console.log(11);
   };
 
   const onRotateRight = () => {
@@ -145,7 +141,11 @@ const ImageEditor = ({
             <Form
               className={classes.select}
               layout="vertical"
-              // initialValues={{}}
+              initialValues={{
+                position: image?.position || ImagePosition.CenterCenter,
+                primaryImage: image?.uid === primaryImage,
+                policeImage: image?.policeImage,
+              }}
               // onFinish={onSubmit}
             >
               <Form.Item
@@ -185,7 +185,6 @@ const ImageEditor = ({
                   defaultMessage: 'Set as primary image',
                 })}
                 name="primaryImage"
-                valuePropName="checked"
                 style={{
                   marginBottom: 0,
                   flexDirection: 'row',
@@ -205,7 +204,6 @@ const ImageEditor = ({
                   defaultMessage: 'Received from the police',
                 })}
                 name="policeImage"
-                valuePropName="checked"
                 style={{
                   marginBottom: 0,
                   flexDirection: 'row',
