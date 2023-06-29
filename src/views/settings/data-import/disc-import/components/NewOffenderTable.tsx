@@ -17,8 +17,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
 import { faImages } from '@fortawesome/pro-solid-svg-icons';
 import type { Theme } from 'configs/ThemeConfig';
-import { Age, Build, Gender, Height, Race } from 'graphql/generated';
 import type { SchemeGroupsQuery } from 'graphql/generated';
+import { Age, Build, Gender, Height, Race } from 'graphql/generated';
+import { FormattedMessage, useIntl } from 'react-intl';
 import type { NewOffender } from '../DiscImport.types';
 
 const useStyles = createUseStyles((theme: Theme) => ({
@@ -60,14 +61,14 @@ const NewOffenderRow = React.memo(
       form.setFieldsValue({
         ...offender,
       });
-      form.validateFields();
+      void form.validateFields();
     }, [offender]);
 
     const onBlur = () => {
       const values = form.getFieldsValue();
       onUpdateOffender({ ...offender, ...values });
     };
-
+    const intl = useIntl();
     return (
       <Form layout="vertical" form={form}>
         <Row gutter={8} className={classes.row}>
@@ -104,27 +105,53 @@ const NewOffenderRow = React.memo(
               <Col flex={1} className={classes.cell}>
                 <Form.Item
                   name="name"
-                  label="Name"
-                  rules={[{ required: true, message: 'Enter an name' }]}
+                  label={intl.formatMessage({
+                    defaultMessage: 'Name',
+                    id: 'HAlOn1',
+                  })}
+                  rules={[
+                    {
+                      required: true,
+                      message: intl.formatMessage({
+                        defaultMessage: 'Enter an name',
+                        id: 'Ju6S8/',
+                      }),
+                    },
+                  ]}
                 >
                   <Input onBlur={onBlur} />
                 </Form.Item>
               </Col>
               <Col span={6} className={classes.cell}>
-                <Form.Item name="gender" label="Sex">
+                <Form.Item
+                  name="gender"
+                  label={intl.formatMessage({
+                    defaultMessage: 'Sex',
+                    id: 'eWJHGp',
+                  })}
+                >
                   <Select
                     options={[
                       {
                         value: Gender.Female,
-                        label: 'Female',
+                        label: intl.formatMessage({
+                          defaultMessage: 'Female',
+                          id: '74BYXL',
+                        }),
                       },
                       {
                         value: Gender.Male,
-                        label: 'Male',
+                        label: intl.formatMessage({
+                          defaultMessage: 'Male',
+                          id: 'jIbAky',
+                        }),
                       },
                       {
                         value: Gender.Unknown,
-                        label: 'Unknown',
+                        label: intl.formatMessage({
+                          defaultMessage: 'Unknown',
+                          id: '5jeq8P',
+                        }),
                       },
                     ]}
                     onBlur={onBlur}
@@ -132,7 +159,13 @@ const NewOffenderRow = React.memo(
                 </Form.Item>
               </Col>
               <Col span={6} className={classes.cell}>
-                <Form.Item name="race" label="Race">
+                <Form.Item
+                  name="race"
+                  label={intl.formatMessage({
+                    defaultMessage: 'Race',
+                    id: 'jOQGTB',
+                  })}
+                >
                   <Select
                     options={[
                       {
@@ -160,7 +193,10 @@ const NewOffenderRow = React.memo(
                         value: Race.Ic6,
                       },
                       {
-                        label: 'Unknown',
+                        label: intl.formatMessage({
+                          defaultMessage: 'Unknown',
+                          id: '5jeq8P',
+                        }),
                         value: Race.Unknown,
                       },
                     ]}
@@ -171,23 +207,42 @@ const NewOffenderRow = React.memo(
             </Row>
             <Row gutter={8}>
               <Col span={6} className={classes.cell}>
-                <Form.Item name="height" label="Height">
+                <Form.Item
+                  name="height"
+                  label={intl.formatMessage({
+                    defaultMessage: 'Height',
+                    id: 'teLZyZ',
+                  })}
+                >
                   <Select
                     options={[
                       {
-                        label: 'Short',
+                        label: intl.formatMessage({
+                          defaultMessage: 'Short',
+                          id: 'juU558',
+                        }),
+
                         value: Height.Short,
                       },
                       {
-                        label: 'Average',
+                        label: intl.formatMessage({
+                          defaultMessage: 'Average',
+                          id: 'FnRTEV',
+                        }),
                         value: Height.Average,
                       },
                       {
-                        label: 'Tall',
+                        label: intl.formatMessage({
+                          defaultMessage: 'Tall',
+                          id: 'hnj65D',
+                        }),
                         value: Height.Tall,
                       },
                       {
-                        label: 'Unknown',
+                        label: intl.formatMessage({
+                          defaultMessage: 'Unknown',
+                          id: '5jeq8P',
+                        }),
                         value: Height.Unknown,
                       },
                     ]}
@@ -196,23 +251,41 @@ const NewOffenderRow = React.memo(
                 </Form.Item>
               </Col>
               <Col span={6} className={classes.cell}>
-                <Form.Item name="build" label="Build">
+                <Form.Item
+                  name="build"
+                  label={intl.formatMessage({
+                    defaultMessage: 'Build',
+                    id: 'RSctv1',
+                  })}
+                >
                   <Select
                     options={[
                       {
-                        label: 'Small',
+                        label: intl.formatMessage({
+                          defaultMessage: 'Small',
+                          id: 'BPnT3T',
+                        }),
                         value: Build.Small,
                       },
                       {
-                        label: 'Medium',
+                        label: intl.formatMessage({
+                          defaultMessage: 'Medium',
+                          id: 'ovJ26C',
+                        }),
                         value: Build.Medium,
                       },
                       {
-                        label: 'Large',
+                        label: intl.formatMessage({
+                          defaultMessage: 'Large',
+                          id: '/06iwc',
+                        }),
                         value: Build.Large,
                       },
                       {
-                        label: 'Unknown',
+                        label: intl.formatMessage({
+                          defaultMessage: 'Unknown',
+                          id: '5jeq8P',
+                        }),
                         value: Build.Unknown,
                       },
                     ]}
@@ -221,7 +294,13 @@ const NewOffenderRow = React.memo(
                 </Form.Item>
               </Col>
               <Col span={6} className={classes.cell}>
-                <Form.Item name="age" label="Age">
+                <Form.Item
+                  name="age"
+                  label={intl.formatMessage({
+                    defaultMessage: 'Age',
+                    id: '9oNQSC',
+                  })}
+                >
                   <Select
                     options={[
                       {
@@ -257,7 +336,10 @@ const NewOffenderRow = React.memo(
                         value: Age.OverEighty,
                       },
                       {
-                        label: 'Unknown',
+                        label: intl.formatMessage({
+                          defaultMessage: 'Unknown',
+                          id: '5jeq8P',
+                        }),
                         value: Age.Unknown,
                       },
                     ]}
@@ -266,7 +348,13 @@ const NewOffenderRow = React.memo(
                 </Form.Item>
               </Col>
               <Col span={6} className={classes.cell}>
-                <Form.Item name="dateOfBirth" label="Date of Birth">
+                <Form.Item
+                  name="dateOfBirth"
+                  label={intl.formatMessage({
+                    defaultMessage: 'Date of Birth',
+                    id: 'e9Z+tg',
+                  })}
+                >
                   <DatePicker onBlur={onBlur} format="DD/MM/YYYY" />
                 </Form.Item>
               </Col>
@@ -275,7 +363,10 @@ const NewOffenderRow = React.memo(
           <Col span={3} className={classes.cell} style={{ maxWidth: 250 }}>
             <Form.Item
               name="groups"
-              label="Groups"
+              label={intl.formatMessage({
+                defaultMessage: 'Groups',
+                id: 'hzmswI',
+              })}
               rules={[{ required: true, message: 'Choose at least one group' }]}
             >
               <Select
@@ -291,7 +382,10 @@ const NewOffenderRow = React.memo(
           <Col style={{ marginTop: 30 }}>
             <Popconfirm
               overlayInnerStyle={{ padding: 10 }}
-              title="Are you sure you want to remove this user?"
+              title={intl.formatMessage({
+                defaultMessage: 'Are you sure you want to remove this user?',
+                id: '2b7AJD',
+              })}
               onConfirm={() => onDelete(offender.id)}
             >
               <Button size="small">
@@ -302,12 +396,24 @@ const NewOffenderRow = React.memo(
         </Row>
         <Row gutter={8} className={classes.bottomRow}>
           <Col span={6} className={classes.cell}>
-            <Form.Item name="peculiarities" label="Peculiarities">
+            <Form.Item
+              name="peculiarities"
+              label={intl.formatMessage({
+                defaultMessage: 'Peculiarities',
+                id: '9s+ZmX',
+              })}
+            >
               <Input.TextArea rows={5} onBlur={onBlur} />
             </Form.Item>
           </Col>
           <Col span={6} className={classes.cell}>
-            <Form.Item name="comments" label="Comments">
+            <Form.Item
+              name="comments"
+              label={intl.formatMessage({
+                defaultMessage: 'Comments',
+                id: 'wCgTu5',
+              })}
+            >
               <Input.TextArea rows={5} onBlur={onBlur} />
             </Form.Item>
           </Col>
@@ -341,12 +447,21 @@ const NewOffenderTable = ({
     );
   }, [currentPage]);
 
+  const intl = useIntl();
   return (
     <Card
-      title={`Offenders (${newOffenders.length})`}
+      title={intl.formatMessage(
+        {
+          defaultMessage: 'Offenders ({offenders})',
+          id: 'lVaHn1',
+        },
+        {
+          offenders: newOffenders.length,
+        }
+      )}
       extra={
         <Button type="primary" style={{ marginBottom: 16 }} onClick={onAdd}>
-          Add Offender
+          <FormattedMessage id="m3ChN4" defaultMessage="Add Offender" />
         </Button>
       }
     >
@@ -363,7 +478,17 @@ const NewOffenderTable = ({
         current={currentPage}
         onChange={setCurrentPage}
         total={newOffenders.length}
-        showTotal={(total) => `Total Offenders: ${total}`}
+        showTotal={(total) =>
+          intl.formatMessage(
+            {
+              defaultMessage: `Total Offenders: {total}`,
+              id: '3JpVG2',
+            },
+            {
+              total,
+            }
+          )
+        }
         pageSizeOptions={[10]}
       />
     </Card>

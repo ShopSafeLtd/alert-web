@@ -6,6 +6,7 @@ import AddVehicle from 'components/form-components/Vehicle/AddVehicle';
 import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
 import EditVehicle from 'components/form-components/Vehicle/EditVehicle';
 import LinkCrimeGroup from 'components/form-components/linkOptions/LinkCrimeGroup';
+import { useIntl } from 'react-intl';
 
 interface Props {
   addNewVehicle: boolean;
@@ -39,85 +40,96 @@ const ProfileDrawer = ({
   onEditVehicle,
   addNewVehicle,
   toggleAddNewVehicle,
-}: Props): JSX.Element => (
-  <>
-    <Drawer
-      title="Add Existing Vehicles"
-      open={addExistingVehicle}
-      width="800"
-      onClose={toggleAddExistingVehicle}
-      zIndex={1001}
-    >
-      {addExistingVehicle ? (
-        // <AddExistingVehicle
-        //   update={updateVehiclesData}
-        //   vehicleIds={vehiclesData.map(({ id }) => id)}
-        //   onClose={toggleAddExistingVehicle}
-        // />
-        <LinkVehicle
-          update={(data) => onAddVehicle(data, true)}
-          vehicleIds={vehiclesData.map(({ id }) => id)}
-          onClose={toggleAddExistingVehicle}
-        />
-      ) : (
-        <div />
-      )}
-    </Drawer>
-    <Drawer
-      title="Add New Vehicle"
-      open={addNewVehicle}
-      width="700"
-      zIndex={999}
-      onClose={toggleAddNewVehicle}
-    >
-      {addNewVehicle ? (
-        <AddVehicle
-          update={(data) => {
-            onAddVehicle(data, false);
-            toggleAddNewVehicle();
-          }}
-          onClose={toggleAddNewVehicle}
-          fromOffender={!!fromOffender}
-        />
-      ) : (
-        <div />
-      )}
-    </Drawer>
-    <Drawer
-      title="Edit Vehicle Details"
-      open={!!editVehicleId}
-      width="700"
-      zIndex={999}
-      onClose={() => setEditVehicleId('')}
-    >
-      {editVehicleId ? (
-        <EditVehicle
-          fromOffender={!!fromOffender}
-          onClose={() => setEditVehicleId('')}
-          update={onEditVehicle}
-          editData={vehiclesData.find(({ id }) => id === editVehicleId)}
-        />
-      ) : (
-        <div />
-      )}
-    </Drawer>
-    <Drawer
-      title="Add Existing Crime Groups"
-      open={addExistingCrimeGroup}
-      width="800"
-      onClose={toggleAddExistingCrimeGroup}
-      zIndex={1001}
-    >
-      {addExistingCrimeGroup ? (
-        <LinkCrimeGroup
-          update={onAddCrimeGroup}
-          crimeGroupIds={crimeGroupsData.map(({ id }) => id)}
-          onClose={toggleAddExistingCrimeGroup}
-        />
-      ) : (
-        <div />
-      )}
-    </Drawer>
-  </>
-);
+}: Props): JSX.Element => {
+  const intl = useIntl();
+  return (
+    <>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Add Existing Vehicles',
+          id: 'goP1s6',
+        })}
+        open={addExistingVehicle}
+        width="800"
+        onClose={toggleAddExistingVehicle}
+        zIndex={1001}
+      >
+        {addExistingVehicle ? (
+          <LinkVehicle
+            update={(data) => onAddVehicle(data, true)}
+            vehicleIds={vehiclesData.map(({ id }) => id)}
+            onClose={toggleAddExistingVehicle}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Add New Vehicle',
+          id: 'cHbTr7',
+        })}
+        open={addNewVehicle}
+        width="700"
+        zIndex={999}
+        onClose={toggleAddNewVehicle}
+      >
+        {addNewVehicle ? (
+          <AddVehicle
+            update={(data) => {
+              onAddVehicle(data, false);
+              toggleAddNewVehicle();
+            }}
+            onClose={toggleAddNewVehicle}
+            fromOffender={!!fromOffender}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Edit Vehicle Details',
+          id: 'AWN+hV',
+        })}
+        open={!!editVehicleId}
+        width="700"
+        zIndex={999}
+        onClose={() => setEditVehicleId('')}
+      >
+        {editVehicleId ? (
+          <EditVehicle
+            fromOffender={!!fromOffender}
+            onClose={() => setEditVehicleId('')}
+            update={onEditVehicle}
+            editData={vehiclesData.find(({ id }) => id === editVehicleId)}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Add Existing Crime Groups',
+          id: '3HDZC+',
+        })}
+        open={addExistingCrimeGroup}
+        width="800"
+        onClose={toggleAddExistingCrimeGroup}
+        zIndex={1001}
+      >
+        {addExistingCrimeGroup ? (
+          <LinkCrimeGroup
+            update={onAddCrimeGroup}
+            crimeGroupIds={crimeGroupsData.map(({ id }) => id)}
+            onClose={toggleAddExistingCrimeGroup}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+    </>
+  );
+};
+
 export default ProfileDrawer;

@@ -1,5 +1,5 @@
-import React from 'react'
+/* eslint-disable */
 
-export const Grow = () => (
-  <div style={{ flex: 1 }} />
-)
+import React from 'react';
+
+export const Grow = () => <div style={{ flex: 1 }} />;

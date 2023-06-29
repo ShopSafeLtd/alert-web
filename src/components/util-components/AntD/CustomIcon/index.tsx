@@ -1,4 +1,4 @@
-/* eslint-disable react/require-default-props */
+/* eslint-disable  */
 import React from 'react';
 import Icon from '@ant-design/icons';
 

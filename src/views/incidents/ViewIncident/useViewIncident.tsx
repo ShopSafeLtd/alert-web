@@ -23,6 +23,7 @@ import update from 'immutability-helper';
 
 import { useStoreState } from 'state';
 import { Modal, notification } from 'antd';
+import { useIntl } from 'react-intl';
 
 const { confirm } = Modal;
 
@@ -114,6 +115,7 @@ interface Return {
 }
 
 const useViewIncident = (incidentId: string): Return => {
+  const intl = useIntl();
   const role = useStoreState((state) => state.user.role);
   const userId = useStoreState((state) => state.user.id);
   const [saving, setSaving] = useState(false);
@@ -177,16 +179,25 @@ const useViewIncident = (incidentId: string): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: 'Successfully Linked!',
-        description: 'The offenders have been Linked to this incidents!',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Linked!',
+          id: 'y2UHQ1',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The offenders have been Linked to this incidents!',
+          id: 'fFQgTY',
+        }),
         placement: 'bottomRight',
       });
     },
     onError: () => {
       setSaving(false);
       notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
+        message: intl.formatMessage({ defaultMessage: 'Error!', id: 'DIDBlF' }),
+        description: intl.formatMessage({
+          defaultMessage: 'Whoops, there are some errors. Please try again.',
+          id: 'tPB3Wl',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -195,7 +206,7 @@ const useViewIncident = (incidentId: string): Return => {
   const updateOffendersList = (selectedOffender: OffenderData) => {
     setSaving(true);
     if (incidentId && selectedOffender) {
-      updateIncident({
+      void updateIncident({
         variables: {
           where: {
             id: incidentId,
@@ -215,28 +226,43 @@ const useViewIncident = (incidentId: string): Return => {
     onCompleted: () => {
       window.history.back();
       notification.success({
-        message: 'Successfully Deleted!',
-        description:
-          'The incident has been deleted from the feed and moved to the recycle bin.',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Deleted!',
+          id: 'dvDKi/',
+        }),
+        description: intl.formatMessage({
+          defaultMessage:
+            'The incident has been deleted from the feed and moved to the recycle bin.',
+          id: 'YagqVR',
+        }),
         placement: 'bottomRight',
       });
     },
     onError: () => {
       notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
+        message: intl.formatMessage({ defaultMessage: 'Error!', id: 'DIDBlF' }),
+        description: intl.formatMessage({
+          defaultMessage: 'Whoops, there are some errors. Please try again.',
+          id: 'tPB3Wl',
+        }),
         placement: 'bottomRight',
       });
     },
   });
   const onDelete = (id: string) => {
     confirm({
-      title: 'Are you sure?',
-      content:
-        'Click delete if you wish to delete this incident. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
-      okText: 'Delete',
+      title: intl.formatMessage({
+        defaultMessage: 'Are you sure?',
+        id: '2oCaym',
+      }),
+      content: intl.formatMessage({
+        defaultMessage:
+          'Click delete if you wish to delete this incident. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
+        id: 'TNOl3z',
+      }),
+      okText: intl.formatMessage({ defaultMessage: 'Delete', id: 'K3r6DQ' }),
       onOk() {
-        recycleIncident({
+        void recycleIncident({
           variables: {
             where: { id },
           },
@@ -257,7 +283,7 @@ const useViewIncident = (incidentId: string): Return => {
 
   const toggleSubscribe = () => {
     if (data?.incident?.subscribed) {
-      unsubscribeFromIncident({
+      void unsubscribeFromIncident({
         variables: {
           where: { id: incidentId },
         },
@@ -271,7 +297,7 @@ const useViewIncident = (incidentId: string): Return => {
         },
       });
     } else {
-      subscribeToIncident({
+      void subscribeToIncident({
         variables: {
           where: { id: incidentId },
         },
@@ -290,7 +316,7 @@ const useViewIncident = (incidentId: string): Return => {
   const [addImagesToIncident] = useAddImagesToIncidentMutation();
 
   const addUpdateImages = (images: { id: string }[]) => {
-    addImagesToIncident({
+    void addImagesToIncident({
       variables: {
         images,
         incident: {
@@ -307,13 +333,22 @@ const useViewIncident = (incidentId: string): Return => {
       setAddImages(images);
     } else {
       confirm({
-        title: 'Are you sure?',
-        content:
-          'Adding this image will notify any other users following the incident.',
+        title: intl.formatMessage({
+          defaultMessage: 'Are you sure?',
+          id: '2oCaym',
+        }),
+        content: intl.formatMessage({
+          defaultMessage:
+            'Adding this image will notify any other users following the incident.',
+          id: 'qfS4of',
+        }),
         onOk() {
           addUpdateImages(images.map(({ id }) => ({ id })));
         },
-        okText: 'Add Images',
+        okText: intl.formatMessage({
+          defaultMessage: 'Add Images',
+          id: 'b4GGYZ',
+        }),
       });
     }
   };
@@ -333,7 +368,7 @@ const useViewIncident = (incidentId: string): Return => {
   const [deleteUpdate] = useDeleteUpdateMutation();
 
   const handleDeleteUpdate = (updateId: string) => {
-    deleteUpdate({
+    void deleteUpdate({
       variables: {
         where: {
           id: updateId,
@@ -420,12 +455,18 @@ const useViewIncident = (incidentId: string): Return => {
 
   const confirmDeleteUpdate = (updateId: string) => {
     confirm({
-      title: 'Are you sure?',
-      content: 'The update will be permanently deleted.',
+      title: intl.formatMessage({
+        defaultMessage: 'Are you sure?',
+        id: '2oCaym',
+      }),
+      content: intl.formatMessage({
+        defaultMessage: 'The update will be permanently deleted.',
+        id: 'gwznO0',
+      }),
       onOk() {
         handleDeleteUpdate(updateId);
       },
-      okText: 'Delete',
+      okText: intl.formatMessage({ defaultMessage: 'Delete', id: 'K3r6DQ' }),
     });
   };
 
@@ -433,7 +474,7 @@ const useViewIncident = (incidentId: string): Return => {
 
   const handleEditUpdate = () => {
     if (editUpdate !== null)
-      updateUpdate({
+      void updateUpdate({
         variables: {
           data: {
             text: editUpdateInput,

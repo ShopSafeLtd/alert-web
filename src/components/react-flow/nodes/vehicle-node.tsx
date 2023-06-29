@@ -4,11 +4,12 @@ import { Handle, NodeToolbar, Position, useStore } from 'reactflow';
 import { NodeResizer } from '@reactflow/node-resizer';
 import '@reactflow/node-resizer/dist/style.css';
 import { useParams } from 'react-router-dom';
+import SelectVehicleNode from 'components/form-components/Investigation/AddExistingVehicleNode';
+import { useIntl } from 'react-intl';
 import useStyles from './style.module';
 import useFlow from '../../../views/investigations/ViewInvestigation/views/Flow/hooks/useFlow';
 import { useDrawerState } from '../../../hooks';
 import { useStoreState } from '../../../state';
-import SelectVehicleNode from 'components/form-components/Investigation/AddExistingVehicleNode';
 
 export interface Vehicle {
   colour?: string | null | undefined;
@@ -51,6 +52,7 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
     // @ts-ignore
     nodesMap.set(id, {
       ...currentNode,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       data: {
         ...currentNode.data,
         vehicle,
@@ -67,6 +69,7 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
     if (!editing) {
       nodesMap.set(id, {
         ...currentNode,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         data: { ...currentNode.data, isEditing: { user: '', editing: false } },
       });
       return;
@@ -75,10 +78,11 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
     // @ts-ignore
     nodesMap.set(id, {
       ...currentNode,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       data: { ...currentNode.data, isEditing: { user: fullName, editing } },
     });
   }, []);
-
+  const intl = useIntl();
   return (
     <>
       <NodeToolbar isVisible={selected} position={Position.Top}>
@@ -91,7 +95,10 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
             });
           }}
         >
-          select vehicle
+          {intl.formatMessage({
+            defaultMessage: 'Select Vehicle',
+            id: 'tnv+4a',
+          })}
         </Button>
       </NodeToolbar>
       <div className={classes.node}>
@@ -111,12 +118,22 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
               </Descriptions.Item> */}
 
                   {data?.vehicle?.colour && (
-                    <Descriptions.Item label="Colour">
+                    <Descriptions.Item
+                      label={intl.formatMessage({
+                        defaultMessage: 'Colour',
+                        id: '+e8vAT',
+                      })}
+                    >
                       {data?.vehicle?.colour}
                     </Descriptions.Item>
                   )}
                   {data?.vehicle?.model && (
-                    <Descriptions.Item label="Model">
+                    <Descriptions.Item
+                      label={intl.formatMessage({
+                        defaultMessage: 'Model',
+                        id: 'rhSI1/',
+                      })}
+                    >
                       {data?.vehicle?.model}
                     </Descriptions.Item>
                   )}
@@ -125,7 +142,10 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
             </Col>
           ) : (
             <div style={{ height: '100%', zIndex: 4 }}>
-              Vehicle: Please choose a vehicle
+              {intl.formatMessage({
+                defaultMessage: 'Vehicle: Please select a vehicle',
+                id: 'tu6WTo',
+              })}
             </div>
           )}
         </div>

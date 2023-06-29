@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { ChatQuery } from 'graphql/generated';
 import { useChatQuery, useDeleteChatMutation } from 'graphql/generated';
 
-import { notification, Modal } from 'antd';
+import { Modal, notification } from 'antd';
 
 const { confirm } = Modal;
 interface Return {
@@ -58,7 +58,7 @@ const useChatDetail = (chatId: string): Return => {
       onOk() {
         setSaving(true);
         if (chatId)
-          deleteChat({
+          void deleteChat({
             variables: {
               id: chatId,
             },

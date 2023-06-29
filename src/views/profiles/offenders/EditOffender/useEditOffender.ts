@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
 import { useState } from 'react';
 import type {
   Age,
@@ -11,10 +12,10 @@ import type {
   ViewOffenderQuery,
 } from 'graphql/generated';
 import {
-  useListCustomGalleriesQuery,
   ImagePosition,
   Model,
   Role,
+  useListCustomGalleriesQuery,
   useListVehiclesQuery,
   useRecycleOffenderMutation,
   useSchemeGroupsQuery,
@@ -37,6 +38,7 @@ import type {
 } from 'types/DataType';
 import update from 'immutability-helper';
 import errorNotification from 'types/error_notification';
+import { useIntl } from 'react-intl';
 
 const { confirm } = Modal;
 
@@ -205,6 +207,7 @@ const onPreview = async (file: UploadFile) => {
 };
 
 const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
+  const intl = useIntl();
   const navigate = useNavigate();
   const [form] = Form.useForm<FormData>();
   const schemeId = useStoreState((state) => state.scheme.id);
@@ -320,8 +323,8 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
             uid: `${image.id}`,
             name: `${image.id}.png`,
             status: 'done',
-            url: `${image.optimised || image.url}`,
-            optimised: `${image.optimised || image.url}`,
+            url: `${image.optimised || image.url || ''}`,
+            optimised: `${image.optimised || image.url || ''}`,
             position: image.position,
             primary: image.primary || false,
             policeImage: image.policeImage || false,
@@ -463,6 +466,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
   });
 
   const [updateOffender] = useUpdateOffenderMutation({
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onCompleted: async () => {
       setSaving(false);
       navigate(`/app/offenders/view/${offenderId}`);
@@ -812,7 +816,14 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
           build: { set: data.build || null },
           height: { set: data.height || null },
           comment: { set: data.comment || '' },
-          hair: { set: data.hair || 'Unknown' },
+          hair: {
+            set:
+              data.hair ||
+              intl.formatMessage({
+                defaultMessage: 'Unknown',
+                id: '5jeq8P',
+              }),
+          },
           peculiarities: { set: data.peculiarities || '' },
           age: { set: ageCheck ? null : data.age || null },
           dateSource: { set: ageCheck ? data.dateSource || null : null },
@@ -840,9 +851,15 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     onCompleted: () => {
       navigate(`/app/offenders`);
       notification.success({
-        message: 'Successfully Rejected!',
-        description:
-          'The offender has been deleted from the feed and moved to the recycle bin.',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Rejected!',
+          id: 'C0DMPx',
+        }),
+        description: intl.formatMessage({
+          defaultMessage:
+            'The offender has been deleted from the feed and moved to the recycle bin.',
+          id: 'nQ1eW+',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -852,12 +869,21 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
   });
   const onReject = () => {
     confirm({
-      title: 'Are you sure?',
-      content:
-        'Click reject if you wish to reject the approvement of this offender. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
-      okText: 'Reject',
+      title: intl.formatMessage({
+        defaultMessage: 'Are you sure?',
+        id: '2oCaym',
+      }),
+      content: intl.formatMessage({
+        defaultMessage:
+          'Click reject if you wish to reject the approving of this offender. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
+        id: '5YfZun',
+      }),
+      okText: intl.formatMessage({
+        defaultMessage: 'Reject',
+        id: 'VzIOKf',
+      }),
       onOk() {
-        recycleOffender({
+        void recycleOffender({
           variables: {
             where: { id: offenderId },
           },
@@ -870,11 +896,18 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
   const beforeUpload = (file: RcFile) => {
     const isFileDuplicate = fileList.find((item) => item.name === file.name);
     if (isFileDuplicate) {
-      message.error('This image already exists, please choose another one.');
+      void message.error(
+        intl.formatMessage({
+          defaultMessage:
+            'This image already exists, please choose another one.',
+          id: 'ILB9M+',
+        })
+      );
     }
 
     return !isFileDuplicate || Upload.LIST_IGNORE;
   };
+
   const imgChange: UploadProps['onChange'] = (info) => {
     if (info.file.response && info.file.status === 'done') {
       setFileList([
@@ -1139,6 +1172,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
   };
 
   return {
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onSubmit,
     data: offenderData,
     loading,
@@ -1155,6 +1189,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
       tagsData?.tags.map((tag) => ({ value: tag.id, label: tag.name })) || [],
     tagsLoading,
     imgChange,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onPreview,
     beforeUpload,
     fileList: fileList.filter((item) => !item.deleted),

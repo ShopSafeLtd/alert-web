@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import React from 'react';
 import type { UserQuery } from 'graphql/generated';
 import { Role } from 'graphql/generated';
@@ -19,6 +20,7 @@ import type { BusinessData, SelectOptions } from 'types/DataType';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import AddBusiness from 'components/form-components/businesses/AddBusiness';
+import { useIntl } from 'react-intl';
 import type { FormData } from './useEditUser';
 
 const { Title } = Typography;
@@ -65,8 +67,9 @@ const EditUser = ({
   addBusinessVisible,
   toggleAddBusinessVisible,
   updateNewBusinessData,
-}: Props): JSX.Element =>
-  !data && loading ? (
+}: Props): JSX.Element => {
+  const intl = useIntl();
+  return !data && loading ? (
     <Skeleton />
   ) : (
     <Form<FormData>
@@ -104,17 +107,26 @@ const EditUser = ({
       onFinish={onSubmit}
     >
       <Title level={4} style={{ marginBottom: 15 }}>
-        User Detail:
+        {intl.formatMessage({
+          defaultMessage: 'User Details:',
+          id: 'vewp8R',
+        })}
       </Title>
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item
             name="fullName"
-            label="Full Name"
+            label={intl.formatMessage({
+              defaultMessage: 'Full Name',
+              id: 'TemVby',
+            })}
             rules={[
               {
                 required: true,
-                message: 'Please enter a name for the user.',
+                message: intl.formatMessage({
+                  defaultMessage: 'Please enter a name for the user',
+                  id: 'HPWnU/',
+                }),
               },
             ]}
           >
@@ -124,11 +136,18 @@ const EditUser = ({
         <Col span={12}>
           <Form.Item
             name="email"
-            label="Email Address"
+            label={intl.formatMessage({
+              defaultMessage: 'Email Address',
+              id: 'xxQxLE',
+            })}
             rules={[
               {
                 required: true,
-                message: 'Please enter a email address for the user.',
+                message: intl.formatMessage({
+                  defaultMessage:
+                    "'Please enter a email address for the user.'",
+                  id: 'uMU/SG',
+                }),
               },
             ]}
           >
@@ -143,11 +162,18 @@ const EditUser = ({
             <Col flex={1}>
               <Form.Item
                 name="businesses"
-                label="Business"
+                label={intl.formatMessage({
+                  defaultMessage: 'Business',
+                  id: 'w1Fanr',
+                })}
                 rules={[
                   {
                     required: true,
-                    message: 'Please select a business for the new user.',
+                    message: intl.formatMessage({
+                      defaultMessage:
+                        'Please select a business for the new user.',
+                      id: 'N4J5/K',
+                    }),
                   },
                 ]}
               >
@@ -157,7 +183,10 @@ const EditUser = ({
                   mode="multiple"
                   maxTagCount={3}
                   disabled={saving}
-                  placeholder="Search for a business..."
+                  placeholder={intl.formatMessage({
+                    defaultMessage: 'Search for a business...',
+                    id: 'qaJxSS',
+                  })}
                   fetchOptions={onSearchBusiness}
                   style={{ width: '100%' }}
                 />
@@ -173,7 +202,10 @@ const EditUser = ({
                   <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
                 }
               >
-                New Business
+                {intl.formatMessage({
+                  defaultMessage: 'New Business',
+                  id: 'KepKya',
+                })}
               </Button>
             </Col>
           </Row>
@@ -183,9 +215,15 @@ const EditUser = ({
         <Col span={12}>
           <Form.Item
             name="role"
-            label="Role"
+            label={intl.formatMessage({ defaultMessage: 'Role', id: '1ZgrhW' })}
             rules={[
-              { required: true, message: 'Please select a role for the user.' },
+              {
+                required: true,
+                message: intl.formatMessage({
+                  defaultMessage: 'Please select a role for the user.',
+                  id: 'vJrE3G',
+                }),
+              },
             ]}
           >
             <Select
@@ -193,32 +231,54 @@ const EditUser = ({
               onChange={(value) => setSelectedRole(value)}
             >
               <Select.Option key={Role.User} value={Role.User}>
-                <Typography.Text>User</Typography.Text>
+                <Typography.Text>
+                  {intl.formatMessage({ defaultMessage: 'User', id: 'EwRIOm' })}
+                </Typography.Text>
                 <Typography.Paragraph
                   type="secondary"
                   style={{ fontSize: 13, margin: 0 }}
                 >
-                  A basic user account that is able to submit data but <br /> no
-                  admin features.
+                  {intl.formatMessage({
+                    defaultMessage:
+                      'A basic user account that is able to submit data but no admin features.',
+                    id: 'nPbds2',
+                  })}
                 </Typography.Paragraph>
               </Select.Option>
               <Select.Option key={Role.ContentAdmin} value={Role.ContentAdmin}>
-                <Typography.Text>Content Admin</Typography.Text>
+                <Typography.Text>
+                  {intl.formatMessage({
+                    defaultMessage: 'Content Admin',
+                    id: 'juchkY',
+                  })}
+                </Typography.Text>
                 <Typography.Paragraph
                   type="secondary"
                   style={{ fontSize: 13, margin: 0, fontWeight: 400 }}
                 >
-                  An account that allows for submitting and administering <br />{' '}
-                  data but no access to settings.
+                  {intl.formatMessage({
+                    defaultMessage:
+                      'An account that allows for submitting and administering data but no access to settings.',
+                    id: 'RSZdzd',
+                  })}
                 </Typography.Paragraph>
               </Select.Option>
               <Select.Option key={Role.SchemeAdmin} value={Role.SchemeAdmin}>
-                <Typography.Text>Scheme Admin</Typography.Text>
+                <Typography.Text>
+                  {intl.formatMessage({
+                    defaultMessage: 'Scheme Admin',
+                    id: 'ZENz1B',
+                  })}
+                </Typography.Text>
                 <Typography.Paragraph
                   type="secondary"
                   style={{ fontSize: 13, margin: 0 }}
                 >
-                  Full administrator account with access to all settings.
+                  {intl.formatMessage({
+                    defaultMessage:
+                      'Full administrator account with access to all settings.',
+                    id: '9eTtQB',
+                  })}
                 </Typography.Paragraph>
               </Select.Option>
             </Select>
@@ -226,17 +286,24 @@ const EditUser = ({
         </Col>
       </Row>
       <Title level={4} style={{ marginBottom: 15 }}>
-        User Groups:
+        {intl.formatMessage({ defaultMessage: 'User Groups:', id: 'OfXLJQ' })}
       </Title>
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item
             name="groups"
-            label="Groups"
+            label={intl.formatMessage({
+              defaultMessage: 'Groups',
+              id: 'hzmswI',
+            })}
             rules={[
               {
                 required: true,
-                message: 'Please selected at least one group for the user.',
+                message: intl.formatMessage({
+                  defaultMessage:
+                    'Please selected at least one group for the user.',
+                  id: 'XXcGL4',
+                }),
               },
             ]}
           >
@@ -253,7 +320,13 @@ const EditUser = ({
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item name="chats" label="Chats Group">
+          <Form.Item
+            name="chats"
+            label={intl.formatMessage({
+              defaultMessage: 'Chats Group',
+              id: 'q5yM57',
+            })}
+          >
             <Select
               loading={chatsLoading}
               disabled={saving}
@@ -266,12 +339,19 @@ const EditUser = ({
           </Form.Item>
         </Col>
       </Row>
+
       {selectedRole === Role.SchemeAdmin &&
         selectedGroups &&
         selectedGroups.length > 0 && (
           <Row gutter={16}>
             <Col span={12}>
-              <Form.Item name="approverGroups" label="Approver Groups">
+              <Form.Item
+                name="approverGroups"
+                label={intl.formatMessage({
+                  defaultMessage: 'Approver Groups',
+                  id: 'D/FCTs',
+                })}
+              >
                 <Select
                   loading={chatsLoading}
                   disabled={saving}
@@ -288,7 +368,10 @@ const EditUser = ({
           </Row>
         )}
       <Form.Item
-        label="Show user name in the system"
+        label={intl.formatMessage({
+          defaultMessage: 'Show user name in the system',
+          id: 'YxFuTi',
+        })}
         name="publicName"
         valuePropName="checked"
         style={{
@@ -304,10 +387,17 @@ const EditUser = ({
         />
       </Form.Item>
       <Title level={4} style={{ marginBottom: 15 }}>
-        Notification Settings:
+        {intl.formatMessage({
+          defaultMessage: 'Notification Settings:',
+          id: 'op0fQr',
+        })}
       </Title>
       <Form.Item
-        label="Only notify users for their own and subscribed incidents:"
+        label={intl.formatMessage({
+          defaultMessage:
+            'Only notify users for their own and subscribed incidents:',
+          id: 'q92TAS',
+        })}
         name="subscribedIncidentOnly"
         valuePropName="checked"
         style={{
@@ -323,7 +413,10 @@ const EditUser = ({
         />
       </Form.Item>
       <Form.Item
-        label="Send app notifications for incidents:"
+        label={intl.formatMessage({
+          defaultMessage: 'Send app notifications for incidents:',
+          id: 'hwc1SW',
+        })}
         name="incidentPush"
         valuePropName="checked"
         style={{
@@ -339,7 +432,10 @@ const EditUser = ({
         />
       </Form.Item>
       <Form.Item
-        label="Send emails for incidents:"
+        label={intl.formatMessage({
+          defaultMessage: 'Send emails for incidents:',
+          id: 'P8o2fl',
+        })}
         name="incidentEmail"
         valuePropName="checked"
         style={{
@@ -356,7 +452,11 @@ const EditUser = ({
       </Form.Item>
       <Form.Item
         name="subscribedOffenderOnly"
-        label="Only notify users for their own and subscribed offenders:"
+        label={intl.formatMessage({
+          defaultMessage:
+            'Only notify users for their own and subscribed offenders:',
+          id: 'PxTS+p',
+        })}
         valuePropName="checked"
         style={{
           marginBottom: 0,
@@ -372,7 +472,10 @@ const EditUser = ({
       </Form.Item>
       <Form.Item
         name="offenderPush"
-        label="Send app notifications for offenders:"
+        label={intl.formatMessage({
+          defaultMessage: 'Send app notifications for offenders:',
+          id: 'kOXe4z',
+        })}
         valuePropName="checked"
         style={{
           marginBottom: 0,
@@ -388,7 +491,10 @@ const EditUser = ({
       </Form.Item>
       <Form.Item
         name="offenderEmail"
-        label="Send emails for offenders:"
+        label={intl.formatMessage({
+          defaultMessage: 'Send emails for offenders:',
+          id: 'jhu5sz',
+        })}
         valuePropName="checked"
         style={{
           marginBottom: 0,
@@ -404,7 +510,10 @@ const EditUser = ({
       </Form.Item>
       <Form.Item
         name="messagePush"
-        label="Send app notifications for new chat messages:"
+        label={intl.formatMessage({
+          defaultMessage: 'Send app notifications for new chat messages:',
+          id: 'S4ojdm',
+        })}
         valuePropName="checked"
         style={{
           marginBottom: 0,
@@ -423,7 +532,7 @@ const EditUser = ({
         <Row style={{ marginTop: 30 }} gutter={16} justify="end">
           <Col>
             <Button disabled={saving} onClick={onClose}>
-              Cancel
+              {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
             </Button>
           </Col>
           <Col>
@@ -433,7 +542,7 @@ const EditUser = ({
               type="primary"
               htmlType="submit"
             >
-              Save
+              {intl.formatMessage({ defaultMessage: 'Save', id: 'jvo0vs' })}
             </Button>
           </Col>
         </Row>
@@ -441,7 +550,10 @@ const EditUser = ({
       <Drawer
         open={addBusinessVisible}
         onClose={toggleAddBusinessVisible}
-        title="Add New Business"
+        title={intl.formatMessage({
+          defaultMessage: 'Add New Business',
+          id: 'p47asT',
+        })}
         width={600}
       >
         {addBusinessVisible && (
@@ -454,5 +566,6 @@ const EditUser = ({
       </Drawer>
     </Form>
   );
+};
 
 export default EditUser;

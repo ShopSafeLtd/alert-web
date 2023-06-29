@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Card, Table } from 'antd';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router';
+import { FormattedMessage } from 'react-intl';
 import {
   Role,
   useCurrentSchemeTermsQuery,
@@ -33,7 +34,10 @@ const Terms = (): JSX.Element => {
             type="primary"
             onClick={() => navigate(`/app/scheme-settings/terms/scheme/create`)}
           >
-            Create Terms and Conditions
+            <FormattedMessage
+              defaultMessage="Create Terms and Conditions"
+              id="5OwJwf"
+            />
           </Button>
         )}
       <Card>

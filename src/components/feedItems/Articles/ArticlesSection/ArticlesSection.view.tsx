@@ -19,6 +19,7 @@ import type {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { DateType } from 'types/DataType';
 import { faFilter } from '@fortawesome/pro-light-svg-icons';
+import { useIntl } from 'react-intl';
 import useStyles from './ArticlesSection.styles';
 import ArticleSkeletonCard from '../../../Articles/ArticleSkeletonCard';
 import ArticleCard from '../ArticleCard';
@@ -78,6 +79,7 @@ const ArticlesSection = ({
   adminRights,
 }: Props): JSX.Element => {
   const classes = useStyles();
+  const intl = useIntl();
 
   return (
     <Card
@@ -101,13 +103,19 @@ const ArticlesSection = ({
       >
         <Col>
           <Title className={classes.title} level={4}>
-            Recent Bulletins
+            {intl.formatMessage({
+              defaultMessage: 'Recent Bulletins',
+              id: 'H40AZz',
+            })}
           </Title>
         </Col>
         <Col flex={1}>
           <Input
             size="small"
-            placeholder="Search for Bulletins..."
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Search for Bulletins...',
+              id: '6PU5qG',
+            })}
             // value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -155,8 +163,14 @@ const ArticlesSection = ({
             <Empty
               description={
                 search === ''
-                  ? 'No Bulletins'
-                  : 'No bulletins match your search criteria'
+                  ? intl.formatMessage({
+                      defaultMessage: 'No Bulletins',
+                      id: '7Pv3BL',
+                    })
+                  : intl.formatMessage({
+                      defaultMessage: 'No bulletins match your search criteria',
+                      id: 'pZaTHe',
+                    })
               }
             />
           </div>
@@ -171,13 +185,21 @@ const ArticlesSection = ({
             pageSize={currentPageSize}
             current={currentPage}
             onChange={onPaginationChange}
-            showTotal={(total) => `Total Bulletins: ${total}`}
+            showTotal={(total) =>
+              intl.formatMessage(
+                { defaultMessage: `Total Bulletins: {total}`, id: '8LkFAr' },
+                { total }
+              )
+            }
             hideOnSinglePage
           />
         </Col>
       </Row>
       <Drawer
-        title="Bulletin Filters"
+        title={intl.formatMessage({
+          defaultMessage: 'Bulletin Filters',
+          id: 'o9w9ud',
+        })}
         visible={sortFilter}
         onClose={toggleSortFilter}
         width={500}

@@ -86,7 +86,7 @@ const useAddChat = ({ onClose, update }: Props): Return => {
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
-    createChat({
+    void createChat({
       variables: {
         data: {
           name: data.name,

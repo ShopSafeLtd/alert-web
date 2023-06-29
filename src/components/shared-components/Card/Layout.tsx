@@ -2,25 +2,19 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/button-has-type */
 import React, { useEffect, useRef, useState } from 'react';
+import type { DropDownProps } from 'antd';
+import { Button, Carousel, Col, Row, Tabs, Typography } from 'antd';
 import {
-  DropDownProps,
-  Typography,
-  Button,
-  Row,
-  Col,
-  Tabs,
-  Carousel,
-} from 'antd';
-import {
-  IoImagesOutline,
   IoChevronBack,
   IoChevronForward,
+  IoImagesOutline,
 } from 'react-icons/io5';
 
-import { useStoreState, useStoreActions } from 'state';
-import { CarouselRef } from 'antd/lib/carousel';
-import CardMenu from './Menu';
+import { useStoreActions, useStoreState } from 'state';
+import type { CarouselRef } from 'antd/lib/carousel';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import { useIntl } from 'react-intl';
+import CardMenu from './Menu';
 
 const { TabPane } = Tabs;
 
@@ -65,6 +59,7 @@ const Layout: React.FC<Props> = ({
   approval,
   additionalItems,
 }: Props) => {
+  const intl = useIntl();
   const [imageIndex, setImageIndex] = useState<number>(0);
   const [overlay, setOverlay] = useState<boolean>(!approval.approved);
   const userRole = useStoreState((state) => state.user.role);
@@ -80,8 +75,8 @@ const Layout: React.FC<Props> = ({
   );
   const lightBoxImages = images.map((img) => img.optimised || img.url);
 
-  const showPrev = images.length && imageIndex !== 0;
-  const showNext = images.length && imageIndex < images.length - 1;
+  const showPrev = images.length > 0 && imageIndex !== 0;
+  const showNext = images.length > 0 && imageIndex < images.length - 1;
   const nextImage = () => carouselRef.current?.next();
   const prevImage = () => carouselRef.current?.prev();
   const onImageIndexChange = (index: number) => setImageIndex(index);
@@ -93,20 +88,39 @@ const Layout: React.FC<Props> = ({
       {overlay && (
         <div className="unapproved-overlay">
           {admin && (
-            <Button
-              type="primary"
-              onClick={toggleOverlay}
-            >{`View & Approve ${type}`}</Button>
+            <Button type="primary" onClick={toggleOverlay}>
+              {intl.formatMessage(
+                {
+                  defaultMessage: `View & Approve {type}`,
+                  id: 'wy4d6A',
+                },
+                {
+                  type: type.toLowerCase(),
+                }
+              )}
+            </Button>
           )}
           {!admin && (
             <Row align="middle" justify="center">
               <Col span={16}>
                 <Row align="middle" justify="center" gutter={[0, 8]}>
                   <Typography.Title level={3}>
-                    Awaiting Approval...
+                    {intl.formatMessage({
+                      defaultMessage: 'Awaiting Approval...',
+                      id: 'YLoz+Y',
+                    })}
                   </Typography.Title>
                   <Typography.Text>
-                    Your administrator has not yet approved this {type}
+                    {intl.formatMessage(
+                      {
+                        defaultMessage:
+                          'Your administrator has not yet approved this {type}',
+                        id: 'tYju2G',
+                      },
+                      {
+                        type: type.toLowerCase(),
+                      }
+                    )}
                   </Typography.Text>
                 </Row>
               </Col>
@@ -117,13 +131,22 @@ const Layout: React.FC<Props> = ({
       {!approval.approved && !overlay && (
         <div className="unapproved-options">
           <button className="option approve" onClick={approval.approve}>
-            APPROVE
+            {intl.formatMessage({
+              defaultMessage: 'APPROVE',
+              id: 'CrPB/+',
+            })}
           </button>
           <button className="option decline" onClick={approval.decline}>
-            DECLINE
+            {intl.formatMessage({
+              defaultMessage: 'DECLINE',
+              id: '39UGGJ',
+            })}
           </button>
           <button className="option cancel" onClick={toggleOverlay}>
-            CANCEL
+            {intl.formatMessage({
+              defaultMessage: 'CANCEL',
+              id: 'X5wtUo',
+            })}
           </button>
         </div>
       )}
@@ -131,7 +154,7 @@ const Layout: React.FC<Props> = ({
       {additionalItems}
       {admin && <CardMenu options={menu} />}
 
-      {images.length ? (
+      {images.length > 0 ? (
         <div className="image-carousel">
           <Carousel
             afterChange={onImageIndexChange}
@@ -139,6 +162,7 @@ const Layout: React.FC<Props> = ({
             dots={false}
           >
             {images.map((image) => (
+              // eslint-disable-next-line jsx-a11y/no-static-element-interactions
               <div
                 key={image.id}
                 onClick={() =>
@@ -166,7 +190,12 @@ const Layout: React.FC<Props> = ({
       ) : (
         <div className="no-image">
           <IoImagesOutline color="#959595" size="36px" />
-          <Typography.Text>No Images</Typography.Text>
+          <Typography.Text>
+            {intl.formatMessage({
+              defaultMessage: 'No Images',
+              id: 'SxFGH/',
+            })}
+          </Typography.Text>
         </div>
       )}
 

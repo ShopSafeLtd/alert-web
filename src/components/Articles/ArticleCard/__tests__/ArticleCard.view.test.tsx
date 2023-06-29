@@ -10,8 +10,8 @@ describe('Detail Officer View', () => {
     subject: 'test subject ',
     location: null,
     approved: null,
-    date: '2022-08-10T10:40:06.191Z',
-    time: '2022-08-11T10:40:09.985Z',
+    date: new Date('2022-07-25T08:57:55.299Z'),
+    time: new Date('2022-07-25T08:57:55.299Z'),
     dayTime: '11:40 - Wed 10, Aug 22',
     description: 'test description',
     createdBy: {
@@ -32,7 +32,7 @@ describe('Detail Officer View', () => {
     offenders: [],
     priority: ArticlePriority.High,
     title: '',
-    updatedAt: '2022-08-11T10:40:09.985Z',
+    updatedAt: new Date('2022-07-25T08:57:55.299Z'),
     tags: [],
   };
   it('renders the page', () => {

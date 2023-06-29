@@ -1,26 +1,15 @@
 import React from 'react';
-import {
-  Button,
-  Card,
-  // Checkbox,
-  Col,
-  Empty,
-  Input,
-  Row,
-  Skeleton,
-  Table,
-} from 'antd';
+import { Button, Card, Col, Empty, Input, Row, Skeleton, Table } from 'antd';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faSquareCheck,
-  faRotate,
   faBellOn,
   faBellSlash,
+  faRotate,
+  faSquareCheck,
 } from '@fortawesome/pro-light-svg-icons';
 import type { UserNotificationsQuery } from 'graphql/generated';
-// import { calcDuration } from 'utils';
-
+import { useIntl } from 'react-intl';
 import useStyles from './NotificationList.styles';
 import type { NotificationData } from './useNotificationList';
 
@@ -55,15 +44,17 @@ const NotificationLists = ({
   handleMarkAllRead,
 }: Props): JSX.Element => {
   const classes = useStyles();
-
+  const intl = useIntl();
   return (
     <div className="list-view">
       <Row gutter={8} className={classes.head}>
         <Col span={8}>
           <Input
-            // value={search}
             onChange={(event) => setSearch(event.target.value)}
-            placeholder="Search for a notification..."
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Search for a notification...',
+              id: '38B8Z+',
+            })}
             allowClear
           />
         </Col>
@@ -73,15 +64,11 @@ const NotificationLists = ({
             type={takeAllSchemes ? 'default' : 'primary'}
             onClick={toggleTakeAllSchemes}
             disabled={saving}
-            // icon={
-            //   <FontAwesomeIcon
-            //     icon={faPlus}
-            //     size="lg"
-            //     style={{ marginRight: 5 }}
-            //   />
-            // }
           >
-            Current Scheme
+            {intl.formatMessage({
+              defaultMessage: 'Current Scheme',
+              id: 'qWFImB',
+            })}
           </Button>
         </Col>
         <Col>
@@ -89,13 +76,7 @@ const NotificationLists = ({
             type="text"
             onClick={toggleTakeAllSchemes}
             disabled={saving}
-            icon={
-              <FontAwesomeIcon
-                icon={faRotate}
-                size="10x"
-                // style={{ marginTop: 5 }}
-              />
-            }
+            icon={<FontAwesomeIcon icon={faRotate} size="10x" />}
           />
         </Col>
         <Col>
@@ -103,15 +84,11 @@ const NotificationLists = ({
             type={takeAllSchemes ? 'primary' : 'default'}
             onClick={toggleTakeAllSchemes}
             disabled={saving}
-            // icon={
-            //   <FontAwesomeIcon
-            //     icon={faPlus}
-            //     size="lg"
-            //     style={{ marginRight: 5 }}
-            //   />
-            // }
           >
-            All Schemes
+            {intl.formatMessage({
+              defaultMessage: 'All Schemes',
+              id: '4zN3gE',
+            })}
           </Button>
         </Col>
         <Col>
@@ -128,7 +105,10 @@ const NotificationLists = ({
               />
             }
           >
-            View ALL
+            {intl.formatMessage({
+              defaultMessage: 'View ALL',
+              id: 'OIe97A',
+            })}
           </Button>
         </Col>
       </Row>
@@ -147,10 +127,6 @@ const NotificationLists = ({
               createdAt: el.createdAt,
               read: el.read,
               notification: el.notification,
-              // expireDay: calcDuration(
-              //   new Date(el.createdAt),
-              //   new Date(new Date().setDate(el.createdAt.getDate() - 30))
-              // ),
             }))}
             loading={loading}
             style={{ cursor: 'pointer' }}
@@ -169,7 +145,10 @@ const NotificationLists = ({
             })}
             columns={[
               {
-                title: 'Read',
+                title: intl.formatMessage({
+                  defaultMessage: 'Read',
+                  id: 'filwqD',
+                }),
                 dataIndex: 'actions',
                 key: 'actions',
                 width: 80,
@@ -184,28 +163,31 @@ const NotificationLists = ({
               {
                 key: 'title',
                 dataIndex: 'title',
-                title: 'Title',
+                title: intl.formatMessage({
+                  defaultMessage: 'Title',
+                  id: '9a9+ww',
+                }),
               },
               {
                 key: 'body',
                 dataIndex: 'body',
-                title: 'Description',
+                title: intl.formatMessage({
+                  defaultMessage: 'Description',
+                  id: 'Q8Qw5B',
+                }),
                 ellipsis: true,
               },
-
               {
                 key: 'createdAt',
                 dataIndex: 'createdAt',
-                title: 'Created At',
+                title: intl.formatMessage({
+                  defaultMessage: 'Created At',
+                  id: 'wittYy',
+                }),
                 width: 120,
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                 render: (value) => moment(value).calendar('dd/mm/yyyy'),
               },
-              // {
-              //   key: 'expireDay',
-              //   dataIndex: 'expireDay',
-              //   title: 'Expire In',
-              //   width: 120,
-              // },
             ]}
           />
         ) : (
@@ -219,7 +201,10 @@ const NotificationLists = ({
           >
             <Empty
               image={Empty.PRESENTED_IMAGE_SIMPLE}
-              description="There's no new notification"
+              description={intl.formatMessage({
+                defaultMessage: "There's no new notification",
+                id: '7cQ0NO',
+              })}
             />
           </div>
         )}

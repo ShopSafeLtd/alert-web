@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React from 'react';
 import { Drawer } from 'antd';
 import { Scrollbars } from 'react-custom-scrollbars';

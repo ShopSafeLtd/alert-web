@@ -1,22 +1,23 @@
+/* eslint-disable formatjs/no-literal-string-in-jsx */
 import React from 'react';
 import CSVReader from 'react-csv-reader';
 import type { FormInstance, UploadFile, UploadProps } from 'antd';
 import {
-  Select,
-  Drawer,
   Badge,
   Button,
   Card,
   Col,
   DatePicker,
+  Drawer,
   Form,
+  Input,
   Row,
+  Select,
+  Space,
+  Steps,
   Table,
   Typography,
   Upload,
-  Input,
-  Space,
-  Steps,
 } from 'antd';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -24,18 +25,18 @@ import { faUpload } from '@fortawesome/pro-light-svg-icons';
 import type { SchemeGroupsQuery, TagsQuery } from 'graphql/generated';
 import { TagType } from 'graphql/generated';
 import type {
+  CSVData,
+  GenerateData,
+  IDSought,
+  Image,
+  Incident,
+  IncidentTags,
   KnownSubject,
   Member,
-  CSVData,
-  IDSought,
-  Incident,
   NewBusiness,
-  NewOffender,
-  Image,
-  NewUser,
   NewIncident,
-  GenerateData,
-  IncidentTags,
+  NewOffender,
+  NewUser,
 } from './DiscImport.types';
 import NewUsersTable from './components/NewUsersTable';
 import NewOffenderTable from './components/NewOffenderTable';
@@ -292,16 +293,45 @@ const DiscImport = ({
         <Form
           form={mappingForm}
           onFinish={onGenerateData}
-          initialValues={{ excludeDate: moment().add(-1, 'year') }}
+          initialValues={{
+            excludeIncidentDate: moment().add(-1, 'year'),
+            excludeUserDate: moment().add(-3, 'month'),
+          }}
         >
           <Row gutter={8}>
             <Col>
               <Form.Item
-                name="excludeDate"
-                label="Exclude data older than:"
+                name="excludeIncidentDate"
+                label="Exclude data older than"
                 required
               >
                 <DatePicker format="DD/MM/YYYY" />
+              </Form.Item>
+            </Col>
+            <Col>
+              <Form.Item
+                name="excludeUserDate"
+                label="Exclude users that haven't logged in since"
+                required
+              >
+                <DatePicker format="DD/MM/YYYY" />
+              </Form.Item>
+            </Col>
+            <Col>
+              <Form.Item name="townCity" label="Town City Override" required>
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col>
+              <Form.Item name="fallbackGroup" label="Fallback Group" required>
+                <Select
+                  mode="multiple"
+                  style={{ width: 200 }}
+                  options={groupsData?.groups.map((group) => ({
+                    value: group.id,
+                    label: group.name,
+                  }))}
+                />
               </Form.Item>
             </Col>
           </Row>
@@ -1083,7 +1113,6 @@ const DiscImport = ({
                           // eslint-disable-next-line react/jsx-props-no-spreading
                           {...restField}
                           name={[name, 'group']}
-                          rules={[{ required: true, message: 'Missing group' }]}
                         >
                           <Select
                             mode="multiple"
@@ -1143,7 +1172,6 @@ const DiscImport = ({
                           // eslint-disable-next-line react/jsx-props-no-spreading
                           {...restField}
                           name={[name, 'group']}
-                          rules={[{ required: true, message: 'Missing group' }]}
                         >
                           <Select
                             mode="multiple"
@@ -1227,7 +1255,7 @@ const DiscImport = ({
     )}
 
     <Row gutter={8} style={{ marginTop: 20 }} justify="end">
-      {[2, 3, 4].includes(currentStep) && (
+      {[2, 3, 4, 5].includes(currentStep) && (
         <Col>
           <Button onClick={() => onStepChange(currentStep - 1)}>Back</Button>
         </Col>

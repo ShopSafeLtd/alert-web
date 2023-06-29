@@ -11,6 +11,7 @@ import {
   Typography,
 } from 'antd';
 import DebounceSelect from 'components/form-components/DebounceSelect';
+import { useIntl } from 'react-intl';
 
 interface FormData {
   name: string;
@@ -44,118 +45,171 @@ const EditBusiness = ({
   saving,
   form,
   loading,
-}: Props) => (
-  <Form<FormData> layout="vertical" onFinish={onSubmit} form={form}>
-    <Form.Item name="name" label="Business Name" rules={[{ required: true }]}>
-      {loading ? <Skeleton.Input /> : <Input disabled={saving} />}
-    </Form.Item>
+}: Props) => {
+  const intl = useIntl();
 
-    <Form.Item
-      label="Show business name in the system"
-      name="publicName"
-      valuePropName="checked"
-      style={{
-        marginBottom: 0,
-        flexDirection: 'row',
-        justifyItems: 'center',
-      }}
-    >
-      <Switch
-        disabled={saving}
-        style={{ marginLeft: 10, marginTop: -22 }}
-        className="scheme-detail-switch"
-      />
-    </Form.Item>
-    <Form.Item name="parent" label="Parent Business">
-      {loading ? (
-        <Skeleton.Input />
-      ) : (
-        <DebounceSelect
-          showSearch
-          allowClear
+  return (
+    <Form<FormData> layout="vertical" onFinish={onSubmit} form={form}>
+      <Form.Item
+        name="name"
+        label={intl.formatMessage({
+          defaultMessage: 'Business Name',
+          id: 'pGwRxT',
+        })}
+        rules={[{ required: true }]}
+      >
+        {loading ? <Skeleton.Input /> : <Input disabled={saving} />}
+      </Form.Item>
+
+      <Form.Item
+        label={intl.formatMessage({
+          defaultMessage: 'Show business name in the system',
+          id: 'yuNoZz',
+        })}
+        name="publicName"
+        valuePropName="checked"
+        style={{
+          marginBottom: 0,
+          flexDirection: 'row',
+          justifyItems: 'center',
+        }}
+      >
+        <Switch
           disabled={saving}
-          placeholder="Search for a business..."
-          fetchOptions={onSearchBusiness}
-          style={{ width: 400 }}
+          style={{ marginLeft: 10, marginTop: -22 }}
+          className="scheme-detail-switch"
         />
-      )}
-    </Form.Item>
-    <Typography.Text style={{ fontSize: 16, fontWeight: 500 }}>
-      Location
-    </Typography.Text>
-    <Row style={{ marginTop: 10 }} gutter={16}>
-      <Col>
-        <Form.Item name="building" label="Building">
-          {loading ? (
-            <Skeleton.Input />
-          ) : (
-            <Input style={{ width: 200 }} disabled={saving} />
-          )}
-        </Form.Item>
-      </Col>
-      <Col>
-        <Form.Item name="street" label="Street" rules={[{ required: true }]}>
-          {loading ? (
-            <Skeleton.Input />
-          ) : (
-            <Input style={{ width: 200 }} disabled={saving} />
-          )}
-        </Form.Item>
-      </Col>
-    </Row>
-    <Row gutter={16}>
-      <Col>
-        <Form.Item
-          name="townCity"
-          label="Town/City"
-          rules={[{ required: true }]}
-        >
-          {loading ? (
-            <Skeleton.Input />
-          ) : (
-            <Input style={{ width: 200 }} disabled={saving} />
-          )}
-        </Form.Item>
-      </Col>
-      <Col>
-        <Form.Item name="county" label="County">
-          {loading ? (
-            <Skeleton.Input />
-          ) : (
-            <Input style={{ width: 200 }} disabled={saving} />
-          )}
-        </Form.Item>
-      </Col>
-    </Row>
-    <Row>
-      <Col>
-        <Form.Item
-          name="postcode"
-          label="Postcode"
-          rules={[{ required: true }]}
-        >
-          {loading ? <Skeleton.Input /> : <Input disabled={saving} />}
-        </Form.Item>
-      </Col>
-    </Row>
-    <Form.Item>
-      <Row gutter={16} justify="end">
+      </Form.Item>
+      <Form.Item
+        name="parent"
+        label={intl.formatMessage({
+          defaultMessage: 'Parent Business',
+          id: 'Av/UtY',
+        })}
+      >
+        {loading ? (
+          <Skeleton.Input />
+        ) : (
+          <DebounceSelect
+            showSearch
+            allowClear
+            disabled={saving}
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Search for a business...',
+              id: 'qaJxSS',
+            })}
+            fetchOptions={onSearchBusiness}
+            style={{ width: 400 }}
+          />
+        )}
+      </Form.Item>
+      <Typography.Text style={{ fontSize: 16, fontWeight: 500 }}>
+        {intl.formatMessage({ defaultMessage: 'Location', id: 'rvirM2' })}
+      </Typography.Text>
+      <Row style={{ marginTop: 10 }} gutter={16}>
         <Col>
-          <Button onClick={onClose}>Cancel</Button>
+          <Form.Item
+            name="building"
+            label={intl.formatMessage({
+              defaultMessage: 'Building',
+              id: 'oS/nae',
+            })}
+          >
+            {loading ? (
+              <Skeleton.Input />
+            ) : (
+              <Input style={{ width: 200 }} disabled={saving} />
+            )}
+          </Form.Item>
         </Col>
         <Col>
-          <Button
-            loading={saving}
-            disabled={saving}
-            type="primary"
-            htmlType="submit"
+          <Form.Item
+            name="street"
+            label={intl.formatMessage({
+              defaultMessage: 'Street',
+              id: 'BaIwdV',
+            })}
+            rules={[{ required: true }]}
           >
-            Save Business
-          </Button>
+            {loading ? (
+              <Skeleton.Input />
+            ) : (
+              <Input style={{ width: 200 }} disabled={saving} />
+            )}
+          </Form.Item>
         </Col>
       </Row>
-    </Form.Item>
-  </Form>
-);
+      <Row gutter={16}>
+        <Col>
+          <Form.Item
+            name="townCity"
+            label={intl.formatMessage({
+              defaultMessage: 'Town/City',
+              id: 'byaTQZ',
+            })}
+            rules={[{ required: true }]}
+          >
+            {loading ? (
+              <Skeleton.Input />
+            ) : (
+              <Input style={{ width: 200 }} disabled={saving} />
+            )}
+          </Form.Item>
+        </Col>
+        <Col>
+          <Form.Item
+            name="county"
+            label={intl.formatMessage({
+              defaultMessage: 'County',
+              id: 'B+KJhc',
+            })}
+          >
+            {loading ? (
+              <Skeleton.Input />
+            ) : (
+              <Input style={{ width: 200 }} disabled={saving} />
+            )}
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <Form.Item
+            name="postcode"
+            label={intl.formatMessage({
+              defaultMessage: 'Postcode',
+              id: 'FJhjgz',
+            })}
+            rules={[{ required: true }]}
+          >
+            {loading ? <Skeleton.Input /> : <Input disabled={saving} />}
+          </Form.Item>
+        </Col>
+      </Row>
+      <Form.Item>
+        <Row gutter={16} justify="end">
+          <Col>
+            <Button onClick={onClose}>
+              {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+            </Button>
+          </Col>
+          <Col>
+            <Button
+              loading={saving}
+              disabled={saving}
+              type="primary"
+              htmlType="submit"
+            >
+              {intl.formatMessage({
+                defaultMessage: 'Save Business',
+                id: 'Dk/kmv',
+              })}
+            </Button>
+          </Col>
+        </Row>
+      </Form.Item>
+    </Form>
+  );
+};
 
 export default EditBusiness;

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Dropdown, DropDownProps } from 'antd';
+import type { DropDownProps } from 'antd';
+import { Dropdown } from 'antd';
 
 interface Props {
   options: DropDownProps['overlay'];

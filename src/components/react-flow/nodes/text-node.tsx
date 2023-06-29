@@ -1,13 +1,15 @@
+/* eslint-disable react/no-unused-prop-types */
 import React, { memo, useCallback } from 'react';
 import { Handle, NodeToolbar, Position, useStore } from 'reactflow';
 import { NodeResizer } from '@reactflow/node-resizer';
 import '@reactflow/node-resizer/dist/style.css';
-import useStyles from './style.module';
 import { Button, Drawer } from 'antd';
-import { useDrawerState } from '../../../hooks';
 import { useParams } from 'react-router-dom';
-import useFlow from '../../../views/investigations/ViewInvestigation/views/Flow/hooks/useFlow';
 import { useStoreState } from 'state';
+import { useIntl } from 'react-intl';
+import useStyles from './style.module';
+import { useDrawerState } from '../../../hooks';
+import useFlow from '../../../views/investigations/ViewInvestigation/views/Flow/hooks/useFlow';
 import EditTextContainer from '../form/editText/EditText.container';
 
 interface Props {
@@ -50,9 +52,10 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
     // @ts-ignore
     nodesMap.set(id, {
       ...currentNode,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       data: {
         ...currentNode.data,
-        html: html,
+        html,
         isEditing: { user: '', editing: false },
       },
     });
@@ -66,6 +69,7 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
     if (!editing) {
       nodesMap.set(id, {
         ...currentNode,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         data: { ...currentNode.data, isEditing: { user: '', editing: false } },
       });
       return;
@@ -74,10 +78,11 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
     // @ts-ignore
     nodesMap.set(id, {
       ...currentNode,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       data: { ...currentNode.data, isEditing: { user: fullName, editing } },
     });
   }, []);
-
+  const intl = useIntl();
   return (
     <>
       <NodeToolbar isVisible={selected} position={Position.Top}>
@@ -90,7 +95,10 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
             });
           }}
         >
-          edit text
+          {intl.formatMessage({
+            defaultMessage: 'edit text',
+            id: '7sFfvN',
+          })}
         </Button>
       </NodeToolbar>
       <div className={classes.node}>
@@ -105,7 +113,15 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
           {/* add a div that says x is editing this component */}
           {data?.isEditing?.editing && (
             <div className={classes.editing}>
-              {data.isEditing.user} is editing this component
+              {intl.formatMessage(
+                {
+                  defaultMessage: '{isEditing} is editing this component',
+                  id: 'fYh1cJ',
+                },
+                {
+                  isEditing: data.isEditing.user,
+                }
+              )}
             </div>
           )}
 

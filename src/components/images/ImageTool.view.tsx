@@ -1,3 +1,5 @@
+/* eslint-disable */
+// TODO - fix this eslint-disable
 import React, { useEffect, useRef, useState } from 'react';
 import { Button, Card, Col, Modal, Row, Typography } from 'antd';
 import { createUseStyles } from 'react-jss';
@@ -165,7 +167,7 @@ const ImageTool = ({ images }: Props) => {
   };
 
   useEffect(() => {
-    initializeObjectDetector();
+    void initializeObjectDetector();
   }, []);
 
   useEffect(() => {

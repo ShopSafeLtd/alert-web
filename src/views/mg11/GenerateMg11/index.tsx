@@ -1,3 +1,4 @@
+/* eslint-disable formatjs/no-literal-string-in-jsx */
 import React from 'react';
 import './styles.css';
 import processText from '../../../utils/generate-text';
@@ -43,6 +44,7 @@ interface Mg11Data {
 
 const generateMg11 = () => {
   const rawdata = localStorage.getItem('data') || '{}';
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const data: Partial<Mg11Data> = JSON.parse(rawdata);
 
   const { text1, text2, noPages } = processText(data.statement || '');

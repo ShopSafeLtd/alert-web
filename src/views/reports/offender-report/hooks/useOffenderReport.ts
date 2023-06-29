@@ -139,7 +139,7 @@ const useOffenderReport = (): Return => {
     data?.targetedGoods?.targetedGoods
       ?.filter((good) => good.totalIncidents > 0)
       .map((good, i) => ({
-        key: good.name + i,
+        key: good.name + i.toString(),
         fullName: good.name,
         incidentsCreated: good.totalIncidents,
         offendersCreated: good.totalOffenders,
@@ -154,7 +154,7 @@ const useOffenderReport = (): Return => {
       ?.filter((business) => business.totalIncidents > 0)
 
       .map((business, i) => ({
-        key: business.name + i,
+        key: business.name + i.toString(),
         fullName: business.name,
         incidentsCreated: business.totalIncidents,
         offendersCreated: business.totalOffenders,

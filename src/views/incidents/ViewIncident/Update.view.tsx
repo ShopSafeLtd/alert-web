@@ -1,6 +1,6 @@
 /* eslint-disable react/require-default-props */
 import React from 'react';
-import { Row, Col, Typography } from 'antd';
+import { Col, Row, Typography } from 'antd';
 import { EyeOutlined } from '@ant-design/icons';
 import type { Moment } from 'moment';
 import moment from 'moment';
@@ -18,6 +18,7 @@ import type {
   OffenderCardData,
   VehicleData,
 } from 'types/DataType';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 const { Text } = Typography;
 
@@ -119,7 +120,8 @@ const CollageImage = ({ index, length, src }: CollageImageProps) => (
   >
     <WatermarkImage url={src} />
     <div className="chat-collage-image-overlay">
-      <EyeOutlined style={{ marginRight: 5 }} /> Preview
+      <EyeOutlined style={{ marginRight: 5 }} />
+      <FormattedMessage defaultMessage="Preview" id="TJo5E6" />
     </div>
     <div>
       <WatermarkImage url={src} />
@@ -138,7 +140,7 @@ const getContent = (content: string) =>
     if (item.includes('@[')) {
       return (
         <Text strong key={item}>
-          {item.replace('@[', '').replace(/(]\(.*?\))/, '')}{' '}
+          {item.replace('@[', '').replace(/(]\(.*?\))/, '')}
         </Text>
       );
     }
@@ -158,110 +160,120 @@ const UpdateContent = ({
   showUser,
   showDate,
   createdAt,
-}: Props): JSX.Element => (
-  <Row
-    gutter={8}
-    style={{
-      marginTop: showDate ? 10 : 0,
-    }}
-    className="update-container"
-  >
-    <Col>
-      <div
-        className={
-          showUser
-            ? 'update-content-card currentUser-card'
-            : 'update-content-card'
-        }
-      >
-        {showDate && (
-          <Row
-            style={{
-              marginTop: 8,
-              marginLeft: 15,
-              marginRight: 10,
-              marginBottom: 0,
-            }}
-          >
-            <Col
+}: Props): JSX.Element => {
+  const intl = useIntl();
+  return (
+    <Row
+      gutter={8}
+      style={{
+        marginTop: showDate ? 10 : 0,
+      }}
+      className="update-container"
+    >
+      <Col>
+        <div
+          className={
+            showUser
+              ? 'update-content-card currentUser-card'
+              : 'update-content-card'
+          }
+        >
+          {showDate && (
+            <Row
               style={{
-                marginRight: 20,
+                marginTop: 8,
+                marginLeft: 15,
+                marginRight: 10,
+                marginBottom: 0,
               }}
-              flex={1}
             >
-              <Text ellipsis style={{ fontSize: 13 }} strong>
-                {userId === from?.id
-                  ? 'You'
-                  : `${from?.origName}${
-                      from?.businesses && from?.businesses[0]?.fullName
-                        ? `(${from?.businesses[0].fullName})`
-                        : ''
-                    }`}
-              </Text>
-            </Col>
-            <Col>
-              <Text style={{ fontSize: 13 }} type="secondary">
-                {getMessageDate(moment(createdAt))}
-              </Text>
-            </Col>
-          </Row>
-        )}
-        {images && images.length > 0 && (
-          <Row style={{ margin: 5 }}>
-            {images.length === 1 ? (
-              images.map((image) => (
-                <Col key={image.id}>
-                  <div style={{ width: 240, height: 240 }}>
-                    <WatermarkImage url={image.optimised} />
-                  </div>
-                </Col>
-              ))
-            ) : (
-              <Row style={{ backgroundColor: '#FFF', width: 500 }}>
-                {images.map((image, index) => (
-                  <Col key={image.id} span={getImageSpan(images.length, index)}>
-                    <CollageImage
-                      index={index}
-                      length={images.length}
-                      src={image.optimised}
-                    />
-                  </Col>
-                ))}
-              </Row>
-            )}
-          </Row>
-        )}
-        {offenders &&
-          offenders.length > 0 &&
-          offenders.map((offender) => (
-            <OffenderMessageCard key={offender.id} offender={offender} />
-          ))}
-        {incidents &&
-          incidents.length > 0 &&
-          incidents.map((incident) => (
-            <IncidentMessageCard key={incident.id} incident={incident} />
-          ))}
-        {vehicles &&
-          vehicles.length > 0 &&
-          vehicles.map((vehicle) => (
-            <VehicleMessageCard key={vehicle.id} vehicle={vehicle} />
-          ))}
-
-        {crimeGroups && crimeGroups.length > 0 && (
-          <CrimeGroupMessageList crimeGroups={crimeGroups} isIntel />
-        )}
-        {content && (
-          <Row key={id}>
-            <div className="update-content-bubble">
-              <Col>
-                <Text>{getContent(content)}</Text>
+              <Col
+                style={{
+                  marginRight: 20,
+                }}
+                flex={1}
+              >
+                <Text ellipsis style={{ fontSize: 13 }} strong>
+                  {userId === from?.id
+                    ? intl.formatMessage({
+                        defaultMessage: 'You',
+                        id: 'kJ5W29',
+                      })
+                    : // eslint-disable-next-line @typescript-eslint/restrict-template-expressions,formatjs/no-literal-string-in-jsx
+                      `${from?.origName}${
+                        from?.businesses && from?.businesses[0]?.fullName
+                          ? `(${from?.businesses[0].fullName})`
+                          : ''
+                      }`}
+                </Text>
               </Col>
-            </div>
-          </Row>
-        )}
-      </div>
-    </Col>
-  </Row>
-);
+              <Col>
+                <Text style={{ fontSize: 13 }} type="secondary">
+                  {getMessageDate(moment(createdAt))}
+                </Text>
+              </Col>
+            </Row>
+          )}
+          {images && images.length > 0 && (
+            <Row style={{ margin: 5 }}>
+              {images.length === 1 ? (
+                images.map((image) => (
+                  <Col key={image.id}>
+                    <div style={{ width: 240, height: 240 }}>
+                      <WatermarkImage url={image.optimised} />
+                    </div>
+                  </Col>
+                ))
+              ) : (
+                <Row style={{ backgroundColor: '#FFF', width: 500 }}>
+                  {images.map((image, index) => (
+                    <Col
+                      key={image.id}
+                      span={getImageSpan(images.length, index)}
+                    >
+                      <CollageImage
+                        index={index}
+                        length={images.length}
+                        src={image.optimised}
+                      />
+                    </Col>
+                  ))}
+                </Row>
+              )}
+            </Row>
+          )}
+          {offenders &&
+            offenders.length > 0 &&
+            offenders.map((offender) => (
+              <OffenderMessageCard key={offender.id} offender={offender} />
+            ))}
+          {incidents &&
+            incidents.length > 0 &&
+            incidents.map((incident) => (
+              <IncidentMessageCard key={incident.id} incident={incident} />
+            ))}
+          {vehicles &&
+            vehicles.length > 0 &&
+            vehicles.map((vehicle) => (
+              <VehicleMessageCard key={vehicle.id} vehicle={vehicle} />
+            ))}
+
+          {crimeGroups && crimeGroups.length > 0 && (
+            <CrimeGroupMessageList crimeGroups={crimeGroups} isIntel />
+          )}
+          {content && (
+            <Row key={id}>
+              <div className="update-content-bubble">
+                <Col>
+                  <Text>{getContent(content)}</Text>
+                </Col>
+              </div>
+            </Row>
+          )}
+        </div>
+      </Col>
+    </Row>
+  );
+};
 
 export default UpdateContent;

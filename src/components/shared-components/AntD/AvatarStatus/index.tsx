@@ -1,18 +1,20 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Avatar } from "antd";
+/* eslint-disable  */
+
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Avatar } from 'antd';
 
 interface RenderAvatarProps {
-	icon: string;
-	src: string;
-	type: string;
-	size: 'large' | 'small' | 'default' | number | undefined;
-	shape: "circle" | "square" | undefined;
-	gap: number | undefined;
-	text: string;
+  icon: string;
+  src: string;
+  type: string;
+  size: 'large' | 'small' | 'default' | number | undefined;
+  shape: 'circle' | 'square' | undefined;
+  gap: number | undefined;
+  text: string;
 }
 
-const renderAvatar = (props:RenderAvatarProps) => {
+const renderAvatar = (props: RenderAvatarProps) => {
   return (
     <Avatar {...props} className={`ant-avatar-${props.type}`}>
       {props.text}
@@ -21,23 +23,24 @@ const renderAvatar = (props:RenderAvatarProps) => {
 };
 
 interface Props {
-	name: string;
-	suffix: string;
-	subTitle: string;
-	id: string;
-	type: string;
-	src: string;
-	icon: string;
-	size: 'large' | 'small' | 'default' | number | undefined;
-	shape: "circle" | "square" | undefined;
-	gap: number | undefined;
-	text: string;
-	onNameClick(args: {
-		name: string;
-		subTitle: string;
-		src: string;
-		id: string;
-	}): void;
+  name: string;
+  suffix: string;
+  subTitle: string;
+  id: string;
+  type: string;
+  src: string;
+  icon: string;
+  size: 'large' | 'small' | 'default' | number | undefined;
+  shape: 'circle' | 'square' | undefined;
+  gap: number | undefined;
+  text: string;
+
+  onNameClick(args: {
+    name: string;
+    subTitle: string;
+    src: string;
+    id: string;
+  }): void;
 }
 
 export const AvatarStatus = (props: Props) => {

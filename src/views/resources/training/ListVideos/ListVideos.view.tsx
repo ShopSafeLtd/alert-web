@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Card, Col, Modal, Row, Tag, Typography } from 'antd';
 import { createUseStyles } from 'react-jss';
 import type { Theme } from 'configs/ThemeConfig';
+import { useIntl } from 'react-intl';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   page: {
@@ -30,7 +31,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
 const ListVideos = () => {
   const classes = useStyles();
   const [modalOpen, setModalOpen] = useState<string | null>(null);
-
+  const intl = useIntl();
   return (
     <Row className={classes.page} gutter={16}>
       <Col>
@@ -44,11 +45,17 @@ const ListVideos = () => {
         >
           <div className={classes.titleSection}>
             <Typography.Title className={classes.title} level={4}>
-              Alert Overview
+              {intl.formatMessage({
+                defaultMessage: 'Alert Overview',
+                id: 'jd6hP1',
+              })}
             </Typography.Title>
             <Typography.Text className={classes.title}>
-              This short video explains the core functionality of alert and how
-              get around the app.
+              {intl.formatMessage({
+                defaultMessage:
+                  ' This short video explains the core functionality of alert and how get around the app.',
+                id: 'JdvoY4',
+              })}
             </Typography.Text>
           </div>
           <Row
@@ -62,12 +69,20 @@ const ListVideos = () => {
             <img
               className={classes.thumbnail}
               src="https://cdn.loom.com/sessions/thumbnails/5f30c94d68a5464c9fa2a1f51edc418a-with-play.gif"
-              alt="thumbnail"
+              alt={intl.formatMessage({
+                defaultMessage: 'thumbnail',
+                id: 'eOFf8G',
+              })}
             />
           </Row>
           <Row className={classes.tagRow}>
             <Col>
-              <Tag>Getting Started</Tag>
+              <Tag>
+                {intl.formatMessage({
+                  defaultMessage: 'Getting Started',
+                  id: '30VEhM',
+                })}
+              </Tag>
             </Col>
           </Row>
         </Card>
@@ -83,11 +98,17 @@ const ListVideos = () => {
         >
           <div className={classes.titleSection}>
             <Typography.Title className={classes.title} level={4}>
-              How to add an incident
+              {intl.formatMessage({
+                defaultMessage: 'How to add an incident',
+                id: 'goPt6M',
+              })}
             </Typography.Title>
             <Typography.Text className={classes.title}>
-              An overview of the incident form and how to add your first
-              incident to alert.
+              {intl.formatMessage({
+                defaultMessage:
+                  'An overview of the incident form and how to add a new incident to alert.',
+                id: 'FXXrSw',
+              })}
             </Typography.Text>
           </div>
           <Row
@@ -101,15 +122,28 @@ const ListVideos = () => {
             <img
               className={classes.thumbnail}
               src="https://cdn.loom.com/sessions/thumbnails/4112c7ef431b4d19814164fc15754408-with-play.gif"
-              alt="thumbnail"
+              alt={intl.formatMessage({
+                defaultMessage: 'thumbnail',
+                id: 'eOFf8G',
+              })}
             />
           </Row>
           <Row className={classes.tagRow} gutter={8}>
             <Col>
-              <Tag>Getting Started</Tag>
+              <Tag>
+                {intl.formatMessage({
+                  defaultMessage: 'Getting Started',
+                  id: '30VEhM',
+                })}
+              </Tag>
             </Col>
             <Col>
-              <Tag>Incidents</Tag>
+              <Tag>
+                {intl.formatMessage({
+                  defaultMessage: 'Incidents',
+                  id: 'mtr3R4',
+                })}
+              </Tag>
             </Col>
           </Row>
         </Card>
@@ -156,7 +190,10 @@ const ListVideos = () => {
           }}
         >
           <iframe
-            title="Video Modal"
+            title={intl.formatMessage({
+              defaultMessage: 'video',
+              id: '4jAirD',
+            })}
             src={modalOpen || ''}
             allowFullScreen
             style={{

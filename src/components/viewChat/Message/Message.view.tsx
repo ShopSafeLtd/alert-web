@@ -1,6 +1,6 @@
 /* eslint-disable react/require-default-props */
 import React from 'react';
-import { Row, Col, Typography, Avatar } from 'antd';
+import { Avatar, Col, Row, Typography } from 'antd';
 import { EyeOutlined } from '@ant-design/icons';
 
 import WatermarkImage from 'components/images/WatermarkImage.view';
@@ -18,6 +18,7 @@ import {
   OffenderMessageCard,
   VehicleMessageCard,
 } from 'components/MessageInput/MessageCard';
+import { FormattedMessage } from 'react-intl';
 
 const { Text } = Typography;
 
@@ -93,7 +94,8 @@ const CollageImage = ({ index, length, src }: CollageImageProps) => (
   >
     <WatermarkImage url={src} />
     <div className="chat-collage-image-overlay">
-      <EyeOutlined style={{ marginRight: 5 }} /> Preview
+      <EyeOutlined style={{ marginRight: 5 }} />
+      <FormattedMessage defaultMessage="Preview" id="TJo5E6" />
     </div>
     <WatermarkImage url={src} />
   </div>
@@ -129,7 +131,7 @@ const getContent = (content: string) =>
     if (item.includes('@[')) {
       return (
         <Text strong key={item}>
-          {item.replace('@[', '').replace(/(]\(.*?\))/, '')}{' '}
+          {item.replace('@[', '').replace(/(]\(.*?\))/, '')}
         </Text>
       );
     }
@@ -184,7 +186,8 @@ const Content = ({
               }}
             >
               <Text style={{ fontSize: 13 }} strong>
-                {`${from?.origName}${
+                {/* eslint-disable-next-line @typescript-eslint/restrict-template-expressions,formatjs/no-literal-string-in-jsx */}
+                {`${from?.fullName}${
                   from?.businesses && from?.businesses[0]?.fullName
                     ? `(${from?.businesses[0].fullName})`
                     : ''

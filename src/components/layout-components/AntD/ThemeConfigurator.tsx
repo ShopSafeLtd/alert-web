@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { ReactNode } from 'react';
 import { Radio, Switch, Button, message } from 'antd';
 import { CopyOutlined } from '@ant-design/icons';

@@ -1,5 +1,6 @@
 /* eslint-disable react/require-default-props */
-import React, { ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import React from 'react';
 
 interface Props {
   children: ReactNode;

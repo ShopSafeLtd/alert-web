@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-floating-promises,@typescript-eslint/no-unsafe-assignment */
 import { useState } from 'react';
 import type { SchemeQuery } from 'graphql/generated';
 import { useSchemeQuery, useUpdateSchemeMutation } from 'graphql/generated';
@@ -242,6 +243,7 @@ const useSchemeDetail = (): Return => {
     saving,
     onSubmit,
     beforeUpload,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onPreview,
     imgChange,
     fileList,

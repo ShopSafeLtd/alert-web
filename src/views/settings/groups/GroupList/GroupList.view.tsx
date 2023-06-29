@@ -1,11 +1,12 @@
 import React from 'react';
-import { Table, Row, Col, Input, Drawer, Button } from 'antd';
+import { Button, Col, Drawer, Input, Row, Table } from 'antd';
 import type { CreateGroupMutation, SchemeGroupsQuery } from 'graphql/generated';
 import { Link } from 'react-router-dom';
 import AddGroup from 'components/form-components/group/AddGroup';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 interface Props {
   data: SchemeGroupsQuery | undefined;
@@ -25,84 +26,99 @@ const GroupList = ({
   addGroup,
   toggleAddGroup,
   updateGroupList,
-}: Props): JSX.Element => (
-  <div className="list-view">
-    <Row gutter={8} style={{ marginBottom: 10 }}>
-      <Col span={8}>
-        <Input
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-          placeholder="Search for a group..."
-          allowClear
-        />
-      </Col>
-      <Col flex={1} />
-      <Col>
-        <Button
-          type="primary"
-          onClick={toggleAddGroup}
-          icon={
-            <FontAwesomeIcon
-              icon={faPlus}
-              size="lg"
-              style={{ marginRight: 5 }}
-            />
-          }
-        >
-          New Group
-        </Button>
-      </Col>
-    </Row>
-    <Table
-      size="small"
-      loading={loading}
-      pagination={
-        data?.groups && data.groups.length > 50
-          ? {
-              defaultPageSize: 20,
-              pageSize: 20,
+}: Props): JSX.Element => {
+  const intl = useIntl();
+  return (
+    <div className="list-view">
+      <Row gutter={8} style={{ marginBottom: 10 }}>
+        <Col span={8}>
+          <Input
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Search for a group...',
+              id: 'UaavNU',
+            })}
+            allowClear
+          />
+        </Col>
+        <Col flex={1} />
+        <Col>
+          <Button
+            type="primary"
+            onClick={toggleAddGroup}
+            icon={
+              <FontAwesomeIcon
+                icon={faPlus}
+                size="lg"
+                style={{ marginRight: 5 }}
+              />
             }
-          : false
-      }
-      columns={[
-        {
-          key: 'name',
-          title: 'Name',
-          dataIndex: 'name',
-          width: 300,
-          render: (value, record) => (
-            <Link to={`/app/scheme-settings/groups/view/${record.key}`}>
-              {value}
-            </Link>
-          ),
-        },
-        {
-          key: 'description',
-          title: 'Description',
-          dataIndex: 'description',
-          ellipsis: true,
-        },
-      ]}
-      dataSource={data?.groups.map((group) => ({
-        key: group.id,
-        name: group.name,
-        description: group.description,
-      }))}
-    />
+          >
+            <FormattedMessage defaultMessage="New Group" id="mx9Iyw" />
+          </Button>
+        </Col>
+      </Row>
+      <Table
+        size="small"
+        loading={loading}
+        pagination={
+          data?.groups && data.groups.length > 50
+            ? {
+                defaultPageSize: 20,
+                pageSize: 20,
+              }
+            : false
+        }
+        columns={[
+          {
+            key: 'name',
+            title: intl.formatMessage({
+              defaultMessage: 'Name',
+              id: 'HAlOn1',
+            }),
+            dataIndex: 'name',
+            width: 300,
+            render: (value, record) => (
+              <Link to={`/app/scheme-settings/groups/view/${record.key}`}>
+                {value}
+              </Link>
+            ),
+          },
+          {
+            key: 'description',
+            title: intl.formatMessage({
+              defaultMessage: 'Description',
+              id: 'Q8Qw5B',
+            }),
+            dataIndex: 'description',
+            ellipsis: true,
+          },
+        ]}
+        dataSource={data?.groups.map((group) => ({
+          key: group.id,
+          name: group.name,
+          description: group.description,
+        }))}
+      />
 
-    <Drawer
-      title="Create New Group"
-      visible={addGroup}
-      width="400"
-      onClose={toggleAddGroup}
-    >
-      {addGroup ? (
-        <AddGroup update={updateGroupList} onClose={toggleAddGroup} />
-      ) : (
-        <div />
-      )}
-    </Drawer>
-  </div>
-);
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Create New Group',
+          id: 'jmg9o5',
+        })}
+        visible={addGroup}
+        width="400"
+        onClose={toggleAddGroup}
+      >
+        {addGroup ? (
+          <AddGroup update={updateGroupList} onClose={toggleAddGroup} />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+    </div>
+  );
+};
 
 export default GroupList;

@@ -12,6 +12,7 @@ import {
   getOffenderGender,
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
+import { useIntl } from 'react-intl';
 import type { Face } from './LightBox.types';
 import WatermarkOverlay from '../WatermarkOverlay.view';
 
@@ -57,7 +58,7 @@ const LightBoxFace = ({
   toggleViewMatches,
 }: Props) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
+  const intl = useIntl();
   const classes = useStyles();
 
   const role = useStoreState((state) => state.user.role);
@@ -133,7 +134,17 @@ const LightBoxFace = ({
               strong
               className={classes.offenderName}
             >
-              {face.offender ? face.offender?.name : `Face ${faceIndex + 1}`}
+              {face.offender
+                ? face.offender?.name
+                : intl.formatMessage(
+                    {
+                      defaultMessage: 'Face {num}',
+                      id: 'zR1xaG',
+                    },
+                    {
+                      num: faceIndex + 1,
+                    }
+                  )}
             </Typography.Text>
             {!face.offender && isAdmin && (
               <Row gutter={8} wrap={false}>
@@ -143,14 +154,27 @@ const LightBoxFace = ({
                     size="small"
                     style={{ marginTop: 12 }}
                   >
-                    Link Offender
+                    {intl.formatMessage({
+                      defaultMessage: 'Link Offender',
+                      id: 'IWqg0R',
+                    })}
                   </Button>
                 </Col>
                 <Col>
-                  <Tooltip title="Delete Face" placement="top">
+                  <Tooltip
+                    title={intl.formatMessage({
+                      defaultMessage: 'Delete Face',
+                      id: 'f/S/kU',
+                    })}
+                    placement="top"
+                  >
                     <Popconfirm
                       overlayInnerStyle={{ padding: 10 }}
-                      title="Are you sure you want to delete this face?"
+                      title={intl.formatMessage({
+                        defaultMessage:
+                          '"Are you sure you want to delete this face?"',
+                        id: 'XtSElZ',
+                      })}
                     >
                       <Button size="small" style={{ marginTop: 12 }}>
                         <FontAwesomeIcon icon={faTrash} />
@@ -167,7 +191,10 @@ const LightBoxFace = ({
                 </Col>
                 <Col>
                   <Typography.Text>
-                    No Offender linked to this face.
+                    {intl.formatMessage({
+                      defaultMessage: 'No Offender linked to this face',
+                      id: 'PTTNcF',
+                    })}
                   </Typography.Text>
                 </Col>
               </Row>
@@ -178,7 +205,15 @@ const LightBoxFace = ({
                   className={classes.offenderText}
                   type="secondary"
                 >
-                  Alert ID: {face.offender.reference}
+                  {intl.formatMessage(
+                    {
+                      defaultMessage: 'Alert ID: {ref}',
+                      id: 'umL9sI',
+                    },
+                    {
+                      ref: face.offender.reference,
+                    }
+                  )}
                 </Typography.Paragraph>
                 <Row gutter={16}>
                   <Col>
@@ -186,7 +221,11 @@ const LightBoxFace = ({
                       className={classes.offenderText}
                       type="secondary"
                     >
-                      Age: {getOffenderAge(face.offender.age)}
+                      {intl.formatMessage({
+                        defaultMessage: 'Age: ',
+                        id: 'anqdpr',
+                      })}
+                      {getOffenderAge(face.offender.age)}
                     </Typography.Paragraph>
                   </Col>
                   <Col>
@@ -194,7 +233,11 @@ const LightBoxFace = ({
                       className={classes.offenderText}
                       type="secondary"
                     >
-                      Gender: {getOffenderGender(face.offender.gender)}
+                      {intl.formatMessage({
+                        defaultMessage: 'Gender: ',
+                        id: 'dMrZIO',
+                      })}
+                      {getOffenderGender(face.offender.gender)}
                     </Typography.Paragraph>
                   </Col>
                   <Col>
@@ -202,7 +245,11 @@ const LightBoxFace = ({
                       className={classes.offenderText}
                       type="secondary"
                     >
-                      Ethnicity: {getOffenderRace(face.offender.race, true)}
+                      {intl.formatMessage({
+                        defaultMessage: 'Ethnicity: ',
+                        id: 'H+Sv5C',
+                      })}
+                      {getOffenderRace(face.offender.race, true)}
                     </Typography.Paragraph>
                   </Col>
                   <Col>
@@ -210,7 +257,11 @@ const LightBoxFace = ({
                       className={classes.offenderText}
                       type="secondary"
                     >
-                      Build: {getOffenderBuild(face.offender.build)}
+                      {intl.formatMessage({
+                        defaultMessage: 'Build: ',
+                        id: 'iXQkAi',
+                      })}
+                      {getOffenderBuild(face.offender.build)}
                     </Typography.Paragraph>
                   </Col>
                 </Row>
@@ -227,8 +278,17 @@ const LightBoxFace = ({
               danger
               onClick={() => toggleViewMatches(face.offender?.id || null)}
             >
-              {face.rekMatchedSearches.length} Match
-              {face.rekMatchedSearches.length > 1 ? 'es' : ''} Found
+              {face.rekMatchedSearches.length > 0 &&
+                intl.formatMessage(
+                  {
+                    defaultMessage:
+                      '{itemCount, plural, one {Match} other {Matches}} Found',
+                    id: 'cfviVh',
+                  },
+                  {
+                    itemCount: face.rekMatchedSearches.length,
+                  }
+                )}
             </Button>
           </Col>
         )}

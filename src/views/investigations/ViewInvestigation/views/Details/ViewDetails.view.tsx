@@ -3,6 +3,7 @@ import {
   Button,
   Card,
   Col,
+  Drawer,
   Input,
   Modal,
   Popover,
@@ -10,7 +11,6 @@ import {
   Statistic,
   Table,
   Typography,
-  Drawer,
 } from 'antd';
 import type {
   InvestigationSuggestionsQuery,
@@ -19,7 +19,7 @@ import type {
 import { UpdateType } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
-
+import moment from 'moment';
 // import { Link } from 'react-router-dom';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useNavigate } from 'react-router';
@@ -28,6 +28,7 @@ import MapCard from 'components/map/MapCard/MapCard.view';
 import SuggestedOffenders from 'components/investigations/SuggestedOffenders';
 import SuggestedVehicles from 'components/investigations/SuggestedVehicles';
 import SuggestedIncidents from 'components/investigations/SuggestedIncidents';
+import { useIntl } from 'react-intl';
 import useStyles from './ViewDetails.styles';
 import UpdateContent from '../../../../incidents/ViewIncident/Update.view';
 import UpdateBar from '../../../../../components/MessageInput/UpdateBar';
@@ -117,7 +118,7 @@ const ViewInvestigation = ({
 }: Props) => {
   const classes = useStyles();
   const navigate = useNavigate();
-
+  const intl = useIntl();
   return (
     <>
       <TabContent>
@@ -133,19 +134,28 @@ const ViewInvestigation = ({
               <Row gutter={32}>
                 <Col>
                   <Statistic
-                    title="Total Incidents"
+                    title={intl.formatMessage({
+                      defaultMessage: 'Total Incidents',
+                      id: 'pUlxda',
+                    })}
                     value={data?.investigation?.totalIncidents || 0}
                   />
                 </Col>
                 <Col>
                   <Statistic
-                    title="Total Offenders"
+                    title={intl.formatMessage({
+                      defaultMessage: 'Total Offenders',
+                      id: 'Pyo0l3',
+                    })}
                     value={data?.investigation?.totalOffenders || 0}
                   />
                 </Col>
                 <Col>
                   <Statistic
-                    title="Total Loss"
+                    title={intl.formatMessage({
+                      defaultMessage: 'Total Loss',
+                      id: 'LPr3Nh',
+                    })}
                     value={`£${
                       data?.investigation?.totalValue?.toLocaleString() || 0
                     }`}
@@ -153,7 +163,10 @@ const ViewInvestigation = ({
                 </Col>
                 <Col>
                   <Statistic
-                    title="Total Value Recovered"
+                    title={intl.formatMessage({
+                      defaultMessage: 'Total Value Recovered',
+                      id: 't+iLve',
+                    })}
                     value={`£${
                       data?.investigation?.totalRecoveredValue?.toLocaleString() ||
                       0
@@ -162,7 +175,10 @@ const ViewInvestigation = ({
                 </Col>
                 <Col>
                   <Statistic
-                    title="Loss Rate"
+                    title={intl.formatMessage({
+                      defaultMessage: 'Loss Rate',
+                      id: 'mQPFSj',
+                    })}
                     value={`${
                       data?.investigation?.totalTheftSuccess?.toFixed(0) || 0
                     }%`}
@@ -170,11 +186,15 @@ const ViewInvestigation = ({
                 </Col>
               </Row>
             </Card>
-
             <Card loading={loading}>
               <Row gutter={8} align="middle">
                 <Col flex={1}>
-                  <Title level={4}>Offenders</Title>
+                  <Title level={4}>
+                    {intl.formatMessage({
+                      defaultMessage: 'Offenders',
+                      id: 'xb54TN',
+                    })}
+                  </Title>
                 </Col>
                 {suggestedData?.investigation?.suggestedOffenders && (
                   <Col>
@@ -184,8 +204,11 @@ const ViewInvestigation = ({
                       type="ghost"
                       onClick={toggleViewSuggestedOffenders}
                     >
-                      {suggestedData.investigation?.suggestedOffenders.length}{' '}
-                      Suggested Offenders
+                      {suggestedData.investigation?.suggestedOffenders.length}
+                      {intl.formatMessage({
+                        defaultMessage: 'Suggested Offenders',
+                        id: '5UuihT',
+                      })}
                     </Button>
                   </Col>
                 )}
@@ -201,7 +224,10 @@ const ViewInvestigation = ({
                       />
                     }
                   >
-                    Add Offenders
+                    {intl.formatMessage({
+                      defaultMessage: 'Add Offenders',
+                      id: 'KaNxum',
+                    })}
                   </Button>
                 </Col>
               </Row>
@@ -210,11 +236,15 @@ const ViewInvestigation = ({
                 hasNavigation
               />
             </Card>
-
             <Card loading={loading}>
               <Row align="middle" gutter={8}>
                 <Col flex={1}>
-                  <Title level={4}>Incidents</Title>
+                  <Title level={4}>
+                    {intl.formatMessage({
+                      defaultMessage: 'Incidents',
+                      id: 'mtr3R4',
+                    })}
+                  </Title>
                 </Col>
                 {suggestedData?.investigation?.suggestedIncidents &&
                   suggestedData.investigation.suggestedIncidents.length > 0 && (
@@ -224,8 +254,11 @@ const ViewInvestigation = ({
                         size="small"
                         onClick={toggleViewSuggestedIncidents}
                       >
-                        {suggestedData.investigation.suggestedIncidents.length}{' '}
-                        Suggested Incidents
+                        {suggestedData.investigation.suggestedIncidents.length}
+                        {intl.formatMessage({
+                          defaultMessage: 'Suggested Incidents',
+                          id: 'CKS/s0',
+                        })}
                       </Button>
                     </Col>
                   )}
@@ -241,7 +274,10 @@ const ViewInvestigation = ({
                       />
                     }
                   >
-                    Add Incidents
+                    {intl.formatMessage({
+                      defaultMessage: 'Add Incidents',
+                      id: 'kKj7sq',
+                    })}
                   </Button>
                 </Col>
               </Row>
@@ -251,33 +287,51 @@ const ViewInvestigation = ({
                   {
                     key: 'reference',
                     dataIndex: 'reference',
-                    title: 'Alert ID',
+                    title: intl.formatMessage({
+                      defaultMessage: 'Alert ID',
+                      id: 'k8ZNgH',
+                    }),
                   },
                   {
                     key: 'policeRef',
                     dataIndex: 'policeRef',
-                    title: 'Crime No.',
+                    title: intl.formatMessage({
+                      defaultMessage: 'Crime No.',
+                      id: 'B0ihHq',
+                    }),
                   },
                   {
                     key: 'subject',
                     dataIndex: 'subject',
-                    title: 'Subject',
+                    title: intl.formatMessage({
+                      defaultMessage: 'Subject',
+                      id: 'LLtKhp',
+                    }),
                   },
                   {
                     key: 'date',
                     dataIndex: 'date',
-                    title: 'Date',
+                    title: intl.formatMessage({
+                      defaultMessage: 'Date',
+                      id: 'P7PLVj',
+                    }),
                   },
                   {
                     key: 'loss',
                     dataIndex: 'loss',
-                    title: 'Loss',
-                    render: (value) => `£${value.toLocaleString()}`,
+                    title: intl.formatMessage({
+                      defaultMessage: 'Loss',
+                      id: 'mv038n',
+                    }),
+                    render: (value: number) => `£${value.toLocaleString()}`,
                   },
                   {
                     key: 'location',
                     dataIndex: 'location',
-                    title: 'Location',
+                    title: intl.formatMessage({
+                      defaultMessage: 'Location',
+                      id: 'rvirM2',
+                    }),
                   },
                 ]}
                 size="small"
@@ -296,7 +350,6 @@ const ViewInvestigation = ({
                 }
               />
             </Card>
-
             {data?.investigation?.incidents &&
               data?.investigation?.incidents.length > 0 && (
                 <MapCard
@@ -310,11 +363,15 @@ const ViewInvestigation = ({
                   }
                 />
               )}
-
             <Card loading={loading}>
               <Row align="middle" gutter={8}>
                 <Col flex={1}>
-                  <Title level={4}>Vehicles</Title>
+                  <Title level={4}>
+                    {intl.formatMessage({
+                      defaultMessage: 'Vehicles',
+                      id: 'r6wuJ3',
+                    })}
+                  </Title>
                 </Col>
                 {suggestedData?.investigation?.suggestedVehicles &&
                   suggestedData.investigation.suggestedVehicles.length > 0 && (
@@ -324,8 +381,11 @@ const ViewInvestigation = ({
                         size="small"
                         onClick={toggleViewSuggestedVehicles}
                       >
-                        {suggestedData.investigation.suggestedVehicles.length}{' '}
-                        Suggested Vehicles
+                        {suggestedData.investigation.suggestedVehicles.length}
+                        {intl.formatMessage({
+                          defaultMessage: 'Suggested Vehicles',
+                          id: 'fzU5Bx',
+                        })}
                       </Button>
                     </Col>
                   )}
@@ -341,7 +401,10 @@ const ViewInvestigation = ({
                       />
                     }
                   >
-                    Add Vehicles
+                    {intl.formatMessage({
+                      defaultMessage: 'Add Vehicles',
+                      id: 'iKGwyV',
+                    })}
                   </Button>
                 </Col>
               </Row>
@@ -372,39 +435,60 @@ const ViewInvestigation = ({
                   {
                     key: 'reference',
                     dataIndex: 'reference',
-                    title: 'Alert ID',
+                    title: intl.formatMessage({
+                      defaultMessage: 'Alert ID',
+                      id: 'k8ZNgH',
+                    }),
                   },
                   {
                     key: 'registration',
                     dataIndex: 'registration',
-                    title: 'Registration',
+                    title: intl.formatMessage({
+                      defaultMessage: 'Registration',
+                      id: 'qv7ied',
+                    }),
                   },
 
                   {
                     key: 'make',
                     dataIndex: 'make',
-                    title: 'Make',
+                    title: intl.formatMessage({
+                      defaultMessage: 'Make',
+                      id: '6AAM0P',
+                    }),
                   },
 
                   {
                     key: 'colour',
                     dataIndex: 'colour',
-                    title: 'Colour',
+                    title: intl.formatMessage({
+                      defaultMessage: 'Colour',
+                      id: '+e8vAT',
+                    }),
                   },
                   {
                     key: 'model',
                     dataIndex: 'model',
-                    title: 'Model',
+                    title: intl.formatMessage({
+                      defaultMessage: 'Model',
+                      id: 'rhSI1/',
+                    }),
                   },
                   {
                     key: 'totalOffenders',
                     dataIndex: 'totalOffenders',
-                    title: 'Members',
+                    title: intl.formatMessage({
+                      defaultMessage: 'Members',
+                      id: '+a+2ug',
+                    }),
                   },
                   {
                     key: 'totalIncidents',
                     dataIndex: 'totalIncidents',
-                    title: 'Incidents',
+                    title: intl.formatMessage({
+                      defaultMessage: 'Incidents',
+                      id: 'mtr3R4',
+                    }),
                   },
                 ]}
               />
@@ -433,7 +517,12 @@ const ViewInvestigation = ({
                 loader={
                   <div className="message-date">
                     <div className="date-line" />
-                    <div className="date">Loading...</div>
+                    <div className="date">
+                      {intl.formatMessage({
+                        defaultMessage: 'Loading...',
+                        id: 'gjBiyj',
+                      })}
+                    </div>
                     <div className="date-line" />
                   </div>
                 }
@@ -472,7 +561,10 @@ const ViewInvestigation = ({
                               }}
                               size="small"
                             >
-                              Edit Update
+                              {intl.formatMessage({
+                                defaultMessage: 'Edit Update',
+                                id: 'pCzvx3',
+                              })}
                             </Button>
                             <Button
                               type="text"
@@ -489,7 +581,10 @@ const ViewInvestigation = ({
                               }}
                               size="small"
                             >
-                              Delete Update
+                              {intl.formatMessage({
+                                defaultMessage: 'Delete Update',
+                                id: 'ef1dfd',
+                              })}
                             </Button>
                           </div>
                         }
@@ -498,7 +593,7 @@ const ViewInvestigation = ({
                           <UpdateContent
                             userId={userId}
                             content={update.text}
-                            createdAt={update.createdAt}
+                            createdAt={moment(update.createdAt)}
                             from={update.createdBy}
                             id={update.id}
                             images={update.images}
@@ -515,7 +610,7 @@ const ViewInvestigation = ({
                       <UpdateContent
                         userId={userId}
                         content={update.text}
-                        createdAt={update.createdAt}
+                        createdAt={moment(update.createdAt)}
                         from={update.createdBy}
                         id={update.id}
                         images={update.images}
@@ -561,7 +656,10 @@ const ViewInvestigation = ({
                                   }}
                                   size="small"
                                 >
-                                  Edit Update
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Edit Update',
+                                    id: 'pCzvx3',
+                                  })}
                                 </Button>
                                 <Button
                                   type="text"
@@ -578,7 +676,10 @@ const ViewInvestigation = ({
                                   }}
                                   size="small"
                                 >
-                                  Delete Update
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Delete Update',
+                                    id: 'ef1dfd',
+                                  })}
                                 </Button>
                               </div>
                             }
@@ -587,7 +688,7 @@ const ViewInvestigation = ({
                               <UpdateContent
                                 userId={userId}
                                 content={reply.text}
-                                createdAt={reply.createdAt}
+                                createdAt={moment(reply.createdAt)}
                                 from={reply.createdBy}
                                 id={reply.id}
                                 images={reply.images}
@@ -604,7 +705,7 @@ const ViewInvestigation = ({
                           <UpdateContent
                             userId={userId}
                             content={reply.text}
-                            createdAt={reply.createdAt}
+                            createdAt={moment(reply.createdAt)}
                             from={reply.createdBy}
                             id={reply.id}
                             images={reply.images}
@@ -630,17 +731,23 @@ const ViewInvestigation = ({
                             size="small"
                             onClick={() =>
                               setReplyTo({
-                                createdAt: update.createdAt,
+                                createdAt: update.createdAt.toString(),
                                 createdBy:
                                   userId === update.createdBy.id
-                                    ? 'You'
+                                    ? intl.formatMessage({
+                                        defaultMessage: 'You',
+                                        id: 'kJ5W29',
+                                      })
                                     : `${update.createdBy.fullName} - ${update.createdBy.businesses[0]?.name}`,
                                 id: update.id,
                                 text: update.text || '',
                               })
                             }
                           >
-                            Reply
+                            {intl.formatMessage({
+                              defaultMessage: 'Reply',
+                              id: '9HU8vw',
+                            })}
                           </Button>
                         </Col>
                       )}
@@ -660,11 +767,14 @@ const ViewInvestigation = ({
         </Row>
       </TabContent>
       <Modal
-        title="Edit Update Content"
+        title={intl.formatMessage({
+          defaultMessage: 'Edit Update Content',
+          id: '8sZeJM',
+        })}
         visible={editUpdate !== null}
         onOk={handleEditUpdate}
         onCancel={() => setEditUpdate(null)}
-        okText="Save"
+        okText={intl.formatMessage({ defaultMessage: 'Save', id: 'jvo0vs' })}
       >
         <Input
           value={editUpdateInput}
@@ -673,7 +783,10 @@ const ViewInvestigation = ({
       </Modal>
 
       <Drawer
-        title="Suggested Offenders"
+        title={intl.formatMessage({
+          defaultMessage: 'Suggested Offenders',
+          id: '5UuihT',
+        })}
         open={viewSuggestedOffenders}
         onClose={toggleViewSuggestedOffenders}
         width="900"
@@ -684,8 +797,12 @@ const ViewInvestigation = ({
           handleAddSuggestion={handleConnectOffender}
         />
       </Drawer>
+
       <Drawer
-        title="Suggested Incidents"
+        title={intl.formatMessage({
+          defaultMessage: 'Suggested Incidents',
+          id: 'CKS/s0',
+        })}
         open={viewSuggestedIncidents}
         onClose={toggleViewSuggestedIncidents}
         width="900"
@@ -696,8 +813,12 @@ const ViewInvestigation = ({
           handleAddSuggestion={handleConnectIncident}
         />
       </Drawer>
+
       <Drawer
-        title="Suggested Vehicles"
+        title={intl.formatMessage({
+          defaultMessage: 'Suggested Vehicles',
+          id: 'fzU5Bx',
+        })}
         open={viewSuggestedVehicles}
         onClose={toggleViewSuggestedVehicles}
         width="900"

@@ -2,6 +2,7 @@ import React from 'react';
 import type { ListOffendersQuery } from 'graphql/generated';
 import { Col, Pagination, Row, Skeleton, Spin, Typography } from 'antd';
 import { Link } from 'react-router-dom';
+import { useIntl } from 'react-intl'; // Import the useIntl hook
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import SideList from 'components/side-list/SideList.view';
 import SideListItem from 'components/side-list/SideListItem.view';
@@ -32,6 +33,8 @@ const OffenderSideList = ({
   pagination,
 }: Props): JSX.Element => {
   const classes = useStyles();
+  const intl = useIntl(); // Use the useIntl hook to access the intl object
+
   return (
     <SideList>
       {loading && (
@@ -79,7 +82,13 @@ const OffenderSideList = ({
                   strong={current === offender.id}
                   ellipsis
                 >
-                  Alert ID: {offender.reference}
+                  {intl.formatMessage(
+                    {
+                      id: '377fsC',
+                      defaultMessage: 'Alert ID: {reference}',
+                    },
+                    { reference: offender.reference }
+                  )}
                 </Text>
                 <Paragraph className={classes.detail} ellipsis>
                   {offender.race && getEthnicity(offender.race)}

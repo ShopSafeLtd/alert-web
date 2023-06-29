@@ -59,7 +59,7 @@ const useAddCrimeType = ({
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
-    createTag({
+    void createTag({
       variables: {
         data: {
           name: data.name,

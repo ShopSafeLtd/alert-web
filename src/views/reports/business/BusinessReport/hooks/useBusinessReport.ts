@@ -183,7 +183,7 @@ const useBusinessReport = (): Return => {
       ?.filter((good) => good.totalIncidents > 0)
 
       .map((good, i) => ({
-        key: good.name + i,
+        key: good.name + i.toString(),
         fullName: good.name,
         incidentsCreated: good.totalIncidents,
         offendersCreated: good.totalOffenders,

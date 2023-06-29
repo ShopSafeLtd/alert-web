@@ -1,13 +1,13 @@
 import React from 'react';
 import {
-  Table,
-  Row,
-  Col,
-  Input,
-  Drawer,
   Button,
-  Typography,
+  Col,
+  Drawer,
+  Input,
+  Row,
+  Table,
   Tooltip,
+  Typography,
 } from 'antd';
 
 import type { TagsQuery } from 'graphql/generated';
@@ -20,6 +20,7 @@ import {
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
 import type { TagData } from 'types/DataType';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 interface Props {
   data: TagsQuery | undefined;
@@ -51,139 +52,170 @@ const OffenderWarningList = ({
   setOffenderId,
   saving,
   deleteConfirm,
-}: Props): JSX.Element => (
-  <div className="list-view">
-    <Row gutter={8} style={{ marginBottom: 10 }}>
-      <Col span={8}>
-        <Input
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-          placeholder="Search offender tags..."
-          allowClear
-        />
-      </Col>
-      <Col flex={1} />
-      <Col>
-        <Button
-          type="primary"
-          onClick={toggleAddOffenderWarning}
-          icon={
-            <FontAwesomeIcon
-              icon={faPlus}
-              size="lg"
-              style={{ marginRight: 5 }}
+}: Props): JSX.Element => {
+  const intl = useIntl();
+  return (
+    <div className="list-view">
+      <Row gutter={8} style={{ marginBottom: 10 }}>
+        <Col span={8}>
+          <Input
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Search offender tags...',
+              id: 'lpxqCT',
+            })}
+            allowClear
+          />
+        </Col>
+        <Col flex={1} />
+        <Col>
+          <Button
+            type="primary"
+            onClick={toggleAddOffenderWarning}
+            icon={
+              <FontAwesomeIcon
+                icon={faPlus}
+                size="lg"
+                style={{ marginRight: 5 }}
+              />
+            }
+          >
+            <FormattedMessage
+              defaultMessage="Add Offender Warning"
+              id="JQTlrb"
             />
-          }
-        >
-          Add Offender Warning
-        </Button>
-      </Col>
-    </Row>
-    <Table
-      size="small"
-      style={{ marginRight: 10 }}
-      loading={loading}
-      pagination={{
-        hideOnSinglePage: true,
-        defaultPageSize: 20,
-        pageSize: 20,
-      }}
-      columns={[
-        {
-          key: 'name',
-          title: 'Name',
-          dataIndex: 'name',
-          width: 300,
-          render: (value, record) => (
-            <Typography.Link
-              disabled={saving}
-              onClick={() => {
-                setOffenderId(record.key);
-                toggleEditOffenderWarning();
-              }}
-            >
-              {value}
-            </Typography.Link>
-          ),
-        },
-        {
-          key: 'description',
-          title: 'Description',
-          dataIndex: 'description',
-          ellipsis: true,
-        },
+          </Button>
+        </Col>
+      </Row>
+      <Table
+        size="small"
+        style={{ marginRight: 10 }}
+        loading={loading}
+        pagination={{
+          hideOnSinglePage: true,
+          defaultPageSize: 20,
+          pageSize: 20,
+        }}
+        columns={[
+          {
+            key: 'name',
+            title: intl.formatMessage({
+              defaultMessage: 'Name',
+              id: 'HAlOn1',
+            }),
+            dataIndex: 'name',
+            width: 300,
+            render: (value, record) => (
+              <Typography.Link
+                disabled={saving}
+                onClick={() => {
+                  setOffenderId(record.key);
+                  toggleEditOffenderWarning();
+                }}
+              >
+                {value}
+              </Typography.Link>
+            ),
+          },
+          {
+            key: 'description',
+            title: intl.formatMessage({
+              defaultMessage: 'Description',
+              id: 'Q8Qw5B',
+            }),
+            dataIndex: 'description',
+            ellipsis: true,
+          },
 
-        {
-          key: 'Options',
-          title: '',
-          dataIndex: 'Options',
-          width: 100,
-          render: (_, record) => (
-            <Row gutter={8}>
-              <Col>
-                <Tooltip title="Edit Tag">
-                  <Button
-                    size="small"
-                    disabled={saving}
-                    onClick={() => {
-                      setOffenderId(record.key);
-                      toggleEditOffenderWarning();
-                    }}
-                    icon={<FontAwesomeIcon icon={faPenToSquare} />}
-                  />
-                </Tooltip>
-              </Col>
-              <Col>
-                <Tooltip title="Remove Tag">
-                  <Button
-                    size="small"
-                    disabled={saving}
-                    onClick={() => {
-                      deleteConfirm(record.key);
-                    }}
-                    icon={<FontAwesomeIcon icon={faTrash} />}
-                  />
-                </Tooltip>
-              </Col>
-            </Row>
-          ),
-        },
-      ]}
-      dataSource={data?.tags.map((tag) => ({
-        key: tag.id,
-        name: tag.name,
-        description: tag.description,
-      }))}
-    />
-
-    <Drawer
-      title="Add Offender Warning"
-      visible={addOffenderWarning}
-      width="400"
-      onClose={toggleAddOffenderWarning}
-    >
-      {addOffenderWarning ? (
-        <AddOffenderWarning
-          update={onAddOffenderWarning}
-          onClose={toggleAddOffenderWarning}
-          saving={saving}
-        />
-      ) : (
-        <div />
-      )}
-    </Drawer>
-    <Drawer
-      title="Edit Offender Warning"
-      visible={editOffenderWarning}
-      width="400"
-      onClose={toggleEditOffenderWarning}
-    >
-      <EditOffenderWarning
-        offenderId={offenderId}
-        onClose={toggleEditOffenderWarning}
+          {
+            key: 'Options',
+            title: '',
+            dataIndex: 'Options',
+            width: 100,
+            render: (_, record) => (
+              <Row gutter={8}>
+                <Col>
+                  <Tooltip
+                    title={intl.formatMessage({
+                      defaultMessage: 'Edit Tag',
+                      id: 'uJkv2X',
+                    })}
+                  >
+                    <Button
+                      size="small"
+                      disabled={saving}
+                      onClick={() => {
+                        setOffenderId(record.key);
+                        toggleEditOffenderWarning();
+                      }}
+                      icon={<FontAwesomeIcon icon={faPenToSquare} />}
+                    />
+                  </Tooltip>
+                </Col>
+                <Col>
+                  <Tooltip
+                    title={intl.formatMessage({
+                      defaultMessage: 'Remove Tag',
+                      id: '5LH37j',
+                    })}
+                  >
+                    <Button
+                      size="small"
+                      disabled={saving}
+                      onClick={() => {
+                        deleteConfirm(record.key);
+                      }}
+                      icon={<FontAwesomeIcon icon={faTrash} />}
+                    />
+                  </Tooltip>
+                </Col>
+              </Row>
+            ),
+          },
+        ]}
+        dataSource={data?.tags.map((tag) => ({
+          key: tag.id,
+          name: tag.name,
+          description: tag.description,
+        }))}
       />
-    </Drawer>
-  </div>
-);
+
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Add Offender Warning',
+          id: 'JQTlrb',
+        })}
+        visible={addOffenderWarning}
+        width="400"
+        onClose={toggleAddOffenderWarning}
+      >
+        {addOffenderWarning ? (
+          <AddOffenderWarning
+            update={onAddOffenderWarning}
+            onClose={toggleAddOffenderWarning}
+            saving={saving}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Edit Offender Warning',
+          id: 'b/YSMD',
+        })}
+        visible={editOffenderWarning}
+        width="400"
+        onClose={toggleEditOffenderWarning}
+      >
+        <EditOffenderWarning
+          offenderId={offenderId}
+          onClose={toggleEditOffenderWarning}
+        />
+      </Drawer>
+    </div>
+  );
+};
 
 export default OffenderWarningList;

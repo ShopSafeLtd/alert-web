@@ -10,8 +10,8 @@ const useStyles = createUseStyles({
     opacity: 0.8,
   },
   imageSkeleton: {
-    height: 80,
-    width: 80,
+    height: '100px !important',
+    width: '70px !important',
     '&.ant-skeleton-element .ant-skeleton-image': {
       height: 80,
       width: 80,

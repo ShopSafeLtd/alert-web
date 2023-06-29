@@ -6,21 +6,22 @@ import type {
   VehicleQueryVariables,
 } from 'graphql/generated';
 import {
-  useUpdateVehicleMutation,
-  useVehicleQuery,
-  useDeleteVehicleMutation,
-  useDeleteUpdateMutation,
-  useUpdateUpdateMutation,
   Role,
-  VehicleDocument,
+  useDeleteUpdateMutation,
+  useDeleteVehicleMutation,
   useSubscribeToVehicleMutation,
   useUnsubscribeToVehicleMutation,
+  useUpdateUpdateMutation,
+  useUpdateVehicleMutation,
+  useVehicleQuery,
+  VehicleDocument,
 } from 'graphql/generated';
 import { useEffect, useState } from 'react';
 import update from 'immutability-helper';
 import { useStoreState } from 'state';
 import errorNotification from 'types/error_notification';
 import type { VehicleData } from 'types/DataType';
+import { useIntl } from 'react-intl';
 
 const { confirm } = Modal;
 
@@ -71,6 +72,7 @@ interface Return {
 }
 
 const useViewVehicle = (vehicleId: string): Return => {
+  const intl = useIntl();
   const userId = useStoreState((state) => state.user.id);
   const role = useStoreState((state) => state.user.role);
   const schemeId = useStoreState((state) => state.scheme.id);
@@ -125,8 +127,14 @@ const useViewVehicle = (vehicleId: string): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: 'Successfully Updated!',
-        description: 'The vehicle has been updated! ',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
+          id: 'w5Yfkf',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The vehicle has been updated!',
+          id: 'xEl97U',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -239,7 +247,7 @@ const useViewVehicle = (vehicleId: string): Return => {
       };
     };
 
-    updateVehicle({
+    void updateVehicle({
       variables: {
         where: {
           id: vehicleId,
@@ -293,8 +301,14 @@ const useViewVehicle = (vehicleId: string): Return => {
       setSaving(false);
       window.history.back();
       notification.success({
-        message: 'Successfully Deleted!',
-        description: 'The vehicle has been deleted!',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Deleted!',
+          id: 'dvDKi/',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The vehicle has been deleted!',
+          id: 'QPIR1s',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -306,7 +320,7 @@ const useViewVehicle = (vehicleId: string): Return => {
 
   const onDeleteVehicle = () => {
     setSaving(true);
-    deleteVehicle({
+    void deleteVehicle({
       variables: {
         id: vehicleId || '',
       },
@@ -315,7 +329,7 @@ const useViewVehicle = (vehicleId: string): Return => {
   const [deleteUpdate] = useDeleteUpdateMutation();
 
   const handleDeleteUpdate = (updateId: string) => {
-    deleteUpdate({
+    void deleteUpdate({
       variables: {
         where: {
           id: updateId,
@@ -396,12 +410,24 @@ const useViewVehicle = (vehicleId: string): Return => {
   };
   const confirmDeleteUpdate = (updateId: string) => {
     confirm({
-      title: 'Are you sure?',
-      content: 'The update will be permanently deleted.',
+      title: intl.formatMessage({
+        defaultMessage: 'Are you sure?',
+        id: 'ZYrND5',
+        description: 'Confirmation dialog title',
+      }),
+      content: intl.formatMessage({
+        defaultMessage: 'The update will be permanently deleted.',
+        id: 'ZWk4fq',
+        description: 'Confirmation dialog content',
+      }),
       onOk() {
         handleDeleteUpdate(updateId);
       },
-      okText: 'Delete',
+      okText: intl.formatMessage({
+        defaultMessage: 'Delete',
+        id: '5qRFq/',
+        description: 'Delete button text',
+      }),
     });
   };
 
@@ -409,7 +435,7 @@ const useViewVehicle = (vehicleId: string): Return => {
 
   const handleEditUpdate = () => {
     if (editUpdate !== null)
-      updateUpdate({
+      void updateUpdate({
         variables: {
           data: {
             text: editUpdateInput,
@@ -435,7 +461,7 @@ const useViewVehicle = (vehicleId: string): Return => {
 
   const toggleSubscribe = () => {
     if (vehicleData?.vehicle?.subscribed) {
-      unsubscribeFromVehicle({
+      void unsubscribeFromVehicle({
         variables: {
           where: { id: vehicleId },
         },
@@ -449,7 +475,7 @@ const useViewVehicle = (vehicleId: string): Return => {
         },
       });
     } else {
-      subscribeToVehicle({
+      void subscribeToVehicle({
         variables: {
           where: { id: vehicleId },
         },

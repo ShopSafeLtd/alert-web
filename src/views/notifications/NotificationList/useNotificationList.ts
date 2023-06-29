@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { useStoreActions, useStoreState } from 'state';
 import type {
   Role,
@@ -18,6 +19,7 @@ import { notification } from 'antd';
 import errorNotification from 'types/error_notification';
 import { useNavigate } from 'react-router';
 import { LocalStorageKeys } from 'types';
+import { useIntl } from 'react-intl';
 
 export interface NotificationData {
   id: string;
@@ -80,7 +82,7 @@ interface Return {
 
 const useNotificationLists = (): Return => {
   const navigate = useNavigate();
-
+  const intl = useIntl();
   const userId = useStoreState((state) => state.user.id);
   const userSchemes = useStoreState((state) => state.user.schemes);
   const schemeId = useStoreState((state) => state.scheme.id);
@@ -211,8 +213,14 @@ const useNotificationLists = (): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: 'Successfully Updated!',
-        description: 'All notifications has been updated to read! ',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
+          id: 'w5Yfkf',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'All notifications have been updated to read!',
+          id: 'dI0d71',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -225,7 +233,7 @@ const useNotificationLists = (): Return => {
   const getUserNotificationType = (value: NotificationData) => {
     switch (value.type) {
       case Model.Article: {
-        navigate(`/app/article/view/${value.articleId}`);
+        navigate(`/app/article/view/${value?.articleId}`);
         return {
           articleId: {
             equals: value.articleId,
@@ -336,7 +344,7 @@ const useNotificationLists = (): Return => {
       if (schemeId !== value.schemes[0].id) {
         handleSchemeChange(value.schemes[0]);
       }
-      updateUserNotification({
+      void updateUserNotification({
         variables: {
           where: {
             notification: getUserNotificationType(value),
@@ -348,7 +356,7 @@ const useNotificationLists = (): Return => {
 
   const handleMarkAllRead = () => {
     setSaving(true);
-    updateAllUserNotifications({
+    void updateAllUserNotifications({
       variables: {
         where: {
           notification: {

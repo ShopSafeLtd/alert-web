@@ -14,8 +14,8 @@ describe('List Officer View', () => {
         completed: false,
         completedBy: null,
         createdBy: null,
-        completedDate: '2023-04-25T21:46:40.796Z',
-        dueDate: '2023-04-25T21:46:40.796Z',
+        completedDate: new Date('2022-07-25T08:57:55.299Z'),
+        dueDate: new Date('2022-07-25T08:57:55.299Z'),
       },
     ],
     completedTodos: [
@@ -27,8 +27,8 @@ describe('List Officer View', () => {
         completed: true,
         completedBy: { id: 'completedTodos', fullName: 'completedTodos' },
         createdBy: null,
-        completedDate: '2023-04-25T21:46:40.796Z',
-        dueDate: '2023-04-25T21:46:40.796Z',
+        completedDate: new Date('2022-07-25T08:57:55.299Z'),
+        dueDate: new Date('2022-07-25T08:57:55.299Z'),
       },
     ],
     uncompletedTotal: 1,
@@ -49,6 +49,8 @@ describe('List Officer View', () => {
           toggleAddTodo={jest.fn()}
           updateTodoList={jest.fn()}
           onPaginationChange={jest.fn()}
+          toggleAllSchemes={jest.fn()}
+          toggleAllUsers={jest.fn()}
           currentPage={1}
           currentPageSize={1}
         />

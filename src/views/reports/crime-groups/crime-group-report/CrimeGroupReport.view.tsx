@@ -4,8 +4,9 @@ import { Button, Col, Drawer, Dropdown, Row, Select, Typography } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
 import DatePicker from 'components/util-components/DatePicker';
-import Page from 'components/shared-components/AntD/Page/Page';
+import { Page } from 'components/shared-components/AntD/Page/Page';
 import RGL, { WidthProvider } from 'react-grid-layout';
+import { useIntl } from 'react-intl';
 import { margin, rowHeight } from '../../../../components/reports/utils/utils';
 import AddLogo from '../../../../components/reports/addLogo';
 import SaveAs from '../../../../components/reports/saveAs';
@@ -58,7 +59,7 @@ const CrimeGroupReportView = ({
   targetedBusinessData,
 }: Props) => {
   const ReactGridLayout = useMemo(() => WidthProvider(RGL), []);
-
+  const intl = useIntl();
   const handleMenuClick: MenuProps['onClick'] = (e) => {
     if (e.key === '1') {
       setSaveAsDrawer(true);
@@ -70,12 +71,15 @@ const CrimeGroupReportView = ({
   const items: MenuProps['items'] = [
     {
       key: '1',
-      label: 'Save As',
+      label: intl.formatMessage({ defaultMessage: 'Save As', id: '/XPfp1' }),
     },
     {
       key: '2',
       disabled: selectedTemplate === 'default',
-      label: 'Update current template',
+      label: intl.formatMessage({
+        defaultMessage: 'Update current template',
+        id: 'ej3o9X',
+      }),
     },
   ];
 
@@ -98,7 +102,15 @@ const CrimeGroupReportView = ({
           type="default"
           hidden={!editMode}
         >
-          {minDrawer ? 'Hide Drawer' : 'Show Drawer'}
+          {minDrawer
+            ? intl.formatMessage({
+                defaultMessage: 'Hide Drawer',
+                id: 'bfZEmd',
+              })
+            : intl.formatMessage({
+                defaultMessage: 'Show Drawer',
+                id: 'Ri86Tj',
+              })}
         </Button>
         <Button
           style={{ marginRight: 10 }}
@@ -106,10 +118,12 @@ const CrimeGroupReportView = ({
           onClick={() => setEditMode(!editMode)}
           type={editMode ? 'primary' : 'default'}
         >
-          {editMode ? 'Lock' : 'Edit'}
+          {editMode
+            ? intl.formatMessage({ defaultMessage: 'Lock', id: 'Zl4/y9' })
+            : intl.formatMessage({ defaultMessage: 'Edit', id: 'wEQDC6' })}
         </Button>
         <Button type="primary" onClick={handlePrint}>
-          Print
+          {intl.formatMessage({ defaultMessage: 'Print', id: 'CXRlIo' })}
         </Button>
       </div>
       <div
@@ -143,14 +157,15 @@ const CrimeGroupReportView = ({
           right: 20,
         }}
       >
-        {' '}
         <Dropdown
           menu={{ items, onClick: handleMenuClick }}
           placement="bottomLeft"
           overlayStyle={{ zIndex: 1000 }}
           className="no-print overlay"
         >
-          <Button>Save</Button>
+          <Button>
+            {intl.formatMessage({ defaultMessage: 'Save', id: 'jvo0vs' })}
+          </Button>
         </Dropdown>
       </div>
       <div ref={componentRef} className="print-page">
@@ -175,6 +190,7 @@ const CrimeGroupReportView = ({
                     marginRight: array.length - 1 === _i ? 0 : 10,
                   }}
                   src={url || ''}
+                  // eslint-disable-next-line formatjs/no-literal-string-in-jsx
                   alt="logo"
                 />
               </>
@@ -186,14 +202,24 @@ const CrimeGroupReportView = ({
             type="primary"
             style={{ marginLeft: 10 }}
           >
-            Add Logo
+            {intl.formatMessage({ defaultMessage: 'Add Logo', id: 'pn9DSF' })}
           </Button>
         </div>
         <Title level={2} className="print-title">
-          Crime Group Report:{' '}
-          {data?.crimeGroup?.alias ?? `CG-${data?.crimeGroup?.reference}`}-{' '}
-          {dateRange.startDate.toLocaleDateString()} -{' '}
-          {dateRange.endDate.toLocaleDateString()}
+          {intl.formatMessage(
+            {
+              defaultMessage:
+                'Crime Group Report: {alias}-{startDate}-{endDate}',
+              id: 'IE/cxz',
+            },
+            {
+              alias:
+                data?.crimeGroup?.alias ??
+                `CG-${data?.crimeGroup?.reference || ''}`,
+              startDate: dateRange.startDate.toLocaleDateString(),
+              endDate: dateRange.endDate.toLocaleDateString(),
+            }
+          )}
         </Title>
         <Row
           className="no-print"
@@ -201,7 +227,10 @@ const CrimeGroupReportView = ({
         >
           <Col span={6}>
             <Select
-              placeholder="Select Groups"
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Select Groups',
+                id: 'q2cuIU',
+              })}
               mode="multiple"
               maxTagCount="responsive"
               onChange={(value) => {
@@ -224,7 +253,10 @@ const CrimeGroupReportView = ({
           </Col>
           <Col span={6}>
             <Select
-              placeholder="Select Business"
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Select Business',
+                id: 'Hdg31+',
+              })}
               mode="multiple"
               maxTagCount="responsive"
               onChange={(value) => {
@@ -315,7 +347,10 @@ const CrimeGroupReportView = ({
         </div>
       </div>
       <Drawer
-        title="Charts available"
+        title={intl.formatMessage({
+          defaultMessage: 'Charts Available',
+          id: 'GB09hj',
+        })}
         placement="bottom"
         mask={false}
         closable
@@ -342,14 +377,17 @@ const CrimeGroupReportView = ({
           {layout.length === CrimeGroupLayout.length && (
             <Col>
               <Typography.Title level={5}>
-                All charts have been added
+                {intl.formatMessage({
+                  defaultMessage: 'All charts have been added',
+                  id: '0Bn8Ax',
+                })}
               </Typography.Title>
             </Col>
           )}
         </Row>
       </Drawer>
       <Drawer
-        title="Add Logo"
+        title={intl.formatMessage({ defaultMessage: 'Add Logo', id: 'pn9DSF' })}
         placement="right"
         closable
         open={editMode && addLogoDrawer}
@@ -364,7 +402,7 @@ const CrimeGroupReportView = ({
         />
       </Drawer>
       <Drawer
-        title="Save As"
+        title={intl.formatMessage({ defaultMessage: 'Save as', id: 'nCsL6d' })}
         placement="right"
         closable
         open={saveAsDrawer}

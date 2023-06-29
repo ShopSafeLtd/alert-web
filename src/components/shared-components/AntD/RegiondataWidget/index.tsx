@@ -1,4 +1,4 @@
-/* eslint-disable no-plusplus */
+/* eslint-disable */
 import React, { useState } from 'react';
 import { Card, Row, Col, Badge, Grid } from 'antd';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';

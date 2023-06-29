@@ -10,7 +10,7 @@ describe('List Officer View', () => {
       systemTask: false,
       incident: {
         id: 'incidentId',
-        date: '2022-08-10T10:40:06.191Z',
+        date: new Date('2022-07-25T08:57:55.299Z'),
         recycled: false,
         subject: 'test subject',
         createdBy: {

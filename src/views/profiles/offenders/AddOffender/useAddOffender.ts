@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
 import { useState } from 'react';
 import type {
   Age,
@@ -12,12 +13,12 @@ import type {
   Race,
 } from 'graphql/generated';
 import {
-  useListCustomGalleriesQuery,
   ImagePosition,
   ListOffendersDocument,
   Model,
   Role,
   useCreateOffenderMutation,
+  useListCustomGalleriesQuery,
   useListVehiclesQuery,
   useSchemeGroupsQuery,
   useTagsQuery,
@@ -38,6 +39,7 @@ import type {
 } from 'types/DataType';
 import update from 'immutability-helper';
 import errorNotification from 'types/error_notification';
+import { useIntl } from 'react-intl';
 
 const { confirm } = Modal;
 
@@ -147,6 +149,7 @@ const onPreview = async (file: UploadFile) => {
 };
 
 const useAddOffender = (): Return => {
+  const intl = useIntl();
   const [form] = Form.useForm<FormData>();
   const schemeId = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
@@ -309,11 +312,18 @@ const useAddOffender = (): Return => {
   };
 
   const [createOffender] = useCreateOffenderMutation({
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onCompleted: async () => {
       setSaving(false);
       notification.success({
-        message: 'Successfully Added!',
-        description: 'The offender has been added!',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Added!',
+          id: '5Hvk21',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The offender has been added!',
+          id: '67LUBd',
+        }),
         placement: 'bottomRight',
       });
 
@@ -488,7 +498,7 @@ const useAddOffender = (): Return => {
         create: undefined,
       };
     };
-    createOffender({
+    void createOffender({
       variables: {
         data: {
           name: data.name,
@@ -570,11 +580,18 @@ const useAddOffender = (): Return => {
   const beforeUpload = (file: RcFile) => {
     const isFileDuplicate = fileList.find((item) => item.name === file.name);
     if (isFileDuplicate) {
-      message.error('This image already exists, please choose another one.');
+      void message.error(
+        intl.formatMessage({
+          defaultMessage:
+            'This image already exists, please choose another one.',
+          id: 'ILB9M+',
+        })
+      );
     }
 
     return !isFileDuplicate || Upload.LIST_IGNORE;
   };
+
   const imgChange: UploadProps['onChange'] = (info) => {
     if (info.file.response && info.file.status === 'done') {
       setFileList([
@@ -701,8 +718,14 @@ const useAddOffender = (): Return => {
 
   const deleteConfirm = (currentId: string | undefined) => {
     confirm({
-      title: 'Do you want to delete the exclusion?',
-      content: 'This action cannot be undone.',
+      title: intl.formatMessage({
+        defaultMessage: 'Do you want to delete the exclusion?',
+        id: 'P70g0z',
+      }),
+      content: intl.formatMessage({
+        defaultMessage: 'This action cannot be undone.',
+        id: 'JDJoIZ',
+      }),
       onOk() {
         onRemoveBan(currentId);
       },
@@ -723,8 +746,14 @@ const useAddOffender = (): Return => {
 
   const onRemoveImage = (imageId: string) => {
     confirm({
-      title: 'Do you want to remove the image?',
-      content: 'This action cannot be undone.',
+      title: intl.formatMessage({
+        defaultMessage: 'Do you want to remove the image?',
+        id: 'n0NLsa',
+      }),
+      content: intl.formatMessage({
+        defaultMessage: 'This action cannot be undone.',
+        id: 'JDJoIZ',
+      }),
       onOk() {
         setFileList(fileList.filter((item) => item.uid !== imageId));
       },
@@ -760,6 +789,7 @@ const useAddOffender = (): Return => {
       })) || [],
     customGalleriesLoading,
     imgChange,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onPreview,
     onRemoveImage,
     beforeUpload,

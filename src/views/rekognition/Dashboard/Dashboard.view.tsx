@@ -2,6 +2,7 @@ import React from 'react';
 import { createUseStyles } from 'react-jss';
 import type { SchemeRekognitionQuery } from 'graphql/generated';
 import { Col, Row, Spin, Typography } from 'antd';
+import { FormattedMessage } from 'react-intl';
 
 const { Title } = Typography;
 
@@ -148,7 +149,7 @@ const Dashboard = ({ data, loading = true }: Props) => {
           <Row gutter={16} align="middle" className={classes.headerRow}>
             <Col flex={1}>
               <Title className={classes.title} level={3}>
-                Face Matches
+                <FormattedMessage defaultMessage="Face Matches" id="r4XwrK" />
               </Title>
             </Col>
           </Row>

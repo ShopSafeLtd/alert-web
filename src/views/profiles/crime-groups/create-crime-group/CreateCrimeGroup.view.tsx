@@ -1,15 +1,15 @@
 import React from 'react';
 import {
+  Button,
+  Card,
+  Carousel,
+  Col,
+  Divider,
+  Drawer,
+  Popconfirm,
+  Row,
   Spin,
   Typography,
-  Card,
-  Row,
-  Col,
-  Button,
-  Carousel,
-  Drawer,
-  Divider,
-  Popconfirm,
 } from 'antd';
 import type {
   ListOffendersQuery,
@@ -28,6 +28,7 @@ import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import { useIntl } from 'react-intl'; // Import the useIntl hook
 import useStyles from './CreateCrimeGroup.styles';
 
 const { Title, Text } = Typography;
@@ -58,13 +59,18 @@ const CreateCrimeGroup = ({
   submitting,
 }: Props) => {
   const classes = useStyles();
+  const intl = useIntl(); // Initialize the useIntl hook
 
   return (
     <div className={classes.page}>
       <Row align="middle" className={classes.headerRow}>
         <Col flex={1}>
           <Title style={{ margin: 0 }} level={3}>
-            Select the offenders to be in the new crime group
+            {intl.formatMessage({
+              id: 'QHtzUS',
+              defaultMessage:
+                'Select the offenders to be in the new crime group',
+            })}
           </Title>
         </Col>
         <Col>
@@ -74,7 +80,10 @@ const CreateCrimeGroup = ({
             onClick={onSubmit}
             type="primary"
           >
-            Create Crime Group
+            {intl.formatMessage({
+              id: 'Bju8fW',
+              defaultMessage: 'Create Crime Group',
+            })}
           </Button>
         </Col>
       </Row>
@@ -113,7 +122,10 @@ const CreateCrimeGroup = ({
                         </Col>
                         <Col>
                           <Popconfirm
-                            title="Are you sure?"
+                            title={intl.formatMessage({
+                              id: '2oCaym',
+                              defaultMessage: 'Are you sure?',
+                            })}
                             disabled={submitting}
                             overlayInnerStyle={{ padding: 10 }}
                             onConfirm={() => removeOffender(offender.id)}
@@ -130,52 +142,98 @@ const CreateCrimeGroup = ({
                       </Row>
                       <Divider style={{ margin: 0 }} />
                       <div className={classes.field}>
-                        <Text>Age: </Text>
+                        <Text>
+                          {intl.formatMessage({
+                            id: 'S9GJ93',
+                            defaultMessage: 'Age:',
+                          })}
+                        </Text>
                         <Text type="secondary">
                           {getAge(offender.age || Age.Unknown)}
                         </Text>
                       </div>
                       <Divider style={{ margin: 0 }} />
                       <div className={classes.field}>
-                        <Text>Date Of Birth: </Text>
+                        <Text>
+                          {intl.formatMessage({
+                            id: '2yJ7Rj',
+                            defaultMessage: 'Date Of Birth:',
+                          })}
+                        </Text>
                         <Text type="secondary">
                           {moment(offender.dateOfBirth).format('DD/MM/YYYY') ||
-                            'Unknown'}
+                            intl.formatMessage({
+                              id: '5jeq8P',
+                              defaultMessage: 'Unknown',
+                            })}
                         </Text>
                       </div>
                       <Divider style={{ margin: 0 }} />
                       <div className={classes.field}>
-                        <Text>DoB Source: </Text>
+                        <Text>
+                          {intl.formatMessage({
+                            id: '+WLvff',
+                            defaultMessage: 'DoB Source:',
+                          })}
+                        </Text>
                         <Text type="secondary">
-                          {offender.dateSource || 'Non'}
+                          {offender.dateSource ||
+                            intl.formatMessage({
+                              id: '450Fty',
+                              defaultMessage: 'None',
+                            })}
                         </Text>
                       </div>
                       <Divider style={{ margin: 0 }} />
                       <div className={classes.field}>
-                        <Text>Build: </Text>
+                        <Text>
+                          {intl.formatMessage({
+                            id: '0qjl3+',
+                            defaultMessage: 'Build:',
+                          })}
+                        </Text>
                         <Text type="secondary">
                           {getBuild(offender.build || Build.Unknown)}
                         </Text>
                       </div>
                       <Divider style={{ margin: 0 }} />
                       <div className={classes.field}>
-                        <Text>Ethnicity: </Text>
+                        <Text>
+                          {intl.formatMessage({
+                            id: 'JzYph5',
+                            defaultMessage: 'Ethnicity:',
+                          })}
+                        </Text>
                         <Text type="secondary">
                           {getEthnicity(offender.race || Race.Unknown)}
                         </Text>
                       </div>
                       <Divider style={{ margin: 0 }} />
                       <div className={classes.field}>
-                        <Text>Sex: </Text>
+                        <Text>
+                          {intl.formatMessage({
+                            id: 'Oz0DsA',
+                            defaultMessage: 'Sex:',
+                          })}
+                        </Text>
                         <Text type="secondary">
                           {getSex(offender.gender || Gender.Unknown)}
                         </Text>
                       </div>
                       <Divider style={{ margin: 0 }} />
                       <div className={classes.field}>
-                        <Text>Last Active: </Text>
+                        <Text>
+                          {intl.formatMessage({
+                            id: 'UNesYg',
+                            defaultMessage: 'Last Active:',
+                          })}
+                        </Text>
                         <Text type="secondary">
-                          {offender.lastActive?.dayTime || 'Never'}
+                          {offender.lastActive?.dayTime ||
+                            intl.formatMessage({
+                              id: 'du1laW',
+                              defaultMessage: 'Never',
+                            })}
                         </Text>
                       </div>
                       <Divider style={{ margin: 0 }} />
@@ -189,7 +247,10 @@ const CreateCrimeGroup = ({
                   onClick={toggleAddOffender}
                   type="primary"
                 >
-                  Add Offender
+                  {intl.formatMessage({
+                    id: 'm3ChN4',
+                    defaultMessage: 'Add Offender',
+                  })}
                 </Button>
               </Col>
             </Row>
@@ -213,10 +274,14 @@ const CreateCrimeGroup = ({
                       <Text className={classes.offenderName}>
                         {offender.name}
                       </Text>
-
                       <Row gutter={8}>
                         <Col>
-                          <Text className={classes.offenderDetail}>Age: </Text>
+                          <Text className={classes.offenderDetail}>
+                            {intl.formatMessage({
+                              id: 'anqdpr',
+                              defaultMessage: 'Age: ',
+                            })}
+                          </Text>
                           <Text
                             className={classes.offenderDetail}
                             type="secondary"
@@ -226,7 +291,10 @@ const CreateCrimeGroup = ({
                         </Col>
                         <Col>
                           <Text className={classes.offenderDetail}>
-                            Build:{' '}
+                            {intl.formatMessage({
+                              id: 'iXQkAi',
+                              defaultMessage: 'Build: ',
+                            })}
                           </Text>
                           <Text
                             className={classes.offenderDetail}
@@ -238,7 +306,12 @@ const CreateCrimeGroup = ({
                       </Row>
                       <Row gutter={8}>
                         <Col>
-                          <Text className={classes.offenderDetail}>Sex: </Text>
+                          <Text className={classes.offenderDetail}>
+                            {intl.formatMessage({
+                              id: 'j3ULId',
+                              defaultMessage: 'Sex: ',
+                            })}
+                          </Text>
                           <Text
                             className={classes.offenderDetail}
                             type="secondary"
@@ -248,7 +321,10 @@ const CreateCrimeGroup = ({
                         </Col>
                         <Col>
                           <Text className={classes.offenderDetail}>
-                            Ethnicity:{' '}
+                            {intl.formatMessage({
+                              id: 'H+Sv5C',
+                              defaultMessage: 'Ethnicity: ',
+                            })}
                           </Text>
                           <Text type="secondary">
                             {getEthnicityShort(offender.race || Race.Unknown)}
@@ -258,7 +334,10 @@ const CreateCrimeGroup = ({
                       <Row gutter={8}>
                         <Col>
                           <Text className={classes.offenderDetail}>
-                            Last Active:{' '}
+                            {intl.formatMessage({
+                              id: 'kS9obh',
+                              defaultMessage: 'Last Active: ',
+                            })}
                           </Text>
                           <Text
                             className={classes.offenderDetail}
@@ -278,7 +357,10 @@ const CreateCrimeGroup = ({
       )}
 
       <Drawer
-        title="Add Offenders"
+        title={intl.formatMessage({
+          id: 'KaNxum',
+          defaultMessage: 'Add Offenders',
+        })}
         visible={addOffender}
         width="800"
         onClose={toggleAddOffender}

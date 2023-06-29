@@ -22,24 +22,23 @@ const FeedSearchFilter: React.FC<Props> = ({
   setSearchInput,
   openFilter,
   children,
-}) => {
-  return (
-    <div className="feed-search-filter-container">
-      <div className="spacer" />
-      <div className="search-filter-bar-container">
-        <SearchFilterBar
-          searchInput={searchInput}
-          setSearchInput={setSearchInput}
-          openFilter={openFilter}
-        />
-      </div>
-      <div className="applied-filters-container">
-        <div className="applied-filters" onClick={openFilter}>
-          {children}
-        </div>
+}) => (
+  <div className="feed-search-filter-container">
+    <div className="spacer" />
+    <div className="search-filter-bar-container">
+      <SearchFilterBar
+        searchInput={searchInput}
+        setSearchInput={setSearchInput}
+        openFilter={openFilter}
+      />
+    </div>
+    <div className="applied-filters-container">
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+      <div className="applied-filters" onClick={openFilter}>
+        {children}
       </div>
     </div>
-  );
-};
+  </div>
+);
 
 export default FeedSearchFilter;

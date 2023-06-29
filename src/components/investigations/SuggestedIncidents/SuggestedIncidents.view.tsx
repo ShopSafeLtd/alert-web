@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import OffenderTable from 'components/tables/OffenderTable/OffenderTable.view';
+import { FormattedMessage } from 'react-intl';
 import useStyles from './SuggestedIncidents.style';
 
 const { Paragraph, Title, Text } = Typography;
@@ -24,7 +25,10 @@ const SuggestedIncidents = ({
   handleAddSuggestion,
 }: Props) => {
   const classes = useStyles();
-  const [lightBoxOpen, setLightBoxOpen] = useState({
+  const [lightBoxOpen, setLightBoxOpen] = useState<{
+    open: boolean;
+    index: number;
+  }>({
     open: false,
     index: 0,
   });
@@ -74,19 +78,39 @@ const SuggestedIncidents = ({
           <Title level={3} style={{ margin: 0 }}>
             {incident.subject}
           </Title>
-          <Text>Alert ID: {incident.reference}</Text>
+          <Text>
+            <FormattedMessage
+              id="377fsC"
+              defaultMessage="Alert ID: {reference}"
+              values={{ reference: incident.reference }}
+            />
+          </Text>
           <Paragraph>{incident.description}</Paragraph>
           <Descriptions style={{ marginTop: 20, marginBottom: 20 }}>
-            <Descriptions.Item label="Date/Time">
+            <Descriptions.Item
+              label={
+                <FormattedMessage id="9RI5n5" defaultMessage="Date/Time" />
+              }
+            >
               {incident.dayTime}
             </Descriptions.Item>
-            <Descriptions.Item label="Location">
+            <Descriptions.Item
+              label={<FormattedMessage id="rvirM2" defaultMessage="Location" />}
+            >
               {incident.location?.full}
             </Descriptions.Item>
-            <Descriptions.Item label="Crime Number">
+            <Descriptions.Item
+              label={
+                <FormattedMessage id="XDjYEW" defaultMessage="Crime Number" />
+              }
+            >
               {incident.policeRef}
             </Descriptions.Item>
-            <Descriptions.Item label="Crime Type">
+            <Descriptions.Item
+              label={
+                <FormattedMessage id="CXUpH7" defaultMessage="Crime Type" />
+              }
+            >
               <Row>
                 {incident.crimeTypes.map((item) => (
                   <Col key={item.id}>
@@ -107,7 +131,12 @@ const SuggestedIncidents = ({
           <Row gutter={8} justify="end">
             <Col>
               <Link to={`/app/incidents/view/${incident.id}`} onClick={onClose}>
-                <Button>View Incident</Button>
+                <Button>
+                  <FormattedMessage
+                    id="f4Tgpp"
+                    defaultMessage="View Incident"
+                  />
+                </Button>
               </Link>
             </Col>
             <Col>
@@ -116,7 +145,10 @@ const SuggestedIncidents = ({
                 type="ghost"
                 onClick={() => handleAddSuggestion(incident.id)}
               >
-                Add To Investigation
+                <FormattedMessage
+                  id="zEXZIx"
+                  defaultMessage="Add To Investigation"
+                />
               </Button>
             </Col>
           </Row>

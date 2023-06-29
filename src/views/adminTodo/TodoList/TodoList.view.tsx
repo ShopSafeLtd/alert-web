@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import React from 'react';
 import {
+  Avatar,
   Button,
   Card,
   Checkbox,
@@ -9,9 +11,11 @@ import {
   Empty,
   Input,
   Popconfirm,
+  Radio,
   Row,
   Skeleton,
   Table,
+  Tooltip,
 } from 'antd';
 import type { CreateTodoMutation, ListTodosQuery } from 'graphql/generated';
 import moment from 'moment';
@@ -21,6 +25,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { Link } from 'react-router-dom';
 import getTodoUrl from 'utils/get-to-do-url';
+import { useIntl } from 'react-intl';
 import useStyles from './TodoList.styles';
 
 const { Panel } = Collapse;
@@ -40,6 +45,8 @@ interface Props {
   onPaginationChange: (page: number, pageSize: number) => void;
   currentPage: number;
   currentPageSize: number;
+  toggleAllUsers: () => void;
+  toggleAllSchemes: () => void;
 }
 
 const AdminTodos = ({
@@ -55,9 +62,11 @@ const AdminTodos = ({
   onPaginationChange,
   currentPage,
   currentPageSize,
+  toggleAllUsers,
+  toggleAllSchemes,
 }: Props): JSX.Element => {
   const classes = useStyles();
-
+  const intl = useIntl();
   return (
     <div className="list-view">
       <Row gutter={8} style={{ marginBottom: 10 }}>
@@ -65,11 +74,46 @@ const AdminTodos = ({
           <Input
             // value={search}
             onChange={(event) => setSearch(event.target.value)}
-            placeholder="Search for a task..."
+            placeholder={intl.formatMessage({
+              id: 'jXZqfz',
+              defaultMessage: 'Search for a task...',
+            })}
             allowClear
           />
         </Col>
         <Col flex={1} />
+        <Col>
+          <Radio.Group defaultValue="CURRENT" onChange={toggleAllSchemes}>
+            <Radio.Button value="CURRENT">
+              {intl.formatMessage({
+                id: 'qWFImB',
+                defaultMessage: 'Current Scheme',
+              })}
+            </Radio.Button>
+            <Radio.Button value="ALL">
+              {intl.formatMessage({
+                defaultMessage: 'All Schemes',
+                id: '4zN3gE',
+              })}
+            </Radio.Button>
+          </Radio.Group>
+        </Col>
+        <Col>
+          <Radio.Group defaultValue="YOUR" onChange={toggleAllUsers}>
+            <Radio.Button value="YOUR">
+              {intl.formatMessage({
+                defaultMessage: 'Your Tasks',
+                id: 'nhiP3+',
+              })}
+            </Radio.Button>
+            <Radio.Button value="ALL">
+              {intl.formatMessage({
+                defaultMessage: 'All Tasks',
+                id: 'rY3Ca3',
+              })}
+            </Radio.Button>
+          </Radio.Group>
+        </Col>
         <Col>
           <Button
             type="primary"
@@ -83,7 +127,10 @@ const AdminTodos = ({
               />
             }
           >
-            New Task
+            {intl.formatMessage({
+              defaultMessage: 'New Task',
+              id: 'jtxQPo',
+            })}
           </Button>
         </Col>
       </Row>
@@ -101,9 +148,7 @@ const AdminTodos = ({
               description: todo?.description,
               dueDate: todo.dueDate,
               completed: todo.completed,
-              assignedUsers: todo.assignedUsers.map(({ fullName }, index) =>
-                index === 0 ? `${fullName}` : `, ${fullName}`
-              ),
+              assignedUsers: todo.assignedUsers,
               todo,
             }))}
             // onRow={(record) =>
@@ -124,17 +169,29 @@ const AdminTodos = ({
             }}
             columns={[
               {
-                title: 'Completed',
+                title: intl.formatMessage({
+                  defaultMessage: 'Completed',
+                  id: '95stPq',
+                }),
                 dataIndex: 'actions',
                 key: 'actions',
                 width: 100,
                 render: (_, record) => (
                   <Popconfirm
-                    title="Complete this task?"
+                    title={intl.formatMessage({
+                      defaultMessage: 'Complete this task?',
+                      id: 'i2Qvui',
+                    })}
                     // description="Do you complete this task?"
                     onConfirm={() => onCompletedTodo(record.key)}
-                    okText="Yes"
-                    cancelText="No"
+                    okText={intl.formatMessage({
+                      defaultMessage: 'Yes',
+                      id: 'a5msuh',
+                    })}
+                    cancelText={intl.formatMessage({
+                      defaultMessage: 'No',
+                      id: 'oUWADl',
+                    })}
                     overlayInnerStyle={{ padding: 10 }}
                   >
                     <Checkbox checked={!!record.completed} />
@@ -144,7 +201,10 @@ const AdminTodos = ({
               {
                 key: 'name',
                 dataIndex: 'name',
-                title: 'Name',
+                title: intl.formatMessage({
+                  defaultMessage: 'Name',
+                  id: 'HAlOn1',
+                }),
                 render: (value, record) => (
                   <Link to={`${getTodoUrl(record.todo)}`}>{value}</Link>
                 ),
@@ -152,21 +212,50 @@ const AdminTodos = ({
               {
                 key: 'description',
                 dataIndex: 'description',
-                title: 'Description',
+                title: intl.formatMessage({
+                  defaultMessage: 'Description',
+                  id: 'Q8Qw5B',
+                }),
                 ellipsis: true,
               },
 
               {
                 key: 'dueDate',
                 dataIndex: 'dueDate',
-                title: 'Due Date',
+                title: intl.formatMessage({
+                  defaultMessage: 'Due Date',
+                  id: '8XUukm',
+                }),
                 render: (value) => moment(value).calendar('dd/mm/yyyy'),
               },
               {
                 key: 'assignedUsers',
                 dataIndex: 'assignedUsers',
-                title: 'Assigned Users',
+                title: intl.formatMessage({
+                  defaultMessage: 'Assigned Users',
+                  id: '8oku8d',
+                }),
                 ellipsis: true,
+                render: (value: { id: string; fullName: string }[]) => (
+                  <Row gutter={4}>
+                    {value.map((item) => (
+                      <Col key={item.id}>
+                        <Tooltip title={item.fullName}>
+                          <Avatar
+                            style={{ cursor: 'pointer', fontSize: 14 }}
+                            size={30}
+                          >
+                            {item.fullName
+                              .split(' ')
+                              .map((split) => split.slice(0, 1).toUpperCase())
+                              .toString()
+                              .replace(',', '')}
+                          </Avatar>
+                        </Tooltip>
+                      </Col>
+                    ))}
+                  </Row>
+                ),
               },
             ]}
           />
@@ -181,14 +270,23 @@ const AdminTodos = ({
           >
             <Empty
               image={Empty.PRESENTED_IMAGE_SIMPLE}
-              description="Nothing to complete"
+              description={intl.formatMessage({
+                defaultMessage: 'Nothing to do',
+                id: 'TtyC9C',
+              })}
             />
           </div>
         )}
       </Card>
 
       <Collapse className={classes.title}>
-        <Panel header="Completed Tasks" key="1">
+        <Panel
+          header={intl.formatMessage({
+            defaultMessage: 'Completed Tasks',
+            id: 'fwW6PN',
+          })}
+          key="1"
+        >
           <Card loading={loading}>
             {loading ? (
               Array.from({ length: 5 }).map((_, index) => (
@@ -219,17 +317,30 @@ const AdminTodos = ({
                 }}
                 columns={[
                   {
-                    title: 'Completed',
+                    title: intl.formatMessage({
+                      defaultMessage: 'Uncompleted',
+                      id: 'vtoZdb',
+                    }),
+
                     dataIndex: 'actions',
                     key: 'actions',
                     width: 100,
                     render: (_, record) => (
                       <Popconfirm
-                        title="Uncompleted this task?"
+                        title={intl.formatMessage({
+                          defaultMessage: 'Uncomplete this task?',
+                          id: 'bTPleg',
+                        })}
                         // description="Do you complete this task?"
                         onConfirm={() => onUncompletedTodo(record.key)}
-                        okText="Yes"
-                        cancelText="No"
+                        okText={intl.formatMessage({
+                          defaultMessage: 'Yes',
+                          id: 'a5msuh',
+                        })}
+                        cancelText={intl.formatMessage({
+                          defaultMessage: 'No',
+                          id: 'oUWADl',
+                        })}
                         overlayInnerStyle={{ padding: 10 }}
                       >
                         <Checkbox checked={record.completed} />
@@ -239,25 +350,37 @@ const AdminTodos = ({
                   {
                     key: 'name',
                     dataIndex: 'name',
-                    title: 'Name',
+                    title: intl.formatMessage({
+                      defaultMessage: 'Name',
+                      id: 'HAlOn1',
+                    }),
                   },
                   {
                     key: 'description',
                     dataIndex: 'description',
-                    title: 'Description',
+                    title: intl.formatMessage({
+                      defaultMessage: 'Description',
+                      id: 'Q8Qw5B',
+                    }),
                     ellipsis: true,
                   },
 
                   {
                     key: 'completedDate',
                     dataIndex: 'completedDate',
-                    title: 'Completed Date',
+                    title: intl.formatMessage({
+                      defaultMessage: 'Completed Date',
+                      id: 'DFG3iK',
+                    }),
                     render: (value) => moment(value).calendar('dd/mm/yyyy'),
                   },
                   {
                     key: 'completedBy',
                     dataIndex: 'completedBy',
-                    title: 'CompletedBy',
+                    title: intl.formatMessage({
+                      defaultMessage: 'Completed By',
+                      id: 'pgRdna',
+                    }),
                   },
                 ]}
               />
@@ -272,7 +395,10 @@ const AdminTodos = ({
               >
                 <Empty
                   image={Empty.PRESENTED_IMAGE_SIMPLE}
-                  description="Nothing has been completed"
+                  description={intl.formatMessage({
+                    defaultMessage: 'Nothing to do',
+                    id: 'TtyC9C',
+                  })}
                 />
               </div>
             )}
@@ -281,7 +407,10 @@ const AdminTodos = ({
       </Collapse>
 
       <Drawer
-        title="New Task"
+        title={intl.formatMessage({
+          defaultMessage: 'Add Todo',
+          id: 'Cgnk3e',
+        })}
         open={addTodo}
         width="400"
         onClose={toggleAddTodo}

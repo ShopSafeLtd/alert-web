@@ -1,14 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Button, Card, Col, Drawer, List } from 'antd';
 import React, { memo, useCallback } from 'react';
 import { Handle, NodeToolbar, Position, useStore } from 'reactflow';
 import '@reactflow/node-resizer/dist/style.css';
 import { useParams } from 'react-router-dom';
+import { NodeResizer } from '@reactflow/node-resizer';
+import { useIntl } from 'react-intl';
 import useStyles from './style.module';
 import useFlow from '../../../views/investigations/ViewInvestigation/views/Flow/hooks/useFlow';
 import { useDrawerState } from '../../../hooks';
 import { useStoreState } from '../../../state';
 import LinkIncident from '../form/SelectManyIncidents';
-import { NodeResizer } from '@reactflow/node-resizer';
 
 export interface Incident {
   description?: string | null | undefined;
@@ -67,7 +69,10 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
     if (!editing) {
       nodesMap.set(id, {
         ...currentNode,
-        data: { ...currentNode.data, isEditing: { user: '', editing: false } },
+        data: {
+          ...currentNode.data,
+          isEditing: { user: '', editing: false },
+        },
       });
       return;
     }
@@ -78,7 +83,7 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
       data: { ...currentNode.data, isEditing: { user: fullName, editing } },
     });
   }, []);
-
+  const intl = useIntl();
   return (
     <>
       <NodeToolbar isVisible={selected} position={Position.Top}>
@@ -86,12 +91,18 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
           onClick={() => {
             setIsEditing(true);
             drawer.open({
-              defaultTitle: 'Select Incidents',
+              defaultTitle: intl.formatMessage({
+                defaultMessage: 'Select Incidents',
+                id: 'mVjUvI',
+              }),
               id: 'incidentsSelect',
             });
           }}
         >
-          select incidents
+          {intl.formatMessage({
+            defaultMessage: 'Select Incidents',
+            id: 'mVjUvI',
+          })}
         </Button>
       </NodeToolbar>
       <div className={classes.node}>
@@ -111,6 +122,7 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
                   dataSource={data.incidentsList || []}
                   renderItem={(item) => (
                     <List.Item>
+                      {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
                       {item && item.description} - {item && item.dayTime}
                     </List.Item>
                   )}
@@ -119,7 +131,10 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
             </Col>
           ) : (
             <div style={{ height: '100%', zIndex: 4, position: 'relative' }}>
-              Incident list: Please select incidents
+              {intl.formatMessage({
+                defaultMessage: 'Incident list: Please select incidents',
+                id: 'w3krAd',
+              })}
             </div>
           )}
         </div>

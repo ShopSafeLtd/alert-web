@@ -10,6 +10,7 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import { Link } from 'react-router-dom';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import { useIntl } from 'react-intl';
 import UpdateContent from '../UpdateContent';
 
 const { Title, Text } = Typography;
@@ -32,9 +33,8 @@ const ImageContainer = ({
 }) => (
   <div
     style={{
-      width: 140,
-      height: 160,
-      borderRadius: 5,
+      width: 150,
+      height: 180,
     }}
   >
     <WatermarkImage url={src} position={position} />
@@ -59,8 +59,9 @@ const VehicleFeed = ({
     totalOffenders,
     reference,
   } = feedItem?.vehicle || {};
-
+  const intl = useIntl();
   return (
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     <Link to={`/app/vehicles/view/${id}`}>
       <Row gutter={20} wrap={false} style={{ width: '100%' }}>
         {(isNewVehicle || isNewImage) && images && images.length > 0 ? (
@@ -82,20 +83,36 @@ const VehicleFeed = ({
           </Col>
         ) : null}
 
-        <Col flex={1}>
+        <Col flex={1} style={{ padding: 10 }}>
           {isNewVehicle ? (
             <>
               <Title level={4} ellipsis>
                 {registration ||
-                  `Alert ID: ${reference}` ||
-                  'Unidentified Vehicle'}
+                  intl.formatMessage(
+                    { defaultMessage: 'Alert ID: {reference}', id: '377fsC' },
+                    {
+                      reference,
+                    }
+                  ) ||
+                  intl.formatMessage({
+                    defaultMessage: " 'Unidentified Vehicle'",
+                    id: '1/BQcU',
+                  })}
               </Title>
 
               {registration ? (
                 <Row style={{ marginTop: -5, marginBottom: 5 }}>
                   <Col>
                     <Text style={{ fontSize: 14 }} type="secondary">
-                      Alert ID: {reference}
+                      {intl.formatMessage(
+                        {
+                          defaultMessage: 'Alert ID: {reference}',
+                          id: '377fsC',
+                        },
+                        {
+                          reference,
+                        }
+                      )}
                     </Text>
                   </Col>
                 </Row>
@@ -110,7 +127,12 @@ const VehicleFeed = ({
                     icon={faUser}
                   />
                   <Text style={{ fontSize: 14 }} type="secondary">
-                    Members: {totalOffenders || 0}
+                    {intl.formatMessage(
+                      { defaultMessage: 'Members: {members}', id: '8gjK3b' },
+                      {
+                        members: totalOffenders || 0,
+                      }
+                    )}
                   </Text>
                 </Col>
               </Row>
@@ -123,7 +145,17 @@ const VehicleFeed = ({
                     icon={faCar}
                   />
                   <Text style={{ fontSize: 14 }} type="secondary">
-                    Make: {make || 'Unknown'}
+                    {intl.formatMessage(
+                      { defaultMessage: 'Make: {make}', id: 'cPuur1' },
+                      {
+                        make:
+                          make ||
+                          intl.formatMessage({
+                            defaultMessage: 'Unknown',
+                            id: '5jeq8P',
+                          }),
+                      }
+                    )}
                   </Text>
                 </Col>
               </Row>
@@ -136,7 +168,17 @@ const VehicleFeed = ({
                     icon={faCarSide}
                   />
                   <Text style={{ fontSize: 14 }} type="secondary">
-                    Model: {model || 'Unknown'}
+                    {intl.formatMessage(
+                      { defaultMessage: 'Model: {model}', id: '6gT5ZW' },
+                      {
+                        model:
+                          model ||
+                          intl.formatMessage({
+                            defaultMessage: 'Unknown',
+                            id: '5jeq8P',
+                          }),
+                      }
+                    )}
                   </Text>
                 </Col>
               </Row>
@@ -149,7 +191,17 @@ const VehicleFeed = ({
                     icon={faPalette}
                   />
                   <Text style={{ fontSize: 14 }} type="secondary">
-                    Colour: {colour || 'Unknown'}
+                    {intl.formatMessage(
+                      { defaultMessage: 'Colour: {colour}', id: 'pukOve' },
+                      {
+                        colour:
+                          colour ||
+                          intl.formatMessage({
+                            defaultMessage: 'Unknown',
+                            id: '5jeq8P',
+                          }),
+                      }
+                    )}
                   </Text>
                 </Col>
               </Row>
@@ -158,8 +210,19 @@ const VehicleFeed = ({
             <UpdateContent
               title={
                 registration ||
-                `Alert ID: ${reference}` ||
-                'Unidentified Vehicle'
+                intl.formatMessage(
+                  {
+                    defaultMessage: 'Alert ID: {reference}',
+                    id: '377fsC',
+                  },
+                  {
+                    reference,
+                  }
+                ) ||
+                intl.formatMessage({
+                  defaultMessage: 'Unidentified Vehicle',
+                  id: 'I3q18K',
+                })
               }
               update={updates[0]}
             />
