@@ -1629,12 +1629,12 @@ const useDiscImport = (): Return => {
             policeInvolved: incident.policeInvolved,
             policeRef: incident.policeRef,
             policeReported: incident.policeReported,
-            postcode: incident.postcode,
+            postcode: incident.postcode || 'Unknown',
             recoveredValue: incident.recoveredValue,
             street: incident.street,
             // TODO check
             time: moment(incident.time).toDate(),
-            townCity: '',
+            townCity: incident.townCity,
           })),
           offenders: newOffenders
             .map((offender) => ({
