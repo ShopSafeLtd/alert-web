@@ -5507,6 +5507,7 @@ export enum BanType {
   Cpw = 'CPW',
   Other = 'OTHER',
   Pspo = 'PSPO',
+  Wip = 'WIP',
 }
 
 export type BanUpdateInput = {
@@ -6275,7 +6276,7 @@ export type BusinessReport = {
 
 export type BusinessReportInput = {
   businessId: Scalars['String'];
-  crimeGroupIds?: InputMaybe<Array<Scalars['String']>>;
+  crimeGroupIds: Array<Scalars['String']>;
   dateRange: DateRangeInput;
   groupIds: Array<Scalars['String']>;
   offenderIds?: InputMaybe<Array<Scalars['String']>>;
@@ -9802,6 +9803,7 @@ export type DiscImportHistoricIncidentsInput = {
   county?: InputMaybe<Scalars['String']>;
   crimeTypes?: InputMaybe<Array<UniqueId>>;
   date?: InputMaybe<Scalars['DateTime']>;
+  groups?: InputMaybe<Array<UniqueId>>;
   importId: Scalars['String'];
   lostValue?: InputMaybe<Scalars['Float']>;
   policeInvolved?: InputMaybe<Scalars['Boolean']>;

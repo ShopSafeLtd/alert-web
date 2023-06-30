@@ -25,5 +25,9 @@ const BanTypeValues = [
     value: BanType.Pspo,
     label: 'PSPO',
   },
+  {
+    value: BanType.Wip,
+    label: 'WIP',
+  },
 ];
 export default BanTypeValues;
