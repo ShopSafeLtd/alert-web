@@ -778,6 +778,8 @@ const useDiscImport = (): Return => {
             .flat()
             .filter((item) => item !== ''),
           deletionDate: moment(offender.databaseDeletionDate),
+          postcode: offender.postcode,
+          street: offender.address,
         });
       });
 
@@ -1652,6 +1654,8 @@ const useDiscImport = (): Return => {
               images: offender.images.map(({ id }) => ({ id })),
               peculiarities: offender.peculiarities,
               race: offender.race,
+              street: offender.street,
+              postcode: offender.postcode,
             }))
             .reverse(),
           scheme: {

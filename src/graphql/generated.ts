@@ -6276,7 +6276,7 @@ export type BusinessReport = {
 
 export type BusinessReportInput = {
   businessId: Scalars['String'];
-  crimeGroupIds: Array<Scalars['String']>;
+  crimeGroupIds?: InputMaybe<Array<Scalars['String']>>;
   dateRange: DateRangeInput;
   groupIds: Array<Scalars['String']>;
   offenderIds?: InputMaybe<Array<Scalars['String']>>;
@@ -9860,7 +9860,9 @@ export type DiscImportOffendersInput = {
   importId: Scalars['String'];
   name: Scalars['String'];
   peculiarities?: InputMaybe<Scalars['String']>;
+  postcode?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
+  street?: InputMaybe<Scalars['String']>;
 };
 
 export type DiscImportUsersInput = {
@@ -17015,6 +17017,7 @@ export type IncidentCreateInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
   skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
@@ -17051,6 +17054,7 @@ export type IncidentCreateManyBusinessInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   schemeId: Scalars['String'];
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
   skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   time: Scalars['DateTime'];
@@ -17088,6 +17092,7 @@ export type IncidentCreateManyCreatedByInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   schemeId: Scalars['String'];
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
   skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   time: Scalars['DateTime'];
@@ -17125,6 +17130,7 @@ export type IncidentCreateManySchemeInput = {
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
   skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   time: Scalars['DateTime'];
@@ -17499,6 +17505,7 @@ export type IncidentCreateWithoutActionsInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
   skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
@@ -17555,6 +17562,7 @@ export type IncidentCreateWithoutArticleColumnsInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
   skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
@@ -17611,6 +17619,7 @@ export type IncidentCreateWithoutBusinessInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
   skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
@@ -17667,6 +17676,7 @@ export type IncidentCreateWithoutCreatedByInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
   skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
@@ -17723,6 +17733,7 @@ export type IncidentCreateWithoutCrimeGroupsInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
   skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
@@ -17779,6 +17790,7 @@ export type IncidentCreateWithoutCrimeTypesInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
   skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
@@ -17835,6 +17847,7 @@ export type IncidentCreateWithoutEvidenceInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
   skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
@@ -17891,6 +17904,7 @@ export type IncidentCreateWithoutFeedItemsInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
   skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
@@ -17947,6 +17961,7 @@ export type IncidentCreateWithoutGroupsInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
   skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
@@ -18003,6 +18018,7 @@ export type IncidentCreateWithoutImagesInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
   skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
@@ -18059,6 +18075,7 @@ export type IncidentCreateWithoutImpressionsInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
   skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
@@ -18115,6 +18132,7 @@ export type IncidentCreateWithoutIntelInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
   skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
@@ -18171,6 +18189,7 @@ export type IncidentCreateWithoutInvestigationsInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
   skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
@@ -18227,6 +18246,7 @@ export type IncidentCreateWithoutLinkedUpdatesInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
   skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
@@ -18283,6 +18303,7 @@ export type IncidentCreateWithoutLocationInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
   skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
@@ -18339,6 +18360,7 @@ export type IncidentCreateWithoutMatchesInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
   skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
@@ -18395,6 +18417,7 @@ export type IncidentCreateWithoutMessagesInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
   skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
@@ -18451,6 +18474,7 @@ export type IncidentCreateWithoutMg11Input = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
   skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
@@ -18507,6 +18531,7 @@ export type IncidentCreateWithoutNotificationsInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
   skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
@@ -18563,6 +18588,7 @@ export type IncidentCreateWithoutOffendersInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
   skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
@@ -18619,6 +18645,7 @@ export type IncidentCreateWithoutRecycleBinInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
   skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
@@ -18675,6 +18702,7 @@ export type IncidentCreateWithoutSchemeInput = {
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
   skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
@@ -18732,6 +18760,7 @@ export type IncidentCreateWithoutSubscribedUsersInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
   skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   time: Scalars['DateTime'];
@@ -18788,6 +18817,7 @@ export type IncidentCreateWithoutTodosInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
   skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
@@ -18844,6 +18874,7 @@ export type IncidentCreateWithoutUpdatesInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
   skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
@@ -18900,6 +18931,7 @@ export type IncidentCreateWithoutVehiclesInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
   skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
@@ -19128,6 +19160,7 @@ export type IncidentOrderByWithRelationInput = {
   reference?: InputMaybe<SortOrder>;
   scheme?: InputMaybe<SchemeOrderByWithRelationInput>;
   schemeId?: InputMaybe<SortOrder>;
+  skipFeedItem?: InputMaybe<SortOrder>;
   skipNotification?: InputMaybe<SortOrder>;
   subject?: InputMaybe<SortOrder>;
   subscribedUsers?: InputMaybe<UserOrderByRelationAggregateInput>;
@@ -19168,6 +19201,7 @@ export type IncidentScalarWhereInput = {
   ref?: InputMaybe<StringNullableFilter>;
   reference?: InputMaybe<IntNullableFilter>;
   schemeId?: InputMaybe<StringFilter>;
+  skipFeedItem?: InputMaybe<BoolFilter>;
   skipNotification?: InputMaybe<BoolFilter>;
   subject?: InputMaybe<StringNullableFilter>;
   time?: InputMaybe<DateTimeFilter>;
@@ -19236,6 +19270,7 @@ export type IncidentUpdateInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
   skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
@@ -19270,6 +19305,7 @@ export type IncidentUpdateManyMutationInput = {
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
   skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -19851,6 +19887,7 @@ export type IncidentUpdateWithoutActionsInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
   skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
@@ -19907,6 +19944,7 @@ export type IncidentUpdateWithoutArticleColumnsInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
   skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
@@ -19963,6 +20001,7 @@ export type IncidentUpdateWithoutBusinessInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
   skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
@@ -20019,6 +20058,7 @@ export type IncidentUpdateWithoutCreatedByInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
   skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
@@ -20075,6 +20115,7 @@ export type IncidentUpdateWithoutCrimeGroupsInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
   skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
@@ -20131,6 +20172,7 @@ export type IncidentUpdateWithoutCrimeTypesInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
   skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
@@ -20187,6 +20229,7 @@ export type IncidentUpdateWithoutEvidenceInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
   skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
@@ -20243,6 +20286,7 @@ export type IncidentUpdateWithoutFeedItemsInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
   skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
@@ -20299,6 +20343,7 @@ export type IncidentUpdateWithoutGroupsInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
   skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
@@ -20355,6 +20400,7 @@ export type IncidentUpdateWithoutImagesInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
   skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
@@ -20411,6 +20457,7 @@ export type IncidentUpdateWithoutImpressionsInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
   skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
@@ -20467,6 +20514,7 @@ export type IncidentUpdateWithoutIntelInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
   skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
@@ -20523,6 +20571,7 @@ export type IncidentUpdateWithoutInvestigationsInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
   skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
@@ -20579,6 +20628,7 @@ export type IncidentUpdateWithoutLinkedUpdatesInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
   skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
@@ -20635,6 +20685,7 @@ export type IncidentUpdateWithoutLocationInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
   skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
@@ -20691,6 +20742,7 @@ export type IncidentUpdateWithoutMatchesInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
   skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
@@ -20747,6 +20799,7 @@ export type IncidentUpdateWithoutMessagesInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
   skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
@@ -20803,6 +20856,7 @@ export type IncidentUpdateWithoutMg11Input = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
   skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
@@ -20859,6 +20913,7 @@ export type IncidentUpdateWithoutNotificationsInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
   skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
@@ -20915,6 +20970,7 @@ export type IncidentUpdateWithoutOffendersInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
   skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
@@ -20971,6 +21027,7 @@ export type IncidentUpdateWithoutRecycleBinInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
   skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
@@ -21027,6 +21084,7 @@ export type IncidentUpdateWithoutSchemeInput = {
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
   skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
@@ -21084,6 +21142,7 @@ export type IncidentUpdateWithoutSubscribedUsersInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
   skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -21140,6 +21199,7 @@ export type IncidentUpdateWithoutTodosInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
   skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
@@ -21196,6 +21256,7 @@ export type IncidentUpdateWithoutUpdatesInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
   skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
@@ -21252,6 +21313,7 @@ export type IncidentUpdateWithoutVehiclesInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
   skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
@@ -21458,6 +21520,7 @@ export type IncidentWhereInput = {
   reference?: InputMaybe<IntNullableFilter>;
   scheme?: InputMaybe<SchemeWhereInput>;
   schemeId?: InputMaybe<StringFilter>;
+  skipFeedItem?: InputMaybe<BoolFilter>;
   skipNotification?: InputMaybe<BoolFilter>;
   subject?: InputMaybe<StringNullableFilter>;
   subscribedUsers?: InputMaybe<UserListRelationFilter>;

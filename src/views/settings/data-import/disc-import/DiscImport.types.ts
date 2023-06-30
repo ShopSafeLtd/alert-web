@@ -241,6 +241,8 @@ export interface NewOffender {
   age: Age;
   groups: string[];
   deletionDate: Moment;
+  street: string;
+  postcode: string;
 }
 
 export interface NewIncident {
