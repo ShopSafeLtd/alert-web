@@ -1,5 +1,5 @@
 enum AccountTypes {
-  admin = "ADMIN",
-  company = "COMPANY"
+  admin = 'ADMIN',
+  company = 'COMPANY',
 }
-export default AccountTypes
+export default AccountTypes;

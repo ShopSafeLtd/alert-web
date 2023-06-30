@@ -38,7 +38,6 @@ const EditOffender = ({ reviewed }: Props): JSX.Element => {
     ageCheck,
     setAgeCheck,
     onReject,
-
     form,
     vehiclesData,
     crimeGroupsData,
@@ -58,7 +57,6 @@ const EditOffender = ({ reviewed }: Props): JSX.Element => {
     toggleEditImage,
     onAddVehicle,
     onRemoveVehicle,
-    onEditVehicle,
     onAddCrimeGroup,
     onRemoveCrimeGroup,
     onRemoveImage,
@@ -124,7 +122,6 @@ const EditOffender = ({ reviewed }: Props): JSX.Element => {
         onEditImage={onEditImage}
         toggleEditImage={toggleEditImage}
         onAddVehicle={onAddVehicle}
-        onEditVehicle={onEditVehicle}
         onRemoveVehicle={onRemoveVehicle}
         onRemoveImage={onRemoveImage}
         primaryImage={primaryImage}

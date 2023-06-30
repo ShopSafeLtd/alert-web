@@ -47,14 +47,14 @@ const roles = [
 ];
 
 export const getSex = (gender: string): string =>
-  genders.find(({ value }) => value === gender)?.text || 'Unknown';
+  genders.find(({ value }) => value === gender)?.text || gender;
 export const getEthnicity = (ethnicity: string): string =>
-  ethnicities.find(({ value }) => value === ethnicity)?.text || 'Unknown';
+  ethnicities.find(({ value }) => value === ethnicity)?.text || ethnicity;
 export const getEthnicityShort = (ethnicity: string): string =>
-  ethnicitiesShort.find(({ value }) => value === ethnicity)?.text || 'Unknown';
+  ethnicitiesShort.find(({ value }) => value === ethnicity)?.text || ethnicity;
 export const getAge = (age: string | number): string =>
   ages.find(({ value }) => value === age)?.text || 'Unknown';
 export const getBuild = (build: string): string =>
-  builds.find(({ value }) => value === build)?.text || 'Unknown';
+  builds.find(({ value }) => value === build)?.text || build;
 export const getRole = (role: string): string =>
-  roles.find(({ value }) => value === role)?.text || 'Unknown';
+  roles.find(({ value }) => value === role)?.text || role;

@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { useEffect } from 'react';
 import { Card, Col, Row } from 'antd';
 import { useStoreState } from 'state';

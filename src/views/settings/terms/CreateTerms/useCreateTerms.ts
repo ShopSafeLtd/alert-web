@@ -48,6 +48,8 @@ const useCreateTerms = (): Return => {
           schemeId,
         },
       },
+    }).finally(() => {
+      onClose();
     });
     // onClose();
   };

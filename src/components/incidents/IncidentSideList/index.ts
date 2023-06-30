@@ -1,1 +1,1 @@
-export { default } from './IncidentSideList.container'
+export { default } from './IncidentSideList.container';

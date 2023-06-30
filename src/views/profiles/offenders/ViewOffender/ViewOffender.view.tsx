@@ -31,18 +31,18 @@ import {
   faBellSlash,
   faCircleInfo,
   faClock,
+  faComment,
   faEarth,
   faEdit,
+  faHeadSide,
   faMarsAndVenus,
   faPassport,
   faTrash,
+  faUser,
   faUserClock,
   faUserHair,
   faUsers,
-  faUser,
   faUserTag,
-  faHeadSide,
-  faComment,
 } from '@fortawesome/pro-light-svg-icons';
 import {
   calcAge,
@@ -72,6 +72,7 @@ import { calcDuration } from 'utils';
 import LightBox from 'components/images/LightBox/LightBox.container';
 import OffenderMatches from 'components/rekognition/OffenderMatches/OffenderMatches.container';
 import formatCalendar from 'utils/format-calendar-24h';
+import { useIntl } from 'react-intl';
 import type { ViewAssociate } from './useViewOffender';
 import useStyles from './ViewOffender.styles';
 
@@ -189,10 +190,19 @@ const ViewOffender = ({
   toggleViewMatches,
   viewMatches,
 }: Props): JSX.Element => {
+  const intl = useIntl();
   const classes = useStyles();
   const expandedRowRender = (record: TableItem) => (
     <Text style={{ fontSize: 14, padding: 0, margin: 0 }}>
-      Description: {record.description}
+      {intl.formatMessage(
+        {
+          defaultMessage: ' Description: {description}',
+          id: 'b/Uf3s',
+        },
+        {
+          description: record.description,
+        }
+      )}
     </Text>
   );
   return (
@@ -208,8 +218,16 @@ const ViewOffender = ({
               data?.offender?.searchedMatches.length > 0 && (
                 <Col>
                   <Button danger onClick={() => toggleViewMatches(offenderId)}>
-                    {data.offender.searchedMatches.length} Face ID Match
-                    {data.offender.searchedMatches.length > 1 ? 'es' : ''}
+                    {intl.formatMessage(
+                      {
+                        defaultMessage:
+                          '{itemCount} {itemCount, plural, one {Face ID Match} other {Face ID Matches}}',
+                        id: '0ZRYJ5',
+                      },
+                      {
+                        itemCount: data.offender.searchedMatches.length,
+                      }
+                    )}
                   </Button>
                 </Col>
               )}
@@ -217,8 +235,14 @@ const ViewOffender = ({
               <Tooltip
                 title={
                   data?.offender?.subscribed
-                    ? 'Stop getting notified about updates.'
-                    : 'Get notified about updates.'
+                    ? intl.formatMessage({
+                        defaultMessage: 'Stop getting notified about updates.',
+                        id: 'WpTY6U',
+                      })
+                    : intl.formatMessage({
+                        defaultMessage: 'Get notified about updates.',
+                        id: 'icr+Hj',
+                      })
                 }
               >
                 <Button
@@ -233,7 +257,15 @@ const ViewOffender = ({
                     style={{ marginRight: 8 }}
                     icon={data?.offender?.subscribed ? faBellSlash : faBell}
                   />
-                  {data?.offender?.subscribed ? 'Un-follow' : 'Follow'}
+                  {data?.offender?.subscribed
+                    ? intl.formatMessage({
+                        defaultMessage: 'Un-follow',
+                        id: 'U9yypY',
+                      })
+                    : intl.formatMessage({
+                        defaultMessage: 'Follow',
+                        id: 'ieGrWo',
+                      })}
                 </Button>
               </Tooltip>
             </Col>
@@ -246,7 +278,10 @@ const ViewOffender = ({
                       style={{ marginRight: 8 }}
                       icon={faEdit}
                     />
-                    Edit
+                    {intl.formatMessage({
+                      defaultMessage: 'Edit',
+                      id: 'wEQDC6',
+                    })}
                   </Button>
                 </Link>
               </Col>
@@ -259,36 +294,15 @@ const ViewOffender = ({
                     style={{ marginRight: 8 }}
                     icon={faTrash}
                   />
-                  Delete
+                  {intl.formatMessage({
+                    defaultMessage: 'Delete',
+                    id: 'K3r6DQ',
+                  })}
                 </Button>
               </Col>
             )}
           </Row>
-          <Row
-            gutter={8}
-            justify="start"
-            align="middle"
-            wrap={false}
-            className={classes.images}
-            style={{
-              height:
-                data?.offender?.images && data?.offender?.images.length > 0
-                  ? undefined
-                  : 0,
-            }}
-          >
-            {data?.offender?.images.map((image, i) => (
-              <Col key={image.id}>
-                <div onClick={() => openLightbox(i)} className={classes.image}>
-                  <WatermarkImage
-                    url={image.optimised}
-                    position={image.position}
-                  />
-                </div>
-              </Col>
-            ))}
-          </Row>
-          {loading && (
+          {loading ? (
             <Row style={{ width: '100%', marginBottom: 20, marginLeft: 10 }}>
               <Row gutter={8} className={classes.offenderRow}>
                 {Array.from({ length: 4 }).map((_, index) => (
@@ -307,7 +321,36 @@ const ViewOffender = ({
                 ))}
               </Row>
             </Row>
+          ) : (
+            <Row
+              gutter={[8, 8]}
+              justify="start"
+              align="middle"
+              wrap={false}
+              className={classes.images}
+              style={{
+                height:
+                  data?.offender?.images && data?.offender?.images.length > 0
+                    ? undefined
+                    : 0,
+              }}
+            >
+              {data?.offender?.images.map((image, i) => (
+                <Col key={image.id}>
+                  <div
+                    onClick={() => openLightbox(i)}
+                    className={classes.image}
+                  >
+                    <WatermarkImage
+                      url={image.optimised}
+                      position={image.position}
+                    />
+                  </div>
+                </Col>
+              ))}
+            </Row>
           )}
+
           <div className={classes.content}>
             <Card>
               <Row align="middle" gutter={10}>
@@ -317,7 +360,17 @@ const ViewOffender = ({
                   </Title>
                 </Col>
                 <Col>
-                  <Text>- - ALert ID: {data?.offender?.reference}</Text>
+                  <Text>
+                    {intl.formatMessage(
+                      {
+                        defaultMessage: 'Alert ID: {ref}',
+                        id: 'umL9sI',
+                      },
+                      {
+                        ref: data?.offender?.reference,
+                      }
+                    )}
+                  </Text>
                 </Col>
               </Row>
 
@@ -340,7 +393,10 @@ const ViewOffender = ({
                           className={classes.descIcon}
                           icon={faUser}
                         />
-                        Alias
+                        {intl.formatMessage({
+                          defaultMessage: 'Alias',
+                          id: 'Ri9jA7',
+                        })}
                       </span>
                     }
                   >
@@ -361,17 +417,31 @@ const ViewOffender = ({
                         className={classes.descIcon}
                         icon={faPassport}
                       />
-                      Verified
+                      {intl.formatMessage({
+                        defaultMessage: 'Verified',
+                        id: 'Z8971h',
+                      })}
                     </span>
                   }
                 >
                   {data?.offender?.idVerified ? (
                     <Typography.Text type="success">
-                      Verified {`(${getIdSource(data?.offender.idSource)})`}
+                      {intl.formatMessage(
+                        {
+                          defaultMessage: 'Verified {source}',
+                          id: 'OBOA6I',
+                        },
+                        {
+                          source: getIdSource(data?.offender.idSource),
+                        }
+                      )}
                     </Typography.Text>
                   ) : (
                     <Typography.Text type="warning">
-                      Not Verified
+                      {intl.formatMessage({
+                        defaultMessage: 'Not Verified',
+                        id: 'r+TWun',
+                      })}
                     </Typography.Text>
                   )}
                 </Descriptions.Item>
@@ -382,7 +452,10 @@ const ViewOffender = ({
                         className={classes.descIcon}
                         icon={faClock}
                       />
-                      Last updated
+                      {intl.formatMessage({
+                        defaultMessage: 'Last updated',
+                        id: '0ICwq5',
+                      })}
                     </span>
                   }
                 >
@@ -395,7 +468,10 @@ const ViewOffender = ({
                         className={classes.descIcon}
                         icon={faUsers}
                       />
-                      Groups
+                      {intl.formatMessage({
+                        defaultMessage: 'Groups',
+                        id: 'hzmswI',
+                      })}
                     </span>
                   }
                 >
@@ -413,7 +489,10 @@ const ViewOffender = ({
               <Col span={12}>
                 <Card>
                   <Title level={4} style={{ marginBottom: 10 }}>
-                    Physical Description
+                    {intl.formatMessage({
+                      defaultMessage: 'Physical Description',
+                      id: 'rXybms',
+                    })}
                   </Title>
                   <Descriptions column={1}>
                     {(publicOffenderDOB || editRights) && (
@@ -424,7 +503,10 @@ const ViewOffender = ({
                               className={classes.descIcon}
                               icon={faUserClock}
                             />
-                            Age
+                            {intl.formatMessage({
+                              defaultMessage: 'Age',
+                              id: '9oNQSC',
+                            })}
                           </span>
                         }
                       >
@@ -440,7 +522,10 @@ const ViewOffender = ({
                             className={classes.descIcon}
                             icon={faMarsAndVenus}
                           />
-                          Sex
+                          {intl.formatMessage({
+                            defaultMessage: 'Sex',
+                            id: 'eWJHGp',
+                          })}
                         </span>
                       }
                     >
@@ -453,7 +538,10 @@ const ViewOffender = ({
                             className={classes.descIcon}
                             icon={faUserTag}
                           />
-                          Build
+                          {intl.formatMessage({
+                            defaultMessage: 'Build',
+                            id: 'RSctv1',
+                          })}
                         </span>
                       }
                     >
@@ -466,7 +554,10 @@ const ViewOffender = ({
                             className={classes.descIcon}
                             icon={faHeadSide}
                           />
-                          Height
+                          {intl.formatMessage({
+                            defaultMessage: 'Height',
+                            id: 'teLZyZ',
+                          })}
                         </span>
                       }
                     >
@@ -479,7 +570,10 @@ const ViewOffender = ({
                             className={classes.descIcon}
                             icon={faEarth}
                           />
-                          Ethnicity
+                          {intl.formatMessage({
+                            defaultMessage: 'Ethnicity',
+                            id: 'XtCAFo',
+                          })}
                         </span>
                       }
                     >
@@ -493,7 +587,10 @@ const ViewOffender = ({
                               className={classes.descIcon}
                               icon={faUserHair}
                             />
-                            Hair
+                            {intl.formatMessage({
+                              defaultMessage: 'Hair',
+                              id: 'e4YBbX',
+                            })}
                           </span>
                         }
                       >
@@ -510,7 +607,10 @@ const ViewOffender = ({
                               className={classes.descIcon}
                               icon={faCircleInfo}
                             />
-                            Additional Info
+                            {intl.formatMessage({
+                              defaultMessage: 'Additional information',
+                              id: 'gh/lBJ',
+                            })}
                           </span>
                         }
                       >
@@ -527,7 +627,10 @@ const ViewOffender = ({
                               className={classes.descIcon}
                               icon={faComment}
                             />
-                            Comment
+                            {intl.formatMessage({
+                              defaultMessage: 'Comment',
+                              id: 'LgbKvU',
+                            })}
                           </span>
                         }
                       >
@@ -561,7 +664,10 @@ const ViewOffender = ({
                   >
                     <Empty
                       image={Empty.PRESENTED_IMAGE_SIMPLE}
-                      description="No incidents to map"
+                      description={intl.formatMessage({
+                        defaultMessage: 'No incidents found',
+                        id: '312q4w',
+                      })}
                     />
                   </Card>
                 )}
@@ -571,18 +677,27 @@ const ViewOffender = ({
               <Row style={{ marginBottom: 20 }} align="middle">
                 <Col>
                   <Title level={4} style={{ marginBottom: 0, marginRight: 20 }}>
-                    Known Associates
+                    {intl.formatMessage({
+                      defaultMessage: 'Known Associates',
+                      id: 'Nnl9rH',
+                    })}
                   </Title>
                 </Col>
                 <Col>
                   <CheckTags
                     options={[
                       {
-                        label: 'Linked Incidents',
+                        label: intl.formatMessage({
+                          defaultMessage: 'Linked Incidents',
+                          id: 'RDsV4v',
+                        }),
                         value: 'LINKED_INCIDENTS',
                       },
                       {
-                        label: 'Linked OCGs',
+                        label: intl.formatMessage({
+                          defaultMessage: 'Linked OCG',
+                          id: 'qhTnhR',
+                        }),
                         value: 'LINKED_OCG',
                       },
                     ]}
@@ -616,7 +731,10 @@ const ViewOffender = ({
                       <Col>
                         <Empty
                           image={Empty.PRESENTED_IMAGE_SIMPLE}
-                          description="No known associated for this offender"
+                          description={intl.formatMessage({
+                            defaultMessage: 'No known associates found',
+                            id: '835oG/',
+                          })}
                         />
                       </Col>
                     </Row>
@@ -646,7 +764,17 @@ const ViewOffender = ({
                             color="basic"
                             count={
                               associate.totalAssociatedIncidents
-                                ? `Incidents: ${associate.totalAssociatedIncidents}`
+                                ? intl.formatMessage(
+                                    {
+                                      defaultMessage:
+                                        'Incidents: {totalAssociatedIncidents}',
+                                      id: 'r4UaZo',
+                                    },
+                                    {
+                                      totalAssociatedIncidents:
+                                        associate.totalAssociatedIncidents,
+                                    }
+                                  )
                                 : undefined
                             }
                           />
@@ -682,7 +810,15 @@ const ViewOffender = ({
                           paddingBottom: 0,
                         }}
                       >
-                        {`Alert ID: ${associate.reference}`}
+                        {intl.formatMessage(
+                          {
+                            defaultMessage: 'Alert Id: {ref}',
+                            id: '9GD9D0',
+                          },
+                          {
+                            ref: associate.reference,
+                          }
+                        )}
                       </Paragraph>
                       <Paragraph
                         className={classes.offenderParagraph}
@@ -699,14 +835,24 @@ const ViewOffender = ({
               </Row>
             </Card>
             <Card>
-              <Title level={4}>Incidents</Title>
+              <Title level={4}>
+                {intl.formatMessage({
+                  defaultMessage: 'Incidents',
+                  id: 'mtr3R4',
+                })}
+              </Title>
               <IncidentTable
                 incidents={data?.offender?.incidents || []}
                 hasNavigation
               />
             </Card>
             <Card>
-              <Title level={4}>Exclusions</Title>
+              <Title level={4}>
+                {intl.formatMessage({
+                  defaultMessage: 'Exclusions',
+                  id: 'jjBvFh',
+                })}
+              </Title>
               <Table
                 size="small"
                 loading={loading}
@@ -724,19 +870,28 @@ const ViewOffender = ({
                 columns={[
                   {
                     key: 'duration',
-                    title: 'Duration',
+                    title: intl.formatMessage({
+                      defaultMessage: 'Duration',
+                      id: 'IuFETn',
+                    }),
                     dataIndex: 'duration',
                     render: (value) => <Text>{value}</Text>,
                   },
                   {
                     key: 'activeDay',
-                    title: 'Active Days',
+                    title: intl.formatMessage({
+                      defaultMessage: 'Active Days',
+                      id: 'YEneNi',
+                    }),
                     dataIndex: 'activeDay',
                     width: 150,
                   },
                   {
                     key: 'status',
-                    title: 'Status',
+                    title: intl.formatMessage({
+                      defaultMessage: 'Status',
+                      id: 'tzMNF3',
+                    }),
                     dataIndex: 'status',
                     render: (value, record) =>
                       calcExpired(new Date(record.endDate)) ? (
@@ -746,7 +901,10 @@ const ViewOffender = ({
                             marginLeft: 10,
                           }}
                         >
-                          EXPIRED
+                          {intl.formatMessage({
+                            defaultMessage: 'EXPIRED',
+                            id: 'GftNg3',
+                          })}
                         </Tag>
                       ) : (
                         <Tag
@@ -755,20 +913,29 @@ const ViewOffender = ({
                             marginLeft: 10,
                           }}
                         >
-                          ACTIVE
+                          {intl.formatMessage({
+                            defaultMessage: 'ACTIVE',
+                            id: 'LQPOVs',
+                          })}
                         </Tag>
                       ),
                   },
                   {
                     key: 'location',
-                    title: 'Location',
+                    title: intl.formatMessage({
+                      defaultMessage: 'Location',
+                      id: 'rvirM2',
+                    }),
                     dataIndex: 'location',
                     ellipsis: true,
                   },
 
                   {
                     key: 'type',
-                    title: 'Type',
+                    title: intl.formatMessage({
+                      defaultMessage: 'Type',
+                      id: '+U6ozc',
+                    }),
                     dataIndex: 'type',
                     ellipsis: true,
                   },
@@ -797,7 +964,12 @@ const ViewOffender = ({
             </Card>
             {editRights && (
               <Card>
-                <Title level={4}>Addresses</Title>
+                <Title level={4}>
+                  {intl.formatMessage({
+                    defaultMessage: 'Addresses',
+                    id: 'xBrtnx',
+                  })}
+                </Title>
                 <Table
                   size="small"
                   loading={loading}
@@ -813,12 +985,18 @@ const ViewOffender = ({
                   columns={[
                     {
                       key: 'alias',
-                      title: 'Alias',
+                      title: intl.formatMessage({
+                        defaultMessage: 'Alias',
+                        id: 'Ri9jA7',
+                      }),
                       dataIndex: 'alias',
                     },
                     {
                       key: 'full',
-                      title: 'Full Address',
+                      title: intl.formatMessage({
+                        defaultMessage: 'Full Address',
+                        id: 'RbRvWj',
+                      }),
                       dataIndex: 'full',
                     },
                   ]}
@@ -831,14 +1009,24 @@ const ViewOffender = ({
               </Card>
             )}
             <Card>
-              <Title level={4}>Vehicles</Title>
+              <Title level={4}>
+                {intl.formatMessage({
+                  defaultMessage: 'Vehicles',
+                  id: 'r6wuJ3',
+                })}
+              </Title>
               <VehicleTable
                 vehicles={data?.offender?.vehicles || []}
                 hasNavigation
               />
             </Card>
             <Card>
-              <Title level={4}>Crime Groups</Title>
+              <Title level={4}>
+                {intl.formatMessage({
+                  defaultMessage: 'Crime Groups',
+                  id: 'a0aLil',
+                })}
+              </Title>
               <CrimeGroupTable
                 crimeGroups={data?.offender?.crimeGroups || []}
                 hasNavigation
@@ -866,7 +1054,12 @@ const ViewOffender = ({
               loader={
                 <div className="message-date">
                   <div className="date-line" />
-                  <div className="date">Loading...</div>
+                  <div className="date">
+                    {intl.formatMessage({
+                      defaultMessage: 'Loading...',
+                      id: 'gjBiyj',
+                    })}
+                  </div>
                   <div className="date-line" />
                 </div>
               }
@@ -905,7 +1098,10 @@ const ViewOffender = ({
                             }}
                             size="small"
                           >
-                            Edit Update
+                            {intl.formatMessage({
+                              defaultMessage: 'Edit Update',
+                              id: 'pCzvx3',
+                            })}
                           </Button>
                           <Button
                             type="text"
@@ -922,7 +1118,10 @@ const ViewOffender = ({
                             }}
                             size="small"
                           >
-                            Delete Update
+                            {intl.formatMessage({
+                              defaultMessage: 'Delete Update',
+                              id: 'ef1dfd',
+                            })}
                           </Button>
                         </div>
                       }
@@ -931,7 +1130,7 @@ const ViewOffender = ({
                         <UpdateContent
                           userId={userId}
                           content={update.text}
-                          createdAt={update.createdAt}
+                          createdAt={moment(update.createdAt)}
                           from={update.createdBy}
                           id={update.id}
                           images={update.images}
@@ -948,7 +1147,7 @@ const ViewOffender = ({
                     <UpdateContent
                       userId={userId}
                       content={update.text}
-                      createdAt={update.createdAt}
+                      createdAt={moment(update.createdAt)}
                       from={update.createdBy}
                       id={update.id}
                       images={update.images}
@@ -994,7 +1193,10 @@ const ViewOffender = ({
                                 }}
                                 size="small"
                               >
-                                Edit Update
+                                {intl.formatMessage({
+                                  defaultMessage: 'Edit Update',
+                                  id: 'pCzvx3',
+                                })}
                               </Button>
                               <Button
                                 type="text"
@@ -1011,7 +1213,10 @@ const ViewOffender = ({
                                 }}
                                 size="small"
                               >
-                                Delete Update
+                                {intl.formatMessage({
+                                  defaultMessage: 'Delete Update',
+                                  id: 'ef1dfd',
+                                })}
                               </Button>
                             </div>
                           }
@@ -1020,7 +1225,7 @@ const ViewOffender = ({
                             <UpdateContent
                               userId={userId}
                               content={reply.text}
-                              createdAt={reply.createdAt}
+                              createdAt={moment(reply.createdAt)}
                               from={reply.createdBy}
                               id={reply.id}
                               images={reply.images}
@@ -1037,7 +1242,7 @@ const ViewOffender = ({
                         <UpdateContent
                           userId={userId}
                           content={reply.text}
-                          createdAt={reply.createdAt}
+                          createdAt={moment(reply.createdAt)}
                           from={reply.createdBy}
                           id={reply.id}
                           images={reply.images}
@@ -1063,17 +1268,23 @@ const ViewOffender = ({
                           size="small"
                           onClick={() =>
                             setReplyTo({
-                              createdAt: update.createdAt,
+                              createdAt: update.createdAt.toString(),
                               createdBy:
                                 userId === update.createdBy.id
-                                  ? 'You'
+                                  ? intl.formatMessage({
+                                      defaultMessage: 'You',
+                                      id: 'kJ5W29',
+                                    })
                                   : `${update.createdBy.fullName} - ${update.createdBy.businesses[0]?.name}`,
                               id: update.id,
                               text: update.text || '',
                             })
                           }
                         >
-                          Reply
+                          {intl.formatMessage({
+                            defaultMessage: 'Reply',
+                            id: '9HU8vw',
+                          })}
                         </Button>
                       </Col>
                     )}
@@ -1095,7 +1306,10 @@ const ViewOffender = ({
                             )
                           }
                         >
-                          Add Image To Incident
+                          {intl.formatMessage({
+                            defaultMessage: 'Add Image To Incident',
+                            id: 'N6jrgc',
+                          })}
                         </Button>
                       </Col>
                     )}
@@ -1115,7 +1329,10 @@ const ViewOffender = ({
       </Row>
 
       <Drawer
-        title="Link Incidents"
+        title={intl.formatMessage({
+          defaultMessage: 'Link Incident',
+          id: '4sHDoC',
+        })}
         open={linkIncident}
         width="800"
         onClose={toggleLinkIncident}
@@ -1132,7 +1349,10 @@ const ViewOffender = ({
       </Drawer>
 
       <Drawer
-        title="Associated Offender"
+        title={intl.formatMessage({
+          defaultMessage: 'Associate Offender',
+          id: 'O0iq2y',
+        })}
         onClose={() => toggleViewAssociate(null)}
         width="800"
         open={viewAssociate !== null}
@@ -1146,12 +1366,18 @@ const ViewOffender = ({
       </Drawer>
 
       <Modal
-        title="Select Images To Add"
+        title={intl.formatMessage({
+          defaultMessage: 'Select images to add',
+          id: 'AmI4Rg',
+        })}
         open={addImages !== null}
         onOk={() => addUpdateImages(selectedImages.map((id) => ({ id })))}
         onCancel={closeAddImages}
         width={addImages ? addImages.length * 250 : 400}
-        okText="Add Images"
+        okText={intl.formatMessage({
+          defaultMessage: 'Add Images',
+          id: 'b4GGYZ',
+        })}
       >
         <Row justify="center" gutter={8}>
           {addImages?.map((image) => (
@@ -1180,11 +1406,17 @@ const ViewOffender = ({
       </Modal>
 
       <Modal
-        title="Edit Update Content"
+        title={intl.formatMessage({
+          defaultMessage: 'Edit update content',
+          id: 'rgtCL5',
+        })}
         open={editUpdate !== null}
         onOk={handleEditUpdate}
         onCancel={() => setEditUpdate(null)}
-        okText="Save"
+        okText={intl.formatMessage({
+          defaultMessage: 'Save',
+          id: 'jvo0vs',
+        })}
       >
         <Input
           value={editUpdateInput}
@@ -1217,7 +1449,10 @@ const ViewOffender = ({
       <Drawer
         open={viewMatches !== null}
         onClose={() => toggleViewMatches(null)}
-        title="View Face AI matches"
+        title={intl.formatMessage({
+          defaultMessage: 'View face AI matches',
+          id: 'VDl5h/',
+        })}
         width={800}
       >
         {viewMatches && <OffenderMatches offenderId={viewMatches} />}

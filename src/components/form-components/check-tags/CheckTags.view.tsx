@@ -70,6 +70,7 @@ const CheckTags = ({
         <Col>
           {!option.needAdminRight || adminRights ? (
             <CheckTag
+              key={option.value}
               value={option.value}
               label={option.label}
               tooltip={option.tooltip}

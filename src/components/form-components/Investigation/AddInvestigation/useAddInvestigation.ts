@@ -44,7 +44,7 @@ const useAddInvestigation = ({ onClose, update }: Props): Return => {
 
   const onSubmit = (data: InvestigationData) => {
     setSaving(true);
-    createInvestigation({
+    void createInvestigation({
       variables: {
         data: {
           name: data.name || '',

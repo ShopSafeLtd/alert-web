@@ -1,1 +1,1 @@
-export { default } from './ViewIncident.container'
+export { default } from './ViewIncident.container';

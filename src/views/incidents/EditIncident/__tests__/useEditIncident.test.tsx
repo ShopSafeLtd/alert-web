@@ -1,17 +1,18 @@
+/* eslint-disable formatjs/no-literal-string-in-jsx */
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { createStore, StoreProvider } from 'easy-peasy';
 import { MemoryRouter } from 'react-router-dom';
 import {
-  SchemeGroupsDocument,
-  TagsDocument,
-  Model,
   ListOffendersDocument,
+  Model,
   Role,
-  ViewIncidentDocument,
-  UpdateIncidentDocument,
+  SchemeGroupsDocument,
   SortOrder,
+  TagsDocument,
+  UpdateIncidentDocument,
+  ViewIncidentDocument,
 } from 'graphql/generated';
 import { IncidentSort, storeModel } from 'state';
 import useEditIncident from '../useEditIncident';

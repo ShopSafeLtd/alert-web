@@ -172,6 +172,54 @@ const useOffenderFeed = (): Return => {
               },
             }
           : undefined,
+      gender:
+        sex.length > 0
+          ? {
+              in: sex,
+            }
+          : undefined,
+      age:
+        age.length > 0
+          ? {
+              in: age,
+            }
+          : undefined,
+      build:
+        build.length > 0
+          ? {
+              in: build,
+            }
+          : undefined,
+      race:
+        ethnicity.length > 0
+          ? {
+              in: ethnicity,
+            }
+          : undefined,
+      hair: hair
+        ? {
+            contains: hair,
+            mode: QueryMode.Insensitive,
+          }
+        : undefined,
+      peculiarities: peculiarities
+        ? {
+            mode: QueryMode.Insensitive,
+            contains: peculiarities,
+          }
+        : undefined,
+      incidents:
+        businesses.length > 0
+          ? {
+              some: {
+                business: {
+                  id: {
+                    in: businesses,
+                  },
+                },
+              },
+            }
+          : undefined,
       OR: [
         {
           name: {
@@ -221,6 +269,15 @@ const useOffenderFeed = (): Return => {
             },
           }
         : undefined,
+      bans: gallery.includes('BANNED')
+        ? {
+            some: {
+              active: {
+                equals: true,
+              },
+            },
+          }
+        : undefined,
       customGalleries:
         customGalleries && customGalleries.length > 0
           ? {
@@ -231,66 +288,6 @@ const useOffenderFeed = (): Return => {
               },
             }
           : undefined,
-      gender:
-        sex.length > 0
-          ? {
-              in: sex,
-            }
-          : undefined,
-      age:
-        age.length > 0
-          ? {
-              in: age,
-            }
-          : undefined,
-      build:
-        build.length > 0
-          ? {
-              in: build,
-            }
-          : undefined,
-      race:
-        ethnicity.length > 0
-          ? {
-              in: ethnicity,
-            }
-          : undefined,
-      hair: hair
-        ? {
-            contains: hair,
-            mode: QueryMode.Insensitive,
-          }
-        : undefined,
-      peculiarities: peculiarities
-        ? {
-            mode: QueryMode.Insensitive,
-            contains: peculiarities,
-          }
-        : undefined,
-      incidents:
-        businesses.length > 0
-          ? {
-              some: {
-                business:
-                  businesses.length > 0
-                    ? {
-                        id: {
-                          in: businesses,
-                        },
-                      }
-                    : undefined,
-              },
-            }
-          : undefined,
-      bans: gallery.includes('BANNED')
-        ? {
-            some: {
-              id: {
-                contains: '',
-              },
-            },
-          }
-        : undefined,
     },
     take: pagination.pageSize,
     skip: pagination.pageSize * (pagination.page - 1),
@@ -352,8 +349,15 @@ const useOffenderFeed = (): Return => {
 
   // Fetch Offenders
   const { data, loading } = useListOffendersQuery({
+    // @ts-expect-error TODO fix date mismatch
     variables: queryVariables,
     fetchPolicy: 'cache-and-network',
+    onCompleted: (res) => {
+      console.log('variables', variables);
+      console.log('total', res.listOffenders?.total);
+
+      console.log('offendersData', res?.listOffenders?.offenders);
+    },
   });
 
   const { data: businessData, loading: businessesLoading } =

@@ -188,11 +188,12 @@ export interface Member {
   premises: string;
   categories: string;
   areas: string;
-  lastSignedIn: string;
+  lastSignedIn: Moment;
 }
 
 export interface Business {
   name: string;
+  lastSignedIn: Moment;
 }
 
 export interface Image {
@@ -210,7 +211,7 @@ export interface NewUser {
   business: string | undefined;
   groups: string[];
   existing?: string;
-  lastLogin?: Date;
+  lastLogin?: Moment;
 }
 
 export interface NewBusiness {
@@ -239,6 +240,9 @@ export interface NewOffender {
   comments: string;
   age: Age;
   groups: string[];
+  deletionDate: Moment;
+  street: string;
+  postcode: string;
 }
 
 export interface NewIncident {
@@ -286,10 +290,14 @@ export interface HistoricIncident {
   impactTypes: string[];
   involvedTypes: string[];
   business: string | undefined;
+  groups: string[];
 }
 
 export interface GenerateData {
-  excludeDate: Moment;
+  excludeIncidentDate: Moment;
+  excludeUserDate: Moment;
+  fallbackGroup: string[];
+  townCity: string;
   defaultGroup: string[] | undefined;
   assaultViolenceAffray: string[];
   beggingPersistent: string[];

@@ -120,7 +120,7 @@ const useAddUserToBusiness = ({
 
   const onSubmit = () => {
     setSaving(false);
-    addUsersToBusiness({
+    void addUsersToBusiness({
       variables: {
         data: selected.map((item) => ({
           id: item.key,

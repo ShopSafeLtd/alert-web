@@ -16,6 +16,7 @@ import {
   faPlus,
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
+import { useIntl } from 'react-intl';
 
 import { calcDuration } from 'utils';
 import EditExclusion from 'components/form-components/offender/exclusion/EditExclusion';
@@ -31,6 +32,7 @@ interface BanType extends BanData {
   updated?: boolean;
   deleted?: boolean;
 }
+
 interface TableItem {
   key: string;
   description: string | null | undefined;
@@ -39,6 +41,7 @@ interface TableItem {
   activeDay?: string | undefined;
   item: BanType;
 }
+
 interface Props {
   titleOrder: number;
   saving: boolean;
@@ -70,23 +73,35 @@ const OffenderExclusions = ({
   onAddExclusion,
   emptyDescription,
 }: Props): JSX.Element => {
+  const intl = useIntl();
+
   const expandedRowRender = (record: TableItem) => (
     <Text style={{ fontSize: 14, padding: 0, margin: 0 }}>
-      Description: {record.description}
+      {intl.formatMessage(
+        { defaultMessage: 'Description: {description}', id: 'US7L2J' },
+        {
+          description: record.description,
+        }
+      )}
     </Text>
   );
+
   return (
     <>
       <Card>
         <Row align="middle" style={{ marginBottom: 20 }}>
           <Col>
             <Title style={{ marginBottom: 0 }} level={4}>
+              {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
               {`${titleOrder}.`}
             </Title>
           </Col>
           <Col>
             <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
-              Exclusions
+              {intl.formatMessage({
+                defaultMessage: 'Exclusions',
+                id: 'jjBvFh',
+              })}
             </Title>
           </Col>
           <Col style={{ marginRight: 5 }}>
@@ -95,8 +110,11 @@ const OffenderExclusions = ({
               type="secondary"
               italic
             >
-              - Create exclusions for this offender to exclusion them from areas
-              or premises.
+              {intl.formatMessage({
+                defaultMessage:
+                  '- Create exclusions for this offender to exclude them from areas or premises.',
+                id: 'lrbcIG',
+              })}
             </Paragraph>
           </Col>
           <Col>
@@ -108,7 +126,10 @@ const OffenderExclusions = ({
                 <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
               }
             >
-              Add Exclusion
+              {intl.formatMessage({
+                defaultMessage: 'Add Exclusion',
+                id: 'QPeZMN',
+              })}
             </Button>
           </Col>
         </Row>
@@ -130,7 +151,10 @@ const OffenderExclusions = ({
                 columns={[
                   {
                     key: 'duration',
-                    title: 'Duration',
+                    title: intl.formatMessage({
+                      defaultMessage: 'Duration',
+                      id: 'IuFETn',
+                    }),
                     dataIndex: 'duration',
                     width: 350,
                     render: (value, record) => (
@@ -143,44 +167,47 @@ const OffenderExclusions = ({
                               marginLeft: 10,
                             }}
                           >
-                            EXPIRED
+                            {intl.formatMessage({
+                              defaultMessage: 'EXPIRED',
+                              id: 'GftNg3',
+                            })}
                           </Tag>
                         )}
                       </>
                     ),
                   },
-
                   {
                     key: 'activeDay',
-                    title: 'Active Days',
+                    title: intl.formatMessage({
+                      defaultMessage: 'Active Days',
+                      id: 'YEneNi',
+                    }),
                     dataIndex: 'activeDay',
                     width: 150,
                   },
                   {
                     key: 'location',
-                    title: 'Location',
+                    title: intl.formatMessage({
+                      defaultMessage: 'Location',
+                      id: 'rvirM2',
+                    }),
                     dataIndex: 'location',
                     ellipsis: true,
                   },
-                  // {
-                  //   key: 'description',
-                  //   title: 'Description',
-                  //   dataIndex: 'description',
-                  //   ellipsis: true,
-                  //   render: (value) => (
-                  //     <Tooltip title={value} placement="bottomLeft">
-                  //       {value}
-                  //     </Tooltip>
-                  //   ),
-                  // },
                   {
                     key: 'type',
-                    title: 'Type',
+                    title: intl.formatMessage({
+                      defaultMessage: 'Type',
+                      id: '+U6ozc',
+                    }),
                     dataIndex: 'type',
                   },
                   {
                     key: 'Edit',
-                    title: 'Edit',
+                    title: intl.formatMessage({
+                      defaultMessage: 'Edit',
+                      id: 'wEQDC6',
+                    }),
                     width: 50,
                     dataIndex: 'Edit',
                     render: (_, record) => (
@@ -196,7 +223,10 @@ const OffenderExclusions = ({
                   },
                   {
                     key: 'Delete',
-                    title: 'Delete',
+                    title: intl.formatMessage({
+                      defaultMessage: 'Delete',
+                      id: 'K3r6DQ',
+                    }),
                     dataIndex: 'Delete',
                     width: 60,
                     render: (_, record) => (
@@ -233,7 +263,11 @@ const OffenderExclusions = ({
             <Empty
               image={Empty.PRESENTED_IMAGE_SIMPLE}
               description={
-                emptyDescription || 'There are no exclusions for this offender.'
+                emptyDescription ||
+                intl.formatMessage({
+                  defaultMessage: 'There are no exclusions for this offender.',
+                  id: '4J6DZ4',
+                })
               }
               style={{ marginLeft: 50 }}
             />
@@ -241,7 +275,10 @@ const OffenderExclusions = ({
         )}
       </Card>
       <Drawer
-        title="Add Exclusion"
+        title={intl.formatMessage({
+          defaultMessage: 'Add Exclusion',
+          id: 'QPeZMN',
+        })}
         visible={addExclusion}
         width="400"
         onClose={toggleAddExclusion}
@@ -253,7 +290,10 @@ const OffenderExclusions = ({
         )}
       </Drawer>
       <Drawer
-        title="Edit Exclusion"
+        title={intl.formatMessage({
+          defaultMessage: 'Edit Exclusion',
+          id: '22olP0',
+        })}
         visible={editExclusion}
         width="400"
         onClose={toggleEditExclusion}
@@ -271,4 +311,5 @@ const OffenderExclusions = ({
     </>
   );
 };
+
 export default OffenderExclusions;

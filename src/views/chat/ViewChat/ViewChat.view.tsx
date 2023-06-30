@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/click-events-have-key-events,formatjs/no-literal-string-in-jsx */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import {
@@ -25,6 +25,7 @@ import ViewMessage from 'components/viewChat/ViewMessage';
 import AddChat from 'components/form-components/chat/AddChat';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { formatDate } from 'utils';
+import { useIntl } from 'react-intl';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -64,6 +65,7 @@ const ViewOffender = ({
   loading,
   adminRights,
 }: Props): JSX.Element => {
+  const intl = useIntl();
   const list = () => {
     if (loading && !data?.user?.chats?.length)
       return (
@@ -102,7 +104,12 @@ const ViewOffender = ({
             // height: 'calc(100vh - 400px)',
           }}
         >
-          <Empty description="No Chats" />
+          <Empty
+            description={intl.formatMessage({
+              defaultMessage: 'No Chats',
+              id: '5lq2mV',
+            })}
+          />
         </div>
       );
     return (
@@ -189,29 +196,51 @@ const ViewOffender = ({
                       >
                         {mentioned && (
                           <Text type="danger" style={{ marginRight: 3 }}>
-                            [You were mentioned]
+                            {intl.formatMessage({
+                              defaultMessage: '[You were mentioned]',
+                              id: 'ES/52d',
+                            })}
                           </Text>
                         )}
                         {messages && messages.length > 0
-                          ? `${messages?.slice(-1)[0].from.origName} : ${
+                          ? // eslint-disable-next-line formatjs/no-literal-string-in-jsx
+                            `${messages?.slice(-1)[0].from.origName} : ${
                               getContent(messages?.slice(-1)[0].content) ||
                               (messages?.slice(-1)[0].images &&
                                 messages?.slice(-1)[0].images.length &&
-                                'Sent an image') ||
+                                intl.formatMessage({
+                                  defaultMessage: 'Sent an image',
+                                  id: '4SOYvd',
+                                })) ||
                               (messages?.slice(-1)[0].offenders &&
                                 messages?.slice(-1)[0].offenders.length &&
-                                'Linked an offender') ||
+                                intl.formatMessage({
+                                  defaultMessage: 'Linked an offender',
+                                  id: 'GJeKJo',
+                                })) ||
                               (messages?.slice(-1)[0].incidents &&
                                 messages?.slice(-1)[0].incidents.length &&
-                                'Linked an incident') ||
+                                intl.formatMessage({
+                                  defaultMessage: 'Linked an incident',
+                                  id: 'bozBqN',
+                                })) ||
                               (messages?.slice(-1)[0].vehicles &&
                                 messages?.slice(-1)[0].vehicles.length &&
-                                'Linked a vehicle') ||
+                                intl.formatMessage({
+                                  defaultMessage: 'Linked a vehicle',
+                                  id: 'nIEa5z',
+                                })) ||
                               (messages?.slice(-1)[0].crimeGroups &&
                                 messages?.slice(-1)[0].crimeGroups.length &&
-                                'Linked a crime group')
+                                intl.formatMessage({
+                                  defaultMessage: 'Linked a crime group',
+                                  id: 'PQ3WJD',
+                                }))
                             }`
-                          : 'No Messages'}
+                          : intl.formatMessage({
+                              defaultMessage: 'No Messages',
+                              id: 'NYz9wc',
+                            })}
                       </Paragraph>
                     </Col>
                   </Row>
@@ -232,7 +261,10 @@ const ViewOffender = ({
             <Row style={{ margin: '12px 5px 5px 10px' }}>
               <Col flex={1}>
                 <Title level={3} style={{ marginTop: 5 }}>
-                  Chats
+                  {intl.formatMessage({
+                    defaultMessage: 'Chats',
+                    id: 'ABAQyo',
+                  })}
                 </Title>
               </Col>
               {adminRights && (
@@ -250,7 +282,10 @@ const ViewOffender = ({
                       />
                     }
                   >
-                    New Chat
+                    {intl.formatMessage({
+                      defaultMessage: 'New Chat',
+                      id: 'UT7Nkj',
+                    })}
                   </Button>
                 </Col>
               )}
@@ -272,13 +307,19 @@ const ViewOffender = ({
                 justifyContent: 'center',
                 flexDirection: 'column',
               }}
-              description="Select or create a chat to view messages"
+              description={intl.formatMessage({
+                defaultMessage: 'Select or create a chat to view messages',
+                id: 'pHlO2V',
+              })}
             />
           )}
         </Col>
       </Row>
       <Drawer
-        title="Create A New Chat"
+        title={intl.formatMessage({
+          defaultMessage: 'Create A New Chat',
+          id: 'E5LFtn',
+        })}
         visible={addChat}
         width="400"
         onClose={toggleAddChat}

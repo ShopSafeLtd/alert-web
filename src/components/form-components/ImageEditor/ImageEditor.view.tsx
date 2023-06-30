@@ -8,44 +8,45 @@ import {
   faRotateBackward,
   faRotateForward,
 } from '@fortawesome/pro-light-svg-icons';
+import { FormattedMessage, useIntl } from 'react-intl';
 import useStyles from './ImageEditor.styles';
 
 const positionOptions = [
   {
     value: ImagePosition.CenterBottom,
-    label: 'Center Bottom',
+    label: <FormattedMessage id="sXTiFB" defaultMessage="Center Bottom" />,
   },
   {
     value: ImagePosition.CenterCenter,
-    label: 'Center Center',
+    label: <FormattedMessage id="K+qua6" defaultMessage="Center Center" />,
   },
   {
     value: ImagePosition.CenterTop,
-    label: 'Center Top',
+    label: <FormattedMessage id="9X8NHT" defaultMessage="Center Top" />,
   },
   {
     value: ImagePosition.LeftBottom,
-    label: 'Left Bottom',
+    label: <FormattedMessage id="sfcQw6" defaultMessage="Left Bottom" />,
   },
   {
     value: ImagePosition.LeftCenter,
-    label: 'Left Center',
+    label: <FormattedMessage id="Ei0973" defaultMessage="Left Center" />,
   },
   {
     value: ImagePosition.LeftTop,
-    label: 'Left Top',
+    label: <FormattedMessage id="0B9/ob" defaultMessage="Left Top" />,
   },
   {
     value: ImagePosition.RightBottom,
-    label: 'Right Bottom',
+    label: <FormattedMessage id="Mm1WF/" defaultMessage="Right Bottom" />,
   },
   {
     value: ImagePosition.RightCenter,
-    label: 'Right Center',
+    label: <FormattedMessage id="iF7Gcw" defaultMessage="Right Center" />,
   },
   {
     value: ImagePosition.RightTop,
-    label: 'Right Top',
+    label: <FormattedMessage id="b8244+" defaultMessage="Right Top" />,
   },
 ];
 
@@ -80,21 +81,28 @@ const ImageEditor = ({
   primaryImage,
   setPrimaryImage,
 }: Props) => {
+  if (!image) return <div />;
+  const intl = useIntl();
   const classes = useStyles();
-  const [position, setPosition] = useState(ImagePosition.CenterCenter);
+  const [position, setPosition] = useState(
+    image?.position || ImagePosition.CenterCenter
+  );
   const [rotation, setRotation] = useState(0);
-  const [policeImage, setPoliceImage] = useState(false);
-  const [isPrimaryImage, setIsPrimaryImage] = useState(false);
+  const [policeImage, setPoliceImage] = useState(image?.policeImage);
+  const [isPrimaryImage, setIsPrimaryImage] = useState(
+    image?.uid === primaryImage
+  );
 
   const handleSubmit = () => {
     if (image) {
+      if (isPrimaryImage && image.uid !== primaryImage)
+        setPrimaryImage(image.uid);
+      if (!isPrimaryImage && image.uid === primaryImage) setPrimaryImage('');
       submitImage({
         ...image,
         position,
         policeImage,
       });
-      if (isPrimaryImage) setPrimaryImage(image.uid);
-      if (!isPrimaryImage && image.uid === primaryImage) setPrimaryImage('');
     }
     setPosition(ImagePosition.CenterCenter);
     setIsPrimaryImage(false);
@@ -113,9 +121,15 @@ const ImageEditor = ({
     <Modal
       width={600}
       open={open}
-      title="Edit Image"
+      title={intl.formatMessage({
+        id: '9UlLIw',
+        defaultMessage: 'Edit Image',
+      })}
       bodyStyle={{ padding: 0 }}
-      okText="Save Image"
+      okText={intl.formatMessage({
+        id: 'gR55Uz',
+        defaultMessage: 'Save Image',
+      })}
       onOk={handleSubmit}
       onCancel={() => {
         onClose();
@@ -127,17 +141,31 @@ const ImageEditor = ({
             <Form
               className={classes.select}
               layout="vertical"
-              // initialValues={{}}
+              initialValues={{
+                position: image?.position || ImagePosition.CenterCenter,
+                primaryImage: image?.uid === primaryImage,
+                policeImage: image?.policeImage,
+              }}
               // onFinish={onSubmit}
             >
-              <Form.Item label="Image Position">
+              <Form.Item
+                label={intl.formatMessage({
+                  id: 't9T6TI',
+                  defaultMessage: 'Image Position',
+                })}
+              >
                 <Select
                   value={position}
                   onChange={setPosition}
                   options={positionOptions}
                 />
               </Form.Item>
-              <Form.Item label="Rotation">
+              <Form.Item
+                label={intl.formatMessage({
+                  id: 'dQJGtK',
+                  defaultMessage: 'Rotation',
+                })}
+              >
                 <Row gutter={8}>
                   <Col>
                     <Button size="small" onClick={onRotateLeft}>
@@ -152,9 +180,11 @@ const ImageEditor = ({
                 </Row>
               </Form.Item>
               <Form.Item
-                label="Set as primary image"
+                label={intl.formatMessage({
+                  id: '8U+Csh',
+                  defaultMessage: 'Set as primary image',
+                })}
                 name="primaryImage"
-                valuePropName="checked"
                 style={{
                   marginBottom: 0,
                   flexDirection: 'row',
@@ -169,9 +199,11 @@ const ImageEditor = ({
                 />
               </Form.Item>
               <Form.Item
-                label="Received from the police"
+                label={intl.formatMessage({
+                  id: 'fOYafo',
+                  defaultMessage: 'Received from the police',
+                })}
                 name="policeImage"
-                valuePropName="checked"
                 style={{
                   marginBottom: 0,
                   flexDirection: 'row',

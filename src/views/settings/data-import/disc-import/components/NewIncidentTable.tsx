@@ -21,6 +21,7 @@ import { faImages } from '@fortawesome/pro-solid-svg-icons';
 import type { Theme } from 'configs/ThemeConfig';
 import type { SchemeGroupsQuery, TagsQuery } from 'graphql/generated';
 import { TagType } from 'graphql/generated';
+import { FormattedMessage, useIntl } from 'react-intl';
 import type {
   NewBusiness,
   NewIncident,
@@ -75,14 +76,14 @@ const NewOffenderRow = React.memo(
       form.setFieldsValue({
         ...incident,
       });
-      form.validateFields();
+      void form.validateFields();
     }, [incident]);
 
     const onBlur = () => {
       const values = form.getFieldsValue();
       onUpdateIncident({ ...incident, ...values });
     };
-
+    const intl = useIntl();
     return (
       <Form layout="vertical" form={form}>
         <Row gutter={8} className={classes.row}>
@@ -119,19 +120,37 @@ const NewOffenderRow = React.memo(
               <Col>
                 <Row gutter={8}>
                   <Col span={12} className={classes.cell}>
-                    <Form.Item name="date" label="Date">
+                    <Form.Item
+                      name="date"
+                      label={intl.formatMessage({
+                        defaultMessage: 'Date',
+                        id: 'P7PLVj',
+                      })}
+                    >
                       <DatePicker onBlur={onBlur} format="DD/MM/YYYY" />
                     </Form.Item>
                   </Col>
                   <Col span={12} className={classes.cell}>
-                    <Form.Item name="time" label="Time">
+                    <Form.Item
+                      name="time"
+                      label={intl.formatMessage({
+                        defaultMessage: 'Time',
+                        id: 'ug01Mk',
+                      })}
+                    >
                       <DatePicker onBlur={onBlur} format="HH:mm" />
                     </Form.Item>
                   </Col>
                 </Row>
               </Col>
               <Col span={3} className={classes.cell} style={{ maxWidth: 260 }}>
-                <Form.Item name="offenders" label="Offenders">
+                <Form.Item
+                  name="offenders"
+                  label={intl.formatMessage({
+                    defaultMessage: 'Offenders',
+                    id: 'xb54TN',
+                  })}
+                >
                   <Select
                     options={newOffenders.map((item) => ({
                       value: item.id,
@@ -145,7 +164,13 @@ const NewOffenderRow = React.memo(
                 </Form.Item>
               </Col>
               <Col span={3} className={classes.cell} style={{ maxWidth: 250 }}>
-                <Form.Item name="createdBy" label="Created By">
+                <Form.Item
+                  name="createdBy"
+                  label={intl.formatMessage({
+                    defaultMessage: 'Created by',
+                    id: 'p4mBmL',
+                  })}
+                >
                   <Select
                     options={newUsers.map((item) => ({
                       value: item.id,
@@ -156,7 +181,13 @@ const NewOffenderRow = React.memo(
                 </Form.Item>
               </Col>
               <Col span={3} className={classes.cell} style={{ maxWidth: 250 }}>
-                <Form.Item name="business" label="Business">
+                <Form.Item
+                  name="business"
+                  label={intl.formatMessage({
+                    defaultMessage: 'Business',
+                    id: 'w1Fanr',
+                  })}
+                >
                   <Select
                     allowClear
                     options={newBusinesses.map((item) => ({
@@ -170,9 +201,18 @@ const NewOffenderRow = React.memo(
               <Col span={3} className={classes.cell} style={{ maxWidth: 250 }}>
                 <Form.Item
                   name="groups"
-                  label="Groups"
+                  label={intl.formatMessage({
+                    defaultMessage: 'Groups',
+                    id: 'hzmswI',
+                  })}
                   rules={[
-                    { required: true, message: 'Choose at least one group' },
+                    {
+                      required: true,
+                      message: intl.formatMessage({
+                        defaultMessage: 'Choose at least one group',
+                        id: 'HRCIYo',
+                      }),
+                    },
                   ]}
                 >
                   <Select
@@ -188,7 +228,11 @@ const NewOffenderRow = React.memo(
               <Col style={{ marginTop: 30 }}>
                 <Popconfirm
                   overlayInnerStyle={{ padding: 10 }}
-                  title="Are you sure you want to remove this user?"
+                  title={intl.formatMessage({
+                    defaultMessage:
+                      'Are you sure you want to delete this incident?',
+                    id: '/OdzA8',
+                  })}
                   onConfirm={() => onDelete(incident.id)}
                 >
                   <Button size="small">
@@ -201,9 +245,18 @@ const NewOffenderRow = React.memo(
               <Col span={8}>
                 <Form.Item
                   name="crimeTypes"
-                  label="Crime Types"
+                  label={intl.formatMessage({
+                    defaultMessage: 'Crime Types',
+                    id: 'Piba4q',
+                  })}
                   rules={[
-                    { required: true, message: 'Choose at least one type' },
+                    {
+                      required: true,
+                      message: intl.formatMessage({
+                        defaultMessage: 'Choose at least one crime type',
+                        id: '/MtIJ2',
+                      }),
+                    },
                   ]}
                 >
                   <Select
@@ -221,7 +274,13 @@ const NewOffenderRow = React.memo(
                 </Form.Item>
               </Col>
               <Col span={8}>
-                <Form.Item name="impactTypes" label="Impact Types">
+                <Form.Item
+                  name="impactTypes"
+                  label={intl.formatMessage({
+                    defaultMessage: 'Impact Types',
+                    id: 'Y5fbZF',
+                  })}
+                >
                   <Select
                     mode="multiple"
                     maxTagCount={2}
@@ -237,7 +296,13 @@ const NewOffenderRow = React.memo(
                 </Form.Item>
               </Col>
               <Col span={8}>
-                <Form.Item name="involvedTypes" label="Involved Types">
+                <Form.Item
+                  name="involvedTypes"
+                  label={intl.formatMessage({
+                    defaultMessage: 'Involved Types',
+                    id: 'FFqBXF',
+                  })}
+                >
                   <Select
                     mode="multiple"
                     style={{ width: '100%' }}
@@ -257,17 +322,35 @@ const NewOffenderRow = React.memo(
         </Row>
         <Row gutter={8}>
           <Col>
-            <Form.Item name="lostValue" label="Value">
+            <Form.Item
+              name="lostValue"
+              label={intl.formatMessage({
+                defaultMessage: 'Value',
+                id: 'GufXy5',
+              })}
+            >
               <InputNumber onBlur={onBlur} />
             </Form.Item>
           </Col>
           <Col>
-            <Form.Item name="recoveredValue" label="Recovered Value">
+            <Form.Item
+              name="recoveredValue"
+              label={intl.formatMessage({
+                defaultMessage: 'Recovered Value',
+                id: 'bGwFFv',
+              })}
+            >
               <InputNumber onBlur={onBlur} />
             </Form.Item>
           </Col>
           <Col>
-            <Form.Item name="policeInvolved" label="Police Attended">
+            <Form.Item
+              name="policeInvolved"
+              label={intl.formatMessage({
+                defaultMessage: 'Police Involved',
+                id: '6m7Lvw',
+              })}
+            >
               <Radio.Group
                 options={[
                   {
@@ -285,43 +368,82 @@ const NewOffenderRow = React.memo(
             </Form.Item>
           </Col>
           <Col>
-            <Form.Item name="policeRef" label="Crime Number">
+            <Form.Item
+              name="policeRef"
+              label={intl.formatMessage({
+                defaultMessage: 'Police Ref',
+                id: '/KdeiX',
+              })}
+            >
               <Input onBlur={onBlur} />
             </Form.Item>
           </Col>
           <Col>
-            <Form.Item name="building" label="Building">
+            <Form.Item
+              name="building"
+              label={intl.formatMessage({
+                defaultMessage: 'Building',
+                id: 'oS/nae',
+              })}
+            >
               <Input onBlur={onBlur} />
             </Form.Item>
           </Col>
           <Col>
             <Form.Item
               name="street"
-              label="Street"
+              label={intl.formatMessage({
+                defaultMessage: 'Street',
+                id: 'BaIwdV',
+              })}
               rules={[{ required: true }]}
             >
               <Input onBlur={onBlur} />
             </Form.Item>
           </Col>
           <Col>
-            <Form.Item name="townCity" label="Town/City">
+            <Form.Item
+              name="townCity"
+              label={intl.formatMessage({
+                defaultMessage: 'Town/City',
+                id: 'byaTQZ',
+              })}
+            >
               <Input onBlur={onBlur} />
             </Form.Item>
           </Col>
           <Col>
-            <Form.Item name="county" label="County">
+            <Form.Item
+              name="county"
+              label={intl.formatMessage({
+                defaultMessage: 'County',
+                id: 'B+KJhc',
+              })}
+            >
               <Input onBlur={onBlur} />
             </Form.Item>
           </Col>
           <Col>
-            <Form.Item name="postcode" label="Postcode">
+            <Form.Item
+              name="postcode"
+              label={intl.formatMessage({
+                defaultMessage: 'Postcode',
+                id: 'FJhjgz',
+              })}
+            >
               <Input onBlur={onBlur} />
             </Form.Item>
           </Col>
         </Row>
         <Row gutter={8} className={classes.bottomRow}>
           <Col span={12} className={classes.cell}>
-            <Form.Item name="description" label="Description">
+            <Form.Item
+              name="description"
+              label={intl.formatMessage({
+                defaultMessage: 'Description',
+                id: 'Q8Qw5B',
+              })}
+            >
               <Input.TextArea onBlur={onBlur} rows={5} />
             </Form.Item>
           </Col>
@@ -362,13 +484,21 @@ const NewIncidentTable = ({
       newIncidents.slice((currentPage - 1) * 10, 10 * currentPage)
     );
   }, [currentPage]);
-
+  const intl = useIntl();
   return (
     <Card
-      title={`Incidents (${newIncidents.length})`}
+      title={intl.formatMessage(
+        {
+          defaultMessage: `Incidents: {total}`,
+          id: 'XdwXwO',
+        },
+        {
+          total: newIncidents.length,
+        }
+      )}
       extra={
         <Button type="primary" style={{ marginBottom: 16 }} onClick={onAdd}>
-          Add Incident
+          <FormattedMessage defaultMessage="Add Incident" id="kG1p3q" />
         </Button>
       }
     >
@@ -390,7 +520,17 @@ const NewIncidentTable = ({
         current={currentPage}
         onChange={setCurrentPage}
         total={newOffenders.length}
-        showTotal={(total) => `Total Incidents: ${total}`}
+        showTotal={(total) =>
+          intl.formatMessage(
+            {
+              defaultMessage: `Total Incidents: {total}`,
+              id: 'SHEopq',
+            },
+            {
+              total,
+            }
+          )
+        }
         pageSizeOptions={[10]}
       />
     </Card>

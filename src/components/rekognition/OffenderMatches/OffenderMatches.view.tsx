@@ -1,7 +1,7 @@
 import React from 'react';
 import { createUseStyles } from 'react-jss';
 import type { ViewOffenderMatchesQuery } from 'graphql/generated';
-import { Button, Card, Col, Row, Skeleton, Typography } from 'antd';
+import { Button, Card, Col, Popconfirm, Row, Skeleton, Typography } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import {
   getOffenderAge,
@@ -12,6 +12,7 @@ import {
 import LightBox from 'components/images/LightBox/LightBox.container';
 import type { Image } from 'components/images/LightBox/LightBox.types';
 import { Link } from 'react-router-dom';
+import { useIntl } from 'react-intl';
 import MatchedFace from './MatchedFace.view';
 
 const useStyles = createUseStyles({
@@ -57,6 +58,7 @@ interface Props {
   loading: boolean;
   lightBox: LightBoxState | null;
   toggleLightBox: (data: LightBoxState | null) => void;
+  onDismissMatch: (id: string) => void;
 }
 
 const OffenderMatches = ({
@@ -64,9 +66,10 @@ const OffenderMatches = ({
   loading,
   lightBox,
   toggleLightBox,
+  onDismissMatch,
 }: Props) => {
   const classes = useStyles();
-
+  const intl = useIntl();
   return (
     <div className={classes.container}>
       <Row gutter={16} className={classes.currentOffender}>
@@ -89,27 +92,51 @@ const OffenderMatches = ({
                 {data?.offender?.name}
               </Typography.Title>
               <Typography.Text className={classes.ref} type="secondary">
-                Alert ID: {data?.offender?.reference}
+                {intl.formatMessage(
+                  {
+                    defaultMessage: 'Alert ID: {reference}',
+                    id: '377fsC',
+                  },
+                  {
+                    reference: data?.offender?.reference,
+                  }
+                )}
               </Typography.Text>
               <Row style={{ marginTop: 5, marginBottom: 10 }} gutter={16}>
                 <Col>
                   <Typography.Text>
-                    Age: {getOffenderAge(data?.offender?.age)}
+                    {intl.formatMessage({
+                      defaultMessage: 'Age: ',
+                      id: 'anqdpr',
+                    })}
+                    {getOffenderAge(data?.offender?.age)}
                   </Typography.Text>
                 </Col>
                 <Col>
                   <Typography.Text>
-                    Sex: {getOffenderGender(data?.offender?.gender)}
+                    {intl.formatMessage({
+                      defaultMessage: 'Sex: ',
+                      id: 'j3ULId',
+                    })}
+                    {getOffenderGender(data?.offender?.gender)}
                   </Typography.Text>
                 </Col>
                 <Col>
                   <Typography.Text>
-                    Ethnicity: {getOffenderRace(data?.offender?.race)}
+                    {intl.formatMessage({
+                      defaultMessage: 'Ethnicity: ',
+                      id: 'H+Sv5C',
+                    })}
+                    {getOffenderRace(data?.offender?.race)}
                   </Typography.Text>
                 </Col>
                 <Col>
                   <Typography.Text>
-                    Build: {getOffenderBuild(data?.offender?.build)}
+                    {intl.formatMessage({
+                      defaultMessage: 'Build: ',
+                      id: 'iXQkAi',
+                    })}
+                    {getOffenderBuild(data?.offender?.build)}
                   </Typography.Text>
                 </Col>
               </Row>
@@ -139,7 +166,12 @@ const OffenderMatches = ({
       )}
 
       {!loading && (
-        <Typography.Title level={4}>Face AI Matches:</Typography.Title>
+        <Typography.Title level={4}>
+          {intl.formatMessage({
+            defaultMessage: 'Face AI Matches:',
+            id: 'f92MK9',
+          })}
+        </Typography.Title>
       )}
       {data?.offender?.searchedMatches.map((match) => (
         <>
@@ -162,32 +194,59 @@ const OffenderMatches = ({
                   {match.matchedOffender?.name}
                 </Typography.Title>
                 <Typography.Text>
-                  Alert ID: {match.matchedOffender?.reference}
+                  {intl.formatMessage(
+                    {
+                      defaultMessage: 'Alert ID: {reference}',
+                      id: '377fsC',
+                    },
+                    {
+                      reference: match.matchedOffender?.reference,
+                    }
+                  )}
                 </Typography.Text>
                 <Row style={{ marginTop: 5, marginBottom: 10 }} gutter={16}>
                   <Col>
                     <Typography.Text>
-                      Age: {getOffenderAge(match.matchedOffender?.age)}
+                      {intl.formatMessage({
+                        defaultMessage: 'Age: ',
+                        id: 'anqdpr',
+                      })}
+                      {getOffenderAge(match.matchedOffender?.age)}
                     </Typography.Text>
                   </Col>
                   <Col>
                     <Typography.Text>
-                      Sex: {getOffenderGender(match.matchedOffender?.gender)}
+                      {intl.formatMessage({
+                        defaultMessage: 'Sex: ',
+                        id: 'j3ULId',
+                      })}
+                      {getOffenderGender(match.matchedOffender?.gender)}
                     </Typography.Text>
                   </Col>
                   <Col>
                     <Typography.Text>
-                      Ethnicity: {getOffenderRace(match.matchedOffender?.race)}
+                      {intl.formatMessage({
+                        defaultMessage: 'Ethnicity: ',
+                        id: 'H+Sv5C',
+                      })}
+                      {getOffenderRace(match.matchedOffender?.race)}
                     </Typography.Text>
                   </Col>
                   <Col>
                     <Typography.Text>
-                      Build: {getOffenderBuild(match.matchedOffender?.build)}
+                      {intl.formatMessage({
+                        defaultMessage: 'Build: ',
+                        id: 'iXQkAi',
+                      })}
+                      {getOffenderBuild(match.matchedOffender?.build)}
                     </Typography.Text>
                   </Col>
                 </Row>
                 <Typography.Text strong style={{ fontSize: 16 }}>
-                  Matched Images
+                  {intl.formatMessage({
+                    defaultMessage: 'Matched Images',
+                    id: 'ye5aNf',
+                  })}
                 </Typography.Text>
                 <Row
                   wrap={false}
@@ -218,16 +277,34 @@ const OffenderMatches = ({
               </Col>
             </Row>
           </Card>
-          <Row justify="end" gutter={8}>
+          <Row justify="end" gutter={8} style={{ marginBottom: 20 }}>
             <Col>
-              <Button size="small">Dismiss Match</Button>
+              <Popconfirm
+                overlayInnerStyle={{ padding: 10 }}
+                title={intl.formatMessage({
+                  defaultMessage: 'Are you sure?',
+                  id: '2oCaym',
+                })}
+                onConfirm={() => onDismissMatch(match.id)}
+              >
+                <Button size="small">
+                  {intl.formatMessage({
+                    defaultMessage: 'Dismiss Match',
+                    id: 'z85yDK',
+                  })}
+                </Button>
+              </Popconfirm>
             </Col>
             <Col>
               <Link
+                // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
                 to={`/app/offenders/compare/${data.offender?.id}?${match.matchedOffender?.id}`}
               >
                 <Button size="small" danger>
-                  Compare & Merge
+                  {intl.formatMessage({
+                    defaultMessage: 'Compare & Merge',
+                    id: 'K3ixDD',
+                  })}
                 </Button>
               </Link>
             </Col>

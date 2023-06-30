@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-misused-promises,@typescript-eslint/no-unsafe-member-access */
 import { useState } from 'react';
 import type {
   Age,
@@ -166,6 +167,7 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
             uid: `${image.id}`,
             name: `${image.id}.png`,
             status: 'done',
+            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
             url: `${image.optimised || image.url}`,
           }))
         );
@@ -295,7 +297,7 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
       };
     };
 
-    updateOffender({
+    void updateOffender({
       variables: {
         where: {
           id: offenderId,
@@ -312,6 +314,7 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
           dateSource: { set: ageCheck ? data.dateSource || null : null },
           dateOfBirth: { set: ageCheck ? data.dateOfBirth || null : null },
           groups: {
+            // ???
             set:
               groups.length > 1
                 ? data.groups.map((id) => ({ id }))
@@ -375,10 +378,10 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
     confirm({
       title: 'Are you sure?',
       content:
-        'Click reject if you wish to reject the approvement of this offender. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
+        'Click reject if you wish to reject the approving of this offender. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
       okText: 'Reject',
       onOk() {
-        recycleOffender({
+        void recycleOffender({
           variables: {
             where: { id: offenderId },
           },
@@ -390,7 +393,9 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
   const beforeUpload = (file: RcFile) => {
     const isFileDuplicate = fileList.find((item) => item.name === file.name);
     if (isFileDuplicate) {
-      message.error('This image already exists, please choose another one.');
+      void message.error(
+        'This image already exists, please choose another one.'
+      );
     }
 
     return !isFileDuplicate || Upload.LIST_IGNORE;
@@ -484,12 +489,10 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
     loading,
     saving,
     groups:
-      role === Role.SchemeAdmin
-        ? groupData?.groups.map((group) => ({
-            value: group.id,
-            label: group.name,
-          })) || []
-        : groups.map((group) => ({ value: group.id, label: group.name })),
+      groupData?.groups.map((group) => ({
+        value: group.id,
+        label: group.name,
+      })) || [],
     groupsLoading,
     tags:
       tagsData?.tags.map((tag) => ({ value: tag.id, label: tag.name })) || [],

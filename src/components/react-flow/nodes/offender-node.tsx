@@ -1,11 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-assignment */
+
 import { Button, Drawer } from 'antd';
 import React, { memo, useCallback } from 'react';
 import { Handle, NodeToolbar, Position, useStore } from 'reactflow';
 import { NodeResizer } from '@reactflow/node-resizer';
 import '@reactflow/node-resizer/dist/style.css';
 import { useParams } from 'react-router-dom';
+import { useIntl } from 'react-intl';
 import OffenderCard from './components/offender-details-card';
-import { Age, Build, Gender, Race } from '../../../graphql/generated';
+import type { Age, Build, Gender, Race } from '../../../graphql/generated';
 import useStyles from './style.module';
 import useFlow from '../../../views/investigations/ViewInvestigation/views/Flow/hooks/useFlow';
 import { useDrawerState } from '../../../hooks';
@@ -44,8 +47,9 @@ interface Props {
   selected: boolean;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-
+// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 const connectionNodeIdSelector = (state) => state.connectionNodeId;
 
 export default memo(({ data, isConnectable, selected, id }: Props) => {
@@ -97,7 +101,7 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
       data: { ...currentNode.data, isEditing: { user: fullName, editing } },
     });
   }, []);
-
+  const intl = useIntl();
   return (
     <>
       <NodeToolbar isVisible={selected} position={Position.Top}>
@@ -105,12 +109,18 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
           onClick={() => {
             setIsEditing(true);
             drawer.open({
-              defaultTitle: 'Select Offender',
+              defaultTitle: intl.formatMessage({
+                defaultMessage: 'Select Offender',
+                id: '8e5n4o',
+              }),
               id: 'offenderSelect',
             });
           }}
         >
-          select offender
+          {intl.formatMessage({
+            defaultMessage: 'Select Offender',
+            id: '8e5n4o',
+          })}
         </Button>
       </NodeToolbar>
       <div className={classes.node}>
@@ -122,10 +132,13 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
         />
         <div className={classes.nodeContainer}>
           {data.offender && data.offender.name ? (
-            <OffenderCard offender={data.offender!} />
+            <OffenderCard offender={data.offender} />
           ) : (
             <div style={{ height: '100%', zIndex: 4, position: 'relative' }}>
-              Offender: Please choose an offender
+              {intl.formatMessage({
+                defaultMessage: 'Offender: Please choose an offender',
+                id: 'KRHeRo',
+              })}
             </div>
           )}
         </div>

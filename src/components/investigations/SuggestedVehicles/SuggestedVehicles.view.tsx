@@ -5,6 +5,7 @@ import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
+import { FormattedMessage } from 'react-intl';
 import useStyles from './SuggestedVehicles.style';
 
 interface Props {
@@ -14,7 +15,10 @@ interface Props {
 
 const SuggestedVehicles = ({ suggestedData, handleAddSuggestion }: Props) => {
   const classes = useStyles();
-  const [lightBoxOpen, setLightBoxOpen] = useState({
+  const [lightBoxOpen, setLightBoxOpen] = useState<{
+    open: boolean;
+    index: number;
+  }>({
     open: false,
     index: 0,
   });
@@ -43,27 +47,29 @@ const SuggestedVehicles = ({ suggestedData, handleAddSuggestion }: Props) => {
           {
             key: 'reference',
             dataIndex: 'reference',
-            title: 'Reference',
+            title: <FormattedMessage id="mcUhhf" defaultMessage="Reference" />,
           },
           {
             key: 'registration',
             dataIndex: 'registration',
-            title: 'Registration',
+            title: (
+              <FormattedMessage id="qv7ied" defaultMessage="Registration" />
+            ),
           },
           {
             key: 'make',
             dataIndex: 'make',
-            title: 'Make',
+            title: <FormattedMessage id="6AAM0P" defaultMessage="Make" />,
           },
           {
             key: 'model',
             dataIndex: 'model',
-            title: 'Model',
+            title: <FormattedMessage id="rhSI1/" defaultMessage="Model" />,
           },
           {
             key: 'colour',
             dataIndex: 'colour',
-            title: 'Colour',
+            title: <FormattedMessage id="+e8vAT" defaultMessage="Colour" />,
           },
           {
             key: 'actions',
@@ -75,7 +81,10 @@ const SuggestedVehicles = ({ suggestedData, handleAddSuggestion }: Props) => {
                 type="ghost"
                 onClick={() => handleAddSuggestion(row.key)}
               >
-                Add To Investigation
+                <FormattedMessage
+                  id="zEXZIx"
+                  defaultMessage="Add To Investigation"
+                />
               </Button>
             ),
           },

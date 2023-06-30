@@ -20,6 +20,7 @@ import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import UploadImage from 'components/images/UploadImage.view';
 import { heightValues } from 'types/enums/height';
 import { IdSource } from 'graphql/generated';
+import { useIntl } from 'react-intl';
 import useStyles from './AddNewOffender.style';
 import type { FormData, Image } from './useAddNewOffender';
 
@@ -67,6 +68,7 @@ const AddNewOffender = ({
   onValuesChange,
 }: Props): JSX.Element => {
   const classes = useStyles();
+  const intl = useIntl();
   return (
     <Form
       form={form}
@@ -78,9 +80,12 @@ const AddNewOffender = ({
         <Col span={12}>
           <Form.Item
             name="name"
-            label="Name"
-            tooltip="Enter the offenders name if you know it, if not leave this field
-                blank."
+            label={intl.formatMessage({ defaultMessage: 'Name', id: 'HAlOn1' })}
+            tooltip={intl.formatMessage({
+              defaultMessage:
+                'Enter the offenders name if you know it, if not leave this field blank.',
+              id: 'pYHIHH',
+            })}
           >
             <Input className={classes.nameSelect} disabled={saving} />
           </Form.Item>
@@ -88,8 +93,14 @@ const AddNewOffender = ({
         <Col span={12}>
           <Form.Item
             name="alias"
-            label="Alias"
-            tooltip="Select the alias of the offender if known."
+            label={intl.formatMessage({
+              defaultMessage: 'Alias',
+              id: 'Ri9jA7',
+            })}
+            tooltip={intl.formatMessage({
+              defaultMessage: 'Select the alias of the offender if known.',
+              id: '54LWuR',
+            })}
           >
             <Select disabled={saving} mode="tags" />
           </Form.Item>
@@ -99,8 +110,14 @@ const AddNewOffender = ({
         <Col span={12}>
           <Form.Item
             name="build"
-            label="Build"
-            tooltip="Select the build of the offender if known."
+            label={intl.formatMessage({
+              defaultMessage: 'Build',
+              id: 'RSctv1',
+            })}
+            tooltip={intl.formatMessage({
+              defaultMessage: 'Select the build of the offender if known.',
+              id: 'f0WQZR',
+            })}
           >
             <Select options={buildValues} disabled={saving} />
           </Form.Item>
@@ -108,8 +125,14 @@ const AddNewOffender = ({
         <Col span={12}>
           <Form.Item
             name="height"
-            label="Height"
-            tooltip="Select the height of the offender if known."
+            label={intl.formatMessage({
+              defaultMessage: 'Height',
+              id: 'teLZyZ',
+            })}
+            tooltip={intl.formatMessage({
+              defaultMessage: 'Select the height of the offender if known.',
+              id: 'B+TToj',
+            })}
           >
             <Select options={heightValues} disabled={saving} />
           </Form.Item>
@@ -117,8 +140,11 @@ const AddNewOffender = ({
         <Col span={12}>
           <Form.Item
             name="gender"
-            label="Sex"
-            tooltip="Select the gender of the offender if known."
+            label={intl.formatMessage({ defaultMessage: 'Sex', id: 'eWJHGp' })}
+            tooltip={intl.formatMessage({
+              defaultMessage: 'Select the gender of the offender if known.',
+              id: 'h04BWW',
+            })}
           >
             <Select options={genderValues} disabled={saving} />
           </Form.Item>
@@ -126,8 +152,14 @@ const AddNewOffender = ({
         <Col span={12}>
           <Form.Item
             name="race"
-            label="Ethnicity"
-            tooltip="Select the ethnicity of the offender if known."
+            label={intl.formatMessage({
+              defaultMessage: 'Ethnicity',
+              id: 'XtCAFo',
+            })}
+            tooltip={intl.formatMessage({
+              defaultMessage: 'Select the ethnicity of the offender if known.',
+              id: 'Wv0puZ',
+            })}
           >
             <Select options={raceValues} disabled={saving} />
           </Form.Item>
@@ -135,8 +167,12 @@ const AddNewOffender = ({
         <Col span={12}>
           <Form.Item
             name="hair"
-            label="Hair"
-            tooltip="The style and colour of the offenders hair if known."
+            label={intl.formatMessage({ defaultMessage: 'Hair', id: 'e4YBbX' })}
+            tooltip={intl.formatMessage({
+              defaultMessage:
+                'The style and colour of the offenders hair if known.',
+              id: 'bnOdvC',
+            })}
           >
             <Input disabled={saving} />
           </Form.Item>
@@ -147,8 +183,14 @@ const AddNewOffender = ({
         <Col span={24}>
           <Form.Item
             name="peculiarities"
-            label="Peculiarities"
-            tooltip="Anything distinctive features of the offender."
+            label={intl.formatMessage({
+              defaultMessage: 'Peculiarities',
+              id: '9s+ZmX',
+            })}
+            tooltip={intl.formatMessage({
+              defaultMessage: 'Anything distinctive features of the offender.',
+              id: 'NssvPD',
+            })}
           >
             <Input.TextArea disabled={saving} />
           </Form.Item>
@@ -156,8 +198,14 @@ const AddNewOffender = ({
         <Col span={24}>
           <Form.Item
             name="comment"
-            label="Comment"
-            tooltip="Leave a comment for the offender."
+            label={intl.formatMessage({
+              defaultMessage: 'Comment',
+              id: 'LgbKvU',
+            })}
+            tooltip={intl.formatMessage({
+              defaultMessage: 'Leave a comment for the offender.',
+              id: 'YSNQlW',
+            })}
           >
             <Input.TextArea disabled={saving} />
           </Form.Item>
@@ -166,13 +214,22 @@ const AddNewOffender = ({
       <Row gutter={20} wrap>
         <Col span={12}>
           <Typography.Text>
-            Do you know the offender&apos;s date of birth?
+            {intl.formatMessage({
+              defaultMessage: "Do you know the offender's date of birth?",
+              id: 'nRYjxK',
+            })}
           </Typography.Text>
           <Switch
             style={{ marginLeft: 10, marginTop: 10 }}
             checked={ageCheck}
-            checkedChildren="Yes"
-            unCheckedChildren="No"
+            checkedChildren={intl.formatMessage({
+              defaultMessage: 'Yes',
+              id: 'a5msuh',
+            })}
+            unCheckedChildren={intl.formatMessage({
+              defaultMessage: 'No',
+              id: 'oUWADl',
+            })}
             onChange={() => {
               setAgeCheck(!ageCheck);
             }}
@@ -182,7 +239,13 @@ const AddNewOffender = ({
         {ageCheck ? (
           <>
             <Col span={10}>
-              <Form.Item name="dateOfBirth" label="Date of Birth">
+              <Form.Item
+                name="dateOfBirth"
+                label={intl.formatMessage({
+                  defaultMessage: 'Date of Birth',
+                  id: 'e9Z+tg',
+                })}
+              >
                 <DatePicker
                   disabled={saving}
                   disabledDate={(current) =>
@@ -194,8 +257,15 @@ const AddNewOffender = ({
             <Col span={24}>
               <Form.Item
                 name="dateSource"
-                label="Date of Birth Source"
-                tooltip="Enter the information source of the offender's date of birth range of the offender ."
+                label={intl.formatMessage({
+                  defaultMessage: 'Date of Birth Source',
+                  id: 'txjqJv',
+                })}
+                tooltip={intl.formatMessage({
+                  defaultMessage:
+                    "Enter the information source of the offender's date of birth range of the offender.",
+                  id: '3Jk/hp',
+                })}
               >
                 <Input.TextArea disabled={saving} />
               </Form.Item>
@@ -205,8 +275,15 @@ const AddNewOffender = ({
           <Col span={10}>
             <Form.Item
               name="age"
-              label="Age"
-              tooltip="Select an estimated age range of the offender if known."
+              label={intl.formatMessage({
+                defaultMessage: 'Age',
+                id: '9oNQSC',
+              })}
+              tooltip={intl.formatMessage({
+                defaultMessage:
+                  'Select an estimated age range of the offender if known.',
+                id: 'w+tgOS',
+              })}
             >
               <Select options={ageValues} disabled={saving} />
             </Form.Item>
@@ -217,12 +294,23 @@ const AddNewOffender = ({
         <Col>
           <Form.Item
             name="idVerified"
-            label="Has the offenders ID been verified?"
-            tooltip="Have you confirmed the offenders ID using an accepted method?"
+            label={intl.formatMessage({
+              defaultMessage: 'Has the offenders ID been verified?',
+              id: 'xP3cvr',
+            })}
+            tooltip={intl.formatMessage({
+              defaultMessage:
+                'Have you confirmed the offenders ID using an accepted method?',
+              id: 'I7veBp',
+            })}
           >
             <Radio.Group disabled={saving}>
-              <Radio.Button value>Yes</Radio.Button>
-              <Radio.Button value={false}>No</Radio.Button>
+              <Radio.Button value>
+                {intl.formatMessage({ defaultMessage: 'Yes', id: 'a5msuh' })}
+              </Radio.Button>
+              <Radio.Button value={false}>
+                {intl.formatMessage({ defaultMessage: 'No', id: 'oUWADl' })}
+              </Radio.Button>
             </Radio.Group>
           </Form.Item>
         </Col>
@@ -230,12 +318,21 @@ const AddNewOffender = ({
           <Col>
             <Form.Item
               name="idSource"
-              label="ID Source"
-              tooltip="How did you confirm the ID?"
+              label={intl.formatMessage({
+                defaultMessage: 'ID Source',
+                id: 'nPSQJe',
+              })}
+              tooltip={intl.formatMessage({
+                defaultMessage: 'How did you confirm the ID?',
+                id: 'TuUlTh',
+              })}
               rules={[
                 {
                   required: true,
-                  message: 'Please enter the source of the ID.',
+                  message: intl.formatMessage({
+                    defaultMessage: 'Please enter the source of the ID.',
+                    id: 'tGh93Z',
+                  }),
                 },
               ]}
             >
@@ -244,23 +341,38 @@ const AddNewOffender = ({
                 disabled={saving}
                 options={[
                   {
-                    label: 'Driving Licence',
+                    label: intl.formatMessage({
+                      defaultMessage: 'Driving Licence',
+                      id: 'wstpvP',
+                    }),
                     value: IdSource.DrivingLicence,
                   },
                   {
-                    label: 'ID Card',
+                    label: intl.formatMessage({
+                      defaultMessage: 'ID Card',
+                      id: 'Fdvpdz',
+                    }),
                     value: IdSource.IdCard,
                   },
                   {
-                    label: 'Known Offender',
+                    label: intl.formatMessage({
+                      defaultMessage: 'Known Offender',
+                      id: 'he2Vcw',
+                    }),
                     value: IdSource.Known,
                   },
                   {
-                    label: 'Other',
+                    label: intl.formatMessage({
+                      defaultMessage: 'Other',
+                      id: '/VnDMl',
+                    }),
                     value: IdSource.Other,
                   },
                   {
-                    label: 'Passport',
+                    label: intl.formatMessage({
+                      defaultMessage: 'Passport',
+                      id: 'OSJSb9',
+                    }),
                     value: IdSource.Passport,
                   },
                 ]}
@@ -280,7 +392,10 @@ const AddNewOffender = ({
           onRemoveImage={onRemoveImage}
           primaryImage={primaryImage}
           setPrimaryImage={setPrimaryImage}
-          title="offender"
+          title={intl.formatMessage({
+            defaultMessage: 'offender',
+            id: 'ZkfGxM',
+          })}
         />
       )}
 
@@ -288,7 +403,7 @@ const AddNewOffender = ({
         <Row style={{ marginTop: 30 }} gutter={10} justify="end">
           <Col>
             <Button disabled={saving} onClick={onClose}>
-              Cancel
+              {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
             </Button>
           </Col>
           <Col>
@@ -298,7 +413,9 @@ const AddNewOffender = ({
               type="primary"
               htmlType="submit"
             >
-              {addOverride || 'Add'} Offender
+              {addOverride ||
+                intl.formatMessage({ defaultMessage: 'Add', id: '2/2yg+' })}
+              {intl.formatMessage({ defaultMessage: 'Offender', id: 'AN7Aru' })}
             </Button>
           </Col>
         </Row>

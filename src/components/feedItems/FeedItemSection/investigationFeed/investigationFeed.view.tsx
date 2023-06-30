@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 
 import WatermarkImage from 'components/images/WatermarkImage.view';
 
+import { useIntl } from 'react-intl';
 import UpdateContent from '../UpdateContent';
 
 const { Title, Text, Paragraph } = Typography;
@@ -51,8 +52,9 @@ const InvestigationFeed = ({
     totalIncidents,
     id,
   } = feedItem?.investigation || {};
-
+  const intl = useIntl();
   return (
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     <Link to={`/app/investigations/view/${id}`}>
       <Row gutter={15} wrap={false} key={id || ''} style={{ width: '100%' }}>
         {!isNewImage && updates && updates[0]?.images[0] ? (
@@ -75,7 +77,12 @@ const InvestigationFeed = ({
               <Row style={{ marginTop: -5, marginBottom: 5 }}>
                 <Col>
                   <Text style={{ fontSize: 14 }} type="secondary">
-                    Alert ID: {reference}
+                    {intl.formatMessage(
+                      { defaultMessage: 'Alert ID: {reference}', id: '377fsC' },
+                      {
+                        reference,
+                      }
+                    )}
                   </Text>
                 </Col>
               </Row>
@@ -88,7 +95,12 @@ const InvestigationFeed = ({
                     style={{ marginRight: 5 }}
                   />
                   <Text style={{ fontSize: 14 }} type="secondary">
-                    Members: {totalOffenders || 0}
+                    {intl.formatMessage(
+                      { defaultMessage: 'Members: {members}', id: '8gjK3b' },
+                      {
+                        members: totalOffenders || 0,
+                      }
+                    )}
                   </Text>
                 </Col>
               </Row>
@@ -101,7 +113,15 @@ const InvestigationFeed = ({
                     style={{ marginRight: 5 }}
                   />
                   <Text style={{ fontSize: 14 }} type="secondary">
-                    Total Incidents: {totalIncidents || 0}
+                    {intl.formatMessage(
+                      {
+                        defaultMessage: 'Total Incidents: {members}',
+                        id: 'yEyRrH',
+                      },
+                      {
+                        members: totalIncidents || 0,
+                      }
+                    )}
                   </Text>
                 </Col>
               </Row>

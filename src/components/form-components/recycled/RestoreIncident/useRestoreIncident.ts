@@ -68,7 +68,7 @@ const useRestoreIncident = ({
   const onSubmit = () => {
     setSaving(true);
     if (incidentId && recycledId)
-      restoreIncident({
+      void restoreIncident({
         variables: {
           id: incidentId,
           recycledId,
@@ -100,7 +100,7 @@ const useRestoreIncident = ({
   const onDelete = () => {
     setSaving(true);
     if (incidentId)
-      deleteIncident({
+      void deleteIncident({
         variables: { where: { id: incidentId } },
       });
   };

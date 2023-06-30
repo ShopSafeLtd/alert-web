@@ -1,12 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-assignment */
 import { Card, Input } from 'antd';
 import React, { memo, useCallback } from 'react';
-import {
-  Handle,
-  Position,
-  useReactFlow,
-  useStore,
-  useStoreApi,
-} from 'reactflow';
+import { Handle, Position, useReactFlow, useStoreApi } from 'reactflow';
 import { NodeResizer } from '@reactflow/node-resizer';
 import '@reactflow/node-resizer/dist/style.css';
 
@@ -18,21 +13,19 @@ interface Props {
   id: string;
   selected: boolean;
 }
-// @ts-ignore
-
-const connectionNodeIdSelector = (state) => state.connectionNodeId;
 
 export default memo(({ data, isConnectable, selected, id }: Props) => {
-  const connectionNodeId = useStore(connectionNodeIdSelector);
-  const isTarget = connectionNodeId && connectionNodeId !== id;
   const { setNodes } = useReactFlow();
   const store = useStoreApi();
 
+  // eslint-disable-next-line @typescript-eslint/no-shadow
   const onChange = useCallback((v, id) => {
     const { nodeInternals } = store.getState();
     setNodes(
+      // eslint-disable-next-line unicorn/prefer-spread
       Array.from(nodeInternals.values()).map((node) => {
         if (node.id === id) {
+          // eslint-disable-next-line no-param-reassign
           node.data = {
             ...node.data,
             text: v,

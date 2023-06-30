@@ -31,7 +31,7 @@ describe('Detail Officer View', () => {
         priority: ArticlePriority.Normal,
         tags: [],
         title: 'test',
-        updatedAt: '2023-05-16T17:39:30.210Z',
+        updatedAt: new Date('2022-07-25T08:57:55.299Z'),
         groups: [],
       },
     ],

@@ -1,6 +1,7 @@
 import { Button } from 'antd';
 import React, { useRef } from 'react';
 import Signature from 'react-signature-canvas';
+import { FormattedMessage } from 'react-intl';
 
 type ReactSignatureCanvas = Signature;
 
@@ -47,7 +48,7 @@ const SignatureInput = ({
         />
       </div>
       <Button hidden={hidden} size="small" onClick={onClear}>
-        Clear
+        <FormattedMessage defaultMessage="Clear" id="/GCoTA" />
       </Button>
     </>
   );

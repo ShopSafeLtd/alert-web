@@ -1,4 +1,5 @@
-import React, { useRef } from 'react';
+import type React from 'react';
+import { useRef } from 'react';
 import type { Editor } from 'tinymce';
 
 interface Props {
@@ -21,6 +22,7 @@ interface Return {
   editorRef: React.MutableRefObject<Editor | null>;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const useEditText = ({ onClose, onSelect, investigationId }: Props): Return => {
   const editorRef = useRef<Editor | null>(null);
 

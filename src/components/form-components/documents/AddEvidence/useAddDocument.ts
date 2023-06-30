@@ -116,7 +116,7 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
       if (found) {
         formattedValues.push(value.value);
       } else {
-        createTag({
+        void createTag({
           variables: {
             data: {
               name: value.value,
@@ -203,7 +203,7 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
       .map((id) => id || '');
 
     if (selectedEvidence) {
-      createDocument({
+      void createDocument({
         variables: {
           where: {
             id: investigationId,

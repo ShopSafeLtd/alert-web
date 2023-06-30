@@ -7,6 +7,7 @@ import { useStoreState } from 'state';
 import type { MapRef } from 'react-map-gl';
 import Map, { Layer, Marker, Source } from 'react-map-gl';
 import mapboxgl from 'mapbox-gl';
+import { useIntl } from 'react-intl';
 import MapPin from '../MapPin';
 
 const { Text } = Typography;
@@ -119,7 +120,7 @@ const HeatMapLayer = (
 
 const MapCard = ({ height, width, markers }: Props) => {
   const mapRef = useRef<MapRef>(null);
-
+  const intl = useIntl();
   const classes = useStyles();
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
   const [largeOpen, setLargeOpen] = useState(false);
@@ -153,7 +154,12 @@ const MapCard = ({ height, width, markers }: Props) => {
         className={classes.mapOverlay}
       >
         <FontAwesomeIcon size="lg" color="#FFF" icon={faArrowsMaximize} />
-        <Text className={classes.mapText}>View Larger Map</Text>
+        <Text className={classes.mapText}>
+          {intl.formatMessage({
+            defaultMessage: 'View Larger Map',
+            id: '3LkujO',
+          })}
+        </Text>
       </div>
       <Map
         mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}
@@ -209,7 +215,7 @@ const MapCard = ({ height, width, markers }: Props) => {
         bodyStyle={{ padding: 0, borderRadius: 10, overflow: 'hidden' }}
         open={largeOpen}
         onOk={toggleLargeOpen}
-        okText="Close"
+        okText={intl.formatMessage({ defaultMessage: 'Close', id: 'rbrahO' })}
         onCancel={toggleLargeOpen}
         width="95vw"
         cancelButtonProps={{
@@ -279,14 +285,26 @@ const MapCard = ({ height, width, markers }: Props) => {
           </Col>
           <Col className={classes.actions}>
             <Form layout="vertical">
-              <Form.Item style={{ margin: 0 }} label="Show Heatmap">
+              <Form.Item
+                style={{ margin: 0 }}
+                label={intl.formatMessage({
+                  defaultMessage: 'Show Heat Map',
+                  id: 'anpRhM',
+                })}
+              >
                 <Switch
                   className={classes.action}
                   onClick={toggleHeatmap}
                   checked={showHeatmap}
                 />
               </Form.Item>
-              <Form.Item style={{ margin: 0 }} label="Show Markers">
+              <Form.Item
+                style={{ margin: 0 }}
+                label={intl.formatMessage({
+                  defaultMessage: 'Show Markers',
+                  id: '3AXahR',
+                })}
+              >
                 <Switch
                   className={classes.action}
                   onClick={toggleMarkers}

@@ -99,7 +99,7 @@ const useAddTodo = ({ update, onClose }: Props): Return => {
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
-    createTodo({
+    void createTodo({
       variables: {
         data: {
           name: data.name,

@@ -2,6 +2,7 @@
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "airbnb",
     "airbnb-typescript",
     "plugin:sonarjs/recommended",
@@ -17,17 +18,36 @@
     "sourceType": "module",
     "project": "./tsconfig.json"
   },
-  "plugins": [
-    "react",
-    "@typescript-eslint",
-    "sonarjs",
-    "unicorn"
-  ],
-  "ignorePatterns": [
-    ".eslintrc.js",
-    ".postInstall.js"
-  ],
+  "plugins": ["react", "@typescript-eslint", "sonarjs", "unicorn", "formatjs"],
+  "ignorePatterns": [".eslintrc.js", ".postInstall.js"],
   "rules": {
+    "formatjs/no-offset": "error",
+    "formatjs/enforce-default-message": ["error", "literal"],
+    "formatjs/no-literal-string-in-jsx": [
+      2,
+      {
+        "props": {
+          "include": [
+            ["*", "message"],
+            ["*", "description"],
+            ["*", "title"],
+            ["*", "label"],
+            ["*", "okText"],
+            ["*", "cancelText"],
+            ["*", "header"],
+            ["*", "placeholder"],
+            ["Form.Item", "tooltip"]
+          ]
+        }
+      }
+    ],
+    "formatjs/enforce-id": [
+      "error",
+      {
+        "idInterpolationPattern": "[sha512:contenthash:base64:6]",
+        "idWhitelist": ["^const_.*"]
+      }
+    ],
     "@typescript-eslint/no-unused-vars": [
       "error",
       {
@@ -37,10 +57,7 @@
       }
     ],
     "@typescript-eslint/no-explicit-any": "error",
-    "arrow-body-style": [
-      "error",
-      "as-needed"
-    ],
+    "arrow-body-style": ["error", "as-needed"],
     "react/function-component-definition": [
       2,
       {
@@ -61,10 +78,10 @@
         "allowForLoopAfterthoughts": true
       }
     ],
+    "no-void": ["error", { "allowAsStatement": true }],
     "import/no-named-as-default": 0,
-
     "react/require-default-props": "off",
-    "sonarjs/no-duplicate-string": "warn",
+    "sonarjs/no-duplicate-string": 1,
     "sonarjs/cognitive-complexity": "warn",
     "react-hooks/rules-of-hooks": "off",
     "@typescript-eslint/space-before-blocks": "off",
@@ -79,6 +96,8 @@
     "react/destructuring-assignment": "error",
     "unicorn/prefer-query-selector": "off",
     "no-restricted-exports": "off",
+    "unicorn/expiring-todo-comments": "off",
+
     "@typescript-eslint/consistent-type-imports": [
       "error",
       {

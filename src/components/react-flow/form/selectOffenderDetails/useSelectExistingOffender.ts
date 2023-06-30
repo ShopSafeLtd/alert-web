@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 
-import {
+import type {
   Age,
   Build,
   Gender,
   ListOffendersQuery,
   Race,
-  SortOrder,
-  useListOffendersQuery,
 } from 'graphql/generated';
+import { SortOrder, useListOffendersQuery } from 'graphql/generated';
 import { useStoreState } from 'state';
 
 export interface Offender {
@@ -101,11 +100,10 @@ const useSelectExistingOffender = ({
   const onSubmit = () => {
     if (
       data?.listOffenders?.offenders &&
-      data.listOffenders.offenders.length > 0
+      data.listOffenders.offenders.length > 0 &&
+      selectedOffender
     ) {
-      if (selectedOffender) {
-        onSelect(selectedOffender as Offender);
-      }
+      onSelect(selectedOffender as Offender);
     }
     onClose();
   };

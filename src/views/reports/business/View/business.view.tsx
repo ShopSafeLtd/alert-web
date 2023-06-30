@@ -1,15 +1,15 @@
 import React from 'react';
 import {
+  Button,
+  Card,
   Col,
+  DatePicker,
   Row,
   Spin,
-  Typography,
   Statistic,
-  Card,
   Table,
   Tag,
-  Button,
-  DatePicker,
+  Typography,
 } from 'antd';
 import type { BusinessReportQuery } from 'graphql/generated';
 import type { Moment } from 'moment';
@@ -18,6 +18,7 @@ import BusinessSideList from 'components/businesses/BusinessSideList';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload } from '@fortawesome/pro-light-svg-icons';
 import Chart from 'react-apexcharts';
+import { FormattedMessage, useIntl } from 'react-intl';
 import useStyles from './business.styles';
 
 const { Title } = Typography;
@@ -39,6 +40,7 @@ const Business = ({
   setDateRange,
 }: Props) => {
   const classes = useStyles();
+  const intl = useIntl();
   return (
     <Row wrap={false}>
       <Col>
@@ -65,7 +67,10 @@ const Business = ({
                   icon={faDownload}
                   className={classes.buttonIcon}
                 />
-                Download Report
+                {intl.formatMessage({
+                  defaultMessage: 'Download Report',
+                  id: 'iHdvdj',
+                })}
               </Button>
             </Col>
           </Row>
@@ -81,7 +86,10 @@ const Business = ({
                     <Statistic
                       prefix="£"
                       value={data?.business?.valueStats?.totalLostValue || 0}
-                      title="Total Lost Value"
+                      title={intl.formatMessage({
+                        defaultMessage: 'Total Lost Value',
+                        id: '3LZ6MG',
+                      })}
                     />
                   </Card>
                 </Col>
@@ -92,7 +100,10 @@ const Business = ({
                       value={
                         data?.business?.valueStats?.totalRecoveredValue || 0
                       }
-                      title="Total Recovered Value"
+                      title={intl.formatMessage({
+                        defaultMessage: 'Total Recovered Value',
+                        id: 'pambF6',
+                      })}
                     />
                   </Card>
                 </Col>
@@ -103,7 +114,10 @@ const Business = ({
                         data?.business?.valueStats?.successRate?.toFixed(2) || 0
                       }
                       suffix="%"
-                      title="Success Rate"
+                      title={intl.formatMessage({
+                        defaultMessage: 'Success Rate',
+                        id: 'IaZkrc',
+                      })}
                     />
                   </Card>
                 </Col>
@@ -112,7 +126,10 @@ const Business = ({
                     <Statistic
                       value={data?.business?.valueStats?.totalLostValue || 0}
                       prefix="£"
-                      title="Avg Lost Value"
+                      title={intl.formatMessage({
+                        defaultMessage: 'Avg Lost Value',
+                        id: 'lpKwSc',
+                      })}
                     />
                   </Card>
                 </Col>
@@ -121,7 +138,10 @@ const Business = ({
                     <Statistic
                       value={data?.business?.valueStats?.avgRecoveredValue || 0}
                       prefix="£"
-                      title="Avg Recovered Value"
+                      title={intl.formatMessage({
+                        defaultMessage: 'Avg Recovered Value',
+                        id: 'PbCwq9',
+                      })}
                     />
                   </Card>
                 </Col>
@@ -129,7 +149,12 @@ const Business = ({
               <Row>
                 <Col span={12}>
                   <Card>
-                    <Title level={4}>Goods Types By Value Lost</Title>
+                    <Title level={4}>
+                      <FormattedMessage
+                        defaultMessage="Goods Types By Value Lost"
+                        id="Iyt31T"
+                      />
+                    </Title>
                     <Chart
                       options={{
                         chart: {
@@ -157,37 +182,54 @@ const Business = ({
                 </Col>
               </Row>
               <Card>
-                <Title level={4}>Goods Types</Title>
+                <Title level={4}>
+                  <FormattedMessage defaultMessage="Goods Types" id="Ewh6rQ" />
+                </Title>
                 <Table
                   columns={[
                     {
                       key: 'name',
                       dataIndex: 'name',
-                      title: 'Name',
+                      title: intl.formatMessage({
+                        defaultMessage: 'Name',
+                        id: 'HAlOn1',
+                      }),
                     },
                     {
                       key: 'lost',
                       dataIndex: 'lost',
-                      title: 'Total Lost',
-                      render: (value) => `£${value.toFixed(2)}`,
+                      title: intl.formatMessage({
+                        defaultMessage: 'Total Lost',
+                        id: 'TpqK2W',
+                      }),
+                      render: (value: number) => `£${value.toFixed(2)}`,
                     },
                     {
                       key: 'recovered',
                       dataIndex: 'recovered',
-                      title: 'Total Recovered',
-                      render: (value) => `£${value.toFixed(2)}`,
+                      title: intl.formatMessage({
+                        defaultMessage: 'Total Recovered',
+                        id: '/YBJ85',
+                      }),
+                      render: (value: number) => `£${value.toFixed(2)}`,
                     },
                     {
                       key: 'successRate',
                       dataIndex: 'successRate',
-                      title: 'Success Rate',
-                      render: (value) => `${value.toFixed(0)}%`,
+                      title: intl.formatMessage({
+                        defaultMessage: 'Success Rate',
+                        id: 'IaZkrc',
+                      }),
+                      render: (value: number) => `${value.toFixed(0)}%`,
                     },
                     {
                       key: 'avgLost',
                       dataIndex: 'avgLost',
-                      title: 'Avg Loss',
-                      render: (value) => `£${value.toFixed(2)}`,
+                      title: intl.formatMessage({
+                        defaultMessage: 'Avg Lost',
+                        id: 'C70bmG',
+                      }),
+                      render: (value: number) => `£${value.toFixed(2)}`,
                     },
                   ]}
                   dataSource={data?.business?.goodsTypesTotals
@@ -213,42 +255,65 @@ const Business = ({
                 />
               </Card>
               <Card>
-                <Title level={4}>All Incidents</Title>
+                <Title level={4}>
+                  {intl.formatMessage({
+                    defaultMessage: 'All Incidents',
+                    id: 'wE2z2t',
+                  })}
+                </Title>
                 <Table
                   columns={[
                     {
                       key: 'reference',
                       dataIndex: 'reference',
-                      title: 'Alert ID',
+                      title: intl.formatMessage({
+                        defaultMessage: 'Alert ID',
+                        id: 'k8ZNgH',
+                      }),
                     },
                     {
                       key: 'date',
                       dataIndex: 'date',
-                      title: 'Date',
-                      render: (value) => moment(value).format('DD/MM/YY'),
+                      title: intl.formatMessage({
+                        defaultMessage: 'Date',
+                        id: 'P7PLVj',
+                      }),
+                      render: (value: Date) => moment(value).format('DD/MM/YY'),
                     },
                     {
                       key: 'value',
                       dataIndex: 'value',
-                      title: 'Value',
-                      render: (value) => `£${value}`,
+                      title: intl.formatMessage({
+                        defaultMessage: 'Value',
+                        id: 'GufXy5',
+                      }),
+                      render: (value: number) => `£${value}`,
                     },
                     {
                       key: 'recoveredValue',
                       dataIndex: 'recoveredValue',
-                      title: 'Recovered Value',
-                      render: (value) => `£${value}`,
+                      title: intl.formatMessage({
+                        defaultMessage: 'Recovered Value',
+                        id: 'bGwFFv',
+                      }),
+                      render: (value: number) => `£${value}`,
                     },
                     {
                       key: 'createdBy',
                       dataIndex: 'createdBy',
-                      title: 'Created by',
+                      title: intl.formatMessage({
+                        defaultMessage: 'Created By',
+                        id: 'uAfuJA',
+                      }),
                     },
                     {
                       key: 'crimeTypes',
                       dataIndex: 'crimeTypes',
-                      title: 'Types',
-                      render: (value) =>
+                      title: intl.formatMessage({
+                        defaultMessage: 'Types',
+                        id: 'kxP9GJ',
+                      }),
+                      render: (value: { id: string; name: string }[]) =>
                         value.map(
                           // eslint-disable-next-line
                           ({ id, name }: { id: string; name: string }) => (
@@ -260,7 +325,7 @@ const Business = ({
                   dataSource={data?.business?.incidents.map((incident) => ({
                     key: incident.id,
                     reference: incident.reference,
-                    data: incident.date,
+                    date: incident.date,
                     crimeTypes: incident.crimeTypes,
                     value: incident.totalValue || 0,
                     recoveredValue: incident.totalRecoveredValue || 0,

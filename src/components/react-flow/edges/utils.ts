@@ -1,3 +1,4 @@
+/* eslint-disable  */
 import { Position } from 'reactflow';
 
 // this helper function returns the intersection point

@@ -72,29 +72,42 @@ const useReportState = ({
   ReportType,
 }: Props): Return => {
   const { id: currentScheme, logo } = useStoreState((state) => state.scheme);
+  const isDemo =
+    currentScheme === 'ckdhbosuv01028oiblmjgeuii' ||
+    currentScheme === 'ck6zhwkwv00019ourjkgk5bdt';
+  // new date 2 years ago at 00:00:00
+  const startDateDemo = new Date(
+    new Date(new Date().setFullYear(new Date().getFullYear() - 2)).setHours(
+      0,
+      0,
+      59
+    )
+  );
+
+  const initDate = isDemo
+    ? startDateDemo
+    : new Date(
+        new Date(new Date().setMonth(new Date().getMonth() - 1)).setHours(
+          0,
+          0,
+          59
+        )
+      );
+
   const businesses = useStoreState((state) => state.user.businesses);
   const [addLogoDrawer, setAddLogoDrawer] = useState(false);
 
   const [editMode, setEditMode] = useState(false);
   const [minDrawer, setMinDrawer] = useState(false);
   const [layout, setLayout] = useState<RGL.Layout[]>(InitLayout);
-  const [selectedBusiness, setSelectedBusiness] = useState<string[]>(
-    businesses ? businesses.map((business) => business.id) : []
-  );
+  const [selectedBusiness, setSelectedBusiness] = useState<string[]>([]);
   const [groups, setGroups] = useState<SelectOptions[]>([]);
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
   const [dateRange, setDateRangeState] = useState<{
     startDate: Date;
     endDate: Date;
   }>({
-    // new date 1 month ago at 00:00:00
-    startDate: new Date(
-      new Date(new Date().setMonth(new Date().getMonth() - 1)).setHours(
-        0,
-        0,
-        59
-      )
-    ),
+    startDate: initDate,
     // today at 23:59:59
     endDate: new Date(new Date().setHours(23, 59, 59)),
   });
@@ -203,7 +216,7 @@ const useReportState = ({
           {
             id: d.createReportTemplate.id || '',
             name: d.createReportTemplate.name || '',
-            metaData: d.createReportTemplate.metaData || [],
+            metaData: (d.createReportTemplate.metaData as MetaData[]) || [],
             layout:
               (d.createReportTemplate.layout.map((item) => ({
                 ...item,
@@ -326,7 +339,7 @@ const useReportState = ({
           {
             id: d.updateReportTemplate.id || '',
             name: d.updateReportTemplate.name || '',
-            metaData: d.updateReportTemplate.metaData || [],
+            metaData: (d.updateReportTemplate.metaData as MetaData[]) || [],
             layout:
               (d.updateReportTemplate.layout.map((item) => ({
                 ...item,
@@ -515,6 +528,7 @@ const useReportState = ({
     metadata,
     removeLogo,
     saveAsDrawer,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     saveTemplate,
     selectTemplate,
     selectedTemplate,

@@ -7,7 +7,7 @@ import Loading from '../../../components/loading';
 const Mg11 = (): JSX.Element => {
   const { user, loginWithRedirect, isLoading, isAuthenticated } = useAuth0();
   if (!isAuthenticated && !isLoading) {
-    loginWithRedirect({
+    void loginWithRedirect({
       appState: { returnTo: window.location.pathname },
       connection: 'email',
     });

@@ -1,15 +1,5 @@
 import React from 'react';
-import {
-  Avatar,
-  Button,
-  Col,
-  Dropdown,
-  Menu,
-  Row,
-  Switch,
-  Typography,
-} from 'antd';
-import { LogoutOutlined } from '@ant-design/icons';
+import { Avatar, Col, Dropdown, Row, Select, Switch, Typography } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
 import { useAuth } from 'hooks';
 import { APP_PREFIX_PATH } from 'configs/AppConfig';
@@ -26,6 +16,8 @@ import { useThemeSwitcher } from 'react-css-theme-switcher/src';
 import { LocalStorageKeys, typedLocalStorage } from 'utils';
 import { createUseStyles } from 'react-jss';
 import type { Theme } from 'configs/ThemeConfig';
+import { useIntl } from 'react-intl';
+import type { AvailableLanguages } from 'lang';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   notificationCol: {
@@ -43,82 +35,92 @@ const useStyles = createUseStyles((theme: Theme) => ({
   },
 }));
 
-interface MenuItem {
-  title: string;
-  icon: string;
-  path: string;
-}
+// interface MenuItem {
+//   title: string;
+//   icon: string;
+//   path: string;
+// }
 
-const menuItem: MenuItem[] = [
-  {
-    title: 'User Settings',
-    icon: '', //EditOutlined,
-    path: `${APP_PREFIX_PATH}/user-settings`,
-  },
-  {
-    title: 'Terms & Conditions',
-    icon: '', //EditOutlined,
-    path: `${APP_PREFIX_PATH}/user-settings/terms`,
-  },
-];
+// const menuItem: MenuItem[] = [
+//   {
+//     title: 'User Settings',
+//     icon: '', // EditOutlined,
+//     path: `${APP_PREFIX_PATH}/user-settings`,
+//   },
+//   {
+//     title: 'Terms & Conditions',
+//     icon: '', // EditOutlined,
+//     path: `${APP_PREFIX_PATH}/user-settings/terms`,
+//   },
+// ];
 
 export const NavProfile = () => {
   const { switcher, themes } = useThemeSwitcher();
   const classes = useStyles();
-
+  const intl = useIntl();
   const name = useStoreState((state) => state.user.fullName);
   const email = useStoreState((state) => state.user.email);
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
   const switchTheme = useStoreActions((actions) => actions.theme.switchTheme);
+  const switchLocale = useStoreActions((actions) => actions.theme.changeLocale);
+  const locale = useStoreState((state) => state.theme.locale);
   const { signOut } = useAuth();
   const { logout } = useAuth0();
 
-  const profileMenu = (
-    <div className="nav-profile nav-dropdown">
-      <div className="nav-profile-header">
-        <div className="d-flex" style={{ alignItems: 'center' }}>
-          <Avatar
-            style={{ backgroundColor: 'rgb(222, 68, 54)', minWidth: 35 }}
-            size={35}
-          >
-            {name?.charAt(0)}
-          </Avatar>
-          <div className="pl-2">
-            <h4 className="mb-0">{name}</h4>
-            <span className="text-muted">{email}</span>
-          </div>
-        </div>
-      </div>
-      <div className="nav-profile-body">
-        <Menu>
-          {menuItem.map((el, i) => {
-            return (
-              <Menu.Item key={i}>
-                <Link to={el.path}>
-                  <Row>
-                    {/* <Icon className="mr-3" type={el.icon} /> */}
-                    <span className="font-weight-normal">{el.title}</span>
-                  </Row>
-                </Link>
-              </Menu.Item>
-            );
-          })}
-          <Menu.Item
-            key={menuItem.length + 1}
-            onClick={() => {
-              signOut();
-              logout({ returnTo: window.location.origin });
-            }}
-          >
-            <Row>
-              <LogoutOutlined className="mr-3" />
-              <span className="font-weight-normal">Sign Out</span>
-            </Row>
-          </Menu.Item>
-        </Menu>
-      </div>
-    </div>
-  );
+  const handleChangeLang = (value: AvailableLanguages) => {
+    switchLocale(value as string);
+    typedLocalStorage.set(LocalStorageKeys.lang, value as string);
+  };
+  // // TODO REMOVE
+  // const profileMenu = (
+  //   <div className="nav-profile nav-dropdown">
+  //     <div className="nav-profile-header">
+  //       <div className="d-flex" style={{ alignItems: 'center' }}>
+  //         <Avatar
+  //           style={{ backgroundColor: 'rgb(222, 68, 54)', minWidth: 35 }}
+  //           size={35}
+  //         >
+  //           {name?.charAt(0)}
+  //         </Avatar>
+  //         <div className="pl-2">
+  //           <h4 className="mb-0">{name}</h4>
+  //           <span className="text-muted">{email}</span>
+  //         </div>
+  //       </div>
+  //     </div>
+  //     <div className="nav-profile-body">
+  //       <Menu>
+  //         {menuItem.map((el, i) => (
+  //           <Menu.Item key={i}>
+  //             <Link to={el.path}>
+  //               <Row>
+  //                 {/* <Icon className="mr-3" type={el.icon} /> */}
+  //                 <span className="font-weight-normal">{el.title}</span>
+  //               </Row>
+  //             </Link>
+  //           </Menu.Item>
+  //         ))}
+  //         <Menu.Item
+  //           key={menuItem.length + 1}
+  //           onClick={() => {
+  //             signOut();
+  //             logout({ returnTo: window.location.origin });
+  //           }}
+  //         >
+  //           <Row>
+  //             <LogoutOutlined className="mr-3" />
+  //             <span className="font-weight-normal">
+  //               {intl.formatMessage({
+  //                 defaultMessage: 'Sign Out',
+  //                 id: 'F62y+K',
+  //               })}
+  //             </span>
+  //           </Row>
+  //         </Menu.Item>
+  //       </Menu>
+  //     </div>
+  //   </div>
+  // );
 
   return (
     <Dropdown
@@ -153,7 +155,12 @@ export const NavProfile = () => {
             label: (
               <Row gutter={8}>
                 <Col>
-                  <Typography.Text>Theme Mode: </Typography.Text>
+                  <Typography.Text>
+                    {intl.formatMessage({
+                      defaultMessage: 'Theme Mode: ',
+                      id: 'QAmP+7',
+                    })}
+                  </Typography.Text>
                 </Col>
                 <Col>
                   <Switch
@@ -170,7 +177,10 @@ export const NavProfile = () => {
                         LocalStorageKeys.theme,
                         value ? 'dark' : 'light'
                       );
-
+                      document.documentElement.setAttribute(
+                        'style',
+                        `color-scheme: ${value ? 'dark' : 'light'}`
+                      );
                       switcher({ theme: value ? themes.dark : themes.light });
                     }}
                   />
@@ -179,11 +189,53 @@ export const NavProfile = () => {
             ),
           },
           {
+            key: 'lang',
+            onClick: () => {},
+            disabled: true,
+            style: {
+              padding: 0,
+              cursor: 'default',
+            },
+            label: (
+              <Row>
+                <Select
+                  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                  defaultValue={locale as AvailableLanguages}
+                  value={locale as AvailableLanguages}
+                  bordered={false}
+                  style={{ width: '100%', paddingLeft: 8 }}
+                  onChange={handleChangeLang}
+                  options={[
+                    {
+                      value: 'en',
+                      label: intl.formatMessage({
+                        defaultMessage: 'English 🇬🇧',
+                        id: 'j66p6j',
+                      }),
+                    },
+                    {
+                      value: 'fr',
+                      label: intl.formatMessage({
+                        defaultMessage: 'French 🇫🇷',
+                        id: '115KOd',
+                      }),
+                    },
+                  ]}
+                />
+              </Row>
+            ),
+          },
+          {
             key: '3',
             label: (
               <Link to={`${APP_PREFIX_PATH}/user-settings`}>
                 <Row>
-                  <span className="font-weight-normal">User Settings</span>
+                  <span className="font-weight-normal">
+                    {intl.formatMessage({
+                      defaultMessage: 'User Settings',
+                      id: 'jUes8R',
+                    })}
+                  </span>
                 </Row>
               </Link>
             ),
@@ -198,7 +250,10 @@ export const NavProfile = () => {
                   </Col>
                   <Col>
                     <span className="font-weight-normal">
-                      Terms & Conditions
+                      {intl.formatMessage({
+                        defaultMessage: 'Terms & Conditions',
+                        id: 'arPp4e',
+                      })}
                     </span>
                   </Col>
                 </Row>
@@ -208,12 +263,23 @@ export const NavProfile = () => {
           {
             key: '5',
             label: (
-              <Row gutter={8}>
+              <Row
+                gutter={8}
+                onClick={() => {
+                  signOut();
+                  logout({ returnTo: window.location.origin });
+                }}
+              >
                 <Col>
                   <FontAwesomeIcon icon={faSignOut} />
                 </Col>
                 <Col>
-                  <span className="font-weight-normal">Sign Out</span>
+                  <span className="font-weight-normal">
+                    {intl.formatMessage({
+                      defaultMessage: 'Sign Out',
+                      id: 'F62y+K',
+                    })}
+                  </span>
                 </Col>
               </Row>
             ),

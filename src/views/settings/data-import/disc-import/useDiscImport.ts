@@ -1,41 +1,41 @@
 import { useEffect, useState } from 'react';
-import type { UploadFile, UploadProps, FormInstance } from 'antd';
+import type { FormInstance, UploadFile, UploadProps } from 'antd';
 import { Form } from 'antd';
 import type { SchemeGroupsQuery, TagsQuery } from 'graphql/generated';
 import {
-  Height,
-  useDiscImportDataMutation,
-  Model,
-  useTagsQuery,
-  Gender,
-  Race,
   Age,
   Build,
-  useSchemeGroupsQuery,
+  Gender,
+  Height,
+  Model,
+  Race,
+  Role,
   SortOrder,
   TagType,
-  Role,
+  useDiscImportDataMutation,
   useListUsersQuery,
+  useSchemeGroupsQuery,
+  useTagsQuery,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
 import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment';
 import update from 'immutability-helper';
 import type {
-  KnownSubject,
-  CSVData,
-  Member,
   Business,
-  IDSought,
-  Incident,
-  NewBusiness,
-  NewOffender,
-  Image,
-  NewUser,
-  NewIncident,
+  CSVData,
   GenerateData,
-  IncidentTags,
   HistoricIncident,
+  IDSought,
+  Image,
+  Incident,
+  IncidentTags,
+  KnownSubject,
+  Member,
+  NewBusiness,
+  NewIncident,
+  NewOffender,
+  NewUser,
 } from './DiscImport.types';
 
 const calcAge = (value: string) => {
@@ -200,6 +200,7 @@ const useDiscImport = (): Return => {
   const [imageModalOpen, setImageModalOpen] = useState<boolean>(false);
 
   const { data: usersData } = useListUsersQuery({
+    fetchPolicy: 'cache-and-network',
     variables: {
       groupWhere: {
         scheme: {
@@ -241,6 +242,7 @@ const useDiscImport = (): Return => {
   });
 
   const { data: tagData } = useTagsQuery({
+    fetchPolicy: 'cache-and-network',
     variables: {
       orderBy: {
         name: SortOrder.Asc,
@@ -264,7 +266,7 @@ const useDiscImport = (): Return => {
     mappingForm.setFieldsValue({
       areas: areas.map((area) => ({
         area,
-        group: groupsData?.groups[0]?.id || undefined,
+        group: undefined,
         key: area,
       })),
     });
@@ -343,22 +345,25 @@ const useDiscImport = (): Return => {
       premises: item[6],
       categories: item[7],
       areas: item[8],
-      lastSignedIn: item[9],
+      lastSignedIn: moment(item[9]),
     }));
     const filteredMembers = importedMembers
       .filter((item) => !item.email?.includes('littoralis'))
       .filter((item) => item.id !== 'Member Id')
-      .filter((item) => item.lastSignedIn);
+      .filter((item) => item.lastSignedIn && item.firstName && item.email);
 
     const activeAreas = [
-      ...new Set(filteredMembers.flatMap((item) => item.areas.split(', '))),
-    ].filter((area) => area !== '');
+      ...new Set(filteredMembers.flatMap((item) => item.areas?.split(', '))),
+    ]
+      .filter((area) => area !== '')
+      .filter((area) => area !== undefined && area !== null);
 
     setAreas(activeAreas);
     setMembers(filteredMembers);
     setBusinesses(
       filteredMembers.map((item) => ({
         name: item.organisation,
+        lastSignedIn: item.lastSignedIn,
       }))
     );
   };
@@ -679,12 +684,41 @@ const useDiscImport = (): Return => {
     const newBusinessData = await Promise.all(
       businesses
         .filter(
+          (business) =>
+            business.name && business.lastSignedIn > values.excludeUserDate
+        )
+        .filter(
           (value, index, self) =>
             index === self.findIndex((t) => t.name === value.name)
         )
         .map((business) => generateBusiness(business))
     );
-    const schemeGroupsIds = groupsData?.groups.map((group) => group.id) || [];
+    const filteredUsers = members.filter(
+      (member) =>
+        member.lastSignedIn > values.excludeUserDate &&
+        member.firstName &&
+        member.email
+    );
+
+    const getUserGroups = (user: Member) => {
+      const userAreasIds = [
+        ...new Set(
+          user.areas
+            ?.split(', ')
+            .flatMap(
+              (area) =>
+                values.areas?.find((value) => value.area === area)?.group || ''
+            )
+            .filter((item) => item !== '')
+        ),
+      ];
+      const groups = [...(values.defaultGroup || ''), ...userAreasIds].filter(
+        (item) => item !== ''
+      );
+      if (groups.length > 0) return groups;
+
+      return values.fallbackGroup;
+    };
 
     const generateUser = (user: Member) =>
       new Promise<NewUser>((resolve) => {
@@ -695,21 +729,9 @@ const useDiscImport = (): Return => {
           )?.id,
           email: user.email,
           fullName: `${user.firstName} ${user.lastName}`,
-          groups: [
-            ...(values.defaultGroup || ''),
-            ...schemeGroupsIds.filter((id) =>
-              user.areas
-                .split(', ')
-                .map(
-                  (area) =>
-                    values.areas.find((value) => value.area === area)?.group ||
-                    ''
-                )
-                .includes(id)
-            ),
-          ].filter((item) => item !== ''),
+          groups: getUserGroups(user),
           role: undefined,
-          lastLogin: new Date(user.lastSignedIn),
+          lastLogin: user.lastSignedIn,
           existing:
             usersData?.listUsers.users.find((item) => item.email === user.email)
               ?.id || undefined,
@@ -741,9 +763,9 @@ const useDiscImport = (): Return => {
           comments: offender.comments,
           age: calcAge(offender.ageRange),
           groups: [
-            ...(values.defaultGroup || ''),
-            ...schemeGroupsIds.filter((id) =>
-              offender.galleryStatus
+            ...new Set(
+              ...(values.defaultGroup || ''),
+              ...offender.galleryStatus
                 .split('; ')
                 .map((value) => value.split(', ')[0])
                 .map(
@@ -751,26 +773,98 @@ const useDiscImport = (): Return => {
                     values.galleries.find((value) => value.gallery === gallery)
                       ?.group || ''
                 )
-                .includes(id)
             ),
-          ].filter((item) => item !== ''),
+          ]
+            .flat()
+            .filter((item) => item !== ''),
+          deletionDate: moment(offender.databaseDeletionDate),
+          postcode: offender.postcode,
+          street: offender.address,
         });
       });
 
     const newUserData = await Promise.all(
-      members.map((member) => generateUser(member))
+      filteredUsers.map((member) => generateUser(member))
     );
     const newOffenderData = await Promise.all(
       offenderData.map((item) => generateOffender(item))
     );
 
+    const getIncidentGroups = (
+      incident: Incident,
+      offenders: string[],
+      createdBy: string
+    ) => {
+      const offenderGroups = newOffenderData
+        .filter((offender) => offenders.includes(offender.id))
+        .flatMap((offender) => offender.groups);
+      if (offenderGroups.length > 0) return offenderGroups;
+
+      const userGroups = newUserData
+        .filter((user) => user.groups.includes(createdBy))
+        .flatMap((user) => user.groups);
+      if (userGroups.length > 0) return userGroups;
+
+      const streetGroups = groupsData?.groups
+        .filter((group) => incident.address.includes(group.name.split(' ')[0]))
+        .map((group) => group.id);
+      if (streetGroups && streetGroups.length > 0) return streetGroups;
+
+      return values.fallbackGroup;
+    };
+
     const generateIncident = (incident: Incident) =>
       new Promise<NewIncident>((resolve) => {
+        const offenders = [
+          incident.subjectID
+            ? newOffenderData?.find(
+                (offender) => offender.discId === incident.subjectID
+              ) || null
+            : null,
+          incident.subjectID1
+            ? newOffenderData?.find(
+                (offender) => offender.discId === incident.subjectID1
+              ) || null
+            : null,
+          incident.subjectID2
+            ? newOffenderData?.find(
+                (offender) => offender.discId === incident.subjectID2
+              ) || null
+            : null,
+          incident.subjectID3
+            ? newOffenderData?.find(
+                (offender) => offender.discId === incident.subjectID3
+              ) || null
+            : null,
+          incident.subjectID4
+            ? newOffenderData?.find(
+                (offender) => offender.discId === incident.subjectID4
+              ) || null
+            : null,
+          incident.subjectID5
+            ? newOffenderData?.find(
+                (offender) => offender.discId === incident.subjectID5
+              ) || null
+            : null,
+          incident.subjectID6
+            ? newOffenderData?.find(
+                (offender) => offender.discId === incident.subjectID6
+              ) || null
+            : null,
+        ].filter((item) => item !== null) as NewOffender[];
+        const offendersIds = [
+          ...new Set(offenders.map((offender) => offender.id)),
+        ];
+        const createdBy = newUserData.find(
+          (user) => user.email === incident.memberEmail
+        )?.id;
         resolve({
           id: uuidv4(),
           discId: incident.id,
           date: moment(incident.dateTime),
-          description: incident.description,
+          description: incident.description
+            ?.replace(/(<([^>]+)>)/gi, '')
+            .replace('&nbsp;', ''),
           subject: '',
           time: moment(incident.dateTime),
           policeInvolved: incident.policeContacted.includes('attended'),
@@ -779,8 +873,8 @@ const useDiscImport = (): Return => {
           lostValue: Number(incident.lossValue),
           recoveredValue: Number(incident.lossRecovered),
           building: '',
-          street: incident.address,
-          townCity: '',
+          street: incident.address.replace(values.townCity, '') || 'London',
+          townCity: values.townCity,
           county: '',
           postcode: incident.postcode,
           images: images.filter((image) =>
@@ -1041,57 +1135,21 @@ const useDiscImport = (): Return => {
                 )
             ),
           ],
-          offenders: [
-            incident.subjectID
-              ? newOffenderData?.find(
-                  (offender) => offender.discId === incident.subjectID
-                )?.id || ''
-              : '',
-            incident.subjectID1
-              ? newOffenderData?.find(
-                  (offender) => offender.discId === incident.subjectID1
-                )?.id || ''
-              : '',
-            incident.subjectID2
-              ? newOffenderData?.find(
-                  (offender) => offender.discId === incident.subjectID2
-                )?.id || ''
-              : '',
-            incident.subjectID3
-              ? newOffenderData?.find(
-                  (offender) => offender.discId === incident.subjectID3
-                )?.id || ''
-              : '',
-            incident.subjectID4
-              ? newOffenderData?.find(
-                  (offender) => offender.discId === incident.subjectID4
-                )?.id || ''
-              : '',
-            incident.subjectID5
-              ? newOffenderData?.find(
-                  (offender) => offender.discId === incident.subjectID5
-                )?.id || ''
-              : '',
-            incident.subjectID6
-              ? newOffenderData?.find(
-                  (offender) => offender.discId === incident.subjectID6
-                )?.id || ''
-              : '',
-          ].filter((item) => item !== ''),
+          offenders: offendersIds,
           business: newUserData.find(
             (user) => user.email === incident.memberEmail
           )?.business,
-          createdBy: newUserData.find(
-            (user) => user.email === incident.memberEmail
-          )?.id,
-          groups: [...(values.defaultGroup || '')].filter(
-            (item) => item !== ''
-          ),
+          createdBy,
+          groups: getIncidentGroups(incident, offendersIds, createdBy || ''),
         });
       });
 
     const generateHistoricIncident = (incident: Incident) =>
       new Promise<HistoricIncident>((resolve) => {
+        const createdBy = newUserData.find(
+          (user) => user.email === incident.memberEmail
+        )?.id;
+
         resolve({
           id: uuidv4(),
           discId: incident.id,
@@ -1104,8 +1162,9 @@ const useDiscImport = (): Return => {
           policeReported: incident.policeContacted.includes('Yes'),
           lostValue: Number(incident.lossValue),
           recoveredValue: Number(incident.lossRecovered),
-          street: incident.address,
+          street: incident.address || 'London',
           postcode: incident.postcode,
+          groups: getIncidentGroups(incident, [], createdBy || ''),
           business: newUserData.find(
             (user) => user.email === incident.memberEmail
           )?.business,
@@ -1372,7 +1431,8 @@ const useDiscImport = (): Return => {
     );
     const filteredIncidents = newIncidentData.filter(
       (incident) =>
-        incident.offenders.length > 0 || incident.date > values.excludeDate
+        incident.offenders.length > 0 ||
+        incident.date > values.excludeIncidentDate
     );
     const incidentIds = new Set(
       filteredIncidents.map((incident) => incident.discId)
@@ -1385,9 +1445,29 @@ const useDiscImport = (): Return => {
       (incident) => !incidentIds.has(incident.discId)
     );
 
+    const checkOffenderGroups = (offender: NewOffender) =>
+      new Promise<NewOffender>((resolve) => {
+        const offenderIncidents = newIncidentData.filter((incident) =>
+          incident.offenders.includes(offender.id)
+        );
+        const incidentGroups = offenderIncidents.flatMap(
+          (incident) => incident.groups
+        );
+        const newGroups = [...new Set([...offender.groups, ...incidentGroups])];
+
+        resolve({
+          ...offender,
+          groups: newGroups.length > 0 ? newGroups : values.fallbackGroup,
+        });
+      });
+
+    const offendersUpdatedGroups = await Promise.all(
+      newOffenderData.map((offender) => checkOffenderGroups(offender))
+    );
+
     setNewBusinesses(newBusinessData);
     setNewUsers(newUserData);
-    setNewOffenders(newOffenderData);
+    setNewOffenders(offendersUpdatedGroups);
     setNewIncidents(filteredIncidents);
     setNewHistoricIncidents(filteredHistoricIncidents);
     setGenerating(false);
@@ -1401,6 +1481,7 @@ const useDiscImport = (): Return => {
   const handleFileListChange: UploadProps['onChange'] = (info) => {
     if (info.file.response && info.file.status === 'done') {
       setImages(
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
         info.file.response.map((item: Image) => ({ ...item, id: uuidv4() }))
       );
     }
@@ -1419,6 +1500,30 @@ const useDiscImport = (): Return => {
   };
 
   const onUpdateIncident = (data: NewIncident) => {
+    const existingData = newIncidents.find(
+      (incident) => incident.id === data.id
+    );
+    if (data.groups.length > (existingData?.groups.length || 0)) {
+      // eslint-disable-next-line unicorn/no-array-for-each
+      data.offenders.forEach((offenderId) => {
+        const index = newOffenders.map(({ id }) => id).indexOf(offenderId);
+        const offender = newOffenders.find(({ id }) => id === offenderId);
+        if (offender) {
+          const newGroups = [...new Set([...offender.groups, ...data.groups])];
+          setNewOffenders(
+            update(newOffenders, {
+              [index]: {
+                $set: {
+                  ...offender,
+                  groups: newGroups,
+                },
+              },
+            })
+          );
+        }
+      });
+    }
+
     const index = newIncidents.map(({ id }) => id).indexOf(data.id);
     setNewIncidents(
       update(newIncidents, {
@@ -1430,7 +1535,7 @@ const useDiscImport = (): Return => {
   };
 
   const onUpdateBusiness = (data: NewBusiness) => {
-    const index = newOffenders.map(({ id }) => id).indexOf(data.id);
+    const index = newBusinesses.map(({ id }) => id).indexOf(data.id);
     setNewBusinesses(
       update(newBusinesses, {
         [index]: {
@@ -1452,7 +1557,7 @@ const useDiscImport = (): Return => {
   };
 
   const onSubmit = () => {
-    importData({
+    void importData({
       variables: {
         data: {
           businesses: newBusinesses.map((business) => ({
@@ -1484,15 +1589,18 @@ const useDiscImport = (): Return => {
               ...incident.impactTypes,
               ...incident.involvedTypes,
             ].map((id) => ({ id })),
-            date: incident.date,
+            // TODO check
+            date: moment(incident.date).toDate(),
             lostValue: incident.lostValue,
             policeInvolved: incident.policeInvolved,
             policeReported: incident.policeReported,
             postcode: incident.postcode,
             recoveredValue: incident.recoveredValue,
             street: incident.street,
-            time: incident.time,
+            // TODO check
+            time: moment(incident.time).toDate(),
             townCity: '',
+            groups: incident.groups.map((id) => ({ id })),
           })),
           images: images.map((image) => ({
             fileName: image.fileName,
@@ -1513,7 +1621,8 @@ const useDiscImport = (): Return => {
               ...incident.impactTypes,
               ...incident.involvedTypes,
             ].map((id) => ({ id })),
-            date: incident.date,
+            // TODO check
+            date: moment(incident.date).toDate(),
             description: incident.description,
             groups: incident.groups.map((id) => ({ id })),
             images: incident.images.map(({ id }) => ({ id })),
@@ -1522,11 +1631,12 @@ const useDiscImport = (): Return => {
             policeInvolved: incident.policeInvolved,
             policeRef: incident.policeRef,
             policeReported: incident.policeReported,
-            postcode: incident.postcode,
+            postcode: incident.postcode || 'Unknown',
             recoveredValue: incident.recoveredValue,
             street: incident.street,
-            time: incident.time,
-            townCity: '',
+            // TODO check
+            time: moment(incident.time).toDate(),
+            townCity: incident.townCity,
           })),
           offenders: newOffenders
             .map((offender) => ({
@@ -1535,13 +1645,17 @@ const useDiscImport = (): Return => {
               age: offender.age,
               build: offender.build,
               comment: offender.comments,
-              dateOfBirth: offender.dateOfBirth,
+              dateOfBirth: offender.dateOfBirth
+                ? moment(offender.dateOfBirth).toDate()
+                : undefined,
               gender: offender.gender,
               groups: offender.groups.map((id) => ({ id })),
               height: offender.height,
               images: offender.images.map(({ id }) => ({ id })),
               peculiarities: offender.peculiarities,
               race: offender.race,
+              street: offender.street,
+              postcode: offender.postcode,
             }))
             .reverse(),
           scheme: {
@@ -1571,7 +1685,7 @@ const useDiscImport = (): Return => {
           })),
         },
       },
-    });
+    }).then(() => {});
   };
 
   return {
@@ -1583,6 +1697,7 @@ const useDiscImport = (): Return => {
     members,
     idSought,
     incidents,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onGenerateData,
     newBusinesses,
     onDeleteNewBusiness,

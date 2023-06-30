@@ -6,6 +6,7 @@ import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import ImageEditor from 'components/form-components/ImageEditor/ImageEditor.view';
 import type { ImagePosition } from 'graphql/generated';
+import { useIntl } from 'react-intl';
 
 interface Image extends UploadFile {
   position?: ImagePosition;
@@ -37,56 +38,46 @@ const UploadImage = ({
   primaryImage,
   setPrimaryImage,
   title,
-}: Props): JSX.Element => (
-  <>
-    <Row>
-      <Col>
-        <Form.Item
-          name="images"
-          label="Images"
-          tooltip={`Please add any images that you have of the ${title}.`}
-        >
-          <Upload
-            accept=".png,.jpeg,.webp"
-            className="upload-images"
-            action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
-            listType="picture-card"
-            fileList={fileList}
-            onChange={imgChange}
-            beforeUpload={beforeUpload}
-            // TODO
-            // eslint-disable-next-line react/no-unstable-nested-components
-            itemRender={(el, file: Image) => (
-              <Card
-                key={el.key}
-                bodyStyle={{
-                  padding: 0,
-                  overflow: 'hidden',
-                  borderRadius: 10,
-                }}
-              >
-                <div style={{ width: '100%', height: 150 }}>
-                  <Button
-                    size="small"
-                    style={{
-                      position: 'absolute',
-                      zIndex: 10,
-                      padding: '6.5px 10px',
-                      top: 5,
-                      left: 5,
-                    }}
-                    onClick={() => toggleEditImage(file)}
-                  >
-                    <FontAwesomeIcon icon={faEdit} />
-                  </Button>
+}: Props): JSX.Element => {
+  const intl = useIntl();
 
-                  <Popconfirm
-                    title="Do you want to remove the image?"
-                    onConfirm={() => onRemoveImage(file.uid)}
-                    okText="Yes"
-                    cancelText="No"
-                    overlayInnerStyle={{ padding: 10 }}
-                  >
+  return (
+    <>
+      <Row>
+        <Col>
+          <Form.Item
+            name="images"
+            label={intl.formatMessage({
+              defaultMessage: 'Images',
+              id: 'Fip4H8',
+            })}
+            tooltip={intl.formatMessage(
+              {
+                defaultMessage: `Please add any images that you have of the {title}.`,
+                id: 'zBoD8y',
+              },
+              { title }
+            )}
+          >
+            <Upload
+              accept=".png,.jpeg,.webp"
+              className="upload-images"
+              action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
+              listType="picture-card"
+              fileList={fileList}
+              onChange={imgChange}
+              beforeUpload={beforeUpload}
+              // eslint-disable-next-line react/no-unstable-nested-components
+              itemRender={(el, file: Image) => (
+                <Card
+                  key={el.key}
+                  bodyStyle={{
+                    padding: 0,
+                    overflow: 'hidden',
+                    borderRadius: 10,
+                  }}
+                >
+                  <div style={{ width: '100%', height: 150 }}>
                     <Button
                       size="small"
                       style={{
@@ -94,48 +85,71 @@ const UploadImage = ({
                         zIndex: 10,
                         padding: '6.5px 10px',
                         top: 5,
-                        left: 45,
+                        left: 5,
                       }}
-                      // onClick={() => onRemoveImage(file.uid)}
+                      onClick={() => toggleEditImage(file)}
                     >
-                      <FontAwesomeIcon icon={faTrash} />
+                      <FontAwesomeIcon icon={faEdit} />
                     </Button>
-                  </Popconfirm>
-                  {/* <Button
-                    size="small"
-                    style={{
-                      position: 'absolute',
-                      zIndex: 10,
-                      padding: '6.5px 10px',
-                      top: 5,
-                      left: 45,
-                    }}
-                    onClick={() => onRemoveImage(file.uid)}
-                  >
-                    <FontAwesomeIcon icon={faTrash} />
-                  </Button> */}
-                  <WatermarkImage
-                    position={file.position}
-                    url={file.url || file.thumbUrl}
-                  />
-                </div>
-              </Card>
-            )}
-          >
-            {fileList.length < 6 && '+ Upload'}
-          </Upload>
-        </Form.Item>
-      </Col>
-    </Row>
 
-    <ImageEditor
-      submitImage={onEditImage}
-      onClose={toggleEditImage}
-      open={!!editImage}
-      image={editImage}
-      primaryImage={primaryImage}
-      setPrimaryImage={setPrimaryImage}
-    />
-  </>
-);
+                    <Popconfirm
+                      title={intl.formatMessage({
+                        defaultMessage: 'Do you want to remove the image?',
+                        id: 'n0NLsa',
+                      })}
+                      onConfirm={() => onRemoveImage(file.uid)}
+                      okText={intl.formatMessage({
+                        defaultMessage: 'Yes',
+                        id: 'a5msuh',
+                      })}
+                      cancelText={intl.formatMessage({
+                        defaultMessage: 'No',
+                        id: 'oUWADl',
+                      })}
+                      overlayInnerStyle={{ padding: 10 }}
+                    >
+                      <Button
+                        size="small"
+                        style={{
+                          position: 'absolute',
+                          zIndex: 10,
+                          padding: '6.5px 10px',
+                          top: 5,
+                          left: 45,
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faTrash} />
+                      </Button>
+                    </Popconfirm>
+                    <WatermarkImage
+                      position={file.position}
+                      url={file.url || file.thumbUrl}
+                    />
+                  </div>
+                </Card>
+              )}
+            >
+              {fileList.length < 6 &&
+                // eslint-disable-next-line formatjs/no-literal-string-in-jsx
+                `+ ${intl.formatMessage({
+                  defaultMessage: 'Upload',
+                  id: 'p4N05H',
+                })}`}
+            </Upload>
+          </Form.Item>
+        </Col>
+      </Row>
+
+      <ImageEditor
+        submitImage={onEditImage}
+        onClose={toggleEditImage}
+        open={!!editImage}
+        image={editImage}
+        primaryImage={primaryImage}
+        setPrimaryImage={setPrimaryImage}
+      />
+    </>
+  );
+};
+
 export default UploadImage;

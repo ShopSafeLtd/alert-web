@@ -32,9 +32,10 @@ const RadialGraph = ({
             textColor: darkMode ? '#ffffff' : '#000',
           }}
           valueFormat=">-.2f"
-          padding={0.4}
+          padding={0.6}
           cornerRadius={2}
           borderWidth={1}
+          innerRadius={0.15}
           borderColor={{
             from: 'color',
             modifiers: [['darker', 0.2]],
@@ -50,7 +51,7 @@ const RadialGraph = ({
               translateY: -20,
               itemWidth: 100,
               itemHeight: 20,
-              itemsSpacing: 0,
+              itemsSpacing: 5,
               symbolSize: 20,
               itemDirection: 'left-to-right',
               itemTextColor: darkMode ? '#fff' : '#3a3a3a',

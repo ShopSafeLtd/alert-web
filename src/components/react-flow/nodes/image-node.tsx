@@ -1,14 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import React, { memo, useCallback } from 'react';
 import { Handle, NodeToolbar, Position, useStore } from 'reactflow';
 import { NodeResizer } from '@reactflow/node-resizer';
 import '@reactflow/node-resizer/dist/style.css';
-import useStyles from './style.module';
 import { Button, Drawer, Skeleton } from 'antd';
+import { useParams } from 'react-router-dom';
+import { useStoreState } from 'state';
+import { useIntl } from 'react-intl';
+import useStyles from './style.module';
 import { useDrawerState } from '../../../hooks';
 import SelectImageContainer from '../form/selectImage/SelectImage.container';
-import { useParams } from 'react-router-dom';
 import useFlow from '../../../views/investigations/ViewInvestigation/views/Flow/hooks/useFlow';
-import { useStoreState } from 'state';
 
 interface Props {
   data: {
@@ -21,7 +23,9 @@ interface Props {
   isConnectable: boolean;
   id: string;
   selected: boolean;
+  // eslint-disable-next-line react/no-unused-prop-types
   width?: number;
+  // eslint-disable-next-line react/no-unused-prop-types
   height?: number;
 }
 
@@ -76,7 +80,7 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
       data: { ...currentNode.data, isEditing: { user: fullName, editing } },
     });
   }, []);
-
+  const intl = useIntl();
   return (
     <>
       <NodeToolbar isVisible={selected} position={Position.Top}>
@@ -84,12 +88,18 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
           onClick={() => {
             setIsEditing(true);
             drawer.open({
-              defaultTitle: 'Select Image',
+              defaultTitle: intl.formatMessage({
+                id: 'XmcDl5',
+                defaultMessage: 'Select Image',
+              }),
               id: 'imageSelect',
             });
           }}
         >
-          select image
+          {intl.formatMessage({
+            id: 'XmcDl5',
+            defaultMessage: 'Select Image',
+          })}
         </Button>
       </NodeToolbar>
       <div className={classes.node}>
@@ -103,12 +113,21 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
         <div className={classes.nodeContainer}>
           {data?.isEditing?.editing && (
             <div className={classes.editing}>
-              {data.isEditing.user} is editing this component
+              {intl.formatMessage(
+                {
+                  id: 'QmCmt6',
+                  defaultMessage: '{user} is editing this component',
+                },
+                {
+                  user: data.isEditing.user,
+                }
+              )}
             </div>
           )}
           {data.imageUrl ? (
             <img
               src={data.imageUrl}
+              // eslint-disable-next-line formatjs/no-literal-string-in-jsx
               alt="offender"
               className={classes.image}
               loading="eager"

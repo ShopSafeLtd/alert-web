@@ -17,6 +17,8 @@ const AdminTodos = (): JSX.Element => {
     onPaginationChange,
     currentPage,
     currentPageSize,
+    toggleAllUsers,
+    toggleAllSchemes,
   } = useAdminTodos();
 
   return (
@@ -33,6 +35,8 @@ const AdminTodos = (): JSX.Element => {
       onPaginationChange={onPaginationChange}
       currentPage={currentPage}
       currentPageSize={currentPageSize}
+      toggleAllUsers={toggleAllUsers}
+      toggleAllSchemes={toggleAllSchemes}
     />
   );
 };

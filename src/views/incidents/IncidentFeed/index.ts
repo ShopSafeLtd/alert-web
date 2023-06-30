@@ -1,1 +1,1 @@
-export { default } from './IncidentFeed.container'
+export { default } from './IncidentFeed.container';

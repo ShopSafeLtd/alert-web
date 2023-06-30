@@ -1,1 +1,1 @@
-export { default } from './IncidentSkeletonCard.view'
+export { default } from './IncidentSkeletonCard.view';

@@ -1,9 +1,8 @@
 import React from 'react';
 
 import View from './AddExistingOffender.view';
-import useSelectExistingOffender, {
-  Offender,
-} from './useSelectExistingOffender';
+import type { Offender } from './useSelectExistingOffender';
+import useSelectExistingOffender from './useSelectExistingOffender';
 
 interface Props {
   onClose: () => void;

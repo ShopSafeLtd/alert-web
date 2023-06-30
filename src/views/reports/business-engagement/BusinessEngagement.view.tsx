@@ -3,6 +3,7 @@ import React from 'react';
 import { Button, Card, Col, Row, Select, Table, Typography } from 'antd';
 import type { BusinessEngagementQuery } from 'graphql/generated';
 import DatePicker from 'components/util-components/DatePicker';
+import { useIntl } from 'react-intl';
 import useStyles from './performance-report.styles';
 import type { SelectOptions } from './useBusinessEngagement';
 
@@ -35,25 +36,36 @@ const PerformanceReport = ({
 }: Props) => {
   const classes = useStyles();
   const logo = localStorage.getItem('logo');
-
+  const intl = useIntl();
   return (
     <div className={classes.page} ref={componentRef}>
       <div className="logo">
         <img
           style={{ height: '100%', width: '25 %' }}
           src={logo || ''}
+          // eslint-disable-next-line formatjs/no-literal-string-in-jsx
           alt="logo"
         />
       </div>
       <Title level={2} className="print-title">
-        Business Engagement:
-        {dateRange.startDate.toLocaleDateString()} -{' '}
-        {dateRange.endDate.toLocaleDateString()}
+        {intl.formatMessage(
+          {
+            defaultMessage: ' Business Engagement: {startDate} - {endDate}',
+            id: 'OgG2/I',
+          },
+          {
+            startDate: dateRange.startDate.toLocaleDateString(),
+            endDate: dateRange.endDate.toLocaleDateString(),
+          }
+        )}
       </Title>
       <Row className="no-print" style={{ marginBottom: 10 }}>
         <Col span={6}>
           <Select
-            placeholder="Select Groups"
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Select Groups',
+              id: 'q2cuIU',
+            })}
             mode="multiple"
             maxTagCount="responsive"
             onChange={(value) => {
@@ -107,7 +119,10 @@ const PerformanceReport = ({
         </Col>
         <Col>
           <Button type="primary" onClick={handlePrint}>
-            Print
+            {intl.formatMessage({
+              defaultMessage: 'Print',
+              id: 'CXRlIo',
+            })}
           </Button>
         </Col>
       </Row>
@@ -115,7 +130,10 @@ const PerformanceReport = ({
         <Col span={24}>
           <Card loading={loading} style={{ height: '100%' }}>
             <Title className="no-print" level={4}>
-              Business Contributions
+              {intl.formatMessage({
+                defaultMessage: 'Business Contributions',
+                id: 'ZwVlvA',
+              })}
             </Title>
             <Table
               size="small"
@@ -131,49 +149,70 @@ const PerformanceReport = ({
                 {
                   key: 'fullName',
                   dataIndex: 'fullName',
-                  title: 'Name',
+                  title: intl.formatMessage({
+                    defaultMessage: 'Name',
+                    id: 'HAlOn1',
+                  }),
                 },
                 {
                   key: 'incidentsCreated',
                   dataIndex: 'incidentsCreated',
-                  title: 'Incidents',
+                  title: intl.formatMessage({
+                    defaultMessage: 'Incidents',
+                    id: 'mtr3R4',
+                  }),
                   defaultSortOrder: 'descend',
                   sorter: (a, b) => a.incidentsCreated - b.incidentsCreated,
                 },
                 {
                   key: 'offendersCreated',
                   dataIndex: 'offendersCreated',
-                  title: 'Offenders',
+                  title: intl.formatMessage({
+                    defaultMessage: 'Offenders',
+                    id: 'xb54TN',
+                  }),
                   sorter: (a, b) => a.offendersCreated - b.offendersCreated,
                 },
                 {
                   key: 'updatesCreated',
                   dataIndex: 'updatesCreated',
-                  title: 'Updates',
+                  title: intl.formatMessage({
+                    defaultMessage: 'Updates',
+                    id: 'recCg9',
+                  }),
                   sorter: (a, b) => a.updatesCreated - b.updatesCreated,
                 },
                 {
                   key: 'messagesSent',
                   dataIndex: 'messagesSent',
-                  title: 'Messages',
+                  title: intl.formatMessage({
+                    defaultMessage: 'Messages',
+                    id: 'hMzcSq',
+                  }),
                   sorter: (a, b) => a.messagesSent - b.messagesSent,
                 },
                 {
                   key: 'logins',
                   dataIndex: 'logins',
-                  title: 'Logins',
+                  title: intl.formatMessage({
+                    defaultMessage: 'Logins',
+                    id: '+vA//S',
+                  }),
                   sorter: (a, b) => a.logins - b.logins,
                 },
                 {
                   key: 'users',
                   dataIndex: 'users',
-                  title: 'Users',
+                  title: intl.formatMessage({
+                    defaultMessage: 'Users',
+                    id: 'YDMrKK',
+                  }),
                   sorter: (a, b) => a.users - b.users,
                 },
               ]}
               dataSource={data?.businessContribution?.businessContributions?.map(
                 (business, i) => ({
-                  key: business.name + i,
+                  key: business.name + i.toString(),
                   fullName: business.name,
                   incidentsCreated: business.totalIncidents,
                   offendersCreated: business.totalOffenders,

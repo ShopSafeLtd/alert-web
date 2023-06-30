@@ -1,11 +1,12 @@
 import React from 'react';
-import { Table, Row, Col, Input, Drawer, Button } from 'antd';
+import { Button, Col, Drawer, Input, Row, Table } from 'antd';
 import type { CreateChatMutation, SchemeChatsQuery } from 'graphql/generated';
 import { Link } from 'react-router-dom';
 import AddChat from 'components/form-components/chat/AddChat';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
+import { useIntl } from 'react-intl';
 
 interface Props {
   data: SchemeChatsQuery | undefined;
@@ -25,81 +26,99 @@ const ChatList = ({
   addChat,
   toggleAddChat,
   updateChatList,
-}: Props): JSX.Element => (
-  <div className="list-view">
-    <Row gutter={8} style={{ marginBottom: 10 }}>
-      <Col span={8}>
-        <Input
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-          placeholder="Search for a chat group..."
-          allowClear
-        />
-      </Col>
-      <Col flex={1} />
-      <Col>
-        <Button
-          onClick={toggleAddChat}
-          type="primary"
-          icon={
-            <FontAwesomeIcon
-              icon={faPlus}
-              size="lg"
-              style={{ marginRight: 5 }}
-            />
-          }
-        >
-          New Chat Group
-        </Button>
-      </Col>
-    </Row>
-    <Table
-      size="small"
-      loading={loading}
-      pagination={{
-        hideOnSinglePage: true,
-        defaultPageSize: 20,
-        pageSize: 20,
-      }}
-      columns={[
-        {
-          key: 'name',
-          title: 'Name',
-          dataIndex: 'name',
-          width: 300,
-          render: (value, record) => (
-            <Link to={`/app/scheme-settings/chat-groups/view/${record.key}`}>
-              {value}
-            </Link>
-          ),
-        },
-        {
-          key: 'description',
-          title: 'Description',
-          dataIndex: 'description',
-          ellipsis: true,
-        },
-      ]}
-      dataSource={data?.chats.map((chat) => ({
-        key: chat.id,
-        name: chat.name,
-        description: chat.description,
-      }))}
-    />
+}: Props): JSX.Element => {
+  const intl = useIntl();
+  return (
+    <div className="list-view">
+      <Row gutter={8} style={{ marginBottom: 10 }}>
+        <Col span={8}>
+          <Input
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Search for a chat group...',
+              id: 'FbQY8L',
+            })}
+            allowClear
+          />
+        </Col>
+        <Col flex={1} />
+        <Col>
+          <Button
+            onClick={toggleAddChat}
+            type="primary"
+            icon={
+              <FontAwesomeIcon
+                icon={faPlus}
+                size="lg"
+                style={{ marginRight: 5 }}
+              />
+            }
+          >
+            {intl.formatMessage({
+              defaultMessage: 'New Chat Group',
+              id: 'bekTqS',
+            })}
+          </Button>
+        </Col>
+      </Row>
+      <Table
+        size="small"
+        loading={loading}
+        pagination={{
+          hideOnSinglePage: true,
+          defaultPageSize: 20,
+          pageSize: 20,
+        }}
+        columns={[
+          {
+            key: 'name',
+            title: intl.formatMessage({
+              defaultMessage: 'Name',
+              id: 'HAlOn1',
+            }),
+            dataIndex: 'name',
+            width: 300,
+            render: (value, record) => (
+              <Link to={`/app/scheme-settings/chat-groups/view/${record.key}`}>
+                {value}
+              </Link>
+            ),
+          },
+          {
+            key: 'description',
+            title: intl.formatMessage({
+              defaultMessage: 'Description',
+              id: 'Q8Qw5B',
+            }),
+            dataIndex: 'description',
+            ellipsis: true,
+          },
+        ]}
+        dataSource={data?.chats.map((chat) => ({
+          key: chat.id,
+          name: chat.name,
+          description: chat.description,
+        }))}
+      />
 
-    <Drawer
-      title="Create New Chat Group"
-      visible={addChat}
-      width="400"
-      onClose={toggleAddChat}
-    >
-      {addChat ? (
-        <AddChat update={updateChatList} onClose={toggleAddChat} />
-      ) : (
-        <div />
-      )}
-    </Drawer>
-  </div>
-);
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'New Chat Group',
+          id: 'bekTqS',
+        })}
+        visible={addChat}
+        width="400"
+        onClose={toggleAddChat}
+      >
+        {addChat ? (
+          <AddChat update={updateChatList} onClose={toggleAddChat} />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+    </div>
+  );
+};
 
 export default ChatList;

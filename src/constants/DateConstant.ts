@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 export const DATE_FORMAT_YYYYMMdd = 'YYYYMMdd';
 export const DATE_FORMAT_YYYY_MM_dd = 'YYYY-MM-dd';
 export const DATE_FORMAT_YYYY_MM_dd_Combined = 'YYYYMMddHHmm';

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import React, { useEffect, useState } from 'react';
 import {
   Button,
@@ -13,7 +14,7 @@ import {
   Typography,
 } from 'antd';
 import type { SchemeGroupsQuery } from 'graphql/generated';
-import { useListSchemeUsersQuery, Role } from 'graphql/generated';
+import { Role, useListSchemeUsersQuery } from 'graphql/generated';
 import { createUseStyles } from 'react-jss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -22,6 +23,7 @@ import {
   faUserMagnifyingGlass,
 } from '@fortawesome/pro-light-svg-icons';
 import { useStoreState } from 'state';
+import { FormattedMessage, useIntl } from 'react-intl';
 import type { NewBusiness, NewUser } from '../DiscImport.types';
 
 const { Text } = Typography;
@@ -99,7 +101,7 @@ const NewUserRow = React.memo(
       form.setFieldsValue({
         ...user,
       });
-      form.validateFields();
+      void form.validateFields();
     }, [user]);
 
     const onValuesChange = (changedValues: NewBusiness) => {
@@ -127,15 +129,17 @@ const NewUserRow = React.memo(
         role: undefined,
         groups: undefined,
       });
-      form.validateFields();
+      void form.validateFields();
       setLink(false);
     };
 
     const onBlur = async () => {
-      const values = await form.validateFields();
+      const values = await form.getFieldsValue();
+      console.log(values);
       onUpdateUser({ ...user, ...values });
     };
 
+    const intl = useIntl();
     return (
       <Form form={form} className={classes.row} onValuesChange={onValuesChange}>
         <Row gutter={8}>
@@ -144,6 +148,7 @@ const NewUserRow = React.memo(
               name="fullName"
               rules={[{ required: true, message: 'Enter a name' }]}
             >
+              {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
               <Input disabled={link} onBlur={onBlur} />
             </Form.Item>
           </Col>
@@ -161,7 +166,6 @@ const NewUserRow = React.memo(
               rules={[{ required: true, message: 'Choose a role' }]}
             >
               <Select
-                disabled={link}
                 style={{ width: 150 }}
                 onBlur={onBlur}
                 options={[
@@ -214,7 +218,12 @@ const NewUserRow = React.memo(
           </Col>
           <Col>
             {!link && (
-              <Tooltip title="Link to an existing user">
+              <Tooltip
+                title={intl.formatMessage({
+                  defaultMessage: 'Link to an existing user',
+                  id: 'uryL7t',
+                })}
+              >
                 <Button size="small" onClick={() => setLink(true)}>
                   <FontAwesomeIcon icon={faUserMagnifyingGlass} />
                 </Button>
@@ -238,7 +247,12 @@ const NewUserRow = React.memo(
                   </Form.Item>
                 </Col>
                 <Col>
-                  <Tooltip title="Clear Link">
+                  <Tooltip
+                    title={intl.formatMessage({
+                      defaultMessage: 'Clear Link',
+                      id: 'qWrq/B',
+                    })}
+                  >
                     <Button size="small" onClick={clearLink}>
                       <FontAwesomeIcon icon={faClose} />
                     </Button>
@@ -250,7 +264,10 @@ const NewUserRow = React.memo(
           <Col>
             <Popconfirm
               overlayInnerStyle={{ padding: 10 }}
-              title="Are you sure you want to remove this user?"
+              title={intl.formatMessage({
+                defaultMessage: 'Are you sure you want to remove this user?',
+                id: '2b7AJD',
+              })}
               onConfirm={() => onDelete(user.id)}
             >
               <Button size="small">
@@ -280,7 +297,7 @@ const NewUsersTable = ({
   onUpdateUser,
 }: Props) => {
   const classes = useStyles();
-
+  const intl = useIntl();
   const [currentPage, setCurrentPage] = useState(1);
   const [activeUsers, setActiveUsers] = useState<NewUser[]>(
     newUsers.slice(0, 10)
@@ -292,10 +309,13 @@ const NewUsersTable = ({
 
   return (
     <Card
-      title="Users"
+      title={intl.formatMessage({
+        defaultMessage: 'Users',
+        id: 'YDMrKK',
+      })}
       extra={
         <Button type="primary" style={{ marginBottom: 16 }} onClick={onAdd}>
-          Add User
+          <FormattedMessage defaultMessage="Add User" id="7c3ANV" />
         </Button>
       }
     >
@@ -310,27 +330,27 @@ const NewUsersTable = ({
           style={{ borderTopLeftRadius: 10 }}
         >
           <Text style={{ paddingLeft: 5 }} strong>
-            Name
+            <FormattedMessage defaultMessage="Name" id="HAlOn1" />
           </Text>
         </Col>
         <Col span={4} className={classes.headerCell}>
           <Text style={{ paddingLeft: 5 }} strong>
-            Email
+            <FormattedMessage defaultMessage="Email" id="sy+pv5" />
           </Text>
         </Col>
         <Col style={{ width: 160 }} className={classes.headerCell}>
           <Text style={{ paddingLeft: 5 }} strong>
-            Role
+            <FormattedMessage defaultMessage="Role" id="1ZgrhW" />
           </Text>
         </Col>
         <Col flex={1} className={classes.headerCell} style={{ maxWidth: 250 }}>
           <Text style={{ paddingLeft: 5 }} strong>
-            Business
+            <FormattedMessage defaultMessage="Business" id="w1Fanr" />
           </Text>
         </Col>
         <Col flex={1} className={classes.headerCell} style={{ maxWidth: 250 }}>
           <Text style={{ paddingLeft: 5 }} strong>
-            Groups
+            <FormattedMessage defaultMessage="Groups" id="hzmswI" />
           </Text>
         </Col>
       </Row>
