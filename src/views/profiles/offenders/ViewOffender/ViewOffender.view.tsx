@@ -816,7 +816,7 @@ const ViewOffender = ({
                             id: '9GD9D0',
                           },
                           {
-                            totalAssociatedIncidents: associate.reference,
+                            ref: associate.reference,
                           }
                         )}
                       </Paragraph>
