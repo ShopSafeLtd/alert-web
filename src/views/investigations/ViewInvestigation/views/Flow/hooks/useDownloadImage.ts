@@ -14,7 +14,7 @@ const downloadImageFunction = (dataUrl: string) => {
 const downloadImage = () => {
   const element: HTMLElement | null = document.querySelector('.react-flow');
   if (element)
-    toPng(element, {
+    void toPng(element, {
       filter: (node) =>
         !(
           node?.classList?.contains('react-flow__minimap') ||

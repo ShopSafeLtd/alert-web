@@ -26,6 +26,7 @@ import {
 } from 'utils/offender/get-offender-desc';
 import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
+import { useIntl } from 'react-intl';
 import useStyles from './AssociatedOffender.style';
 
 const { Paragraph, Title, Text } = Typography;
@@ -48,7 +49,7 @@ const AssociatedOffender = ({ offender, onClose }: Props) => {
   const publicOffenderDOB = useStoreState(
     (state) => state.scheme.defaultPublicOffenderDOB
   );
-
+  const intl = useIntl();
   const [lightBoxOpen, setLightBoxOpen] = useState({
     open: false,
     index: 0,
@@ -92,10 +93,20 @@ const AssociatedOffender = ({ offender, onClose }: Props) => {
       <Title level={3} style={{ margin: 0 }}>
         {offender.name}
       </Title>
-      <Text>Alert ID: {offender.reference}</Text>
+      <Text>
+        {intl.formatMessage(
+          { defaultMessage: 'Alert ID: {alertID}', id: 'XO+QG8' },
+          { alertID: offender.reference }
+        )}
+      </Text>
       <Descriptions style={{ marginTop: 20, marginBottom: 20 }}>
         {offender.alias.length > 0 ? (
-          <Descriptions.Item label="Alias ">
+          <Descriptions.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Alias',
+              id: 'Ri9jA7',
+            })}
+          >
             {offender.alias.map((item) => (
               <Text>{item}</Text>
             ))}
@@ -109,7 +120,7 @@ const AssociatedOffender = ({ offender, onClose }: Props) => {
                   className={classes.descIcon}
                   icon={faUserClock}
                 />
-                Age
+                {intl.formatMessage({ defaultMessage: 'Age', id: '9oNQSC' })}
               </span>
             }
           >
@@ -125,7 +136,7 @@ const AssociatedOffender = ({ offender, onClose }: Props) => {
                 className={classes.descIcon}
                 icon={faMarsAndVenus}
               />
-              Sex
+              {intl.formatMessage({ defaultMessage: 'Sex', id: 'eWJHGp' })}
             </span>
           }
         >
@@ -135,7 +146,7 @@ const AssociatedOffender = ({ offender, onClose }: Props) => {
           label={
             <span>
               <FontAwesomeIcon className={classes.descIcon} icon={faUserTag} />
-              Build
+              {intl.formatMessage({ defaultMessage: 'Build', id: 'RSctv1' })}
             </span>
           }
         >
@@ -145,7 +156,10 @@ const AssociatedOffender = ({ offender, onClose }: Props) => {
           label={
             <span>
               <FontAwesomeIcon className={classes.descIcon} icon={faEarth} />
-              Ethnicity
+              {intl.formatMessage({
+                defaultMessage: 'Ethnicity',
+                id: 'XtCAFo',
+              })}
             </span>
           }
         >
@@ -159,7 +173,7 @@ const AssociatedOffender = ({ offender, onClose }: Props) => {
                   className={classes.descIcon}
                   icon={faUserHair}
                 />
-                Hair
+                {intl.formatMessage({ defaultMessage: 'Hair', id: 'e4YBbX' })}
               </span>
             }
           >
@@ -176,7 +190,10 @@ const AssociatedOffender = ({ offender, onClose }: Props) => {
                   className={classes.descIcon}
                   icon={faCircleInfo}
                 />
-                Additional Info
+                {intl.formatMessage({
+                  defaultMessage: 'Additional Info',
+                  id: '3XOciw',
+                })}
               </span>
             }
           >
@@ -184,23 +201,41 @@ const AssociatedOffender = ({ offender, onClose }: Props) => {
           </Descriptions.Item>
         )}
       </Descriptions>
-      {offender.associatedIncidents && offender.associatedIncidents.length > 0 && (
-        <div className={classes.tableContainer}>
-          <Paragraph className={classes.explainText}>
-            This offender shares {offender.totalAssociatedIncidents} incidents
-          </Paragraph>
-          <IncidentTable
-            incidents={offender?.associatedIncidents || []}
-            hasNavigation
-          />
-        </div>
-      )}
+      {offender.associatedIncidents &&
+        offender.associatedIncidents.length > 0 && (
+          <div className={classes.tableContainer}>
+            <Paragraph className={classes.explainText}>
+              {intl.formatMessage(
+                {
+                  defaultMessage:
+                    'This offender shares {incidentCount} incidents',
+                  id: 'YHoR/W',
+                },
+                {
+                  incidentCount: offender.totalAssociatedIncidents,
+                }
+              )}
+            </Paragraph>
+            <IncidentTable
+              incidents={offender?.associatedIncidents || []}
+              hasNavigation
+            />
+          </div>
+        )}
       {offender.associatedCrimeGroups &&
         offender.associatedCrimeGroups.length > 0 && (
           <div className={classes.tableContainer}>
             <Paragraph className={classes.explainText}>
-              This offender shares {offender.totalAssociatedCrimeGroups} crime
-              groups
+              {intl.formatMessage(
+                {
+                  defaultMessage:
+                    'This offender shares {crimeGroupCount} crime groups',
+                  id: '56zjV6',
+                },
+                {
+                  crimeGroupCount: offender.totalAssociatedCrimeGroups,
+                }
+              )}
             </Paragraph>
             <CrimeGroupTable
               crimeGroups={offender.associatedCrimeGroups || []}
@@ -210,11 +245,18 @@ const AssociatedOffender = ({ offender, onClose }: Props) => {
         )}
       <Row gutter={8} justify="end">
         <Col>
-          <Button onClick={onClose}>Close</Button>
+          <Button onClick={onClose}>
+            {intl.formatMessage({ defaultMessage: 'Close', id: 'rbrahO' })}
+          </Button>
         </Col>
         <Col>
           <Link to={`/app/offenders/view/${offender.id}`} onClick={onClose}>
-            <Button>View Offender</Button>
+            <Button>
+              {intl.formatMessage({
+                defaultMessage: 'View Offender',
+                id: 'GszQTo',
+              })}
+            </Button>
           </Link>
         </Col>
       </Row>

@@ -1,26 +1,27 @@
 import { Modal, notification } from 'antd';
 
 import type {
-  CreateVehicleDataInput,
+  VehicleUpdateInput,
   VehicleQuery,
   VehicleQueryVariables,
 } from 'graphql/generated';
 import {
-  useUpdateVehicleMutation,
-  useVehicleQuery,
-  useDeleteVehicleMutation,
-  useDeleteUpdateMutation,
-  useUpdateUpdateMutation,
   Role,
-  VehicleDocument,
+  useDeleteUpdateMutation,
+  useDeleteVehicleMutation,
   useSubscribeToVehicleMutation,
   useUnsubscribeToVehicleMutation,
+  useUpdateUpdateMutation,
+  useUpdateVehicleMutation,
+  useVehicleQuery,
+  VehicleDocument,
 } from 'graphql/generated';
 import { useEffect, useState } from 'react';
 import update from 'immutability-helper';
 import { useStoreState } from 'state';
 import errorNotification from 'types/error_notification';
 import type { VehicleData } from 'types/DataType';
+import { useIntl } from 'react-intl';
 
 const { confirm } = Modal;
 
@@ -71,6 +72,7 @@ interface Return {
 }
 
 const useViewVehicle = (vehicleId: string): Return => {
+  const intl = useIntl();
   const userId = useStoreState((state) => state.user.id);
   const role = useStoreState((state) => state.user.role);
   const schemeId = useStoreState((state) => state.scheme.id);
@@ -112,6 +114,8 @@ const useViewVehicle = (vehicleId: string): Return => {
       },
     },
     onCompleted: (res) => {
+      console.log('groups', vehicleData?.vehicle?.groups);
+
       setLightboxElements(
         res.vehicle?.images.map((image) => ({
           src: image.optimised || '',
@@ -123,8 +127,14 @@ const useViewVehicle = (vehicleId: string): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: 'Successfully Updated!',
-        description: 'The vehicle has been updated! ',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
+          id: 'w5Yfkf',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The vehicle has been updated!',
+          id: 'xEl97U',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -136,121 +146,152 @@ const useViewVehicle = (vehicleId: string): Return => {
 
   const submitEditVehicle = (data: VehicleData) => {
     setSaving(true);
-    const getCustomGalleries =
-      (): CreateVehicleDataInput['customGalleries'] => {
-        const existingCustomGalleryIds =
-          vehicleData?.vehicle?.customGalleries.map(({ id }) => id);
-        const customGalleryIds = data.customGalleries;
+    const getImages = (): VehicleUpdateInput['images'] => {
+      const editedImages = data.images?.filter(
+        (item) => item.edited && !item.new
+      );
 
-        if (customGalleryIds) {
-          const newCustomGalleries = data.newCustomGalleriesData;
-          const connectedCustomGalleries = customGalleryIds?.filter(
-            (id) =>
-              !(
-                newCustomGalleries?.map((el) => el.id).includes(id) ||
-                existingCustomGalleryIds?.includes(id)
-              )
-          );
-          // const disconnectedCustomGalleries = existingCustomGalleryIds?.filter(
-          //   (id) => !customGalleryIds?.includes(id)
-          // );
-
-          return {
-            // ???
-            // disconnect:
-            //   disconnectedCustomGalleries &&
-            //   disconnectedCustomGalleries.length > 0
-            //     ? disconnectedCustomGalleries.map((id) => ({ id }))
-            //     : undefined,
-
-            connect:
-              connectedCustomGalleries.length > 0
-                ? connectedCustomGalleries.map((id) => ({ id }))
-                : undefined,
-            create:
-              newCustomGalleries && newCustomGalleries.length > 0
-                ? newCustomGalleries.map((value) => ({
-                    name: value.name,
-                    description: value.description || '',
-                    schemes: { connect: [{ id: schemeId }] },
-                    groups: {
-                      connect:
-                        // ???
-                        data.groups && data.groups.length > 0
-                          ? data.groups.map((id) => ({ id }))
-                          : [],
-                    },
-                  }))
-                : undefined,
-          };
-        }
-        return {
-          connect: undefined,
-          create: undefined,
-          // disconnect:
-          //   existingCustomGalleryIds && existingCustomGalleryIds.length > 0
-          //     ? existingCustomGalleryIds.map((id) => ({ id }))
-          //     : undefined,
-        };
+      return {
+        upload:
+          data.images && data.images.length > 0
+            ? data.images
+                .filter((image) => image.new)
+                .map((item) => ({
+                  url: {
+                    filename: item.fileName || '',
+                    mimetype: item.type || '',
+                    url: item.url || '',
+                  },
+                  position: item.position,
+                  primary: item.primary,
+                  policeImage: item.policeImage,
+                }))
+            : undefined,
+        delete:
+          data.images && data.images.length > 0
+            ? data.images
+                .filter((image) => image.deleted)
+                .map(({ id }) => ({
+                  id,
+                }))
+            : vehicleData?.vehicle?.images.map(({ id }) => ({
+                id,
+              })),
+        update:
+          editedImages && editedImages.length > 0
+            ? editedImages.map((item) => ({
+                data: {
+                  position: { set: item.position },
+                  primary: { set: item.primary },
+                  policeImage: { set: item.policeImage },
+                },
+                where: {
+                  id: item.id,
+                },
+              }))
+            : undefined,
       };
+    };
+    const getCustomGalleries = (): VehicleUpdateInput['customGalleries'] => {
+      const existingCustomGalleryIds =
+        vehicleData?.vehicle?.customGalleries.map(({ id }) => id);
+      const customGalleryIds = data.customGalleries;
 
-    updateVehicle({
+      if (customGalleryIds) {
+        const newCustomGalleries = data.newCustomGalleriesData;
+        const connectedCustomGalleries = customGalleryIds?.filter(
+          (id) =>
+            !(
+              newCustomGalleries?.map((el) => el.id).includes(id) ||
+              existingCustomGalleryIds?.includes(id)
+            )
+        );
+        const disconnectedCustomGalleries = existingCustomGalleryIds?.filter(
+          (id) => !customGalleryIds?.includes(id)
+        );
+
+        return {
+          disconnect:
+            disconnectedCustomGalleries &&
+            disconnectedCustomGalleries.length > 0
+              ? disconnectedCustomGalleries.map((id) => ({ id }))
+              : undefined,
+
+          connect:
+            connectedCustomGalleries.length > 0
+              ? connectedCustomGalleries.map((id) => ({ id }))
+              : undefined,
+          create:
+            newCustomGalleries && newCustomGalleries.length > 0
+              ? newCustomGalleries.map((value) => ({
+                  name: value.name,
+                  description: value.description || '',
+                  schemes: { connect: [{ id: schemeId }] },
+                  groups: {
+                    connect:
+                      data.groups && data.groups.length > 0
+                        ? data.groups.map((id) => ({ id }))
+                        : [],
+                  },
+                }))
+              : undefined,
+        };
+      }
+      return {
+        connect: undefined,
+        create: undefined,
+        disconnect:
+          existingCustomGalleryIds && existingCustomGalleryIds.length > 0
+            ? existingCustomGalleryIds.map((id) => ({ id }))
+            : undefined,
+      };
+    };
+
+    void updateVehicle({
       variables: {
         where: {
           id: vehicleId,
         },
         data: {
-          make: data.make || '',
-          model: data.model || '',
-          colour: data.colour || '',
-          registration: data.registration || '',
-          crimeGroup:
-            data?.crimeGroup && data.crimeGroup.length > 0
-              ? data?.crimeGroup?.map((id) => ({ id }))
-              : [],
-          incidents:
-            data.incidents && data.incidents.length > 0
-              ? data.incidents.map((id) => ({ id }))
-              : [],
-          offenders:
-            data.offenders && data.offenders.length > 0
-              ? data.offenders.map((id) => ({ id }))
-              : [],
-          schemes: schemeId,
-          // ???
-          groups:
-            data.groups && data.groups.length > 0
-              ? data.groups.map((id) => ({ id }))
-              : [],
-          customGalleries: getCustomGalleries(),
-          image: {
-            upload:
-              data.images && data.images.length > 0
-                ? data.images
-                    .filter((image) => image.new)
-                    .map((item) => ({
-                      url: {
-                        filename: item.fileName || '',
-                        mimetype: item.type || '',
-                        url: item.url || '',
-                      },
-                      position: item.position,
-                      primary: item.primary,
-                      policeImage: item.policeImage,
-                    }))
-                : undefined,
-            // ???  update
-            disconnect:
-              data.images && data.images.length > 0
-                ? data.images
-                    .filter((image) => image.deleted)
-                    .map(({ id }) => ({
-                      id,
-                    }))
-                : vehicleData?.vehicle?.images.map(({ id }) => ({
-                    id,
-                  })),
+          make: {
+            set: data.make || '',
           },
+          model: {
+            set: data.model || '',
+          },
+          colour: {
+            set: data.colour || '',
+          },
+          registration: {
+            set: data.registration || '',
+          },
+          groups: {
+            set:
+              data?.groups && data?.groups.length > 0
+                ? data?.groups?.map((id) => ({ id }))
+                : [],
+          },
+          crimeGroup: {
+            set:
+              data?.crimeGroup && data.crimeGroup.length > 0
+                ? data?.crimeGroup?.map((id) => ({ id }))
+                : [],
+          },
+          incidents: {
+            set:
+              data.incidents && data.incidents.length > 0
+                ? data.incidents.map((id) => ({ id }))
+                : [],
+          },
+          offenders: {
+            set:
+              data.offenders && data.offenders.length > 0
+                ? data.offenders.map((id) => ({ id }))
+                : [],
+          },
+
+          customGalleries: getCustomGalleries(),
+          images: getImages(),
         },
       },
     });
@@ -260,8 +301,14 @@ const useViewVehicle = (vehicleId: string): Return => {
       setSaving(false);
       window.history.back();
       notification.success({
-        message: 'Successfully Deleted!',
-        description: 'The vehicle has been deleted!',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Deleted!',
+          id: 'dvDKi/',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The vehicle has been deleted!',
+          id: 'QPIR1s',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -273,7 +320,7 @@ const useViewVehicle = (vehicleId: string): Return => {
 
   const onDeleteVehicle = () => {
     setSaving(true);
-    deleteVehicle({
+    void deleteVehicle({
       variables: {
         id: vehicleId || '',
       },
@@ -282,7 +329,7 @@ const useViewVehicle = (vehicleId: string): Return => {
   const [deleteUpdate] = useDeleteUpdateMutation();
 
   const handleDeleteUpdate = (updateId: string) => {
-    deleteUpdate({
+    void deleteUpdate({
       variables: {
         where: {
           id: updateId,
@@ -363,12 +410,24 @@ const useViewVehicle = (vehicleId: string): Return => {
   };
   const confirmDeleteUpdate = (updateId: string) => {
     confirm({
-      title: 'Are you sure?',
-      content: 'The update will be permanently deleted.',
+      title: intl.formatMessage({
+        defaultMessage: 'Are you sure?',
+        id: 'ZYrND5',
+        description: 'Confirmation dialog title',
+      }),
+      content: intl.formatMessage({
+        defaultMessage: 'The update will be permanently deleted.',
+        id: 'ZWk4fq',
+        description: 'Confirmation dialog content',
+      }),
       onOk() {
         handleDeleteUpdate(updateId);
       },
-      okText: 'Delete',
+      okText: intl.formatMessage({
+        defaultMessage: 'Delete',
+        id: '5qRFq/',
+        description: 'Delete button text',
+      }),
     });
   };
 
@@ -376,7 +435,7 @@ const useViewVehicle = (vehicleId: string): Return => {
 
   const handleEditUpdate = () => {
     if (editUpdate !== null)
-      updateUpdate({
+      void updateUpdate({
         variables: {
           data: {
             text: editUpdateInput,
@@ -402,7 +461,7 @@ const useViewVehicle = (vehicleId: string): Return => {
 
   const toggleSubscribe = () => {
     if (vehicleData?.vehicle?.subscribed) {
-      unsubscribeFromVehicle({
+      void unsubscribeFromVehicle({
         variables: {
           where: { id: vehicleId },
         },
@@ -416,7 +475,7 @@ const useViewVehicle = (vehicleId: string): Return => {
         },
       });
     } else {
-      subscribeToVehicle({
+      void subscribeToVehicle({
         variables: {
           where: { id: vehicleId },
         },

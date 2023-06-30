@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable */
 import React, { useEffect } from 'react';
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Alert } from 'antd';
+import { Alert, Button, Form, Input } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useStoreActions, useStoreState } from 'state';

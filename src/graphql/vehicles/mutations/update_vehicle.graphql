@@ -1,4 +1,4 @@
-mutation updateVehicle($where: UniqueId!, $data: CreateVehicleDataInput!) {
+mutation updateVehicle($where: UniqueId!, $data: VehicleUpdateInput!) {
   updateVehicle(where: $where, data: $data) {
     id
     make
@@ -12,6 +12,16 @@ mutation updateVehicle($where: UniqueId!, $data: CreateVehicleDataInput!) {
       optimised
       url
       position
+      policeImage
+      primary
+    }
+    customGalleries {
+      id
+      name
+    }
+    groups {
+      id
+      name
     }
     incidents {
       id

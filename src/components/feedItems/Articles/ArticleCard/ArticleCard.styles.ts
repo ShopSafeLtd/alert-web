@@ -6,6 +6,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
     border: `1px solid ${theme.borderColor}`,
     borderRadius: 10,
     marginBottom: 5,
+    overflow: 'hidden',
   },
   imageExpand: {
     position: 'absolute',

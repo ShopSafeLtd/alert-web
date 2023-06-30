@@ -1,3 +1,4 @@
+/* eslint-disable formatjs/no-literal-string-in-jsx */
 import React from 'react';
 import { render } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
@@ -5,13 +6,13 @@ import { createStore, StoreProvider } from 'easy-peasy';
 import { storeModel } from 'state/store';
 import { MemoryRouter } from 'react-router-dom';
 import {
-  Role,
   ListIncidentsDocument,
-  SchemeGroupsDocument,
-  TagsDocument,
   Model,
-  SortOrder,
   QueryMode,
+  Role,
+  SchemeGroupsDocument,
+  SortOrder,
+  TagsDocument,
 } from 'graphql/generated';
 import { IncidentSort } from 'state';
 import useIncidentFeed from '../useIncidentFeed';

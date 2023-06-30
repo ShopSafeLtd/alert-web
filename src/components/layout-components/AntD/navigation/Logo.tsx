@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React from 'react';
 import { APP_NAME } from 'configs/AppConfig';
 import { useStoreState } from 'state';

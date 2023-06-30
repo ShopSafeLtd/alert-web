@@ -52,6 +52,7 @@ const CrimeGroupSideList = ({
                     strong={current === group.id}
                     ellipsis
                   >
+                    {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
                     {`CG-${group.reference}`}
                   </Paragraph>
                 )}

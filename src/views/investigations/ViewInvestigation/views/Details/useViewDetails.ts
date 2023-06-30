@@ -6,11 +6,11 @@ import type {
 } from 'graphql/generated';
 import {
   InvestigationSuggestionsDocument,
-  useUpdateInvestigationMutation,
-  TagType,
-  useInvestigationSuggestionsQuery,
   Role,
+  TagType,
   useDeleteUpdateMutation,
+  useInvestigationSuggestionsQuery,
+  useUpdateInvestigationMutation,
   useUpdateUpdateMutation,
   useViewInvestigationQuery,
   ViewInvestigationDocument,
@@ -123,7 +123,7 @@ const useViewDetails = ({ investigationId }: Props): Return => {
 
   const handleEditUpdate = () => {
     if (editUpdate !== null)
-      updateUpdate({
+      void updateUpdate({
         variables: {
           data: {
             text: editUpdateInput,
@@ -154,7 +154,7 @@ const useViewDetails = ({ investigationId }: Props): Return => {
   const [deleteUpdate] = useDeleteUpdateMutation();
 
   const handleDeleteUpdate = (updateId: string) => {
-    deleteUpdate({
+    void deleteUpdate({
       variables: {
         where: {
           id: updateId,
@@ -266,7 +266,7 @@ const useViewDetails = ({ investigationId }: Props): Return => {
 
   const handleConnectOffender = (offenderId: string) => {
     toggleViewSuggestedOffenders();
-    updateInvestigation({
+    void updateInvestigation({
       variables: {
         data: {
           offenderIds: [offenderId],
@@ -330,7 +330,7 @@ const useViewDetails = ({ investigationId }: Props): Return => {
   };
   const handleConnectIncident = (incidentId: string) => {
     toggleViewSuggestedIncidents();
-    updateInvestigation({
+    void updateInvestigation({
       variables: {
         data: {
           incidentIds: [incidentId],
@@ -394,7 +394,7 @@ const useViewDetails = ({ investigationId }: Props): Return => {
   };
   const handleConnectVehicle = (vehicleId: string) => {
     toggleViewSuggestedVehicles();
-    updateInvestigation({
+    void updateInvestigation({
       variables: {
         data: {
           vehicleIds: [vehicleId],

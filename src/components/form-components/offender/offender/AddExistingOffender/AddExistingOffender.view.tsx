@@ -29,6 +29,7 @@ import Lightbox from 'yet-another-react-lightbox';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
+import { useIntl } from 'react-intl';
 import useStyles from './AddExistingOffender.styles';
 
 const { Paragraph, Text } = Typography;
@@ -98,9 +99,9 @@ const AddExistingOffender = ({
   addOverride,
 }: Props): JSX.Element => {
   const classes = useStyles();
-
+  const intl = useIntl();
   const existingOffenders = (): JSX.Element => {
-    if (!data?.listOffenders && loading)
+    if (!data?.listOffenders && loading) {
       return (
         <Row wrap gutter={16}>
           {Array.from({ length: data?.listOffenders?.total || 24 })
@@ -112,10 +113,12 @@ const AddExistingOffender = ({
             ))}
         </Row>
       );
+    }
+
     if (data && data.listOffenders && data.listOffenders.offenders.length > 0) {
       return (
         <Row wrap gutter={16} style={{ marginRight: 0 }}>
-          {data?.listOffenders?.offenders.map((offender) => (
+          {data.listOffenders.offenders.map((offender) => (
             <Col span={6} key={offender.id} className="offender-item">
               <OffenderTile
                 offender={offender}
@@ -126,10 +129,16 @@ const AddExistingOffender = ({
         </Row>
       );
     }
+
     return (
       <Row justify="center" align="middle" className="no-offenders">
         <Col>
-          <Empty description="No matching offenders found" />
+          <Empty
+            description={intl.formatMessage({
+              defaultMessage: 'No matching offenders found',
+              id: 'ykYp5y',
+            })}
+          />
         </Col>
       </Row>
     );
@@ -142,7 +151,10 @@ const AddExistingOffender = ({
             value={search}
             className={classes.searchBar}
             onChange={(event) => setSearch(event.target.value)}
-            placeholder="Search Offenders..."
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Search Offenders...',
+              id: 'mCDjFM',
+            })}
             allowClear
           />
           <div className="add-existing-offender-row">
@@ -164,95 +176,219 @@ const AddExistingOffender = ({
           </div>
         </Col>
         <Col className={classes.filters} span={6}>
-          <Paragraph className={classes.filterTitle}>Filters</Paragraph>
+          <Paragraph className={classes.filterTitle}>
+            {intl.formatMessage({ defaultMessage: 'Filters', id: 'zSOvI0' })}
+          </Paragraph>
           <div className={classes.filter}>
-            <Text>Ethnicity</Text>
+            <Text>
+              {intl.formatMessage({
+                defaultMessage: 'Ethnicity',
+                id: 'XtCAFo',
+              })}
+            </Text>
             <Select
               value={ethnicity}
               onChange={setEthnicity}
-              placeholder="Ethnicity"
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Ethnicity',
+                id: 'XtCAFo',
+              })}
               className={classes.filterSelect}
               mode="multiple"
               allowClear
             >
               <Select.Option value={Race.Ic1}>
-                IC1 - North European
+                {intl.formatMessage({
+                  defaultMessage: 'IC1 - North European',
+                  id: 'ZbGHgq',
+                })}
               </Select.Option>
               <Select.Option value={Race.Ic2}>
-                IC2 - South European
+                {intl.formatMessage({
+                  defaultMessage: 'IC2 - South European',
+                  id: 'qDNJ3C',
+                })}
               </Select.Option>
-              <Select.Option value={Race.Ic3}>IC3 - Black</Select.Option>
-              <Select.Option value={Race.Ic4}>IC - South Asian4</Select.Option>
+              <Select.Option value={Race.Ic3}>
+                {intl.formatMessage({
+                  defaultMessage: 'IC3 - Black',
+                  id: 'k0NwMh',
+                })}
+              </Select.Option>
+              <Select.Option value={Race.Ic4}>
+                {intl.formatMessage({
+                  defaultMessage: 'IC4 - South Asian',
+                  id: 'nok2Wh',
+                })}
+              </Select.Option>
               <Select.Option value={Race.Ic5}>
-                IC5 - Southeast Asian
+                {intl.formatMessage({
+                  defaultMessage: 'IC5 - Southeast Asian',
+                  id: 'u7exuh',
+                })}
               </Select.Option>
               <Select.Option value={Race.Ic6}>
-                IC6 - North African or Arab
+                {intl.formatMessage({
+                  defaultMessage: 'IC6 - North African or Arab',
+                  id: 'V2hDQr',
+                })}
               </Select.Option>
-              <Select.Option value={Race.Unknown}>Unknown</Select.Option>
+              <Select.Option value={Race.Unknown}>
+                {intl.formatMessage({
+                  defaultMessage: 'Unknown',
+                  id: '5jeq8P',
+                })}
+              </Select.Option>
             </Select>
           </div>
           <div className={classes.filter}>
-            <Text>Build</Text>
+            <Text>
+              {intl.formatMessage({ defaultMessage: 'Build', id: 'RSctv1' })}
+            </Text>
             <Select
               mode="multiple"
               allowClear
               value={build}
               onChange={setBuild}
-              placeholder="Build"
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Build',
+                id: 'RSctv1',
+              })}
               className={classes.filterSelect}
             >
-              <Select.Option value={Build.Small}>Small</Select.Option>
-              <Select.Option value={Build.Medium}>Medium</Select.Option>
-              <Select.Option value={Build.Large}>Large</Select.Option>
-              <Select.Option value={Build.Unknown}>Unknown</Select.Option>
+              <Select.Option value={Build.Small}>
+                {intl.formatMessage({ defaultMessage: 'Small', id: 'BPnT3T' })}
+              </Select.Option>
+              <Select.Option value={Build.Medium}>
+                {intl.formatMessage({ defaultMessage: 'Medium', id: 'ovJ26C' })}
+              </Select.Option>
+              <Select.Option value={Build.Large}>
+                {intl.formatMessage({ defaultMessage: 'Large', id: '/06iwc' })}
+              </Select.Option>
+              <Select.Option value={Build.Unknown}>
+                {intl.formatMessage({
+                  defaultMessage: 'Unknown',
+                  id: '5jeq8P',
+                })}
+              </Select.Option>
             </Select>
           </div>
           <div className={classes.filter}>
-            <Text>Age</Text>
+            <Text>
+              {intl.formatMessage({ defaultMessage: 'Age', id: '9oNQSC' })}
+            </Text>
             <Select
               mode="multiple"
               allowClear
               value={age}
               onChange={setAge}
-              placeholder="Age"
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Age',
+                id: '9oNQSC',
+              })}
               className={classes.filterSelect}
             >
-              <Select.Option value={Age.UnderEighteen}>Under 18</Select.Option>
-              <Select.Option value={Age.EighteenThirty}>18 - 30</Select.Option>
-              <Select.Option value={Age.ThirtyForty}>30 - 40</Select.Option>
-              <Select.Option value={Age.FortyFifty}>40 - 50</Select.Option>
-              <Select.Option value={Age.FiftySixty}>50 - 60</Select.Option>
-              <Select.Option value={Age.SixtySeventy}>60 - 70</Select.Option>
-              <Select.Option value={Age.SeventyEighty}>70 - 80</Select.Option>
-              <Select.Option value={Age.OverEighty}>Over 80</Select.Option>
-              <Select.Option value={Age.Unknown}>Unknown</Select.Option>
+              <Select.Option value={Age.UnderEighteen}>
+                {intl.formatMessage({
+                  defaultMessage: 'Under 18',
+                  id: 'Cwx1GS',
+                })}
+              </Select.Option>
+              <Select.Option value={Age.EighteenThirty}>
+                {intl.formatMessage({
+                  defaultMessage: '18 - 30',
+                  id: '088rlR',
+                })}
+              </Select.Option>
+              <Select.Option value={Age.ThirtyForty}>
+                {intl.formatMessage({
+                  defaultMessage: '30 - 40',
+                  id: 'cENhUd',
+                })}
+              </Select.Option>
+              <Select.Option value={Age.FortyFifty}>
+                {intl.formatMessage({
+                  defaultMessage: '40 - 50',
+                  id: 'FEg968',
+                })}
+              </Select.Option>
+              <Select.Option value={Age.FiftySixty}>
+                {intl.formatMessage({
+                  defaultMessage: '50 - 60',
+                  id: 'xuMURn',
+                })}
+              </Select.Option>
+              <Select.Option value={Age.SixtySeventy}>
+                {intl.formatMessage({
+                  defaultMessage: '60 - 70',
+                  id: 'W8pA9z',
+                })}
+              </Select.Option>
+              <Select.Option value={Age.SeventyEighty}>
+                {intl.formatMessage({
+                  defaultMessage: '70 - 80',
+                  id: 'yjJSPV',
+                })}
+              </Select.Option>
+              <Select.Option value={Age.OverEighty}>
+                {intl.formatMessage({
+                  defaultMessage: 'Over 80',
+                  id: 'oFu9sf',
+                })}
+              </Select.Option>
+              <Select.Option value={Age.Unknown}>
+                {intl.formatMessage({
+                  defaultMessage: 'Unknown',
+                  id: '5jeq8P',
+                })}
+              </Select.Option>
             </Select>
           </div>
           <div className={classes.filter}>
-            <Text>Sex</Text>
+            <Text>
+              {intl.formatMessage({ defaultMessage: 'Sex', id: 'eWJHGp' })}
+            </Text>
             <Select
               mode="multiple"
               allowClear
               value={sex}
               onChange={setSex}
-              placeholder="Sex"
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Sex',
+                id: 'eWJHGp',
+              })}
               className={classes.filterSelect}
             >
-              <Select.Option value={Gender.Female}>Female</Select.Option>
-              <Select.Option value={Gender.Male}>Male</Select.Option>
-              <Select.Option value={Gender.Unknown}>Unknown</Select.Option>
+              <Select.Option value={Gender.Female}>
+                {intl.formatMessage({ defaultMessage: 'Female', id: '74BYXL' })}
+              </Select.Option>
+              <Select.Option value={Gender.Male}>
+                {intl.formatMessage({ defaultMessage: 'Male', id: 'jIbAky' })}
+              </Select.Option>
+              <Select.Option value={Gender.Unknown}>
+                {intl.formatMessage({
+                  defaultMessage: 'Unknown',
+                  id: '5jeq8P',
+                })}
+              </Select.Option>
             </Select>
           </div>
           <div className={classes.filter}>
-            <Text>Hair</Text>
+            <Text>
+              {intl.formatMessage({ defaultMessage: 'Hair', id: 'e4YBbX' })}
+            </Text>
             <Input.TextArea
               value={hair}
               onChange={(e) => setHair(e.target.value)}
             />
           </div>
           <div className={classes.filter}>
-            <Text>Peculiarities</Text>
+            <Text>
+              {intl.formatMessage({
+                defaultMessage: 'Peculiarities',
+                id: '9s+ZmX',
+              })}
+            </Text>
             <Input.TextArea
               value={peculiarities}
               onChange={(e) => setPeculiarities(e.target.value)}
@@ -260,7 +396,12 @@ const AddExistingOffender = ({
           </div>
           <Row justify="end" className={classes.clearRow}>
             <Col>
-              <Button onClick={clearFilters}>Clear Filters</Button>
+              <Button onClick={clearFilters}>
+                {intl.formatMessage({
+                  defaultMessage: 'Clear Filters',
+                  id: 'MsGXc3',
+                })}
+              </Button>
             </Col>
           </Row>
         </Col>
@@ -269,11 +410,20 @@ const AddExistingOffender = ({
       <Modal
         open={!!selectedOffender}
         zIndex={1010}
-        okText={`${addOverride || 'Add'} Offender`}
+        // eslint-disable-next-line formatjs/no-literal-string-in-jsx
+        okText={`${
+          addOverride ||
+          intl.formatMessage({ defaultMessage: 'Add', id: '2/2yg+' })
+        } Offender`}
         onOk={() => onSubmit(selectedOffender?.id)}
         onCancel={() => setCurrentId(undefined)}
         bodyStyle={{ padding: 0 }}
-        title={`${addOverride || 'Add'} ${selectedOffender?.name}`}
+        // eslint-disable-next-line formatjs/no-literal-string-in-jsx
+        title={`${
+          addOverride ||
+          intl.formatMessage({ defaultMessage: 'Add', id: '2/2yg+' })
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        } ${selectedOffender?.name}`}
       >
         <Row gutter={16} wrap={false}>
           {selectedOffender && selectedOffender.images.length > 0 && (
@@ -293,23 +443,69 @@ const AddExistingOffender = ({
           )}
           <Col style={{ padding: '10px 20px' }}>
             <Descriptions column={1} size="small">
-              <Descriptions.Item label="Age">
+              <Descriptions.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Age',
+                  id: '9oNQSC',
+                })}
+              >
                 {getOffenderAge(selectedOffender?.age)}
               </Descriptions.Item>
-              <Descriptions.Item label="Build">
-                {getOffenderBuild(selectedOffender?.build) || 'Unknown'}
+              <Descriptions.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Build',
+                  id: 'RSctv1',
+                })}
+              >
+                {getOffenderBuild(selectedOffender?.build) ||
+                  intl.formatMessage({
+                    defaultMessage: 'Unknown',
+                    id: '5jeq8P',
+                  })}
               </Descriptions.Item>
-              <Descriptions.Item label="Ethnicity">
+              <Descriptions.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Ethnicity',
+                  id: 'XtCAFo',
+                })}
+              >
                 {getOffenderRace(selectedOffender?.race)}
               </Descriptions.Item>
-              <Descriptions.Item label="Sex">
-                {getOffenderGender(selectedOffender?.gender) || 'Unknown'}
+              <Descriptions.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Sex',
+                  id: 'eWJHGp',
+                })}
+              >
+                {getOffenderGender(selectedOffender?.gender) ||
+                  intl.formatMessage({
+                    defaultMessage: 'Unknown',
+                    id: '5jeq8P',
+                  })}
               </Descriptions.Item>
-              <Descriptions.Item label="Hair">
-                {selectedOffender?.hair || 'Unknown'}
+              <Descriptions.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Hair',
+                  id: 'e4YBbX',
+                })}
+              >
+                {selectedOffender?.hair ||
+                  intl.formatMessage({
+                    defaultMessage: 'Unknown',
+                    id: '5jeq8P',
+                  })}
               </Descriptions.Item>
-              <Descriptions.Item label="Peculiarities">
-                {selectedOffender?.peculiarities || 'Unknown'}
+              <Descriptions.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Peculiarities',
+                  id: '9s+ZmX',
+                })}
+              >
+                {selectedOffender?.peculiarities ||
+                  intl.formatMessage({
+                    defaultMessage: 'Unknown',
+                    id: '5jeq8P',
+                  })}
               </Descriptions.Item>
             </Descriptions>
           </Col>

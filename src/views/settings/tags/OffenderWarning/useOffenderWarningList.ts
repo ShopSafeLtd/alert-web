@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import type { TagsQuery, TagsQueryVariables } from 'graphql/generated';
 import {
-  useCreateTagMutation,
-  QueryMode,
-  useTagsQuery,
-  TagsDocument,
-  useUpdateTagMutation,
   Model,
+  QueryMode,
+  TagsDocument,
+  useCreateTagMutation,
+  useTagsQuery,
+  useUpdateTagMutation,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
 
-import { notification, Modal } from 'antd';
+import { Modal, notification } from 'antd';
 import errorNotification from 'types/error_notification';
 import type { TagData } from 'types/DataType';
 
@@ -141,7 +141,7 @@ const useOffenderWarningList = (): Return => {
             },
           });
       },
-    });
+    }).finally(() => setSaving(false));
   };
 
   // delete
@@ -204,7 +204,7 @@ const useOffenderWarningList = (): Return => {
             },
           },
         },
-      });
+      }).finally(() => setSaving(false));
   };
 
   const deleteConfirm = (currentId: string) => {

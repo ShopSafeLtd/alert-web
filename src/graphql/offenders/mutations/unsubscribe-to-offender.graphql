@@ -1,0 +1,6 @@
+mutation UnsubscribeFromOffender($where: OffenderWhereUniqueInput!) {
+  unsubscribeFromOffender(where: $where) {
+    id
+    subscribed
+  }
+}

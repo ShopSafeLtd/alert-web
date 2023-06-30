@@ -105,7 +105,7 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
       return undefined;
     };
 
-    updateBusiness({
+    void updateBusiness({
       variables: {
         where: {
           id: businessId,

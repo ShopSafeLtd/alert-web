@@ -131,7 +131,7 @@ const useLinkBusiness = ({ onClose }: Props): Return => {
   const onSubmit = () => {
     if (selectedValue.length > 0) {
       setSaving(true);
-      linkBusinessToScheme({
+      void linkBusinessToScheme({
         variables: {
           business: {
             id: selectedValue[0] as string,

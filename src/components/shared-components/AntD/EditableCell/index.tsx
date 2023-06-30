@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable */
 /* eslint-disable react/prop-types */
 /* eslint-disable import/prefer-default-export */
 /* eslint-disable @typescript-eslint/no-explicit-any */

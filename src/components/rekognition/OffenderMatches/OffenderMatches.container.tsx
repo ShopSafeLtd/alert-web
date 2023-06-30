@@ -7,9 +7,10 @@ interface Props {
 }
 
 const OffenderMatches = ({ offenderId }: Props) => {
-  const { data, loading, lightBox, toggleLightBox } = useOffenderMatches({
-    offenderId,
-  });
+  const { data, loading, lightBox, toggleLightBox, onDismissMatch } =
+    useOffenderMatches({
+      offenderId,
+    });
 
   return (
     <View
@@ -17,6 +18,7 @@ const OffenderMatches = ({ offenderId }: Props) => {
       loading={loading}
       lightBox={lightBox}
       toggleLightBox={toggleLightBox}
+      onDismissMatch={onDismissMatch}
     />
   );
 };

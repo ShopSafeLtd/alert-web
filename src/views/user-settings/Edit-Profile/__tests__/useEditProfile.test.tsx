@@ -1,3 +1,4 @@
+/* eslint-disable formatjs/no-literal-string-in-jsx */
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
@@ -136,6 +137,7 @@ const UseEditProfileTest = () => {
       <span>{loading ? 'true' : 'false'}</span>
       <button
         type="button"
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         onClick={() =>
           onSubmit({
             fullName: 'name',

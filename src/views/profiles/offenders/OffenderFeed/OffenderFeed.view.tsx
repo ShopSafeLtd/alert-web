@@ -40,6 +40,7 @@ import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view'
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import OffenderFilter from 'components/offenders/OffenderFilter';
 import type { DateType } from 'types/DataType';
+import { useIntl } from 'react-intl';
 import useStyles from './OffenderFeed.styles';
 
 // import useStyles from './OffenderFeed.styles';
@@ -149,31 +150,35 @@ const OffenderFeed = ({
   onSelectCustomGalleries,
   onSelectGallery,
 }: Props): JSX.Element => {
+  const intl = useIntl();
   const classes = useStyles();
   const galleryOptions = [
     {
-      label: 'Active',
+      label: intl.formatMessage({ defaultMessage: 'Active', id: '3a5wL8' }),
       value: 'ACTIVE',
     },
     {
-      label: 'Not Approved',
+      label: intl.formatMessage({
+        defaultMessage: 'Not Approved',
+        id: 'VwMCyX',
+      }),
       value: 'NOT APPROVED',
       needAdminRight: true,
     },
     {
-      label: 'Following',
+      label: intl.formatMessage({ defaultMessage: 'Following', id: 'cPIKU2' }),
       value: 'FOLLOWING',
     },
     {
-      label: 'My Data',
+      label: intl.formatMessage({ defaultMessage: 'My Data', id: 'dr0ueW' }),
       value: 'MYDATA',
     },
     {
-      label: 'Banned',
+      label: intl.formatMessage({ defaultMessage: 'Banned', id: 'xerM7K' }),
       value: 'BANNED',
     },
     {
-      label: 'Seeking ID',
+      label: intl.formatMessage({ defaultMessage: 'Seeking ID', id: '1zVxRE' }),
       value: 'ID',
     },
   ];
@@ -226,7 +231,10 @@ const OffenderFeed = ({
             >
               <Input
                 size="small"
-                placeholder="Search Offenders..."
+                placeholder={intl.formatMessage({
+                  defaultMessage: 'Search Offenders...',
+                  id: 'mCDjFM',
+                })}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
@@ -239,7 +247,10 @@ const OffenderFeed = ({
                   arrow={{ pointAtCenter: true }}
                 >
                   <Button className={classes.selectBox}>
-                    Gallery
+                    {intl.formatMessage({
+                      defaultMessage: 'Gallery',
+                      id: 'WExVSr',
+                    })}
                     <FontAwesomeIcon
                       icon={faChevronDown}
                       style={{ marginLeft: 10 }}
@@ -266,11 +277,14 @@ const OffenderFeed = ({
                 >
                   <Button className={classes.selectBox}>
                     {/* <FontAwesomeIcon
-                      size="lg"
-                      style={{ marginRight: 5 }}
-                      icon={faUserTag}
-                    /> */}
-                    Custom Gallery
+                    size="lg"
+                    style={{ marginRight: 5 }}
+                    icon={faUserTag}
+                  /> */}
+                    {intl.formatMessage({
+                      defaultMessage: 'Custom Gallery',
+                      id: '/b4BmP',
+                    })}
                     <FontAwesomeIcon
                       icon={faChevronDown}
                       style={{ marginLeft: 10 }}
@@ -290,7 +304,10 @@ const OffenderFeed = ({
                   />
                 }
               >
-                Sort &amp; Filter
+                {intl.formatMessage({
+                  defaultMessage: 'Sort & Filter',
+                  id: 'f2g3SM',
+                })}
               </Button>
             </Col>
             <Col>
@@ -305,7 +322,10 @@ const OffenderFeed = ({
                   />
                 }
               >
-                Add Offender
+                {intl.formatMessage({
+                  defaultMessage: 'Add Offender',
+                  id: 'm3ChN4',
+                })}
               </Button>
             </Col>
           </Row>
@@ -360,8 +380,15 @@ const OffenderFeed = ({
               <Empty
                 description={
                   search === ''
-                    ? 'No Offenders'
-                    : 'No offenders match your search criteria'
+                    ? intl.formatMessage({
+                        defaultMessage: 'No Offenders',
+                        id: 'hO5g1p',
+                      })
+                    : intl.formatMessage({
+                        defaultMessage:
+                          'No offenders match your search criteria',
+                        id: 'i7eap9',
+                      })
                 }
               />
             </div>
@@ -376,7 +403,15 @@ const OffenderFeed = ({
               pageSize={pagination.pageSize}
               current={pagination.page}
               onChange={onPaginationChange}
-              showTotal={(total) => `Total Offenders: ${total}`}
+              showTotal={(total) =>
+                intl.formatMessage(
+                  {
+                    defaultMessage: 'Total Offenders: {total}',
+                    id: '3JpVG2',
+                  },
+                  { total }
+                )
+              }
               hideOnSinglePage
             />
           </Col>
@@ -384,7 +419,10 @@ const OffenderFeed = ({
       </div>
 
       <Drawer
-        title="Offender Filters"
+        title={intl.formatMessage({
+          defaultMessage: 'Offender Filters',
+          id: 'gxEHRQ',
+        })}
         visible={sortFilter}
         onClose={toggleSortFilter}
         width={500}

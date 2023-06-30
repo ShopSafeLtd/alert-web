@@ -128,6 +128,7 @@ const useArticlesSection = ({
 
   const { data, loading } = useListArticlesQuery({
     fetchPolicy: 'cache-and-network',
+    // @ts-expect-error TODO fix date issue
     variables,
   });
 

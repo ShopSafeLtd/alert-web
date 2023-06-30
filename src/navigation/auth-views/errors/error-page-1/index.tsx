@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React from 'react';
 import { Button, Row, Col } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';

@@ -19,7 +19,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  DateTime: any;
+  DateTime: Date;
   Json: any;
   /** The `Upload` scalar type represents a file upload. */
   Upload: any;
@@ -5507,6 +5507,7 @@ export enum BanType {
   Cpw = 'CPW',
   Other = 'OTHER',
   Pspo = 'PSPO',
+  Wip = 'WIP',
 }
 
 export type BanUpdateInput = {
@@ -6275,7 +6276,7 @@ export type BusinessReport = {
 
 export type BusinessReportInput = {
   businessId: Scalars['String'];
-  crimeGroupIds: Array<Scalars['String']>;
+  crimeGroupIds?: InputMaybe<Array<Scalars['String']>>;
   dateRange: DateRangeInput;
   groupIds: Array<Scalars['String']>;
   offenderIds?: InputMaybe<Array<Scalars['String']>>;
@@ -9802,6 +9803,7 @@ export type DiscImportHistoricIncidentsInput = {
   county?: InputMaybe<Scalars['String']>;
   crimeTypes?: InputMaybe<Array<UniqueId>>;
   date?: InputMaybe<Scalars['DateTime']>;
+  groups?: InputMaybe<Array<UniqueId>>;
   importId: Scalars['String'];
   lostValue?: InputMaybe<Scalars['Float']>;
   policeInvolved?: InputMaybe<Scalars['Boolean']>;
@@ -9849,6 +9851,7 @@ export type DiscImportOffendersInput = {
   comment?: InputMaybe<Scalars['String']>;
   createdBy?: InputMaybe<UniqueId>;
   dateOfBirth?: InputMaybe<Scalars['DateTime']>;
+  deletionDate?: InputMaybe<Scalars['DateTime']>;
   gender?: InputMaybe<Gender>;
   groups?: InputMaybe<Array<UniqueId>>;
   hair?: InputMaybe<Scalars['String']>;
@@ -9857,7 +9860,9 @@ export type DiscImportOffendersInput = {
   importId: Scalars['String'];
   name: Scalars['String'];
   peculiarities?: InputMaybe<Scalars['String']>;
+  postcode?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
+  street?: InputMaybe<Scalars['String']>;
 };
 
 export type DiscImportUsersInput = {
@@ -17012,6 +17017,8 @@ export type IncidentCreateInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
   time: Scalars['DateTime'];
@@ -17047,6 +17054,8 @@ export type IncidentCreateManyBusinessInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   schemeId: Scalars['String'];
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   time: Scalars['DateTime'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -17083,6 +17092,8 @@ export type IncidentCreateManyCreatedByInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   schemeId: Scalars['String'];
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   time: Scalars['DateTime'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -17119,6 +17130,8 @@ export type IncidentCreateManySchemeInput = {
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   time: Scalars['DateTime'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -17492,6 +17505,8 @@ export type IncidentCreateWithoutActionsInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
   time: Scalars['DateTime'];
@@ -17547,6 +17562,8 @@ export type IncidentCreateWithoutArticleColumnsInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
   time: Scalars['DateTime'];
@@ -17602,6 +17619,8 @@ export type IncidentCreateWithoutBusinessInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
   time: Scalars['DateTime'];
@@ -17657,6 +17676,8 @@ export type IncidentCreateWithoutCreatedByInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
   time: Scalars['DateTime'];
@@ -17712,6 +17733,8 @@ export type IncidentCreateWithoutCrimeGroupsInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
   time: Scalars['DateTime'];
@@ -17767,6 +17790,8 @@ export type IncidentCreateWithoutCrimeTypesInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
   time: Scalars['DateTime'];
@@ -17822,6 +17847,8 @@ export type IncidentCreateWithoutEvidenceInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
   time: Scalars['DateTime'];
@@ -17877,6 +17904,8 @@ export type IncidentCreateWithoutFeedItemsInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
   time: Scalars['DateTime'];
@@ -17932,6 +17961,8 @@ export type IncidentCreateWithoutGroupsInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
   time: Scalars['DateTime'];
@@ -17987,6 +18018,8 @@ export type IncidentCreateWithoutImagesInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
   time: Scalars['DateTime'];
@@ -18042,6 +18075,8 @@ export type IncidentCreateWithoutImpressionsInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
   time: Scalars['DateTime'];
@@ -18097,6 +18132,8 @@ export type IncidentCreateWithoutIntelInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
   time: Scalars['DateTime'];
@@ -18152,6 +18189,8 @@ export type IncidentCreateWithoutInvestigationsInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
   time: Scalars['DateTime'];
@@ -18207,6 +18246,8 @@ export type IncidentCreateWithoutLinkedUpdatesInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
   time: Scalars['DateTime'];
@@ -18262,6 +18303,8 @@ export type IncidentCreateWithoutLocationInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
   time: Scalars['DateTime'];
@@ -18317,6 +18360,8 @@ export type IncidentCreateWithoutMatchesInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
   time: Scalars['DateTime'];
@@ -18372,6 +18417,8 @@ export type IncidentCreateWithoutMessagesInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
   time: Scalars['DateTime'];
@@ -18427,6 +18474,8 @@ export type IncidentCreateWithoutMg11Input = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
   time: Scalars['DateTime'];
@@ -18482,6 +18531,8 @@ export type IncidentCreateWithoutNotificationsInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
   time: Scalars['DateTime'];
@@ -18537,6 +18588,8 @@ export type IncidentCreateWithoutOffendersInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
   time: Scalars['DateTime'];
@@ -18592,6 +18645,8 @@ export type IncidentCreateWithoutRecycleBinInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
   time: Scalars['DateTime'];
@@ -18647,6 +18702,8 @@ export type IncidentCreateWithoutSchemeInput = {
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
   time: Scalars['DateTime'];
@@ -18703,6 +18760,8 @@ export type IncidentCreateWithoutSubscribedUsersInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   time: Scalars['DateTime'];
   todos?: InputMaybe<TodoCreateNestedManyWithoutIncidentInput>;
@@ -18758,6 +18817,8 @@ export type IncidentCreateWithoutTodosInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
   time: Scalars['DateTime'];
@@ -18813,6 +18874,8 @@ export type IncidentCreateWithoutUpdatesInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
   time: Scalars['DateTime'];
@@ -18868,6 +18931,8 @@ export type IncidentCreateWithoutVehiclesInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  skipFeedItem?: InputMaybe<Scalars['Boolean']>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedIncidentsInput>;
   time: Scalars['DateTime'];
@@ -19095,6 +19160,8 @@ export type IncidentOrderByWithRelationInput = {
   reference?: InputMaybe<SortOrder>;
   scheme?: InputMaybe<SchemeOrderByWithRelationInput>;
   schemeId?: InputMaybe<SortOrder>;
+  skipFeedItem?: InputMaybe<SortOrder>;
+  skipNotification?: InputMaybe<SortOrder>;
   subject?: InputMaybe<SortOrder>;
   subscribedUsers?: InputMaybe<UserOrderByRelationAggregateInput>;
   time?: InputMaybe<SortOrder>;
@@ -19134,6 +19201,8 @@ export type IncidentScalarWhereInput = {
   ref?: InputMaybe<StringNullableFilter>;
   reference?: InputMaybe<IntNullableFilter>;
   schemeId?: InputMaybe<StringFilter>;
+  skipFeedItem?: InputMaybe<BoolFilter>;
+  skipNotification?: InputMaybe<BoolFilter>;
   subject?: InputMaybe<StringNullableFilter>;
   time?: InputMaybe<DateTimeFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
@@ -19201,6 +19270,8 @@ export type IncidentUpdateInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -19234,6 +19305,8 @@ export type IncidentUpdateManyMutationInput = {
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -19814,6 +19887,8 @@ export type IncidentUpdateWithoutActionsInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -19869,6 +19944,8 @@ export type IncidentUpdateWithoutArticleColumnsInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -19924,6 +20001,8 @@ export type IncidentUpdateWithoutBusinessInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -19979,6 +20058,8 @@ export type IncidentUpdateWithoutCreatedByInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -20034,6 +20115,8 @@ export type IncidentUpdateWithoutCrimeGroupsInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -20089,6 +20172,8 @@ export type IncidentUpdateWithoutCrimeTypesInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -20144,6 +20229,8 @@ export type IncidentUpdateWithoutEvidenceInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -20199,6 +20286,8 @@ export type IncidentUpdateWithoutFeedItemsInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -20254,6 +20343,8 @@ export type IncidentUpdateWithoutGroupsInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -20309,6 +20400,8 @@ export type IncidentUpdateWithoutImagesInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -20364,6 +20457,8 @@ export type IncidentUpdateWithoutImpressionsInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -20419,6 +20514,8 @@ export type IncidentUpdateWithoutIntelInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -20474,6 +20571,8 @@ export type IncidentUpdateWithoutInvestigationsInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -20529,6 +20628,8 @@ export type IncidentUpdateWithoutLinkedUpdatesInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -20584,6 +20685,8 @@ export type IncidentUpdateWithoutLocationInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -20639,6 +20742,8 @@ export type IncidentUpdateWithoutMatchesInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -20694,6 +20799,8 @@ export type IncidentUpdateWithoutMessagesInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -20749,6 +20856,8 @@ export type IncidentUpdateWithoutMg11Input = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -20804,6 +20913,8 @@ export type IncidentUpdateWithoutNotificationsInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -20859,6 +20970,8 @@ export type IncidentUpdateWithoutOffendersInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -20914,6 +21027,8 @@ export type IncidentUpdateWithoutRecycleBinInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -20969,6 +21084,8 @@ export type IncidentUpdateWithoutSchemeInput = {
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -21025,6 +21142,8 @@ export type IncidentUpdateWithoutSubscribedUsersInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutIncidentNestedInput>;
@@ -21080,6 +21199,8 @@ export type IncidentUpdateWithoutTodosInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -21135,6 +21256,8 @@ export type IncidentUpdateWithoutUpdatesInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -21190,6 +21313,8 @@ export type IncidentUpdateWithoutVehiclesInput = {
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsNestedInput>;
+  skipFeedItem?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedIncidentsNestedInput>;
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -21395,6 +21520,8 @@ export type IncidentWhereInput = {
   reference?: InputMaybe<IntNullableFilter>;
   scheme?: InputMaybe<SchemeWhereInput>;
   schemeId?: InputMaybe<StringFilter>;
+  skipFeedItem?: InputMaybe<BoolFilter>;
+  skipNotification?: InputMaybe<BoolFilter>;
   subject?: InputMaybe<StringNullableFilter>;
   subscribedUsers?: InputMaybe<UserListRelationFilter>;
   time?: InputMaybe<DateTimeFilter>;
@@ -24304,6 +24431,12 @@ export type ListUserContribution = {
   __typename?: 'ListUserContribution';
   total: Scalars['Int'];
   userContributions: Array<UserContribution>;
+};
+
+export type ListUserNotifications = {
+  __typename?: 'ListUserNotifications';
+  notifications: Array<UserNotification>;
+  total: Scalars['Int'];
 };
 
 export type ListUsers = {
@@ -27495,7 +27628,7 @@ export type MutationUpdateUserSchemeArgs = {
 };
 
 export type MutationUpdateVehicleArgs = {
-  data: CreateVehicleDataInput;
+  data: VehicleUpdateInput;
   where: UniqueId;
 };
 
@@ -29232,6 +29365,7 @@ export type Offender = {
   customGalleries: Array<CustomGallery>;
   dateOfBirth?: Maybe<Scalars['DateTime']>;
   dateSource?: Maybe<Scalars['String']>;
+  deletionDate?: Maybe<Scalars['DateTime']>;
   feedItems: Array<FeedItem>;
   gender?: Maybe<Gender>;
   goodsTypesTotals?: Maybe<Array<BusinessGoodsTotals>>;
@@ -29492,6 +29626,7 @@ export type OffenderCreateInput = {
   rekFaces?: InputMaybe<RekFaceCreateNestedManyWithoutOffenderInput>;
   scheme: SchemeCreateNestedOneWithoutOffendersInput;
   searchedMatches?: InputMaybe<RekMatchCreateNestedManyWithoutSearchedOffenderInput>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedOffendersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutOffendersInput>;
   tempId?: InputMaybe<Scalars['String']>;
@@ -29526,6 +29661,7 @@ export type OffenderCreateManyCreatedByInput = {
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   schemeId: Scalars['String'];
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   tempId?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   uploaded?: InputMaybe<Scalars['Boolean']>;
@@ -29560,6 +29696,7 @@ export type OffenderCreateManySchemeInput = {
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   tempId?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   uploaded?: InputMaybe<Scalars['Boolean']>;
@@ -29939,6 +30076,7 @@ export type OffenderCreateWithoutActionsInput = {
   rekFaces?: InputMaybe<RekFaceCreateNestedManyWithoutOffenderInput>;
   scheme: SchemeCreateNestedOneWithoutOffendersInput;
   searchedMatches?: InputMaybe<RekMatchCreateNestedManyWithoutSearchedOffenderInput>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedOffendersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutOffendersInput>;
   tempId?: InputMaybe<Scalars['String']>;
@@ -29993,6 +30131,7 @@ export type OffenderCreateWithoutAddressesInput = {
   rekFaces?: InputMaybe<RekFaceCreateNestedManyWithoutOffenderInput>;
   scheme: SchemeCreateNestedOneWithoutOffendersInput;
   searchedMatches?: InputMaybe<RekMatchCreateNestedManyWithoutSearchedOffenderInput>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedOffendersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutOffendersInput>;
   tempId?: InputMaybe<Scalars['String']>;
@@ -30047,6 +30186,7 @@ export type OffenderCreateWithoutArticleColumnsInput = {
   rekFaces?: InputMaybe<RekFaceCreateNestedManyWithoutOffenderInput>;
   scheme: SchemeCreateNestedOneWithoutOffendersInput;
   searchedMatches?: InputMaybe<RekMatchCreateNestedManyWithoutSearchedOffenderInput>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedOffendersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutOffendersInput>;
   tempId?: InputMaybe<Scalars['String']>;
@@ -30101,6 +30241,7 @@ export type OffenderCreateWithoutBansInput = {
   rekFaces?: InputMaybe<RekFaceCreateNestedManyWithoutOffenderInput>;
   scheme: SchemeCreateNestedOneWithoutOffendersInput;
   searchedMatches?: InputMaybe<RekMatchCreateNestedManyWithoutSearchedOffenderInput>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedOffendersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutOffendersInput>;
   tempId?: InputMaybe<Scalars['String']>;
@@ -30155,6 +30296,7 @@ export type OffenderCreateWithoutCreatedByInput = {
   rekFaces?: InputMaybe<RekFaceCreateNestedManyWithoutOffenderInput>;
   scheme: SchemeCreateNestedOneWithoutOffendersInput;
   searchedMatches?: InputMaybe<RekMatchCreateNestedManyWithoutSearchedOffenderInput>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedOffendersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutOffendersInput>;
   tempId?: InputMaybe<Scalars['String']>;
@@ -30209,6 +30351,7 @@ export type OffenderCreateWithoutCrimeGroupsInput = {
   rekFaces?: InputMaybe<RekFaceCreateNestedManyWithoutOffenderInput>;
   scheme: SchemeCreateNestedOneWithoutOffendersInput;
   searchedMatches?: InputMaybe<RekMatchCreateNestedManyWithoutSearchedOffenderInput>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedOffendersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutOffendersInput>;
   tempId?: InputMaybe<Scalars['String']>;
@@ -30263,6 +30406,7 @@ export type OffenderCreateWithoutCustomGalleriesInput = {
   rekFaces?: InputMaybe<RekFaceCreateNestedManyWithoutOffenderInput>;
   scheme: SchemeCreateNestedOneWithoutOffendersInput;
   searchedMatches?: InputMaybe<RekMatchCreateNestedManyWithoutSearchedOffenderInput>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedOffendersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutOffendersInput>;
   tempId?: InputMaybe<Scalars['String']>;
@@ -30317,6 +30461,7 @@ export type OffenderCreateWithoutFeedItemsInput = {
   rekFaces?: InputMaybe<RekFaceCreateNestedManyWithoutOffenderInput>;
   scheme: SchemeCreateNestedOneWithoutOffendersInput;
   searchedMatches?: InputMaybe<RekMatchCreateNestedManyWithoutSearchedOffenderInput>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedOffendersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutOffendersInput>;
   tempId?: InputMaybe<Scalars['String']>;
@@ -30371,6 +30516,7 @@ export type OffenderCreateWithoutGroupsInput = {
   rekFaces?: InputMaybe<RekFaceCreateNestedManyWithoutOffenderInput>;
   scheme: SchemeCreateNestedOneWithoutOffendersInput;
   searchedMatches?: InputMaybe<RekMatchCreateNestedManyWithoutSearchedOffenderInput>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedOffendersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutOffendersInput>;
   tempId?: InputMaybe<Scalars['String']>;
@@ -30425,6 +30571,7 @@ export type OffenderCreateWithoutImagesInput = {
   rekFaces?: InputMaybe<RekFaceCreateNestedManyWithoutOffenderInput>;
   scheme: SchemeCreateNestedOneWithoutOffendersInput;
   searchedMatches?: InputMaybe<RekMatchCreateNestedManyWithoutSearchedOffenderInput>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedOffendersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutOffendersInput>;
   tempId?: InputMaybe<Scalars['String']>;
@@ -30479,6 +30626,7 @@ export type OffenderCreateWithoutImpressionsInput = {
   rekFaces?: InputMaybe<RekFaceCreateNestedManyWithoutOffenderInput>;
   scheme: SchemeCreateNestedOneWithoutOffendersInput;
   searchedMatches?: InputMaybe<RekMatchCreateNestedManyWithoutSearchedOffenderInput>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedOffendersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutOffendersInput>;
   tempId?: InputMaybe<Scalars['String']>;
@@ -30534,6 +30682,7 @@ export type OffenderCreateWithoutIncidentsInput = {
   rekFaces?: InputMaybe<RekFaceCreateNestedManyWithoutOffenderInput>;
   scheme: SchemeCreateNestedOneWithoutOffendersInput;
   searchedMatches?: InputMaybe<RekMatchCreateNestedManyWithoutSearchedOffenderInput>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedOffendersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutOffendersInput>;
   tempId?: InputMaybe<Scalars['String']>;
@@ -30588,6 +30737,7 @@ export type OffenderCreateWithoutIntelInput = {
   rekFaces?: InputMaybe<RekFaceCreateNestedManyWithoutOffenderInput>;
   scheme: SchemeCreateNestedOneWithoutOffendersInput;
   searchedMatches?: InputMaybe<RekMatchCreateNestedManyWithoutSearchedOffenderInput>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedOffendersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutOffendersInput>;
   tempId?: InputMaybe<Scalars['String']>;
@@ -30642,6 +30792,7 @@ export type OffenderCreateWithoutInvestigationsInput = {
   rekFaces?: InputMaybe<RekFaceCreateNestedManyWithoutOffenderInput>;
   scheme: SchemeCreateNestedOneWithoutOffendersInput;
   searchedMatches?: InputMaybe<RekMatchCreateNestedManyWithoutSearchedOffenderInput>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedOffendersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutOffendersInput>;
   tempId?: InputMaybe<Scalars['String']>;
@@ -30696,6 +30847,7 @@ export type OffenderCreateWithoutLinkedUpdatesInput = {
   rekFaces?: InputMaybe<RekFaceCreateNestedManyWithoutOffenderInput>;
   scheme: SchemeCreateNestedOneWithoutOffendersInput;
   searchedMatches?: InputMaybe<RekMatchCreateNestedManyWithoutSearchedOffenderInput>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedOffendersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutOffendersInput>;
   tempId?: InputMaybe<Scalars['String']>;
@@ -30750,6 +30902,7 @@ export type OffenderCreateWithoutMatchedMatchesInput = {
   rekFaces?: InputMaybe<RekFaceCreateNestedManyWithoutOffenderInput>;
   scheme: SchemeCreateNestedOneWithoutOffendersInput;
   searchedMatches?: InputMaybe<RekMatchCreateNestedManyWithoutSearchedOffenderInput>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedOffendersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutOffendersInput>;
   tempId?: InputMaybe<Scalars['String']>;
@@ -30804,6 +30957,7 @@ export type OffenderCreateWithoutMessagesInput = {
   rekFaces?: InputMaybe<RekFaceCreateNestedManyWithoutOffenderInput>;
   scheme: SchemeCreateNestedOneWithoutOffendersInput;
   searchedMatches?: InputMaybe<RekMatchCreateNestedManyWithoutSearchedOffenderInput>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedOffendersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutOffendersInput>;
   tempId?: InputMaybe<Scalars['String']>;
@@ -30858,6 +31012,7 @@ export type OffenderCreateWithoutNotificationsInput = {
   rekFaces?: InputMaybe<RekFaceCreateNestedManyWithoutOffenderInput>;
   scheme: SchemeCreateNestedOneWithoutOffendersInput;
   searchedMatches?: InputMaybe<RekMatchCreateNestedManyWithoutSearchedOffenderInput>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedOffendersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutOffendersInput>;
   tempId?: InputMaybe<Scalars['String']>;
@@ -30912,6 +31067,7 @@ export type OffenderCreateWithoutRecycleBinInput = {
   rekFaces?: InputMaybe<RekFaceCreateNestedManyWithoutOffenderInput>;
   scheme: SchemeCreateNestedOneWithoutOffendersInput;
   searchedMatches?: InputMaybe<RekMatchCreateNestedManyWithoutSearchedOffenderInput>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedOffendersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutOffendersInput>;
   tempId?: InputMaybe<Scalars['String']>;
@@ -30966,6 +31122,7 @@ export type OffenderCreateWithoutRekFacesInput = {
   reference?: InputMaybe<Scalars['Int']>;
   scheme: SchemeCreateNestedOneWithoutOffendersInput;
   searchedMatches?: InputMaybe<RekMatchCreateNestedManyWithoutSearchedOffenderInput>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedOffendersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutOffendersInput>;
   tempId?: InputMaybe<Scalars['String']>;
@@ -31020,6 +31177,7 @@ export type OffenderCreateWithoutSchemeInput = {
   reference?: InputMaybe<Scalars['Int']>;
   rekFaces?: InputMaybe<RekFaceCreateNestedManyWithoutOffenderInput>;
   searchedMatches?: InputMaybe<RekMatchCreateNestedManyWithoutSearchedOffenderInput>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedOffendersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutOffendersInput>;
   tempId?: InputMaybe<Scalars['String']>;
@@ -31074,6 +31232,7 @@ export type OffenderCreateWithoutSearchedMatchesInput = {
   reference?: InputMaybe<Scalars['Int']>;
   rekFaces?: InputMaybe<RekFaceCreateNestedManyWithoutOffenderInput>;
   scheme: SchemeCreateNestedOneWithoutOffendersInput;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedOffendersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutOffendersInput>;
   tempId?: InputMaybe<Scalars['String']>;
@@ -31129,6 +31288,7 @@ export type OffenderCreateWithoutSubscribedUsersInput = {
   rekFaces?: InputMaybe<RekFaceCreateNestedManyWithoutOffenderInput>;
   scheme: SchemeCreateNestedOneWithoutOffendersInput;
   searchedMatches?: InputMaybe<RekMatchCreateNestedManyWithoutSearchedOffenderInput>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   tags?: InputMaybe<TagCreateNestedManyWithoutOffendersInput>;
   tempId?: InputMaybe<Scalars['String']>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutOffenderInput>;
@@ -31183,6 +31343,7 @@ export type OffenderCreateWithoutTagsInput = {
   rekFaces?: InputMaybe<RekFaceCreateNestedManyWithoutOffenderInput>;
   scheme: SchemeCreateNestedOneWithoutOffendersInput;
   searchedMatches?: InputMaybe<RekMatchCreateNestedManyWithoutSearchedOffenderInput>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedOffendersInput>;
   tempId?: InputMaybe<Scalars['String']>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutOffenderInput>;
@@ -31237,6 +31398,7 @@ export type OffenderCreateWithoutTodosInput = {
   rekFaces?: InputMaybe<RekFaceCreateNestedManyWithoutOffenderInput>;
   scheme: SchemeCreateNestedOneWithoutOffendersInput;
   searchedMatches?: InputMaybe<RekMatchCreateNestedManyWithoutSearchedOffenderInput>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedOffendersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutOffendersInput>;
   tempId?: InputMaybe<Scalars['String']>;
@@ -31291,6 +31453,7 @@ export type OffenderCreateWithoutUpdatesInput = {
   rekFaces?: InputMaybe<RekFaceCreateNestedManyWithoutOffenderInput>;
   scheme: SchemeCreateNestedOneWithoutOffendersInput;
   searchedMatches?: InputMaybe<RekMatchCreateNestedManyWithoutSearchedOffenderInput>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedOffendersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutOffendersInput>;
   tempId?: InputMaybe<Scalars['String']>;
@@ -31345,6 +31508,7 @@ export type OffenderCreateWithoutVehiclesInput = {
   rekFaces?: InputMaybe<RekFaceCreateNestedManyWithoutOffenderInput>;
   scheme: SchemeCreateNestedOneWithoutOffendersInput;
   searchedMatches?: InputMaybe<RekMatchCreateNestedManyWithoutSearchedOffenderInput>;
+  skipNotification?: InputMaybe<Scalars['Boolean']>;
   subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedOffendersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutOffendersInput>;
   tempId?: InputMaybe<Scalars['String']>;
@@ -31415,6 +31579,7 @@ export type OffenderOrderByWithRelationInput = {
   scheme?: InputMaybe<SchemeOrderByWithRelationInput>;
   schemeId?: InputMaybe<SortOrder>;
   searchedMatches?: InputMaybe<RekMatchOrderByRelationAggregateInput>;
+  skipNotification?: InputMaybe<SortOrder>;
   subscribedUsers?: InputMaybe<UserOrderByRelationAggregateInput>;
   tags?: InputMaybe<TagOrderByRelationAggregateInput>;
   tempId?: InputMaybe<SortOrder>;
@@ -31452,7 +31617,7 @@ export type OffenderReport = {
 };
 
 export type OffenderReportInput = {
-  businessIds: Array<Scalars['String']>;
+  businessIds?: InputMaybe<Array<Scalars['String']>>;
   dateRange: DateRangeInput;
   groupIds: Array<Scalars['String']>;
   offenderId: Scalars['String'];
@@ -31487,6 +31652,7 @@ export type OffenderScalarWhereInput = {
   ref?: InputMaybe<StringNullableFilter>;
   reference?: InputMaybe<IntNullableFilter>;
   schemeId?: InputMaybe<StringFilter>;
+  skipNotification?: InputMaybe<BoolFilter>;
   tempId?: InputMaybe<StringNullableFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   uploaded?: InputMaybe<BoolNullableFilter>;
@@ -31537,6 +31703,7 @@ export type OffenderUpdateInput = {
   rekFaces?: InputMaybe<RekFaceUpdateManyWithoutOffenderNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutOffendersNestedInput>;
   searchedMatches?: InputMaybe<RekMatchUpdateManyWithoutSearchedOffenderNestedInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedOffendersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutOffendersNestedInput>;
   tempId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -31570,6 +31737,7 @@ export type OffenderUpdateManyMutationInput = {
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   tempId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
@@ -32149,6 +32317,7 @@ export type OffenderUpdateWithoutActionsInput = {
   rekFaces?: InputMaybe<RekFaceUpdateManyWithoutOffenderNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutOffendersNestedInput>;
   searchedMatches?: InputMaybe<RekMatchUpdateManyWithoutSearchedOffenderNestedInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedOffendersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutOffendersNestedInput>;
   tempId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -32203,6 +32372,7 @@ export type OffenderUpdateWithoutAddressesInput = {
   rekFaces?: InputMaybe<RekFaceUpdateManyWithoutOffenderNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutOffendersNestedInput>;
   searchedMatches?: InputMaybe<RekMatchUpdateManyWithoutSearchedOffenderNestedInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedOffendersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutOffendersNestedInput>;
   tempId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -32257,6 +32427,7 @@ export type OffenderUpdateWithoutArticleColumnsInput = {
   rekFaces?: InputMaybe<RekFaceUpdateManyWithoutOffenderNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutOffendersNestedInput>;
   searchedMatches?: InputMaybe<RekMatchUpdateManyWithoutSearchedOffenderNestedInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedOffendersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutOffendersNestedInput>;
   tempId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -32311,6 +32482,7 @@ export type OffenderUpdateWithoutBansInput = {
   rekFaces?: InputMaybe<RekFaceUpdateManyWithoutOffenderNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutOffendersNestedInput>;
   searchedMatches?: InputMaybe<RekMatchUpdateManyWithoutSearchedOffenderNestedInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedOffendersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutOffendersNestedInput>;
   tempId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -32365,6 +32537,7 @@ export type OffenderUpdateWithoutCreatedByInput = {
   rekFaces?: InputMaybe<RekFaceUpdateManyWithoutOffenderNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutOffendersNestedInput>;
   searchedMatches?: InputMaybe<RekMatchUpdateManyWithoutSearchedOffenderNestedInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedOffendersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutOffendersNestedInput>;
   tempId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -32419,6 +32592,7 @@ export type OffenderUpdateWithoutCrimeGroupsInput = {
   rekFaces?: InputMaybe<RekFaceUpdateManyWithoutOffenderNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutOffendersNestedInput>;
   searchedMatches?: InputMaybe<RekMatchUpdateManyWithoutSearchedOffenderNestedInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedOffendersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutOffendersNestedInput>;
   tempId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -32473,6 +32647,7 @@ export type OffenderUpdateWithoutCustomGalleriesInput = {
   rekFaces?: InputMaybe<RekFaceUpdateManyWithoutOffenderNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutOffendersNestedInput>;
   searchedMatches?: InputMaybe<RekMatchUpdateManyWithoutSearchedOffenderNestedInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedOffendersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutOffendersNestedInput>;
   tempId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -32527,6 +32702,7 @@ export type OffenderUpdateWithoutFeedItemsInput = {
   rekFaces?: InputMaybe<RekFaceUpdateManyWithoutOffenderNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutOffendersNestedInput>;
   searchedMatches?: InputMaybe<RekMatchUpdateManyWithoutSearchedOffenderNestedInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedOffendersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutOffendersNestedInput>;
   tempId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -32581,6 +32757,7 @@ export type OffenderUpdateWithoutGroupsInput = {
   rekFaces?: InputMaybe<RekFaceUpdateManyWithoutOffenderNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutOffendersNestedInput>;
   searchedMatches?: InputMaybe<RekMatchUpdateManyWithoutSearchedOffenderNestedInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedOffendersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutOffendersNestedInput>;
   tempId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -32635,6 +32812,7 @@ export type OffenderUpdateWithoutImagesInput = {
   rekFaces?: InputMaybe<RekFaceUpdateManyWithoutOffenderNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutOffendersNestedInput>;
   searchedMatches?: InputMaybe<RekMatchUpdateManyWithoutSearchedOffenderNestedInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedOffendersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutOffendersNestedInput>;
   tempId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -32689,6 +32867,7 @@ export type OffenderUpdateWithoutImpressionsInput = {
   rekFaces?: InputMaybe<RekFaceUpdateManyWithoutOffenderNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutOffendersNestedInput>;
   searchedMatches?: InputMaybe<RekMatchUpdateManyWithoutSearchedOffenderNestedInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedOffendersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutOffendersNestedInput>;
   tempId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -32743,6 +32922,7 @@ export type OffenderUpdateWithoutIncidentsInput = {
   rekFaces?: InputMaybe<RekFaceUpdateManyWithoutOffenderNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutOffendersNestedInput>;
   searchedMatches?: InputMaybe<RekMatchUpdateManyWithoutSearchedOffenderNestedInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedOffendersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutOffendersNestedInput>;
   tempId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -32797,6 +32977,7 @@ export type OffenderUpdateWithoutIntelInput = {
   rekFaces?: InputMaybe<RekFaceUpdateManyWithoutOffenderNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutOffendersNestedInput>;
   searchedMatches?: InputMaybe<RekMatchUpdateManyWithoutSearchedOffenderNestedInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedOffendersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutOffendersNestedInput>;
   tempId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -32851,6 +33032,7 @@ export type OffenderUpdateWithoutInvestigationsInput = {
   rekFaces?: InputMaybe<RekFaceUpdateManyWithoutOffenderNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutOffendersNestedInput>;
   searchedMatches?: InputMaybe<RekMatchUpdateManyWithoutSearchedOffenderNestedInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedOffendersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutOffendersNestedInput>;
   tempId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -32905,6 +33087,7 @@ export type OffenderUpdateWithoutLinkedUpdatesInput = {
   rekFaces?: InputMaybe<RekFaceUpdateManyWithoutOffenderNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutOffendersNestedInput>;
   searchedMatches?: InputMaybe<RekMatchUpdateManyWithoutSearchedOffenderNestedInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedOffendersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutOffendersNestedInput>;
   tempId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -32959,6 +33142,7 @@ export type OffenderUpdateWithoutMatchedMatchesInput = {
   rekFaces?: InputMaybe<RekFaceUpdateManyWithoutOffenderNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutOffendersNestedInput>;
   searchedMatches?: InputMaybe<RekMatchUpdateManyWithoutSearchedOffenderNestedInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedOffendersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutOffendersNestedInput>;
   tempId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -33013,6 +33197,7 @@ export type OffenderUpdateWithoutMessagesInput = {
   rekFaces?: InputMaybe<RekFaceUpdateManyWithoutOffenderNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutOffendersNestedInput>;
   searchedMatches?: InputMaybe<RekMatchUpdateManyWithoutSearchedOffenderNestedInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedOffendersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutOffendersNestedInput>;
   tempId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -33067,6 +33252,7 @@ export type OffenderUpdateWithoutNotificationsInput = {
   rekFaces?: InputMaybe<RekFaceUpdateManyWithoutOffenderNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutOffendersNestedInput>;
   searchedMatches?: InputMaybe<RekMatchUpdateManyWithoutSearchedOffenderNestedInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedOffendersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutOffendersNestedInput>;
   tempId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -33121,6 +33307,7 @@ export type OffenderUpdateWithoutRecycleBinInput = {
   rekFaces?: InputMaybe<RekFaceUpdateManyWithoutOffenderNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutOffendersNestedInput>;
   searchedMatches?: InputMaybe<RekMatchUpdateManyWithoutSearchedOffenderNestedInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedOffendersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutOffendersNestedInput>;
   tempId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -33175,6 +33362,7 @@ export type OffenderUpdateWithoutRekFacesInput = {
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutOffendersNestedInput>;
   searchedMatches?: InputMaybe<RekMatchUpdateManyWithoutSearchedOffenderNestedInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedOffendersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutOffendersNestedInput>;
   tempId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -33229,6 +33417,7 @@ export type OffenderUpdateWithoutSchemeInput = {
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   rekFaces?: InputMaybe<RekFaceUpdateManyWithoutOffenderNestedInput>;
   searchedMatches?: InputMaybe<RekMatchUpdateManyWithoutSearchedOffenderNestedInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedOffendersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutOffendersNestedInput>;
   tempId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -33283,6 +33472,7 @@ export type OffenderUpdateWithoutSearchedMatchesInput = {
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   rekFaces?: InputMaybe<RekFaceUpdateManyWithoutOffenderNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutOffendersNestedInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedOffendersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutOffendersNestedInput>;
   tempId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -33338,6 +33528,7 @@ export type OffenderUpdateWithoutSubscribedUsersInput = {
   rekFaces?: InputMaybe<RekFaceUpdateManyWithoutOffenderNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutOffendersNestedInput>;
   searchedMatches?: InputMaybe<RekMatchUpdateManyWithoutSearchedOffenderNestedInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   tags?: InputMaybe<TagUpdateManyWithoutOffendersNestedInput>;
   tempId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutOffenderNestedInput>;
@@ -33392,6 +33583,7 @@ export type OffenderUpdateWithoutTagsInput = {
   rekFaces?: InputMaybe<RekFaceUpdateManyWithoutOffenderNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutOffendersNestedInput>;
   searchedMatches?: InputMaybe<RekMatchUpdateManyWithoutSearchedOffenderNestedInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedOffendersNestedInput>;
   tempId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutOffenderNestedInput>;
@@ -33446,6 +33638,7 @@ export type OffenderUpdateWithoutTodosInput = {
   rekFaces?: InputMaybe<RekFaceUpdateManyWithoutOffenderNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutOffendersNestedInput>;
   searchedMatches?: InputMaybe<RekMatchUpdateManyWithoutSearchedOffenderNestedInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedOffendersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutOffendersNestedInput>;
   tempId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -33500,6 +33693,7 @@ export type OffenderUpdateWithoutUpdatesInput = {
   rekFaces?: InputMaybe<RekFaceUpdateManyWithoutOffenderNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutOffendersNestedInput>;
   searchedMatches?: InputMaybe<RekMatchUpdateManyWithoutSearchedOffenderNestedInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedOffendersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutOffendersNestedInput>;
   tempId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -33554,6 +33748,7 @@ export type OffenderUpdateWithoutVehiclesInput = {
   rekFaces?: InputMaybe<RekFaceUpdateManyWithoutOffenderNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutOffendersNestedInput>;
   searchedMatches?: InputMaybe<RekMatchUpdateManyWithoutSearchedOffenderNestedInput>;
+  skipNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedOffendersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutOffendersNestedInput>;
   tempId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -33767,6 +33962,7 @@ export type OffenderWhereInput = {
   scheme?: InputMaybe<SchemeWhereInput>;
   schemeId?: InputMaybe<StringFilter>;
   searchedMatches?: InputMaybe<RekMatchListRelationFilter>;
+  skipNotification?: InputMaybe<BoolFilter>;
   subscribedUsers?: InputMaybe<UserListRelationFilter>;
   tags?: InputMaybe<TagListRelationFilter>;
   tempId?: InputMaybe<StringNullableFilter>;
@@ -33974,6 +34170,7 @@ export type Query = {
   listOffenders?: Maybe<ListOffenders>;
   listRekMatches: ListRekMatches;
   listTodos: ListTodos;
+  listUserNotifications: ListUserNotifications;
   listUsers: ListUsers;
   listVehicles: ListVehicles;
   message?: Maybe<Message>;
@@ -34296,6 +34493,13 @@ export type QueryListTodosArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<TodoWhereInput>;
+};
+
+export type QueryListUserNotificationsArgs = {
+  orderBy?: InputMaybe<Array<UserNotificationOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<UserNotificationWhereInput>;
 };
 
 export type QueryListUsersArgs = {
@@ -58303,7 +58507,7 @@ export type ListActionsQuery = {
       description?: string | null;
       dataType: Model;
       reason?: string | null;
-      createdAt: any;
+      createdAt: Date;
       byUser: {
         __typename?: 'User';
         id: string;
@@ -58328,7 +58532,7 @@ export type CreateArticleMutation = {
   createArticle?: {
     __typename?: 'Article';
     id: string;
-    createdAt: any;
+    createdAt: Date;
     priority: ArticlePriority;
     title: string;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
@@ -58406,12 +58610,12 @@ export type CreateArticleMutation = {
         offenders: Array<{
           __typename?: 'Offender';
           id: string;
-          createdAt: any;
-          updatedAt: any;
+          createdAt: Date;
+          updatedAt: Date;
           age?: Age | null;
           build?: Build | null;
           height?: Height | null;
-          dateOfBirth?: any | null;
+          dateOfBirth?: Date | null;
           dateSource?: string | null;
           hair?: string | null;
           gender?: Gender | null;
@@ -58450,7 +58654,7 @@ export type CreateArticleMutation = {
             subject?: string | null;
             description: string;
             dayTime?: string | null;
-            date: any;
+            date: Date;
             approved?: boolean | null;
             crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
             location?: {
@@ -58501,7 +58705,7 @@ export type EditArticleMutation = {
   editArticle?: {
     __typename?: 'Article';
     id: string;
-    createdAt: any;
+    createdAt: Date;
     priority: ArticlePriority;
     title: string;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
@@ -58579,12 +58783,12 @@ export type EditArticleMutation = {
         offenders: Array<{
           __typename?: 'Offender';
           id: string;
-          createdAt: any;
-          updatedAt: any;
+          createdAt: Date;
+          updatedAt: Date;
           age?: Age | null;
           build?: Build | null;
           height?: Height | null;
-          dateOfBirth?: any | null;
+          dateOfBirth?: Date | null;
           dateSource?: string | null;
           hair?: string | null;
           gender?: Gender | null;
@@ -58623,7 +58827,7 @@ export type EditArticleMutation = {
             subject?: string | null;
             description: string;
             dayTime?: string | null;
-            date: any;
+            date: Date;
             approved?: boolean | null;
             crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
             location?: {
@@ -58670,7 +58874,7 @@ export type ArticlesQuery = {
     previewText?: string | null;
     priority: ArticlePriority;
     title: string;
-    updatedAt: any;
+    updatedAt: Date;
     id: string;
     tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
     images: Array<{
@@ -58721,7 +58925,7 @@ export type ListArticlesQuery = {
       previewText?: string | null;
       priority: ArticlePriority;
       title: string;
-      updatedAt: any;
+      updatedAt: Date;
       id: string;
       tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
       images: Array<{
@@ -58763,8 +58967,8 @@ export type ArticleQuery = {
   article?: {
     __typename?: 'Article';
     id: string;
-    createdAt: any;
-    updatedAt: any;
+    createdAt: Date;
+    updatedAt: Date;
     priority: ArticlePriority;
     title: string;
     groups: Array<{
@@ -58848,12 +59052,12 @@ export type ArticleQuery = {
         offenders: Array<{
           __typename?: 'Offender';
           id: string;
-          createdAt: any;
-          updatedAt: any;
+          createdAt: Date;
+          updatedAt: Date;
           age?: Age | null;
           build?: Build | null;
           height?: Height | null;
-          dateOfBirth?: any | null;
+          dateOfBirth?: Date | null;
           dateSource?: string | null;
           hair?: string | null;
           gender?: Gender | null;
@@ -58892,7 +59096,7 @@ export type ArticleQuery = {
             subject?: string | null;
             description: string;
             dayTime?: string | null;
-            date: any;
+            date: Date;
             approved?: boolean | null;
             crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
             location?: {
@@ -58981,10 +59185,10 @@ export type UpdateBanMutation = {
     id: string;
     active: boolean;
     location: string;
-    startDate: any;
-    endDate: any;
+    startDate: Date;
+    endDate: Date;
     description?: string | null;
-    createdAt: any;
+    createdAt: Date;
     createdBy: { __typename?: 'User'; id: string; fullName: string };
   } | null;
 };
@@ -59000,10 +59204,10 @@ export type BanQuery = {
     id: string;
     active: boolean;
     location: string;
-    startDate: any;
-    endDate: any;
+    startDate: Date;
+    endDate: Date;
     description?: string | null;
-    createdAt: any;
+    createdAt: Date;
     createdBy: { __typename?: 'User'; id: string; fullName: string };
   } | null;
 };
@@ -59019,8 +59223,8 @@ export type CreateBanMutation = {
     id: string;
     location: string;
     description?: string | null;
-    startDate: any;
-    endDate: any;
+    startDate: Date;
+    endDate: Date;
   };
 };
 
@@ -59034,8 +59238,8 @@ export type BansQuery = {
     __typename?: 'Ban';
     id: string;
     location: string;
-    startDate: any;
-    endDate: any;
+    startDate: Date;
+    endDate: Date;
     description?: string | null;
   }>;
 };
@@ -59059,7 +59263,7 @@ export type AddUsersToBusinessMutation = {
       fullName: string;
       status?: string | null;
       publicName: boolean;
-      loginEvents: Array<{ __typename?: 'LoginEvent'; loginTime: any }>;
+      loginEvents: Array<{ __typename?: 'LoginEvent'; loginTime: Date }>;
       groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     }>;
   };
@@ -59137,7 +59341,7 @@ export type RemoveUserFromBusinessMutation = {
       fullName: string;
       status?: string | null;
       publicName: boolean;
-      loginEvents: Array<{ __typename?: 'LoginEvent'; loginTime: any }>;
+      loginEvents: Array<{ __typename?: 'LoginEvent'; loginTime: Date }>;
       groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     }>;
   };
@@ -59218,12 +59422,12 @@ export type BusinessReportQuery = {
       __typename?: 'Incident';
       id: string;
       subject?: string | null;
-      createdAt: any;
+      createdAt: Date;
       reference?: number | null;
       policeRef?: string | null;
       totalRecoveredValue?: number | null;
       totalValue?: number | null;
-      date: any;
+      date: Date;
       crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
       createdBy: {
         __typename?: 'User';
@@ -59489,15 +59693,15 @@ export type CreateChatMutation = {
     id: string;
     name: string;
     description?: string | null;
-    updatedAt: any;
-    createdAt: any;
+    updatedAt: Date;
+    createdAt: Date;
     members: Array<{
       __typename?: 'UserChat';
       id: string;
       newMessages?: boolean | null;
       mentioned?: boolean | null;
-      updatedAt: any;
-      createdAt: any;
+      updatedAt: Date;
+      createdAt: Date;
       chat: {
         __typename?: 'Chat';
         id: string;
@@ -59508,7 +59712,7 @@ export type CreateChatMutation = {
           __typename?: 'Message';
           id: string;
           content: string;
-          createdAt: any;
+          createdAt: Date;
           from: { __typename?: 'User'; id: string; origName: string };
           images: Array<{ __typename?: 'Image'; id: string }>;
           incidents: Array<{ __typename?: 'Incident'; id: string }>;
@@ -59576,7 +59780,7 @@ export type CreateCrimeGroupMutation = {
     totalTheftSuccess?: number | null;
     totalValue?: number | null;
     alias?: string | null;
-    updatedAt: any;
+    updatedAt: Date;
   };
 };
 
@@ -59640,7 +59844,7 @@ export type UpdateCrimeGroupMutation = {
       hair?: string | null;
       peculiarities?: string | null;
       race?: Race | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       dateSource?: string | null;
       build?: Build | null;
       height?: Height | null;
@@ -59708,7 +59912,7 @@ export type ListCrimeGroupsQuery = {
       totalTheftSuccess?: number | null;
       totalValue?: number | null;
       alias?: string | null;
-      updatedAt: any;
+      updatedAt: Date;
     }>;
   };
 };
@@ -59730,7 +59934,7 @@ export type SuggestedCrimeGroupMembersQuery = {
       name?: string | null;
       alias: Array<string>;
       reference?: number | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       age?: Age | null;
       gender?: Gender | null;
       build?: Build | null;
@@ -59802,7 +60006,7 @@ export type CrimeGroupQuery = {
       hair?: string | null;
       peculiarities?: string | null;
       race?: Race | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       dateSource?: string | null;
       build?: Build | null;
       height?: Height | null;
@@ -59830,7 +60034,7 @@ export type CrimeGroupQuery = {
       reference?: number | null;
       make?: string | null;
       model?: string | null;
-      updatedAt: any;
+      updatedAt: Date;
       colour?: string | null;
       registration?: string | null;
       totalOffenders?: number | null;
@@ -59842,7 +60046,7 @@ export type CrimeGroupQuery = {
       id: string;
       reference?: number | null;
       dayTime?: string | null;
-      date: any;
+      date: Date;
       crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
       createdBy: {
         __typename?: 'User';
@@ -59851,6 +60055,7 @@ export type CrimeGroupQuery = {
           __typename?: 'Business';
           id: string;
           name: string;
+          fullName: string;
         }>;
       };
       location?: {
@@ -59866,7 +60071,7 @@ export type CrimeGroupQuery = {
       id: string;
       text?: string | null;
       type: UpdateType;
-      createdAt: any;
+      createdAt: Date;
       images: Array<{
         __typename?: 'Image';
         id: string;
@@ -59885,11 +60090,11 @@ export type CrimeGroupQuery = {
         totalRecoveredValue?: number | null;
         totalTheftSuccess?: number | null;
         totalValue?: number | null;
-        updatedAt: any;
+        updatedAt: Date;
       }>;
       linkedVehicles: Array<{
         __typename?: 'Vehicle';
-        updatedAt: any;
+        updatedAt: Date;
         totalOffenders?: number | null;
         registration?: string | null;
         reference?: number | null;
@@ -59922,11 +60127,11 @@ export type CrimeGroupQuery = {
       linkedOffenders: Array<{
         __typename?: 'Offender';
         id: string;
-        updatedAt: any;
+        updatedAt: Date;
         age?: Age | null;
         build?: Build | null;
         height?: Height | null;
-        dateOfBirth?: any | null;
+        dateOfBirth?: Date | null;
         name?: string | null;
         race?: Race | null;
         gender?: Gender | null;
@@ -59947,6 +60152,7 @@ export type CrimeGroupQuery = {
           __typename?: 'Business';
           id: string;
           name: string;
+          fullName: string;
         }>;
       };
       replies: Array<{
@@ -59954,7 +60160,7 @@ export type CrimeGroupQuery = {
         id: string;
         text?: string | null;
         type: UpdateType;
-        createdAt: any;
+        createdAt: Date;
         images: Array<{
           __typename?: 'Image';
           id: string;
@@ -59973,11 +60179,11 @@ export type CrimeGroupQuery = {
           totalRecoveredValue?: number | null;
           totalTheftSuccess?: number | null;
           totalValue?: number | null;
-          updatedAt: any;
+          updatedAt: Date;
         }>;
         linkedVehicles: Array<{
           __typename?: 'Vehicle';
-          updatedAt: any;
+          updatedAt: Date;
           totalOffenders?: number | null;
           registration?: string | null;
           reference?: number | null;
@@ -60010,11 +60216,11 @@ export type CrimeGroupQuery = {
         linkedOffenders: Array<{
           __typename?: 'Offender';
           id: string;
-          updatedAt: any;
+          updatedAt: Date;
           age?: Age | null;
           build?: Build | null;
           height?: Height | null;
-          dateOfBirth?: any | null;
+          dateOfBirth?: Date | null;
           name?: string | null;
           race?: Race | null;
           gender?: Gender | null;
@@ -60035,6 +60241,7 @@ export type CrimeGroupQuery = {
             __typename?: 'Business';
             id: string;
             name: string;
+            fullName: string;
           }>;
         };
       }>;
@@ -60130,7 +60337,7 @@ export type ListDemEvidenceQuery = {
       playbackUrl?: string | null;
       importance?: string | null;
       id?: string | null;
-      createdAt?: any | null;
+      createdAt?: Date | null;
     }>;
   };
 };
@@ -60165,8 +60372,8 @@ export type CreateDocumentMutation = {
     name: string;
     thumbnailUrl?: string | null;
     url: string;
-    createdAt: any;
-    updatedAt: any;
+    createdAt: Date;
+    updatedAt: Date;
     tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
   } | null;
 };
@@ -60185,7 +60392,7 @@ export type ListDocumentsOnSchemeQuery = {
       name: string;
       url: string;
       thumbnailUrl?: string | null;
-      createdAt: any;
+      createdAt: Date;
       tags: Array<{ __typename?: 'Tag'; name: string; id: string }>;
     }>;
   } | null;
@@ -60220,8 +60427,8 @@ export type FeedItemsQuery = {
       __typename?: 'FeedItem';
       type: FeedItemType;
       articleId?: string | null;
-      createdAt: any;
-      updatedAt: any;
+      createdAt: Date;
+      updatedAt: Date;
       message: string;
       model?: Model | null;
       crimeGroupId?: string | null;
@@ -60232,9 +60439,9 @@ export type FeedItemsQuery = {
       offenderId?: string | null;
       ban?: {
         __typename?: 'Ban';
-        endDate: any;
-        startDate: any;
-        updatedAt: any;
+        endDate: Date;
+        startDate: Date;
+        updatedAt: Date;
         title?: string | null;
         type?: BanType | null;
         active: boolean;
@@ -60259,7 +60466,7 @@ export type FeedItemsQuery = {
         __typename?: 'Article';
         id: string;
         title: string;
-        updatedAt: any;
+        updatedAt: Date;
         previewImage?: string | null;
         previewText?: string | null;
         priority: ArticlePriority;
@@ -60303,14 +60510,14 @@ export type FeedItemsQuery = {
         totalRecoveredValue?: number | null;
         totalTheftSuccess?: number | null;
         totalValue?: number | null;
-        updatedAt: any;
+        updatedAt: Date;
         updates: Array<{
           __typename?: 'Update';
           id: string;
           text?: string | null;
           icon: UpdateIcon;
           type: UpdateType;
-          createdAt: any;
+          createdAt: Date;
           images: Array<{
             __typename?: 'Image';
             id: string;
@@ -60329,11 +60536,11 @@ export type FeedItemsQuery = {
             totalRecoveredValue?: number | null;
             totalTheftSuccess?: number | null;
             totalValue?: number | null;
-            updatedAt: any;
+            updatedAt: Date;
           }>;
           linkedVehicles: Array<{
             __typename?: 'Vehicle';
-            updatedAt: any;
+            updatedAt: Date;
             totalOffenders?: number | null;
             registration?: string | null;
             reference?: number | null;
@@ -60366,11 +60573,11 @@ export type FeedItemsQuery = {
           linkedOffenders: Array<{
             __typename?: 'Offender';
             id: string;
-            updatedAt: any;
+            updatedAt: Date;
             age?: Age | null;
             build?: Build | null;
             height?: Height | null;
-            dateOfBirth?: any | null;
+            dateOfBirth?: Date | null;
             name?: string | null;
             race?: Race | null;
             gender?: Gender | null;
@@ -60397,7 +60604,7 @@ export type FeedItemsQuery = {
       } | null;
       vehicle?: {
         __typename?: 'Vehicle';
-        updatedAt: any;
+        updatedAt: Date;
         totalOffenders?: number | null;
         totalUpdates?: number | null;
         registration?: string | null;
@@ -60419,7 +60626,7 @@ export type FeedItemsQuery = {
           text?: string | null;
           icon: UpdateIcon;
           type: UpdateType;
-          createdAt: any;
+          createdAt: Date;
           images: Array<{
             __typename?: 'Image';
             id: string;
@@ -60438,11 +60645,11 @@ export type FeedItemsQuery = {
             totalRecoveredValue?: number | null;
             totalTheftSuccess?: number | null;
             totalValue?: number | null;
-            updatedAt: any;
+            updatedAt: Date;
           }>;
           linkedVehicles: Array<{
             __typename?: 'Vehicle';
-            updatedAt: any;
+            updatedAt: Date;
             totalOffenders?: number | null;
             registration?: string | null;
             reference?: number | null;
@@ -60475,11 +60682,11 @@ export type FeedItemsQuery = {
           linkedOffenders: Array<{
             __typename?: 'Offender';
             id: string;
-            updatedAt: any;
+            updatedAt: Date;
             age?: Age | null;
             build?: Build | null;
             height?: Height | null;
-            dateOfBirth?: any | null;
+            dateOfBirth?: Date | null;
             name?: string | null;
             race?: Race | null;
             gender?: Gender | null;
@@ -60514,7 +60721,7 @@ export type FeedItemsQuery = {
         totalCrimeGroups?: number | null;
         totalUpdates?: number | null;
         description?: string | null;
-        updatedAt: any;
+        updatedAt: Date;
         createdBy: {
           __typename?: 'User';
           id: string;
@@ -60532,7 +60739,7 @@ export type FeedItemsQuery = {
           text?: string | null;
           icon: UpdateIcon;
           type: UpdateType;
-          createdAt: any;
+          createdAt: Date;
           images: Array<{
             __typename?: 'Image';
             id: string;
@@ -60551,11 +60758,11 @@ export type FeedItemsQuery = {
             totalRecoveredValue?: number | null;
             totalTheftSuccess?: number | null;
             totalValue?: number | null;
-            updatedAt: any;
+            updatedAt: Date;
           }>;
           linkedVehicles: Array<{
             __typename?: 'Vehicle';
-            updatedAt: any;
+            updatedAt: Date;
             totalOffenders?: number | null;
             registration?: string | null;
             reference?: number | null;
@@ -60588,11 +60795,11 @@ export type FeedItemsQuery = {
           linkedOffenders: Array<{
             __typename?: 'Offender';
             id: string;
-            updatedAt: any;
+            updatedAt: Date;
             age?: Age | null;
             build?: Build | null;
             height?: Height | null;
-            dateOfBirth?: any | null;
+            dateOfBirth?: Date | null;
             name?: string | null;
             race?: Race | null;
             gender?: Gender | null;
@@ -60626,7 +60833,7 @@ export type FeedItemsQuery = {
         reference?: number | null;
         description: string;
         dayTime?: string | null;
-        date: any;
+        date: Date;
         totalOffenders?: number | null;
         totalUpdates?: number | null;
         approved?: boolean | null;
@@ -60636,7 +60843,7 @@ export type FeedItemsQuery = {
           text?: string | null;
           icon: UpdateIcon;
           type: UpdateType;
-          createdAt: any;
+          createdAt: Date;
           images: Array<{
             __typename?: 'Image';
             id: string;
@@ -60655,11 +60862,11 @@ export type FeedItemsQuery = {
             totalRecoveredValue?: number | null;
             totalTheftSuccess?: number | null;
             totalValue?: number | null;
-            updatedAt: any;
+            updatedAt: Date;
           }>;
           linkedVehicles: Array<{
             __typename?: 'Vehicle';
-            updatedAt: any;
+            updatedAt: Date;
             totalOffenders?: number | null;
             registration?: string | null;
             reference?: number | null;
@@ -60692,11 +60899,11 @@ export type FeedItemsQuery = {
           linkedOffenders: Array<{
             __typename?: 'Offender';
             id: string;
-            updatedAt: any;
+            updatedAt: Date;
             age?: Age | null;
             build?: Build | null;
             height?: Height | null;
-            dateOfBirth?: any | null;
+            dateOfBirth?: Date | null;
             name?: string | null;
             race?: Race | null;
             gender?: Gender | null;
@@ -60745,13 +60952,13 @@ export type FeedItemsQuery = {
       offender?: {
         __typename?: 'Offender';
         id: string;
-        createdAt: any;
+        createdAt: Date;
         reference?: number | null;
-        updatedAt: any;
+        updatedAt: Date;
         age?: Age | null;
         build?: Build | null;
         height?: Height | null;
-        dateOfBirth?: any | null;
+        dateOfBirth?: Date | null;
         dateSource?: string | null;
         gender?: Gender | null;
         hair?: string | null;
@@ -60771,8 +60978,8 @@ export type FeedItemsQuery = {
           title?: string | null;
           location: string;
           description?: string | null;
-          startDate: any;
-          endDate: any;
+          startDate: Date;
+          endDate: Date;
         }>;
         lastActive?: {
           __typename?: 'Incident';
@@ -60785,7 +60992,7 @@ export type FeedItemsQuery = {
           text?: string | null;
           icon: UpdateIcon;
           type: UpdateType;
-          createdAt: any;
+          createdAt: Date;
           images: Array<{
             __typename?: 'Image';
             id: string;
@@ -60804,11 +61011,11 @@ export type FeedItemsQuery = {
             totalRecoveredValue?: number | null;
             totalTheftSuccess?: number | null;
             totalValue?: number | null;
-            updatedAt: any;
+            updatedAt: Date;
           }>;
           linkedVehicles: Array<{
             __typename?: 'Vehicle';
-            updatedAt: any;
+            updatedAt: Date;
             totalOffenders?: number | null;
             registration?: string | null;
             reference?: number | null;
@@ -60841,11 +61048,11 @@ export type FeedItemsQuery = {
           linkedOffenders: Array<{
             __typename?: 'Offender';
             id: string;
-            updatedAt: any;
+            updatedAt: Date;
             age?: Age | null;
             build?: Build | null;
             height?: Height | null;
-            dateOfBirth?: any | null;
+            dateOfBirth?: Date | null;
             name?: string | null;
             race?: Race | null;
             gender?: Gender | null;
@@ -61079,8 +61286,8 @@ export type CreateIncidentMutation = {
     subject?: string | null;
     description: string;
     dayTime?: string | null;
-    date: any;
-    time: any;
+    date: Date;
+    time: Date;
     value?: number | null;
     recoveredValue?: number | null;
     policeReported: boolean;
@@ -61115,12 +61322,12 @@ export type CreateIncidentMutation = {
     offenders: Array<{
       __typename?: 'Offender';
       id: string;
-      createdAt: any;
-      updatedAt: any;
+      createdAt: Date;
+      updatedAt: Date;
       age?: Age | null;
       build?: Build | null;
       height?: Height | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       dateSource?: string | null;
       gender?: Gender | null;
       hair?: string | null;
@@ -61191,8 +61398,8 @@ export type UpdateIncidentMutation = {
     subject?: string | null;
     description: string;
     dayTime?: string | null;
-    date: any;
-    time: any;
+    date: Date;
+    time: Date;
     value?: number | null;
     recoveredValue?: number | null;
     policeReported: boolean;
@@ -61228,17 +61435,18 @@ export type UpdateIncidentMutation = {
       optimised?: string | null;
       position: ImagePosition;
       url?: string | null;
+      card?: string | null;
     }>;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     offenders: Array<{
       __typename?: 'Offender';
       id: string;
-      createdAt: any;
-      updatedAt: any;
+      createdAt: Date;
+      updatedAt: Date;
       age?: Age | null;
       build?: Build | null;
       height?: Height | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       dateSource?: string | null;
       gender?: Gender | null;
       hair?: string | null;
@@ -61292,8 +61500,8 @@ export type EditIncidentQuery = {
     subject?: string | null;
     description: string;
     dayTime?: string | null;
-    date: any;
-    time: any;
+    date: Date;
+    time: Date;
     reference?: number | null;
     ref?: string | null;
     policeReported: boolean;
@@ -61373,7 +61581,7 @@ export type EditIncidentQuery = {
       totalCrimeGroups?: number | null;
       totalIncidents?: number | null;
       totalOffenders?: number | null;
-      updatedAt: any;
+      updatedAt: Date;
       images: Array<{
         __typename?: 'Image';
         id: string;
@@ -61386,12 +61594,12 @@ export type EditIncidentQuery = {
       __typename?: 'Offender';
       id: string;
       reference?: number | null;
-      createdAt: any;
-      updatedAt: any;
+      createdAt: Date;
+      updatedAt: Date;
       age?: Age | null;
       build?: Build | null;
       height?: Height | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       dateSource?: string | null;
       gender?: Gender | null;
       hair?: string | null;
@@ -61416,7 +61624,7 @@ export type EditIncidentQuery = {
       id: string;
       text?: string | null;
       type: UpdateType;
-      createdAt: any;
+      createdAt: Date;
       images: Array<{
         __typename?: 'Image';
         id: string;
@@ -61435,11 +61643,11 @@ export type EditIncidentQuery = {
         totalRecoveredValue?: number | null;
         totalTheftSuccess?: number | null;
         totalValue?: number | null;
-        updatedAt: any;
+        updatedAt: Date;
       }>;
       linkedVehicles: Array<{
         __typename?: 'Vehicle';
-        updatedAt: any;
+        updatedAt: Date;
         totalOffenders?: number | null;
         registration?: string | null;
         reference?: number | null;
@@ -61472,11 +61680,11 @@ export type EditIncidentQuery = {
       linkedOffenders: Array<{
         __typename?: 'Offender';
         id: string;
-        updatedAt: any;
+        updatedAt: Date;
         age?: Age | null;
         build?: Build | null;
         height?: Height | null;
-        dateOfBirth?: any | null;
+        dateOfBirth?: Date | null;
         name?: string | null;
         race?: Race | null;
         gender?: Gender | null;
@@ -61497,6 +61705,7 @@ export type EditIncidentQuery = {
           __typename?: 'Business';
           id: string;
           name: string;
+          fullName: string;
         }>;
       };
       replies: Array<{
@@ -61504,7 +61713,7 @@ export type EditIncidentQuery = {
         id: string;
         text?: string | null;
         type: UpdateType;
-        createdAt: any;
+        createdAt: Date;
         images: Array<{
           __typename?: 'Image';
           id: string;
@@ -61523,11 +61732,11 @@ export type EditIncidentQuery = {
           totalRecoveredValue?: number | null;
           totalTheftSuccess?: number | null;
           totalValue?: number | null;
-          updatedAt: any;
+          updatedAt: Date;
         }>;
         linkedVehicles: Array<{
           __typename?: 'Vehicle';
-          updatedAt: any;
+          updatedAt: Date;
           totalOffenders?: number | null;
           registration?: string | null;
           reference?: number | null;
@@ -61560,11 +61769,11 @@ export type EditIncidentQuery = {
         linkedOffenders: Array<{
           __typename?: 'Offender';
           id: string;
-          updatedAt: any;
+          updatedAt: Date;
           age?: Age | null;
           build?: Build | null;
           height?: Height | null;
-          dateOfBirth?: any | null;
+          dateOfBirth?: Date | null;
           name?: string | null;
           race?: Race | null;
           gender?: Gender | null;
@@ -61585,6 +61794,7 @@ export type EditIncidentQuery = {
             __typename?: 'Business';
             id: string;
             name: string;
+            fullName: string;
           }>;
         };
       }>;
@@ -61731,7 +61941,7 @@ export type ListUnapprovedIncidentsQuery = {
       id: string;
       subject?: string | null;
       dayTime?: string | null;
-      date: any;
+      date: Date;
       reference?: number | null;
       approved?: boolean | null;
       business?: { __typename?: 'Business'; id: string; name: string } | null;
@@ -61770,8 +61980,8 @@ export type ViewIncidentQuery = {
     subject?: string | null;
     description: string;
     dayTime?: string | null;
-    date: any;
-    time: any;
+    date: Date;
+    time: Date;
     reference?: number | null;
     ref?: string | null;
     policeReported: boolean;
@@ -61843,7 +62053,7 @@ export type ViewIncidentQuery = {
       totalCrimeGroups?: number | null;
       totalIncidents?: number | null;
       totalOffenders?: number | null;
-      updatedAt: any;
+      updatedAt: Date;
       images: Array<{
         __typename?: 'Image';
         id: string;
@@ -61856,12 +62066,12 @@ export type ViewIncidentQuery = {
       __typename?: 'Offender';
       id: string;
       reference?: number | null;
-      createdAt: any;
-      updatedAt: any;
+      createdAt: Date;
+      updatedAt: Date;
       age?: Age | null;
       build?: Build | null;
       height?: Height | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       dateSource?: string | null;
       gender?: Gender | null;
       hair?: string | null;
@@ -61886,7 +62096,7 @@ export type ViewIncidentQuery = {
       id: string;
       text?: string | null;
       type: UpdateType;
-      createdAt: any;
+      createdAt: Date;
       images: Array<{
         __typename?: 'Image';
         id: string;
@@ -61905,11 +62115,11 @@ export type ViewIncidentQuery = {
         totalRecoveredValue?: number | null;
         totalTheftSuccess?: number | null;
         totalValue?: number | null;
-        updatedAt: any;
+        updatedAt: Date;
       }>;
       linkedVehicles: Array<{
         __typename?: 'Vehicle';
-        updatedAt: any;
+        updatedAt: Date;
         totalOffenders?: number | null;
         registration?: string | null;
         reference?: number | null;
@@ -61942,11 +62152,11 @@ export type ViewIncidentQuery = {
       linkedOffenders: Array<{
         __typename?: 'Offender';
         id: string;
-        updatedAt: any;
+        updatedAt: Date;
         age?: Age | null;
         build?: Build | null;
         height?: Height | null;
-        dateOfBirth?: any | null;
+        dateOfBirth?: Date | null;
         name?: string | null;
         race?: Race | null;
         gender?: Gender | null;
@@ -61967,6 +62177,7 @@ export type ViewIncidentQuery = {
           __typename?: 'Business';
           id: string;
           name: string;
+          fullName: string;
         }>;
       };
       replies: Array<{
@@ -61974,7 +62185,7 @@ export type ViewIncidentQuery = {
         id: string;
         text?: string | null;
         type: UpdateType;
-        createdAt: any;
+        createdAt: Date;
         images: Array<{
           __typename?: 'Image';
           id: string;
@@ -61993,11 +62204,11 @@ export type ViewIncidentQuery = {
           totalRecoveredValue?: number | null;
           totalTheftSuccess?: number | null;
           totalValue?: number | null;
-          updatedAt: any;
+          updatedAt: Date;
         }>;
         linkedVehicles: Array<{
           __typename?: 'Vehicle';
-          updatedAt: any;
+          updatedAt: Date;
           totalOffenders?: number | null;
           registration?: string | null;
           reference?: number | null;
@@ -62030,11 +62241,11 @@ export type ViewIncidentQuery = {
         linkedOffenders: Array<{
           __typename?: 'Offender';
           id: string;
-          updatedAt: any;
+          updatedAt: Date;
           age?: Age | null;
           build?: Build | null;
           height?: Height | null;
-          dateOfBirth?: any | null;
+          dateOfBirth?: Date | null;
           name?: string | null;
           race?: Race | null;
           gender?: Gender | null;
@@ -62055,6 +62266,7 @@ export type ViewIncidentQuery = {
             __typename?: 'Business';
             id: string;
             name: string;
+            fullName: string;
           }>;
         };
       }>;
@@ -62178,7 +62390,7 @@ export type UpdateInvestigationMutation = {
       model?: string | null;
       colour?: string | null;
       registration?: string | null;
-      updatedAt: any;
+      updatedAt: Date;
       totalCrimeGroups?: number | null;
       totalOffenders?: number | null;
       totalIncidents?: number | null;
@@ -62197,7 +62409,7 @@ export type UpdateInvestigationMutation = {
       dayTime?: string | null;
       reference?: number | null;
       subject?: string | null;
-      date: any;
+      date: Date;
       value?: number | null;
       recoveredValue?: number | null;
       createdBy: { __typename?: 'User'; organisation: string };
@@ -62254,7 +62466,7 @@ export type InvestigationSuggestionsQuery = {
       name?: string | null;
       alias: Array<string>;
       reference?: number | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       age?: Age | null;
       gender?: Gender | null;
       build?: Build | null;
@@ -62352,7 +62564,7 @@ export type InvestigationSuggestionsQuery = {
         race?: Race | null;
         build?: Build | null;
         height?: Height | null;
-        dateOfBirth?: any | null;
+        dateOfBirth?: Date | null;
         hair?: string | null;
         peculiarities?: string | null;
         alias: Array<string>;
@@ -62420,7 +62632,7 @@ export type ViewInvestigationQuery = {
       model?: string | null;
       colour?: string | null;
       registration?: string | null;
-      updatedAt: any;
+      updatedAt: Date;
       totalCrimeGroups?: number | null;
       totalOffenders?: number | null;
       totalIncidents?: number | null;
@@ -62431,7 +62643,7 @@ export type ViewInvestigationQuery = {
       id: string;
       text?: string | null;
       type: UpdateType;
-      createdAt: any;
+      createdAt: Date;
       images: Array<{
         __typename?: 'Image';
         id: string;
@@ -62451,11 +62663,11 @@ export type ViewInvestigationQuery = {
         totalRecoveredValue?: number | null;
         totalTheftSuccess?: number | null;
         totalValue?: number | null;
-        updatedAt: any;
+        updatedAt: Date;
       }>;
       linkedVehicles: Array<{
         __typename?: 'Vehicle';
-        updatedAt: any;
+        updatedAt: Date;
         totalOffenders?: number | null;
         registration?: string | null;
         reference?: number | null;
@@ -62490,11 +62702,11 @@ export type ViewInvestigationQuery = {
       linkedOffenders: Array<{
         __typename?: 'Offender';
         id: string;
-        updatedAt: any;
+        updatedAt: Date;
         age?: Age | null;
         build?: Build | null;
         height?: Height | null;
-        dateOfBirth?: any | null;
+        dateOfBirth?: Date | null;
         name?: string | null;
         race?: Race | null;
         gender?: Gender | null;
@@ -62516,6 +62728,7 @@ export type ViewInvestigationQuery = {
           __typename?: 'Business';
           id: string;
           name: string;
+          fullName: string;
         }>;
       };
       replies: Array<{
@@ -62523,7 +62736,7 @@ export type ViewInvestigationQuery = {
         id: string;
         text?: string | null;
         type: UpdateType;
-        createdAt: any;
+        createdAt: Date;
         images: Array<{
           __typename?: 'Image';
           id: string;
@@ -62543,11 +62756,11 @@ export type ViewInvestigationQuery = {
           totalRecoveredValue?: number | null;
           totalTheftSuccess?: number | null;
           totalValue?: number | null;
-          updatedAt: any;
+          updatedAt: Date;
         }>;
         linkedVehicles: Array<{
           __typename?: 'Vehicle';
-          updatedAt: any;
+          updatedAt: Date;
           totalOffenders?: number | null;
           registration?: string | null;
           reference?: number | null;
@@ -62581,11 +62794,11 @@ export type ViewInvestigationQuery = {
         linkedOffenders: Array<{
           __typename?: 'Offender';
           id: string;
-          updatedAt: any;
+          updatedAt: Date;
           age?: Age | null;
           build?: Build | null;
           height?: Height | null;
-          dateOfBirth?: any | null;
+          dateOfBirth?: Date | null;
           name?: string | null;
           race?: Race | null;
           gender?: Gender | null;
@@ -62607,6 +62820,7 @@ export type ViewInvestigationQuery = {
             __typename?: 'Business';
             id: string;
             name: string;
+            fullName: string;
           }>;
         };
       }>;
@@ -62622,7 +62836,7 @@ export type ViewInvestigationQuery = {
       race?: Race | null;
       build?: Build | null;
       height?: Height | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       images: Array<{
         __typename?: 'Image';
         id: string;
@@ -62638,7 +62852,7 @@ export type ViewInvestigationQuery = {
       dayTime?: string | null;
       reference?: number | null;
       subject?: string | null;
-      date: any;
+      date: Date;
       totalValue?: number | null;
       totalRecoveredValue?: number | null;
       createdBy: { __typename?: 'User'; organisation: string };
@@ -62658,7 +62872,7 @@ export type ViewInvestigationQuery = {
     }>;
     flows: Array<{
       __typename?: 'Flow';
-      updatedAt: any;
+      updatedAt: Date;
       name: string;
       id: string;
       description?: string | null;
@@ -62697,7 +62911,7 @@ export type CreateMessageMutation = {
     __typename?: 'MessageItem';
     id: string;
     content: string;
-    createdAt: any;
+    createdAt: Date;
     currentUser?: boolean | null;
     formattedDateTime?: string | null;
     sent: boolean;
@@ -62765,11 +62979,11 @@ export type CreateMessageMutation = {
     offenders: Array<{
       __typename?: 'Offender';
       id: string;
-      updatedAt: any;
+      updatedAt: Date;
       age?: Age | null;
       build?: Build | null;
       height?: Height | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       name?: string | null;
       race?: Race | null;
       gender?: Gender | null;
@@ -62805,7 +63019,7 @@ export type UpdateMessageMutation = {
     id: string;
     sent?: boolean | null;
     content: string;
-    createdAt: any;
+    createdAt: Date;
     from: {
       __typename?: 'User';
       id: string;
@@ -62863,11 +63077,11 @@ export type UpdateMessageMutation = {
     offenders: Array<{
       __typename?: 'Offender';
       id: string;
-      updatedAt: any;
+      updatedAt: Date;
       age?: Age | null;
       build?: Build | null;
       height?: Height | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       name?: string | null;
       race?: Race | null;
       gender?: Gender | null;
@@ -62894,7 +63108,7 @@ export type ChatMessagesQuery = {
     __typename?: 'MessageItem';
     id: string;
     content: string;
-    createdAt: any;
+    createdAt: Date;
     currentUser?: boolean | null;
     formattedDateTime?: string | null;
     sent: boolean;
@@ -62962,11 +63176,11 @@ export type ChatMessagesQuery = {
     offenders: Array<{
       __typename?: 'Offender';
       id: string;
-      updatedAt: any;
+      updatedAt: Date;
       age?: Age | null;
       build?: Build | null;
       height?: Height | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       name?: string | null;
       race?: Race | null;
       gender?: Gender | null;
@@ -62993,7 +63207,7 @@ export type MessagesQuery = {
     id: string;
     sent?: boolean | null;
     content: string;
-    createdAt: any;
+    createdAt: Date;
     from: {
       __typename?: 'User';
       id: string;
@@ -63018,11 +63232,11 @@ export type MessagesQuery = {
       totalRecoveredValue?: number | null;
       totalTheftSuccess?: number | null;
       totalValue?: number | null;
-      updatedAt: any;
+      updatedAt: Date;
     }>;
     vehicles: Array<{
       __typename?: 'Vehicle';
-      updatedAt: any;
+      updatedAt: Date;
       totalOffenders?: number | null;
       registration?: string | null;
       reference?: number | null;
@@ -63055,11 +63269,11 @@ export type MessagesQuery = {
     offenders: Array<{
       __typename?: 'Offender';
       id: string;
-      updatedAt: any;
+      updatedAt: Date;
       age?: Age | null;
       build?: Build | null;
       height?: Height | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       name?: string | null;
       race?: Race | null;
       gender?: Gender | null;
@@ -63085,7 +63299,7 @@ export type MessagesSubscriptionSubscription = {
     __typename?: 'MessageItem';
     id: string;
     content: string;
-    createdAt: any;
+    createdAt: Date;
     currentUser?: boolean | null;
     formattedDateTime?: string | null;
     sent: boolean;
@@ -63115,11 +63329,11 @@ export type MessagesSubscriptionSubscription = {
       totalRecoveredValue?: number | null;
       totalTheftSuccess?: number | null;
       totalValue?: number | null;
-      updatedAt: any;
+      updatedAt: Date;
     }>;
     vehicles: Array<{
       __typename?: 'Vehicle';
-      updatedAt: any;
+      updatedAt: Date;
       totalOffenders?: number | null;
       registration?: string | null;
       reference?: number | null;
@@ -63152,11 +63366,11 @@ export type MessagesSubscriptionSubscription = {
     offenders: Array<{
       __typename?: 'Offender';
       id: string;
-      updatedAt: any;
+      updatedAt: Date;
       age?: Age | null;
       build?: Build | null;
       height?: Height | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       name?: string | null;
       race?: Race | null;
       gender?: Gender | null;
@@ -63233,7 +63447,7 @@ export type FetchMg11Query = {
     civilProceedingsRelease?: string | null;
     witnessServiceDisclose?: boolean | null;
     witnessSignature?: string | null;
-    witnessSignatureDate?: any | null;
+    witnessSignatureDate?: Date | null;
     interviewerSignature?: string | null;
     station?: string | null;
     statementWhereWhen?: string | null;
@@ -63270,12 +63484,12 @@ export type CreateOffenderMutation = {
   createOffender?: {
     __typename?: 'Offender';
     id: string;
-    createdAt: any;
-    updatedAt: any;
+    createdAt: Date;
+    updatedAt: Date;
     age?: Age | null;
     build?: Build | null;
     height?: Height | null;
-    dateOfBirth?: any | null;
+    dateOfBirth?: Date | null;
     dateSource?: string | null;
     hair?: string | null;
     gender?: Gender | null;
@@ -63301,8 +63515,8 @@ export type CreateOffenderMutation = {
       title?: string | null;
       location: string;
       description?: string | null;
-      startDate: any;
-      endDate: any;
+      startDate: Date;
+      endDate: Date;
       type?: BanType | null;
     }>;
     createdBy: {
@@ -63316,7 +63530,7 @@ export type CreateOffenderMutation = {
       id: string;
       subject?: string | null;
       description: string;
-      date: any;
+      date: Date;
       dayTime?: string | null;
       crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
       location?: {
@@ -63376,6 +63590,19 @@ export type SubscribeToOffenderMutation = {
   } | null;
 };
 
+export type UnsubscribeFromOffenderMutationVariables = Exact<{
+  where: OffenderWhereUniqueInput;
+}>;
+
+export type UnsubscribeFromOffenderMutation = {
+  __typename?: 'Mutation';
+  unsubscribeFromOffender?: {
+    __typename?: 'Offender';
+    id: string;
+    subscribed?: boolean | null;
+  } | null;
+};
+
 export type UpdateOffenderMutationVariables = Exact<{
   where: UniqueId;
   data: OffenderUpdateInput;
@@ -63386,12 +63613,12 @@ export type UpdateOffenderMutation = {
   updateOffender?: {
     __typename?: 'Offender';
     id: string;
-    createdAt: any;
-    updatedAt: any;
+    createdAt: Date;
+    updatedAt: Date;
     age?: Age | null;
     build?: Build | null;
     height?: Height | null;
-    dateOfBirth?: any | null;
+    dateOfBirth?: Date | null;
     dateSource?: string | null;
     hair?: string | null;
     gender?: Gender | null;
@@ -63416,8 +63643,8 @@ export type UpdateOffenderMutation = {
       id: string;
       location: string;
       description?: string | null;
-      startDate: any;
-      endDate: any;
+      startDate: Date;
+      endDate: Date;
       type?: BanType | null;
     }>;
     createdBy: {
@@ -63449,7 +63676,7 @@ export type AssociatedOffendersQuery = {
       name?: string | null;
       alias: Array<string>;
       reference?: number | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       age?: Age | null;
       gender?: Gender | null;
       build?: Build | null;
@@ -63513,11 +63740,11 @@ export type ViewOffenderCompareQuery = {
   offender?: {
     __typename?: 'Offender';
     id: string;
-    updatedAt: any;
+    updatedAt: Date;
     age?: Age | null;
     build?: Build | null;
     height?: Height | null;
-    dateOfBirth?: any | null;
+    dateOfBirth?: Date | null;
     dateSource?: string | null;
     hair?: string | null;
     gender?: Gender | null;
@@ -63556,13 +63783,13 @@ export type ListOffendersQuery = {
       __typename?: 'Offender';
       id: string;
       reference?: number | null;
-      createdAt: any;
-      updatedAt: any;
+      createdAt: Date;
+      updatedAt: Date;
       totalIncidents?: number | null;
       age?: Age | null;
       build?: Build | null;
       height?: Height | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       dateSource?: string | null;
       hair?: string | null;
       gender?: Gender | null;
@@ -63602,7 +63829,7 @@ export type ListOffendersQuery = {
         subject?: string | null;
         description: string;
         dayTime?: string | null;
-        date: any;
+        date: Date;
         approved?: boolean | null;
         crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
         location?: {
@@ -63658,14 +63885,14 @@ export type OffenderFeedQuery = {
   offenderFeed?: Array<{
     __typename?: 'Offender';
     id: string;
-    createdAt: any;
-    updatedAt: any;
+    createdAt: Date;
+    updatedAt: Date;
     totalIncidents?: number | null;
     reference?: number | null;
     age?: Age | null;
     build?: Build | null;
     height?: Height | null;
-    dateOfBirth?: any | null;
+    dateOfBirth?: Date | null;
     dateSource?: string | null;
     gender?: Gender | null;
     hair?: string | null;
@@ -63803,11 +64030,11 @@ export type SearchOffendersQuery = {
     offenders: Array<{
       __typename?: 'Offender';
       id: string;
-      updatedAt: any;
+      updatedAt: Date;
       age?: Age | null;
       build?: Build | null;
       height?: Height | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       dateSource?: string | null;
       hair?: string | null;
       gender?: Gender | null;
@@ -63852,12 +64079,12 @@ export type ViewOffenderQuery = {
     __typename?: 'Offender';
     id: string;
     alias: Array<string>;
-    createdAt: any;
-    updatedAt: any;
+    createdAt: Date;
+    updatedAt: Date;
     age?: Age | null;
     build?: Build | null;
     height?: Height | null;
-    dateOfBirth?: any | null;
+    dateOfBirth?: Date | null;
     dateSource?: string | null;
     hair?: string | null;
     gender?: Gender | null;
@@ -63919,8 +64146,8 @@ export type ViewOffenderQuery = {
       title?: string | null;
       location: string;
       description?: string | null;
-      startDate: any;
-      endDate: any;
+      startDate: Date;
+      endDate: Date;
       type?: BanType | null;
     }>;
     crimeGroups: Array<{
@@ -63945,7 +64172,7 @@ export type ViewOffenderQuery = {
       totalCrimeGroups?: number | null;
       totalIncidents?: number | null;
       totalOffenders?: number | null;
-      updatedAt: any;
+      updatedAt: Date;
     }>;
     createdBy: {
       __typename?: 'User';
@@ -63958,7 +64185,7 @@ export type ViewOffenderQuery = {
       id: string;
       reference?: number | null;
       dayTime?: string | null;
-      date: any;
+      date: Date;
       crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
       createdBy: {
         __typename?: 'User';
@@ -63967,6 +64194,7 @@ export type ViewOffenderQuery = {
           __typename?: 'Business';
           id: string;
           name: string;
+          fullName: string;
         }>;
       };
       location?: {
@@ -63982,7 +64210,7 @@ export type ViewOffenderQuery = {
       id: string;
       text?: string | null;
       type: UpdateType;
-      createdAt: any;
+      createdAt: Date;
       images: Array<{
         __typename?: 'Image';
         id: string;
@@ -64001,11 +64229,11 @@ export type ViewOffenderQuery = {
         totalRecoveredValue?: number | null;
         totalTheftSuccess?: number | null;
         totalValue?: number | null;
-        updatedAt: any;
+        updatedAt: Date;
       }>;
       linkedVehicles: Array<{
         __typename?: 'Vehicle';
-        updatedAt: any;
+        updatedAt: Date;
         totalOffenders?: number | null;
         registration?: string | null;
         reference?: number | null;
@@ -64038,11 +64266,11 @@ export type ViewOffenderQuery = {
       linkedOffenders: Array<{
         __typename?: 'Offender';
         id: string;
-        updatedAt: any;
+        updatedAt: Date;
         age?: Age | null;
         build?: Build | null;
         height?: Height | null;
-        dateOfBirth?: any | null;
+        dateOfBirth?: Date | null;
         name?: string | null;
         race?: Race | null;
         gender?: Gender | null;
@@ -64063,6 +64291,7 @@ export type ViewOffenderQuery = {
           __typename?: 'Business';
           id: string;
           name: string;
+          fullName: string;
         }>;
       };
       replies: Array<{
@@ -64070,7 +64299,7 @@ export type ViewOffenderQuery = {
         id: string;
         text?: string | null;
         type: UpdateType;
-        createdAt: any;
+        createdAt: Date;
         images: Array<{
           __typename?: 'Image';
           id: string;
@@ -64089,11 +64318,11 @@ export type ViewOffenderQuery = {
           totalRecoveredValue?: number | null;
           totalTheftSuccess?: number | null;
           totalValue?: number | null;
-          updatedAt: any;
+          updatedAt: Date;
         }>;
         linkedVehicles: Array<{
           __typename?: 'Vehicle';
-          updatedAt: any;
+          updatedAt: Date;
           totalOffenders?: number | null;
           registration?: string | null;
           reference?: number | null;
@@ -64126,11 +64355,11 @@ export type ViewOffenderQuery = {
         linkedOffenders: Array<{
           __typename?: 'Offender';
           id: string;
-          updatedAt: any;
+          updatedAt: Date;
           age?: Age | null;
           build?: Build | null;
           height?: Height | null;
-          dateOfBirth?: any | null;
+          dateOfBirth?: Date | null;
           name?: string | null;
           race?: Race | null;
           gender?: Gender | null;
@@ -64151,6 +64380,7 @@ export type ViewOffenderQuery = {
             __typename?: 'Business';
             id: string;
             name: string;
+            fullName: string;
           }>;
         };
       }>;
@@ -64218,7 +64448,7 @@ export type RecycledItemQuery = {
     incident?: {
       __typename?: 'Incident';
       id: string;
-      date: any;
+      date: Date;
       recycled: boolean;
       subject?: string | null;
       createdBy: {
@@ -64247,7 +64477,7 @@ export type RecycledItemQuery = {
       incidents: Array<{
         __typename?: 'Incident';
         id: string;
-        date: any;
+        date: Date;
         location?: {
           __typename?: 'Address';
           id: string;
@@ -64273,8 +64503,8 @@ export type RecycledItemsQuery = {
   recycledItems?: Array<{
     __typename?: 'RecycledItem';
     id: string;
-    deletedAt: any;
-    expiresAt: any;
+    deletedAt: Date;
+    expiresAt: Date;
     systemTask: boolean;
     deletedBy?: {
       __typename?: 'User';
@@ -64285,7 +64515,7 @@ export type RecycledItemsQuery = {
     incident?: {
       __typename?: 'Incident';
       id: string;
-      date: any;
+      date: Date;
       recycled: boolean;
       subject?: string | null;
       createdBy: {
@@ -64314,7 +64544,7 @@ export type RecycledItemsQuery = {
       incidents: Array<{
         __typename?: 'Incident';
         id: string;
-        date: any;
+        date: Date;
         location?: {
           __typename?: 'Address';
           id: string;
@@ -64411,8 +64641,8 @@ export type CreateReportTemplateMutation = {
     layout: Array<{
       __typename?: 'ReportLayout';
       id: string;
-      createdAt: any;
-      updatedAt: any;
+      createdAt: Date;
+      updatedAt: Date;
       h: number;
       w: number;
       x: number;
@@ -64444,8 +64674,8 @@ export type UpdateReportTemplateMutation = {
     layout: Array<{
       __typename?: 'ReportLayout';
       id: string;
-      createdAt: any;
-      updatedAt: any;
+      createdAt: Date;
+      updatedAt: Date;
       h: number;
       w: number;
       x: number;
@@ -64531,7 +64761,7 @@ export type TargetedBusinessReportQuery = {
       __typename?: 'IncidentSummary';
       totalIncidents: number;
       mostCommonCrimeType: string;
-      lastIncidentDate?: any | null;
+      lastIncidentDate?: Date | null;
       incidentsWherePoliceAttended: number;
       incidentsReportedToPolice: number;
     } | null;
@@ -64547,7 +64777,7 @@ export type TargetedBusinessReportQuery = {
         __typename?: 'Incident';
         id: string;
         reference?: number | null;
-        date: any;
+        date: Date;
         totalOffenders?: number | null;
         policeReported: boolean;
         policeInvolved: boolean;
@@ -64636,7 +64866,7 @@ export type CrimeGroupReportQuery = {
       __typename?: 'IncidentSummary';
       mostCommonCrimeType: string;
       totalIncidents: number;
-      lastIncidentDate?: any | null;
+      lastIncidentDate?: Date | null;
       incidentsWherePoliceAttended: number;
       incidentsReportedToPolice: number;
     } | null;
@@ -64652,7 +64882,7 @@ export type CrimeGroupReportQuery = {
         __typename?: 'Incident';
         id: string;
         reference?: number | null;
-        date: any;
+        date: Date;
         totalOffenders?: number | null;
         policeReported: boolean;
         policeInvolved: boolean;
@@ -64699,7 +64929,7 @@ export type CrimeGroupReportQuery = {
       totalLostValue: number;
       totalRecoveredValue: number;
       totalSuccessRate: number;
-      lastIncidentDate?: any | null;
+      lastIncidentDate?: Date | null;
     }>;
   } | null;
   businessContribution?: {
@@ -64773,7 +65003,7 @@ export type OffenderProfileQuery = {
   offender?: {
     __typename?: 'Offender';
     age?: Age | null;
-    dateOfBirth?: any | null;
+    dateOfBirth?: Date | null;
     dateSource?: string | null;
     gender?: Gender | null;
     hair?: string | null;
@@ -64788,13 +65018,13 @@ export type OffenderProfileQuery = {
     totalRecoveredValue?: number | null;
     totalTheftSuccess?: number | null;
     totalValue?: number | null;
-    updatedAt: any;
+    updatedAt: Date;
     bans: Array<{
       __typename?: 'Ban';
       id: string;
-      endDate: any;
+      endDate: Date;
       active: boolean;
-      startDate: any;
+      startDate: Date;
       title?: string | null;
     }>;
     crimeGroups: Array<{
@@ -64847,7 +65077,7 @@ export type OffenderProfileQuery = {
       __typename?: 'Incident';
       id: string;
       dayTime?: string | null;
-      date: any;
+      date: Date;
       value?: number | null;
       recoveredValue?: number | null;
       reference?: number | null;
@@ -64859,6 +65089,7 @@ export type OffenderProfileQuery = {
           __typename?: 'Business';
           id: string;
           name: string;
+          fullName: string;
         }>;
       };
     }>;
@@ -64866,7 +65097,7 @@ export type OffenderProfileQuery = {
       __typename?: 'Incident';
       id: string;
       dayTime?: string | null;
-      date: any;
+      date: Date;
       value?: number | null;
       recoveredValue?: number | null;
       reference?: number | null;
@@ -64878,6 +65109,7 @@ export type OffenderProfileQuery = {
           __typename?: 'Business';
           id: string;
           name: string;
+          fullName: string;
         }>;
       };
     } | null;
@@ -64931,7 +65163,7 @@ export type OffenderReportQuery = {
       __typename?: 'IncidentSummary';
       totalIncidents: number;
       mostCommonCrimeType: string;
-      lastIncidentDate?: any | null;
+      lastIncidentDate?: Date | null;
       incidentsWherePoliceAttended: number;
       incidentsReportedToPolice: number;
     } | null;
@@ -64947,7 +65179,7 @@ export type OffenderReportQuery = {
         __typename?: 'Incident';
         id: string;
         reference?: number | null;
-        date: any;
+        date: Date;
         totalOffenders?: number | null;
         policeReported: boolean;
         policeInvolved: boolean;
@@ -64982,7 +65214,7 @@ export type OffenderReportQuery = {
       age?: Age | null;
       dateSource?: string | null;
       peculiarities?: string | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       build?: Build | null;
       height?: Height | null;
       hair?: string | null;
@@ -65057,7 +65289,7 @@ export type PerformanceReportQuery = {
     incidentSummary?: {
       __typename?: 'IncidentSummary';
       totalIncidents: number;
-      lastIncidentDate?: any | null;
+      lastIncidentDate?: Date | null;
       incidentsReportedToPolice: number;
       incidentsWherePoliceAttended: number;
       mostCommonCrimeType: string;
@@ -65108,7 +65340,7 @@ export type PerformanceReportQuery = {
       totalLostValue: number;
       totalRecoveredValue: number;
       totalSuccessRate: number;
-      lastIncidentDate?: any | null;
+      lastIncidentDate?: Date | null;
     }>;
   } | null;
   businessContribution?: {
@@ -65141,7 +65373,7 @@ export type PerformanceReportQuery = {
       totalOffenders: number;
       totalLostValue: number;
       totalIncidents: number;
-      lastIncident?: any | null;
+      lastIncident?: Date | null;
       alias: string;
       alertId: string;
     }>;
@@ -65509,8 +65741,8 @@ export type CreateTodoMutation = {
     __typename?: 'Todo';
     type?: TodoType | null;
     description?: string | null;
-    dueDate?: any | null;
-    completedDate?: any | null;
+    dueDate?: Date | null;
+    completedDate?: Date | null;
     completed?: boolean | null;
     id: string;
     name?: string | null;
@@ -65530,8 +65762,8 @@ export type UpdateTodoMutation = {
     __typename?: 'Todo';
     type?: TodoType | null;
     description?: string | null;
-    dueDate?: any | null;
-    completedDate?: any | null;
+    dueDate?: Date | null;
+    completedDate?: Date | null;
     completed?: boolean | null;
     id: string;
     name?: string | null;
@@ -65550,8 +65782,8 @@ export type UpdateTodoMentionMutation = {
   updateTodoMention?: Array<{
     __typename?: 'Todo';
     description?: string | null;
-    dueDate?: any | null;
-    completedDate?: any | null;
+    dueDate?: Date | null;
+    completedDate?: Date | null;
     completed?: boolean | null;
     id: string;
     name?: string | null;
@@ -65579,8 +65811,8 @@ export type ListTodosQuery = {
       __typename?: 'Todo';
       type?: TodoType | null;
       description?: string | null;
-      dueDate?: any | null;
-      completedDate?: any | null;
+      dueDate?: Date | null;
+      completedDate?: Date | null;
       id: string;
       name?: string | null;
       completed?: boolean | null;
@@ -65606,8 +65838,8 @@ export type ListTodosQuery = {
       __typename?: 'Todo';
       type?: TodoType | null;
       description?: string | null;
-      dueDate?: any | null;
-      completedDate?: any | null;
+      dueDate?: Date | null;
+      completedDate?: Date | null;
       id: string;
       name?: string | null;
       completed?: boolean | null;
@@ -65638,14 +65870,14 @@ export type CreateUpdateOnCrimeGroupMutation = {
     id: string;
     text?: string | null;
     type: UpdateType;
-    createdAt: any;
+    createdAt: Date;
     images: Array<{
       __typename?: 'Image';
       id: string;
       url?: string | null;
       optimised?: string | null;
-      card?: string | null;
       position: ImagePosition;
+      card?: string | null;
     }>;
     linkedCrimeGroups: Array<{
       __typename?: 'CrimeGroup';
@@ -65657,11 +65889,11 @@ export type CreateUpdateOnCrimeGroupMutation = {
       totalRecoveredValue?: number | null;
       totalTheftSuccess?: number | null;
       totalValue?: number | null;
-      updatedAt: any;
+      updatedAt: Date;
     }>;
     linkedVehicles: Array<{
       __typename?: 'Vehicle';
-      updatedAt: any;
+      updatedAt: Date;
       totalOffenders?: number | null;
       registration?: string | null;
       reference?: number | null;
@@ -65694,11 +65926,11 @@ export type CreateUpdateOnCrimeGroupMutation = {
     linkedOffenders: Array<{
       __typename?: 'Offender';
       id: string;
-      updatedAt: any;
+      updatedAt: Date;
       age?: Age | null;
       build?: Build | null;
       height?: Height | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       name?: string | null;
       race?: Race | null;
       gender?: Gender | null;
@@ -65715,21 +65947,26 @@ export type CreateUpdateOnCrimeGroupMutation = {
       origName: string;
       id: string;
       fullName: string;
-      businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
+      businesses: Array<{
+        __typename?: 'Business';
+        id: string;
+        name: string;
+        fullName: string;
+      }>;
     };
     replies: Array<{
       __typename?: 'Update';
       id: string;
       text?: string | null;
       type: UpdateType;
-      createdAt: any;
+      createdAt: Date;
       images: Array<{
         __typename?: 'Image';
         id: string;
         url?: string | null;
         optimised?: string | null;
-        position: ImagePosition;
         card?: string | null;
+        position: ImagePosition;
       }>;
       linkedCrimeGroups: Array<{
         __typename?: 'CrimeGroup';
@@ -65741,11 +65978,11 @@ export type CreateUpdateOnCrimeGroupMutation = {
         totalRecoveredValue?: number | null;
         totalTheftSuccess?: number | null;
         totalValue?: number | null;
-        updatedAt: any;
+        updatedAt: Date;
       }>;
       linkedVehicles: Array<{
         __typename?: 'Vehicle';
-        updatedAt: any;
+        updatedAt: Date;
         totalOffenders?: number | null;
         registration?: string | null;
         reference?: number | null;
@@ -65778,11 +66015,11 @@ export type CreateUpdateOnCrimeGroupMutation = {
       linkedOffenders: Array<{
         __typename?: 'Offender';
         id: string;
-        updatedAt: any;
+        updatedAt: Date;
         age?: Age | null;
         build?: Build | null;
         height?: Height | null;
-        dateOfBirth?: any | null;
+        dateOfBirth?: Date | null;
         name?: string | null;
         race?: Race | null;
         gender?: Gender | null;
@@ -65803,6 +66040,7 @@ export type CreateUpdateOnCrimeGroupMutation = {
           __typename?: 'Business';
           id: string;
           name: string;
+          fullName: string;
         }>;
       };
     }>;
@@ -65821,14 +66059,14 @@ export type CreateUpdateOnIncidentMutation = {
     id: string;
     text?: string | null;
     type: UpdateType;
-    createdAt: any;
+    createdAt: Date;
     images: Array<{
       __typename?: 'Image';
       id: string;
       url?: string | null;
       optimised?: string | null;
-      card?: string | null;
       position: ImagePosition;
+      card?: string | null;
     }>;
     linkedCrimeGroups: Array<{
       __typename?: 'CrimeGroup';
@@ -65840,11 +66078,11 @@ export type CreateUpdateOnIncidentMutation = {
       totalRecoveredValue?: number | null;
       totalTheftSuccess?: number | null;
       totalValue?: number | null;
-      updatedAt: any;
+      updatedAt: Date;
     }>;
     linkedVehicles: Array<{
       __typename?: 'Vehicle';
-      updatedAt: any;
+      updatedAt: Date;
       totalOffenders?: number | null;
       registration?: string | null;
       reference?: number | null;
@@ -65855,9 +66093,9 @@ export type CreateUpdateOnIncidentMutation = {
       images: Array<{
         __typename?: 'Image';
         id: string;
+        url?: string | null;
         optimised?: string | null;
         position: ImagePosition;
-        url?: string | null;
       }>;
     }>;
     linkedIncidents: Array<{
@@ -65877,11 +66115,11 @@ export type CreateUpdateOnIncidentMutation = {
     linkedOffenders: Array<{
       __typename?: 'Offender';
       id: string;
-      updatedAt: any;
+      updatedAt: Date;
       age?: Age | null;
       build?: Build | null;
       height?: Height | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       name?: string | null;
       race?: Race | null;
       gender?: Gender | null;
@@ -65898,21 +66136,26 @@ export type CreateUpdateOnIncidentMutation = {
       origName: string;
       id: string;
       fullName: string;
-      businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
+      businesses: Array<{
+        __typename?: 'Business';
+        id: string;
+        name: string;
+        fullName: string;
+      }>;
     };
     replies: Array<{
       __typename?: 'Update';
       id: string;
       text?: string | null;
       type: UpdateType;
-      createdAt: any;
+      createdAt: Date;
       images: Array<{
         __typename?: 'Image';
         id: string;
         url?: string | null;
         optimised?: string | null;
-        position: ImagePosition;
         card?: string | null;
+        position: ImagePosition;
       }>;
       linkedCrimeGroups: Array<{
         __typename?: 'CrimeGroup';
@@ -65924,11 +66167,11 @@ export type CreateUpdateOnIncidentMutation = {
         totalRecoveredValue?: number | null;
         totalTheftSuccess?: number | null;
         totalValue?: number | null;
-        updatedAt: any;
+        updatedAt: Date;
       }>;
       linkedVehicles: Array<{
         __typename?: 'Vehicle';
-        updatedAt: any;
+        updatedAt: Date;
         totalOffenders?: number | null;
         registration?: string | null;
         reference?: number | null;
@@ -65961,11 +66204,11 @@ export type CreateUpdateOnIncidentMutation = {
       linkedOffenders: Array<{
         __typename?: 'Offender';
         id: string;
-        updatedAt: any;
+        updatedAt: Date;
         age?: Age | null;
         build?: Build | null;
         height?: Height | null;
-        dateOfBirth?: any | null;
+        dateOfBirth?: Date | null;
         name?: string | null;
         race?: Race | null;
         gender?: Gender | null;
@@ -65986,6 +66229,7 @@ export type CreateUpdateOnIncidentMutation = {
           __typename?: 'Business';
           id: string;
           name: string;
+          fullName: string;
         }>;
       };
     }>;
@@ -66004,14 +66248,44 @@ export type CreateUpdateOnInvestigationMutation = {
     id: string;
     text?: string | null;
     type: UpdateType;
-    createdAt: any;
+    createdAt: Date;
     images: Array<{
       __typename?: 'Image';
       id: string;
       url?: string | null;
       optimised?: string | null;
-      card?: string | null;
       position: ImagePosition;
+      card?: string | null;
+    }>;
+    linkedCrimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      totalOffenders?: number | null;
+      totalIncidents?: number | null;
+      alias?: string | null;
+      id: string;
+      reference?: number | null;
+      totalRecoveredValue?: number | null;
+      totalTheftSuccess?: number | null;
+      totalValue?: number | null;
+      updatedAt: Date;
+    }>;
+    linkedVehicles: Array<{
+      __typename?: 'Vehicle';
+      updatedAt: Date;
+      totalOffenders?: number | null;
+      registration?: string | null;
+      reference?: number | null;
+      model?: string | null;
+      make?: string | null;
+      id: string;
+      colour?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+        position: ImagePosition;
+      }>;
     }>;
     linkedIncidents: Array<{
       __typename?: 'Incident';
@@ -66030,44 +66304,14 @@ export type CreateUpdateOnInvestigationMutation = {
     linkedOffenders: Array<{
       __typename?: 'Offender';
       id: string;
-      updatedAt: any;
+      updatedAt: Date;
       age?: Age | null;
       build?: Build | null;
       height?: Height | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       name?: string | null;
       race?: Race | null;
       gender?: Gender | null;
-      images: Array<{
-        __typename?: 'Image';
-        id: string;
-        url?: string | null;
-        optimised?: string | null;
-        position: ImagePosition;
-      }>;
-    }>;
-    linkedCrimeGroups: Array<{
-      __typename?: 'CrimeGroup';
-      totalOffenders?: number | null;
-      totalIncidents?: number | null;
-      alias?: string | null;
-      id: string;
-      reference?: number | null;
-      totalRecoveredValue?: number | null;
-      totalTheftSuccess?: number | null;
-      totalValue?: number | null;
-      updatedAt: any;
-    }>;
-    linkedVehicles: Array<{
-      __typename?: 'Vehicle';
-      updatedAt: any;
-      totalOffenders?: number | null;
-      registration?: string | null;
-      reference?: number | null;
-      model?: string | null;
-      make?: string | null;
-      id: string;
-      colour?: string | null;
       images: Array<{
         __typename?: 'Image';
         id: string;
@@ -66081,14 +66325,19 @@ export type CreateUpdateOnInvestigationMutation = {
       origName: string;
       id: string;
       fullName: string;
-      businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
+      businesses: Array<{
+        __typename?: 'Business';
+        id: string;
+        name: string;
+        fullName: string;
+      }>;
     };
     replies: Array<{
       __typename?: 'Update';
       id: string;
       text?: string | null;
       type: UpdateType;
-      createdAt: any;
+      createdAt: Date;
       images: Array<{
         __typename?: 'Image';
         id: string;
@@ -66107,11 +66356,11 @@ export type CreateUpdateOnInvestigationMutation = {
         totalRecoveredValue?: number | null;
         totalTheftSuccess?: number | null;
         totalValue?: number | null;
-        updatedAt: any;
+        updatedAt: Date;
       }>;
       linkedVehicles: Array<{
         __typename?: 'Vehicle';
-        updatedAt: any;
+        updatedAt: Date;
         totalOffenders?: number | null;
         registration?: string | null;
         reference?: number | null;
@@ -66144,11 +66393,11 @@ export type CreateUpdateOnInvestigationMutation = {
       linkedOffenders: Array<{
         __typename?: 'Offender';
         id: string;
-        updatedAt: any;
+        updatedAt: Date;
         age?: Age | null;
         build?: Build | null;
         height?: Height | null;
-        dateOfBirth?: any | null;
+        dateOfBirth?: Date | null;
         name?: string | null;
         race?: Race | null;
         gender?: Gender | null;
@@ -66169,6 +66418,7 @@ export type CreateUpdateOnInvestigationMutation = {
           __typename?: 'Business';
           id: string;
           name: string;
+          fullName: string;
         }>;
       };
     }>;
@@ -66187,14 +66437,14 @@ export type CreateUpdateOnOffenderMutation = {
     id: string;
     text?: string | null;
     type: UpdateType;
-    createdAt: any;
+    createdAt: Date;
     images: Array<{
       __typename?: 'Image';
       id: string;
       url?: string | null;
       optimised?: string | null;
-      card?: string | null;
       position: ImagePosition;
+      card?: string | null;
     }>;
     linkedCrimeGroups: Array<{
       __typename?: 'CrimeGroup';
@@ -66206,11 +66456,11 @@ export type CreateUpdateOnOffenderMutation = {
       totalRecoveredValue?: number | null;
       totalTheftSuccess?: number | null;
       totalValue?: number | null;
-      updatedAt: any;
+      updatedAt: Date;
     }>;
     linkedVehicles: Array<{
       __typename?: 'Vehicle';
-      updatedAt: any;
+      updatedAt: Date;
       totalOffenders?: number | null;
       registration?: string | null;
       reference?: number | null;
@@ -66221,8 +66471,8 @@ export type CreateUpdateOnOffenderMutation = {
       images: Array<{
         __typename?: 'Image';
         id: string;
-        optimised?: string | null;
         url?: string | null;
+        optimised?: string | null;
         position: ImagePosition;
       }>;
     }>;
@@ -66243,11 +66493,11 @@ export type CreateUpdateOnOffenderMutation = {
     linkedOffenders: Array<{
       __typename?: 'Offender';
       id: string;
-      updatedAt: any;
+      updatedAt: Date;
       age?: Age | null;
       build?: Build | null;
       height?: Height | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       name?: string | null;
       race?: Race | null;
       gender?: Gender | null;
@@ -66264,14 +66514,19 @@ export type CreateUpdateOnOffenderMutation = {
       origName: string;
       id: string;
       fullName: string;
-      businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
+      businesses: Array<{
+        __typename?: 'Business';
+        id: string;
+        name: string;
+        fullName: string;
+      }>;
     };
     replies: Array<{
       __typename?: 'Update';
       id: string;
       text?: string | null;
       type: UpdateType;
-      createdAt: any;
+      createdAt: Date;
       images: Array<{
         __typename?: 'Image';
         id: string;
@@ -66290,11 +66545,11 @@ export type CreateUpdateOnOffenderMutation = {
         totalRecoveredValue?: number | null;
         totalTheftSuccess?: number | null;
         totalValue?: number | null;
-        updatedAt: any;
+        updatedAt: Date;
       }>;
       linkedVehicles: Array<{
         __typename?: 'Vehicle';
-        updatedAt: any;
+        updatedAt: Date;
         totalOffenders?: number | null;
         registration?: string | null;
         reference?: number | null;
@@ -66327,11 +66582,11 @@ export type CreateUpdateOnOffenderMutation = {
       linkedOffenders: Array<{
         __typename?: 'Offender';
         id: string;
-        updatedAt: any;
+        updatedAt: Date;
         age?: Age | null;
         build?: Build | null;
         height?: Height | null;
-        dateOfBirth?: any | null;
+        dateOfBirth?: Date | null;
         name?: string | null;
         race?: Race | null;
         gender?: Gender | null;
@@ -66352,6 +66607,7 @@ export type CreateUpdateOnOffenderMutation = {
           __typename?: 'Business';
           id: string;
           name: string;
+          fullName: string;
         }>;
       };
     }>;
@@ -66370,14 +66626,14 @@ export type CreateUpdateOnVehicleMutation = {
     id: string;
     text?: string | null;
     type: UpdateType;
-    createdAt: any;
+    createdAt: Date;
     images: Array<{
       __typename?: 'Image';
       id: string;
       url?: string | null;
       optimised?: string | null;
-      card?: string | null;
       position: ImagePosition;
+      card?: string | null;
     }>;
     linkedCrimeGroups: Array<{
       __typename?: 'CrimeGroup';
@@ -66389,11 +66645,11 @@ export type CreateUpdateOnVehicleMutation = {
       totalRecoveredValue?: number | null;
       totalTheftSuccess?: number | null;
       totalValue?: number | null;
-      updatedAt: any;
+      updatedAt: Date;
     }>;
     linkedVehicles: Array<{
       __typename?: 'Vehicle';
-      updatedAt: any;
+      updatedAt: Date;
       totalOffenders?: number | null;
       registration?: string | null;
       reference?: number | null;
@@ -66426,11 +66682,11 @@ export type CreateUpdateOnVehicleMutation = {
     linkedOffenders: Array<{
       __typename?: 'Offender';
       id: string;
-      updatedAt: any;
+      updatedAt: Date;
       age?: Age | null;
       build?: Build | null;
       height?: Height | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       name?: string | null;
       race?: Race | null;
       gender?: Gender | null;
@@ -66447,21 +66703,26 @@ export type CreateUpdateOnVehicleMutation = {
       origName: string;
       id: string;
       fullName: string;
-      businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
+      businesses: Array<{
+        __typename?: 'Business';
+        id: string;
+        name: string;
+        fullName: string;
+      }>;
     };
     replies: Array<{
       __typename?: 'Update';
       id: string;
       text?: string | null;
       type: UpdateType;
-      createdAt: any;
+      createdAt: Date;
       images: Array<{
         __typename?: 'Image';
         id: string;
         url?: string | null;
         optimised?: string | null;
-        position: ImagePosition;
         card?: string | null;
+        position: ImagePosition;
       }>;
       linkedCrimeGroups: Array<{
         __typename?: 'CrimeGroup';
@@ -66473,11 +66734,11 @@ export type CreateUpdateOnVehicleMutation = {
         totalRecoveredValue?: number | null;
         totalTheftSuccess?: number | null;
         totalValue?: number | null;
-        updatedAt: any;
+        updatedAt: Date;
       }>;
       linkedVehicles: Array<{
         __typename?: 'Vehicle';
-        updatedAt: any;
+        updatedAt: Date;
         totalOffenders?: number | null;
         registration?: string | null;
         reference?: number | null;
@@ -66510,11 +66771,11 @@ export type CreateUpdateOnVehicleMutation = {
       linkedOffenders: Array<{
         __typename?: 'Offender';
         id: string;
-        updatedAt: any;
+        updatedAt: Date;
         age?: Age | null;
         build?: Build | null;
         height?: Height | null;
-        dateOfBirth?: any | null;
+        dateOfBirth?: Date | null;
         name?: string | null;
         race?: Race | null;
         gender?: Gender | null;
@@ -66535,6 +66796,7 @@ export type CreateUpdateOnVehicleMutation = {
           __typename?: 'Business';
           id: string;
           name: string;
+          fullName: string;
         }>;
       };
     }>;
@@ -66674,6 +66936,7 @@ export type CurrentUserQuery = {
       __typename?: 'Business';
       id: string;
       name: string;
+      fullName: string;
       demId?: string | null;
     }>;
     groups: Array<{
@@ -66768,8 +67031,8 @@ export type CreateUserChatMutation = {
     id: string;
     newMessages?: boolean | null;
     mentioned?: boolean | null;
-    updatedAt: any;
-    createdAt: any;
+    updatedAt: Date;
+    createdAt: Date;
     user: {
       __typename?: 'User';
       id: string;
@@ -66788,7 +67051,7 @@ export type CreateUserChatMutation = {
         __typename?: 'Message';
         id: string;
         content: string;
-        createdAt: any;
+        createdAt: Date;
         from: {
           __typename?: 'User';
           id: string;
@@ -66853,8 +67116,8 @@ export type UpdateUserChatMutation = {
       id: string;
       newMessages?: boolean | null;
       mentioned?: boolean | null;
-      updatedAt: any;
-      createdAt: any;
+      updatedAt: Date;
+      createdAt: Date;
       user: {
         __typename?: 'User';
         id: string;
@@ -66871,7 +67134,7 @@ export type UpdateUserChatMutation = {
           __typename?: 'Message';
           id: string;
           content: string;
-          createdAt: any;
+          createdAt: Date;
           from: {
             __typename?: 'User';
             id: string;
@@ -66931,8 +67194,8 @@ export type UserChatsQuery = {
       id: string;
       newMessages?: boolean | null;
       mentioned?: boolean | null;
-      updatedAt: any;
-      createdAt: any;
+      updatedAt: Date;
+      createdAt: Date;
       chat: {
         __typename?: 'Chat';
         id: string;
@@ -66943,7 +67206,7 @@ export type UserChatsQuery = {
           __typename?: 'Message';
           id: string;
           content: string;
-          createdAt: any;
+          createdAt: Date;
           from: { __typename?: 'User'; id: string; origName: string };
           images: Array<{ __typename?: 'Image'; id: string }>;
           incidents: Array<{ __typename?: 'Incident'; id: string }>;
@@ -66966,12 +67229,12 @@ export type UpdateUserNotificationsMutation = {
     __typename?: 'UserNotification';
     id: string;
     read: boolean;
-    createdAt: any;
+    createdAt: Date;
     notification: {
       __typename?: 'Notification';
       id: string;
       crimeGroupId?: string | null;
-      createdAt: any;
+      createdAt: Date;
       chatId?: string | null;
       body?: string | null;
       articleId?: string | null;
@@ -66992,32 +67255,31 @@ export type UpdateUserNotificationsMutation = {
   } | null> | null;
 };
 
-export type UserNotificationsQueryVariables = Exact<{
-  where: UserWhereUniqueInput;
+export type ListUserNotificationsQueryVariables = Exact<{
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<UserNotificationWhereInput>;
   orderBy?: InputMaybe<
     | Array<UserNotificationOrderByWithRelationInput>
     | UserNotificationOrderByWithRelationInput
   >;
-  notificationWhere?: InputMaybe<UserNotificationWhereInput>;
 }>;
 
-export type UserNotificationsQuery = {
+export type ListUserNotificationsQuery = {
   __typename?: 'Query';
-  user?: {
-    __typename?: 'User';
-    id: string;
-    totalNotifications?: number | null;
-    totalUnreadNotifications?: number | null;
+  listUserNotifications: {
+    __typename?: 'ListUserNotifications';
+    total: number;
     notifications: Array<{
       __typename?: 'UserNotification';
       id: string;
       read: boolean;
-      createdAt: any;
+      createdAt: Date;
       notification: {
         __typename?: 'Notification';
         id: string;
         crimeGroupId?: string | null;
-        createdAt: any;
+        createdAt: Date;
         chatId?: string | null;
         body?: string | null;
         articleId?: string | null;
@@ -67055,6 +67317,73 @@ export type UserNotificationsQuery = {
         } | null;
       };
     }>;
+  };
+};
+
+export type UserNotificationsQueryVariables = Exact<{
+  where: UserWhereUniqueInput;
+  orderBy?: InputMaybe<
+    | Array<UserNotificationOrderByWithRelationInput>
+    | UserNotificationOrderByWithRelationInput
+  >;
+  notificationWhere?: InputMaybe<UserNotificationWhereInput>;
+}>;
+
+export type UserNotificationsQuery = {
+  __typename?: 'Query';
+  user?: {
+    __typename?: 'User';
+    id: string;
+    totalNotifications?: number | null;
+    totalUnreadNotifications?: number | null;
+    notifications: Array<{
+      __typename?: 'UserNotification';
+      id: string;
+      read: boolean;
+      createdAt: Date;
+      notification: {
+        __typename?: 'Notification';
+        id: string;
+        crimeGroupId?: string | null;
+        createdAt: Date;
+        chatId?: string | null;
+        body?: string | null;
+        articleId?: string | null;
+        incidentId?: string | null;
+        investigationId?: string | null;
+        offenderId?: string | null;
+        title?: string | null;
+        type?: Model | null;
+        vehicleId?: string | null;
+        userId?: string | null;
+        schemes: Array<{
+          __typename?: 'Scheme';
+          id: string;
+          name: string;
+          autoApproveIncidents: boolean;
+          autoApproveOffenders: boolean;
+          defaultPublicOffenderDOB: boolean;
+          userTodos?: number | null;
+          userNotifications?: number | null;
+          logo?: {
+            __typename?: 'Image';
+            optimisedPersisted?: string | null;
+            id: string;
+          } | null;
+          darkLogo?: {
+            __typename?: 'Image';
+            id: string;
+            optimisedPersisted?: string | null;
+          } | null;
+          members: Array<{ __typename?: 'UserScheme'; id: string; role: Role }>;
+        }>;
+        ban?: {
+          __typename?: 'Ban';
+          id: string;
+          offender: { __typename?: 'Offender'; id: string };
+        } | null;
+      };
+    }>;
   } | null;
 };
 
@@ -67083,7 +67412,7 @@ export type CreateUserInDatabaseMutation = {
     }>;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     approverGroups: Array<{ __typename?: 'Group'; id: string; name: string }>;
-    loginEvents: Array<{ __typename?: 'LoginEvent'; loginTime: any }>;
+    loginEvents: Array<{ __typename?: 'LoginEvent'; loginTime: Date }>;
   } | null;
 };
 
@@ -67113,7 +67442,7 @@ export type InviteExistingUserMutation = {
     }>;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     approverGroups: Array<{ __typename?: 'Group'; id: string; name: string }>;
-    loginEvents: Array<{ __typename?: 'LoginEvent'; loginTime: any }>;
+    loginEvents: Array<{ __typename?: 'LoginEvent'; loginTime: Date }>;
   } | null;
 };
 
@@ -67133,7 +67462,7 @@ export type ListBusinessUsersQuery = {
     fullName: string;
     status?: string | null;
     publicName: boolean;
-    loginEvents: Array<{ __typename?: 'LoginEvent'; loginTime: any }>;
+    loginEvents: Array<{ __typename?: 'LoginEvent'; loginTime: Date }>;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
   }>;
 };
@@ -67308,7 +67637,7 @@ export type CreateVehicleMutation = {
     totalIncidents?: number | null;
     totalCrimeGroups?: number | null;
     reference?: number | null;
-    updatedAt: any;
+    updatedAt: Date;
     colour?: string | null;
     images: Array<{
       __typename?: 'Image';
@@ -67377,7 +67706,7 @@ export type UnsubscribeToVehicleMutation = {
 
 export type UpdateVehicleMutationVariables = Exact<{
   where: UniqueId;
-  data: CreateVehicleDataInput;
+  data: VehicleUpdateInput;
 }>;
 
 export type UpdateVehicleMutation = {
@@ -67391,7 +67720,7 @@ export type UpdateVehicleMutation = {
     reference?: number | null;
     totalOffenders?: number | null;
     totalIncidents?: number | null;
-    updatedAt: any;
+    updatedAt: Date;
     colour?: string | null;
     images: Array<{
       __typename?: 'Image';
@@ -67399,7 +67728,15 @@ export type UpdateVehicleMutation = {
       optimised?: string | null;
       url?: string | null;
       position: ImagePosition;
+      policeImage?: boolean | null;
+      primary?: boolean | null;
     }>;
+    customGalleries: Array<{
+      __typename?: 'CustomGallery';
+      id: string;
+      name: string;
+    }>;
+    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     incidents: Array<{
       __typename?: 'Incident';
       id: string;
@@ -67440,7 +67777,7 @@ export type ListVehiclesQuery = {
       totalOffenders?: number | null;
       totalIncidents?: number | null;
       reference?: number | null;
-      updatedAt: any;
+      updatedAt: Date;
       colour?: string | null;
       images: Array<{
         __typename?: 'Image';
@@ -67485,26 +67822,29 @@ export type VehicleQuery = {
     totalCrimeGroups?: number | null;
     reference?: number | null;
     subscribed?: boolean | null;
-    updatedAt: any;
+    updatedAt: Date;
     colour?: string | null;
     customGalleries: Array<{
       __typename?: 'CustomGallery';
       id: string;
       name: string;
     }>;
+    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     images: Array<{
       __typename?: 'Image';
       id: string;
       optimised?: string | null;
       url?: string | null;
       position: ImagePosition;
+      policeImage?: boolean | null;
+      primary?: boolean | null;
     }>;
     incidents: Array<{
       __typename?: 'Incident';
       id: string;
       reference?: number | null;
       dayTime?: string | null;
-      date: any;
+      date: Date;
       policeRef?: string | null;
       subject?: string | null;
       value?: number | null;
@@ -67516,6 +67856,7 @@ export type VehicleQuery = {
           __typename?: 'Business';
           id: string;
           name: string;
+          fullName: string;
         }>;
       };
     }>;
@@ -67527,7 +67868,7 @@ export type VehicleQuery = {
       hair?: string | null;
       peculiarities?: string | null;
       race?: Race | null;
-      dateOfBirth?: any | null;
+      dateOfBirth?: Date | null;
       dateSource?: string | null;
       build?: Build | null;
       height?: Height | null;
@@ -67565,7 +67906,7 @@ export type VehicleQuery = {
       id: string;
       text?: string | null;
       type: UpdateType;
-      createdAt: any;
+      createdAt: Date;
       images: Array<{
         __typename?: 'Image';
         id: string;
@@ -67584,11 +67925,11 @@ export type VehicleQuery = {
         totalRecoveredValue?: number | null;
         totalTheftSuccess?: number | null;
         totalValue?: number | null;
-        updatedAt: any;
+        updatedAt: Date;
       }>;
       linkedVehicles: Array<{
         __typename?: 'Vehicle';
-        updatedAt: any;
+        updatedAt: Date;
         totalOffenders?: number | null;
         registration?: string | null;
         reference?: number | null;
@@ -67621,11 +67962,11 @@ export type VehicleQuery = {
       linkedOffenders: Array<{
         __typename?: 'Offender';
         id: string;
-        updatedAt: any;
+        updatedAt: Date;
         age?: Age | null;
         build?: Build | null;
         height?: Height | null;
-        dateOfBirth?: any | null;
+        dateOfBirth?: Date | null;
         name?: string | null;
         race?: Race | null;
         gender?: Gender | null;
@@ -67646,6 +67987,7 @@ export type VehicleQuery = {
           __typename?: 'Business';
           id: string;
           name: string;
+          fullName: string;
         }>;
       };
       replies: Array<{
@@ -67653,7 +67995,7 @@ export type VehicleQuery = {
         id: string;
         text?: string | null;
         type: UpdateType;
-        createdAt: any;
+        createdAt: Date;
         images: Array<{
           __typename?: 'Image';
           id: string;
@@ -67672,11 +68014,11 @@ export type VehicleQuery = {
           totalRecoveredValue?: number | null;
           totalTheftSuccess?: number | null;
           totalValue?: number | null;
-          updatedAt: any;
+          updatedAt: Date;
         }>;
         linkedVehicles: Array<{
           __typename?: 'Vehicle';
-          updatedAt: any;
+          updatedAt: Date;
           totalOffenders?: number | null;
           registration?: string | null;
           reference?: number | null;
@@ -67709,11 +68051,11 @@ export type VehicleQuery = {
         linkedOffenders: Array<{
           __typename?: 'Offender';
           id: string;
-          updatedAt: any;
+          updatedAt: Date;
           age?: Age | null;
           build?: Build | null;
           height?: Height | null;
-          dateOfBirth?: any | null;
+          dateOfBirth?: Date | null;
           name?: string | null;
           race?: Race | null;
           gender?: Gender | null;
@@ -67734,6 +68076,7 @@ export type VehicleQuery = {
             __typename?: 'Business';
             id: string;
             name: string;
+            fullName: string;
           }>;
         };
       }>;
@@ -69171,6 +69514,7 @@ export const BusinessReportDocument = gql`
             id
             name
             fullName
+            fullName
           }
         }
       }
@@ -70257,6 +70601,7 @@ export const CrimeGroupDocument = gql`
           businesses {
             id
             name
+            fullName
           }
         }
         location {
@@ -70341,6 +70686,7 @@ export const CrimeGroupDocument = gql`
           businesses {
             id
             name
+            fullName
           }
         }
         replies {
@@ -70418,6 +70764,7 @@ export const CrimeGroupDocument = gql`
             businesses {
               id
               name
+              fullName
             }
           }
         }
@@ -72139,6 +72486,7 @@ export const UpdateIncidentDocument = gql`
         optimised
         position
         url
+        card
       }
       groups {
         id
@@ -72460,6 +72808,7 @@ export const EditIncidentDocument = gql`
           businesses {
             id
             name
+            fullName
           }
         }
         replies {
@@ -72543,6 +72892,7 @@ export const EditIncidentDocument = gql`
             businesses {
               id
               name
+              fullName
             }
           }
         }
@@ -73121,6 +73471,7 @@ export const ViewIncidentDocument = gql`
           businesses {
             id
             name
+            fullName
           }
         }
         replies {
@@ -73204,6 +73555,7 @@ export const ViewIncidentDocument = gql`
             businesses {
               id
               name
+              fullName
             }
           }
         }
@@ -73880,6 +74232,7 @@ export const ViewInvestigationDocument = gql`
           businesses {
             id
             name
+            fullName
           }
         }
         replies {
@@ -73960,6 +74313,7 @@ export const ViewInvestigationDocument = gql`
             businesses {
               id
               name
+              fullName
             }
           }
         }
@@ -75044,6 +75398,39 @@ export type SubscribeToOffenderMutationOptions = Apollo.BaseMutationOptions<
   SubscribeToOffenderMutation,
   SubscribeToOffenderMutationVariables
 >;
+export const UnsubscribeFromOffenderDocument = gql`
+  mutation UnsubscribeFromOffender($where: OffenderWhereUniqueInput!) {
+    unsubscribeFromOffender(where: $where) {
+      id
+      subscribed
+    }
+  }
+`;
+export type UnsubscribeFromOffenderMutationFn = Apollo.MutationFunction<
+  UnsubscribeFromOffenderMutation,
+  UnsubscribeFromOffenderMutationVariables
+>;
+export function useUnsubscribeFromOffenderMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UnsubscribeFromOffenderMutation,
+    UnsubscribeFromOffenderMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UnsubscribeFromOffenderMutation,
+    UnsubscribeFromOffenderMutationVariables
+  >(UnsubscribeFromOffenderDocument, options);
+}
+export type UnsubscribeFromOffenderMutationHookResult = ReturnType<
+  typeof useUnsubscribeFromOffenderMutation
+>;
+export type UnsubscribeFromOffenderMutationResult =
+  Apollo.MutationResult<UnsubscribeFromOffenderMutation>;
+export type UnsubscribeFromOffenderMutationOptions = Apollo.BaseMutationOptions<
+  UnsubscribeFromOffenderMutation,
+  UnsubscribeFromOffenderMutationVariables
+>;
 export const UpdateOffenderDocument = gql`
   mutation updateOffender($where: UniqueId!, $data: OffenderUpdateInput!) {
     updateOffender(where: $where, data: $data) {
@@ -75866,6 +76253,7 @@ export const ViewOffenderDocument = gql`
           businesses {
             id
             name
+            fullName
           }
         }
         location {
@@ -75954,6 +76342,7 @@ export const ViewOffenderDocument = gql`
           businesses {
             id
             name
+            fullName
           }
         }
         replies {
@@ -76031,6 +76420,7 @@ export const ViewOffenderDocument = gql`
             businesses {
               id
               name
+              fullName
             }
           }
         }
@@ -77131,6 +77521,7 @@ export const OffenderProfileDocument = gql`
           businesses {
             id
             name
+            fullName
           }
         }
       }
@@ -77147,6 +77538,7 @@ export const OffenderProfileDocument = gql`
           businesses {
             id
             name
+            fullName
           }
         }
         value
@@ -78414,8 +78806,8 @@ export const CreateUpdateOnCrimeGroupDocument = gql`
         id
         url
         optimised
-        card
         position
+        card
       }
       linkedCrimeGroups {
         totalOffenders
@@ -78480,6 +78872,7 @@ export const CreateUpdateOnCrimeGroupDocument = gql`
         businesses {
           id
           name
+          fullName
         }
       }
       replies {
@@ -78491,8 +78884,8 @@ export const CreateUpdateOnCrimeGroupDocument = gql`
           id
           url
           optimised
-          position
           card
+          position
         }
         linkedCrimeGroups {
           totalOffenders
@@ -78557,6 +78950,7 @@ export const CreateUpdateOnCrimeGroupDocument = gql`
           businesses {
             id
             name
+            fullName
           }
         }
       }
@@ -78603,8 +78997,8 @@ export const CreateUpdateOnIncidentDocument = gql`
         id
         url
         optimised
-        card
         position
+        card
       }
       linkedCrimeGroups {
         totalOffenders
@@ -78618,6 +79012,12 @@ export const CreateUpdateOnIncidentDocument = gql`
         updatedAt
       }
       linkedVehicles {
+        images {
+          id
+          url
+          optimised
+          position
+        }
         updatedAt
         totalOffenders
         registration
@@ -78626,12 +79026,6 @@ export const CreateUpdateOnIncidentDocument = gql`
         make
         id
         colour
-        images {
-          id
-          optimised
-          position
-          url
-        }
       }
       linkedIncidents {
         id
@@ -78669,6 +79063,7 @@ export const CreateUpdateOnIncidentDocument = gql`
         businesses {
           id
           name
+          fullName
         }
       }
       replies {
@@ -78680,8 +79075,8 @@ export const CreateUpdateOnIncidentDocument = gql`
           id
           url
           optimised
-          position
           card
+          position
         }
         linkedCrimeGroups {
           totalOffenders
@@ -78695,6 +79090,12 @@ export const CreateUpdateOnIncidentDocument = gql`
           updatedAt
         }
         linkedVehicles {
+          images {
+            id
+            url
+            optimised
+            position
+          }
           updatedAt
           totalOffenders
           registration
@@ -78703,12 +79104,6 @@ export const CreateUpdateOnIncidentDocument = gql`
           make
           id
           colour
-          images {
-            id
-            url
-            optimised
-            position
-          }
         }
         linkedIncidents {
           id
@@ -78746,6 +79141,7 @@ export const CreateUpdateOnIncidentDocument = gql`
           businesses {
             id
             name
+            fullName
           }
         }
       }
@@ -78791,8 +79187,35 @@ export const CreateUpdateOnInvestigationDocument = gql`
         id
         url
         optimised
-        card
         position
+        card
+      }
+      linkedCrimeGroups {
+        totalOffenders
+        totalIncidents
+        alias
+        id
+        reference
+        totalRecoveredValue
+        totalTheftSuccess
+        totalValue
+        updatedAt
+      }
+      linkedVehicles {
+        images {
+          id
+          url
+          optimised
+          position
+        }
+        updatedAt
+        totalOffenders
+        registration
+        reference
+        model
+        make
+        id
+        colour
       }
       linkedIncidents {
         id
@@ -78823,33 +79246,6 @@ export const CreateUpdateOnInvestigationDocument = gql`
           position
         }
       }
-      linkedCrimeGroups {
-        totalOffenders
-        totalIncidents
-        alias
-        id
-        reference
-        totalRecoveredValue
-        totalTheftSuccess
-        totalValue
-        updatedAt
-      }
-      linkedVehicles {
-        images {
-          id
-          url
-          optimised
-          position
-        }
-        updatedAt
-        totalOffenders
-        registration
-        reference
-        model
-        make
-        id
-        colour
-      }
       createdBy {
         origName
         id
@@ -78857,6 +79253,7 @@ export const CreateUpdateOnInvestigationDocument = gql`
         businesses {
           id
           name
+          fullName
         }
       }
       replies {
@@ -78934,6 +79331,7 @@ export const CreateUpdateOnInvestigationDocument = gql`
           businesses {
             id
             name
+            fullName
           }
         }
       }
@@ -78980,8 +79378,8 @@ export const CreateUpdateOnOffenderDocument = gql`
         id
         url
         optimised
-        card
         position
+        card
       }
       linkedCrimeGroups {
         totalOffenders
@@ -78995,6 +79393,12 @@ export const CreateUpdateOnOffenderDocument = gql`
         updatedAt
       }
       linkedVehicles {
+        images {
+          id
+          url
+          optimised
+          position
+        }
         updatedAt
         totalOffenders
         registration
@@ -79003,12 +79407,6 @@ export const CreateUpdateOnOffenderDocument = gql`
         make
         id
         colour
-        images {
-          id
-          optimised
-          url
-          position
-        }
       }
       linkedIncidents {
         id
@@ -79046,6 +79444,7 @@ export const CreateUpdateOnOffenderDocument = gql`
         businesses {
           id
           name
+          fullName
         }
       }
       replies {
@@ -79123,6 +79522,7 @@ export const CreateUpdateOnOffenderDocument = gql`
           businesses {
             id
             name
+            fullName
           }
         }
       }
@@ -79168,8 +79568,8 @@ export const CreateUpdateOnVehicleDocument = gql`
         id
         url
         optimised
-        card
         position
+        card
       }
       linkedCrimeGroups {
         totalOffenders
@@ -79234,6 +79634,7 @@ export const CreateUpdateOnVehicleDocument = gql`
         businesses {
           id
           name
+          fullName
         }
       }
       replies {
@@ -79245,8 +79646,8 @@ export const CreateUpdateOnVehicleDocument = gql`
           id
           url
           optimised
-          position
           card
+          position
         }
         linkedCrimeGroups {
           totalOffenders
@@ -79311,6 +79712,7 @@ export const CreateUpdateOnVehicleDocument = gql`
           businesses {
             id
             name
+            fullName
           }
         }
       }
@@ -79630,6 +80032,7 @@ export const CurrentUserDocument = gql`
       businesses {
         id
         name
+        fullName
         demId
       }
       newUser
@@ -80112,6 +80515,100 @@ export type UpdateUserNotificationsMutationOptions = Apollo.BaseMutationOptions<
   UpdateUserNotificationsMutation,
   UpdateUserNotificationsMutationVariables
 >;
+export const ListUserNotificationsDocument = gql`
+  query listUserNotifications(
+    $take: Int
+    $skip: Int
+    $where: UserNotificationWhereInput
+    $orderBy: [UserNotificationOrderByWithRelationInput!]
+  ) {
+    listUserNotifications(
+      take: $take
+      skip: $skip
+      where: $where
+      orderBy: $orderBy
+    ) {
+      notifications {
+        id
+        read
+        createdAt
+        notification {
+          id
+          crimeGroupId
+          createdAt
+          chatId
+          body
+          articleId
+          incidentId
+          investigationId
+          offenderId
+          schemes {
+            id
+            name
+            autoApproveIncidents
+            autoApproveOffenders
+            defaultPublicOffenderDOB
+            userTodos
+            userNotifications
+            logo {
+              optimisedPersisted
+              id
+            }
+            darkLogo {
+              id
+              optimisedPersisted
+            }
+          }
+          title
+          type
+          vehicleId
+          ban {
+            id
+            offender {
+              id
+            }
+          }
+          userId
+        }
+      }
+      total
+    }
+  }
+`;
+export function useListUserNotificationsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    ListUserNotificationsQuery,
+    ListUserNotificationsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    ListUserNotificationsQuery,
+    ListUserNotificationsQueryVariables
+  >(ListUserNotificationsDocument, options);
+}
+export function useListUserNotificationsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListUserNotificationsQuery,
+    ListUserNotificationsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ListUserNotificationsQuery,
+    ListUserNotificationsQueryVariables
+  >(ListUserNotificationsDocument, options);
+}
+export type ListUserNotificationsQueryHookResult = ReturnType<
+  typeof useListUserNotificationsQuery
+>;
+export type ListUserNotificationsLazyQueryHookResult = ReturnType<
+  typeof useListUserNotificationsLazyQuery
+>;
+export type ListUserNotificationsQueryResult = Apollo.QueryResult<
+  ListUserNotificationsQuery,
+  ListUserNotificationsQueryVariables
+>;
 export const UserNotificationsDocument = gql`
   query userNotifications(
     $where: UserWhereUniqueInput!
@@ -80151,6 +80648,10 @@ export const UserNotificationsDocument = gql`
             darkLogo {
               id
               optimisedPersisted
+            }
+            members {
+              id
+              role
             }
           }
           title
@@ -80844,7 +81345,7 @@ export type UnsubscribeToVehicleMutationOptions = Apollo.BaseMutationOptions<
   UnsubscribeToVehicleMutationVariables
 >;
 export const UpdateVehicleDocument = gql`
-  mutation updateVehicle($where: UniqueId!, $data: CreateVehicleDataInput!) {
+  mutation updateVehicle($where: UniqueId!, $data: VehicleUpdateInput!) {
     updateVehicle(where: $where, data: $data) {
       id
       make
@@ -80858,6 +81359,16 @@ export const UpdateVehicleDocument = gql`
         optimised
         url
         position
+        policeImage
+        primary
+      }
+      customGalleries {
+        id
+        name
+      }
+      groups {
+        id
+        name
       }
       incidents {
         id
@@ -80993,11 +81504,17 @@ export const VehicleDocument = gql`
         id
         name
       }
+      groups {
+        id
+        name
+      }
       images {
         id
         optimised
         url
         position
+        policeImage
+        primary
       }
       incidents {
         id
@@ -81016,6 +81533,7 @@ export const VehicleDocument = gql`
           businesses {
             id
             name
+            fullName
           }
         }
       }
@@ -81133,6 +81651,7 @@ export const VehicleDocument = gql`
           businesses {
             id
             name
+            fullName
           }
         }
         replies {
@@ -81210,6 +81729,7 @@ export const VehicleDocument = gql`
             businesses {
               id
               name
+              fullName
             }
           }
         }

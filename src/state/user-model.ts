@@ -10,7 +10,12 @@ export interface SetUserPayload {
   origName: string;
   reference: string;
   onboarded: boolean;
-  businesses: { name: string; id: string; demId?: string | null | undefined }[];
+  businesses: {
+    name: string;
+    fullName: string;
+    id: string;
+    demId?: string | null | undefined;
+  }[];
   schemes: Scheme[];
   demId: string | null | undefined;
   groups: {
@@ -69,7 +74,12 @@ export interface UserModel {
   origName: string;
   reference: string;
   picture: string;
-  businesses: { name: string; id: string; demId?: string | null | undefined }[];
+  businesses: {
+    name: string;
+    fullName: string;
+    id: string;
+    demId?: string | null | undefined;
+  }[];
   onboarded: boolean;
   schemes: Scheme[];
   demId: string | null | undefined;

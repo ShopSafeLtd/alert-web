@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AddBusiness from 'components/form-components/businesses/AddBusiness';
 import LinkBusiness from 'components/form-components/businesses/LinkBusiness';
 import type { BusinessData } from 'types/DataType';
+import { useIntl } from 'react-intl';
 import useStyles from './ListBusinesses.styles';
 
 interface TableData {
@@ -44,13 +45,16 @@ const ListBusinesses = ({
   saving,
 }: Props) => {
   const classNames = useStyles();
-
+  const intl = useIntl();
   return (
     <div className={classNames.page}>
       <Row gutter={8} className={classNames.actions}>
         <Col span={8}>
           <Input
-            placeholder="Search businesses..."
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Search for a business...',
+              id: 'qaJxSS',
+            })}
             onChange={(e) => onSearchChange(e.target.value)}
             value={searchValue}
           />
@@ -68,7 +72,10 @@ const ListBusinesses = ({
             danger
             onClick={toggleLinkVisible}
           >
-            Link Existing Business
+            {intl.formatMessage({
+              defaultMessage: 'Link Existing Business',
+              id: '50iYmp',
+            })}
           </Button>
         </Col>
         <Col>
@@ -83,7 +90,10 @@ const ListBusinesses = ({
             danger
             onClick={toggleAddVisible}
           >
-            New Business
+            {intl.formatMessage({
+              defaultMessage: 'New Business',
+              id: 'KepKya',
+            })}
           </Button>
         </Col>
       </Row>
@@ -92,7 +102,10 @@ const ListBusinesses = ({
           {
             key: 'name',
             dataIndex: 'name',
-            title: 'Name',
+            title: intl.formatMessage({
+              defaultMessage: 'Name',
+              id: 'HAlOn1',
+            }),
             render: (value, item) => (
               <Link to={`view/${item.key}`}>{value}</Link>
             ),
@@ -100,19 +113,28 @@ const ListBusinesses = ({
           {
             key: 'totalUsers',
             dataIndex: 'totalUsers',
-            title: 'Total Users',
+            title: intl.formatMessage({
+              defaultMessage: 'Total Users',
+              id: '/VwiLT',
+            }),
           },
           {
             key: 'parent',
             dataIndex: 'parent',
-            title: 'Parent',
+            title: intl.formatMessage({
+              defaultMessage: 'Parent',
+              id: 'zTbLfn',
+            }),
             render: (value, item) =>
-              value ? <Link to={`/${item.parentId}`}>{value}</Link> : '',
+              value ? <Link to={`/${item.parentId || ''}`}>{value}</Link> : '',
           },
           {
             key: 'location',
             dataIndex: 'location',
-            title: 'Location',
+            title: intl.formatMessage({
+              defaultMessage: 'Location',
+              id: 'rvirM2',
+            }),
           },
         ]}
         dataSource={data?.listBusinesses.businesses.map((item) => ({
@@ -134,7 +156,10 @@ const ListBusinesses = ({
       <Drawer
         open={addVisible}
         onClose={toggleAddVisible}
-        title="Add New Business"
+        title={intl.formatMessage({
+          defaultMessage: 'Add New Business',
+          id: 'p47asT',
+        })}
         width={600}
       >
         {addVisible && (
@@ -148,7 +173,10 @@ const ListBusinesses = ({
       <Drawer
         open={linkVisible}
         onClose={toggleLinkVisible}
-        title="Add New Business"
+        title={intl.formatMessage({
+          defaultMessage: 'Add New Business',
+          id: 'p47asT',
+        })}
         width={600}
       >
         {linkVisible && <LinkBusiness onClose={toggleLinkVisible} />}

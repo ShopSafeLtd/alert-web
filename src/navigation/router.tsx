@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import AppLayout from 'layouts/app-layout';
 import AuthLayout from 'layouts/auth-layout';
+import type { AvailableLanguages } from 'lang';
 import AppLocale from 'lang';
 import { ThemeProvider } from 'react-jss';
 import { IntlProvider } from 'react-intl';
@@ -16,53 +17,49 @@ import { ErrorBoundary, withSentryReactRouterV6Routing } from '@sentry/react';
 import PrimaryOnboarding from '../views/onboard/SetPassword';
 import Loading from '../components/loading';
 import { GuestLayout } from '../layouts/guest-layout';
+import { LocalStorageKeys, typedLocalStorage } from '../utils';
 
 const SentryRoutes = withSentryReactRouterV6Routing(Routes);
 
-export const Views = (): JSX.Element => {
+const Views = () => {
   const { isLoading } = useAuth0();
   const location = useLocation();
+  const locale = useStoreState((state) => state.theme.locale);
+  const lang = navigator.language.split('-')[0];
+  const localLang = typedLocalStorage.get(LocalStorageKeys.lang);
+  const initLang = localLang || lang || locale;
+
   const currentRoute = location.pathname;
   const guestRoutes = ['/generated', '/ext/'];
   const guestRoute = guestRoutes.some((route) => currentRoute.includes(route));
-  const locale = useStoreState((state) => state.theme.locale) as 'en' | 'fr';
+
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
   const t = localStorage.getItem('theme');
   const switchTheme = useStoreActions((actions) => actions.theme.switchTheme);
-  if (!t) {
+  if (t) {
+    document.documentElement.setAttribute('style', `color-scheme: ${t}`);
+  } else {
     // get browser theme preference
     const darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
     localStorage.setItem('theme', darkMode ? 'dark' : 'light');
     switchTheme(darkMode ? 'dark' : 'light');
+    // set color-scheme: dark or light on the html element
+    document.documentElement.setAttribute(
+      'style',
+      `color-scheme: ${darkMode ? 'dark' : 'light'}`
+    );
   }
 
   const isSet = useStoreState((state) => state.auth.isSet);
   const userId = useStoreState((state) => state.user.id);
   const navigate = useNavigate();
-  const currentAppLocale = AppLocale[locale];
+  const currentAppLocale = AppLocale[initLang as AvailableLanguages];
 
   const { rehydrateAuth, loading } = useAuth();
 
   useEffect(() => {
     if (!guestRoute) rehydrateAuth();
-    // eslint-disable-next-line
   }, []);
-
-  // // useEffect(() => {
-  // //   const newUserIdCheck = location?.pathname?.split('/onboarding/')[1] || '';
-  // //   if (newUserIdCheck !== 'password') {
-  // //     setNewUserId(newUserIdCheck);
-  // //   }
-  // // }, []);
-  // useEffect(() => {
-  //   if (!isLoading) {
-  //     const newUserIdCheck = location?.pathname?.split('/onboarding/')[1] || '';
-  //
-  //     if (newUserIdCheck !== 'password') {
-  //       setNewUserId(newUserIdCheck);
-  //     }
-  //   }
-  // }, [isLoading]);
 
   const { data } = useUserNewQuery({
     fetchPolicy: 'network-only',
@@ -76,9 +73,12 @@ export const Views = (): JSX.Element => {
       }
     },
   });
-  if ((loading || isLoading || !isSet) && !guestRoute) return <Loading />;
 
-  if (guestRoute)
+  if ((loading || isLoading || !isSet) && !guestRoute) {
+    return <Loading />;
+  }
+
+  if (guestRoute) {
     return (
       <div style={{ colorScheme: currentTheme }}>
         <ThemeProvider theme={theme[currentTheme]}>
@@ -88,9 +88,11 @@ export const Views = (): JSX.Element => {
         </ThemeProvider>
       </div>
     );
+  }
+
   return (
-    <ErrorBoundary>
-      <div style={{ colorScheme: currentTheme }}>
+    <div style={{ colorScheme: currentTheme }}>
+      <ErrorBoundary>
         <ThemeProvider theme={theme[currentTheme]}>
           <IntlProvider
             locale={currentAppLocale.locale}
@@ -119,8 +121,8 @@ export const Views = (): JSX.Element => {
             </ConfigProvider>
           </IntlProvider>
         </ThemeProvider>
-      </div>
-    </ErrorBoundary>
+      </ErrorBoundary>
+    </div>
   );
 };
 

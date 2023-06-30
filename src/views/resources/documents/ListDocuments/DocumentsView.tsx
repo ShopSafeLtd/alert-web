@@ -16,6 +16,7 @@ import AddDocument from 'components/form-components/documents/AddDocument';
 import TabContent from 'components/TabContent';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faPlus } from '@fortawesome/pro-light-svg-icons';
+import { useIntl } from 'react-intl';
 import type { Props } from './types/Documents';
 
 const isImage = (url: string) => {
@@ -36,7 +37,7 @@ const DocumentsView = ({
   );
   // convert tags to string array
   const tagsArray = [...tags];
-
+  const intl = useIntl();
   return (
     <TabContent>
       <Card style={{ marginLeft: 20, marginRight: 20, marginTop: 20 }}>
@@ -53,7 +54,10 @@ const DocumentsView = ({
                   <Menu
                     items={[
                       {
-                        label: 'Add Document',
+                        label: intl.formatMessage({
+                          defaultMessage: 'Add Document',
+                          id: 'r9vGqd',
+                        }),
                         key: '5',
                         icon: (
                           <FontAwesomeIcon
@@ -75,7 +79,10 @@ const DocumentsView = ({
                     <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
                   }
                 >
-                  Documents
+                  {intl.formatMessage({
+                    defaultMessage: 'Add Document',
+                    id: 'r9vGqd',
+                  })}
                 </Button>
               </Dropdown>
             )}
@@ -85,7 +92,10 @@ const DocumentsView = ({
           loading={loading}
           columns={[
             {
-              title: 'Thumbnail',
+              title: intl.formatMessage({
+                defaultMessage: 'Thumbnail',
+                id: 'RGYBjE',
+              }),
               dataIndex: 'thumbnail',
               key: 'thumbnail',
               render: (thumbnail: string | null | undefined) =>
@@ -96,12 +106,18 @@ const DocumentsView = ({
                 ),
             },
             {
-              title: 'Name',
+              title: intl.formatMessage({
+                defaultMessage: 'Name',
+                id: 'HAlOn1',
+              }),
               dataIndex: 'name',
               key: 'name',
             },
             {
-              title: 'Tags',
+              title: intl.formatMessage({
+                defaultMessage: 'Tags',
+                id: '1EYCdR',
+              }),
               dataIndex: 'tags',
               key: 'tags',
               filters: tagsArray.map((tag) => ({
@@ -128,7 +144,10 @@ const DocumentsView = ({
                     window.open(fileUrl);
                   }}
                 >
-                  Download
+                  {intl.formatMessage({
+                    defaultMessage: 'Download',
+                    id: '5q3qC0',
+                  })}
                 </Button>
               ),
             },
@@ -151,7 +170,10 @@ const DocumentsView = ({
         />
       </Card>
       <Drawer
-        title="Add Evidence"
+        title={intl.formatMessage({
+          defaultMessage: 'Add Evidence',
+          id: 'vgVasT',
+        })}
         visible={addDocument}
         width="800"
         onClose={toggleAddDocument}

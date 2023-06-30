@@ -1,6 +1,7 @@
 import React from 'react';
-import type { ChatQuery, ListSchemeUsersQuery } from 'graphql/generated';
 import { Button, Col, Form, Input, Row, Select, Skeleton } from 'antd';
+import { useIntl } from 'react-intl';
+import type { ChatQuery, ListSchemeUsersQuery } from 'graphql/generated';
 
 interface FormData {
   name: string;
@@ -26,8 +27,10 @@ const EditChat = ({
   usersData,
   usersLoading,
   saving,
-}: Props): JSX.Element =>
-  !data && loading ? (
+}: Props): JSX.Element => {
+  const intl = useIntl();
+
+  return !data && loading ? (
     <Skeleton />
   ) : (
     <Form
@@ -46,11 +49,14 @@ const EditChat = ({
         <Col span={23}>
           <Form.Item
             name="name"
-            label="Name"
+            label={intl.formatMessage({ defaultMessage: 'Name', id: 'HAlOn1' })}
             rules={[
               {
                 required: true,
-                message: 'Please enter a name for the chat group.',
+                message: intl.formatMessage({
+                  defaultMessage: 'Please enter a name for the chat group.',
+                  id: 'Fpln7y',
+                }),
               },
             ]}
           >
@@ -60,7 +66,13 @@ const EditChat = ({
       </Row>
       <Row gutter={16}>
         <Col span={23}>
-          <Form.Item name="description" label="Description">
+          <Form.Item
+            name="description"
+            label={intl.formatMessage({
+              defaultMessage: 'Description',
+              id: 'Q8Qw5B',
+            })}
+          >
             <Input.TextArea disabled={saving} />
           </Form.Item>
         </Col>
@@ -70,11 +82,18 @@ const EditChat = ({
         <Col span={23}>
           <Form.Item
             name="user"
-            label="Users"
+            label={intl.formatMessage({
+              defaultMessage: 'Users',
+              id: 'YDMrKK',
+            })}
             rules={[
               {
                 required: true,
-                message: 'Please added at least one user for the chat group.',
+                message: intl.formatMessage({
+                  defaultMessage:
+                    'Please add at least one user for the chat group.',
+                  id: 'Ov3luP',
+                }),
               },
             ]}
           >
@@ -98,7 +117,7 @@ const EditChat = ({
         <Row style={{ marginTop: 30 }} gutter={16} justify="end">
           <Col>
             <Button disabled={saving} onClick={onClose}>
-              Cancel
+              {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
             </Button>
           </Col>
           <Col>
@@ -108,12 +127,13 @@ const EditChat = ({
               type="primary"
               htmlType="submit"
             >
-              Save
+              {intl.formatMessage({ defaultMessage: 'Save', id: 'jvo0vs' })}
             </Button>
           </Col>
         </Row>
       </Form.Item>
     </Form>
   );
+};
 
 export default EditChat;

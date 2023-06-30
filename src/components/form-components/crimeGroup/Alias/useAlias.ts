@@ -54,7 +54,7 @@ const useAddAlias = ({ onClose }: Props): Return => {
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
-    updateCrimeGroup({
+    void updateCrimeGroup({
       variables: {
         where: {
           id: params.id || '',

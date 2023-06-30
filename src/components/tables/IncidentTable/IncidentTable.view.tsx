@@ -2,10 +2,12 @@ import React from 'react';
 import { Table, Tooltip } from 'antd';
 import { useNavigate } from 'react-router';
 import { createUseStyles } from 'react-jss';
+import { useIntl } from 'react-intl';
 
 const useStyles = createUseStyles({
   row: { cursor: 'pointer' },
 });
+
 interface Props {
   incidents:
     | {
@@ -35,6 +37,8 @@ const IncidentTable = ({
 }: Props): JSX.Element => {
   const classes = useStyles();
   const navigate = useNavigate();
+  const intl = useIntl();
+
   return (
     <Table
       size="small"
@@ -50,25 +54,31 @@ const IncidentTable = ({
         {
           key: 'reference',
           dataIndex: 'reference',
-          title: 'Alert ID',
+          title: intl.formatMessage({
+            id: 'k8ZNgH',
+            defaultMessage: 'Alert ID',
+          }),
           width: 100,
         },
         {
           key: 'types',
-          title: 'Types',
+          title: intl.formatMessage({ id: 'kxP9GJ', defaultMessage: 'Types' }),
           dataIndex: 'types',
         },
         {
           key: 'date',
-          title: 'Date',
+          title: intl.formatMessage({ id: 'P7PLVj', defaultMessage: 'Date' }),
           dataIndex: 'date',
         },
         {
           key: 'location',
-          title: 'Location',
+          title: intl.formatMessage({
+            id: 'rvirM2',
+            defaultMessage: 'Location',
+          }),
           dataIndex: 'location',
           ellipsis: true,
-          render: (value) => <Tooltip title={value}>{value}</Tooltip>,
+          render: (value: string) => <Tooltip title={value}>{value}</Tooltip>,
         },
       ]}
       dataSource={incidents.map((incident) => ({
@@ -90,4 +100,5 @@ const IncidentTable = ({
     />
   );
 };
+
 export default IncidentTable;

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment */
 import type { UploadProps } from 'antd';
 import { useState } from 'react';
 import { useStoreState } from 'state';

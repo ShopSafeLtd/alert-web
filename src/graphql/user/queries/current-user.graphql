@@ -10,6 +10,7 @@ query currentUser {
     businesses {
       id
       name
+      fullName
       demId
     }
     newUser

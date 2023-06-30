@@ -176,6 +176,7 @@ const useCreateCrimeGroup = (): Return => {
     offendersSelected: selectedOffenders.length > 0,
     toggleAddOffender,
     addOffender,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onSubmit,
     removeOffender,
     submitting,

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
 import type { MutationUpdaterFn } from '@apollo/client';
 import { useApolloClient } from '@apollo/client';
 import type { FormInstance } from 'antd';
@@ -36,6 +37,7 @@ import {
 } from 'graphql/generated';
 import update from 'immutability-helper';
 import moment from 'moment';
+import type React from 'react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStoreActions, useStoreState } from 'state';
@@ -45,6 +47,7 @@ import type {
   VehicleData,
 } from 'types/DataType';
 import Mixpanel from 'utils/mixpanel';
+import { useIntl } from 'react-intl';
 
 const { confirm } = Modal;
 const { useForm } = Form;
@@ -173,7 +176,7 @@ interface Return {
 const useEditIncident = (): Return => {
   const [form] = useForm<FormData>();
   const client = useApolloClient();
-
+  const intl = useIntl();
   const schemeId = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
   const groups = useStoreState((state) => state.user.groups);
@@ -408,8 +411,14 @@ const useEditIncident = (): Return => {
       setSaving(false);
       Mixpanel.track('Successfully create incident');
       notification.success({
-        message: 'Successfully Added!',
-        description: 'The Incident has been added!',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Added!',
+          id: '5Hvk21',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The Incident has been added!',
+          id: 'R+HTBd',
+        }),
         placement: 'bottomRight',
       });
       navigate('/app/incidents');
@@ -418,11 +427,18 @@ const useEditIncident = (): Return => {
       setSaving(false);
       Mixpanel.track('Unsuccessfully create incident');
       notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
+        message: intl.formatMessage({
+          defaultMessage: 'Error!',
+          id: 'DIDBlF',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'Whoops, there are some errors. Please try again.',
+          id: 'tPB3Wl',
+        }),
         placement: 'bottomRight',
       });
     },
+
     update: updateIncident,
   });
 
@@ -632,7 +648,13 @@ const useEditIncident = (): Return => {
   const beforeUpload = (file: RcFile) => {
     const isFileDuplicate = fileList.find((item) => item.name === file.name);
     if (isFileDuplicate) {
-      message.error('This image already exists, please choose another one.');
+      void message.error(
+        intl.formatMessage({
+          defaultMessage:
+            'This image already exists, please choose another one.',
+          id: 'ILB9M+',
+        })
+      );
     }
     return !isFileDuplicate || Upload.LIST_IGNORE;
   };
@@ -853,7 +875,7 @@ const useEditIncident = (): Return => {
         goods: data.goods?.length || 0,
       });
 
-      createIncident({
+      void createIncident({
         variables: {
           data: {
             subject: data.subject,
@@ -923,10 +945,23 @@ const useEditIncident = (): Return => {
       });
     } else {
       confirm({
-        title: 'No Offenders',
-        content: 'Please select or add at least one offender for the incident.',
-        cancelText: 'Find Offenders',
-        okText: 'Add New Offender',
+        title: intl.formatMessage({
+          defaultMessage: 'No Offenders',
+          id: 'hO5g1p',
+        }),
+        content: intl.formatMessage({
+          defaultMessage:
+            'Please select or add at least one offender for the incident.',
+          id: 'o0nzyY',
+        }),
+        cancelText: intl.formatMessage({
+          defaultMessage: 'Find Offenders',
+          id: 'c1BgIE',
+        }),
+        okText: intl.formatMessage({
+          defaultMessage: 'Add New Offender',
+          id: 'V+RsEq',
+        }),
       });
       setSaving(false);
     }
@@ -961,7 +996,10 @@ const useEditIncident = (): Return => {
             }))
           : [
               {
-                label: 'No results found',
+                label: intl.formatMessage({
+                  defaultMessage: 'No results found',
+                  id: 'hX5PAb',
+                }),
                 value: '',
                 disabled: true,
               },
@@ -1076,68 +1114,89 @@ const useEditIncident = (): Return => {
       const unknownOffenders =
         (values.profiles &&
           values.profiles.filter(
-            (item) => item.name === 'Unidentified Offender'
+            (item) =>
+              item.name ===
+              intl.formatMessage({
+                defaultMessage: 'Unidentified Offender',
+                id: 'tHTxaO',
+              })
           )) ||
         [];
       const knownOffenders =
         (values.profiles &&
           values.profiles.filter(
-            (item) => item.name !== 'Unidentified Offender'
+            (item) =>
+              item.name !==
+              intl.formatMessage({
+                defaultMessage: 'Unidentified Offender',
+                id: 'tHTxaO',
+              })
           )) ||
         [];
 
+      const offendersText = intl.formatMessage(
+        {
+          defaultMessage:
+            'The incident involved {offenderCount, plural, one {offender} other {offenders}} {knownOffenders}{unknownCount, plural, =0 {.} other { and}} {unknownCount, plural, =0 {} 1 {unidentified offender} other {unidentified offenders.}}',
+          id: 'cF5joO',
+        },
+        {
+          offenderCount: offenders.length,
+
+          unknownCount: unknownOffenders.length,
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+          knownOffenders: `${knownOffenders.map(
+            (item, index) => `${index > 1 ? ' ' : ''}${item.name || ''}`
+          )}`,
+        }
+      );
+
       form.setFieldsValue({
-        description: `An incident of ${tags
-          .map((tag, index) => `${index > 0 ? ' ' : ''}${tag}`)
-          .toString()} occurred ${
-          values.business ? `at ${values.business?.label}` : ''
-        } at ${moment(values.date).format('HH:mm')} on ${moment(
-          values.date
-        ).format('dddd Do MMMM YYYY')}. ${
-          tags.includes('Theft & Handling')
-            ? `The goods lost in this incident total £${
-                values.goods
-                  .filter(
-                    (item) =>
-                      item.goodsType !== undefined &&
-                      item.recoveredValue !== undefined &&
-                      item.value !== undefined
-                  )
-                  .map((item) => item.value)
-                  .reduce((a, b) => (a || 0) + (b || 0))
-                  ?.toFixed(2) || 0
-              } of which a value of £${values.goods
-                .filter(
-                  (item) =>
-                    item.goodsType !== undefined &&
-                    item.recoveredValue !== undefined &&
-                    item.value !== undefined
-                )
-                .map((item) => item.recoveredValue)
-                .reduce((a, b) => (a || 0) + (b || 0))
-                .toFixed(2)} was recovered.`
-            : ''
-        } ${
-          offenders.length > 0
-            ? `The incident involved ${
-                offenders.length > 1
-                  ? `${offenders.length} offenders`
-                  : `${offenders.length} offender`
-              }, ${
-                knownOffenders.length > 0
-                  ? ` ${knownOffenders.map(
-                      (item, index) => `${index > 1 ? ' ' : ''}${item.name}`
-                    )}${unknownOffenders.length > 0 ? ' and' : '.'}`
-                  : ''
-              } ${
-                unknownOffenders.length > 0
-                  ? `${unknownOffenders.length} unidentified offender${
-                      unknownOffenders.length > 1 ? 's.' : '.'
+        description:
+          intl.formatMessage(
+            {
+              defaultMessage:
+                'An incident of {tags} occurred at {time} on {date}. {goods, plural, =0 {} other {The goods lost in this incident total {totalLoss} of which a value of {recovered} was recovered.}}',
+              id: 'J5ne/R',
+            },
+            {
+              tags: tags
+                .map((tag, index) => `${index > 0 ? ' ' : ''}${tag}`)
+                .toString(),
+              time: moment(values.date).format('HH:mm'),
+              date: moment(values.date).format('dddd Do MMMM YYYY'),
+              goods: 0,
+              totalLoss:
+                values.goods?.length > 0
+                  ? `£${
+                      values.goods
+                        .filter(
+                          (item) =>
+                            item.goodsType !== undefined &&
+                            item.recoveredValue !== undefined &&
+                            item.value !== undefined
+                        )
+                        .map((item) => item.value)
+                        .reduce((a, b) => (a || 0) + (b || 0))
+                        ?.toFixed(2) || 0
                     }`
-                  : ''
-              }`
-            : ''
-        }`,
+                  : '',
+              recovered:
+                values.goods?.length > 0
+                  ? `£${values.goods
+
+                      .filter(
+                        (item) =>
+                          item.goodsType !== undefined &&
+                          item.recoveredValue !== undefined &&
+                          item.value !== undefined
+                      )
+                      .map((item) => item.recoveredValue)
+                      .reduce((a, b) => (a || 0) + (b || 0))
+                      .toFixed(2)}`
+                  : '£0',
+            }
+          ) + (offenders.length > 0 ? offendersText : ''),
       });
     }
   };

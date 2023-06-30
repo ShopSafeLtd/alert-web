@@ -15,7 +15,6 @@ import {
   Tooltip,
 } from 'antd';
 import type { ListCrimeGroupsQuery } from 'graphql/generated';
-import type { OffenderData } from 'components/viewChat/ViewMessage/useViewMessage';
 import LinkOffender from 'components/form-components/offender/offender/AddExistingOffender';
 import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -25,11 +24,12 @@ import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import type {
   CustomGalleryData,
   IncidentCardData,
-  VehicleData,
+  OffenderData,
+  VehicleCardData,
 } from 'types/DataType';
-
 import UploadImage from 'components/images/UploadImage.view';
 import AddCustomGallery from 'components/form-components/customGalleries/AddCustomGallery';
+import { useIntl } from 'react-intl';
 import useStyles from './EditVehicle.styles';
 import type { FormData, Image } from './useEditVehicle';
 
@@ -37,7 +37,7 @@ const { confirm } = Modal;
 
 interface Props {
   onClose: () => void;
-  editData: VehicleData | undefined | null;
+  editData: VehicleCardData | undefined | null;
   onSubmit: (value: FormData) => void;
   CrimeGroupsData: ListCrimeGroupsQuery | undefined;
   CrimeGroupsLoading: boolean;
@@ -115,6 +115,7 @@ const EditVehicle = ({
   form,
 }: Props): JSX.Element => {
   const classes = useStyles();
+  const intl = useIntl();
   return editData ? (
     <div>
       <Form<FormData>
@@ -123,6 +124,10 @@ const EditVehicle = ({
           model: editData.model || '',
           colour: editData.colour || '',
           registration: editData.registration || '',
+          groups:
+            editData.groups && editData.groups.length > 0
+              ? editData.groups.map((id) => id)
+              : [],
           crimeGroup:
             editData.crimeGroup && editData.crimeGroup.length > 0
               ? editData.crimeGroup.map((id) => id)
@@ -138,24 +143,48 @@ const EditVehicle = ({
       >
         <Row gutter={16}>
           <Col span={12}>
-            <Form.Item name="make" label="Make">
+            <Form.Item
+              name="make"
+              label={intl.formatMessage({
+                defaultMessage: 'Make',
+                id: '6AAM0P',
+              })}
+            >
               <Input disabled={saving} />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name="model" label="Model">
+            <Form.Item
+              name="model"
+              label={intl.formatMessage({
+                defaultMessage: 'Model',
+                id: 'rhSI1/',
+              })}
+            >
               <Input disabled={saving} />
             </Form.Item>
           </Col>
         </Row>
         <Row gutter={16}>
           <Col span={12}>
-            <Form.Item name="colour" label="Colour">
+            <Form.Item
+              name="colour"
+              label={intl.formatMessage({
+                defaultMessage: 'Colour',
+                id: '+e8vAT',
+              })}
+            >
               <Input disabled={saving} />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name="registration" label="Registration">
+            <Form.Item
+              name="registration"
+              label={intl.formatMessage({
+                defaultMessage: 'Registration',
+                id: 'qv7ied',
+              })}
+            >
               <Input disabled={saving} />
             </Form.Item>
           </Col>
@@ -166,13 +195,23 @@ const EditVehicle = ({
             <Col span={12}>
               <Form.Item
                 name="groups"
-                label="Groups"
-                tooltip="Please select the relevant groups that you would like this vehicle to be visible to."
+                label={intl.formatMessage({
+                  defaultMessage: 'Groups',
+                  id: 'hzmswI',
+                })}
+                tooltip={intl.formatMessage({
+                  defaultMessage:
+                    'Please select the relevant groups that you would like this vehicle to be visible to.',
+                  id: 'cz35+X',
+                })}
                 rules={[
                   {
                     required: true,
-                    message:
-                      'Please select at least one group for the vehicle.',
+                    message: intl.formatMessage({
+                      defaultMessage:
+                        'Please select at least one group for the vehicle.',
+                      id: 'QVpuqK',
+                    }),
                   },
                 ]}
               >
@@ -181,7 +220,10 @@ const EditVehicle = ({
                   disabled={saving}
                   mode="multiple"
                   maxTagCount={3}
-                  placeholder="Select groups..."
+                  placeholder={intl.formatMessage({
+                    defaultMessage: 'Select groups...',
+                    id: 'aVKXev',
+                  })}
                 >
                   {groups.map((group) => (
                     <Select.Option key={group.value} value={group.value}>
@@ -194,7 +236,13 @@ const EditVehicle = ({
           )}
           {adminRights && (
             <Col span={12}>
-              <Form.Item name="crimeGroup" label="Crime Groups">
+              <Form.Item
+                name="crimeGroup"
+                label={intl.formatMessage({
+                  defaultMessage: 'Crime Groups',
+                  id: 'a0aLil',
+                })}
+              >
                 <Select
                   loading={CrimeGroupsLoading}
                   disabled={saving}
@@ -205,7 +253,15 @@ const EditVehicle = ({
                   options={CrimeGroupsData?.listCrimeGroups.crimeGroups.map(
                     (crimeGroup) => ({
                       value: crimeGroup.id,
-                      label: `CG-${crimeGroup.reference}`,
+                      label: intl.formatMessage(
+                        {
+                          defaultMessage: `CG-{ref}`,
+                          id: 'h/qDZq',
+                        },
+                        {
+                          ref: crimeGroup.reference,
+                        }
+                      ),
                     })
                   )}
                 />
@@ -221,8 +277,15 @@ const EditVehicle = ({
                 <Col span={12}>
                   <Form.Item
                     name="customGalleries"
-                    label="Custom Galleries"
-                    tooltip="select any custom galleries that are relevant to this offender or add your own."
+                    label={intl.formatMessage({
+                      defaultMessage: 'Custom Galleries',
+                      id: 'bzpFEk',
+                    })}
+                    tooltip={intl.formatMessage({
+                      defaultMessage:
+                        'Select any custom galleries that are relevant to this offender or add your own.',
+                      id: 'lGUu1k',
+                    })}
                   >
                     <Select
                       loading={customGalleriesLoading}
@@ -253,14 +316,16 @@ const EditVehicle = ({
                       />
                     }
                   >
-                    Add Custom Gallery
+                    {intl.formatMessage({
+                      defaultMessage: 'Add Custom Gallery',
+                      id: 'rLyRNN',
+                    })}
                   </Button>
                 </Col>
               </Row>
             </Col>
           </Row>
         )}
-
         <UploadImage
           imgChange={imgChange}
           beforeUpload={beforeUpload}
@@ -271,8 +336,12 @@ const EditVehicle = ({
           onRemoveImage={onRemoveImage}
           primaryImage={primaryImage}
           setPrimaryImage={setPrimaryImage}
-          title="vehicle"
+          title={intl.formatMessage({
+            defaultMessage: 'vehicle',
+            id: 'qcNaCj',
+          })}
         />
+
         {adminRights && (
           <Row gutter={16}>
             {!fromIncident && (
@@ -288,7 +357,10 @@ const EditVehicle = ({
                     />
                   }
                 >
-                  Link Incident
+                  {intl.formatMessage({
+                    defaultMessage: 'Link Incident',
+                    id: '4sHDoC',
+                  })}
                 </Button>
               </Col>
             )}
@@ -307,7 +379,10 @@ const EditVehicle = ({
                       />
                     }
                   >
-                    Link Offender
+                    {intl.formatMessage({
+                      defaultMessage: 'Link Offender',
+                      id: 'IWqg0R',
+                    })}
                   </Button>
                 </div>
               </Col>
@@ -317,40 +392,70 @@ const EditVehicle = ({
 
         {incidentsData && incidentsData.length > 0 ? (
           <>
-            <Divider>Linked Incidents</Divider>
+            <Divider>
+              {intl.formatMessage({
+                defaultMessage: 'Linked Incidents',
+                id: 'RDsV4v',
+              })}
+            </Divider>
             <Table
               columns={[
                 {
                   key: 'reference',
                   dataIndex: 'reference',
-                  title: 'Alert ID',
+                  title: intl.formatMessage({
+                    defaultMessage: 'Alert ID',
+                    id: 'k8ZNgH',
+                  }),
                 },
                 {
                   key: 'subject',
                   dataIndex: 'subject',
-                  title: 'Subject',
+                  title: intl.formatMessage({
+                    defaultMessage: 'Subject',
+                    id: 'LLtKhp',
+                  }),
                 },
                 {
                   key: 'date',
                   dataIndex: 'date',
-                  title: 'Date',
+                  title: intl.formatMessage({
+                    defaultMessage: 'Date',
+                    id: 'P7PLVj',
+                  }),
                 },
                 {
                   key: 'Options',
-                  title: 'Delete',
+                  title: intl.formatMessage({
+                    defaultMessage: 'Delete',
+                    id: 'K3r6DQ',
+                  }),
                   dataIndex: 'Options',
                   width: 5,
                   render: (_, record) => (
                     <Row>
                       <Col>
-                        <Tooltip title="Remove Incident">
+                        <Tooltip
+                          title={intl.formatMessage({
+                            defaultMessage: 'Remove Incident',
+                            id: 'NhpFO7',
+                          })}
+                        >
                           <Button
                             size="small"
                             disabled={saving}
                             onClick={() => {
                               confirm({
-                                title: 'Do you want to remove the incident?',
-                                content: 'This action cannot be undone.',
+                                title: intl.formatMessage({
+                                  defaultMessage:
+                                    'Do you want to remove the incident?',
+                                  id: 'wN3wVs',
+                                }),
+                                content: intl.formatMessage({
+                                  defaultMessage:
+                                    'This action cannot be undone.',
+                                  id: 'JDJoIZ',
+                                }),
                                 onOk() {
                                   removeIncident(record.key);
                                 },
@@ -367,9 +472,7 @@ const EditVehicle = ({
               dataSource={incidentsData.map((incident) => ({
                 subject: incident.subject,
                 reference: incident.reference,
-
                 date: incident.dayTime,
-
                 key: incident.id,
               }))}
               pagination={false}
@@ -380,13 +483,21 @@ const EditVehicle = ({
 
         {offendersData && offendersData.length > 0 ? (
           <>
-            <Divider>Linked Offenders</Divider>
+            <Divider>
+              {intl.formatMessage({
+                defaultMessage: 'Linked Offenders',
+                id: 'hyrc8o',
+              })}
+            </Divider>
             <Table
               columns={[
                 {
                   key: 'images',
                   dataIndex: 'images',
-                  title: 'Image',
+                  title: intl.formatMessage({
+                    defaultMessage: 'Image',
+                    id: '+0zv6g',
+                  }),
                   render: (images: { id: string; optimised: string }[]) =>
                     // eslint-disable-next-line
                     images.length > 0 ? (
@@ -405,25 +516,43 @@ const EditVehicle = ({
                 {
                   key: 'name',
                   dataIndex: 'name',
-                  title: 'Name',
+                  title: intl.formatMessage({
+                    defaultMessage: 'Name',
+                    id: 'HAlOn1',
+                  }),
                 },
-
                 {
                   key: 'Options',
-                  title: 'Delete',
+                  title: intl.formatMessage({
+                    defaultMessage: 'Delete',
+                    id: 'K3r6DQ',
+                  }),
                   dataIndex: 'Options',
                   width: 5,
                   render: (_, record) => (
                     <Row>
                       <Col>
-                        <Tooltip title="Remove Offender">
+                        <Tooltip
+                          title={intl.formatMessage({
+                            defaultMessage: 'Remove Offender',
+                            id: 'cZH2Kj',
+                          })}
+                        >
                           <Button
                             size="small"
                             disabled={saving}
                             onClick={() => {
                               confirm({
-                                title: 'Do you want to remove the offender?',
-                                content: 'This action cannot be undone.',
+                                title: intl.formatMessage({
+                                  defaultMessage:
+                                    'Do you want to remove the offender?',
+                                  id: 'B3Hfqo',
+                                }),
+                                content: intl.formatMessage({
+                                  defaultMessage:
+                                    'This action cannot be undone.',
+                                  id: 'JDJoIZ',
+                                }),
                                 onOk() {
                                   removeOffender(record.key);
                                 },
@@ -452,7 +581,7 @@ const EditVehicle = ({
           <Row style={{ marginTop: 30 }} gutter={16} justify="end">
             <Col>
               <Button disabled={saving} onClick={onClose}>
-                Cancel
+                {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
               </Button>
             </Col>
             <Col>
@@ -462,14 +591,17 @@ const EditVehicle = ({
                 disabled={saving}
                 loading={saving}
               >
-                Save
+                {intl.formatMessage({ defaultMessage: 'Save', id: 'jvo0vs' })}
               </Button>
             </Col>
           </Row>
         </Form.Item>
       </Form>
       <Drawer
-        title="Link Offenders"
+        title={intl.formatMessage({
+          defaultMessage: 'Link Offenders',
+          id: 'UhSUQG',
+        })}
         visible={linkOffender}
         width="800"
         onClose={toggleLinkOffender}
@@ -485,7 +617,10 @@ const EditVehicle = ({
         )}
       </Drawer>
       <Drawer
-        title="Link Incidents"
+        title={intl.formatMessage({
+          defaultMessage: 'Link Incidents',
+          id: '1Vs3Qr',
+        })}
         visible={linkIncident}
         width="800"
         onClose={toggleLinkIncident}
@@ -501,7 +636,10 @@ const EditVehicle = ({
         )}
       </Drawer>
       <Drawer
-        title="Add Custom Gallery"
+        title={intl.formatMessage({
+          defaultMessage: 'Add Custom Gallery',
+          id: 'rLyRNN',
+        })}
         visible={addCustomGallery}
         width="400"
         onClose={toggleAddCustomGallery}

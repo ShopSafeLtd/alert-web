@@ -1,0 +1,3521 @@
+{
+  "++aMeS": {
+    "defaultMessage": "Only notify users for their own and subscribed offenders"
+  },
+  "++g1VR": {
+    "defaultMessage": "Incidents by Hour"
+  },
+  "+0zv6g": {
+    "defaultMessage": "Image"
+  },
+  "+AUpV6": {
+    "defaultMessage": "Please enter a name for the scheme."
+  },
+  "+CkDvs": {
+    "defaultMessage": "None documented"
+  },
+  "+F01hQ": {
+    "defaultMessage": "This error has been reported to our team, if it continues to happen reach out to our support team."
+  },
+  "+OfJ4/": {
+    "defaultMessage": "Edit Offender"
+  },
+  "+Prn0X": {
+    "defaultMessage": "Incidents by Month"
+  },
+  "+U6ozc": {
+    "defaultMessage": "Type"
+  },
+  "+WLvff": {
+    "defaultMessage": "DoB Source:"
+  },
+  "+a+2ug": {
+    "defaultMessage": "Members"
+  },
+  "+dEOlx": {
+    "defaultMessage": "Please enter a street for the incident."
+  },
+  "+e8vAT": {
+    "defaultMessage": "Colour"
+  },
+  "+eY3nZ": {
+    "defaultMessage": "Do you know what goods were involved?"
+  },
+  "+nJOH5": {
+    "defaultMessage": "No Incidents"
+  },
+  "+nRUf9": {
+    "defaultMessage": "Incidents:"
+  },
+  "+pfPgu": {
+    "defaultMessage": "Remove the incident?"
+  },
+  "+qw0ns": {
+    "defaultMessage": "No offenders for this incident"
+  },
+  "+vA//S": {
+    "defaultMessage": "Logins"
+  },
+  "+yKhr6": {
+    "defaultMessage": "Default New User Settings:"
+  },
+  "/06iwc": {
+    "defaultMessage": "Large"
+  },
+  "/GCoTA": {
+    "defaultMessage": "Clear"
+  },
+  "/KdeiX": {
+    "defaultMessage": "Police Ref"
+  },
+  "/MtIJ2": {
+    "defaultMessage": "Choose at least one crime type"
+  },
+  "/OYfH0": {
+    "defaultMessage": "Please select at least one business for the new user."
+  },
+  "/OdzA8": {
+    "defaultMessage": "Are you sure you want to delete this incident?"
+  },
+  "/TfPy3": {
+    "defaultMessage": "Please selected at least one admin for the new to-do."
+  },
+  "/VnDMl": {
+    "defaultMessage": "Other"
+  },
+  "/VwiLT": {
+    "defaultMessage": "Total Users"
+  },
+  "/XPfp1": {
+    "defaultMessage": "Save As"
+  },
+  "/YBJ85": {
+    "defaultMessage": "Total Recovered"
+  },
+  "/b4BmP": {
+    "defaultMessage": "Custom Gallery"
+  },
+  "/oJY/I": {
+    "defaultMessage": "Select the groups that you would like this offender to be visible to."
+  },
+  "/zFGgP": {
+    "defaultMessage": "+{count} more"
+  },
+  "03pSDv": {
+    "defaultMessage": "Crime Ref"
+  },
+  "05bSdr": {
+    "defaultMessage": "The Incident has been approved!"
+  },
+  "05xT64": {
+    "defaultMessage": "How did this make you feel?"
+  },
+  "088rlR": {
+    "defaultMessage": "18 - 30"
+  },
+  "08jKoU": {
+    "defaultMessage": "Get it on Google Play"
+  },
+  "0B9/ob": {
+    "defaultMessage": "Left Top"
+  },
+  "0BUTMv": {
+    "defaultMessage": "Search..."
+  },
+  "0Bn8Ax": {
+    "defaultMessage": "All charts have been added"
+  },
+  "0ICwq5": {
+    "defaultMessage": "Last updated"
+  },
+  "0Q9dlW": {
+    "defaultMessage": "Add Existing Vehicle"
+  },
+  "0UFWIV": {
+    "defaultMessage": "Send app notifications for new chat messages"
+  },
+  "0h0TWW": {
+    "defaultMessage": "Please select at least one group for a user."
+  },
+  "0oo0ZK": {
+    "defaultMessage": "Delete incidents after:"
+  },
+  "0qjl3+": {
+    "defaultMessage": "Build:"
+  },
+  "0rPJ0H": {
+    "defaultMessage": "Enter a town/city"
+  },
+  "0rgxT7": {
+    "defaultMessage": "Date of birth of offenders are visible"
+  },
+  "0u8zRc": {
+    "defaultMessage": "- If there is a known address for the offender please enter it."
+  },
+  "1/BQcU": {
+    "defaultMessage": "'Unidentified Vehicle'"
+  },
+  "115KOd": {
+    "defaultMessage": "French 🇫🇷"
+  },
+  "11odF5": {
+    "defaultMessage": "Scheme Branding:"
+  },
+  "13MEnK": {
+    "defaultMessage": "Select the groups that you would like this incident to be visible to."
+  },
+  "14N7fW": {
+    "defaultMessage": "Link to DEM"
+  },
+  "1BX5Wp": {
+    "defaultMessage": "DISC Import"
+  },
+  "1EYCdR": {
+    "defaultMessage": "Tags"
+  },
+  "1EYWsE": {
+    "defaultMessage": "{showboxes, plural, =0 {Hide Boxes} =1{Show Boxes} other{}}"
+  },
+  "1FbM4r": {
+    "defaultMessage": "Add Existing Offenders"
+  },
+  "1GC81u": {
+    "defaultMessage": "Add Existing incident"
+  },
+  "1IvHmw": {
+    "defaultMessage": "Your Password has been created!"
+  },
+  "1KlEM/": {
+    "defaultMessage": "Vehicle Filters"
+  },
+  "1LmW+v": {
+    "defaultMessage": "remove"
+  },
+  "1V1nJ/": {
+    "defaultMessage": "Email Notifications"
+  },
+  "1VKite": {
+    "defaultMessage": "- Select the types that apply to this incident."
+  },
+  "1Vs3Qr": {
+    "defaultMessage": "Link Incidents"
+  },
+  "1ZgrhW": {
+    "defaultMessage": "Role"
+  },
+  "1f5eBz": {
+    "defaultMessage": "Please select an option for this field"
+  },
+  "1jRWJS": {
+    "defaultMessage": "Offender Warnings"
+  },
+  "1lpfu7": {
+    "defaultMessage": "Link a vehicle"
+  },
+  "1rIGfA": {
+    "defaultMessage": "At the moment adding an incident to a multi-scheme article is not supported."
+  },
+  "1wokJ7": {
+    "defaultMessage": "Download on the App Store"
+  },
+  "1zVxRE": {
+    "defaultMessage": "Seeking ID"
+  },
+  "2/2yg+": {
+    "defaultMessage": "Add"
+  },
+  "22olP0": {
+    "defaultMessage": "Edit Exclusion"
+  },
+  "242AjY": {
+    "defaultMessage": "Perculiarities:"
+  },
+  "25PQ1b": {
+    "defaultMessage": "Offenders- Receive notifications for new offenders"
+  },
+  "27//14": {
+    "defaultMessage": "- Please complete the details for the incident."
+  },
+  "2Rpk/e": {
+    "defaultMessage": "Recorded On"
+  },
+  "2S6C4z": {
+    "defaultMessage": "Please enter a postcode for the incident."
+  },
+  "2Us/IK": {
+    "defaultMessage": "- Add any of the known addresses for the offender."
+  },
+  "2b7AJD": {
+    "defaultMessage": "Are you sure you want to remove this user?"
+  },
+  "2oCaym": {
+    "defaultMessage": "Are you sure?"
+  },
+  "2pC0Hc": {
+    "defaultMessage": "Crime Types by Business"
+  },
+  "2rCZPy": {
+    "defaultMessage": "Alert ID: {incidentReference} {policeRef, plural, =1 {{policeRefS}} other {}}"
+  },
+  "2t8hXG": {
+    "defaultMessage": "No goods count"
+  },
+  "2u26fg": {
+    "defaultMessage": "Occurred Between"
+  },
+  "2vcxv5": {
+    "defaultMessage": "No more charts to add"
+  },
+  "2x7zoS": {
+    "defaultMessage": "Hair:"
+  },
+  "2yJ7Rj": {
+    "defaultMessage": "Date Of Birth:"
+  },
+  "2zJXeA": {
+    "defaultMessage": "Profiles"
+  },
+  "30VEhM": {
+    "defaultMessage": "Getting Started"
+  },
+  "312q4w": {
+    "defaultMessage": "No incidents found"
+  },
+  "367usW": {
+    "defaultMessage": "Did the police attend this incident."
+  },
+  "377fsC": {
+    "defaultMessage": "Alert ID: {reference}"
+  },
+  "38B8Z+": {
+    "defaultMessage": "Search for a notification..."
+  },
+  "39UGGJ": {
+    "defaultMessage": "DECLINE"
+  },
+  "3AXahR": {
+    "defaultMessage": "Show Markers"
+  },
+  "3CqKJ0": {
+    "defaultMessage": "Recently Active Offenders"
+  },
+  "3HDZC+": {
+    "defaultMessage": "Add Existing Crime Groups"
+  },
+  "3Jk/hp": {
+    "defaultMessage": "Enter the information source of the offender's date of birth range of the offender."
+  },
+  "3JpVG2": {
+    "defaultMessage": "Total Offenders: {total}"
+  },
+  "3LZ6MG": {
+    "defaultMessage": "Total Lost Value"
+  },
+  "3LkujO": {
+    "defaultMessage": "View Larger Map"
+  },
+  "3OwM2P": {
+    "defaultMessage": "Incident Type"
+  },
+  "3QJWLZ": {
+    "defaultMessage": "+ Upload"
+  },
+  "3XOciw": {
+    "defaultMessage": "Additional Info"
+  },
+  "3YYDlc": {
+    "defaultMessage": "Lost Value"
+  },
+  "3a5wL8": {
+    "defaultMessage": "Active"
+  },
+  "3kptQz": {
+    "defaultMessage": "- Please provide information about the lost/recovered goods."
+  },
+  "3lIfgt": {
+    "defaultMessage": "The crime group has been updated!"
+  },
+  "3oaaS2": {
+    "defaultMessage": "Once this period has elapsed, the item will be transferred to the recycle bin."
+  },
+  "3vA0/l": {
+    "defaultMessage": "No incidents match your search criteria"
+  },
+  "3x8wG/": {
+    "defaultMessage": "No offenders for this crime group"
+  },
+  "3yzV/I": {
+    "defaultMessage": "Please download our app to experience all the familiar features, with better performance!"
+  },
+  "450Fty": {
+    "defaultMessage": "None"
+  },
+  "45gIlS": {
+    "defaultMessage": "Un-follow Updates"
+  },
+  "47FYwb": {
+    "defaultMessage": "Cancel"
+  },
+  "493J7R": {
+    "defaultMessage": "Compare"
+  },
+  "4J6DZ4": {
+    "defaultMessage": "There are no exclusions for this offender."
+  },
+  "4JVX6H": {
+    "defaultMessage": "Create Vehicle"
+  },
+  "4SOYvd": {
+    "defaultMessage": "Sent an image"
+  },
+  "4T7son": {
+    "defaultMessage": "Vehicle"
+  },
+  "4VDu+5": {
+    "defaultMessage": "Upload Logo"
+  },
+  "4Y/QAD": {
+    "defaultMessage": "Select an business to view"
+  },
+  "4bsmSr": {
+    "defaultMessage": "Crime Groups Created"
+  },
+  "4eTajC": {
+    "defaultMessage": "The date and time that the incident occurred."
+  },
+  "4jAirD": {
+    "defaultMessage": "video"
+  },
+  "4sHDoC": {
+    "defaultMessage": "Link Incident"
+  },
+  "4zN3gE": {
+    "defaultMessage": "All Schemes"
+  },
+  "50iYmp": {
+    "defaultMessage": "Link Existing Business"
+  },
+  "51xeBs": {
+    "defaultMessage": "Click reject if you wish to reject the approving of this incident. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted."
+  },
+  "54LWuR": {
+    "defaultMessage": "Select the alias of the offender if known."
+  },
+  "56zjV6": {
+    "defaultMessage": "This offender shares {crimeGroupCount} crime groups"
+  },
+  "58ir77": {
+    "defaultMessage": "Create New Offender"
+  },
+  "5988Gb": {
+    "defaultMessage": "Please enter a name for the offender warning."
+  },
+  "59gCcZ": {
+    "defaultMessage": "Enable User"
+  },
+  "5ETgSz": {
+    "defaultMessage": "Business contribution"
+  },
+  "5Ei/wg": {
+    "defaultMessage": "Please enter a name for the new to-do."
+  },
+  "5Hvk21": {
+    "defaultMessage": "Successfully Added!"
+  },
+  "5J4hv4": {
+    "defaultMessage": "Add Existing User"
+  },
+  "5LH37j": {
+    "defaultMessage": "Remove Tag"
+  },
+  "5MBl1V": {
+    "defaultMessage": "Add business"
+  },
+  "5OwJwf": {
+    "defaultMessage": "Create Terms and Conditions"
+  },
+  "5RJkQZ": {
+    "defaultMessage": "Create Evidence"
+  },
+  "5RSz8i": {
+    "defaultMessage": "I know the goods involved"
+  },
+  "5Tbx28": {
+    "defaultMessage": "Search involved tags..."
+  },
+  "5UuihT": {
+    "defaultMessage": "Suggested Offenders"
+  },
+  "5YfZun": {
+    "defaultMessage": "Click reject if you wish to reject the approving of this offender. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted."
+  },
+  "5jeq8P": {
+    "defaultMessage": "Unknown"
+  },
+  "5lq2mV": {
+    "defaultMessage": "No Chats"
+  },
+  "5q3qC0": {
+    "defaultMessage": "Download"
+  },
+  "5qRFq/": {
+    "defaultMessage": "Delete",
+    "description": "Delete button text"
+  },
+  "67LUBd": {
+    "defaultMessage": "The offender has been added!"
+  },
+  "6AAM0P": {
+    "defaultMessage": "Make"
+  },
+  "6HCBAW": {
+    "defaultMessage": "Scheme Settings"
+  },
+  "6Inpr1": {
+    "defaultMessage": "Select a period of time to retain data before it is automatically deleted. You can also disable this feature and manually audit your data"
+  },
+  "6L5/Qv": {
+    "defaultMessage": "What goods were involved?"
+  },
+  "6PU5qG": {
+    "defaultMessage": "Search for Bulletins..."
+  },
+  "6g7+6N": {
+    "defaultMessage": "Evidence"
+  },
+  "6gT5ZW": {
+    "defaultMessage": "Model: {model}"
+  },
+  "6gfZFu": {
+    "defaultMessage": "Officer Collar No."
+  },
+  "6m7Lvw": {
+    "defaultMessage": "Police Involved"
+  },
+  "705XBo": {
+    "defaultMessage": "Please input a name!"
+  },
+  "70s5j7": {
+    "defaultMessage": "Link an offender to face"
+  },
+  "74BYXL": {
+    "defaultMessage": "Female"
+  },
+  "74pOam": {
+    "defaultMessage": "Add Chat Members"
+  },
+  "753yX5": {
+    "defaultMessage": "Label"
+  },
+  "77+H1T": {
+    "defaultMessage": "Delete Now"
+  },
+  "7Pv3BL": {
+    "defaultMessage": "No Bulletins"
+  },
+  "7UNuAl": {
+    "defaultMessage": "No incidents"
+  },
+  "7c3ANV": {
+    "defaultMessage": "Add User"
+  },
+  "7cQ0NO": {
+    "defaultMessage": "There's no new notification"
+  },
+  "7iDdU4": {
+    "defaultMessage": "Published:"
+  },
+  "7sFfvN": {
+    "defaultMessage": "edit text"
+  },
+  "7vPZdr": {
+    "defaultMessage": "Add Vehicle"
+  },
+  "835oG/": {
+    "defaultMessage": "No known associates found"
+  },
+  "87+qJ4": {
+    "defaultMessage": "Please set a password for the account."
+  },
+  "89cjOr": {
+    "defaultMessage": "Add A New Offender"
+  },
+  "8LkFAr": {
+    "defaultMessage": "Total Bulletins: {total}"
+  },
+  "8TntzL": {
+    "defaultMessage": "Chat Groups"
+  },
+  "8U+Csh": {
+    "defaultMessage": "Set as primary image"
+  },
+  "8XUukm": {
+    "defaultMessage": "Due Date"
+  },
+  "8b6ooN": {
+    "defaultMessage": "No Chat Groups"
+  },
+  "8e5n4o": {
+    "defaultMessage": "Select Offender"
+  },
+  "8eDBzp": {
+    "defaultMessage": "Create Group"
+  },
+  "8gjK3b": {
+    "defaultMessage": "Members: {members}"
+  },
+  "8jgxbm": {
+    "defaultMessage": "The selected period of time begins on the date that an offender or incident was last updated."
+  },
+  "8lCjAM": {
+    "defaultMessage": "Priority"
+  },
+  "8oku8d": {
+    "defaultMessage": "Assigned Users"
+  },
+  "8sZeJM": {
+    "defaultMessage": "Edit Update Content"
+  },
+  "8swx2J": {
+    "defaultMessage": "Are you sure to permanently delete this offender?"
+  },
+  "8vWvqg": {
+    "defaultMessage": "Incident Map"
+  },
+  "8xjLZ0": {
+    "defaultMessage": "Drugs"
+  },
+  "9+Ddtu": {
+    "defaultMessage": "Next"
+  },
+  "95stPq": {
+    "defaultMessage": "Completed"
+  },
+  "9GD9D0": {
+    "defaultMessage": "Alert Id: {ref}"
+  },
+  "9GUoY+": {
+    "defaultMessage": "Oops, something went wrong,"
+  },
+  "9GcvKL": {
+    "defaultMessage": "All Notifications"
+  },
+  "9HU8vw": {
+    "defaultMessage": "Reply"
+  },
+  "9MnnCm": {
+    "defaultMessage": "Output Node"
+  },
+  "9RI5n5": {
+    "defaultMessage": "Date/Time"
+  },
+  "9RLqIM": {
+    "defaultMessage": "No Losses"
+  },
+  "9UlLIw": {
+    "defaultMessage": "Edit Image"
+  },
+  "9WRlF4": {
+    "defaultMessage": "Send"
+  },
+  "9X8NHT": {
+    "defaultMessage": "Center Top"
+  },
+  "9YK+Sa": {
+    "defaultMessage": "Set Password"
+  },
+  "9ZDz+Z": {
+    "defaultMessage": "Choose which notifications you wish to receive and how you want to receive them."
+  },
+  "9a9+ww": {
+    "defaultMessage": "Title"
+  },
+  "9apQnO": {
+    "defaultMessage": "| Updated:"
+  },
+  "9eFYpD": {
+    "defaultMessage": "Last offence: {lastOffence}"
+  },
+  "9eTtQB": {
+    "defaultMessage": "Full administrator account with access to all settings."
+  },
+  "9ej2FR": {
+    "defaultMessage": "Exclusion Title"
+  },
+  "9k1Jt/": {
+    "defaultMessage": "Edit Business"
+  },
+  "9kQMmf": {
+    "defaultMessage": "Age: {age}"
+  },
+  "9oNQSC": {
+    "defaultMessage": "Age"
+  },
+  "9p+uZ/": {
+    "defaultMessage": "Add New Alias"
+  },
+  "9s+ZmX": {
+    "defaultMessage": "Peculiarities"
+  },
+  "A0w5MM": {
+    "defaultMessage": "Last offence"
+  },
+  "A2fHI3": {
+    "defaultMessage": "Edit Details"
+  },
+  "A3DgcN": {
+    "defaultMessage": "Please enter a town/city for the incident."
+  },
+  "A5vVzY": {
+    "defaultMessage": "Location:"
+  },
+  "ABAQyo": {
+    "defaultMessage": "Chats"
+  },
+  "AG8qKq": {
+    "defaultMessage": "Please select at least one location for the incident."
+  },
+  "AIkkvf": {
+    "defaultMessage": "Please enter a description for the incident."
+  },
+  "AN7Aru": {
+    "defaultMessage": "Offender"
+  },
+  "AWN+hV": {
+    "defaultMessage": "Edit Vehicle Details"
+  },
+  "Ag64m0": {
+    "defaultMessage": "Link DEM"
+  },
+  "AjSz/I": {
+    "defaultMessage": "Are you sure you want to delete this article?"
+  },
+  "AmI4Rg": {
+    "defaultMessage": "Select images to add"
+  },
+  "Av/UtY": {
+    "defaultMessage": "Parent Business"
+  },
+  "AxMhQr": {
+    "defaultMessage": "High"
+  },
+  "B+KJhc": {
+    "defaultMessage": "County"
+  },
+  "B+TToj": {
+    "defaultMessage": "Select the height of the offender if known."
+  },
+  "B0ihHq": {
+    "defaultMessage": "Crime No."
+  },
+  "B0zBf8": {
+    "defaultMessage": "Build: {build}"
+  },
+  "B3Hfqo": {
+    "defaultMessage": "Do you want to remove the offender?"
+  },
+  "B9s5+4": {
+    "defaultMessage": "Incidents by Day of Week"
+  },
+  "BPnT3T": {
+    "defaultMessage": "Small"
+  },
+  "BX6Fot": {
+    "defaultMessage": "Send app notifications for incidents"
+  },
+  "BaIwdV": {
+    "defaultMessage": "Street"
+  },
+  "BbTEjZ": {
+    "defaultMessage": "No Crime Types"
+  },
+  "Bju8fW": {
+    "defaultMessage": "Create Crime Group"
+  },
+  "BwoE1F": {
+    "defaultMessage": "select any warning labels that are relevant to this offender or add your own."
+  },
+  "Bwx7T/": {
+    "defaultMessage": "The article has been deleted."
+  },
+  "BxIzUN": {
+    "defaultMessage": "Link an offender"
+  },
+  "C+eSq0": {
+    "defaultMessage": "Add Crime Group"
+  },
+  "C0DMPx": {
+    "defaultMessage": "Successfully Rejected!"
+  },
+  "C1FYp6": {
+    "defaultMessage": "Average Loss Per Incident"
+  },
+  "C70bmG": {
+    "defaultMessage": "Avg Lost"
+  },
+  "C96ztN": {
+    "defaultMessage": "Enter the information source of the offender's date of birth range of the offender ."
+  },
+  "C9WGEu": {
+    "defaultMessage": "of"
+  },
+  "CA+Z1B": {
+    "defaultMessage": "Targeted Business"
+  },
+  "CA2t76": {
+    "defaultMessage": "A basic user account that can submit data but has no admin features."
+  },
+  "CKS/s0": {
+    "defaultMessage": "Suggested Incidents"
+  },
+  "COmjwm": {
+    "defaultMessage": "Only receive notifications for incidents that I report or follow"
+  },
+  "CPGEqg": {
+    "defaultMessage": "Incident Time of Day"
+  },
+  "CTToP/": {
+    "defaultMessage": "Are you sure you want to add {name}?"
+  },
+  "CV8rPY": {
+    "defaultMessage": "Please enter a name for the user."
+  },
+  "CXRlIo": {
+    "defaultMessage": "Print"
+  },
+  "CXUpH7": {
+    "defaultMessage": "Crime Type"
+  },
+  "Cgnk3e": {
+    "defaultMessage": "Add Todo"
+  },
+  "Cgy3GX": {
+    "defaultMessage": "Please select a date for the incident."
+  },
+  "CpHzB0": {
+    "defaultMessage": "Please select a end date for the exclusion."
+  },
+  "CpvwMZ": {
+    "defaultMessage": "Create MG11"
+  },
+  "CqQV1G": {
+    "defaultMessage": "Offender Name:"
+  },
+  "CrPB/+": {
+    "defaultMessage": "APPROVE"
+  },
+  "CuXG65": {
+    "defaultMessage": "Please confirm your password!"
+  },
+  "Cv0frO": {
+    "defaultMessage": "An account that allows for submitting and administering data but has no access to settings."
+  },
+  "Cwx1GS": {
+    "defaultMessage": "Under 18"
+  },
+  "D/FCTs": {
+    "defaultMessage": "Approver Groups"
+  },
+  "D0tMhW": {
+    "defaultMessage": "Businesses"
+  },
+  "D1GrfQ": {
+    "defaultMessage": "gender"
+  },
+  "DBZGY7": {
+    "defaultMessage": "Importance"
+  },
+  "DFG3iK": {
+    "defaultMessage": "Completed Date"
+  },
+  "DGld1Y": {
+    "defaultMessage": "Incidents Summary"
+  },
+  "DIDBlF": {
+    "defaultMessage": "Error!"
+  },
+  "DRvp89": {
+    "defaultMessage": "Select any warning labels that are relevant to this offender or add your own."
+  },
+  "DV1/IH": {
+    "defaultMessage": "Edit Chat Group Details"
+  },
+  "Dg5ys8": {
+    "defaultMessage": "Do you want to delete the task?"
+  },
+  "DgIVkj": {
+    "defaultMessage": "Performance Report: {startDate} - {endDate}"
+  },
+  "Dk/kmv": {
+    "defaultMessage": "Save Business"
+  },
+  "DqoZy3": {
+    "defaultMessage": "Please enter a name for the new chat group."
+  },
+  "Dz/qC3": {
+    "defaultMessage": "Crime Group Filters"
+  },
+  "E/xqrh": {
+    "defaultMessage": "Updates Submitted"
+  },
+  "E5LFtn": {
+    "defaultMessage": "Create A New Chat"
+  },
+  "E6VJFN": {
+    "defaultMessage": "Edit Incident"
+  },
+  "ECx6bx": {
+    "defaultMessage": "Updated At"
+  },
+  "EDcXmf": {
+    "defaultMessage": "Link DEM Company"
+  },
+  "EOkcI5": {
+    "defaultMessage": "No vehicles for this incident"
+  },
+  "ES/52d": {
+    "defaultMessage": "[You were mentioned]"
+  },
+  "ES0Nc8": {
+    "defaultMessage": "Police Attended"
+  },
+  "EbeHm3": {
+    "defaultMessage": "Invite New User"
+  },
+  "EdVD2H": {
+    "defaultMessage": "Please at least select an user for the chat group."
+  },
+  "EeN7DX": {
+    "defaultMessage": "Who is this incident relevant to?"
+  },
+  "Ei0973": {
+    "defaultMessage": "Left Center"
+  },
+  "Ek+T43": {
+    "defaultMessage": "Remove the crime group?"
+  },
+  "Ev5c0L": {
+    "defaultMessage": "Please enter a name for the new user."
+  },
+  "Ev6SEF": {
+    "defaultMessage": "New Password"
+  },
+  "EwRIOm": {
+    "defaultMessage": "User"
+  },
+  "EwWYUF": {
+    "defaultMessage": "Search Image"
+  },
+  "Ewh6rQ": {
+    "defaultMessage": "Goods Types"
+  },
+  "F62y+K": {
+    "defaultMessage": "Sign Out"
+  },
+  "F8UHCF": {
+    "defaultMessage": "Add Document Link"
+  },
+  "FAQLEy": {
+    "defaultMessage": "Criminal Damage"
+  },
+  "FEg968": {
+    "defaultMessage": "40 - 50"
+  },
+  "FFqBXF": {
+    "defaultMessage": "Involved Types"
+  },
+  "FGm79Y": {
+    "defaultMessage": "Alert ID: {ref} {alias}"
+  },
+  "FID+qO": {
+    "defaultMessage": "Auto Approve Offenders"
+  },
+  "FJhjgz": {
+    "defaultMessage": "Postcode"
+  },
+  "FUnyfx": {
+    "defaultMessage": "Input Node"
+  },
+  "FXXrSw": {
+    "defaultMessage": "An overview of the incident form and how to add a new incident to alert."
+  },
+  "FY/YfT": {
+    "defaultMessage": "Crime Group"
+  },
+  "FZ9gwb": {
+    "defaultMessage": "Search for anything in alert..."
+  },
+  "FbQY8L": {
+    "defaultMessage": "Search for a chat group..."
+  },
+  "Fdvpdz": {
+    "defaultMessage": "ID Card"
+  },
+  "FghSV+": {
+    "defaultMessage": "Add {make} to the chat?"
+  },
+  "Fip4H8": {
+    "defaultMessage": "Images"
+  },
+  "FnRTEV": {
+    "defaultMessage": "Average"
+  },
+  "Fpln7y": {
+    "defaultMessage": "Please enter a name for the chat group."
+  },
+  "FqEGSY": {
+    "defaultMessage": "Value Recovered"
+  },
+  "FqI37D": {
+    "defaultMessage": "Oldest First"
+  },
+  "G+A6Wv": {
+    "defaultMessage": "Link Business"
+  },
+  "G+JbdY": {
+    "defaultMessage": "Average Success Rate"
+  },
+  "G+tr7D": {
+    "defaultMessage": "Please select the groups that this incident is for."
+  },
+  "G0RzJg": {
+    "defaultMessage": "Send app notifications for offenders"
+  },
+  "G4f9uY": {
+    "defaultMessage": "Please select a due date for the new to-do."
+  },
+  "GB09hj": {
+    "defaultMessage": "Charts Available"
+  },
+  "GFlSjL": {
+    "defaultMessage": "The settings that will be selected by default for all new users created in the scheme."
+  },
+  "GFrwvj": {
+    "defaultMessage": "Assign Offenders"
+  },
+  "GJeKJo": {
+    "defaultMessage": "Linked an offender"
+  },
+  "GV2eOn": {
+    "defaultMessage": "Did the police attend this incident?"
+  },
+  "GYWlm+": {
+    "defaultMessage": "Select Images & Compare Fields"
+  },
+  "GeGjlC": {
+    "defaultMessage": "Search Evidence"
+  },
+  "GftNg3": {
+    "defaultMessage": "EXPIRED"
+  },
+  "Gi8z4T": {
+    "defaultMessage": "2."
+  },
+  "GkZRlh": {
+    "defaultMessage": "No evidence for this incident"
+  },
+  "GnoNcT": {
+    "defaultMessage": "Please enter a name for the new crime type."
+  },
+  "GszQTo": {
+    "defaultMessage": "View Offender"
+  },
+  "GufXy5": {
+    "defaultMessage": "Value"
+  },
+  "H+Sv5C": {
+    "defaultMessage": "Ethnicity:"
+  },
+  "H+p9nh": {
+    "defaultMessage": "Please enter a name for the crime type."
+  },
+  "H2pLHC": {
+    "defaultMessage": "Please enter a name for the group."
+  },
+  "H40AZz": {
+    "defaultMessage": "Recent Bulletins"
+  },
+  "H79fAf": {
+    "defaultMessage": "Targeted Businesses"
+  },
+  "H7OJNn": {
+    "defaultMessage": "Last Saved:"
+  },
+  "HAlOn1": {
+    "defaultMessage": "Name"
+  },
+  "HC54OB": {
+    "defaultMessage": "Delete Group"
+  },
+  "HEnuMU": {
+    "defaultMessage": "Offenders:"
+  },
+  "HPWnU/": {
+    "defaultMessage": "Please enter a name for the user"
+  },
+  "HRCIYo": {
+    "defaultMessage": "Choose at least one group"
+  },
+  "HTKZYW": {
+    "defaultMessage": "View All Notifications"
+  },
+  "HbFVjB": {
+    "defaultMessage": "Total businesses: {total}"
+  },
+  "Hdg31+": {
+    "defaultMessage": "Select Business"
+  },
+  "Hnfici": {
+    "defaultMessage": "Add Involved Tag"
+  },
+  "HssoVa": {
+    "defaultMessage": "Edit Chat"
+  },
+  "HugE+F": {
+    "defaultMessage": "Alert logo"
+  },
+  "Hw6crD": {
+    "defaultMessage": "Sort Order"
+  },
+  "HyaDMq": {
+    "defaultMessage": "- {text}"
+  },
+  "I/u2cD": {
+    "defaultMessage": "Incidents over the last 12 months"
+  },
+  "I3q18K": {
+    "defaultMessage": "Unidentified Vehicle"
+  },
+  "I7veBp": {
+    "defaultMessage": "Have you confirmed the offenders ID using an accepted method?"
+  },
+  "IE/cxz": {
+    "defaultMessage": "Crime Group Report: {alias}-{startDate}-{endDate}"
+  },
+  "IGVq4m": {
+    "defaultMessage": "The message has been deleted!"
+  },
+  "ILB9M+": {
+    "defaultMessage": "This image already exists, please choose another one."
+  },
+  "ILhZuX": {
+    "defaultMessage": "Total:"
+  },
+  "IU3Z4K": {
+    "defaultMessage": "Total Businesses: {total}"
+  },
+  "IWqg0R": {
+    "defaultMessage": "Link Offender"
+  },
+  "IaZkrc": {
+    "defaultMessage": "Success Rate"
+  },
+  "IhHcoJ": {
+    "defaultMessage": "No Offenders Found"
+  },
+  "Imc8gS": {
+    "defaultMessage": "Incident Details"
+  },
+  "IuFETn": {
+    "defaultMessage": "Duration"
+  },
+  "IyEJgq": {
+    "defaultMessage": "Delete Offender"
+  },
+  "Iyt31T": {
+    "defaultMessage": "Goods Types By Value Lost"
+  },
+  "J1tpDz": {
+    "defaultMessage": "Please enter a location for this exclusion"
+  },
+  "J35F/I": {
+    "defaultMessage": "Click delete if you wish to delete this offender. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted."
+  },
+  "J5ne/R": {
+    "defaultMessage": "An incident of {tags} occurred at {time} on {date}. {goods, plural, =0 {} other {The goods lost in this incident total {totalLoss} of which a value of {recovered} was recovered.}}"
+  },
+  "JBGYtO": {
+    "defaultMessage": "This offender shares {total} crime groups with offenders in this investigation"
+  },
+  "JBWS0c": {
+    "defaultMessage": "Link"
+  },
+  "JDJoIZ": {
+    "defaultMessage": "This action cannot be undone."
+  },
+  "JLznCv": {
+    "defaultMessage": "Total Lost value: : {value}"
+  },
+  "JNbVtq": {
+    "defaultMessage": "Show Heatmap"
+  },
+  "JQTlrb": {
+    "defaultMessage": "Add Offender Warning"
+  },
+  "JZVMXj": {
+    "defaultMessage": "Impact Tags"
+  },
+  "JcJ/mL": {
+    "defaultMessage": "Groups:"
+  },
+  "JdvoY4": {
+    "defaultMessage": "This short video explains the core functionality of alert and how get around the app."
+  },
+  "Jh9m4u": {
+    "defaultMessage": "Please enter a email address for the user."
+  },
+  "Ju6S8/": {
+    "defaultMessage": "Enter an name"
+  },
+  "JuhI7q": {
+    "defaultMessage": "The value of the goods that were recovered."
+  },
+  "JxpaMx": {
+    "defaultMessage": "Create Document"
+  },
+  "JzYph5": {
+    "defaultMessage": "Ethnicity:"
+  },
+  "K+qua6": {
+    "defaultMessage": "Center Center"
+  },
+  "K/tzzI": {
+    "defaultMessage": "Search for an business..."
+  },
+  "K3ixDD": {
+    "defaultMessage": "Compare & Merge"
+  },
+  "K3r6DQ": {
+    "defaultMessage": "Delete"
+  },
+  "KBPSuo": {
+    "defaultMessage": "Search for an offender..."
+  },
+  "KDH1mp": {
+    "defaultMessage": "Add Alias"
+  },
+  "KN7zKn": {
+    "defaultMessage": "Error"
+  },
+  "KNIQ3m": {
+    "defaultMessage": "The investigation has been updated!"
+  },
+  "KRHeRo": {
+    "defaultMessage": "Offender: Please choose an offender"
+  },
+  "KaNxum": {
+    "defaultMessage": "Add Offenders"
+  },
+  "Kc9MAV": {
+    "defaultMessage": "Upload Document"
+  },
+  "KepKya": {
+    "defaultMessage": "New Business"
+  },
+  "KrBn25": {
+    "defaultMessage": "Police Reported"
+  },
+  "KxHHjU": {
+    "defaultMessage": "Select the relevant crime types for this incident, these help to categorize the incident."
+  },
+  "KxS/zg": {
+    "defaultMessage": "Incident Impact"
+  },
+  "LDupfj": {
+    "defaultMessage": "Please enter a street for the new location."
+  },
+  "LFId63": {
+    "defaultMessage": "Total offenders: {total}"
+  },
+  "LIuP87": {
+    "defaultMessage": "Lost value"
+  },
+  "LLtKhp": {
+    "defaultMessage": "Subject"
+  },
+  "LOHgf/": {
+    "defaultMessage": "3."
+  },
+  "LPUHNC": {
+    "defaultMessage": "Last Login"
+  },
+  "LPr3Nh": {
+    "defaultMessage": "Total Loss"
+  },
+  "LPtzWr": {
+    "defaultMessage": "Incidents by day of week"
+  },
+  "LQPOVs": {
+    "defaultMessage": "ACTIVE"
+  },
+  "LUqHSz": {
+    "defaultMessage": "Information Source"
+  },
+  "LgbKvU": {
+    "defaultMessage": "Comment"
+  },
+  "LhTpVN": {
+    "defaultMessage": "Reported to Police"
+  },
+  "Lv0zJu": {
+    "defaultMessage": "Details"
+  },
+  "LwoWFl": {
+    "defaultMessage": "Search Vehicles..."
+  },
+  "Ly+ku5": {
+    "defaultMessage": "Followed Groups"
+  },
+  "M/DKgW": {
+    "defaultMessage": "Notification Options"
+  },
+  "M3C0JK": {
+    "defaultMessage": "Enter a street"
+  },
+  "MLZWwC": {
+    "defaultMessage": "Highest Value Lost"
+  },
+  "MPzA66": {
+    "defaultMessage": "The value of the goods involved in the incident, both lost and recovered."
+  },
+  "MSPOxg": {
+    "defaultMessage": "Import DEM Evidence"
+  },
+  "MVCGSr": {
+    "defaultMessage": "Please enter a town/city for the new location."
+  },
+  "MZynHZ": {
+    "defaultMessage": "Select Businesses"
+  },
+  "McI49v": {
+    "defaultMessage": "Invite Existing User"
+  },
+  "Mh7T6y": {
+    "defaultMessage": "Invite User"
+  },
+  "Mm1WF/": {
+    "defaultMessage": "Right Bottom"
+  },
+  "MntrZe": {
+    "defaultMessage": "Upload Image"
+  },
+  "MoJx/h": {
+    "defaultMessage": "Total Value"
+  },
+  "MsGXc3": {
+    "defaultMessage": "Clear Filters"
+  },
+  "N26vgU": {
+    "defaultMessage": "No Involved Tags"
+  },
+  "N4J5/K": {
+    "defaultMessage": "Please select a business for the new user."
+  },
+  "N6jrgc": {
+    "defaultMessage": "Add Image To Incident"
+  },
+  "NDV5Mq": {
+    "defaultMessage": "Options"
+  },
+  "NMr04q": {
+    "defaultMessage": "Delete Chat"
+  },
+  "NOT1VO": {
+    "defaultMessage": "Show Businesses"
+  },
+  "NYz9wc": {
+    "defaultMessage": "No Messages"
+  },
+  "NhpFO7": {
+    "defaultMessage": "Remove Incident"
+  },
+  "Nm9Hsa": {
+    "defaultMessage": "Approvers"
+  },
+  "Nnl9rH": {
+    "defaultMessage": "Known Associates"
+  },
+  "NssvPD": {
+    "defaultMessage": "Anything distinctive features of the offender."
+  },
+  "NuAnYs": {
+    "defaultMessage": "Remove From Business"
+  },
+  "NuUp/9": {
+    "defaultMessage": "You have not assigned any offender to this image."
+  },
+  "NwJPpe": {
+    "defaultMessage": "Please enter a postcode for the new location."
+  },
+  "O0DXtz": {
+    "defaultMessage": "Loss Summary"
+  },
+  "O0iq2y": {
+    "defaultMessage": "Associate Offender"
+  },
+  "OAVeBQ": {
+    "defaultMessage": "Add Crime Type"
+  },
+  "OBOA6I": {
+    "defaultMessage": "Verified {source}"
+  },
+  "OIe97A": {
+    "defaultMessage": "View ALL"
+  },
+  "ONEXvQ": {
+    "defaultMessage": "This incident is awaiting approval"
+  },
+  "OSJSb9": {
+    "defaultMessage": "Passport"
+  },
+  "OaNQvU": {
+    "defaultMessage": "Edit User Details"
+  },
+  "OfXLJQ": {
+    "defaultMessage": "User Groups:"
+  },
+  "OgG2/I": {
+    "defaultMessage": "Business Engagement: {startDate} - {endDate}"
+  },
+  "OgfKP9": {
+    "defaultMessage": "Incident Summary"
+  },
+  "OkjwIC": {
+    "defaultMessage": "The Incident has been updated!"
+  },
+  "Om/2W/": {
+    "defaultMessage": "This offender is awaiting approval"
+  },
+  "OorvGS": {
+    "defaultMessage": "Total recovered value"
+  },
+  "Or8c6M": {
+    "defaultMessage": "select any custom galleries that are relevant to this offender or add your own."
+  },
+  "Ov3luP": {
+    "defaultMessage": "Please add at least one user for the chat group."
+  },
+  "OvPg13": {
+    "defaultMessage": "Save & Merge"
+  },
+  "Oz0DsA": {
+    "defaultMessage": "Sex:"
+  },
+  "P70g0z": {
+    "defaultMessage": "Do you want to delete the exclusion?"
+  },
+  "P7PLVj": {
+    "defaultMessage": "Date"
+  },
+  "P8o2fl": {
+    "defaultMessage": "Send emails for incidents:"
+  },
+  "PNTO/p": {
+    "defaultMessage": "No profiles added yet."
+  },
+  "PQ3WJD": {
+    "defaultMessage": "Linked a crime group"
+  },
+  "PSUx8Z": {
+    "defaultMessage": "Link to existing business"
+  },
+  "PTTNcF": {
+    "defaultMessage": "No Offender linked to this face"
+  },
+  "PVUzYi": {
+    "defaultMessage": "Please enter an alias for the crime group."
+  },
+  "PX1DHW": {
+    "defaultMessage": "Vehicles Created"
+  },
+  "PYBHmx": {
+    "defaultMessage": "Search impact tags..."
+  },
+  "PbCwq9": {
+    "defaultMessage": "Avg Recovered Value"
+  },
+  "Pgum6c": {
+    "defaultMessage": "View Full Article"
+  },
+  "Piba4q": {
+    "defaultMessage": "Crime Types"
+  },
+  "PnleGP": {
+    "defaultMessage": "View {offenderName}"
+  },
+  "PoSlBr": {
+    "defaultMessage": "Search vehicles..."
+  },
+  "PwRU00": {
+    "defaultMessage": "Total Crime Groups"
+  },
+  "PxTS+p": {
+    "defaultMessage": "Only notify users for their own and subscribed offenders:"
+  },
+  "Pyo0l3": {
+    "defaultMessage": "Total Offenders"
+  },
+  "PziBb1": {
+    "defaultMessage": "Loss/Recovered by Goods Type"
+  },
+  "Q0d8Y6": {
+    "defaultMessage": "This offender shares {total} incidents with offenders in this group"
+  },
+  "Q3p9d3": {
+    "defaultMessage": "Page 2"
+  },
+  "Q8Qw5B": {
+    "defaultMessage": "Description"
+  },
+  "Q8XddZ": {
+    "defaultMessage": "Author:"
+  },
+  "QAmP+7": {
+    "defaultMessage": "Theme Mode:"
+  },
+  "QGQoOa": {
+    "defaultMessage": "Messages Sent"
+  },
+  "QHtzUS": {
+    "defaultMessage": "Select the offenders to be in the new crime group"
+  },
+  "QL7Ixv": {
+    "defaultMessage": "Something wrong!"
+  },
+  "QPIR1s": {
+    "defaultMessage": "The vehicle has been deleted!"
+  },
+  "QPeZMN": {
+    "defaultMessage": "Add Exclusion"
+  },
+  "QVpuqK": {
+    "defaultMessage": "Please select at least one group for the vehicle."
+  },
+  "QaKS9A": {
+    "defaultMessage": "Add New Investigation"
+  },
+  "Qc/Mx7": {
+    "defaultMessage": "Recycle Bin"
+  },
+  "QgGevU": {
+    "defaultMessage": "Schemes"
+  },
+  "QirE3M": {
+    "defaultMessage": "Start Date"
+  },
+  "QmCmt6": {
+    "defaultMessage": "{user} is editing this component"
+  },
+  "Qym1cU": {
+    "defaultMessage": "Auto Approve Incident"
+  },
+  "R+HTBd": {
+    "defaultMessage": "The Incident has been added!"
+  },
+  "R3Hr1/": {
+    "defaultMessage": "Incident Month"
+  },
+  "R72ORA": {
+    "defaultMessage": "No offenders for this vehicle"
+  },
+  "RBV3cF": {
+    "defaultMessage": "Crime Group Table"
+  },
+  "RDsV4v": {
+    "defaultMessage": "Linked Incidents"
+  },
+  "REcCeM": {
+    "defaultMessage": "- Please add any images that you have of the offender."
+  },
+  "RGYBjE": {
+    "defaultMessage": "Thumbnail"
+  },
+  "RSZdzd": {
+    "defaultMessage": "An account that allows for submitting and administering data but no access to settings."
+  },
+  "RSctv1": {
+    "defaultMessage": "Build"
+  },
+  "RVBwrX": {
+    "defaultMessage": "Show Incidents"
+  },
+  "RZ0IMu": {
+    "defaultMessage": "Add {name} to incident"
+  },
+  "RbRvWj": {
+    "defaultMessage": "Full Address"
+  },
+  "Rdz6pw": {
+    "defaultMessage": "Alert ID: {offenderReference}"
+  },
+  "Ri86Tj": {
+    "defaultMessage": "Show Drawer"
+  },
+  "Ri9jA7": {
+    "defaultMessage": "Alias"
+  },
+  "RkYfRn": {
+    "defaultMessage": "Age: {age}, Build: {build}, Ethnicity: {ethnicity}, Sex: {sex}"
+  },
+  "Rp6Hio": {
+    "defaultMessage": "No incidents to display"
+  },
+  "S+q256": {
+    "defaultMessage": "Link CrimeGroups"
+  },
+  "S4ojdm": {
+    "defaultMessage": "Send app notifications for new chat messages:"
+  },
+  "S9GJ93": {
+    "defaultMessage": "Age:"
+  },
+  "SHEopq": {
+    "defaultMessage": "Total Incidents: {total}"
+  },
+  "SYqxvY": {
+    "defaultMessage": "Feed Item Filters"
+  },
+  "SYtNVL": {
+    "defaultMessage": "Last updated: {updatedAt}"
+  },
+  "Sd01Sf": {
+    "defaultMessage": "Scheme Name"
+  },
+  "SeBe5K": {
+    "defaultMessage": "Link an incident"
+  },
+  "ShE8aY": {
+    "defaultMessage": "Add Users"
+  },
+  "Ssi2B7": {
+    "defaultMessage": "Image Comparison"
+  },
+  "SstHAZ": {
+    "defaultMessage": "Are you sure to restore this offender?"
+  },
+  "Sw4elA": {
+    "defaultMessage": "Delete offenders after:"
+  },
+  "SxFGH/": {
+    "defaultMessage": "No Images"
+  },
+  "Syf67T": {
+    "defaultMessage": "I don't know the goods involved"
+  },
+  "T4GOiX": {
+    "defaultMessage": "End Date"
+  },
+  "TE4fIS": {
+    "defaultMessage": "City"
+  },
+  "TJo5E6": {
+    "defaultMessage": "Preview"
+  },
+  "TNOl3z": {
+    "defaultMessage": "Click delete if you wish to delete this incident. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted."
+  },
+  "TQgPcd": {
+    "defaultMessage": "Incidents Time of Day"
+  },
+  "TRAHH0": {
+    "defaultMessage": "Offenders"
+  },
+  "TToxGs": {
+    "defaultMessage": "You can drag these nodes to the pane on the right."
+  },
+  "TWIGMk": {
+    "defaultMessage": "We no longer support this screen size on the web version of Alert!"
+  },
+  "Tb4qgA": {
+    "defaultMessage": "Push Notifications (Mobile App)"
+  },
+  "TemVby": {
+    "defaultMessage": "Full Name"
+  },
+  "TpqK2W": {
+    "defaultMessage": "Total Lost"
+  },
+  "TtyC9C": {
+    "defaultMessage": "Nothing to do"
+  },
+  "TuUlTh": {
+    "defaultMessage": "How did you confirm the ID?"
+  },
+  "TwEM4f": {
+    "defaultMessage": "Delete Message"
+  },
+  "TxnvVF": {
+    "defaultMessage": "Suggested Members"
+  },
+  "U7hOD2": {
+    "defaultMessage": "Enabling auto approve will automatically approve any new incidents and offenders without manual approval."
+  },
+  "U9yypY": {
+    "defaultMessage": "Un-follow"
+  },
+  "UHXcnM": {
+    "defaultMessage": "Update the necessary fields for the offender warning."
+  },
+  "UNK6Ao": {
+    "defaultMessage": "1."
+  },
+  "UNesYg": {
+    "defaultMessage": "Last Active:"
+  },
+  "UOcKMI": {
+    "defaultMessage": "Incidents Created"
+  },
+  "URt/QV": {
+    "defaultMessage": "Business Report: {businessName} {startDate} - {endDate}"
+  },
+  "US7L2J": {
+    "defaultMessage": "Description: {description}"
+  },
+  "UT7Nkj": {
+    "defaultMessage": "New Chat"
+  },
+  "UTvOxQ": {
+    "defaultMessage": "Incidents heatmap"
+  },
+  "UaavNU": {
+    "defaultMessage": "Search for a group..."
+  },
+  "UhSUQG": {
+    "defaultMessage": "Link Offenders"
+  },
+  "Umf5pG": {
+    "defaultMessage": "Please enter a value"
+  },
+  "V+RsEq": {
+    "defaultMessage": "Add New Offender"
+  },
+  "V2hDQr": {
+    "defaultMessage": "IC6 - North African or Arab"
+  },
+  "V72sYf": {
+    "defaultMessage": "- Please add any images that you have of the incident."
+  },
+  "VDl5h/": {
+    "defaultMessage": "View face AI matches"
+  },
+  "VGN48N": {
+    "defaultMessage": "Search Existing Offenders"
+  },
+  "VKb1MS": {
+    "defaultMessage": "Categories"
+  },
+  "VLt5sV": {
+    "defaultMessage": "2."
+  },
+  "VN9g7W": {
+    "defaultMessage": "Add Image to Incident"
+  },
+  "Vea8nA": {
+    "defaultMessage": "Select incident"
+  },
+  "VwMCyX": {
+    "defaultMessage": "Not Approved"
+  },
+  "VzIOKf": {
+    "defaultMessage": "Reject"
+  },
+  "VzzYJk": {
+    "defaultMessage": "Create"
+  },
+  "W19COr": {
+    "defaultMessage": "Your account has been updated!"
+  },
+  "W8pA9z": {
+    "defaultMessage": "60 - 70"
+  },
+  "WCaf5C": {
+    "defaultMessage": "Approve"
+  },
+  "WD3oHm": {
+    "defaultMessage": "Theft & Handling"
+  },
+  "WExVSr": {
+    "defaultMessage": "Gallery"
+  },
+  "WKJjnj": {
+    "defaultMessage": "Please review your account details and correct any errors or fill in any missing information."
+  },
+  "WpTY6U": {
+    "defaultMessage": "Stop getting notified about updates."
+  },
+  "Wv0puZ": {
+    "defaultMessage": "Select the ethnicity of the offender if known."
+  },
+  "WxqFHl": {
+    "defaultMessage": "Recycled Offender"
+  },
+  "X2zpcf": {
+    "defaultMessage": "- Please select the groups that this incident is for"
+  },
+  "X5wtUo": {
+    "defaultMessage": "CANCEL"
+  },
+  "XDjYEW": {
+    "defaultMessage": "Crime Number"
+  },
+  "XO+QG8": {
+    "defaultMessage": "Alert ID: {alertID}"
+  },
+  "XX7iFo": {
+    "defaultMessage": "Do you want to delete the chat?"
+  },
+  "XXcGL4": {
+    "defaultMessage": "Please selected at least one group for the user."
+  },
+  "XbmkWb": {
+    "defaultMessage": "Alias"
+  },
+  "XdwXwO": {
+    "defaultMessage": "Incidents: {total}"
+  },
+  "Xk++Mj": {
+    "defaultMessage": "incidents"
+  },
+  "XmcDl5": {
+    "defaultMessage": "Select Image"
+  },
+  "XnxQnj": {
+    "defaultMessage": "Add {ref} to incident"
+  },
+  "Xq/6U0": {
+    "defaultMessage": "Flow Map"
+  },
+  "XtCAFo": {
+    "defaultMessage": "Ethnicity"
+  },
+  "XtSElZ": {
+    "defaultMessage": "\"Are you sure you want to delete this face?\""
+  },
+  "Y03BBv": {
+    "defaultMessage": "Assign To Admins"
+  },
+  "Y5fbZF": {
+    "defaultMessage": "Impact Types"
+  },
+  "Y64oGy": {
+    "defaultMessage": "Compare Offender"
+  },
+  "YDMrKK": {
+    "defaultMessage": "Users"
+  },
+  "YEneNi": {
+    "defaultMessage": "Active Days"
+  },
+  "YHoR/W": {
+    "defaultMessage": "This offender shares {incidentCount} incidents"
+  },
+  "YI+p4u": {
+    "defaultMessage": "A friendly name for the address to identify it, such as home"
+  },
+  "YLoz+Y": {
+    "defaultMessage": "Awaiting Approval..."
+  },
+  "YNC1/h": {
+    "defaultMessage": "Whoops, there are some errors. Please try again."
+  },
+  "YO5FlE": {
+    "defaultMessage": "select a type for the exclusions"
+  },
+  "YQkHXw": {
+    "defaultMessage": "Goods type value"
+  },
+  "YSNQlW": {
+    "defaultMessage": "Leave a comment for the offender."
+  },
+  "YagqVR": {
+    "defaultMessage": "The incident has been deleted from the feed and moved to the recycle bin."
+  },
+  "YiU0H0": {
+    "defaultMessage": "Incidents by Day"
+  },
+  "Yt1WCY": {
+    "defaultMessage": "Enter the offender's date of birth if known."
+  },
+  "YxFuTi": {
+    "defaultMessage": "Show user name in the system"
+  },
+  "YxqXbK": {
+    "defaultMessage": "Please enter a town/city for the new address."
+  },
+  "Z/t+tP": {
+    "defaultMessage": "Add {subject} to offender"
+  },
+  "Z8971h": {
+    "defaultMessage": "Verified"
+  },
+  "ZENz1B": {
+    "defaultMessage": "Scheme Admin"
+  },
+  "ZNawcf": {
+    "defaultMessage": "Incident has happened at..."
+  },
+  "ZU9Wjz": {
+    "defaultMessage": "Please input title!"
+  },
+  "ZUR1Zs": {
+    "defaultMessage": "Please select importance!"
+  },
+  "ZWk4fq": {
+    "defaultMessage": "The update will be permanently deleted.",
+    "description": "Confirmation dialog content"
+  },
+  "ZYrND5": {
+    "defaultMessage": "Are you sure?",
+    "description": "Confirmation dialog title"
+  },
+  "ZbGHgq": {
+    "defaultMessage": "IC1 - North European"
+  },
+  "ZdCdo5": {
+    "defaultMessage": "Last updated: {date}"
+  },
+  "Ze/CG9": {
+    "defaultMessage": "Select Crime Groups"
+  },
+  "ZiY/d1": {
+    "defaultMessage": "Scheme Logo (optional dark mode version):"
+  },
+  "ZkfGxM": {
+    "defaultMessage": "offender"
+  },
+  "Zl4/y9": {
+    "defaultMessage": "Lock"
+  },
+  "ZwQRld": {
+    "defaultMessage": "Incidents--Receive notifications for new incidents"
+  },
+  "ZwVlvA": {
+    "defaultMessage": "Business Contributions"
+  },
+  "a0aLil": {
+    "defaultMessage": "Crime Groups"
+  },
+  "a1axpo": {
+    "defaultMessage": "Create Business"
+  },
+  "a3slTY": {
+    "defaultMessage": "Incidents Month"
+  },
+  "a5msuh": {
+    "defaultMessage": "Yes"
+  },
+  "aVKXev": {
+    "defaultMessage": "Select groups..."
+  },
+  "abhK2u": {
+    "defaultMessage": "SuccessRate"
+  },
+  "anpRhM": {
+    "defaultMessage": "Show Heat Map"
+  },
+  "anqdpr": {
+    "defaultMessage": "Age:"
+  },
+  "anuHw8": {
+    "defaultMessage": "- Please add the profiles that were involved in the offender."
+  },
+  "arPp4e": {
+    "defaultMessage": "Terms & Conditions"
+  },
+  "avzlc+": {
+    "defaultMessage": "Link DEM User"
+  },
+  "awr2tc": {
+    "defaultMessage": "Type of Goods"
+  },
+  "b/Uf3s": {
+    "defaultMessage": "Description: {description}"
+  },
+  "b/YSMD": {
+    "defaultMessage": "Edit Offender Warning"
+  },
+  "b4GGYZ": {
+    "defaultMessage": "Add Images"
+  },
+  "b4xRGE": {
+    "defaultMessage": "No matching vehicles found"
+  },
+  "b8244+": {
+    "defaultMessage": "Right Top"
+  },
+  "bGwFFv": {
+    "defaultMessage": "Recovered Value"
+  },
+  "bIrv01": {
+    "defaultMessage": "Search Bulletins..."
+  },
+  "bOhJPQ": {
+    "defaultMessage": "End:"
+  },
+  "bQvSz+": {
+    "defaultMessage": "Please set your password, you will use this to log into Alert in the future. It must contain upper and lower case letters, a number, and be at least 8 characters long."
+  },
+  "bRha+v": {
+    "defaultMessage": "Remove the image?"
+  },
+  "bRjypX": {
+    "defaultMessage": "Full Screen"
+  },
+  "bTPleg": {
+    "defaultMessage": "Uncomplete this task?"
+  },
+  "bYAgZW": {
+    "defaultMessage": "Choose which notifications you wish to receive and how you want to receive them."
+  },
+  "bav6vT": {
+    "defaultMessage": "Please select a category for the new crime type."
+  },
+  "bcJvHG": {
+    "defaultMessage": "Recycled Incident"
+  },
+  "bekTqS": {
+    "defaultMessage": "New Chat Group"
+  },
+  "bfRA48": {
+    "defaultMessage": "Select Scheme"
+  },
+  "bfZEmd": {
+    "defaultMessage": "Hide Drawer"
+  },
+  "bhVnhl": {
+    "defaultMessage": "Police Information"
+  },
+  "bnHbBx": {
+    "defaultMessage": "Add Impact Type"
+  },
+  "bnOdvC": {
+    "defaultMessage": "The style and colour of the offenders hair if known."
+  },
+  "bozBqN": {
+    "defaultMessage": "Linked an incident"
+  },
+  "bulletins": {
+    "defaultMessage": "Bulletins"
+  },
+  "buqD4b": {
+    "defaultMessage": "DoB Source"
+  },
+  "business": {
+    "defaultMessage": "Business"
+  },
+  "business-engagement": {
+    "defaultMessage": "Business Engagement"
+  },
+  "businesses": {
+    "defaultMessage": "Businesses"
+  },
+  "byP6IC": {
+    "defaultMessage": "Selected"
+  },
+  "byWnqW": {
+    "defaultMessage": "It will remain in the recycle bin for 30 days before being permanently deleted."
+  },
+  "byaTQZ": {
+    "defaultMessage": "Town/City"
+  },
+  "bzpFEk": {
+    "defaultMessage": "Custom Galleries"
+  },
+  "c+kQCf": {
+    "defaultMessage": "Review Incident"
+  },
+  "c1BgIE": {
+    "defaultMessage": "Find Offenders"
+  },
+  "c8IWbz": {
+    "defaultMessage": "Please add at least one user for the new chat group."
+  },
+  "cENhUd": {
+    "defaultMessage": "30 - 40"
+  },
+  "cF5joO": {
+    "defaultMessage": "The incident involved {offenderCount, plural, one {offender} other {offenders}} {knownOffenders}{unknownCount, plural, =0 {.} other { and}} {unknownCount, plural, =0 {} 1 {unidentified offender} other {unidentified offenders.}}"
+  },
+  "cFQJf4": {
+    "defaultMessage": "User Disabled"
+  },
+  "cHbTr7": {
+    "defaultMessage": "Add New Vehicle"
+  },
+  "cLrIqr": {
+    "defaultMessage": "Are there offenders in your image?"
+  },
+  "cMfoug": {
+    "defaultMessage": "Date Filter"
+  },
+  "cOPFph": {
+    "defaultMessage": "There is nothing here!"
+  },
+  "cPIKU2": {
+    "defaultMessage": "Following"
+  },
+  "cPuur1": {
+    "defaultMessage": "Make: {make}"
+  },
+  "cSg8/M": {
+    "defaultMessage": "Did this incident involve any of the following?"
+  },
+  "cY8TMo": {
+    "defaultMessage": "Most common crime type"
+  },
+  "cZ+mfu": {
+    "defaultMessage": "false"
+  },
+  "cZH2Kj": {
+    "defaultMessage": "Remove Offender"
+  },
+  "ccXLVi": {
+    "defaultMessage": "Category"
+  },
+  "chat": {
+    "defaultMessage": "Chat"
+  },
+  "chat-groups": {
+    "defaultMessage": "Chat Groups"
+  },
+  "cihgU6": {
+    "defaultMessage": "Create Investigation"
+  },
+  "cmwbt4": {
+    "defaultMessage": "User Filters"
+  },
+  "cpKYXQ": {
+    "defaultMessage": "Link Crime Group"
+  },
+  "cqlObT": {
+    "defaultMessage": "Clear All"
+  },
+  "crime-groups": {
+    "defaultMessage": "Crime Groups"
+  },
+  "crime-groups-report": {
+    "defaultMessage": "Crime Groups"
+  },
+  "cz35+X": {
+    "defaultMessage": "Please select the relevant groups that you would like this vehicle to be visible to."
+  },
+  "d1U1M+": {
+    "defaultMessage": "Add to incident"
+  },
+  "d3tEdR": {
+    "defaultMessage": "Incident Filters"
+  },
+  "d3uFRh": {
+    "defaultMessage": "Please enter a street for the new address."
+  },
+  "d4sshx": {
+    "defaultMessage": "Crime types are used to categorize incidents that are submitted by members."
+  },
+  "dE8QLQ": {
+    "defaultMessage": "You haven't added any exclusion for this offender yet."
+  },
+  "dI0d71": {
+    "defaultMessage": "All notifications have been updated to read!"
+  },
+  "dJG2/n": {
+    "defaultMessage": "Exclusion location"
+  },
+  "dKMbT0": {
+    "defaultMessage": "Please select a start date"
+  },
+  "dLBbg0": {
+    "defaultMessage": "Targeted Goods"
+  },
+  "dMrZIO": {
+    "defaultMessage": "Gender:"
+  },
+  "dPaSVi": {
+    "defaultMessage": "Please select groups!"
+  },
+  "dQJGtK": {
+    "defaultMessage": "Rotation"
+  },
+  "dU7aDE": {
+    "defaultMessage": "Auto Approve Options:"
+  },
+  "dVzhQl": {
+    "defaultMessage": "Was this incident reported to the police?"
+  },
+  "dZ4nD4": {
+    "defaultMessage": "Do you want to delete the vehicle?"
+  },
+  "dZYazP": {
+    "defaultMessage": "Newest First"
+  },
+  "data-import": {
+    "defaultMessage": "Data Import"
+  },
+  "djQusS": {
+    "defaultMessage": "The start date cannot be later than the end date!"
+  },
+  "documents": {
+    "defaultMessage": "Documents"
+  },
+  "dr0ueW": {
+    "defaultMessage": "My Data"
+  },
+  "dtAhMN": {
+    "defaultMessage": "No vehicles for this crime group"
+  },
+  "du1laW": {
+    "defaultMessage": "Never"
+  },
+  "dvDKi/": {
+    "defaultMessage": "Successfully Deleted!"
+  },
+  "e3gI+W": {
+    "defaultMessage": "No Crime Types or Offenders"
+  },
+  "e4YBbX": {
+    "defaultMessage": "Hair"
+  },
+  "e6Ph5+": {
+    "defaultMessage": "Address"
+  },
+  "e9Z+tg": {
+    "defaultMessage": "Date of Birth"
+  },
+  "eMIzkc": {
+    "defaultMessage": "No incidents for this vehicle"
+  },
+  "eMpXMz": {
+    "defaultMessage": "Police involvement"
+  },
+  "eOFf8G": {
+    "defaultMessage": "thumbnail"
+  },
+  "eSO3MA": {
+    "defaultMessage": "Select Images To Add"
+  },
+  "eSRsUW": {
+    "defaultMessage": "Please add at least one crime type."
+  },
+  "eVn+j4": {
+    "defaultMessage": "Manage Chat Members"
+  },
+  "eWJHGp": {
+    "defaultMessage": "Sex"
+  },
+  "eZm/Sa": {
+    "defaultMessage": "Alias:"
+  },
+  "ef1dfd": {
+    "defaultMessage": "Delete Update"
+  },
+  "ej3o9X": {
+    "defaultMessage": "Update current template"
+  },
+  "ek8734": {
+    "defaultMessage": "Messagess"
+  },
+  "eo8Q5+": {
+    "defaultMessage": "The collar number of the officer(s) involved."
+  },
+  "erIvhR": {
+    "defaultMessage": "The collar number of the officers involved in this incident."
+  },
+  "f/S/kU": {
+    "defaultMessage": "Delete Face"
+  },
+  "f0WQZR": {
+    "defaultMessage": "Select the build of the offender if known."
+  },
+  "f2A9g8": {
+    "defaultMessage": "Burglary"
+  },
+  "f2g3SM": {
+    "defaultMessage": "Sort & Filter"
+  },
+  "f4Tgpp": {
+    "defaultMessage": "View Incident"
+  },
+  "f92MK9": {
+    "defaultMessage": "Face AI Matches:"
+  },
+  "f9Kbe7": {
+    "defaultMessage": "Height: {height}"
+  },
+  "fFQgTY": {
+    "defaultMessage": "The offenders have been Linked to this incidents!"
+  },
+  "fOYafo": {
+    "defaultMessage": "Received from the police"
+  },
+  "fQT6Wx": {
+    "defaultMessage": "Offender Details"
+  },
+  "fTlL2P": {
+    "defaultMessage": "Remark"
+  },
+  "fWpZ4S": {
+    "defaultMessage": "Total Value Lost"
+  },
+  "fYh1cJ": {
+    "defaultMessage": "{isEditing} is editing this component"
+  },
+  "fbn/t1": {
+    "defaultMessage": "Delete Article"
+  },
+  "fi2Xie": {
+    "defaultMessage": "+ {num} more"
+  },
+  "filwqD": {
+    "defaultMessage": "Read"
+  },
+  "fwW6PN": {
+    "defaultMessage": "Completed Tasks"
+  },
+  "fzU5Bx": {
+    "defaultMessage": "Suggested Vehicles"
+  },
+  "gBN+ok": {
+    "defaultMessage": "Follow Updates"
+  },
+  "gDnUVp": {
+    "defaultMessage": "Add DEM Document"
+  },
+  "gL4S9+": {
+    "defaultMessage": "A more detailed description of the incident."
+  },
+  "gNrgvu": {
+    "defaultMessage": "Created Summary"
+  },
+  "gR55Uz": {
+    "defaultMessage": "Save Image"
+  },
+  "gVNXsT": {
+    "defaultMessage": "- Please select the groups that this incident is for."
+  },
+  "gcagTt": {
+    "defaultMessage": "Add Member"
+  },
+  "gh/lBJ": {
+    "defaultMessage": "Additional information"
+  },
+  "gjBiyj": {
+    "defaultMessage": "Loading..."
+  },
+  "goP1s6": {
+    "defaultMessage": "Add Existing Vehicles"
+  },
+  "goPt6M": {
+    "defaultMessage": "How to add an incident"
+  },
+  "groups": {
+    "defaultMessage": "Groups"
+  },
+  "gvqTQ8": {
+    "defaultMessage": "Search Incidents..."
+  },
+  "gwznO0": {
+    "defaultMessage": "The update will be permanently deleted."
+  },
+  "gxEHRQ": {
+    "defaultMessage": "Offender Filters"
+  },
+  "h/qDZq": {
+    "defaultMessage": "CG-{ref}"
+  },
+  "h04BWW": {
+    "defaultMessage": "Select the gender of the offender if known."
+  },
+  "h1fdng": {
+    "defaultMessage": "Edit Group"
+  },
+  "hCXJmL": {
+    "defaultMessage": "- Select a the business that this incident relates to."
+  },
+  "hEAGzW": {
+    "defaultMessage": "Page 1"
+  },
+  "hGJYON": {
+    "defaultMessage": "Created Between"
+  },
+  "hHs0lD": {
+    "defaultMessage": "Remove the vehicle?"
+  },
+  "hK3zLA": {
+    "defaultMessage": "Please select at least one group for the offender."
+  },
+  "hK8+eV": {
+    "defaultMessage": "{fullName} ({businessName})"
+  },
+  "hLeud7": {
+    "defaultMessage": "The incident has been reported to the police"
+  },
+  "hMzcSq": {
+    "defaultMessage": "Messages"
+  },
+  "hNTGVK": {
+    "defaultMessage": "Select a option and change input text above"
+  },
+  "hO4ExD": {
+    "defaultMessage": "Offender {index}"
+  },
+  "hO5g1p": {
+    "defaultMessage": "No Offenders"
+  },
+  "hQHL0E": {
+    "defaultMessage": "Set Date & Time"
+  },
+  "hX5PAb": {
+    "defaultMessage": "No results found"
+  },
+  "hXJRLT": {
+    "defaultMessage": "Were the police involved in this incident?"
+  },
+  "he2Vcw": {
+    "defaultMessage": "Known Offender"
+  },
+  "hkUyq1": {
+    "defaultMessage": "Are you sure to restore this Incident?"
+  },
+  "hm9cEh": {
+    "defaultMessage": "Add Crime Types"
+  },
+  "hnj65D": {
+    "defaultMessage": "Tall"
+  },
+  "hqB+1X": {
+    "defaultMessage": "Involved Tags"
+  },
+  "ht++Mj": {
+    "defaultMessage": "Ethnicity: {race}"
+  },
+  "htkq75": {
+    "defaultMessage": "The vehicle has been added!"
+  },
+  "hwc1SW": {
+    "defaultMessage": "Send app notifications for incidents:"
+  },
+  "hyrc8o": {
+    "defaultMessage": "Linked Offenders"
+  },
+  "hyvrCv": {
+    "defaultMessage": "What incident are you reporting?"
+  },
+  "hzmswI": {
+    "defaultMessage": "Groups"
+  },
+  "i2Qvui": {
+    "defaultMessage": "Complete this task?"
+  },
+  "i7IHf9": {
+    "defaultMessage": "No Recoveries"
+  },
+  "i7Qzld": {
+    "defaultMessage": "Review Offender"
+  },
+  "i7eap9": {
+    "defaultMessage": "No offenders match your search criteria"
+  },
+  "iAfc5K": {
+    "defaultMessage": "Type:"
+  },
+  "iBIFWL": {
+    "defaultMessage": "Please enter a postcode for the new address."
+  },
+  "iF7Gcw": {
+    "defaultMessage": "Right Center"
+  },
+  "iHdvdj": {
+    "defaultMessage": "Download Report"
+  },
+  "iKGwyV": {
+    "defaultMessage": "Add Vehicles"
+  },
+  "iXQkAi": {
+    "defaultMessage": "Build:"
+  },
+  "ibMD0D": {
+    "defaultMessage": "Disable User"
+  },
+  "icr+Hj": {
+    "defaultMessage": "Get notified about updates."
+  },
+  "ieGrWo": {
+    "defaultMessage": "Follow"
+  },
+  "ihAHg9": {
+    "defaultMessage": "The task has been deleted!"
+  },
+  "iiG8RT": {
+    "defaultMessage": "Please select at least one scheme."
+  },
+  "incidentMap": {
+    "defaultMessage": "Incident Map"
+  },
+  "incidentSettings": {
+    "defaultMessage": "Incident Settings"
+  },
+  "incidents": {
+    "defaultMessage": "Incidents"
+  },
+  "investigations": {
+    "defaultMessage": "Investigations"
+  },
+  "io/Qlk": {
+    "defaultMessage": "Date & Time"
+  },
+  "ioDzAV": {
+    "defaultMessage": "Select an offender to view"
+  },
+  "j/5VxV": {
+    "defaultMessage": "Select the relevant crime types for this incident, these help to categorise the incident."
+  },
+  "j/FtxW": {
+    "defaultMessage": "Members: {totalOffenders}"
+  },
+  "j3ULId": {
+    "defaultMessage": "Sex:"
+  },
+  "j5X+WR": {
+    "defaultMessage": "Which profiles were involved?"
+  },
+  "j66p6j": {
+    "defaultMessage": "English 🇬🇧"
+  },
+  "j6a7pa": {
+    "defaultMessage": "Link crime groups"
+  },
+  "jISH3I": {
+    "defaultMessage": "Enter any distinctive features of the offender."
+  },
+  "jIbAky": {
+    "defaultMessage": "Male"
+  },
+  "jNlSdL": {
+    "defaultMessage": "Search for a user..."
+  },
+  "jOQGTB": {
+    "defaultMessage": "Race"
+  },
+  "jS/UOn": {
+    "defaultMessage": "Update template"
+  },
+  "jUes8R": {
+    "defaultMessage": "User Settings"
+  },
+  "jXZqfz": {
+    "defaultMessage": "Search for a task..."
+  },
+  "jbbNOa": {
+    "defaultMessage": "Most Common Crime Type"
+  },
+  "jd6hP1": {
+    "defaultMessage": "Alert Overview"
+  },
+  "jhu5sz": {
+    "defaultMessage": "Send emails for offenders:"
+  },
+  "jjBvFh": {
+    "defaultMessage": "Exclusions"
+  },
+  "jkpwh9": {
+    "defaultMessage": "Select a business"
+  },
+  "jmg9o5": {
+    "defaultMessage": "Create New Group"
+  },
+  "jtxQPo": {
+    "defaultMessage": "New Task"
+  },
+  "juU558": {
+    "defaultMessage": "Short"
+  },
+  "juchkY": {
+    "defaultMessage": "Content Admin"
+  },
+  "jum0CL": {
+    "defaultMessage": "- Please add at least one offender that was involved in the incident"
+  },
+  "jvo0vs": {
+    "defaultMessage": "Save"
+  },
+  "jx7Hn3": {
+    "defaultMessage": "Article"
+  },
+  "jxHIQ/": {
+    "defaultMessage": "Suggested Group Members"
+  },
+  "jz2M2Y": {
+    "defaultMessage": "Average Lost"
+  },
+  "k/Rta7": {
+    "defaultMessage": "There are no addresses for this offender."
+  },
+  "k0NwMh": {
+    "defaultMessage": "IC3 - Black"
+  },
+  "k3caZl": {
+    "defaultMessage": "Receive notifications for new messages"
+  },
+  "k5jo6H": {
+    "defaultMessage": "A full administrator account with access to all settings."
+  },
+  "k62cVY": {
+    "defaultMessage": "Average Loss per Incident"
+  },
+  "k8ZNgH": {
+    "defaultMessage": "Alert ID"
+  },
+  "kG1p3q": {
+    "defaultMessage": "Add Incident"
+  },
+  "kGBG2S": {
+    "defaultMessage": "Enter Address"
+  },
+  "kJ5W29": {
+    "defaultMessage": "You"
+  },
+  "kJuP0b": {
+    "defaultMessage": "Last Incident"
+  },
+  "kKj7sq": {
+    "defaultMessage": "Add Incidents"
+  },
+  "kNLPWW": {
+    "defaultMessage": "Add Item"
+  },
+  "kNP3in": {
+    "defaultMessage": "Offenders Created"
+  },
+  "kOXe4z": {
+    "defaultMessage": "Send app notifications for offenders:"
+  },
+  "kQAf2d": {
+    "defaultMessage": "Select"
+  },
+  "kQtSa1": {
+    "defaultMessage": "Only receive notifications for offenders that I report or follow"
+  },
+  "kS9obh": {
+    "defaultMessage": "Last Active:"
+  },
+  "kSDNX6": {
+    "defaultMessage": "true"
+  },
+  "kfoYM1": {
+    "defaultMessage": "Amend your account details and then press the save button to update them."
+  },
+  "kkghcT": {
+    "defaultMessage": "My Groups"
+  },
+  "kp+ICm": {
+    "defaultMessage": "Scheme Logo:"
+  },
+  "kxP9GJ": {
+    "defaultMessage": "Types"
+  },
+  "l/6hum": {
+    "defaultMessage": "Last Active"
+  },
+  "lEBqus": {
+    "defaultMessage": "Default Offender Settings:"
+  },
+  "lGUu1k": {
+    "defaultMessage": "Select any custom galleries that are relevant to this offender or add your own."
+  },
+  "lI3BDd": {
+    "defaultMessage": "Last Incident (in range)"
+  },
+  "lOgZfN": {
+    "defaultMessage": "Are you sure you want to delete this offender?"
+  },
+  "lVaHn1": {
+    "defaultMessage": "Offenders ({offenders})"
+  },
+  "lXj6/P": {
+    "defaultMessage": "Crime Ref No."
+  },
+  "laUK3e": {
+    "defaultMessage": "Additional Information"
+  },
+  "leIGMx": {
+    "defaultMessage": "Search all existing offenders..."
+  },
+  "lk9fDC": {
+    "defaultMessage": "Link to dem user"
+  },
+  "lpKDhF": {
+    "defaultMessage": "Create Article"
+  },
+  "lpKwSc": {
+    "defaultMessage": "Avg Lost Value"
+  },
+  "lpxqCT": {
+    "defaultMessage": "Search offender tags..."
+  },
+  "lrbcIG": {
+    "defaultMessage": "- Create exclusions for this offender to exclude them from areas or premises."
+  },
+  "m36ZnV": {
+    "defaultMessage": "Please enter a description for the new group."
+  },
+  "m3ChN4": {
+    "defaultMessage": "Add Offender"
+  },
+  "m8/n8c": {
+    "defaultMessage": "Gender"
+  },
+  "m94i2s": {
+    "defaultMessage": "View Full Offender"
+  },
+  "mCDjFM": {
+    "defaultMessage": "Search Offenders..."
+  },
+  "mJMb3v": {
+    "defaultMessage": "Remove the image from the offender?"
+  },
+  "mJbA00": {
+    "defaultMessage": "Delete User"
+  },
+  "mKqoi7": {
+    "defaultMessage": "Edit Group Details"
+  },
+  "mOem22": {
+    "defaultMessage": "No Feed Items"
+  },
+  "mQPFSj": {
+    "defaultMessage": "Loss Rate"
+  },
+  "mRLlqQ": {
+    "defaultMessage": "Please enter a name for the new group."
+  },
+  "mVjUvI": {
+    "defaultMessage": "Select Incidents"
+  },
+  "mYx8sv": {
+    "defaultMessage": "Account Details"
+  },
+  "mcUhhf": {
+    "defaultMessage": "Reference"
+  },
+  "md4Qkb": {
+    "defaultMessage": "never"
+  },
+  "mduNlp": {
+    "defaultMessage": "Please select at least one user for the new group."
+  },
+  "mjoJ/I": {
+    "defaultMessage": "You have not added any offenders to the incident yet, please add offenders if any are present in the image."
+  },
+  "mtr3R4": {
+    "defaultMessage": "Incidents"
+  },
+  "mv038n": {
+    "defaultMessage": "Loss"
+  },
+  "mx9Iyw": {
+    "defaultMessage": "New Group"
+  },
+  "myq2ZL": {
+    "defaultMessage": "Normal"
+  },
+  "n0NLsa": {
+    "defaultMessage": "Do you want to remove the image?"
+  },
+  "n0Vms/": {
+    "defaultMessage": "Send emails for incidents"
+  },
+  "n6SkPt": {
+    "defaultMessage": "Scheme Terms & Conditions"
+  },
+  "n6qFde": {
+    "defaultMessage": "Link Dem User"
+  },
+  "nB3dy0": {
+    "defaultMessage": "Input Password"
+  },
+  "nBsI+u": {
+    "defaultMessage": "- Create exclusions for this offender to exclusion them from areas or premises."
+  },
+  "nCsL6d": {
+    "defaultMessage": "Save as"
+  },
+  "nIEa5z": {
+    "defaultMessage": "Linked a vehicle"
+  },
+  "nNFHrE": {
+    "defaultMessage": "Select Offenders"
+  },
+  "nOsiXy": {
+    "defaultMessage": "Deleted items will be stored here for 30 days, then permanently deleted. Items can be restored at any point before that."
+  },
+  "nPSQJe": {
+    "defaultMessage": "ID Source"
+  },
+  "nPbds2": {
+    "defaultMessage": "A basic user account that is able to submit data but no admin features."
+  },
+  "nQ1eW+": {
+    "defaultMessage": "The offender has been deleted from the feed and moved to the recycle bin."
+  },
+  "nRYjxK": {
+    "defaultMessage": "Do you know the offender's date of birth?"
+  },
+  "nZ3lWy": {
+    "defaultMessage": "Search crime types..."
+  },
+  "nc8QpJ": {
+    "defaultMessage": "Recent Activity"
+  },
+  "ndDyqZ": {
+    "defaultMessage": "Sort & filter"
+  },
+  "nhiP3+": {
+    "defaultMessage": "Your Tasks"
+  },
+  "niNmLF": {
+    "defaultMessage": "Clear link"
+  },
+  "nok2Wh": {
+    "defaultMessage": "IC4 - South Asian"
+  },
+  "npEJui": {
+    "defaultMessage": "Start:"
+  },
+  "nsggw+": {
+    "defaultMessage": "Link Crime Groups"
+  },
+  "nsomX/": {
+    "defaultMessage": "Send emails for offenders"
+  },
+  "nzan7S": {
+    "defaultMessage": "Import Evidence"
+  },
+  "o0nzyY": {
+    "defaultMessage": "Please select or add at least one offender for the incident."
+  },
+  "o9w9ud": {
+    "defaultMessage": "Bulletin Filters"
+  },
+  "oFu9sf": {
+    "defaultMessage": "Over 80"
+  },
+  "oN/glA": {
+    "defaultMessage": "No Recent Activity"
+  },
+  "oOGhLO": {
+    "defaultMessage": "Violence Against The Person"
+  },
+  "oS/nae": {
+    "defaultMessage": "Building"
+  },
+  "oUWADl": {
+    "defaultMessage": "No"
+  },
+  "oVyEbU": {
+    "defaultMessage": "Recovered value"
+  },
+  "oXvpCQ": {
+    "defaultMessage": "Goods Involved"
+  },
+  "oY9x8s": {
+    "defaultMessage": "Where & When did this incident happen?"
+  },
+  "oZPIFV": {
+    "defaultMessage": "Edit Article"
+  },
+  "ocw1NP": {
+    "defaultMessage": "Successfully Created!"
+  },
+  "offender": {
+    "defaultMessage": "Offender"
+  },
+  "offender-warnings": {
+    "defaultMessage": "Offender Warnings"
+  },
+  "offenders": {
+    "defaultMessage": "Offenders"
+  },
+  "oihKBY": {
+    "defaultMessage": "Offenders-- Receive notifications for new offenders"
+  },
+  "olEMVF": {
+    "defaultMessage": "Most Common Lost"
+  },
+  "op0fQr": {
+    "defaultMessage": "Notification Settings:"
+  },
+  "ou6i2r": {
+    "defaultMessage": "The two passwords that you entered do not match!"
+  },
+  "oujtV2": {
+    "defaultMessage": "No Approver Groups"
+  },
+  "ovJ26C": {
+    "defaultMessage": "Medium"
+  },
+  "owzkCW": {
+    "defaultMessage": "Please enter a name for the new offender warning."
+  },
+  "p/iF5T": {
+    "defaultMessage": "Search users..."
+  },
+  "p47asT": {
+    "defaultMessage": "Add New Business"
+  },
+  "p4Hiyr": {
+    "defaultMessage": "Select goods..."
+  },
+  "p4N05H": {
+    "defaultMessage": "Upload"
+  },
+  "p4mBmL": {
+    "defaultMessage": "Created by"
+  },
+  "p6oMeZ": {
+    "defaultMessage": "This offender shares {noIncidents} incidents with offenders in this investigation"
+  },
+  "pCzvx3": {
+    "defaultMessage": "Edit Update"
+  },
+  "pGwRxT": {
+    "defaultMessage": "Business Name"
+  },
+  "pHlO2V": {
+    "defaultMessage": "Select or create a chat to view messages"
+  },
+  "pQjC2k": {
+    "defaultMessage": "No feed items match your search criteria"
+  },
+  "pRx/92": {
+    "defaultMessage": "this vehicle"
+  },
+  "pSy8jU": {
+    "defaultMessage": "Offenders Table"
+  },
+  "pUlxda": {
+    "defaultMessage": "Total Incidents"
+  },
+  "pYHIHH": {
+    "defaultMessage": "Enter the offenders name if you know it, if not leave this field blank."
+  },
+  "pZaTHe": {
+    "defaultMessage": "No bulletins match your search criteria"
+  },
+  "pambF6": {
+    "defaultMessage": "Total Recovered Value"
+  },
+  "pbIqi6": {
+    "defaultMessage": "No goods values"
+  },
+  "pd8FHc": {
+    "defaultMessage": "Please enter a type"
+  },
+  "performance": {
+    "defaultMessage": "Performance"
+  },
+  "pgRdna": {
+    "defaultMessage": "Completed By"
+  },
+  "phPrn9": {
+    "defaultMessage": "User Detail:"
+  },
+  "pn9DSF": {
+    "defaultMessage": "Add Logo"
+  },
+  "ppHb/S": {
+    "defaultMessage": "remove:"
+  },
+  "profiles": {
+    "defaultMessage": "Profiles"
+  },
+  "puSFww": {
+    "defaultMessage": "Changed the scheme name and upload a logo."
+  },
+  "pukOve": {
+    "defaultMessage": "Colour: {colour}"
+  },
+  "q2cuIU": {
+    "defaultMessage": "Select Groups"
+  },
+  "q5vT3Z": {
+    "defaultMessage": "Search crime groups..."
+  },
+  "q5yM57": {
+    "defaultMessage": "Chats Group"
+  },
+  "q7E1ai": {
+    "defaultMessage": "Incidents Heat Map"
+  },
+  "q92TAS": {
+    "defaultMessage": "Only notify users for their own and subscribed incidents:"
+  },
+  "qDNJ3C": {
+    "defaultMessage": "IC2 - South European"
+  },
+  "qGb+T3": {
+    "defaultMessage": "Locations"
+  },
+  "qHTdPQ": {
+    "defaultMessage": "Remove Crime Type"
+  },
+  "qT9KAx": {
+    "defaultMessage": "Police Attenteded"
+  },
+  "qV4R14": {
+    "defaultMessage": "Default Node"
+  },
+  "qWFImB": {
+    "defaultMessage": "Current Scheme"
+  },
+  "qWrq/B": {
+    "defaultMessage": "Clear Link"
+  },
+  "qaJxSS": {
+    "defaultMessage": "Search for a business..."
+  },
+  "qbNNUK": {
+    "defaultMessage": "Create Incident"
+  },
+  "qcNaCj": {
+    "defaultMessage": "vehicle"
+  },
+  "qcTvaq": {
+    "defaultMessage": "Date Retention:"
+  },
+  "qeYxWJ": {
+    "defaultMessage": "Offender warnings are added to offenders to highlight important things about them, for example that they are prone to violence."
+  },
+  "qfS4of": {
+    "defaultMessage": "Adding this image will notify any other users following the incident."
+  },
+  "qhTnhR": {
+    "defaultMessage": "Linked OCG"
+  },
+  "qv7ied": {
+    "defaultMessage": "Registration"
+  },
+  "r+TWun": {
+    "defaultMessage": "Not Verified"
+  },
+  "r4EMV1": {
+    "defaultMessage": "Officer Collar Number"
+  },
+  "r4UaZo": {
+    "defaultMessage": "Incidents: {totalAssociatedIncidents}"
+  },
+  "r4XwrK": {
+    "defaultMessage": "Face Matches"
+  },
+  "r67UpQ": {
+    "defaultMessage": "Top Contributors"
+  },
+  "r6wuJ3": {
+    "defaultMessage": "Vehicles"
+  },
+  "r9vGqd": {
+    "defaultMessage": "Add Document"
+  },
+  "rI1Xj8": {
+    "defaultMessage": "Exclusion Description"
+  },
+  "rLyRNN": {
+    "defaultMessage": "Add Custom Gallery"
+  },
+  "rOMPXq": {
+    "defaultMessage": "If you elect to disable auto-deletion, you must manually remove data which is no longer relevant."
+  },
+  "rVkCib": {
+    "defaultMessage": "Not Provided"
+  },
+  "rXTgTq": {
+    "defaultMessage": "Time & Date"
+  },
+  "rXybms": {
+    "defaultMessage": "Physical Description"
+  },
+  "rY3Ca3": {
+    "defaultMessage": "All Tasks"
+  },
+  "rbrahO": {
+    "defaultMessage": "Close"
+  },
+  "recCg9": {
+    "defaultMessage": "Updates"
+  },
+  "recycle-bin": {
+    "defaultMessage": "Recycle Bin"
+  },
+  "reports": {
+    "defaultMessage": "Reports"
+  },
+  "resources": {
+    "defaultMessage": "Resources"
+  },
+  "rgtCL5": {
+    "defaultMessage": "Edit update content"
+  },
+  "rhSI1/": {
+    "defaultMessage": "Model"
+  },
+  "rmI5oX": {
+    "defaultMessage": "Link Vehicles"
+  },
+  "rvirM2": {
+    "defaultMessage": "Location"
+  },
+  "ryBmoZ": {
+    "defaultMessage": "CG-{id}"
+  },
+  "s8QPty": {
+    "defaultMessage": "Delete Incident"
+  },
+  "sKEGIM": {
+    "defaultMessage": "Add Label"
+  },
+  "sLEQ0e": {
+    "defaultMessage": "Are you sure you want to remove this business?"
+  },
+  "sXTiFB": {
+    "defaultMessage": "Center Bottom"
+  },
+  "sYTUgV": {
+    "defaultMessage": "Date of Birth:"
+  },
+  "sZjntV": {
+    "defaultMessage": "Click delete if you wish to delete this article. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted."
+  },
+  "sZrY8p": {
+    "defaultMessage": "At the moment adding an offender to a multi-scheme article is not supported."
+  },
+  "scheme-details": {
+    "defaultMessage": "Scheme Settings"
+  },
+  "settings": {
+    "defaultMessage": "Settings"
+  },
+  "sfcQw6": {
+    "defaultMessage": "Left Bottom"
+  },
+  "sidenav.dashboard": {
+    "defaultMessage": "Dashboard"
+  },
+  "sl+yfu": {
+    "defaultMessage": "Add Impact Tag"
+  },
+  "snVLui": {
+    "defaultMessage": "{itemCount, plural, one {Match Found} other {Matches Found}}"
+  },
+  "sozjTX": {
+    "defaultMessage": "Do you want to delete the crime group?"
+  },
+  "statement-templates": {
+    "defaultMessage": "Templates"
+  },
+  "suKy40": {
+    "defaultMessage": "Please enter an email address for the new user."
+  },
+  "sy+pv5": {
+    "defaultMessage": "Email"
+  },
+  "t+iLve": {
+    "defaultMessage": "Total Value Recovered"
+  },
+  "t9T6TI": {
+    "defaultMessage": "Image Position"
+  },
+  "tClut2": {
+    "defaultMessage": "Custom galleries are added to offenders to sort."
+  },
+  "tEuhMY": {
+    "defaultMessage": "Aggravating Factors"
+  },
+  "tFNjGE": {
+    "defaultMessage": "Welcome to Alert!"
+  },
+  "tGh93Z": {
+    "defaultMessage": "Please enter the source of the ID."
+  },
+  "tHTxaO": {
+    "defaultMessage": "Unidentified Offender"
+  },
+  "tIUIJt": {
+    "defaultMessage": "Previous Locations:"
+  },
+  "tMiPZU": {
+    "defaultMessage": "The crime reference number provided by the police."
+  },
+  "tNseQe": {
+    "defaultMessage": "Investigation"
+  },
+  "tPB3Wl": {
+    "defaultMessage": "Whoops, there are some errors. Please try again."
+  },
+  "tT2D9t": {
+    "defaultMessage": "Edit User"
+  },
+  "tUOcWp": {
+    "defaultMessage": "Add Existing"
+  },
+  "tY/jAs": {
+    "defaultMessage": "- Please complete the basic details for the offender."
+  },
+  "tYju2G": {
+    "defaultMessage": "Your administrator has not yet approved this {type}"
+  },
+  "tasks": {
+    "defaultMessage": "Tasks"
+  },
+  "teLZyZ": {
+    "defaultMessage": "Height"
+  },
+  "terms": {
+    "defaultMessage": "Terms & Conditions"
+  },
+  "tjQ2Mx": {
+    "defaultMessage": "UpdatedAt"
+  },
+  "tl/J0C": {
+    "defaultMessage": "Please enter a title!"
+  },
+  "tnv+4a": {
+    "defaultMessage": "Select Vehicle"
+  },
+  "training": {
+    "defaultMessage": "Training"
+  },
+  "tsUrpI": {
+    "defaultMessage": "Offender Report: {startDate} - {endDate}"
+  },
+  "ttuPSC": {
+    "defaultMessage": "Remove the offender?"
+  },
+  "tu6WTo": {
+    "defaultMessage": "Vehicle: Please select a vehicle"
+  },
+  "txjqJv": {
+    "defaultMessage": "Date of Birth Source"
+  },
+  "tzMNF3": {
+    "defaultMessage": "Status"
+  },
+  "u7exuh": {
+    "defaultMessage": "IC5 - Southeast Asian"
+  },
+  "uAfuJA": {
+    "defaultMessage": "Created By"
+  },
+  "uFO+ib": {
+    "defaultMessage": "No incidents for this crime group"
+  },
+  "uJkv2X": {
+    "defaultMessage": "Edit Tag"
+  },
+  "uMU/SG": {
+    "defaultMessage": "'Please enter a email address for the user.'"
+  },
+  "uPmWKm": {
+    "defaultMessage": "Value Lost"
+  },
+  "uSpe21": {
+    "defaultMessage": "Edit Address"
+  },
+  "uVl/Bo": {
+    "defaultMessage": "Resend Invite"
+  },
+  "ug01Mk": {
+    "defaultMessage": "Time"
+  },
+  "ukeLzq": {
+    "defaultMessage": "Please add at least one group that you would like this incident to be visible to."
+  },
+  "ulwh+J": {
+    "defaultMessage": "Sex: {gender}"
+  },
+  "umL9sI": {
+    "defaultMessage": "Alert ID: {ref}"
+  },
+  "uo8NOT": {
+    "defaultMessage": "unknown"
+  },
+  "uqBy7y": {
+    "defaultMessage": "Enter a name"
+  },
+  "uryL7t": {
+    "defaultMessage": "Link to an existing user"
+  },
+  "users": {
+    "defaultMessage": "Users"
+  },
+  "v0ZJr7": {
+    "defaultMessage": "Password must contain upper and lower case letters, a number, and be at least 8 characters long."
+  },
+  "vBlT6y": {
+    "defaultMessage": "Documents"
+  },
+  "vJrE3G": {
+    "defaultMessage": "Please select a role for the user."
+  },
+  "vNNXAE": {
+    "defaultMessage": "Incident: {reference}"
+  },
+  "vXvK25": {
+    "defaultMessage": "Crime Type Category"
+  },
+  "vehicles": {
+    "defaultMessage": "Vehicles"
+  },
+  "vewp8R": {
+    "defaultMessage": "User Details:"
+  },
+  "vfG+nh": {
+    "defaultMessage": "Confirm Password"
+  },
+  "vgVasT": {
+    "defaultMessage": "Add Evidence"
+  },
+  "vi+XKb": {
+    "defaultMessage": "Please select the relevant groups to report this incident to, for GDPR it is important that the data is relevant to the groups."
+  },
+  "vnYVwS": {
+    "defaultMessage": "Restore Item"
+  },
+  "vtoZdb": {
+    "defaultMessage": "Uncompleted"
+  },
+  "vugtF7": {
+    "defaultMessage": "No Activity"
+  },
+  "vyqHbw": {
+    "defaultMessage": "Import data from a disc data dump into alert using a guided form"
+  },
+  "w+tgOS": {
+    "defaultMessage": "Select an estimated age range of the offender if known."
+  },
+  "w1Fanr": {
+    "defaultMessage": "Business"
+  },
+  "w3krAd": {
+    "defaultMessage": "Incident list: Please select incidents"
+  },
+  "w4XD3a": {
+    "defaultMessage": "Add Existing Offender"
+  },
+  "w5Yfkf": {
+    "defaultMessage": "Successfully Updated!"
+  },
+  "wBeTSd": {
+    "defaultMessage": "In accordance with your data protection obligations, data must only be retained for as long as it is relevant. It is your responsibility to determine that period of time."
+  },
+  "wCgTu5": {
+    "defaultMessage": "Comments"
+  },
+  "wE2z2t": {
+    "defaultMessage": "All Incidents"
+  },
+  "wEQDC6": {
+    "defaultMessage": "Edit"
+  },
+  "wHRKby": {
+    "defaultMessage": "Robbery"
+  },
+  "wN3wVs": {
+    "defaultMessage": "Do you want to remove the incident?"
+  },
+  "wS+Y5g": {
+    "defaultMessage": "Unknown Offender"
+  },
+  "wSZR47": {
+    "defaultMessage": "Submit"
+  },
+  "weQa+I": {
+    "defaultMessage": "View Face AI matches"
+  },
+  "wittYy": {
+    "defaultMessage": "Created At"
+  },
+  "wjB0LJ": {
+    "defaultMessage": "Edit Account"
+  },
+  "wkhZ0u": {
+    "defaultMessage": "The message cannot be empty!"
+  },
+  "wr/if9": {
+    "defaultMessage": "{itemCount, plural, one {Face ID Match} other {Face ID Matches}}"
+  },
+  "wrBzdH": {
+    "defaultMessage": "Replying to: {createdBy}"
+  },
+  "wstpvP": {
+    "defaultMessage": "Driving Licence"
+  },
+  "wvg3HJ": {
+    "defaultMessage": "Who is it visible to?"
+  },
+  "wy4d6A": {
+    "defaultMessage": "View & Approve {type}"
+  },
+  "x52+I1": {
+    "defaultMessage": "Add Bulletin"
+  },
+  "x8deu0": {
+    "defaultMessage": "Please enter a name for the new custom gallery."
+  },
+  "xBrtnx": {
+    "defaultMessage": "Addresses"
+  },
+  "xEl97U": {
+    "defaultMessage": "The vehicle has been updated!"
+  },
+  "xP3cvr": {
+    "defaultMessage": "Has the offenders ID been verified?"
+  },
+  "xPGy5S": {
+    "defaultMessage": "Offender has incidents at..."
+  },
+  "xaKy7Z": {
+    "defaultMessage": "You have no open tasks"
+  },
+  "xb54TN": {
+    "defaultMessage": "Offenders"
+  },
+  "xerM7K": {
+    "defaultMessage": "Banned"
+  },
+  "xg14pg": {
+    "defaultMessage": "Add Address"
+  },
+  "xhO9Od": {
+    "defaultMessage": "Total lost value"
+  },
+  "xiAZxN": {
+    "defaultMessage": "Create New Vehicle"
+  },
+  "xl27nc": {
+    "defaultMessage": "Reset Password"
+  },
+  "xlfAGs": {
+    "defaultMessage": "Save Address"
+  },
+  "xt8fV1": {
+    "defaultMessage": "No Groups"
+  },
+  "xuMURn": {
+    "defaultMessage": "50 - 60"
+  },
+  "xxQxLE": {
+    "defaultMessage": "Email Address"
+  },
+  "y2UHQ1": {
+    "defaultMessage": "Successfully Linked!"
+  },
+  "y5gXPE": {
+    "defaultMessage": "Are you sure to permanently delete this Incident?"
+  },
+  "y7GECT": {
+    "defaultMessage": "Search for a crime type..."
+  },
+  "yEyRrH": {
+    "defaultMessage": "Total Incidents: {members}"
+  },
+  "yLxJj+": {
+    "defaultMessage": "- Please select the groups that this offender is for"
+  },
+  "yNCChc": {
+    "defaultMessage": "Select Location"
+  },
+  "yNmV/R": {
+    "defaultMessage": "Items"
+  },
+  "yTVc8S": {
+    "defaultMessage": "Delete Bulletin"
+  },
+  "ycBHr2": {
+    "defaultMessage": "Only notify users for their own and subscribed incidents"
+  },
+  "ye5aNf": {
+    "defaultMessage": "Matched Images"
+  },
+  "yhLYu7": {
+    "defaultMessage": "No crime groups for this vehicle"
+  },
+  "yhU1et": {
+    "defaultMessage": "Tasks"
+  },
+  "yjJSPV": {
+    "defaultMessage": "70 - 80"
+  },
+  "ykYp5y": {
+    "defaultMessage": "No matching offenders found"
+  },
+  "ymfx6F": {
+    "defaultMessage": "The police have been involved in the incident."
+  },
+  "ysScN/": {
+    "defaultMessage": "Enter a postcode"
+  },
+  "ytshKn": {
+    "defaultMessage": "Synced:"
+  },
+  "yuNoZz": {
+    "defaultMessage": "Show business name in the system"
+  },
+  "yyf+RN": {
+    "defaultMessage": "Add DEM Evidence"
+  },
+  "z0zYUX": {
+    "defaultMessage": "Create Chat Group"
+  },
+  "z1wXYP": {
+    "defaultMessage": "Goods Type Count"
+  },
+  "z85yDK": {
+    "defaultMessage": "Dismiss Match"
+  },
+  "zAWiMb": {
+    "defaultMessage": "Fraud & Forgery"
+  },
+  "zBoD8y": {
+    "defaultMessage": "Please add any images that you have of the {title}."
+  },
+  "zEXZIx": {
+    "defaultMessage": "Add To Investigation"
+  },
+  "zHoH3/": {
+    "defaultMessage": "match"
+  },
+  "zJsyF1": {
+    "defaultMessage": "Successfully Deleted"
+  },
+  "zNsljc": {
+    "defaultMessage": "Charts available to add"
+  },
+  "zR1xaG": {
+    "defaultMessage": "Face {num}"
+  },
+  "zSOvI0": {
+    "defaultMessage": "Filters"
+  },
+  "zTaC7h": {
+    "defaultMessage": "Edit Bulletin"
+  },
+  "zTbLfn": {
+    "defaultMessage": "Parent"
+  },
+  "zaYxwd": {
+    "defaultMessage": "Incident"
+  },
+  "zbPKYg": {
+    "defaultMessage": "CrimeGroup"
+  },
+  "zlX6V5": {
+    "defaultMessage": "Total Incidents: {totalIncidents}"
+  },
+  "znM5dX": {
+    "defaultMessage": "Sexual Offences"
+  },
+  "zoBZ7M": {
+    "defaultMessage": "Search Crime Groups..."
+  },
+  "zwQmkF": {
+    "defaultMessage": "Edit Crime Type"
+  }
+}

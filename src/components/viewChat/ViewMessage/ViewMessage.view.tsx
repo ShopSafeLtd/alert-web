@@ -58,6 +58,7 @@ import {
   OffenderMessageCard,
   VehicleMessageCard,
 } from 'components/MessageInput/MessageCard';
+import { useIntl } from 'react-intl';
 import Content from '../Message/Message.view';
 
 const { Option, getMentions } = Mentions;
@@ -222,7 +223,7 @@ const ViewMessages = ({
     deleteOffenderConfirm('1', '1');
     deleteIncidentConfirm('1', '1');
   }
-
+  const intl = useIntl();
   return (
     <div className="view-message-container">
       <PageHeader
@@ -275,7 +276,10 @@ const ViewMessages = ({
                 />
               }
             >
-              Delete Chat
+              {intl.formatMessage({
+                defaultMessage: 'Delete Chat',
+                id: 'NMr04q',
+              })}
             </Button>,
           ]
         }
@@ -346,7 +350,10 @@ const ViewMessages = ({
                             }}
                             size="small"
                           >
-                            Delete Message
+                            {intl.formatMessage({
+                              defaultMessage: 'Delete Message',
+                              id: 'TwEM4f',
+                            })}
                           </Button>
                         )
                       }
@@ -435,10 +442,19 @@ const ViewMessages = ({
                     <Popconfirm
                       placement="topLeft"
                       trigger="click"
-                      title="Remove the image?"
+                      title={intl.formatMessage({
+                        id: 'bRha+v',
+                        defaultMessage: 'Remove the image?',
+                      })}
                       onConfirm={() => removeImage(file.uid)}
-                      okText="Yes"
-                      cancelText="No"
+                      okText={intl.formatMessage({
+                        id: 'a5msuh',
+                        defaultMessage: 'Yes',
+                      })}
+                      cancelText={intl.formatMessage({
+                        id: 'oUWADl',
+                        defaultMessage: 'No',
+                      })}
                       overlayInnerStyle={{ padding: 10 }}
                     >
                       <Button
@@ -528,6 +544,7 @@ const ViewMessages = ({
             >
               {membersData?.map(({ id, origName, businesses }) => (
                 <Option key={id} value={origName.replace(' ', '_')}>
+                  {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
                   {origName} ({businesses[0]?.name})
                 </Option>
               ))}
@@ -542,7 +559,10 @@ const ViewMessages = ({
                 type="primary"
                 htmlType="submit"
               >
-                Send
+                {intl.formatMessage({
+                  id: '9WRlF4',
+                  defaultMessage: 'Send',
+                })}
               </Button>
             </Form.Item>
           </Col>
@@ -574,6 +594,7 @@ const ViewMessages = ({
                 <img
                   style={{ marginLeft: -8 }}
                   className="emoji-icon"
+                  // eslint-disable-next-line formatjs/no-literal-string-in-jsx
                   alt="emoji picker"
                   src="https://icons.getbootstrap.com/assets/icons/emoji-smile.svg"
                 />
@@ -620,7 +641,10 @@ const ViewMessages = ({
                     <FontAwesomeIcon className="button-icon" icon={faUsers} />
                   }
                 >
-                  Offender
+                  {intl.formatMessage({
+                    defaultMessage: 'Offender',
+                    id: 'AN7Aru',
+                  })}
                 </Button>
               </div>
             </Col>
@@ -643,7 +667,10 @@ const ViewMessages = ({
                   />
                 }
               >
-                Incident
+                {intl.formatMessage({
+                  defaultMessage: 'Incident',
+                  id: 'zaYxwd',
+                })}
               </Button>
             </Col>
           )}
@@ -665,7 +692,10 @@ const ViewMessages = ({
                   />
                 }
               >
-                Crime Group
+                {intl.formatMessage({
+                  defaultMessage: 'Crime Group',
+                  id: 'FY/YfT',
+                })}
               </Button>
             </Col>
           )}
@@ -682,7 +712,10 @@ const ViewMessages = ({
                 }
                 icon={<FontAwesomeIcon className="button-icon" icon={faCar} />}
               >
-                Vehicle
+                {intl.formatMessage({
+                  defaultMessage: 'Vehicle',
+                  id: '4T7son',
+                })}
               </Button>
             </Col>
           )}
@@ -690,7 +723,10 @@ const ViewMessages = ({
       </Form>
 
       <Drawer
-        title="Manage Chat Members"
+        title={intl.formatMessage({
+          defaultMessage: 'Manage Chat Members',
+          id: 'eVn+j4',
+        })}
         visible={manageChat}
         width="600"
         onClose={toggleManageChat}
@@ -703,7 +739,10 @@ const ViewMessages = ({
       </Drawer>
 
       <Drawer
-        title="Link Offenders"
+        title={intl.formatMessage({
+          defaultMessage: 'Link Offenders',
+          id: 'UhSUQG',
+        })}
         visible={linkOffender}
         width="800"
         onClose={toggleLinkOffender}
@@ -719,7 +758,10 @@ const ViewMessages = ({
         )}
       </Drawer>
       <Drawer
-        title="Link Incidents"
+        title={intl.formatMessage({
+          defaultMessage: 'Link Incidents',
+          id: '1Vs3Qr',
+        })}
         visible={linkIncident}
         width="1000"
         onClose={toggleLinkIncident}
@@ -735,7 +777,10 @@ const ViewMessages = ({
         )}
       </Drawer>
       <Drawer
-        title="Link CrimeGroups"
+        title={intl.formatMessage({
+          defaultMessage: 'Link Crime Groups',
+          id: 'nsggw+',
+        })}
         visible={linkCrimeGroup}
         width="800"
         onClose={toggleLinkCrimeGroup}
@@ -751,7 +796,10 @@ const ViewMessages = ({
         )}
       </Drawer>
       <Drawer
-        title="Link Vehicles"
+        title={intl.formatMessage({
+          defaultMessage: 'Link Vehicles',
+          id: 'rmI5oX',
+        })}
         visible={linkVehicle}
         width="800"
         onClose={toggleLinkVehicle}

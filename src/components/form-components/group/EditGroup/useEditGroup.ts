@@ -105,7 +105,7 @@ const useEditGroup = ({ onClose, groupId }: Props): Return => {
   const onSubmit = (data: FormData) => {
     setSaving(true);
     if (groupId)
-      updateGroup({
+      void updateGroup({
         variables: {
           where: {
             id: groupId,

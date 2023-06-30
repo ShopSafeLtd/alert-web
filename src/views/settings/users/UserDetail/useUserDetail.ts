@@ -95,6 +95,8 @@ const useUserDetail = (userId: string): Return => {
         variables: {
           user: userId,
         },
+      }).finally(() => {
+        setSaving(false);
       });
   };
   const inviteConfirm = () => {
@@ -136,6 +138,8 @@ const useUserDetail = (userId: string): Return => {
             disabled: { set: disabled },
           },
         },
+      }).finally(() => {
+        setSaving(false);
       });
   };
   const enableConfirm = () => {
@@ -187,6 +191,8 @@ const useUserDetail = (userId: string): Return => {
           id: userId,
           scheme: schemeId,
         },
+      }).finally(() => {
+        setSaving(false);
       });
   };
 

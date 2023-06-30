@@ -22,11 +22,11 @@ import {
   IncidentsColumns,
   TargetGoodsColumns,
 } from 'components/reports/tableColumns';
+import { useIntl } from 'react-intl';
 import useStyles from '../../../styles/report.styles';
 import RadialGraph from '../../../../../components/reports/graphs/radialGraph';
 import type { TargetedBusinessReportQuery } from '../../../../../graphql/generated';
-import type { AllowedValue, Elements } from '../../../types';
-import { MetaData } from '../../../types';
+import type { AllowedValue, Elements, MetaData } from '../../../types';
 
 const { Title } = Typography;
 
@@ -69,6 +69,8 @@ const BusinessReport = ({
       rowHeight * targetH + margin[1] * (targetH - 1) - (offset || 0)
     }px`;
   };
+
+  const intl = useIntl();
   const components: Elements = {
     incidentsSummary: (
       <Card
@@ -88,12 +90,20 @@ const BusinessReport = ({
         />
         <Row>
           <Col span={12}>
-            <Title level={4}>Incidents Summary</Title>
+            <Title level={4}>
+              {intl.formatMessage({
+                defaultMessage: 'Incidents Summary',
+                id: 'DGld1Y',
+              })}
+            </Title>
           </Col>
           <Row className="stats-row">
             <Statistic
               className={classes.stats}
-              title="Total Incidents"
+              title={intl.formatMessage({
+                defaultMessage: 'Total Incidents',
+                id: 'pUlxda',
+              })}
               value={data?.businessReport?.incidentSummary?.totalIncidents || 0}
               prefix={
                 <FontAwesomeIcon
@@ -104,13 +114,19 @@ const BusinessReport = ({
             />
             <Statistic
               className={classes.stats}
-              title="Last Incident (in range)"
+              title={intl.formatMessage({
+                defaultMessage: 'Last Incident (in range)',
+                id: 'lI3BDd',
+              })}
               value={
                 data?.businessReport?.incidentSummary?.lastIncidentDate
                   ? new Date(
                       data?.businessReport?.incidentSummary?.lastIncidentDate
                     ).toLocaleDateString()
-                  : 'unknown'
+                  : intl.formatMessage({
+                      defaultMessage: 'unknown',
+                      id: 'uo8NOT',
+                    })
               }
               prefix={
                 <FontAwesomeIcon
@@ -122,7 +138,10 @@ const BusinessReport = ({
 
             <Statistic
               className={classes.stats}
-              title="Reported to Police"
+              title={intl.formatMessage({
+                defaultMessage: 'Reported to Police',
+                id: 'LhTpVN',
+              })}
               value={
                 data?.businessReport?.incidentSummary
                   ?.incidentsReportedToPolice || 0
@@ -137,7 +156,10 @@ const BusinessReport = ({
 
             <Statistic
               className={classes.stats}
-              title="Police Attended"
+              title={intl.formatMessage({
+                defaultMessage: 'Police Attended',
+                id: 'ES0Nc8',
+              })}
               value={
                 data?.businessReport?.incidentSummary
                   ?.incidentsWherePoliceAttended || 0
@@ -152,7 +174,10 @@ const BusinessReport = ({
 
             <Statistic
               className={classes.stats}
-              title="Most common crime type"
+              title={intl.formatMessage({
+                defaultMessage: 'Most common crime type',
+                id: 'cY8TMo',
+              })}
               value={
                 data?.businessReport?.incidentSummary?.mostCommonCrimeType || ''
               }
@@ -185,18 +210,29 @@ const BusinessReport = ({
         />
         <Row>
           <Col span={12}>
-            <Title level={4}>Loss Summary</Title>
+            <Title level={4}>
+              {intl.formatMessage({
+                defaultMessage: 'Loss Summary',
+                id: 'O0DXtz',
+              })}
+            </Title>
           </Col>
           <Row className="stats-row">
             <Statistic
               className={classes.stats}
-              title="Total lost value"
+              title={intl.formatMessage({
+                defaultMessage: 'Total lost value',
+                id: 'xhO9Od',
+              })}
               value={
                 data?.businessReport?.lossTotals?.totalLostValue
                   ? `£${data?.businessReport?.lossTotals?.totalLostValue.toFixed(
                       2
                     )}`
-                  : 'No Losses'
+                  : intl.formatMessage({
+                      defaultMessage: 'No Losses',
+                      id: '9RLqIM',
+                    })
               }
               prefix={
                 <FontAwesomeIcon
@@ -208,13 +244,19 @@ const BusinessReport = ({
             />
             <Statistic
               className={classes.stats}
-              title="Total recovered value"
+              title={intl.formatMessage({
+                defaultMessage: 'Total recovered value',
+                id: 'OorvGS',
+              })}
               value={
                 data?.businessReport?.lossTotals?.totalRecoveredValue
                   ? `£${data?.businessReport?.lossTotals?.totalRecoveredValue.toFixed(
                       2
                     )}`
-                  : 'No Recoveries'
+                  : intl.formatMessage({
+                      defaultMessage: 'No Recoveries',
+                      id: 'i7IHf9',
+                    })
               }
               prefix={
                 <FontAwesomeIcon
@@ -226,7 +268,10 @@ const BusinessReport = ({
             />
             <Statistic
               className={classes.stats}
-              title="Average Success Rate"
+              title={intl.formatMessage({
+                defaultMessage: 'Average Success Rate',
+                id: 'G+JbdY',
+              })}
               value={`${(
                 (data?.businessReport?.lossTotals?.averageSuccessRate || 0) *
                 100
@@ -240,11 +285,14 @@ const BusinessReport = ({
             />
             <Statistic
               className={classes.stats}
-              title="Average Loss per Incident"
+              title={intl.formatMessage({
+                defaultMessage: 'Average Loss per Incident',
+                id: 'k62cVY',
+              })}
               value={
-                `£${data?.businessReport?.lossTotals?.averagePerIncident.toFixed(
-                  2
-                )}` || ''
+                `£${(
+                  data?.businessReport?.lossTotals?.averagePerIncident || 0
+                ).toFixed(2)}` || ''
               }
               prefix={
                 <FontAwesomeIcon
@@ -254,13 +302,16 @@ const BusinessReport = ({
               }
             />
           </Row>
-        </Row>{' '}
+        </Row>
       </Card>
     ),
 
     crimeTypesDonut: (
       <Card
-        title="Crime Types"
+        title={intl.formatMessage({
+          defaultMessage: 'Crime Types',
+          id: 'Piba4q',
+        })}
         className="no-break"
         loading={loading}
         style={{ height: calculateHeight('crimeTypesDonut') }}
@@ -317,7 +368,10 @@ const BusinessReport = ({
           'pie' ? (
           <DonutGraph
             data={data?.businessReport?.crimeTypeDonut}
-            emptyLabel="No Crime Types"
+            emptyLabel={intl.formatMessage({
+              defaultMessage: 'No Crime Types',
+              id: 'BbTEjZ',
+            })}
             type={
               metadata.find((item) => item.key === 'crimeTypesDonut')?.type as
                 | 'donut'
@@ -327,15 +381,24 @@ const BusinessReport = ({
         ) : (
           <BarGraph
             data={data?.businessReport?.crimeTypeDonut}
-            emptyLabel="No Crime Types"
-            labelFormat="Incidents"
+            emptyLabel={intl.formatMessage({
+              defaultMessage: 'No Crime Types',
+              id: 'BbTEjZ',
+            })}
+            labelFormat={intl.formatMessage({
+              defaultMessage: 'Incidents',
+              id: 'mtr3R4',
+            })}
           />
         )}
       </Card>
     ),
     involvedTagsDonut: (
       <Card
-        title="Involved Tags"
+        title={intl.formatMessage({
+          defaultMessage: 'Involved Tags',
+          id: 'hqB+1X',
+        })}
         className="no-break"
         loading={loading}
         style={{ height: calculateHeight('involvedTagsDonut') }}
@@ -393,7 +456,10 @@ const BusinessReport = ({
           'pie' ? (
           <DonutGraph
             data={data?.businessReport?.involvedTagDonut}
-            emptyLabel="No Involved Tags"
+            emptyLabel={intl.formatMessage({
+              defaultMessage: 'No Involved Tags',
+              id: 'N26vgU',
+            })}
             type={
               metadata.find((item) => item.key === 'involvedTagsDonut')
                 ?.type as 'donut' | 'pie'
@@ -402,8 +468,14 @@ const BusinessReport = ({
         ) : (
           <BarGraph
             data={data?.businessReport?.involvedTagDonut}
-            emptyLabel="No Involved Tags"
-            labelFormat="Incidents"
+            emptyLabel={intl.formatMessage({
+              defaultMessage: 'No Involved Tags',
+              id: 'N26vgU',
+            })}
+            labelFormat={intl.formatMessage({
+              defaultMessage: 'Incidents',
+              id: 'mtr3R4',
+            })}
           />
         )}
       </Card>
@@ -426,16 +498,28 @@ const BusinessReport = ({
           onClick={() => removeItem('incidentsDayOfWeekGraph')}
         />
         <LineGraph
-          label="Incidents by day of week"
+          label={intl.formatMessage({
+            defaultMessage: 'Incidents by day of week',
+            id: 'LPtzWr',
+          })}
           data={data?.businessReport?.incidentDayOfWeekGraph}
-          dataLabel="incidents"
-          emptyLabel="No incidents"
+          dataLabel={intl.formatMessage({
+            defaultMessage: 'incidents',
+            id: 'Xk++Mj',
+          })}
+          emptyLabel={intl.formatMessage({
+            defaultMessage: 'No incidents',
+            id: '7UNuAl',
+          })}
         />
       </Card>
     ),
     goodsTypeLossRecoveredRadial: (
       <Card
-        title="Loss/Recovered by Goods Type"
+        title={intl.formatMessage({
+          defaultMessage: 'Loss/Recovered by Goods Type',
+          id: 'PziBb1',
+        })}
         className="no-break"
         loading={loading}
         style={{
@@ -456,14 +540,20 @@ const BusinessReport = ({
         />
         <RadialGraph
           data={data?.businessReport?.goodsTypeLossRecovered}
-          emptyLabel="No Crime Types"
+          emptyLabel={intl.formatMessage({
+            defaultMessage: 'No Crime Types',
+            id: 'BbTEjZ',
+          })}
         />
       </Card>
     ),
 
     incidentTimeOfDayDonut: (
       <Card
-        title="Incidents Time of Day"
+        title={intl.formatMessage({
+          defaultMessage: 'Incidents Time of Day',
+          id: 'TQgPcd',
+        })}
         className="no-break"
         loading={loading}
         style={{ height: calculateHeight('incidentTimeOfDayDonut') }}
@@ -520,7 +610,10 @@ const BusinessReport = ({
           'pie' ? (
           <DonutGraph
             data={data?.businessReport?.incidentTimeOfDayDonut}
-            emptyLabel="No goods count"
+            emptyLabel={intl.formatMessage({
+              defaultMessage: 'No goods count',
+              id: '2t8hXG',
+            })}
             type={
               metadata.find((item) => item.key === 'crimeTypesDonut')?.type as
                 | 'donut'
@@ -530,8 +623,14 @@ const BusinessReport = ({
         ) : (
           <BarGraph
             data={data?.businessReport?.incidentTimeOfDayDonut}
-            emptyLabel="No goods count"
-            labelFormat="Incidents"
+            emptyLabel={intl.formatMessage({
+              defaultMessage: 'No goods count',
+              id: '2t8hXG',
+            })}
+            labelFormat={intl.formatMessage({
+              defaultMessage: 'Incidents',
+              id: 'mtr3R4',
+            })}
           />
         )}
       </Card>
@@ -539,7 +638,10 @@ const BusinessReport = ({
 
     incidentMonthDonut: (
       <Card
-        title="Incidents Month"
+        title={intl.formatMessage({
+          defaultMessage: 'Incidents Month',
+          id: 'a3slTY',
+        })}
         className="no-break"
         loading={loading}
         style={{ height: calculateHeight('incidentMonthDonut') }}
@@ -596,7 +698,10 @@ const BusinessReport = ({
           'pie' ? (
           <DonutGraph
             data={data?.businessReport?.incidentMonthGraph}
-            emptyLabel="No incidents"
+            emptyLabel={intl.formatMessage({
+              defaultMessage: 'No incidents',
+              id: '7UNuAl',
+            })}
             type={
               metadata.find((item) => item.key === 'crimeTypesDonut')?.type as
                 | 'donut'
@@ -606,8 +711,14 @@ const BusinessReport = ({
         ) : (
           <BarGraph
             data={data?.businessReport?.incidentMonthGraph}
-            emptyLabel="No incidents"
-            labelFormat="Incidents"
+            emptyLabel={intl.formatMessage({
+              defaultMessage: 'No incidents',
+              id: '7UNuAl',
+            })}
+            labelFormat={intl.formatMessage({
+              defaultMessage: 'Incidents',
+              id: 'mtr3R4',
+            })}
           />
         )}
       </Card>
@@ -630,7 +741,12 @@ const BusinessReport = ({
           size="small"
           onClick={() => removeItem('targetedGoodsTable')}
         />
-        <Title level={4}>Targeted Goods</Title>
+        <Title level={4}>
+          {intl.formatMessage({
+            defaultMessage: 'Targeted Goods',
+            id: 'dLBbg0',
+          })}
+        </Title>
         <Table
           size="small"
           className="no-break"
@@ -642,13 +758,18 @@ const BusinessReport = ({
             total: data?.businessReport?.targetedGoods?.total,
             defaultPageSize: 10,
             showSizeChanger: true,
-            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
+            showTotal: (total, range) =>
+              `${range[0]}-${range[1]} ${intl.formatMessage({
+                defaultMessage: 'of',
+                id: 'C9WGEu',
+              })} ${total}`,
           }}
           columns={TargetGoodsColumns}
           dataSource={targetedGoodsData}
         />
       </Card>
     ),
+
     incidentsTable: (
       <Card
         loading={loading}
@@ -666,7 +787,9 @@ const BusinessReport = ({
           size="small"
           onClick={() => removeItem('incidentsTable')}
         />
-        <Title level={4}>Incidents</Title>
+        <Title level={4}>
+          {intl.formatMessage({ defaultMessage: 'Incidents', id: 'mtr3R4' })}
+        </Title>
         <Table
           size="small"
           className="no-break"
@@ -678,13 +801,18 @@ const BusinessReport = ({
             total: data?.businessReport?.incidentsTable?.total || 0,
             defaultPageSize: 10,
             showSizeChanger: true,
-            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
+            showTotal: (total, range) =>
+              `${range[0]}-${range[1]} ${intl.formatMessage({
+                defaultMessage: 'of',
+                id: 'C9WGEu',
+              })} ${total}`,
           }}
           columns={IncidentsColumns}
           dataSource={incidentsTableData}
         />
       </Card>
     ),
+
     pageBreak: (
       <div
         className="page-break"
@@ -696,9 +824,12 @@ const BusinessReport = ({
           zIndex: 100,
         }}
       >
-        <Typography.Paragraph>Page 1</Typography.Paragraph>
+        <Typography.Paragraph>
+          {intl.formatMessage({ defaultMessage: 'Page 1', id: 'hEAGzW' })}
+        </Typography.Paragraph>
       </div>
     ),
+
     pageBreak2: (
       <div
         className="page-break"
@@ -710,7 +841,9 @@ const BusinessReport = ({
           zIndex: 100,
         }}
       >
-        <Typography.Paragraph>Page 2</Typography.Paragraph>
+        <Typography.Paragraph>
+          {intl.formatMessage({ defaultMessage: 'Page 2', id: 'Q3p9d3' })}
+        </Typography.Paragraph>
       </div>
     ),
   };

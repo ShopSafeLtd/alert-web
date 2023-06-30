@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Col, Form, Input, Row, Skeleton } from 'antd';
+import { useIntl } from 'react-intl';
 import type { CrimeGroupQuery } from 'graphql/generated';
 
 interface FormData {
@@ -20,8 +21,10 @@ const AddAlias = ({
   saving,
   data,
   loading,
-}: Props): JSX.Element =>
-  !data && loading ? (
+}: Props): JSX.Element => {
+  const intl = useIntl();
+
+  return !data && loading ? (
     <Skeleton />
   ) : (
     <Form
@@ -35,11 +38,17 @@ const AddAlias = ({
         <Col span={23}>
           <Form.Item
             name="alias"
-            label="Alias"
+            label={intl.formatMessage({
+              defaultMessage: 'Alias',
+              id: 'Ri9jA7',
+            })}
             rules={[
               {
                 required: true,
-                message: 'Please enter a alias for the crime group.',
+                message: intl.formatMessage({
+                  defaultMessage: 'Please enter an alias for the crime group.',
+                  id: 'PVUzYi',
+                }),
               },
             ]}
           >
@@ -52,7 +61,7 @@ const AddAlias = ({
         <Row style={{ marginTop: 30 }} gutter={16} justify="end">
           <Col>
             <Button disabled={saving} onClick={onClose}>
-              Cancel
+              {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
             </Button>
           </Col>
           <Col>
@@ -62,12 +71,16 @@ const AddAlias = ({
               disabled={saving}
               loading={saving}
             >
-              Add Alias
+              {intl.formatMessage({
+                defaultMessage: 'Add Alias',
+                id: 'KDH1mp',
+              })}
             </Button>
           </Col>
         </Row>
       </Form.Item>
     </Form>
   );
+};
 
 export default AddAlias;

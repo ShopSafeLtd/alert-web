@@ -3,10 +3,10 @@ import { useStoreState } from 'state';
 import type { CurrentUserQuery } from 'graphql/generated';
 import {
   useCurrentUserQuery,
-  useUpdateUserMutation,
   useResetPasswordMutation,
+  useUpdateUserMutation,
 } from 'graphql/generated';
-import { notification, Modal } from 'antd';
+import { Modal, notification } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
 const { confirm } = Modal;
@@ -63,7 +63,7 @@ const useEditProfile = (): Return => {
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
-    if (userId)
+    if (userId) {
       updateUser({
         variables: {
           where: {
@@ -95,7 +95,10 @@ const useEditProfile = (): Return => {
             },
           },
         },
+      }).finally(() => {
+        setSaving(false);
       });
+    }
   };
 
   const [resetPassword] = useResetPasswordMutation();
@@ -103,8 +106,8 @@ const useEditProfile = (): Return => {
     confirm({
       title: 'Do you Want to reset your password?',
       content: 'You will receive a reset email.',
-      onOk() {
-        resetPassword({
+      async onOk() {
+        await resetPassword({
           variables: {
             data: {
               userId,

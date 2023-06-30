@@ -1,14 +1,15 @@
+/* eslint-disable formatjs/no-literal-string-in-jsx */
 import React from 'react';
 import { render } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 
 import { MemoryRouter } from 'react-router-dom';
 import {
+  ArticlePriority,
   ListArticlesDocument,
+  QueryMode,
   SchemeGroupsDocument,
   SortOrder,
-  QueryMode,
-  ArticlePriority,
 } from 'graphql/generated';
 
 import useArticleFeed from '../useArticleFeed';

@@ -1,4 +1,4 @@
-import { Theme } from 'configs/ThemeConfig';
+import type { Theme } from 'configs/ThemeConfig';
 import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles((theme: Theme) => ({
@@ -9,8 +9,6 @@ const useStyles = createUseStyles((theme: Theme) => ({
     border: '1px solid #000',
     backgroundColor: theme.componentBackground,
     boxSizing: 'border-box',
-    /*max-height: 250px;*/
-    /*max-width: 250px;*/
   },
   nodeContainer: {
     padding: 15,

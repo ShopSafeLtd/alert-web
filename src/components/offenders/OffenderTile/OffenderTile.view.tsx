@@ -1,8 +1,8 @@
 import React from 'react';
-// import { faUser } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Card, Tooltip, Typography } from 'antd';
 import { faCheckCircle } from '@fortawesome/pro-solid-svg-icons';
+import { useIntl } from 'react-intl'; // Import the useIntl hook
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import useStyles from './OffenderTile.styles';
 
@@ -25,9 +25,19 @@ const OffenderTile = ({
   selectedOffenderIds,
 }: Props): JSX.Element => {
   const classes = useStyles();
+  const intl = useIntl(); // Use the useIntl hook to access the intl object
 
   return (
-    <Tooltip placement="bottom" title={`Add ${offender.name} to incident`}>
+    <Tooltip
+      placement="bottom"
+      title={intl.formatMessage(
+        {
+          id: 'RZ0IMu',
+          defaultMessage: `Add {name} to incident`,
+        },
+        { name: offender.name }
+      )}
+    >
       <Card
         onClick={onClick}
         bodyStyle={{
@@ -44,22 +54,19 @@ const OffenderTile = ({
         }}
       >
         <WatermarkImage url={offender.images[0]?.optimised} />
-        {/* {offender.images && offender.images.length > 0 ? (
-        <WatermarkImage url={offender.images[0]?.optimised} />
-      ) : (
-        <FontAwesomeIcon
-          style={{ color: 'rgb(114, 132, 154)' }}
-          icon={faUser}
-          size="3x"
-        />
-      )} */}
         <Paragraph
           className={classes.offenderParagraph}
           style={{
             top: 0,
           }}
         >
-          Alert ID: {offender.reference}
+          {intl.formatMessage(
+            {
+              id: '377fsC',
+              defaultMessage: 'Alert ID: {reference}',
+            },
+            { reference: offender.reference }
+          )}
         </Paragraph>
         <Paragraph
           className={classes.offenderParagraph}
@@ -69,23 +76,6 @@ const OffenderTile = ({
         >
           {offender.name}
         </Paragraph>
-        {/* <Paragraph
-          style={{
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            background: 'rgba(0,0,0,.5)',
-            color: '#FFF',
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            margin: 0,
-            padding: '3px 10px 3px',
-          }}
-        >
-          {offender.name}
-        </Paragraph> */}
       </Card>
       {selectedOffenderIds?.find((id) => id === offender.id) && (
         <FontAwesomeIcon
@@ -98,9 +88,9 @@ const OffenderTile = ({
             right: 10,
           }}
         />
-        // </div>
       )}
     </Tooltip>
   );
 };
+
 export default OffenderTile;

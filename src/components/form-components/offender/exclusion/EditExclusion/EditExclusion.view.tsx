@@ -5,6 +5,7 @@ import moment from 'moment';
 import type { RangePickerProps } from 'antd/es/date-picker';
 import type { BanData } from 'types/DataType';
 import { BanTypeValues } from 'types';
+import { useIntl } from 'react-intl';
 
 interface Props {
   onSubmit: (value: BanData) => void;
@@ -22,139 +23,179 @@ const EditExclusion = ({
   saving,
   setStartDate,
   disabledDate,
-}: Props): JSX.Element => (
-  <Form
-    initialValues={{
-      title: banData?.title,
-      startDate: moment(banData?.startDate, 'YYYY-MM-DD'),
-      endDate: moment(banData?.endDate, 'YYYY-MM-DD'),
-      location: banData?.location,
-      description: banData?.description || '',
-      type: banData?.type || null,
-    }}
-    layout="vertical"
-    onFinish={onSubmit}
-  >
-    <Row gutter={16}>
-      <Col span={21}>
-        <Form.Item
-          name="title"
-          label="Exclusion Title"
-          // rules={[
-          //   {
-          //     required: true,
-          //     message: 'Please enter a title for the new exclusion.',
-          //   },
-          // ]}
-        >
-          <Input disabled={saving} />
-        </Form.Item>
-      </Col>
-    </Row>
-    <Row gutter={16}>
-      <Col span={21}>
-        <Form.Item
-          name="type"
-          label="Type"
-          tooltip="select a type for the exclusion."
-        >
-          <Select options={BanTypeValues} disabled={saving} />
-        </Form.Item>
-      </Col>
-    </Row>
-    <Row gutter={16}>
-      <Col span={21}>
-        <Form.Item
-          name="location"
-          label="Exclusion Location "
-          rules={[
-            {
-              required: true,
-              message: 'Please enter a location for the exclusion.',
-            },
-          ]}
-        >
-          <Input disabled={saving} />
-        </Form.Item>
-      </Col>
-    </Row>
-    <Row gutter={16}>
-      <Col span={21}>
-        <Form.Item name="description" label="Exclusion Description">
-          <Input.TextArea disabled={saving} />
-        </Form.Item>
-      </Col>
-    </Row>
-    <Row gutter={16}>
-      <Col span={11}>
-        <Form.Item
-          name="startDate"
-          label="Start Date"
-          dependencies={['endDate']}
-          rules={[
-            {
-              required: true,
-              message: 'Please select a start date for the exclusion.',
-            },
-            ({ getFieldValue }) => ({
-              validator(_, value) {
-                if (getFieldValue('endDate') < value) {
-                  return Promise.reject(
-                    new Error(
-                      'The start date cannot be later than the end date!'
-                    )
-                  );
-                }
-                return Promise.resolve();
-              },
-            }),
-          ]}
-        >
-          <DatePicker
-            disabled={saving}
-            onChange={(value) =>
-              setStartDate(value ? new Date(value.valueOf()) : null)
-            }
-          />
-        </Form.Item>
-      </Col>
-
-      <Col span={11}>
-        <Form.Item
-          name="endDate"
-          label="End Date"
-          rules={[
-            {
-              required: true,
-              message: 'Please select a end date for the exclusion.',
-            },
-          ]}
-        >
-          <DatePicker disabled={saving} disabledDate={disabledDate} />
-        </Form.Item>
-      </Col>
-    </Row>
-
-    <Form.Item>
-      <Row style={{ marginTop: 30 }} gutter={16} justify="end">
-        <Col>
-          <Button disabled={saving} onClick={onClose}>
-            Cancel
-          </Button>
-        </Col>
-        <Col>
-          <Button
-            type="primary"
-            htmlType="submit"
-            disabled={saving}
-            loading={saving}
+}: Props): JSX.Element => {
+  const intl = useIntl();
+  return (
+    <Form
+      initialValues={{
+        title: banData?.title,
+        startDate: moment(banData?.startDate, 'YYYY-MM-DD'),
+        endDate: moment(banData?.endDate, 'YYYY-MM-DD'),
+        location: banData?.location,
+        description: banData?.description || '',
+        type: banData?.type || null,
+      }}
+      layout="vertical"
+      onFinish={onSubmit}
+    >
+      <Row gutter={16}>
+        <Col span={21}>
+          <Form.Item
+            name="title"
+            label={intl.formatMessage({
+              defaultMessage: 'Exclusion Title',
+              id: '9ej2FR',
+            })}
+            // rules={[
+            //   {
+            //     required: true,
+            //     message: 'Please enter a title for the new exclusion.',
+            //   },
+            // ]}
           >
-            save
-          </Button>
+            <Input disabled={saving} />
+          </Form.Item>
         </Col>
       </Row>
-    </Form.Item>
-  </Form>
-);
+      <Row gutter={16}>
+        <Col span={21}>
+          <Form.Item
+            name="type"
+            label={intl.formatMessage({ defaultMessage: 'Type', id: '+U6ozc' })}
+            tooltip={intl.formatMessage({
+              defaultMessage: 'select a type for the exclusions',
+              id: 'YO5FlE',
+            })}
+          >
+            <Select options={BanTypeValues} disabled={saving} />
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={21}>
+          <Form.Item
+            name={intl.formatMessage({
+              defaultMessage: 'Location',
+              id: 'rvirM2',
+            })}
+            label={intl.formatMessage({
+              defaultMessage: 'Exclusion location',
+              id: 'dJG2/n',
+            })}
+            rules={[
+              {
+                required: true,
+                message: intl.formatMessage({
+                  defaultMessage: 'Please enter a location for this exclusion',
+                  id: 'J1tpDz',
+                }),
+              },
+            ]}
+          >
+            <Input disabled={saving} />
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={21}>
+          <Form.Item
+            name="description"
+            label={intl.formatMessage({
+              defaultMessage: 'Exclusion Description',
+              id: 'rI1Xj8',
+            })}
+          >
+            <Input.TextArea disabled={saving} />
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={11}>
+          <Form.Item
+            name="startDate"
+            label={intl.formatMessage({
+              defaultMessage: 'Start Date',
+              id: 'QirE3M',
+            })}
+            dependencies={['endDate']}
+            rules={[
+              {
+                required: true,
+                message: intl.formatMessage({
+                  defaultMessage: 'Please select a start date',
+                  id: 'dKMbT0',
+                }),
+              },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (getFieldValue('endDate') < value) {
+                    return Promise.reject(
+                      new Error(
+                        intl.formatMessage({
+                          defaultMessage:
+                            'The start date cannot be later than the end date!',
+                          id: 'djQusS',
+                        })
+                      )
+                    );
+                  }
+                  return Promise.resolve();
+                },
+              }),
+            ]}
+          >
+            <DatePicker
+              disabled={saving}
+              onChange={(value) =>
+                setStartDate(value ? new Date(value.valueOf()) : null)
+              }
+            />
+          </Form.Item>
+        </Col>
+
+        <Col span={11}>
+          <Form.Item
+            name="endDate"
+            label={intl.formatMessage({
+              defaultMessage: 'End Date',
+              id: 'T4GOiX',
+            })}
+            rules={[
+              {
+                required: true,
+                message: intl.formatMessage({
+                  defaultMessage: 'Please select a end date for the exclusion.',
+                  id: 'CpHzB0',
+                }),
+              },
+            ]}
+          >
+            <DatePicker disabled={saving} disabledDate={disabledDate} />
+          </Form.Item>
+        </Col>
+      </Row>
+
+      <Form.Item>
+        <Row style={{ marginTop: 30 }} gutter={16} justify="end">
+          <Col>
+            <Button disabled={saving} onClick={onClose}>
+              {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
+            </Button>
+          </Col>
+          <Col>
+            <Button
+              type="primary"
+              htmlType="submit"
+              disabled={saving}
+              loading={saving}
+            >
+              {intl.formatMessage({ defaultMessage: 'Save', id: 'jvo0vs' })}
+            </Button>
+          </Col>
+        </Row>
+      </Form.Item>
+    </Form>
+  );
+};
 
 export default EditExclusion;

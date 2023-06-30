@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import type { Locale } from 'antd/lib/locale-provider';
 import enLang from './entries/en_US';
 import frLang from './entries/fr_FR';
+
+export type AvailableLanguages = 'en' | 'fr';
 
 interface AppLocaleType {
   en: LocaleType;
@@ -8,9 +11,12 @@ interface AppLocaleType {
 }
 
 interface LocaleType {
-  antd: any;
+  antd: Locale;
+
   locale: string;
-  messages: any;
+  messages: {
+    [key: string]: string;
+  };
 }
 
 const AppLocale: AppLocaleType = {

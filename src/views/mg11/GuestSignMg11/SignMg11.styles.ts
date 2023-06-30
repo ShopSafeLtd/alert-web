@@ -18,7 +18,7 @@ const styles = createUseStyles((theme: Theme) => ({
   },
   selectBox: {
     border: `1px solid ${theme.borderColor}`,
-    padding: '5px 15px ',
+    padding: '5px 10px 5px 5px',
     borderRadius: 100,
     cursor: 'pointer',
   },

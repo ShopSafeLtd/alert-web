@@ -7,8 +7,8 @@ import OffenderCard from '../OffenderCard.view';
 describe('Detail Officer View', () => {
   const data = {
     id: 'offenderId',
-    createdAt: '2022-08-10T10:40:06.191Z',
-    updatedAt: '2022-08-11T10:40:09.985Z',
+    createdAt: new Date('2022-07-25T08:57:55.299Z'),
+    updatedAt: new Date('2022-07-25T08:57:55.299Z'),
     age: null,
     build: null,
     dateOfBirth: null,

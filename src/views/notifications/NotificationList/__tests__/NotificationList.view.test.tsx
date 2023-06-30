@@ -2,6 +2,7 @@ import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import TodoList from '../NotificationList.view';
+import { Role } from 'graphql/generated';
 
 describe('List Officer View', () => {
   const data = {
@@ -9,11 +10,11 @@ describe('List Officer View', () => {
       {
         id: 'testId',
         read: false,
-        createdAt: '2022-08-10T10:40:09.985Z',
+        createdAt: new Date('2022-07-25T08:57:55.299Z'),
         notification: {
           id: 'id',
           title: 'title',
-          createdAt: '2022-08-10T10:40:09.985Z',
+          createdAt: new Date('2022-07-25T08:57:55.299Z'),
           schemes: [
             {
               id: 'id',
@@ -21,6 +22,12 @@ describe('List Officer View', () => {
               autoApproveIncidents: false,
               autoApproveOffenders: false,
               defaultPublicOffenderDOB: false,
+              members: [
+                {
+                  id: 'id',
+                  role: Role.ContentAdmin,
+                },
+              ],
             },
           ],
         },

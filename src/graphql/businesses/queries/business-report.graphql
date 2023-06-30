@@ -25,6 +25,7 @@ query BusinessReport(
           id
           name
           fullName
+          fullName
         }
       }
     }

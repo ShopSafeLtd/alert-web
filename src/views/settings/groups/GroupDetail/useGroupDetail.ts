@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import type { GroupQuery } from 'graphql/generated';
-import { useGroupQuery, useDeleteGroupMutation } from 'graphql/generated';
+import { useDeleteGroupMutation, useGroupQuery } from 'graphql/generated';
 
-import { notification, Modal } from 'antd';
+import { Modal, notification } from 'antd';
 
 const { confirm } = Modal;
 
@@ -51,7 +51,7 @@ const useGroupDetail = (groupId: string): Return => {
   const openDelete = () => {
     setSaving(true);
     if (groupId)
-      deleteGroup({
+      void deleteGroup({
         variables: {
           id: groupId,
         },

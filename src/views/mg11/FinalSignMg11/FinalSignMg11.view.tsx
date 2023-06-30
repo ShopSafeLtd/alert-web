@@ -1,3 +1,4 @@
+/* eslint-disable formatjs/no-literal-string-in-jsx */
 import React from 'react';
 import './styles.css';
 import type { FormInstance } from 'antd';

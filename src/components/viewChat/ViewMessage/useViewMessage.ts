@@ -42,6 +42,7 @@ import type {
   VehicleData,
 } from 'types/DataType';
 import errorNotification from 'types/error_notification';
+import { useIntl } from 'react-intl';
 
 const { confirm } = Modal;
 const { getMentions } = Mentions;
@@ -144,7 +145,7 @@ interface Return {
 
 const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   const apolloStore = useApolloClient();
-
+  const intl = useIntl();
   const {
     role,
     id: userId,
@@ -282,7 +283,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                         $set: [
                           {
                             content: newMessage.content,
-                            createdAt: newMessage.createdAt,
+                            createdAt: newMessage?.createdAt,
                             from: {
                               origName: newMessage.from?.fullName || '',
                               id: newMessage.id || '',
@@ -514,8 +515,14 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: 'Successfully Deleted!',
-        description: 'The message has been deleted!',
+        message: intl.formatMessage({
+          id: 'dvDKi/',
+          defaultMessage: 'Successfully Deleted!',
+        }),
+        description: intl.formatMessage({
+          id: 'ihAHg9',
+          defaultMessage: 'The task has been deleted!',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -529,7 +536,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   const openDelete = (currentId: string) => {
     setSaving(true);
     if (currentId) {
-      deleteMessage({
+      void deleteMessage({
         variables: {
           id: currentId,
         },
@@ -538,8 +545,14 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   };
   const deleteMessageConfirm = (currentId: string) => {
     confirm({
-      title: 'Do you want to delete the message?',
-      content: 'This action cannot be undone.',
+      title: intl.formatMessage({
+        id: 'Dg5ys8',
+        defaultMessage: 'Do you want to delete the task?',
+      }),
+      content: intl.formatMessage({
+        id: 'JDJoIZ',
+        defaultMessage: 'This action cannot be undone.',
+      }),
       onOk() {
         openDelete(currentId);
       },
@@ -551,8 +564,14 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       setSaving(false);
       navigate('/app/chat');
       notification.success({
-        message: 'Successfully Deleted!',
-        description: 'The chat has been deleted!',
+        message: intl.formatMessage({
+          id: 'dvDKi/',
+          defaultMessage: 'Successfully Deleted!',
+        }),
+        description: intl.formatMessage({
+          id: 'ihAHg9',
+          defaultMessage: 'The task has been deleted!',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -564,13 +583,22 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   });
   const deleteChatConfirm = () => {
     confirm({
-      title: 'Do you want to delete the chat?',
-      content: 'This action cannot be undone.',
-      okText: 'Delete',
+      title: intl.formatMessage({
+        id: 'XX7iFo',
+        defaultMessage: 'Do you want to delete the chat?',
+      }),
+      content: intl.formatMessage({
+        id: 'JDJoIZ',
+        defaultMessage: 'This action cannot be undone.',
+      }),
+      okText: intl.formatMessage({
+        id: 'K3r6DQ',
+        defaultMessage: 'Delete',
+      }),
       onOk() {
         setSaving(true);
         if (chatId)
-          deleteChat({
+          void deleteChat({
             variables: {
               id: chatId,
             },
@@ -650,7 +678,13 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   const beforeUpload = (file: RcFile) => {
     const isFileDuplicate = fileList.find((item) => item.name === file.name);
     if (isFileDuplicate) {
-      message.error('This image already exists, please choose another one.');
+      void message.error(
+        intl.formatMessage({
+          defaultMessage:
+            'This image already exists, please choose another one.',
+          id: 'ILB9M+',
+        })
+      );
     }
     return !isFileDuplicate || Upload.LIST_IGNORE;
   };
@@ -661,8 +695,11 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
         ...fileList.filter((item) => item.uid !== info.file.uid),
         {
           ...info.file,
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
           url: info.file.response[0].url,
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
           fileName: info.file.response[0].blobName,
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
           type: info.file.response[0].mimetype,
         },
       ]);
@@ -736,10 +773,15 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       vehiclesData.length === 0 &&
       crimeGroupsData.length === 0
     ) {
-      message.info('The message cannot be empty!');
+      void message.info(
+        intl.formatMessage({
+          defaultMessage: 'The message cannot be empty!',
+          id: 'wkhZ0u',
+        })
+      );
     } else {
       setSaving(true);
-      sendMessage({
+      void sendMessage({
         variables: {
           data: {
             chat: {
@@ -828,7 +870,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                       })) || [],
                     reference: incident.reference,
                     subject: incident.subject,
-                    description: incident.description,
+                    description: incident.description || '',
                     dayTime: incident.dayTime,
                   }))
                 : [],
@@ -841,7 +883,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                         ...image,
                         position: ImagePosition.CenterCenter,
                       })) || [],
-                    updatedAt: offender.updatedAt,
+                    updatedAt: offender.updatedAt || new Date(),
                     age: offender.age,
                     build: offender.build,
                     dateOfBirth: offender.dateOfBirth,
@@ -906,12 +948,14 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   };
 
   return {
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onSubmit,
     data,
     loading,
     chatData,
     form,
     saving,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     scrolledToTop,
     userId,
     deleteMessageConfirm,
@@ -925,6 +969,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     showPicker,
     toggleShowPicker,
     imgChange,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onPreview,
     beforeUpload,
     fileList,

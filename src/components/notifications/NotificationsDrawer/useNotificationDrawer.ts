@@ -1,5 +1,8 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { useStoreActions, useStoreState } from 'state';
 import type {
+  ListUserNotificationsQuery,
+  ListUserNotificationsQueryVariables,
   UpdateUserNotificationsMutation,
   UserNotificationsQuery,
 } from 'graphql/generated';
@@ -8,8 +11,8 @@ import {
   QueryMode,
   SortOrder,
   UserNotificationsDocument,
+  useListUserNotificationsQuery,
   useUpdateUserNotificationsMutation,
-  useUserNotificationsQuery,
 } from 'graphql/generated';
 import { useState } from 'react';
 import type { MutationUpdaterFn } from '@apollo/client';
@@ -17,6 +20,7 @@ import { notification } from 'antd';
 import errorNotification from 'types/error_notification';
 import { useNavigate } from 'react-router';
 import { LocalStorageKeys } from 'types';
+import { useIntl } from 'react-intl';
 
 export interface NotificationData {
   id: string;
@@ -58,7 +62,10 @@ interface Scheme {
 }
 interface Return {
   data:
-    | Exclude<UserNotificationsQuery['user'], undefined | null>
+    | Exclude<
+        ListUserNotificationsQuery['listUserNotifications'],
+        undefined | null
+      >
     | null
     | undefined;
   loading: boolean;
@@ -74,7 +81,7 @@ interface Return {
 
 const useNotificationLists = (): Return => {
   const navigate = useNavigate();
-
+  const intl = useIntl();
   const userId = useStoreState((state) => state.user.id);
   const userSchemes = useStoreState((state) => state.user.schemes);
   const schemeId = useStoreState((state) => state.scheme.id);
@@ -168,12 +175,15 @@ const useNotificationLists = (): Return => {
     }
   };
 
-  const variables = {
+  const variables: ListUserNotificationsQueryVariables = {
     take: 20,
+    skip: 0,
     where: {
-      id: userId,
-    },
-    notificationWhere: {
+      user: {
+        id: {
+          equals: userId,
+        },
+      },
       AND: [
         {
           OR: [
@@ -217,19 +227,9 @@ const useNotificationLists = (): Return => {
     ],
   };
 
-  const { data, loading, refetch } = useUserNotificationsQuery({
+  const { data, loading, refetch } = useListUserNotificationsQuery({
     fetchPolicy: 'cache-and-network',
     variables,
-    onCompleted: (res) => {
-      if (
-        res.user?.totalUnreadNotifications &&
-        res.user?.totalUnreadNotifications > 0
-      ) {
-        setNotifications({
-          userNotifications: res.user.totalUnreadNotifications || 0,
-        });
-      }
-    },
   });
 
   const update: MutationUpdaterFn<UpdateUserNotificationsMutation> = (
@@ -282,8 +282,14 @@ const useNotificationLists = (): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: 'Successfully Updated!',
-        description: 'All notifications has been updated to read! ',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
+          id: 'w5Yfkf',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'All notifications have been updated to read!',
+          id: 'dI0d71',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -325,7 +331,7 @@ const useNotificationLists = (): Return => {
       if (schemeId !== value.schemes[0].id) {
         handleSchemeChange(value.schemes[0]);
       }
-      updateUserNotification({
+      void updateUserNotification({
         variables: {
           where: {
             notification: getUserNotificationType(value),
@@ -337,7 +343,7 @@ const useNotificationLists = (): Return => {
 
   const handleMarkAllRead = () => {
     setSaving(true);
-    updateAllUserNotifications({
+    void updateAllUserNotifications({
       variables: {
         where: {
           notification: {
@@ -366,7 +372,7 @@ const useNotificationLists = (): Return => {
   };
 
   return {
-    data: data?.user,
+    data: data?.listUserNotifications,
     loading: (data === null || data === undefined) && loading,
     saving,
     takeAllSchemes,
@@ -374,6 +380,7 @@ const useNotificationLists = (): Return => {
     handleMarkAsRead,
     handleMarkAllRead,
     setSearch,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onRefresh,
     refreshing,
   };

@@ -123,13 +123,14 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
       meta.set('lastSaved', date.getTime());
       setSavedWhen(moment(date).fromNow());
 
-      updateFlow({
+      void updateFlow({
         variables: {
           where: {
             id: importData?.investigation?.flows[0].id || '',
           },
           data: {
             nodes: flow.nodes.map((node: Node) => ({
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
               data: node.data,
               id: node.id,
               positionX: Math.round(node.position.x),
@@ -177,6 +178,7 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
 
   const handleSynced = useCallback(
     ({ synced }) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       setIsSynced(synced);
     },
     [setIsSynced]
@@ -295,7 +297,9 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
       if (
         lastSaved &&
         lastSaved >
-          new Date(importData?.investigation?.flows[0].updatedAt).getTime()
+          new Date(
+            importData?.investigation?.flows[0]?.updatedAt?.toString() || ''
+          ).getTime()
       ) {
         setSavedWhen(moment(new Date(lastSaved)).fromNow());
       } else {
@@ -320,14 +324,17 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
   }, [handleSaveDebounced, nodes, edges]);
 
   const onChange = useCallback((value, id) => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const currentNode = nodesMap.get(id);
     if (!currentNode) {
       return;
     }
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     nodesMap.set(id, {
       ...currentNode,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       data: { ...currentNode.data, color: value },
     });
   }, []);
@@ -416,18 +423,21 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
   };
 
   const onNodeClick = useCallback((_, node) => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
     const currentNode = nodesMap.get(node.id);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
     nodesMap.set(node.id, {
       ...currentNode,
       className: styles.blink,
     });
 
     window.setTimeout(() => {
-      // eslint-disable-next-line @typescript-eslint/no-shadow
+      // eslint-disable-next-line @typescript-eslint/no-shadow, @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
       const currentNode = nodesMap.get(node.id);
       if (currentNode) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
         nodesMap.set(node.id, {
           ...currentNode,
           className: undefined,
@@ -443,8 +453,9 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
     []
   );
   const onDragOver = useCallback((event) => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
     event.preventDefault();
-    // eslint-disable-next-line no-param-reassign
+    // eslint-disable-next-line no-param-reassign,@typescript-eslint/no-unsafe-member-access
     event.dataTransfer.dropEffect = 'move';
   }, []);
 
@@ -472,9 +483,9 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
   const setFullScreen = useCallback(() => {
     setIsFullScreen(!isFullScreen);
     if (isFullScreen) {
-      flowScreen.exit();
+      void flowScreen.exit();
     } else {
-      flowScreen.enter();
+      void flowScreen.enter();
     }
   }, [isFullScreen]);
 

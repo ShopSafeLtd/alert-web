@@ -44,7 +44,7 @@ const DebounceSelect = <
       if (setValue && value !== '') {
         setValue([value]);
       }
-      fetchOptions(value).then((newOptions) => {
+      void fetchOptions(value).then((newOptions) => {
         setOptions(newOptions);
         setFetching(false);
       });

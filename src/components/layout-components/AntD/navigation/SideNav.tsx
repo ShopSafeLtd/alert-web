@@ -1,10 +1,11 @@
+/* eslint-disable unicorn/prefer-node-protocol */
 import React from 'react';
 import { Layout } from 'antd';
 import { SIDE_NAV_WIDTH } from 'constants/ThemeConstant';
 import { Scrollbars } from 'react-custom-scrollbars';
+import { useStoreState, NavType } from 'state';
+import type { NavItem } from 'configs/NavigationConfig';
 import MenuContent from './MenuContent';
-import { useStoreState, SideNavTheme, NavType } from 'state';
-import { NavItem } from 'configs/NavigationConfig';
 
 const { Sider } = Layout;
 

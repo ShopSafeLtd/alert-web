@@ -114,6 +114,7 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
         businesses {
           id
           name
+          fullName
         }
       }
       replies {
@@ -194,6 +195,7 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
           businesses {
             id
             name
+            fullName
           }
         }
       }

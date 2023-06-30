@@ -1,7 +1,8 @@
 import React from 'react';
-import { Col, Input, Row, Table } from 'antd';
+import { Button, Col, Input, Row, Table } from 'antd';
 import type { ListCrimeGroupsQuery } from 'graphql/generated';
 import { Link } from 'react-router-dom';
+import { useIntl } from 'react-intl';
 import useStyles from './ListCrimeGroups.styles';
 
 interface Props {
@@ -13,6 +14,7 @@ interface Props {
 
 const ListCrimeGroups = ({ data, loading, search, setSearch }: Props) => {
   const classes = useStyles();
+  const intl = useIntl();
   return (
     <div className={classes.page}>
       <Row gutter={16} className={classes.headerRow}>
@@ -22,8 +24,21 @@ const ListCrimeGroups = ({ data, loading, search, setSearch }: Props) => {
             onChange={(event) => setSearch(event.target.value)}
             allowClear
             className={classes.searchInput}
-            placeholder="Search crime groups..."
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Search crime groups...',
+              id: 'q5vT3Z',
+            })}
           />
+        </Col>
+        <Col>
+          <Link to="create">
+            <Button type="primary">
+              {intl.formatMessage({
+                defaultMessage: 'Create Crime Group',
+                id: 'Bju8fW',
+              })}
+            </Button>
+          </Link>
         </Col>
       </Row>
       <Table
@@ -43,42 +58,71 @@ const ListCrimeGroups = ({ data, loading, search, setSearch }: Props) => {
           {
             key: 'reference',
             dataIndex: 'reference',
-            title: 'Alert ID',
-            render: (value, item) => <Link to={`${item.key}`}>CG-{value}</Link>,
+            title: intl.formatMessage({
+              defaultMessage: 'Alert ID',
+              id: 'k8ZNgH',
+            }),
+            render: (value: string, item) => (
+              <Link to={`${item.key}`}>
+                {intl.formatMessage(
+                  { defaultMessage: 'CG-{id}', id: 'ryBmoZ' },
+                  {
+                    id: value,
+                  }
+                )}
+              </Link>
+            ),
           },
           {
             key: 'alias',
             dataIndex: 'alias',
-            title: 'Alias',
+            title: intl.formatMessage({
+              defaultMessage: 'Alias',
+              id: 'Ri9jA7',
+            }),
           },
-
           {
             key: 'totalOffenders',
             dataIndex: 'totalOffenders',
-            title: 'Members',
+            title: intl.formatMessage({
+              defaultMessage: 'Members',
+              id: '+a+2ug',
+            }),
           },
           {
             key: 'totalIncidents',
             dataIndex: 'totalIncidents',
-            title: 'Incidents',
+            title: intl.formatMessage({
+              defaultMessage: 'Incidents',
+              id: 'mtr3R4',
+            }),
           },
           {
             key: 'totalValue',
             dataIndex: 'totalValue',
-            title: 'Lost Value',
-            render: (value) => `£${value || 0}`,
+            title: intl.formatMessage({
+              defaultMessage: 'Lost Value',
+              id: '3YYDlc',
+            }),
+            render: (value: number | undefined) => `£${value || 0}`,
           },
           {
             key: 'totalRecoveredValue',
             dataIndex: 'totalRecoveredValue',
-            title: 'Recovered Value',
-            render: (value) => `£${value || 0}`,
+            title: intl.formatMessage({
+              defaultMessage: 'Recovered Value',
+              id: 'bGwFFv',
+            }),
+            render: (value: number | undefined) => `£${value || 0}`,
           },
           {
             key: 'totalTheftSuccess',
             dataIndex: 'totalTheftSuccess',
-            title: 'Success Rate',
-            render: (value) => `${value?.toFixed(0) || 0}%`,
+            title: intl.formatMessage({
+              defaultMessage: 'Success Rate',
+              id: 'IaZkrc',
+            }),
+            render: (value: number | undefined) => `${value?.toFixed(0) || 0}%`,
           },
         ]}
       />
