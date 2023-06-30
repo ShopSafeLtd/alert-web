@@ -1,12 +1,12 @@
 import React from 'react';
-import type { VehicleData, VehicleCardData } from 'types/DataType';
+import type { VehicleData } from 'types/DataType';
 import View from './EditVehicle.view';
 import useEditVehicle from './useEditVehicle';
 
 interface Props {
   onClose: () => void;
   update: (value: VehicleData) => void;
-  editData: VehicleCardData | undefined | null;
+  editData: VehicleData | undefined | null;
   showGroups?: boolean;
   fromIncident?: boolean | undefined;
   fromOffender?: boolean | undefined;

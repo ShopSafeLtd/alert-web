@@ -114,13 +114,15 @@ const useAuth = (): Return => {
       handleNoValidScheme();
     }
 
-    await OneSignal.init({
-      appId: '15f85158-c5be-4735-b503-23c4200c94d6',
-    }).then(async () => {
-      await OneSignal.showSlidedownPrompt().then(() => {
-        // do other stuff
+    if (window.location.href.includes('app.shopsafe.uk')) {
+      await OneSignal.init({
+        appId: '15f85158-c5be-4735-b503-23c4200c94d6',
+      }).then(async () => {
+        await OneSignal.showSlidedownPrompt().then(() => {
+          // do other stuff
+        });
       });
-    });
+    }
 
     LogRocket.identify(id, {
       fullName,

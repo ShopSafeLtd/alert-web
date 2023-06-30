@@ -24,8 +24,8 @@ import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import type {
   CustomGalleryData,
   IncidentCardData,
-  VehicleCardData,
   OffenderData,
+  VehicleData,
 } from 'types/DataType';
 import UploadImage from 'components/images/UploadImage.view';
 import AddCustomGallery from 'components/form-components/customGalleries/AddCustomGallery';
@@ -37,7 +37,7 @@ const { confirm } = Modal;
 
 interface Props {
   onClose: () => void;
-  editData: VehicleCardData | undefined | null;
+  editData: VehicleData | undefined | null;
   onSubmit: (value: FormData) => void;
   CrimeGroupsData: ListCrimeGroupsQuery | undefined;
   CrimeGroupsLoading: boolean;

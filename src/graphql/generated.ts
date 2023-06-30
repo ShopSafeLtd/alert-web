@@ -31617,7 +31617,7 @@ export type OffenderReport = {
 };
 
 export type OffenderReportInput = {
-  businessIds: Array<Scalars['String']>;
+  businessIds?: InputMaybe<Array<Scalars['String']>>;
   dateRange: DateRangeInput;
   groupIds: Array<Scalars['String']>;
   offenderId: Scalars['String'];
@@ -65876,8 +65876,8 @@ export type CreateUpdateOnCrimeGroupMutation = {
       id: string;
       url?: string | null;
       optimised?: string | null;
-      card?: string | null;
       position: ImagePosition;
+      card?: string | null;
     }>;
     linkedCrimeGroups: Array<{
       __typename?: 'CrimeGroup';
@@ -65947,7 +65947,12 @@ export type CreateUpdateOnCrimeGroupMutation = {
       origName: string;
       id: string;
       fullName: string;
-      businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
+      businesses: Array<{
+        __typename?: 'Business';
+        id: string;
+        name: string;
+        fullName: string;
+      }>;
     };
     replies: Array<{
       __typename?: 'Update';
@@ -65960,8 +65965,8 @@ export type CreateUpdateOnCrimeGroupMutation = {
         id: string;
         url?: string | null;
         optimised?: string | null;
-        position: ImagePosition;
         card?: string | null;
+        position: ImagePosition;
       }>;
       linkedCrimeGroups: Array<{
         __typename?: 'CrimeGroup';
@@ -66060,8 +66065,8 @@ export type CreateUpdateOnIncidentMutation = {
       id: string;
       url?: string | null;
       optimised?: string | null;
-      card?: string | null;
       position: ImagePosition;
+      card?: string | null;
     }>;
     linkedCrimeGroups: Array<{
       __typename?: 'CrimeGroup';
@@ -66088,9 +66093,9 @@ export type CreateUpdateOnIncidentMutation = {
       images: Array<{
         __typename?: 'Image';
         id: string;
+        url?: string | null;
         optimised?: string | null;
         position: ImagePosition;
-        url?: string | null;
       }>;
     }>;
     linkedIncidents: Array<{
@@ -66131,7 +66136,12 @@ export type CreateUpdateOnIncidentMutation = {
       origName: string;
       id: string;
       fullName: string;
-      businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
+      businesses: Array<{
+        __typename?: 'Business';
+        id: string;
+        name: string;
+        fullName: string;
+      }>;
     };
     replies: Array<{
       __typename?: 'Update';
@@ -66144,8 +66154,8 @@ export type CreateUpdateOnIncidentMutation = {
         id: string;
         url?: string | null;
         optimised?: string | null;
-        position: ImagePosition;
         card?: string | null;
+        position: ImagePosition;
       }>;
       linkedCrimeGroups: Array<{
         __typename?: 'CrimeGroup';
@@ -66244,8 +66254,38 @@ export type CreateUpdateOnInvestigationMutation = {
       id: string;
       url?: string | null;
       optimised?: string | null;
-      card?: string | null;
       position: ImagePosition;
+      card?: string | null;
+    }>;
+    linkedCrimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      totalOffenders?: number | null;
+      totalIncidents?: number | null;
+      alias?: string | null;
+      id: string;
+      reference?: number | null;
+      totalRecoveredValue?: number | null;
+      totalTheftSuccess?: number | null;
+      totalValue?: number | null;
+      updatedAt: Date;
+    }>;
+    linkedVehicles: Array<{
+      __typename?: 'Vehicle';
+      updatedAt: Date;
+      totalOffenders?: number | null;
+      registration?: string | null;
+      reference?: number | null;
+      model?: string | null;
+      make?: string | null;
+      id: string;
+      colour?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+        position: ImagePosition;
+      }>;
     }>;
     linkedIncidents: Array<{
       __typename?: 'Incident';
@@ -66280,42 +66320,17 @@ export type CreateUpdateOnInvestigationMutation = {
         position: ImagePosition;
       }>;
     }>;
-    linkedCrimeGroups: Array<{
-      __typename?: 'CrimeGroup';
-      totalOffenders?: number | null;
-      totalIncidents?: number | null;
-      alias?: string | null;
-      id: string;
-      reference?: number | null;
-      totalRecoveredValue?: number | null;
-      totalTheftSuccess?: number | null;
-      totalValue?: number | null;
-      updatedAt: Date;
-    }>;
-    linkedVehicles: Array<{
-      __typename?: 'Vehicle';
-      updatedAt: Date;
-      totalOffenders?: number | null;
-      registration?: string | null;
-      reference?: number | null;
-      model?: string | null;
-      make?: string | null;
-      id: string;
-      colour?: string | null;
-      images: Array<{
-        __typename?: 'Image';
-        id: string;
-        url?: string | null;
-        optimised?: string | null;
-        position: ImagePosition;
-      }>;
-    }>;
     createdBy: {
       __typename?: 'User';
       origName: string;
       id: string;
       fullName: string;
-      businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
+      businesses: Array<{
+        __typename?: 'Business';
+        id: string;
+        name: string;
+        fullName: string;
+      }>;
     };
     replies: Array<{
       __typename?: 'Update';
@@ -66428,8 +66443,8 @@ export type CreateUpdateOnOffenderMutation = {
       id: string;
       url?: string | null;
       optimised?: string | null;
-      card?: string | null;
       position: ImagePosition;
+      card?: string | null;
     }>;
     linkedCrimeGroups: Array<{
       __typename?: 'CrimeGroup';
@@ -66456,8 +66471,8 @@ export type CreateUpdateOnOffenderMutation = {
       images: Array<{
         __typename?: 'Image';
         id: string;
-        optimised?: string | null;
         url?: string | null;
+        optimised?: string | null;
         position: ImagePosition;
       }>;
     }>;
@@ -66499,7 +66514,12 @@ export type CreateUpdateOnOffenderMutation = {
       origName: string;
       id: string;
       fullName: string;
-      businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
+      businesses: Array<{
+        __typename?: 'Business';
+        id: string;
+        name: string;
+        fullName: string;
+      }>;
     };
     replies: Array<{
       __typename?: 'Update';
@@ -66612,8 +66632,8 @@ export type CreateUpdateOnVehicleMutation = {
       id: string;
       url?: string | null;
       optimised?: string | null;
-      card?: string | null;
       position: ImagePosition;
+      card?: string | null;
     }>;
     linkedCrimeGroups: Array<{
       __typename?: 'CrimeGroup';
@@ -66683,7 +66703,12 @@ export type CreateUpdateOnVehicleMutation = {
       origName: string;
       id: string;
       fullName: string;
-      businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
+      businesses: Array<{
+        __typename?: 'Business';
+        id: string;
+        name: string;
+        fullName: string;
+      }>;
     };
     replies: Array<{
       __typename?: 'Update';
@@ -66696,8 +66721,8 @@ export type CreateUpdateOnVehicleMutation = {
         id: string;
         url?: string | null;
         optimised?: string | null;
-        position: ImagePosition;
         card?: string | null;
+        position: ImagePosition;
       }>;
       linkedCrimeGroups: Array<{
         __typename?: 'CrimeGroup';
@@ -66911,6 +66936,7 @@ export type CurrentUserQuery = {
       __typename?: 'Business';
       id: string;
       name: string;
+      fullName: string;
       demId?: string | null;
     }>;
     groups: Array<{
@@ -78780,8 +78806,8 @@ export const CreateUpdateOnCrimeGroupDocument = gql`
         id
         url
         optimised
-        card
         position
+        card
       }
       linkedCrimeGroups {
         totalOffenders
@@ -78846,6 +78872,7 @@ export const CreateUpdateOnCrimeGroupDocument = gql`
         businesses {
           id
           name
+          fullName
         }
       }
       replies {
@@ -78857,8 +78884,8 @@ export const CreateUpdateOnCrimeGroupDocument = gql`
           id
           url
           optimised
-          position
           card
+          position
         }
         linkedCrimeGroups {
           totalOffenders
@@ -78970,8 +78997,8 @@ export const CreateUpdateOnIncidentDocument = gql`
         id
         url
         optimised
-        card
         position
+        card
       }
       linkedCrimeGroups {
         totalOffenders
@@ -78985,6 +79012,12 @@ export const CreateUpdateOnIncidentDocument = gql`
         updatedAt
       }
       linkedVehicles {
+        images {
+          id
+          url
+          optimised
+          position
+        }
         updatedAt
         totalOffenders
         registration
@@ -78993,12 +79026,6 @@ export const CreateUpdateOnIncidentDocument = gql`
         make
         id
         colour
-        images {
-          id
-          optimised
-          position
-          url
-        }
       }
       linkedIncidents {
         id
@@ -79036,6 +79063,7 @@ export const CreateUpdateOnIncidentDocument = gql`
         businesses {
           id
           name
+          fullName
         }
       }
       replies {
@@ -79047,8 +79075,8 @@ export const CreateUpdateOnIncidentDocument = gql`
           id
           url
           optimised
-          position
           card
+          position
         }
         linkedCrimeGroups {
           totalOffenders
@@ -79062,6 +79090,12 @@ export const CreateUpdateOnIncidentDocument = gql`
           updatedAt
         }
         linkedVehicles {
+          images {
+            id
+            url
+            optimised
+            position
+          }
           updatedAt
           totalOffenders
           registration
@@ -79070,12 +79104,6 @@ export const CreateUpdateOnIncidentDocument = gql`
           make
           id
           colour
-          images {
-            id
-            url
-            optimised
-            position
-          }
         }
         linkedIncidents {
           id
@@ -79159,8 +79187,35 @@ export const CreateUpdateOnInvestigationDocument = gql`
         id
         url
         optimised
-        card
         position
+        card
+      }
+      linkedCrimeGroups {
+        totalOffenders
+        totalIncidents
+        alias
+        id
+        reference
+        totalRecoveredValue
+        totalTheftSuccess
+        totalValue
+        updatedAt
+      }
+      linkedVehicles {
+        images {
+          id
+          url
+          optimised
+          position
+        }
+        updatedAt
+        totalOffenders
+        registration
+        reference
+        model
+        make
+        id
+        colour
       }
       linkedIncidents {
         id
@@ -79191,33 +79246,6 @@ export const CreateUpdateOnInvestigationDocument = gql`
           position
         }
       }
-      linkedCrimeGroups {
-        totalOffenders
-        totalIncidents
-        alias
-        id
-        reference
-        totalRecoveredValue
-        totalTheftSuccess
-        totalValue
-        updatedAt
-      }
-      linkedVehicles {
-        images {
-          id
-          url
-          optimised
-          position
-        }
-        updatedAt
-        totalOffenders
-        registration
-        reference
-        model
-        make
-        id
-        colour
-      }
       createdBy {
         origName
         id
@@ -79225,6 +79253,7 @@ export const CreateUpdateOnInvestigationDocument = gql`
         businesses {
           id
           name
+          fullName
         }
       }
       replies {
@@ -79349,8 +79378,8 @@ export const CreateUpdateOnOffenderDocument = gql`
         id
         url
         optimised
-        card
         position
+        card
       }
       linkedCrimeGroups {
         totalOffenders
@@ -79364,6 +79393,12 @@ export const CreateUpdateOnOffenderDocument = gql`
         updatedAt
       }
       linkedVehicles {
+        images {
+          id
+          url
+          optimised
+          position
+        }
         updatedAt
         totalOffenders
         registration
@@ -79372,12 +79407,6 @@ export const CreateUpdateOnOffenderDocument = gql`
         make
         id
         colour
-        images {
-          id
-          optimised
-          url
-          position
-        }
       }
       linkedIncidents {
         id
@@ -79415,6 +79444,7 @@ export const CreateUpdateOnOffenderDocument = gql`
         businesses {
           id
           name
+          fullName
         }
       }
       replies {
@@ -79538,8 +79568,8 @@ export const CreateUpdateOnVehicleDocument = gql`
         id
         url
         optimised
-        card
         position
+        card
       }
       linkedCrimeGroups {
         totalOffenders
@@ -79604,6 +79634,7 @@ export const CreateUpdateOnVehicleDocument = gql`
         businesses {
           id
           name
+          fullName
         }
       }
       replies {
@@ -79615,8 +79646,8 @@ export const CreateUpdateOnVehicleDocument = gql`
           id
           url
           optimised
-          position
           card
+          position
         }
         linkedCrimeGroups {
           totalOffenders
@@ -80001,6 +80032,7 @@ export const CurrentUserDocument = gql`
       businesses {
         id
         name
+        fullName
         demId
       }
       newUser

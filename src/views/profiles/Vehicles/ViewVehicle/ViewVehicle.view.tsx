@@ -761,8 +761,12 @@ const ViewVehicle = ({
                 ...data?.vehicle,
                 id: data?.vehicle?.id || '',
                 crimeGroup: data?.vehicle?.crimeGroup.map(({ id }) => id || ''),
-                incidents: data?.vehicle?.incidents,
-                offenders: data?.vehicle?.offenders,
+                incidents: data?.vehicle?.incidents.map(
+                  (incident) => incident.id
+                ),
+                offenders: data?.vehicle?.offenders.map(
+                  (offender) => offender.id
+                ),
                 customGalleries: data?.vehicle?.customGalleries.map(
                   ({ id }) => id || ''
                 ),

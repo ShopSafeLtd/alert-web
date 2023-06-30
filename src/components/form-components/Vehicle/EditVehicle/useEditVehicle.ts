@@ -18,14 +18,13 @@ import type {
   IncidentCardData,
   VehicleData,
   OffenderData,
-  VehicleCardData,
 } from 'types/DataType';
 import update from 'immutability-helper';
 
 interface Props {
   onClose: () => void;
   update: (value: VehicleData) => void;
-  editData: VehicleCardData | undefined | null;
+  editData: VehicleData | undefined | null;
 }
 export interface Image extends UploadFile {
   optimised?: string | null;

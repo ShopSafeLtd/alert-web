@@ -8,8 +8,8 @@ mutation CreateUpdateOnVehicle($vehicle: UniqueId!, $data: CreateUpdateData!) {
       id
       url
       optimised
-      card
       position
+      card
     }
     linkedCrimeGroups {
       totalOffenders
@@ -74,6 +74,7 @@ mutation CreateUpdateOnVehicle($vehicle: UniqueId!, $data: CreateUpdateData!) {
       businesses {
         id
         name
+        fullName
       }
     }
     replies {
@@ -85,8 +86,8 @@ mutation CreateUpdateOnVehicle($vehicle: UniqueId!, $data: CreateUpdateData!) {
         id
         url
         optimised
-        position
         card
+        position
       }
       linkedCrimeGroups {
         totalOffenders
