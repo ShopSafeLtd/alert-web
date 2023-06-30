@@ -4,7 +4,6 @@ import { Drawer } from 'antd';
 import type { CrimeGroupData, VehicleData } from 'types/DataType';
 import AddVehicle from 'components/form-components/Vehicle/AddVehicle';
 import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
-import EditVehicle from 'components/form-components/Vehicle/EditVehicle';
 import LinkCrimeGroup from 'components/form-components/linkOptions/LinkCrimeGroup';
 import { useIntl } from 'react-intl';
 
@@ -14,22 +13,17 @@ interface Props {
   vehiclesData: VehicleData[];
   addExistingVehicle: boolean;
   toggleAddExistingVehicle: () => void;
-  editVehicleId: string;
-  setEditVehicleId: (value: string) => void;
   crimeGroupsData: CrimeGroupData[];
   addExistingCrimeGroup: boolean;
   toggleAddExistingCrimeGroup: () => void;
   onAddCrimeGroup: (value: CrimeGroupData) => void;
   fromOffender?: boolean;
   onAddVehicle: (data: VehicleData, existing: boolean) => void;
-  onEditVehicle: (data: VehicleData) => void;
 }
 
 const ProfileDrawer = ({
   vehiclesData,
   addExistingVehicle,
-  editVehicleId,
-  setEditVehicleId,
   toggleAddExistingVehicle,
   crimeGroupsData,
   addExistingCrimeGroup,
@@ -37,7 +31,6 @@ const ProfileDrawer = ({
   onAddCrimeGroup,
   fromOffender,
   onAddVehicle,
-  onEditVehicle,
   addNewVehicle,
   toggleAddNewVehicle,
 }: Props): JSX.Element => {
@@ -82,27 +75,6 @@ const ProfileDrawer = ({
             }}
             onClose={toggleAddNewVehicle}
             fromOffender={!!fromOffender}
-          />
-        ) : (
-          <div />
-        )}
-      </Drawer>
-      <Drawer
-        title={intl.formatMessage({
-          defaultMessage: 'Edit Vehicle Details',
-          id: 'AWN+hV',
-        })}
-        open={!!editVehicleId}
-        width="700"
-        zIndex={999}
-        onClose={() => setEditVehicleId('')}
-      >
-        {editVehicleId ? (
-          <EditVehicle
-            fromOffender={!!fromOffender}
-            onClose={() => setEditVehicleId('')}
-            update={onEditVehicle}
-            editData={vehiclesData.find(({ id }) => id === editVehicleId)}
           />
         ) : (
           <div />

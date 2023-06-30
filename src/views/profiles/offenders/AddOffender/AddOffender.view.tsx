@@ -58,7 +58,6 @@ interface Props {
   bansData: BanData[];
   updateExclusion: (value: BanData) => void;
   adminRights: boolean;
-
   form: FormInstance<FormData> | undefined;
   listVehiclesData: ListVehiclesQuery | undefined;
   vehiclesData: VehicleData[];
@@ -69,7 +68,6 @@ interface Props {
   toggleEditImage: (value?: Image) => void;
   editImage: Image | null;
   onAddVehicle: (value: VehicleData, existing: boolean) => void;
-  onEditVehicle: (value: VehicleData) => void;
   onRemoveVehicle: (vehicleId: string) => void;
   onAddCrimeGroup: (value: CrimeGroupData) => void;
   onRemoveCrimeGroup: (crimeGroupId: string) => void;
@@ -121,7 +119,6 @@ const AddOffender = ({
   toggleEditImage,
   onAddCrimeGroup,
   onAddVehicle,
-  onEditVehicle,
   onRemoveCrimeGroup,
   onRemoveVehicle,
   onRemoveImage,
@@ -287,7 +284,6 @@ const AddOffender = ({
               titleNumber={3}
               onAddCrimeGroup={onAddCrimeGroup}
               onAddVehicle={onAddVehicle}
-              onEditVehicle={onEditVehicle}
               onRemoveCrimeGroup={onRemoveCrimeGroup}
               onRemoveVehicle={onRemoveVehicle}
             />

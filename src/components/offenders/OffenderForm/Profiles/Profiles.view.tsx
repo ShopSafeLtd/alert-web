@@ -35,7 +35,6 @@ interface Props {
   onRemoveVehicle: (vehicleId: string) => void;
   onRemoveCrimeGroup: (crimeGroupId: string) => void;
   crimeGroupsData: CrimeGroupData[];
-  onEditVehicle: (data: VehicleData) => void;
   onAddCrimeGroup: (value: CrimeGroupData) => void;
 }
 
@@ -46,14 +45,12 @@ const Profiles = ({
   onAddVehicle,
   crimeGroupsData,
   listVehiclesData,
-  onEditVehicle,
   onAddCrimeGroup,
   onRemoveCrimeGroup,
   onRemoveVehicle,
 }: Props): JSX.Element => {
   const [addNewVehicle, setAddNewVehicle] = useState(false);
   const [addExistingVehicle, setAddExistingVehicle] = useState(false);
-  const [editVehicleId, setEditVehicleId] = useState<string>('');
   const [addExistingCrimeGroup, setAddExistingCrimeGroup] = useState(false);
 
   const toggleAddExistingCrimeGroup = () => {
@@ -445,8 +442,6 @@ const Profiles = ({
 
       <ProfileDrawer
         addExistingVehicle={addExistingVehicle}
-        editVehicleId={editVehicleId}
-        setEditVehicleId={setEditVehicleId}
         toggleAddNewVehicle={toggleAddNewVehicle}
         toggleAddExistingVehicle={toggleAddExistingVehicle}
         vehiclesData={vehiclesData}
@@ -455,7 +450,6 @@ const Profiles = ({
         toggleAddExistingCrimeGroup={toggleAddExistingCrimeGroup}
         crimeGroupsData={crimeGroupsData}
         fromOffender
-        onEditVehicle={onEditVehicle}
         onAddCrimeGroup={onAddCrimeGroup}
         addNewVehicle={addNewVehicle}
       />

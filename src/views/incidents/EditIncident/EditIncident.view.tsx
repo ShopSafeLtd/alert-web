@@ -214,7 +214,6 @@ const EditIncident = ({
   onRemoveOffender,
   onEditImage,
   onAddVehicle,
-  onEditVehicle,
   onRemoveVehicle,
   primaryImage,
   setPrimaryImage,
@@ -932,7 +931,6 @@ const EditIncident = ({
               updateOffender={onEditOffender}
               onAddOffender={onAddOffender}
               onAddVehicle={onAddVehicle}
-              onEditVehicle={onEditVehicle}
               onRemoveVehicle={onRemoveVehicle}
               vehiclesData={vehiclesData}
             />

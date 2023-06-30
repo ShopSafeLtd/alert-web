@@ -52,7 +52,6 @@ interface Props {
   addOffender: boolean;
   addRecentOffender: Offender | null;
   editOffenderId: string;
-  editVehicleId: string;
   offenderImgChange: (
     info: UploadChangeParam<UploadFile>,
     currentId: string
@@ -65,7 +64,6 @@ interface Props {
   searchOffenders: string;
   setAddRecentOffender: (value: Offender | null) => void;
   setEditOffenderId: (value: string) => void;
-  setEditVehicleId: (value: string) => void;
   setSearchOffenders: (value: string) => void;
   titleOrder: number;
   toggleAddExistingOffender: () => void;
@@ -76,7 +74,6 @@ interface Props {
   vehiclesData: VehicleData[];
   onAddOffender: (value: OffenderData, existing: boolean) => void;
   onAddVehicle: (data: VehicleData, existing: boolean) => void;
-  onEditVehicle: (data: VehicleData) => void;
   onRemoveVehicle: (vehicleId: string) => void;
 }
 
@@ -85,7 +82,6 @@ const Profiles = ({
   saving,
   toggleAddNewVehicle,
   toggleAddExistingVehicle,
-  setEditVehicleId,
   vehiclesData,
   offendersData,
   removeOffender,
@@ -104,11 +100,9 @@ const Profiles = ({
   addOffender,
   addRecentOffender,
   editOffenderId,
-  editVehicleId,
   updateOffender,
   onAddOffender,
   onAddVehicle,
-  onEditVehicle,
   onRemoveVehicle,
 }: Props): JSX.Element => {
   const intl = useIntl();
@@ -731,11 +725,9 @@ const Profiles = ({
         addNewVehicle={addNewVehicle}
         addOffender={addOffender}
         editOffenderId={editOffenderId}
-        editVehicleId={editVehicleId}
         fromIncident
         offendersData={offendersData}
         setEditOffenderId={setEditOffenderId}
-        setEditVehicleId={setEditVehicleId}
         toggleAddExistingOffender={toggleAddExistingOffender}
         toggleAddExistingVehicle={toggleAddExistingVehicle}
         toggleAddNewVehicle={toggleAddNewVehicle}
@@ -744,7 +736,6 @@ const Profiles = ({
         vehiclesData={vehiclesData}
         onAddOffender={onAddOffender}
         onAddVehicle={onAddVehicle}
-        onEditVehicle={onEditVehicle}
       />
       <Modal
         onCancel={() => setAddRecentOffender(null)}

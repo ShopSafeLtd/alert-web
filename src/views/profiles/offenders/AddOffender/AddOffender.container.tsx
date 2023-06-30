@@ -29,7 +29,6 @@ const AddOffender = (): JSX.Element => {
     deleteConfirm,
     ageCheck,
     setAgeCheck,
-
     form,
     adminRights,
     vehiclesData,
@@ -42,7 +41,6 @@ const AddOffender = (): JSX.Element => {
     toggleEditImage,
     onAddCrimeGroup,
     onAddVehicle,
-    onEditVehicle,
     onRemoveCrimeGroup,
     onRemoveImage,
     onRemoveVehicle,
@@ -60,7 +58,6 @@ const AddOffender = (): JSX.Element => {
       <View
         onAddCrimeGroup={onAddCrimeGroup}
         onAddVehicle={onAddVehicle}
-        onEditVehicle={onEditVehicle}
         onRemoveCrimeGroup={onRemoveCrimeGroup}
         onRemoveImage={onRemoveImage}
         onRemoveVehicle={onRemoveVehicle}

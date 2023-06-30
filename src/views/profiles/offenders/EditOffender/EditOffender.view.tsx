@@ -114,7 +114,6 @@ interface Props {
   reviewed: boolean;
   onReject: () => void;
   adminRights: boolean;
-
   form: FormInstance<FormData> | undefined;
   listVehiclesData: ListVehiclesQuery | undefined;
   vehiclesData: VehicleData[];
@@ -132,7 +131,6 @@ interface Props {
   onEditImage: (value: Image) => void;
   toggleEditImage: (value?: Image) => void;
   editImage: Image | null;
-  onEditVehicle: (data: VehicleData) => void;
   onAddCrimeGroup: (value: CrimeGroupData) => void;
   onRemoveCrimeGroup: (crimeGroupId: string) => void;
   onRemoveImage: (imageId: string) => void;
@@ -175,14 +173,11 @@ const EditOffender = ({
   setAgeCheck,
   reviewed,
   onReject,
-
   onAddVehicle,
-
   form,
   adminRights,
   vehiclesData,
   onRemoveVehicle,
-  onEditVehicle,
   crimeGroupsData,
   listVehiclesData,
   onValuesChange,
@@ -476,7 +471,6 @@ const EditOffender = ({
                   titleNumber={3}
                   onAddVehicle={onAddVehicle}
                   onAddCrimeGroup={onAddCrimeGroup}
-                  onEditVehicle={onEditVehicle}
                 />
               </Card>
             )}

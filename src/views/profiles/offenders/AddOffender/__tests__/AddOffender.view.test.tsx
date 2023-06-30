@@ -45,7 +45,6 @@ describe('List Officer View', () => {
         onValuesChange={jest.fn()}
         onAddCrimeGroup={jest.fn()}
         onAddVehicle={jest.fn()}
-        onEditVehicle={jest.fn()}
         onRemoveCrimeGroup={jest.fn()}
         onRemoveImage={jest.fn()}
         onRemoveVehicle={jest.fn()}

@@ -176,7 +176,6 @@ const EditIncident = ({
   knowGoods,
   onEditImage,
   onAddVehicle,
-  onEditVehicle,
   onRemoveVehicle,
   primaryImage,
   setPrimaryImage,
@@ -753,7 +752,6 @@ const EditIncident = ({
               vehiclesData={vehiclesData}
               onAddOffender={onAddOffender}
               onAddVehicle={onAddVehicle}
-              onEditVehicle={onEditVehicle}
               onRemoveVehicle={onRemoveVehicle}
             />
           </Form.Item>

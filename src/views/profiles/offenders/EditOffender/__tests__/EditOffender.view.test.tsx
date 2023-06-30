@@ -113,7 +113,6 @@ describe('List Officer View', () => {
           toggleEditAddress={jest.fn()}
           onAddCrimeGroup={jest.fn()}
           onAddVehicle={jest.fn()}
-          onEditVehicle={jest.fn()}
           onRemoveCrimeGroup={jest.fn()}
           onRemoveVehicle={jest.fn()}
           onRemoveImage={jest.fn()}

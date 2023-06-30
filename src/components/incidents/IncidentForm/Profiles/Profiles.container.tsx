@@ -25,7 +25,6 @@ interface Props {
   vehiclesData: VehicleData[];
   onAddOffender: (value: OffenderData, existing: boolean) => void;
   onAddVehicle: (data: VehicleData, existing: boolean) => void;
-  onEditVehicle: (data: VehicleData) => void;
   onRemoveVehicle: (vehicleId: string) => void;
 }
 
@@ -45,7 +44,6 @@ const Profiles = ({
   vehiclesData,
   onAddOffender: onAddOffenderParent,
   onAddVehicle,
-  onEditVehicle,
   onRemoveVehicle,
 }: Props) => {
   const {
@@ -55,12 +53,10 @@ const Profiles = ({
     addOffender,
     addRecentOffender,
     editOffenderId,
-    editVehicleId,
     offenderImgChange,
     removeOffender,
     setAddRecentOffender,
     setEditOffenderId,
-    setEditVehicleId,
     toggleAddExistingOffender,
     toggleAddExistingVehicle,
     toggleAddNewVehicle,
@@ -84,7 +80,6 @@ const Profiles = ({
       addOffender={addOffender}
       addRecentOffender={addRecentOffender}
       editOffenderId={editOffenderId}
-      editVehicleId={editVehicleId}
       offenderImgChange={offenderImgChange}
       offendersData={offendersData}
       recentOffenderData={recentOffenderData}
@@ -94,7 +89,6 @@ const Profiles = ({
       searchOffenders={searchOffenders}
       setAddRecentOffender={setAddRecentOffender}
       setEditOffenderId={setEditOffenderId}
-      setEditVehicleId={setEditVehicleId}
       setSearchOffenders={setSearchOffenders}
       titleOrder={titleOrder}
       toggleAddExistingOffender={toggleAddExistingOffender}
@@ -106,7 +100,6 @@ const Profiles = ({
       onAddOffender={onAddOffender}
       onRemoveVehicle={onRemoveVehicle}
       onAddVehicle={onAddVehicle}
-      onEditVehicle={onEditVehicle}
     />
   );
 };

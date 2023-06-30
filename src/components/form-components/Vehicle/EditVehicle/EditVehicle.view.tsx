@@ -25,7 +25,7 @@ import type {
   CustomGalleryData,
   IncidentCardData,
   OffenderData,
-  VehicleData,
+  VehicleCardData,
 } from 'types/DataType';
 import UploadImage from 'components/images/UploadImage.view';
 import AddCustomGallery from 'components/form-components/customGalleries/AddCustomGallery';
@@ -37,7 +37,7 @@ const { confirm } = Modal;
 
 interface Props {
   onClose: () => void;
-  editData: VehicleData | undefined | null;
+  editData: VehicleCardData | undefined | null;
   onSubmit: (value: FormData) => void;
   CrimeGroupsData: ListCrimeGroupsQuery | undefined;
   CrimeGroupsLoading: boolean;

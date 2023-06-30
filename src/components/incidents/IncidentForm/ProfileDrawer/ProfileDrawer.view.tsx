@@ -6,7 +6,6 @@ import EditOffender from 'components/form-components/offender/offender/EditOffen
 import type { OffenderData, VehicleData } from 'types/DataType';
 import AddVehicle from 'components/form-components/Vehicle/AddVehicle';
 import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
-import EditVehicle from 'components/form-components/Vehicle/EditVehicle';
 import { useIntl } from 'react-intl';
 
 interface Props {
@@ -15,11 +14,9 @@ interface Props {
   addNewVehicle: boolean;
   addOffender: boolean;
   editOffenderId: string;
-  editVehicleId: string;
   fromIncident?: boolean;
   offendersData: OffenderData[];
   setEditOffenderId: (arg0: string) => void;
-  setEditVehicleId: (value: string) => void;
   toggleAddExistingOffender: () => void;
   toggleAddExistingVehicle: () => void;
   toggleAddNewVehicle: () => void;
@@ -28,7 +25,6 @@ interface Props {
   vehiclesData: VehicleData[];
   onAddOffender: (value: OffenderData, existing: boolean) => void;
   onAddVehicle: (data: VehicleData, existing: boolean) => void;
-  onEditVehicle: (data: VehicleData) => void;
 }
 
 const ProfileDrawer = ({
@@ -43,14 +39,11 @@ const ProfileDrawer = ({
   vehiclesData,
   addNewVehicle,
   addExistingVehicle,
-  editVehicleId,
-  setEditVehicleId,
   toggleAddNewVehicle,
   toggleAddExistingVehicle,
   fromIncident,
   onAddOffender,
   onAddVehicle,
-  onEditVehicle,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return (
@@ -156,27 +149,6 @@ const ProfileDrawer = ({
             }}
             onClose={toggleAddNewVehicle}
             fromIncident={!!fromIncident}
-          />
-        ) : (
-          <div />
-        )}
-      </Drawer>
-      <Drawer
-        title={intl.formatMessage({
-          defaultMessage: 'Edit Vehicle Details',
-          id: 'AWN+hV',
-        })}
-        open={!!editVehicleId}
-        width="700"
-        zIndex={999}
-        onClose={() => setEditVehicleId('')}
-      >
-        {editVehicleId ? (
-          <EditVehicle
-            fromIncident
-            onClose={() => setEditVehicleId('')}
-            update={onEditVehicle}
-            editData={vehiclesData.find(({ id }) => id === editVehicleId)}
           />
         ) : (
           <div />
