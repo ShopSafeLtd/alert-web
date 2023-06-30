@@ -221,8 +221,8 @@ const ViewOffender = ({
                     {intl.formatMessage(
                       {
                         defaultMessage:
-                          '{itemCount, plural, one {Face ID Match} other {Face ID Matches}}',
-                        id: 'wr/if9',
+                          '{itemCount} {itemCount, plural, one {Face ID Match} other {Face ID Matches}}',
+                        id: '0ZRYJ5',
                       },
                       {
                         itemCount: data.offender.searchedMatches.length,

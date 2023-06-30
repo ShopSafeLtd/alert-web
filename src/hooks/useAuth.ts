@@ -6,6 +6,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { useEffect } from 'react';
 import * as Sentry from '@sentry/react';
 import Mixpanel from 'utils/mixpanel';
+import OneSignal from 'react-onesignal';
 
 interface Return {
   rehydrateAuth: () => void;
@@ -44,7 +45,7 @@ const useAuth = (): Return => {
     accessToken: string;
   }
 
-  const handleSuccess = ({
+  const handleSuccess = async ({
     id,
     accessToken,
     fullName,
@@ -113,6 +114,14 @@ const useAuth = (): Return => {
       handleNoValidScheme();
     }
 
+    await OneSignal.init({
+      appId: '15f85158-c5be-4735-b503-23c4200c94d6',
+    }).then(async () => {
+      await OneSignal.showSlidedownPrompt().then(() => {
+        // do other stuff
+      });
+    });
+
     LogRocket.identify(id, {
       fullName,
       email,
@@ -145,7 +154,8 @@ const useAuth = (): Return => {
 
   const [getCurrentUser, { loading }] = useCurrentUserLazyQuery({
     nextFetchPolicy: 'cache-and-network',
-    onCompleted: ({ currentUser }) => {
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    onCompleted: async ({ currentUser }) => {
       const scheme =
         currentScheme || window.localStorage.getItem('currentScheme');
 
@@ -167,7 +177,7 @@ const useAuth = (): Return => {
           );
         }
       }
-      handleSuccess({
+      await handleSuccess({
         id: currentUser?.id || '',
         email: currentUser?.email || '',
         fullName: currentUser?.fullName || '',
@@ -228,7 +238,7 @@ const useAuth = (): Return => {
     // }
   };
 
-  const onLoginSuccess = (data: OnLoginSuccessArgs) => {
+  const onLoginSuccess = async (data: OnLoginSuccessArgs) => {
     window.localStorage.setItem('access_token', data.accessToken);
 
     const scheme = window.localStorage.getItem('currentScheme');
@@ -241,7 +251,7 @@ const useAuth = (): Return => {
       email: data.email,
     });
 
-    handleSuccess({
+    await handleSuccess({
       id: data.id,
       accessToken: data.accessToken,
       email: data.email,
@@ -360,6 +370,7 @@ const useAuth = (): Return => {
     loading,
     rehydrateAuth,
     signOut,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onLoginSuccess,
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     getCurrentUser,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { createUseStyles } from 'react-jss';
 import type { ViewOffenderMatchesQuery } from 'graphql/generated';
-import { Button, Card, Col, Row, Skeleton, Typography } from 'antd';
+import { Button, Card, Col, Popconfirm, Row, Skeleton, Typography } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import {
   getOffenderAge,
@@ -58,6 +58,7 @@ interface Props {
   loading: boolean;
   lightBox: LightBoxState | null;
   toggleLightBox: (data: LightBoxState | null) => void;
+  onDismissMatch: (id: string) => void;
 }
 
 const OffenderMatches = ({
@@ -65,6 +66,7 @@ const OffenderMatches = ({
   loading,
   lightBox,
   toggleLightBox,
+  onDismissMatch,
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
@@ -275,14 +277,23 @@ const OffenderMatches = ({
               </Col>
             </Row>
           </Card>
-          <Row justify="end" gutter={8}>
+          <Row justify="end" gutter={8} style={{ marginBottom: 20 }}>
             <Col>
-              <Button size="small">
-                {intl.formatMessage({
-                  defaultMessage: 'Dismiss Match',
-                  id: 'z85yDK',
+              <Popconfirm
+                overlayInnerStyle={{ padding: 10 }}
+                title={intl.formatMessage({
+                  defaultMessage: 'Are you sure?',
+                  id: '2oCaym',
                 })}
-              </Button>
+                onConfirm={() => onDismissMatch(match.id)}
+              >
+                <Button size="small">
+                  {intl.formatMessage({
+                    defaultMessage: 'Dismiss Match',
+                    id: 'z85yDK',
+                  })}
+                </Button>
+              </Popconfirm>
             </Col>
             <Col>
               <Link
