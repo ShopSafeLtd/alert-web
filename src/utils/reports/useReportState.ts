@@ -100,9 +100,7 @@ const useReportState = ({
   const [editMode, setEditMode] = useState(false);
   const [minDrawer, setMinDrawer] = useState(false);
   const [layout, setLayout] = useState<RGL.Layout[]>(InitLayout);
-  const [selectedBusiness, setSelectedBusiness] = useState<string[]>(
-    businesses ? businesses.map((business) => business.id) : []
-  );
+  const [selectedBusiness, setSelectedBusiness] = useState<string[]>([]);
   const [groups, setGroups] = useState<SelectOptions[]>([]);
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
   const [dateRange, setDateRangeState] = useState<{

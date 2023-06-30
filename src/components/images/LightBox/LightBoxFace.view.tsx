@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import type { Theme } from 'configs/ThemeConfig';
 import { Button, Card, Col, Popconfirm, Row, Tooltip, Typography } from 'antd';
@@ -282,8 +282,8 @@ const LightBoxFace = ({
                 intl.formatMessage(
                   {
                     defaultMessage:
-                      '{itemCount, plural, one {Match} other {Matches}} Found',
-                    id: 'cfviVh',
+                      '{itemCount, plural, one {Match Found} other {Matches Found}}',
+                    id: 'snVLui',
                   },
                   {
                     itemCount: face.rekMatchedSearches.length,

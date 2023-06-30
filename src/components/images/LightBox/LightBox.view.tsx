@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import type { Theme } from 'configs/ThemeConfig';
 import { Button, Carousel, Col, Drawer, Row } from 'antd';
@@ -171,8 +171,8 @@ const LightBox = ({
                 {intl.formatMessage(
                   {
                     defaultMessage:
-                      '{showboxes, plural, =0 {Hide} =1{Show} other{}} Boxes',
-                    id: 'bEeWYD',
+                      '{showboxes, plural, =0 {Hide Boxes} =1{Show Boxes} other{}}',
+                    id: '1EYWsE',
                   },
                   {
                     showboxes: showBoxes ? 0 : 1,
