@@ -204,7 +204,8 @@ const ViewInvestigation = ({
                       type="ghost"
                       onClick={toggleViewSuggestedOffenders}
                     >
-                      {suggestedData.investigation?.suggestedOffenders.length}
+                      {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                      {suggestedData.investigation?.suggestedOffenders.length}{' '}
                       {intl.formatMessage({
                         defaultMessage: 'Suggested Offenders',
                         id: '5UuihT',
@@ -254,7 +255,8 @@ const ViewInvestigation = ({
                         size="small"
                         onClick={toggleViewSuggestedIncidents}
                       >
-                        {suggestedData.investigation.suggestedIncidents.length}
+                        {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                        {suggestedData.investigation.suggestedIncidents.length}{' '}
                         {intl.formatMessage({
                           defaultMessage: 'Suggested Incidents',
                           id: 'CKS/s0',
@@ -381,7 +383,8 @@ const ViewInvestigation = ({
                         size="small"
                         onClick={toggleViewSuggestedVehicles}
                       >
-                        {suggestedData.investigation.suggestedVehicles.length}
+                        {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                        {suggestedData.investigation.suggestedVehicles.length}{' '}
                         {intl.formatMessage({
                           defaultMessage: 'Suggested Vehicles',
                           id: 'fzU5Bx',
