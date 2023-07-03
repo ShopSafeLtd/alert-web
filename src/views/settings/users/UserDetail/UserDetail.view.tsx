@@ -1,5 +1,6 @@
 import React from 'react';
 import type { UserQuery } from 'graphql/generated';
+import { UserStatus } from 'graphql/generated';
 import { RoleValues } from 'types';
 import { FormattedMessage } from 'react-intl';
 
@@ -170,7 +171,11 @@ const userDetail = ({
               style={{ paddingBottom: 8 }}
             >
               <Typography.Text
-                type={data?.user?.status === 'Enabled' ? 'success' : 'warning'}
+                type={
+                  data?.user?.status === UserStatus.Active
+                    ? 'success'
+                    : 'warning'
+                }
               >
                 {data?.user?.status}
               </Typography.Text>
