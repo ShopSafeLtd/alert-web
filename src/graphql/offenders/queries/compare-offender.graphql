@@ -1,5 +1,5 @@
-query ViewOffenderCompare($where: OffenderWhereUniqueInput!) {
-  offender(where: $where) {
+query ViewOffendersCompare($where: OffenderWhereInput!) {
+  offenders(where: $where) {
     id
     updatedAt
     age
