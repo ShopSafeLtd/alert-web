@@ -2,5 +2,10 @@ mutation UpdateOneStatementTemplate($data: StatementTemplateUpdateInput!, $where
   updateOneStatementTemplate(data: $data, where: $where) {
     id
     name
+        content
+            schemes {
+            id
+            name
+            }
   }
 }
