@@ -25,6 +25,7 @@ import ViewBusiness from 'views/settings/businesses/ViewBusiness';
 import DiscMenu from 'views/settings/data-import/menu/Menu.view';
 import DiscImport from 'views/settings/data-import/disc-import/DiscImport.container';
 import CustomSchemeTerms from '../../../views/settings/terms/ViewCustomTerms/ViewTermsContainer';
+import ListStatements from '../../../views/settings/statements/ListStatements';
 
 const SchemeSettings = (): JSX.Element => (
   <Routes>
@@ -65,6 +66,9 @@ const SchemeSettings = (): JSX.Element => (
     <Route path="businesses/view/:id" element={<ViewBusiness />} />
     <Route path="data-import" element={<DiscMenu />} />
     <Route path="data-import/disc" element={<DiscImport />} />
+
+    {/* Statement temlates */}
+    <Route path="statement-templates/*" element={<ListStatements />} />
   </Routes>
 );
 

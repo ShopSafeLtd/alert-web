@@ -117,7 +117,7 @@ const useSignMg11 = (): Return => {
           id: id || '',
         },
         data: {
-          status: { set: Mg11Status.UserSigned },
+          status: { set: Mg11Status.Completed },
           detailsExplained: { set: formData.detailsExplained === 'true' },
           leafletReceived: { set: formData.leafletReceived === 'true' },
           medicalReleasedPolice: { set: formData.medicalReleasedPolice },

@@ -427,7 +427,7 @@ const adminOnlyItems: NavItem[] = [
       },
       {
         key: 'statement-templates',
-        path: `${APP_PREFIX_PATH}/settings/statement-templates`,
+        path: `${APP_PREFIX_PATH}/scheme-settings/statement-templates`,
         title: 'Templates',
         intl: defineMessage({
           id: 'statement-templates',
