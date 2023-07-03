@@ -34276,7 +34276,7 @@ export type Query = {
   statementTemplate?: Maybe<StatementTemplate>;
   statementTemplates: Array<StatementTemplate>;
   tag?: Maybe<Tag>;
-  tags?: Maybe<Array<Tag>>;
+  tags: Array<Tag>;
   targetedGoods?: Maybe<ListTargetedGoods>;
   user?: Maybe<User>;
   userByEmail?: Maybe<User>;
@@ -65999,14 +65999,14 @@ export type TagsQueryVariables = Exact<{
 
 export type TagsQuery = {
   __typename?: 'Query';
-  tags?: Array<{
+  tags: Array<{
     __typename?: 'Tag';
     id: string;
     name: string;
     description: string;
     crimeType?: CrimeType | null;
     type: TagType;
-  }> | null;
+  }>;
 };
 
 export type CreateTodoMutationVariables = Exact<{
