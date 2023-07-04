@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button, Col, Row, Select, Typography } from 'antd';
-import type { UserStatus } from 'graphql/generated';
-import { Role } from 'graphql/generated';
+import { UserStatus, Role } from 'graphql/generated';
 
 import type { UserSort } from 'types/enums/user_sort';
 import { userSortValues } from 'types/enums/user_sort';
@@ -75,7 +74,6 @@ const UserFilter = ({
           <Typography.Paragraph className={classes.selectTitle}>
             <FormattedMessage id="tzMNF3" defaultMessage="Status" />
           </Typography.Paragraph>
-          {/* new thing to translate, more userStatus options  */}
           <Select
             placeholder={intl.formatMessage({
               id: 'tzMNF3',
@@ -90,7 +88,23 @@ const UserFilter = ({
               label: value.label,
               value: value.value,
             }))}
-          />
+          >
+            <Select.Option value={UserStatus.Active}>
+              <FormattedMessage id="3a5wL8" defaultMessage="Active" />
+            </Select.Option>
+            <Select.Option value={UserStatus.Inactive}>
+              <FormattedMessage id="6Tps09" defaultMessage="Inactive" />
+            </Select.Option>
+            <Select.Option value={UserStatus.Invited}>
+              <FormattedMessage id="qJje/s" defaultMessage="Invited" />
+            </Select.Option>
+            <Select.Option value={UserStatus.NotInvited}>
+              <FormattedMessage id="kJwS9K" defaultMessage="NotInvited" />
+            </Select.Option>
+            <Select.Option value={UserStatus.Disabled}>
+              <FormattedMessage id="tthToS" defaultMessage="Disabled" />
+            </Select.Option>
+          </Select>
         </Col>
       </Row>
       <Row gutter={16}>

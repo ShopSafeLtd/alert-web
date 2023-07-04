@@ -13,6 +13,7 @@ import { useStoreState } from 'state';
 import { Modal, notification } from 'antd';
 import errorNotification from 'types/error_notification';
 import type { TagData } from 'types/DataType';
+import { useIntl } from 'react-intl';
 
 const { confirm } = Modal;
 
@@ -33,6 +34,7 @@ interface Return {
 }
 
 const useOffenderWarningList = (): Return => {
+  const intl = useIntl();
   const schemeId = useStoreState((state) => state.scheme.id);
   const schemeName = useStoreState((state) => state.scheme.name);
   const userId = useStoreState((state) => state.user.id);
@@ -151,7 +153,6 @@ const useOffenderWarningList = (): Return => {
   const [recycleTag] = useRecycleTagMutation({
     onCompleted: () => {
       setSaving(false);
-      // new thing to translate
       notification.success({
         message: 'Successfully Removed',
         description: `The crime type has been removed from ${schemeName}!`,
@@ -197,10 +198,15 @@ const useOffenderWarningList = (): Return => {
   };
 
   const deleteConfirm = (currentId: string) => {
-    // new thing to translate
     confirm({
-      title: 'Do you want to delete the offender warning?',
-      content: 'This action cannot be undone.',
+      title: intl.formatMessage({
+        defaultMessage: 'Do you want to delete the offender warning?',
+        id: 'NCxXub',
+      }),
+      content: intl.formatMessage({
+        defaultMessage: 'This action cannot be undone.',
+        id: 'JDJoIZ',
+      }),
       onOk() {
         openDelete(currentId);
       },
