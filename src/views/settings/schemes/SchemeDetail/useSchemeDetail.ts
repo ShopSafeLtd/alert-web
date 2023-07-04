@@ -6,6 +6,7 @@ import { message, notification, Upload } from 'antd';
 import { useStoreState } from 'state';
 
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
+import errorNotification from 'types/error_notification';
 
 interface FormData {
   name: string;
@@ -100,11 +101,7 @@ const useSchemeDetail = (): Return => {
     },
     onError: () => {
       setSaving(false);
-      notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
   });
 

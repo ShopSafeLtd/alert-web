@@ -179,7 +179,6 @@ const useEditIncident = (): Return => {
   const intl = useIntl();
   const schemeId = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
-  const groups = useStoreState((state) => state.user.groups);
   const businesses = useStoreState((state) => state.user.businesses);
   const role = useStoreState((state) => state.user.role);
   const pagination = useStoreState((state) => state.data.incidents.pagination);
@@ -1232,12 +1231,10 @@ const useEditIncident = (): Return => {
     onSubmit,
     saving,
     groups:
-      role === Role.SchemeAdmin
-        ? groupData?.groups.map((group) => ({
-            value: group.id,
-            label: group.name,
-          })) || []
-        : groups.map((group) => ({ value: group.id, label: group.name })),
+      groupData?.groups.map((group) => ({
+        value: group.id,
+        label: group.name,
+      })) || [],
     groupsLoading,
     tags:
       tagsData?.tags.map((tag) => ({

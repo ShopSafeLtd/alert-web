@@ -11,6 +11,7 @@ import {
 } from 'graphql/generated';
 import { useState } from 'react';
 import { useStoreState } from 'state';
+import errorNotification from 'types/error_notification';
 
 interface Row {
   key: string;
@@ -108,12 +109,7 @@ const useAddUserToBusiness = ({
       });
     },
     onError: () => {
-      notification.error({
-        message: 'Oops, something has gone wrong!',
-        description:
-          'This has been reported to our team but if it keeps happening please contact us.',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
     update,
   });

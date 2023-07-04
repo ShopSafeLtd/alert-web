@@ -9,6 +9,7 @@ import {
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useStoreState } from 'state';
+import errorNotification from 'types/error_notification';
 import FONT_FAMILIES from '../../../components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
 
 const { useForm } = Form;
@@ -127,11 +128,7 @@ const useCreateMg11 = (): Return => {
     },
     onError: () => {
       setSaving(false);
-      notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
   });
 

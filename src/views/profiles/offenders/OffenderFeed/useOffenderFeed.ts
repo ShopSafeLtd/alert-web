@@ -105,7 +105,7 @@ const useOffenderFeed = (): Return => {
 
   // Global State
   const schemeId = useStoreState((state) => state.scheme.id);
-  const { role, groups, id: userId } = useStoreState((state) => state.user);
+  const { role, id: userId } = useStoreState((state) => state.user);
   const pagination = useStoreState((state) => state.data.offenders.pagination);
   const variables = useStoreState((state) => state.data.offenders.variables);
   const order = useStoreState((state) => state.data.offenders.order);
@@ -302,6 +302,16 @@ const useOffenderFeed = (): Return => {
             equals: schemeId,
           },
         },
+        users:
+          role === Role.User
+            ? {
+                some: {
+                  id: {
+                    equals: userId,
+                  },
+                },
+              }
+            : undefined,
       },
     },
     fetchPolicy: 'cache-and-network',
@@ -318,12 +328,7 @@ const useOffenderFeed = (): Return => {
       },
       variables: {
         ...variables,
-        groups:
-          role === Role.SchemeAdmin
-            ? groupData?.groups.map((group) => group.id) || []
-            : groups
-                // .filter((group) => group.id === schemeId)
-                .map((group) => group.id),
+        groups: groupData?.groups.map((group) => group.id) || [],
       },
       order,
     });
@@ -547,12 +552,10 @@ const useOffenderFeed = (): Return => {
     search: variables.search,
     setSearch,
     groups:
-      role === Role.SchemeAdmin
-        ? groupData?.groups.map((group) => ({
-            value: group.id,
-            label: group.name,
-          })) || []
-        : groups.map((group) => ({ value: group.id, label: group.name })),
+      groupData?.groups.map((group) => ({
+        value: group.id,
+        label: group.name,
+      })) || [],
     groupsLoading,
     onGroupsChange,
     variables,

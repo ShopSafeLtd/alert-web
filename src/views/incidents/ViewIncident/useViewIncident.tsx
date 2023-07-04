@@ -24,6 +24,7 @@ import update from 'immutability-helper';
 import { useStoreState } from 'state';
 import { Modal, notification } from 'antd';
 import { useIntl } from 'react-intl';
+import errorNotification from 'types/error_notification';
 
 const { confirm } = Modal;
 
@@ -239,14 +240,15 @@ const useViewIncident = (incidentId: string): Return => {
       });
     },
     onError: () => {
-      notification.error({
-        message: intl.formatMessage({ defaultMessage: 'Error!', id: 'DIDBlF' }),
-        description: intl.formatMessage({
-          defaultMessage: 'Whoops, there are some errors. Please try again.',
-          id: 'tPB3Wl',
-        }),
-        placement: 'bottomRight',
-      });
+      errorNotification();
+      // notification.error({
+      //   message: intl.formatMessage({ defaultMessage: 'Error!', id: 'DIDBlF' }),
+      //   description: intl.formatMessage({
+      //     defaultMessage: 'Whoops, there are some errors. Please try again.',
+      //     id: 'tPB3Wl',
+      //   }),
+      //   placement: 'bottomRight',
+      // });
     },
   });
   const onDelete = (id: string) => {

@@ -39,7 +39,6 @@ const ViewIncident = (): JSX.Element => {
     setOptionRowShow,
     onDelete,
   } = useViewIncident(incidentId);
-
   return (
     <View
       data={data}

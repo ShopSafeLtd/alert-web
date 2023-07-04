@@ -64,7 +64,7 @@ const useFeedItems = (): Return => {
   const intl = useIntl();
   // Global State
   const schemeId = useStoreState((state) => state.scheme.id);
-  const { role, groups, id: userId } = useStoreState((state) => state.user);
+  const { role, id: userId } = useStoreState((state) => state.user);
   const pagination = useStoreState((state) => state.data.feedItems.pagination);
   const variables = useStoreState((state) => state.data.feedItems.variables);
   const order = useStoreState((state) => state.data.feedItems.order);
@@ -197,6 +197,16 @@ const useFeedItems = (): Return => {
             equals: schemeId,
           },
         },
+        users:
+          role === Role.User
+            ? {
+                some: {
+                  id: {
+                    equals: userId,
+                  },
+                },
+              }
+            : undefined,
       },
     },
     fetchPolicy: 'cache-and-network',
@@ -214,10 +224,7 @@ const useFeedItems = (): Return => {
       },
       variables: {
         ...variables,
-        groups:
-          role === Role.SchemeAdmin
-            ? groupsData?.groups.map((group) => group.id) || []
-            : groups.map((group) => group.id),
+        groups: groupsData?.groups.map((group) => group.id) || [],
       },
       order,
     });
@@ -410,12 +417,10 @@ const useFeedItems = (): Return => {
     search,
     setSearch,
     groups:
-      role === Role.SchemeAdmin
-        ? groupsData?.groups.map((group) => ({
-            value: group.id,
-            label: group.name,
-          })) || []
-        : groups.map((group) => ({ value: group.id, label: group.name })),
+      groupsData?.groups.map((group) => ({
+        value: group.id,
+        label: group.name,
+      })) || [],
     groupsLoading,
     onGroupsChange,
     variables,

@@ -7,6 +7,7 @@ import {
 } from 'graphql/generated';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import errorNotification from 'types/error_notification';
 import FONT_FAMILIES from '../../../components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
 import { useStoreState } from '../../../state';
 
@@ -81,11 +82,7 @@ const useSignMg11 = (): Return => {
     },
     onError: () => {
       setSaving(false);
-      notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
   });
 

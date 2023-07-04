@@ -20,6 +20,7 @@ import { useParams } from 'react-router';
 import { useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { notification } from 'antd';
+import errorNotification from 'types/error_notification';
 
 interface Return {
   data: BusinessQuery | undefined;
@@ -114,12 +115,7 @@ const useViewBusiness = (): Return => {
       });
     },
     onError: () => {
-      notification.error({
-        message: 'Oops, something went wrong',
-        description:
-          'This error has been reported to our team, if it continues to happen reach out to our support team.',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
     update: (store, result) => {
       const existingData = store.readQuery<

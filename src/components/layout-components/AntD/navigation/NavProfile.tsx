@@ -205,6 +205,7 @@ export const NavProfile = () => {
                   bordered={false}
                   style={{ width: '100%', paddingLeft: 8 }}
                   onChange={handleChangeLang}
+                  placement="topLeft"
                   options={[
                     {
                       value: 'en',
@@ -218,6 +219,34 @@ export const NavProfile = () => {
                       label: intl.formatMessage({
                         defaultMessage: 'French 🇫🇷',
                         id: '115KOd',
+                      }),
+                    },
+                    {
+                      value: 'de',
+                      label: intl.formatMessage({
+                        defaultMessage: 'German 🇩🇪',
+                        id: 'SjSAxT',
+                      }),
+                    },
+                    {
+                      value: 'es',
+                      label: intl.formatMessage({
+                        defaultMessage: 'Spanish 🇪🇸',
+                        id: 'B+T9Ie',
+                      }),
+                    },
+                    {
+                      value: 'da',
+                      label: intl.formatMessage({
+                        defaultMessage: 'Danish 🇩🇰',
+                        id: 'Xg7VWX',
+                      }),
+                    },
+                    {
+                      value: 'it',
+                      label: intl.formatMessage({
+                        defaultMessage: 'Italian 🇮🇹',
+                        id: 'RVX8BX',
                       }),
                     },
                   ]}

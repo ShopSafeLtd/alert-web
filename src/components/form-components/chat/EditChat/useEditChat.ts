@@ -8,6 +8,7 @@ import {
   useChatQuery,
 } from 'graphql/generated';
 import { notification } from 'antd';
+import errorNotification from 'types/error_notification';
 
 interface FormData {
   name: string;
@@ -85,11 +86,7 @@ const useEditChat = ({ onClose, chatId }: Props): Return => {
     },
     onError: () => {
       setSaving(false);
-      notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
   });
 

@@ -758,7 +758,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       if (mentioned)
         newText = newText.replace(
           `@${mention.value}`,
-          `@[${mentioned.origName}](${mentioned.id})`
+          `@[${mentioned.origName}]`
         );
     }
 

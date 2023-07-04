@@ -1,13 +1,13 @@
 import React from 'react';
 import { Col, Row, Typography } from 'antd';
-import type { FeedItemsQuery, ImagePosition } from 'graphql/generated';
+import type { FeedItemsQuery } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot } from '@fortawesome/pro-light-svg-icons';
 
 import { Link } from 'react-router-dom';
-import WatermarkImage from 'components/images/WatermarkImage.view';
 import { useIntl } from 'react-intl';
 import UpdateContent from '../UpdateContent';
+import ImageContainer from '../ImageContainer';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -20,22 +20,6 @@ interface Props {
   isNewIncident?: boolean;
 }
 
-const ImageContainer = ({
-  src,
-  position,
-}: {
-  src: string;
-  position: ImagePosition;
-}) => (
-  <div
-    style={{
-      width: 150,
-      height: 180,
-    }}
-  >
-    <WatermarkImage url={src} position={position} />
-  </div>
-);
 const IncidentFeed = ({
   feedItem,
   isNewImage,
@@ -80,7 +64,7 @@ const IncidentFeed = ({
           </Col>
         ) : null}
 
-        <Col flex={1} style={{ padding: 10 }}>
+        <Col flex={1} style={{ padding: 10, marginLeft: 15 }}>
           {!isNewIncident && updates && updates.length > 0 ? (
             <UpdateContent title={subject || ''} update={updates[0]} />
           ) : (

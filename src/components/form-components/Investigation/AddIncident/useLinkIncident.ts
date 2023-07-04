@@ -11,6 +11,7 @@ import {
 import { useStoreActions, useStoreState } from 'state';
 import { notification } from 'antd';
 import { useParams } from 'react-router';
+import errorNotification from 'types/error_notification';
 
 interface Props {
   onClose: () => void;
@@ -118,11 +119,7 @@ const useLinkIncident = ({ onClose, incidentIds }: Props): Return => {
     },
     onError: () => {
       setSaving(false);
-      notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
   });
   const onSubmit = () => {

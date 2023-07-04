@@ -1,14 +1,12 @@
 import React from 'react';
 import { Col, Row, Typography } from 'antd';
-import type { FeedItemsQuery, ImagePosition } from 'graphql/generated';
+import type { FeedItemsQuery } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamationCircle, faUser } from '@fortawesome/pro-light-svg-icons';
 import { Link } from 'react-router-dom';
-
-import WatermarkImage from 'components/images/WatermarkImage.view';
-
 import { useIntl } from 'react-intl';
 import UpdateContent from '../UpdateContent';
+import ImageContainer from '../ImageContainer';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -21,23 +19,6 @@ interface Props {
   isNewInvestigation?: boolean;
 }
 
-const ImageContainer = ({
-  src,
-  position,
-}: {
-  src: string;
-  position: ImagePosition;
-}) => (
-  <div
-    style={{
-      width: 140,
-      height: 160,
-      borderRadius: 5,
-    }}
-  >
-    <WatermarkImage url={src} position={position} />
-  </div>
-);
 const InvestigationFeed = ({
   feedItem,
   isNewImage,
@@ -68,7 +49,7 @@ const InvestigationFeed = ({
           </Col>
         ) : null}
 
-        <Col flex={1}>
+        <Col flex={1} style={{ padding: 10, marginLeft: 15 }}>
           {isNewInvestigation ? (
             <>
               <Title level={4} ellipsis>
