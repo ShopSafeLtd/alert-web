@@ -122,7 +122,6 @@ const DiscImport = ({
   toggleIdSoughtModal,
   toggleIncidentModal,
   toggleImageModal,
-  generating,
   onDeleteNewBusiness,
   tagData,
   newIncidents,
@@ -1198,12 +1197,7 @@ const DiscImport = ({
                 </Button>
               </Col>
               <Col>
-                <Button
-                  htmlType="submit"
-                  type="primary"
-                  loading={generating}
-                  disabled={generating}
-                >
+                <Button htmlType="submit" type="primary">
                   Generate Alert Data
                 </Button>
               </Col>

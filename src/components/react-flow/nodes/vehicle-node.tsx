@@ -1,5 +1,6 @@
 import { Button, Card, Col, Descriptions, Drawer } from 'antd';
 import React, { memo, useCallback } from 'react';
+import type { Node } from 'reactflow';
 import { Handle, NodeToolbar, Position, useStore } from 'reactflow';
 import { NodeResizer } from '@reactflow/node-resizer';
 import '@reactflow/node-resizer/dist/style.css';
@@ -7,9 +8,9 @@ import { useParams } from 'react-router-dom';
 import SelectVehicleNode from 'components/form-components/Investigation/AddExistingVehicleNode';
 import { useIntl } from 'react-intl';
 import useStyles from './style.module';
-import useFlow from '../../../views/investigations/ViewInvestigation/views/Flow/hooks/useFlow';
 import { useDrawerState } from '../../../hooks';
 import { useStoreState } from '../../../state';
+import { useWebRtcContext } from '../../../views/investigations/ViewInvestigation/views/Flow/hooks/useWebRtcProvidor';
 
 export interface Vehicle {
   colour?: string | null | undefined;
@@ -36,10 +37,8 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
   const isTarget = connectionNodeId && connectionNodeId !== id;
   const targetHandleStyle = { zIndex: isTarget ? 5 : 1 };
   const classes = useStyles();
-  const { nodesMap } = useFlow({
-    investigationId: investigationId || '',
-    importData: undefined,
-  });
+  const provider = useWebRtcContext();
+  const nodesMap = provider.doc.getMap<Node>('nodes');
 
   const { drawer } = useDrawerState();
   const { fullName } = useStoreState((state) => state.user);

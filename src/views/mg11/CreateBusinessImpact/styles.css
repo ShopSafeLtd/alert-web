@@ -1,0 +1,138 @@
+body {
+  margin: 0;
+  padding: 0;
+  font: 12pt 'Tahoma';
+  color: #000000;
+}
+* {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+
+.container {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.text-last {
+  position: absolute;
+  top: 6px;
+  right: 27px;
+  color: black;
+  font-size: 8px;
+  margin-right: 10px;
+}
+
+.bis-section {
+  padding-bottom: 10px;
+}
+
+.section-full {
+  padding-bottom: 10px;
+}
+
+.bis-section-title {
+  font-size: 20px;
+  text-align: center;
+  color: black;
+  font-weight: 600;
+  margin-bottom: 0;
+}
+
+.bis-section-header {
+  font-size: 20px;
+  color: black;
+  font-weight: 600;
+  margin-bottom: 0;
+}
+
+.bis-section-sub-header {
+  font-size: 18px;
+  color: black;
+  font-weight: 600;
+  margin-bottom: 0;
+
+  text-decoration: underline;
+}
+
+.section-subtitle {
+  font-size: 12px;
+  text-align: center;
+  color: black;
+}
+
+.bis-fields {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.bis-field {
+  width: 90%;
+  margin-bottom: 12px;
+  margin-top: 12px;
+  display: flex;
+}
+
+.field-statement-consent {
+  width: 100%;
+  font-size: 12px;
+}
+
+.bis-field-label {
+  width: 48%;
+}
+.field-bottom {
+  display: flex;
+  justify-content: center;
+  margin-left: 40px;
+  margin-right: 40px;
+}
+
+.bis-field-signature {
+  font-size: 20px;
+  width: 70%;
+  display: flex;
+  align-items: flex-end;
+}
+
+.field-signature-bottom {
+  font-size: 12px;
+  width: 48%;
+  display: flex;
+  align-items: flex-end;
+}
+
+.field-date {
+  font-size: 12px;
+  width: 20%;
+}
+
+.image-container {
+  height: 50px;
+}
+
+.image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: scale-down;
+}
+
+.image-container svg {
+  width: 100%;
+  height: 100%;
+  object-fit: scale-down;
+}
+
+ul {
+  list-style-type: disc;
+  padding: 0;
+  margin-left: 25px;
+  margin-top: 10px;
+}
+
+ul li {
+  margin-bottom: 10px;
+}

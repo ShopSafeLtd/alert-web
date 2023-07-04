@@ -3,5 +3,9 @@ query ListStatementTemplates($where: StatementTemplateWhereInput) {
     id
     name
     content
+            schemes {
+            id
+            name
+            }
   }
 }

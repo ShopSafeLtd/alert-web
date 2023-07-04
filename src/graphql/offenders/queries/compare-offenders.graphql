@@ -1,0 +1,29 @@
+query ViewOffendersCompare($where: OffenderWhereInput!) {
+  offenders(where: $where) {
+    id
+    updatedAt
+    age
+    build
+    height
+    dateOfBirth
+    dateSource
+    hair
+    gender
+    name
+    race
+    peculiarities
+    images {
+      id
+      optimised
+      position
+    }
+    tags {
+      id
+      name
+    }
+    lastActive {
+      id
+      dayTime
+    }
+  }
+}

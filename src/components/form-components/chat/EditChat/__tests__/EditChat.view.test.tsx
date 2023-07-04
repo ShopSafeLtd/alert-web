@@ -2,6 +2,7 @@ import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import EditChat from '../EditChat.view';
+import { UserStatus } from '../../../../../graphql/generated';
 
 describe('Detail Officer View', () => {
   const data = {
@@ -31,7 +32,7 @@ describe('Detail Officer View', () => {
         email: 'user email',
         publicName: true,
         businesses: [{ name: 'user business', id: '', fullName: '' }],
-        status: 'enabled',
+        status: UserStatus.Active,
         groups: [{ id: 'groupId', name: 'test group' }],
         schemes: [],
         approverGroups: [],

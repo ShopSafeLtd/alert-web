@@ -1,17 +1,26 @@
-import type { ViewOffenderCompareQuery } from 'graphql/generated';
+import type { ViewOffendersCompareQuery } from 'graphql/generated';
 import {
   Age,
   Build,
   Gender,
   Race,
   useMergeOffendersMutation,
-  useViewOffenderCompareLazyQuery,
+  useViewOffendersCompareLazyQuery,
 } from 'graphql/generated';
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import type { OffenderData } from 'components/form-components/offender/offender/AddExistingOffender/AddExistingOffender.container';
 
-type Offender = Exclude<ViewOffenderCompareQuery['offender'], undefined | null>;
+function useQuery() {
+  const { search } = useLocation();
+
+  return React.useMemo(() => new URLSearchParams(search), [search]);
+}
+
+type Offender = Exclude<
+  ViewOffendersCompareQuery['offenders'][number],
+  undefined | null
+>;
 export type OffenderField =
   | 'name'
   | 'age'
@@ -54,6 +63,7 @@ interface Return {
 
 const compareIncident = (): Return => {
   const { id: offenderId } = useParams();
+  const query = useQuery();
   const navigate = useNavigate();
 
   const [mode, setMode] = useState<'grid' | 'column'>('column');
@@ -84,38 +94,52 @@ const compareIncident = (): Return => {
   });
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
 
-  const [queryOffender, { data }] = useViewOffenderCompareLazyQuery();
+  const [queryOffenders, { data }] = useViewOffendersCompareLazyQuery();
 
   useEffect(() => {
-    void queryOffender({
+    const urlOffender = query.get('offenders');
+    let ids: string[] = [];
+    if (offenderId) ids = [...ids, offenderId];
+    if (urlOffender) ids = [...ids, urlOffender];
+    void queryOffenders({
+      fetchPolicy: 'cache-and-network',
       variables: {
         where: {
-          id: offenderId,
+          id: {
+            in: ids,
+          },
         },
       },
     });
-  }, [offenderId]);
+  }, []);
 
   useEffect(() => {
-    if (offenders.length === 0 && data?.offender) {
-      setPreview(data?.offender);
-      setSelected({
-        age: data?.offender.id || null,
-        build: data?.offender.id || null,
-        gender: data?.offender.id || null,
-        hair: data?.offender.id || null,
-        name: data?.offender.id || null,
-        race: data?.offender.id || null,
-        dateOfBirth: data?.offender.id || null,
-        dateSource: data?.offender.id || null,
-      });
+    if (offenders.length === 0 && data?.offenders) {
+      const primaryOffender = data?.offenders.find(
+        ({ id }) => id === offenderId
+      );
+      if (primaryOffender) {
+        setPreview(primaryOffender);
+        setSelected({
+          age: primaryOffender.id || null,
+          build: primaryOffender.id || null,
+          gender: primaryOffender.id || null,
+          hair: primaryOffender.id || null,
+          name: primaryOffender.id || null,
+          race: primaryOffender.id || null,
+          dateOfBirth: primaryOffender.id || null,
+          dateSource: primaryOffender.id || null,
+        });
+      }
     }
-    const offenderIds = offenders.map(({ id }) => id);
-    if (data?.offender && !offenderIds.includes(data?.offender.id)) {
-      setOffenders([...offenders, data.offender]);
+    if (data?.offenders) {
+      const offenderIds = new Set(offenders.map(({ id }) => id));
+      setOffenders([
+        ...offenders,
+        ...data.offenders.filter(({ id }) => !offenderIds.has(id)),
+      ]);
     }
   }, [data]);
-
   const toggleAddOffender = () => {
     setAddOffender(!addOffender);
   };
