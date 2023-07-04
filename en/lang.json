@@ -134,6 +134,9 @@
   "0UFWIV": {
     "defaultMessage": "Send app notifications for new chat messages"
   },
+  "0ZRYJ5": {
+    "defaultMessage": "{itemCount} {itemCount, plural, one {Face ID Match} other {Face ID Matches}}"
+  },
   "0h0TWW": {
     "defaultMessage": "Please select at least one group for a user."
   },
@@ -480,6 +483,9 @@
   "6PU5qG": {
     "defaultMessage": "Search for Bulletins..."
   },
+  "6Tps09": {
+    "defaultMessage": "Inactive"
+  },
   "6g7+6N": {
     "defaultMessage": "Evidence"
   },
@@ -701,6 +707,9 @@
   },
   "B+KJhc": {
     "defaultMessage": "County"
+  },
+  "B+T9Ie": {
+    "defaultMessage": "Spanish 🇪🇸"
   },
   "B+TToj": {
     "defaultMessage": "Select the height of the offender if known."
@@ -1296,6 +1305,9 @@
   "Mm1WF/": {
     "defaultMessage": "Right Bottom"
   },
+  "Mn4m0R": {
+    "defaultMessage": "Send Invite"
+  },
   "MntrZe": {
     "defaultMessage": "Upload Image"
   },
@@ -1313,6 +1325,9 @@
   },
   "N6jrgc": {
     "defaultMessage": "Add Image To Incident"
+  },
+  "NCxXub": {
+    "defaultMessage": "Do you want to delete the offender warning?"
   },
   "NDV5Mq": {
     "defaultMessage": "Options"
@@ -1412,6 +1427,9 @@
   },
   "PNTO/p": {
     "defaultMessage": "No profiles added yet."
+  },
+  "PPTlxg": {
+    "defaultMessage": "Create Business Impact Statement"
   },
   "PQ3WJD": {
     "defaultMessage": "Linked a crime group"
@@ -1539,6 +1557,9 @@
   "RVBwrX": {
     "defaultMessage": "Show Incidents"
   },
+  "RVX8BX": {
+    "defaultMessage": "Italian 🇮🇹"
+  },
   "RZ0IMu": {
     "defaultMessage": "Add {name} to incident"
   },
@@ -1586,6 +1607,9 @@
   },
   "ShE8aY": {
     "defaultMessage": "Add Users"
+  },
+  "SjSAxT": {
+    "defaultMessage": "German 🇩🇪"
   },
   "Ssi2B7": {
     "defaultMessage": "Image Comparison"
@@ -1652,6 +1676,9 @@
   },
   "U9yypY": {
     "defaultMessage": "Un-follow"
+  },
+  "UE8z9N": {
+    "defaultMessage": "Create statement"
   },
   "UHXcnM": {
     "defaultMessage": "Update the necessary fields for the offender warning."
@@ -1772,6 +1799,9 @@
   },
   "XdwXwO": {
     "defaultMessage": "Incidents: {total}"
+  },
+  "Xg7VWX": {
+    "defaultMessage": "Danish 🇩🇰"
   },
   "Xk++Mj": {
     "defaultMessage": "incidents"
@@ -2168,6 +2198,9 @@
   "dvDKi/": {
     "defaultMessage": "Successfully Deleted!"
   },
+  "e++XV+": {
+    "defaultMessage": "Edit statement"
+  },
   "e3gI+W": {
     "defaultMessage": "No Crime Types or Offenders"
   },
@@ -2390,6 +2423,9 @@
   "htkq75": {
     "defaultMessage": "The vehicle has been added!"
   },
+  "hv7GuO": {
+    "defaultMessage": "{itemCount} {itemCount, plural, one {Match Found} other {Matches Found}}"
+  },
   "hwc1SW": {
     "defaultMessage": "Send app notifications for incidents:"
   },
@@ -2575,6 +2611,9 @@
   },
   "kJuP0b": {
     "defaultMessage": "Last Incident"
+  },
+  "kJwS9K": {
+    "defaultMessage": "NotInvited"
   },
   "kKj7sq": {
     "defaultMessage": "Add Incidents"
@@ -2957,6 +2996,9 @@
   "qHTdPQ": {
     "defaultMessage": "Remove Crime Type"
   },
+  "qJje/s": {
+    "defaultMessage": "Invited"
+  },
   "qT9KAx": {
     "defaultMessage": "Police Attenteded"
   },
@@ -3101,9 +3143,6 @@
   "sl+yfu": {
     "defaultMessage": "Add Impact Tag"
   },
-  "snVLui": {
-    "defaultMessage": "{itemCount, plural, one {Match Found} other {Matches Found}}"
-  },
   "sozjTX": {
     "defaultMessage": "Do you want to delete the crime group?"
   },
@@ -3184,6 +3223,9 @@
   },
   "tsUrpI": {
     "defaultMessage": "Offender Report: {startDate} - {endDate}"
+  },
+  "tthToS": {
+    "defaultMessage": "Disabled"
   },
   "ttuPSC": {
     "defaultMessage": "Remove the offender?"
@@ -3337,9 +3379,6 @@
   },
   "wkhZ0u": {
     "defaultMessage": "The message cannot be empty!"
-  },
-  "wr/if9": {
-    "defaultMessage": "{itemCount, plural, one {Face ID Match} other {Face ID Matches}}"
   },
   "wrBzdH": {
     "defaultMessage": "Replying to: {createdBy}"

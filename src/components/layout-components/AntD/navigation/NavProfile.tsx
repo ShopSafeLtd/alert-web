@@ -220,6 +220,34 @@ export const NavProfile = () => {
                         id: '115KOd',
                       }),
                     },
+                    {
+                      value: 'de',
+                      label: intl.formatMessage({
+                        defaultMessage: 'German 🇩🇪',
+                        id: 'SjSAxT',
+                      }),
+                    },
+                    {
+                      value: 'es',
+                      label: intl.formatMessage({
+                        defaultMessage: 'Spanish 🇪🇸',
+                        id: 'B+T9Ie',
+                      }),
+                    },
+                    {
+                      value: 'dk',
+                      label: intl.formatMessage({
+                        defaultMessage: 'Danish 🇩🇰',
+                        id: 'Xg7VWX',
+                      }),
+                    },
+                    {
+                      value: 'it',
+                      label: intl.formatMessage({
+                        defaultMessage: 'Italian 🇮🇹',
+                        id: 'RVX8BX',
+                      }),
+                    },
                   ]}
                 />
               </Row>

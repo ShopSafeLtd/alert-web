@@ -27202,6 +27202,10 @@ export type MutationCreateOffenderDefaultArgs = {
   data: OffenderCreateInput;
 };
 
+export type MutationCreateOneBusinessImpactArgs = {
+  data: BusinessImpactInput;
+};
+
 export type MutationCreateOneMg11Args = {
   data: Mg11CreateInput;
 };
@@ -34459,6 +34463,10 @@ export type QueryBusinessArgs = {
 
 export type QueryBusinessContributionArgs = {
   where: UserContributionWhereInput;
+};
+
+export type QueryBusinessImpactArgs = {
+  where: UniqueId;
 };
 
 export type QueryBusinessReportArgs = {
@@ -64149,6 +64157,41 @@ export type ViewOffenderCompareQuery = {
   } | null;
 };
 
+export type ViewOffendersCompareQueryVariables = Exact<{
+  where: OffenderWhereInput;
+}>;
+
+export type ViewOffendersCompareQuery = {
+  __typename?: 'Query';
+  offenders: Array<{
+    __typename?: 'Offender';
+    id: string;
+    updatedAt: Date;
+    age?: Age | null;
+    build?: Build | null;
+    height?: Height | null;
+    dateOfBirth?: Date | null;
+    dateSource?: string | null;
+    hair?: string | null;
+    gender?: Gender | null;
+    name?: string | null;
+    race?: Race | null;
+    peculiarities?: string | null;
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      optimised?: string | null;
+      position: ImagePosition;
+    }>;
+    tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+    lastActive?: {
+      __typename?: 'Incident';
+      id: string;
+      dayTime?: string | null;
+    } | null;
+  }>;
+};
+
 export type ListOffendersQueryVariables = Exact<{
   scheme: SchemeWhereUniqueInput;
   where?: InputMaybe<OffenderWhereInput>;
@@ -65009,6 +65052,19 @@ export type SchemeRekognitionQuery = {
   } | null;
 };
 
+export type CreateOneBusinessImpactMutationVariables = Exact<{
+  data: BusinessImpactInput;
+}>;
+
+export type CreateOneBusinessImpactMutation = {
+  __typename?: 'Mutation';
+  createOneBusinessImpact: {
+    __typename?: 'Document';
+    id: string;
+    name: string;
+  };
+};
+
 export type CreateReportTemplateMutationVariables = Exact<{
   data: ReportTemplateCreateInput;
 }>;
@@ -65093,6 +65149,34 @@ export type BusinessEngagementQuery = {
       totalMessages: number;
       totalLogins: number;
     }>;
+  } | null;
+};
+
+export type BusinessImpactQueryVariables = Exact<{
+  where: UniqueId;
+}>;
+
+export type BusinessImpactQuery = {
+  __typename?: 'Query';
+  businessImpact?: {
+    __typename?: 'BusinessImpact';
+    businessAddress: string;
+    businessName: string;
+    contactAddress: string;
+    contactName: string;
+    crimeNumber: string;
+    date: string;
+    description: string;
+    incidentDate: string;
+    incidentLoss: string;
+    incidentRecovered: string;
+    lostItems: Array<string>;
+    policeOfficerAttending: string;
+    referenceNumber: string;
+    telephone: string;
+    userAddress: string;
+    userContact: string;
+    userName: string;
   } | null;
 };
 
@@ -65992,6 +66076,8 @@ export type CreateOneStatementTemplateMutation = {
     __typename?: 'StatementTemplate';
     id: string;
     name: string;
+    content: string;
+    schemes: Array<{ __typename?: 'Scheme'; id: string; name: string }>;
   };
 };
 
@@ -66006,6 +66092,8 @@ export type UpdateOneStatementTemplateMutation = {
     __typename?: 'StatementTemplate';
     id: string;
     name: string;
+    content: string;
+    schemes: Array<{ __typename?: 'Scheme'; id: string; name: string }>;
   } | null;
 };
 
@@ -66034,6 +66122,7 @@ export type ListStatementTemplatesQuery = {
     id: string;
     name: string;
     content: string;
+    schemes: Array<{ __typename?: 'Scheme'; id: string; name: string }>;
   }>;
 };
 
@@ -76094,6 +76183,71 @@ export type ViewOffenderCompareQueryResult = Apollo.QueryResult<
   ViewOffenderCompareQuery,
   ViewOffenderCompareQueryVariables
 >;
+export const ViewOffendersCompareDocument = gql`
+  query ViewOffendersCompare($where: OffenderWhereInput!) {
+    offenders(where: $where) {
+      id
+      updatedAt
+      age
+      build
+      height
+      dateOfBirth
+      dateSource
+      hair
+      gender
+      name
+      race
+      peculiarities
+      images {
+        id
+        optimised
+        position
+      }
+      tags {
+        id
+        name
+      }
+      lastActive {
+        id
+        dayTime
+      }
+    }
+  }
+`;
+export function useViewOffendersCompareQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ViewOffendersCompareQuery,
+    ViewOffendersCompareQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    ViewOffendersCompareQuery,
+    ViewOffendersCompareQueryVariables
+  >(ViewOffendersCompareDocument, options);
+}
+export function useViewOffendersCompareLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ViewOffendersCompareQuery,
+    ViewOffendersCompareQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ViewOffendersCompareQuery,
+    ViewOffendersCompareQueryVariables
+  >(ViewOffendersCompareDocument, options);
+}
+export type ViewOffendersCompareQueryHookResult = ReturnType<
+  typeof useViewOffendersCompareQuery
+>;
+export type ViewOffendersCompareLazyQueryHookResult = ReturnType<
+  typeof useViewOffendersCompareLazyQuery
+>;
+export type ViewOffendersCompareQueryResult = Apollo.QueryResult<
+  ViewOffendersCompareQuery,
+  ViewOffendersCompareQueryVariables
+>;
 export const ListOffendersDocument = gql`
   query listOffenders(
     $scheme: SchemeWhereUniqueInput!
@@ -77351,6 +77505,39 @@ export type SchemeRekognitionQueryResult = Apollo.QueryResult<
   SchemeRekognitionQuery,
   SchemeRekognitionQueryVariables
 >;
+export const CreateOneBusinessImpactDocument = gql`
+  mutation CreateOneBusinessImpact($data: BusinessImpactInput!) {
+    createOneBusinessImpact(data: $data) {
+      id
+      name
+    }
+  }
+`;
+export type CreateOneBusinessImpactMutationFn = Apollo.MutationFunction<
+  CreateOneBusinessImpactMutation,
+  CreateOneBusinessImpactMutationVariables
+>;
+export function useCreateOneBusinessImpactMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateOneBusinessImpactMutation,
+    CreateOneBusinessImpactMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateOneBusinessImpactMutation,
+    CreateOneBusinessImpactMutationVariables
+  >(CreateOneBusinessImpactDocument, options);
+}
+export type CreateOneBusinessImpactMutationHookResult = ReturnType<
+  typeof useCreateOneBusinessImpactMutation
+>;
+export type CreateOneBusinessImpactMutationResult =
+  Apollo.MutationResult<CreateOneBusinessImpactMutation>;
+export type CreateOneBusinessImpactMutationOptions = Apollo.BaseMutationOptions<
+  CreateOneBusinessImpactMutation,
+  CreateOneBusinessImpactMutationVariables
+>;
 export const CreateReportTemplateDocument = gql`
   mutation CreateReportTemplate($data: ReportTemplateCreateInput!) {
     createReportTemplate(data: $data) {
@@ -77505,6 +77692,63 @@ export type BusinessEngagementLazyQueryHookResult = ReturnType<
 export type BusinessEngagementQueryResult = Apollo.QueryResult<
   BusinessEngagementQuery,
   BusinessEngagementQueryVariables
+>;
+export const BusinessImpactDocument = gql`
+  query BusinessImpact($where: UniqueId!) {
+    businessImpact(where: $where) {
+      businessAddress
+      businessName
+      contactAddress
+      contactName
+      crimeNumber
+      date
+      description
+      incidentDate
+      incidentLoss
+      incidentRecovered
+      lostItems
+      policeOfficerAttending
+      referenceNumber
+      telephone
+      userAddress
+      userContact
+      userName
+    }
+  }
+`;
+export function useBusinessImpactQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    BusinessImpactQuery,
+    BusinessImpactQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<BusinessImpactQuery, BusinessImpactQueryVariables>(
+    BusinessImpactDocument,
+    options
+  );
+}
+export function useBusinessImpactLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    BusinessImpactQuery,
+    BusinessImpactQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<BusinessImpactQuery, BusinessImpactQueryVariables>(
+    BusinessImpactDocument,
+    options
+  );
+}
+export type BusinessImpactQueryHookResult = ReturnType<
+  typeof useBusinessImpactQuery
+>;
+export type BusinessImpactLazyQueryHookResult = ReturnType<
+  typeof useBusinessImpactLazyQuery
+>;
+export type BusinessImpactQueryResult = Apollo.QueryResult<
+  BusinessImpactQuery,
+  BusinessImpactQueryVariables
 >;
 export const TargetedBusinessReportDocument = gql`
   query TargetedBusinessReport(
@@ -78663,6 +78907,11 @@ export const CreateOneStatementTemplateDocument = gql`
     createOneStatementTemplate(data: $data) {
       id
       name
+      content
+      schemes {
+        id
+        name
+      }
     }
   }
 `;
@@ -78700,6 +78949,11 @@ export const UpdateOneStatementTemplateDocument = gql`
     updateOneStatementTemplate(data: $data, where: $where) {
       id
       name
+      content
+      schemes {
+        id
+        name
+      }
     }
   }
 `;
@@ -78778,6 +79032,10 @@ export const ListStatementTemplatesDocument = gql`
       id
       name
       content
+      schemes {
+        id
+        name
+      }
     }
   }
 `;
