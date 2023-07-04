@@ -2,6 +2,12 @@
 import type { Action } from 'easy-peasy';
 import { action } from 'easy-peasy';
 
+export interface Translations {
+  [key: string]: {
+    [lang: string]: string;
+  };
+}
+
 export interface SetSchemePayload {
   name: string;
   autoApproveIncidents: boolean;
@@ -12,6 +18,7 @@ export interface SetSchemePayload {
   darkLogo?: string | null | undefined;
   userTodos?: number | null | undefined;
   userNotifications?: number | null | undefined;
+  translations?: Translations[];
 }
 
 export interface SchemeModel {
@@ -26,6 +33,7 @@ export interface SchemeModel {
   darkLogo?: string | null | undefined;
   userTodos?: number | null | undefined;
   userNotifications?: number | null | undefined;
+  translations?: Translations[];
 }
 
 const userModel: SchemeModel = {
@@ -38,6 +46,7 @@ const userModel: SchemeModel = {
   darkLogo: '',
   userTodos: 0,
   userNotifications: 0,
+  translations: [],
   setScheme: action((state, payload) => {
     state.id = payload.id;
     state.autoApproveIncidents = payload.autoApproveIncidents;
@@ -48,6 +57,7 @@ const userModel: SchemeModel = {
     state.darkLogo = payload.darkLogo;
     state.userTodos = payload.userTodos;
     state.userNotifications = payload.userNotifications;
+    state.translations = payload.translations;
   }),
   clearScheme: action((state) => {
     state.id = '';
@@ -59,6 +69,7 @@ const userModel: SchemeModel = {
     state.darkLogo = '';
     state.userTodos = 0;
     state.userNotifications = 0;
+    state.translations = [];
   }),
 };
 

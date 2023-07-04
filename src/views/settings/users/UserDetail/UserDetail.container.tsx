@@ -21,6 +21,7 @@ const UserDetail = (): JSX.Element => {
     toggleDemLink,
     demId,
   } = useUserDetail(userId);
+
   return (
     <View
       demId={demId}

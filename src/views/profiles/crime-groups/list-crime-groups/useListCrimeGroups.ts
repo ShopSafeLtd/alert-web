@@ -31,7 +31,7 @@ interface Return {
 
 const useListCrimeGroups = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
-  const { role, groups, id: userId } = useStoreState((state) => state.user);
+  const { role, id: userId } = useStoreState((state) => state.user);
   const [search, setSearch] = useState('');
   const [sortFilter, setSortFilter] = useState(false);
   const [order, setOrder] = useState<SortOrder>(SortOrder.Desc);
@@ -117,6 +117,16 @@ const useListCrimeGroups = (): Return => {
             equals: schemeId,
           },
         },
+        users:
+          role === Role.User
+            ? {
+                some: {
+                  id: {
+                    equals: userId,
+                  },
+                },
+              }
+            : undefined,
       },
     },
     fetchPolicy: 'cache-and-network',
@@ -138,12 +148,10 @@ const useListCrimeGroups = (): Return => {
     search,
     setSearch,
     groups:
-      role === Role.SchemeAdmin
-        ? groupData?.groups.map((group) => ({
-            value: group.id,
-            label: group.name,
-          })) || []
-        : groups.map((group) => ({ value: group.id, label: group.name })),
+      groupData?.groups.map((group) => ({
+        value: group.id,
+        label: group.name,
+      })) || [],
     groupsLoading,
     groupsFilter,
     setGroupsFilter,

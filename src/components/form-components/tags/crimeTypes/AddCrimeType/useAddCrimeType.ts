@@ -5,6 +5,7 @@ import type { Scheme } from 'state';
 import { useStoreState } from 'state';
 import { notification } from 'antd';
 import type { MutationUpdaterFn } from '@apollo/client';
+import errorNotification from 'types/error_notification';
 
 interface FormData {
   name: string;
@@ -48,11 +49,7 @@ const useAddCrimeType = ({
     },
     onError: () => {
       setSaving(false);
-      notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
     update,
   });

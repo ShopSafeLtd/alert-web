@@ -80,7 +80,7 @@ interface Return {
 
 const useAddVehicle = ({ update: updateVehicle }: Props): Return => {
   const [form] = Form.useForm<FormData>();
-  const { role, id: userId, groups } = useStoreState((state) => state.user);
+  const { role, id: userId } = useStoreState((state) => state.user);
   const schemeId = useStoreState((state) => state.scheme.id);
 
   const [linkIncident, setLinkIncident] = useState(false);
@@ -132,7 +132,6 @@ const useAddVehicle = ({ update: updateVehicle }: Props): Return => {
               }
             : undefined,
       },
-
       orderBy: {
         name: SortOrder.Asc,
       },
@@ -334,12 +333,10 @@ const useAddVehicle = ({ update: updateVehicle }: Props): Return => {
     primaryImage,
     setPrimaryImage,
     groups:
-      role === Role.SchemeAdmin
-        ? groupsData?.groups.map((group) => ({
-            value: group.id,
-            label: group.name,
-          })) || []
-        : groups.map((group) => ({ value: group.id, label: group.name })),
+      groupsData?.groups.map((group) => ({
+        value: group.id,
+        label: group.name,
+      })) || [],
     groupsLoading,
     customGalleries:
       customGalleriesData?.listCustomGalleries.customGalleries.map((tag) => ({

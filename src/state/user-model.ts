@@ -2,6 +2,7 @@
 import type { Action } from 'easy-peasy';
 import { action } from 'easy-peasy';
 import { Role } from 'graphql/generated';
+import type { Translations } from './scheme-model';
 
 export interface SetUserPayload {
   id: string;
@@ -52,6 +53,8 @@ export interface Scheme {
     defaultPublicOffenderDOB: boolean;
     userTodos?: number | null | undefined;
     userNotifications?: number | null | undefined;
+    customTranslations?: Translations[];
+
     logo?:
       | {
           optimisedPersisted?: string | null | undefined;

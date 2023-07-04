@@ -134,13 +134,12 @@ interface Props extends DatedMessages {
   showUser?: boolean;
   showDate?: boolean;
 }
-
 const getContent = (content: string) =>
-  content.split(/(@\[.*?]\(.*?\))/).map((item) => {
-    if (item.includes('@[')) {
+  content.split(/(@\[.*?])/).map((item) => {
+    if (item.startsWith('@[')) {
       return (
         <Text strong key={item}>
-          {item.replace('@[', '').replace(/(]\(.*?\))/, '')}
+          {item.replace('@[', '').replace(']', '')}
         </Text>
       );
     }
@@ -162,9 +161,11 @@ const UpdateContent = ({
   createdAt,
 }: Props): JSX.Element => {
   const intl = useIntl();
+
   return (
     <Row
       gutter={8}
+      // justify={userId === from?.id ? 'end' : 'start'}
       style={{
         marginTop: showDate ? 10 : 0,
       }}

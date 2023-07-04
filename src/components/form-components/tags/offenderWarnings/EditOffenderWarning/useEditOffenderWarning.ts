@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { TagQuery } from 'graphql/generated';
 import { useUpdateTagMutation, useTagQuery } from 'graphql/generated';
 import { notification } from 'antd';
+import errorNotification from 'types/error_notification';
 
 interface FormData {
   name: string;
@@ -42,11 +43,7 @@ const useEditOffenderWarning = ({ onClose, offenderId }: Props): Return => {
     },
     onError: () => {
       setSaving(false);
-      notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
   });
 

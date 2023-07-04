@@ -35,6 +35,7 @@ describe('Detail Officer View', () => {
           id: 'schemeId',
           role: Role.ContentAdmin,
           scheme: {
+            customTranslations: [],
             defaultPublicOffenderDOB: true,
             autoApproveIncidents: true,
             autoApproveOffenders: true,

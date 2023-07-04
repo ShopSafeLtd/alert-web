@@ -1,11 +1,11 @@
 import React from 'react';
 import { Col, Row, Tag, Typography } from 'antd';
-import type { FeedItemsQuery, ImagePosition } from 'graphql/generated';
+import type { FeedItemsQuery } from 'graphql/generated';
 import { ArticlePriority } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import { faExclamationCircle, faUser } from '@fortawesome/pro-light-svg-icons';
-import WatermarkImage from 'components/images/WatermarkImage.view';
+import ImageContainer from '../ImageContainer';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -15,22 +15,7 @@ interface Props {
     | null
     | undefined;
 }
-const ImageContainer = ({
-  src,
-  position,
-}: {
-  src: string;
-  position: ImagePosition;
-}) => (
-  <div
-    style={{
-      width: 150,
-      height: 180,
-    }}
-  >
-    <WatermarkImage url={src} position={position} />
-  </div>
-);
+
 const ArticleFeed = ({ feedItem }: Props): JSX.Element => {
   // const imagesRef = useRef<CarouselRef>(null);
 
@@ -50,7 +35,7 @@ const ArticleFeed = ({ feedItem }: Props): JSX.Element => {
           </Col>
         ) : null}
 
-        <Col flex={1} style={{ padding: 10 }}>
+        <Col flex={1} style={{ padding: 10, marginLeft: 15 }}>
           <Title style={{ marginBottom: 2 }} level={4} ellipsis>
             {priority === ArticlePriority.High && (
               <FontAwesomeIcon

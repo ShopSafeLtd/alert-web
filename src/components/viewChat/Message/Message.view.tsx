@@ -127,11 +127,11 @@ interface Props {
 }
 
 const getContent = (content: string) =>
-  content.split(/(@\[.*?]\(.*?\))/).map((item) => {
-    if (item.includes('@[')) {
+  content.split(/(@\[.*?])/).map((item) => {
+    if (item.startsWith('@[')) {
       return (
         <Text strong key={item}>
-          {item.replace('@[', '').replace(/(]\(.*?\))/, '')}
+          {item.replace('@[', '').replace(']', '')}
         </Text>
       );
     }
@@ -259,5 +259,4 @@ const Content = ({
     </Col>
   </Row>
 );
-
 export default Content;

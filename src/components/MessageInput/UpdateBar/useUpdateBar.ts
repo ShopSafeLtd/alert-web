@@ -465,7 +465,7 @@ const useUpdateBar = ({
           if (mentioned)
             newText = newText.replace(
               `@${mention.value}`,
-              `@[${mentioned.oldFullName}](${mentioned.id})`
+              `@[${mentioned.oldFullName}]`
             );
         }
 

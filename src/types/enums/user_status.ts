@@ -1,20 +1,26 @@
-export enum UserStatus {
-  'ACTIVE' = 'ACTIVE',
-  'DISABLED' = 'DISABLED',
-  'INVITED' = 'INVITED',
-}
+import { UserStatus } from 'graphql/generated';
 
-export const userStatusValues = [
+const userStatusValues = [
   {
-    value: 'ACTIVE',
+    value: UserStatus.Active,
     label: 'Active',
   },
   {
-    value: 'DISABLED',
-    label: 'Disabled',
+    value: UserStatus.Inactive,
+    label: 'Inactive',
   },
+
   {
-    value: 'INVITED',
+    value: UserStatus.Invited,
     label: 'Invited',
   },
+  {
+    value: UserStatus.NotInvited,
+    label: 'Uninvited',
+  },
+  {
+    value: UserStatus.Disabled,
+    label: 'Disabled',
+  },
 ];
+export default userStatusValues;

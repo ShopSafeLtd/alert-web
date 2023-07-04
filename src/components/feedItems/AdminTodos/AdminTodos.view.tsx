@@ -15,13 +15,13 @@ import {
   Typography,
 } from 'antd';
 import type { CreateTodoMutation, ListTodosQuery } from 'graphql/generated';
-import moment from 'moment';
 import type { MutationUpdaterFn } from '@apollo/client';
 import AddTodo from 'components/form-components/Todos/AddTodo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
+import formatCalendar from 'utils/format-calendar-24h';
 import type { TodoData } from '../../../utils/get-to-do-url';
 import getTodoUrl from '../../../utils/get-to-do-url';
 import useStyles from './AdminTodos.styles';
@@ -195,7 +195,7 @@ const AdminTodos = ({
                 id: '8XUukm',
               }),
               width: 120,
-              render: (value) => moment(value).calendar('dd/mm/yyyy'),
+              render: (value) => formatCalendar(value),
             },
           ]}
           expandable={{

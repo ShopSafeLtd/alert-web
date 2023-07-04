@@ -200,9 +200,6 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
   const intl = useIntl();
   const schemeId = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
-  const groups = useStoreState((state) => state.user.groups).filter(
-    ({ scheme: { id } }) => schemeId === id
-  );
   const role = useStoreState((state) => state.user.role);
   const pagination = useStoreState((state) => state.data.incidents.pagination);
   const variables = useStoreState((state) => state.data.incidents.variables);
@@ -306,6 +303,16 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
             equals: schemeId,
           },
         },
+        users:
+          role === Role.User
+            ? {
+                some: {
+                  id: {
+                    equals: userId,
+                  },
+                },
+              }
+            : undefined,
       },
     },
     fetchPolicy: 'cache-and-network',
@@ -1215,12 +1222,10 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     fileList,
     goodsTypesData,
     groups:
-      role === Role.SchemeAdmin
-        ? groupData?.groups.map((group) => ({
-            value: group.id,
-            label: group.name,
-          })) || []
-        : groups.map((group) => ({ value: group.id, label: group.name })),
+      groupData?.groups.map((group) => ({
+        value: group.id,
+        label: group.name,
+      })) || [],
     groupsLoading,
     imgChange,
     loading,

@@ -297,7 +297,7 @@ const useNotificationLists = (): Return => {
         };
       }
       case Model.User: {
-        navigate(`/app/scheme-settings/users/view/${value.userId}`);
+        navigate(`/app/dashboard`);
         return {
           id: {
             equals: value.id,
