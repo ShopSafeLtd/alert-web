@@ -108,6 +108,7 @@ const useCreateMg11 = (): Return => {
   const [saving, setSaving] = useState(false);
 
   const navigate = useNavigate();
+  const businessStatement = Form.useWatch('businessStatement', form) === 'true';
 
   const [createMg11] = useCreateMg11Mutation({
     onCompleted: () => {
@@ -118,7 +119,11 @@ const useCreateMg11 = (): Return => {
           'The Mg11 has been created and sent to the witness to sign!',
         placement: 'bottomRight',
       });
-      navigate(`/app/incidents/view/${incidentId || ''}`);
+      if (businessStatement) {
+        navigate(`/app/mg11/create-bis/${incidentId || ''}`);
+      } else {
+        navigate(`/app/incidents/view/${incidentId || ''}`);
+      }
     },
     onError: () => {
       setSaving(false);

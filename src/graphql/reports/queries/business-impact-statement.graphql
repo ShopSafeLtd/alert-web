@@ -1,0 +1,21 @@
+query BusinessImpact($where: UniqueId!) {
+  businessImpact(where: $where) {
+    businessAddress
+    businessName
+    contactAddress
+    contactName
+    crimeNumber
+    date
+    description
+    incidentDate
+    incidentLoss
+    incidentRecovered
+    lostItems
+    policeOfficerAttending
+    referenceNumber
+    telephone
+    userAddress
+    userContact
+    userName
+  }
+}

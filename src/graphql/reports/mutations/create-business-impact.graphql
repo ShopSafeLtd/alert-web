@@ -1,0 +1,6 @@
+mutation CreateOneBusinessImpact($data: BusinessImpactInput!) {
+  createOneBusinessImpact(data: $data) {
+    id
+    name
+  }
+}

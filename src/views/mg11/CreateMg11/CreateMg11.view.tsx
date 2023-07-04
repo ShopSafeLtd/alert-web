@@ -90,7 +90,7 @@ const CreateMg11 = ({
   const careNeeds = Form.useWatch('careNeeds', form);
   const over18 = Form.useWatch('over18', form) !== 'false';
   const otherEthnicity = Form.useWatch('ethnicity', form) === 'other';
-  // const businessStatement = Form.useWatch('businessStatement', form) === 'true';
+  const businessStatement = Form.useWatch('businessStatement', form) === 'true';
   const completeNow = Form.useWatch('completeNow', form) === 'true';
   return (
     <div className="page-view">
@@ -129,7 +129,7 @@ const CreateMg11 = ({
           specialMeasures: '',
           careNeeds: '',
           careNeedsDetails: '',
-          businessStatement: 'false',
+          businessStatement: '',
           completeNow: '',
         }}
         onFinish={onSubmit}
@@ -184,7 +184,6 @@ const CreateMg11 = ({
           </Form.Item>
           <Form.Item
             name="businessStatement"
-            hidden
             label="Would you like to also create a Business Impact Statement?"
             rules={[
               {
@@ -210,8 +209,8 @@ const CreateMg11 = ({
             ]}
           >
             <Radio.Group size="small">
-              <Radio.Button value="true">Yes</Radio.Button>
-              <Radio.Button value="false">No</Radio.Button>
+              <Radio.Button value="true">Now</Radio.Button>
+              <Radio.Button value="false">Send to Witness</Radio.Button>
             </Radio.Group>
           </Form.Item>
         </Card>
@@ -953,6 +952,7 @@ const CreateMg11 = ({
                 <Col span={24}>
                   <Form.Item
                     name="interviewerSignature"
+                    label="Interviewer Signature"
                     rules={[
                       () => ({
                         validator() {
@@ -1163,7 +1163,9 @@ const CreateMg11 = ({
                 type="primary"
                 htmlType="submit"
               >
-                Create Mg11
+                {businessStatement
+                  ? `Create Mg11/Go to business impact statement`
+                  : 'Create Mg11'}
               </Button>
             </Col>
           </Row>
