@@ -17,10 +17,10 @@ interface Props {
 export default memo(({ data, isConnectable, selected, id }: Props) => {
   const { setNodes } = useReactFlow();
   const store = useStoreApi();
+  const { nodeInternals } = store.getState();
 
   // eslint-disable-next-line @typescript-eslint/no-shadow
   const onChange = useCallback((v, id) => {
-    const { nodeInternals } = store.getState();
     setNodes(
       // eslint-disable-next-line unicorn/prefer-spread
       Array.from(nodeInternals.values()).map((node) => {

@@ -2,6 +2,7 @@
 
 import { Button, Drawer } from 'antd';
 import React, { memo, useCallback } from 'react';
+import type { Node } from 'reactflow';
 import { Handle, NodeToolbar, Position, useStore } from 'reactflow';
 import { NodeResizer } from '@reactflow/node-resizer';
 import '@reactflow/node-resizer/dist/style.css';
@@ -10,10 +11,10 @@ import { useIntl } from 'react-intl';
 import OffenderCard from './components/offender-details-card';
 import type { Age, Build, Gender, Race } from '../../../graphql/generated';
 import useStyles from './style.module';
-import useFlow from '../../../views/investigations/ViewInvestigation/views/Flow/hooks/useFlow';
 import { useDrawerState } from '../../../hooks';
 import { useStoreState } from '../../../state';
 import SelectOffenderDetails from '../form/selectOffenderDetails';
+import { useWebRtcContext } from '../../../views/investigations/ViewInvestigation/views/Flow/hooks/useWebRtcProvidor';
 
 interface Offender {
   images:
@@ -58,11 +59,8 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
   const isTarget = connectionNodeId && connectionNodeId !== id;
   const targetHandleStyle = { zIndex: isTarget ? 5 : 1 };
   const classes = useStyles();
-  const { nodesMap } = useFlow({
-    investigationId: investigationId || '',
-    importData: undefined,
-  });
-
+  const provider = useWebRtcContext();
+  const nodesMap = provider.doc.getMap<Node>('nodes');
   const { drawer } = useDrawerState();
   const { fullName } = useStoreState((state) => state.user);
   const onSelect = useCallback((offender: Offender) => {

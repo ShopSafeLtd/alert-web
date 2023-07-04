@@ -2,5 +2,10 @@ mutation CreateOneStatementTemplate($data: StatementTemplateCreateInput!) {
   createOneStatementTemplate(data: $data) {
     id
     name
+    content
+            schemes {
+            id
+            name
+            }
   }
 }

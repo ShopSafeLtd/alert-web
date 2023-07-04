@@ -4,6 +4,7 @@ import React from 'react';
 import useFlow from './hooks/useFlow';
 import ReactFlowView from './Flow.view';
 import type { ViewInvestigationQuery } from '../../../../../graphql/generated';
+import { WebRtcProviderContextProvider } from './hooks/useWebRtcProvidor';
 
 interface Props {
   importData: ViewInvestigationQuery | undefined;
@@ -72,7 +73,9 @@ const ReactFlowPro = ({ importData }: Props) => {
 
 const Flow = ({ importData }: Props) => (
   <ReactFlowProvider>
-    <ReactFlowPro importData={importData} />
+    <WebRtcProviderContextProvider>
+      <ReactFlowPro importData={importData} />
+    </WebRtcProviderContextProvider>
   </ReactFlowProvider>
 );
 export default Flow;

@@ -282,8 +282,8 @@ const LightBoxFace = ({
                 intl.formatMessage(
                   {
                     defaultMessage:
-                      '{itemCount, plural, one {Match Found} other {Matches Found}}',
-                    id: 'snVLui',
+                      '{itemCount} {itemCount, plural, one {Match Found} other {Matches Found}}',
+                    id: 'hv7GuO',
                   },
                   {
                     itemCount: face.rekMatchedSearches.length,

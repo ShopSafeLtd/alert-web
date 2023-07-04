@@ -309,13 +309,13 @@ const useDiscImport = (): Return => {
         height: item[12],
         build: item[13],
         distinguishingFeatures: item[14],
-        comments: item[15],
-        address: item[16],
-        postcode: item[17],
-        incidentCount: item[18],
-        dateAdded: item[19],
-        databaseDeletionDate: item[20],
-        galleryStatus: item[21],
+        comments: `${item[15]}${item[16]}`,
+        address: item[17],
+        postcode: item[18],
+        incidentCount: item[19],
+        dateAdded: item[20],
+        databaseDeletionDate: item[21],
+        galleryStatus: item[22],
       }))
       .filter((item) => item.workspaceId !== 'Workspace Id')
       .filter((item) => item.workspaceId !== '');
@@ -386,13 +386,13 @@ const useDiscImport = (): Return => {
         height: item[12],
         build: item[13],
         distinguishingFeatures: item[14],
-        comments: item[15],
-        address: item[16],
-        postcode: item[17],
-        incidentCount: item[18],
-        dateAdded: item[19],
-        databaseDeletionDate: item[20],
-        galleryStatus: item[21],
+        comments: `${item[15]}${item[16]}`,
+        address: item[17],
+        postcode: item[18],
+        incidentCount: item[19],
+        dateAdded: item[20],
+        databaseDeletionDate: item[21],
+        galleryStatus: item[22],
       }))
       .filter((item) => item.workspaceId !== 'Workspace Id')
       .filter((item) => item.workspaceId !== '');
@@ -749,7 +749,7 @@ const useDiscImport = (): Return => {
               offender.lastName ? ` ${offender.lastName}` : ''
             }` || 'Unidentified Offender',
           images: images.filter((image) =>
-            image.fileName.includes(offender.id)
+            image.fileName?.includes(offender.id)
           ),
           alias: offender.nicknames.split(','),
           dateOfBirth: offender.dateOfBirth
@@ -878,7 +878,7 @@ const useDiscImport = (): Return => {
           county: '',
           postcode: incident.postcode,
           images: images.filter((image) =>
-            image.fileName.includes(incident.subjectID)
+            image.fileName?.includes(incident.subjectID)
           ),
           crimeTypes: [
             ...new Set(
@@ -1479,13 +1479,16 @@ const useDiscImport = (): Return => {
   };
 
   const handleFileListChange: UploadProps['onChange'] = (info) => {
+    console.log(images.length);
     if (info.file.response && info.file.status === 'done') {
-      setImages(
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-        info.file.response.map((item: Image) => ({ ...item, id: uuidv4() }))
-      );
+      setImages([
+        ...images,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+        ...info.file.response.map((item: Image) => ({ ...item, id: uuidv4() })),
+      ]);
     }
     setFileList(info.fileList);
+    console.log(images.length);
   };
 
   const onUpdateOffender = (data: NewOffender) => {

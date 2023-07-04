@@ -16,8 +16,10 @@ import {
   Col,
   Descriptions,
   Drawer,
+  Dropdown,
   Empty,
   Input,
+  Menu,
   Modal,
   Popover,
   Row,
@@ -35,13 +37,14 @@ import {
   faClock,
   faEdit,
   faPage,
+  faPlus,
   faSirenOn,
   faTags,
   faTrash,
   faUsers,
   faUserTag,
 } from '@fortawesome/pro-light-svg-icons';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import IncidentSideList from 'components/incidents/IncidentSideList';
 import UpdateBar from 'components/MessageInput/UpdateBar';
 import LinkOffender from 'components/form-components/offender/offender/AddExistingOffender';
@@ -186,6 +189,7 @@ const ViewIncident = ({
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
+  const navigate = useNavigate();
   return (
     <div className="page-container">
       <Row wrap={false}>
@@ -258,23 +262,67 @@ const ViewIncident = ({
                       </Link>
                     </Col>
                   )}
-
                   {data?.incident?.scheme.mg11Available && (
-                    <Col>
-                      <Link to={`/app/mg11/create/${incidentId}`}>
-                        <Button type="ghost">
+                    <Dropdown
+                      overlay={
+                        <Menu
+                          items={[
+                            {
+                              label: intl.formatMessage({
+                                defaultMessage: 'Create MG11',
+                                id: 'CpvwMZ',
+                              }),
+                              key: '1',
+                              icon: (
+                                <FontAwesomeIcon
+                                  size="1x"
+                                  style={{ marginRight: 8 }}
+                                  icon={faPage}
+                                />
+                              ),
+                              // disabled: !listVehiclesData?.listVehicles.total,
+                              onClick: () =>
+                                navigate(`/app/mg11/create/${incidentId}`),
+                            },
+                            {
+                              label: intl.formatMessage({
+                                defaultMessage:
+                                  'Create Business Impact Statement',
+                                id: 'PPTlxg',
+                              }),
+                              key: '3',
+                              icon: (
+                                <FontAwesomeIcon
+                                  size="1x"
+                                  style={{ marginRight: 8 }}
+                                  icon={faPage}
+                                />
+                              ),
+                              // disabled: !listVehiclesData?.listVehicles.total,
+                              onClick: () =>
+                                navigate(
+                                  `/app/mg11/create-bis/${incidentId || ''}`
+                                ),
+                            },
+                          ]}
+                        />
+                      }
+                    >
+                      <Button
+                        key="2"
+                        icon={
                           <FontAwesomeIcon
-                            size="1x"
-                            style={{ marginRight: 8 }}
-                            icon={faPage}
+                            icon={faPlus}
+                            style={{ marginRight: 5 }}
                           />
-                          {intl.formatMessage({
-                            defaultMessage: 'Create MG11',
-                            id: 'CpvwMZ',
-                          })}
-                        </Button>
-                      </Link>
-                    </Col>
+                        }
+                      >
+                        {intl.formatMessage({
+                          defaultMessage: 'Add Document',
+                          id: 'r9vGqd',
+                        })}
+                      </Button>
+                    </Dropdown>
                   )}
                   {deleteRights && (
                     <Col>

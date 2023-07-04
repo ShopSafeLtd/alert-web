@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Button, Card, Col, Drawer, List } from 'antd';
 import React, { memo, useCallback } from 'react';
+import type { Node } from 'reactflow';
 import { Handle, NodeToolbar, Position, useStore } from 'reactflow';
 import '@reactflow/node-resizer/dist/style.css';
-import { useParams } from 'react-router-dom';
 import { NodeResizer } from '@reactflow/node-resizer';
 import { useIntl } from 'react-intl';
 import useStyles from './style.module';
-import useFlow from '../../../views/investigations/ViewInvestigation/views/Flow/hooks/useFlow';
 import { useDrawerState } from '../../../hooks';
 import { useStoreState } from '../../../state';
 import LinkIncident from '../form/SelectManyIncidents';
+import { useWebRtcContext } from '../../../views/investigations/ViewInvestigation/views/Flow/hooks/useWebRtcProvidor';
 
 export interface Incident {
   description?: string | null | undefined;
@@ -33,14 +33,11 @@ const connectionNodeIdSelector = (state: { connectionNodeId: string | null }) =>
 
 export default memo(({ data, isConnectable, selected, id }: Props) => {
   const connectionNodeId = useStore(connectionNodeIdSelector);
-  const { id: investigationId } = useParams();
+  const provider = useWebRtcContext();
+  const nodesMap = provider.doc.getMap<Node>('nodes');
   const isTarget = connectionNodeId && connectionNodeId !== id;
   const targetHandleStyle = { zIndex: isTarget ? 5 : 1 };
   const classes = useStyles();
-  const { nodesMap } = useFlow({
-    investigationId: investigationId || '',
-    importData: undefined,
-  });
 
   const { drawer } = useDrawerState();
   const { fullName } = useStoreState((state) => state.user);

@@ -15,18 +15,15 @@ import { useDebouncedCallback } from 'use-debounce';
 
 import type { YMap } from 'yjs/dist/src/internals';
 import { useUsers } from 'y-presence';
-import type { WebsocketProvider } from 'y-websocket';
 import type { FullScreenHandle } from 'react-full-screen';
 import { useFullScreenHandle } from 'react-full-screen';
-import useWebRtcProvider from './useWebRtcProvidor';
-import useNodesStateSynced from './useNodesStateSynced';
-import useEdgesStateSynced from './useEdgesStateSynced';
-import { useStoreState } from '../../../../../../state';
 import useObservableListener from './useObservableListener';
 import styles from '../style.module.css';
 import type { ViewInvestigationQuery } from '../../../../../../graphql/generated';
 import { useUpdateFlowMutation } from '../../../../../../graphql/generated';
 import useDownloadImage from './useDownloadImage';
+import useGraphStateSynced from './useNodesEdgesStateSynced';
+import { useWebRtcContext } from './useWebRtcProvidor';
 
 interface Return {
   nodes: Node[];
@@ -60,7 +57,6 @@ interface Return {
   // eslint-disable-next-line
   users: Map<number, { [p: string]: any }>;
   handlePointMove: (e: React.PointerEvent) => void;
-  provider: WebsocketProvider;
   reactFlowInstance: ReactFlowInstance | null;
   downloadImage: () => void;
   flowScreen: FullScreenHandle;
@@ -76,25 +72,25 @@ interface Props {
 }
 
 const useFlow = ({ investigationId, importData }: Props): Return => {
-  const currentUser = useStoreState((state) => state.user);
+  const provider = useWebRtcContext();
 
-  const provider: WebsocketProvider = useWebRtcProvider(
-    currentUser,
-    investigationId
-  );
+  // const provider: WebsocketProvider = useWebRtcProvider(
+  //   currentUser,
+  //   investigationId
+  // );
   const [selected, setSelected] = useState<string | null>(null);
   const [savedWhen, setSavedWhen] = useState<string | null>(
     importData?.investigation?.flows[0].updatedAt
       ? moment(importData?.investigation?.flows[0].updatedAt).fromNow()
       : null
   );
-
   const [updateFlow, { loading: saving }] = useUpdateFlowMutation();
   const { downloadImage: handleDownload } = useDownloadImage();
   const nodesMap = provider.doc.getMap<Node>('nodes');
   const edgesMap = provider.doc.getMap<Edge>('edges');
-  const [nodes, onNodesChange] = useNodesStateSynced({ nodesMap, edgesMap });
-  const [edges, onEdgesChange, onConnect] = useEdgesStateSynced({ edgesMap });
+  const [nodes, edges, onNodesChange, onEdgesChange, onConnect] =
+    useGraphStateSynced({ nodesMap, edgesMap });
+  // const [edges, onEdgesChange, onConnect] = useEdgesStateSynced({ edgesMap });
   const [clientCount, setClientCount] = useState<number>(0);
   const [isSynced, setIsSynced] = useState<boolean>(false);
   const [usedFallbackRef, setUsedFallbackRef] = useState<boolean>(false);
@@ -191,101 +187,48 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
 
   useObservableListener('update', handleYDocUpdate, provider.doc);
 
-  // useEffect(() => {
-  //   if (usedFallbackRef.current) return;
-  //   const fetchFallback = async () => {
-  //     if (
-  //       provider.wsconnected &&
-  //       clientCount === 0 &&
-  //       // eslint-disable-next-line no-underscore-dangle
-  //       nodesMap?._map.size === 0 &&
-  //       !usedFallbackRef.current
-  //     ) {
-  //       const initData = importData?.investigation?.flows[0];
-  //       if (initData?.nodes)
-  //         // eslint-disable-next-line no-restricted-syntax,no-unsafe-optional-chaining
-  //         for (const node of initData?.nodes) {
-  //           nodesMap.set(node.id, node as Node);
-  //         }
-  //       if (initData?.edges)
-  //         // eslint-disable-next-line no-restricted-syntax,no-unsafe-optional-chaining
-  //         for (const edge of initData?.edges) {
-  //           edgesMap.set(edge.id, edge as Edge);
-  //         }
-  //     }
-  //     usedFallbackRef.current = true;
-  //     return () => {};
-  //   };
-  //
-  //   const timeoutId = window.setTimeout(fetchFallback, 1000);
-  //   // eslint-disable-next-line consistent-return
-  //   return () => {
-  //     window.clearTimeout(timeoutId);
-  //   };
-  // }, [
-  //   importData,
-  //   investigationId,
-  //   provider.wsconnected,
-  //   clientCount,
-  //   reactFlowInstance,
-  // ]);
-
   useEffect(() => {
     let isMounted = true;
     const fetchFallback = async () => {
-      if (
-        provider.wsconnected &&
-        clientCount === 0 &&
+      if (provider.wsconnected && clientCount === 0 && !usedFallbackRef) {
         // eslint-disable-next-line no-underscore-dangle
-        nodesMap?._map.size === 0 &&
-        !usedFallbackRef
-      ) {
-        const initData = importData?.investigation?.flows[0];
-        if (initData?.nodes)
-          // eslint-disable-next-line no-restricted-syntax,no-unsafe-optional-chaining
-          for (const node of initData?.nodes) {
-            nodesMap.set(node.id, node as Node);
+        if (nodesMap?._map.size === 0) {
+          console.log('No Ydoc');
+          const initData = importData?.investigation?.flows[0];
+          if (initData?.nodes) {
+            // eslint-disable-next-line no-restricted-syntax
+            for (const node of initData.nodes) {
+              nodesMap.set(node.id, node as Node);
+            }
           }
-        if (initData?.edges)
-          // eslint-disable-next-line no-restricted-syntax,no-unsafe-optional-chaining
-          for (const edge of initData?.edges) {
-            edgesMap.set(edge.id, edge as Edge);
+          if (initData?.edges) {
+            // eslint-disable-next-line no-restricted-syntax
+            for (const edge of initData.edges) {
+              edgesMap.set(edge.id, edge as Edge);
+            }
           }
+          console.log('Done creating Ydoc');
+        } else {
+          console.log('Ydoc found and used');
+        }
+        setUsedFallbackRef(true);
       }
-      setUsedFallbackRef(true);
     };
 
-    const timeoutId = window.setTimeout(async () => {
-      await fetchFallback();
-      if (isMounted && usedFallbackRef) {
-        window.clearTimeout(timeoutId);
-        // do something
-      }
-    }, 500);
-
+    if (isMounted) {
+      void fetchFallback();
+    }
     return () => {
       isMounted = false;
-      window.clearTimeout(timeoutId);
     };
   }, [
-    importData,
-    investigationId,
+    // importData,
     provider.wsconnected,
-    clientCount,
-    reactFlowInstance,
+    // clientCount,
+    // usedFallbackRef,
+    // nodesMap,
+    // edgesMap,
   ]);
-
-  // useEffect(() => {
-  //
-  //   const timeoutId = window.setTimeout(updateSavedWhen, 1000);
-  //
-  //   // eslint-disable-next-line consistent-return
-  //   return () => {
-  //     // clear prescence
-  //     provider.awareness.setLocalStateField('user', null);
-  //     window.clearTimeout(timeoutId);
-  //   };
-  // }, []);
 
   const getId = () => `dndnode_${Math.random() * 10_000}_${investigationId}`;
 
@@ -512,13 +455,6 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
     provider.wsconnecting,
   ]);
 
-  // :
-  //   importData?.investigation?.flows[0] &&
-  //   provider.wsconnected &&
-  //   usedFallbackRef
-  //     ? false
-  //     : provider.wsconnecting && !usedFallbackRef
-  //
   return {
     nodes,
     onNodesChange,
@@ -542,7 +478,6 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
     saving,
     users,
     handlePointMove,
-    provider,
     downloadImage,
     flowScreen,
     isFullScreen,

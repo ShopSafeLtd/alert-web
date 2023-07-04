@@ -298,7 +298,7 @@ const OffenderMatches = ({
             <Col>
               <Link
                 // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-                to={`/app/offenders/compare/${data.offender?.id}?${match.matchedOffender?.id}`}
+                to={`/app/offenders/compare/${match.matchedOffender?.id}?offenders=${data.offender?.id}`}
               >
                 <Button size="small" danger>
                   {intl.formatMessage({
