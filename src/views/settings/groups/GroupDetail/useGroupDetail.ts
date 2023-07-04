@@ -3,6 +3,7 @@ import type { GroupQuery } from 'graphql/generated';
 import { useDeleteGroupMutation, useGroupQuery } from 'graphql/generated';
 
 import { Modal, notification } from 'antd';
+import errorNotification from 'types/error_notification';
 
 const { confirm } = Modal;
 
@@ -40,11 +41,7 @@ const useGroupDetail = (groupId: string): Return => {
     },
     onError: () => {
       setSaving(false);
-      notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
   });
 

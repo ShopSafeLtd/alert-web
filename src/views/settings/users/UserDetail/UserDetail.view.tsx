@@ -87,6 +87,9 @@ const userDetail = ({
             />
           }
         >
+          {/* new thing to translate:  data?.user?.status === UserStatus.NotInvited
+                ? 'Send Invite'
+                : 'Resend Invite' */}
           <FormattedMessage defaultMessage="Resend Invite" id="uVl/Bo" />
         </Button>,
         data?.user?.disabled ? (

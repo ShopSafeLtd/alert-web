@@ -11,6 +11,7 @@ import {
 } from 'graphql/generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { notification } from 'antd';
+import errorNotification from 'types/error_notification';
 
 interface Props {
   onClose: () => void;
@@ -58,11 +59,7 @@ const useRestoreOffender = ({
     },
     onError: () => {
       setSaving(false);
-      notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
     update: updateRestore,
   });
@@ -89,11 +86,7 @@ const useRestoreOffender = ({
     },
     onError: () => {
       setSaving(false);
-      notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
     update: updateDelete,
   });

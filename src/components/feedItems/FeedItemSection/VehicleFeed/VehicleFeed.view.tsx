@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Row, Typography } from 'antd';
-import type { FeedItemsQuery, ImagePosition } from 'graphql/generated';
+import type { FeedItemsQuery } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCar,
@@ -9,9 +9,9 @@ import {
   faUser,
 } from '@fortawesome/pro-light-svg-icons';
 import { Link } from 'react-router-dom';
-import WatermarkImage from 'components/images/WatermarkImage.view';
 import { useIntl } from 'react-intl';
 import UpdateContent from '../UpdateContent';
+import ImageContainer from '../ImageContainer';
 
 const { Title, Text } = Typography;
 
@@ -24,22 +24,6 @@ interface Props {
   isNewVehicle?: boolean;
 }
 
-const ImageContainer = ({
-  src,
-  position,
-}: {
-  src: string;
-  position: ImagePosition;
-}) => (
-  <div
-    style={{
-      width: 150,
-      height: 180,
-    }}
-  >
-    <WatermarkImage url={src} position={position} />
-  </div>
-);
 const VehicleFeed = ({
   feedItem,
   isNewImage,
@@ -83,7 +67,7 @@ const VehicleFeed = ({
           </Col>
         ) : null}
 
-        <Col flex={1} style={{ padding: 10 }}>
+        <Col flex={1} style={{ padding: 10, marginLeft: 15 }}>
           {isNewVehicle ? (
             <>
               <Title level={4} ellipsis>

@@ -89,7 +89,7 @@ const useIncidentFeed = (): Return => {
 
   // Global State
   const schemeId = useStoreState((state) => state.scheme.id);
-  const { role, groups, id: userId } = useStoreState((state) => state.user);
+  const { role, id: userId } = useStoreState((state) => state.user);
   const pagination = useStoreState((state) => state.data.incidents.pagination);
   const variables = useStoreState((state) => state.data.incidents.variables);
   const order = useStoreState((state) => state.data.incidents.order);
@@ -281,6 +281,16 @@ const useIncidentFeed = (): Return => {
             equals: schemeId,
           },
         },
+        users:
+          role === Role.User
+            ? {
+                some: {
+                  id: {
+                    equals: userId,
+                  },
+                },
+              }
+            : undefined,
       },
     },
     fetchPolicy: 'cache-and-network',
@@ -351,10 +361,7 @@ const useIncidentFeed = (): Return => {
       },
       variables: {
         ...variables,
-        groups:
-          role === Role.SchemeAdmin || role === Role.ShopsafeAdmin
-            ? groupsData?.groups.map((group) => group.id) || []
-            : groups.map((group) => group.id),
+        groups: groupsData?.groups.map((group) => group.id) || [],
       },
       order,
     });
@@ -485,18 +492,19 @@ const useIncidentFeed = (): Return => {
     search: variables.search,
     setSearch,
     groups:
-      role === Role.SchemeAdmin
-        ? groupsData?.groups.map((group) => ({
-            value: group.id,
-            label: group.name,
-          })) || []
-        : groups.map((group) => ({ value: group.id, label: group.name })),
+      groupsData?.groups.map((group) => ({
+        value: group.id,
+        label: group.name,
+      })) || [],
     groupsLoading,
     onGroupsChange,
     variables,
     onCrimeTypesChange,
     crimeTypes:
-      tagsData?.tags.map((tag) => ({ value: tag.id, label: tag.name })) || [],
+      tagsData?.tags?.map((tag) => ({
+        value: tag?.id || '',
+        label: tag?.name || '',
+      })) || [],
     tagsLoading,
     updateIncidentList,
     onNavigate,

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button, Card, Col, Empty, Input, Row, Skeleton, Table } from 'antd';
-import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBellOn,
@@ -10,6 +9,7 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import type { UserNotificationsQuery } from 'graphql/generated';
 import { useIntl } from 'react-intl';
+import formatCalendar from 'utils/format-calendar-24h';
 import useStyles from './NotificationList.styles';
 import type { NotificationData } from './useNotificationList';
 
@@ -186,7 +186,7 @@ const NotificationLists = ({
                 }),
                 width: 120,
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                render: (value) => moment(value).calendar('dd/mm/yyyy'),
+                render: (value) => formatCalendar(value),
               },
             ]}
           />

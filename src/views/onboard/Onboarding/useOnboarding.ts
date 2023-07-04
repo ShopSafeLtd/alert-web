@@ -5,6 +5,7 @@ import { notification } from 'antd';
 import { useStoreState } from 'state';
 import type { CurrentSchemeTermsQuery } from 'graphql/generated';
 import {
+  // UserStatus,
   useCurrentSchemeTermsQuery,
   useSignTermsMutation,
   useUpdateUserMutation,
@@ -133,6 +134,7 @@ const useOnboarding = (): Return => {
             fullName: { set: accountDetail?.fullName },
             termsSigned: { set: true },
             newUser: { set: false },
+            // status: { set: UserStatus.Active },
           },
           groupWhere: {
             scheme: {

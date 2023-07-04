@@ -1,20 +1,21 @@
 import { useEffect, useState } from 'react';
 import type {
   CreateTagMutation,
+  RecycleTagMutation,
   TagsQuery,
-  UpdateTagMutation,
 } from 'graphql/generated';
 import {
+  useRecycleTagMutation,
   Model,
   QueryMode,
   TagsDocument,
   TagType,
   useTagsQuery,
-  useUpdateTagMutation,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { Modal, notification } from 'antd';
+import errorNotification from 'types/error_notification';
 
 const { confirm } = Modal;
 
@@ -254,7 +255,7 @@ const useCrimeTypeList = (): Return => {
     store.writeQuery<TagsQuery>({
       query: TagsDocument,
       data: {
-        tags: [...existingData.tags, res.createTag],
+        tags: [...(<[]>existingData.tags), res.createTag],
         __typename: 'Query',
       },
       variables: impactTagsVars,
@@ -277,7 +278,7 @@ const useCrimeTypeList = (): Return => {
     store.writeQuery<TagsQuery>({
       query: TagsDocument,
       data: {
-        tags: [...existingData.tags, res.createTag],
+        tags: [...(<[]>existingData.tags), res.createTag],
         __typename: 'Query',
       },
       variables: involvedTagsVars,
@@ -300,7 +301,7 @@ const useCrimeTypeList = (): Return => {
     store.writeQuery<TagsQuery>({
       query: TagsDocument,
       data: {
-        tags: [...existingData.tags, res.createTag],
+        tags: [...(<[]>existingData.tags), res.createTag],
         __typename: 'Query',
       },
       variables: crimeTypesVars,
@@ -308,7 +309,7 @@ const useCrimeTypeList = (): Return => {
   };
 
   // update list after deleting an item
-  const update: MutationUpdaterFn<UpdateTagMutation> = (
+  const update: MutationUpdaterFn<RecycleTagMutation> = (
     store,
     { data: res }
   ) => {
@@ -331,8 +332,8 @@ const useCrimeTypeList = (): Return => {
       store.writeQuery<TagsQuery>({
         query: TagsDocument,
         data: {
-          tags: existingData.tags.filter(
-            (tag) => tag.id !== res?.updateTag?.id
+          tags: existingData.tags?.filter(
+            (tag) => tag?.id !== res?.recycleTag?.id
           ),
           __typename: 'Query',
         },
@@ -342,8 +343,8 @@ const useCrimeTypeList = (): Return => {
       store.writeQuery<TagsQuery>({
         query: TagsDocument,
         data: {
-          tags: existingInvolvedData.tags.filter(
-            (tag) => tag.id !== res?.updateTag?.id
+          tags: existingInvolvedData.tags?.filter(
+            (tag) => tag?.id !== res?.recycleTag?.id
           ),
           __typename: 'Query',
         },
@@ -353,8 +354,8 @@ const useCrimeTypeList = (): Return => {
       store.writeQuery<TagsQuery>({
         query: TagsDocument,
         data: {
-          tags: existingImpactData.tags.filter(
-            (tag) => tag.id !== res?.updateTag?.id
+          tags: existingImpactData.tags?.filter(
+            (tag) => tag?.id !== res?.recycleTag?.id
           ),
           __typename: 'Query',
         },
@@ -362,10 +363,13 @@ const useCrimeTypeList = (): Return => {
       });
   };
 
-  // delete
-  const [updateTag] = useUpdateTagMutation({
+  // recycle Tag
+  // ???
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const [recycleTag] = useRecycleTagMutation({
     onCompleted: () => {
       setSaving(false);
+      // new thing to translate
       notification.success({
         message: 'Successfully Removed',
         description: `The crime type has been removed from ${schemeName}!`,
@@ -374,35 +378,20 @@ const useCrimeTypeList = (): Return => {
     },
     onError: () => {
       setSaving(false);
-      notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
     update,
   });
   const openDelete = (currentId: string) => {
     setSaving(true);
     if (currentId)
-      updateTag({
+      void recycleTag({
         variables: {
           where: {
             id: currentId,
           },
-          data: {
-            schemes: {
-              disconnect: [
-                {
-                  id: schemeId,
-                },
-              ],
-            },
-          },
         },
-      }).finally(() => {
-        setSaving(false);
-      });
+      }).finally(() => setSaving(false));
   };
 
   const deleteConfirm = (currentId: string) => {

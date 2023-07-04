@@ -10,6 +10,7 @@ import {
 } from 'graphql/generated';
 import { notification } from 'antd';
 import type { SelectOptions } from 'types/DataType';
+import errorNotification from 'types/error_notification';
 
 export interface FormData {
   name: string;
@@ -94,11 +95,7 @@ const useEditGroup = ({ onClose, groupId }: Props): Return => {
     },
     onError: () => {
       setSaving(false);
-      notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
   });
 

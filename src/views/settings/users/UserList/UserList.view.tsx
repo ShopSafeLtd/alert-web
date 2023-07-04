@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Col, Drawer, Input, Row, Table, Typography } from 'antd';
+import { UserStatus } from 'graphql/generated';
 import type {
   CreateUserInDatabaseMutation,
   InviteExistingUserMutation,
@@ -12,7 +13,6 @@ import type { MutationUpdaterFn } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faFilter, faPlus } from '@fortawesome/pro-light-svg-icons';
 import EditUser from 'components/form-components/user/EditUser';
-import type { UserStatus } from 'types/enums/user_status';
 import type { UserSort } from 'types/enums/user_sort';
 import UserFilter from 'components/users/UserFilter';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -35,8 +35,8 @@ interface Props {
   currentPageSize: number;
   toggleEditUser: (value?: string | undefined) => void;
   editUser: string | undefined;
-  userStatus: UserStatus | undefined;
-  setUserStatus: (value: UserStatus) => void;
+  userStatus: UserStatus[] | undefined;
+  setUserStatus: (value: UserStatus[]) => void;
   userRole: Role | undefined;
   setUserRole: (value: Role) => void;
   sortFilter: boolean;
@@ -158,7 +158,7 @@ const UserList = ({
             dataIndex: 'status',
             render: (value) => (
               <Typography.Text
-                type={value === 'Enabled' ? 'success' : 'warning'}
+                type={value === UserStatus.Active ? 'success' : 'warning'}
               >
                 {value}
               </Typography.Text>
@@ -222,7 +222,8 @@ const UserList = ({
               index === 0 ? group.name : ` ${group.name}`
             )
             .toString(),
-          status: user.status,
+          // ???
+          status: user.status || UserStatus.Active,
         }))}
       />
       <Drawer

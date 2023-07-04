@@ -2,8 +2,7 @@ import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import { UserSort } from 'types/enums/user_sort';
-import { Role } from 'graphql/generated';
-import { UserStatus } from 'types/enums/user_status';
+import { Role, UserStatus } from 'graphql/generated';
 import UserList from '../UserList.view';
 
 describe('List Officer View', () => {
@@ -54,7 +53,7 @@ describe('List Officer View', () => {
           sortFilter
           toggleSortFilter={jest.fn()}
           userRole={Role.SchemeAdmin}
-          userStatus={UserStatus.ACTIVE}
+          userStatus={[UserStatus.Active]}
         />
       </MemoryRouter>
     );

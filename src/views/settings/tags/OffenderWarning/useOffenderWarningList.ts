@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import type { TagsQuery, TagsQueryVariables } from 'graphql/generated';
 import {
+  useRecycleTagMutation,
   Model,
   QueryMode,
   TagsDocument,
   useCreateTagMutation,
   useTagsQuery,
-  useUpdateTagMutation,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
 
@@ -80,6 +80,7 @@ const useOffenderWarningList = (): Return => {
     onCompleted: () => {
       setSaving(false);
       setAddOffenderWarning(false);
+      // new thing to translate
       notification.success({
         message: 'Successfully Added!',
         description: 'The offender warning has been added! ',
@@ -103,7 +104,7 @@ const useOffenderWarningList = (): Return => {
       store.writeQuery<TagsQuery, TagsQueryVariables>({
         query: TagsDocument,
         data: {
-          tags: [...existingData.tags, res.createTag],
+          tags: [...(<[]>existingData.tags), res.createTag],
           __typename: 'Query',
         },
         variables,
@@ -137,7 +138,7 @@ const useOffenderWarningList = (): Return => {
             query: TagsDocument,
             variables,
             data: {
-              tags: [...existingData.tags, result.data?.createTag],
+              tags: [...(<[]>existingData.tags), result.data?.createTag],
             },
           });
       },
@@ -145,9 +146,12 @@ const useOffenderWarningList = (): Return => {
   };
 
   // delete
-  const [updateTag] = useUpdateTagMutation({
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const [recycleTag] = useRecycleTagMutation({
     onCompleted: () => {
       setSaving(false);
+      // new thing to translate
       notification.success({
         message: 'Successfully Removed',
         description: `The crime type has been removed from ${schemeName}!`,
@@ -156,16 +160,10 @@ const useOffenderWarningList = (): Return => {
     },
     onError: () => {
       setSaving(false);
-      notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
     update: (store, { data: res }) => {
       if (res === null || res === undefined) return;
-
-      // get existing Offender list data from Apollo store
       const existingData = store.readQuery<TagsQuery>({
         query: TagsDocument,
         variables,
@@ -177,8 +175,8 @@ const useOffenderWarningList = (): Return => {
       store.writeQuery<TagsQuery>({
         query: TagsDocument,
         data: {
-          tags: existingData.tags.filter(
-            (tag) => tag.id !== res?.updateTag?.id
+          tags: existingData?.tags?.filter(
+            (tag) => tag?.id !== res?.recycleTag?.id
           ),
           __typename: 'Query',
         },
@@ -189,25 +187,17 @@ const useOffenderWarningList = (): Return => {
   const openDelete = (currentId: string) => {
     setSaving(true);
     if (currentId)
-      updateTag({
+      void recycleTag({
         variables: {
           where: {
             id: currentId,
-          },
-          data: {
-            schemes: {
-              disconnect: [
-                {
-                  id: schemeId,
-                },
-              ],
-            },
           },
         },
       }).finally(() => setSaving(false));
   };
 
   const deleteConfirm = (currentId: string) => {
+    // new thing to translate
     confirm({
       title: 'Do you want to delete the offender warning?',
       content: 'This action cannot be undone.',

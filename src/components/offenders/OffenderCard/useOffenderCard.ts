@@ -5,6 +5,7 @@ import { notification } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { useIntl } from 'react-intl';
+import errorNotification from 'types/error_notification';
 
 interface Props {
   createdById: string | undefined;
@@ -52,14 +53,7 @@ const useOffenderCard = ({ createdById, update }: Props): Return => {
       });
     },
     onError: () => {
-      notification.error({
-        message: intl.formatMessage({ defaultMessage: 'Error!', id: 'DIDBlF' }),
-        description: intl.formatMessage({
-          defaultMessage: 'Whoops, there are some errors. Please try again.',
-          id: 'tPB3Wl',
-        }),
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
     update,
   });

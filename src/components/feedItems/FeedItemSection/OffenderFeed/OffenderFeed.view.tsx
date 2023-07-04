@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Row, Tag, Typography } from 'antd';
-import type { FeedItemsQuery, ImagePosition } from 'graphql/generated';
+import type { FeedItemsQuery } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faEarth,
@@ -17,9 +17,9 @@ import {
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
 import { Link } from 'react-router-dom';
-import WatermarkImage from 'components/images/WatermarkImage.view';
 import { useIntl } from 'react-intl';
 import UpdateContent from '../UpdateContent';
+import ImageContainer from '../ImageContainer';
 
 const { Title, Text } = Typography;
 
@@ -32,22 +32,6 @@ interface Props {
   isNewOffender?: boolean;
 }
 
-const ImageContainer = ({
-  src,
-  position,
-}: {
-  src: string;
-  position: ImagePosition;
-}) => (
-  <div
-    style={{
-      width: 150,
-      height: 180,
-    }}
-  >
-    <WatermarkImage url={src} position={position} />
-  </div>
-);
 const OffenderFeed = ({
   feedItem,
   isNewImage,
@@ -74,7 +58,7 @@ const OffenderFeed = ({
   return (
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     <Link to={`/app/offenders/view/${id}`}>
-      <Row gutter={20} wrap={false} style={{ width: '100%' }}>
+      <Row gutter={15} wrap={false} style={{ width: '100%' }}>
         {(isNewOffender || isNewImage) && images && images.length > 0 ? (
           <Col>
             <ImageContainer
@@ -94,7 +78,7 @@ const OffenderFeed = ({
           </Col>
         ) : null}
 
-        <Col flex={1} style={{ padding: 10 }}>
+        <Col flex={1} style={{ padding: 10, marginLeft: 15 }}>
           {isNewOffender ? (
             <>
               <Title level={4} ellipsis>

@@ -61,7 +61,7 @@ const useArticleFeed = (): Return => {
 
   // Global State
   const schemeId = useStoreState((state) => state.scheme.id);
-  const { role, groups, id: userId } = useStoreState((state) => state.user);
+  const { role, id: userId } = useStoreState((state) => state.user);
   const [search, setSearch] = useState('');
   const [pageSize, setPageSize] = useState(10);
   const [page, setPage] = useState(1);
@@ -192,6 +192,16 @@ const useArticleFeed = (): Return => {
             equals: schemeId,
           },
         },
+        users:
+          role === Role.User
+            ? {
+                some: {
+                  id: {
+                    equals: userId,
+                  },
+                },
+              }
+            : undefined,
       },
     },
     fetchPolicy: 'cache-and-network',
@@ -231,12 +241,10 @@ const useArticleFeed = (): Return => {
     priorityFilter,
     setPriorityFilter,
     groups:
-      role === Role.SchemeAdmin
-        ? groupsData?.groups.map((group) => ({
-            value: group.id,
-            label: group.name,
-          })) || []
-        : groups.map((group) => ({ value: group.id, label: group.name })),
+      groupsData?.groups.map((group) => ({
+        value: group.id,
+        label: group.name,
+      })) || [],
     groupsLoading,
     onNavigate,
     lightboxElements,

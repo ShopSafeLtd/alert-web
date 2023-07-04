@@ -1,11 +1,12 @@
 import React from 'react';
 import { Button, Col, Row, Select, Typography } from 'antd';
+import type { UserStatus } from 'graphql/generated';
 import { Role } from 'graphql/generated';
-import type { UserStatus } from 'types/enums/user_status';
-import { userStatusValues } from 'types/enums/user_status';
+
 import type { UserSort } from 'types/enums/user_sort';
 import { userSortValues } from 'types/enums/user_sort';
 import { FormattedMessage, useIntl } from 'react-intl';
+import userStatusValues from 'types/enums/user_status';
 import useStyles from './UserFilter.styles';
 
 interface Props {
@@ -16,8 +17,8 @@ interface Props {
   clearFilters: () => void;
   groupsFilter: string[];
   setGroupsFilter: (value: string[]) => void;
-  userStatus: UserStatus | undefined;
-  setUserStatus: (value: UserStatus) => void;
+  userStatus: UserStatus[] | undefined;
+  setUserStatus: (value: UserStatus[]) => void;
   userRole: Role | undefined;
   setUserRole: (value: Role) => void;
 }
@@ -74,18 +75,20 @@ const UserFilter = ({
           <Typography.Paragraph className={classes.selectTitle}>
             <FormattedMessage id="tzMNF3" defaultMessage="Status" />
           </Typography.Paragraph>
+          {/* new thing to translate, more userStatus options  */}
           <Select
             placeholder={intl.formatMessage({
               id: 'tzMNF3',
               defaultMessage: 'Status',
             })}
+            mode="multiple"
             className={classes.select}
             allowClear
             value={userStatus}
             onChange={setUserStatus}
             options={userStatusValues.map((value) => ({
-              label: value,
-              value,
+              label: value.label,
+              value: value.value,
             }))}
           />
         </Col>

@@ -50,7 +50,7 @@ interface Return {
 const useListVehicles = (): Return => {
   const intl = useIntl();
   const schemeId = useStoreState((state) => state.scheme.id);
-  const { role, groups, id: userId } = useStoreState((state) => state.user);
+  const { role, id: userId } = useStoreState((state) => state.user);
   const [addVehicle, setAddVehicle] = useState(false);
   const [search, setSearch] = useState('');
   const [sortFilter, setSortFilter] = useState(false);
@@ -148,6 +148,16 @@ const useListVehicles = (): Return => {
             equals: schemeId,
           },
         },
+        users:
+          role === Role.User
+            ? {
+                some: {
+                  id: {
+                    equals: userId,
+                  },
+                },
+              }
+            : undefined,
       },
     },
     fetchPolicy: 'cache-and-network',
@@ -377,12 +387,10 @@ const useListVehicles = (): Return => {
     // updateVehicleList,
     onSubmit,
     groups:
-      role === Role.SchemeAdmin
-        ? groupData?.groups.map((group) => ({
-            value: group.id,
-            label: group.name,
-          })) || []
-        : groups.map((group) => ({ value: group.id, label: group.name })),
+      groupData?.groups.map((group) => ({
+        value: group.id,
+        label: group.name,
+      })) || [],
     groupsLoading,
     groupsFilter,
     setGroupsFilter,

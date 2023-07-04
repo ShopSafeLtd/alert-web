@@ -255,16 +255,21 @@ const FeedItem = ({
                   loading={loading}
                 >
                   <>
-                    <Row style={{ margin: '8px 8px 4px' }}>
-                      <Col flex={1}>
-                        <Title
-                          style={{ margin: 0, fontSize: 14 }}
-                          level={4}
-                          ellipsis
-                        >
-                          {feedItem?.message}
-                        </Title>
-                      </Col>
+                    <Row
+                      style={{ margin: '8px 8px 4px' }}
+                      // justify="end"
+                      wrap={false}
+                    >
+                      {/* <Col> */}
+                      <Title
+                        style={{ margin: 0, fontSize: 14, maxWidth: '60%' }}
+                        level={4}
+                        ellipsis
+                      >
+                        {feedItem?.message}
+                      </Title>
+                      {/* </Col> */}
+                      <Col flex={1} />
                       <Col>
                         <Text type="secondary" style={{ fontSize: 14 }}>
                           {formatCalendar(feedItem?.updatedAt)}
@@ -279,7 +284,7 @@ const FeedItem = ({
                                 height: 25,
                                 width: 30,
                                 marginTop: -15,
-                                marginLeft: 5,
+                                // marginLeft: 5,
                               }}
                               disabled={saving}
                               icon={

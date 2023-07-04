@@ -1,0 +1,17 @@
+query ListTags(
+  $where: TagWhereInput!
+  $order: TagOrderByWithRelationInput
+  $take: Int
+  $skip: Int
+) {
+  listTags(where: $where, order: $order) {
+    tags {
+      id
+      name
+      description
+      crimeType
+      type
+    }
+    total
+  }
+}

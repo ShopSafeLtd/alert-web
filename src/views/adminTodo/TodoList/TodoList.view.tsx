@@ -18,7 +18,6 @@ import {
   Tooltip,
 } from 'antd';
 import type { CreateTodoMutation, ListTodosQuery } from 'graphql/generated';
-import moment from 'moment';
 import type { MutationUpdaterFn } from '@apollo/client';
 import AddTodo from 'components/form-components/Todos/AddTodo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -26,6 +25,7 @@ import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { Link } from 'react-router-dom';
 import getTodoUrl from 'utils/get-to-do-url';
 import { useIntl } from 'react-intl';
+import formatCalendar from 'utils/format-calendar-24h';
 import useStyles from './TodoList.styles';
 
 const { Panel } = Collapse;
@@ -226,7 +226,7 @@ const AdminTodos = ({
                   defaultMessage: 'Due Date',
                   id: '8XUukm',
                 }),
-                render: (value) => moment(value).calendar('dd/mm/yyyy'),
+                render: (value) => formatCalendar(value),
               },
               {
                 key: 'assignedUsers',
@@ -372,7 +372,7 @@ const AdminTodos = ({
                       defaultMessage: 'Completed Date',
                       id: 'DFG3iK',
                     }),
-                    render: (value) => moment(value).calendar('dd/mm/yyyy'),
+                    render: (value) => formatCalendar(value),
                   },
                   {
                     key: 'completedBy',

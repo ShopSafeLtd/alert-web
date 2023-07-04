@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { UserQuery } from 'graphql/generated';
 import {
+  UserStatus,
   useDeleteUserFromSchemeMutation,
   useSendInviteMutation,
   useUpdateUserDisableMutation,
@@ -136,6 +137,9 @@ const useUserDetail = (userId: string): Return => {
           },
           data: {
             disabled: { set: disabled },
+            status: {
+              set: disabled ? UserStatus.Disabled : UserStatus.Active,
+            },
           },
         },
       }).finally(() => {
