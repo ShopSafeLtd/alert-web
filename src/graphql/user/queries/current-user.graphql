@@ -25,6 +25,8 @@ query currentUser {
       id
       role
       scheme {
+
+customTranslations
         logo {
           optimisedPersisted
         }
@@ -37,6 +39,7 @@ query currentUser {
         autoApproveIncidents
         autoApproveOffenders
         defaultPublicOffenderDOB
+
       }
     }
     incidentEmail

@@ -7,14 +7,14 @@ import deLang from './entries/de_DE';
 import dkLang from './entries/dk_DK';
 import itLang from './entries/it_IT';
 
-export type AvailableLanguages = 'en' | 'fr' | 'es' | 'de' | 'dk' | 'it';
+export type AvailableLanguages = 'en' | 'fr' | 'es' | 'de' | 'da' | 'it';
 
 interface AppLocaleType {
   en: LocaleType;
   fr: LocaleType;
   es: LocaleType;
   de: LocaleType;
-  dk: LocaleType;
+  da: LocaleType;
   it: LocaleType;
 }
 
@@ -32,7 +32,7 @@ const AppLocale: AppLocaleType = {
   fr: frLang,
   es: esLang,
   de: deLang,
-  dk: dkLang,
+  da: dkLang,
   it: itLang,
 };
 

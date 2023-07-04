@@ -205,6 +205,7 @@ export const NavProfile = () => {
                   bordered={false}
                   style={{ width: '100%', paddingLeft: 8 }}
                   onChange={handleChangeLang}
+                  placement="topLeft"
                   options={[
                     {
                       value: 'en',
@@ -235,7 +236,7 @@ export const NavProfile = () => {
                       }),
                     },
                     {
-                      value: 'dk',
+                      value: 'da',
                       label: intl.formatMessage({
                         defaultMessage: 'Danish 🇩🇰',
                         id: 'Xg7VWX',

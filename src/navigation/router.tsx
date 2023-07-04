@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+import React, { useEffect, useState } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import AppLayout from 'layouts/app-layout';
-import AuthLayout from 'layouts/auth-layout';
+import { AuthLayout } from 'layouts/auth-layout';
 import type { AvailableLanguages } from 'lang';
 import AppLocale from 'lang';
 import { ThemeProvider } from 'react-jss';
@@ -28,7 +30,9 @@ const Views = () => {
   const lang = navigator.language.split('-')[0];
   const localLang = typedLocalStorage.get(LocalStorageKeys.lang);
   const initLang = localLang || lang || locale;
-
+  const customTranslations = useStoreState(
+    (state) => state.scheme.translations
+  );
   const currentRoute = location.pathname;
   const guestRoutes = ['/generated', '/ext/'];
   const guestRoute = guestRoutes.some((route) => currentRoute.includes(route));
@@ -56,6 +60,41 @@ const Views = () => {
   const currentAppLocale = AppLocale[initLang as AvailableLanguages];
 
   const { rehydrateAuth, loading } = useAuth();
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore. eslint-disable-next-line
+  // eslint-disable-next-line unicorn/consistent-function-scoping
+  function convertTranslationsToJSON(
+    translations: any[],
+    language: string
+  ): { [key: string]: string } {
+    const json = {};
+
+    // eslint-disable-next-line no-restricted-syntax
+    for (const translation of translations) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      const id = Object.keys(translation)[0];
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
+      json[id] = translation[id][language];
+    }
+
+    return json;
+  }
+
+  const [messages, setMessages] = useState({
+    ...currentAppLocale.messages,
+    ...convertTranslationsToJSON(customTranslations || [], locale),
+  });
+
+  useEffect(() => {
+    setMessages({
+      ...currentAppLocale.messages,
+      ...convertTranslationsToJSON(customTranslations || [], locale),
+    });
+  }, [currentAppLocale.messages, customTranslations, locale]);
 
   useEffect(() => {
     if (!guestRoute) rehydrateAuth();
@@ -94,10 +133,7 @@ const Views = () => {
     <div style={{ colorScheme: currentTheme }}>
       <ErrorBoundary>
         <ThemeProvider theme={theme[currentTheme]}>
-          <IntlProvider
-            locale={currentAppLocale.locale}
-            messages={currentAppLocale.messages}
-          >
+          <IntlProvider locale={currentAppLocale.locale} messages={messages}>
             <ConfigProvider locale={currentAppLocale.antd}>
               {isSet && data ? (
                 <SentryRoutes>

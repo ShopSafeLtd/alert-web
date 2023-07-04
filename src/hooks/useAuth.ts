@@ -6,6 +6,8 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { useEffect } from 'react';
 import * as Sentry from '@sentry/react';
 import Mixpanel from 'utils/mixpanel';
+import type { Translations } from '../state/scheme-model';
+
 // import OneSignal from 'react-onesignal';
 
 interface Return {
@@ -74,6 +76,7 @@ const useAuth = (): Return => {
         darkLogo: schemeDetails?.darkLogo?.optimisedPersisted,
         userTodos: schemeDetails?.userTodos || 0,
         userNotifications: schemeDetails?.userNotifications || 0,
+        translations: schemeDetails?.customTranslations as Translations[],
       });
       setTodos({ userTodos: schemes[0]?.scheme?.userTodos || 0 });
       setNotifications({
@@ -102,6 +105,8 @@ const useAuth = (): Return => {
           darkLogo: schemeDetails.scheme.darkLogo?.optimisedPersisted,
           userTodos: schemeDetails.scheme.userTodos,
           userNotifications: schemeDetails?.scheme.userNotifications,
+          translations: schemeDetails?.scheme
+            .customTranslations as Translations[],
         });
         setTodos({ userTodos: schemeDetails?.scheme?.userTodos || 0 });
         setNotifications({
