@@ -1,3 +1,92 @@
+fragment FeedImage on Image {
+  id
+  url
+  optimised
+  position
+  rotation
+}
+
+fragment FeedUpdate on Update {
+  id
+  text
+  icon
+  type
+  createdAt
+          feedImage {
+          ...FeedImage
+        }
+  linkedCrimeGroups {
+    totalOffenders
+    totalIncidents
+    alias
+    id
+    reference
+    totalRecoveredValue
+    totalTheftSuccess
+    totalValue
+    updatedAt
+  }
+  linkedVehicles {
+    updatedAt
+    totalOffenders
+    registration
+    reference
+    model
+    feedImage {
+      id
+      url
+      optimised
+      position
+      rotation
+    }
+    make
+    id
+    colour
+  }
+  linkedOffenders {
+    id
+    updatedAt
+    age
+    build
+    height
+    dateOfBirth
+    name
+    race
+    gender
+    feedImage {
+      id
+      url
+      optimised
+      position
+      rotation
+    }
+  }
+  linkedIncidents {
+    id
+    subject
+    description
+    dayTime
+    feedImage {
+      id
+      url
+      optimised
+      position
+      rotation
+    }
+  }
+  createdBy {
+    id
+    fullName
+    businesses {
+      fullName
+      id
+      name
+    }
+  }
+}
+
+
+
 query FeedItems(
   $schemeId: String!
   $search: String
@@ -31,15 +120,11 @@ query FeedItems(
         id
         location
         description
+        feedImage {
+          ...FeedImage
+        }
         offender {
           id
-          images {
-            id
-            url
-            optimised
-            position
-            rotation
-          }
           name
         }
       }
@@ -59,14 +144,6 @@ query FeedItems(
             name
             fullName
           }
-        }
-        images {
-          id
-          url
-          optimised
-          card
-          position
-          rotation
         }
         image {
           id
@@ -97,88 +174,8 @@ query FeedItems(
         totalTheftSuccess
         totalValue
         updatedAt
-        updates(orderBy: { createdAt: desc }) {
-          id
-          text
-          icon
-          type
-          createdAt
-          images {
-            id
-            url
-            optimised
-            position
-            rotation
-            card
-          }
-          linkedCrimeGroups {
-            totalOffenders
-            totalIncidents
-            alias
-            id
-            reference
-            totalRecoveredValue
-            totalTheftSuccess
-            totalValue
-            updatedAt
-          }
-          linkedVehicles {
-            updatedAt
-            totalOffenders
-            registration
-            reference
-            model
-            images {
-              id
-              url
-              optimised
-              position
-              rotation
-            }
-            make
-            id
-            colour
-          }
-          linkedIncidents {
-            id
-            subject
-            description
-            dayTime
-            images {
-              id
-              url
-              optimised
-              position
-              rotation
-            }
-          }
-          linkedOffenders {
-            id
-            updatedAt
-            age
-            build
-            height
-            dateOfBirth
-            name
-            race
-            gender
-            images {
-              id
-              url
-              optimised
-              position
-              rotation
-            }
-          }
-          createdBy {
-            id
-            fullName
-            businesses {
-              fullName
-              id
-              name
-            }
-          }
+        latestUpdate {
+          ...FeedUpdate
         }
       }
       vehicleId
@@ -192,95 +189,11 @@ query FeedItems(
         make
         id
         colour
-        images {
-          id
-          optimised
-          position
-          rotation
-          url
+        feedImage {
+          ...FeedImage
         }
-        updates(orderBy: { createdAt: desc }) {
-          id
-          text
-          icon
-          type
-          createdAt
-          images {
-            id
-            url
-            optimised
-            position
-            rotation
-            card
-          }
-          linkedCrimeGroups {
-            totalOffenders
-            totalIncidents
-            alias
-            id
-            reference
-            totalRecoveredValue
-            totalTheftSuccess
-            totalValue
-            updatedAt
-          }
-          linkedVehicles {
-            updatedAt
-            totalOffenders
-            registration
-            reference
-            model
-            make
-            id
-            colour
-            images {
-              id
-              url
-              position
-              rotation
-              optimised
-            }
-          }
-          linkedIncidents {
-            id
-            subject
-            description
-            dayTime
-            images {
-              id
-              url
-              optimised
-              position
-              rotation
-            }
-          }
-          linkedOffenders {
-            id
-            updatedAt
-            age
-            build
-            height
-            dateOfBirth
-            name
-            race
-            gender
-            images {
-              id
-              url
-              optimised
-              position
-              rotation
-            }
-          }
-          createdBy {
-            id
-            fullName
-            businesses {
-              fullName
-              id
-              name
-            }
-          }
+        latestUpdate {
+          ...FeedUpdate
         }
       }
       investigationId
@@ -303,88 +216,8 @@ query FeedItems(
             name
           }
         }
-        updates(orderBy: { createdAt: desc }) {
-          id
-          text
-          icon
-          type
-          createdAt
-          images {
-            id
-            url
-            optimised
-            position
-            rotation
-            card
-          }
-          linkedCrimeGroups {
-            totalOffenders
-            totalIncidents
-            alias
-            id
-            reference
-            totalRecoveredValue
-            totalTheftSuccess
-            totalValue
-            updatedAt
-          }
-          linkedVehicles {
-            updatedAt
-            totalOffenders
-            registration
-            reference
-            model
-            make
-            images {
-              id
-              url
-              optimised
-              position
-              rotation
-            }
-            id
-            colour
-          }
-          linkedIncidents {
-            id
-            subject
-            description
-            dayTime
-            images {
-              id
-              url
-              optimised
-              position
-              rotation
-            }
-          }
-          linkedOffenders {
-            id
-            updatedAt
-            age
-            build
-            height
-            dateOfBirth
-            name
-            race
-            gender
-            images {
-              id
-              url
-              optimised
-              position
-              rotation
-            }
-          }
-          createdBy {
-            id
-            fullName
-            businesses {
-              fullName
-              id
-              name
-            }
-          }
+        latestUpdate {
+          ...FeedUpdate
         }
       }
       groups {
@@ -403,88 +236,8 @@ query FeedItems(
         date
         totalOffenders
         totalUpdates
-        updates(orderBy: { createdAt: desc }) {
-          id
-          text
-          icon
-          type
-          createdAt
-          images {
-            id
-            url
-            optimised
-            position
-            rotation
-            card
-          }
-          linkedCrimeGroups {
-            totalOffenders
-            totalIncidents
-            alias
-            id
-            reference
-            totalRecoveredValue
-            totalTheftSuccess
-            totalValue
-            updatedAt
-          }
-          linkedVehicles {
-            updatedAt
-            totalOffenders
-            registration
-            reference
-            model
-            images {
-              id
-              url
-              position
-              rotation
-              optimised
-            }
-            make
-            id
-            colour
-          }
-          linkedIncidents {
-            id
-            subject
-            description
-            dayTime
-            images {
-              id
-              url
-              position
-              rotation
-              optimised
-            }
-          }
-          linkedOffenders {
-            id
-            updatedAt
-            age
-            build
-            height
-            dateOfBirth
-            name
-            race
-            gender
-            images {
-              id
-              url
-              optimised
-              position
-              rotation
-            }
-          }
-          createdBy {
-            id
-            fullName
-            businesses {
-              fullName
-              id
-              name
-            }
-          }
+        latestUpdate {
+          ...FeedUpdate
         }
 
         crimeTypes {
@@ -505,12 +258,8 @@ query FeedItems(
             name
           }
         }
-        images(orderBy: { createdAt: desc }) {
-          id
-          optimised
-          url
-          position
-          rotation
+        feedImage {
+          ...FeedImage
         }
         groups {
           id
@@ -555,97 +304,12 @@ query FeedItems(
           id
           dayTime
         }
-        updates(orderBy: { createdAt: desc }) {
-          id
-          text
-          icon
-          type
-          createdAt
-          images {
-            id
-            url
-            optimised
-            position
-            rotation
-            card
-          }
-          linkedCrimeGroups {
-            totalOffenders
-            totalIncidents
-            alias
-            id
-            reference
-            totalRecoveredValue
-            totalTheftSuccess
-            totalValue
-            updatedAt
-          }
-          linkedVehicles {
-            updatedAt
-            totalOffenders
-            registration
-            reference
-            model
-            make
-            id
-            images {
-              id
-              url
-              position
-              rotation
-              optimised
-            }
-            colour
-          }
-          linkedIncidents {
-            id
-            subject
-            description
-            dayTime
-            images {
-              id
-              url
-              position
-              rotation
-              optimised
-            }
-          }
-          linkedOffenders {
-            id
-            updatedAt
-            age
-            build
-            height
-            dateOfBirth
-            name
-            race
-            gender
-            images {
-              id
-              url
-              position
-              rotation
-              optimised
-            }
-          }
-          createdBy {
-            id
-            fullName
-            businesses {
-              fullName
-              id
-              name
-            }
-          }
+        latestUpdate {
+          ...FeedUpdate
         }
 
-        images(orderBy: { createdAt: desc }) {
-          id
-          url
-          optimised
-          position
-          rotation
-          card
+        feedImage {
+          ...FeedImage
         }
         tags {
           id
@@ -699,11 +363,8 @@ query FeedItems(
               name
             }
           }
-          images(orderBy: { createdAt: desc }) {
-            id
-            optimised
-            position
-            rotation
+          feedImage {
+            ...FeedImage
           }
         }
       }

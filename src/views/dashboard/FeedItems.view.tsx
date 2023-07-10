@@ -1,7 +1,7 @@
 import React from 'react';
 import type {
   FeedItemsQuery,
-  ListOffendersQuery,
+  ListOffendersFeedQuery,
   Model,
 } from 'graphql/generated';
 import { FeedItemType } from 'graphql/generated';
@@ -58,7 +58,7 @@ interface Props {
   data: FeedItemsQuery | undefined;
   loading: boolean;
 
-  recentOffenderData: ListOffendersQuery | undefined;
+  recentOffenderData: ListOffendersFeedQuery | undefined;
   recentOffenderLoading: boolean;
   onPaginationChange: (page: number, pageSize: number) => void;
   pagination: { page: number; pageSize: number; sizeOptions: string[] };
@@ -490,13 +490,13 @@ const FeedItem = ({
                                 cursor: 'pointer',
                               }}
                             >
-                              {offender.images.length > 0 && (
+                              {offender.feedImage && (
                                 <WatermarkImage
-                                  url={offender.images[0]?.optimised}
-                                  position={offender.images[0]?.position}
+                                  url={offender.feedImage?.optimised}
+                                  position={offender.feedImage?.position}
                                 />
                               )}
-                              {offender.images.length === 0 && (
+                              {!offender.feedImage && (
                                 <FontAwesomeIcon
                                   style={{ color: 'rgb(114, 132, 154)' }}
                                   icon={faUser}

@@ -5,7 +5,7 @@ function extracted(html: string | undefined): string {
   for (const img_ of imgs) {
     img_.setAttribute('style', 'max-width: 100%; height: auto;');
     if (!img_.hasAttribute('width')) {
-      img_.setAttribute('width', '500');
+      img_.setAttribute('width', '300');
     }
     if (!img_.hasAttribute('height')) {
       img_.setAttribute('height', 'auto');

@@ -30,7 +30,7 @@ const CrimeGroupFeed = ({ feedItem, isNewCrimeGroup }: Props): JSX.Element => {
     alias,
     // totalUpdates,
     id,
-    updates,
+    latestUpdate,
     totalOffenders,
     reference,
     totalValue,
@@ -133,7 +133,7 @@ const CrimeGroupFeed = ({ feedItem, isNewCrimeGroup }: Props): JSX.Element => {
                 </Col>
               </Row>
             </>
-          ) : updates && updates.length > 0 ? (
+          ) : latestUpdate ? (
             <UpdateContent
               title={
                 alias ||
@@ -144,7 +144,7 @@ const CrimeGroupFeed = ({ feedItem, isNewCrimeGroup }: Props): JSX.Element => {
                   }
                 )
               }
-              update={updates[0]}
+              update={latestUpdate}
             />
           ) : null}
         </Col>

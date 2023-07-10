@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment */
+
 import React from 'react';
 import { Col, Row, Typography } from 'antd';
 import type { FeedItemsQuery } from 'graphql/generated';
@@ -38,8 +40,8 @@ const VehicleFeed = ({
 
     // totalUpdates,
     id,
-    updates,
-    images,
+    feedImage,
+    latestUpdate,
     totalOffenders,
     reference,
   } = feedItem?.vehicle || {};
@@ -48,21 +50,23 @@ const VehicleFeed = ({
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     <Link to={`/app/vehicles/view/${id}`}>
       <Row gutter={20} wrap={false} style={{ width: '100%' }}>
-        {(isNewVehicle || isNewImage) && images && images.length > 0 ? (
+        {(isNewVehicle || isNewImage) && feedImage ? (
           <Col>
             <ImageContainer
-              src={images[0].optimised || images[0].url || ''}
-              position={images[0].position}
+              src={feedImage.optimised || feedImage.url || ''}
+              position={feedImage.position}
             />
           </Col>
         ) : null}
-        {!isNewImage && updates && updates[0]?.images[0] ? (
+        {!isNewImage && latestUpdate && latestUpdate.feedImage ? (
           <Col>
             <ImageContainer
               src={
-                updates[0].images[0].optimised || updates[0].images[0].url || ''
+                latestUpdate.feedImage.optimised ||
+                latestUpdate.feedImage.url ||
+                ''
               }
-              position={updates[0].images[0].position}
+              position={latestUpdate.feedImage.position}
             />
           </Col>
         ) : null}
@@ -190,7 +194,7 @@ const VehicleFeed = ({
                 </Col>
               </Row>
             </>
-          ) : updates && updates.length > 0 ? (
+          ) : latestUpdate ? (
             <UpdateContent
               title={
                 registration ||
@@ -208,7 +212,7 @@ const VehicleFeed = ({
                   id: 'I3q18K',
                 })
               }
-              update={updates[0]}
+              update={latestUpdate}
             />
           ) : null}
         </Col>

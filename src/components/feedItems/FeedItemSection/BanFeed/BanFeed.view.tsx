@@ -37,19 +37,18 @@ const BanFeed = ({ feedItem }: Props): JSX.Element => {
     location,
     offender,
     description,
+    feedImage,
   } = feedItem?.ban || {};
   const intl = useIntl();
   return (
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     <Link to={`/app/offenders/view/${offender?.id}`}>
       <Row gutter={20} wrap={false} style={{ width: '100%' }}>
-        {offender?.images && offender?.images.length > 0 ? (
+        {feedImage ? (
           <Col>
             <ImageContainer
-              position={offender?.images[0].position}
-              src={
-                offender?.images[0].optimised || offender?.images[0].url || ''
-              }
+              position={feedImage.position}
+              src={feedImage.optimised || feedImage.url || ''}
             />
           </Col>
         ) : null}

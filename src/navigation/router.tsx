@@ -131,9 +131,9 @@ const Views = () => {
 
   return (
     <div style={{ colorScheme: currentTheme }}>
-      <ErrorBoundary>
-        <ThemeProvider theme={theme[currentTheme]}>
-          <IntlProvider locale={currentAppLocale.locale} messages={messages}>
+      <IntlProvider locale={currentAppLocale.locale} messages={messages}>
+        <ErrorBoundary>
+          <ThemeProvider theme={theme[currentTheme]}>
             <ConfigProvider locale={currentAppLocale.antd}>
               {isSet && data ? (
                 <SentryRoutes>
@@ -155,9 +155,9 @@ const Views = () => {
                 <Loading />
               )}
             </ConfigProvider>
-          </IntlProvider>
-        </ThemeProvider>
-      </ErrorBoundary>
+          </ThemeProvider>
+        </ErrorBoundary>
+      </IntlProvider>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import type {
   DeleteFeedItemMutation,
   FeedItemsQuery,
-  ListOffendersQuery,
+  ListOffendersFeedQuery,
   Model,
 } from 'graphql/generated';
 import {
@@ -11,7 +11,7 @@ import {
   SortOrder,
   useDeleteFeedItemMutation,
   useFeedItemsQuery,
-  useListOffendersQuery,
+  useListOffendersFeedQuery,
   useSchemeGroupsQuery,
 } from 'graphql/generated';
 import { useEffect, useState } from 'react';
@@ -26,7 +26,7 @@ import { useIntl } from 'react-intl';
 interface Return {
   data: FeedItemsQuery | undefined;
   loading: boolean;
-  recentOffenderData: ListOffendersQuery | undefined;
+  recentOffenderData: ListOffendersFeedQuery | undefined;
   recentOffenderLoading: boolean;
   onPaginationChange: (page: number, pageSize: number) => void;
   pagination: PaginationModel;
@@ -237,7 +237,7 @@ const useFeedItems = (): Return => {
   });
 
   const { data: recentOffenderData, loading: recentOffenderLoading } =
-    useListOffendersQuery({
+    useListOffendersFeedQuery({
       fetchPolicy: 'cache-and-network',
       variables: {
         scheme: {

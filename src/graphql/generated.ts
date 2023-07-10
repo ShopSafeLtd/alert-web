@@ -5146,6 +5146,7 @@ export type Ban = {
   description?: Maybe<Scalars['String']>;
   endDate: Scalars['DateTime'];
   expired?: Maybe<Scalars['Boolean']>;
+  feedImage?: Maybe<Image>;
   groups: Array<Group>;
   id: Scalars['String'];
   location: Scalars['String'];
@@ -7719,6 +7720,7 @@ export type CrimeGroup = {
   id: Scalars['String'];
   incidents?: Maybe<Array<Maybe<Incident>>>;
   intel: Array<Intel>;
+  latestUpdate?: Maybe<Update>;
   offenders: Array<Offender>;
   ref?: Maybe<Scalars['String']>;
   reference?: Maybe<Scalars['Int']>;
@@ -16900,6 +16902,7 @@ export type Incident = {
   dayTime?: Maybe<Scalars['String']>;
   description: Scalars['String'];
   evidence: Array<Document>;
+  feedImage?: Maybe<Image>;
   feedItems: Array<FeedItem>;
   geoLat?: Maybe<Scalars['String']>;
   geoLng?: Maybe<Scalars['String']>;
@@ -16912,6 +16915,7 @@ export type Incident = {
   incidentItems: Array<IncidentItem>;
   intel: Array<Intel>;
   involvedTags: Array<Tag>;
+  latestUpdate?: Maybe<Update>;
   location?: Maybe<Address>;
   monthOfYear?: Maybe<Scalars['Int']>;
   motiveTags: Array<Tag>;
@@ -22638,6 +22642,7 @@ export type Investigation = {
   id: Scalars['String'];
   incidents: Array<Incident>;
   intel: Array<Intel>;
+  latestUpdate?: Maybe<Update>;
   name: Scalars['String'];
   offenders: Array<Offender>;
   ref?: Maybe<Scalars['String']>;
@@ -29684,6 +29689,7 @@ export type Offender = {
   dateOfBirth?: Maybe<Scalars['DateTime']>;
   dateSource?: Maybe<Scalars['String']>;
   deletionDate?: Maybe<Scalars['DateTime']>;
+  feedImage?: Maybe<Image>;
   feedItems: Array<FeedItem>;
   gender?: Maybe<Gender>;
   goodsTypesTotals?: Maybe<Array<BusinessGoodsTotals>>;
@@ -29703,6 +29709,7 @@ export type Offender = {
   intel: Array<Intel>;
   knownAssociates?: Maybe<Array<Offender>>;
   lastActive?: Maybe<Incident>;
+  latestUpdate?: Maybe<Update>;
   name?: Maybe<Scalars['String']>;
   peculiarities?: Maybe<Scalars['String']>;
   race?: Maybe<Race>;
@@ -46860,6 +46867,7 @@ export type Update = {
   createdById: Scalars['String'];
   crimeGroup?: Maybe<CrimeGroup>;
   crimeGroupId?: Maybe<Scalars['String']>;
+  feedImage?: Maybe<Image>;
   icon: UpdateIcon;
   id: Scalars['String'];
   images: Array<Image>;
@@ -57620,10 +57628,12 @@ export type Vehicle = {
   createdAt: Scalars['DateTime'];
   crimeGroup: Array<CrimeGroup>;
   customGalleries: Array<CustomGallery>;
+  feedImage?: Maybe<Image>;
   groups: Array<Group>;
   id: Scalars['String'];
   images: Array<Image>;
   incidents: Array<Incident>;
+  latestUpdate?: Maybe<Update>;
   make?: Maybe<Scalars['String']>;
   model?: Maybe<Scalars['String']>;
   notifications: Array<Notification>;
@@ -61478,6 +61488,109 @@ export type DeleteFeedItemMutation = {
   deleteFeedItem?: { __typename?: 'FeedItem'; id: string } | null;
 };
 
+export type FeedImageFragment = {
+  __typename?: 'Image';
+  id: string;
+  url?: string | null;
+  optimised?: string | null;
+  position: ImagePosition;
+  rotation: number;
+};
+
+export type FeedUpdateFragment = {
+  __typename?: 'Update';
+  id: string;
+  text?: string | null;
+  icon: UpdateIcon;
+  type: UpdateType;
+  createdAt: Date;
+  feedImage?: {
+    __typename?: 'Image';
+    id: string;
+    url?: string | null;
+    optimised?: string | null;
+    position: ImagePosition;
+    rotation: number;
+  } | null;
+  linkedCrimeGroups: Array<{
+    __typename?: 'CrimeGroup';
+    totalOffenders?: number | null;
+    totalIncidents?: number | null;
+    alias?: string | null;
+    id: string;
+    reference?: number | null;
+    totalRecoveredValue?: number | null;
+    totalTheftSuccess?: number | null;
+    totalValue?: number | null;
+    updatedAt: Date;
+  }>;
+  linkedVehicles: Array<{
+    __typename?: 'Vehicle';
+    updatedAt: Date;
+    totalOffenders?: number | null;
+    registration?: string | null;
+    reference?: number | null;
+    model?: string | null;
+    make?: string | null;
+    id: string;
+    colour?: string | null;
+    feedImage?: {
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+      position: ImagePosition;
+      rotation: number;
+    } | null;
+  }>;
+  linkedOffenders: Array<{
+    __typename?: 'Offender';
+    id: string;
+    updatedAt: Date;
+    age?: Age | null;
+    build?: Build | null;
+    height?: Height | null;
+    dateOfBirth?: Date | null;
+    name?: string | null;
+    race?: Race | null;
+    gender?: Gender | null;
+    feedImage?: {
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+      position: ImagePosition;
+      rotation: number;
+    } | null;
+  }>;
+  linkedIncidents: Array<{
+    __typename?: 'Incident';
+    id: string;
+    subject?: string | null;
+    description: string;
+    dayTime?: string | null;
+    feedImage?: {
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+      position: ImagePosition;
+      rotation: number;
+    } | null;
+  }>;
+  createdBy: {
+    __typename?: 'User';
+    id: string;
+    fullName: string;
+    businesses: Array<{
+      __typename?: 'Business';
+      fullName: string;
+      id: string;
+      name: string;
+    }>;
+  };
+};
+
 export type FeedItemsQueryVariables = Exact<{
   schemeId: Scalars['String'];
   search?: InputMaybe<Scalars['String']>;
@@ -61520,19 +61633,15 @@ export type FeedItemsQuery = {
         id: string;
         location: string;
         description?: string | null;
-        offender: {
-          __typename?: 'Offender';
+        feedImage?: {
+          __typename?: 'Image';
           id: string;
-          name?: string | null;
-          images: Array<{
-            __typename?: 'Image';
-            id: string;
-            url?: string | null;
-            optimised?: string | null;
-            position: ImagePosition;
-            rotation: number;
-          }>;
-        };
+          url?: string | null;
+          optimised?: string | null;
+          position: ImagePosition;
+          rotation: number;
+        } | null;
+        offender: { __typename?: 'Offender'; id: string; name?: string | null };
       } | null;
       article?: {
         __typename?: 'Article';
@@ -61554,15 +61663,6 @@ export type FeedItemsQuery = {
             fullName: string;
           }>;
         };
-        images: Array<{
-          __typename?: 'Image';
-          id: string;
-          url?: string | null;
-          optimised?: string | null;
-          card?: string | null;
-          position: ImagePosition;
-          rotation: number;
-        }>;
         image?: {
           __typename?: 'Image';
           id: string;
@@ -61585,22 +61685,21 @@ export type FeedItemsQuery = {
         totalTheftSuccess?: number | null;
         totalValue?: number | null;
         updatedAt: Date;
-        updates: Array<{
+        latestUpdate?: {
           __typename?: 'Update';
           id: string;
           text?: string | null;
           icon: UpdateIcon;
           type: UpdateType;
           createdAt: Date;
-          images: Array<{
+          feedImage?: {
             __typename?: 'Image';
             id: string;
             url?: string | null;
             optimised?: string | null;
             position: ImagePosition;
             rotation: number;
-            card?: string | null;
-          }>;
+          } | null;
           linkedCrimeGroups: Array<{
             __typename?: 'CrimeGroup';
             totalOffenders?: number | null;
@@ -61623,29 +61722,14 @@ export type FeedItemsQuery = {
             make?: string | null;
             id: string;
             colour?: string | null;
-            images: Array<{
+            feedImage?: {
               __typename?: 'Image';
               id: string;
               url?: string | null;
               optimised?: string | null;
               position: ImagePosition;
               rotation: number;
-            }>;
-          }>;
-          linkedIncidents: Array<{
-            __typename?: 'Incident';
-            id: string;
-            subject?: string | null;
-            description: string;
-            dayTime?: string | null;
-            images: Array<{
-              __typename?: 'Image';
-              id: string;
-              url?: string | null;
-              optimised?: string | null;
-              position: ImagePosition;
-              rotation: number;
-            }>;
+            } | null;
           }>;
           linkedOffenders: Array<{
             __typename?: 'Offender';
@@ -61658,14 +61742,29 @@ export type FeedItemsQuery = {
             name?: string | null;
             race?: Race | null;
             gender?: Gender | null;
-            images: Array<{
+            feedImage?: {
               __typename?: 'Image';
               id: string;
               url?: string | null;
               optimised?: string | null;
               position: ImagePosition;
               rotation: number;
-            }>;
+            } | null;
+          }>;
+          linkedIncidents: Array<{
+            __typename?: 'Incident';
+            id: string;
+            subject?: string | null;
+            description: string;
+            dayTime?: string | null;
+            feedImage?: {
+              __typename?: 'Image';
+              id: string;
+              url?: string | null;
+              optimised?: string | null;
+              position: ImagePosition;
+              rotation: number;
+            } | null;
           }>;
           createdBy: {
             __typename?: 'User';
@@ -61678,7 +61777,7 @@ export type FeedItemsQuery = {
               name: string;
             }>;
           };
-        }>;
+        } | null;
       } | null;
       vehicle?: {
         __typename?: 'Vehicle';
@@ -61691,30 +61790,29 @@ export type FeedItemsQuery = {
         make?: string | null;
         id: string;
         colour?: string | null;
-        images: Array<{
+        feedImage?: {
           __typename?: 'Image';
           id: string;
+          url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
           rotation: number;
-          url?: string | null;
-        }>;
-        updates: Array<{
+        } | null;
+        latestUpdate?: {
           __typename?: 'Update';
           id: string;
           text?: string | null;
           icon: UpdateIcon;
           type: UpdateType;
           createdAt: Date;
-          images: Array<{
+          feedImage?: {
             __typename?: 'Image';
             id: string;
             url?: string | null;
             optimised?: string | null;
             position: ImagePosition;
             rotation: number;
-            card?: string | null;
-          }>;
+          } | null;
           linkedCrimeGroups: Array<{
             __typename?: 'CrimeGroup';
             totalOffenders?: number | null;
@@ -61737,29 +61835,14 @@ export type FeedItemsQuery = {
             make?: string | null;
             id: string;
             colour?: string | null;
-            images: Array<{
-              __typename?: 'Image';
-              id: string;
-              url?: string | null;
-              position: ImagePosition;
-              rotation: number;
-              optimised?: string | null;
-            }>;
-          }>;
-          linkedIncidents: Array<{
-            __typename?: 'Incident';
-            id: string;
-            subject?: string | null;
-            description: string;
-            dayTime?: string | null;
-            images: Array<{
+            feedImage?: {
               __typename?: 'Image';
               id: string;
               url?: string | null;
               optimised?: string | null;
               position: ImagePosition;
               rotation: number;
-            }>;
+            } | null;
           }>;
           linkedOffenders: Array<{
             __typename?: 'Offender';
@@ -61772,14 +61855,29 @@ export type FeedItemsQuery = {
             name?: string | null;
             race?: Race | null;
             gender?: Gender | null;
-            images: Array<{
+            feedImage?: {
               __typename?: 'Image';
               id: string;
               url?: string | null;
               optimised?: string | null;
               position: ImagePosition;
               rotation: number;
-            }>;
+            } | null;
+          }>;
+          linkedIncidents: Array<{
+            __typename?: 'Incident';
+            id: string;
+            subject?: string | null;
+            description: string;
+            dayTime?: string | null;
+            feedImage?: {
+              __typename?: 'Image';
+              id: string;
+              url?: string | null;
+              optimised?: string | null;
+              position: ImagePosition;
+              rotation: number;
+            } | null;
           }>;
           createdBy: {
             __typename?: 'User';
@@ -61792,7 +61890,7 @@ export type FeedItemsQuery = {
               name: string;
             }>;
           };
-        }>;
+        } | null;
       } | null;
       investigation?: {
         __typename?: 'Investigation';
@@ -61816,22 +61914,21 @@ export type FeedItemsQuery = {
             name: string;
           }>;
         };
-        updates: Array<{
+        latestUpdate?: {
           __typename?: 'Update';
           id: string;
           text?: string | null;
           icon: UpdateIcon;
           type: UpdateType;
           createdAt: Date;
-          images: Array<{
+          feedImage?: {
             __typename?: 'Image';
             id: string;
             url?: string | null;
             optimised?: string | null;
             position: ImagePosition;
             rotation: number;
-            card?: string | null;
-          }>;
+          } | null;
           linkedCrimeGroups: Array<{
             __typename?: 'CrimeGroup';
             totalOffenders?: number | null;
@@ -61854,29 +61951,14 @@ export type FeedItemsQuery = {
             make?: string | null;
             id: string;
             colour?: string | null;
-            images: Array<{
+            feedImage?: {
               __typename?: 'Image';
               id: string;
               url?: string | null;
               optimised?: string | null;
               position: ImagePosition;
               rotation: number;
-            }>;
-          }>;
-          linkedIncidents: Array<{
-            __typename?: 'Incident';
-            id: string;
-            subject?: string | null;
-            description: string;
-            dayTime?: string | null;
-            images: Array<{
-              __typename?: 'Image';
-              id: string;
-              url?: string | null;
-              optimised?: string | null;
-              position: ImagePosition;
-              rotation: number;
-            }>;
+            } | null;
           }>;
           linkedOffenders: Array<{
             __typename?: 'Offender';
@@ -61889,14 +61971,29 @@ export type FeedItemsQuery = {
             name?: string | null;
             race?: Race | null;
             gender?: Gender | null;
-            images: Array<{
+            feedImage?: {
               __typename?: 'Image';
               id: string;
               url?: string | null;
               optimised?: string | null;
               position: ImagePosition;
               rotation: number;
-            }>;
+            } | null;
+          }>;
+          linkedIncidents: Array<{
+            __typename?: 'Incident';
+            id: string;
+            subject?: string | null;
+            description: string;
+            dayTime?: string | null;
+            feedImage?: {
+              __typename?: 'Image';
+              id: string;
+              url?: string | null;
+              optimised?: string | null;
+              position: ImagePosition;
+              rotation: number;
+            } | null;
           }>;
           createdBy: {
             __typename?: 'User';
@@ -61909,7 +62006,7 @@ export type FeedItemsQuery = {
               name: string;
             }>;
           };
-        }>;
+        } | null;
       } | null;
       groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
       incident?: {
@@ -61924,22 +62021,21 @@ export type FeedItemsQuery = {
         totalOffenders?: number | null;
         totalUpdates?: number | null;
         approved?: boolean | null;
-        updates: Array<{
+        latestUpdate?: {
           __typename?: 'Update';
           id: string;
           text?: string | null;
           icon: UpdateIcon;
           type: UpdateType;
           createdAt: Date;
-          images: Array<{
+          feedImage?: {
             __typename?: 'Image';
             id: string;
             url?: string | null;
             optimised?: string | null;
             position: ImagePosition;
             rotation: number;
-            card?: string | null;
-          }>;
+          } | null;
           linkedCrimeGroups: Array<{
             __typename?: 'CrimeGroup';
             totalOffenders?: number | null;
@@ -61962,29 +62058,14 @@ export type FeedItemsQuery = {
             make?: string | null;
             id: string;
             colour?: string | null;
-            images: Array<{
+            feedImage?: {
               __typename?: 'Image';
               id: string;
               url?: string | null;
+              optimised?: string | null;
               position: ImagePosition;
               rotation: number;
-              optimised?: string | null;
-            }>;
-          }>;
-          linkedIncidents: Array<{
-            __typename?: 'Incident';
-            id: string;
-            subject?: string | null;
-            description: string;
-            dayTime?: string | null;
-            images: Array<{
-              __typename?: 'Image';
-              id: string;
-              url?: string | null;
-              position: ImagePosition;
-              rotation: number;
-              optimised?: string | null;
-            }>;
+            } | null;
           }>;
           linkedOffenders: Array<{
             __typename?: 'Offender';
@@ -61997,14 +62078,29 @@ export type FeedItemsQuery = {
             name?: string | null;
             race?: Race | null;
             gender?: Gender | null;
-            images: Array<{
+            feedImage?: {
               __typename?: 'Image';
               id: string;
               url?: string | null;
               optimised?: string | null;
               position: ImagePosition;
               rotation: number;
-            }>;
+            } | null;
+          }>;
+          linkedIncidents: Array<{
+            __typename?: 'Incident';
+            id: string;
+            subject?: string | null;
+            description: string;
+            dayTime?: string | null;
+            feedImage?: {
+              __typename?: 'Image';
+              id: string;
+              url?: string | null;
+              optimised?: string | null;
+              position: ImagePosition;
+              rotation: number;
+            } | null;
           }>;
           createdBy: {
             __typename?: 'User';
@@ -62017,7 +62113,7 @@ export type FeedItemsQuery = {
               name: string;
             }>;
           };
-        }>;
+        } | null;
         crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
         business?: { __typename?: 'Business'; id: string; name: string } | null;
         createdBy: {
@@ -62031,14 +62127,14 @@ export type FeedItemsQuery = {
             name: string;
           }>;
         };
-        images: Array<{
+        feedImage?: {
           __typename?: 'Image';
           id: string;
-          optimised?: string | null;
           url?: string | null;
+          optimised?: string | null;
           position: ImagePosition;
           rotation: number;
-        }>;
+        } | null;
         groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
       } | null;
       offender?: {
@@ -62078,22 +62174,21 @@ export type FeedItemsQuery = {
           id: string;
           dayTime?: string | null;
         } | null;
-        updates: Array<{
+        latestUpdate?: {
           __typename?: 'Update';
           id: string;
           text?: string | null;
           icon: UpdateIcon;
           type: UpdateType;
           createdAt: Date;
-          images: Array<{
+          feedImage?: {
             __typename?: 'Image';
             id: string;
             url?: string | null;
             optimised?: string | null;
             position: ImagePosition;
             rotation: number;
-            card?: string | null;
-          }>;
+          } | null;
           linkedCrimeGroups: Array<{
             __typename?: 'CrimeGroup';
             totalOffenders?: number | null;
@@ -62116,29 +62211,14 @@ export type FeedItemsQuery = {
             make?: string | null;
             id: string;
             colour?: string | null;
-            images: Array<{
+            feedImage?: {
               __typename?: 'Image';
               id: string;
               url?: string | null;
+              optimised?: string | null;
               position: ImagePosition;
               rotation: number;
-              optimised?: string | null;
-            }>;
-          }>;
-          linkedIncidents: Array<{
-            __typename?: 'Incident';
-            id: string;
-            subject?: string | null;
-            description: string;
-            dayTime?: string | null;
-            images: Array<{
-              __typename?: 'Image';
-              id: string;
-              url?: string | null;
-              position: ImagePosition;
-              rotation: number;
-              optimised?: string | null;
-            }>;
+            } | null;
           }>;
           linkedOffenders: Array<{
             __typename?: 'Offender';
@@ -62151,14 +62231,29 @@ export type FeedItemsQuery = {
             name?: string | null;
             race?: Race | null;
             gender?: Gender | null;
-            images: Array<{
+            feedImage?: {
               __typename?: 'Image';
               id: string;
               url?: string | null;
+              optimised?: string | null;
               position: ImagePosition;
               rotation: number;
+            } | null;
+          }>;
+          linkedIncidents: Array<{
+            __typename?: 'Incident';
+            id: string;
+            subject?: string | null;
+            description: string;
+            dayTime?: string | null;
+            feedImage?: {
+              __typename?: 'Image';
+              id: string;
+              url?: string | null;
               optimised?: string | null;
-            }>;
+              position: ImagePosition;
+              rotation: number;
+            } | null;
           }>;
           createdBy: {
             __typename?: 'User';
@@ -62171,16 +62266,15 @@ export type FeedItemsQuery = {
               name: string;
             }>;
           };
-        }>;
-        images: Array<{
+        } | null;
+        feedImage?: {
           __typename?: 'Image';
           id: string;
           url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
           rotation: number;
-          card?: string | null;
-        }>;
+        } | null;
         groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
         createdBy: {
           __typename?: 'User';
@@ -62217,15 +62311,102 @@ export type FeedItemsQuery = {
               name: string;
             }>;
           };
-          images: Array<{
+          feedImage?: {
             __typename?: 'Image';
             id: string;
+            url?: string | null;
             optimised?: string | null;
             position: ImagePosition;
             rotation: number;
-          }>;
+          } | null;
         }>;
       } | null;
+    }>;
+  } | null;
+};
+
+export type ListOffendersFeedQueryVariables = Exact<{
+  scheme: SchemeWhereUniqueInput;
+  where?: InputMaybe<OffenderWhereInput>;
+  order?: InputMaybe<OffenderOrderByWithRelationInput>;
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type ListOffendersFeedQuery = {
+  __typename?: 'Query';
+  listOffenders?: {
+    __typename?: 'ListOffenders';
+    total: number;
+    offenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      reference?: number | null;
+      totalImages?: number | null;
+      createdAt: Date;
+      updatedAt: Date;
+      totalIncidents?: number | null;
+      age?: Age | null;
+      build?: Build | null;
+      height?: Height | null;
+      dateOfBirth?: Date | null;
+      dateSource?: string | null;
+      hair?: string | null;
+      gender?: Gender | null;
+      name?: string | null;
+      race?: Race | null;
+      peculiarities?: string | null;
+      approved?: boolean | null;
+      active?: boolean | null;
+      lastActive?: {
+        __typename?: 'Incident';
+        id: string;
+        dayTime?: string | null;
+      } | null;
+      tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+      feedImage?: {
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+        position: ImagePosition;
+        rotation: number;
+      } | null;
+      groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+      createdBy: {
+        __typename?: 'User';
+        id: string;
+        fullName: string;
+        businesses: Array<{
+          __typename?: 'Business';
+          id: string;
+          name: string;
+        }>;
+      };
+      incidents: Array<{
+        __typename?: 'Incident';
+        id: string;
+        reference?: number | null;
+        subject?: string | null;
+        description: string;
+        dayTime?: string | null;
+        date: Date;
+        location?: {
+          __typename?: 'Address';
+          id: string;
+          full?: string | null;
+        } | null;
+        createdBy: {
+          __typename?: 'User';
+          id: string;
+          fullName: string;
+          businesses: Array<{
+            __typename?: 'Business';
+            id: string;
+            name: string;
+          }>;
+        };
+      }>;
     }>;
   } | null;
 };
@@ -69879,6 +70060,96 @@ export type VehicleQuery = {
   } | null;
 };
 
+export const FeedImageFragmentDoc = gql`
+  fragment FeedImage on Image {
+    id
+    url
+    optimised
+    position
+    rotation
+  }
+`;
+export const FeedUpdateFragmentDoc = gql`
+  fragment FeedUpdate on Update {
+    id
+    text
+    icon
+    type
+    createdAt
+    feedImage {
+      ...FeedImage
+    }
+    linkedCrimeGroups {
+      totalOffenders
+      totalIncidents
+      alias
+      id
+      reference
+      totalRecoveredValue
+      totalTheftSuccess
+      totalValue
+      updatedAt
+    }
+    linkedVehicles {
+      updatedAt
+      totalOffenders
+      registration
+      reference
+      model
+      feedImage {
+        id
+        url
+        optimised
+        position
+        rotation
+      }
+      make
+      id
+      colour
+    }
+    linkedOffenders {
+      id
+      updatedAt
+      age
+      build
+      height
+      dateOfBirth
+      name
+      race
+      gender
+      feedImage {
+        id
+        url
+        optimised
+        position
+        rotation
+      }
+    }
+    linkedIncidents {
+      id
+      subject
+      description
+      dayTime
+      feedImage {
+        id
+        url
+        optimised
+        position
+        rotation
+      }
+    }
+    createdBy {
+      id
+      fullName
+      businesses {
+        fullName
+        id
+        name
+      }
+    }
+  }
+  ${FeedImageFragmentDoc}
+`;
 export const ListActionsDocument = gql`
   query ListActions(
     $take: Int
@@ -73064,15 +73335,11 @@ export const FeedItemsDocument = gql`
           id
           location
           description
+          feedImage {
+            ...FeedImage
+          }
           offender {
             id
-            images {
-              id
-              url
-              optimised
-              position
-              rotation
-            }
             name
           }
         }
@@ -73092,14 +73359,6 @@ export const FeedItemsDocument = gql`
               name
               fullName
             }
-          }
-          images {
-            id
-            url
-            optimised
-            card
-            position
-            rotation
           }
           image {
             id
@@ -73130,88 +73389,8 @@ export const FeedItemsDocument = gql`
           totalTheftSuccess
           totalValue
           updatedAt
-          updates(orderBy: { createdAt: desc }) {
-            id
-            text
-            icon
-            type
-            createdAt
-            images {
-              id
-              url
-              optimised
-              position
-              rotation
-              card
-            }
-            linkedCrimeGroups {
-              totalOffenders
-              totalIncidents
-              alias
-              id
-              reference
-              totalRecoveredValue
-              totalTheftSuccess
-              totalValue
-              updatedAt
-            }
-            linkedVehicles {
-              updatedAt
-              totalOffenders
-              registration
-              reference
-              model
-              images {
-                id
-                url
-                optimised
-                position
-                rotation
-              }
-              make
-              id
-              colour
-            }
-            linkedIncidents {
-              id
-              subject
-              description
-              dayTime
-              images {
-                id
-                url
-                optimised
-                position
-                rotation
-              }
-            }
-            linkedOffenders {
-              id
-              updatedAt
-              age
-              build
-              height
-              dateOfBirth
-              name
-              race
-              gender
-              images {
-                id
-                url
-                optimised
-                position
-                rotation
-              }
-            }
-            createdBy {
-              id
-              fullName
-              businesses {
-                fullName
-                id
-                name
-              }
-            }
+          latestUpdate {
+            ...FeedUpdate
           }
         }
         vehicleId
@@ -73225,95 +73404,11 @@ export const FeedItemsDocument = gql`
           make
           id
           colour
-          images {
-            id
-            optimised
-            position
-            rotation
-            url
+          feedImage {
+            ...FeedImage
           }
-          updates(orderBy: { createdAt: desc }) {
-            id
-            text
-            icon
-            type
-            createdAt
-            images {
-              id
-              url
-              optimised
-              position
-              rotation
-              card
-            }
-            linkedCrimeGroups {
-              totalOffenders
-              totalIncidents
-              alias
-              id
-              reference
-              totalRecoveredValue
-              totalTheftSuccess
-              totalValue
-              updatedAt
-            }
-            linkedVehicles {
-              updatedAt
-              totalOffenders
-              registration
-              reference
-              model
-              make
-              id
-              colour
-              images {
-                id
-                url
-                position
-                rotation
-                optimised
-              }
-            }
-            linkedIncidents {
-              id
-              subject
-              description
-              dayTime
-              images {
-                id
-                url
-                optimised
-                position
-                rotation
-              }
-            }
-            linkedOffenders {
-              id
-              updatedAt
-              age
-              build
-              height
-              dateOfBirth
-              name
-              race
-              gender
-              images {
-                id
-                url
-                optimised
-                position
-                rotation
-              }
-            }
-            createdBy {
-              id
-              fullName
-              businesses {
-                fullName
-                id
-                name
-              }
-            }
+          latestUpdate {
+            ...FeedUpdate
           }
         }
         investigationId
@@ -73336,88 +73431,8 @@ export const FeedItemsDocument = gql`
               name
             }
           }
-          updates(orderBy: { createdAt: desc }) {
-            id
-            text
-            icon
-            type
-            createdAt
-            images {
-              id
-              url
-              optimised
-              position
-              rotation
-              card
-            }
-            linkedCrimeGroups {
-              totalOffenders
-              totalIncidents
-              alias
-              id
-              reference
-              totalRecoveredValue
-              totalTheftSuccess
-              totalValue
-              updatedAt
-            }
-            linkedVehicles {
-              updatedAt
-              totalOffenders
-              registration
-              reference
-              model
-              make
-              images {
-                id
-                url
-                optimised
-                position
-                rotation
-              }
-              id
-              colour
-            }
-            linkedIncidents {
-              id
-              subject
-              description
-              dayTime
-              images {
-                id
-                url
-                optimised
-                position
-                rotation
-              }
-            }
-            linkedOffenders {
-              id
-              updatedAt
-              age
-              build
-              height
-              dateOfBirth
-              name
-              race
-              gender
-              images {
-                id
-                url
-                optimised
-                position
-                rotation
-              }
-            }
-            createdBy {
-              id
-              fullName
-              businesses {
-                fullName
-                id
-                name
-              }
-            }
+          latestUpdate {
+            ...FeedUpdate
           }
         }
         groups {
@@ -73436,88 +73451,8 @@ export const FeedItemsDocument = gql`
           date
           totalOffenders
           totalUpdates
-          updates(orderBy: { createdAt: desc }) {
-            id
-            text
-            icon
-            type
-            createdAt
-            images {
-              id
-              url
-              optimised
-              position
-              rotation
-              card
-            }
-            linkedCrimeGroups {
-              totalOffenders
-              totalIncidents
-              alias
-              id
-              reference
-              totalRecoveredValue
-              totalTheftSuccess
-              totalValue
-              updatedAt
-            }
-            linkedVehicles {
-              updatedAt
-              totalOffenders
-              registration
-              reference
-              model
-              images {
-                id
-                url
-                position
-                rotation
-                optimised
-              }
-              make
-              id
-              colour
-            }
-            linkedIncidents {
-              id
-              subject
-              description
-              dayTime
-              images {
-                id
-                url
-                position
-                rotation
-                optimised
-              }
-            }
-            linkedOffenders {
-              id
-              updatedAt
-              age
-              build
-              height
-              dateOfBirth
-              name
-              race
-              gender
-              images {
-                id
-                url
-                optimised
-                position
-                rotation
-              }
-            }
-            createdBy {
-              id
-              fullName
-              businesses {
-                fullName
-                id
-                name
-              }
-            }
+          latestUpdate {
+            ...FeedUpdate
           }
           crimeTypes {
             id
@@ -73537,12 +73472,8 @@ export const FeedItemsDocument = gql`
               name
             }
           }
-          images(orderBy: { createdAt: desc }) {
-            id
-            optimised
-            url
-            position
-            rotation
+          feedImage {
+            ...FeedImage
           }
           groups {
             id
@@ -73587,96 +73518,11 @@ export const FeedItemsDocument = gql`
             id
             dayTime
           }
-          updates(orderBy: { createdAt: desc }) {
-            id
-            text
-            icon
-            type
-            createdAt
-            images {
-              id
-              url
-              optimised
-              position
-              rotation
-              card
-            }
-            linkedCrimeGroups {
-              totalOffenders
-              totalIncidents
-              alias
-              id
-              reference
-              totalRecoveredValue
-              totalTheftSuccess
-              totalValue
-              updatedAt
-            }
-            linkedVehicles {
-              updatedAt
-              totalOffenders
-              registration
-              reference
-              model
-              make
-              id
-              images {
-                id
-                url
-                position
-                rotation
-                optimised
-              }
-              colour
-            }
-            linkedIncidents {
-              id
-              subject
-              description
-              dayTime
-              images {
-                id
-                url
-                position
-                rotation
-                optimised
-              }
-            }
-            linkedOffenders {
-              id
-              updatedAt
-              age
-              build
-              height
-              dateOfBirth
-              name
-              race
-              gender
-              images {
-                id
-                url
-                position
-                rotation
-                optimised
-              }
-            }
-            createdBy {
-              id
-              fullName
-              businesses {
-                fullName
-                id
-                name
-              }
-            }
+          latestUpdate {
+            ...FeedUpdate
           }
-          images(orderBy: { createdAt: desc }) {
-            id
-            url
-            optimised
-            position
-            rotation
-            card
+          feedImage {
+            ...FeedImage
           }
           tags {
             id
@@ -73730,11 +73576,8 @@ export const FeedItemsDocument = gql`
                 name
               }
             }
-            images(orderBy: { createdAt: desc }) {
-              id
-              optimised
-              position
-              rotation
+            feedImage {
+              ...FeedImage
             }
           }
         }
@@ -73743,6 +73586,8 @@ export const FeedItemsDocument = gql`
       total
     }
   }
+  ${FeedImageFragmentDoc}
+  ${FeedUpdateFragmentDoc}
 `;
 export function useFeedItemsQuery(
   baseOptions: Apollo.QueryHookOptions<FeedItemsQuery, FeedItemsQueryVariables>
@@ -73772,6 +73617,128 @@ export type FeedItemsLazyQueryHookResult = ReturnType<
 export type FeedItemsQueryResult = Apollo.QueryResult<
   FeedItemsQuery,
   FeedItemsQueryVariables
+>;
+export const ListOffendersFeedDocument = gql`
+  query listOffendersFeed(
+    $scheme: SchemeWhereUniqueInput!
+    $where: OffenderWhereInput
+    $order: OffenderOrderByWithRelationInput
+    $take: Int
+    $skip: Int
+  ) {
+    listOffenders(
+      scheme: $scheme
+      where: $where
+      order: $order
+      take: $take
+      skip: $skip
+    ) {
+      offenders {
+        id
+        reference
+        totalImages
+        createdAt
+        updatedAt
+        totalIncidents
+        reference
+        age
+        build
+        height
+        dateOfBirth
+        dateSource
+        hair
+        gender
+        name
+        race
+        peculiarities
+        approved
+        active
+        lastActive {
+          id
+          dayTime
+        }
+        tags {
+          id
+          name
+        }
+        feedImage {
+          ...FeedImage
+        }
+        groups {
+          id
+          name
+        }
+        tags {
+          id
+          name
+        }
+        createdBy {
+          id
+          fullName
+          businesses {
+            id
+            name
+          }
+        }
+        incidents {
+          id
+          reference
+          subject
+          description
+          dayTime
+          date
+          location {
+            id
+            full
+          }
+          createdBy {
+            id
+            fullName
+            businesses {
+              id
+              name
+            }
+          }
+        }
+      }
+      total
+    }
+  }
+  ${FeedImageFragmentDoc}
+`;
+export function useListOffendersFeedQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ListOffendersFeedQuery,
+    ListOffendersFeedQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    ListOffendersFeedQuery,
+    ListOffendersFeedQueryVariables
+  >(ListOffendersFeedDocument, options);
+}
+export function useListOffendersFeedLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListOffendersFeedQuery,
+    ListOffendersFeedQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ListOffendersFeedQuery,
+    ListOffendersFeedQueryVariables
+  >(ListOffendersFeedDocument, options);
+}
+export type ListOffendersFeedQueryHookResult = ReturnType<
+  typeof useListOffendersFeedQuery
+>;
+export type ListOffendersFeedLazyQueryHookResult = ReturnType<
+  typeof useListOffendersFeedLazyQuery
+>;
+export type ListOffendersFeedQueryResult = Apollo.QueryResult<
+  ListOffendersFeedQuery,
+  ListOffendersFeedQueryVariables
 >;
 export const ListGoodsTypesDocument = gql`
   query ListGoodsTypes {

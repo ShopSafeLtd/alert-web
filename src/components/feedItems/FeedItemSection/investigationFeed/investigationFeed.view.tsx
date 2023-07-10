@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment */
 import React from 'react';
 import { Col, Row, Typography } from 'antd';
 import type { FeedItemsQuery } from 'graphql/generated';
@@ -25,7 +26,7 @@ const InvestigationFeed = ({
   isNewInvestigation,
 }: Props): JSX.Element => {
   const {
-    updates,
+    latestUpdate,
     name,
     description,
     reference,
@@ -38,13 +39,15 @@ const InvestigationFeed = ({
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     <Link to={`/app/investigations/view/${id}`}>
       <Row gutter={15} wrap={false} key={id || ''} style={{ width: '100%' }}>
-        {!isNewImage && updates && updates[0]?.images[0] ? (
+        {!isNewImage && latestUpdate && latestUpdate.feedImage ? (
           <Col>
             <ImageContainer
               src={
-                updates[0].images[0].optimised || updates[0].images[0].url || ''
+                latestUpdate.feedImage.optimised ||
+                latestUpdate.feedImage.url ||
+                ''
               }
-              position={updates[0].images[0].position}
+              position={latestUpdate.feedImage.position}
             />
           </Col>
         ) : null}
@@ -129,8 +132,8 @@ const InvestigationFeed = ({
                 </Col>
               </Row> */}
             </>
-          ) : updates && updates.length > 0 ? (
-            <UpdateContent title={name || ''} update={updates[0]} />
+          ) : latestUpdate ? (
+            <UpdateContent title={name || ''} update={latestUpdate} />
           ) : null}
         </Col>
       </Row>
