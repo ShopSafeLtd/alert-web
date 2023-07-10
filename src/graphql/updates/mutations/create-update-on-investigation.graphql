@@ -12,6 +12,7 @@ mutation CreateUpdateOnInvestigation(
       url
       optimised
       position
+      rotation
       card
     }
     linkedCrimeGroups {
@@ -31,6 +32,7 @@ mutation CreateUpdateOnInvestigation(
         url
         optimised
         position
+        rotation
       }
       updatedAt
       totalOffenders
@@ -51,6 +53,7 @@ mutation CreateUpdateOnInvestigation(
         url
         optimised
         position
+        rotation
       }
     }
     linkedOffenders {
@@ -68,6 +71,7 @@ mutation CreateUpdateOnInvestigation(
         url
         optimised
         position
+        rotation
       }
     }
     createdBy {
@@ -91,6 +95,7 @@ mutation CreateUpdateOnInvestigation(
         optimised
         card
         position
+        rotation
       }
       linkedCrimeGroups {
         totalOffenders
@@ -109,6 +114,7 @@ mutation CreateUpdateOnInvestigation(
           url
           optimised
           position
+          rotation
         }
         updatedAt
         totalOffenders
@@ -129,6 +135,7 @@ mutation CreateUpdateOnInvestigation(
           url
           optimised
           position
+          rotation
         }
       }
       linkedOffenders {
@@ -146,6 +153,7 @@ mutation CreateUpdateOnInvestigation(
           url
           optimised
           position
+          rotation
         }
       }
       createdBy {

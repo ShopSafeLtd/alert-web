@@ -150,7 +150,11 @@ const ArticleCard = ({
         <Carousel ref={imagesRef}>
           {images.map((image) => (
             <div key={id} className={classes.image}>
-              <WatermarkImage url={image.optimised} position={image.position} />
+              <WatermarkImage
+                url={image.optimised}
+                rotation={image.rotation}
+                position={image.position}
+              />
             </div>
           ))}
         </Carousel>

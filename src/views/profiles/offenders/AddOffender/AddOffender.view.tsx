@@ -19,6 +19,7 @@ import type {
   BanData,
   CrimeGroupData,
   CustomGalleryData,
+  Image,
   TagData,
   VehicleData,
 } from 'types/DataType';
@@ -28,7 +29,7 @@ import OffenderExclusions from 'components/offenders/OffenderForm/OffenderExclus
 import OffenderImage from 'components/offenders/OffenderForm/OffenderImage';
 
 import { useIntl } from 'react-intl';
-import type { FormData, Image } from './useAddOffender';
+import type { FormData } from './useAddOffender';
 
 const { Title, Paragraph } = Typography;
 
@@ -40,7 +41,7 @@ interface Props {
   tags: { value: string; label: string }[];
   tagsLoading: boolean;
   imgChange: UploadProps['onChange'];
-  onPreview: (value: UploadFile) => void;
+  // onPreview: (value: UploadFile) => void;
   beforeUpload: (value: RcFile) => void;
   fileList: UploadFile[];
   addOffenderTag: boolean;
@@ -89,7 +90,7 @@ const AddOffender = ({
   tags,
   tagsLoading,
   imgChange,
-  onPreview,
+  // onPreview,
   beforeUpload,
   fileList,
   addOffenderTag,
@@ -314,7 +315,7 @@ const AddOffender = ({
         <OffenderImage
           titleOrder={adminRights ? 5 : 3}
           imgChange={imgChange}
-          onPreview={onPreview}
+          // onPreview={onPreview}
           beforeUpload={beforeUpload}
           fileList={fileList}
           editImage={editImage}

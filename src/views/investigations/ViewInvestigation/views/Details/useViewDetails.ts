@@ -18,6 +18,7 @@ import {
 import { useEffect, useState } from 'react';
 import update from 'immutability-helper';
 import { Modal } from 'antd';
+import { useIntl } from 'react-intl';
 import { useStoreState } from '../../../../../state';
 
 const { confirm } = Modal;
@@ -70,6 +71,7 @@ interface Props {
   investigationId: string;
 }
 const useViewDetails = ({ investigationId }: Props): Return => {
+  const intl = useIntl();
   const [editUpdateInput, setEditUpdateInput] = useState('');
   const [editUpdate, setEditUpdate] = useState<{
     id: string;
@@ -245,12 +247,22 @@ const useViewDetails = ({ investigationId }: Props): Return => {
 
   const confirmDeleteUpdate = (updateId: string) => {
     confirm({
-      title: 'Are you sure?',
-      content: 'The update will be permanently deleted.',
+      title: intl.formatMessage({
+        id: '2oCaym',
+        defaultMessage: 'Are you sure?',
+      }),
+      content: intl.formatMessage({
+        id: 'gwznO0',
+        defaultMessage: 'The update will be permanently deleted.',
+      }),
+      okText: intl.formatMessage({
+        id: 'K3r6DQ',
+        defaultMessage: 'Delete',
+      }),
+
       onOk() {
         handleDeleteUpdate(updateId);
       },
-      okText: 'Delete',
     });
   };
 

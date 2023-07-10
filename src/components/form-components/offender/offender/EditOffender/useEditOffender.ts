@@ -25,6 +25,7 @@ import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { useNavigate } from 'react-router';
 import errorNotification from 'types/error_notification';
 import type { TagData } from 'types/DataType';
+import { useIntl } from 'react-intl';
 
 export interface OffenderData {
   id: string;
@@ -100,9 +101,7 @@ interface Return {
   groupsLoading: boolean;
   tags: { value: string; label: string }[];
   tagsLoading: boolean;
-
   imgChange: UploadProps['onChange'];
-  onPreview: (value: UploadFile) => void;
   beforeUpload: (value: RcFile) => void;
   fileList: UploadFile[];
   addOffenderTag: boolean;
@@ -128,6 +127,7 @@ interface Return {
 }
 
 const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
+  const intl = useIntl();
   const navigate = useNavigate();
   const [form] = Form.useForm<FormData>();
   const schemeId = useStoreState((state) => state.scheme.id);
@@ -226,8 +226,14 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
       });
       setSaving(false);
       notification.success({
-        message: 'Successfully Updated!',
-        description: 'The offender has been updated!',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated',
+          id: 'ryTk34',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The offender has been updated!',
+          id: 'aRw1jd',
+        }),
         placement: 'bottomRight',
       });
       onClose();
@@ -314,7 +320,6 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
           dateSource: { set: ageCheck ? data.dateSource || null : null },
           dateOfBirth: { set: ageCheck ? data.dateOfBirth || null : null },
           groups: {
-            // ???
             set:
               groups.length > 1
                 ? data.groups.map((id) => ({ id }))
@@ -364,9 +369,15 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
     onCompleted: () => {
       navigate(`/app/offenders`);
       notification.success({
-        message: 'Successfully Rejected!',
-        description:
-          'The offender has been deleted from the feed and moved to the recycle bin.',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Rejected!',
+          id: 'C0DMPx',
+        }),
+        description: intl.formatMessage({
+          defaultMessage:
+            'The offender has been deleted from the feed and moved to the recycle bin.',
+          id: 'nQ1eW+',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -376,10 +387,19 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
   });
   const onReject = () => {
     confirm({
-      title: 'Are you sure?',
-      content:
-        'Click reject if you wish to reject the approving of this offender. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
-      okText: 'Reject',
+      title: intl.formatMessage({
+        defaultMessage: 'Are you sure you want to delete this article?',
+        id: 'AjSz/I',
+      }),
+      content: intl.formatMessage({
+        defaultMessage:
+          'Click reject if you wish to reject the approving of this offender. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
+        id: '5YfZun',
+      }),
+      okText: intl.formatMessage({
+        defaultMessage: 'Reject',
+        id: 'VzIOKf',
+      }),
       onOk() {
         void recycleOffender({
           variables: {
@@ -402,7 +422,6 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
   };
   const imgChange: UploadProps['onChange'] = (info) => {
     if (info.file.response && info.file.status === 'done') {
-      // ???
       // if (info.file.response && (info.file.status === 'done'||'success') {
       setFileList([
         ...fileList.filter((item) => item.uid !== info.file.uid),
@@ -420,20 +439,6 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
       setImageChange(true);
     }
   };
-  const onPreview = async (file: UploadFile) => {
-    let src = file.url as string;
-    if (!src) {
-      src = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file.originFileObj as RcFile);
-        reader.addEventListener('load', () => resolve(reader.result as string));
-      });
-    }
-    const image = new Image();
-    image.src = src;
-    const imgWindow = window.open(src);
-    imgWindow?.document.write(image.outerHTML);
-  };
 
   const toggleAddOffenderTag = () => {
     setAddOffenderTag(!addOffenderTag);
@@ -449,8 +454,14 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
   };
   const deleteConfirm = (currentId: string) => {
     confirm({
-      title: 'Do you want to delete the exclusion?',
-      content: 'This action cannot be undone.',
+      title: intl.formatMessage({
+        defaultMessage: 'Do you want to delete the exclusion?',
+        id: 'P70g0z',
+      }),
+      content: intl.formatMessage({
+        defaultMessage: 'This action cannot be undone.',
+        id: 'JDJoIZ',
+      }),
       onOk() {
         openDelete(currentId);
       },
@@ -498,7 +509,6 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
       tagsData?.tags.map((tag) => ({ value: tag.id, label: tag.name })) || [],
     tagsLoading,
     imgChange,
-    onPreview,
     beforeUpload,
     fileList,
     addOffenderTag,

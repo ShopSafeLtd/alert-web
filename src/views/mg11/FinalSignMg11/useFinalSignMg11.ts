@@ -8,6 +8,7 @@ import {
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import errorNotification from 'types/error_notification';
+import { useIntl } from 'react-intl';
 import FONT_FAMILIES from '../../../components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
 import type { Mg11Data } from './FinalSignMg11.view';
 import { useStoreState } from '../../../state';
@@ -33,6 +34,7 @@ interface Return {
 }
 
 const useFinalSignMg11 = (): Return => {
+  const intl = useIntl();
   const [form] = useForm();
   const { fullName: userName } = useStoreState((state) => state.user);
   const [data, setdata] = useState<Mg11Data>({
@@ -89,8 +91,16 @@ const useFinalSignMg11 = (): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: 'Successfully Signed!',
-        description: 'The statement has been successfully signed, thank you!',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Signed!',
+          id: 'LnyNwP',
+        }),
+        description: intl.formatMessage({
+          defaultMessage:
+            'The statement has been successfully signed, thank you!',
+          id: '+/CdFi',
+        }),
+
         placement: 'bottomRight',
       });
       navigate(`/app/incidents/view/${data.incidentId}`);

@@ -21,7 +21,6 @@ const EditOffender = ({ id, onClose, update }: Props): JSX.Element => {
     tags,
     tagsLoading,
     imgChange,
-    onPreview,
     beforeUpload,
     fileList,
     addOffenderTag,
@@ -58,7 +57,6 @@ const EditOffender = ({ id, onClose, update }: Props): JSX.Element => {
         tags={tags}
         tagsLoading={tagsLoading}
         imgChange={imgChange}
-        onPreview={onPreview}
         beforeUpload={beforeUpload}
         fileList={fileList}
         addOffenderTag={addOffenderTag}

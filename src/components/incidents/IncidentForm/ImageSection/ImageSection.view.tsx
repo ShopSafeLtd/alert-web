@@ -17,33 +17,28 @@ import {
   faUpload,
   faUsers,
 } from '@fortawesome/pro-light-svg-icons';
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
+import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import ImageEditor from 'components/form-components/ImageEditor/ImageEditor.view';
 import { ImagePosition } from 'graphql/generated';
 import { useIntl } from 'react-intl';
+import type { Image } from 'types/DataType';
 
 const { Title, Paragraph, Text } = Typography;
 
-interface Image extends UploadFile {
+interface ImagePayload extends Image {
   offenders?: {
     id: string;
     name?: string | undefined | null;
   }[];
-  position?: ImagePosition;
-}
-
-interface ImagePayload extends UploadFile {
-  offenders?: {
-    id: string;
-    name?: string | undefined | null;
-  }[];
-  position: ImagePosition;
 }
 
 interface OffenderTagProps {
-  removeImageFromOffender: (data: { image: Image; offenderId: string }) => void;
-  file: Image;
+  removeImageFromOffender: (data: {
+    image: ImagePayload;
+    offenderId: string;
+  }) => void;
+  file: ImagePayload;
   offender: { id: string; name?: string | null };
 }
 
@@ -88,11 +83,13 @@ interface Props {
   titleOrder: number;
   imgChange: UploadProps['onChange'];
   removeImage: (uid: string) => void;
-  removeImageFromOffender: (data: { image: Image; offenderId: string }) => void;
+  removeImageFromOffender: (data: {
+    image: ImagePayload;
+    offenderId: string;
+  }) => void;
   beforeUpload: (value: RcFile) => void;
-  fileList: Image[];
-  setAssignToImage: (image: Image) => void;
-  onPreview?: (value: Image) => void;
+  fileList: ImagePayload[];
+  setAssignToImage: (image: ImagePayload) => void;
   disabled?: boolean;
   onEditImage: (value: ImagePayload) => void;
   primaryImage: string;
@@ -107,15 +104,14 @@ const ImageSection = ({
   setAssignToImage,
   removeImageFromOffender,
   removeImage,
-  onPreview,
   disabled,
   onEditImage,
   primaryImage,
   setPrimaryImage,
 }: Props): JSX.Element => {
-  const [editImage, setEditImage] = useState<Image | null>(null);
+  const [editImage, setEditImage] = useState<ImagePayload | null>(null);
   const intl = useIntl();
-  const handleEditSubmit = (value: Image) => {
+  const handleEditSubmit = (value: ImagePayload) => {
     onEditImage({
       ...value,
       position: value.position || ImagePosition.CenterCenter,
@@ -177,10 +173,9 @@ const ImageSection = ({
           </Col>
         </Row>
         <Form.Item name="images">
-          <Upload<Image>
+          <Upload<ImagePayload>
             action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
             className="incident-form-images"
-            onPreview={onPreview}
             listType="picture-card"
             fileList={fileList}
             onChange={imgChange}
@@ -189,7 +184,7 @@ const ImageSection = ({
             disabled={disabled}
             // TODO
             // eslint-disable-next-line react/no-unstable-nested-components
-            itemRender={(el, file: Image) => (
+            itemRender={(el, file: ImagePayload) => (
               <div className="image-card" key={el.key}>
                 {file.url === undefined && (
                   <div className="image-card-loading">

@@ -9,6 +9,7 @@ import {
 } from 'graphql/generated';
 import { Modal, notification } from 'antd';
 import errorNotification from 'types/error_notification';
+import { useIntl } from 'react-intl';
 
 const { confirm } = Modal;
 
@@ -52,6 +53,7 @@ interface Return {
 }
 
 const useEditChat = ({ onClose, chatId }: Props): Return => {
+  const intl = useIntl();
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
   const [addMember, setAddMember] = useState(false);
@@ -113,8 +115,14 @@ const useEditChat = ({ onClose, chatId }: Props): Return => {
       setSaving(false);
       onClose();
       notification.success({
-        message: 'Successfully Updated!',
-        description: 'The chat group has been updated! ',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
+          id: 'w5Yfkf',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The chat group has been updated.',
+          id: 'Mq+ZFn',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -138,8 +146,16 @@ const useEditChat = ({ onClose, chatId }: Props): Return => {
   };
   const deleteConfirm = (currentId: string) => {
     confirm({
-      title: 'Do you want to remove this user from the chat group?',
-      content: 'This action cannot be undone.',
+      title: intl.formatMessage({
+        defaultMessage:
+          'Please select or add at least one offender for the incident.',
+        id: 'o0nzyY',
+      }),
+      content: intl.formatMessage({
+        defaultMessage: 'This action cannot be undone.',
+        id: 'JDJoIZ',
+      }),
+
       onOk() {
         setMembersData(membersData?.filter((el) => el.id !== currentId));
       },

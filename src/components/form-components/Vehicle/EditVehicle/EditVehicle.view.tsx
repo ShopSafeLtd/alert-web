@@ -23,6 +23,7 @@ import WatermarkImage from 'components/images/WatermarkImage.view';
 import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import type {
   CustomGalleryData,
+  Image,
   IncidentCardData,
   OffenderData,
   VehicleCardData,
@@ -31,7 +32,7 @@ import UploadImage from 'components/images/UploadImage.view';
 import AddCustomGallery from 'components/form-components/customGalleries/AddCustomGallery';
 import { useIntl } from 'react-intl';
 import useStyles from './EditVehicle.styles';
-import type { FormData, Image } from './useEditVehicle';
+import type { FormData } from './useEditVehicle';
 
 const { confirm } = Modal;
 

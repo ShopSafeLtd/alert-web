@@ -6,6 +6,7 @@ import {
   useUpdateOneMg11Mutation,
 } from 'graphql/generated';
 import { useState } from 'react';
+import { useIntl } from 'react-intl';
 import { useNavigate, useParams } from 'react-router-dom';
 import errorNotification from 'types/error_notification';
 import FONT_FAMILIES from '../../../components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
@@ -45,6 +46,7 @@ interface Return {
 }
 
 const useSignMg11 = (): Return => {
+  const intl = useIntl();
   const scheme = useStoreState((state) => state.scheme.id);
   const [form] = useForm<FormData>();
   const [data, setdata] = useState<FormData>({
@@ -73,9 +75,17 @@ const useSignMg11 = (): Return => {
   const [updateMg11] = useUpdateOneMg11Mutation({
     onCompleted: () => {
       setSaving(false);
+
       notification.success({
-        message: 'Successfully Signed!',
-        description: 'The statement has been successfully signed, thank you!',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Signed!',
+          id: 'LnyNwP',
+        }),
+        description: intl.formatMessage({
+          defaultMessage:
+            'The statement has been successfully signed, thank you!',
+          id: '+/CdFi',
+        }),
         placement: 'bottomRight',
       });
       navigate(scheme ? '/app/' : `/ext/thank-you`);

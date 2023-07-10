@@ -25,6 +25,7 @@ mutation createMessage($data: MessageCreateWithoutActionsInput!) {
       url
       optimised
       position
+      rotation
     }
     crimeGroups {
       totalOffenders
@@ -45,6 +46,7 @@ mutation createMessage($data: MessageCreateWithoutActionsInput!) {
         optimised
         url
         position
+        rotation
       }
     }
     incidents {
@@ -57,6 +59,7 @@ mutation createMessage($data: MessageCreateWithoutActionsInput!) {
         url
         optimised
         position
+        rotation
       }
     }
     offenders {
@@ -74,6 +77,7 @@ mutation createMessage($data: MessageCreateWithoutActionsInput!) {
         url
         optimised
         position
+        rotation
       }
     }
   }

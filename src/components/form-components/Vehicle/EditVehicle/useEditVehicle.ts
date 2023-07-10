@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
 import { useEffect, useState } from 'react';
-import type { ImagePosition, ListCrimeGroupsQuery } from 'graphql/generated';
+import type { ListCrimeGroupsQuery } from 'graphql/generated';
 import {
   useListCustomGalleriesQuery,
   SortOrder,
@@ -12,13 +12,14 @@ import type { FormInstance } from 'antd';
 import { Form, message, Upload } from 'antd';
 import { useStoreState } from 'state';
 
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
+import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import type {
   CustomGalleryData,
   IncidentCardData,
   VehicleData,
   OffenderData,
   VehicleCardData,
+  Image,
 } from 'types/DataType';
 import update from 'immutability-helper';
 
@@ -27,15 +28,7 @@ interface Props {
   update: (value: VehicleData) => void;
   editData: VehicleCardData | undefined | null;
 }
-export interface Image extends UploadFile {
-  optimised?: string | null;
-  position?: ImagePosition;
-  primary?: boolean;
-  policeImage?: boolean;
-  edited?: boolean;
-  new?: boolean;
-  deleted?: boolean;
-}
+
 export interface FormData {
   name: string;
   make?: string;
@@ -123,6 +116,7 @@ const useEditVehicle = ({
           position: image.position,
           primary: image.primary || false,
           policeImage: image.policeImage || false,
+          rotation: image.rotation || 0,
           edited: false,
           new: false,
         }))
@@ -245,6 +239,7 @@ const useEditVehicle = ({
                 position: item.position,
                 primary: item.uid === primaryImage,
                 policeImage: item.policeImage,
+                rotation: item.rotation || 0,
                 edited: item.edited && !item.new,
                 new: item.new,
                 deleted: item.deleted,

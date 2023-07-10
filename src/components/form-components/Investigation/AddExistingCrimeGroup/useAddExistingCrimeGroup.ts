@@ -11,6 +11,7 @@ import { useStoreState } from 'state';
 import { notification } from 'antd';
 import { useParams } from 'react-router';
 import errorNotification from 'types/error_notification';
+import { useIntl } from 'react-intl';
 
 interface Props {
   onClose: () => void;
@@ -32,7 +33,7 @@ const useAddExistingCrimeGroup = ({
   crimeGroupIds,
 }: Props): Return => {
   const params = useParams();
-
+  const intl = useIntl();
   const [saving, setSaving] = useState(false);
   const schemeId = useStoreState((state) => state.scheme.id);
   const [selected, setSelected] = useState<string | undefined>();
@@ -72,8 +73,15 @@ const useAddExistingCrimeGroup = ({
       setSaving(false);
       onClose();
       notification.success({
-        message: 'Successfully Updated!',
-        description: 'The vehicle has been added to the crime group! ',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
+          id: 'w5Yfkf',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The vehicle has been added to the crime group.',
+          id: 'FZF+UQ',
+        }),
+
         placement: 'bottomRight',
       });
     },

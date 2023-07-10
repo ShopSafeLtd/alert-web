@@ -52,6 +52,7 @@ query offenderFeed(
       optimised
       card
       position
+      rotation
     }
     tags {
       id

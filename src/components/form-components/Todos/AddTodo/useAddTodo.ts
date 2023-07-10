@@ -11,6 +11,7 @@ import {
 import errorNotification from 'types/error_notification';
 import { notification } from 'antd';
 import { useStoreState } from 'state';
+import { useIntl } from 'react-intl';
 
 export interface FormData {
   name: string;
@@ -32,9 +33,9 @@ interface Return {
 }
 
 const useAddTodo = ({ update, onClose }: Props): Return => {
+  const intl = useIntl();
   const schemeId = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
-
   const [saving, setSaving] = useState(false);
 
   const { data: usersData, loading: usersLoading } = useListSchemeUsersQuery({
@@ -85,8 +86,14 @@ const useAddTodo = ({ update, onClose }: Props): Return => {
       setSaving(false);
       onClose();
       notification.success({
-        message: 'Successfully Added!',
-        description: 'The todo has been added! ',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Added!',
+          id: '5Hvk21',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The task has been added.',
+          id: '/ZJnc1',
+        }),
         placement: 'bottomRight',
       });
     },

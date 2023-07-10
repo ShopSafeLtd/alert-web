@@ -13,9 +13,10 @@ import type { FormInstance } from 'antd';
 import { Form, message, Upload } from 'antd';
 import { useStoreState } from 'state';
 import type { OffenderData } from 'components/viewChat/ViewMessage/useViewMessage';
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
+import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import type {
   CustomGalleryData,
+  Image,
   IncidentCardData,
   VehicleData,
 } from 'types/DataType';
@@ -24,11 +25,7 @@ import update from 'immutability-helper';
 interface Props {
   update: (value: VehicleData) => void;
 }
-export interface Image extends UploadFile {
-  position?: ImagePosition;
-  primary?: boolean;
-  policeImage?: boolean;
-}
+
 export interface FormData {
   name: string;
   make?: string;
@@ -203,6 +200,7 @@ const useAddVehicle = ({ update: updateVehicle }: Props): Return => {
               position: item.position,
               primary: item.uid === primaryImage,
               policeImage: item.policeImage,
+              rotation: item.rotation || 0,
             }))
           : [],
     });

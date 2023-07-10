@@ -27,6 +27,7 @@ describe('Detail Officer View', () => {
         optimised: null,
         url: 'htt',
         position: ImagePosition.CenterCenter,
+        rotation: 0,
       },
     ],
     offenders: [],
@@ -40,8 +41,14 @@ describe('Detail Officer View', () => {
           deleteRights={false}
           menuRights={false}
           openLightbox={jest.fn()}
-          onNavigate={jest.fn()}
           onDelete={jest.fn()}
+          editIncidentFeed={false}
+          toggleEditIncidentFeed={jest.fn()}
+          editImage={false}
+          toggleEditImage={jest.fn()}
+          editImageId={'id'}
+          setEditImageId={jest.fn()}
+          onEditImage={jest.fn()}
         />
       </MemoryRouter>
     );

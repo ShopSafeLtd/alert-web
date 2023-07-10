@@ -1,8 +1,8 @@
 import React from 'react';
 import type { ListBusinessesQuery } from 'graphql/generated';
-import { Button, Col, Drawer, Input, Row, Table } from 'antd';
+import { Button, Col, Drawer, Input, Row, Table, Tooltip } from 'antd';
 import { Link } from 'react-router-dom';
-import { faPlus } from '@fortawesome/pro-light-svg-icons';
+import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AddBusiness from 'components/form-components/businesses/AddBusiness';
 import LinkBusiness from 'components/form-components/businesses/LinkBusiness';
@@ -30,6 +30,7 @@ interface Props {
   toggleLinkVisible: () => void;
   onSubmit: (value: BusinessData) => void;
   saving: boolean;
+  deleteConfirm: (value: string) => void;
 }
 
 const ListBusinesses = ({
@@ -43,6 +44,7 @@ const ListBusinesses = ({
   toggleLinkVisible,
   onSubmit,
   saving,
+  deleteConfirm,
 }: Props) => {
   const classNames = useStyles();
   const intl = useIntl();
@@ -135,6 +137,29 @@ const ListBusinesses = ({
               defaultMessage: 'Location',
               id: 'rvirM2',
             }),
+          },
+          {
+            key: 'Options',
+            // title: '',
+            dataIndex: 'Options',
+            width: 60,
+            render: (_, record) => (
+              <Tooltip
+                title={intl.formatMessage({
+                  defaultMessage: 'Remove Business',
+                  id: 'fDBTeJ',
+                })}
+              >
+                <Button
+                  size="small"
+                  disabled={saving}
+                  onClick={() => {
+                    deleteConfirm(record.key);
+                  }}
+                  icon={<FontAwesomeIcon icon={faTrash} />}
+                />
+              </Tooltip>
+            ),
           },
         ]}
         dataSource={data?.listBusinesses.businesses.map((item) => ({

@@ -7577,6 +7577,7 @@ export type CreateInvestigationInput = {
   description?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   schemeId: Scalars['String'];
+  status?: InputMaybe<InvestigationStatus>;
 };
 
 export type CreateOffenderCrimeGroups = {
@@ -7689,6 +7690,7 @@ export type CreateVehicleImages = {
   policeImage?: InputMaybe<Scalars['Boolean']>;
   position?: InputMaybe<ImagePosition>;
   primary?: InputMaybe<Scalars['Boolean']>;
+  rotation?: InputMaybe<Scalars['Int']>;
   upload?: InputMaybe<Array<InputMaybe<UploadVehicleImage>>>;
 };
 
@@ -10985,6 +10987,7 @@ export type FeedItemGroupsArgs = {
   before?: InputMaybe<GroupWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<GroupWhereInput>;
 };
 
 export type FeedItemImagesArgs = {
@@ -12857,6 +12860,19 @@ export type GeoIpInput = {
   subdivisionCode?: InputMaybe<Scalars['String']>;
   subdivisionName?: InputMaybe<Scalars['String']>;
   timeZone?: InputMaybe<Scalars['String']>;
+};
+
+export type GeoIpOrderByWithRelationInput = {
+  city?: InputMaybe<SortOrder>;
+  countryCode?: InputMaybe<SortOrder>;
+  countryName?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  latitude?: InputMaybe<SortOrder>;
+  loginEvents?: InputMaybe<LoginEventOrderByRelationAggregateInput>;
+  longitude?: InputMaybe<SortOrder>;
+  postalCode?: InputMaybe<SortOrder>;
+  region?: InputMaybe<SortOrder>;
+  timezone?: InputMaybe<SortOrder>;
 };
 
 export type GeoIpUpdateOneWithoutLoginEventsNestedInput = {
@@ -15617,6 +15633,7 @@ export type ImageUpdateManyWithoutVehiclesNestedInput = {
   policeImage?: InputMaybe<Scalars['Boolean']>;
   position?: InputMaybe<ImagePosition>;
   primary?: InputMaybe<Scalars['Boolean']>;
+  rotation?: InputMaybe<Scalars['Int']>;
   set?: InputMaybe<Array<ImageWhereUniqueInput>>;
   update?: InputMaybe<Array<ImageUpdateWithWhereUniqueWithoutVehiclesInput>>;
   updateMany?: InputMaybe<Array<ImageUpdateManyWithWhereWithoutVehiclesInput>>;
@@ -16913,6 +16930,7 @@ export type Incident = {
   subject?: Maybe<Scalars['String']>;
   subscribed?: Maybe<Scalars['Boolean']>;
   time: Scalars['DateTime'];
+  totalImages?: Maybe<Scalars['Int']>;
   totalOffenders?: Maybe<Scalars['Int']>;
   totalRecoveredValue?: Maybe<Scalars['Float']>;
   totalUpdates?: Maybe<Scalars['Int']>;
@@ -24516,6 +24534,12 @@ export type ListInvestigations = {
   total: Scalars['Int'];
 };
 
+export type ListLoginEvents = {
+  __typename?: 'ListLoginEvents';
+  loginEvents: Array<LoginEvent>;
+  total: Scalars['Int'];
+};
+
 export type ListNotifications = {
   __typename?: 'ListNotifications';
   notifications: Array<Notification>;
@@ -24596,18 +24620,43 @@ export type LoginEvent = {
   user: User;
 };
 
-export type LoginEventCreateManyUserInput = {
+export type LoginEventCreateManySchemeInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   geoIpAddress?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
   ipAddress: Scalars['String'];
   loginTime: Scalars['DateTime'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  userId: Scalars['String'];
+};
+
+export type LoginEventCreateManySchemeInputEnvelope = {
+  data?: InputMaybe<Array<LoginEventCreateManySchemeInput>>;
+  skipDuplicates?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type LoginEventCreateManyUserInput = {
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  geoIpAddress?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['String']>;
+  ipAddress: Scalars['String'];
+  loginTime: Scalars['DateTime'];
+  schemeId?: InputMaybe<Scalars['String']>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
 export type LoginEventCreateManyUserInputEnvelope = {
   data?: InputMaybe<Array<LoginEventCreateManyUserInput>>;
   skipDuplicates?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type LoginEventCreateNestedManyWithoutSchemeInput = {
+  connect?: InputMaybe<Array<LoginEventWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<LoginEventCreateOrConnectWithoutSchemeInput>
+  >;
+  create?: InputMaybe<Array<LoginEventCreateWithoutSchemeInput>>;
+  createMany?: InputMaybe<LoginEventCreateManySchemeInputEnvelope>;
 };
 
 export type LoginEventCreateNestedManyWithoutUserInput = {
@@ -24619,9 +24668,24 @@ export type LoginEventCreateNestedManyWithoutUserInput = {
   createMany?: InputMaybe<LoginEventCreateManyUserInputEnvelope>;
 };
 
+export type LoginEventCreateOrConnectWithoutSchemeInput = {
+  create: LoginEventCreateWithoutSchemeInput;
+  where: LoginEventWhereUniqueInput;
+};
+
 export type LoginEventCreateOrConnectWithoutUserInput = {
   create: LoginEventCreateWithoutUserInput;
   where: LoginEventWhereUniqueInput;
+};
+
+export type LoginEventCreateWithoutSchemeInput = {
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  geoIp?: InputMaybe<GeoIpCreateNestedOneWithoutLoginEventsInput>;
+  id?: InputMaybe<Scalars['String']>;
+  ipAddress: Scalars['String'];
+  loginTime: Scalars['DateTime'];
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  user: UserCreateNestedOneWithoutLoginEventsInput;
 };
 
 export type LoginEventCreateWithoutUserInput = {
@@ -24630,6 +24694,7 @@ export type LoginEventCreateWithoutUserInput = {
   id?: InputMaybe<Scalars['String']>;
   ipAddress: Scalars['String'];
   loginTime: Scalars['DateTime'];
+  scheme?: InputMaybe<SchemeCreateNestedOneWithoutLoginEventsInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
@@ -24643,6 +24708,20 @@ export type LoginEventOrderByRelationAggregateInput = {
   _count?: InputMaybe<SortOrder>;
 };
 
+export type LoginEventOrderByWithRelationInput = {
+  createdAt?: InputMaybe<SortOrder>;
+  geoIp?: InputMaybe<GeoIpOrderByWithRelationInput>;
+  geoIpAddress?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  ipAddress?: InputMaybe<SortOrder>;
+  loginTime?: InputMaybe<SortOrder>;
+  scheme?: InputMaybe<SchemeOrderByWithRelationInput>;
+  schemeId?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
+  user?: InputMaybe<UserOrderByWithRelationInput>;
+  userId?: InputMaybe<SortOrder>;
+};
+
 export type LoginEventScalarWhereInput = {
   AND?: InputMaybe<Array<LoginEventScalarWhereInput>>;
   NOT?: InputMaybe<Array<LoginEventScalarWhereInput>>;
@@ -24652,6 +24731,7 @@ export type LoginEventScalarWhereInput = {
   id?: InputMaybe<StringFilter>;
   ipAddress?: InputMaybe<StringFilter>;
   loginTime?: InputMaybe<DateTimeFilter>;
+  schemeId?: InputMaybe<StringNullableFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   userId?: InputMaybe<StringFilter>;
 };
@@ -24664,9 +24744,32 @@ export type LoginEventUpdateManyMutationInput = {
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
 
+export type LoginEventUpdateManyWithWhereWithoutSchemeInput = {
+  data: LoginEventUpdateManyMutationInput;
+  where: LoginEventScalarWhereInput;
+};
+
 export type LoginEventUpdateManyWithWhereWithoutUserInput = {
   data: LoginEventUpdateManyMutationInput;
   where: LoginEventScalarWhereInput;
+};
+
+export type LoginEventUpdateManyWithoutSchemeNestedInput = {
+  connect?: InputMaybe<Array<LoginEventWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<LoginEventCreateOrConnectWithoutSchemeInput>
+  >;
+  create?: InputMaybe<Array<LoginEventCreateWithoutSchemeInput>>;
+  createMany?: InputMaybe<LoginEventCreateManySchemeInputEnvelope>;
+  delete?: InputMaybe<Array<LoginEventWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<LoginEventScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<LoginEventWhereUniqueInput>>;
+  set?: InputMaybe<Array<LoginEventWhereUniqueInput>>;
+  update?: InputMaybe<Array<LoginEventUpdateWithWhereUniqueWithoutSchemeInput>>;
+  updateMany?: InputMaybe<
+    Array<LoginEventUpdateManyWithWhereWithoutSchemeInput>
+  >;
+  upsert?: InputMaybe<Array<LoginEventUpsertWithWhereUniqueWithoutSchemeInput>>;
 };
 
 export type LoginEventUpdateManyWithoutUserNestedInput = {
@@ -24685,9 +24788,24 @@ export type LoginEventUpdateManyWithoutUserNestedInput = {
   upsert?: InputMaybe<Array<LoginEventUpsertWithWhereUniqueWithoutUserInput>>;
 };
 
+export type LoginEventUpdateWithWhereUniqueWithoutSchemeInput = {
+  data: LoginEventUpdateWithoutSchemeInput;
+  where: LoginEventWhereUniqueInput;
+};
+
 export type LoginEventUpdateWithWhereUniqueWithoutUserInput = {
   data: LoginEventUpdateWithoutUserInput;
   where: LoginEventWhereUniqueInput;
+};
+
+export type LoginEventUpdateWithoutSchemeInput = {
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  geoIp?: InputMaybe<GeoIpUpdateOneWithoutLoginEventsNestedInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  ipAddress?: InputMaybe<StringFieldUpdateOperationsInput>;
+  loginTime?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  user?: InputMaybe<UserUpdateOneRequiredWithoutLoginEventsNestedInput>;
 };
 
 export type LoginEventUpdateWithoutUserInput = {
@@ -24696,7 +24814,14 @@ export type LoginEventUpdateWithoutUserInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   ipAddress?: InputMaybe<StringFieldUpdateOperationsInput>;
   loginTime?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  scheme?: InputMaybe<SchemeUpdateOneWithoutLoginEventsNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type LoginEventUpsertWithWhereUniqueWithoutSchemeInput = {
+  create: LoginEventCreateWithoutSchemeInput;
+  update: LoginEventUpdateWithoutSchemeInput;
+  where: LoginEventWhereUniqueInput;
 };
 
 export type LoginEventUpsertWithWhereUniqueWithoutUserInput = {
@@ -24715,6 +24840,8 @@ export type LoginEventWhereInput = {
   id?: InputMaybe<StringFilter>;
   ipAddress?: InputMaybe<StringFilter>;
   loginTime?: InputMaybe<DateTimeFilter>;
+  scheme?: InputMaybe<SchemeWhereInput>;
+  schemeId?: InputMaybe<StringNullableFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   user?: InputMaybe<UserWhereInput>;
   userId?: InputMaybe<StringFilter>;
@@ -29593,6 +29720,8 @@ export type Offender = {
   totalAssociatedCrimeGroups?: Maybe<Scalars['Int']>;
   /** To be used on the known associates field to show total number of linking incidents */
   totalAssociatedIncidents?: Maybe<Scalars['Int']>;
+  totalBans?: Maybe<Scalars['Int']>;
+  totalImages?: Maybe<Scalars['Int']>;
   totalIncidents?: Maybe<Scalars['Int']>;
   totalRecoveredValue?: Maybe<Scalars['Float']>;
   totalTheftSuccess?: Maybe<Scalars['Float']>;
@@ -34358,14 +34487,18 @@ export type Query = {
   listGoodsTypes: ListGoodsTypes;
   listIncidents?: Maybe<ListIncidents>;
   listInvestigations?: Maybe<ListInvestigations>;
+  listLoginEvents?: Maybe<ListLoginEvents>;
   listNotifications: ListNotifications;
   listOffenders?: Maybe<ListOffenders>;
   listRekMatches: ListRekMatches;
   listTags: ListTags;
   listTodos: ListTodos;
+  listUserContribution?: Maybe<ListUserContribution>;
   listUserNotifications: ListUserNotifications;
   listUsers: ListUsers;
   listVehicles: ListVehicles;
+  loginEvent?: Maybe<LoginEvent>;
+  loginEvents: Array<LoginEvent>;
   message?: Maybe<Message>;
   messages: Array<Message>;
   mg11?: Maybe<Mg11>;
@@ -34663,6 +34796,13 @@ export type QueryListInvestigationsArgs = {
   take?: InputMaybe<Scalars['Int']>;
 };
 
+export type QueryListLoginEventsArgs = {
+  orderBy?: InputMaybe<Array<LoginEventOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<LoginEventWhereInput>;
+};
+
 export type QueryListNotificationsArgs = {
   orderBy?: InputMaybe<Array<NotificationOrderByWithRelationInput>>;
   skip?: InputMaybe<Scalars['Int']>;
@@ -34699,6 +34839,10 @@ export type QueryListTodosArgs = {
   where?: InputMaybe<TodoWhereInput>;
 };
 
+export type QueryListUserContributionArgs = {
+  where: UserContributionWhereInput;
+};
+
 export type QueryListUserNotificationsArgs = {
   orderBy?: InputMaybe<Array<UserNotificationOrderByWithRelationInput>>;
   skip?: InputMaybe<Scalars['Int']>;
@@ -34718,6 +34862,19 @@ export type QueryListVehiclesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<VehicleWhereInput>;
+};
+
+export type QueryLoginEventArgs = {
+  where: LoginEventWhereUniqueInput;
+};
+
+export type QueryLoginEventsArgs = {
+  after?: InputMaybe<LoginEventWhereUniqueInput>;
+  before?: InputMaybe<LoginEventWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<LoginEventOrderByWithRelationInput>>;
+  where?: InputMaybe<LoginEventWhereInput>;
 };
 
 export type QueryMessageArgs = {
@@ -37262,6 +37419,7 @@ export type Scheme = {
   incidentsByType?: Maybe<IncidentsByType>;
   incidentsCreated?: Maybe<Scalars['Int']>;
   investigationsInScheme: Array<Investigation>;
+  loginEvents: Array<LoginEvent>;
   logo?: Maybe<Image>;
   members: Array<UserScheme>;
   messages: Array<Message>;
@@ -37389,6 +37547,15 @@ export type SchemeInvestigationsInSchemeArgs = {
   before?: InputMaybe<InvestigationWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+};
+
+export type SchemeLoginEventsArgs = {
+  after?: InputMaybe<LoginEventWhereUniqueInput>;
+  before?: InputMaybe<LoginEventWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<LoginEventOrderByWithRelationInput>>;
+  where?: InputMaybe<LoginEventWhereInput>;
 };
 
 export type SchemeMembersArgs = {
@@ -37547,6 +37714,7 @@ export type SchemeCreateInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
@@ -37835,6 +38003,12 @@ export type SchemeCreateNestedOneWithoutInvestigationsInput = {
   create?: InputMaybe<SchemeCreateWithoutInvestigationsInput>;
 };
 
+export type SchemeCreateNestedOneWithoutLoginEventsInput = {
+  connect?: InputMaybe<SchemeWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<SchemeCreateOrConnectWithoutLoginEventsInput>;
+  create?: InputMaybe<SchemeCreateWithoutLoginEventsInput>;
+};
+
 export type SchemeCreateNestedOneWithoutMembersInput = {
   connect?: InputMaybe<SchemeWhereUniqueInput>;
   connectOrCreate?: InputMaybe<SchemeCreateOrConnectWithoutMembersInput>;
@@ -37967,6 +38141,11 @@ export type SchemeCreateOrConnectWithoutInvestigationsInput = {
   where: SchemeWhereUniqueInput;
 };
 
+export type SchemeCreateOrConnectWithoutLoginEventsInput = {
+  create: SchemeCreateWithoutLoginEventsInput;
+  where: SchemeWhereUniqueInput;
+};
+
 export type SchemeCreateOrConnectWithoutLogoInput = {
   create: SchemeCreateWithoutLogoInput;
   where: SchemeWhereUniqueInput;
@@ -38087,6 +38266,7 @@ export type SchemeCreateWithoutActionsInSchemeInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
@@ -38146,6 +38326,7 @@ export type SchemeCreateWithoutActionsInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
@@ -38205,6 +38386,7 @@ export type SchemeCreateWithoutArticlesInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
@@ -38264,6 +38446,7 @@ export type SchemeCreateWithoutBansInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
@@ -38323,6 +38506,7 @@ export type SchemeCreateWithoutBusinessesInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
@@ -38382,6 +38566,7 @@ export type SchemeCreateWithoutChatsInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
@@ -38441,6 +38626,7 @@ export type SchemeCreateWithoutContactsInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
@@ -38500,6 +38686,7 @@ export type SchemeCreateWithoutCrimeGroupsInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
@@ -38559,6 +38746,7 @@ export type SchemeCreateWithoutCustomGalleriesInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
@@ -38618,6 +38806,7 @@ export type SchemeCreateWithoutDarkLogoInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
@@ -38677,6 +38866,7 @@ export type SchemeCreateWithoutDocumentsInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
@@ -38736,6 +38926,7 @@ export type SchemeCreateWithoutFeedItemsInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
@@ -38795,6 +38986,7 @@ export type SchemeCreateWithoutGroupsInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
@@ -38854,6 +39046,7 @@ export type SchemeCreateWithoutImagesInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
@@ -38913,6 +39106,7 @@ export type SchemeCreateWithoutIncidentsInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
@@ -38972,6 +39166,7 @@ export type SchemeCreateWithoutIntelInput = {
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutSchemeInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
@@ -39031,6 +39226,7 @@ export type SchemeCreateWithoutInvestigationsInSchemeInput = {
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutSchemeInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
@@ -39089,6 +39285,67 @@ export type SchemeCreateWithoutInvestigationsInput = {
   incidentRetention?: InputMaybe<Scalars['Int']>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutSchemeInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
+  investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
+  logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
+  members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
+  mentionDueDays?: InputMaybe<Scalars['Int']>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutSchemeInput>;
+  mg11Available?: InputMaybe<Scalars['Boolean']>;
+  name: Scalars['String'];
+  notifications?: InputMaybe<NotificationCreateNestedManyWithoutSchemesInput>;
+  offenderRetention?: InputMaybe<Scalars['Int']>;
+  offenders?: InputMaybe<OffenderCreateNestedManyWithoutSchemeInput>;
+  recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutSchemeInput>;
+  rekCollections?: InputMaybe<RekCollectionCreateNestedManyWithoutSchemesInput>;
+  reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
+  reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
+  schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
+  tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
+  tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
+  terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
+  termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
+  todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+};
+
+export type SchemeCreateWithoutLoginEventsInput = {
+  actions?: InputMaybe<ActionCreateNestedManyWithoutSchemeInput>;
+  actionsInScheme?: InputMaybe<ActionCreateNestedManyWithoutInSchemeInput>;
+  approvalDueDays?: InputMaybe<Scalars['Int']>;
+  articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
+  autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
+  autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
+  businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
+  chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
+  customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
+  darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
+  defaultIncidentEmail?: InputMaybe<Scalars['Boolean']>;
+  defaultIncidentPush?: InputMaybe<Scalars['Boolean']>;
+  defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
+  defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
+  defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
+  defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
+  defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
+  documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
+  facialRecognition?: InputMaybe<Scalars['Boolean']>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutSchemesInput>;
+  groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
+  id?: InputMaybe<Scalars['String']>;
+  images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  incidentImpact?: InputMaybe<Scalars['Boolean']>;
+  incidentRetention?: InputMaybe<Scalars['Int']>;
+  incidents?: InputMaybe<IncidentCreateNestedManyWithoutSchemeInput>;
+  intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
+  investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
@@ -39150,6 +39407,7 @@ export type SchemeCreateWithoutLogoInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutSchemeInput>;
@@ -39209,6 +39467,7 @@ export type SchemeCreateWithoutMembersInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutSchemeInput>;
@@ -39268,6 +39527,7 @@ export type SchemeCreateWithoutMessagesInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
@@ -39327,6 +39587,7 @@ export type SchemeCreateWithoutNotificationsInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
@@ -39386,6 +39647,7 @@ export type SchemeCreateWithoutOffendersInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
@@ -39445,6 +39707,7 @@ export type SchemeCreateWithoutRecycledItemsInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
@@ -39504,6 +39767,7 @@ export type SchemeCreateWithoutRekCollectionsInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
@@ -39563,6 +39827,7 @@ export type SchemeCreateWithoutReportIconsInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
@@ -39622,6 +39887,7 @@ export type SchemeCreateWithoutReportTemplatesInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
@@ -39681,6 +39947,7 @@ export type SchemeCreateWithoutSchemeTagsInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
@@ -39740,6 +40007,7 @@ export type SchemeCreateWithoutStatementTemplatesInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
@@ -39799,6 +40067,7 @@ export type SchemeCreateWithoutTagOrdersInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
@@ -39858,6 +40127,7 @@ export type SchemeCreateWithoutTagsInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
@@ -39917,6 +40187,7 @@ export type SchemeCreateWithoutTermsInSchemeInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
@@ -39976,6 +40247,7 @@ export type SchemeCreateWithoutTermsInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
@@ -40035,6 +40307,7 @@ export type SchemeCreateWithoutTodosInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
@@ -40094,6 +40367,7 @@ export type SchemeCreateWithoutVehiclesInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
@@ -40168,6 +40442,7 @@ export type SchemeOrderByWithRelationInput = {
   intel?: InputMaybe<IntelOrderByRelationAggregateInput>;
   investigations?: InputMaybe<InvestigationOrderByRelationAggregateInput>;
   investigationsInScheme?: InputMaybe<InvestigationOrderByRelationAggregateInput>;
+  loginEvents?: InputMaybe<LoginEventOrderByRelationAggregateInput>;
   logo?: InputMaybe<ImageOrderByWithRelationInput>;
   logoId?: InputMaybe<SortOrder>;
   members?: InputMaybe<UserSchemeOrderByRelationAggregateInput>;
@@ -40264,6 +40539,7 @@ export type SchemeUpdateInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -40865,6 +41141,16 @@ export type SchemeUpdateOneWithoutDocumentsNestedInput = {
   upsert?: InputMaybe<SchemeUpsertWithoutDocumentsInput>;
 };
 
+export type SchemeUpdateOneWithoutLoginEventsNestedInput = {
+  connect?: InputMaybe<SchemeWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<SchemeCreateOrConnectWithoutLoginEventsInput>;
+  create?: InputMaybe<SchemeCreateWithoutLoginEventsInput>;
+  delete?: InputMaybe<Scalars['Boolean']>;
+  disconnect?: InputMaybe<Scalars['Boolean']>;
+  update?: InputMaybe<SchemeUpdateWithoutLoginEventsInput>;
+  upsert?: InputMaybe<SchemeUpsertWithoutLoginEventsInput>;
+};
+
 export type SchemeUpdateOneWithoutTagsNestedInput = {
   connect?: InputMaybe<SchemeWhereUniqueInput>;
   connectOrCreate?: InputMaybe<SchemeCreateOrConnectWithoutTagsInput>;
@@ -41000,6 +41286,7 @@ export type SchemeUpdateWithoutActionsInSchemeInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -41059,6 +41346,7 @@ export type SchemeUpdateWithoutActionsInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -41118,6 +41406,7 @@ export type SchemeUpdateWithoutArticlesInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -41177,6 +41466,7 @@ export type SchemeUpdateWithoutBansInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -41236,6 +41526,7 @@ export type SchemeUpdateWithoutBusinessesInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -41295,6 +41586,7 @@ export type SchemeUpdateWithoutChatsInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -41354,6 +41646,7 @@ export type SchemeUpdateWithoutContactsInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -41413,6 +41706,7 @@ export type SchemeUpdateWithoutCrimeGroupsInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -41472,6 +41766,7 @@ export type SchemeUpdateWithoutCustomGalleriesInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -41531,6 +41826,7 @@ export type SchemeUpdateWithoutDarkLogoInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -41590,6 +41886,7 @@ export type SchemeUpdateWithoutDocumentsInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -41649,6 +41946,7 @@ export type SchemeUpdateWithoutFeedItemsInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -41708,6 +42006,7 @@ export type SchemeUpdateWithoutGroupsInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -41767,6 +42066,7 @@ export type SchemeUpdateWithoutImagesInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -41826,6 +42126,7 @@ export type SchemeUpdateWithoutIncidentsInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -41885,6 +42186,7 @@ export type SchemeUpdateWithoutIntelInput = {
   incidents?: InputMaybe<IncidentUpdateManyWithoutSchemeNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -41944,6 +42246,7 @@ export type SchemeUpdateWithoutInvestigationsInSchemeInput = {
   incidents?: InputMaybe<IncidentUpdateManyWithoutSchemeNestedInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -42002,6 +42305,67 @@ export type SchemeUpdateWithoutInvestigationsInput = {
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutSchemeNestedInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
+  investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
+  logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
+  members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
+  mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutSchemeNestedInput>;
+  mg11Available?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  notifications?: InputMaybe<NotificationUpdateManyWithoutSchemesNestedInput>;
+  offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  offenders?: InputMaybe<OffenderUpdateManyWithoutSchemeNestedInput>;
+  recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutSchemeNestedInput>;
+  rekCollections?: InputMaybe<RekCollectionUpdateManyWithoutSchemesNestedInput>;
+  reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
+  reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
+  schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
+  tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
+  tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
+  terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
+  termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
+  todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+};
+
+export type SchemeUpdateWithoutLoginEventsInput = {
+  actions?: InputMaybe<ActionUpdateManyWithoutSchemeNestedInput>;
+  actionsInScheme?: InputMaybe<ActionUpdateManyWithoutInSchemeNestedInput>;
+  approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
+  autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
+  businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
+  chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
+  customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
+  darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
+  defaultIncidentEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultIncidentPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
+  facialRecognition?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutSchemesNestedInput>;
+  groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  incidents?: InputMaybe<IncidentUpdateManyWithoutSchemeNestedInput>;
+  intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
+  investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
@@ -42063,6 +42427,7 @@ export type SchemeUpdateWithoutLogoInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutSchemeNestedInput>;
@@ -42122,6 +42487,7 @@ export type SchemeUpdateWithoutMembersInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutSchemeNestedInput>;
@@ -42181,6 +42547,7 @@ export type SchemeUpdateWithoutMessagesInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -42240,6 +42607,7 @@ export type SchemeUpdateWithoutNotificationsInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -42299,6 +42667,7 @@ export type SchemeUpdateWithoutOffendersInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -42358,6 +42727,7 @@ export type SchemeUpdateWithoutRecycledItemsInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -42417,6 +42787,7 @@ export type SchemeUpdateWithoutRekCollectionsInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -42476,6 +42847,7 @@ export type SchemeUpdateWithoutReportIconsInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -42535,6 +42907,7 @@ export type SchemeUpdateWithoutReportTemplatesInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -42594,6 +42967,7 @@ export type SchemeUpdateWithoutSchemeTagsInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -42653,6 +43027,7 @@ export type SchemeUpdateWithoutStatementTemplatesInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -42712,6 +43087,7 @@ export type SchemeUpdateWithoutTagOrdersInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -42771,6 +43147,7 @@ export type SchemeUpdateWithoutTagsInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -42830,6 +43207,7 @@ export type SchemeUpdateWithoutTermsInSchemeInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -42889,6 +43267,7 @@ export type SchemeUpdateWithoutTermsInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -42948,6 +43327,7 @@ export type SchemeUpdateWithoutTodosInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -43007,6 +43387,7 @@ export type SchemeUpdateWithoutVehiclesInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -43193,6 +43574,11 @@ export type SchemeUpsertWithoutInvestigationsInput = {
   update: SchemeUpdateWithoutInvestigationsInput;
 };
 
+export type SchemeUpsertWithoutLoginEventsInput = {
+  create: SchemeCreateWithoutLoginEventsInput;
+  update: SchemeUpdateWithoutLoginEventsInput;
+};
+
 export type SchemeUpsertWithoutMembersInput = {
   create: SchemeCreateWithoutMembersInput;
   update: SchemeUpdateWithoutMembersInput;
@@ -43268,6 +43654,7 @@ export type SchemeWhereInput = {
   intel?: InputMaybe<IntelListRelationFilter>;
   investigations?: InputMaybe<InvestigationListRelationFilter>;
   investigationsInScheme?: InputMaybe<InvestigationListRelationFilter>;
+  loginEvents?: InputMaybe<LoginEventListRelationFilter>;
   logo?: InputMaybe<ImageWhereInput>;
   logoId?: InputMaybe<StringNullableFilter>;
   members?: InputMaybe<UserSchemeListRelationFilter>;
@@ -47298,6 +47685,7 @@ export type UpdateInvestigationInput = {
   name?: InputMaybe<Scalars['String']>;
   offenderIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   schemeId?: InputMaybe<Scalars['String']>;
+  status?: InputMaybe<InvestigationStatus>;
   vehicleIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
@@ -48291,6 +48679,7 @@ export type UploadIncidentImage = {
   policeImage?: InputMaybe<Scalars['Boolean']>;
   position?: InputMaybe<ImagePosition>;
   primary?: InputMaybe<Scalars['Boolean']>;
+  rotation?: InputMaybe<Scalars['Int']>;
   url?: InputMaybe<UrlImage>;
 };
 
@@ -48304,6 +48693,7 @@ export type UploadOffenderImage = {
   policeImage?: InputMaybe<Scalars['Boolean']>;
   position?: InputMaybe<ImagePosition>;
   primary?: InputMaybe<Scalars['Boolean']>;
+  rotation?: InputMaybe<Scalars['Int']>;
   url?: InputMaybe<UrlImage>;
 };
 
@@ -48317,6 +48707,7 @@ export type UploadVehicleImage = {
   policeImage?: InputMaybe<Scalars['Boolean']>;
   position?: InputMaybe<ImagePosition>;
   primary?: InputMaybe<Scalars['Boolean']>;
+  rotation?: InputMaybe<Scalars['Int']>;
   url?: InputMaybe<UrlImage>;
 };
 
@@ -48348,6 +48739,7 @@ export type User = {
   incidents: Array<Incident>;
   ipAddress?: Maybe<Scalars['String']>;
   lastLogin?: Maybe<LoginEvent>;
+  lastTenLogin?: Maybe<Array<Maybe<LoginEvent>>>;
   loginEvents: Array<LoginEvent>;
   messagePush: Scalars['Boolean'];
   messages: Array<Message>;
@@ -48373,7 +48765,9 @@ export type User = {
   termsSigned: Scalars['Boolean'];
   timeSigned?: Maybe<Scalars['DateTime']>;
   totalChats?: Maybe<Scalars['Int']>;
+  totalLastYearLogin?: Maybe<Scalars['Int']>;
   totalNotifications?: Maybe<Scalars['Int']>;
+  totalThirtyDaysLogin?: Maybe<Scalars['Int']>;
   totalUnreadNotifications?: Maybe<Scalars['Int']>;
   unreadNotifications?: Maybe<Array<Maybe<UserNotification>>>;
   updatedAt: Scalars['DateTime'];
@@ -48791,6 +49185,8 @@ export type UserChatWhereUniqueInput = {
 
 export type UserContribution = {
   __typename?: 'UserContribution';
+  businesses?: Maybe<Array<Maybe<Scalars['String']>>>;
+  lastLogin?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   totalIncidents: Scalars['Int'];
   totalLogins: Scalars['Int'];
@@ -49087,6 +49483,12 @@ export type UserCreateNestedOneWithoutInvestigationsInput = {
   create?: InputMaybe<UserCreateWithoutInvestigationsInput>;
 };
 
+export type UserCreateNestedOneWithoutLoginEventsInput = {
+  connect?: InputMaybe<UserWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<UserCreateOrConnectWithoutLoginEventsInput>;
+  create?: InputMaybe<UserCreateWithoutLoginEventsInput>;
+};
+
 export type UserCreateNestedOneWithoutMessagesInput = {
   connect?: InputMaybe<UserWhereUniqueInput>;
   connectOrCreate?: InputMaybe<UserCreateOrConnectWithoutMessagesInput>;
@@ -49253,6 +49655,11 @@ export type UserCreateOrConnectWithoutIntelInput = {
 
 export type UserCreateOrConnectWithoutInvestigationsInput = {
   create: UserCreateWithoutInvestigationsInput;
+  where: UserWhereUniqueInput;
+};
+
+export type UserCreateOrConnectWithoutLoginEventsInput = {
+  create: UserCreateWithoutLoginEventsInput;
   where: UserWhereUniqueInput;
 };
 
@@ -50982,6 +51389,79 @@ export type UserCreateWithoutInvestigationsInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutCreatedByInput>;
   ipAddress?: InputMaybe<Scalars['String']>;
   loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutUserInput>;
+  mentionedUpdated?: InputMaybe<UpdateCreateNestedManyWithoutMentionedUsersInput>;
+  messageMentions?: InputMaybe<MessageCreateNestedManyWithoutMentionsInput>;
+  messagePush?: InputMaybe<Scalars['Boolean']>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutFromInput>;
+  mg11s?: InputMaybe<Mg11CreateNestedManyWithoutCreatedByInput>;
+  newSchemeNotifications?: InputMaybe<NotificationCreateNestedManyWithoutUserInput>;
+  newUser?: InputMaybe<Scalars['Boolean']>;
+  notifications?: InputMaybe<UserNotificationCreateNestedManyWithoutUserInput>;
+  offenderEmail?: InputMaybe<Scalars['Boolean']>;
+  offenderPush?: InputMaybe<Scalars['Boolean']>;
+  offenders?: InputMaybe<OffenderCreateNestedManyWithoutCreatedByInput>;
+  onboardSteps?: InputMaybe<OnboardSteps>;
+  oneSignalIds?: InputMaybe<OneSignalIdCreateNestedManyWithoutUserInput>;
+  organisation: Scalars['String'];
+  platform?: InputMaybe<Scalars['String']>;
+  publicName?: InputMaybe<Scalars['Boolean']>;
+  recycled?: InputMaybe<Scalars['Boolean']>;
+  recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
+  reference?: InputMaybe<Scalars['Int']>;
+  schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  status?: InputMaybe<UserStatus>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
+  subscribedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
+  subscribedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutSubscribedUsersInput>;
+  tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
+  termsSigned?: InputMaybe<Scalars['Boolean']>;
+  timeSigned?: InputMaybe<Scalars['DateTime']>;
+  type?: InputMaybe<UserType>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploaded?: InputMaybe<Scalars['Boolean']>;
+  userTerms?: InputMaybe<UserTermCreateNestedManyWithoutUserInput>;
+  vehicles?: InputMaybe<VehicleCreateNestedManyWithoutCreatedByInput>;
+};
+
+export type UserCreateWithoutLoginEventsInput = {
+  actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
+  actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
+  addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
+  articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedTodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
+  auth0Id?: InputMaybe<Scalars['String']>;
+  bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
+  businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
+  chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedTodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
+  contact?: InputMaybe<ContactCreateNestedOneWithoutUserInput>;
+  createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
+  createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
+  createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  demId?: InputMaybe<Scalars['String']>;
+  disabled?: InputMaybe<Scalars['Boolean']>;
+  email: Scalars['String'];
+  expoPushTokens?: InputMaybe<ExpoPushTokenCreateNestedManyWithoutUserInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutCreatedByInput>;
+  fullName: Scalars['String'];
+  groups?: InputMaybe<GroupCreateNestedManyWithoutUsersInput>;
+  id?: InputMaybe<Scalars['String']>;
+  images?: InputMaybe<ImageCreateNestedManyWithoutUploadedByInput>;
+  impressions?: InputMaybe<ImpressionCreateNestedManyWithoutUserInput>;
+  incidentEmail?: InputMaybe<Scalars['Boolean']>;
+  incidentPush?: InputMaybe<Scalars['Boolean']>;
+  incidents?: InputMaybe<IncidentCreateNestedManyWithoutCreatedByInput>;
+  intel?: InputMaybe<IntelCreateNestedManyWithoutCreatedByInput>;
+  investigations?: InputMaybe<InvestigationCreateNestedManyWithoutCreatedByInput>;
+  ipAddress?: InputMaybe<Scalars['String']>;
   mentionedUpdated?: InputMaybe<UpdateCreateNestedManyWithoutMentionedUsersInput>;
   messageMentions?: InputMaybe<MessageCreateNestedManyWithoutMentionsInput>;
   messagePush?: InputMaybe<Scalars['Boolean']>;
@@ -53606,6 +54086,14 @@ export type UserUpdateOneRequiredWithoutInvestigationsNestedInput = {
   upsert?: InputMaybe<UserUpsertWithoutInvestigationsInput>;
 };
 
+export type UserUpdateOneRequiredWithoutLoginEventsNestedInput = {
+  connect?: InputMaybe<UserWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<UserCreateOrConnectWithoutLoginEventsInput>;
+  create?: InputMaybe<UserCreateWithoutLoginEventsInput>;
+  update?: InputMaybe<UserUpdateWithoutLoginEventsInput>;
+  upsert?: InputMaybe<UserUpsertWithoutLoginEventsInput>;
+};
+
 export type UserUpdateOneRequiredWithoutMessagesNestedInput = {
   connect?: InputMaybe<UserWhereUniqueInput>;
   connectOrCreate?: InputMaybe<UserCreateOrConnectWithoutMessagesInput>;
@@ -55498,6 +55986,79 @@ export type UserUpdateWithoutInvestigationsInput = {
   vehicles?: InputMaybe<VehicleUpdateManyWithoutCreatedByNestedInput>;
 };
 
+export type UserUpdateWithoutLoginEventsInput = {
+  actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
+  actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
+  addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
+  articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedTodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
+  auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
+  businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
+  chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedTodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
+  contact?: InputMaybe<ContactUpdateOneWithoutUserNestedInput>;
+  createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
+  createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
+  createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  email?: InputMaybe<StringFieldUpdateOperationsInput>;
+  expoPushTokens?: InputMaybe<ExpoPushTokenUpdateManyWithoutUserNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutCreatedByNestedInput>;
+  fullName?: InputMaybe<StringFieldUpdateOperationsInput>;
+  groups?: InputMaybe<GroupUpdateManyWithoutUsersNestedInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  images?: InputMaybe<ImageUpdateManyWithoutUploadedByNestedInput>;
+  impressions?: InputMaybe<ImpressionUpdateManyWithoutUserNestedInput>;
+  incidentEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  incidentPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  incidents?: InputMaybe<IncidentUpdateManyWithoutCreatedByNestedInput>;
+  intel?: InputMaybe<IntelUpdateManyWithoutCreatedByNestedInput>;
+  investigations?: InputMaybe<InvestigationUpdateManyWithoutCreatedByNestedInput>;
+  ipAddress?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  mentionedUpdated?: InputMaybe<UpdateUpdateManyWithoutMentionedUsersNestedInput>;
+  messageMentions?: InputMaybe<MessageUpdateManyWithoutMentionsNestedInput>;
+  messagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutFromNestedInput>;
+  mg11s?: InputMaybe<Mg11UpdateManyWithoutCreatedByNestedInput>;
+  newSchemeNotifications?: InputMaybe<NotificationUpdateManyWithoutUserNestedInput>;
+  newUser?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  notifications?: InputMaybe<UserNotificationUpdateManyWithoutUserNestedInput>;
+  offenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  offenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  offenders?: InputMaybe<OffenderUpdateManyWithoutCreatedByNestedInput>;
+  onboardSteps?: InputMaybe<EnumOnboardStepsFieldUpdateOperationsInput>;
+  oneSignalIds?: InputMaybe<OneSignalIdUpdateManyWithoutUserNestedInput>;
+  organisation?: InputMaybe<StringFieldUpdateOperationsInput>;
+  platform?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  publicName?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByNestedInput>;
+  reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserNestedInput>;
+  status?: InputMaybe<NullableEnumUserStatusFieldUpdateOperationsInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  subscribedIncidents?: InputMaybe<IncidentUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  subscribedOffenders?: InputMaybe<OffenderUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedVehicles?: InputMaybe<VehicleUpdateManyWithoutSubscribedUsersNestedInput>;
+  tags?: InputMaybe<TagUpdateManyWithoutUsersNestedInput>;
+  termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
+  type?: InputMaybe<EnumUserTypeFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploaded?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  userTerms?: InputMaybe<UserTermUpdateManyWithoutUserNestedInput>;
+  vehicles?: InputMaybe<VehicleUpdateManyWithoutCreatedByNestedInput>;
+};
+
 export type UserUpdateWithoutMentionedUpdatedInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
   actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
@@ -56905,6 +57466,11 @@ export type UserUpsertWithoutIntelInput = {
 export type UserUpsertWithoutInvestigationsInput = {
   create: UserCreateWithoutInvestigationsInput;
   update: UserUpdateWithoutInvestigationsInput;
+};
+
+export type UserUpsertWithoutLoginEventsInput = {
+  create: UserCreateWithoutLoginEventsInput;
+  update: UserUpdateWithoutLoginEventsInput;
 };
 
 export type UserUpsertWithoutMessagesInput = {
@@ -59363,6 +59929,7 @@ export type ArticlesQuery = {
       optimised?: string | null;
       card?: string | null;
       position: ImagePosition;
+      rotation: number;
     }>;
     image?: {
       __typename?: 'Image';
@@ -59414,6 +59981,7 @@ export type ListArticlesQuery = {
         optimised?: string | null;
         card?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
       image?: {
         __typename?: 'Image';
@@ -59472,6 +60040,7 @@ export type ArticleQuery = {
       optimised?: string | null;
       card?: string | null;
       position: ImagePosition;
+      rotation: number;
     }>;
     image?: {
       __typename?: 'Image';
@@ -59517,6 +60086,7 @@ export type ArticleQuery = {
             id: string;
             url?: string | null;
             position: ImagePosition;
+            rotation: number;
             optimised?: string | null;
             card?: string | null;
             offenders: Array<{ __typename?: 'Offender'; id: string }>;
@@ -59556,6 +60126,7 @@ export type ArticleQuery = {
             id: string;
             optimised?: string | null;
             position: ImagePosition;
+            rotation: number;
           }>;
           groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
           createdBy: {
@@ -59599,6 +60170,7 @@ export type ArticleQuery = {
               id: string;
               optimised?: string | null;
               position: ImagePosition;
+              rotation: number;
             }>;
           }>;
         }>;
@@ -59769,6 +60341,15 @@ export type CreateBusinessMutation = {
       full?: string | null;
     }>;
   };
+};
+
+export type DeleteBusinessMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+export type DeleteBusinessMutation = {
+  __typename?: 'Mutation';
+  deleteBusiness: { __typename?: 'Business'; id: string };
 };
 
 export type LinkBusinessToSchemeMutationVariables = Exact<{
@@ -60343,6 +60924,7 @@ export type UpdateCrimeGroupMutation = {
         id: string;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }>;
     vehicles: Array<{ __typename?: 'Vehicle'; id: string }>;
@@ -60427,6 +61009,7 @@ export type SuggestedCrimeGroupMembersQuery = {
         id: string;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
       associatedIncidents?: Array<{
         __typename?: 'Incident';
@@ -60505,6 +61088,7 @@ export type CrimeGroupQuery = {
         id: string;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }>;
     vehicles: Array<{
@@ -60557,6 +61141,7 @@ export type CrimeGroupQuery = {
         url?: string | null;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
         card?: string | null;
       }>;
       linkedCrimeGroups: Array<{
@@ -60587,6 +61172,7 @@ export type CrimeGroupQuery = {
           url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
       }>;
       linkedIncidents: Array<{
@@ -60601,6 +61187,7 @@ export type CrimeGroupQuery = {
           url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
       }>;
       linkedOffenders: Array<{
@@ -60620,6 +61207,7 @@ export type CrimeGroupQuery = {
           url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
       }>;
       createdBy: {
@@ -60647,6 +61235,7 @@ export type CrimeGroupQuery = {
           optimised?: string | null;
           card?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
         linkedCrimeGroups: Array<{
           __typename?: 'CrimeGroup';
@@ -60676,6 +61265,7 @@ export type CrimeGroupQuery = {
             url?: string | null;
             optimised?: string | null;
             position: ImagePosition;
+            rotation: number;
           }>;
         }>;
         linkedIncidents: Array<{
@@ -60690,6 +61280,7 @@ export type CrimeGroupQuery = {
             url?: string | null;
             optimised?: string | null;
             position: ImagePosition;
+            rotation: number;
           }>;
         }>;
         linkedOffenders: Array<{
@@ -60709,6 +61300,7 @@ export type CrimeGroupQuery = {
             url?: string | null;
             optimised?: string | null;
             position: ImagePosition;
+            rotation: number;
           }>;
         }>;
         createdBy: {
@@ -60938,6 +61530,7 @@ export type FeedItemsQuery = {
             url?: string | null;
             optimised?: string | null;
             position: ImagePosition;
+            rotation: number;
           }>;
         };
       } | null;
@@ -60968,6 +61561,7 @@ export type FeedItemsQuery = {
           optimised?: string | null;
           card?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
         image?: {
           __typename?: 'Image';
@@ -60975,6 +61569,7 @@ export type FeedItemsQuery = {
           url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
+          rotation: number;
           card?: string | null;
         } | null;
       } | null;
@@ -61003,6 +61598,7 @@ export type FeedItemsQuery = {
             url?: string | null;
             optimised?: string | null;
             position: ImagePosition;
+            rotation: number;
             card?: string | null;
           }>;
           linkedCrimeGroups: Array<{
@@ -61033,6 +61629,7 @@ export type FeedItemsQuery = {
               url?: string | null;
               optimised?: string | null;
               position: ImagePosition;
+              rotation: number;
             }>;
           }>;
           linkedIncidents: Array<{
@@ -61047,6 +61644,7 @@ export type FeedItemsQuery = {
               url?: string | null;
               optimised?: string | null;
               position: ImagePosition;
+              rotation: number;
             }>;
           }>;
           linkedOffenders: Array<{
@@ -61066,6 +61664,7 @@ export type FeedItemsQuery = {
               url?: string | null;
               optimised?: string | null;
               position: ImagePosition;
+              rotation: number;
             }>;
           }>;
           createdBy: {
@@ -61097,6 +61696,7 @@ export type FeedItemsQuery = {
           id: string;
           optimised?: string | null;
           position: ImagePosition;
+          rotation: number;
           url?: string | null;
         }>;
         updates: Array<{
@@ -61112,6 +61712,7 @@ export type FeedItemsQuery = {
             url?: string | null;
             optimised?: string | null;
             position: ImagePosition;
+            rotation: number;
             card?: string | null;
           }>;
           linkedCrimeGroups: Array<{
@@ -61141,6 +61742,7 @@ export type FeedItemsQuery = {
               id: string;
               url?: string | null;
               position: ImagePosition;
+              rotation: number;
               optimised?: string | null;
             }>;
           }>;
@@ -61156,6 +61758,7 @@ export type FeedItemsQuery = {
               url?: string | null;
               optimised?: string | null;
               position: ImagePosition;
+              rotation: number;
             }>;
           }>;
           linkedOffenders: Array<{
@@ -61175,6 +61778,7 @@ export type FeedItemsQuery = {
               url?: string | null;
               optimised?: string | null;
               position: ImagePosition;
+              rotation: number;
             }>;
           }>;
           createdBy: {
@@ -61225,6 +61829,7 @@ export type FeedItemsQuery = {
             url?: string | null;
             optimised?: string | null;
             position: ImagePosition;
+            rotation: number;
             card?: string | null;
           }>;
           linkedCrimeGroups: Array<{
@@ -61255,6 +61860,7 @@ export type FeedItemsQuery = {
               url?: string | null;
               optimised?: string | null;
               position: ImagePosition;
+              rotation: number;
             }>;
           }>;
           linkedIncidents: Array<{
@@ -61269,6 +61875,7 @@ export type FeedItemsQuery = {
               url?: string | null;
               optimised?: string | null;
               position: ImagePosition;
+              rotation: number;
             }>;
           }>;
           linkedOffenders: Array<{
@@ -61288,6 +61895,7 @@ export type FeedItemsQuery = {
               url?: string | null;
               optimised?: string | null;
               position: ImagePosition;
+              rotation: number;
             }>;
           }>;
           createdBy: {
@@ -61329,6 +61937,7 @@ export type FeedItemsQuery = {
             url?: string | null;
             optimised?: string | null;
             position: ImagePosition;
+            rotation: number;
             card?: string | null;
           }>;
           linkedCrimeGroups: Array<{
@@ -61358,6 +61967,7 @@ export type FeedItemsQuery = {
               id: string;
               url?: string | null;
               position: ImagePosition;
+              rotation: number;
               optimised?: string | null;
             }>;
           }>;
@@ -61372,6 +61982,7 @@ export type FeedItemsQuery = {
               id: string;
               url?: string | null;
               position: ImagePosition;
+              rotation: number;
               optimised?: string | null;
             }>;
           }>;
@@ -61392,6 +62003,7 @@ export type FeedItemsQuery = {
               url?: string | null;
               optimised?: string | null;
               position: ImagePosition;
+              rotation: number;
             }>;
           }>;
           createdBy: {
@@ -61425,6 +62037,7 @@ export type FeedItemsQuery = {
           optimised?: string | null;
           url?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
         groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
       } | null;
@@ -61478,6 +62091,7 @@ export type FeedItemsQuery = {
             url?: string | null;
             optimised?: string | null;
             position: ImagePosition;
+            rotation: number;
             card?: string | null;
           }>;
           linkedCrimeGroups: Array<{
@@ -61507,6 +62121,7 @@ export type FeedItemsQuery = {
               id: string;
               url?: string | null;
               position: ImagePosition;
+              rotation: number;
               optimised?: string | null;
             }>;
           }>;
@@ -61521,6 +62136,7 @@ export type FeedItemsQuery = {
               id: string;
               url?: string | null;
               position: ImagePosition;
+              rotation: number;
               optimised?: string | null;
             }>;
           }>;
@@ -61540,6 +62156,7 @@ export type FeedItemsQuery = {
               id: string;
               url?: string | null;
               position: ImagePosition;
+              rotation: number;
               optimised?: string | null;
             }>;
           }>;
@@ -61561,6 +62178,7 @@ export type FeedItemsQuery = {
           url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
+          rotation: number;
           card?: string | null;
         }>;
         groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
@@ -61604,6 +62222,7 @@ export type FeedItemsQuery = {
             id: string;
             optimised?: string | null;
             position: ImagePosition;
+            rotation: number;
           }>;
         }>;
       } | null;
@@ -61749,6 +62368,7 @@ export type AddImagesToIncidentMutation = {
       optimised?: string | null;
       card?: string | null;
       position: ImagePosition;
+      rotation: number;
     }>;
   } | null;
 };
@@ -61796,6 +62416,7 @@ export type CreateIncidentMutation = {
       optimised?: string | null;
       url?: string | null;
       position: ImagePosition;
+      rotation: number;
     }>;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     offenders: Array<{
@@ -61823,6 +62444,7 @@ export type CreateIncidentMutation = {
         optimised?: string | null;
         card?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
       tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
     }>;
@@ -61861,6 +62483,31 @@ export type UnsubscribeFromIncidentMutation = {
     __typename?: 'Incident';
     id: string;
     subscribed?: boolean | null;
+  } | null;
+};
+
+export type UpdateIncidentImagesMutationVariables = Exact<{
+  id: Scalars['String'];
+  images?: InputMaybe<ImageUpdateManyWithoutIncidentNestedInput>;
+}>;
+
+export type UpdateIncidentImagesMutation = {
+  __typename?: 'Mutation';
+  updateIncident?: {
+    __typename?: 'Incident';
+    id: string;
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+      optimisticUri?: string | null;
+      uploaded: boolean;
+      position: ImagePosition;
+      primary?: boolean | null;
+      policeImage?: boolean | null;
+      rotation: number;
+    }>;
   } | null;
 };
 
@@ -61913,6 +62560,7 @@ export type UpdateIncidentMutation = {
       id: string;
       optimised?: string | null;
       position: ImagePosition;
+      rotation: number;
       url?: string | null;
       card?: string | null;
     }>;
@@ -61940,6 +62588,7 @@ export type UpdateIncidentMutation = {
         id: string;
         url?: string | null;
         position: ImagePosition;
+        rotation: number;
         optimised?: string | null;
         card?: string | null;
       }>;
@@ -61965,6 +62614,330 @@ export type AddressesQuery = {
     primary?: boolean | null;
     full?: string | null;
   }>;
+};
+
+export type EditIncidentFeedQueryVariables = Exact<{
+  where: IncidentWhereUniqueInput;
+}>;
+
+export type EditIncidentFeedQuery = {
+  __typename?: 'Query';
+  incident?: {
+    __typename?: 'Incident';
+    id: string;
+    subject?: string | null;
+    description: string;
+    date: Date;
+    time: Date;
+    reference?: number | null;
+    ref?: string | null;
+    policeReported: boolean;
+    policeRef?: string | null;
+    policeNo?: string | null;
+    policeInvolved: boolean;
+    subscribed?: boolean | null;
+    totalValue?: number | null;
+    totalRecoveredValue?: number | null;
+    approved?: boolean | null;
+    crimeTypes: Array<{
+      __typename?: 'Tag';
+      id: string;
+      name: string;
+      crimeType?: CrimeType | null;
+    }>;
+    involvedTags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+    impactTags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+    incidentItems: Array<{
+      __typename?: 'IncidentItem';
+      id: string;
+      name: string;
+      value: number;
+      recoveredValue: number;
+      goodsType: { __typename?: 'GoodsType'; id: string };
+    }>;
+    location?: {
+      __typename?: 'Address';
+      id: string;
+      building?: string | null;
+      street: string;
+      townCity: string;
+      county?: string | null;
+      postcode: string;
+    } | null;
+    business?: { __typename?: 'Business'; id: string; name: string } | null;
+    createdBy: {
+      __typename?: 'User';
+      id: string;
+      fullName: string;
+      businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
+    };
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      optimised?: string | null;
+      url?: string | null;
+      position: ImagePosition;
+      rotation: number;
+      primary?: boolean | null;
+      policeImage?: boolean | null;
+      offenders: Array<{
+        __typename?: 'Offender';
+        id: string;
+        name?: string | null;
+      }>;
+    }>;
+    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+    crimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      id: string;
+      reference?: number | null;
+      alias?: string | null;
+      totalIncidents?: number | null;
+      totalOffenders?: number | null;
+      totalRecoveredValue?: number | null;
+      totalTheftSuccess?: number | null;
+      totalValue?: number | null;
+    }>;
+    vehicles: Array<{
+      __typename?: 'Vehicle';
+      id: string;
+      reference?: number | null;
+      colour?: string | null;
+      model?: string | null;
+      make?: string | null;
+      registration?: string | null;
+      totalCrimeGroups?: number | null;
+      totalIncidents?: number | null;
+      totalOffenders?: number | null;
+      updatedAt: Date;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+        position: ImagePosition;
+        rotation: number;
+      }>;
+    }>;
+    offenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      reference?: number | null;
+      createdAt: Date;
+      updatedAt: Date;
+      age?: Age | null;
+      build?: Build | null;
+      height?: Height | null;
+      dateOfBirth?: Date | null;
+      dateSource?: string | null;
+      gender?: Gender | null;
+      hair?: string | null;
+      name?: string | null;
+      peculiarities?: string | null;
+      race?: Race | null;
+      approved?: boolean | null;
+      uploaded?: boolean | null;
+      active?: boolean | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+        card?: string | null;
+        position: ImagePosition;
+        rotation: number;
+      }>;
+      tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+    }>;
+    updates: Array<{
+      __typename?: 'Update';
+      id: string;
+      text?: string | null;
+      type: UpdateType;
+      createdAt: Date;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+        position: ImagePosition;
+        rotation: number;
+        card?: string | null;
+      }>;
+      linkedCrimeGroups: Array<{
+        __typename?: 'CrimeGroup';
+        totalOffenders?: number | null;
+        totalIncidents?: number | null;
+        alias?: string | null;
+        id: string;
+        reference?: number | null;
+        totalRecoveredValue?: number | null;
+        totalTheftSuccess?: number | null;
+        totalValue?: number | null;
+        updatedAt: Date;
+      }>;
+      linkedVehicles: Array<{
+        __typename?: 'Vehicle';
+        updatedAt: Date;
+        totalOffenders?: number | null;
+        registration?: string | null;
+        reference?: number | null;
+        model?: string | null;
+        make?: string | null;
+        id: string;
+        colour?: string | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+          position: ImagePosition;
+          rotation: number;
+        }>;
+      }>;
+      linkedIncidents: Array<{
+        __typename?: 'Incident';
+        id: string;
+        subject?: string | null;
+        description: string;
+        dayTime?: string | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+          position: ImagePosition;
+          rotation: number;
+        }>;
+      }>;
+      linkedOffenders: Array<{
+        __typename?: 'Offender';
+        id: string;
+        updatedAt: Date;
+        age?: Age | null;
+        build?: Build | null;
+        height?: Height | null;
+        dateOfBirth?: Date | null;
+        name?: string | null;
+        race?: Race | null;
+        gender?: Gender | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+          position: ImagePosition;
+          rotation: number;
+        }>;
+      }>;
+      createdBy: {
+        __typename?: 'User';
+        origName: string;
+        id: string;
+        fullName: string;
+        businesses: Array<{
+          __typename?: 'Business';
+          id: string;
+          name: string;
+          fullName: string;
+        }>;
+      };
+      replies: Array<{
+        __typename?: 'Update';
+        id: string;
+        text?: string | null;
+        type: UpdateType;
+        createdAt: Date;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+          position: ImagePosition;
+          rotation: number;
+          card?: string | null;
+        }>;
+        linkedCrimeGroups: Array<{
+          __typename?: 'CrimeGroup';
+          totalOffenders?: number | null;
+          totalIncidents?: number | null;
+          alias?: string | null;
+          id: string;
+          reference?: number | null;
+          totalRecoveredValue?: number | null;
+          totalTheftSuccess?: number | null;
+          totalValue?: number | null;
+          updatedAt: Date;
+        }>;
+        linkedVehicles: Array<{
+          __typename?: 'Vehicle';
+          updatedAt: Date;
+          totalOffenders?: number | null;
+          registration?: string | null;
+          reference?: number | null;
+          model?: string | null;
+          make?: string | null;
+          id: string;
+          colour?: string | null;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+            position: ImagePosition;
+            rotation: number;
+          }>;
+        }>;
+        linkedIncidents: Array<{
+          __typename?: 'Incident';
+          id: string;
+          subject?: string | null;
+          description: string;
+          dayTime?: string | null;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+            position: ImagePosition;
+            rotation: number;
+          }>;
+        }>;
+        linkedOffenders: Array<{
+          __typename?: 'Offender';
+          id: string;
+          updatedAt: Date;
+          age?: Age | null;
+          build?: Build | null;
+          height?: Height | null;
+          dateOfBirth?: Date | null;
+          name?: string | null;
+          race?: Race | null;
+          gender?: Gender | null;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+            position: ImagePosition;
+            rotation: number;
+          }>;
+        }>;
+        createdBy: {
+          __typename?: 'User';
+          origName: string;
+          id: string;
+          fullName: string;
+          businesses: Array<{
+            __typename?: 'Business';
+            id: string;
+            name: string;
+            fullName: string;
+          }>;
+        };
+      }>;
+    }>;
+  } | null;
 };
 
 export type EditIncidentQueryVariables = Exact<{
@@ -62029,6 +63002,7 @@ export type EditIncidentQuery = {
       optimised?: string | null;
       url?: string | null;
       position: ImagePosition;
+      rotation: number;
       primary?: boolean | null;
       policeImage?: boolean | null;
       offenders: Array<{
@@ -62067,6 +63041,7 @@ export type EditIncidentQuery = {
         url?: string | null;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }>;
     offenders: Array<{
@@ -62095,6 +63070,7 @@ export type EditIncidentQuery = {
         optimised?: string | null;
         card?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
       tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
     }>;
@@ -62110,6 +63086,7 @@ export type EditIncidentQuery = {
         url?: string | null;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
         card?: string | null;
       }>;
       linkedCrimeGroups: Array<{
@@ -62140,6 +63117,7 @@ export type EditIncidentQuery = {
           url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
       }>;
       linkedIncidents: Array<{
@@ -62154,6 +63132,7 @@ export type EditIncidentQuery = {
           url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
       }>;
       linkedOffenders: Array<{
@@ -62173,6 +63152,7 @@ export type EditIncidentQuery = {
           url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
       }>;
       createdBy: {
@@ -62199,6 +63179,7 @@ export type EditIncidentQuery = {
           url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
+          rotation: number;
           card?: string | null;
         }>;
         linkedCrimeGroups: Array<{
@@ -62229,6 +63210,7 @@ export type EditIncidentQuery = {
             url?: string | null;
             optimised?: string | null;
             position: ImagePosition;
+            rotation: number;
           }>;
         }>;
         linkedIncidents: Array<{
@@ -62243,6 +63225,7 @@ export type EditIncidentQuery = {
             url?: string | null;
             optimised?: string | null;
             position: ImagePosition;
+            rotation: number;
           }>;
         }>;
         linkedOffenders: Array<{
@@ -62262,6 +63245,7 @@ export type EditIncidentQuery = {
             url?: string | null;
             optimised?: string | null;
             position: ImagePosition;
+            rotation: number;
           }>;
         }>;
         createdBy: {
@@ -62320,6 +63304,7 @@ export type IncidentFeedQuery = {
       url?: string | null;
       optimised?: string | null;
       position: ImagePosition;
+      rotation: number;
       card?: string | null;
       offenders: Array<{ __typename?: 'Offender'; id: string }>;
     }>;
@@ -62363,6 +63348,7 @@ export type ListIncidentsQuery = {
       __typename?: 'Incident';
       id: string;
       subject?: string | null;
+      totalImages?: number | null;
       description: string;
       dayTime?: string | null;
       reference?: number | null;
@@ -62389,6 +63375,7 @@ export type ListIncidentsQuery = {
         __typename?: 'Image';
         id: string;
         position: ImagePosition;
+        rotation: number;
         optimised?: string | null;
         url?: string | null;
       }>;
@@ -62429,6 +63416,7 @@ export type ListUnapprovedIncidentsQuery = {
         id: string;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
         url?: string | null;
       }>;
       crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
@@ -62506,6 +63494,7 @@ export type ViewIncidentQuery = {
       __typename?: 'Image';
       id: string;
       position: ImagePosition;
+      rotation: number;
       optimised?: string | null;
       url?: string | null;
     }>;
@@ -62538,6 +63527,7 @@ export type ViewIncidentQuery = {
         id: string;
         url?: string | null;
         position: ImagePosition;
+        rotation: number;
         optimised?: string | null;
       }>;
     }>;
@@ -62566,6 +63556,7 @@ export type ViewIncidentQuery = {
         url?: string | null;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
         card?: string | null;
       }>;
       tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
@@ -62582,6 +63573,7 @@ export type ViewIncidentQuery = {
         url?: string | null;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
         card?: string | null;
       }>;
       linkedCrimeGroups: Array<{
@@ -62611,6 +63603,7 @@ export type ViewIncidentQuery = {
           id: string;
           url?: string | null;
           position: ImagePosition;
+          rotation: number;
           optimised?: string | null;
         }>;
       }>;
@@ -62626,6 +63619,7 @@ export type ViewIncidentQuery = {
           url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
       }>;
       linkedOffenders: Array<{
@@ -62645,6 +63639,7 @@ export type ViewIncidentQuery = {
           url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
       }>;
       createdBy: {
@@ -62671,6 +63666,7 @@ export type ViewIncidentQuery = {
           url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
+          rotation: number;
           card?: string | null;
         }>;
         linkedCrimeGroups: Array<{
@@ -62701,6 +63697,7 @@ export type ViewIncidentQuery = {
             url?: string | null;
             optimised?: string | null;
             position: ImagePosition;
+            rotation: number;
           }>;
         }>;
         linkedIncidents: Array<{
@@ -62715,6 +63712,7 @@ export type ViewIncidentQuery = {
             url?: string | null;
             optimised?: string | null;
             position: ImagePosition;
+            rotation: number;
           }>;
         }>;
         linkedOffenders: Array<{
@@ -62734,6 +63732,7 @@ export type ViewIncidentQuery = {
             url?: string | null;
             optimised?: string | null;
             position: ImagePosition;
+            rotation: number;
           }>;
         }>;
         createdBy: {
@@ -62784,6 +63783,7 @@ export type CreateInvestigationMutation = {
     id: string;
     name: string;
     description?: string | null;
+    status: InvestigationStatus;
   } | null;
 };
 
@@ -62960,6 +63960,7 @@ export type InvestigationSuggestionsQuery = {
         id: string;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
       associatedIncidents?: Array<{
         __typename?: 'Incident';
@@ -63011,6 +64012,7 @@ export type InvestigationSuggestionsQuery = {
         id: string;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }> | null;
     suggestedIncidents?: Array<{
@@ -63027,6 +64029,7 @@ export type InvestigationSuggestionsQuery = {
         id: string;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
       location?: {
         __typename?: 'Address';
@@ -63051,6 +64054,7 @@ export type InvestigationSuggestionsQuery = {
           __typename?: 'Image';
           id: string;
           position: ImagePosition;
+          rotation: number;
           optimised?: string | null;
         }>;
       }>;
@@ -63074,6 +64078,7 @@ export type ListInvestigationsQuery = {
       id: string;
       name: string;
       description?: string | null;
+      status: InvestigationStatus;
     }>;
   } | null;
 };
@@ -63089,6 +64094,7 @@ export type ViewInvestigationQuery = {
     id: string;
     description?: string | null;
     name: string;
+    status: InvestigationStatus;
     totalOffenders?: number | null;
     totalIncidents?: number | null;
     totalValue?: number | null;
@@ -63131,6 +64137,7 @@ export type ViewInvestigationQuery = {
         optimisedPersisted?: string | null;
         card?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
       linkedCrimeGroups: Array<{
         __typename?: 'CrimeGroup';
@@ -63161,6 +64168,7 @@ export type ViewInvestigationQuery = {
           optimised?: string | null;
           optimisedPersisted?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
       }>;
       linkedIncidents: Array<{
@@ -63176,6 +64184,7 @@ export type ViewInvestigationQuery = {
           optimised?: string | null;
           optimisedPersisted?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
       }>;
       linkedOffenders: Array<{
@@ -63196,6 +64205,7 @@ export type ViewInvestigationQuery = {
           optimised?: string | null;
           optimisedPersisted?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
       }>;
       createdBy: {
@@ -63224,6 +64234,7 @@ export type ViewInvestigationQuery = {
           optimised?: string | null;
           card?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
         linkedCrimeGroups: Array<{
           __typename?: 'CrimeGroup';
@@ -63254,6 +64265,7 @@ export type ViewInvestigationQuery = {
             optimisedPersisted?: string | null;
             optimised?: string | null;
             position: ImagePosition;
+            rotation: number;
           }>;
         }>;
         linkedIncidents: Array<{
@@ -63268,6 +64280,7 @@ export type ViewInvestigationQuery = {
             url?: string | null;
             optimised?: string | null;
             position: ImagePosition;
+            rotation: number;
           }>;
         }>;
         linkedOffenders: Array<{
@@ -63288,6 +64301,7 @@ export type ViewInvestigationQuery = {
             optimised?: string | null;
             optimisedPersisted?: string | null;
             position: ImagePosition;
+            rotation: number;
           }>;
         }>;
         createdBy: {
@@ -63322,6 +64336,7 @@ export type ViewInvestigationQuery = {
         optimised?: string | null;
         optimisedPersisted?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }>;
     incidents: Array<{
@@ -63416,6 +64431,7 @@ export type CreateMessageMutation = {
       url?: string | null;
       optimised?: string | null;
       position: ImagePosition;
+      rotation: number;
     }>;
     crimeGroups: Array<{
       __typename?: 'CrimeGroup';
@@ -63439,6 +64455,7 @@ export type CreateMessageMutation = {
         optimised?: string | null;
         url?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }>;
     incidents: Array<{
@@ -63453,6 +64470,7 @@ export type CreateMessageMutation = {
         url?: string | null;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }>;
     offenders: Array<{
@@ -63472,6 +64490,7 @@ export type CreateMessageMutation = {
         url?: string | null;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }>;
   } | null;
@@ -63513,6 +64532,7 @@ export type UpdateMessageMutation = {
       id: string;
       url?: string | null;
       position: ImagePosition;
+      rotation: number;
       optimised?: string | null;
     }>;
     crimeGroups: Array<{
@@ -63537,6 +64557,7 @@ export type UpdateMessageMutation = {
         optimised?: string | null;
         url?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }>;
     incidents: Array<{
@@ -63551,6 +64572,7 @@ export type UpdateMessageMutation = {
         url?: string | null;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }>;
     offenders: Array<{
@@ -63570,6 +64592,7 @@ export type UpdateMessageMutation = {
         url?: string | null;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }>;
   } | null;
@@ -63612,6 +64635,7 @@ export type ChatMessagesQuery = {
       id: string;
       url?: string | null;
       position: ImagePosition;
+      rotation: number;
       optimised?: string | null;
     }>;
     crimeGroups: Array<{
@@ -63636,6 +64660,7 @@ export type ChatMessagesQuery = {
         optimised?: string | null;
         url?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }>;
     incidents: Array<{
@@ -63650,6 +64675,7 @@ export type ChatMessagesQuery = {
         url?: string | null;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }>;
     offenders: Array<{
@@ -63669,6 +64695,7 @@ export type ChatMessagesQuery = {
         url?: string | null;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }>;
   }>;
@@ -63699,6 +64726,7 @@ export type MessagesQuery = {
       id: string;
       url?: string | null;
       position: ImagePosition;
+      rotation: number;
       optimised?: string | null;
     }>;
     crimeGroups: Array<{
@@ -63728,6 +64756,7 @@ export type MessagesQuery = {
         id: string;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
         url?: string | null;
       }>;
     }>;
@@ -63743,6 +64772,7 @@ export type MessagesQuery = {
         url?: string | null;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }>;
     offenders: Array<{
@@ -63762,6 +64792,7 @@ export type MessagesQuery = {
         url?: string | null;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }>;
   }>;
@@ -63797,6 +64828,7 @@ export type MessagesSubscriptionSubscription = {
       url?: string | null;
       optimised?: string | null;
       position: ImagePosition;
+      rotation: number;
     }>;
     crimeGroups: Array<{
       __typename?: 'CrimeGroup';
@@ -63826,6 +64858,7 @@ export type MessagesSubscriptionSubscription = {
         optimised?: string | null;
         url?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }>;
     incidents: Array<{
@@ -63840,6 +64873,7 @@ export type MessagesSubscriptionSubscription = {
         url?: string | null;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }>;
     offenders: Array<{
@@ -63859,6 +64893,7 @@ export type MessagesSubscriptionSubscription = {
         url?: string | null;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }>;
   } | null> | null;
@@ -63950,6 +64985,7 @@ export type AddImagesToOffenderMutation = {
       optimised?: string | null;
       card?: string | null;
       position: ImagePosition;
+      rotation: number;
     }>;
   } | null;
 };
@@ -63985,6 +65021,7 @@ export type CreateOffenderMutation = {
       url?: string | null;
       optimised?: string | null;
       position: ImagePosition;
+      rotation: number;
     }>;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
@@ -64033,6 +65070,7 @@ export type CreateOffenderMutation = {
         url?: string | null;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }>;
   } | null;
@@ -64082,6 +65120,31 @@ export type UnsubscribeFromOffenderMutation = {
   } | null;
 };
 
+export type UpdateOffenderImagesMutationVariables = Exact<{
+  id: Scalars['String'];
+  images?: InputMaybe<ImageUpdateManyWithoutOffendersNestedInput>;
+}>;
+
+export type UpdateOffenderImagesMutation = {
+  __typename?: 'Mutation';
+  updateOffender?: {
+    __typename?: 'Offender';
+    id: string;
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+      optimisticUri?: string | null;
+      card?: string | null;
+      position: ImagePosition;
+      rotation: number;
+      primary?: boolean | null;
+      policeImage?: boolean | null;
+    }>;
+  } | null;
+};
+
 export type UpdateOffenderMutationVariables = Exact<{
   where: UniqueId;
   data: OffenderUpdateInput;
@@ -64114,6 +65177,7 @@ export type UpdateOffenderMutation = {
       url?: string | null;
       optimised?: string | null;
       position: ImagePosition;
+      rotation: number;
     }>;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
@@ -64170,6 +65234,7 @@ export type AssociatedOffendersQuery = {
         id: string;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
       associatedCrimeGroups?: Array<{
         __typename?: 'CrimeGroup';
@@ -64235,6 +65300,7 @@ export type ViewOffenderCompareQuery = {
       id: string;
       optimised?: string | null;
       position: ImagePosition;
+      rotation: number;
     }>;
     tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
     lastActive?: {
@@ -64270,6 +65336,7 @@ export type ViewOffendersCompareQuery = {
       id: string;
       optimised?: string | null;
       position: ImagePosition;
+      rotation: number;
     }>;
     tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
     lastActive?: {
@@ -64297,6 +65364,7 @@ export type ListOffendersQuery = {
       __typename?: 'Offender';
       id: string;
       reference?: number | null;
+      totalImages?: number | null;
       createdAt: Date;
       updatedAt: Date;
       totalIncidents?: number | null;
@@ -64323,6 +65391,7 @@ export type ListOffendersQuery = {
         id: string;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
         optimisedPersisted?: string | null;
       }>;
       groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
@@ -64344,8 +65413,6 @@ export type ListOffendersQuery = {
         description: string;
         dayTime?: string | null;
         date: Date;
-        approved?: boolean | null;
-        crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
         location?: {
           __typename?: 'Address';
           id: string;
@@ -64361,12 +65428,6 @@ export type ListOffendersQuery = {
             name: string;
           }>;
         };
-        images: Array<{
-          __typename?: 'Image';
-          id: string;
-          optimised?: string | null;
-          position: ImagePosition;
-        }>;
       }>;
     }>;
   } | null;
@@ -64423,6 +65484,7 @@ export type OffenderFeedQuery = {
       optimised?: string | null;
       card?: string | null;
       position: ImagePosition;
+      rotation: number;
     }>;
     tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
@@ -64474,6 +65536,7 @@ export type ViewOffenderMatchesQuery = {
             url?: string | null;
             optimised?: string | null;
             position: ImagePosition;
+            rotation: number;
             faces: Array<{
               __typename?: 'RekFace';
               id: string;
@@ -64515,6 +65578,7 @@ export type ViewOffenderMatchesQuery = {
           __typename?: 'Image';
           id: string;
           position: ImagePosition;
+          rotation: number;
           optimised?: string | null;
         }>;
       } | null;
@@ -64523,6 +65587,7 @@ export type ViewOffenderMatchesQuery = {
       __typename?: 'Image';
       id: string;
       position: ImagePosition;
+      rotation: number;
       optimised?: string | null;
     }>;
   } | null;
@@ -64559,6 +65624,7 @@ export type SearchOffendersQuery = {
         __typename?: 'Image';
         id: string;
         position: ImagePosition;
+        rotation: number;
         optimised?: string | null;
       }>;
       groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
@@ -64623,6 +65689,7 @@ export type ViewOffenderQuery = {
       url?: string | null;
       optimised?: string | null;
       position: ImagePosition;
+      rotation: number;
       policeImage?: boolean | null;
       primary?: boolean | null;
       faces: Array<{
@@ -64731,6 +65798,7 @@ export type ViewOffenderQuery = {
         url?: string | null;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
         card?: string | null;
       }>;
       linkedCrimeGroups: Array<{
@@ -64761,6 +65829,7 @@ export type ViewOffenderQuery = {
           url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
       }>;
       linkedIncidents: Array<{
@@ -64775,6 +65844,7 @@ export type ViewOffenderQuery = {
           url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
       }>;
       linkedOffenders: Array<{
@@ -64794,6 +65864,7 @@ export type ViewOffenderQuery = {
           url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
       }>;
       createdBy: {
@@ -64821,6 +65892,7 @@ export type ViewOffenderQuery = {
           optimised?: string | null;
           card?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
         linkedCrimeGroups: Array<{
           __typename?: 'CrimeGroup';
@@ -64850,6 +65922,7 @@ export type ViewOffenderQuery = {
             url?: string | null;
             optimised?: string | null;
             position: ImagePosition;
+            rotation: number;
           }>;
         }>;
         linkedIncidents: Array<{
@@ -64864,6 +65937,7 @@ export type ViewOffenderQuery = {
             url?: string | null;
             optimised?: string | null;
             position: ImagePosition;
+            rotation: number;
           }>;
         }>;
         linkedOffenders: Array<{
@@ -64883,6 +65957,7 @@ export type ViewOffenderQuery = {
             url?: string | null;
             optimised?: string | null;
             position: ImagePosition;
+            rotation: number;
           }>;
         }>;
         createdBy: {
@@ -65104,6 +66179,7 @@ export type IndexImageMutation = {
     url?: string | null;
     optimised?: string | null;
     position: ImagePosition;
+    rotation: number;
     faces: Array<{
       __typename?: 'RekFace';
       id: string;
@@ -65542,6 +66618,64 @@ export type IncidentMapQuery = {
   }>;
 };
 
+export type UserEngagementQueryVariables = Exact<{
+  where: UserContributionWhereInput;
+}>;
+
+export type UserEngagementQuery = {
+  __typename?: 'Query';
+  listUserContribution?: {
+    __typename?: 'ListUserContribution';
+    total: number;
+    userContributions: Array<{
+      __typename?: 'UserContribution';
+      name: string;
+      businesses?: Array<string | null> | null;
+      totalIncidents: number;
+      totalOffenders: number;
+      totalUpdates: number;
+      totalMessages: number;
+      totalLogins: number;
+      lastLogin?: string | null;
+    }>;
+  } | null;
+};
+
+export type ListLoginEventsQueryVariables = Exact<{
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<LoginEventWhereInput>;
+  orderBy?: InputMaybe<
+    | Array<LoginEventOrderByWithRelationInput>
+    | LoginEventOrderByWithRelationInput
+  >;
+}>;
+
+export type ListLoginEventsQuery = {
+  __typename?: 'Query';
+  listLoginEvents?: {
+    __typename?: 'ListLoginEvents';
+    total: number;
+    loginEvents: Array<{
+      __typename?: 'LoginEvent';
+      id?: string | null;
+      createdAt: Date;
+      loginTime: Date;
+      user: {
+        __typename?: 'User';
+        id: string;
+        fullName: string;
+        firstLetter?: string | null;
+        businesses: Array<{
+          __typename?: 'Business';
+          id: string;
+          name: string;
+        }>;
+      };
+    }>;
+  } | null;
+};
+
 export type OffenderProfileQueryVariables = Exact<{
   where: OffenderWhereUniqueInput;
   orderBy?: InputMaybe<
@@ -65788,6 +66922,7 @@ export type OffenderReportQuery = {
         __typename?: 'Image';
         optimisedPersisted?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     } | null;
   } | null;
@@ -66469,6 +67604,7 @@ export type CreateUpdateOnCrimeGroupMutation = {
       url?: string | null;
       optimised?: string | null;
       position: ImagePosition;
+      rotation: number;
       card?: string | null;
     }>;
     linkedCrimeGroups: Array<{
@@ -66499,6 +67635,7 @@ export type CreateUpdateOnCrimeGroupMutation = {
         url?: string | null;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }>;
     linkedIncidents: Array<{
@@ -66513,6 +67650,7 @@ export type CreateUpdateOnCrimeGroupMutation = {
         url?: string | null;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }>;
     linkedOffenders: Array<{
@@ -66532,6 +67670,7 @@ export type CreateUpdateOnCrimeGroupMutation = {
         url?: string | null;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }>;
     createdBy: {
@@ -66559,6 +67698,7 @@ export type CreateUpdateOnCrimeGroupMutation = {
         optimised?: string | null;
         card?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
       linkedCrimeGroups: Array<{
         __typename?: 'CrimeGroup';
@@ -66588,6 +67728,7 @@ export type CreateUpdateOnCrimeGroupMutation = {
           url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
       }>;
       linkedIncidents: Array<{
@@ -66602,6 +67743,7 @@ export type CreateUpdateOnCrimeGroupMutation = {
           url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
       }>;
       linkedOffenders: Array<{
@@ -66621,6 +67763,7 @@ export type CreateUpdateOnCrimeGroupMutation = {
           url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
       }>;
       createdBy: {
@@ -66658,6 +67801,7 @@ export type CreateUpdateOnIncidentMutation = {
       url?: string | null;
       optimised?: string | null;
       position: ImagePosition;
+      rotation: number;
       card?: string | null;
     }>;
     linkedCrimeGroups: Array<{
@@ -66688,6 +67832,7 @@ export type CreateUpdateOnIncidentMutation = {
         url?: string | null;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }>;
     linkedIncidents: Array<{
@@ -66702,6 +67847,7 @@ export type CreateUpdateOnIncidentMutation = {
         url?: string | null;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }>;
     linkedOffenders: Array<{
@@ -66721,6 +67867,7 @@ export type CreateUpdateOnIncidentMutation = {
         url?: string | null;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }>;
     createdBy: {
@@ -66748,6 +67895,7 @@ export type CreateUpdateOnIncidentMutation = {
         optimised?: string | null;
         card?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
       linkedCrimeGroups: Array<{
         __typename?: 'CrimeGroup';
@@ -66777,6 +67925,7 @@ export type CreateUpdateOnIncidentMutation = {
           url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
       }>;
       linkedIncidents: Array<{
@@ -66791,6 +67940,7 @@ export type CreateUpdateOnIncidentMutation = {
           url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
       }>;
       linkedOffenders: Array<{
@@ -66810,6 +67960,7 @@ export type CreateUpdateOnIncidentMutation = {
           url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
       }>;
       createdBy: {
@@ -66847,6 +67998,7 @@ export type CreateUpdateOnInvestigationMutation = {
       url?: string | null;
       optimised?: string | null;
       position: ImagePosition;
+      rotation: number;
       card?: string | null;
     }>;
     linkedCrimeGroups: Array<{
@@ -66877,6 +68029,7 @@ export type CreateUpdateOnInvestigationMutation = {
         url?: string | null;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }>;
     linkedIncidents: Array<{
@@ -66891,6 +68044,7 @@ export type CreateUpdateOnInvestigationMutation = {
         url?: string | null;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }>;
     linkedOffenders: Array<{
@@ -66910,6 +68064,7 @@ export type CreateUpdateOnInvestigationMutation = {
         url?: string | null;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }>;
     createdBy: {
@@ -66937,6 +68092,7 @@ export type CreateUpdateOnInvestigationMutation = {
         optimised?: string | null;
         card?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
       linkedCrimeGroups: Array<{
         __typename?: 'CrimeGroup';
@@ -66966,6 +68122,7 @@ export type CreateUpdateOnInvestigationMutation = {
           url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
       }>;
       linkedIncidents: Array<{
@@ -66980,6 +68137,7 @@ export type CreateUpdateOnInvestigationMutation = {
           url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
       }>;
       linkedOffenders: Array<{
@@ -66999,6 +68157,7 @@ export type CreateUpdateOnInvestigationMutation = {
           url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
       }>;
       createdBy: {
@@ -67036,6 +68195,7 @@ export type CreateUpdateOnOffenderMutation = {
       url?: string | null;
       optimised?: string | null;
       position: ImagePosition;
+      rotation: number;
       card?: string | null;
     }>;
     linkedCrimeGroups: Array<{
@@ -67066,6 +68226,7 @@ export type CreateUpdateOnOffenderMutation = {
         url?: string | null;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }>;
     linkedIncidents: Array<{
@@ -67080,6 +68241,7 @@ export type CreateUpdateOnOffenderMutation = {
         url?: string | null;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }>;
     linkedOffenders: Array<{
@@ -67099,6 +68261,7 @@ export type CreateUpdateOnOffenderMutation = {
         url?: string | null;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }>;
     createdBy: {
@@ -67126,6 +68289,7 @@ export type CreateUpdateOnOffenderMutation = {
         optimised?: string | null;
         card?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
       linkedCrimeGroups: Array<{
         __typename?: 'CrimeGroup';
@@ -67155,6 +68319,7 @@ export type CreateUpdateOnOffenderMutation = {
           url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
       }>;
       linkedIncidents: Array<{
@@ -67169,6 +68334,7 @@ export type CreateUpdateOnOffenderMutation = {
           url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
       }>;
       linkedOffenders: Array<{
@@ -67188,6 +68354,7 @@ export type CreateUpdateOnOffenderMutation = {
           url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
       }>;
       createdBy: {
@@ -67225,6 +68392,7 @@ export type CreateUpdateOnVehicleMutation = {
       url?: string | null;
       optimised?: string | null;
       position: ImagePosition;
+      rotation: number;
       card?: string | null;
     }>;
     linkedCrimeGroups: Array<{
@@ -67255,6 +68423,7 @@ export type CreateUpdateOnVehicleMutation = {
         url?: string | null;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }>;
     linkedIncidents: Array<{
@@ -67269,6 +68438,7 @@ export type CreateUpdateOnVehicleMutation = {
         url?: string | null;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }>;
     linkedOffenders: Array<{
@@ -67288,6 +68458,7 @@ export type CreateUpdateOnVehicleMutation = {
         url?: string | null;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }>;
     createdBy: {
@@ -67315,6 +68486,7 @@ export type CreateUpdateOnVehicleMutation = {
         optimised?: string | null;
         card?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
       linkedCrimeGroups: Array<{
         __typename?: 'CrimeGroup';
@@ -67344,6 +68516,7 @@ export type CreateUpdateOnVehicleMutation = {
           url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
       }>;
       linkedIncidents: Array<{
@@ -67358,6 +68531,7 @@ export type CreateUpdateOnVehicleMutation = {
           url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
       }>;
       linkedOffenders: Array<{
@@ -67377,6 +68551,7 @@ export type CreateUpdateOnVehicleMutation = {
           url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
       }>;
       createdBy: {
@@ -67589,6 +68764,8 @@ export type UserQuery = {
     messagePush: boolean;
     offenderEmail: boolean;
     offenderPush: boolean;
+    totalLastYearLogin?: number | null;
+    totalThirtyDaysLogin?: number | null;
     businesses: Array<{
       __typename?: 'Business';
       id: string;
@@ -67610,6 +68787,16 @@ export type UserQuery = {
       chat: { __typename?: 'Chat'; id: string; name: string };
     }>;
     schemes: Array<{ __typename?: 'UserScheme'; id: string; role: Role }>;
+    lastTenLogin?: Array<{
+      __typename?: 'LoginEvent';
+      loginTime: Date;
+      id?: string | null;
+    } | null> | null;
+    lastLogin?: {
+      __typename?: 'LoginEvent';
+      loginTime: Date;
+      id?: string | null;
+    } | null;
   } | null;
 };
 
@@ -67659,6 +68846,7 @@ export type CreateUserChatMutation = {
           url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
         incidents: Array<{
           __typename?: 'Incident';
@@ -67741,6 +68929,7 @@ export type UpdateUserChatMutation = {
             url?: string | null;
             optimised?: string | null;
             position: ImagePosition;
+            rotation: number;
           }>;
           vehicles: Array<{
             __typename?: 'Vehicle';
@@ -68238,6 +69427,7 @@ export type CreateVehicleMutation = {
       optimised?: string | null;
       url?: string | null;
       position: ImagePosition;
+      rotation: number;
     }>;
     incidents: Array<{
       __typename?: 'Incident';
@@ -68321,6 +69511,7 @@ export type UpdateVehicleMutation = {
       optimised?: string | null;
       url?: string | null;
       position: ImagePosition;
+      rotation: number;
       policeImage?: boolean | null;
       primary?: boolean | null;
     }>;
@@ -68378,6 +69569,7 @@ export type ListVehiclesQuery = {
         optimised?: string | null;
         url?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
       incidents: Array<{
         __typename?: 'Incident';
@@ -68429,6 +69621,7 @@ export type VehicleQuery = {
       optimised?: string | null;
       url?: string | null;
       position: ImagePosition;
+      rotation: number;
       policeImage?: boolean | null;
       primary?: boolean | null;
     }>;
@@ -68481,6 +69674,7 @@ export type VehicleQuery = {
         id: string;
         optimised?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
     }>;
     crimeGroup: Array<{
@@ -68507,6 +69701,7 @@ export type VehicleQuery = {
         optimised?: string | null;
         card?: string | null;
         position: ImagePosition;
+        rotation: number;
       }>;
       linkedCrimeGroups: Array<{
         __typename?: 'CrimeGroup';
@@ -68536,6 +69731,7 @@ export type VehicleQuery = {
           url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
       }>;
       linkedIncidents: Array<{
@@ -68550,6 +69746,7 @@ export type VehicleQuery = {
           url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
       }>;
       linkedOffenders: Array<{
@@ -68569,6 +69766,7 @@ export type VehicleQuery = {
           url?: string | null;
           optimised?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
       }>;
       createdBy: {
@@ -68596,6 +69794,7 @@ export type VehicleQuery = {
           optimised?: string | null;
           card?: string | null;
           position: ImagePosition;
+          rotation: number;
         }>;
         linkedCrimeGroups: Array<{
           __typename?: 'CrimeGroup';
@@ -68625,6 +69824,7 @@ export type VehicleQuery = {
             url?: string | null;
             optimised?: string | null;
             position: ImagePosition;
+            rotation: number;
           }>;
         }>;
         linkedIncidents: Array<{
@@ -68639,6 +69839,7 @@ export type VehicleQuery = {
             url?: string | null;
             optimised?: string | null;
             position: ImagePosition;
+            rotation: number;
           }>;
         }>;
         linkedOffenders: Array<{
@@ -68658,6 +69859,7 @@ export type VehicleQuery = {
             url?: string | null;
             optimised?: string | null;
             position: ImagePosition;
+            rotation: number;
           }>;
         }>;
         createdBy: {
@@ -69168,6 +70370,7 @@ export const ArticlesDocument = gql`
         optimised
         card
         position
+        rotation
       }
       image {
         id
@@ -69248,6 +70451,7 @@ export const ListArticlesDocument = gql`
           optimised
           card
           position
+          rotation
         }
         image {
           id
@@ -69346,6 +70550,7 @@ export const ArticleDocument = gql`
         optimised
         card
         position
+        rotation
       }
       image {
         id
@@ -69387,6 +70592,7 @@ export const ArticleDocument = gql`
               id
               url
               position
+              rotation
               optimised
               card
               offenders {
@@ -69430,6 +70636,7 @@ export const ArticleDocument = gql`
               id
               optimised
               position
+              rotation
             }
             groups {
               id
@@ -69476,6 +70683,7 @@ export const ArticleDocument = gql`
                 id
                 optimised
                 position
+                rotation
               }
             }
           }
@@ -69865,6 +71073,38 @@ export type CreateBusinessMutationResult =
 export type CreateBusinessMutationOptions = Apollo.BaseMutationOptions<
   CreateBusinessMutation,
   CreateBusinessMutationVariables
+>;
+export const DeleteBusinessDocument = gql`
+  mutation deleteBusiness($id: String!) {
+    deleteBusiness(where: { id: $id }) {
+      id
+    }
+  }
+`;
+export type DeleteBusinessMutationFn = Apollo.MutationFunction<
+  DeleteBusinessMutation,
+  DeleteBusinessMutationVariables
+>;
+export function useDeleteBusinessMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteBusinessMutation,
+    DeleteBusinessMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteBusinessMutation,
+    DeleteBusinessMutationVariables
+  >(DeleteBusinessDocument, options);
+}
+export type DeleteBusinessMutationHookResult = ReturnType<
+  typeof useDeleteBusinessMutation
+>;
+export type DeleteBusinessMutationResult =
+  Apollo.MutationResult<DeleteBusinessMutation>;
+export type DeleteBusinessMutationOptions = Apollo.BaseMutationOptions<
+  DeleteBusinessMutation,
+  DeleteBusinessMutationVariables
 >;
 export const LinkBusinessToSchemeDocument = gql`
   mutation LinkBusinessToScheme(
@@ -70925,6 +72165,7 @@ export const UpdateCrimeGroupDocument = gql`
           id
           optimised
           position
+          rotation
         }
         totalTheftSuccess
         totalRecoveredValue
@@ -71061,6 +72302,7 @@ export const SuggestedCrimeGroupMembersDocument = gql`
           id
           optimised
           position
+          rotation
         }
         totalAssociatedIncidents(associatedCrimeGroup: $associatedCrimeGroup)
         associatedIncidents(associatedCrimeGroup: $associatedCrimeGroup) {
@@ -71162,6 +72404,7 @@ export const CrimeGroupDocument = gql`
           id
           optimised
           position
+          rotation
         }
         totalTheftSuccess
         totalRecoveredValue
@@ -71214,6 +72457,7 @@ export const CrimeGroupDocument = gql`
           url
           optimised
           position
+          rotation
           card
         }
         linkedCrimeGroups {
@@ -71241,6 +72485,7 @@ export const CrimeGroupDocument = gql`
             url
             optimised
             position
+            rotation
           }
         }
         linkedIncidents {
@@ -71253,6 +72498,7 @@ export const CrimeGroupDocument = gql`
             url
             optimised
             position
+            rotation
           }
         }
         linkedOffenders {
@@ -71270,6 +72516,7 @@ export const CrimeGroupDocument = gql`
             url
             optimised
             position
+            rotation
           }
         }
         createdBy {
@@ -71293,6 +72540,7 @@ export const CrimeGroupDocument = gql`
             optimised
             card
             position
+            rotation
           }
           linkedCrimeGroups {
             totalOffenders
@@ -71319,6 +72567,7 @@ export const CrimeGroupDocument = gql`
               url
               optimised
               position
+              rotation
             }
           }
           linkedIncidents {
@@ -71331,6 +72580,7 @@ export const CrimeGroupDocument = gql`
               url
               optimised
               position
+              rotation
             }
           }
           linkedOffenders {
@@ -71348,6 +72598,7 @@ export const CrimeGroupDocument = gql`
               url
               optimised
               position
+              rotation
             }
           }
           createdBy {
@@ -71820,6 +73071,7 @@ export const FeedItemsDocument = gql`
               url
               optimised
               position
+              rotation
             }
             name
           }
@@ -71847,12 +73099,14 @@ export const FeedItemsDocument = gql`
             optimised
             card
             position
+            rotation
           }
           image {
             id
             url
             optimised
             position
+            rotation
             card
           }
           previewImage
@@ -71887,6 +73141,7 @@ export const FeedItemsDocument = gql`
               url
               optimised
               position
+              rotation
               card
             }
             linkedCrimeGroups {
@@ -71911,6 +73166,7 @@ export const FeedItemsDocument = gql`
                 url
                 optimised
                 position
+                rotation
               }
               make
               id
@@ -71926,6 +73182,7 @@ export const FeedItemsDocument = gql`
                 url
                 optimised
                 position
+                rotation
               }
             }
             linkedOffenders {
@@ -71943,6 +73200,7 @@ export const FeedItemsDocument = gql`
                 url
                 optimised
                 position
+                rotation
               }
             }
             createdBy {
@@ -71971,6 +73229,7 @@ export const FeedItemsDocument = gql`
             id
             optimised
             position
+            rotation
             url
           }
           updates(orderBy: { createdAt: desc }) {
@@ -71984,6 +73243,7 @@ export const FeedItemsDocument = gql`
               url
               optimised
               position
+              rotation
               card
             }
             linkedCrimeGroups {
@@ -72010,6 +73270,7 @@ export const FeedItemsDocument = gql`
                 id
                 url
                 position
+                rotation
                 optimised
               }
             }
@@ -72023,6 +73284,7 @@ export const FeedItemsDocument = gql`
                 url
                 optimised
                 position
+                rotation
               }
             }
             linkedOffenders {
@@ -72040,6 +73302,7 @@ export const FeedItemsDocument = gql`
                 url
                 optimised
                 position
+                rotation
               }
             }
             createdBy {
@@ -72084,6 +73347,7 @@ export const FeedItemsDocument = gql`
               url
               optimised
               position
+              rotation
               card
             }
             linkedCrimeGroups {
@@ -72109,6 +73373,7 @@ export const FeedItemsDocument = gql`
                 url
                 optimised
                 position
+                rotation
               }
               id
               colour
@@ -72123,6 +73388,7 @@ export const FeedItemsDocument = gql`
                 url
                 optimised
                 position
+                rotation
               }
             }
             linkedOffenders {
@@ -72140,6 +73406,7 @@ export const FeedItemsDocument = gql`
                 url
                 optimised
                 position
+                rotation
               }
             }
             createdBy {
@@ -72180,6 +73447,7 @@ export const FeedItemsDocument = gql`
               url
               optimised
               position
+              rotation
               card
             }
             linkedCrimeGroups {
@@ -72203,6 +73471,7 @@ export const FeedItemsDocument = gql`
                 id
                 url
                 position
+                rotation
                 optimised
               }
               make
@@ -72218,6 +73487,7 @@ export const FeedItemsDocument = gql`
                 id
                 url
                 position
+                rotation
                 optimised
               }
             }
@@ -72236,6 +73506,7 @@ export const FeedItemsDocument = gql`
                 url
                 optimised
                 position
+                rotation
               }
             }
             createdBy {
@@ -72271,6 +73542,7 @@ export const FeedItemsDocument = gql`
             optimised
             url
             position
+            rotation
           }
           groups {
             id
@@ -72326,6 +73598,7 @@ export const FeedItemsDocument = gql`
               url
               optimised
               position
+              rotation
               card
             }
             linkedCrimeGroups {
@@ -72351,6 +73624,7 @@ export const FeedItemsDocument = gql`
                 id
                 url
                 position
+                rotation
                 optimised
               }
               colour
@@ -72364,6 +73638,7 @@ export const FeedItemsDocument = gql`
                 id
                 url
                 position
+                rotation
                 optimised
               }
             }
@@ -72381,6 +73656,7 @@ export const FeedItemsDocument = gql`
                 id
                 url
                 position
+                rotation
                 optimised
               }
             }
@@ -72399,6 +73675,7 @@ export const FeedItemsDocument = gql`
             url
             optimised
             position
+            rotation
             card
           }
           tags {
@@ -72457,6 +73734,7 @@ export const FeedItemsDocument = gql`
               id
               optimised
               position
+              rotation
             }
           }
         }
@@ -72810,6 +74088,7 @@ export const AddImagesToIncidentDocument = gql`
         optimised
         card
         position
+        rotation
       }
     }
   }
@@ -72876,6 +74155,7 @@ export const CreateIncidentDocument = gql`
         optimised
         url
         position
+        rotation
       }
       groups {
         id
@@ -72904,6 +74184,7 @@ export const CreateIncidentDocument = gql`
           optimised
           card
           position
+          rotation
         }
         tags {
           id
@@ -73036,6 +74317,52 @@ export type UnsubscribeFromIncidentMutationOptions = Apollo.BaseMutationOptions<
   UnsubscribeFromIncidentMutation,
   UnsubscribeFromIncidentMutationVariables
 >;
+export const UpdateIncidentImagesDocument = gql`
+  mutation UpdateIncidentImages(
+    $id: String!
+    $images: ImageUpdateManyWithoutIncidentNestedInput
+  ) {
+    updateIncident(where: { id: $id }, data: { images: $images }) {
+      id
+      images {
+        id
+        url
+        optimised
+        optimisticUri
+        uploaded
+        position
+        primary
+        policeImage
+        rotation
+      }
+    }
+  }
+`;
+export type UpdateIncidentImagesMutationFn = Apollo.MutationFunction<
+  UpdateIncidentImagesMutation,
+  UpdateIncidentImagesMutationVariables
+>;
+export function useUpdateIncidentImagesMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateIncidentImagesMutation,
+    UpdateIncidentImagesMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateIncidentImagesMutation,
+    UpdateIncidentImagesMutationVariables
+  >(UpdateIncidentImagesDocument, options);
+}
+export type UpdateIncidentImagesMutationHookResult = ReturnType<
+  typeof useUpdateIncidentImagesMutation
+>;
+export type UpdateIncidentImagesMutationResult =
+  Apollo.MutationResult<UpdateIncidentImagesMutation>;
+export type UpdateIncidentImagesMutationOptions = Apollo.BaseMutationOptions<
+  UpdateIncidentImagesMutation,
+  UpdateIncidentImagesMutationVariables
+>;
 export const UpdateIncidentDocument = gql`
   mutation updateIncident($where: UniqueId!, $data: IncidentUpdateInput!) {
     updateIncident(where: $where, data: $data) {
@@ -73078,6 +74405,7 @@ export const UpdateIncidentDocument = gql`
         id
         optimised
         position
+        rotation
         url
         card
       }
@@ -73106,6 +74434,7 @@ export const UpdateIncidentDocument = gql`
           id
           url
           position
+          rotation
           optimised
           card
         }
@@ -73185,6 +74514,361 @@ export type AddressesQueryResult = Apollo.QueryResult<
   AddressesQuery,
   AddressesQueryVariables
 >;
+export const EditIncidentFeedDocument = gql`
+  query EditIncidentFeed($where: IncidentWhereUniqueInput!) {
+    incident(where: $where) {
+      id
+      subject
+      description
+      date
+      time
+      reference
+      ref
+      policeReported
+      policeRef
+      policeNo
+      policeInvolved
+      subscribed
+      totalValue
+      totalRecoveredValue
+      crimeTypes {
+        id
+        name
+        crimeType
+      }
+      involvedTags {
+        id
+        name
+      }
+      impactTags {
+        id
+        name
+      }
+      incidentItems {
+        id
+        name
+        value
+        recoveredValue
+        goodsType {
+          id
+        }
+      }
+      location {
+        id
+        building
+        street
+        townCity
+        county
+        postcode
+      }
+      approved
+      business {
+        id
+        name
+      }
+      createdBy {
+        id
+        fullName
+        businesses {
+          id
+          name
+        }
+      }
+      images {
+        id
+        optimised
+        url
+        position
+        rotation
+        primary
+        policeImage
+        rotation
+        offenders {
+          id
+          name
+        }
+      }
+      groups {
+        id
+        name
+      }
+      crimeGroups {
+        id
+        reference
+        alias
+        totalIncidents
+        totalOffenders
+        totalRecoveredValue
+        totalTheftSuccess
+        totalValue
+      }
+      vehicles {
+        id
+        reference
+        colour
+        model
+        make
+        registration
+        totalCrimeGroups
+        totalIncidents
+        totalOffenders
+        updatedAt
+        images {
+          id
+          url
+          optimised
+          position
+          rotation
+        }
+      }
+      offenders {
+        id
+        reference
+        createdAt
+        updatedAt
+        age
+        build
+        height
+        dateOfBirth
+        dateSource
+        gender
+        hair
+        name
+        peculiarities
+        race
+        approved
+        uploaded
+        active
+        images {
+          id
+          url
+          optimised
+          card
+          position
+          rotation
+        }
+        tags {
+          id
+          name
+        }
+      }
+      updates(orderBy: { createdAt: desc }) {
+        id
+        text
+        type
+        createdAt
+        images {
+          id
+          url
+          optimised
+          position
+          rotation
+          card
+        }
+        linkedCrimeGroups {
+          totalOffenders
+          totalIncidents
+          alias
+          id
+          reference
+          totalRecoveredValue
+          totalTheftSuccess
+          totalValue
+          updatedAt
+        }
+        linkedVehicles {
+          images {
+            id
+            url
+            optimised
+            position
+            rotation
+          }
+          updatedAt
+          totalOffenders
+          registration
+          reference
+          model
+          make
+          id
+          colour
+          images {
+            id
+            url
+            optimised
+            position
+            rotation
+          }
+        }
+        linkedIncidents {
+          id
+          subject
+          description
+          dayTime
+          images {
+            id
+            url
+            optimised
+            position
+            rotation
+          }
+        }
+        linkedOffenders {
+          id
+          updatedAt
+          age
+          build
+          height
+          dateOfBirth
+          name
+          race
+          gender
+          images {
+            id
+            url
+            optimised
+            position
+            rotation
+          }
+        }
+        createdBy {
+          origName
+          id
+          fullName
+          businesses {
+            id
+            name
+            fullName
+          }
+        }
+        replies {
+          id
+          text
+          type
+          createdAt
+          images {
+            id
+            url
+            optimised
+            position
+            rotation
+            card
+          }
+          linkedCrimeGroups {
+            totalOffenders
+            totalIncidents
+            alias
+            id
+            reference
+            totalRecoveredValue
+            totalTheftSuccess
+            totalValue
+            updatedAt
+          }
+          linkedVehicles {
+            images {
+              id
+              url
+              optimised
+              position
+              rotation
+            }
+            updatedAt
+            totalOffenders
+            registration
+            reference
+            model
+            make
+            id
+            colour
+            images {
+              id
+              url
+              optimised
+              position
+              rotation
+            }
+          }
+          linkedIncidents {
+            id
+            subject
+            description
+            dayTime
+            images {
+              id
+              url
+              optimised
+              position
+              rotation
+            }
+          }
+          linkedOffenders {
+            id
+            updatedAt
+            age
+            build
+            height
+            dateOfBirth
+            name
+            race
+            gender
+            images {
+              id
+              url
+              optimised
+              position
+              rotation
+            }
+          }
+          createdBy {
+            origName
+            id
+            fullName
+            businesses {
+              id
+              name
+              fullName
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+export function useEditIncidentFeedQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    EditIncidentFeedQuery,
+    EditIncidentFeedQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<EditIncidentFeedQuery, EditIncidentFeedQueryVariables>(
+    EditIncidentFeedDocument,
+    options
+  );
+}
+export function useEditIncidentFeedLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    EditIncidentFeedQuery,
+    EditIncidentFeedQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    EditIncidentFeedQuery,
+    EditIncidentFeedQueryVariables
+  >(EditIncidentFeedDocument, options);
+}
+export type EditIncidentFeedQueryHookResult = ReturnType<
+  typeof useEditIncidentFeedQuery
+>;
+export type EditIncidentFeedLazyQueryHookResult = ReturnType<
+  typeof useEditIncidentFeedLazyQuery
+>;
+export type EditIncidentFeedQueryResult = Apollo.QueryResult<
+  EditIncidentFeedQuery,
+  EditIncidentFeedQueryVariables
+>;
 export const EditIncidentDocument = gql`
   query EditIncident($where: IncidentWhereUniqueInput!) {
     incident(where: $where) {
@@ -73251,8 +74935,10 @@ export const EditIncidentDocument = gql`
         optimised
         url
         position
+        rotation
         primary
         policeImage
+        rotation
         offenders {
           id
           name
@@ -73288,6 +74974,7 @@ export const EditIncidentDocument = gql`
           url
           optimised
           position
+          rotation
         }
       }
       offenders {
@@ -73314,6 +75001,7 @@ export const EditIncidentDocument = gql`
           optimised
           card
           position
+          rotation
         }
         tags {
           id
@@ -73330,6 +75018,7 @@ export const EditIncidentDocument = gql`
           url
           optimised
           position
+          rotation
           card
         }
         linkedCrimeGroups {
@@ -73349,6 +75038,7 @@ export const EditIncidentDocument = gql`
             url
             optimised
             position
+            rotation
           }
           updatedAt
           totalOffenders
@@ -73363,6 +75053,7 @@ export const EditIncidentDocument = gql`
             url
             optimised
             position
+            rotation
           }
         }
         linkedIncidents {
@@ -73375,6 +75066,7 @@ export const EditIncidentDocument = gql`
             url
             optimised
             position
+            rotation
           }
         }
         linkedOffenders {
@@ -73392,6 +75084,7 @@ export const EditIncidentDocument = gql`
             url
             optimised
             position
+            rotation
           }
         }
         createdBy {
@@ -73414,6 +75107,7 @@ export const EditIncidentDocument = gql`
             url
             optimised
             position
+            rotation
             card
           }
           linkedCrimeGroups {
@@ -73433,6 +75127,7 @@ export const EditIncidentDocument = gql`
               url
               optimised
               position
+              rotation
             }
             updatedAt
             totalOffenders
@@ -73447,6 +75142,7 @@ export const EditIncidentDocument = gql`
               url
               optimised
               position
+              rotation
             }
           }
           linkedIncidents {
@@ -73459,6 +75155,7 @@ export const EditIncidentDocument = gql`
               url
               optimised
               position
+              rotation
             }
           }
           linkedOffenders {
@@ -73476,6 +75173,7 @@ export const EditIncidentDocument = gql`
               url
               optimised
               position
+              rotation
             }
           }
           createdBy {
@@ -73577,6 +75275,7 @@ export const IncidentFeedDocument = gql`
         url
         optimised
         position
+        rotation
         card
         offenders {
           id
@@ -73688,6 +75387,7 @@ export const ListIncidentsDocument = gql`
       incidents {
         id
         subject
+        totalImages
         description
         dayTime
         reference
@@ -73716,6 +75416,7 @@ export const ListIncidentsDocument = gql`
         images {
           id
           position
+          rotation
           optimised
           url
         }
@@ -73795,6 +75496,7 @@ export const ListUnapprovedIncidentsDocument = gql`
           id
           optimised
           position
+          rotation
           url
         }
         crimeTypes {
@@ -73918,6 +75620,7 @@ export const ViewIncidentDocument = gql`
       images {
         id
         position
+        rotation
         optimised
         url
       }
@@ -73950,6 +75653,7 @@ export const ViewIncidentDocument = gql`
           id
           url
           position
+          rotation
           optimised
         }
       }
@@ -73976,6 +75680,7 @@ export const ViewIncidentDocument = gql`
           url
           optimised
           position
+          rotation
           card
         }
         tags {
@@ -73993,6 +75698,7 @@ export const ViewIncidentDocument = gql`
           url
           optimised
           position
+          rotation
           card
         }
         linkedCrimeGroups {
@@ -74011,6 +75717,7 @@ export const ViewIncidentDocument = gql`
             id
             url
             position
+            rotation
             optimised
           }
           updatedAt
@@ -74026,6 +75733,7 @@ export const ViewIncidentDocument = gql`
             url
             optimised
             position
+            rotation
           }
         }
         linkedIncidents {
@@ -74038,6 +75746,7 @@ export const ViewIncidentDocument = gql`
             url
             optimised
             position
+            rotation
           }
         }
         linkedOffenders {
@@ -74055,6 +75764,7 @@ export const ViewIncidentDocument = gql`
             url
             optimised
             position
+            rotation
           }
         }
         createdBy {
@@ -74077,6 +75787,7 @@ export const ViewIncidentDocument = gql`
             url
             optimised
             position
+            rotation
             card
           }
           linkedCrimeGroups {
@@ -74096,6 +75807,7 @@ export const ViewIncidentDocument = gql`
               url
               optimised
               position
+              rotation
             }
             updatedAt
             totalOffenders
@@ -74110,6 +75822,7 @@ export const ViewIncidentDocument = gql`
               url
               optimised
               position
+              rotation
             }
           }
           linkedIncidents {
@@ -74122,6 +75835,7 @@ export const ViewIncidentDocument = gql`
               url
               optimised
               position
+              rotation
             }
           }
           linkedOffenders {
@@ -74139,6 +75853,7 @@ export const ViewIncidentDocument = gql`
               url
               optimised
               position
+              rotation
             }
           }
           createdBy {
@@ -74235,6 +75950,7 @@ export const CreateInvestigationDocument = gql`
       id
       name
       description
+      status
     }
   }
 `;
@@ -74525,6 +76241,7 @@ export const InvestigationSuggestionsDocument = gql`
           id
           optimised
           position
+          rotation
         }
         totalAssociatedIncidents(
           associatedInvestigation: $associatedInvestigation
@@ -74578,6 +76295,7 @@ export const InvestigationSuggestionsDocument = gql`
           id
           optimised
           position
+          rotation
         }
         colour
       }
@@ -74595,6 +76313,7 @@ export const InvestigationSuggestionsDocument = gql`
           id
           optimised
           position
+          rotation
         }
         policeRef
         location {
@@ -74617,6 +76336,7 @@ export const InvestigationSuggestionsDocument = gql`
           images {
             id
             position
+            rotation
             optimised
           }
         }
@@ -74670,6 +76390,7 @@ export const ListInvestigationsDocument = gql`
         id
         name
         description
+        status
       }
     }
   }
@@ -74714,6 +76435,7 @@ export const ViewInvestigationDocument = gql`
       id
       description
       name
+      status
       totalOffenders
       totalIncidents
       totalValue
@@ -74758,6 +76480,7 @@ export const ViewInvestigationDocument = gql`
           optimisedPersisted
           card
           position
+          rotation
         }
         linkedCrimeGroups {
           totalOffenders
@@ -74777,6 +76500,7 @@ export const ViewInvestigationDocument = gql`
             optimised
             optimisedPersisted
             position
+            rotation
           }
           updatedAt
           totalOffenders
@@ -74798,6 +76522,7 @@ export const ViewInvestigationDocument = gql`
             optimised
             optimisedPersisted
             position
+            rotation
           }
         }
         linkedOffenders {
@@ -74816,6 +76541,7 @@ export const ViewInvestigationDocument = gql`
             optimised
             optimisedPersisted
             position
+            rotation
           }
         }
         createdBy {
@@ -74840,6 +76566,7 @@ export const ViewInvestigationDocument = gql`
             optimised
             card
             position
+            rotation
           }
           linkedCrimeGroups {
             totalOffenders
@@ -74859,6 +76586,7 @@ export const ViewInvestigationDocument = gql`
               optimisedPersisted
               optimised
               position
+              rotation
             }
             updatedAt
             totalOffenders
@@ -74879,6 +76607,7 @@ export const ViewInvestigationDocument = gql`
               url
               optimised
               position
+              rotation
             }
           }
           linkedOffenders {
@@ -74897,6 +76626,7 @@ export const ViewInvestigationDocument = gql`
               optimised
               optimisedPersisted
               position
+              rotation
             }
           }
           createdBy {
@@ -74927,6 +76657,7 @@ export const ViewInvestigationDocument = gql`
           optimised
           optimisedPersisted
           position
+          rotation
         }
       }
       incidents {
@@ -75052,6 +76783,7 @@ export const CreateMessageDocument = gql`
         url
         optimised
         position
+        rotation
       }
       crimeGroups {
         totalOffenders
@@ -75072,6 +76804,7 @@ export const CreateMessageDocument = gql`
           optimised
           url
           position
+          rotation
         }
       }
       incidents {
@@ -75084,6 +76817,7 @@ export const CreateMessageDocument = gql`
           url
           optimised
           position
+          rotation
         }
       }
       offenders {
@@ -75101,6 +76835,7 @@ export const CreateMessageDocument = gql`
           url
           optimised
           position
+          rotation
         }
       }
     }
@@ -75191,6 +76926,7 @@ export const UpdateMessageDocument = gql`
         id
         url
         position
+        rotation
         optimised
       }
       crimeGroups {
@@ -75212,6 +76948,7 @@ export const UpdateMessageDocument = gql`
           optimised
           url
           position
+          rotation
         }
       }
       incidents {
@@ -75224,6 +76961,7 @@ export const UpdateMessageDocument = gql`
           url
           optimised
           position
+          rotation
         }
       }
       offenders {
@@ -75241,6 +76979,7 @@ export const UpdateMessageDocument = gql`
           url
           optimised
           position
+          rotation
         }
       }
     }
@@ -75298,6 +77037,7 @@ export const ChatMessagesDocument = gql`
         id
         url
         position
+        rotation
         optimised
       }
       crimeGroups {
@@ -75319,6 +77059,7 @@ export const ChatMessagesDocument = gql`
           optimised
           url
           position
+          rotation
         }
       }
       incidents {
@@ -75331,6 +77072,7 @@ export const ChatMessagesDocument = gql`
           url
           optimised
           position
+          rotation
         }
       }
       offenders {
@@ -75348,6 +77090,7 @@ export const ChatMessagesDocument = gql`
           url
           optimised
           position
+          rotation
         }
       }
     }
@@ -75415,6 +77158,7 @@ export const MessagesDocument = gql`
         id
         url
         position
+        rotation
         optimised
       }
       crimeGroups {
@@ -75441,6 +77185,7 @@ export const MessagesDocument = gql`
           id
           optimised
           position
+          rotation
           url
         }
       }
@@ -75454,6 +77199,7 @@ export const MessagesDocument = gql`
           url
           optimised
           position
+          rotation
         }
       }
       offenders {
@@ -75471,6 +77217,7 @@ export const MessagesDocument = gql`
           url
           optimised
           position
+          rotation
         }
       }
     }
@@ -75527,6 +77274,7 @@ export const MessagesSubscriptionDocument = gql`
         url
         optimised
         position
+        rotation
       }
       crimeGroups {
         totalOffenders
@@ -75553,6 +77301,7 @@ export const MessagesSubscriptionDocument = gql`
           optimised
           url
           position
+          rotation
         }
       }
       incidents {
@@ -75565,6 +77314,7 @@ export const MessagesSubscriptionDocument = gql`
           url
           optimised
           position
+          rotation
         }
       }
       offenders {
@@ -75582,6 +77332,7 @@ export const MessagesSubscriptionDocument = gql`
           url
           optimised
           position
+          rotation
         }
       }
     }
@@ -75757,6 +77508,7 @@ export const AddImagesToOffenderDocument = gql`
         optimised
         card
         position
+        rotation
       }
     }
   }
@@ -75811,6 +77563,7 @@ export const CreateOffenderDocument = gql`
         url
         optimised
         position
+        rotation
       }
       groups {
         id
@@ -75864,6 +77617,7 @@ export const CreateOffenderDocument = gql`
           url
           optimised
           position
+          rotation
         }
       }
     }
@@ -76024,6 +77778,53 @@ export type UnsubscribeFromOffenderMutationOptions = Apollo.BaseMutationOptions<
   UnsubscribeFromOffenderMutation,
   UnsubscribeFromOffenderMutationVariables
 >;
+export const UpdateOffenderImagesDocument = gql`
+  mutation updateOffenderImages(
+    $id: String!
+    $images: ImageUpdateManyWithoutOffendersNestedInput
+  ) {
+    updateOffender(where: { id: $id }, data: { images: $images }) {
+      id
+      images {
+        id
+        url
+        optimised
+        optimisticUri
+        card
+        position
+        rotation
+        primary
+        policeImage
+        rotation
+      }
+    }
+  }
+`;
+export type UpdateOffenderImagesMutationFn = Apollo.MutationFunction<
+  UpdateOffenderImagesMutation,
+  UpdateOffenderImagesMutationVariables
+>;
+export function useUpdateOffenderImagesMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateOffenderImagesMutation,
+    UpdateOffenderImagesMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateOffenderImagesMutation,
+    UpdateOffenderImagesMutationVariables
+  >(UpdateOffenderImagesDocument, options);
+}
+export type UpdateOffenderImagesMutationHookResult = ReturnType<
+  typeof useUpdateOffenderImagesMutation
+>;
+export type UpdateOffenderImagesMutationResult =
+  Apollo.MutationResult<UpdateOffenderImagesMutation>;
+export type UpdateOffenderImagesMutationOptions = Apollo.BaseMutationOptions<
+  UpdateOffenderImagesMutation,
+  UpdateOffenderImagesMutationVariables
+>;
 export const UpdateOffenderDocument = gql`
   mutation updateOffender($where: UniqueId!, $data: OffenderUpdateInput!) {
     updateOffender(where: $where, data: $data) {
@@ -76049,6 +77850,7 @@ export const UpdateOffenderDocument = gql`
         url
         optimised
         position
+        rotation
       }
       groups {
         id
@@ -76134,6 +77936,7 @@ export const AssociatedOffendersDocument = gql`
           id
           optimised
           position
+          rotation
         }
         totalAssociatedIncidents(associatedOffender: $associatedOffender)
         totalAssociatedCrimeGroups(associatedOffender: $associatedOffender)
@@ -76226,6 +78029,7 @@ export const ViewOffenderCompareDocument = gql`
         id
         optimised
         position
+        rotation
       }
       tags {
         id
@@ -76291,6 +78095,7 @@ export const ViewOffendersCompareDocument = gql`
         id
         optimised
         position
+        rotation
       }
       tags {
         id
@@ -76355,6 +78160,7 @@ export const ListOffendersDocument = gql`
       offenders {
         id
         reference
+        totalImages
         createdAt
         updatedAt
         totalIncidents
@@ -76383,6 +78189,7 @@ export const ListOffendersDocument = gql`
           id
           optimised
           position
+          rotation
           optimisedPersisted
         }
         groups {
@@ -76408,11 +78215,6 @@ export const ListOffendersDocument = gql`
           description
           dayTime
           date
-          crimeTypes {
-            id
-            name
-          }
-          approved
           location {
             id
             full
@@ -76424,11 +78226,6 @@ export const ListOffendersDocument = gql`
               id
               name
             }
-          }
-          images {
-            id
-            optimised
-            position
           }
         }
       }
@@ -76525,6 +78322,7 @@ export const OffenderFeedDocument = gql`
         optimised
         card
         position
+        rotation
       }
       tags {
         id
@@ -76610,6 +78408,7 @@ export const ViewOffenderMatchesDocument = gql`
               url
               optimised
               position
+              rotation
               faces {
                 id
                 confidence
@@ -76648,6 +78447,7 @@ export const ViewOffenderMatchesDocument = gql`
           images {
             id
             position
+            rotation
             optimised
           }
         }
@@ -76655,6 +78455,7 @@ export const ViewOffenderMatchesDocument = gql`
       images {
         id
         position
+        rotation
         optimised
       }
     }
@@ -76725,6 +78526,7 @@ export const SearchOffendersDocument = gql`
         images {
           id
           position
+          rotation
           optimised
         }
         groups {
@@ -76822,6 +78624,7 @@ export const ViewOffenderDocument = gql`
         url
         optimised
         position
+        rotation
         faces {
           id
           confidence
@@ -76838,6 +78641,7 @@ export const ViewOffenderDocument = gql`
           }
         }
         policeImage
+        rotation
         primary
       }
       addresses {
@@ -76935,6 +78739,7 @@ export const ViewOffenderDocument = gql`
           url
           optimised
           position
+          rotation
           card
         }
         linkedCrimeGroups {
@@ -76954,6 +78759,7 @@ export const ViewOffenderDocument = gql`
             url
             optimised
             position
+            rotation
           }
           updatedAt
           totalOffenders
@@ -76974,6 +78780,7 @@ export const ViewOffenderDocument = gql`
             url
             optimised
             position
+            rotation
           }
         }
         linkedOffenders {
@@ -76991,6 +78798,7 @@ export const ViewOffenderDocument = gql`
             url
             optimised
             position
+            rotation
           }
         }
         createdBy {
@@ -77014,6 +78822,7 @@ export const ViewOffenderDocument = gql`
             optimised
             card
             position
+            rotation
           }
           linkedCrimeGroups {
             totalOffenders
@@ -77032,6 +78841,7 @@ export const ViewOffenderDocument = gql`
               url
               optimised
               position
+              rotation
             }
             updatedAt
             totalOffenders
@@ -77052,6 +78862,7 @@ export const ViewOffenderDocument = gql`
               url
               optimised
               position
+              rotation
             }
           }
           linkedOffenders {
@@ -77069,6 +78880,7 @@ export const ViewOffenderDocument = gql`
               url
               optimised
               position
+              rotation
             }
           }
           createdBy {
@@ -77505,6 +79317,7 @@ export const IndexImageDocument = gql`
       url
       optimised
       position
+      rotation
       faces {
         id
         confidence
@@ -78189,6 +80002,122 @@ export type IncidentMapQueryResult = Apollo.QueryResult<
   IncidentMapQuery,
   IncidentMapQueryVariables
 >;
+export const UserEngagementDocument = gql`
+  query UserEngagement($where: UserContributionWhereInput!) {
+    listUserContribution(where: $where) {
+      userContributions {
+        name
+        businesses
+        totalIncidents
+        totalOffenders
+        totalUpdates
+        totalMessages
+        totalLogins
+        lastLogin
+      }
+      total
+    }
+  }
+`;
+export function useUserEngagementQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    UserEngagementQuery,
+    UserEngagementQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<UserEngagementQuery, UserEngagementQueryVariables>(
+    UserEngagementDocument,
+    options
+  );
+}
+export function useUserEngagementLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    UserEngagementQuery,
+    UserEngagementQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<UserEngagementQuery, UserEngagementQueryVariables>(
+    UserEngagementDocument,
+    options
+  );
+}
+export type UserEngagementQueryHookResult = ReturnType<
+  typeof useUserEngagementQuery
+>;
+export type UserEngagementLazyQueryHookResult = ReturnType<
+  typeof useUserEngagementLazyQuery
+>;
+export type UserEngagementQueryResult = Apollo.QueryResult<
+  UserEngagementQuery,
+  UserEngagementQueryVariables
+>;
+export const ListLoginEventsDocument = gql`
+  query ListLoginEvents(
+    $take: Int
+    $skip: Int
+    $where: LoginEventWhereInput
+    $orderBy: [LoginEventOrderByWithRelationInput!]
+  ) {
+    listLoginEvents(
+      take: $take
+      skip: $skip
+      where: $where
+      orderBy: $orderBy
+    ) {
+      loginEvents {
+        id
+        createdAt
+        loginTime
+        user {
+          id
+          fullName
+          firstLetter
+          businesses {
+            id
+            name
+          }
+        }
+      }
+      total
+    }
+  }
+`;
+export function useListLoginEventsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    ListLoginEventsQuery,
+    ListLoginEventsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ListLoginEventsQuery, ListLoginEventsQueryVariables>(
+    ListLoginEventsDocument,
+    options
+  );
+}
+export function useListLoginEventsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListLoginEventsQuery,
+    ListLoginEventsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ListLoginEventsQuery,
+    ListLoginEventsQueryVariables
+  >(ListLoginEventsDocument, options);
+}
+export type ListLoginEventsQueryHookResult = ReturnType<
+  typeof useListLoginEventsQuery
+>;
+export type ListLoginEventsLazyQueryHookResult = ReturnType<
+  typeof useListLoginEventsLazyQuery
+>;
+export type ListLoginEventsQueryResult = Apollo.QueryResult<
+  ListLoginEventsQuery,
+  ListLoginEventsQueryVariables
+>;
 export const OffenderProfileDocument = gql`
   query OffenderProfile(
     $where: OffenderWhereUniqueInput!
@@ -78449,6 +80378,7 @@ export const OffenderReportDocument = gql`
         images {
           optimisedPersisted
           position
+          rotation
         }
       }
     }
@@ -79649,6 +81579,7 @@ export const CreateUpdateOnCrimeGroupDocument = gql`
         url
         optimised
         position
+        rotation
         card
       }
       linkedCrimeGroups {
@@ -79668,6 +81599,7 @@ export const CreateUpdateOnCrimeGroupDocument = gql`
           url
           optimised
           position
+          rotation
         }
         updatedAt
         totalOffenders
@@ -79688,6 +81620,7 @@ export const CreateUpdateOnCrimeGroupDocument = gql`
           url
           optimised
           position
+          rotation
         }
       }
       linkedOffenders {
@@ -79705,6 +81638,7 @@ export const CreateUpdateOnCrimeGroupDocument = gql`
           url
           optimised
           position
+          rotation
         }
       }
       createdBy {
@@ -79728,6 +81662,7 @@ export const CreateUpdateOnCrimeGroupDocument = gql`
           optimised
           card
           position
+          rotation
         }
         linkedCrimeGroups {
           totalOffenders
@@ -79746,6 +81681,7 @@ export const CreateUpdateOnCrimeGroupDocument = gql`
             url
             optimised
             position
+            rotation
           }
           updatedAt
           totalOffenders
@@ -79766,6 +81702,7 @@ export const CreateUpdateOnCrimeGroupDocument = gql`
             url
             optimised
             position
+            rotation
           }
         }
         linkedOffenders {
@@ -79783,6 +81720,7 @@ export const CreateUpdateOnCrimeGroupDocument = gql`
             url
             optimised
             position
+            rotation
           }
         }
         createdBy {
@@ -79840,6 +81778,7 @@ export const CreateUpdateOnIncidentDocument = gql`
         url
         optimised
         position
+        rotation
         card
       }
       linkedCrimeGroups {
@@ -79859,6 +81798,7 @@ export const CreateUpdateOnIncidentDocument = gql`
           url
           optimised
           position
+          rotation
         }
         updatedAt
         totalOffenders
@@ -79879,6 +81819,7 @@ export const CreateUpdateOnIncidentDocument = gql`
           url
           optimised
           position
+          rotation
         }
       }
       linkedOffenders {
@@ -79896,6 +81837,7 @@ export const CreateUpdateOnIncidentDocument = gql`
           url
           optimised
           position
+          rotation
         }
       }
       createdBy {
@@ -79919,6 +81861,7 @@ export const CreateUpdateOnIncidentDocument = gql`
           optimised
           card
           position
+          rotation
         }
         linkedCrimeGroups {
           totalOffenders
@@ -79937,6 +81880,7 @@ export const CreateUpdateOnIncidentDocument = gql`
             url
             optimised
             position
+            rotation
           }
           updatedAt
           totalOffenders
@@ -79957,6 +81901,7 @@ export const CreateUpdateOnIncidentDocument = gql`
             url
             optimised
             position
+            rotation
           }
         }
         linkedOffenders {
@@ -79974,6 +81919,7 @@ export const CreateUpdateOnIncidentDocument = gql`
             url
             optimised
             position
+            rotation
           }
         }
         createdBy {
@@ -80030,6 +81976,7 @@ export const CreateUpdateOnInvestigationDocument = gql`
         url
         optimised
         position
+        rotation
         card
       }
       linkedCrimeGroups {
@@ -80049,6 +81996,7 @@ export const CreateUpdateOnInvestigationDocument = gql`
           url
           optimised
           position
+          rotation
         }
         updatedAt
         totalOffenders
@@ -80069,6 +82017,7 @@ export const CreateUpdateOnInvestigationDocument = gql`
           url
           optimised
           position
+          rotation
         }
       }
       linkedOffenders {
@@ -80086,6 +82035,7 @@ export const CreateUpdateOnInvestigationDocument = gql`
           url
           optimised
           position
+          rotation
         }
       }
       createdBy {
@@ -80109,6 +82059,7 @@ export const CreateUpdateOnInvestigationDocument = gql`
           optimised
           card
           position
+          rotation
         }
         linkedCrimeGroups {
           totalOffenders
@@ -80127,6 +82078,7 @@ export const CreateUpdateOnInvestigationDocument = gql`
             url
             optimised
             position
+            rotation
           }
           updatedAt
           totalOffenders
@@ -80147,6 +82099,7 @@ export const CreateUpdateOnInvestigationDocument = gql`
             url
             optimised
             position
+            rotation
           }
         }
         linkedOffenders {
@@ -80164,6 +82117,7 @@ export const CreateUpdateOnInvestigationDocument = gql`
             url
             optimised
             position
+            rotation
           }
         }
         createdBy {
@@ -80221,6 +82175,7 @@ export const CreateUpdateOnOffenderDocument = gql`
         url
         optimised
         position
+        rotation
         card
       }
       linkedCrimeGroups {
@@ -80240,6 +82195,7 @@ export const CreateUpdateOnOffenderDocument = gql`
           url
           optimised
           position
+          rotation
         }
         updatedAt
         totalOffenders
@@ -80260,6 +82216,7 @@ export const CreateUpdateOnOffenderDocument = gql`
           url
           optimised
           position
+          rotation
         }
       }
       linkedOffenders {
@@ -80277,6 +82234,7 @@ export const CreateUpdateOnOffenderDocument = gql`
           url
           optimised
           position
+          rotation
         }
       }
       createdBy {
@@ -80300,6 +82258,7 @@ export const CreateUpdateOnOffenderDocument = gql`
           optimised
           card
           position
+          rotation
         }
         linkedCrimeGroups {
           totalOffenders
@@ -80318,6 +82277,7 @@ export const CreateUpdateOnOffenderDocument = gql`
             url
             optimised
             position
+            rotation
           }
           updatedAt
           totalOffenders
@@ -80338,6 +82298,7 @@ export const CreateUpdateOnOffenderDocument = gql`
             url
             optimised
             position
+            rotation
           }
         }
         linkedOffenders {
@@ -80355,6 +82316,7 @@ export const CreateUpdateOnOffenderDocument = gql`
             url
             optimised
             position
+            rotation
           }
         }
         createdBy {
@@ -80411,6 +82373,7 @@ export const CreateUpdateOnVehicleDocument = gql`
         url
         optimised
         position
+        rotation
         card
       }
       linkedCrimeGroups {
@@ -80430,6 +82393,7 @@ export const CreateUpdateOnVehicleDocument = gql`
           url
           optimised
           position
+          rotation
         }
         updatedAt
         totalOffenders
@@ -80450,6 +82414,7 @@ export const CreateUpdateOnVehicleDocument = gql`
           url
           optimised
           position
+          rotation
         }
       }
       linkedOffenders {
@@ -80467,6 +82432,7 @@ export const CreateUpdateOnVehicleDocument = gql`
           url
           optimised
           position
+          rotation
         }
       }
       createdBy {
@@ -80490,6 +82456,7 @@ export const CreateUpdateOnVehicleDocument = gql`
           optimised
           card
           position
+          rotation
         }
         linkedCrimeGroups {
           totalOffenders
@@ -80508,6 +82475,7 @@ export const CreateUpdateOnVehicleDocument = gql`
             url
             optimised
             position
+            rotation
           }
           updatedAt
           totalOffenders
@@ -80528,6 +82496,7 @@ export const CreateUpdateOnVehicleDocument = gql`
             url
             optimised
             position
+            rotation
           }
         }
         linkedOffenders {
@@ -80545,6 +82514,7 @@ export const CreateUpdateOnVehicleDocument = gql`
             url
             optimised
             position
+            rotation
           }
         }
         createdBy {
@@ -81000,6 +82970,16 @@ export const UserDocument = gql`
         id
         role
       }
+      totalLastYearLogin
+      totalThirtyDaysLogin
+      lastTenLogin {
+        loginTime
+        id
+      }
+      lastLogin {
+        loginTime
+        id
+      }
     }
   }
 `;
@@ -81057,6 +83037,7 @@ export const CreateUserChatDocument = gql`
             url
             optimised
             position
+            rotation
           }
           incidents {
             id
@@ -81171,6 +83152,7 @@ export const UpdateUserChatDocument = gql`
               url
               optimised
               position
+              rotation
             }
             vehicles {
               id
@@ -82042,6 +84024,7 @@ export const CreateVehicleDocument = gql`
         optimised
         url
         position
+        rotation
       }
       incidents {
         id
@@ -82202,7 +84185,9 @@ export const UpdateVehicleDocument = gql`
         optimised
         url
         position
+        rotation
         policeImage
+        rotation
         primary
       }
       customGalleries {
@@ -82277,6 +84262,7 @@ export const ListVehiclesDocument = gql`
           optimised
           url
           position
+          rotation
         }
         incidents {
           id
@@ -82356,7 +84342,9 @@ export const VehicleDocument = gql`
         optimised
         url
         position
+        rotation
         policeImage
+        rotation
         primary
       }
       incidents {
@@ -82401,6 +84389,7 @@ export const VehicleDocument = gql`
           id
           optimised
           position
+          rotation
         }
         totalTheftSuccess
         totalRecoveredValue
@@ -82430,6 +84419,7 @@ export const VehicleDocument = gql`
           optimised
           card
           position
+          rotation
         }
         linkedCrimeGroups {
           totalOffenders
@@ -82448,6 +84438,7 @@ export const VehicleDocument = gql`
             url
             optimised
             position
+            rotation
           }
           updatedAt
           totalOffenders
@@ -82468,6 +84459,7 @@ export const VehicleDocument = gql`
             url
             optimised
             position
+            rotation
           }
         }
         linkedOffenders {
@@ -82485,6 +84477,7 @@ export const VehicleDocument = gql`
             url
             optimised
             position
+            rotation
           }
         }
         createdBy {
@@ -82508,6 +84501,7 @@ export const VehicleDocument = gql`
             optimised
             card
             position
+            rotation
           }
           linkedCrimeGroups {
             totalOffenders
@@ -82526,6 +84520,7 @@ export const VehicleDocument = gql`
               url
               optimised
               position
+              rotation
             }
             updatedAt
             totalOffenders
@@ -82546,6 +84541,7 @@ export const VehicleDocument = gql`
               url
               optimised
               position
+              rotation
             }
           }
           linkedOffenders {
@@ -82563,6 +84559,7 @@ export const VehicleDocument = gql`
               url
               optimised
               position
+              rotation
             }
           }
           createdBy {

@@ -58,6 +58,7 @@ interface Image extends UploadFile {
   position?: ImagePosition;
   primary?: boolean;
   policeImage?: boolean;
+  rotation?: number;
 }
 // interface FormData {
 //   position?: ImagePosition;
@@ -102,6 +103,7 @@ const ImageEditor = ({
         ...image,
         position,
         policeImage,
+        rotation,
       });
     }
     setPosition(ImagePosition.CenterCenter);

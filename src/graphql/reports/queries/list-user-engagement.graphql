@@ -1,0 +1,15 @@
+query UserEngagement($where: UserContributionWhereInput!) {
+  listUserContribution(where: $where) {
+    userContributions {
+      name
+      businesses
+      totalIncidents
+      totalOffenders
+      totalUpdates
+      totalMessages
+      totalLogins
+      lastLogin
+    }
+    total
+  }
+}

@@ -23,7 +23,6 @@ describe('List Officer View', () => {
         tags={[]}
         tagsLoading={false}
         imgChange={jest.fn()}
-        onPreview={jest.fn()}
         beforeUpload={jest.fn()}
         fileList={[]}
         addOffenderTag={false}

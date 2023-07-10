@@ -4,6 +4,7 @@ import {
   Card,
   Carousel,
   Col,
+  Drawer,
   Dropdown,
   Menu,
   Modal,
@@ -21,6 +22,7 @@ import {
   faEllipsisV,
   faExclamationCircle,
   faHeadSide,
+  faImage,
   faLocationDot,
   faMarsAndVenus,
   faPeople,
@@ -50,6 +52,9 @@ import moment from 'moment';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import SkeletonImage from 'components/images/SkeletonImage.view';
 import { useIntl } from 'react-intl';
+import EditOffenderFeed from 'components/form-components/offender/EditOffenderFeed';
+import FeedImageEditor from 'components/form-components/ImageEditor/FeedImageEditor.view';
+import type { EditFeedImage } from 'types/DataType';
 
 const { Title, Text } = Typography;
 const { confirm } = Modal;
@@ -63,9 +68,16 @@ interface Props {
   deleteRights: boolean;
   menuRights: boolean;
   openLightbox: (elements: { src: string }[], index: number) => void;
-  onNavigate: (id?: string | undefined, url?: string | undefined) => void;
   onDelete: (id: string) => void;
   isArticle?: boolean;
+  editOffenderFeed: boolean;
+  toggleEditOffenderFeed: () => void;
+  editImage: boolean;
+  toggleEditImage: () => void;
+  editImageId: string;
+  setEditImageId: (id: string) => void;
+  onEditImage: (value: EditFeedImage) => void;
+  onNavigate: (id?: string | undefined, url?: string | undefined) => void;
 }
 
 const OffenderCard = ({
@@ -77,6 +89,13 @@ const OffenderCard = ({
   onNavigate,
   onDelete,
   isArticle,
+  editOffenderFeed,
+  toggleEditOffenderFeed,
+  editImage,
+  toggleEditImage,
+  editImageId,
+  setEditImageId,
+  onEditImage,
 }: Props): JSX.Element => {
   const imagesRef = useRef<CarouselRef>(null);
   const intl = useIntl();
@@ -119,11 +138,22 @@ const OffenderCard = ({
                     defaultMessage: 'Edit Offender',
                     id: '+OfJ4/',
                   }),
-                  onClick: () => onNavigate(offender?.id || ''),
-                  icon: <FontAwesomeIcon size="lg" icon={faEdit} />,
+                  onClick: () => toggleEditOffenderFeed(),
+                  icon: <FontAwesomeIcon icon={faEdit} />,
                 },
+                offender.totalImages && offender.totalImages > 0
+                  ? {
+                      key: 1,
+                      label: intl.formatMessage({
+                        defaultMessage: 'Edit Image',
+                        id: '9UlLIw',
+                      }),
+                      onClick: () => toggleEditImage(),
+                      icon: <FontAwesomeIcon icon={faImage} />,
+                    }
+                  : null,
                 {
-                  key: 1,
+                  key: 2,
                   label: intl.formatMessage({
                     defaultMessage: 'Compare Offender',
                     id: 'Y64oGy',
@@ -136,7 +166,7 @@ const OffenderCard = ({
                   icon: <FontAwesomeIcon size="lg" icon={faPeople} />,
                 },
                 {
-                  key: 2,
+                  key: 3,
                   label: intl.formatMessage({
                     defaultMessage: 'Delete Offender',
                     id: 'IyEJgq',
@@ -160,7 +190,7 @@ const OffenderCard = ({
                     }),
                   icon: <FontAwesomeIcon size="lg" icon={faTrash} />,
                 },
-              ].filter((item) => item.key !== 1 || deleteRights)}
+              ].filter((item) => item?.key !== 3 || deleteRights)}
             />
           }
           placement="bottomRight"
@@ -192,12 +222,20 @@ const OffenderCard = ({
           )}
         </Row>
       </div>
-      {offender && offender.images.length > 0 ? (
-        <Carousel ref={imagesRef}>
+      {offender.totalImages && offender.totalImages > 0 ? (
+        <Carousel
+          ref={imagesRef}
+          afterChange={(currentSlide: number) => {
+            setEditImageId(offender.images[currentSlide].id);
+          }}
+        >
           {offender?.images.map((image) => (
             <div key={image.id}>
               <div className="offender-card-image">
                 <WatermarkImage
+                  // ???
+                  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                  rotation={image.rotation}
                   position={image.position}
                   url={image.optimised}
                 />
@@ -208,7 +246,7 @@ const OffenderCard = ({
       ) : (
         <SkeletonImage height={300} />
       )}
-      {offender && offender.images.length > 1 && (
+      {offender.totalImages && offender.totalImages > 1 && (
         <Row className="offender-card-controls">
           <Col>
             <FontAwesomeIcon
@@ -229,7 +267,7 @@ const OffenderCard = ({
           </Col>
         </Row>
       )}
-      {offender && offender.images.length > 0 && (
+      {offender.totalImages && offender.totalImages > 0 && (
         <FontAwesomeIcon
           size="lg"
           className="offender-card-expand"
@@ -502,6 +540,30 @@ const OffenderCard = ({
           </Col>
         </Row>
       </div>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Edit Offender',
+          id: '+OfJ4/',
+        })}
+        visible={editOffenderFeed}
+        width="600"
+        onClose={toggleEditOffenderFeed}
+      >
+        {editOffenderFeed ? (
+          <EditOffenderFeed
+            onClose={toggleEditOffenderFeed}
+            offenderId={offender.id}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <FeedImageEditor
+        submitImage={onEditImage}
+        onClose={toggleEditImage}
+        open={editImage}
+        image={offender.images.find((image) => editImageId === image.id)}
+      />
     </Card>
   );
 };

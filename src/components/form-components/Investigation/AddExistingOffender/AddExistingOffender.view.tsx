@@ -185,6 +185,7 @@ const AddExistingOffender = ({
                         >
                           <WatermarkImage
                             url={image.optimised}
+                            rotation={image.rotation}
                             position={image.position}
                           />
                         </div>

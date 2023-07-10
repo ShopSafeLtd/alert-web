@@ -10,13 +10,14 @@ import {
   Row,
   Statistic,
   Table,
+  Tag,
   Typography,
 } from 'antd';
 import type {
   InvestigationSuggestionsQuery,
   ViewInvestigationQuery,
 } from 'graphql/generated';
-import { UpdateType } from 'graphql/generated';
+import { InvestigationStatus, UpdateType } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
 import moment from 'moment';
@@ -29,6 +30,7 @@ import SuggestedOffenders from 'components/investigations/SuggestedOffenders';
 import SuggestedVehicles from 'components/investigations/SuggestedVehicles';
 import SuggestedIncidents from 'components/investigations/SuggestedIncidents';
 import { useIntl } from 'react-intl';
+import GetInvestigationStatusValues from 'types/enums/investigation-status';
 import useStyles from './ViewDetails.styles';
 import UpdateContent from '../../../../incidents/ViewIncident/Update.view';
 import UpdateBar from '../../../../../components/MessageInput/UpdateBar';
@@ -82,7 +84,12 @@ interface Props {
   viewSuggestedVehicles: boolean;
   toggleViewSuggestedVehicles: () => void;
 }
-
+const getTextStatus = (value: InvestigationStatus) => {
+  if (value === InvestigationStatus.Open) return 'green';
+  if (value === InvestigationStatus.Closed) return 'red';
+  if (value === InvestigationStatus.Paused) return 'orange';
+  return 'green';
+};
 const ViewInvestigation = ({
   data,
   loading,
@@ -127,6 +134,18 @@ const ViewInvestigation = ({
             <Card>
               <Title className={classes.headerTitle} level={4}>
                 {data?.investigation?.name}
+                <Tag
+                  color={getTextStatus(
+                    data?.investigation?.status || InvestigationStatus.Open
+                  )}
+                  style={{ marginLeft: 10, marginTop: -8 }}
+                >
+                  {
+                    GetInvestigationStatusValues[
+                      data?.investigation?.status || InvestigationStatus.Open
+                    ]
+                  }
+                </Tag>
               </Title>
               <Paragraph style={{ margin: 0, marginBottom: 10 }}>
                 {data?.investigation?.description}

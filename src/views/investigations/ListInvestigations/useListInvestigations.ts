@@ -35,47 +35,48 @@ const useListInvestigations = (): Return => {
     setAddInvestigation((prev) => !prev);
   };
 
-  const updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation> =
-    (store, { data: res }) => {
-      if (res === null || res === undefined) return;
+  const updateInvestigationList: MutationUpdaterFn<
+    CreateInvestigationMutation
+  > = (store, { data: res }) => {
+    if (res === null || res === undefined) return;
 
-      const existingData = store.readQuery<ListInvestigationsQuery>({
-        query: ListInvestigationsDocument,
-        variables: {
-          scheme: {
-            id: schemeId,
-          },
+    const existingData = store.readQuery<ListInvestigationsQuery>({
+      query: ListInvestigationsDocument,
+      variables: {
+        scheme: {
+          id: schemeId,
         },
-      });
+      },
+    });
 
-      if (existingData === null) return;
+    if (existingData === null) return;
 
-      store.writeQuery<ListInvestigationsQuery>({
-        query: ListInvestigationsDocument,
-        data: {
-          listInvestigations: {
-            ...existingData.listInvestigations,
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            investigations:
-              existingData?.listInvestigations?.investigations &&
-              existingData.listInvestigations.investigations.length > 0
-                ? [
-                    // eslint-disable-next-line no-unsafe-optional-chaining
-                    ...existingData?.listInvestigations?.investigations,
-                    res?.createInvestigation || [],
-                  ]
-                : [res.createInvestigation],
-          },
-          __typename: 'Query',
+    store.writeQuery<ListInvestigationsQuery>({
+      query: ListInvestigationsDocument,
+      data: {
+        listInvestigations: {
+          ...existingData.listInvestigations,
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          investigations:
+            existingData?.listInvestigations?.investigations &&
+            existingData.listInvestigations.investigations.length > 0
+              ? [
+                  // eslint-disable-next-line no-unsafe-optional-chaining
+                  ...existingData?.listInvestigations?.investigations,
+                  res?.createInvestigation || [],
+                ]
+              : [res.createInvestigation],
         },
-        variables: {
-          scheme: {
-            id: schemeId,
-          },
+        __typename: 'Query',
+      },
+      variables: {
+        scheme: {
+          id: schemeId,
         },
-      });
-    };
+      },
+    });
+  };
   return {
     data,
     loading,

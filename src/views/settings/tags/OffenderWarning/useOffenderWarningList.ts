@@ -82,10 +82,15 @@ const useOffenderWarningList = (): Return => {
     onCompleted: () => {
       setSaving(false);
       setAddOffenderWarning(false);
-      // new thing to translate
       notification.success({
-        message: 'Successfully Added!',
-        description: 'The offender warning has been added! ',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Added!',
+          id: '5Hvk21',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The offender warning has been added.',
+          id: 'aV3tF0',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -148,8 +153,6 @@ const useOffenderWarningList = (): Return => {
   };
 
   // delete
-
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const [recycleTag] = useRecycleTagMutation({
     onCompleted: () => {
       setSaving(false);
@@ -172,7 +175,6 @@ const useOffenderWarningList = (): Return => {
 
       if (existingData === null) return;
 
-      // write the new data to the Apollo store
       store.writeQuery<TagsQuery>({
         query: TagsDocument,
         data: {
@@ -185,17 +187,6 @@ const useOffenderWarningList = (): Return => {
       });
     },
   });
-  const openDelete = (currentId: string) => {
-    setSaving(true);
-    if (currentId)
-      void recycleTag({
-        variables: {
-          where: {
-            id: currentId,
-          },
-        },
-      }).finally(() => setSaving(false));
-  };
 
   const deleteConfirm = (currentId: string) => {
     confirm({
@@ -208,7 +199,14 @@ const useOffenderWarningList = (): Return => {
         id: 'JDJoIZ',
       }),
       onOk() {
-        openDelete(currentId);
+        setSaving(true);
+        void recycleTag({
+          variables: {
+            where: {
+              id: currentId,
+            },
+          },
+        }).finally(() => setSaving(false));
       },
     });
   };

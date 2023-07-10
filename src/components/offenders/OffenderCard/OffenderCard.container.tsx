@@ -23,11 +23,23 @@ const OffenderCard = ({
   update,
   isArticle,
 }: Props): JSX.Element => {
-  const { approvalRights, deleteRights, menuRights, onNavigate, onDelete } =
-    useOffenderCard({
-      createdById: offender.createdBy.id,
-      update,
-    });
+  const {
+    approvalRights,
+    deleteRights,
+    menuRights,
+    onDelete,
+    editOffenderFeed,
+    toggleEditOffenderFeed,
+    editImage,
+    toggleEditImage,
+    editImageId,
+    setEditImageId,
+    onEditImage,
+    onNavigate,
+  } = useOffenderCard({
+    offender,
+    update,
+  });
 
   return (
     <View
@@ -37,8 +49,15 @@ const OffenderCard = ({
       menuRights={menuRights}
       offender={offender}
       openLightbox={openLightbox}
-      onNavigate={onNavigate}
       onDelete={onDelete}
+      editOffenderFeed={editOffenderFeed}
+      toggleEditOffenderFeed={toggleEditOffenderFeed}
+      editImage={editImage}
+      toggleEditImage={toggleEditImage}
+      editImageId={editImageId}
+      setEditImageId={setEditImageId}
+      onEditImage={onEditImage}
+      onNavigate={onNavigate}
     />
   );
 };

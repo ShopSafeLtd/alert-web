@@ -56,6 +56,7 @@ describe('Detail Officer View', () => {
             {
               id: 'cl6owsuzo33227f9pe9zk4wone',
               position: ImagePosition.CenterCenter,
+              rotation: 0,
             },
           ],
           offenders: [],

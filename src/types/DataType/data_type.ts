@@ -1,3 +1,4 @@
+import type { UploadFile } from 'antd';
 import type {
   Age,
   BanType,
@@ -45,17 +46,7 @@ export interface OffenderData {
         name: string;
       }[]
     | undefined;
-  images?: {
-    id: string;
-    optimised?: string | null;
-    url?: string | null;
-    fileName?: string | null;
-    type?: string | null;
-    new?: boolean;
-    position?: ImagePosition;
-    primary?: boolean;
-    policeImage?: boolean;
-  }[];
+  images?: ImageCardData[];
   imageUid?: string[] | undefined;
   bans?: BanData[] | undefined;
   idVerified?: boolean;
@@ -85,11 +76,7 @@ export interface IncidentCardData {
   subject?: string | null;
   description?: string;
   dayTime?: string | null;
-  images?: Array<{
-    id: string;
-    url?: string | null;
-    optimised?: string | null;
-  }>;
+  images?: Array<ImageCardData>;
 }
 
 // Vehicle
@@ -107,19 +94,7 @@ export interface VehicleData {
   offenders?: string[];
   customGalleries?: string[];
   newCustomGalleriesData?: CustomGalleryData[];
-  images?: Array<{
-    id: string;
-    url?: string | null;
-    optimised?: string | null;
-    fileName?: string | null;
-    type?: string | null;
-    position?: ImagePosition;
-    primary?: boolean;
-    policeImage?: boolean;
-    edited?: boolean;
-    new?: boolean;
-    deleted?: boolean;
-  }>;
+  images?: Array<ImageCardData>;
 }
 
 export interface VehicleCardData {
@@ -134,17 +109,7 @@ export interface VehicleCardData {
   groups?: string[];
   crimeGroup?: string[];
   customGalleries?: string[];
-  images?: Array<{
-    id: string;
-    optimised?: string | null;
-    url?: string | null;
-    fileName?: string | null;
-    type?: string | null;
-    new?: boolean;
-    position?: ImagePosition;
-    primary?: boolean;
-    policeImage?: boolean;
-  }>;
+  images?: Array<ImageCardData>;
   incidents?: IncidentCardData[];
   offenders?: OffenderData[];
 }
@@ -173,10 +138,38 @@ export interface CrimeGroupCardData {
 // image
 export interface ImageCardData {
   id: string;
-  url?: string | null;
-  optimised?: string | null;
+  optimised?: string | null | undefined;
+  url?: string | null | undefined;
+  fileName?: string | null;
+  type?: string | null;
+  edited?: boolean;
+  new?: boolean;
+  deleted?: boolean;
+  position?: ImagePosition;
+  primary?: boolean;
+  policeImage?: boolean;
+  rotation?: number;
 }
-
+export interface Image extends UploadFile {
+  // id: string;
+  optimised?: string | null;
+  position?: ImagePosition;
+  primary?: boolean;
+  policeImage?: boolean;
+  rotation?: number;
+  edited?: boolean;
+  new?: boolean;
+  deleted?: boolean;
+}
+export interface EditFeedImage {
+  id: string;
+  optimised?: string | null | undefined;
+  url?: string | null | undefined;
+  position?: ImagePosition;
+  primary?: boolean;
+  policeImage?: boolean;
+  rotation?: number;
+}
 // LocationData
 export interface LocationData {
   building?: string | null;

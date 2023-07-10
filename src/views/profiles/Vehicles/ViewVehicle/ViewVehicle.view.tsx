@@ -273,6 +273,7 @@ const ViewVehicle = ({
                     >
                       <WatermarkImage
                         url={image.optimised}
+                        rotation={image.rotation}
                         position={image.position}
                       />
                     </Button>

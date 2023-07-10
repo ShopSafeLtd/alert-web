@@ -1,18 +1,15 @@
 query listInvestigations(
-    $scheme: SchemeWhereUniqueInput!
-    $take: Int
-    $skip: Int
+  $scheme: SchemeWhereUniqueInput!
+  $take: Int
+  $skip: Int
 ) {
-    listInvestigations(
-        scheme: $scheme
-        take: $take
-        skip: $skip
-    ) {
-        total
-        investigations {
-            id
-            name
-            description
-        }
+  listInvestigations(scheme: $scheme, take: $take, skip: $skip) {
+    total
+    investigations {
+      id
+      name
+      description
+      status
     }
+  }
 }
