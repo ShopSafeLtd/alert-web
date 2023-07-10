@@ -62342,28 +62342,7 @@ export type ListOffendersFeedQuery = {
       __typename?: 'Offender';
       id: string;
       reference?: number | null;
-      totalImages?: number | null;
-      createdAt: Date;
-      updatedAt: Date;
-      totalIncidents?: number | null;
-      age?: Age | null;
-      build?: Build | null;
-      height?: Height | null;
-      dateOfBirth?: Date | null;
-      dateSource?: string | null;
-      hair?: string | null;
-      gender?: Gender | null;
       name?: string | null;
-      race?: Race | null;
-      peculiarities?: string | null;
-      approved?: boolean | null;
-      active?: boolean | null;
-      lastActive?: {
-        __typename?: 'Incident';
-        id: string;
-        dayTime?: string | null;
-      } | null;
-      tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
       feedImage?: {
         __typename?: 'Image';
         id: string;
@@ -62372,41 +62351,6 @@ export type ListOffendersFeedQuery = {
         position: ImagePosition;
         rotation: number;
       } | null;
-      groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
-      createdBy: {
-        __typename?: 'User';
-        id: string;
-        fullName: string;
-        businesses: Array<{
-          __typename?: 'Business';
-          id: string;
-          name: string;
-        }>;
-      };
-      incidents: Array<{
-        __typename?: 'Incident';
-        id: string;
-        reference?: number | null;
-        subject?: string | null;
-        description: string;
-        dayTime?: string | null;
-        date: Date;
-        location?: {
-          __typename?: 'Address';
-          id: string;
-          full?: string | null;
-        } | null;
-        createdBy: {
-          __typename?: 'User';
-          id: string;
-          fullName: string;
-          businesses: Array<{
-            __typename?: 'Business';
-            id: string;
-            name: string;
-          }>;
-        };
-      }>;
     }>;
   } | null;
 };
@@ -73636,69 +73580,9 @@ export const ListOffendersFeedDocument = gql`
       offenders {
         id
         reference
-        totalImages
-        createdAt
-        updatedAt
-        totalIncidents
-        reference
-        age
-        build
-        height
-        dateOfBirth
-        dateSource
-        hair
-        gender
         name
-        race
-        peculiarities
-        approved
-        active
-        lastActive {
-          id
-          dayTime
-        }
-        tags {
-          id
-          name
-        }
         feedImage {
           ...FeedImage
-        }
-        groups {
-          id
-          name
-        }
-        tags {
-          id
-          name
-        }
-        createdBy {
-          id
-          fullName
-          businesses {
-            id
-            name
-          }
-        }
-        incidents {
-          id
-          reference
-          subject
-          description
-          dayTime
-          date
-          location {
-            id
-            full
-          }
-          createdBy {
-            id
-            fullName
-            businesses {
-              id
-              name
-            }
-          }
         }
       }
       total

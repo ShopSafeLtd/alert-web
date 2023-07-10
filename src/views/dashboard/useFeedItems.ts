@@ -12,7 +12,6 @@ import {
   useDeleteFeedItemMutation,
   useFeedItemsQuery,
   useListOffendersFeedQuery,
-  useSchemeGroupsQuery,
 } from 'graphql/generated';
 import { useEffect, useState } from 'react';
 import { FeedItemSort, useStoreActions, useStoreState } from 'state';
@@ -187,31 +186,40 @@ const useFeedItems = (): Return => {
       ],
     },
   };
+
+  const schemeGroups =
+    useStoreState((state) => state.user.groups)
+      .filter((group) => group.scheme.id === schemeId)
+      .map((group) => ({
+        value: group.id,
+        label: group.name,
+      })) || [];
+
   // Queries
-  // Fetch scheme groups if scheme admin
-  const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
-    variables: {
-      where: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
-        users:
-          role === Role.User
-            ? {
-                some: {
-                  id: {
-                    equals: userId,
-                  },
-                },
-              }
-            : undefined,
-      },
-    },
-    fetchPolicy: 'cache-and-network',
-    skip: role !== Role.SchemeAdmin,
-  });
+  // // Fetch scheme groups if scheme admin
+  // const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
+  //   variables: {
+  //     where: {
+  //       scheme: {
+  //         id: {
+  //           equals: schemeId,
+  //         },
+  //       },
+  //       users:
+  //         role === Role.User
+  //           ? {
+  //               some: {
+  //                 id: {
+  //                   equals: userId,
+  //                 },
+  //               },
+  //             }
+  //           : undefined,
+  //     },
+  //   },
+  //   fetchPolicy: 'cache-and-network',
+  //   skip: role !== Role.SchemeAdmin,
+  // });
 
   // On mount
   useEffect(() => {
@@ -224,7 +232,7 @@ const useFeedItems = (): Return => {
       },
       variables: {
         ...variables,
-        groups: groupsData?.groups.map((group) => group.id) || [],
+        groups: schemeGroups?.map((group) => group.value) || [],
       },
       order,
     });
@@ -416,12 +424,8 @@ const useFeedItems = (): Return => {
     setOrder,
     search,
     setSearch,
-    groups:
-      groupsData?.groups.map((group) => ({
-        value: group.id,
-        label: group.name,
-      })) || [],
-    groupsLoading,
+    groups: schemeGroups,
+    groupsLoading: false,
     onGroupsChange,
     variables,
     onNavigate,

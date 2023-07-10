@@ -172,4 +172,4 @@ const WatermarkImage = ({ url, image, position, rotation }: Props) => {
   );
 };
 
-export default WatermarkImage;
+export default React.memo(WatermarkImage);
