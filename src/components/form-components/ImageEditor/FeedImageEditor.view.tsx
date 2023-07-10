@@ -64,7 +64,7 @@ const FeedImageEditor = ({ open, image, submitImage, onClose }: Props) => {
   const [position, setPosition] = useState(
     image?.position || ImagePosition.CenterCenter
   );
-  const [rotation, setRotation] = useState(0);
+  const [rotation, setRotation] = useState(image?.rotation || 0);
   const [policeImage, setPoliceImage] = useState(image?.policeImage);
   const [primary, setPrimary] = useState(image?.primary);
   // console.log('imageId', image.id);
@@ -83,7 +83,7 @@ const FeedImageEditor = ({ open, image, submitImage, onClose }: Props) => {
         rotation,
       });
     }
-    // onClose();
+    onClose();
     setRotation(0);
     setPosition(ImagePosition.CenterCenter);
     setPrimary(false);

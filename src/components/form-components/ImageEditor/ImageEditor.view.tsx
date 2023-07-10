@@ -88,7 +88,7 @@ const ImageEditor = ({
   const [position, setPosition] = useState(
     image?.position || ImagePosition.CenterCenter
   );
-  const [rotation, setRotation] = useState(0);
+  const [rotation, setRotation] = useState(image?.rotation || 0);
   const [policeImage, setPoliceImage] = useState(image?.policeImage);
   const [isPrimaryImage, setIsPrimaryImage] = useState(
     image?.uid === primaryImage
@@ -106,6 +106,7 @@ const ImageEditor = ({
         rotation,
       });
     }
+    onClose();
     setPosition(ImagePosition.CenterCenter);
     setIsPrimaryImage(false);
     setPoliceImage(false);
