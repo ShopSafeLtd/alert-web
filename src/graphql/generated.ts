@@ -48752,6 +48752,7 @@ export type User = {
   messagePush: Scalars['Boolean'];
   messages: Array<Message>;
   newUser: Scalars['Boolean'];
+  notificationCount?: Maybe<Scalars['Int']>;
   notifications: Array<UserNotification>;
   offenderEmail: Scalars['Boolean'];
   offenderPush: Scalars['Boolean'];
@@ -48912,6 +48913,10 @@ export type UserMessagesArgs = {
   last?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<MessageOrderByWithRelationInput>>;
   where?: InputMaybe<MessageWhereInput>;
+};
+
+export type UserNotificationCountArgs = {
+  scheme?: InputMaybe<UniqueId>;
 };
 
 export type UserNotificationsArgs = {
@@ -68861,7 +68866,9 @@ export type UpdateUserDisableMutation = {
   updateUser?: { __typename?: 'User'; id: string; disabled: boolean } | null;
 };
 
-export type CurrentUserQueryVariables = Exact<{ [key: string]: never }>;
+export type CurrentUserQueryVariables = Exact<{
+  scheme?: InputMaybe<UniqueId>;
+}>;
 
 export type CurrentUserQuery = {
   __typename?: 'Query';
@@ -68874,6 +68881,7 @@ export type CurrentUserQuery = {
     reference?: number | null;
     demId?: string | null;
     publicName: boolean;
+    notificationCount?: number | null;
     newUser: boolean;
     incidentEmail: boolean;
     incidentPush: boolean;
@@ -70058,6 +70066,38 @@ export type VehicleQuery = {
       }>;
     }>;
   } | null;
+};
+
+export type UserListQueryVariables = Exact<{
+  where?: InputMaybe<UserWhereInput>;
+  orderBy?: InputMaybe<
+    Array<UserOrderByWithRelationInput> | UserOrderByWithRelationInput
+  >;
+  groupWhere?: InputMaybe<GroupWhereInput>;
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type UserListQuery = {
+  __typename?: 'Query';
+  listUsers: {
+    __typename?: 'ListUsers';
+    total: number;
+    users: Array<{
+      __typename?: 'User';
+      id: string;
+      fullName: string;
+      email: string;
+      status?: UserStatus | null;
+      businesses: Array<{
+        __typename?: 'Business';
+        id: string;
+        name: string;
+        fullName: string;
+      }>;
+      groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+    }>;
+  };
 };
 
 export const FeedImageFragmentDoc = gql`
@@ -82799,7 +82839,7 @@ export type UpdateUserDisableMutationOptions = Apollo.BaseMutationOptions<
   UpdateUserDisableMutationVariables
 >;
 export const CurrentUserDocument = gql`
-  query currentUser {
+  query currentUser($scheme: UniqueId) {
     currentUser {
       id
       fullName
@@ -82808,6 +82848,7 @@ export const CurrentUserDocument = gql`
       reference
       demId
       publicName
+      notificationCount(scheme: $scheme)
       businesses {
         id
         name
@@ -84567,4 +84608,61 @@ export type VehicleLazyQueryHookResult = ReturnType<typeof useVehicleLazyQuery>;
 export type VehicleQueryResult = Apollo.QueryResult<
   VehicleQuery,
   VehicleQueryVariables
+>;
+export const UserListDocument = gql`
+  query UserList(
+    $where: UserWhereInput
+    $orderBy: [UserOrderByWithRelationInput!]
+    $groupWhere: GroupWhereInput
+    $take: Int
+    $skip: Int
+  ) {
+    listUsers(where: $where, orderBy: $orderBy, take: $take, skip: $skip) {
+      users {
+        id
+        fullName
+        email
+        businesses {
+          id
+          name
+          fullName
+        }
+        status
+        groups(where: $groupWhere) {
+          id
+          name
+        }
+      }
+      total
+    }
+  }
+`;
+export function useUserListQuery(
+  baseOptions?: Apollo.QueryHookOptions<UserListQuery, UserListQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<UserListQuery, UserListQueryVariables>(
+    UserListDocument,
+    options
+  );
+}
+export function useUserListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    UserListQuery,
+    UserListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<UserListQuery, UserListQueryVariables>(
+    UserListDocument,
+    options
+  );
+}
+export type UserListQueryHookResult = ReturnType<typeof useUserListQuery>;
+export type UserListLazyQueryHookResult = ReturnType<
+  typeof useUserListLazyQuery
+>;
+export type UserListQueryResult = Apollo.QueryResult<
+  UserListQuery,
+  UserListQueryVariables
 >;

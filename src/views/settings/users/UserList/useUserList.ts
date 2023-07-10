@@ -1,24 +1,24 @@
 import { useState } from 'react';
 import type {
-  ListUsersQuery,
   CreateUserInDatabaseMutation,
   InviteExistingUserMutation,
   UserStatus,
+  UserListQuery,
 } from 'graphql/generated';
 import {
   SortOrder,
-  useListUsersQuery,
   QueryMode,
   useSchemeGroupsQuery,
   ListUsersDocument,
   Role,
+  useUserListQuery,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { UserSort } from 'types/enums/user_sort';
 
 interface Return {
-  data: ListUsersQuery | undefined;
+  data: UserListQuery | undefined;
   loading: boolean;
   search: string;
   setSearch: (value: string) => void;
@@ -158,13 +158,12 @@ const useUserList = (): Return => {
     },
   };
 
-  const { data, loading } = useListUsersQuery({
+  const { data, loading } = useUserListQuery({
     fetchPolicy: 'cache-and-network',
     variables,
   });
 
   const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
-    fetchPolicy: 'cache-and-network',
     variables: {
       where: {
         scheme: {
@@ -209,7 +208,7 @@ const useUserList = (): Return => {
       return;
 
     // get existing group list data from Apollo store
-    const existingData = store.readQuery<ListUsersQuery>({
+    const existingData = store.readQuery<UserListQuery>({
       query: ListUsersDocument,
       variables,
     });
@@ -217,7 +216,7 @@ const useUserList = (): Return => {
     if (!existingData?.listUsers) return;
 
     // write the new data to the Apollo store
-    store.writeQuery<ListUsersQuery>({
+    store.writeQuery<UserListQuery>({
       query: ListUsersDocument,
       data: {
         listUsers: {
@@ -241,7 +240,7 @@ const useUserList = (): Return => {
       return;
 
     // get existing group list data from Apollo store
-    const existingData = store.readQuery<ListUsersQuery>({
+    const existingData = store.readQuery<UserListQuery>({
       query: ListUsersDocument,
       variables,
     });
@@ -249,7 +248,7 @@ const useUserList = (): Return => {
     if (existingData === null) return;
 
     // write the new data to the Apollo store
-    store.writeQuery<ListUsersQuery>({
+    store.writeQuery<UserListQuery>({
       query: ListUsersDocument,
       data: {
         listUsers: {

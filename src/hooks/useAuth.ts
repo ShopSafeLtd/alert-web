@@ -59,6 +59,7 @@ const useAuth = (): Return => {
     demId,
     groups,
     reference,
+    userNotifications,
   }: HandleSuccessArgs) => {
     // const color = `hsl(${Math.random() * 360}, 70%, 30%)`;
 
@@ -109,9 +110,6 @@ const useAuth = (): Return => {
             .customTranslations as Translations[],
         });
         setTodos({ userTodos: schemeDetails?.scheme?.userTodos || 0 });
-        setNotifications({
-          userNotifications: schemes[0]?.scheme?.userNotifications || 0,
-        });
       } else {
         handleNoValidScheme();
       }
@@ -145,7 +143,6 @@ const useAuth = (): Return => {
     });
 
     Sentry.setUser({ email, username: fullName, id });
-
     setUser({
       id,
       email,
@@ -158,6 +155,7 @@ const useAuth = (): Return => {
       isSet: true,
       demId,
       reference,
+      userNotifications,
     });
     authenticated(accessToken);
   };
@@ -187,6 +185,7 @@ const useAuth = (): Return => {
           );
         }
       }
+
       await handleSuccess({
         id: currentUser?.id || '',
         email: currentUser?.email || '',
@@ -201,6 +200,7 @@ const useAuth = (): Return => {
         isSet: true,
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         reference: `${currentUser?.reference}` || '',
+        userNotifications: currentUser?.notificationCount || 0,
       });
     },
     onError: () => expired(),
@@ -274,6 +274,7 @@ const useAuth = (): Return => {
       isSet: true,
       demId: data.demId,
       reference: data.reference,
+      userNotifications: data.userNotifications,
     });
   };
 

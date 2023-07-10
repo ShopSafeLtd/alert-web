@@ -4,7 +4,7 @@ import { UserStatus } from 'graphql/generated';
 import type {
   CreateUserInDatabaseMutation,
   InviteExistingUserMutation,
-  ListUsersQuery,
+  UserListQuery,
   Role,
 } from 'graphql/generated';
 import { Link } from 'react-router-dom';
@@ -19,7 +19,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { GetUserStatusValues } from 'types/enums/user_status';
 
 interface Props {
-  data: ListUsersQuery | undefined;
+  data: UserListQuery | undefined;
   loading: boolean;
   search: string;
   setSearch: (value: string) => void;
