@@ -61544,6 +61544,7 @@ export type FeedItemsQueryVariables = Exact<{
   skip?: InputMaybe<Scalars['Int']>;
   after?: InputMaybe<Scalars['String']>;
   groups?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+  groupsWhere2?: InputMaybe<GroupWhereInput>;
 }>;
 
 export type FeedItemsQuery = {
@@ -73279,6 +73280,7 @@ export const FeedItemsDocument = gql`
     $skip: Int
     $after: String
     $groups: [String!]
+    $groupsWhere2: GroupWhereInput
   ) {
     listFeedItems(
       where: $where
@@ -73403,7 +73405,7 @@ export const FeedItemsDocument = gql`
             ...FeedUpdate
           }
         }
-        groups {
+        groups(where: $groupsWhere2) {
           id
           name
         }

@@ -241,7 +241,18 @@ const useFeedItems = (): Return => {
 
   const { data, loading, fetchMore } = useFeedItemsQuery({
     // @ts-expect-error TODO: Fix type
-    variables: queryVariables,
+    variables: {
+      ...queryVariables,
+      groupsWhere2: {
+        users: {
+          some: {
+            id: {
+              equals: userId,
+            },
+          },
+        },
+      },
+    },
     fetchPolicy: 'cache-and-network',
   });
 
