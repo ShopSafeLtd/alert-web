@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment */
 import React from 'react';
 import { Col, Row, Typography } from 'antd';
 import type { FeedItemsQuery } from 'graphql/generated';
@@ -49,11 +48,7 @@ const IncidentFeed = ({
         {!isNewImage && latestUpdate && latestUpdate.feedImage ? (
           <Col>
             <ImageContainer
-              src={
-                latestUpdate.feedImage.optimised ||
-                latestUpdate.feedImage.url ||
-                ''
-              }
+              src={latestUpdate.feedImage.low || ''}
               position={latestUpdate.feedImage.position}
             />
           </Col>
@@ -61,7 +56,7 @@ const IncidentFeed = ({
         {(isNewIncident || isNewImage) && feedImage ? (
           <Col>
             <ImageContainer
-              src={feedImage.optimised || feedImage.url || ''}
+              src={feedImage.low || ''}
               position={feedImage.position}
             />
           </Col>

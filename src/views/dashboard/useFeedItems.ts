@@ -55,6 +55,7 @@ interface Return {
   setGallery: (values: string[]) => void;
   createdAtFilter: DateType | undefined;
   setCreatedAtFilter: (value: DateType | undefined) => void;
+  fetchMoreScroll: () => void;
 }
 
 const useFeedItems = (): Return => {
@@ -238,7 +239,7 @@ const useFeedItems = (): Return => {
     });
   }, []);
 
-  const { data, loading } = useFeedItemsQuery({
+  const { data, loading, fetchMore } = useFeedItemsQuery({
     // @ts-expect-error TODO: Fix type
     variables: queryVariables,
     fetchPolicy: 'cache-and-network',
@@ -361,6 +362,32 @@ const useFeedItems = (): Return => {
       });
     }
   };
+
+  const fetchMoreScroll = () => {
+    void fetchMore({
+      variables: {
+        ...queryVariables,
+        take: 10,
+        skip: data?.listFeedItems?.feedItems?.length || 0,
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        return {
+          listFeedItems: {
+            ...fetchMoreResult.listFeedItems,
+            total:
+              prev.listFeedItems?.total ||
+              fetchMoreResult?.listFeedItems?.total ||
+              0,
+            feedItems: [
+              ...(prev.listFeedItems?.feedItems || []),
+              ...(fetchMoreResult.listFeedItems?.feedItems || []),
+            ],
+          },
+        };
+      },
+    });
+  };
   // Functions
   const onPaginationChange = (page: number, pageSize: number) => {
     setFeedItemsState({
@@ -443,6 +470,7 @@ const useFeedItems = (): Return => {
     setGallery,
     setCreatedAtFilter,
     createdAtFilter,
+    fetchMoreScroll,
   };
 };
 

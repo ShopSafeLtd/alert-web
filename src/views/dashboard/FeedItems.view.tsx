@@ -14,7 +14,6 @@ import {
   Empty,
   Input,
   Modal,
-  Pagination,
   Row,
   Skeleton,
   Tooltip,
@@ -49,7 +48,9 @@ import BanFeed from 'components/feedItems/FeedItemSection/BanFeed';
 import ArticlesSection from 'components/feedItems/Articles/ArticlesSection';
 import formatCalendar from 'utils/format-calendar-24h';
 import { useIntl } from 'react-intl';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import useStyles from './FeedItem.styles';
+import Loading from '../../components/shared-components/AntD/Loading';
 
 const { Title, Paragraph, Text } = Typography;
 const { confirm } = Modal;
@@ -60,8 +61,8 @@ interface Props {
 
   recentOffenderData: ListOffendersFeedQuery | undefined;
   recentOffenderLoading: boolean;
-  onPaginationChange: (page: number, pageSize: number) => void;
-  pagination: { page: number; pageSize: number; sizeOptions: string[] };
+  // onPaginationChange: (page: number, pageSize: number) => void;
+  // pagination: { page: number; pageSize: number; sizeOptions: string[] };
 
   search: string;
   setSearch: (value: string) => void;
@@ -84,6 +85,7 @@ interface Props {
   setGallery: (values: string[]) => void;
   setCreatedAtFilter: (value: DateType | undefined) => void;
   createdAtFilter: DateType | undefined;
+  fetchMoreScroll: () => void;
 }
 
 const FeedItem = ({
@@ -91,8 +93,8 @@ const FeedItem = ({
   loading,
   recentOffenderData,
   recentOffenderLoading,
-  onPaginationChange,
-  pagination,
+  // onPaginationChange,
+  // pagination,
   search,
   setSearch,
   onDeleteFeedItem,
@@ -113,9 +115,12 @@ const FeedItem = ({
   setGallery,
   setCreatedAtFilter,
   createdAtFilter,
+  fetchMoreScroll,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
+  const total = data?.listFeedItems?.total || 0;
+  const feedItems = data?.listFeedItems?.feedItems.length || 0;
   return (
     <div
       className="feed-container"
@@ -240,163 +245,178 @@ const FeedItem = ({
                 overflow: 'auto',
               }}
             >
-              {data.listFeedItems?.feedItems.map((feedItem) => (
-                <Card
-                  style={{
-                    width: '99%',
-                    marginBottom: 20,
-                  }}
-                  key={feedItem?.id}
-                  bodyStyle={{
-                    padding: 0,
-                    overflow: 'hidden',
-                    borderRadius: 10,
-                  }}
-                  loading={loading}
-                >
-                  <>
-                    <Row
-                      style={{ margin: '8px 8px 4px' }}
-                      // justify="end"
-                      wrap={false}
-                    >
-                      {/* <Col> */}
-                      <Title
-                        style={{ margin: 0, fontSize: 14, maxWidth: '60%' }}
-                        level={4}
-                        ellipsis
+              <InfiniteScroll
+                dataLength={feedItems}
+                next={() => fetchMoreScroll()}
+                hasMore={feedItems < total}
+                loader={<Loading />}
+                height="calc(100vh - 100px)"
+                endMessage={
+                  <p style={{ textAlign: 'center' }}>
+                    {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                    <b>-----------</b>
+                  </p>
+                }
+              >
+                {data.listFeedItems?.feedItems.map((feedItem) => (
+                  <Card
+                    style={{
+                      width: '99%',
+                      marginBottom: 20,
+                    }}
+                    key={feedItem?.id}
+                    bodyStyle={{
+                      padding: 0,
+                      overflow: 'hidden',
+                      borderRadius: 10,
+                    }}
+                    loading={loading}
+                  >
+                    <>
+                      <Row
+                        style={{ margin: '8px 8px 4px' }}
+                        // justify="end"
+                        wrap={false}
                       >
-                        {feedItem?.message}
-                      </Title>
-                      {/* </Col> */}
-                      <Col flex={1} />
-                      <Col>
-                        <Text type="secondary" style={{ fontSize: 14 }}>
-                          {formatCalendar(feedItem?.updatedAt)}
-                        </Text>
-                      </Col>
-                      {adminRights ? (
+                        {/* <Col> */}
+                        <Title
+                          style={{ margin: 0, fontSize: 14, maxWidth: '60%' }}
+                          level={4}
+                          ellipsis
+                        >
+                          {feedItem?.message}
+                        </Title>
+                        {/* </Col> */}
+                        <Col flex={1} />
                         <Col>
-                          {adminRights ? (
-                            <Button
-                              type="text"
-                              style={{
-                                height: 25,
-                                width: 30,
-                                marginTop: -15,
-                                // marginLeft: 5,
-                              }}
-                              disabled={saving}
-                              icon={
-                                <FontAwesomeIcon
-                                  style={{ marginBottom: 2 }}
-                                  icon={faTrash}
-                                  size="sm"
-                                />
-                              }
-                              onClick={() => {
-                                confirm({
-                                  title: 'Do you want to delete the feed item?',
-                                  content: 'This action cannot be undone.',
-                                  onOk() {
-                                    onDeleteFeedItem(feedItem.id);
-                                  },
-                                });
-                              }}
-                              size="small"
-                            />
-                          ) : null}
+                          <Text type="secondary" style={{ fontSize: 14 }}>
+                            {formatCalendar(feedItem?.updatedAt)}
+                          </Text>
                         </Col>
-                      ) : null}
-                    </Row>
-                    <Divider style={{ margin: 0 }} />
-                    <div style={{ padding: 0 }}>
-                      {/* create new incident/offender */}
-                      {feedItem?.type === FeedItemType.NewIncident && (
-                        <IncidentFeed feedItem={feedItem} isNewIncident />
-                      )}
-                      {feedItem?.type === FeedItemType.NewOffender && (
-                        <OffenderFeed feedItem={feedItem} isNewOffender />
-                      )}
-                      {feedItem?.type === FeedItemType.NewInvestigation && (
-                        <InvestigationFeed
-                          feedItem={feedItem}
-                          isNewInvestigation
-                        />
-                      )}
-                      {feedItem?.type === FeedItemType.NewVehicle && (
-                        <VehicleFeed feedItem={feedItem} isNewVehicle />
-                      )}
-                      {feedItem?.type === FeedItemType.NewCrimegroup && (
-                        <CrimeGroupFeed feedItem={feedItem} isNewCrimeGroup />
-                      )}
-                      {/* update details  */}
-                      {feedItem?.type === FeedItemType.Incident && (
-                        <IncidentFeed feedItem={feedItem} />
-                      )}
-                      {feedItem?.type === FeedItemType.Offender && (
-                        <OffenderFeed feedItem={feedItem} />
-                      )}
-                      {feedItem?.type === FeedItemType.Investigation && (
-                        <InvestigationFeed feedItem={feedItem} />
-                      )}
+                        {adminRights ? (
+                          <Col>
+                            {adminRights ? (
+                              <Button
+                                type="text"
+                                style={{
+                                  height: 25,
+                                  width: 30,
+                                  marginTop: -15,
+                                  // marginLeft: 5,
+                                }}
+                                disabled={saving}
+                                icon={
+                                  <FontAwesomeIcon
+                                    style={{ marginBottom: 2 }}
+                                    icon={faTrash}
+                                    size="sm"
+                                  />
+                                }
+                                onClick={() => {
+                                  confirm({
+                                    title:
+                                      'Do you want to delete the feed item?',
+                                    content: 'This action cannot be undone.',
+                                    onOk() {
+                                      onDeleteFeedItem(feedItem.id);
+                                    },
+                                  });
+                                }}
+                                size="small"
+                              />
+                            ) : null}
+                          </Col>
+                        ) : null}
+                      </Row>
+                      <Divider style={{ margin: 0 }} />
+                      <div style={{ padding: 0 }}>
+                        {/* create new incident/offender */}
+                        {feedItem?.type === FeedItemType.NewIncident && (
+                          <IncidentFeed feedItem={feedItem} isNewIncident />
+                        )}
+                        {feedItem?.type === FeedItemType.NewOffender && (
+                          <OffenderFeed feedItem={feedItem} isNewOffender />
+                        )}
+                        {feedItem?.type === FeedItemType.NewInvestigation && (
+                          <InvestigationFeed
+                            feedItem={feedItem}
+                            isNewInvestigation
+                          />
+                        )}
+                        {feedItem?.type === FeedItemType.NewVehicle && (
+                          <VehicleFeed feedItem={feedItem} isNewVehicle />
+                        )}
+                        {feedItem?.type === FeedItemType.NewCrimegroup && (
+                          <CrimeGroupFeed feedItem={feedItem} isNewCrimeGroup />
+                        )}
+                        {/* update details  */}
+                        {feedItem?.type === FeedItemType.Incident && (
+                          <IncidentFeed feedItem={feedItem} />
+                        )}
+                        {feedItem?.type === FeedItemType.Offender && (
+                          <OffenderFeed feedItem={feedItem} />
+                        )}
+                        {feedItem?.type === FeedItemType.Investigation && (
+                          <InvestigationFeed feedItem={feedItem} />
+                        )}
 
-                      {/* add new images */}
-                      {feedItem?.type === FeedItemType.IncidentImage && (
-                        <IncidentFeed feedItem={feedItem} isNewImage />
-                      )}
-                      {feedItem?.type === FeedItemType.OffenderImage && (
-                        <OffenderFeed feedItem={feedItem} isNewImage />
-                      )}
-                      {feedItem?.type === FeedItemType.InvestigationImage && (
-                        <InvestigationFeed feedItem={feedItem} isNewImage />
-                      )}
-                      {feedItem?.type === FeedItemType.VehicleImage && (
-                        <VehicleFeed feedItem={feedItem} isNewImage />
-                      )}
-                      {/* add new intel */}
-                      {feedItem?.type === FeedItemType.IncidentIntel && (
-                        <IncidentFeed feedItem={feedItem} />
-                      )}
-                      {feedItem?.type === FeedItemType.OffenderIntel && (
-                        <OffenderFeed feedItem={feedItem} />
-                      )}
-                      {feedItem?.type === FeedItemType.InvestigationIntel && (
-                        <InvestigationFeed feedItem={feedItem} />
-                      )}
-                      {feedItem?.type === FeedItemType.VehicleIntel && (
-                        <VehicleFeed feedItem={feedItem} />
-                      )}
-                      {feedItem?.type === FeedItemType.CrimegroupIntel && (
-                        <CrimeGroupFeed feedItem={feedItem} />
-                      )}
+                        {/* add new images */}
+                        {feedItem?.type === FeedItemType.IncidentImage && (
+                          <IncidentFeed feedItem={feedItem} isNewImage />
+                        )}
+                        {feedItem?.type === FeedItemType.OffenderImage && (
+                          <OffenderFeed feedItem={feedItem} isNewImage />
+                        )}
+                        {feedItem?.type === FeedItemType.InvestigationImage && (
+                          <InvestigationFeed feedItem={feedItem} isNewImage />
+                        )}
+                        {feedItem?.type === FeedItemType.VehicleImage && (
+                          <VehicleFeed feedItem={feedItem} isNewImage />
+                        )}
+                        {/* add new intel */}
+                        {feedItem?.type === FeedItemType.IncidentIntel && (
+                          <IncidentFeed feedItem={feedItem} />
+                        )}
+                        {feedItem?.type === FeedItemType.OffenderIntel && (
+                          <OffenderFeed feedItem={feedItem} />
+                        )}
+                        {feedItem?.type === FeedItemType.InvestigationIntel && (
+                          <InvestigationFeed feedItem={feedItem} />
+                        )}
+                        {feedItem?.type === FeedItemType.VehicleIntel && (
+                          <VehicleFeed feedItem={feedItem} />
+                        )}
+                        {feedItem?.type === FeedItemType.CrimegroupIntel && (
+                          <CrimeGroupFeed feedItem={feedItem} />
+                        )}
 
-                      {/* article */}
-                      {feedItem?.type === FeedItemType.NewArticle && (
-                        <ArticleFeed feedItem={feedItem} />
-                      )}
-                      {/* ban */}
-                      {feedItem?.type === FeedItemType.NewBan && (
-                        <BanFeed feedItem={feedItem} />
-                      )}
-                    </div>
-                  </>
-                </Card>
-              ))}
-              <Row justify="center">
-                <Col>
-                  <Pagination
-                    total={data?.listFeedItems?.total}
-                    // pageSizeOptions={['20']}
-                    showSizeChanger={false}
-                    pageSize={pagination.pageSize}
-                    current={pagination.page}
-                    onChange={onPaginationChange}
-                    showTotal={(total) => `Total FeedItems: ${total}`}
-                    hideOnSinglePage
-                  />
-                </Col>
-              </Row>
+                        {/* article */}
+                        {feedItem?.type === FeedItemType.NewArticle && (
+                          <ArticleFeed feedItem={feedItem} />
+                        )}
+                        {/* ban */}
+                        {feedItem?.type === FeedItemType.NewBan && (
+                          <BanFeed feedItem={feedItem} />
+                        )}
+                      </div>
+                    </>
+                  </Card>
+                ))}
+              </InfiniteScroll>
+              {/* <Row justify="center"> */}
+              {/*   <Col> */}
+              {/*     <Pagination */}
+              {/*       total={data?.listFeedItems?.total} */}
+              {/*       // pageSizeOptions={['20']} */}
+              {/*       showSizeChanger={false} */}
+              {/*       pageSize={pagination.pageSize} */}
+              {/*       current={pagination.page} */}
+              {/*       onChange={onPaginationChange} */}
+              {/*       showTotal={(total) => `Total FeedItems: ${total}`} */}
+              {/*       hideOnSinglePage */}
+              {/*     /> */}
+              {/*   </Col> */}
+              {/* </Row> */}
             </div>
           ) : (
             <Card
@@ -492,7 +512,7 @@ const FeedItem = ({
                             >
                               {offender.feedImage && (
                                 <WatermarkImage
-                                  url={offender.feedImage?.optimised}
+                                  url={offender.feedImage?.low}
                                   position={offender.feedImage?.position}
                                 />
                               )}

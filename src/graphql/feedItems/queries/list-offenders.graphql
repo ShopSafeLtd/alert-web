@@ -15,12 +15,10 @@ query listOffendersFeed(
     offenders {
       id
       reference
-    name
-          feedImage {
-          ...FeedImage
-        }
-
-
+      name
+      feedImage {
+        ...FeedImage
+      }
     }
     total
   }

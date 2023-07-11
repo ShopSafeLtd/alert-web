@@ -53,7 +53,7 @@ const VehicleFeed = ({
         {(isNewVehicle || isNewImage) && feedImage ? (
           <Col>
             <ImageContainer
-              src={feedImage.optimised || feedImage.url || ''}
+              src={feedImage.low || ''}
               position={feedImage.position}
             />
           </Col>
@@ -61,11 +61,7 @@ const VehicleFeed = ({
         {!isNewImage && latestUpdate && latestUpdate.feedImage ? (
           <Col>
             <ImageContainer
-              src={
-                latestUpdate.feedImage.optimised ||
-                latestUpdate.feedImage.url ||
-                ''
-              }
+              src={latestUpdate.feedImage.low || ''}
               position={latestUpdate.feedImage.position}
             />
           </Col>

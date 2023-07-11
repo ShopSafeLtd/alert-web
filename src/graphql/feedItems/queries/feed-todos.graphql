@@ -1,0 +1,18 @@
+query FeedTodos(
+  $where: TodoWhereInput
+  $take: Int
+  $skip: Int
+  $orderBy: [TodoOrderBy!]
+) {
+  listTodos(where: $where, orderBy: $orderBy, take: $take, skip: $skip) {
+    uncompletedTodos {
+      ...FeedTodo
+    }
+    completedTodos {
+          ...FeedTodo
+    }
+    totalUserTodos
+    uncompletedTotal
+    completedTotal
+  }
+}

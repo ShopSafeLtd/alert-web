@@ -42,11 +42,7 @@ const InvestigationFeed = ({
         {!isNewImage && latestUpdate && latestUpdate.feedImage ? (
           <Col>
             <ImageContainer
-              src={
-                latestUpdate.feedImage.optimised ||
-                latestUpdate.feedImage.url ||
-                ''
-              }
+              src={latestUpdate.feedImage.low || ''}
               position={latestUpdate.feedImage.position}
             />
           </Col>

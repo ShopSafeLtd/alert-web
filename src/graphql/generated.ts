@@ -46197,6 +46197,36 @@ export type TodoOrderByRelationAggregateInput = {
   _count?: InputMaybe<SortOrder>;
 };
 
+export type TodoOrderByWithRelationInput = {
+  assignedUsers?: InputMaybe<UserOrderByRelationAggregateInput>;
+  chat?: InputMaybe<ChatOrderByWithRelationInput>;
+  chatId?: InputMaybe<SortOrder>;
+  completed?: InputMaybe<SortOrder>;
+  completedBy?: InputMaybe<UserOrderByWithRelationInput>;
+  completedById?: InputMaybe<SortOrder>;
+  completedDate?: InputMaybe<SortOrder>;
+  createdAt?: InputMaybe<SortOrder>;
+  createdBy?: InputMaybe<UserOrderByWithRelationInput>;
+  createdById?: InputMaybe<SortOrder>;
+  crimeGroup?: InputMaybe<CrimeGroupOrderByWithRelationInput>;
+  crimeGroupId?: InputMaybe<SortOrder>;
+  description?: InputMaybe<SortOrder>;
+  dueDate?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  incident?: InputMaybe<IncidentOrderByWithRelationInput>;
+  incidentId?: InputMaybe<SortOrder>;
+  investigation?: InputMaybe<InvestigationOrderByWithRelationInput>;
+  investigationId?: InputMaybe<SortOrder>;
+  name?: InputMaybe<SortOrder>;
+  offender?: InputMaybe<OffenderOrderByWithRelationInput>;
+  offenderId?: InputMaybe<SortOrder>;
+  schemes?: InputMaybe<SchemeOrderByRelationAggregateInput>;
+  type?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
+  vehicle?: InputMaybe<VehicleOrderByWithRelationInput>;
+  vehicleId?: InputMaybe<SortOrder>;
+};
+
 export type TodoScalarWhereInput = {
   AND?: InputMaybe<Array<TodoScalarWhereInput>>;
   NOT?: InputMaybe<Array<TodoScalarWhereInput>>;
@@ -48726,6 +48756,7 @@ export type User = {
   addresses: Array<Address>;
   approverGroups: Array<Group>;
   articles: Array<Article>;
+  assignedTodos: Array<Todo>;
   auth0Id?: Maybe<Scalars['String']>;
   bans: Array<Ban>;
   businesses: Array<Business>;
@@ -48824,6 +48855,15 @@ export type UserArticlesArgs = {
   before?: InputMaybe<ArticleWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+};
+
+export type UserAssignedTodosArgs = {
+  after?: InputMaybe<TodoWhereUniqueInput>;
+  before?: InputMaybe<TodoWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<TodoOrderByWithRelationInput>>;
+  where?: InputMaybe<TodoWhereInput>;
 };
 
 export type UserBansArgs = {
@@ -53118,12 +53158,14 @@ export type UserScheme = {
   __typename?: 'UserScheme';
   createdAt: Scalars['DateTime'];
   id: Scalars['String'];
+  notificationCount?: Maybe<Scalars['Int']>;
   recycled: Scalars['Boolean'];
   role: Role;
   scheme: Scheme;
   schemeId: Scalars['String'];
   updatedAt: Scalars['DateTime'];
   user: User;
+  userId: Scalars['String'];
 };
 
 export type UserSchemeCreateInput = {
@@ -61493,109 +61535,6 @@ export type DeleteFeedItemMutation = {
   deleteFeedItem?: { __typename?: 'FeedItem'; id: string } | null;
 };
 
-export type FeedImageFragment = {
-  __typename?: 'Image';
-  id: string;
-  url?: string | null;
-  optimised?: string | null;
-  position: ImagePosition;
-  rotation: number;
-};
-
-export type FeedUpdateFragment = {
-  __typename?: 'Update';
-  id: string;
-  text?: string | null;
-  icon: UpdateIcon;
-  type: UpdateType;
-  createdAt: Date;
-  feedImage?: {
-    __typename?: 'Image';
-    id: string;
-    url?: string | null;
-    optimised?: string | null;
-    position: ImagePosition;
-    rotation: number;
-  } | null;
-  linkedCrimeGroups: Array<{
-    __typename?: 'CrimeGroup';
-    totalOffenders?: number | null;
-    totalIncidents?: number | null;
-    alias?: string | null;
-    id: string;
-    reference?: number | null;
-    totalRecoveredValue?: number | null;
-    totalTheftSuccess?: number | null;
-    totalValue?: number | null;
-    updatedAt: Date;
-  }>;
-  linkedVehicles: Array<{
-    __typename?: 'Vehicle';
-    updatedAt: Date;
-    totalOffenders?: number | null;
-    registration?: string | null;
-    reference?: number | null;
-    model?: string | null;
-    make?: string | null;
-    id: string;
-    colour?: string | null;
-    feedImage?: {
-      __typename?: 'Image';
-      id: string;
-      url?: string | null;
-      optimised?: string | null;
-      position: ImagePosition;
-      rotation: number;
-    } | null;
-  }>;
-  linkedOffenders: Array<{
-    __typename?: 'Offender';
-    id: string;
-    updatedAt: Date;
-    age?: Age | null;
-    build?: Build | null;
-    height?: Height | null;
-    dateOfBirth?: Date | null;
-    name?: string | null;
-    race?: Race | null;
-    gender?: Gender | null;
-    feedImage?: {
-      __typename?: 'Image';
-      id: string;
-      url?: string | null;
-      optimised?: string | null;
-      position: ImagePosition;
-      rotation: number;
-    } | null;
-  }>;
-  linkedIncidents: Array<{
-    __typename?: 'Incident';
-    id: string;
-    subject?: string | null;
-    description: string;
-    dayTime?: string | null;
-    feedImage?: {
-      __typename?: 'Image';
-      id: string;
-      url?: string | null;
-      optimised?: string | null;
-      position: ImagePosition;
-      rotation: number;
-    } | null;
-  }>;
-  createdBy: {
-    __typename?: 'User';
-    id: string;
-    fullName: string;
-    businesses: Array<{
-      __typename?: 'Business';
-      fullName: string;
-      id: string;
-      name: string;
-    }>;
-  };
-};
-
 export type FeedItemsQueryVariables = Exact<{
   schemeId: Scalars['String'];
   search?: InputMaybe<Scalars['String']>;
@@ -61641,8 +61580,7 @@ export type FeedItemsQuery = {
         feedImage?: {
           __typename?: 'Image';
           id: string;
-          url?: string | null;
-          optimised?: string | null;
+          low?: string | null;
           position: ImagePosition;
           rotation: number;
         } | null;
@@ -61700,8 +61638,7 @@ export type FeedItemsQuery = {
           feedImage?: {
             __typename?: 'Image';
             id: string;
-            url?: string | null;
-            optimised?: string | null;
+            low?: string | null;
             position: ImagePosition;
             rotation: number;
           } | null;
@@ -61730,8 +61667,7 @@ export type FeedItemsQuery = {
             feedImage?: {
               __typename?: 'Image';
               id: string;
-              url?: string | null;
-              optimised?: string | null;
+              low?: string | null;
               position: ImagePosition;
               rotation: number;
             } | null;
@@ -61750,8 +61686,7 @@ export type FeedItemsQuery = {
             feedImage?: {
               __typename?: 'Image';
               id: string;
-              url?: string | null;
-              optimised?: string | null;
+              low?: string | null;
               position: ImagePosition;
               rotation: number;
             } | null;
@@ -61765,23 +61700,11 @@ export type FeedItemsQuery = {
             feedImage?: {
               __typename?: 'Image';
               id: string;
-              url?: string | null;
-              optimised?: string | null;
+              low?: string | null;
               position: ImagePosition;
               rotation: number;
             } | null;
           }>;
-          createdBy: {
-            __typename?: 'User';
-            id: string;
-            fullName: string;
-            businesses: Array<{
-              __typename?: 'Business';
-              fullName: string;
-              id: string;
-              name: string;
-            }>;
-          };
         } | null;
       } | null;
       vehicle?: {
@@ -61798,8 +61721,7 @@ export type FeedItemsQuery = {
         feedImage?: {
           __typename?: 'Image';
           id: string;
-          url?: string | null;
-          optimised?: string | null;
+          low?: string | null;
           position: ImagePosition;
           rotation: number;
         } | null;
@@ -61813,8 +61735,7 @@ export type FeedItemsQuery = {
           feedImage?: {
             __typename?: 'Image';
             id: string;
-            url?: string | null;
-            optimised?: string | null;
+            low?: string | null;
             position: ImagePosition;
             rotation: number;
           } | null;
@@ -61843,8 +61764,7 @@ export type FeedItemsQuery = {
             feedImage?: {
               __typename?: 'Image';
               id: string;
-              url?: string | null;
-              optimised?: string | null;
+              low?: string | null;
               position: ImagePosition;
               rotation: number;
             } | null;
@@ -61863,8 +61783,7 @@ export type FeedItemsQuery = {
             feedImage?: {
               __typename?: 'Image';
               id: string;
-              url?: string | null;
-              optimised?: string | null;
+              low?: string | null;
               position: ImagePosition;
               rotation: number;
             } | null;
@@ -61878,23 +61797,11 @@ export type FeedItemsQuery = {
             feedImage?: {
               __typename?: 'Image';
               id: string;
-              url?: string | null;
-              optimised?: string | null;
+              low?: string | null;
               position: ImagePosition;
               rotation: number;
             } | null;
           }>;
-          createdBy: {
-            __typename?: 'User';
-            id: string;
-            fullName: string;
-            businesses: Array<{
-              __typename?: 'Business';
-              fullName: string;
-              id: string;
-              name: string;
-            }>;
-          };
         } | null;
       } | null;
       investigation?: {
@@ -61929,8 +61836,7 @@ export type FeedItemsQuery = {
           feedImage?: {
             __typename?: 'Image';
             id: string;
-            url?: string | null;
-            optimised?: string | null;
+            low?: string | null;
             position: ImagePosition;
             rotation: number;
           } | null;
@@ -61959,8 +61865,7 @@ export type FeedItemsQuery = {
             feedImage?: {
               __typename?: 'Image';
               id: string;
-              url?: string | null;
-              optimised?: string | null;
+              low?: string | null;
               position: ImagePosition;
               rotation: number;
             } | null;
@@ -61979,8 +61884,7 @@ export type FeedItemsQuery = {
             feedImage?: {
               __typename?: 'Image';
               id: string;
-              url?: string | null;
-              optimised?: string | null;
+              low?: string | null;
               position: ImagePosition;
               rotation: number;
             } | null;
@@ -61994,23 +61898,11 @@ export type FeedItemsQuery = {
             feedImage?: {
               __typename?: 'Image';
               id: string;
-              url?: string | null;
-              optimised?: string | null;
+              low?: string | null;
               position: ImagePosition;
               rotation: number;
             } | null;
           }>;
-          createdBy: {
-            __typename?: 'User';
-            id: string;
-            fullName: string;
-            businesses: Array<{
-              __typename?: 'Business';
-              fullName: string;
-              id: string;
-              name: string;
-            }>;
-          };
         } | null;
       } | null;
       groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
@@ -62018,13 +61910,8 @@ export type FeedItemsQuery = {
         __typename?: 'Incident';
         id: string;
         subject?: string | null;
-        policeRef?: string | null;
         reference?: number | null;
         description: string;
-        dayTime?: string | null;
-        date: Date;
-        totalOffenders?: number | null;
-        totalUpdates?: number | null;
         approved?: boolean | null;
         latestUpdate?: {
           __typename?: 'Update';
@@ -62036,8 +61923,7 @@ export type FeedItemsQuery = {
           feedImage?: {
             __typename?: 'Image';
             id: string;
-            url?: string | null;
-            optimised?: string | null;
+            low?: string | null;
             position: ImagePosition;
             rotation: number;
           } | null;
@@ -62066,8 +61952,7 @@ export type FeedItemsQuery = {
             feedImage?: {
               __typename?: 'Image';
               id: string;
-              url?: string | null;
-              optimised?: string | null;
+              low?: string | null;
               position: ImagePosition;
               rotation: number;
             } | null;
@@ -62086,8 +61971,7 @@ export type FeedItemsQuery = {
             feedImage?: {
               __typename?: 'Image';
               id: string;
-              url?: string | null;
-              optimised?: string | null;
+              low?: string | null;
               position: ImagePosition;
               rotation: number;
             } | null;
@@ -62101,46 +61985,20 @@ export type FeedItemsQuery = {
             feedImage?: {
               __typename?: 'Image';
               id: string;
-              url?: string | null;
-              optimised?: string | null;
+              low?: string | null;
               position: ImagePosition;
               rotation: number;
             } | null;
           }>;
-          createdBy: {
-            __typename?: 'User';
-            id: string;
-            fullName: string;
-            businesses: Array<{
-              __typename?: 'Business';
-              fullName: string;
-              id: string;
-              name: string;
-            }>;
-          };
         } | null;
-        crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
         business?: { __typename?: 'Business'; id: string; name: string } | null;
-        createdBy: {
-          __typename?: 'User';
-          id: string;
-          fullName: string;
-          businesses: Array<{
-            __typename?: 'Business';
-            fullName: string;
-            id: string;
-            name: string;
-          }>;
-        };
         feedImage?: {
           __typename?: 'Image';
           id: string;
-          url?: string | null;
-          optimised?: string | null;
+          low?: string | null;
           position: ImagePosition;
           rotation: number;
         } | null;
-        groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
       } | null;
       offender?: {
         __typename?: 'Offender';
@@ -62189,8 +62047,7 @@ export type FeedItemsQuery = {
           feedImage?: {
             __typename?: 'Image';
             id: string;
-            url?: string | null;
-            optimised?: string | null;
+            low?: string | null;
             position: ImagePosition;
             rotation: number;
           } | null;
@@ -62219,8 +62076,7 @@ export type FeedItemsQuery = {
             feedImage?: {
               __typename?: 'Image';
               id: string;
-              url?: string | null;
-              optimised?: string | null;
+              low?: string | null;
               position: ImagePosition;
               rotation: number;
             } | null;
@@ -62239,8 +62095,7 @@ export type FeedItemsQuery = {
             feedImage?: {
               __typename?: 'Image';
               id: string;
-              url?: string | null;
-              optimised?: string | null;
+              low?: string | null;
               position: ImagePosition;
               rotation: number;
             } | null;
@@ -62254,29 +62109,16 @@ export type FeedItemsQuery = {
             feedImage?: {
               __typename?: 'Image';
               id: string;
-              url?: string | null;
-              optimised?: string | null;
+              low?: string | null;
               position: ImagePosition;
               rotation: number;
             } | null;
           }>;
-          createdBy: {
-            __typename?: 'User';
-            id: string;
-            fullName: string;
-            businesses: Array<{
-              __typename?: 'Business';
-              fullName: string;
-              id: string;
-              name: string;
-            }>;
-          };
         } | null;
         feedImage?: {
           __typename?: 'Image';
           id: string;
-          url?: string | null;
-          optimised?: string | null;
+          low?: string | null;
           position: ImagePosition;
           rotation: number;
         } | null;
@@ -62319,8 +62161,7 @@ export type FeedItemsQuery = {
           feedImage?: {
             __typename?: 'Image';
             id: string;
-            url?: string | null;
-            optimised?: string | null;
+            low?: string | null;
             position: ImagePosition;
             rotation: number;
           } | null;
@@ -62328,6 +62169,53 @@ export type FeedItemsQuery = {
       } | null;
     }>;
   } | null;
+};
+
+export type FeedTodosQueryVariables = Exact<{
+  where?: InputMaybe<TodoWhereInput>;
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<TodoOrderBy> | TodoOrderBy>;
+}>;
+
+export type FeedTodosQuery = {
+  __typename?: 'Query';
+  listTodos: {
+    __typename?: 'ListTodos';
+    totalUserTodos: number;
+    uncompletedTotal: number;
+    completedTotal: number;
+    uncompletedTodos: Array<{
+      __typename?: 'Todo';
+      description?: string | null;
+      id: string;
+      name?: string | null;
+      dueDate?: Date | null;
+      completed?: boolean | null;
+      type?: TodoType | null;
+      vehicleId?: string | null;
+      offenderId?: string | null;
+      crimeGroupId?: string | null;
+      incidentId?: string | null;
+      investigationId?: string | null;
+      chatId?: string | null;
+    }>;
+    completedTodos: Array<{
+      __typename?: 'Todo';
+      description?: string | null;
+      id: string;
+      name?: string | null;
+      dueDate?: Date | null;
+      completed?: boolean | null;
+      type?: TodoType | null;
+      vehicleId?: string | null;
+      offenderId?: string | null;
+      crimeGroupId?: string | null;
+      incidentId?: string | null;
+      investigationId?: string | null;
+      chatId?: string | null;
+    }>;
+  };
 };
 
 export type ListOffendersFeedQueryVariables = Exact<{
@@ -62351,13 +62239,115 @@ export type ListOffendersFeedQuery = {
       feedImage?: {
         __typename?: 'Image';
         id: string;
-        url?: string | null;
-        optimised?: string | null;
+        low?: string | null;
         position: ImagePosition;
         rotation: number;
       } | null;
     }>;
   } | null;
+};
+
+export type FeedImageFragment = {
+  __typename?: 'Image';
+  id: string;
+  low?: string | null;
+  position: ImagePosition;
+  rotation: number;
+};
+
+export type FeedTodoFragment = {
+  __typename?: 'Todo';
+  description?: string | null;
+  id: string;
+  name?: string | null;
+  dueDate?: Date | null;
+  completed?: boolean | null;
+  type?: TodoType | null;
+  vehicleId?: string | null;
+  offenderId?: string | null;
+  crimeGroupId?: string | null;
+  incidentId?: string | null;
+  investigationId?: string | null;
+  chatId?: string | null;
+};
+
+export type FeedUpdateFragment = {
+  __typename?: 'Update';
+  id: string;
+  text?: string | null;
+  icon: UpdateIcon;
+  type: UpdateType;
+  createdAt: Date;
+  feedImage?: {
+    __typename?: 'Image';
+    id: string;
+    low?: string | null;
+    position: ImagePosition;
+    rotation: number;
+  } | null;
+  linkedCrimeGroups: Array<{
+    __typename?: 'CrimeGroup';
+    totalOffenders?: number | null;
+    totalIncidents?: number | null;
+    alias?: string | null;
+    id: string;
+    reference?: number | null;
+    totalRecoveredValue?: number | null;
+    totalTheftSuccess?: number | null;
+    totalValue?: number | null;
+    updatedAt: Date;
+  }>;
+  linkedVehicles: Array<{
+    __typename?: 'Vehicle';
+    updatedAt: Date;
+    totalOffenders?: number | null;
+    registration?: string | null;
+    reference?: number | null;
+    model?: string | null;
+    make?: string | null;
+    id: string;
+    colour?: string | null;
+    feedImage?: {
+      __typename?: 'Image';
+      id: string;
+      low?: string | null;
+      position: ImagePosition;
+      rotation: number;
+    } | null;
+  }>;
+  linkedOffenders: Array<{
+    __typename?: 'Offender';
+    id: string;
+    updatedAt: Date;
+    age?: Age | null;
+    build?: Build | null;
+    height?: Height | null;
+    dateOfBirth?: Date | null;
+    name?: string | null;
+    race?: Race | null;
+    gender?: Gender | null;
+    feedImage?: {
+      __typename?: 'Image';
+      id: string;
+      low?: string | null;
+      position: ImagePosition;
+      rotation: number;
+    } | null;
+  }>;
+  linkedIncidents: Array<{
+    __typename?: 'Incident';
+    id: string;
+    subject?: string | null;
+    description: string;
+    dayTime?: string | null;
+    feedImage?: {
+      __typename?: 'Image';
+      id: string;
+      low?: string | null;
+      position: ImagePosition;
+      rotation: number;
+    } | null;
+  }>;
 };
 
 export type ListGoodsTypesQueryVariables = Exact<{ [key: string]: never }>;
@@ -70044,11 +70034,26 @@ export type UserListQuery = {
   };
 };
 
+export const FeedTodoFragmentDoc = gql`
+  fragment FeedTodo on Todo {
+    description
+    id
+    name
+    dueDate
+    completed
+    type
+    vehicleId
+    offenderId
+    crimeGroupId
+    incidentId
+    investigationId
+    chatId
+  }
+`;
 export const FeedImageFragmentDoc = gql`
   fragment FeedImage on Image {
     id
-    url
-    optimised
+    low
     position
     rotation
   }
@@ -70081,11 +70086,7 @@ export const FeedUpdateFragmentDoc = gql`
       reference
       model
       feedImage {
-        id
-        url
-        optimised
-        position
-        rotation
+        ...FeedImage
       }
       make
       id
@@ -70102,11 +70103,7 @@ export const FeedUpdateFragmentDoc = gql`
       race
       gender
       feedImage {
-        id
-        url
-        optimised
-        position
-        rotation
+        ...FeedImage
       }
     }
     linkedIncidents {
@@ -70115,20 +70112,7 @@ export const FeedUpdateFragmentDoc = gql`
       description
       dayTime
       feedImage {
-        id
-        url
-        optimised
-        position
-        rotation
-      }
-    }
-    createdBy {
-      id
-      fullName
-      businesses {
-        fullName
-        id
-        name
+        ...FeedImage
       }
     }
   }
@@ -73427,41 +73411,18 @@ export const FeedItemsDocument = gql`
         incident {
           id
           subject
-          policeRef
-          reference
           reference
           description
-          dayTime
-          date
-          totalOffenders
-          totalUpdates
           latestUpdate {
             ...FeedUpdate
-          }
-          crimeTypes {
-            id
-            name
           }
           approved
           business {
             id
             name
           }
-          createdBy {
-            id
-            fullName
-            businesses {
-              fullName
-              id
-              name
-            }
-          }
           feedImage {
             ...FeedImage
-          }
-          groups {
-            id
-            name
           }
         }
         incidentId
@@ -73601,6 +73562,56 @@ export type FeedItemsLazyQueryHookResult = ReturnType<
 export type FeedItemsQueryResult = Apollo.QueryResult<
   FeedItemsQuery,
   FeedItemsQueryVariables
+>;
+export const FeedTodosDocument = gql`
+  query FeedTodos(
+    $where: TodoWhereInput
+    $take: Int
+    $skip: Int
+    $orderBy: [TodoOrderBy!]
+  ) {
+    listTodos(where: $where, orderBy: $orderBy, take: $take, skip: $skip) {
+      uncompletedTodos {
+        ...FeedTodo
+      }
+      completedTodos {
+        ...FeedTodo
+      }
+      totalUserTodos
+      uncompletedTotal
+      completedTotal
+    }
+  }
+  ${FeedTodoFragmentDoc}
+`;
+export function useFeedTodosQuery(
+  baseOptions?: Apollo.QueryHookOptions<FeedTodosQuery, FeedTodosQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<FeedTodosQuery, FeedTodosQueryVariables>(
+    FeedTodosDocument,
+    options
+  );
+}
+export function useFeedTodosLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    FeedTodosQuery,
+    FeedTodosQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<FeedTodosQuery, FeedTodosQueryVariables>(
+    FeedTodosDocument,
+    options
+  );
+}
+export type FeedTodosQueryHookResult = ReturnType<typeof useFeedTodosQuery>;
+export type FeedTodosLazyQueryHookResult = ReturnType<
+  typeof useFeedTodosLazyQuery
+>;
+export type FeedTodosQueryResult = Apollo.QueryResult<
+  FeedTodosQuery,
+  FeedTodosQueryVariables
 >;
 export const ListOffendersFeedDocument = gql`
   query listOffendersFeed(

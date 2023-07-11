@@ -1,92 +1,3 @@
-fragment FeedImage on Image {
-  id
-  url
-  optimised
-  position
-  rotation
-}
-
-fragment FeedUpdate on Update {
-  id
-  text
-  icon
-  type
-  createdAt
-          feedImage {
-          ...FeedImage
-        }
-  linkedCrimeGroups {
-    totalOffenders
-    totalIncidents
-    alias
-    id
-    reference
-    totalRecoveredValue
-    totalTheftSuccess
-    totalValue
-    updatedAt
-  }
-  linkedVehicles {
-    updatedAt
-    totalOffenders
-    registration
-    reference
-    model
-    feedImage {
-      id
-      url
-      optimised
-      position
-      rotation
-    }
-    make
-    id
-    colour
-  }
-  linkedOffenders {
-    id
-    updatedAt
-    age
-    build
-    height
-    dateOfBirth
-    name
-    race
-    gender
-    feedImage {
-      id
-      url
-      optimised
-      position
-      rotation
-    }
-  }
-  linkedIncidents {
-    id
-    subject
-    description
-    dayTime
-    feedImage {
-      id
-      url
-      optimised
-      position
-      rotation
-    }
-  }
-  createdBy {
-    id
-    fullName
-    businesses {
-      fullName
-      id
-      name
-    }
-  }
-}
-
-
-
 query FeedItems(
   $schemeId: String!
   $search: String
@@ -228,43 +139,20 @@ query FeedItems(
       incident {
         id
         subject
-        policeRef
-        reference
         reference
         description
-        dayTime
-        date
-        totalOffenders
-        totalUpdates
         latestUpdate {
           ...FeedUpdate
-        }
-
-        crimeTypes {
-          id
-          name
         }
         approved
         business {
           id
           name
         }
-        createdBy {
-          id
-          fullName
-          businesses {
-            fullName
-            id
-            name
-          }
-        }
         feedImage {
           ...FeedImage
         }
-        groups {
-          id
-          name
-        }
+
       }
       incidentId
       offender {
