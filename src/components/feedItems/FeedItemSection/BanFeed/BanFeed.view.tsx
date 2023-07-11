@@ -48,7 +48,7 @@ const BanFeed = ({ feedItem }: Props): JSX.Element => {
           <Col>
             <ImageContainer
               position={feedImage.position}
-              src={feedImage.optimised || feedImage.url || ''}
+              src={feedImage.low || ''}
             />
           </Col>
         ) : null}
