@@ -22,6 +22,7 @@ mutation updateOffender($where: UniqueId!, $data: OffenderUpdateInput!) {
       url
       optimised
       position
+      rotation
     }
     groups {
       id

@@ -6,7 +6,6 @@ import type {
   Gender,
   Height,
   IdSource,
-  ImagePosition,
   Race,
   SearchOffendersQuery,
   SearchOffendersQueryVariables,
@@ -16,13 +15,13 @@ import {
   SearchOffendersDocument,
   SortOrder,
 } from 'graphql/generated';
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
+import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import type { FormInstance } from 'antd';
 import { Form, message, Upload } from 'antd';
 import { useApolloClient } from '@apollo/client';
 import { useStoreState } from 'state';
 import update from 'immutability-helper';
-import type { OffenderData } from 'types/DataType';
+import type { Image, OffenderData } from 'types/DataType';
 import OffenderItem from './OffenderItem';
 
 export interface FormData {
@@ -43,11 +42,6 @@ export interface FormData {
   idSource?: IdSource;
 }
 
-export interface Image extends UploadFile {
-  position?: ImagePosition;
-  primary?: boolean;
-  policeImage?: boolean;
-}
 interface Props {
   onClose: () => void;
   update: (value: OffenderData) => void;

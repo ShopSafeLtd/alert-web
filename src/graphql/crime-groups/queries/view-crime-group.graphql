@@ -33,6 +33,7 @@ query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
         id
         optimised
         position
+        rotation
       }
       totalTheftSuccess
       totalRecoveredValue
@@ -85,6 +86,7 @@ query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
         url
         optimised
         position
+        rotation
         card
       }
       linkedCrimeGroups {
@@ -112,6 +114,7 @@ query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
           url
           optimised
           position
+          rotation
         }
       }
       linkedIncidents {
@@ -124,6 +127,7 @@ query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
           url
           optimised
           position
+          rotation
         }
       }
       linkedOffenders {
@@ -141,6 +145,7 @@ query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
           url
           optimised
           position
+          rotation
         }
       }
       createdBy {
@@ -164,6 +169,7 @@ query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
           optimised
           card
           position
+          rotation
         }
         linkedCrimeGroups {
           totalOffenders
@@ -190,6 +196,7 @@ query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
             url
             optimised
             position
+            rotation
           }
         }
         linkedIncidents {
@@ -202,6 +209,7 @@ query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
             url
             optimised
             position
+            rotation
           }
         }
         linkedOffenders {
@@ -219,6 +227,7 @@ query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
             url
             optimised
             position
+            rotation
           }
         }
         createdBy {

@@ -32,6 +32,7 @@ mutation updateCrimeGroup(
         id
         optimised
         position
+        rotation
       }
       totalTheftSuccess
       totalRecoveredValue

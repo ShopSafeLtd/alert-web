@@ -4,6 +4,7 @@ mutation IndexImage($where: ImageWhereUniqueInput!) {
     url
     optimised
     position
+    rotation
     faces {
       id
       confidence

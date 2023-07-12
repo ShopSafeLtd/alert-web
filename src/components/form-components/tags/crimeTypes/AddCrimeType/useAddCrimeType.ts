@@ -6,6 +6,7 @@ import { useStoreState } from 'state';
 import { notification } from 'antd';
 import type { MutationUpdaterFn } from '@apollo/client';
 import errorNotification from 'types/error_notification';
+import { useIntl } from 'react-intl';
 
 interface FormData {
   name: string;
@@ -32,6 +33,7 @@ const useAddCrimeType = ({
   update,
   type = TagType.IncidentCrimeType,
 }: Props): Return => {
+  const intl = useIntl();
   const schemeId = useStoreState((state) => state.scheme.id);
   const userSchemes = useStoreState((state) => state.user.schemes);
   const userId = useStoreState((state) => state.user.id);
@@ -42,8 +44,14 @@ const useAddCrimeType = ({
       setSaving(false);
       onClose();
       notification.success({
-        message: 'Successfully Added!',
-        description: 'The crime type has been added! ',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Added!',
+          id: '5Hvk21',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The crime type has been added! ',
+          id: 'LWKS5X',
+        }),
         placement: 'bottomRight',
       });
     },

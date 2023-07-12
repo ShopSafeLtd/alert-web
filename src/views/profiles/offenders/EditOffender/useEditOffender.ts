@@ -26,9 +26,10 @@ import {
 import type { FormInstance } from 'antd';
 import { Form, message, Modal, notification, Upload } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
+import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import { useNavigate } from 'react-router';
 import type {
+  Image,
   BanData,
   CrimeGroupData,
   CustomGalleryData,
@@ -100,16 +101,6 @@ export interface FormData {
   customGalleries?: Array<string | SelectOptions>;
 }
 
-interface Image extends UploadFile {
-  optimised?: string | null;
-  position?: ImagePosition;
-  primary?: boolean;
-  policeImage?: boolean;
-  edited?: boolean;
-  new?: boolean;
-  deleted?: boolean;
-}
-
 export interface BanType extends BanData {
   new?: boolean;
   updated?: boolean;
@@ -159,7 +150,6 @@ interface Return {
   onEditAddress: (data: EditAddressForm) => void;
   onEditImage: (value: Image) => void;
   onEditVehicle: (data: VehicleData) => void;
-  onPreview: (value: UploadFile) => void;
   onReject: () => void;
   onRemoveCrimeGroup: (crimeGroupId: string) => void;
   onRemoveImage: (imageId: string) => void;
@@ -190,21 +180,6 @@ interface Return {
   updateNewCustomGalleryData: (values: CustomGalleryData) => void;
   updateNewOffenderTagData: (values: TagData) => void;
 }
-
-const onPreview = async (file: UploadFile) => {
-  let src = file.url as string;
-  if (!src) {
-    src = await new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file.originFileObj as RcFile);
-      reader.addEventListener('load', () => resolve(reader.result as string));
-    });
-  }
-  const image = new Image();
-  image.src = src;
-  const imgWindow = window.open(src);
-  imgWindow?.document.write(image.outerHTML);
-};
 
 const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
   const intl = useIntl();
@@ -319,6 +294,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
       if (offender?.images && offender.images.length > 0) {
         setFileList(
           offender?.images.map((image) => ({
+            // id: image.id,
             uid: `${image.id}`,
             name: `${image.id}.png`,
             status: 'done',
@@ -327,6 +303,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
             position: image.position,
             primary: image.primary || false,
             policeImage: image.policeImage || false,
+            rotation: image.rotation || 0,
             edited: false,
             new: false,
           }))
@@ -658,6 +635,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
                   position: item.position,
                   primary: item.uid === primaryImage,
                   policeImage: item.policeImage,
+                  rotation: item.rotation,
                 }))
             : undefined,
         delete: imageChange
@@ -674,6 +652,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
                   position: { set: item.position },
                   primary: { set: item.uid === primaryImage },
                   policeImage: { set: item.policeImage },
+                  rotation: { set: item.rotation || 0 },
                 },
                 where: {
                   id: item.uid,
@@ -1113,8 +1092,15 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
 
   const onRemoveImage = (imageId: string) => {
     confirm({
-      title: 'Do you want to remove the image?',
-      content: 'This action cannot be undone.',
+      title: intl.formatMessage({
+        id: 'n0NLsa',
+        defaultMessage: 'Do you want to remove the image?',
+      }),
+      content: intl.formatMessage({
+        id: 'JDJoIZ',
+        defaultMessage: 'This action cannot be undone.',
+      }),
+
       onOk() {
         setImageChange(true);
         const image = fileList.find((item) => item.uid === imageId);
@@ -1138,8 +1124,14 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
 
   const deleteConfirm = (currentId: string) => {
     confirm({
-      title: 'Do you want to delete the exclusion?',
-      content: 'This action cannot be undone.',
+      title: intl.formatMessage({
+        id: 'P70g0z',
+        defaultMessage: 'Do you want to delete the exclusion?',
+      }),
+      content: intl.formatMessage({
+        id: 'JDJoIZ',
+        defaultMessage: 'This action cannot be undone.',
+      }),
       onOk() {
         onRemoveExclusion(currentId);
       },
@@ -1197,7 +1189,6 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     tagsLoading,
     imgChange,
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    onPreview,
     beforeUpload,
     fileList: fileList.filter((item) => !item.deleted),
     addOffenderTag,
@@ -1215,7 +1206,6 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     ageCheck,
     setAgeCheck,
     onReject,
-
     adminRights: role !== Role.User,
     form,
     vehiclesData: vehiclesData.filter((item) => !item.deleted),

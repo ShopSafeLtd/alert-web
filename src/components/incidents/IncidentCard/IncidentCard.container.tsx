@@ -21,11 +21,22 @@ const IncidentCard = ({
   openLightbox,
   update,
 }: Props): JSX.Element => {
-  const { approvalRights, deleteRights, menuRights, onNavigate, onDelete } =
-    useIncidentCard({
-      createdById: incident?.createdBy.id,
-      update,
-    });
+  const {
+    approvalRights,
+    deleteRights,
+    menuRights,
+    editIncidentFeed,
+    toggleEditIncidentFeed,
+    onDelete,
+    editImage,
+    toggleEditImage,
+    editImageId,
+    setEditImageId,
+    onEditImage,
+  } = useIncidentCard({
+    incident,
+    update,
+  });
 
   return (
     <View
@@ -34,8 +45,14 @@ const IncidentCard = ({
       menuRights={menuRights}
       incident={incident}
       openLightbox={openLightbox}
-      onNavigate={onNavigate}
       onDelete={onDelete}
+      editIncidentFeed={editIncidentFeed}
+      toggleEditIncidentFeed={toggleEditIncidentFeed}
+      editImage={editImage}
+      toggleEditImage={toggleEditImage}
+      editImageId={editImageId}
+      setEditImageId={setEditImageId}
+      onEditImage={onEditImage}
     />
   );
 };

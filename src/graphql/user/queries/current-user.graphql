@@ -1,4 +1,4 @@
-query currentUser {
+query currentUser($scheme: UniqueId) {
   currentUser {
     id
     fullName
@@ -7,6 +7,7 @@ query currentUser {
     reference
     demId
     publicName
+    notificationCount(scheme: $scheme)
     businesses {
       id
       name
@@ -25,8 +26,7 @@ query currentUser {
       id
       role
       scheme {
-
-customTranslations
+        customTranslations
         logo {
           optimisedPersisted
         }
@@ -39,7 +39,6 @@ customTranslations
         autoApproveIncidents
         autoApproveOffenders
         defaultPublicOffenderDOB
-
       }
     }
     incidentEmail

@@ -26,8 +26,8 @@ const IncidentFeed = ({
   isNewIncident,
 }: Props): JSX.Element => {
   const {
-    updates,
-    images,
+    feedImage,
+    latestUpdate,
     // dayTime,
     description,
     business,
@@ -45,28 +45,26 @@ const IncidentFeed = ({
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     <Link to={`/app/incidents/view/${id}`}>
       <Row gutter={15} wrap={false} key={id || ''} style={{ width: '100%' }}>
-        {!isNewImage && updates && updates[0]?.images[0] ? (
+        {!isNewImage && latestUpdate && latestUpdate.feedImage ? (
           <Col>
             <ImageContainer
-              src={
-                updates[0].images[0].optimised || updates[0].images[0].url || ''
-              }
-              position={updates[0].images[0].position}
+              src={latestUpdate.feedImage.low || ''}
+              position={latestUpdate.feedImage.position}
             />
           </Col>
         ) : null}
-        {(isNewIncident || isNewImage) && images && images.length > 0 ? (
+        {(isNewIncident || isNewImage) && feedImage ? (
           <Col>
             <ImageContainer
-              src={images[0].optimised || images[0].url || ''}
-              position={images[0].position}
+              src={feedImage.low || ''}
+              position={feedImage.position}
             />
           </Col>
         ) : null}
 
         <Col flex={1} style={{ padding: 10, marginLeft: 15 }}>
-          {!isNewIncident && updates && updates.length > 0 ? (
-            <UpdateContent title={subject || ''} update={updates[0]} />
+          {!isNewIncident && latestUpdate ? (
+            <UpdateContent title={subject || ''} update={latestUpdate} />
           ) : (
             <>
               <Title level={4} ellipsis>

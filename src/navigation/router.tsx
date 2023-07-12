@@ -105,7 +105,7 @@ const Views = () => {
     variables: {
       id: userId,
     },
-    skip: guestRoute,
+    skip: guestRoute || !userId,
     onCompleted: (res) => {
       if (res.userNew?.newUser) {
         navigate('/app/onboarding');
@@ -128,14 +128,13 @@ const Views = () => {
       </div>
     );
   }
-
   return (
     <div style={{ colorScheme: currentTheme }}>
-      <ErrorBoundary>
-        <ThemeProvider theme={theme[currentTheme]}>
-          <IntlProvider locale={currentAppLocale.locale} messages={messages}>
+      <IntlProvider locale={currentAppLocale.locale} messages={messages}>
+        <ErrorBoundary>
+          <ThemeProvider theme={theme[currentTheme]}>
             <ConfigProvider locale={currentAppLocale.antd}>
-              {isSet && data ? (
+              {isSet && (data === undefined || data.userNew) ? (
                 <SentryRoutes>
                   <Route path="/">
                     <Route index element={<Navigate to="app" />} />
@@ -155,9 +154,9 @@ const Views = () => {
                 <Loading />
               )}
             </ConfigProvider>
-          </IntlProvider>
-        </ThemeProvider>
-      </ErrorBoundary>
+          </ThemeProvider>
+        </ErrorBoundary>
+      </IntlProvider>
     </div>
   );
 };

@@ -22,6 +22,7 @@ query InvestigationSuggestions(
         id
         optimised
         position
+        rotation
       }
       totalAssociatedIncidents(
         associatedInvestigation: $associatedInvestigation
@@ -73,6 +74,7 @@ query InvestigationSuggestions(
         id
         optimised
         position
+        rotation
       }
       colour
     }
@@ -90,6 +92,7 @@ query InvestigationSuggestions(
         id
         optimised
         position
+        rotation
       }
       policeRef
       location {
@@ -112,6 +115,7 @@ query InvestigationSuggestions(
         images {
           id
           position
+          rotation
           optimised
         }
       }

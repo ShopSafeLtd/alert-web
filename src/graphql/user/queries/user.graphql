@@ -53,5 +53,15 @@ query User(
       id
       role
     }
+    totalLastYearLogin
+    totalThirtyDaysLogin
+    lastTenLogin {
+      loginTime
+      id
+    }
+    lastLogin {
+      loginTime
+      id
+    }
   }
 }

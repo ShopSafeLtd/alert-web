@@ -11,6 +11,7 @@ import {
 import { notification } from 'antd';
 import type { SelectOptions } from 'types/DataType';
 import errorNotification from 'types/error_notification';
+import { useIntl } from 'react-intl';
 
 export interface FormData {
   name: string;
@@ -35,6 +36,7 @@ interface Return {
 }
 
 const useEditGroup = ({ onClose, groupId }: Props): Return => {
+  const intl = useIntl();
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState<string[]>();
@@ -88,8 +90,14 @@ const useEditGroup = ({ onClose, groupId }: Props): Return => {
       setSaving(false);
       onClose();
       notification.success({
-        message: 'Successfully Updated!',
-        description: 'The group has been Updated! ',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
+          id: 'w5Yfkf',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The group has been updated.',
+          id: '7dpbD2',
+        }),
         placement: 'bottomRight',
       });
     },

@@ -21,8 +21,9 @@ import UploadImage from 'components/images/UploadImage.view';
 import { heightValues } from 'types/enums/height';
 import { IdSource } from 'graphql/generated';
 import { useIntl } from 'react-intl';
+import type { Image } from 'types/DataType';
 import useStyles from './AddNewOffender.style';
-import type { FormData, Image } from './useAddNewOffender';
+import type { FormData } from './useAddNewOffender';
 
 interface Props {
   onClose: () => void;

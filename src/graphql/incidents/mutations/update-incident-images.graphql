@@ -1,0 +1,19 @@
+mutation UpdateIncidentImages(
+  $id: String!
+  $images: ImageUpdateManyWithoutIncidentNestedInput
+) {
+  updateIncident(where: { id: $id }, data: { images: $images }) {
+    id
+    images {
+      id
+      url
+      optimised
+      optimisticUri
+      uploaded
+      position
+      primary
+      policeImage
+      rotation
+    }
+  }
+}

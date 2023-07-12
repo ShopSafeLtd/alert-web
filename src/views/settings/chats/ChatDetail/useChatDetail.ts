@@ -4,6 +4,7 @@ import { useChatQuery, useDeleteChatMutation } from 'graphql/generated';
 
 import { Modal, notification } from 'antd';
 import errorNotification from 'types/error_notification';
+import { useIntl } from 'react-intl';
 
 const { confirm } = Modal;
 interface Return {
@@ -16,6 +17,8 @@ interface Return {
 }
 
 const useChatDetail = (chatId: string): Return => {
+  const intl = useIntl();
+
   const [editChat, setEditChat] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -36,8 +39,14 @@ const useChatDetail = (chatId: string): Return => {
       setSaving(false);
       window.history.back();
       notification.success({
-        message: 'Successfully Deleted!',
-        description: 'The chat group has been deleted!',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Deleted!',
+          id: 'dvDKi/',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The chat group has been deleted.',
+          id: 'FT0guS',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -49,9 +58,19 @@ const useChatDetail = (chatId: string): Return => {
 
   const deleteConfirm = () => {
     confirm({
-      title: 'Do you want to delete the chat group?',
-      content: 'This action cannot be undone.',
-      okText: 'Delete',
+      title: intl.formatMessage({
+        id: 'QA9jAK',
+        defaultMessage: 'Do you want to delete the chat group?',
+      }),
+      content: intl.formatMessage({
+        id: 'JDJoIZ',
+        defaultMessage: 'This action cannot be undone.',
+      }),
+      okText: intl.formatMessage({
+        id: 'K3r6DQ',
+        defaultMessage: 'Delete',
+      }),
+
       onOk() {
         setSaving(true);
         if (chatId)

@@ -4,6 +4,7 @@ import { useDeleteGroupMutation, useGroupQuery } from 'graphql/generated';
 
 import { Modal, notification } from 'antd';
 import errorNotification from 'types/error_notification';
+import { useIntl } from 'react-intl';
 
 const { confirm } = Modal;
 
@@ -17,6 +18,7 @@ interface Return {
 }
 
 const useGroupDetail = (groupId: string): Return => {
+  const intl = useIntl();
   const [saving, setSaving] = useState(false);
   const [editGroup, setEditGroup] = useState(false);
 
@@ -34,8 +36,14 @@ const useGroupDetail = (groupId: string): Return => {
       setSaving(false);
       window.history.back();
       notification.success({
-        message: 'Successfully Deleted!',
-        description: 'The group has been deleted!',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Deleted!',
+          id: 'dvDKi/',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The group has been deleted.',
+          id: 'zwABBJ',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -56,8 +64,15 @@ const useGroupDetail = (groupId: string): Return => {
   };
   const deleteConfirm = () => {
     confirm({
-      title: 'Do you want to delete the group?',
-      content: 'This action cannot be undone.',
+      title: intl.formatMessage({
+        id: 'PKtIBm',
+        defaultMessage: 'Do you want to delete the group?',
+      }),
+      content: intl.formatMessage({
+        id: 'JDJoIZ',
+        defaultMessage: 'This action cannot be undone.',
+      }),
+
       onOk() {
         openDelete();
       },

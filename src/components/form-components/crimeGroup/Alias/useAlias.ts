@@ -8,6 +8,7 @@ import { notification } from 'antd';
 
 import { useParams } from 'react-router';
 import errorNotification from 'types/error_notification';
+import { useIntl } from 'react-intl';
 
 interface FormData {
   alias: string;
@@ -25,6 +26,7 @@ interface Return {
 }
 
 const useAddAlias = ({ onClose }: Props): Return => {
+  const intl = useIntl();
   const params = useParams();
   const [saving, setSaving] = useState(false);
 
@@ -41,8 +43,15 @@ const useAddAlias = ({ onClose }: Props): Return => {
       setSaving(false);
       onClose();
       notification.success({
-        message: 'Successfully Updated!',
-        description: 'The alias has been added to the crime group! ',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
+          id: 'w5Yfkf',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The alias has been added to the crime group! ',
+          id: 'bd2XVk',
+        }),
+
         placement: 'bottomRight',
       });
     },

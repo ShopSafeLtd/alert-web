@@ -7,6 +7,7 @@ import { useStoreState } from 'state';
 
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import errorNotification from 'types/error_notification';
+import { useIntl } from 'react-intl';
 
 interface FormData {
   name: string;
@@ -40,6 +41,7 @@ interface Return {
 }
 
 const useSchemeDetail = (): Return => {
+  const intl = useIntl();
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
   const [imageChange, setImageChange] = useState(false);
@@ -86,8 +88,14 @@ const useSchemeDetail = (): Return => {
     onCompleted: (res) => {
       setSaving(false);
       notification.success({
-        message: 'Successfully Updated!',
-        description: 'The Scheme has been updated!',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
+          id: 'w5Yfkf',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The scheme has been updated.',
+          id: 'uAmnXX',
+        }),
         placement: 'bottomRight',
       });
       window.localStorage.setItem(

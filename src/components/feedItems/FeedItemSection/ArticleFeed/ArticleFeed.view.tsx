@@ -29,6 +29,7 @@ const ArticleFeed = ({ feedItem }: Props): JSX.Element => {
         {image ? (
           <Col>
             <ImageContainer
+              rotation={image.rotation}
               position={image.position}
               src={image.optimised || image.url || ''}
             />

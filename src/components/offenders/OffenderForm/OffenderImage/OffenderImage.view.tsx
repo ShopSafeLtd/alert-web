@@ -2,23 +2,13 @@ import React from 'react';
 import { Button, Card, Col, Form, Row, Typography, Upload } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faUpload } from '@fortawesome/pro-light-svg-icons';
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
+import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import ImageEditor from 'components/form-components/ImageEditor/ImageEditor.view';
-import type { ImagePosition } from 'graphql/generated';
 import { useIntl } from 'react-intl';
+import type { Image } from 'types/DataType';
 
 const { Title, Paragraph } = Typography;
-
-interface Image extends UploadFile {
-  offenders?: {
-    id: string;
-    name?: string | undefined | null;
-  }[];
-  position?: ImagePosition;
-  primary?: boolean;
-  policeImage?: boolean;
-}
 
 interface Props {
   titleOrder: number;
@@ -26,7 +16,6 @@ interface Props {
   onRemoveImage: (uid: string) => void;
   beforeUpload: (value: RcFile) => void;
   fileList: Image[];
-  onPreview?: (value: Image) => void;
   toggleEditImage: (value?: Image) => void;
   primaryImage: string;
   editImage: Image | null;
@@ -43,7 +32,6 @@ const OffenderImage = ({
   onEditImage,
   toggleEditImage,
   onRemoveImage,
-  onPreview,
   primaryImage,
   setPrimaryImage,
 }: Props): JSX.Element => {
@@ -115,7 +103,6 @@ const OffenderImage = ({
                 listType="picture-card"
                 fileList={fileList}
                 onChange={imgChange}
-                onPreview={onPreview}
                 beforeUpload={beforeUpload}
                 // eslint-disable-next-line react/no-unstable-nested-components
                 itemRender={(el, file: Image) => (

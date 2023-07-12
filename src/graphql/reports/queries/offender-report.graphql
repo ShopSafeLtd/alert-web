@@ -96,6 +96,7 @@ query OffenderReport(
       images {
         optimisedPersisted
         position
+        rotation
       }
     }
   }

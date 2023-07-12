@@ -19,6 +19,7 @@ query ListVehicles(
         optimised
         url
         position
+        rotation
       }
       incidents {
         id

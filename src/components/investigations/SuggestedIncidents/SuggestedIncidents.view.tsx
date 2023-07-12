@@ -69,6 +69,7 @@ const SuggestedIncidents = ({
                 <div className={classes.image}>
                   <WatermarkImage
                     url={image.optimised}
+                    rotation={image.rotation}
                     position={image.position}
                   />
                 </div>

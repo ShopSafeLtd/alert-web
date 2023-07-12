@@ -344,6 +344,7 @@ const CompareIncident = ({
                                 <div className={classes.image}>
                                   <WatermarkImage
                                     url={image.optimised}
+                                    rotation={image.rotation}
                                     position={image.position}
                                   />
                                 </div>
@@ -503,6 +504,7 @@ const CompareIncident = ({
                         <div className={classes.image}>
                           <WatermarkImage
                             url={image.optimised}
+                            rotation={image.rotation}
                             position={image.position}
                           />
                         </div>

@@ -10,6 +10,7 @@ import {
   useListSchemeUsersQuery,
 } from 'graphql/generated';
 import { useState } from 'react';
+import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
 import errorNotification from 'types/error_notification';
 
@@ -42,6 +43,7 @@ const useAddUserToBusiness = ({
   onClose,
   update,
 }: Props): Return => {
+  const intl = useIntl();
   const currentScheme = useStoreState((state) => state.scheme.id);
   const [selected, setSelected] = useState<Row[]>([]);
   const [saving, setSaving] = useState(false);
@@ -103,8 +105,15 @@ const useAddUserToBusiness = ({
       setSaving(false);
       onClose();
       notification.success({
-        message: 'Users Added',
-        description: 'The users have been successfully added to the business',
+        message: intl.formatMessage({
+          defaultMessage: 'Users Added!',
+          id: 'nJCL+y',
+        }),
+        description: intl.formatMessage({
+          defaultMessage:
+            'The users have been successfully added to the business',
+          id: 'd7kC/1',
+        }),
         placement: 'bottomRight',
       });
     },

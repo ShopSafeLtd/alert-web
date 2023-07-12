@@ -1,0 +1,24 @@
+query ListLoginEvents(
+  $take: Int
+  $skip: Int
+  $where: LoginEventWhereInput
+  $orderBy: [LoginEventOrderByWithRelationInput!]
+) {
+  listLoginEvents(take: $take, skip: $skip, where: $where, orderBy: $orderBy) {
+    loginEvents {
+      id
+      createdAt
+      loginTime
+      user {
+        id
+        fullName
+        firstLetter
+        businesses {
+          id
+          name
+        }
+      }
+    }
+    total
+  }
+}

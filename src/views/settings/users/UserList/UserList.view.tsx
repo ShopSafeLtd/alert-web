@@ -4,7 +4,7 @@ import { UserStatus } from 'graphql/generated';
 import type {
   CreateUserInDatabaseMutation,
   InviteExistingUserMutation,
-  ListUsersQuery,
+  UserListQuery,
   Role,
 } from 'graphql/generated';
 import { Link } from 'react-router-dom';
@@ -16,9 +16,10 @@ import EditUser from 'components/form-components/user/EditUser';
 import type { UserSort } from 'types/enums/user_sort';
 import UserFilter from 'components/users/UserFilter';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { GetUserStatusValues } from 'types/enums/user_status';
 
 interface Props {
-  data: ListUsersQuery | undefined;
+  data: UserListQuery | undefined;
   loading: boolean;
   search: string;
   setSearch: (value: string) => void;
@@ -45,7 +46,12 @@ interface Props {
   setOrder: (value: UserSort) => void;
   clearFilters: () => void;
 }
-
+const getTextStatus = (value: UserStatus) => {
+  if (value === UserStatus.Active) return 'success';
+  if (value === UserStatus.Invited) return 'warning';
+  if (value === UserStatus.Disabled) return 'danger';
+  return 'secondary';
+};
 const UserList = ({
   data,
   loading,
@@ -156,11 +162,9 @@ const UserList = ({
               id: 'tzMNF3',
             }),
             dataIndex: 'status',
-            render: (value) => (
-              <Typography.Text
-                type={value === UserStatus.Active ? 'success' : 'warning'}
-              >
-                {value}
+            render: (value: UserStatus) => (
+              <Typography.Text type={getTextStatus(value)}>
+                {GetUserStatusValues[value || UserStatus.Active]}
               </Typography.Text>
             ),
           },
@@ -222,7 +226,6 @@ const UserList = ({
               index === 0 ? group.name : ` ${group.name}`
             )
             .toString(),
-          // ???
           status: user.status || UserStatus.Active,
         }))}
       />

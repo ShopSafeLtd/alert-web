@@ -36,6 +36,7 @@ import { useNavigate } from 'react-router';
 import update from 'immutability-helper';
 import type { UploadChangeParam } from 'antd/lib/upload';
 import type {
+  Image,
   OffenderData as OffenderDataGlobal,
   VehicleData,
 } from 'types/DataType';
@@ -93,17 +94,11 @@ interface OffenderData extends OffenderDataGlobal {
   deleted: boolean;
 }
 
-interface Image extends UploadFile {
+export interface EditImage extends Image {
   offenders?: {
     id: string;
     name?: string | undefined | null;
   }[];
-  optimised?: string | null;
-  edited?: boolean;
-  position: ImagePosition;
-  primary?: boolean;
-  policeImage?: boolean;
-  new?: boolean;
 }
 
 interface ImagePayload extends UploadFile {
@@ -130,20 +125,19 @@ interface Return {
   }) => void;
   beforeUpload: (value: RcFile) => void;
   data: EditIncidentQuery | undefined;
-  fileList: Image[];
+  fileList: EditImage[];
   goodsTypesData: ListGoodsTypesQuery | undefined;
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
   imgChange: UploadProps['onChange'];
   loading: boolean;
-  newImage: Image | null;
+  newImage: EditImage | null;
   offenderImgChange: (
     info: UploadChangeParam<UploadFile>,
     currentId: string
   ) => void;
   offendersData: OffenderData[];
   onCancelNewImage: () => void;
-  onPreview: (value: ImagePayload) => void;
   onReject: () => void;
   onSearchBusiness: (
     value: string
@@ -171,28 +165,13 @@ interface Return {
   onAddOffender: (offender: OffenderDataGlobal, existing: boolean) => void;
   onEditOffender: (offender: OffenderDataGlobal) => void;
   onRemoveOffender: (offenderId: string) => void;
-  onEditImage: (value: Image) => void;
+  onEditImage: (value: EditImage) => void;
   onAddVehicle: (data: VehicleData, existing: boolean) => void;
   onEditVehicle: (data: VehicleData) => void;
   onRemoveVehicle: (vehicleId: string) => void;
   primaryImage: string;
   setPrimaryImage: (value: string) => void;
 }
-
-const onPreview = async (file: UploadFile) => {
-  let src = file.url as string;
-  if (!src) {
-    src = await new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file.originFileObj as RcFile);
-      reader.addEventListener('load', () => resolve(reader.result as string));
-    });
-  }
-  const image = new Image();
-  image.src = src;
-  const imgWindow = window.open(src);
-  imgWindow?.document.write(image.outerHTML);
-};
 
 const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
   const navigate = useNavigate();
@@ -218,8 +197,8 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
   );
   const [searchOffenders, setSearchOffenders] = useState<string>('');
   const [imageChange, setImageChange] = useState(false);
-  const [fileList, setFileList] = useState<Image[]>([]);
-  const [newImage, setNewImage] = useState<Image | null>(null);
+  const [fileList, setFileList] = useState<EditImage[]>([]);
+  const [newImage, setNewImage] = useState<EditImage | null>(null);
   const [editedOffender, setEditedOffender] = useState<
     OffenderData | undefined
   >();
@@ -284,6 +263,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
             position: image.position,
             primary: image.primary || false,
             policeImage: image.policeImage || false,
+            rotation: image.rotation || 0,
             new: false,
           }))
         );
@@ -520,7 +500,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
       ]);
       setImageChange(true);
     } else {
-      setFileList(info.fileList as Image[]);
+      setFileList(info.fileList as EditImage[]);
       setImageChange(true);
     }
   };
@@ -535,7 +515,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     setAddExistingOffender(!addExistingOffender);
   };
 
-  const onEditImage = (value: Image) => {
+  const onEditImage = (value: EditImage) => {
     const index = fileList.map((item) => item.uid).indexOf(value.uid);
     setFileList(
       update(fileList, {
@@ -885,7 +865,6 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
                   scheme: { connect: { id: schemeId } },
                   createdBy: { connect: { id: userId } },
                   localId: offender.id,
-                  // ???
                   images:
                     offender?.images &&
                     offender.images.length > 0 &&
@@ -997,6 +976,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
                     position: item.position,
                     primary: item.uid === primaryImage,
                     policeImage: item.policeImage,
+                    rotation: item.rotation || 0,
                   }))
                   .filter((obj) => obj.url !== undefined)
               : undefined,
@@ -1014,6 +994,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
                     position: { set: item.position },
                     primary: { set: item.uid === primaryImage },
                     policeImage: { set: item.policeImage },
+                    rotation: { set: item.rotation },
                   },
                   where: {
                     id: item.uid,
@@ -1233,8 +1214,6 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     offenderImgChange,
     offendersData: offendersData.filter((item) => !item.deleted),
     onCancelNewImage,
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    onPreview,
     onReject,
     onSearchBusiness,
     onSubmit,

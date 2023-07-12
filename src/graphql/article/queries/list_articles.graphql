@@ -27,6 +27,7 @@ query listArticles(
         optimised
         card
         position
+        rotation
       }
       image {
         id

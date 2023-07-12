@@ -40,7 +40,6 @@ query EditIncident($where: IncidentWhereUniqueInput!) {
     location {
       id
       building
-
       street
       townCity
       county
@@ -64,8 +63,10 @@ query EditIncident($where: IncidentWhereUniqueInput!) {
       optimised
       url
       position
+      rotation
       primary
       policeImage
+      rotation
       offenders {
         id
         name
@@ -101,6 +102,7 @@ query EditIncident($where: IncidentWhereUniqueInput!) {
         url
         optimised
         position
+        rotation
       }
     }
     offenders {
@@ -127,6 +129,7 @@ query EditIncident($where: IncidentWhereUniqueInput!) {
         optimised
         card
         position
+        rotation
       }
       tags {
         id
@@ -143,6 +146,7 @@ query EditIncident($where: IncidentWhereUniqueInput!) {
         url
         optimised
         position
+        rotation
         card
       }
       linkedCrimeGroups {
@@ -162,6 +166,7 @@ query EditIncident($where: IncidentWhereUniqueInput!) {
           url
           optimised
           position
+          rotation
         }
         updatedAt
         totalOffenders
@@ -176,6 +181,7 @@ query EditIncident($where: IncidentWhereUniqueInput!) {
           url
           optimised
           position
+          rotation
         }
       }
       linkedIncidents {
@@ -188,6 +194,7 @@ query EditIncident($where: IncidentWhereUniqueInput!) {
           url
           optimised
           position
+          rotation
         }
       }
       linkedOffenders {
@@ -205,6 +212,7 @@ query EditIncident($where: IncidentWhereUniqueInput!) {
           url
           optimised
           position
+          rotation
         }
       }
       createdBy {
@@ -227,6 +235,7 @@ query EditIncident($where: IncidentWhereUniqueInput!) {
           url
           optimised
           position
+          rotation
           card
         }
         linkedCrimeGroups {
@@ -246,6 +255,7 @@ query EditIncident($where: IncidentWhereUniqueInput!) {
             url
             optimised
             position
+            rotation
           }
           updatedAt
           totalOffenders
@@ -260,6 +270,7 @@ query EditIncident($where: IncidentWhereUniqueInput!) {
             url
             optimised
             position
+            rotation
           }
         }
         linkedIncidents {
@@ -272,6 +283,7 @@ query EditIncident($where: IncidentWhereUniqueInput!) {
             url
             optimised
             position
+            rotation
           }
         }
         linkedOffenders {
@@ -289,6 +301,7 @@ query EditIncident($where: IncidentWhereUniqueInput!) {
             url
             optimised
             position
+            rotation
           }
         }
         createdBy {

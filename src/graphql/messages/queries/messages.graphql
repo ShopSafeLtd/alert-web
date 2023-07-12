@@ -25,6 +25,7 @@ query messages($chat: String, $before: MessageWhereUniqueInput) {
       id
       url
       position
+      rotation
       optimised
     }
     crimeGroups {
@@ -51,6 +52,7 @@ query messages($chat: String, $before: MessageWhereUniqueInput) {
         id
         optimised
         position
+        rotation
         url
       }
     }
@@ -64,6 +66,7 @@ query messages($chat: String, $before: MessageWhereUniqueInput) {
         url
         optimised
         position
+        rotation
       }
     }
     offenders {
@@ -81,6 +84,7 @@ query messages($chat: String, $before: MessageWhereUniqueInput) {
         url
         optimised
         position
+        rotation
       }
     }
   }

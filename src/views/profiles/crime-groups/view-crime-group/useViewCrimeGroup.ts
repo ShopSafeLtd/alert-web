@@ -224,6 +224,7 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
                           position: item.position,
                           primary: item.primary,
                           policeImage: item.policeImage,
+                          rotation: item.rotation || 0,
                         }))
                       : undefined,
                 },

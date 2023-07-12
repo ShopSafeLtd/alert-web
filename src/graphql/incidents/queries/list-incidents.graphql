@@ -15,6 +15,7 @@ query listIncidents(
     incidents {
       id
       subject
+      totalImages
       description
       dayTime
       reference
@@ -43,6 +44,7 @@ query listIncidents(
       images {
         id
         position
+        rotation
         optimised
         url
       }

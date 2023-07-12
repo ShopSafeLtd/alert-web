@@ -1,6 +1,6 @@
 import { UserStatus } from 'graphql/generated';
 
-const userStatusValues = [
+export const userStatusValues = [
   {
     value: UserStatus.Active,
     label: 'Active',
@@ -23,4 +23,11 @@ const userStatusValues = [
     label: 'Disabled',
   },
 ];
-export default userStatusValues;
+
+export const GetUserStatusValues = {
+  [UserStatus.Active]: 'Active',
+  [UserStatus.Inactive]: 'Inactive',
+  [UserStatus.Invited]: 'Invited',
+  [UserStatus.NotInvited]: 'NotInvited',
+  [UserStatus.Disabled]: 'Disabled',
+} as const;

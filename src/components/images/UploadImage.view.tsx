@@ -2,17 +2,11 @@ import React from 'react';
 import { Button, Card, Col, Form, Popconfirm, Row, Upload } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/pro-light-svg-icons';
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
+import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import ImageEditor from 'components/form-components/ImageEditor/ImageEditor.view';
-import type { ImagePosition } from 'graphql/generated';
 import { useIntl } from 'react-intl';
-
-interface Image extends UploadFile {
-  position?: ImagePosition;
-  primary?: boolean;
-  policeImage?: boolean;
-}
+import type { Image } from 'types/DataType';
 
 interface Props {
   imgChange: UploadProps['onChange'];

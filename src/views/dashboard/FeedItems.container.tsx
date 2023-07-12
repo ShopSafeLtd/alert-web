@@ -9,11 +9,12 @@ const FeedItems = (): JSX.Element => {
 
     recentOffenderData,
     recentOffenderLoading,
-    onPaginationChange,
-    pagination,
+    // onPaginationChange,
+    // pagination,
 
     search,
     setSearch,
+    fetchMoreScroll,
 
     // updateIncidentList,
     // onNavigate,
@@ -39,12 +40,13 @@ const FeedItems = (): JSX.Element => {
 
   return (
     <View
+      fetchMoreScroll={fetchMoreScroll}
       data={data}
       loading={loading}
       recentOffenderData={recentOffenderData}
       recentOffenderLoading={recentOffenderLoading}
-      onPaginationChange={onPaginationChange}
-      pagination={pagination}
+      // onPaginationChange={onPaginationChange}
+      // pagination={pagination}
       search={search}
       setSearch={setSearch}
       onDeleteFeedItem={onDeleteFeedItem}

@@ -9,6 +9,7 @@ import {
 import { Modal, notification } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import errorNotification from 'types/error_notification';
+import { useIntl } from 'react-intl';
 
 const { confirm } = Modal;
 
@@ -32,6 +33,7 @@ interface Return {
 }
 
 const useEditProfile = (): Return => {
+  const intl = useIntl();
   const navigate = useNavigate();
   const userId = useStoreState((state) => state.user.id);
   const schemeId = useStoreState((state) => state.scheme.id);
@@ -47,8 +49,14 @@ const useEditProfile = (): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: 'Successfully Updated!',
-        description: 'Your Profile has been updated! ',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
+          id: 'w5Yfkf',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'Your Profile has been updated.',
+          id: 'PYtwbu',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -101,8 +109,14 @@ const useEditProfile = (): Return => {
   const [resetPassword] = useResetPasswordMutation();
   const resetConfirm = () => {
     confirm({
-      title: 'Do you Want to reset your password?',
-      content: 'You will receive a reset email.',
+      title: intl.formatMessage({
+        id: 'bnCsAu',
+        defaultMessage: 'Do you Want to reset your password?',
+      }),
+      content: intl.formatMessage({
+        id: 'tPTbL8',
+        defaultMessage: 'You will receive a reset email.',
+      }),
       async onOk() {
         await resetPassword({
           variables: {

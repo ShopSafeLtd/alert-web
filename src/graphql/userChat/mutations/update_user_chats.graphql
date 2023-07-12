@@ -32,6 +32,7 @@ mutation updateUserChat($where: UniqueId!, $data: UserUpdateInput!) {
             url
             optimised
             position
+            rotation
           }
           vehicles {
             id

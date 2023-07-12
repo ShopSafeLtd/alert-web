@@ -1,0 +1,58 @@
+fragment FeedUpdate on Update {
+  id
+  text
+  icon
+  type
+  createdAt
+  feedImage {
+    ...FeedImage
+  }
+  linkedCrimeGroups {
+    totalOffenders
+    totalIncidents
+    alias
+    id
+    reference
+    totalRecoveredValue
+    totalTheftSuccess
+    totalValue
+    updatedAt
+  }
+  linkedVehicles {
+    updatedAt
+    totalOffenders
+    registration
+    reference
+    model
+    feedImage {
+      ...FeedImage
+    }
+    make
+    id
+    colour
+  }
+  linkedOffenders {
+    id
+    updatedAt
+    age
+    build
+    height
+    dateOfBirth
+    name
+    race
+    gender
+    feedImage {
+      ...FeedImage
+    }
+  }
+  linkedIncidents {
+    id
+    subject
+    description
+    dayTime
+    feedImage {
+      ...FeedImage
+    }
+  }
+
+}

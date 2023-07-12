@@ -27,6 +27,7 @@ export interface SetUserPayload {
     };
   }[];
   isSet: boolean;
+  userNotifications: number;
 }
 
 export interface SetUserRole {
@@ -133,6 +134,7 @@ const userModel: UserModel = {
     state.isSet = payload.isSet;
     state.demId = payload.demId;
     state.reference = payload.reference;
+    state.userNotifications = payload.userNotifications;
   }),
   setRole: action((state, payload) => {
     state.role = payload.role;

@@ -22,7 +22,9 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
       optimised
       url
       position
+      rotation
       policeImage
+      rotation
       primary
     }
     incidents {
@@ -67,6 +69,7 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
         id
         optimised
         position
+        rotation
       }
       totalTheftSuccess
       totalRecoveredValue
@@ -96,6 +99,7 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
         optimised
         card
         position
+        rotation
       }
       linkedCrimeGroups {
         totalOffenders
@@ -114,6 +118,7 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
           url
           optimised
           position
+          rotation
         }
         updatedAt
         totalOffenders
@@ -134,6 +139,7 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
           url
           optimised
           position
+          rotation
         }
       }
       linkedOffenders {
@@ -151,6 +157,7 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
           url
           optimised
           position
+          rotation
         }
       }
       createdBy {
@@ -174,6 +181,7 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
           optimised
           card
           position
+          rotation
         }
         linkedCrimeGroups {
           totalOffenders
@@ -192,6 +200,7 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
             url
             optimised
             position
+            rotation
           }
           updatedAt
           totalOffenders
@@ -212,6 +221,7 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
             url
             optimised
             position
+            rotation
           }
         }
         linkedOffenders {
@@ -229,6 +239,7 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
             url
             optimised
             position
+            rotation
           }
         }
         createdBy {

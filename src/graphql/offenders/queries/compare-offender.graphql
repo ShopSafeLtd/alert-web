@@ -16,6 +16,7 @@ query ViewOffenderCompare($where: OffenderWhereUniqueInput!) {
       id
       optimised
       position
+      rotation
     }
     tags {
       id

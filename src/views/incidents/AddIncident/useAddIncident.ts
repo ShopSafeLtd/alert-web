@@ -10,7 +10,6 @@ import type {
   CreateIncidentData,
   CreateIncidentMutation,
   CreateTagMutation,
-  ImagePosition,
   ListGoodsTypesQuery,
   ListIncidentsQuery,
   ListOffendersQuery,
@@ -42,6 +41,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStoreActions, useStoreState } from 'state';
 import type {
+  Image,
   LocationData,
   OffenderData as GlobalOffenderData,
   VehicleData,
@@ -85,15 +85,12 @@ export interface FormData {
   fellingTags: [];
 }
 
-interface Image extends UploadFile {
+export interface NewImage extends Image {
   offenders?: {
     id: string;
     name?: string | undefined | null;
     new?: boolean;
   }[];
-  position?: ImagePosition;
-  primary?: boolean;
-  policeImage?: boolean;
 }
 
 interface VehicleType extends VehicleData {
@@ -107,18 +104,18 @@ interface Return {
   addressLoading: boolean;
   adminRights: boolean;
   assignOffendersToImages: (data: {
-    image: Image;
+    image: NewImage;
     offenders: OffenderData[];
   }) => void;
   beforeUpload: (value: RcFile) => void;
-  fileList: Image[];
+  fileList: NewImage[];
   form: FormInstance<FormData>;
   goodsTypesData: ListGoodsTypesQuery | undefined;
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
   imgChange: UploadProps['onChange'];
   isTheft: boolean;
-  newImage: Image | null;
+  newImage: NewImage | null;
   offenderImgChange: (
     info: UploadChangeParam<UploadFile>,
     currentId: string
@@ -136,11 +133,14 @@ interface Return {
   recentOffenderData: ListOffendersQuery | undefined;
   recentOffenderLoading: boolean;
   removeImage: (uid: string) => void;
-  removeImageFromOffender: (data: { image: Image; offenderId: string }) => void;
+  removeImageFromOffender: (data: {
+    image: NewImage;
+    offenderId: string;
+  }) => void;
   removeOffender: (offenderId: string) => void;
   saving: boolean;
   searchOffenders: string;
-  setAssignToImage: (image: Image) => void;
+  setAssignToImage: (image: NewImage) => void;
   setSearchOffenders: (value: string) => void;
   tags: { value: string; label: string; tooltip: string; type: TagType }[];
   tagsLoading: boolean;
@@ -165,7 +165,7 @@ interface Return {
   goodsVisible: boolean;
   dontKnowGoods: () => void;
   knowGoods: () => void;
-  onEditImage: (value: Image) => void;
+  onEditImage: (value: NewImage) => void;
   onAddVehicle: (value: VehicleData, existing: boolean) => void;
   onEditVehicle: (value: VehicleData) => void;
   onRemoveVehicle: (vehicleId: string) => void;
@@ -204,11 +204,11 @@ const useEditIncident = (): Return => {
     details: false,
     groups: false,
   });
-  const [fileList, setFileList] = useState<Image[]>([]);
+  const [fileList, setFileList] = useState<NewImage[]>([]);
   const [imageChange, setImageChange] = useState(false);
   const [isTheft, setIsTheft] = useState(false);
   const [descriptionPristine, setDescriptionPristine] = useState(true);
-  const [newImage, setNewImage] = useState<Image | null>(null);
+  const [newImage, setNewImage] = useState<NewImage | null>(null);
   const [offendersData, setOffendersData] = useState<OffenderData[]>([]);
   const [saving, setSaving] = useState(false);
   const [searchOffenders, setSearchOffenders] = useState<string>('');
@@ -451,7 +451,7 @@ const useEditIncident = (): Return => {
   const updateNewAddressData = (address: LocationData | undefined) =>
     setNewAddressData(address);
 
-  const onEditImage = (value: Image) => {
+  const onEditImage = (value: NewImage) => {
     const index = fileList.map((item) => item.uid).indexOf(value.uid);
     setFileList(
       update(fileList, {
@@ -477,7 +477,7 @@ const useEditIncident = (): Return => {
       setFileList([
         ...fileList,
         ...offender.images.map(
-          (image): Image => ({
+          (image): NewImage => ({
             ...image,
             uid: image.id,
             name: image.fileName || '',
@@ -540,7 +540,7 @@ const useEditIncident = (): Return => {
   const removeImage = (uid: string) => {
     setFileList(fileList.filter((image) => image.uid !== uid));
   };
-  const setAssignToImage = (image: Image) => {
+  const setAssignToImage = (image: NewImage) => {
     setNewImage(image);
   };
 
@@ -549,7 +549,7 @@ const useEditIncident = (): Return => {
   ): item is OffenderData => !!item;
 
   const assignOffendersToImages = (data: {
-    image: Image;
+    image: NewImage;
     offenders: OffenderData[];
   }) => {
     if (offendersData) {
@@ -687,7 +687,7 @@ const useEditIncident = (): Return => {
   };
 
   const removeImageFromOffender = (data: {
-    image: Image;
+    image: NewImage;
     offenderId: string;
   }) => {
     // find index of file in fileList array
@@ -933,6 +933,7 @@ const useEditIncident = (): Return => {
                         position: item.position,
                         primary: item.uid === primaryImage,
                         policeImage: item.policeImage,
+                        rotation: item.rotation || 0,
                       }))
                       .filter((object) => object.url !== undefined)
                       .filter((object) => object.url.url !== undefined)
@@ -1217,7 +1218,6 @@ const useEditIncident = (): Return => {
           recoveredValue: 0,
           value: undefined,
         },
-        // ???
         {
           goodsType: undefined,
           recoveredValue: 0,

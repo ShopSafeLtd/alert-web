@@ -25,6 +25,7 @@ mutation updateMessage(
       id
       url
       position
+      rotation
       optimised
     }
     crimeGroups {
@@ -46,6 +47,7 @@ mutation updateMessage(
         optimised
         url
         position
+        rotation
       }
     }
     incidents {
@@ -58,6 +60,7 @@ mutation updateMessage(
         url
         optimised
         position
+        rotation
       }
     }
     offenders {
@@ -75,6 +78,7 @@ mutation updateMessage(
         url
         optimised
         position
+        rotation
       }
     }
   }

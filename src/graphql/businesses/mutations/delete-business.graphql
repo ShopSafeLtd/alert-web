@@ -1,0 +1,5 @@
+mutation deleteBusiness($id: String!) {
+  deleteBusiness(where: { id: $id }) {
+    id
+  }
+}

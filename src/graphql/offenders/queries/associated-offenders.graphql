@@ -29,6 +29,7 @@ query AssociatedOffenders(
         id
         optimised
         position
+        rotation
       }
       totalAssociatedIncidents(associatedOffender: $associatedOffender)
       totalAssociatedCrimeGroups(associatedOffender: $associatedOffender)

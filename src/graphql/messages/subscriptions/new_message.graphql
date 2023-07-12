@@ -19,6 +19,7 @@ subscription MessagesSubscription($chat: ID!, $user: ID!) {
       url
       optimised
       position
+      rotation
     }
     crimeGroups {
       totalOffenders
@@ -45,6 +46,7 @@ subscription MessagesSubscription($chat: ID!, $user: ID!) {
         optimised
         url
         position
+        rotation
       }
     }
     incidents {
@@ -57,6 +59,7 @@ subscription MessagesSubscription($chat: ID!, $user: ID!) {
         url
         optimised
         position
+        rotation
       }
     }
     offenders {
@@ -74,6 +77,7 @@ subscription MessagesSubscription($chat: ID!, $user: ID!) {
         url
         optimised
         position
+        rotation
       }
     }
   }

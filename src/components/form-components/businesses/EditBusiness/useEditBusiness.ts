@@ -12,6 +12,7 @@ import {
   useUpdateBusinessMutation,
 } from 'graphql/generated';
 import { useState } from 'react';
+import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
 import errorNotification from 'types/error_notification';
 
@@ -47,7 +48,7 @@ interface Return {
 const useEditBusiness = ({ onClose, businessId }: Props): Return => {
   const client = useApolloClient();
   const currentScheme = useStoreState((state) => state.scheme.id);
-
+  const intl = useIntl();
   const [form] = Form.useForm<OnSubmitValues>();
 
   const [saving, setSaving] = useState(false);
@@ -83,7 +84,11 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
       setSaving(false);
       onClose();
       notification.success({
-        message: 'Business has been updated',
+        message: intl.formatMessage({
+          defaultMessage: 'Business has been updated',
+          id: 'otzBb4',
+        }),
+
         placement: 'bottomRight',
       });
     },
