@@ -28,6 +28,7 @@ query searchOffenders(
       images {
         id
         position
+        rotation
         optimised
       }
       groups {

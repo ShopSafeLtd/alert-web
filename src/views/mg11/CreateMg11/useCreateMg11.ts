@@ -7,6 +7,7 @@ import {
   useListStatementTemplatesQuery,
 } from 'graphql/generated';
 import { useState } from 'react';
+import { useIntl } from 'react-intl';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useStoreState } from 'state';
 import errorNotification from 'types/error_notification';
@@ -83,6 +84,7 @@ interface Return {
 }
 
 const useCreateMg11 = (): Return => {
+  const intl = useIntl();
   const [form] = useForm<FormData>();
   const schemeId = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
@@ -115,9 +117,15 @@ const useCreateMg11 = (): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: 'Successfully Created!',
-        description:
-          'The Mg11 has been created and sent to the witness to sign!',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Created!',
+          id: 'ocw1NP',
+        }),
+        description: intl.formatMessage({
+          defaultMessage:
+            'The Mg11 has been created and sent to the witness to sign!',
+          id: 'kAfpt1',
+        }),
         placement: 'bottomRight',
       });
       if (businessStatement) {

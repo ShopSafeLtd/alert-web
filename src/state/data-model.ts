@@ -125,8 +125,8 @@ const dataModel: DataModel = {
   feedItems: {
     pagination: {
       page: 1,
-      pageSize: 20,
-      sizeOptions: ['20'],
+      pageSize: 10,
+      sizeOptions: ['10'],
     },
     variables: {
       search: '',

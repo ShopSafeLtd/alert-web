@@ -42,6 +42,7 @@ export interface OffenderData {
     type?: string | null;
     new?: boolean;
     position: ImagePosition;
+    rotation: number;
   }[];
   imageUid?: string[] | undefined;
   lastActive:
@@ -239,11 +240,16 @@ const useAddExistingOffender = ({
         tags: selectedOffender.tags,
         lastActive: selectedOffender.lastActive || null,
         images:
-          selectedOffender.images.map(({ id, optimised, position }) => ({
-            id,
-            optimised,
-            position,
-          })) || null,
+          selectedOffender.images.map(
+            ({ id, optimised, position, rotation }) => ({
+              id,
+              optimised,
+              position,
+              // ???
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+              rotation,
+            })
+          ) || null,
       });
     }
     setSaving(false);

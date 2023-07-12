@@ -1,7 +1,8 @@
 mutation CreateInvestigation($data: CreateInvestigationInput!) {
-    createInvestigation(data: $data) {
-        id
-        name
-        description
-    }
+  createInvestigation(data: $data) {
+    id
+    name
+    description
+    status
+  }
 }

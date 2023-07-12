@@ -24,6 +24,7 @@ query ChatMessages($where: ChatMessagesWhereInput!, $take: Int, $skip: Int) {
       id
       url
       position
+      rotation
       optimised
     }
     crimeGroups {
@@ -45,6 +46,7 @@ query ChatMessages($where: ChatMessagesWhereInput!, $take: Int, $skip: Int) {
         optimised
         url
         position
+        rotation
       }
     }
     incidents {
@@ -57,6 +59,7 @@ query ChatMessages($where: ChatMessagesWhereInput!, $take: Int, $skip: Int) {
         url
         optimised
         position
+        rotation
       }
     }
     offenders {
@@ -74,6 +77,7 @@ query ChatMessages($where: ChatMessagesWhereInput!, $take: Int, $skip: Int) {
         url
         optimised
         position
+        rotation
       }
     }
   }

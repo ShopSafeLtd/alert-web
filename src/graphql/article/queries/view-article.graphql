@@ -25,8 +25,8 @@ query Article($where: ArticleWhereUniqueInput!) {
       id
     }
     schemes {
-    id
-    name
+      id
+      name
     }
     images {
       id
@@ -34,6 +34,7 @@ query Article($where: ArticleWhereUniqueInput!) {
       optimised
       card
       position
+      rotation
     }
     image {
       id
@@ -75,6 +76,7 @@ query Article($where: ArticleWhereUniqueInput!) {
             id
             url
             position
+            rotation
             optimised
             card
             offenders {
@@ -118,6 +120,7 @@ query Article($where: ArticleWhereUniqueInput!) {
             id
             optimised
             position
+            rotation
           }
           groups {
             id
@@ -164,6 +167,7 @@ query Article($where: ArticleWhereUniqueInput!) {
               id
               optimised
               position
+              rotation
             }
           }
         }

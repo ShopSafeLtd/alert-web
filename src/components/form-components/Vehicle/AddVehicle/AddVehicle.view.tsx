@@ -22,12 +22,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
 import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import type { CustomGalleryData, IncidentCardData } from 'types/DataType';
+import type {
+  CustomGalleryData,
+  Image,
+  IncidentCardData,
+} from 'types/DataType';
 import AddCustomGallery from 'components/form-components/customGalleries/AddCustomGallery';
 import UploadImage from 'components/images/UploadImage.view';
 import { useIntl } from 'react-intl';
 import useStyles from './AddVehicle.styles';
-import type { FormData, Image } from './useAddVehicle';
+import type { FormData } from './useAddVehicle';
 
 const { confirm } = Modal;
 

@@ -7,6 +7,8 @@ query FeedItems(
   $skip: Int
   $after: String
   $groups: [String!]
+    $groupsWhere2: GroupWhereInput
+
 ) {
   listFeedItems(
     where: $where
@@ -31,14 +33,11 @@ query FeedItems(
         id
         location
         description
+        feedImage {
+          ...FeedImage
+        }
         offender {
           id
-          images {
-            id
-            url
-            optimised
-            position
-          }
           name
         }
       }
@@ -59,18 +58,12 @@ query FeedItems(
             fullName
           }
         }
-        images {
-          id
-          url
-          optimised
-          card
-          position
-        }
         image {
           id
           url
           optimised
           position
+          rotation
           card
         }
         previewImage
@@ -94,84 +87,8 @@ query FeedItems(
         totalTheftSuccess
         totalValue
         updatedAt
-        updates(orderBy: { createdAt: desc }) {
-          id
-          text
-          icon
-          type
-          createdAt
-          images {
-            id
-            url
-            optimised
-            position
-            card
-          }
-          linkedCrimeGroups {
-            totalOffenders
-            totalIncidents
-            alias
-            id
-            reference
-            totalRecoveredValue
-            totalTheftSuccess
-            totalValue
-            updatedAt
-          }
-          linkedVehicles {
-            updatedAt
-            totalOffenders
-            registration
-            reference
-            model
-            images {
-              id
-              url
-              optimised
-              position
-            }
-            make
-            id
-            colour
-          }
-          linkedIncidents {
-            id
-            subject
-            description
-            dayTime
-            images {
-              id
-              url
-              optimised
-              position
-            }
-          }
-          linkedOffenders {
-            id
-            updatedAt
-            age
-            build
-            height
-            dateOfBirth
-            name
-            race
-            gender
-            images {
-              id
-              url
-              optimised
-              position
-            }
-          }
-          createdBy {
-            id
-            fullName
-            businesses {
-              fullName
-              id
-              name
-            }
-          }
+        latestUpdate {
+          ...FeedUpdate
         }
       }
       vehicleId
@@ -185,90 +102,11 @@ query FeedItems(
         make
         id
         colour
-        images {
-          id
-          optimised
-          position
-          url
+        feedImage {
+          ...FeedImage
         }
-        updates(orderBy: { createdAt: desc }) {
-          id
-          text
-          icon
-          type
-          createdAt
-          images {
-            id
-            url
-            optimised
-            position
-            card
-          }
-          linkedCrimeGroups {
-            totalOffenders
-            totalIncidents
-            alias
-            id
-            reference
-            totalRecoveredValue
-            totalTheftSuccess
-            totalValue
-            updatedAt
-          }
-          linkedVehicles {
-            updatedAt
-            totalOffenders
-            registration
-            reference
-            model
-            make
-            id
-            colour
-            images {
-              id
-              url
-              position
-              optimised
-            }
-          }
-          linkedIncidents {
-            id
-            subject
-            description
-            dayTime
-            images {
-              id
-              url
-              optimised
-              position
-            }
-          }
-          linkedOffenders {
-            id
-            updatedAt
-            age
-            build
-            height
-            dateOfBirth
-            name
-            race
-            gender
-            images {
-              id
-              url
-              optimised
-              position
-            }
-          }
-          createdBy {
-            id
-            fullName
-            businesses {
-              fullName
-              id
-              name
-            }
-          }
+        latestUpdate {
+          ...FeedUpdate
         }
       }
       investigationId
@@ -291,87 +129,11 @@ query FeedItems(
             name
           }
         }
-        updates(orderBy: { createdAt: desc }) {
-          id
-          text
-          icon
-          type
-          createdAt
-          images {
-            id
-            url
-            optimised
-            position
-            card
-          }
-          linkedCrimeGroups {
-            totalOffenders
-            totalIncidents
-            alias
-            id
-            reference
-            totalRecoveredValue
-            totalTheftSuccess
-            totalValue
-            updatedAt
-          }
-          linkedVehicles {
-            updatedAt
-            totalOffenders
-            registration
-            reference
-            model
-            make
-            images {
-              id
-              url
-              optimised
-              position
-            }
-            id
-            colour
-          }
-          linkedIncidents {
-            id
-            subject
-            description
-            dayTime
-            images {
-              id
-              url
-              optimised
-              position
-            }
-          }
-          linkedOffenders {
-            id
-            updatedAt
-            age
-            build
-            height
-            dateOfBirth
-            name
-            race
-            gender
-            images {
-              id
-              url
-              optimised
-              position
-            }
-          }
-          createdBy {
-            id
-            fullName
-            businesses {
-              fullName
-              id
-              name
-            }
-          }
+        latestUpdate {
+          ...FeedUpdate
         }
       }
-      groups {
+      groups(where: $groupsWhere2) {
         id
         name
       }
@@ -379,122 +141,20 @@ query FeedItems(
       incident {
         id
         subject
-        policeRef
-        reference
         reference
         description
-        dayTime
-        date
-        totalOffenders
-        totalUpdates
-        updates(orderBy: { createdAt: desc }) {
-          id
-          text
-          icon
-          type
-          createdAt
-          images {
-            id
-            url
-            optimised
-            position
-            card
-          }
-          linkedCrimeGroups {
-            totalOffenders
-            totalIncidents
-            alias
-            id
-            reference
-            totalRecoveredValue
-            totalTheftSuccess
-            totalValue
-            updatedAt
-          }
-          linkedVehicles {
-            updatedAt
-            totalOffenders
-            registration
-            reference
-            model
-            images {
-              id
-              url
-              position
-              optimised
-            }
-            make
-            id
-            colour
-          }
-          linkedIncidents {
-            id
-            subject
-            description
-            dayTime
-            images {
-              id
-              url
-              position
-              optimised
-            }
-          }
-          linkedOffenders {
-            id
-            updatedAt
-            age
-            build
-            height
-            dateOfBirth
-            name
-            race
-            gender
-            images {
-              id
-              url
-              optimised
-              position
-            }
-          }
-          createdBy {
-            id
-            fullName
-            businesses {
-              fullName
-              id
-              name
-            }
-          }
-        }
-
-        crimeTypes {
-          id
-          name
+        latestUpdate {
+          ...FeedUpdate
         }
         approved
         business {
           id
           name
         }
-        createdBy {
-          id
-          fullName
-          businesses {
-            fullName
-            id
-            name
-          }
+        feedImage {
+          ...FeedImage
         }
-        images(orderBy: { createdAt: desc }) {
-          id
-          optimised
-          url
-          position
-        }
-        groups {
-          id
-          name
-        }
+
       }
       incidentId
       offender {
@@ -534,92 +194,12 @@ query FeedItems(
           id
           dayTime
         }
-        updates(orderBy: { createdAt: desc }) {
-          id
-          text
-          icon
-          type
-          createdAt
-          images {
-            id
-            url
-            optimised
-            position
-            card
-          }
-          linkedCrimeGroups {
-            totalOffenders
-            totalIncidents
-            alias
-            id
-            reference
-            totalRecoveredValue
-            totalTheftSuccess
-            totalValue
-            updatedAt
-          }
-          linkedVehicles {
-            updatedAt
-            totalOffenders
-            registration
-            reference
-            model
-            make
-            id
-            images {
-              id
-              url
-              position
-              optimised
-            }
-            colour
-          }
-          linkedIncidents {
-            id
-            subject
-            description
-            dayTime
-            images {
-              id
-              url
-              position
-              optimised
-            }
-          }
-          linkedOffenders {
-            id
-            updatedAt
-            age
-            build
-            height
-            dateOfBirth
-            name
-            race
-            gender
-            images {
-              id
-              url
-              position
-              optimised
-            }
-          }
-          createdBy {
-            id
-            fullName
-            businesses {
-              fullName
-              id
-              name
-            }
-          }
+        latestUpdate {
+          ...FeedUpdate
         }
 
-        images(orderBy: { createdAt: desc }) {
-          id
-          url
-          optimised
-          position
-          card
+        feedImage {
+          ...FeedImage
         }
         tags {
           id
@@ -673,10 +253,8 @@ query FeedItems(
               name
             }
           }
-          images(orderBy: { createdAt: desc }) {
-            id
-            optimised
-            position
+          feedImage {
+            ...FeedImage
           }
         }
       }

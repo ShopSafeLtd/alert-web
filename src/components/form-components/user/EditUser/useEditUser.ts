@@ -22,6 +22,7 @@ import { useApolloClient } from '@apollo/client';
 import type { BusinessData, SelectOptions } from 'types/DataType';
 import { useForm } from 'antd/lib/form/Form';
 import errorNotification from 'types/error_notification';
+import { useIntl } from 'react-intl';
 
 export interface FormData {
   fullName: string;
@@ -68,6 +69,7 @@ interface Return {
 
 const useEditUser = ({ onClose, userId }: Props): Return => {
   const client = useApolloClient();
+  const intl = useIntl();
   const [form] = useForm<FormData>();
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
@@ -147,8 +149,14 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: 'Successfully Updated!',
-        description: 'The user has been Updated! ',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
+          id: 'w5Yfkf',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The user has been updated.',
+          id: 'm0wU41',
+        }),
         placement: 'bottomRight',
       });
       onClose();

@@ -37,6 +37,7 @@ export interface OffenderData {
     type?: string | null;
     new?: boolean;
     position: ImagePosition;
+    rotation: number;
   }[];
   imageUid?: string[] | undefined;
   tags: {

@@ -4,6 +4,7 @@ import type {
   ListBusinessesQueryVariables,
 } from 'graphql/generated';
 import {
+  useDeleteBusinessMutation,
   ListBusinessesDocument,
   QueryMode,
   SortOrder,
@@ -11,9 +12,10 @@ import {
   useListBusinessesQuery,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
-import { notification } from 'antd';
+import { Modal, notification } from 'antd';
 import errorNotification from 'types/error_notification';
 import type { BusinessData } from 'types/DataType';
+import { useIntl } from 'react-intl';
 
 interface Return {
   data: ListBusinessesQuery | undefined;
@@ -26,36 +28,37 @@ interface Return {
   toggleLinkVisible: () => void;
   onSubmit: (value: BusinessData) => void;
   saving: boolean;
+  deleteConfirm: (value: string) => void;
 }
 
 const useListBusinesses = (): Return => {
+  const intl = useIntl();
   const currentScheme = useStoreState((state) => state.scheme.id);
-
   const [searchValue, onSearchChange] = useState('');
   const [addVisible, setAddVisible] = useState(false);
   const [linkVisible, setLinkVisible] = useState(false);
   const [saving, setSaving] = useState(false);
-
-  const { data } = useListBusinessesQuery({
-    fetchPolicy: 'cache-and-network',
-    variables: {
-      where: {
-        name: {
-          contains: searchValue,
-          mode: QueryMode.Insensitive,
-        },
-        schemes: {
-          some: {
-            id: {
-              equals: currentScheme,
-            },
+  const variables = {
+    where: {
+      name: {
+        contains: searchValue,
+        mode: QueryMode.Insensitive,
+      },
+      schemes: {
+        some: {
+          id: {
+            equals: currentScheme,
           },
         },
       },
-      orderBy: {
-        name: SortOrder.Asc,
-      },
     },
+    orderBy: {
+      name: SortOrder.Asc,
+    },
+  };
+  const { data } = useListBusinessesQuery({
+    fetchPolicy: 'cache-and-network',
+    variables,
   });
 
   const [createBusiness] = useCreateBusinessMutation({
@@ -63,8 +66,14 @@ const useListBusinesses = (): Return => {
       setSaving(false);
       setAddVisible(false);
       notification.success({
-        message: 'Business has been created',
-        description: 'You new business has been add to alert.',
+        message: intl.formatMessage({
+          defaultMessage: 'Business has been created',
+          id: 'uILUkO',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'You new business has been add to alert.',
+          id: 'sJoRW/',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -132,6 +141,75 @@ const useListBusinesses = (): Return => {
     },
   });
 
+  const [deleteBusiness] = useDeleteBusinessMutation({
+    onCompleted: () => {
+      setSaving(false);
+      notification.success({
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Removed!',
+          id: 'U0zgbv',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The business has been removed!',
+          id: 'mSae6x',
+        }),
+        placement: 'bottomRight',
+      });
+    },
+    onError: () => {
+      setSaving(false);
+      errorNotification();
+    },
+    update: (store, { data: res }) => {
+      if (res === null || res === undefined) return;
+
+      const existingData = store.readQuery<
+        ListBusinessesQuery,
+        ListBusinessesQueryVariables
+      >({
+        query: ListBusinessesDocument,
+        variables,
+      });
+
+      if (existingData === null) return;
+      if (existingData.listBusinesses.businesses === undefined) return;
+
+      store.writeQuery<ListBusinessesQuery, ListBusinessesQueryVariables>({
+        query: ListBusinessesDocument,
+        data: {
+          listBusinesses: {
+            ...existingData.listBusinesses,
+            businesses: existingData?.listBusinesses?.businesses?.filter(
+              (business) => business?.id !== res?.deleteBusiness?.id
+            ),
+          },
+          __typename: 'Query',
+        },
+        variables,
+      });
+    },
+  });
+
+  const deleteConfirm = (currentId: string) => {
+    Modal.confirm({
+      title: intl.formatMessage({
+        defaultMessage: 'Do you want to delete this business?',
+        id: 'e1WPCT',
+      }),
+      content: intl.formatMessage({
+        defaultMessage: 'This action cannot be undone.',
+        id: 'JDJoIZ',
+      }),
+      onOk() {
+        setSaving(true);
+        void deleteBusiness({
+          variables: {
+            id: currentId,
+          },
+        }).finally(() => setSaving(false));
+      },
+    });
+  };
   const onSubmit = (values: BusinessData) => {
     void createBusiness({
       variables: {
@@ -205,6 +283,7 @@ const useListBusinesses = (): Return => {
     toggleLinkVisible,
     onSubmit,
     saving,
+    deleteConfirm,
   };
 };
 

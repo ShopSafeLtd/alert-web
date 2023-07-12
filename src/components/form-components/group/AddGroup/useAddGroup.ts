@@ -11,6 +11,7 @@ import { useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { SelectOptions } from 'types/DataType';
 import errorNotification from 'types/error_notification';
+import { useIntl } from 'react-intl';
 
 export interface FormData {
   name: string;
@@ -35,6 +36,7 @@ interface Return {
 }
 
 const useAddGroup = ({ onClose, update }: Props): Return => {
+  const intl = useIntl();
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState<string[]>();
@@ -78,8 +80,14 @@ const useAddGroup = ({ onClose, update }: Props): Return => {
       setSaving(false);
       onClose();
       notification.success({
-        message: 'Successfully Added!',
-        description: 'The group has been added! ',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Added!',
+          id: '5Hvk21',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The group has been added.',
+          id: 'dJ4Y8x',
+        }),
         placement: 'bottomRight',
       });
     },

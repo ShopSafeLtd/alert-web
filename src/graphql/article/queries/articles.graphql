@@ -16,6 +16,7 @@ query Articles(
       optimised
       card
       position
+      rotation
     }
     image {
       id

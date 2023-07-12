@@ -80,7 +80,6 @@ interface Props {
   tags: { value: string; label: string }[];
   tagsLoading: boolean;
   imgChange: UploadProps['onChange'];
-  onPreview: (value: UploadFile) => void;
   beforeUpload: (value: RcFile) => void;
   fileList: UploadFile[];
   addExclusion: boolean;
@@ -115,7 +114,6 @@ const EditOffender = ({
   tags,
   tagsLoading,
   imgChange,
-  onPreview,
   beforeUpload,
   fileList,
   addOffenderTag,
@@ -735,7 +733,6 @@ const EditOffender = ({
                     listType="picture-card"
                     fileList={fileList}
                     onChange={imgChange}
-                    onPreview={onPreview}
                     beforeUpload={beforeUpload}
                     accept=".png,.jpeg,.webp"
                   >

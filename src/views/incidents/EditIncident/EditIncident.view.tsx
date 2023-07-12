@@ -3,7 +3,6 @@ import React from 'react';
 import type {
   CreateTagMutation,
   EditIncidentQuery,
-  ImagePosition,
   ListGoodsTypesQuery,
   ListOffendersQuery,
 } from 'graphql/generated';
@@ -52,6 +51,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import { useIntl } from 'react-intl';
+import type { EditImage } from './useEditIncident';
 
 const { Title, Paragraph } = Typography;
 
@@ -87,23 +87,6 @@ interface FormData {
   postcode: string;
 }
 
-interface Image extends UploadFile {
-  offenders?: {
-    id: string;
-    name?: string | undefined | null;
-  }[];
-  optimised?: string | null;
-}
-
-interface EditImagePayload extends UploadFile {
-  offenders?: {
-    id: string;
-    name?: string | undefined | null;
-  }[];
-  optimised?: string | null;
-  position: ImagePosition;
-}
-
 type Offender = Exclude<
   ListOffendersQuery['listOffenders'],
   null | undefined
@@ -120,36 +103,38 @@ interface Props {
   addIncidentTag: boolean;
   addRecentOffender: Offender | null;
   assignOffendersToImages: (data: {
-    image: Image;
+    image: EditImage;
     offenders: OffenderDataGlobal[];
   }) => void;
   beforeUpload: (value: RcFile) => void;
   data: EditIncidentQuery | undefined;
-  fileList: Image[];
+  fileList: EditImage[];
   goodsTypesData: ListGoodsTypesQuery | undefined;
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
   imgChange: UploadProps['onChange'];
   loading: boolean;
-  newImage: Image | null;
+  newImage: EditImage | null;
   offenderImgChange: (
     info: UploadChangeParam<UploadFile>,
     currentId: string
   ) => void;
   offendersData: OffenderData[];
   onCancelNewImage: () => void;
-  onPreview: (value: Image) => void;
   onReject: () => void;
   onSubmit: (value: FormData) => void;
   recentOffenderData: ListOffendersQuery | undefined;
   recentOffenderLoading: boolean;
   removeImage: (uid: string) => void;
-  removeImageFromOffender: (data: { image: Image; offenderId: string }) => void;
+  removeImageFromOffender: (data: {
+    image: EditImage;
+    offenderId: string;
+  }) => void;
   reviewed: boolean;
   saving: boolean;
   searchOffenders: string;
   setAddRecentOffender: (value: Offender | null) => void;
-  setAssignToImage: (image: Image) => void;
+  setAssignToImage: (image: EditImage) => void;
   setSearchOffenders: (value: string) => void;
   crimeTypes: { value: string; label: string }[];
   involvedTags: { value: string; label: string }[];
@@ -164,7 +149,7 @@ interface Props {
   onAddOffender: (offender: OffenderDataGlobal, existing: boolean) => void;
   onEditOffender: (offender: OffenderDataGlobal) => void;
   onRemoveOffender: (offenderId: string) => void;
-  onEditImage: (value: EditImagePayload) => void;
+  onEditImage: (value: EditImage) => void;
   onAddVehicle: (data: VehicleData, existing: boolean) => void;
   onEditVehicle: (data: VehicleData) => void;
   onRemoveVehicle: (vehicleId: string) => void;
@@ -188,7 +173,6 @@ const EditIncident = ({
   offenderImgChange,
   offendersData,
   onCancelNewImage,
-  onPreview,
   onReject,
   onSearchBusiness,
   onSubmit,
@@ -944,7 +928,6 @@ const EditIncident = ({
               setAssignToImage={setAssignToImage}
               removeImageFromOffender={removeImageFromOffender}
               removeImage={removeImage}
-              onPreview={onPreview}
               onEditImage={onEditImage}
               primaryImage={primaryImage}
               setPrimaryImage={setPrimaryImage}

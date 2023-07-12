@@ -1,13 +1,15 @@
 import React from 'react';
-import { Button, Col, Drawer, Row, Table } from 'antd';
+import { Button, Col, Drawer, Row, Table, Typography } from 'antd';
 import type {
   CreateInvestigationMutation,
   ListInvestigationsQuery,
 } from 'graphql/generated';
+import { InvestigationStatus } from 'graphql/generated';
 import { Link } from 'react-router-dom';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router';
 import { FormattedMessage } from 'react-intl';
+import GetInvestigationStatusValues from 'types/enums/investigation-status';
 import useStyles from './ListInvestigations.styles';
 import AddInvestigation from '../../../components/form-components/Investigation/AddInvestigation';
 
@@ -18,7 +20,12 @@ interface Props {
   toggleAddInvestigation: () => void;
   updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
 }
-
+const getTextStatus = (value: InvestigationStatus) => {
+  if (value === InvestigationStatus.Open) return 'success';
+  if (value === InvestigationStatus.Closed) return 'danger';
+  if (value === InvestigationStatus.Paused) return 'warning';
+  return 'success';
+};
 const ListInvestigations = ({
   data,
   loading,
@@ -56,9 +63,20 @@ const ListInvestigations = ({
             key: investigation.id,
             name: investigation.name,
             description: investigation.description || '',
+            status: investigation.status || InvestigationStatus.Open,
           })
         )}
         loading={loading}
+        pagination={{
+          hideOnSinglePage: true,
+          defaultPageSize: 50,
+          // pageSize: currentPageSize,
+          showSizeChanger: true,
+          // current: currentPage,
+          // onChange: onPaginationChange,
+          total: data?.listInvestigations?.total || 0,
+          showTotal: (total) => `Total Investigations: ${total}`,
+        }}
         size="small"
         onRow={(record) => ({
           onClick: () => navigate(`/app/investigations/view/${record.key}`),
@@ -70,6 +88,22 @@ const ListInvestigations = ({
             title: <FormattedMessage defaultMessage="Name" id="HAlOn1" />,
             render: (value, item) => (
               <Link to={`view/${item.key}`}>{value}</Link>
+            ),
+          },
+          {
+            key: 'status',
+            dataIndex: 'status',
+            // width: 100,
+            // ???
+            // title: intl.formatMessage({
+            //   defaultMessage: 'Status',
+            //   id: 'tzMNF3',
+            // }),
+            title: <FormattedMessage defaultMessage="Status" id="tzMNF3" />,
+            render: (value: InvestigationStatus) => (
+              <Typography.Text type={getTextStatus(value)}>
+                {GetInvestigationStatusValues[value]}
+              </Typography.Text>
             ),
           },
           {

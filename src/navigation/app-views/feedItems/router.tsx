@@ -1,6 +1,6 @@
 import React from 'react';
-import { Routes, Route } from 'react-router';
-import FeedItem from 'views/feedItems';
+import { Route, Routes } from 'react-router';
+import FeedItem from '../../../views/dashboard';
 
 // import ReviewIncident from 'views/incidents/ReviewIncident ';
 

@@ -72,6 +72,8 @@ interface Props {
   onRemoveBusiness: (value: string) => void;
   toggleLinkDem: () => void;
   linkDemVisible: boolean;
+  saving: boolean;
+  deleteConfirm: (value: string) => void;
 }
 
 const ViewBusiness = ({
@@ -93,6 +95,8 @@ const ViewBusiness = ({
   actionsData,
   onRemoveBusiness,
   linkDemVisible,
+  saving,
+  deleteConfirm,
 }: Props) => {
   const classNames = useStyles();
   const intl = useIntl();
@@ -118,6 +122,7 @@ const ViewBusiness = ({
                   id: '14N7fW',
                 })}
               </Button>,
+
               <Button
                 key="4"
                 icon={
@@ -132,6 +137,24 @@ const ViewBusiness = ({
                 {intl.formatMessage({
                   defaultMessage: 'Edit Business',
                   id: '9k1Jt/',
+                })}
+              </Button>,
+              <Button
+                key="4"
+                disabled={saving}
+                type="primary"
+                icon={
+                  <FontAwesomeIcon
+                    style={{ marginRight: 5 }}
+                    size="lg"
+                    icon={faTrash}
+                  />
+                }
+                onClick={() => deleteConfirm(data?.business?.id || '')}
+              >
+                {intl.formatMessage({
+                  defaultMessage: 'Delete Business',
+                  id: 'pneJSz',
                 })}
               </Button>,
             ]}

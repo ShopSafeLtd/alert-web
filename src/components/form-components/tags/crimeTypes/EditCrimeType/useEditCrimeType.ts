@@ -3,6 +3,7 @@ import type { TagQuery, CrimeType } from 'graphql/generated';
 import { useUpdateTagMutation, useTagQuery } from 'graphql/generated';
 import { notification } from 'antd';
 import errorNotification from 'types/error_notification';
+import { useIntl } from 'react-intl';
 
 interface FormData {
   name: string;
@@ -21,6 +22,7 @@ interface Return {
 }
 
 const useEditCrimeType = ({ onClose, incidentId }: Props): Return => {
+  const intl = useIntl();
   const [saving, setSaving] = useState(false);
 
   const { data: TagData, loading } = useTagQuery({
@@ -37,8 +39,14 @@ const useEditCrimeType = ({ onClose, incidentId }: Props): Return => {
       setSaving(false);
       onClose();
       notification.success({
-        message: 'Successfully Updated!',
-        description: 'The crime type has been updated! ',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
+          id: 'w5Yfkf',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The crime type has been updated.',
+          id: '/Gih2b',
+        }),
         placement: 'bottomRight',
       });
     },

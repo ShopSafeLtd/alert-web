@@ -1,10 +1,10 @@
 import { useStoreActions, useStoreState } from 'state';
-import type { CreateTodoMutation, ListTodosQuery } from 'graphql/generated';
+import type { CreateTodoMutation, FeedTodosQuery } from 'graphql/generated';
 import {
-  ListTodosDocument,
+  FeedTodosDocument,
   QueryMode,
   SortOrder,
-  useListTodosQuery,
+  useFeedTodosQuery,
   useUpdateTodoMutation,
 } from 'graphql/generated';
 import { useState } from 'react';
@@ -16,7 +16,7 @@ interface Props {
 }
 interface Return {
   data:
-    | Exclude<ListTodosQuery['listTodos'], undefined | null>
+    | Exclude<FeedTodosQuery['listTodos'], undefined | null>
     | null
     | undefined;
   loading: boolean;
@@ -91,7 +91,7 @@ const useAdminTodos = ({ fullSearch, groupsFilter }: Props): Return => {
       ],
     },
   };
-  const { data, loading } = useListTodosQuery({
+  const { data, loading } = useFeedTodosQuery({
     variables,
     onCompleted: (res) => {
       if (res.listTodos) {
@@ -107,15 +107,15 @@ const useAdminTodos = ({ fullSearch, groupsFilter }: Props): Return => {
     if (res?.createTodo === null || res?.createTodo === undefined) return;
 
     // get existing group list data from Apollo store
-    const existingData = store.readQuery<ListTodosQuery>({
-      query: ListTodosDocument,
+    const existingData = store.readQuery<FeedTodosQuery>({
+      query: FeedTodosDocument,
       variables,
     });
     if (!existingData?.listTodos) return;
 
     // write the new data to the Apollo store
-    store.writeQuery<ListTodosQuery>({
-      query: ListTodosDocument,
+    store.writeQuery<FeedTodosQuery>({
+      query: FeedTodosDocument,
       data: {
         listTodos: {
           uncompletedTotal: [
@@ -147,15 +147,15 @@ const useAdminTodos = ({ fullSearch, groupsFilter }: Props): Return => {
       if (res?.updateTodo === null || res?.updateTodo === undefined) return;
 
       // get existing group list data from Apollo store
-      const existingData = store.readQuery<ListTodosQuery>({
-        query: ListTodosDocument,
+      const existingData = store.readQuery<FeedTodosQuery>({
+        query: FeedTodosDocument,
         variables,
       });
 
       if (!existingData?.listTodos) return;
       if (res.updateTodo.completed) {
-        store.writeQuery<ListTodosQuery>({
-          query: ListTodosDocument,
+        store.writeQuery<FeedTodosQuery>({
+          query: FeedTodosDocument,
           data: {
             listTodos: {
               totalUserTodos: existingData.listTodos.totalUserTodos - 1,
@@ -179,8 +179,8 @@ const useAdminTodos = ({ fullSearch, groupsFilter }: Props): Return => {
         });
       }
       if (!res.updateTodo.completed) {
-        store.writeQuery<ListTodosQuery>({
-          query: ListTodosDocument,
+        store.writeQuery<FeedTodosQuery>({
+          query: FeedTodosDocument,
           data: {
             listTodos: {
               totalUserTodos: existingData.listTodos.totalUserTodos + 1,

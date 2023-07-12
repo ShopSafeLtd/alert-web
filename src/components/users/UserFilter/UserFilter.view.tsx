@@ -2,10 +2,9 @@ import React from 'react';
 import { Button, Col, Row, Select, Typography } from 'antd';
 import { UserStatus, Role } from 'graphql/generated';
 
-import type { UserSort } from 'types/enums/user_sort';
-import { userSortValues } from 'types/enums/user_sort';
+import { UserSort } from 'types/enums/user_sort';
 import { FormattedMessage, useIntl } from 'react-intl';
-import userStatusValues from 'types/enums/user_status';
+import { userStatusValues } from 'types/enums/user_status';
 import useStyles from './UserFilter.styles';
 
 interface Props {
@@ -61,11 +60,20 @@ const UserFilter = ({
               id: 'Hw6crD',
               defaultMessage: 'Sort Order',
             })}
-            options={userSortValues.map((value) => ({
-              label: value,
-              value,
-            }))}
-          />
+          >
+            <Select.Option value={UserSort.nameAsc}>
+              <FormattedMessage id="9wooBl" defaultMessage="Name A-Z" />
+            </Select.Option>
+            <Select.Option value={UserSort.nameDesc}>
+              <FormattedMessage id="egH4sY" defaultMessage="Name Z-A" />
+            </Select.Option>
+            <Select.Option value={UserSort.createdAtDesc}>
+              <FormattedMessage id="dZYazP" defaultMessage="Newest First" />
+            </Select.Option>
+            <Select.Option value={UserSort.createdAtAsc}>
+              <FormattedMessage id="FqI37D" defaultMessage="Oldest First" />
+            </Select.Option>
+          </Select>
         </Col>
       </Row>
 

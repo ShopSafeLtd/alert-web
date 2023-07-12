@@ -12,7 +12,9 @@ mutation updateVehicle($where: UniqueId!, $data: VehicleUpdateInput!) {
       optimised
       url
       position
+      rotation
       policeImage
+      rotation
       primary
     }
     customGalleries {

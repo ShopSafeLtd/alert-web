@@ -4,6 +4,7 @@ import {
   Card,
   Carousel,
   Col,
+  Drawer,
   Dropdown,
   Menu,
   Modal,
@@ -18,6 +19,7 @@ import {
   faClock,
   faEdit,
   faEllipsisV,
+  faImage,
   faLocationDot,
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
@@ -31,6 +33,9 @@ import { Link } from 'react-router-dom';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import SkeletonImage from 'components/images/SkeletonImage.view';
 import { useIntl } from 'react-intl';
+import EditIncidentFeed from 'components/form-components/incident/EditIncidentFeed';
+import FeedImageEditor from 'components/form-components/ImageEditor/FeedImageEditor.view';
+import type { EditFeedImage } from 'types/DataType';
 
 const { Title, Text, Paragraph } = Typography;
 const { confirm } = Modal;
@@ -44,8 +49,14 @@ interface Props {
   deleteRights: boolean;
   menuRights: boolean;
   openLightbox: (elements: { src: string }[], index: number) => void;
-  onNavigate: (id: string) => void;
   onDelete: (id: string) => void;
+  editIncidentFeed: boolean;
+  toggleEditIncidentFeed: () => void;
+  editImage: boolean;
+  toggleEditImage: () => void;
+  editImageId: string;
+  setEditImageId: (id: string) => void;
+  onEditImage: (value: EditFeedImage) => void;
 }
 
 const IncidentCard = ({
@@ -54,8 +65,14 @@ const IncidentCard = ({
   deleteRights,
   menuRights,
   openLightbox,
-  onNavigate,
   onDelete,
+  editIncidentFeed,
+  toggleEditIncidentFeed,
+  editImage,
+  toggleEditImage,
+  editImageId,
+  setEditImageId,
+  onEditImage,
 }: Props): JSX.Element => {
   const imagesRef = useRef<CarouselRef>(null);
   const intl = useIntl();
@@ -97,11 +114,22 @@ const IncidentCard = ({
                     defaultMessage: 'Edit Incident',
                     id: 'E6VJFN',
                   }),
-                  onClick: () => onNavigate(incident?.id || ''),
+                  onClick: () => toggleEditIncidentFeed(),
                   icon: <FontAwesomeIcon icon={faEdit} />,
                 },
+                incident.totalImages && incident.totalImages > 0
+                  ? {
+                      key: 1,
+                      label: intl.formatMessage({
+                        defaultMessage: 'Edit Image',
+                        id: '9UlLIw',
+                      }),
+                      onClick: () => toggleEditImage(),
+                      icon: <FontAwesomeIcon icon={faImage} />,
+                    }
+                  : null,
                 {
-                  key: 1,
+                  key: 2,
                   label: intl.formatMessage({
                     defaultMessage: 'Delete Incident',
                     id: 's8QPty',
@@ -125,7 +153,8 @@ const IncidentCard = ({
                     }),
                   icon: <FontAwesomeIcon icon={faTrash} />,
                 },
-              ].filter((item) => item.key !== 1 || deleteRights)}
+                //
+              ].filter((item) => item?.key !== 2 || deleteRights)}
             />
           }
           placement="bottomRight"
@@ -172,13 +201,19 @@ const IncidentCard = ({
         </Row>
       </div>
       <div>
-        {incident && incident.images.length > 0 ? (
-          <Carousel ref={imagesRef}>
+        {incident.totalImages && incident.totalImages > 0 ? (
+          <Carousel
+            ref={imagesRef}
+            afterChange={(currentSlide: number) => {
+              setEditImageId(incident.images[currentSlide].id);
+            }}
+          >
             {incident?.images.map((image) => (
               <div key={image.id}>
                 <div className="incident-card-image">
                   <WatermarkImage
                     url={image.optimised}
+                    rotation={image.rotation}
                     position={image.position}
                   />
                 </div>
@@ -189,7 +224,7 @@ const IncidentCard = ({
           <SkeletonImage height={280} />
         )}
       </div>
-      {incident && incident.images.length > 1 && (
+      {incident.totalImages && incident.totalImages > 1 && (
         <Row className="incident-card-controls">
           <Col>
             <FontAwesomeIcon
@@ -208,7 +243,7 @@ const IncidentCard = ({
           </Col>
         </Row>
       )}
-      {incident && incident.images.length > 0 && (
+      {incident.totalImages && incident.totalImages > 0 && (
         <FontAwesomeIcon
           className="incident-card-expand"
           icon={faArrowsMaximize}
@@ -386,6 +421,30 @@ const IncidentCard = ({
           </Row>
         </Link>
       </div>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Edit Incident',
+          id: 'E6VJFN',
+        })}
+        visible={editIncidentFeed}
+        width="400"
+        onClose={toggleEditIncidentFeed}
+      >
+        {editIncidentFeed ? (
+          <EditIncidentFeed
+            onClose={toggleEditIncidentFeed}
+            incidentId={incident.id}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <FeedImageEditor
+        submitImage={onEditImage}
+        onClose={toggleEditImage}
+        open={editImage}
+        image={incident.images.find((image) => editImageId === image.id)}
+      />
     </Card>
   );
 };

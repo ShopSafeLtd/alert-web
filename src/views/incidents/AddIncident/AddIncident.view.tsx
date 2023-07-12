@@ -45,7 +45,7 @@ import CheckTags from 'components/form-components/check-tags/CheckTags.view';
 import AddLocation from 'components/form-components/incident/location/AddLocation';
 import { useIntl } from 'react-intl';
 import useStyles from './AddIncident.styles';
-import type { FormData } from './useAddIncident';
+import type { FormData, NewImage } from './useAddIncident';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -55,29 +55,21 @@ interface OffenderData extends GlobalOffenderData {
   edited: boolean;
 }
 
-interface Image extends UploadFile {
-  offenders?: {
-    id: string;
-    name?: string | undefined | null;
-    new?: boolean;
-  }[];
-}
-
 interface Props {
   addIncidentTag: boolean;
   assignOffendersToImages: (data: {
-    image: Image;
+    image: NewImage;
     offenders: OffenderData[];
   }) => void;
   beforeUpload: (value: RcFile) => void;
-  fileList: Image[];
+  fileList: NewImage[];
   form: FormInstance<FormData>;
   goodsTypesData: ListGoodsTypesQuery | undefined;
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
   imgChange: UploadProps['onChange'];
   isTheft: boolean;
-  newImage: Image | null;
+  newImage: NewImage | null;
   offenderImgChange: (
     info: UploadChangeParam<UploadFile>,
     currentId: string
@@ -95,11 +87,14 @@ interface Props {
   recentOffenderData: ListOffendersQuery | undefined;
   recentOffenderLoading: boolean;
   removeImage: (uid: string) => void;
-  removeImageFromOffender: (data: { image: Image; offenderId: string }) => void;
+  removeImageFromOffender: (data: {
+    image: NewImage;
+    offenderId: string;
+  }) => void;
   removeOffender: (offenderId: string) => void;
   saving: boolean;
   searchOffenders: string;
-  setAssignToImage: (image: Image) => void;
+  setAssignToImage: (image: NewImage) => void;
   setSearchOffenders: (value: string) => void;
   tags: { value: string; label: string; tooltip: string; type: TagType }[];
   tagsLoading: boolean;
@@ -124,7 +119,7 @@ interface Props {
   goodsVisible: boolean;
   dontKnowGoods: () => void;
   knowGoods: () => void;
-  onEditImage: (value: Image) => void;
+  onEditImage: (value: NewImage) => void;
   onAddVehicle: (value: VehicleData, existing: boolean) => void;
   onEditVehicle: (value: VehicleData) => void;
   onRemoveVehicle: (vehicleId: string) => void;

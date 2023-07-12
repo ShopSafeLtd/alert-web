@@ -39,6 +39,7 @@ mutation updateIncident($where: UniqueId!, $data: IncidentUpdateInput!) {
       id
       optimised
       position
+      rotation
       url
       card
     }
@@ -67,6 +68,7 @@ mutation updateIncident($where: UniqueId!, $data: IncidentUpdateInput!) {
         id
         url
         position
+        rotation
         optimised
         card
       }

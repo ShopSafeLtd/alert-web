@@ -48,8 +48,8 @@ const OffenderFeed = ({
     dateOfBirth,
     reference,
     id,
-    updates,
-    images,
+    latestUpdate,
+    feedImage,
     tags,
     // lastActive,
     // incidents,
@@ -59,21 +59,19 @@ const OffenderFeed = ({
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     <Link to={`/app/offenders/view/${id}`}>
       <Row gutter={15} wrap={false} style={{ width: '100%' }}>
-        {(isNewOffender || isNewImage) && images && images.length > 0 ? (
+        {(isNewOffender || isNewImage) && feedImage ? (
           <Col>
             <ImageContainer
-              position={images[0].position}
-              src={images[0].optimised || images[0].url || ''}
+              position={feedImage.position}
+              src={feedImage.low || ''}
             />
           </Col>
         ) : null}
-        {!isNewImage && updates && updates[0]?.images[0] ? (
+        {!isNewImage && latestUpdate && latestUpdate?.feedImage ? (
           <Col>
             <ImageContainer
-              src={
-                updates[0].images[0].optimised || updates[0].images[0].url || ''
-              }
-              position={updates[0].images[0].position}
+              src={latestUpdate?.feedImage.low || ''}
+              position={latestUpdate?.feedImage.position}
             />
           </Col>
         ) : null}
@@ -176,7 +174,7 @@ const OffenderFeed = ({
                 </Col>
               </Row>
             </>
-          ) : updates && updates.length > 0 ? (
+          ) : latestUpdate ? (
             <UpdateContent
               title={
                 name ||
@@ -185,7 +183,7 @@ const OffenderFeed = ({
                   id: 'tHTxaO',
                 })
               }
-              update={updates[0]}
+              update={latestUpdate}
             />
           ) : null}
         </Col>

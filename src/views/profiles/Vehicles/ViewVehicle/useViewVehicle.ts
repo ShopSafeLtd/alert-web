@@ -165,6 +165,7 @@ const useViewVehicle = (vehicleId: string): Return => {
                   position: item.position,
                   primary: item.primary,
                   policeImage: item.policeImage,
+                  rotation: item.rotation || 0,
                 }))
             : undefined,
         delete:
@@ -184,6 +185,7 @@ const useViewVehicle = (vehicleId: string): Return => {
                   position: { set: item.position },
                   primary: { set: item.primary },
                   policeImage: { set: item.policeImage },
+                  rotation: { set: item.rotation },
                 },
                 where: {
                   id: item.id,

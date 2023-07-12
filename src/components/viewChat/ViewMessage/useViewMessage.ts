@@ -856,6 +856,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                       optimised: item.url || '',
                       url: item.url || '',
                       position: ImagePosition.CenterCenter,
+                      rotation: 0,
                     }))
                     .filter((obj) => obj.url !== undefined)
                 : [],
@@ -867,6 +868,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                       incident.images?.map((image) => ({
                         ...image,
                         position: ImagePosition.CenterCenter,
+                        rotation: 0,
                       })) || [],
                     reference: incident.reference,
                     subject: incident.subject,
@@ -882,6 +884,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                       offender.images?.map((image) => ({
                         ...image,
                         position: ImagePosition.CenterCenter,
+                        rotation: 0,
                       })) || [],
                     updatedAt: offender.updatedAt || new Date(),
                     age: offender.age,
@@ -900,6 +903,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                       vehicle.images?.map((image) => ({
                         ...image,
                         position: ImagePosition.CenterCenter,
+                        rotation: 0,
                       })) || [],
                     reference: vehicle.reference,
                     registration: vehicle.registration,

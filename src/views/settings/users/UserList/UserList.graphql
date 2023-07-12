@@ -1,0 +1,26 @@
+query UserList(
+  $where: UserWhereInput
+  $orderBy: [UserOrderByWithRelationInput!]
+  $groupWhere: GroupWhereInput
+  $take: Int
+  $skip: Int
+) {
+  listUsers(where: $where, orderBy: $orderBy, take: $take, skip: $skip) {
+    users {
+      id
+      fullName
+      email
+      businesses {
+        id
+        name
+        fullName
+      }
+      status
+      groups(where: $groupWhere) {
+        id
+        name
+      }
+    }
+    total
+  }
+}

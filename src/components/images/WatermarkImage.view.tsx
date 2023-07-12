@@ -77,7 +77,7 @@ interface Props {
   rotation?: number;
 }
 
-const WatermarkImage = ({ url, image, position, rotation = 0 }: Props) => {
+const WatermarkImage = ({ url, image, position, rotation }: Props) => {
   const classes = useStyles();
   const reference = useStoreState((state) => state.user.reference);
 
@@ -156,7 +156,7 @@ const WatermarkImage = ({ url, image, position, rotation = 0 }: Props) => {
             // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
             backgroundImage: `url(${url})`,
             backgroundPosition: getPosition(position),
-            transform: `rotate(${rotation}deg)`,
+            transform: `rotate(${rotation || 0}deg)`,
           }}
         />
       )}
@@ -172,4 +172,4 @@ const WatermarkImage = ({ url, image, position, rotation = 0 }: Props) => {
   );
 };
 
-export default WatermarkImage;
+export default React.memo(WatermarkImage);

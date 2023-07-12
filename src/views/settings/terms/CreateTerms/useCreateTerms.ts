@@ -3,6 +3,7 @@ import { useRef } from 'react';
 import type { Editor } from 'tinymce';
 import { useNavigate } from 'react-router';
 import { notification } from 'antd';
+import { useIntl } from 'react-intl';
 import { useStoreState } from '../../../../state';
 import {
   useCreateTermsAndConditionsMutation,
@@ -17,6 +18,7 @@ interface Return {
 }
 
 const useCreateTerms = (): Return => {
+  const intl = useIntl();
   const editorRef = useRef<Editor | null>(null);
   const schemeId = useStoreState((state) => state.scheme.id);
   const navigate = useNavigate();
@@ -31,8 +33,14 @@ const useCreateTerms = (): Return => {
   const [saveTerms] = useCreateTermsAndConditionsMutation({
     onCompleted: () => {
       notification.success({
-        message: 'Successfully Updated!',
-        description: 'The Terms have been updated! ',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
+          id: 'w5Yfkf',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The terms has been updated.',
+          id: 'TL13W1',
+        }),
         placement: 'bottomRight',
       });
     },

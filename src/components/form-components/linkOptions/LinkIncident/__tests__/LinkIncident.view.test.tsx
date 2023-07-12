@@ -33,6 +33,7 @@ describe('Detail Officer View', () => {
               optimised: null,
               url: 'htt',
               position: ImagePosition.CenterCenter,
+              rotation: 0,
             },
           ],
           offenders: [],

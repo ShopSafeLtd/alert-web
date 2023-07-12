@@ -1,9 +1,5 @@
 import React from 'react';
-import type {
-  ImagePosition,
-  ListVehiclesQuery,
-  ViewOffenderQuery,
-} from 'graphql/generated';
+import type { ListVehiclesQuery, ViewOffenderQuery } from 'graphql/generated';
 import type { FormInstance } from 'antd';
 import {
   Button,
@@ -20,7 +16,7 @@ import {
   Table,
   Typography,
 } from 'antd';
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
+import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faPenToSquare,
@@ -33,6 +29,7 @@ import type {
   BanData,
   CrimeGroupData,
   CustomGalleryData,
+  Image,
   TagData,
   VehicleData,
 } from 'types/DataType';
@@ -76,12 +73,6 @@ interface EditAddressForm {
   postcode: string;
 }
 
-interface Image extends UploadFile {
-  position?: ImagePosition;
-  primary?: boolean;
-  policeImage?: boolean;
-}
-
 interface Props {
   onSubmit: (value: FormData) => void;
   data: ViewOffenderQuery | undefined;
@@ -92,7 +83,6 @@ interface Props {
   tags: { value: string; label: string }[];
   tagsLoading: boolean;
   imgChange: UploadProps['onChange'];
-  onPreview: (value: UploadFile) => void;
   beforeUpload: (value: RcFile) => void;
   fileList: Image[];
   addExclusion: boolean;
@@ -154,7 +144,6 @@ const EditOffender = ({
   tags,
   tagsLoading,
   imgChange,
-  onPreview,
   beforeUpload,
   fileList,
   addOffenderTag,
@@ -238,6 +227,7 @@ const EditOffender = ({
               gender: data?.offender?.gender || null,
               race: data?.offender?.race || null,
               build: data?.offender?.build || null,
+              height: data?.offender?.height || null,
               hair: data?.offender?.hair || null,
               ageCheck: !!data?.offender?.dateOfBirth,
               peculiarities: data?.offender?.peculiarities || null,
@@ -498,7 +488,6 @@ const EditOffender = ({
             <OffenderImage
               titleOrder={adminRights ? 5 : 2}
               imgChange={imgChange}
-              onPreview={onPreview}
               beforeUpload={beforeUpload}
               fileList={fileList}
               editImage={editImage}

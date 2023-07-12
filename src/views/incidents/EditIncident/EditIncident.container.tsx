@@ -25,7 +25,6 @@ const EditIncident = ({ reviewed }: Props): JSX.Element => {
     offenderImgChange,
     offendersData,
     onCancelNewImage,
-    onPreview,
     onReject,
     onSearchBusiness,
     onSubmit,
@@ -75,7 +74,6 @@ const EditIncident = ({ reviewed }: Props): JSX.Element => {
         offenderImgChange={offenderImgChange}
         offendersData={offendersData}
         onCancelNewImage={onCancelNewImage}
-        onPreview={onPreview}
         onReject={onReject}
         onSearchBusiness={onSearchBusiness}
         onSubmit={onSubmit}

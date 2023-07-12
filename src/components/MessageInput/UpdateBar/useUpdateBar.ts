@@ -539,6 +539,7 @@ const useUpdateBar = ({
                       optimised: image.url,
                       url: image.url,
                       position: ImagePosition.CenterCenter,
+                      rotation: 0,
                     }))
                   : [],
               replies: [],
@@ -628,6 +629,7 @@ const useUpdateBar = ({
                       optimised: image.url,
                       url: image.url,
                       position: ImagePosition.CenterCenter,
+                      rotation: 0,
                     }))
                   : [],
               replies: [],
@@ -717,6 +719,7 @@ const useUpdateBar = ({
                       optimised: image.url,
                       url: image.url,
                       position: ImagePosition.CenterCenter,
+                      rotation: 0,
                     }))
                   : [],
               replies: [],
@@ -809,6 +812,7 @@ const useUpdateBar = ({
                       optimised: image.url,
                       url: image.url,
                       position: ImagePosition.CenterCenter,
+                      rotation: 0,
                     }))
                   : [],
               replies: [],
@@ -896,6 +900,7 @@ const useUpdateBar = ({
                       optimised: image.url,
                       url: image.url,
                       position: ImagePosition.CenterCenter,
+                      rotation: 0,
                     }))
                   : [],
               replies: [],

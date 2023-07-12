@@ -10,6 +10,8 @@ import {
 import { useStoreState } from 'state';
 import { useNavigate } from 'react-router-dom';
 import { Modal, notification } from 'antd';
+import { useIntl } from 'react-intl';
+import errorNotification from 'types/error_notification';
 
 const { confirm } = Modal;
 
@@ -28,15 +30,9 @@ interface Return {
   deleteConfirm: () => void;
 }
 
-const errorNotification = () => {
-  notification.error({
-    message: 'Error!',
-    description: 'Whoops, there are some errors. Please try again. ',
-    placement: 'bottomRight',
-  });
-};
 const useUserDetail = (userId: string): Return => {
   const navigate = useNavigate();
+  const intl = useIntl();
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
   const [editUser, setEditUser] = useState(false);
@@ -102,9 +98,15 @@ const useUserDetail = (userId: string): Return => {
   };
   const inviteConfirm = () => {
     confirm({
-      title: 'Do you want to send the invite?',
-      content:
-        'Resending the invite will reset the users password and send them an new invite containing the new password.',
+      title: intl.formatMessage({
+        id: 'acB6rj',
+        defaultMessage: 'Do you want to send the invite?',
+      }),
+      content: intl.formatMessage({
+        id: 'z2ZctF',
+        defaultMessage:
+          'Resending the invite will reset the users password and send them an new invite containing the new password.',
+      }),
       onOk() {
         openInvite();
       },
@@ -116,8 +118,14 @@ const useUserDetail = (userId: string): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: 'Successfully updated!',
-        description: 'The status of user has been updated!',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Updated!',
+          id: 'w5Yfkf',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The status of user has been updated.',
+          id: 'yca5dF',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -148,9 +156,15 @@ const useUserDetail = (userId: string): Return => {
   };
   const enableConfirm = () => {
     confirm({
-      title: 'Do you want to enable the user?',
-      content:
-        'Enabling this user will allow them to log back into the system.',
+      title: intl.formatMessage({
+        id: 'PsfdcH',
+        defaultMessage: 'Do you want to enable the user?',
+      }),
+      content: intl.formatMessage({
+        id: 'LH0sQ4',
+        defaultMessage:
+          'Enabling this user will allow them to log back into the system.',
+      }),
       onOk() {
         openDisableUser(false);
       },
@@ -159,9 +173,15 @@ const useUserDetail = (userId: string): Return => {
 
   const disableConfirm = () => {
     confirm({
-      title: 'Do you want to disable the user?',
-      content:
-        'Disabling this user will prevent them from logging into alert but will not delete them or any content they have added.',
+      title: intl.formatMessage({
+        id: '53q2Zw',
+        defaultMessage: 'Do you want to disable the user?',
+      }),
+      content: intl.formatMessage({
+        id: 'bvUFwi',
+        defaultMessage:
+          'Disabling this user will prevent them from logging into alert but will not delete them or any content they have added.',
+      }),
       onOk() {
         openDisableUser(true);
       },
@@ -176,8 +196,14 @@ const useUserDetail = (userId: string): Return => {
       setSaving(false);
       navigate('users');
       notification.success({
-        message: 'Successfully Deleted!',
-        description: 'The user has been deleted!',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Deleted!',
+          id: 'dvDKi/',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The user has been deleted.',
+          id: '7+Rwjf',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -202,9 +228,15 @@ const useUserDetail = (userId: string): Return => {
 
   const deleteConfirm = () => {
     confirm({
-      title: 'Do you want to delete the user from the scheme?',
-      content:
-        'Deleting this user will remove them from the scheme and any groups, it will not remove any content that they have submitted. This action can not be undone.',
+      title: intl.formatMessage({
+        id: 'Q3pVMD',
+        defaultMessage: 'Do you want to delete the user from the scheme?',
+      }),
+      content: intl.formatMessage({
+        id: 'qhIvoi',
+        defaultMessage:
+          'Deleting this user will remove them from the scheme and any groups, it will not remove any content that they have submitted. This action can not be undone.',
+      }),
       onOk() {
         openDelete();
       },

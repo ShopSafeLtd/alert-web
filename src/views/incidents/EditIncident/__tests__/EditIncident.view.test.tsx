@@ -43,6 +43,7 @@ describe('List Officer View', () => {
           optimised: null,
           url: null,
           position: ImagePosition.CenterCenter,
+          rotation: 0,
           offenders: [],
         },
       ],
@@ -71,7 +72,6 @@ describe('List Officer View', () => {
           involvedTags={[]}
           tagsLoading={false}
           imgChange={jest.fn()}
-          onPreview={jest.fn()}
           fileList={[]}
           beforeUpload={jest.fn()}
           addIncidentTag={false}

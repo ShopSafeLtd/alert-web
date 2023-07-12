@@ -12,6 +12,7 @@ import {
 import type { MutationUpdaterFn } from '@apollo/client';
 import { notification } from 'antd';
 import errorNotification from 'types/error_notification';
+import { useIntl } from 'react-intl';
 
 interface Props {
   onClose: () => void;
@@ -35,8 +36,8 @@ const useRestoreIncident = ({
   updateRestore,
   updateDelete,
 }: Props): Return => {
+  const intl = useIntl();
   const [saving, setSaving] = useState(false);
-
   const { data, loading } = useRecycledItemQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
@@ -51,8 +52,14 @@ const useRestoreIncident = ({
       setSaving(false);
       onClose();
       notification.success({
-        message: 'Successfully Restored!',
-        description: 'The incident has been restored! ',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Restored!',
+          id: 'aJnSOt',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The incident has been restored! ',
+          id: '/PBSKb',
+        }),
         placement: 'bottomRight',
       });
     },
@@ -78,8 +85,14 @@ const useRestoreIncident = ({
       setSaving(false);
       onClose();
       notification.success({
-        message: 'Successfully Deleted!',
-        description: 'The incident has been Deleted! ',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Deleted!',
+          id: 'dvDKi/',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The incident has been deleted.',
+          id: 'kOsXhQ',
+        }),
         placement: 'bottomRight',
       });
     },

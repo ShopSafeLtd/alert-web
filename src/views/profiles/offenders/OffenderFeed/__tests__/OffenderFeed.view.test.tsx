@@ -66,6 +66,7 @@ describe('Detail Officer View', () => {
               optimised: null,
               url: null,
               position: ImagePosition.CenterCenter,
+              rotation: 0,
             },
           ],
           incidents: [],

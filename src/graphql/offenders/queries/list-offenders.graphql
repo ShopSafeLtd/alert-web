@@ -15,6 +15,7 @@ query listOffenders(
     offenders {
       id
       reference
+      totalImages
       createdAt
       updatedAt
       totalIncidents
@@ -43,6 +44,7 @@ query listOffenders(
         id
         optimised
         position
+        rotation
         optimisedPersisted
       }
       groups {
@@ -68,11 +70,6 @@ query listOffenders(
         description
         dayTime
         date
-        crimeTypes {
-          id
-          name
-        }
-        approved
         location {
           id
           full
@@ -84,11 +81,6 @@ query listOffenders(
             id
             name
           }
-        }
-        images {
-          id
-          optimised
-          position
         }
       }
     }

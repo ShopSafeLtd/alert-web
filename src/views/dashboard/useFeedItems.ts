@@ -1,7 +1,7 @@
 import type {
   DeleteFeedItemMutation,
   FeedItemsQuery,
-  ListOffendersQuery,
+  ListOffendersFeedQuery,
   Model,
 } from 'graphql/generated';
 import {
@@ -11,8 +11,7 @@ import {
   SortOrder,
   useDeleteFeedItemMutation,
   useFeedItemsQuery,
-  useListOffendersQuery,
-  useSchemeGroupsQuery,
+  useListOffendersFeedQuery,
 } from 'graphql/generated';
 import { useEffect, useState } from 'react';
 import { FeedItemSort, useStoreActions, useStoreState } from 'state';
@@ -26,7 +25,7 @@ import { useIntl } from 'react-intl';
 interface Return {
   data: FeedItemsQuery | undefined;
   loading: boolean;
-  recentOffenderData: ListOffendersQuery | undefined;
+  recentOffenderData: ListOffendersFeedQuery | undefined;
   recentOffenderLoading: boolean;
   onPaginationChange: (page: number, pageSize: number) => void;
   pagination: PaginationModel;
@@ -56,6 +55,7 @@ interface Return {
   setGallery: (values: string[]) => void;
   createdAtFilter: DateType | undefined;
   setCreatedAtFilter: (value: DateType | undefined) => void;
+  fetchMoreScroll: () => void;
 }
 
 const useFeedItems = (): Return => {
@@ -187,31 +187,40 @@ const useFeedItems = (): Return => {
       ],
     },
   };
+
+  const schemeGroups =
+    useStoreState((state) => state.user.groups)
+      .filter((group) => group.scheme.id === schemeId)
+      .map((group) => ({
+        value: group.id,
+        label: group.name,
+      })) || [];
+
   // Queries
-  // Fetch scheme groups if scheme admin
-  const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
-    variables: {
-      where: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
-        users:
-          role === Role.User
-            ? {
-                some: {
-                  id: {
-                    equals: userId,
-                  },
-                },
-              }
-            : undefined,
-      },
-    },
-    fetchPolicy: 'cache-and-network',
-    skip: role !== Role.SchemeAdmin,
-  });
+  // // Fetch scheme groups if scheme admin
+  // const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
+  //   variables: {
+  //     where: {
+  //       scheme: {
+  //         id: {
+  //           equals: schemeId,
+  //         },
+  //       },
+  //       users:
+  //         role === Role.User
+  //           ? {
+  //               some: {
+  //                 id: {
+  //                   equals: userId,
+  //                 },
+  //               },
+  //             }
+  //           : undefined,
+  //     },
+  //   },
+  //   fetchPolicy: 'cache-and-network',
+  //   skip: role !== Role.SchemeAdmin,
+  // });
 
   // On mount
   useEffect(() => {
@@ -224,20 +233,31 @@ const useFeedItems = (): Return => {
       },
       variables: {
         ...variables,
-        groups: groupsData?.groups.map((group) => group.id) || [],
+        groups: schemeGroups?.map((group) => group.value) || [],
       },
       order,
     });
   }, []);
 
-  const { data, loading } = useFeedItemsQuery({
+  const { data, loading, fetchMore } = useFeedItemsQuery({
     // @ts-expect-error TODO: Fix type
-    variables: queryVariables,
+    variables: {
+      ...queryVariables,
+      groupsWhere2: {
+        users: {
+          some: {
+            id: {
+              equals: userId,
+            },
+          },
+        },
+      },
+    },
     fetchPolicy: 'cache-and-network',
   });
 
   const { data: recentOffenderData, loading: recentOffenderLoading } =
-    useListOffendersQuery({
+    useListOffendersFeedQuery({
       fetchPolicy: 'cache-and-network',
       variables: {
         scheme: {
@@ -353,6 +373,32 @@ const useFeedItems = (): Return => {
       });
     }
   };
+
+  const fetchMoreScroll = () => {
+    void fetchMore({
+      variables: {
+        ...queryVariables,
+        take: 10,
+        skip: data?.listFeedItems?.feedItems?.length || 0,
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        return {
+          listFeedItems: {
+            ...fetchMoreResult.listFeedItems,
+            total:
+              prev.listFeedItems?.total ||
+              fetchMoreResult?.listFeedItems?.total ||
+              0,
+            feedItems: [
+              ...(prev.listFeedItems?.feedItems || []),
+              ...(fetchMoreResult.listFeedItems?.feedItems || []),
+            ],
+          },
+        };
+      },
+    });
+  };
   // Functions
   const onPaginationChange = (page: number, pageSize: number) => {
     setFeedItemsState({
@@ -416,12 +462,8 @@ const useFeedItems = (): Return => {
     setOrder,
     search,
     setSearch,
-    groups:
-      groupsData?.groups.map((group) => ({
-        value: group.id,
-        label: group.name,
-      })) || [],
-    groupsLoading,
+    groups: schemeGroups,
+    groupsLoading: false,
     onGroupsChange,
     variables,
     onNavigate,
@@ -439,6 +481,7 @@ const useFeedItems = (): Return => {
     setGallery,
     setCreatedAtFilter,
     createdAtFilter,
+    fetchMoreScroll,
   };
 };
 

@@ -5,6 +5,7 @@ import { notification } from 'antd';
 import { useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
 import errorNotification from 'types/error_notification';
+import { useIntl } from 'react-intl';
 
 export interface InvestigationData {
   id?: string;
@@ -23,6 +24,7 @@ interface Return {
 }
 
 const useAddInvestigation = ({ onClose, update }: Props): Return => {
+  const intl = useIntl();
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
   const [createInvestigation] = useCreateInvestigationMutation({
@@ -30,8 +32,14 @@ const useAddInvestigation = ({ onClose, update }: Props): Return => {
       setSaving(false);
       onClose();
       notification.success({
-        message: 'Successfully Added!',
-        description: 'The investigation has been added! ',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Added!',
+          id: '5Hvk21',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The investigation has been added! ',
+          id: 'Y0ftuc',
+        }),
         placement: 'bottomRight',
       });
     },

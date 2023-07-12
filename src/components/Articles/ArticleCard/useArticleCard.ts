@@ -33,8 +33,8 @@ const useArticleCard = ({ createdById, update }: Props): Return => {
     onCompleted: () => {
       notification.success({
         message: intl.formatMessage({
-          defaultMessage: 'Successfully Deleted',
-          id: 'zJsyF1',
+          defaultMessage: 'Successfully Deleted!',
+          id: 'dvDKi/',
         }),
         description: intl.formatMessage({
           defaultMessage: 'The article has been deleted.',

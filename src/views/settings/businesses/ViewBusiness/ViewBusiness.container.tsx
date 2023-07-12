@@ -22,6 +22,8 @@ const ViewBusiness = () => {
     onRemoveBusiness,
     toggleLinkDem,
     linkDemVisible,
+    saving,
+    deleteConfirm,
   } = useViewBusiness();
 
   return (
@@ -44,6 +46,8 @@ const ViewBusiness = () => {
       updateAddUsersToBusiness={updateAddUsersToBusiness}
       actionsData={actionsData}
       onRemoveBusiness={onRemoveBusiness}
+      saving={saving}
+      deleteConfirm={deleteConfirm}
     />
   );
 };

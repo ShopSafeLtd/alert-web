@@ -13,6 +13,7 @@ import { useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { notification } from 'antd';
 import errorNotification from 'types/error_notification';
+import { useIntl } from 'react-intl';
 
 interface FormData {
   name: string;
@@ -31,6 +32,7 @@ interface Return {
 }
 
 const useAddChat = ({ onClose, update }: Props): Return => {
+  const intl = useIntl();
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
 
@@ -72,8 +74,14 @@ const useAddChat = ({ onClose, update }: Props): Return => {
       setSaving(false);
       onClose();
       notification.success({
-        message: 'Successfully Added!',
-        description: 'The Chat has been added! ',
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Added!',
+          id: '5Hvk21',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The Chat has been added!',
+          id: 'qKyEqm',
+        }),
         placement: 'bottomRight',
       });
     },

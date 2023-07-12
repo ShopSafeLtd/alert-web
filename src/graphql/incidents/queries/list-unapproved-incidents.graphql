@@ -26,6 +26,7 @@ query listUnapprovedIncidents(
         id
         optimised
         position
+        rotation
         url
       }
       crimeTypes {

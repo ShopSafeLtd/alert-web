@@ -26,10 +26,11 @@ import {
 import type { FormInstance } from 'antd';
 import { Form, message, Modal, notification, Upload } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
+import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import type {
+  Image,
   BanData,
   CrimeGroupData,
   CustomGalleryData,
@@ -42,12 +43,6 @@ import errorNotification from 'types/error_notification';
 import { useIntl } from 'react-intl';
 
 const { confirm } = Modal;
-
-export interface Image extends UploadFile {
-  position?: ImagePosition;
-  primary?: boolean;
-  policeImage?: boolean;
-}
 
 export interface FormData {
   name: string;
@@ -106,7 +101,7 @@ interface Return {
   onAddVehicle: (value: VehicleData, existing: boolean) => void;
   onEditImage: (value: Image) => void;
   onEditVehicle: (value: VehicleData) => void;
-  onPreview: (value: UploadFile) => void;
+  // onPreview: (value: UploadFile) => void;
   onRemoveCrimeGroup: (crimeGroupId: string) => void;
   onRemoveImage: (imageId: string) => void;
   onRemoveVehicle: (vehicleId: string) => void;
@@ -133,20 +128,20 @@ interface Return {
   updateNewOffenderTagData: (values: TagData) => void;
 }
 
-const onPreview = async (file: UploadFile) => {
-  let src = file.url as string;
-  if (!src) {
-    src = await new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file.originFileObj as RcFile);
-      reader.addEventListener('load', () => resolve(reader.result as string));
-    });
-  }
-  const image = new Image();
-  image.src = src;
-  const imgWindow = window.open(src);
-  imgWindow?.document.write(image.outerHTML);
-};
+// const onPreview = async (file: UploadFile) => {
+//   let src = file.url as string;
+//   if (!src) {
+//     src = await new Promise((resolve) => {
+//       const reader = new FileReader();
+//       reader.readAsDataURL(file.originFileObj as RcFile);
+//       reader.addEventListener('load', () => resolve(reader.result as string));
+//     });
+//   }
+//   const image = new Image();
+//   image.src = src;
+//   const imgWindow = window.open(src);
+//   imgWindow?.document.write(image.outerHTML);
+// };
 
 const useAddOffender = (): Return => {
   const intl = useIntl();
@@ -539,6 +534,7 @@ const useAddOffender = (): Return => {
                     position: item.position,
                     primary: item.uid === primaryImage,
                     policeImage: item.policeImage,
+                    rotation: item.rotation || 0,
                   }))
                 : undefined,
           },
@@ -790,7 +786,7 @@ const useAddOffender = (): Return => {
     customGalleriesLoading,
     imgChange,
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    onPreview,
+    // onPreview,
     onRemoveImage,
     beforeUpload,
     fileList,

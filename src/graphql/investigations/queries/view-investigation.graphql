@@ -3,6 +3,7 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
     id
     description
     name
+    status
     totalOffenders
     totalIncidents
     totalValue
@@ -47,6 +48,7 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
         optimisedPersisted
         card
         position
+        rotation
       }
       linkedCrimeGroups {
         totalOffenders
@@ -66,6 +68,7 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
           optimised
           optimisedPersisted
           position
+          rotation
         }
         updatedAt
         totalOffenders
@@ -87,6 +90,7 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
           optimised
           optimisedPersisted
           position
+          rotation
         }
       }
       linkedOffenders {
@@ -105,6 +109,7 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
           optimised
           optimisedPersisted
           position
+          rotation
         }
       }
       createdBy {
@@ -129,6 +134,7 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
           optimised
           card
           position
+          rotation
         }
         linkedCrimeGroups {
           totalOffenders
@@ -148,6 +154,7 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
             optimisedPersisted
             optimised
             position
+            rotation
           }
           updatedAt
           totalOffenders
@@ -168,6 +175,7 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
             url
             optimised
             position
+            rotation
           }
         }
         linkedOffenders {
@@ -186,6 +194,7 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
             optimised
             optimisedPersisted
             position
+            rotation
           }
         }
         createdBy {
@@ -217,6 +226,7 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
         optimised
         optimisedPersisted
         position
+        rotation
       }
     }
     incidents {

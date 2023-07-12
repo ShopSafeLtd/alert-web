@@ -1,0 +1,20 @@
+mutation updateOffenderImages(
+  $id: String!
+  $images: ImageUpdateManyWithoutOffendersNestedInput
+) {
+  updateOffender(where: { id: $id }, data: { images: $images }) {
+    id
+    images {
+      id
+      url
+      optimised
+      optimisticUri
+      card
+      position
+      rotation
+      primary
+      policeImage
+      rotation
+    }
+  }
+}

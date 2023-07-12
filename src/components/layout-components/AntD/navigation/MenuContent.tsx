@@ -122,11 +122,6 @@ const SideNavContent = (props: SideNavContentProps) => {
     },
   };
 
-  const { data } = useUserNotificationsQuery({
-    fetchPolicy: 'cache-and-network',
-    variables,
-  });
-
   const [notificationsOpen, setNotificationsOpen] = useState(false);
 
   const toggleNotificationOpen = () => setNotificationsOpen(!notificationsOpen);
@@ -250,11 +245,7 @@ const SideNavContent = (props: SideNavContentProps) => {
           className={classes.notificationCol}
           onClick={toggleNotificationOpen}
         >
-          <Badge
-            offset={[8, 0]}
-            size="small"
-            count={data?.user?.totalUnreadNotifications}
-          >
+          <Badge offset={[8, 0]} size="small" count={notifications}>
             <FontAwesomeIcon size="xl" icon={faBell} />
           </Badge>
         </Col>

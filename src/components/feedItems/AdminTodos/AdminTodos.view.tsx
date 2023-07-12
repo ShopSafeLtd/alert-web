@@ -14,7 +14,7 @@ import {
   Table,
   Typography,
 } from 'antd';
-import type { CreateTodoMutation, ListTodosQuery } from 'graphql/generated';
+import type { CreateTodoMutation, FeedTodosQuery } from 'graphql/generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import AddTodo from 'components/form-components/Todos/AddTodo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -30,7 +30,7 @@ const { Title, Text } = Typography;
 
 interface Props {
   data:
-    | Exclude<ListTodosQuery['listTodos'], undefined | null>
+    | Exclude<FeedTodosQuery['listTodos'], undefined | null>
     | null
     | undefined;
   loading: boolean;

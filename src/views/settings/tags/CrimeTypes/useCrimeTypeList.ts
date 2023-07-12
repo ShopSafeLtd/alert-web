@@ -16,6 +16,7 @@ import { useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { Modal, notification } from 'antd';
 import errorNotification from 'types/error_notification';
+import { useIntl } from 'react-intl';
 
 const { confirm } = Modal;
 
@@ -46,6 +47,7 @@ interface Return {
 }
 
 const useCrimeTypeList = (): Return => {
+  const intl = useIntl();
   const schemeId = useStoreState((state) => state.scheme.id);
   const schemeName = useStoreState((state) => state.scheme.name);
   const [incidentId, setIncidentId] = useState('');
@@ -396,9 +398,16 @@ const useCrimeTypeList = (): Return => {
 
   const deleteConfirm = (currentId: string) => {
     confirm({
-      title: 'Are you sure?',
-      content:
-        'This will remove this crime type from this scheme, bu not any other schemes you may have added it to.',
+      title: intl.formatMessage({
+        id: '2oCaym',
+        defaultMessage: 'Are you sure?',
+      }),
+      content: intl.formatMessage({
+        id: 'q21W2X',
+        defaultMessage:
+          'This will remove this crime type from this scheme, bu not any other schemes you may have added it to.',
+      }),
+
       onOk() {
         openDelete(currentId);
       },

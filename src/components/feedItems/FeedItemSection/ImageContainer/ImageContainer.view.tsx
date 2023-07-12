@@ -6,9 +6,11 @@ import WatermarkImage from 'components/images/WatermarkImage.view';
 const ImageContainer = ({
   src,
   position,
+  rotation,
 }: {
   src: string;
   position: ImagePosition;
+  rotation?: number;
 }) => (
   <div
     style={{
@@ -17,7 +19,7 @@ const ImageContainer = ({
       marginRight: -15,
     }}
   >
-    <WatermarkImage url={src} position={position} />
+    <WatermarkImage url={src} position={position} rotation={rotation || 0} />
   </div>
 );
 

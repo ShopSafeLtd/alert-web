@@ -327,6 +327,18 @@ const adminOnlyItems: NavItem[] = [
         submenu: [],
       },
       {
+        key: 'user-engagement',
+        path: `${APP_PREFIX_PATH}/reports/user-engagement`,
+        title: 'User Engagement',
+        icon: faUsers,
+        intl: defineMessage({
+          id: 'user-engagement',
+          defaultMessage: 'User Engagement',
+        }),
+        breadcrumb: true,
+        submenu: [],
+      },
+      {
         key: 'incidentMap',
         intl: defineMessage({
           id: 'incidentMap',

@@ -85,7 +85,11 @@ const AssociatedOffender = ({ offender, onClose }: Props) => {
         {offender?.images.map((image, i) => (
           <Col key={image.id} onClick={() => openLightbox(i)}>
             <div className={classes.image}>
-              <WatermarkImage url={image.optimised} position={image.position} />
+              <WatermarkImage
+                url={image.optimised}
+                rotation={image.rotation}
+                position={image.position}
+              />
             </div>
           </Col>
         ))}

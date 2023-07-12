@@ -33,6 +33,7 @@ query ViewOffender(
       url
       optimised
       position
+      rotation
       faces {
         id
         confidence
@@ -49,6 +50,7 @@ query ViewOffender(
         }
       }
       policeImage
+      rotation
       primary
     }
     addresses {
@@ -146,6 +148,7 @@ query ViewOffender(
         url
         optimised
         position
+        rotation
         card
       }
       linkedCrimeGroups {
@@ -165,6 +168,7 @@ query ViewOffender(
           url
           optimised
           position
+          rotation
         }
         updatedAt
         totalOffenders
@@ -185,6 +189,7 @@ query ViewOffender(
           url
           optimised
           position
+          rotation
         }
       }
       linkedOffenders {
@@ -202,6 +207,7 @@ query ViewOffender(
           url
           optimised
           position
+          rotation
         }
       }
       createdBy {
@@ -225,6 +231,7 @@ query ViewOffender(
           optimised
           card
           position
+          rotation
         }
         linkedCrimeGroups {
           totalOffenders
@@ -243,6 +250,7 @@ query ViewOffender(
             url
             optimised
             position
+            rotation
           }
           updatedAt
           totalOffenders
@@ -263,6 +271,7 @@ query ViewOffender(
             url
             optimised
             position
+            rotation
           }
         }
         linkedOffenders {
@@ -280,6 +289,7 @@ query ViewOffender(
             url
             optimised
             position
+            rotation
           }
         }
         createdBy {
