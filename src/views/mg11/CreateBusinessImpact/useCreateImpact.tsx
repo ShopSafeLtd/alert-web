@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
 import { useNavigate, useParams } from 'react-router-dom';
 import type { FormInstance } from 'antd';
 import { Form } from 'antd';
