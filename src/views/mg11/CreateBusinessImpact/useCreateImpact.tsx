@@ -2,7 +2,8 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import type { FormInstance } from 'antd';
 import { Form } from 'antd';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import ReactDOMServer from 'react-dom/server';
 import {
   useBusinessImpactQuery,
   useCreateOneBusinessImpactMutation,
@@ -10,6 +11,7 @@ import {
 import type { FormData, IncidentData } from './CreateImpact.view';
 import FONT_FAMILIES from '../../../components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
 import { useStoreState } from '../../../state';
+import SigSeal from '../../../components/onboarding/Onboarding/SchemeTerms/SigSeal';
 
 const { useForm } = Form;
 
@@ -81,7 +83,17 @@ const useCreateImpact = (): Return => {
   });
 
   const [selectedFont, setSelectedFont] = useState(FONT_FAMILIES[0]);
-  const [sign, setSign] = useState('');
+  const [sign, setSign] = useState(
+    ReactDOMServer.renderToString(
+      <SigSeal
+        key={selectedFont}
+        name={name}
+        font={selectedFont}
+        height={100}
+        width={300}
+      />
+    )
+  );
   const [tab, setTab] = useState('generate');
   const [file, setFile] = useState<{
     file: string;
@@ -97,7 +109,7 @@ const useCreateImpact = (): Return => {
 
   const onSubmit = (value: FormData) => {
     setSaving(true);
-    void createImpact({
+    createImpact({
       variables: {
         data: {
           ...value,
@@ -107,8 +119,9 @@ const useCreateImpact = (): Return => {
           incidentID: incidentId || '',
         },
       },
+    }).finally(() => {
+      setSaving(false);
     });
-    setSaving(false);
   };
 
   const update = (value: string) => {
