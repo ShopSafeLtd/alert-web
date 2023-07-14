@@ -219,7 +219,7 @@ const IncidentCard = ({
               <div key={image.id}>
                 <div className="incident-card-image">
                   <WatermarkImage
-                    url={image.optimised}
+                    url={image.low}
                     rotation={image.rotation}
                     position={image.position}
                   />
@@ -257,7 +257,7 @@ const IncidentCard = ({
           onClick={() =>
             openLightbox(
               incident?.images.map((image) => ({
-                src: image.optimised || '',
+                src: image.low || '',
               })) || [],
               0
             )

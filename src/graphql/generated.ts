@@ -63497,8 +63497,7 @@ export type ListIncidentsQuery = {
         id: string;
         position: ImagePosition;
         rotation: number;
-        optimised?: string | null;
-        url?: string | null;
+        low?: string | null;
       }>;
       groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
       offenders: Array<{
@@ -75321,8 +75320,7 @@ export const ListIncidentsDocument = gql`
           id
           position
           rotation
-          optimised
-          url
+          low
         }
         groups {
           id
