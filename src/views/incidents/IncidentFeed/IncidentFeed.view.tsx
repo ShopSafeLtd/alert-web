@@ -237,6 +237,7 @@ const IncidentFeed = ({
               {data?.listIncidents?.incidents?.map((el) => (
                 <Col sm={24} md={12} lg={8} xl={8} xxl={6} key={el?.id}>
                   <IncidentCard
+                    key={el?.id}
                     incident={el}
                     openLightbox={openLightbox}
                     update={updateIncidentList}

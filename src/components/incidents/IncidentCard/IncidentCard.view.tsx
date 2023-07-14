@@ -287,7 +287,7 @@ const IncidentCard = ({
           </div>
           {incident.offenders.length > 0 ? (
             <Row wrap={false}>
-              {incident.offenders.slice(0, 2).map((offender) => (
+              {incident.offenders.slice(0, 1).map((offender) => (
                 <Link to={`/app/offenders/view/${offender?.id}`}>
                   <Tag key={offender.id}>
                     {offender.name ||
@@ -298,12 +298,15 @@ const IncidentCard = ({
                   </Tag>
                 </Link>
               ))}
-              {incident.offenders.length > 2 && (
+              {incident.offenders.length > 1 && (
                 <Tooltip
-                  title={incident.offenders
-                    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-                    .map((item) => ` ${item.name}`)
-                    .toString()}
+                  title={incident.offenders.slice(1).map((item, index) => (
+                    <Link to={`/app/offenders/view/${item?.id}`}>
+                      {/* eslint-disable-next-line @typescript-eslint/restrict-template-expressions,formatjs/no-literal-string-in-jsx */}
+                      {index > 0 && ', '}
+                      {item.name}
+                    </Link>
+                  ))}
                 >
                   <Tag>
                     {intl.formatMessage(
