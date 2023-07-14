@@ -13,8 +13,7 @@ import { useStoreActions, useStoreState } from 'state';
 import { useAuth } from 'hooks';
 import { useAuth0 } from '@auth0/auth0-react';
 import theme from 'configs/ThemeConfig';
-import { useUserNewQuery } from 'graphql/generated';
-import { useNavigate } from 'react-router';
+
 import { ErrorBoundary, withSentryReactRouterV6Routing } from '@sentry/react';
 import PrimaryOnboarding from '../views/onboard/SetPassword';
 import Loading from '../components/loading';
@@ -36,7 +35,6 @@ const Views = () => {
   const currentRoute = location.pathname;
   const guestRoutes = ['/generated', '/ext/'];
   const guestRoute = guestRoutes.some((route) => currentRoute.includes(route));
-
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
   const t = localStorage.getItem('theme');
   const switchTheme = useStoreActions((actions) => actions.theme.switchTheme);
@@ -56,7 +54,6 @@ const Views = () => {
 
   const isSet = useStoreState((state) => state.auth.isSet);
   const userId = useStoreState((state) => state.user.id);
-  const navigate = useNavigate();
   const currentAppLocale = AppLocale[initLang as AvailableLanguages];
 
   const { rehydrateAuth, loading } = useAuth();
@@ -100,19 +97,6 @@ const Views = () => {
     if (!guestRoute) rehydrateAuth();
   }, []);
 
-  const { data } = useUserNewQuery({
-    fetchPolicy: 'network-only',
-    variables: {
-      id: userId,
-    },
-    skip: guestRoute || !userId,
-    onCompleted: (res) => {
-      if (res.userNew?.newUser) {
-        navigate('/app/onboarding');
-      }
-    },
-  });
-
   if ((loading || isLoading || !isSet) && !guestRoute) {
     return <Loading />;
   }
@@ -134,7 +118,7 @@ const Views = () => {
         <ErrorBoundary>
           <ThemeProvider theme={theme[currentTheme]}>
             <ConfigProvider locale={currentAppLocale.antd}>
-              {isSet && (data === undefined || data.userNew) ? (
+              {isSet ? (
                 <SentryRoutes>
                   <Route path="/">
                     <Route index element={<Navigate to="app" />} />
