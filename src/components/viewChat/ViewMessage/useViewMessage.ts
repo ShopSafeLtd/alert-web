@@ -171,7 +171,6 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   const [linkOffender, setLinkOffender] = useState(false);
   const [linkVehicle, setLinkVehicle] = useState(false);
   const [linkCrimeGroup, setLinkCrimeGroup] = useState(false);
-
   const [offendersData, setOffendersData] = useState<OffenderData[]>([]);
   const [mentionedUser, setMentionedUser] = useState<
     { id: string; value: string }[]
@@ -247,8 +246,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
         chat: chatId,
         user: userId,
       },
-      updateQuery: (prev, { subscriptionData }) => {
-        // update chat list
+      updateQuery: (prev, { subscriptionData, variables }) => {
         const existingChatListData = apolloStore.readQuery<
           UserChatsQuery,
           UserChatsQueryVariables
@@ -266,11 +264,15 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
             },
           },
         });
+
         const newMessage = subscriptionData.data.chatMessages[0];
         if (newMessage && existingChatListData?.user) {
           const chatIndex = existingChatListData.user.chats
             .map(({ chat }) => chat.id)
-            .indexOf(chatId);
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            .indexOf((variables?.where?.chat?.id as string) || chatId);
 
           apolloStore.writeQuery<UserChatsQuery, UserChatsQueryVariables>({
             query: UserChatsDocument,
@@ -318,11 +320,17 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
           });
         }
 
-        if (prev && prev.chatMessages) {
+        if (
+          prev &&
+          prev.chatMessages &&
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+          chatId === variables?.where?.chat?.id
+        ) {
           const test = prev.chatMessages.find(
             ({ id }) => id === subscriptionData.data.chatMessages[0]?.id
           );
-
           if (test === undefined) {
             return {
               ...prev,
@@ -339,8 +347,8 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       },
     });
   };
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  useEffect(() => subscribeToNewMessage(), [chatId]);
+
+  useEffect(() => subscribeToNewMessage(), [chatId, subscribeToNewMessage]);
 
   const scrolledToTop = async () => {
     if (!loadMore && !fetching) {
