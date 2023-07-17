@@ -442,7 +442,7 @@ const IncidentCard = ({
           id: 'E6VJFN',
         })}
         visible={editIncidentFeed}
-        width="400"
+        width="600"
         onClose={toggleEditIncidentFeed}
       >
         {editIncidentFeed ? (

@@ -409,7 +409,7 @@ const EditOffender = ({
                     loading={tagsLoading}
                     disabled={saving}
                     mode="multiple"
-                    maxTagCount={3}
+                    maxTagCount={2}
                     optionFilterProp="label"
                   >
                     {tags.map((tag) => (
@@ -437,7 +437,7 @@ const EditOffender = ({
                     loading={customGalleriesLoading}
                     disabled={saving}
                     mode="multiple"
-                    maxTagCount={3}
+                    maxTagCount={2}
                     optionFilterProp="label"
                   >
                     {customGalleries.map((el) => (

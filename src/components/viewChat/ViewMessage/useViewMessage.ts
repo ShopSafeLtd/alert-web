@@ -150,6 +150,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     role,
     id: userId,
     origName: userOrigName,
+    businesses: userBusinesses,
   } = useStoreState((state) => state.user);
   const schemeId = useStoreState((state) => state.scheme.id);
   const navigate = useNavigate();
@@ -930,8 +931,12 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
               id: userId,
               firstLetter: userOrigName.slice(1)[0],
               origName: userOrigName,
-              // TODO
-              businesses: [{ id: '', fullName: '' }],
+              businesses: [
+                {
+                  id: userBusinesses[0].id,
+                  fullName: userBusinesses[0].fullName,
+                },
+              ],
             },
             paddingTop: true,
             showUser: false,
