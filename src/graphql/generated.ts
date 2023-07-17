@@ -43924,7 +43924,7 @@ export type Style = {
 
 export type Subscription = {
   __typename?: 'Subscription';
-  chatMessages?: Maybe<Array<Maybe<MessageItem>>>;
+  chatMessages?: Maybe<MessageItem>;
   newMessage?: Maybe<Message>;
 };
 
@@ -64925,7 +64925,7 @@ export type MessagesSubscriptionSubscriptionVariables = Exact<{
 
 export type MessagesSubscriptionSubscription = {
   __typename?: 'Subscription';
-  chatMessages?: Array<{
+  chatMessages?: {
     __typename?: 'MessageItem';
     id: string;
     content: string;
@@ -65016,7 +65016,7 @@ export type MessagesSubscriptionSubscription = {
         rotation: number;
       }>;
     }>;
-  } | null> | null;
+  } | null;
 };
 
 export type CreateMg11MutationVariables = Exact<{

@@ -63,26 +63,38 @@ const Apollo = ({ children }: Props): JSX.Element => {
   const wsLink = new GraphQLWsLink(
     createClient({
       keepAlive: 10_000,
-
       on: {
         // eslint-disable-next-line no-return-assign
         connected: (socket) => (activeSocket = socket as WebSocket),
         ping: (received) => {
-          if (!received)
-            // sent
+          if (!received) {
             timedOut = setTimeout(() => {
-              if (activeSocket.readyState === WebSocket.OPEN)
+              if (activeSocket.readyState === WebSocket.OPEN) {
+                // Graceful disconnection
                 activeSocket.close(4408, 'Request Timeout');
-            }, 5000); // wait 5 seconds for the pong and then close the connection
+              }
+            }, 5000);
+          }
         },
         pong: (received) => {
-          if (received) clearTimeout(timedOut); // pong is received, clear connection close timeout
+          if (received) {
+            clearTimeout(timedOut);
+          } else {
+            console.error('Pong not received');
+          }
+        },
+        error: (error) => {
+          Sentry.captureMessage(`WebSocket error: ${error}`);
         },
       },
       url: import.meta.env.VITE_GRAPHQL_WS_URL,
-      connectionParams: async () => ({
-        authorization: `Bearer ${await getNewToken()}`,
-      }),
+      connectionParams: async () => {
+        const token = await getNewToken();
+        return {
+          authorization: `Bearer ${token}`,
+        };
+      },
+      lazy: true,
     })
   );
 
