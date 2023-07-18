@@ -83,8 +83,11 @@ const Apollo = ({ children }: Props): JSX.Element => {
             console.error('Pong not received');
           }
         },
+        closed: () => {
+          clearTimeout(timedOut);
+        },
         error: (error) => {
-          Sentry.captureMessage(`WebSocket error: ${error}`);
+          console.error(`WebSocket error: ${error}`);
         },
       },
       url: import.meta.env.VITE_GRAPHQL_WS_URL,

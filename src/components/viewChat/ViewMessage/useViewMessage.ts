@@ -5,6 +5,7 @@ import type {
   ChatMessagesQuery,
   ChatMessagesQueryVariables,
   ChatQuery,
+  ChatQueryVariables,
   CreateMessageMutation,
   DeleteChatMutation,
   DeleteMessageMutation,
@@ -14,6 +15,7 @@ import type {
   UserChatsQueryVariables,
 } from 'graphql/generated';
 import {
+  ChatDocument,
   ChatMessagesDocument,
   ImagePosition,
   MessageItemType,
@@ -141,6 +143,7 @@ interface Return {
   deleteOffenderConfirm: (messageId: string, offenderId: string) => void;
   deleteIncidentConfirm: (messageId: string, incidentId: string) => void;
   setMessageSent: (value: boolean) => void;
+  totalChats: number;
 }
 
 const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
@@ -239,6 +242,8 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     },
   });
 
+  console.log(chatData?.chat?.totalMessages);
+
   const subscribeToNewMessage = () => {
     subscribeToMore({
       document: MessagesSubscriptionDocument,
@@ -265,6 +270,40 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
           },
         });
 
+        const existingChat = apolloStore.readQuery<
+          ChatQuery,
+          ChatQueryVariables
+        >({
+          query: ChatDocument,
+          variables: {
+            where: {
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+              id: variables?.where?.chat?.id as string,
+            },
+          },
+        });
+        if (existingChat && existingChat.chat)
+          apolloStore.writeQuery<ChatQuery, ChatQueryVariables>({
+            query: ChatDocument,
+            variables: {
+              where: {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                id: variables?.where?.chat?.id as string,
+              },
+            },
+            data: {
+              chat: {
+                ...existingChat?.chat,
+                totalMessages:
+                  ((existingChat?.chat?.totalMessages as number) || 0) + 1,
+              },
+            },
+          });
+
         const newMessage = subscriptionData.data.chatMessages[0];
         if (newMessage && existingChatListData?.user) {
           const chatIndex = existingChatListData.user.chats
@@ -279,6 +318,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
             data: {
               user: {
                 id: existingChatListData.user.id,
+                totalChats: existingChatListData.user.totalChats,
                 chats: update(existingChatListData.user.chats, {
                   [chatIndex]: {
                     chat: {
@@ -319,26 +359,6 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
             },
           });
         }
-        console.log({
-          ...subscriptionData.data.chatMessages[0],
-          from: {
-            fullName:
-              subscriptionData.data.chatMessages[0]?.from?.fullName || '',
-            businesses:
-              subscriptionData.data.chatMessages[0]?.from?.businesses || [],
-            firstLetter:
-              subscriptionData.data.chatMessages[0]?.from?.fullName?.charAt(
-                0
-              ) || '',
-            origName:
-              subscriptionData.data.chatMessages[0]?.from?.fullName || '',
-            origFirstLetter:
-              subscriptionData.data.chatMessages[0]?.from?.fullName?.charAt(
-                0
-              ) || '',
-            id: subscriptionData.data.chatMessages[0]?.from?.id || '',
-          },
-        });
         if (
           prev &&
           prev.chatMessages &&
@@ -424,7 +444,9 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       setFetching(true);
       await fetchMore({
         variables: {
-          skip: data?.chatMessages.length || 0,
+          skip:
+            data?.chatMessages?.filter((chat) => chat?.type !== 'DATE')
+              .length || 0,
         },
       });
       setLoadMore(false);
@@ -1086,6 +1108,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     deleteOffenderConfirm: () => {},
     messageSent,
     setMessageSent,
+    totalChats: chatData?.chat?.totalMessages || 0,
   };
 };
 

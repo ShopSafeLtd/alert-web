@@ -6692,6 +6692,7 @@ export type Chat = {
   name: Scalars['String'];
   scheme: Scheme;
   totalMembers?: Maybe<Scalars['Int']>;
+  totalMessages?: Maybe<Scalars['Int']>;
   updatedAt: Scalars['DateTime'];
 };
 
@@ -34851,6 +34852,7 @@ export type QueryListUserContributionArgs = {
 };
 
 export type QueryListUserNotificationsArgs = {
+  cursor?: InputMaybe<UserNotificationWhereUniqueInput>;
   orderBy?: InputMaybe<Array<UserNotificationOrderByWithRelationInput>>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
@@ -43924,7 +43926,7 @@ export type Style = {
 
 export type Subscription = {
   __typename?: 'Subscription';
-  chatMessages?: Maybe<MessageItem>;
+  chatMessages?: Maybe<Array<Maybe<MessageItem>>>;
   newMessage?: Maybe<Message>;
 };
 
@@ -60778,6 +60780,7 @@ export type ChatQuery = {
     name: string;
     description?: string | null;
     totalMembers?: number | null;
+    totalMessages?: number | null;
     members: Array<{
       __typename?: 'UserChat';
       id: string;
@@ -64925,7 +64928,7 @@ export type MessagesSubscriptionSubscriptionVariables = Exact<{
 
 export type MessagesSubscriptionSubscription = {
   __typename?: 'Subscription';
-  chatMessages?: {
+  chatMessages?: Array<{
     __typename?: 'MessageItem';
     id: string;
     content: string;
@@ -65016,7 +65019,7 @@ export type MessagesSubscriptionSubscription = {
         rotation: number;
       }>;
     }>;
-  } | null;
+  } | null> | null;
 };
 
 export type CreateMg11MutationVariables = Exact<{
@@ -72018,6 +72021,7 @@ export const ChatDocument = gql`
       name
       description
       totalMembers
+      totalMessages
       members {
         id
         user {
