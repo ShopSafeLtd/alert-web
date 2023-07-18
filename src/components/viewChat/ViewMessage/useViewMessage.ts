@@ -319,7 +319,26 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
             },
           });
         }
-
+        console.log({
+          ...subscriptionData.data.chatMessages[0],
+          from: {
+            fullName:
+              subscriptionData.data.chatMessages[0]?.from?.fullName || '',
+            businesses:
+              subscriptionData.data.chatMessages[0]?.from?.businesses || [],
+            firstLetter:
+              subscriptionData.data.chatMessages[0]?.from?.fullName?.charAt(
+                0
+              ) || '',
+            origName:
+              subscriptionData.data.chatMessages[0]?.from?.fullName || '',
+            origFirstLetter:
+              subscriptionData.data.chatMessages[0]?.from?.fullName?.charAt(
+                0
+              ) || '',
+            id: subscriptionData.data.chatMessages[0]?.from?.id || '',
+          },
+        });
         if (
           prev &&
           prev.chatMessages &&
@@ -334,9 +353,58 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
           if (test === undefined) {
             return {
               ...prev,
+
               chatMessages: [
+                {
+                  ...subscriptionData.data.chatMessages[0],
+                  content: subscriptionData.data.chatMessages[0]?.content || '',
+                  createdAt:
+                    subscriptionData.data.chatMessages[0]?.createdAt || '',
+
+                  id: subscriptionData.data.chatMessages[0]?.id || '',
+                  sent: subscriptionData.data.chatMessages[0]?.sent || false,
+                  incidents:
+                    subscriptionData.data.chatMessages[0]?.incidents || [],
+                  offenders:
+                    subscriptionData.data.chatMessages[0]?.offenders || [],
+                  images: subscriptionData.data.chatMessages[0]?.images || [],
+                  crimeGroups:
+                    subscriptionData.data.chatMessages[0]?.crimeGroups || [],
+                  currentUser:
+                    subscriptionData.data.chatMessages[0]?.from?.id === userId,
+                  formattedDateTime:
+                    subscriptionData.data.chatMessages[0]?.formattedDateTime ||
+                    '',
+                  paddingTop:
+                    subscriptionData.data.chatMessages[0]?.paddingTop || false,
+                  type:
+                    subscriptionData.data.chatMessages[0]?.type || 'MESSAGE',
+                  showUser:
+                    subscriptionData.data.chatMessages[0]?.showUser || false,
+                  vehicles:
+                    subscriptionData.data.chatMessages[0]?.vehicles || [],
+                  from: {
+                    fullName:
+                      subscriptionData.data.chatMessages[0]?.from?.fullName ||
+                      '',
+                    businesses:
+                      subscriptionData.data.chatMessages[0]?.from?.businesses ||
+                      [],
+                    firstLetter:
+                      subscriptionData.data.chatMessages[0]?.from?.fullName?.charAt(
+                        0
+                      ) || '',
+                    origName:
+                      subscriptionData.data.chatMessages[0]?.from?.fullName ||
+                      '',
+                    origFirstLetter:
+                      subscriptionData.data.chatMessages[0]?.from?.fullName?.charAt(
+                        0
+                      ) || '',
+                    id: subscriptionData.data.chatMessages[0]?.from?.id || '',
+                  },
+                },
                 ...prev.chatMessages,
-                ...subscriptionData.data.chatMessages,
               ],
             };
           }
