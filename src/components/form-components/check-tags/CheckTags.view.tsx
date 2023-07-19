@@ -77,7 +77,7 @@ const CheckTags = ({
           const option = options.find(({ value }) => value === valueProp[2]);
           setTertiaryValue(option || null);
         }
-        setPristine(true);
+        setPristine(false);
       }
     } else {
       setMode('check');
