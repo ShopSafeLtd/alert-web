@@ -99,12 +99,13 @@ describe('Detail Officer View', () => {
               loading={false}
               lightboxElements={[]}
               openLightbox={jest.fn()}
-              onPaginationChange={jest.fn()}
-              pagination={{
-                page: 1,
-                pageSize: 1,
-                sizeOptions: [],
-              }}
+              // onPaginationChange={jest.fn()}
+              // pagination={{
+              //   page: 1,
+              //   pageSize: 1,
+              //   sizeOptions: [],
+              // }}
+              fetchMoreScroll={jest.fn()}
               order={IncidentSort.createdAtAsc}
               setOrder={jest.fn()}
               search=""

@@ -89,8 +89,8 @@ const dataModel: DataModel = {
   incidents: {
     pagination: {
       page: 1,
-      pageSize: 24,
-      sizeOptions: ['24'],
+      pageSize: 12,
+      sizeOptions: ['12'],
     },
     variables: {
       search: '',

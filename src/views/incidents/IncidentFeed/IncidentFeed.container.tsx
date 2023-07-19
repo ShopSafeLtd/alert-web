@@ -8,8 +8,8 @@ const IncidentFeed = (): JSX.Element => {
     loading,
     lightboxElements,
     openLightbox,
-    onPaginationChange,
-    pagination,
+    // onPaginationChange,
+    // pagination,
     order,
     setOrder,
     search,
@@ -42,17 +42,19 @@ const IncidentFeed = (): JSX.Element => {
     businessesLoading,
     setIncidentDateFilter,
     setCreatedAtFilter,
+    fetchMoreScroll,
   } = useIncidentFeed();
 
   return (
     <View
+      fetchMoreScroll={fetchMoreScroll}
       lightBoxOpen={lightBoxOpen}
       data={data}
       loading={loading}
       lightboxElements={lightboxElements}
       openLightbox={openLightbox}
-      onPaginationChange={onPaginationChange}
-      pagination={pagination}
+      // onPaginationChange={onPaginationChange}
+      // pagination={pagination}
       order={order}
       setOrder={setOrder}
       search={search}

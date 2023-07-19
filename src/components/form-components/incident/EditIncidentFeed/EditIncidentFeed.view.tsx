@@ -89,7 +89,7 @@ const EditGroup = ({
       onFinish={onSubmit}
     >
       <Row gutter={16}>
-        <Col flex={1}>
+        <Col span={12}>
           <Form.Item
             name="tagsCrimeTypes"
             label={intl.formatMessage({
@@ -115,7 +115,7 @@ const EditGroup = ({
               loading={tagsLoading}
               disabled={saving}
               mode="multiple"
-              maxTagCount={3}
+              maxTagCount={2}
               placeholder={intl.formatMessage({
                 id: 'y7GECT',
                 defaultMessage: 'Search for a crime type...',
@@ -129,7 +129,7 @@ const EditGroup = ({
             </Select>
           </Form.Item>
         </Col>
-        <Col flex={1}>
+        <Col span={12}>
           <Form.Item
             name="tagsInvolved"
             label={intl.formatMessage({
@@ -141,7 +141,7 @@ const EditGroup = ({
               loading={tagsLoading}
               disabled={saving}
               mode="multiple"
-              maxTagCount={3}
+              maxTagCount={2}
               placeholder={intl.formatMessage({
                 id: 'y7GECT',
                 defaultMessage: 'Search for a crime type...',
@@ -155,7 +155,7 @@ const EditGroup = ({
             </Select>
           </Form.Item>
         </Col>
-        <Col flex={1}>
+        <Col span={12}>
           <Form.Item
             name="tagsImpact"
             label={intl.formatMessage({
@@ -167,7 +167,7 @@ const EditGroup = ({
               loading={tagsLoading}
               disabled={saving}
               mode="multiple"
-              maxTagCount={3}
+              maxTagCount={2}
               placeholder={intl.formatMessage({
                 id: 'y7GECT',
                 defaultMessage: 'Search for a crime type...',
@@ -181,7 +181,9 @@ const EditGroup = ({
             </Select>
           </Form.Item>
         </Col>
-        <Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={12}>
           <Form.Item
             name="date"
             label={intl.formatMessage({
@@ -203,6 +205,7 @@ const EditGroup = ({
             ]}
           >
             <DatePicker
+              style={{ width: '100%' }}
               disabled={saving}
               disabledDate={(current) =>
                 current && current.valueOf() > Date.now()
@@ -216,9 +219,7 @@ const EditGroup = ({
             />
           </Form.Item>
         </Col>
-      </Row>
-      <Row gutter={16}>
-        <Col>
+        <Col span={12}>
           <Form.Item
             name="subject"
             label={intl.formatMessage({
@@ -226,7 +227,7 @@ const EditGroup = ({
               defaultMessage: 'Subject',
             })}
           >
-            <Input style={{ width: 500 }} disabled={saving} />
+            <Input disabled={saving} />
           </Form.Item>
         </Col>
       </Row>
@@ -253,7 +254,7 @@ const EditGroup = ({
         <Input.TextArea disabled={saving} />
       </Form.Item>
       <Row>
-        <Col>
+        <Col span={24}>
           <Form.Item
             name="business"
             label={intl.formatMessage({
@@ -262,6 +263,7 @@ const EditGroup = ({
             })}
           >
             <DebounceSelect
+              style={{ width: '100%' }}
               showSearch
               allowClear
               disabled={saving}
@@ -270,13 +272,12 @@ const EditGroup = ({
                 id: 'qaJxSS',
               })}
               fetchOptions={onSearchBusiness}
-              style={{ width: 300 }}
             />
           </Form.Item>
         </Col>
       </Row>
       <Row>
-        <Col flex={1}>
+        <Col span={24}>
           <Form.Item
             name="groups"
             label={intl.formatMessage({
@@ -367,7 +368,7 @@ const EditGroup = ({
               id: 'tMiPZU',
             })}
           >
-            <Input disabled={saving} />
+            <Input disabled={saving} style={{ width: 200 }} />
           </Form.Item>
         </Col>
         <Col>
@@ -417,7 +418,7 @@ const EditGroup = ({
               id: 'eo8Q5+',
             })}
           >
-            <Input disabled={saving} />
+            <Input disabled={saving} style={{ width: 200 }} />
           </Form.Item>
         </Col>
       </Row>

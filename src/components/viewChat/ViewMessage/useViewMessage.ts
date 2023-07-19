@@ -5,6 +5,7 @@ import type {
   ChatMessagesQuery,
   ChatMessagesQueryVariables,
   ChatQuery,
+  ChatQueryVariables,
   CreateMessageMutation,
   DeleteChatMutation,
   DeleteMessageMutation,
@@ -14,6 +15,7 @@ import type {
   UserChatsQueryVariables,
 } from 'graphql/generated';
 import {
+  ChatDocument,
   ChatMessagesDocument,
   ImagePosition,
   MessageItemType,
@@ -141,6 +143,7 @@ interface Return {
   deleteOffenderConfirm: (messageId: string, offenderId: string) => void;
   deleteIncidentConfirm: (messageId: string, incidentId: string) => void;
   setMessageSent: (value: boolean) => void;
+  totalChats: number;
 }
 
 const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
@@ -150,6 +153,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     role,
     id: userId,
     origName: userOrigName,
+    businesses: userBusinesses,
   } = useStoreState((state) => state.user);
   const schemeId = useStoreState((state) => state.scheme.id);
   const navigate = useNavigate();
@@ -170,7 +174,6 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   const [linkOffender, setLinkOffender] = useState(false);
   const [linkVehicle, setLinkVehicle] = useState(false);
   const [linkCrimeGroup, setLinkCrimeGroup] = useState(false);
-
   const [offendersData, setOffendersData] = useState<OffenderData[]>([]);
   const [mentionedUser, setMentionedUser] = useState<
     { id: string; value: string }[]
@@ -239,6 +242,8 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     },
   });
 
+  console.log(chatData?.chat?.totalMessages);
+
   const subscribeToNewMessage = () => {
     subscribeToMore({
       document: MessagesSubscriptionDocument,
@@ -246,8 +251,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
         chat: chatId,
         user: userId,
       },
-      updateQuery: (prev, { subscriptionData }) => {
-        // update chat list
+      updateQuery: (prev, { subscriptionData, variables }) => {
         const existingChatListData = apolloStore.readQuery<
           UserChatsQuery,
           UserChatsQueryVariables
@@ -265,17 +269,56 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
             },
           },
         });
+
+        const existingChat = apolloStore.readQuery<
+          ChatQuery,
+          ChatQueryVariables
+        >({
+          query: ChatDocument,
+          variables: {
+            where: {
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+              id: variables?.where?.chat?.id as string,
+            },
+          },
+        });
+        if (existingChat && existingChat.chat)
+          apolloStore.writeQuery<ChatQuery, ChatQueryVariables>({
+            query: ChatDocument,
+            variables: {
+              where: {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                id: variables?.where?.chat?.id as string,
+              },
+            },
+            data: {
+              chat: {
+                ...existingChat?.chat,
+                totalMessages:
+                  ((existingChat?.chat?.totalMessages as number) || 0) + 1,
+              },
+            },
+          });
+
         const newMessage = subscriptionData.data.chatMessages[0];
         if (newMessage && existingChatListData?.user) {
           const chatIndex = existingChatListData.user.chats
             .map(({ chat }) => chat.id)
-            .indexOf(chatId);
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            .indexOf((variables?.where?.chat?.id as string) || chatId);
 
           apolloStore.writeQuery<UserChatsQuery, UserChatsQueryVariables>({
             query: UserChatsDocument,
             data: {
               user: {
                 id: existingChatListData.user.id,
+                totalChats: existingChatListData.user.totalChats,
                 chats: update(existingChatListData.user.chats, {
                   [chatIndex]: {
                     chat: {
@@ -316,18 +359,72 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
             },
           });
         }
-
-        if (prev && prev.chatMessages) {
+        if (
+          prev &&
+          prev.chatMessages &&
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+          chatId === variables?.where?.chat?.id
+        ) {
           const test = prev.chatMessages.find(
             ({ id }) => id === subscriptionData.data.chatMessages[0]?.id
           );
-
           if (test === undefined) {
             return {
               ...prev,
+
               chatMessages: [
+                {
+                  ...subscriptionData.data.chatMessages[0],
+                  content: subscriptionData.data.chatMessages[0]?.content || '',
+                  createdAt:
+                    subscriptionData.data.chatMessages[0]?.createdAt || '',
+
+                  id: subscriptionData.data.chatMessages[0]?.id || '',
+                  sent: subscriptionData.data.chatMessages[0]?.sent || false,
+                  incidents:
+                    subscriptionData.data.chatMessages[0]?.incidents || [],
+                  offenders:
+                    subscriptionData.data.chatMessages[0]?.offenders || [],
+                  images: subscriptionData.data.chatMessages[0]?.images || [],
+                  crimeGroups:
+                    subscriptionData.data.chatMessages[0]?.crimeGroups || [],
+                  currentUser:
+                    subscriptionData.data.chatMessages[0]?.from?.id === userId,
+                  formattedDateTime:
+                    subscriptionData.data.chatMessages[0]?.formattedDateTime ||
+                    '',
+                  paddingTop:
+                    subscriptionData.data.chatMessages[0]?.paddingTop || false,
+                  type:
+                    subscriptionData.data.chatMessages[0]?.type || 'MESSAGE',
+                  showUser:
+                    subscriptionData.data.chatMessages[0]?.showUser || false,
+                  vehicles:
+                    subscriptionData.data.chatMessages[0]?.vehicles || [],
+                  from: {
+                    fullName:
+                      subscriptionData.data.chatMessages[0]?.from?.fullName ||
+                      '',
+                    businesses:
+                      subscriptionData.data.chatMessages[0]?.from?.businesses ||
+                      [],
+                    firstLetter:
+                      subscriptionData.data.chatMessages[0]?.from?.fullName?.charAt(
+                        0
+                      ) || '',
+                    origName:
+                      subscriptionData.data.chatMessages[0]?.from?.fullName ||
+                      '',
+                    origFirstLetter:
+                      subscriptionData.data.chatMessages[0]?.from?.fullName?.charAt(
+                        0
+                      ) || '',
+                    id: subscriptionData.data.chatMessages[0]?.from?.id || '',
+                  },
+                },
                 ...prev.chatMessages,
-                ...subscriptionData.data.chatMessages,
               ],
             };
           }
@@ -338,8 +435,8 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       },
     });
   };
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  useEffect(() => subscribeToNewMessage(), [chatId]);
+
+  useEffect(() => subscribeToNewMessage(), [chatId, subscribeToNewMessage]);
 
   const scrolledToTop = async () => {
     if (!loadMore && !fetching) {
@@ -347,7 +444,9 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       setFetching(true);
       await fetchMore({
         variables: {
-          skip: data?.chatMessages.length || 0,
+          skip:
+            data?.chatMessages?.filter((chat) => chat?.type !== 'DATE')
+              .length || 0,
         },
       });
       setLoadMore(false);
@@ -930,8 +1029,12 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
               id: userId,
               firstLetter: userOrigName.slice(1)[0],
               origName: userOrigName,
-              // TODO
-              businesses: [{ id: '', fullName: '' }],
+              businesses: [
+                {
+                  id: userBusinesses[0].id,
+                  fullName: userBusinesses[0].fullName,
+                },
+              ],
             },
             paddingTop: true,
             showUser: false,
@@ -1005,6 +1108,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     deleteOffenderConfirm: () => {},
     messageSent,
     setMessageSent,
+    totalChats: chatData?.chat?.totalMessages || 0,
   };
 };
 

@@ -1,6 +1,6 @@
 import { useStoreState } from 'state';
-import type { ListArticlesQuery, ArticlePriority } from 'graphql/generated';
-import { useListArticlesQuery, QueryMode, SortOrder } from 'graphql/generated';
+import type { ArticlePriority, ListArticlesQuery } from 'graphql/generated';
+import { QueryMode, SortOrder, useListArticlesQuery } from 'graphql/generated';
 import { useState } from 'react';
 import type { DateType } from 'types/DataType';
 
@@ -10,6 +10,7 @@ interface Props {
   fullCreatedAtFilter: DateType | undefined;
   fullGroupFilter: string[];
 }
+
 interface Return {
   data:
     | Exclude<ListArticlesQuery['listArticles'], undefined | null>
@@ -31,6 +32,7 @@ interface Return {
   setCreatedAtFilter: (value: DateType | undefined) => void;
   order: SortOrder;
   setOrder: (value: SortOrder) => void;
+  fetchMoreScroll: () => void;
 }
 
 const useArticlesSection = ({
@@ -42,7 +44,7 @@ const useArticlesSection = ({
   const userId = useStoreState((state) => state.user.id);
   const schemeId = useStoreState((state) => state.scheme.id);
   const [search, setSearch] = useState('');
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(6);
   const [page, setPage] = useState(1);
   const [order, setOrder] = useState<SortOrder>(SortOrder.Desc);
   const [sortFilter, setSortFilter] = useState(false);
@@ -126,7 +128,7 @@ const useArticlesSection = ({
     take: pageSize,
   };
 
-  const { data, loading } = useListArticlesQuery({
+  const { data, loading, fetchMore } = useListArticlesQuery({
     fetchPolicy: 'cache-and-network',
     // @ts-expect-error TODO fix date issue
     variables,
@@ -147,6 +149,33 @@ const useArticlesSection = ({
     setPage(pageVale);
     setPageSize(pageSizeValue);
   };
+
+  const fetchMoreScroll = () => {
+    void fetchMore({
+      variables: {
+        ...variables,
+        take: 6,
+        skip: data?.listArticles?.articles?.length || 0,
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        return {
+          listArticles: {
+            ...fetchMoreResult.listArticles,
+            total:
+              prev.listArticles?.total ||
+              fetchMoreResult?.listArticles?.total ||
+              0,
+            articles: [
+              ...(prev.listArticles?.articles || []),
+              ...(fetchMoreResult.listArticles?.articles || []),
+            ],
+          },
+        };
+      },
+    });
+  };
+
   return {
     data: data?.listArticles,
     loading: (data === null || data === undefined) && loading,
@@ -165,6 +194,7 @@ const useArticlesSection = ({
     setCreatedAtFilter,
     order,
     setOrder,
+    fetchMoreScroll,
   };
 };
 

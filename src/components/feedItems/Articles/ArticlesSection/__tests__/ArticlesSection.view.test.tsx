@@ -43,7 +43,6 @@ describe('List Officer View', () => {
           search=""
           setSearch={jest.fn()}
           saving={false}
-          onPaginationChange={jest.fn()}
           order={SortOrder.Desc}
           setOrder={jest.fn()}
           groups={[]}
@@ -57,8 +56,7 @@ describe('List Officer View', () => {
           toggleSortFilter={jest.fn()}
           clearFilters={jest.fn()}
           adminRights={false}
-          currentPage={1}
-          currentPageSize={1}
+          fetchMoreScroll={jest.fn()}
         />
       </MemoryRouter>
     );

@@ -30076,6 +30076,11 @@ tr > .ant-picker-cell-in-view.ant-picker-cell-range-hover:first-child::after {
 }
 .incident-card {
   margin: 5px 5px 10px;
+  min-height: -webkit-min-content;
+  min-height: min-content;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
 }
 .incident-card .ant-card-body {
   position: relative;
@@ -30125,17 +30130,16 @@ tr > .ant-picker-cell-in-view.ant-picker-cell-range-hover:first-child::after {
 }
 .incident-card .incident-card-content {
   padding: 10px 10px 5px;
-  height: 260px;
   overflow: auto;
+  display: flex;
+  flex-direction: column;
+  min-height: -webkit-min-content;
+  min-height: min-content;
+  flex-grow: 1;
 }
 .incident-card .incident-card-desc {
   height: 80px;
-  margin-bottom: 15px;
   overflow: hidden;
-}
-.incident-card .incident-card-location-row {
-  margin-top: 5px;
-  margin-bottom: 5px;
 }
 .incident-card .incident-card-menu {
   position: absolute;

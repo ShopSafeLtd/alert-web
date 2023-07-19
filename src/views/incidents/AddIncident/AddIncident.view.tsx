@@ -41,6 +41,7 @@ import ImageSection from 'components/incidents/IncidentForm/ImageSection';
 import DebounceSelect from 'components/form-components/DebounceSelect';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
+import type { Mode } from 'components/form-components/check-tags/CheckTags.view';
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
 import AddLocation from 'components/form-components/incident/location/AddLocation';
 import { useIntl } from 'react-intl';
@@ -251,7 +252,7 @@ const EditIncident = ({
           >
             <CheckTags
               loading={tagsLoading}
-              // mode="multiple"
+              mode={'check' satisfies Mode}
               options={tags.filter(
                 (item) => item.type === TagType.IncidentCrimeType
               )}

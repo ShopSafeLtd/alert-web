@@ -8,12 +8,12 @@ import {
   QueryMode,
   Role,
   SortOrder,
+  TagType,
   useListBusinessesQuery,
   useListGoodsTypesQuery,
   useListIncidentsQuery,
   useSchemeGroupsQuery,
   useTagsQuery,
-  TagType,
 } from 'graphql/generated';
 import { useEffect, useState } from 'react';
 import { IncidentSort, useStoreActions, useStoreState } from 'state';
@@ -71,16 +71,17 @@ interface Return {
   goodsLoading: boolean;
   setIncidentDateFilter: (value: DateType | undefined) => void;
   setCreatedAtFilter: (value: DateType | undefined) => void;
+  fetchMoreScroll: () => void;
 }
 
 const getSizeOptions = () => {
   if (window.innerWidth > 1239 && window.innerWidth < 1800) {
-    return ['24', '48', '96'];
+    return ['12', '24', '48', '96'];
   }
   if (window.innerWidth > 1799) {
-    return ['24', '48', '96'];
+    return ['12', '24', '48', '96'];
   }
-  return ['24'];
+  return ['12'];
 };
 
 const useIncidentFeed = (): Return => {
@@ -266,7 +267,7 @@ const useIncidentFeed = (): Return => {
   };
   // Queries
   // Fetch incidents
-  const { data, loading } = useListIncidentsQuery({
+  const { data, loading, fetchMore } = useListIncidentsQuery({
     // @ts-expect-error TODO fix date type
     variables: queryVariables,
     fetchPolicy: 'cache-and-network',
@@ -357,7 +358,6 @@ const useIncidentFeed = (): Return => {
       pagination: {
         ...pagination,
         sizeOptions,
-        pageSize: Number(sizeOptions[0]),
       },
       variables: {
         ...variables,
@@ -473,6 +473,32 @@ const useIncidentFeed = (): Return => {
     setSortFilter(!sortFilter);
   };
 
+  const fetchMoreScroll = () => {
+    void fetchMore({
+      variables: {
+        ...queryVariables,
+        take: 12,
+        skip: data?.listIncidents?.incidents?.length || 0,
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        return {
+          listIncidents: {
+            ...fetchMoreResult.listIncidents,
+            total:
+              fetchMoreResult.listIncidents?.total ||
+              prev.listIncidents?.total ||
+              0,
+            incidents: [
+              ...(prev.listIncidents?.incidents || []),
+              ...(fetchMoreResult.listIncidents?.incidents || []),
+            ],
+          },
+        };
+      },
+    });
+  };
+
   const clearFilters = () => {
     setGroupsFilter([]);
     setCrimeTypesFilter([]);
@@ -541,6 +567,7 @@ const useIncidentFeed = (): Return => {
     businessesLoading,
     setCreatedAtFilter,
     setIncidentDateFilter,
+    fetchMoreScroll,
   };
 };
 

@@ -9,6 +9,7 @@ import {
   Menu,
   Modal,
   Row,
+  Space,
   Tag,
   Tooltip,
   Typography,
@@ -80,7 +81,13 @@ const IncidentCard = ({
     <Card
       className="incident-card"
       key={incident.id || ''}
-      bodyStyle={{ overflow: 'hidden', borderRadius: 10 }}
+      bodyStyle={{
+        overflow: 'hidden',
+        borderRadius: 10,
+        display: 'flex',
+        flexDirection: 'column',
+        flexGrow: 1,
+      }}
     >
       {!incident?.approved && (
         <div className="incident-card-overlay">
@@ -212,7 +219,7 @@ const IncidentCard = ({
               <div key={image.id}>
                 <div className="incident-card-image">
                   <WatermarkImage
-                    url={image.optimised}
+                    url={image.low}
                     rotation={image.rotation}
                     position={image.position}
                   />
@@ -224,7 +231,7 @@ const IncidentCard = ({
           <SkeletonImage height={280} />
         )}
       </div>
-      {incident.totalImages && incident.totalImages > 1 && (
+      {incident.totalImages && incident.totalImages > 1 ? (
         <Row className="incident-card-controls">
           <Col>
             <FontAwesomeIcon
@@ -242,155 +249,64 @@ const IncidentCard = ({
             />
           </Col>
         </Row>
-      )}
-      {incident.totalImages && incident.totalImages > 0 && (
+      ) : null}
+      {incident.totalImages && incident.totalImages > 0 ? (
         <FontAwesomeIcon
           className="incident-card-expand"
           icon={faArrowsMaximize}
           onClick={() =>
             openLightbox(
               incident?.images.map((image) => ({
-                src: image.optimised || '',
+                src: image.low || '',
               })) || [],
               0
             )
           }
         />
-      )}
-      <div style={{ padding: '10px 10px 5px', height: 283, overflow: 'auto' }}>
-        <Title level={4} ellipsis style={{ marginBottom: 2 }}>
-          {incident?.subject}
-        </Title>
-        <div style={{ marginBottom: 10 }}>
-          <Text type="secondary">
-            {intl.formatMessage(
-              {
-                defaultMessage:
-                  'Alert ID: {incidentReference} {policeRef, plural, =1 {{policeRefS}} other {}}',
-                id: '2rCZPy',
-              },
-              {
-                incidentReference: incident?.reference,
-                policeRefS: incident.policeRef,
-                policeRef: incident.policeRef ? 1 : 0,
-              }
-            )}
-          </Text>
-        </div>
-        {incident.offenders.length > 0 ? (
-          <Row wrap={false} style={{ overflowX: 'auto', marginBottom: 10 }}>
-            {incident.offenders.slice(0, 2).map((offender) => (
-              <Link to={`/app/offenders/view/${offender?.id}`}>
-                <Tag key={offender.id}>
-                  {offender.name ||
-                    intl.formatMessage({
-                      defaultMessage: 'Unknown Offender',
-                      id: 'wS+Y5g',
-                    })}
-                </Tag>
-              </Link>
-            ))}
-            {incident.offenders.length > 2 && (
-              <Tooltip
-                title={incident.offenders
-                  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-                  .map((item) => ` ${item.name}`)
-                  .toString()}
-              >
-                <Tag>
-                  {intl.formatMessage(
-                    {
-                      defaultMessage: '+ {num} more',
-                      id: 'fi2Xie',
-                    },
-                    {
-                      num: incident.offenders.length - 1,
-                    }
-                  )}
-                </Tag>
-              </Tooltip>
-            )}
-          </Row>
-        ) : (
-          <div style={{ marginBottom: 10 }} />
-        )}
-        <Link to={`/app/incidents/view/${incident?.id}`}>
-          <Row
-            wrap={false}
-            gutter={8}
-            style={{ marginBottom: 5, maxWidth: '100%' }}
-          >
-            <Col span={12}>
-              <Row wrap={false}>
-                <Col>
-                  <FontAwesomeIcon
-                    size="sm"
-                    className="incident-card-icon"
-                    icon={faClock}
-                  />
-                </Col>
-                <Col>
-                  <Text type="secondary">{incident?.dayTime}</Text>
-                </Col>
-              </Row>
-            </Col>
-            <Col span={12}>
-              <Row wrap={false}>
-                <Col>
-                  <FontAwesomeIcon
-                    size="sm"
-                    className="incident-card-icon"
-                    icon={faLocationDot}
-                  />
-                </Col>
-                <Col>
-                  <Text style={{ flex: 1 }} ellipsis type="secondary">
-                    {incident?.business?.name || incident?.location?.full}
-                  </Text>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-
-          <Paragraph
-            // style={{ height: incident.offenders.length > 0 ? 24 : 66 }}
-            // className="incident-card-desc"
-            style={{
-              height: incident.offenders.length > 0 ? 60 : 95,
-              marginBottom: 10,
-            }}
-            type="secondary"
-            ellipsis={{ rows: 2 }}
-          >
-            {incident?.description}
-          </Paragraph>
-          <Row
-            wrap={false}
-            align="middle"
-            style={{
-              overflowX: 'auto',
-              // marginBottom: incident.offenders.length > 2 ? 3 : 15,
-            }}
-          >
-            <Col style={{ minWidth: 60 }}>
-              <Text strong type="secondary">
-                {intl.formatMessage({
-                  defaultMessage: 'Groups:',
-                  id: 'JcJ/mL',
-                })}
-              </Text>
-            </Col>
-            {incident.groups.slice(0, 1).map((group) => (
-              <Col key={group.id}>
-                <Tag>{group.name}</Tag>
-              </Col>
-            ))}
-            {incident.groups.length > 1 && (
-              <Col>
+      ) : null}
+      <div className="incident-card-content">
+        <Space direction="vertical">
+          <Title level={4} ellipsis>
+            {incident?.subject}
+          </Title>
+          <div>
+            <Text type="secondary">
+              {intl.formatMessage(
+                {
+                  defaultMessage:
+                    'Alert ID: {incidentReference} {policeRef, plural, =1 {{policeRefS}} other {}}',
+                  id: '2rCZPy',
+                },
+                {
+                  incidentReference: incident?.reference,
+                  policeRefS: incident.policeRef,
+                  policeRef: incident.policeRef ? 1 : 0,
+                }
+              )}
+            </Text>
+          </div>
+          {incident.offenders.length > 0 ? (
+            <Row wrap={false}>
+              {incident.offenders.slice(0, 1).map((offender) => (
+                <Link to={`/app/offenders/view/${offender?.id}`}>
+                  <Tag key={offender.id}>
+                    {offender.name ||
+                      intl.formatMessage({
+                        defaultMessage: 'Unknown Offender',
+                        id: 'wS+Y5g',
+                      })}
+                  </Tag>
+                </Link>
+              ))}
+              {incident.offenders.length > 1 && (
                 <Tooltip
-                  title={incident.groups
-                    .map((item) => ` ${item.name}`)
-                    .toString()}
+                  title={incident.offenders.slice(1).map((item, index) => (
+                    <Link to={`/app/offenders/view/${item?.id}`}>
+                      {/* eslint-disable-next-line @typescript-eslint/restrict-template-expressions,formatjs/no-literal-string-in-jsx */}
+                      {index > 0 && ', '}
+                      {item.name}
+                    </Link>
+                  ))}
                 >
                   <Tag>
                     {intl.formatMessage(
@@ -399,27 +315,126 @@ const IncidentCard = ({
                         id: 'fi2Xie',
                       },
                       {
-                        num: incident.groups.length - 1,
+                        num: incident.offenders.length - 1,
                       }
                     )}
                   </Tag>
                 </Tooltip>
+              )}
+            </Row>
+          ) : (
+            <div />
+          )}
+          <Link to={`/app/incidents/view/${incident?.id}`}>
+            <Row
+              wrap={false}
+              gutter={8}
+              style={{ marginBottom: 5, maxWidth: '100%' }}
+            >
+              <Col span={12}>
+                <Row wrap={false}>
+                  <Col>
+                    <FontAwesomeIcon
+                      size="sm"
+                      className="incident-card-icon"
+                      icon={faClock}
+                    />
+                  </Col>
+                  <Col>
+                    <Text type="secondary">{incident?.dayTime}</Text>
+                  </Col>
+                </Row>
               </Col>
-            )}
-          </Row>
-          <Row justify="center" style={{ marginTop: 10 }}>
-            <Col>
-              <Link to={`/app/incidents/view/${incident?.id}`}>
-                <Button size="small" type="text">
+              <Col span={12}>
+                <Row wrap={false}>
+                  <Col>
+                    <FontAwesomeIcon
+                      size="sm"
+                      className="incident-card-icon"
+                      icon={faLocationDot}
+                    />
+                  </Col>
+                  <Col>
+                    <Text style={{ flex: 1 }} ellipsis type="secondary">
+                      {incident?.business?.name || incident?.location?.full}
+                    </Text>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+
+            <Paragraph
+              // style={{ height: incident.offenders.length > 0 ? 24 : 66 }}
+              // className="incident-card-desc"
+              style={{
+                height: incident.offenders.length > 0 ? 60 : 95,
+                marginBottom: 10,
+              }}
+              type="secondary"
+              ellipsis={{ rows: 2 }}
+            >
+              {incident?.description}
+            </Paragraph>
+            <Row
+              wrap={false}
+              align="middle"
+              style={{
+                overflowX: 'auto',
+                // marginBottom: incident.offenders.length > 2 ? 3 : 15,
+              }}
+            >
+              <Col style={{ minWidth: 60 }}>
+                <Text strong type="secondary">
                   {intl.formatMessage({
-                    defaultMessage: 'View Incident',
-                    id: 'f4Tgpp',
+                    defaultMessage: 'Groups:',
+                    id: 'JcJ/mL',
                   })}
-                </Button>
-              </Link>
-            </Col>
-          </Row>
-        </Link>
+                </Text>
+              </Col>
+              {incident.groups.slice(0, 1).map((group) => (
+                <Col key={group.id}>
+                  <Tag>{group.name}</Tag>
+                </Col>
+              ))}
+              {incident.groups.length > 1 && (
+                <Col>
+                  <Tooltip
+                    title={incident.groups
+                      .map((item) => ` ${item.name}`)
+                      .toString()}
+                  >
+                    <Tag>
+                      {intl.formatMessage(
+                        {
+                          defaultMessage: '+ {num} more',
+                          id: 'fi2Xie',
+                        },
+                        {
+                          num: incident.groups.length - 1,
+                        }
+                      )}
+                    </Tag>
+                  </Tooltip>
+                </Col>
+              )}
+            </Row>
+          </Link>
+        </Space>
+        <Row
+          justify="center"
+          style={{ marginTop: 10, flexGrow: 1, alignContent: 'flex-end' }}
+        >
+          <Col>
+            <Link to={`/app/incidents/view/${incident?.id}`}>
+              <Button size="small" type="text">
+                {intl.formatMessage({
+                  defaultMessage: 'View Incident',
+                  id: 'f4Tgpp',
+                })}
+              </Button>
+            </Link>
+          </Col>
+        </Row>
       </div>
       <Drawer
         title={intl.formatMessage({
@@ -427,7 +442,7 @@ const IncidentCard = ({
           id: 'E6VJFN',
         })}
         visible={editIncidentFeed}
-        width="400"
+        width="600"
         onClose={toggleEditIncidentFeed}
       >
         {editIncidentFeed ? (

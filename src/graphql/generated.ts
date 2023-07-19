@@ -6692,6 +6692,7 @@ export type Chat = {
   name: Scalars['String'];
   scheme: Scheme;
   totalMembers?: Maybe<Scalars['Int']>;
+  totalMessages?: Maybe<Scalars['Int']>;
   updatedAt: Scalars['DateTime'];
 };
 
@@ -34851,6 +34852,7 @@ export type QueryListUserContributionArgs = {
 };
 
 export type QueryListUserNotificationsArgs = {
+  cursor?: InputMaybe<UserNotificationWhereUniqueInput>;
   orderBy?: InputMaybe<Array<UserNotificationOrderByWithRelationInput>>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
@@ -60778,6 +60780,7 @@ export type ChatQuery = {
     name: string;
     description?: string | null;
     totalMembers?: number | null;
+    totalMessages?: number | null;
     members: Array<{
       __typename?: 'UserChat';
       id: string;
@@ -63497,8 +63500,7 @@ export type ListIncidentsQuery = {
         id: string;
         position: ImagePosition;
         rotation: number;
-        optimised?: string | null;
-        url?: string | null;
+        low?: string | null;
       }>;
       groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
       offenders: Array<{
@@ -72019,6 +72021,7 @@ export const ChatDocument = gql`
       name
       description
       totalMembers
+      totalMessages
       members {
         id
         user {
@@ -75321,8 +75324,7 @@ export const ListIncidentsDocument = gql`
           id
           position
           rotation
-          optimised
-          url
+          low
         }
         groups {
           id
