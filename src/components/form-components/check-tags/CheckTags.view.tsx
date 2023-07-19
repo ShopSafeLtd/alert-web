@@ -5,7 +5,7 @@ import { useStoreState } from 'state';
 import CheckTag from '../check-tag/CheckTag.view';
 import CheckTagsLoading from './CheckTagsLoading.view';
 
-type Mode = 'check' | 'radio';
+export type Mode = 'check' | 'radio';
 
 interface Option {
   label: string;
@@ -67,15 +67,15 @@ const CheckTags = ({
         // If values are present in array set state
         if (valueProp && valueProp[0]) {
           const option = options.find(({ value }) => value === valueProp[0]);
-          setPrimaryValue(option);
+          setPrimaryValue(option || null);
         }
         if (valueProp && valueProp[1]) {
           const option = options.find(({ value }) => value === valueProp[1]);
-          setPrimaryValue(option);
+          setPrimaryValue(option || null);
         }
         if (valueProp && valueProp[2]) {
           const option = options.find(({ value }) => value === valueProp[2]);
-          setPrimaryValue(option);
+          setPrimaryValue(option || null);
         }
         setPristine(true);
       }
