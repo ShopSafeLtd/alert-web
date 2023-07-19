@@ -29,9 +29,6 @@ const ArticlesSection = ({
     loading,
     setSearch,
     search,
-    onPaginationChange,
-    currentPage,
-    currentPageSize,
     priorityFilter,
     setPriorityFilter,
     groupsFilter,
@@ -42,6 +39,7 @@ const ArticlesSection = ({
     order,
     setOrder,
     setCreatedAtFilter,
+    fetchMoreScroll,
   } = useArticlesSection({
     fullSearch,
     fullGroupFilter,
@@ -51,14 +49,12 @@ const ArticlesSection = ({
 
   return (
     <View
+      fetchMoreScroll={fetchMoreScroll}
       data={data}
       loading={loading}
       saving={saving}
       search={search}
       setSearch={setSearch}
-      onPaginationChange={onPaginationChange}
-      currentPage={currentPage}
-      currentPageSize={currentPageSize}
       order={order}
       setOrder={setOrder}
       groups={groups}

@@ -12,6 +12,7 @@ import utils from 'utils';
 import { useThemeSwitcher } from 'react-css-theme-switcher/src';
 import { NavType, useStoreState } from 'state';
 import { Navigate } from 'react-router-dom';
+import { useAuth0 } from '@auth0/auth0-react';
 import {
   SIDE_NAV_COLLAPSED_WIDTH,
   SIDE_NAV_WIDTH,
@@ -30,11 +31,12 @@ export const AppLayout = ({ location }: Props): JSX.Element => {
   const navCollapsed = useStoreState((state) => state.theme.navCollapsed);
   const navType = useStoreState((state) => state.theme.navType);
   const { onboarded } = useStoreState((state) => state.user);
-
   const currentRouteInfo = utils.getRouteInfo(
     navigationConfig,
     location.pathname
   );
+
+  const { isAuthenticated, isLoading } = useAuth0();
   const screens = utils.getBreakPoint(useBreakpoint());
   const isMobile = !screens.includes('lg');
   const isNavSide = navType === NavType.SIDE;
@@ -49,11 +51,11 @@ export const AppLayout = ({ location }: Props): JSX.Element => {
 
   const { status } = useThemeSwitcher();
 
-  if (status === 'loading') {
+  if (status === 'loading' || isLoading) {
     return <Loading cover="page" />;
   }
 
-  return loggedIn ? (
+  return loggedIn || (isAuthenticated && !isLoading) ? (
     <Layout>
       {/* <HeaderNav isMobile={isMobile} /> */}
       {isNavTop && !isMobile ? <TopNav routeInfo={currentRouteInfo} /> : null}

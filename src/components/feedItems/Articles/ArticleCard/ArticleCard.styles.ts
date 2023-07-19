@@ -3,10 +3,14 @@ import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   card: {
-    border: `1px solid ${theme.borderColor}`,
+    outline: `1px solid ${theme.borderColor}`,
     borderRadius: 10,
     marginBottom: 5,
     overflow: 'hidden',
+    minHeight: 'min-content',
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
   },
   imageExpand: {
     position: 'absolute',
@@ -25,8 +29,9 @@ const useStyles = createUseStyles((theme: Theme) => ({
   content: {
     display: 'flex',
     flexDirection: 'column',
-    height: 185,
-    margin: '10px 20px 0px',
+    minHeight: 'min-content',
+    margin: '10px 10px 0px',
+    flexGrow: 1,
   },
   details: { flex: 1 },
   skeletonImage: {
@@ -37,8 +42,6 @@ const useStyles = createUseStyles((theme: Theme) => ({
   tagRow: {
     overflowX: 'auto',
     paddingBottom: 5,
-    marginLeft: -10,
-    marginRight: -15,
   },
   descIcon: {
     marginRight: 10,

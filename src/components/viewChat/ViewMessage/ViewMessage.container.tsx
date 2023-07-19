@@ -13,6 +13,7 @@ const ViewMessages = ({ chatId, updateUserChatList }: Props): JSX.Element => {
     onSubmit,
     chatData,
     form,
+    totalChats,
     saving,
     scrolledToTop,
     userId,
@@ -111,6 +112,7 @@ const ViewMessages = ({ chatId, updateUserChatList }: Props): JSX.Element => {
       deleteIncidentConfirm={deleteIncidentConfirm}
       messageSent={messageSent}
       setMessageSent={setMessageSent}
+      totalChats={totalChats}
     />
   );
 };

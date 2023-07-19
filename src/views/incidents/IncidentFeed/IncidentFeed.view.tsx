@@ -3,17 +3,7 @@ import type {
   ListIncidentsQuery,
   RecycleIncidentMutation,
 } from 'graphql/generated';
-import {
-  Affix,
-  Button,
-  Card,
-  Col,
-  Drawer,
-  Empty,
-  Input,
-  Pagination,
-  Row,
-} from 'antd';
+import { Button, Card, Col, Drawer, Empty, Input, Row } from 'antd';
 import IncidentCard from 'components/incidents/IncidentCard';
 import IncidentSkeletonCard from 'components/incidents/IncidentSkeletonCard';
 import type { IncidentSort } from 'state';
@@ -28,6 +18,8 @@ import CheckTags from 'components/form-components/check-tags/CheckTags.view';
 import IncidentFilter from 'components/incidents/IncidentFilter';
 import type { DateType } from 'types/DataType';
 import { useIntl } from 'react-intl';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import Loading from '../../../components/shared-components/AntD/Loading';
 
 interface Props {
   data: ListIncidentsQuery | undefined;
@@ -40,8 +32,8 @@ interface Props {
     open: boolean;
     index: number;
   };
-  onPaginationChange: (page: number, pageSize: number) => void;
-  pagination: { page: number; pageSize: number; sizeOptions: string[] };
+  // onPaginationChange: (page: number, pageSize: number) => void;
+  // pagination: { page: number; pageSize: number; sizeOptions: string[] };
   order: IncidentSort;
   setOrder: (value: IncidentSort) => void;
   search: string;
@@ -73,6 +65,7 @@ interface Props {
   businessesLoading: boolean;
   setIncidentDateFilter: (value: DateType | undefined) => void;
   setCreatedAtFilter: (value: DateType | undefined) => void;
+  fetchMoreScroll: () => void;
 }
 
 const IncidentFeed = ({
@@ -80,8 +73,8 @@ const IncidentFeed = ({
   loading,
   lightboxElements,
   openLightbox,
-  onPaginationChange,
-  pagination,
+  // onPaginationChange,
+  // pagination,
   order,
   setOrder,
   search,
@@ -114,115 +107,147 @@ const IncidentFeed = ({
   setCrimeTypesFilter,
   setIncidentDateFilter,
   setCreatedAtFilter,
+  fetchMoreScroll,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return (
-    <div className="feed-container" style={{ padding: 10 }}>
-      <Affix offsetTop={5}>
-        <Card bodyStyle={{ padding: 10 }} style={{ marginBottom: 5 }}>
-          <Row align="middle" gutter={16}>
-            <Col span={8} xxl={6}>
-              <Input
-                size="small"
-                // style={{ width: 350 }}
-                placeholder={intl.formatMessage({
-                  defaultMessage: 'Search Incidents...',
-                  id: 'gvqTQ8',
-                })}
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </Col>
-            <Col flex={1}>
-              <CheckTags
-                mode="radio"
-                value={gallery}
-                onChange={setGallery}
-                options={[
-                  {
-                    label: intl.formatMessage({
-                      defaultMessage: 'Following',
-                      id: 'cPIKU2',
-                    }),
-                    value: 'FOLLOWING',
-                  },
-                  {
-                    label: intl.formatMessage({
-                      defaultMessage: 'My Data',
-                      id: 'dr0ueW',
-                    }),
-                    value: 'MYDATA',
-                  },
-                  {
-                    label: intl.formatMessage({
-                      defaultMessage: 'Not Approved',
-                      id: 'VwMCyX',
-                    }),
-                    value: 'NOT APPROVED',
-                    needAdminRight: true,
-                  },
-                ]}
-              />
-            </Col>
-            <Col>
-              <Button
-                onClick={toggleSortFilter}
-                icon={
-                  <FontAwesomeIcon
-                    icon={faFilter}
-                    size="lg"
-                    style={{ marginRight: 5 }}
-                  />
-                }
-              >
-                {intl.formatMessage({
-                  defaultMessage: 'Sort & Filter',
-                  id: 'f2g3SM',
-                })}
-              </Button>
-            </Col>
-            <Col>
-              <Button
-                type="primary"
-                onClick={onNavigate}
-                icon={
-                  <FontAwesomeIcon
-                    icon={faPlus}
-                    size="lg"
-                    style={{ marginRight: 5 }}
-                  />
-                }
-              >
-                {intl.formatMessage({
-                  defaultMessage: 'Add Incident',
-                  id: 'kG1p3q',
-                })}
-              </Button>
-            </Col>
-          </Row>
-        </Card>
-      </Affix>
+    <div className="feed-container" style={{ padding: 10, paddingRight: 0 }}>
+      <Card
+        bodyStyle={{ padding: 10 }}
+        style={{ marginBottom: 5, marginRight: 10 }}
+      >
+        <Row align="middle" gutter={16}>
+          <Col span={8} xxl={6}>
+            <Input
+              size="small"
+              // style={{ width: 350 }}
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Search Incidents...',
+                id: 'gvqTQ8',
+              })}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </Col>
+          <Col flex={1}>
+            <CheckTags
+              mode="radio"
+              value={gallery}
+              onChange={setGallery}
+              options={[
+                {
+                  label: intl.formatMessage({
+                    defaultMessage: 'Following',
+                    id: 'cPIKU2',
+                  }),
+                  value: 'FOLLOWING',
+                },
+                {
+                  label: intl.formatMessage({
+                    defaultMessage: 'My Data',
+                    id: 'dr0ueW',
+                  }),
+                  value: 'MYDATA',
+                },
+                {
+                  label: intl.formatMessage({
+                    defaultMessage: 'Not Approved',
+                    id: 'VwMCyX',
+                  }),
+                  value: 'NOT APPROVED',
+                  needAdminRight: true,
+                },
+              ]}
+            />
+          </Col>
+          <Col>
+            <Button
+              onClick={toggleSortFilter}
+              icon={
+                <FontAwesomeIcon
+                  icon={faFilter}
+                  size="lg"
+                  style={{ marginRight: 5 }}
+                />
+              }
+            >
+              {intl.formatMessage({
+                defaultMessage: 'Sort & Filter',
+                id: 'f2g3SM',
+              })}
+            </Button>
+          </Col>
+          <Col>
+            <Button
+              type="primary"
+              onClick={onNavigate}
+              icon={
+                <FontAwesomeIcon
+                  icon={faPlus}
+                  size="lg"
+                  style={{ marginRight: 5 }}
+                />
+              }
+            >
+              {intl.formatMessage({
+                defaultMessage: 'Add Incident',
+                id: 'kG1p3q',
+              })}
+            </Button>
+          </Col>
+        </Row>
+      </Card>
 
       <div style={{ paddingBottom: 10 }}>
-        <Row gutter={8}>
-          {loading ? (
-            Array.from({ length: 24 }).map((_, index) => (
+        {loading ? (
+          <Row gutter={[8, 16]}>
+            {Array.from({ length: 24 }).map((_, index) => (
               // eslint-disable-next-line react/no-array-index-key
               <Col key={index} sm={24} md={12} lg={8} xl={8} xxl={6}>
                 <IncidentSkeletonCard />
               </Col>
-            ))
-          ) : data?.listIncidents?.total ? (
-            data?.listIncidents?.incidents?.map((el) => (
-              <Col sm={24} md={12} lg={8} xl={8} xxl={6} key={el?.id}>
-                <IncidentCard
-                  incident={el}
-                  openLightbox={openLightbox}
-                  update={updateIncidentList}
-                />
-              </Col>
-            ))
-          ) : (
+            ))}
+          </Row>
+        ) : data?.listIncidents?.total ? (
+          <InfiniteScroll
+            dataLength={data?.listIncidents?.incidents.length}
+            next={() => fetchMoreScroll()}
+            hasMore={
+              data?.listIncidents?.incidents.length < data?.listIncidents?.total
+            }
+            loader={<Loading />}
+            height="calc(100vh - 87px)"
+            style={{ overflowX: 'hidden' }}
+            endMessage={
+              <p style={{ textAlign: 'center' }}>
+                {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                <b>-----------</b>
+              </p>
+            }
+          >
+            <Row
+              gutter={[8, 16]}
+              align="stretch"
+              style={{
+                alignItems: 'stretch',
+                padding: 10,
+                overflowX: 'hidden',
+              }}
+            >
+              {data?.listIncidents?.incidents?.map((el) => (
+                <Col sm={24} md={12} lg={8} xl={8} xxl={6} key={el?.id}>
+                  <IncidentCard
+                    key={el?.id}
+                    incident={el}
+                    openLightbox={openLightbox}
+                    update={updateIncidentList}
+                  />
+                </Col>
+              ))}
+            </Row>
+          </InfiniteScroll>
+        ) : (
+          <Row gutter={8}>
             <div
               style={{
                 display: 'flex',
@@ -247,26 +272,26 @@ const IncidentFeed = ({
                 }
               />
             </div>
-          )}
-        </Row>
-        <Row justify="center">
-          <Col>
-            <Pagination
-              total={data?.listIncidents?.total}
-              pageSizeOptions={pagination.sizeOptions}
-              pageSize={pagination.pageSize}
-              current={pagination.page}
-              onChange={onPaginationChange}
-              showTotal={(total) =>
-                intl.formatMessage(
-                  { defaultMessage: `Total Incidents: {total}`, id: 'SHEopq' },
-                  { total }
-                )
-              }
-              hideOnSinglePage
-            />
-          </Col>
-        </Row>
+          </Row>
+        )}
+        {/* <Row justify="center"> */}
+        {/*   <Col> */}
+        {/*     <Pagination */}
+        {/*       total={data?.listIncidents?.total} */}
+        {/*       pageSizeOptions={pagination.sizeOptions} */}
+        {/*       pageSize={pagination.pageSize} */}
+        {/*       current={pagination.page} */}
+        {/*       onChange={onPaginationChange} */}
+        {/*       showTotal={(total) => */}
+        {/*         intl.formatMessage( */}
+        {/*           { defaultMessage: `Total Incidents: {total}`, id: 'SHEopq' }, */}
+        {/*           { total } */}
+        {/*         ) */}
+        {/*       } */}
+        {/*       hideOnSinglePage */}
+        {/*     /> */}
+        {/*   </Col> */}
+        {/* </Row> */}
       </div>
       <Drawer
         title={intl.formatMessage({

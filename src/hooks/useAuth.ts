@@ -6,6 +6,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { useEffect } from 'react';
 import * as Sentry from '@sentry/react';
 import Mixpanel from 'utils/mixpanel';
+import { useNavigate } from 'react-router';
 import type { Translations } from '../state/scheme-model';
 
 // import OneSignal from 'react-onesignal';
@@ -24,7 +25,7 @@ interface OnLoginSuccessArgs extends SetUserPayload {
 
 const useAuth = (): Return => {
   const { getAccessTokenSilently, isAuthenticated, user } = useAuth0();
-
+  const navigate = useNavigate();
   // const client = useApolloClient();
   const authenticated = useStoreActions(
     (actions) => actions.auth.authenticated
@@ -202,6 +203,9 @@ const useAuth = (): Return => {
         reference: `${currentUser?.reference}` || '',
         userNotifications: currentUser?.notificationCount || 0,
       });
+      if (currentUser?.newUser) {
+        navigate('/app/onboarding');
+      }
     },
     onError: () => expired(),
     fetchPolicy: 'cache-and-network',

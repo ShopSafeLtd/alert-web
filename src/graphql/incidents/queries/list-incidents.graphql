@@ -45,8 +45,7 @@ query listIncidents(
         id
         position
         rotation
-        optimised
-        url
+        low
       }
       groups {
         id

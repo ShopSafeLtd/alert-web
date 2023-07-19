@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Row, Tag, Typography } from 'antd';
+import { Col, Row, Tag, Tooltip, Typography } from 'antd';
 import type { ListArticlesQuery } from 'graphql/generated';
 import { ArticlePriority, Role } from 'graphql/generated';
 import { Link } from 'react-router-dom';
@@ -16,6 +16,7 @@ import {
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import formatCalendar from 'utils/format-calendar-24h';
 import { useStoreState } from 'state';
+import { useIntl } from 'react-intl';
 import useStyles from './ArticleCard.styles';
 
 const { Title, Paragraph, Text } = Typography;
@@ -46,7 +47,7 @@ const ArticleCard = ({ article, openLightbox }: Props): JSX.Element => {
   const classes = useStyles();
   const userGroups = useStoreState((state) => state.user.groups);
   const role = useStoreState((state) => state.user.role);
-
+  const intl = useIntl();
   return (
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     <Link to={`/app/article/view/${id}`}>
@@ -123,11 +124,31 @@ const ArticleCard = ({ article, openLightbox }: Props): JSX.Element => {
           groups &&
           groups.length > 0 ? (
             <Row wrap={false} className={classes.tagRow}>
-              {groups.map((group) => (
-                <Col key={group.id}>
-                  <Tag key={group.id}>{group.name}</Tag>
+              <Col key={groups[0].id}>
+                <Tag key={groups[0].id}>{groups[0].name}</Tag>
+              </Col>
+              {groups.length > 1 && (
+                <Col>
+                  <Tag>
+                    <Tooltip
+                      title={groups
+                        .slice(1)
+                        .map((group) => group.name)
+                        .join(', ')}
+                    >
+                      {intl.formatMessage(
+                        {
+                          defaultMessage: '+ {num} more',
+                          id: 'fi2Xie',
+                        },
+                        {
+                          num: groups.length - 1,
+                        }
+                      )}
+                    </Tooltip>
+                  </Tag>
                 </Col>
-              ))}
+              )}
             </Row>
           ) : (
             <div style={{ marginBottom: 5 }} />

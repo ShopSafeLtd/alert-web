@@ -154,11 +154,13 @@ interface Props {
   deleteIncidentConfirm: (messageId: string, incidentId: string) => void;
   messageSent: boolean;
   setMessageSent: (value: boolean) => void;
+  totalChats: number;
 }
 
 const ViewMessages = ({
   onSubmit,
   chatData,
+  totalChats,
   form,
   saving,
   scrolledToTop,
@@ -224,6 +226,10 @@ const ViewMessages = ({
     deleteIncidentConfirm('1', '1');
   }
   const intl = useIntl();
+
+  const chatsWoDate =
+    data?.chatMessages?.filter((chat) => chat?.type !== 'DATE').length || 0;
+
   return (
     <div className="view-message-container">
       <PageHeader
@@ -290,7 +296,7 @@ const ViewMessages = ({
         next={scrolledToTop}
         style={{ display: 'flex', flexDirection: 'column-reverse' }}
         inverse
-        hasMore
+        hasMore={chatsWoDate < totalChats && data?.chatMessages.length !== 0}
         loader={
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <Spin />
