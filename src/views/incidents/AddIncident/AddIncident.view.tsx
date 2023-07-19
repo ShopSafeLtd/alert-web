@@ -252,9 +252,116 @@ const EditIncident = ({
             <CheckTags
               loading={tagsLoading}
               // mode="multiple"
-              options={tags.filter(
-                (item) => item.type === TagType.IncidentCrimeType
-              )}
+              // options={tags.filter(
+              //   (item) => item.type === TagType.IncidentCrimeType
+              // )}
+              options={[
+                {
+                  value: 'store',
+                  children: [
+                    {
+                      value: 'Lost Property/Equipment',
+                      children: [
+                        {
+                          value: 'Detacher',
+                          children: [],
+                          label: 'Detacher',
+                          tooltip: 'Detacher',
+                        },
+                        {
+                          value: 'HHT Scanner',
+                          children: [],
+                          label: 'HHT Scanner',
+                          tooltip: 'HHT Scanner',
+                        },
+                        {
+                          value: 'Keys Lost/Stolen',
+                          children: [],
+                          label: 'Keys Lost/Stolen',
+                          tooltip: 'Keys Lost/Stolen',
+                        },
+                        {
+                          value: 'Radio Lost/Stolen',
+                          children: [],
+                          label: 'Radio Lost/Stolen',
+                          tooltip: 'Radio Lost/Stolen',
+                        },
+                        {
+                          value: 'Shutter Fob Lost/Stolen',
+                          children: [],
+                          label: 'Shutter Fob Lost/Stolen',
+                          tooltip: 'Shutter Fob Lost/Stolen',
+                        },
+                        {
+                          value: 'Customer Personal Item',
+                          children: [],
+                          label: 'Customer Personal Item',
+                          tooltip: 'Customer Personal Item',
+                        },
+                      ],
+                      label: 'Lost Property/Equipment',
+                      tooltip: 'Lost Property/Equipment',
+                    },
+                    {
+                      value: 'Procedure Failure',
+                      children: [
+                        {
+                          value: 'Alarm Not Set',
+                          children: [],
+                          label: 'Alarm Not Set',
+                          tooltip: 'Alarm Not Set',
+                        },
+                        {
+                          value: 'Breach Of Security Procedures',
+                          children: [],
+                          label: 'Breach Of Security Procedures',
+                          tooltip: 'Breach Of Security Procedures',
+                        },
+                        {
+                          value: 'Cash Handling Procedures',
+                          children: [],
+                          label: 'Cash Handling Procedures',
+                          tooltip: 'Cash Handling Procedures',
+                        },
+                        {
+                          value: 'Incorrect DC Return',
+                          children: [],
+                          label: 'Incorrect DC Return',
+                          tooltip: 'Incorrect DC Return',
+                        },
+                        {
+                          value: 'Insecure Door',
+                          children: [],
+                          label: 'Insecure Door',
+                          tooltip: 'Insecure Door',
+                        },
+                        {
+                          value: 'Staff Discount Abuse',
+                          children: [],
+                          label: 'Staff Discount Abuse',
+                          tooltip: 'Staff Discount Abuse',
+                        },
+                      ],
+                      label: 'Procedure Failure',
+                      tooltip: 'Procedure Failure',
+                    },
+                  ],
+                  label: 'Store',
+                  tooltip: 'Store option',
+                },
+                {
+                  value: 'office',
+                  children: [],
+                  label: 'Office',
+                  tooltip: 'Office option',
+                },
+                {
+                  value: 'dc',
+                  children: [],
+                  label: 'DC',
+                  tooltip: 'DC option',
+                },
+              ]}
             />
           </Form.Item>
           <Form.Item

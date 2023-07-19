@@ -5,21 +5,27 @@ import { faCheckCircle } from '@fortawesome/pro-light-svg-icons';
 import { faCheckCircle as faCheckCircleSolid } from '@fortawesome/pro-solid-svg-icons';
 import useStyles from './CheckTag.styles';
 
-interface Props {
-  active: boolean;
+interface Option {
   label: string;
   value: string;
   tooltip?: string;
-  onClick: (value: string) => void;
+  needAdminRight?: boolean;
+  children?: Option[];
 }
 
-const CheckTag = ({ active, label, value, onClick, tooltip }: Props) => {
+interface Props {
+  active: boolean;
+  option: Option;
+  onClick: (value: Option) => void;
+}
+
+const CheckTag = ({ active, option, onClick }: Props) => {
   const classes = useStyles();
   return (
-    <Tooltip title={tooltip}>
+    <Tooltip title={option.tooltip}>
       <Row
         className={classes.selectBox}
-        onClick={() => onClick(value)}
+        onClick={() => onClick(option)}
         style={{ borderColor: active ? 'red' : undefined }}
         align="middle"
       >
@@ -30,7 +36,7 @@ const CheckTag = ({ active, label, value, onClick, tooltip }: Props) => {
           style={{ color: active ? 'red' : undefined }}
           icon={active ? faCheckCircleSolid : faCheckCircle}
         />
-        {label}
+        {option.label}
       </Row>
     </Tooltip>
   );
