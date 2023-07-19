@@ -71,11 +71,11 @@ const CheckTags = ({
         }
         if (valueProp && valueProp[1]) {
           const option = options.find(({ value }) => value === valueProp[1]);
-          setPrimaryValue(option || null);
+          setSecondaryValue(option || null);
         }
         if (valueProp && valueProp[2]) {
           const option = options.find(({ value }) => value === valueProp[2]);
-          setPrimaryValue(option || null);
+          setTertiaryValue(option || null);
         }
         setPristine(true);
       }
