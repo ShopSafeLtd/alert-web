@@ -80,7 +80,6 @@ const OffenderTag = ({
 };
 
 interface Props {
-  titleOrder: number;
   imgChange: UploadProps['onChange'];
   removeImage: (uid: string) => void;
   removeImageFromOffender: (data: {
@@ -94,10 +93,10 @@ interface Props {
   onEditImage: (value: ImagePayload) => void;
   primaryImage: string;
   setPrimaryImage: (value: string) => void;
+  hideOffenders?: boolean;
 }
 
 const ImageSection = ({
-  titleOrder,
   imgChange,
   fileList,
   beforeUpload,
@@ -108,6 +107,7 @@ const ImageSection = ({
   onEditImage,
   primaryImage,
   setPrimaryImage,
+  hideOffenders = false,
 }: Props): JSX.Element => {
   const [editImage, setEditImage] = useState<ImagePayload | null>(null);
   const intl = useIntl();
@@ -123,12 +123,6 @@ const ImageSection = ({
     <Row gutter={20}>
       <Col>
         <Row align="middle" style={{ marginBottom: 20 }}>
-          <Col>
-            <Title style={{ marginBottom: 0 }} level={4}>
-              {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-              {`${titleOrder}.`}
-            </Title>
-          </Col>
           <Col>
             <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
               {intl.formatMessage({ defaultMessage: 'Images', id: 'Fip4H8' })}
@@ -175,7 +169,11 @@ const ImageSection = ({
         <Form.Item name="images">
           <Upload<ImagePayload>
             action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
-            className="incident-form-images"
+            className={
+              hideOffenders
+                ? 'incident-form-images-no-offenders'
+                : 'incident-form-images'
+            }
             listType="picture-card"
             fileList={fileList}
             onChange={imgChange}
@@ -185,7 +183,11 @@ const ImageSection = ({
             // TODO
             // eslint-disable-next-line react/no-unstable-nested-components
             itemRender={(el, file: ImagePayload) => (
-              <div className="image-card" key={el.key}>
+              <div
+                className="image-card"
+                style={{ width: hideOffenders ? 200 : 500 }}
+                key={el.key}
+              >
                 {file.url === undefined && (
                   <div className="image-card-loading">
                     <Spin />
@@ -236,77 +238,79 @@ const ImageSection = ({
                     </Row>
                   </div>
                 </div>
-                <div className="image-card-offenders">
-                  <Text strong>
-                    {intl.formatMessage({
-                      defaultMessage: 'Offenders:',
-                      id: 'HEnuMU',
-                    })}
-                  </Text>
-                  {file.offenders && file.offenders.length === 0 && (
-                    <Paragraph>
+                {!hideOffenders && (
+                  <div className="image-card-offenders">
+                    <Text strong>
                       {intl.formatMessage({
-                        defaultMessage:
-                          'You have not assigned any offender to this image.',
-                        id: 'NuUp/9',
+                        defaultMessage: 'Offenders:',
+                        id: 'HEnuMU',
                       })}
-                    </Paragraph>
-                  )}
-                  <Row gutter={[8, 8]}>
-                    {file.offenders?.map((offender) => (
-                      // <div className="image-card-offender" key={offender.id}>
-                      //   <Text className="image-card-offender-text">
-                      //     {offender.name}
-                      //   </Text>
-                      //   <Popconfirm
-                      //     placement="topLeft"
-                      //     title="Remove the image from the offender?"
-                      //     onConfirm={() => {
-                      //       removeImageFromOffender({
-                      //         image: file,
-                      //         offenderId: offender.id,
-                      //       });
-                      //     }}
-                      //     okText="Yes"
-                      //     cancelText="No"
-                      //     overlayInnerStyle={{ padding: 10 }}
-                      //   >
-                      //     <Button
-                      //       size="small"
-                      //       disabled={disabled}
-                      //       icon={<FontAwesomeIcon icon={faTrash} />}
-                      //       style={{ color: 'red' }}
-                      //     />
-                      //   </Popconfirm>
-                      // </div>
-                      <Col span={24} key={offender.id}>
-                        <OffenderTag
-                          file={file}
-                          offender={offender}
-                          removeImageFromOffender={removeImageFromOffender}
+                    </Text>
+                    {file.offenders && file.offenders.length === 0 && (
+                      <Paragraph>
+                        {intl.formatMessage({
+                          defaultMessage:
+                            'You have not assigned any offender to this image.',
+                          id: 'NuUp/9',
+                        })}
+                      </Paragraph>
+                    )}
+                    <Row gutter={[8, 8]}>
+                      {file.offenders?.map((offender) => (
+                        // <div className="image-card-offender" key={offender.id}>
+                        //   <Text className="image-card-offender-text">
+                        //     {offender.name}
+                        //   </Text>
+                        //   <Popconfirm
+                        //     placement="topLeft"
+                        //     title="Remove the image from the offender?"
+                        //     onConfirm={() => {
+                        //       removeImageFromOffender({
+                        //         image: file,
+                        //         offenderId: offender.id,
+                        //       });
+                        //     }}
+                        //     okText="Yes"
+                        //     cancelText="No"
+                        //     overlayInnerStyle={{ padding: 10 }}
+                        //   >
+                        //     <Button
+                        //       size="small"
+                        //       disabled={disabled}
+                        //       icon={<FontAwesomeIcon icon={faTrash} />}
+                        //       style={{ color: 'red' }}
+                        //     />
+                        //   </Popconfirm>
+                        // </div>
+                        <Col span={24} key={offender.id}>
+                          <OffenderTag
+                            file={file}
+                            offender={offender}
+                            removeImageFromOffender={removeImageFromOffender}
+                          />
+                        </Col>
+                      ))}
+                    </Row>
+                    <Button
+                      size="small"
+                      type="primary"
+                      style={{ marginTop: 10 }}
+                      onClick={() => setAssignToImage(file)}
+                      disabled={disabled}
+                      icon={
+                        <FontAwesomeIcon
+                          icon={faUsers}
+                          style={{ marginRight: 5 }}
                         />
-                      </Col>
-                    ))}
-                  </Row>
-                  <Button
-                    size="small"
-                    type="primary"
-                    style={{ marginTop: 10 }}
-                    onClick={() => setAssignToImage(file)}
-                    disabled={disabled}
-                    icon={
-                      <FontAwesomeIcon
-                        icon={faUsers}
-                        style={{ marginRight: 5 }}
-                      />
-                    }
-                  >
-                    {intl.formatMessage({
-                      defaultMessage: 'Assign Offenders',
-                      id: 'GFrwvj',
-                    })}
-                  </Button>
-                </div>
+                      }
+                    >
+                      {intl.formatMessage({
+                        defaultMessage: 'Assign Offenders',
+                        id: 'GFrwvj',
+                      })}
+                    </Button>
+                  </div>
+                )}
               </div>
             )}
           >

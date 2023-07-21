@@ -2,21 +2,18 @@ import React from 'react';
 import View from './AddIncident.view';
 import useAddIncident from './useAddIncident';
 
-const EditIncident = (): JSX.Element => {
+const AddIncident = (): JSX.Element => {
   const {
     addIncidentTag,
     assignOffendersToImages,
     beforeUpload,
     fileList,
     form,
-    groups,
-    groupsLoading,
     imgChange,
     newImage,
     offenderImgChange,
     offendersData,
     onCancelNewImage,
-    onSearchBusiness,
     onSubmit,
     primaryAddress,
     recentOffenderData,
@@ -28,15 +25,12 @@ const EditIncident = (): JSX.Element => {
     searchOffenders,
     setAssignToImage,
     setSearchOffenders,
-    tags,
-    tagsLoading,
     toggleAddIncidentTag,
     updateIncidentTag,
     vehiclesData,
     formStages,
     onValuesChange,
     isTheft,
-    goodsTypesData,
     addNewAddress,
     toggleAddNewAddress,
     updateNewAddressData,
@@ -47,10 +41,11 @@ const EditIncident = (): JSX.Element => {
     knowGoods,
     onEditImage,
     onAddVehicle,
-    onEditVehicle,
     onRemoveVehicle,
     primaryImage,
     setPrimaryImage,
+    incidentForm,
+    customQuestions,
   } = useAddIncident();
 
   return (
@@ -61,14 +56,11 @@ const EditIncident = (): JSX.Element => {
         beforeUpload={beforeUpload}
         fileList={fileList}
         form={form}
-        groups={groups}
-        groupsLoading={groupsLoading}
         imgChange={imgChange}
         newImage={newImage}
         offenderImgChange={offenderImgChange}
         offendersData={offendersData}
         onCancelNewImage={onCancelNewImage}
-        onSearchBusiness={onSearchBusiness}
         onSubmit={onSubmit}
         primaryAddress={primaryAddress}
         recentOffenderData={recentOffenderData}
@@ -80,15 +72,12 @@ const EditIncident = (): JSX.Element => {
         searchOffenders={searchOffenders}
         setAssignToImage={setAssignToImage}
         setSearchOffenders={setSearchOffenders}
-        tags={tags}
-        tagsLoading={tagsLoading}
         toggleAddIncidentTag={toggleAddIncidentTag}
         updateIncidentTag={updateIncidentTag}
         vehiclesData={vehiclesData}
         formStages={formStages}
         onValuesChange={onValuesChange}
         isTheft={isTheft}
-        goodsTypesData={goodsTypesData}
         addNewAddress={addNewAddress}
         toggleAddNewAddress={toggleAddNewAddress}
         updateNewAddressData={updateNewAddressData}
@@ -99,13 +88,14 @@ const EditIncident = (): JSX.Element => {
         knowGoods={knowGoods}
         onEditImage={onEditImage}
         onAddVehicle={onAddVehicle}
-        onEditVehicle={onEditVehicle}
         onRemoveVehicle={onRemoveVehicle}
         primaryImage={primaryImage}
         setPrimaryImage={setPrimaryImage}
+        incidentForm={incidentForm}
+        customQuestions={customQuestions}
       />
     </div>
   );
 };
 
-export default EditIncident;
+export default AddIncident;

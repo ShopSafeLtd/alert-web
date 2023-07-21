@@ -9,6 +9,7 @@ import type {
   ImagePosition,
   ListIncidentsQuery,
   Race,
+  AnswerType,
 } from 'graphql/generated';
 import type { Moment } from 'moment';
 
@@ -261,4 +262,13 @@ export interface TagData {
   schemes: string[];
   isConnected?: boolean;
   isNew?: boolean;
+}
+
+export interface CustomQuestion {
+  answerType: AnswerType;
+  label: string;
+  questionId: string;
+  required: boolean;
+  tagQuestionId: string;
+  value: string;
 }

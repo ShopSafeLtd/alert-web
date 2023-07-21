@@ -10,9 +10,12 @@ export type Mode = 'check' | 'radio';
 interface Option {
   label: string;
   value: string;
-  tooltip?: string;
+  tooltip?: string | null;
   needAdminRight?: boolean;
-  children?: Option[];
+  hasChildren?: boolean;
+  parentId?: string | null;
+  parents?: string[];
+  tier?: number;
 }
 
 interface Props {
@@ -53,7 +56,7 @@ const CheckTags = ({
 
   useEffect(() => {
     const hasChildren = options
-      .map(({ children }) => children && children.length > 0)
+      .map((option) => option.hasChildren)
       .includes(true);
     setHasChildOptions(hasChildren);
   }, [options]);
@@ -113,10 +116,7 @@ const CheckTags = ({
     setSecondaryValue(null);
     setTertiaryValue(null);
 
-    if (
-      (!hasChildOptions || (data.children && data.children.length === 0)) &&
-      onChangeProp
-    )
+    if ((!hasChildOptions || !data.hasChildren) && onChangeProp)
       onChangeProp(selfClick ? [] : [data.value]);
   };
 
@@ -124,26 +124,15 @@ const CheckTags = ({
     const selfClick = data.value === secondaryValue?.value;
     setSecondaryValue(selfClick ? null : data);
     setTertiaryValue(null);
-    if (
-      data.children &&
-      data.children.length === 0 &&
-      onChangeProp &&
-      primaryValue
-    )
-      onChangeProp(
-        selfClick ? [primaryValue.value] : [primaryValue.value, data.value]
-      );
+    if (!data.hasChildren && onChangeProp && primaryValue)
+      onChangeProp(selfClick ? [] : [data.value]);
   };
 
   const setTertiary = (data: Option) => {
     const selfClick = data.value === tertiaryValue?.value;
     setTertiaryValue(selfClick ? null : data);
     if (onChangeProp && primaryValue && secondaryValue)
-      onChangeProp(
-        selfClick
-          ? [primaryValue.value, secondaryValue.value]
-          : [primaryValue.value, secondaryValue.value, data.value]
-      );
+      onChangeProp(selfClick ? [] : [data.value]);
   };
 
   return loading ? (
@@ -151,61 +140,67 @@ const CheckTags = ({
   ) : (
     <>
       <Row gutter={[10, 10]}>
-        {options.map((option) =>
-          !option.needAdminRight || adminRights ? (
-            <Col key={option.value}>
-              {mode === 'check' && (
-                <CheckTag
-                  option={option}
-                  active={checkValues.includes(option.value)}
-                  onClick={toggleCheckOption}
-                />
-              )}
-              {mode === 'radio' && (
-                <CheckTag
-                  option={option}
-                  active={primaryValue?.value === option.value}
-                  onClick={setPrimary}
-                />
-              )}
-            </Col>
-          ) : (
-            <Col key={option.value} />
-          )
-        )}
-      </Row>
-      {primaryValue?.children && primaryValue.children.length > 0 && (
-        <Row gutter={[10, 10]} style={{ marginTop: 20 }}>
-          {primaryValue.children.map((option) =>
+        {options
+          .filter((item) => item.tier === 0 || !hasChildOptions)
+          .map((option) =>
             !option.needAdminRight || adminRights ? (
               <Col key={option.value}>
-                <CheckTag
-                  option={option}
-                  active={secondaryValue?.value === option.value}
-                  onClick={setSecondary}
-                />
+                {mode === 'check' && (
+                  <CheckTag
+                    option={option}
+                    active={checkValues.includes(option.value)}
+                    onClick={toggleCheckOption}
+                  />
+                )}
+                {mode === 'radio' && (
+                  <CheckTag
+                    option={option}
+                    active={primaryValue?.value === option.value}
+                    onClick={setPrimary}
+                  />
+                )}
               </Col>
             ) : (
               <Col key={option.value} />
             )
           )}
+      </Row>
+      {primaryValue?.hasChildren && (
+        <Row gutter={[10, 10]} style={{ marginTop: 20 }}>
+          {options
+            .filter((option) => option.parentId === primaryValue?.value)
+            .map((option) =>
+              !option.needAdminRight || adminRights ? (
+                <Col key={option.value}>
+                  <CheckTag
+                    option={option}
+                    active={secondaryValue?.value === option.value}
+                    onClick={setSecondary}
+                  />
+                </Col>
+              ) : (
+                <Col key={option.value} />
+              )
+            )}
         </Row>
       )}
-      {secondaryValue?.children && secondaryValue.children.length > 0 && (
+      {secondaryValue?.hasChildren && (
         <Row gutter={[10, 10]} style={{ marginTop: 20 }}>
-          {secondaryValue.children.map((option) =>
-            !option.needAdminRight || adminRights ? (
-              <Col key={option.value}>
-                <CheckTag
-                  option={option}
-                  active={tertiaryValue?.value === option.value}
-                  onClick={setTertiary}
-                />
-              </Col>
-            ) : (
-              <Col key={option.value} />
-            )
-          )}
+          {options
+            .filter((option) => option.parentId === secondaryValue?.value)
+            .map((option) =>
+              !option.needAdminRight || adminRights ? (
+                <Col key={option.value}>
+                  <CheckTag
+                    option={option}
+                    active={tertiaryValue?.value === option.value}
+                    onClick={setTertiary}
+                  />
+                </Col>
+              ) : (
+                <Col key={option.value} />
+              )
+            )}
         </Row>
       )}
     </>

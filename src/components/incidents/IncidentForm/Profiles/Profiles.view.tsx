@@ -65,7 +65,6 @@ interface Props {
   setAddRecentOffender: (value: Offender | null) => void;
   setEditOffenderId: (value: string) => void;
   setSearchOffenders: (value: string) => void;
-  titleOrder: number;
   toggleAddExistingOffender: () => void;
   toggleAddExistingVehicle: () => void;
   toggleAddNewVehicle: () => void;
@@ -78,7 +77,6 @@ interface Props {
 }
 
 const Profiles = ({
-  titleOrder,
   saving,
   toggleAddNewVehicle,
   toggleAddExistingVehicle,
@@ -128,12 +126,6 @@ const Profiles = ({
   return (
     <>
       <Row gutter={10} align="middle">
-        <Col>
-          <Title style={{ marginBottom: 0 }} level={4}>
-            {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-            {`${titleOrder}.`}
-          </Title>
-        </Col>
         <Col>
           <Title style={{ marginBottom: 0 }} level={4}>
             {intl.formatMessage({

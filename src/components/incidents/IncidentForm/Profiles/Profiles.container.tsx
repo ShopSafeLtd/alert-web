@@ -19,7 +19,6 @@ interface Props {
   saving: boolean;
   searchOffenders: string;
   setSearchOffenders: (value: string) => void;
-  titleOrder: number;
   updateOffender: (value: OffenderData) => void;
   value?: OffenderData[];
   vehiclesData: VehicleData[];
@@ -38,7 +37,6 @@ const Profiles = ({
   saving,
   searchOffenders,
   setSearchOffenders,
-  titleOrder,
   updateOffender: updateOffenderParent,
   value,
   vehiclesData,
@@ -90,7 +88,6 @@ const Profiles = ({
       setAddRecentOffender={setAddRecentOffender}
       setEditOffenderId={setEditOffenderId}
       setSearchOffenders={setSearchOffenders}
-      titleOrder={titleOrder}
       toggleAddExistingOffender={toggleAddExistingOffender}
       toggleAddExistingVehicle={toggleAddExistingVehicle}
       toggleAddNewVehicle={toggleAddNewVehicle}

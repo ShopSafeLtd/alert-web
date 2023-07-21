@@ -1,0 +1,66 @@
+import type React from 'react';
+import { useApolloClient } from '@apollo/client';
+import type {
+  SearchBusinessesQuery,
+  SearchBusinessesQueryVariables,
+} from 'graphql/generated';
+import { QueryMode, SearchBusinessesDocument } from 'graphql/generated';
+import { useStoreState } from 'state';
+import { useIntl } from 'react-intl';
+
+interface Return {
+  onSearchBusiness: (
+    value: string
+  ) => Promise<{ label: React.ReactNode; value: string }[]>;
+}
+
+const useIncidentWhere = (): Return => {
+  const client = useApolloClient();
+  const intl = useIntl();
+  const schemeId = useStoreState((state) => state.scheme.id);
+
+  const onSearchBusiness = async (value: string) =>
+    client
+      .query<SearchBusinessesQuery, SearchBusinessesQueryVariables>({
+        query: SearchBusinessesDocument,
+        variables: {
+          where: {
+            name: {
+              contains: value,
+              mode: QueryMode.Insensitive,
+            },
+            schemes: {
+              some: {
+                id: {
+                  equals: schemeId,
+                },
+              },
+            },
+          },
+        },
+      })
+      .then((response) =>
+        response.data.listBusinesses.businesses.length > 0
+          ? response.data.listBusinesses.businesses.map((item) => ({
+              label: item?.name || '',
+              value: item?.id || '',
+              location: item?.locations[0].full || '',
+            }))
+          : [
+              {
+                label: intl.formatMessage({
+                  defaultMessage: 'No results found',
+                  id: 'hX5PAb',
+                }),
+                value: '',
+                disabled: true,
+              },
+            ]
+      );
+
+  return {
+    onSearchBusiness,
+  };
+};
+
+export default useIncidentWhere;
