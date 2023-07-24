@@ -16,6 +16,7 @@ describe('Detail Officer View', () => {
             id: 'test userId',
             fullName: 'test user',
             publicName: true,
+            reportToAllBusinesses: false,
             businesses: [{ name: 'user business', id: '', fullName: '' }],
             origName: 'test user',
           },

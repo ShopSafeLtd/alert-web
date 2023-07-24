@@ -114,8 +114,6 @@ const useViewVehicle = (vehicleId: string): Return => {
       },
     },
     onCompleted: (res) => {
-      console.log('groups', vehicleData?.vehicle?.groups);
-
       setLightboxElements(
         res.vehicle?.images.map((image) => ({
           src: image.optimised || '',

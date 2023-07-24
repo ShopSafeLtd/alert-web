@@ -294,7 +294,7 @@ const UseAddUserTest = () => {
       subscribedOffenderOnly: false,
       messagePush: false,
       publicName: true,
-
+      reportToAllBusinesses: false,
       offenderEmail: false,
       offenderPush: false,
     };
@@ -340,6 +340,7 @@ const UseAddUserTest = () => {
             groups: ['groupId'],
             approverGroups: ['approverGroupsId'],
             publicName: true,
+            reportToAllBusinesses: false,
             chats: ['chatId'],
             incidentEmail: false,
             incidentPush: false,

@@ -11,6 +11,7 @@ mutation inviteExistingUser(
     origFirstLetter
     email
     publicName
+    reportToAllBusinesses
     businesses {
       id
       name

@@ -95,25 +95,6 @@ const useIncidentCard = ({ incident, update }: Props): Return => {
     },
   });
   const onEditImage = (value: EditFeedImage) => {
-    console.log('imageValue2', {
-      id: incident.id,
-      images: {
-        update: [
-          {
-            where: {
-              id: value.id,
-            },
-            data: {
-              position: { set: value.position },
-              primary: { set: value.primary || false },
-              policeImage: { set: value.policeImage || false },
-              rotation: { set: value.rotation || 0 },
-            },
-          },
-        ],
-      },
-    });
-
     if (value)
       void updateIncident({
         variables: {
@@ -132,6 +113,19 @@ const useIncidentCard = ({ incident, update }: Props): Return => {
                 },
               },
             ],
+            // optimistic: incident.images.map((image) => {
+            //   if (image.id === value.id) {
+            //     return {
+            //       ...image,
+            //       uri: '',
+            //       policeImage: value.policeImage,
+            //       primary: value.primary,
+            //       position: value.position,
+            //       rotation: image.rotation,
+            //     };
+            //   }
+            //   return { ...image, uri: '' };
+            // }),
           },
         },
       }).finally(() => {

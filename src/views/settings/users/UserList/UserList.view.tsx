@@ -258,7 +258,7 @@ const UserList = ({
           id: 'EbeHm3',
         })}
         open={addUser}
-        width="800"
+        width="600"
         onClose={toggleAddUser}
       >
         {addUser ? (
@@ -277,7 +277,7 @@ const UserList = ({
           id: 'tT2D9t',
         })}
         open={editUser !== undefined}
-        width="800"
+        width="600"
         onClose={() => toggleEditUser()}
       >
         {editUser ? (

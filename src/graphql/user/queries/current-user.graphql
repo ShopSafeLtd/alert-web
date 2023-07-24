@@ -7,6 +7,7 @@ query currentUser($scheme: UniqueId) {
     reference
     demId
     publicName
+    reportToAllBusinesses
     notificationCount(scheme: $scheme)
     businesses {
       id

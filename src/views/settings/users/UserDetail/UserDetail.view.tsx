@@ -466,7 +466,7 @@ const userDetail = ({
           <FormattedMessage defaultMessage="Edit User Details" id="OaNQvU" />
         }
         visible={editUser}
-        width="800"
+        width="600"
         onClose={toggleEditUser}
       >
         {editUser ? <EditUser onClose={toggleEditUser} /> : <div />}

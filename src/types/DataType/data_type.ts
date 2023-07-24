@@ -167,8 +167,8 @@ export interface EditFeedImage {
   optimised?: string | null | undefined;
   url?: string | null | undefined;
   position?: ImagePosition;
-  primary?: boolean;
-  policeImage?: boolean;
+  primary?: boolean | null | undefined;
+  policeImage?: boolean | null | undefined;
   rotation?: number;
 }
 // LocationData
