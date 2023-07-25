@@ -249,6 +249,48 @@ export const NavProfile = () => {
                         id: 'RVX8BX',
                       }),
                     },
+                    {
+                      value: 'nl',
+                      label: intl.formatMessage({
+                        defaultMessage: 'Dutch 🇳🇱',
+                        id: 'kVa3St',
+                      }),
+                    },
+                    {
+                      value: 'rbe',
+                      label: intl.formatMessage({
+                        defaultMessage: 'Belgian 🇧🇪',
+                        id: '0P84j7',
+                      }),
+                    },
+                    {
+                      value: 'pt',
+                      label: intl.formatMessage({
+                        defaultMessage: 'Portuguese 🇵🇹',
+                        id: '7gRkSQ',
+                      }),
+                    },
+                    {
+                      value: 'sv',
+                      label: intl.formatMessage({
+                        defaultMessage: 'Swedish 🇸🇪',
+                        id: 'Sda1tF',
+                      }),
+                    },
+                    {
+                      value: 'pl',
+                      label: intl.formatMessage({
+                        defaultMessage: 'Polish 🇵🇱',
+                        id: 'L66cYZ',
+                      }),
+                    },
+                    {
+                      value: 'fi',
+                      label: intl.formatMessage({
+                        defaultMessage: 'Finnish 🇫🇮',
+                        id: 'TpJCED',
+                      }),
+                    },
                   ]}
                 />
               </Row>
