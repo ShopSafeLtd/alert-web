@@ -21,6 +21,7 @@ import { createClient } from 'graphql-ws';
 import * as Sentry from '@sentry/react';
 import { SentryLink } from 'apollo-link-sentry';
 import { useStoreState } from '../state';
+import { LocalStorageKeys, typedLocalStorage } from '../utils';
 
 interface Props {
   children: React.ReactNode;
@@ -28,6 +29,8 @@ interface Props {
 
 const Apollo = ({ children }: Props): JSX.Element => {
   const accessToken = localStorage.getItem('accessToken');
+  const localLang = typedLocalStorage.get(LocalStorageKeys.lang);
+
   const { getAccessTokenSilently, isAuthenticated, loginWithRedirect } =
     useAuth0();
   const getNewToken = async () =>
@@ -160,6 +163,7 @@ const Apollo = ({ children }: Props): JSX.Element => {
             ...headers,
             Authorization: authToken ? `Bearer ${authToken}` : '',
             currentScheme,
+            language: localLang,
           },
           ...context,
         };
@@ -190,6 +194,7 @@ const Apollo = ({ children }: Props): JSX.Element => {
       headers: {
         ...headers,
         Authorization: `Bearer ''`,
+        language: localLan,
       },
       ...context,
     };

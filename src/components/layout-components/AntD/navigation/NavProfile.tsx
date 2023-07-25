@@ -259,8 +259,8 @@ export const NavProfile = () => {
                     {
                       value: 'rbe',
                       label: intl.formatMessage({
-                        defaultMessage: 'Belgian 🇧🇪',
-                        id: '0P84j7',
+                        defaultMessage: 'Flemish 🇧🇪',
+                        id: 'lQ59Z+',
                       }),
                     },
                     {
