@@ -3846,6 +3846,7 @@ export type ArticleCreateManyCreatedByInput = {
   previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   start?: InputMaybe<Scalars['DateTime']>;
   title: Scalars['String'];
@@ -4025,6 +4026,7 @@ export type ArticleCreateWithoutActionsInput = {
   previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   rows?: InputMaybe<ArticleRowCreateNestedManyWithoutArticleInput>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutArticlesInput>;
@@ -4053,6 +4055,7 @@ export type ArticleCreateWithoutCreatedByInput = {
   previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   rows?: InputMaybe<ArticleRowCreateNestedManyWithoutArticleInput>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutArticlesInput>;
@@ -4081,6 +4084,7 @@ export type ArticleCreateWithoutDocumentsInput = {
   previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   rows?: InputMaybe<ArticleRowCreateNestedManyWithoutArticleInput>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutArticlesInput>;
@@ -4109,6 +4113,7 @@ export type ArticleCreateWithoutFeedItemsInput = {
   previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   rows?: InputMaybe<ArticleRowCreateNestedManyWithoutArticleInput>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutArticlesInput>;
@@ -4137,6 +4142,7 @@ export type ArticleCreateWithoutGroupsInput = {
   previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   rows?: InputMaybe<ArticleRowCreateNestedManyWithoutArticleInput>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutArticlesInput>;
@@ -4165,6 +4171,7 @@ export type ArticleCreateWithoutImageInput = {
   previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   rows?: InputMaybe<ArticleRowCreateNestedManyWithoutArticleInput>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutArticlesInput>;
@@ -4193,6 +4200,7 @@ export type ArticleCreateWithoutImagesInput = {
   previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   rows?: InputMaybe<ArticleRowCreateNestedManyWithoutArticleInput>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutArticlesInput>;
@@ -4221,6 +4229,7 @@ export type ArticleCreateWithoutImpressionsInput = {
   previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   rows?: InputMaybe<ArticleRowCreateNestedManyWithoutArticleInput>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutArticlesInput>;
@@ -4249,6 +4258,7 @@ export type ArticleCreateWithoutNotificationsInput = {
   previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   rows?: InputMaybe<ArticleRowCreateNestedManyWithoutArticleInput>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutArticlesInput>;
@@ -4278,6 +4288,7 @@ export type ArticleCreateWithoutRowsInput = {
   previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutArticlesInput>;
   start?: InputMaybe<Scalars['DateTime']>;
@@ -4306,6 +4317,7 @@ export type ArticleCreateWithoutSchemesInput = {
   previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   rows?: InputMaybe<ArticleRowCreateNestedManyWithoutArticleInput>;
   start?: InputMaybe<Scalars['DateTime']>;
@@ -4334,6 +4346,7 @@ export type ArticleCreateWithoutTagsInput = {
   previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   rows?: InputMaybe<ArticleRowCreateNestedManyWithoutArticleInput>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutArticlesInput>;
@@ -4362,6 +4375,7 @@ export type ArticleCreateWithoutUsersInput = {
   previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   rows?: InputMaybe<ArticleRowCreateNestedManyWithoutArticleInput>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutArticlesInput>;
@@ -4402,6 +4416,7 @@ export type ArticleOrderByWithRelationInput = {
   previewText?: InputMaybe<SortOrder>;
   priority?: InputMaybe<SortOrder>;
   recurring?: InputMaybe<SortOrder>;
+  recycleDate?: InputMaybe<SortOrder>;
   recycled?: InputMaybe<SortOrder>;
   rows?: InputMaybe<ArticleRowOrderByRelationAggregateInput>;
   schemes?: InputMaybe<SchemeOrderByRelationAggregateInput>;
@@ -4626,6 +4641,7 @@ export type ArticleScalarWhereInput = {
   previewText?: InputMaybe<StringNullableFilter>;
   priority?: InputMaybe<EnumArticlePriorityFilter>;
   recurring?: InputMaybe<BoolFilter>;
+  recycleDate?: InputMaybe<DateTimeFilter>;
   recycled?: InputMaybe<BoolFilter>;
   start?: InputMaybe<DateTimeNullableFilter>;
   title?: InputMaybe<StringFilter>;
@@ -4653,6 +4669,7 @@ export type ArticleUpdateManyMutationInput = {
   previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   start?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   title?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -4907,6 +4924,7 @@ export type ArticleUpdateWithoutActionsInput = {
   previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rows?: InputMaybe<ArticleRowUpdateManyWithoutArticleNestedInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutArticlesNestedInput>;
@@ -4935,6 +4953,7 @@ export type ArticleUpdateWithoutCreatedByInput = {
   previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rows?: InputMaybe<ArticleRowUpdateManyWithoutArticleNestedInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutArticlesNestedInput>;
@@ -4963,6 +4982,7 @@ export type ArticleUpdateWithoutDocumentsInput = {
   previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rows?: InputMaybe<ArticleRowUpdateManyWithoutArticleNestedInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutArticlesNestedInput>;
@@ -4991,6 +5011,7 @@ export type ArticleUpdateWithoutFeedItemsInput = {
   previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rows?: InputMaybe<ArticleRowUpdateManyWithoutArticleNestedInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutArticlesNestedInput>;
@@ -5019,6 +5040,7 @@ export type ArticleUpdateWithoutGroupsInput = {
   previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rows?: InputMaybe<ArticleRowUpdateManyWithoutArticleNestedInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutArticlesNestedInput>;
@@ -5047,6 +5069,7 @@ export type ArticleUpdateWithoutImageInput = {
   previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rows?: InputMaybe<ArticleRowUpdateManyWithoutArticleNestedInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutArticlesNestedInput>;
@@ -5075,6 +5098,7 @@ export type ArticleUpdateWithoutImagesInput = {
   previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rows?: InputMaybe<ArticleRowUpdateManyWithoutArticleNestedInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutArticlesNestedInput>;
@@ -5103,6 +5127,7 @@ export type ArticleUpdateWithoutImpressionsInput = {
   previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rows?: InputMaybe<ArticleRowUpdateManyWithoutArticleNestedInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutArticlesNestedInput>;
@@ -5131,6 +5156,7 @@ export type ArticleUpdateWithoutNotificationsInput = {
   previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rows?: InputMaybe<ArticleRowUpdateManyWithoutArticleNestedInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutArticlesNestedInput>;
@@ -5160,6 +5186,7 @@ export type ArticleUpdateWithoutRowsInput = {
   previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutArticlesNestedInput>;
   start?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -5188,6 +5215,7 @@ export type ArticleUpdateWithoutSchemesInput = {
   previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rows?: InputMaybe<ArticleRowUpdateManyWithoutArticleNestedInput>;
   start?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -5216,6 +5244,7 @@ export type ArticleUpdateWithoutTagsInput = {
   previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rows?: InputMaybe<ArticleRowUpdateManyWithoutArticleNestedInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutArticlesNestedInput>;
@@ -5244,6 +5273,7 @@ export type ArticleUpdateWithoutUsersInput = {
   previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rows?: InputMaybe<ArticleRowUpdateManyWithoutArticleNestedInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutArticlesNestedInput>;
@@ -5349,6 +5379,7 @@ export type ArticleWhereInput = {
   previewText?: InputMaybe<StringNullableFilter>;
   priority?: InputMaybe<EnumArticlePriorityFilter>;
   recurring?: InputMaybe<BoolFilter>;
+  recycleDate?: InputMaybe<DateTimeFilter>;
   recycled?: InputMaybe<BoolFilter>;
   rows?: InputMaybe<ArticleRowListRelationFilter>;
   schemes?: InputMaybe<SchemeListRelationFilter>;
@@ -6918,6 +6949,10 @@ export type BusinessWhereUniqueInput = {
   id?: InputMaybe<Scalars['String']>;
 };
 
+export type ChangePositionAndReqInput = {
+  tags: Array<UpdateTagQuestionInput>;
+};
+
 export type Chat = {
   __typename?: 'Chat';
   createdAt: Scalars['DateTime'];
@@ -7871,6 +7906,13 @@ export type CreateOffenderVehicles = {
   connect?: InputMaybe<Array<InputMaybe<UniqueId>>>;
   create?: InputMaybe<Array<InputMaybe<VehicleCreateWithoutOffendersInput>>>;
   update?: InputMaybe<Array<InputMaybe<CreateOffenderUpdateVehicles>>>;
+};
+
+export type CreateQuestionInput = {
+  question: Scalars['String'];
+  required?: Scalars['Boolean'];
+  tagId: Scalars['String'];
+  type: AnswerType;
 };
 
 export type CreateTermsInput = {
@@ -17515,6 +17557,7 @@ export type IncidentCreateInput = {
   date: Scalars['DateTime'];
   dayOfMonth?: InputMaybe<Scalars['Int']>;
   dayOfWeek?: InputMaybe<Scalars['Int']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   description: Scalars['String'];
   evidence?: InputMaybe<DocumentCreateNestedManyWithoutIncidentsInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
@@ -17542,6 +17585,7 @@ export type IncidentCreateInput = {
   policeReported?: InputMaybe<Scalars['Boolean']>;
   recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -17568,6 +17612,7 @@ export type IncidentCreateManyBusinessInput = {
   date: Scalars['DateTime'];
   dayOfMonth?: InputMaybe<Scalars['Int']>;
   dayOfWeek?: InputMaybe<Scalars['Int']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   description: Scalars['String'];
   geoLat?: InputMaybe<Scalars['String']>;
   geoLng?: InputMaybe<Scalars['String']>;
@@ -17579,6 +17624,7 @@ export type IncidentCreateManyBusinessInput = {
   policeRef?: InputMaybe<Scalars['String']>;
   policeReported?: InputMaybe<Scalars['Boolean']>;
   recoveredValue?: InputMaybe<Scalars['Float']>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -17606,6 +17652,7 @@ export type IncidentCreateManyCreatedByInput = {
   date: Scalars['DateTime'];
   dayOfMonth?: InputMaybe<Scalars['Int']>;
   dayOfWeek?: InputMaybe<Scalars['Int']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   description: Scalars['String'];
   geoLat?: InputMaybe<Scalars['String']>;
   geoLng?: InputMaybe<Scalars['String']>;
@@ -17617,6 +17664,7 @@ export type IncidentCreateManyCreatedByInput = {
   policeRef?: InputMaybe<Scalars['String']>;
   policeReported?: InputMaybe<Scalars['Boolean']>;
   recoveredValue?: InputMaybe<Scalars['Float']>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -17645,6 +17693,7 @@ export type IncidentCreateManySchemeInput = {
   date: Scalars['DateTime'];
   dayOfMonth?: InputMaybe<Scalars['Int']>;
   dayOfWeek?: InputMaybe<Scalars['Int']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   description: Scalars['String'];
   geoLat?: InputMaybe<Scalars['String']>;
   geoLng?: InputMaybe<Scalars['String']>;
@@ -17656,6 +17705,7 @@ export type IncidentCreateManySchemeInput = {
   policeRef?: InputMaybe<Scalars['String']>;
   policeReported?: InputMaybe<Scalars['Boolean']>;
   recoveredValue?: InputMaybe<Scalars['Float']>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -18015,6 +18065,7 @@ export type IncidentCreateWithoutActionsInput = {
   date: Scalars['DateTime'];
   dayOfMonth?: InputMaybe<Scalars['Int']>;
   dayOfWeek?: InputMaybe<Scalars['Int']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   description: Scalars['String'];
   evidence?: InputMaybe<DocumentCreateNestedManyWithoutIncidentsInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
@@ -18042,6 +18093,7 @@ export type IncidentCreateWithoutActionsInput = {
   policeReported?: InputMaybe<Scalars['Boolean']>;
   recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -18073,6 +18125,7 @@ export type IncidentCreateWithoutAnswersInput = {
   date: Scalars['DateTime'];
   dayOfMonth?: InputMaybe<Scalars['Int']>;
   dayOfWeek?: InputMaybe<Scalars['Int']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   description: Scalars['String'];
   evidence?: InputMaybe<DocumentCreateNestedManyWithoutIncidentsInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
@@ -18100,6 +18153,7 @@ export type IncidentCreateWithoutAnswersInput = {
   policeReported?: InputMaybe<Scalars['Boolean']>;
   recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -18131,6 +18185,7 @@ export type IncidentCreateWithoutArticleColumnsInput = {
   date: Scalars['DateTime'];
   dayOfMonth?: InputMaybe<Scalars['Int']>;
   dayOfWeek?: InputMaybe<Scalars['Int']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   description: Scalars['String'];
   evidence?: InputMaybe<DocumentCreateNestedManyWithoutIncidentsInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
@@ -18158,6 +18213,7 @@ export type IncidentCreateWithoutArticleColumnsInput = {
   policeReported?: InputMaybe<Scalars['Boolean']>;
   recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -18189,6 +18245,7 @@ export type IncidentCreateWithoutBusinessInput = {
   date: Scalars['DateTime'];
   dayOfMonth?: InputMaybe<Scalars['Int']>;
   dayOfWeek?: InputMaybe<Scalars['Int']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   description: Scalars['String'];
   evidence?: InputMaybe<DocumentCreateNestedManyWithoutIncidentsInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
@@ -18216,6 +18273,7 @@ export type IncidentCreateWithoutBusinessInput = {
   policeReported?: InputMaybe<Scalars['Boolean']>;
   recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -18247,6 +18305,7 @@ export type IncidentCreateWithoutCreatedByInput = {
   date: Scalars['DateTime'];
   dayOfMonth?: InputMaybe<Scalars['Int']>;
   dayOfWeek?: InputMaybe<Scalars['Int']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   description: Scalars['String'];
   evidence?: InputMaybe<DocumentCreateNestedManyWithoutIncidentsInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
@@ -18274,6 +18333,7 @@ export type IncidentCreateWithoutCreatedByInput = {
   policeReported?: InputMaybe<Scalars['Boolean']>;
   recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -18305,6 +18365,7 @@ export type IncidentCreateWithoutCrimeGroupsInput = {
   date: Scalars['DateTime'];
   dayOfMonth?: InputMaybe<Scalars['Int']>;
   dayOfWeek?: InputMaybe<Scalars['Int']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   description: Scalars['String'];
   evidence?: InputMaybe<DocumentCreateNestedManyWithoutIncidentsInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
@@ -18332,6 +18393,7 @@ export type IncidentCreateWithoutCrimeGroupsInput = {
   policeReported?: InputMaybe<Scalars['Boolean']>;
   recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -18363,6 +18425,7 @@ export type IncidentCreateWithoutCrimeTypesInput = {
   date: Scalars['DateTime'];
   dayOfMonth?: InputMaybe<Scalars['Int']>;
   dayOfWeek?: InputMaybe<Scalars['Int']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   description: Scalars['String'];
   evidence?: InputMaybe<DocumentCreateNestedManyWithoutIncidentsInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
@@ -18390,6 +18453,7 @@ export type IncidentCreateWithoutCrimeTypesInput = {
   policeReported?: InputMaybe<Scalars['Boolean']>;
   recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -18422,6 +18486,7 @@ export type IncidentCreateWithoutEvidenceInput = {
   date: Scalars['DateTime'];
   dayOfMonth?: InputMaybe<Scalars['Int']>;
   dayOfWeek?: InputMaybe<Scalars['Int']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   description: Scalars['String'];
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
   geoLat?: InputMaybe<Scalars['String']>;
@@ -18448,6 +18513,7 @@ export type IncidentCreateWithoutEvidenceInput = {
   policeReported?: InputMaybe<Scalars['Boolean']>;
   recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -18480,6 +18546,7 @@ export type IncidentCreateWithoutFeedItemsInput = {
   date: Scalars['DateTime'];
   dayOfMonth?: InputMaybe<Scalars['Int']>;
   dayOfWeek?: InputMaybe<Scalars['Int']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   description: Scalars['String'];
   evidence?: InputMaybe<DocumentCreateNestedManyWithoutIncidentsInput>;
   geoLat?: InputMaybe<Scalars['String']>;
@@ -18506,6 +18573,7 @@ export type IncidentCreateWithoutFeedItemsInput = {
   policeReported?: InputMaybe<Scalars['Boolean']>;
   recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -18538,6 +18606,7 @@ export type IncidentCreateWithoutGroupsInput = {
   date: Scalars['DateTime'];
   dayOfMonth?: InputMaybe<Scalars['Int']>;
   dayOfWeek?: InputMaybe<Scalars['Int']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   description: Scalars['String'];
   evidence?: InputMaybe<DocumentCreateNestedManyWithoutIncidentsInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
@@ -18564,6 +18633,7 @@ export type IncidentCreateWithoutGroupsInput = {
   policeReported?: InputMaybe<Scalars['Boolean']>;
   recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -18596,6 +18666,7 @@ export type IncidentCreateWithoutImagesInput = {
   date: Scalars['DateTime'];
   dayOfMonth?: InputMaybe<Scalars['Int']>;
   dayOfWeek?: InputMaybe<Scalars['Int']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   description: Scalars['String'];
   evidence?: InputMaybe<DocumentCreateNestedManyWithoutIncidentsInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
@@ -18622,6 +18693,7 @@ export type IncidentCreateWithoutImagesInput = {
   policeReported?: InputMaybe<Scalars['Boolean']>;
   recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -18654,6 +18726,7 @@ export type IncidentCreateWithoutImpressionsInput = {
   date: Scalars['DateTime'];
   dayOfMonth?: InputMaybe<Scalars['Int']>;
   dayOfWeek?: InputMaybe<Scalars['Int']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   description: Scalars['String'];
   evidence?: InputMaybe<DocumentCreateNestedManyWithoutIncidentsInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
@@ -18680,6 +18753,7 @@ export type IncidentCreateWithoutImpressionsInput = {
   policeReported?: InputMaybe<Scalars['Boolean']>;
   recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -18712,6 +18786,7 @@ export type IncidentCreateWithoutIntelInput = {
   date: Scalars['DateTime'];
   dayOfMonth?: InputMaybe<Scalars['Int']>;
   dayOfWeek?: InputMaybe<Scalars['Int']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   description: Scalars['String'];
   evidence?: InputMaybe<DocumentCreateNestedManyWithoutIncidentsInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
@@ -18738,6 +18813,7 @@ export type IncidentCreateWithoutIntelInput = {
   policeReported?: InputMaybe<Scalars['Boolean']>;
   recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -18770,6 +18846,7 @@ export type IncidentCreateWithoutInvestigationsInput = {
   date: Scalars['DateTime'];
   dayOfMonth?: InputMaybe<Scalars['Int']>;
   dayOfWeek?: InputMaybe<Scalars['Int']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   description: Scalars['String'];
   evidence?: InputMaybe<DocumentCreateNestedManyWithoutIncidentsInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
@@ -18796,6 +18873,7 @@ export type IncidentCreateWithoutInvestigationsInput = {
   policeReported?: InputMaybe<Scalars['Boolean']>;
   recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -18828,6 +18906,7 @@ export type IncidentCreateWithoutLinkedUpdatesInput = {
   date: Scalars['DateTime'];
   dayOfMonth?: InputMaybe<Scalars['Int']>;
   dayOfWeek?: InputMaybe<Scalars['Int']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   description: Scalars['String'];
   evidence?: InputMaybe<DocumentCreateNestedManyWithoutIncidentsInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
@@ -18854,6 +18933,7 @@ export type IncidentCreateWithoutLinkedUpdatesInput = {
   policeReported?: InputMaybe<Scalars['Boolean']>;
   recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -18886,6 +18966,7 @@ export type IncidentCreateWithoutLocationInput = {
   date: Scalars['DateTime'];
   dayOfMonth?: InputMaybe<Scalars['Int']>;
   dayOfWeek?: InputMaybe<Scalars['Int']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   description: Scalars['String'];
   evidence?: InputMaybe<DocumentCreateNestedManyWithoutIncidentsInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
@@ -18912,6 +18993,7 @@ export type IncidentCreateWithoutLocationInput = {
   policeReported?: InputMaybe<Scalars['Boolean']>;
   recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -18944,6 +19026,7 @@ export type IncidentCreateWithoutMatchesInput = {
   date: Scalars['DateTime'];
   dayOfMonth?: InputMaybe<Scalars['Int']>;
   dayOfWeek?: InputMaybe<Scalars['Int']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   description: Scalars['String'];
   evidence?: InputMaybe<DocumentCreateNestedManyWithoutIncidentsInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
@@ -18970,6 +19053,7 @@ export type IncidentCreateWithoutMatchesInput = {
   policeReported?: InputMaybe<Scalars['Boolean']>;
   recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -19002,6 +19086,7 @@ export type IncidentCreateWithoutMessagesInput = {
   date: Scalars['DateTime'];
   dayOfMonth?: InputMaybe<Scalars['Int']>;
   dayOfWeek?: InputMaybe<Scalars['Int']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   description: Scalars['String'];
   evidence?: InputMaybe<DocumentCreateNestedManyWithoutIncidentsInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
@@ -19028,6 +19113,7 @@ export type IncidentCreateWithoutMessagesInput = {
   policeReported?: InputMaybe<Scalars['Boolean']>;
   recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -19060,6 +19146,7 @@ export type IncidentCreateWithoutMg11Input = {
   date: Scalars['DateTime'];
   dayOfMonth?: InputMaybe<Scalars['Int']>;
   dayOfWeek?: InputMaybe<Scalars['Int']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   description: Scalars['String'];
   evidence?: InputMaybe<DocumentCreateNestedManyWithoutIncidentsInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
@@ -19086,6 +19173,7 @@ export type IncidentCreateWithoutMg11Input = {
   policeReported?: InputMaybe<Scalars['Boolean']>;
   recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -19118,6 +19206,7 @@ export type IncidentCreateWithoutNotificationsInput = {
   date: Scalars['DateTime'];
   dayOfMonth?: InputMaybe<Scalars['Int']>;
   dayOfWeek?: InputMaybe<Scalars['Int']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   description: Scalars['String'];
   evidence?: InputMaybe<DocumentCreateNestedManyWithoutIncidentsInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
@@ -19144,6 +19233,7 @@ export type IncidentCreateWithoutNotificationsInput = {
   policeReported?: InputMaybe<Scalars['Boolean']>;
   recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -19176,6 +19266,7 @@ export type IncidentCreateWithoutOffendersInput = {
   date: Scalars['DateTime'];
   dayOfMonth?: InputMaybe<Scalars['Int']>;
   dayOfWeek?: InputMaybe<Scalars['Int']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   description: Scalars['String'];
   evidence?: InputMaybe<DocumentCreateNestedManyWithoutIncidentsInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
@@ -19202,6 +19293,7 @@ export type IncidentCreateWithoutOffendersInput = {
   policeReported?: InputMaybe<Scalars['Boolean']>;
   recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -19234,6 +19326,7 @@ export type IncidentCreateWithoutRecycleBinInput = {
   date: Scalars['DateTime'];
   dayOfMonth?: InputMaybe<Scalars['Int']>;
   dayOfWeek?: InputMaybe<Scalars['Int']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   description: Scalars['String'];
   evidence?: InputMaybe<DocumentCreateNestedManyWithoutIncidentsInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
@@ -19260,6 +19353,7 @@ export type IncidentCreateWithoutRecycleBinInput = {
   policeRef?: InputMaybe<Scalars['String']>;
   policeReported?: InputMaybe<Scalars['Boolean']>;
   recoveredValue?: InputMaybe<Scalars['Float']>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -19292,6 +19386,7 @@ export type IncidentCreateWithoutSchemeInput = {
   date: Scalars['DateTime'];
   dayOfMonth?: InputMaybe<Scalars['Int']>;
   dayOfWeek?: InputMaybe<Scalars['Int']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   description: Scalars['String'];
   evidence?: InputMaybe<DocumentCreateNestedManyWithoutIncidentsInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
@@ -19319,6 +19414,7 @@ export type IncidentCreateWithoutSchemeInput = {
   policeReported?: InputMaybe<Scalars['Boolean']>;
   recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -19350,6 +19446,7 @@ export type IncidentCreateWithoutSubscribedUsersInput = {
   date: Scalars['DateTime'];
   dayOfMonth?: InputMaybe<Scalars['Int']>;
   dayOfWeek?: InputMaybe<Scalars['Int']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   description: Scalars['String'];
   evidence?: InputMaybe<DocumentCreateNestedManyWithoutIncidentsInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
@@ -19377,6 +19474,7 @@ export type IncidentCreateWithoutSubscribedUsersInput = {
   policeReported?: InputMaybe<Scalars['Boolean']>;
   recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -19408,6 +19506,7 @@ export type IncidentCreateWithoutTodosInput = {
   date: Scalars['DateTime'];
   dayOfMonth?: InputMaybe<Scalars['Int']>;
   dayOfWeek?: InputMaybe<Scalars['Int']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   description: Scalars['String'];
   evidence?: InputMaybe<DocumentCreateNestedManyWithoutIncidentsInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
@@ -19435,6 +19534,7 @@ export type IncidentCreateWithoutTodosInput = {
   policeReported?: InputMaybe<Scalars['Boolean']>;
   recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -19466,6 +19566,7 @@ export type IncidentCreateWithoutUpdatesInput = {
   date: Scalars['DateTime'];
   dayOfMonth?: InputMaybe<Scalars['Int']>;
   dayOfWeek?: InputMaybe<Scalars['Int']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   description: Scalars['String'];
   evidence?: InputMaybe<DocumentCreateNestedManyWithoutIncidentsInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
@@ -19493,6 +19594,7 @@ export type IncidentCreateWithoutUpdatesInput = {
   policeReported?: InputMaybe<Scalars['Boolean']>;
   recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -19524,6 +19626,7 @@ export type IncidentCreateWithoutVehiclesInput = {
   date: Scalars['DateTime'];
   dayOfMonth?: InputMaybe<Scalars['Int']>;
   dayOfWeek?: InputMaybe<Scalars['Int']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   description: Scalars['String'];
   evidence?: InputMaybe<DocumentCreateNestedManyWithoutIncidentsInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
@@ -19551,6 +19654,7 @@ export type IncidentCreateWithoutVehiclesInput = {
   policeReported?: InputMaybe<Scalars['Boolean']>;
   recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -19973,6 +20077,7 @@ export type IncidentOrderByWithRelationInput = {
   date?: InputMaybe<SortOrder>;
   dayOfMonth?: InputMaybe<SortOrder>;
   dayOfWeek?: InputMaybe<SortOrder>;
+  deleted?: InputMaybe<SortOrder>;
   description?: InputMaybe<SortOrder>;
   evidence?: InputMaybe<DocumentOrderByRelationAggregateInput>;
   feedItems?: InputMaybe<FeedItemOrderByRelationAggregateInput>;
@@ -20000,6 +20105,7 @@ export type IncidentOrderByWithRelationInput = {
   policeReported?: InputMaybe<SortOrder>;
   recoveredValue?: InputMaybe<SortOrder>;
   recycleBin?: InputMaybe<RecycledItemOrderByWithRelationInput>;
+  recycleDate?: InputMaybe<SortOrder>;
   recycled?: InputMaybe<SortOrder>;
   ref?: InputMaybe<SortOrder>;
   reference?: InputMaybe<SortOrder>;
@@ -20040,6 +20146,7 @@ export type IncidentScalarWhereInput = {
   date?: InputMaybe<DateTimeFilter>;
   dayOfMonth?: InputMaybe<IntNullableFilter>;
   dayOfWeek?: InputMaybe<IntNullableFilter>;
+  deleted?: InputMaybe<BoolFilter>;
   description?: InputMaybe<StringFilter>;
   geoLat?: InputMaybe<StringNullableFilter>;
   geoLng?: InputMaybe<StringNullableFilter>;
@@ -20051,6 +20158,7 @@ export type IncidentScalarWhereInput = {
   policeRef?: InputMaybe<StringNullableFilter>;
   policeReported?: InputMaybe<BoolFilter>;
   recoveredValue?: InputMaybe<FloatNullableFilter>;
+  recycleDate?: InputMaybe<DateTimeFilter>;
   recycled?: InputMaybe<BoolFilter>;
   ref?: InputMaybe<StringNullableFilter>;
   reference?: InputMaybe<IntNullableFilter>;
@@ -20111,6 +20219,7 @@ export type IncidentUpdateInput = {
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   evidence?: InputMaybe<DocumentUpdateManyWithoutIncidentsNestedInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
@@ -20138,6 +20247,7 @@ export type IncidentUpdateInput = {
   policeReported?: InputMaybe<BoolFieldUpdateOperationsInput>;
   recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -20163,6 +20273,7 @@ export type IncidentUpdateManyMutationInput = {
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   geoLat?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   geoLng?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -20174,6 +20285,7 @@ export type IncidentUpdateManyMutationInput = {
   policeRef?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   policeReported?: InputMaybe<BoolFieldUpdateOperationsInput>;
   recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -20739,6 +20851,7 @@ export type IncidentUpdateWithoutActionsInput = {
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   evidence?: InputMaybe<DocumentUpdateManyWithoutIncidentsNestedInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
@@ -20766,6 +20879,7 @@ export type IncidentUpdateWithoutActionsInput = {
   policeReported?: InputMaybe<BoolFieldUpdateOperationsInput>;
   recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -20797,6 +20911,7 @@ export type IncidentUpdateWithoutAnswersInput = {
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   evidence?: InputMaybe<DocumentUpdateManyWithoutIncidentsNestedInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
@@ -20824,6 +20939,7 @@ export type IncidentUpdateWithoutAnswersInput = {
   policeReported?: InputMaybe<BoolFieldUpdateOperationsInput>;
   recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -20855,6 +20971,7 @@ export type IncidentUpdateWithoutArticleColumnsInput = {
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   evidence?: InputMaybe<DocumentUpdateManyWithoutIncidentsNestedInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
@@ -20882,6 +20999,7 @@ export type IncidentUpdateWithoutArticleColumnsInput = {
   policeReported?: InputMaybe<BoolFieldUpdateOperationsInput>;
   recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -20913,6 +21031,7 @@ export type IncidentUpdateWithoutBusinessInput = {
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   evidence?: InputMaybe<DocumentUpdateManyWithoutIncidentsNestedInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
@@ -20940,6 +21059,7 @@ export type IncidentUpdateWithoutBusinessInput = {
   policeReported?: InputMaybe<BoolFieldUpdateOperationsInput>;
   recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -20971,6 +21091,7 @@ export type IncidentUpdateWithoutCreatedByInput = {
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   evidence?: InputMaybe<DocumentUpdateManyWithoutIncidentsNestedInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
@@ -20998,6 +21119,7 @@ export type IncidentUpdateWithoutCreatedByInput = {
   policeReported?: InputMaybe<BoolFieldUpdateOperationsInput>;
   recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -21029,6 +21151,7 @@ export type IncidentUpdateWithoutCrimeGroupsInput = {
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   evidence?: InputMaybe<DocumentUpdateManyWithoutIncidentsNestedInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
@@ -21056,6 +21179,7 @@ export type IncidentUpdateWithoutCrimeGroupsInput = {
   policeReported?: InputMaybe<BoolFieldUpdateOperationsInput>;
   recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -21087,6 +21211,7 @@ export type IncidentUpdateWithoutCrimeTypesInput = {
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   evidence?: InputMaybe<DocumentUpdateManyWithoutIncidentsNestedInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
@@ -21114,6 +21239,7 @@ export type IncidentUpdateWithoutCrimeTypesInput = {
   policeReported?: InputMaybe<BoolFieldUpdateOperationsInput>;
   recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -21146,6 +21272,7 @@ export type IncidentUpdateWithoutEvidenceInput = {
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
   geoLat?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -21172,6 +21299,7 @@ export type IncidentUpdateWithoutEvidenceInput = {
   policeReported?: InputMaybe<BoolFieldUpdateOperationsInput>;
   recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -21204,6 +21332,7 @@ export type IncidentUpdateWithoutFeedItemsInput = {
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   evidence?: InputMaybe<DocumentUpdateManyWithoutIncidentsNestedInput>;
   geoLat?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -21230,6 +21359,7 @@ export type IncidentUpdateWithoutFeedItemsInput = {
   policeReported?: InputMaybe<BoolFieldUpdateOperationsInput>;
   recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -21262,6 +21392,7 @@ export type IncidentUpdateWithoutGroupsInput = {
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   evidence?: InputMaybe<DocumentUpdateManyWithoutIncidentsNestedInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
@@ -21288,6 +21419,7 @@ export type IncidentUpdateWithoutGroupsInput = {
   policeReported?: InputMaybe<BoolFieldUpdateOperationsInput>;
   recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -21320,6 +21452,7 @@ export type IncidentUpdateWithoutImagesInput = {
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   evidence?: InputMaybe<DocumentUpdateManyWithoutIncidentsNestedInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
@@ -21346,6 +21479,7 @@ export type IncidentUpdateWithoutImagesInput = {
   policeReported?: InputMaybe<BoolFieldUpdateOperationsInput>;
   recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -21378,6 +21512,7 @@ export type IncidentUpdateWithoutImpressionsInput = {
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   evidence?: InputMaybe<DocumentUpdateManyWithoutIncidentsNestedInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
@@ -21404,6 +21539,7 @@ export type IncidentUpdateWithoutImpressionsInput = {
   policeReported?: InputMaybe<BoolFieldUpdateOperationsInput>;
   recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -21436,6 +21572,7 @@ export type IncidentUpdateWithoutIntelInput = {
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   evidence?: InputMaybe<DocumentUpdateManyWithoutIncidentsNestedInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
@@ -21462,6 +21599,7 @@ export type IncidentUpdateWithoutIntelInput = {
   policeReported?: InputMaybe<BoolFieldUpdateOperationsInput>;
   recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -21494,6 +21632,7 @@ export type IncidentUpdateWithoutInvestigationsInput = {
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   evidence?: InputMaybe<DocumentUpdateManyWithoutIncidentsNestedInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
@@ -21520,6 +21659,7 @@ export type IncidentUpdateWithoutInvestigationsInput = {
   policeReported?: InputMaybe<BoolFieldUpdateOperationsInput>;
   recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -21552,6 +21692,7 @@ export type IncidentUpdateWithoutLinkedUpdatesInput = {
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   evidence?: InputMaybe<DocumentUpdateManyWithoutIncidentsNestedInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
@@ -21578,6 +21719,7 @@ export type IncidentUpdateWithoutLinkedUpdatesInput = {
   policeReported?: InputMaybe<BoolFieldUpdateOperationsInput>;
   recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -21610,6 +21752,7 @@ export type IncidentUpdateWithoutLocationInput = {
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   evidence?: InputMaybe<DocumentUpdateManyWithoutIncidentsNestedInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
@@ -21636,6 +21779,7 @@ export type IncidentUpdateWithoutLocationInput = {
   policeReported?: InputMaybe<BoolFieldUpdateOperationsInput>;
   recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -21668,6 +21812,7 @@ export type IncidentUpdateWithoutMatchesInput = {
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   evidence?: InputMaybe<DocumentUpdateManyWithoutIncidentsNestedInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
@@ -21694,6 +21839,7 @@ export type IncidentUpdateWithoutMatchesInput = {
   policeReported?: InputMaybe<BoolFieldUpdateOperationsInput>;
   recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -21726,6 +21872,7 @@ export type IncidentUpdateWithoutMessagesInput = {
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   evidence?: InputMaybe<DocumentUpdateManyWithoutIncidentsNestedInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
@@ -21752,6 +21899,7 @@ export type IncidentUpdateWithoutMessagesInput = {
   policeReported?: InputMaybe<BoolFieldUpdateOperationsInput>;
   recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -21784,6 +21932,7 @@ export type IncidentUpdateWithoutMg11Input = {
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   evidence?: InputMaybe<DocumentUpdateManyWithoutIncidentsNestedInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
@@ -21810,6 +21959,7 @@ export type IncidentUpdateWithoutMg11Input = {
   policeReported?: InputMaybe<BoolFieldUpdateOperationsInput>;
   recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -21842,6 +21992,7 @@ export type IncidentUpdateWithoutNotificationsInput = {
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   evidence?: InputMaybe<DocumentUpdateManyWithoutIncidentsNestedInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
@@ -21868,6 +22019,7 @@ export type IncidentUpdateWithoutNotificationsInput = {
   policeReported?: InputMaybe<BoolFieldUpdateOperationsInput>;
   recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -21900,6 +22052,7 @@ export type IncidentUpdateWithoutOffendersInput = {
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   evidence?: InputMaybe<DocumentUpdateManyWithoutIncidentsNestedInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
@@ -21926,6 +22079,7 @@ export type IncidentUpdateWithoutOffendersInput = {
   policeReported?: InputMaybe<BoolFieldUpdateOperationsInput>;
   recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -21958,6 +22112,7 @@ export type IncidentUpdateWithoutRecycleBinInput = {
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   evidence?: InputMaybe<DocumentUpdateManyWithoutIncidentsNestedInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
@@ -21984,6 +22139,7 @@ export type IncidentUpdateWithoutRecycleBinInput = {
   policeRef?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   policeReported?: InputMaybe<BoolFieldUpdateOperationsInput>;
   recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -22016,6 +22172,7 @@ export type IncidentUpdateWithoutSchemeInput = {
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   evidence?: InputMaybe<DocumentUpdateManyWithoutIncidentsNestedInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
@@ -22043,6 +22200,7 @@ export type IncidentUpdateWithoutSchemeInput = {
   policeReported?: InputMaybe<BoolFieldUpdateOperationsInput>;
   recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -22074,6 +22232,7 @@ export type IncidentUpdateWithoutSubscribedUsersInput = {
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   evidence?: InputMaybe<DocumentUpdateManyWithoutIncidentsNestedInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
@@ -22101,6 +22260,7 @@ export type IncidentUpdateWithoutSubscribedUsersInput = {
   policeReported?: InputMaybe<BoolFieldUpdateOperationsInput>;
   recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -22132,6 +22292,7 @@ export type IncidentUpdateWithoutTodosInput = {
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   evidence?: InputMaybe<DocumentUpdateManyWithoutIncidentsNestedInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
@@ -22159,6 +22320,7 @@ export type IncidentUpdateWithoutTodosInput = {
   policeReported?: InputMaybe<BoolFieldUpdateOperationsInput>;
   recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -22190,6 +22352,7 @@ export type IncidentUpdateWithoutUpdatesInput = {
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   evidence?: InputMaybe<DocumentUpdateManyWithoutIncidentsNestedInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
@@ -22217,6 +22380,7 @@ export type IncidentUpdateWithoutUpdatesInput = {
   policeReported?: InputMaybe<BoolFieldUpdateOperationsInput>;
   recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -22248,6 +22412,7 @@ export type IncidentUpdateWithoutVehiclesInput = {
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   evidence?: InputMaybe<DocumentUpdateManyWithoutIncidentsNestedInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
@@ -22275,6 +22440,7 @@ export type IncidentUpdateWithoutVehiclesInput = {
   policeReported?: InputMaybe<BoolFieldUpdateOperationsInput>;
   recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -22460,6 +22626,7 @@ export type IncidentWhereInput = {
   date?: InputMaybe<DateTimeFilter>;
   dayOfMonth?: InputMaybe<IntNullableFilter>;
   dayOfWeek?: InputMaybe<IntNullableFilter>;
+  deleted?: InputMaybe<BoolFilter>;
   description?: InputMaybe<StringFilter>;
   evidence?: InputMaybe<DocumentListRelationFilter>;
   feedItems?: InputMaybe<FeedItemListRelationFilter>;
@@ -22487,6 +22654,7 @@ export type IncidentWhereInput = {
   policeReported?: InputMaybe<BoolFilter>;
   recoveredValue?: InputMaybe<FloatNullableFilter>;
   recycleBin?: InputMaybe<RecycledItemWhereInput>;
+  recycleDate?: InputMaybe<DateTimeFilter>;
   recycled?: InputMaybe<BoolFilter>;
   ref?: InputMaybe<StringNullableFilter>;
   reference?: InputMaybe<IntNullableFilter>;
@@ -23519,6 +23687,7 @@ export type Investigation = {
   status: InvestigationStatus;
   subscribed?: Maybe<Scalars['Boolean']>;
   subscribedUsers: Array<User>;
+  suggestedCrimeGroups?: Maybe<Array<CrimeGroup>>;
   suggestedIncidents?: Maybe<Array<Incident>>;
   suggestedOffenders?: Maybe<Array<Offender>>;
   suggestedVehicles?: Maybe<Array<Vehicle>>;
@@ -25322,6 +25491,25 @@ export type JsonNullableListFilter = {
   isEmpty?: InputMaybe<Scalars['Boolean']>;
 };
 
+export type Language = {
+  __typename?: 'Language';
+  code: LanguageCode;
+  createdAt: Scalars['DateTime'];
+  id: Scalars['String'];
+  name: Scalars['String'];
+  schemes: Array<Scheme>;
+  updatedAt: Scalars['DateTime'];
+};
+
+export type LanguageSchemesArgs = {
+  after?: InputMaybe<SchemeWhereUniqueInput>;
+  before?: InputMaybe<SchemeWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<SchemeOrderByWithRelationInput>>;
+  where?: InputMaybe<SchemeWhereInput>;
+};
+
 export enum LanguageCode {
   Da = 'da',
   De = 'de',
@@ -25333,6 +25521,7 @@ export enum LanguageCode {
   Nl = 'nl',
   Pl = 'pl',
   Pt = 'pt',
+  Rbe = 'rbe',
   Sv = 'sv',
 }
 
@@ -27998,6 +28187,7 @@ export type Mutation = {
   addImagesToIncident?: Maybe<Incident>;
   addImagesToOffender?: Maybe<Offender>;
   addImagesToUpdate?: Maybe<Update>;
+  addQuestion?: Maybe<Question>;
   addUploadedImageToIncident?: Maybe<Incident>;
   addUsersToBusiness: Business;
   approveIncident?: Maybe<Incident>;
@@ -28106,6 +28296,7 @@ export type Mutation = {
   recycleUnusedImages?: Maybe<SystemTask>;
   refreshAuth?: Maybe<RefreshAuth>;
   registerPushToken?: Maybe<ExpoPushToken>;
+  removeQuestionFromTag?: Maybe<TagQuestion>;
   removeUserFromBusiness: Business;
   /** Uses the auth0Id or userId to generate a reset password token and sends it to the user */
   resetPassword?: Maybe<ResetPassword>;
@@ -28165,6 +28356,7 @@ export type Mutation = {
   updateSchemeDefault?: Maybe<Scheme>;
   updateTag?: Maybe<Tag>;
   updateTagDefault?: Maybe<Tag>;
+  updateTagQs?: Maybe<Array<Maybe<TagQuestion>>>;
   updateTodo?: Maybe<Todo>;
   updateTodoDefault?: Maybe<Todo>;
   updateTodoMention?: Maybe<Array<Maybe<Todo>>>;
@@ -28197,6 +28389,11 @@ export type MutationAddImagesToOffenderArgs = {
 export type MutationAddImagesToUpdateArgs = {
   data: Array<UrlImage>;
   where: UniqueId;
+};
+
+export type MutationAddQuestionArgs = {
+  data: CreateQuestionInput;
+  where?: InputMaybe<UniqueId>;
 };
 
 export type MutationAddUploadedImageToIncidentArgs = {
@@ -28632,6 +28829,10 @@ export type MutationRegisterPushTokenArgs = {
   data: RegisterPushTokenData;
 };
 
+export type MutationRemoveQuestionFromTagArgs = {
+  where?: InputMaybe<UniqueId>;
+};
+
 export type MutationRemoveUserFromBusinessArgs = {
   data: UserWhereUniqueInput;
   schemeWhere: SchemeWhereUniqueInput;
@@ -28861,6 +29062,10 @@ export type MutationUpdateTagArgs = {
 export type MutationUpdateTagDefaultArgs = {
   data: TagUpdateInput;
   where: TagWhereUniqueInput;
+};
+
+export type MutationUpdateTagQsArgs = {
+  data: ChangePositionAndReqInput;
 };
 
 export type MutationUpdateTodoArgs = {
@@ -30944,6 +31149,7 @@ export type OffenderCreateInput = {
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutOffendersInput>;
   dateOfBirth?: InputMaybe<Scalars['DateTime']>;
   dateSource?: InputMaybe<Scalars['String']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   deletionDate?: InputMaybe<Scalars['DateTime']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutOffenderInput>;
   gender?: InputMaybe<Gender>;
@@ -30966,6 +31172,7 @@ export type OffenderCreateInput = {
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutOffenderInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -30993,6 +31200,7 @@ export type OffenderCreateManyCreatedByInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   dateOfBirth?: InputMaybe<Scalars['DateTime']>;
   dateSource?: InputMaybe<Scalars['String']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   deletionDate?: InputMaybe<Scalars['DateTime']>;
   gender?: InputMaybe<Gender>;
   hair?: InputMaybe<Scalars['String']>;
@@ -31003,6 +31211,7 @@ export type OffenderCreateManyCreatedByInput = {
   name?: InputMaybe<Scalars['String']>;
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -31029,6 +31238,7 @@ export type OffenderCreateManySchemeInput = {
   createdById: Scalars['String'];
   dateOfBirth?: InputMaybe<Scalars['DateTime']>;
   dateSource?: InputMaybe<Scalars['String']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   deletionDate?: InputMaybe<Scalars['DateTime']>;
   gender?: InputMaybe<Gender>;
   hair?: InputMaybe<Scalars['String']>;
@@ -31039,6 +31249,7 @@ export type OffenderCreateManySchemeInput = {
   name?: InputMaybe<Scalars['String']>;
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -31394,6 +31605,7 @@ export type OffenderCreateWithoutActionsInput = {
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutOffendersInput>;
   dateOfBirth?: InputMaybe<Scalars['DateTime']>;
   dateSource?: InputMaybe<Scalars['String']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   deletionDate?: InputMaybe<Scalars['DateTime']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutOffenderInput>;
   gender?: InputMaybe<Gender>;
@@ -31416,6 +31628,7 @@ export type OffenderCreateWithoutActionsInput = {
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutOffenderInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -31449,6 +31662,7 @@ export type OffenderCreateWithoutAddressesInput = {
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutOffendersInput>;
   dateOfBirth?: InputMaybe<Scalars['DateTime']>;
   dateSource?: InputMaybe<Scalars['String']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   deletionDate?: InputMaybe<Scalars['DateTime']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutOffenderInput>;
   gender?: InputMaybe<Gender>;
@@ -31471,6 +31685,7 @@ export type OffenderCreateWithoutAddressesInput = {
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutOffenderInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -31504,6 +31719,7 @@ export type OffenderCreateWithoutArticleColumnsInput = {
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutOffendersInput>;
   dateOfBirth?: InputMaybe<Scalars['DateTime']>;
   dateSource?: InputMaybe<Scalars['String']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   deletionDate?: InputMaybe<Scalars['DateTime']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutOffenderInput>;
   gender?: InputMaybe<Gender>;
@@ -31526,6 +31742,7 @@ export type OffenderCreateWithoutArticleColumnsInput = {
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutOffenderInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -31559,6 +31776,7 @@ export type OffenderCreateWithoutBansInput = {
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutOffendersInput>;
   dateOfBirth?: InputMaybe<Scalars['DateTime']>;
   dateSource?: InputMaybe<Scalars['String']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   deletionDate?: InputMaybe<Scalars['DateTime']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutOffenderInput>;
   gender?: InputMaybe<Gender>;
@@ -31581,6 +31799,7 @@ export type OffenderCreateWithoutBansInput = {
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutOffenderInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -31614,6 +31833,7 @@ export type OffenderCreateWithoutCreatedByInput = {
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutOffendersInput>;
   dateOfBirth?: InputMaybe<Scalars['DateTime']>;
   dateSource?: InputMaybe<Scalars['String']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   deletionDate?: InputMaybe<Scalars['DateTime']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutOffenderInput>;
   gender?: InputMaybe<Gender>;
@@ -31636,6 +31856,7 @@ export type OffenderCreateWithoutCreatedByInput = {
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutOffenderInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -31669,6 +31890,7 @@ export type OffenderCreateWithoutCrimeGroupsInput = {
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutOffendersInput>;
   dateOfBirth?: InputMaybe<Scalars['DateTime']>;
   dateSource?: InputMaybe<Scalars['String']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   deletionDate?: InputMaybe<Scalars['DateTime']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutOffenderInput>;
   gender?: InputMaybe<Gender>;
@@ -31691,6 +31913,7 @@ export type OffenderCreateWithoutCrimeGroupsInput = {
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutOffenderInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -31724,6 +31947,7 @@ export type OffenderCreateWithoutCustomGalleriesInput = {
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutOffendersInput>;
   dateOfBirth?: InputMaybe<Scalars['DateTime']>;
   dateSource?: InputMaybe<Scalars['String']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   deletionDate?: InputMaybe<Scalars['DateTime']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutOffenderInput>;
   gender?: InputMaybe<Gender>;
@@ -31746,6 +31970,7 @@ export type OffenderCreateWithoutCustomGalleriesInput = {
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutOffenderInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -31780,6 +32005,7 @@ export type OffenderCreateWithoutFeedItemsInput = {
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutOffendersInput>;
   dateOfBirth?: InputMaybe<Scalars['DateTime']>;
   dateSource?: InputMaybe<Scalars['String']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   deletionDate?: InputMaybe<Scalars['DateTime']>;
   gender?: InputMaybe<Gender>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutOffendersInput>;
@@ -31801,6 +32027,7 @@ export type OffenderCreateWithoutFeedItemsInput = {
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutOffenderInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -31835,6 +32062,7 @@ export type OffenderCreateWithoutGroupsInput = {
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutOffendersInput>;
   dateOfBirth?: InputMaybe<Scalars['DateTime']>;
   dateSource?: InputMaybe<Scalars['String']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   deletionDate?: InputMaybe<Scalars['DateTime']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutOffenderInput>;
   gender?: InputMaybe<Gender>;
@@ -31856,6 +32084,7 @@ export type OffenderCreateWithoutGroupsInput = {
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutOffenderInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -31890,6 +32119,7 @@ export type OffenderCreateWithoutImagesInput = {
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutOffendersInput>;
   dateOfBirth?: InputMaybe<Scalars['DateTime']>;
   dateSource?: InputMaybe<Scalars['String']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   deletionDate?: InputMaybe<Scalars['DateTime']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutOffenderInput>;
   gender?: InputMaybe<Gender>;
@@ -31911,6 +32141,7 @@ export type OffenderCreateWithoutImagesInput = {
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutOffenderInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -31945,6 +32176,7 @@ export type OffenderCreateWithoutImpressionsInput = {
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutOffendersInput>;
   dateOfBirth?: InputMaybe<Scalars['DateTime']>;
   dateSource?: InputMaybe<Scalars['String']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   deletionDate?: InputMaybe<Scalars['DateTime']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutOffenderInput>;
   gender?: InputMaybe<Gender>;
@@ -31966,6 +32198,7 @@ export type OffenderCreateWithoutImpressionsInput = {
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutOffenderInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -32000,6 +32233,7 @@ export type OffenderCreateWithoutIncidentsInput = {
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutOffendersInput>;
   dateOfBirth?: InputMaybe<Scalars['DateTime']>;
   dateSource?: InputMaybe<Scalars['String']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   deletionDate?: InputMaybe<Scalars['DateTime']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutOffenderInput>;
   gender?: InputMaybe<Gender>;
@@ -32022,6 +32256,7 @@ export type OffenderCreateWithoutIncidentsInput = {
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutOffenderInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -32056,6 +32291,7 @@ export type OffenderCreateWithoutIntelInput = {
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutOffendersInput>;
   dateOfBirth?: InputMaybe<Scalars['DateTime']>;
   dateSource?: InputMaybe<Scalars['String']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   deletionDate?: InputMaybe<Scalars['DateTime']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutOffenderInput>;
   gender?: InputMaybe<Gender>;
@@ -32077,6 +32313,7 @@ export type OffenderCreateWithoutIntelInput = {
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutOffenderInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -32111,6 +32348,7 @@ export type OffenderCreateWithoutInvestigationsInput = {
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutOffendersInput>;
   dateOfBirth?: InputMaybe<Scalars['DateTime']>;
   dateSource?: InputMaybe<Scalars['String']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   deletionDate?: InputMaybe<Scalars['DateTime']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutOffenderInput>;
   gender?: InputMaybe<Gender>;
@@ -32132,6 +32370,7 @@ export type OffenderCreateWithoutInvestigationsInput = {
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutOffenderInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -32166,6 +32405,7 @@ export type OffenderCreateWithoutLinkedUpdatesInput = {
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutOffendersInput>;
   dateOfBirth?: InputMaybe<Scalars['DateTime']>;
   dateSource?: InputMaybe<Scalars['String']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   deletionDate?: InputMaybe<Scalars['DateTime']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutOffenderInput>;
   gender?: InputMaybe<Gender>;
@@ -32187,6 +32427,7 @@ export type OffenderCreateWithoutLinkedUpdatesInput = {
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutOffenderInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -32221,6 +32462,7 @@ export type OffenderCreateWithoutMatchedMatchesInput = {
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutOffendersInput>;
   dateOfBirth?: InputMaybe<Scalars['DateTime']>;
   dateSource?: InputMaybe<Scalars['String']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   deletionDate?: InputMaybe<Scalars['DateTime']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutOffenderInput>;
   gender?: InputMaybe<Gender>;
@@ -32242,6 +32484,7 @@ export type OffenderCreateWithoutMatchedMatchesInput = {
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutOffenderInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -32276,6 +32519,7 @@ export type OffenderCreateWithoutMessagesInput = {
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutOffendersInput>;
   dateOfBirth?: InputMaybe<Scalars['DateTime']>;
   dateSource?: InputMaybe<Scalars['String']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   deletionDate?: InputMaybe<Scalars['DateTime']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutOffenderInput>;
   gender?: InputMaybe<Gender>;
@@ -32297,6 +32541,7 @@ export type OffenderCreateWithoutMessagesInput = {
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutOffenderInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -32331,6 +32576,7 @@ export type OffenderCreateWithoutNotificationsInput = {
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutOffendersInput>;
   dateOfBirth?: InputMaybe<Scalars['DateTime']>;
   dateSource?: InputMaybe<Scalars['String']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   deletionDate?: InputMaybe<Scalars['DateTime']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutOffenderInput>;
   gender?: InputMaybe<Gender>;
@@ -32352,6 +32598,7 @@ export type OffenderCreateWithoutNotificationsInput = {
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutOffenderInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -32386,6 +32633,7 @@ export type OffenderCreateWithoutRecycleBinInput = {
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutOffendersInput>;
   dateOfBirth?: InputMaybe<Scalars['DateTime']>;
   dateSource?: InputMaybe<Scalars['String']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   deletionDate?: InputMaybe<Scalars['DateTime']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutOffenderInput>;
   gender?: InputMaybe<Gender>;
@@ -32407,6 +32655,7 @@ export type OffenderCreateWithoutRecycleBinInput = {
   notifications?: InputMaybe<NotificationCreateNestedManyWithoutOffenderInput>;
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -32441,6 +32690,7 @@ export type OffenderCreateWithoutRekFacesInput = {
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutOffendersInput>;
   dateOfBirth?: InputMaybe<Scalars['DateTime']>;
   dateSource?: InputMaybe<Scalars['String']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   deletionDate?: InputMaybe<Scalars['DateTime']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutOffenderInput>;
   gender?: InputMaybe<Gender>;
@@ -32463,6 +32713,7 @@ export type OffenderCreateWithoutRekFacesInput = {
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutOffenderInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -32496,6 +32747,7 @@ export type OffenderCreateWithoutSchemeInput = {
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutOffendersInput>;
   dateOfBirth?: InputMaybe<Scalars['DateTime']>;
   dateSource?: InputMaybe<Scalars['String']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   deletionDate?: InputMaybe<Scalars['DateTime']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutOffenderInput>;
   gender?: InputMaybe<Gender>;
@@ -32518,6 +32770,7 @@ export type OffenderCreateWithoutSchemeInput = {
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutOffenderInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -32551,6 +32804,7 @@ export type OffenderCreateWithoutSearchedMatchesInput = {
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutOffendersInput>;
   dateOfBirth?: InputMaybe<Scalars['DateTime']>;
   dateSource?: InputMaybe<Scalars['String']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   deletionDate?: InputMaybe<Scalars['DateTime']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutOffenderInput>;
   gender?: InputMaybe<Gender>;
@@ -32573,6 +32827,7 @@ export type OffenderCreateWithoutSearchedMatchesInput = {
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutOffenderInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -32606,6 +32861,7 @@ export type OffenderCreateWithoutSubscribedUsersInput = {
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutOffendersInput>;
   dateOfBirth?: InputMaybe<Scalars['DateTime']>;
   dateSource?: InputMaybe<Scalars['String']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   deletionDate?: InputMaybe<Scalars['DateTime']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutOffenderInput>;
   gender?: InputMaybe<Gender>;
@@ -32628,6 +32884,7 @@ export type OffenderCreateWithoutSubscribedUsersInput = {
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutOffenderInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -32661,6 +32918,7 @@ export type OffenderCreateWithoutTagsInput = {
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutOffendersInput>;
   dateOfBirth?: InputMaybe<Scalars['DateTime']>;
   dateSource?: InputMaybe<Scalars['String']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   deletionDate?: InputMaybe<Scalars['DateTime']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutOffenderInput>;
   gender?: InputMaybe<Gender>;
@@ -32683,6 +32941,7 @@ export type OffenderCreateWithoutTagsInput = {
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutOffenderInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -32716,6 +32975,7 @@ export type OffenderCreateWithoutTodosInput = {
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutOffendersInput>;
   dateOfBirth?: InputMaybe<Scalars['DateTime']>;
   dateSource?: InputMaybe<Scalars['String']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   deletionDate?: InputMaybe<Scalars['DateTime']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutOffenderInput>;
   gender?: InputMaybe<Gender>;
@@ -32738,6 +32998,7 @@ export type OffenderCreateWithoutTodosInput = {
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutOffenderInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -32771,6 +33032,7 @@ export type OffenderCreateWithoutUpdatesInput = {
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutOffendersInput>;
   dateOfBirth?: InputMaybe<Scalars['DateTime']>;
   dateSource?: InputMaybe<Scalars['String']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   deletionDate?: InputMaybe<Scalars['DateTime']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutOffenderInput>;
   gender?: InputMaybe<Gender>;
@@ -32793,6 +33055,7 @@ export type OffenderCreateWithoutUpdatesInput = {
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutOffenderInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -32826,6 +33089,7 @@ export type OffenderCreateWithoutVehiclesInput = {
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutOffendersInput>;
   dateOfBirth?: InputMaybe<Scalars['DateTime']>;
   dateSource?: InputMaybe<Scalars['String']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   deletionDate?: InputMaybe<Scalars['DateTime']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutOffenderInput>;
   gender?: InputMaybe<Gender>;
@@ -32848,6 +33112,7 @@ export type OffenderCreateWithoutVehiclesInput = {
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutOffenderInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
@@ -32896,6 +33161,7 @@ export type OffenderOrderByWithRelationInput = {
   customGalleries?: InputMaybe<CustomGalleryOrderByRelationAggregateInput>;
   dateOfBirth?: InputMaybe<SortOrder>;
   dateSource?: InputMaybe<SortOrder>;
+  deleted?: InputMaybe<SortOrder>;
   deletionDate?: InputMaybe<SortOrder>;
   feedItems?: InputMaybe<FeedItemOrderByRelationAggregateInput>;
   gender?: InputMaybe<SortOrder>;
@@ -32918,6 +33184,7 @@ export type OffenderOrderByWithRelationInput = {
   peculiarities?: InputMaybe<SortOrder>;
   race?: InputMaybe<SortOrder>;
   recycleBin?: InputMaybe<RecycledItemOrderByWithRelationInput>;
+  recycleDate?: InputMaybe<SortOrder>;
   recycled?: InputMaybe<SortOrder>;
   ref?: InputMaybe<SortOrder>;
   reference?: InputMaybe<SortOrder>;
@@ -32984,6 +33251,7 @@ export type OffenderScalarWhereInput = {
   createdById?: InputMaybe<StringFilter>;
   dateOfBirth?: InputMaybe<DateTimeNullableFilter>;
   dateSource?: InputMaybe<StringNullableFilter>;
+  deleted?: InputMaybe<BoolFilter>;
   deletionDate?: InputMaybe<DateTimeNullableFilter>;
   gender?: InputMaybe<EnumGenderNullableFilter>;
   hair?: InputMaybe<StringNullableFilter>;
@@ -32994,6 +33262,7 @@ export type OffenderScalarWhereInput = {
   name?: InputMaybe<StringNullableFilter>;
   peculiarities?: InputMaybe<StringNullableFilter>;
   race?: InputMaybe<EnumRaceNullableFilter>;
+  recycleDate?: InputMaybe<DateTimeFilter>;
   recycled?: InputMaybe<BoolFilter>;
   ref?: InputMaybe<StringNullableFilter>;
   reference?: InputMaybe<IntNullableFilter>;
@@ -33021,6 +33290,7 @@ export type OffenderUpdateInput = {
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutOffendersNestedInput>;
   dateOfBirth?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   dateSource?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   deletionDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutOffenderNestedInput>;
   gender?: InputMaybe<NullableEnumGenderFieldUpdateOperationsInput>;
@@ -33043,6 +33313,7 @@ export type OffenderUpdateInput = {
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutOffenderNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -33070,6 +33341,7 @@ export type OffenderUpdateManyMutationInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dateOfBirth?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   dateSource?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   deletionDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   gender?: InputMaybe<NullableEnumGenderFieldUpdateOperationsInput>;
   hair?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -33080,6 +33352,7 @@ export type OffenderUpdateManyMutationInput = {
   name?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -33635,6 +33908,7 @@ export type OffenderUpdateWithoutActionsInput = {
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutOffendersNestedInput>;
   dateOfBirth?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   dateSource?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   deletionDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutOffenderNestedInput>;
   gender?: InputMaybe<NullableEnumGenderFieldUpdateOperationsInput>;
@@ -33657,6 +33931,7 @@ export type OffenderUpdateWithoutActionsInput = {
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutOffenderNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -33690,6 +33965,7 @@ export type OffenderUpdateWithoutAddressesInput = {
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutOffendersNestedInput>;
   dateOfBirth?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   dateSource?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   deletionDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutOffenderNestedInput>;
   gender?: InputMaybe<NullableEnumGenderFieldUpdateOperationsInput>;
@@ -33712,6 +33988,7 @@ export type OffenderUpdateWithoutAddressesInput = {
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutOffenderNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -33745,6 +34022,7 @@ export type OffenderUpdateWithoutArticleColumnsInput = {
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutOffendersNestedInput>;
   dateOfBirth?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   dateSource?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   deletionDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutOffenderNestedInput>;
   gender?: InputMaybe<NullableEnumGenderFieldUpdateOperationsInput>;
@@ -33767,6 +34045,7 @@ export type OffenderUpdateWithoutArticleColumnsInput = {
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutOffenderNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -33800,6 +34079,7 @@ export type OffenderUpdateWithoutBansInput = {
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutOffendersNestedInput>;
   dateOfBirth?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   dateSource?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   deletionDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutOffenderNestedInput>;
   gender?: InputMaybe<NullableEnumGenderFieldUpdateOperationsInput>;
@@ -33822,6 +34102,7 @@ export type OffenderUpdateWithoutBansInput = {
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutOffenderNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -33855,6 +34136,7 @@ export type OffenderUpdateWithoutCreatedByInput = {
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutOffendersNestedInput>;
   dateOfBirth?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   dateSource?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   deletionDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutOffenderNestedInput>;
   gender?: InputMaybe<NullableEnumGenderFieldUpdateOperationsInput>;
@@ -33877,6 +34159,7 @@ export type OffenderUpdateWithoutCreatedByInput = {
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutOffenderNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -33910,6 +34193,7 @@ export type OffenderUpdateWithoutCrimeGroupsInput = {
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutOffendersNestedInput>;
   dateOfBirth?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   dateSource?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   deletionDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutOffenderNestedInput>;
   gender?: InputMaybe<NullableEnumGenderFieldUpdateOperationsInput>;
@@ -33932,6 +34216,7 @@ export type OffenderUpdateWithoutCrimeGroupsInput = {
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutOffenderNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -33965,6 +34250,7 @@ export type OffenderUpdateWithoutCustomGalleriesInput = {
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutOffendersNestedInput>;
   dateOfBirth?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   dateSource?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   deletionDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutOffenderNestedInput>;
   gender?: InputMaybe<NullableEnumGenderFieldUpdateOperationsInput>;
@@ -33987,6 +34273,7 @@ export type OffenderUpdateWithoutCustomGalleriesInput = {
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutOffenderNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -34021,6 +34308,7 @@ export type OffenderUpdateWithoutFeedItemsInput = {
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutOffendersNestedInput>;
   dateOfBirth?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   dateSource?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   deletionDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   gender?: InputMaybe<NullableEnumGenderFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutOffendersNestedInput>;
@@ -34042,6 +34330,7 @@ export type OffenderUpdateWithoutFeedItemsInput = {
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutOffenderNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -34076,6 +34365,7 @@ export type OffenderUpdateWithoutGroupsInput = {
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutOffendersNestedInput>;
   dateOfBirth?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   dateSource?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   deletionDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutOffenderNestedInput>;
   gender?: InputMaybe<NullableEnumGenderFieldUpdateOperationsInput>;
@@ -34097,6 +34387,7 @@ export type OffenderUpdateWithoutGroupsInput = {
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutOffenderNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -34131,6 +34422,7 @@ export type OffenderUpdateWithoutImagesInput = {
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutOffendersNestedInput>;
   dateOfBirth?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   dateSource?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   deletionDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutOffenderNestedInput>;
   gender?: InputMaybe<NullableEnumGenderFieldUpdateOperationsInput>;
@@ -34152,6 +34444,7 @@ export type OffenderUpdateWithoutImagesInput = {
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutOffenderNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -34186,6 +34479,7 @@ export type OffenderUpdateWithoutImpressionsInput = {
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutOffendersNestedInput>;
   dateOfBirth?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   dateSource?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   deletionDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutOffenderNestedInput>;
   gender?: InputMaybe<NullableEnumGenderFieldUpdateOperationsInput>;
@@ -34207,6 +34501,7 @@ export type OffenderUpdateWithoutImpressionsInput = {
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutOffenderNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -34241,6 +34536,7 @@ export type OffenderUpdateWithoutIncidentsInput = {
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutOffendersNestedInput>;
   dateOfBirth?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   dateSource?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   deletionDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutOffenderNestedInput>;
   gender?: InputMaybe<NullableEnumGenderFieldUpdateOperationsInput>;
@@ -34262,6 +34558,7 @@ export type OffenderUpdateWithoutIncidentsInput = {
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutOffenderNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -34296,6 +34593,7 @@ export type OffenderUpdateWithoutIntelInput = {
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutOffendersNestedInput>;
   dateOfBirth?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   dateSource?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   deletionDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutOffenderNestedInput>;
   gender?: InputMaybe<NullableEnumGenderFieldUpdateOperationsInput>;
@@ -34317,6 +34615,7 @@ export type OffenderUpdateWithoutIntelInput = {
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutOffenderNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -34351,6 +34650,7 @@ export type OffenderUpdateWithoutInvestigationsInput = {
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutOffendersNestedInput>;
   dateOfBirth?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   dateSource?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   deletionDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutOffenderNestedInput>;
   gender?: InputMaybe<NullableEnumGenderFieldUpdateOperationsInput>;
@@ -34372,6 +34672,7 @@ export type OffenderUpdateWithoutInvestigationsInput = {
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutOffenderNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -34406,6 +34707,7 @@ export type OffenderUpdateWithoutLinkedUpdatesInput = {
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutOffendersNestedInput>;
   dateOfBirth?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   dateSource?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   deletionDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutOffenderNestedInput>;
   gender?: InputMaybe<NullableEnumGenderFieldUpdateOperationsInput>;
@@ -34427,6 +34729,7 @@ export type OffenderUpdateWithoutLinkedUpdatesInput = {
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutOffenderNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -34461,6 +34764,7 @@ export type OffenderUpdateWithoutMatchedMatchesInput = {
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutOffendersNestedInput>;
   dateOfBirth?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   dateSource?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   deletionDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutOffenderNestedInput>;
   gender?: InputMaybe<NullableEnumGenderFieldUpdateOperationsInput>;
@@ -34482,6 +34786,7 @@ export type OffenderUpdateWithoutMatchedMatchesInput = {
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutOffenderNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -34516,6 +34821,7 @@ export type OffenderUpdateWithoutMessagesInput = {
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutOffendersNestedInput>;
   dateOfBirth?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   dateSource?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   deletionDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutOffenderNestedInput>;
   gender?: InputMaybe<NullableEnumGenderFieldUpdateOperationsInput>;
@@ -34537,6 +34843,7 @@ export type OffenderUpdateWithoutMessagesInput = {
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutOffenderNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -34571,6 +34878,7 @@ export type OffenderUpdateWithoutNotificationsInput = {
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutOffendersNestedInput>;
   dateOfBirth?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   dateSource?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   deletionDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutOffenderNestedInput>;
   gender?: InputMaybe<NullableEnumGenderFieldUpdateOperationsInput>;
@@ -34592,6 +34900,7 @@ export type OffenderUpdateWithoutNotificationsInput = {
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutOffenderNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -34626,6 +34935,7 @@ export type OffenderUpdateWithoutRecycleBinInput = {
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutOffendersNestedInput>;
   dateOfBirth?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   dateSource?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   deletionDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutOffenderNestedInput>;
   gender?: InputMaybe<NullableEnumGenderFieldUpdateOperationsInput>;
@@ -34647,6 +34957,7 @@ export type OffenderUpdateWithoutRecycleBinInput = {
   notifications?: InputMaybe<NotificationUpdateManyWithoutOffenderNestedInput>;
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -34681,6 +34992,7 @@ export type OffenderUpdateWithoutRekFacesInput = {
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutOffendersNestedInput>;
   dateOfBirth?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   dateSource?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   deletionDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutOffenderNestedInput>;
   gender?: InputMaybe<NullableEnumGenderFieldUpdateOperationsInput>;
@@ -34703,6 +35015,7 @@ export type OffenderUpdateWithoutRekFacesInput = {
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutOffenderNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -34736,6 +35049,7 @@ export type OffenderUpdateWithoutSchemeInput = {
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutOffendersNestedInput>;
   dateOfBirth?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   dateSource?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   deletionDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutOffenderNestedInput>;
   gender?: InputMaybe<NullableEnumGenderFieldUpdateOperationsInput>;
@@ -34758,6 +35072,7 @@ export type OffenderUpdateWithoutSchemeInput = {
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutOffenderNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -34791,6 +35106,7 @@ export type OffenderUpdateWithoutSearchedMatchesInput = {
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutOffendersNestedInput>;
   dateOfBirth?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   dateSource?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   deletionDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutOffenderNestedInput>;
   gender?: InputMaybe<NullableEnumGenderFieldUpdateOperationsInput>;
@@ -34813,6 +35129,7 @@ export type OffenderUpdateWithoutSearchedMatchesInput = {
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutOffenderNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -34846,6 +35163,7 @@ export type OffenderUpdateWithoutSubscribedUsersInput = {
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutOffendersNestedInput>;
   dateOfBirth?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   dateSource?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   deletionDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutOffenderNestedInput>;
   gender?: InputMaybe<NullableEnumGenderFieldUpdateOperationsInput>;
@@ -34868,6 +35186,7 @@ export type OffenderUpdateWithoutSubscribedUsersInput = {
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutOffenderNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -34901,6 +35220,7 @@ export type OffenderUpdateWithoutTagsInput = {
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutOffendersNestedInput>;
   dateOfBirth?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   dateSource?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   deletionDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutOffenderNestedInput>;
   gender?: InputMaybe<NullableEnumGenderFieldUpdateOperationsInput>;
@@ -34923,6 +35243,7 @@ export type OffenderUpdateWithoutTagsInput = {
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutOffenderNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -34956,6 +35277,7 @@ export type OffenderUpdateWithoutTodosInput = {
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutOffendersNestedInput>;
   dateOfBirth?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   dateSource?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   deletionDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutOffenderNestedInput>;
   gender?: InputMaybe<NullableEnumGenderFieldUpdateOperationsInput>;
@@ -34978,6 +35300,7 @@ export type OffenderUpdateWithoutTodosInput = {
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutOffenderNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -35011,6 +35334,7 @@ export type OffenderUpdateWithoutUpdatesInput = {
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutOffendersNestedInput>;
   dateOfBirth?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   dateSource?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   deletionDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutOffenderNestedInput>;
   gender?: InputMaybe<NullableEnumGenderFieldUpdateOperationsInput>;
@@ -35033,6 +35357,7 @@ export type OffenderUpdateWithoutUpdatesInput = {
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutOffenderNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -35066,6 +35391,7 @@ export type OffenderUpdateWithoutVehiclesInput = {
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutOffendersNestedInput>;
   dateOfBirth?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   dateSource?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   deletionDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutOffenderNestedInput>;
   gender?: InputMaybe<NullableEnumGenderFieldUpdateOperationsInput>;
@@ -35088,6 +35414,7 @@ export type OffenderUpdateWithoutVehiclesInput = {
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutOffenderNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -35279,6 +35606,7 @@ export type OffenderWhereInput = {
   customGalleries?: InputMaybe<CustomGalleryListRelationFilter>;
   dateOfBirth?: InputMaybe<DateTimeNullableFilter>;
   dateSource?: InputMaybe<StringNullableFilter>;
+  deleted?: InputMaybe<BoolFilter>;
   deletionDate?: InputMaybe<DateTimeNullableFilter>;
   feedItems?: InputMaybe<FeedItemListRelationFilter>;
   gender?: InputMaybe<EnumGenderNullableFilter>;
@@ -35301,6 +35629,7 @@ export type OffenderWhereInput = {
   peculiarities?: InputMaybe<StringNullableFilter>;
   race?: InputMaybe<EnumRaceNullableFilter>;
   recycleBin?: InputMaybe<RecycledItemWhereInput>;
+  recycleDate?: InputMaybe<DateTimeFilter>;
   recycled?: InputMaybe<BoolFilter>;
   ref?: InputMaybe<StringNullableFilter>;
   reference?: InputMaybe<IntNullableFilter>;
@@ -35475,6 +35804,7 @@ export type Query = {
   article?: Maybe<Article>;
   articles: Array<Article>;
   auth0User?: Maybe<Auth0User>;
+  availableQuestions: Array<Question>;
   ban?: Maybe<Ban>;
   bans: Array<Ban>;
   business?: Maybe<Business>;
@@ -35602,6 +35932,10 @@ export type QueryArticlesArgs = {
 
 export type QueryAuth0UserArgs = {
   id: Scalars['String'];
+};
+
+export type QueryAvailableQuestionsArgs = {
+  where?: InputMaybe<UniqueId>;
 };
 
 export type QueryBanArgs = {
@@ -38646,6 +38980,7 @@ export type Scheme = {
   incidentsByType?: Maybe<IncidentsByType>;
   incidentsCreated?: Maybe<Scalars['Int']>;
   investigationsInScheme: Array<Investigation>;
+  languages: Array<Language>;
   loginEvents: Array<LoginEvent>;
   logo?: Maybe<Image>;
   members: Array<UserScheme>;
@@ -38772,6 +39107,13 @@ export type SchemeIncidentsCreatedArgs = {
 export type SchemeInvestigationsInSchemeArgs = {
   after?: InputMaybe<InvestigationWhereUniqueInput>;
   before?: InputMaybe<InvestigationWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+export type SchemeLanguagesArgs = {
+  after?: InputMaybe<LanguageWhereUniqueInput>;
+  before?: InputMaybe<LanguageWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
 };
@@ -50365,6 +50707,10 @@ export enum UpdateIcon {
 export type UpdateInvestigationInput = {
   crimeGroupIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   description?: InputMaybe<Scalars['String']>;
+  disconnectCrimeGroupIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  disconnectIncidentIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  disconnectOffenderIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  disconnectVehicleIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   incidentIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   name?: InputMaybe<Scalars['String']>;
   offenderIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
@@ -50441,6 +50787,12 @@ export type UpdateScalarWhereInput = {
   type?: InputMaybe<EnumUpdateTypeFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   vehicleId?: InputMaybe<StringNullableFilter>;
+};
+
+export type UpdateTagQuestionInput = {
+  id: Scalars['String'];
+  position: Scalars['Int'];
+  req: Scalars['Boolean'];
 };
 
 export type UpdateTodoMention = {
@@ -60522,9 +60874,11 @@ export type VehicleUpdatesArgs = {
 export type VehicleCreateManyCreatedByInput = {
   colour?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   id?: InputMaybe<Scalars['String']>;
   make?: InputMaybe<Scalars['String']>;
   model?: InputMaybe<Scalars['String']>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   registration?: InputMaybe<Scalars['String']>;
@@ -60750,6 +61104,7 @@ export type VehicleCreateWithoutActionsInput = {
   createdBy?: InputMaybe<UserCreateNestedOneWithoutVehiclesInput>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedManyWithoutVehiclesInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutVehiclesInput>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutVehicleInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutVehiclesInput>;
   id?: InputMaybe<Scalars['String']>;
@@ -60762,6 +61117,7 @@ export type VehicleCreateWithoutActionsInput = {
   model?: InputMaybe<Scalars['String']>;
   notifications?: InputMaybe<NotificationCreateNestedManyWithoutVehicleInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutVehiclesInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   registration?: InputMaybe<Scalars['String']>;
@@ -60778,6 +61134,7 @@ export type VehicleCreateWithoutCreatedByInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedManyWithoutVehiclesInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutVehiclesInput>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutVehicleInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutVehiclesInput>;
   id?: InputMaybe<Scalars['String']>;
@@ -60790,6 +61147,7 @@ export type VehicleCreateWithoutCreatedByInput = {
   model?: InputMaybe<Scalars['String']>;
   notifications?: InputMaybe<NotificationCreateNestedManyWithoutVehicleInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutVehiclesInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   registration?: InputMaybe<Scalars['String']>;
@@ -60806,6 +61164,7 @@ export type VehicleCreateWithoutCrimeGroupInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdBy?: InputMaybe<UserCreateNestedOneWithoutVehiclesInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutVehiclesInput>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutVehicleInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutVehiclesInput>;
   id?: InputMaybe<Scalars['String']>;
@@ -60818,6 +61177,7 @@ export type VehicleCreateWithoutCrimeGroupInput = {
   model?: InputMaybe<Scalars['String']>;
   notifications?: InputMaybe<NotificationCreateNestedManyWithoutVehicleInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutVehiclesInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   registration?: InputMaybe<Scalars['String']>;
@@ -60834,6 +61194,7 @@ export type VehicleCreateWithoutCustomGalleriesInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdBy?: InputMaybe<UserCreateNestedOneWithoutVehiclesInput>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedManyWithoutVehiclesInput>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutVehicleInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutVehiclesInput>;
   id?: InputMaybe<Scalars['String']>;
@@ -60846,6 +61207,7 @@ export type VehicleCreateWithoutCustomGalleriesInput = {
   model?: InputMaybe<Scalars['String']>;
   notifications?: InputMaybe<NotificationCreateNestedManyWithoutVehicleInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutVehiclesInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   registration?: InputMaybe<Scalars['String']>;
@@ -60863,6 +61225,7 @@ export type VehicleCreateWithoutFeedItemsInput = {
   createdBy?: InputMaybe<UserCreateNestedOneWithoutVehiclesInput>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedManyWithoutVehiclesInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutVehiclesInput>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutVehiclesInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutVehiclesInput>;
@@ -60874,6 +61237,7 @@ export type VehicleCreateWithoutFeedItemsInput = {
   model?: InputMaybe<Scalars['String']>;
   notifications?: InputMaybe<NotificationCreateNestedManyWithoutVehicleInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutVehiclesInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   registration?: InputMaybe<Scalars['String']>;
@@ -60891,6 +61255,7 @@ export type VehicleCreateWithoutGroupsInput = {
   createdBy?: InputMaybe<UserCreateNestedOneWithoutVehiclesInput>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedManyWithoutVehiclesInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutVehiclesInput>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutVehicleInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutVehiclesInput>;
@@ -60902,6 +61267,7 @@ export type VehicleCreateWithoutGroupsInput = {
   model?: InputMaybe<Scalars['String']>;
   notifications?: InputMaybe<NotificationCreateNestedManyWithoutVehicleInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutVehiclesInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   registration?: InputMaybe<Scalars['String']>;
@@ -60919,6 +61285,7 @@ export type VehicleCreateWithoutImagesInput = {
   createdBy?: InputMaybe<UserCreateNestedOneWithoutVehiclesInput>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedManyWithoutVehiclesInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutVehiclesInput>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutVehicleInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutVehiclesInput>;
   id?: InputMaybe<Scalars['String']>;
@@ -60930,6 +61297,7 @@ export type VehicleCreateWithoutImagesInput = {
   model?: InputMaybe<Scalars['String']>;
   notifications?: InputMaybe<NotificationCreateNestedManyWithoutVehicleInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutVehiclesInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   registration?: InputMaybe<Scalars['String']>;
@@ -60947,6 +61315,7 @@ export type VehicleCreateWithoutIncidentsInput = {
   createdBy?: InputMaybe<UserCreateNestedOneWithoutVehiclesInput>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedManyWithoutVehiclesInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutVehiclesInput>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutVehicleInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutVehiclesInput>;
   id?: InputMaybe<Scalars['String']>;
@@ -60958,6 +61327,7 @@ export type VehicleCreateWithoutIncidentsInput = {
   model?: InputMaybe<Scalars['String']>;
   notifications?: InputMaybe<NotificationCreateNestedManyWithoutVehicleInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutVehiclesInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   registration?: InputMaybe<Scalars['String']>;
@@ -60975,6 +61345,7 @@ export type VehicleCreateWithoutInvestigationsInput = {
   createdBy?: InputMaybe<UserCreateNestedOneWithoutVehiclesInput>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedManyWithoutVehiclesInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutVehiclesInput>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutVehicleInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutVehiclesInput>;
   id?: InputMaybe<Scalars['String']>;
@@ -60986,6 +61357,7 @@ export type VehicleCreateWithoutInvestigationsInput = {
   model?: InputMaybe<Scalars['String']>;
   notifications?: InputMaybe<NotificationCreateNestedManyWithoutVehicleInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutVehiclesInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   registration?: InputMaybe<Scalars['String']>;
@@ -61003,6 +61375,7 @@ export type VehicleCreateWithoutLinkedUpdatesInput = {
   createdBy?: InputMaybe<UserCreateNestedOneWithoutVehiclesInput>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedManyWithoutVehiclesInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutVehiclesInput>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutVehicleInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutVehiclesInput>;
   id?: InputMaybe<Scalars['String']>;
@@ -61014,6 +61387,7 @@ export type VehicleCreateWithoutLinkedUpdatesInput = {
   model?: InputMaybe<Scalars['String']>;
   notifications?: InputMaybe<NotificationCreateNestedManyWithoutVehicleInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutVehiclesInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   registration?: InputMaybe<Scalars['String']>;
@@ -61031,6 +61405,7 @@ export type VehicleCreateWithoutMessagesInput = {
   createdBy?: InputMaybe<UserCreateNestedOneWithoutVehiclesInput>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedManyWithoutVehiclesInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutVehiclesInput>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutVehicleInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutVehiclesInput>;
   id?: InputMaybe<Scalars['String']>;
@@ -61042,6 +61417,7 @@ export type VehicleCreateWithoutMessagesInput = {
   model?: InputMaybe<Scalars['String']>;
   notifications?: InputMaybe<NotificationCreateNestedManyWithoutVehicleInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutVehiclesInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   registration?: InputMaybe<Scalars['String']>;
@@ -61059,6 +61435,7 @@ export type VehicleCreateWithoutNotificationsInput = {
   createdBy?: InputMaybe<UserCreateNestedOneWithoutVehiclesInput>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedManyWithoutVehiclesInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutVehiclesInput>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutVehicleInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutVehiclesInput>;
   id?: InputMaybe<Scalars['String']>;
@@ -61070,6 +61447,7 @@ export type VehicleCreateWithoutNotificationsInput = {
   messages?: InputMaybe<MessageCreateNestedManyWithoutVehiclesInput>;
   model?: InputMaybe<Scalars['String']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutVehiclesInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   registration?: InputMaybe<Scalars['String']>;
@@ -61087,6 +61465,7 @@ export type VehicleCreateWithoutOffendersInput = {
   createdBy?: InputMaybe<UserCreateNestedOneWithoutVehiclesInput>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedManyWithoutVehiclesInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutVehiclesInput>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutVehicleInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutVehiclesInput>;
   id?: InputMaybe<Scalars['String']>;
@@ -61098,6 +61477,7 @@ export type VehicleCreateWithoutOffendersInput = {
   messages?: InputMaybe<MessageCreateNestedManyWithoutVehiclesInput>;
   model?: InputMaybe<Scalars['String']>;
   notifications?: InputMaybe<NotificationCreateNestedManyWithoutVehicleInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   registration?: InputMaybe<Scalars['String']>;
@@ -61115,6 +61495,7 @@ export type VehicleCreateWithoutSchemesInput = {
   createdBy?: InputMaybe<UserCreateNestedOneWithoutVehiclesInput>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedManyWithoutVehiclesInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutVehiclesInput>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutVehicleInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutVehiclesInput>;
   id?: InputMaybe<Scalars['String']>;
@@ -61127,6 +61508,7 @@ export type VehicleCreateWithoutSchemesInput = {
   model?: InputMaybe<Scalars['String']>;
   notifications?: InputMaybe<NotificationCreateNestedManyWithoutVehicleInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutVehiclesInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   registration?: InputMaybe<Scalars['String']>;
@@ -61143,6 +61525,7 @@ export type VehicleCreateWithoutSubscribedUsersInput = {
   createdBy?: InputMaybe<UserCreateNestedOneWithoutVehiclesInput>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedManyWithoutVehiclesInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutVehiclesInput>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutVehicleInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutVehiclesInput>;
   id?: InputMaybe<Scalars['String']>;
@@ -61155,6 +61538,7 @@ export type VehicleCreateWithoutSubscribedUsersInput = {
   model?: InputMaybe<Scalars['String']>;
   notifications?: InputMaybe<NotificationCreateNestedManyWithoutVehicleInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutVehiclesInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   registration?: InputMaybe<Scalars['String']>;
@@ -61171,6 +61555,7 @@ export type VehicleCreateWithoutTodosInput = {
   createdBy?: InputMaybe<UserCreateNestedOneWithoutVehiclesInput>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedManyWithoutVehiclesInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutVehiclesInput>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutVehicleInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutVehiclesInput>;
   id?: InputMaybe<Scalars['String']>;
@@ -61183,6 +61568,7 @@ export type VehicleCreateWithoutTodosInput = {
   model?: InputMaybe<Scalars['String']>;
   notifications?: InputMaybe<NotificationCreateNestedManyWithoutVehicleInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutVehiclesInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   registration?: InputMaybe<Scalars['String']>;
@@ -61199,6 +61585,7 @@ export type VehicleCreateWithoutUpdatesInput = {
   createdBy?: InputMaybe<UserCreateNestedOneWithoutVehiclesInput>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedManyWithoutVehiclesInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutVehiclesInput>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutVehicleInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutVehiclesInput>;
   id?: InputMaybe<Scalars['String']>;
@@ -61211,6 +61598,7 @@ export type VehicleCreateWithoutUpdatesInput = {
   model?: InputMaybe<Scalars['String']>;
   notifications?: InputMaybe<NotificationCreateNestedManyWithoutVehicleInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutVehiclesInput>;
+  recycleDate?: InputMaybe<Scalars['DateTime']>;
   ref?: InputMaybe<Scalars['String']>;
   reference?: InputMaybe<Scalars['Int']>;
   registration?: InputMaybe<Scalars['String']>;
@@ -61238,6 +61626,7 @@ export type VehicleOrderByWithRelationInput = {
   createdById?: InputMaybe<SortOrder>;
   crimeGroup?: InputMaybe<CrimeGroupOrderByRelationAggregateInput>;
   customGalleries?: InputMaybe<CustomGalleryOrderByRelationAggregateInput>;
+  deleted?: InputMaybe<SortOrder>;
   feedItems?: InputMaybe<FeedItemOrderByRelationAggregateInput>;
   groups?: InputMaybe<GroupOrderByRelationAggregateInput>;
   id?: InputMaybe<SortOrder>;
@@ -61250,6 +61639,7 @@ export type VehicleOrderByWithRelationInput = {
   model?: InputMaybe<SortOrder>;
   notifications?: InputMaybe<NotificationOrderByRelationAggregateInput>;
   offenders?: InputMaybe<OffenderOrderByRelationAggregateInput>;
+  recycleDate?: InputMaybe<SortOrder>;
   ref?: InputMaybe<SortOrder>;
   reference?: InputMaybe<SortOrder>;
   registration?: InputMaybe<SortOrder>;
@@ -61267,9 +61657,11 @@ export type VehicleScalarWhereInput = {
   colour?: InputMaybe<StringNullableFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   createdById?: InputMaybe<StringNullableFilter>;
+  deleted?: InputMaybe<BoolFilter>;
   id?: InputMaybe<StringFilter>;
   make?: InputMaybe<StringNullableFilter>;
   model?: InputMaybe<StringNullableFilter>;
+  recycleDate?: InputMaybe<DateTimeFilter>;
   ref?: InputMaybe<StringNullableFilter>;
   reference?: InputMaybe<IntNullableFilter>;
   registration?: InputMaybe<StringNullableFilter>;
@@ -61283,6 +61675,7 @@ export type VehicleUpdateInput = {
   createdBy?: InputMaybe<UserUpdateOneWithoutVehiclesNestedInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateManyWithoutVehiclesNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutVehiclesNestedInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutVehicleNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutVehiclesNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -61295,6 +61688,7 @@ export type VehicleUpdateInput = {
   model?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   notifications?: InputMaybe<NotificationUpdateManyWithoutVehicleNestedInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutVehiclesNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   registration?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -61308,9 +61702,11 @@ export type VehicleUpdateInput = {
 export type VehicleUpdateManyMutationInput = {
   colour?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   make?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   model?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   registration?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -61708,6 +62104,7 @@ export type VehicleUpdateWithoutActionsInput = {
   createdBy?: InputMaybe<UserUpdateOneWithoutVehiclesNestedInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateManyWithoutVehiclesNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutVehiclesNestedInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutVehicleNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutVehiclesNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -61720,6 +62117,7 @@ export type VehicleUpdateWithoutActionsInput = {
   model?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   notifications?: InputMaybe<NotificationUpdateManyWithoutVehicleNestedInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutVehiclesNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   registration?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -61736,6 +62134,7 @@ export type VehicleUpdateWithoutCreatedByInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateManyWithoutVehiclesNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutVehiclesNestedInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutVehicleNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutVehiclesNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -61748,6 +62147,7 @@ export type VehicleUpdateWithoutCreatedByInput = {
   model?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   notifications?: InputMaybe<NotificationUpdateManyWithoutVehicleNestedInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutVehiclesNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   registration?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -61764,6 +62164,7 @@ export type VehicleUpdateWithoutCrimeGroupInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdBy?: InputMaybe<UserUpdateOneWithoutVehiclesNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutVehiclesNestedInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutVehicleNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutVehiclesNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -61776,6 +62177,7 @@ export type VehicleUpdateWithoutCrimeGroupInput = {
   model?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   notifications?: InputMaybe<NotificationUpdateManyWithoutVehicleNestedInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutVehiclesNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   registration?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -61792,6 +62194,7 @@ export type VehicleUpdateWithoutCustomGalleriesInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdBy?: InputMaybe<UserUpdateOneWithoutVehiclesNestedInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateManyWithoutVehiclesNestedInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutVehicleNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutVehiclesNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -61804,6 +62207,7 @@ export type VehicleUpdateWithoutCustomGalleriesInput = {
   model?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   notifications?: InputMaybe<NotificationUpdateManyWithoutVehicleNestedInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutVehiclesNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   registration?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -61821,6 +62225,7 @@ export type VehicleUpdateWithoutFeedItemsInput = {
   createdBy?: InputMaybe<UserUpdateOneWithoutVehiclesNestedInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateManyWithoutVehiclesNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutVehiclesNestedInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutVehiclesNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutVehiclesNestedInput>;
@@ -61832,6 +62237,7 @@ export type VehicleUpdateWithoutFeedItemsInput = {
   model?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   notifications?: InputMaybe<NotificationUpdateManyWithoutVehicleNestedInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutVehiclesNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   registration?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -61849,6 +62255,7 @@ export type VehicleUpdateWithoutGroupsInput = {
   createdBy?: InputMaybe<UserUpdateOneWithoutVehiclesNestedInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateManyWithoutVehiclesNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutVehiclesNestedInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutVehicleNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutVehiclesNestedInput>;
@@ -61860,6 +62267,7 @@ export type VehicleUpdateWithoutGroupsInput = {
   model?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   notifications?: InputMaybe<NotificationUpdateManyWithoutVehicleNestedInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutVehiclesNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   registration?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -61877,6 +62285,7 @@ export type VehicleUpdateWithoutImagesInput = {
   createdBy?: InputMaybe<UserUpdateOneWithoutVehiclesNestedInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateManyWithoutVehiclesNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutVehiclesNestedInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutVehicleNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutVehiclesNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -61888,6 +62297,7 @@ export type VehicleUpdateWithoutImagesInput = {
   model?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   notifications?: InputMaybe<NotificationUpdateManyWithoutVehicleNestedInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutVehiclesNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   registration?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -61905,6 +62315,7 @@ export type VehicleUpdateWithoutIncidentsInput = {
   createdBy?: InputMaybe<UserUpdateOneWithoutVehiclesNestedInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateManyWithoutVehiclesNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutVehiclesNestedInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutVehicleNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutVehiclesNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -61916,6 +62327,7 @@ export type VehicleUpdateWithoutIncidentsInput = {
   model?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   notifications?: InputMaybe<NotificationUpdateManyWithoutVehicleNestedInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutVehiclesNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   registration?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -61933,6 +62345,7 @@ export type VehicleUpdateWithoutInvestigationsInput = {
   createdBy?: InputMaybe<UserUpdateOneWithoutVehiclesNestedInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateManyWithoutVehiclesNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutVehiclesNestedInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutVehicleNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutVehiclesNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -61944,6 +62357,7 @@ export type VehicleUpdateWithoutInvestigationsInput = {
   model?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   notifications?: InputMaybe<NotificationUpdateManyWithoutVehicleNestedInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutVehiclesNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   registration?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -61961,6 +62375,7 @@ export type VehicleUpdateWithoutLinkedUpdatesInput = {
   createdBy?: InputMaybe<UserUpdateOneWithoutVehiclesNestedInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateManyWithoutVehiclesNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutVehiclesNestedInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutVehicleNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutVehiclesNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -61972,6 +62387,7 @@ export type VehicleUpdateWithoutLinkedUpdatesInput = {
   model?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   notifications?: InputMaybe<NotificationUpdateManyWithoutVehicleNestedInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutVehiclesNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   registration?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -61989,6 +62405,7 @@ export type VehicleUpdateWithoutMessagesInput = {
   createdBy?: InputMaybe<UserUpdateOneWithoutVehiclesNestedInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateManyWithoutVehiclesNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutVehiclesNestedInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutVehicleNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutVehiclesNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -62000,6 +62417,7 @@ export type VehicleUpdateWithoutMessagesInput = {
   model?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   notifications?: InputMaybe<NotificationUpdateManyWithoutVehicleNestedInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutVehiclesNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   registration?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -62017,6 +62435,7 @@ export type VehicleUpdateWithoutNotificationsInput = {
   createdBy?: InputMaybe<UserUpdateOneWithoutVehiclesNestedInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateManyWithoutVehiclesNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutVehiclesNestedInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutVehicleNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutVehiclesNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -62028,6 +62447,7 @@ export type VehicleUpdateWithoutNotificationsInput = {
   messages?: InputMaybe<MessageUpdateManyWithoutVehiclesNestedInput>;
   model?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutVehiclesNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   registration?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -62045,6 +62465,7 @@ export type VehicleUpdateWithoutOffendersInput = {
   createdBy?: InputMaybe<UserUpdateOneWithoutVehiclesNestedInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateManyWithoutVehiclesNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutVehiclesNestedInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutVehicleNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutVehiclesNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -62056,6 +62477,7 @@ export type VehicleUpdateWithoutOffendersInput = {
   messages?: InputMaybe<MessageUpdateManyWithoutVehiclesNestedInput>;
   model?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   notifications?: InputMaybe<NotificationUpdateManyWithoutVehicleNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   registration?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -62073,6 +62495,7 @@ export type VehicleUpdateWithoutSchemesInput = {
   createdBy?: InputMaybe<UserUpdateOneWithoutVehiclesNestedInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateManyWithoutVehiclesNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutVehiclesNestedInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutVehicleNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutVehiclesNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -62085,6 +62508,7 @@ export type VehicleUpdateWithoutSchemesInput = {
   model?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   notifications?: InputMaybe<NotificationUpdateManyWithoutVehicleNestedInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutVehiclesNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   registration?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -62101,6 +62525,7 @@ export type VehicleUpdateWithoutSubscribedUsersInput = {
   createdBy?: InputMaybe<UserUpdateOneWithoutVehiclesNestedInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateManyWithoutVehiclesNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutVehiclesNestedInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutVehicleNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutVehiclesNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -62113,6 +62538,7 @@ export type VehicleUpdateWithoutSubscribedUsersInput = {
   model?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   notifications?: InputMaybe<NotificationUpdateManyWithoutVehicleNestedInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutVehiclesNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   registration?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -62129,6 +62555,7 @@ export type VehicleUpdateWithoutTodosInput = {
   createdBy?: InputMaybe<UserUpdateOneWithoutVehiclesNestedInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateManyWithoutVehiclesNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutVehiclesNestedInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutVehicleNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutVehiclesNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -62141,6 +62568,7 @@ export type VehicleUpdateWithoutTodosInput = {
   model?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   notifications?: InputMaybe<NotificationUpdateManyWithoutVehicleNestedInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutVehiclesNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   registration?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -62157,6 +62585,7 @@ export type VehicleUpdateWithoutUpdatesInput = {
   createdBy?: InputMaybe<UserUpdateOneWithoutVehiclesNestedInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateManyWithoutVehiclesNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutVehiclesNestedInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutVehicleNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutVehiclesNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -62169,6 +62598,7 @@ export type VehicleUpdateWithoutUpdatesInput = {
   model?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   notifications?: InputMaybe<NotificationUpdateManyWithoutVehicleNestedInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutVehiclesNestedInput>;
+  recycleDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   ref?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   registration?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -62286,6 +62716,7 @@ export type VehicleWhereInput = {
   createdById?: InputMaybe<StringNullableFilter>;
   crimeGroup?: InputMaybe<CrimeGroupListRelationFilter>;
   customGalleries?: InputMaybe<CustomGalleryListRelationFilter>;
+  deleted?: InputMaybe<BoolFilter>;
   feedItems?: InputMaybe<FeedItemListRelationFilter>;
   groups?: InputMaybe<GroupListRelationFilter>;
   id?: InputMaybe<StringFilter>;
@@ -62298,6 +62729,7 @@ export type VehicleWhereInput = {
   model?: InputMaybe<StringNullableFilter>;
   notifications?: InputMaybe<NotificationListRelationFilter>;
   offenders?: InputMaybe<OffenderListRelationFilter>;
+  recycleDate?: InputMaybe<DateTimeFilter>;
   ref?: InputMaybe<StringNullableFilter>;
   reference?: InputMaybe<IntNullableFilter>;
   registration?: InputMaybe<StringNullableFilter>;
@@ -66317,6 +66749,18 @@ export type ViewIncidentQuery = {
     totalValue?: number | null;
     totalRecoveredValue?: number | null;
     approved?: boolean | null;
+    answers: Array<{
+      __typename?: 'Answer';
+      id: string;
+      answer: string;
+      type: AnswerType;
+      tagQuestion: {
+        __typename?: 'TagQuestion';
+        id: string;
+        priority: number;
+        question: { __typename?: 'Question'; id: string; question: string };
+      };
+    }>;
     evidence: Array<{
       __typename?: 'Document';
       id: string;
@@ -78257,6 +78701,19 @@ export const ViewIncidentDocument = gql`
       subscribed
       totalValue
       totalRecoveredValue
+      answers {
+        id
+        answer
+        tagQuestion {
+          id
+          priority
+          question {
+            id
+            question
+          }
+        }
+        type
+      }
       evidence {
         id
         name

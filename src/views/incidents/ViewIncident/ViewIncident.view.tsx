@@ -62,6 +62,7 @@ import moment from 'moment';
 import UpdateContent from './Update.view';
 import useStyles from './ViewIncident.styles';
 import EvidenceTable from '../../../components/tables/EvidenceTable';
+import formatAnswer from '../../../utils/format-answer';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -499,69 +500,75 @@ const ViewIncident = ({
                                 })}
                             </Row>
                           </Descriptions.Item>
-                          <Descriptions.Item
-                            className={classes.detailTag}
-                            label={
-                              <span className={classes.tagLabel}>
-                                <FontAwesomeIcon
-                                  className={classes.descIcon}
-                                  icon={faTags}
-                                />
-                                {intl.formatMessage({
-                                  defaultMessage: 'Involved Tags',
-                                  id: 'hqB+1X',
-                                })}
-                              </span>
-                            }
-                          >
-                            <Row>
-                              {data?.incident?.involvedTags.map((tag) => (
-                                <Tag
-                                  color="red"
-                                  key={tag.id}
-                                  className={classes.tag}
-                                >
-                                  {tag.name}
-                                </Tag>
-                              )) ||
-                                intl.formatMessage({
-                                  defaultMessage: 'None',
-                                  id: '450Fty',
-                                })}
-                            </Row>
-                          </Descriptions.Item>
+                          {data.incident &&
+                            data?.incident?.involvedTags.length > 0 && (
+                              <Descriptions.Item
+                                className={classes.detailTag}
+                                label={
+                                  <span className={classes.tagLabel}>
+                                    <FontAwesomeIcon
+                                      className={classes.descIcon}
+                                      icon={faTags}
+                                    />
+                                    {intl.formatMessage({
+                                      defaultMessage: 'Involved Tags',
+                                      id: 'hqB+1X',
+                                    })}
+                                  </span>
+                                }
+                              >
+                                <Row>
+                                  {data?.incident?.involvedTags.map((tag) => (
+                                    <Tag
+                                      color="red"
+                                      key={tag.id}
+                                      className={classes.tag}
+                                    >
+                                      {tag.name}
+                                    </Tag>
+                                  )) ||
+                                    intl.formatMessage({
+                                      defaultMessage: 'None',
+                                      id: '450Fty',
+                                    })}
+                                </Row>
+                              </Descriptions.Item>
+                            )}
 
-                          <Descriptions.Item
-                            className={classes.detailTag}
-                            label={
-                              <span className={classes.tagLabel}>
-                                <FontAwesomeIcon
-                                  className={classes.descIcon}
-                                  icon={faUserTag}
-                                />
-                                {intl.formatMessage({
-                                  defaultMessage: 'Impact Tags',
-                                  id: 'JZVMXj',
-                                })}
-                              </span>
-                            }
-                          >
-                            <Row justify="start" align="middle">
-                              {data?.incident?.impactTags.map((tag) => (
-                                <Tag
-                                  color="red"
-                                  key={tag.id}
-                                  className={classes.tag}
-                                >
-                                  {tag.name}
-                                </Tag>
-                              )) ||
-                                intl.formatMessage({
-                                  defaultMessage: 'None',
-                                  id: '450Fty',
-                                })}
-                            </Row>
-                          </Descriptions.Item>
+                          {data?.incident &&
+                            data.incident.impactTags.length > 0 && (
+                              <Descriptions.Item
+                                className={classes.detailTag}
+                                label={
+                                  <span className={classes.tagLabel}>
+                                    <FontAwesomeIcon
+                                      className={classes.descIcon}
+                                      icon={faUserTag}
+                                    />
+                                    {intl.formatMessage({
+                                      defaultMessage: 'Impact Tags',
+                                      id: 'JZVMXj',
+                                    })}
+                                  </span>
+                                }
+                              >
+                                <Row justify="start" align="middle">
+                                  {data?.incident?.impactTags.map((tag) => (
+                                    <Tag
+                                      color="red"
+                                      key={tag.id}
+                                      className={classes.tag}
+                                    >
+                                      {tag.name}
+                                    </Tag>
+                                  )) ||
+                                    intl.formatMessage({
+                                      defaultMessage: 'None',
+                                      id: '450Fty',
+                                    })}
+                                </Row>
+                              </Descriptions.Item>
+                            )}
                         </Descriptions>
                       </Card>
                       <Row gutter={16}>
@@ -748,6 +755,26 @@ const ViewIncident = ({
                               );
                             }}
                           />
+                        </Card>
+                      )}
+
+                      {data?.incident && data.incident.answers.length > 0 && (
+                        <Card>
+                          <Title level={4}>
+                            {intl.formatMessage({
+                              defaultMessage: 'Incident Details',
+                              id: 'Imc8gS',
+                            })}
+                          </Title>
+                          <Descriptions>
+                            {data.incident.answers.map((answer) => (
+                              <Descriptions.Item
+                                label={answer.tagQuestion.question.question}
+                              >
+                                {formatAnswer(answer.answer, answer.type)}
+                              </Descriptions.Item>
+                            ))}
+                          </Descriptions>
                         </Card>
                       )}
 
