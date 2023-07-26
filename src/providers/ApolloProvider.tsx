@@ -194,7 +194,7 @@ const Apollo = ({ children }: Props): JSX.Element => {
       headers: {
         ...headers,
         Authorization: `Bearer ''`,
-        language: localLan,
+        language: localLang,
       },
       ...context,
     };
