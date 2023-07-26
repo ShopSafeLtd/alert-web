@@ -1,5 +1,4 @@
 import moment from 'moment';
-
 // calculate the difference in days between start and end date
 const formatLoginTime = (timestamp: Date): string => {
   const date = moment(timestamp);
