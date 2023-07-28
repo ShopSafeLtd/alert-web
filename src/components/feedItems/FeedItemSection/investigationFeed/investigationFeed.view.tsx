@@ -3,7 +3,7 @@ import React from 'react';
 import { Col, Row, Typography } from 'antd';
 import type { FeedItemsQuery } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExclamationCircle, faUser } from '@fortawesome/pro-light-svg-icons';
+import { faExclamationCircle, faUsers } from '@fortawesome/pro-light-svg-icons';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import UpdateContent from '../UpdateContent';
@@ -71,7 +71,7 @@ const InvestigationFeed = ({
                   <FontAwesomeIcon
                     size="sm"
                     className="feedItem-card-icon"
-                    icon={faUser}
+                    icon={faUsers}
                     style={{ marginRight: 5 }}
                   />
                   <Text style={{ fontSize: 14 }} type="secondary">
@@ -120,7 +120,7 @@ const InvestigationFeed = ({
                   <FontAwesomeIcon
                     size="sm"
                     className="feedItem-card-icon"
-                    icon={faUser}
+                    icon={faUsers}
                   />
                   <Text style={{ fontSize: 14 }} type="secondary">
                     {createdBy?.fullName} - {createdBy?.businesses[0]?.name}
