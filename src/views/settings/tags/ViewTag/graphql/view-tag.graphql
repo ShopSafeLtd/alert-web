@@ -1,0 +1,37 @@
+query ViewTag($where: TagWhereUniqueInput!, $listWhere: TagWhereInput!) {
+  listTags(where: $listWhere) {
+    tags {
+      id
+      name
+      parentTag {
+        id
+      }
+    }
+  }
+  tag(where: $where) {
+    id
+    name
+    parentTag {
+      id
+      name
+    }
+    description
+    incidentForm {
+      id
+      fields {
+        id
+        position
+        type
+      }
+    }
+    tagQuestions {
+      req
+      priority
+      question {
+        questionFormatted
+        type
+      }
+      id
+    }
+  }
+}

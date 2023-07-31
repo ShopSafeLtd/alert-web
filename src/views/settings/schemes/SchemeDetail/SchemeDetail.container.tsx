@@ -14,6 +14,8 @@ const SchemeDetail = (): JSX.Element => {
     fileList,
     darkImgChange,
     darkFileList,
+    tags,
+    updateTagParent,
   } = useSchemeDetail();
   return (
     <View
@@ -27,6 +29,8 @@ const SchemeDetail = (): JSX.Element => {
       beforeUpload={beforeUpload}
       imgChange={imgChange}
       onPreview={onPreview}
+      tags={tags}
+      updateTagParent={updateTagParent}
     />
   );
 };

@@ -29,7 +29,6 @@ interface Props {
 
 const Apollo = ({ children }: Props): JSX.Element => {
   const accessToken = localStorage.getItem('accessToken');
-  const localLang = typedLocalStorage.get(LocalStorageKeys.lang);
 
   const { getAccessTokenSilently, isAuthenticated, loginWithRedirect } =
     useAuth0();
@@ -40,6 +39,7 @@ const Apollo = ({ children }: Props): JSX.Element => {
     });
 
   const currentScheme = useStoreState((state) => state.scheme.id);
+  const localLang = useStoreState((state) => state.theme.locale);
   // const wsClient = new SubscriptionClient(
   //   import.meta.env.VITE_GRAPHQL_WS_URL,
   //   // "wss://alert-api-dev.azurewebsites.net/graphql",

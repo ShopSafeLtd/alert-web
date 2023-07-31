@@ -39,6 +39,13 @@ const Views = () => {
   const localLang = typedLocalStorage.get(LocalStorageKeys.lang);
 
   const initLang = localLang || lang || locale;
+
+  useEffect(() => {
+    if (initLang) {
+      typedLocalStorage.set(LocalStorageKeys.lang, initLang);
+    }
+  }, []);
+
   const customTranslations = useStoreState(
     (state) => state.scheme.translations
   );

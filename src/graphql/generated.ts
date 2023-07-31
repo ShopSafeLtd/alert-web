@@ -3165,6 +3165,12 @@ export type AnswerListRelationFilter = {
   some?: InputMaybe<AnswerWhereInput>;
 };
 
+export type AnswerOption = {
+  __typename?: 'AnswerOption';
+  label: Scalars['String'];
+  value: Scalars['String'];
+};
+
 export type AnswerOrderByRelationAggregateInput = {
   _count?: InputMaybe<SortOrder>;
 };
@@ -3188,6 +3194,7 @@ export enum AnswerType {
   Number = 'NUMBER',
   Select = 'SELECT',
   String = 'STRING',
+  Time = 'TIME',
 }
 
 export type AnswerUpdateManyMutationInput = {
@@ -7909,6 +7916,7 @@ export type CreateOffenderVehicles = {
 };
 
 export type CreateQuestionInput = {
+  options?: InputMaybe<Array<Scalars['String']>>;
   question: Scalars['String'];
   required?: Scalars['Boolean'];
   tagId: Scalars['String'];
@@ -11140,6 +11148,28 @@ export type EnumWhenNullableFilter = {
   in?: InputMaybe<Array<When>>;
   not?: InputMaybe<NestedEnumWhenNullableFilter>;
   notIn?: InputMaybe<Array<When>>;
+};
+
+export type EnumWorkflowActionTypeFieldUpdateOperationsInput = {
+  set?: InputMaybe<WorkflowActionType>;
+};
+
+export type EnumWorkflowActionTypeFilter = {
+  equals?: InputMaybe<WorkflowActionType>;
+  in?: InputMaybe<Array<WorkflowActionType>>;
+  not?: InputMaybe<NestedEnumWorkflowActionTypeFilter>;
+  notIn?: InputMaybe<Array<WorkflowActionType>>;
+};
+
+export type EnumWorkflowTriggerFieldUpdateOperationsInput = {
+  set?: InputMaybe<WorkflowTrigger>;
+};
+
+export type EnumWorkflowTriggerFilter = {
+  equals?: InputMaybe<WorkflowTrigger>;
+  in?: InputMaybe<Array<WorkflowTrigger>>;
+  not?: InputMaybe<NestedEnumWorkflowTriggerFilter>;
+  notIn?: InputMaybe<Array<WorkflowTrigger>>;
 };
 
 export type ExpoPushToken = {
@@ -20130,6 +20160,8 @@ export type IncidentQuestions = {
   __typename?: 'IncidentQuestions';
   answerType: AnswerType;
   label: Scalars['String'];
+  options: Array<AnswerOption>;
+  priority: Scalars['Int'];
   questionId: Scalars['String'];
   required: Scalars['Boolean'];
   tagQuestionId: Scalars['String'];
@@ -28176,6 +28208,7 @@ export enum Model {
   Scheme = 'SCHEME',
   Send = 'SEND',
   Tag = 'TAG',
+  Todo = 'TODO',
   Update = 'UPDATE',
   User = 'USER',
   Vehicle = 'VEHICLE',
@@ -28370,6 +28403,7 @@ export type Mutation = {
   updateVehicleDefault?: Maybe<Vehicle>;
   uploadImage?: Maybe<Image>;
   uploadToImage?: Maybe<Image>;
+  upsertIncidentForm?: Maybe<IncidentForm>;
 };
 
 export type MutationAddImageIntelArgs = {
@@ -29133,6 +29167,10 @@ export type MutationUploadToImageArgs = {
   image: ImageWhereUniqueInput;
 };
 
+export type MutationUpsertIncidentFormArgs = {
+  data: UpsertIncidentFormInput;
+};
+
 export type NestedBoolFilter = {
   equals?: InputMaybe<Scalars['Boolean']>;
   not?: InputMaybe<NestedBoolFilter>;
@@ -29387,6 +29425,20 @@ export type NestedEnumWhenNullableFilter = {
   in?: InputMaybe<Array<When>>;
   not?: InputMaybe<NestedEnumWhenNullableFilter>;
   notIn?: InputMaybe<Array<When>>;
+};
+
+export type NestedEnumWorkflowActionTypeFilter = {
+  equals?: InputMaybe<WorkflowActionType>;
+  in?: InputMaybe<Array<WorkflowActionType>>;
+  not?: InputMaybe<NestedEnumWorkflowActionTypeFilter>;
+  notIn?: InputMaybe<Array<WorkflowActionType>>;
+};
+
+export type NestedEnumWorkflowTriggerFilter = {
+  equals?: InputMaybe<WorkflowTrigger>;
+  in?: InputMaybe<Array<WorkflowTrigger>>;
+  not?: InputMaybe<NestedEnumWorkflowTriggerFilter>;
+  notIn?: InputMaybe<Array<WorkflowTrigger>>;
 };
 
 export type NestedFloatFilter = {
@@ -36453,10 +36505,14 @@ export type Question = {
   __typename?: 'Question';
   createdAt: Scalars['DateTime'];
   id: Scalars['String'];
+  options: Array<Scalars['Json']>;
+  optionsFormatted?: Maybe<Array<Scalars['String']>>;
   question: Scalars['String'];
+  questionFormatted: Scalars['String'];
   questionTranslations: Array<Scalars['Json']>;
   schemes: Array<Scheme>;
   tags: Array<TagQuestion>;
+  type: AnswerType;
   updatedAt: Scalars['DateTime'];
 };
 
@@ -36500,7 +36556,9 @@ export type QuestionCreateOrConnectWithoutTagsInput = {
 
 export type QuestionCreateWithoutSchemesInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   id?: InputMaybe<Scalars['String']>;
+  options?: InputMaybe<QuestionCreateoptionsInput>;
   question: Scalars['String'];
   questionTranslations?: InputMaybe<QuestionCreatequestionTranslationsInput>;
   tags?: InputMaybe<TagQuestionCreateNestedManyWithoutQuestionInput>;
@@ -36510,12 +36568,18 @@ export type QuestionCreateWithoutSchemesInput = {
 
 export type QuestionCreateWithoutTagsInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   id?: InputMaybe<Scalars['String']>;
+  options?: InputMaybe<QuestionCreateoptionsInput>;
   question: Scalars['String'];
   questionTranslations?: InputMaybe<QuestionCreatequestionTranslationsInput>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutQuestionsInput>;
   type: AnswerType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type QuestionCreateoptionsInput = {
+  set?: InputMaybe<Array<Scalars['Json']>>;
 };
 
 export type QuestionCreatequestionTranslationsInput = {
@@ -36537,7 +36601,9 @@ export type QuestionScalarWhereInput = {
   NOT?: InputMaybe<Array<QuestionScalarWhereInput>>;
   OR?: InputMaybe<Array<QuestionScalarWhereInput>>;
   createdAt?: InputMaybe<DateTimeFilter>;
+  deleted?: InputMaybe<BoolFilter>;
   id?: InputMaybe<StringFilter>;
+  options?: InputMaybe<JsonNullableListFilter>;
   question?: InputMaybe<StringFilter>;
   questionTranslations?: InputMaybe<JsonNullableListFilter>;
   type?: InputMaybe<EnumAnswerTypeFilter>;
@@ -36546,7 +36612,9 @@ export type QuestionScalarWhereInput = {
 
 export type QuestionUpdateManyMutationInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  options?: InputMaybe<QuestionUpdateoptionsInput>;
   question?: InputMaybe<StringFieldUpdateOperationsInput>;
   questionTranslations?: InputMaybe<QuestionUpdatequestionTranslationsInput>;
   type?: InputMaybe<EnumAnswerTypeFieldUpdateOperationsInput>;
@@ -36590,7 +36658,9 @@ export type QuestionUpdateWithWhereUniqueWithoutSchemesInput = {
 
 export type QuestionUpdateWithoutSchemesInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  options?: InputMaybe<QuestionUpdateoptionsInput>;
   question?: InputMaybe<StringFieldUpdateOperationsInput>;
   questionTranslations?: InputMaybe<QuestionUpdatequestionTranslationsInput>;
   tags?: InputMaybe<TagQuestionUpdateManyWithoutQuestionNestedInput>;
@@ -36600,12 +36670,19 @@ export type QuestionUpdateWithoutSchemesInput = {
 
 export type QuestionUpdateWithoutTagsInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  options?: InputMaybe<QuestionUpdateoptionsInput>;
   question?: InputMaybe<StringFieldUpdateOperationsInput>;
   questionTranslations?: InputMaybe<QuestionUpdatequestionTranslationsInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutQuestionsNestedInput>;
   type?: InputMaybe<EnumAnswerTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type QuestionUpdateoptionsInput = {
+  push?: InputMaybe<Scalars['Json']>;
+  set?: InputMaybe<Array<Scalars['Json']>>;
 };
 
 export type QuestionUpdatequestionTranslationsInput = {
@@ -36629,7 +36706,9 @@ export type QuestionWhereInput = {
   NOT?: InputMaybe<Array<QuestionWhereInput>>;
   OR?: InputMaybe<Array<QuestionWhereInput>>;
   createdAt?: InputMaybe<DateTimeFilter>;
+  deleted?: InputMaybe<BoolFilter>;
   id?: InputMaybe<StringFilter>;
+  options?: InputMaybe<JsonNullableListFilter>;
   question?: InputMaybe<StringFilter>;
   questionTranslations?: InputMaybe<JsonNullableListFilter>;
   schemes?: InputMaybe<SchemeListRelationFilter>;
@@ -39309,6 +39388,7 @@ export type SchemeCreateInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateManyDarkLogoInput = {
@@ -39890,6 +39970,7 @@ export type SchemeCreateWithoutActionsInSchemeInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutActionsInput = {
@@ -39953,6 +40034,7 @@ export type SchemeCreateWithoutActionsInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutArticlesInput = {
@@ -40016,6 +40098,7 @@ export type SchemeCreateWithoutArticlesInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutBansInput = {
@@ -40079,6 +40162,7 @@ export type SchemeCreateWithoutBansInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutBusinessesInput = {
@@ -40142,6 +40226,7 @@ export type SchemeCreateWithoutBusinessesInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutChatsInput = {
@@ -40205,6 +40290,7 @@ export type SchemeCreateWithoutChatsInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutContactsInput = {
@@ -40268,6 +40354,7 @@ export type SchemeCreateWithoutContactsInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutCrimeGroupsInput = {
@@ -40331,6 +40418,7 @@ export type SchemeCreateWithoutCrimeGroupsInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutCustomGalleriesInput = {
@@ -40394,6 +40482,7 @@ export type SchemeCreateWithoutCustomGalleriesInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutDarkLogoInput = {
@@ -40457,6 +40546,7 @@ export type SchemeCreateWithoutDarkLogoInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutDocumentsInput = {
@@ -40520,6 +40610,7 @@ export type SchemeCreateWithoutDocumentsInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutFeedItemsInput = {
@@ -40583,6 +40674,7 @@ export type SchemeCreateWithoutFeedItemsInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutGroupsInput = {
@@ -40646,6 +40738,7 @@ export type SchemeCreateWithoutGroupsInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutImagesInput = {
@@ -40709,6 +40802,7 @@ export type SchemeCreateWithoutImagesInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutIncidentFormInput = {
@@ -40772,6 +40866,7 @@ export type SchemeCreateWithoutIncidentFormInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutIncidentsInput = {
@@ -40835,6 +40930,7 @@ export type SchemeCreateWithoutIncidentsInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutIntelInput = {
@@ -40898,6 +40994,7 @@ export type SchemeCreateWithoutIntelInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutInvestigationsInSchemeInput = {
@@ -40961,6 +41058,7 @@ export type SchemeCreateWithoutInvestigationsInSchemeInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutInvestigationsInput = {
@@ -41024,6 +41122,7 @@ export type SchemeCreateWithoutInvestigationsInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutLoginEventsInput = {
@@ -41087,6 +41186,7 @@ export type SchemeCreateWithoutLoginEventsInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutLogoInput = {
@@ -41150,6 +41250,7 @@ export type SchemeCreateWithoutLogoInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutMembersInput = {
@@ -41213,6 +41314,7 @@ export type SchemeCreateWithoutMembersInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutMessagesInput = {
@@ -41276,6 +41378,7 @@ export type SchemeCreateWithoutMessagesInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutNotificationsInput = {
@@ -41339,6 +41442,7 @@ export type SchemeCreateWithoutNotificationsInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutOffendersInput = {
@@ -41402,6 +41506,7 @@ export type SchemeCreateWithoutOffendersInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutQuestionsInput = {
@@ -41465,6 +41570,7 @@ export type SchemeCreateWithoutQuestionsInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutRecycledItemsInput = {
@@ -41528,6 +41634,7 @@ export type SchemeCreateWithoutRecycledItemsInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutRekCollectionsInput = {
@@ -41591,6 +41698,7 @@ export type SchemeCreateWithoutRekCollectionsInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutReportIconsInput = {
@@ -41654,6 +41762,7 @@ export type SchemeCreateWithoutReportIconsInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutReportTemplatesInput = {
@@ -41717,6 +41826,7 @@ export type SchemeCreateWithoutReportTemplatesInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutSchemeTagsInput = {
@@ -41780,6 +41890,7 @@ export type SchemeCreateWithoutSchemeTagsInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutStatementTemplatesInput = {
@@ -41843,6 +41954,7 @@ export type SchemeCreateWithoutStatementTemplatesInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutTagOrdersInput = {
@@ -41906,6 +42018,7 @@ export type SchemeCreateWithoutTagOrdersInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutTagsInput = {
@@ -41969,6 +42082,7 @@ export type SchemeCreateWithoutTagsInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutTermsInSchemeInput = {
@@ -42032,6 +42146,7 @@ export type SchemeCreateWithoutTermsInSchemeInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutTermsInput = {
@@ -42095,6 +42210,7 @@ export type SchemeCreateWithoutTermsInput = {
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutTodosInput = {
@@ -42158,6 +42274,7 @@ export type SchemeCreateWithoutTodosInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutVehiclesInput = {
@@ -42221,6 +42338,7 @@ export type SchemeCreateWithoutVehiclesInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreatecustomTranslationsInput = {
@@ -42301,6 +42419,7 @@ export type SchemeOrderByWithRelationInput = {
   todos?: InputMaybe<TodoOrderByRelationAggregateInput>;
   updatedAt?: InputMaybe<SortOrder>;
   vehicles?: InputMaybe<VehicleOrderByRelationAggregateInput>;
+  workflows?: InputMaybe<WorkflowOrderByRelationAggregateInput>;
 };
 
 export type SchemeRekognotionCollectionsInput = {
@@ -42400,6 +42519,7 @@ export type SchemeUpdateInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateManyMutationInput = {
@@ -43208,6 +43328,7 @@ export type SchemeUpdateWithoutActionsInSchemeInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutActionsInput = {
@@ -43271,6 +43392,7 @@ export type SchemeUpdateWithoutActionsInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutArticlesInput = {
@@ -43334,6 +43456,7 @@ export type SchemeUpdateWithoutArticlesInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutBansInput = {
@@ -43397,6 +43520,7 @@ export type SchemeUpdateWithoutBansInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutBusinessesInput = {
@@ -43460,6 +43584,7 @@ export type SchemeUpdateWithoutBusinessesInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutChatsInput = {
@@ -43523,6 +43648,7 @@ export type SchemeUpdateWithoutChatsInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutContactsInput = {
@@ -43586,6 +43712,7 @@ export type SchemeUpdateWithoutContactsInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutCrimeGroupsInput = {
@@ -43649,6 +43776,7 @@ export type SchemeUpdateWithoutCrimeGroupsInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutCustomGalleriesInput = {
@@ -43712,6 +43840,7 @@ export type SchemeUpdateWithoutCustomGalleriesInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutDarkLogoInput = {
@@ -43775,6 +43904,7 @@ export type SchemeUpdateWithoutDarkLogoInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutDocumentsInput = {
@@ -43838,6 +43968,7 @@ export type SchemeUpdateWithoutDocumentsInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutFeedItemsInput = {
@@ -43901,6 +44032,7 @@ export type SchemeUpdateWithoutFeedItemsInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutGroupsInput = {
@@ -43964,6 +44096,7 @@ export type SchemeUpdateWithoutGroupsInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutImagesInput = {
@@ -44027,6 +44160,7 @@ export type SchemeUpdateWithoutImagesInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutIncidentFormInput = {
@@ -44090,6 +44224,7 @@ export type SchemeUpdateWithoutIncidentFormInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutIncidentsInput = {
@@ -44153,6 +44288,7 @@ export type SchemeUpdateWithoutIncidentsInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutIntelInput = {
@@ -44216,6 +44352,7 @@ export type SchemeUpdateWithoutIntelInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutInvestigationsInSchemeInput = {
@@ -44279,6 +44416,7 @@ export type SchemeUpdateWithoutInvestigationsInSchemeInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutInvestigationsInput = {
@@ -44342,6 +44480,7 @@ export type SchemeUpdateWithoutInvestigationsInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutLoginEventsInput = {
@@ -44405,6 +44544,7 @@ export type SchemeUpdateWithoutLoginEventsInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutLogoInput = {
@@ -44468,6 +44608,7 @@ export type SchemeUpdateWithoutLogoInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutMembersInput = {
@@ -44531,6 +44672,7 @@ export type SchemeUpdateWithoutMembersInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutMessagesInput = {
@@ -44594,6 +44736,7 @@ export type SchemeUpdateWithoutMessagesInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutNotificationsInput = {
@@ -44657,6 +44800,7 @@ export type SchemeUpdateWithoutNotificationsInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutOffendersInput = {
@@ -44720,6 +44864,7 @@ export type SchemeUpdateWithoutOffendersInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutQuestionsInput = {
@@ -44783,6 +44928,7 @@ export type SchemeUpdateWithoutQuestionsInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutRecycledItemsInput = {
@@ -44846,6 +44992,7 @@ export type SchemeUpdateWithoutRecycledItemsInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutRekCollectionsInput = {
@@ -44909,6 +45056,7 @@ export type SchemeUpdateWithoutRekCollectionsInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutReportIconsInput = {
@@ -44972,6 +45120,7 @@ export type SchemeUpdateWithoutReportIconsInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutReportTemplatesInput = {
@@ -45035,6 +45184,7 @@ export type SchemeUpdateWithoutReportTemplatesInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutSchemeTagsInput = {
@@ -45098,6 +45248,7 @@ export type SchemeUpdateWithoutSchemeTagsInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutStatementTemplatesInput = {
@@ -45161,6 +45312,7 @@ export type SchemeUpdateWithoutStatementTemplatesInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutTagOrdersInput = {
@@ -45224,6 +45376,7 @@ export type SchemeUpdateWithoutTagOrdersInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutTagsInput = {
@@ -45287,6 +45440,7 @@ export type SchemeUpdateWithoutTagsInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutTermsInSchemeInput = {
@@ -45350,6 +45504,7 @@ export type SchemeUpdateWithoutTermsInSchemeInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutTermsInput = {
@@ -45413,6 +45568,7 @@ export type SchemeUpdateWithoutTermsInput = {
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutTodosInput = {
@@ -45476,6 +45632,7 @@ export type SchemeUpdateWithoutTodosInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutVehiclesInput = {
@@ -45539,6 +45696,7 @@ export type SchemeUpdateWithoutVehiclesInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdatecustomTranslationsInput = {
@@ -45823,6 +45981,7 @@ export type SchemeWhereInput = {
   todos?: InputMaybe<TodoListRelationFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   vehicles?: InputMaybe<VehicleListRelationFilter>;
+  workflows?: InputMaybe<WorkflowListRelationFilter>;
 };
 
 export type SchemeWhereUniqueInput = {
@@ -46098,6 +46257,7 @@ export type Tag = {
   description: Scalars['String'];
   documents: Array<Document>;
   id: Scalars['String'];
+  incidentForm?: Maybe<IncidentForm>;
   incidents: Array<Incident>;
   name: Scalars['String'];
   offenders: Array<Offender>;
@@ -46105,6 +46265,7 @@ export type Tag = {
   recycled?: Maybe<Scalars['Boolean']>;
   scheme?: Maybe<Scheme>;
   schemes: Array<Scheme>;
+  tagQuestions: Array<TagQuestion>;
   type: TagType;
   updatedAt: Scalars['DateTime'];
   uploaded?: Maybe<Scalars['Boolean']>;
@@ -46162,6 +46323,13 @@ export type TagOffendersArgs = {
 export type TagSchemesArgs = {
   after?: InputMaybe<SchemeWhereUniqueInput>;
   before?: InputMaybe<SchemeWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+export type TagTagQuestionsArgs = {
+  after?: InputMaybe<TagQuestionWhereUniqueInput>;
+  before?: InputMaybe<TagQuestionWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
 };
@@ -47126,6 +47294,7 @@ export type TagQuestionAnswersArgs = {
 
 export type TagQuestionCreateManyQuestionInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   id?: InputMaybe<Scalars['String']>;
   priority?: InputMaybe<Scalars['Int']>;
   req?: InputMaybe<Scalars['Boolean']>;
@@ -47140,6 +47309,7 @@ export type TagQuestionCreateManyQuestionInputEnvelope = {
 
 export type TagQuestionCreateManyTagInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   id?: InputMaybe<Scalars['String']>;
   priority?: InputMaybe<Scalars['Int']>;
   questionId: Scalars['String'];
@@ -47193,6 +47363,7 @@ export type TagQuestionCreateOrConnectWithoutTagInput = {
 
 export type TagQuestionCreateWithoutAnswersInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   id?: InputMaybe<Scalars['String']>;
   priority?: InputMaybe<Scalars['Int']>;
   question: QuestionCreateNestedOneWithoutTagsInput;
@@ -47204,6 +47375,7 @@ export type TagQuestionCreateWithoutAnswersInput = {
 export type TagQuestionCreateWithoutQuestionInput = {
   answers?: InputMaybe<AnswerCreateNestedManyWithoutTagQuestionInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   id?: InputMaybe<Scalars['String']>;
   priority?: InputMaybe<Scalars['Int']>;
   req?: InputMaybe<Scalars['Boolean']>;
@@ -47214,6 +47386,7 @@ export type TagQuestionCreateWithoutQuestionInput = {
 export type TagQuestionCreateWithoutTagInput = {
   answers?: InputMaybe<AnswerCreateNestedManyWithoutTagQuestionInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  deleted?: InputMaybe<Scalars['Boolean']>;
   id?: InputMaybe<Scalars['String']>;
   priority?: InputMaybe<Scalars['Int']>;
   question: QuestionCreateNestedOneWithoutTagsInput;
@@ -47236,6 +47409,7 @@ export type TagQuestionScalarWhereInput = {
   NOT?: InputMaybe<Array<TagQuestionScalarWhereInput>>;
   OR?: InputMaybe<Array<TagQuestionScalarWhereInput>>;
   createdAt?: InputMaybe<DateTimeFilter>;
+  deleted?: InputMaybe<BoolFilter>;
   id?: InputMaybe<StringFilter>;
   priority?: InputMaybe<IntFilter>;
   questionId?: InputMaybe<StringFilter>;
@@ -47246,6 +47420,7 @@ export type TagQuestionScalarWhereInput = {
 
 export type TagQuestionUpdateManyMutationInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   priority?: InputMaybe<IntFieldUpdateOperationsInput>;
   req?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -47320,6 +47495,7 @@ export type TagQuestionUpdateWithWhereUniqueWithoutTagInput = {
 
 export type TagQuestionUpdateWithoutAnswersInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   priority?: InputMaybe<IntFieldUpdateOperationsInput>;
   question?: InputMaybe<QuestionUpdateOneRequiredWithoutTagsNestedInput>;
@@ -47331,6 +47507,7 @@ export type TagQuestionUpdateWithoutAnswersInput = {
 export type TagQuestionUpdateWithoutQuestionInput = {
   answers?: InputMaybe<AnswerUpdateManyWithoutTagQuestionNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   priority?: InputMaybe<IntFieldUpdateOperationsInput>;
   req?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -47341,6 +47518,7 @@ export type TagQuestionUpdateWithoutQuestionInput = {
 export type TagQuestionUpdateWithoutTagInput = {
   answers?: InputMaybe<AnswerUpdateManyWithoutTagQuestionNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  deleted?: InputMaybe<BoolFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   priority?: InputMaybe<IntFieldUpdateOperationsInput>;
   question?: InputMaybe<QuestionUpdateOneRequiredWithoutTagsNestedInput>;
@@ -47371,6 +47549,7 @@ export type TagQuestionWhereInput = {
   OR?: InputMaybe<Array<TagQuestionWhereInput>>;
   answers?: InputMaybe<AnswerListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
+  deleted?: InputMaybe<BoolFilter>;
   id?: InputMaybe<StringFilter>;
   priority?: InputMaybe<IntFilter>;
   question?: InputMaybe<QuestionWhereInput>;
@@ -49861,6 +50040,13 @@ export type TopContributors = {
   updatesCreated: Scalars['Int'];
 };
 
+export type Tree = {
+  __typename?: 'Tree';
+  id: Scalars['String'];
+  name: Scalars['String'];
+  parentId?: Maybe<Scalars['String']>;
+};
+
 export type UrlImage = {
   filename: Scalars['String'];
   id?: InputMaybe<Scalars['String']>;
@@ -51745,6 +51931,11 @@ export type UploadVehicleImage = {
   primary?: InputMaybe<Scalars['Boolean']>;
   rotation?: InputMaybe<Scalars['Int']>;
   url?: InputMaybe<UrlImage>;
+};
+
+export type UpsertIncidentFormInput = {
+  formFields: Array<IncidentFormFieldsInput>;
+  tagId: Scalars['String'];
 };
 
 export type User = {
@@ -62750,10 +62941,302 @@ export enum When {
   Year = 'YEAR',
 }
 
+export type WorkflowActionCreateManyWorkflowInput = {
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  data: Scalars['Json'];
+  id?: InputMaybe<Scalars['String']>;
+  outputModel?: InputMaybe<Model>;
+  type: WorkflowActionType;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type WorkflowActionCreateManyWorkflowInputEnvelope = {
+  data?: InputMaybe<Array<WorkflowActionCreateManyWorkflowInput>>;
+  skipDuplicates?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type WorkflowActionCreateNestedManyWithoutWorkflowInput = {
+  connect?: InputMaybe<Array<WorkflowActionWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<WorkflowActionCreateOrConnectWithoutWorkflowInput>
+  >;
+  create?: InputMaybe<Array<WorkflowActionCreateWithoutWorkflowInput>>;
+  createMany?: InputMaybe<WorkflowActionCreateManyWorkflowInputEnvelope>;
+};
+
+export type WorkflowActionCreateOrConnectWithoutWorkflowInput = {
+  create: WorkflowActionCreateWithoutWorkflowInput;
+  where: WorkflowActionWhereUniqueInput;
+};
+
+export type WorkflowActionCreateWithoutWorkflowInput = {
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  data: Scalars['Json'];
+  id?: InputMaybe<Scalars['String']>;
+  outputModel?: InputMaybe<Model>;
+  type: WorkflowActionType;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type WorkflowActionListRelationFilter = {
+  every?: InputMaybe<WorkflowActionWhereInput>;
+  none?: InputMaybe<WorkflowActionWhereInput>;
+  some?: InputMaybe<WorkflowActionWhereInput>;
+};
+
+export type WorkflowActionScalarWhereInput = {
+  AND?: InputMaybe<Array<WorkflowActionScalarWhereInput>>;
+  NOT?: InputMaybe<Array<WorkflowActionScalarWhereInput>>;
+  OR?: InputMaybe<Array<WorkflowActionScalarWhereInput>>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  id?: InputMaybe<StringFilter>;
+  outputModel?: InputMaybe<EnumModelNullableFilter>;
+  type?: InputMaybe<EnumWorkflowActionTypeFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+  workflowId?: InputMaybe<StringFilter>;
+};
+
+export enum WorkflowActionType {
+  Create = 'CREATE',
+  SendEmail = 'SEND_EMAIL',
+  SendNotification = 'SEND_NOTIFICATION',
+}
+
+export type WorkflowActionUpdateManyMutationInput = {
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  data?: InputMaybe<Scalars['Json']>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  outputModel?: InputMaybe<NullableEnumModelFieldUpdateOperationsInput>;
+  type?: InputMaybe<EnumWorkflowActionTypeFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type WorkflowActionUpdateManyWithWhereWithoutWorkflowInput = {
+  data: WorkflowActionUpdateManyMutationInput;
+  where: WorkflowActionScalarWhereInput;
+};
+
+export type WorkflowActionUpdateManyWithoutWorkflowNestedInput = {
+  connect?: InputMaybe<Array<WorkflowActionWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<WorkflowActionCreateOrConnectWithoutWorkflowInput>
+  >;
+  create?: InputMaybe<Array<WorkflowActionCreateWithoutWorkflowInput>>;
+  createMany?: InputMaybe<WorkflowActionCreateManyWorkflowInputEnvelope>;
+  delete?: InputMaybe<Array<WorkflowActionWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<WorkflowActionScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<WorkflowActionWhereUniqueInput>>;
+  set?: InputMaybe<Array<WorkflowActionWhereUniqueInput>>;
+  update?: InputMaybe<
+    Array<WorkflowActionUpdateWithWhereUniqueWithoutWorkflowInput>
+  >;
+  updateMany?: InputMaybe<
+    Array<WorkflowActionUpdateManyWithWhereWithoutWorkflowInput>
+  >;
+  upsert?: InputMaybe<
+    Array<WorkflowActionUpsertWithWhereUniqueWithoutWorkflowInput>
+  >;
+};
+
+export type WorkflowActionUpdateWithWhereUniqueWithoutWorkflowInput = {
+  data: WorkflowActionUpdateWithoutWorkflowInput;
+  where: WorkflowActionWhereUniqueInput;
+};
+
+export type WorkflowActionUpdateWithoutWorkflowInput = {
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  data?: InputMaybe<Scalars['Json']>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  outputModel?: InputMaybe<NullableEnumModelFieldUpdateOperationsInput>;
+  type?: InputMaybe<EnumWorkflowActionTypeFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type WorkflowActionUpsertWithWhereUniqueWithoutWorkflowInput = {
+  create: WorkflowActionCreateWithoutWorkflowInput;
+  update: WorkflowActionUpdateWithoutWorkflowInput;
+  where: WorkflowActionWhereUniqueInput;
+};
+
+export type WorkflowActionWhereInput = {
+  AND?: InputMaybe<Array<WorkflowActionWhereInput>>;
+  NOT?: InputMaybe<Array<WorkflowActionWhereInput>>;
+  OR?: InputMaybe<Array<WorkflowActionWhereInput>>;
+  Workflow?: InputMaybe<WorkflowWhereInput>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  id?: InputMaybe<StringFilter>;
+  outputModel?: InputMaybe<EnumModelNullableFilter>;
+  type?: InputMaybe<EnumWorkflowActionTypeFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+  workflowId?: InputMaybe<StringFilter>;
+};
+
+export type WorkflowActionWhereUniqueInput = {
+  id?: InputMaybe<Scalars['String']>;
+};
+
+export type WorkflowCreateNestedManyWithoutSchemesInput = {
+  connect?: InputMaybe<Array<WorkflowWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<WorkflowCreateOrConnectWithoutSchemesInput>
+  >;
+  create?: InputMaybe<Array<WorkflowCreateWithoutSchemesInput>>;
+};
+
+export type WorkflowCreateOrConnectWithoutSchemesInput = {
+  create: WorkflowCreateWithoutSchemesInput;
+  where: WorkflowWhereUniqueInput;
+};
+
+export type WorkflowCreateWithoutSchemesInput = {
+  actions?: InputMaybe<WorkflowActionCreateNestedManyWithoutWorkflowInput>;
+  conditions?: InputMaybe<Scalars['Json']>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  id?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+  trigger: WorkflowTrigger;
+  triggerModels: Model;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type WorkflowListRelationFilter = {
+  every?: InputMaybe<WorkflowWhereInput>;
+  none?: InputMaybe<WorkflowWhereInput>;
+  some?: InputMaybe<WorkflowWhereInput>;
+};
+
+export type WorkflowOrderByRelationAggregateInput = {
+  _count?: InputMaybe<SortOrder>;
+};
+
+export type WorkflowScalarWhereInput = {
+  AND?: InputMaybe<Array<WorkflowScalarWhereInput>>;
+  NOT?: InputMaybe<Array<WorkflowScalarWhereInput>>;
+  OR?: InputMaybe<Array<WorkflowScalarWhereInput>>;
+  conditions?: InputMaybe<JsonNullableFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  id?: InputMaybe<StringFilter>;
+  name?: InputMaybe<StringFilter>;
+  trigger?: InputMaybe<EnumWorkflowTriggerFilter>;
+  triggerModels?: InputMaybe<EnumModelFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export enum WorkflowTrigger {
+  Approved = 'APPROVED',
+  Assigned = 'ASSIGNED',
+  Completed = 'COMPLETED',
+  Created = 'CREATED',
+  Updated = 'UPDATED',
+}
+
+export type WorkflowUpdateManyMutationInput = {
+  conditions?: InputMaybe<Scalars['Json']>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  trigger?: InputMaybe<EnumWorkflowTriggerFieldUpdateOperationsInput>;
+  triggerModels?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type WorkflowUpdateManyWithWhereWithoutSchemesInput = {
+  data: WorkflowUpdateManyMutationInput;
+  where: WorkflowScalarWhereInput;
+};
+
+export type WorkflowUpdateManyWithoutSchemesNestedInput = {
+  connect?: InputMaybe<Array<WorkflowWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<WorkflowCreateOrConnectWithoutSchemesInput>
+  >;
+  create?: InputMaybe<Array<WorkflowCreateWithoutSchemesInput>>;
+  delete?: InputMaybe<Array<WorkflowWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<WorkflowScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<WorkflowWhereUniqueInput>>;
+  set?: InputMaybe<Array<WorkflowWhereUniqueInput>>;
+  update?: InputMaybe<Array<WorkflowUpdateWithWhereUniqueWithoutSchemesInput>>;
+  updateMany?: InputMaybe<
+    Array<WorkflowUpdateManyWithWhereWithoutSchemesInput>
+  >;
+  upsert?: InputMaybe<Array<WorkflowUpsertWithWhereUniqueWithoutSchemesInput>>;
+};
+
+export type WorkflowUpdateWithWhereUniqueWithoutSchemesInput = {
+  data: WorkflowUpdateWithoutSchemesInput;
+  where: WorkflowWhereUniqueInput;
+};
+
+export type WorkflowUpdateWithoutSchemesInput = {
+  actions?: InputMaybe<WorkflowActionUpdateManyWithoutWorkflowNestedInput>;
+  conditions?: InputMaybe<Scalars['Json']>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  trigger?: InputMaybe<EnumWorkflowTriggerFieldUpdateOperationsInput>;
+  triggerModels?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type WorkflowUpsertWithWhereUniqueWithoutSchemesInput = {
+  create: WorkflowCreateWithoutSchemesInput;
+  update: WorkflowUpdateWithoutSchemesInput;
+  where: WorkflowWhereUniqueInput;
+};
+
+export type WorkflowWhereInput = {
+  AND?: InputMaybe<Array<WorkflowWhereInput>>;
+  NOT?: InputMaybe<Array<WorkflowWhereInput>>;
+  OR?: InputMaybe<Array<WorkflowWhereInput>>;
+  actions?: InputMaybe<WorkflowActionListRelationFilter>;
+  conditions?: InputMaybe<JsonNullableFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  id?: InputMaybe<StringFilter>;
+  name?: InputMaybe<StringFilter>;
+  schemes?: InputMaybe<SchemeListRelationFilter>;
+  trigger?: InputMaybe<EnumWorkflowTriggerFilter>;
+  triggerModels?: InputMaybe<EnumModelFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type WorkflowWhereUniqueInput = {
+  id?: InputMaybe<Scalars['String']>;
+};
+
 export type Xy = {
   __typename?: 'XY';
   x: Scalars['Int'];
   y: Scalars['Int'];
+};
+
+export type CreateOrAddQuestionMutationVariables = Exact<{
+  data: CreateQuestionInput;
+  where?: InputMaybe<UniqueId>;
+}>;
+
+export type CreateOrAddQuestionMutation = {
+  __typename?: 'Mutation';
+  addQuestion?: {
+    __typename?: 'Question';
+    id: string;
+    questionFormatted: string;
+  } | null;
+};
+
+export type AvailableQuestionsQueryVariables = Exact<{
+  where?: InputMaybe<UniqueId>;
+}>;
+
+export type AvailableQuestionsQuery = {
+  __typename?: 'Query';
+  availableQuestions: Array<{
+    __typename?: 'Question';
+    id: string;
+    questionFormatted: string;
+    optionsFormatted?: Array<string> | null;
+    type: AnswerType;
+    options: Array<any>;
+  }>;
 };
 
 export type ListActionsQueryVariables = Exact<{
@@ -73225,6 +73708,100 @@ export type VehicleQuery = {
   } | null;
 };
 
+export type ListSchemeTagsQueryVariables = Exact<{
+  listWhere: TagWhereInput;
+}>;
+
+export type ListSchemeTagsQuery = {
+  __typename?: 'Query';
+  listTags: {
+    __typename?: 'ListTags';
+    tags: Array<{
+      __typename?: 'Tag';
+      id: string;
+      name: string;
+      parentTag?: { __typename?: 'Tag'; id: string } | null;
+    }>;
+  };
+};
+
+export type RemoveQuestionFromTagMutationVariables = Exact<{
+  where?: InputMaybe<UniqueId>;
+}>;
+
+export type RemoveQuestionFromTagMutation = {
+  __typename?: 'Mutation';
+  removeQuestionFromTag?: { __typename?: 'TagQuestion'; id: string } | null;
+};
+
+export type UpsertIncidentFormMutationVariables = Exact<{
+  data: UpsertIncidentFormInput;
+}>;
+
+export type UpsertIncidentFormMutation = {
+  __typename?: 'Mutation';
+  upsertIncidentForm?: { __typename?: 'IncidentForm'; id: string } | null;
+};
+
+export type UpdateTagQsMutationVariables = Exact<{
+  data: ChangePositionAndReqInput;
+}>;
+
+export type UpdateTagQsMutation = {
+  __typename?: 'Mutation';
+  updateTagQs?: Array<{
+    __typename?: 'TagQuestion';
+    id: string;
+    priority: number;
+  } | null> | null;
+};
+
+export type ViewTagQueryVariables = Exact<{
+  where: TagWhereUniqueInput;
+  listWhere: TagWhereInput;
+}>;
+
+export type ViewTagQuery = {
+  __typename?: 'Query';
+  listTags: {
+    __typename?: 'ListTags';
+    tags: Array<{
+      __typename?: 'Tag';
+      id: string;
+      name: string;
+      parentTag?: { __typename?: 'Tag'; id: string } | null;
+    }>;
+  };
+  tag?: {
+    __typename?: 'Tag';
+    id: string;
+    name: string;
+    description: string;
+    parentTag?: { __typename?: 'Tag'; id: string; name: string } | null;
+    incidentForm?: {
+      __typename?: 'IncidentForm';
+      id: string;
+      fields: Array<{
+        __typename?: 'FormField';
+        id: string;
+        position: number;
+        type: IncidentFormField;
+      }>;
+    } | null;
+    tagQuestions: Array<{
+      __typename?: 'TagQuestion';
+      req: boolean;
+      priority: number;
+      id: string;
+      question: {
+        __typename?: 'Question';
+        questionFormatted: string;
+        type: AnswerType;
+      };
+    }>;
+  } | null;
+};
+
 export type UserListQueryVariables = Exact<{
   where?: InputMaybe<UserWhereInput>;
   orderBy?: InputMaybe<
@@ -73341,6 +73918,84 @@ export const FeedUpdateFragmentDoc = gql`
   }
   ${FeedImageFragmentDoc}
 `;
+export const CreateOrAddQuestionDocument = gql`
+  mutation CreateOrAddQuestion($data: CreateQuestionInput!, $where: UniqueId) {
+    addQuestion(data: $data, where: $where) {
+      id
+      questionFormatted
+    }
+  }
+`;
+export type CreateOrAddQuestionMutationFn = Apollo.MutationFunction<
+  CreateOrAddQuestionMutation,
+  CreateOrAddQuestionMutationVariables
+>;
+export function useCreateOrAddQuestionMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateOrAddQuestionMutation,
+    CreateOrAddQuestionMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateOrAddQuestionMutation,
+    CreateOrAddQuestionMutationVariables
+  >(CreateOrAddQuestionDocument, options);
+}
+export type CreateOrAddQuestionMutationHookResult = ReturnType<
+  typeof useCreateOrAddQuestionMutation
+>;
+export type CreateOrAddQuestionMutationResult =
+  Apollo.MutationResult<CreateOrAddQuestionMutation>;
+export type CreateOrAddQuestionMutationOptions = Apollo.BaseMutationOptions<
+  CreateOrAddQuestionMutation,
+  CreateOrAddQuestionMutationVariables
+>;
+export const AvailableQuestionsDocument = gql`
+  query AvailableQuestions($where: UniqueId) {
+    availableQuestions(where: $where) {
+      id
+      questionFormatted
+      optionsFormatted
+      type
+      options
+    }
+  }
+`;
+export function useAvailableQuestionsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    AvailableQuestionsQuery,
+    AvailableQuestionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    AvailableQuestionsQuery,
+    AvailableQuestionsQueryVariables
+  >(AvailableQuestionsDocument, options);
+}
+export function useAvailableQuestionsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    AvailableQuestionsQuery,
+    AvailableQuestionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    AvailableQuestionsQuery,
+    AvailableQuestionsQueryVariables
+  >(AvailableQuestionsDocument, options);
+}
+export type AvailableQuestionsQueryHookResult = ReturnType<
+  typeof useAvailableQuestionsQuery
+>;
+export type AvailableQuestionsLazyQueryHookResult = ReturnType<
+  typeof useAvailableQuestionsLazyQuery
+>;
+export type AvailableQuestionsQueryResult = Apollo.QueryResult<
+  AvailableQuestionsQuery,
+  AvailableQuestionsQueryVariables
+>;
 export const ListActionsDocument = gql`
   query ListActions(
     $take: Int
@@ -87810,6 +88465,213 @@ export type VehicleLazyQueryHookResult = ReturnType<typeof useVehicleLazyQuery>;
 export type VehicleQueryResult = Apollo.QueryResult<
   VehicleQuery,
   VehicleQueryVariables
+>;
+export const ListSchemeTagsDocument = gql`
+  query ListSchemeTags($listWhere: TagWhereInput!) {
+    listTags(where: $listWhere) {
+      tags {
+        id
+        name
+        parentTag {
+          id
+        }
+      }
+    }
+  }
+`;
+export function useListSchemeTagsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ListSchemeTagsQuery,
+    ListSchemeTagsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ListSchemeTagsQuery, ListSchemeTagsQueryVariables>(
+    ListSchemeTagsDocument,
+    options
+  );
+}
+export function useListSchemeTagsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListSchemeTagsQuery,
+    ListSchemeTagsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ListSchemeTagsQuery, ListSchemeTagsQueryVariables>(
+    ListSchemeTagsDocument,
+    options
+  );
+}
+export type ListSchemeTagsQueryHookResult = ReturnType<
+  typeof useListSchemeTagsQuery
+>;
+export type ListSchemeTagsLazyQueryHookResult = ReturnType<
+  typeof useListSchemeTagsLazyQuery
+>;
+export type ListSchemeTagsQueryResult = Apollo.QueryResult<
+  ListSchemeTagsQuery,
+  ListSchemeTagsQueryVariables
+>;
+export const RemoveQuestionFromTagDocument = gql`
+  mutation RemoveQuestionFromTag($where: UniqueId) {
+    removeQuestionFromTag(where: $where) {
+      id
+    }
+  }
+`;
+export type RemoveQuestionFromTagMutationFn = Apollo.MutationFunction<
+  RemoveQuestionFromTagMutation,
+  RemoveQuestionFromTagMutationVariables
+>;
+export function useRemoveQuestionFromTagMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    RemoveQuestionFromTagMutation,
+    RemoveQuestionFromTagMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    RemoveQuestionFromTagMutation,
+    RemoveQuestionFromTagMutationVariables
+  >(RemoveQuestionFromTagDocument, options);
+}
+export type RemoveQuestionFromTagMutationHookResult = ReturnType<
+  typeof useRemoveQuestionFromTagMutation
+>;
+export type RemoveQuestionFromTagMutationResult =
+  Apollo.MutationResult<RemoveQuestionFromTagMutation>;
+export type RemoveQuestionFromTagMutationOptions = Apollo.BaseMutationOptions<
+  RemoveQuestionFromTagMutation,
+  RemoveQuestionFromTagMutationVariables
+>;
+export const UpsertIncidentFormDocument = gql`
+  mutation UpsertIncidentForm($data: UpsertIncidentFormInput!) {
+    upsertIncidentForm(data: $data) {
+      id
+    }
+  }
+`;
+export type UpsertIncidentFormMutationFn = Apollo.MutationFunction<
+  UpsertIncidentFormMutation,
+  UpsertIncidentFormMutationVariables
+>;
+export function useUpsertIncidentFormMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpsertIncidentFormMutation,
+    UpsertIncidentFormMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpsertIncidentFormMutation,
+    UpsertIncidentFormMutationVariables
+  >(UpsertIncidentFormDocument, options);
+}
+export type UpsertIncidentFormMutationHookResult = ReturnType<
+  typeof useUpsertIncidentFormMutation
+>;
+export type UpsertIncidentFormMutationResult =
+  Apollo.MutationResult<UpsertIncidentFormMutation>;
+export type UpsertIncidentFormMutationOptions = Apollo.BaseMutationOptions<
+  UpsertIncidentFormMutation,
+  UpsertIncidentFormMutationVariables
+>;
+export const UpdateTagQsDocument = gql`
+  mutation UpdateTagQs($data: ChangePositionAndReqInput!) {
+    updateTagQs(data: $data) {
+      id
+      priority
+    }
+  }
+`;
+export type UpdateTagQsMutationFn = Apollo.MutationFunction<
+  UpdateTagQsMutation,
+  UpdateTagQsMutationVariables
+>;
+export function useUpdateTagQsMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateTagQsMutation,
+    UpdateTagQsMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<UpdateTagQsMutation, UpdateTagQsMutationVariables>(
+    UpdateTagQsDocument,
+    options
+  );
+}
+export type UpdateTagQsMutationHookResult = ReturnType<
+  typeof useUpdateTagQsMutation
+>;
+export type UpdateTagQsMutationResult =
+  Apollo.MutationResult<UpdateTagQsMutation>;
+export type UpdateTagQsMutationOptions = Apollo.BaseMutationOptions<
+  UpdateTagQsMutation,
+  UpdateTagQsMutationVariables
+>;
+export const ViewTagDocument = gql`
+  query ViewTag($where: TagWhereUniqueInput!, $listWhere: TagWhereInput!) {
+    listTags(where: $listWhere) {
+      tags {
+        id
+        name
+        parentTag {
+          id
+        }
+      }
+    }
+    tag(where: $where) {
+      id
+      name
+      parentTag {
+        id
+        name
+      }
+      description
+      incidentForm {
+        id
+        fields {
+          id
+          position
+          type
+        }
+      }
+      tagQuestions {
+        req
+        priority
+        question {
+          questionFormatted
+          type
+        }
+        id
+      }
+    }
+  }
+`;
+export function useViewTagQuery(
+  baseOptions: Apollo.QueryHookOptions<ViewTagQuery, ViewTagQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ViewTagQuery, ViewTagQueryVariables>(
+    ViewTagDocument,
+    options
+  );
+}
+export function useViewTagLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<ViewTagQuery, ViewTagQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ViewTagQuery, ViewTagQueryVariables>(
+    ViewTagDocument,
+    options
+  );
+}
+export type ViewTagQueryHookResult = ReturnType<typeof useViewTagQuery>;
+export type ViewTagLazyQueryHookResult = ReturnType<typeof useViewTagLazyQuery>;
+export type ViewTagQueryResult = Apollo.QueryResult<
+  ViewTagQuery,
+  ViewTagQueryVariables
 >;
 export const UserListDocument = gql`
   query UserList(

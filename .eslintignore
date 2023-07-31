@@ -45,4 +45,4 @@ public
 *.test.ts*
 src/graphql/generated/*
 
-postInstall.js
+postInstall.js/en/lang.json

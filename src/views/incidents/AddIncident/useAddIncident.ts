@@ -969,7 +969,7 @@ const useAddIncident = (): Return => {
               date: moment(values.date).format('dddd Do MMMM YYYY'),
               goods: 0,
               totalLoss:
-                values.goods?.length > 0
+                values?.goods?.length > 0
                   ? `£${
                       values.goods
                         .filter(
