@@ -401,6 +401,10 @@ const useViewTag = (): Return => {
     setIncidentFormLayoutChanged(false);
   };
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
   return {
     toggleField,
     setIncidentFormLayoutChanged,
