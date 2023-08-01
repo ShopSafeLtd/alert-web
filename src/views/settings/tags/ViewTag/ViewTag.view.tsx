@@ -22,9 +22,9 @@ import 'react-grid-layout/css/styles.css';
 import AddQuestionContainer from '../../../../components/form-components/addQuestion/AddQuestion.container';
 import BuildTree from '../../../../utils/tags/tree-helper';
 import type {
-  IncidentFormFieldState,
   Elements,
   FieldLayout,
+  IncidentFormFieldState,
 } from './useViewTag';
 
 interface Props {
@@ -342,15 +342,14 @@ const ViewTag = ({
             <Col>
               <Tooltip
                 title={intl.formatMessage({
-                  defaultMessage: 'Hide/Show field on form',
-                  id: '+AMnGS',
+                  defaultMessage: 'Is required',
+                  id: 'kWXp6p',
                 })}
               >
                 <Checkbox
+                  disabled
                   checked={incidentFormFields.GROUPS}
-                  onChange={() => {
-                    toggleField(IncidentFormField.Groups);
-                  }}
+                  onChange={() => {}}
                 />
               </Tooltip>
             </Col>
