@@ -1,33 +1,19 @@
 /* eslint-disable react/jsx-props-no-spreading,@typescript-eslint/no-unsafe-member-access,formatjs/no-literal-string-in-jsx */
 import React from 'react';
-import type {
-  AddressesQuery,
-  CreateTagMutation,
-  ListOffendersQuery,
-} from 'graphql/generated';
+import type { AddressesQuery } from 'graphql/generated';
 import { IncidentFormField } from 'graphql/generated';
-import type {
-  CustomQuestion,
-  LocationData,
-  OffenderData as GlobalOffenderData,
-  VehicleData,
-} from 'types/DataType';
+import type { CustomQuestion, LocationData } from 'types/DataType';
 
 import type { FormInstance } from 'antd';
 import { Button, Card, Col, Drawer, Form, PageHeader, Row } from 'antd';
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-import type { MutationUpdaterFn } from '@apollo/client';
-import AddIncidentTag from 'components/form-components/tags/crimeTypes/AddCrimeType';
 import moment from 'moment';
-import AssignImageOffender from 'components/form-components/incident/image/AssignImageOffenders';
-import type { UploadChangeParam } from 'antd/lib/upload';
 import IncidentDetails from 'components/incidents/IncidentForm/IncidentDetails';
 import Profiles from 'components/incidents/IncidentForm/Profiles';
 import ImageSection from 'components/incidents/IncidentForm/ImageSection';
 import AddLocation from 'components/form-components/incident/location/AddLocation';
 import { useIntl } from 'react-intl';
 import useStyles from './AddIncident.styles';
-import type { FormData, NewImage } from './useAddIncident';
+import type { FormData } from './useAddIncident';
 import IncidentTypes from './components/IncidentTypes/IncidentTypes.container';
 import IncidentWhere from './components/IncidentWhere/IncidentWhere.container';
 import IncidentGoods from './components/IncidentsGoods/IncidentGoods.container';
@@ -35,60 +21,14 @@ import IncidentPolice from './components/IncidentPolice/IncidentPolice.view';
 import IncidentGroups from './components/IncidentGroups/IncidentGroups.container';
 import IncidentCustom from './components/IncidentCustom/IncidentCustom.view';
 
-interface OffenderData extends GlobalOffenderData {
-  new: boolean;
-  existing: boolean;
-  edited: boolean;
-}
-
 interface Props {
-  addIncidentTag: boolean;
-  assignOffendersToImages: (data: {
-    image: NewImage;
-    offenders: OffenderData[];
-  }) => void;
-  beforeUpload: (value: RcFile) => void;
-  fileList: NewImage[];
   form: FormInstance<FormData>;
-  imgChange: UploadProps['onChange'];
-  newImage: NewImage | null;
-  offenderImgChange: (
-    info: UploadChangeParam<UploadFile>,
-    currentId: string
-  ) => void;
-  offendersData: OffenderData[];
-  onCancelNewImage: () => void;
   onSubmit: (value: FormData) => void;
   onValuesChange: (changedValues: FormData, values: FormData) => void;
   primaryAddress:
     | Exclude<AddressesQuery['addresses'], undefined | null>[0]
     | undefined;
-  recentOffenderData: ListOffendersQuery | undefined;
-  recentOffenderLoading: boolean;
-  removeImage: (uid: string) => void;
-  removeImageFromOffender: (data: {
-    image: NewImage;
-    offenderId: string;
-  }) => void;
-  removeOffender: (offenderId: string) => void;
   saving: boolean;
-  searchOffenders: string;
-  setAssignToImage: (image: NewImage) => void;
-  setSearchOffenders: (value: string) => void;
-  toggleAddIncidentTag: () => void;
-  updateIncidentTag: MutationUpdaterFn<CreateTagMutation>;
-  onAddOffender: (value: GlobalOffenderData, existing: boolean) => void;
-  vehiclesData: VehicleData[];
-  formStages: {
-    crimeTypes: boolean;
-    where: boolean;
-    goods: boolean;
-    profiles: boolean;
-    images: boolean;
-    police: boolean;
-    details: boolean;
-    groups: boolean;
-  };
   addNewAddress: boolean;
   toggleAddNewAddress: () => void;
   updateNewAddressData: (value: LocationData | undefined) => void;
@@ -96,44 +36,20 @@ interface Props {
   goodsVisible: boolean;
   dontKnowGoods: () => void;
   knowGoods: () => void;
-  onEditImage: (value: NewImage) => void;
-  onAddVehicle: (value: VehicleData, existing: boolean) => void;
-  onRemoveVehicle: (vehicleId: string) => void;
   primaryImage: string;
   setPrimaryImage: (value: string) => void;
   incidentForm: IncidentFormField[];
   customQuestions: CustomQuestion[];
+  goodsMode: string;
 }
 
 const AddIncident = ({
-  addIncidentTag,
-  assignOffendersToImages,
-  beforeUpload,
-  fileList,
   form,
-  formStages,
-  imgChange,
   customQuestions,
-  newImage,
-  offenderImgChange,
-  offendersData,
-  onCancelNewImage,
   onSubmit,
   onValuesChange,
   primaryAddress,
-  recentOffenderData,
-  recentOffenderLoading,
-  removeImage,
-  removeImageFromOffender,
-  removeOffender,
   saving,
-  searchOffenders,
-  setAssignToImage,
-  setSearchOffenders,
-  toggleAddIncidentTag,
-  updateIncidentTag,
-  onAddOffender,
-  vehiclesData,
   addNewAddress,
   toggleAddNewAddress,
   updateNewAddressData,
@@ -141,12 +57,10 @@ const AddIncident = ({
   dontKnowGoods,
   goodsVisible,
   knowGoods,
-  onEditImage,
-  onAddVehicle,
-  onRemoveVehicle,
   primaryImage,
   setPrimaryImage,
   incidentForm,
+  goodsMode,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
@@ -165,6 +79,8 @@ const AddIncident = ({
           fullAddress: primaryAddress?.full,
           date: moment(),
           involvedTags: [],
+          offenders: null,
+          vehicles: null,
         }}
         onFinish={onSubmit}
         layout="vertical"
@@ -182,94 +98,55 @@ const AddIncident = ({
                   newAddressData={newAddressData}
                   toggleAddNewAddress={toggleAddNewAddress}
                   saving={saving}
-                  formStages={formStages}
                 />
               );
             }
             case IncidentFormField.Goods: {
               return (
                 <IncidentGoods
-                  formStages={formStages}
                   dontKnowGoods={dontKnowGoods}
                   goodsVisible={goodsVisible}
                   knowGoods={knowGoods}
+                  goodsMode={goodsMode}
                 />
               );
             }
             case IncidentFormField.Offenders: {
               return (
-                <Card
-                  className={classes.card}
-                  style={{ opacity: formStages.profiles ? 1 : 0.7 }}
-                >
-                  {!formStages.profiles && (
-                    <div className={classes.cardOverlay} />
-                  )}
+                <Card className={classes.card}>
                   <Form.Item name="profiles">
-                    <Profiles
-                      offenderImgChange={offenderImgChange}
-                      offendersData={offendersData}
-                      recentOffenderData={recentOffenderData}
-                      recentOffenderLoading={recentOffenderLoading}
-                      removeOffender={removeOffender}
-                      saving={saving}
-                      searchOffenders={searchOffenders}
-                      setSearchOffenders={setSearchOffenders}
-                      updateOffender={() => {}}
-                      vehiclesData={vehiclesData}
-                      onAddOffender={onAddOffender}
-                      onAddVehicle={onAddVehicle}
-                      onRemoveVehicle={onRemoveVehicle}
-                    />
+                    <Profiles form={form} saving={saving} />
                   </Form.Item>
                 </Card>
               );
             }
             case IncidentFormField.Images: {
               return (
-                <Card
-                  className={classes.card}
-                  style={{ opacity: formStages.images ? 1 : 0.7 }}
-                >
-                  {!formStages.images && (
-                    <div className={classes.cardOverlay} />
-                  )}
-                  <ImageSection
-                    imgChange={imgChange}
-                    fileList={fileList}
-                    beforeUpload={beforeUpload}
-                    setAssignToImage={setAssignToImage}
-                    removeImageFromOffender={removeImageFromOffender}
-                    removeImage={removeImage}
-                    disabled={saving}
-                    onEditImage={onEditImage}
-                    primaryImage={primaryImage}
-                    setPrimaryImage={setPrimaryImage}
-                    hideOffenders={
-                      !incidentForm.includes(IncidentFormField.Offenders)
-                    }
-                  />
+                <Card className={classes.card}>
+                  <Form.Item name="images">
+                    <ImageSection
+                      disabled={saving}
+                      primaryImage={primaryImage}
+                      setPrimaryImage={setPrimaryImage}
+                      form={form}
+                      incidentForm={incidentForm}
+                    />
+                  </Form.Item>
                 </Card>
               );
             }
             case IncidentFormField.Police: {
-              return <IncidentPolice formStages={formStages} saving={saving} />;
+              return <IncidentPolice saving={saving} form={form} />;
             }
             case IncidentFormField.Details: {
               return (
-                <Card
-                  className={classes.card}
-                  style={{ opacity: formStages.details ? 1 : 0.7 }}
-                >
-                  {!formStages.details && (
-                    <div className={classes.cardOverlay} />
-                  )}
+                <Card className={classes.card}>
                   <IncidentDetails saving={saving} />
                 </Card>
               );
             }
             case IncidentFormField.Groups: {
-              return <IncidentGroups formStages={formStages} saving={saving} />;
+              return <IncidentGroups saving={saving} />;
             }
             case IncidentFormField.Custom: {
               return (
@@ -292,7 +169,7 @@ const AddIncident = ({
             </Col>
             <Col>
               <Button
-                disabled={saving || !formStages.details}
+                disabled={saving}
                 loading={saving}
                 type="primary"
                 htmlType="submit"
@@ -309,24 +186,6 @@ const AddIncident = ({
 
       <Drawer
         title={intl.formatMessage({
-          defaultMessage: 'Add Crime Type',
-          id: 'OAVeBQ',
-        })}
-        open={addIncidentTag}
-        width="400"
-        onClose={toggleAddIncidentTag}
-      >
-        {addIncidentTag ? (
-          <AddIncidentTag
-            update={updateIncidentTag}
-            onClose={toggleAddIncidentTag}
-          />
-        ) : (
-          <div />
-        )}
-      </Drawer>
-      <Drawer
-        title={intl.formatMessage({
           defaultMessage: 'Enter Address',
           id: 'kGBG2S',
         })}
@@ -341,13 +200,6 @@ const AddIncident = ({
           />
         )}
       </Drawer>
-
-      <AssignImageOffender
-        image={newImage || undefined}
-        offenderData={offendersData || []}
-        onCancel={onCancelNewImage}
-        onSubmit={assignOffendersToImages}
-      />
     </div>
   );
 };

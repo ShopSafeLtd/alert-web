@@ -38,7 +38,6 @@ const AddVehicle = ({
     imgChange,
     beforeUpload,
     fileList,
-
     onRemoveImage,
     onEditImage,
     toggleEditImage,

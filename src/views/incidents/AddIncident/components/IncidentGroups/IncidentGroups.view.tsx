@@ -6,37 +6,18 @@ import useStyles from '../../AddIncident.styles';
 const { Title, Paragraph } = Typography;
 
 interface Props {
-  formStages: {
-    crimeTypes: boolean;
-    where: boolean;
-    goods: boolean;
-    profiles: boolean;
-    images: boolean;
-    police: boolean;
-    details: boolean;
-    groups: boolean;
-  };
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
   saving: boolean;
 }
 
-const IncidentGroups = ({
-  groupsLoading,
-  groups,
-  formStages,
-  saving,
-}: Props) => {
+const IncidentGroups = ({ groupsLoading, groups, saving }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
 
   return (
     groups.length > 1 && (
-      <Card
-        className={classes.card}
-        style={{ opacity: formStages.groups ? 1 : 0.7 }}
-      >
-        {!formStages.groups && <div className={classes.cardOverlay} />}
+      <Card className={classes.card}>
         <>
           <Row align="bottom" style={{ marginBottom: 20 }}>
             <Col>

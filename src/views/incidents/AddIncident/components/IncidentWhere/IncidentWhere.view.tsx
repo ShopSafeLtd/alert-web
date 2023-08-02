@@ -11,16 +11,6 @@ import useStyles from '../../AddIncident.styles';
 const { Title, Paragraph, Text } = Typography;
 
 interface Props {
-  formStages: {
-    crimeTypes: boolean;
-    where: boolean;
-    goods: boolean;
-    profiles: boolean;
-    images: boolean;
-    police: boolean;
-    details: boolean;
-    groups: boolean;
-  };
   saving: boolean;
   onSearchBusiness: (
     value: string
@@ -31,7 +21,6 @@ interface Props {
 }
 
 const IncidentWhere = ({
-  formStages,
   saving,
   toggleAddNewAddress,
   onSearchBusiness,
@@ -42,18 +31,14 @@ const IncidentWhere = ({
   const intl = useIntl();
 
   return (
-    <Card
-      className={classes.card}
-      style={{ opacity: formStages.where ? 1 : 0.7 }}
-    >
-      {!formStages.where && <div className={classes.cardOverlay} />}
+    <Card className={classes.card}>
       <Row align="bottom" style={{ marginBottom: 20 }}>
         <Col>
           <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
             {intl.formatMessage(
               {
-                defaultMessage: 'Where & When did this incident happen?',
-                id: 'oY9x8s',
+                defaultMessage: 'Where did this incident happen?',
+                id: 'MUuc1b',
               },
               {}
             )}
@@ -107,7 +92,7 @@ const IncidentWhere = ({
                 </Col>
                 <Col>
                   <Button
-                    style={{ color: 'red', marginLeft: 5, marginTop: 30 }}
+                    style={{ marginLeft: 5, marginTop: 30 }}
                     onClick={toggleAddNewAddress}
                     icon={
                       <FontAwesomeIcon
@@ -117,7 +102,7 @@ const IncidentWhere = ({
                     }
                   >
                     {intl.formatMessage(
-                      { defaultMessage: 'Enter Address', id: 'kGBG2S' },
+                      { defaultMessage: 'Use An Address', id: 'Fbk02A' },
                       {}
                     )}
                   </Button>

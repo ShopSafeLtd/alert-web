@@ -8,7 +8,7 @@ import type {
   Race,
   ViewIncidentQuery,
 } from 'graphql/generated';
-import { CrimeType, UpdateType } from 'graphql/generated';
+import { UpdateType } from 'graphql/generated';
 import {
   Button,
   Card,
@@ -500,8 +500,8 @@ const ViewIncident = ({
                                 })}
                             </Row>
                           </Descriptions.Item>
-                          {data.incident &&
-                            data?.incident?.involvedTags.length > 0 && (
+                          {data?.incident &&
+                            data.incident.involvedTags.length > 0 && (
                               <Descriptions.Item
                                 className={classes.detailTag}
                                 label={
@@ -674,89 +674,88 @@ const ViewIncident = ({
                         </Col>
                       </Row>
 
-                      {data?.incident?.crimeTypes
-                        .map((item) => item.crimeType)
-                        .includes(CrimeType.TheftHandling) && (
-                        <Card style={{ marginBottom: 20 }}>
-                          <Title level={4}>
-                            {intl.formatMessage({
-                              defaultMessage: 'Items',
-                              id: 'yNmV/R',
-                            })}
-                          </Title>
-                          <Table
-                            columns={[
-                              {
-                                title: intl.formatMessage({
-                                  defaultMessage: 'Name',
-                                  id: 'HAlOn1',
-                                }),
-                                dataIndex: 'name',
-                                key: 'name',
-                              },
-                              {
-                                title: intl.formatMessage({
-                                  defaultMessage: 'Value',
-                                  id: 'GufXy5',
-                                }),
-                                dataIndex: 'value',
-                                key: 'value',
-                                render: (value: number) =>
-                                  `£${value.toFixed(2)}`,
-                              },
-                              {
-                                title: intl.formatMessage({
-                                  defaultMessage: 'Recovered Value',
-                                  id: 'bGwFFv',
-                                }),
-                                dataIndex: 'recoveredValue',
-                                key: 'recoveredValue',
-                                render: (value: number) =>
-                                  `£${value.toFixed(2)}`,
-                              },
-                            ]}
-                            dataSource={data?.incident?.incidentItems.map(
-                              (item) => ({
-                                key: item.id,
-                                name: item.name,
-                                value: item.value,
-                                recoveredValue: item.recoveredValue,
-                              })
-                            )}
-                            size="small"
-                            pagination={false}
-                            // TODO
-                            // eslint-disable-next-line react/no-unstable-nested-components
-                            summary={(tableData) => {
-                              const totalValue = tableData
-                                .map((item) => item.value || 0)
-                                .reduce((a, b) => a + b, 0);
-                              const totalRecovered = tableData
-                                .map((item) => item.recoveredValue || 0)
-                                .reduce((a, b) => a + b, 0);
+                      {data?.incident?.incidentItems &&
+                        data.incident.incidentItems.length > 0 && (
+                          <Card style={{ marginBottom: 20 }}>
+                            <Title level={4}>
+                              {intl.formatMessage({
+                                defaultMessage: 'Items',
+                                id: 'yNmV/R',
+                              })}
+                            </Title>
+                            <Table
+                              columns={[
+                                {
+                                  title: intl.formatMessage({
+                                    defaultMessage: 'Name',
+                                    id: 'HAlOn1',
+                                  }),
+                                  dataIndex: 'name',
+                                  key: 'name',
+                                },
+                                {
+                                  title: intl.formatMessage({
+                                    defaultMessage: 'Value',
+                                    id: 'GufXy5',
+                                  }),
+                                  dataIndex: 'value',
+                                  key: 'value',
+                                  render: (value: number) =>
+                                    `£${value.toFixed(2)}`,
+                                },
+                                {
+                                  title: intl.formatMessage({
+                                    defaultMessage: 'Recovered Value',
+                                    id: 'bGwFFv',
+                                  }),
+                                  dataIndex: 'recoveredValue',
+                                  key: 'recoveredValue',
+                                  render: (value: number) =>
+                                    `£${value.toFixed(2)}`,
+                                },
+                              ]}
+                              dataSource={data?.incident?.incidentItems.map(
+                                (item) => ({
+                                  key: item.id,
+                                  name: item.name || '',
+                                  value: item.value || 0,
+                                  recoveredValue: item.recoveredValue || 0,
+                                })
+                              )}
+                              size="small"
+                              pagination={false}
+                              // TODO
+                              // eslint-disable-next-line react/no-unstable-nested-components
+                              summary={(tableData) => {
+                                const totalValue = tableData
+                                  .map((item) => item.value || 0)
+                                  .reduce((a, b) => a + b, 0);
+                                const totalRecovered = tableData
+                                  .map((item) => item.recoveredValue || 0)
+                                  .reduce((a, b) => a + b, 0);
 
-                              return (
-                                <Table.Summary.Row>
-                                  <Table.Summary.Cell index={0}>
-                                    {intl.formatMessage({
-                                      defaultMessage: 'Total: ',
-                                      id: 'ILhZuX',
-                                    })}
-                                  </Table.Summary.Cell>
-                                  {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                                  <Table.Summary.Cell index={1}>
-                                    £{totalValue.toFixed(2)}
-                                  </Table.Summary.Cell>
-                                  {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                                  <Table.Summary.Cell index={1}>
-                                    £{totalRecovered.toFixed(2)}
-                                  </Table.Summary.Cell>
-                                </Table.Summary.Row>
-                              );
-                            }}
-                          />
-                        </Card>
-                      )}
+                                return (
+                                  <Table.Summary.Row>
+                                    <Table.Summary.Cell index={0}>
+                                      {intl.formatMessage({
+                                        defaultMessage: 'Total: ',
+                                        id: 'ILhZuX',
+                                      })}
+                                    </Table.Summary.Cell>
+                                    {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                                    <Table.Summary.Cell index={1}>
+                                      £{totalValue.toFixed(2)}
+                                    </Table.Summary.Cell>
+                                    {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                                    <Table.Summary.Cell index={1}>
+                                      £{totalRecovered.toFixed(2)}
+                                    </Table.Summary.Cell>
+                                  </Table.Summary.Row>
+                                );
+                              }}
+                            />
+                          </Card>
+                        )}
 
                       {data?.incident && data.incident.answers.length > 0 && (
                         <Card>

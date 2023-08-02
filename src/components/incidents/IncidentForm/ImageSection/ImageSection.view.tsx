@@ -1,123 +1,52 @@
-import React, { useState } from 'react';
-import {
-  Button,
-  Col,
-  Form,
-  Popconfirm,
-  Row,
-  Spin,
-  Tag,
-  Typography,
-  Upload,
-} from 'antd';
+import React from 'react';
+import type { FormInstance } from 'antd';
+import { Button, Col, Popconfirm, Row, Spin, Typography, Upload } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faEdit,
-  faTrash,
-  faUpload,
-  faUsers,
-} from '@fortawesome/pro-light-svg-icons';
-import type { RcFile, UploadProps } from 'antd/es/upload/interface';
+import { faEdit, faTrash } from '@fortawesome/pro-light-svg-icons';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import ImageEditor from 'components/form-components/ImageEditor/ImageEditor.view';
+import type { IncidentFormField } from 'graphql/generated';
 import { ImagePosition } from 'graphql/generated';
 import { useIntl } from 'react-intl';
-import type { Image } from 'types/DataType';
+import type { StateImageData } from './useImageSection';
+import useImageSection from './useImageSection';
+import type { FormData } from '../../../../views/incidents/AddIncident/useAddIncident';
 
-const { Title, Paragraph, Text } = Typography;
-
-interface ImagePayload extends Image {
-  offenders?: {
-    id: string;
-    name?: string | undefined | null;
-  }[];
-}
-
-interface OffenderTagProps {
-  removeImageFromOffender: (data: {
-    image: ImagePayload;
-    offenderId: string;
-  }) => void;
-  file: ImagePayload;
-  offender: { id: string; name?: string | null };
-}
-
-const OffenderTag = ({
-  removeImageFromOffender,
-  file,
-  offender,
-}: OffenderTagProps) => {
-  const [confirmOpen, setConfirmOpen] = useState(false);
-
-  const preventDefault = (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault();
-    setConfirmOpen(true);
-  };
-  const intl = useIntl();
-  return (
-    <Popconfirm
-      placement="topLeft"
-      title={intl.formatMessage({
-        defaultMessage: 'Remove the image from the offender?',
-        id: 'mJMb3v',
-      })}
-      open={confirmOpen}
-      onConfirm={() => {
-        removeImageFromOffender({
-          image: file,
-          offenderId: offender.id,
-        });
-      }}
-      okText={intl.formatMessage({ defaultMessage: 'Yes', id: 'a5msuh' })}
-      cancelText={intl.formatMessage({ defaultMessage: 'No', id: 'oUWADl' })}
-      overlayInnerStyle={{ padding: 10 }}
-    >
-      <Tag color="blue" closable onClose={preventDefault}>
-        {offender.name}
-      </Tag>
-    </Popconfirm>
-  );
-};
+const { Title, Paragraph } = Typography;
 
 interface Props {
-  imgChange: UploadProps['onChange'];
-  removeImage: (uid: string) => void;
-  removeImageFromOffender: (data: {
-    image: ImagePayload;
-    offenderId: string;
-  }) => void;
-  beforeUpload: (value: RcFile) => void;
-  fileList: ImagePayload[];
-  setAssignToImage: (image: ImagePayload) => void;
-  disabled?: boolean;
-  onEditImage: (value: ImagePayload) => void;
+  incidentForm: IncidentFormField[];
+  form: FormInstance<FormData>;
+  value?: StateImageData[];
+  onChange?: (data: StateImageData[]) => void;
+  disabled: boolean;
   primaryImage: string;
   setPrimaryImage: (value: string) => void;
-  hideOffenders?: boolean;
 }
 
 const ImageSection = ({
-  imgChange,
-  fileList,
-  beforeUpload,
-  setAssignToImage,
-  removeImageFromOffender,
-  removeImage,
-  disabled,
-  onEditImage,
+  disabled = false,
   primaryImage,
   setPrimaryImage,
-  hideOffenders = false,
+  incidentForm,
+  form,
+  onChange,
+  value,
 }: Props): JSX.Element => {
-  const [editImage, setEditImage] = useState<ImagePayload | null>(null);
   const intl = useIntl();
-  const handleEditSubmit = (value: ImagePayload) => {
-    onEditImage({
-      ...value,
-      position: value.position || ImagePosition.CenterCenter,
-    });
-    setEditImage(null);
-  };
+  const {
+    images,
+    onImageChange,
+    editImage,
+    setEditImage,
+    onEditImage,
+    onRemoveImage,
+  } = useImageSection({
+    value,
+    incidentForm,
+    form,
+    onChange,
+  });
 
   return (
     <Row gutter={20}>
@@ -141,186 +70,78 @@ const ImageSection = ({
               })}
             </Paragraph>
           </Col>
-          <Col style={{ marginLeft: 30 }}>
-            <Upload
-              action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
-              fileList={fileList}
-              onChange={imgChange}
-              beforeUpload={beforeUpload}
-              accept=".png,.jpeg,.webp"
-              showUploadList={false}
-              disabled={disabled}
-            >
-              <Button
-                disabled={disabled}
-                icon={
-                  <FontAwesomeIcon icon={faUpload} style={{ marginRight: 5 }} />
-                }
-                style={{ color: 'red' }}
-              >
-                {intl.formatMessage({
-                  defaultMessage: 'Upload Image',
-                  id: 'MntrZe',
-                })}
-              </Button>
-            </Upload>
-          </Col>
         </Row>
-        <Form.Item name="images">
-          <Upload<ImagePayload>
-            action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
-            className={
-              hideOffenders
-                ? 'incident-form-images-no-offenders'
-                : 'incident-form-images'
-            }
-            listType="picture-card"
-            fileList={fileList}
-            onChange={imgChange}
-            beforeUpload={beforeUpload}
-            accept=".png,.jpeg,.webp"
-            disabled={disabled}
-            // TODO
-            // eslint-disable-next-line react/no-unstable-nested-components
-            itemRender={(el, file: ImagePayload) => (
-              <div
-                className="image-card"
-                style={{ width: hideOffenders ? 200 : 500 }}
-                key={el.key}
-              >
-                {file.url === undefined && (
-                  <div className="image-card-loading">
-                    <Spin />
-                  </div>
-                )}
+        <Upload
+          fileList={images}
+          onChange={onImageChange}
+          action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
+          className="incident-form-images-no-offenders"
+          listType="picture-card"
+          accept=".png,.jpeg"
+          disabled={disabled}
+          // TODO
+          // eslint-disable-next-line react/no-unstable-nested-components
+          itemRender={(el, file: StateImageData) => (
+            <div className="image-card" style={{ width: 200 }} key={el.key}>
+              {file.url === undefined && (
+                <div className="image-card-loading">
+                  <Spin />
+                </div>
+              )}
 
-                <div className="image-card-image">
-                  <WatermarkImage
-                    position={file.position}
-                    url={file.url || file.thumbUrl}
-                  />
-                  <div className="image-remove-button">
-                    <Row gutter={4}>
-                      <Col>
+              <div className="image-card-image">
+                <WatermarkImage
+                  position={file.position || ImagePosition.CenterCenter}
+                  url={file.url || file.thumbUrl || ''}
+                />
+                <div className="image-remove-button">
+                  <Row gutter={4}>
+                    <Col>
+                      <Button
+                        size="small"
+                        disabled={disabled}
+                        onClick={() => setEditImage(file)}
+                        icon={<FontAwesomeIcon icon={faEdit} />}
+                      />
+                    </Col>
+                    <Col>
+                      <Popconfirm
+                        placement="topLeft"
+                        trigger="hover"
+                        title={intl.formatMessage({
+                          defaultMessage: 'Remove the image?',
+                          id: 'bRha+v',
+                        })}
+                        onConfirm={() => onRemoveImage(file.uid)}
+                        okText={intl.formatMessage({
+                          defaultMessage: 'Yes',
+                          id: 'a5msuh',
+                        })}
+                        cancelText={intl.formatMessage({
+                          defaultMessage: 'No',
+                          id: 'oUWADl',
+                        })}
+                        overlayInnerStyle={{ padding: 10 }}
+                      >
                         <Button
                           size="small"
                           disabled={disabled}
-                          onClick={() => setEditImage(file)}
-                          icon={<FontAwesomeIcon icon={faEdit} />}
+                          icon={<FontAwesomeIcon icon={faTrash} />}
                         />
-                      </Col>
-                      <Col>
-                        <Popconfirm
-                          placement="topLeft"
-                          trigger="hover"
-                          title={intl.formatMessage({
-                            defaultMessage: 'Remove the image?',
-                            id: 'bRha+v',
-                          })}
-                          onConfirm={() => removeImage(file.uid)}
-                          okText={intl.formatMessage({
-                            defaultMessage: 'Yes',
-                            id: 'a5msuh',
-                          })}
-                          cancelText={intl.formatMessage({
-                            defaultMessage: 'No',
-                            id: 'oUWADl',
-                          })}
-                          overlayInnerStyle={{ padding: 10 }}
-                        >
-                          <Button
-                            size="small"
-                            disabled={disabled}
-                            icon={<FontAwesomeIcon icon={faTrash} />}
-                          />
-                        </Popconfirm>
-                      </Col>
-                    </Row>
-                  </div>
+                      </Popconfirm>
+                    </Col>
+                  </Row>
                 </div>
-                {!hideOffenders && (
-                  <div className="image-card-offenders">
-                    <Text strong>
-                      {intl.formatMessage({
-                        defaultMessage: 'Offenders:',
-                        id: 'HEnuMU',
-                      })}
-                    </Text>
-                    {file.offenders && file.offenders.length === 0 && (
-                      <Paragraph>
-                        {intl.formatMessage({
-                          defaultMessage:
-                            'You have not assigned any offender to this image.',
-                          id: 'NuUp/9',
-                        })}
-                      </Paragraph>
-                    )}
-                    <Row gutter={[8, 8]}>
-                      {file.offenders?.map((offender) => (
-                        // <div className="image-card-offender" key={offender.id}>
-                        //   <Text className="image-card-offender-text">
-                        //     {offender.name}
-                        //   </Text>
-                        //   <Popconfirm
-                        //     placement="topLeft"
-                        //     title="Remove the image from the offender?"
-                        //     onConfirm={() => {
-                        //       removeImageFromOffender({
-                        //         image: file,
-                        //         offenderId: offender.id,
-                        //       });
-                        //     }}
-                        //     okText="Yes"
-                        //     cancelText="No"
-                        //     overlayInnerStyle={{ padding: 10 }}
-                        //   >
-                        //     <Button
-                        //       size="small"
-                        //       disabled={disabled}
-                        //       icon={<FontAwesomeIcon icon={faTrash} />}
-                        //       style={{ color: 'red' }}
-                        //     />
-                        //   </Popconfirm>
-                        // </div>
-                        <Col span={24} key={offender.id}>
-                          <OffenderTag
-                            file={file}
-                            offender={offender}
-                            removeImageFromOffender={removeImageFromOffender}
-                          />
-                        </Col>
-                      ))}
-                    </Row>
-                    <Button
-                      size="small"
-                      type="primary"
-                      style={{ marginTop: 10 }}
-                      onClick={() => setAssignToImage(file)}
-                      disabled={disabled}
-                      icon={
-                        <FontAwesomeIcon
-                          icon={faUsers}
-                          style={{ marginRight: 5 }}
-                        />
-                      }
-                    >
-                      {intl.formatMessage({
-                        defaultMessage: 'Assign Offenders',
-                        id: 'GFrwvj',
-                      })}
-                    </Button>
-                  </div>
-                )}
               </div>
-            )}
-          >
-            {fileList.length < 10 &&
-              intl.formatMessage({ defaultMessage: '+ Upload', id: '3QJWLZ' })}
-          </Upload>
-        </Form.Item>
+            </div>
+          )}
+        >
+          {images.length < 10 &&
+            intl.formatMessage({ defaultMessage: '+ Upload', id: '3QJWLZ' })}
+        </Upload>
         {/* TODO! */}
         <ImageEditor
-          submitImage={handleEditSubmit}
+          submitImage={onEditImage}
           onClose={() => setEditImage(null)}
           open={!!editImage}
           image={editImage}

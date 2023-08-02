@@ -44,8 +44,6 @@ import type {
   OffenderData as OffenderDataGlobal,
   VehicleData,
 } from 'types/DataType';
-import Profiles from 'components/incidents/IncidentForm/Profiles';
-import ImageSection from 'components/incidents/IncidentForm/ImageSection';
 import DebounceSelect from 'components/form-components/DebounceSelect';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
@@ -161,46 +159,27 @@ const EditIncident = ({
   addIncidentTag,
   addRecentOffender,
   assignOffendersToImages,
-  beforeUpload,
   data,
-  fileList,
   goodsTypesData,
   groups,
   groupsLoading,
-  imgChange,
   loading,
   newImage,
-  offenderImgChange,
   offendersData,
   onCancelNewImage,
   onReject,
   onSearchBusiness,
   onSubmit,
-  recentOffenderData,
-  recentOffenderLoading,
-  removeImage,
-  removeImageFromOffender,
   reviewed,
   saving,
-  searchOffenders,
   setAddRecentOffender,
-  setAssignToImage,
-  setSearchOffenders,
   crimeTypes,
   involvedTags,
   impactTags,
   tagsLoading,
   toggleAddIncidentTag,
   updateIncidentTag,
-  vehiclesData,
   onAddOffender,
-  onEditOffender,
-  onRemoveOffender,
-  onEditImage,
-  onAddVehicle,
-  onRemoveVehicle,
-  primaryImage,
-  setPrimaryImage,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return (
@@ -900,38 +879,6 @@ const EditIncident = ({
                 </Form.Item>
               </Col>
             </Row>
-          </Card>
-          <Card style={{ marginBottom: 10 }}>
-            <Profiles
-              offenderImgChange={offenderImgChange}
-              offendersData={offendersData}
-              recentOffenderData={recentOffenderData}
-              recentOffenderLoading={recentOffenderLoading}
-              removeOffender={onRemoveOffender}
-              saving={saving}
-              searchOffenders={searchOffenders}
-              setSearchOffenders={setSearchOffenders}
-              titleOrder={5}
-              updateOffender={onEditOffender}
-              onAddOffender={onAddOffender}
-              onAddVehicle={onAddVehicle}
-              onRemoveVehicle={onRemoveVehicle}
-              vehiclesData={vehiclesData}
-            />
-          </Card>
-          <Card style={{ marginBottom: 10 }}>
-            <ImageSection
-              titleOrder={6}
-              imgChange={imgChange}
-              fileList={fileList}
-              beforeUpload={beforeUpload}
-              setAssignToImage={setAssignToImage}
-              removeImageFromOffender={removeImageFromOffender}
-              removeImage={removeImage}
-              onEditImage={onEditImage}
-              primaryImage={primaryImage}
-              setPrimaryImage={setPrimaryImage}
-            />
           </Card>
           <Card style={{ marginBottom: 10 }}>
             <Row align="bottom" style={{ marginBottom: 20 }}>

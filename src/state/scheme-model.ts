@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import type { Action } from 'easy-peasy';
 import { action } from 'easy-peasy';
+import { GoodsMode } from '../graphql/generated';
 
 export interface Translations {
   [key: string]: {
@@ -19,6 +20,8 @@ export interface SetSchemePayload {
   userTodos?: number | null | undefined;
   userNotifications?: number | null | undefined;
   translations?: Translations[];
+  goodsMode: GoodsMode;
+  facialRecognition: boolean;
 }
 
 export interface SchemeModel {
@@ -34,6 +37,8 @@ export interface SchemeModel {
   userTodos?: number | null | undefined;
   userNotifications?: number | null | undefined;
   translations?: Translations[];
+  goodsMode: GoodsMode;
+  facialRecognition: boolean;
 }
 
 const userModel: SchemeModel = {
@@ -47,6 +52,8 @@ const userModel: SchemeModel = {
   userTodos: 0,
   userNotifications: 0,
   translations: [],
+  goodsMode: GoodsMode.Generic,
+  facialRecognition: false,
   setScheme: action((state, payload) => {
     state.id = payload.id;
     state.autoApproveIncidents = payload.autoApproveIncidents;
@@ -58,6 +65,8 @@ const userModel: SchemeModel = {
     state.userTodos = payload.userTodos;
     state.userNotifications = payload.userNotifications;
     state.translations = payload.translations;
+    state.goodsMode = payload.goodsMode;
+    state.facialRecognition = payload.facialRecognition;
   }),
   clearScheme: action((state) => {
     state.id = '';
@@ -70,6 +79,8 @@ const userModel: SchemeModel = {
     state.userTodos = 0;
     state.userNotifications = 0;
     state.translations = [];
+    state.goodsMode = GoodsMode.Generic;
+    state.facialRecognition = false;
   }),
 };
 

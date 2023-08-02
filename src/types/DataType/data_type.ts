@@ -271,4 +271,8 @@ export interface CustomQuestion {
   required: boolean;
   tagQuestionId: string;
   value: string;
+  options: {
+    label: string;
+    value: string;
+  }[];
 }

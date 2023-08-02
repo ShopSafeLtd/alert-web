@@ -37,9 +37,11 @@ query currentUser($scheme: UniqueId) {
         userTodos
         id
         name
+        goodsMode
         autoApproveIncidents
         autoApproveOffenders
         defaultPublicOffenderDOB
+        facialRecognition
       }
     }
     incidentEmail

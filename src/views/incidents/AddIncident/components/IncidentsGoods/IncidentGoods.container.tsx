@@ -3,26 +3,17 @@ import View from './IncidentGoods.view';
 import useIncidentGoods from './useIncidentGoods';
 
 interface Props {
-  formStages: {
-    crimeTypes: boolean;
-    where: boolean;
-    goods: boolean;
-    profiles: boolean;
-    images: boolean;
-    police: boolean;
-    details: boolean;
-    groups: boolean;
-  };
   goodsVisible: boolean;
   dontKnowGoods: () => void;
   knowGoods: () => void;
+  goodsMode: string;
 }
 
 const IncidentGoods = ({
-  formStages,
   goodsVisible,
   knowGoods,
   dontKnowGoods,
+  goodsMode,
 }: Props) => {
   const { goodsTypesData } = useIncidentGoods();
   return (
@@ -31,7 +22,7 @@ const IncidentGoods = ({
       goodsVisible={goodsVisible}
       knowGoods={knowGoods}
       dontKnowGoods={dontKnowGoods}
-      formStages={formStages}
+      goodsMode={goodsMode}
     />
   );
 };

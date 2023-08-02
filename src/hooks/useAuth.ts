@@ -1,7 +1,7 @@
 import type { SetUserPayload } from 'state';
 import { useStoreActions, useStoreState } from 'state';
 import LogRocket from 'logrocket';
-import { useCurrentUserLazyQuery } from 'graphql/generated';
+import { GoodsMode, useCurrentUserLazyQuery } from 'graphql/generated';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useEffect } from 'react';
 import * as Sentry from '@sentry/react';
@@ -37,7 +37,6 @@ const useAuth = (): Return => {
   const { setRole, setTodos, setNotifications } = useStoreActions(
     (actions) => actions.user
   );
-
   const setScheme = useStoreActions((actions) => actions.scheme.setScheme);
   const setAuthMessage = useStoreActions(
     (actions) => actions.auth.setAuthMessage
@@ -66,7 +65,7 @@ const useAuth = (): Return => {
 
     const handleNoValidScheme = () => {
       const schemeDetails = schemes[0]?.scheme;
-      window.localStorage.setItem('currentScheme', schemeDetails?.id);
+      window.localStorage.setItem('currentScheme', schemeDetails?.id || '');
       setRole({ role: schemes[0]?.role });
       setScheme({
         autoApproveIncidents: schemeDetails?.autoApproveIncidents,
@@ -79,6 +78,8 @@ const useAuth = (): Return => {
         userTodos: schemeDetails?.userTodos || 0,
         userNotifications: schemeDetails?.userNotifications || 0,
         translations: schemeDetails?.customTranslations as Translations[],
+        goodsMode: schemeDetails?.goodsMode || GoodsMode.Generic,
+        facialRecognition: schemeDetails?.facialRecognition,
       });
       setTodos({ userTodos: schemes[0]?.scheme?.userTodos || 0 });
       setNotifications({
@@ -109,6 +110,8 @@ const useAuth = (): Return => {
           userNotifications: schemeDetails?.scheme.userNotifications,
           translations: schemeDetails?.scheme
             .customTranslations as Translations[],
+          goodsMode: schemeDetails.scheme.goodsMode,
+          facialRecognition: schemeDetails.scheme.facialRecognition,
         });
         setTodos({ userTodos: schemeDetails?.scheme?.userTodos || 0 });
       } else {
@@ -138,9 +141,9 @@ const useAuth = (): Return => {
 
     Mixpanel.identify(id);
     Mixpanel.people.set({
-      name: fullName,
-      businessId: businesses[0]?.id,
-      businessName: businesses[0]?.name,
+      name: fullName || '',
+      businessId: businesses[0]?.id || '',
+      businessName: businesses[0]?.name || '',
     });
 
     Sentry.setUser({ email, username: fullName, id });
@@ -169,9 +172,9 @@ const useAuth = (): Return => {
         currentScheme || window.localStorage.getItem('currentScheme');
 
       if (scheme) {
-        const currentS = currentUser?.schemes.find(
-          (s) => s.scheme.id === scheme
-        );
+        const currentS =
+          currentUser &&
+          currentUser.schemes.find((s) => s.scheme.id === scheme);
         if (currentS) {
           window.localStorage.setItem(
             'logo',

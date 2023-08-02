@@ -24,6 +24,7 @@ interface Props {
   options: Option[];
   mode?: Mode;
   loading?: boolean;
+  disabled?: boolean;
 }
 
 const CheckTags = ({
@@ -32,10 +33,10 @@ const CheckTags = ({
   value: valueProp = [],
   mode: modeProp,
   loading = false,
+  disabled = false,
 }: Props) => {
   // Global State
   const role = useStoreState((state) => state.user.role);
-
   // Local State
   const [pristine, setPristine] = useState<boolean>(true);
   const [mode, setMode] = useState<Mode>('check');
@@ -98,14 +99,16 @@ const CheckTags = ({
 
   // Handles updating of check state
   const toggleCheckOption = (data: Option) => {
-    if (checkValues.includes(data.value)) {
-      const newValue = checkValues.filter((i) => i !== data.value);
-      setCheckValues(newValue);
-      if (onChangeProp) onChangeProp(newValue);
-    } else {
-      const newValues = [...checkValues, data.value];
-      setCheckValues(newValues);
-      if (onChangeProp) onChangeProp(newValues);
+    if (!disabled) {
+      if (checkValues.includes(data.value)) {
+        const newValue = checkValues.filter((i) => i !== data.value);
+        setCheckValues(newValue);
+        if (onChangeProp) onChangeProp(newValue);
+      } else {
+        const newValues = [...checkValues, data.value];
+        setCheckValues(newValues);
+        if (onChangeProp) onChangeProp(newValues);
+      }
     }
   };
 

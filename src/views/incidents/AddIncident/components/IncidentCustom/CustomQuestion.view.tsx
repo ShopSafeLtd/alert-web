@@ -1,10 +1,20 @@
-import { Col, DatePicker, Form, Input, InputNumber, Radio, Row } from 'antd';
+import {
+  Col,
+  DatePicker,
+  TimePicker,
+  Form,
+  Input,
+  InputNumber,
+  Radio,
+  Row,
+} from 'antd';
 import React from 'react';
 import { AnswerType } from 'graphql/generated';
 import type { CustomQuestion } from 'types/DataType';
 import { useIntl } from 'react-intl';
 import type { Moment } from 'moment';
 import moment from 'moment';
+import CheckTags from '../../../../../components/form-components/check-tags/CheckTags.view';
 
 interface StringInputProps {
   value?: string;
@@ -13,8 +23,8 @@ interface StringInputProps {
 }
 
 const StringInputNumber = ({ value, onChange, disabled }: StringInputProps) => {
-  const covertToString = (data: number) => {
-    if (onChange) onChange(data.toString());
+  const covertToString = (data: number | null) => {
+    if (onChange) onChange(data ? data.toString() : '');
   };
 
   return (
@@ -28,8 +38,8 @@ const StringInputNumber = ({ value, onChange, disabled }: StringInputProps) => {
 };
 
 const StringDate = ({ value, onChange, disabled }: StringInputProps) => {
-  const covertToString = (data: Moment) => {
-    if (onChange) onChange(data.toString());
+  const covertToString = (data: Moment | null) => {
+    if (onChange) onChange(data ? data.toString() : '');
   };
 
   return (
@@ -39,6 +49,46 @@ const StringDate = ({ value, onChange, disabled }: StringInputProps) => {
       style={{ minWidth: 150 }}
       disabled={disabled}
       format="DD/MM/YYYY"
+    />
+  );
+};
+
+const StringTime = ({ value, onChange, disabled }: StringInputProps) => {
+  const covertToString = (data: Moment | null) => {
+    if (onChange) onChange(data ? data.toString() : '');
+  };
+
+  return (
+    <TimePicker
+      value={value ? moment(value) : null}
+      onChange={covertToString}
+      style={{ minWidth: 150 }}
+      disabled={disabled}
+    />
+  );
+};
+
+interface SelectInputProps extends StringInputProps {
+  options: { label: string; value: string }[];
+}
+
+const StringSelect = ({
+  value,
+  onChange,
+  options,
+  disabled,
+}: SelectInputProps) => {
+  const covertToString = (data: string[]) => {
+    if (onChange) onChange(data.toString());
+  };
+
+  return (
+    <CheckTags
+      value={value ? value.split(',') : []}
+      onChange={covertToString}
+      options={options}
+      mode="check"
+      disabled={disabled}
     />
   );
 };
@@ -58,25 +108,70 @@ const CustomQuestions = ({ questions, disabled }: Props) => {
             <Form.Item
               name={question.questionId}
               label={question.label}
-              required={question.required}
+              rules={[
+                {
+                  required: question.required,
+                  message: intl.formatMessage({
+                    id: '6B5Jtu',
+                    defaultMessage: 'This field is required.',
+                  }),
+                },
+              ]}
             >
-              <Input.TextArea style={{ maxWidth: '50%' }} disabled={disabled} />
+              <Input.TextArea
+                style={{ maxWidth: '50%' }}
+                rows={1}
+                disabled={disabled}
+              />
             </Form.Item>
           )}
           {question.answerType === AnswerType.Date && (
             <Form.Item
               name={question.questionId}
               label={question.label}
-              required={question.required}
+              rules={[
+                {
+                  required: question.required,
+                  message: intl.formatMessage({
+                    id: '6B5Jtu',
+                    defaultMessage: 'This field is required.',
+                  }),
+                },
+              ]}
             >
-              <StringDate format="DD/MM/YYYY" disabled={disabled} />
+              <StringDate disabled={disabled} />
+            </Form.Item>
+          )}
+          {question.answerType === AnswerType.Time && (
+            <Form.Item
+              name={question.questionId}
+              label={question.label}
+              rules={[
+                {
+                  required: question.required,
+                  message: intl.formatMessage({
+                    id: '6B5Jtu',
+                    defaultMessage: 'This field is required.',
+                  }),
+                },
+              ]}
+            >
+              <StringTime disabled={disabled} />
             </Form.Item>
           )}
           {question.answerType === AnswerType.Boolean && (
             <Form.Item
               name={question.questionId}
               label={question.label}
-              required={question.required}
+              rules={[
+                {
+                  required: question.required,
+                  message: intl.formatMessage({
+                    id: '6B5Jtu',
+                    defaultMessage: 'This field is required.',
+                  }),
+                },
+              ]}
             >
               <Radio.Group
                 options={[
@@ -104,9 +199,34 @@ const CustomQuestions = ({ questions, disabled }: Props) => {
             <Form.Item
               name={question.questionId}
               label={question.label}
-              required={question.required}
+              rules={[
+                {
+                  required: question.required,
+                  message: intl.formatMessage({
+                    id: '6B5Jtu',
+                    defaultMessage: 'This field is required.',
+                  }),
+                },
+              ]}
             >
               <StringInputNumber disabled={disabled} />
+            </Form.Item>
+          )}
+          {question.answerType === AnswerType.Select && (
+            <Form.Item
+              name={question.questionId}
+              label={question.label}
+              rules={[
+                {
+                  required: question.required,
+                  message: intl.formatMessage({
+                    id: '6B5Jtu',
+                    defaultMessage: 'This field is required.',
+                  }),
+                },
+              ]}
+            >
+              <StringSelect disabled={disabled} options={question.options} />
             </Form.Item>
           )}
         </Col>

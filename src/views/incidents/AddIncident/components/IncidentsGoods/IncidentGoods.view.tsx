@@ -8,49 +8,39 @@ import {
   Row,
   Select,
   Typography,
+  Empty,
 } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import type { ListGoodsTypesQuery } from 'graphql/generated';
+import Input from 'antd/es/input/Input';
+import { GoodsMode } from 'graphql/generated';
 import useStyles from '../../AddIncident.styles';
 
 const { Paragraph, Title } = Typography;
 
 interface Props {
-  formStages: {
-    crimeTypes: boolean;
-    where: boolean;
-    goods: boolean;
-    profiles: boolean;
-    images: boolean;
-    police: boolean;
-    details: boolean;
-    groups: boolean;
-  };
   goodsVisible: boolean;
   dontKnowGoods: () => void;
   knowGoods: () => void;
   goodsTypesData: ListGoodsTypesQuery | undefined;
+  goodsMode: string;
 }
 
 const IncidentGoods = ({
   goodsVisible,
-  formStages,
   knowGoods,
   dontKnowGoods,
   goodsTypesData,
+  goodsMode,
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
 
   return (
-    <Card
-      className={classes.card}
-      style={{ opacity: formStages.goods ? 1 : 0.7 }}
-    >
-      {!formStages.goods && <div className={classes.cardOverlay} />}
+    <Card className={classes.card}>
       <Row align="bottom" style={{ marginBottom: 20 }}>
         <Col>
           <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
@@ -99,118 +89,264 @@ const IncidentGoods = ({
         >
           {(fields, { add, remove }) => (
             <>
+              {fields.length === 0 && (
+                <Empty
+                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                  description={intl.formatMessage({
+                    id: 'yjhOzY',
+                    defaultMessage: 'No goods added to incident',
+                  })}
+                >
+                  <Form.Item>
+                    <Row justify="center">
+                      <Col>
+                        <Button
+                          onClick={() =>
+                            add({
+                              recoveredValue: 0,
+                            })
+                          }
+                          block
+                          icon={
+                            <FontAwesomeIcon
+                              style={{ marginRight: 8 }}
+                              icon={faPlus}
+                            />
+                          }
+                        >
+                          {intl.formatMessage({
+                            defaultMessage: 'Add Item',
+                            id: 'kNLPWW',
+                          })}
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Form.Item>
+                </Empty>
+              )}
               {fields.map(({ key, name, ...restField }, index) => (
                 <Row key={key} gutter={8}>
-                  <Col>
-                    <Form.Item
-                      {...restField}
-                      label={
-                        index
-                          ? ''
-                          : intl.formatMessage({
-                              defaultMessage: 'Type of Goods',
-                              id: 'awr2tc',
-                            })
-                      }
-                      name={[name, 'goodsType']}
-                      rules={[
-                        {
-                          required: index === 0,
-                          message: intl.formatMessage({
-                            defaultMessage: 'Please enter a type',
-                            id: 'pd8FHc',
-                          }),
-                        },
-                      ]}
-                    >
-                      <Select
-                        placeholder={intl.formatMessage({
-                          defaultMessage: 'Select goods...',
-                          id: 'p4Hiyr',
-                        })}
-                        style={{ width: 300 }}
-                        allowClear
-                        options={
-                          goodsTypesData?.listGoodsTypes.goodsTypes.map(
-                            (goodsType) => ({
-                              value: goodsType.id,
-                              label: goodsType.name,
-                            })
-                          ) || []
+                  {goodsMode === GoodsMode.Generic && (
+                    <Col>
+                      <Form.Item
+                        {...restField}
+                        label={
+                          index
+                            ? ''
+                            : intl.formatMessage({
+                                defaultMessage: 'Type of Goods',
+                                id: 'awr2tc',
+                              })
                         }
-                      />
-                    </Form.Item>
-                  </Col>
-                  <Col>
-                    <Form.Item
-                      {...restField}
-                      name={[name, 'value']}
-                      label={
-                        index
-                          ? ''
-                          : intl.formatMessage({
-                              defaultMessage: 'Value',
-                              id: 'GufXy5',
-                            })
-                      }
-                      rules={[
-                        {
-                          required: index === 0,
-                          message: intl.formatMessage({
-                            defaultMessage: 'Please enter a value',
-                            id: 'Umf5pG',
-                          }),
-                        },
-                      ]}
-                      tooltip={intl.formatMessage({
-                        defaultMessage:
-                          'The value of the goods involved in the incident, both lost and recovered.',
-                        id: 'MPzA66',
-                      })}
-                    >
-                      <InputNumber
-                        style={{ width: 150 }}
-                        prefix="£"
-                        precision={2}
-                        min={0}
-                      />
-                    </Form.Item>
-                  </Col>
-                  <Col>
-                    <Form.Item
-                      {...restField}
-                      name={[name, 'recoveredValue']}
-                      label={
-                        index
-                          ? ''
-                          : intl.formatMessage({
-                              defaultMessage: 'Value Recovered',
-                              id: 'FqEGSY',
-                            })
-                      }
-                      rules={[
-                        {
-                          required: index === 0,
-                          message: intl.formatMessage({
-                            defaultMessage: 'Please enter a value',
-                            id: 'Umf5pG',
-                          }),
-                        },
-                      ]}
-                      tooltip={intl.formatMessage({
-                        defaultMessage:
-                          'The value of the goods that were recovered.',
-                        id: 'JuhI7q',
-                      })}
-                    >
-                      <InputNumber
-                        style={{ width: 150 }}
-                        prefix="£"
-                        precision={2}
-                        min={0}
-                      />
-                    </Form.Item>
-                  </Col>
+                        name={[name, 'goodsType']}
+                        rules={[
+                          {
+                            required: index === 0,
+                            message: intl.formatMessage({
+                              defaultMessage: 'Please enter a type',
+                              id: 'pd8FHc',
+                            }),
+                          },
+                        ]}
+                      >
+                        <Select
+                          placeholder={intl.formatMessage({
+                            defaultMessage: 'Select goods...',
+                            id: 'p4Hiyr',
+                          })}
+                          style={{ width: 300 }}
+                          allowClear
+                          options={
+                            (goodsTypesData &&
+                              goodsTypesData.listGoodsTypes.goodsTypes.map(
+                                (goodsType) => ({
+                                  value: goodsType.id,
+                                  label: goodsType.name,
+                                })
+                              )) ||
+                            []
+                          }
+                        />
+                      </Form.Item>
+                    </Col>
+                  )}
+                  {goodsMode === GoodsMode.Generic && (
+                    <Col>
+                      <Form.Item
+                        {...restField}
+                        name={[name, 'value']}
+                        label={
+                          index
+                            ? ''
+                            : intl.formatMessage({
+                                defaultMessage: 'Value',
+                                id: 'GufXy5',
+                              })
+                        }
+                        rules={[
+                          {
+                            required: index === 0,
+                            message: intl.formatMessage({
+                              defaultMessage: 'Please enter a value',
+                              id: 'Umf5pG',
+                            }),
+                          },
+                        ]}
+                        tooltip={intl.formatMessage({
+                          defaultMessage:
+                            'The value of the goods involved in the incident, both lost and recovered.',
+                          id: 'MPzA66',
+                        })}
+                      >
+                        <InputNumber
+                          style={{ width: 150 }}
+                          prefix="£"
+                          precision={2}
+                          min={0}
+                        />
+                      </Form.Item>
+                    </Col>
+                  )}
+                  {goodsMode === GoodsMode.Generic && (
+                    <Col>
+                      <Form.Item
+                        {...restField}
+                        name={[name, 'recoveredValue']}
+                        label={
+                          index
+                            ? ''
+                            : intl.formatMessage({
+                                defaultMessage: 'Value Recovered',
+                                id: 'FqEGSY',
+                              })
+                        }
+                        rules={[
+                          {
+                            required: index === 0,
+                            message: intl.formatMessage({
+                              defaultMessage: 'Please enter a value',
+                              id: 'Umf5pG',
+                            }),
+                          },
+                        ]}
+                        tooltip={intl.formatMessage({
+                          defaultMessage:
+                            'The value of the goods that were recovered.',
+                          id: 'JuhI7q',
+                        })}
+                      >
+                        <InputNumber
+                          style={{ width: 150 }}
+                          prefix="£"
+                          precision={2}
+                          min={0}
+                        />
+                      </Form.Item>
+                    </Col>
+                  )}
+                  {goodsMode === GoodsMode.Specific && (
+                    <Col>
+                      <Form.Item
+                        {...restField}
+                        name={[name, 'sku']}
+                        label={
+                          index
+                            ? ''
+                            : intl.formatMessage({
+                                defaultMessage: 'SKU',
+                                id: 'k4brJy',
+                              })
+                        }
+                        rules={[
+                          {
+                            required: index === 0,
+                            message: intl.formatMessage({
+                              defaultMessage: 'Please enter the SKU',
+                              id: '0WNVIn',
+                            }),
+                          },
+                        ]}
+                        tooltip={intl.formatMessage({
+                          defaultMessage: 'The SKU of the item.',
+                          id: 'rrLaZs',
+                        })}
+                      >
+                        <Input style={{ width: 250 }} />
+                      </Form.Item>
+                    </Col>
+                  )}
+                  {goodsMode === GoodsMode.Specific && (
+                    <Col>
+                      <Form.Item
+                        {...restField}
+                        name={[name, 'quantity']}
+                        label={
+                          index
+                            ? ''
+                            : intl.formatMessage({
+                                defaultMessage: 'Quantity',
+                                id: 'qVGRIE',
+                              })
+                        }
+                        rules={[
+                          {
+                            required: index === 0,
+                            message: intl.formatMessage({
+                              defaultMessage: 'Please enter a quantity.',
+                              id: 'KEVIs3',
+                            }),
+                          },
+                        ]}
+                        tooltip={intl.formatMessage({
+                          defaultMessage: 'The quantity of the items involved.',
+                          id: 'X3X/lp',
+                        })}
+                      >
+                        <InputNumber
+                          style={{ width: 150 }}
+                          precision={0}
+                          min={0}
+                        />
+                      </Form.Item>
+                    </Col>
+                  )}
+                  {goodsMode === GoodsMode.Specific && (
+                    <Col>
+                      <Form.Item
+                        {...restField}
+                        name={[name, 'recoveredQuantity']}
+                        label={
+                          index
+                            ? ''
+                            : intl.formatMessage({
+                                defaultMessage: 'Quantity Recovered',
+                                id: 'vQz41I',
+                              })
+                        }
+                        rules={[
+                          {
+                            required: index === 0,
+                            message: intl.formatMessage({
+                              defaultMessage:
+                                'Please enter a recovered quantity.',
+                              id: 'CZemdW',
+                            }),
+                          },
+                        ]}
+                        tooltip={intl.formatMessage({
+                          defaultMessage:
+                            'The quantity of the goods that were recovered.',
+                          id: '00WDlL',
+                        })}
+                      >
+                        <InputNumber
+                          style={{ width: 150 }}
+                          precision={0}
+                          min={0}
+                        />
+                      </Form.Item>
+                    </Col>
+                  )}
                   {fields.length > 1 && (
                     <Col>
                       <Button
@@ -224,31 +360,33 @@ const IncidentGoods = ({
                   )}
                 </Row>
               ))}
-              <Form.Item>
-                <Row justify="center">
-                  <Col>
-                    <Button
-                      onClick={() =>
-                        add({
-                          recoveredValue: 0,
-                        })
-                      }
-                      block
-                      icon={
-                        <FontAwesomeIcon
-                          style={{ marginRight: 8 }}
-                          icon={faPlus}
-                        />
-                      }
-                    >
-                      {intl.formatMessage({
-                        defaultMessage: 'Add Item',
-                        id: 'kNLPWW',
-                      })}
-                    </Button>
-                  </Col>
-                </Row>
-              </Form.Item>
+              {fields.length > 0 && (
+                <Form.Item>
+                  <Row justify="center">
+                    <Col>
+                      <Button
+                        onClick={() =>
+                          add({
+                            recoveredValue: 0,
+                          })
+                        }
+                        block
+                        icon={
+                          <FontAwesomeIcon
+                            style={{ marginRight: 8 }}
+                            icon={faPlus}
+                          />
+                        }
+                      >
+                        {intl.formatMessage({
+                          defaultMessage: 'Add Item',
+                          id: 'kNLPWW',
+                        })}
+                      </Button>
+                    </Col>
+                  </Row>
+                </Form.Item>
+              )}
             </>
           )}
         </Form.List>
