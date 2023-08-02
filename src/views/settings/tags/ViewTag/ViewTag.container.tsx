@@ -24,10 +24,16 @@ const AddCrimeType = (): JSX.Element => {
     incidentFormLayoutChanged,
     saveIncidentForm,
     loading,
+    updateQuestionOnTag,
+    selectedQuestion,
+    setSelectedQuestion,
   } = useViewTag();
 
   return (
     <View
+      selectedQuestion={selectedQuestion}
+      setSelectedQuestion={setSelectedQuestion}
+      updateQuestionOnTag={updateQuestionOnTag}
       loading={loading}
       incidentFormFields={incidentFormFields}
       setIncidentFormLayoutChanged={setIncidentFormLayoutChanged}

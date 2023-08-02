@@ -1,0 +1,12 @@
+mutation UpdateQuestionOnTag($data: UpdateQuestionOnTagInput!) {
+  updateQuestionOnTag(data: $data) {
+    tag {
+      id
+    }
+    question {
+      question
+      id
+    }
+    id
+  }
+}

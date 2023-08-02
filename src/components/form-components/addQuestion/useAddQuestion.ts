@@ -3,12 +3,12 @@ import { useState } from 'react';
 import type { FormInstance } from 'antd';
 import { Form, notification } from 'antd';
 import { useIntl } from 'react-intl';
+import type { AvailableQuestionsQuery } from '../../../graphql/generated';
 import {
   AnswerType,
   useAvailableQuestionsQuery,
   useCreateOrAddQuestionMutation,
 } from '../../../graphql/generated';
-import type { AvailableQuestionsQuery } from '../../../graphql/generated';
 import errorNotification from '../../../types/error_notification';
 
 interface Return {
@@ -64,8 +64,8 @@ const useAddQuestion = ({ onClose }: Props): Return => {
           id: 'Qdgb9w',
         }),
         description: intl.formatMessage({
-          defaultMessage: 'The question has been succesfully created.added!',
-          id: '+iJC6t',
+          defaultMessage: 'The question has been succesfully created/added!',
+          id: '1UtqCZ',
         }),
 
         placement: 'bottomRight',

@@ -36062,6 +36062,7 @@ export type Query = {
   offenders: Array<Offender>;
   offendersPerformance?: Maybe<ListOffenderPerformance>;
   performanceReport?: Maybe<PerformanceReport>;
+  question?: Maybe<Question>;
   recycledItem?: Maybe<RecycledItem>;
   recycledItems?: Maybe<Array<Maybe<RecycledItem>>>;
   reportTemplate?: Maybe<ReportTemplate>;
@@ -36498,6 +36499,10 @@ export type QueryOffendersPerformanceArgs = {
 
 export type QueryPerformanceReportArgs = {
   where: UserContributionWhereInput;
+};
+
+export type QueryQuestionArgs = {
+  where: QuestionWhereUniqueInput;
 };
 
 export type QueryRecycledItemArgs = {
@@ -51197,6 +51202,7 @@ export type UpdateQuestionOnTagInput = {
   newQuestion?: InputMaybe<Scalars['String']>;
   origOptions?: InputMaybe<Array<Scalars['String']>>;
   origQuestion: Scalars['String'];
+  questionId: Scalars['String'];
   tag: TagQuestionOnQInput;
 };
 
@@ -63479,10 +63485,42 @@ export type AvailableQuestionsQuery = {
     __typename?: 'Question';
     id: string;
     questionFormatted: string;
+    question: string;
     optionsFormatted?: Array<string> | null;
     type: AnswerType;
     options: Array<any>;
   }>;
+};
+
+export type QuestionDetailsQueryVariables = Exact<{
+  where: QuestionWhereUniqueInput;
+}>;
+
+export type QuestionDetailsQuery = {
+  __typename?: 'Query';
+  question?: {
+    __typename?: 'Question';
+    id: string;
+    questionFormatted: string;
+    question: string;
+    optionsFormatted?: Array<string> | null;
+    type: AnswerType;
+    options: Array<any>;
+  } | null;
+};
+
+export type UpdateQuestionOnTagMutationVariables = Exact<{
+  data: UpdateQuestionOnTagInput;
+}>;
+
+export type UpdateQuestionOnTagMutation = {
+  __typename?: 'Mutation';
+  updateQuestionOnTag?: {
+    __typename?: 'TagQuestion';
+    id: string;
+    tag: { __typename?: 'Tag'; id: string };
+    question: { __typename?: 'Question'; question: string; id: string };
+  } | null;
 };
 
 export type ListActionsQueryVariables = Exact<{
@@ -74052,6 +74090,7 @@ export type ViewTagQuery = {
         __typename?: 'Question';
         questionFormatted: string;
         type: AnswerType;
+        id: string;
       };
     }>;
   } | null;
@@ -74211,6 +74250,7 @@ export const AvailableQuestionsDocument = gql`
     availableQuestions(where: $where) {
       id
       questionFormatted
+      question
       optionsFormatted
       type
       options
@@ -74250,6 +74290,91 @@ export type AvailableQuestionsLazyQueryHookResult = ReturnType<
 export type AvailableQuestionsQueryResult = Apollo.QueryResult<
   AvailableQuestionsQuery,
   AvailableQuestionsQueryVariables
+>;
+export const QuestionDetailsDocument = gql`
+  query QuestionDetails($where: QuestionWhereUniqueInput!) {
+    question(where: $where) {
+      id
+      questionFormatted
+      question
+      optionsFormatted
+      type
+      options
+    }
+  }
+`;
+export function useQuestionDetailsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    QuestionDetailsQuery,
+    QuestionDetailsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<QuestionDetailsQuery, QuestionDetailsQueryVariables>(
+    QuestionDetailsDocument,
+    options
+  );
+}
+export function useQuestionDetailsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    QuestionDetailsQuery,
+    QuestionDetailsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    QuestionDetailsQuery,
+    QuestionDetailsQueryVariables
+  >(QuestionDetailsDocument, options);
+}
+export type QuestionDetailsQueryHookResult = ReturnType<
+  typeof useQuestionDetailsQuery
+>;
+export type QuestionDetailsLazyQueryHookResult = ReturnType<
+  typeof useQuestionDetailsLazyQuery
+>;
+export type QuestionDetailsQueryResult = Apollo.QueryResult<
+  QuestionDetailsQuery,
+  QuestionDetailsQueryVariables
+>;
+export const UpdateQuestionOnTagDocument = gql`
+  mutation UpdateQuestionOnTag($data: UpdateQuestionOnTagInput!) {
+    updateQuestionOnTag(data: $data) {
+      tag {
+        id
+      }
+      question {
+        question
+        id
+      }
+      id
+    }
+  }
+`;
+export type UpdateQuestionOnTagMutationFn = Apollo.MutationFunction<
+  UpdateQuestionOnTagMutation,
+  UpdateQuestionOnTagMutationVariables
+>;
+export function useUpdateQuestionOnTagMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateQuestionOnTagMutation,
+    UpdateQuestionOnTagMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateQuestionOnTagMutation,
+    UpdateQuestionOnTagMutationVariables
+  >(UpdateQuestionOnTagDocument, options);
+}
+export type UpdateQuestionOnTagMutationHookResult = ReturnType<
+  typeof useUpdateQuestionOnTagMutation
+>;
+export type UpdateQuestionOnTagMutationResult =
+  Apollo.MutationResult<UpdateQuestionOnTagMutation>;
+export type UpdateQuestionOnTagMutationOptions = Apollo.BaseMutationOptions<
+  UpdateQuestionOnTagMutation,
+  UpdateQuestionOnTagMutationVariables
 >;
 export const ListActionsDocument = gql`
   query ListActions(
@@ -88909,6 +89034,7 @@ export const ViewTagDocument = gql`
         question {
           questionFormatted
           type
+          id
         }
         id
       }

@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import { useEffect, useState } from 'react';
-import type { ViewTagQuery } from 'graphql/generated';
+import type { AnswerType, ViewTagQuery } from 'graphql/generated';
 import {
   IncidentFormField,
   Model,
@@ -10,10 +10,12 @@ import {
   useUpdateTagQsMutation,
   useUpsertIncidentFormMutation,
   useViewTagQuery,
+  ViewTagDocument,
 } from 'graphql/generated';
 import type { Scheme } from 'state';
 import { useStoreState } from 'state';
 import { useParams } from 'react-router-dom';
+import { useApolloClient } from '@apollo/client';
 import type { ExtendedLayout } from '../../../reports/types';
 
 interface FieldToLayoutMap {
@@ -48,6 +50,9 @@ interface Return {
   incidentFormFields: IncidentFormFieldState;
   incidentFormLayoutChanged: boolean;
   saveIncidentForm: () => void;
+  updateQuestionOnTag: (question: string, tagId: string) => void;
+  selectedQuestion: string | null;
+  setSelectedQuestion: (value: string | null) => void;
 }
 
 const fieldToLayoutSet: Record<string, IncidentFormField[]> = {
@@ -216,6 +221,7 @@ const useViewTag = (): Return => {
     },
   });
 
+  const [selectedQuestion, setSelectedQuestion] = useState<string | null>(null);
   useEffect(() => {
     if (data && data.tag?.tagQuestions) {
       // eslint-disable-next-line no-unsafe-optional-chaining
@@ -372,6 +378,101 @@ const useViewTag = (): Return => {
     setQuestionsLayout(tagQs);
   };
 
+  const store = useApolloClient();
+
+  const updateQuestionOnTag = (question: string, qId: string) => {
+    const existingData = store.readQuery<ViewTagQuery>({
+      query: ViewTagDocument,
+      variables: {
+        where: {
+          id: id || '',
+        },
+        tagQuestionsWhere: {
+          deleted: {
+            equals: false,
+          },
+        },
+        listWhere: {
+          type: {
+            equals: TagType.IncidentCrimeType,
+          },
+          dataType: {
+            equals: Model.Incident,
+          },
+          schemes: {
+            some: {
+              id: {
+                equals: schemeId,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!existingData || !existingData.tag) return;
+
+    const updatedQs = existingData.tag?.tagQuestions?.map((tq) => {
+      if (tq.question.id === qId) {
+        return {
+          ...tq,
+          question: {
+            ...tq.question,
+            questionFormatted: question,
+          },
+        };
+      }
+      return tq;
+    }) as Array<{
+      __typename?: 'TagQuestion';
+      req: boolean;
+      priority: number;
+      id: string;
+      question: {
+        __typename?: 'Question';
+        questionFormatted: string;
+        id: string;
+        type: AnswerType;
+      };
+    }>;
+
+    store.writeQuery<ViewTagQuery>({
+      query: ViewTagDocument,
+      data: {
+        ...existingData,
+        tag: {
+          ...existingData.tag,
+          tagQuestions: updatedQs,
+        },
+      },
+      variables: {
+        where: {
+          id: id || '',
+        },
+        tagQuestionsWhere: {
+          deleted: {
+            equals: false,
+          },
+        },
+        listWhere: {
+          type: {
+            equals: TagType.IncidentCrimeType,
+          },
+          dataType: {
+            equals: Model.Incident,
+          },
+          schemes: {
+            some: {
+              id: {
+                equals: schemeId,
+              },
+            },
+          },
+        },
+      },
+    });
+  };
+
   const toggleField = (fieldToUpdate: IncidentFormField) => {
     if (!incidentFormLayoutChanged) {
       setIncidentFormLayoutChanged(true);
@@ -434,6 +535,9 @@ const useViewTag = (): Return => {
     incidentFormLayoutChanged,
     setIncidentFormLayout,
     saveIncidentForm,
+    updateQuestionOnTag,
+    selectedQuestion,
+    setSelectedQuestion,
   };
 };
 export default useViewTag;
