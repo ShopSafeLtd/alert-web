@@ -193,6 +193,11 @@ const useViewTag = (): Return => {
       where: {
         id: id || '',
       },
+      tagQuestionsWhere: {
+        deleted: {
+          equals: false,
+        },
+      },
       listWhere: {
         type: {
           equals: TagType.IncidentCrimeType,

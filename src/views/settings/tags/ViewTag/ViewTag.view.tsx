@@ -232,26 +232,6 @@ const ViewTag = ({
         >
           <Row>
             <Col flex={1}>
-              <FormattedMessage defaultMessage="Offenders" id="xb54TN" />
-            </Col>
-            <Col>
-              <Tooltip
-                title={intl.formatMessage({
-                  defaultMessage: 'Hide/Show field on form',
-                  id: '+AMnGS',
-                })}
-              >
-                <Checkbox
-                  checked={incidentFormFields.OFFENDERS}
-                  onChange={() => {
-                    toggleField(IncidentFormField.Offenders);
-                  }}
-                />
-              </Tooltip>
-            </Col>
-          </Row>
-          <Row>
-            <Col flex={1}>
               <FormattedMessage defaultMessage="Images" id="Fip4H8" />
             </Col>
             <Col>
@@ -265,6 +245,26 @@ const ViewTag = ({
                   checked={incidentFormFields.IMAGES}
                   onChange={() => {
                     toggleField(IncidentFormField.Images);
+                  }}
+                />
+              </Tooltip>
+            </Col>
+          </Row>
+          <Row>
+            <Col flex={1}>
+              <FormattedMessage defaultMessage="Offenders" id="xb54TN" />
+            </Col>
+            <Col>
+              <Tooltip
+                title={intl.formatMessage({
+                  defaultMessage: 'Hide/Show field on form',
+                  id: '+AMnGS',
+                })}
+              >
+                <Checkbox
+                  checked={incidentFormFields.OFFENDERS}
+                  onChange={() => {
+                    toggleField(IncidentFormField.Offenders);
                   }}
                 />
               </Tooltip>
@@ -522,6 +522,7 @@ const ViewTag = ({
             loading={loading}
             style={{
               minHeight: 370,
+              marginBottom: 20,
             }}
           >
             <Row>
