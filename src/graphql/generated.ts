@@ -74013,6 +74013,7 @@ export type UpdateTagQsMutation = {
 export type ViewTagQueryVariables = Exact<{
   where: TagWhereUniqueInput;
   listWhere: TagWhereInput;
+  tagQuestionsWhere?: InputMaybe<TagQuestionWhereInput>;
 }>;
 
 export type ViewTagQuery = {
@@ -88872,7 +88873,11 @@ export type UpdateTagQsMutationOptions = Apollo.BaseMutationOptions<
   UpdateTagQsMutationVariables
 >;
 export const ViewTagDocument = gql`
-  query ViewTag($where: TagWhereUniqueInput!, $listWhere: TagWhereInput!) {
+  query ViewTag(
+    $where: TagWhereUniqueInput!
+    $listWhere: TagWhereInput!
+    $tagQuestionsWhere: TagQuestionWhereInput
+  ) {
     listTags(where: $listWhere) {
       tags {
         id
@@ -88898,7 +88903,7 @@ export const ViewTagDocument = gql`
           type
         }
       }
-      tagQuestions {
+      tagQuestions(where: $tagQuestionsWhere) {
         req
         priority
         question {

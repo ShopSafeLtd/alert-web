@@ -1,0 +1,1298 @@
+[
+  {
+    "/OYfH0": {
+      "en": "Please select at least one shop for the new user.",
+      "nl": "Selecteer minstens één winkel voor de nieuwe gebruiker.",
+      "fr": "Veuillez sélectionner au moins un magasin pour le nouvel utilisateur.",
+      "de": "Bitte wählen Sie mindestens einen Shop für den neuen Benutzer aus.",
+      "it": "Selezionare almeno un negozio per il nuovo utente.",
+      "pl": "Wybierz co najmniej jeden sklep dla nowego użytkownika.",
+      "pt": "Seleccione pelo menos uma loja para o novo utilizador.",
+      "es": "Seleccione al menos una tienda para el nuevo usuario.",
+      "sv": "Välj minst en butik för den nya användaren.",
+      "rbe": "Selecteer minstens één winkel voor de nieuwe gebruiker.",
+      "da": "Vælg mindst én butik til den nye bruger.",
+      "fi": "Valitse vähintään yksi kauppa uudelle käyttäjälle."
+    }
+  },
+  {
+    "06TVnx": {
+      "en": "2.5 Data accessed within Alert is for your personal use and for the benefit of the company for which you are employed, but must not be shown, shared or disclosed with any other person, shop, company or organization that is not a member or User of Alert!",
+      "nl": "2.5 De gegevens die binnen Alert worden geraadpleegd, zijn bestemd voor persoonlijk gebruik en voor het bedrijf waarvoor u werkt, maar mogen niet worden getoond, gedeeld of bekendgemaakt aan andere personen, winkels, bedrijven of organisaties die geen lid of gebruiker zijn van Alert!",
+      "fr": "2.5 Les données auxquelles vous avez accès dans Alert sont destinées à votre usage personnel et au bénéfice de l'entreprise pour laquelle vous travaillez, mais ne doivent pas être montrées, partagées ou divulguées à toute autre personne, magasin, entreprise ou organisation qui n'est pas un membre ou un utilisateur d'Alert !",
+      "de": "2.5 Die Daten, auf die Sie innerhalb von Alert zugreifen, sind für Ihren persönlichen Gebrauch und für das Unternehmen, bei dem Sie angestellt sind, bestimmt, dürfen aber keiner anderen Person, keinem Geschäft, keinem Unternehmen oder keiner Organisation, die nicht Mitglied oder Nutzer von Alert! ist, gezeigt, mitgeteilt oder offengelegt werden.",
+      "it": "2.5 I dati a cui si accede all'interno di Alert sono per uso personale e a beneficio dell'azienda per cui si lavora, ma non devono essere mostrati, condivisi o divulgati con nessun'altra persona, negozio, azienda o organizzazione che non sia un membro o un utente di Alert!",
+      "pl": "2.5 Dane, do których użytkownik uzyskuje dostęp w ramach usługi Alert, są przeznaczone do użytku osobistego użytkownika i na rzecz firmy, w której jest on zatrudniony, ale nie mogą być pokazywane, udostępniane ani ujawniane żadnej innej osobie, sklepowi, firmie lub organizacji, która nie jest członkiem lub użytkownikiem usługi Alert!",
+      "pt": "2.5 Os dados acedidos no Alert são para seu uso pessoal e para benefício da empresa para a qual trabalha, mas não devem ser mostrados, partilhados ou divulgados a qualquer outra pessoa, loja, empresa ou organização que não seja membro ou utilizador do Alert!",
+      "es": "¡2.5 Los datos a los que acceda dentro de Alert son para su uso personal y en beneficio de la empresa para la que trabaja, pero no deben mostrarse, compartirse ni divulgarse con ninguna otra persona, tienda, empresa u organización que no sea miembro o usuario de Alert!",
+      "sv": "2.5 Data som du får tillgång till inom Alert är för ditt personliga bruk och till förmån för det företag som du är anställd för, men får inte visas, delas eller avslöjas för någon annan person, butik, företag eller organisation som inte är medlem eller Användare av Alert!",
+      "rbe": "2.5 De gegevens die binnen Alert worden geraadpleegd, zijn bestemd voor persoonlijk gebruik en voor het bedrijf waarvoor u werkt, maar mogen niet worden getoond, gedeeld of bekendgemaakt aan andere personen, winkels, bedrijven of organisaties die geen lid of gebruiker zijn van Alert!",
+      "da": "2.5 Data, du har adgang til i Alert, er til personlig brug og til gavn for den virksomhed, du er ansat i, men må ikke vises, deles eller videregives til nogen anden person, butik, virksomhed eller organisation, der ikke er medlem eller bruger af Alert!",
+      "fi": "2.5 Tiedot, joita Alertissa käytetään, on tarkoitettu henkilökohtaiseen käyttöön ja sen yrityksen hyödyksi, jossa työskentelet, mutta niitä ei saa näyttää, jakaa tai paljastaa muille henkilöille, liikkeille, yrityksille tai organisaatioille, jotka eivät ole Alertin jäseniä tai käyttäjiä."
+    }
+  },
+  {
+    "0KPX7H": {
+      "en": "Allow usr to report to all shops",
+      "nl": "Laat usr rapporteren aan alle winkels",
+      "fr": "Permettre à l'utilisateur de faire rapport à tous les ateliers",
+      "de": "Erlauben Sie Usern, allen Geschäften Bericht zu erstatten",
+      "it": "Consentire a usr di riferire a tutti i negozi",
+      "pl": "Zezwalanie użytkownikom na raportowanie do wszystkich sklepów",
+      "pt": "Permitir que o utilizador apresente relatórios a todas as lojas",
+      "es": "Permitir que usr informe a todas las tiendas",
+      "sv": "Låt usr rapportera till alla butiker",
+      "rbe": "Laat usr rapporteren aan alle winkels",
+      "da": "Tillad usr at rapportere til alle butikker",
+      "fi": "Salli usr:n raportoida kaikille liikkeille"
+    }
+  },
+  {
+    "0XtAf2": {
+      "en": "Please fill up the details for the shop.",
+      "nl": "Vul de gegevens voor de winkel in.",
+      "fr": "Veuillez remplir les détails de la boutique.",
+      "de": "Bitte füllen Sie die Angaben für den Shop aus.",
+      "it": "Si prega di compilare i dati per il negozio.",
+      "pl": "Prosimy o wypełnienie danych sklepu.",
+      "pt": "Preencher os dados da loja.",
+      "es": "Rellene los datos de la tienda.",
+      "sv": "Vänligen fyll i uppgifterna för butiken.",
+      "rbe": "Vul de gegevens voor de winkel in.",
+      "da": "Udfyld venligst detaljerne for butikken.",
+      "fi": "Täytä tiedot kauppaa varten."
+    }
+  },
+  {
+    "2pC0Hc": {
+      "en": "Crime Types by Shop",
+      "nl": "Misdaadsoorten per winkel",
+      "fr": "Types de délits par magasin",
+      "de": "Verbrechensarten nach Geschäft",
+      "it": "Tipi di reato per negozio",
+      "pl": "Rodzaje przestępstw według sklepów",
+      "pt": "Tipos de crime por loja",
+      "es": "Tipos de delitos por tienda",
+      "sv": "Brottstyper per butik",
+      "rbe": "Misdaadsoorten per winkel",
+      "da": "Kriminalitetstyper efter butik",
+      "fi": "Rikostyypit myymälöittäin"
+    }
+  },
+  {
+    "3RD2uO": {
+      "en": "Select a shops",
+      "nl": "Selecteer een winkel",
+      "fr": "Sélectionner un magasin",
+      "de": "Wählen Sie ein Geschäft",
+      "it": "Selezionare un negozio",
+      "pl": "Wybór sklepów",
+      "pt": "Selecionar uma loja",
+      "es": "Seleccione una tienda",
+      "sv": "Välj en butik",
+      "rbe": "Selecteer een winkel",
+      "da": "Vælg en butik",
+      "fi": "Valitse kaupat"
+    }
+  },
+  {
+    "4Y/QAD": {
+      "en": "Select an shop to view",
+      "nl": "Selecteer een winkel om te bekijken",
+      "fr": "Sélectionnez un magasin à visualiser",
+      "de": "Wählen Sie einen Shop zur Ansicht",
+      "it": "Selezionare un negozio da visualizzare",
+      "pl": "Wybierz sklep do wyświetlenia",
+      "pt": "Selecionar uma loja para ver",
+      "es": "Seleccione una tienda para verla",
+      "sv": "Välj en butik för att se",
+      "rbe": "Selecteer een winkel om te bekijken",
+      "da": "Vælg en butik for at se",
+      "fi": "Valitse myymälä nähdäksesi"
+    }
+  },
+  {
+    "50iYmp": {
+      "en": "Link Existing Shop",
+      "nl": "Bestaande winkel koppelen",
+      "fr": "Lien vers un magasin existant",
+      "de": "Link Vorhandener Shop",
+      "it": "Collegamento al negozio esistente",
+      "pl": "Link do istniejącego sklepu",
+      "pt": "Ligar a loja existente",
+      "es": "Vincular tienda existente",
+      "sv": "Länka till befintlig butik",
+      "rbe": "Bestaande winkel koppelen",
+      "da": "Link til eksisterende butik",
+      "fi": "Linkki Olemassa oleva kauppa"
+    }
+  },
+  {
+    "5ETgSz": {
+      "en": "Shop contribution",
+      "nl": "Winkelbijdrage",
+      "fr": "Contribution à la boutique",
+      "de": "Shop-Beitrag",
+      "it": "Contributo del negozio",
+      "pl": "Wkład sklepu",
+      "pt": "Contribuição da loja",
+      "es": "Contribución a la tienda",
+      "sv": "Bidrag till butik",
+      "rbe": "Winkelbijdrage",
+      "da": "Shop-bidrag",
+      "fi": "Myymälän maksuosuus"
+    }
+  },
+  {
+    "5MBl1V": {
+      "en": "Add shop",
+      "nl": "Winkel toevoegen",
+      "fr": "Ajouter un magasin",
+      "de": "Shop hinzufügen",
+      "it": "Aggiungi negozio",
+      "pl": "Dodaj sklep",
+      "pt": "Adicionar loja",
+      "es": "Añadir tienda",
+      "sv": "Lägg till butik",
+      "rbe": "Winkel toevoegen",
+      "da": "Tilføj butik",
+      "fi": "Lisää kauppa"
+    }
+  },
+  {
+    "7DwF/t": {
+      "en": "Please enter a county for the shop Location",
+      "nl": "Voer een provincie in voor de winkellocatie",
+      "fr": "Veuillez indiquer un pays pour la boutique Emplacement",
+      "de": "Bitte geben Sie einen Bezirk für den Shop ein Standort",
+      "it": "Inserire una contea per il negozio Ubicazione",
+      "pl": "Wprowadź województwo dla lokalizacji sklepu",
+      "pt": "Por favor, introduza um concelho para a loja Localização",
+      "es": "Introduzca un país para la tienda Ubicación",
+      "sv": "Vänligen ange ett län för butiken Plats",
+      "rbe": "Voer een provincie in voor de winkellocatie",
+      "da": "Indtast venligst et amt for butikkens placering",
+      "fi": "Kirjoita myymälän maakunta Sijainti"
+    }
+  },
+  {
+    "9buzD1": {
+      "en": "3.1 Your password is personal to you. Your transactions are logged throughout your visits to Alert! You must use all reasonable endeavours to prevent any unauthorised access to the Services and shall not disclose your password, or grant access to any part of the Services, to any other person, third party, or shop.",
+      "nl": "3.1 Uw wachtwoord is persoonlijk voor u. Uw transacties worden geregistreerd tijdens uw bezoeken aan Alert! U dient alle redelijke inspanningen te leveren om ongeoorloofde toegang tot de Diensten te voorkomen en u mag uw wachtwoord niet bekendmaken of toegang verlenen tot enig deel van de Diensten aan andere personen, derden of winkels.",
+      "fr": "3.1 Votre mot de passe vous est personnel. Vos transactions sont enregistrées tout au long de vos visites sur le site d'Alert ! Vous devez prendre toutes les mesures raisonnables pour empêcher tout accès non autorisé aux services et ne devez pas divulguer votre mot de passe, ni accorder l'accès à toute partie des services, à toute autre personne, tiers ou boutique.",
+      "de": "3.1 Ihr Passwort ist für Sie persönlich. Ihre Transaktionen werden während Ihrer Besuche bei Alert! protokolliert. Sie müssen alle angemessenen Anstrengungen unternehmen, um einen unbefugten Zugang zu den Diensten zu verhindern, und dürfen Ihr Passwort nicht an andere Personen, Dritte oder Geschäfte weitergeben oder ihnen Zugang zu Teilen der Dienste gewähren.",
+      "it": "3.1 La password è personale. Le vostre transazioni vengono registrate durante tutte le vostre visite ad Alert! L'utente è tenuto a compiere ogni ragionevole sforzo per prevenire qualsiasi accesso non autorizzato ai Servizi e non dovrà divulgare la propria password, né concedere l'accesso a qualsiasi parte dei Servizi, a qualsiasi altra persona, terza parte o negozio.",
+      "pl": "3.1 Hasło użytkownika ma charakter osobisty. Transakcje użytkownika są rejestrowane podczas wszystkich jego wizyt w Alert! Użytkownik musi dołożyć wszelkich starań, aby zapobiec nieautoryzowanemu dostępowi do Usług i nie może ujawniać swojego hasła ani udzielać dostępu do jakiejkolwiek części Usług żadnej innej osobie, stronie trzeciej ani sklepowi.",
+      "pt": "3.1 A sua palavra-passe é pessoal. As suas transacções são registadas durante as suas visitas ao Alert! O utilizador deverá envidar todos os esforços razoáveis para impedir qualquer acesso não autorizado aos Serviços e não deverá divulgar a sua palavra-passe ou conceder acesso a qualquer parte dos Serviços a qualquer outra pessoa, terceiro ou loja.",
+      "es": "3.1 Su contraseña es personal. Sus transacciones se registran durante todas sus visitas a ¡Alerta! Deberá hacer todo lo razonablemente posible para evitar cualquier acceso no autorizado a los Servicios y no revelará su contraseña, ni concederá acceso a ninguna parte de los Servicios, a ninguna otra persona, tercero o tienda.",
+      "sv": "3.1 Ditt lösenord är personligt för dig. Dina transaktioner loggas under alla dina besök på Alert! Du måste vidta alla rimliga åtgärder för att förhindra obehörig åtkomst till tjänsterna och får inte avslöja ditt lösenord, eller ge åtkomst till någon del av tjänsterna, till någon annan person, tredje part eller butik.",
+      "rbe": "3.1 Uw wachtwoord is persoonlijk voor u. Uw transacties worden geregistreerd tijdens uw bezoeken aan Alert! U dient alle redelijke inspanningen te leveren om ongeoorloofde toegang tot de Diensten te voorkomen en u mag uw wachtwoord niet bekendmaken of toegang verlenen tot enig deel van de Diensten aan andere personen, derden of winkels.",
+      "da": "3.1 Din adgangskode er personlig for dig. Dine transaktioner logges under alle dine besøg på Alert! Du skal gøre alle rimelige bestræbelser på at forhindre uautoriseret adgang til tjenesterne og må ikke afsløre din adgangskode eller give adgang til nogen del af tjenesterne til nogen anden person, tredjepart eller butik.",
+      "fi": "3.1 Salasanasi on henkilökohtainen. Tapahtumasi kirjautuvat koko Alert!:ssa käyntisi ajan. Sinun on pyrittävä kaikin kohtuullisin keinoin estämään luvaton pääsy Palveluihin, etkä saa paljastaa salasanaasi tai antaa pääsyä mihinkään Palveluiden osaan kenellekään muulle henkilölle, kolmannelle osapuolelle tai kaupalle."
+    }
+  },
+  {
+    "9k1Jt/": {
+      "en": "Edit Shop",
+      "nl": "Bewerk winkel",
+      "fr": "Editer la boutique",
+      "de": "Shop bearbeiten",
+      "it": "Modifica negozio",
+      "pl": "Edytuj sklep",
+      "pt": "Editar loja",
+      "es": "Editar tienda",
+      "sv": "Edit Butik",
+      "rbe": "Bewerk winkel",
+      "da": "Rediger butik",
+      "fi": "Muokkaa kauppaa"
+    }
+  },
+  {
+    "Av/UtY": {
+      "en": "Parent Shop",
+      "nl": "Ouderwinkel",
+      "fr": "Boutique des parents",
+      "de": "Elternladen",
+      "it": "Negozio per genitori",
+      "pl": "Sklep dla rodziców",
+      "pt": "Loja dos pais",
+      "es": "Tienda para padres",
+      "sv": "Föräldrabutik",
+      "rbe": "Ouderwinkel",
+      "da": "Forældrebutik",
+      "fi": "Vanhempien kauppa"
+    }
+  },
+  {
+    "CA+Z1B": {
+      "en": "Targeted Shop",
+      "nl": "Gerichte winkel",
+      "fr": "Boutique ciblée",
+      "de": "Zielgerichteter Shop",
+      "it": "Negozio mirato",
+      "pl": "Sklep docelowy",
+      "pt": "Loja direccionada",
+      "es": "Tienda dirigida",
+      "sv": "Riktad butik",
+      "rbe": "Gerichte winkel",
+      "da": "Målrettet butik",
+      "fi": "Kohdennettu kauppa"
+    }
+  },
+  {
+    "D0tMhW": {
+      "en": "Shops",
+      "nl": "Winkels",
+      "fr": "Magasins",
+      "de": "Geschäfte",
+      "it": "Negozi",
+      "pl": "Sklepy",
+      "pt": "Lojas",
+      "es": "Tiendas",
+      "sv": "Butiker",
+      "rbe": "Winkels",
+      "da": "Butikker",
+      "fi": "Kaupat"
+    }
+  },
+  {
+    "Dk/kmv": {
+      "en": "Save Shop",
+      "nl": "Winkel besparen",
+      "fr": "Sauver la boutique",
+      "de": "Shop speichern",
+      "it": "Risparmia il tuo negozio",
+      "pl": "Save Shop",
+      "pt": "Salvar loja",
+      "es": "Tienda Save",
+      "sv": "Spara i butiken",
+      "rbe": "Winkel besparen",
+      "da": "Gem butik",
+      "fi": "Tallenna kauppa"
+    }
+  },
+  {
+    "EnP/IW": {
+      "en": "7.1 ShopSafe is given general authorisation to engage third-parties to process the Personal Data (“Sub-Processors”) without obtaining any further written, specific authorization from the Data Controller, provided that ShopSafe notifies the Data Controller in writing about the identity of a potential Sub-Processor (and its processors, if any) before any agreements are made with the relevant Sub-Processors and before the relevant Sub-Processor processes any of the Personal Data. If the Data Controller wishes to object to the relevant Sub-Processor, the Data Controller shall give notice hereof in writing within ten (10) shop days from receiving the notification from ShopSafe. Absence of any objections from the Data Controller shall be deemed consent to the relevant Sub-Processor.",
+      "nl": "7.1 ShopSafe wordt algemeen gemachtigd om derden in te schakelen voor het verwerken van de Persoonsgegevens (\"Sub-Verwerkers\") zonder dat daarvoor een nadere schriftelijke, specifieke machtiging van de Verwerkingsverantwoordelijke nodig is, mits ShopSafe de Verwerkingsverantwoordelijke schriftelijk informeert over de identiteit van een potentiële Sub-Verwerker (en diens eventuele verwerkers) voordat er overeenkomsten worden gesloten met de betreffende Sub-Verwerkers en voordat de betreffende Sub-Verwerker Persoonsgegevens verwerkt. Indien de Verwerkingsverantwoordelijke bezwaar wenst te maken tegen de relevante Sub-Verwerker, dient de Verwerkingsverantwoordelijke dit schriftelijk kenbaar te maken binnen tien (10) winkeldagen na ontvangst van de kennisgeving van ShopSafe. Het ontbreken van enig bezwaar van de Verwerkingsverantwoordelijke wordt beschouwd als toestemming voor de relevante Subverwerker.",
+      "fr": "7.1 ShopSafe a l'autorisation générale d'engager des tiers pour traiter les données personnelles (\" Sous-Traitants \") sans obtenir d'autre autorisation écrite et spécifique du Responsable des données, à condition que ShopSafe informe le Responsable des données par écrit de l'identité d'un Sous-Traitant potentiel (et de ses sous-traitants, le cas échéant) avant que des accords ne soient conclus avec les Sous-Traitants concernés et avant que le Sous-Traitant concerné ne traite les données personnelles. Si le contrôleur des données souhaite s'opposer au sous-traitant secondaire concerné, il doit le notifier par écrit dans un délai de dix (10) jours ouvrables à compter de la réception de la notification de ShopSafe. L'absence d'objection de la part du Responsable des données sera considérée comme un consentement au Sous-Traitant concerné.",
+      "de": "7.1 ShopSafe erhält die allgemeine Erlaubnis, Dritte mit der Verarbeitung personenbezogener Daten zu beauftragen (\"Unterauftragsverarbeiter\"), ohne eine weitere schriftliche, spezifische Erlaubnis des für die Verarbeitung Verantwortlichen einzuholen, vorausgesetzt, dass ShopSafe den für die Verarbeitung Verantwortlichen schriftlich über die Identität eines potenziellen Unterauftragsverarbeiters (und ggf. seiner Auftragsverarbeiter) informiert, bevor Vereinbarungen mit den entsprechenden Unterauftragsverarbeitern getroffen werden und bevor der entsprechende Unterauftragsverarbeiter personenbezogene Daten verarbeitet. Wenn der für die Verarbeitung Verantwortliche den betreffenden Unterauftragsverarbeiter ablehnen möchte, muss er dies innerhalb von zehn (10) Werktagen nach Erhalt der Mitteilung von ShopSafe schriftlich mitteilen. Wenn der für die Verarbeitung Verantwortliche keine Einwände erhebt, gilt dies als Zustimmung zu dem betreffenden Unterauftragsverarbeiter.",
+      "it": "7.1 ShopSafe è autorizzata in via generale ad affidare a terzi il trattamento dei Dati personali (\"Subprocessori\") senza dover ottenere un'ulteriore autorizzazione scritta e specifica da parte del Titolare del trattamento, a condizione che ShopSafe notifichi per iscritto al Titolare del trattamento l'identità di un potenziale Subprocessore (e dei suoi eventuali incaricati del trattamento) prima che vengano stipulati accordi con i relativi Subprocessori e prima che il relativo Subprocessore tratti i Dati personali. Se il Titolare del trattamento desidera opporsi al relativo Subprocessore, dovrà darne comunicazione scritta entro dieci (10) giorni dal ricevimento della notifica da parte di ShopSafe. L'assenza di obiezioni da parte del Titolare dei dati sarà considerata un consenso al Subprocessore in questione.",
+      "pl": "7.1 ShopSafe otrzymuje ogólne upoważnienie do angażowania stron trzecich do przetwarzania Danych Osobowych (\"Podprzetwarzający\") bez uzyskiwania dalszego pisemnego, konkretnego upoważnienia od Administratora Danych, pod warunkiem, że ShopSafe powiadomi Administratora Danych na piśmie o tożsamości potencjalnego Podprzetwarzającego (i jego podmiotów przetwarzających, jeśli takie istnieją) przed zawarciem jakichkolwiek umów z odpowiednimi Podprzetwarzającymi i zanim odpowiedni Podprzetwarzający przetworzy jakiekolwiek Dane Osobowe. Jeśli Administrator Danych chce sprzeciwić się odpowiedniemu Podprzetwarzającemu, Administrator Danych powiadomi o tym na piśmie w ciągu dziesięciu (10) dni sklepowych od otrzymania powiadomienia od ShopSafe. Brak sprzeciwu ze strony Administratora Danych uznaje się za zgodę na odpowiedni Podmiot Przetwarzający.",
+      "pt": "7.1 A ShopSafe tem autorização geral para contratar terceiros para processar os Dados Pessoais (\"Subcontratantes\") sem obter qualquer outra autorização específica por escrito do Controlador de Dados, desde que a ShopSafe notifique o Controlador de Dados por escrito sobre a identidade de um potencial Subcontratante (e seus processadores, se houver) antes de quaisquer acordos serem feitos com os Subcontratantes relevantes e antes que o Subcontratante relevante processe qualquer um dos Dados Pessoais. Se o Controlador de Dados desejar opor-se ao Subprocessador relevante, o Controlador de Dados deverá notificá-lo por escrito no prazo de dez (10) dias úteis a contar da receção da notificação da ShopSafe. A ausência de objecções por parte do Responsável pelo Tratamento será considerada como consentimento para o Subcontratante.",
+      "es": "7.1 ShopSafe tiene autorización general para contratar a terceros para procesar los Datos Personales (\"Subencargados del Tratamiento\") sin obtener ninguna otra autorización específica por escrito del Responsable del Tratamiento, siempre que ShopSafe notifique por escrito al Responsable del Tratamiento la identidad de un posible Subencargado del Tratamiento (y sus procesadores, si los hubiera) antes de llegar a ningún acuerdo con los Subencargados del Tratamiento pertinentes y antes de que el Subencargado del Tratamiento pertinente procese cualquiera de los Datos Personales. Si el Responsable del Tratamiento desea oponerse al correspondiente Subencargado del Tratamiento, deberá notificarlo por escrito en el plazo de diez (10) días hábiles a partir de la recepción de la notificación de ShopSafe. La ausencia de objeciones por parte del Responsable del Tratamiento se considerará como consentimiento al correspondiente Subencargado del Tratamiento.",
+      "sv": "7.1 ShopSafe ges allmänt tillstånd att anlita tredje parter för att behandla Personuppgifterna (\"Underbiträden\") utan att inhämta något ytterligare skriftligt, specifikt tillstånd från den Personuppgiftsansvarige, förutsatt att ShopSafe skriftligen meddelar den Personuppgiftsansvarige om identiteten på ett potentiellt Underbiträde (och dess eventuella underbiträden) innan några avtal ingås med de relevanta Underbiträdena och innan det relevanta Underbiträdet behandlar några av Personuppgifterna. Om den personuppgiftsansvarige vill invända mot det relevanta personuppgiftsbiträdet ska den personuppgiftsansvarige meddela detta skriftligen inom tio (10) butiksdagar från mottagandet av meddelandet från ShopSafe. Avsaknad av invändningar från den personuppgiftsansvarige ska anses utgöra samtycke till det relevanta personuppgiftsbiträdet.",
+      "rbe": "7.1 ShopSafe wordt algemeen gemachtigd om derden in te schakelen voor het verwerken van de Persoonsgegevens (\"Sub-Verwerkers\") zonder dat daarvoor een nadere schriftelijke, specifieke machtiging van de Verwerkingsverantwoordelijke nodig is, mits ShopSafe de Verwerkingsverantwoordelijke schriftelijk informeert over de identiteit van een potentiële Sub-Verwerker (en diens eventuele verwerkers) voordat er overeenkomsten worden gesloten met de betreffende Sub-Verwerkers en voordat de betreffende Sub-Verwerker Persoonsgegevens verwerkt. Indien de Verwerkingsverantwoordelijke bezwaar wenst te maken tegen de relevante Sub-Verwerker, dient de Verwerkingsverantwoordelijke dit schriftelijk kenbaar te maken binnen tien (10) winkeldagen na ontvangst van de kennisgeving van ShopSafe. Het ontbreken van enig bezwaar van de Verwerkingsverantwoordelijke wordt beschouwd als toestemming voor de relevante Subverwerker.",
+      "da": "7.1 ShopSafe gives generel tilladelse til at engagere tredjeparter til at behandle personoplysningerne (\"underdatabehandlere\") uden at indhente yderligere skriftlig, specifik tilladelse fra den dataansvarlige, forudsat at ShopSafe skriftligt underretter den dataansvarlige om identiteten af en potentiel underdatabehandler (og dennes eventuelle databehandlere), før der indgås aftaler med de relevante underdatabehandlere, og før den relevante underdatabehandler behandler nogen af personoplysningerne. Hvis den dataansvarlige ønsker at gøre indsigelse mod den relevante underdatabehandler, skal den dataansvarlige give skriftlig meddelelse herom inden for ti (10) butiksdage fra modtagelsen af meddelelsen fra ShopSafe. Hvis den dataansvarlige ikke gør indsigelse, anses det for at være et samtykke til den relevante underdatabehandler.",
+      "fi": "7.1 ShopSafelle annetaan yleinen lupa käyttää kolmansia osapuolia henkilötietojen käsittelyyn (\"alihankkijat\") ilman, että se tarvitsee rekisterinpitäjältä mitään muuta kirjallista, erityistä lupaa edellyttäen, että ShopSafe ilmoittaa rekisterinpitäjälle kirjallisesti mahdollisen alihankkijan (ja sen mahdollisten käsittelijöiden) henkilöllisyydestä, ennen kuin alihankkijoiden kanssa tehdään sopimuksia ja ennen kuin alihankkija käsittelee mitään henkilötietoja. Jos rekisterinpitäjä haluaa vastustaa asianomaista alihankkijana toimivaa käsittelijää, rekisterinpitäjän on ilmoitettava tästä kirjallisesti kymmenen (10) myymäläpäivän kuluessa siitä, kun se on saanut ilmoituksen ShopSafelta. Jos rekisterinpitäjä ei esitä vastalauseita, katsotaan, että kyseinen alihankkijana toimiva henkilö on antanut suostumuksensa."
+    }
+  },
+  {
+    "FsK0f5": {
+      "en": "Shops: {name}",
+      "nl": "Winkels: {name}",
+      "fr": "Magasins : {name}",
+      "de": "Geschäfte: {name}",
+      "it": "Negozi: {name}",
+      "pl": "Sklepy: {name}",
+      "pt": "Lojas: {name}",
+      "es": "Tiendas: {name}",
+      "sv": "Butiker: {name}",
+      "rbe": "Winkels: {name}",
+      "da": "Butikker: {name}",
+      "fi": "Kaupat: {name}"
+    }
+  },
+  {
+    "G+A6Wv": {
+      "en": "Link Shop",
+      "nl": "Link Shop",
+      "fr": "Boutique en ligne",
+      "de": "Link Shop",
+      "it": "Negozio di link",
+      "pl": "Link Shop",
+      "pt": "Ligação à loja",
+      "es": "Tienda de enlaces",
+      "sv": "Länk Butik",
+      "rbe": "Link Shop",
+      "da": "Link butik",
+      "fi": "Linkki Shop"
+    }
+  },
+  {
+    "G+gVEl": {
+      "en": "11.4 In the event of any failure of the service, ShopSafe will not be liable to the Data Controller or any other party for any special, indirect, or consequential damages, including but not limited to loss of revenue, shop, anticipated savings or profit, loss of goodwill, loss or corruption of data or any other economic loss or any indirect or consequential loss whatsoever or howsoever arising even if the Data Controller has notified ShopSafe that any of the above may occur.",
+      "nl": "11.4 In het geval van een storing in de service, zal ShopSafe niet aansprakelijk zijn jegens de Data Controller of enige andere partij voor enige speciale, indirecte of gevolgschade, met inbegrip van maar niet beperkt tot verlies van inkomsten, winkel, verwachte besparingen of winst, verlies van goodwill, verlies of corruptie van gegevens of enig ander economisch verlies of enige indirecte of gevolgschade van welke aard dan ook of hoe dan ook ontstaan, zelfs indien de Data Controller ShopSafe heeft geïnformeerd dat een van de bovenstaande kan optreden.",
+      "fr": "11.4 En cas de défaillance du service, ShopSafe ne sera pas responsable envers le responsable des données ou toute autre partie des dommages spéciaux, indirects ou consécutifs, y compris, mais sans s'y limiter, la perte de revenus, de boutique, d'économies ou de profits prévus, la perte de clientèle, la perte ou la corruption de données ou toute autre perte économique ou toute perte indirecte ou consécutive, quelle qu'elle soit, même si le responsable des données a avisé ShopSafe que l'une ou l'autre des situations susmentionnées pourrait se produire.",
+      "de": "11.4 Im Falle eines Ausfalls des Dienstes haftet ShopSafe weder gegenüber dem für die Datenverarbeitung Verantwortlichen noch gegenüber einer anderen Partei für besondere, indirekte oder Folgeschäden, einschließlich, aber nicht beschränkt auf den Verlust von Einnahmen, Geschäften, erwarteten Einsparungen oder Gewinnen, den Verlust von Firmenwert, den Verlust oder die Beschädigung von Daten oder andere wirtschaftliche Verluste oder indirekte oder Folgeschäden jeglicher Art, auch wenn der für die Datenverarbeitung Verantwortliche ShopSafe darüber informiert hat, dass einer der oben genannten Fälle eintreten könnte.",
+      "it": "11.4 In caso di guasto del servizio, ShopSafe non sarà responsabile nei confronti del Titolare del trattamento o di qualsiasi altra parte per danni speciali, indiretti o consequenziali, inclusi, a titolo esemplificativo e non esaustivo, la perdita di ricavi, di negozio, di risparmi o profitti previsti, la perdita di avviamento, la perdita o la corruzione di dati o qualsiasi altra perdita economica o qualsiasi perdita indiretta o consequenziale di qualsiasi tipo o comunque derivante, anche se il Titolare del trattamento ha notificato a ShopSafe la possibilità che si verifichi uno dei suddetti eventi.",
+      "pl": "11.4 W przypadku jakiejkolwiek awarii usługi, ShopSafe nie ponosi odpowiedzialności wobec Administratora Danych lub jakiejkolwiek innej strony za jakiekolwiek szczególne, pośrednie lub wtórne szkody, w tym między innymi utratę przychodów, sklepu, przewidywanych oszczędności lub zysków, utratę wartości firmy, utratę lub uszkodzenie danych lub jakiekolwiek inne straty ekonomiczne lub jakiekolwiek pośrednie lub wtórne straty, niezależnie od tego, w jaki sposób powstały, nawet jeśli Administrator Danych powiadomił ShopSafe, że którekolwiek z powyższych może wystąpić.",
+      "pt": "11.4 No caso de qualquer falha do serviço, a ShopSafe não será responsável perante o Controlador de Dados ou qualquer outra parte por quaisquer danos especiais, indirectos ou consequenciais, incluindo, mas não se limitando a perda de receitas, compras, poupanças ou lucros antecipados, perda de boa vontade, perda ou corrupção de dados ou qualquer outra perda económica ou qualquer perda indireta ou consequencial de qualquer forma ou de qualquer forma decorrente, mesmo que o Controlador de Dados tenha notificado a ShopSafe de que qualquer um dos itens acima pode ocorrer.",
+      "es": "11.4 En caso de cualquier fallo del servicio, ShopSafe no será responsable ante el Responsable del Tratamiento ni ante ninguna otra parte por ningún daño especial, indirecto o consecuente, incluyendo pero no limitándose a la pérdida de ingresos, tienda, ahorros o beneficios previstos, pérdida de fondo de comercio, pérdida o corrupción de datos o cualquier otra pérdida económica o cualquier pérdida indirecta o consecuente de cualquier tipo o forma, incluso si el Responsable del Tratamiento ha notificado a ShopSafe que cualquiera de los anteriores puede ocurrir.",
+      "sv": "11.4 I händelse av fel i tjänsten ska ShopSafe inte hållas ansvarigt gentemot den personuppgiftsansvarige eller någon annan part för några särskilda, indirekta eller följdskador, inklusive men inte begränsat till förlust av intäkter, butik, förväntade besparingar eller vinst, förlust av goodwill, förlust eller förvanskning av data eller någon annan ekonomisk förlust eller någon indirekt eller följdskada oavsett vad eller hur den uppstår även om den personuppgiftsansvarige har meddelat ShopSafe att något av det ovanstående kan inträffa.",
+      "rbe": "11.4 In het geval van een storing in de service, zal ShopSafe niet aansprakelijk zijn jegens de Data Controller of enige andere partij voor enige speciale, indirecte of gevolgschade, met inbegrip van maar niet beperkt tot verlies van inkomsten, winkel, verwachte besparingen of winst, verlies van goodwill, verlies of corruptie van gegevens of enig ander economisch verlies of enige indirecte of gevolgschade van welke aard dan ook of hoe dan ook ontstaan, zelfs indien de Data Controller ShopSafe heeft geïnformeerd dat een van de bovenstaande kan optreden.",
+      "da": "11.4 I tilfælde af fejl i tjenesten er ShopSafe ikke ansvarlig over for den dataansvarlige eller nogen anden part for særlige skader, indirekte skader eller følgeskader, herunder, men ikke begrænset til, tab af omsætning, butik, forventede besparelser eller fortjeneste, tab af goodwill, tab eller beskadigelse af data eller andre økonomiske tab eller indirekte tab eller følgeskader, uanset hvad eller hvordan de måtte opstå, selvom den dataansvarlige har underrettet ShopSafe om, at noget af ovenstående kan forekomme.",
+      "fi": "11.4 Jos palvelu ei toimi, ShopSafe ei ole vastuussa rekisterinpitäjälle tai millekään muulle osapuolelle mistään erityisistä, epäsuorista tai välillisistä vahingoista, mukaan lukien, mutta ei rajoittuen, tulojen, kauppojen, ennakoitujen säästöjen tai voittojen menetys, liikearvon menetys, tietojen menetys tai turmeltuminen tai muut taloudelliset menetykset tai epäsuorat tai välilliset tai välilliset menetykset, jotka voivat syntyä, vaikka rekisterinpitäjä olisi ilmoittanut ShopSafelle edellä mainittujen tapahtumien mahdollisuudesta."
+    }
+  },
+  {
+    "G7muIT": {
+      "en": "A “User” or “Member” is any person, shop or organisation enabled or authorised by the Data Controller to access and share information via the Services.",
+      "nl": "Een \"Gebruiker\" of \"Lid\" is een persoon, winkel of organisatie die door de Gegevensbeheerder in staat is gesteld of gemachtigd om toegang te krijgen tot informatie en deze te delen via de Services.",
+      "fr": "Un \"utilisateur\" ou \"membre\" est toute personne, boutique ou organisation habilitée ou autorisée par le responsable du traitement des données à accéder aux services et à y partager des informations.",
+      "de": "Ein \"Nutzer\" oder \"Mitglied\" ist jede Person, jedes Geschäft oder jede Organisation, die vom für die Datenverarbeitung Verantwortlichen befähigt oder ermächtigt wurde, über die Dienste auf Informationen zuzugreifen und diese auszutauschen.",
+      "it": "Un \"Utente\" o \"Membro\" è una persona, un negozio o un'organizzazione abilitata o autorizzata dal Titolare del trattamento ad accedere e condividere informazioni tramite i Servizi.",
+      "pl": "\"Użytkownik\" lub \"Członek\" to dowolna osoba, sklep lub organizacja, której Administrator danych umożliwił lub którą upoważnił do uzyskiwania dostępu do informacji i ich udostępniania za pośrednictwem Usług.",
+      "pt": "Um \"Utilizador\" ou \"Membro\" é qualquer pessoa, loja ou organização habilitada ou autorizada pelo Controlador de Dados a aceder e partilhar informações através dos Serviços.",
+      "es": "Un \"Usuario\" o \"Miembro\" es cualquier persona, tienda u organización habilitada o autorizada por el Responsable del Tratamiento para acceder y compartir información a través de los Servicios.",
+      "sv": "En \"användare\" eller \"medlem\" är en person, butik eller organisation som av den personuppgiftsansvarige har fått möjlighet eller tillstånd att komma åt och dela information via tjänsterna.",
+      "rbe": "Een \"Gebruiker\" of \"Lid\" is een persoon, winkel of organisatie die door de Gegevensbeheerder in staat is gesteld of gemachtigd om toegang te krijgen tot informatie en deze te delen via de Services.",
+      "da": "En \"bruger\" eller et \"medlem\" er enhver person, butik eller organisation, der er aktiveret eller autoriseret af den dataansvarlige til at få adgang til og dele oplysninger via tjenesterne.",
+      "fi": "\"Käyttäjä\" tai \"jäsen\" on henkilö, kauppa tai organisaatio, jolle rekisterinpitäjä on antanut tai jonka rekisterinpitäjä on valtuuttanut käyttämään ja jakamaan tietoja palveluiden kautta."
+    }
+  },
+  {
+    "H79fAf": {
+      "en": "Targeted Shops",
+      "nl": "Gerichte winkels",
+      "fr": "Magasins ciblés",
+      "de": "Gezielte Geschäfte",
+      "it": "Negozi mirati",
+      "pl": "Sklepy docelowe",
+      "pt": "Lojas direccionadas",
+      "es": "Tiendas específicas",
+      "sv": "Riktade butiker",
+      "rbe": "Gerichte winkels",
+      "da": "Målrettede butikker",
+      "fi": "Kohdennetut kaupat"
+    }
+  },
+  {
+    "HbFVjB": {
+      "en": "Total shops: {total}",
+      "nl": "Totaal winkels: {total}",
+      "fr": "Nombre total de boutiques : {total}",
+      "de": "Geschäfte insgesamt: {total}",
+      "it": "Totale negozi: {total}",
+      "pl": "Łączna liczba sklepów: {total}",
+      "pt": "Total de lojas: {total}",
+      "es": "Total de tiendas: {total}",
+      "sv": "Totalt antal butiker: {total}",
+      "rbe": "Totaal winkels: {total}",
+      "da": "Butikker i alt: {total}",
+      "fi": "Kauppoja yhteensä: {total}"
+    }
+  },
+  {
+    "Hdg31+": {
+      "en": "Select Shop",
+      "nl": "Selecteer winkel",
+      "fr": "Sélectionner un magasin",
+      "de": "Shop auswählen",
+      "it": "Seleziona il negozio",
+      "pl": "Wybierz sklep",
+      "pt": "Selecionar loja",
+      "es": "Seleccionar tienda",
+      "sv": "Välj butik",
+      "rbe": "Selecteer winkel",
+      "da": "Vælg butik",
+      "fi": "Valitse kauppa"
+    }
+  },
+  {
+    "IU3Z4K": {
+      "en": "Total Shops: {total}",
+      "nl": "Totaal aantal winkels: {total}",
+      "fr": "Nombre total de boutiques : {total}",
+      "de": "Geschäfte insgesamt: {total}",
+      "it": "Totale negozi: {total}",
+      "pl": "Łączna liczba sklepów: {total}",
+      "pt": "Total de lojas: {total}",
+      "es": "Tiendas totales: {total}",
+      "sv": "Totalt antal butiker: {total}",
+      "rbe": "Totaal aantal winkels: {total}",
+      "da": "Butikker i alt: {total}",
+      "fi": "Kauppoja yhteensä: {total}"
+    }
+  },
+  {
+    "K/tzzI": {
+      "en": "Search for an shop...",
+      "nl": "Zoek naar een winkel...",
+      "fr": "Recherche d'un magasin...",
+      "de": "Suche nach einem Geschäft...",
+      "it": "Ricerca di un negozio...",
+      "pl": "Szukaj sklepu...",
+      "pt": "Procurar uma loja...",
+      "es": "Buscar una tienda...",
+      "sv": "Sök efter en butik...",
+      "rbe": "Zoek naar een winkel...",
+      "da": "Søg efter en butik...",
+      "fi": "Etsi myymälä..."
+    }
+  },
+  {
+    "KepKya": {
+      "en": "New Shop",
+      "nl": "Nieuwe winkel",
+      "fr": "Nouveau magasin",
+      "de": "Neues Geschäft",
+      "it": "Nuovo negozio",
+      "pl": "Nowy sklep",
+      "pt": "Nova loja",
+      "es": "Nueva tienda",
+      "sv": "Ny butik",
+      "rbe": "Nieuwe winkel",
+      "da": "Ny butik",
+      "fi": "Uusi kauppa"
+    }
+  },
+  {
+    "KjRJyC": {
+      "en": "Update Shop Members",
+      "nl": "Shopleden bijwerken",
+      "fr": "Mise à jour des membres de l'atelier",
+      "de": "Update Shop-Mitglieder",
+      "it": "Aggiornamento dei membri del negozio",
+      "pl": "Aktualizacja dla członków sklepu",
+      "pt": "Atualizar os membros da loja",
+      "es": "Actualizar los miembros de la tienda",
+      "sv": "Uppdatera medlemmar i butiken",
+      "rbe": "Shopleden bijwerken",
+      "da": "Opdatering af butiksmedlemmer",
+      "fi": "Päivitä kaupan jäsenet"
+    }
+  },
+  {
+    "LgTm3N": {
+      "en": "There are no users on this shop.",
+      "nl": "Er zijn geen gebruikers in deze winkel.",
+      "fr": "Il n'y a pas d'utilisateurs dans cette boutique.",
+      "de": "Es gibt keine Benutzer in diesem Shop.",
+      "it": "Non ci sono utenti in questo negozio.",
+      "pl": "W tym sklepie nie ma użytkowników.",
+      "pt": "Não existem utilizadores nesta loja.",
+      "es": "No hay usuarios en esta tienda.",
+      "sv": "Det finns inga användare i denna butik.",
+      "rbe": "Er zijn geen gebruikers in deze winkel.",
+      "da": "Der er ingen brugere på denne shop.",
+      "fi": "Tässä kaupassa ei ole käyttäjiä."
+    }
+  },
+  {
+    "MZynHZ": {
+      "en": "Select Shops",
+      "nl": "Selecteer winkels",
+      "fr": "Sélectionner les magasins",
+      "de": "Geschäfte auswählen",
+      "it": "Seleziona i negozi",
+      "pl": "Wybierz sklepy",
+      "pt": "Selecionar lojas",
+      "es": "Seleccionar tiendas",
+      "sv": "Välj butiker",
+      "rbe": "Selecteer winkels",
+      "da": "Vælg butikker",
+      "fi": "Valitse kaupat"
+    }
+  },
+  {
+    "N4J5/K": {
+      "en": "Please select a shop for the new user.",
+      "nl": "Selecteer een winkel voor de nieuwe gebruiker.",
+      "fr": "Veuillez sélectionner un magasin pour le nouvel utilisateur.",
+      "de": "Bitte wählen Sie einen Shop für den neuen Benutzer.",
+      "it": "Selezionare un negozio per il nuovo utente.",
+      "pl": "Wybierz sklep dla nowego użytkownika.",
+      "pt": "Seleccione uma loja para o novo utilizador.",
+      "es": "Seleccione una tienda para el nuevo usuario.",
+      "sv": "Välj en butik för den nya användaren.",
+      "rbe": "Selecteer een winkel voor de nieuwe gebruiker.",
+      "da": "Vælg venligst en butik til den nye bruger.",
+      "fi": "Valitse uudelle käyttäjälle kauppa."
+    }
+  },
+  {
+    "NOT1VO": {
+      "en": "Show Shops",
+      "nl": "Winkels tonen",
+      "fr": "Montrer les magasins",
+      "de": "Geschäfte anzeigen",
+      "it": "Negozi in mostra",
+      "pl": "Pokaż sklepy",
+      "pt": "Mostrar lojas",
+      "es": "Mostrar tiendas",
+      "sv": "Visa butiker",
+      "rbe": "Winkels tonen",
+      "da": "Vis butikker",
+      "fi": "Näytä kaupat"
+    }
+  },
+  {
+    "NuAnYs": {
+      "en": "Remove From Shop",
+      "nl": "Verwijderen uit winkel",
+      "fr": "Retirer du magasin",
+      "de": "Aus dem Shop entfernen",
+      "it": "Rimuovi dal negozio",
+      "pl": "Usuń ze sklepu",
+      "pt": "Remover da loja",
+      "es": "Eliminar de la tienda",
+      "sv": "Ta bort från butiken",
+      "rbe": "Verwijderen uit winkel",
+      "da": "Fjern fra butik",
+      "fi": "Poista kaupasta"
+    }
+  },
+  {
+    "OARg/D": {
+      "en": "6.7.1 Upon request by a Data Controller, the Data Processor shall make available to the Data Controller all relevant information necessary to demonstrate compliance with this DPA, and shall allow for and reasonably cooperate with audits, including inspections by the Data Controller or an auditor mandated by the Data Controller. The Data Controller shall give notice of any audit or document inspection to be conducted and shall make reasonable endeavors to avoid causing damage or disruption to ShopSafeAlert’s premises, equipment and shop in the course of such an audit or inspection. Any audit or document inspection shall be carried out with reasonable prior written notice of no less than 30 days and shall not be conducted more than once a year.",
+      "nl": "6.7.1 Op verzoek van een Data Controller zal de Data Processor alle relevante informatie beschikbaar stellen aan de Data Controller die nodig is om de naleving van deze DPA aan te tonen, en zal hij audits toestaan en er redelijkerwijs aan meewerken, inclusief inspecties door de Data Controller of een auditor in opdracht van de Data Controller. De Gegevensverwerker zal kennis geven van elke uit te voeren audit of documentinspectie en zal redelijke inspanningen leveren om te voorkomen dat schade of verstoring wordt veroorzaakt aan de gebouwen, apparatuur en winkel van ShopSafeAlert in de loop van een dergelijke audit of inspectie. Elke audit of documentinspectie wordt uitgevoerd met een redelijke voorafgaande schriftelijke kennisgeving van ten minste 30 dagen en wordt niet vaker dan eenmaal per jaar uitgevoerd.",
+      "fr": "6.7.1 À la demande d'un contrôleur de données, le processeur de données doit mettre à la disposition du contrôleur de données toutes les informations pertinentes nécessaires pour démontrer la conformité à ce DPA, et doit permettre et coopérer raisonnablement avec les audits, y compris les inspections du contrôleur de données ou d'un auditeur mandaté par le contrôleur de données. Le contrôleur des données doit notifier tout audit ou inspection de documents à effectuer et doit faire des efforts raisonnables pour éviter de causer des dommages ou des perturbations aux locaux, à l'équipement et au magasin de ShopSafeAlert au cours d'un tel audit ou d'une telle inspection. Tout audit ou inspection de documents sera effectué avec un préavis écrit raisonnable d'au moins 30 jours et ne sera pas effectué plus d'une fois par an.",
+      "de": "6.7.1 Auf Anfrage eines für die Verarbeitung Verantwortlichen stellt der Datenverarbeiter dem für die Verarbeitung Verantwortlichen alle relevanten Informationen zur Verfügung, die für den Nachweis der Einhaltung dieser DSGVO erforderlich sind, und ermöglicht Audits, einschließlich Inspektionen durch den für die Verarbeitung Verantwortlichen oder einen von diesem beauftragten Prüfer, und kooperiert in angemessener Weise dabei. Der für die Verarbeitung Verantwortliche kündigt die Durchführung von Audits oder Dokumentenprüfungen an und bemüht sich in angemessener Weise, Schäden oder Störungen an den Räumlichkeiten, der Ausrüstung und dem Geschäft von ShopSafeAlert im Zuge eines solchen Audits oder einer solchen Prüfung zu vermeiden. Jede Prüfung oder Dokumenteninspektion muss mit einer angemessenen schriftlichen Vorankündigung von mindestens 30 Tagen erfolgen und darf nicht öfter als einmal im Jahr durchgeführt werden.",
+      "it": "6.7.1 Su richiesta di un Titolare del trattamento dei dati, il Responsabile del trattamento dei dati metterà a disposizione del Titolare del trattamento dei dati tutte le informazioni pertinenti necessarie a dimostrare la conformità alla presente DPA e consentirà e coopererà ragionevolmente con gli audit, comprese le ispezioni da parte del Titolare del trattamento dei dati o di un revisore incaricato dal Titolare del trattamento dei dati. Il Titolare del trattamento dei dati dovrà avvisare di qualsiasi audit o ispezione documentale da condurre e dovrà fare il possibile per evitare di causare danni o interruzioni ai locali, alle attrezzature e al negozio di ShopSafeAlert nel corso di tale audit o ispezione. Qualsiasi verifica o ispezione documentale sarà effettuata con un ragionevole preavviso scritto non inferiore a 30 giorni e non sarà effettuata più di una volta all'anno.",
+      "pl": "6.7.1 Na żądanie Administratora Danych Przetwarzający Dane udostępni Administratorowi Danych wszelkie istotne informacje niezbędne do wykazania zgodności z niniejszym OOD oraz umożliwi i będzie w rozsądnym zakresie współpracować przy audytach, w tym kontrolach przeprowadzanych przez Administratora Danych lub audytora upoważnionego przez Administratora Danych. Administrator Danych powiadomi o każdym audycie lub kontroli dokumentów, które mają zostać przeprowadzone i dołoży uzasadnionych starań, aby uniknąć spowodowania szkód lub zakłóceń w pomieszczeniach, sprzęcie i sklepie ShopSafeAlert w trakcie takiego audytu lub kontroli. Wszelkie audyty lub kontrole dokumentów będą przeprowadzane z uzasadnionym pisemnym powiadomieniem nie krótszym niż 30 dni i nie będą przeprowadzane częściej niż raz w roku.",
+      "pt": "6.7.1 A pedido de um Responsável pelo Tratamento de Dados, o Subcontratante disponibilizará ao Responsável pelo Tratamento de Dados todas as informações relevantes necessárias para demonstrar a conformidade com o presente APD e permitirá e cooperará razoavelmente com auditorias, incluindo inspecções pelo Responsável pelo Tratamento de Dados ou por um auditor mandatado pelo Responsável pelo Tratamento de Dados. O Responsável pelo Tratamento de Dados deve notificar qualquer auditoria ou inspeção de documentos a realizar e deve envidar esforços razoáveis para evitar causar danos ou perturbações nas instalações, equipamento e loja do ShopSafeAlert no decurso de tal auditoria ou inspeção. Qualquer auditoria ou inspeção de documentos deve ser efectuada com um pré-aviso razoável, por escrito, não inferior a 30 dias e não deve ser realizada mais do que uma vez por ano.",
+      "es": "6.7.1 A petición de un Responsable del Tratamiento, el Responsable del Tratamiento pondrá a disposición del Responsable del Tratamiento toda la información pertinente necesaria para demostrar el cumplimiento del presente APD, y permitirá y cooperará razonablemente con las auditorías, incluidas las inspecciones del Responsable del Tratamiento o de un auditor encargado por el Responsable del Tratamiento. El responsable del tratamiento notificará cualquier auditoría o inspección de documentos que vaya a realizar y hará todo lo razonablemente posible para evitar causar daños o interrupciones en los locales, equipos y tienda de ShopSafeAlert en el transcurso de dicha auditoría o inspección. Cualquier auditoría o inspección de documentos se llevará a cabo con un preaviso razonable por escrito no inferior a 30 días y no se realizará más de una vez al año.",
+      "sv": "6.7.1 På begäran av en personuppgiftsansvarig ska personuppgiftsbiträdet göra all relevant information som krävs för att visa överensstämmelse med detta dataskyddsavtal tillgänglig för den personuppgiftsansvarige och ska tillåta och rimligen samarbeta med revisioner, inklusive inspektioner av den personuppgiftsansvarige eller en revisor som bemyndigats av den personuppgiftsansvarige. Den personuppgiftsansvarige ska meddela om någon revision eller dokumentinspektion som ska utföras och ska göra rimliga ansträngningar för att undvika att orsaka skador eller störningar i ShopSafeAlerts lokaler, utrustning och butik i samband med en sådan revision eller inspektion. Varje revision eller dokumentinspektion ska utföras med rimlig skriftlig förvarning på minst 30 dagar och ska inte utföras mer än en gång per år.",
+      "rbe": "6.7.1 Op verzoek van een Data Controller zal de Data Processor alle relevante informatie beschikbaar stellen aan de Data Controller die nodig is om de naleving van deze DPA aan te tonen, en zal hij audits toestaan en er redelijkerwijs aan meewerken, inclusief inspecties door de Data Controller of een auditor in opdracht van de Data Controller. De Gegevensverwerker zal kennis geven van elke uit te voeren audit of documentinspectie en zal redelijke inspanningen leveren om te voorkomen dat schade of verstoring wordt veroorzaakt aan de gebouwen, apparatuur en winkel van ShopSafeAlert in de loop van een dergelijke audit of inspectie. Elke audit of documentinspectie wordt uitgevoerd met een redelijke voorafgaande schriftelijke kennisgeving van ten minste 30 dagen en wordt niet vaker dan eenmaal per jaar uitgevoerd.",
+      "da": "6.7.1 Efter anmodning fra en dataansvarlig skal databehandleren stille alle relevante oplysninger til rådighed for den dataansvarlige, der er nødvendige for at påvise overholdelse af denne databeskyttelsesaftale, og skal tillade og i rimeligt omfang samarbejde med revisioner, herunder inspektioner foretaget af den dataansvarlige eller en revisor, der er bemyndiget af den dataansvarlige. Den dataansvarlige skal give meddelelse om enhver revision eller dokumentinspektion, der skal udføres, og skal gøre rimelige bestræbelser på at undgå at forårsage skade eller forstyrrelse af ShopSafeAlert's lokaler, udstyr og butik i løbet af en sådan revision eller inspektion. Enhver revision eller dokumentinspektion skal udføres med et rimeligt forudgående skriftligt varsel på mindst 30 dage og må ikke udføres mere end én gang om året.",
+      "fi": "6.7.1 Rekisterinpitäjän pyynnöstä henkilötietojen käsittelijän on annettava rekisterinpitäjän käyttöön kaikki tarvittavat tiedot, jotka ovat tarpeen tämän tietosuojasopimuksen noudattamisen osoittamiseksi, sekä sallittava tarkastukset, mukaan lukien rekisterinpitäjän tai rekisterinpitäjän valtuuttaman tarkastajan suorittamat tarkastukset, ja tehtävä kohtuullisesti yhteistyötä niissä. Rekisterinpitäjän on ilmoitettava kaikista suoritettavista auditoinneista tai asiakirjatarkastuksista ja pyrittävä kohtuullisesti välttämään vahinkojen tai häiriöiden aiheuttamista ShopSafeAlertin tiloille, laitteille ja myymälälle tällaisen auditoinnin tai tarkastuksen aikana. Kaikki tarkastukset tai asiakirjatarkastukset on suoritettava kohtuullisella, vähintään 30 päivän pituisella kirjallisella ennakkoilmoituksella, eikä niitä saa suorittaa useammin kuin kerran vuodessa."
+    }
+  },
+  {
+    "Of9c8F": {
+      "en": "Submit Shops",
+      "nl": "Winkels indienen",
+      "fr": "Soumettre des boutiques",
+      "de": "Shops einreichen",
+      "it": "Invia negozi",
+      "pl": "Prześlij sklepy",
+      "pt": "Enviar lojas",
+      "es": "Enviar tiendas",
+      "sv": "Skicka in butiker",
+      "rbe": "Winkels indienen",
+      "da": "Indsend butikker",
+      "fi": "Lähetä kaupat"
+    }
+  },
+  {
+    "OgG2/I": {
+      "en": "Shop Engagement: {startDate} - {endDate}",
+      "nl": "Winkel Verloving: {startDate} - {endDate}",
+      "fr": "Engagement du magasin : {startDate} - {endDate}",
+      "de": "Shop Engagement: {startDate} - {endDate}",
+      "it": "Impegno del negozio: {startDate} - {endDate}",
+      "pl": "Zaangażowanie w sklepie: {startDate} - {endDate}",
+      "pt": "Compromisso da loja: {startDate} - {endDate}",
+      "es": "Compromiso de compra: {startDate} - {endDate}",
+      "sv": "Förlovning i butik: {startDate} - {endDate}",
+      "rbe": "Winkel Verloving: {startDate} - {endDate}",
+      "da": "Shop Engagement: {startDate} - {endDate}",
+      "fi": "Osta kihlajaiset: {startDate} - {endDate}"
+    }
+  },
+  {
+    "POy41b": {
+      "en": "Terms agreed by your shops and ShopSafe Ltd.",
+      "nl": "Voorwaarden overeengekomen tussen uw winkels en ShopSafe Ltd.",
+      "fr": "Conditions convenues entre vos magasins et ShopSafe Ltd.",
+      "de": "Von Ihren Geschäften und ShopSafe Ltd. vereinbarte Bedingungen.",
+      "it": "Condizioni concordate dai vostri negozi e da ShopSafe Ltd.",
+      "pl": "Warunki uzgodnione przez sklepy i ShopSafe Ltd.",
+      "pt": "Termos acordados entre as suas lojas e a ShopSafe Ltd.",
+      "es": "Condiciones acordadas por sus tiendas y ShopSafe Ltd.",
+      "sv": "Villkor som överenskommits mellan dina butiker och ShopSafe Ltd.",
+      "rbe": "Voorwaarden overeengekomen tussen uw winkels en ShopSafe Ltd.",
+      "da": "Vilkår aftalt mellem dine butikker og ShopSafe Ltd.",
+      "fi": "Myymälöiden ja ShopSafe Ltd:n sopimat ehdot."
+    }
+  },
+  {
+    "PPTlxg": {
+      "en": "Create Shop Impact Statement",
+      "nl": "Maak een winkelimpactverklaring",
+      "fr": "Créer une déclaration d'impact sur les commerces",
+      "de": "Shop Impact Statement erstellen",
+      "it": "Creare una dichiarazione d'impatto del negozio",
+      "pl": "Tworzenie oświadczenia o wpływie na sklep",
+      "pt": "Criar uma declaração de impacto da loja",
+      "es": "Crear una declaración de impacto comercial",
+      "sv": "Skapa en konsekvensbeskrivning för butiken",
+      "rbe": "Maak een winkelimpactverklaring",
+      "da": "Lav en konsekvensanalyse for butikken",
+      "fi": "Luo myymälän vaikutusselvitys"
+    }
+  },
+  {
+    "PSUx8Z": {
+      "en": "Link to existing shop",
+      "nl": "Link naar bestaande winkel",
+      "fr": "Lien avec le magasin existant",
+      "de": "Link zum bestehenden Shop",
+      "it": "Collegamento al negozio esistente",
+      "pl": "Link do istniejącego sklepu",
+      "pt": "Ligação à loja existente",
+      "es": "Enlace a la tienda existente",
+      "sv": "Länk till befintlig butik",
+      "rbe": "Link naar bestaande winkel",
+      "da": "Link til eksisterende butik",
+      "fi": "Linkki olemassa olevaan kauppaan"
+    }
+  },
+  {
+    "TI03PM": {
+      "en": "Please enter a street name for the shop Location",
+      "nl": "Voer een straatnaam in voor de locatie van de winkel",
+      "fr": "Veuillez saisir un nom de rue pour le magasin Emplacement",
+      "de": "Bitte geben Sie einen Straßennamen für das Geschäft ein Standort",
+      "it": "Inserire il nome di una via per il negozio Ubicazione",
+      "pl": "Wprowadź nazwę ulicy dla lokalizacji sklepu",
+      "pt": "Por favor, introduza o nome de uma rua para a loja Localização",
+      "es": "Introduzca el nombre de la calle de la tienda Ubicación",
+      "sv": "Vänligen ange ett gatunamn för butiken Plats",
+      "rbe": "Voer een straatnaam in voor de locatie van de winkel",
+      "da": "Indtast venligst et gadenavn for butikkens placering",
+      "fi": "Anna myymälän kadunnimi Sijainti"
+    }
+  },
+  {
+    "TZgr9+": {
+      "en": "Shop Improvement District",
+      "nl": "District winkelverbetering",
+      "fr": "District d'amélioration des magasins",
+      "de": "Shop Improvement District",
+      "it": "Distretto di miglioramento dei negozi",
+      "pl": "Dzielnica Ulepszania Sklepów",
+      "pt": "Distrito de melhoramento de lojas",
+      "es": "Distrito de mejora de comercios",
+      "sv": "Distrikt för förbättring av butiker",
+      "rbe": "District winkelverbetering",
+      "da": "Distrikt til forbedring af butikker",
+      "fi": "Shop Improvement District"
+    }
+  },
+  {
+    "URt/QV": {
+      "en": "Shop Report: {businessName} {startDate} - {endDate}",
+      "nl": "Winkelrapport: {businessName} {startDate} - {endDate}",
+      "fr": "Rapport d'atelier : {businessName} {startDate} - {endDate}",
+      "de": "Geschäftsbericht: {businessName} {startDate} - {endDate}",
+      "it": "Rapporto sul negozio: {businessName} {startDate} - {endDate}",
+      "pl": "Raport sklepu: {businessName} {startDate} - {endDate}",
+      "pt": "Relatório da loja:{businessName} {startDate} - {endDate}",
+      "es": "Informe de tienda: {businessName} {startDate} - {endDate}",
+      "sv": "Rapport från butik: {businessName} {startDate} - {endDate}",
+      "rbe": "Winkelrapport: {businessName} {startDate} - {endDate}",
+      "da": "Butiksrapport: {businessName} {startDate} - {endDate}",
+      "fi": "Shop Report: {businessName} {startDate} - {endDate}"
+    }
+  },
+  {
+    "VbhMoN": {
+      "en": "The Users are a group of shops that are all Members of the Organisation shown. The intelligence data they share may be constructed over time from a number of sources and may include personal data, photographs and videos. The Data Controller has Administration rights to enable the Users to access the Alert! system.",
+      "nl": "De Gebruikers zijn een groep winkels die allemaal lid zijn van de getoonde Organisatie. De gegevens die zij delen kunnen in de loop van de tijd worden samengesteld uit verschillende bronnen en kunnen persoonlijke gegevens, foto's en video's bevatten. De Gegevensbeheerder heeft beheerrechten om de Gebruikers toegang te geven tot het Alert! systeem.",
+      "fr": "Les utilisateurs sont un groupe de magasins qui sont tous membres de l'organisation indiquée. Les données de renseignement qu'ils partagent peuvent être construites au fil du temps à partir d'un certain nombre de sources et peuvent inclure des données personnelles, des photographies et des vidéos. Le responsable du traitement des données dispose de droits d'administration pour permettre aux utilisateurs d'accéder au système Alert !",
+      "de": "Die Nutzer sind eine Gruppe von Geschäften, die alle Mitglieder der angegebenen Organisation sind. Die nachrichtendienstlichen Daten, die sie gemeinsam nutzen, können im Laufe der Zeit aus einer Reihe von Quellen zusammengestellt werden und persönliche Daten, Fotos und Videos enthalten. Der für die Datenverarbeitung Verantwortliche verfügt über Verwaltungsrechte, um den Benutzern den Zugang zum Alert!-System zu ermöglichen.",
+      "it": "Gli Utenti sono un gruppo di negozi che sono tutti Membri dell'Organizzazione indicata. I dati di intelligence che condividono possono essere costruiti nel tempo da diverse fonti e possono includere dati personali, fotografie e video. Il Titolare del trattamento dei dati ha i diritti di amministrazione per consentire agli Utenti di accedere al sistema Alert!",
+      "pl": "Użytkownicy to grupa sklepów, które są członkami wskazanej organizacji. Dane wywiadowcze, które udostępniają, mogą być tworzone z czasem z wielu źródeł i mogą obejmować dane osobowe, zdjęcia i filmy. Administrator Danych ma uprawnienia administracyjne umożliwiające Użytkownikom dostęp do systemu Alert!",
+      "pt": "Os Utilizadores são um grupo de lojas que são todos Membros da Organização apresentada. Os dados de informação que partilham podem ser construídos ao longo do tempo a partir de várias fontes e podem incluir dados pessoais, fotografias e vídeos. O responsável pelo tratamento de dados tem direitos de administração para permitir que os utilizadores acedam ao sistema Alert!",
+      "es": "Los Usuarios son un grupo de comercios que son todos Miembros de la Organización indicada. Los datos de inteligencia que comparten pueden construirse a lo largo del tiempo a partir de diversas fuentes y pueden incluir datos personales, fotografías y vídeos. ¡El responsable del tratamiento tiene derechos de administración para permitir a los usuarios acceder al sistema Alert!",
+      "sv": "Användarna är en grupp butiker som alla är medlemmar i den organisation som visas. De underrättelsedata som de delar kan konstrueras över tid från ett antal källor och kan innehålla personuppgifter, fotografier och videor. Den personuppgiftsansvarige har administrationsrättigheter för att ge användarna tillgång till Alert!-systemet.",
+      "rbe": "De Gebruikers zijn een groep winkels die allemaal lid zijn van de getoonde Organisatie. De gegevens die zij delen kunnen in de loop van de tijd worden samengesteld uit verschillende bronnen en kunnen persoonlijke gegevens, foto's en video's bevatten. De Gegevensbeheerder heeft beheerrechten om de Gebruikers toegang te geven tot het Alert! systeem.",
+      "da": "Brugerne er en gruppe af butikker, der alle er medlemmer af den viste organisation. De efterretningsdata, de deler, kan være konstrueret over tid fra en række kilder og kan omfatte personlige data, fotografier og videoer. Den dataansvarlige har administrationsrettigheder til at give brugerne adgang til Alert! systemet.",
+      "fi": "Käyttäjät ovat ryhmä kauppoja, jotka ovat kaikki näytetyn organisaation jäseniä. Heidän jakamansa tiedustelutiedot voidaan muodostaa ajan mittaan useista eri lähteistä, ja ne voivat sisältää henkilötietoja, valokuvia ja videoita. Rekisterinpitäjällä on hallinnointioikeudet, joiden avulla käyttäjät voivat käyttää Alert!-järjestelmää."
+    }
+  },
+  {
+    "WhM8cX": {
+      "en": "Please enter a town or city for the shop Location",
+      "nl": "Voer een plaats in voor de winkellocatie",
+      "fr": "Veuillez indiquer une ville pour l'emplacement de la boutique.",
+      "de": "Bitte geben Sie eine Stadt oder einen Ort für den Shop ein Standort",
+      "it": "Inserire una città o un paese per la posizione del negozio.",
+      "pl": "Wprowadź miejscowość lub miasto dla lokalizacji sklepu",
+      "pt": "Introduza uma localidade ou cidade para a localização da loja",
+      "es": "Por favor, introduzca un pueblo o ciudad para la tienda Ubicación",
+      "sv": "Vänligen ange en ort eller stad för butiken Plats",
+      "rbe": "Voer een plaats in voor de winkellocatie",
+      "da": "Indtast venligst en by for butikkens placering",
+      "fi": "Kirjoita kaupunki tai kaupunki myymälän sijaintia varten."
+    }
+  },
+  {
+    "Yliudz": {
+      "en": "Please enter the shop name",
+      "nl": "Voer de naam van de winkel in",
+      "fr": "Veuillez saisir le nom du magasin",
+      "de": "Bitte geben Sie den Shopnamen ein",
+      "it": "Inserire il nome del negozio",
+      "pl": "Wprowadź nazwę sklepu",
+      "pt": "Introduzir o nome da loja",
+      "es": "Introduzca el nombre de la tienda",
+      "sv": "Vänligen ange butikens namn",
+      "rbe": "Voer de naam van de winkel in",
+      "da": "Indtast venligst butikkens navn",
+      "fi": "Kirjoita liikkeen nimi"
+    }
+  },
+  {
+    "YmxrGk": {
+      "en": "“Shop Improvement District”",
+      "nl": "\"Shop Improvement District",
+      "fr": "\"District d'amélioration des magasins",
+      "de": "\"Shop Improvement District\"",
+      "it": "\"Distretto di miglioramento dei negozi\"",
+      "pl": "\"Dzielnica Ulepszania Sklepów\"",
+      "pt": "\"Distrito de melhoramento de lojas\"",
+      "es": "\"Distrito de mejora comercial\"",
+      "sv": "\"Distrikt för förbättring av butiker\"",
+      "rbe": "\"Shop Improvement District",
+      "da": "\"Forbedringsdistrikt for butikker\"",
+      "fi": "\"Shop Improvement District\""
+    }
+  },
+  {
+    "ZwVlvA": {
+      "en": "Shop Contributions",
+      "nl": "Bijdragen winkelen",
+      "fr": "Contributions à la boutique",
+      "de": "Shop-Beiträge",
+      "it": "Negozio Contributi",
+      "pl": "Składki w sklepie",
+      "pt": "Contribuições para a loja",
+      "es": "Contribuciones",
+      "sv": "Bidrag till butiken",
+      "rbe": "Bijdragen winkelen",
+      "da": "Bidrag til butikken",
+      "fi": "Myymälän lahjoitukset"
+    }
+  },
+  {
+    "a1axpo": {
+      "en": "Create Shop",
+      "nl": "Shop maken",
+      "fr": "Créer un magasin",
+      "de": "Shop erstellen",
+      "it": "Crea negozio",
+      "pl": "Utwórz sklep",
+      "pt": "Criar loja",
+      "es": "Crear tienda",
+      "sv": "Skapa butik",
+      "rbe": "Shop maken",
+      "da": "Opret butik",
+      "fi": "Luo kauppa"
+    }
+  },
+  {
+    "bKY0p9": {
+      "en": "Parent Shops",
+      "nl": "Ouderwinkels",
+      "fr": "Magasins de parents",
+      "de": "Übergeordnete Geschäfte",
+      "it": "Negozi per genitori",
+      "pl": "Sklepy macierzyste",
+      "pt": "Lojas dos pais",
+      "es": "Tiendas para padres",
+      "sv": "Föräldrabutiker",
+      "rbe": "Ouderwinkels",
+      "da": "Forældrebutikker",
+      "fi": "Vanhempien kaupat"
+    }
+  },
+  {
+    "bRBcFQ": {
+      "en": "Please fill up the details for the new shop.",
+      "nl": "Vul de gegevens voor de nieuwe winkel in.",
+      "fr": "Veuillez remplir les détails pour le nouveau magasin.",
+      "de": "Bitte geben Sie die Daten für den neuen Shop ein.",
+      "it": "Si prega di compilare i dati per il nuovo negozio.",
+      "pl": "Prosimy o uzupełnienie danych nowego sklepu.",
+      "pt": "Por favor, preencha os dados da nova loja.",
+      "es": "Rellene los datos de la nueva tienda.",
+      "sv": "Vänligen fyll i uppgifterna för den nya butiken.",
+      "rbe": "Vul de gegevens voor de nieuwe winkel in.",
+      "da": "Udfyld venligst detaljerne for den nye butik.",
+      "fi": "Täytä uuden myymälän tiedot."
+    }
+  },
+  {
+    "ba2gyq": {
+      "en": "Select the shop that this incident is for. If the shop is not in the list, please click Enter Address and enter the address detail for it.",
+      "nl": "Selecteer de winkel waar dit incident voor is. Als de winkel niet in de lijst voorkomt, klik dan op Adres invoeren en voer de adresgegevens voor de winkel in.",
+      "fr": "Sélectionnez le magasin concerné par l'incident. Si le magasin ne figure pas dans la liste, cliquez sur Entrer l'adresse et saisissez les détails de l'adresse.",
+      "de": "Wählen Sie das Geschäft aus, für das dieser Vorfall bestimmt ist. Wenn das Geschäft nicht in der Liste enthalten ist, klicken Sie bitte auf Adresse eingeben und geben Sie die Adressdaten ein.",
+      "it": "Selezionare il negozio a cui si riferisce l'incidente. Se il negozio non è presente nell'elenco, fare clic su Inserisci indirizzo e inserire i dettagli dell'indirizzo.",
+      "pl": "Wybierz sklep, którego dotyczy to zdarzenie. Jeśli sklepu nie ma na liście, kliknij przycisk Wprowadź adres i wprowadź dane adresowe.",
+      "pt": "Seleccione a loja a que se destina esta ocorrência. Se a loja não constar da lista, clique em Introduzir endereço e introduza o endereço detalhado da mesma.",
+      "es": "Seleccione la tienda a la que corresponde esta incidencia. Si la tienda no está en la lista, haga clic en Introducir dirección e introduzca los datos de la dirección.",
+      "sv": "Välj den butik som incidenten gäller. Om butiken inte finns i listan, klicka på Ange adress och ange adressuppgifterna för den.",
+      "rbe": "Selecteer de winkel waar dit incident voor is. Als de winkel niet in de lijst voorkomt, klik dan op Adres invoeren en voer de adresgegevens voor de winkel in.",
+      "da": "Vælg den butik, som denne hændelse er til. Hvis butikken ikke er på listen, skal du klikke på Indtast adresse og indtaste adressedetaljerne for den.",
+      "fi": "Valitse myymälä, jota tämä tapaus koskee. Jos liikettä ei ole luettelossa, valitse Anna osoite ja anna sen osoitetiedot."
+    }
+  },
+  {
+    "business": {
+      "en": "Shop",
+      "nl": "Winkel op",
+      "fr": "Boutique",
+      "de": "Shop",
+      "it": "Negozio",
+      "pl": "Sklep",
+      "pt": "Loja",
+      "es": "Tienda",
+      "sv": "Butik",
+      "rbe": "Winkel op",
+      "da": "Butik",
+      "fi": "Kauppa"
+    }
+  },
+  {
+    "business-engagement": {
+      "en": "Shop Engagement",
+      "nl": "Winkel Verloving",
+      "fr": "Boutique Fiançailles",
+      "de": "Shop Engagement",
+      "it": "Negozio Fidanzamento",
+      "pl": "Sklep Zaręczyny",
+      "pt": "Comprar noivado",
+      "es": "Tienda Compromiso",
+      "sv": "Butik Förlovning",
+      "rbe": "Winkel Verloving",
+      "da": "Shop forlovelse",
+      "fi": "Kauppa Kihlaus"
+    }
+  },
+  {
+    "businesses": {
+      "en": "Shops",
+      "nl": "Winkels",
+      "fr": "Magasins",
+      "de": "Geschäfte",
+      "it": "Negozi",
+      "pl": "Sklepy",
+      "pt": "Lojas",
+      "es": "Tiendas",
+      "sv": "Butiker",
+      "rbe": "Winkels",
+      "da": "Butikker",
+      "fi": "Kaupat"
+    }
+  },
+  {
+    "d1Fs8E": {
+      "en": "There are no activities on this shop.",
+      "nl": "Er zijn geen activiteiten in deze winkel.",
+      "fr": "Il n'y a pas d'activités sur ce magasin.",
+      "de": "In diesem Shop gibt es keine Aktivitäten.",
+      "it": "Non ci sono attività in questo negozio.",
+      "pl": "W tym sklepie nie są prowadzone żadne działania.",
+      "pt": "Não há actividades nesta loja.",
+      "es": "No hay actividades en esta tienda.",
+      "sv": "Det finns inga aktiviteter på denna shop.",
+      "rbe": "Er zijn geen activiteiten in deze winkel.",
+      "da": "Der er ingen aktiviteter på denne shop.",
+      "fi": "Tässä kaupassa ei ole toimintaa."
+    }
+  },
+  {
+    "d7kC/1": {
+      "en": "The users have been successfully added to the shop",
+      "nl": "De gebruikers zijn succesvol toegevoegd aan de shop",
+      "fr": "Les utilisateurs ont été ajoutés avec succès à la boutique",
+      "de": "Die Benutzer wurden erfolgreich zum Shop hinzugefügt",
+      "it": "Gli utenti sono stati aggiunti con successo al negozio",
+      "pl": "Użytkownicy zostali pomyślnie dodani do sklepu",
+      "pt": "Os utilizadores foram adicionados com sucesso à loja",
+      "es": "Los usuarios se han añadido correctamente a la tienda",
+      "sv": "Användarna har framgångsrikt lagts till i butiken",
+      "rbe": "De gebruikers zijn succesvol toegevoegd aan de shop",
+      "da": "Brugerne er blevet tilføjet til shoppen",
+      "fi": "Käyttäjät on onnistuneesti lisätty kauppaan"
+    }
+  },
+  {
+    "e1WPCT": {
+      "en": "Do you want to delete this shop?",
+      "nl": "Wil je deze winkel verwijderen?",
+      "fr": "Voulez-vous supprimer ce magasin ?",
+      "de": "Möchten Sie diesen Shop löschen?",
+      "it": "Vuoi cancellare questo negozio?",
+      "pl": "Czy chcesz usunąć ten sklep?",
+      "pt": "Pretende eliminar esta loja?",
+      "es": "¿Desea eliminar esta tienda?",
+      "sv": "Vill du radera denna butik?",
+      "rbe": "Wil je deze winkel verwijderen?",
+      "da": "Vil du slette denne butik?",
+      "fi": "Haluatko poistaa tämän kaupan?"
+    }
+  },
+  {
+    "fDBTeJ": {
+      "en": "Remove Shop",
+      "nl": "Winkel verwijderen",
+      "fr": "Supprimer la boutique",
+      "de": "Shop entfernen",
+      "it": "Rimuovi negozio",
+      "pl": "Usuń sklep",
+      "pt": "Remover loja",
+      "es": "Eliminar tienda",
+      "sv": "Ta bort butik",
+      "rbe": "Winkel verwijderen",
+      "da": "Fjern butik",
+      "fi": "Poista kauppa"
+    }
+  },
+  {
+    "gCaZj6": {
+      "en": "Published by {fullName} - {businessName}, {date}",
+      "nl": "Gepubliceerd door {fullName} - {businessName}, {date}",
+      "fr": "Publié par {fullName} - {businessName}, {date}",
+      "de": "Veröffentlicht von {fullName} - {businessName}, {date}",
+      "it": "Pubblicato da {fullName} - {businessName}, {date}",
+      "pl": "Opublikowany przez {fullName} - {businessName}, {date}",
+      "pt": "Publicado por {fullName} - {businessName}, {date}",
+      "es": "Publicado por {fullName} - {businessName}, {date}",
+      "sv": "Publicerad av {fullName} - {businessName}, {date}",
+      "rbe": "Gepubliceerd door {fullName} - {businessName}, {date}",
+      "da": "Udgivet af {fullName} - {businessName}, {date}",
+      "fi": "Julkaisija {fullName} - {businessName}, {date}"
+    }
+  },
+  {
+    "hCXJmL": {
+      "en": "- Select a the shop that this incident relates to.",
+      "nl": "- Selecteer de winkel waar dit incident betrekking op heeft.",
+      "fr": "- Sélectionnez un magasin sur lequel porte l'incident.",
+      "de": "- Wählen Sie den Laden aus, auf den sich dieser Vorfall bezieht.",
+      "it": "- Selezionare il negozio a cui si riferisce l'incidente.",
+      "pl": "- Wybierz sklep, którego dotyczy incydent.",
+      "pt": "- Seleccione a loja a que este incidente diz respeito.",
+      "es": "- Seleccione la tienda a la que se refiere el incidente.",
+      "sv": "- Välj en butik som denna incident gäller.",
+      "rbe": "- Selecteer de winkel waar dit incident betrekking op heeft.",
+      "da": "- Vælg den butik, som denne hændelse vedrører.",
+      "fi": "- Valitse myymälä, jota tämä tapaus koskee."
+    }
+  },
+  {
+    "hEeWrS": {
+      "en": "Show shops name in the system",
+      "nl": "Toon winkelnaam in het systeem",
+      "fr": "Afficher le nom des magasins dans le système",
+      "de": "Namen der Geschäfte im System anzeigen",
+      "it": "Mostra il nome del negozio nel sistema",
+      "pl": "Pokaż nazwę sklepu w systemie",
+      "pt": "Mostrar o nome das lojas no sistema",
+      "es": "Mostrar el nombre de las tiendas en el sistema",
+      "sv": "Visa butikens namn i systemet",
+      "rbe": "Toon winkelnaam in het systeem",
+      "da": "Vis butikkens navn i systemet",
+      "fi": "Näytä kauppojen nimet järjestelmässä"
+    }
+  },
+  {
+    "hK8+eV": {
+      "en": "{fullName} ({businessName})",
+      "nl": "{fullName} ({businessName})",
+      "fr": "{fullName} ({businessName})",
+      "de": "{fullName} ({businessName})",
+      "it": "{fullName} ({businessName})",
+      "pl": "{fullName} ({businessName})",
+      "pt": "{fullName} ({businessName})",
+      "es": "{fullName} ({businessName})",
+      "sv": "{fullName} ({businessName})",
+      "rbe": "{fullName} ({businessName})",
+      "da": "{fullName} ({businessName})",
+      "fi": "{fullName} ({businessName})"
+    }
+  },
+  {
+    "jkpwh9": {
+      "en": "Select a shop",
+      "nl": "Selecteer een winkel",
+      "fr": "Sélectionner un magasin",
+      "de": "Wählen Sie ein Geschäft",
+      "it": "Selezionare un negozio",
+      "pl": "Wybierz sklep",
+      "pt": "Selecionar uma loja",
+      "es": "Seleccione una tienda",
+      "sv": "Välj en butik",
+      "rbe": "Selecteer een winkel",
+      "da": "Vælg en butik",
+      "fi": "Valitse kauppa"
+    }
+  },
+  {
+    "mSae6x": {
+      "en": "The shop has been removed!",
+      "nl": "De winkel is verwijderd!",
+      "fr": "Le magasin a été supprimé !",
+      "de": "Das Geschäft wurde entfernt!",
+      "it": "Il negozio è stato rimosso!",
+      "pl": "Sklep został usunięty!",
+      "pt": "A loja foi retirada!",
+      "es": "La tienda ha sido eliminada.",
+      "sv": "Butiken har tagits bort!",
+      "rbe": "De winkel is verwijderd!",
+      "da": "Butikken er blevet fjernet!",
+      "fi": "Kauppa on poistettu!"
+    }
+  },
+  {
+    "otzBb4": {
+      "en": "Shop has been updated",
+      "nl": "Shop is bijgewerkt",
+      "fr": "La boutique a été mise à jour",
+      "de": "Der Shop wurde aktualisiert",
+      "it": "Il negozio è stato aggiornato",
+      "pl": "Sklep został zaktualizowany",
+      "pt": "A loja foi actualizada",
+      "es": "Tienda actualizada",
+      "sv": "Shop har uppdaterats",
+      "rbe": "Shop is bijgewerkt",
+      "da": "Butikken er blevet opdateret",
+      "fi": "Kauppa on päivitetty"
+    }
+  },
+  {
+    "p47asT": {
+      "en": "Add New Shop",
+      "nl": "Nieuwe winkel toevoegen",
+      "fr": "Ajouter un nouveau magasin",
+      "de": "Neuen Shop hinzufügen",
+      "it": "Aggiungi un nuovo negozio",
+      "pl": "Dodaj nowy sklep",
+      "pt": "Adicionar nova loja",
+      "es": "Añadir nueva tienda",
+      "sv": "Lägg till ny butik",
+      "rbe": "Nieuwe winkel toevoegen",
+      "da": "Tilføj ny butik",
+      "fi": "Lisää uusi myymälä"
+    }
+  },
+  {
+    "pGwRxT": {
+      "en": "Shop Name",
+      "nl": "Naam winkel",
+      "fr": "Nom du magasin",
+      "de": "Name des Geschäfts",
+      "it": "Nome del negozio",
+      "pl": "Nazwa sklepu",
+      "pt": "Nome da loja",
+      "es": "Nombre de la tienda",
+      "sv": "Butikens namn",
+      "rbe": "Naam winkel",
+      "da": "Butiksnavn",
+      "fi": "Kaupan nimi"
+    }
+  },
+  {
+    "pfPWIr": {
+      "en": "Please select the shops from the list that the new shop is involved in.",
+      "nl": "Selecteer de winkels uit de lijst waarbij de nieuwe winkel betrokken is.",
+      "fr": "Veuillez sélectionner dans la liste les magasins dans lesquels le nouveau magasin est impliqué.",
+      "de": "Bitte wählen Sie aus der Liste die Geschäfte aus, an denen das neue Geschäft beteiligt ist.",
+      "it": "Selezionare dall'elenco i negozi in cui è coinvolto il nuovo negozio.",
+      "pl": "Wybierz sklepy z listy, w które zaangażowany jest nowy sklep.",
+      "pt": "Seleccione as lojas da lista em que a nova loja está envolvida.",
+      "es": "Seleccione los comercios de la lista en los que participa el nuevo comercio.",
+      "sv": "Välj de butiker från listan som den nya butiken är involverad i.",
+      "rbe": "Selecteer de winkels uit de lijst waarbij de nieuwe winkel betrokken is.",
+      "da": "Vælg de butikker fra listen, som den nye butik er involveret i.",
+      "fi": "Valitse luettelosta ne kaupat, joissa uusi kauppa on mukana."
+    }
+  },
+  {
+    "pneJSz": {
+      "en": "Delete Shop",
+      "nl": "Winkel verwijderen",
+      "fr": "Supprimer la boutique",
+      "de": "Shop löschen",
+      "it": "Cancellare il negozio",
+      "pl": "Usuń sklep",
+      "pt": "Eliminar a loja",
+      "es": "Borrar tienda",
+      "sv": "Radera butik",
+      "rbe": "Winkel verwijderen",
+      "da": "Slet butik",
+      "fi": "Poista kauppa"
+    }
+  },
+  {
+    "qaJxSS": {
+      "en": "Search for a shop...",
+      "nl": "Zoek een winkel...",
+      "fr": "Recherche d'un magasin...",
+      "de": "Suche nach einem Geschäft...",
+      "it": "Ricerca di un negozio...",
+      "pl": "Szukaj sklepu...",
+      "pt": "Procurar uma loja...",
+      "es": "Buscar una tienda...",
+      "sv": "Sök efter en butik...",
+      "rbe": "Zoek een winkel...",
+      "da": "Søg efter en butik...",
+      "fi": "Etsi kauppa..."
+    }
+  },
+  {
+    "rKQaqi": {
+      "en": "Add Shop",
+      "nl": "Winkel toevoegen",
+      "fr": "Ajouter un magasin",
+      "de": "Shop hinzufügen",
+      "it": "Aggiungi negozio",
+      "pl": "Dodaj sklep",
+      "pt": "Adicionar loja",
+      "es": "Añadir tienda",
+      "sv": "Lägg till butik",
+      "rbe": "Winkel toevoegen",
+      "da": "Tilføj butik",
+      "fi": "Lisää kauppa"
+    }
+  },
+  {
+    "rnzxUP": {
+      "en": "Select users that you want to add to the shop.",
+      "nl": "Selecteer gebruikers die je wilt toevoegen aan de shop.",
+      "fr": "Sélectionnez les utilisateurs que vous souhaitez ajouter à la boutique.",
+      "de": "Wählen Sie die Benutzer aus, die Sie dem Shop hinzufügen möchten.",
+      "it": "Selezionare gli utenti che si desidera aggiungere al negozio.",
+      "pl": "Wybierz użytkowników, których chcesz dodać do sklepu.",
+      "pt": "Seleccione os utilizadores que pretende adicionar à loja.",
+      "es": "Seleccione los usuarios que desea añadir a la tienda.",
+      "sv": "Välj användare som du vill lägga till i butiken.",
+      "rbe": "Selecteer gebruikers die je wilt toevoegen aan de shop.",
+      "da": "Vælg de brugere, du vil tilføje til shoppen.",
+      "fi": "Valitse käyttäjät, jotka haluat lisätä kauppaan."
+    }
+  },
+  {
+    "sJoRW/": {
+      "en": "You new shop has been add to alert.",
+      "nl": "Je nieuwe winkel is toegevoegd aan alert.",
+      "fr": "Votre nouvelle boutique a été ajoutée à l'alerte.",
+      "de": "Ihr neuer Shop wurde zum Alert hinzugefügt.",
+      "it": "Il tuo nuovo negozio è stato aggiunto all'avviso.",
+      "pl": "Twój nowy sklep został dodany do powiadomień.",
+      "pt": "A sua nova loja foi adicionada ao alerta.",
+      "es": "Su nueva tienda ha sido añadida a la alerta.",
+      "sv": "Din nya butik har lagts till i bevakningen.",
+      "rbe": "Je nieuwe winkel is toegevoegd aan alert.",
+      "da": "Din nye butik er blevet tilføjet til alarm.",
+      "fi": "Uusi myymäläsi on lisätty hälytykseen."
+    }
+  },
+  {
+    "sLEQ0e": {
+      "en": "Are you sure you want to remove this shop?",
+      "nl": "Weet je zeker dat je deze winkel wilt verwijderen?",
+      "fr": "Êtes-vous sûr de vouloir supprimer ce magasin ?",
+      "de": "Sind Sie sicher, dass Sie diesen Shop entfernen möchten?",
+      "it": "Sei sicuro di voler rimuovere questo negozio?",
+      "pl": "Czy na pewno chcesz usunąć ten sklep?",
+      "pt": "Tem a certeza de que pretende remover esta loja?",
+      "es": "¿Estás seguro de que quieres eliminar esta tienda?",
+      "sv": "Är du säker på att du vill ta bort den här butiken?",
+      "rbe": "Weet je zeker dat je deze winkel wilt verwijderen?",
+      "da": "Er du sikker på, at du vil fjerne denne butik?",
+      "fi": "Haluatko varmasti poistaa tämän kaupan?"
+    }
+  },
+  {
+    "tjcmAo": {
+      "en": "Are you sure you want to remove this user from the shop",
+      "nl": "Weet je zeker dat je deze gebruiker uit de shop wilt verwijderen?",
+      "fr": "Êtes-vous sûr de vouloir retirer cet utilisateur de la boutique ?",
+      "de": "Sind Sie sicher, dass Sie diesen Benutzer aus dem Shop entfernen möchten?",
+      "it": "Siete sicuri di voler rimuovere questo utente dal negozio?",
+      "pl": "Czy na pewno chcesz usunąć tego użytkownika ze sklepu?",
+      "pt": "Tem a certeza de que pretende remover este utilizador da loja",
+      "es": "¿Está seguro de que desea eliminar este usuario de la tienda?",
+      "sv": "Är du säker på att du vill ta bort den här användaren från butiken",
+      "rbe": "Weet je zeker dat je deze gebruiker uit de shop wilt verwijderen?",
+      "da": "Er du sikker på, at du vil fjerne denne bruger fra butikken?",
+      "fi": "Haluatko varmasti poistaa tämän käyttäjän kaupasta?"
+    }
+  },
+  {
+    "uILUkO": {
+      "en": "Shop has been created",
+      "nl": "Shop is gemaakt",
+      "fr": "La boutique a été créée",
+      "de": "Shop ist erstellt worden",
+      "it": "Il negozio è stato creato",
+      "pl": "Sklep został utworzony",
+      "pt": "A loja foi criada",
+      "es": "Se ha creado una tienda",
+      "sv": "Shop har skapats",
+      "rbe": "Shop is gemaakt",
+      "da": "Butikken er blevet oprettet",
+      "fi": "Kauppa on luotu"
+    }
+  },
+  {
+    "w1Fanr": {
+      "en": "Shop",
+      "nl": "Winkel op",
+      "fr": "Boutique",
+      "de": "Shop",
+      "it": "Negozio",
+      "pl": "Sklep",
+      "pt": "Loja",
+      "es": "Tienda",
+      "sv": "Butik",
+      "rbe": "Winkel op",
+      "da": "Butik",
+      "fi": "Kauppa"
+    }
+  },
+  {
+    "wCfiF/": {
+      "en": "select at least one shop or create a new shop for the user.",
+      "nl": "ten minste één winkel selecteren of een nieuwe winkel aanmaken voor de gebruiker.",
+      "fr": "sélectionner au moins un magasin ou créer un nouveau magasin pour l'utilisateur.",
+      "de": "mindestens einen Shop auswählen oder einen neuen Shop für den Benutzer anlegen.",
+      "it": "selezionare almeno un negozio o creare un nuovo negozio per l'utente.",
+      "pl": "wybrać co najmniej jeden sklep lub utworzyć nowy sklep dla użytkownika.",
+      "pt": "selecionar pelo menos uma loja ou criar uma nova loja para o utilizador.",
+      "es": "seleccionar al menos una tienda o crear una nueva tienda para el usuario.",
+      "sv": "Välj minst en butik eller skapa en ny butik för användaren.",
+      "rbe": "ten minste één winkel selecteren of een nieuwe winkel aanmaken voor de gebruiker.",
+      "da": "Vælg mindst én butik, eller opret en ny butik til brugeren.",
+      "fi": "valitse vähintään yksi kauppa tai luo uusi kauppa käyttäjälle."
+    }
+  },
+  {
+    "xVbMQT": {
+      "en": "{text} Shop",
+      "nl": "{text} Shop",
+      "fr": "{text} Boutique",
+      "de": "{text} Shop",
+      "it": "{text} Negozio",
+      "pl": "{text} Sklep",
+      "pt": "{text} Loja",
+      "es": "{text} Tienda",
+      "sv": "{text} Butik",
+      "rbe": "{text} Shop",
+      "da": "{text} Butik",
+      "fi": "{text} Kauppa"
+    }
+  },
+  {
+    "yuNoZz": {
+      "en": "Show shop name in the system",
+      "nl": "Toon winkelnaam in het systeem",
+      "fr": "Afficher le nom du magasin dans le système",
+      "de": "Shopnamen im System anzeigen",
+      "it": "Mostra il nome del negozio nel sistema",
+      "pl": "Pokaż nazwę sklepu w systemie",
+      "pt": "Mostrar o nome da loja no sistema",
+      "es": "Mostrar el nombre de la tienda en el sistema",
+      "sv": "Visa butikens namn i systemet",
+      "rbe": "Toon winkelnaam in het systeem",
+      "da": "Vis butikkens navn i systemet",
+      "fi": "Näytä myymälän nimi järjestelmässä"
+    }
+  }
+]
