@@ -15,7 +15,12 @@ import { IncidentFormField } from 'graphql/generated';
 import { FormattedMessage, useIntl } from 'react-intl';
 import RGL, { WidthProvider } from 'react-grid-layout';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
+import {
+  faBars,
+  faPenToSquare,
+  faPlus,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
 import { margin, rowHeight } from '../../../../components/reports/utils/utils';
 import type { ExtendedLayout } from '../../../reports/types';
 import 'react-grid-layout/css/styles.css';
@@ -26,6 +31,7 @@ import type {
   FieldLayout,
   IncidentFormFieldState,
 } from './useViewTag';
+import UpdateQuestionContainer from '../../../../components/form-components/update-question/UpdateQuestion.container';
 
 interface Props {
   toggleAddQuestion: () => void;
@@ -48,6 +54,9 @@ interface Props {
   incidentFormLayoutChanged: boolean;
   saveIncidentForm: () => void;
   loading: boolean;
+  updateQuestionOnTag: (question: string, tagId: string) => void;
+  selectedQuestion: string | null;
+  setSelectedQuestion: (value: string | null) => void;
 }
 
 const ViewTag = ({
@@ -71,6 +80,9 @@ const ViewTag = ({
   incidentFormLayoutChanged,
   saveIncidentForm,
   loading,
+  updateQuestionOnTag,
+  selectedQuestion,
+  setSelectedQuestion,
 }: Props): JSX.Element => {
   const ReactGridLayout = useMemo(() => WidthProvider(RGL), []);
   const intl = useIntl();
@@ -79,6 +91,8 @@ const ViewTag = ({
     i: tagq.id,
     question: tagq.question.questionFormatted,
     type: tagq.question.type,
+    qId: tagq.question.id,
+    required: tagq.req,
   }));
 
   const incidentFormElements: Elements = {
@@ -418,6 +432,25 @@ const ViewTag = ({
             <Col>
               <Tooltip
                 title={intl.formatMessage({
+                  defaultMessage: 'Edit Question',
+                  id: 'Pa9Li0',
+                })}
+              >
+                <Button
+                  size="small"
+                  onClick={() => {
+                    setSelectedQuestion(
+                      tagqs?.find((tagq) => tagq.i === layout.i)?.qId || ''
+                    );
+                  }}
+                  style={{ marginRight: 5 }}
+                  icon={<FontAwesomeIcon icon={faPenToSquare} />}
+                />
+              </Tooltip>
+            </Col>
+            <Col>
+              <Tooltip
+                title={intl.formatMessage({
                   defaultMessage: 'Remove Question',
                   id: 'CvVrAx',
                 })}
@@ -594,6 +627,31 @@ const ViewTag = ({
       >
         {addQuestion ? (
           <AddQuestionContainer onClose={() => toggleAddQuestion()} />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Add/Create Question',
+          id: '/vx2Ey',
+        })}
+        visible={!!selectedQuestion}
+        width="800"
+        onClose={() => setSelectedQuestion(null)}
+      >
+        {selectedQuestion ? (
+          <UpdateQuestionContainer
+            onClose={() => setSelectedQuestion(null)}
+            questionId={selectedQuestion}
+            updateQuestionOnTag={updateQuestionOnTag}
+            tagQId={
+              tagqs?.find((tagq) => tagq.qId === selectedQuestion)?.i || ''
+            }
+            required={
+              !!tagqs?.find((tagq) => tagq.qId === selectedQuestion)?.required
+            }
+          />
         ) : (
           <div />
         )}

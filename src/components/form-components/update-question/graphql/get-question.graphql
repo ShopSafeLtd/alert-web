@@ -1,5 +1,5 @@
-query AvailableQuestions($where: UniqueId) {
-  availableQuestions(where: $where) {
+query QuestionDetails($where: QuestionWhereUniqueInput!) {
+  question(where: $where) {
     id
     questionFormatted
     question
