@@ -8,7 +8,6 @@ mutation UpdateIncidentImages(
       id
       url
       optimised
-      optimisticUri
       uploaded
       position
       primary

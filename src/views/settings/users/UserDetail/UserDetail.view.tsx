@@ -3,7 +3,7 @@ import type { UserQuery } from 'graphql/generated';
 import { UserStatus } from 'graphql/generated';
 import { RoleValues } from 'types';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Button,
   Card,
@@ -31,7 +31,7 @@ import {
   faUnlockKeyhole,
 } from '@fortawesome/pro-light-svg-icons';
 import { GetUserStatusValues } from 'types/enums/user_status';
-import formatLoginTime from 'utils/format-lonin-time';
+import formatLoginTime from 'utils/format-login-time';
 import LinkDem from '../../../../components/form-components/user/LinkDem';
 import useStyles from './UserDetail.styles';
 
@@ -224,8 +224,8 @@ const userDetail = ({
               <Statistic
                 className={classes.stats}
                 title={intl.formatMessage({
-                  defaultMessage: 'Total Login in 30 Days',
-                  id: 'q7cI3I',
+                  defaultMessage: 'Total logins in the last 30 Days',
+                  id: 'PfxGeQ',
                 })}
                 value={data?.user?.totalThirtyDaysLogin || 0}
                 prefix={
@@ -239,8 +239,8 @@ const userDetail = ({
               <Statistic
                 className={classes.stats}
                 title={intl.formatMessage({
-                  defaultMessage: 'Total Login in Last Year',
-                  id: '9Zch7I',
+                  defaultMessage: 'Total logins in the last year',
+                  id: 'sM7fV8',
                 })}
                 value={data?.user?.totalLastYearLogin || 0}
                 prefix={
@@ -466,7 +466,7 @@ const userDetail = ({
           <FormattedMessage defaultMessage="Edit User Details" id="OaNQvU" />
         }
         visible={editUser}
-        width="800"
+        width="600"
         onClose={toggleEditUser}
       >
         {editUser ? <EditUser onClose={toggleEditUser} /> : <div />}

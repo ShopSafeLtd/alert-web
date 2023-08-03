@@ -8,7 +8,7 @@ import type {
   Race,
   ViewIncidentQuery,
 } from 'graphql/generated';
-import { CrimeType, UpdateType } from 'graphql/generated';
+import { UpdateType } from 'graphql/generated';
 import {
   Button,
   Card,
@@ -57,11 +57,12 @@ import WatermarkImage from 'components/images/WatermarkImage.view';
 import OffenderTable from 'components/tables/OffenderTable';
 import VehicleTable from 'components/tables/VehicleTable';
 import MapCard from 'components/map/MapCard/MapCard.view';
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import moment from 'moment';
 import UpdateContent from './Update.view';
 import useStyles from './ViewIncident.styles';
 import EvidenceTable from '../../../components/tables/EvidenceTable';
+import formatAnswer from '../../../utils/format-answer';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -150,6 +151,9 @@ interface Props {
   optionRowShow: boolean;
   setOptionRowShow: (value: boolean) => void;
   onDelete: (incidentId: string) => void;
+  onReject: () => void;
+  onApprove: () => void;
+  approving: boolean;
 }
 
 const ViewIncident = ({
@@ -186,6 +190,9 @@ const ViewIncident = ({
   optionRowShow,
   setOptionRowShow,
   onDelete,
+  onReject,
+  onApprove,
+  approving,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
@@ -200,627 +207,689 @@ const ViewIncident = ({
         <Col flex={1}>
           <div className={classes.viewIncident}>
             <Row className={classes.content}>
-              <Col className={classes.detailsContent} span={16}>
-                <Row gutter={8} className={classes.headerBar} justify="end">
-                  <Col>
-                    <Tooltip
-                      title={
-                        data?.incident?.subscribed
-                          ? intl.formatMessage({
-                              defaultMessage:
-                                'Stop getting notified about updates.',
-                              id: 'WpTY6U',
-                            })
-                          : intl.formatMessage({
-                              defaultMessage: 'Get notified about updates.',
-                              id: 'icr+Hj',
-                            })
-                      }
-                    >
-                      <Button
-                        onClick={toggleSubscribe}
-                        disabled={saving}
-                        loading={saving}
-                        type="ghost"
-                        color={
-                          data?.incident?.subscribed ? undefined : 'danger'
+              <Col span={16} className={classes.detailsContainer}>
+                {data?.incident?.approved === false && (
+                  <div className={classes.approveBar}>
+                    <Row gutter={8} justify="end">
+                      <Col>
+                        <Button
+                          type="ghost"
+                          onClick={onReject}
+                          disabled={approving}
+                        >
+                          <FormattedMessage
+                            defaultMessage="Reject Incident"
+                            id="O9bahm"
+                          />
+                        </Button>
+                      </Col>
+                      <Col>
+                        <Button
+                          type="primary"
+                          onClick={onApprove}
+                          disabled={approving}
+                        >
+                          <FormattedMessage
+                            defaultMessage="Approve Incident"
+                            id="Y6VB57"
+                          />
+                        </Button>
+                      </Col>
+                    </Row>
+                  </div>
+                )}
+                <div className={classes.detailsContent}>
+                  <Row gutter={8} className={classes.headerBar} justify="end">
+                    <Col>
+                      <Tooltip
+                        title={
+                          data?.incident?.subscribed
+                            ? intl.formatMessage({
+                                defaultMessage:
+                                  'Stop getting notified about updates.',
+                                id: 'WpTY6U',
+                              })
+                            : intl.formatMessage({
+                                defaultMessage: 'Get notified about updates.',
+                                id: 'icr+Hj',
+                              })
                         }
                       >
-                        <FontAwesomeIcon
-                          size="1x"
-                          style={{ marginRight: 8 }}
-                          icon={
-                            data?.incident?.subscribed ? faBellSlash : faBell
+                        <Button
+                          onClick={toggleSubscribe}
+                          disabled={saving}
+                          loading={saving}
+                          type="ghost"
+                          color={
+                            data?.incident?.subscribed ? undefined : 'danger'
                           }
-                        />
-                        {data?.incident?.subscribed
-                          ? intl.formatMessage({
-                              defaultMessage: 'Un-follow',
-                              id: 'U9yypY',
-                            })
-                          : intl.formatMessage({
-                              defaultMessage: 'Follow',
-                              id: 'ieGrWo',
-                            })}
-                      </Button>
-                    </Tooltip>
-                  </Col>
-                  {editRights && (
-                    <Col>
-                      <Link to={`/app/incidents/edit/${incidentId}`}>
-                        <Button type="ghost">
+                        >
                           <FontAwesomeIcon
                             size="1x"
                             style={{ marginRight: 8 }}
-                            icon={faEdit}
+                            icon={
+                              data?.incident?.subscribed ? faBellSlash : faBell
+                            }
                           />
-                          {intl.formatMessage({
-                            defaultMessage: 'Edit',
-                            id: 'wEQDC6',
-                          })}
+                          {data?.incident?.subscribed
+                            ? intl.formatMessage({
+                                defaultMessage: 'Un-follow',
+                                id: 'U9yypY',
+                              })
+                            : intl.formatMessage({
+                                defaultMessage: 'Follow',
+                                id: 'ieGrWo',
+                              })}
                         </Button>
-                      </Link>
+                      </Tooltip>
                     </Col>
-                  )}
-                  {data?.incident?.scheme.mg11Available && (
-                    <Dropdown
-                      overlay={
-                        <Menu
-                          items={[
-                            {
-                              label: intl.formatMessage({
-                                defaultMessage: 'Create MG11',
-                                id: 'CpvwMZ',
-                              }),
-                              key: '1',
-                              icon: (
-                                <FontAwesomeIcon
-                                  size="1x"
-                                  style={{ marginRight: 8 }}
-                                  icon={faPage}
-                                />
-                              ),
-                              // disabled: !listVehiclesData?.listVehicles.total,
-                              onClick: () =>
-                                navigate(`/app/mg11/create/${incidentId}`),
-                            },
-                            {
-                              label: intl.formatMessage({
-                                defaultMessage:
-                                  'Create Business Impact Statement',
-                                id: 'PPTlxg',
-                              }),
-                              key: '3',
-                              icon: (
-                                <FontAwesomeIcon
-                                  size="1x"
-                                  style={{ marginRight: 8 }}
-                                  icon={faPage}
-                                />
-                              ),
-                              // disabled: !listVehiclesData?.listVehicles.total,
-                              onClick: () =>
-                                navigate(
-                                  `/app/mg11/create-bis/${incidentId || ''}`
+                    {editRights && (
+                      <Col>
+                        <Link to={`/app/incidents/edit/${incidentId}`}>
+                          <Button type="ghost">
+                            <FontAwesomeIcon
+                              size="1x"
+                              style={{ marginRight: 8 }}
+                              icon={faEdit}
+                            />
+                            {intl.formatMessage({
+                              defaultMessage: 'Edit',
+                              id: 'wEQDC6',
+                            })}
+                          </Button>
+                        </Link>
+                      </Col>
+                    )}
+                    {data?.incident?.scheme.mg11Available && (
+                      <Dropdown
+                        overlay={
+                          <Menu
+                            items={[
+                              {
+                                label: intl.formatMessage({
+                                  defaultMessage: 'Create MG11',
+                                  id: 'CpvwMZ',
+                                }),
+                                key: '1',
+                                icon: (
+                                  <FontAwesomeIcon
+                                    size="1x"
+                                    style={{ marginRight: 8 }}
+                                    icon={faPage}
+                                  />
                                 ),
-                            },
-                          ]}
-                        />
-                      }
-                    >
-                      <Button
-                        key="2"
-                        icon={
-                          <FontAwesomeIcon
-                            icon={faPlus}
-                            style={{ marginRight: 5 }}
+                                // disabled: !listVehiclesData?.listVehicles.total,
+                                onClick: () =>
+                                  navigate(`/app/mg11/create/${incidentId}`),
+                              },
+                              {
+                                label: intl.formatMessage({
+                                  defaultMessage:
+                                    'Create Business Impact Statement',
+                                  id: 'PPTlxg',
+                                }),
+                                key: '3',
+                                icon: (
+                                  <FontAwesomeIcon
+                                    size="1x"
+                                    style={{ marginRight: 8 }}
+                                    icon={faPage}
+                                  />
+                                ),
+                                // disabled: !listVehiclesData?.listVehicles.total,
+                                onClick: () =>
+                                  navigate(
+                                    `/app/mg11/create-bis/${incidentId || ''}`
+                                  ),
+                              },
+                            ]}
                           />
                         }
                       >
-                        {intl.formatMessage({
-                          defaultMessage: 'Add Document',
-                          id: 'r9vGqd',
-                        })}
-                      </Button>
-                    </Dropdown>
-                  )}
-                  {deleteRights && (
-                    <Col>
-                      <Button type="ghost" onClick={() => onDelete(incidentId)}>
-                        <FontAwesomeIcon
-                          size="1x"
-                          style={{ marginRight: 8 }}
-                          icon={faTrash}
-                        />
-                        {intl.formatMessage({
-                          defaultMessage: 'Delete',
-                          id: 'K3r6DQ',
-                        })}
-                      </Button>
-                    </Col>
-                  )}
-                </Row>
-                {loading ? (
-                  <Skeleton />
-                ) : (
-                  <Row
-                    gutter={[8, 8]}
-                    justify="start"
-                    align="middle"
-                    wrap
-                    className={classes.images}
-                    style={{
-                      height:
-                        data?.incident?.images &&
-                        data?.incident?.images.length > 0
-                          ? undefined
-                          : 0,
-                    }}
-                  >
-                    {data?.incident?.images.map((image, i) => (
-                      <Col key={image.id}>
-                        <div
-                          onClick={() => openLightbox(i)}
-                          className={classes.image}
+                        <Button
+                          key="2"
+                          icon={
+                            <FontAwesomeIcon
+                              icon={faPlus}
+                              style={{ marginRight: 5 }}
+                            />
+                          }
                         >
-                          <WatermarkImage
-                            url={image.optimised}
-                            rotation={image.rotation}
-                            position={image.position}
+                          {intl.formatMessage({
+                            defaultMessage: 'Add Document',
+                            id: 'r9vGqd',
+                          })}
+                        </Button>
+                      </Dropdown>
+                    )}
+                    {deleteRights && (
+                      <Col>
+                        <Button
+                          type="ghost"
+                          onClick={() => onDelete(incidentId)}
+                        >
+                          <FontAwesomeIcon
+                            size="1x"
+                            style={{ marginRight: 8 }}
+                            icon={faTrash}
                           />
-                        </div>
+                          {intl.formatMessage({
+                            defaultMessage: 'Delete',
+                            id: 'K3r6DQ',
+                          })}
+                        </Button>
                       </Col>
-                    ))}
+                    )}
                   </Row>
-                )}
-                <div className={classes.details}>
                   {loading ? (
                     <Skeleton />
                   ) : (
-                    <div className="incident-tab-content">
-                      <Card>
-                        <Title className={classes.headerTitle} level={4}>
-                          {data?.incident?.subject}
-                        </Title>
-                        <Text>
-                          {intl.formatMessage(
-                            {
-                              defaultMessage: 'Alert ID: {ref}',
-                              id: 'umL9sI',
-                            },
-                            {
-                              ref: data?.incident?.reference,
-                            }
-                          )}
-                        </Text>
-                        <Paragraph type="secondary" style={{ marginTop: 10 }}>
-                          {data?.incident?.description}
-                        </Paragraph>
-
-                        <Descriptions column={1} className={classes.desc}>
-                          <Descriptions.Item
-                            className={classes.detail}
-                            label={
-                              <span>
-                                <FontAwesomeIcon
-                                  className={classes.descIcon}
-                                  icon={faBuilding}
-                                />
-                                {intl.formatMessage({
-                                  defaultMessage: 'Business',
-                                  id: 'w1Fanr',
-                                })}
-                              </span>
-                            }
+                    <Row
+                      gutter={[8, 8]}
+                      justify="start"
+                      align="middle"
+                      wrap
+                      className={classes.images}
+                      style={{
+                        height:
+                          data?.incident?.images &&
+                          data?.incident?.images.length > 0
+                            ? undefined
+                            : 0,
+                      }}
+                    >
+                      {data?.incident?.images.map((image, i) => (
+                        <Col key={image.id}>
+                          <div
+                            onClick={() => openLightbox(i)}
+                            className={classes.image}
                           >
-                            {editRights ? (
-                              <Link
-                                to={`/app/scheme-settings/business/view/${
-                                  data?.incident?.business?.id || ''
-                                }`}
-                              >
-                                {data?.incident?.business?.name}
-                              </Link>
-                            ) : (
-                              data?.incident?.business?.name
-                            )}
-                          </Descriptions.Item>
-                          <Descriptions.Item
-                            className={classes.detail}
-                            label={
-                              <span>
-                                <FontAwesomeIcon
-                                  className={classes.descIcon}
-                                  icon={faClock}
-                                />
-                                {intl.formatMessage({
-                                  defaultMessage: 'Date & Time',
-                                  id: 'io/Qlk',
-                                })}
-                              </span>
-                            }
-                          >
-                            {data?.incident?.dayTime}
-                          </Descriptions.Item>
-                        </Descriptions>
-
-                        <Descriptions column={1} className={classes.desc}>
-                          <Descriptions.Item
-                            className={classes.detailTag}
-                            label={
-                              <span className={classes.tagLabel}>
-                                <FontAwesomeIcon
-                                  className={classes.descIcon}
-                                  icon={faUsers}
-                                />
-                                {intl.formatMessage({
-                                  defaultMessage: 'Groups',
-                                  id: 'hzmswI',
-                                })}
-                              </span>
-                            }
-                          >
-                            <Row>
-                              {data?.incident?.groups.map((group) => (
-                                <Tag key={group.id} className={classes.tag}>
-                                  {group.name}
-                                </Tag>
-                              ))}
-                            </Row>
-                          </Descriptions.Item>
-                          <Descriptions.Item
-                            className={classes.detailTag}
-                            label={
-                              <span className={classes.tagLabel}>
-                                <FontAwesomeIcon
-                                  className={classes.descIcon}
-                                  icon={faSirenOn}
-                                />
-                                {intl.formatMessage({
-                                  defaultMessage: 'Crime Types',
-                                  id: 'Piba4q',
-                                })}
-                              </span>
-                            }
-                          >
-                            <Row>
-                              {data?.incident?.crimeTypes.map((tag) => (
-                                <Tag
-                                  color="red"
-                                  key={tag.id}
-                                  className={classes.tag}
-                                >
-                                  {tag.name}
-                                </Tag>
-                              )) ||
-                                intl.formatMessage({
-                                  defaultMessage: 'None',
-                                  id: '450Fty',
-                                })}
-                            </Row>
-                          </Descriptions.Item>
-                          <Descriptions.Item
-                            className={classes.detailTag}
-                            label={
-                              <span className={classes.tagLabel}>
-                                <FontAwesomeIcon
-                                  className={classes.descIcon}
-                                  icon={faTags}
-                                />
-                                {intl.formatMessage({
-                                  defaultMessage: 'Involved Tags',
-                                  id: 'hqB+1X',
-                                })}
-                              </span>
-                            }
-                          >
-                            <Row>
-                              {data?.incident?.involvedTags.map((tag) => (
-                                <Tag
-                                  color="red"
-                                  key={tag.id}
-                                  className={classes.tag}
-                                >
-                                  {tag.name}
-                                </Tag>
-                              )) ||
-                                intl.formatMessage({
-                                  defaultMessage: 'None',
-                                  id: '450Fty',
-                                })}
-                            </Row>
-                          </Descriptions.Item>
-
-                          <Descriptions.Item
-                            className={classes.detailTag}
-                            label={
-                              <span className={classes.tagLabel}>
-                                <FontAwesomeIcon
-                                  className={classes.descIcon}
-                                  icon={faUserTag}
-                                />
-                                {intl.formatMessage({
-                                  defaultMessage: 'Impact Tags',
-                                  id: 'JZVMXj',
-                                })}
-                              </span>
-                            }
-                          >
-                            <Row justify="start" align="middle">
-                              {data?.incident?.impactTags.map((tag) => (
-                                <Tag
-                                  color="red"
-                                  key={tag.id}
-                                  className={classes.tag}
-                                >
-                                  {tag.name}
-                                </Tag>
-                              )) ||
-                                intl.formatMessage({
-                                  defaultMessage: 'None',
-                                  id: '450Fty',
-                                })}
-                            </Row>
-                          </Descriptions.Item>
-                        </Descriptions>
-                      </Card>
-                      <Row gutter={16}>
-                        <Col xs={24} xl={12}>
-                          <MapCard
-                            width="100%"
-                            height={194}
-                            markers={[
-                              {
-                                geoLat: data?.incident?.location?.geoLat,
-                                geoLng: data?.incident?.location?.geoLng,
-                              },
-                            ]}
-                          />
+                            <WatermarkImage
+                              url={image.optimised}
+                              rotation={image.rotation}
+                              position={image.position}
+                            />
+                          </div>
                         </Col>
-                        <Col xs={24} xl={12}>
+                      ))}
+                    </Row>
+                  )}
+                  <div className={classes.details}>
+                    {loading ? (
+                      <Skeleton />
+                    ) : (
+                      <div className="incident-tab-content">
+                        <Card>
+                          <Title className={classes.headerTitle} level={4}>
+                            {data?.incident?.subject}
+                          </Title>
+                          <Text>
+                            {intl.formatMessage(
+                              {
+                                defaultMessage: 'Alert ID: {ref}',
+                                id: 'umL9sI',
+                              },
+                              {
+                                ref: data?.incident?.reference,
+                              }
+                            )}
+                          </Text>
+                          <Paragraph type="secondary" style={{ marginTop: 10 }}>
+                            {data?.incident?.description}
+                          </Paragraph>
+
+                          <Descriptions column={1} className={classes.desc}>
+                            <Descriptions.Item
+                              className={classes.detail}
+                              label={
+                                <span>
+                                  <FontAwesomeIcon
+                                    className={classes.descIcon}
+                                    icon={faBuilding}
+                                  />
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Business',
+                                    id: 'w1Fanr',
+                                  })}
+                                </span>
+                              }
+                            >
+                              {editRights ? (
+                                <Link
+                                  to={`/app/scheme-settings/business/view/${
+                                    data?.incident?.business?.id || ''
+                                  }`}
+                                >
+                                  {data?.incident?.business?.name}
+                                </Link>
+                              ) : (
+                                data?.incident?.business?.name
+                              )}
+                            </Descriptions.Item>
+                            <Descriptions.Item
+                              className={classes.detail}
+                              label={
+                                <span>
+                                  <FontAwesomeIcon
+                                    className={classes.descIcon}
+                                    icon={faClock}
+                                  />
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Date & Time',
+                                    id: 'io/Qlk',
+                                  })}
+                                </span>
+                              }
+                            >
+                              {data?.incident?.dayTime}
+                            </Descriptions.Item>
+                          </Descriptions>
+
+                          <Descriptions column={1} className={classes.desc}>
+                            <Descriptions.Item
+                              className={classes.detailTag}
+                              label={
+                                <span className={classes.tagLabel}>
+                                  <FontAwesomeIcon
+                                    className={classes.descIcon}
+                                    icon={faUsers}
+                                  />
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Groups',
+                                    id: 'hzmswI',
+                                  })}
+                                </span>
+                              }
+                            >
+                              <Row>
+                                {data?.incident?.groups.map((group) => (
+                                  <Tag key={group.id} className={classes.tag}>
+                                    {group.name}
+                                  </Tag>
+                                ))}
+                              </Row>
+                            </Descriptions.Item>
+                            <Descriptions.Item
+                              className={classes.detailTag}
+                              label={
+                                <span className={classes.tagLabel}>
+                                  <FontAwesomeIcon
+                                    className={classes.descIcon}
+                                    icon={faSirenOn}
+                                  />
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Crime Types',
+                                    id: 'Piba4q',
+                                  })}
+                                </span>
+                              }
+                            >
+                              <Row>
+                                {data?.incident?.crimeTypes.map((tag) => (
+                                  <Tag
+                                    color="red"
+                                    key={tag.id}
+                                    className={classes.tag}
+                                  >
+                                    {tag.name}
+                                  </Tag>
+                                )) ||
+                                  intl.formatMessage({
+                                    defaultMessage: 'None',
+                                    id: '450Fty',
+                                  })}
+                              </Row>
+                            </Descriptions.Item>
+                            {data?.incident &&
+                              data.incident.involvedTags.length > 0 && (
+                                <Descriptions.Item
+                                  className={classes.detailTag}
+                                  label={
+                                    <span className={classes.tagLabel}>
+                                      <FontAwesomeIcon
+                                        className={classes.descIcon}
+                                        icon={faTags}
+                                      />
+                                      {intl.formatMessage({
+                                        defaultMessage: 'Involved Tags',
+                                        id: 'hqB+1X',
+                                      })}
+                                    </span>
+                                  }
+                                >
+                                  <Row>
+                                    {data?.incident?.involvedTags.map((tag) => (
+                                      <Tag
+                                        color="red"
+                                        key={tag.id}
+                                        className={classes.tag}
+                                      >
+                                        {tag.name}
+                                      </Tag>
+                                    )) ||
+                                      intl.formatMessage({
+                                        defaultMessage: 'None',
+                                        id: '450Fty',
+                                      })}
+                                  </Row>
+                                </Descriptions.Item>
+                              )}
+
+                            {data?.incident &&
+                              data.incident.impactTags.length > 0 && (
+                                <Descriptions.Item
+                                  className={classes.detailTag}
+                                  label={
+                                    <span className={classes.tagLabel}>
+                                      <FontAwesomeIcon
+                                        className={classes.descIcon}
+                                        icon={faUserTag}
+                                      />
+                                      {intl.formatMessage({
+                                        defaultMessage: 'Impact Tags',
+                                        id: 'JZVMXj',
+                                      })}
+                                    </span>
+                                  }
+                                >
+                                  <Row justify="start" align="middle">
+                                    {data?.incident?.impactTags.map((tag) => (
+                                      <Tag
+                                        color="red"
+                                        key={tag.id}
+                                        className={classes.tag}
+                                      >
+                                        {tag.name}
+                                      </Tag>
+                                    )) ||
+                                      intl.formatMessage({
+                                        defaultMessage: 'None',
+                                        id: '450Fty',
+                                      })}
+                                  </Row>
+                                </Descriptions.Item>
+                              )}
+                          </Descriptions>
+                        </Card>
+                        <Row gutter={16}>
+                          <Col xs={24} xl={12}>
+                            <MapCard
+                              width="100%"
+                              height={194}
+                              markers={[
+                                {
+                                  geoLat: data?.incident?.location?.geoLat,
+                                  geoLng: data?.incident?.location?.geoLng,
+                                },
+                              ]}
+                            />
+                          </Col>
+                          <Col xs={24} xl={12}>
+                            <Card>
+                              <Title level={4}>
+                                {intl.formatMessage({
+                                  defaultMessage: 'Police Information',
+                                  id: 'bhVnhl',
+                                })}
+                              </Title>
+                              <Descriptions
+                                column={1}
+                                style={{ marginTop: 10 }}
+                                className={classes.desc}
+                              >
+                                <Descriptions.Item
+                                  className={classes.detail}
+                                  label={
+                                    <span>
+                                      {intl.formatMessage({
+                                        defaultMessage: 'Police Reported',
+                                        id: 'KrBn25',
+                                      })}
+                                    </span>
+                                  }
+                                >
+                                  {data?.incident?.policeReported
+                                    ? intl.formatMessage({
+                                        defaultMessage: 'Yes',
+                                        id: 'a5msuh',
+                                      })
+                                    : intl.formatMessage({
+                                        defaultMessage: 'No',
+                                        id: 'oUWADl',
+                                      })}
+                                </Descriptions.Item>
+                                <Descriptions.Item
+                                  className={classes.detail}
+                                  label={
+                                    <span>
+                                      {intl.formatMessage({
+                                        defaultMessage: 'Police Attenteded',
+                                        id: 'qT9KAx',
+                                      })}
+                                    </span>
+                                  }
+                                >
+                                  {data?.incident?.policeInvolved
+                                    ? intl.formatMessage({
+                                        defaultMessage: 'Yes',
+                                        id: 'a5msuh',
+                                      })
+                                    : intl.formatMessage({
+                                        defaultMessage: 'No',
+                                        id: 'oUWADl',
+                                      })}
+                                </Descriptions.Item>
+                                <Descriptions.Item
+                                  className={classes.detail}
+                                  label={intl.formatMessage({
+                                    defaultMessage: 'Crime Ref',
+                                    id: '03pSDv',
+                                  })}
+                                >
+                                  {data?.incident?.policeRef ||
+                                    intl.formatMessage({
+                                      defaultMessage: 'Not Provided',
+                                      id: 'rVkCib',
+                                    })}
+                                </Descriptions.Item>
+                                <Descriptions.Item
+                                  className={classes.detail}
+                                  label={
+                                    <span>
+                                      {intl.formatMessage({
+                                        defaultMessage: 'Officer Collar Number',
+                                        id: 'r4EMV1',
+                                      })}
+                                    </span>
+                                  }
+                                >
+                                  {data?.incident?.policeNo ||
+                                    intl.formatMessage({
+                                      defaultMessage: 'Not Provided',
+                                      id: 'rVkCib',
+                                    })}
+                                </Descriptions.Item>
+                              </Descriptions>
+                            </Card>
+                          </Col>
+                        </Row>
+
+                        {data?.incident?.incidentItems &&
+                          data.incident.incidentItems.length > 0 && (
+                            <Card style={{ marginBottom: 20 }}>
+                              <Title level={4}>
+                                {intl.formatMessage({
+                                  defaultMessage: 'Items',
+                                  id: 'yNmV/R',
+                                })}
+                              </Title>
+                              <Table
+                                columns={[
+                                  {
+                                    title: intl.formatMessage({
+                                      defaultMessage: 'Name',
+                                      id: 'HAlOn1',
+                                    }),
+                                    dataIndex: 'name',
+                                    key: 'name',
+                                  },
+                                  {
+                                    title: intl.formatMessage({
+                                      defaultMessage: 'Value',
+                                      id: 'GufXy5',
+                                    }),
+                                    dataIndex: 'value',
+                                    key: 'value',
+                                    render: (value: number) =>
+                                      `£${value.toFixed(2)}`,
+                                  },
+                                  {
+                                    title: intl.formatMessage({
+                                      defaultMessage: 'Recovered Value',
+                                      id: 'bGwFFv',
+                                    }),
+                                    dataIndex: 'recoveredValue',
+                                    key: 'recoveredValue',
+                                    render: (value: number) =>
+                                      `£${value.toFixed(2)}`,
+                                  },
+                                ]}
+                                dataSource={data?.incident?.incidentItems.map(
+                                  (item) => ({
+                                    key: item.id,
+                                    name: item.name || '',
+                                    value: item.value || 0,
+                                    recoveredValue: item.recoveredValue || 0,
+                                  })
+                                )}
+                                size="small"
+                                pagination={false}
+                                // TODO
+                                // eslint-disable-next-line react/no-unstable-nested-components
+                                summary={(tableData) => {
+                                  const totalValue = tableData
+                                    .map((item) => item.value || 0)
+                                    .reduce((a, b) => a + b, 0);
+                                  const totalRecovered = tableData
+                                    .map((item) => item.recoveredValue || 0)
+                                    .reduce((a, b) => a + b, 0);
+
+                                  return (
+                                    <Table.Summary.Row>
+                                      <Table.Summary.Cell index={0}>
+                                        {intl.formatMessage({
+                                          defaultMessage: 'Total: ',
+                                          id: 'ILhZuX',
+                                        })}
+                                      </Table.Summary.Cell>
+                                      {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                                      <Table.Summary.Cell index={1}>
+                                        £{totalValue.toFixed(2)}
+                                      </Table.Summary.Cell>
+                                      {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                                      <Table.Summary.Cell index={1}>
+                                        £{totalRecovered.toFixed(2)}
+                                      </Table.Summary.Cell>
+                                    </Table.Summary.Row>
+                                  );
+                                }}
+                              />
+                            </Card>
+                          )}
+
+                        {data?.incident && data.incident.answers.length > 0 && (
                           <Card>
                             <Title level={4}>
                               {intl.formatMessage({
-                                defaultMessage: 'Police Information',
-                                id: 'bhVnhl',
+                                defaultMessage: 'Incident Details',
+                                id: 'Imc8gS',
                               })}
                             </Title>
-                            <Descriptions
-                              column={1}
-                              style={{ marginTop: 10 }}
-                              className={classes.desc}
-                            >
-                              <Descriptions.Item
-                                className={classes.detail}
-                                label={
-                                  <span>
-                                    {intl.formatMessage({
-                                      defaultMessage: 'Police Reported',
-                                      id: 'KrBn25',
-                                    })}
-                                  </span>
-                                }
-                              >
-                                {data?.incident?.policeReported
-                                  ? intl.formatMessage({
-                                      defaultMessage: 'Yes',
-                                      id: 'a5msuh',
-                                    })
-                                  : intl.formatMessage({
-                                      defaultMessage: 'No',
-                                      id: 'oUWADl',
-                                    })}
-                              </Descriptions.Item>
-                              <Descriptions.Item
-                                className={classes.detail}
-                                label={
-                                  <span>
-                                    {intl.formatMessage({
-                                      defaultMessage: 'Police Attenteded',
-                                      id: 'qT9KAx',
-                                    })}
-                                  </span>
-                                }
-                              >
-                                {data?.incident?.policeInvolved
-                                  ? intl.formatMessage({
-                                      defaultMessage: 'Yes',
-                                      id: 'a5msuh',
-                                    })
-                                  : intl.formatMessage({
-                                      defaultMessage: 'No',
-                                      id: 'oUWADl',
-                                    })}
-                              </Descriptions.Item>
-                              <Descriptions.Item
-                                className={classes.detail}
-                                label={intl.formatMessage({
-                                  defaultMessage: 'Crime Ref',
-                                  id: '03pSDv',
-                                })}
-                              >
-                                {data?.incident?.policeRef ||
-                                  intl.formatMessage({
-                                    defaultMessage: 'Not Provided',
-                                    id: 'rVkCib',
-                                  })}
-                              </Descriptions.Item>
-                              <Descriptions.Item
-                                className={classes.detail}
-                                label={
-                                  <span>
-                                    {intl.formatMessage({
-                                      defaultMessage: 'Officer Collar Number',
-                                      id: 'r4EMV1',
-                                    })}
-                                  </span>
-                                }
-                              >
-                                {data?.incident?.policeNo ||
-                                  intl.formatMessage({
-                                    defaultMessage: 'Not Provided',
-                                    id: 'rVkCib',
-                                  })}
-                              </Descriptions.Item>
+                            <Descriptions>
+                              {data.incident.answers.map((answer) => (
+                                <Descriptions.Item
+                                  label={answer.tagQuestion.question.question}
+                                >
+                                  {formatAnswer(answer.answer, answer.type)}
+                                </Descriptions.Item>
+                              ))}
                             </Descriptions>
                           </Card>
-                        </Col>
-                      </Row>
+                        )}
 
-                      {data?.incident?.crimeTypes
-                        .map((item) => item.crimeType)
-                        .includes(CrimeType.TheftHandling) && (
-                        <Card style={{ marginBottom: 20 }}>
+                        <Card>
                           <Title level={4}>
                             {intl.formatMessage({
-                              defaultMessage: 'Items',
-                              id: 'yNmV/R',
+                              defaultMessage: 'Offenders',
+                              id: 'xb54TN',
                             })}
                           </Title>
-                          <Table
-                            columns={[
-                              {
-                                title: intl.formatMessage({
-                                  defaultMessage: 'Name',
-                                  id: 'HAlOn1',
-                                }),
-                                dataIndex: 'name',
-                                key: 'name',
-                              },
-                              {
-                                title: intl.formatMessage({
-                                  defaultMessage: 'Value',
-                                  id: 'GufXy5',
-                                }),
-                                dataIndex: 'value',
-                                key: 'value',
-                                render: (value: number) =>
-                                  `£${value.toFixed(2)}`,
-                              },
-                              {
-                                title: intl.formatMessage({
-                                  defaultMessage: 'Recovered Value',
-                                  id: 'bGwFFv',
-                                }),
-                                dataIndex: 'recoveredValue',
-                                key: 'recoveredValue',
-                                render: (value: number) =>
-                                  `£${value.toFixed(2)}`,
-                              },
-                            ]}
-                            dataSource={data?.incident?.incidentItems.map(
-                              (item) => ({
-                                key: item.id,
-                                name: item.name,
-                                value: item.value,
-                                recoveredValue: item.recoveredValue,
-                              })
-                            )}
-                            size="small"
-                            pagination={false}
-                            // TODO
-                            // eslint-disable-next-line react/no-unstable-nested-components
-                            summary={(tableData) => {
-                              const totalValue = tableData
-                                .map((item) => item.value || 0)
-                                .reduce((a, b) => a + b, 0);
-                              const totalRecovered = tableData
-                                .map((item) => item.recoveredValue || 0)
-                                .reduce((a, b) => a + b, 0);
-
-                              return (
-                                <Table.Summary.Row>
-                                  <Table.Summary.Cell index={0}>
-                                    {intl.formatMessage({
-                                      defaultMessage: 'Total: ',
-                                      id: 'ILhZuX',
-                                    })}
-                                  </Table.Summary.Cell>
-                                  {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                                  <Table.Summary.Cell index={1}>
-                                    £{totalValue.toFixed(2)}
-                                  </Table.Summary.Cell>
-                                  {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                                  <Table.Summary.Cell index={1}>
-                                    £{totalRecovered.toFixed(2)}
-                                  </Table.Summary.Cell>
-                                </Table.Summary.Row>
-                              );
-                            }}
-                          />
-                        </Card>
-                      )}
-
-                      <Card>
-                        <Title level={4}>
-                          {intl.formatMessage({
-                            defaultMessage: 'Offenders',
-                            id: 'xb54TN',
-                          })}
-                        </Title>
-                        {data?.incident?.offenders.length && !loading ? (
-                          <OffenderTable
-                            offenders={data?.incident?.offenders}
-                            hasNavigation
-                          />
-                        ) : (
-                          <Empty
-                            description={intl.formatMessage({
-                              defaultMessage: 'No offenders for this incident',
-                              id: '+qw0ns',
-                            })}
-                            image={Empty.PRESENTED_IMAGE_SIMPLE}
-                          />
-                        )}
-                      </Card>
-
-                      <Card style={{ marginTop: 20 }}>
-                        <Title level={4}>
-                          {intl.formatMessage({
-                            defaultMessage: 'Vehicles',
-                            id: 'r6wuJ3',
-                          })}
-                        </Title>
-                        {data?.incident?.vehicles.length && !loading ? (
-                          <VehicleTable
-                            vehicles={data?.incident?.vehicles}
-                            hasNavigation
-                          />
-                        ) : (
-                          <Empty
-                            description={intl.formatMessage({
-                              defaultMessage: 'No vehicles for this incident',
-                              id: 'EOkcI5',
-                            })}
-                            image={Empty.PRESENTED_IMAGE_SIMPLE}
-                          />
-                        )}
-                      </Card>
-                      {data?.incident?.scheme.mg11Available && (
-                        <Card style={{ marginTop: 20 }}>
-                          <Title level={4}>
-                            {intl.formatMessage({
-                              defaultMessage: 'Evidence',
-                              id: '6g7+6N',
-                            })}
-                          </Title>
-                          {data?.incident?.evidence.length && !loading ? (
-                            <EvidenceTable
-                              evidence={data?.incident?.evidence}
+                          {data?.incident?.offenders.length && !loading ? (
+                            <OffenderTable
+                              offenders={data?.incident?.offenders}
+                              hasNavigation
                             />
                           ) : (
                             <Empty
                               description={intl.formatMessage({
-                                defaultMessage: 'No evidence for this incident',
-                                id: 'GkZRlh',
+                                defaultMessage:
+                                  'No offenders for this incident',
+                                id: '+qw0ns',
                               })}
                               image={Empty.PRESENTED_IMAGE_SIMPLE}
                             />
                           )}
                         </Card>
-                      )}
-                    </div>
-                  )}
+
+                        <Card style={{ marginTop: 20 }}>
+                          <Title level={4}>
+                            {intl.formatMessage({
+                              defaultMessage: 'Vehicles',
+                              id: 'r6wuJ3',
+                            })}
+                          </Title>
+                          {data?.incident?.vehicles.length && !loading ? (
+                            <VehicleTable
+                              vehicles={data?.incident?.vehicles}
+                              hasNavigation
+                            />
+                          ) : (
+                            <Empty
+                              description={intl.formatMessage({
+                                defaultMessage: 'No vehicles for this incident',
+                                id: 'EOkcI5',
+                              })}
+                              image={Empty.PRESENTED_IMAGE_SIMPLE}
+                            />
+                          )}
+                        </Card>
+                        {data?.incident?.scheme.mg11Available && (
+                          <Card style={{ marginTop: 20 }}>
+                            <Title level={4}>
+                              {intl.formatMessage({
+                                defaultMessage: 'Evidence',
+                                id: '6g7+6N',
+                              })}
+                            </Title>
+                            {data?.incident?.evidence.length && !loading ? (
+                              <EvidenceTable
+                                evidence={data?.incident?.evidence}
+                              />
+                            ) : (
+                              <Empty
+                                description={intl.formatMessage({
+                                  defaultMessage:
+                                    'No evidence for this incident',
+                                  id: 'GkZRlh',
+                                })}
+                                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                              />
+                            )}
+                          </Card>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </Col>
               <Col span={8}>

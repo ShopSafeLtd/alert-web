@@ -13,6 +13,7 @@ describe('Detail Officer View', () => {
         origName: 'testUser',
         email: 'user email',
         publicName: true,
+        reportToAllBusinesses: false,
         businesses: [{ name: 'user business', id: '', fullName: '' }],
         status: UserStatus.Active,
         groups: [{ id: 'groupId', name: 'test group' }],

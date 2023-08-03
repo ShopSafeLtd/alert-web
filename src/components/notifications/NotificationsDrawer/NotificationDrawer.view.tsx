@@ -20,6 +20,7 @@ import {
 import type { ListUserNotificationsQuery } from 'graphql/generated';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
+import { GoodsMode } from 'graphql/generated';
 import useStyles from './NotificationDrawer.styles';
 import type { NotificationData } from './useNotificationDrawer';
 
@@ -141,7 +142,17 @@ const NotificationsDrawer = ({
           renderItem={(item) => (
             <List.Item
               className={item.read ? classes.item : classes.unreadItem}
-              onClick={() => handleMarkAsRead(item.notification)}
+              // TODO: fix this
+              onClick={() =>
+                handleMarkAsRead({
+                  ...item.notification,
+                  schemes: item.notification.schemes.map((scheme) => ({
+                    ...scheme,
+                    goodsMode: GoodsMode.Generic,
+                    facialRecognition: false,
+                  })),
+                })
+              }
             >
               <List.Item.Meta
                 avatar={

@@ -27,6 +27,8 @@ describe('List Officer View', () => {
     const { getByText } = render(
       <MemoryRouter>
         <SchemeList
+          tags={undefined}
+          updateTagParent={jest.fn()}
           data={data}
           loading={false}
           saving={false}

@@ -26,6 +26,7 @@ import DiscMenu from 'views/settings/data-import/menu/Menu.view';
 import DiscImport from 'views/settings/data-import/disc-import/DiscImport.container';
 import CustomSchemeTerms from '../../../views/settings/terms/ViewCustomTerms/ViewTermsContainer';
 import ListStatements from '../../../views/settings/statements/ListStatements';
+import TagView from '../../../views/settings/tags/ViewTag/ViewTag.container';
 
 const SchemeSettings = (): JSX.Element => (
   <Routes>
@@ -57,6 +58,7 @@ const SchemeSettings = (): JSX.Element => (
 
     {/* crime types */}
     <Route path="crime-types/*" element={<CrimeTypes />} />
+    <Route path="crime-types/view/:id" element={<TagView />} />
 
     {/* recycle bin */}
     <Route path="recycle-bin/*" element={<RecycleBin />} />

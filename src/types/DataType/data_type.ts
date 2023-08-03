@@ -9,6 +9,7 @@ import type {
   ImagePosition,
   ListIncidentsQuery,
   Race,
+  AnswerType,
 } from 'graphql/generated';
 import type { Moment } from 'moment';
 
@@ -146,7 +147,7 @@ export interface ImageCardData {
   new?: boolean;
   deleted?: boolean;
   position?: ImagePosition;
-  primary?: boolean;
+  primary?: boolean | null | undefined;
   policeImage?: boolean;
   rotation?: number;
 }
@@ -166,8 +167,8 @@ export interface EditFeedImage {
   optimised?: string | null | undefined;
   url?: string | null | undefined;
   position?: ImagePosition;
-  primary?: boolean;
-  policeImage?: boolean;
+  primary?: boolean | null | undefined;
+  policeImage?: boolean | null | undefined;
   rotation?: number;
 }
 // LocationData
@@ -261,4 +262,17 @@ export interface TagData {
   schemes: string[];
   isConnected?: boolean;
   isNew?: boolean;
+}
+
+export interface CustomQuestion {
+  answerType: AnswerType;
+  label: string;
+  questionId: string;
+  required: boolean;
+  tagQuestionId: string;
+  value: string;
+  options: {
+    label: string;
+    value: string;
+  }[];
 }

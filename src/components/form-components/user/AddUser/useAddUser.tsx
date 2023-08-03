@@ -46,6 +46,7 @@ export interface FormData {
   offenderEmail: boolean;
   offenderPush: boolean;
   publicName: boolean;
+  reportToAllBusinesses: boolean;
   approverGroups: string[];
 }
 
@@ -131,6 +132,7 @@ const useAddUser = ({
               fullName: user.fullName,
               email: user.email,
               publicName: user.publicName,
+              reportToAllBusinesses: user.reportToAllBusinesses,
               businesses:
                 user.businesses && user.businesses.length > 0
                   ? user.businesses.map(({ id, name }) => ({
@@ -400,6 +402,7 @@ const useAddUser = ({
               : undefined,
             role: data.role,
             publicName: data.publicName,
+            reportToAllBusinesses: data.reportToAllBusinesses,
             incidentEmail: data.incidentEmail,
             incidentPush: data.incidentPush,
             messagePush: data.messagePush,

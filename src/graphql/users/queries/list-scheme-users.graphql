@@ -13,6 +13,7 @@ query ListSchemeUsers(
     origFirstLetter
     email
     publicName
+    reportToAllBusinesses
     businesses {
       id
       name

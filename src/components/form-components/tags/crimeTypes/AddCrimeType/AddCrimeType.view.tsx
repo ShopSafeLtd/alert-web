@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Col, Form, Input, Row, Select, Typography } from 'antd';
+import type { ListSchemeTagsQuery } from 'graphql/generated';
 import { CrimeType, TagType } from 'graphql/generated';
 import type { Scheme } from 'state';
 import { useIntl } from 'react-intl';
@@ -20,6 +21,7 @@ interface Props {
   type?: TagType;
   userSchemes: Scheme[];
   schemeId: string;
+  tags: ListSchemeTagsQuery | undefined;
 }
 
 const AddCrimeType = ({
@@ -29,6 +31,7 @@ const AddCrimeType = ({
   type = TagType.IncidentCrimeType,
   schemeId,
   userSchemes,
+  tags,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return (
@@ -82,94 +85,112 @@ const AddCrimeType = ({
         </Col>
 
         {type === TagType.IncidentCrimeType && (
-          <Col span={24}>
-            <Form.Item
-              name="crimeType"
-              label={intl.formatMessage({
-                defaultMessage: 'Crime Type Category',
-                id: 'vXvK25',
-              })}
-              rules={[
-                {
-                  required: true,
-                  message: intl.formatMessage({
-                    defaultMessage:
-                      'Please select a category for the new crime type.',
-                    id: 'bav6vT',
-                  }),
-                },
-              ]}
-            >
-              <Select
-                disabled={saving}
-                options={[
+          <>
+            <Col span={24}>
+              <Form.Item
+                name="parentTagId"
+                label={intl.formatMessage({
+                  defaultMessage: 'Parent Tag',
+                  id: 'wlAaAz',
+                })}
+              >
+                <Select
+                  options={tags?.listTags.tags.map((tag) => ({
+                    value: tag.id,
+                    label: tag.name,
+                  }))}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={24}>
+              <Form.Item
+                name="crimeType"
+                label={intl.formatMessage({
+                  defaultMessage: 'Crime Type Category',
+                  id: 'vXvK25',
+                })}
+                rules={[
                   {
-                    value: CrimeType.Burglary,
-                    label: intl.formatMessage({
-                      defaultMessage: 'Burglary',
-                      id: 'f2A9g8',
-                    }),
-                  },
-                  {
-                    value: CrimeType.CriminalDamage,
-                    label: intl.formatMessage({
-                      defaultMessage: 'Criminal Damage',
-                      id: 'FAQLEy',
-                    }),
-                  },
-                  {
-                    value: CrimeType.Drugs,
-                    label: intl.formatMessage({
-                      defaultMessage: 'Drugs',
-                      id: '8xjLZ0',
-                    }),
-                  },
-                  {
-                    value: CrimeType.FraudForgery,
-                    label: intl.formatMessage({
-                      defaultMessage: 'Fraud & Forgery',
-                      id: 'zAWiMb',
-                    }),
-                  },
-                  {
-                    value: CrimeType.Robbery,
-                    label: intl.formatMessage({
-                      defaultMessage: 'Robbery',
-                      id: 'wHRKby',
-                    }),
-                  },
-                  {
-                    value: CrimeType.SexualOffences,
-                    label: intl.formatMessage({
-                      defaultMessage: 'Sexual Offences',
-                      id: 'znM5dX',
-                    }),
-                  },
-                  {
-                    value: CrimeType.TheftHandling,
-                    label: intl.formatMessage({
-                      defaultMessage: 'Theft & Handling',
-                      id: 'WD3oHm',
-                    }),
-                  },
-                  {
-                    value: CrimeType.Violence,
-                    label: intl.formatMessage({
-                      defaultMessage: 'Violence Against The Person',
-                      id: 'oOGhLO',
-                    }),
-                  },
-                  {
-                    value: CrimeType.Other,
-                    label: intl.formatMessage({
-                      defaultMessage: 'Other',
-                      id: '/VnDMl',
+                    required: true,
+                    message: intl.formatMessage({
+                      defaultMessage:
+                        'Please select a category for the new crime type.',
+                      id: 'bav6vT',
                     }),
                   },
                 ]}
-              />
-            </Form.Item>
-          </Col>
+              >
+                <Select
+                  disabled={saving}
+                  options={[
+                    {
+                      value: CrimeType.Burglary,
+                      label: intl.formatMessage({
+                        defaultMessage: 'Burglary',
+                        id: 'f2A9g8',
+                      }),
+                    },
+                    {
+                      value: CrimeType.CriminalDamage,
+                      label: intl.formatMessage({
+                        defaultMessage: 'Criminal Damage',
+                        id: 'FAQLEy',
+                      }),
+                    },
+                    {
+                      value: CrimeType.Drugs,
+                      label: intl.formatMessage({
+                        defaultMessage: 'Drugs',
+                        id: '8xjLZ0',
+                      }),
+                    },
+                    {
+                      value: CrimeType.FraudForgery,
+                      label: intl.formatMessage({
+                        defaultMessage: 'Fraud & Forgery',
+                        id: 'zAWiMb',
+                      }),
+                    },
+                    {
+                      value: CrimeType.Robbery,
+                      label: intl.formatMessage({
+                        defaultMessage: 'Robbery',
+                        id: 'wHRKby',
+                      }),
+                    },
+                    {
+                      value: CrimeType.SexualOffences,
+                      label: intl.formatMessage({
+                        defaultMessage: 'Sexual Offences',
+                        id: 'znM5dX',
+                      }),
+                    },
+                    {
+                      value: CrimeType.TheftHandling,
+                      label: intl.formatMessage({
+                        defaultMessage: 'Theft & Handling',
+                        id: 'WD3oHm',
+                      }),
+                    },
+                    {
+                      value: CrimeType.Violence,
+                      label: intl.formatMessage({
+                        defaultMessage: 'Violence Against The Person',
+                        id: 'oOGhLO',
+                      }),
+                    },
+                    {
+                      value: CrimeType.Other,
+                      label: intl.formatMessage({
+                        defaultMessage: 'Other',
+                        id: '/VnDMl',
+                      }),
+                    },
+                  ]}
+                />
+              </Form.Item>
+            </Col>
+          </>
         )}
         <Col span={24}>
           <Form.Item

@@ -257,6 +257,7 @@ const UseAddUserTest = () => {
         type="button"
         onClick={() =>
           onSubmit({
+            reportToAllBusinesses: false,
             email: 'email',
             fullName: 'fullName',
             incidentEmail: false,

@@ -7,6 +7,7 @@ import {
   faRotate,
   faSquareCheck,
 } from '@fortawesome/pro-light-svg-icons';
+import { GoodsMode } from 'graphql/generated';
 import type { UserNotificationsQuery } from 'graphql/generated';
 import { useIntl } from 'react-intl';
 import formatCalendar from 'utils/format-calendar-24h';
@@ -141,7 +142,16 @@ const NotificationLists = ({
               position: ['bottomCenter'],
             }}
             onRow={(record) => ({
-              onClick: () => handleMarkAsRead(record.notification),
+              // TODO fix this
+              onClick: () =>
+                handleMarkAsRead({
+                  ...record.notification,
+                  schemes: record.notification.schemes.map((scheme) => ({
+                    ...scheme,
+                    goodsMode: GoodsMode.Generic,
+                    facialRecognition: false,
+                  })),
+                }),
             })}
             columns={[
               {

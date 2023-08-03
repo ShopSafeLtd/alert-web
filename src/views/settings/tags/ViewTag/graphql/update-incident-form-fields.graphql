@@ -1,0 +1,5 @@
+mutation UpsertIncidentForm($data: UpsertIncidentFormInput!) {
+  upsertIncidentForm(data: $data) {
+    id
+  }
+}

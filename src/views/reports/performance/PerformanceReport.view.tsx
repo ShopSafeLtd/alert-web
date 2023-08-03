@@ -4,10 +4,11 @@ import { Button, Col, Drawer, Dropdown, Row, Select, Typography } from 'antd';
 import DatePicker from 'components/util-components/DatePicker';
 import { Page } from 'components/shared-components/AntD/Page/Page';
 import RGL, { WidthProvider } from 'react-grid-layout';
+import 'react-grid-layout/css/styles.css';
+
 import { margin, rowHeight } from 'components/reports/utils/utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
-import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import { useIntl } from 'react-intl';
 import AddLogo from '../../../components/reports/addLogo';

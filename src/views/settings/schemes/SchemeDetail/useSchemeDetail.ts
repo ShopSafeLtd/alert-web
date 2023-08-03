@@ -1,7 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-floating-promises,@typescript-eslint/no-unsafe-assignment */
 import { useState } from 'react';
-import type { SchemeQuery } from 'graphql/generated';
-import { useSchemeQuery, useUpdateSchemeMutation } from 'graphql/generated';
+import type { SchemeQuery, ViewTagQuery } from 'graphql/generated';
+import {
+  Model,
+  TagType,
+  useListSchemeTagsQuery,
+  useSchemeQuery,
+  useUpdateSchemeMutation,
+  useUpdateTagMutation,
+} from 'graphql/generated';
 import { message, notification, Upload } from 'antd';
 import { useStoreState } from 'state';
 
@@ -38,6 +45,8 @@ interface Return {
   beforeUpload: (value: RcFile, dark?: string) => void;
   darkFileList: UploadFile[];
   darkImgChange: UploadProps['onChange'];
+  updateTagParent: (tagId: string, parentTagId: string | null) => void;
+  tags: ViewTagQuery | undefined;
 }
 
 const useSchemeDetail = (): Return => {
@@ -48,6 +57,26 @@ const useSchemeDetail = (): Return => {
   const [darkImageChange, setDarkImageChange] = useState(false);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [darkFileList, setDarkFileList] = useState<UploadFile[]>([]);
+
+  const { data: tags } = useListSchemeTagsQuery({
+    variables: {
+      listWhere: {
+        type: {
+          equals: TagType.IncidentCrimeType,
+        },
+        dataType: {
+          equals: Model.Incident,
+        },
+        schemes: {
+          some: {
+            id: {
+              equals: schemeId,
+            },
+          },
+        },
+      },
+    },
+  });
 
   const { data: schemeData, loading } = useSchemeQuery({
     fetchPolicy: 'cache-and-network',
@@ -242,7 +271,42 @@ const useSchemeDetail = (): Return => {
     imgWindow?.document.write(image.outerHTML);
   };
 
+  const [updateTag] = useUpdateTagMutation();
+
+  const updateTagParent = (tagId: string, parentTagId: string | null) => {
+    if (parentTagId) {
+      void updateTag({
+        variables: {
+          where: {
+            id: tagId,
+          },
+          data: {
+            parentTag: {
+              connect: {
+                id: parentTagId,
+              },
+            },
+          },
+        },
+      });
+    } else {
+      void updateTag({
+        variables: {
+          where: {
+            id: tagId,
+          },
+          data: {
+            parentTag: {
+              disconnect: true,
+            },
+          },
+        },
+      });
+    }
+  };
+
   return {
+    updateTagParent,
     data: schemeData,
     loading,
     saving,
@@ -254,6 +318,7 @@ const useSchemeDetail = (): Return => {
     fileList,
     darkFileList,
     darkImgChange,
+    tags,
   };
 };
 

@@ -1,13 +1,35 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Locale } from 'antd/lib/locale-provider';
-import enLang from './entries/en_US';
-import frLang from './entries/fr_FR';
-import esLang from './entries/es_ES';
-import deLang from './entries/de_DE';
-import dkLang from './entries/dk_DK';
-import itLang from './entries/it_IT';
+import {
+  DaLang,
+  DeLang,
+  EnLang,
+  EsLang,
+  FiLang,
+  FrLang,
+  ItLang,
+  NlLang,
+  PlLang,
+  PtLang,
+  SvLang,
+} from './entries';
 
-export type AvailableLanguages = 'en' | 'fr' | 'es' | 'de' | 'da' | 'it';
+export const AvailableLanguagesConst = [
+  'en',
+  'fr',
+  'es',
+  'de',
+  'da',
+  'it',
+  'rbe',
+  'nl',
+  'fi',
+  'pl',
+  'pt',
+  'sv',
+] as const;
+
+export type AvailableLanguages = (typeof AvailableLanguagesConst)[number];
 
 interface AppLocaleType {
   en: LocaleType;
@@ -16,6 +38,12 @@ interface AppLocaleType {
   de: LocaleType;
   da: LocaleType;
   it: LocaleType;
+  rbe: LocaleType;
+  nl: LocaleType;
+  fi: LocaleType;
+  pl: LocaleType;
+  pt: LocaleType;
+  sv: LocaleType;
 }
 
 interface LocaleType {
@@ -28,12 +56,18 @@ interface LocaleType {
 }
 
 const AppLocale: AppLocaleType = {
-  en: enLang,
-  fr: frLang,
-  es: esLang,
-  de: deLang,
-  da: dkLang,
-  it: itLang,
+  en: EnLang,
+  fr: FrLang,
+  es: EsLang,
+  de: DeLang,
+  da: DaLang,
+  it: ItLang,
+  rbe: NlLang,
+  nl: NlLang,
+  fi: FiLang,
+  pl: PlLang,
+  pt: PtLang,
+  sv: SvLang,
 };
 
 export default AppLocale;

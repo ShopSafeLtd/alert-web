@@ -1,4 +1,6 @@
 export interface Theme {
+  primary: string;
+  primaryLight: string;
   componentBackground: string;
   itemHoverBackground: string;
   itemSelectedBackground: string;
@@ -9,6 +11,7 @@ export interface Theme {
   logo: string;
   colorScheme: string;
   hoverBackground: string;
+  headerColor: string;
 }
 
 const theme: {
@@ -16,6 +19,8 @@ const theme: {
   light: Theme;
 } = {
   dark: {
+    primary: 'rgb(222, 68, 54)',
+    primaryLight: '#ff6b72',
     componentBackground: '#283142',
     itemHoverBackground: 'rgb(60, 67, 84)',
     itemSelectedBackground: 'rgb(60, 67, 84)',
@@ -26,8 +31,11 @@ const theme: {
     logo: 'url(/img/light-logo.svg)',
     colorScheme: 'dark',
     hoverBackground: 'rgb(92, 102, 123)',
+    headerColor: '#FFF',
   },
   light: {
+    primary: 'rgb(222, 68, 54)',
+    primaryLight: '#ff6b72',
     componentBackground: '#FFF',
     itemHoverBackground: '#fafafb',
     itemSelectedBackground: '#fafafb',
@@ -38,6 +46,7 @@ const theme: {
     logo: 'url(/img/dark-logo.svg)',
     colorScheme: 'light',
     hoverBackground: 'rgba(0, 0, 0, 0.018)',
+    headerColor: '#1a3353',
   },
 };
 

@@ -1,6 +1,15 @@
 import { useState } from 'react';
-import type { CreateTagMutation, CrimeType } from 'graphql/generated';
-import { useCreateTagMutation, Model, TagType } from 'graphql/generated';
+import type {
+  CreateTagMutation,
+  CrimeType,
+  ListSchemeTagsQuery,
+} from 'graphql/generated';
+import {
+  useCreateTagMutation,
+  Model,
+  TagType,
+  useListSchemeTagsQuery,
+} from 'graphql/generated';
 import type { Scheme } from 'state';
 import { useStoreState } from 'state';
 import { notification } from 'antd';
@@ -13,6 +22,7 @@ interface FormData {
   description: string;
   crimeType: CrimeType;
   schemes: string[];
+  parentTagId?: string;
 }
 
 interface Props {
@@ -26,6 +36,7 @@ interface Return {
   saving: boolean;
   userSchemes: Scheme[];
   schemeId: string;
+  tags: ListSchemeTagsQuery | undefined;
 }
 
 const useAddCrimeType = ({
@@ -38,6 +49,26 @@ const useAddCrimeType = ({
   const userSchemes = useStoreState((state) => state.user.schemes);
   const userId = useStoreState((state) => state.user.id);
   const [saving, setSaving] = useState(false);
+
+  const { data: tags } = useListSchemeTagsQuery({
+    variables: {
+      listWhere: {
+        type: {
+          equals: TagType.IncidentCrimeType,
+        },
+        dataType: {
+          equals: Model.Incident,
+        },
+        schemes: {
+          some: {
+            id: {
+              equals: schemeId,
+            },
+          },
+        },
+      },
+    },
+  });
 
   const [createTag] = useCreateTagMutation({
     onCompleted: () => {
@@ -75,6 +106,9 @@ const useAddCrimeType = ({
               id,
             })),
           },
+          parentTag: data.parentTagId
+            ? { connect: { id: data.parentTagId } }
+            : undefined,
           createdBy: { connect: { id: userId } },
           dataType: Model.Incident,
           type,
@@ -88,6 +122,7 @@ const useAddCrimeType = ({
     saving,
     schemeId,
     userSchemes,
+    tags,
   };
 };
 export default useAddCrimeType;

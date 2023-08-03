@@ -1,0 +1,6 @@
+mutation CreateOrAddQuestion($data: CreateQuestionInput!, $where: UniqueId) {
+  addQuestion(data: $data, where: $where) {
+    id
+    questionFormatted
+  }
+}

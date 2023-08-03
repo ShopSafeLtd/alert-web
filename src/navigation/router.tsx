@@ -5,7 +5,7 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import AppLayout from 'layouts/app-layout';
 import { AuthLayout } from 'layouts/auth-layout';
 import type { AvailableLanguages } from 'lang';
-import AppLocale from 'lang';
+import AppLocale, { AvailableLanguagesConst } from 'lang';
 import { ThemeProvider } from 'react-jss';
 import { IntlProvider } from 'react-intl';
 import { ConfigProvider } from 'antd';
@@ -22,13 +22,30 @@ import { LocalStorageKeys, typedLocalStorage } from '../utils';
 
 const SentryRoutes = withSentryReactRouterV6Routing(Routes);
 
+function checkLang(l: string): l is AvailableLanguages {
+  return (AvailableLanguagesConst as readonly string[]).includes(l);
+}
+
 const Views = () => {
   const { isLoading } = useAuth0();
   const location = useLocation();
   const locale = useStoreState((state) => state.theme.locale);
-  const lang = navigator.language.split('-')[0];
+  const lang =
+    checkLang(
+      navigator.language === 'nl-BE' ? 'rbe' : navigator.language.split('-')[0]
+    ) &&
+    (navigator.language === 'nl-BE' ? 'rbe' : navigator.language.split('-')[0]);
+
   const localLang = typedLocalStorage.get(LocalStorageKeys.lang);
+
   const initLang = localLang || lang || locale;
+
+  useEffect(() => {
+    if (initLang) {
+      typedLocalStorage.set(LocalStorageKeys.lang, initLang);
+    }
+  }, []);
+
   const customTranslations = useStoreState(
     (state) => state.scheme.translations
   );

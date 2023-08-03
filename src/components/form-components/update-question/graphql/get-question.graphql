@@ -1,0 +1,10 @@
+query QuestionDetails($where: QuestionWhereUniqueInput!) {
+  question(where: $where) {
+    id
+    questionFormatted
+    question
+    optionsFormatted
+    type
+    options
+  }
+}

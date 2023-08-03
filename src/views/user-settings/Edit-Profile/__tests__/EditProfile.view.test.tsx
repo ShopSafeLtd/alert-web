@@ -1,12 +1,13 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
-import { Role } from 'graphql/generated';
+import { CurrentUserQuery, GoodsMode, Role } from 'graphql/generated';
 import EditProfile from '../EditProfile.view';
 
 describe('Detail Officer View', () => {
-  const data = {
+  const data: CurrentUserQuery | undefined = {
     currentUser: {
+      reportToAllBusinesses: true,
       id: 'userId',
       fullName: 'test user',
       email: '@shopsafe.uk',
@@ -18,13 +19,11 @@ describe('Detail Officer View', () => {
       offenderEmail: true,
       offenderPush: true,
       publicName: true,
-      approverGroups: [],
       origName: 'test user',
       groups: [
         {
           id: 'test',
           name: 'test group',
-          description: null,
           scheme: {
             id: 'id',
           },
@@ -41,6 +40,8 @@ describe('Detail Officer View', () => {
             autoApproveOffenders: true,
             id: 'ckdhbosuv01028oiblmjgeuii',
             name: 'Demo',
+            goodsMode: 'GENERIC' as GoodsMode,
+            facialRecognition: false,
           },
         },
       ],

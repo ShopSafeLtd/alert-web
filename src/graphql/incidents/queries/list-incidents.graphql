@@ -43,8 +43,11 @@ query listIncidents(
       }
       images {
         id
+        optimised
         position
         rotation
+        primary
+        policeImage
         low
       }
       groups {

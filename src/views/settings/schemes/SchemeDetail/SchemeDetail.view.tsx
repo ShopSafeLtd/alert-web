@@ -1,5 +1,5 @@
 import React from 'react';
-import type { SchemeQuery } from 'graphql/generated';
+import type { SchemeQuery, ListSchemeTagsQuery } from 'graphql/generated';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import {
   Button,
@@ -18,11 +18,13 @@ import {
 
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { FormattedMessage, useIntl } from 'react-intl';
+import BuildTree from '../../../../utils/tags/tree-helper';
 
 const { Title, Text } = Typography;
 
 interface Props {
   data: SchemeQuery | undefined;
+  tags: ListSchemeTagsQuery | undefined;
   loading: boolean;
   saving: boolean;
   onSubmit: (value: FormData) => void;
@@ -32,6 +34,7 @@ interface Props {
   onPreview: (value: UploadFile) => void;
   fileList: UploadFile[];
   imgChange: UploadProps['onChange'];
+  updateTagParent: (tagId: string, parentTagId: string | null) => void;
 }
 
 interface FormData {
@@ -64,6 +67,7 @@ const options = [
 ];
 const SchemeDetail = ({
   data,
+  tags,
   loading,
   saving,
   onSubmit,
@@ -73,6 +77,7 @@ const SchemeDetail = ({
   fileList,
   darkImgChange,
   darkFileList,
+  updateTagParent,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return (
@@ -207,6 +212,21 @@ const SchemeDetail = ({
               </Col>
             </Row>
           </Card>
+
+          <Card>
+            <FormattedMessage defaultMessage="Tag hierarchy" id="I5HrhC" />
+            <BuildTree
+              InitData={
+                tags?.listTags.tags.map((tag) => ({
+                  id: tag.id,
+                  name: tag.name,
+                  parentId: tag.parentTag?.id || null,
+                })) || []
+              }
+              updateTagParent={updateTagParent}
+            />
+          </Card>
+
           <Card>
             <Title level={4}>
               <FormattedMessage

@@ -1,3 +1,49 @@
+.incident-form-images-no-offenders {
+  .ant-upload-list-picture-card-container {
+    width: 200px;
+    height: 200px;
+    margin-right: 20px;
+  }
+
+  .image-card {
+    position: relative;
+    height: 200px;
+    width: 500px;
+    display: flex;
+    overflow: hidden;
+    border: 1px solid #edf2f9;
+    border-radius: 10px;
+
+    .image-card-image {
+      position: relative;
+      min-width: 250px;
+      height: 200px;
+      background-repeat: no-repeat;
+      background-size: cover;
+      .image-remove-button {
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        width: calc(100% - 50px);
+        z-index: 10;
+      }
+    }
+  }
+
+  .image-card-loading {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
 .incident-form-images {
   .ant-upload-list-picture-card-container {
     width: 500px;

@@ -72,7 +72,7 @@ const LinkVehicle = ({
       return (
         <Row wrap gutter={16} style={{ marginRight: 0 }}>
           {data?.listVehicles?.vehicles.map((vehicle) => (
-            <Col span={6} key={vehicle.id} className="offender-item">
+            <Col key={vehicle.id} className="offender-item">
               <VehicleTile
                 vehicle={vehicle}
                 onClick={() => setCurrentId(vehicle.id)}
@@ -130,7 +130,7 @@ const LinkVehicle = ({
       </Row>
 
       <Modal
-        visible={!!selectedVehicle}
+        open={!!selectedVehicle}
         zIndex={1010}
         okText={intl.formatMessage({
           defaultMessage: 'Add Vehicle',
@@ -139,20 +139,10 @@ const LinkVehicle = ({
         onOk={() => onSubmit(selectedVehicle?.id)}
         onCancel={() => setCurrentId(undefined)}
         bodyStyle={{ padding: 0 }}
-        title={intl.formatMessage(
-          {
-            defaultMessage: 'Add {make} to the chat?',
-            id: 'FghSV+',
-          },
-          {
-            make:
-              selectedVehicle?.make ||
-              intl.formatMessage({
-                defaultMessage: 'this vehicle',
-                id: 'pRx/92',
-              }),
-          }
-        )}
+        title={intl.formatMessage({
+          defaultMessage: 'Add this vehicle?',
+          id: 'i1CjZG',
+        })}
       >
         <Row gutter={16} wrap={false}>
           {selectedVehicle && selectedVehicle.images.length > 0 && (
@@ -219,22 +209,6 @@ const LinkVehicle = ({
                     defaultMessage: 'Unknown',
                     id: '5jeq8P',
                   })}
-              </Descriptions.Item>
-              <Descriptions.Item
-                label={intl.formatMessage({
-                  defaultMessage: 'Total Offenders',
-                  id: 'Pyo0l3',
-                })}
-              >
-                {selectedVehicle?.totalOffenders || 0}
-              </Descriptions.Item>
-              <Descriptions.Item
-                label={intl.formatMessage({
-                  defaultMessage: 'Total Crime Groups',
-                  id: 'PwRU00',
-                })}
-              >
-                {selectedVehicle?.totalCrimeGroups || 0}
               </Descriptions.Item>
             </Descriptions>
           </Col>

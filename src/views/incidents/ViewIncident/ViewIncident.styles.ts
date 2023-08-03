@@ -32,6 +32,9 @@ const useStyles = createUseStyles((theme: Theme) => ({
     position: 'relative',
     height: '100%',
   },
+  detailsContainer: {
+    height: '100%',
+  },
   detailsContent: {
     background: theme.bodyBackground,
     height: '100%',
@@ -39,7 +42,8 @@ const useStyles = createUseStyles((theme: Theme) => ({
     borderRight: `1px solid ${theme.borderColor}`,
   },
   details: {
-    padding: '0px 15px 0 8px',
+    padding: '0px 15px 70px 8px',
+    position: 'relative',
   },
   detail: {
     paddingBottom: '8px !important',
@@ -105,6 +109,16 @@ const useStyles = createUseStyles((theme: Theme) => ({
   tag: {
     marginBottom: 3,
   },
+  approveBar: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: theme.bodyBackground,
+    borderTop: `1px solid ${theme.borderColor}`,
+    width: 'calc(100% - 1px)',
+    padding: '10px 15px 10px',
+    zIndex: 10,
+  },
 }));
-
 export default useStyles;
