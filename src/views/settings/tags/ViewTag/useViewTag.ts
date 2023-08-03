@@ -297,11 +297,13 @@ const useViewTag = (): Return => {
 
   const saveQOrder = () => {
     setQuestionLayoutChanged(false);
-    const tagQs = questionsLayout.map((q, index) => ({
-      id: q.i,
-      position: 1000 - index,
-      req: data?.tag?.tagQuestions?.find((tq) => tq.id === q.i)?.req || false,
-    }));
+    const tagQs = questionsLayout
+      .sort((a, b) => a.y - b.y)
+      .map((q, index) => ({
+        id: q.i,
+        position: 1000 - index,
+        req: data?.tag?.tagQuestions?.find((tq) => tq.id === q.i)?.req || false,
+      }));
     void updateOrderQs({
       variables: {
         data: {
@@ -487,7 +489,9 @@ const useViewTag = (): Return => {
   const [saveIncidentFormLayout] = useUpsertIncidentFormMutation();
 
   const saveIncidentForm = () => {
-    const positions = incidentFormLayout.map((l) => l.i);
+    const positions = incidentFormLayout
+      .sort((a, b) => a.y - b.y)
+      .map((l) => l.i);
 
     const getTypeArray = positions
       .flatMap((key) => fieldToLayoutSet[key].map((t) => ({ type: t })))
