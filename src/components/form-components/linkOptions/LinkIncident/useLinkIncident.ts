@@ -128,7 +128,11 @@ const useLinkIncident = ({
         update({
           id: selectedData.id,
           description: selectedData.description,
-          images: selectedData.images,
+          images: selectedData.images.map((image) => ({
+            ...image,
+            primary: !!image.primary,
+            policeImage: !!image.policeImage,
+          })),
           dayTime: selectedData.dayTime,
           reference: selectedData.reference,
           subject: selectedData.subject,

@@ -9,7 +9,6 @@ const AddIncident = (): JSX.Element => {
     primaryAddress,
     saving,
     onValuesChange,
-    isTheft,
     addNewAddress,
     toggleAddNewAddress,
     updateNewAddressData,
@@ -32,7 +31,6 @@ const AddIncident = (): JSX.Element => {
         primaryAddress={primaryAddress}
         saving={saving}
         onValuesChange={onValuesChange}
-        isTheft={isTheft}
         addNewAddress={addNewAddress}
         toggleAddNewAddress={toggleAddNewAddress}
         updateNewAddressData={updateNewAddressData}

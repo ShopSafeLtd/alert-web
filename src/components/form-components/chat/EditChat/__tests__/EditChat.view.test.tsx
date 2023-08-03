@@ -27,6 +27,8 @@ describe('Detail Officer View', () => {
   const usersData = {
     users: [
       {
+        reportToAllBusinesses: false,
+
         id: 'userId',
         fullName: 'testUser',
         origName: 'testUser',

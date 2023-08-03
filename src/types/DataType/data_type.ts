@@ -147,7 +147,7 @@ export interface ImageCardData {
   new?: boolean;
   deleted?: boolean;
   position?: ImagePosition;
-  primary?: boolean;
+  primary?: boolean | null | undefined;
   policeImage?: boolean;
   rotation?: number;
 }

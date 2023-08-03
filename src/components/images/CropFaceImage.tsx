@@ -12,6 +12,14 @@ interface CropFaceImageProps {
   width: number;
 }
 
+function StringToNumber(value: string | number | undefined | null): number {
+  if (typeof value === 'string') {
+    return Number(value);
+  }
+  if (!value) return 0;
+  return value;
+}
+
 const CropFaceImage = ({
   url,
   boundingBox,
@@ -30,15 +38,17 @@ const CropFaceImage = ({
         const imageWidth = canvasImage.width;
 
         // width of the bounding box
-        const boundingWidth = boundingBox.width * imageWidth;
+        const boundingWidth = StringToNumber(boundingBox.width) * imageWidth;
         // height of the bounding box
-        const boundingHeight = boundingBox.height * imageHeight;
+        const boundingHeight = StringToNumber(boundingBox.height) * imageHeight;
         const xOffset = boundingWidth;
         const yOffset = boundingHeight;
         // position of bounding box from the left
-        let boundingX = boundingBox.left * imageWidth - xOffset / 2;
+        let boundingX =
+          StringToNumber(boundingBox.left) * imageWidth - xOffset / 2;
         // position of bounding box from the top
-        let boundingY = boundingBox.top * imageHeight - yOffset / 2.5;
+        let boundingY =
+          StringToNumber(boundingBox.top) * imageHeight - yOffset / 2.5;
         const extendedBoundingWidth = boundingWidth + xOffset;
         const extendedBoundingHeight = boundingHeight + yOffset;
 

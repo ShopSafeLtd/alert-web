@@ -19,6 +19,7 @@ const UseAddNewOffenderTest = () => {
         type="button"
         onClick={() =>
           onSubmit({
+            images: [],
             name: 'offender name',
             age: Age.Unknown,
             gender: Gender.Unknown,

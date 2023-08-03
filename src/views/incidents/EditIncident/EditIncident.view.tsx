@@ -214,7 +214,8 @@ const EditIncident = ({
             },
             goods: data?.incident?.incidentItems.map((item) => ({
               id: item.id,
-              goodsType: item.goodsType.id,
+              // TODO: fix this
+              goodsType: item.goodsType?.id || '',
               value: item.value,
               recoveredValue: item.recoveredValue,
             })),
@@ -1020,7 +1021,19 @@ const EditIncident = ({
         onCancel={() => setAddRecentOffender(null)}
         visible={addRecentOffender !== null}
         onOk={() => {
-          if (addRecentOffender) onAddOffender(addRecentOffender, true);
+          // TODO fix this
+          if (addRecentOffender)
+            onAddOffender(
+              {
+                ...addRecentOffender,
+                images: addRecentOffender.images.map((image) => ({
+                  ...image,
+                  primary: !!image.primary,
+                  policeImage: !!image.policeImage,
+                })),
+              },
+              true
+            );
           setAddRecentOffender(null);
         }}
         okText={intl.formatMessage({

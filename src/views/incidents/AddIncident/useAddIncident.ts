@@ -601,6 +601,8 @@ const useAddIncident = (): Return => {
             images: getImages(),
             location: getLocation(),
             answers: customQuestions.map((question) => ({
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore TODO: fix noImplicitAny error here
               answer: data[question.questionId] || '',
               type: question.answerType,
               tagQuestionId: question.tagQuestionId,
@@ -787,7 +789,7 @@ const useAddIncident = (): Return => {
       ];
 
       if (sections.length > 0) {
-        setIncidentForm(sections);
+        setIncidentForm(sections as IncidentFormField[]);
       } else {
         setIncidentForm([
           IncidentFormField.Types,

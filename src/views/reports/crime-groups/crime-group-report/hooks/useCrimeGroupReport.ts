@@ -199,10 +199,10 @@ const useCrimeGroupReport = (): Return => {
       alertId: incident.reference,
       date: moment(incident.date).format('DD/MM/YYYY'),
       value: incident.incidentItems
-        ?.reduce((acc, item) => acc + item.value, 0)
+        ?.reduce((acc, item) => acc + (item.value || 0), 0)
         .toFixed(2),
       valueRec: incident.incidentItems
-        ?.reduce((acc, item) => acc + item.recoveredValue, 0)
+        ?.reduce((acc, item) => acc + (item.recoveredValue || 0), 0)
         .toFixed(2),
       location: incident.location?.alias || '',
       totalOffenders: incident.totalOffenders || 0,
