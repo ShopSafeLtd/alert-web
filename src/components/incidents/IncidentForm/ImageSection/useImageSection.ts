@@ -42,7 +42,7 @@ export interface ImageResponseType {
   url?: string;
   blobName?: string;
   mimetype?: string;
-  faces: {
+  faces?: {
     Gender: {
       Value: 'Male' | 'Female';
     };
@@ -115,6 +115,7 @@ const useImageSection = ({
         if (
           facialRecognition &&
           incidentForm.includes(IncidentFormField.Offenders) &&
+          image.faces &&
           image.faces.length > 0
         ) {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
