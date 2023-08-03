@@ -63,7 +63,7 @@ const fieldToLayoutSet: Record<string, IncidentFormField[]> = {
   ],
   when: [IncidentFormField.Where],
   goods: [IncidentFormField.Goods],
-  profiles: [IncidentFormField.Offenders, IncidentFormField.Images],
+  profiles: [IncidentFormField.Images, IncidentFormField.Offenders],
   police: [IncidentFormField.Police, IncidentFormField.Details],
   groups: [IncidentFormField.Groups],
   custom: [IncidentFormField.Custom],
