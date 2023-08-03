@@ -1,0 +1,5 @@
+mutation RemoveQuestionFromTag($where: UniqueId) {
+  removeQuestionFromTag(where: $where) {
+    id
+  }
+}

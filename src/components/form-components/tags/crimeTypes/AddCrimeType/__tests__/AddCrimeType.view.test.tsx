@@ -8,6 +8,7 @@ describe('List Officer View', () => {
     const { getByText } = render(
       <MemoryRouter>
         <AddCrimeType
+          tags={undefined}
           onSubmit={jest.fn()}
           saving={false}
           onClose={jest.fn()}

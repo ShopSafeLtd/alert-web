@@ -86,7 +86,7 @@
     "react/require-default-props": "off",
     "sonarjs/no-duplicate-string": 1,
     "sonarjs/cognitive-complexity": "warn",
-    "react-hooks/rules-of-hooks": "off",
+    "react-hooks/rules-of-hooks": "warn",
     "@typescript-eslint/space-before-blocks": "off",
     "unicorn/filename-case": "off",
     "unicorn/no-null": "off",

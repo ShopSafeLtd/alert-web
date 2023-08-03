@@ -83,6 +83,8 @@ export const NavScheme = () => {
       darkLogo: scheme.scheme.darkLogo?.optimisedPersisted,
       userTodos: scheme.scheme.userTodos,
       userNotifications: scheme.scheme.userNotifications,
+      goodsMode: scheme.scheme.goodsMode,
+      facialRecognition: scheme.scheme.facialRecognition,
     });
     setTodos({ userTodos: scheme.scheme.userTodos || 0 });
     setNotifications({

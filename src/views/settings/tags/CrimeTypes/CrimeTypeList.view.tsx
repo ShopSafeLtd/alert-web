@@ -23,6 +23,7 @@ import {
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { useNavigate } from 'react-router';
 
 interface Props {
   data: TagsQuery | undefined;
@@ -76,6 +77,7 @@ const CrimeTypeList = ({
   updateInvolvedList,
 }: Props): JSX.Element => {
   const intl = useIntl();
+  const navigate = useNavigate();
   return (
     <div className="list-view">
       <Card>
@@ -134,8 +136,9 @@ const CrimeTypeList = ({
                 <Typography.Link
                   disabled={saving}
                   onClick={() => {
-                    setIncidentId(record.key);
-                    toggleEditIncident();
+                    navigate(
+                      `/app/scheme-settings/crime-types/view/${record.key}`
+                    );
                   }}
                 >
                   {value}
@@ -466,7 +469,7 @@ const CrimeTypeList = ({
           id: 'hm9cEh',
         })}
         visible={addIncident}
-        width="400"
+        width="800"
         onClose={toggleAddIncident}
       >
         {addIncident ? (

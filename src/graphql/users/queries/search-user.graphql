@@ -12,6 +12,7 @@ query SearchUser($where: UserWhereUniqueInput!) {
     }
     email
     publicName
+    reportToAllBusinesses
     addresses(where: { primary: { equals: true } }) {
       id
       postcode

@@ -357,12 +357,6 @@ const useOffenderFeed = (): Return => {
     // @ts-expect-error TODO fix date mismatch
     variables: queryVariables,
     fetchPolicy: 'cache-and-network',
-    onCompleted: (res) => {
-      console.log('variables', variables);
-      console.log('total', res.listOffenders?.total);
-
-      console.log('offendersData', res?.listOffenders?.offenders);
-    },
   });
 
   const { data: businessData, loading: businessesLoading } =

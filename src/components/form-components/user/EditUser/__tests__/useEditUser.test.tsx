@@ -300,6 +300,7 @@ const UseEditUserTest = () => {
             email: 'email',
             role: Role.User,
             publicName: true,
+            reportToAllBusinesses: false,
             businesses: [
               {
                 label: '',

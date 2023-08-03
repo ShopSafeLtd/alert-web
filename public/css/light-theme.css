@@ -29703,6 +29703,51 @@ tr > .ant-picker-cell-in-view.ant-picker-cell-range-hover:first-child::after {
   padding: 8px 0 8px 15px;
   line-height: 1.5;
 }
+.incident-form-images-no-offenders .ant-upload-list-picture-card-container {
+  width: 200px;
+  height: 200px;
+  margin-right: 20px;
+}
+.incident-form-images-no-offenders .image-card {
+  position: relative;
+  height: 200px;
+  width: 500px;
+  display: flex;
+  overflow: hidden;
+  border: 1px solid #edf2f9;
+  border-radius: 10px;
+}
+.incident-form-images .image-card .image-card-image,
+.incident-form-images-no-offenders .image-card .image-card-image {
+  position: relative;
+  min-width: 250px;
+  height: 200px;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.incident-form-images .image-card .image-card-image .image-remove-button,
+.incident-form-images-no-offenders
+  .image-card
+  .image-card-image
+  .image-remove-button {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: calc(100% - 50px);
+  z-index: 10;
+}
+.incident-form-images-no-offenders .image-card-loading {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .incident-form-images .ant-upload-list-picture-card-container {
   width: 500px;
   height: 200px;
@@ -29716,20 +29761,6 @@ tr > .ant-picker-cell-in-view.ant-picker-cell-range-hover:first-child::after {
   overflow: hidden;
   border: 1px solid #edf2f9;
   border-radius: 10px;
-}
-.incident-form-images .image-card .image-card-image {
-  position: relative;
-  min-width: 250px;
-  height: 200px;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-.incident-form-images .image-card .image-card-image .image-remove-button {
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  width: calc(100% - 50px);
-  z-index: 10;
 }
 .incident-form-images .image-card .image-card-offenders {
   padding: 10px;

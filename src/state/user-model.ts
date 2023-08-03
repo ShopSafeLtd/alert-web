@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import type { Action } from 'easy-peasy';
 import { action } from 'easy-peasy';
+import type { GoodsMode } from 'graphql/generated';
 import { Role } from 'graphql/generated';
 import type { Translations } from './scheme-model';
 
@@ -68,6 +69,8 @@ export interface Scheme {
         }
       | null
       | undefined;
+    goodsMode: GoodsMode;
+    facialRecognition: boolean;
   };
 }
 

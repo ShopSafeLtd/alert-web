@@ -138,7 +138,7 @@ const ViewInvestigation = ({
                   color={getTextStatus(
                     data?.investigation?.status || InvestigationStatus.Open
                   )}
-                  style={{ marginLeft: 10, marginTop: -8 }}
+                  style={{ marginLeft: 10, marginTop: -5 }}
                 >
                   {
                     GetInvestigationStatusValues[

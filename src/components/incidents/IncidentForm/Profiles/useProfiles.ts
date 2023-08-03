@@ -1,126 +1,44 @@
 import { useState } from 'react';
-import type { ListOffendersQuery } from 'graphql/generated';
-import type { OffenderData } from 'types/DataType';
-import type { UploadChangeParam } from 'antd/lib/upload';
-import type { UploadFile } from 'antd/lib/upload/interface';
-
-type Offender = Exclude<
-  ListOffendersQuery['listOffenders'],
-  null | undefined
->['offenders'][0];
-
-interface Props {
-  offenderImgChangeParent: (
-    info: UploadChangeParam<UploadFile>,
-    currentId: string
-  ) => void;
-  onChange?: (data: OffenderData[]) => void;
-  removeOffenderParent: (offenderId: string) => void;
-  updateOffenderParent: (value: OffenderData) => void;
-  onAddOffenderParent: (value: OffenderData, existing: boolean) => void;
-  value?: OffenderData[];
-}
 
 interface Return {
-  addExistingOffender: boolean;
-  addExistingVehicle: boolean;
-  addNewVehicle: boolean;
-  addOffender: boolean;
-  addRecentOffender: Offender | null;
-  editOffenderId: string;
-  editVehicleId: string;
-  offenderImgChange: (
-    info: UploadChangeParam<UploadFile>,
-    currentId: string
-  ) => void;
-  removeOffender: (offenderId: string) => void;
-  setAddRecentOffender: (value: Offender | null) => void;
-  setEditOffenderId: (value: string) => void;
-  setEditVehicleId: (value: string) => void;
-  toggleAddExistingOffender: () => void;
-  toggleAddExistingVehicle: () => void;
-  toggleAddNewVehicle: () => void;
-  toggleAddOffender: () => void;
-  updateOffender: (value: OffenderData) => void;
-  updateOffenderParent: (value: OffenderData) => void;
-  onAddOffender: (value: OffenderData, existing: boolean) => void;
+  addNewOffenderOpen: boolean;
+  addExistingOffenderOpen: boolean;
+  addNewVehicleOpen: boolean;
+  addExistingVehicleOpen: boolean;
+  toggleAddNewOffenderOpen: () => void;
+  toggleAddExistingOffenderOpen: () => void;
+  toggleAddNewVehicleOpen: () => void;
+  toggleAddExisingVehicleOpen: () => void;
 }
 
-const useProfiles = ({
-  offenderImgChangeParent,
-  onChange,
-  removeOffenderParent,
-  updateOffenderParent,
-  value,
-  onAddOffenderParent,
-}: Props): Return => {
-  const [addExistingOffender, setAddExistingOffender] = useState(false);
-  const [addExistingVehicle, setAddExistingVehicle] = useState(false);
-  const [addNewVehicle, setAddNewVehicle] = useState(false);
-  const [addOffender, setAddOffender] = useState(false);
-  const [addRecentOffender, setAddRecentOffender] = useState<Offender | null>(
-    null
-  );
-  const [editOffenderId, setEditOffenderId] = useState<string>('');
-  const [editVehicleId, setEditVehicleId] = useState<string>('');
+const useProfiles = (): Return => {
+  const [addNewOffenderOpen, setAddNewOffenderOpen] = useState(false);
+  const [addExistingOffenderOpen, setAddExistingOffenderOpen] = useState(false);
+  const [addNewVehicleOpen, setAddNewVehicleOpen] = useState(false);
+  const [addExistingVehicleOpen, setAddExistingVehicleOpen] = useState(false);
 
-  const toggleAddOffender = () => {
-    setAddOffender(!addOffender);
+  const toggleAddNewOffenderOpen = () => {
+    setAddNewOffenderOpen(!addNewOffenderOpen);
   };
-  const toggleAddExistingOffender = () => {
-    setAddExistingOffender(!addExistingOffender);
+  const toggleAddExistingOffenderOpen = () => {
+    setAddExistingOffenderOpen(!addExistingOffenderOpen);
   };
-  const toggleAddNewVehicle = () => {
-    setAddNewVehicle(!addNewVehicle);
+  const toggleAddNewVehicleOpen = () => {
+    setAddNewVehicleOpen(!addNewVehicleOpen);
   };
-  const toggleAddExistingVehicle = () => {
-    setAddExistingVehicle(!addExistingVehicle);
-  };
-
-  const updateOffender = (data: OffenderData) => {
-    updateOffenderParent(data);
-  };
-  const onAddOffender = (data: OffenderData, existing: boolean) => {
-    onAddOffenderParent(data, existing);
-    if (onChange) {
-      if (value) {
-        onChange([...value, data]);
-      } else {
-        onChange([data]);
-      }
-    }
-  };
-  const offenderImgChange = (
-    info: UploadChangeParam<UploadFile>,
-    currentId: string
-  ) => {
-    offenderImgChangeParent(info, currentId);
-  };
-  const removeOffender = (id: string) => {
-    removeOffenderParent(id);
-    if (onChange && value) onChange(value.filter((item) => item.id !== id));
+  const toggleAddExisingVehicleOpen = () => {
+    setAddExistingVehicleOpen(!addExistingVehicleOpen);
   };
 
   return {
-    addExistingOffender,
-    addExistingVehicle,
-    addNewVehicle,
-    addOffender,
-    addRecentOffender,
-    editOffenderId,
-    editVehicleId,
-    offenderImgChange,
-    setAddRecentOffender,
-    setEditOffenderId,
-    setEditVehicleId,
-    toggleAddExistingOffender,
-    toggleAddExistingVehicle,
-    toggleAddNewVehicle,
-    toggleAddOffender,
-    updateOffender,
-    onAddOffender,
-    removeOffender,
-    updateOffenderParent,
+    addNewOffenderOpen,
+    addExistingOffenderOpen,
+    addExistingVehicleOpen,
+    addNewVehicleOpen,
+    toggleAddExisingVehicleOpen,
+    toggleAddExistingOffenderOpen,
+    toggleAddNewVehicleOpen,
+    toggleAddNewOffenderOpen,
   };
 };
 

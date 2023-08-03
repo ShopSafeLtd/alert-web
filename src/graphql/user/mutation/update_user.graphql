@@ -12,6 +12,7 @@ mutation updateUser(
     status
     demId
     publicName
+    reportToAllBusinesses
     businesses {
       id
       name

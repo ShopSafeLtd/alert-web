@@ -15,6 +15,7 @@ describe('Detail Officer View', () => {
       disabled: false,
       newUser: false,
       publicName: true,
+      reportToAllBusinesses: false,
       groups: [
         {
           id: 'groupId',

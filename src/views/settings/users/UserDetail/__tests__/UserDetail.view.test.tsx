@@ -1,12 +1,13 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
-import { Role } from 'graphql/generated';
+import { Role, UserQuery } from 'graphql/generated';
 import UserDetail from '../UserDetail.view';
 
 describe('Detail Officer View', () => {
-  const data = {
+  const data: UserQuery | undefined = {
     user: {
+      reportToAllBusinesses: true,
       approverGroups: [],
       id: 'test UserId',
       fullName: 'test user',
@@ -22,21 +23,10 @@ describe('Detail Officer View', () => {
       offenderEmail: false,
       offenderPush: false,
       publicName: true,
-      addresses: [
-        {
-          building: 'building',
-          county: 'Suffolk',
-          id: 'ckshi0r5f9684229l4ckxvhld8',
-          postcode: 'IP313FA',
-          street: 'Unit 2 Sandy Lane',
-          townCity: 'Badwell Ash',
-        },
-      ],
       groups: [
         {
           id: 'test',
           name: 'test group',
-          description: null,
         },
       ],
       chats: [
@@ -45,7 +35,6 @@ describe('Detail Officer View', () => {
           chat: {
             id: 'chatId',
             name: 'test chat',
-            description: null,
           },
         },
       ],

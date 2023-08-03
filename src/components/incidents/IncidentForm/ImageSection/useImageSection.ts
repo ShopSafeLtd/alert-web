@@ -1,0 +1,210 @@
+import { useEffect, useState } from 'react';
+import type { FormInstance, UploadFile } from 'antd';
+import {
+  Age,
+  Build,
+  Gender,
+  Height,
+  ImagePosition,
+  IncidentFormField,
+  Race,
+} from 'graphql/generated';
+import type { FormData } from 'views/incidents/AddIncident/useAddIncident';
+import update from 'immutability-helper';
+import { useStoreState } from 'state';
+import type { UploadChangeParam } from 'antd/lib/upload';
+import type { StateOffenderData } from '../Profiles/Offenders/useOffenders';
+
+const getClosestAgeRange = (high: number, low: number) => {
+  const middle = high - (high - low) / 2;
+  if (middle < 18) return Age.UnderEighteen;
+  if (middle >= 18 && middle < 30) return Age.EighteenThirty;
+  if (middle >= 30 && middle < 40) return Age.ThirtyForty;
+  if (middle >= 40 && middle < 50) return Age.FortyFifty;
+  if (middle >= 50 && middle < 60) return Age.FiftySixty;
+  if (middle >= 60 && middle < 70) return Age.SixtySeventy;
+  if (middle >= 70 && middle < 80) return Age.SeventyEighty;
+  if (middle >= 80) return Age.OverEighty;
+  return Age.Unknown;
+};
+const getGenderFromFace = (gender: 'Male' | 'Female') => {
+  if (gender === 'Male') return Gender.Male;
+  if (gender === 'Female') return Gender.Female;
+  return Gender.Unknown;
+};
+const getPeculiaritiesFromFace = (beard: boolean, mustache: boolean) => {
+  if (mustache) return 'They have a moustache.';
+  if (beard) return 'They have a beard.';
+  return undefined;
+};
+
+export interface ImageResponseType {
+  url?: string;
+  blobName?: string;
+  mimetype?: string;
+  faces: {
+    Gender: {
+      Value: 'Male' | 'Female';
+    };
+    AgeRange: {
+      High: number;
+      Low: number;
+    };
+    Beard: {
+      Value: boolean;
+    };
+    Mustache: {
+      Value: boolean;
+    };
+    BoundingBox: {
+      Height: string;
+      Left: string;
+      Top: string;
+      Width: string;
+    };
+  }[];
+}
+
+export interface StateImageData extends UploadFile<ImageResponseType[]> {
+  position?: ImagePosition;
+  primary?: boolean;
+  policeImage?: boolean;
+  rotation?: number;
+}
+
+interface Props {
+  incidentForm: IncidentFormField[];
+  form: FormInstance<FormData>;
+  value?: StateImageData[];
+  onChange?: (data: StateImageData[]) => void;
+}
+
+interface Return {
+  images: StateImageData[];
+  onImageChange: (info: UploadChangeParam<StateImageData>) => void;
+  editImage: StateImageData | null;
+  setEditImage: (data: StateImageData | null) => void;
+  onEditImage: (value: StateImageData) => void;
+  onRemoveImage: (uid: string) => void;
+}
+
+const useImageSection = ({
+  incidentForm,
+  form,
+  value,
+  onChange,
+}: Props): Return => {
+  const [images, setImages] = useState<StateImageData[]>([]);
+  const [editImage, setEditImage] = useState<StateImageData | null>(null);
+  const facialRecognition = useStoreState(
+    (state) => state.scheme.facialRecognition
+  );
+
+  useEffect(() => {
+    if (value) setImages(value);
+  }, []);
+
+  useEffect(() => {
+    if (onChange) onChange(images);
+  }, [images]);
+
+  const onImageChange = (info: UploadChangeParam<StateImageData>) => {
+    if (info.file.response) {
+      const image = info.file.response[0];
+      if (image) {
+        if (
+          facialRecognition &&
+          incidentForm.includes(IncidentFormField.Offenders) &&
+          image.faces.length > 0
+        ) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          const currentOffenders: StateOffenderData[] =
+            form.getFieldValue('offenders') || [];
+
+          form.setFieldsValue({
+            offenders: [
+              ...currentOffenders,
+              ...image.faces.map((face) => ({
+                id: Math.floor(Math.random() * 1000).toString(),
+                name: 'Unidentified Offender',
+                confirmedInIncident: false,
+                gender: getGenderFromFace(face.Gender.Value),
+                age: getClosestAgeRange(face.AgeRange.High, face.AgeRange.Low),
+                race: Race.Unknown,
+                height: Height.Unknown,
+                build: Build.Unknown,
+                peculiarities: getPeculiaritiesFromFace(
+                  face.Beard.Value,
+                  face.Mustache.Value
+                ),
+                images: [
+                  {
+                    id: info.file.uid,
+                    optimised: image.url,
+                    url: image.url,
+                    new: true,
+                    boundingBox: {
+                      height: face.BoundingBox.Height,
+                      left: face.BoundingBox.Left,
+                      top: face.BoundingBox.Top,
+                      width: face.BoundingBox.Width,
+                    },
+                  },
+                ],
+                new: true,
+                existing: false,
+                edited: false,
+                blank: true,
+              })),
+            ],
+          });
+        }
+        setImages([
+          ...images.filter((item) => item.uid !== info.file.uid),
+          {
+            ...info.file,
+            url: image.url,
+            fileName: image.blobName,
+            type: image.mimetype,
+            policeImage: false,
+            primary: false,
+            rotation: 0,
+            position: ImagePosition.CenterCenter,
+          },
+        ]);
+      }
+    } else {
+      setImages(info.fileList);
+    }
+  };
+
+  const onEditImage = (data: StateImageData) => {
+    const index = images.map((item) => item.uid).indexOf(data.uid);
+    setImages(
+      update<StateImageData[]>(images, {
+        [index]: {
+          $set: {
+            ...data,
+            position: data.position || ImagePosition.CenterCenter,
+          },
+        },
+      })
+    );
+    setEditImage(null);
+  };
+
+  const onRemoveImage = (uid: string) => {
+    setImages(images.filter((image) => image.uid !== uid));
+  };
+
+  return {
+    images,
+    onImageChange,
+    editImage,
+    setEditImage,
+    onEditImage,
+    onRemoveImage,
+  };
+};
+
+export default useImageSection;

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Badge, Button, Drawer, Tabs, Tooltip, Typography } from 'antd';
-
 import { createUseStyles } from 'react-jss';
 import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
 import LinkCrimeGroup from 'components/form-components/linkOptions/LinkCrimeGroup';

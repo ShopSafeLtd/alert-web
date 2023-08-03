@@ -45,6 +45,8 @@ query listOffenders(
         optimised
         position
         rotation
+        primary
+        policeImage
         optimisedPersisted
       }
       groups {

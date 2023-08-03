@@ -7,6 +7,7 @@ query currentUser($scheme: UniqueId) {
     reference
     demId
     publicName
+    reportToAllBusinesses
     notificationCount(scheme: $scheme)
     businesses {
       id
@@ -36,9 +37,11 @@ query currentUser($scheme: UniqueId) {
         userTodos
         id
         name
+        goodsMode
         autoApproveIncidents
         autoApproveOffenders
         defaultPublicOffenderDOB
+        facialRecognition
       }
     }
     incidentEmail

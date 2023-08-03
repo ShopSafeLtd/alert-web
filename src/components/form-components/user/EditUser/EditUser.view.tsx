@@ -95,6 +95,8 @@ const EditUser = ({
             ? data.user.chats.map(({ chat }) => chat.id)
             : [],
         publicName: data?.user?.publicName,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        reportToAllBusinesses: data?.user?.reportToAllBusinesses || false,
         incidentEmail: data?.user?.incidentEmail,
         incidentPush: data?.user?.incidentPush,
         subscribedIncidentOnly: data?.user?.subscribedIncidentOnly,
@@ -367,25 +369,50 @@ const EditUser = ({
             </Col>
           </Row>
         )}
-      <Form.Item
-        label={intl.formatMessage({
-          defaultMessage: 'Show user name in the system',
-          id: 'YxFuTi',
-        })}
-        name="publicName"
-        valuePropName="checked"
-        style={{
-          marginBottom: 0,
-          flexDirection: 'row',
-          justifyItems: 'center',
-        }}
-      >
-        <Switch
-          disabled={saving}
-          style={{ marginLeft: 10, marginTop: -22 }}
-          className="scheme-detail-switch"
-        />
-      </Form.Item>
+      <Row>
+        <Col span={12}>
+          <Form.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Show user name in the system',
+              id: 'YxFuTi',
+            })}
+            name="publicName"
+            valuePropName="checked"
+            style={{
+              marginBottom: 0,
+              flexDirection: 'row',
+              justifyItems: 'center',
+            }}
+          >
+            <Switch
+              disabled={saving}
+              style={{ marginLeft: 10, marginTop: -22 }}
+              className="scheme-detail-switch"
+            />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Allow usr to report to all businesses',
+              id: '0KPX7H',
+            })}
+            name="reportToAllBusinesses"
+            valuePropName="checked"
+            style={{
+              marginBottom: 0,
+              flexDirection: 'row',
+              justifyItems: 'center',
+            }}
+          >
+            <Switch
+              disabled={saving}
+              style={{ marginLeft: 10, marginTop: -22 }}
+              className="scheme-detail-switch"
+            />
+          </Form.Item>
+        </Col>
+      </Row>
       <Title level={4} style={{ marginBottom: 15 }}>
         {intl.formatMessage({
           defaultMessage: 'Notification Settings:',

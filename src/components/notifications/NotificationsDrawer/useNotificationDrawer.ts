@@ -5,6 +5,7 @@ import type {
   ListUserNotificationsQueryVariables,
   UpdateUserNotificationsMutation,
   UserNotificationsQuery,
+  GoodsMode,
 } from 'graphql/generated';
 import {
   Model,
@@ -59,6 +60,8 @@ interface Scheme {
       }
     | null
     | undefined;
+  goodsMode: GoodsMode;
+  facialRecognition: boolean;
 }
 interface Return {
   data:
@@ -319,6 +322,8 @@ const useNotificationLists = (): Return => {
       darkLogo: scheme.darkLogo?.optimisedPersisted,
       userTodos: scheme.userTodos,
       userNotifications: scheme.userNotifications,
+      goodsMode: scheme.goodsMode,
+      facialRecognition: scheme.facialRecognition,
     });
     setTodos({ userTodos: scheme.userTodos || 0 });
     setNotifications({

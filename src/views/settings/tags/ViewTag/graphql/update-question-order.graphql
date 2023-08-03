@@ -1,0 +1,6 @@
+mutation UpdateTagQs($data: ChangePositionAndReqInput!) {
+  updateTagQs(data: $data) {
+    id
+    priority
+  }
+}

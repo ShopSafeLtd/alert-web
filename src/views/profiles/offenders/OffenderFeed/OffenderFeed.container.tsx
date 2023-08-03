@@ -54,8 +54,6 @@ const OffenderFeed = (): JSX.Element => {
     customGalleries,
   } = useOffenderFeed();
 
-  console.log('groupsFilter', groupsFilter);
-
   return (
     <View
       lightBoxOpen={lightBoxOpen}

@@ -98,7 +98,7 @@ const IncidentCard = ({
             })}
           </Title>
           {approvalRights && (
-            <Link to={`review/${incident?.id}`}>
+            <Link to={`view/${incident?.id}`}>
               <Button>
                 {intl.formatMessage({
                   defaultMessage: 'Review Incident',

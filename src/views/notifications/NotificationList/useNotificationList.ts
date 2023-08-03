@@ -4,6 +4,7 @@ import type {
   Role,
   UpdateUserNotificationsMutation,
   UserNotificationsQuery,
+  GoodsMode,
 } from 'graphql/generated';
 import {
   Model,
@@ -62,6 +63,8 @@ interface Scheme {
     id: string;
     role: Role;
   }[];
+  goodsMode: GoodsMode;
+  facialRecognition: boolean;
 }
 interface Return {
   data:
@@ -329,6 +332,8 @@ const useNotificationLists = (): Return => {
       darkLogo: scheme.darkLogo?.optimisedPersisted,
       userTodos: scheme.userTodos,
       userNotifications: scheme.userNotifications,
+      goodsMode: scheme.goodsMode,
+      facialRecognition: scheme.facialRecognition,
     });
     setTodos({ userTodos: scheme.userTodos || 0 });
     setNotifications({
@@ -338,8 +343,6 @@ const useNotificationLists = (): Return => {
   const handleMarkAsRead = (value: NotificationData) => {
     if (value) {
       setSaving(true);
-      console.log('value', value);
-      console.log('schemes', value.schemes);
 
       if (schemeId !== value.schemes[0].id) {
         handleSchemeChange(value.schemes[0]);

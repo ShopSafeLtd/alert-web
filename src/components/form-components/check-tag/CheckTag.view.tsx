@@ -8,9 +8,12 @@ import useStyles from './CheckTag.styles';
 interface Option {
   label: string;
   value: string;
-  tooltip?: string;
+  tooltip?: string | null;
   needAdminRight?: boolean;
-  children?: Option[];
+  hasChildren?: boolean;
+  parentId?: string | null;
+  parents?: string[];
+  tier?: number;
 }
 
 interface Props {

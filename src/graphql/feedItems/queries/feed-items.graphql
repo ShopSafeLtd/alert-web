@@ -7,8 +7,7 @@ query FeedItems(
   $skip: Int
   $after: String
   $groups: [String!]
-    $groupsWhere2: GroupWhereInput
-
+  $groupsWhere2: GroupWhereInput
 ) {
   listFeedItems(
     where: $where
@@ -116,6 +115,7 @@ query FeedItems(
         reference
         totalOffenders
         totalIncidents
+
         totalCrimeGroups
         totalUpdates
         description
@@ -154,7 +154,6 @@ query FeedItems(
         feedImage {
           ...FeedImage
         }
-
       }
       incidentId
       offender {

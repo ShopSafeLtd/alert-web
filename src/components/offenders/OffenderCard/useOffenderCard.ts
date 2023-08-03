@@ -99,25 +99,6 @@ const useOffenderCard = ({ offender, update }: Props): Return => {
     },
   });
   const onEditImage = (value: EditFeedImage) => {
-    console.log('offender imageValue2', {
-      id: offender.id,
-      images: {
-        update: [
-          {
-            where: {
-              id: value.id || '',
-            },
-            data: {
-              position: { set: value.position },
-              primary: { set: value.primary || false },
-              policeImage: { set: value.policeImage || false },
-              rotation: { set: value.rotation || 0 },
-            },
-          },
-        ],
-      },
-    });
-
     if (value)
       void updateOffender({
         variables: {

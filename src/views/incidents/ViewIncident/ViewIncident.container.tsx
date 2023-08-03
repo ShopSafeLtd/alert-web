@@ -2,6 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import View from './ViewIncident.view';
 import useViewIncident from './useViewIncident';
+import useApproveIncident from './useApproveIncident';
 
 const ViewIncident = (): JSX.Element => {
   const incidentId = useParams().id || '';
@@ -39,6 +40,8 @@ const ViewIncident = (): JSX.Element => {
     setOptionRowShow,
     onDelete,
   } = useViewIncident(incidentId);
+  const { onApprove, onReject, approving } = useApproveIncident({ incidentId });
+
   return (
     <View
       data={data}
@@ -74,6 +77,9 @@ const ViewIncident = (): JSX.Element => {
       lightBoxOpen={lightBoxOpen}
       optionRowShow={optionRowShow}
       setOptionRowShow={setOptionRowShow}
+      onApprove={onApprove}
+      onReject={onReject}
+      approving={approving}
     />
   );
 };
