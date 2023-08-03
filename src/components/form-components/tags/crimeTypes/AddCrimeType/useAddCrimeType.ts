@@ -51,6 +51,7 @@ const useAddCrimeType = ({
   const [saving, setSaving] = useState(false);
 
   const { data: tags } = useListSchemeTagsQuery({
+    fetchPolicy: 'cache-and-network',
     variables: {
       listWhere: {
         type: {
