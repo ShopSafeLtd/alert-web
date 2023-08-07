@@ -39,6 +39,7 @@ const ViewIncident = (): JSX.Element => {
     optionRowShow,
     setOptionRowShow,
     onDelete,
+    goodsMode,
   } = useViewIncident(incidentId);
   const { onApprove, onReject, approving } = useApproveIncident({ incidentId });
 
@@ -80,6 +81,7 @@ const ViewIncident = (): JSX.Element => {
       onApprove={onApprove}
       onReject={onReject}
       approving={approving}
+      goodsMode={goodsMode}
     />
   );
 };

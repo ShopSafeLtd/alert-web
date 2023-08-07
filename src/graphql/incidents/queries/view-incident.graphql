@@ -56,6 +56,9 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
       name
       value
       recoveredValue
+      sku
+      quantity
+      recoveredQuantity
       goodsType {
         id
       }

@@ -8,22 +8,26 @@ import {
   Tooltip,
   Typography,
   Checkbox,
+  Upload,
 } from 'antd';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
 import React from 'react';
+import type { UploadChangeParam } from 'antd/lib/upload';
+import { useStoreState } from 'state';
 import {
   getOffenderAge,
   getOffenderBuild,
   getOffenderGender,
   getOffenderHeight,
   getOffenderRace,
-} from '../../../../../utils/offender/get-offender-desc';
-import WatermarkImage from '../../../../images/WatermarkImage.view';
-import CropFaceImage from '../../../../images/CropFaceImage';
+} from 'utils/offender/get-offender-desc';
+import WatermarkImage from 'components/images/WatermarkImage.view';
+import CropFaceImage from 'components/images/CropFaceImage';
 import useStyles from '../Profiles.styles';
 import type { StateOffenderData } from './useOffenders';
+import type { StateImageData } from '../../ImageSection/useImageSection';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -39,6 +43,13 @@ interface Props {
   toggleMergeSelected: (value: string) => void;
   mergeSelected: string | null;
   onMerge: () => void;
+  index: number;
+  onChangeOffenderImage: (
+    info: UploadChangeParam<StateImageData>,
+    offenderId: string
+  ) => void;
+  uploading: boolean;
+  onNoImages: (id: string) => void;
 }
 
 const OffenderProfile = ({
@@ -53,16 +64,24 @@ const OffenderProfile = ({
   mergeSelected,
   toggleMergeSelected,
   onMerge,
+  index,
+  onChangeOffenderImage,
+  uploading,
+  onNoImages,
 }: Props) => {
   const intl = useIntl();
   const classes = useStyles();
+  const imagesRequired = useStoreState(
+    (state) => state.scheme.imagesRequiredOnOffenders
+  );
+
   return (
     <>
       <div
         className={
-          offender.confirmedInIncident
-            ? classes.profileCard
-            : classes.profileCardInvalid
+          !offender.confirmedInIncident || !offender.imageConfirmed
+            ? classes.profileCardInvalid
+            : classes.profileCard
         }
       >
         {mergeActive && mergeActive !== offender.id && (
@@ -87,7 +106,7 @@ const OffenderProfile = ({
             )}
           </div>
         )}
-        {offender.confirmedInIncident && (
+        {offender.confirmedInIncident && offender.imageConfirmed && (
           <div className={classes.profileContent}>
             <Title level={4}>{offender.name}</Title>
             <Row gutter={[16, 8]} wrap className={classes.profileDetails}>
@@ -321,12 +340,100 @@ const OffenderProfile = ({
             )}
           </div>
         )}
+        {!offender.imageConfirmed && (
+          <div className={classes.involvedContainer}>
+            {mergeActive !== offender.id && (
+              <>
+                <Title level={4}>
+                  <FormattedMessage
+                    defaultMessage="Offender {index}"
+                    id="hO4ExD"
+                    values={{ index: index + 1 }}
+                  />
+                </Title>
+                <Paragraph className={classes.involvedQuestion}>
+                  <FormattedMessage
+                    defaultMessage="Do you have an image for this offender?"
+                    id="PNMvor"
+                  />
+                </Paragraph>
+                <Row>
+                  <Col>
+                    <Upload
+                      onChange={(info) =>
+                        onChangeOffenderImage(info, offender.id)
+                      }
+                      action={
+                        import.meta.env.VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT
+                      }
+                      showUploadList={false}
+                    >
+                      <Button
+                        loading={uploading}
+                        disabled={uploading}
+                        size="small"
+                        className={classes.buttonLeft}
+                      >
+                        <FormattedMessage defaultMessage="Yes" id="a5msuh" />
+                      </Button>
+                    </Upload>
+                  </Col>
+                  <Col>
+                    {imagesRequired && (
+                      <Popconfirm
+                        placement="topLeft"
+                        title={intl.formatMessage({
+                          id: 'zM0KJt',
+                          defaultMessage:
+                            'If you have no image the offender will be removed',
+                        })}
+                        onConfirm={() => {
+                          onRemoveOffender(offender.id);
+                        }}
+                        okText={intl.formatMessage({
+                          id: 'a5msuh',
+                          defaultMessage: 'Yes',
+                        })}
+                        cancelText={intl.formatMessage({
+                          id: 'oUWADl',
+                          defaultMessage: 'No',
+                        })}
+                        overlayInnerStyle={{ padding: 10 }}
+                      >
+                        <Button size="small" className={classes.buttonRight}>
+                          <FormattedMessage defaultMessage="No" id="oUWADl" />
+                        </Button>
+                      </Popconfirm>
+                    )}
+                    {!imagesRequired && (
+                      <Button
+                        size="small"
+                        className={classes.buttonRight}
+                        onClick={() => onNoImages(offender.id)}
+                      >
+                        <FormattedMessage defaultMessage="No" id="oUWADl" />
+                      </Button>
+                    )}
+                  </Col>
+                </Row>
+              </>
+            )}
+          </div>
+        )}
       </div>
       {!offender.confirmedInIncident && (
         <Paragraph type="danger" style={{ marginTop: 5 }}>
           <FormattedMessage
             defaultMessage="Please confirm if this offender was involved"
             id="W+/1cJ"
+          />
+        </Paragraph>
+      )}
+      {!offender.imageConfirmed && (
+        <Paragraph type="danger" style={{ marginTop: 5 }}>
+          <FormattedMessage
+            defaultMessage="Confirm there is an image."
+            id="VbQ5f+"
           />
         </Paragraph>
       )}

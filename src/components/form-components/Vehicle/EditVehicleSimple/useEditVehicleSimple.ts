@@ -2,6 +2,9 @@
 import { useState } from 'react';
 import type { FormInstance } from 'antd';
 import { Form } from 'antd';
+import type { StateImageData } from '../../../incidents/IncidentForm/ImageSection/useImageSection';
+import type { ImageValue } from '../../ImageSelect/ImageSelect.view';
+import { ImagePosition } from '../../../../graphql/generated';
 
 export interface UpdateVehicleData {
   id: string;
@@ -20,6 +23,7 @@ interface Props {
   onClose: () => void;
   update: (value: UpdateVehicleData) => void;
   editData: UpdateVehicleData | undefined | null;
+  onImagesUploaded?: (values: StateImageData[]) => void;
 }
 
 export interface FormData {
@@ -27,12 +31,7 @@ export interface FormData {
   make?: string;
   model?: string;
   colour?: string;
-  images?: {
-    id: string;
-    url?: string | null | undefined;
-    optimised?: string | null | undefined;
-    new: boolean;
-  }[];
+  images?: ImageValue[];
 }
 
 interface Return {
@@ -45,6 +44,7 @@ const useEditVehicleSimple = ({
   onClose,
   update: updateVehicle,
   editData,
+  onImagesUploaded,
 }: Props): Return => {
   const [form] = Form.useForm<FormData>();
   const [saving, setSaving] = useState(false);
@@ -60,6 +60,26 @@ const useEditVehicleSimple = ({
       registration: data.registration || '',
       images: data.images || [],
     });
+
+    const uploadedImages = data.images?.filter((image) => image.file) || [];
+    if (uploadedImages.length > 0 && onImagesUploaded) {
+      onImagesUploaded(
+        uploadedImages.map(
+          (image) =>
+            ({
+              ...image.file,
+              url: image.file?.response && image.file.response[0].url,
+              fileName: image.file?.response && image.file.response[0].blobName,
+              type: image.file?.response && image.file.response[0].mimetype,
+              policeImage: false,
+              primary: false,
+              rotation: 0,
+              position: ImagePosition.CenterCenter,
+            } as StateImageData)
+        )
+      );
+    }
+
     onClose();
   };
   // image

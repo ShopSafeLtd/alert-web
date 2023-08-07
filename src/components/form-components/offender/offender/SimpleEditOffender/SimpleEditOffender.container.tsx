@@ -3,12 +3,14 @@ import type { ImageData } from 'components/form-components/ImageSelect/ImageSele
 import View from './SimpleEditOffender.view';
 import type { OffenderData } from './useEditOffender';
 import useEditOffender from './useEditOffender';
+import type { StateImageData } from '../../../../incidents/IncidentForm/ImageSection/useImageSection';
 
 interface Props {
   data: OffenderData;
   onClose: () => void;
   update: (value: OffenderData) => void;
   images?: ImageData[];
+  onImagesUploaded?: (values: StateImageData[]) => void;
 }
 
 const EditOffender = ({
@@ -16,11 +18,13 @@ const EditOffender = ({
   onClose,
   update,
   images,
+  onImagesUploaded,
 }: Props): JSX.Element => {
   const { onSubmit, ageCheck, form, idVerified } = useEditOffender({
     data,
     onClose,
     update,
+    onImagesUploaded,
   });
   return (
     <div>

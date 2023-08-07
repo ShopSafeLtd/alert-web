@@ -65,6 +65,7 @@ interface Scheme {
   }[];
   goodsMode: GoodsMode;
   facialRecognition: boolean;
+  imagesRequiredOnOffenders: boolean;
 }
 interface Return {
   data:
@@ -334,6 +335,7 @@ const useNotificationLists = (): Return => {
       userNotifications: scheme.userNotifications,
       goodsMode: scheme.goodsMode,
       facialRecognition: scheme.facialRecognition,
+      imagesRequiredOnOffenders: scheme.imagesRequiredOnOffenders,
     });
     setTodos({ userTodos: scheme.userTodos || 0 });
     setNotifications({

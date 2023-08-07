@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react';
 import update from 'immutability-helper';
+import type { FormInstance } from 'antd';
+import { Form } from 'antd';
+import type { FormData } from 'views/incidents/AddIncident/useAddIncident';
+import type { StateImageData } from '../../ImageSection/useImageSection';
 
 export interface AddVehicleData {
   id: string;
@@ -24,6 +28,7 @@ export interface StateVehicleData extends AddVehicleData {
 interface Props {
   value?: StateVehicleData[];
   onChange?: (value: StateVehicleData[]) => void;
+  form: FormInstance<FormData>;
 }
 
 interface Return {
@@ -39,9 +44,12 @@ interface Return {
   onAddVehicles: (vehicles: AddVehicleData[], existing: boolean) => void;
   onMatchVehicle: (value: AddVehicleData) => void;
   onUpdateVehicle: (data: AddVehicleData) => void;
+  onImagesUploadedInForm: (values: StateImageData[]) => void;
 }
 
-const useVehicles = ({ value, onChange }: Props): Return => {
+const useVehicles = ({ value, onChange, form }: Props): Return => {
+  const images = Form.useWatch('images', form);
+
   const [pristine, setPristine] = useState(true);
   const [vehicles, setVehicles] = useState<StateVehicleData[]>([]);
   const [noVehicles, setNoVehicles] = useState(false);
@@ -157,6 +165,15 @@ const useVehicles = ({ value, onChange }: Props): Return => {
       );
   };
 
+  const onImagesUploadedInForm = (values: StateImageData[]) => {
+    if (images)
+      form.setFieldsValue({
+        images: update<StateImageData[]>(images, {
+          $push: values,
+        }),
+      });
+  };
+
   return {
     vehicles,
     noVehicles,
@@ -170,6 +187,7 @@ const useVehicles = ({ value, onChange }: Props): Return => {
     onAddVehicles,
     onMatchVehicle,
     onUpdateVehicle,
+    onImagesUploadedInForm,
   };
 };
 
