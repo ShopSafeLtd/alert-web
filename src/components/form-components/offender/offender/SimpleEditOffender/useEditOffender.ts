@@ -9,6 +9,9 @@ import type {
 } from 'graphql/generated';
 import type { FormInstance } from 'antd';
 import { Form } from 'antd';
+import { ImagePosition } from 'graphql/generated';
+import type { ImageValue } from '../../../ImageSelect/ImageSelect.view';
+import type { StateImageData } from '../../../../incidents/IncidentForm/ImageSection/useImageSection';
 
 interface OffenderImage {
   id: string;
@@ -39,6 +42,7 @@ interface Props {
   onClose: () => void;
   data: OffenderData;
   update: (value: OffenderData) => void;
+  onImagesUploaded?: (values: StateImageData[]) => void;
 }
 
 export interface FormData {
@@ -58,7 +62,7 @@ export interface FormData {
   groups: string[];
   idVerified?: boolean;
   idSource?: IdSource;
-  images: OffenderImage[];
+  images: ImageValue[];
 }
 
 interface Return {
@@ -68,7 +72,12 @@ interface Return {
   idVerified: boolean | undefined;
 }
 
-const useEditOffender = ({ data, onClose, update }: Props): Return => {
+const useEditOffender = ({
+  data,
+  onClose,
+  update,
+  onImagesUploaded,
+}: Props): Return => {
   const [form] = Form.useForm<FormData>();
 
   const ageCheck = Form.useWatch('ageCheck', form);
@@ -78,7 +87,32 @@ const useEditOffender = ({ data, onClose, update }: Props): Return => {
     update({
       ...data,
       ...values,
+      images: values.images.map((image) => ({
+        id: image.id,
+        url: image.url,
+        optimised: image.optimised,
+      })),
     });
+
+    const uploadedImages = values.images?.filter((image) => image.file) || [];
+    if (uploadedImages.length > 0 && onImagesUploaded) {
+      onImagesUploaded(
+        uploadedImages.map(
+          (image) =>
+            ({
+              ...image.file,
+              url: image.file?.response && image.file.response[0].url,
+              fileName: image.file?.response && image.file.response[0].blobName,
+              type: image.file?.response && image.file.response[0].mimetype,
+              policeImage: false,
+              primary: false,
+              rotation: 0,
+              position: ImagePosition.CenterCenter,
+            } as StateImageData)
+        )
+      );
+    }
+
     onClose();
   };
 

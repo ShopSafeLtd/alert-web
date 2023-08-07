@@ -8,7 +8,7 @@ import type {
   Race,
   ViewIncidentQuery,
 } from 'graphql/generated';
-import { UpdateType } from 'graphql/generated';
+import { GoodsMode, UpdateType } from 'graphql/generated';
 import {
   Button,
   Card,
@@ -154,6 +154,7 @@ interface Props {
   onReject: () => void;
   onApprove: () => void;
   approving: boolean;
+  goodsMode: GoodsMode;
 }
 
 const ViewIncident = ({
@@ -193,6 +194,7 @@ const ViewIncident = ({
   onReject,
   onApprove,
   approving,
+  goodsMode,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
@@ -724,42 +726,76 @@ const ViewIncident = ({
                                 })}
                               </Title>
                               <Table
-                                columns={[
-                                  {
-                                    title: intl.formatMessage({
-                                      defaultMessage: 'Name',
-                                      id: 'HAlOn1',
-                                    }),
-                                    dataIndex: 'name',
-                                    key: 'name',
-                                  },
-                                  {
-                                    title: intl.formatMessage({
-                                      defaultMessage: 'Value',
-                                      id: 'GufXy5',
-                                    }),
-                                    dataIndex: 'value',
-                                    key: 'value',
-                                    render: (value: number) =>
-                                      `£${value.toFixed(2)}`,
-                                  },
-                                  {
-                                    title: intl.formatMessage({
-                                      defaultMessage: 'Recovered Value',
-                                      id: 'bGwFFv',
-                                    }),
-                                    dataIndex: 'recoveredValue',
-                                    key: 'recoveredValue',
-                                    render: (value: number) =>
-                                      `£${value.toFixed(2)}`,
-                                  },
-                                ]}
+                                columns={
+                                  goodsMode === GoodsMode.Generic
+                                    ? [
+                                        {
+                                          title: intl.formatMessage({
+                                            defaultMessage: 'Name',
+                                            id: 'HAlOn1',
+                                          }),
+                                          dataIndex: 'name',
+                                          key: 'name',
+                                        },
+                                        {
+                                          title: intl.formatMessage({
+                                            defaultMessage: 'Value',
+                                            id: 'GufXy5',
+                                          }),
+                                          dataIndex: 'value',
+                                          key: 'value',
+                                          render: (value: number) =>
+                                            `£${value.toFixed(2)}`,
+                                        },
+                                        {
+                                          title: intl.formatMessage({
+                                            defaultMessage: 'Recovered Value',
+                                            id: 'bGwFFv',
+                                          }),
+                                          dataIndex: 'recoveredValue',
+                                          key: 'recoveredValue',
+                                          render: (value: number) =>
+                                            `£${value.toFixed(2)}`,
+                                        },
+                                      ]
+                                    : [
+                                        {
+                                          title: intl.formatMessage({
+                                            defaultMessage: 'SKU',
+                                            id: 'k4brJy',
+                                          }),
+                                          dataIndex: 'sku',
+                                          key: 'name',
+                                        },
+                                        {
+                                          title: intl.formatMessage({
+                                            defaultMessage: 'Quantity',
+                                            id: 'qVGRIE',
+                                          }),
+                                          dataIndex: 'quantity',
+                                          key: 'quantity',
+                                        },
+                                        {
+                                          title: intl.formatMessage({
+                                            defaultMessage:
+                                              'Recovered Quantity',
+                                            id: '+30ZkY',
+                                          }),
+                                          dataIndex: 'recoveredQuantity',
+                                          key: 'recoveredQuantity',
+                                        },
+                                      ]
+                                }
                                 dataSource={data?.incident?.incidentItems.map(
                                   (item) => ({
                                     key: item.id,
                                     name: item.name || '',
                                     value: item.value || 0,
                                     recoveredValue: item.recoveredValue || 0,
+                                    sku: item.sku || '',
+                                    quantity: item.quantity || 0,
+                                    recoveredQuantity:
+                                      item.recoveredQuantity || 0,
                                   })
                                 )}
                                 size="small"

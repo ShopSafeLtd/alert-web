@@ -6,6 +6,7 @@ import type {
   Race,
   ViewIncidentQuery,
   ViewIncidentQueryVariables,
+  GoodsMode,
 } from 'graphql/generated';
 import {
   Role,
@@ -113,12 +114,14 @@ interface Return {
   };
   optionRowShow: boolean;
   setOptionRowShow: (value: boolean) => void;
+  goodsMode: GoodsMode;
 }
 
 const useViewIncident = (incidentId: string): Return => {
   const intl = useIntl();
   const role = useStoreState((state) => state.user.role);
   const userId = useStoreState((state) => state.user.id);
+  const goodsMode = useStoreState((state) => state.scheme.goodsMode);
   const [saving, setSaving] = useState(false);
   const [linkOffender, setLinkOffender] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
@@ -532,6 +535,7 @@ const useViewIncident = (incidentId: string): Return => {
     lightBoxOpen,
     optionRowShow,
     setOptionRowShow,
+    goodsMode,
   };
 };
 

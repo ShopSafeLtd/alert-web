@@ -15,9 +15,10 @@ import {
 import { ageValues, buildValues, genderValues, raceValues } from 'types/enums';
 import moment from 'moment';
 import { useIntl } from 'react-intl';
+import { heightValues } from 'types/enums/height';
+import { IdSource } from 'graphql/generated';
+import { useStoreState } from 'state';
 import type { FormData, OffenderData } from './useEditOffender';
-import { heightValues } from '../../../../../types/enums/height';
-import { IdSource } from '../../../../../graphql/generated';
 import type { ImageData } from '../../../ImageSelect/ImageSelect.view';
 import ImageSelect from '../../../ImageSelect/ImageSelect.view';
 
@@ -41,6 +42,9 @@ const EditOffender = ({
   images,
 }: Props): JSX.Element => {
   const intl = useIntl();
+  const imagesRequired = useStoreState(
+    (state) => state.scheme.imagesRequiredOnOffenders
+  );
 
   return (
     <div className="list-view">
@@ -382,21 +386,28 @@ const EditOffender = ({
           )}
         </Row>
 
-        {images && images.length > 0 && (
-          <Form.Item
-            name="images"
-            label={intl.formatMessage({
-              defaultMessage: 'Images',
-              id: 'Fip4H8',
-            })}
-            tooltip={intl.formatMessage({
-              defaultMessage: 'Select the images that the offender is in.',
-              id: 'LQT0YO',
-            })}
-          >
-            <ImageSelect images={images} />
-          </Form.Item>
-        )}
+        <Form.Item
+          name="images"
+          label={intl.formatMessage({
+            defaultMessage: 'Images',
+            id: 'Fip4H8',
+          })}
+          tooltip={intl.formatMessage({
+            defaultMessage: 'Select the images that the offender is in.',
+            id: 'LQT0YO',
+          })}
+          rules={[
+            {
+              required: imagesRequired,
+              message: intl.formatMessage({
+                defaultMessage: 'Images are required for offenders.',
+                id: 'UwlDA8',
+              }),
+            },
+          ]}
+        >
+          <ImageSelect images={images} />
+        </Form.Item>
         <Form.Item>
           <Row style={{ marginTop: 30 }} gutter={10} justify="end">
             <Col>

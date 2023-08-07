@@ -40,6 +40,9 @@ query listUserNotifications(
             id
             optimisedPersisted
           }
+          imagesRequiredOnOffenders
+          goodsMode
+          facialRecognition
         }
         title
         type

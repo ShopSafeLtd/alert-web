@@ -88,21 +88,19 @@ const EditVehicle = ({
           </Col>
         </Row>
 
-        {images && images.length > 0 && (
-          <Form.Item
-            name="images"
-            label={intl.formatMessage({
-              defaultMessage: 'Images',
-              id: 'Fip4H8',
-            })}
-            tooltip={intl.formatMessage({
-              defaultMessage: 'Select the images that the vehicle is in.',
-              id: '+sAAjK',
-            })}
-          >
-            <ImageSelect images={images} />
-          </Form.Item>
-        )}
+        <Form.Item
+          name="images"
+          label={intl.formatMessage({
+            defaultMessage: 'Images',
+            id: 'Fip4H8',
+          })}
+          tooltip={intl.formatMessage({
+            defaultMessage: 'Select the images that the vehicle is in.',
+            id: '+sAAjK',
+          })}
+        >
+          <ImageSelect images={images} />
+        </Form.Item>
         <Form.Item>
           <Row style={{ marginTop: 30 }} gutter={16} justify="end">
             <Col>

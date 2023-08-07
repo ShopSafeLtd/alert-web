@@ -22,6 +22,7 @@ export interface SetSchemePayload {
   translations?: Translations[];
   goodsMode: GoodsMode;
   facialRecognition: boolean;
+  imagesRequiredOnOffenders: boolean;
 }
 
 export interface SchemeModel {
@@ -39,6 +40,7 @@ export interface SchemeModel {
   translations?: Translations[];
   goodsMode: GoodsMode;
   facialRecognition: boolean;
+  imagesRequiredOnOffenders: boolean;
 }
 
 const userModel: SchemeModel = {
@@ -54,6 +56,7 @@ const userModel: SchemeModel = {
   translations: [],
   goodsMode: GoodsMode.Generic,
   facialRecognition: false,
+  imagesRequiredOnOffenders: false,
   setScheme: action((state, payload) => {
     state.id = payload.id;
     state.autoApproveIncidents = payload.autoApproveIncidents;
@@ -67,6 +70,7 @@ const userModel: SchemeModel = {
     state.translations = payload.translations;
     state.goodsMode = payload.goodsMode;
     state.facialRecognition = payload.facialRecognition;
+    state.imagesRequiredOnOffenders = payload.imagesRequiredOnOffenders;
   }),
   clearScheme: action((state) => {
     state.id = '';
@@ -81,6 +85,7 @@ const userModel: SchemeModel = {
     state.translations = [];
     state.goodsMode = GoodsMode.Generic;
     state.facialRecognition = false;
+    state.imagesRequiredOnOffenders = false;
   }),
 };
 
