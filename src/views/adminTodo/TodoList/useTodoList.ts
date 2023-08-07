@@ -93,7 +93,7 @@ const useAdminTodos = (): Return => {
     fetchPolicy: 'cache-and-network',
     onCompleted: (res) => {
       if (res.listTodos) {
-        setTodoList({ userTodos: res.listTodos.totalUserTodos || 0 });
+        setTodoList({ userTodos: res.listTodos.uncompletedTotal || 0 });
       }
     },
   });
@@ -158,15 +158,13 @@ const useAdminTodos = (): Return => {
           data: {
             listTodos: {
               totalUserTodos: existingData.listTodos.totalUserTodos + 1,
-              completedTotal: [
-                ...(<[]>existingData.listTodos.completedTodos),
-                res.updateTodo,
-              ].length,
+              completedTotal: existingData.listTodos.completedTotal + 1,
+
               completedTodos: [
                 ...(<[]>existingData.listTodos.completedTodos),
                 res.updateTodo,
               ],
-              uncompletedTotal: existingData.listTodos.uncompletedTotal + 1,
+              uncompletedTotal: existingData.listTodos.uncompletedTotal - 1,
               uncompletedTodos: existingData.listTodos.uncompletedTodos.filter(
                 (todo) => todo.id !== res?.updateTodo?.id
               ),
@@ -182,11 +180,7 @@ const useAdminTodos = (): Return => {
           data: {
             listTodos: {
               totalUserTodos: existingData.listTodos.totalUserTodos - 1,
-
-              uncompletedTotal: [
-                ...(<[]>existingData.listTodos.uncompletedTodos),
-                res.updateTodo,
-              ].length,
+              uncompletedTotal: existingData.listTodos.uncompletedTotal + 1,
               uncompletedTodos: [
                 ...(<[]>existingData.listTodos.uncompletedTodos),
                 res.updateTodo,
