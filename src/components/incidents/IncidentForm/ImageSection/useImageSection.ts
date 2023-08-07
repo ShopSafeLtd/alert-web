@@ -15,7 +15,7 @@ import { useStoreState } from 'state';
 import type { UploadChangeParam } from 'antd/lib/upload';
 import type { StateOffenderData } from '../Profiles/Offenders/useOffenders';
 
-const getClosestAgeRange = (high: number, low: number) => {
+export const getClosestAgeRange = (high: number, low: number) => {
   const middle = high - (high - low) / 2;
   if (middle < 18) return Age.UnderEighteen;
   if (middle >= 18 && middle < 30) return Age.EighteenThirty;
@@ -27,12 +27,12 @@ const getClosestAgeRange = (high: number, low: number) => {
   if (middle >= 80) return Age.OverEighty;
   return Age.Unknown;
 };
-const getGenderFromFace = (gender: 'Male' | 'Female') => {
+export const getGenderFromFace = (gender: 'Male' | 'Female') => {
   if (gender === 'Male') return Gender.Male;
   if (gender === 'Female') return Gender.Female;
   return Gender.Unknown;
 };
-const getPeculiaritiesFromFace = (beard: boolean, mustache: boolean) => {
+export const getPeculiaritiesFromFace = (beard: boolean, mustache: boolean) => {
   if (mustache) return 'They have a moustache.';
   if (beard) return 'They have a beard.';
   return undefined;
@@ -102,10 +102,10 @@ const useImageSection = ({
 
   useEffect(() => {
     if (value) setImages(value);
-  }, []);
+  }, [value]);
 
   useEffect(() => {
-    if (onChange) onChange(images);
+    if (onChange && value?.length !== images.length) onChange(images);
   }, [images]);
 
   const onImageChange = (info: UploadChangeParam<StateImageData>) => {
@@ -156,6 +156,7 @@ const useImageSection = ({
                 existing: false,
                 edited: false,
                 blank: true,
+                imageConfirmed: true,
               })),
             ],
           });

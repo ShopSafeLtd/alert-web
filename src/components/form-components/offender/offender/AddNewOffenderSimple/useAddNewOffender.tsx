@@ -10,6 +10,9 @@ import type {
 } from 'graphql/generated';
 import type { FormInstance } from 'antd';
 import { Form } from 'antd';
+import { ImagePosition } from 'graphql/generated';
+import type { StateImageData } from '../../../../incidents/IncidentForm/ImageSection/useImageSection';
+import type { ImageValue } from '../../../ImageSelect/ImageSelect.view';
 
 export interface AddOffenderData {
   id: string;
@@ -58,23 +61,13 @@ export interface FormData {
   idVerified?: boolean;
   ageCheck?: boolean;
   idSource?: IdSource;
-  images: {
-    id: string;
-    url?: string | null | undefined;
-    optimised?: string | null | undefined;
-    new: boolean;
-    boundingBox?: {
-      height: string;
-      left: string;
-      top: string;
-      width: string;
-    };
-  }[];
+  images: ImageValue[];
 }
 
 interface Props {
   onClose: () => void;
   update: (value: AddOffenderData) => void;
+  onImagesUploaded?: (values: StateImageData[]) => void;
 }
 interface Return {
   onSubmit: (value: FormData) => void;
@@ -87,6 +80,7 @@ interface Return {
 const useAddNewOffender = ({
   onClose,
   update: updateOffender,
+  onImagesUploaded,
 }: Props): Return => {
   const [form] = Form.useForm<FormData>();
   const [saving, setSaving] = useState(false);
@@ -115,6 +109,25 @@ const useAddNewOffender = ({
       idSource: data.idSource,
       images: data.images || [],
     });
+
+    const uploadedImages = data.images?.filter((image) => image.file) || [];
+    if (uploadedImages.length > 0 && onImagesUploaded) {
+      onImagesUploaded(
+        uploadedImages.map(
+          (image) =>
+            ({
+              ...image.file,
+              url: image.file?.response && image.file.response[0].url,
+              fileName: image.file?.response && image.file.response[0].blobName,
+              type: image.file?.response && image.file.response[0].mimetype,
+              policeImage: false,
+              primary: false,
+              rotation: 0,
+              position: ImagePosition.CenterCenter,
+            } as StateImageData)
+        )
+      );
+    }
 
     onClose();
     setSaving(false);

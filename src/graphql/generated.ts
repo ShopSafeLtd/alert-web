@@ -39204,6 +39204,7 @@ export type Scheme = {
   groups: Array<Group>;
   id: Scalars['String'];
   images: Array<Image>;
+  imagesRequiredOnOffenders: Scalars['Boolean'];
   incidentImpact: Scalars['Boolean'];
   incidentRetention?: Maybe<Scalars['Int']>;
   incidents: Array<Incident>;
@@ -39233,6 +39234,7 @@ export type Scheme = {
   topContributors?: Maybe<Array<TopContributors>>;
   updatedAt: Scalars['DateTime'];
   updatesCreated?: Maybe<Scalars['Int']>;
+  uploadOffenderImagesOnMobile: Scalars['Boolean'];
   userNotifications?: Maybe<Scalars['Int']>;
   userTodos?: Maybe<Scalars['Int']>;
   vehicles: Array<Vehicle>;
@@ -39508,6 +39510,7 @@ export type SchemeCreateInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -39539,6 +39542,7 @@ export type SchemeCreateInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -39560,6 +39564,7 @@ export type SchemeCreateManyDarkLogoInput = {
   facialRecognition?: InputMaybe<Scalars['Boolean']>;
   goodsMode?: InputMaybe<GoodsMode>;
   id?: InputMaybe<Scalars['String']>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
   logoId?: InputMaybe<Scalars['String']>;
@@ -39568,6 +39573,7 @@ export type SchemeCreateManyDarkLogoInput = {
   name: Scalars['String'];
   offenderRetention?: InputMaybe<Scalars['Int']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type SchemeCreateManyDarkLogoInputEnvelope = {
@@ -39593,6 +39599,7 @@ export type SchemeCreateManyLogoInput = {
   facialRecognition?: InputMaybe<Scalars['Boolean']>;
   goodsMode?: InputMaybe<GoodsMode>;
   id?: InputMaybe<Scalars['String']>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
   mentionDueDays?: InputMaybe<Scalars['Int']>;
@@ -39600,6 +39607,7 @@ export type SchemeCreateManyLogoInput = {
   name: Scalars['String'];
   offenderRetention?: InputMaybe<Scalars['Int']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type SchemeCreateManyLogoInputEnvelope = {
@@ -40093,6 +40101,7 @@ export type SchemeCreateWithoutActionsInSchemeInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -40124,6 +40133,7 @@ export type SchemeCreateWithoutActionsInSchemeInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -40158,6 +40168,7 @@ export type SchemeCreateWithoutActionsInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -40189,6 +40200,7 @@ export type SchemeCreateWithoutActionsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -40223,6 +40235,7 @@ export type SchemeCreateWithoutArticlesInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -40254,6 +40267,7 @@ export type SchemeCreateWithoutArticlesInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -40288,6 +40302,7 @@ export type SchemeCreateWithoutBansInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -40319,6 +40334,7 @@ export type SchemeCreateWithoutBansInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -40353,6 +40369,7 @@ export type SchemeCreateWithoutBusinessesInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -40384,6 +40401,7 @@ export type SchemeCreateWithoutBusinessesInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -40418,6 +40436,7 @@ export type SchemeCreateWithoutChatsInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -40449,6 +40468,7 @@ export type SchemeCreateWithoutChatsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -40483,6 +40503,7 @@ export type SchemeCreateWithoutContactsInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -40514,6 +40535,7 @@ export type SchemeCreateWithoutContactsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -40548,6 +40570,7 @@ export type SchemeCreateWithoutCrimeGroupsInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -40579,6 +40602,7 @@ export type SchemeCreateWithoutCrimeGroupsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -40613,6 +40637,7 @@ export type SchemeCreateWithoutCustomGalleriesInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -40644,6 +40669,7 @@ export type SchemeCreateWithoutCustomGalleriesInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -40678,6 +40704,7 @@ export type SchemeCreateWithoutDarkLogoInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -40709,6 +40736,7 @@ export type SchemeCreateWithoutDarkLogoInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -40743,6 +40771,7 @@ export type SchemeCreateWithoutDocumentsInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -40774,6 +40803,7 @@ export type SchemeCreateWithoutDocumentsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -40808,6 +40838,7 @@ export type SchemeCreateWithoutFeedItemsInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -40839,6 +40870,7 @@ export type SchemeCreateWithoutFeedItemsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -40873,6 +40905,7 @@ export type SchemeCreateWithoutGroupsInput = {
   goodsMode?: InputMaybe<GoodsMode>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -40904,6 +40937,7 @@ export type SchemeCreateWithoutGroupsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -40938,6 +40972,7 @@ export type SchemeCreateWithoutImagesInput = {
   goodsMode?: InputMaybe<GoodsMode>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -40969,6 +41004,7 @@ export type SchemeCreateWithoutImagesInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -41004,6 +41040,7 @@ export type SchemeCreateWithoutIncidentFormInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutSchemeInput>;
@@ -41034,6 +41071,7 @@ export type SchemeCreateWithoutIncidentFormInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -41069,6 +41107,7 @@ export type SchemeCreateWithoutIncidentsInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -41099,6 +41138,7 @@ export type SchemeCreateWithoutIncidentsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -41134,6 +41174,7 @@ export type SchemeCreateWithoutIntelInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -41164,6 +41205,7 @@ export type SchemeCreateWithoutIntelInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -41199,6 +41241,7 @@ export type SchemeCreateWithoutInvestigationsInSchemeInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -41229,6 +41272,7 @@ export type SchemeCreateWithoutInvestigationsInSchemeInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -41264,6 +41308,7 @@ export type SchemeCreateWithoutInvestigationsInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -41294,6 +41339,7 @@ export type SchemeCreateWithoutInvestigationsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -41329,6 +41375,7 @@ export type SchemeCreateWithoutLoginEventsInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -41359,6 +41406,7 @@ export type SchemeCreateWithoutLoginEventsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -41394,6 +41442,7 @@ export type SchemeCreateWithoutLogoInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -41424,6 +41473,7 @@ export type SchemeCreateWithoutLogoInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -41459,6 +41509,7 @@ export type SchemeCreateWithoutMembersInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -41489,6 +41540,7 @@ export type SchemeCreateWithoutMembersInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -41524,6 +41576,7 @@ export type SchemeCreateWithoutMessagesInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -41554,6 +41607,7 @@ export type SchemeCreateWithoutMessagesInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -41589,6 +41643,7 @@ export type SchemeCreateWithoutNotificationsInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -41619,6 +41674,7 @@ export type SchemeCreateWithoutNotificationsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -41654,6 +41710,7 @@ export type SchemeCreateWithoutOffendersInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -41684,6 +41741,7 @@ export type SchemeCreateWithoutOffendersInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -41719,6 +41777,7 @@ export type SchemeCreateWithoutQuestionsInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -41749,6 +41808,7 @@ export type SchemeCreateWithoutQuestionsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -41784,6 +41844,7 @@ export type SchemeCreateWithoutRecycledItemsInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -41814,6 +41875,7 @@ export type SchemeCreateWithoutRecycledItemsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -41849,6 +41911,7 @@ export type SchemeCreateWithoutRekCollectionsInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -41879,6 +41942,7 @@ export type SchemeCreateWithoutRekCollectionsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -41914,6 +41978,7 @@ export type SchemeCreateWithoutReportIconsInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -41944,6 +42009,7 @@ export type SchemeCreateWithoutReportIconsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -41979,6 +42045,7 @@ export type SchemeCreateWithoutReportTemplatesInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -42009,6 +42076,7 @@ export type SchemeCreateWithoutReportTemplatesInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -42044,6 +42112,7 @@ export type SchemeCreateWithoutSchemeTagsInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -42074,6 +42143,7 @@ export type SchemeCreateWithoutSchemeTagsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -42109,6 +42179,7 @@ export type SchemeCreateWithoutStatementTemplatesInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -42139,6 +42210,7 @@ export type SchemeCreateWithoutStatementTemplatesInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -42174,6 +42246,7 @@ export type SchemeCreateWithoutTagOrdersInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -42204,6 +42277,7 @@ export type SchemeCreateWithoutTagOrdersInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -42239,6 +42313,7 @@ export type SchemeCreateWithoutTagsInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -42269,6 +42344,7 @@ export type SchemeCreateWithoutTagsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -42304,6 +42380,7 @@ export type SchemeCreateWithoutTermsInSchemeInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -42334,6 +42411,7 @@ export type SchemeCreateWithoutTermsInSchemeInput = {
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -42369,6 +42447,7 @@ export type SchemeCreateWithoutTermsInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -42399,6 +42478,7 @@ export type SchemeCreateWithoutTermsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -42434,6 +42514,7 @@ export type SchemeCreateWithoutTodosInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -42464,6 +42545,7 @@ export type SchemeCreateWithoutTodosInput = {
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
@@ -42499,6 +42581,7 @@ export type SchemeCreateWithoutVehiclesInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
   incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
@@ -42530,6 +42613,7 @@ export type SchemeCreateWithoutVehiclesInput = {
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
   workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
 };
 
@@ -42579,6 +42663,7 @@ export type SchemeOrderByWithRelationInput = {
   groups?: InputMaybe<GroupOrderByRelationAggregateInput>;
   id?: InputMaybe<SortOrder>;
   images?: InputMaybe<ImageOrderByRelationAggregateInput>;
+  imagesRequiredOnOffenders?: InputMaybe<SortOrder>;
   incidentForm?: InputMaybe<IncidentFormOrderByRelationAggregateInput>;
   incidentImpact?: InputMaybe<SortOrder>;
   incidentRetention?: InputMaybe<SortOrder>;
@@ -42611,6 +42696,7 @@ export type SchemeOrderByWithRelationInput = {
   termsInScheme?: InputMaybe<TermsAndConditionOrderByRelationAggregateInput>;
   todos?: InputMaybe<TodoOrderByRelationAggregateInput>;
   updatedAt?: InputMaybe<SortOrder>;
+  uploadOffenderImagesOnMobile?: InputMaybe<SortOrder>;
   vehicles?: InputMaybe<VehicleOrderByRelationAggregateInput>;
   workflows?: InputMaybe<WorkflowOrderByRelationAggregateInput>;
 };
@@ -42641,6 +42727,7 @@ export type SchemeScalarWhereInput = {
   facialRecognition?: InputMaybe<BoolFilter>;
   goodsMode?: InputMaybe<EnumGoodsModeFilter>;
   id?: InputMaybe<StringFilter>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFilter>;
   incidentImpact?: InputMaybe<BoolFilter>;
   incidentRetention?: InputMaybe<IntNullableFilter>;
   logoId?: InputMaybe<StringNullableFilter>;
@@ -42649,6 +42736,7 @@ export type SchemeScalarWhereInput = {
   name?: InputMaybe<StringFilter>;
   offenderRetention?: InputMaybe<IntNullableFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFilter>;
 };
 
 export type SchemeUpdateInput = {
@@ -42682,6 +42770,7 @@ export type SchemeUpdateInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -42713,6 +42802,7 @@ export type SchemeUpdateInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -42734,6 +42824,7 @@ export type SchemeUpdateManyMutationInput = {
   facialRecognition?: InputMaybe<BoolFieldUpdateOperationsInput>;
   goodsMode?: InputMaybe<EnumGoodsModeFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -42741,6 +42832,7 @@ export type SchemeUpdateManyMutationInput = {
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
 };
 
 export type SchemeUpdateManyWithWhereWithoutArticlesInput = {
@@ -43493,6 +43585,7 @@ export type SchemeUpdateWithoutActionsInSchemeInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -43524,6 +43617,7 @@ export type SchemeUpdateWithoutActionsInSchemeInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -43558,6 +43652,7 @@ export type SchemeUpdateWithoutActionsInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -43589,6 +43684,7 @@ export type SchemeUpdateWithoutActionsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -43623,6 +43719,7 @@ export type SchemeUpdateWithoutArticlesInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -43654,6 +43751,7 @@ export type SchemeUpdateWithoutArticlesInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -43688,6 +43786,7 @@ export type SchemeUpdateWithoutBansInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -43719,6 +43818,7 @@ export type SchemeUpdateWithoutBansInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -43753,6 +43853,7 @@ export type SchemeUpdateWithoutBusinessesInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -43784,6 +43885,7 @@ export type SchemeUpdateWithoutBusinessesInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -43818,6 +43920,7 @@ export type SchemeUpdateWithoutChatsInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -43849,6 +43952,7 @@ export type SchemeUpdateWithoutChatsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -43883,6 +43987,7 @@ export type SchemeUpdateWithoutContactsInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -43914,6 +44019,7 @@ export type SchemeUpdateWithoutContactsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -43948,6 +44054,7 @@ export type SchemeUpdateWithoutCrimeGroupsInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -43979,6 +44086,7 @@ export type SchemeUpdateWithoutCrimeGroupsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -44013,6 +44121,7 @@ export type SchemeUpdateWithoutCustomGalleriesInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -44044,6 +44153,7 @@ export type SchemeUpdateWithoutCustomGalleriesInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -44078,6 +44188,7 @@ export type SchemeUpdateWithoutDarkLogoInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -44109,6 +44220,7 @@ export type SchemeUpdateWithoutDarkLogoInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -44143,6 +44255,7 @@ export type SchemeUpdateWithoutDocumentsInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -44174,6 +44287,7 @@ export type SchemeUpdateWithoutDocumentsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -44208,6 +44322,7 @@ export type SchemeUpdateWithoutFeedItemsInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -44239,6 +44354,7 @@ export type SchemeUpdateWithoutFeedItemsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -44273,6 +44389,7 @@ export type SchemeUpdateWithoutGroupsInput = {
   goodsMode?: InputMaybe<EnumGoodsModeFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -44304,6 +44421,7 @@ export type SchemeUpdateWithoutGroupsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -44338,6 +44456,7 @@ export type SchemeUpdateWithoutImagesInput = {
   goodsMode?: InputMaybe<EnumGoodsModeFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -44369,6 +44488,7 @@ export type SchemeUpdateWithoutImagesInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -44404,6 +44524,7 @@ export type SchemeUpdateWithoutIncidentFormInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutSchemeNestedInput>;
@@ -44434,6 +44555,7 @@ export type SchemeUpdateWithoutIncidentFormInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -44469,6 +44591,7 @@ export type SchemeUpdateWithoutIncidentsInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -44499,6 +44622,7 @@ export type SchemeUpdateWithoutIncidentsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -44534,6 +44658,7 @@ export type SchemeUpdateWithoutIntelInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -44564,6 +44689,7 @@ export type SchemeUpdateWithoutIntelInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -44599,6 +44725,7 @@ export type SchemeUpdateWithoutInvestigationsInSchemeInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -44629,6 +44756,7 @@ export type SchemeUpdateWithoutInvestigationsInSchemeInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -44664,6 +44792,7 @@ export type SchemeUpdateWithoutInvestigationsInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -44694,6 +44823,7 @@ export type SchemeUpdateWithoutInvestigationsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -44729,6 +44859,7 @@ export type SchemeUpdateWithoutLoginEventsInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -44759,6 +44890,7 @@ export type SchemeUpdateWithoutLoginEventsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -44794,6 +44926,7 @@ export type SchemeUpdateWithoutLogoInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -44824,6 +44957,7 @@ export type SchemeUpdateWithoutLogoInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -44859,6 +44993,7 @@ export type SchemeUpdateWithoutMembersInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -44889,6 +45024,7 @@ export type SchemeUpdateWithoutMembersInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -44924,6 +45060,7 @@ export type SchemeUpdateWithoutMessagesInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -44954,6 +45091,7 @@ export type SchemeUpdateWithoutMessagesInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -44989,6 +45127,7 @@ export type SchemeUpdateWithoutNotificationsInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -45019,6 +45158,7 @@ export type SchemeUpdateWithoutNotificationsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -45054,6 +45194,7 @@ export type SchemeUpdateWithoutOffendersInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -45084,6 +45225,7 @@ export type SchemeUpdateWithoutOffendersInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -45119,6 +45261,7 @@ export type SchemeUpdateWithoutQuestionsInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -45149,6 +45292,7 @@ export type SchemeUpdateWithoutQuestionsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -45184,6 +45328,7 @@ export type SchemeUpdateWithoutRecycledItemsInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -45214,6 +45359,7 @@ export type SchemeUpdateWithoutRecycledItemsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -45249,6 +45395,7 @@ export type SchemeUpdateWithoutRekCollectionsInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -45279,6 +45426,7 @@ export type SchemeUpdateWithoutRekCollectionsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -45314,6 +45462,7 @@ export type SchemeUpdateWithoutReportIconsInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -45344,6 +45493,7 @@ export type SchemeUpdateWithoutReportIconsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -45379,6 +45529,7 @@ export type SchemeUpdateWithoutReportTemplatesInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -45409,6 +45560,7 @@ export type SchemeUpdateWithoutReportTemplatesInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -45444,6 +45596,7 @@ export type SchemeUpdateWithoutSchemeTagsInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -45474,6 +45627,7 @@ export type SchemeUpdateWithoutSchemeTagsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -45509,6 +45663,7 @@ export type SchemeUpdateWithoutStatementTemplatesInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -45539,6 +45694,7 @@ export type SchemeUpdateWithoutStatementTemplatesInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -45574,6 +45730,7 @@ export type SchemeUpdateWithoutTagOrdersInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -45604,6 +45761,7 @@ export type SchemeUpdateWithoutTagOrdersInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -45639,6 +45797,7 @@ export type SchemeUpdateWithoutTagsInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -45669,6 +45828,7 @@ export type SchemeUpdateWithoutTagsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -45704,6 +45864,7 @@ export type SchemeUpdateWithoutTermsInSchemeInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -45734,6 +45895,7 @@ export type SchemeUpdateWithoutTermsInSchemeInput = {
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -45769,6 +45931,7 @@ export type SchemeUpdateWithoutTermsInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -45799,6 +45962,7 @@ export type SchemeUpdateWithoutTermsInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -45834,6 +45998,7 @@ export type SchemeUpdateWithoutTodosInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -45864,6 +46029,7 @@ export type SchemeUpdateWithoutTodosInput = {
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
@@ -45899,6 +46065,7 @@ export type SchemeUpdateWithoutVehiclesInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -45930,6 +46097,7 @@ export type SchemeUpdateWithoutVehiclesInput = {
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
   workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
 };
 
@@ -46183,6 +46351,7 @@ export type SchemeWhereInput = {
   groups?: InputMaybe<GroupListRelationFilter>;
   id?: InputMaybe<StringFilter>;
   images?: InputMaybe<ImageListRelationFilter>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFilter>;
   incidentForm?: InputMaybe<IncidentFormListRelationFilter>;
   incidentImpact?: InputMaybe<BoolFilter>;
   incidentRetention?: InputMaybe<IntNullableFilter>;
@@ -46215,6 +46384,7 @@ export type SchemeWhereInput = {
   termsInScheme?: InputMaybe<TermsAndConditionListRelationFilter>;
   todos?: InputMaybe<TodoListRelationFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFilter>;
   vehicles?: InputMaybe<VehicleListRelationFilter>;
   workflows?: InputMaybe<WorkflowListRelationFilter>;
 };
@@ -67550,6 +67720,9 @@ export type ViewIncidentQuery = {
       name?: string | null;
       value?: number | null;
       recoveredValue?: number | null;
+      sku?: string | null;
+      quantity?: number | null;
+      recoveredQuantity?: number | null;
       goodsType?: { __typename?: 'GoodsType'; id: string } | null;
     }>;
     business?: { __typename?: 'Business'; id: string; name: string } | null;
@@ -72840,6 +73013,7 @@ export type CurrentUserQuery = {
         autoApproveOffenders: boolean;
         defaultPublicOffenderDOB: boolean;
         facialRecognition: boolean;
+        imagesRequiredOnOffenders: boolean;
         logo?: {
           __typename?: 'Image';
           optimisedPersisted?: string | null;
@@ -73197,6 +73371,9 @@ export type ListUserNotificationsQuery = {
           defaultPublicOffenderDOB: boolean;
           userTodos?: number | null;
           userNotifications?: number | null;
+          imagesRequiredOnOffenders: boolean;
+          goodsMode: GoodsMode;
+          facialRecognition: boolean;
           logo?: {
             __typename?: 'Image';
             optimisedPersisted?: string | null;
@@ -73263,6 +73440,9 @@ export type UserNotificationsQuery = {
           defaultPublicOffenderDOB: boolean;
           userTodos?: number | null;
           userNotifications?: number | null;
+          imagesRequiredOnOffenders: boolean;
+          goodsMode: GoodsMode;
+          facialRecognition: boolean;
           logo?: {
             __typename?: 'Image';
             optimisedPersisted?: string | null;
@@ -79776,6 +79956,9 @@ export const ViewIncidentDocument = gql`
         name
         value
         recoveredValue
+        sku
+        quantity
+        recoveredQuantity
         goodsType {
           id
         }
@@ -87118,6 +87301,7 @@ export const CurrentUserDocument = gql`
           autoApproveOffenders
           defaultPublicOffenderDOB
           facialRecognition
+          imagesRequiredOnOffenders
         }
       }
       incidentEmail
@@ -87630,6 +87814,9 @@ export const ListUserNotificationsDocument = gql`
               id
               optimisedPersisted
             }
+            imagesRequiredOnOffenders
+            goodsMode
+            facialRecognition
           }
           title
           type
@@ -87725,6 +87912,9 @@ export const UserNotificationsDocument = gql`
               id
               role
             }
+            imagesRequiredOnOffenders
+            goodsMode
+            facialRecognition
           }
           title
           type

@@ -20,7 +20,6 @@ import {
 import type { ListUserNotificationsQuery } from 'graphql/generated';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
-import { GoodsMode } from 'graphql/generated';
 import useStyles from './NotificationDrawer.styles';
 import type { NotificationData } from './useNotificationDrawer';
 
@@ -146,11 +145,7 @@ const NotificationsDrawer = ({
               onClick={() =>
                 handleMarkAsRead({
                   ...item.notification,
-                  schemes: item.notification.schemes.map((scheme) => ({
-                    ...scheme,
-                    goodsMode: GoodsMode.Generic,
-                    facialRecognition: false,
-                  })),
+                  schemes: item.notification.schemes,
                 })
               }
             >

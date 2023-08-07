@@ -3,12 +3,14 @@ import View from './AddVehicleSimple.view';
 import type { AddVehicleData } from './useAddVehicleSimple';
 import useAddVehicleSimple from './useAddVehicleSimple';
 import type { ImageData } from '../../ImageSelect/ImageSelect.view';
+import type { StateImageData } from '../../../incidents/IncidentForm/ImageSection/useImageSection';
 
 interface Props {
   onClose: () => void;
   update: (value: AddVehicleData) => void;
   saving?: boolean;
   images: ImageData[];
+  onImagesUploaded?: (values: StateImageData[]) => void;
 }
 
 const AddVehicle = ({
@@ -16,9 +18,11 @@ const AddVehicle = ({
   update,
   saving,
   images,
+  onImagesUploaded,
 }: Props): JSX.Element => {
   const { onSubmit, form } = useAddVehicleSimple({
     update,
+    onImagesUploaded,
   });
 
   return (

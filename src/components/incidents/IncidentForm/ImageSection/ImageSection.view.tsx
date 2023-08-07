@@ -54,7 +54,10 @@ const ImageSection = ({
         <Row align="middle" style={{ marginBottom: 20 }}>
           <Col>
             <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
-              {intl.formatMessage({ defaultMessage: 'Images', id: 'Fip4H8' })}
+              {intl.formatMessage({
+                defaultMessage: 'Images & Other Media',
+                id: 'OR3nwV',
+              })}
             </Title>
           </Col>
           <Col>
@@ -65,8 +68,8 @@ const ImageSection = ({
             >
               {intl.formatMessage({
                 defaultMessage:
-                  '- Please add any images that you have of the incident.',
-                id: 'V72sYf',
+                  '- Please add other images & media that you have related to this incident.',
+                id: 'Fm/tL0',
               })}
             </Paragraph>
           </Col>
@@ -74,7 +77,7 @@ const ImageSection = ({
         <Upload
           fileList={images}
           onChange={onImageChange}
-          action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
+          action={import.meta.env.VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT}
           className="incident-form-images-no-offenders"
           listType="picture-card"
           accept=".png,.jpeg"
