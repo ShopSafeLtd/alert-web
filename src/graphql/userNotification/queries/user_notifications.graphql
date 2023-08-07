@@ -44,6 +44,9 @@ query userNotifications(
             id
             role
           }
+          imagesRequiredOnOffenders
+          goodsMode
+          facialRecognition
         }
         title
         type

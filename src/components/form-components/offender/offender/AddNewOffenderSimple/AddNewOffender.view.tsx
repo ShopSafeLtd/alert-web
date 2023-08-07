@@ -22,6 +22,7 @@ import useStyles from './AddNewOffender.style';
 import type { FormData } from './useAddNewOffender';
 import type { ImageData } from '../../../ImageSelect/ImageSelect.view';
 import ImageSelect from '../../../ImageSelect/ImageSelect.view';
+import { useStoreState } from '../../../../../state';
 
 interface Props {
   onClose: () => void;
@@ -44,6 +45,10 @@ const AddNewOffender = ({
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
+  const imagesRequired = useStoreState(
+    (state) => state.scheme.imagesRequiredOnOffenders
+  );
+
   return (
     <Form form={form} layout="vertical" onFinish={onSubmit}>
       <Row gutter={16}>
@@ -350,18 +355,25 @@ const AddNewOffender = ({
         )}
       </Row>
 
-      {images && images.length > 0 && (
-        <Form.Item
-          name="images"
-          label={intl.formatMessage({ defaultMessage: 'Images', id: 'Fip4H8' })}
-          tooltip={intl.formatMessage({
-            defaultMessage: 'Select the images that the offender is in.',
-            id: 'LQT0YO',
-          })}
-        >
-          <ImageSelect images={images} />
-        </Form.Item>
-      )}
+      <Form.Item
+        name="images"
+        label={intl.formatMessage({ defaultMessage: 'Images', id: 'Fip4H8' })}
+        tooltip={intl.formatMessage({
+          defaultMessage: 'Select the images that the offender is in.',
+          id: 'LQT0YO',
+        })}
+        rules={[
+          {
+            required: imagesRequired,
+            message: intl.formatMessage({
+              defaultMessage: 'Images are required for offenders.',
+              id: 'UwlDA8',
+            }),
+          },
+        ]}
+      >
+        <ImageSelect images={images} />
+      </Form.Item>
 
       <Form.Item>
         <Row style={{ marginTop: 30 }} gutter={10} justify="end">

@@ -80,6 +80,7 @@ const useAuth = (): Return => {
         translations: schemeDetails?.customTranslations as Translations[],
         goodsMode: schemeDetails?.goodsMode || GoodsMode.Generic,
         facialRecognition: schemeDetails?.facialRecognition,
+        imagesRequiredOnOffenders: schemeDetails?.imagesRequiredOnOffenders,
       });
       setTodos({ userTodos: schemes[0]?.scheme?.userTodos || 0 });
       setNotifications({
@@ -112,6 +113,8 @@ const useAuth = (): Return => {
             .customTranslations as Translations[],
           goodsMode: schemeDetails.scheme.goodsMode,
           facialRecognition: schemeDetails.scheme.facialRecognition,
+          imagesRequiredOnOffenders:
+            schemeDetails.scheme.imagesRequiredOnOffenders,
         });
         setTodos({ userTodos: schemeDetails?.scheme?.userTodos || 0 });
       } else {

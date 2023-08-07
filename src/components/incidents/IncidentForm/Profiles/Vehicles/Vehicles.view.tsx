@@ -49,9 +49,11 @@ const Vehicles = ({
     onUpdateVehicle,
     updateOpen,
     onMatchVehicle,
+    onImagesUploadedInForm,
   } = useVehicles({
     value,
     onChange,
+    form,
   });
   const classes = useStyles();
   const intl = useIntl();
@@ -205,6 +207,7 @@ const Vehicles = ({
             onClose={() => setUpdateOpen(null)}
             editData={updateOpen}
             images={images}
+            onImagesUploaded={onImagesUploadedInForm}
           />
         ) : (
           <div />
@@ -228,6 +231,7 @@ const Vehicles = ({
             }}
             onClose={toggleAddNewOpen}
             images={images}
+            onImagesUploaded={onImagesUploadedInForm}
           />
         ) : (
           <div />

@@ -42,6 +42,7 @@ query currentUser($scheme: UniqueId) {
         autoApproveOffenders
         defaultPublicOffenderDOB
         facialRecognition
+        imagesRequiredOnOffenders
       }
     }
     incidentEmail

@@ -2,7 +2,7 @@ import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import TodoList from '../NotificationList.view';
-import { Role } from 'graphql/generated';
+import { GoodsMode, Role } from 'graphql/generated';
 
 describe('List Officer View', () => {
   const data = {
@@ -28,6 +28,9 @@ describe('List Officer View', () => {
                   role: Role.ContentAdmin,
                 },
               ],
+              facialRecognition: false,
+              imagesRequiredOnOffenders: false,
+              goodsMode: GoodsMode.Generic,
             },
           ],
         },

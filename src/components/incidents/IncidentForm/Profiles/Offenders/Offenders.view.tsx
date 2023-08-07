@@ -12,6 +12,7 @@ import AddOffender from '../../../../form-components/offender/offender/AddNewOff
 import AddExistingOffender from '../../../../form-components/offender/offender/AddExistingOffender';
 import EditOffender from '../../../../form-components/offender/offender/SimpleEditOffender';
 import type { FormData } from '../../../../../views/incidents/AddIncident/useAddIncident';
+import FacesColumn from './FacesColumn.view';
 
 const { Paragraph } = Typography;
 
@@ -57,9 +58,17 @@ const Offenders = ({
     mergeSelected,
     toggleMergeSelected,
     onMerge,
+    onChangeOffenderImage,
+    uploading,
+    onNoImages,
+    onImagesUploadedInForm,
+    facesOpen,
+    setFacesOpen,
+    onSubmitImageFaces,
   } = useOffenders({
     value,
     onChange,
+    form,
   });
   const images = Form.useWatch('images', form);
 
@@ -74,7 +83,7 @@ const Offenders = ({
             })}
           </Divider>
           <Row gutter={[16, 16]}>
-            {offenders.map((offender) => (
+            {offenders.map((offender, index) => (
               <Col key={offender.id}>
                 <OffenderProfile
                   offender={offender}
@@ -88,6 +97,10 @@ const Offenders = ({
                   toggleMergeSelected={toggleMergeSelected}
                   mergeSelected={mergeSelected}
                   onMerge={onMerge}
+                  index={index}
+                  onChangeOffenderImage={onChangeOffenderImage}
+                  uploading={uploading}
+                  onNoImages={onNoImages}
                 />
               </Col>
             ))}
@@ -173,6 +186,7 @@ const Offenders = ({
             update={(data) => onAddOffenders([data], false)}
             onClose={toggleAddNewOpen}
             images={images}
+            onImagesUploaded={onImagesUploadedInForm}
           />
         ) : (
           <div />
@@ -237,9 +251,26 @@ const Offenders = ({
             onClose={() => setUpdateOpen(null)}
             update={onUpdateOffender}
             images={images}
+            onImagesUploaded={onImagesUploadedInForm}
           />
         ) : (
           <div />
+        )}
+      </Drawer>
+
+      <Drawer
+        open={facesOpen !== null}
+        bodyStyle={{ padding: 0 }}
+        width={1000}
+        onClose={() => setFacesOpen(null)}
+        headerStyle={{ display: 'none' }}
+      >
+        {facesOpen !== null && (
+          <FacesColumn
+            facesOpen={facesOpen}
+            onSubmit={onSubmitImageFaces}
+            onClose={() => setFacesOpen(null)}
+          />
         )}
       </Drawer>
     </>
