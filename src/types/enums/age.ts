@@ -9,7 +9,7 @@ export enum Age {
   'SEVENTY_EIGHTY' = 'SEVENTY_EIGHTY',
   'OVER_EIGHTY' = 'OVER_EIGHTY',
 }
-
+// wait to check
 export const ageValues = [
   {
     value: Age.UNKNOWN,

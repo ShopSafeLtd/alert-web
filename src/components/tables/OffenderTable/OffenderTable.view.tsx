@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
 import React from 'react';
-import { Table } from 'antd';
+import { Button, Col, Popconfirm, Row, Table, Tooltip } from 'antd';
 import { useNavigate } from 'react-router';
 import { createUseStyles } from 'react-jss';
 import {
@@ -19,6 +19,9 @@ import type {
 } from 'graphql/generated';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import { useIntl } from 'react-intl';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPenToSquare, faTrash } from '@fortawesome/pro-light-svg-icons';
+import type { OffenderData } from 'types/DataType';
 
 const useStyles = createUseStyles({
   row: { cursor: 'pointer' },
@@ -39,15 +42,24 @@ interface Props {
           | {
               id: string;
               optimised?: string | null | undefined;
-              position: ImagePosition;
+              position?: ImagePosition;
             }[]
           | null
           | undefined;
       }[];
-  hasNavigation: boolean;
+  hasNavigation?: boolean;
+  saving?: boolean;
+  setEditOffenderData?: (value: OffenderData | null) => void;
+  onDeleteOffender?: (id: string) => void;
 }
 
-const OffenderTable = ({ offenders, hasNavigation }: Props): JSX.Element => {
+const OffenderTable = ({
+  offenders,
+  hasNavigation,
+  saving,
+  setEditOffenderData,
+  onDeleteOffender,
+}: Props): JSX.Element => {
   const classes = useStyles();
   const navigate = useNavigate();
   const intl = useIntl();
@@ -115,6 +127,68 @@ const OffenderTable = ({ offenders, hasNavigation }: Props): JSX.Element => {
           dataIndex: 'build',
           key: 'build',
         },
+        {
+          key: 'Options',
+          title: '',
+          dataIndex: 'Options',
+          width: 100,
+          render: (_, record) => (
+            <Row gutter={8}>
+              <Col>
+                <Tooltip
+                  title={intl.formatMessage({
+                    defaultMessage: 'Edit Offender',
+                    id: '+OfJ4/',
+                  })}
+                >
+                  <Button
+                    size="small"
+                    disabled={saving}
+                    onClick={() => {
+                      if (setEditOffenderData)
+                        setEditOffenderData(record.offender);
+                    }}
+                    icon={<FontAwesomeIcon icon={faPenToSquare} />}
+                  />
+                </Tooltip>
+              </Col>
+              <Col>
+                <Tooltip
+                  title={intl.formatMessage({
+                    defaultMessage: 'Remove Offender',
+                    id: 'cZH2Kj',
+                  })}
+                >
+                  <Popconfirm
+                    placement="topLeft"
+                    title={intl.formatMessage({
+                      defaultMessage: 'Remove the offender?',
+                      id: 'ttuPSC',
+                    })}
+                    onConfirm={() => {
+                      if (onDeleteOffender) onDeleteOffender(record.key);
+                    }}
+                    okText={intl.formatMessage({
+                      defaultMessage: 'Yes',
+                      id: 'a5msuh',
+                    })}
+                    cancelText={intl.formatMessage({
+                      defaultMessage: 'No',
+                      id: 'oUWADl',
+                    })}
+                    overlayInnerStyle={{ padding: 10 }}
+                  >
+                    <Button
+                      size="small"
+                      disabled={saving}
+                      icon={<FontAwesomeIcon icon={faTrash} />}
+                    />
+                  </Popconfirm>
+                </Tooltip>
+              </Col>
+            </Row>
+          ),
+        },
       ]}
       dataSource={offenders.map((offender) => ({
         key: offender.id,
@@ -138,6 +212,7 @@ const OffenderTable = ({ offenders, hasNavigation }: Props): JSX.Element => {
             ? ''
             : getOffenderBuild(offender.build),
         images: offender.images,
+        offender,
       }))}
       pagination={
         offenders && offenders.length > 5

@@ -1,0 +1,15 @@
+mutation UpdateIncidentDetails(
+  $where: UniqueId!
+  $data: IncidentUpdateInput!
+) {
+  updateIncident(
+    where: $where
+    data: $data
+  ) {
+    id
+    subject
+    date
+    time
+    description
+  }
+}

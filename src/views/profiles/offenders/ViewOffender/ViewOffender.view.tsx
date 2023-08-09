@@ -14,9 +14,12 @@ import {
   Col,
   Descriptions,
   Drawer,
+  Dropdown,
   Empty,
   Input,
+  Menu,
   Modal,
+  Popconfirm,
   Popover,
   Row,
   Skeleton,
@@ -35,8 +38,12 @@ import {
   faEarth,
   faEdit,
   faHeadSide,
+  faImage,
+  faMagnifyingGlass,
   faMarsAndVenus,
   faPassport,
+  faPenToSquare,
+  faPlus,
   faTrash,
   faUser,
   faUserClock,
@@ -64,7 +71,6 @@ import WatermarkImage from 'components/images/WatermarkImage.view';
 import IncidentTable from 'components/tables/IncidentTable';
 import VehicleTable from 'components/tables/VehicleTable';
 import CrimeGroupTable from 'components/tables/CrimeGroupTable';
-import { Link } from 'react-router-dom';
 import MapCard from 'components/map/MapCard/MapCard.view';
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
 import AssociatedOffender from 'components/offenders/AssociatedOffender';
@@ -73,6 +79,24 @@ import LightBox from 'components/images/LightBox/LightBox.container';
 import OffenderMatches from 'components/rekognition/OffenderMatches/OffenderMatches.container';
 import formatCalendar from 'utils/format-calendar-24h';
 import { useIntl } from 'react-intl';
+import type {
+  BanData,
+  EditFeedImage,
+  ImageCardData,
+  LocationData,
+  VehicleData,
+} from 'types/DataType';
+import EditImageList from 'components/images/EditImageList';
+import FeedImageEditor from 'components/form-components/ImageEditor/FeedImageEditor.view';
+import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
+import AddVehicle from 'components/form-components/Vehicle/AddVehicle';
+import EditVehicle from 'components/form-components/Vehicle/EditVehicleSimple';
+import EditExclusion from 'components/form-components/offender/exclusion/EditExclusion';
+import AddExclusion from 'components/form-components/offender/exclusion/AddExclusion';
+import NewOffenderAddress from 'components/form-components/addresses/NewOffenderAddress';
+import EditOffenderAddress from 'components/form-components/addresses/EditOffenderAddress';
+import LinkCrimeGroup from 'components/form-components/linkOptions/LinkCrimeGroup';
+import EditOffenderFeed from 'components/form-components/offender/EditOffenderFeed';
 import type { ViewAssociate } from './useViewOffender';
 import useStyles from './ViewOffender.styles';
 
@@ -145,6 +169,43 @@ interface Props {
   toggleViewAssociate: (value: ViewAssociate | null) => void;
   viewMatches: string | null;
   toggleViewMatches: (offenderId: string | null) => void;
+  editOffender: boolean;
+  toggleEditOffender: () => void;
+  addVehicle: boolean;
+  addExistingVehicle: boolean;
+  toggleAddVehicle: () => void;
+  toggleAddExistingVehicle: () => void;
+  editVehicleData: VehicleData | null;
+  setEditVehicleData: (value: VehicleData | null) => void;
+  onDeleteVehicle: (id: string) => void;
+  onEditVehicle: (value: VehicleData) => void;
+  onAddVehicle: (value: VehicleData) => void;
+  onAddExistingVehicle: (id: string) => void;
+  addCrimeGroup: boolean;
+  toggleAddCrimeGroup: () => void;
+  onDeleteCrimeGroup: (id: string) => void;
+  onAddCrimeGroup: (value: string) => void;
+  addAddress: boolean;
+  toggleAddAddress: () => void;
+  editAddressData: LocationData | null;
+  setEditAddressData: (value: LocationData | null) => void;
+  onDeleteAddress: (id: string) => void;
+  onEditAddress: (value: LocationData) => void;
+  onAddAddress: (value: LocationData) => void;
+  addBan: boolean;
+  toggleAddBan: () => void;
+  editBanData: BanData | null;
+  setEditBanData: (value: BanData | null) => void;
+  onDeleteBan: (id: string) => void;
+  onEditBan: (value: BanData) => void;
+  onAddBan: (value: BanData) => void;
+  editImages: boolean;
+  toggleEditImages: () => void;
+  editImageData: EditFeedImage | null;
+  setEditImageData: (value: EditFeedImage | null) => void;
+  onDeleteImage: (id: string) => void;
+  onEditImage: (id: EditFeedImage) => void;
+  onUpdateImages: (value: ImageCardData[]) => void;
 }
 
 const ViewOffender = ({
@@ -189,6 +250,43 @@ const ViewOffender = ({
   viewAssociate,
   toggleViewMatches,
   viewMatches,
+  editOffender,
+  toggleEditOffender,
+  editImages,
+  toggleEditImages,
+  editImageData,
+  setEditImageData,
+  onDeleteImage,
+  onEditImage,
+  onUpdateImages,
+  addVehicle,
+  addExistingVehicle,
+  editVehicleData,
+  setEditVehicleData,
+  onDeleteVehicle,
+  toggleAddVehicle,
+  toggleAddExistingVehicle,
+  onEditVehicle,
+  onAddVehicle,
+  onAddExistingVehicle,
+  addCrimeGroup,
+  onDeleteCrimeGroup,
+  toggleAddCrimeGroup,
+  onAddCrimeGroup,
+  addAddress,
+  editAddressData,
+  setEditAddressData,
+  onDeleteAddress,
+  toggleAddAddress,
+  onEditAddress,
+  onAddAddress,
+  addBan,
+  editBanData,
+  setEditBanData,
+  onDeleteBan,
+  toggleAddBan,
+  onEditBan,
+  onAddBan,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const classes = useStyles();
@@ -271,7 +369,37 @@ const ViewOffender = ({
             </Col>
             {editRights && (
               <Col>
-                <Link to={`/app/offenders/edit/${offenderId}`}>
+                <Dropdown
+                  overlay={
+                    <Menu
+                      items={[
+                        {
+                          key: 0,
+                          label: intl.formatMessage({
+                            defaultMessage: 'Edit Offender',
+                            id: '+OfJ4/',
+                          }),
+                          onClick: () => toggleEditOffender(),
+                          icon: <FontAwesomeIcon icon={faEdit} />,
+                        },
+                        data?.offender?.totalImages &&
+                        data?.offender.totalImages > 0
+                          ? {
+                              key: 1,
+                              label: intl.formatMessage({
+                                defaultMessage: 'Edit Images',
+                                id: 'Cs6iOM',
+                              }),
+                              onClick: () => toggleEditImages(),
+                              icon: <FontAwesomeIcon icon={faImage} />,
+                            }
+                          : null,
+                      ]}
+                    />
+                  }
+                  placement="bottomRight"
+                  arrow={{ pointAtCenter: true }}
+                >
                   <Button type="ghost">
                     <FontAwesomeIcon
                       size="1x"
@@ -283,7 +411,7 @@ const ViewOffender = ({
                       id: 'wEQDC6',
                     })}
                   </Button>
-                </Link>
+                </Dropdown>
               </Col>
             )}
             {deleteRights && (
@@ -337,16 +465,84 @@ const ViewOffender = ({
             >
               {data?.offender?.images.map((image, i) => (
                 <Col key={image.id}>
-                  <div
-                    onClick={() => openLightbox(i)}
-                    className={classes.image}
+                  <Popover
+                    trigger="hover"
+                    placement="left"
+                    content={
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                        }}
+                      >
+                        <Button
+                          type="text"
+                          disabled={saving}
+                          icon={
+                            <FontAwesomeIcon
+                              style={{ marginRight: 5 }}
+                              icon={faEdit}
+                              size="lg"
+                            />
+                          }
+                          onClick={() => setEditImageData(image)}
+                          size="small"
+                        >
+                          {intl.formatMessage({
+                            defaultMessage: 'Edit Image',
+                            id: '9UlLIw',
+                          })}
+                        </Button>
+                        <Popconfirm
+                          placement="topLeft"
+                          title={intl.formatMessage({
+                            defaultMessage: 'Remove the image?',
+                            id: 'bRha+v',
+                          })}
+                          onConfirm={() => onDeleteImage(image.id)}
+                          okText={intl.formatMessage({
+                            defaultMessage: 'Yes',
+                            id: 'a5msuh',
+                          })}
+                          cancelText={intl.formatMessage({
+                            defaultMessage: 'No',
+                            id: 'oUWADl',
+                          })}
+                          overlayInnerStyle={{ padding: 10 }}
+                        >
+                          <Button
+                            type="text"
+                            disabled={saving}
+                            icon={
+                              <FontAwesomeIcon
+                                style={{ marginRight: 5 }}
+                                icon={faTrash}
+                                size="lg"
+                              />
+                            }
+                            // onClick={() => onDeleteImage(image.id)}
+                            size="small"
+                          >
+                            {intl.formatMessage({
+                              defaultMessage: 'Delete Image',
+                              id: 'u5uVrC',
+                            })}
+                          </Button>
+                        </Popconfirm>
+                      </div>
+                    }
                   >
-                    <WatermarkImage
-                      url={image.optimised}
-                      rotation={image.rotation}
-                      position={image.position}
-                    />
-                  </div>
+                    <div
+                      onClick={() => openLightbox(i)}
+                      className={classes.image}
+                    >
+                      <WatermarkImage
+                        url={image.optimised}
+                        rotation={image.rotation}
+                        position={image.position}
+                      />
+                    </div>
+                  </Popover>
                 </Col>
               ))}
             </Row>
@@ -483,6 +679,22 @@ const ViewOffender = ({
                       </Tag>
                     ))}
                   </Row>
+                </Descriptions.Item>
+                <Descriptions.Item
+                  label={
+                    <span className={classes.tagLabel}>
+                      <FontAwesomeIcon
+                        className={classes.descIcon}
+                        icon={faUser}
+                      />
+                      {intl.formatMessage({
+                        defaultMessage: 'Created By',
+                        id: 'uAfuJA',
+                      })}
+                    </span>
+                  }
+                >
+                  <Row>{data?.offender?.createdBy.fullName}</Row>
                 </Descriptions.Item>
               </Descriptions>
             </Card>
@@ -848,12 +1060,33 @@ const ViewOffender = ({
               />
             </Card>
             <Card>
-              <Title level={4}>
-                {intl.formatMessage({
-                  defaultMessage: 'Exclusions',
-                  id: 'jjBvFh',
-                })}
-              </Title>
+              <Row gutter={8} align="middle" style={{ marginBottom: 10 }}>
+                <Col flex={1}>
+                  <Title level={4}>
+                    {intl.formatMessage({
+                      defaultMessage: 'Exclusions',
+                      id: 'jjBvFh',
+                    })}
+                  </Title>
+                </Col>
+                <Col>
+                  <Button
+                    size="small"
+                    onClick={toggleAddBan}
+                    icon={
+                      <FontAwesomeIcon
+                        icon={faPlus}
+                        style={{ marginRight: 5 }}
+                      />
+                    }
+                  >
+                    {intl.formatMessage({
+                      defaultMessage: 'Add Exclusion',
+                      id: 'QPeZMN',
+                    })}
+                  </Button>
+                </Col>
+              </Row>
               <Table
                 size="small"
                 loading={loading}
@@ -876,6 +1109,7 @@ const ViewOffender = ({
                       id: 'IuFETn',
                     }),
                     dataIndex: 'duration',
+                    width: 110,
                     render: (value) => <Text>{value}</Text>,
                   },
                   {
@@ -885,7 +1119,6 @@ const ViewOffender = ({
                       id: 'YEneNi',
                     }),
                     dataIndex: 'activeDay',
-                    width: 150,
                   },
                   {
                     key: 'status',
@@ -896,24 +1129,14 @@ const ViewOffender = ({
                     dataIndex: 'status',
                     render: (value, record) =>
                       calcExpired(new Date(record.endDate)) ? (
-                        <Tag
-                          color="red"
-                          style={{
-                            marginLeft: 10,
-                          }}
-                        >
+                        <Tag color="red">
                           {intl.formatMessage({
                             defaultMessage: 'EXPIRED',
                             id: 'GftNg3',
                           })}
                         </Tag>
                       ) : (
-                        <Tag
-                          color="success"
-                          style={{
-                            marginLeft: 10,
-                          }}
-                        >
+                        <Tag color="success">
                           {intl.formatMessage({
                             defaultMessage: 'ACTIVE',
                             id: 'LQPOVs',
@@ -940,14 +1163,76 @@ const ViewOffender = ({
                     dataIndex: 'type',
                     ellipsis: true,
                   },
+                  {
+                    key: 'Options',
+                    title: '',
+                    dataIndex: 'Options',
+                    // width: 100,
+                    render: (_, record) => (
+                      <Row gutter={8}>
+                        <Col>
+                          <Tooltip
+                            title={intl.formatMessage({
+                              defaultMessage: 'Edit Exclusion',
+                              id: '22olP0',
+                            })}
+                          >
+                            <Button
+                              size="small"
+                              disabled={saving}
+                              onClick={() => {
+                                setEditBanData(record.ban);
+                              }}
+                              icon={<FontAwesomeIcon icon={faPenToSquare} />}
+                            />
+                          </Tooltip>
+                        </Col>
+                        <Col>
+                          <Tooltip
+                            title={intl.formatMessage({
+                              defaultMessage: 'Remove Exclusion',
+                              id: '8y70Xm',
+                            })}
+                          >
+                            <Popconfirm
+                              placement="topLeft"
+                              trigger="hover"
+                              title={intl.formatMessage({
+                                defaultMessage: 'Remove the exclusion?',
+                                id: 'Dc7IO/',
+                              })}
+                              onConfirm={() => onDeleteBan(record.key)}
+                              okText={intl.formatMessage({
+                                defaultMessage: 'Yes',
+                                id: 'a5msuh',
+                              })}
+                              cancelText={intl.formatMessage({
+                                defaultMessage: 'No',
+                                id: 'oUWADl',
+                              })}
+                              overlayInnerStyle={{
+                                padding: 10,
+                              }}
+                            >
+                              <Button
+                                size="small"
+                                disabled={saving}
+                                icon={<FontAwesomeIcon icon={faTrash} />}
+                              />
+                            </Popconfirm>
+                          </Tooltip>
+                        </Col>
+                      </Row>
+                    ),
+                  },
                 ]}
                 dataSource={data?.offender?.bans.map((ban) => ({
+                  key: ban.id,
                   endDate: ban.endDate,
-                  duration: `${new Date(
-                    ban?.startDate
-                  ).toDateString()}  -->  ${new Date(
-                    ban?.endDate
-                  ).toDateString()}`,
+                  duration: `${formatCalendar(
+                    ban?.startDate,
+                    true
+                  )}  ->  ${formatCalendar(ban?.endDate, true)}`,
                   activeDay: calcDuration(
                     new Date(ban?.startDate),
                     new Date(ban?.endDate)
@@ -960,66 +1245,233 @@ const ViewOffender = ({
                   location: ban.location,
                   description: ban.description,
                   type: ban.type,
+                  ban,
                 }))}
               />
             </Card>
             {editRights && (
               <Card>
-                <Title level={4}>
-                  {intl.formatMessage({
-                    defaultMessage: 'Addresses',
-                    id: 'xBrtnx',
-                  })}
-                </Title>
-                <Table
-                  size="small"
-                  loading={loading}
-                  pagination={
-                    data?.offender?.addresses &&
-                    data.offender.addresses.length > 10
-                      ? {
-                          pageSize: 10,
-                        }
-                      : false
-                  }
-                  className={classes.exclusions}
-                  columns={[
-                    {
-                      key: 'alias',
-                      title: intl.formatMessage({
-                        defaultMessage: 'Alias',
-                        id: 'Ri9jA7',
-                      }),
-                      dataIndex: 'alias',
-                    },
-                    {
-                      key: 'full',
-                      title: intl.formatMessage({
-                        defaultMessage: 'Full Address',
-                        id: 'RbRvWj',
-                      }),
-                      dataIndex: 'full',
-                    },
-                  ]}
-                  dataSource={data?.offender?.addresses.map((address) => ({
-                    key: address.id,
-                    alias: address.alias,
-                    full: address.full,
-                  }))}
-                />
+                <Row gutter={8} align="middle" style={{ marginBottom: 10 }}>
+                  <Col flex={1}>
+                    <Title level={4}>
+                      {intl.formatMessage({
+                        defaultMessage: 'Addresses',
+                        id: 'xBrtnx',
+                      })}
+                    </Title>
+                  </Col>
+                  <Col>
+                    <Button
+                      size="small"
+                      onClick={toggleAddAddress}
+                      icon={
+                        <FontAwesomeIcon
+                          icon={faPlus}
+                          style={{ marginRight: 5 }}
+                        />
+                      }
+                    >
+                      {intl.formatMessage({
+                        defaultMessage: 'Add Address',
+                        id: 'xg14pg',
+                      })}
+                    </Button>
+                  </Col>
+                </Row>
+                {data?.offender?.addresses.length && !loading ? (
+                  <Table
+                    size="small"
+                    loading={loading}
+                    pagination={
+                      data?.offender?.addresses &&
+                      data.offender.addresses.length > 10
+                        ? {
+                            pageSize: 10,
+                          }
+                        : false
+                    }
+                    className={classes.exclusions}
+                    columns={[
+                      {
+                        key: 'alias',
+                        title: intl.formatMessage({
+                          defaultMessage: 'Alias',
+                          id: 'Ri9jA7',
+                        }),
+                        dataIndex: 'alias',
+                      },
+                      {
+                        key: 'full',
+                        title: intl.formatMessage({
+                          defaultMessage: 'Full Address',
+                          id: 'RbRvWj',
+                        }),
+                        dataIndex: 'full',
+                      },
+                      {
+                        key: 'options',
+                        title: '',
+                        dataIndex: 'Options',
+                        width: 100,
+                        render: (_, record) => (
+                          <Row gutter={8}>
+                            <Col>
+                              <Tooltip
+                                title={intl.formatMessage({
+                                  defaultMessage: 'Edit Address',
+                                  id: 'uSpe21',
+                                })}
+                              >
+                                <Button
+                                  size="small"
+                                  disabled={saving}
+                                  onClick={() => {
+                                    setEditAddressData(record.address);
+                                  }}
+                                  icon={
+                                    <FontAwesomeIcon icon={faPenToSquare} />
+                                  }
+                                />
+                              </Tooltip>
+                            </Col>
+                            <Col>
+                              <Tooltip
+                                title={intl.formatMessage({
+                                  defaultMessage: 'Remove Address',
+                                  id: 'r3DjS/',
+                                })}
+                              >
+                                <Popconfirm
+                                  placement="topLeft"
+                                  trigger="hover"
+                                  title={intl.formatMessage({
+                                    defaultMessage: 'Remove the Address?',
+                                    id: 'y/xSXA',
+                                  })}
+                                  onConfirm={() => onDeleteAddress(record.key)}
+                                  okText={intl.formatMessage({
+                                    defaultMessage: 'Yes',
+                                    id: 'a5msuh',
+                                  })}
+                                  cancelText={intl.formatMessage({
+                                    defaultMessage: 'No',
+                                    id: 'oUWADl',
+                                  })}
+                                  overlayInnerStyle={{
+                                    padding: 10,
+                                  }}
+                                >
+                                  <Button
+                                    size="small"
+                                    disabled={saving}
+                                    icon={<FontAwesomeIcon icon={faTrash} />}
+                                  />
+                                </Popconfirm>
+                              </Tooltip>
+                            </Col>
+                          </Row>
+                        ),
+                      },
+                    ]}
+                    dataSource={data?.offender?.addresses.map((address) => ({
+                      key: address.id,
+                      alias: address.alias,
+                      full: address.full,
+                      address,
+                    }))}
+                  />
+                ) : (
+                  <Empty
+                    description={intl.formatMessage({
+                      defaultMessage: 'No addresses for this offender',
+                      id: 'UFKxSJ',
+                    })}
+                    image={Empty.PRESENTED_IMAGE_SIMPLE}
+                  />
+                )}
               </Card>
             )}
             <Card>
-              <Title level={4}>
-                {intl.formatMessage({
-                  defaultMessage: 'Vehicles',
-                  id: 'r6wuJ3',
-                })}
-              </Title>
-              <VehicleTable
-                vehicles={data?.offender?.vehicles || []}
-                hasNavigation
-              />
+              <Row gutter={8} align="middle" style={{ marginBottom: 10 }}>
+                <Col flex={1}>
+                  <Title level={4}>
+                    {intl.formatMessage({
+                      defaultMessage: 'Vehicles',
+                      id: 'r6wuJ3',
+                    })}
+                  </Title>
+                </Col>
+                <Col>
+                  <Dropdown
+                    overlay={
+                      <Menu
+                        items={[
+                          {
+                            label: intl.formatMessage({
+                              defaultMessage: 'Add Existing Vehicles',
+                              id: 'goP1s6',
+                            }),
+                            key: '1',
+                            icon: (
+                              <FontAwesomeIcon
+                                icon={faMagnifyingGlass}
+                                style={{ marginRight: 5 }}
+                              />
+                            ),
+                            onClick: () => toggleAddExistingVehicle(),
+                          },
+                          {
+                            label: intl.formatMessage({
+                              defaultMessage: 'Create New Vehicle',
+                              id: 'xiAZxN',
+                            }),
+                            key: '2',
+                            icon: (
+                              <FontAwesomeIcon
+                                icon={faPlus}
+                                style={{ marginRight: 5 }}
+                              />
+                            ),
+                            onClick: () => toggleAddVehicle(),
+                          },
+                        ]}
+                      />
+                    }
+                  >
+                    <Button
+                      size="small"
+                      icon={
+                        <FontAwesomeIcon
+                          icon={faPlus}
+                          style={{ marginRight: 5 }}
+                        />
+                      }
+                    >
+                      {intl.formatMessage({
+                        defaultMessage: 'Vehicles',
+                        id: 'r6wuJ3',
+                      })}
+                    </Button>
+                  </Dropdown>
+                </Col>
+              </Row>
+
+              {data?.offender?.vehicles.length && !loading ? (
+                <VehicleTable
+                  vehicles={data?.offender?.vehicles}
+                  setEditVehicleData={setEditVehicleData}
+                  onDeleteVehicle={onDeleteVehicle}
+                  saving={saving}
+                />
+              ) : (
+                <Empty
+                  description={intl.formatMessage({
+                    defaultMessage: 'No vehicles for this offender',
+                    id: 'mc7u7d',
+                  })}
+                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                />
+              )}
             </Card>
             <Card>
               <Title level={4}>
@@ -1028,10 +1480,21 @@ const ViewOffender = ({
                   id: 'a0aLil',
                 })}
               </Title>
-              <CrimeGroupTable
-                crimeGroups={data?.offender?.crimeGroups || []}
-                hasNavigation
-              />
+              {data?.offender?.vehicles.length && !loading ? (
+                <CrimeGroupTable
+                  crimeGroups={data?.offender?.crimeGroups || []}
+                  onDelete={onDeleteCrimeGroup}
+                  saving={saving}
+                />
+              ) : (
+                <Empty
+                  description={intl.formatMessage({
+                    defaultMessage: 'No crime groups for this offender',
+                    id: 'BIRzsQ',
+                  })}
+                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                />
+              )}
             </Card>
           </div>
         </Col>
@@ -1457,6 +1920,210 @@ const ViewOffender = ({
         width={800}
       >
         {viewMatches && <OffenderMatches offenderId={viewMatches} />}
+      </Drawer>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Edit Offender Details',
+          id: 'DomujL',
+        })}
+        visible={editOffender}
+        width="600"
+        onClose={toggleEditOffender}
+      >
+        {editOffender ? (
+          <EditOffenderFeed
+            onClose={toggleEditOffender}
+            offenderId={data?.offender?.id || ''}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      {/* images */}
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Edit Offender Images',
+          id: 'd7OJx8',
+        })}
+        open={editImages}
+        width="800"
+        zIndex={999}
+        onClose={toggleEditImages}
+      >
+        {editImages ? (
+          <EditImageList
+            update={onUpdateImages}
+            onClose={toggleEditImages}
+            images={data?.offender?.images}
+            title={intl.formatMessage({
+              defaultMessage: 'offender',
+              id: 'ZkfGxM',
+            })}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <FeedImageEditor
+        submitImage={onEditImage}
+        onClose={() => setEditImageData(null)}
+        open={!!editImageData}
+        image={editImageData}
+      />
+      {/* vehicle */}
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Add Existing Vehicles',
+          id: 'goP1s6',
+        })}
+        open={addExistingVehicle}
+        width="800"
+        onClose={toggleAddExistingVehicle}
+        zIndex={1001}
+      >
+        {addExistingVehicle ? (
+          <LinkVehicle
+            update={(value) => onAddExistingVehicle(value.id)}
+            vehicleIds={data?.offender?.vehicles.map(({ id }) => id)}
+            onClose={toggleAddExistingVehicle}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Add New Vehicle',
+          id: 'cHbTr7',
+        })}
+        open={addVehicle}
+        width="700"
+        zIndex={999}
+        onClose={toggleAddVehicle}
+      >
+        {addVehicle ? (
+          <AddVehicle
+            update={onAddVehicle}
+            onClose={toggleAddVehicle}
+            fromIncident
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Update Vehicle',
+          id: 'BBPVid',
+        })}
+        open={!!editVehicleData}
+        width="800"
+        onClose={() => setEditVehicleData(null)}
+        zIndex={1001}
+      >
+        {editVehicleData ? (
+          <EditVehicle
+            update={onEditVehicle}
+            onClose={() => setEditVehicleData(null)}
+            editData={editVehicleData}
+            images={data?.offender?.images.map((el) => ({ ...el, uid: el.id }))}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      {/* crime group */}
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Add Crime Groups',
+          id: 'mYgStg',
+        })}
+        open={addCrimeGroup}
+        width="800"
+        onClose={toggleAddCrimeGroup}
+        zIndex={1001}
+      >
+        {addCrimeGroup ? (
+          <LinkCrimeGroup
+            update={(value) => onAddCrimeGroup(value.id)}
+            crimeGroupIds={data?.offender?.crimeGroups.map(({ id }) => id)}
+            onClose={toggleAddCrimeGroup}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+
+      {/* Address  */}
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Add Address',
+          id: 'xg14pg',
+        })}
+        visible={addAddress}
+        width="600"
+        onClose={toggleAddAddress}
+      >
+        {addAddress && (
+          <NewOffenderAddress
+            onClose={toggleAddAddress}
+            onSubmit={(value) =>
+              onAddAddress({ ...value, id: `${Math.random()}` })
+            }
+          />
+        )}
+      </Drawer>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Edit Address',
+          id: 'uSpe21',
+        })}
+        visible={!!editAddressData}
+        width="600"
+        onClose={() => setEditAddressData(null)}
+      >
+        {editAddressData && (
+          <EditOffenderAddress
+            onClose={() => setEditAddressData(null)}
+            onSubmit={onEditAddress}
+            data={editAddressData}
+          />
+        )}
+      </Drawer>
+      {/* exclusion */}
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Add Exclusion',
+          id: 'QPeZMN',
+        })}
+        visible={addBan}
+        width="400"
+        onClose={toggleAddBan}
+      >
+        {addBan ? (
+          <AddExclusion update={onAddBan} onClose={toggleAddBan} />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Edit Exclusion',
+          id: '22olP0',
+        })}
+        visible={!!editBanData}
+        width="400"
+        onClose={() => setEditBanData(null)}
+      >
+        {editBanData ? (
+          <EditExclusion
+            update={onEditBan}
+            onClose={() => setEditBanData(null)}
+            banData={editBanData}
+          />
+        ) : (
+          <div />
+        )}
       </Drawer>
     </div>
   );

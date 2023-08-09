@@ -47,6 +47,43 @@ const ViewOffender = (): JSX.Element => {
     viewAssociate,
     toggleViewMatches,
     viewMatches,
+    editOffender,
+    toggleEditOffender,
+    editImages,
+    toggleEditImages,
+    editImageData,
+    setEditImageData,
+    onDeleteImage,
+    onEditImage,
+    onUpdateImages,
+    addVehicle,
+    addExistingVehicle,
+    editVehicleData,
+    setEditVehicleData,
+    onDeleteVehicle,
+    toggleAddVehicle,
+    toggleAddExistingVehicle,
+    onEditVehicle,
+    onAddVehicle,
+    onAddExistingVehicle,
+    addCrimeGroup,
+    onDeleteCrimeGroup,
+    toggleAddCrimeGroup,
+    onAddCrimeGroup,
+    addAddress,
+    editAddressData,
+    setEditAddressData,
+    onDeleteAddress,
+    toggleAddAddress,
+    onEditAddress,
+    onAddAddress,
+    addBan,
+    editBanData,
+    setEditBanData,
+    onDeleteBan,
+    toggleAddBan,
+    onEditBan,
+    onAddBan,
   } = useViewOffender(offenderId);
 
   return (
@@ -92,6 +129,43 @@ const ViewOffender = (): JSX.Element => {
       viewAssociate={viewAssociate}
       toggleViewMatches={toggleViewMatches}
       viewMatches={viewMatches}
+      editOffender={editOffender}
+      toggleEditOffender={toggleEditOffender}
+      editImages={editImages}
+      toggleEditImages={toggleEditImages}
+      editImageData={editImageData}
+      setEditImageData={setEditImageData}
+      onDeleteImage={onDeleteImage}
+      onEditImage={onEditImage}
+      onUpdateImages={onUpdateImages}
+      addVehicle={addVehicle}
+      addExistingVehicle={addExistingVehicle}
+      editVehicleData={editVehicleData}
+      setEditVehicleData={setEditVehicleData}
+      onDeleteVehicle={onDeleteVehicle}
+      toggleAddVehicle={toggleAddVehicle}
+      toggleAddExistingVehicle={toggleAddExistingVehicle}
+      onEditVehicle={onEditVehicle}
+      onAddVehicle={onAddVehicle}
+      onAddExistingVehicle={onAddExistingVehicle}
+      addCrimeGroup={addCrimeGroup}
+      onDeleteCrimeGroup={onDeleteCrimeGroup}
+      toggleAddCrimeGroup={toggleAddCrimeGroup}
+      onAddCrimeGroup={onAddCrimeGroup}
+      addAddress={addAddress}
+      editAddressData={editAddressData}
+      setEditAddressData={setEditAddressData}
+      onDeleteAddress={onDeleteAddress}
+      toggleAddAddress={toggleAddAddress}
+      onEditAddress={onEditAddress}
+      onAddAddress={onAddAddress}
+      addBan={addBan}
+      editBanData={editBanData}
+      setEditBanData={setEditBanData}
+      onDeleteBan={onDeleteBan}
+      toggleAddBan={toggleAddBan}
+      onEditBan={onEditBan}
+      onAddBan={onAddBan}
     />
   );
 };

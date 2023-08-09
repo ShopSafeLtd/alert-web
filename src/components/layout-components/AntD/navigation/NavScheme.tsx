@@ -86,6 +86,7 @@ export const NavScheme = () => {
       goodsMode: scheme.scheme.goodsMode,
       facialRecognition: scheme.scheme.facialRecognition,
       imagesRequiredOnOffenders: scheme.scheme.imagesRequiredOnOffenders,
+      taskTimeTracking: scheme.scheme.taskTimeTracking,
     });
     setTodos({ userTodos: scheme.scheme.userTodos || 0 });
     setNotifications({

@@ -117,6 +117,53 @@ describe('Detail Officer View', () => {
               viewAssociate={null}
               toggleViewMatches={jest.fn()}
               viewMatches={null}
+              editOffender={false}
+              toggleEditOffender={jest.fn()}
+              editImages={false}
+              toggleEditImages={jest.fn()}
+              editImageData={{ id: 'imageId' }}
+              setEditImageData={jest.fn()}
+              onDeleteImage={jest.fn()}
+              onEditImage={jest.fn()}
+              onUpdateImages={jest.fn()}
+              addVehicle={false}
+              addExistingVehicle={false}
+              editVehicleData={{ id: 'imageId' }}
+              setEditVehicleData={jest.fn()}
+              onDeleteVehicle={jest.fn()}
+              toggleAddVehicle={jest.fn()}
+              toggleAddExistingVehicle={jest.fn()}
+              onEditVehicle={jest.fn()}
+              onAddVehicle={jest.fn()}
+              onAddExistingVehicle={jest.fn()}
+              addCrimeGroup={false}
+              onDeleteCrimeGroup={jest.fn()}
+              toggleAddCrimeGroup={jest.fn()}
+              onAddCrimeGroup={jest.fn()}
+              addAddress={false}
+              editAddressData={{
+                id: 'imageId',
+                postcode: 'postcode',
+                street: 'street',
+                townCity: 'townCity',
+              }}
+              setEditAddressData={jest.fn()}
+              onDeleteAddress={jest.fn()}
+              toggleAddAddress={jest.fn()}
+              onEditAddress={jest.fn()}
+              onAddAddress={jest.fn()}
+              addBan={false}
+              editBanData={{
+                id: 'imageId',
+                endDate: new Date(),
+                startDate: new Date(),
+                location: 'location',
+              }}
+              setEditBanData={jest.fn()}
+              onDeleteBan={jest.fn()}
+              toggleAddBan={jest.fn()}
+              onEditBan={jest.fn()}
+              onAddBan={jest.fn()}
             />
           </MockedProvider>
         </MemoryRouter>

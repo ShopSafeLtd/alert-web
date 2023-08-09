@@ -7,8 +7,9 @@ import {
   faCheckCircle as faCheckedCircle,
   faUpload,
 } from '@fortawesome/pro-solid-svg-icons';
-import { FormattedMessage } from 'react-intl';
+import { useIntl } from 'react-intl';
 import type { UploadChangeParam } from 'antd/lib/upload';
+import type { ImagePosition } from 'graphql/generated';
 import WatermarkImage from '../../images/WatermarkImage.view';
 import type { StateImageData } from '../../incidents/IncidentForm/ImageSection/useImageSection';
 
@@ -48,8 +49,13 @@ const useStyles = createUseStyles((theme: Theme) => ({
 
 export interface ImageData {
   uid: string;
+  id?: string;
   url?: string | null | undefined;
   optimised?: string | null | undefined;
+  position?: ImagePosition;
+  primary?: boolean | null | undefined;
+  policeImage?: boolean | null | undefined;
+  rotation?: number;
   boundingBox?: {
     height: string;
     left: string;
@@ -63,6 +69,11 @@ export interface ImageValue {
   id: string;
   url?: string | null | undefined;
   optimised?: string | null | undefined;
+  new?: boolean;
+  position?: ImagePosition;
+  primary?: boolean | null | undefined;
+  policeImage?: boolean | null | undefined;
+  rotation?: number;
   boundingBox?: {
     height: string;
     left: string;
@@ -74,11 +85,13 @@ export interface ImageValue {
 
 interface Props {
   images: ImageData[] | undefined;
-  value?: ImageValue[];
+  // selectedImages: ImageData[] | undefined;
+  value?: ImageValue[] | null;
   onChange?: (value?: ImageValue[]) => void;
 }
 
 const ImageSelect = ({ images: imagesProp, value, onChange }: Props) => {
+  const intl = useIntl();
   const classes = useStyles();
   const [selected, setSelected] = useState<ImageValue[]>([]);
   const [images, setImages] = useState<ImageData[]>([]);
@@ -95,8 +108,15 @@ const ImageSelect = ({ images: imagesProp, value, onChange }: Props) => {
   useEffect(() => {
     if (onChange) onChange(selected);
   }, [selected]);
+  console.log('images', images);
 
   const toggleSelected = (image: ImageData) => {
+    console.log('image', image);
+    console.log(
+      'select',
+      selected.some(({ id }) => id === image.uid)
+    );
+
     if (selected.some(({ id }) => id === image.uid)) {
       setSelected(selected.filter(({ id }) => id !== image.uid));
     } else {
@@ -147,12 +167,17 @@ const ImageSelect = ({ images: imagesProp, value, onChange }: Props) => {
     <div>
       <Upload
         onChange={onImageChange}
-        action={import.meta.env.VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT}
-        showUploadList={false}
+        // listType="picture-card"
+        // action={import.meta.env.VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT}
+        action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
+        // showUploadList={false}
       >
         <Button loading={uploading} disabled={uploading}>
           <FontAwesomeIcon icon={faUpload} className={classes.uploadIcon} />
-          <FormattedMessage defaultMessage="Upload Image" id="MntrZe" />
+          {intl.formatMessage({
+            defaultMessage: 'Upload Image',
+            id: 'MntrZe',
+          })}
         </Button>
       </Upload>
       <Row className={classes.row} gutter={[16, 16]}>
@@ -168,7 +193,11 @@ const ImageSelect = ({ images: imagesProp, value, onChange }: Props) => {
               </div>
             )}
             <div className={classes.image}>
-              <WatermarkImage url={image.url} />
+              <WatermarkImage
+                url={image.url}
+                position={image.position}
+                rotation={image.rotation || 0}
+              />
             </div>
           </Col>
         ))}

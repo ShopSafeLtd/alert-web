@@ -26,7 +26,9 @@ import { Link } from 'react-router-dom';
 import getTodoUrl from 'utils/get-to-do-url';
 import { useIntl } from 'react-intl';
 import formatCalendar from 'utils/format-calendar-24h';
+import { useStoreState } from 'state';
 import useStyles from './TodoList.styles';
+import ViewTodo from '../../../components/form-components/Todos/ViewTodo/Todo.container';
 
 const { Panel } = Collapse;
 interface Props {
@@ -47,6 +49,8 @@ interface Props {
   currentPageSize: number;
   toggleAllUsers: () => void;
   toggleAllSchemes: () => void;
+  selectedTodo: string | null;
+  setSelectedTodo: (id: string | null) => void;
 }
 
 const AdminTodos = ({
@@ -64,9 +68,19 @@ const AdminTodos = ({
   currentPageSize,
   toggleAllUsers,
   toggleAllSchemes,
+  selectedTodo,
+  setSelectedTodo,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
+  const shouldOpen = useStoreState((state) => state.scheme.taskTimeTracking);
+  // const shouldOpen = true;
+
+  const completeTodo = (value: boolean, id?: string) => {
+    if (value && id) {
+      onCompletedTodo(id);
+    }
+  };
   return (
     <div className="list-view">
       <Row gutter={8} style={{ marginBottom: 10 }}>
@@ -169,36 +183,6 @@ const AdminTodos = ({
             }}
             columns={[
               {
-                title: intl.formatMessage({
-                  defaultMessage: 'Completed',
-                  id: '95stPq',
-                }),
-                dataIndex: 'actions',
-                key: 'actions',
-                width: 100,
-                render: (_, record) => (
-                  <Popconfirm
-                    title={intl.formatMessage({
-                      defaultMessage: 'Complete this task?',
-                      id: 'i2Qvui',
-                    })}
-                    // description="Do you complete this task?"
-                    onConfirm={() => onCompletedTodo(record.key)}
-                    okText={intl.formatMessage({
-                      defaultMessage: 'Yes',
-                      id: 'a5msuh',
-                    })}
-                    cancelText={intl.formatMessage({
-                      defaultMessage: 'No',
-                      id: 'oUWADl',
-                    })}
-                    overlayInnerStyle={{ padding: 10 }}
-                  >
-                    <Checkbox checked={!!record.completed} />
-                  </Popconfirm>
-                ),
-              },
-              {
                 key: 'name',
                 dataIndex: 'name',
                 title: intl.formatMessage({
@@ -255,6 +239,50 @@ const AdminTodos = ({
                       </Col>
                     ))}
                   </Row>
+                ),
+              },
+              {
+                title: intl.formatMessage({
+                  defaultMessage: 'Completed',
+                  id: '95stPq',
+                }),
+                dataIndex: 'actions',
+                key: 'actions',
+                width: 100,
+                render: (_, record) => (
+                  <Button
+                    onClick={() => {
+                      if (shouldOpen) {
+                        setSelectedTodo(record.todo.id);
+                      } else {
+                        onCompletedTodo(record.todo.id);
+                      }
+                    }}
+                  >
+                    {intl.formatMessage({
+                      defaultMessage: 'Complete',
+                      id: 'U78NhE',
+                    })}
+                  </Button>
+                  // <Popconfirm
+                  //   title={intl.formatMessage({
+                  //     defaultMessage: 'Complete this task?',
+                  //     id: 'i2Qvui',
+                  //   })}
+                  //   // description="Do you complete this task?"
+                  //   onConfirm={() => onCompletedTodo(record.key)}
+                  //   okText={intl.formatMessage({
+                  //     defaultMessage: 'Yes',
+                  //     id: 'a5msuh',
+                  //   })}
+                  //   cancelText={intl.formatMessage({
+                  //     defaultMessage: 'No',
+                  //     id: 'oUWADl',
+                  //   })}
+                  //   overlayInnerStyle={{ padding: 10 }}
+                  // >
+                  //   <Checkbox checked={!!record.completed} />
+                  // </Popconfirm>
                 ),
               },
             ]}
@@ -408,15 +436,34 @@ const AdminTodos = ({
 
       <Drawer
         title={intl.formatMessage({
-          defaultMessage: 'Add Todo',
-          id: 'Cgnk3e',
+          defaultMessage: 'Create Activity',
+          id: '8RIxKm',
         })}
         open={addTodo}
-        width="400"
+        width="800"
         onClose={toggleAddTodo}
       >
         {addTodo ? (
           <AddTodo update={updateTodoList} onClose={toggleAddTodo} />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Complete Activity',
+          id: '8fwjt4',
+        })}
+        open={!!selectedTodo}
+        width="800"
+        onClose={() => setSelectedTodo(null)}
+      >
+        {selectedTodo ? (
+          <ViewTodo
+            id={selectedTodo}
+            onClose={() => setSelectedTodo(null)}
+            updateTodo={completeTodo}
+          />
         ) : (
           <div />
         )}

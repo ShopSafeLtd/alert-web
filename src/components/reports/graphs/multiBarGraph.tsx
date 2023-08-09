@@ -2,6 +2,7 @@ import { ResponsiveBar } from '@nivo/bar';
 
 import { Empty } from 'antd';
 import React from 'react';
+import { useIntl } from 'react-intl';
 import { useStoreState } from '../../../state';
 import filteredBarData from '../../../views/reports/crime-groups/crime-group-report/utils/FilteredBarData';
 
@@ -20,6 +21,7 @@ const MultiBarGraph = ({
 }) => {
   const darkMode =
     useStoreState((state) => state.theme.currentTheme) === 'dark';
+  const intl = useIntl();
 
   return (
     <div
@@ -35,7 +37,11 @@ const MultiBarGraph = ({
             }) || [
               {
                 value: 'No Data',
-                label: 'No Data',
+                // label: 'No Data',
+                label: intl.formatMessage({
+                  defaultMessage: 'No Data',
+                  id: 'D3rOMr',
+                }),
               },
             ]
           }

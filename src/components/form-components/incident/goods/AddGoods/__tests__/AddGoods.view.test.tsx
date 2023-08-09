@@ -1,18 +1,23 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
-import AddExclusion from '../AddTodo.view';
+import AddGoods from '../AddGoods.view';
+import { GoodsMode } from 'graphql/generated';
 
 describe('Detail Officer View', () => {
   it('renders the page', () => {
     const { getByText } = render(
       <MemoryRouter>
-        <AddExclusion
-          adminUsersData={[]}
-          usersLoading={false}
+        <AddGoods
           onSubmit={jest.fn()}
           onClose={jest.fn()}
-          saving={false}
+          goodsTypesData={{
+            listGoodsTypes: {
+              total: 1,
+              goodsTypes: [{ id: 'id', name: 'name' }],
+            },
+          }}
+          goodsMode={GoodsMode.Generic}
         />
       </MemoryRouter>
     );

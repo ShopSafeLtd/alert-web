@@ -1,5 +1,5 @@
 import { BanType } from 'graphql/generated';
-
+// wait to check
 const BanTypeValues = [
   {
     value: BanType.Cbo,

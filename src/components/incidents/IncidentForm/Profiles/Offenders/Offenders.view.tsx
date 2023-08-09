@@ -250,7 +250,7 @@ const Offenders = ({
             data={updateOpen}
             onClose={() => setUpdateOpen(null)}
             update={onUpdateOffender}
-            images={images}
+            images={images?.map((el) => ({ ...el, id: `${Math.random()}` }))}
             onImagesUploaded={onImagesUploadedInForm}
           />
         ) : (

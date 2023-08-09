@@ -1,0 +1,15 @@
+mutation updateOffenderCustomGalleries(
+  $id: String!
+  $customGalleries: CustomGalleryUpdateManyWithoutOffendersNestedInput
+) {
+  updateOffender(
+    where: { id: $id }
+    data: { customGalleries: $customGalleries }
+  ) {
+    id
+    customGalleries {
+      id
+      name
+    }
+  }
+}

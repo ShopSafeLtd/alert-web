@@ -43,6 +43,7 @@ describe('Detail Officer View', () => {
             goodsMode: 'GENERIC' as GoodsMode,
             facialRecognition: false,
             imagesRequiredOnOffenders: false,
+            taskTimeTracking: false,
           },
         },
       ],

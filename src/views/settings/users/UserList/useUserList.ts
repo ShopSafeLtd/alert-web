@@ -60,15 +60,6 @@ const useUserList = (): Return => {
   const [userStatus, setUserStatus] = useState<UserStatus[]>();
   const [userRole, setUserRole] = useState<Role>();
 
-  // const getDisAbled = () => {
-  //   if (userStatus === UserStatus.Disabled) return { equals: true };
-  //   return { equals: false };
-  // };
-  // const getNewUser = () => {
-  //   if (userStatus === UserStatus.Invited) return { equals: true };
-  //   if (userStatus === UserStatus.Inactive) return { equals: false };
-  //   return undefined;
-  // };
   const getOrderBy = {
     [UserSort.createdAtDesc]: {
       createdAt: SortOrder.Desc,
@@ -112,8 +103,6 @@ const useUserList = (): Return => {
       status: {
         in: userStatus,
       },
-      // disabled: getDisAbled(),
-      // newUser: getNewUser(),
       groups:
         selectedGroups.length > 0
           ? {

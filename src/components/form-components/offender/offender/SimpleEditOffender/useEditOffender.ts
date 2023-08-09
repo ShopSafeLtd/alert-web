@@ -35,7 +35,7 @@ export interface OffenderData {
   comment?: string | null;
   idVerified?: boolean;
   idSource?: IdSource;
-  images?: OffenderImage[];
+  images?: OffenderImage[] | null;
 }
 
 interface Props {
@@ -88,7 +88,7 @@ const useEditOffender = ({
       ...data,
       ...values,
       images: values.images.map((image) => ({
-        id: image.id,
+        id: image.id || '',
         url: image.url,
         optimised: image.optimised,
       })),

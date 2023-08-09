@@ -22,6 +22,7 @@ import { useApolloClient } from '@apollo/client';
 import { useStoreState } from 'state';
 import update from 'immutability-helper';
 import type { Image, OffenderData } from 'types/DataType';
+import { useIntl } from 'react-intl';
 import OffenderItem from './OffenderItem';
 
 export interface FormData {
@@ -72,6 +73,7 @@ const useAddNewOffender = ({
   onClose,
   update: updateOffender,
 }: Props): Return => {
+  const intl = useIntl();
   const client = useApolloClient();
   const [form] = Form.useForm<FormData>();
   const schemeId = useStoreState((state) => state.scheme.id);
@@ -113,7 +115,10 @@ const useAddNewOffender = ({
             }))
           : [
               {
-                label: 'No results found',
+                label: intl.formatMessage({
+                  defaultMessage: 'No results found',
+                  id: 'hX5PAb',
+                }),
                 value: '',
                 disabled: true,
               },

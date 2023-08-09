@@ -11,7 +11,7 @@ import {
   Typography,
 } from 'antd';
 import { Link } from 'react-router-dom';
-
+// wait to check
 const { Text, Title, Paragraph } = Typography;
 
 interface Props {

@@ -121,7 +121,6 @@ const useViewChat = ({ chatId }: Props): Return => {
   const toggleAddChat = () => {
     setAddChat(!addChat);
   };
-
   const updateAddUserChat: MutationUpdaterFn<CreateChatMutation> = (
     store,
     { data: res }

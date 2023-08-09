@@ -43,6 +43,7 @@ query currentUser($scheme: UniqueId) {
         defaultPublicOffenderDOB
         facialRecognition
         imagesRequiredOnOffenders
+        taskTimeTracking
       }
     }
     incidentEmail

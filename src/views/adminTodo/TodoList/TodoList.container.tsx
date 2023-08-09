@@ -19,10 +19,14 @@ const AdminTodos = (): JSX.Element => {
     currentPageSize,
     toggleAllUsers,
     toggleAllSchemes,
+    setSelectedTodo,
+    selectedTodo,
   } = useAdminTodos();
 
   return (
     <View
+      selectedTodo={selectedTodo}
+      setSelectedTodo={setSelectedTodo}
       data={data}
       loading={loading}
       saving={saving}

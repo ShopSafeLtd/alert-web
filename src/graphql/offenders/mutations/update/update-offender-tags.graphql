@@ -1,0 +1,12 @@
+mutation updateOffenderTags(
+  $id: String!
+  $tags: TagUpdateManyWithoutOffendersNestedInput
+) {
+  updateOffender(where: { id: $id }, data: { tags: $tags }) {
+    id
+    tags {
+      id
+      name
+    }
+  }
+}
