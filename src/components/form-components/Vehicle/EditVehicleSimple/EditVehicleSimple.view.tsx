@@ -100,7 +100,13 @@ const EditVehicle = ({
           })}
         >
           <ImageSelect
-            images={editData.images ? images?.concat(editData.images) : images}
+            images={
+              editData.images
+                ? images?.concat(
+                    editData.images.map((el) => ({ ...el, uid: el.id }))
+                  )
+                : images
+            }
             value={editData.images}
           />
         </Form.Item>

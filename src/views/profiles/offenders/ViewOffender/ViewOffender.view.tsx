@@ -2037,7 +2037,7 @@ const ViewOffender = ({
             update={onEditVehicle}
             onClose={() => setEditVehicleData(null)}
             editData={editVehicleData}
-            images={data?.offender?.images}
+            images={data?.offender?.images.map((el) => ({ ...el, uid: el.id }))}
           />
         ) : (
           <div />

@@ -88,7 +88,7 @@ const useEditOffender = ({
       ...data,
       ...values,
       images: values.images.map((image) => ({
-        id: image.id,
+        id: image.id || '',
         url: image.url,
         optimised: image.optimised,
       })),

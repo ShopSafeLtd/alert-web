@@ -48,7 +48,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
 }));
 
 export interface ImageData {
-  uid?: string;
+  uid: string;
   id?: string;
   url?: string | null | undefined;
   optimised?: string | null | undefined;
@@ -66,7 +66,7 @@ export interface ImageData {
 }
 
 export interface ImageValue {
-  id?: string;
+  id: string;
   url?: string | null | undefined;
   optimised?: string | null | undefined;
   new?: boolean;

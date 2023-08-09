@@ -76,7 +76,7 @@ export interface AddOffenderData {
   comment?: string | null;
   idVerified?: boolean;
   idSource?: IdSource;
-  images?: ImageType[];
+  images?: ImageType[] | null;
 }
 
 export interface StateOffenderData extends AddOffenderData {

@@ -35,7 +35,7 @@ const EditOffender = ({
         ageCheck={ageCheck}
         onClose={onClose}
         idVerified={idVerified}
-        images={images}
+        images={images?.map((el) => ({ ...el, uid: el.id }))}
       />
     </div>
   );

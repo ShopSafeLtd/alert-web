@@ -407,7 +407,13 @@ const EditOffender = ({
           ]}
         >
           <ImageSelect
-            images={data.images ? images?.concat(data.images) : images}
+            images={
+              data.images
+                ? images?.concat(
+                    data.images.map((el) => ({ ...el, uid: el.id }))
+                  )
+                : images
+            }
             value={data.images}
           />
         </Form.Item>

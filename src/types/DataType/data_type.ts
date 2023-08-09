@@ -62,11 +62,14 @@ export interface OffenderCardData {
   reference?: number | null;
   updatedAt?: Date | undefined;
   name?: string | null;
-  images?: Array<{
-    id: string;
-    url?: string | null;
-    optimised?: string | null;
-  }>;
+  images?:
+    | Array<{
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+      }>
+    | null
+    | undefined;
 }
 
 // Incident

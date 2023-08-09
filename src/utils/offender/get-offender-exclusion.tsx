@@ -1,7 +1,10 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 // calculate the difference in days between start and end date
-export const calcDuration = (startDate: string, endDate: string) => {
+export const calcDuration = (
+  startDate: string | Date,
+  endDate: string | Date
+) => {
   const start = new Date(startDate).valueOf();
   const end = new Date(endDate).valueOf();
 

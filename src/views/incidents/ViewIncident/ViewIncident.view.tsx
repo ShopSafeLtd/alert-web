@@ -1818,7 +1818,7 @@ const ViewIncident = ({
           <AddNewOffenderSimple
             update={onAddOffender}
             onClose={toggleAddOffender}
-            images={data?.incident?.images}
+            images={data?.incident?.images.map((el) => ({ ...el, uid: el.id }))}
           />
         ) : (
           <div />
@@ -1920,7 +1920,7 @@ const ViewIncident = ({
             update={onEditVehicle}
             onClose={() => setEditVehicleData(null)}
             editData={editVehicleData}
-            images={data?.incident?.images}
+            images={data?.incident?.images.map((el) => ({ ...el, uid: el.id }))}
           />
         ) : (
           <div />
