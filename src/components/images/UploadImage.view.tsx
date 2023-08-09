@@ -93,7 +93,9 @@ const UploadImage = ({
                         defaultMessage: 'Remove the image?',
                         id: 'bRha+v',
                       })}
-                      onConfirm={() => onRemoveImage(file.uid)}
+                      onConfirm={() => {
+                        onRemoveImage(file.uid);
+                      }}
                       okText={intl.formatMessage({
                         defaultMessage: 'Yes',
                         id: 'a5msuh',

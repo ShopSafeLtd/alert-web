@@ -387,7 +387,11 @@ const useViewIncident = (incidentId: string): Return => {
 
   const onEditImage = (value: EditFeedImage) => {
     setSaving(true);
-    if (value)
+    if (value) {
+      // ???
+      const findPrimaryId = data?.incident?.images.find(
+        ({ primary }) => primary
+      )?.id;
       void updateIncidentImages({
         variables: {
           id: incidentId,
@@ -404,6 +408,14 @@ const useViewIncident = (incidentId: string): Return => {
                   rotation: { set: value.rotation || 0 },
                 },
               },
+              {
+                where: {
+                  id: findPrimaryId,
+                },
+                data: {
+                  primary: { set: !value.primary },
+                },
+              },
             ],
           },
         },
@@ -418,6 +430,7 @@ const useViewIncident = (incidentId: string): Return => {
         setEditImageData(null);
         setSaving(false);
       });
+    }
   };
   const onDeleteImage = (value: string) => {
     setSaving(false);
