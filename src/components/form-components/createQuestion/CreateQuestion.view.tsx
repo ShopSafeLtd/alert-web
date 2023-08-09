@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access,unicorn/no-useless-promise-resolve-reject,consistent-return,@typescript-eslint/no-unsafe-call */
 import type { FormInstance } from 'antd';
-import { Button, Card, Checkbox, Col, Form, Input, Row, Select } from 'antd';
+import { Button, Card, Col, Form, Input, Row, Select } from 'antd';
 import React from 'react';
 import { useIntl } from 'react-intl';
-import type { FormData } from './useAddQuestion';
-import type { AvailableQuestionsQuery } from '../../../graphql/generated';
+import type { FormData } from './useCreateQuestion';
+import type { AvailableTaskQuestionsQuery } from '../../../graphql/generated';
 import { AnswerType } from '../../../graphql/generated';
 import {
   DatePreview,
@@ -16,23 +16,23 @@ import {
 } from './previews';
 
 interface AddQuestionViewProps {
-  questionData: AvailableQuestionsQuery | undefined;
-  loading: boolean;
   form: FormInstance<FormData>;
   data: FormData;
   onSubmit: (value: FormData) => void;
   onClose: () => void;
   saving: boolean;
+  questionData: AvailableTaskQuestionsQuery | undefined;
+  loading: boolean;
 }
 
-const AddQuestionView = ({
+const CreateQuestionView = ({
   data,
-  questionData,
-  loading,
   form,
   onSubmit,
   onClose,
   saving,
+  questionData,
+  loading,
 }: AddQuestionViewProps) => {
   const answerType = Form.useWatch('type', form);
   const question = Form.useWatch('question', form) || '';
@@ -83,7 +83,7 @@ const AddQuestionView = ({
               form.setFieldsValue({ question: '' });
             }}
             onSelect={(value) => {
-              const ques = questionData?.availableQuestions.find(
+              const ques = questionData?.availableTaskQuestions.find(
                 (q) => q.id === value
               );
               const qType = ques?.type;
@@ -95,7 +95,7 @@ const AddQuestionView = ({
                 options: qOptions || [],
               });
             }}
-            options={questionData?.availableQuestions.map((q) => ({
+            options={questionData?.availableTaskQuestions.map((q) => ({
               label: q.questionFormatted,
               value: q.id,
             }))}
@@ -111,16 +111,6 @@ const AddQuestionView = ({
           required
         >
           <Input />
-        </Form.Item>
-        <Form.Item
-          label={intl.formatMessage({
-            defaultMessage: 'Required',
-            id: 'Seanpx',
-          })}
-          name="required"
-          valuePropName="checked"
-        >
-          <Checkbox />
         </Form.Item>
       </Card>
 
@@ -310,4 +300,4 @@ const AddQuestionView = ({
   );
 };
 
-export default AddQuestionView;
+export default CreateQuestionView;

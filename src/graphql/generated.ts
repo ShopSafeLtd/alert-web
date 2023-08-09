@@ -3081,6 +3081,8 @@ export type Answer = {
   id: Scalars['String'];
   incident?: Maybe<Incident>;
   tagQuestion?: Maybe<TagQuestion>;
+  taskQuestion?: Maybe<TaskQuestion>;
+  todo?: Maybe<Todo>;
   type: AnswerType;
   updatedAt: Scalars['DateTime'];
 };
@@ -3091,6 +3093,7 @@ export type AnswerCreateManyIncidentInput = {
   id?: InputMaybe<Scalars['String']>;
   tagId?: InputMaybe<Scalars['String']>;
   taskId?: InputMaybe<Scalars['String']>;
+  todoId?: InputMaybe<Scalars['String']>;
   type: AnswerType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
@@ -3106,6 +3109,7 @@ export type AnswerCreateManyTagQuestionInput = {
   id?: InputMaybe<Scalars['String']>;
   incidentId?: InputMaybe<Scalars['String']>;
   taskId?: InputMaybe<Scalars['String']>;
+  todoId?: InputMaybe<Scalars['String']>;
   type: AnswerType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
@@ -3121,12 +3125,29 @@ export type AnswerCreateManyTaskQuestionInput = {
   id?: InputMaybe<Scalars['String']>;
   incidentId?: InputMaybe<Scalars['String']>;
   tagId?: InputMaybe<Scalars['String']>;
+  todoId?: InputMaybe<Scalars['String']>;
   type: AnswerType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
 export type AnswerCreateManyTaskQuestionInputEnvelope = {
   data?: InputMaybe<Array<AnswerCreateManyTaskQuestionInput>>;
+  skipDuplicates?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type AnswerCreateManyTodoInput = {
+  answer: Scalars['String'];
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  id?: InputMaybe<Scalars['String']>;
+  incidentId?: InputMaybe<Scalars['String']>;
+  tagId?: InputMaybe<Scalars['String']>;
+  taskId?: InputMaybe<Scalars['String']>;
+  type: AnswerType;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type AnswerCreateManyTodoInputEnvelope = {
+  data?: InputMaybe<Array<AnswerCreateManyTodoInput>>;
   skipDuplicates?: InputMaybe<Scalars['Boolean']>;
 };
 
@@ -3157,6 +3178,13 @@ export type AnswerCreateNestedManyWithoutTaskQuestionInput = {
   createMany?: InputMaybe<AnswerCreateManyTaskQuestionInputEnvelope>;
 };
 
+export type AnswerCreateNestedManyWithoutTodoInput = {
+  connect?: InputMaybe<Array<AnswerWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<AnswerCreateOrConnectWithoutTodoInput>>;
+  create?: InputMaybe<Array<AnswerCreateWithoutTodoInput>>;
+  createMany?: InputMaybe<AnswerCreateManyTodoInputEnvelope>;
+};
+
 export type AnswerCreateOrConnectWithoutIncidentInput = {
   create: AnswerCreateWithoutIncidentInput;
   where: AnswerWhereUniqueInput;
@@ -3172,12 +3200,18 @@ export type AnswerCreateOrConnectWithoutTaskQuestionInput = {
   where: AnswerWhereUniqueInput;
 };
 
+export type AnswerCreateOrConnectWithoutTodoInput = {
+  create: AnswerCreateWithoutTodoInput;
+  where: AnswerWhereUniqueInput;
+};
+
 export type AnswerCreateWithoutIncidentInput = {
   answer: Scalars['String'];
   createdAt?: InputMaybe<Scalars['DateTime']>;
   id?: InputMaybe<Scalars['String']>;
   tagQuestion?: InputMaybe<TagQuestionCreateNestedOneWithoutAnswersInput>;
   taskQuestion?: InputMaybe<TaskQuestionCreateNestedOneWithoutAnswersInput>;
+  todo?: InputMaybe<TodoCreateNestedOneWithoutAnswersInput>;
   type: AnswerType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
@@ -3188,6 +3222,7 @@ export type AnswerCreateWithoutTagQuestionInput = {
   id?: InputMaybe<Scalars['String']>;
   incident?: InputMaybe<IncidentCreateNestedOneWithoutAnswersInput>;
   taskQuestion?: InputMaybe<TaskQuestionCreateNestedOneWithoutAnswersInput>;
+  todo?: InputMaybe<TodoCreateNestedOneWithoutAnswersInput>;
   type: AnswerType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
@@ -3198,6 +3233,18 @@ export type AnswerCreateWithoutTaskQuestionInput = {
   id?: InputMaybe<Scalars['String']>;
   incident?: InputMaybe<IncidentCreateNestedOneWithoutAnswersInput>;
   tagQuestion?: InputMaybe<TagQuestionCreateNestedOneWithoutAnswersInput>;
+  todo?: InputMaybe<TodoCreateNestedOneWithoutAnswersInput>;
+  type: AnswerType;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type AnswerCreateWithoutTodoInput = {
+  answer: Scalars['String'];
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  id?: InputMaybe<Scalars['String']>;
+  incident?: InputMaybe<IncidentCreateNestedOneWithoutAnswersInput>;
+  tagQuestion?: InputMaybe<TagQuestionCreateNestedOneWithoutAnswersInput>;
+  taskQuestion?: InputMaybe<TaskQuestionCreateNestedOneWithoutAnswersInput>;
   type: AnswerType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
@@ -3228,6 +3275,7 @@ export type AnswerScalarWhereInput = {
   incidentId?: InputMaybe<StringNullableFilter>;
   tagId?: InputMaybe<StringNullableFilter>;
   taskId?: InputMaybe<StringNullableFilter>;
+  todoId?: InputMaybe<StringNullableFilter>;
   type?: InputMaybe<EnumAnswerTypeFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
 };
@@ -3260,6 +3308,11 @@ export type AnswerUpdateManyWithWhereWithoutTagQuestionInput = {
 };
 
 export type AnswerUpdateManyWithWhereWithoutTaskQuestionInput = {
+  data: AnswerUpdateManyMutationInput;
+  where: AnswerScalarWhereInput;
+};
+
+export type AnswerUpdateManyWithWhereWithoutTodoInput = {
   data: AnswerUpdateManyMutationInput;
   where: AnswerScalarWhereInput;
 };
@@ -3324,6 +3377,20 @@ export type AnswerUpdateManyWithoutTaskQuestionNestedInput = {
   >;
 };
 
+export type AnswerUpdateManyWithoutTodoNestedInput = {
+  connect?: InputMaybe<Array<AnswerWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<AnswerCreateOrConnectWithoutTodoInput>>;
+  create?: InputMaybe<Array<AnswerCreateWithoutTodoInput>>;
+  createMany?: InputMaybe<AnswerCreateManyTodoInputEnvelope>;
+  delete?: InputMaybe<Array<AnswerWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<AnswerScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<AnswerWhereUniqueInput>>;
+  set?: InputMaybe<Array<AnswerWhereUniqueInput>>;
+  update?: InputMaybe<Array<AnswerUpdateWithWhereUniqueWithoutTodoInput>>;
+  updateMany?: InputMaybe<Array<AnswerUpdateManyWithWhereWithoutTodoInput>>;
+  upsert?: InputMaybe<Array<AnswerUpsertWithWhereUniqueWithoutTodoInput>>;
+};
+
 export type AnswerUpdateWithWhereUniqueWithoutIncidentInput = {
   data: AnswerUpdateWithoutIncidentInput;
   where: AnswerWhereUniqueInput;
@@ -3339,12 +3406,18 @@ export type AnswerUpdateWithWhereUniqueWithoutTaskQuestionInput = {
   where: AnswerWhereUniqueInput;
 };
 
+export type AnswerUpdateWithWhereUniqueWithoutTodoInput = {
+  data: AnswerUpdateWithoutTodoInput;
+  where: AnswerWhereUniqueInput;
+};
+
 export type AnswerUpdateWithoutIncidentInput = {
   answer?: InputMaybe<StringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   tagQuestion?: InputMaybe<TagQuestionUpdateOneWithoutAnswersNestedInput>;
   taskQuestion?: InputMaybe<TaskQuestionUpdateOneWithoutAnswersNestedInput>;
+  todo?: InputMaybe<TodoUpdateOneWithoutAnswersNestedInput>;
   type?: InputMaybe<EnumAnswerTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
@@ -3355,6 +3428,7 @@ export type AnswerUpdateWithoutTagQuestionInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incident?: InputMaybe<IncidentUpdateOneWithoutAnswersNestedInput>;
   taskQuestion?: InputMaybe<TaskQuestionUpdateOneWithoutAnswersNestedInput>;
+  todo?: InputMaybe<TodoUpdateOneWithoutAnswersNestedInput>;
   type?: InputMaybe<EnumAnswerTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
@@ -3365,6 +3439,18 @@ export type AnswerUpdateWithoutTaskQuestionInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incident?: InputMaybe<IncidentUpdateOneWithoutAnswersNestedInput>;
   tagQuestion?: InputMaybe<TagQuestionUpdateOneWithoutAnswersNestedInput>;
+  todo?: InputMaybe<TodoUpdateOneWithoutAnswersNestedInput>;
+  type?: InputMaybe<EnumAnswerTypeFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type AnswerUpdateWithoutTodoInput = {
+  answer?: InputMaybe<StringFieldUpdateOperationsInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  incident?: InputMaybe<IncidentUpdateOneWithoutAnswersNestedInput>;
+  tagQuestion?: InputMaybe<TagQuestionUpdateOneWithoutAnswersNestedInput>;
+  taskQuestion?: InputMaybe<TaskQuestionUpdateOneWithoutAnswersNestedInput>;
   type?: InputMaybe<EnumAnswerTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
@@ -3387,6 +3473,12 @@ export type AnswerUpsertWithWhereUniqueWithoutTaskQuestionInput = {
   where: AnswerWhereUniqueInput;
 };
 
+export type AnswerUpsertWithWhereUniqueWithoutTodoInput = {
+  create: AnswerCreateWithoutTodoInput;
+  update: AnswerUpdateWithoutTodoInput;
+  where: AnswerWhereUniqueInput;
+};
+
 export type AnswerWhereInput = {
   AND?: InputMaybe<Array<AnswerWhereInput>>;
   NOT?: InputMaybe<Array<AnswerWhereInput>>;
@@ -3400,6 +3492,8 @@ export type AnswerWhereInput = {
   tagQuestion?: InputMaybe<TagQuestionWhereInput>;
   taskId?: InputMaybe<StringNullableFilter>;
   taskQuestion?: InputMaybe<TaskQuestionWhereInput>;
+  todo?: InputMaybe<TodoWhereInput>;
+  todoId?: InputMaybe<StringNullableFilter>;
   type?: InputMaybe<EnumAnswerTypeFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
 };
@@ -8019,7 +8113,8 @@ export type CreateQuestionInput = {
   options?: InputMaybe<Array<Scalars['String']>>;
   question: Scalars['String'];
   required?: Scalars['Boolean'];
-  tagId: Scalars['String'];
+  tagId?: InputMaybe<Scalars['String']>;
+  taskId?: InputMaybe<Scalars['String']>;
   type: AnswerType;
 };
 
@@ -23951,7 +24046,6 @@ export type Investigation = {
   totalTheftSuccess?: Maybe<Scalars['Float']>;
   totalUpdates?: Maybe<Scalars['Int']>;
   totalValue?: Maybe<Scalars['Int']>;
-  totalVehicles?: Maybe<Scalars['Int']>;
   updatedAt: Scalars['DateTime'];
   updates: Array<Update>;
   vehicles: Array<Vehicle>;
@@ -36117,6 +36211,7 @@ export type Query = {
   articles: Array<Article>;
   auth0User?: Maybe<Auth0User>;
   availableQuestions: Array<Question>;
+  availableTaskQuestions: Array<Question>;
   ban?: Maybe<Ban>;
   bans: Array<Ban>;
   business?: Maybe<Business>;
@@ -36190,6 +36285,8 @@ export type Query = {
   tag?: Maybe<Tag>;
   tags: Array<Tag>;
   targetedGoods?: Maybe<ListTargetedGoods>;
+  todo?: Maybe<Todo>;
+  translateText: Array<TranslatedText>;
   user?: Maybe<User>;
   userByEmail?: Maybe<User>;
   userChat?: Maybe<UserChat>;
@@ -36249,6 +36346,10 @@ export type QueryAuth0UserArgs = {
 
 export type QueryAvailableQuestionsArgs = {
   where?: InputMaybe<UniqueId>;
+};
+
+export type QueryAvailableTaskQuestionsArgs = {
+  where: Array<Scalars['String']>;
 };
 
 export type QueryBanArgs = {
@@ -36693,6 +36794,14 @@ export type QueryTargetedGoodsArgs = {
   where: UserContributionWhereInput;
 };
 
+export type QueryTodoArgs = {
+  where: TodoWhereUniqueInput;
+};
+
+export type QueryTranslateTextArgs = {
+  data: TranslateTextInput;
+};
+
 export type QueryUserArgs = {
   where: UserWhereUniqueInput;
 };
@@ -36771,6 +36880,7 @@ export type Question = {
   createdAt: Scalars['DateTime'];
   id: Scalars['String'];
   options: Array<Scalars['Json']>;
+  optionsFormFormatted?: Maybe<Array<AnswerOption>>;
   optionsFormatted?: Maybe<Array<Scalars['String']>>;
   question: Scalars['String'];
   questionFormatted: Scalars['String'];
@@ -39413,6 +39523,7 @@ export type Scheme = {
   schemeTags: Array<Tag>;
   statementTemplates: Array<StatementTemplate>;
   tags: Array<Tag>;
+  taskTimeTracking: Scalars['Boolean'];
   terms: Array<TermsAndCondition>;
   termsInScheme: Array<TermsAndCondition>;
   topContributors?: Maybe<Array<TopContributors>>;
@@ -49168,6 +49279,25 @@ export type TargetedGood = {
   totalSuccessRate: Scalars['Float'];
 };
 
+export type TaskQuestion = {
+  __typename?: 'TaskQuestion';
+  answers: Array<Answer>;
+  createdAt: Scalars['DateTime'];
+  id: Scalars['String'];
+  priority: Scalars['Int'];
+  question: Question;
+  req: Scalars['Boolean'];
+  task: Todo;
+  updatedAt: Scalars['DateTime'];
+};
+
+export type TaskQuestionAnswersArgs = {
+  after?: InputMaybe<AnswerWhereUniqueInput>;
+  before?: InputMaybe<AnswerWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
 export type TaskQuestionCreateManyQuestionInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   deleted?: InputMaybe<Scalars['Boolean']>;
@@ -49718,6 +49848,16 @@ export type TermsAndConditionWhereUniqueInput = {
   id?: InputMaybe<Scalars['String']>;
 };
 
+export type TimeTaken = {
+  __typename?: 'TimeTaken';
+  createdAt: Scalars['DateTime'];
+  id: Scalars['String'];
+  timeTaken: Scalars['Int'];
+  todo: Todo;
+  updatedAt: Scalars['DateTime'];
+  user: User;
+};
+
 export type TimeTakenCreateManyTodoInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   id?: InputMaybe<Scalars['String']>;
@@ -49909,6 +50049,7 @@ export type TimeTakenWhereUniqueInput = {
 
 export type Todo = {
   __typename?: 'Todo';
+  answers: Array<Answer>;
   assignedUsers: Array<User>;
   chatId?: Maybe<Scalars['String']>;
   completed?: Maybe<Scalars['Boolean']>;
@@ -49926,15 +50067,31 @@ export type Todo = {
   investigationId?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   offenderId?: Maybe<Scalars['String']>;
+  questions: Array<TaskQuestion>;
   schemes: Array<Scheme>;
+  timeTaken: Array<TimeTaken>;
   type?: Maybe<TodoType>;
   updatedAt: Scalars['DateTime'];
   vehicleId?: Maybe<Scalars['String']>;
 };
 
+export type TodoAnswersArgs = {
+  after?: InputMaybe<AnswerWhereUniqueInput>;
+  before?: InputMaybe<AnswerWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
 export type TodoAssignedUsersArgs = {
   after?: InputMaybe<UserWhereUniqueInput>;
   before?: InputMaybe<UserWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+export type TodoQuestionsArgs = {
+  after?: InputMaybe<TaskQuestionWhereUniqueInput>;
+  before?: InputMaybe<TaskQuestionWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
 };
@@ -49946,7 +50103,15 @@ export type TodoSchemesArgs = {
   last?: InputMaybe<Scalars['Int']>;
 };
 
+export type TodoTimeTakenArgs = {
+  after?: InputMaybe<TimeTakenWhereUniqueInput>;
+  before?: InputMaybe<TimeTakenWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
 export type TodoCreateInput = {
+  answers?: InputMaybe<AnswerCreateNestedManyWithoutTodoInput>;
   assignedUsers?: InputMaybe<UserCreateNestedManyWithoutAssignedTodosInput>;
   chat?: InputMaybe<ChatCreateNestedOneWithoutTodosInput>;
   completed?: InputMaybe<Scalars['Boolean']>;
@@ -50238,6 +50403,12 @@ export type TodoCreateNestedManyWithoutVehicleInput = {
   createMany?: InputMaybe<TodoCreateManyVehicleInputEnvelope>;
 };
 
+export type TodoCreateNestedOneWithoutAnswersInput = {
+  connect?: InputMaybe<TodoWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<TodoCreateOrConnectWithoutAnswersInput>;
+  create?: InputMaybe<TodoCreateWithoutAnswersInput>;
+};
+
 export type TodoCreateNestedOneWithoutQuestionsInput = {
   connect?: InputMaybe<TodoWhereUniqueInput>;
   connectOrCreate?: InputMaybe<TodoCreateOrConnectWithoutQuestionsInput>;
@@ -50248,6 +50419,11 @@ export type TodoCreateNestedOneWithoutTimeTakenInput = {
   connect?: InputMaybe<TodoWhereUniqueInput>;
   connectOrCreate?: InputMaybe<TodoCreateOrConnectWithoutTimeTakenInput>;
   create?: InputMaybe<TodoCreateWithoutTimeTakenInput>;
+};
+
+export type TodoCreateOrConnectWithoutAnswersInput = {
+  create: TodoCreateWithoutAnswersInput;
+  where: TodoWhereUniqueInput;
 };
 
 export type TodoCreateOrConnectWithoutAssignedUsersInput = {
@@ -50310,7 +50486,32 @@ export type TodoCreateOrConnectWithoutVehicleInput = {
   where: TodoWhereUniqueInput;
 };
 
+export type TodoCreateWithoutAnswersInput = {
+  assignedUsers?: InputMaybe<UserCreateNestedManyWithoutAssignedTodosInput>;
+  chat?: InputMaybe<ChatCreateNestedOneWithoutTodosInput>;
+  completed?: InputMaybe<Scalars['Boolean']>;
+  completedBy?: InputMaybe<UserCreateNestedOneWithoutCompletedTodosInput>;
+  completedDate?: InputMaybe<Scalars['DateTime']>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  createdBy?: InputMaybe<UserCreateNestedOneWithoutCreatedTodosInput>;
+  crimeGroup?: InputMaybe<CrimeGroupCreateNestedOneWithoutTodosInput>;
+  description?: InputMaybe<Scalars['String']>;
+  dueDate?: InputMaybe<Scalars['DateTime']>;
+  id?: InputMaybe<Scalars['String']>;
+  incident?: InputMaybe<IncidentCreateNestedOneWithoutTodosInput>;
+  investigation?: InputMaybe<InvestigationCreateNestedOneWithoutTodosInput>;
+  name?: InputMaybe<Scalars['String']>;
+  offender?: InputMaybe<OffenderCreateNestedOneWithoutTodosInput>;
+  questions?: InputMaybe<TaskQuestionCreateNestedManyWithoutTaskInput>;
+  schemes?: InputMaybe<SchemeCreateNestedManyWithoutTodosInput>;
+  timeTaken?: InputMaybe<TimeTakenCreateNestedManyWithoutTodoInput>;
+  type?: InputMaybe<TodoType>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicle?: InputMaybe<VehicleCreateNestedOneWithoutTodosInput>;
+};
+
 export type TodoCreateWithoutAssignedUsersInput = {
+  answers?: InputMaybe<AnswerCreateNestedManyWithoutTodoInput>;
   chat?: InputMaybe<ChatCreateNestedOneWithoutTodosInput>;
   completed?: InputMaybe<Scalars['Boolean']>;
   completedBy?: InputMaybe<UserCreateNestedOneWithoutCompletedTodosInput>;
@@ -50334,6 +50535,7 @@ export type TodoCreateWithoutAssignedUsersInput = {
 };
 
 export type TodoCreateWithoutChatInput = {
+  answers?: InputMaybe<AnswerCreateNestedManyWithoutTodoInput>;
   assignedUsers?: InputMaybe<UserCreateNestedManyWithoutAssignedTodosInput>;
   completed?: InputMaybe<Scalars['Boolean']>;
   completedBy?: InputMaybe<UserCreateNestedOneWithoutCompletedTodosInput>;
@@ -50357,6 +50559,7 @@ export type TodoCreateWithoutChatInput = {
 };
 
 export type TodoCreateWithoutCompletedByInput = {
+  answers?: InputMaybe<AnswerCreateNestedManyWithoutTodoInput>;
   assignedUsers?: InputMaybe<UserCreateNestedManyWithoutAssignedTodosInput>;
   chat?: InputMaybe<ChatCreateNestedOneWithoutTodosInput>;
   completed?: InputMaybe<Scalars['Boolean']>;
@@ -50380,6 +50583,7 @@ export type TodoCreateWithoutCompletedByInput = {
 };
 
 export type TodoCreateWithoutCreatedByInput = {
+  answers?: InputMaybe<AnswerCreateNestedManyWithoutTodoInput>;
   assignedUsers?: InputMaybe<UserCreateNestedManyWithoutAssignedTodosInput>;
   chat?: InputMaybe<ChatCreateNestedOneWithoutTodosInput>;
   completed?: InputMaybe<Scalars['Boolean']>;
@@ -50403,6 +50607,7 @@ export type TodoCreateWithoutCreatedByInput = {
 };
 
 export type TodoCreateWithoutCrimeGroupInput = {
+  answers?: InputMaybe<AnswerCreateNestedManyWithoutTodoInput>;
   assignedUsers?: InputMaybe<UserCreateNestedManyWithoutAssignedTodosInput>;
   chat?: InputMaybe<ChatCreateNestedOneWithoutTodosInput>;
   completed?: InputMaybe<Scalars['Boolean']>;
@@ -50426,6 +50631,7 @@ export type TodoCreateWithoutCrimeGroupInput = {
 };
 
 export type TodoCreateWithoutIncidentInput = {
+  answers?: InputMaybe<AnswerCreateNestedManyWithoutTodoInput>;
   assignedUsers?: InputMaybe<UserCreateNestedManyWithoutAssignedTodosInput>;
   chat?: InputMaybe<ChatCreateNestedOneWithoutTodosInput>;
   completed?: InputMaybe<Scalars['Boolean']>;
@@ -50449,6 +50655,7 @@ export type TodoCreateWithoutIncidentInput = {
 };
 
 export type TodoCreateWithoutInvestigationInput = {
+  answers?: InputMaybe<AnswerCreateNestedManyWithoutTodoInput>;
   assignedUsers?: InputMaybe<UserCreateNestedManyWithoutAssignedTodosInput>;
   chat?: InputMaybe<ChatCreateNestedOneWithoutTodosInput>;
   completed?: InputMaybe<Scalars['Boolean']>;
@@ -50472,6 +50679,7 @@ export type TodoCreateWithoutInvestigationInput = {
 };
 
 export type TodoCreateWithoutOffenderInput = {
+  answers?: InputMaybe<AnswerCreateNestedManyWithoutTodoInput>;
   assignedUsers?: InputMaybe<UserCreateNestedManyWithoutAssignedTodosInput>;
   chat?: InputMaybe<ChatCreateNestedOneWithoutTodosInput>;
   completed?: InputMaybe<Scalars['Boolean']>;
@@ -50495,6 +50703,7 @@ export type TodoCreateWithoutOffenderInput = {
 };
 
 export type TodoCreateWithoutQuestionsInput = {
+  answers?: InputMaybe<AnswerCreateNestedManyWithoutTodoInput>;
   assignedUsers?: InputMaybe<UserCreateNestedManyWithoutAssignedTodosInput>;
   chat?: InputMaybe<ChatCreateNestedOneWithoutTodosInput>;
   completed?: InputMaybe<Scalars['Boolean']>;
@@ -50518,6 +50727,7 @@ export type TodoCreateWithoutQuestionsInput = {
 };
 
 export type TodoCreateWithoutSchemesInput = {
+  answers?: InputMaybe<AnswerCreateNestedManyWithoutTodoInput>;
   assignedUsers?: InputMaybe<UserCreateNestedManyWithoutAssignedTodosInput>;
   chat?: InputMaybe<ChatCreateNestedOneWithoutTodosInput>;
   completed?: InputMaybe<Scalars['Boolean']>;
@@ -50541,6 +50751,7 @@ export type TodoCreateWithoutSchemesInput = {
 };
 
 export type TodoCreateWithoutTimeTakenInput = {
+  answers?: InputMaybe<AnswerCreateNestedManyWithoutTodoInput>;
   assignedUsers?: InputMaybe<UserCreateNestedManyWithoutAssignedTodosInput>;
   chat?: InputMaybe<ChatCreateNestedOneWithoutTodosInput>;
   completed?: InputMaybe<Scalars['Boolean']>;
@@ -50564,6 +50775,7 @@ export type TodoCreateWithoutTimeTakenInput = {
 };
 
 export type TodoCreateWithoutVehicleInput = {
+  answers?: InputMaybe<AnswerCreateNestedManyWithoutTodoInput>;
   assignedUsers?: InputMaybe<UserCreateNestedManyWithoutAssignedTodosInput>;
   chat?: InputMaybe<ChatCreateNestedOneWithoutTodosInput>;
   completed?: InputMaybe<Scalars['Boolean']>;
@@ -50601,6 +50813,7 @@ export type TodoOrderByRelationAggregateInput = {
 };
 
 export type TodoOrderByWithRelationInput = {
+  answers?: InputMaybe<AnswerOrderByRelationAggregateInput>;
   assignedUsers?: InputMaybe<UserOrderByRelationAggregateInput>;
   chat?: InputMaybe<ChatOrderByWithRelationInput>;
   chatId?: InputMaybe<SortOrder>;
@@ -50667,6 +50880,7 @@ export enum TodoType {
 }
 
 export type TodoUpdateInput = {
+  answers?: InputMaybe<AnswerUpdateManyWithoutTodoNestedInput>;
   assignedUsers?: InputMaybe<UserUpdateManyWithoutAssignedTodosNestedInput>;
   chat?: InputMaybe<ChatUpdateOneWithoutTodosNestedInput>;
   completed?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
@@ -50928,6 +51142,16 @@ export type TodoUpdateOneRequiredWithoutTimeTakenNestedInput = {
   upsert?: InputMaybe<TodoUpsertWithoutTimeTakenInput>;
 };
 
+export type TodoUpdateOneWithoutAnswersNestedInput = {
+  connect?: InputMaybe<TodoWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<TodoCreateOrConnectWithoutAnswersInput>;
+  create?: InputMaybe<TodoCreateWithoutAnswersInput>;
+  delete?: InputMaybe<Scalars['Boolean']>;
+  disconnect?: InputMaybe<Scalars['Boolean']>;
+  update?: InputMaybe<TodoUpdateWithoutAnswersInput>;
+  upsert?: InputMaybe<TodoUpsertWithoutAnswersInput>;
+};
+
 export type TodoUpdateWithWhereUniqueWithoutAssignedUsersInput = {
   data: TodoUpdateWithoutAssignedUsersInput;
   where: TodoWhereUniqueInput;
@@ -50978,7 +51202,32 @@ export type TodoUpdateWithWhereUniqueWithoutVehicleInput = {
   where: TodoWhereUniqueInput;
 };
 
+export type TodoUpdateWithoutAnswersInput = {
+  assignedUsers?: InputMaybe<UserUpdateManyWithoutAssignedTodosNestedInput>;
+  chat?: InputMaybe<ChatUpdateOneWithoutTodosNestedInput>;
+  completed?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
+  completedBy?: InputMaybe<UserUpdateOneWithoutCompletedTodosNestedInput>;
+  completedDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  createdBy?: InputMaybe<UserUpdateOneWithoutCreatedTodosNestedInput>;
+  crimeGroup?: InputMaybe<CrimeGroupUpdateOneWithoutTodosNestedInput>;
+  description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  dueDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  incident?: InputMaybe<IncidentUpdateOneWithoutTodosNestedInput>;
+  investigation?: InputMaybe<InvestigationUpdateOneWithoutTodosNestedInput>;
+  name?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  offender?: InputMaybe<OffenderUpdateOneWithoutTodosNestedInput>;
+  questions?: InputMaybe<TaskQuestionUpdateManyWithoutTaskNestedInput>;
+  schemes?: InputMaybe<SchemeUpdateManyWithoutTodosNestedInput>;
+  timeTaken?: InputMaybe<TimeTakenUpdateManyWithoutTodoNestedInput>;
+  type?: InputMaybe<NullableEnumTodoTypeFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  vehicle?: InputMaybe<VehicleUpdateOneWithoutTodosNestedInput>;
+};
+
 export type TodoUpdateWithoutAssignedUsersInput = {
+  answers?: InputMaybe<AnswerUpdateManyWithoutTodoNestedInput>;
   chat?: InputMaybe<ChatUpdateOneWithoutTodosNestedInput>;
   completed?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   completedBy?: InputMaybe<UserUpdateOneWithoutCompletedTodosNestedInput>;
@@ -51002,6 +51251,7 @@ export type TodoUpdateWithoutAssignedUsersInput = {
 };
 
 export type TodoUpdateWithoutChatInput = {
+  answers?: InputMaybe<AnswerUpdateManyWithoutTodoNestedInput>;
   assignedUsers?: InputMaybe<UserUpdateManyWithoutAssignedTodosNestedInput>;
   completed?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   completedBy?: InputMaybe<UserUpdateOneWithoutCompletedTodosNestedInput>;
@@ -51025,6 +51275,7 @@ export type TodoUpdateWithoutChatInput = {
 };
 
 export type TodoUpdateWithoutCompletedByInput = {
+  answers?: InputMaybe<AnswerUpdateManyWithoutTodoNestedInput>;
   assignedUsers?: InputMaybe<UserUpdateManyWithoutAssignedTodosNestedInput>;
   chat?: InputMaybe<ChatUpdateOneWithoutTodosNestedInput>;
   completed?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
@@ -51048,6 +51299,7 @@ export type TodoUpdateWithoutCompletedByInput = {
 };
 
 export type TodoUpdateWithoutCreatedByInput = {
+  answers?: InputMaybe<AnswerUpdateManyWithoutTodoNestedInput>;
   assignedUsers?: InputMaybe<UserUpdateManyWithoutAssignedTodosNestedInput>;
   chat?: InputMaybe<ChatUpdateOneWithoutTodosNestedInput>;
   completed?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
@@ -51071,6 +51323,7 @@ export type TodoUpdateWithoutCreatedByInput = {
 };
 
 export type TodoUpdateWithoutCrimeGroupInput = {
+  answers?: InputMaybe<AnswerUpdateManyWithoutTodoNestedInput>;
   assignedUsers?: InputMaybe<UserUpdateManyWithoutAssignedTodosNestedInput>;
   chat?: InputMaybe<ChatUpdateOneWithoutTodosNestedInput>;
   completed?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
@@ -51094,6 +51347,7 @@ export type TodoUpdateWithoutCrimeGroupInput = {
 };
 
 export type TodoUpdateWithoutIncidentInput = {
+  answers?: InputMaybe<AnswerUpdateManyWithoutTodoNestedInput>;
   assignedUsers?: InputMaybe<UserUpdateManyWithoutAssignedTodosNestedInput>;
   chat?: InputMaybe<ChatUpdateOneWithoutTodosNestedInput>;
   completed?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
@@ -51117,6 +51371,7 @@ export type TodoUpdateWithoutIncidentInput = {
 };
 
 export type TodoUpdateWithoutInvestigationInput = {
+  answers?: InputMaybe<AnswerUpdateManyWithoutTodoNestedInput>;
   assignedUsers?: InputMaybe<UserUpdateManyWithoutAssignedTodosNestedInput>;
   chat?: InputMaybe<ChatUpdateOneWithoutTodosNestedInput>;
   completed?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
@@ -51140,6 +51395,7 @@ export type TodoUpdateWithoutInvestigationInput = {
 };
 
 export type TodoUpdateWithoutOffenderInput = {
+  answers?: InputMaybe<AnswerUpdateManyWithoutTodoNestedInput>;
   assignedUsers?: InputMaybe<UserUpdateManyWithoutAssignedTodosNestedInput>;
   chat?: InputMaybe<ChatUpdateOneWithoutTodosNestedInput>;
   completed?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
@@ -51163,6 +51419,7 @@ export type TodoUpdateWithoutOffenderInput = {
 };
 
 export type TodoUpdateWithoutQuestionsInput = {
+  answers?: InputMaybe<AnswerUpdateManyWithoutTodoNestedInput>;
   assignedUsers?: InputMaybe<UserUpdateManyWithoutAssignedTodosNestedInput>;
   chat?: InputMaybe<ChatUpdateOneWithoutTodosNestedInput>;
   completed?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
@@ -51186,6 +51443,7 @@ export type TodoUpdateWithoutQuestionsInput = {
 };
 
 export type TodoUpdateWithoutSchemesInput = {
+  answers?: InputMaybe<AnswerUpdateManyWithoutTodoNestedInput>;
   assignedUsers?: InputMaybe<UserUpdateManyWithoutAssignedTodosNestedInput>;
   chat?: InputMaybe<ChatUpdateOneWithoutTodosNestedInput>;
   completed?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
@@ -51209,6 +51467,7 @@ export type TodoUpdateWithoutSchemesInput = {
 };
 
 export type TodoUpdateWithoutTimeTakenInput = {
+  answers?: InputMaybe<AnswerUpdateManyWithoutTodoNestedInput>;
   assignedUsers?: InputMaybe<UserUpdateManyWithoutAssignedTodosNestedInput>;
   chat?: InputMaybe<ChatUpdateOneWithoutTodosNestedInput>;
   completed?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
@@ -51232,6 +51491,7 @@ export type TodoUpdateWithoutTimeTakenInput = {
 };
 
 export type TodoUpdateWithoutVehicleInput = {
+  answers?: InputMaybe<AnswerUpdateManyWithoutTodoNestedInput>;
   assignedUsers?: InputMaybe<UserUpdateManyWithoutAssignedTodosNestedInput>;
   chat?: InputMaybe<ChatUpdateOneWithoutTodosNestedInput>;
   completed?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
@@ -51314,6 +51574,11 @@ export type TodoUpsertWithWhereUniqueWithoutVehicleInput = {
   where: TodoWhereUniqueInput;
 };
 
+export type TodoUpsertWithoutAnswersInput = {
+  create: TodoCreateWithoutAnswersInput;
+  update: TodoUpdateWithoutAnswersInput;
+};
+
 export type TodoUpsertWithoutQuestionsInput = {
   create: TodoCreateWithoutQuestionsInput;
   update: TodoUpdateWithoutQuestionsInput;
@@ -51328,6 +51593,7 @@ export type TodoWhereInput = {
   AND?: InputMaybe<Array<TodoWhereInput>>;
   NOT?: InputMaybe<Array<TodoWhereInput>>;
   OR?: InputMaybe<Array<TodoWhereInput>>;
+  answers?: InputMaybe<AnswerListRelationFilter>;
   assignedUsers?: InputMaybe<UserListRelationFilter>;
   chat?: InputMaybe<ChatWhereInput>;
   chatId?: InputMaybe<StringNullableFilter>;
@@ -51372,6 +51638,17 @@ export type TopContributors = {
   messagesSent: Scalars['Int'];
   offendersCreated: Scalars['Int'];
   updatesCreated: Scalars['Int'];
+};
+
+export type TranslateTextInput = {
+  targetLang: LanguageCode;
+  text: Array<Scalars['String']>;
+};
+
+export type TranslatedText = {
+  __typename?: 'TranslatedText';
+  origText: Scalars['String'];
+  translatedText: Scalars['String'];
 };
 
 export type Tree = {
@@ -64814,6 +65091,58 @@ export type Xy = {
   y: Scalars['Int'];
 };
 
+export type UpdateTaskMutationVariables = Exact<{
+  data: TodoUpdateInput;
+  where: TodoWhereUniqueInput;
+}>;
+
+export type UpdateTaskMutation = {
+  __typename?: 'Mutation';
+  updateTodoDefault?: { __typename?: 'Todo'; id: string } | null;
+};
+
+export type TodoQueryVariables = Exact<{
+  where: TodoWhereUniqueInput;
+}>;
+
+export type TodoQuery = {
+  __typename?: 'Query';
+  todo?: {
+    __typename?: 'Todo';
+    name?: string | null;
+    description?: string | null;
+    id: string;
+    assignedUsers: Array<{ __typename?: 'User'; id: string; fullName: string }>;
+    answers: Array<{
+      __typename?: 'Answer';
+      id: string;
+      answer: string;
+      taskQuestion?: { __typename?: 'TaskQuestion'; id: string } | null;
+    }>;
+    timeTaken: Array<{
+      __typename?: 'TimeTaken';
+      timeTaken: number;
+      user: { __typename?: 'User'; id: string };
+    }>;
+    questions: Array<{
+      __typename?: 'TaskQuestion';
+      id: string;
+      question: {
+        __typename?: 'Question';
+        id: string;
+        optionsFormatted?: Array<string> | null;
+        questionFormatted: string;
+        type: AnswerType;
+        optionsFormFormatted?: Array<{
+          __typename?: 'AnswerOption';
+          label: string;
+          value: string;
+        }> | null;
+      };
+    }>;
+  } | null;
+};
+
 export type CreateOrAddQuestionMutationVariables = Exact<{
   data: CreateQuestionInput;
   where?: InputMaybe<UniqueId>;
@@ -64843,6 +65172,38 @@ export type AvailableQuestionsQuery = {
     type: AnswerType;
     options: Array<any>;
   }>;
+};
+
+export type AvailableTaskQuestionsQueryVariables = Exact<{
+  where: Array<Scalars['String']> | Scalars['String'];
+}>;
+
+export type AvailableTaskQuestionsQuery = {
+  __typename?: 'Query';
+  availableTaskQuestions: Array<{
+    __typename?: 'Question';
+    id: string;
+    questionFormatted: string;
+    question: string;
+    optionsFormatted?: Array<string> | null;
+    type: AnswerType;
+    options: Array<any>;
+  }>;
+};
+
+export type CreateQuestionMutationVariables = Exact<{
+  data: CreateQuestionInput;
+  where?: InputMaybe<UniqueId>;
+}>;
+
+export type CreateQuestionMutation = {
+  __typename?: 'Mutation';
+  addQuestion?: {
+    __typename?: 'Question';
+    id: string;
+    questionFormatted: string;
+    type: AnswerType;
+  } | null;
 };
 
 export type QuestionDetailsQueryVariables = Exact<{
@@ -74548,6 +74909,7 @@ export type CurrentUserQuery = {
         defaultPublicOffenderDOB: boolean;
         facialRecognition: boolean;
         imagesRequiredOnOffenders: boolean;
+        taskTimeTracking: boolean;
         logo?: {
           __typename?: 'Image';
           optimisedPersisted?: string | null;
@@ -75926,6 +76288,95 @@ export const FeedUpdateFragmentDoc = gql`
   }
   ${FeedImageFragmentDoc}
 `;
+export const UpdateTaskDocument = gql`
+  mutation UpdateTask($data: TodoUpdateInput!, $where: TodoWhereUniqueInput!) {
+    updateTodoDefault(data: $data, where: $where) {
+      id
+    }
+  }
+`;
+export type UpdateTaskMutationFn = Apollo.MutationFunction<
+  UpdateTaskMutation,
+  UpdateTaskMutationVariables
+>;
+export function useUpdateTaskMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateTaskMutation,
+    UpdateTaskMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<UpdateTaskMutation, UpdateTaskMutationVariables>(
+    UpdateTaskDocument,
+    options
+  );
+}
+export type UpdateTaskMutationHookResult = ReturnType<
+  typeof useUpdateTaskMutation
+>;
+export type UpdateTaskMutationResult =
+  Apollo.MutationResult<UpdateTaskMutation>;
+export type UpdateTaskMutationOptions = Apollo.BaseMutationOptions<
+  UpdateTaskMutation,
+  UpdateTaskMutationVariables
+>;
+export const TodoDocument = gql`
+  query Todo($where: TodoWhereUniqueInput!) {
+    todo(where: $where) {
+      assignedUsers {
+        id
+        fullName
+      }
+      name
+      answers {
+        id
+        taskQuestion {
+          id
+        }
+        answer
+      }
+      timeTaken {
+        user {
+          id
+        }
+        timeTaken
+      }
+      questions {
+        id
+        question {
+          id
+          optionsFormatted
+          optionsFormFormatted {
+            label
+            value
+          }
+          questionFormatted
+          type
+        }
+      }
+      description
+      id
+    }
+  }
+`;
+export function useTodoQuery(
+  baseOptions: Apollo.QueryHookOptions<TodoQuery, TodoQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<TodoQuery, TodoQueryVariables>(TodoDocument, options);
+}
+export function useTodoLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<TodoQuery, TodoQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<TodoQuery, TodoQueryVariables>(
+    TodoDocument,
+    options
+  );
+}
+export type TodoQueryHookResult = ReturnType<typeof useTodoQuery>;
+export type TodoLazyQueryHookResult = ReturnType<typeof useTodoLazyQuery>;
+export type TodoQueryResult = Apollo.QueryResult<TodoQuery, TodoQueryVariables>;
 export const CreateOrAddQuestionDocument = gql`
   mutation CreateOrAddQuestion($data: CreateQuestionInput!, $where: UniqueId) {
     addQuestion(data: $data, where: $where) {
@@ -76004,6 +76455,86 @@ export type AvailableQuestionsLazyQueryHookResult = ReturnType<
 export type AvailableQuestionsQueryResult = Apollo.QueryResult<
   AvailableQuestionsQuery,
   AvailableQuestionsQueryVariables
+>;
+export const AvailableTaskQuestionsDocument = gql`
+  query AvailableTaskQuestions($where: [String!]!) {
+    availableTaskQuestions(where: $where) {
+      id
+      questionFormatted
+      question
+      optionsFormatted
+      type
+      options
+    }
+  }
+`;
+export function useAvailableTaskQuestionsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    AvailableTaskQuestionsQuery,
+    AvailableTaskQuestionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    AvailableTaskQuestionsQuery,
+    AvailableTaskQuestionsQueryVariables
+  >(AvailableTaskQuestionsDocument, options);
+}
+export function useAvailableTaskQuestionsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    AvailableTaskQuestionsQuery,
+    AvailableTaskQuestionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    AvailableTaskQuestionsQuery,
+    AvailableTaskQuestionsQueryVariables
+  >(AvailableTaskQuestionsDocument, options);
+}
+export type AvailableTaskQuestionsQueryHookResult = ReturnType<
+  typeof useAvailableTaskQuestionsQuery
+>;
+export type AvailableTaskQuestionsLazyQueryHookResult = ReturnType<
+  typeof useAvailableTaskQuestionsLazyQuery
+>;
+export type AvailableTaskQuestionsQueryResult = Apollo.QueryResult<
+  AvailableTaskQuestionsQuery,
+  AvailableTaskQuestionsQueryVariables
+>;
+export const CreateQuestionDocument = gql`
+  mutation CreateQuestion($data: CreateQuestionInput!, $where: UniqueId) {
+    addQuestion(data: $data, where: $where) {
+      id
+      questionFormatted
+      type
+    }
+  }
+`;
+export type CreateQuestionMutationFn = Apollo.MutationFunction<
+  CreateQuestionMutation,
+  CreateQuestionMutationVariables
+>;
+export function useCreateQuestionMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateQuestionMutation,
+    CreateQuestionMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateQuestionMutation,
+    CreateQuestionMutationVariables
+  >(CreateQuestionDocument, options);
+}
+export type CreateQuestionMutationHookResult = ReturnType<
+  typeof useCreateQuestionMutation
+>;
+export type CreateQuestionMutationResult =
+  Apollo.MutationResult<CreateQuestionMutation>;
+export type CreateQuestionMutationOptions = Apollo.BaseMutationOptions<
+  CreateQuestionMutation,
+  CreateQuestionMutationVariables
 >;
 export const QuestionDetailsDocument = gql`
   query QuestionDetails($where: QuestionWhereUniqueInput!) {
@@ -89536,6 +90067,7 @@ export const CurrentUserDocument = gql`
           defaultPublicOffenderDOB
           facialRecognition
           imagesRequiredOnOffenders
+          taskTimeTracking
         }
       }
       incidentEmail

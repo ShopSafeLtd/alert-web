@@ -85,7 +85,7 @@ const useAddQuestion = ({ onClose }: Props): Return => {
       options: values.options,
       required: values.required,
       type: values.type,
-      tagId: id || 'clkb8fza50004xdyc9netg4pl',
+      tagId: id || '',
     };
     void addQuestion({
       variables: values.selectedId

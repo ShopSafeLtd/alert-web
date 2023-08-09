@@ -1,0 +1,10 @@
+query AvailableTaskQuestions($where: [String!]!) {
+  availableTaskQuestions(where: $where) {
+    id
+    questionFormatted
+    question
+    optionsFormatted
+    type
+    options
+  }
+}

@@ -1,0 +1,235 @@
+import type { FormInstance } from 'antd';
+import { useForm } from 'antd/lib/form/Form';
+import { useEffect, useState } from 'react';
+import type { TodoQuery } from '../../../../graphql/generated';
+import {
+  Role,
+  SortOrder,
+  useListSchemeUsersQuery,
+  useTodoQuery,
+  useUpdateTaskMutation,
+} from '../../../../graphql/generated';
+import { useStoreState } from '../../../../state';
+
+export interface FormData {
+  [key: string]: string | number | boolean | undefined;
+}
+interface Return {
+  todo: TodoQuery | undefined;
+  form: FormInstance<FormData>;
+  onSubmit: (value: FormData) => void;
+  saving: boolean;
+  users: { id: string; name: string; timeTaken: number }[];
+  availableUsers: { id: string; name: string; timeTaken: number }[];
+  setUsers: (users: { id: string; name: string; timeTaken: number }[]) => void;
+  setAvailableUsers: (
+    users: { id: string; name: string; timeTaken: number }[]
+  ) => void;
+  loading: boolean;
+}
+
+const useTodo = ({
+  id,
+  onClose,
+  updateTodo,
+}: {
+  id: string | null;
+  onClose: () => void;
+  updateTodo: (value: boolean, i?: string) => void;
+}): Return => {
+  const [form] = useForm<FormData>();
+  const [saving, setSaving] = useState(false);
+  const [users, setUsers] = useState<
+    { id: string; name: string; timeTaken: number }[]
+  >([]);
+  const [availableUsers, setAvailableUsers] = useState<
+    { id: string; name: string; timeTaken: number }[]
+  >([]);
+  const schemeId = useStoreState((state) => state.scheme.id);
+  const { data: todo, loading } = useTodoQuery({
+    variables: {
+      where: {
+        id: id || '',
+      },
+    },
+  });
+
+  useEffect(() => {
+    if (todo?.todo?.assignedUsers) {
+      const u = todo?.todo?.assignedUsers.map((user) => ({
+        id: user?.id || '',
+        name: user?.fullName || '',
+        timeTaken:
+          todo.todo?.timeTaken.find((time) => time?.user?.id === user?.id)
+            ?.timeTaken || 0,
+      }));
+      setUsers(u || []);
+    }
+  }, [todo]);
+
+  const { data: usersData, loading: usersLoading } = useListSchemeUsersQuery({
+    fetchPolicy: 'cache-and-network',
+    variables: {
+      where: {
+        schemes: {
+          some: {
+            AND: [
+              {
+                scheme: {
+                  id: {
+                    equals: schemeId,
+                  },
+                },
+              },
+              {
+                role: {
+                  in: [Role.SchemeAdmin, Role.ShopsafeAdmin],
+                },
+              },
+            ],
+          },
+        },
+      },
+      groupWhere: {
+        scheme: {
+          id: {
+            equals: schemeId,
+          },
+        },
+      },
+      orderBy: {
+        fullName: SortOrder.Asc,
+      },
+      schemesWhere: {
+        scheme: {
+          id: {
+            equals: schemeId,
+          },
+        },
+      },
+    },
+  });
+
+  const [updateTodoMutation] = useUpdateTaskMutation({
+    onCompleted: () => {
+      setSaving(false);
+      onClose();
+    },
+    onError: () => {
+      setSaving(false);
+    },
+  });
+
+  useEffect(() => {
+    if (usersData?.users && todo?.todo) {
+      const userr = todo?.todo?.assignedUsers.map((user) => ({
+        id: user?.id || '',
+        name: user?.fullName || '',
+        timeTaken:
+          todo.todo?.timeTaken.find((time) => time?.user?.id === user?.id)
+            ?.timeTaken || 0,
+      }));
+      const u = usersData?.users
+        .map((user) => ({
+          id: user?.id || '',
+          name: user?.fullName || '',
+          timeTaken: 0,
+        }))
+        .filter((user) => !userr.some((us) => us.id === user.id));
+      setAvailableUsers(u || []);
+    }
+  }, [todo, usersData]);
+
+  const onSubmit = (value: FormData) => {
+    setSaving(true);
+    const userTime = users.map((user) => ({
+      id: user.id,
+      timeTaken: value[user.id],
+    }));
+
+    const answers = todo?.todo?.questions.map(({ question, id: qId }) => ({
+      questionId: qId,
+      answer: value[question?.id || ''],
+      type: question?.type,
+    }));
+
+    const answerIds = todo?.todo?.answers.map(({ id: aId }) => aId);
+
+    void updateTodoMutation({
+      variables: {
+        where: {
+          id: id || '',
+        },
+        data: {
+          completed: {
+            set: true,
+          },
+          questions: {
+            update: answers?.map((answer) => ({
+              where: {
+                id: answer.questionId,
+              },
+              data: {
+                answers: {
+                  create: [
+                    {
+                      type: answer.type,
+                      answer: (answer.answer as string) || '',
+                      todo: {
+                        connect: {
+                          id: id || '',
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+            })),
+          },
+          answers: {
+            deleteMany: answerIds
+              ? [
+                  {
+                    id: {
+                      in: answerIds || [],
+                    },
+                  },
+                ]
+              : undefined,
+            // createMany: {
+            //   data: answers?.map((answer) => ({
+            //     answer: answer.answer as string,
+            //     taskQuestionId: answer.questionId,
+            //     type: answer.type,
+            //   })),
+            // },
+          },
+          timeTaken: userTime
+            ? {
+                createMany: {
+                  data: userTime.map((time) => ({
+                    timeTaken: time.timeTaken as number,
+                    userId: time.id,
+                  })),
+                },
+              }
+            : undefined,
+        },
+      },
+    });
+    updateTodo(true, id || '');
+  };
+  return {
+    todo,
+    form,
+    onSubmit,
+    saving,
+    availableUsers,
+    users,
+    setUsers,
+    setAvailableUsers,
+    loading: loading || usersLoading,
+  };
+};
+
+export default useTodo;
