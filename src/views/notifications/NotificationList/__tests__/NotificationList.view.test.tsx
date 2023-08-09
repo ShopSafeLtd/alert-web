@@ -31,6 +31,7 @@ describe('List Officer View', () => {
               facialRecognition: false,
               imagesRequiredOnOffenders: false,
               goodsMode: GoodsMode.Generic,
+              taskTimeTracking: false,
             },
           ],
         },
