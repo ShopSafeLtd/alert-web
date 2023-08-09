@@ -18,7 +18,7 @@ import type { FormData } from './useTodo';
 
 interface Props {
   todo: TodoQuery | undefined;
-  form: FormInstance<FormData>;
+  form: FormInstance;
   onSubmit: (value: FormData) => void;
   saving: boolean;
   users: { id: string; name: string; timeTaken: number }[];
@@ -69,7 +69,7 @@ const TodoView = ({
   return (
     <Card loading={loading}>
       <h1>{todo?.todo?.name || ''}</h1>
-      <Form<FormData> form={form} onFinish={onSubmit} layout="vertical">
+      <Form form={form} onFinish={onSubmit} layout="vertical">
         <Typography.Title level={4}>
           {intl.formatMessage({
             defaultMessage: 'Questions',

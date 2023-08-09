@@ -1,5 +1,5 @@
 import type { FormInstance } from 'antd';
-import { useForm } from 'antd/lib/form/Form';
+import { Form } from 'antd';
 import { useEffect, useState } from 'react';
 import type { TodoQuery } from '../../../../graphql/generated';
 import {
@@ -14,9 +14,10 @@ import { useStoreState } from '../../../../state';
 export interface FormData {
   [key: string]: string | number | boolean | undefined;
 }
+
 interface Return {
   todo: TodoQuery | undefined;
-  form: FormInstance<FormData>;
+  form: FormInstance;
   onSubmit: (value: FormData) => void;
   saving: boolean;
   users: { id: string; name: string; timeTaken: number }[];
@@ -28,6 +29,8 @@ interface Return {
   loading: boolean;
 }
 
+const { useForm } = Form;
+
 const useTodo = ({
   id,
   onClose,
@@ -37,7 +40,8 @@ const useTodo = ({
   onClose: () => void;
   updateTodo: (value: boolean, i?: string) => void;
 }): Return => {
-  const [form] = useForm<FormData>();
+  const [form] = useForm();
+
   const [saving, setSaving] = useState(false);
   const [users, setUsers] = useState<
     { id: string; name: string; timeTaken: number }[]
