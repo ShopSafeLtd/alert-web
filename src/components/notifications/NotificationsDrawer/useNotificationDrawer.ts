@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { useStoreActions, useStoreState } from 'state';
 import type {
+  GoodsMode,
   ListUserNotificationsQuery,
   ListUserNotificationsQueryVariables,
   UpdateUserNotificationsMutation,
   UserNotificationsQuery,
-  GoodsMode,
 } from 'graphql/generated';
 import {
   Model,
   QueryMode,
   SortOrder,
-  UserNotificationsDocument,
   useListUserNotificationsQuery,
+  UserNotificationsDocument,
   useUpdateUserNotificationsMutation,
 } from 'graphql/generated';
 import { useState } from 'react';
@@ -63,6 +63,7 @@ interface Scheme {
   goodsMode: GoodsMode;
   facialRecognition: boolean;
   imagesRequiredOnOffenders: boolean;
+  taskTimeTracking: boolean;
 }
 interface Return {
   data:
@@ -326,6 +327,7 @@ const useNotificationLists = (): Return => {
       goodsMode: scheme.goodsMode,
       facialRecognition: scheme.facialRecognition,
       imagesRequiredOnOffenders: scheme.imagesRequiredOnOffenders,
+      taskTimeTracking: scheme.taskTimeTracking,
     });
     setTodos({ userTodos: scheme.userTodos || 0 });
     setNotifications({
