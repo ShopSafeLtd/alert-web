@@ -358,18 +358,22 @@ const ViewIncident = ({
                                   onClick: () => toggleEditIncident(),
                                   icon: <FontAwesomeIcon icon={faEdit} />,
                                 },
-                                data?.incident?.totalImages &&
-                                data?.incident.totalImages > 0
-                                  ? {
-                                      key: 1,
-                                      label: intl.formatMessage({
-                                        defaultMessage: 'Edit Images',
-                                        id: 'Cs6iOM',
-                                      }),
-                                      onClick: () => toggleEditImages(),
-                                      icon: <FontAwesomeIcon icon={faImage} />,
-                                    }
-                                  : null,
+                                {
+                                  key: 1,
+                                  label:
+                                    data?.incident?.totalImages &&
+                                    data?.incident.totalImages > 0
+                                      ? intl.formatMessage({
+                                          defaultMessage: 'Edit Images',
+                                          id: 'Cs6iOM',
+                                        })
+                                      : intl.formatMessage({
+                                          defaultMessage: 'Add Images',
+                                          id: 'b4GGYZ',
+                                        }),
+                                  onClick: () => toggleEditImages(),
+                                  icon: <FontAwesomeIcon icon={faImage} />,
+                                },
                               ]}
                             />
                           }
