@@ -15,13 +15,21 @@ const formatLoginTime = (timestamp: Date): string => {
       defaultMessage: 'Tomorrow',
       id: 'MtrTNy',
     })} ${timeIn24HourFormat}]`,
-    // nextWeek: `dddd [at] ${timeIn24HourFormat}`,
-    nextWeek: `dddd ${timeIn24HourFormat}`,
+    nextWeek: `${intl.formatMessage({
+      defaultMessage: 'dddd',
+      id: '0yYUWg',
+    })} ${timeIn24HourFormat}`,
     lastDay: `[${intl.formatMessage({
       defaultMessage: 'Yesterday',
       id: '6dIxDP',
     })} ${timeIn24HourFormat}]`,
-    lastWeek: `[Last] dddd [${timeIn24HourFormat}]`,
+    lastWeek: `[${intl.formatMessage({
+      defaultMessage: 'Last',
+      id: '8nvhZ9',
+    })}] ${intl.formatMessage({
+      defaultMessage: 'dddd',
+      id: '0yYUWg',
+    })} [${timeIn24HourFormat}]`,
     sameElse: `[${moment(date).format('DD/MM/YYYY')} ${timeIn24HourFormat}]`,
   });
 };

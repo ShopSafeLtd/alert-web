@@ -1109,6 +1109,7 @@ const ViewOffender = ({
                       id: 'IuFETn',
                     }),
                     dataIndex: 'duration',
+                    width: 110,
                     render: (value) => <Text>{value}</Text>,
                   },
                   {
@@ -1118,7 +1119,6 @@ const ViewOffender = ({
                       id: 'YEneNi',
                     }),
                     dataIndex: 'activeDay',
-                    width: 150,
                   },
                   {
                     key: 'status',
@@ -1129,24 +1129,14 @@ const ViewOffender = ({
                     dataIndex: 'status',
                     render: (value, record) =>
                       calcExpired(new Date(record.endDate)) ? (
-                        <Tag
-                          color="red"
-                          style={{
-                            marginLeft: 10,
-                          }}
-                        >
+                        <Tag color="red">
                           {intl.formatMessage({
                             defaultMessage: 'EXPIRED',
                             id: 'GftNg3',
                           })}
                         </Tag>
                       ) : (
-                        <Tag
-                          color="success"
-                          style={{
-                            marginLeft: 10,
-                          }}
-                        >
+                        <Tag color="success">
                           {intl.formatMessage({
                             defaultMessage: 'ACTIVE',
                             id: 'LQPOVs',
@@ -1177,7 +1167,7 @@ const ViewOffender = ({
                     key: 'Options',
                     title: '',
                     dataIndex: 'Options',
-                    width: 100,
+                    // width: 100,
                     render: (_, record) => (
                       <Row gutter={8}>
                         <Col>
@@ -1239,11 +1229,10 @@ const ViewOffender = ({
                 dataSource={data?.offender?.bans.map((ban) => ({
                   key: ban.id,
                   endDate: ban.endDate,
-                  duration: `${new Date(
-                    ban?.startDate
-                  ).toDateString()}  -->  ${new Date(
-                    ban?.endDate
-                  ).toDateString()}`,
+                  duration: `${formatCalendar(
+                    ban?.startDate,
+                    true
+                  )}  ->  ${formatCalendar(ban?.endDate, true)}`,
                   activeDay: calcDuration(
                     new Date(ban?.startDate),
                     new Date(ban?.endDate)
