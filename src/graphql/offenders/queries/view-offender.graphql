@@ -6,6 +6,9 @@ query ViewOffender(
     id
     alias
     createdAt
+    createdBy {
+      fullName
+    }
     updatedAt
     age
     build
@@ -24,6 +27,7 @@ query ViewOffender(
     active
     idVerified
     idSource
+    totalImages
     customGalleries {
       id
       name
@@ -97,10 +101,15 @@ query ViewOffender(
       model
       make
       registration
-      totalCrimeGroups
-      totalIncidents
-      totalOffenders
-      updatedAt
+      images {
+        id
+        url
+        optimised
+        policeImage
+        primary
+        position
+        rotation
+      }
     }
     createdBy {
       id

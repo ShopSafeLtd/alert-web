@@ -1,0 +1,17 @@
+mutation UpdateIncidentLocation(
+  $id: String!
+  $location: AddressUpdateOneWithoutIncidentNestedInput
+) {
+  updateIncident(where: { id: $id }, data: { location: $location }) {
+    id
+    location {
+      id
+      premises
+      building
+      street
+      townCity
+      county
+      postcode
+    }
+  }
+}

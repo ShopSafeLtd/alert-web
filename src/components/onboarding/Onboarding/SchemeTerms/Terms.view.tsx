@@ -1,5 +1,3 @@
-/* eslint-disable formatjs/no-literal-string-in-jsx */
-
 import React, { useState } from 'react';
 import {
   Button,
@@ -18,6 +16,7 @@ import { Link } from 'react-router-dom';
 import ReactDOMServer from 'react-dom/server';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileUpload } from '@fortawesome/pro-light-svg-icons';
+import { useIntl } from 'react-intl';
 import SignatureInput from '../../../SignBox';
 import FONT_FAMILIES from './utils/Fonts';
 import SigSeal from './SigSeal';
@@ -43,6 +42,7 @@ const SchemeTerms = ({
   updateBox,
   name,
 }: Props): JSX.Element => {
+  const intl = useIntl();
   const [selectedFont, setSelectedFont] = useState(FONT_FAMILIES[0]);
   const [sign, setSign] = useState('');
   const [tab, setTab] = useState('generate');
@@ -56,11 +56,19 @@ const SchemeTerms = ({
     <div className="list-view">
       <Row style={{ margin: 15 }}>
         <Col>
-          <Title level={3}>Terms of Use</Title>
+          <Title level={3}>
+            {intl.formatMessage({
+              defaultMessage: 'Terms of Use',
+              id: 'UhkSyx',
+            })}
+          </Title>
 
           <Text>
-            Please read through the terms and conditions and accept them to
-            continue.
+            {intl.formatMessage({
+              defaultMessage:
+                'Please read through the terms and conditions and accept them to continue.',
+              id: '6L0SzA',
+            })}
           </Text>
 
           {/* <Text>
@@ -97,8 +105,10 @@ const SchemeTerms = ({
             >
               <Checkbox onChange={updateBox}>
                 <Title level={4}>
-                  I confirm that I have read and agree to the above terms and
-                  conditions.
+                  {intl.formatMessage({
+                    defaultMessage: `I confirm that I have read and agree to the above terms and conditions.`,
+                    id: 'EbrzL+',
+                  })}
                 </Title>
               </Checkbox>
             </Form.Item>
@@ -153,6 +163,7 @@ const SchemeTerms = ({
                           ReactDOMServer.renderToString(
                             <img
                               src={`data:application/pdf;base64,${file?.file}`}
+                              // eslint-disable-next-line formatjs/no-literal-string-in-jsx
                               alt="file"
                               height={100}
                               width={300}
@@ -244,6 +255,7 @@ const SchemeTerms = ({
                                     ReactDOMServer.renderToString(
                                       <img
                                         src={`data:application/pdf;base64,${base64result}`}
+                                        // eslint-disable-next-line formatjs/no-literal-string-in-jsx
                                         alt="file"
                                         height={100}
                                         width={300}
@@ -263,13 +275,17 @@ const SchemeTerms = ({
                               icon={faFileUpload}
                               style={{ fontSize: 16, marginRight: '10px' }}
                             />
-                            Upload
+                            {intl.formatMessage({
+                              defaultMessage: 'Upload',
+                              id: 'p4N05H',
+                            })}
                           </Button>
                         </Upload>
                         {file && (
                           <div style={{ paddingTop: 10, paddingLeft: 10 }}>
                             <img
                               src={`data:application/pdf;base64,${file.file}`}
+                              // eslint-disable-next-line formatjs/no-literal-string-in-jsx
                               alt="file"
                               height={100}
                               width={300}
@@ -305,7 +321,10 @@ const SchemeTerms = ({
                     setCurrent(1);
                   }}
                 >
-                  Back
+                  {intl.formatMessage({
+                    defaultMessage: 'Back',
+                    id: 'cyR7Kh',
+                  })}
                 </Button>
               </Link>
             </Col>
@@ -317,7 +336,10 @@ const SchemeTerms = ({
                 type="primary"
                 htmlType="submit"
               >
-                Next
+                {intl.formatMessage({
+                  defaultMessage: 'Next',
+                  id: '9+Ddtu',
+                })}
               </Button>
             </Col>
           </Row>

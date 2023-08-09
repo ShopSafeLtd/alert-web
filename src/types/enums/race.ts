@@ -7,7 +7,7 @@ export enum Race {
   'IC5' = 'IC5',
   'IC6' = 'IC6',
 }
-
+// wait to check
 export const raceValues = [
   {
     value: 'UNKNOWN',

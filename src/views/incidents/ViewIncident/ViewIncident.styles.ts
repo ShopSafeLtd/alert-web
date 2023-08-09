@@ -25,6 +25,9 @@ const useStyles = createUseStyles((theme: Theme) => ({
     width: '100%',
     height: '100vh',
   },
+  redButton: {
+    color: theme.primaryLight,
+  },
   detailsHeader: {
     paddingRight: 20,
   },

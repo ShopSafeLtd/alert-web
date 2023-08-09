@@ -1,0 +1,18 @@
+mutation UpdateOffenderCrimeGroups(
+  $id: String!
+  $crimeGroups: CrimeGroupUpdateManyWithoutOffendersNestedInput
+) {
+  updateOffender(where: { id: $id }, data: { crimeGroups: $crimeGroups }) {
+    id
+    crimeGroups {
+      id
+      reference
+      alias
+      totalIncidents
+      totalOffenders
+      totalRecoveredValue
+      totalTheftSuccess
+      totalValue
+    }
+  }
+}

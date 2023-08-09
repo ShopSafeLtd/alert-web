@@ -47,11 +47,14 @@ export interface OffenderData {
         name: string;
       }[]
     | undefined;
-  images?: ImageCardData[];
+  images?: ImageCardData[] | null | undefined;
   imageUid?: string[] | undefined;
   bans?: BanData[] | undefined;
   idVerified?: boolean;
   idSource?: IdSource;
+  new?: boolean;
+  existing?: boolean;
+  edited?: boolean;
 }
 
 export interface OffenderCardData {
@@ -148,7 +151,7 @@ export interface ImageCardData {
   deleted?: boolean;
   position?: ImagePosition;
   primary?: boolean | null | undefined;
-  policeImage?: boolean;
+  policeImage?: boolean | null | undefined;
   rotation?: number;
 }
 export interface Image extends UploadFile {
@@ -173,6 +176,8 @@ export interface EditFeedImage {
 }
 // LocationData
 export interface LocationData {
+  id: string;
+  alias?: string | null;
   building?: string | null;
   street: string;
   townCity: string;
@@ -275,4 +280,24 @@ export interface CustomQuestion {
     label: string;
     value: string;
   }[];
+}
+
+export interface GoodsData {
+  id: string;
+  name?: string | undefined | null;
+  value?: number | undefined | null;
+  recoveredValue?: number | undefined | null;
+  goodsType?:
+    | {
+        id: string;
+      }
+    | undefined
+    | null;
+  goodsTypeId?: string;
+}
+export enum UserSort {
+  createdAtDesc = 'CREATED_AT_DESC',
+  createdAtAsc = 'CREATED_AT_ASC',
+  nameDesc = 'NAME_DESC',
+  nameAsc = 'NAME_ASC',
 }

@@ -1,6 +1,7 @@
 import { Button, Col, Form, Input, Row } from 'antd';
 import React from 'react';
 import { useIntl } from 'react-intl';
+import type { LocationData } from 'types/DataType';
 
 interface AddressForm {
   id: string;
@@ -13,7 +14,7 @@ interface AddressForm {
 }
 
 interface Props {
-  data?: AddressForm;
+  data?: LocationData;
   onClose: () => void;
   onSubmit: (data: AddressForm) => void;
 }

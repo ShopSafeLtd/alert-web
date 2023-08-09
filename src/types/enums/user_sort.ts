@@ -4,6 +4,7 @@ export enum UserSort {
   nameDesc = 'NAME_DESC',
   nameAsc = 'NAME_ASC',
 }
+// wait to check
 export const userSortValues = [
   {
     value: 'CREATED_AT_DESC',

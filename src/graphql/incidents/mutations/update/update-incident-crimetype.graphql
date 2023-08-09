@@ -1,0 +1,12 @@
+mutation updateIncidentCrimeType(
+  $id: String!
+  $crimeTypes: TagUpdateManyWithoutIncidentsNestedInput
+) {
+  updateIncident(where: { id: $id }, data: { crimeTypes: $crimeTypes }) {
+    id
+    crimeTypes {
+      id
+      name
+    }
+  }
+}

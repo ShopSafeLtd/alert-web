@@ -5,6 +5,7 @@ import type {
   SearchBusinessesQueryVariables,
 } from 'graphql/generated';
 import { QueryMode, SearchBusinessesDocument } from 'graphql/generated';
+import { useIntl } from 'react-intl';
 
 import { useStoreState } from 'state';
 import type { BusinessData } from 'types/DataType';
@@ -36,6 +37,7 @@ interface Return {
 }
 
 const useAddBusiness = ({ update }: Props): Return => {
+  const intl = useIntl();
   const client = useApolloClient();
   const currentScheme = useStoreState((state) => state.scheme.id);
 
@@ -96,7 +98,10 @@ const useAddBusiness = ({ update }: Props): Return => {
             }))
           : [
               {
-                label: 'No results found',
+                label: intl.formatMessage({
+                  defaultMessage: 'No results found',
+                  id: 'hX5PAb',
+                }),
                 value: '',
                 disabled: true,
               },

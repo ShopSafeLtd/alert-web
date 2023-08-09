@@ -35,7 +35,7 @@ export interface OffenderData {
   comment?: string | null;
   idVerified?: boolean;
   idSource?: IdSource;
-  images?: OffenderImage[];
+  images?: OffenderImage[] | null;
 }
 
 interface Props {

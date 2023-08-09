@@ -1,0 +1,16 @@
+mutation UpdateOffenderBans(
+  $id: String!
+  $bans: BanUpdateManyWithoutOffenderNestedInput
+) {
+  updateOffender(where: { id: $id }, data: { bans: $bans }) {
+    id
+    bans(orderBy: { endDate: asc }) {
+      id
+      startDate
+      endDate
+      location
+      description
+      title
+    }
+  }
+}

@@ -1,41 +1,41 @@
 import { useEffect, useState } from 'react';
-import type { Age, Build, Gender, Race } from 'graphql/generated';
 import type { UploadFile } from 'antd/lib/upload/interface';
+import type { OffenderData } from 'types/DataType';
 
-interface OffenderData {
-  id: string;
-  name?: string | null;
-  age?: Age | null;
-  gender?: Gender | null;
-  race?: Race | null;
-  build?: Build | null;
-  dateOfBirth?: Date | null;
-  hair?: string | null;
-  dateSource?: string | null;
-  peculiarities?: string | null;
-  approved?: boolean | null;
-  groups?:
-    | {
-        id: string;
-        name: string;
-      }[]
-    | undefined;
-  images?: {
-    id: string;
-    optimised?: string | null;
-    url?: string | null;
-    fileName?: string | null;
-    type?: string | null;
-    new?: boolean;
-  }[];
-  imageUid?: string[] | undefined;
-}
+// interface OffenderData {
+//   id: string;
+//   name?: string | null;
+//   age?: Age | null;
+//   gender?: Gender | null;
+//   race?: Race | null;
+//   build?: Build | null;
+//   dateOfBirth?: Date | null;
+//   hair?: string | null;
+//   dateSource?: string | null;
+//   peculiarities?: string | null;
+//   approved?: boolean | null;
+//   groups?:
+//     | {
+//         id: string;
+//         name: string;
+//       }[]
+//     | undefined;
+//   images?: {
+//     id: string;
+//     optimised?: string | null;
+//     url?: string | null;
+//     fileName?: string | null;
+//     type?: string | null;
+//     new?: boolean;
+//   }[];
+//   imageUid?: string[] | undefined;
+// }
 
-interface OffenderDataPayload extends OffenderData {
-  new: boolean;
-  existing: boolean;
-  edited: boolean;
-}
+// interface OffenderDataPayload extends OffenderData {
+//   new: boolean;
+//   existing: boolean;
+//   edited: boolean;
+// }
 
 interface Image extends UploadFile {
   offenders?: {
@@ -45,13 +45,13 @@ interface Image extends UploadFile {
 }
 
 interface Props {
-  offenderData: OffenderDataPayload[];
+  offenderData: OffenderData[];
   image: Image | undefined;
-  onSubmit: (data: { image: Image; offenders: OffenderDataPayload[] }) => void;
+  onSubmit: (data: { image: Image; offenders: OffenderData[] }) => void;
 }
 
 interface Return {
-  offendersData: OffenderDataPayload[];
+  offendersData: OffenderData[];
   addOffender: boolean;
   toggleAddOffender: () => void;
   addExistingOffender: boolean;
@@ -67,7 +67,7 @@ const useAssignImageOffender = ({
   image,
   onSubmit,
 }: Props): Return => {
-  const [offendersData, setOffendersData] = useState<OffenderDataPayload[]>([]);
+  const [offendersData, setOffendersData] = useState<OffenderData[]>([]);
   const [addOffender, setAddOffender] = useState(false);
   const [addExistingOffender, setAddExistingOffender] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
@@ -110,8 +110,8 @@ const useAssignImageOffender = ({
   };
 
   const isOffenderData = (
-    item: OffenderDataPayload | undefined
-  ): item is OffenderDataPayload => !!item;
+    item: OffenderData | undefined
+  ): item is OffenderData => !!item;
 
   const submitImage = () => {
     setSelected([]);

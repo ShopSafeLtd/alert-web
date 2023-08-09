@@ -906,6 +906,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
           fileName: info.file.response[0].blobName,
           type: info.file.response[0].mimetype,
           position: ImagePosition.CenterCenter,
+          rotation: 0,
           edited: false,
           new: true,
         },

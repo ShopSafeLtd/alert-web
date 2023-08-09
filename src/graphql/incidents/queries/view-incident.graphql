@@ -2,6 +2,7 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
   incident(where: $where) {
     id
     subject
+    totalImages
     description
     dayTime
     date
@@ -78,10 +79,12 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
     }
     images {
       id
+      url
+      optimised
       position
       rotation
-      optimised
-      url
+      primary
+      policeImage
     }
     groups {
       id
@@ -104,23 +107,19 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
       model
       make
       registration
-      totalCrimeGroups
-      totalIncidents
-      totalOffenders
-      updatedAt
       images {
         id
         url
         position
         rotation
         optimised
+        primary
+        policeImage
       }
     }
     offenders {
       id
       reference
-      createdAt
-      updatedAt
       age
       build
       height
@@ -140,11 +139,9 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
         optimised
         position
         rotation
+        primary
+        policeImage
         card
-      }
-      tags {
-        id
-        name
       }
     }
     updates(orderBy: { createdAt: asc }) {

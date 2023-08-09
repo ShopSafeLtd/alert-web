@@ -1,13 +1,19 @@
 /* eslint-disable formatjs/no-literal-string-in-jsx */
 import React from 'react';
 import { Card, Col, Row, Space, Typography } from 'antd';
-
+// wait to check
 const { Text, Title } = Typography;
 const UserTerms = (): JSX.Element => (
   <div className="list-view">
     <Row style={{ margin: 10 }}>
       <Col>
-        <Title level={3}>Terms of Use</Title>
+        <Title level={3}>
+          {/* {intl.formatMessage({
+            defaultMessage: ``,
+            id: 'xRsLDX',
+          })} */}
+          Terms of Use
+        </Title>
         <Text>
           Below are the terms and conditions that you accepted during your
           onboarding process as an Alert! user.

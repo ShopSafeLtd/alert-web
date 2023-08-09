@@ -23,6 +23,7 @@ const UseAddLocationTest = () => {
             postcode: 's3 7ab',
             street: 'street',
             townCity: 'town',
+            id: '',
           })
         }
       >

@@ -22,6 +22,7 @@ const useAddOffender = ({ onClose, update }: Props): Return => {
       townCity: data.townCity,
       county: data.county,
       postcode: data.postcode,
+      id: 'id',
     });
     onClose();
     setSaving(false);

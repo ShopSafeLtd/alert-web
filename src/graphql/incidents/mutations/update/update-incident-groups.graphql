@@ -1,0 +1,12 @@
+mutation UpdateIncidentGroups(
+  $id: String!
+  $groups: GroupUpdateManyWithoutIncidentsNestedInput
+) {
+  updateIncident(where: { id: $id }, data: { groups: $groups }) {
+    id
+    groups {
+      id
+      name
+    }
+  }
+}

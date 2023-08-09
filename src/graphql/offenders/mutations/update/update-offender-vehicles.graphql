@@ -1,0 +1,25 @@
+mutation UpdateOffenderVehicles(
+  $id: String!
+  $vehicles: VehicleUpdateManyWithoutOffendersNestedInput
+) {
+  updateOffender(where: { id: $id }, data: { vehicles: $vehicles }) {
+    id
+    vehicles {
+      id
+      reference
+      colour
+      model
+      make
+      registration
+      images(first: 1) {
+        id
+        url
+        position
+        rotation
+        policeImage
+        primary
+        optimised
+      }
+    }
+  }
+}

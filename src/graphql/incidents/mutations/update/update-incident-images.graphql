@@ -8,7 +8,6 @@ mutation UpdateIncidentImages(
       id
       url
       optimised
-      uploaded
       position
       primary
       policeImage

@@ -1,13 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
-import type {
-  Age,
-  Build,
-  Gender,
-  Race,
-  ViewIncidentQuery,
-} from 'graphql/generated';
+import type { ViewIncidentQuery } from 'graphql/generated';
 import { GoodsMode, UpdateType } from 'graphql/generated';
 import {
   Button,
@@ -21,6 +15,7 @@ import {
   Input,
   Menu,
   Modal,
+  Popconfirm,
   Popover,
   Row,
   Skeleton,
@@ -36,7 +31,10 @@ import {
   faBuilding,
   faClock,
   faEdit,
+  faImage,
+  faMagnifyingGlass,
   faPage,
+  faPenToSquare,
   faPlus,
   faSirenOn,
   faTags,
@@ -47,7 +45,6 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import IncidentSideList from 'components/incidents/IncidentSideList';
 import UpdateBar from 'components/MessageInput/UpdateBar';
-import LinkOffender from 'components/form-components/offender/offender/AddExistingOffender';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
@@ -59,41 +56,30 @@ import VehicleTable from 'components/tables/VehicleTable';
 import MapCard from 'components/map/MapCard/MapCard.view';
 import { FormattedMessage, useIntl } from 'react-intl';
 import moment from 'moment';
+import type {
+  EditFeedImage,
+  GoodsData,
+  ImageCardData,
+  OffenderData,
+  VehicleData,
+} from 'types/DataType';
+import EditIncidentFeed from 'components/form-components/incident/EditIncidentFeed';
+import FeedImageEditor from 'components/form-components/ImageEditor/FeedImageEditor.view';
+import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
+import AddVehicle from 'components/form-components/Vehicle/AddVehicle';
+import AddNewOffenderSimple from 'components/form-components/offender/offender/AddNewOffenderSimple';
+import AddExistingOffender from 'components/form-components/offender/offender/AddExistingOffender';
+import AddGoods from 'components/form-components/incident/goods/AddGoods';
+import EditVehicle from 'components/form-components/Vehicle/EditVehicleSimple';
+import SimpleEditOffender from 'components/form-components/offender/offender/SimpleEditOffender';
+import EditGoods from 'components/form-components/incident/goods/EditGoods';
+import EditImageList from 'components/images/EditImageList';
 import UpdateContent from './Update.view';
 import useStyles from './ViewIncident.styles';
 import EvidenceTable from '../../../components/tables/EvidenceTable';
 import formatAnswer from '../../../utils/format-answer';
 
 const { Title, Paragraph, Text } = Typography;
-
-interface OffenderData {
-  id: string;
-  name?: string | null;
-  age?: Age | null;
-  gender?: Gender | null;
-  race?: Race | null;
-  build?: Build | null;
-  dateOfBirth?: Date | null;
-  hair?: string | null;
-  dateSource?: string | null;
-  peculiarities?: string | null;
-  approved?: boolean | null;
-  groups?:
-    | {
-        id: string;
-        name: string;
-      }[]
-    | undefined;
-  images?: {
-    id: string;
-    optimised?: string | null;
-    url?: string | null;
-    fileName?: string | null;
-    type?: string | null;
-    new?: boolean;
-  }[];
-  imageUid?: string[] | undefined;
-}
 
 interface Props {
   data: ViewIncidentQuery | undefined;
@@ -154,6 +140,42 @@ interface Props {
   onReject: () => void;
   onApprove: () => void;
   approving: boolean;
+  editIncident: boolean;
+  toggleEditIncident: () => void;
+  editImages: boolean;
+  toggleEditImages: () => void;
+  editImageData: EditFeedImage | null;
+  setEditImageData: (value: EditFeedImage | null) => void;
+  onDeleteImage: (id: string) => void;
+  onEditImage: (id: EditFeedImage) => void;
+  addOffender: boolean;
+  addExistingOffender: boolean;
+  toggleAddOffender: () => void;
+  toggleAddExistingOffender: () => void;
+  editOffenderData: OffenderData | null;
+  setEditOffenderData: (value: OffenderData | null) => void;
+  onDeleteOffender: (id: string) => void;
+  addVehicle: boolean;
+  addExistingVehicle: boolean;
+  toggleAddVehicle: () => void;
+  toggleAddExistingVehicle: () => void;
+  editVehicleData: VehicleData | null;
+  setEditVehicleData: (value: VehicleData | null) => void;
+  onDeleteVehicle: (id: string) => void;
+  addGoods: boolean;
+  toggleAddGoods: () => void;
+  editGoodsData: GoodsData | null;
+  setEditGoodsData: (value: GoodsData | null) => void;
+  onDeleteGoods: (id: string) => void;
+  onEditVehicle: (value: VehicleData) => void;
+  onAddVehicle: (value: VehicleData) => void;
+  onAddExistingVehicle: (id: string) => void;
+  onEditOffender: (value: OffenderData) => void;
+  onAddOffender: (value: OffenderData) => void;
+  onAddExistingOffender: (id: string) => void;
+  onEditGoods: (value: GoodsData) => void;
+  onAddGoods: (value: GoodsData) => void;
+  onUpdateImages: (value: ImageCardData[]) => void;
   goodsMode: GoodsMode;
 }
 
@@ -194,6 +216,42 @@ const ViewIncident = ({
   onReject,
   onApprove,
   approving,
+  editIncident,
+  toggleEditIncident,
+  editImages,
+  toggleEditImages,
+  editImageData,
+  setEditImageData,
+  onDeleteImage,
+  onEditImage,
+  addOffender,
+  addExistingOffender,
+  editOffenderData,
+  setEditOffenderData,
+  onDeleteOffender,
+  toggleAddOffender,
+  toggleAddExistingOffender,
+  addVehicle,
+  addExistingVehicle,
+  editVehicleData,
+  setEditVehicleData,
+  onDeleteVehicle,
+  toggleAddVehicle,
+  toggleAddExistingVehicle,
+  addGoods,
+  editGoodsData,
+  setEditGoodsData,
+  onDeleteGoods,
+  toggleAddGoods,
+  onEditGoods,
+  onAddGoods,
+  onEditOffender,
+  onAddOffender,
+  onAddExistingOffender,
+  onEditVehicle,
+  onAddVehicle,
+  onAddExistingVehicle,
+  onUpdateImages,
   goodsMode,
 }: Props): JSX.Element => {
   const classes = useStyles();
@@ -287,7 +345,37 @@ const ViewIncident = ({
                     </Col>
                     {editRights && (
                       <Col>
-                        <Link to={`/app/incidents/edit/${incidentId}`}>
+                        <Dropdown
+                          overlay={
+                            <Menu
+                              items={[
+                                {
+                                  key: 0,
+                                  label: intl.formatMessage({
+                                    defaultMessage: 'Edit Incident',
+                                    id: 'E6VJFN',
+                                  }),
+                                  onClick: () => toggleEditIncident(),
+                                  icon: <FontAwesomeIcon icon={faEdit} />,
+                                },
+                                data?.incident?.totalImages &&
+                                data?.incident.totalImages > 0
+                                  ? {
+                                      key: 1,
+                                      label: intl.formatMessage({
+                                        defaultMessage: 'Edit Images',
+                                        id: 'Cs6iOM',
+                                      }),
+                                      onClick: () => toggleEditImages(),
+                                      icon: <FontAwesomeIcon icon={faImage} />,
+                                    }
+                                  : null,
+                              ]}
+                            />
+                          }
+                          placement="bottomRight"
+                          arrow={{ pointAtCenter: true }}
+                        >
                           <Button type="ghost">
                             <FontAwesomeIcon
                               size="1x"
@@ -299,7 +387,20 @@ const ViewIncident = ({
                               id: 'wEQDC6',
                             })}
                           </Button>
-                        </Link>
+                        </Dropdown>
+                        {/* <Link to={`/app/incidents/edit/${incidentId}`}>
+                          <Button type="ghost">
+                            <FontAwesomeIcon
+                              size="1x"
+                              style={{ marginRight: 8 }}
+                              icon={faEdit}
+                            />
+                            {intl.formatMessage({
+                              defaultMessage: 'Edit',
+                              id: 'wEQDC6',
+                            })}
+                          </Button>
+                        </Link> */}
                       </Col>
                     )}
                     {data?.incident?.scheme.mg11Available && (
@@ -402,16 +503,157 @@ const ViewIncident = ({
                     >
                       {data?.incident?.images.map((image, i) => (
                         <Col key={image.id}>
-                          <div
-                            onClick={() => openLightbox(i)}
-                            className={classes.image}
+                          <Popover
+                            trigger="hover"
+                            placement="left"
+                            content={
+                              <div
+                                style={{
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                }}
+                              >
+                                <Button
+                                  type="text"
+                                  disabled={saving}
+                                  icon={
+                                    <FontAwesomeIcon
+                                      style={{ marginRight: 5 }}
+                                      icon={faEdit}
+                                      size="lg"
+                                    />
+                                  }
+                                  onClick={() => setEditImageData(image)}
+                                  size="small"
+                                >
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Edit Image',
+                                    id: '9UlLIw',
+                                  })}
+                                </Button>
+                                <Popconfirm
+                                  placement="topLeft"
+                                  title={intl.formatMessage({
+                                    defaultMessage: 'Remove the image?',
+                                    id: 'bRha+v',
+                                  })}
+                                  onConfirm={() => onDeleteImage(image.id)}
+                                  okText={intl.formatMessage({
+                                    defaultMessage: 'Yes',
+                                    id: 'a5msuh',
+                                  })}
+                                  cancelText={intl.formatMessage({
+                                    defaultMessage: 'No',
+                                    id: 'oUWADl',
+                                  })}
+                                  overlayInnerStyle={{ padding: 10 }}
+                                >
+                                  <Button
+                                    type="text"
+                                    disabled={saving}
+                                    icon={
+                                      <FontAwesomeIcon
+                                        style={{ marginRight: 5 }}
+                                        icon={faTrash}
+                                        size="lg"
+                                      />
+                                    }
+                                    // onClick={() => onDeleteImage(image.id)}
+                                    size="small"
+                                  >
+                                    {intl.formatMessage({
+                                      defaultMessage: 'Delete Image',
+                                      id: 'u5uVrC',
+                                    })}
+                                  </Button>
+                                </Popconfirm>
+                              </div>
+                            }
                           >
-                            <WatermarkImage
-                              url={image.optimised}
-                              rotation={image.rotation}
-                              position={image.position}
-                            />
-                          </div>
+                            <div
+                              onClick={() => openLightbox(i)}
+                              className={classes.image}
+                            >
+                              <WatermarkImage
+                                url={image.optimised}
+                                rotation={image.rotation}
+                                position={image.position}
+                              />
+                            </div>
+                          </Popover>
+                          {/* <Card
+                            key={image.id}
+                            bodyStyle={{
+                              padding: 0,
+                              overflow: 'hidden',
+                              borderRadius: 10,
+                            }}
+                          >
+                            <div style={{ height: 200, width: '100%' }}>
+                              {editRights && (
+                                <Dropdown
+                                  overlay={
+                                    <Menu
+                                      style={{
+                                        // position: 'absolute',
+                                        zIndex: 1000,
+                                        // padding: '6.5px 10px',
+                                        // top: 5,
+                                        // right: 5,
+                                      }}
+                                      items={[
+                                        {
+                                          key: 0,
+                                          label: intl.formatMessage({
+                                            defaultMessage: 'Edit',
+                                            id: 'wEQDC6',
+                                          }),
+                                          icon: (
+                                            <FontAwesomeIcon icon={faEdit} />
+                                          ),
+                                        },
+                                        {
+                                          key: 1,
+                                          label: intl.formatMessage({
+                                            defaultMessage: 'Delete',
+                                            id: 'K3r6DQ',
+                                          }),
+                                          icon: (
+                                            <FontAwesomeIcon icon={faEdit} />
+                                          ),
+                                        },
+                                      ]}
+                                    />
+                                  }
+                                  placement="topRight"
+                                  arrow={{ pointAtCenter: true }}
+                                >
+                                  <Button
+                                    size="small"
+                                    style={{
+                                      position: 'absolute',
+                                      zIndex: 10,
+                                      padding: '6.5px 10px',
+                                      top: 5,
+                                      right: 5,
+                                    }}
+                                  >
+                                    <FontAwesomeIcon
+                                      // size="5x"
+                                      style={{ height: '100%' }}
+                                      icon={faEllipsisV}
+                                    />
+                                  </Button>
+                                </Dropdown>
+                              )}
+
+                              <WatermarkImage
+                                url={image.optimised}
+                                rotation={image.rotation}
+                                position={image.position}
+                              />
+                            </div>
+                          </Card> */}
                         </Col>
                       ))}
                     </Row>
@@ -719,12 +961,38 @@ const ViewIncident = ({
                         {data?.incident?.incidentItems &&
                           data.incident.incidentItems.length > 0 && (
                             <Card style={{ marginBottom: 20 }}>
-                              <Title level={4}>
-                                {intl.formatMessage({
-                                  defaultMessage: 'Items',
-                                  id: 'yNmV/R',
-                                })}
-                              </Title>
+                              <Row
+                                gutter={8}
+                                align="middle"
+                                style={{ marginBottom: 10 }}
+                              >
+                                <Col flex={1}>
+                                  <Title level={4}>
+                                    {intl.formatMessage({
+                                      defaultMessage: 'Items',
+                                      id: 'yNmV/R',
+                                    })}
+                                  </Title>
+                                </Col>
+                                <Col>
+                                  <Button
+                                    size="small"
+                                    onClick={toggleAddGoods}
+                                    icon={
+                                      <FontAwesomeIcon
+                                        icon={faPlus}
+                                        style={{ marginRight: 5 }}
+                                      />
+                                    }
+                                  >
+                                    {intl.formatMessage({
+                                      defaultMessage: 'Add Item',
+                                      id: 'kNLPWW',
+                                    })}
+                                  </Button>
+                                </Col>
+                              </Row>
+
                               <Table
                                 columns={
                                   goodsMode === GoodsMode.Generic
@@ -756,6 +1024,87 @@ const ViewIncident = ({
                                           key: 'recoveredValue',
                                           render: (value: number) =>
                                             `£${value.toFixed(2)}`,
+                                        },
+                                        {
+                                          key: 'Options',
+                                          title: '',
+                                          dataIndex: 'Options',
+                                          width: 100,
+                                          render: (_, record) => (
+                                            <Row gutter={8}>
+                                              <Col>
+                                                <Tooltip
+                                                  title={intl.formatMessage({
+                                                    defaultMessage: 'Edit Item',
+                                                    id: 'Jm7MY5',
+                                                  })}
+                                                >
+                                                  <Button
+                                                    size="small"
+                                                    disabled={saving}
+                                                    onClick={() => {
+                                                      setEditGoodsData(
+                                                        record.item
+                                                      );
+                                                    }}
+                                                    icon={
+                                                      <FontAwesomeIcon
+                                                        icon={faPenToSquare}
+                                                      />
+                                                    }
+                                                  />
+                                                </Tooltip>
+                                              </Col>
+                                              <Col>
+                                                <Tooltip
+                                                  title={intl.formatMessage({
+                                                    defaultMessage:
+                                                      'Remove Item',
+                                                    id: 'BBWWVV',
+                                                  })}
+                                                >
+                                                  <Popconfirm
+                                                    placement="topLeft"
+                                                    trigger="hover"
+                                                    title={intl.formatMessage({
+                                                      defaultMessage:
+                                                        'Remove the item?',
+                                                      id: 'NKL3Y8',
+                                                    })}
+                                                    onConfirm={() =>
+                                                      onDeleteGoods(record.key)
+                                                    }
+                                                    okText={intl.formatMessage({
+                                                      defaultMessage: 'Yes',
+                                                      id: 'a5msuh',
+                                                    })}
+                                                    cancelText={intl.formatMessage(
+                                                      {
+                                                        defaultMessage: 'No',
+                                                        id: 'oUWADl',
+                                                      }
+                                                    )}
+                                                    overlayInnerStyle={{
+                                                      padding: 10,
+                                                    }}
+                                                  >
+                                                    <Button
+                                                      size="small"
+                                                      disabled={saving}
+                                                      // onClick={() =>
+                                                      //   onDeleteGoods(record.key)
+                                                      // }
+                                                      icon={
+                                                        <FontAwesomeIcon
+                                                          icon={faTrash}
+                                                        />
+                                                      }
+                                                    />
+                                                  </Popconfirm>
+                                                </Tooltip>
+                                              </Col>
+                                            </Row>
+                                          ),
                                         },
                                       ]
                                     : [
@@ -796,6 +1145,7 @@ const ViewIncident = ({
                                     quantity: item.quantity || 0,
                                     recoveredQuantity:
                                       item.recoveredQuantity || 0,
+                                    item,
                                   })
                                 )}
                                 size="small"
@@ -844,7 +1194,7 @@ const ViewIncident = ({
                             <Descriptions>
                               {data.incident.answers.map((answer) => (
                                 <Descriptions.Item
-                                  label={answer.tagQuestion.question.question}
+                                  label={answer.tagQuestion?.question.question}
                                 >
                                   {formatAnswer(answer.answer, answer.type)}
                                 </Descriptions.Item>
@@ -854,16 +1204,82 @@ const ViewIncident = ({
                         )}
 
                         <Card>
-                          <Title level={4}>
-                            {intl.formatMessage({
-                              defaultMessage: 'Offenders',
-                              id: 'xb54TN',
-                            })}
-                          </Title>
+                          <Row
+                            gutter={8}
+                            align="middle"
+                            style={{ marginBottom: 10 }}
+                          >
+                            <Col flex={1}>
+                              <Title level={4}>
+                                {intl.formatMessage({
+                                  defaultMessage: 'Offenders',
+                                  id: 'xb54TN',
+                                })}
+                              </Title>
+                            </Col>
+                            <Col>
+                              <Dropdown
+                                overlay={
+                                  <Menu
+                                    items={[
+                                      {
+                                        label: intl.formatMessage({
+                                          id: 'w4XD3a',
+                                          defaultMessage:
+                                            'Add Existing Offender',
+                                        }),
+                                        key: '1',
+                                        icon: (
+                                          <FontAwesomeIcon
+                                            icon={faMagnifyingGlass}
+                                            style={{ marginRight: 5 }}
+                                          />
+                                        ),
+                                        onClick: () =>
+                                          toggleAddExistingOffender(),
+                                      },
+                                      {
+                                        label: intl.formatMessage({
+                                          id: '58ir77',
+                                          defaultMessage: 'Create New Offender',
+                                        }),
+                                        key: '2',
+                                        icon: (
+                                          <FontAwesomeIcon
+                                            icon={faPlus}
+                                            style={{ marginRight: 5 }}
+                                          />
+                                        ),
+                                        onClick: () => toggleAddOffender(),
+                                      },
+                                    ]}
+                                  />
+                                }
+                              >
+                                <Button
+                                  size="small"
+                                  icon={
+                                    <FontAwesomeIcon
+                                      icon={faPlus}
+                                      style={{ marginRight: 5 }}
+                                    />
+                                  }
+                                >
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Offenders',
+                                    id: 'xb54TN',
+                                  })}
+                                </Button>
+                              </Dropdown>
+                            </Col>
+                          </Row>
+
                           {data?.incident?.offenders.length && !loading ? (
                             <OffenderTable
                               offenders={data?.incident?.offenders}
-                              hasNavigation
+                              setEditOffenderData={setEditOffenderData}
+                              onDeleteOffender={onDeleteOffender}
+                              saving={saving}
                             />
                           ) : (
                             <Empty
@@ -878,16 +1294,82 @@ const ViewIncident = ({
                         </Card>
 
                         <Card style={{ marginTop: 20 }}>
-                          <Title level={4}>
-                            {intl.formatMessage({
-                              defaultMessage: 'Vehicles',
-                              id: 'r6wuJ3',
-                            })}
-                          </Title>
+                          <Row
+                            gutter={8}
+                            align="middle"
+                            style={{ marginBottom: 10 }}
+                          >
+                            <Col flex={1}>
+                              <Title level={4}>
+                                {intl.formatMessage({
+                                  defaultMessage: 'Vehicles',
+                                  id: 'r6wuJ3',
+                                })}
+                              </Title>
+                            </Col>
+                            <Col>
+                              <Dropdown
+                                overlay={
+                                  <Menu
+                                    items={[
+                                      {
+                                        label: intl.formatMessage({
+                                          defaultMessage:
+                                            'Add Existing Vehicles',
+                                          id: 'goP1s6',
+                                        }),
+                                        key: '1',
+                                        icon: (
+                                          <FontAwesomeIcon
+                                            icon={faMagnifyingGlass}
+                                            style={{ marginRight: 5 }}
+                                          />
+                                        ),
+                                        onClick: () =>
+                                          toggleAddExistingVehicle(),
+                                      },
+                                      {
+                                        label: intl.formatMessage({
+                                          defaultMessage: 'Create New Vehicle',
+                                          id: 'xiAZxN',
+                                        }),
+                                        key: '2',
+                                        icon: (
+                                          <FontAwesomeIcon
+                                            icon={faPlus}
+                                            style={{ marginRight: 5 }}
+                                          />
+                                        ),
+                                        onClick: () => toggleAddVehicle(),
+                                      },
+                                    ]}
+                                  />
+                                }
+                              >
+                                <Button
+                                  size="small"
+                                  icon={
+                                    <FontAwesomeIcon
+                                      icon={faPlus}
+                                      style={{ marginRight: 5 }}
+                                    />
+                                  }
+                                >
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Vehicles',
+                                    id: 'r6wuJ3',
+                                  })}
+                                </Button>
+                              </Dropdown>
+                            </Col>
+                          </Row>
+
                           {data?.incident?.vehicles.length && !loading ? (
                             <VehicleTable
                               vehicles={data?.incident?.vehicles}
-                              hasNavigation
+                              setEditVehicleData={setEditVehicleData}
+                              onDeleteVehicle={onDeleteVehicle}
+                              saving={saving}
                             />
                           ) : (
                             <Empty
@@ -1293,7 +1775,7 @@ const ViewIncident = ({
         onClose={toggleLinkOffender}
       >
         {linkOffender ? (
-          <LinkOffender
+          <AddExistingOffender
             update={updateOffendersList}
             onClose={toggleLinkOffender}
             offenderIds={data?.incident?.offenders.map(({ id }) => id)}
@@ -1302,6 +1784,216 @@ const ViewIncident = ({
           <div />
         )}
       </Drawer>
+      {/* incident details */}
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Edit Incident',
+          id: 'E6VJFN',
+        })}
+        visible={editIncident}
+        width="600"
+        onClose={toggleEditIncident}
+      >
+        {editIncident ? (
+          <EditIncidentFeed
+            onClose={toggleEditIncident}
+            incidentId={data?.incident?.id || ''}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      {/* offender */}
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Add New Offender',
+          id: 'V+RsEq',
+        })}
+        open={addOffender}
+        width="700"
+        zIndex={999}
+        onClose={toggleAddOffender}
+      >
+        {addOffender ? (
+          <AddNewOffenderSimple
+            update={onAddOffender}
+            onClose={toggleAddOffender}
+            images={data?.incident?.images}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Add Existing Offenders',
+          id: '1FbM4r',
+        })}
+        open={addExistingOffender}
+        width="800"
+        onClose={toggleAddExistingOffender}
+        zIndex={1001}
+      >
+        {addExistingOffender ? (
+          <AddExistingOffender
+            update={(value) => onAddExistingOffender(value.id)}
+            offenderIds={data?.incident?.offenders.map(({ id }) => id)}
+            onClose={toggleAddExistingOffender}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Edit Offender',
+          id: '+OfJ4/',
+        })}
+        open={!!editOffenderData}
+        width="700"
+        onClose={() => setEditOffenderData(null)}
+      >
+        {editOffenderData ? (
+          <SimpleEditOffender
+            data={editOffenderData}
+            onClose={() => setEditOffenderData(null)}
+            update={onEditOffender}
+            images={data?.incident?.images}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      {/* vehicle */}
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Add Existing Vehicles',
+          id: 'goP1s6',
+        })}
+        open={addExistingVehicle}
+        width="800"
+        onClose={toggleAddExistingVehicle}
+        zIndex={1001}
+      >
+        {addExistingVehicle ? (
+          <LinkVehicle
+            update={(value) => onAddExistingVehicle(value.id)}
+            vehicleIds={data?.incident?.vehicles.map(({ id }) => id)}
+            onClose={toggleAddExistingVehicle}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Add New Vehicle',
+          id: 'cHbTr7',
+        })}
+        open={addVehicle}
+        width="700"
+        zIndex={999}
+        onClose={toggleAddVehicle}
+      >
+        {addVehicle ? (
+          <AddVehicle
+            update={onAddVehicle}
+            onClose={toggleAddVehicle}
+            fromIncident
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Edit Vehicle',
+          id: 'X/6z9r',
+        })}
+        open={!!editVehicleData}
+        width="800"
+        onClose={() => setEditVehicleData(null)}
+        zIndex={1001}
+      >
+        {editVehicleData ? (
+          <EditVehicle
+            update={onEditVehicle}
+            onClose={() => setEditVehicleData(null)}
+            editData={editVehicleData}
+            images={data?.incident?.images}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      {/* goods */}
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Add New Item',
+          id: '4CZFEs',
+        })}
+        open={addGoods}
+        width="400"
+        zIndex={999}
+        onClose={toggleAddGoods}
+      >
+        {addGoods ? (
+          <AddGoods update={onAddGoods} onClose={toggleAddGoods} />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Edit Item',
+          id: 'Jm7MY5',
+        })}
+        open={!!editGoodsData}
+        width="400"
+        zIndex={999}
+        onClose={() => setEditGoodsData(null)}
+      >
+        {editGoodsData ? (
+          <EditGoods
+            update={onEditGoods}
+            onClose={() => setEditGoodsData(null)}
+            data={editGoodsData}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      {/* images */}
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Edit Incident Images',
+          id: 'BqhA0W',
+        })}
+        open={editImages}
+        width="800"
+        zIndex={999}
+        onClose={toggleEditImages}
+      >
+        {editImages ? (
+          <EditImageList
+            update={onUpdateImages}
+            onClose={toggleEditImages}
+            images={data?.incident?.images}
+            title={intl.formatMessage({
+              defaultMessage: 'incidnet',
+              id: 'PjFIWc',
+            })}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <FeedImageEditor
+        submitImage={onEditImage}
+        onClose={() => setEditImageData(null)}
+        open={!!editImageData}
+        image={editImageData}
+      />
       <Lightbox
         open={lightBoxOpen.open}
         close={() => openLightbox(0)}
