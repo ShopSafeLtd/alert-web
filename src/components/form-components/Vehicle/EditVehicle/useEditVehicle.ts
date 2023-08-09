@@ -231,8 +231,8 @@ const useEditVehicle = ({
       images:
         imageChange && fileList.length > 0
           ? fileList
-              .filter((item) => !item.optimised)
-              .filter((item) => item.new || item.edited || item.deleted)
+              // .filter((item) => !item.optimised)
+              // .filter((item) => item.new || item.edited || item.deleted)
               .map((item) => ({
                 id: item.uid,
                 filename: item.fileName || '',
@@ -388,7 +388,7 @@ const useEditVehicle = ({
     adminRights: role !== Role.User,
     imgChange,
     beforeUpload,
-    fileList,
+    fileList: fileList.filter(({ deleted }) => !deleted),
     onRemoveImage,
     onEditImage,
     toggleEditImage,
