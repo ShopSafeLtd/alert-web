@@ -75270,6 +75270,7 @@ export type ListUserNotificationsQuery = {
           imagesRequiredOnOffenders: boolean;
           goodsMode: GoodsMode;
           facialRecognition: boolean;
+          taskTimeTracking: boolean;
           logo?: {
             __typename?: 'Image';
             optimisedPersisted?: string | null;
@@ -75339,6 +75340,7 @@ export type UserNotificationsQuery = {
           imagesRequiredOnOffenders: boolean;
           goodsMode: GoodsMode;
           facialRecognition: boolean;
+          taskTimeTracking: boolean;
           logo?: {
             __typename?: 'Image';
             optimisedPersisted?: string | null;
@@ -90583,6 +90585,7 @@ export const ListUserNotificationsDocument = gql`
             imagesRequiredOnOffenders
             goodsMode
             facialRecognition
+            taskTimeTracking
           }
           title
           type
@@ -90681,6 +90684,7 @@ export const UserNotificationsDocument = gql`
             imagesRequiredOnOffenders
             goodsMode
             facialRecognition
+            taskTimeTracking
           }
           title
           type
