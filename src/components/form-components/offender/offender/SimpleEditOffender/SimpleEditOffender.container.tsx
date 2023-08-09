@@ -1,5 +1,5 @@
 import React from 'react';
-import type { ImageData } from 'components/form-components/ImageSelect/ImageSelect.view';
+import type { ImageValue } from 'components/form-components/ImageSelect/ImageSelect.view';
 import View from './SimpleEditOffender.view';
 import type { OffenderData } from './useEditOffender';
 import useEditOffender from './useEditOffender';
@@ -9,7 +9,7 @@ interface Props {
   data: OffenderData;
   onClose: () => void;
   update: (value: OffenderData) => void;
-  images?: ImageData[];
+  images?: ImageValue[];
   onImagesUploaded?: (values: StateImageData[]) => void;
 }
 
@@ -35,7 +35,7 @@ const EditOffender = ({
         ageCheck={ageCheck}
         onClose={onClose}
         idVerified={idVerified}
-        images={images}
+        images={images?.map((el) => ({ ...el, uid: el.id }))}
       />
     </div>
   );

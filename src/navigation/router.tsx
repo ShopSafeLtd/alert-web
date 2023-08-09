@@ -46,6 +46,16 @@ const Views = () => {
     }
   }, []);
 
+  useEffect(() => {
+    // TODO swap this to component
+    if (navigator.userAgent.toLowerCase().includes('android')) {
+      window.location.href =
+        'https://play.google.com/store/apps/details?id=co.uk.shopsafealert.app';
+    } else if (navigator.userAgent.toLowerCase().includes('iphone')) {
+      window.location.href = 'https://apps.apple.com/gb/app/alert/id1497736226';
+    }
+  }, []);
+
   const customTranslations = useStoreState(
     (state) => state.scheme.translations
   );
@@ -131,7 +141,11 @@ const Views = () => {
   }
   return (
     <div style={{ colorScheme: currentTheme }}>
-      <IntlProvider locale={currentAppLocale.locale} messages={messages}>
+      <IntlProvider
+        locale={currentAppLocale.locale}
+        messages={messages}
+        onError={() => {}}
+      >
         <ErrorBoundary>
           <ThemeProvider theme={theme[currentTheme]}>
             <ConfigProvider locale={currentAppLocale.antd}>

@@ -4,7 +4,7 @@ export enum Height {
   'AVERAGE' = 'AVERAGE',
   'TALL' = 'TALL',
 }
-
+// wait to check
 export const heightValues = [
   {
     value: 'UNKNOWN',

@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import type { ListCrimeGroupsQuery } from 'graphql/generated';
 import {
+  ImagePosition,
   useListCustomGalleriesQuery,
   SortOrder,
   useSchemeGroupsQuery,
@@ -231,6 +232,7 @@ const useEditVehicle = ({
         imageChange && fileList.length > 0
           ? fileList
               .filter((item) => !item.optimised)
+              .filter((item) => item.new || item.edited || item.deleted)
               .map((item) => ({
                 id: item.uid,
                 filename: item.fileName || '',
@@ -319,6 +321,9 @@ const useEditVehicle = ({
           url: info.file.response[0].url,
           fileName: info.file.response[0].blobName,
           type: info.file.response[0].mimetype,
+          position: ImagePosition.CenterCenter,
+          rotation: 0,
+          new: true,
         },
       ]);
       setImageChange(true);
@@ -351,6 +356,9 @@ const useEditVehicle = ({
           [index]: {
             deleted: {
               $set: true,
+            },
+            edited: {
+              $set: false,
             },
           },
         })

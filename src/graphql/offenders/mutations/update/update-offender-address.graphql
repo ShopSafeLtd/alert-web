@@ -1,0 +1,18 @@
+mutation updateOffenderAddresses(
+  $id: String!
+  $addresses: AddressUpdateManyWithoutOffenderNestedInput
+) {
+  updateOffender(where: { id: $id }, data: { addresses: $addresses }) {
+    id
+    addresses {
+      id
+      full
+      building
+      street
+      townCity
+      county
+      postcode
+      alias
+    }
+  }
+}

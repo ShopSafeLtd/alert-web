@@ -148,12 +148,15 @@ const useViewVehicle = (vehicleId: string): Return => {
       const editedImages = data.images?.filter(
         (item) => item.edited && !item.new
       );
+      const disconnect = data.images
+        ?.filter(({ deleted }) => deleted)
+        .map(({ id }) => ({ id }));
+      const newImages = data.images?.filter((el) => el.new);
 
       return {
         upload:
-          data.images && data.images.length > 0
-            ? data.images
-                .filter((image) => image.new)
+          newImages && newImages.length > 0
+            ? newImages
                 .map((item) => ({
                   url: {
                     filename: item.fileName || '',
@@ -165,28 +168,20 @@ const useViewVehicle = (vehicleId: string): Return => {
                   policeImage: item.policeImage,
                   rotation: item.rotation || 0,
                 }))
+                .filter((obj) => obj.url !== undefined)
             : undefined,
-        delete:
-          data.images && data.images.length > 0
-            ? data.images
-                .filter((image) => image.deleted)
-                .map(({ id }) => ({
-                  id,
-                }))
-            : vehicleData?.vehicle?.images.map(({ id }) => ({
-                id,
-              })),
+        delete: disconnect && disconnect.length > 0 ? disconnect : undefined,
         update:
           editedImages && editedImages.length > 0
             ? editedImages.map((item) => ({
+                where: {
+                  id: item.id,
+                },
                 data: {
                   position: { set: item.position },
                   primary: { set: item.primary },
                   policeImage: { set: item.policeImage },
                   rotation: { set: item.rotation },
-                },
-                where: {
-                  id: item.id,
                 },
               }))
             : undefined,

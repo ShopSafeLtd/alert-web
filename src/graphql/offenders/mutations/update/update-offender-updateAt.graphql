@@ -1,0 +1,9 @@
+mutation updateOffenderUpdatedAt(
+  $id: String!
+  $updatedAt: DateTimeFieldUpdateOperationsInput
+) {
+  updateOffender(where: { id: $id }, data: { updatedAt: $updatedAt }) {
+    id
+    updatedAt
+  }
+}

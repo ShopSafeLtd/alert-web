@@ -39,6 +39,42 @@ const ViewIncident = (): JSX.Element => {
     optionRowShow,
     setOptionRowShow,
     onDelete,
+    editIncident,
+    toggleEditIncident,
+    editImages,
+    toggleEditImages,
+    editImageData,
+    setEditImageData,
+    onDeleteImage,
+    onEditImage,
+    addOffender,
+    addExistingOffender,
+    editOffenderData,
+    setEditOffenderData,
+    onDeleteOffender,
+    toggleAddOffender,
+    toggleAddExistingOffender,
+    addVehicle,
+    addExistingVehicle,
+    editVehicleData,
+    setEditVehicleData,
+    onDeleteVehicle,
+    toggleAddVehicle,
+    toggleAddExistingVehicle,
+    addGoods,
+    editGoodsData,
+    setEditGoodsData,
+    onDeleteGoods,
+    toggleAddGoods,
+    onEditVehicle,
+    onAddVehicle,
+    onAddExistingVehicle,
+    onEditGoods,
+    onAddGoods,
+    onEditOffender,
+    onAddOffender,
+    onAddExistingOffender,
+    onUpdateImages,
     goodsMode,
   } = useViewIncident(incidentId);
   const { onApprove, onReject, approving } = useApproveIncident({ incidentId });
@@ -81,6 +117,42 @@ const ViewIncident = (): JSX.Element => {
       onApprove={onApprove}
       onReject={onReject}
       approving={approving}
+      editIncident={editIncident}
+      toggleEditIncident={toggleEditIncident}
+      editImages={editImages}
+      toggleEditImages={toggleEditImages}
+      editImageData={editImageData}
+      setEditImageData={setEditImageData}
+      onDeleteImage={onDeleteImage}
+      onEditImage={onEditImage}
+      addOffender={addOffender}
+      addExistingOffender={addExistingOffender}
+      editOffenderData={editOffenderData}
+      setEditOffenderData={setEditOffenderData}
+      onDeleteOffender={onDeleteOffender}
+      toggleAddOffender={toggleAddOffender}
+      toggleAddExistingOffender={toggleAddExistingOffender}
+      addVehicle={addVehicle}
+      addExistingVehicle={addExistingVehicle}
+      editVehicleData={editVehicleData}
+      setEditVehicleData={setEditVehicleData}
+      onDeleteVehicle={onDeleteVehicle}
+      toggleAddVehicle={toggleAddVehicle}
+      toggleAddExistingVehicle={toggleAddExistingVehicle}
+      addGoods={addGoods}
+      editGoodsData={editGoodsData}
+      setEditGoodsData={setEditGoodsData}
+      onDeleteGoods={onDeleteGoods}
+      toggleAddGoods={toggleAddGoods}
+      onEditVehicle={onEditVehicle}
+      onAddVehicle={onAddVehicle}
+      onAddExistingVehicle={onAddExistingVehicle}
+      onEditGoods={onEditGoods}
+      onAddGoods={onAddGoods}
+      onEditOffender={onEditOffender}
+      onAddOffender={onAddOffender}
+      onAddExistingOffender={onAddExistingOffender}
+      onUpdateImages={onUpdateImages}
       goodsMode={goodsMode}
     />
   );

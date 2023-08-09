@@ -73,15 +73,15 @@ const userOnlyItems: NavItem[] = [
   {
     key: 'tasks',
     path: `${APP_PREFIX_PATH}/tasks`,
-    title: 'Tasks',
+    title: 'Activities',
     icon: faCalendarCheck,
     breadcrumb: false,
     submenu: [],
     roles: [Role.SchemeAdmin, Role.ShopsafeAdmin],
     badge: BadgeTypes.todo,
     intl: defineMessage({
-      id: 'tasks',
-      defaultMessage: 'Tasks',
+      id: 'Activities',
+      defaultMessage: 'Activities',
     }),
   },
   {

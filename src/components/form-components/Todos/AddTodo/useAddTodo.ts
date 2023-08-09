@@ -22,7 +22,7 @@ export interface FormData {
 
 interface Props {
   onClose: () => void;
-  update: MutationUpdaterFn<CreateTodoMutation>;
+  updateMutation: MutationUpdaterFn<CreateTodoMutation>;
 }
 
 interface Return {
@@ -30,14 +30,31 @@ interface Return {
   adminUsersData: SelectOptions[] | undefined;
   usersLoading: boolean;
   saving: boolean;
+  addQuestion: boolean;
+  setAddQuestion: (value: boolean) => void;
+  update: (id: string, question: string) => void;
+  selectedIds?: string[];
+  selectedQuestions: { id: string; question: string }[];
+  setSelectedQuestions: (value: { id: string; question: string }[]) => void;
+  setSelectedIds: (value: string[]) => void;
 }
 
-const useAddTodo = ({ update, onClose }: Props): Return => {
+const useAddTodo = ({ updateMutation, onClose }: Props): Return => {
   const intl = useIntl();
   const schemeId = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
   const [saving, setSaving] = useState(false);
+  const [addQuestion, setAddQuestion] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
+  const [selectedQuestions, setSelectedQuestions] = useState<
+    { id: string; question: string }[]
+  >([]);
+
+  const update = (id: string, question: string) => {
+    setSelectedQuestions([...selectedQuestions, { id, question }]);
+    setSelectedIds([...selectedIds, id]);
+  };
   const { data: usersData, loading: usersLoading } = useListSchemeUsersQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
@@ -101,7 +118,7 @@ const useAddTodo = ({ update, onClose }: Props): Return => {
       setSaving(false);
       errorNotification();
     },
-    update,
+    update: updateMutation,
   });
 
   const onSubmit = (data: FormData) => {
@@ -114,6 +131,16 @@ const useAddTodo = ({ update, onClose }: Props): Return => {
           assignedUsers:
             data.assignedUsers && data.assignedUsers.length > 0
               ? { connect: data.assignedUsers.map((id) => ({ id })) }
+              : undefined,
+          questions:
+            selectedQuestions && selectedQuestions.length > 0
+              ? {
+                  createMany: {
+                    data: selectedQuestions.map((question) => ({
+                      questionId: question.id,
+                    })),
+                  },
+                }
               : undefined,
           dueDate: data.dueDate,
           completed: false,
@@ -138,6 +165,13 @@ const useAddTodo = ({ update, onClose }: Props): Return => {
       label: user.fullName,
     })),
     usersLoading,
+    addQuestion,
+    setAddQuestion,
+    update,
+    selectedIds,
+    selectedQuestions,
+    setSelectedQuestions,
+    setSelectedIds,
   };
 };
 export default useAddTodo;

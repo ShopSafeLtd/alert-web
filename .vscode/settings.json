@@ -1,7 +1,0 @@
-{
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "cSpell.words": ["antd", "Lightbox", "reactflow", "systerm", "Todos"],
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true,
-  },
-}

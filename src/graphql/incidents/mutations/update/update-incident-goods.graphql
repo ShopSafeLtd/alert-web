@@ -1,0 +1,17 @@
+mutation UpdateIncidentGoods(
+  $id: String!
+  $incidentItems: IncidentItemUpdateManyWithoutIncidentNestedInput
+) {
+  updateIncident(where: { id: $id }, data: { incidentItems: $incidentItems }) {
+    id
+    incidentItems {
+      id
+      name
+      value
+      recoveredValue
+      goodsType {
+        id
+      }
+    }
+  }
+}

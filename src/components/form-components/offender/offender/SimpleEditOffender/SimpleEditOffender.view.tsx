@@ -70,7 +70,7 @@ const EditOffender = ({
           comment: data.comment || null,
           idVerified: data.idVerified || null,
           idSource: data.idSource || null,
-          images: data.images,
+          images: data.images || null,
         }}
       >
         <Row gutter={16}>
@@ -406,7 +406,16 @@ const EditOffender = ({
             },
           ]}
         >
-          <ImageSelect images={images} />
+          <ImageSelect
+            images={
+              data.images
+                ? images?.concat(
+                    data.images.map((el) => ({ ...el, uid: el.id }))
+                  )
+                : images
+            }
+            value={data.images}
+          />
         </Form.Item>
         <Form.Item>
           <Row style={{ marginTop: 30 }} gutter={10} justify="end">

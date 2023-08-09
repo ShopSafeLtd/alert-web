@@ -1,7 +1,7 @@
 /* eslint-disable formatjs/no-literal-string-in-jsx */
 import React from 'react';
 import { Card, Col, Row, Space, Typography } from 'antd';
-
+// wait to check
 const { Text, Title, Paragraph } = Typography;
 const SchemeTerms = (): JSX.Element => (
   <div className="list-view">

@@ -7,10 +7,7 @@ query userNotifications(
     id
     totalNotifications
     totalUnreadNotifications
-    notifications(
-      where: $notificationWhere
-      orderBy: $orderBy
-    ) {
+    notifications(where: $notificationWhere, orderBy: $orderBy) {
       id
       read
       createdAt
@@ -47,6 +44,7 @@ query userNotifications(
           imagesRequiredOnOffenders
           goodsMode
           facialRecognition
+          taskTimeTracking
         }
         title
         type

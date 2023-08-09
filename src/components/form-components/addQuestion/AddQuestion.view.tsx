@@ -1,17 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access,unicorn/no-useless-promise-resolve-reject,consistent-return,@typescript-eslint/no-unsafe-call */
 import type { FormInstance } from 'antd';
-import { Button, Card, Col, Form, Row, Select, Input, Checkbox } from 'antd';
+import { Button, Card, Checkbox, Col, Form, Input, Row, Select } from 'antd';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import type { FormData } from './useAddQuestion';
 import type { AvailableQuestionsQuery } from '../../../graphql/generated';
 import { AnswerType } from '../../../graphql/generated';
 import {
-  StringPreview,
-  YesNoPreview,
   DatePreview,
+  NumberPreview,
   SelectPreview,
+  StringPreview,
   TimePreview,
+  YesNoPreview,
 } from './previews';
 
 interface AddQuestionViewProps {
@@ -47,6 +48,9 @@ const AddQuestionView = ({
     }
     if (answerType === AnswerType.Date) {
       return <DatePreview question={question} />;
+    }
+    if (answerType === AnswerType.Number) {
+      return <NumberPreview question={question} />;
     }
     if (answerType === AnswerType.Time) {
       return <TimePreview question={question} />;
@@ -137,6 +141,13 @@ const AddQuestionView = ({
                   id: 'aA8bDw',
                 }),
                 value: AnswerType.String,
+              },
+              {
+                label: intl.formatMessage({
+                  defaultMessage: 'Number',
+                  id: 'kFkPWB',
+                }),
+                value: AnswerType.Number,
               },
               {
                 label: intl.formatMessage({

@@ -1,0 +1,37 @@
+query Todo($where: TodoWhereUniqueInput!) {
+  todo(where: $where) {
+    assignedUsers {
+      id
+      fullName
+    }
+    name
+    answers {
+      id
+      taskQuestion {
+        id
+      }
+      answer
+    }
+    timeTaken {
+      user {
+        id
+      }
+      timeTaken
+    }
+    questions {
+      id
+      question {
+        id
+        optionsFormatted
+        optionsFormFormatted {
+          label
+          value
+        }
+        questionFormatted
+        type
+      }
+    }
+    description
+    id
+  }
+}

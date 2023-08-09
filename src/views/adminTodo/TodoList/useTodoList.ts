@@ -30,6 +30,8 @@ interface Return {
   toggleAllUsers: () => void;
   allSchemes: boolean;
   toggleAllSchemes: () => void;
+  selectedTodo: string | null;
+  setSelectedTodo: (id: string | null) => void;
 }
 
 const useAdminTodos = (): Return => {
@@ -45,6 +47,7 @@ const useAdminTodos = (): Return => {
   const [page, setPage] = useState(1);
   const setTodoList = useStoreActions((actions) => actions.user.setTodos);
   const userTodos = useStoreState((state) => state.user.userTodos);
+  const [selectedTodo, setSelectedTodo] = useState<string | null>(null);
   const variables = {
     orderBy: {
       createdAt: SortOrder.Desc,
@@ -270,6 +273,8 @@ const useAdminTodos = (): Return => {
     toggleAllUsers,
     allSchemes,
     toggleAllSchemes,
+    selectedTodo,
+    setSelectedTodo,
   };
 };
 

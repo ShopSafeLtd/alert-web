@@ -87,9 +87,11 @@ const UploadImage = ({
                     </Button>
 
                     <Popconfirm
+                      placement="topLeft"
+                      trigger="hover"
                       title={intl.formatMessage({
-                        defaultMessage: 'Do you want to remove the image?',
-                        id: 'n0NLsa',
+                        defaultMessage: 'Remove the image?',
+                        id: 'bRha+v',
                       })}
                       onConfirm={() => onRemoveImage(file.uid)}
                       okText={intl.formatMessage({
@@ -117,6 +119,7 @@ const UploadImage = ({
                     </Popconfirm>
                     <WatermarkImage
                       position={file.position}
+                      rotation={file.rotation}
                       url={file.url || file.thumbUrl}
                     />
                   </div>

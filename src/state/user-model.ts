@@ -71,6 +71,7 @@ export interface Scheme {
       | undefined;
     goodsMode: GoodsMode;
     facialRecognition: boolean;
+    taskTimeTracking: boolean;
     imagesRequiredOnOffenders: boolean;
   };
 }

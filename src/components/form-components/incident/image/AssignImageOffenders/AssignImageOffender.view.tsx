@@ -9,7 +9,6 @@ import {
   Modal,
   Skeleton,
 } from 'antd';
-import type { Age, Build, Gender, Race } from 'graphql/generated';
 import {
   getOffenderAge,
   getOffenderBuild,
@@ -19,43 +18,46 @@ import {
 import type { UploadFile } from 'antd/lib/upload/interface';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import { useIntl } from 'react-intl';
+import type { OffenderData } from 'types/DataType';
 import AddExistingOffender from '../../../offender/offender/AddExistingOffender';
 import AddOffender from '../../../offender/offender/AddNewOffender';
 
 const { Title, Paragraph, Text } = Typography;
 
-interface OffenderData {
-  id: string;
-  name?: string | null;
-  age?: Age | null;
-  gender?: Gender | null;
-  race?: Race | null;
-  build?: Build | null;
-  dateOfBirth?: Date | null;
-  hair?: string | null;
-  dateSource?: string | null;
-  peculiarities?: string | null;
-  approved?: boolean | null;
-  groups?:
-    | {
-        id: string;
-        name: string;
-      }[]
-    | undefined;
-  images?: {
-    id: string;
-    optimised?: string | null;
-    url?: string | null;
-    new?: boolean;
-  }[];
-  imageUid?: string[] | undefined;
-}
+// interface OffenderData {
+//   id: string;
+//   name?: string | null;
+//   age?: Age | null;
+//   gender?: Gender | null;
+//   race?: Race | null;
+//   build?: Build | null;
+//   dateOfBirth?: Date | null;
+//   hair?: string | null;
+//   dateSource?: string | null;
+//   peculiarities?: string | null;
+//   approved?: boolean | null;
+//   groups?:
+//     | {
+//         id: string;
+//         name: string;
+//       }[]
+//     | undefined;
+//   images?:
+//     | {
+//         id: string;
+//         optimised?: string | null;
+//         url?: string | null;
+//         new?: boolean;
+//       }[]
+//     | null;
+//   imageUid?: string[] | undefined;
+// }
 
-interface OffenderDataPayload extends OffenderData {
-  new: boolean;
-  existing: boolean;
-  edited: boolean;
-}
+// interface OffenderData extends OffenderData {
+//   new: boolean;
+//   existing: boolean;
+//   edited: boolean;
+// }
 
 interface Image extends UploadFile {
   offenders?: {
@@ -66,7 +68,7 @@ interface Image extends UploadFile {
 
 interface Props {
   image: Image | undefined;
-  offendersData: OffenderDataPayload[];
+  offendersData: OffenderData[];
   toggleAddOffender: () => void;
   toggleAddExistingOffender: () => void;
   addExistingOffender: boolean;

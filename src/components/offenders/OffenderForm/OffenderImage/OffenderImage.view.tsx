@@ -1,5 +1,14 @@
 import React from 'react';
-import { Button, Card, Col, Form, Row, Typography, Upload } from 'antd';
+import {
+  Button,
+  Card,
+  Col,
+  Form,
+  Popconfirm,
+  Row,
+  Typography,
+  Upload,
+} from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faUpload } from '@fortawesome/pro-light-svg-icons';
 import type { RcFile, UploadProps } from 'antd/es/upload/interface';
@@ -128,19 +137,37 @@ const OffenderImage = ({
                       >
                         <FontAwesomeIcon icon={faEdit} />
                       </Button>
-                      <Button
-                        size="small"
-                        style={{
-                          position: 'absolute',
-                          zIndex: 10,
-                          padding: '6.5px 10px',
-                          top: 5,
-                          left: 45,
-                        }}
-                        onClick={() => onRemoveImage(file.uid)}
+                      <Popconfirm
+                        placement="topLeft"
+                        trigger="hover"
+                        title={intl.formatMessage({
+                          defaultMessage: 'Remove the image?',
+                          id: 'bRha+v',
+                        })}
+                        onConfirm={() => onRemoveImage(file.uid)}
+                        okText={intl.formatMessage({
+                          defaultMessage: 'Yes',
+                          id: 'a5msuh',
+                        })}
+                        cancelText={intl.formatMessage({
+                          defaultMessage: 'No',
+                          id: 'oUWADl',
+                        })}
+                        overlayInnerStyle={{ padding: 10 }}
                       >
-                        <FontAwesomeIcon icon={faTrash} />
-                      </Button>
+                        <Button
+                          size="small"
+                          style={{
+                            position: 'absolute',
+                            zIndex: 10,
+                            padding: '6.5px 10px',
+                            top: 5,
+                            left: 45,
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faTrash} />
+                        </Button>
+                      </Popconfirm>
                       <WatermarkImage
                         position={file.position}
                         url={file.url || file.thumbUrl}

@@ -1,0 +1,43 @@
+mutation updateOffenderDetails(
+  $id: String!
+  $alias: OffenderUpdatealiasInput
+  $age: NullableEnumAgeFieldUpdateOperationsInput
+  $build: NullableEnumBuildFieldUpdateOperationsInput
+  $dateOfBirth: NullableDateTimeFieldUpdateOperationsInput
+  $dateSource: NullableStringFieldUpdateOperationsInput
+  $gender: NullableEnumGenderFieldUpdateOperationsInput
+  $hair: NullableStringFieldUpdateOperationsInput
+  $name: NullableStringFieldUpdateOperationsInput
+  $peculiarities: NullableStringFieldUpdateOperationsInput
+  $race: NullableEnumRaceFieldUpdateOperationsInput
+) {
+  updateOffender(
+    where: { id: $id }
+    data: {
+      alias: $alias
+      age: $age
+      build: $build
+      dateOfBirth: $dateOfBirth
+      dateSource: $dateSource
+      gender: $gender
+      hair: $hair
+      name: $name
+      peculiarities: $peculiarities
+      race: $race
+    }
+  ) {
+    id
+    alias
+    name
+    age
+    build
+    dateOfBirth
+    dateSource
+    race
+    gender
+    hair
+    peculiarities
+    height
+    comment
+  }
+}

@@ -10,14 +10,33 @@ interface Props {
   update: MutationUpdaterFn<CreateTodoMutation>;
 }
 
-const AddTodo = ({ update, onClose }: Props): JSX.Element => {
-  const { onSubmit, saving, adminUsersData, usersLoading } = useAddTodo({
-    onClose,
+const AddTodo = ({ update: updateMutation, onClose }: Props): JSX.Element => {
+  const {
+    onSubmit,
+    saving,
+    adminUsersData,
+    usersLoading,
+    addQuestion,
+    setAddQuestion,
     update,
+    selectedIds,
+    selectedQuestions,
+    setSelectedQuestions,
+    setSelectedIds,
+  } = useAddTodo({
+    onClose,
+    updateMutation,
   });
 
   return (
     <View
+      setSelectedIds={setSelectedIds}
+      addQuestion={addQuestion}
+      setAddQuestion={setAddQuestion}
+      update={update}
+      selectedIds={selectedIds}
+      selectedQuestions={selectedQuestions}
+      setSelectedQuestions={setSelectedQuestions}
       onSubmit={onSubmit}
       onClose={onClose}
       saving={saving}

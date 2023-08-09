@@ -1,0 +1,34 @@
+mutation UpdateIncidentOffenders(
+  $id: String!
+  $offenders: OffenderUpdateManyWithoutIncidentsNestedInput
+) {
+  updateIncident(where: { id: $id }, data: { offenders: $offenders }) {
+    id
+    offenders(where: { recycled: { equals: false } }) {
+      id
+      name
+      age
+      gender
+      race
+      dateOfBirth
+      build
+      height
+      comment
+      images(first: 1) {
+        id
+        url
+        optimised
+        card
+        position
+        rotation
+        primary
+        policeImage
+        offenders {
+          id
+          name
+        }
+      }
+      recycled
+    }
+  }
+}

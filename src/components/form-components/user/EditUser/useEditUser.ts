@@ -379,7 +379,10 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
             )
           : [
               {
-                label: 'No results found',
+                label: intl.formatMessage({
+                  defaultMessage: 'No results found',
+                  id: 'hX5PAb',
+                }),
                 value: '',
                 disabled: true,
               },

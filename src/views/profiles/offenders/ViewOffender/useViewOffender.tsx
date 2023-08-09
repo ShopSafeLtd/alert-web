@@ -1,10 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import type {
   AssociatedOffendersQuery,
+  UpdateOffenderAddressesMutation,
+  UpdateOffenderBansMutation,
+  UpdateOffenderCrimeGroupsMutation,
+  UpdateOffenderVehiclesMutation,
   ViewOffenderQuery,
   ViewOffenderQueryVariables,
 } from 'graphql/generated';
 import {
+  useUpdateOffenderImagesMutation,
+  useUpdateOffenderAddressesMutation,
+  useUpdateOffenderBansMutation,
+  useUpdateOffenderCrimeGroupsMutation,
+  useUpdateOffenderVehiclesMutation,
   useUnsubscribeFromOffenderMutation,
   Role,
   TagType,
@@ -27,6 +36,19 @@ import { faEdit, faPeople, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { useNavigate } from 'react-router';
 import update from 'immutability-helper';
 import { useIntl } from 'react-intl';
+import type {
+  BanData,
+  EditFeedImage,
+  ImageCardData,
+  LocationData,
+  VehicleData,
+} from 'types/DataType';
+import errorNotification from 'types/error_notification';
+import type { MutationUpdaterFn } from '@apollo/client';
+import {
+  ProfileUpdatedModel,
+  ProfileUpdatedType,
+} from 'types/enums/profile-update-type';
 
 const { confirm } = Modal;
 
@@ -106,6 +128,43 @@ interface Return {
   toggleViewAssociate: (value: ViewAssociate | null) => void;
   viewMatches: string | null;
   toggleViewMatches: (offenderId: string | null) => void;
+  editOffender: boolean;
+  toggleEditOffender: () => void;
+  addVehicle: boolean;
+  addExistingVehicle: boolean;
+  toggleAddVehicle: () => void;
+  toggleAddExistingVehicle: () => void;
+  editVehicleData: VehicleData | null;
+  setEditVehicleData: (value: VehicleData | null) => void;
+  onDeleteVehicle: (id: string) => void;
+  onEditVehicle: (value: VehicleData) => void;
+  onAddVehicle: (value: VehicleData) => void;
+  onAddExistingVehicle: (id: string) => void;
+  addCrimeGroup: boolean;
+  toggleAddCrimeGroup: () => void;
+  onDeleteCrimeGroup: (id: string) => void;
+  onAddCrimeGroup: (value: string) => void;
+  addAddress: boolean;
+  toggleAddAddress: () => void;
+  editAddressData: LocationData | null;
+  setEditAddressData: (value: LocationData | null) => void;
+  onDeleteAddress: (id: string) => void;
+  onEditAddress: (value: LocationData) => void;
+  onAddAddress: (value: LocationData) => void;
+  addBan: boolean;
+  toggleAddBan: () => void;
+  editBanData: BanData | null;
+  setEditBanData: (value: BanData | null) => void;
+  onDeleteBan: (id: string) => void;
+  onEditBan: (value: BanData) => void;
+  onAddBan: (value: BanData) => void;
+  editImages: boolean;
+  toggleEditImages: () => void;
+  editImageData: EditFeedImage | null;
+  setEditImageData: (value: EditFeedImage | null) => void;
+  onDeleteImage: (id: string) => void;
+  onEditImage: (id: EditFeedImage) => void;
+  onUpdateImages: (value: ImageCardData[]) => void;
 }
 
 const useViewOffender = (offenderId: string): Return => {
@@ -117,6 +176,7 @@ const useViewOffender = (offenderId: string): Return => {
   const role = useStoreState((state) => state.user.role);
   const groups = useStoreState((state) => state.user.groups);
   const userId = useStoreState((state) => state.user.id);
+  const schemeId = useStoreState((state) => state.scheme.id);
   const intl = useIntl();
   const [saving, setSaving] = useState(false);
 
@@ -137,6 +197,24 @@ const useViewOffender = (offenderId: string): Return => {
   const [viewAssociate, setViewAssociate] = useState<ViewAssociate | null>(
     null
   );
+
+  const [editOffender, setEditOffender] = useState(false);
+  const [editImages, setEditImages] = useState(false);
+  const [editImageData, setEditImageData] = useState<EditFeedImage | null>(
+    null
+  );
+  const [addVehicle, setAddVehicle] = useState(false);
+  const [addExistingVehicle, setAddExistingVehicle] = useState(false);
+  const [editVehicleData, setEditVehicleData] = useState<VehicleData | null>(
+    null
+  );
+  const [addCrimeGroup, setAddCrimeGroup] = useState(false);
+  const [addAddress, setAddAddress] = useState(false);
+  const [editAddressData, setEditAddressData] = useState<LocationData | null>(
+    null
+  );
+  const [addBan, setAddBan] = useState(false);
+  const [editBanData, setEditBanData] = useState<BanData | null>(null);
 
   const openLightbox = (index: number) => {
     setLightBoxOpen({ open: !lightBoxOpen.open, index });
@@ -162,7 +240,27 @@ const useViewOffender = (offenderId: string): Return => {
   >(null);
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
   const [editUpdateInput, setEditUpdateInput] = useState('');
-
+  const getNotificationContent = (
+    title: ProfileUpdatedModel,
+    type: ProfileUpdatedType
+  ) =>
+    notification.success({
+      message: intl.formatMessage(
+        {
+          defaultMessage: 'Successfully {type}!',
+          id: 'cAM3G8',
+        },
+        { type }
+      ),
+      description: intl.formatMessage(
+        {
+          defaultMessage: 'The {title} of the offender have been {type}.!',
+          id: 'd9AbkL',
+        },
+        { title, type: type.toLocaleLowerCase() }
+      ),
+      placement: 'bottomRight',
+    });
   useEffect(() => {
     const incidents =
       window.localStorage.getItem(LINKED_INCIDENTS) === 'fasle'
@@ -183,20 +281,20 @@ const useViewOffender = (offenderId: string): Return => {
     window.localStorage.setItem(LINKED_INCIDENTS, incidents ? 'true' : 'false');
     window.localStorage.setItem(LINKED_OCG, crimeGroups ? 'true' : 'false');
   }, [associateFilters]);
-
+  const variables = {
+    where: {
+      id: offenderId,
+    },
+    banWhere: {
+      groups:
+        role === Role.User || role === Role.ContentAdmin
+          ? { some: { id: { in: groupsId } } }
+          : undefined,
+    },
+  };
   const { data, loading } = useViewOffenderQuery({
     fetchPolicy: 'cache-and-network',
-    variables: {
-      where: {
-        id: offenderId,
-      },
-      banWhere: {
-        groups:
-          role === Role.User || role === Role.ContentAdmin
-            ? { some: { id: { in: groupsId } } }
-            : undefined,
-      },
-    },
+    variables,
     onCompleted: (res) => {
       setLightboxElements(
         res.offender?.images.map((image) => ({
@@ -334,8 +432,695 @@ const useViewOffender = (offenderId: string): Return => {
       },
     });
   };
-  const toggleLinkIncident = () => {
-    setLinkIncident(!linkIncident);
+  // image
+  const [updateOffenderImages] = useUpdateOffenderImagesMutation({
+    onError: () => {
+      errorNotification();
+    },
+  });
+
+  const onUpdateImages = (value: ImageCardData[]) => {
+    console.log('value111', value);
+
+    setSaving(true);
+    const disconnect = value
+      .filter(({ deleted }) => deleted)
+      .map(({ id }) => ({ id }));
+    const newImages = value.filter((el) => el.new);
+    // const editedImages = value.filter(({ edited }) => edited);
+
+    void updateOffenderImages({
+      variables: {
+        id: offenderId,
+        images: {
+          disconnect:
+            disconnect && disconnect.length > 0 ? disconnect : undefined,
+          upload:
+            newImages && newImages.length > 0
+              ? newImages
+                  .map((item) => ({
+                    url: {
+                      filename: item.fileName || '',
+                      mimetype: item.type || '',
+                      url: item.url || '',
+                    },
+                    position: item.position,
+                    primary: item.primary,
+                    policeImage: item.policeImage,
+                    rotation: item.rotation || 0,
+                  }))
+                  .filter((obj) => obj.url !== undefined)
+              : undefined,
+          update:
+            value && value.length > 0
+              ? value.map((item) => ({
+                  where: {
+                    id: item.id,
+                  },
+                  data: {
+                    position: { set: item.position },
+                    primary: { set: item.primary },
+                    policeImage: { set: item.policeImage },
+                    rotation: { set: item.rotation },
+                  },
+                }))
+              : undefined,
+        },
+      },
+      onCompleted: () => {
+        getNotificationContent(
+          ProfileUpdatedModel.Images,
+          ProfileUpdatedType.updated
+        );
+      },
+    }).finally(() => {
+      setEditImages(false);
+      setSaving(false);
+    });
+  };
+
+  const onEditImage = (value: EditFeedImage) => {
+    setSaving(true);
+    if (value)
+      void updateOffenderImages({
+        variables: {
+          id: offenderId,
+          images: {
+            update: [
+              {
+                where: {
+                  id: value.id,
+                },
+                data: {
+                  position: { set: value.position },
+                  primary: { set: value.primary || false },
+                  policeImage: { set: value.policeImage || false },
+                  rotation: { set: value.rotation || 0 },
+                },
+              },
+            ],
+          },
+        },
+        onCompleted: () => {
+          getNotificationContent(
+            ProfileUpdatedModel.Image,
+            ProfileUpdatedType.updated
+          );
+        },
+        // update: updateImageList,
+      }).finally(() => {
+        setEditImageData(null);
+        setSaving(false);
+      });
+  };
+  const onDeleteImage = (value: string) => {
+    setSaving(false);
+    void updateOffenderImages({
+      variables: {
+        id: offenderId,
+        images: {
+          disconnect: [{ id: value }],
+        },
+      },
+      onCompleted: () => {
+        getNotificationContent(
+          ProfileUpdatedModel.Image,
+          ProfileUpdatedType.deleted
+        );
+      },
+      update: (store, { data: res }) => {
+        if (res?.updateOffender === null || res?.updateOffender === undefined)
+          return;
+        const existingData = store.readQuery<ViewOffenderQuery>({
+          query: ViewOffenderDocument,
+          variables,
+        });
+
+        if (!existingData?.offender) return;
+        store.writeQuery<ViewOffenderQuery>({
+          query: ViewOffenderDocument,
+          data: {
+            offender: {
+              ...existingData.offender,
+              images: existingData.offender.images.filter(
+                ({ id }) => id !== value
+              ),
+            },
+            __typename: 'Query',
+          },
+          variables,
+        });
+      },
+    });
+  };
+  // vehicle
+  const [updateOffenderVehicles] = useUpdateOffenderVehiclesMutation({
+    onError: () => {
+      errorNotification();
+    },
+  });
+  const updateVehicleList: MutationUpdaterFn<UpdateOffenderVehiclesMutation> = (
+    store,
+    { data: res }
+  ) => {
+    if (res?.updateOffender === null || res?.updateOffender === undefined)
+      return;
+
+    const existingData = store.readQuery<ViewOffenderQuery>({
+      query: ViewOffenderDocument,
+      variables,
+    });
+
+    if (!existingData?.offender) return;
+    store.writeQuery<ViewOffenderQuery>({
+      query: ViewOffenderDocument,
+      data: {
+        offender: {
+          ...existingData.offender,
+          vehicles: [
+            ...existingData.offender.vehicles,
+            ...res.updateOffender.vehicles,
+          ],
+        },
+        __typename: 'Query',
+      },
+      variables,
+    });
+  };
+
+  const onEditVehicle = (value: VehicleData) => {
+    setSaving(true);
+    if (value)
+      void updateOffenderVehicles({
+        variables: {
+          id: offenderId,
+          vehicles: {
+            update: [
+              {
+                where: {
+                  id: value.id,
+                },
+                data: {
+                  make: { set: value.make || '' },
+                  model: { set: value.model || '' },
+                  colour: { set: value.colour || '' },
+                  registration: { set: value.registration || '' },
+                },
+              },
+            ],
+          },
+        },
+        onCompleted: () => {
+          getNotificationContent(
+            ProfileUpdatedModel.Vehicle,
+            ProfileUpdatedType.updated
+          );
+        },
+      }).finally(() => {
+        setEditVehicleData(null);
+        setSaving(false);
+      });
+  };
+  const onAddVehicle = (value: VehicleData) => {
+    setSaving(true);
+    if (value)
+      void updateOffenderVehicles({
+        variables: {
+          id: offenderId,
+          vehicles: {
+            create: [
+              {
+                make: value.make || '',
+                model: value.model || '',
+                colour: value.colour || '',
+                registration: value.registration || '',
+              },
+            ],
+          },
+        },
+        onCompleted: () => {
+          getNotificationContent(
+            ProfileUpdatedModel.Vehicle,
+            ProfileUpdatedType.added
+          );
+        },
+        update: updateVehicleList,
+      }).finally(() => {
+        setAddVehicle(false);
+        setSaving(false);
+      });
+  };
+  const onAddExistingVehicle = (value: string) => {
+    setSaving(true);
+    if (value)
+      void updateOffenderVehicles({
+        variables: {
+          id: offenderId,
+          vehicles: {
+            connect: [{ id: value }],
+          },
+        },
+        onCompleted: () => {
+          getNotificationContent(
+            ProfileUpdatedModel.Vehicle,
+            ProfileUpdatedType.added
+          );
+        },
+        update: updateVehicleList,
+      }).finally(() => {
+        setAddExistingVehicle(false);
+        setSaving(false);
+      });
+  };
+  const onDeleteVehicle = (value: string) => {
+    setSaving(true);
+    if (value)
+      void updateOffenderVehicles({
+        variables: {
+          id: offenderId,
+          vehicles: { disconnect: [{ id: value }] },
+        },
+        onCompleted: () => {
+          getNotificationContent(
+            ProfileUpdatedModel.Vehicle,
+            ProfileUpdatedType.deleted
+          );
+        },
+        update: (store, { data: res }) => {
+          if (res?.updateOffender === null || res?.updateOffender === undefined)
+            return;
+          const existingData = store.readQuery<ViewOffenderQuery>({
+            query: ViewOffenderDocument,
+            variables,
+          });
+
+          if (!existingData?.offender) return;
+          store.writeQuery<ViewOffenderQuery>({
+            query: ViewOffenderDocument,
+            data: {
+              offender: {
+                ...existingData.offender,
+                vehicles: existingData.offender.vehicles.filter(
+                  ({ id }) => id !== value
+                ),
+              },
+              __typename: 'Query',
+            },
+            variables,
+          });
+        },
+      }).finally(() => {
+        setSaving(false);
+      });
+  };
+  // crime group
+  const [updateOffenderCrimeGroups] = useUpdateOffenderCrimeGroupsMutation({
+    onError: () => {
+      errorNotification();
+    },
+  });
+  const updateCrimeGroupList: MutationUpdaterFn<
+    UpdateOffenderCrimeGroupsMutation
+  > = (store, { data: res }) => {
+    if (res?.updateOffender === null || res?.updateOffender === undefined)
+      return;
+
+    const existingData = store.readQuery<ViewOffenderQuery>({
+      query: ViewOffenderDocument,
+      variables,
+    });
+
+    if (!existingData?.offender) return;
+    store.writeQuery<ViewOffenderQuery>({
+      query: ViewOffenderDocument,
+      data: {
+        offender: {
+          ...existingData.offender,
+          crimeGroups: [
+            ...existingData.offender.crimeGroups,
+            ...res.updateOffender.crimeGroups,
+          ],
+        },
+        __typename: 'Query',
+      },
+      variables,
+    });
+  };
+
+  const onAddCrimeGroup = (value: string) => {
+    setSaving(true);
+    if (value)
+      void updateOffenderCrimeGroups({
+        variables: {
+          id: offenderId,
+          crimeGroups: {
+            connect: [{ id: value }],
+          },
+        },
+        onCompleted: () => {
+          getNotificationContent(
+            ProfileUpdatedModel.Crime_Group,
+            ProfileUpdatedType.added
+          );
+        },
+        update: updateCrimeGroupList,
+      }).finally(() => {
+        setAddCrimeGroup(false);
+        setSaving(false);
+      });
+  };
+  const onDeleteCrimeGroup = (value: string) => {
+    setSaving(true);
+    if (value)
+      void updateOffenderCrimeGroups({
+        variables: {
+          id: offenderId,
+          crimeGroups: { disconnect: [{ id: value }] },
+        },
+        onCompleted: () => {
+          getNotificationContent(
+            ProfileUpdatedModel.Vehicle,
+            ProfileUpdatedType.deleted
+          );
+        },
+        update: (store, { data: res }) => {
+          if (res?.updateOffender === null || res?.updateOffender === undefined)
+            return;
+          const existingData = store.readQuery<ViewOffenderQuery>({
+            query: ViewOffenderDocument,
+            variables,
+          });
+
+          if (!existingData?.offender) return;
+          store.writeQuery<ViewOffenderQuery>({
+            query: ViewOffenderDocument,
+            data: {
+              offender: {
+                ...existingData.offender,
+                vehicles: existingData.offender.vehicles.filter(
+                  ({ id }) => id !== value
+                ),
+              },
+              __typename: 'Query',
+            },
+            variables,
+          });
+        },
+      }).finally(() => {
+        setSaving(false);
+      });
+  };
+
+  // addresses
+  const [updateOffenderAddresses] = useUpdateOffenderAddressesMutation({
+    onError: () => {
+      errorNotification();
+    },
+  });
+  const updateAddressList: MutationUpdaterFn<
+    UpdateOffenderAddressesMutation
+  > = (store, { data: res }) => {
+    if (res?.updateOffender === null || res?.updateOffender === undefined)
+      return;
+
+    const existingData = store.readQuery<ViewOffenderQuery>({
+      query: ViewOffenderDocument,
+      variables,
+    });
+
+    if (!existingData?.offender) return;
+    store.writeQuery<ViewOffenderQuery>({
+      query: ViewOffenderDocument,
+      data: {
+        offender: {
+          ...existingData.offender,
+          addresses: [
+            ...existingData.offender.addresses,
+            ...res.updateOffender.addresses,
+          ],
+        },
+        __typename: 'Query',
+      },
+      variables,
+    });
+  };
+
+  const onEditAddress = (value: LocationData) => {
+    setSaving(true);
+    if (value)
+      void updateOffenderAddresses({
+        variables: {
+          id: offenderId,
+          addresses: {
+            update: [
+              {
+                where: {
+                  id: value.id,
+                },
+                data: {
+                  postcode: { set: value.postcode },
+                  street: { set: value.street },
+                  townCity: { set: value.townCity },
+                  alias: { set: value.alias },
+                  building: { set: value.building },
+                  county: { set: value.county },
+                },
+              },
+            ],
+          },
+        },
+        onCompleted: () => {
+          getNotificationContent(
+            ProfileUpdatedModel.Address,
+            ProfileUpdatedType.updated
+          );
+        },
+      }).finally(() => {
+        setEditAddressData(null);
+        setSaving(false);
+      });
+  };
+  const onAddAddress = (value: LocationData) => {
+    setSaving(true);
+    if (value)
+      void updateOffenderAddresses({
+        variables: {
+          id: offenderId,
+          addresses: {
+            create: [
+              {
+                postcode: value.postcode,
+                street: value.street,
+                townCity: value.townCity,
+                alias: value.alias,
+                building: value.building,
+                county: value.county,
+              },
+            ],
+          },
+        },
+        onCompleted: () => {
+          getNotificationContent(
+            ProfileUpdatedModel.Address,
+            ProfileUpdatedType.added
+          );
+        },
+        update: updateAddressList,
+      }).finally(() => {
+        setAddAddress(false);
+        setSaving(false);
+      });
+  };
+
+  const onDeleteAddress = (value: string) => {
+    setSaving(true);
+    if (value)
+      void updateOffenderAddresses({
+        variables: {
+          id: offenderId,
+          addresses: { disconnect: [{ id: value }] },
+        },
+        onCompleted: () => {
+          getNotificationContent(
+            ProfileUpdatedModel.Address,
+            ProfileUpdatedType.deleted
+          );
+        },
+        update: (store, { data: res }) => {
+          if (res?.updateOffender === null || res?.updateOffender === undefined)
+            return;
+          const existingData = store.readQuery<ViewOffenderQuery>({
+            query: ViewOffenderDocument,
+            variables,
+          });
+
+          if (!existingData?.offender) return;
+          store.writeQuery<ViewOffenderQuery>({
+            query: ViewOffenderDocument,
+            data: {
+              offender: {
+                ...existingData.offender,
+                addresses: existingData.offender.addresses.filter(
+                  ({ id }) => id !== value
+                ),
+              },
+              __typename: 'Query',
+            },
+            variables,
+          });
+        },
+      }).finally(() => {
+        setSaving(false);
+      });
+  };
+
+  // ban
+  const [updateOffenderBans] = useUpdateOffenderBansMutation({
+    onError: () => {
+      errorNotification();
+    },
+  });
+  const updateBanList: MutationUpdaterFn<UpdateOffenderBansMutation> = (
+    store,
+    { data: res }
+  ) => {
+    if (res?.updateOffender === null || res?.updateOffender === undefined)
+      return;
+
+    const existingData = store.readQuery<ViewOffenderQuery>({
+      query: ViewOffenderDocument,
+      variables,
+    });
+
+    if (!existingData?.offender) return;
+    store.writeQuery<ViewOffenderQuery>({
+      query: ViewOffenderDocument,
+      data: {
+        offender: {
+          ...existingData.offender,
+          bans: [...existingData.offender.bans, ...res.updateOffender.bans],
+        },
+        __typename: 'Query',
+      },
+      variables,
+    });
+  };
+
+  const onEditBan = (value: BanData) => {
+    setSaving(true);
+    if (value)
+      void updateOffenderBans({
+        variables: {
+          id: offenderId,
+          bans: {
+            update: [
+              {
+                where: {
+                  id: value.id,
+                },
+                data: {
+                  endDate: { set: value.endDate },
+                  location: { set: value.location },
+                  startDate: { set: value.startDate },
+                  description: { set: value.description },
+                  type: { set: value.type },
+                },
+              },
+            ],
+          },
+        },
+        onCompleted: () => {
+          getNotificationContent(
+            ProfileUpdatedModel.Ban,
+            ProfileUpdatedType.updated
+          );
+        },
+      }).finally(() => {
+        setEditBanData(null);
+        setSaving(false);
+      });
+  };
+  const onAddBan = (value: BanData) => {
+    setSaving(true);
+    if (value)
+      void updateOffenderBans({
+        variables: {
+          id: offenderId,
+          bans: {
+            create: [
+              {
+                createdBy: {
+                  connect: {
+                    id: userId,
+                  },
+                },
+                endDate: value.endDate,
+                location: value.location,
+                scheme: {
+                  connect: {
+                    id: schemeId,
+                  },
+                },
+                startDate: value.startDate,
+                description: value.description,
+                type: value.type,
+              },
+            ],
+          },
+        },
+        onCompleted: () => {
+          getNotificationContent(
+            ProfileUpdatedModel.Ban,
+            ProfileUpdatedType.added
+          );
+        },
+        update: updateBanList,
+      }).finally(() => {
+        setAddBan(false);
+        setSaving(false);
+      });
+  };
+
+  const onDeleteBan = (value: string) => {
+    setSaving(true);
+    if (value)
+      void updateOffenderBans({
+        variables: {
+          id: offenderId,
+          bans: { disconnect: [{ id: value }] },
+        },
+        onCompleted: () => {
+          getNotificationContent(
+            ProfileUpdatedModel.Ban,
+            ProfileUpdatedType.deleted
+          );
+        },
+        update: (store, { data: res }) => {
+          if (res?.updateOffender === null || res?.updateOffender === undefined)
+            return;
+          const existingData = store.readQuery<ViewOffenderQuery>({
+            query: ViewOffenderDocument,
+            variables,
+          });
+
+          if (!existingData?.offender) return;
+          store.writeQuery<ViewOffenderQuery>({
+            query: ViewOffenderDocument,
+            data: {
+              offender: {
+                ...existingData.offender,
+                bans: existingData.offender.bans.filter(
+                  ({ id }) => id !== value
+                ),
+              },
+              __typename: 'Query',
+            },
+            variables,
+          });
+        },
+      }).finally(() => {
+        setSaving(false);
+      });
   };
 
   const [subscribe] = useSubscribeToOffenderMutation();
@@ -603,6 +1388,32 @@ const useViewOffender = (offenderId: string): Return => {
     }
   }, [role]);
 
+  // function
+  const toggleLinkIncident = () => {
+    setLinkIncident(!linkIncident);
+  };
+  const toggleEditOffender = () => {
+    setEditOffender(!editOffender);
+  };
+  const toggleEditImages = () => {
+    setEditImages(!editImages);
+  };
+  const toggleAddVehicle = () => {
+    setAddVehicle(!addVehicle);
+  };
+  const toggleAddExistingVehicle = () => {
+    setAddExistingVehicle(!addExistingVehicle);
+  };
+  const toggleAddCrimeGroup = () => {
+    setAddCrimeGroup(!addCrimeGroup);
+  };
+  const toggleAddAddress = () => {
+    setAddAddress(!addAddress);
+  };
+  const toggleAddBan = () => {
+    setAddBan(!addBan);
+  };
+
   const onAssociateFilterChange = (value: string[]) => {
     setAssociatedFilters(value);
   };
@@ -650,6 +1461,43 @@ const useViewOffender = (offenderId: string): Return => {
     toggleViewAssociate: setViewAssociate,
     toggleViewMatches,
     viewMatches,
+    editOffender,
+    toggleEditOffender,
+    editImages,
+    toggleEditImages,
+    editImageData,
+    setEditImageData,
+    onDeleteImage,
+    onEditImage,
+    onUpdateImages,
+    addVehicle,
+    addExistingVehicle,
+    editVehicleData,
+    setEditVehicleData,
+    onDeleteVehicle,
+    toggleAddVehicle,
+    toggleAddExistingVehicle,
+    onEditVehicle,
+    onAddVehicle,
+    onAddExistingVehicle,
+    addCrimeGroup,
+    onDeleteCrimeGroup,
+    toggleAddCrimeGroup,
+    onAddCrimeGroup,
+    addAddress,
+    editAddressData,
+    setEditAddressData,
+    onDeleteAddress,
+    toggleAddAddress,
+    onEditAddress,
+    onAddAddress,
+    addBan,
+    editBanData,
+    setEditBanData,
+    onDeleteBan,
+    toggleAddBan,
+    onEditBan,
+    onAddBan,
   };
 };
 

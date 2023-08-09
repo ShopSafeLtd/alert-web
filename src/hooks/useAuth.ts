@@ -81,6 +81,7 @@ const useAuth = (): Return => {
         goodsMode: schemeDetails?.goodsMode || GoodsMode.Generic,
         facialRecognition: schemeDetails?.facialRecognition,
         imagesRequiredOnOffenders: schemeDetails?.imagesRequiredOnOffenders,
+        taskTimeTracking: schemeDetails?.taskTimeTracking,
       });
       setTodos({ userTodos: schemes[0]?.scheme?.userTodos || 0 });
       setNotifications({
@@ -115,6 +116,7 @@ const useAuth = (): Return => {
           facialRecognition: schemeDetails.scheme.facialRecognition,
           imagesRequiredOnOffenders:
             schemeDetails.scheme.imagesRequiredOnOffenders,
+          taskTimeTracking: schemeDetails.scheme.taskTimeTracking,
         });
         setTodos({ userTodos: schemeDetails?.scheme?.userTodos || 0 });
       } else {
