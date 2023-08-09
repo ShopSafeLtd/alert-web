@@ -159,6 +159,12 @@ const useTodo = ({
 
     const answerIds = todo?.todo?.answers.map(({ id: aId }) => aId);
 
+    const timeTaken = userTime
+      .map((time) => ({
+        timeTaken: time.timeTaken as number,
+        userId: time.id,
+      }))
+      ?.filter((time) => time.timeTaken && time.timeTaken > 0);
     void updateTodoMutation({
       variables: {
         where: {
@@ -208,16 +214,14 @@ const useTodo = ({
             //   })),
             // },
           },
-          timeTaken: userTime
-            ? {
-                createMany: {
-                  data: userTime.map((time) => ({
-                    timeTaken: time.timeTaken as number,
-                    userId: time.id,
-                  })),
-                },
-              }
-            : undefined,
+          timeTaken:
+            userTime && timeTaken
+              ? {
+                  createMany: {
+                    data: timeTaken,
+                  },
+                }
+              : undefined,
         },
       },
     });

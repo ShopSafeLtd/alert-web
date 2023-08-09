@@ -8,6 +8,7 @@ import ImageEditor from 'components/form-components/ImageEditor/ImageEditor.view
 import type { IncidentFormField } from 'graphql/generated';
 import { ImagePosition } from 'graphql/generated';
 import { useIntl } from 'react-intl';
+import { useStoreState } from 'state';
 import type { StateImageData } from './useImageSection';
 import useImageSection from './useImageSection';
 import type { FormData } from '../../../../views/incidents/AddIncident/useAddIncident';
@@ -47,7 +48,7 @@ const ImageSection = ({
     form,
     onChange,
   });
-
+  const facialRec = useStoreState((state) => state.scheme.facialRecognition);
   return (
     <Row gutter={20}>
       <Col>
@@ -77,7 +78,11 @@ const ImageSection = ({
         <Upload
           fileList={images}
           onChange={onImageChange}
-          action={import.meta.env.VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT}
+          action={
+            facialRec
+              ? import.meta.env.VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT
+              : import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT
+          }
           className="incident-form-images-no-offenders"
           listType="picture-card"
           accept=".png,.jpeg"
