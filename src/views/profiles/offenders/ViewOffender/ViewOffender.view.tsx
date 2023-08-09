@@ -382,18 +382,22 @@ const ViewOffender = ({
                           onClick: () => toggleEditOffender(),
                           icon: <FontAwesomeIcon icon={faEdit} />,
                         },
-                        data?.offender?.totalImages &&
-                        data?.offender.totalImages > 0
-                          ? {
-                              key: 1,
-                              label: intl.formatMessage({
-                                defaultMessage: 'Edit Images',
-                                id: 'Cs6iOM',
-                              }),
-                              onClick: () => toggleEditImages(),
-                              icon: <FontAwesomeIcon icon={faImage} />,
-                            }
-                          : null,
+                        {
+                          key: 1,
+                          label:
+                            data?.offender?.totalImages &&
+                            data?.offender.totalImages > 0
+                              ? intl.formatMessage({
+                                  defaultMessage: 'Edit Images',
+                                  id: 'Cs6iOM',
+                                })
+                              : intl.formatMessage({
+                                  defaultMessage: 'Add Images',
+                                  id: 'b4GGYZ',
+                                }),
+                          onClick: () => toggleEditImages(),
+                          icon: <FontAwesomeIcon icon={faImage} />,
+                        },
                       ]}
                     />
                   }

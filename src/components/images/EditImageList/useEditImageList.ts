@@ -77,12 +77,40 @@ const useEditImagesList = ({
       if (findPrimaryImage) setPrimaryImage(findPrimaryImage);
     }
   }, [images]);
-
+  const onEditImage = (value: Image) => {
+    setImageChange(true);
+    setEditImage(null);
+    const index = fileList.map((item) => item.uid).indexOf(value.uid);
+    setFileList(
+      update(fileList, {
+        [index]: {
+          $set: { ...value, edited: !value.new },
+        },
+      })
+    );
+  };
   const onSubmit = () => {
     setSaving(true);
+
     if (imageChange && fileList.length > 0) {
+      const findPrimaryId = images?.find(({ primary }) => primary)?.id;
+      const value = fileList.find(({ uid }) => uid === findPrimaryId);
+
+      if (findPrimaryId && value && findPrimaryId !== primaryImage) {
+        // ??? edited dont update to false
+        onEditImage({ ...value, primary: false, edited: true });
+        // const index = fileList.map((item) => item.uid).indexOf(value.uid);
+        // setFileList(
+        //   update(fileList, {
+        //     [index]: {
+        //       $set: { ...value, primary: false, edited: true },
+        //     },
+        //   })
+        // );
+      }
+
       const imagesData = fileList
-        .filter((item) => !item.optimised)
+        // .filter((item) => !item.optimised)
         // .filter((item) => item.new || item.edited || item.deleted)
         .map((item) => ({
           id: item.uid,
@@ -93,10 +121,12 @@ const useEditImagesList = ({
           primary: item.uid === primaryImage,
           policeImage: item.policeImage || false,
           rotation: item.rotation,
-          edited: item.edited && !item.new,
+          edited: item.edited && !item.new && !item.deleted,
           new: item.new,
           deleted: item.deleted,
         }));
+      // console.log('imagesData', imagesData);
+
       updateImageList(imagesData);
     }
     setSaving(false);
@@ -137,18 +167,6 @@ const useEditImagesList = ({
       setImageChange(true);
     }
   };
-  const onEditImage = (value: Image) => {
-    setImageChange(true);
-    setEditImage(null);
-    const index = fileList.map((item) => item.uid).indexOf(value.uid);
-    setFileList(
-      update(fileList, {
-        [index]: {
-          $set: { ...value, edited: !value.new },
-        },
-      })
-    );
-  };
 
   const onRemoveImage = (imageId: string) => {
     setImageChange(true);
@@ -162,9 +180,6 @@ const useEditImagesList = ({
           [index]: {
             deleted: {
               $set: true,
-            },
-            edited: {
-              $set: false,
             },
           },
         })
@@ -181,7 +196,7 @@ const useEditImagesList = ({
     saving,
     imgChange,
     beforeUpload,
-    fileList,
+    fileList: fileList.filter(({ deleted }) => !deleted),
     onRemoveImage,
     onEditImage,
     toggleEditImage,

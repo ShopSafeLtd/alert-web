@@ -95,7 +95,8 @@ const useIncidentCard = ({ incident, update }: Props): Return => {
     },
   });
   const onEditImage = (value: EditFeedImage) => {
-    if (value)
+    if (value) {
+      const findPrimaryId = incident?.images.find(({ primary }) => primary)?.id;
       void updateIncident({
         variables: {
           id: incident.id,
@@ -112,25 +113,21 @@ const useIncidentCard = ({ incident, update }: Props): Return => {
                   rotation: { set: value.rotation || 0 },
                 },
               },
+              {
+                where: {
+                  id: findPrimaryId,
+                },
+                data: {
+                  primary: { set: !value.primary },
+                },
+              },
             ],
-            // optimistic: incident.images.map((image) => {
-            //   if (image.id === value.id) {
-            //     return {
-            //       ...image,
-            //       uri: '',
-            //       policeImage: value.policeImage,
-            //       primary: value.primary,
-            //       position: value.position,
-            //       rotation: image.rotation,
-            //     };
-            //   }
-            //   return { ...image, uri: '' };
-            // }),
           },
         },
       }).finally(() => {
         setEditImage(false);
       });
+    }
   };
   const onDelete = (id: string) => {
     if (deleteRights)

@@ -440,8 +440,6 @@ const useViewOffender = (offenderId: string): Return => {
   });
 
   const onUpdateImages = (value: ImageCardData[]) => {
-    console.log('value111', value);
-
     setSaving(true);
     const disconnect = value
       .filter(({ deleted }) => deleted)
@@ -501,7 +499,10 @@ const useViewOffender = (offenderId: string): Return => {
 
   const onEditImage = (value: EditFeedImage) => {
     setSaving(true);
-    if (value)
+    if (value) {
+      const findPrimaryId = data?.offender?.images.find(
+        ({ primary }) => primary
+      )?.id;
       void updateOffenderImages({
         variables: {
           id: offenderId,
@@ -518,6 +519,14 @@ const useViewOffender = (offenderId: string): Return => {
                   rotation: { set: value.rotation || 0 },
                 },
               },
+              {
+                where: {
+                  id: findPrimaryId,
+                },
+                data: {
+                  primary: { set: !value.primary },
+                },
+              },
             ],
           },
         },
@@ -532,6 +541,7 @@ const useViewOffender = (offenderId: string): Return => {
         setEditImageData(null);
         setSaving(false);
       });
+    }
   };
   const onDeleteImage = (value: string) => {
     setSaving(false);

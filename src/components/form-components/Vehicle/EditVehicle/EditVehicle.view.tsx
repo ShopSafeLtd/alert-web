@@ -330,8 +330,8 @@ const EditVehicle = ({
         <UploadImage
           imgChange={imgChange}
           beforeUpload={beforeUpload}
-          fileList={fileList}
           editImage={editImage}
+          fileList={fileList}
           onEditImage={onEditImage}
           toggleEditImage={toggleEditImage}
           onRemoveImage={onRemoveImage}

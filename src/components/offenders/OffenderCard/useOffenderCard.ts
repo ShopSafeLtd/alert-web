@@ -99,7 +99,8 @@ const useOffenderCard = ({ offender, update }: Props): Return => {
     },
   });
   const onEditImage = (value: EditFeedImage) => {
-    if (value)
+    if (value) {
+      const findPrimaryId = offender?.images.find(({ primary }) => primary)?.id;
       void updateOffender({
         variables: {
           id: offender.id,
@@ -116,12 +117,21 @@ const useOffenderCard = ({ offender, update }: Props): Return => {
                   rotation: { set: value.rotation || 0 },
                 },
               },
+              {
+                where: {
+                  id: findPrimaryId,
+                },
+                data: {
+                  primary: { set: !value.primary },
+                },
+              },
             ],
           },
         },
       }).finally(() => {
         setEditImage(false);
       });
+    }
   };
   const onDelete = (id: string) => {
     if (deleteRights)
