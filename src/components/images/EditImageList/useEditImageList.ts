@@ -94,26 +94,11 @@ const useEditImagesList = ({
 
     if (imageChange && fileList.length > 0) {
       const findPrimaryId = images?.find(({ primary }) => primary)?.id;
-      const value = fileList.find(({ uid }) => uid === findPrimaryId);
-
-      if (findPrimaryId && value && findPrimaryId !== primaryImage) {
-        // ??? edited dont update to false
-        onEditImage({ ...value, primary: false, edited: true });
-        // const index = fileList.map((item) => item.uid).indexOf(value.uid);
-        // setFileList(
-        //   update(fileList, {
-        //     [index]: {
-        //       $set: { ...value, primary: false, edited: true },
-        //     },
-        //   })
-        // );
-      }
-
       const imagesData = fileList
         // .filter((item) => !item.optimised)
         // .filter((item) => item.new || item.edited || item.deleted)
         .map((item) => ({
-          id: item.uid,
+          id: item.uid || `${Math.random()}`,
           filename: item.fileName || '',
           mimetype: item.type || '',
           url: item.url || '',
@@ -121,11 +106,12 @@ const useEditImagesList = ({
           primary: item.uid === primaryImage,
           policeImage: item.policeImage || false,
           rotation: item.rotation,
-          edited: item.edited && !item.new && !item.deleted,
+          edited:
+            (item.edited && !item.new && !item.deleted) ||
+            (findPrimaryId === item.uid && findPrimaryId !== primaryImage),
           new: item.new,
           deleted: item.deleted,
         }));
-      // console.log('imagesData', imagesData);
 
       updateImageList(imagesData);
     }
