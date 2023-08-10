@@ -1,12 +1,13 @@
 import { useStoreState } from 'state';
 import type {
+  ImageUpdateWithWhereUniqueWithoutIncidentInput,
   ListIncidentsQuery,
   RecycleIncidentMutation,
 } from 'graphql/generated';
 import {
-  useUpdateIncidentImagesMutation,
   Role,
   useRecycleIncidentMutation,
+  useUpdateIncidentImagesMutation,
 } from 'graphql/generated';
 import { notification } from 'antd';
 import type { MutationUpdaterFn } from '@apollo/client';
@@ -97,31 +98,36 @@ const useIncidentCard = ({ incident, update }: Props): Return => {
   const onEditImage = (value: EditFeedImage) => {
     if (value) {
       const findPrimaryId = incident?.images.find(({ primary }) => primary)?.id;
+      const u: ImageUpdateWithWhereUniqueWithoutIncidentInput[] = [
+        {
+          where: {
+            id: value.id,
+          },
+          data: {
+            position: { set: value.position },
+            primary: { set: value.primary || false },
+            policeImage: { set: value.policeImage || false },
+            rotation: { set: value.rotation || 0 },
+          },
+        },
+      ];
+
+      if (findPrimaryId && value.primary && findPrimaryId !== value.id) {
+        u.push({
+          where: {
+            id: findPrimaryId,
+          },
+          data: {
+            primary: { set: false },
+          },
+        });
+      }
+
       void updateIncident({
         variables: {
           id: incident.id,
           images: {
-            update: [
-              {
-                where: {
-                  id: value.id,
-                },
-                data: {
-                  position: { set: value.position },
-                  primary: { set: value.primary || false },
-                  policeImage: { set: value.policeImage || false },
-                  rotation: { set: value.rotation || 0 },
-                },
-              },
-              {
-                where: {
-                  id: findPrimaryId,
-                },
-                data: {
-                  primary: { set: !value.primary },
-                },
-              },
-            ],
+            update: u,
           },
         },
       }).finally(() => {

@@ -1,24 +1,24 @@
 import { useEffect, useState } from 'react';
 import type {
+  GoodsMode,
+  UpdateIncidentGoodsMutation,
+  UpdateIncidentOffendersMutation,
+  UpdateIncidentVehiclesMutation,
   ViewIncidentQuery,
   ViewIncidentQueryVariables,
-  GoodsMode,
-  UpdateIncidentVehiclesMutation,
-  UpdateIncidentOffendersMutation,
-  UpdateIncidentGoodsMutation,
 } from 'graphql/generated';
 import {
-  useUpdateIncidentGoodsMutation,
-  useUpdateIncidentOffendersMutation,
-  useUpdateIncidentVehiclesMutation,
-  useUpdateIncidentImagesMutation,
   Role,
   useAddImagesToIncidentMutation,
   useDeleteUpdateMutation,
   useRecycleIncidentMutation,
   useSubscribeToIncidentMutation,
   useUnsubscribeFromIncidentMutation,
+  useUpdateIncidentGoodsMutation,
+  useUpdateIncidentImagesMutation,
   useUpdateIncidentMutation,
+  useUpdateIncidentOffendersMutation,
+  useUpdateIncidentVehiclesMutation,
   useUpdateUpdateMutation,
   useViewIncidentQuery,
   ViewIncidentDocument,
@@ -333,7 +333,7 @@ const useViewIncident = (incidentId: string): Return => {
       .filter(({ deleted }) => deleted)
       .map(({ id }) => ({ id }));
     const newImages = value.filter((el) => el.new);
-    // const editedImages = value.filter(({ edited }) => edited);
+    const editedImages = value.filter(({ edited }) => edited);
 
     void updateIncidentImages({
       variables: {
@@ -358,8 +358,8 @@ const useViewIncident = (incidentId: string): Return => {
                   .filter((obj) => obj.url !== undefined)
               : undefined,
           update:
-            value && value.length > 0
-              ? value.map((item) => ({
+            editedImages && editedImages.length > 0
+              ? editedImages.map((item) => ({
                   where: {
                     id: item.id,
                   },
