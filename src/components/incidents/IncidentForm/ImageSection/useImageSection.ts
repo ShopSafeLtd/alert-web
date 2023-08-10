@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { useEffect, useState } from 'react';
 import type { FormInstance, UploadFile } from 'antd';
 import {
@@ -108,75 +109,97 @@ const useImageSection = ({
     if (onChange && value?.length !== images.length) onChange(images);
   }, [images]);
 
+  useEffect(() => {
+    form.setFieldValue('images', images);
+  }, [images]);
+
   const onImageChange = (info: UploadChangeParam<StateImageData>) => {
+    let newFileList = [...info.fileList];
+
+    newFileList = newFileList.map((file) => {
+      if (file.response && file.response[0]) {
+        const image = file.response[0];
+
+        file.url = image.url;
+        file.fileName = image.blobName;
+        file.type = image.mimetype;
+        file.policeImage = false;
+        file.primary = false;
+        file.rotation = 0;
+        file.position = ImagePosition.CenterCenter;
+        // Component will show file.url as link
+        file.url = file.response[0].url;
+      }
+      return file;
+    });
+
+    setImages(newFileList);
+
     if (info.file.response) {
       const image = info.file.response[0];
-      if (image) {
-        if (
-          facialRecognition &&
-          incidentForm.includes(IncidentFormField.Offenders) &&
-          image.faces &&
-          image.faces.length > 0
-        ) {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          const currentOffenders: StateOffenderData[] =
-            form.getFieldValue('offenders') || [];
+      if (
+        image &&
+        facialRecognition &&
+        incidentForm.includes(IncidentFormField.Offenders) &&
+        image.faces &&
+        image.faces.length > 0
+      ) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const currentOffenders: StateOffenderData[] =
+          form.getFieldValue('offenders') || [];
 
-          form.setFieldsValue({
-            offenders: [
-              ...currentOffenders,
-              ...image.faces.map((face) => ({
-                id: Math.floor(Math.random() * 1000).toString(),
-                name: 'Unidentified Offender',
-                confirmedInIncident: false,
-                gender: getGenderFromFace(face.Gender.Value),
-                age: getClosestAgeRange(face.AgeRange.High, face.AgeRange.Low),
-                race: Race.Unknown,
-                height: Height.Unknown,
-                build: Build.Unknown,
-                peculiarities: getPeculiaritiesFromFace(
-                  face.Beard.Value,
-                  face.Mustache.Value
-                ),
-                images: [
-                  {
-                    id: info.file.uid,
-                    optimised: image.url,
-                    url: image.url,
-                    new: true,
-                    boundingBox: {
-                      height: face.BoundingBox.Height,
-                      left: face.BoundingBox.Left,
-                      top: face.BoundingBox.Top,
-                      width: face.BoundingBox.Width,
-                    },
+        form.setFieldsValue({
+          offenders: [
+            ...currentOffenders,
+            ...image.faces.map((face) => ({
+              id: Math.floor(Math.random() * 1000).toString(),
+              name: 'Unidentified Offender',
+              confirmedInIncident: false,
+              gender: getGenderFromFace(face.Gender.Value),
+              age: getClosestAgeRange(face.AgeRange.High, face.AgeRange.Low),
+              race: Race.Unknown,
+              height: Height.Unknown,
+              build: Build.Unknown,
+              peculiarities: getPeculiaritiesFromFace(
+                face.Beard.Value,
+                face.Mustache.Value
+              ),
+              images: [
+                {
+                  id: info.file.uid,
+                  optimised: image.url,
+                  url: image.url,
+                  new: true,
+                  boundingBox: {
+                    height: face.BoundingBox.Height,
+                    left: face.BoundingBox.Left,
+                    top: face.BoundingBox.Top,
+                    width: face.BoundingBox.Width,
                   },
-                ],
-                new: true,
-                existing: false,
-                edited: false,
-                blank: true,
-                imageConfirmed: true,
-              })),
-            ],
-          });
-        }
-        setImages([
-          ...images.filter((item) => item.uid !== info.file.uid),
-          {
-            ...info.file,
-            url: image.url,
-            fileName: image.blobName,
-            type: image.mimetype,
-            policeImage: false,
-            primary: false,
-            rotation: 0,
-            position: ImagePosition.CenterCenter,
-          },
-        ]);
+                },
+              ],
+              new: true,
+              existing: false,
+              edited: false,
+              blank: true,
+              imageConfirmed: true,
+            })),
+          ],
+        });
       }
-    } else {
-      setImages(info.fileList);
+      // setImages([
+      //   ...images.filter((item) => item.uid !== info.file.uid),
+      //   {
+      //     ...info.file,
+      //     url: image.url,
+      //     fileName: image.blobName,
+      //     type: image.mimetype,
+      //     policeImage: false,
+      //     primary: false,
+      //     rotation: 0,
+      //     position: ImagePosition.CenterCenter,
+      //   },
+      // ]);
     }
   };
 
@@ -192,6 +215,7 @@ const useImageSection = ({
         },
       })
     );
+
     setEditImage(null);
   };
 

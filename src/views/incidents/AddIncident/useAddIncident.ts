@@ -1,22 +1,23 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { FormInstance } from 'antd';
-import { Form, notification, Modal } from 'antd';
+import { Form, Modal, notification } from 'antd';
 import type {
   AddressesQuery,
-  CreateIncidentData,
-  CreateIncidentMutation,
-  IdSource,
-  ListIncidentsQuery,
   Age,
   Build,
+  CreateIncidentData,
+  CreateIncidentMutation,
   Gender,
   Height,
-  Race,
+  IdSource,
+  ListIncidentsQuery,
   PoliceResponseTime,
+  Race,
 } from 'graphql/generated';
 import {
   AnswerType,
+  GoodsMode,
   IncidentFormField,
   ListIncidentsDocument,
   Model,
@@ -27,7 +28,6 @@ import {
   useListIncidentTagsQuery,
   useSchemeGroupsQuery,
   useTagsQuery,
-  GoodsMode,
 } from 'graphql/generated';
 import moment from 'moment';
 import type React from 'react';
@@ -412,7 +412,7 @@ const useAddIncident = (): Return => {
             update: editedOffenders.map((offender) => ({
               data: {
                 name: { set: offender.name },
-                alias: { set: offender.alias },
+                alias: offender.alias ? { set: offender.alias } : undefined,
                 gender: { set: offender.gender },
                 race: { set: offender.race },
                 build: { set: offender.build },
