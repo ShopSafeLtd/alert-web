@@ -1,5 +1,6 @@
 import {
   Button,
+  Checkbox,
   Col,
   Divider,
   Popconfirm,
@@ -7,7 +8,6 @@ import {
   Row,
   Tooltip,
   Typography,
-  Checkbox,
   Upload,
 } from 'antd';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -74,6 +74,7 @@ const OffenderProfile = ({
   const imagesRequired = useStoreState(
     (state) => state.scheme.imagesRequiredOnOffenders
   );
+  const facialRec = useStoreState((state) => state.scheme.facialRecognition);
 
   return (
     <>
@@ -364,7 +365,10 @@ const OffenderProfile = ({
                         onChangeOffenderImage(info, offender.id)
                       }
                       action={
-                        import.meta.env.VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT
+                        facialRec
+                          ? import.meta.env
+                              .VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT
+                          : import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT
                       }
                       showUploadList={false}
                     >

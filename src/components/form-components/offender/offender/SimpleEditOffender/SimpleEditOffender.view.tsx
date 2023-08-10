@@ -409,9 +409,13 @@ const EditOffender = ({
           <ImageSelect
             images={
               data.images
-                ? images?.concat(
-                    data.images.map((el) => ({ ...el, uid: el.id }))
-                  )
+                ? images
+                    ?.filter(
+                      (el) => !data?.images?.find((el2) => el2.url === el.url)
+                    )
+                    // concat not allowed
+                    // eslint-disable-next-line
+                    .concat(data.images.map((el) => ({ ...el, uid: el.id })))
                 : images
             }
             value={data.images}

@@ -49,6 +49,7 @@ const ImageSection = ({
     onChange,
   });
   const facialRec = useStoreState((state) => state.scheme.facialRecognition);
+
   return (
     <Row gutter={20}>
       <Col>
