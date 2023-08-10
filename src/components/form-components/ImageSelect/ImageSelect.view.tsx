@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Upload, Row, Button } from 'antd';
+import { Button, Col, Row, Upload } from 'antd';
 import { createUseStyles } from 'react-jss';
 import type { Theme } from 'configs/ThemeConfig';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -97,6 +97,7 @@ const ImageSelect = ({ images: imagesProp, value, onChange }: Props) => {
   const [images, setImages] = useState<ImageData[]>([]);
   const [uploading, setUploading] = useState(false);
 
+  console.log(imagesProp, 'value', onChange);
   useEffect(() => {
     if (value) setSelected(value);
   }, []);
@@ -106,7 +107,9 @@ const ImageSelect = ({ images: imagesProp, value, onChange }: Props) => {
   }, [imagesProp]);
 
   useEffect(() => {
-    if (onChange) onChange(selected);
+    if (onChange) {
+      onChange(selected);
+    }
   }, [selected]);
   console.log('images', images);
 
