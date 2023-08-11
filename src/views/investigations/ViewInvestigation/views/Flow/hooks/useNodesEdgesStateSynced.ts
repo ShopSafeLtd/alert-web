@@ -72,7 +72,7 @@ function useGraphStateSynced({
       id,
       ...params,
       type: 'floating',
-      style: { stroke: 'red', color: 'red' },
+      style: { stroke: 'red', color: 'red', strokeWidth: 2 },
       // @ts-ignore
       markerEnd: { type: 'arrow', height: 50, width: 50, color: 'red' },
     });
@@ -90,6 +90,7 @@ function useGraphStateSynced({
           style: {
             stroke: 'red',
             color: 'red',
+            strokeWidth: 2,
           },
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           markerEnd: {
@@ -106,9 +107,11 @@ function useGraphStateSynced({
     setEdges(
       Array.from(edgesMap.values()).map((edge) => ({
         ...edge,
+
         style: {
           stroke: 'red',
           color: 'red',
+          strokeWidth: 2,
         },
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         markerEnd: {
