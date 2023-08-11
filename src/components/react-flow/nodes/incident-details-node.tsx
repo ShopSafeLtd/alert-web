@@ -43,7 +43,7 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
   const nodesMap = provider.doc.getMap<Node>('nodes');
 
   const isTarget = connectionNodeId && connectionNodeId !== id;
-  const targetHandleStyle = { zIndex: isTarget ? 5 : 1 };
+  const targetHandleStyle = { zIndex: isTarget ? 15 : 1 };
   const classes = useStyles();
 
   const { drawer } = useDrawerState();
@@ -113,6 +113,10 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
           minWidth={290}
           minHeight={200}
           handleStyle={{ zIndex: 5 }}
+          lineStyle={{
+            borderWidth: 2,
+            borderRadius: 2,
+          }}
         />
         <div className={classes.nodeContainer}>
           {data.incident && data.incident.description ? (

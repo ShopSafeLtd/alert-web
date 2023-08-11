@@ -45,6 +45,10 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
         color="#ff0071"
         isVisible={selected}
         minWidth={100}
+        lineStyle={{
+          borderWidth: 2,
+          borderRadius: 2,
+        }}
         minHeight={30}
       />
       <Card style={{ height: '100%' }} bodyStyle={{ height: '100%' }}>
