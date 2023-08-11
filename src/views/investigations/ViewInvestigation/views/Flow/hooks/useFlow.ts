@@ -209,6 +209,7 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
                 style: {
                   stroke: 'red',
                   color: 'red',
+                  strokeWidth: 2,
                 },
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                 markerEnd: {
