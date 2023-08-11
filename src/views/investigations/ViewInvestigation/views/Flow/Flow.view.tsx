@@ -175,7 +175,14 @@ FlowProps) => {
               )}
             </p>
             <Sidebar />
-            <FullScreen handle={flowScreen} className="fullscreen-wrapper">
+            <FullScreen
+              handle={flowScreen}
+              className={
+                darkTheme
+                  ? 'fullscreen-wrapper-dark'
+                  : 'fullscreen-wrapper-light'
+              }
+            >
               <div className={styles.rfWrapper} ref={wrapperRef}>
                 <ReactFlow
                   style={{
