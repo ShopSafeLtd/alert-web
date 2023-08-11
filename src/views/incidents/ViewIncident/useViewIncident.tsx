@@ -939,13 +939,25 @@ const useViewIncident = (incidentId: string): Return => {
       void updateIncidentGoods({
         variables: {
           id: incidentId,
-          incidentItems: { disconnect: [{ id: value }] },
+          incidentItems: {
+            deleteMany: [
+              {
+                id: {
+                  equals: value,
+                },
+              },
+            ],
+          },
+        },
+        onError: () => {
+          setSaving(false);
         },
         onCompleted: () => {
           getNotificationContent(
             ProfileUpdatedModel.Incident_Item,
             ProfileUpdatedType.deleted
           );
+          setSaving(false);
         },
         update: (store, { data: res }) => {
           if (res?.updateIncident === null || res?.updateIncident === undefined)
