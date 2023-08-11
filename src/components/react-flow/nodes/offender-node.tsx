@@ -57,7 +57,7 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
   const connectionNodeId = useStore(connectionNodeIdSelector);
   const { id: investigationId } = useParams();
   const isTarget = connectionNodeId && connectionNodeId !== id;
-  const targetHandleStyle = { zIndex: isTarget ? 5 : 1 };
+  const targetHandleStyle = { zIndex: isTarget ? 15 : 1 };
   const classes = useStyles();
   const provider = useWebRtcContext();
   const nodesMap = provider.doc.getMap<Node>('nodes');
@@ -127,6 +127,10 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
           isVisible={selected}
           minWidth={290}
           minHeight={550}
+          lineStyle={{
+            borderWidth: 2,
+            borderRadius: 2,
+          }}
         />
         <div className={classes.nodeContainer}>
           {data.offender && data.offender.name ? (

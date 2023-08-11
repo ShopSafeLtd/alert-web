@@ -35,7 +35,7 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
   const connectionNodeId = useStore(connectionNodeIdSelector);
   const { id: investigationId } = useParams();
   const isTarget = connectionNodeId && connectionNodeId !== id;
-  const targetHandleStyle = { zIndex: isTarget ? 5 : 1 };
+  const targetHandleStyle = { zIndex: isTarget ? 15 : 1 };
   const classes = useStyles();
   const provider = useWebRtcContext();
   const nodesMap = provider.doc.getMap<Node>('nodes');
@@ -106,11 +106,16 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
           isVisible={selected}
           minWidth={100}
           minHeight={30}
+          handleStyle={{ zIndex: 5 }}
+          lineStyle={{
+            borderWidth: 2,
+            borderRadius: 2,
+          }}
         />
         <div className={classes.nodeContainer}>
           {data.vehicle ? (
             <Col>
-              <Card style={{ zIndex: 4 }}>
+              <Card style={{ zIndex: 6, position: 'relative' }}>
                 <Descriptions contentStyle={{ fontSize: 16 }} column={1}>
                   {/* <Descriptions.Item label="Make">
                 {data?.vehicle?.make}
@@ -140,7 +145,7 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
               </Card>
             </Col>
           ) : (
-            <div style={{ height: '100%', zIndex: 4 }}>
+            <div style={{ height: '100%', zIndex: 6, position: 'relative' }}>
               {intl.formatMessage({
                 defaultMessage: 'Vehicle: Please select a vehicle',
                 id: 'tu6WTo',
