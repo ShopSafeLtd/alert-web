@@ -1,12 +1,13 @@
 import { useStoreState } from 'state';
 import type {
+  ImageUpdateWithWhereUniqueWithoutOffendersInput,
   ListOffendersQuery,
   RecycleOffenderMutation,
 } from 'graphql/generated';
 import {
-  useUpdateOffenderImagesMutation,
   Role,
   useRecycleOffenderMutation,
+  useUpdateOffenderImagesMutation,
 } from 'graphql/generated';
 import { notification } from 'antd';
 import type { MutationUpdaterFn } from '@apollo/client';
@@ -101,31 +102,36 @@ const useOffenderCard = ({ offender, update }: Props): Return => {
   const onEditImage = (value: EditFeedImage) => {
     if (value) {
       const findPrimaryId = offender?.images.find(({ primary }) => primary)?.id;
+      const u: ImageUpdateWithWhereUniqueWithoutOffendersInput[] = [
+        {
+          where: {
+            id: value.id,
+          },
+          data: {
+            position: { set: value.position },
+            primary: { set: value.primary || false },
+            policeImage: { set: value.policeImage || false },
+            rotation: { set: value.rotation || 0 },
+          },
+        },
+      ];
+
+      if (findPrimaryId && value.primary && findPrimaryId !== value.id) {
+        u.push({
+          where: {
+            id: findPrimaryId,
+          },
+          data: {
+            primary: { set: false },
+          },
+        });
+      }
+
       void updateOffender({
         variables: {
           id: offender.id,
           images: {
-            update: [
-              {
-                where: {
-                  id: value.id,
-                },
-                data: {
-                  position: { set: value.position },
-                  primary: { set: value.primary || false },
-                  policeImage: { set: value.policeImage || false },
-                  rotation: { set: value.rotation || 0 },
-                },
-              },
-              {
-                where: {
-                  id: findPrimaryId,
-                },
-                data: {
-                  primary: { set: !value.primary },
-                },
-              },
-            ],
+            update: u,
           },
         },
       }).finally(() => {
