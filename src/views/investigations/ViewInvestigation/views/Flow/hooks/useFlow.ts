@@ -204,7 +204,22 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
           if (initData?.edges) {
             // eslint-disable-next-line no-restricted-syntax
             for (const edge of initData.edges) {
-              edgesMap.set(edge.id, edge as Edge);
+              const newEdge = {
+                ...edge,
+                style: {
+                  stroke: 'red',
+                  color: 'red',
+                },
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                markerEnd: {
+                  // eslint-disable-next-line
+                  // @ts-ignore
+                  ...edge.markerEnd,
+                  color: 'red',
+                },
+              };
+              console.log(newEdge);
+              edgesMap.set(edge.id, newEdge as Edge);
             }
           }
           console.log('Done creating Ydoc');

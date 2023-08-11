@@ -72,8 +72,9 @@ function useGraphStateSynced({
       id,
       ...params,
       type: 'floating',
+      style: { stroke: 'red', color: 'red' },
       // @ts-ignore
-      markerEnd: { type: 'arrow', height: 50, width: 50 },
+      markerEnd: { type: 'arrow', height: 50, width: 50, color: 'red' },
     });
   }, []);
 
@@ -83,11 +84,41 @@ function useGraphStateSynced({
     };
 
     const edgesObserver = () => {
-      setEdges(Array.from(edgesMap.values()));
+      setEdges(
+        Array.from(edgesMap.values()).map((edge) => ({
+          ...edge,
+          style: {
+            stroke: 'red',
+            color: 'red',
+          },
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          markerEnd: {
+            // eslint-disable-next-line
+            // @ts-ignore
+            ...edge.markerEnd,
+            color: 'red',
+          },
+        }))
+      );
     };
 
     setNodes(Array.from(nodesMap.values()));
-    setEdges(Array.from(edgesMap.values()));
+    setEdges(
+      Array.from(edgesMap.values()).map((edge) => ({
+        ...edge,
+        style: {
+          stroke: 'red',
+          color: 'red',
+        },
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        markerEnd: {
+          // eslint-disable-next-line
+          // @ts-ignore
+          ...edge.markerEnd,
+          color: 'red',
+        },
+      }))
+    );
 
     nodesMap.observe(nodesObserver);
     edgesMap.observe(edgesObserver);
