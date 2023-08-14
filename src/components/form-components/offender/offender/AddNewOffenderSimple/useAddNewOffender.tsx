@@ -90,6 +90,8 @@ const useAddNewOffender = ({
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
+    console.log('offImage', data.images);
+
     updateOffender({
       id: Math.floor(Math.random() * 1000).toString(),
       name: data.name || 'Unidentified Offender',
@@ -107,7 +109,17 @@ const useAddNewOffender = ({
       dateOfBirth: ageCheck ? data.dateOfBirth || null : null,
       idVerified: data.idVerified,
       idSource: data.idSource,
-      images: data.images || [],
+      images: data.images.map((item) => ({
+        id: item.id || `${Math.random()}`,
+        fileName: item.file?.response && item.file.response[0].blobName,
+        type: item.file?.response && item.file.response[0].mimetype,
+        url: item.url || '',
+        position: item.position,
+        primary: false,
+        policeImage: item.policeImage || false,
+        rotation: item.rotation,
+        new: !!item.file,
+      })),
     });
 
     const uploadedImages = data.images?.filter((image) => image.file) || [];

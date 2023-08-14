@@ -1,9 +1,14 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
-import type { ViewIncidentQuery } from 'graphql/generated';
+import type {
+  CreateDocumentMutation,
+  CreateTodoMutation,
+  ViewIncidentQuery,
+} from 'graphql/generated';
 import { GoodsMode, UpdateType } from 'graphql/generated';
 import {
+  Avatar,
   Button,
   Card,
   Checkbox,
@@ -74,6 +79,10 @@ import EditVehicle from 'components/form-components/Vehicle/EditVehicleSimple';
 import SimpleEditOffender from 'components/form-components/offender/offender/SimpleEditOffender';
 import EditGoods from 'components/form-components/incident/goods/EditGoods';
 import EditImageList from 'components/images/EditImageList';
+import type { MutationUpdaterFn } from '@apollo/client';
+import AddTodo from 'components/form-components/Todos/AddTodo';
+import FormatCalendar from 'utils/format-calendar-24h';
+import AddDocument from 'components/form-components/documents/AddDocument';
 import UpdateContent from './Update.view';
 import useStyles from './ViewIncident.styles';
 import EvidenceTable from '../../../components/tables/EvidenceTable';
@@ -81,6 +90,14 @@ import formatAnswer from '../../../utils/format-answer';
 
 const { Title, Paragraph, Text } = Typography;
 
+interface TableItem {
+  key: string;
+  name: string;
+  description: string | null | undefined;
+  dueDate?: Date | null;
+  assignedUsers: { id: string; fullName: string }[];
+  completed: boolean;
+}
 interface Props {
   data: ViewIncidentQuery | undefined;
   loading: boolean;
@@ -177,6 +194,12 @@ interface Props {
   onAddGoods: (value: GoodsData) => void;
   onUpdateImages: (value: ImageCardData[]) => void;
   goodsMode: GoodsMode;
+  addTodo: boolean;
+  toggleAddTodo: () => void;
+  updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
+  toggleAddDocument: () => void;
+  addDocument: boolean;
+  updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
 }
 
 const ViewIncident = ({
@@ -253,10 +276,29 @@ const ViewIncident = ({
   onAddExistingVehicle,
   onUpdateImages,
   goodsMode,
+  addTodo,
+  toggleAddTodo,
+  updateTodoList,
+  toggleAddDocument,
+  addDocument,
+  updateDocumentList,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
   const navigate = useNavigate();
+  const expandedRowRender = (record: TableItem) => (
+    <Text style={{ fontSize: 14, padding: 0, margin: 0 }}>
+      {intl.formatMessage(
+        {
+          defaultMessage: ' Description: {description}',
+          id: 'b/Uf3s',
+        },
+        {
+          description: record.description,
+        }
+      )}
+    </Text>
+  );
   return (
     <div className="page-container">
       <Row wrap={false}>
@@ -998,6 +1040,10 @@ const ViewIncident = ({
                               </Row>
 
                               <Table
+                                pagination={{
+                                  hideOnSinglePage: true,
+                                  pageSize: 5,
+                                }}
                                 columns={
                                   goodsMode === GoodsMode.Generic
                                     ? [
@@ -1153,7 +1199,6 @@ const ViewIncident = ({
                                   })
                                 )}
                                 size="small"
-                                pagination={false}
                                 // TODO
                                 // eslint-disable-next-line react/no-unstable-nested-components
                                 summary={(tableData) => {
@@ -1270,8 +1315,8 @@ const ViewIncident = ({
                                   }
                                 >
                                   {intl.formatMessage({
-                                    defaultMessage: 'Offenders',
-                                    id: 'xb54TN',
+                                    defaultMessage: 'Add Offenders',
+                                    id: 'KaNxum',
                                   })}
                                 </Button>
                               </Dropdown>
@@ -1360,8 +1405,8 @@ const ViewIncident = ({
                                   }
                                 >
                                   {intl.formatMessage({
-                                    defaultMessage: 'Vehicles',
-                                    id: 'r6wuJ3',
+                                    defaultMessage: 'Add Vehicles',
+                                    id: 'iKGwyV',
                                   })}
                                 </Button>
                               </Dropdown>
@@ -1387,12 +1432,38 @@ const ViewIncident = ({
                         </Card>
                         {data?.incident?.scheme.mg11Available && (
                           <Card style={{ marginTop: 20 }}>
-                            <Title level={4}>
-                              {intl.formatMessage({
-                                defaultMessage: 'Evidence',
-                                id: '6g7+6N',
-                              })}
-                            </Title>
+                            <Row
+                              gutter={8}
+                              align="middle"
+                              style={{ marginBottom: 10 }}
+                            >
+                              <Col flex={1}>
+                                <Title level={4}>
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Evidence',
+                                    id: '6g7+6N',
+                                  })}
+                                </Title>
+                              </Col>
+                              <Col>
+                                <Button
+                                  size="small"
+                                  onClick={toggleAddDocument}
+                                  icon={
+                                    <FontAwesomeIcon
+                                      icon={faPlus}
+                                      style={{ marginRight: 5 }}
+                                    />
+                                  }
+                                >
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Add Evidence',
+                                    id: 'vgVasT',
+                                  })}
+                                </Button>
+                              </Col>
+                            </Row>
+
                             {data?.incident?.evidence.length && !loading ? (
                               <EvidenceTable
                                 evidence={data?.incident?.evidence}
@@ -1403,6 +1474,144 @@ const ViewIncident = ({
                                   defaultMessage:
                                     'No evidence for this incident',
                                   id: 'GkZRlh',
+                                })}
+                                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                              />
+                            )}
+                          </Card>
+                        )}
+                        {editRights && (
+                          <Card>
+                            <Row
+                              gutter={8}
+                              align="middle"
+                              style={{ marginBottom: 10 }}
+                            >
+                              <Col flex={1}>
+                                <Title level={4}>
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Activities',
+                                    id: 'UmEsZF',
+                                  })}
+                                </Title>
+                              </Col>
+                              <Col>
+                                <Button
+                                  size="small"
+                                  onClick={toggleAddTodo}
+                                  icon={
+                                    <FontAwesomeIcon
+                                      icon={faPlus}
+                                      style={{ marginRight: 5 }}
+                                    />
+                                  }
+                                >
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Add Activity',
+                                    id: 'VOiupa',
+                                  })}
+                                </Button>
+                              </Col>
+                            </Row>
+                            {data?.incident?.todos.length && !loading ? (
+                              <Table
+                                size="small"
+                                loading={loading}
+                                pagination={{
+                                  hideOnSinglePage: true,
+                                  pageSize: 5,
+                                }}
+                                columns={[
+                                  {
+                                    key: 'name',
+                                    title: intl.formatMessage({
+                                      defaultMessage: 'Name',
+                                      id: 'HAlOn1',
+                                    }),
+                                    dataIndex: 'name',
+                                  },
+                                  {
+                                    key: 'description',
+                                    dataIndex: 'description',
+                                    title: intl.formatMessage({
+                                      defaultMessage: 'Description',
+                                      id: 'Q8Qw5B',
+                                    }),
+                                    ellipsis: true,
+                                  },
+
+                                  {
+                                    key: 'dueDate',
+                                    dataIndex: 'dueDate',
+                                    title: intl.formatMessage({
+                                      defaultMessage: 'Due Date',
+                                      id: '8XUukm',
+                                    }),
+                                    render: (value: Date) =>
+                                      FormatCalendar(new Date(value), true),
+                                  },
+                                  {
+                                    key: 'assignedUsers',
+                                    dataIndex: 'assignedUsers',
+                                    title: intl.formatMessage({
+                                      defaultMessage: 'Assigned Users',
+                                      id: '8oku8d',
+                                    }),
+                                    ellipsis: true,
+                                    render: (
+                                      value: { id: string; fullName: string }[]
+                                    ) => (
+                                      <Row gutter={4}>
+                                        {value.map((item) => (
+                                          <Col key={item.id}>
+                                            <Tooltip title={item.fullName}>
+                                              <Avatar
+                                                style={{
+                                                  cursor: 'pointer',
+                                                  fontSize: 14,
+                                                }}
+                                                size={30}
+                                              >
+                                                {item.fullName
+                                                  .split(' ')
+                                                  .map((split) =>
+                                                    split
+                                                      .slice(0, 1)
+                                                      .toUpperCase()
+                                                  )
+                                                  .toString()
+                                                  .replace(',', '')}
+                                              </Avatar>
+                                            </Tooltip>
+                                          </Col>
+                                        ))}
+                                      </Row>
+                                    ),
+                                  },
+                                ]}
+                                dataSource={data?.incident?.todos.map(
+                                  (todo) => ({
+                                    key: todo.id,
+                                    name: todo.name || '',
+                                    description: todo?.description,
+                                    dueDate: todo.dueDate,
+                                    completed: todo.completed || false,
+                                    assignedUsers: todo.assignedUsers,
+                                    // todo,
+                                  })
+                                )}
+                                expandable={{
+                                  expandedRowRender,
+                                  rowExpandable: (record) =>
+                                    !!record.description,
+                                }}
+                              />
+                            ) : (
+                              <Empty
+                                description={intl.formatMessage({
+                                  defaultMessage:
+                                    'No activities for this incident',
+                                  id: 'JLTkJo',
                                 })}
                                 image={Empty.PRESENTED_IMAGE_SIMPLE}
                               />
@@ -1807,6 +2016,37 @@ const ViewIncident = ({
           <div />
         )}
       </Drawer>
+      {/* images */}
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Edit Incident Images',
+          id: 'BqhA0W',
+        })}
+        open={editImages}
+        width="800"
+        zIndex={999}
+        onClose={toggleEditImages}
+      >
+        {editImages ? (
+          <EditImageList
+            update={onUpdateImages}
+            onClose={toggleEditImages}
+            images={data?.incident?.images}
+            title={intl.formatMessage({
+              defaultMessage: 'incidnet',
+              id: 'PjFIWc',
+            })}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <FeedImageEditor
+        submitImage={onEditImage}
+        onClose={() => setEditImageData(null)}
+        open={!!editImageData}
+        image={editImageData}
+      />
       {/* offender */}
       <Drawer
         title={intl.formatMessage({
@@ -1967,37 +2207,45 @@ const ViewIncident = ({
           <div />
         )}
       </Drawer>
-      {/* images */}
+
+      {/* todo */}
       <Drawer
         title={intl.formatMessage({
-          defaultMessage: 'Edit Incident Images',
-          id: 'BqhA0W',
+          defaultMessage: 'Add Activity',
+          id: 'VOiupa',
         })}
-        open={editImages}
-        width="800"
-        zIndex={999}
-        onClose={toggleEditImages}
+        open={addTodo}
+        width="600"
+        onClose={toggleAddTodo}
       >
-        {editImages ? (
-          <EditImageList
-            update={onUpdateImages}
-            onClose={toggleEditImages}
-            images={data?.incident?.images}
-            title={intl.formatMessage({
-              defaultMessage: 'incidnet',
-              id: 'PjFIWc',
-            })}
+        {addTodo ? (
+          <AddTodo update={updateTodoList} onClose={toggleAddTodo} />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+
+      {/* evidence */}
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Add Evidence',
+          id: 'vgVasT',
+        })}
+        visible={addDocument}
+        width="600"
+        onClose={toggleAddDocument}
+        zIndex={1001}
+      >
+        {addDocument ? (
+          <AddDocument
+            incidentId={data?.incident?.id || ''}
+            onClose={toggleAddDocument}
+            update={updateDocumentList}
           />
         ) : (
           <div />
         )}
       </Drawer>
-      <FeedImageEditor
-        submitImage={onEditImage}
-        onClose={() => setEditImageData(null)}
-        open={!!editImageData}
-        image={editImageData}
-      />
       <Lightbox
         open={lightBoxOpen.open}
         close={() => openLightbox(0)}

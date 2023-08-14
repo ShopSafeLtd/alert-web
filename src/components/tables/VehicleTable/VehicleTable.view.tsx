@@ -162,13 +162,10 @@ const VehicleTable = ({
         registration: vehicle.registration,
         vehicle,
       }))}
-      pagination={
-        vehicles && vehicles.length > 5
-          ? {
-              pageSize: 5,
-            }
-          : false
-      }
+      pagination={{
+        hideOnSinglePage: true,
+        pageSize: 5,
+      }}
     />
   );
 };

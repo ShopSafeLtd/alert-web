@@ -202,7 +202,6 @@ const useAddUser = ({
   const [createUserInDatabase] = useCreateUserInDatabaseMutation({
     onCompleted: () => {
       setSaving(false);
-      onClose();
       notification.success({
         message: 'Successfully Invited!',
         description: 'The invitation has been sent! ',
@@ -219,7 +218,6 @@ const useAddUser = ({
   const [inviteExistingUser] = useInviteExistingUserMutation({
     onCompleted: () => {
       setSaving(false);
-      onClose();
       notification.success({
         message: 'Successfully Invited!',
         description: 'The invitation has been sent! ',
@@ -426,6 +424,7 @@ const useAddUser = ({
         },
       });
     }
+    onClose();
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

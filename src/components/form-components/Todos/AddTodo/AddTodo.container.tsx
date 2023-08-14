@@ -8,9 +8,14 @@ import useAddTodo from './useAddTodo';
 interface Props {
   onClose: () => void;
   update: MutationUpdaterFn<CreateTodoMutation>;
+  incidentId?: string;
 }
 
-const AddTodo = ({ update: updateMutation, onClose }: Props): JSX.Element => {
+const AddTodo = ({
+  update: updateMutation,
+  onClose,
+  incidentId,
+}: Props): JSX.Element => {
   const {
     onSubmit,
     saving,
@@ -26,6 +31,7 @@ const AddTodo = ({ update: updateMutation, onClose }: Props): JSX.Element => {
   } = useAddTodo({
     onClose,
     updateMutation,
+    incidentId,
   });
 
   return (

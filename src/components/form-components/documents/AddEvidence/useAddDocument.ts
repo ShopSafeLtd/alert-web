@@ -178,7 +178,6 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
           data: {
             investigation: {
               ...existingData.investigation,
-
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
 

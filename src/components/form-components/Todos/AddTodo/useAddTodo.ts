@@ -22,6 +22,7 @@ export interface FormData {
 
 interface Props {
   onClose: () => void;
+  incidentId?: string;
   updateMutation: MutationUpdaterFn<CreateTodoMutation>;
 }
 
@@ -39,7 +40,7 @@ interface Return {
   setSelectedIds: (value: string[]) => void;
 }
 
-const useAddTodo = ({ updateMutation, onClose }: Props): Return => {
+const useAddTodo = ({ updateMutation, onClose, incidentId }: Props): Return => {
   const intl = useIntl();
   const schemeId = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
@@ -108,8 +109,8 @@ const useAddTodo = ({ updateMutation, onClose }: Props): Return => {
           id: '5Hvk21',
         }),
         description: intl.formatMessage({
-          defaultMessage: 'The task has been added.',
-          id: '/ZJnc1',
+          defaultMessage: 'The activity has been added.',
+          id: 'hDZLqK',
         }),
         placement: 'bottomRight',
       });
@@ -144,6 +145,7 @@ const useAddTodo = ({ updateMutation, onClose }: Props): Return => {
               : undefined,
           dueDate: data.dueDate,
           completed: false,
+          incident: incidentId ? { connect: { id: incidentId } } : undefined,
           createdBy: { connect: { id: userId } },
           schemes: {
             connect: [

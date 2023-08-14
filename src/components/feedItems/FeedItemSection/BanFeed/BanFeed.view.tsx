@@ -9,7 +9,7 @@ import {
   faUserClock,
 } from '@fortawesome/pro-light-svg-icons';
 import { Link } from 'react-router-dom';
-import formatCalendar from 'utils/format-calendar-24h';
+import FormatCalendar from 'utils/format-calendar-24h';
 import { useIntl } from 'react-intl';
 import ImageContainer from '../ImageContainer';
 
@@ -96,7 +96,7 @@ const BanFeed = ({ feedItem }: Props): JSX.Element => {
                     defaultMessage: 'Start: ',
                     id: 'npEJui',
                   })}
-                  {formatCalendar(startDate || new Date())}
+                  {FormatCalendar(startDate || new Date())}
                 </Text>
               </Col>
             </Row>
@@ -113,7 +113,7 @@ const BanFeed = ({ feedItem }: Props): JSX.Element => {
                     defaultMessage: 'End: ',
                     id: 'bOhJPQ',
                   })}
-                  {formatCalendar(endDate || new Date())}
+                  {FormatCalendar(endDate || new Date())}
                 </Text>
               </Col>
             </Row>

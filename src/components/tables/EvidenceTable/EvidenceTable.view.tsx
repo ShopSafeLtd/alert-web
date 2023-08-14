@@ -24,6 +24,10 @@ const EvidenceTable = ({ evidence }: Props): JSX.Element => {
   return (
     <Table
       size="small"
+      pagination={{
+        hideOnSinglePage: true,
+        pageSize: 5,
+      }}
       rowClassName={classes.row}
       columns={[
         {

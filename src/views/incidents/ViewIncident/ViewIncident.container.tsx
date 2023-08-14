@@ -76,8 +76,15 @@ const ViewIncident = (): JSX.Element => {
     onAddExistingOffender,
     onUpdateImages,
     goodsMode,
+    addTodo,
+    toggleAddTodo,
+    updateTodoList,
+    toggleAddDocument,
+    addDocument,
+    updateDocumentList,
   } = useViewIncident(incidentId);
   const { onApprove, onReject, approving } = useApproveIncident({ incidentId });
+  console.log('offenders', data?.incident?.offenders);
 
   return (
     <View
@@ -154,6 +161,12 @@ const ViewIncident = (): JSX.Element => {
       onAddExistingOffender={onAddExistingOffender}
       onUpdateImages={onUpdateImages}
       goodsMode={goodsMode}
+      addTodo={addTodo}
+      toggleAddTodo={toggleAddTodo}
+      updateTodoList={updateTodoList}
+      toggleAddDocument={toggleAddDocument}
+      addDocument={addDocument}
+      updateDocumentList={updateDocumentList}
     />
   );
 };

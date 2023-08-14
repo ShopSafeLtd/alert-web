@@ -6,9 +6,12 @@ import type {
   UpdateIncidentVehiclesMutation,
   ViewIncidentQuery,
   ViewIncidentQueryVariables,
+  CreateTodoMutation,
   ImageUpdateWithWhereUniqueWithoutIncidentInput,
+  CreateDocumentMutation,
 } from 'graphql/generated';
 import {
+  useCreateOffenderMutation,
   Role,
   useAddImagesToIncidentMutation,
   useDeleteUpdateMutation,
@@ -138,6 +141,12 @@ interface Return {
   onEditGoods: (value: GoodsData) => void;
   onAddGoods: (value: GoodsData) => void;
   onUpdateImages: (value: ImageCardData[]) => void;
+  addTodo: boolean;
+  toggleAddTodo: () => void;
+  updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
+  toggleAddDocument: () => void;
+  addDocument: boolean;
+  updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
 }
 
 const useViewIncident = (incidentId: string): Return => {
@@ -150,6 +159,8 @@ const useViewIncident = (incidentId: string): Return => {
   const [linkOffender, setLinkOffender] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
   const [optionRowShow, setOptionRowShow] = useState(false);
+  const [addTodo, setAddTodo] = useState(false);
+  const [addDocument, setAddDocument] = useState(false);
 
   const [editUpdate, setEditUpdate] = useState<{
     id: string;
@@ -176,7 +187,6 @@ const useViewIncident = (incidentId: string): Return => {
     null
   );
   const [editIncident, setEditIncident] = useState(false);
-
   const [addVehicle, setAddVehicle] = useState(false);
   const [addExistingVehicle, setAddExistingVehicle] = useState(false);
   const [editVehicleData, setEditVehicleData] = useState<VehicleData | null>(
@@ -716,49 +726,61 @@ const useViewIncident = (incidentId: string): Return => {
         setSaving(false);
       });
   };
+  const [createOffender] = useCreateOffenderMutation({});
   const onAddOffender = (value: OffenderData) => {
     setSaving(true);
-    if (value)
-      void updateIncidentOffenders({
+    if (value) {
+      console.log('newOff', value.images);
+
+      void createOffender({
         variables: {
-          id: incidentId,
-          offenders: {
-            create: [
-              {
-                name: value.name,
-                gender: value.gender || null,
-                race: value.race || null,
-                build: value.build || null,
-                height: value.height || null,
-                hair: value.hair || null,
-                peculiarities: value.peculiarities || null,
-                comment: value.comment || null,
-                age: value.age || null,
-                dateSource: value.dateSource || null,
-                dateOfBirth: value.dateOfBirth || null,
-                groups: {
-                  connect:
-                    value.groups && value.groups.length > 0
-                      ? value.groups.map(({ id }) => ({ id }))
-                      : data?.incident?.groups.map(({ id }) => ({ id })),
-                },
-                scheme: { connect: { id: schemeId } },
-                createdBy: { connect: { id: userId } },
-                localId: value.id,
-                images:
-                  value.images &&
-                  value.images.length > 0 &&
-                  value.images?.filter((image) => image.new === true)
-                    ? {
-                        connect: value.images
-                          ?.filter((image) => image.new === true)
-                          .map((image) => ({
-                            id: image.id,
-                          })),
-                      }
-                    : {},
-              },
-            ],
+          // id: incidentId,
+          data: {
+            name: value.name,
+            gender: value.gender || null,
+            race: value.race || null,
+            build: value.build || null,
+            height: value.height || null,
+            hair: value.hair || null,
+            peculiarities: value.peculiarities || null,
+            comment: value.comment || null,
+            age: value.age || null,
+            dateSource: value.dateSource || null,
+            dateOfBirth: value.dateOfBirth || null,
+            groups: {
+              connect:
+                value.groups && value.groups.length > 0
+                  ? value.groups.map(({ id }) => ({ id }))
+                  : data?.incident?.groups.map(({ id }) => ({ id })),
+            },
+            scheme: schemeId,
+            incidentId,
+            // createdBy: { connect: { id: userId } },
+            // localId: value.id,
+            image:
+              value.images && value.images.length > 0
+                ? {
+                    connect: value.images
+                      ?.filter((image) => !image.new)
+                      .map((image) => ({
+                        id: image.id,
+                      })),
+                    upload: value.images
+                      ?.filter((image) => image.new)
+                      .map((item) => ({
+                        url: {
+                          filename: item.fileName || '',
+                          mimetype: item.type || '',
+                          url: item.url || '',
+                        },
+                        position: item.position,
+                        primary: item.primary,
+                        policeImage: item.policeImage,
+                        rotation: item.rotation || 0,
+                      }))
+                      .filter((obj) => obj.url !== undefined),
+                  }
+                : {},
           },
         },
         onCompleted: () => {
@@ -772,6 +794,7 @@ const useViewIncident = (incidentId: string): Return => {
         setAddOffender(false);
         setSaving(false);
       });
+    }
   };
   const onAddExistingOffender = (value: string) => {
     setSaving(true);
@@ -832,6 +855,8 @@ const useViewIncident = (incidentId: string): Return => {
             variables,
           });
         },
+      }).finally(() => {
+        setSaving(false);
       });
   };
   const [updateIncidentGoods] = useUpdateIncidentGoodsMutation({
@@ -989,6 +1014,57 @@ const useViewIncident = (incidentId: string): Return => {
           });
         },
       });
+  };
+
+  // todo
+  const updateTodoList: MutationUpdaterFn<CreateTodoMutation> = (
+    store,
+    { data: res }
+  ) => {
+    if (res?.createTodo === null || res?.createTodo === undefined) return;
+    const existingData = store.readQuery<ViewIncidentQuery>({
+      query: ViewIncidentDocument,
+      variables,
+    });
+
+    if (!existingData?.incident) return;
+    store.writeQuery<ViewIncidentQuery>({
+      query: ViewIncidentDocument,
+      data: {
+        incident: {
+          ...existingData.incident,
+          todos: [...existingData.incident.todos, res.createTodo],
+        },
+        __typename: 'Query',
+      },
+      variables,
+    });
+  };
+
+  // evidence
+  const updateDocumentList: MutationUpdaterFn<CreateDocumentMutation> = (
+    store,
+    { data: res }
+  ) => {
+    if (res?.createDocument === null || res?.createDocument === undefined)
+      return;
+    const existingData = store.readQuery<ViewIncidentQuery>({
+      query: ViewIncidentDocument,
+      variables,
+    });
+
+    if (!existingData?.incident) return;
+    store.writeQuery<ViewIncidentQuery>({
+      query: ViewIncidentDocument,
+      data: {
+        incident: {
+          ...existingData.incident,
+          evidence: [...existingData.incident.evidence, res.createDocument],
+        },
+        __typename: 'Query',
+      },
+      variables,
+    });
   };
 
   const [subscribeToIncident] = useSubscribeToIncidentMutation();
@@ -1238,6 +1314,12 @@ const useViewIncident = (incidentId: string): Return => {
   const toggleAddGoods = () => {
     setAddGoods(!addGoods);
   };
+  const toggleAddTodo = () => {
+    setAddTodo(!addTodo);
+  };
+  const toggleAddDocument = () => {
+    setAddDocument(() => !addDocument);
+  };
 
   return {
     addImages,
@@ -1310,6 +1392,12 @@ const useViewIncident = (incidentId: string): Return => {
     onEditOffender,
     onAddOffender,
     onAddExistingOffender,
+    addTodo,
+    toggleAddTodo,
+    updateTodoList,
+    addDocument,
+    toggleAddDocument,
+    updateDocumentList,
   };
 };
 

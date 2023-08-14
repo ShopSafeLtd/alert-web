@@ -12,7 +12,7 @@ import {
   faUser,
 } from '@fortawesome/pro-light-svg-icons';
 import { Role } from 'graphql/generated';
-import formatCalendar from 'utils/format-calendar-24h';
+import FormatCalendar from 'utils/format-calendar-24h';
 import { useIntl } from 'react-intl'; // Import useIntl hook
 import type { ReturnProps as Props } from './types/ViewArticle';
 import IncidentCard from '../../../components/incidents/IncidentCard';
@@ -86,7 +86,7 @@ const ViewArticleView = ({
                   defaultMessage: 'Published:',
                 })}
               </Text>
-              <Text>{formatCalendar(data?.article?.createdAt as Date)} </Text>
+              <Text>{FormatCalendar(data?.article?.createdAt as Date)} </Text>
               {data?.article?.createdAt !== data?.article?.updatedAt && (
                 <>
                   <Text style={{ fontSize: 16, fontWeight: 400 }}>
@@ -96,7 +96,7 @@ const ViewArticleView = ({
                     })}
                   </Text>
                   <Text>
-                    {formatCalendar(data?.article?.updatedAt as Date)}
+                    {FormatCalendar(data?.article?.updatedAt as Date)}
                   </Text>
                 </>
               )}

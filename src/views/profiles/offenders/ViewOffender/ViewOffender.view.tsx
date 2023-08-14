@@ -77,7 +77,7 @@ import AssociatedOffender from 'components/offenders/AssociatedOffender';
 import { calcDuration } from 'utils';
 import LightBox from 'components/images/LightBox/LightBox.container';
 import OffenderMatches from 'components/rekognition/OffenderMatches/OffenderMatches.container';
-import formatCalendar from 'utils/format-calendar-24h';
+import FormatCalendar from 'utils/format-calendar-24h';
 import { useIntl } from 'react-intl';
 import type {
   BanData,
@@ -660,7 +660,7 @@ const ViewOffender = ({
                     </span>
                   }
                 >
-                  {formatCalendar(data?.offender?.updatedAt || moment())}
+                  {FormatCalendar(data?.offender?.updatedAt || moment())}
                 </Descriptions.Item>
                 <Descriptions.Item
                   label={
@@ -1233,10 +1233,10 @@ const ViewOffender = ({
                 dataSource={data?.offender?.bans.map((ban) => ({
                   key: ban.id,
                   endDate: ban.endDate,
-                  duration: `${formatCalendar(
+                  duration: `${FormatCalendar(
                     ban?.startDate,
                     true
-                  )}  ->  ${formatCalendar(ban?.endDate, true)}`,
+                  )}  ->  ${FormatCalendar(ban?.endDate, true)}`,
                   activeDay: calcDuration(
                     new Date(ban?.startDate),
                     new Date(ban?.endDate)

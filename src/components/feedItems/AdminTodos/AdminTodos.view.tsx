@@ -21,7 +21,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
-import formatCalendar from 'utils/format-calendar-24h';
+import FormatCalendar from 'utils/format-calendar-24h';
 import type { TodoData } from '../../../utils/get-to-do-url';
 import getTodoUrl from '../../../utils/get-to-do-url';
 import useStyles from './AdminTodos.styles';
@@ -98,14 +98,14 @@ const AdminTodos = ({
       <Row align="middle" gutter={5} wrap={false} style={{ marginBottom: 10 }}>
         <Col span={4}>
           <Title className={classes.title} level={4}>
-            {intl.formatMessage({ defaultMessage: 'Tasks', id: 'yhU1et' })}
+            {intl.formatMessage({ defaultMessage: 'Activities', id: 'UmEsZF' })}
           </Title>
         </Col>
         <Col flex={1} style={{ marginRight: -10 }}>
           <Input
             placeholder={intl.formatMessage({
-              defaultMessage: 'Search for a task...',
-              id: 'jXZqfz',
+              defaultMessage: 'Search for a activity...',
+              id: '8KsNIu',
             })}
             onChange={(e) => setSearch(e.target.value)}
             allowClear
@@ -120,7 +120,10 @@ const AdminTodos = ({
             icon={<FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />}
             onClick={toggleAddTodo}
           >
-            {intl.formatMessage({ defaultMessage: 'New Task', id: 'jtxQPo' })}
+            {intl.formatMessage({
+              defaultMessage: 'New Activity',
+              id: '6kyt/v',
+            })}
           </Button>
         </Col>
       </Row>
@@ -157,8 +160,8 @@ const AdminTodos = ({
               render: (_, record) => (
                 <Popconfirm
                   title={intl.formatMessage({
-                    defaultMessage: 'Complete this task?',
-                    id: 'i2Qvui',
+                    defaultMessage: 'Complete this activity?',
+                    id: 'UCqqOk',
                   })}
                   onConfirm={() => onCompletedTodo(record.key)}
                   okText={intl.formatMessage({
@@ -195,7 +198,7 @@ const AdminTodos = ({
                 id: '8XUukm',
               }),
               width: 120,
-              render: (value) => formatCalendar(value),
+              render: (value) => FormatCalendar(value),
             },
           ]}
           expandable={{
@@ -215,14 +218,17 @@ const AdminTodos = ({
           <Empty
             image={Empty.PRESENTED_IMAGE_SIMPLE}
             description={intl.formatMessage({
-              defaultMessage: 'You have no open tasks',
-              id: 'xaKy7Z',
+              defaultMessage: 'You have no open activities',
+              id: '/grXWE',
             })}
           />
         </div>
       )}
       <Drawer
-        title={intl.formatMessage({ defaultMessage: 'New Task', id: 'jtxQPo' })}
+        title={intl.formatMessage({
+          defaultMessage: 'New Activity',
+          id: '6kyt/v',
+        })}
         open={addTodo}
         width="400"
         onClose={toggleAddTodo}

@@ -51,6 +51,8 @@ export interface ImageData {
   uid: string;
   id?: string;
   url?: string | null | undefined;
+  fileName?: string | null;
+  type?: string | null;
   optimised?: string | null | undefined;
   position?: ImagePosition;
   primary?: boolean | null | undefined;
@@ -69,6 +71,8 @@ export interface ImageValue {
   id: string;
   url?: string | null | undefined;
   optimised?: string | null | undefined;
+  fileName?: string | null;
+  type?: string | null;
   new?: boolean;
   position?: ImagePosition;
   primary?: boolean | null | undefined;
@@ -97,7 +101,7 @@ const ImageSelect = ({ images: imagesProp, value, onChange }: Props) => {
   const [images, setImages] = useState<ImageData[]>([]);
   const [uploading, setUploading] = useState(false);
 
-  console.log(imagesProp, 'value', onChange);
+  // console.log(imagesProp, 'value', onChange);
   useEffect(() => {
     if (value) setSelected(value);
   }, []);
@@ -111,14 +115,14 @@ const ImageSelect = ({ images: imagesProp, value, onChange }: Props) => {
       onChange(selected);
     }
   }, [selected]);
-  console.log('images', images);
+  // console.log('images', images);
 
   const toggleSelected = (image: ImageData) => {
-    console.log('image', image);
-    console.log(
-      'select',
-      selected.some(({ id }) => id === image.uid)
-    );
+    // console.log('image', image);
+    // console.log(
+    //   'select',
+    //   selected.some(({ id }) => id === image.uid)
+    // );
 
     if (selected.some(({ id }) => id === image.uid)) {
       setSelected(selected.filter(({ id }) => id !== image.uid));
@@ -148,6 +152,8 @@ const ImageSelect = ({ images: imagesProp, value, onChange }: Props) => {
         ...images,
         {
           url: info.file.response[0].url,
+          fileName: info.file.response[0].blobName,
+          type: info.file.response[0].mimetype,
           uid: info.file.uid,
           file: info.file,
           optimised: info.file.response[0].url,

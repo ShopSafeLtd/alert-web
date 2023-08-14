@@ -84,6 +84,7 @@ const OffenderTable = ({
             <div style={{ height: 100, width: 80 }}>
               <WatermarkImage
                 url={item[0]?.optimised}
+                rotation={item[0]?.rotation}
                 position={item[0]?.position}
               />
             </div>
@@ -214,13 +215,10 @@ const OffenderTable = ({
         images: offender.images,
         offender,
       }))}
-      pagination={
-        offenders && offenders.length > 5
-          ? {
-              pageSize: 5,
-            }
-          : false
-      }
+      pagination={{
+        hideOnSinglePage: true,
+        pageSize: 5,
+      }}
     />
   );
 };
