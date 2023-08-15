@@ -38,6 +38,7 @@ export interface NotificationData {
   } | null;
   userId?: string | null;
   schemes: Scheme[];
+  read: boolean;
 }
 interface Scheme {
   id: string;

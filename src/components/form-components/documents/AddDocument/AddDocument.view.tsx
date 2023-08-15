@@ -19,7 +19,7 @@ interface Props {
   categoriesChange: (categories: { value: string }[]) => void;
   onClose: () => void;
   documentUploadProps: UploadProps;
-  investigationId?: string | null;
+  providedId: boolean;
 }
 
 const AddBusiness = ({
@@ -31,7 +31,7 @@ const AddBusiness = ({
   categoriesLoading,
   onClose,
   documentUploadProps,
-  investigationId,
+  providedId,
 }: Props) => {
   const intl = useIntl();
 
@@ -133,7 +133,7 @@ const AddBusiness = ({
                 type="primary"
                 htmlType="submit"
               >
-                {investigationId
+                {providedId
                   ? intl.formatMessage({
                       defaultMessage: 'Create Evidence',
                       id: '5RJkQZ',

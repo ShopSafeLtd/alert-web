@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter } from '@fortawesome/pro-light-svg-icons';
 import type { DateType } from 'types/DataType';
 import { useIntl } from 'react-intl';
-import formatCalendar from 'utils/format-calendar-24h';
+import FormatCalendar from 'utils/format-calendar-24h';
 import useStyles from './ListCrimeGroups.styles';
 
 interface Props {
@@ -204,7 +204,7 @@ const ListCrimeGroups = ({
               id: 'ECx6bx',
             }),
             render: (value: Date | undefined) =>
-              formatCalendar(value || moment()),
+              FormatCalendar(value || moment()),
           },
         ]}
         pagination={{

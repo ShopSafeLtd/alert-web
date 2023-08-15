@@ -205,8 +205,8 @@ const AddTodo = ({
                 loading={saving}
               >
                 {intl.formatMessage({
-                  id: 'jtxQPo',
-                  defaultMessage: 'New Task',
+                  id: '6kyt/v',
+                  defaultMessage: 'New Activity',
                 })}
               </Button>
             </Col>
