@@ -48,7 +48,17 @@ const useAddVehicleSimple = ({
       model: data.model || '',
       colour: data.colour || '',
       registration: data.registration || '',
-      images: data.images || [],
+      images: data?.images?.map((item) => ({
+        id: item.id || `${Math.random()}`,
+        fileName: item.file?.response && item.file.response[0].blobName,
+        type: item.file?.response && item.file.response[0].mimetype,
+        url: item.url || '',
+        position: item.position,
+        primary: false,
+        policeImage: item.policeImage || false,
+        rotation: item.rotation,
+        new: !!item.file,
+      })),
     });
 
     const uploadedImages = data.images?.filter((image) => image.file) || [];

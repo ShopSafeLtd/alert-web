@@ -4,6 +4,7 @@ import React from 'react';
 import type {
   CreateDocumentMutation,
   CreateTodoMutation,
+  DeleteDocumentMutation,
   ViewIncidentQuery,
 } from 'graphql/generated';
 import { GoodsMode, UpdateType } from 'graphql/generated';
@@ -71,11 +72,9 @@ import type {
 import EditIncidentFeed from 'components/form-components/incident/EditIncidentFeed';
 import FeedImageEditor from 'components/form-components/ImageEditor/FeedImageEditor.view';
 import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
-import AddVehicle from 'components/form-components/Vehicle/AddVehicle';
 import AddNewOffenderSimple from 'components/form-components/offender/offender/AddNewOffenderSimple';
 import AddExistingOffender from 'components/form-components/offender/offender/AddExistingOffender';
 import AddGoods from 'components/form-components/incident/goods/AddGoods';
-import EditVehicle from 'components/form-components/Vehicle/EditVehicleSimple';
 import SimpleEditOffender from 'components/form-components/offender/offender/SimpleEditOffender';
 import EditGoods from 'components/form-components/incident/goods/EditGoods';
 import EditImageList from 'components/images/EditImageList';
@@ -83,6 +82,9 @@ import type { MutationUpdaterFn } from '@apollo/client';
 import AddTodo from 'components/form-components/Todos/AddTodo';
 import FormatCalendar from 'utils/format-calendar-24h';
 import AddDocument from 'components/form-components/documents/AddDocument';
+import { ProfileUpdatedModel } from 'types/enums/profile-update-type';
+import AddVehicleSimple from 'components/form-components/Vehicle/AddVehicleSimple';
+import EditVehicleSimple from 'components/form-components/Vehicle/EditVehicleSimple';
 import UpdateContent from './Update.view';
 import useStyles from './ViewIncident.styles';
 import EvidenceTable from '../../../components/tables/EvidenceTable';
@@ -200,6 +202,7 @@ interface Props {
   toggleAddDocument: () => void;
   addDocument: boolean;
   updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
+  updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
 }
 
 const ViewIncident = ({
@@ -282,6 +285,7 @@ const ViewIncident = ({
   toggleAddDocument,
   addDocument,
   updateDocumentList,
+  updateDeleteDocument,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
@@ -549,50 +553,16 @@ const ViewIncident = ({
                     >
                       {data?.incident?.images.map((image, i) => (
                         <Col key={image.id}>
-                          <Popover
-                            trigger="hover"
-                            placement="left"
-                            content={
-                              <div
-                                style={{
-                                  display: 'flex',
-                                  flexDirection: 'column',
-                                }}
-                              >
-                                <Button
-                                  type="text"
-                                  disabled={saving}
-                                  icon={
-                                    <FontAwesomeIcon
-                                      style={{ marginRight: 5 }}
-                                      icon={faEdit}
-                                      size="lg"
-                                    />
-                                  }
-                                  onClick={() => setEditImageData(image)}
-                                  size="small"
-                                >
-                                  {intl.formatMessage({
-                                    defaultMessage: 'Edit Image',
-                                    id: '9UlLIw',
-                                  })}
-                                </Button>
-                                <Popconfirm
-                                  placement="topLeft"
-                                  title={intl.formatMessage({
-                                    defaultMessage: 'Remove the image?',
-                                    id: 'bRha+v',
-                                  })}
-                                  onConfirm={() => onDeleteImage(image.id)}
-                                  okText={intl.formatMessage({
-                                    defaultMessage: 'Yes',
-                                    id: 'a5msuh',
-                                  })}
-                                  cancelText={intl.formatMessage({
-                                    defaultMessage: 'No',
-                                    id: 'oUWADl',
-                                  })}
-                                  overlayInnerStyle={{ padding: 10 }}
+                          {editRights ? (
+                            <Popover
+                              trigger="hover"
+                              placement="left"
+                              content={
+                                <div
+                                  style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                  }}
                                 >
                                   <Button
                                     type="text"
@@ -600,22 +570,68 @@ const ViewIncident = ({
                                     icon={
                                       <FontAwesomeIcon
                                         style={{ marginRight: 5 }}
-                                        icon={faTrash}
+                                        icon={faEdit}
                                         size="lg"
                                       />
                                     }
-                                    // onClick={() => onDeleteImage(image.id)}
+                                    onClick={() => setEditImageData(image)}
                                     size="small"
                                   >
                                     {intl.formatMessage({
-                                      defaultMessage: 'Delete Image',
-                                      id: 'u5uVrC',
+                                      defaultMessage: 'Edit Image',
+                                      id: '9UlLIw',
                                     })}
                                   </Button>
-                                </Popconfirm>
+                                  <Popconfirm
+                                    placement="topLeft"
+                                    title={intl.formatMessage({
+                                      defaultMessage: 'Remove the image?',
+                                      id: 'bRha+v',
+                                    })}
+                                    onConfirm={() => onDeleteImage(image.id)}
+                                    okText={intl.formatMessage({
+                                      defaultMessage: 'Yes',
+                                      id: 'a5msuh',
+                                    })}
+                                    cancelText={intl.formatMessage({
+                                      defaultMessage: 'No',
+                                      id: 'oUWADl',
+                                    })}
+                                    overlayInnerStyle={{ padding: 10 }}
+                                  >
+                                    <Button
+                                      type="text"
+                                      disabled={saving}
+                                      icon={
+                                        <FontAwesomeIcon
+                                          style={{ marginRight: 5 }}
+                                          icon={faTrash}
+                                          size="lg"
+                                        />
+                                      }
+                                      size="small"
+                                    >
+                                      {intl.formatMessage({
+                                        defaultMessage: 'Delete Image',
+                                        id: 'u5uVrC',
+                                      })}
+                                    </Button>
+                                  </Popconfirm>
+                                </div>
+                              }
+                            >
+                              <div
+                                onClick={() => openLightbox(i)}
+                                className={classes.image}
+                              >
+                                <WatermarkImage
+                                  url={image.optimised}
+                                  rotation={image.rotation}
+                                  position={image.position}
+                                />
                               </div>
-                            }
-                          >
+                            </Popover>
+                          ) : (
                             <div
                               onClick={() => openLightbox(i)}
                               className={classes.image}
@@ -626,7 +642,7 @@ const ViewIncident = ({
                                 position={image.position}
                               />
                             </div>
-                          </Popover>
+                          )}
                           {/* <Card
                             key={image.id}
                             bodyStyle={{
@@ -1020,23 +1036,25 @@ const ViewIncident = ({
                                     })}
                                   </Title>
                                 </Col>
-                                <Col>
-                                  <Button
-                                    size="small"
-                                    onClick={toggleAddGoods}
-                                    icon={
-                                      <FontAwesomeIcon
-                                        icon={faPlus}
-                                        style={{ marginRight: 5 }}
-                                      />
-                                    }
-                                  >
-                                    {intl.formatMessage({
-                                      defaultMessage: 'Add Item',
-                                      id: 'kNLPWW',
-                                    })}
-                                  </Button>
-                                </Col>
+                                {editRights && (
+                                  <Col>
+                                    <Button
+                                      size="small"
+                                      onClick={toggleAddGoods}
+                                      icon={
+                                        <FontAwesomeIcon
+                                          icon={faPlus}
+                                          style={{ marginRight: 5 }}
+                                        />
+                                      }
+                                    >
+                                      {intl.formatMessage({
+                                        defaultMessage: 'Add Item',
+                                        id: 'kNLPWW',
+                                      })}
+                                    </Button>
+                                  </Col>
+                                )}
                               </Row>
 
                               <Table
@@ -1082,77 +1100,88 @@ const ViewIncident = ({
                                           width: 100,
                                           render: (_, record) => (
                                             <Row gutter={8}>
-                                              <Col>
-                                                <Tooltip
-                                                  title={intl.formatMessage({
-                                                    defaultMessage: 'Edit Item',
-                                                    id: 'Jm7MY5',
-                                                  })}
-                                                >
-                                                  <Button
-                                                    size="small"
-                                                    disabled={saving}
-                                                    onClick={() => {
-                                                      setEditGoodsData(
-                                                        record.item
-                                                      );
-                                                    }}
-                                                    icon={
-                                                      <FontAwesomeIcon
-                                                        icon={faPenToSquare}
-                                                      />
-                                                    }
-                                                  />
-                                                </Tooltip>
-                                              </Col>
-                                              <Col>
-                                                <Tooltip
-                                                  title={intl.formatMessage({
-                                                    defaultMessage:
-                                                      'Remove Item',
-                                                    id: 'BBWWVV',
-                                                  })}
-                                                >
-                                                  <Popconfirm
-                                                    placement="topLeft"
-                                                    trigger="hover"
+                                              {editRights && (
+                                                <Col>
+                                                  <Tooltip
                                                     title={intl.formatMessage({
                                                       defaultMessage:
-                                                        'Remove the item?',
-                                                      id: 'NKL3Y8',
+                                                        'Edit Item',
+                                                      id: 'Jm7MY5',
                                                     })}
-                                                    onConfirm={() =>
-                                                      onDeleteGoods(record.key)
-                                                    }
-                                                    okText={intl.formatMessage({
-                                                      defaultMessage: 'Yes',
-                                                      id: 'a5msuh',
-                                                    })}
-                                                    cancelText={intl.formatMessage(
-                                                      {
-                                                        defaultMessage: 'No',
-                                                        id: 'oUWADl',
-                                                      }
-                                                    )}
-                                                    overlayInnerStyle={{
-                                                      padding: 10,
-                                                    }}
                                                   >
                                                     <Button
                                                       size="small"
                                                       disabled={saving}
-                                                      // onClick={() =>
-                                                      //   onDeleteGoods(record.key)
-                                                      // }
+                                                      onClick={() => {
+                                                        setEditGoodsData(
+                                                          record.item
+                                                        );
+                                                      }}
                                                       icon={
                                                         <FontAwesomeIcon
-                                                          icon={faTrash}
+                                                          icon={faPenToSquare}
                                                         />
                                                       }
                                                     />
-                                                  </Popconfirm>
-                                                </Tooltip>
-                                              </Col>
+                                                  </Tooltip>
+                                                </Col>
+                                              )}
+                                              {deleteRights && (
+                                                <Col>
+                                                  <Tooltip
+                                                    title={intl.formatMessage({
+                                                      defaultMessage:
+                                                        'Remove Item',
+                                                      id: 'BBWWVV',
+                                                    })}
+                                                  >
+                                                    <Popconfirm
+                                                      placement="topLeft"
+                                                      trigger="hover"
+                                                      title={intl.formatMessage(
+                                                        {
+                                                          defaultMessage:
+                                                            'Remove the item?',
+                                                          id: 'NKL3Y8',
+                                                        }
+                                                      )}
+                                                      onConfirm={() =>
+                                                        onDeleteGoods(
+                                                          record.key
+                                                        )
+                                                      }
+                                                      okText={intl.formatMessage(
+                                                        {
+                                                          defaultMessage: 'Yes',
+                                                          id: 'a5msuh',
+                                                        }
+                                                      )}
+                                                      cancelText={intl.formatMessage(
+                                                        {
+                                                          defaultMessage: 'No',
+                                                          id: 'oUWADl',
+                                                        }
+                                                      )}
+                                                      overlayInnerStyle={{
+                                                        padding: 10,
+                                                      }}
+                                                    >
+                                                      <Button
+                                                        size="small"
+                                                        disabled={saving}
+                                                        // onClick={() =>
+                                                        //   onDeleteGoods(record.key)
+                                                        // }
+                                                        icon={
+                                                          <FontAwesomeIcon
+                                                            icon={faTrash}
+                                                          />
+                                                        }
+                                                      />
+                                                    </Popconfirm>
+                                                  </Tooltip>
+                                                </Col>
+                                              )}
                                             </Row>
                                           ),
                                         },
@@ -1266,61 +1295,64 @@ const ViewIncident = ({
                                 })}
                               </Title>
                             </Col>
-                            <Col>
-                              <Dropdown
-                                overlay={
-                                  <Menu
-                                    items={[
-                                      {
-                                        label: intl.formatMessage({
-                                          id: 'w4XD3a',
-                                          defaultMessage:
-                                            'Add Existing Offender',
-                                        }),
-                                        key: '1',
-                                        icon: (
-                                          <FontAwesomeIcon
-                                            icon={faMagnifyingGlass}
-                                            style={{ marginRight: 5 }}
-                                          />
-                                        ),
-                                        onClick: () =>
-                                          toggleAddExistingOffender(),
-                                      },
-                                      {
-                                        label: intl.formatMessage({
-                                          id: '58ir77',
-                                          defaultMessage: 'Create New Offender',
-                                        }),
-                                        key: '2',
-                                        icon: (
-                                          <FontAwesomeIcon
-                                            icon={faPlus}
-                                            style={{ marginRight: 5 }}
-                                          />
-                                        ),
-                                        onClick: () => toggleAddOffender(),
-                                      },
-                                    ]}
-                                  />
-                                }
-                              >
-                                <Button
-                                  size="small"
-                                  icon={
-                                    <FontAwesomeIcon
-                                      icon={faPlus}
-                                      style={{ marginRight: 5 }}
+                            {editRights && (
+                              <Col>
+                                <Dropdown
+                                  overlay={
+                                    <Menu
+                                      items={[
+                                        {
+                                          label: intl.formatMessage({
+                                            id: 'w4XD3a',
+                                            defaultMessage:
+                                              'Add Existing Offender',
+                                          }),
+                                          key: '1',
+                                          icon: (
+                                            <FontAwesomeIcon
+                                              icon={faMagnifyingGlass}
+                                              style={{ marginRight: 5 }}
+                                            />
+                                          ),
+                                          onClick: () =>
+                                            toggleAddExistingOffender(),
+                                        },
+                                        {
+                                          label: intl.formatMessage({
+                                            id: '58ir77',
+                                            defaultMessage:
+                                              'Create New Offender',
+                                          }),
+                                          key: '2',
+                                          icon: (
+                                            <FontAwesomeIcon
+                                              icon={faPlus}
+                                              style={{ marginRight: 5 }}
+                                            />
+                                          ),
+                                          onClick: () => toggleAddOffender(),
+                                        },
+                                      ]}
                                     />
                                   }
                                 >
-                                  {intl.formatMessage({
-                                    defaultMessage: 'Add Offenders',
-                                    id: 'KaNxum',
-                                  })}
-                                </Button>
-                              </Dropdown>
-                            </Col>
+                                  <Button
+                                    size="small"
+                                    icon={
+                                      <FontAwesomeIcon
+                                        icon={faPlus}
+                                        style={{ marginRight: 5 }}
+                                      />
+                                    }
+                                  >
+                                    {intl.formatMessage({
+                                      defaultMessage: 'Add Offenders',
+                                      id: 'KaNxum',
+                                    })}
+                                  </Button>
+                                </Dropdown>
+                              </Col>
+                            )}
                           </Row>
 
                           {data?.incident?.offenders.length && !loading ? (
@@ -1329,6 +1361,8 @@ const ViewIncident = ({
                               setEditOffenderData={setEditOffenderData}
                               onDeleteOffender={onDeleteOffender}
                               saving={saving}
+                              editRights={editRights}
+                              deleteRights={deleteRights}
                             />
                           ) : (
                             <Empty
@@ -1356,61 +1390,64 @@ const ViewIncident = ({
                                 })}
                               </Title>
                             </Col>
-                            <Col>
-                              <Dropdown
-                                overlay={
-                                  <Menu
-                                    items={[
-                                      {
-                                        label: intl.formatMessage({
-                                          defaultMessage:
-                                            'Add Existing Vehicles',
-                                          id: 'goP1s6',
-                                        }),
-                                        key: '1',
-                                        icon: (
-                                          <FontAwesomeIcon
-                                            icon={faMagnifyingGlass}
-                                            style={{ marginRight: 5 }}
-                                          />
-                                        ),
-                                        onClick: () =>
-                                          toggleAddExistingVehicle(),
-                                      },
-                                      {
-                                        label: intl.formatMessage({
-                                          defaultMessage: 'Create New Vehicle',
-                                          id: 'xiAZxN',
-                                        }),
-                                        key: '2',
-                                        icon: (
-                                          <FontAwesomeIcon
-                                            icon={faPlus}
-                                            style={{ marginRight: 5 }}
-                                          />
-                                        ),
-                                        onClick: () => toggleAddVehicle(),
-                                      },
-                                    ]}
-                                  />
-                                }
-                              >
-                                <Button
-                                  size="small"
-                                  icon={
-                                    <FontAwesomeIcon
-                                      icon={faPlus}
-                                      style={{ marginRight: 5 }}
+                            {editRights && (
+                              <Col>
+                                <Dropdown
+                                  overlay={
+                                    <Menu
+                                      items={[
+                                        {
+                                          label: intl.formatMessage({
+                                            defaultMessage:
+                                              'Add Existing Vehicles',
+                                            id: 'goP1s6',
+                                          }),
+                                          key: '1',
+                                          icon: (
+                                            <FontAwesomeIcon
+                                              icon={faMagnifyingGlass}
+                                              style={{ marginRight: 5 }}
+                                            />
+                                          ),
+                                          onClick: () =>
+                                            toggleAddExistingVehicle(),
+                                        },
+                                        {
+                                          label: intl.formatMessage({
+                                            defaultMessage:
+                                              'Create New Vehicle',
+                                            id: 'xiAZxN',
+                                          }),
+                                          key: '2',
+                                          icon: (
+                                            <FontAwesomeIcon
+                                              icon={faPlus}
+                                              style={{ marginRight: 5 }}
+                                            />
+                                          ),
+                                          onClick: () => toggleAddVehicle(),
+                                        },
+                                      ]}
                                     />
                                   }
                                 >
-                                  {intl.formatMessage({
-                                    defaultMessage: 'Add Vehicles',
-                                    id: 'iKGwyV',
-                                  })}
-                                </Button>
-                              </Dropdown>
-                            </Col>
+                                  <Button
+                                    size="small"
+                                    icon={
+                                      <FontAwesomeIcon
+                                        icon={faPlus}
+                                        style={{ marginRight: 5 }}
+                                      />
+                                    }
+                                  >
+                                    {intl.formatMessage({
+                                      defaultMessage: 'Add Vehicles',
+                                      id: 'iKGwyV',
+                                    })}
+                                  </Button>
+                                </Dropdown>
+                              </Col>
+                            )}
                           </Row>
 
                           {data?.incident?.vehicles.length && !loading ? (
@@ -1419,6 +1456,8 @@ const ViewIncident = ({
                               setEditVehicleData={setEditVehicleData}
                               onDeleteVehicle={onDeleteVehicle}
                               saving={saving}
+                              editRights={editRights}
+                              deleteRights={deleteRights}
                             />
                           ) : (
                             <Empty
@@ -1445,28 +1484,33 @@ const ViewIncident = ({
                                   })}
                                 </Title>
                               </Col>
-                              <Col>
-                                <Button
-                                  size="small"
-                                  onClick={toggleAddDocument}
-                                  icon={
-                                    <FontAwesomeIcon
-                                      icon={faPlus}
-                                      style={{ marginRight: 5 }}
-                                    />
-                                  }
-                                >
-                                  {intl.formatMessage({
-                                    defaultMessage: 'Add Evidence',
-                                    id: 'vgVasT',
-                                  })}
-                                </Button>
-                              </Col>
+                              {editRights && (
+                                <Col>
+                                  <Button
+                                    size="small"
+                                    onClick={toggleAddDocument}
+                                    icon={
+                                      <FontAwesomeIcon
+                                        icon={faPlus}
+                                        style={{ marginRight: 5 }}
+                                      />
+                                    }
+                                  >
+                                    {intl.formatMessage({
+                                      defaultMessage: 'Add Evidence',
+                                      id: 'vgVasT',
+                                    })}
+                                  </Button>
+                                </Col>
+                              )}
                             </Row>
 
                             {data?.incident?.evidence.length && !loading ? (
                               <EvidenceTable
                                 evidence={data?.incident?.evidence}
+                                deleteRights={deleteRights}
+                                title={ProfileUpdatedModel.Incident}
+                                update={updateDeleteDocument}
                               />
                             ) : (
                               <Empty
@@ -1495,23 +1539,25 @@ const ViewIncident = ({
                                   })}
                                 </Title>
                               </Col>
-                              <Col>
-                                <Button
-                                  size="small"
-                                  onClick={toggleAddTodo}
-                                  icon={
-                                    <FontAwesomeIcon
-                                      icon={faPlus}
-                                      style={{ marginRight: 5 }}
-                                    />
-                                  }
-                                >
-                                  {intl.formatMessage({
-                                    defaultMessage: 'Add Activity',
-                                    id: 'VOiupa',
-                                  })}
-                                </Button>
-                              </Col>
+                              {editRights && (
+                                <Col>
+                                  <Button
+                                    size="small"
+                                    onClick={toggleAddTodo}
+                                    icon={
+                                      <FontAwesomeIcon
+                                        icon={faPlus}
+                                        style={{ marginRight: 5 }}
+                                      />
+                                    }
+                                  >
+                                    {intl.formatMessage({
+                                      defaultMessage: 'Add Activity',
+                                      id: 'VOiupa',
+                                    })}
+                                  </Button>
+                                </Col>
+                              )}
                             </Row>
                             {data?.incident?.todos.length && !loading ? (
                               <Table
@@ -2050,6 +2096,26 @@ const ViewIncident = ({
       {/* offender */}
       <Drawer
         title={intl.formatMessage({
+          defaultMessage: 'Edit Offender',
+          id: '+OfJ4/',
+        })}
+        open={!!editOffenderData}
+        width="700"
+        onClose={() => setEditOffenderData(null)}
+      >
+        {editOffenderData ? (
+          <SimpleEditOffender
+            data={editOffenderData}
+            onClose={() => setEditOffenderData(null)}
+            update={onEditOffender}
+            images={data?.incident?.images}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <Drawer
+        title={intl.formatMessage({
           defaultMessage: 'Add New Offender',
           id: 'V+RsEq',
         })}
@@ -2088,26 +2154,7 @@ const ViewIncident = ({
           <div />
         )}
       </Drawer>
-      <Drawer
-        title={intl.formatMessage({
-          defaultMessage: 'Edit Offender',
-          id: '+OfJ4/',
-        })}
-        open={!!editOffenderData}
-        width="700"
-        onClose={() => setEditOffenderData(null)}
-      >
-        {editOffenderData ? (
-          <SimpleEditOffender
-            data={editOffenderData}
-            onClose={() => setEditOffenderData(null)}
-            update={onEditOffender}
-            images={data?.incident?.images}
-          />
-        ) : (
-          <div />
-        )}
-      </Drawer>
+
       {/* vehicle */}
       <Drawer
         title={intl.formatMessage({
@@ -2140,10 +2187,10 @@ const ViewIncident = ({
         onClose={toggleAddVehicle}
       >
         {addVehicle ? (
-          <AddVehicle
+          <AddVehicleSimple
             update={onAddVehicle}
             onClose={toggleAddVehicle}
-            fromIncident
+            images={data?.incident?.images.map((el) => ({ ...el, uid: el.id }))}
           />
         ) : (
           <div />
@@ -2160,10 +2207,10 @@ const ViewIncident = ({
         zIndex={1001}
       >
         {editVehicleData ? (
-          <EditVehicle
+          <EditVehicleSimple
+            editData={editVehicleData}
             update={onEditVehicle}
             onClose={() => setEditVehicleData(null)}
-            editData={editVehicleData}
             images={data?.incident?.images.map((el) => ({ ...el, uid: el.id }))}
           />
         ) : (

@@ -31,7 +31,7 @@ export interface FormData {
   make?: string;
   model?: string;
   colour?: string;
-  images?: ImageValue[];
+  images: ImageValue[];
 }
 
 interface Return {
@@ -58,7 +58,18 @@ const useEditVehicleSimple = ({
       model: data.model || '',
       colour: data.colour || '',
       registration: data.registration || '',
-      images: data.images || [],
+      images: data?.images?.map((item) => ({
+        id: item.id || '',
+        url: item.url,
+        optimised: item.optimised,
+        fileName: item.file?.response && item.file.response[0].blobName,
+        type: item.file?.response && item.file.response[0].mimetype,
+        position: item.position,
+        primary: false,
+        policeImage: item.policeImage || false,
+        rotation: item.rotation,
+        new: !!item.file,
+      })),
     });
 
     const uploadedImages = data.images?.filter((image) => image.file) || [];

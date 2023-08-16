@@ -90,8 +90,6 @@ const useAddNewOffender = ({
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
-    console.log('offImage', data.images);
-
     updateOffender({
       id: Math.floor(Math.random() * 1000).toString(),
       name: data.name || 'Unidentified Offender',

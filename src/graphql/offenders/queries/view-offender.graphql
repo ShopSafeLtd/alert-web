@@ -9,6 +9,15 @@ query ViewOffender(
     createdBy {
       fullName
     }
+    evidence {
+      id
+      name
+      url
+      fileType
+    }
+    scheme {
+      mg11Available
+    }
     updatedAt
     age
     build
