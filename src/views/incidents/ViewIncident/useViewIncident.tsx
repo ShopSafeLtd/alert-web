@@ -9,9 +9,13 @@ import type {
   CreateTodoMutation,
   ImageUpdateWithWhereUniqueWithoutIncidentInput,
   CreateDocumentMutation,
+  DeleteDocumentMutation,
 } from 'graphql/generated';
 import {
-  useCreateOffenderMutation,
+  useCreateSimpleVehicleMutation,
+  useUpdateSimpleVehicleMutation,
+  useUpdateSimpleOffenderMutation,
+  useCreateSimpleOffenderMutation,
   Role,
   useAddImagesToIncidentMutation,
   useDeleteUpdateMutation,
@@ -147,6 +151,7 @@ interface Return {
   toggleAddDocument: () => void;
   addDocument: boolean;
   updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
+  updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
 }
 
 const useViewIncident = (incidentId: string): Return => {
@@ -243,8 +248,8 @@ const useViewIncident = (incidentId: string): Return => {
       ),
       description: intl.formatMessage(
         {
-          defaultMessage: 'The {title} of the incident have been {type}.!',
-          id: 'WO77fs',
+          defaultMessage: 'The {title} of the incident have been {type}!',
+          id: 'B5KlHg',
         },
         { title, type: type.toLocaleLowerCase() }
       ),
@@ -403,7 +408,7 @@ const useViewIncident = (incidentId: string): Return => {
         ({ primary }) => primary
       )?.id;
 
-      const u: ImageUpdateWithWhereUniqueWithoutIncidentInput[] = [
+      const updateImages: ImageUpdateWithWhereUniqueWithoutIncidentInput[] = [
         {
           where: {
             id: value.id,
@@ -418,7 +423,7 @@ const useViewIncident = (incidentId: string): Return => {
       ];
 
       if (findPrimaryId && value.primary && findPrimaryId !== value.id) {
-        u.push({
+        updateImages.push({
           where: {
             id: findPrimaryId,
           },
@@ -432,7 +437,7 @@ const useViewIncident = (incidentId: string): Return => {
         variables: {
           id: incidentId,
           images: {
-            update: u,
+            update: updateImages,
           },
         },
         onCompleted: () => {
@@ -522,27 +527,89 @@ const useViewIncident = (incidentId: string): Return => {
       variables,
     });
   };
+  const [updateVehicle] = useUpdateSimpleVehicleMutation({
+    onError: () => {
+      errorNotification();
+    },
+    update: (store, { data: res }) => {
+      if (res?.updateVehicle === null || res?.updateVehicle === undefined)
+        return;
+      const existingData = store.readQuery<ViewIncidentQuery>({
+        query: ViewIncidentDocument,
+        variables,
+      });
 
+      if (!existingData?.incident) return;
+      const index = existingData?.incident?.vehicles
+        .map((item) => item.id)
+        .indexOf(res.updateVehicle.id);
+      store.writeQuery<ViewIncidentQuery>({
+        query: ViewIncidentDocument,
+        data: {
+          incident: {
+            ...existingData.incident,
+            vehicles: update(existingData.incident.vehicles, {
+              [index]: {
+                $set: { ...res.updateVehicle },
+              },
+            }),
+          },
+          __typename: 'Query',
+        },
+        variables,
+      });
+    },
+  });
   const onEditVehicle = (value: VehicleData) => {
     setSaving(true);
-    if (value)
-      void updateIncidentVehicles({
+    if (value) {
+      const existingImageIds = editVehicleData?.images?.map(({ id }) => id);
+      const deleteIds = existingImageIds?.filter(
+        (id) => !value.images?.map((el) => el.id).includes(id)
+      );
+      void updateVehicle({
         variables: {
-          id: incidentId,
-          vehicles: {
-            update: [
-              {
-                where: {
-                  id: value.id,
-                },
-                data: {
-                  make: { set: value.make || '' },
-                  model: { set: value.model || '' },
-                  colour: { set: value.colour || '' },
-                  registration: { set: value.registration || '' },
-                },
-              },
-            ],
+          where: {
+            id: value.id,
+          },
+          data: {
+            make: { set: value.make || '' },
+            model: { set: value.model || '' },
+            colour: { set: value.colour || '' },
+            registration: { set: value.registration || '' },
+            images:
+              value.images && value.images.length > 0
+                ? {
+                    delete:
+                      deleteIds && deleteIds.length > 0
+                        ? deleteIds.map((id) => ({ id }))
+                        : undefined,
+                    connect: value.images
+                      ?.filter((image) => !image.new)
+                      .map((image) => ({
+                        id: image.id,
+                      })),
+                    upload: value.images
+                      ?.filter((image) => image.new)
+                      .map((item) => ({
+                        url: {
+                          filename: item.fileName || '',
+                          mimetype: item.type || '',
+                          url: item.url || '',
+                        },
+                        position: item.position,
+                        primary: item.primary,
+                        policeImage: item.policeImage,
+                        rotation: item.rotation || 0,
+                      }))
+                      .filter((obj) => obj.url !== undefined),
+                  }
+                : {
+                    delete:
+                      deleteIds && deleteIds.length > 0
+                        ? deleteIds.map((id) => ({ id }))
+                        : undefined,
+                  },
           },
         },
         onCompleted: () => {
@@ -555,22 +622,70 @@ const useViewIncident = (incidentId: string): Return => {
         setEditVehicleData(null);
         setSaving(false);
       });
+    }
   };
+  const [createVehicle] = useCreateSimpleVehicleMutation({
+    onError: () => {
+      errorNotification();
+    },
+    update: (store, { data: res }) => {
+      if (res?.createVehicle === null || res?.createVehicle === undefined)
+        return;
+      const existingData = store.readQuery<ViewIncidentQuery>({
+        query: ViewIncidentDocument,
+        variables,
+      });
+
+      if (!existingData?.incident) return;
+      store.writeQuery<ViewIncidentQuery>({
+        query: ViewIncidentDocument,
+        data: {
+          incident: {
+            ...existingData.incident,
+            vehicles: [...existingData.incident.vehicles, res.createVehicle],
+          },
+          __typename: 'Query',
+        },
+        variables,
+      });
+    },
+  });
   const onAddVehicle = (value: VehicleData) => {
     setSaving(true);
-    if (value)
-      void updateIncidentVehicles({
+    if (value) {
+      void createVehicle({
         variables: {
-          id: incidentId,
-          vehicles: {
-            create: [
-              {
-                make: value.make || '',
-                model: value.model || '',
-                colour: value.colour || '',
-                registration: value.registration || '',
-              },
-            ],
+          data: {
+            make: value.make || '',
+            model: value.model || '',
+            colour: value.colour || '',
+            registration: value.registration || '',
+            incidents: [{ id: incidentId }],
+            schemes: schemeId,
+            image:
+              value.images && value.images.length > 0
+                ? {
+                    connect: value.images
+                      ?.filter((image) => !image.new)
+                      .map((image) => ({
+                        id: image.id,
+                      })),
+                    upload: value.images
+                      ?.filter((image) => image.new)
+                      .map((item) => ({
+                        url: {
+                          filename: item.fileName || '',
+                          mimetype: item.type || '',
+                          url: item.url || '',
+                        },
+                        position: item.position,
+                        primary: item.primary,
+                        policeImage: item.policeImage,
+                        rotation: item.rotation || 0,
+                      }))
+                      .filter((obj) => obj.url !== undefined),
+                  }
+                : {},
           },
         },
         onCompleted: () => {
@@ -579,11 +694,11 @@ const useViewIncident = (incidentId: string): Return => {
             ProfileUpdatedType.added
           );
         },
-        update: updateVehicleList,
       }).finally(() => {
         setAddVehicle(false);
         setSaving(false);
       });
+    }
   };
   const onAddExistingVehicle = (value: string) => {
     setSaving(true);
@@ -681,37 +796,101 @@ const useViewIncident = (incidentId: string): Return => {
       variables,
     });
   };
+  const [updateOffender] = useUpdateSimpleOffenderMutation({
+    onError: () => {
+      errorNotification();
+    },
+    update: (store, { data: res }) => {
+      if (res?.updateOffender === null || res?.updateOffender === undefined)
+        return;
+      const existingData = store.readQuery<ViewIncidentQuery>({
+        query: ViewIncidentDocument,
+        variables,
+      });
+      if (!existingData?.incident) return;
+      const index = existingData?.incident?.offenders
+        .map((item) => item.id)
+        .indexOf(res.updateOffender.id);
+
+      store.writeQuery<ViewIncidentQuery>({
+        query: ViewIncidentDocument,
+        data: {
+          incident: {
+            ...existingData.incident,
+            offenders: update(existingData.incident.offenders, {
+              [index]: {
+                $set: { ...res.updateOffender },
+              },
+            }),
+          },
+          __typename: 'Query',
+        },
+        variables,
+      });
+    },
+  });
   const onEditOffender = (value: OffenderData) => {
     setSaving(true);
-    if (value)
-      void updateIncidentOffenders({
+    if (value) {
+      const existingImageIds = editOffenderData?.images?.map(({ id }) => id);
+      const deleteIds = existingImageIds?.filter(
+        (id) => !value.images?.map((el) => el.id).includes(id)
+      );
+
+      void updateOffender({
         variables: {
-          id: incidentId,
-          offenders: {
-            update: [
-              {
-                where: {
-                  id: value.id,
-                },
-                data: {
-                  name: { set: value.name },
-                  gender: { set: value.gender || null },
-                  race: { set: value.race || null },
-                  build: { set: value.build || null },
-                  hair: { set: value.hair || 'Unknown' },
-                  peculiarities: { set: value.peculiarities || '' },
-                  age: { set: value.age || null },
-                  dateSource: { set: value.dateSource || null },
-                  dateOfBirth: { set: value.dateOfBirth || null },
-                  groups: {
-                    set:
-                      value.groups && value.groups.length > 0
-                        ? value.groups.map(({ id }) => ({ id }))
+          where: {
+            id: value.id,
+          },
+          data: {
+            name: { set: value.name },
+            gender: { set: value.gender || null },
+            race: { set: value.race || null },
+            build: { set: value.build || null },
+            hair: { set: value.hair || 'Unknown' },
+            peculiarities: { set: value.peculiarities || '' },
+            age: { set: value.age || null },
+            dateSource: { set: value.dateSource || null },
+            dateOfBirth: { set: value.dateOfBirth || null },
+            groups: {
+              set:
+                value.groups && value.groups.length > 0
+                  ? value.groups.map(({ id }) => ({ id }))
+                  : undefined,
+            },
+            images:
+              value.images && value.images.length > 0
+                ? {
+                    delete:
+                      deleteIds && deleteIds.length > 0
+                        ? deleteIds.map((id) => ({ id }))
+                        : undefined,
+                    connect: value.images
+                      ?.filter((image) => !image.new)
+                      .map((image) => ({
+                        id: image.id,
+                      })),
+                    upload: value.images
+                      ?.filter((image) => image.new)
+                      .map((item) => ({
+                        url: {
+                          filename: item.fileName || '',
+                          mimetype: item.type || '',
+                          url: item.url || '',
+                        },
+                        position: item.position,
+                        primary: item.primary,
+                        policeImage: item.policeImage,
+                        rotation: item.rotation || 0,
+                      }))
+                      .filter((obj) => obj.url !== undefined),
+                  }
+                : {
+                    delete:
+                      deleteIds && deleteIds.length > 0
+                        ? deleteIds.map((id) => ({ id }))
                         : undefined,
                   },
-                },
-              },
-            ],
           },
         },
         onCompleted: () => {
@@ -725,16 +904,46 @@ const useViewIncident = (incidentId: string): Return => {
         setEditOffenderData(null);
         setSaving(false);
       });
+    }
   };
-  const [createOffender] = useCreateOffenderMutation({});
+  const [createOffender] = useCreateSimpleOffenderMutation({
+    onCompleted: () => {
+      getNotificationContent(
+        ProfileUpdatedModel.Offender,
+        ProfileUpdatedType.added
+      );
+    },
+    onError: () => {
+      errorNotification();
+    },
+    update: (store, { data: res }) => {
+      if (res?.createOffender === null || res?.createOffender === undefined)
+        return;
+      const existingData = store.readQuery<ViewIncidentQuery>({
+        query: ViewIncidentDocument,
+        variables,
+      });
+
+      if (!existingData?.incident) return;
+      store.writeQuery<ViewIncidentQuery>({
+        query: ViewIncidentDocument,
+        data: {
+          incident: {
+            ...existingData.incident,
+            offenders: [...existingData.incident.offenders, res.createOffender],
+          },
+          __typename: 'Query',
+        },
+        variables,
+      });
+    },
+  });
+
   const onAddOffender = (value: OffenderData) => {
     setSaving(true);
     if (value) {
-      console.log('newOff', value.images);
-
       void createOffender({
         variables: {
-          // id: incidentId,
           data: {
             name: value.name,
             gender: value.gender || null,
@@ -783,13 +992,6 @@ const useViewIncident = (incidentId: string): Return => {
                 : {},
           },
         },
-        onCompleted: () => {
-          getNotificationContent(
-            ProfileUpdatedModel.Offender,
-            ProfileUpdatedType.added
-          );
-        },
-        update: updateOffenderList,
       }).finally(() => {
         setAddOffender(false);
         setSaving(false);
@@ -1066,7 +1268,32 @@ const useViewIncident = (incidentId: string): Return => {
       variables,
     });
   };
+  const updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation> = (
+    store,
+    { data: res }
+  ) => {
+    if (res?.deleteDocument === null || res?.deleteDocument === undefined)
+      return;
+    const existingData = store.readQuery<ViewIncidentQuery>({
+      query: ViewIncidentDocument,
+      variables,
+    });
 
+    if (!existingData?.incident) return;
+    store.writeQuery<ViewIncidentQuery>({
+      query: ViewIncidentDocument,
+      data: {
+        incident: {
+          ...existingData.incident,
+          evidence: existingData.incident.evidence.filter(
+            ({ id }) => id !== res.deleteDocument?.id
+          ),
+        },
+        __typename: 'Query',
+      },
+      variables,
+    });
+  };
   const [subscribeToIncident] = useSubscribeToIncidentMutation();
   const [unsubscribeFromIncident] = useUnsubscribeFromIncidentMutation();
 
@@ -1330,6 +1557,7 @@ const useViewIncident = (incidentId: string): Return => {
     confirmUpdateImages,
     data,
     deleteRights: role !== Role.User,
+    // ||(userId === data?.incident?.createdBy.id && !data?.incident?.approved),
     editRights: role !== Role.User,
     editUpdate,
     editUpdateInput,
@@ -1398,6 +1626,7 @@ const useViewIncident = (incidentId: string): Return => {
     addDocument,
     toggleAddDocument,
     updateDocumentList,
+    updateDeleteDocument,
   };
 };
 

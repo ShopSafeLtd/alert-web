@@ -1,15 +1,15 @@
 import React from 'react';
+import type { VehicleData } from 'types/DataType';
 import View from './AddVehicleSimple.view';
-import type { AddVehicleData } from './useAddVehicleSimple';
 import useAddVehicleSimple from './useAddVehicleSimple';
 import type { ImageData } from '../../ImageSelect/ImageSelect.view';
 import type { StateImageData } from '../../../incidents/IncidentForm/ImageSection/useImageSection';
 
 interface Props {
   onClose: () => void;
-  update: (value: AddVehicleData) => void;
+  update: (value: VehicleData) => void;
   saving?: boolean;
-  images: ImageData[];
+  images: ImageData[] | undefined;
   onImagesUploaded?: (values: StateImageData[]) => void;
 }
 

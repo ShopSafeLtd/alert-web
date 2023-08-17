@@ -51,6 +51,8 @@ interface Props {
   saving?: boolean;
   setEditOffenderData?: (value: OffenderData | null) => void;
   onDeleteOffender?: (id: string) => void;
+  editRights?: boolean;
+  deleteRights?: boolean;
 }
 
 const OffenderTable = ({
@@ -59,6 +61,8 @@ const OffenderTable = ({
   saving,
   setEditOffenderData,
   onDeleteOffender,
+  editRights,
+  deleteRights,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const navigate = useNavigate();
@@ -135,58 +139,62 @@ const OffenderTable = ({
           width: 100,
           render: (_, record) => (
             <Row gutter={8}>
-              <Col>
-                <Tooltip
-                  title={intl.formatMessage({
-                    defaultMessage: 'Edit Offender',
-                    id: '+OfJ4/',
-                  })}
-                >
-                  <Button
-                    size="small"
-                    disabled={saving}
-                    onClick={() => {
-                      if (setEditOffenderData)
-                        setEditOffenderData(record.offender);
-                    }}
-                    icon={<FontAwesomeIcon icon={faPenToSquare} />}
-                  />
-                </Tooltip>
-              </Col>
-              <Col>
-                <Tooltip
-                  title={intl.formatMessage({
-                    defaultMessage: 'Remove Offender',
-                    id: 'cZH2Kj',
-                  })}
-                >
-                  <Popconfirm
-                    placement="topLeft"
+              {editRights && (
+                <Col>
+                  <Tooltip
                     title={intl.formatMessage({
-                      defaultMessage: 'Remove the offender?',
-                      id: 'ttuPSC',
+                      defaultMessage: 'Edit Offender',
+                      id: '+OfJ4/',
                     })}
-                    onConfirm={() => {
-                      if (onDeleteOffender) onDeleteOffender(record.key);
-                    }}
-                    okText={intl.formatMessage({
-                      defaultMessage: 'Yes',
-                      id: 'a5msuh',
-                    })}
-                    cancelText={intl.formatMessage({
-                      defaultMessage: 'No',
-                      id: 'oUWADl',
-                    })}
-                    overlayInnerStyle={{ padding: 10 }}
                   >
                     <Button
                       size="small"
                       disabled={saving}
-                      icon={<FontAwesomeIcon icon={faTrash} />}
+                      onClick={() => {
+                        if (setEditOffenderData)
+                          setEditOffenderData(record.offender);
+                      }}
+                      icon={<FontAwesomeIcon icon={faPenToSquare} />}
                     />
-                  </Popconfirm>
-                </Tooltip>
-              </Col>
+                  </Tooltip>
+                </Col>
+              )}
+              {deleteRights && (
+                <Col>
+                  <Tooltip
+                    title={intl.formatMessage({
+                      defaultMessage: 'Remove Offender',
+                      id: 'cZH2Kj',
+                    })}
+                  >
+                    <Popconfirm
+                      placement="topLeft"
+                      title={intl.formatMessage({
+                        defaultMessage: 'Remove the offender?',
+                        id: 'ttuPSC',
+                      })}
+                      onConfirm={() => {
+                        if (onDeleteOffender) onDeleteOffender(record.key);
+                      }}
+                      okText={intl.formatMessage({
+                        defaultMessage: 'Yes',
+                        id: 'a5msuh',
+                      })}
+                      cancelText={intl.formatMessage({
+                        defaultMessage: 'No',
+                        id: 'oUWADl',
+                      })}
+                      overlayInnerStyle={{ padding: 10 }}
+                    >
+                      <Button
+                        size="small"
+                        disabled={saving}
+                        icon={<FontAwesomeIcon icon={faTrash} />}
+                      />
+                    </Popconfirm>
+                  </Tooltip>
+                </Col>
+              )}
             </Row>
           ),
         },

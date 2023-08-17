@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import type {
   AssociatedOffendersQuery,
+  CreateDocumentMutation,
+  DeleteDocumentMutation,
   UpdateOffenderAddressesMutation,
   UpdateOffenderBansMutation,
   UpdateOffenderCrimeGroupsMutation,
@@ -9,6 +11,8 @@ import type {
   ViewOffenderQueryVariables,
 } from 'graphql/generated';
 import {
+  useCreateSimpleVehicleMutation,
+  useUpdateSimpleVehicleMutation,
   useUpdateOffenderImagesMutation,
   useUpdateOffenderAddressesMutation,
   useUpdateOffenderBansMutation,
@@ -165,6 +169,10 @@ interface Return {
   onDeleteImage: (id: string) => void;
   onEditImage: (id: EditFeedImage) => void;
   onUpdateImages: (value: ImageCardData[]) => void;
+  toggleAddDocument: () => void;
+  addDocument: boolean;
+  updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
+  updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
 }
 
 const useViewOffender = (offenderId: string): Return => {
@@ -183,6 +191,7 @@ const useViewOffender = (offenderId: string): Return => {
   const [viewMatches, toggleViewMatches] = useState<string | null>(null);
   const [optionRowShow, setOptionRowShow] = useState(false);
   const [linkIncident, setLinkIncident] = useState(false);
+  const [addDocument, setAddDocument] = useState(false);
   const [optionMenuItems, setOptionsMenuItems] = useState<ItemType[]>([]);
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
     []
@@ -617,27 +626,89 @@ const useViewOffender = (offenderId: string): Return => {
       variables,
     });
   };
+  const [updateVehicle] = useUpdateSimpleVehicleMutation({
+    onError: () => {
+      errorNotification();
+    },
+    update: (store, { data: res }) => {
+      if (res?.updateVehicle === null || res?.updateVehicle === undefined)
+        return;
+      const existingData = store.readQuery<ViewOffenderQuery>({
+        query: ViewOffenderDocument,
+        variables,
+      });
 
+      if (!existingData?.offender) return;
+      const index = existingData?.offender?.vehicles
+        .map((item) => item.id)
+        .indexOf(res.updateVehicle.id);
+      store.writeQuery<ViewOffenderQuery>({
+        query: ViewOffenderDocument,
+        data: {
+          offender: {
+            ...existingData.offender,
+            vehicles: update(existingData.offender.vehicles, {
+              [index]: {
+                $set: { ...res.updateVehicle },
+              },
+            }),
+          },
+          __typename: 'Query',
+        },
+        variables,
+      });
+    },
+  });
   const onEditVehicle = (value: VehicleData) => {
     setSaving(true);
-    if (value)
-      void updateOffenderVehicles({
+    if (value) {
+      const existingImageIds = editVehicleData?.images?.map(({ id }) => id);
+      const deleteIds = existingImageIds?.filter(
+        (id) => !value.images?.map((el) => el.id).includes(id)
+      );
+      void updateVehicle({
         variables: {
-          id: offenderId,
-          vehicles: {
-            update: [
-              {
-                where: {
-                  id: value.id,
-                },
-                data: {
-                  make: { set: value.make || '' },
-                  model: { set: value.model || '' },
-                  colour: { set: value.colour || '' },
-                  registration: { set: value.registration || '' },
-                },
-              },
-            ],
+          where: {
+            id: value.id,
+          },
+          data: {
+            make: { set: value.make || '' },
+            model: { set: value.model || '' },
+            colour: { set: value.colour || '' },
+            registration: { set: value.registration || '' },
+            images:
+              value.images && value.images.length > 0
+                ? {
+                    delete:
+                      deleteIds && deleteIds.length > 0
+                        ? deleteIds.map((id) => ({ id }))
+                        : undefined,
+                    connect: value.images
+                      ?.filter((image) => !image.new)
+                      .map((image) => ({
+                        id: image.id,
+                      })),
+                    upload: value.images
+                      ?.filter((image) => image.new)
+                      .map((item) => ({
+                        url: {
+                          filename: item.fileName || '',
+                          mimetype: item.type || '',
+                          url: item.url || '',
+                        },
+                        position: item.position,
+                        primary: item.primary,
+                        policeImage: item.policeImage,
+                        rotation: item.rotation || 0,
+                      }))
+                      .filter((obj) => obj.url !== undefined),
+                  }
+                : {
+                    delete:
+                      deleteIds && deleteIds.length > 0
+                        ? deleteIds.map((id) => ({ id }))
+                        : undefined,
+                  },
           },
         },
         onCompleted: () => {
@@ -650,22 +721,70 @@ const useViewOffender = (offenderId: string): Return => {
         setEditVehicleData(null);
         setSaving(false);
       });
+    }
   };
+  const [createVehicle] = useCreateSimpleVehicleMutation({
+    onError: () => {
+      errorNotification();
+    },
+    update: (store, { data: res }) => {
+      if (res?.createVehicle === null || res?.createVehicle === undefined)
+        return;
+      const existingData = store.readQuery<ViewOffenderQuery>({
+        query: ViewOffenderDocument,
+        variables,
+      });
+
+      if (!existingData?.offender) return;
+      store.writeQuery<ViewOffenderQuery>({
+        query: ViewOffenderDocument,
+        data: {
+          offender: {
+            ...existingData.offender,
+            vehicles: [...existingData.offender.vehicles, res.createVehicle],
+          },
+          __typename: 'Query',
+        },
+        variables,
+      });
+    },
+  });
   const onAddVehicle = (value: VehicleData) => {
     setSaving(true);
-    if (value)
-      void updateOffenderVehicles({
+    if (value) {
+      void createVehicle({
         variables: {
-          id: offenderId,
-          vehicles: {
-            create: [
-              {
-                make: value.make || '',
-                model: value.model || '',
-                colour: value.colour || '',
-                registration: value.registration || '',
-              },
-            ],
+          data: {
+            make: value.make || '',
+            model: value.model || '',
+            colour: value.colour || '',
+            registration: value.registration || '',
+            offenders: [{ id: offenderId }],
+            schemes: schemeId,
+            image:
+              value.images && value.images.length > 0
+                ? {
+                    connect: value.images
+                      ?.filter((image) => !image.new)
+                      .map((image) => ({
+                        id: image.id,
+                      })),
+                    upload: value.images
+                      ?.filter((image) => image.new)
+                      .map((item) => ({
+                        url: {
+                          filename: item.fileName || '',
+                          mimetype: item.type || '',
+                          url: item.url || '',
+                        },
+                        position: item.position,
+                        primary: item.primary,
+                        policeImage: item.policeImage,
+                        rotation: item.rotation || 0,
+                      }))
+                      .filter((obj) => obj.url !== undefined),
+                  }
+                : {},
           },
         },
         onCompleted: () => {
@@ -679,7 +798,9 @@ const useViewOffender = (offenderId: string): Return => {
         setAddVehicle(false);
         setSaving(false);
       });
+    }
   };
+
   const onAddExistingVehicle = (value: string) => {
     setSaving(true);
     if (value)
@@ -1132,7 +1253,57 @@ const useViewOffender = (offenderId: string): Return => {
         setSaving(false);
       });
   };
+  // evidence
+  const updateDocumentList: MutationUpdaterFn<CreateDocumentMutation> = (
+    store,
+    { data: res }
+  ) => {
+    if (res?.createDocument === null || res?.createDocument === undefined)
+      return;
+    const existingData = store.readQuery<ViewOffenderQuery>({
+      query: ViewOffenderDocument,
+      variables,
+    });
 
+    if (!existingData?.offender) return;
+    store.writeQuery<ViewOffenderQuery>({
+      query: ViewOffenderDocument,
+      data: {
+        offender: {
+          ...existingData.offender,
+          evidence: [...existingData.offender.evidence, res.createDocument],
+        },
+        __typename: 'Query',
+      },
+      variables,
+    });
+  };
+  const updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation> = (
+    store,
+    { data: res }
+  ) => {
+    if (res?.deleteDocument === null || res?.deleteDocument === undefined)
+      return;
+    const existingData = store.readQuery<ViewOffenderQuery>({
+      query: ViewOffenderDocument,
+      variables,
+    });
+
+    if (!existingData?.offender) return;
+    store.writeQuery<ViewOffenderQuery>({
+      query: ViewOffenderDocument,
+      data: {
+        offender: {
+          ...existingData.offender,
+          evidence: existingData.offender.evidence.filter(
+            ({ id }) => id !== res.deleteDocument?.id
+          ),
+        },
+        __typename: 'Query',
+      },
+      variables,
+    });
+  };
   const [subscribe] = useSubscribeToOffenderMutation();
   const [unsubscribeFromOffender] = useUnsubscribeFromOffenderMutation();
 
@@ -1423,7 +1594,9 @@ const useViewOffender = (offenderId: string): Return => {
   const toggleAddBan = () => {
     setAddBan(!addBan);
   };
-
+  const toggleAddDocument = () => {
+    setAddDocument(() => !addDocument);
+  };
   const onAssociateFilterChange = (value: string[]) => {
     setAssociatedFilters(value);
   };
@@ -1508,6 +1681,10 @@ const useViewOffender = (offenderId: string): Return => {
     toggleAddBan,
     onEditBan,
     onAddBan,
+    addDocument,
+    toggleAddDocument,
+    updateDocumentList,
+    updateDeleteDocument,
   };
 };
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import type { FormInstance } from 'antd';
 import { Button, Col, Form, Input, Row, Skeleton } from 'antd';
-import type { VehicleCardData } from 'types/DataType';
+import type { VehicleData } from 'types/DataType';
 import { useIntl } from 'react-intl';
 import type { ImageData } from 'components/form-components/ImageSelect/ImageSelect.view';
 import ImageSelect from 'components/form-components/ImageSelect/ImageSelect.view';
@@ -9,7 +9,7 @@ import type { FormData } from './useEditVehicleSimple';
 
 interface Props {
   onClose: () => void;
-  editData: VehicleCardData | undefined | null;
+  editData: VehicleData | undefined | null;
   onSubmit: (value: FormData) => void;
   saving: boolean;
   form: FormInstance<FormData>;
@@ -33,7 +33,7 @@ const EditVehicle = ({
           model: editData.model || '',
           colour: editData.colour || '',
           registration: editData.registration || '',
-          images: editData.images || [],
+          images: editData.images || null,
         }}
         layout="vertical"
         onFinish={onSubmit}
@@ -102,9 +102,16 @@ const EditVehicle = ({
           <ImageSelect
             images={
               editData.images
-                ? images?.concat(
-                    editData.images.map((el) => ({ ...el, uid: el.id }))
-                  )
+                ? images
+                    ?.filter(
+                      (el) =>
+                        !editData?.images?.find((el2) => el2.url === el.url)
+                    )
+                    // concat not allowed
+                    // eslint-disable-next-line
+                    .concat(
+                      editData.images.map((el) => ({ ...el, uid: el.id }))
+                    )
                 : images
             }
             value={editData.images}

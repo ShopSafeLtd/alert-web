@@ -84,6 +84,10 @@ const ViewOffender = (): JSX.Element => {
     toggleAddBan,
     onEditBan,
     onAddBan,
+    toggleAddDocument,
+    addDocument,
+    updateDocumentList,
+    updateDeleteDocument,
   } = useViewOffender(offenderId);
 
   return (
@@ -166,6 +170,10 @@ const ViewOffender = (): JSX.Element => {
       toggleAddBan={toggleAddBan}
       onEditBan={onEditBan}
       onAddBan={onAddBan}
+      toggleAddDocument={toggleAddDocument}
+      addDocument={addDocument}
+      updateDocumentList={updateDocumentList}
+      updateDeleteDocument={updateDeleteDocument}
     />
   );
 };

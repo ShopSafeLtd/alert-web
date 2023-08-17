@@ -24,6 +24,8 @@ interface Props {
   saving?: boolean;
   setEditVehicleData?: (value: VehicleData | null) => void;
   onDeleteVehicle?: (id: string) => void;
+  editRights?: boolean;
+  deleteRights?: boolean;
 }
 //  wait to check
 const VehicleTable = ({
@@ -32,6 +34,8 @@ const VehicleTable = ({
   saving,
   setEditVehicleData,
   onDeleteVehicle,
+  editRights,
+  deleteRights,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const navigate = useNavigate();
@@ -97,58 +101,62 @@ const VehicleTable = ({
           width: 100,
           render: (_, record) => (
             <Row gutter={8}>
-              <Col>
-                <Tooltip
-                  title={intl.formatMessage({
-                    defaultMessage: 'Edit Vehicle',
-                    id: 'X/6z9r',
-                  })}
-                >
-                  <Button
-                    size="small"
-                    disabled={saving}
-                    onClick={() => {
-                      if (setEditVehicleData)
-                        setEditVehicleData(record.vehicle);
-                    }}
-                    icon={<FontAwesomeIcon icon={faPenToSquare} />}
-                  />
-                </Tooltip>
-              </Col>
-              <Col>
-                <Tooltip
-                  title={intl.formatMessage({
-                    defaultMessage: 'Remove Vehicle',
-                    id: 'Mcn1/c',
-                  })}
-                >
-                  <Popconfirm
-                    placement="topLeft"
+              {editRights && (
+                <Col>
+                  <Tooltip
                     title={intl.formatMessage({
-                      defaultMessage: 'Remove the vehicle?',
-                      id: 'hHs0lD',
+                      defaultMessage: 'Edit Vehicle',
+                      id: 'X/6z9r',
                     })}
-                    onConfirm={() => {
-                      if (onDeleteVehicle) onDeleteVehicle(record.key);
-                    }}
-                    okText={intl.formatMessage({
-                      defaultMessage: 'Yes',
-                      id: 'a5msuh',
-                    })}
-                    cancelText={intl.formatMessage({
-                      defaultMessage: 'No',
-                      id: 'oUWADl',
-                    })}
-                    overlayInnerStyle={{ padding: 10 }}
                   >
                     <Button
                       size="small"
                       disabled={saving}
-                      icon={<FontAwesomeIcon icon={faTrash} />}
+                      onClick={() => {
+                        if (setEditVehicleData)
+                          setEditVehicleData(record.vehicle);
+                      }}
+                      icon={<FontAwesomeIcon icon={faPenToSquare} />}
                     />
-                  </Popconfirm>
-                </Tooltip>
-              </Col>
+                  </Tooltip>
+                </Col>
+              )}
+              {deleteRights && (
+                <Col>
+                  <Tooltip
+                    title={intl.formatMessage({
+                      defaultMessage: 'Remove Vehicle',
+                      id: 'Mcn1/c',
+                    })}
+                  >
+                    <Popconfirm
+                      placement="topLeft"
+                      title={intl.formatMessage({
+                        defaultMessage: 'Remove the vehicle?',
+                        id: 'hHs0lD',
+                      })}
+                      onConfirm={() => {
+                        if (onDeleteVehicle) onDeleteVehicle(record.key);
+                      }}
+                      okText={intl.formatMessage({
+                        defaultMessage: 'Yes',
+                        id: 'a5msuh',
+                      })}
+                      cancelText={intl.formatMessage({
+                        defaultMessage: 'No',
+                        id: 'oUWADl',
+                      })}
+                      overlayInnerStyle={{ padding: 10 }}
+                    >
+                      <Button
+                        size="small"
+                        disabled={saving}
+                        icon={<FontAwesomeIcon icon={faTrash} />}
+                      />
+                    </Popconfirm>
+                  </Tooltip>
+                </Col>
+              )}
             </Row>
           ),
         },
