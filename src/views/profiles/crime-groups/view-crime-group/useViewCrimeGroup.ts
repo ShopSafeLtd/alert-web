@@ -1,7 +1,9 @@
 import { Modal, notification } from 'antd';
 import type {
+  CreateDocumentMutation,
   CrimeGroupQuery,
   CrimeGroupQueryVariables,
+  DeleteDocumentMutation,
   SuggestedCrimeGroupMembersQuery,
   SuggestedCrimeGroupMembersQueryVariables,
   VehicleCreateWithoutCrimeGroupInput,
@@ -26,6 +28,7 @@ import { useStoreState } from 'state';
 import type { OffenderData, VehicleData } from 'types/DataType';
 import errorNotification from 'types/error_notification';
 import { useIntl } from 'react-intl';
+import type { MutationUpdaterFn } from '@apollo/client';
 
 const { confirm } = Modal;
 interface Return {
@@ -80,6 +83,10 @@ interface Return {
   viewSuggestedOpen: boolean;
   toggleViewSuggested: () => void;
   handleAddSuggestion: (id: string) => void;
+  toggleAddDocument: () => void;
+  addDocument: boolean;
+  updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
+  updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
 }
 
 const useViewCrimeGroup = (crimeGroupId: string): Return => {
@@ -98,6 +105,7 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
   const [optionRowShow, setOptionRowShow] = useState(false);
   const [viewSuggestedOpen, setViewSuggestedOpen] = useState(false);
   const [editUpdateInput, setEditUpdateInput] = useState('');
+  const [addDocument, setAddDocument] = useState(false);
   const [editUpdate, setEditUpdate] = useState<{
     id: string;
     text: string;
@@ -112,14 +120,14 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
   useEffect(() => {
     if (editUpdate) setEditUpdateInput(editUpdate.text);
   }, [editUpdate]);
-
+  const variables = {
+    where: {
+      id: crimeGroupId,
+    },
+  };
   const { data: crimeGroupsData, loading } = useCrimeGroupQuery({
     fetchPolicy: 'cache-and-network',
-    variables: {
-      where: {
-        id: crimeGroupId,
-      },
-    },
+    variables,
     onCompleted: ({ crimeGroup }) => {
       if (crimeGroup?.offenders && crimeGroup.offenders.length > 0) {
         setOffenderIds(crimeGroup.offenders.map(({ id }) => id));
@@ -660,6 +668,60 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
       },
     });
   };
+  // evidence
+  const updateDocumentList: MutationUpdaterFn<CreateDocumentMutation> = (
+    store,
+    { data: res }
+  ) => {
+    if (res?.createDocument === null || res?.createDocument === undefined)
+      return;
+    const existingData = store.readQuery<CrimeGroupQuery>({
+      query: CrimeGroupDocument,
+      variables,
+    });
+
+    if (!existingData?.crimeGroup) return;
+    store.writeQuery<CrimeGroupQuery>({
+      query: CrimeGroupDocument,
+      data: {
+        crimeGroup: {
+          ...existingData.crimeGroup,
+          evidence: [...existingData.crimeGroup.evidence, res.createDocument],
+        },
+        __typename: 'Query',
+      },
+      variables,
+    });
+  };
+  const updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation> = (
+    store,
+    { data: res }
+  ) => {
+    if (res?.deleteDocument === null || res?.deleteDocument === undefined)
+      return;
+    const existingData = store.readQuery<CrimeGroupQuery>({
+      query: CrimeGroupDocument,
+      variables,
+    });
+
+    if (!existingData?.crimeGroup) return;
+    store.writeQuery<CrimeGroupQuery>({
+      query: CrimeGroupDocument,
+      data: {
+        crimeGroup: {
+          ...existingData.crimeGroup,
+          evidence: existingData.crimeGroup.evidence.filter(
+            ({ id }) => id !== res.deleteDocument?.id
+          ),
+        },
+        __typename: 'Query',
+      },
+      variables,
+    });
+  };
+  const toggleAddDocument = () => {
+    setAddDocument(() => !addDocument);
+  };
 
   return {
     data: crimeGroupsData,
@@ -702,6 +764,10 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
     viewSuggestedOpen,
     toggleViewSuggested,
     handleAddSuggestion,
+    toggleAddDocument,
+    addDocument,
+    updateDocumentList,
+    updateDeleteDocument,
   };
 };
 

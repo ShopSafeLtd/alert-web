@@ -158,8 +158,11 @@ const useViewIncident = (incidentId: string): Return => {
   const intl = useIntl();
   const role = useStoreState((state) => state.user.role);
   const userId = useStoreState((state) => state.user.id);
-  const goodsMode = useStoreState((state) => state.scheme.goodsMode);
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const {
+    restrictIncidentAccess,
+    id: schemeId,
+    goodsMode,
+  } = useStoreState((state) => state.scheme);
   const [saving, setSaving] = useState(false);
   const [linkOffender, setLinkOffender] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
@@ -226,6 +229,7 @@ const useViewIncident = (incidentId: string): Return => {
   const { data, loading } = useViewIncidentQuery({
     fetchPolicy: 'cache-and-network',
     variables,
+    skip: role === Role.User && restrictIncidentAccess,
     onCompleted: (res) => {
       setLightboxElements(
         res.incident?.images.map((image) => ({

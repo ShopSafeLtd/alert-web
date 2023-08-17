@@ -78,6 +78,7 @@ const UseRecycledItemListTest = () => {
             name: 'new name',
             autoApproveIncidents: false,
             autoApproveOffenders: false,
+            restrictIncidentAccess: false,
             incidentRetention: 1,
             offenderRetention: 1,
             defaultIncidentEmail: true,

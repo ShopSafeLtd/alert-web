@@ -52,6 +52,7 @@ query User(
     }
     schemes(where: $schemeWhere) {
       id
+      schemeId
       role
     }
     totalLastYearLogin

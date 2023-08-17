@@ -45,6 +45,7 @@ import {
   faSirenOn,
   faTags,
   faTrash,
+  faUpload,
   faUsers,
   faUserTag,
 } from '@fortawesome/pro-light-svg-icons';
@@ -453,68 +454,7 @@ const ViewIncident = ({
                         </Link> */}
                       </Col>
                     )}
-                    {data?.incident?.scheme.mg11Available && (
-                      <Dropdown
-                        overlay={
-                          <Menu
-                            items={[
-                              {
-                                label: intl.formatMessage({
-                                  defaultMessage: 'Create MG11',
-                                  id: 'CpvwMZ',
-                                }),
-                                key: '1',
-                                icon: (
-                                  <FontAwesomeIcon
-                                    size="1x"
-                                    style={{ marginRight: 8 }}
-                                    icon={faPage}
-                                  />
-                                ),
-                                // disabled: !listVehiclesData?.listVehicles.total,
-                                onClick: () =>
-                                  navigate(`/app/mg11/create/${incidentId}`),
-                              },
-                              {
-                                label: intl.formatMessage({
-                                  defaultMessage:
-                                    'Create Business Impact Statement',
-                                  id: 'PPTlxg',
-                                }),
-                                key: '3',
-                                icon: (
-                                  <FontAwesomeIcon
-                                    size="1x"
-                                    style={{ marginRight: 8 }}
-                                    icon={faPage}
-                                  />
-                                ),
-                                // disabled: !listVehiclesData?.listVehicles.total,
-                                onClick: () =>
-                                  navigate(
-                                    `/app/mg11/create-bis/${incidentId || ''}`
-                                  ),
-                              },
-                            ]}
-                          />
-                        }
-                      >
-                        <Button
-                          key="2"
-                          icon={
-                            <FontAwesomeIcon
-                              icon={faPlus}
-                              style={{ marginRight: 5 }}
-                            />
-                          }
-                        >
-                          {intl.formatMessage({
-                            defaultMessage: 'Add Document',
-                            id: 'r9vGqd',
-                          })}
-                        </Button>
-                      </Dropdown>
-                    )}
+
                     {deleteRights && (
                       <Col>
                         <Button
@@ -1469,23 +1409,105 @@ const ViewIncident = ({
                             />
                           )}
                         </Card>
-                        {data?.incident?.scheme.mg11Available && (
-                          <Card style={{ marginTop: 20 }}>
-                            <Row
-                              gutter={8}
-                              align="middle"
-                              style={{ marginBottom: 10 }}
-                            >
-                              <Col flex={1}>
-                                <Title level={4}>
-                                  {intl.formatMessage({
-                                    defaultMessage: 'Evidence',
-                                    id: '6g7+6N',
-                                  })}
-                                </Title>
-                              </Col>
-                              {editRights && (
-                                <Col>
+
+                        <Card style={{ marginTop: 20 }}>
+                          <Row
+                            gutter={8}
+                            align="middle"
+                            style={{ marginBottom: 10 }}
+                          >
+                            <Col flex={1}>
+                              <Title level={4}>
+                                {intl.formatMessage({
+                                  defaultMessage: 'Evidence',
+                                  id: '6g7+6N',
+                                })}
+                              </Title>
+                            </Col>
+                            {editRights && (
+                              <Col>
+                                {data?.incident?.scheme.mg11Available ? (
+                                  <Dropdown
+                                    overlay={
+                                      <Menu
+                                        items={[
+                                          {
+                                            label: intl.formatMessage({
+                                              defaultMessage: 'Create MG11',
+                                              id: 'CpvwMZ',
+                                            }),
+                                            key: '1',
+                                            icon: (
+                                              <FontAwesomeIcon
+                                                size="1x"
+                                                style={{ marginRight: 8 }}
+                                                icon={faPage}
+                                              />
+                                            ),
+                                            // disabled: !listVehiclesData?.listVehicles.total,
+                                            onClick: () =>
+                                              navigate(
+                                                `/app/mg11/create/${incidentId}`
+                                              ),
+                                          },
+                                          {
+                                            label: intl.formatMessage({
+                                              defaultMessage:
+                                                'Create Business Impact Statement',
+                                              id: 'PPTlxg',
+                                            }),
+                                            key: '2',
+                                            icon: (
+                                              <FontAwesomeIcon
+                                                size="1x"
+                                                style={{ marginRight: 8 }}
+                                                icon={faPage}
+                                              />
+                                            ),
+                                            // disabled: !listVehiclesData?.listVehicles.total,
+                                            onClick: () =>
+                                              navigate(
+                                                `/app/mg11/create-bis/${
+                                                  incidentId || ''
+                                                }`
+                                              ),
+                                          },
+                                          {
+                                            label: intl.formatMessage({
+                                              defaultMessage: 'Upload',
+                                              id: 'p4N05H',
+                                            }),
+                                            key: '3',
+                                            icon: (
+                                              <FontAwesomeIcon
+                                                size="1x"
+                                                style={{ marginRight: 8 }}
+                                                icon={faUpload}
+                                              />
+                                            ),
+                                            // disabled: !listVehiclesData?.listVehicles.total,
+                                            onClick: () => toggleAddDocument(),
+                                          },
+                                        ]}
+                                      />
+                                    }
+                                  >
+                                    <Button
+                                      // key="2"
+                                      icon={
+                                        <FontAwesomeIcon
+                                          icon={faPlus}
+                                          style={{ marginRight: 5 }}
+                                        />
+                                      }
+                                    >
+                                      {intl.formatMessage({
+                                        defaultMessage: 'Add Evidence',
+                                        id: 'vgVasT',
+                                      })}
+                                    </Button>
+                                  </Dropdown>
+                                ) : (
                                   <Button
                                     size="small"
                                     onClick={toggleAddDocument}
@@ -1501,29 +1523,47 @@ const ViewIncident = ({
                                       id: 'vgVasT',
                                     })}
                                   </Button>
-                                </Col>
-                              )}
-                            </Row>
-
-                            {data?.incident?.evidence.length && !loading ? (
-                              <EvidenceTable
-                                evidence={data?.incident?.evidence}
-                                deleteRights={deleteRights}
-                                title={ProfileUpdatedModel.Incident}
-                                update={updateDeleteDocument}
-                              />
-                            ) : (
-                              <Empty
-                                description={intl.formatMessage({
-                                  defaultMessage:
-                                    'No evidence for this incident',
-                                  id: 'GkZRlh',
-                                })}
-                                image={Empty.PRESENTED_IMAGE_SIMPLE}
-                              />
+                                )}
+                              </Col>
                             )}
-                          </Card>
-                        )}
+                            {/* {editRights && (
+                              <Col>
+                                <Button
+                                  size="small"
+                                  onClick={toggleAddDocument}
+                                  icon={
+                                    <FontAwesomeIcon
+                                      icon={faPlus}
+                                      style={{ marginRight: 5 }}
+                                    />
+                                  }
+                                >
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Add Evidence',
+                                    id: 'vgVasT',
+                                  })}
+                                </Button>
+                              </Col>
+                            )} */}
+                          </Row>
+
+                          {data?.incident?.evidence.length && !loading ? (
+                            <EvidenceTable
+                              evidence={data?.incident?.evidence}
+                              title={ProfileUpdatedModel.Incident}
+                              update={updateDeleteDocument}
+                            />
+                          ) : (
+                            <Empty
+                              description={intl.formatMessage({
+                                defaultMessage: 'No evidence for this incident',
+                                id: 'GkZRlh',
+                              })}
+                              image={Empty.PRESENTED_IMAGE_SIMPLE}
+                            />
+                          )}
+                        </Card>
+
                         {editRights && (
                           <Card>
                             <Row

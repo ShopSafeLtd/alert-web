@@ -18,7 +18,11 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import type { VehicleQuery } from 'graphql/generated';
+import type {
+  CreateDocumentMutation,
+  DeleteDocumentMutation,
+  VehicleQuery,
+} from 'graphql/generated';
 import { UpdateType } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -26,6 +30,7 @@ import {
   faBellSlash,
   faChevronDown,
   faEdit,
+  faPlus,
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
 import EditVehicle from 'components/form-components/Vehicle/EditVehicle';
@@ -43,6 +48,10 @@ import CrimeGroupTable from 'components/tables/CrimeGroupTable';
 import IncidentTable from 'components/tables/IncidentTable';
 import type { VehicleData } from 'types/DataType';
 import { FormattedMessage, useIntl } from 'react-intl';
+import type { MutationUpdaterFn } from '@apollo/client';
+import EvidenceTable from 'components/tables/EvidenceTable';
+import { ProfileUpdatedModel } from 'types/enums/profile-update-type';
+import AddDocument from 'components/form-components/documents/AddDocument';
 import useStyles from './ViewVehicle.styles';
 
 const { Title } = Typography;
@@ -94,6 +103,10 @@ interface Props {
   vehicleId: string;
   toggleSubscribe: () => void;
   submitEditVehicle: (value: VehicleData) => void;
+  toggleAddDocument: () => void;
+  addDocument: boolean;
+  updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
+  updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
 }
 
 const ViewVehicle = ({
@@ -123,6 +136,10 @@ const ViewVehicle = ({
   vehicleId,
   toggleSubscribe,
   submitEditVehicle,
+  toggleAddDocument,
+  addDocument,
+  updateDocumentList,
+  updateDeleteDocument,
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
@@ -471,6 +488,54 @@ const ViewVehicle = ({
                 />
               )}
             </Card>
+
+            <Card style={{ marginTop: 20 }}>
+              <Row gutter={8} align="middle" style={{ marginBottom: 10 }}>
+                <Col flex={1}>
+                  <Title level={4}>
+                    {intl.formatMessage({
+                      defaultMessage: 'Evidence',
+                      id: '6g7+6N',
+                    })}
+                  </Title>
+                </Col>
+                {editRights && (
+                  <Col>
+                    <Button
+                      size="small"
+                      onClick={toggleAddDocument}
+                      icon={
+                        <FontAwesomeIcon
+                          icon={faPlus}
+                          style={{ marginRight: 5 }}
+                        />
+                      }
+                    >
+                      {intl.formatMessage({
+                        defaultMessage: 'Add Evidence',
+                        id: 'vgVasT',
+                      })}
+                    </Button>
+                  </Col>
+                )}
+              </Row>
+
+              {data?.vehicle?.evidence.length && !loading ? (
+                <EvidenceTable
+                  evidence={data?.vehicle?.evidence}
+                  title={ProfileUpdatedModel.Vehicle}
+                  update={updateDeleteDocument}
+                />
+              ) : (
+                <Empty
+                  description={intl.formatMessage({
+                    defaultMessage: 'No evidence for this vehicle',
+                    id: 'Ca6r3Z',
+                  })}
+                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                />
+              )}
+            </Card>
           </div>
         </Col>
         <Col span={12}>
@@ -814,6 +879,27 @@ const ViewVehicle = ({
           }}
         />
       </Row>
+      {/* evidence */}
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Add Evidence',
+          id: 'vgVasT',
+        })}
+        visible={addDocument}
+        width="600"
+        onClose={toggleAddDocument}
+        zIndex={1001}
+      >
+        {addDocument ? (
+          <AddDocument
+            vehicleId={data?.vehicle?.id || ''}
+            onClose={toggleAddDocument}
+            update={updateDocumentList}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
     </div>
   );
 };

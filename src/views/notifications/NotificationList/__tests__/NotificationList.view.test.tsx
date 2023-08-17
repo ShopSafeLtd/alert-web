@@ -21,6 +21,7 @@ describe('List Officer View', () => {
               name: 'scheme',
               autoApproveIncidents: false,
               autoApproveOffenders: false,
+              restrictIncidentAccess: false,
               defaultPublicOffenderDOB: false,
               members: [
                 {

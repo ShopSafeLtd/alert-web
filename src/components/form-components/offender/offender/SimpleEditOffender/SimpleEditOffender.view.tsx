@@ -45,7 +45,13 @@ const EditOffender = ({
   const imagesRequired = useStoreState(
     (state) => state.scheme.imagesRequiredOnOffenders
   );
-
+  const filteredImages = images?.filter(
+    (el) => !data?.images?.find((el2) => el2.url === el.url)
+  );
+  const vehicleImages = data?.images?.map((el) => ({ ...el, uid: el.id }));
+  const allImages = vehicleImages
+    ? [...(filteredImages || []), ...vehicleImages]
+    : images;
   return (
     <div className="list-view">
       <Form<FormData>
@@ -406,21 +412,7 @@ const EditOffender = ({
             },
           ]}
         >
-          <ImageSelect
-            images={
-              data.images
-                ? images
-                    ?.filter(
-                      (el) => !data?.images?.find((el2) => el2.url === el.url)
-                    )
-                    // ???
-                    // concat not allowed
-                    // eslint-disable-next-line
-                    .concat(data.images.map((el) => ({ ...el, uid: el.id })))
-                : images
-            }
-            value={data.images}
-          />
+          <ImageSelect images={allImages} value={data.images} />
         </Form.Item>
         <Form.Item>
           <Row style={{ marginTop: 30 }} gutter={10} justify="end">

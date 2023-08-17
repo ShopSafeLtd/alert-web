@@ -36,6 +36,7 @@ describe('Detail Officer View', () => {
           scheme: {
             customTranslations: [],
             defaultPublicOffenderDOB: true,
+            restrictIncidentAccess: false,
             autoApproveIncidents: true,
             autoApproveOffenders: true,
             id: 'ckdhbosuv01028oiblmjgeuii',

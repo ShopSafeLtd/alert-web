@@ -37,6 +37,7 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
     }
     scheme {
       mg11Available
+      restrictIncidentAccess
     }
     crimeTypes {
       id

@@ -19,6 +19,7 @@ import { useIntl } from 'react-intl';
 interface FormData {
   name: string;
   logo?: { id: string; url: string; optimised: string };
+  restrictIncidentAccess: boolean;
   autoApproveOffenders: boolean;
   autoApproveIncidents: boolean;
   defaultIncidentEmail: boolean;
@@ -152,6 +153,7 @@ const useSchemeDetail = (): Return => {
         },
         data: {
           name: { set: data.name },
+          restrictIncidentAccess: { set: data.restrictIncidentAccess },
           autoApproveIncidents: { set: data.autoApproveOffenders },
           autoApproveOffenders: { set: data.autoApproveIncidents },
           incidentRetention: { set: data.incidentRetention },

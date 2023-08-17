@@ -32,6 +32,10 @@ const ViewVehicle = () => {
     confirmDeleteUpdate,
     toggleSubscribe,
     submitEditVehicle,
+    toggleAddDocument,
+    addDocument,
+    updateDocumentList,
+    updateDeleteDocument,
   } = useViewVehicle(vehicleId);
 
   return (
@@ -62,6 +66,10 @@ const ViewVehicle = () => {
       vehicleId={vehicleId}
       toggleSubscribe={toggleSubscribe}
       submitEditVehicle={submitEditVehicle}
+      toggleAddDocument={toggleAddDocument}
+      addDocument={addDocument}
+      updateDocumentList={updateDocumentList}
+      updateDeleteDocument={updateDeleteDocument}
     />
   );
 };

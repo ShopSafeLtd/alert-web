@@ -25,6 +25,13 @@ const EditVehicle = ({
   images,
 }: Props): JSX.Element => {
   const intl = useIntl();
+  const filteredImages = images?.filter(
+    (el) => !editData?.images?.find((el2) => el2.url === el.url)
+  );
+  const vehicleImages = editData?.images?.map((el) => ({ ...el, uid: el.id }));
+  const allImages = vehicleImages
+    ? [...(filteredImages || []), ...vehicleImages]
+    : images;
   return editData ? (
     <div>
       <Form<FormData>
@@ -99,23 +106,7 @@ const EditVehicle = ({
             id: '+sAAjK',
           })}
         >
-          <ImageSelect
-            images={
-              editData.images
-                ? images
-                    ?.filter(
-                      (el) =>
-                        !editData?.images?.find((el2) => el2.url === el.url)
-                    )
-                    // concat not allowed
-                    // eslint-disable-next-line
-                    .concat(
-                      editData.images.map((el) => ({ ...el, uid: el.id }))
-                    )
-                : images
-            }
-            value={editData.images}
-          />
+          <ImageSelect images={allImages} value={editData.images} />
         </Form.Item>
         <Form.Item>
           <Row style={{ marginTop: 30 }} gutter={16} justify="end">

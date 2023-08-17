@@ -13,6 +13,7 @@ export interface SetSchemePayload {
   name: string;
   autoApproveIncidents: boolean;
   autoApproveOffenders: boolean;
+  restrictIncidentAccess: boolean;
   defaultPublicOffenderDOB: boolean;
   id: string;
   logo?: string | null | undefined;
@@ -31,6 +32,7 @@ export interface SchemeModel {
   name: string;
   autoApproveIncidents: boolean;
   autoApproveOffenders: boolean;
+  restrictIncidentAccess: boolean;
   defaultPublicOffenderDOB: boolean;
   setScheme: Action<SchemeModel, SetSchemePayload>;
   clearScheme: Action<SchemeModel>;
@@ -49,6 +51,7 @@ const userModel: SchemeModel = {
   id: '',
   autoApproveIncidents: false,
   autoApproveOffenders: false,
+  restrictIncidentAccess: false,
   defaultPublicOffenderDOB: false,
   name: 'Loading...',
   logo: '',
@@ -64,6 +67,7 @@ const userModel: SchemeModel = {
     state.id = payload.id;
     state.autoApproveIncidents = payload.autoApproveIncidents;
     state.autoApproveOffenders = payload.autoApproveOffenders;
+    state.restrictIncidentAccess = payload.restrictIncidentAccess;
     state.defaultPublicOffenderDOB = payload.defaultPublicOffenderDOB;
     state.name = payload.name;
     state.logo = payload.logo;
@@ -80,6 +84,7 @@ const userModel: SchemeModel = {
     state.id = '';
     state.autoApproveIncidents = false;
     state.autoApproveOffenders = false;
+    state.restrictIncidentAccess = false;
     state.defaultPublicOffenderDOB = false;
     state.name = '';
     state.logo = '';

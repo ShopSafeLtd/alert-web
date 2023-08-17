@@ -1533,56 +1533,56 @@ const ViewOffender = ({
                 />
               )}
             </Card>
-            {data?.offender?.scheme.mg11Available && (
-              <Card style={{ marginTop: 20 }}>
-                <Row gutter={8} align="middle" style={{ marginBottom: 10 }}>
-                  <Col flex={1}>
-                    <Title level={4}>
-                      {intl.formatMessage({
-                        defaultMessage: 'Evidence',
-                        id: '6g7+6N',
-                      })}
-                    </Title>
-                  </Col>
-                  {editRights && (
-                    <Col>
-                      <Button
-                        size="small"
-                        onClick={toggleAddDocument}
-                        icon={
-                          <FontAwesomeIcon
-                            icon={faPlus}
-                            style={{ marginRight: 5 }}
-                          />
-                        }
-                      >
-                        {intl.formatMessage({
-                          defaultMessage: 'Add Evidence',
-                          id: 'vgVasT',
-                        })}
-                      </Button>
-                    </Col>
-                  )}
-                </Row>
 
-                {data?.offender?.evidence.length && !loading ? (
-                  <EvidenceTable
-                    evidence={data?.offender?.evidence}
-                    deleteRights={deleteRights}
-                    title={ProfileUpdatedModel.Offender}
-                    update={updateDeleteDocument}
-                  />
-                ) : (
-                  <Empty
-                    description={intl.formatMessage({
-                      defaultMessage: 'No evidence for this offender',
-                      id: 'jOOKhL',
+            <Card style={{ marginTop: 20 }}>
+              <Row gutter={8} align="middle" style={{ marginBottom: 10 }}>
+                <Col flex={1}>
+                  <Title level={4}>
+                    {intl.formatMessage({
+                      defaultMessage: 'Evidence',
+                      id: '6g7+6N',
                     })}
-                    image={Empty.PRESENTED_IMAGE_SIMPLE}
-                  />
+                  </Title>
+                </Col>
+                {editRights && (
+                  <Col>
+                    <Button
+                      size="small"
+                      onClick={toggleAddDocument}
+                      icon={
+                        <FontAwesomeIcon
+                          icon={faPlus}
+                          style={{ marginRight: 5 }}
+                        />
+                      }
+                    >
+                      {intl.formatMessage({
+                        defaultMessage: 'Add Evidence',
+                        id: 'vgVasT',
+                      })}
+                    </Button>
+                  </Col>
                 )}
-              </Card>
-            )}
+              </Row>
+
+              {data?.offender?.evidence &&
+              data.offender.evidence.length > 0 &&
+              !loading ? (
+                <EvidenceTable
+                  evidence={data?.offender?.evidence}
+                  title={ProfileUpdatedModel.Offender}
+                  update={updateDeleteDocument}
+                />
+              ) : (
+                <Empty
+                  description={intl.formatMessage({
+                    defaultMessage: 'No evidence for this offender',
+                    id: 'jOOKhL',
+                  })}
+                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                />
+              )}
+            </Card>
           </div>
         </Col>
         <Col span={8}>
