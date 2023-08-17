@@ -1,0 +1,5 @@
+mutation DeleteQuestionGroup($where: QuestionGroupWhereUniqueInput!) {
+  deleteOneQuestionGroup(where: $where) {
+    id
+  }
+}

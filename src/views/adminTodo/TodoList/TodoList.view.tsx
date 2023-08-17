@@ -13,6 +13,7 @@ import {
   Popconfirm,
   Radio,
   Row,
+  Select,
   Skeleton,
   Table,
   Tooltip,
@@ -22,15 +23,17 @@ import type { MutationUpdaterFn } from '@apollo/client';
 import AddTodo from 'components/form-components/Todos/AddTodo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
-import { Link } from 'react-router-dom';
-import getTodoUrl from 'utils/get-to-do-url';
 import { useIntl } from 'react-intl';
 import FormatCalendar from 'utils/format-calendar-24h';
 import { useStoreState } from 'state';
 import useStyles from './TodoList.styles';
 import ViewTodo from '../../../components/form-components/Todos/ViewTodo/Todo.container';
+import type { ListData } from '../useActivities';
 
 const { Panel } = Collapse;
+
+type TemplateData = ListData;
+
 interface Props {
   data:
     | Exclude<ListTodosQuery['listTodos'], undefined | null>
@@ -51,6 +54,9 @@ interface Props {
   toggleAllSchemes: () => void;
   selectedTodo: string | null;
   setSelectedTodo: (id: string | null) => void;
+  templateData: ListData[];
+  selectedTemplate: TemplateData | null;
+  selectTemplate: (id: string | null) => void;
 }
 
 const AdminTodos = ({
@@ -70,6 +76,9 @@ const AdminTodos = ({
   toggleAllSchemes,
   selectedTodo,
   setSelectedTodo,
+  templateData,
+  selectTemplate,
+  selectedTemplate,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
@@ -83,7 +92,7 @@ const AdminTodos = ({
   };
   return (
     <div className="list-view">
-      <Row gutter={8} style={{ marginBottom: 10 }}>
+      <Row gutter={8} style={{ marginBottom: 15 }}>
         <Col span={8}>
           <Input
             // value={search}
@@ -96,6 +105,45 @@ const AdminTodos = ({
           />
         </Col>
         <Col flex={1} />
+
+        {templateData.length > 0 && (
+          <Col span={5}>
+            <Select
+              style={{ width: '100%' }}
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Create Activity from Template',
+                id: '1RRG2d',
+              })}
+              onSelect={(value) => selectTemplate(value)}
+              value={null}
+              options={templateData.map((item) => ({
+                label: item.name,
+                value: item.id,
+              }))}
+            />
+          </Col>
+        )}
+        <Col>
+          <Button
+            type="primary"
+            onClick={toggleAddTodo}
+            disabled={saving}
+            icon={
+              <FontAwesomeIcon
+                icon={faPlus}
+                size="lg"
+                style={{ marginRight: 5 }}
+              />
+            }
+          >
+            {intl.formatMessage({
+              defaultMessage: 'New Activity',
+              id: '6kyt/v',
+            })}
+          </Button>
+        </Col>
+      </Row>
+      <Row gutter={8} style={{ marginBottom: 15 }}>
         <Col>
           <Radio.Group defaultValue="CURRENT" onChange={toggleAllSchemes}>
             <Radio.Button value="CURRENT">
@@ -127,25 +175,6 @@ const AdminTodos = ({
               })}
             </Radio.Button>
           </Radio.Group>
-        </Col>
-        <Col>
-          <Button
-            type="primary"
-            onClick={toggleAddTodo}
-            disabled={saving}
-            icon={
-              <FontAwesomeIcon
-                icon={faPlus}
-                size="lg"
-                style={{ marginRight: 5 }}
-              />
-            }
-          >
-            {intl.formatMessage({
-              defaultMessage: 'New Activity',
-              id: '6kyt/v',
-            })}
-          </Button>
         </Col>
       </Row>
       <Card loading={loading}>
@@ -189,9 +218,6 @@ const AdminTodos = ({
                   defaultMessage: 'Name',
                   id: 'HAlOn1',
                 }),
-                render: (value, record) => (
-                  <Link to={`${getTodoUrl(record.todo)}`}>{value}</Link>
-                ),
               },
               {
                 key: 'description',
@@ -248,7 +274,7 @@ const AdminTodos = ({
                 }),
                 dataIndex: 'actions',
                 key: 'actions',
-                width: 100,
+                width: 130,
                 render: (_, record) => (
                   <Button
                     onClick={() => {
@@ -440,11 +466,15 @@ const AdminTodos = ({
           id: '8RIxKm',
         })}
         open={addTodo}
-        width="800"
+        width={800}
         onClose={toggleAddTodo}
       >
         {addTodo ? (
-          <AddTodo update={updateTodoList} onClose={toggleAddTodo} />
+          <AddTodo
+            update={updateTodoList}
+            onClose={toggleAddTodo}
+            initData={selectedTemplate ?? undefined}
+          />
         ) : (
           <div />
         )}
@@ -455,7 +485,7 @@ const AdminTodos = ({
           id: '8fwjt4',
         })}
         open={!!selectedTodo}
-        width="800"
+        width={800}
         onClose={() => setSelectedTodo(null)}
       >
         {selectedTodo ? (

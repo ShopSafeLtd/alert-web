@@ -1,28 +1,15 @@
 import React from 'react';
 import type { FormInstance } from 'antd';
-import {
-  Button,
-  Col,
-  DatePicker,
-  Drawer,
-  Form,
-  Input,
-  Row,
-  Select,
-} from 'antd';
-import type { RangePickerProps } from 'antd/es/date-picker';
-import type { SelectOptions } from 'types/DataType';
+import { Button, Col, Drawer, Form, Input, InputNumber, Row } from 'antd';
 import { useIntl } from 'react-intl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
-import type { FormData } from './useAddTodo';
-import CreateQuestionContainer from '../../createQuestion/CreateQuestion.container';
+import type { FormData } from './useCreateActivityTemplate';
+import CreateQuestionContainer from '../createQuestion/CreateQuestion.container';
 
 interface Props {
   onClose: () => void;
   onSubmit: (value: FormData) => void;
-  adminUsersData: SelectOptions[] | undefined;
-  usersLoading: boolean;
   saving: boolean;
   addQuestion: boolean;
   setAddQuestion: (value: boolean) => void;
@@ -34,15 +21,10 @@ interface Props {
   form: FormInstance<FormData>;
 }
 
-const disabledDate: RangePickerProps['disabledDate'] = (current) =>
-  current && current.valueOf() < Date.now() - 3600 * 1000 * 24;
-
 const AddTodo = ({
   onSubmit,
   onClose,
   saving,
-  adminUsersData,
-  usersLoading,
   addQuestion,
   setAddQuestion,
   update,
@@ -69,8 +51,9 @@ const AddTodo = ({
                 {
                   required: true,
                   message: intl.formatMessage({
-                    id: '5Ei/wg',
-                    defaultMessage: 'Please enter a name for the new to-do.',
+                    id: '02vNtJ',
+                    defaultMessage:
+                      'Please enter a name for the created activity.',
                   }),
                 },
               ]}
@@ -82,58 +65,23 @@ const AddTodo = ({
         <Row gutter={16}>
           <Col span={23}>
             <Form.Item
-              name="dueDate"
+              name="defaultDueDate"
               label={intl.formatMessage({
-                id: '8XUukm',
-                defaultMessage: 'Due Date',
+                id: 'NQ90za',
+                defaultMessage: 'Default due days',
               })}
               rules={[
                 {
                   required: true,
                   message: intl.formatMessage({
-                    id: 'G4f9uY',
+                    id: '9EDzmS',
                     defaultMessage:
-                      'Please select a due date for the new to-do.',
+                      'Please select a default number of days the activity should be required to be finished by.',
                   }),
                 },
               ]}
             >
-              <DatePicker
-                disabled={saving}
-                disabledDate={disabledDate}
-                style={{ width: '100%' }}
-              />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={23}>
-            <Form.Item
-              name="assignedUsers"
-              label={intl.formatMessage({
-                id: 'Y03BBv',
-                defaultMessage: 'Assign To Admins',
-              })}
-              rules={[
-                {
-                  required: true,
-                  message: intl.formatMessage({
-                    id: '/TfPy3',
-                    defaultMessage:
-                      'Please selected at least one admin for the new to-do.',
-                  }),
-                },
-              ]}
-            >
-              <Select
-                loading={usersLoading}
-                disabled={saving}
-                mode="multiple"
-                maxTagCount={3}
-                options={adminUsersData}
-                optionFilterProp="label"
-                optionLabelProp="label"
-              />
+              <InputNumber disabled={saving} min={0} />
             </Form.Item>
           </Col>
         </Row>
@@ -208,8 +156,8 @@ const AddTodo = ({
                 loading={saving}
               >
                 {intl.formatMessage({
-                  id: '6kyt/v',
-                  defaultMessage: 'New Activity',
+                  id: 'jvo0vs',
+                  defaultMessage: 'Save',
                 })}
               </Button>
             </Col>

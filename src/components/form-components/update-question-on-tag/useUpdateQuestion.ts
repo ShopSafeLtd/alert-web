@@ -8,6 +8,7 @@ import {
   useUpdateQuestionOnTagMutation,
 } from '../../../graphql/generated';
 import errorNotification from '../../../types/error_notification';
+import type { TagQuestion } from './UpdateQuestion.container';
 
 interface Return {
   loading: boolean;
@@ -24,16 +25,31 @@ export interface FormData {
   origOptions: string[];
   newOptions: string[];
   required: boolean;
+  dependentOn: string;
+  dependentAnswer: string;
 }
 
 const { useForm } = Form;
 
 interface Props {
   onClose: () => void;
-  updateQuestionOnTag: (question: string, tagId: string) => void;
+  updateQuestionOnTag: (
+    question: string,
+    tagId: string,
+    dependentOn?: {
+      tagQuestionId: string;
+      questionId: string;
+      answer: string;
+    }
+  ) => void;
   tagQId: string;
   questionId: string;
   required: boolean;
+  tagQuestions: TagQuestion[];
+  dependent?: {
+    dependentOn: string;
+    dependentAnswer: string;
+  };
 }
 
 const useUpdateQuestion = ({
@@ -42,6 +58,8 @@ const useUpdateQuestion = ({
   questionId,
   required,
   updateQuestionOnTag,
+  tagQuestions,
+  dependent,
 }: Props): Return => {
   const intl = useIntl();
 
@@ -54,6 +72,8 @@ const useUpdateQuestion = ({
     newQuestion: '',
     origOptions: [],
     newOptions: [],
+    dependentOn: '',
+    dependentAnswer: '',
   });
 
   const { data: questionData, loading } = useQuestionDetailsQuery({
@@ -99,6 +119,10 @@ const useUpdateQuestion = ({
         }
         return [];
       };
+      const checkExists = tagQuestions.find(
+        (tagQ) => tagQ.questionId === questionId
+      );
+
       setData({
         type: questionData.question?.type || AnswerType.String,
         required,
@@ -106,6 +130,8 @@ const useUpdateQuestion = ({
         newQuestion: questionData.question?.questionFormatted || '',
         newOptions: questionData.question?.optionsFormatted || [],
         origOptions: formatOption(),
+        dependentOn: checkExists ? dependent?.dependentOn || '' : '',
+        dependentAnswer: checkExists ? dependent?.dependentAnswer || '' : '',
       });
 
       form.setFieldsValue({
@@ -115,6 +141,8 @@ const useUpdateQuestion = ({
         newQuestion: questionData.question?.questionFormatted || '',
         newOptions: questionData.question?.optionsFormatted || [],
         origOptions: formatOption(),
+        dependentOn: checkExists ? dependent?.dependentOn || '' : '',
+        dependentAnswer: checkExists ? dependent?.dependentAnswer || '' : '',
       });
     }
   }, [questionData, required]);
@@ -122,7 +150,20 @@ const useUpdateQuestion = ({
   const onSubmit = (values: FormData) => {
     setSaving(true);
 
-    updateQuestionOnTag(values.newQuestion, questionId);
+    const dependentOnTag = tagQuestions.find(
+      (tagQ) => tagQ.tagQuestionId === values.dependentOn
+    );
+    updateQuestionOnTag(
+      values.newQuestion,
+      questionId,
+      dependentOnTag
+        ? {
+            tagQuestionId: dependentOnTag?.tagQuestionId,
+            questionId: dependentOnTag?.questionId,
+            answer: values.dependentAnswer,
+          }
+        : undefined
+    );
 
     void updateQuestion({
       variables: {
@@ -132,6 +173,9 @@ const useUpdateQuestion = ({
           origOptions: data.origOptions,
           origQuestion: data.origQuestion,
           questionId,
+          dependentAnswer: values.dependentAnswer ?? undefined,
+          dependentOnQId: dependentOnTag?.questionId,
+          dependentOnTagQId: values.dependentOn ?? undefined,
           tag: {
             id: tagQId,
             req: values.required,

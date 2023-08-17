@@ -1,0 +1,12 @@
+mutation CreateOneQuestionGroup($data: QuestionGroupCreateInput!) {
+  createOneQuestionGroup(data: $data) {
+    id
+    name
+    description
+    defaultDueDate
+    questions {
+      questionFormatted
+      id
+    }
+  }
+}
