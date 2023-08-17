@@ -819,6 +819,8 @@ const useAddIncident = (): Return => {
               tagQuestionId: question?.tagQuestionId || '',
               value: '',
               options: question?.options || [],
+              dependentOnQuestionId: question?.dependentOnQuestionId || null,
+              dependentOnAnswerValue: question?.dependentOnAnswerValue || null,
             }))
           );
       }

@@ -1,14 +1,13 @@
-import type { MutationUpdaterFn } from '@apollo/client';
-import type { CreateTodoMutation } from 'graphql/generated';
 import React from 'react';
 
-import View from './AddTodo.view';
-import useAddTodo from './useAddTodo';
+import View from './ActivityTemplate.view';
+import useCreateActivityTemplate from './useCreateActivityTemplate';
+import type { ListData } from '../../../views/adminTodo/useActivities';
 
 interface Props {
   onClose: () => void;
-  update?: MutationUpdaterFn<CreateTodoMutation>;
-  incidentId?: string;
+  update: (item: ListData, type: 'create' | 'update' | 'delete') => void;
+  id?: string;
   initData?: {
     name: string;
     description: string;
@@ -20,29 +19,27 @@ interface Props {
   };
 }
 
-const AddTodo = ({
-  update: updateMutation,
+const ActivityTemplateForm = ({
+  update,
   onClose,
-  incidentId,
   initData,
+  id,
 }: Props): JSX.Element => {
   const {
     onSubmit,
     saving,
-    adminUsersData,
-    usersLoading,
     addQuestion,
     setAddQuestion,
-    update,
     selectedIds,
     selectedQuestions,
     setSelectedQuestions,
     setSelectedIds,
     form,
-  } = useAddTodo({
+    updateQs,
+  } = useCreateActivityTemplate({
     onClose,
-    updateMutation,
-    incidentId,
+    id,
+    update,
     initData,
   });
 
@@ -52,17 +49,15 @@ const AddTodo = ({
       setSelectedIds={setSelectedIds}
       addQuestion={addQuestion}
       setAddQuestion={setAddQuestion}
-      update={update}
+      update={updateQs}
       selectedIds={selectedIds}
       selectedQuestions={selectedQuestions}
       setSelectedQuestions={setSelectedQuestions}
       onSubmit={onSubmit}
       onClose={onClose}
       saving={saving}
-      adminUsersData={adminUsersData}
-      usersLoading={usersLoading}
     />
   );
 };
 
-export default AddTodo;
+export default ActivityTemplateForm;

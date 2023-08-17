@@ -1,12 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/ban-ts-comment */
 import {
   Col,
   DatePicker,
-  TimePicker,
   Form,
   Input,
   InputNumber,
   Radio,
   Row,
+  TimePicker,
 } from 'antd';
 import React from 'react';
 import { AnswerType } from 'graphql/generated';
@@ -100,137 +101,233 @@ interface Props {
 
 const CustomQuestions = ({ questions, disabled }: Props) => {
   const intl = useIntl();
+
+  const getFieldType = (question: CustomQuestion, type: AnswerType) => {
+    switch (type) {
+      case AnswerType.String: {
+        return (
+          <Input.TextArea
+            style={{ maxWidth: '50%' }}
+            rows={1}
+            disabled={disabled}
+          />
+        );
+      }
+      case AnswerType.Date: {
+        return <StringDate disabled={disabled} />;
+      }
+
+      case AnswerType.Time: {
+        return <StringTime disabled={disabled} />;
+      }
+      case AnswerType.Boolean: {
+        return (
+          <Radio.Group
+            options={[
+              {
+                label: intl.formatMessage({
+                  defaultMessage: 'Yes',
+                  id: 'a5msuh',
+                }),
+                value: 'true',
+              },
+              {
+                label: intl.formatMessage({
+                  defaultMessage: 'No',
+                  id: 'oUWADl',
+                }),
+                value: 'false',
+              },
+            ]}
+            optionType="button"
+            disabled={disabled}
+          />
+        );
+      }
+      case AnswerType.Number: {
+        return <StringInputNumber disabled={disabled} />;
+      }
+      case AnswerType.Select: {
+        return <StringSelect disabled={disabled} options={question.options} />;
+      }
+      default: {
+        return null;
+      }
+    }
+  };
+
   return (
     <Row>
-      {questions.map((question) => (
-        <Col span={24}>
-          {question.answerType === AnswerType.String && (
-            <Form.Item
-              name={question.questionId}
-              label={question.label}
-              rules={[
-                {
-                  required: question.required,
-                  message: intl.formatMessage({
-                    id: '6B5Jtu',
-                    defaultMessage: 'This field is required.',
-                  }),
-                },
-              ]}
-            >
-              <Input.TextArea
-                style={{ maxWidth: '50%' }}
-                rows={1}
-                disabled={disabled}
-              />
-            </Form.Item>
-          )}
-          {question.answerType === AnswerType.Date && (
-            <Form.Item
-              name={question.questionId}
-              label={question.label}
-              rules={[
-                {
-                  required: question.required,
-                  message: intl.formatMessage({
-                    id: '6B5Jtu',
-                    defaultMessage: 'This field is required.',
-                  }),
-                },
-              ]}
-            >
-              <StringDate disabled={disabled} />
-            </Form.Item>
-          )}
-          {question.answerType === AnswerType.Time && (
-            <Form.Item
-              name={question.questionId}
-              label={question.label}
-              rules={[
-                {
-                  required: question.required,
-                  message: intl.formatMessage({
-                    id: '6B5Jtu',
-                    defaultMessage: 'This field is required.',
-                  }),
-                },
-              ]}
-            >
-              <StringTime disabled={disabled} />
-            </Form.Item>
-          )}
-          {question.answerType === AnswerType.Boolean && (
-            <Form.Item
-              name={question.questionId}
-              label={question.label}
-              rules={[
-                {
-                  required: question.required,
-                  message: intl.formatMessage({
-                    id: '6B5Jtu',
-                    defaultMessage: 'This field is required.',
-                  }),
-                },
-              ]}
-            >
-              <Radio.Group
-                options={[
+      {questions.map((question) => {
+        if (
+          question.dependentOnQuestionId !== null &&
+          question.dependentOnQuestionId
+        ) {
+          return (
+            <Col span={24}>
+              <Form.Item
+                noStyle
+                shouldUpdate={(prevValues, curValues) =>
+                  // @ts-ignore
+                  prevValues[question.dependentOnQuestionId] !==
+                  // @ts-ignore
+                  curValues[question.dependentOnQuestionId]
+                }
+              >
+                {({ getFieldValue }) =>
+                  getFieldValue(question.dependentOnQuestionId || '') ===
+                  question.dependentOnAnswerValue ? (
+                    <Form.Item
+                      name={question.questionId}
+                      label={question.label}
+                      rules={[
+                        {
+                          required: question.required,
+                          message: intl.formatMessage({
+                            id: '6B5Jtu',
+                            defaultMessage: 'This field is required.',
+                          }),
+                        },
+                      ]}
+                    >
+                      {getFieldType(question, question.answerType)}
+                    </Form.Item>
+                  ) : null
+                }
+              </Form.Item>
+            </Col>
+          );
+        }
+        return (
+          <Col span={24}>
+            {question.answerType === AnswerType.String && (
+              <Form.Item
+                name={question.questionId}
+                label={question.label}
+                rules={[
                   {
-                    label: intl.formatMessage({
-                      defaultMessage: 'Yes',
-                      id: 'a5msuh',
+                    required: question.required,
+                    message: intl.formatMessage({
+                      id: '6B5Jtu',
+                      defaultMessage: 'This field is required.',
                     }),
-                    value: 'true',
-                  },
-                  {
-                    label: intl.formatMessage({
-                      defaultMessage: 'No',
-                      id: 'oUWADl',
-                    }),
-                    value: 'false',
                   },
                 ]}
-                optionType="button"
-                disabled={disabled}
-              />
-            </Form.Item>
-          )}
-          {question.answerType === AnswerType.Number && (
-            <Form.Item
-              name={question.questionId}
-              label={question.label}
-              rules={[
-                {
-                  required: question.required,
-                  message: intl.formatMessage({
-                    id: '6B5Jtu',
-                    defaultMessage: 'This field is required.',
-                  }),
-                },
-              ]}
-            >
-              <StringInputNumber disabled={disabled} />
-            </Form.Item>
-          )}
-          {question.answerType === AnswerType.Select && (
-            <Form.Item
-              name={question.questionId}
-              label={question.label}
-              rules={[
-                {
-                  required: question.required,
-                  message: intl.formatMessage({
-                    id: '6B5Jtu',
-                    defaultMessage: 'This field is required.',
-                  }),
-                },
-              ]}
-            >
-              <StringSelect disabled={disabled} options={question.options} />
-            </Form.Item>
-          )}
-        </Col>
-      ))}
+              >
+                <Input.TextArea
+                  style={{ maxWidth: '50%' }}
+                  rows={1}
+                  disabled={disabled}
+                />
+              </Form.Item>
+            )}
+            {question.answerType === AnswerType.Date && (
+              <Form.Item
+                name={question.questionId}
+                label={question.label}
+                rules={[
+                  {
+                    required: question.required,
+                    message: intl.formatMessage({
+                      id: '6B5Jtu',
+                      defaultMessage: 'This field is required.',
+                    }),
+                  },
+                ]}
+              >
+                <StringDate disabled={disabled} />
+              </Form.Item>
+            )}
+            {question.answerType === AnswerType.Time && (
+              <Form.Item
+                name={question.questionId}
+                label={question.label}
+                rules={[
+                  {
+                    required: question.required,
+                    message: intl.formatMessage({
+                      id: '6B5Jtu',
+                      defaultMessage: 'This field is required.',
+                    }),
+                  },
+                ]}
+              >
+                <StringTime disabled={disabled} />
+              </Form.Item>
+            )}
+            {question.answerType === AnswerType.Boolean && (
+              <Form.Item
+                name={question.questionId}
+                label={question.label}
+                rules={[
+                  {
+                    required: question.required,
+                    message: intl.formatMessage({
+                      id: '6B5Jtu',
+                      defaultMessage: 'This field is required.',
+                    }),
+                  },
+                ]}
+              >
+                <Radio.Group
+                  options={[
+                    {
+                      label: intl.formatMessage({
+                        defaultMessage: 'Yes',
+                        id: 'a5msuh',
+                      }),
+                      value: 'true',
+                    },
+                    {
+                      label: intl.formatMessage({
+                        defaultMessage: 'No',
+                        id: 'oUWADl',
+                      }),
+                      value: 'false',
+                    },
+                  ]}
+                  optionType="button"
+                  disabled={disabled}
+                />
+              </Form.Item>
+            )}
+            {question.answerType === AnswerType.Number && (
+              <Form.Item
+                name={question.questionId}
+                label={question.label}
+                rules={[
+                  {
+                    required: question.required,
+                    message: intl.formatMessage({
+                      id: '6B5Jtu',
+                      defaultMessage: 'This field is required.',
+                    }),
+                  },
+                ]}
+              >
+                <StringInputNumber disabled={disabled} />
+              </Form.Item>
+            )}
+            {question.answerType === AnswerType.Select && (
+              <Form.Item
+                name={question.questionId}
+                label={question.label}
+                rules={[
+                  {
+                    required: question.required,
+                    message: intl.formatMessage({
+                      id: '6B5Jtu',
+                      defaultMessage: 'This field is required.',
+                    }),
+                  },
+                ]}
+              >
+                <StringSelect disabled={disabled} options={question.options} />
+              </Form.Item>
+            )}
+          </Col>
+        );
+      })}
     </Row>
   );
 };

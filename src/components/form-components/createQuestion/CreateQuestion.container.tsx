@@ -8,7 +8,20 @@ interface Props {
   ids?: string[];
 }
 
-const CreateQuestionContainer = ({ onClose, update, ids }: Props) => {
+/**
+ * @param {Props} props
+ * @param {() => void} onClose
+ * @param {(id: string, question: string) => void} update
+ * @param {string[] | undefined} ids
+ * @returns {JSX.Element}
+ * @constructor
+ * For use with tasks
+ */
+const CreateQuestionContainer = ({
+  onClose,
+  update,
+  ids,
+}: Props): JSX.Element => {
   const { data, form, saving, onSubmit, questionData, loading } =
     useCreateQuestion({
       onClose,

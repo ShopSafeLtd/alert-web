@@ -8115,6 +8115,7 @@ export type CreateOffenderVehicles = {
 };
 
 export type CreateQuestionInput = {
+  model?: InputMaybe<QuestionModel>;
   options?: InputMaybe<Array<Scalars['String']>>;
   question: Scalars['String'];
   required?: Scalars['Boolean'];
@@ -20940,6 +20941,8 @@ export type IncidentOrderByWithRelationInput = {
 export type IncidentQuestions = {
   __typename?: 'IncidentQuestions';
   answerType: AnswerType;
+  dependentOnAnswerValue?: Maybe<Scalars['String']>;
+  dependentOnQuestionId?: Maybe<Scalars['String']>;
   label: Scalars['String'];
   options: Array<AnswerOption>;
   priority: Scalars['Int'];
@@ -29066,6 +29069,7 @@ export type Mutation = {
   createOffenderDefault: Offender;
   createOneBusinessImpact: Document;
   createOneMG11: Mg11;
+  createOneQuestionGroup: QuestionGroup;
   createOneStatementTemplate: StatementTemplate;
   createReportTemplate: ReportTemplate;
   createScheme: Scheme;
@@ -29109,6 +29113,7 @@ export type Mutation = {
   deleteMessage?: Maybe<Message>;
   deleteOffender?: Maybe<Offender>;
   deleteOffenderDefault?: Maybe<Offender>;
+  deleteOneQuestionGroup?: Maybe<QuestionGroup>;
   deleteOneStatementTemplate?: Maybe<StatementTemplate>;
   deleteRecycleTag?: Maybe<Tag>;
   deleteReportTemplate?: Maybe<ReportTemplate>;
@@ -29195,6 +29200,7 @@ export type Mutation = {
   updateOffenderDefault?: Maybe<Offender>;
   updateOneIncident?: Maybe<Incident>;
   updateOneMG11?: Maybe<Mg11>;
+  updateOneQuestionGroup?: Maybe<QuestionGroup>;
   updateOneStatementTemplate?: Maybe<StatementTemplate>;
   updateOneUserNotification?: Maybe<UserNotification>;
   updatePassword?: Maybe<User>;
@@ -29382,6 +29388,10 @@ export type MutationCreateOneMg11Args = {
   data: Mg11CreateInput;
 };
 
+export type MutationCreateOneQuestionGroupArgs = {
+  data: QuestionGroupCreateInput;
+};
+
 export type MutationCreateOneStatementTemplateArgs = {
   data: StatementTemplateCreateInput;
 };
@@ -29552,6 +29562,10 @@ export type MutationDeleteOffenderArgs = {
 
 export type MutationDeleteOffenderDefaultArgs = {
   where: OffenderWhereUniqueInput;
+};
+
+export type MutationDeleteOneQuestionGroupArgs = {
+  where: QuestionGroupWhereUniqueInput;
 };
 
 export type MutationDeleteOneStatementTemplateArgs = {
@@ -29876,6 +29890,11 @@ export type MutationUpdateOneIncidentArgs = {
 export type MutationUpdateOneMg11Args = {
   data: Mg11UpdateInput;
   where: Mg11WhereUniqueInput;
+};
+
+export type MutationUpdateOneQuestionGroupArgs = {
+  data: QuestionGroupUpdateInput;
+  where: QuestionGroupWhereUniqueInput;
 };
 
 export type MutationUpdateOneStatementTemplateArgs = {
@@ -37658,11 +37677,19 @@ export type Question = {
   optionsFormatted?: Maybe<Array<Scalars['String']>>;
   question: Scalars['String'];
   questionFormatted: Scalars['String'];
+  questionGroup: Array<QuestionGroup>;
   questionTranslations: Array<Scalars['Json']>;
   schemes: Array<Scheme>;
   tags: Array<TagQuestion>;
   type: AnswerType;
   updatedAt: Scalars['DateTime'];
+};
+
+export type QuestionQuestionGroupArgs = {
+  after?: InputMaybe<QuestionGroupWhereUniqueInput>;
+  before?: InputMaybe<QuestionGroupWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
 };
 
 export type QuestionSchemesArgs = {
@@ -37828,6 +37855,42 @@ export type QuestionCreatequestionTranslationsInput = {
   set?: InputMaybe<Array<Scalars['Json']>>;
 };
 
+export type QuestionGroup = {
+  __typename?: 'QuestionGroup';
+  createdAt: Scalars['DateTime'];
+  defaultDueDate: Scalars['Int'];
+  description?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  name: Scalars['String'];
+  questions: Array<Question>;
+  schemes: Array<Scheme>;
+};
+
+export type QuestionGroupQuestionsArgs = {
+  after?: InputMaybe<QuestionWhereUniqueInput>;
+  before?: InputMaybe<QuestionWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+export type QuestionGroupSchemesArgs = {
+  after?: InputMaybe<SchemeWhereUniqueInput>;
+  before?: InputMaybe<SchemeWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+export type QuestionGroupCreateInput = {
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  defaultDueDate?: InputMaybe<Scalars['Int']>;
+  description?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+  questions?: InputMaybe<QuestionCreateNestedManyWithoutQuestionGroupInput>;
+  schemes?: InputMaybe<SchemeCreateNestedManyWithoutQuestionGroupsInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
 export type QuestionGroupCreateNestedManyWithoutQuestionsInput = {
   connect?: InputMaybe<Array<QuestionGroupWhereUniqueInput>>;
   connectOrCreate?: InputMaybe<
@@ -37856,6 +37919,8 @@ export type QuestionGroupCreateOrConnectWithoutSchemesInput = {
 
 export type QuestionGroupCreateWithoutQuestionsInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  defaultDueDate?: InputMaybe<Scalars['Int']>;
+  description?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutQuestionGroupsInput>;
@@ -37864,10 +37929,17 @@ export type QuestionGroupCreateWithoutQuestionsInput = {
 
 export type QuestionGroupCreateWithoutSchemesInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  defaultDueDate?: InputMaybe<Scalars['Int']>;
+  description?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   questions?: InputMaybe<QuestionCreateNestedManyWithoutQuestionGroupInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type QuestionGroupInput = {
+  questionGroupId?: InputMaybe<Scalars['String']>;
+  questionIds: Array<Scalars['String']>;
 };
 
 export type QuestionGroupListRelationFilter = {
@@ -37885,13 +37957,28 @@ export type QuestionGroupScalarWhereInput = {
   NOT?: InputMaybe<Array<QuestionGroupScalarWhereInput>>;
   OR?: InputMaybe<Array<QuestionGroupScalarWhereInput>>;
   createdAt?: InputMaybe<DateTimeFilter>;
+  defaultDueDate?: InputMaybe<IntFilter>;
+  description?: InputMaybe<StringNullableFilter>;
   id?: InputMaybe<StringFilter>;
   name?: InputMaybe<StringFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
+export type QuestionGroupUpdateInput = {
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  defaultDueDate?: InputMaybe<IntFieldUpdateOperationsInput>;
+  description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  questions?: InputMaybe<QuestionUpdateManyWithoutQuestionGroupNestedInput>;
+  schemes?: InputMaybe<SchemeUpdateManyWithoutQuestionGroupsNestedInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
 export type QuestionGroupUpdateManyMutationInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  defaultDueDate?: InputMaybe<IntFieldUpdateOperationsInput>;
+  description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -37961,6 +38048,8 @@ export type QuestionGroupUpdateWithWhereUniqueWithoutSchemesInput = {
 
 export type QuestionGroupUpdateWithoutQuestionsInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  defaultDueDate?: InputMaybe<IntFieldUpdateOperationsInput>;
+  description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutQuestionGroupsNestedInput>;
@@ -37969,6 +38058,8 @@ export type QuestionGroupUpdateWithoutQuestionsInput = {
 
 export type QuestionGroupUpdateWithoutSchemesInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  defaultDueDate?: InputMaybe<IntFieldUpdateOperationsInput>;
+  description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   questions?: InputMaybe<QuestionUpdateManyWithoutQuestionGroupNestedInput>;
@@ -37992,6 +38083,8 @@ export type QuestionGroupWhereInput = {
   NOT?: InputMaybe<Array<QuestionGroupWhereInput>>;
   OR?: InputMaybe<Array<QuestionGroupWhereInput>>;
   createdAt?: InputMaybe<DateTimeFilter>;
+  defaultDueDate?: InputMaybe<IntFilter>;
+  description?: InputMaybe<StringNullableFilter>;
   id?: InputMaybe<StringFilter>;
   name?: InputMaybe<StringFilter>;
   questions?: InputMaybe<QuestionListRelationFilter>;
@@ -40643,6 +40736,7 @@ export type Scheme = {
   offenderRetention?: Maybe<Scalars['Int']>;
   offenders: Array<Offender>;
   offendersCreated?: Maybe<Scalars['Int']>;
+  questionGroups: Array<QuestionGroup>;
   recycledItems: Array<RecycledItem>;
   rekCollections: Array<RekCollection>;
   reportIcons: Array<Image>;
@@ -40818,6 +40912,13 @@ export type SchemeOffendersArgs = {
 export type SchemeOffendersCreatedArgs = {
   endDate?: InputMaybe<Scalars['DateTime']>;
   startDate?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type SchemeQuestionGroupsArgs = {
+  after?: InputMaybe<QuestionGroupWhereUniqueInput>;
+  before?: InputMaybe<QuestionGroupWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
 };
 
 export type SchemeRecycledItemsArgs = {
@@ -49733,6 +49834,7 @@ export type TagQuestion = {
   __typename?: 'TagQuestion';
   answers: Array<Answer>;
   createdAt: Scalars['DateTime'];
+  dependentQuestions: Array<Scalars['Json']>;
   id: Scalars['String'];
   priority: Scalars['Int'];
   question: Question;
@@ -54259,6 +54361,9 @@ export type UpdatePasswordData = {
 };
 
 export type UpdateQuestionOnTagInput = {
+  dependentAnswer?: InputMaybe<Scalars['String']>;
+  dependentOnQId?: InputMaybe<Scalars['String']>;
+  dependentOnTagQId?: InputMaybe<Scalars['String']>;
   newOptions?: InputMaybe<Array<Scalars['String']>>;
   newQuestion?: InputMaybe<Scalars['String']>;
   origOptions?: InputMaybe<Array<Scalars['String']>>;
@@ -75657,6 +75762,8 @@ export type ListIncidentTagsQuery = {
       required: boolean;
       tagQuestionId: string;
       priority: number;
+      dependentOnQuestionId?: string | null;
+      dependentOnAnswerValue?: string | null;
       options: Array<{
         __typename?: 'AnswerOption';
         label: string;
@@ -78222,6 +78329,68 @@ export type VehicleQuery = {
   } | null;
 };
 
+export type CreateOneQuestionGroupMutationVariables = Exact<{
+  data: QuestionGroupCreateInput;
+}>;
+
+export type CreateOneQuestionGroupMutation = {
+  __typename?: 'Mutation';
+  createOneQuestionGroup: {
+    __typename?: 'QuestionGroup';
+    id: string;
+    name: string;
+    description?: string | null;
+    defaultDueDate: number;
+    questions: Array<{
+      __typename?: 'Question';
+      questionFormatted: string;
+      id: string;
+    }>;
+  };
+};
+
+export type DeleteQuestionGroupMutationVariables = Exact<{
+  where: QuestionGroupWhereUniqueInput;
+}>;
+
+export type DeleteQuestionGroupMutation = {
+  __typename?: 'Mutation';
+  deleteOneQuestionGroup?: { __typename?: 'QuestionGroup'; id: string } | null;
+};
+
+export type UpdateQuestionGroupMutationVariables = Exact<{
+  where: QuestionGroupWhereUniqueInput;
+  data: QuestionGroupUpdateInput;
+}>;
+
+export type UpdateQuestionGroupMutation = {
+  __typename?: 'Mutation';
+  updateOneQuestionGroup?: { __typename?: 'QuestionGroup'; id: string } | null;
+};
+
+export type QuestionGroupOnSchemeQueryVariables = Exact<{
+  where: SchemeWhereUniqueInput;
+}>;
+
+export type QuestionGroupOnSchemeQuery = {
+  __typename?: 'Query';
+  scheme?: {
+    __typename?: 'Scheme';
+    questionGroups: Array<{
+      __typename?: 'QuestionGroup';
+      id: string;
+      name: string;
+      description?: string | null;
+      defaultDueDate: number;
+      questions: Array<{
+        __typename?: 'Question';
+        questionFormatted: string;
+        id: string;
+      }>;
+    }>;
+  } | null;
+};
+
 export type ListSchemeTagsQueryVariables = Exact<{
   listWhere: TagWhereInput;
 }>;
@@ -78307,12 +78476,14 @@ export type ViewTagQuery = {
       __typename?: 'TagQuestion';
       req: boolean;
       priority: number;
+      dependentQuestions: Array<any>;
       id: string;
       question: {
         __typename?: 'Question';
         questionFormatted: string;
         type: AnswerType;
         id: string;
+        optionsFormatted?: Array<string> | null;
       };
     }>;
   } | null;
@@ -90710,6 +90881,8 @@ export const ListIncidentTagsDocument = gql`
         required
         tagQuestionId
         priority
+        dependentOnQuestionId
+        dependentOnAnswerValue
         options {
           label
           value
@@ -94228,6 +94401,162 @@ export type VehicleQueryResult = Apollo.QueryResult<
   VehicleQuery,
   VehicleQueryVariables
 >;
+export const CreateOneQuestionGroupDocument = gql`
+  mutation CreateOneQuestionGroup($data: QuestionGroupCreateInput!) {
+    createOneQuestionGroup(data: $data) {
+      id
+      name
+      description
+      defaultDueDate
+      questions {
+        questionFormatted
+        id
+      }
+    }
+  }
+`;
+export type CreateOneQuestionGroupMutationFn = Apollo.MutationFunction<
+  CreateOneQuestionGroupMutation,
+  CreateOneQuestionGroupMutationVariables
+>;
+export function useCreateOneQuestionGroupMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateOneQuestionGroupMutation,
+    CreateOneQuestionGroupMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateOneQuestionGroupMutation,
+    CreateOneQuestionGroupMutationVariables
+  >(CreateOneQuestionGroupDocument, options);
+}
+export type CreateOneQuestionGroupMutationHookResult = ReturnType<
+  typeof useCreateOneQuestionGroupMutation
+>;
+export type CreateOneQuestionGroupMutationResult =
+  Apollo.MutationResult<CreateOneQuestionGroupMutation>;
+export type CreateOneQuestionGroupMutationOptions = Apollo.BaseMutationOptions<
+  CreateOneQuestionGroupMutation,
+  CreateOneQuestionGroupMutationVariables
+>;
+export const DeleteQuestionGroupDocument = gql`
+  mutation DeleteQuestionGroup($where: QuestionGroupWhereUniqueInput!) {
+    deleteOneQuestionGroup(where: $where) {
+      id
+    }
+  }
+`;
+export type DeleteQuestionGroupMutationFn = Apollo.MutationFunction<
+  DeleteQuestionGroupMutation,
+  DeleteQuestionGroupMutationVariables
+>;
+export function useDeleteQuestionGroupMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteQuestionGroupMutation,
+    DeleteQuestionGroupMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteQuestionGroupMutation,
+    DeleteQuestionGroupMutationVariables
+  >(DeleteQuestionGroupDocument, options);
+}
+export type DeleteQuestionGroupMutationHookResult = ReturnType<
+  typeof useDeleteQuestionGroupMutation
+>;
+export type DeleteQuestionGroupMutationResult =
+  Apollo.MutationResult<DeleteQuestionGroupMutation>;
+export type DeleteQuestionGroupMutationOptions = Apollo.BaseMutationOptions<
+  DeleteQuestionGroupMutation,
+  DeleteQuestionGroupMutationVariables
+>;
+export const UpdateQuestionGroupDocument = gql`
+  mutation UpdateQuestionGroup(
+    $where: QuestionGroupWhereUniqueInput!
+    $data: QuestionGroupUpdateInput!
+  ) {
+    updateOneQuestionGroup(where: $where, data: $data) {
+      id
+    }
+  }
+`;
+export type UpdateQuestionGroupMutationFn = Apollo.MutationFunction<
+  UpdateQuestionGroupMutation,
+  UpdateQuestionGroupMutationVariables
+>;
+export function useUpdateQuestionGroupMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateQuestionGroupMutation,
+    UpdateQuestionGroupMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateQuestionGroupMutation,
+    UpdateQuestionGroupMutationVariables
+  >(UpdateQuestionGroupDocument, options);
+}
+export type UpdateQuestionGroupMutationHookResult = ReturnType<
+  typeof useUpdateQuestionGroupMutation
+>;
+export type UpdateQuestionGroupMutationResult =
+  Apollo.MutationResult<UpdateQuestionGroupMutation>;
+export type UpdateQuestionGroupMutationOptions = Apollo.BaseMutationOptions<
+  UpdateQuestionGroupMutation,
+  UpdateQuestionGroupMutationVariables
+>;
+export const QuestionGroupOnSchemeDocument = gql`
+  query QuestionGroupOnScheme($where: SchemeWhereUniqueInput!) {
+    scheme(where: $where) {
+      questionGroups {
+        id
+        name
+        description
+        defaultDueDate
+        questions {
+          questionFormatted
+          id
+        }
+      }
+    }
+  }
+`;
+export function useQuestionGroupOnSchemeQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    QuestionGroupOnSchemeQuery,
+    QuestionGroupOnSchemeQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    QuestionGroupOnSchemeQuery,
+    QuestionGroupOnSchemeQueryVariables
+  >(QuestionGroupOnSchemeDocument, options);
+}
+export function useQuestionGroupOnSchemeLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    QuestionGroupOnSchemeQuery,
+    QuestionGroupOnSchemeQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    QuestionGroupOnSchemeQuery,
+    QuestionGroupOnSchemeQueryVariables
+  >(QuestionGroupOnSchemeDocument, options);
+}
+export type QuestionGroupOnSchemeQueryHookResult = ReturnType<
+  typeof useQuestionGroupOnSchemeQuery
+>;
+export type QuestionGroupOnSchemeLazyQueryHookResult = ReturnType<
+  typeof useQuestionGroupOnSchemeLazyQuery
+>;
+export type QuestionGroupOnSchemeQueryResult = Apollo.QueryResult<
+  QuestionGroupOnSchemeQuery,
+  QuestionGroupOnSchemeQueryVariables
+>;
 export const ListSchemeTagsDocument = gql`
   query ListSchemeTags($listWhere: TagWhereInput!) {
     listTags(where: $listWhere) {
@@ -94406,10 +94735,13 @@ export const ViewTagDocument = gql`
       tagQuestions(where: $tagQuestionsWhere) {
         req
         priority
+        dependentQuestions
         question {
           questionFormatted
           type
           id
+          optionsFormatted
+          type
         }
         id
       }

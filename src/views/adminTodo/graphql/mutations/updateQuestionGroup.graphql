@@ -1,0 +1,8 @@
+mutation UpdateQuestionGroup(
+  $where: QuestionGroupWhereUniqueInput!
+  $data: QuestionGroupUpdateInput!
+) {
+  updateOneQuestionGroup(where: $where, data: $data) {
+    id
+  }
+}

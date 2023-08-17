@@ -8,6 +8,10 @@ import { ImagePosition } from '../../../../../graphql/generated';
 describe('List Officer View', () => {
   const data: ViewOffenderQuery = {
     offender: {
+      evidence: [],
+      scheme: {
+        mg11Available: true,
+      },
       updates: [],
       crimeGroups: [],
       subscribed: false,

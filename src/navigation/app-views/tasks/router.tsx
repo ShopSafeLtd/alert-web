@@ -1,6 +1,6 @@
 import React from 'react';
-import { Routes, Route } from 'react-router';
-import TodoList from 'views/adminTodo/TodoList';
+import { Route, Routes } from 'react-router';
+import TodoList from 'views/adminTodo/Activities.container';
 
 // import ReviewIncident from 'views/incidents/ReviewIncident ';
 

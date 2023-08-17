@@ -1,6 +1,7 @@
 import type { UploadFile } from 'antd';
 import type {
   Age,
+  AnswerType,
   BanType,
   Build,
   Gender,
@@ -9,7 +10,6 @@ import type {
   ImagePosition,
   ListIncidentsQuery,
   Race,
-  AnswerType,
 } from 'graphql/generated';
 import type { Moment } from 'moment';
 
@@ -283,6 +283,8 @@ export interface CustomQuestion {
     label: string;
     value: string;
   }[];
+  dependentOnQuestionId?: string | null;
+  dependentOnAnswerValue?: string | null;
 }
 
 export interface GoodsData {

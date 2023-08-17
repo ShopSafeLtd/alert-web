@@ -3,12 +3,10 @@ import React from 'react';
 import {
   Button,
   Card,
-  Checkbox,
   Col,
   Drawer,
   Empty,
   Input,
-  Popconfirm,
   Row,
   Skeleton,
   Table,
@@ -35,7 +33,7 @@ interface Props {
     | undefined;
   loading: boolean;
   saving: boolean;
-  onCompletedTodo: (id: string) => void;
+  // onCompletedTodo: (id: string) => void;
   // onUncompletedTodo: (id: string) => void;
   addTodo: boolean;
   toggleAddTodo: () => void;
@@ -60,7 +58,7 @@ const AdminTodos = ({
   data,
   loading,
   saving,
-  onCompletedTodo,
+  // onCompletedTodo,
   // onUncompletedTodo,
   addTodo,
   toggleAddTodo,
@@ -153,31 +151,31 @@ const AdminTodos = ({
             position: ['bottomCenter'],
           }}
           columns={[
-            {
-              dataIndex: 'actions',
-              key: 'actions',
-              width: 40,
-              render: (_, record) => (
-                <Popconfirm
-                  title={intl.formatMessage({
-                    defaultMessage: 'Complete this activity?',
-                    id: 'UCqqOk',
-                  })}
-                  onConfirm={() => onCompletedTodo(record.key)}
-                  okText={intl.formatMessage({
-                    defaultMessage: 'Yes',
-                    id: 'a5msuh',
-                  })}
-                  cancelText={intl.formatMessage({
-                    defaultMessage: 'No',
-                    id: 'oUWADl',
-                  })}
-                  overlayInnerStyle={{ padding: 10 }}
-                >
-                  <Checkbox checked={!!record.completed} />
-                </Popconfirm>
-              ),
-            },
+            // {
+            //   dataIndex: 'actions',
+            //   key: 'actions',
+            //   width: 40,
+            //   render: (_, record) => (
+            //     <Popconfirm
+            //       title={intl.formatMessage({
+            //         defaultMessage: 'Complete this activity?',
+            //         id: 'UCqqOk',
+            //       })}
+            //       onConfirm={() => onCompletedTodo(record.key)}
+            //       okText={intl.formatMessage({
+            //         defaultMessage: 'Yes',
+            //         id: 'a5msuh',
+            //       })}
+            //       cancelText={intl.formatMessage({
+            //         defaultMessage: 'No',
+            //         id: 'oUWADl',
+            //       })}
+            //       overlayInnerStyle={{ padding: 10 }}
+            //     >
+            //       <Checkbox checked={!!record.completed} />
+            //     </Popconfirm>
+            //   ),
+            // },
             {
               key: 'name',
               dataIndex: 'name',

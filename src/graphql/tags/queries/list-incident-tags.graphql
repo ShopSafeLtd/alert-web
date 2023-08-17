@@ -1,27 +1,29 @@
 query ListIncidentTags($where: IncidentTagsInput!) {
-    listIncidentTags(where: $where) {
-        hasChildren
-        incidentForm {
-            position
-            type
-        }
-        label
-        parentId
-        parents
-        questions {
-            answerType
-            label
-            questionId
-            required
-            tagQuestionId
-            priority
-            options {
-                label
-                value
-            }
-        }
-        tier
-        value
-        tooltip
+  listIncidentTags(where: $where) {
+    hasChildren
+    incidentForm {
+      position
+      type
     }
+    label
+    parentId
+    parents
+    questions {
+      answerType
+      label
+      questionId
+      required
+      tagQuestionId
+      priority
+      dependentOnQuestionId
+      dependentOnAnswerValue
+      options {
+        label
+        value
+      }
+    }
+    tier
+    value
+    tooltip
+  }
 }
