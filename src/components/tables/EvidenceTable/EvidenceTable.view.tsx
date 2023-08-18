@@ -134,7 +134,7 @@ const EvidenceTable = ({
                   />
                 </Tooltip>
               </Col>
-              {deleteRights && update && (
+              {deleteRights && (
                 <Col>
                   <Tooltip
                     title={intl.formatMessage({

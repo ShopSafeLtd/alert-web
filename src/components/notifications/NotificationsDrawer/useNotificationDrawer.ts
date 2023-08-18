@@ -64,6 +64,7 @@ interface Scheme {
   facialRecognition: boolean;
   imagesRequiredOnOffenders: boolean;
   taskTimeTracking: boolean;
+  restrictIncidentAccess: boolean;
 }
 interface Return {
   data:
@@ -328,6 +329,7 @@ const useNotificationLists = (): Return => {
       facialRecognition: scheme.facialRecognition,
       imagesRequiredOnOffenders: scheme.imagesRequiredOnOffenders,
       taskTimeTracking: scheme.taskTimeTracking,
+      restrictIncidentAccess: scheme.restrictIncidentAccess,
     });
     setTodos({ userTodos: scheme.userTodos || 0 });
     setNotifications({
