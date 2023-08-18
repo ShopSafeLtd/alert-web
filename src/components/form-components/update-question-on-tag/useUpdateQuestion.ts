@@ -120,7 +120,7 @@ const useUpdateQuestion = ({
         return [];
       };
       const checkExists = tagQuestions.find(
-        (tagQ) => tagQ.questionId === questionId
+        (tagQ) => tagQ.tagQuestionId === dependent?.dependentOn
       );
 
       setData({
