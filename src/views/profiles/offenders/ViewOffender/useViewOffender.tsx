@@ -177,14 +177,9 @@ interface Return {
 
 const useViewOffender = (offenderId: string): Return => {
   const navigate = useNavigate();
-  const publicOffenderDOB = useStoreState(
-    (state) => state.scheme.defaultPublicOffenderDOB
-  );
-
-  const role = useStoreState((state) => state.user.role);
-  const groups = useStoreState((state) => state.user.groups);
-  const userId = useStoreState((state) => state.user.id);
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const { id: schemeId, defaultPublicOffenderDOB: publicOffenderDOB } =
+    useStoreState((state) => state.scheme);
+  const { role, id: userId, groups } = useStoreState((state) => state.user);
   const intl = useIntl();
   const [saving, setSaving] = useState(false);
 
@@ -1605,8 +1600,12 @@ const useViewOffender = (offenderId: string): Return => {
     data,
     loading: data?.offender ? false : loading,
     saving,
-    editRights: role !== Role.User,
-    deleteRights: role !== Role.User,
+    deleteRights:
+      role !== Role.User ||
+      (userId === data?.offender?.createdBy.id && !data?.offender?.approved),
+    editRights:
+      role !== Role.User ||
+      (userId === data?.offender?.createdBy.id && !data?.offender?.approved),
     linkIncident,
     toggleLinkIncident,
     updateIncidentList,

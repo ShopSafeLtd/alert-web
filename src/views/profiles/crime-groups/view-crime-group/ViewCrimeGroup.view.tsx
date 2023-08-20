@@ -584,6 +584,7 @@ const ViewCrimeGroup = ({
                     evidence={data?.crimeGroup?.evidence}
                     title={ProfileUpdatedModel.Crime_Group}
                     update={updateDeleteDocument}
+                    deleteRights={editRights}
                   />
                 ) : (
                   <Empty

@@ -89,9 +89,7 @@ const useIncidentFeed = (): Return => {
   const onNavigate = () => navigate(`/app/incidents/add`);
 
   // Global State
-  const { restrictIncidentAccess, id: schemeId } = useStoreState(
-    (state) => state.scheme
-  );
+  const { id: schemeId } = useStoreState((state) => state.scheme);
   const { role, id: userId } = useStoreState((state) => state.user);
   const pagination = useStoreState((state) => state.data.incidents.pagination);
   const variables = useStoreState((state) => state.data.incidents.variables);
@@ -273,7 +271,7 @@ const useIncidentFeed = (): Return => {
     // @ts-expect-error TODO fix date type
     variables: queryVariables,
     fetchPolicy: 'cache-and-network',
-    skip: role === Role.User && restrictIncidentAccess,
+    // skip: role === Role.User && restrictIncidentAccess,
   });
 
   // Fetch scheme groups if scheme admin

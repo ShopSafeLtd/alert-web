@@ -204,6 +204,7 @@ interface Props {
   addDocument: boolean;
   updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
   updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
+  hideIncident: boolean;
 }
 
 const ViewIncident = ({
@@ -287,6 +288,7 @@ const ViewIncident = ({
   addDocument,
   updateDocumentList,
   updateDeleteDocument,
+  hideIncident,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
@@ -307,9 +309,11 @@ const ViewIncident = ({
   return (
     <div className="page-container">
       <Row wrap={false}>
-        <Col>
-          <IncidentSideList current={incidentId} />
-        </Col>
+        {!hideIncident && (
+          <Col>
+            <IncidentSideList current={incidentId} />
+          </Col>
+        )}
 
         <Col flex={1}>
           <div className={classes.viewIncident}>
@@ -1552,6 +1556,7 @@ const ViewIncident = ({
                               evidence={data?.incident?.evidence}
                               title={ProfileUpdatedModel.Incident}
                               update={updateDeleteDocument}
+                              deleteRights={deleteRights}
                             />
                           ) : (
                             <Empty
@@ -2306,7 +2311,11 @@ const ViewIncident = ({
         onClose={toggleAddTodo}
       >
         {addTodo ? (
-          <AddTodo update={updateTodoList} onClose={toggleAddTodo} />
+          <AddTodo
+            update={updateTodoList}
+            onClose={toggleAddTodo}
+            incidentId={data?.incident?.id}
+          />
         ) : (
           <div />
         )}

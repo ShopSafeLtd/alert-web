@@ -525,6 +525,7 @@ const ViewVehicle = ({
                   evidence={data?.vehicle?.evidence}
                   title={ProfileUpdatedModel.Vehicle}
                   update={updateDeleteDocument}
+                  deleteRights={editRights}
                 />
               ) : (
                 <Empty

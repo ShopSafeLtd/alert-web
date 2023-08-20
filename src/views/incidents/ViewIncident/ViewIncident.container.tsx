@@ -83,6 +83,7 @@ const ViewIncident = (): JSX.Element => {
     addDocument,
     updateDocumentList,
     updateDeleteDocument,
+    hideIncident,
   } = useViewIncident(incidentId);
   const { onApprove, onReject, approving } = useApproveIncident({ incidentId });
 
@@ -168,6 +169,7 @@ const ViewIncident = (): JSX.Element => {
       addDocument={addDocument}
       updateDocumentList={updateDocumentList}
       updateDeleteDocument={updateDeleteDocument}
+      hideIncident={hideIncident}
     />
   );
 };

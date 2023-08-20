@@ -46,6 +46,7 @@ interface Scheme {
   autoApproveIncidents: boolean;
   autoApproveOffenders: boolean;
   defaultPublicOffenderDOB: boolean;
+  restrictIncidentAccess: boolean;
   userTodos?: number | null | undefined;
   userNotifications?: number | null | undefined;
   logo?:
@@ -319,6 +320,7 @@ const useNotificationLists = (): Return => {
       autoApproveIncidents: scheme.autoApproveIncidents,
       autoApproveOffenders: scheme.autoApproveOffenders,
       defaultPublicOffenderDOB: scheme.defaultPublicOffenderDOB,
+      restrictIncidentAccess: scheme.restrictIncidentAccess,
       id: scheme.id,
       name: scheme.name,
       logo: scheme.logo?.optimisedPersisted,

@@ -1572,6 +1572,7 @@ const ViewOffender = ({
                   evidence={data?.offender?.evidence}
                   title={ProfileUpdatedModel.Offender}
                   update={updateDeleteDocument}
+                  deleteRights={deleteRights}
                 />
               ) : (
                 <Empty

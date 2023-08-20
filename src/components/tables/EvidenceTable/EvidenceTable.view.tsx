@@ -10,14 +10,13 @@ import {
 } from 'antd';
 import { createUseStyles } from 'react-jss';
 import type { DeleteDocumentMutation, FileType } from 'graphql/generated';
-import { Role, useDeleteDocumentMutation } from 'graphql/generated';
+import { useDeleteDocumentMutation } from 'graphql/generated';
 import { useIntl } from 'react-intl';
 import { faFileArrowDown, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import errorNotification from 'types/error_notification';
 import type { ProfileUpdatedModel } from 'types/enums/profile-update-type';
 import type { MutationUpdaterFn } from '@apollo/client';
-import { useStoreState } from 'state';
 
 const useStyles = createUseStyles({
   row: { cursor: 'pointer' },
@@ -32,7 +31,8 @@ interface Props {
         fileType?: FileType | null | undefined;
       }[];
   saving?: boolean;
-  title?: ProfileUpdatedModel;
+  title: ProfileUpdatedModel;
+  deleteRights: boolean;
   update: MutationUpdaterFn<DeleteDocumentMutation>;
 }
 
@@ -41,10 +41,10 @@ const EvidenceTable = ({
   saving: inputSaving,
   title,
   update,
+  deleteRights,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
-  const deleteRights = useStoreState((state) => state.user.role) !== Role.User;
   const [saving, setSaving] = useState(inputSaving);
   useEffect(() => {
     if (inputSaving) setSaving(inputSaving);

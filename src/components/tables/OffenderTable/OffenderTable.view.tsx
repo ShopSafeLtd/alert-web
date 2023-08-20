@@ -101,6 +101,9 @@ const OffenderTable = ({
             id: 'k8ZNgH',
             defaultMessage: 'Alert ID',
           }),
+          // render: (_, record) => (
+          //   <Link to={`/app/offenders/view/${record.key}`} />
+          // ),
           width: 100,
         },
 

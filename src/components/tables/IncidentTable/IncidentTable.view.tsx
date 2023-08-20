@@ -3,6 +3,8 @@ import { Table, Tooltip } from 'antd';
 import { useNavigate } from 'react-router';
 import { createUseStyles } from 'react-jss';
 import { useIntl } from 'react-intl';
+import { Role } from 'graphql/generated';
+import { useStoreState } from 'state';
 
 const useStyles = createUseStyles({
   row: { cursor: 'pointer' },
@@ -38,13 +40,17 @@ const IncidentTable = ({
   const classes = useStyles();
   const navigate = useNavigate();
   const intl = useIntl();
+  const restrictIncidentAccess = useStoreState(
+    (state) => state.scheme.restrictIncidentAccess
+  );
+  const role = useStoreState((state) => state.user.role);
 
   return (
     <Table
       size="small"
       rowClassName={classes.row}
       onRow={(record) =>
-        hasNavigation
+        hasNavigation && role === Role.User && restrictIncidentAccess
           ? {
               onClick: () => navigate(`/app/incidents/view/${record.key}`),
             }

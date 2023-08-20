@@ -29,6 +29,7 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import { Role } from 'graphql/generated';
 import { defineMessage } from 'react-intl';
+import { useStoreState } from 'state';
 
 export enum BadgeTypes {
   todo = 'TODO',
