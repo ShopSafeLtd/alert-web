@@ -7,10 +7,25 @@ import useAddTodo from './useAddTodo';
 
 interface Props {
   onClose: () => void;
-  update: MutationUpdaterFn<CreateTodoMutation>;
+  update?: MutationUpdaterFn<CreateTodoMutation>;
+  incidentId?: string;
+  initData?: {
+    name: string;
+    description: string;
+    questions: {
+      id: string;
+      question: string;
+    }[];
+    defaultDueDays: number;
+  };
 }
 
-const AddTodo = ({ update: updateMutation, onClose }: Props): JSX.Element => {
+const AddTodo = ({
+  update: updateMutation,
+  onClose,
+  incidentId,
+  initData,
+}: Props): JSX.Element => {
   const {
     onSubmit,
     saving,
@@ -23,13 +38,17 @@ const AddTodo = ({ update: updateMutation, onClose }: Props): JSX.Element => {
     selectedQuestions,
     setSelectedQuestions,
     setSelectedIds,
+    form,
   } = useAddTodo({
     onClose,
     updateMutation,
+    incidentId,
+    initData,
   });
 
   return (
     <View
+      form={form}
       setSelectedIds={setSelectedIds}
       addQuestion={addQuestion}
       setAddQuestion={setAddQuestion}

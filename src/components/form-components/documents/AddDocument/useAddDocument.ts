@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
 import type { SelectProps, UploadProps } from 'antd';
 import type {
+  CreateDocumentMutation,
   ListDocumentsOnSchemeQuery,
   ListDocumentsOnSchemeQueryVariables,
   ViewInvestigationQuery,
@@ -17,6 +18,7 @@ import {
 import { useState } from 'react';
 import { useStoreState } from 'state';
 import type { UploadFile } from 'antd/es/upload/interface';
+import type { MutationUpdaterFn } from '@apollo/client';
 
 interface OnSubmitValues {
   name: string;
@@ -26,6 +28,11 @@ interface OnSubmitValues {
 interface Props {
   onClose: () => void;
   investigationId?: string | null;
+  incidentId?: string | null;
+  offenderId?: string | null;
+  vehicleId?: string | null;
+  crimeGroupId?: string | null;
+  update?: MutationUpdaterFn<CreateDocumentMutation> | undefined;
 }
 
 interface Return {
@@ -38,7 +45,15 @@ interface Return {
   documentUploadProps: UploadProps;
 }
 
-const useAddDocument = ({ onClose, investigationId }: Props): Return => {
+const useAddDocument = ({
+  onClose,
+  offenderId,
+  incidentId,
+  investigationId,
+  vehicleId,
+  crimeGroupId,
+  update,
+}: Props): Return => {
   const currentScheme = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
   const [saving, setSaving] = useState(false);
@@ -141,23 +156,12 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
       setSaving(false);
       onClose();
     },
-    update: (store, result) => {
-      if (!investigationId) {
-        const existingData = store.readQuery<
-          ListDocumentsOnSchemeQuery,
-          ListDocumentsOnSchemeQueryVariables
-        >({
-          query: ListDocumentsOnSchemeDocument,
-          variables: {
-            where: {
-              id: currentScheme,
-            },
-          },
-        });
-        if (existingData && result.data) {
-          const oldDocuments = existingData?.scheme?.documents || [];
-          const newDocuments = [result.data.createDocument];
-          store.writeQuery<
+
+    update:
+      update ||
+      ((store, result) => {
+        if (!investigationId) {
+          const existingData = store.readQuery<
             ListDocumentsOnSchemeQuery,
             ListDocumentsOnSchemeQueryVariables
           >({
@@ -167,34 +171,32 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
                 id: currentScheme,
               },
             },
-            data: {
-              scheme: {
-                ...existingData.scheme,
-
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-
-                documents: [...oldDocuments, ...newDocuments],
-              },
-            },
           });
-        }
-      } else if (investigationId) {
-        const existingData = store.readQuery<
-          ViewInvestigationQuery,
-          ViewInvestigationQueryVariables
-        >({
-          query: ViewInvestigationDocument,
-          variables: {
-            where: {
-              id: investigationId,
-            },
-          },
-        });
-        if (existingData && result.data) {
-          const oldDocuments = existingData?.investigation?.documents || [];
-          const newDocuments = [result.data.createDocument];
-          store.writeQuery<
+          if (existingData && result.data) {
+            const oldDocuments = existingData?.scheme?.documents || [];
+            const newDocuments = [result.data.createDocument];
+            store.writeQuery<
+              ListDocumentsOnSchemeQuery,
+              ListDocumentsOnSchemeQueryVariables
+            >({
+              query: ListDocumentsOnSchemeDocument,
+              variables: {
+                where: {
+                  id: currentScheme,
+                },
+              },
+              data: {
+                scheme: {
+                  ...existingData.scheme,
+                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                  // @ts-ignore
+                  documents: [...oldDocuments, ...newDocuments],
+                },
+              },
+            });
+          }
+        } else if (investigationId) {
+          const existingData = store.readQuery<
             ViewInvestigationQuery,
             ViewInvestigationQueryVariables
           >({
@@ -204,18 +206,32 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
                 id: investigationId,
               },
             },
-            data: {
-              investigation: {
-                ...existingData.investigation,
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                documents: [...oldDocuments, ...newDocuments],
-              },
-            },
           });
+          if (existingData && result.data) {
+            const oldDocuments = existingData?.investigation?.documents || [];
+            const newDocuments = [result.data.createDocument];
+            store.writeQuery<
+              ViewInvestigationQuery,
+              ViewInvestigationQueryVariables
+            >({
+              query: ViewInvestigationDocument,
+              variables: {
+                where: {
+                  id: investigationId,
+                },
+              },
+              data: {
+                investigation: {
+                  ...existingData.investigation,
+                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                  // @ts-ignore
+                  documents: [...oldDocuments, ...newDocuments],
+                },
+              },
+            });
+          }
         }
-      }
-    },
+      }),
   });
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
@@ -230,12 +246,24 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
         return selectedCategory?.id;
       })
       .map((id) => id || '');
+
     if (fileList[0].url) {
       void createDocument({
         variables: {
           data: {
             investigationId: investigationId || null,
-            schemeId: investigationId ? undefined : currentScheme,
+            incidentId: incidentId || null,
+            offenderId: offenderId || null,
+            vehicleId: vehicleId || null,
+            crimeGroupId: crimeGroupId || null,
+            schemeId:
+              investigationId ||
+              offenderId ||
+              incidentId ||
+              vehicleId ||
+              crimeGroupId
+                ? undefined
+                : currentScheme,
             name: values.name,
             url: fileList[0].url || '',
             tags: selectedCategoryIds,

@@ -508,8 +508,8 @@ const AddUser = ({
         <Col span={12}>
           <Form.Item
             label={intl.formatMessage({
-              defaultMessage: 'Allow usr to report to all businesses',
-              id: '0KPX7H',
+              defaultMessage: 'Allow user to report to all businesses',
+              id: 'OILM5t',
             })}
             name="reportToAllBusinesses"
             valuePropName="checked"

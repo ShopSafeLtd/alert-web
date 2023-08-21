@@ -40,7 +40,7 @@ const getTodoUrl = (todo: TodoData) => {
       return `/app/chat/${todo.chatId}`;
     }
     default: {
-      return `/app/adminTodo`;
+      return `/app/tasks`;
     }
   }
 };

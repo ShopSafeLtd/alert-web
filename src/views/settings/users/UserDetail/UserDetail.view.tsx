@@ -1,5 +1,5 @@
 import React from 'react';
-import type { UserQuery } from 'graphql/generated';
+import type { Role, UserQuery } from 'graphql/generated';
 import { UserStatus } from 'graphql/generated';
 import { RoleValues } from 'types';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -48,6 +48,7 @@ interface Props {
   disableConfirm: () => void;
   deleteConfirm: () => void;
   toggleDemLink: () => void;
+  userRole: Role | undefined;
 }
 const getTextStatus = (value: UserStatus) => {
   if (value === UserStatus.Active) return 'green';
@@ -68,6 +69,7 @@ const userDetail = ({
   demLink,
   toggleDemLink,
   demId,
+  userRole,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const classes = useStyles();
@@ -332,7 +334,7 @@ const userDetail = ({
                 label={<FormattedMessage defaultMessage="Role" id="1ZgrhW" />}
                 style={{ paddingBottom: 8 }}
               >
-                {data?.user?.schemes && RoleValues[data?.user?.schemes[0].role]}
+                {userRole && RoleValues[userRole]}
               </Descriptions.Item>
               <Descriptions.Item
                 label={<FormattedMessage defaultMessage="Groups" id="hzmswI" />}

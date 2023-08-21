@@ -27,18 +27,6 @@ src/setupTests.ts
 src/assets/*
 public
 
-#
-#src/components/shared-components/AntD/*
-#src/components/util-components/AntD/*
-#src/components/layout-components/AntD/*
-#
-#src/components/shared-components/*
-#src/components/util-components/*
-#src/components/layout-components/*
-
-#
-#src/components/react-flow/*
-#src/components/TabbedView/*
 
 *.css
 *.less

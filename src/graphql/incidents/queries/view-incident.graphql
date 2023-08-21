@@ -37,6 +37,7 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
     }
     scheme {
       mg11Available
+      restrictIncidentAccess
     }
     crimeTypes {
       id
@@ -117,6 +118,18 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
         policeImage
       }
     }
+    todos {
+      id
+      name
+      description
+      dueDate
+      completed
+      assignedUsers {
+        id
+        fullName
+      }
+    }
+
     offenders {
       id
       reference

@@ -70,6 +70,7 @@ const useAuth = (): Return => {
       setScheme({
         autoApproveIncidents: schemeDetails?.autoApproveIncidents,
         autoApproveOffenders: schemeDetails?.autoApproveOffenders,
+        restrictIncidentAccess: schemeDetails?.restrictIncidentAccess,
         defaultPublicOffenderDOB: schemeDetails?.defaultPublicOffenderDOB,
         id: schemeDetails?.id,
         name: schemeDetails?.name,
@@ -102,6 +103,7 @@ const useAuth = (): Return => {
         setScheme({
           autoApproveIncidents: schemeDetails.scheme.autoApproveIncidents,
           autoApproveOffenders: schemeDetails.scheme.autoApproveOffenders,
+          restrictIncidentAccess: schemeDetails.scheme.restrictIncidentAccess,
           defaultPublicOffenderDOB:
             schemeDetails.scheme.defaultPublicOffenderDOB,
           id: schemeDetails.scheme.id,

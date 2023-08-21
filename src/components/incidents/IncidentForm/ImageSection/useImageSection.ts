@@ -102,7 +102,9 @@ const useImageSection = ({
   );
 
   useEffect(() => {
-    if (value) setImages(value);
+    if (value && value !== images) {
+      setImages(value);
+    }
   }, [value]);
 
   useEffect(() => {
@@ -111,7 +113,7 @@ const useImageSection = ({
 
   useEffect(() => {
     form.setFieldValue('images', images);
-  }, [images]);
+  }, [form, images]);
 
   const onImageChange = (info: UploadChangeParam<StateImageData>) => {
     let newFileList = [...info.fileList];

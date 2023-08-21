@@ -64,6 +64,7 @@ interface Scheme {
   facialRecognition: boolean;
   imagesRequiredOnOffenders: boolean;
   taskTimeTracking: boolean;
+  restrictIncidentAccess: boolean;
 }
 interface Return {
   data:
@@ -318,6 +319,7 @@ const useNotificationLists = (): Return => {
       autoApproveIncidents: scheme.autoApproveIncidents,
       autoApproveOffenders: scheme.autoApproveOffenders,
       defaultPublicOffenderDOB: scheme.defaultPublicOffenderDOB,
+      restrictIncidentAccess: scheme.restrictIncidentAccess,
       id: scheme.id,
       name: scheme.name,
       logo: scheme.logo?.optimisedPersisted,

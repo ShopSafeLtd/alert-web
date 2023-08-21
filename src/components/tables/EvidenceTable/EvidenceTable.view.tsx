@@ -1,8 +1,22 @@
-import React from 'react';
-import { Button, Table } from 'antd';
+import React, { useEffect, useState } from 'react';
+import {
+  Button,
+  Col,
+  notification,
+  Popconfirm,
+  Row,
+  Table,
+  Tooltip,
+} from 'antd';
 import { createUseStyles } from 'react-jss';
-import type { FileType } from 'graphql/generated';
+import type { DeleteDocumentMutation, FileType } from 'graphql/generated';
+import { useDeleteDocumentMutation } from 'graphql/generated';
 import { useIntl } from 'react-intl';
+import { faFileArrowDown, faTrash } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import errorNotification from 'types/error_notification';
+import type { ProfileUpdatedModel } from 'types/enums/profile-update-type';
+import type { MutationUpdaterFn } from '@apollo/client';
 
 const useStyles = createUseStyles({
   row: { cursor: 'pointer' },
@@ -16,14 +30,62 @@ interface Props {
         url?: string;
         fileType?: FileType | null | undefined;
       }[];
+  saving?: boolean;
+  title: ProfileUpdatedModel;
+  deleteRights: boolean;
+  update: MutationUpdaterFn<DeleteDocumentMutation>;
 }
 
-const EvidenceTable = ({ evidence }: Props): JSX.Element => {
+const EvidenceTable = ({
+  evidence,
+  saving: inputSaving,
+  title,
+  update,
+  deleteRights,
+}: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
+  const [saving, setSaving] = useState(inputSaving);
+  useEffect(() => {
+    if (inputSaving) setSaving(inputSaving);
+  }, [inputSaving]);
+
+  const [deleteDocument] = useDeleteDocumentMutation({
+    onCompleted: () => {
+      notification.success({
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Deleted!',
+          id: 'dvDKi/',
+        }),
+        description: intl.formatMessage(
+          {
+            defaultMessage: `The document has been deleted from the {title}!`,
+            id: 'Qr7jBZ',
+          },
+          { title }
+        ),
+        placement: 'bottomRight',
+      });
+    },
+    onError: () => {
+      errorNotification();
+    },
+    update,
+  });
+  const onDelete = (value: string) => {
+    void deleteDocument({
+      variables: {
+        id: value || '',
+      },
+    });
+  };
   return (
     <Table
       size="small"
+      pagination={{
+        hideOnSinglePage: true,
+        pageSize: 5,
+      }}
       rowClassName={classes.row}
       columns={[
         {
@@ -33,24 +95,82 @@ const EvidenceTable = ({ evidence }: Props): JSX.Element => {
             id: 'HAlOn1',
             defaultMessage: 'Name',
           }),
-          width: '80%',
+          // width: '80%',
         },
         {
           title: '',
           dataIndex: 'fileUrl',
           key: 'fileUrl',
-          render: (fileUrl: string) => (
-            <Button
-              type="link"
-              onClick={() => {
-                window.open(fileUrl);
-              }}
-            >
-              {intl.formatMessage({
-                id: '5q3qC0',
-                defaultMessage: 'Download',
-              })}
-            </Button>
+          width: 100,
+          // render: (fileUrl: string) => (
+          //   <Button
+          //     type="link"
+          //     onClick={() => {
+          //       window.open(fileUrl);
+          //     }}
+          //   >
+          //     {intl.formatMessage({
+          //       id: '5q3qC0',
+          //       defaultMessage: 'Download',
+          //     })}
+          //   </Button>
+          // ),
+          render: (_, record) => (
+            <Row gutter={8}>
+              <Col>
+                <Tooltip
+                  title={intl.formatMessage({
+                    defaultMessage: 'Download',
+                    id: '5q3qC0',
+                  })}
+                >
+                  <Button
+                    size="small"
+                    disabled={saving}
+                    onClick={() => {
+                      window.open(record.fileUrl);
+                    }}
+                    icon={<FontAwesomeIcon icon={faFileArrowDown} />}
+                  />
+                </Tooltip>
+              </Col>
+              {deleteRights && (
+                <Col>
+                  <Tooltip
+                    title={intl.formatMessage({
+                      defaultMessage: 'Remove Evidence',
+                      id: 'K9MTKE',
+                    })}
+                  >
+                    <Popconfirm
+                      placement="topLeft"
+                      title={intl.formatMessage({
+                        defaultMessage: 'Remove the evidence?',
+                        id: 'IW8b3z',
+                      })}
+                      onConfirm={() => {
+                        onDelete(record.key);
+                      }}
+                      okText={intl.formatMessage({
+                        defaultMessage: 'Yes',
+                        id: 'a5msuh',
+                      })}
+                      cancelText={intl.formatMessage({
+                        defaultMessage: 'No',
+                        id: 'oUWADl',
+                      })}
+                      overlayInnerStyle={{ padding: 10 }}
+                    >
+                      <Button
+                        size="small"
+                        disabled={saving}
+                        icon={<FontAwesomeIcon icon={faTrash} />}
+                      />
+                    </Popconfirm>
+                  </Tooltip>
+                </Col>
+              )}
+            </Row>
           ),
         },
       ]}

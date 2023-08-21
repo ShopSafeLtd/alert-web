@@ -3,12 +3,10 @@ import React from 'react';
 import {
   Button,
   Card,
-  Checkbox,
   Col,
   Drawer,
   Empty,
   Input,
-  Popconfirm,
   Row,
   Skeleton,
   Table,
@@ -21,7 +19,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
-import formatCalendar from 'utils/format-calendar-24h';
+import FormatCalendar from 'utils/format-calendar-24h';
 import type { TodoData } from '../../../utils/get-to-do-url';
 import getTodoUrl from '../../../utils/get-to-do-url';
 import useStyles from './AdminTodos.styles';
@@ -35,7 +33,7 @@ interface Props {
     | undefined;
   loading: boolean;
   saving: boolean;
-  onCompletedTodo: (id: string) => void;
+  // onCompletedTodo: (id: string) => void;
   // onUncompletedTodo: (id: string) => void;
   addTodo: boolean;
   toggleAddTodo: () => void;
@@ -60,7 +58,7 @@ const AdminTodos = ({
   data,
   loading,
   saving,
-  onCompletedTodo,
+  // onCompletedTodo,
   // onUncompletedTodo,
   addTodo,
   toggleAddTodo,
@@ -98,14 +96,14 @@ const AdminTodos = ({
       <Row align="middle" gutter={5} wrap={false} style={{ marginBottom: 10 }}>
         <Col span={4}>
           <Title className={classes.title} level={4}>
-            {intl.formatMessage({ defaultMessage: 'Tasks', id: 'yhU1et' })}
+            {intl.formatMessage({ defaultMessage: 'Activities', id: 'UmEsZF' })}
           </Title>
         </Col>
         <Col flex={1} style={{ marginRight: -10 }}>
           <Input
             placeholder={intl.formatMessage({
-              defaultMessage: 'Search for a task...',
-              id: 'jXZqfz',
+              defaultMessage: 'Search for a activity...',
+              id: '8KsNIu',
             })}
             onChange={(e) => setSearch(e.target.value)}
             allowClear
@@ -120,7 +118,10 @@ const AdminTodos = ({
             icon={<FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />}
             onClick={toggleAddTodo}
           >
-            {intl.formatMessage({ defaultMessage: 'New Task', id: 'jtxQPo' })}
+            {intl.formatMessage({
+              defaultMessage: 'New Activity',
+              id: '6kyt/v',
+            })}
           </Button>
         </Col>
       </Row>
@@ -150,31 +151,31 @@ const AdminTodos = ({
             position: ['bottomCenter'],
           }}
           columns={[
-            {
-              dataIndex: 'actions',
-              key: 'actions',
-              width: 40,
-              render: (_, record) => (
-                <Popconfirm
-                  title={intl.formatMessage({
-                    defaultMessage: 'Complete this task?',
-                    id: 'i2Qvui',
-                  })}
-                  onConfirm={() => onCompletedTodo(record.key)}
-                  okText={intl.formatMessage({
-                    defaultMessage: 'Yes',
-                    id: 'a5msuh',
-                  })}
-                  cancelText={intl.formatMessage({
-                    defaultMessage: 'No',
-                    id: 'oUWADl',
-                  })}
-                  overlayInnerStyle={{ padding: 10 }}
-                >
-                  <Checkbox checked={!!record.completed} />
-                </Popconfirm>
-              ),
-            },
+            // {
+            //   dataIndex: 'actions',
+            //   key: 'actions',
+            //   width: 40,
+            //   render: (_, record) => (
+            //     <Popconfirm
+            //       title={intl.formatMessage({
+            //         defaultMessage: 'Complete this activity?',
+            //         id: 'UCqqOk',
+            //       })}
+            //       onConfirm={() => onCompletedTodo(record.key)}
+            //       okText={intl.formatMessage({
+            //         defaultMessage: 'Yes',
+            //         id: 'a5msuh',
+            //       })}
+            //       cancelText={intl.formatMessage({
+            //         defaultMessage: 'No',
+            //         id: 'oUWADl',
+            //       })}
+            //       overlayInnerStyle={{ padding: 10 }}
+            //     >
+            //       <Checkbox checked={!!record.completed} />
+            //     </Popconfirm>
+            //   ),
+            // },
             {
               key: 'name',
               dataIndex: 'name',
@@ -195,7 +196,7 @@ const AdminTodos = ({
                 id: '8XUukm',
               }),
               width: 120,
-              render: (value) => formatCalendar(value),
+              render: (value) => FormatCalendar(value),
             },
           ]}
           expandable={{
@@ -215,14 +216,17 @@ const AdminTodos = ({
           <Empty
             image={Empty.PRESENTED_IMAGE_SIMPLE}
             description={intl.formatMessage({
-              defaultMessage: 'You have no open tasks',
-              id: 'xaKy7Z',
+              defaultMessage: 'You have no open activities',
+              id: '/grXWE',
             })}
           />
         </div>
       )}
       <Drawer
-        title={intl.formatMessage({ defaultMessage: 'New Task', id: 'jtxQPo' })}
+        title={intl.formatMessage({
+          defaultMessage: 'New Activity',
+          id: '6kyt/v',
+        })}
         open={addTodo}
         width="400"
         onClose={toggleAddTodo}

@@ -29,9 +29,9 @@ const AddNewOffender = ({
         onClose={onClose}
         saving={saving}
         images={images}
+        form={form}
         idVerified={idVerified}
         ageCheck={ageCheck}
-        form={form}
       />
     </div>
   );

@@ -3,26 +3,27 @@ import { useEffect, useState } from 'react';
 import type { ListCrimeGroupsQuery } from 'graphql/generated';
 import {
   ImagePosition,
-  useListCustomGalleriesQuery,
-  SortOrder,
-  useSchemeGroupsQuery,
-  useListCrimeGroupsQuery,
   Role,
+  SortOrder,
+  useListCrimeGroupsQuery,
+  useListCustomGalleriesQuery,
+  useSchemeGroupsQuery,
 } from 'graphql/generated';
 import type { FormInstance } from 'antd';
-import { Form, message, Upload } from 'antd';
+import { Form, message } from 'antd';
 import { useStoreState } from 'state';
 
 import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import type {
   CustomGalleryData,
+  Image,
   IncidentCardData,
-  VehicleData,
   OffenderData,
   VehicleCardData,
-  Image,
+  VehicleData,
 } from 'types/DataType';
 import update from 'immutability-helper';
+import { compressImage } from '../../../../utils/compress-images';
 
 interface Props {
   onClose: () => void;
@@ -310,7 +311,7 @@ const useEditVehicle = ({
         'This image already exists, please choose another one.'
       );
     }
-    return !isFileDuplicate || Upload.LIST_IGNORE;
+    return compressImage(file);
   };
   const imgChange: UploadProps['onChange'] = (info) => {
     if (info.file.response && info.file.status === 'done') {
@@ -387,6 +388,7 @@ const useEditVehicle = ({
     removeIncident,
     adminRights: role !== Role.User,
     imgChange,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     beforeUpload,
     fileList: fileList.filter(({ deleted }) => !deleted),
     onRemoveImage,

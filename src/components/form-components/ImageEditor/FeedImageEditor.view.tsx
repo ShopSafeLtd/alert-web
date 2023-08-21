@@ -67,7 +67,6 @@ const FeedImageEditor = ({ open, image, submitImage, onClose }: Props) => {
   const [rotation, setRotation] = useState(image?.rotation || 0);
   const [policeImage, setPoliceImage] = useState(image?.policeImage || false);
   const [primary, setPrimary] = useState(image?.primary || false);
-  console.log('image', image);
 
   const handleSubmit = () => {
     if (image) {

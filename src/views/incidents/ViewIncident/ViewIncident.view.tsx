@@ -1,9 +1,15 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
-import type { ViewIncidentQuery } from 'graphql/generated';
+import type {
+  CreateDocumentMutation,
+  CreateTodoMutation,
+  DeleteDocumentMutation,
+  ViewIncidentQuery,
+} from 'graphql/generated';
 import { GoodsMode, UpdateType } from 'graphql/generated';
 import {
+  Avatar,
   Button,
   Card,
   Checkbox,
@@ -39,6 +45,7 @@ import {
   faSirenOn,
   faTags,
   faTrash,
+  faUpload,
   faUsers,
   faUserTag,
 } from '@fortawesome/pro-light-svg-icons';
@@ -66,14 +73,19 @@ import type {
 import EditIncidentFeed from 'components/form-components/incident/EditIncidentFeed';
 import FeedImageEditor from 'components/form-components/ImageEditor/FeedImageEditor.view';
 import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
-import AddVehicle from 'components/form-components/Vehicle/AddVehicle';
 import AddNewOffenderSimple from 'components/form-components/offender/offender/AddNewOffenderSimple';
 import AddExistingOffender from 'components/form-components/offender/offender/AddExistingOffender';
 import AddGoods from 'components/form-components/incident/goods/AddGoods';
-import EditVehicle from 'components/form-components/Vehicle/EditVehicleSimple';
 import SimpleEditOffender from 'components/form-components/offender/offender/SimpleEditOffender';
 import EditGoods from 'components/form-components/incident/goods/EditGoods';
 import EditImageList from 'components/images/EditImageList';
+import type { MutationUpdaterFn } from '@apollo/client';
+import AddTodo from 'components/form-components/Todos/AddTodo';
+import FormatCalendar from 'utils/format-calendar-24h';
+import AddDocument from 'components/form-components/documents/AddDocument';
+import { ProfileUpdatedModel } from 'types/enums/profile-update-type';
+import AddVehicleSimple from 'components/form-components/Vehicle/AddVehicleSimple';
+import EditVehicleSimple from 'components/form-components/Vehicle/EditVehicleSimple';
 import UpdateContent from './Update.view';
 import useStyles from './ViewIncident.styles';
 import EvidenceTable from '../../../components/tables/EvidenceTable';
@@ -81,6 +93,14 @@ import formatAnswer from '../../../utils/format-answer';
 
 const { Title, Paragraph, Text } = Typography;
 
+interface TableItem {
+  key: string;
+  name: string;
+  description: string | null | undefined;
+  dueDate?: Date | null;
+  assignedUsers: { id: string; fullName: string }[];
+  completed: boolean;
+}
 interface Props {
   data: ViewIncidentQuery | undefined;
   loading: boolean;
@@ -177,6 +197,14 @@ interface Props {
   onAddGoods: (value: GoodsData) => void;
   onUpdateImages: (value: ImageCardData[]) => void;
   goodsMode: GoodsMode;
+  addTodo: boolean;
+  toggleAddTodo: () => void;
+  updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
+  toggleAddDocument: () => void;
+  addDocument: boolean;
+  updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
+  updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
+  hideIncident: boolean;
 }
 
 const ViewIncident = ({
@@ -253,16 +281,39 @@ const ViewIncident = ({
   onAddExistingVehicle,
   onUpdateImages,
   goodsMode,
+  addTodo,
+  toggleAddTodo,
+  updateTodoList,
+  toggleAddDocument,
+  addDocument,
+  updateDocumentList,
+  updateDeleteDocument,
+  hideIncident,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
   const navigate = useNavigate();
+  const expandedRowRender = (record: TableItem) => (
+    <Text style={{ fontSize: 14, padding: 0, margin: 0 }}>
+      {intl.formatMessage(
+        {
+          defaultMessage: ' Description: {description}',
+          id: 'b/Uf3s',
+        },
+        {
+          description: record.description,
+        }
+      )}
+    </Text>
+  );
   return (
     <div className="page-container">
       <Row wrap={false}>
-        <Col>
-          <IncidentSideList current={incidentId} />
-        </Col>
+        {!hideIncident && (
+          <Col>
+            <IncidentSideList current={incidentId} />
+          </Col>
+        )}
 
         <Col flex={1}>
           <div className={classes.viewIncident}>
@@ -407,68 +458,7 @@ const ViewIncident = ({
                         </Link> */}
                       </Col>
                     )}
-                    {data?.incident?.scheme.mg11Available && (
-                      <Dropdown
-                        overlay={
-                          <Menu
-                            items={[
-                              {
-                                label: intl.formatMessage({
-                                  defaultMessage: 'Create MG11',
-                                  id: 'CpvwMZ',
-                                }),
-                                key: '1',
-                                icon: (
-                                  <FontAwesomeIcon
-                                    size="1x"
-                                    style={{ marginRight: 8 }}
-                                    icon={faPage}
-                                  />
-                                ),
-                                // disabled: !listVehiclesData?.listVehicles.total,
-                                onClick: () =>
-                                  navigate(`/app/mg11/create/${incidentId}`),
-                              },
-                              {
-                                label: intl.formatMessage({
-                                  defaultMessage:
-                                    'Create Business Impact Statement',
-                                  id: 'PPTlxg',
-                                }),
-                                key: '3',
-                                icon: (
-                                  <FontAwesomeIcon
-                                    size="1x"
-                                    style={{ marginRight: 8 }}
-                                    icon={faPage}
-                                  />
-                                ),
-                                // disabled: !listVehiclesData?.listVehicles.total,
-                                onClick: () =>
-                                  navigate(
-                                    `/app/mg11/create-bis/${incidentId || ''}`
-                                  ),
-                              },
-                            ]}
-                          />
-                        }
-                      >
-                        <Button
-                          key="2"
-                          icon={
-                            <FontAwesomeIcon
-                              icon={faPlus}
-                              style={{ marginRight: 5 }}
-                            />
-                          }
-                        >
-                          {intl.formatMessage({
-                            defaultMessage: 'Add Document',
-                            id: 'r9vGqd',
-                          })}
-                        </Button>
-                      </Dropdown>
-                    )}
+
                     {deleteRights && (
                       <Col>
                         <Button
@@ -507,50 +497,16 @@ const ViewIncident = ({
                     >
                       {data?.incident?.images.map((image, i) => (
                         <Col key={image.id}>
-                          <Popover
-                            trigger="hover"
-                            placement="left"
-                            content={
-                              <div
-                                style={{
-                                  display: 'flex',
-                                  flexDirection: 'column',
-                                }}
-                              >
-                                <Button
-                                  type="text"
-                                  disabled={saving}
-                                  icon={
-                                    <FontAwesomeIcon
-                                      style={{ marginRight: 5 }}
-                                      icon={faEdit}
-                                      size="lg"
-                                    />
-                                  }
-                                  onClick={() => setEditImageData(image)}
-                                  size="small"
-                                >
-                                  {intl.formatMessage({
-                                    defaultMessage: 'Edit Image',
-                                    id: '9UlLIw',
-                                  })}
-                                </Button>
-                                <Popconfirm
-                                  placement="topLeft"
-                                  title={intl.formatMessage({
-                                    defaultMessage: 'Remove the image?',
-                                    id: 'bRha+v',
-                                  })}
-                                  onConfirm={() => onDeleteImage(image.id)}
-                                  okText={intl.formatMessage({
-                                    defaultMessage: 'Yes',
-                                    id: 'a5msuh',
-                                  })}
-                                  cancelText={intl.formatMessage({
-                                    defaultMessage: 'No',
-                                    id: 'oUWADl',
-                                  })}
-                                  overlayInnerStyle={{ padding: 10 }}
+                          {editRights ? (
+                            <Popover
+                              trigger="hover"
+                              placement="left"
+                              content={
+                                <div
+                                  style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                  }}
                                 >
                                   <Button
                                     type="text"
@@ -558,22 +514,68 @@ const ViewIncident = ({
                                     icon={
                                       <FontAwesomeIcon
                                         style={{ marginRight: 5 }}
-                                        icon={faTrash}
+                                        icon={faEdit}
                                         size="lg"
                                       />
                                     }
-                                    // onClick={() => onDeleteImage(image.id)}
+                                    onClick={() => setEditImageData(image)}
                                     size="small"
                                   >
                                     {intl.formatMessage({
-                                      defaultMessage: 'Delete Image',
-                                      id: 'u5uVrC',
+                                      defaultMessage: 'Edit Image',
+                                      id: '9UlLIw',
                                     })}
                                   </Button>
-                                </Popconfirm>
+                                  <Popconfirm
+                                    placement="topLeft"
+                                    title={intl.formatMessage({
+                                      defaultMessage: 'Remove the image?',
+                                      id: 'bRha+v',
+                                    })}
+                                    onConfirm={() => onDeleteImage(image.id)}
+                                    okText={intl.formatMessage({
+                                      defaultMessage: 'Yes',
+                                      id: 'a5msuh',
+                                    })}
+                                    cancelText={intl.formatMessage({
+                                      defaultMessage: 'No',
+                                      id: 'oUWADl',
+                                    })}
+                                    overlayInnerStyle={{ padding: 10 }}
+                                  >
+                                    <Button
+                                      type="text"
+                                      disabled={saving}
+                                      icon={
+                                        <FontAwesomeIcon
+                                          style={{ marginRight: 5 }}
+                                          icon={faTrash}
+                                          size="lg"
+                                        />
+                                      }
+                                      size="small"
+                                    >
+                                      {intl.formatMessage({
+                                        defaultMessage: 'Delete Image',
+                                        id: 'u5uVrC',
+                                      })}
+                                    </Button>
+                                  </Popconfirm>
+                                </div>
+                              }
+                            >
+                              <div
+                                onClick={() => openLightbox(i)}
+                                className={classes.image}
+                              >
+                                <WatermarkImage
+                                  url={image.optimised}
+                                  rotation={image.rotation}
+                                  position={image.position}
+                                />
                               </div>
-                            }
-                          >
+                            </Popover>
+                          ) : (
                             <div
                               onClick={() => openLightbox(i)}
                               className={classes.image}
@@ -584,7 +586,7 @@ const ViewIncident = ({
                                 position={image.position}
                               />
                             </div>
-                          </Popover>
+                          )}
                           {/* <Card
                             key={image.id}
                             bodyStyle={{
@@ -978,26 +980,32 @@ const ViewIncident = ({
                                     })}
                                   </Title>
                                 </Col>
-                                <Col>
-                                  <Button
-                                    size="small"
-                                    onClick={toggleAddGoods}
-                                    icon={
-                                      <FontAwesomeIcon
-                                        icon={faPlus}
-                                        style={{ marginRight: 5 }}
-                                      />
-                                    }
-                                  >
-                                    {intl.formatMessage({
-                                      defaultMessage: 'Add Item',
-                                      id: 'kNLPWW',
-                                    })}
-                                  </Button>
-                                </Col>
+                                {editRights && (
+                                  <Col>
+                                    <Button
+                                      size="small"
+                                      onClick={toggleAddGoods}
+                                      icon={
+                                        <FontAwesomeIcon
+                                          icon={faPlus}
+                                          style={{ marginRight: 5 }}
+                                        />
+                                      }
+                                    >
+                                      {intl.formatMessage({
+                                        defaultMessage: 'Add Item',
+                                        id: 'kNLPWW',
+                                      })}
+                                    </Button>
+                                  </Col>
+                                )}
                               </Row>
 
                               <Table
+                                pagination={{
+                                  hideOnSinglePage: true,
+                                  pageSize: 5,
+                                }}
                                 columns={
                                   goodsMode === GoodsMode.Generic
                                     ? [
@@ -1036,77 +1044,88 @@ const ViewIncident = ({
                                           width: 100,
                                           render: (_, record) => (
                                             <Row gutter={8}>
-                                              <Col>
-                                                <Tooltip
-                                                  title={intl.formatMessage({
-                                                    defaultMessage: 'Edit Item',
-                                                    id: 'Jm7MY5',
-                                                  })}
-                                                >
-                                                  <Button
-                                                    size="small"
-                                                    disabled={saving}
-                                                    onClick={() => {
-                                                      setEditGoodsData(
-                                                        record.item
-                                                      );
-                                                    }}
-                                                    icon={
-                                                      <FontAwesomeIcon
-                                                        icon={faPenToSquare}
-                                                      />
-                                                    }
-                                                  />
-                                                </Tooltip>
-                                              </Col>
-                                              <Col>
-                                                <Tooltip
-                                                  title={intl.formatMessage({
-                                                    defaultMessage:
-                                                      'Remove Item',
-                                                    id: 'BBWWVV',
-                                                  })}
-                                                >
-                                                  <Popconfirm
-                                                    placement="topLeft"
-                                                    trigger="hover"
+                                              {editRights && (
+                                                <Col>
+                                                  <Tooltip
                                                     title={intl.formatMessage({
                                                       defaultMessage:
-                                                        'Remove the item?',
-                                                      id: 'NKL3Y8',
+                                                        'Edit Item',
+                                                      id: 'Jm7MY5',
                                                     })}
-                                                    onConfirm={() =>
-                                                      onDeleteGoods(record.key)
-                                                    }
-                                                    okText={intl.formatMessage({
-                                                      defaultMessage: 'Yes',
-                                                      id: 'a5msuh',
-                                                    })}
-                                                    cancelText={intl.formatMessage(
-                                                      {
-                                                        defaultMessage: 'No',
-                                                        id: 'oUWADl',
-                                                      }
-                                                    )}
-                                                    overlayInnerStyle={{
-                                                      padding: 10,
-                                                    }}
                                                   >
                                                     <Button
                                                       size="small"
                                                       disabled={saving}
-                                                      // onClick={() =>
-                                                      //   onDeleteGoods(record.key)
-                                                      // }
+                                                      onClick={() => {
+                                                        setEditGoodsData(
+                                                          record.item
+                                                        );
+                                                      }}
                                                       icon={
                                                         <FontAwesomeIcon
-                                                          icon={faTrash}
+                                                          icon={faPenToSquare}
                                                         />
                                                       }
                                                     />
-                                                  </Popconfirm>
-                                                </Tooltip>
-                                              </Col>
+                                                  </Tooltip>
+                                                </Col>
+                                              )}
+                                              {deleteRights && (
+                                                <Col>
+                                                  <Tooltip
+                                                    title={intl.formatMessage({
+                                                      defaultMessage:
+                                                        'Remove Item',
+                                                      id: 'BBWWVV',
+                                                    })}
+                                                  >
+                                                    <Popconfirm
+                                                      placement="topLeft"
+                                                      trigger="hover"
+                                                      title={intl.formatMessage(
+                                                        {
+                                                          defaultMessage:
+                                                            'Remove the item?',
+                                                          id: 'NKL3Y8',
+                                                        }
+                                                      )}
+                                                      onConfirm={() =>
+                                                        onDeleteGoods(
+                                                          record.key
+                                                        )
+                                                      }
+                                                      okText={intl.formatMessage(
+                                                        {
+                                                          defaultMessage: 'Yes',
+                                                          id: 'a5msuh',
+                                                        }
+                                                      )}
+                                                      cancelText={intl.formatMessage(
+                                                        {
+                                                          defaultMessage: 'No',
+                                                          id: 'oUWADl',
+                                                        }
+                                                      )}
+                                                      overlayInnerStyle={{
+                                                        padding: 10,
+                                                      }}
+                                                    >
+                                                      <Button
+                                                        size="small"
+                                                        disabled={saving}
+                                                        // onClick={() =>
+                                                        //   onDeleteGoods(record.key)
+                                                        // }
+                                                        icon={
+                                                          <FontAwesomeIcon
+                                                            icon={faTrash}
+                                                          />
+                                                        }
+                                                      />
+                                                    </Popconfirm>
+                                                  </Tooltip>
+                                                </Col>
+                                              )}
                                             </Row>
                                           ),
                                         },
@@ -1153,7 +1172,6 @@ const ViewIncident = ({
                                   })
                                 )}
                                 size="small"
-                                pagination={false}
                                 // TODO
                                 // eslint-disable-next-line react/no-unstable-nested-components
                                 summary={(tableData) => {
@@ -1221,61 +1239,64 @@ const ViewIncident = ({
                                 })}
                               </Title>
                             </Col>
-                            <Col>
-                              <Dropdown
-                                overlay={
-                                  <Menu
-                                    items={[
-                                      {
-                                        label: intl.formatMessage({
-                                          id: 'w4XD3a',
-                                          defaultMessage:
-                                            'Add Existing Offender',
-                                        }),
-                                        key: '1',
-                                        icon: (
-                                          <FontAwesomeIcon
-                                            icon={faMagnifyingGlass}
-                                            style={{ marginRight: 5 }}
-                                          />
-                                        ),
-                                        onClick: () =>
-                                          toggleAddExistingOffender(),
-                                      },
-                                      {
-                                        label: intl.formatMessage({
-                                          id: '58ir77',
-                                          defaultMessage: 'Create New Offender',
-                                        }),
-                                        key: '2',
-                                        icon: (
-                                          <FontAwesomeIcon
-                                            icon={faPlus}
-                                            style={{ marginRight: 5 }}
-                                          />
-                                        ),
-                                        onClick: () => toggleAddOffender(),
-                                      },
-                                    ]}
-                                  />
-                                }
-                              >
-                                <Button
-                                  size="small"
-                                  icon={
-                                    <FontAwesomeIcon
-                                      icon={faPlus}
-                                      style={{ marginRight: 5 }}
+                            {editRights && (
+                              <Col>
+                                <Dropdown
+                                  overlay={
+                                    <Menu
+                                      items={[
+                                        {
+                                          label: intl.formatMessage({
+                                            id: 'w4XD3a',
+                                            defaultMessage:
+                                              'Add Existing Offender',
+                                          }),
+                                          key: '1',
+                                          icon: (
+                                            <FontAwesomeIcon
+                                              icon={faMagnifyingGlass}
+                                              style={{ marginRight: 5 }}
+                                            />
+                                          ),
+                                          onClick: () =>
+                                            toggleAddExistingOffender(),
+                                        },
+                                        {
+                                          label: intl.formatMessage({
+                                            id: '58ir77',
+                                            defaultMessage:
+                                              'Create New Offender',
+                                          }),
+                                          key: '2',
+                                          icon: (
+                                            <FontAwesomeIcon
+                                              icon={faPlus}
+                                              style={{ marginRight: 5 }}
+                                            />
+                                          ),
+                                          onClick: () => toggleAddOffender(),
+                                        },
+                                      ]}
                                     />
                                   }
                                 >
-                                  {intl.formatMessage({
-                                    defaultMessage: 'Offenders',
-                                    id: 'xb54TN',
-                                  })}
-                                </Button>
-                              </Dropdown>
-                            </Col>
+                                  <Button
+                                    size="small"
+                                    icon={
+                                      <FontAwesomeIcon
+                                        icon={faPlus}
+                                        style={{ marginRight: 5 }}
+                                      />
+                                    }
+                                  >
+                                    {intl.formatMessage({
+                                      defaultMessage: 'Add Offenders',
+                                      id: 'KaNxum',
+                                    })}
+                                  </Button>
+                                </Dropdown>
+                              </Col>
+                            )}
                           </Row>
 
                           {data?.incident?.offenders.length && !loading ? (
@@ -1284,6 +1305,8 @@ const ViewIncident = ({
                               setEditOffenderData={setEditOffenderData}
                               onDeleteOffender={onDeleteOffender}
                               saving={saving}
+                              editRights={editRights}
+                              deleteRights={deleteRights}
                             />
                           ) : (
                             <Empty
@@ -1311,61 +1334,64 @@ const ViewIncident = ({
                                 })}
                               </Title>
                             </Col>
-                            <Col>
-                              <Dropdown
-                                overlay={
-                                  <Menu
-                                    items={[
-                                      {
-                                        label: intl.formatMessage({
-                                          defaultMessage:
-                                            'Add Existing Vehicles',
-                                          id: 'goP1s6',
-                                        }),
-                                        key: '1',
-                                        icon: (
-                                          <FontAwesomeIcon
-                                            icon={faMagnifyingGlass}
-                                            style={{ marginRight: 5 }}
-                                          />
-                                        ),
-                                        onClick: () =>
-                                          toggleAddExistingVehicle(),
-                                      },
-                                      {
-                                        label: intl.formatMessage({
-                                          defaultMessage: 'Create New Vehicle',
-                                          id: 'xiAZxN',
-                                        }),
-                                        key: '2',
-                                        icon: (
-                                          <FontAwesomeIcon
-                                            icon={faPlus}
-                                            style={{ marginRight: 5 }}
-                                          />
-                                        ),
-                                        onClick: () => toggleAddVehicle(),
-                                      },
-                                    ]}
-                                  />
-                                }
-                              >
-                                <Button
-                                  size="small"
-                                  icon={
-                                    <FontAwesomeIcon
-                                      icon={faPlus}
-                                      style={{ marginRight: 5 }}
+                            {editRights && (
+                              <Col>
+                                <Dropdown
+                                  overlay={
+                                    <Menu
+                                      items={[
+                                        {
+                                          label: intl.formatMessage({
+                                            defaultMessage:
+                                              'Add Existing Vehicles',
+                                            id: 'goP1s6',
+                                          }),
+                                          key: '1',
+                                          icon: (
+                                            <FontAwesomeIcon
+                                              icon={faMagnifyingGlass}
+                                              style={{ marginRight: 5 }}
+                                            />
+                                          ),
+                                          onClick: () =>
+                                            toggleAddExistingVehicle(),
+                                        },
+                                        {
+                                          label: intl.formatMessage({
+                                            defaultMessage:
+                                              'Create New Vehicle',
+                                            id: 'xiAZxN',
+                                          }),
+                                          key: '2',
+                                          icon: (
+                                            <FontAwesomeIcon
+                                              icon={faPlus}
+                                              style={{ marginRight: 5 }}
+                                            />
+                                          ),
+                                          onClick: () => toggleAddVehicle(),
+                                        },
+                                      ]}
                                     />
                                   }
                                 >
-                                  {intl.formatMessage({
-                                    defaultMessage: 'Vehicles',
-                                    id: 'r6wuJ3',
-                                  })}
-                                </Button>
-                              </Dropdown>
-                            </Col>
+                                  <Button
+                                    size="small"
+                                    icon={
+                                      <FontAwesomeIcon
+                                        icon={faPlus}
+                                        style={{ marginRight: 5 }}
+                                      />
+                                    }
+                                  >
+                                    {intl.formatMessage({
+                                      defaultMessage: 'Add Vehicles',
+                                      id: 'iKGwyV',
+                                    })}
+                                  </Button>
+                                </Dropdown>
+                              </Col>
+                            )}
                           </Row>
 
                           {data?.incident?.vehicles.length && !loading ? (
@@ -1374,6 +1400,8 @@ const ViewIncident = ({
                               setEditVehicleData={setEditVehicleData}
                               onDeleteVehicle={onDeleteVehicle}
                               saving={saving}
+                              editRights={editRights}
+                              deleteRights={deleteRights}
                             />
                           ) : (
                             <Empty
@@ -1385,24 +1413,296 @@ const ViewIncident = ({
                             />
                           )}
                         </Card>
-                        {data?.incident?.scheme.mg11Available && (
-                          <Card style={{ marginTop: 20 }}>
-                            <Title level={4}>
-                              {intl.formatMessage({
-                                defaultMessage: 'Evidence',
-                                id: '6g7+6N',
+
+                        <Card style={{ marginTop: 20 }}>
+                          <Row
+                            gutter={8}
+                            align="middle"
+                            style={{ marginBottom: 10 }}
+                          >
+                            <Col flex={1}>
+                              <Title level={4}>
+                                {intl.formatMessage({
+                                  defaultMessage: 'Evidence',
+                                  id: '6g7+6N',
+                                })}
+                              </Title>
+                            </Col>
+                            {editRights && (
+                              <Col>
+                                {data?.incident?.scheme.mg11Available ? (
+                                  <Dropdown
+                                    overlay={
+                                      <Menu
+                                        items={[
+                                          {
+                                            label: intl.formatMessage({
+                                              defaultMessage: 'Create MG11',
+                                              id: 'CpvwMZ',
+                                            }),
+                                            key: '1',
+                                            icon: (
+                                              <FontAwesomeIcon
+                                                size="1x"
+                                                style={{ marginRight: 8 }}
+                                                icon={faPage}
+                                              />
+                                            ),
+                                            // disabled: !listVehiclesData?.listVehicles.total,
+                                            onClick: () =>
+                                              navigate(
+                                                `/app/mg11/create/${incidentId}`
+                                              ),
+                                          },
+                                          {
+                                            label: intl.formatMessage({
+                                              defaultMessage:
+                                                'Create Business Impact Statement',
+                                              id: 'PPTlxg',
+                                            }),
+                                            key: '2',
+                                            icon: (
+                                              <FontAwesomeIcon
+                                                size="1x"
+                                                style={{ marginRight: 8 }}
+                                                icon={faPage}
+                                              />
+                                            ),
+                                            // disabled: !listVehiclesData?.listVehicles.total,
+                                            onClick: () =>
+                                              navigate(
+                                                `/app/mg11/create-bis/${
+                                                  incidentId || ''
+                                                }`
+                                              ),
+                                          },
+                                          {
+                                            label: intl.formatMessage({
+                                              defaultMessage: 'Upload',
+                                              id: 'p4N05H',
+                                            }),
+                                            key: '3',
+                                            icon: (
+                                              <FontAwesomeIcon
+                                                size="1x"
+                                                style={{ marginRight: 8 }}
+                                                icon={faUpload}
+                                              />
+                                            ),
+                                            // disabled: !listVehiclesData?.listVehicles.total,
+                                            onClick: () => toggleAddDocument(),
+                                          },
+                                        ]}
+                                      />
+                                    }
+                                  >
+                                    <Button
+                                      // key="2"
+                                      icon={
+                                        <FontAwesomeIcon
+                                          icon={faPlus}
+                                          style={{ marginRight: 5 }}
+                                        />
+                                      }
+                                    >
+                                      {intl.formatMessage({
+                                        defaultMessage: 'Add Evidence',
+                                        id: 'vgVasT',
+                                      })}
+                                    </Button>
+                                  </Dropdown>
+                                ) : (
+                                  <Button
+                                    size="small"
+                                    onClick={toggleAddDocument}
+                                    icon={
+                                      <FontAwesomeIcon
+                                        icon={faPlus}
+                                        style={{ marginRight: 5 }}
+                                      />
+                                    }
+                                  >
+                                    {intl.formatMessage({
+                                      defaultMessage: 'Add Evidence',
+                                      id: 'vgVasT',
+                                    })}
+                                  </Button>
+                                )}
+                              </Col>
+                            )}
+                            {/* {editRights && (
+                              <Col>
+                                <Button
+                                  size="small"
+                                  onClick={toggleAddDocument}
+                                  icon={
+                                    <FontAwesomeIcon
+                                      icon={faPlus}
+                                      style={{ marginRight: 5 }}
+                                    />
+                                  }
+                                >
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Add Evidence',
+                                    id: 'vgVasT',
+                                  })}
+                                </Button>
+                              </Col>
+                            )} */}
+                          </Row>
+
+                          {data?.incident?.evidence.length && !loading ? (
+                            <EvidenceTable
+                              evidence={data?.incident?.evidence}
+                              title={ProfileUpdatedModel.Incident}
+                              update={updateDeleteDocument}
+                              deleteRights={deleteRights}
+                            />
+                          ) : (
+                            <Empty
+                              description={intl.formatMessage({
+                                defaultMessage: 'No evidence for this incident',
+                                id: 'GkZRlh',
                               })}
-                            </Title>
-                            {data?.incident?.evidence.length && !loading ? (
-                              <EvidenceTable
-                                evidence={data?.incident?.evidence}
+                              image={Empty.PRESENTED_IMAGE_SIMPLE}
+                            />
+                          )}
+                        </Card>
+
+                        {editRights && (
+                          <Card>
+                            <Row
+                              gutter={8}
+                              align="middle"
+                              style={{ marginBottom: 10 }}
+                            >
+                              <Col flex={1}>
+                                <Title level={4}>
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Activities',
+                                    id: 'UmEsZF',
+                                  })}
+                                </Title>
+                              </Col>
+                              {editRights && (
+                                <Col>
+                                  <Button
+                                    size="small"
+                                    onClick={toggleAddTodo}
+                                    icon={
+                                      <FontAwesomeIcon
+                                        icon={faPlus}
+                                        style={{ marginRight: 5 }}
+                                      />
+                                    }
+                                  >
+                                    {intl.formatMessage({
+                                      defaultMessage: 'Add Activity',
+                                      id: 'VOiupa',
+                                    })}
+                                  </Button>
+                                </Col>
+                              )}
+                            </Row>
+                            {data?.incident?.todos.length && !loading ? (
+                              <Table
+                                size="small"
+                                loading={loading}
+                                pagination={{
+                                  hideOnSinglePage: true,
+                                  pageSize: 5,
+                                }}
+                                columns={[
+                                  {
+                                    key: 'name',
+                                    title: intl.formatMessage({
+                                      defaultMessage: 'Name',
+                                      id: 'HAlOn1',
+                                    }),
+                                    dataIndex: 'name',
+                                  },
+                                  {
+                                    key: 'description',
+                                    dataIndex: 'description',
+                                    title: intl.formatMessage({
+                                      defaultMessage: 'Description',
+                                      id: 'Q8Qw5B',
+                                    }),
+                                    ellipsis: true,
+                                  },
+
+                                  {
+                                    key: 'dueDate',
+                                    dataIndex: 'dueDate',
+                                    title: intl.formatMessage({
+                                      defaultMessage: 'Due Date',
+                                      id: '8XUukm',
+                                    }),
+                                    render: (value: Date) =>
+                                      FormatCalendar(new Date(value), true),
+                                  },
+                                  {
+                                    key: 'assignedUsers',
+                                    dataIndex: 'assignedUsers',
+                                    title: intl.formatMessage({
+                                      defaultMessage: 'Assigned Users',
+                                      id: '8oku8d',
+                                    }),
+                                    ellipsis: true,
+                                    render: (
+                                      value: { id: string; fullName: string }[]
+                                    ) => (
+                                      <Row gutter={4}>
+                                        {value.map((item) => (
+                                          <Col key={item.id}>
+                                            <Tooltip title={item.fullName}>
+                                              <Avatar
+                                                style={{
+                                                  cursor: 'pointer',
+                                                  fontSize: 14,
+                                                }}
+                                                size={30}
+                                              >
+                                                {item.fullName
+                                                  .split(' ')
+                                                  .map((split) =>
+                                                    split
+                                                      .slice(0, 1)
+                                                      .toUpperCase()
+                                                  )
+                                                  .toString()
+                                                  .replace(',', '')}
+                                              </Avatar>
+                                            </Tooltip>
+                                          </Col>
+                                        ))}
+                                      </Row>
+                                    ),
+                                  },
+                                ]}
+                                dataSource={data?.incident?.todos.map(
+                                  (todo) => ({
+                                    key: todo.id,
+                                    name: todo.name || '',
+                                    description: todo?.description,
+                                    dueDate: todo.dueDate,
+                                    completed: todo.completed || false,
+                                    assignedUsers: todo.assignedUsers,
+                                    // todo,
+                                  })
+                                )}
+                                expandable={{
+                                  expandedRowRender,
+                                  rowExpandable: (record) =>
+                                    !!record.description,
+                                }}
                               />
                             ) : (
                               <Empty
                                 description={intl.formatMessage({
                                   defaultMessage:
-                                    'No evidence for this incident',
-                                  id: 'GkZRlh',
+                                    'No activities for this incident',
+                                  id: 'JLTkJo',
                                 })}
                                 image={Empty.PRESENTED_IMAGE_SIMPLE}
                               />
@@ -1807,7 +2107,58 @@ const ViewIncident = ({
           <div />
         )}
       </Drawer>
+      {/* images */}
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Edit Incident Images',
+          id: 'BqhA0W',
+        })}
+        open={editImages}
+        width="800"
+        zIndex={999}
+        onClose={toggleEditImages}
+      >
+        {editImages ? (
+          <EditImageList
+            update={onUpdateImages}
+            onClose={toggleEditImages}
+            images={data?.incident?.images}
+            title={intl.formatMessage({
+              defaultMessage: 'incidnet',
+              id: 'PjFIWc',
+            })}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <FeedImageEditor
+        submitImage={onEditImage}
+        onClose={() => setEditImageData(null)}
+        open={!!editImageData}
+        image={editImageData}
+      />
       {/* offender */}
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Edit Offender',
+          id: '+OfJ4/',
+        })}
+        open={!!editOffenderData}
+        width="700"
+        onClose={() => setEditOffenderData(null)}
+      >
+        {editOffenderData ? (
+          <SimpleEditOffender
+            data={editOffenderData}
+            onClose={() => setEditOffenderData(null)}
+            update={onEditOffender}
+            images={data?.incident?.images}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add New Offender',
@@ -1848,26 +2199,7 @@ const ViewIncident = ({
           <div />
         )}
       </Drawer>
-      <Drawer
-        title={intl.formatMessage({
-          defaultMessage: 'Edit Offender',
-          id: '+OfJ4/',
-        })}
-        open={!!editOffenderData}
-        width="700"
-        onClose={() => setEditOffenderData(null)}
-      >
-        {editOffenderData ? (
-          <SimpleEditOffender
-            data={editOffenderData}
-            onClose={() => setEditOffenderData(null)}
-            update={onEditOffender}
-            images={data?.incident?.images}
-          />
-        ) : (
-          <div />
-        )}
-      </Drawer>
+
       {/* vehicle */}
       <Drawer
         title={intl.formatMessage({
@@ -1900,10 +2232,10 @@ const ViewIncident = ({
         onClose={toggleAddVehicle}
       >
         {addVehicle ? (
-          <AddVehicle
+          <AddVehicleSimple
             update={onAddVehicle}
             onClose={toggleAddVehicle}
-            fromIncident
+            images={data?.incident?.images.map((el) => ({ ...el, uid: el.id }))}
           />
         ) : (
           <div />
@@ -1920,10 +2252,10 @@ const ViewIncident = ({
         zIndex={1001}
       >
         {editVehicleData ? (
-          <EditVehicle
+          <EditVehicleSimple
+            editData={editVehicleData}
             update={onEditVehicle}
             onClose={() => setEditVehicleData(null)}
-            editData={editVehicleData}
             images={data?.incident?.images.map((el) => ({ ...el, uid: el.id }))}
           />
         ) : (
@@ -1967,37 +2299,49 @@ const ViewIncident = ({
           <div />
         )}
       </Drawer>
-      {/* images */}
+
+      {/* todo */}
       <Drawer
         title={intl.formatMessage({
-          defaultMessage: 'Edit Incident Images',
-          id: 'BqhA0W',
+          defaultMessage: 'Add Activity',
+          id: 'VOiupa',
         })}
-        open={editImages}
-        width="800"
-        zIndex={999}
-        onClose={toggleEditImages}
+        open={addTodo}
+        width="600"
+        onClose={toggleAddTodo}
       >
-        {editImages ? (
-          <EditImageList
-            update={onUpdateImages}
-            onClose={toggleEditImages}
-            images={data?.incident?.images}
-            title={intl.formatMessage({
-              defaultMessage: 'incidnet',
-              id: 'PjFIWc',
-            })}
+        {addTodo ? (
+          <AddTodo
+            update={updateTodoList}
+            onClose={toggleAddTodo}
+            incidentId={data?.incident?.id}
           />
         ) : (
           <div />
         )}
       </Drawer>
-      <FeedImageEditor
-        submitImage={onEditImage}
-        onClose={() => setEditImageData(null)}
-        open={!!editImageData}
-        image={editImageData}
-      />
+
+      {/* evidence */}
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Add Evidence',
+          id: 'vgVasT',
+        })}
+        visible={addDocument}
+        width="600"
+        onClose={toggleAddDocument}
+        zIndex={1001}
+      >
+        {addDocument ? (
+          <AddDocument
+            incidentId={data?.incident?.id || ''}
+            onClose={toggleAddDocument}
+            update={updateDocumentList}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
       <Lightbox
         open={lightBoxOpen.open}
         close={() => openLightbox(0)}

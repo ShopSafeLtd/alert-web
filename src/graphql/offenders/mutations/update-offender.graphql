@@ -21,8 +21,11 @@ mutation updateOffender($where: UniqueId!, $data: OffenderUpdateInput!) {
       id
       url
       optimised
+      card
       position
       rotation
+      primary
+      policeImage
     }
     groups {
       id

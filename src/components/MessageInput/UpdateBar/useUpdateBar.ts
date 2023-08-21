@@ -93,6 +93,7 @@ interface Return {
   saving: boolean;
   adminRights: boolean;
   handleMarkAsRead: () => void;
+  hideIncident: boolean;
 }
 
 interface Props {
@@ -155,13 +156,16 @@ const useUpdateBar = ({
 }: Props): Return => {
   const [updateForm] = Form.useForm<FormData>();
 
-  const schemeId = useStoreState((state) => state.scheme.id);
-  const userRole = useStoreState((state) => state.user.role);
-  const userId = useStoreState((state) => state.user.id);
-  const fullName = useStoreState((state) => state.user.origName);
-  const businesses = useStoreState((state) => state.user.businesses);
-  const userGroups = useStoreState((state) => state.user.groups);
-
+  const { restrictIncidentAccess, id: schemeId } = useStoreState(
+    (state) => state.scheme
+  );
+  const {
+    role: userRole,
+    id: userId,
+    origName: fullName,
+    groups: userGroups,
+    businesses,
+  } = useStoreState((state) => state.user);
   const [saving, setSaving] = useState(false);
   const [showUpdatePicker, setShowUpdatePicker] = useState(false);
   const [linkIncident, setLinkIncident] = useState(false);
@@ -203,6 +207,7 @@ const useUpdateBar = ({
     updateIncidents,
     vehiclesData,
     crimeGroupsData,
+    setOptionRowShow,
   ]);
 
   useListSchemeUsersQuery({
@@ -1139,6 +1144,7 @@ const useUpdateBar = ({
     saving,
     adminRights: userRole !== Role.User,
     handleMarkAsRead,
+    hideIncident: userRole === Role.User && restrictIncidentAccess,
   };
 };
 

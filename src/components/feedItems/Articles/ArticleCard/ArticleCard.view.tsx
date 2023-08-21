@@ -14,7 +14,7 @@ import {
   faUser,
 } from '@fortawesome/pro-light-svg-icons';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import formatCalendar from 'utils/format-calendar-24h';
+import FormatCalendar from 'utils/format-calendar-24h';
 import { useStoreState } from 'state';
 import { useIntl } from 'react-intl';
 import useStyles from './ArticleCard.styles';
@@ -116,7 +116,7 @@ const ArticleCard = ({ article, openLightbox }: Props): JSX.Element => {
                 icon={faClock}
                 style={{ marginRight: 5 }}
               />
-              <Text>{formatCalendar(updatedAt || new Date())}</Text>
+              <Text>{FormatCalendar(updatedAt || new Date())}</Text>
             </Col>
           </Row>
           {userGroups.length > 0 &&

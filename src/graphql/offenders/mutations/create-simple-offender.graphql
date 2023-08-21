@@ -1,0 +1,24 @@
+mutation CreateSimpleOffender($data: CreateOffenderData!) {
+  createOffender(data: $data) {
+    id
+    name
+    age
+    gender
+    race
+    dateOfBirth
+    build
+    height
+    comment
+    images(first: 1) {
+      id
+      url
+      optimised
+      card
+      position
+      rotation
+      primary
+      policeImage
+    }
+    recycled
+  }
+}

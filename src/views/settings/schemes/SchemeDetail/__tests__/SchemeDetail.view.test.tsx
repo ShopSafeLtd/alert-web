@@ -10,6 +10,7 @@ describe('List Officer View', () => {
       name: 'test scheme',
       autoApproveIncidents: false,
       autoApproveOffenders: false,
+      restrictIncidentAccess: false,
       logo: null,
       offenderRetention: null,
       incidentRetention: null,

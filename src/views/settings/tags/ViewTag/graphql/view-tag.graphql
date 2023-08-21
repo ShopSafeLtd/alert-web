@@ -20,6 +20,7 @@ query ViewTag(
       name
     }
     description
+
     incidentForm {
       id
       fields {
@@ -31,10 +32,13 @@ query ViewTag(
     tagQuestions(where: $tagQuestionsWhere) {
       req
       priority
+      dependentQuestions
       question {
         questionFormatted
         type
         id
+        optionsFormatted
+        type
       }
       id
     }

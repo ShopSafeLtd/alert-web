@@ -2,8 +2,16 @@ import React from 'react';
 
 import View from './TodoList.view';
 import useAdminTodos from './useTodoList';
+import type { ListData } from '../useActivities';
 
-const AdminTodos = (): JSX.Element => {
+interface Props {
+  templateData: ListData[];
+  loading: boolean;
+}
+const AdminTodos = ({
+  templateData,
+  loading: TemplateLoading,
+}: Props): JSX.Element => {
   const {
     data,
     loading,
@@ -21,14 +29,18 @@ const AdminTodos = (): JSX.Element => {
     toggleAllSchemes,
     setSelectedTodo,
     selectedTodo,
-  } = useAdminTodos();
+    selectTemplate,
+    selectedTemplate,
+  } = useAdminTodos({ templateData });
 
   return (
     <View
+      selectedTemplate={selectedTemplate}
+      selectTemplate={selectTemplate}
       selectedTodo={selectedTodo}
       setSelectedTodo={setSelectedTodo}
       data={data}
-      loading={loading}
+      loading={loading || TemplateLoading}
       saving={saving}
       onCompletedTodo={onCompletedTodo}
       onUncompletedTodo={onUncompletedTodo}
@@ -41,6 +53,7 @@ const AdminTodos = (): JSX.Element => {
       currentPageSize={currentPageSize}
       toggleAllUsers={toggleAllUsers}
       toggleAllSchemes={toggleAllSchemes}
+      templateData={templateData}
     />
   );
 };

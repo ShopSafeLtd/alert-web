@@ -3,6 +3,8 @@
 import React from 'react';
 import type {
   AssociatedOffendersQuery,
+  CreateDocumentMutation,
+  DeleteDocumentMutation,
   ViewOffenderQuery,
 } from 'graphql/generated';
 import { UpdateType } from 'graphql/generated';
@@ -77,7 +79,7 @@ import AssociatedOffender from 'components/offenders/AssociatedOffender';
 import { calcDuration } from 'utils';
 import LightBox from 'components/images/LightBox/LightBox.container';
 import OffenderMatches from 'components/rekognition/OffenderMatches/OffenderMatches.container';
-import formatCalendar from 'utils/format-calendar-24h';
+import FormatCalendar from 'utils/format-calendar-24h';
 import { useIntl } from 'react-intl';
 import type {
   BanData,
@@ -89,16 +91,20 @@ import type {
 import EditImageList from 'components/images/EditImageList';
 import FeedImageEditor from 'components/form-components/ImageEditor/FeedImageEditor.view';
 import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
-import AddVehicle from 'components/form-components/Vehicle/AddVehicle';
-import EditVehicle from 'components/form-components/Vehicle/EditVehicleSimple';
 import EditExclusion from 'components/form-components/offender/exclusion/EditExclusion';
 import AddExclusion from 'components/form-components/offender/exclusion/AddExclusion';
 import NewOffenderAddress from 'components/form-components/addresses/NewOffenderAddress';
 import EditOffenderAddress from 'components/form-components/addresses/EditOffenderAddress';
 import LinkCrimeGroup from 'components/form-components/linkOptions/LinkCrimeGroup';
 import EditOffenderFeed from 'components/form-components/offender/EditOffenderFeed';
-import type { ViewAssociate } from './useViewOffender';
+import EvidenceTable from 'components/tables/EvidenceTable';
+import { ProfileUpdatedModel } from 'types/enums/profile-update-type';
+import AddDocument from 'components/form-components/documents/AddDocument';
+import type { MutationUpdaterFn } from '@apollo/client';
+import AddVehicleSimple from 'components/form-components/Vehicle/AddVehicleSimple';
+import EditVehicleSimple from 'components/form-components/Vehicle/EditVehicleSimple';
 import useStyles from './ViewOffender.styles';
+import type { ViewAssociate } from './useViewOffender';
 
 const { Title, Text, Paragraph } = Typography;
 interface TableItem {
@@ -206,6 +212,10 @@ interface Props {
   onDeleteImage: (id: string) => void;
   onEditImage: (id: EditFeedImage) => void;
   onUpdateImages: (value: ImageCardData[]) => void;
+  toggleAddDocument: () => void;
+  addDocument: boolean;
+  updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
+  updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
 }
 
 const ViewOffender = ({
@@ -287,6 +297,10 @@ const ViewOffender = ({
   toggleAddBan,
   onEditBan,
   onAddBan,
+  toggleAddDocument,
+  addDocument,
+  updateDocumentList,
+  updateDeleteDocument,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const classes = useStyles();
@@ -660,7 +674,7 @@ const ViewOffender = ({
                     </span>
                   }
                 >
-                  {formatCalendar(data?.offender?.updatedAt || moment())}
+                  {FormatCalendar(data?.offender?.updatedAt || moment())}
                 </Descriptions.Item>
                 <Descriptions.Item
                   label={
@@ -1073,23 +1087,25 @@ const ViewOffender = ({
                     })}
                   </Title>
                 </Col>
-                <Col>
-                  <Button
-                    size="small"
-                    onClick={toggleAddBan}
-                    icon={
-                      <FontAwesomeIcon
-                        icon={faPlus}
-                        style={{ marginRight: 5 }}
-                      />
-                    }
-                  >
-                    {intl.formatMessage({
-                      defaultMessage: 'Add Exclusion',
-                      id: 'QPeZMN',
-                    })}
-                  </Button>
-                </Col>
+                {editRights && (
+                  <Col>
+                    <Button
+                      size="small"
+                      onClick={toggleAddBan}
+                      icon={
+                        <FontAwesomeIcon
+                          icon={faPlus}
+                          style={{ marginRight: 5 }}
+                        />
+                      }
+                    >
+                      {intl.formatMessage({
+                        defaultMessage: 'Add Exclusion',
+                        id: 'QPeZMN',
+                      })}
+                    </Button>
+                  </Col>
+                )}
               </Row>
               <Table
                 size="small"
@@ -1174,58 +1190,62 @@ const ViewOffender = ({
                     // width: 100,
                     render: (_, record) => (
                       <Row gutter={8}>
-                        <Col>
-                          <Tooltip
-                            title={intl.formatMessage({
-                              defaultMessage: 'Edit Exclusion',
-                              id: '22olP0',
-                            })}
-                          >
-                            <Button
-                              size="small"
-                              disabled={saving}
-                              onClick={() => {
-                                setEditBanData(record.ban);
-                              }}
-                              icon={<FontAwesomeIcon icon={faPenToSquare} />}
-                            />
-                          </Tooltip>
-                        </Col>
-                        <Col>
-                          <Tooltip
-                            title={intl.formatMessage({
-                              defaultMessage: 'Remove Exclusion',
-                              id: '8y70Xm',
-                            })}
-                          >
-                            <Popconfirm
-                              placement="topLeft"
-                              trigger="hover"
+                        {editRights && (
+                          <Col>
+                            <Tooltip
                               title={intl.formatMessage({
-                                defaultMessage: 'Remove the exclusion?',
-                                id: 'Dc7IO/',
+                                defaultMessage: 'Edit Exclusion',
+                                id: '22olP0',
                               })}
-                              onConfirm={() => onDeleteBan(record.key)}
-                              okText={intl.formatMessage({
-                                defaultMessage: 'Yes',
-                                id: 'a5msuh',
-                              })}
-                              cancelText={intl.formatMessage({
-                                defaultMessage: 'No',
-                                id: 'oUWADl',
-                              })}
-                              overlayInnerStyle={{
-                                padding: 10,
-                              }}
                             >
                               <Button
                                 size="small"
                                 disabled={saving}
-                                icon={<FontAwesomeIcon icon={faTrash} />}
+                                onClick={() => {
+                                  setEditBanData(record.ban);
+                                }}
+                                icon={<FontAwesomeIcon icon={faPenToSquare} />}
                               />
-                            </Popconfirm>
-                          </Tooltip>
-                        </Col>
+                            </Tooltip>
+                          </Col>
+                        )}
+                        {deleteRights && (
+                          <Col>
+                            <Tooltip
+                              title={intl.formatMessage({
+                                defaultMessage: 'Remove Exclusion',
+                                id: '8y70Xm',
+                              })}
+                            >
+                              <Popconfirm
+                                placement="topLeft"
+                                trigger="hover"
+                                title={intl.formatMessage({
+                                  defaultMessage: 'Remove the exclusion?',
+                                  id: 'Dc7IO/',
+                                })}
+                                onConfirm={() => onDeleteBan(record.key)}
+                                okText={intl.formatMessage({
+                                  defaultMessage: 'Yes',
+                                  id: 'a5msuh',
+                                })}
+                                cancelText={intl.formatMessage({
+                                  defaultMessage: 'No',
+                                  id: 'oUWADl',
+                                })}
+                                overlayInnerStyle={{
+                                  padding: 10,
+                                }}
+                              >
+                                <Button
+                                  size="small"
+                                  disabled={saving}
+                                  icon={<FontAwesomeIcon icon={faTrash} />}
+                                />
+                              </Popconfirm>
+                            </Tooltip>
+                          </Col>
+                        )}
                       </Row>
                     ),
                   },
@@ -1233,10 +1253,10 @@ const ViewOffender = ({
                 dataSource={data?.offender?.bans.map((ban) => ({
                   key: ban.id,
                   endDate: ban.endDate,
-                  duration: `${formatCalendar(
+                  duration: `${FormatCalendar(
                     ban?.startDate,
                     true
-                  )}  ->  ${formatCalendar(ban?.endDate, true)}`,
+                  )}  ->  ${FormatCalendar(ban?.endDate, true)}`,
                   activeDay: calcDuration(
                     new Date(ban?.startDate),
                     new Date(ban?.endDate)
@@ -1264,23 +1284,25 @@ const ViewOffender = ({
                       })}
                     </Title>
                   </Col>
-                  <Col>
-                    <Button
-                      size="small"
-                      onClick={toggleAddAddress}
-                      icon={
-                        <FontAwesomeIcon
-                          icon={faPlus}
-                          style={{ marginRight: 5 }}
-                        />
-                      }
-                    >
-                      {intl.formatMessage({
-                        defaultMessage: 'Add Address',
-                        id: 'xg14pg',
-                      })}
-                    </Button>
-                  </Col>
+                  {editRights && (
+                    <Col>
+                      <Button
+                        size="small"
+                        onClick={toggleAddAddress}
+                        icon={
+                          <FontAwesomeIcon
+                            icon={faPlus}
+                            style={{ marginRight: 5 }}
+                          />
+                        }
+                      >
+                        {intl.formatMessage({
+                          defaultMessage: 'Add Address',
+                          id: 'xg14pg',
+                        })}
+                      </Button>
+                    </Col>
+                  )}
                 </Row>
                 {data?.offender?.addresses.length && !loading ? (
                   <Table
@@ -1319,60 +1341,66 @@ const ViewOffender = ({
                         width: 100,
                         render: (_, record) => (
                           <Row gutter={8}>
-                            <Col>
-                              <Tooltip
-                                title={intl.formatMessage({
-                                  defaultMessage: 'Edit Address',
-                                  id: 'uSpe21',
-                                })}
-                              >
-                                <Button
-                                  size="small"
-                                  disabled={saving}
-                                  onClick={() => {
-                                    setEditAddressData(record.address);
-                                  }}
-                                  icon={
-                                    <FontAwesomeIcon icon={faPenToSquare} />
-                                  }
-                                />
-                              </Tooltip>
-                            </Col>
-                            <Col>
-                              <Tooltip
-                                title={intl.formatMessage({
-                                  defaultMessage: 'Remove Address',
-                                  id: 'r3DjS/',
-                                })}
-                              >
-                                <Popconfirm
-                                  placement="topLeft"
-                                  trigger="hover"
+                            {editRights && (
+                              <Col>
+                                <Tooltip
                                   title={intl.formatMessage({
-                                    defaultMessage: 'Remove the Address?',
-                                    id: 'y/xSXA',
+                                    defaultMessage: 'Edit Address',
+                                    id: 'uSpe21',
                                   })}
-                                  onConfirm={() => onDeleteAddress(record.key)}
-                                  okText={intl.formatMessage({
-                                    defaultMessage: 'Yes',
-                                    id: 'a5msuh',
-                                  })}
-                                  cancelText={intl.formatMessage({
-                                    defaultMessage: 'No',
-                                    id: 'oUWADl',
-                                  })}
-                                  overlayInnerStyle={{
-                                    padding: 10,
-                                  }}
                                 >
                                   <Button
                                     size="small"
                                     disabled={saving}
-                                    icon={<FontAwesomeIcon icon={faTrash} />}
+                                    onClick={() => {
+                                      setEditAddressData(record.address);
+                                    }}
+                                    icon={
+                                      <FontAwesomeIcon icon={faPenToSquare} />
+                                    }
                                   />
-                                </Popconfirm>
-                              </Tooltip>
-                            </Col>
+                                </Tooltip>
+                              </Col>
+                            )}
+                            {deleteRights && (
+                              <Col>
+                                <Tooltip
+                                  title={intl.formatMessage({
+                                    defaultMessage: 'Remove Address',
+                                    id: 'r3DjS/',
+                                  })}
+                                >
+                                  <Popconfirm
+                                    placement="topLeft"
+                                    trigger="hover"
+                                    title={intl.formatMessage({
+                                      defaultMessage: 'Remove the Address?',
+                                      id: 'y/xSXA',
+                                    })}
+                                    onConfirm={() =>
+                                      onDeleteAddress(record.key)
+                                    }
+                                    okText={intl.formatMessage({
+                                      defaultMessage: 'Yes',
+                                      id: 'a5msuh',
+                                    })}
+                                    cancelText={intl.formatMessage({
+                                      defaultMessage: 'No',
+                                      id: 'oUWADl',
+                                    })}
+                                    overlayInnerStyle={{
+                                      padding: 10,
+                                    }}
+                                  >
+                                    <Button
+                                      size="small"
+                                      disabled={saving}
+                                      icon={<FontAwesomeIcon icon={faTrash} />}
+                                    />
+                                  </Popconfirm>
+                                </Tooltip>
+                              </Col>
+                            )}
                           </Row>
                         ),
                       },
@@ -1405,59 +1433,61 @@ const ViewOffender = ({
                     })}
                   </Title>
                 </Col>
-                <Col>
-                  <Dropdown
-                    overlay={
-                      <Menu
-                        items={[
-                          {
-                            label: intl.formatMessage({
-                              defaultMessage: 'Add Existing Vehicles',
-                              id: 'goP1s6',
-                            }),
-                            key: '1',
-                            icon: (
-                              <FontAwesomeIcon
-                                icon={faMagnifyingGlass}
-                                style={{ marginRight: 5 }}
-                              />
-                            ),
-                            onClick: () => toggleAddExistingVehicle(),
-                          },
-                          {
-                            label: intl.formatMessage({
-                              defaultMessage: 'Create New Vehicle',
-                              id: 'xiAZxN',
-                            }),
-                            key: '2',
-                            icon: (
-                              <FontAwesomeIcon
-                                icon={faPlus}
-                                style={{ marginRight: 5 }}
-                              />
-                            ),
-                            onClick: () => toggleAddVehicle(),
-                          },
-                        ]}
-                      />
-                    }
-                  >
-                    <Button
-                      size="small"
-                      icon={
-                        <FontAwesomeIcon
-                          icon={faPlus}
-                          style={{ marginRight: 5 }}
+                {editRights && (
+                  <Col>
+                    <Dropdown
+                      overlay={
+                        <Menu
+                          items={[
+                            {
+                              label: intl.formatMessage({
+                                defaultMessage: 'Add Existing Vehicles',
+                                id: 'goP1s6',
+                              }),
+                              key: '1',
+                              icon: (
+                                <FontAwesomeIcon
+                                  icon={faMagnifyingGlass}
+                                  style={{ marginRight: 5 }}
+                                />
+                              ),
+                              onClick: () => toggleAddExistingVehicle(),
+                            },
+                            {
+                              label: intl.formatMessage({
+                                defaultMessage: 'Create New Vehicle',
+                                id: 'xiAZxN',
+                              }),
+                              key: '2',
+                              icon: (
+                                <FontAwesomeIcon
+                                  icon={faPlus}
+                                  style={{ marginRight: 5 }}
+                                />
+                              ),
+                              onClick: () => toggleAddVehicle(),
+                            },
+                          ]}
                         />
                       }
                     >
-                      {intl.formatMessage({
-                        defaultMessage: 'Vehicles',
-                        id: 'r6wuJ3',
-                      })}
-                    </Button>
-                  </Dropdown>
-                </Col>
+                      <Button
+                        size="small"
+                        icon={
+                          <FontAwesomeIcon
+                            icon={faPlus}
+                            style={{ marginRight: 5 }}
+                          />
+                        }
+                      >
+                        {intl.formatMessage({
+                          defaultMessage: 'Vehicles',
+                          id: 'r6wuJ3',
+                        })}
+                      </Button>
+                    </Dropdown>
+                  </Col>
+                )}
               </Row>
 
               {data?.offender?.vehicles.length && !loading ? (
@@ -1466,6 +1496,8 @@ const ViewOffender = ({
                   setEditVehicleData={setEditVehicleData}
                   onDeleteVehicle={onDeleteVehicle}
                   saving={saving}
+                  editRights={editRights}
+                  deleteRights={deleteRights}
                 />
               ) : (
                 <Empty
@@ -1489,12 +1521,64 @@ const ViewOffender = ({
                   crimeGroups={data?.offender?.crimeGroups || []}
                   onDelete={onDeleteCrimeGroup}
                   saving={saving}
+                  deleteRights={deleteRights}
                 />
               ) : (
                 <Empty
                   description={intl.formatMessage({
                     defaultMessage: 'No crime groups for this offender',
                     id: 'BIRzsQ',
+                  })}
+                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                />
+              )}
+            </Card>
+
+            <Card style={{ marginTop: 20 }}>
+              <Row gutter={8} align="middle" style={{ marginBottom: 10 }}>
+                <Col flex={1}>
+                  <Title level={4}>
+                    {intl.formatMessage({
+                      defaultMessage: 'Evidence',
+                      id: '6g7+6N',
+                    })}
+                  </Title>
+                </Col>
+                {editRights && (
+                  <Col>
+                    <Button
+                      size="small"
+                      onClick={toggleAddDocument}
+                      icon={
+                        <FontAwesomeIcon
+                          icon={faPlus}
+                          style={{ marginRight: 5 }}
+                        />
+                      }
+                    >
+                      {intl.formatMessage({
+                        defaultMessage: 'Add Evidence',
+                        id: 'vgVasT',
+                      })}
+                    </Button>
+                  </Col>
+                )}
+              </Row>
+
+              {data?.offender?.evidence &&
+              data.offender.evidence.length > 0 &&
+              !loading ? (
+                <EvidenceTable
+                  evidence={data?.offender?.evidence}
+                  title={ProfileUpdatedModel.Offender}
+                  update={updateDeleteDocument}
+                  deleteRights={deleteRights}
+                />
+              ) : (
+                <Empty
+                  description={intl.formatMessage({
+                    defaultMessage: 'No evidence for this offender',
+                    id: 'jOOKhL',
                   })}
                   image={Empty.PRESENTED_IMAGE_SIMPLE}
                 />
@@ -2006,10 +2090,10 @@ const ViewOffender = ({
         onClose={toggleAddVehicle}
       >
         {addVehicle ? (
-          <AddVehicle
+          <AddVehicleSimple
             update={onAddVehicle}
             onClose={toggleAddVehicle}
-            fromIncident
+            images={data?.offender?.images.map((el) => ({ ...el, uid: el.id }))}
           />
         ) : (
           <div />
@@ -2026,7 +2110,7 @@ const ViewOffender = ({
         zIndex={1001}
       >
         {editVehicleData ? (
-          <EditVehicle
+          <EditVehicleSimple
             update={onEditVehicle}
             onClose={() => setEditVehicleData(null)}
             editData={editVehicleData}
@@ -2124,6 +2208,27 @@ const ViewOffender = ({
             update={onEditBan}
             onClose={() => setEditBanData(null)}
             banData={editBanData}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      {/* evidence */}
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Add Evidence',
+          id: 'vgVasT',
+        })}
+        visible={addDocument}
+        width="600"
+        onClose={toggleAddDocument}
+        zIndex={1001}
+      >
+        {addDocument ? (
+          <AddDocument
+            offenderId={data?.offender?.id || ''}
+            onClose={toggleAddDocument}
+            update={updateDocumentList}
           />
         ) : (
           <div />

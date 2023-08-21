@@ -38,12 +38,14 @@ export interface NotificationData {
   } | null;
   userId?: string | null;
   schemes: Scheme[];
+  read: boolean;
 }
 interface Scheme {
   id: string;
   name: string;
   autoApproveIncidents: boolean;
   autoApproveOffenders: boolean;
+  restrictIncidentAccess: boolean;
   defaultPublicOffenderDOB: boolean;
   userTodos?: number | null | undefined;
   userNotifications?: number | null | undefined;
@@ -327,6 +329,7 @@ const useNotificationLists = (): Return => {
     setScheme({
       autoApproveIncidents: scheme.autoApproveIncidents,
       autoApproveOffenders: scheme.autoApproveOffenders,
+      restrictIncidentAccess: scheme.restrictIncidentAccess,
       defaultPublicOffenderDOB: scheme.defaultPublicOffenderDOB,
       id: scheme.id,
       name: scheme.name,

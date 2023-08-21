@@ -30,7 +30,7 @@ import type { CarouselRef } from 'antd/lib/carousel';
 import { Link } from 'react-router-dom';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import SkeletonImage from 'components/images/SkeletonImage.view';
-import formatCalendar from 'utils/format-calendar-24h';
+import FormatCalendar from 'utils/format-calendar-24h';
 import { FormattedMessage } from 'react-intl';
 import useStyles from './ArticleCard.styles';
 
@@ -229,7 +229,7 @@ const ArticleCard = ({
               style={{ marginRight: 5 }}
             />
             {/* @ts-expect-error TODO fix */}
-            <Text>{formatCalendar(updatedAt)}</Text>
+            <Text>{FormatCalendar(updatedAt)}</Text>
           </Col>
         </Row>
         {groups && groups.length > 0 ? (

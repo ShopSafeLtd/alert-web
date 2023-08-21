@@ -9,6 +9,7 @@ import {
 } from 'graphql/generated';
 import { useState } from 'react';
 import type { MutationUpdaterFn } from '@apollo/client';
+import type { ListData } from '../useActivities';
 
 interface Return {
   data:
@@ -32,9 +33,15 @@ interface Return {
   toggleAllSchemes: () => void;
   selectedTodo: string | null;
   setSelectedTodo: (id: string | null) => void;
+  selectedTemplate: ListData | null;
+  selectTemplate: (id: string | null) => void;
 }
 
-const useAdminTodos = (): Return => {
+interface Props {
+  templateData: ListData[];
+}
+
+const useAdminTodos = ({ templateData }: Props): Return => {
   const userId = useStoreState((state) => state.user.id);
   const schemeId = useStoreState((state) => state.scheme.id);
   const userSchemes = useStoreState((state) => state.user.schemes);
@@ -48,6 +55,17 @@ const useAdminTodos = (): Return => {
   const setTodoList = useStoreActions((actions) => actions.user.setTodos);
   const userTodos = useStoreState((state) => state.user.userTodos);
   const [selectedTodo, setSelectedTodo] = useState<string | null>(null);
+  const [selectedTemplate, setSelectedTemplate] = useState<ListData | null>(
+    null
+  );
+
+  const selectTemplate = (id: string | null) => {
+    const template = templateData.find((t) => t.id === id);
+    if (template) {
+      setSelectedTemplate(template);
+      setAddTodo(true);
+    }
+  };
   const variables = {
     orderBy: {
       createdAt: SortOrder.Desc,
@@ -244,6 +262,7 @@ const useAdminTodos = (): Return => {
   };
   const toggleAddTodo = () => {
     setAddTodo(!addTodo);
+    setSelectedTemplate(null);
   };
   const onPaginationChange = (pageVale: number, pageSizeValue: number) => {
     setPage(pageVale);
@@ -275,6 +294,8 @@ const useAdminTodos = (): Return => {
     toggleAllSchemes,
     selectedTodo,
     setSelectedTodo,
+    selectTemplate,
+    selectedTemplate,
   };
 };
 

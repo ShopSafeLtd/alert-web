@@ -41,6 +41,7 @@ interface FormData {
   name: string;
   autoApproveIncidents: boolean;
   autoApproveOffenders: boolean;
+  restrictIncidentAccess: boolean;
   defaultIncidentEmail: boolean;
   defaultIncidentPush: boolean;
   defaultSubscribedIncidentOnly: boolean;
@@ -99,6 +100,7 @@ const SchemeDetail = ({
             name: data?.scheme?.name,
             autoApproveOffenders: data?.scheme?.autoApproveOffenders,
             autoApproveIncidents: data?.scheme?.autoApproveIncidents,
+            restrictIncidentAccess: data?.scheme?.restrictIncidentAccess,
             incidentRetention: data?.scheme?.incidentRetention,
             offenderRetention: data?.scheme?.offenderRetention,
             defaultIncidentEmail: data?.scheme?.defaultIncidentEmail,
@@ -534,6 +536,38 @@ const SchemeDetail = ({
                     id: '0rgxT7',
                   })}
                   name="defaultPublicOffenderDOB"
+                  valuePropName="checked"
+                  style={{ marginBottom: 0 }}
+                >
+                  <Switch
+                    disabled={saving}
+                    style={{ marginLeft: 5 }}
+                    className="scheme-detail-switch"
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+          </Card>
+          <Card>
+            <Title level={4}>
+              {intl.formatMessage({
+                defaultMessage: 'Default Incident Settings:',
+                id: 'NnYRAS',
+              })}
+            </Title>
+            {/* <Text type="secondary">
+                The settings that will be selected by default for all new users
+                created in the scheme.
+              </Text> */}
+
+            <Row>
+              <Col span={15}>
+                <Form.Item
+                  label={intl.formatMessage({
+                    defaultMessage: 'Restrict users access to Incidents',
+                    id: 'FnEGyH',
+                  })}
+                  name="restrictIncidentAccess"
                   valuePropName="checked"
                   style={{ marginBottom: 0 }}
                 >

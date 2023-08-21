@@ -23,6 +23,7 @@ interface Props {
   hasNavigation?: boolean;
   saving?: boolean;
   onDelete?: (id: string) => void;
+  deleteRights?: boolean;
 }
 
 // interface CrimeGroupsTable {
@@ -113,6 +114,7 @@ const CrimeGroupTable = ({
   hasNavigation,
   onDelete,
   saving,
+  deleteRights,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const navigate = useNavigate();
@@ -162,45 +164,47 @@ const CrimeGroupTable = ({
           title: <FormattedMessage id="NDV5Mq" defaultMessage="Options" />,
           render: (_, record) => (
             <Row gutter={8}>
-              <Col>
-                <Tooltip
-                  title={
-                    <FormattedMessage
-                      id="6HwEZt"
-                      defaultMessage="Remove Crime Group"
-                    />
-                  }
-                >
-                  <Popconfirm
-                    placement="topLeft"
-                    trigger="hover"
+              {deleteRights && (
+                <Col>
+                  <Tooltip
                     title={
                       <FormattedMessage
-                        id="Ek+T43"
-                        defaultMessage="Remove the crime group?"
+                        id="6HwEZt"
+                        defaultMessage="Remove Crime Group"
                       />
                     }
-                    onConfirm={() => {
-                      if (onDelete) onDelete(record.key);
-                    }}
-                    okText={
-                      <FormattedMessage id="a5msuh" defaultMessage="Yes" />
-                    }
-                    cancelText={
-                      <FormattedMessage id="oUWADl" defaultMessage="No" />
-                    }
-                    overlayInnerStyle={{
-                      padding: 10,
-                    }}
                   >
-                    <Button
-                      size="small"
-                      disabled={saving}
-                      icon={<FontAwesomeIcon icon={faTrash} />}
-                    />
-                  </Popconfirm>
-                </Tooltip>
-              </Col>
+                    <Popconfirm
+                      placement="topLeft"
+                      trigger="hover"
+                      title={
+                        <FormattedMessage
+                          id="Ek+T43"
+                          defaultMessage="Remove the crime group?"
+                        />
+                      }
+                      onConfirm={() => {
+                        if (onDelete) onDelete(record.key);
+                      }}
+                      okText={
+                        <FormattedMessage id="a5msuh" defaultMessage="Yes" />
+                      }
+                      cancelText={
+                        <FormattedMessage id="oUWADl" defaultMessage="No" />
+                      }
+                      overlayInnerStyle={{
+                        padding: 10,
+                      }}
+                    >
+                      <Button
+                        size="small"
+                        disabled={saving}
+                        icon={<FontAwesomeIcon icon={faTrash} />}
+                      />
+                    </Popconfirm>
+                  </Tooltip>
+                </Col>
+              )}
             </Row>
           ),
         },

@@ -12,6 +12,12 @@ query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
     groups {
       id
     }
+    evidence {
+      id
+      name
+      url
+      fileType
+    }
     offenders {
       id
       name

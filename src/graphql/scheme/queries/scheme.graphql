@@ -2,6 +2,7 @@ query scheme($where: SchemeWhereUniqueInput!) {
   scheme(where: $where) {
     id
     name
+    restrictIncidentAccess
     autoApproveIncidents
     autoApproveOffenders
     defaultIncidentEmail

@@ -3,7 +3,7 @@ import moment from 'moment';
 import { useIntl } from 'react-intl';
 
 // calculate the difference in days between start and end date
-const formatCalendar = (date: Moment | Date, hideTime?: boolean): string => {
+const FormatCalendar = (date: Moment | Date, hideTime?: boolean): string => {
   const timeIn24HourFormat = moment(date).format('HH:mm');
   const intl = useIntl();
 
@@ -59,4 +59,4 @@ const formatCalendar = (date: Moment | Date, hideTime?: boolean): string => {
   });
 };
 
-export default formatCalendar;
+export default FormatCalendar;
