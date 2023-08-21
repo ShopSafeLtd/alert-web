@@ -177,8 +177,10 @@ interface Return {
 
 const useViewOffender = (offenderId: string): Return => {
   const navigate = useNavigate();
-  const { id: schemeId, defaultPublicOffenderDOB: publicOffenderDOB } =
-    useStoreState((state) => state.scheme);
+  const { id: schemeId, defaultPublicOffenderDOB } = useStoreState(
+    (state) => state.scheme
+  );
+
   const { role, id: userId, groups } = useStoreState((state) => state.user);
   const intl = useIntl();
   const [saving, setSaving] = useState(false);
@@ -1633,7 +1635,7 @@ const useViewOffender = (offenderId: string): Return => {
     lightBoxOpen,
     optionRowShow,
     setOptionRowShow,
-    publicOffenderDOB,
+    publicOffenderDOB: defaultPublicOffenderDOB && role !== Role.User,
     onDelete,
     associatesData,
     associatesLoading,

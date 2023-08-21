@@ -726,7 +726,7 @@ const ViewOffender = ({
                     })}
                   </Title>
                   <Descriptions column={1}>
-                    {(publicOffenderDOB || editRights) && (
+                    {publicOffenderDOB && (
                       <Descriptions.Item
                         label={
                           <span>

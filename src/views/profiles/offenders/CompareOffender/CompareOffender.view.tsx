@@ -12,7 +12,7 @@ import {
   Typography,
 } from 'antd';
 import type { ViewOffenderCompareQuery } from 'graphql/generated';
-import { Age, Build, Gender, Race } from 'graphql/generated';
+import { Role, Age, Build, Gender, Race } from 'graphql/generated';
 import { getAge, getBuild, getEthnicity, getSex } from 'utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -28,6 +28,7 @@ import AddExisitingOffender from 'components/form-components/offender/offender/A
 import type { OffenderData } from 'components/form-components/offender/offender/AddExistingOffender/AddExistingOffender.container';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import { useIntl } from 'react-intl';
+import { useStoreState } from 'state';
 import useStyles from './CompareOffender.styles';
 import type { OffenderField, Selected } from './useCompareIncident';
 
@@ -137,6 +138,10 @@ const CompareIncident = ({
   const classes = useStyles();
   const [layout, setLayout] = useState<Layout[]>([]);
   const intl = useIntl();
+  const role = useStoreState((state) => state.user.role);
+  const publicOffenderDOB =
+    useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
+    role !== Role.User;
   return (
     <div ref={pageRef} className={classes.page}>
       <Row justify="end" gutter={16} style={{ marginBottom: 10 }}>
@@ -220,15 +225,19 @@ const CompareIncident = ({
                   })}
                 </Text>
               </div>
-              <Divider style={{ margin: 0 }} />
-              <div className={classes.titleField}>
-                <Text strong>
-                  {intl.formatMessage({
-                    defaultMessage: 'Age:',
-                    id: 'S9GJ93',
-                  })}
-                </Text>
-              </div>
+              {publicOffenderDOB && (
+                <>
+                  <Divider style={{ margin: 0 }} />
+                  <div className={classes.titleField}>
+                    <Text strong>
+                      {intl.formatMessage({
+                        defaultMessage: 'Age:',
+                        id: 'S9GJ93',
+                      })}
+                    </Text>
+                  </div>
+                </>
+              )}
               <Divider style={{ margin: 0 }} />
               <div className={classes.titleField}>
                 <Text strong>

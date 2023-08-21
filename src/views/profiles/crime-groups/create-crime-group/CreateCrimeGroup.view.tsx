@@ -15,7 +15,7 @@ import type {
   ListOffendersQuery,
   SearchOffendersQuery,
 } from 'graphql/generated';
-import { Age, Build, Gender, Race } from 'graphql/generated';
+import { Role, Age, Build, Gender, Race } from 'graphql/generated';
 import AddExisitingOffender from 'components/form-components/offender/offender/AddExistingOffender';
 import {
   getAge,
@@ -29,6 +29,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import { useIntl } from 'react-intl'; // Import the useIntl hook
+import { useStoreState } from 'state';
 import useStyles from './CreateCrimeGroup.styles';
 
 const { Title, Text } = Typography;
@@ -60,7 +61,10 @@ const CreateCrimeGroup = ({
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl(); // Initialize the useIntl hook
-
+  const role = useStoreState((state) => state.user.role);
+  const publicOffenderDOB =
+    useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
+    role !== Role.User;
   return (
     <div className={classes.page}>
       <Row align="middle" className={classes.headerRow}>
@@ -142,17 +146,19 @@ const CreateCrimeGroup = ({
                         </Col>
                       </Row>
                       <Divider style={{ margin: 0 }} />
-                      <div className={classes.field}>
-                        <Text>
-                          {intl.formatMessage({
-                            id: 'S9GJ93',
-                            defaultMessage: 'Age:',
-                          })}
-                        </Text>
-                        <Text type="secondary">
-                          {getAge(offender.age || Age.Unknown)}
-                        </Text>
-                      </div>
+                      {publicOffenderDOB && (
+                        <div className={classes.field}>
+                          <Text>
+                            {intl.formatMessage({
+                              id: 'S9GJ93',
+                              defaultMessage: 'Age:',
+                            })}
+                          </Text>
+                          <Text type="secondary">
+                            {getAge(offender.age || Age.Unknown)}
+                          </Text>
+                        </div>
+                      )}
                       <Divider style={{ margin: 0 }} />
                       <div className={classes.field}>
                         <Text>

@@ -144,6 +144,7 @@ interface Return {
   deleteIncidentConfirm: (messageId: string, incidentId: string) => void;
   setMessageSent: (value: boolean) => void;
   totalChats: number;
+  restrictIncidentAccess: boolean;
 }
 
 const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
@@ -155,6 +156,9 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     origName: userOrigName,
     businesses: userBusinesses,
   } = useStoreState((state) => state.user);
+  const restrictIncidentAccess =
+    useStoreState((state) => state.scheme.restrictIncidentAccess) &&
+    role === Role.User;
   const schemeId = useStoreState((state) => state.scheme.id);
   const navigate = useNavigate();
   const [saving, setSaving] = useState(false);
@@ -1109,6 +1113,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     messageSent,
     setMessageSent,
     totalChats: chatData?.chat?.totalMessages || 0,
+    restrictIncidentAccess,
   };
 };
 

@@ -10,8 +10,8 @@ import {
   Form,
 } from 'antd';
 import type { SearchBusinessesQuery } from 'graphql/generated';
-import { Age, Build, Gender, Race } from 'graphql/generated';
-import { OffenderSort } from 'state';
+import { Role, Age, Build, Gender, Race } from 'graphql/generated';
+import { OffenderSort, useStoreState } from 'state';
 import type { DateType } from 'types/DataType';
 import { useIntl } from 'react-intl';
 import useStyles from './OffenderFilter.styles';
@@ -85,6 +85,10 @@ const OffenderFilter = ({
   const classes = useStyles();
   const [form] = useForm<FormData>();
   const intl = useIntl();
+  const role = useStoreState((state) => state.user.role);
+  const publicOffenderDOB =
+    useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
+    role !== Role.User;
   return (
     <Form<FormData> form={form}>
       <Row justify="end">
@@ -301,50 +305,79 @@ const OffenderFilter = ({
         </Col>
       </Row>
       <Row gutter={16}>
-        <Col span={12}>
-          <Typography.Paragraph className={classes.selectTitle}>
-            {intl.formatMessage({ defaultMessage: 'Age', id: '9oNQSC' })}
-          </Typography.Paragraph>
-          <Select
-            mode="multiple"
-            allowClear
-            placeholder={intl.formatMessage({
-              defaultMessage: 'Age',
-              id: '9oNQSC',
-            })}
-            className={classes.select}
-            value={age}
-            onChange={setAge}
-          >
-            <Select.Option value={Age.UnderEighteen}>
-              {intl.formatMessage({ defaultMessage: 'Under 18', id: 'Cwx1GS' })}
-            </Select.Option>
-            <Select.Option value={Age.EighteenThirty}>
-              {intl.formatMessage({ defaultMessage: '18 - 30', id: '088rlR' })}
-            </Select.Option>
-            <Select.Option value={Age.ThirtyForty}>
-              {intl.formatMessage({ defaultMessage: '30 - 40', id: 'cENhUd' })}
-            </Select.Option>
-            <Select.Option value={Age.FortyFifty}>
-              {intl.formatMessage({ defaultMessage: '40 - 50', id: 'FEg968' })}
-            </Select.Option>
-            <Select.Option value={Age.FiftySixty}>
-              {intl.formatMessage({ defaultMessage: '50 - 60', id: 'xuMURn' })}
-            </Select.Option>
-            <Select.Option value={Age.SixtySeventy}>
-              {intl.formatMessage({ defaultMessage: '60 - 70', id: 'W8pA9z' })}
-            </Select.Option>
-            <Select.Option value={Age.SeventyEighty}>
-              {intl.formatMessage({ defaultMessage: '70 - 80', id: 'yjJSPV' })}
-            </Select.Option>
-            <Select.Option value={Age.OverEighty}>
-              {intl.formatMessage({ defaultMessage: 'Over 80', id: 'oFu9sf' })}
-            </Select.Option>
-            <Select.Option value={Age.Unknown}>
-              {intl.formatMessage({ defaultMessage: 'Unknown', id: '5jeq8P' })}
-            </Select.Option>
-          </Select>
-        </Col>
+        {publicOffenderDOB && (
+          <Col span={12}>
+            <Typography.Paragraph className={classes.selectTitle}>
+              {intl.formatMessage({ defaultMessage: 'Age', id: '9oNQSC' })}
+            </Typography.Paragraph>
+            <Select
+              mode="multiple"
+              allowClear
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Age',
+                id: '9oNQSC',
+              })}
+              className={classes.select}
+              value={age}
+              onChange={setAge}
+            >
+              <Select.Option value={Age.UnderEighteen}>
+                {intl.formatMessage({
+                  defaultMessage: 'Under 18',
+                  id: 'Cwx1GS',
+                })}
+              </Select.Option>
+              <Select.Option value={Age.EighteenThirty}>
+                {intl.formatMessage({
+                  defaultMessage: '18 - 30',
+                  id: '088rlR',
+                })}
+              </Select.Option>
+              <Select.Option value={Age.ThirtyForty}>
+                {intl.formatMessage({
+                  defaultMessage: '30 - 40',
+                  id: 'cENhUd',
+                })}
+              </Select.Option>
+              <Select.Option value={Age.FortyFifty}>
+                {intl.formatMessage({
+                  defaultMessage: '40 - 50',
+                  id: 'FEg968',
+                })}
+              </Select.Option>
+              <Select.Option value={Age.FiftySixty}>
+                {intl.formatMessage({
+                  defaultMessage: '50 - 60',
+                  id: 'xuMURn',
+                })}
+              </Select.Option>
+              <Select.Option value={Age.SixtySeventy}>
+                {intl.formatMessage({
+                  defaultMessage: '60 - 70',
+                  id: 'W8pA9z',
+                })}
+              </Select.Option>
+              <Select.Option value={Age.SeventyEighty}>
+                {intl.formatMessage({
+                  defaultMessage: '70 - 80',
+                  id: 'yjJSPV',
+                })}
+              </Select.Option>
+              <Select.Option value={Age.OverEighty}>
+                {intl.formatMessage({
+                  defaultMessage: 'Over 80',
+                  id: 'oFu9sf',
+                })}
+              </Select.Option>
+              <Select.Option value={Age.Unknown}>
+                {intl.formatMessage({
+                  defaultMessage: 'Unknown',
+                  id: '5jeq8P',
+                })}
+              </Select.Option>
+            </Select>
+          </Col>
+        )}
         <Col span={12}>
           <Typography.Paragraph className={classes.selectTitle}>
             {intl.formatMessage({ defaultMessage: 'Sex', id: 'eWJHGp' })}
