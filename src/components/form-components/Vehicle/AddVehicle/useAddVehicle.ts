@@ -3,14 +3,14 @@ import { useState } from 'react';
 import type { ListCrimeGroupsQuery } from 'graphql/generated';
 import {
   ImagePosition,
-  useListCustomGalleriesQuery,
-  SortOrder,
-  useSchemeGroupsQuery,
-  useListCrimeGroupsQuery,
   Role,
+  SortOrder,
+  useListCrimeGroupsQuery,
+  useListCustomGalleriesQuery,
+  useSchemeGroupsQuery,
 } from 'graphql/generated';
 import type { FormInstance } from 'antd';
-import { Form, message, Upload } from 'antd';
+import { Form, message } from 'antd';
 import { useStoreState } from 'state';
 import type { OffenderData } from 'components/viewChat/ViewMessage/useViewMessage';
 import type { RcFile, UploadProps } from 'antd/es/upload/interface';
@@ -21,6 +21,7 @@ import type {
   VehicleData,
 } from 'types/DataType';
 import update from 'immutability-helper';
+import { compressImage } from '../../../../utils/compress-images';
 
 interface Props {
   update: (value: VehicleData) => void;
@@ -265,7 +266,7 @@ const useAddVehicle = ({ update: updateVehicle }: Props): Return => {
         'This image already exists, please choose another one.'
       );
     }
-    return !isFileDuplicate || Upload.LIST_IGNORE;
+    return compressImage(file);
   };
   const imgChange: UploadProps['onChange'] = (info) => {
     if (info.file.response && info.file.status === 'done') {
@@ -322,6 +323,7 @@ const useAddVehicle = ({ update: updateVehicle }: Props): Return => {
     removeIncident,
     adminRights: role !== Role.User,
     imgChange,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     beforeUpload,
     fileList,
     onRemoveImage,

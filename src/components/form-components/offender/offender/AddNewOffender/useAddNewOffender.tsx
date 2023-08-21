@@ -17,12 +17,13 @@ import {
 } from 'graphql/generated';
 import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import type { FormInstance } from 'antd';
-import { Form, message, Upload } from 'antd';
+import { Form, message } from 'antd';
 import { useApolloClient } from '@apollo/client';
 import { useStoreState } from 'state';
 import update from 'immutability-helper';
 import type { Image, OffenderData } from 'types/DataType';
 import { useIntl } from 'react-intl';
+import { compressImage } from 'utils/compress-images';
 import OffenderItem from './OffenderItem';
 
 export interface FormData {
@@ -172,7 +173,7 @@ const useAddNewOffender = ({
         'This image already exists, please choose another one.'
       );
     }
-    return !isFileDuplicate || Upload.LIST_IGNORE;
+    return compressImage(file);
   };
   const imgChange: UploadProps['onChange'] = (info) => {
     if (info.file.response && info.file.status === 'done') {
@@ -222,6 +223,7 @@ const useAddNewOffender = ({
     ageCheck,
     setAgeCheck,
     imgChange,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     beforeUpload,
     fileList,
     onRemoveImage,

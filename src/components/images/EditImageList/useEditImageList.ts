@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
 import { useEffect, useState } from 'react';
-import { message, Upload } from 'antd';
+import { message } from 'antd';
 
 import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import type { Image, ImageCardData } from 'types/DataType';
 import update from 'immutability-helper';
 import { useIntl } from 'react-intl';
 import { ImagePosition } from 'graphql/generated';
+import { compressImage } from '../../../utils/compress-images';
 
 interface Props {
   onClose: () => void;
@@ -130,7 +131,7 @@ const useEditImagesList = ({
         })
       );
     }
-    return !isFileDuplicate || Upload.LIST_IGNORE;
+    return compressImage(file);
   };
   const imgChange: UploadProps['onChange'] = (info) => {
     if (info.file.response && info.file.status === 'done') {
@@ -181,6 +182,7 @@ const useEditImagesList = ({
     onSubmit,
     saving,
     imgChange,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     beforeUpload,
     fileList: fileList.filter(({ deleted }) => !deleted),
     onRemoveImage,

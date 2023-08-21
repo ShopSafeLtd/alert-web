@@ -12,6 +12,7 @@ import { useStoreState } from 'state';
 import type { StateImageData } from './useImageSection';
 import useImageSection from './useImageSection';
 import type { FormData } from '../../../../views/incidents/AddIncident/useAddIncident';
+import { compressImage } from '../../../../utils/compress-images';
 
 const { Title, Paragraph } = Typography;
 
@@ -88,6 +89,7 @@ const ImageSection = ({
           listType="picture-card"
           accept=".png,.jpeg"
           disabled={disabled}
+          beforeUpload={async (file) => compressImage(file)}
           // TODO
           // eslint-disable-next-line react/no-unstable-nested-components
           itemRender={(el, file: StateImageData) => (
