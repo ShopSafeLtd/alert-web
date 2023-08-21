@@ -46,7 +46,7 @@ import FeedItemSkeletonCard from 'components/feedItems/FeedItemSection/FeedItemS
 import AdminTodos from 'components/feedItems/AdminTodos';
 import BanFeed from 'components/feedItems/FeedItemSection/BanFeed';
 import ArticlesSection from 'components/feedItems/Articles/ArticlesSection';
-import formatCalendar from 'utils/format-calendar-24h';
+import FormatCalendar from 'utils/format-calendar-24h';
 import { useIntl } from 'react-intl';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import useStyles from './FeedItem.styles';
@@ -290,7 +290,7 @@ const FeedItem = ({
                         <Col flex={1} />
                         <Col>
                           <Text type="secondary" style={{ fontSize: 14 }}>
-                            {formatCalendar(feedItem?.updatedAt)}
+                            {FormatCalendar(feedItem?.updatedAt)}
                           </Text>
                         </Col>
                         {adminRights ? (

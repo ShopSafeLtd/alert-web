@@ -1,0 +1,14 @@
+query QuestionGroupOnScheme($where: SchemeWhereUniqueInput!) {
+  scheme(where: $where) {
+    questionGroups {
+      id
+      name
+      description
+      defaultDueDate
+      questions {
+        questionFormatted
+        id
+      }
+    }
+  }
+}

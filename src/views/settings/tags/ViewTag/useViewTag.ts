@@ -50,7 +50,15 @@ interface Return {
   incidentFormFields: IncidentFormFieldState;
   incidentFormLayoutChanged: boolean;
   saveIncidentForm: () => void;
-  updateQuestionOnTag: (question: string, tagId: string) => void;
+  updateQuestionOnTag: (
+    question: string,
+    tagId: string,
+    dependentOn?: {
+      tagQuestionId: string;
+      questionId: string;
+      answer: string;
+    }
+  ) => void;
   selectedQuestion: string | null;
   setSelectedQuestion: (value: string | null) => void;
 }
@@ -63,7 +71,8 @@ const fieldToLayoutSet: Record<string, IncidentFormField[]> = {
   ],
   when: [IncidentFormField.Where],
   goods: [IncidentFormField.Goods],
-  profiles: [IncidentFormField.Images, IncidentFormField.Offenders],
+  images: [IncidentFormField.Images],
+  profiles: [IncidentFormField.Offenders],
   police: [IncidentFormField.Police, IncidentFormField.Details],
   groups: [IncidentFormField.Groups],
   custom: [IncidentFormField.Custom],
@@ -72,6 +81,7 @@ export type FieldLayout =
   | 'tags'
   | 'when'
   | 'goods'
+  | 'images'
   | 'profiles'
   | 'police'
   | 'groups'
@@ -111,7 +121,7 @@ const useViewTag = (): Return => {
     },
     {
       w: 1,
-      h: 3.8,
+      h: 3,
       x: 0,
       y: 3,
       i: 'profiles',
@@ -120,9 +130,18 @@ const useViewTag = (): Return => {
     },
     {
       w: 1,
-      h: 3.8,
+      h: 3,
       x: 0,
       y: 4,
+      i: 'images',
+      moved: false,
+      static: false,
+    },
+    {
+      w: 1,
+      h: 3.8,
+      x: 0,
+      y: 5,
       i: 'police',
       moved: false,
       static: false,
@@ -131,7 +150,7 @@ const useViewTag = (): Return => {
       w: 1,
       h: 3,
       x: 0,
-      y: 5,
+      y: 6,
       i: 'groups',
       moved: false,
       static: false,
@@ -140,7 +159,7 @@ const useViewTag = (): Return => {
       w: 1,
       h: 3,
       x: 0,
-      y: 6,
+      y: 7,
       i: 'custom',
       moved: false,
       static: false,
@@ -375,6 +394,75 @@ const useViewTag = (): Return => {
           id: questionId,
         },
       },
+      update: (cache, result) => {
+        const existingData = cache.readQuery<ViewTagQuery>({
+          query: ViewTagDocument,
+          variables: {
+            where: {
+              id: id || '',
+            },
+            tagQuestionsWhere: {
+              deleted: {
+                equals: false,
+              },
+            },
+            listWhere: {
+              type: {
+                equals: TagType.IncidentCrimeType,
+              },
+              dataType: {
+                equals: Model.Incident,
+              },
+              schemes: {
+                some: {
+                  id: {
+                    equals: schemeId,
+                  },
+                },
+              },
+            },
+          },
+        });
+
+        if (!existingData || !existingData.tag) return;
+        cache.writeQuery<ViewTagQuery>({
+          query: ViewTagDocument,
+          data: {
+            ...existingData,
+            tag: {
+              ...existingData.tag,
+              tagQuestions: existingData.tag?.tagQuestions?.filter(
+                (tq) => tq.id !== result.data?.removeQuestionFromTag?.id
+              ),
+            },
+          },
+          variables: {
+            where: {
+              id: id || '',
+            },
+            tagQuestionsWhere: {
+              deleted: {
+                equals: false,
+              },
+            },
+            listWhere: {
+              type: {
+                equals: TagType.IncidentCrimeType,
+              },
+              dataType: {
+                equals: Model.Incident,
+              },
+              schemes: {
+                some: {
+                  id: {
+                    equals: schemeId,
+                  },
+                },
+              },
+            },
+          },
+        });
+      },
     });
     const tagQs = questionsLayout.filter((q) => q.i !== questionId);
     setQuestionsLayout(tagQs);
@@ -382,7 +470,15 @@ const useViewTag = (): Return => {
 
   const store = useApolloClient();
 
-  const updateQuestionOnTag = (question: string, qId: string) => {
+  const updateQuestionOnTag = (
+    question: string,
+    qId: string,
+    dependentOn?: {
+      tagQuestionId: string;
+      questionId: string;
+      answer: string;
+    }
+  ) => {
     const existingData = store.readQuery<ViewTagQuery>({
       query: ViewTagDocument,
       variables: {
@@ -418,6 +514,7 @@ const useViewTag = (): Return => {
       if (tq.question.id === qId) {
         return {
           ...tq,
+          dependentQuestions: dependentOn ? [dependentOn] : [],
           question: {
             ...tq.question,
             questionFormatted: question,
@@ -430,6 +527,7 @@ const useViewTag = (): Return => {
       req: boolean;
       priority: number;
       id: string;
+      dependentQuestions: Array<never>;
       question: {
         __typename?: 'Question';
         questionFormatted: string;

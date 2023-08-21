@@ -13,6 +13,7 @@ import {
   Popconfirm,
   Radio,
   Row,
+  Select,
   Skeleton,
   Table,
   Tooltip,
@@ -22,15 +23,17 @@ import type { MutationUpdaterFn } from '@apollo/client';
 import AddTodo from 'components/form-components/Todos/AddTodo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
-import { Link } from 'react-router-dom';
-import getTodoUrl from 'utils/get-to-do-url';
 import { useIntl } from 'react-intl';
-import formatCalendar from 'utils/format-calendar-24h';
+import FormatCalendar from 'utils/format-calendar-24h';
 import { useStoreState } from 'state';
 import useStyles from './TodoList.styles';
 import ViewTodo from '../../../components/form-components/Todos/ViewTodo/Todo.container';
+import type { ListData } from '../useActivities';
 
 const { Panel } = Collapse;
+
+type TemplateData = ListData;
+
 interface Props {
   data:
     | Exclude<ListTodosQuery['listTodos'], undefined | null>
@@ -51,6 +54,9 @@ interface Props {
   toggleAllSchemes: () => void;
   selectedTodo: string | null;
   setSelectedTodo: (id: string | null) => void;
+  templateData: ListData[];
+  selectedTemplate: TemplateData | null;
+  selectTemplate: (id: string | null) => void;
 }
 
 const AdminTodos = ({
@@ -70,6 +76,9 @@ const AdminTodos = ({
   toggleAllSchemes,
   selectedTodo,
   setSelectedTodo,
+  templateData,
+  selectTemplate,
+  selectedTemplate,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
@@ -83,7 +92,7 @@ const AdminTodos = ({
   };
   return (
     <div className="list-view">
-      <Row gutter={8} style={{ marginBottom: 10 }}>
+      <Row gutter={8} style={{ marginBottom: 15 }}>
         <Col span={8}>
           <Input
             // value={search}
@@ -96,6 +105,45 @@ const AdminTodos = ({
           />
         </Col>
         <Col flex={1} />
+
+        {templateData.length > 0 && (
+          <Col span={5}>
+            <Select
+              style={{ width: '100%' }}
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Create Activity from Template',
+                id: '1RRG2d',
+              })}
+              onSelect={(value) => selectTemplate(value)}
+              value={null}
+              options={templateData.map((item) => ({
+                label: item.name,
+                value: item.id,
+              }))}
+            />
+          </Col>
+        )}
+        <Col>
+          <Button
+            type="primary"
+            onClick={toggleAddTodo}
+            disabled={saving}
+            icon={
+              <FontAwesomeIcon
+                icon={faPlus}
+                size="lg"
+                style={{ marginRight: 5 }}
+              />
+            }
+          >
+            {intl.formatMessage({
+              defaultMessage: 'New Activity',
+              id: '6kyt/v',
+            })}
+          </Button>
+        </Col>
+      </Row>
+      <Row gutter={8} style={{ marginBottom: 15 }}>
         <Col>
           <Radio.Group defaultValue="CURRENT" onChange={toggleAllSchemes}>
             <Radio.Button value="CURRENT">
@@ -116,36 +164,17 @@ const AdminTodos = ({
           <Radio.Group defaultValue="YOUR" onChange={toggleAllUsers}>
             <Radio.Button value="YOUR">
               {intl.formatMessage({
-                defaultMessage: 'Your Tasks',
-                id: 'nhiP3+',
+                defaultMessage: 'Your Activities',
+                id: '401sYO',
               })}
             </Radio.Button>
             <Radio.Button value="ALL">
               {intl.formatMessage({
-                defaultMessage: 'All Tasks',
-                id: 'rY3Ca3',
+                defaultMessage: 'All Activities',
+                id: 'CC/yEt',
               })}
             </Radio.Button>
           </Radio.Group>
-        </Col>
-        <Col>
-          <Button
-            type="primary"
-            onClick={toggleAddTodo}
-            disabled={saving}
-            icon={
-              <FontAwesomeIcon
-                icon={faPlus}
-                size="lg"
-                style={{ marginRight: 5 }}
-              />
-            }
-          >
-            {intl.formatMessage({
-              defaultMessage: 'New Task',
-              id: 'jtxQPo',
-            })}
-          </Button>
         </Col>
       </Row>
       <Card loading={loading}>
@@ -189,9 +218,6 @@ const AdminTodos = ({
                   defaultMessage: 'Name',
                   id: 'HAlOn1',
                 }),
-                render: (value, record) => (
-                  <Link to={`${getTodoUrl(record.todo)}`}>{value}</Link>
-                ),
               },
               {
                 key: 'description',
@@ -210,7 +236,7 @@ const AdminTodos = ({
                   defaultMessage: 'Due Date',
                   id: '8XUukm',
                 }),
-                render: (value) => formatCalendar(value),
+                render: (value) => FormatCalendar(value),
               },
               {
                 key: 'assignedUsers',
@@ -248,7 +274,7 @@ const AdminTodos = ({
                 }),
                 dataIndex: 'actions',
                 key: 'actions',
-                width: 100,
+                width: 130,
                 render: (_, record) => (
                   <Button
                     onClick={() => {
@@ -266,10 +292,10 @@ const AdminTodos = ({
                   </Button>
                   // <Popconfirm
                   //   title={intl.formatMessage({
-                  //     defaultMessage: 'Complete this task?',
+                  //     defaultMessage: 'Complete this activity?',
                   //     id: 'i2Qvui',
                   //   })}
-                  //   // description="Do you complete this task?"
+                  //   // description="Do you complete this activity?"
                   //   onConfirm={() => onCompletedTodo(record.key)}
                   //   okText={intl.formatMessage({
                   //     defaultMessage: 'Yes',
@@ -299,8 +325,8 @@ const AdminTodos = ({
             <Empty
               image={Empty.PRESENTED_IMAGE_SIMPLE}
               description={intl.formatMessage({
-                defaultMessage: 'Nothing to do',
-                id: 'TtyC9C',
+                defaultMessage: 'No Activities',
+                id: 'wndZeG',
               })}
             />
           </div>
@@ -310,8 +336,8 @@ const AdminTodos = ({
       <Collapse className={classes.title}>
         <Panel
           header={intl.formatMessage({
-            defaultMessage: 'Completed Tasks',
-            id: 'fwW6PN',
+            defaultMessage: 'Completed Activities',
+            id: 'igF7K8',
           })}
           key="1"
         >
@@ -356,10 +382,10 @@ const AdminTodos = ({
                     render: (_, record) => (
                       <Popconfirm
                         title={intl.formatMessage({
-                          defaultMessage: 'Uncomplete this task?',
-                          id: 'bTPleg',
+                          defaultMessage: 'Uncomplete this activity?',
+                          id: 'R2orBo',
                         })}
-                        // description="Do you complete this task?"
+                        // description="Do you complete this activity?"
                         onConfirm={() => onUncompletedTodo(record.key)}
                         okText={intl.formatMessage({
                           defaultMessage: 'Yes',
@@ -400,7 +426,7 @@ const AdminTodos = ({
                       defaultMessage: 'Completed Date',
                       id: 'DFG3iK',
                     }),
-                    render: (value) => formatCalendar(value),
+                    render: (value) => FormatCalendar(value),
                   },
                   {
                     key: 'completedBy',
@@ -440,11 +466,15 @@ const AdminTodos = ({
           id: '8RIxKm',
         })}
         open={addTodo}
-        width="800"
+        width={800}
         onClose={toggleAddTodo}
       >
         {addTodo ? (
-          <AddTodo update={updateTodoList} onClose={toggleAddTodo} />
+          <AddTodo
+            update={updateTodoList}
+            onClose={toggleAddTodo}
+            initData={selectedTemplate ?? undefined}
+          />
         ) : (
           <div />
         )}
@@ -455,7 +485,7 @@ const AdminTodos = ({
           id: '8fwjt4',
         })}
         open={!!selectedTodo}
-        width="800"
+        width={800}
         onClose={() => setSelectedTodo(null)}
       >
         {selectedTodo ? (

@@ -40,6 +40,7 @@ describe('Detail Officer View', () => {
       ],
       schemes: [
         {
+          schemeId: 'test schemeId',
           id: 'test schemeId',
           role: Role.ContentAdmin,
         },
@@ -50,6 +51,7 @@ describe('Detail Officer View', () => {
     const { getByText } = render(
       <MemoryRouter>
         <UserDetail
+          userRole={Role.ContentAdmin}
           demLink={false}
           toggleDemLink={jest.fn()}
           demId=""

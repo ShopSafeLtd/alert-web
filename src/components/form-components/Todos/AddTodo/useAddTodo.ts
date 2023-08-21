@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { SelectOptions } from 'types/DataType';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { CreateTodoMutation } from 'graphql/generated';
@@ -9,9 +9,12 @@ import {
   useListSchemeUsersQuery,
 } from 'graphql/generated';
 import errorNotification from 'types/error_notification';
+import type { FormInstance } from 'antd';
 import { notification } from 'antd';
 import { useStoreState } from 'state';
 import { useIntl } from 'react-intl';
+import { useForm } from 'antd/lib/form/Form';
+import moment from 'moment';
 
 export interface FormData {
   name: string;
@@ -22,7 +25,17 @@ export interface FormData {
 
 interface Props {
   onClose: () => void;
-  updateMutation: MutationUpdaterFn<CreateTodoMutation>;
+  incidentId?: string;
+  updateMutation?: MutationUpdaterFn<CreateTodoMutation>;
+  initData?: {
+    name: string;
+    description: string;
+    questions: {
+      id: string;
+      question: string;
+    }[];
+    defaultDueDays: number;
+  };
 }
 
 interface Return {
@@ -37,9 +50,16 @@ interface Return {
   selectedQuestions: { id: string; question: string }[];
   setSelectedQuestions: (value: { id: string; question: string }[]) => void;
   setSelectedIds: (value: string[]) => void;
+  form: FormInstance<FormData>;
 }
 
-const useAddTodo = ({ updateMutation, onClose }: Props): Return => {
+const useAddTodo = ({
+  updateMutation,
+  onClose,
+  incidentId,
+  initData,
+}: Props): Return => {
+  const [form] = useForm<FormData>();
   const intl = useIntl();
   const schemeId = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
@@ -55,6 +75,28 @@ const useAddTodo = ({ updateMutation, onClose }: Props): Return => {
     setSelectedQuestions([...selectedQuestions, { id, question }]);
     setSelectedIds([...selectedIds, id]);
   };
+  useEffect(() => {
+    if (initData) {
+      const { name, description, questions, defaultDueDays } = initData;
+      const dueDate = new Date();
+      dueDate.setDate(dueDate.getDate() + defaultDueDays);
+
+      const formattedDate = moment(dueDate);
+      setSelectedIds(questions.map((question) => question.id));
+      setSelectedQuestions(
+        questions.map((question) => ({
+          id: question.id,
+          question: question.question,
+        }))
+      );
+
+      form.setFieldsValue({
+        name,
+        description,
+        dueDate: formattedDate,
+      });
+    }
+  }, [initData]);
   const { data: usersData, loading: usersLoading } = useListSchemeUsersQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
@@ -108,8 +150,8 @@ const useAddTodo = ({ updateMutation, onClose }: Props): Return => {
           id: '5Hvk21',
         }),
         description: intl.formatMessage({
-          defaultMessage: 'The task has been added.',
-          id: '/ZJnc1',
+          defaultMessage: 'The activity has been added.',
+          id: 'hDZLqK',
         }),
         placement: 'bottomRight',
       });
@@ -144,6 +186,7 @@ const useAddTodo = ({ updateMutation, onClose }: Props): Return => {
               : undefined,
           dueDate: data.dueDate,
           completed: false,
+          incident: incidentId ? { connect: { id: incidentId } } : undefined,
           createdBy: { connect: { id: userId } },
           schemes: {
             connect: [
@@ -172,6 +215,7 @@ const useAddTodo = ({ updateMutation, onClose }: Props): Return => {
     selectedQuestions,
     setSelectedQuestions,
     setSelectedIds,
+    form,
   };
 };
 export default useAddTodo;

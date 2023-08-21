@@ -34,6 +34,10 @@ describe('Detail Officer View', () => {
   });
   const data: ViewOffenderQuery = {
     offender: {
+      evidence: [],
+      scheme: {
+        mg11Available: true,
+      },
       updates: [],
       crimeGroups: [],
       subscribed: false,
@@ -164,6 +168,10 @@ describe('Detail Officer View', () => {
               toggleAddBan={jest.fn()}
               onEditBan={jest.fn()}
               onAddBan={jest.fn()}
+              addDocument={false}
+              toggleAddDocument={jest.fn()}
+              updateDeleteDocument={jest.fn()}
+              updateDocumentList={jest.fn()}
             />
           </MockedProvider>
         </MemoryRouter>

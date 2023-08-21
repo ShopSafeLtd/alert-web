@@ -1,4 +1,5 @@
 import React from 'react';
+import type { FormInstance } from 'antd';
 import {
   Button,
   Col,
@@ -30,6 +31,7 @@ interface Props {
   setSelectedIds: (value: string[]) => void;
   selectedQuestions: { id: string; question: string }[];
   setSelectedQuestions: (value: { id: string; question: string }[]) => void;
+  form: FormInstance<FormData>;
 }
 
 const disabledDate: RangePickerProps['disabledDate'] = (current) =>
@@ -48,12 +50,13 @@ const AddTodo = ({
   setSelectedIds,
   selectedQuestions,
   setSelectedQuestions,
+  form,
 }: Props): JSX.Element => {
   const intl = useIntl();
 
   return (
     <>
-      <Form layout="vertical" onFinish={onSubmit}>
+      <Form layout="vertical" onFinish={onSubmit} form={form}>
         <Row gutter={16}>
           <Col span={23}>
             <Form.Item
@@ -205,8 +208,8 @@ const AddTodo = ({
                 loading={saving}
               >
                 {intl.formatMessage({
-                  id: 'jtxQPo',
-                  defaultMessage: 'New Task',
+                  id: '6kyt/v',
+                  defaultMessage: 'New Activity',
                 })}
               </Button>
             </Col>

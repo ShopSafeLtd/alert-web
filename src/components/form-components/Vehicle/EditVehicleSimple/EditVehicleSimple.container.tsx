@@ -1,14 +1,14 @@
 import React from 'react';
+import type { VehicleData } from 'types/DataType';
 import View from './EditVehicleSimple.view';
-import type { UpdateVehicleData } from './useEditVehicleSimple';
 import useEditVehicleSimple from './useEditVehicleSimple';
 import type { ImageData } from '../../ImageSelect/ImageSelect.view';
 import type { StateImageData } from '../../../incidents/IncidentForm/ImageSection/useImageSection';
 
 interface Props {
   onClose: () => void;
-  update: (value: UpdateVehicleData) => void;
-  editData: UpdateVehicleData | undefined | null;
+  update: (value: VehicleData) => void;
+  editData: VehicleData | undefined | null;
   images?: ImageData[];
   onImagesUploaded?: (values: StateImageData[]) => void;
 }

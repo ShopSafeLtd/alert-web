@@ -9,7 +9,7 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import type { UserNotificationsQuery } from 'graphql/generated';
 import { useIntl } from 'react-intl';
-import formatCalendar from 'utils/format-calendar-24h';
+import FormatCalendar from 'utils/format-calendar-24h';
 import useStyles from './NotificationList.styles';
 import type { NotificationData } from './useNotificationList';
 
@@ -145,6 +145,7 @@ const NotificationLists = ({
               onClick: () =>
                 handleMarkAsRead({
                   ...record.notification,
+                  read: record.read,
                   schemes: record.notification.schemes,
                 }),
             })}
@@ -191,7 +192,7 @@ const NotificationLists = ({
                 }),
                 width: 120,
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                render: (value) => formatCalendar(value),
+                render: (value) => FormatCalendar(value),
               },
             ]}
           />

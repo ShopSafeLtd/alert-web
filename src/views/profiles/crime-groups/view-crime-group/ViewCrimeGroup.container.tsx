@@ -46,6 +46,10 @@ const ViewCrimeGroup = () => {
     viewSuggestedOpen,
     toggleViewSuggested,
     handleAddSuggestion,
+    toggleAddDocument,
+    addDocument,
+    updateDocumentList,
+    updateDeleteDocument,
   } = useViewCrimeGroup(crimeGroupId);
 
   return (
@@ -90,6 +94,10 @@ const ViewCrimeGroup = () => {
       viewSuggestedOpen={viewSuggestedOpen}
       toggleViewSuggested={toggleViewSuggested}
       handleAddSuggestion={handleAddSuggestion}
+      toggleAddDocument={toggleAddDocument}
+      addDocument={addDocument}
+      updateDocumentList={updateDocumentList}
+      updateDeleteDocument={updateDeleteDocument}
     />
   );
 };

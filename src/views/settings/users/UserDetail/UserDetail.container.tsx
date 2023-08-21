@@ -20,6 +20,7 @@ const UserDetail = (): JSX.Element => {
     demLink,
     toggleDemLink,
     demId,
+    userRole,
   } = useUserDetail(userId);
 
   return (
@@ -36,6 +37,7 @@ const UserDetail = (): JSX.Element => {
       deleteConfirm={deleteConfirm}
       enableConfirm={enableConfirm}
       disableConfirm={disableConfirm}
+      userRole={userRole}
     />
   );
 };

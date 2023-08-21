@@ -17,7 +17,9 @@ import {
   Typography,
 } from 'antd';
 import type {
+  CreateDocumentMutation,
   CrimeGroupQuery,
+  DeleteDocumentMutation,
   SuggestedCrimeGroupMembersQuery,
 } from 'graphql/generated';
 import { UpdateType } from 'graphql/generated';
@@ -49,6 +51,10 @@ import SuggestedMembers from 'components/crimeGroups/SuggestedMembers/SuggestedM
 import MapCard from 'components/map/MapCard/MapCard.view';
 import { useIntl } from 'react-intl';
 import moment from 'moment';
+import EvidenceTable from 'components/tables/EvidenceTable';
+import { ProfileUpdatedModel } from 'types/enums/profile-update-type';
+import AddDocument from 'components/form-components/documents/AddDocument';
+import type { MutationUpdaterFn } from '@apollo/client';
 import useStyles from './ViewCrimeGroup.styles';
 
 const { Title } = Typography;
@@ -107,6 +113,10 @@ interface Props {
   viewSuggestedOpen: boolean;
   toggleViewSuggested: () => void;
   handleAddSuggestion: (id: string) => void;
+  toggleAddDocument: () => void;
+  addDocument: boolean;
+  updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
+  updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
 }
 
 const ViewCrimeGroup = ({
@@ -150,6 +160,10 @@ const ViewCrimeGroup = ({
   toggleViewSuggested,
   viewSuggestedOpen,
   handleAddSuggestion,
+  toggleAddDocument,
+  addDocument,
+  updateDocumentList,
+  updateDeleteDocument,
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
@@ -529,6 +543,54 @@ const ViewCrimeGroup = ({
                     description={intl.formatMessage({
                       defaultMessage: 'No incidents for this crime group',
                       id: 'uFO+ib',
+                    })}
+                    image={Empty.PRESENTED_IMAGE_SIMPLE}
+                  />
+                )}
+              </Card>
+              <Card style={{ marginTop: 20 }}>
+                <Row gutter={8} align="middle" style={{ marginBottom: 10 }}>
+                  <Col flex={1}>
+                    <Title level={4}>
+                      {intl.formatMessage({
+                        defaultMessage: 'Evidence',
+                        id: '6g7+6N',
+                      })}
+                    </Title>
+                  </Col>
+                  {editRights && (
+                    <Col>
+                      <Button
+                        size="small"
+                        onClick={toggleAddDocument}
+                        icon={
+                          <FontAwesomeIcon
+                            icon={faPlus}
+                            style={{ marginRight: 5 }}
+                          />
+                        }
+                      >
+                        {intl.formatMessage({
+                          defaultMessage: 'Add Evidence',
+                          id: 'vgVasT',
+                        })}
+                      </Button>
+                    </Col>
+                  )}
+                </Row>
+
+                {data?.crimeGroup?.evidence.length && !loading ? (
+                  <EvidenceTable
+                    evidence={data?.crimeGroup?.evidence}
+                    title={ProfileUpdatedModel.Crime_Group}
+                    update={updateDeleteDocument}
+                    deleteRights={editRights}
+                  />
+                ) : (
+                  <Empty
+                    description={intl.formatMessage({
+                      defaultMessage: 'No evidence for this crimeGroup',
+                      id: 'BKR0xN',
                     })}
                     image={Empty.PRESENTED_IMAGE_SIMPLE}
                   />
@@ -935,6 +997,27 @@ const ViewCrimeGroup = ({
             onClose={toggleViewSuggested}
             handleAddSuggestion={handleAddSuggestion}
           />
+        )}
+      </Drawer>
+      {/* evidence */}
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Add Evidence',
+          id: 'vgVasT',
+        })}
+        visible={addDocument}
+        width="600"
+        onClose={toggleAddDocument}
+        zIndex={1001}
+      >
+        {addDocument ? (
+          <AddDocument
+            crimeGroupId={data?.crimeGroup?.id || ''}
+            onClose={toggleAddDocument}
+            update={updateDocumentList}
+          />
+        ) : (
+          <div />
         )}
       </Drawer>
     </div>

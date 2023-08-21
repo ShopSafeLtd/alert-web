@@ -4,6 +4,8 @@ import type {
   VehicleUpdateInput,
   VehicleQuery,
   VehicleQueryVariables,
+  CreateDocumentMutation,
+  DeleteDocumentMutation,
 } from 'graphql/generated';
 import {
   Role,
@@ -22,6 +24,7 @@ import { useStoreState } from 'state';
 import errorNotification from 'types/error_notification';
 import type { VehicleData } from 'types/DataType';
 import { useIntl } from 'react-intl';
+import type { MutationUpdaterFn } from '@apollo/client';
 
 const { confirm } = Modal;
 
@@ -69,6 +72,10 @@ interface Return {
   editRights: boolean;
   toggleSubscribe: () => void;
   submitEditVehicle: (value: VehicleData) => void;
+  toggleAddDocument: () => void;
+  addDocument: boolean;
+  updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
+  updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
 }
 
 const useViewVehicle = (vehicleId: string): Return => {
@@ -89,6 +96,8 @@ const useViewVehicle = (vehicleId: string): Return => {
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
     []
   );
+  const [addDocument, setAddDocument] = useState(false);
+
   // const [optionMenuItems, setOptionsMenuItems] = useState<ItemType[]>([]);
 
   const [replyTo, setReplyTo] = useState<{
@@ -106,13 +115,15 @@ const useViewVehicle = (vehicleId: string): Return => {
     if (editUpdate) setEditUpdateInput(editUpdate.text);
   }, [editUpdate]);
 
+  const variables = {
+    where: {
+      id: vehicleId,
+    },
+  };
+
   const { data: vehicleData, loading } = useVehicleQuery({
     fetchPolicy: 'cache-and-network',
-    variables: {
-      where: {
-        id: vehicleId,
-      },
-    },
+    variables,
     onCompleted: (res) => {
       setLightboxElements(
         res.vehicle?.images.map((image) => ({
@@ -485,6 +496,58 @@ const useViewVehicle = (vehicleId: string): Return => {
       });
     }
   };
+
+  // evidence
+  const updateDocumentList: MutationUpdaterFn<CreateDocumentMutation> = (
+    store,
+    { data: res }
+  ) => {
+    if (res?.createDocument === null || res?.createDocument === undefined)
+      return;
+    const existingData = store.readQuery<VehicleQuery>({
+      query: VehicleDocument,
+      variables,
+    });
+
+    if (!existingData?.vehicle) return;
+    store.writeQuery<VehicleQuery>({
+      query: VehicleDocument,
+      data: {
+        vehicle: {
+          ...existingData.vehicle,
+          evidence: [...existingData.vehicle.evidence, res.createDocument],
+        },
+        __typename: 'Query',
+      },
+      variables,
+    });
+  };
+  const updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation> = (
+    store,
+    { data: res }
+  ) => {
+    if (res?.deleteDocument === null || res?.deleteDocument === undefined)
+      return;
+    const existingData = store.readQuery<VehicleQuery>({
+      query: VehicleDocument,
+      variables,
+    });
+
+    if (!existingData?.vehicle) return;
+    store.writeQuery<VehicleQuery>({
+      query: VehicleDocument,
+      data: {
+        vehicle: {
+          ...existingData.vehicle,
+          evidence: existingData.vehicle.evidence.filter(
+            ({ id }) => id !== res.deleteDocument?.id
+          ),
+        },
+        __typename: 'Query',
+      },
+      variables,
+    });
+  };
   const toggleEditVehicle = () => {
     setEditVehicle(!editVehicle);
   };
@@ -494,6 +557,9 @@ const useViewVehicle = (vehicleId: string): Return => {
 
   const openLightbox = (index: number) => {
     setLightBoxOpen({ open: !lightBoxOpen.open, index });
+  };
+  const toggleAddDocument = () => {
+    setAddDocument(() => !addDocument);
   };
   return {
     data: vehicleData,
@@ -521,6 +587,10 @@ const useViewVehicle = (vehicleId: string): Return => {
     confirmDeleteUpdate,
     toggleSubscribe,
     submitEditVehicle,
+    toggleAddDocument,
+    addDocument,
+    updateDocumentList,
+    updateDeleteDocument,
     // optionMenuItems,
   };
 };

@@ -86,11 +86,33 @@ const useEditOffender = ({
   const onSubmit = (values: FormData) => {
     update({
       ...data,
-      ...values,
-      images: values.images.map((image) => ({
-        id: image.id || '',
-        url: image.url,
-        optimised: image.optimised,
+      name: values.name || 'Unidentified Offender',
+      alias:
+        values.alias && values.alias.length > 0
+          ? [...new Set(values.alias?.map((el) => el.trim().toLowerCase()))]
+          : [],
+      // ???
+      gender: values.gender || null,
+      race: values.race || null,
+      build: values.build || null,
+      hair: values.hair || null,
+      peculiarities: values.peculiarities || null,
+      age: ageCheck ? null : values.age || null,
+      dateSource: ageCheck ? values.dateSource || null : null,
+      dateOfBirth: ageCheck ? values.dateOfBirth || null : null,
+      idVerified: values.idVerified,
+      idSource: values.idSource,
+      images: values.images.map((item) => ({
+        id: item.id || '',
+        url: item.url,
+        optimised: item.optimised,
+        fileName: item.file?.response && item.file.response[0].blobName,
+        type: item.file?.response && item.file.response[0].mimetype,
+        position: item.position,
+        primary: false,
+        policeImage: item.policeImage || false,
+        rotation: item.rotation,
+        new: !!item.file,
       })),
     });
 

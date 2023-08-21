@@ -19,7 +19,7 @@ import { faBell } from '@fortawesome/pro-light-svg-icons';
 import { createUseStyles } from 'react-jss';
 import { Theme } from 'configs/ThemeConfig';
 import NotificationsDrawer from 'components/notifications/NotificationsDrawer/NotificationDrawer.container';
-import { useUserNotificationsQuery } from 'graphql/generated';
+import { Role, useUserNotificationsQuery } from 'graphql/generated';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   notificationCol: {
@@ -115,6 +115,21 @@ const SideNavContent = (props: SideNavContentProps) => {
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
   const userRole = useStoreState((state) => state.user.role);
   const userId = useStoreState((state) => state.user.id);
+  const restrictIncidentAccess = useStoreState(
+    (state) => state.scheme.restrictIncidentAccess
+  );
+
+  const getNavigationConfig = () => {
+    const filteredConfig = navConfig.filter((el) =>
+      el.roles?.includes(userRole)
+    );
+
+    if (userRole === 'USER' && restrictIncidentAccess) {
+      return filteredConfig.filter((el) => el.title !== 'Incidents');
+    }
+    return filteredConfig;
+  };
+  const navigationConfig = getNavigationConfig();
 
   const variables = {
     where: {
@@ -132,9 +147,7 @@ const SideNavContent = (props: SideNavContentProps) => {
       onMobileNavToggle(false);
     }
   };
-  const navigationConfig = navConfig.filter((el) =>
-    el.roles?.includes(userRole)
-  );
+
   const customLogo = !!window.localStorage.getItem('logo');
 
   const getBadgeCount = {
@@ -304,10 +317,25 @@ const TopNavContent = (props: TopNavContentProps) => {
   const { topNavColor, localization } = props;
 
   const userRole = useStoreState((state) => state.user.role);
-  const navigationConfig =
-    userRole === 'SCHEME_ADMIN'
-      ? navConfig
-      : navConfig.filter((el) => el.title !== 'sidenav.scheme');
+  const restrictIncidentAccess = useStoreState(
+    (state) => state.scheme.restrictIncidentAccess
+  );
+
+  const getNavigationConfig = () => {
+    if (userRole !== 'SCHEME_ADMIN') {
+      if (userRole === 'USER' && restrictIncidentAccess) {
+        return navConfig.filter(
+          (el) => el.title !== 'sidenav.scheme' && el.title !== 'Incidents'
+        );
+      }
+      return navConfig.filter((el) => el.title !== 'sidenav.scheme');
+    }
+    return navConfig;
+  };
+  const navigationConfig = getNavigationConfig();
+
+  console.log('navigationConfig', navigationConfig);
+
   return (
     <Menu mode="horizontal" style={{ backgroundColor: topNavColor }}>
       {navigationConfig.map((menu) =>

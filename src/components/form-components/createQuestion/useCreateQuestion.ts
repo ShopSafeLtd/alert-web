@@ -5,6 +5,7 @@ import { useIntl } from 'react-intl';
 import type { AvailableTaskQuestionsQuery } from '../../../graphql/generated';
 import {
   AnswerType,
+  QuestionModel,
   useAvailableTaskQuestionsQuery,
   useCreateOrAddQuestionMutation,
 } from '../../../graphql/generated';
@@ -61,12 +62,12 @@ const useCreateQuestion = ({ onClose, update, ids }: Props): Return => {
       setSaving(false);
       notification.success({
         message: intl.formatMessage({
-          defaultMessage: 'Successfully created!',
-          id: '2Ltm8W',
+          defaultMessage: 'Successful!',
+          id: 'ELUYrG',
         }),
         description: intl.formatMessage({
-          defaultMessage: 'The question has been successfully created!',
-          id: '8/Rflz',
+          defaultMessage: 'The operation was successful!',
+          id: 'uQUHna',
         }),
 
         placement: 'bottomRight',
@@ -102,6 +103,7 @@ const useCreateQuestion = ({ onClose, update, ids }: Props): Return => {
         question: values.question,
         options: values.options,
         type: values.type,
+        model: QuestionModel.Task,
       };
       void addQuestion({
         variables: {

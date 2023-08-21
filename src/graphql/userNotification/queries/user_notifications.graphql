@@ -26,6 +26,7 @@ query userNotifications(
           name
           autoApproveIncidents
           autoApproveOffenders
+          restrictIncidentAccess
           defaultPublicOffenderDOB
           userTodos
           userNotifications

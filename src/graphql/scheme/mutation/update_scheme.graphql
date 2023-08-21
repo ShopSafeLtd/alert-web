@@ -2,6 +2,7 @@ mutation updateScheme($where: UniqueId!, $data: SchemeUpdateInput!) {
   updateScheme(where: $where, data: $data) {
     id
     name
+    restrictIncidentAccess
     autoApproveIncidents
     autoApproveOffenders
     defaultPublicOffenderDOB

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access,formatjs/no-literal-string-in-jsx,@typescript-eslint/no-unsafe-assignment */
 import React, { useMemo } from 'react';
 import {
   Button,
@@ -9,6 +10,7 @@ import {
   Row,
   Select,
   Tooltip,
+  Typography,
 } from 'antd';
 import type { ViewTagQuery } from 'graphql/generated';
 import { IncidentFormField } from 'graphql/generated';
@@ -31,7 +33,7 @@ import type {
   FieldLayout,
   IncidentFormFieldState,
 } from './useViewTag';
-import UpdateQuestionContainer from '../../../../components/form-components/update-question/UpdateQuestion.container';
+import UpdateQuestionContainer from '../../../../components/form-components/update-question-on-tag/UpdateQuestion.container';
 
 interface Props {
   toggleAddQuestion: () => void;
@@ -54,7 +56,15 @@ interface Props {
   incidentFormLayoutChanged: boolean;
   saveIncidentForm: () => void;
   loading: boolean;
-  updateQuestionOnTag: (question: string, tagId: string) => void;
+  updateQuestionOnTag: (
+    question: string,
+    tagId: string,
+    dependentOn?: {
+      tagQuestionId: string;
+      questionId: string;
+      answer: string;
+    }
+  ) => void;
   selectedQuestion: string | null;
   setSelectedQuestion: (value: string | null) => void;
 }
@@ -93,7 +103,37 @@ const ViewTag = ({
     type: tagq.question.type,
     qId: tagq.question.id,
     required: tagq.req,
+    dependOn: tagq.dependentQuestions[0],
   }));
+
+  const tagQsFormatted = useMemo(
+    () =>
+      data?.tag?.tagQuestions
+        ?.map((tag) => ({
+          questionId: tag.question.id,
+          tagQuestionId: tag.id,
+          question: tag.question.questionFormatted,
+          type: tag.question.type,
+          options: tag.question.optionsFormatted || [],
+        }))
+        .filter((tag) => tag.questionId !== selectedQuestion) || [],
+    [data, selectedQuestion]
+  );
+
+  const findDep = () => {
+    const found = data?.tag?.tagQuestions?.find(
+      (tagq) => tagq.question.id === selectedQuestion
+    );
+    if (found && found.dependentQuestions[0]) {
+      const dependentOn = found.dependentQuestions[0].tagQuestionId;
+      const dependentAnswer = found.dependentQuestions[0].answer;
+      return {
+        dependentOn,
+        dependentAnswer,
+      };
+    }
+    return null;
+  };
 
   const incidentFormElements: Elements = {
     tags: (
@@ -246,26 +286,6 @@ const ViewTag = ({
         >
           <Row>
             <Col flex={1}>
-              <FormattedMessage defaultMessage="Images" id="Fip4H8" />
-            </Col>
-            <Col>
-              <Tooltip
-                title={intl.formatMessage({
-                  defaultMessage: 'Hide/Show field on form',
-                  id: '+AMnGS',
-                })}
-              >
-                <Checkbox
-                  checked={incidentFormFields.IMAGES}
-                  onChange={() => {
-                    toggleField(IncidentFormField.Images);
-                  }}
-                />
-              </Tooltip>
-            </Col>
-          </Row>
-          <Row>
-            <Col flex={1}>
               <FormattedMessage defaultMessage="Offenders" id="xb54TN" />
             </Col>
             <Col>
@@ -279,6 +299,40 @@ const ViewTag = ({
                   checked={incidentFormFields.OFFENDERS}
                   onChange={() => {
                     toggleField(IncidentFormField.Offenders);
+                  }}
+                />
+              </Tooltip>
+            </Col>
+          </Row>
+        </Card>
+      </div>
+    ),
+    images: (
+      <div
+        key="images"
+        style={{
+          cursor: 'grab',
+        }}
+      >
+        <Card
+          style={{ marginBottom: 0, outline: '1px solid #ccc' }}
+          title={<FormattedMessage defaultMessage="Images" id="Fip4H8" />}
+        >
+          <Row>
+            <Col flex={1}>
+              <FormattedMessage defaultMessage="Images" id="Fip4H8" />
+            </Col>
+            <Col>
+              <Tooltip
+                title={intl.formatMessage({
+                  defaultMessage: 'Hide/Show field on form',
+                  id: '+AMnGS',
+                })}
+              >
+                <Checkbox
+                  checked={incidentFormFields.IMAGES}
+                  onChange={() => {
+                    toggleField(IncidentFormField.Images);
                   }}
                 />
               </Tooltip>
@@ -417,56 +471,106 @@ const ViewTag = ({
 
   const qElements = useMemo(
     () =>
-      questionsLayout.map((layout) => (
-        <div
-          key={layout.i}
-          style={{
-            cursor: 'grab',
-          }}
-        >
-          <Row>
-            <Col flex={1}>
-              <FontAwesomeIcon style={{ marginRight: 10 }} icon={faBars} />
-              {tagqs?.find((tagq) => tagq.i === layout.i)?.question}
-            </Col>
-            <Col>
-              <Tooltip
-                title={intl.formatMessage({
-                  defaultMessage: 'Edit Question',
-                  id: 'Pa9Li0',
-                })}
+      questionsLayout.map((layout) => {
+        const found = tagqs?.find((tagq) => tagq.i === layout.i);
+        const findDepQ = tagqs?.find(
+          (tagq) => tagq.qId === found?.dependOn?.questionId
+        );
+
+        const message = `${layout.y + 1}. ${found?.question || ''}`;
+        return (
+          <div
+            key={layout.i}
+            style={{
+              cursor: 'grab',
+            }}
+          >
+            <Row
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <Col
+                style={{
+                  width: '60%',
+                }}
+                flex={1}
               >
-                <Button
-                  size="small"
-                  onClick={() => {
-                    setSelectedQuestion(
-                      tagqs?.find((tagq) => tagq.i === layout.i)?.qId || ''
-                    );
-                  }}
-                  style={{ marginRight: 5 }}
-                  icon={<FontAwesomeIcon icon={faPenToSquare} />}
-                />
-              </Tooltip>
-            </Col>
-            <Col>
-              <Tooltip
-                title={intl.formatMessage({
-                  defaultMessage: 'Remove Question',
-                  id: 'CvVrAx',
-                })}
-              >
-                <Button
-                  size="small"
-                  onClick={() => {
-                    deleteQuestion(layout.i);
-                  }}
-                  icon={<FontAwesomeIcon icon={faTrash} />}
-                />
-              </Tooltip>
-            </Col>
-          </Row>
-        </div>
-      )),
+                <FontAwesomeIcon style={{ marginRight: 10 }} icon={faBars} />
+                <Typography.Text
+                  style={{ maxWidth: '90%' }}
+                  ellipsis={{ tooltip: message }}
+                >
+                  {message}
+                </Typography.Text>
+                {found?.required && (
+                  <Typography.Text
+                    style={{
+                      marginLeft: 5,
+                      color: '#ff0000',
+                    }}
+                  >
+                    *
+                  </Typography.Text>
+                )}
+              </Col>
+
+              {findDepQ && (
+                <Col>
+                  <Tooltip title={findDepQ.question}>
+                    <Typography.Text
+                      style={{
+                        marginRight: 10,
+                        color: '#1890ff',
+                        height: '100%',
+                      }}
+                    >
+                      {intl.formatMessage({
+                        defaultMessage: 'Dependent',
+                        id: 'R1OkyM',
+                      })}
+                    </Typography.Text>
+                  </Tooltip>
+                </Col>
+              )}
+              <Col>
+                <Tooltip
+                  title={intl.formatMessage({
+                    defaultMessage: 'Edit Question',
+                    id: 'Pa9Li0',
+                  })}
+                >
+                  <Button
+                    size="small"
+                    onClick={() => {
+                      setSelectedQuestion(found?.qId || '');
+                    }}
+                    style={{ marginRight: 5 }}
+                    icon={<FontAwesomeIcon icon={faPenToSquare} />}
+                  />
+                </Tooltip>
+              </Col>
+              <Col>
+                <Tooltip
+                  title={intl.formatMessage({
+                    defaultMessage: 'Remove Question',
+                    id: 'CvVrAx',
+                  })}
+                >
+                  <Button
+                    size="small"
+                    onClick={() => {
+                      deleteQuestion(layout.i);
+                    }}
+                    icon={<FontAwesomeIcon icon={faTrash} />}
+                  />
+                </Tooltip>
+              </Col>
+            </Row>
+          </div>
+        );
+      }),
     [questionsLayout, tagqs]
   );
 
@@ -491,7 +595,7 @@ const ViewTag = ({
         ]}
       />
       <Row gutter={[8, 8]}>
-        <Col span={12}>
+        <Col span={16}>
           <Card loading={loading}>
             <FormattedMessage defaultMessage="Parent Tag:" id="TqRfhz" />
             <Select
@@ -595,7 +699,7 @@ const ViewTag = ({
             </Col>
           </Card>
         </Col>
-        <Col span={12}>
+        <Col span={8}>
           <Card
             style={{
               minHeight: 500,
@@ -622,7 +726,7 @@ const ViewTag = ({
           id: '/vx2Ey',
         })}
         visible={addQuestion}
-        width="800"
+        width={800}
         onClose={toggleAddQuestion}
       >
         {addQuestion ? (
@@ -637,7 +741,7 @@ const ViewTag = ({
           id: '/vx2Ey',
         })}
         visible={!!selectedQuestion}
-        width="800"
+        width={800}
         onClose={() => setSelectedQuestion(null)}
       >
         {selectedQuestion ? (
@@ -651,6 +755,8 @@ const ViewTag = ({
             required={
               !!tagqs?.find((tagq) => tagq.qId === selectedQuestion)?.required
             }
+            tagQuestions={tagQsFormatted || []}
+            dependent={findDep() || undefined}
           />
         ) : (
           <div />

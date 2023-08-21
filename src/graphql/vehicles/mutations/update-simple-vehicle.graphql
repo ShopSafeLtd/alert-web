@@ -1,0 +1,19 @@
+mutation updateSimpleVehicle($where: UniqueId!, $data: VehicleUpdateInput!) {
+  updateVehicle(where: $where, data: $data) {
+    id
+    reference
+    colour
+    model
+    make
+    registration
+    images(first: 1) {
+      id
+      url
+      policeImage
+      primary
+      position
+      rotation
+      optimised
+    }
+  }
+}

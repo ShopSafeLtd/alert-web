@@ -1,7 +1,7 @@
 import React from 'react';
 import type { FormInstance } from 'antd';
 import { Button, Col, Form, Input, Row, Skeleton } from 'antd';
-import type { VehicleCardData } from 'types/DataType';
+import type { VehicleData } from 'types/DataType';
 import { useIntl } from 'react-intl';
 import type { ImageData } from 'components/form-components/ImageSelect/ImageSelect.view';
 import ImageSelect from 'components/form-components/ImageSelect/ImageSelect.view';
@@ -9,7 +9,7 @@ import type { FormData } from './useEditVehicleSimple';
 
 interface Props {
   onClose: () => void;
-  editData: VehicleCardData | undefined | null;
+  editData: VehicleData | undefined | null;
   onSubmit: (value: FormData) => void;
   saving: boolean;
   form: FormInstance<FormData>;
@@ -25,6 +25,13 @@ const EditVehicle = ({
   images,
 }: Props): JSX.Element => {
   const intl = useIntl();
+  const filteredImages = images?.filter(
+    (el) => !editData?.images?.find((el2) => el2.url === el.url)
+  );
+  const vehicleImages = editData?.images?.map((el) => ({ ...el, uid: el.id }));
+  const allImages = vehicleImages
+    ? [...(filteredImages || []), ...vehicleImages]
+    : images;
   return editData ? (
     <div>
       <Form<FormData>
@@ -33,7 +40,7 @@ const EditVehicle = ({
           model: editData.model || '',
           colour: editData.colour || '',
           registration: editData.registration || '',
-          images: editData.images || [],
+          images: editData.images || null,
         }}
         layout="vertical"
         onFinish={onSubmit}
@@ -99,16 +106,7 @@ const EditVehicle = ({
             id: '+sAAjK',
           })}
         >
-          <ImageSelect
-            images={
-              editData.images
-                ? images?.concat(
-                    editData.images.map((el) => ({ ...el, uid: el.id }))
-                  )
-                : images
-            }
-            value={editData.images}
-          />
+          <ImageSelect images={allImages} value={editData.images} />
         </Form.Item>
         <Form.Item>
           <Row style={{ marginTop: 30 }} gutter={16} justify="end">

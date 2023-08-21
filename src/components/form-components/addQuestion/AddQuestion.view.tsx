@@ -39,6 +39,7 @@ const AddQuestionView = ({
   const opt = Form.useWatch('options', form) || [];
   const selectedId = Form.useWatch('selectedId', form);
   const intl = useIntl();
+
   const generatePreview = () => {
     if (answerType === AnswerType.String) {
       return <StringPreview question={question} />;

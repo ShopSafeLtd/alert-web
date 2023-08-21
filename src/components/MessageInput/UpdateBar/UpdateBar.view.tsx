@@ -104,6 +104,7 @@ interface Props {
   vehiclesData: VehicleData[];
   saving: boolean;
   handleMarkAsRead: () => void;
+  hideIncident: boolean;
 }
 
 const UpdateBar = ({
@@ -144,6 +145,7 @@ const UpdateBar = ({
   vehiclesData,
   saving,
   handleMarkAsRead,
+  hideIncident,
 }: Props) => {
   const intl = useIntl();
   return (
@@ -407,88 +409,153 @@ const UpdateBar = ({
             <Dropdown
               overlay={
                 <Menu
-                  items={[
-                    {
-                      label: intl.formatMessage({
-                        id: 'UhSUQG',
-                        defaultMessage: 'Link Offenders',
-                      }),
-                      key: '1',
-                      icon: (
-                        <FontAwesomeIcon
-                          icon={faUsers}
-                          style={{ marginRight: 10 }}
-                        />
-                      ),
-                      disabled:
-                        saving ||
-                        (updateIncidents && updateIncidents.length > 0) ||
-                        (updateFileList && updateFileList.length > 0) ||
-                        (vehiclesData && vehiclesData.length > 0) ||
-                        (crimeGroupsData && crimeGroupsData.length > 0),
-                      onClick: () => toggleLinkUpdateOffender(),
-                    },
-                    {
-                      label: intl.formatMessage({
-                        id: '1Vs3Qr',
-                        defaultMessage: 'Link Incidents',
-                      }),
-                      key: '2',
-                      icon: (
-                        <FontAwesomeIcon
-                          icon={faExclamationCircle}
-                          style={{ marginRight: 10 }}
-                        />
-                      ),
-                      disabled:
-                        saving ||
-                        (updateFileList && updateFileList.length > 0) ||
-                        (updateOffenders && updateOffenders.length > 0) ||
-                        (vehiclesData && vehiclesData.length > 0) ||
-                        (crimeGroupsData && crimeGroupsData.length > 0),
-                      onClick: () => toggleLinkUpdateIncident(),
-                    },
-                    {
-                      label: intl.formatMessage({
-                        id: 'rmI5oX',
-                        defaultMessage: 'Link Vehicles',
-                      }),
-                      key: '3',
-                      icon: (
-                        <FontAwesomeIcon
-                          icon={faCar}
-                          style={{ marginRight: 10 }}
-                        />
-                      ),
-                      disabled:
-                        saving ||
-                        (updateFileList && updateFileList.length > 0) ||
-                        (updateOffenders && updateOffenders.length > 0) ||
-                        (updateIncidents && updateIncidents.length > 0) ||
-                        (crimeGroupsData && crimeGroupsData.length > 0),
-                      onClick: () => toggleLinkVehicle(),
-                    },
-                    {
-                      label: intl.formatMessage({
-                        id: 'nsggw+',
-                        defaultMessage: 'Link Crime Groups',
-                      }),
-                      key: '4',
-                      icon: (
-                        <FontAwesomeIcon
-                          icon={faPeopleGroup}
-                          style={{ marginRight: 10 }}
-                        />
-                      ),
-                      disabled:
-                        saving ||
-                        (updateFileList && updateFileList.length > 0) ||
-                        (updateOffenders && updateOffenders.length > 0) ||
-                        (vehiclesData && vehiclesData.length > 0) ||
-                        (updateIncidents && updateIncidents.length > 0),
-                      onClick: () => toggleLinkCrimeGroup(),
-                    },
-                  ]}
+                  items={
+                    hideIncident
+                      ? [
+                          {
+                            label: intl.formatMessage({
+                              id: 'UhSUQG',
+                              defaultMessage: 'Link Offenders',
+                            }),
+                            key: '1',
+                            icon: (
+                              <FontAwesomeIcon
+                                icon={faUsers}
+                                style={{ marginRight: 10 }}
+                              />
+                            ),
+                            disabled:
+                              saving ||
+                              (updateIncidents && updateIncidents.length > 0) ||
+                              (updateFileList && updateFileList.length > 0) ||
+                              (vehiclesData && vehiclesData.length > 0) ||
+                              (crimeGroupsData && crimeGroupsData.length > 0),
+                            onClick: () => toggleLinkUpdateOffender(),
+                          },
+                          {
+                            label: intl.formatMessage({
+                              id: 'rmI5oX',
+                              defaultMessage: 'Link Vehicles',
+                            }),
+                            key: '3',
+                            icon: (
+                              <FontAwesomeIcon
+                                icon={faCar}
+                                style={{ marginRight: 10 }}
+                              />
+                            ),
+                            disabled:
+                              saving ||
+                              (updateFileList && updateFileList.length > 0) ||
+                              (updateOffenders && updateOffenders.length > 0) ||
+                              (updateIncidents && updateIncidents.length > 0) ||
+                              (crimeGroupsData && crimeGroupsData.length > 0),
+                            onClick: () => toggleLinkVehicle(),
+                          },
+                          {
+                            label: intl.formatMessage({
+                              id: 'nsggw+',
+                              defaultMessage: 'Link Crime Groups',
+                            }),
+                            key: '4',
+                            icon: (
+                              <FontAwesomeIcon
+                                icon={faPeopleGroup}
+                                style={{ marginRight: 10 }}
+                              />
+                            ),
+                            disabled:
+                              saving ||
+                              (updateFileList && updateFileList.length > 0) ||
+                              (updateOffenders && updateOffenders.length > 0) ||
+                              (vehiclesData && vehiclesData.length > 0) ||
+                              (updateIncidents && updateIncidents.length > 0),
+                            onClick: () => toggleLinkCrimeGroup(),
+                          },
+                        ]
+                      : [
+                          {
+                            label: intl.formatMessage({
+                              id: 'UhSUQG',
+                              defaultMessage: 'Link Offenders',
+                            }),
+                            key: '1',
+                            icon: (
+                              <FontAwesomeIcon
+                                icon={faUsers}
+                                style={{ marginRight: 10 }}
+                              />
+                            ),
+                            disabled:
+                              saving ||
+                              (updateIncidents && updateIncidents.length > 0) ||
+                              (updateFileList && updateFileList.length > 0) ||
+                              (vehiclesData && vehiclesData.length > 0) ||
+                              (crimeGroupsData && crimeGroupsData.length > 0),
+                            onClick: () => toggleLinkUpdateOffender(),
+                          },
+                          {
+                            label: intl.formatMessage({
+                              id: '1Vs3Qr',
+                              defaultMessage: 'Link Incidents',
+                            }),
+                            key: '2',
+                            icon: (
+                              <FontAwesomeIcon
+                                icon={faExclamationCircle}
+                                style={{ marginRight: 10 }}
+                              />
+                            ),
+                            disabled:
+                              saving ||
+                              (updateFileList && updateFileList.length > 0) ||
+                              (updateOffenders && updateOffenders.length > 0) ||
+                              (vehiclesData && vehiclesData.length > 0) ||
+                              (crimeGroupsData && crimeGroupsData.length > 0),
+                            onClick: () => toggleLinkUpdateIncident(),
+                          },
+                          {
+                            label: intl.formatMessage({
+                              id: 'rmI5oX',
+                              defaultMessage: 'Link Vehicles',
+                            }),
+                            key: '3',
+                            icon: (
+                              <FontAwesomeIcon
+                                icon={faCar}
+                                style={{ marginRight: 10 }}
+                              />
+                            ),
+                            disabled:
+                              saving ||
+                              (updateFileList && updateFileList.length > 0) ||
+                              (updateOffenders && updateOffenders.length > 0) ||
+                              (updateIncidents && updateIncidents.length > 0) ||
+                              (crimeGroupsData && crimeGroupsData.length > 0),
+                            onClick: () => toggleLinkVehicle(),
+                          },
+                          {
+                            label: intl.formatMessage({
+                              id: 'nsggw+',
+                              defaultMessage: 'Link Crime Groups',
+                            }),
+                            key: '4',
+                            icon: (
+                              <FontAwesomeIcon
+                                icon={faPeopleGroup}
+                                style={{ marginRight: 10 }}
+                              />
+                            ),
+                            disabled:
+                              saving ||
+                              (updateFileList && updateFileList.length > 0) ||
+                              (updateOffenders && updateOffenders.length > 0) ||
+                              (vehiclesData && vehiclesData.length > 0) ||
+                              (updateIncidents && updateIncidents.length > 0),
+                            onClick: () => toggleLinkCrimeGroup(),
+                          },
+                        ]
+                  }
                 />
               }
             >

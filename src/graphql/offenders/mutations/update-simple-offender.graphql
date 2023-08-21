@@ -1,0 +1,24 @@
+mutation UpdateSimpleOffender($where: UniqueId!, $data: OffenderUpdateInput!) {
+  updateOffender(where: $where, data: $data) {
+    id
+    name
+    age
+    gender
+    race
+    dateOfBirth
+    build
+    height
+    comment
+    images(first: 1) {
+      id
+      url
+      optimised
+      card
+      position
+      rotation
+      primary
+      policeImage
+    }
+    recycled
+  }
+}

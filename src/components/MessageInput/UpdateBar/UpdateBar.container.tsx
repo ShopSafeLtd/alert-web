@@ -73,6 +73,7 @@ const UpdateBar = ({
     vehiclesData,
     saving,
     handleMarkAsRead,
+    hideIncident,
   } = useUpdateBar({
     replyTo,
     incidentId,
@@ -124,6 +125,7 @@ const UpdateBar = ({
       vehiclesData={vehiclesData}
       saving={saving}
       handleMarkAsRead={handleMarkAsRead}
+      hideIncident={hideIncident}
     />
   );
 };

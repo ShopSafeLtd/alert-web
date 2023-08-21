@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { UserQuery } from 'graphql/generated';
+import type { UserQuery, Role } from 'graphql/generated';
 import {
   UserStatus,
   useDeleteUserFromSchemeMutation,
@@ -28,6 +28,7 @@ interface Return {
   enableConfirm: () => void;
   disableConfirm: () => void;
   deleteConfirm: () => void;
+  userRole: Role | undefined;
 }
 
 const useUserDetail = (userId: string): Return => {
@@ -242,6 +243,7 @@ const useUserDetail = (userId: string): Return => {
       },
     });
   };
+
   return {
     data,
     loading,
@@ -255,6 +257,7 @@ const useUserDetail = (userId: string): Return => {
     demLink,
     toggleDemLink,
     demId,
+    userRole: data?.user?.schemes.find((el) => el.schemeId === schemeId)?.role,
   };
 };
 

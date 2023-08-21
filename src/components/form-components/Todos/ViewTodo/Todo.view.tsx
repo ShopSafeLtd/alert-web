@@ -111,6 +111,7 @@ const TodoView = ({
             <Row>
               <Col span={24}>
                 <Select
+                  value={null}
                   style={{ width: '50%' }}
                   options={availableUsers.map((user) => ({
                     label: user.name,
