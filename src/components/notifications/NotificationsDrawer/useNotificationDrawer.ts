@@ -46,7 +46,6 @@ interface Scheme {
   autoApproveIncidents: boolean;
   autoApproveOffenders: boolean;
   defaultPublicOffenderDOB: boolean;
-  restrictIncidentAccess: boolean;
   userTodos?: number | null | undefined;
   userNotifications?: number | null | undefined;
   logo?:
@@ -331,7 +330,6 @@ const useNotificationLists = (): Return => {
       facialRecognition: scheme.facialRecognition,
       imagesRequiredOnOffenders: scheme.imagesRequiredOnOffenders,
       taskTimeTracking: scheme.taskTimeTracking,
-      restrictIncidentAccess: scheme.restrictIncidentAccess,
     });
     setTodos({ userTodos: scheme.userTodos || 0 });
     setNotifications({
