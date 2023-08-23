@@ -19,6 +19,8 @@ import type { UploadFile } from 'antd/lib/upload/interface';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import { useIntl } from 'react-intl';
 import type { OffenderData } from 'types/DataType';
+import { useStoreState } from 'state';
+import { Role } from 'graphql/generated';
 import AddExistingOffender from '../../../offender/offender/AddExistingOffender';
 import AddOffender from '../../../offender/offender/AddNewOffender';
 
@@ -94,7 +96,10 @@ const AssignImageOffender = ({
   onSubmit,
 }: Props): JSX.Element => {
   const intl = useIntl();
-
+  const role = useStoreState((state) => state.user.role);
+  const publicOffenderDOB =
+    useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
+    role !== Role.User;
   return (
     <Modal
       open={image !== undefined}
@@ -170,12 +175,13 @@ const AssignImageOffender = ({
                         id: 'RkYfRn',
                       },
                       {
-                        age: offender.age
-                          ? getOffenderAge(offender.age)
-                          : intl.formatMessage({
-                              defaultMessage: 'Unknown',
-                              id: '5jeq8P',
-                            }),
+                        age:
+                          offender.age && publicOffenderDOB
+                            ? getOffenderAge(offender.age)
+                            : intl.formatMessage({
+                                defaultMessage: 'Unknown',
+                                id: '5jeq8P',
+                              }),
                         build: offender.build
                           ? getOffenderBuild(offender.build)
                           : intl.formatMessage({

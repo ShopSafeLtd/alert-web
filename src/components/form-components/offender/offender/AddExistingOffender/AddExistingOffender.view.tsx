@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import type { ListOffendersQuery } from 'graphql/generated';
-import { Age, Build, Gender, Race } from 'graphql/generated';
+import { Role, Age, Build, Gender, Race } from 'graphql/generated';
 import {
   Button,
   Col,
@@ -30,6 +30,7 @@ import WatermarkImage from 'components/images/WatermarkImage.view';
 import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import { useIntl } from 'react-intl';
+import { useStoreState } from 'state';
 import useStyles from './AddExistingOffender.styles';
 
 const { Paragraph, Text } = Typography;
@@ -100,6 +101,10 @@ const AddExistingOffender = ({
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
+  const role = useStoreState((state) => state.user.role);
+  const publicOffenderDOB =
+    useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
+    role !== Role.User;
   const existingOffenders = (): JSX.Element => {
     if (!data?.listOffenders && loading) {
       return (
@@ -273,77 +278,79 @@ const AddExistingOffender = ({
               </Select.Option>
             </Select>
           </div>
-          <div className={classes.filter}>
-            <Text>
-              {intl.formatMessage({ defaultMessage: 'Age', id: '9oNQSC' })}
-            </Text>
-            <Select
-              mode="multiple"
-              allowClear
-              value={age}
-              onChange={setAge}
-              placeholder={intl.formatMessage({
-                defaultMessage: 'Age',
-                id: '9oNQSC',
-              })}
-              className={classes.filterSelect}
-            >
-              <Select.Option value={Age.UnderEighteen}>
-                {intl.formatMessage({
-                  defaultMessage: 'Under 18',
-                  id: 'Cwx1GS',
+          {publicOffenderDOB && (
+            <div className={classes.filter}>
+              <Text>
+                {intl.formatMessage({ defaultMessage: 'Age', id: '9oNQSC' })}
+              </Text>
+              <Select
+                mode="multiple"
+                allowClear
+                value={age}
+                onChange={setAge}
+                placeholder={intl.formatMessage({
+                  defaultMessage: 'Age',
+                  id: '9oNQSC',
                 })}
-              </Select.Option>
-              <Select.Option value={Age.EighteenThirty}>
-                {intl.formatMessage({
-                  defaultMessage: '18 - 30',
-                  id: '088rlR',
-                })}
-              </Select.Option>
-              <Select.Option value={Age.ThirtyForty}>
-                {intl.formatMessage({
-                  defaultMessage: '30 - 40',
-                  id: 'cENhUd',
-                })}
-              </Select.Option>
-              <Select.Option value={Age.FortyFifty}>
-                {intl.formatMessage({
-                  defaultMessage: '40 - 50',
-                  id: 'FEg968',
-                })}
-              </Select.Option>
-              <Select.Option value={Age.FiftySixty}>
-                {intl.formatMessage({
-                  defaultMessage: '50 - 60',
-                  id: 'xuMURn',
-                })}
-              </Select.Option>
-              <Select.Option value={Age.SixtySeventy}>
-                {intl.formatMessage({
-                  defaultMessage: '60 - 70',
-                  id: 'W8pA9z',
-                })}
-              </Select.Option>
-              <Select.Option value={Age.SeventyEighty}>
-                {intl.formatMessage({
-                  defaultMessage: '70 - 80',
-                  id: 'yjJSPV',
-                })}
-              </Select.Option>
-              <Select.Option value={Age.OverEighty}>
-                {intl.formatMessage({
-                  defaultMessage: 'Over 80',
-                  id: 'oFu9sf',
-                })}
-              </Select.Option>
-              <Select.Option value={Age.Unknown}>
-                {intl.formatMessage({
-                  defaultMessage: 'Unknown',
-                  id: '5jeq8P',
-                })}
-              </Select.Option>
-            </Select>
-          </div>
+                className={classes.filterSelect}
+              >
+                <Select.Option value={Age.UnderEighteen}>
+                  {intl.formatMessage({
+                    defaultMessage: 'Under 18',
+                    id: 'Cwx1GS',
+                  })}
+                </Select.Option>
+                <Select.Option value={Age.EighteenThirty}>
+                  {intl.formatMessage({
+                    defaultMessage: '18 - 30',
+                    id: '088rlR',
+                  })}
+                </Select.Option>
+                <Select.Option value={Age.ThirtyForty}>
+                  {intl.formatMessage({
+                    defaultMessage: '30 - 40',
+                    id: 'cENhUd',
+                  })}
+                </Select.Option>
+                <Select.Option value={Age.FortyFifty}>
+                  {intl.formatMessage({
+                    defaultMessage: '40 - 50',
+                    id: 'FEg968',
+                  })}
+                </Select.Option>
+                <Select.Option value={Age.FiftySixty}>
+                  {intl.formatMessage({
+                    defaultMessage: '50 - 60',
+                    id: 'xuMURn',
+                  })}
+                </Select.Option>
+                <Select.Option value={Age.SixtySeventy}>
+                  {intl.formatMessage({
+                    defaultMessage: '60 - 70',
+                    id: 'W8pA9z',
+                  })}
+                </Select.Option>
+                <Select.Option value={Age.SeventyEighty}>
+                  {intl.formatMessage({
+                    defaultMessage: '70 - 80',
+                    id: 'yjJSPV',
+                  })}
+                </Select.Option>
+                <Select.Option value={Age.OverEighty}>
+                  {intl.formatMessage({
+                    defaultMessage: 'Over 80',
+                    id: 'oFu9sf',
+                  })}
+                </Select.Option>
+                <Select.Option value={Age.Unknown}>
+                  {intl.formatMessage({
+                    defaultMessage: 'Unknown',
+                    id: '5jeq8P',
+                  })}
+                </Select.Option>
+              </Select>
+            </div>
+          )}
           <div className={classes.filter}>
             <Text>
               {intl.formatMessage({ defaultMessage: 'Sex', id: 'eWJHGp' })}

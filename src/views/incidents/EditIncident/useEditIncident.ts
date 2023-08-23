@@ -216,7 +216,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
       ]);
       setEditedOffender(undefined);
     }
-  }, [editedOffender]);
+  }, [editedOffender, offendersData]);
   // Query
   const { data: incidentData, loading } = useEditIncidentQuery({
     fetchPolicy: 'cache-and-network',

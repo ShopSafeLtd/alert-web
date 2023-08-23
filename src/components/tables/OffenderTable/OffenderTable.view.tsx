@@ -22,31 +22,31 @@ import { useIntl } from 'react-intl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faTrash } from '@fortawesome/pro-light-svg-icons';
 import type { OffenderData } from 'types/DataType';
+import { useStoreState } from 'state';
 
 const useStyles = createUseStyles({
   row: { cursor: 'pointer' },
 });
-
-interface Props {
-  offenders:
+interface Offender {
+  id: string;
+  reference?: number | null;
+  name?: string | null;
+  age?: Age | null;
+  gender?: Gender | null;
+  race?: Race | null;
+  build?: Build | null;
+  dateOfBirth?: Date | null;
+  images?:
     | {
         id: string;
-        reference?: number | null;
-        name?: string | null;
-        age?: Age | null;
-        gender?: Gender | null;
-        race?: Race | null;
-        build?: Build | null;
-        dateOfBirth?: Date | null;
-        images?:
-          | {
-              id: string;
-              optimised?: string | null | undefined;
-              position?: ImagePosition;
-            }[]
-          | null
-          | undefined;
-      }[];
+        optimised?: string | null | undefined;
+        position?: ImagePosition;
+      }[]
+    | null
+    | undefined;
+}
+interface Props {
+  offenders: Offender[];
   hasNavigation?: boolean;
   saving?: boolean;
   setEditOffenderData?: (value: OffenderData | null) => void;
@@ -54,7 +54,15 @@ interface Props {
   editRights?: boolean;
   deleteRights?: boolean;
 }
-
+const getAgeValue = (offender: Offender) => {
+  if (offender.dateOfBirth) {
+    return calcAge(offender.dateOfBirth);
+  }
+  if (getOffenderAge(offender.age) !== 'Unknown') {
+    return getOffenderAge(offender.age);
+  }
+  return '';
+};
 const OffenderTable = ({
   offenders,
   hasNavigation,
@@ -67,6 +75,9 @@ const OffenderTable = ({
   const classes = useStyles();
   const navigate = useNavigate();
   const intl = useIntl();
+  const publicOffenderDOB =
+    useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
+    editRights;
 
   return (
     <Table
@@ -101,9 +112,6 @@ const OffenderTable = ({
             id: 'k8ZNgH',
             defaultMessage: 'Alert ID',
           }),
-          // render: (_, record) => (
-          //   <Link to={`/app/offenders/view/${record.key}`} />
-          // ),
           width: 100,
         },
 
@@ -214,11 +222,7 @@ const OffenderTable = ({
           getOffenderRace(offender.race, true) === 'Unknown'
             ? ''
             : getOffenderRace(offender.race, true),
-        age: offender.dateOfBirth
-          ? calcAge(offender.dateOfBirth)
-          : getOffenderAge(offender.age) === 'Unknown'
-          ? ''
-          : getOffenderAge(offender.age),
+        age: publicOffenderDOB ? getAgeValue(offender) : '',
         build:
           getOffenderBuild(offender.build) === 'Unknown'
             ? ''

@@ -42,8 +42,9 @@ import {
 } from 'components/reports/tableColumns';
 import moment from 'moment';
 import { useIntl } from 'react-intl';
+import { useStoreState } from 'state';
 import type { OffenderReportQuery } from '../../../../graphql/generated';
-import { Age, Build, Gender, Race } from '../../../../graphql/generated';
+import { Role, Age, Build, Gender, Race } from '../../../../graphql/generated';
 import useStyles from '../../styles/report.styles';
 import WatermarkImage from '../../../../components/images/WatermarkImage.view';
 import RadialGraph from '../../../../components/reports/graphs/radialGraph';
@@ -85,6 +86,10 @@ const OffenderReportLayout = ({
   setMetadata,
 }: Props) => {
   const classes = useStyles();
+  const role = useStoreState((state) => state.user.role);
+  const publicOffenderDOB =
+    useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
+    role !== Role.User;
   const calculateHeight = (key: string, offset?: number) => {
     const targetElement = layout.find((element) => element.i === key);
     const targetH = targetElement ? targetElement.h : 0;
@@ -163,32 +168,34 @@ const OffenderReportLayout = ({
                     Gender.Unknown
                 )}
               </Descriptions.Item>
-              {!data?.offenderReport?.offenderSummary?.dateOfBirth && (
-                <Descriptions.Item
-                  className={classes.descItem}
-                  label={intl.formatMessage({
-                    defaultMessage: 'Age',
-                    id: '9oNQSC',
-                  })}
-                >
-                  {getAge(
-                    data?.offenderReport?.offenderSummary?.age || Age.Unknown
-                  )}
-                </Descriptions.Item>
-              )}
-              {data?.offenderReport?.offenderSummary?.dateOfBirth && (
-                <Descriptions.Item
-                  className={classes.descItem}
-                  label={intl.formatMessage({
-                    defaultMessage: 'Date of Birth',
-                    id: 'e9Z+tg',
-                  })}
-                >
-                  {moment(
-                    data?.offenderReport?.offenderSummary?.dateOfBirth
-                  ).format('DD/MM/YYYY')}
-                </Descriptions.Item>
-              )}
+              {publicOffenderDOB &&
+                !data?.offenderReport?.offenderSummary?.dateOfBirth && (
+                  <Descriptions.Item
+                    className={classes.descItem}
+                    label={intl.formatMessage({
+                      defaultMessage: 'Age',
+                      id: '9oNQSC',
+                    })}
+                  >
+                    {getAge(
+                      data?.offenderReport?.offenderSummary?.age || Age.Unknown
+                    )}
+                  </Descriptions.Item>
+                )}
+              {publicOffenderDOB &&
+                data?.offenderReport?.offenderSummary?.dateOfBirth && (
+                  <Descriptions.Item
+                    className={classes.descItem}
+                    label={intl.formatMessage({
+                      defaultMessage: 'Date of Birth',
+                      id: 'e9Z+tg',
+                    })}
+                  >
+                    {moment(
+                      data?.offenderReport?.offenderSummary?.dateOfBirth
+                    ).format('DD/MM/YYYY')}
+                  </Descriptions.Item>
+                )}
               {data?.offenderReport?.offenderSummary?.dateSource && (
                 <Descriptions.Item
                   className={classes.descItem}

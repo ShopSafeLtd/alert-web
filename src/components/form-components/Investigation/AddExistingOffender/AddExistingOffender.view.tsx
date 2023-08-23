@@ -67,6 +67,7 @@ interface Props {
     open: boolean;
     index: number;
   };
+  publicOffenderDOB: boolean;
 }
 
 const AddExistingOffender = ({
@@ -82,6 +83,7 @@ const AddExistingOffender = ({
   openLightbox,
   selectedOffender,
   lightBoxOpen,
+  publicOffenderDOB,
 }: Props): JSX.Element => {
   const imagesRef = useRef<CarouselRef>(null);
   const intl = useIntl();
@@ -239,24 +241,26 @@ const AddExistingOffender = ({
                       `ddd MMM DD YYYY - HH:mm`
                     )}
                   </Descriptions.Item>
-                  <Descriptions.Item
-                    label={
-                      <span>
-                        <FontAwesomeIcon
-                          className="offender-description-icon"
-                          icon={faUserClock}
-                        />
-                        {intl.formatMessage({
-                          defaultMessage: 'Age',
-                          id: '9oNQSC',
-                        })}
-                      </span>
-                    }
-                  >
-                    {selectedOffender.dateOfBirth
-                      ? calcAge(selectedOffender.dateOfBirth)
-                      : getOffenderAge(selectedOffender.age)}
-                  </Descriptions.Item>
+                  {publicOffenderDOB && (
+                    <Descriptions.Item
+                      label={
+                        <span>
+                          <FontAwesomeIcon
+                            className="offender-description-icon"
+                            icon={faUserClock}
+                          />
+                          {intl.formatMessage({
+                            defaultMessage: 'Age',
+                            id: '9oNQSC',
+                          })}
+                        </span>
+                      }
+                    >
+                      {selectedOffender.dateOfBirth
+                        ? calcAge(selectedOffender.dateOfBirth)
+                        : getOffenderAge(selectedOffender.age)}
+                    </Descriptions.Item>
+                  )}
                   <Descriptions.Item
                     label={
                       <span>

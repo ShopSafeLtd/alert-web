@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { Card, Carousel, Col, Row, Skeleton, Typography } from 'antd';
 
 import type { Age, Build, Gender, Race } from 'graphql/generated';
+import { Role } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faClock,
@@ -28,6 +29,7 @@ import moment from 'moment';
 import type { CarouselRef } from 'antd/lib/carousel';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import { useIntl } from 'react-intl';
+import { useStoreState } from 'state';
 
 const { Title, Text } = Typography;
 
@@ -57,6 +59,11 @@ interface Props {
 const OffenderCard = ({ offender }: Props): JSX.Element => {
   const imagesRef = useRef<CarouselRef>(null);
   const intl = useIntl();
+
+  const role = useStoreState((state) => state.user.role);
+  const publicOffenderDOB =
+    useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
+    role !== Role.User;
   return (
     <Card
       className="offender-card"
@@ -160,22 +167,24 @@ const OffenderCard = ({ offender }: Props): JSX.Element => {
         </div>
 
         <Row gutter={16}>
-          <Col>
-            <FontAwesomeIcon
-              size="sm"
-              className="offender-card-icon"
-              icon={faUserClock}
-            />
-            <Text type="secondary">
-              {intl.formatMessage({
-                defaultMessage: 'Age: ',
-                id: 'anqdpr',
-              })}
-              {offender.dateOfBirth
-                ? calcAge(offender.dateOfBirth)
-                : getOffenderAge(offender.age)}
-            </Text>
-          </Col>
+          {publicOffenderDOB && (
+            <Col>
+              <FontAwesomeIcon
+                size="sm"
+                className="offender-card-icon"
+                icon={faUserClock}
+              />
+              <Text type="secondary">
+                {intl.formatMessage({
+                  defaultMessage: 'Age: ',
+                  id: 'anqdpr',
+                })}
+                {offender.dateOfBirth
+                  ? calcAge(offender.dateOfBirth)
+                  : getOffenderAge(offender.age)}
+              </Text>
+            </Col>
+          )}
           <Col>
             <FontAwesomeIcon
               size="sm"

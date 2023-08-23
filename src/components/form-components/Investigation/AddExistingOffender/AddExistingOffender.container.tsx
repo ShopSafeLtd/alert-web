@@ -26,6 +26,7 @@ const AddExistingOffender = ({
     selectedOffender,
     openLightbox,
     lightBoxOpen,
+    publicOffenderDOB,
   } = useAddExistingOffender({ onClose, offenderIds });
 
   return (
@@ -42,6 +43,7 @@ const AddExistingOffender = ({
       onPaginationChange={onPaginationChange}
       setCurrentId={setCurrentId}
       selectedOffender={selectedOffender}
+      publicOffenderDOB={publicOffenderDOB}
     />
   );
 };

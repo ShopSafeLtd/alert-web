@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import type { ReactNode } from 'react';
 import React from 'react';
 import { Card } from 'antd';
@@ -18,22 +19,28 @@ const useStyles = createUseStyles((theme: Theme) => ({
     '&.current': {
       backgroundColor: theme.itemSelectedBackground,
     },
+    '&.loading': {
+      height: 70,
+    },
   },
 }));
 
 interface Props {
   children: ReactNode;
   current: boolean;
+  loading?: boolean;
 }
 
-const SideList = ({ children, current }: Props) => {
+const SideList = ({ children, current, loading }: Props) => {
   const classes = useStyles();
 
   return (
     <Card
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      className={`${classes.item} ${current ? 'current' : undefined}`}
-      bodyStyle={{ padding: 0 }}
+      loading={loading || false}
+      className={`${classes.item} ${current ? 'current' : undefined} ${
+        loading ? 'loading' : undefined
+      }`}
+      bodyStyle={{ padding: loading ? 10 : 0 }}
     >
       {children}
     </Card>

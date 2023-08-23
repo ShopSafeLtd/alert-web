@@ -155,6 +155,7 @@ interface Props {
   messageSent: boolean;
   setMessageSent: (value: boolean) => void;
   totalChats: number;
+  restrictIncidentAccess: boolean;
 }
 
 const ViewMessages = ({
@@ -208,6 +209,7 @@ const ViewMessages = ({
   data,
   messageSent,
   setMessageSent,
+  restrictIncidentAccess,
 }: Props): JSX.Element => {
   const ref = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
@@ -655,7 +657,7 @@ const ViewMessages = ({
               </div>
             </Col>
           )}
-          {adminRights && (
+          {restrictIncidentAccess && (
             <Col>
               <Button
                 onClick={toggleLinkIncident}
@@ -680,51 +682,46 @@ const ViewMessages = ({
               </Button>
             </Col>
           )}
-          {adminRights && (
-            <Col>
-              <Button
-                onClick={toggleLinkCrimeGroup}
-                disabled={
-                  saving ||
-                  (fileList && fileList.length > 0) ||
-                  (offendersData && offendersData.length > 0) ||
-                  (vehiclesData && vehiclesData.length > 0) ||
-                  (incidentsData && incidentsData.length > 0)
-                }
-                icon={
-                  <FontAwesomeIcon
-                    className="button-icon"
-                    icon={faPeopleGroup}
-                  />
-                }
-              >
-                {intl.formatMessage({
-                  defaultMessage: 'Crime Group',
-                  id: 'FY/YfT',
-                })}
-              </Button>
-            </Col>
-          )}
-          {adminRights && (
-            <Col>
-              <Button
-                onClick={toggleLinkVehicle}
-                disabled={
-                  saving ||
-                  (fileList && fileList.length > 0) ||
-                  (offendersData && offendersData.length > 0) ||
-                  (incidentsData && incidentsData.length > 0) ||
-                  (crimeGroupsData && crimeGroupsData.length > 0)
-                }
-                icon={<FontAwesomeIcon className="button-icon" icon={faCar} />}
-              >
-                {intl.formatMessage({
-                  defaultMessage: 'Vehicle',
-                  id: '4T7son',
-                })}
-              </Button>
-            </Col>
-          )}
+
+          <Col>
+            <Button
+              onClick={toggleLinkCrimeGroup}
+              disabled={
+                saving ||
+                (fileList && fileList.length > 0) ||
+                (offendersData && offendersData.length > 0) ||
+                (vehiclesData && vehiclesData.length > 0) ||
+                (incidentsData && incidentsData.length > 0)
+              }
+              icon={
+                <FontAwesomeIcon className="button-icon" icon={faPeopleGroup} />
+              }
+            >
+              {intl.formatMessage({
+                defaultMessage: 'Crime Group',
+                id: 'FY/YfT',
+              })}
+            </Button>
+          </Col>
+
+          <Col>
+            <Button
+              onClick={toggleLinkVehicle}
+              disabled={
+                saving ||
+                (fileList && fileList.length > 0) ||
+                (offendersData && offendersData.length > 0) ||
+                (incidentsData && incidentsData.length > 0) ||
+                (crimeGroupsData && crimeGroupsData.length > 0)
+              }
+              icon={<FontAwesomeIcon className="button-icon" icon={faCar} />}
+            >
+              {intl.formatMessage({
+                defaultMessage: 'Vehicle',
+                id: '4T7son',
+              })}
+            </Button>
+          </Col>
         </Row>
       </Form>
 

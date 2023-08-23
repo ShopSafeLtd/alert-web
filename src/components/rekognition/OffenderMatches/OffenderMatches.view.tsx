@@ -1,6 +1,7 @@
 import React from 'react';
 import { createUseStyles } from 'react-jss';
 import type { ViewOffenderMatchesQuery } from 'graphql/generated';
+import { Role } from 'graphql/generated';
 import { Button, Card, Col, Popconfirm, Row, Skeleton, Typography } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import {
@@ -13,6 +14,7 @@ import LightBox from 'components/images/LightBox/LightBox.container';
 import type { Image } from 'components/images/LightBox/LightBox.types';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
+import { useStoreState } from 'state';
 import MatchedFace from './MatchedFace.view';
 
 const useStyles = createUseStyles({
@@ -70,6 +72,10 @@ const OffenderMatches = ({
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
+  const role = useStoreState((state) => state.user.role);
+  const publicOffenderDOB =
+    useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
+    role !== Role.User;
   return (
     <div className={classes.container}>
       <Row gutter={16} className={classes.currentOffender}>
@@ -103,15 +109,17 @@ const OffenderMatches = ({
                 )}
               </Typography.Text>
               <Row style={{ marginTop: 5, marginBottom: 10 }} gutter={16}>
-                <Col>
-                  <Typography.Text>
-                    {intl.formatMessage({
-                      defaultMessage: 'Age: ',
-                      id: 'anqdpr',
-                    })}
-                    {getOffenderAge(data?.offender?.age)}
-                  </Typography.Text>
-                </Col>
+                {publicOffenderDOB && (
+                  <Col>
+                    <Typography.Text>
+                      {intl.formatMessage({
+                        defaultMessage: 'Age: ',
+                        id: 'anqdpr',
+                      })}
+                      {getOffenderAge(data?.offender?.age)}
+                    </Typography.Text>
+                  </Col>
+                )}
                 <Col>
                   <Typography.Text>
                     {intl.formatMessage({
