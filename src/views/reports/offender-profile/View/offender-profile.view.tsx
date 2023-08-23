@@ -14,7 +14,7 @@ import {
 } from 'antd';
 import OffenderSideList from 'components/offenders/OffenderSideList';
 import type { OffenderProfileQuery } from 'graphql/generated';
-import { Age, Build, Gender, Race } from 'graphql/generated';
+import { Role, Age, Build, Gender, Race } from 'graphql/generated';
 import { getAge, getBuild, getEthnicity, getSex } from 'utils';
 import { ResponsiveBar } from '@nivo/bar';
 import { ResponsivePie } from '@nivo/pie';
@@ -41,6 +41,10 @@ const OffenderProfile = ({
 }: Props) => {
   const classes = useStyles();
   const theme = useStoreState((state) => state.theme.currentTheme);
+  const role = useStoreState((state) => state.user.role);
+  const publicOffenderDOB =
+    useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
+    role !== Role.User;
   const intl = useIntl();
   return (
     <Row wrap={false}>
@@ -122,32 +126,34 @@ const OffenderProfile = ({
                             Gender.Unknown
                         )}
                       </Descriptions.Item>
-                      {!offenderProfileData?.offender?.dateOfBirth && (
-                        <Descriptions.Item
-                          className={classes.descItem}
-                          label={intl.formatMessage({
-                            defaultMessage: 'Age',
-                            id: '9oNQSC',
-                          })}
-                        >
-                          {getAge(
-                            offenderProfileData?.offender?.age || Age.Unknown
-                          )}
-                        </Descriptions.Item>
-                      )}
-                      {offenderProfileData?.offender?.dateOfBirth && (
-                        <Descriptions.Item
-                          className={classes.descItem}
-                          label={intl.formatMessage({
-                            defaultMessage: 'Date of Birth',
-                            id: 'e9Z+tg',
-                          })}
-                        >
-                          {moment(
-                            offenderProfileData?.offender?.dateOfBirth
-                          ).format('DD/MM/YYYY')}
-                        </Descriptions.Item>
-                      )}
+                      {publicOffenderDOB &&
+                        !offenderProfileData?.offender?.dateOfBirth && (
+                          <Descriptions.Item
+                            className={classes.descItem}
+                            label={intl.formatMessage({
+                              defaultMessage: 'Age',
+                              id: '9oNQSC',
+                            })}
+                          >
+                            {getAge(
+                              offenderProfileData?.offender?.age || Age.Unknown
+                            )}
+                          </Descriptions.Item>
+                        )}
+                      {publicOffenderDOB &&
+                        offenderProfileData?.offender?.dateOfBirth && (
+                          <Descriptions.Item
+                            className={classes.descItem}
+                            label={intl.formatMessage({
+                              defaultMessage: 'Date of Birth',
+                              id: 'e9Z+tg',
+                            })}
+                          >
+                            {moment(
+                              offenderProfileData?.offender?.dateOfBirth
+                            ).format('DD/MM/YYYY')}
+                          </Descriptions.Item>
+                        )}
                       {offenderProfileData?.offender?.dateSource && (
                         <Descriptions.Item
                           className={classes.descItem}

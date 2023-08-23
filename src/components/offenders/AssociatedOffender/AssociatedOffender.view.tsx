@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Col, Descriptions, Row, Typography } from 'antd';
 import type { AssociatedOffendersQuery } from 'graphql/generated';
+import { Role } from 'graphql/generated';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import WatermarkImage from 'components/images/WatermarkImage.view';
@@ -46,9 +47,10 @@ interface Props {
 
 const AssociatedOffender = ({ offender, onClose }: Props) => {
   const classes = useStyles();
-  const publicOffenderDOB = useStoreState(
-    (state) => state.scheme.defaultPublicOffenderDOB
-  );
+  const role = useStoreState((state) => state.user.role);
+  const publicOffenderDOB =
+    useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
+    role !== Role.User;
   const intl = useIntl();
   const [lightBoxOpen, setLightBoxOpen] = useState({
     open: false,

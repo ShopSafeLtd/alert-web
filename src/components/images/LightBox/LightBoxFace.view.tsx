@@ -62,6 +62,9 @@ const LightBoxFace = ({
   const classes = useStyles();
 
   const role = useStoreState((state) => state.user.role);
+  const publicOffenderDOB =
+    useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
+    role !== Role.User;
 
   const [isAdmin, setIsAdmin] = useState(false);
   const [height, setHeight] = useState(500);
@@ -216,18 +219,20 @@ const LightBoxFace = ({
                   )}
                 </Typography.Paragraph>
                 <Row gutter={16}>
-                  <Col>
-                    <Typography.Paragraph
-                      className={classes.offenderText}
-                      type="secondary"
-                    >
-                      {intl.formatMessage({
-                        defaultMessage: 'Age: ',
-                        id: 'anqdpr',
-                      })}
-                      {getOffenderAge(face.offender.age)}
-                    </Typography.Paragraph>
-                  </Col>
+                  {publicOffenderDOB && (
+                    <Col>
+                      <Typography.Paragraph
+                        className={classes.offenderText}
+                        type="secondary"
+                      >
+                        {intl.formatMessage({
+                          defaultMessage: 'Age: ',
+                          id: 'anqdpr',
+                        })}
+                        {getOffenderAge(face.offender.age)}
+                      </Typography.Paragraph>
+                    </Col>
+                  )}
                   <Col>
                     <Typography.Paragraph
                       className={classes.offenderText}

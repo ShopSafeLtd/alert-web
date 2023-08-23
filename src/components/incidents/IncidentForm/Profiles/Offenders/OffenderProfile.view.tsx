@@ -25,6 +25,7 @@ import {
 } from 'utils/offender/get-offender-desc';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import CropFaceImage from 'components/images/CropFaceImage';
+import { Role } from 'graphql/generated';
 import useStyles from '../Profiles.styles';
 import type { StateOffenderData } from './useOffenders';
 import type { StateImageData } from '../../ImageSection/useImageSection';
@@ -75,7 +76,10 @@ const OffenderProfile = ({
     (state) => state.scheme.imagesRequiredOnOffenders
   );
   const facialRec = useStoreState((state) => state.scheme.facialRecognition);
-
+  const role = useStoreState((state) => state.user.role);
+  const publicOffenderDOB =
+    useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
+    role !== Role.User;
   return (
     <>
       <div
@@ -122,17 +126,19 @@ const OffenderProfile = ({
                   />
                 </Text>
               </Col>
-              <Col>
-                <Text>
-                  <FormattedMessage
-                    defaultMessage="Age: {age}"
-                    id="9kQMmf"
-                    values={{
-                      age: getOffenderAge(offender.age),
-                    }}
-                  />
-                </Text>
-              </Col>
+              {publicOffenderDOB && (
+                <Col>
+                  <Text>
+                    <FormattedMessage
+                      defaultMessage="Age: {age}"
+                      id="9kQMmf"
+                      values={{
+                        age: getOffenderAge(offender.age),
+                      }}
+                    />
+                  </Text>
+                </Col>
+              )}
               <Col>
                 <Text>
                   <FormattedMessage

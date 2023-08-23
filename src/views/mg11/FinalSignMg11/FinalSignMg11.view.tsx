@@ -121,6 +121,7 @@ const generateMg11 = ({
                 <div className="field-label">URN: {data.urn}</div>
               </div>
               <div className="field">
+                {/* wait to check */}
                 <div className="field-label">Age: {data.age}</div>
                 <div className="field-label">Occupation: {data.occupation}</div>
               </div>

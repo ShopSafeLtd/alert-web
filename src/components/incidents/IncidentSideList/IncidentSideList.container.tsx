@@ -8,16 +8,16 @@ interface Props {
 }
 
 const IncidentSideList = ({ current }: Props): JSX.Element => {
-  const { data, loading, onPaginationChange, pagination } =
-    useIncidentSideList();
+  const { data, loading, next } = useIncidentSideList();
 
   return (
     <View
       data={data}
       loading={loading}
       current={current}
-      onPaginationChange={onPaginationChange}
-      pagination={pagination}
+      // onPaginationChange={onPaginationChange}
+      // pagination={pagination}
+      next={next}
     />
   );
 };

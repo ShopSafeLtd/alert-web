@@ -1,31 +1,35 @@
 import type { ListIncidentsQuery } from 'graphql/generated';
 import { SortOrder, useListIncidentsQuery } from 'graphql/generated';
-import { useStoreState, IncidentSort, useStoreActions } from 'state';
+import { IncidentSort, useStoreState } from 'state';
 
 interface Return {
   data: ListIncidentsQuery | undefined;
   loading: boolean;
-  onPaginationChange: (page: number, pageSize: number) => void;
-  pagination: {
-    page: number;
-    pageSize: number;
-  };
+  next: () => void;
 }
 
 const useIncidentSideList = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const order = useStoreState((state) => state.data.incidents.order);
   const pagination = useStoreState((state) => state.data.incidents.pagination);
-  const variables = useStoreState((state) => state.data.incidents.variables);
-  const setIncidentsState = useStoreActions(
-    (actions) => actions.data.setIncidents
-  );
-
-  const { data, loading } = useListIncidentsQuery({
+  // const variables = useStoreState((state) => state.data.incidents.variables);
+  // const setIncidentsState = useStoreActions(
+  //   (actions) => actions.data.setIncidents
+  // );
+  const role = useStoreState((state) => state.user.role);
+  const { data, loading, fetchMore } = useListIncidentsQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
       scheme: {
         id: schemeId,
+      },
+      where: {
+        approved:
+          role === 'USER'
+            ? {
+                equals: true,
+              }
+            : undefined,
       },
       order: {
         createdAt:
@@ -36,26 +40,56 @@ const useIncidentSideList = (): Return => {
     },
   });
 
-  const onPaginationChange = (page: number, pageSize: number) => {
-    setIncidentsState({
-      pagination: {
-        ...pagination,
-        page,
-        pageSize,
+  // const onPaginationChange = (page: number, pageSize: number) => {
+  //   setIncidentsState({
+  //     pagination: {
+  //       ...pagination,
+  //       page,
+  //       pageSize,
+  //     },
+  //     variables,
+  //     order,
+  //   });
+  // };
+
+  const next = () => {
+    void fetchMore({
+      variables: {
+        scheme: {
+          id: schemeId,
+        },
+        order: {
+          createdAt:
+            order === IncidentSort.createdAtDesc
+              ? SortOrder.Desc
+              : SortOrder.Asc,
+        },
+        take: 12,
+        skip: data?.listIncidents?.incidents?.length || 0,
       },
-      variables,
-      order,
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        return {
+          listIncidents: {
+            ...fetchMoreResult.listIncidents,
+            total:
+              fetchMoreResult.listIncidents?.total ||
+              prev.listIncidents?.total ||
+              0,
+            incidents: [
+              ...(prev.listIncidents?.incidents || []),
+              ...(fetchMoreResult.listIncidents?.incidents || []),
+            ],
+          },
+        };
+      },
     });
   };
 
   return {
     data,
     loading: data?.listIncidents ? false : loading,
-    onPaginationChange,
-    pagination: {
-      page: pagination.page,
-      pageSize: pagination.pageSize,
-    },
+    next,
   };
 };
 

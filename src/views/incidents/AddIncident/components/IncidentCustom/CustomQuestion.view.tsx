@@ -174,9 +174,12 @@ const CustomQuestions = ({ questions, disabled }: Props) => {
                   curValues[question.dependentOnQuestionId]
                 }
               >
-                {({ getFieldValue }) =>
-                  getFieldValue(question.dependentOnQuestionId || '') ===
-                  question.dependentOnAnswerValue ? (
+                {({ getFieldValue }) => {
+                  const currentValue = getFieldValue(
+                    question.dependentOnQuestionId || ''
+                  ) as string | undefined;
+                  return currentValue?.toLowerCase() ===
+                    question.dependentOnAnswerValue ? (
                     <Form.Item
                       name={question.questionId}
                       label={question.label}
@@ -192,8 +195,8 @@ const CustomQuestions = ({ questions, disabled }: Props) => {
                     >
                       {getFieldType(question, question.answerType)}
                     </Form.Item>
-                  ) : null
-                }
+                  ) : null;
+                }}
               </Form.Item>
             </Col>
           );

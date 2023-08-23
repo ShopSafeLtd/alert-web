@@ -230,6 +230,27 @@ const useEditIncidentFeed = ({ onClose, incidentId }: Props): Return => {
                   ? true
                   : undefined,
             },
+            location: {
+              // ???
+              upsert: {
+                update: {
+                  premises: { set: '' },
+                  building: { set: data.building || '' },
+                  street: { set: data.street || '' },
+                  townCity: { set: data.townCity || '' },
+                  county: { set: data.county || '' },
+                  postcode: { set: data.postcode || '' },
+                },
+                create: {
+                  premises: '',
+                  building: data.building || '',
+                  street: data.street || '',
+                  townCity: data.townCity || '',
+                  county: data.county || '',
+                  postcode: data.postcode || '',
+                },
+              },
+            },
           },
         },
       });

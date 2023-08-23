@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Col, Descriptions, Divider, Row, Typography } from 'antd';
 import type { InvestigationSuggestionsQuery } from 'graphql/generated';
+import { Role } from 'graphql/generated';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import WatermarkImage from 'components/images/WatermarkImage.view';
@@ -44,9 +45,10 @@ const SuggestedOffenders = ({
 }: Props) => {
   const intl = useIntl();
   const classes = useStyles();
-  const publicOffenderDOB = useStoreState(
-    (state) => state.scheme.defaultPublicOffenderDOB
-  );
+  const role = useStoreState((state) => state.user.role);
+  const publicOffenderDOB =
+    useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
+    role !== Role.User;
 
   const [lightBoxOpen, setLightBoxOpen] = useState({
     open: false,
