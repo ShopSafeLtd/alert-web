@@ -6,6 +6,7 @@ import type {
   CreateTodoMutation,
   DeleteDocumentMutation,
   ViewIncidentQuery,
+  Role,
 } from 'graphql/generated';
 import { GoodsMode, UpdateType } from 'graphql/generated';
 import {
@@ -102,6 +103,7 @@ interface TableItem {
   completed: boolean;
 }
 interface Props {
+  userRole: Role;
   data: ViewIncidentQuery | undefined;
   loading: boolean;
   saving: boolean;
@@ -289,6 +291,7 @@ const ViewIncident = ({
   updateDocumentList,
   updateDeleteDocument,
   hideIncident,
+  userRole,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
@@ -306,6 +309,12 @@ const ViewIncident = ({
       )}
     </Text>
   );
+
+  if (userRole === 'USER' && data?.incident?.approved === false) {
+    navigate('/app/incidents');
+    return <div />;
+  }
+
   return (
     <div className="page-container">
       <Row wrap={false}>
@@ -319,7 +328,7 @@ const ViewIncident = ({
           <div className={classes.viewIncident}>
             <Row className={classes.content}>
               <Col span={16} className={classes.detailsContainer}>
-                {data?.incident?.approved === false && (
+                {data?.incident?.approved === false && userRole !== 'USER' && (
                   <div className={classes.approveBar}>
                     <Row gutter={8} justify="end">
                       <Col>

@@ -1,23 +1,21 @@
 import { useEffect, useState } from 'react';
 import type {
+  CreateDocumentMutation,
+  CreateTodoMutation,
+  DeleteDocumentMutation,
   GoodsMode,
+  ImageUpdateWithWhereUniqueWithoutIncidentInput,
   UpdateIncidentGoodsMutation,
   UpdateIncidentOffendersMutation,
   UpdateIncidentVehiclesMutation,
   ViewIncidentQuery,
   ViewIncidentQueryVariables,
-  CreateTodoMutation,
-  ImageUpdateWithWhereUniqueWithoutIncidentInput,
-  CreateDocumentMutation,
-  DeleteDocumentMutation,
 } from 'graphql/generated';
 import {
-  useCreateSimpleVehicleMutation,
-  useUpdateSimpleVehicleMutation,
-  useUpdateSimpleOffenderMutation,
-  useCreateSimpleOffenderMutation,
   Role,
   useAddImagesToIncidentMutation,
+  useCreateSimpleOffenderMutation,
+  useCreateSimpleVehicleMutation,
   useDeleteUpdateMutation,
   useRecycleIncidentMutation,
   useSubscribeToIncidentMutation,
@@ -27,6 +25,8 @@ import {
   useUpdateIncidentMutation,
   useUpdateIncidentOffendersMutation,
   useUpdateIncidentVehiclesMutation,
+  useUpdateSimpleOffenderMutation,
+  useUpdateSimpleVehicleMutation,
   useUpdateUpdateMutation,
   useViewIncidentQuery,
   ViewIncidentDocument,
@@ -153,6 +153,7 @@ interface Return {
   updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
   updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
   hideIncident: boolean;
+  userRole: Role;
 }
 
 const useViewIncident = (incidentId: string): Return => {
@@ -1633,6 +1634,7 @@ const useViewIncident = (incidentId: string): Return => {
     updateDocumentList,
     updateDeleteDocument,
     hideIncident: role === Role.User && restrictIncidentAccess,
+    userRole: role,
   };
 };
 

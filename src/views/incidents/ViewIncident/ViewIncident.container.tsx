@@ -84,11 +84,13 @@ const ViewIncident = (): JSX.Element => {
     updateDocumentList,
     updateDeleteDocument,
     hideIncident,
+    userRole,
   } = useViewIncident(incidentId);
   const { onApprove, onReject, approving } = useApproveIncident({ incidentId });
 
   return (
     <View
+      userRole={userRole}
       data={data}
       loading={loading}
       saving={saving}
