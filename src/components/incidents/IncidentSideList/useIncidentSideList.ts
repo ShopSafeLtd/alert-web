@@ -16,12 +16,20 @@ const useIncidentSideList = (): Return => {
   // const setIncidentsState = useStoreActions(
   //   (actions) => actions.data.setIncidents
   // );
-
+  const role = useStoreState((state) => state.user.role);
   const { data, loading, fetchMore } = useListIncidentsQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
       scheme: {
         id: schemeId,
+      },
+      where: {
+        approved:
+          role === 'USER'
+            ? {
+                equals: true,
+              }
+            : undefined,
       },
       order: {
         createdAt:

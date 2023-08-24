@@ -7,15 +7,15 @@ import type {
   SearchBusinessesQueryVariables,
 } from 'graphql/generated';
 import {
+  Model,
   QueryMode,
+  Role,
   SearchBusinessesDocument,
   TagType,
-  Model,
+  useEditIncidentFeedQuery,
   useSchemeGroupsQuery,
   useTagsQuery,
   useUpdateIncidentMutation,
-  useEditIncidentFeedQuery,
-  Role,
 } from 'graphql/generated';
 import { notification } from 'antd';
 import errorNotification from 'types/error_notification';
@@ -230,6 +230,10 @@ const useEditIncidentFeed = ({ onClose, incidentId }: Props): Return => {
                   ? true
                   : undefined,
             },
+            policeInvolved: { set: data.policeInvolved || false },
+            policeRef: { set: data.policeRef || '' },
+            policeNo: { set: data.policeNo || '' },
+            policeReported: { set: data.policeReported || false },
             location: {
               // ???
               upsert: {
