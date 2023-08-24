@@ -121,7 +121,7 @@ const OffenderCard = ({
             })}
           </Title>
           {approvalRights && (
-            <Link to={`review/${offender?.id}`}>
+            <Link to={`view/${offender?.id}`}>
               <Button>
                 {intl.formatMessage({
                   defaultMessage: 'Review Offender',

@@ -3,7 +3,6 @@ import type {
   AssociatedOffendersQuery,
   CreateDocumentMutation,
   DeleteDocumentMutation,
-  UpdateOffenderAddressesMutation,
   UpdateOffenderBansMutation,
   UpdateOffenderCrimeGroupsMutation,
   UpdateOffenderVehiclesMutation,
@@ -132,6 +131,8 @@ interface Return {
   toggleViewAssociate: (value: ViewAssociate | null) => void;
   viewMatches: string | null;
   toggleViewMatches: (offenderId: string | null) => void;
+  copyOffender: boolean;
+  toggleCopyOffender: () => void;
   editOffender: boolean;
   toggleEditOffender: () => void;
   addVehicle: boolean;
@@ -203,7 +204,7 @@ const useViewOffender = (offenderId: string): Return => {
   const [viewAssociate, setViewAssociate] = useState<ViewAssociate | null>(
     null
   );
-
+  const [copyOffender, setCopyOffender] = useState(false);
   const [editOffender, setEditOffender] = useState(false);
   const [editImages, setEditImages] = useState(false);
   const [editImageData, setEditImageData] = useState<EditFeedImage | null>(
@@ -965,33 +966,33 @@ const useViewOffender = (offenderId: string): Return => {
       errorNotification();
     },
   });
-  const updateAddressList: MutationUpdaterFn<
-    UpdateOffenderAddressesMutation
-  > = (store, { data: res }) => {
-    if (res?.updateOffender === null || res?.updateOffender === undefined)
-      return;
+  // const updateAddressList: MutationUpdaterFn<
+  //   UpdateOffenderAddressesMutation
+  // > = (store, { data: res }) => {
+  //   if (res?.updateOffender === null || res?.updateOffender === undefined)
+  //     return;
 
-    const existingData = store.readQuery<ViewOffenderQuery>({
-      query: ViewOffenderDocument,
-      variables,
-    });
+  //   const existingData = store.readQuery<ViewOffenderQuery>({
+  //     query: ViewOffenderDocument,
+  //     variables,
+  //   });
 
-    if (!existingData?.offender) return;
-    store.writeQuery<ViewOffenderQuery>({
-      query: ViewOffenderDocument,
-      data: {
-        offender: {
-          ...existingData.offender,
-          addresses: [
-            ...existingData.offender.addresses,
-            ...res.updateOffender.addresses,
-          ],
-        },
-        __typename: 'Query',
-      },
-      variables,
-    });
-  };
+  //   if (!existingData?.offender) return;
+  //   store.writeQuery<ViewOffenderQuery>({
+  //     query: ViewOffenderDocument,
+  //     data: {
+  //       offender: {
+  //         ...existingData.offender,
+  //         addresses: [
+  //           ...existingData.offender.addresses,
+  //           ...res.updateOffender.addresses,
+  //         ],
+  //       },
+  //       __typename: 'Query',
+  //     },
+  //     variables,
+  //   });
+  // };
 
   const onEditAddress = (value: LocationData) => {
     setSaving(true);
@@ -1053,7 +1054,7 @@ const useViewOffender = (offenderId: string): Return => {
             ProfileUpdatedType.added
           );
         },
-        update: updateAddressList,
+        // update: updateAddressList,
       }).finally(() => {
         setAddAddress(false);
         setSaving(false);
@@ -1570,6 +1571,9 @@ const useViewOffender = (offenderId: string): Return => {
   const toggleLinkIncident = () => {
     setLinkIncident(!linkIncident);
   };
+  const toggleCopyOffender = () => {
+    setCopyOffender(!copyOffender);
+  };
   const toggleEditOffender = () => {
     setEditOffender(!editOffender);
   };
@@ -1645,6 +1649,8 @@ const useViewOffender = (offenderId: string): Return => {
     toggleViewAssociate: setViewAssociate,
     toggleViewMatches,
     viewMatches,
+    copyOffender,
+    toggleCopyOffender,
     editOffender,
     toggleEditOffender,
     editImages,

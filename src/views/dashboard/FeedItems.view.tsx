@@ -86,6 +86,7 @@ interface Props {
   setCreatedAtFilter: (value: DateType | undefined) => void;
   createdAtFilter: DateType | undefined;
   fetchMoreScroll: () => void;
+  restrictIncidentAccess: boolean;
 }
 
 const FeedItem = ({
@@ -116,6 +117,7 @@ const FeedItem = ({
   setCreatedAtFilter,
   createdAtFilter,
   fetchMoreScroll,
+  restrictIncidentAccess,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
@@ -187,20 +189,22 @@ const FeedItem = ({
               })}
             </Button>
           </Col>
-          <Col>
-            <Link to="/app/incidents/add">
-              <Button size="small" type="primary">
-                <FontAwesomeIcon
-                  icon={faExclamationCircle}
-                  style={{ marginRight: 10 }}
-                />
-                {intl.formatMessage({
-                  id: 'kG1p3q',
-                  defaultMessage: 'Add Incident',
-                })}
-              </Button>
-            </Link>
-          </Col>
+          {!restrictIncidentAccess && (
+            <Col>
+              <Link to="/app/incidents/add">
+                <Button size="small" type="primary">
+                  <FontAwesomeIcon
+                    icon={faExclamationCircle}
+                    style={{ marginRight: 10 }}
+                  />
+                  {intl.formatMessage({
+                    id: 'kG1p3q',
+                    defaultMessage: 'Add Incident',
+                  })}
+                </Button>
+              </Link>
+            </Col>
+          )}
           <Col>
             <Link to="/app/offenders/add">
               <Button size="small" type="primary">

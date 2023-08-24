@@ -77,7 +77,7 @@ const OffenderSideList = ({
                 >
                   {offender.name}
                 </Text>
-                <Text
+                <Paragraph
                   className={classes.reference}
                   strong={current === offender.id}
                   ellipsis
@@ -89,7 +89,7 @@ const OffenderSideList = ({
                     },
                     { reference: offender.reference }
                   )}
-                </Text>
+                </Paragraph>
                 <Paragraph className={classes.detail} ellipsis>
                   {offender.race && getEthnicity(offender.race)}
                 </Paragraph>

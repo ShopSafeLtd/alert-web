@@ -61,7 +61,6 @@ const ViewMessages = ({ chatId, updateUserChatList }: Props): JSX.Element => {
     setMessageSent,
     restrictIncidentAccess,
   } = useViewMessages({ chatId, updateUserChatList });
-  console.log('restrictIncidentAccess', restrictIncidentAccess);
 
   return (
     <View

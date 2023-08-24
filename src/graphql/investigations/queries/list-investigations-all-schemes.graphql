@@ -1,10 +1,9 @@
-query listInvestigations(
-  $scheme: SchemeWhereUniqueInput!
+query listInvestigationsAllSchemes(
   $take: Int
   $skip: Int
   $where: InvestigationWhereInput
 ) {
-  listInvestigations(scheme: $scheme, where: $where, take: $take, skip: $skip) {
+  listInvestigationsAllSchemes(where: $where, take: $take, skip: $skip) {
     total
     investigations {
       id

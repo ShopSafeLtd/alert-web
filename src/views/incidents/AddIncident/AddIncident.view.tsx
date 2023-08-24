@@ -123,15 +123,13 @@ const AddIncident = ({
             case IncidentFormField.Images: {
               return (
                 <Card className={classes.card}>
-                  <Form.Item name="images">
-                    <ImageSection
-                      disabled={saving}
-                      primaryImage={primaryImage}
-                      setPrimaryImage={setPrimaryImage}
-                      form={form}
-                      incidentForm={incidentForm}
-                    />
-                  </Form.Item>
+                  <ImageSection
+                    disabled={saving}
+                    primaryImage={primaryImage}
+                    setPrimaryImage={setPrimaryImage}
+                    form={form}
+                    incidentForm={incidentForm}
+                  />
                 </Card>
               );
             }

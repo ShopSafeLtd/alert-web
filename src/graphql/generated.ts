@@ -7986,6 +7986,7 @@ export type CreateIncidentData = {
   crimeTypes?: InputMaybe<Array<InputMaybe<UniqueId>>>;
   date: Scalars['DateTime'];
   description: Scalars['String'];
+  documents?: InputMaybe<Array<InputMaybe<CreateDocument>>>;
   groups: Array<InputMaybe<UniqueId>>;
   images: CreateIncidentImages;
   items?: InputMaybe<Array<CreateIncidentItemInput>>;
@@ -8081,6 +8082,7 @@ export type CreateOffenderData = {
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutOffendersInput>;
   dateOfBirth?: InputMaybe<Scalars['DateTime']>;
   dateSource?: InputMaybe<Scalars['String']>;
+  documents?: InputMaybe<Array<InputMaybe<CreateDocument>>>;
   gender?: InputMaybe<Gender>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutOffendersInput>;
   hair?: InputMaybe<Scalars['String']>;
@@ -8169,6 +8171,7 @@ export type CreateVehicleDataInput = {
   colour?: InputMaybe<Scalars['String']>;
   crimeGroup?: InputMaybe<Array<InputMaybe<UniqueId>>>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutVehiclesInput>;
+  documents?: InputMaybe<Array<InputMaybe<CreateDocument>>>;
   groups?: InputMaybe<Array<InputMaybe<UniqueId>>>;
   image?: InputMaybe<ImageCreateNestedManyWithoutVehiclesInput>;
   images?: InputMaybe<Array<InputMaybe<UploadVehicleImage>>>;
@@ -29042,6 +29045,7 @@ export type Mutation = {
   approveIncident?: Maybe<Incident>;
   approveOffender?: Maybe<Offender>;
   copyEvidenceOnInvestigation?: Maybe<Document>;
+  copyOffender?: Maybe<Offender>;
   createAction: Action;
   createAddress: Address;
   createArticle?: Maybe<Article>;
@@ -29274,6 +29278,11 @@ export type MutationApproveOffenderArgs = {
 
 export type MutationCopyEvidenceOnInvestigationArgs = {
   data: ImportDemEvidence;
+  where: UniqueId;
+};
+
+export type MutationCopyOffenderArgs = {
+  data: CreateOffenderData;
   where: UniqueId;
 };
 
@@ -37044,6 +37053,7 @@ export type Query = {
   listIncidentTags: Array<IncidentTags>;
   listIncidents?: Maybe<ListIncidents>;
   listInvestigations?: Maybe<ListInvestigations>;
+  listInvestigationsAllSchemes?: Maybe<ListInvestigations>;
   listLoginEvents?: Maybe<ListLoginEvents>;
   listNotifications: ListNotifications;
   listOffenders?: Maybe<ListOffenders>;
@@ -37092,6 +37102,8 @@ export type Query = {
   userSchemes: Array<UserScheme>;
   users: Array<User>;
   vehicle?: Maybe<Vehicle>;
+  workflow?: Maybe<Workflow>;
+  workflows: Array<Workflow>;
 };
 
 export type QueryActionArgs = {
@@ -37365,6 +37377,13 @@ export type QueryListIncidentsArgs = {
 export type QueryListInvestigationsArgs = {
   order?: InputMaybe<InvestigationOrderByWithRelationInput>;
   scheme: SchemeWhereUniqueInput;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<InvestigationWhereInput>;
+};
+
+export type QueryListInvestigationsAllSchemesArgs = {
+  order?: InputMaybe<InvestigationOrderByWithRelationInput>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<InvestigationWhereInput>;
@@ -37661,6 +37680,19 @@ export type QueryUsersArgs = {
 
 export type QueryVehicleArgs = {
   where: VehicleWhereUniqueInput;
+};
+
+export type QueryWorkflowArgs = {
+  where: WorkflowWhereUniqueInput;
+};
+
+export type QueryWorkflowsArgs = {
+  after?: InputMaybe<WorkflowWhereUniqueInput>;
+  before?: InputMaybe<WorkflowWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<WorkflowOrderByWithRelationInput>>;
+  where?: InputMaybe<WorkflowWhereInput>;
 };
 
 export enum QueryMode {
@@ -40758,6 +40790,7 @@ export type Scheme = {
   userSubscribedIncidentOnly?: Maybe<Scalars['Boolean']>;
   userTodos?: Maybe<Scalars['Int']>;
   vehicles: Array<Vehicle>;
+  workflows: Array<Workflow>;
 };
 
 export type SchemeActionsArgs = {
@@ -41002,6 +41035,13 @@ export type SchemeUpdatesCreatedArgs = {
 export type SchemeVehiclesArgs = {
   after?: InputMaybe<VehicleWhereUniqueInput>;
   before?: InputMaybe<VehicleWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+export type SchemeWorkflowsArgs = {
+  after?: InputMaybe<WorkflowWhereUniqueInput>;
+  before?: InputMaybe<WorkflowWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
 };
@@ -66772,11 +66812,51 @@ export enum When {
   Year = 'YEAR',
 }
 
+export type Workflow = {
+  __typename?: 'Workflow';
+  actions: Array<WorkflowAction>;
+  conditions?: Maybe<Scalars['Json']>;
+  createdAt: Scalars['DateTime'];
+  id: Scalars['String'];
+  name: Scalars['String'];
+  schemes: Array<Scheme>;
+  trigger: WorkflowTrigger;
+  triggerModels: Model;
+  updatedAt: Scalars['DateTime'];
+};
+
+export type WorkflowActionsArgs = {
+  after?: InputMaybe<WorkflowActionWhereUniqueInput>;
+  before?: InputMaybe<WorkflowActionWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+export type WorkflowSchemesArgs = {
+  after?: InputMaybe<SchemeWhereUniqueInput>;
+  before?: InputMaybe<SchemeWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+export type WorkflowAction = {
+  __typename?: 'WorkflowAction';
+  Workflow: Workflow;
+  createdAt: Scalars['DateTime'];
+  data: Scalars['Json'];
+  id: Scalars['String'];
+  outputModel?: Maybe<Model>;
+  type: WorkflowActionType;
+  updatedAt: Scalars['DateTime'];
+  workflowId: Scalars['String'];
+};
+
 export type WorkflowActionCreateManyWorkflowInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   data: Scalars['Json'];
   id?: InputMaybe<Scalars['String']>;
   outputModel?: InputMaybe<Model>;
+  timesRun?: InputMaybe<Scalars['Int']>;
   type: WorkflowActionType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
@@ -66819,6 +66899,7 @@ export type WorkflowActionCreateWithoutQuestionsInput = {
   data: Scalars['Json'];
   id?: InputMaybe<Scalars['String']>;
   outputModel?: InputMaybe<Model>;
+  timesRun?: InputMaybe<Scalars['Int']>;
   type: WorkflowActionType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
@@ -66829,6 +66910,7 @@ export type WorkflowActionCreateWithoutWorkflowInput = {
   id?: InputMaybe<Scalars['String']>;
   outputModel?: InputMaybe<Model>;
   questions?: InputMaybe<QuestionCreateNestedManyWithoutWorkFlowActionsInput>;
+  timesRun?: InputMaybe<Scalars['Int']>;
   type: WorkflowActionType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
@@ -66839,6 +66921,10 @@ export type WorkflowActionListRelationFilter = {
   some?: InputMaybe<WorkflowActionWhereInput>;
 };
 
+export type WorkflowActionOrderByRelationAggregateInput = {
+  _count?: InputMaybe<SortOrder>;
+};
+
 export type WorkflowActionScalarWhereInput = {
   AND?: InputMaybe<Array<WorkflowActionScalarWhereInput>>;
   NOT?: InputMaybe<Array<WorkflowActionScalarWhereInput>>;
@@ -66846,6 +66932,7 @@ export type WorkflowActionScalarWhereInput = {
   createdAt?: InputMaybe<DateTimeFilter>;
   id?: InputMaybe<StringFilter>;
   outputModel?: InputMaybe<EnumModelNullableFilter>;
+  timesRun?: InputMaybe<IntFilter>;
   type?: InputMaybe<EnumWorkflowActionTypeFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   workflowId?: InputMaybe<StringFilter>;
@@ -66862,6 +66949,7 @@ export type WorkflowActionUpdateManyMutationInput = {
   data?: InputMaybe<Scalars['Json']>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   outputModel?: InputMaybe<NullableEnumModelFieldUpdateOperationsInput>;
+  timesRun?: InputMaybe<IntFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumWorkflowActionTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
@@ -66935,6 +67023,7 @@ export type WorkflowActionUpdateWithoutQuestionsInput = {
   data?: InputMaybe<Scalars['Json']>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   outputModel?: InputMaybe<NullableEnumModelFieldUpdateOperationsInput>;
+  timesRun?: InputMaybe<IntFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumWorkflowActionTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
@@ -66945,6 +67034,7 @@ export type WorkflowActionUpdateWithoutWorkflowInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   outputModel?: InputMaybe<NullableEnumModelFieldUpdateOperationsInput>;
   questions?: InputMaybe<QuestionUpdateManyWithoutWorkFlowActionsNestedInput>;
+  timesRun?: InputMaybe<IntFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumWorkflowActionTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
@@ -66970,6 +67060,7 @@ export type WorkflowActionWhereInput = {
   id?: InputMaybe<StringFilter>;
   outputModel?: InputMaybe<EnumModelNullableFilter>;
   questions?: InputMaybe<QuestionListRelationFilter>;
+  timesRun?: InputMaybe<IntFilter>;
   type?: InputMaybe<EnumWorkflowActionTypeFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   workflowId?: InputMaybe<StringFilter>;
@@ -67033,6 +67124,18 @@ export type WorkflowListRelationFilter = {
 
 export type WorkflowOrderByRelationAggregateInput = {
   _count?: InputMaybe<SortOrder>;
+};
+
+export type WorkflowOrderByWithRelationInput = {
+  actions?: InputMaybe<WorkflowActionOrderByRelationAggregateInput>;
+  conditions?: InputMaybe<SortOrder>;
+  createdAt?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  name?: InputMaybe<SortOrder>;
+  schemes?: InputMaybe<SchemeOrderByRelationAggregateInput>;
+  trigger?: InputMaybe<SortOrder>;
+  triggerModels?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
 };
 
 export type WorkflowScalarWhereInput = {
@@ -72111,10 +72214,32 @@ export type InvestigationSuggestionsQuery = {
   } | null;
 };
 
+export type ListInvestigationsAllSchemesQueryVariables = Exact<{
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<InvestigationWhereInput>;
+}>;
+
+export type ListInvestigationsAllSchemesQuery = {
+  __typename?: 'Query';
+  listInvestigationsAllSchemes?: {
+    __typename?: 'ListInvestigations';
+    total: number;
+    investigations: Array<{
+      __typename?: 'Investigation';
+      id: string;
+      name: string;
+      description?: string | null;
+      status: InvestigationStatus;
+    }>;
+  } | null;
+};
+
 export type ListInvestigationsQueryVariables = Exact<{
   scheme: SchemeWhereUniqueInput;
   take?: InputMaybe<Scalars['Int']>;
   skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<InvestigationWhereInput>;
 }>;
 
 export type ListInvestigationsQuery = {
@@ -73036,6 +73161,63 @@ export type AddImagesToOffenderMutation = {
       position: ImagePosition;
       rotation: number;
     }>;
+  } | null;
+};
+
+export type CopyOffenderMutationVariables = Exact<{
+  where: UniqueId;
+  data: CreateOffenderData;
+}>;
+
+export type CopyOffenderMutation = {
+  __typename?: 'Mutation';
+  copyOffender?: {
+    __typename?: 'Offender';
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    age?: Age | null;
+    build?: Build | null;
+    height?: Height | null;
+    dateOfBirth?: Date | null;
+    dateSource?: string | null;
+    hair?: string | null;
+    gender?: Gender | null;
+    name?: string | null;
+    race?: Race | null;
+    peculiarities?: string | null;
+    approved?: boolean | null;
+    active?: boolean | null;
+    idVerified: boolean;
+    idSource?: IdSource | null;
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+      card?: string | null;
+      position: ImagePosition;
+      rotation: number;
+      primary?: boolean | null;
+      policeImage?: boolean | null;
+    }>;
+    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+    tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+    bans: Array<{
+      __typename?: 'Ban';
+      id: string;
+      location: string;
+      description?: string | null;
+      startDate: Date;
+      endDate: Date;
+      type?: BanType | null;
+    }>;
+    createdBy: {
+      __typename?: 'User';
+      id: string;
+      fullName: string;
+      businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
+    };
   } | null;
 };
 
@@ -85486,13 +85668,70 @@ export type InvestigationSuggestionsQueryResult = Apollo.QueryResult<
   InvestigationSuggestionsQuery,
   InvestigationSuggestionsQueryVariables
 >;
+export const ListInvestigationsAllSchemesDocument = gql`
+  query listInvestigationsAllSchemes(
+    $take: Int
+    $skip: Int
+    $where: InvestigationWhereInput
+  ) {
+    listInvestigationsAllSchemes(where: $where, take: $take, skip: $skip) {
+      total
+      investigations {
+        id
+        name
+        description
+        status
+      }
+    }
+  }
+`;
+export function useListInvestigationsAllSchemesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    ListInvestigationsAllSchemesQuery,
+    ListInvestigationsAllSchemesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    ListInvestigationsAllSchemesQuery,
+    ListInvestigationsAllSchemesQueryVariables
+  >(ListInvestigationsAllSchemesDocument, options);
+}
+export function useListInvestigationsAllSchemesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListInvestigationsAllSchemesQuery,
+    ListInvestigationsAllSchemesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ListInvestigationsAllSchemesQuery,
+    ListInvestigationsAllSchemesQueryVariables
+  >(ListInvestigationsAllSchemesDocument, options);
+}
+export type ListInvestigationsAllSchemesQueryHookResult = ReturnType<
+  typeof useListInvestigationsAllSchemesQuery
+>;
+export type ListInvestigationsAllSchemesLazyQueryHookResult = ReturnType<
+  typeof useListInvestigationsAllSchemesLazyQuery
+>;
+export type ListInvestigationsAllSchemesQueryResult = Apollo.QueryResult<
+  ListInvestigationsAllSchemesQuery,
+  ListInvestigationsAllSchemesQueryVariables
+>;
 export const ListInvestigationsDocument = gql`
   query listInvestigations(
     $scheme: SchemeWhereUniqueInput!
     $take: Int
     $skip: Int
+    $where: InvestigationWhereInput
   ) {
-    listInvestigations(scheme: $scheme, take: $take, skip: $skip) {
+    listInvestigations(
+      scheme: $scheme
+      where: $where
+      take: $take
+      skip: $skip
+    ) {
       total
       investigations {
         id
@@ -86645,6 +86884,88 @@ export type AddImagesToOffenderMutationResult =
 export type AddImagesToOffenderMutationOptions = Apollo.BaseMutationOptions<
   AddImagesToOffenderMutation,
   AddImagesToOffenderMutationVariables
+>;
+export const CopyOffenderDocument = gql`
+  mutation copyOffender($where: UniqueId!, $data: CreateOffenderData!) {
+    copyOffender(where: $where, data: $data) {
+      id
+      createdAt
+      updatedAt
+      age
+      build
+      height
+      dateOfBirth
+      dateSource
+      hair
+      gender
+      name
+      race
+      peculiarities
+      approved
+      active
+      idVerified
+      idSource
+      images {
+        id
+        url
+        optimised
+        card
+        position
+        rotation
+        primary
+        policeImage
+      }
+      groups {
+        id
+        name
+      }
+      tags {
+        id
+        name
+      }
+      bans {
+        id
+        location
+        description
+        startDate
+        endDate
+        type
+      }
+      createdBy {
+        id
+        fullName
+        businesses {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
+export type CopyOffenderMutationFn = Apollo.MutationFunction<
+  CopyOffenderMutation,
+  CopyOffenderMutationVariables
+>;
+export function useCopyOffenderMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CopyOffenderMutation,
+    CopyOffenderMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CopyOffenderMutation,
+    CopyOffenderMutationVariables
+  >(CopyOffenderDocument, options);
+}
+export type CopyOffenderMutationHookResult = ReturnType<
+  typeof useCopyOffenderMutation
+>;
+export type CopyOffenderMutationResult =
+  Apollo.MutationResult<CopyOffenderMutation>;
+export type CopyOffenderMutationOptions = Apollo.BaseMutationOptions<
+  CopyOffenderMutation,
+  CopyOffenderMutationVariables
 >;
 export const CreateSimpleOffenderDocument = gql`
   mutation CreateSimpleOffender($data: CreateOffenderData!) {

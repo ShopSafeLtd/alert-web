@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
 import type { MutationUpdaterFn } from '@apollo/client';
-import type { FormInstance } from 'antd';
+import type { FormInstance, UploadFile } from 'antd';
 import { Form, Modal, notification } from 'antd';
 import type {
   AddressesQuery,
@@ -99,6 +99,7 @@ export interface FormData {
   groups: string[];
   tags: string[];
   images?: StateImageData[];
+  documents?: { fileList: UploadFile[] };
   goods?: {
     goodsType?: string;
     value?: number;
@@ -366,6 +367,8 @@ const useAddIncident = (): Return => {
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
+    console.log('data', data);
+
     const allOffendersConfirmed = !data.offenders
       ?.map((offender) => offender.confirmedInIncident)
       .includes(false);
@@ -541,6 +544,17 @@ const useAddIncident = (): Return => {
       const involved = data.involvedTags?.map((id) => ({ id })) || [];
       const impact = data.fellingTags?.map((id) => ({ id })) || [];
 
+      const getDocuments = () => {
+        if (data.documents?.fileList && data.documents?.fileList?.length > 0) {
+          return data.documents?.fileList.map((file) => ({
+            url: file.url || '',
+            name: file.name || '',
+            fileType: file.type || '',
+            origFileName: file.fileName || '',
+          }));
+        }
+        return undefined;
+      };
       void createIncident({
         variables: {
           data: {
@@ -599,6 +613,8 @@ const useAddIncident = (): Return => {
             vehicles: getVehicles(),
             crimeGroups: {},
             images: getImages(),
+            documents: getDocuments(),
+
             location: getLocation(),
             answers: customQuestions.map((question) => ({
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
