@@ -90,11 +90,17 @@ const ViewOffender = (): JSX.Element => {
     toggleAddDocument,
     addDocument,
     updateDocumentList,
+    translateText,
+    isTranslated,
     updateDeleteDocument,
+    languageCount,
   } = useViewOffender(offenderId);
   const { onApprove, onReject, approving } = useApproveOffender({ offenderId });
   return (
     <View
+      languageCount={languageCount}
+      translateText={translateText}
+      isTranslated={isTranslated}
       associatesData={associatesData}
       associatesLoading={associatesLoading}
       lightBoxOpen={lightBoxOpen}

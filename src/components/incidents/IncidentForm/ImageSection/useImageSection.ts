@@ -155,6 +155,9 @@ const useImageSection = ({
           form.getFieldValue('offenders') || [];
 
         form.setFieldsValue({
+          // TODO alias issue -Fix this
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           offenders: [
             ...currentOffenders,
             ...image.faces.map((face) => ({

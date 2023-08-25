@@ -40774,6 +40774,7 @@ export type Scheme = {
   incidentsByType?: Maybe<IncidentsByType>;
   incidentsCreated?: Maybe<Scalars['Int']>;
   investigationsInScheme: Array<Investigation>;
+  languageCount: Scalars['Int'];
   languages: Array<Language>;
   loginEvents: Array<LoginEvent>;
   logo?: Maybe<Image>;
@@ -77351,6 +77352,7 @@ export type CurrentUserQuery = {
         facialRecognition: boolean;
         imagesRequiredOnOffenders: boolean;
         taskTimeTracking: boolean;
+        languageCount: number;
         logo?: {
           __typename?: 'Image';
           optimisedPersisted?: string | null;
@@ -93148,6 +93150,7 @@ export const CurrentUserDocument = gql`
           facialRecognition
           imagesRequiredOnOffenders
           taskTimeTracking
+          languageCount
         }
       }
       incidentEmail

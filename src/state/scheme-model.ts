@@ -25,6 +25,7 @@ export interface SetSchemePayload {
   facialRecognition: boolean;
   imagesRequiredOnOffenders: boolean;
   taskTimeTracking: boolean;
+  languageCount: number;
 }
 
 export interface SchemeModel {
@@ -45,6 +46,7 @@ export interface SchemeModel {
   facialRecognition: boolean;
   imagesRequiredOnOffenders: boolean;
   taskTimeTracking: boolean;
+  languageCount: number;
 }
 
 const userModel: SchemeModel = {
@@ -63,6 +65,7 @@ const userModel: SchemeModel = {
   facialRecognition: false,
   imagesRequiredOnOffenders: false,
   taskTimeTracking: false,
+  languageCount: 0,
   setScheme: action((state, payload) => {
     state.id = payload.id;
     state.autoApproveIncidents = payload.autoApproveIncidents;
@@ -79,6 +82,7 @@ const userModel: SchemeModel = {
     state.facialRecognition = payload.facialRecognition;
     state.imagesRequiredOnOffenders = payload.imagesRequiredOnOffenders;
     state.taskTimeTracking = payload.taskTimeTracking;
+    state.languageCount = payload.languageCount;
   }),
   clearScheme: action((state) => {
     state.id = '';
@@ -96,6 +100,7 @@ const userModel: SchemeModel = {
     state.facialRecognition = false;
     state.imagesRequiredOnOffenders = false;
     state.taskTimeTracking = false;
+    state.languageCount = 0;
   }),
 };
 

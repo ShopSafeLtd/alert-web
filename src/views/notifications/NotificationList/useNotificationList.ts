@@ -47,6 +47,7 @@ interface Scheme {
   autoApproveOffenders: boolean;
   restrictIncidentAccess: boolean;
   defaultPublicOffenderDOB: boolean;
+  languageCount: number;
   userTodos?: number | null | undefined;
   userNotifications?: number | null | undefined;
   logo?:
@@ -327,6 +328,7 @@ const useNotificationLists = (): Return => {
     );
 
     setScheme({
+      languageCount: scheme.languageCount,
       autoApproveIncidents: scheme.autoApproveIncidents,
       autoApproveOffenders: scheme.autoApproveOffenders,
       restrictIncidentAccess: scheme.restrictIncidentAccess,

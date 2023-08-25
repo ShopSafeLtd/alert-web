@@ -3,6 +3,7 @@ import type {
   AssociatedOffendersQuery,
   CreateDocumentMutation,
   DeleteDocumentMutation,
+  LanguageCode,
   UpdateOffenderBansMutation,
   UpdateOffenderCrimeGroupsMutation,
   UpdateOffenderVehiclesMutation,
@@ -10,22 +11,23 @@ import type {
   ViewOffenderQueryVariables,
 } from 'graphql/generated';
 import {
-  useCreateSimpleVehicleMutation,
-  useUpdateSimpleVehicleMutation,
-  useUpdateOffenderImagesMutation,
-  useUpdateOffenderAddressesMutation,
-  useUpdateOffenderBansMutation,
-  useUpdateOffenderCrimeGroupsMutation,
-  useUpdateOffenderVehiclesMutation,
-  useUnsubscribeFromOffenderMutation,
   Role,
   TagType,
   useAddImagesToOffenderMutation,
   useAssociatedOffendersQuery,
+  useCreateSimpleVehicleMutation,
   useDeleteUpdateMutation,
   useRecycleOffenderMutation,
   useSubscribeToOffenderMutation,
+  useTranslateLazyQuery,
+  useUnsubscribeFromOffenderMutation,
+  useUpdateOffenderAddressesMutation,
+  useUpdateOffenderBansMutation,
+  useUpdateOffenderCrimeGroupsMutation,
+  useUpdateOffenderImagesMutation,
   useUpdateOffenderMutation,
+  useUpdateOffenderVehiclesMutation,
+  useUpdateSimpleVehicleMutation,
   useUpdateUpdateMutation,
   useViewOffenderQuery,
   ViewOffenderDocument,
@@ -174,9 +176,14 @@ interface Return {
   addDocument: boolean;
   updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
   updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
+  translateText: () => Promise<void>;
+  isTranslated: string | null;
+  languageCount: number;
 }
 
 const useViewOffender = (offenderId: string): Return => {
+  const { languageCount } = useStoreState((state) => state.scheme);
+
   const navigate = useNavigate();
   const { id: schemeId, defaultPublicOffenderDOB } = useStoreState(
     (state) => state.scheme
@@ -1602,6 +1609,33 @@ const useViewOffender = (offenderId: string): Return => {
     setAssociatedFilters(value);
   };
 
+  const [isTranslated, setIsTranslated] = useState<string | null>(null);
+  const currentLanguage = useStoreState((state) => state.theme.locale);
+
+  const [translate] = useTranslateLazyQuery({
+    canonizeResults: true,
+    fetchPolicy: 'cache-first',
+    variables: {
+      data: {
+        text: [data?.offender?.peculiarities || ''],
+        targetLang: currentLanguage as LanguageCode,
+      },
+    },
+  });
+
+  const translateText = async () => {
+    if (isTranslated) {
+      setIsTranslated(null);
+      return;
+    }
+    const { data: newTranslation } = await translate();
+    setIsTranslated(
+      newTranslation?.translateText[0].translatedText ||
+        data?.offender?.peculiarities ||
+        ''
+    );
+  };
+
   return {
     data,
     loading: data?.offender ? false : loading,
@@ -1692,6 +1726,9 @@ const useViewOffender = (offenderId: string): Return => {
     toggleAddDocument,
     updateDocumentList,
     updateDeleteDocument,
+    translateText,
+    isTranslated,
+    languageCount,
   };
 };
 

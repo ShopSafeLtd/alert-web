@@ -83,6 +83,7 @@ const useAuth = (): Return => {
         facialRecognition: schemeDetails?.facialRecognition,
         imagesRequiredOnOffenders: schemeDetails?.imagesRequiredOnOffenders,
         taskTimeTracking: schemeDetails?.taskTimeTracking,
+        languageCount: schemeDetails?.languageCount || 0,
       });
       setTodos({ userTodos: schemes[0]?.scheme?.userTodos || 0 });
       setNotifications({
@@ -119,6 +120,7 @@ const useAuth = (): Return => {
           imagesRequiredOnOffenders:
             schemeDetails.scheme.imagesRequiredOnOffenders,
           taskTimeTracking: schemeDetails.scheme.taskTimeTracking,
+          languageCount: schemeDetails.scheme.languageCount || 0,
         });
         setTodos({ userTodos: schemeDetails?.scheme?.userTodos || 0 });
       } else {

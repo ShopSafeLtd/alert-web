@@ -42,6 +42,7 @@ import {
   faEdit,
   faHeadSide,
   faImage,
+  faLanguage,
   faMagnifyingGlass,
   faMarsAndVenus,
   faPassport,
@@ -223,6 +224,9 @@ interface Props {
   onReject: () => void;
   onApprove: () => void;
   approving: boolean;
+  translateText: () => Promise<void>;
+  isTranslated: string | null;
+  languageCount: number;
 }
 
 const ViewOffender = ({
@@ -313,6 +317,9 @@ const ViewOffender = ({
   approving,
   onReject,
   onApprove,
+  translateText,
+  isTranslated,
+  languageCount,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const classes = useStyles();
@@ -652,40 +659,149 @@ const ViewOffender = ({
                     ) : (
                       <div>
                         <Card>
-                          <Row align="middle" gutter={10}>
-                            <Col>
-                              <Title style={{ margin: 0 }} level={3}>
-                                {data?.offender?.name}
-                              </Title>
-                            </Col>
-                            <Col>
-                              <Text>
-                                {intl.formatMessage(
-                                  {
-                                    defaultMessage: 'Alert ID: {ref}',
-                                    id: 'umL9sI',
-                                  },
-                                  {
-                                    ref: data?.offender?.reference,
+                          <Row gutter={[8, 8]}>
+                            <Col span={12}>
+                              <Row gutter={10}>
+                                <Col>
+                                  <Title style={{ margin: 0 }} level={3}>
+                                    {data?.offender?.name}
+                                  </Title>
+                                </Col>
+                                <Col>
+                                  <Text>
+                                    {intl.formatMessage(
+                                      {
+                                        defaultMessage: 'Alert ID: {ref}',
+                                        id: 'umL9sI',
+                                      },
+                                      {
+                                        ref: data?.offender?.reference,
+                                      }
+                                    )}
+                                  </Text>
+                                </Col>
+                              </Row>
+
+                              <Row style={{ marginTop: 5 }}>
+                                {data?.offender?.tags.map((tag) => (
+                                  <Col key={tag.id}>
+                                    <Tag color="red" className={classes.tag}>
+                                      {tag.name}
+                                    </Tag>
+                                  </Col>
+                                ))}
+                              </Row>
+
+                              <Descriptions
+                                column={1}
+                                style={{ marginTop: 10 }}
+                              >
+                                {data?.offender?.alias &&
+                                  data.offender.alias.length > 0 && (
+                                    <Descriptions.Item
+                                      label={
+                                        <span className={classes.tagLabel}>
+                                          <FontAwesomeIcon
+                                            className={classes.descIcon}
+                                            icon={faUser}
+                                          />
+                                          {intl.formatMessage({
+                                            defaultMessage: 'Alias',
+                                            id: 'Ri9jA7',
+                                          })}
+                                        </span>
+                                      }
+                                    >
+                                      <Row>
+                                        {data?.offender?.alias.map((el, i) => (
+                                          // eslint-disable-next-line react/no-array-index-key
+                                          <Tag key={i} className={classes.tag}>
+                                            {el}
+                                          </Tag>
+                                        ))}
+                                      </Row>
+                                    </Descriptions.Item>
+                                  )}
+                                <Descriptions.Item
+                                  label={
+                                    <span>
+                                      <FontAwesomeIcon
+                                        className={classes.descIcon}
+                                        icon={faPassport}
+                                      />
+                                      {intl.formatMessage({
+                                        defaultMessage: 'Verified',
+                                        id: 'Z8971h',
+                                      })}
+                                    </span>
                                   }
-                                )}
-                              </Text>
-                            </Col>
-                          </Row>
-
-                          <Row style={{ marginTop: 5 }}>
-                            {data?.offender?.tags.map((tag) => (
-                              <Col key={tag.id}>
-                                <Tag color="red" className={classes.tag}>
-                                  {tag.name}
-                                </Tag>
-                              </Col>
-                            ))}
-                          </Row>
-
-                          <Descriptions column={1} style={{ marginTop: 10 }}>
-                            {data?.offender?.alias &&
-                              data.offender.alias.length > 0 && (
+                                >
+                                  {data?.offender?.idVerified ? (
+                                    <Typography.Text type="success">
+                                      {intl.formatMessage(
+                                        {
+                                          defaultMessage: 'Verified {source}',
+                                          id: 'OBOA6I',
+                                        },
+                                        {
+                                          source: getIdSource(
+                                            data?.offender.idSource
+                                          ),
+                                        }
+                                      )}
+                                    </Typography.Text>
+                                  ) : (
+                                    <Typography.Text type="warning">
+                                      {intl.formatMessage({
+                                        defaultMessage: 'Not Verified',
+                                        id: 'r+TWun',
+                                      })}
+                                    </Typography.Text>
+                                  )}
+                                </Descriptions.Item>
+                                <Descriptions.Item
+                                  label={
+                                    <span>
+                                      <FontAwesomeIcon
+                                        className={classes.descIcon}
+                                        icon={faClock}
+                                      />
+                                      {intl.formatMessage({
+                                        defaultMessage: 'Last updated',
+                                        id: '0ICwq5',
+                                      })}
+                                    </span>
+                                  }
+                                >
+                                  {FormatCalendar(
+                                    data?.offender?.updatedAt || moment()
+                                  )}
+                                </Descriptions.Item>
+                                <Descriptions.Item
+                                  label={
+                                    <span className={classes.tagLabel}>
+                                      <FontAwesomeIcon
+                                        className={classes.descIcon}
+                                        icon={faUsers}
+                                      />
+                                      {intl.formatMessage({
+                                        defaultMessage: 'Groups',
+                                        id: 'hzmswI',
+                                      })}
+                                    </span>
+                                  }
+                                >
+                                  <Row>
+                                    {data?.offender?.groups?.map((group) => (
+                                      <Tag
+                                        key={group.id}
+                                        className={classes.tag}
+                                      >
+                                        {group.name}
+                                      </Tag>
+                                    ))}
+                                  </Row>
+                                </Descriptions.Item>
                                 <Descriptions.Item
                                   label={
                                     <span className={classes.tagLabel}>
@@ -694,119 +810,56 @@ const ViewOffender = ({
                                         icon={faUser}
                                       />
                                       {intl.formatMessage({
-                                        defaultMessage: 'Alias',
-                                        id: 'Ri9jA7',
+                                        defaultMessage: 'Created By',
+                                        id: 'uAfuJA',
                                       })}
                                     </span>
                                   }
                                 >
                                   <Row>
-                                    {data?.offender?.alias.map((el, i) => (
-                                      // eslint-disable-next-line react/no-array-index-key
-                                      <Tag key={i} className={classes.tag}>
-                                        {el}
-                                      </Tag>
-                                    ))}
+                                    {data?.offender?.createdBy.fullName}
                                   </Row>
                                 </Descriptions.Item>
-                              )}
-                            <Descriptions.Item
-                              label={
-                                <span>
-                                  <FontAwesomeIcon
-                                    className={classes.descIcon}
-                                    icon={faPassport}
-                                  />
-                                  {intl.formatMessage({
-                                    defaultMessage: 'Verified',
-                                    id: 'Z8971h',
-                                  })}
-                                </span>
-                              }
-                            >
-                              {data?.offender?.idVerified ? (
-                                <Typography.Text type="success">
-                                  {intl.formatMessage(
-                                    {
-                                      defaultMessage: 'Verified {source}',
-                                      id: 'OBOA6I',
-                                    },
-                                    {
-                                      source: getIdSource(
-                                        data?.offender.idSource
-                                      ),
-                                    }
-                                  )}
-                                </Typography.Text>
+                              </Descriptions>
+                            </Col>
+                            <Col span={12}>
+                              {data?.offender?.incidents &&
+                              data?.offender?.incidents.length > 0 ? (
+                                <MapCard
+                                  width="100%"
+                                  height={301}
+                                  markers={
+                                    data?.offender?.incidents.map(
+                                      (incident) => ({
+                                        geoLat: incident.location?.geoLat,
+                                        geoLng: incident.location?.geoLng,
+                                      })
+                                    ) || []
+                                  }
+                                />
                               ) : (
-                                <Typography.Text type="warning">
-                                  {intl.formatMessage({
-                                    defaultMessage: 'Not Verified',
-                                    id: 'r+TWun',
-                                  })}
-                                </Typography.Text>
+                                <Card
+                                  style={{
+                                    height: 'calc(100% - 20px)',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                  }}
+                                >
+                                  <Empty
+                                    image={Empty.PRESENTED_IMAGE_SIMPLE}
+                                    description={intl.formatMessage({
+                                      defaultMessage: 'No incidents found',
+                                      id: '312q4w',
+                                    })}
+                                  />
+                                </Card>
                               )}
-                            </Descriptions.Item>
-                            <Descriptions.Item
-                              label={
-                                <span>
-                                  <FontAwesomeIcon
-                                    className={classes.descIcon}
-                                    icon={faClock}
-                                  />
-                                  {intl.formatMessage({
-                                    defaultMessage: 'Last updated',
-                                    id: '0ICwq5',
-                                  })}
-                                </span>
-                              }
-                            >
-                              {FormatCalendar(
-                                data?.offender?.updatedAt || moment()
-                              )}
-                            </Descriptions.Item>
-                            <Descriptions.Item
-                              label={
-                                <span className={classes.tagLabel}>
-                                  <FontAwesomeIcon
-                                    className={classes.descIcon}
-                                    icon={faUsers}
-                                  />
-                                  {intl.formatMessage({
-                                    defaultMessage: 'Groups',
-                                    id: 'hzmswI',
-                                  })}
-                                </span>
-                              }
-                            >
-                              <Row>
-                                {data?.offender?.groups?.map((group) => (
-                                  <Tag key={group.id} className={classes.tag}>
-                                    {group.name}
-                                  </Tag>
-                                ))}
-                              </Row>
-                            </Descriptions.Item>
-                            <Descriptions.Item
-                              label={
-                                <span className={classes.tagLabel}>
-                                  <FontAwesomeIcon
-                                    className={classes.descIcon}
-                                    icon={faUser}
-                                  />
-                                  {intl.formatMessage({
-                                    defaultMessage: 'Created By',
-                                    id: 'uAfuJA',
-                                  })}
-                                </span>
-                              }
-                            >
-                              <Row>{data?.offender?.createdBy.fullName}</Row>
-                            </Descriptions.Item>
-                          </Descriptions>
+                            </Col>
+                          </Row>
                         </Card>
                         <Row gutter={16}>
-                          <Col span={12}>
+                          <Col span={24}>
                             <Card>
                               <Title level={4} style={{ marginBottom: 10 }}>
                                 {intl.formatMessage({
@@ -935,7 +988,27 @@ const ViewOffender = ({
                                       </span>
                                     }
                                   >
-                                    {data?.offender?.peculiarities}
+                                    {isTranslated ??
+                                      data?.offender?.peculiarities}
+                                    {languageCount > 1 && (
+                                      <Tooltip
+                                        title={intl.formatMessage({
+                                          defaultMessage: 'Translate',
+                                          id: 'wCy/Tc',
+                                        })}
+                                      >
+                                        <FontAwesomeIcon
+                                          icon={faLanguage}
+                                          color="lightblue"
+                                          // eslint-disable-next-line no-void
+                                          onClick={() => void translateText()}
+                                          style={{
+                                            marginLeft: '10px',
+                                            cursor: 'pointer',
+                                          }}
+                                        />
+                                      </Tooltip>
+                                    )}
                                   </Descriptions.Item>
                                 )}
                               </Descriptions>
@@ -960,38 +1033,6 @@ const ViewOffender = ({
                                 )}
                               </Descriptions>
                             </Card>
-                          </Col>
-                          <Col span={12}>
-                            {data?.offender?.incidents &&
-                            data?.offender?.incidents.length > 0 ? (
-                              <MapCard
-                                width="100%"
-                                height={301}
-                                markers={
-                                  data?.offender?.incidents.map((incident) => ({
-                                    geoLat: incident.location?.geoLat,
-                                    geoLng: incident.location?.geoLng,
-                                  })) || []
-                                }
-                              />
-                            ) : (
-                              <Card
-                                style={{
-                                  height: 'calc(100% - 20px)',
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                }}
-                              >
-                                <Empty
-                                  image={Empty.PRESENTED_IMAGE_SIMPLE}
-                                  description={intl.formatMessage({
-                                    defaultMessage: 'No incidents found',
-                                    id: '312q4w',
-                                  })}
-                                />
-                              </Card>
-                            )}
                           </Col>
                         </Row>
                         <Card>
