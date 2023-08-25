@@ -33,6 +33,7 @@ describe('List Officer View', () => {
               imagesRequiredOnOffenders: false,
               goodsMode: GoodsMode.Generic,
               taskTimeTracking: false,
+              languageCount: 0,
             },
           ],
         },
