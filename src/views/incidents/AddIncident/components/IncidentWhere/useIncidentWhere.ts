@@ -1,10 +1,11 @@
 import type React from 'react';
+import { useEffect, useState } from 'react';
 import { useApolloClient } from '@apollo/client';
 import type {
   SearchBusinessesQuery,
   SearchBusinessesQueryVariables,
 } from 'graphql/generated';
-import { QueryMode, SearchBusinessesDocument } from 'graphql/generated';
+import { QueryMode, Role, SearchBusinessesDocument } from 'graphql/generated';
 import { useStoreState } from 'state';
 import { useIntl } from 'react-intl';
 
@@ -12,12 +13,25 @@ interface Return {
   onSearchBusiness: (
     value: string
   ) => Promise<{ label: React.ReactNode; value: string }[]>;
+  hideField: boolean;
 }
 
 const useIncidentWhere = (): Return => {
   const client = useApolloClient();
   const intl = useIntl();
   const schemeId = useStoreState((state) => state.scheme.id);
+  const role = useStoreState((state) => state.user.role);
+  const businesses = useStoreState((state) => state.user.businesses);
+
+  const [hideField, setHideField] = useState(true);
+
+  useEffect(() => {
+    if (role !== Role.User || businesses.length > 1) {
+      setHideField(false);
+    } else {
+      setHideField(true);
+    }
+  }, [role, businesses]);
 
   const onSearchBusiness = async (value: string) =>
     client
@@ -60,6 +74,7 @@ const useIncidentWhere = (): Return => {
 
   return {
     onSearchBusiness,
+    hideField,
   };
 };
 

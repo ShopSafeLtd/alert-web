@@ -16,7 +16,7 @@ const IncidentWhere = ({
   updateNewAddressData,
   newAddressData,
 }: Props) => {
-  const { onSearchBusiness } = useIncidentWhere();
+  const { onSearchBusiness, hideField } = useIncidentWhere();
 
   return (
     <View
@@ -25,6 +25,7 @@ const IncidentWhere = ({
       saving={saving}
       toggleAddNewAddress={toggleAddNewAddress}
       updateNewAddressData={updateNewAddressData}
+      hideField={hideField}
     />
   );
 };

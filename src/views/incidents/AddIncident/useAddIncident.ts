@@ -172,6 +172,9 @@ const useAddIncident = (): Return => {
   const setIncidentsState = useStoreActions(
     (actions) => actions.data.setIncidents
   );
+  const restrictIncidentAccess = useStoreState(
+    (state) => state.scheme.restrictIncidentAccess
+  );
 
   const [goodsVisible, setGoodsVisible] = useState(false);
   const [addNewAddress, setAddNewAddress] = useState(false);
@@ -336,7 +339,11 @@ const useAddIncident = (): Return => {
         }),
         placement: 'bottomRight',
       });
-      navigate('/app/incidents');
+      if (restrictIncidentAccess && role === Role.User) {
+        navigate('/app/dashboard');
+      } else {
+        navigate('/app/incidents');
+      }
     },
     onError: () => {
       setSaving(false);
