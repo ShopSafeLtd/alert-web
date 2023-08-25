@@ -1,6 +1,7 @@
 import { APP_PREFIX_PATH } from 'configs/AppConfig';
 import {
   faAddressCard,
+  faArrowProgress,
   faBuilding,
   faCalendarCheck,
   faCar,
@@ -29,7 +30,6 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import { Role } from 'graphql/generated';
 import { defineMessage } from 'react-intl';
-import { useStoreState } from 'state';
 
 export enum BadgeTypes {
   todo = 'TODO',
@@ -364,6 +364,19 @@ const adminOnlyItems: NavItem[] = [
         submenu: [],
       },
     ],
+  },
+  {
+    key: 'workflow',
+    path: `${APP_PREFIX_PATH}/workflow`,
+    title: 'Workflow',
+    icon: faArrowProgress,
+    breadcrumb: true,
+    intl: defineMessage({
+      id: 'workflow',
+      defaultMessage: 'Workflow',
+    }),
+    roles: [Role.SchemeAdmin, Role.ShopsafeAdmin],
+    submenu: [],
   },
   {
     key: 'settings',

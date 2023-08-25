@@ -19,7 +19,6 @@ import { faBell } from '@fortawesome/pro-light-svg-icons';
 import { createUseStyles } from 'react-jss';
 import { Theme } from 'configs/ThemeConfig';
 import NotificationsDrawer from 'components/notifications/NotificationsDrawer/NotificationDrawer.container';
-import { Role, useUserNotificationsQuery } from 'graphql/generated';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   notificationCol: {
@@ -333,8 +332,6 @@ const TopNavContent = (props: TopNavContentProps) => {
     return navConfig;
   };
   const navigationConfig = getNavigationConfig();
-
-  console.log('navigationConfig', navigationConfig);
 
   return (
     <Menu mode="horizontal" style={{ backgroundColor: topNavColor }}>

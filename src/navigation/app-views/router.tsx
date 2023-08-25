@@ -4,12 +4,6 @@ import Loading from 'components/shared-components/AntD/Loading';
 import { useAuth } from 'hooks';
 import { useStoreState } from 'state';
 import { useAuth0 } from '@auth0/auth0-react';
-// import TodoList from 'views/adminTodo/TodoList';
-// import Incidents from './incidents/router';
-// import Offenders from './offenders/router';
-// import FeedItems from './feedItems/router';
-// import CrimeGroups from './crime-groups/router';
-// import Vehicles from './vehicles/router';
 
 const Onboarding = lazy(() => import(`./onboarding/router`));
 const Incidents = lazy(() => import(`./incidents/router`));
@@ -26,7 +20,7 @@ const CrimeGroups = lazy(() => import(`./crime-groups/router`));
 const FeedItems = lazy(() => import(`./feedItems/router`));
 const Tasks = lazy(() => import(`./tasks/router`));
 const Notifications = lazy(() => import(`./notifications/router`));
-
+const Workflows = lazy(() => import(`./workflow/router`));
 const Mg11 = lazy(() => import(`./mg11/router`));
 const FaceAi = lazy(() => import(`./face-ai/router`));
 
@@ -34,18 +28,10 @@ export const AppViews = (): JSX.Element => {
   const { isLoading } = useAuth0();
   const { getCurrentUser, loading } = useAuth();
   const { role, onboarded, isSet } = useStoreState((state) => state.user);
-  // const navigate = useNavigate();
-  // const location = useLocation();
 
   useEffect(() => {
     getCurrentUser();
   }, []);
-
-  // useEffect(() => {
-  //   if (onboarded && location.pathname === '/app/onboarding') {
-  //     navigate('incidents');
-  //   }
-  // }, [onboarded]);
 
   if (loading || isLoading || !isSet) return <Loading cover="content" />;
   return (
@@ -94,6 +80,7 @@ export const AppViews = (): JSX.Element => {
         <Route key="resources" path="resources/*" element={<Documents />} />
         <Route key="mg11" path="mg11/*" element={<Mg11 />} />
         <Route key="face-ai" path="face-ai/*" element={<FaceAi />} />
+        <Route key="workflow" path="workflow/*" element={<Workflows />} />
       </Routes>
     </Suspense>
   );
