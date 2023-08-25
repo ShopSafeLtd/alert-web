@@ -14,6 +14,7 @@ import {
   Typography,
 } from 'antd';
 import type { ListOffendersQuery } from 'graphql/generated';
+import { Role } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faClock,
@@ -55,6 +56,7 @@ import { useIntl } from 'react-intl';
 import EditOffenderFeed from 'components/form-components/offender/EditOffenderFeed';
 import FeedImageEditor from 'components/form-components/ImageEditor/FeedImageEditor.view';
 import type { EditFeedImage } from 'types/DataType';
+import { useStoreState } from 'state';
 
 const { Title, Text } = Typography;
 const { confirm } = Modal;
@@ -97,6 +99,10 @@ const OffenderCard = ({
   setEditImageId,
   onEditImage,
 }: Props): JSX.Element => {
+  const role = useStoreState((state) => state.user.role);
+  const publicOffenderDOB =
+    useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
+    role !== Role.User;
   const imagesRef = useRef<CarouselRef>(null);
   const intl = useIntl();
   return (
@@ -246,7 +252,7 @@ const OffenderCard = ({
       ) : (
         <SkeletonImage height={300} />
       )}
-      {offender.totalImages && offender.totalImages > 1 && (
+      {offender.totalImages && offender.totalImages > 1 ? (
         <Row className="offender-card-controls">
           <Col>
             <FontAwesomeIcon
@@ -266,8 +272,8 @@ const OffenderCard = ({
             />
           </Col>
         </Row>
-      )}
-      {offender.totalImages && offender.totalImages > 0 && (
+      ) : null}
+      {offender.totalImages && offender.totalImages > 0 ? (
         <FontAwesomeIcon
           size="lg"
           className="offender-card-expand"
@@ -281,7 +287,7 @@ const OffenderCard = ({
             )
           }
         />
-      )}
+      ) : null}
       <div className="offender-card-content">
         <Link
           to={
@@ -320,47 +326,6 @@ const OffenderCard = ({
               <FontAwesomeIcon
                 size="sm"
                 className="offender-card-icon"
-                icon={faUserClock}
-              />
-              <Text type="secondary">
-                {intl.formatMessage(
-                  {
-                    defaultMessage: 'Age: {age}',
-                    id: '9kQMmf',
-                  },
-                  {
-                    age: offender.dateOfBirth
-                      ? calcAge(offender.dateOfBirth)
-                      : getOffenderAge(offender.age),
-                  }
-                )}
-              </Text>
-            </Col>
-
-            <Col span={12}>
-              <FontAwesomeIcon
-                size="sm"
-                className="offender-card-icon"
-                icon={faMarsAndVenus}
-              />
-              <Text type="secondary">
-                {intl.formatMessage(
-                  {
-                    defaultMessage: 'Sex: {gender}',
-                    id: 'ulwh+J',
-                  },
-                  {
-                    gender: getOffenderGender(offender.gender),
-                  }
-                )}
-              </Text>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={12}>
-              <FontAwesomeIcon
-                size="sm"
-                className="offender-card-icon"
                 icon={faUserTag}
               />
               <Text type="secondary">
@@ -394,6 +359,48 @@ const OffenderCard = ({
               </Text>
             </Col>
           </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+              <FontAwesomeIcon
+                size="sm"
+                className="offender-card-icon"
+                icon={faMarsAndVenus}
+              />
+              <Text type="secondary">
+                {intl.formatMessage(
+                  {
+                    defaultMessage: 'Sex: {gender}',
+                    id: 'ulwh+J',
+                  },
+                  {
+                    gender: getOffenderGender(offender.gender),
+                  }
+                )}
+              </Text>
+            </Col>
+            {publicOffenderDOB && (
+              <Col span={12}>
+                <FontAwesomeIcon
+                  size="sm"
+                  className="offender-card-icon"
+                  icon={faUserClock}
+                />
+                <Text type="secondary">
+                  {intl.formatMessage(
+                    {
+                      defaultMessage: 'Age: {age}',
+                      id: '9kQMmf',
+                    },
+                    {
+                      age: offender.dateOfBirth
+                        ? calcAge(offender.dateOfBirth)
+                        : getOffenderAge(offender.age),
+                    }
+                  )}
+                </Text>
+              </Col>
+            )}
+          </Row>
           <Row>
             <Col>
               <FontAwesomeIcon
@@ -415,7 +422,7 @@ const OffenderCard = ({
             </Col>
           </Row>
         </Link>
-        <Row>
+        <Row style={{ marginTop: 3 }}>
           <Col>
             <FontAwesomeIcon
               size="sm"
@@ -445,7 +452,7 @@ const OffenderCard = ({
               : ''
           }
         >
-          <Row gutter={8} style={{ marginTop: 5 }}>
+          <Row gutter={8}>
             <Col span={1}>
               <FontAwesomeIcon
                 size="sm"

@@ -1,6 +1,6 @@
 import type { ListOffendersQuery } from 'graphql/generated';
 import { SortOrder, useListOffendersQuery } from 'graphql/generated';
-import { useStoreState, OffenderSort, useStoreActions } from 'state';
+import { OffenderSort, useStoreActions, useStoreState } from 'state';
 
 interface Return {
   data: ListOffendersQuery | undefined;
@@ -21,10 +21,20 @@ const useOffenderSideList = (): Return => {
     (actions) => actions.data.setOffenders
   );
 
+  const role = useStoreState((state) => state.user.role);
+
   const { data, loading } = useListOffendersQuery({
     variables: {
       scheme: {
         id: schemeId,
+      },
+      where: {
+        approved:
+          role === 'USER'
+            ? {
+                equals: true,
+              }
+            : undefined,
       },
       order: {
         updatedAt:

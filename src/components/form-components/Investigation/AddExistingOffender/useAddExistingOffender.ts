@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 import type { ListOffendersQuery } from 'graphql/generated';
 import {
+  Role,
   QueryMode,
   SortOrder,
   useListOffendersQuery,
@@ -39,11 +40,17 @@ interface Return {
     open: boolean;
     index: number;
   };
+  publicOffenderDOB: boolean;
 }
 
 const useAddExistingOffender = ({ onClose, offenderIds }: Props): Return => {
   const params = useParams();
   const intl = useIntl();
+  const role = useStoreState((state) => state.user.role);
+  const publicOffenderDOB =
+    useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
+    role !== Role.User;
+
   const [saving, setSaving] = useState(false);
   const [currentId, setCurrentId] = useState<string | undefined>(undefined);
 
@@ -187,6 +194,7 @@ const useAddExistingOffender = ({ onClose, offenderIds }: Props): Return => {
     openLightbox,
     lightBoxOpen,
     selectedOffender,
+    publicOffenderDOB,
   };
 };
 

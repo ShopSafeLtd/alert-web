@@ -66,7 +66,7 @@ const IncidentSideList = ({
         className={classes.infiniteScroll}
       >
         {isLoading
-          ? Array.from({ length: 10 }).map(() => (
+          ? Array.from({ length: 24 }).map(() => (
               <SideListItem loading current={false}>
                 <Row wrap={false}>
                   <Col className={classes.itemContent} flex={1}>

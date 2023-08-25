@@ -7,15 +7,15 @@ import type {
   SearchBusinessesQueryVariables,
 } from 'graphql/generated';
 import {
+  Model,
   QueryMode,
+  Role,
   SearchBusinessesDocument,
   TagType,
-  Model,
+  useEditIncidentFeedQuery,
   useSchemeGroupsQuery,
   useTagsQuery,
   useUpdateIncidentMutation,
-  useEditIncidentFeedQuery,
-  Role,
 } from 'graphql/generated';
 import { notification } from 'antd';
 import errorNotification from 'types/error_notification';
@@ -229,6 +229,31 @@ const useEditIncidentFeed = ({ onClose, incidentId }: Props): Return => {
                 data.business?.value === undefined
                   ? true
                   : undefined,
+            },
+            policeInvolved: { set: data.policeInvolved || false },
+            policeRef: { set: data.policeRef || '' },
+            policeNo: { set: data.policeNo || '' },
+            policeReported: { set: data.policeReported || false },
+            location: {
+              // ???
+              upsert: {
+                update: {
+                  premises: { set: '' },
+                  building: { set: data.building || '' },
+                  street: { set: data.street || '' },
+                  townCity: { set: data.townCity || '' },
+                  county: { set: data.county || '' },
+                  postcode: { set: data.postcode || '' },
+                },
+                create: {
+                  premises: '',
+                  building: data.building || '',
+                  street: data.street || '',
+                  townCity: data.townCity || '',
+                  county: data.county || '',
+                  postcode: data.postcode || '',
+                },
+              },
             },
           },
         },

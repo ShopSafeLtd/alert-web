@@ -1,6 +1,7 @@
 import React from 'react';
 import { Col, Row, Tag, Typography } from 'antd';
 import type { FeedItemsQuery } from 'graphql/generated';
+import { Role } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faEarth,
@@ -18,6 +19,7 @@ import {
 } from 'utils/offender/get-offender-desc';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
+import { useStoreState } from 'state';
 import UpdateContent from '../UpdateContent';
 import ImageContainer from '../ImageContainer';
 
@@ -55,6 +57,10 @@ const OffenderFeed = ({
     // incidents,
   } = feedItem?.offender || {};
   const intl = useIntl();
+  const role = useStoreState((state) => state.user.role);
+  const publicOffenderDOB =
+    useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
+    role !== Role.User;
   return (
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     <Link to={`/app/offenders/view/${id}`}>
@@ -105,23 +111,25 @@ const OffenderFeed = ({
               ) : (
                 <div style={{ marginBottom: 5 }} />
               )}
-              <Row>
-                <Col>
-                  <FontAwesomeIcon
-                    size="sm"
-                    style={{ marginRight: 5 }}
-                    className="feedItem-card-icon"
-                    icon={faUserClock}
-                  />
-                  <Text style={{ fontSize: 14 }} type="secondary">
-                    {intl.formatMessage({
-                      defaultMessage: 'Age: ',
-                      id: 'anqdpr',
-                    })}
-                    {dateOfBirth ? calcAge(dateOfBirth) : getOffenderAge(age)}
-                  </Text>
-                </Col>
-              </Row>
+              {publicOffenderDOB && (
+                <Row>
+                  <Col>
+                    <FontAwesomeIcon
+                      size="sm"
+                      style={{ marginRight: 5 }}
+                      className="feedItem-card-icon"
+                      icon={faUserClock}
+                    />
+                    <Text style={{ fontSize: 14 }} type="secondary">
+                      {intl.formatMessage({
+                        defaultMessage: 'Age: ',
+                        id: 'anqdpr',
+                      })}
+                      {dateOfBirth ? calcAge(dateOfBirth) : getOffenderAge(age)}
+                    </Text>
+                  </Col>
+                </Row>
+              )}
               <Row>
                 <Col>
                   <FontAwesomeIcon
