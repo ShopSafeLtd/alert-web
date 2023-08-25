@@ -30,6 +30,7 @@ query userNotifications(
           defaultPublicOffenderDOB
           userTodos
           userNotifications
+          languageCount
           logo {
             optimisedPersisted
             id

@@ -47,7 +47,6 @@ interface Scheme {
   autoApproveOffenders: boolean;
   restrictIncidentAccess: boolean;
   defaultPublicOffenderDOB: boolean;
-  languageCount: number;
   userTodos?: number | null | undefined;
   userNotifications?: number | null | undefined;
   logo?:
@@ -70,6 +69,7 @@ interface Scheme {
   facialRecognition: boolean;
   imagesRequiredOnOffenders: boolean;
   taskTimeTracking: boolean;
+  languageCount: number;
 }
 interface Return {
   data:

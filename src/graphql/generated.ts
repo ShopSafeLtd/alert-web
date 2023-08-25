@@ -77716,6 +77716,7 @@ export type ListUserNotificationsQuery = {
           defaultPublicOffenderDOB: boolean;
           userTodos?: number | null;
           userNotifications?: number | null;
+          languageCount: number;
           imagesRequiredOnOffenders: boolean;
           goodsMode: GoodsMode;
           facialRecognition: boolean;
@@ -77787,6 +77788,7 @@ export type UserNotificationsQuery = {
           defaultPublicOffenderDOB: boolean;
           userTodos?: number | null;
           userNotifications?: number | null;
+          languageCount: number;
           imagesRequiredOnOffenders: boolean;
           goodsMode: GoodsMode;
           facialRecognition: boolean;
@@ -93657,6 +93659,7 @@ export const ListUserNotificationsDocument = gql`
             defaultPublicOffenderDOB
             userTodos
             userNotifications
+            languageCount
             logo {
               optimisedPersisted
               id
@@ -93753,6 +93756,7 @@ export const UserNotificationsDocument = gql`
             defaultPublicOffenderDOB
             userTodos
             userNotifications
+            languageCount
             logo {
               optimisedPersisted
               id

@@ -33,6 +33,8 @@ query listUserNotifications(
           defaultPublicOffenderDOB
           userTodos
           userNotifications
+          languageCount
+
           logo {
             optimisedPersisted
             id
