@@ -1,0 +1,55 @@
+mutation copyOffender($where: UniqueId!, $data: CreateOffenderData!) {
+  copyOffender(where: $where, data: $data) {
+    id
+    createdAt
+    updatedAt
+    age
+    build
+    height
+    dateOfBirth
+    dateSource
+    hair
+    gender
+    name
+    race
+    peculiarities
+    approved
+    active
+    idVerified
+    idSource
+    images {
+      id
+      url
+      optimised
+      card
+      position
+      rotation
+      primary
+      policeImage
+    }
+    groups {
+      id
+      name
+    }
+    tags {
+      id
+      name
+    }
+    bans {
+      id
+      location
+      description
+      startDate
+      endDate
+      type
+    }
+    createdBy {
+      id
+      fullName
+      businesses {
+        id
+        name
+      }
+    }
+  }
+}

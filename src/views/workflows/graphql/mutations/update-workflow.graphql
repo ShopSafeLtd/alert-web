@@ -1,0 +1,16 @@
+mutation UpdateOneWorkflow(
+  $data: WorkflowUpdateInput!
+  $where: WorkflowWhereUniqueInput!
+) {
+  updateOneWorkflow(data: $data, where: $where) {
+    id
+    name
+    trigger
+    triggerModels
+    actions {
+      type
+      outputModel
+      timesRun
+    }
+  }
+}

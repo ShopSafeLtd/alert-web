@@ -2,6 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import View from './ViewOffender.view';
 import useViewOffender from './useViewOffender';
+import useApproveOffender from './useApproveIncident';
 
 const ViewOffender = (): JSX.Element => {
   const offenderId = useParams().id || '';
@@ -47,6 +48,8 @@ const ViewOffender = (): JSX.Element => {
     viewAssociate,
     toggleViewMatches,
     viewMatches,
+    copyOffender,
+    toggleCopyOffender,
     editOffender,
     toggleEditOffender,
     editImages,
@@ -89,7 +92,7 @@ const ViewOffender = (): JSX.Element => {
     updateDocumentList,
     updateDeleteDocument,
   } = useViewOffender(offenderId);
-
+  const { onApprove, onReject, approving } = useApproveOffender({ offenderId });
   return (
     <View
       associatesData={associatesData}
@@ -133,6 +136,8 @@ const ViewOffender = (): JSX.Element => {
       viewAssociate={viewAssociate}
       toggleViewMatches={toggleViewMatches}
       viewMatches={viewMatches}
+      copyOffender={copyOffender}
+      toggleCopyOffender={toggleCopyOffender}
       editOffender={editOffender}
       toggleEditOffender={toggleEditOffender}
       editImages={editImages}
@@ -174,6 +179,9 @@ const ViewOffender = (): JSX.Element => {
       addDocument={addDocument}
       updateDocumentList={updateDocumentList}
       updateDeleteDocument={updateDeleteDocument}
+      onApprove={onApprove}
+      onReject={onReject}
+      approving={approving}
     />
   );
 };

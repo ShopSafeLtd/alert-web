@@ -1,0 +1,33 @@
+query WorkflowData(
+  $where: SchemeWhereUniqueInput!
+  $questionsWhere: QuestionWhereInput
+  $schemeTagsWhere: TagWhereInput
+) {
+  scheme(where: $where) {
+    questions(where: $questionsWhere) {
+      id
+      questionOn
+      optionsFormFormatted {
+        value
+        label
+      }
+      type
+      questionFormatted
+    }
+    schemeTags(where: $schemeTagsWhere) {
+      id
+      name
+    }
+    members {
+      role
+      userId
+      user {
+        fullName
+      }
+    }
+    groups {
+      id
+      name
+    }
+  }
+}

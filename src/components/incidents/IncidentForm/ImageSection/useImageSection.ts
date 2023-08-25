@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { useEffect, useState } from 'react';
-import type { FormInstance, UploadFile } from 'antd';
+import type { FormInstance, UploadFile, UploadProps } from 'antd';
 import {
   Age,
   Build,
@@ -87,6 +87,8 @@ interface Return {
   setEditImage: (data: StateImageData | null) => void;
   onEditImage: (value: StateImageData) => void;
   onRemoveImage: (uid: string) => void;
+  fileList: UploadFile[];
+  documentUploadProps: UploadProps;
 }
 
 const useImageSection = ({
@@ -100,6 +102,7 @@ const useImageSection = ({
   const facialRecognition = useStoreState(
     (state) => state.scheme.facialRecognition
   );
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   useEffect(() => {
     if (value && value !== images) {
@@ -115,6 +118,7 @@ const useImageSection = ({
     form.setFieldValue('images', images);
   }, [form, images]);
 
+  // ???
   const onImageChange = (info: UploadChangeParam<StateImageData>) => {
     let newFileList = [...info.fileList];
 
@@ -225,6 +229,54 @@ const useImageSection = ({
     setImages(images.filter((image) => image.uid !== uid));
   };
 
+  // // other medias
+  // const handleChange: UploadProps['onChange'] = (info) => {
+  //   let newFileList = [...info.fileList];
+
+  //   newFileList = newFileList.map((file) => {
+  //     if (file.response) {
+  //       // eslint-disable-next-line no-param-reassign
+  //       file.url = file.response[0].url;
+
+  //       // eslint-disable-next-line no-param-reassign
+  //       file.fileName = file.response[0].blobName;
+  //     }
+  //     return file;
+  //   });
+
+  //   setFileList(newFileList);
+  // };
+
+  // const documentUploadProps: UploadProps = {
+  //   action: import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT,
+  //   onChange: handleChange,
+  //   multiple: false,
+  //   headers: {
+  //     type: 'pdf',
+  //   },
+  // };
+
+  // evidence
+  const handleChange: UploadProps['onChange'] = (info) => {
+    let newFileList = [...info.fileList];
+
+    newFileList = newFileList.map((file) => {
+      if (file.response) {
+        // eslint-disable-next-line no-param-reassign, @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
+        file.url = file.response[0].url;
+        // eslint-disable-next-line no-param-reassign, @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
+        file.fileName = file.response[0].blobName;
+      }
+      return file;
+    });
+
+    setFileList(newFileList);
+  };
+  const documentUploadProps: UploadProps = {
+    action: import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT,
+    onChange: handleChange,
+    multiple: true,
+  };
   return {
     images,
     onImageChange,
@@ -232,6 +284,8 @@ const useImageSection = ({
     setEditImage,
     onEditImage,
     onRemoveImage,
+    fileList,
+    documentUploadProps,
   };
 };
 

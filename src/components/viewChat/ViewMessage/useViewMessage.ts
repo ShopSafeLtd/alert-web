@@ -159,6 +159,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   const restrictIncidentAccess =
     useStoreState((state) => state.scheme.restrictIncidentAccess) &&
     role === Role.User;
+
   const schemeId = useStoreState((state) => state.scheme.id);
   const navigate = useNavigate();
   const [saving, setSaving] = useState(false);

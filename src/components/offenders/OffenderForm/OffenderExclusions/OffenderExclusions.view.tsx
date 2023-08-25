@@ -259,17 +259,17 @@ const OffenderExclusions = ({
             </Col>
           </Row>
         ) : (
-          <Row justify="start">
+          <Row justify="center">
             <Empty
               image={Empty.PRESENTED_IMAGE_SIMPLE}
               description={
                 emptyDescription ||
                 intl.formatMessage({
-                  defaultMessage: 'There are no exclusions for this offender.',
-                  id: '4J6DZ4',
+                  defaultMessage: 'No exclusions added yet.',
+                  id: '8SBPZ4',
                 })
               }
-              style={{ marginLeft: 50 }}
+              // style={{ marginLeft: 50 }}
             />
           </Row>
         )}

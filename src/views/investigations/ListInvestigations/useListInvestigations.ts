@@ -1,34 +1,45 @@
 import type { MutationUpdaterFn } from '@apollo/client';
 import type {
   CreateInvestigationMutation,
-  ListInvestigationsQuery,
+  ListInvestigationsAllSchemesQuery,
 } from 'graphql/generated';
 import {
-  ListInvestigationsDocument,
-  useListInvestigationsQuery,
+  ListInvestigationsAllSchemesDocument,
+  useListInvestigationsAllSchemesQuery,
 } from 'graphql/generated';
 import { useState } from 'react';
 import { useStoreState } from 'state';
 
 interface Return {
-  data: ListInvestigationsQuery | undefined;
+  data: ListInvestigationsAllSchemesQuery | undefined;
   loading: boolean;
   addInvestigation: boolean;
   toggleAddInvestigation: () => void;
   updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
+  takeAllSchemes: boolean;
+  toggleTakeAllSchemes: () => void;
 }
 
 const useListInvestigations = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
+  const userSchemes = useStoreState((state) => state.user.schemes);
+  const userSchemeIds = userSchemes.map((el) => el.scheme.id);
   const [addInvestigation, setAddInvestigation] = useState(false);
-
-  const { data, loading } = useListInvestigationsQuery({
-    fetchPolicy: 'cache-and-network',
-    variables: {
-      scheme: {
-        id: schemeId,
+  const [takeAllSchemes, setTakeAllSchemes] = useState(true);
+  const variables = {
+    where: {
+      schemes: {
+        some: {
+          id: {
+            in: takeAllSchemes ? userSchemeIds : [schemeId],
+          },
+        },
       },
     },
+  };
+  const { data, loading } = useListInvestigationsAllSchemesQuery({
+    fetchPolicy: 'cache-and-network',
+    variables,
   });
 
   const toggleAddInvestigation = () => {
@@ -40,42 +51,37 @@ const useListInvestigations = (): Return => {
   > = (store, { data: res }) => {
     if (res === null || res === undefined) return;
 
-    const existingData = store.readQuery<ListInvestigationsQuery>({
-      query: ListInvestigationsDocument,
-      variables: {
-        scheme: {
-          id: schemeId,
-        },
-      },
+    const existingData = store.readQuery<ListInvestigationsAllSchemesQuery>({
+      query: ListInvestigationsAllSchemesDocument,
+      variables,
     });
 
     if (existingData === null) return;
 
-    store.writeQuery<ListInvestigationsQuery>({
-      query: ListInvestigationsDocument,
+    store.writeQuery<ListInvestigationsAllSchemesQuery>({
+      query: ListInvestigationsAllSchemesDocument,
       data: {
-        listInvestigations: {
-          ...existingData.listInvestigations,
+        listInvestigationsAllSchemes: {
+          ...existingData.listInvestigationsAllSchemes,
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           investigations:
-            existingData?.listInvestigations?.investigations &&
-            existingData.listInvestigations.investigations.length > 0
+            existingData?.listInvestigationsAllSchemes?.investigations &&
+            existingData.listInvestigationsAllSchemes.investigations.length > 0
               ? [
                   // eslint-disable-next-line no-unsafe-optional-chaining
-                  ...existingData?.listInvestigations?.investigations,
+                  ...existingData?.listInvestigationsAllSchemes?.investigations,
                   res?.createInvestigation || [],
                 ]
               : [res.createInvestigation],
         },
         __typename: 'Query',
       },
-      variables: {
-        scheme: {
-          id: schemeId,
-        },
-      },
+      variables,
     });
+  };
+  const toggleTakeAllSchemes = () => {
+    setTakeAllSchemes(!takeAllSchemes);
   };
   return {
     data,
@@ -83,6 +89,8 @@ const useListInvestigations = (): Return => {
     addInvestigation,
     toggleAddInvestigation,
     updateInvestigationList,
+    takeAllSchemes,
+    toggleTakeAllSchemes,
   };
 };
 
