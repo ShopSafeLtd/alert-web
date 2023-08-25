@@ -1,10 +1,10 @@
 import React from 'react';
 import type { UploadFile } from 'antd';
 import {
-  Empty,
   Button,
   Card,
   Col,
+  Empty,
   Form,
   Popconfirm,
   Row,
@@ -34,7 +34,7 @@ interface Props {
   onEditImage: (value: Image) => void;
   setPrimaryImage: (value: string) => void;
   documentList: UploadFile[];
-  documentUploadProps: UploadProps;
+  documentUploadProps?: UploadProps;
 }
 
 const OffenderImage = ({
