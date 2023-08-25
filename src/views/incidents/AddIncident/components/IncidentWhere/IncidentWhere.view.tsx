@@ -18,6 +18,7 @@ interface Props {
   toggleAddNewAddress: () => void;
   newAddressData: LocationData | undefined;
   updateNewAddressData: (value: LocationData | undefined) => void;
+  hideField: boolean;
 }
 
 const IncidentWhere = ({
@@ -26,11 +27,14 @@ const IncidentWhere = ({
   onSearchBusiness,
   newAddressData,
   updateNewAddressData,
+  hideField,
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
 
-  return (
+  return hideField ? (
+    <div />
+  ) : (
     <Card className={classes.card}>
       <Row align="bottom" style={{ marginBottom: 20 }}>
         <Col>
