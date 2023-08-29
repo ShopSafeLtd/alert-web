@@ -8,6 +8,7 @@ interface Props {
   onClose: () => void;
   update: (value: VehicleData) => void;
   vehicleIds: string[] | undefined;
+  takeAllSchemes?: boolean;
 }
 
 interface Return {
@@ -34,7 +35,15 @@ interface Return {
   };
 }
 
-const useLinkVehicle = ({ onClose, update, vehicleIds }: Props): Return => {
+const useLinkVehicle = ({
+  onClose,
+  update,
+  vehicleIds,
+  takeAllSchemes,
+}: Props): Return => {
+  const userSchemeIds = useStoreState((state) => state.user.schemes).map(
+    (el) => el.scheme.id
+  );
   const [saving, setSaving] = useState(false);
   const [currentId, setCurrentId] = useState<string | undefined>(undefined);
 
@@ -70,7 +79,7 @@ const useLinkVehicle = ({ onClose, update, vehicleIds }: Props): Return => {
         schemes: {
           some: {
             id: {
-              equals: schemeId,
+              in: takeAllSchemes ? userSchemeIds : [schemeId],
             },
           },
         },

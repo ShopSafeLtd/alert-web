@@ -8,7 +8,7 @@ import {
   useListInvestigationsAllSchemesQuery,
 } from 'graphql/generated';
 import { useState } from 'react';
-import { useStoreState } from 'state';
+import { useStoreActions, useStoreState } from 'state';
 
 interface Return {
   data: ListInvestigationsAllSchemesQuery | undefined;
@@ -23,9 +23,15 @@ interface Return {
 const useListInvestigations = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const userSchemes = useStoreState((state) => state.user.schemes);
+  const setInvestigationAllSchemes = useStoreActions(
+    (actions) => actions.user.setInvestigationAllSchemes
+  );
+  const investigationAllSchemes = useStoreState(
+    (state) => state.user.investigationAllSchemes
+  );
   const userSchemeIds = userSchemes.map((el) => el.scheme.id);
   const [addInvestigation, setAddInvestigation] = useState(false);
-  const [takeAllSchemes, setTakeAllSchemes] = useState(true);
+  const [takeAllSchemes, setTakeAllSchemes] = useState(investigationAllSchemes);
   const variables = {
     where: {
       schemes: {
@@ -81,8 +87,12 @@ const useListInvestigations = (): Return => {
     });
   };
   const toggleTakeAllSchemes = () => {
+    setInvestigationAllSchemes({ investigationAllSchemes: !takeAllSchemes });
     setTakeAllSchemes(!takeAllSchemes);
   };
+  console.log('takeAllSchemes', takeAllSchemes);
+  console.log('investigationAllSchemes', investigationAllSchemes);
+
   return {
     data,
     loading,

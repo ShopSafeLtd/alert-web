@@ -21,6 +21,7 @@ export type Scalars = {
   Float: number;
   DateTime: Date;
   Json: any;
+  /** The `Upload` scalar type represents a file upload. */
   Upload: any;
 };
 
@@ -37067,11 +37068,13 @@ export type Query = {
   listGoodsTypes: ListGoodsTypes;
   listIncidentTags: Array<IncidentTags>;
   listIncidents?: Maybe<ListIncidents>;
+  listIncidentsAllSchemes?: Maybe<ListIncidents>;
   listInvestigations?: Maybe<ListInvestigations>;
   listInvestigationsAllSchemes?: Maybe<ListInvestigations>;
   listLoginEvents?: Maybe<ListLoginEvents>;
   listNotifications: ListNotifications;
   listOffenders?: Maybe<ListOffenders>;
+  listOffendersAllSchemes?: Maybe<ListOffenders>;
   listRekMatches: ListRekMatches;
   listTags: ListTags;
   listTodos: ListTodos;
@@ -37389,6 +37392,14 @@ export type QueryListIncidentsArgs = {
   where?: InputMaybe<IncidentWhereInput>;
 };
 
+export type QueryListIncidentsAllSchemesArgs = {
+  after?: InputMaybe<IncidentWhereUniqueInput>;
+  order?: InputMaybe<IncidentOrderByWithRelationInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<IncidentWhereInput>;
+};
+
 export type QueryListInvestigationsArgs = {
   order?: InputMaybe<InvestigationOrderByWithRelationInput>;
   scheme: SchemeWhereUniqueInput;
@@ -37422,6 +37433,14 @@ export type QueryListOffendersArgs = {
   after?: InputMaybe<OffenderWhereUniqueInput>;
   order?: InputMaybe<OffenderOrderByWithRelationInput>;
   scheme: SchemeWhereUniqueInput;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<OffenderWhereInput>;
+};
+
+export type QueryListOffendersAllSchemesArgs = {
+  after?: InputMaybe<OffenderWhereUniqueInput>;
+  order?: InputMaybe<OffenderOrderByWithRelationInput>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<OffenderWhereInput>;
@@ -71487,6 +71506,65 @@ export type IncidentFeedQuery = {
   } | null> | null;
 };
 
+export type ListIncidentsAllSchemesQueryVariables = Exact<{
+  where?: InputMaybe<IncidentWhereInput>;
+  order?: InputMaybe<IncidentOrderByWithRelationInput>;
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type ListIncidentsAllSchemesQuery = {
+  __typename?: 'Query';
+  listIncidentsAllSchemes?: {
+    __typename?: 'ListIncidents';
+    total: number;
+    incidents: Array<{
+      __typename?: 'Incident';
+      id: string;
+      subject?: string | null;
+      totalImages?: number | null;
+      description: string;
+      dayTime?: string | null;
+      reference?: number | null;
+      policeRef?: string | null;
+      approved?: boolean | null;
+      crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+      business?: { __typename?: 'Business'; id: string; name: string } | null;
+      location?: {
+        __typename?: 'Address';
+        id: string;
+        full?: string | null;
+      } | null;
+      createdBy: {
+        __typename?: 'User';
+        id: string;
+        fullName: string;
+        businesses: Array<{
+          __typename?: 'Business';
+          id: string;
+          name: string;
+        }>;
+      };
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimised?: string | null;
+        position: ImagePosition;
+        rotation: number;
+        primary?: boolean | null;
+        policeImage?: boolean | null;
+        low?: string | null;
+      }>;
+      groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+      offenders: Array<{
+        __typename?: 'Offender';
+        id: string;
+        name?: string | null;
+      }>;
+    }>;
+  } | null;
+};
+
 export type ListIncidentsFlowQueryVariables = Exact<{
   where?: InputMaybe<IncidentWhereInput>;
 }>;
@@ -73880,6 +73958,93 @@ export type ViewOffendersCompareQuery = {
   }>;
 };
 
+export type ListOffendersAllSchemesQueryVariables = Exact<{
+  where?: InputMaybe<OffenderWhereInput>;
+  order?: InputMaybe<OffenderOrderByWithRelationInput>;
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type ListOffendersAllSchemesQuery = {
+  __typename?: 'Query';
+  listOffendersAllSchemes?: {
+    __typename?: 'ListOffenders';
+    total: number;
+    offenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      reference?: number | null;
+      totalImages?: number | null;
+      createdAt: Date;
+      updatedAt: Date;
+      totalIncidents?: number | null;
+      age?: Age | null;
+      build?: Build | null;
+      height?: Height | null;
+      dateOfBirth?: Date | null;
+      dateSource?: string | null;
+      hair?: string | null;
+      gender?: Gender | null;
+      name?: string | null;
+      race?: Race | null;
+      peculiarities?: string | null;
+      approved?: boolean | null;
+      active?: boolean | null;
+      lastActive?: {
+        __typename?: 'Incident';
+        id: string;
+        dayTime?: string | null;
+      } | null;
+      tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimised?: string | null;
+        position: ImagePosition;
+        rotation: number;
+        primary?: boolean | null;
+        policeImage?: boolean | null;
+        optimisedPersisted?: string | null;
+      }>;
+      groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+      createdBy: {
+        __typename?: 'User';
+        id: string;
+        fullName: string;
+        businesses: Array<{
+          __typename?: 'Business';
+          id: string;
+          name: string;
+        }>;
+      };
+      incidents: Array<{
+        __typename?: 'Incident';
+        id: string;
+        reference?: number | null;
+        subject?: string | null;
+        description: string;
+        dayTime?: string | null;
+        date: Date;
+        location?: {
+          __typename?: 'Address';
+          id: string;
+          full?: string | null;
+        } | null;
+        createdBy: {
+          __typename?: 'User';
+          id: string;
+          fullName: string;
+          businesses: Array<{
+            __typename?: 'Business';
+            id: string;
+            name: string;
+          }>;
+        };
+      }>;
+    }>;
+  } | null;
+};
+
 export type ListOffendersQueryVariables = Exact<{
   scheme: SchemeWhereUniqueInput;
   where?: InputMaybe<OffenderWhereInput>;
@@ -76186,19 +76351,6 @@ export type TranslateQuery = {
     __typename?: 'TranslatedText';
     origText: string;
     translatedText: string;
-  }>;
-};
-
-export type TranslateTextQueryVariables = Exact<{
-  data: TranslateTextInput;
-}>;
-
-export type TranslateTextQuery = {
-  __typename?: 'Query';
-  translateText: Array<{
-    __typename?: 'TranslatedText';
-    translatedText: string;
-    origText: string;
   }>;
 };
 
@@ -84784,6 +84936,104 @@ export type IncidentFeedQueryResult = Apollo.QueryResult<
   IncidentFeedQuery,
   IncidentFeedQueryVariables
 >;
+export const ListIncidentsAllSchemesDocument = gql`
+  query listIncidentsAllSchemes(
+    $where: IncidentWhereInput
+    $order: IncidentOrderByWithRelationInput
+    $take: Int
+    $skip: Int
+  ) {
+    listIncidentsAllSchemes(
+      where: $where
+      order: $order
+      take: $take
+      skip: $skip
+    ) {
+      incidents {
+        id
+        subject
+        totalImages
+        description
+        dayTime
+        reference
+        policeRef
+        crimeTypes {
+          id
+          name
+        }
+        approved
+        business {
+          id
+          name
+        }
+        location {
+          id
+          full
+        }
+        createdBy {
+          id
+          fullName
+          businesses {
+            id
+            name
+          }
+        }
+        images {
+          id
+          optimised
+          position
+          rotation
+          primary
+          policeImage
+          low
+        }
+        groups {
+          id
+          name
+        }
+        offenders {
+          id
+          name
+        }
+      }
+      total
+    }
+  }
+`;
+export function useListIncidentsAllSchemesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    ListIncidentsAllSchemesQuery,
+    ListIncidentsAllSchemesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    ListIncidentsAllSchemesQuery,
+    ListIncidentsAllSchemesQueryVariables
+  >(ListIncidentsAllSchemesDocument, options);
+}
+export function useListIncidentsAllSchemesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListIncidentsAllSchemesQuery,
+    ListIncidentsAllSchemesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ListIncidentsAllSchemesQuery,
+    ListIncidentsAllSchemesQueryVariables
+  >(ListIncidentsAllSchemesDocument, options);
+}
+export type ListIncidentsAllSchemesQueryHookResult = ReturnType<
+  typeof useListIncidentsAllSchemesQuery
+>;
+export type ListIncidentsAllSchemesLazyQueryHookResult = ReturnType<
+  typeof useListIncidentsAllSchemesLazyQuery
+>;
+export type ListIncidentsAllSchemesQueryResult = Apollo.QueryResult<
+  ListIncidentsAllSchemesQuery,
+  ListIncidentsAllSchemesQueryVariables
+>;
 export const ListIncidentsFlowDocument = gql`
   query ListIncidentsFlow($where: IncidentWhereInput) {
     incidents(where: $where) {
@@ -88247,6 +88497,131 @@ export type ViewOffendersCompareLazyQueryHookResult = ReturnType<
 export type ViewOffendersCompareQueryResult = Apollo.QueryResult<
   ViewOffendersCompareQuery,
   ViewOffendersCompareQueryVariables
+>;
+export const ListOffendersAllSchemesDocument = gql`
+  query listOffendersAllSchemes(
+    $where: OffenderWhereInput
+    $order: OffenderOrderByWithRelationInput
+    $take: Int
+    $skip: Int
+  ) {
+    listOffendersAllSchemes(
+      where: $where
+      order: $order
+      take: $take
+      skip: $skip
+    ) {
+      offenders {
+        id
+        reference
+        totalImages
+        createdAt
+        updatedAt
+        totalIncidents
+        reference
+        age
+        build
+        height
+        dateOfBirth
+        dateSource
+        hair
+        gender
+        name
+        race
+        peculiarities
+        approved
+        active
+        lastActive {
+          id
+          dayTime
+        }
+        tags {
+          id
+          name
+        }
+        images {
+          id
+          optimised
+          position
+          rotation
+          primary
+          policeImage
+          optimisedPersisted
+        }
+        groups {
+          id
+          name
+        }
+        tags {
+          id
+          name
+        }
+        createdBy {
+          id
+          fullName
+          businesses {
+            id
+            name
+          }
+        }
+        incidents {
+          id
+          reference
+          subject
+          description
+          dayTime
+          date
+          location {
+            id
+            full
+          }
+          createdBy {
+            id
+            fullName
+            businesses {
+              id
+              name
+            }
+          }
+        }
+      }
+      total
+    }
+  }
+`;
+export function useListOffendersAllSchemesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    ListOffendersAllSchemesQuery,
+    ListOffendersAllSchemesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    ListOffendersAllSchemesQuery,
+    ListOffendersAllSchemesQueryVariables
+  >(ListOffendersAllSchemesDocument, options);
+}
+export function useListOffendersAllSchemesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListOffendersAllSchemesQuery,
+    ListOffendersAllSchemesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ListOffendersAllSchemesQuery,
+    ListOffendersAllSchemesQueryVariables
+  >(ListOffendersAllSchemesDocument, options);
+}
+export type ListOffendersAllSchemesQueryHookResult = ReturnType<
+  typeof useListOffendersAllSchemesQuery
+>;
+export type ListOffendersAllSchemesLazyQueryHookResult = ReturnType<
+  typeof useListOffendersAllSchemesLazyQuery
+>;
+export type ListOffendersAllSchemesQueryResult = Apollo.QueryResult<
+  ListOffendersAllSchemesQuery,
+  ListOffendersAllSchemesQueryVariables
 >;
 export const ListOffendersDocument = gql`
   query listOffenders(
@@ -91793,48 +92168,6 @@ export type TranslateLazyQueryHookResult = ReturnType<
 export type TranslateQueryResult = Apollo.QueryResult<
   TranslateQuery,
   TranslateQueryVariables
->;
-export const TranslateTextDocument = gql`
-  query TranslateText($data: TranslateTextInput!) {
-    translateText(data: $data) {
-      translatedText
-      origText
-    }
-  }
-`;
-export function useTranslateTextQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    TranslateTextQuery,
-    TranslateTextQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<TranslateTextQuery, TranslateTextQueryVariables>(
-    TranslateTextDocument,
-    options
-  );
-}
-export function useTranslateTextLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    TranslateTextQuery,
-    TranslateTextQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<TranslateTextQuery, TranslateTextQueryVariables>(
-    TranslateTextDocument,
-    options
-  );
-}
-export type TranslateTextQueryHookResult = ReturnType<
-  typeof useTranslateTextQuery
->;
-export type TranslateTextLazyQueryHookResult = ReturnType<
-  typeof useTranslateTextLazyQuery
->;
-export type TranslateTextQueryResult = Apollo.QueryResult<
-  TranslateTextQuery,
-  TranslateTextQueryVariables
 >;
 export const CreateUpdateOnCrimeGroupDocument = gql`
   mutation CreateUpdateOnCrimeGroup(

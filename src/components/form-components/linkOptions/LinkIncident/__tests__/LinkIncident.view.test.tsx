@@ -6,7 +6,7 @@ import LinkIncident from '../LinkIncident.view';
 
 describe('Detail Officer View', () => {
   const data = {
-    listIncidents: {
+    listIncidentsAllSchemes: {
       total: 1,
       incidents: [
         {
