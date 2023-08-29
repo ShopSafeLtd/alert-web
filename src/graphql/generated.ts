@@ -37013,6 +37013,7 @@ export type PerformanceReport = {
 
 export enum PoliceResponseTime {
   NoResponse = 'NO_RESPONSE',
+  Over_24Hours = 'OVER_24_HOURS',
   Within_1Hour = 'WITHIN_1_HOUR',
   Within_3Hours = 'WITHIN_3_HOURS',
   Within_12Hours = 'WITHIN_12_HOURS',
