@@ -42,7 +42,6 @@ import {
   faEdit,
   faHeadSide,
   faImage,
-  faLanguage,
   faMagnifyingGlass,
   faMarsAndVenus,
   faPassport,
@@ -108,6 +107,7 @@ import EditVehicleSimple from 'components/form-components/Vehicle/EditVehicleSim
 import CopyOffender from 'components/form-components/offender/CopyOffender';
 import useStyles from './ViewOffender.styles';
 import type { ViewAssociate } from './useViewOffender';
+import TranslateButton from '../../../../components/util-components/TranslateButton';
 
 const { Title, Text, Paragraph } = Typography;
 interface TableItem {
@@ -224,9 +224,6 @@ interface Props {
   onReject: () => void;
   onApprove: () => void;
   approving: boolean;
-  translateText: () => Promise<void>;
-  isTranslated: string | null;
-  languageCount: number;
 }
 
 const ViewOffender = ({
@@ -317,9 +314,6 @@ const ViewOffender = ({
   approving,
   onReject,
   onApprove,
-  translateText,
-  isTranslated,
-  languageCount,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const classes = useStyles();
@@ -988,27 +982,30 @@ const ViewOffender = ({
                                       </span>
                                     }
                                   >
-                                    {isTranslated ??
-                                      data?.offender?.peculiarities}
-                                    {languageCount > 1 && (
-                                      <Tooltip
-                                        title={intl.formatMessage({
-                                          defaultMessage: 'Translate',
-                                          id: 'wCy/Tc',
-                                        })}
-                                      >
-                                        <FontAwesomeIcon
-                                          icon={faLanguage}
-                                          color="lightblue"
-                                          // eslint-disable-next-line no-void
-                                          onClick={() => void translateText()}
-                                          style={{
-                                            marginLeft: '10px',
-                                            cursor: 'pointer',
-                                          }}
-                                        />
-                                      </Tooltip>
-                                    )}
+                                    <TranslateButton
+                                      text={data?.offender?.peculiarities || ''}
+                                    />
+                                    {/* {isTranslated ?? */}
+                                    {/*   data?.offender?.peculiarities} */}
+                                    {/* {languageCount > 1 && ( */}
+                                    {/*   <Tooltip */}
+                                    {/*     title={intl.formatMessage({ */}
+                                    {/*       defaultMessage: 'Translate', */}
+                                    {/*       id: 'wCy/Tc', */}
+                                    {/*     })} */}
+                                    {/*   > */}
+                                    {/*     <FontAwesomeIcon */}
+                                    {/*       icon={faLanguage} */}
+                                    {/*       color="lightblue" */}
+                                    {/*       // eslint-disable-next-line no-void */}
+                                    {/*       onClick={() => void translateText()} */}
+                                    {/*       style={{ */}
+                                    {/*         marginLeft: '10px', */}
+                                    {/*         cursor: 'pointer', */}
+                                    {/*       }} */}
+                                    {/*     /> */}
+                                    {/*   </Tooltip> */}
+                                    {/* )} */}
                                   </Descriptions.Item>
                                 )}
                               </Descriptions>
