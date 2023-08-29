@@ -8117,6 +8117,9 @@ export type CreateOffenderVehicles = {
 };
 
 export type CreateQuestionInput = {
+  dependentAnswer?: InputMaybe<Scalars['String']>;
+  dependentOnQId?: InputMaybe<Scalars['String']>;
+  dependentOnTagQId?: InputMaybe<Scalars['String']>;
   model?: InputMaybe<QuestionModel>;
   options?: InputMaybe<Array<Scalars['String']>>;
   question: Scalars['String'];
