@@ -75,7 +75,7 @@ const userDetail = ({
   userRole,
   toggleEditPassword,
   editPassword,
-}: Props): React.JSX.Element => {
+}: Props) => {
   const intl = useIntl();
   const classes = useStyles();
   const navigate = useNavigate();
