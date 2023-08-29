@@ -57,7 +57,7 @@ export interface Scheme {
     userTodos?: number | null | undefined;
     userNotifications?: number | null | undefined;
     customTranslations?: Translations[];
-
+    languageCount: number;
     logo?:
       | {
           optimisedPersisted?: string | null | undefined;
@@ -74,6 +74,7 @@ export interface Scheme {
     facialRecognition: boolean;
     taskTimeTracking: boolean;
     imagesRequiredOnOffenders: boolean;
+    autoPopulateDescription: boolean;
   };
 }
 

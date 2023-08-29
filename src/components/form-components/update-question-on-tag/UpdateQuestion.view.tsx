@@ -8,6 +8,7 @@ import {
   DatePicker,
   Form,
   Input,
+  InputNumber,
   Radio,
   Row,
   Select,
@@ -65,6 +66,9 @@ const UpdateQuestionView = ({
       case AnswerType.Date: {
         return <DatePicker />;
       }
+      case AnswerType.Time: {
+        return <DatePicker.TimePicker />;
+      }
       case AnswerType.Select: {
         return (
           <Select
@@ -74,6 +78,9 @@ const UpdateQuestionView = ({
             }))}
           />
         );
+      }
+      case AnswerType.Number: {
+        return <InputNumber />;
       }
       default: {
         return <div />;

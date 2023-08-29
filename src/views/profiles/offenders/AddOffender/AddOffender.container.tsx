@@ -50,6 +50,8 @@ const AddOffender = (): JSX.Element => {
     addCustomGallery,
     toggleAddCustomGallery,
     updateNewCustomGalleryData,
+    documentList,
+    documentUploadProps,
   } = useAddOffender();
 
   return (
@@ -100,6 +102,8 @@ const AddOffender = (): JSX.Element => {
         addCustomGallery={addCustomGallery}
         toggleAddCustomGallery={toggleAddCustomGallery}
         updateNewCustomGalleryData={updateNewCustomGalleryData}
+        documentList={documentList}
+        documentUploadProps={documentUploadProps}
       />
     </div>
   );

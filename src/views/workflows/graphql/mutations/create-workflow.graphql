@@ -1,0 +1,13 @@
+mutation CreateOneWorkflow($data: WorkflowCreateInput!) {
+  createOneWorkflow(data: $data) {
+    id
+    name
+    trigger
+    triggerModels
+    actions {
+      type
+      outputModel
+      timesRun
+    }
+  }
+}

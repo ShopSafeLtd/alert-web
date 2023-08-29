@@ -23,6 +23,7 @@ describe('List Officer View', () => {
               autoApproveOffenders: false,
               restrictIncidentAccess: false,
               defaultPublicOffenderDOB: false,
+              autoPopulateDescription: false,
               members: [
                 {
                   id: 'id',
@@ -33,6 +34,7 @@ describe('List Officer View', () => {
               imagesRequiredOnOffenders: false,
               goodsMode: GoodsMode.Generic,
               taskTimeTracking: false,
+              languageCount: 0,
             },
           ],
         },

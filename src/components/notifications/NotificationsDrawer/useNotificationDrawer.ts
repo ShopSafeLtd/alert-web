@@ -48,6 +48,8 @@ interface Scheme {
   defaultPublicOffenderDOB: boolean;
   userTodos?: number | null | undefined;
   userNotifications?: number | null | undefined;
+  languageCount: number;
+  autoPopulateDescription: boolean;
   logo?:
     | {
         optimisedPersisted?: string | null | undefined;
@@ -316,6 +318,9 @@ const useNotificationLists = (): Return => {
     );
 
     setScheme({
+      autoPopulateDescription: scheme.autoPopulateDescription,
+
+      languageCount: scheme.languageCount,
       autoApproveIncidents: scheme.autoApproveIncidents,
       autoApproveOffenders: scheme.autoApproveOffenders,
       defaultPublicOffenderDOB: scheme.defaultPublicOffenderDOB,

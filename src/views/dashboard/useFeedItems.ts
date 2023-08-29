@@ -56,6 +56,7 @@ interface Return {
   createdAtFilter: DateType | undefined;
   setCreatedAtFilter: (value: DateType | undefined) => void;
   fetchMoreScroll: () => void;
+  restrictIncidentAccess: boolean;
 }
 
 const useFeedItems = (): Return => {
@@ -65,6 +66,9 @@ const useFeedItems = (): Return => {
   // Global State
   const schemeId = useStoreState((state) => state.scheme.id);
   const { role, id: userId } = useStoreState((state) => state.user);
+  const restrictIncidentAccess =
+    useStoreState((state) => state.scheme.restrictIncidentAccess) &&
+    role === Role.User;
   const pagination = useStoreState((state) => state.data.feedItems.pagination);
   const variables = useStoreState((state) => state.data.feedItems.variables);
   const order = useStoreState((state) => state.data.feedItems.order);
@@ -482,6 +486,7 @@ const useFeedItems = (): Return => {
     setCreatedAtFilter,
     createdAtFilter,
     fetchMoreScroll,
+    restrictIncidentAccess,
   };
 };
 

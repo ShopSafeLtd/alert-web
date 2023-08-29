@@ -2,23 +2,27 @@ import React from 'react';
 import { Button, Col, Drawer, Row, Table, Typography } from 'antd';
 import type {
   CreateInvestigationMutation,
-  ListInvestigationsQuery,
+  ListInvestigationsAllSchemesQuery,
 } from 'graphql/generated';
 import { InvestigationStatus } from 'graphql/generated';
 import { Link } from 'react-router-dom';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import GetInvestigationStatusValues from 'types/enums/investigation-status';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faRotate } from '@fortawesome/pro-light-svg-icons';
 import useStyles from './ListInvestigations.styles';
 import AddInvestigation from '../../../components/form-components/Investigation/AddInvestigation';
 
 interface Props {
-  data: ListInvestigationsQuery | undefined;
+  data: ListInvestigationsAllSchemesQuery | undefined;
   loading: boolean;
   addInvestigation: boolean;
   toggleAddInvestigation: () => void;
   updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
+  takeAllSchemes: boolean;
+  toggleTakeAllSchemes: () => void;
 }
 const getTextStatus = (value: InvestigationStatus) => {
   if (value === InvestigationStatus.Open) return 'success';
@@ -32,13 +36,55 @@ const ListInvestigations = ({
   addInvestigation,
   toggleAddInvestigation,
   updateInvestigationList,
+  takeAllSchemes,
+  toggleTakeAllSchemes,
 }: Props) => {
   const classes = useStyles();
   const navigate = useNavigate();
+  const intl = useIntl();
 
   return (
     <div className={classes.page}>
       <Row className={classes.headerRow}>
+        <Col>
+          <Button type="primary" onClick={toggleAddInvestigation}>
+            <FormattedMessage
+              defaultMessage="Add New Investigation"
+              id="QaKS9A"
+            />
+          </Button>
+        </Col>
+        <Col flex={1} />
+        <Col>
+          <Button
+            type={takeAllSchemes ? 'text' : 'primary'}
+            onClick={toggleTakeAllSchemes}
+            // disabled={saving}
+          >
+            {intl.formatMessage({
+              defaultMessage: 'Current Scheme',
+              id: 'qWFImB',
+            })}
+          </Button>
+        </Col>
+        <Col>
+          <Button
+            type={takeAllSchemes ? 'primary' : 'text'}
+            onClick={toggleTakeAllSchemes}
+          >
+            {intl.formatMessage({
+              defaultMessage: 'All Schemes',
+              id: '4zN3gE',
+            })}
+          </Button>
+        </Col>
+        <Col style={{ marginLeft: 10 }}>
+          <Button
+            type="default"
+            onClick={toggleTakeAllSchemes}
+            icon={<FontAwesomeIcon icon={faRotate} size="10x" />}
+          />
+        </Col>
         {/*  <Col flex={1}> */}
         {/*    <Input */}
         {/*      value={search} */}
@@ -48,17 +94,9 @@ const ListInvestigations = ({
         {/*      placeholder="Search vehicles..." */}
         {/*    /> */}
         {/*  </Col> */}
-        <Col>
-          <Button type="primary" onClick={toggleAddInvestigation}>
-            <FormattedMessage
-              defaultMessage="Add New Investigation"
-              id="QaKS9A"
-            />
-          </Button>
-        </Col>
       </Row>
       <Table
-        dataSource={data?.listInvestigations?.investigations.map(
+        dataSource={data?.listInvestigationsAllSchemes?.investigations.map(
           (investigation) => ({
             key: investigation.id,
             name: investigation.name,
@@ -74,7 +112,7 @@ const ListInvestigations = ({
           showSizeChanger: true,
           // current: currentPage,
           // onChange: onPaginationChange,
-          total: data?.listInvestigations?.total || 0,
+          total: data?.listInvestigationsAllSchemes?.total || 0,
           showTotal: (total) => `Total Investigations: ${total}`,
         }}
         size="small"

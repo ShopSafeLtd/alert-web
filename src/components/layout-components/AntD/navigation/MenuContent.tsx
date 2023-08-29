@@ -333,8 +333,6 @@ const TopNavContent = (props: TopNavContentProps) => {
   };
   const navigationConfig = getNavigationConfig();
 
-  console.log('navigationConfig', navigationConfig);
-
   return (
     <Menu mode="horizontal" style={{ backgroundColor: topNavColor }}>
       {navigationConfig.map((menu) =>

@@ -29,6 +29,7 @@ interface FormData {
   defaultMessagePush: boolean;
   defaultOffenderEmail: boolean;
   defaultOffenderPush: boolean;
+  autoPopulateDescription: boolean;
   defaultPublicOffenderDOB: boolean;
   incidentRetention: number | null;
   offenderRetention: number | null;
@@ -153,6 +154,7 @@ const useSchemeDetail = (): Return => {
         },
         data: {
           name: { set: data.name },
+          autoPopulateDescription: { set: data.autoPopulateDescription },
           restrictIncidentAccess: { set: data.restrictIncidentAccess },
           autoApproveIncidents: { set: data.autoApproveOffenders },
           autoApproveOffenders: { set: data.autoApproveIncidents },

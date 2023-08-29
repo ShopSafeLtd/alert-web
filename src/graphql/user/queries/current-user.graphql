@@ -45,6 +45,8 @@ query currentUser($scheme: UniqueId) {
         facialRecognition
         imagesRequiredOnOffenders
         taskTimeTracking
+        languageCount
+        autoPopulateDescription
       }
     }
     incidentEmail

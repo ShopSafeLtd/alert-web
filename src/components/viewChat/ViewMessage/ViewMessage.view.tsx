@@ -633,31 +633,29 @@ const ViewMessages = ({
             </Upload>
           </Col>
 
-          {adminRights && (
-            <Col>
-              <div>
-                <Button
-                  onClick={toggleLinkOffender}
-                  disabled={
-                    saving ||
-                    (incidentsData && incidentsData.length > 0) ||
-                    (fileList && fileList.length > 0) ||
-                    (vehiclesData && vehiclesData.length > 0) ||
-                    (crimeGroupsData && crimeGroupsData.length > 0)
-                  }
-                  icon={
-                    <FontAwesomeIcon className="button-icon" icon={faUsers} />
-                  }
-                >
-                  {intl.formatMessage({
-                    defaultMessage: 'Offender',
-                    id: 'AN7Aru',
-                  })}
-                </Button>
-              </div>
-            </Col>
-          )}
-          {restrictIncidentAccess && (
+          <Col>
+            <div>
+              <Button
+                onClick={toggleLinkOffender}
+                disabled={
+                  saving ||
+                  (incidentsData && incidentsData.length > 0) ||
+                  (fileList && fileList.length > 0) ||
+                  (vehiclesData && vehiclesData.length > 0) ||
+                  (crimeGroupsData && crimeGroupsData.length > 0)
+                }
+                icon={
+                  <FontAwesomeIcon className="button-icon" icon={faUsers} />
+                }
+              >
+                {intl.formatMessage({
+                  defaultMessage: 'Offender',
+                  id: 'AN7Aru',
+                })}
+              </Button>
+            </div>
+          </Col>
+          {!restrictIncidentAccess && (
             <Col>
               <Button
                 onClick={toggleLinkIncident}

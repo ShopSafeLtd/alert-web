@@ -1,0 +1,15 @@
+query listInvestigationsAllSchemes(
+  $take: Int
+  $skip: Int
+  $where: InvestigationWhereInput
+) {
+  listInvestigationsAllSchemes(where: $where, take: $take, skip: $skip) {
+    total
+    investigations {
+      id
+      name
+      description
+      status
+    }
+  }
+}

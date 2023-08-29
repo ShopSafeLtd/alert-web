@@ -10,6 +10,7 @@ import type {
   UpdateIncidentVehiclesMutation,
   ViewIncidentQuery,
   ViewIncidentQueryVariables,
+  LanguageCode,
 } from 'graphql/generated';
 import {
   Role,
@@ -19,6 +20,7 @@ import {
   useDeleteUpdateMutation,
   useRecycleIncidentMutation,
   useSubscribeToIncidentMutation,
+  useTranslateLazyQuery,
   useUnsubscribeFromIncidentMutation,
   useUpdateIncidentGoodsMutation,
   useUpdateIncidentImagesMutation,
@@ -154,11 +156,16 @@ interface Return {
   updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
   hideIncident: boolean;
   userRole: Role;
+  translateText: () => Promise<void>;
+  isTranslated: string | null;
+  languageCount: number;
 }
 
 const useViewIncident = (incidentId: string): Return => {
   const intl = useIntl();
   const role = useStoreState((state) => state.user.role);
+  const { languageCount } = useStoreState((state) => state.scheme);
+
   const userId = useStoreState((state) => state.user.id);
   const {
     restrictIncidentAccess,
@@ -1554,6 +1561,33 @@ const useViewIncident = (incidentId: string): Return => {
     setAddDocument(() => !addDocument);
   };
 
+  const [isTranslated, setIsTranslated] = useState<string | null>(null);
+  const currentLanguage = useStoreState((state) => state.theme.locale);
+
+  const [translate] = useTranslateLazyQuery({
+    canonizeResults: true,
+    fetchPolicy: 'cache-first',
+    variables: {
+      data: {
+        text: [data?.incident?.description || ''],
+        targetLang: currentLanguage as LanguageCode,
+      },
+    },
+  });
+
+  const translateText = async () => {
+    if (isTranslated) {
+      setIsTranslated(null);
+      return;
+    }
+    const { data: newTranslation } = await translate();
+    setIsTranslated(
+      newTranslation?.translateText[0].translatedText ||
+        data?.incident?.description ||
+        ''
+    );
+  };
+
   return {
     addImages,
     addOffenderRights: role !== Role.User,
@@ -1635,6 +1669,9 @@ const useViewIncident = (incidentId: string): Return => {
     updateDeleteDocument,
     hideIncident: role === Role.User && restrictIncidentAccess,
     userRole: role,
+    translateText,
+    isTranslated,
+    languageCount,
   };
 };
 

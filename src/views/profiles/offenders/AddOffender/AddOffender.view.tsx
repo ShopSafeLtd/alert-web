@@ -80,6 +80,8 @@ interface Props {
   addCustomGallery: boolean;
   toggleAddCustomGallery: () => void;
   updateNewCustomGalleryData: (values: CustomGalleryData) => void;
+  documentList: UploadFile[];
+  documentUploadProps: UploadProps;
 }
 
 const AddOffender = ({
@@ -108,7 +110,6 @@ const AddOffender = ({
   bansData,
   updateExclusion,
   adminRights,
-
   form,
   vehiclesData,
   crimeGroupsData,
@@ -130,6 +131,8 @@ const AddOffender = ({
   addCustomGallery,
   toggleAddCustomGallery,
   updateNewCustomGalleryData,
+  documentList,
+  documentUploadProps,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return (
@@ -324,6 +327,8 @@ const AddOffender = ({
           onRemoveImage={onRemoveImage}
           primaryImage={primaryImage}
           setPrimaryImage={setPrimaryImage}
+          documentList={documentList}
+          documentUploadProps={documentUploadProps}
         />
         {groups.length > 1 && (
           <Card>

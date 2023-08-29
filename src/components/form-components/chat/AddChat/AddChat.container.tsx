@@ -10,13 +10,14 @@ interface Props {
 }
 
 const AddChat = ({ onClose, update }: Props): JSX.Element => {
-  const { onSubmit, usersData, usersLoading, saving } = useAddChat({
+  const { onSubmit, usersData, usersLoading, saving, form } = useAddChat({
     onClose,
     update,
   });
 
   return (
     <View
+      form={form}
       onSubmit={onSubmit}
       onClose={onClose}
       usersData={usersData}
