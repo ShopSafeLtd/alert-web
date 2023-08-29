@@ -27,16 +27,15 @@ const ScreenSizeUnsupported: React.FC<Props> = ({ children }: Props) => {
       />
       <Typography.Title level={3} className="title-text">
         {intl.formatMessage({
-          defaultMessage:
-            'We no longer support this screen size on the web version of Alert!',
-          id: 'TWIGMk',
+          defaultMessage: 'Download our mobile app',
+          id: 'cQjk4e',
         })}
       </Typography.Title>
       <Typography.Text type="secondary" className="subtitle-text">
         {intl.formatMessage({
           defaultMessage:
-            'Please download our app to experience all the familiar features, with better performance!',
-          id: '3yzV/I',
+            'The app gives you a better experience on your mobile than the website.',
+          id: 'R3DQxN',
         })}
       </Typography.Text>
       <a href="https://play.google.com/store/apps/details?id=co.uk.shopsafealert.app&gl=GB&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1">

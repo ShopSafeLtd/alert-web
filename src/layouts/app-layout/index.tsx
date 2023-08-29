@@ -17,6 +17,7 @@ import {
   SIDE_NAV_COLLAPSED_WIDTH,
   SIDE_NAV_WIDTH,
 } from '../../constants/ThemeConstant';
+import ScreenSizeUnsupported from '../../components/layout-components/ScreenSizeUnsuported';
 
 const { Content } = Layout;
 const { useBreakpoint } = Grid;
@@ -56,41 +57,43 @@ export const AppLayout = ({ location }: Props): JSX.Element => {
   }
 
   return loggedIn || (isAuthenticated && !isLoading) ? (
-    <Layout>
-      {/* <HeaderNav isMobile={isMobile} /> */}
-      {isNavTop && !isMobile ? <TopNav routeInfo={currentRouteInfo} /> : null}
-      <Layout className="app-container">
-        {isNavSide && !isMobile && onboarded ? (
-          <SideNav routeInfo={currentRouteInfo} />
-        ) : null}
-        <Layout
-          className=""
-          style={{
-            paddingLeft: location.pathname.includes('onboarding')
-              ? 0
-              : getLayoutGutter(),
-          }}
-        >
-          <div
-            className={`app-content ${isNavTop ? 'layout-top-nav' : ''}`}
+    <ScreenSizeUnsupported>
+      <Layout>
+        {/* <HeaderNav isMobile={isMobile} /> */}
+        {isNavTop && !isMobile ? <TopNav routeInfo={currentRouteInfo} /> : null}
+        <Layout className="app-container">
+          {isNavSide && !isMobile && onboarded ? (
+            <SideNav routeInfo={currentRouteInfo} />
+          ) : null}
+          <Layout
+            className=""
             style={{
-              padding:
-                location.pathname.includes('settings') ||
-                location.pathname.includes('onboarding')
-                  ? 0
-                  : undefined,
+              paddingLeft: location.pathname.includes('onboarding')
+                ? 0
+                : getLayoutGutter(),
             }}
           >
-            {/* <PageHeader display={currentRouteInfo?.breadcrumb} title={currentRouteInfo?.title} /> */}
-            <Content>
-              <AppViews />
-            </Content>
-          </div>
-          {/* <Footer /> */}
+            <div
+              className={`app-content ${isNavTop ? 'layout-top-nav' : ''}`}
+              style={{
+                padding:
+                  location.pathname.includes('settings') ||
+                  location.pathname.includes('onboarding')
+                    ? 0
+                    : undefined,
+              }}
+            >
+              {/* <PageHeader display={currentRouteInfo?.breadcrumb} title={currentRouteInfo?.title} /> */}
+              <Content>
+                <AppViews />
+              </Content>
+            </div>
+            {/* <Footer /> */}
+          </Layout>
         </Layout>
+        {isMobile && <MobileNav routeInfo={currentRouteInfo} />}
       </Layout>
-      {isMobile && <MobileNav routeInfo={currentRouteInfo} />}
-    </Layout>
+    </ScreenSizeUnsupported>
   ) : (
     <Navigate to="/auth" />
   );

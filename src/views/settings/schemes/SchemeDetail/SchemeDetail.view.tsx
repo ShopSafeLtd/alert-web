@@ -1,5 +1,5 @@
 import React from 'react';
-import type { SchemeQuery, ListSchemeTagsQuery } from 'graphql/generated';
+import type { ListSchemeTagsQuery, SchemeQuery } from 'graphql/generated';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import {
   Button,
@@ -50,6 +50,7 @@ interface FormData {
   defaultOffenderEmail: boolean;
   defaultOffenderPush: boolean;
   defaultPublicOffenderDOB: boolean;
+  autoPopulateDescription: boolean;
   incidentRetention: number | null;
   offenderRetention: number | null;
   logo?: { id: string; url: string; optimised: string };
@@ -105,6 +106,7 @@ const SchemeDetail = ({
             offenderRetention: data?.scheme?.offenderRetention,
             defaultIncidentEmail: data?.scheme?.defaultIncidentEmail,
             defaultIncidentPush: data?.scheme?.defaultIncidentPush,
+            autoPopulateDescription: data?.scheme?.autoPopulateDescription,
             defaultSubscribedIncidentOnly:
               data?.scheme?.defaultSubscribedIncidentOnly,
             defaultSubscribedOffenderOnly:
@@ -568,6 +570,21 @@ const SchemeDetail = ({
                     id: 'FnEGyH',
                   })}
                   name="restrictIncidentAccess"
+                  valuePropName="checked"
+                  style={{ marginBottom: 0 }}
+                >
+                  <Switch
+                    disabled={saving}
+                    style={{ marginLeft: 5 }}
+                    className="scheme-detail-switch"
+                  />
+                </Form.Item>
+                <Form.Item
+                  label={intl.formatMessage({
+                    defaultMessage: 'Auto populate description',
+                    id: '3BrT8L',
+                  })}
+                  name="autoPopulateDescription"
                   valuePropName="checked"
                   style={{ marginBottom: 0 }}
                 >

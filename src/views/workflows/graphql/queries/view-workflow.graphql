@@ -1,0 +1,10 @@
+query ViewWorkflow($where: WorkflowWhereUniqueInput!) {
+  workflow(where: $where) {
+    name
+    conditions
+    actions {
+      data
+      id
+    }
+  }
+}

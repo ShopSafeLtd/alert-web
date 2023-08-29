@@ -26,7 +26,7 @@ export interface FormData {
   newOptions: string[];
   required: boolean;
   dependentOn: string;
-  dependentAnswer: string;
+  dependentAnswer: string | number;
 }
 
 const { useForm } = Form;
@@ -153,14 +153,21 @@ const useUpdateQuestion = ({
     const dependentOnTag = tagQuestions.find(
       (tagQ) => tagQ.tagQuestionId === values.dependentOn
     );
+    let answerString: string | undefined;
+    if (dependentOnTag) {
+      answerString =
+        typeof values.dependentAnswer === 'number'
+          ? values.dependentAnswer.toString()
+          : values.dependentAnswer.toLowerCase();
+    }
     updateQuestionOnTag(
       values.newQuestion,
       questionId,
-      dependentOnTag
+      dependentOnTag && answerString
         ? {
             tagQuestionId: dependentOnTag?.tagQuestionId,
             questionId: dependentOnTag?.questionId,
-            answer: values.dependentAnswer,
+            answer: answerString,
           }
         : undefined
     );
@@ -173,7 +180,7 @@ const useUpdateQuestion = ({
           origOptions: data.origOptions,
           origQuestion: data.origQuestion,
           questionId,
-          dependentAnswer: values.dependentAnswer ?? undefined,
+          dependentAnswer: answerString ?? undefined,
           dependentOnQId: dependentOnTag?.questionId,
           dependentOnTagQId: values.dependentOn ?? undefined,
           tag: {

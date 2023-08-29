@@ -5,8 +5,8 @@ import type {
   CreateDocumentMutation,
   CreateTodoMutation,
   DeleteDocumentMutation,
-  ViewIncidentQuery,
   Role,
+  ViewIncidentQuery,
 } from 'graphql/generated';
 import { GoodsMode, UpdateType } from 'graphql/generated';
 import {
@@ -39,6 +39,7 @@ import {
   faClock,
   faEdit,
   faImage,
+  faLanguage,
   faMagnifyingGlass,
   faPage,
   faPenToSquare,
@@ -207,6 +208,9 @@ interface Props {
   updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
   updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
   hideIncident: boolean;
+  translateText: () => Promise<void>;
+  isTranslated: string | null;
+  languageCount: number;
 }
 
 const ViewIncident = ({
@@ -292,6 +296,9 @@ const ViewIncident = ({
   updateDeleteDocument,
   hideIncident,
   userRole,
+  translateText,
+  isTranslated,
+  languageCount,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
@@ -694,7 +701,26 @@ const ViewIncident = ({
                             )}
                           </Text>
                           <Paragraph type="secondary" style={{ marginTop: 10 }}>
-                            {data?.incident?.description}
+                            {isTranslated ?? data?.incident?.description}
+                            {languageCount > 1 && (
+                              <Tooltip
+                                title={intl.formatMessage({
+                                  defaultMessage: 'Translate',
+                                  id: 'wCy/Tc',
+                                })}
+                              >
+                                <FontAwesomeIcon
+                                  icon={faLanguage}
+                                  color="lightblue"
+                                  // eslint-disable-next-line no-void
+                                  onClick={() => void translateText()}
+                                  style={{
+                                    marginLeft: '10px',
+                                    cursor: 'pointer',
+                                  }}
+                                />
+                              </Tooltip>
+                            )}
                           </Paragraph>
 
                           <Descriptions column={1} className={classes.desc}>

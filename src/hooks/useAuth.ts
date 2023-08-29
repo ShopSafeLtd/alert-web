@@ -68,6 +68,8 @@ const useAuth = (): Return => {
       window.localStorage.setItem('currentScheme', schemeDetails?.id || '');
       setRole({ role: schemes[0]?.role });
       setScheme({
+        autoPopulateDescription: schemeDetails.autoPopulateDescription,
+
         autoApproveIncidents: schemeDetails?.autoApproveIncidents,
         autoApproveOffenders: schemeDetails?.autoApproveOffenders,
         restrictIncidentAccess: schemeDetails?.restrictIncidentAccess,
@@ -83,6 +85,7 @@ const useAuth = (): Return => {
         facialRecognition: schemeDetails?.facialRecognition,
         imagesRequiredOnOffenders: schemeDetails?.imagesRequiredOnOffenders,
         taskTimeTracking: schemeDetails?.taskTimeTracking,
+        languageCount: schemeDetails?.languageCount || 0,
       });
       setTodos({ userTodos: schemes[0]?.scheme?.userTodos || 0 });
       setNotifications({
@@ -101,6 +104,8 @@ const useAuth = (): Return => {
       if (schemeDetails) {
         setRole({ role: schemeDetails.role });
         setScheme({
+          autoPopulateDescription: schemeDetails.scheme.autoPopulateDescription,
+
           autoApproveIncidents: schemeDetails.scheme.autoApproveIncidents,
           autoApproveOffenders: schemeDetails.scheme.autoApproveOffenders,
           restrictIncidentAccess: schemeDetails.scheme.restrictIncidentAccess,
@@ -119,6 +124,7 @@ const useAuth = (): Return => {
           imagesRequiredOnOffenders:
             schemeDetails.scheme.imagesRequiredOnOffenders,
           taskTimeTracking: schemeDetails.scheme.taskTimeTracking,
+          languageCount: schemeDetails.scheme.languageCount || 0,
         });
         setTodos({ userTodos: schemeDetails?.scheme?.userTodos || 0 });
       } else {

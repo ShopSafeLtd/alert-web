@@ -496,6 +496,8 @@ const EditOffender = ({
               onRemoveImage={onRemoveImage}
               primaryImage={primaryImage}
               setPrimaryImage={setPrimaryImage}
+              // TODO: add document upload
+              documentList={[]}
             />
 
             <Card>

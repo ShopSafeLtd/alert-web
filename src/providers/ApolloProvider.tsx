@@ -21,7 +21,6 @@ import { createClient } from 'graphql-ws';
 import * as Sentry from '@sentry/react';
 import { SentryLink } from 'apollo-link-sentry';
 import { useStoreState } from '../state';
-import { LocalStorageKeys, typedLocalStorage } from '../utils';
 
 interface Props {
   children: React.ReactNode;
@@ -36,6 +35,16 @@ const Apollo = ({ children }: Props): JSX.Element => {
     getAccessTokenSilently({
       audience: `https://app.shopsafealert.co.uk`,
       scope: 'openid read:current_user',
+    }).catch((error) => {
+      if (error === 'login_required') {
+        if (localStorage.getItem('logo')?.endsWith('.webp')) {
+          void loginWithRedirect({
+            'ext-logo': localStorage.getItem('logo'),
+          });
+        } else {
+          void loginWithRedirect();
+        }
+      }
     });
 
   const currentScheme = useStoreState((state) => state.scheme.id);
@@ -90,6 +99,15 @@ const Apollo = ({ children }: Props): JSX.Element => {
           clearTimeout(timedOut);
         },
         error: (error) => {
+          if (error === 'Login required') {
+            if (localStorage.getItem('logo')?.endsWith('.webp')) {
+              void loginWithRedirect({
+                'ext-logo': localStorage.getItem('logo'),
+              });
+            } else {
+              void loginWithRedirect();
+            }
+          }
           console.error(`WebSocket error: ${error}`);
         },
       },

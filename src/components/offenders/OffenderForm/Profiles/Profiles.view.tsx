@@ -424,16 +424,13 @@ const Profiles = ({
               ) : null}
             </>
           ) : (
-            <Row justify="start">
+            <Row justify="center">
               <Empty
-                description={
-                  <span>
-                    {intl.formatMessage({
-                      id: 'PNTO/p',
-                      defaultMessage: 'No profiles added yet.',
-                    })}
-                  </span>
-                }
+                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                description={intl.formatMessage({
+                  id: 'PNTO/p',
+                  defaultMessage: 'No profiles added yet.',
+                })}
               />
             </Row>
           )}

@@ -85,11 +85,17 @@ const ViewIncident = (): JSX.Element => {
     updateDeleteDocument,
     hideIncident,
     userRole,
+    translateText,
+    isTranslated,
+    languageCount,
   } = useViewIncident(incidentId);
   const { onApprove, onReject, approving } = useApproveIncident({ incidentId });
 
   return (
     <View
+      languageCount={languageCount}
+      isTranslated={isTranslated}
+      translateText={translateText}
       userRole={userRole}
       data={data}
       loading={loading}

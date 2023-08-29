@@ -1,5 +1,5 @@
 import type { FormInstance } from 'antd';
-import { Card, Col, Form, Input, Radio, Row, Typography, Select } from 'antd';
+import { Card, Col, Form, Input, Radio, Row, Select, Typography } from 'antd';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import useStyles from '../../AddIncident.styles';
@@ -178,6 +178,13 @@ const IncidentPolice = ({ saving, form }: Props) => {
                       id: 'UQjcxS',
                     }),
                     value: PoliceResponseTime.Within_24Hours,
+                  },
+                  {
+                    label: intl.formatMessage({
+                      defaultMessage: 'Over 24 Hours',
+                      id: 'X1GAcj',
+                    }),
+                    value: PoliceResponseTime.Over_24Hours,
                   },
                   {
                     label: intl.formatMessage({

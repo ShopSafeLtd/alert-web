@@ -10,6 +10,7 @@ import {
   useCreateOrAddQuestionMutation,
 } from '../../../graphql/generated';
 import errorNotification from '../../../types/error_notification';
+import type { TagQuestion } from '../update-question-on-tag/UpdateQuestion.container';
 
 interface Return {
   questionData: AvailableQuestionsQuery | undefined;
@@ -26,15 +27,18 @@ export interface FormData {
   options: string[];
   question: string;
   required: boolean;
+  dependentOn: string;
+  dependentAnswer: string | number;
 }
 
 const { useForm } = Form;
 
 interface Props {
   onClose: () => void;
+  tagQuestions?: TagQuestion[];
 }
 
-const useAddQuestion = ({ onClose }: Props): Return => {
+const useAddQuestion = ({ onClose, tagQuestions }: Props): Return => {
   const intl = useIntl();
   const [saving, setSaving] = useState(false);
   const { id } = useParams();
@@ -53,6 +57,8 @@ const useAddQuestion = ({ onClose }: Props): Return => {
     options: [],
     question: '',
     required: false,
+    dependentOn: '',
+    dependentAnswer: '',
   });
 
   const [addQuestion] = useCreateOrAddQuestionMutation({
@@ -80,12 +86,27 @@ const useAddQuestion = ({ onClose }: Props): Return => {
 
   const onSubmit = (values: FormData) => {
     setSaving(true);
+    const dependentOnTag = tagQuestions?.find(
+      (tagQ) => tagQ.tagQuestionId === values.dependentOn
+    );
+
+    let answerString: string | undefined;
+    if (dependentOnTag) {
+      answerString =
+        typeof values.dependentAnswer === 'number'
+          ? values.dependentAnswer.toString()
+          : values.dependentAnswer.toLowerCase();
+    }
+
     const dataToSubmit = {
       question: values.question,
       options: values.options,
       required: values.required,
       type: values.type,
       tagId: id || '',
+      dependentAnswer: answerString ?? undefined,
+      dependentOnQId: dependentOnTag?.questionId ?? undefined,
+      dependentOnTagQId: values.dependentOn ?? undefined,
     };
     void addQuestion({
       variables: values.selectedId

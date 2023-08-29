@@ -7986,6 +7986,7 @@ export type CreateIncidentData = {
   crimeTypes?: InputMaybe<Array<InputMaybe<UniqueId>>>;
   date: Scalars['DateTime'];
   description: Scalars['String'];
+  documents?: InputMaybe<Array<InputMaybe<CreateDocument>>>;
   groups: Array<InputMaybe<UniqueId>>;
   images: CreateIncidentImages;
   items?: InputMaybe<Array<CreateIncidentItemInput>>;
@@ -8081,6 +8082,7 @@ export type CreateOffenderData = {
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutOffendersInput>;
   dateOfBirth?: InputMaybe<Scalars['DateTime']>;
   dateSource?: InputMaybe<Scalars['String']>;
+  documents?: InputMaybe<Array<InputMaybe<CreateDocument>>>;
   gender?: InputMaybe<Gender>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutOffendersInput>;
   hair?: InputMaybe<Scalars['String']>;
@@ -8115,6 +8117,9 @@ export type CreateOffenderVehicles = {
 };
 
 export type CreateQuestionInput = {
+  dependentAnswer?: InputMaybe<Scalars['String']>;
+  dependentOnQId?: InputMaybe<Scalars['String']>;
+  dependentOnTagQId?: InputMaybe<Scalars['String']>;
   model?: InputMaybe<QuestionModel>;
   options?: InputMaybe<Array<Scalars['String']>>;
   question: Scalars['String'];
@@ -8169,6 +8174,7 @@ export type CreateVehicleDataInput = {
   colour?: InputMaybe<Scalars['String']>;
   crimeGroup?: InputMaybe<Array<InputMaybe<UniqueId>>>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutVehiclesInput>;
+  documents?: InputMaybe<Array<InputMaybe<CreateDocument>>>;
   groups?: InputMaybe<Array<InputMaybe<UniqueId>>>;
   image?: InputMaybe<ImageCreateNestedManyWithoutVehiclesInput>;
   images?: InputMaybe<Array<InputMaybe<UploadVehicleImage>>>;
@@ -29042,6 +29048,7 @@ export type Mutation = {
   approveIncident?: Maybe<Incident>;
   approveOffender?: Maybe<Offender>;
   copyEvidenceOnInvestigation?: Maybe<Document>;
+  copyOffender?: Maybe<Offender>;
   createAction: Action;
   createAddress: Address;
   createArticle?: Maybe<Article>;
@@ -29071,6 +29078,7 @@ export type Mutation = {
   createOneMG11: Mg11;
   createOneQuestionGroup: QuestionGroup;
   createOneStatementTemplate: StatementTemplate;
+  createOneWorkflow: Workflow;
   createReportTemplate: ReportTemplate;
   createScheme: Scheme;
   createTag: Tag;
@@ -29115,6 +29123,7 @@ export type Mutation = {
   deleteOffenderDefault?: Maybe<Offender>;
   deleteOneQuestionGroup?: Maybe<QuestionGroup>;
   deleteOneStatementTemplate?: Maybe<StatementTemplate>;
+  deleteOneWorkflow?: Maybe<Workflow>;
   deleteRecycleTag?: Maybe<Tag>;
   deleteReportTemplate?: Maybe<ReportTemplate>;
   deleteScheme?: Maybe<Scheme>;
@@ -29203,6 +29212,7 @@ export type Mutation = {
   updateOneQuestionGroup?: Maybe<QuestionGroup>;
   updateOneStatementTemplate?: Maybe<StatementTemplate>;
   updateOneUserNotification?: Maybe<UserNotification>;
+  updateOneWorkflow?: Maybe<Workflow>;
   updatePassword?: Maybe<User>;
   updateQuestionOnTag?: Maybe<TagQuestion>;
   updateReportTemplate?: Maybe<ReportTemplate>;
@@ -29274,6 +29284,11 @@ export type MutationApproveOffenderArgs = {
 
 export type MutationCopyEvidenceOnInvestigationArgs = {
   data: ImportDemEvidence;
+  where: UniqueId;
+};
+
+export type MutationCopyOffenderArgs = {
+  data: CreateOffenderData;
   where: UniqueId;
 };
 
@@ -29394,6 +29409,10 @@ export type MutationCreateOneQuestionGroupArgs = {
 
 export type MutationCreateOneStatementTemplateArgs = {
   data: StatementTemplateCreateInput;
+};
+
+export type MutationCreateOneWorkflowArgs = {
+  data: WorkflowCreateInput;
 };
 
 export type MutationCreateReportTemplateArgs = {
@@ -29570,6 +29589,10 @@ export type MutationDeleteOneQuestionGroupArgs = {
 
 export type MutationDeleteOneStatementTemplateArgs = {
   where: StatementTemplateWhereUniqueInput;
+};
+
+export type MutationDeleteOneWorkflowArgs = {
+  where: WorkflowWhereUniqueInput;
 };
 
 export type MutationDeleteRecycleTagArgs = {
@@ -29905,6 +29928,11 @@ export type MutationUpdateOneStatementTemplateArgs = {
 export type MutationUpdateOneUserNotificationArgs = {
   data: UserNotificationUpdateInput;
   where: UserNotificationWhereUniqueInput;
+};
+
+export type MutationUpdateOneWorkflowArgs = {
+  data: WorkflowUpdateInput;
+  where: WorkflowWhereUniqueInput;
 };
 
 export type MutationUpdatePasswordArgs = {
@@ -36988,6 +37016,7 @@ export type PerformanceReport = {
 
 export enum PoliceResponseTime {
   NoResponse = 'NO_RESPONSE',
+  Over_24Hours = 'OVER_24_HOURS',
   Within_1Hour = 'WITHIN_1_HOUR',
   Within_3Hours = 'WITHIN_3_HOURS',
   Within_12Hours = 'WITHIN_12_HOURS',
@@ -37044,6 +37073,7 @@ export type Query = {
   listIncidentTags: Array<IncidentTags>;
   listIncidents?: Maybe<ListIncidents>;
   listInvestigations?: Maybe<ListInvestigations>;
+  listInvestigationsAllSchemes?: Maybe<ListInvestigations>;
   listLoginEvents?: Maybe<ListLoginEvents>;
   listNotifications: ListNotifications;
   listOffenders?: Maybe<ListOffenders>;
@@ -37092,6 +37122,8 @@ export type Query = {
   userSchemes: Array<UserScheme>;
   users: Array<User>;
   vehicle?: Maybe<Vehicle>;
+  workflow?: Maybe<Workflow>;
+  workflows: Array<Workflow>;
 };
 
 export type QueryActionArgs = {
@@ -37365,6 +37397,13 @@ export type QueryListIncidentsArgs = {
 export type QueryListInvestigationsArgs = {
   order?: InputMaybe<InvestigationOrderByWithRelationInput>;
   scheme: SchemeWhereUniqueInput;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<InvestigationWhereInput>;
+};
+
+export type QueryListInvestigationsAllSchemesArgs = {
+  order?: InputMaybe<InvestigationOrderByWithRelationInput>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<InvestigationWhereInput>;
@@ -37663,6 +37702,19 @@ export type QueryVehicleArgs = {
   where: VehicleWhereUniqueInput;
 };
 
+export type QueryWorkflowArgs = {
+  where: WorkflowWhereUniqueInput;
+};
+
+export type QueryWorkflowsArgs = {
+  after?: InputMaybe<WorkflowWhereUniqueInput>;
+  before?: InputMaybe<WorkflowWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<WorkflowOrderByWithRelationInput>>;
+  where?: InputMaybe<WorkflowWhereInput>;
+};
+
 export enum QueryMode {
   Default = 'default',
   Insensitive = 'insensitive',
@@ -37672,12 +37724,14 @@ export type Question = {
   __typename?: 'Question';
   createdAt: Scalars['DateTime'];
   id: Scalars['String'];
+  model: QuestionModel;
   options: Array<Scalars['Json']>;
   optionsFormFormatted?: Maybe<Array<AnswerOption>>;
   optionsFormatted?: Maybe<Array<Scalars['String']>>;
   question: Scalars['String'];
   questionFormatted: Scalars['String'];
   questionGroup: Array<QuestionGroup>;
+  questionOn: QuestionModel;
   questionTranslations: Array<Scalars['Json']>;
   schemes: Array<Scheme>;
   tags: Array<TagQuestion>;
@@ -40683,6 +40737,7 @@ export type ResetPasswordData = {
 
 export enum Role {
   ContentAdmin = 'CONTENT_ADMIN',
+  GroupAdmin = 'GROUP_ADMIN',
   SchemeAdmin = 'SCHEME_ADMIN',
   ShopsafeAdmin = 'SHOPSAFE_ADMIN',
   User = 'USER',
@@ -40695,6 +40750,7 @@ export type Scheme = {
   articles: Array<Article>;
   autoApproveIncidents: Scalars['Boolean'];
   autoApproveOffenders: Scalars['Boolean'];
+  autoPopulateDescription: Scalars['Boolean'];
   bans: Array<Ban>;
   businesses: Array<Business>;
   chats: Array<Chat>;
@@ -40725,6 +40781,7 @@ export type Scheme = {
   incidentsByType?: Maybe<IncidentsByType>;
   incidentsCreated?: Maybe<Scalars['Int']>;
   investigationsInScheme: Array<Investigation>;
+  languageCount: Scalars['Int'];
   languages: Array<Language>;
   loginEvents: Array<LoginEvent>;
   logo?: Maybe<Image>;
@@ -40737,6 +40794,7 @@ export type Scheme = {
   offenders: Array<Offender>;
   offendersCreated?: Maybe<Scalars['Int']>;
   questionGroups: Array<QuestionGroup>;
+  questions: Array<Question>;
   recycledItems: Array<RecycledItem>;
   rekCollections: Array<RekCollection>;
   reportIcons: Array<Image>;
@@ -40758,6 +40816,7 @@ export type Scheme = {
   userSubscribedIncidentOnly?: Maybe<Scalars['Boolean']>;
   userTodos?: Maybe<Scalars['Int']>;
   vehicles: Array<Vehicle>;
+  workflows: Array<Workflow>;
 };
 
 export type SchemeActionsArgs = {
@@ -40921,6 +40980,14 @@ export type SchemeQuestionGroupsArgs = {
   last?: InputMaybe<Scalars['Int']>;
 };
 
+export type SchemeQuestionsArgs = {
+  after?: InputMaybe<QuestionWhereUniqueInput>;
+  before?: InputMaybe<QuestionWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<QuestionWhereInput>;
+};
+
 export type SchemeRecycledItemsArgs = {
   after?: InputMaybe<RecycledItemWhereUniqueInput>;
   before?: InputMaybe<RecycledItemWhereUniqueInput>;
@@ -41006,6 +41073,13 @@ export type SchemeVehiclesArgs = {
   last?: InputMaybe<Scalars['Int']>;
 };
 
+export type SchemeWorkflowsArgs = {
+  after?: InputMaybe<WorkflowWhereUniqueInput>;
+  before?: InputMaybe<WorkflowWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
 export type SchemeCreateInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutSchemeInput>;
   actionsInScheme?: InputMaybe<ActionCreateNestedManyWithoutInSchemeInput>;
@@ -41013,6 +41087,7 @@ export type SchemeCreateInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -41081,6 +41156,7 @@ export type SchemeCreateManyDarkLogoInput = {
   approvalDueDays?: InputMaybe<Scalars['Int']>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   defaultIncidentEmail?: InputMaybe<Scalars['Boolean']>;
@@ -41117,6 +41193,7 @@ export type SchemeCreateManyLogoInput = {
   approvalDueDays?: InputMaybe<Scalars['Int']>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogoId?: InputMaybe<Scalars['String']>;
@@ -41637,6 +41714,7 @@ export type SchemeCreateWithoutActionsInSchemeInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -41707,6 +41785,7 @@ export type SchemeCreateWithoutActionsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -41777,6 +41856,7 @@ export type SchemeCreateWithoutArticlesInput = {
   approvalDueDays?: InputMaybe<Scalars['Int']>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -41848,6 +41928,7 @@ export type SchemeCreateWithoutBansInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
@@ -41918,6 +41999,7 @@ export type SchemeCreateWithoutBusinessesInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
@@ -41988,6 +42070,7 @@ export type SchemeCreateWithoutChatsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
@@ -42058,6 +42141,7 @@ export type SchemeCreateWithoutContactsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -42128,6 +42212,7 @@ export type SchemeCreateWithoutCrimeGroupsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -42198,6 +42283,7 @@ export type SchemeCreateWithoutCustomGalleriesInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -42268,6 +42354,7 @@ export type SchemeCreateWithoutDarkLogoInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -42338,6 +42425,7 @@ export type SchemeCreateWithoutDocumentsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -42408,6 +42496,7 @@ export type SchemeCreateWithoutFeedItemsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -42478,6 +42567,7 @@ export type SchemeCreateWithoutGroupsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -42548,6 +42638,7 @@ export type SchemeCreateWithoutImagesInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -42618,6 +42709,7 @@ export type SchemeCreateWithoutIncidentFormInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -42688,6 +42780,7 @@ export type SchemeCreateWithoutIncidentsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -42758,6 +42851,7 @@ export type SchemeCreateWithoutIntelInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -42828,6 +42922,7 @@ export type SchemeCreateWithoutInvestigationsInSchemeInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -42898,6 +42993,7 @@ export type SchemeCreateWithoutInvestigationsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -42968,6 +43064,7 @@ export type SchemeCreateWithoutLoginEventsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -43038,6 +43135,7 @@ export type SchemeCreateWithoutLogoInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -43108,6 +43206,7 @@ export type SchemeCreateWithoutMembersInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -43178,6 +43277,7 @@ export type SchemeCreateWithoutMessagesInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -43248,6 +43348,7 @@ export type SchemeCreateWithoutNotificationsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -43318,6 +43419,7 @@ export type SchemeCreateWithoutOffendersInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -43388,6 +43490,7 @@ export type SchemeCreateWithoutQuestionGroupsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -43458,6 +43561,7 @@ export type SchemeCreateWithoutQuestionsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -43528,6 +43632,7 @@ export type SchemeCreateWithoutRecycledItemsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -43598,6 +43703,7 @@ export type SchemeCreateWithoutRekCollectionsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -43668,6 +43774,7 @@ export type SchemeCreateWithoutReportIconsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -43738,6 +43845,7 @@ export type SchemeCreateWithoutReportTemplatesInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -43808,6 +43916,7 @@ export type SchemeCreateWithoutSchemeTagsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -43878,6 +43987,7 @@ export type SchemeCreateWithoutStatementTemplatesInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -43948,6 +44058,7 @@ export type SchemeCreateWithoutTagOrdersInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -44018,6 +44129,7 @@ export type SchemeCreateWithoutTagsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -44088,6 +44200,7 @@ export type SchemeCreateWithoutTermsInSchemeInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -44158,6 +44271,7 @@ export type SchemeCreateWithoutTermsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -44228,6 +44342,7 @@ export type SchemeCreateWithoutTodosInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -44298,6 +44413,7 @@ export type SchemeCreateWithoutVehiclesInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -44368,6 +44484,7 @@ export type SchemeCreateWithoutWorkflowsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -44452,6 +44569,7 @@ export type SchemeOrderByWithRelationInput = {
   articles?: InputMaybe<ArticleOrderByRelationAggregateInput>;
   autoApproveIncidents?: InputMaybe<SortOrder>;
   autoApproveOffenders?: InputMaybe<SortOrder>;
+  autoPopulateDescription?: InputMaybe<SortOrder>;
   bans?: InputMaybe<BanOrderByRelationAggregateInput>;
   businesses?: InputMaybe<BusinessOrderByRelationAggregateInput>;
   chats?: InputMaybe<ChatOrderByRelationAggregateInput>;
@@ -44530,6 +44648,7 @@ export type SchemeScalarWhereInput = {
   approvalDueDays?: InputMaybe<IntNullableFilter>;
   autoApproveIncidents?: InputMaybe<BoolFilter>;
   autoApproveOffenders?: InputMaybe<BoolFilter>;
+  autoPopulateDescription?: InputMaybe<BoolFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   customTranslations?: InputMaybe<JsonNullableListFilter>;
   darkLogoId?: InputMaybe<StringNullableFilter>;
@@ -44565,6 +44684,7 @@ export type SchemeUpdateInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -44633,6 +44753,7 @@ export type SchemeUpdateManyMutationInput = {
   approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   defaultIncidentEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -45443,6 +45564,7 @@ export type SchemeUpdateWithoutActionsInSchemeInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -45513,6 +45635,7 @@ export type SchemeUpdateWithoutActionsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -45583,6 +45706,7 @@ export type SchemeUpdateWithoutArticlesInput = {
   approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -45654,6 +45778,7 @@ export type SchemeUpdateWithoutBansInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
@@ -45724,6 +45849,7 @@ export type SchemeUpdateWithoutBusinessesInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
@@ -45794,6 +45920,7 @@ export type SchemeUpdateWithoutChatsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
@@ -45864,6 +45991,7 @@ export type SchemeUpdateWithoutContactsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -45934,6 +46062,7 @@ export type SchemeUpdateWithoutCrimeGroupsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -46004,6 +46133,7 @@ export type SchemeUpdateWithoutCustomGalleriesInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -46074,6 +46204,7 @@ export type SchemeUpdateWithoutDarkLogoInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -46144,6 +46275,7 @@ export type SchemeUpdateWithoutDocumentsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -46214,6 +46346,7 @@ export type SchemeUpdateWithoutFeedItemsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -46284,6 +46417,7 @@ export type SchemeUpdateWithoutGroupsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -46354,6 +46488,7 @@ export type SchemeUpdateWithoutImagesInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -46424,6 +46559,7 @@ export type SchemeUpdateWithoutIncidentFormInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -46494,6 +46630,7 @@ export type SchemeUpdateWithoutIncidentsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -46564,6 +46701,7 @@ export type SchemeUpdateWithoutIntelInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -46634,6 +46772,7 @@ export type SchemeUpdateWithoutInvestigationsInSchemeInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -46704,6 +46843,7 @@ export type SchemeUpdateWithoutInvestigationsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -46774,6 +46914,7 @@ export type SchemeUpdateWithoutLoginEventsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -46844,6 +46985,7 @@ export type SchemeUpdateWithoutLogoInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -46914,6 +47056,7 @@ export type SchemeUpdateWithoutMembersInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -46984,6 +47127,7 @@ export type SchemeUpdateWithoutMessagesInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -47054,6 +47198,7 @@ export type SchemeUpdateWithoutNotificationsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -47124,6 +47269,7 @@ export type SchemeUpdateWithoutOffendersInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -47194,6 +47340,7 @@ export type SchemeUpdateWithoutQuestionGroupsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -47264,6 +47411,7 @@ export type SchemeUpdateWithoutQuestionsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -47334,6 +47482,7 @@ export type SchemeUpdateWithoutRecycledItemsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -47404,6 +47553,7 @@ export type SchemeUpdateWithoutRekCollectionsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -47474,6 +47624,7 @@ export type SchemeUpdateWithoutReportIconsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -47544,6 +47695,7 @@ export type SchemeUpdateWithoutReportTemplatesInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -47614,6 +47766,7 @@ export type SchemeUpdateWithoutSchemeTagsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -47684,6 +47837,7 @@ export type SchemeUpdateWithoutStatementTemplatesInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -47754,6 +47908,7 @@ export type SchemeUpdateWithoutTagOrdersInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -47824,6 +47979,7 @@ export type SchemeUpdateWithoutTagsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -47894,6 +48050,7 @@ export type SchemeUpdateWithoutTermsInSchemeInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -47964,6 +48121,7 @@ export type SchemeUpdateWithoutTermsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -48034,6 +48192,7 @@ export type SchemeUpdateWithoutTodosInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -48104,6 +48263,7 @@ export type SchemeUpdateWithoutVehiclesInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -48174,6 +48334,7 @@ export type SchemeUpdateWithoutWorkflowsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -48474,6 +48635,7 @@ export type SchemeWhereInput = {
   articles?: InputMaybe<ArticleListRelationFilter>;
   autoApproveIncidents?: InputMaybe<BoolFilter>;
   autoApproveOffenders?: InputMaybe<BoolFilter>;
+  autoPopulateDescription?: InputMaybe<BoolFilter>;
   bans?: InputMaybe<BanListRelationFilter>;
   businesses?: InputMaybe<BusinessListRelationFilter>;
   chats?: InputMaybe<ChatListRelationFilter>;
@@ -66772,11 +66934,52 @@ export enum When {
   Year = 'YEAR',
 }
 
+export type Workflow = {
+  __typename?: 'Workflow';
+  actions: Array<WorkflowAction>;
+  conditions?: Maybe<Scalars['Json']>;
+  createdAt: Scalars['DateTime'];
+  id: Scalars['String'];
+  name: Scalars['String'];
+  schemes: Array<Scheme>;
+  trigger: WorkflowTrigger;
+  triggerModels: Model;
+  updatedAt: Scalars['DateTime'];
+};
+
+export type WorkflowActionsArgs = {
+  after?: InputMaybe<WorkflowActionWhereUniqueInput>;
+  before?: InputMaybe<WorkflowActionWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+export type WorkflowSchemesArgs = {
+  after?: InputMaybe<SchemeWhereUniqueInput>;
+  before?: InputMaybe<SchemeWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+export type WorkflowAction = {
+  __typename?: 'WorkflowAction';
+  Workflow: Workflow;
+  createdAt: Scalars['DateTime'];
+  data: Scalars['Json'];
+  id: Scalars['String'];
+  outputModel?: Maybe<Model>;
+  timesRun: Scalars['Int'];
+  type: WorkflowActionType;
+  updatedAt: Scalars['DateTime'];
+  workflowId: Scalars['String'];
+};
+
 export type WorkflowActionCreateManyWorkflowInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   data: Scalars['Json'];
   id?: InputMaybe<Scalars['String']>;
   outputModel?: InputMaybe<Model>;
+  timesRun?: InputMaybe<Scalars['Int']>;
   type: WorkflowActionType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
@@ -66819,6 +67022,7 @@ export type WorkflowActionCreateWithoutQuestionsInput = {
   data: Scalars['Json'];
   id?: InputMaybe<Scalars['String']>;
   outputModel?: InputMaybe<Model>;
+  timesRun?: InputMaybe<Scalars['Int']>;
   type: WorkflowActionType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
@@ -66829,6 +67033,7 @@ export type WorkflowActionCreateWithoutWorkflowInput = {
   id?: InputMaybe<Scalars['String']>;
   outputModel?: InputMaybe<Model>;
   questions?: InputMaybe<QuestionCreateNestedManyWithoutWorkFlowActionsInput>;
+  timesRun?: InputMaybe<Scalars['Int']>;
   type: WorkflowActionType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
@@ -66839,6 +67044,10 @@ export type WorkflowActionListRelationFilter = {
   some?: InputMaybe<WorkflowActionWhereInput>;
 };
 
+export type WorkflowActionOrderByRelationAggregateInput = {
+  _count?: InputMaybe<SortOrder>;
+};
+
 export type WorkflowActionScalarWhereInput = {
   AND?: InputMaybe<Array<WorkflowActionScalarWhereInput>>;
   NOT?: InputMaybe<Array<WorkflowActionScalarWhereInput>>;
@@ -66846,6 +67055,7 @@ export type WorkflowActionScalarWhereInput = {
   createdAt?: InputMaybe<DateTimeFilter>;
   id?: InputMaybe<StringFilter>;
   outputModel?: InputMaybe<EnumModelNullableFilter>;
+  timesRun?: InputMaybe<IntFilter>;
   type?: InputMaybe<EnumWorkflowActionTypeFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   workflowId?: InputMaybe<StringFilter>;
@@ -66862,6 +67072,7 @@ export type WorkflowActionUpdateManyMutationInput = {
   data?: InputMaybe<Scalars['Json']>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   outputModel?: InputMaybe<NullableEnumModelFieldUpdateOperationsInput>;
+  timesRun?: InputMaybe<IntFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumWorkflowActionTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
@@ -66935,6 +67146,7 @@ export type WorkflowActionUpdateWithoutQuestionsInput = {
   data?: InputMaybe<Scalars['Json']>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   outputModel?: InputMaybe<NullableEnumModelFieldUpdateOperationsInput>;
+  timesRun?: InputMaybe<IntFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumWorkflowActionTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
@@ -66945,6 +67157,7 @@ export type WorkflowActionUpdateWithoutWorkflowInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   outputModel?: InputMaybe<NullableEnumModelFieldUpdateOperationsInput>;
   questions?: InputMaybe<QuestionUpdateManyWithoutWorkFlowActionsNestedInput>;
+  timesRun?: InputMaybe<IntFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumWorkflowActionTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
@@ -66970,6 +67183,7 @@ export type WorkflowActionWhereInput = {
   id?: InputMaybe<StringFilter>;
   outputModel?: InputMaybe<EnumModelNullableFilter>;
   questions?: InputMaybe<QuestionListRelationFilter>;
+  timesRun?: InputMaybe<IntFilter>;
   type?: InputMaybe<EnumWorkflowActionTypeFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   workflowId?: InputMaybe<StringFilter>;
@@ -66977,6 +67191,18 @@ export type WorkflowActionWhereInput = {
 
 export type WorkflowActionWhereUniqueInput = {
   id?: InputMaybe<Scalars['String']>;
+};
+
+export type WorkflowCreateInput = {
+  actions?: InputMaybe<WorkflowActionCreateNestedManyWithoutWorkflowInput>;
+  conditions?: InputMaybe<Scalars['Json']>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  id?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+  schemes?: InputMaybe<SchemeCreateNestedManyWithoutWorkflowsInput>;
+  trigger: WorkflowTrigger;
+  triggerModels: Model;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
 export type WorkflowCreateNestedManyWithoutSchemesInput = {
@@ -67035,6 +67261,18 @@ export type WorkflowOrderByRelationAggregateInput = {
   _count?: InputMaybe<SortOrder>;
 };
 
+export type WorkflowOrderByWithRelationInput = {
+  actions?: InputMaybe<WorkflowActionOrderByRelationAggregateInput>;
+  conditions?: InputMaybe<SortOrder>;
+  createdAt?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  name?: InputMaybe<SortOrder>;
+  schemes?: InputMaybe<SchemeOrderByRelationAggregateInput>;
+  trigger?: InputMaybe<SortOrder>;
+  triggerModels?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
+};
+
 export type WorkflowScalarWhereInput = {
   AND?: InputMaybe<Array<WorkflowScalarWhereInput>>;
   NOT?: InputMaybe<Array<WorkflowScalarWhereInput>>;
@@ -67055,6 +67293,18 @@ export enum WorkflowTrigger {
   Created = 'CREATED',
   Updated = 'UPDATED',
 }
+
+export type WorkflowUpdateInput = {
+  actions?: InputMaybe<WorkflowActionUpdateManyWithoutWorkflowNestedInput>;
+  conditions?: InputMaybe<Scalars['Json']>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  schemes?: InputMaybe<SchemeUpdateManyWithoutWorkflowsNestedInput>;
+  trigger?: InputMaybe<EnumWorkflowTriggerFieldUpdateOperationsInput>;
+  triggerModels?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
 
 export type WorkflowUpdateManyMutationInput = {
   conditions?: InputMaybe<Scalars['Json']>;
@@ -67157,6 +67407,15 @@ export type Xy = {
   __typename?: 'XY';
   x: Scalars['Int'];
   y: Scalars['Int'];
+};
+
+export type SetPasswordMutationVariables = Exact<{
+  data: SetPasswordData;
+}>;
+
+export type SetPasswordMutation = {
+  __typename?: 'Mutation';
+  setPassword?: { __typename?: 'User'; id: string } | null;
 };
 
 export type UpdateTaskMutationVariables = Exact<{
@@ -72111,10 +72370,32 @@ export type InvestigationSuggestionsQuery = {
   } | null;
 };
 
+export type ListInvestigationsAllSchemesQueryVariables = Exact<{
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<InvestigationWhereInput>;
+}>;
+
+export type ListInvestigationsAllSchemesQuery = {
+  __typename?: 'Query';
+  listInvestigationsAllSchemes?: {
+    __typename?: 'ListInvestigations';
+    total: number;
+    investigations: Array<{
+      __typename?: 'Investigation';
+      id: string;
+      name: string;
+      description?: string | null;
+      status: InvestigationStatus;
+    }>;
+  } | null;
+};
+
 export type ListInvestigationsQueryVariables = Exact<{
   scheme: SchemeWhereUniqueInput;
   take?: InputMaybe<Scalars['Int']>;
   skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<InvestigationWhereInput>;
 }>;
 
 export type ListInvestigationsQuery = {
@@ -73036,6 +73317,63 @@ export type AddImagesToOffenderMutation = {
       position: ImagePosition;
       rotation: number;
     }>;
+  } | null;
+};
+
+export type CopyOffenderMutationVariables = Exact<{
+  where: UniqueId;
+  data: CreateOffenderData;
+}>;
+
+export type CopyOffenderMutation = {
+  __typename?: 'Mutation';
+  copyOffender?: {
+    __typename?: 'Offender';
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    age?: Age | null;
+    build?: Build | null;
+    height?: Height | null;
+    dateOfBirth?: Date | null;
+    dateSource?: string | null;
+    hair?: string | null;
+    gender?: Gender | null;
+    name?: string | null;
+    race?: Race | null;
+    peculiarities?: string | null;
+    approved?: boolean | null;
+    active?: boolean | null;
+    idVerified: boolean;
+    idSource?: IdSource | null;
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+      card?: string | null;
+      position: ImagePosition;
+      rotation: number;
+      primary?: boolean | null;
+      policeImage?: boolean | null;
+    }>;
+    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+    tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+    bans: Array<{
+      __typename?: 'Ban';
+      id: string;
+      location: string;
+      description?: string | null;
+      startDate: Date;
+      endDate: Date;
+      type?: BanType | null;
+    }>;
+    createdBy: {
+      __typename?: 'User';
+      id: string;
+      fullName: string;
+      businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
+    };
   } | null;
 };
 
@@ -75534,6 +75872,7 @@ export type UpdateSchemeMutation = {
     defaultMessagePush: boolean;
     defaultOffenderEmail: boolean;
     defaultOffenderPush: boolean;
+    autoPopulateDescription: boolean;
     incidentRetention?: number | null;
     offenderRetention?: number | null;
     logo?: {
@@ -75592,6 +75931,7 @@ export type SchemeQuery = {
     defaultPublicOffenderDOB: boolean;
     incidentRetention?: number | null;
     offenderRetention?: number | null;
+    autoPopulateDescription: boolean;
     darkLogo?: {
       __typename?: 'Image';
       id: string;
@@ -75940,6 +76280,32 @@ export type ListTodosQuery = {
       }>;
     }>;
   };
+};
+
+export type TranslateQueryVariables = Exact<{
+  data: TranslateTextInput;
+}>;
+
+export type TranslateQuery = {
+  __typename?: 'Query';
+  translateText: Array<{
+    __typename?: 'TranslatedText';
+    origText: string;
+    translatedText: string;
+  }>;
+};
+
+export type TranslateTextQueryVariables = Exact<{
+  data: TranslateTextInput;
+}>;
+
+export type TranslateTextQuery = {
+  __typename?: 'Query';
+  translateText: Array<{
+    __typename?: 'TranslatedText';
+    translatedText: string;
+    origText: string;
+  }>;
 };
 
 export type CreateUpdateOnCrimeGroupMutationVariables = Exact<{
@@ -77092,6 +77458,8 @@ export type CurrentUserQuery = {
         facialRecognition: boolean;
         imagesRequiredOnOffenders: boolean;
         taskTimeTracking: boolean;
+        languageCount: number;
+        autoPopulateDescription: boolean;
         logo?: {
           __typename?: 'Image';
           optimisedPersisted?: string | null;
@@ -77455,6 +77823,8 @@ export type ListUserNotificationsQuery = {
           defaultPublicOffenderDOB: boolean;
           userTodos?: number | null;
           userNotifications?: number | null;
+          languageCount: number;
+          autoPopulateDescription: boolean;
           imagesRequiredOnOffenders: boolean;
           goodsMode: GoodsMode;
           facialRecognition: boolean;
@@ -77526,6 +77896,8 @@ export type UserNotificationsQuery = {
           defaultPublicOffenderDOB: boolean;
           userTodos?: number | null;
           userNotifications?: number | null;
+          languageCount: number;
+          autoPopulateDescription: boolean;
           imagesRequiredOnOffenders: boolean;
           goodsMode: GoodsMode;
           facialRecognition: boolean;
@@ -78521,6 +78893,120 @@ export type UserListQuery = {
   };
 };
 
+export type CreateOneWorkflowMutationVariables = Exact<{
+  data: WorkflowCreateInput;
+}>;
+
+export type CreateOneWorkflowMutation = {
+  __typename?: 'Mutation';
+  createOneWorkflow: {
+    __typename?: 'Workflow';
+    id: string;
+    name: string;
+    trigger: WorkflowTrigger;
+    triggerModels: Model;
+    actions: Array<{
+      __typename?: 'WorkflowAction';
+      type: WorkflowActionType;
+      outputModel?: Model | null;
+      timesRun: number;
+    }>;
+  };
+};
+
+export type UpdateOneWorkflowMutationVariables = Exact<{
+  data: WorkflowUpdateInput;
+  where: WorkflowWhereUniqueInput;
+}>;
+
+export type UpdateOneWorkflowMutation = {
+  __typename?: 'Mutation';
+  updateOneWorkflow?: {
+    __typename?: 'Workflow';
+    id: string;
+    name: string;
+    trigger: WorkflowTrigger;
+    triggerModels: Model;
+    actions: Array<{
+      __typename?: 'WorkflowAction';
+      type: WorkflowActionType;
+      outputModel?: Model | null;
+      timesRun: number;
+    }>;
+  } | null;
+};
+
+export type WorkflowsQueryVariables = Exact<{
+  where?: InputMaybe<WorkflowWhereInput>;
+  orderBy?: InputMaybe<
+    Array<WorkflowOrderByWithRelationInput> | WorkflowOrderByWithRelationInput
+  >;
+}>;
+
+export type WorkflowsQuery = {
+  __typename?: 'Query';
+  workflows: Array<{
+    __typename?: 'Workflow';
+    id: string;
+    name: string;
+    trigger: WorkflowTrigger;
+    triggerModels: Model;
+    actions: Array<{
+      __typename?: 'WorkflowAction';
+      type: WorkflowActionType;
+      outputModel?: Model | null;
+      timesRun: number;
+    }>;
+  }>;
+};
+
+export type ViewWorkflowQueryVariables = Exact<{
+  where: WorkflowWhereUniqueInput;
+}>;
+
+export type ViewWorkflowQuery = {
+  __typename?: 'Query';
+  workflow?: {
+    __typename?: 'Workflow';
+    name: string;
+    conditions?: any | null;
+    actions: Array<{ __typename?: 'WorkflowAction'; data: any; id: string }>;
+  } | null;
+};
+
+export type WorkflowDataQueryVariables = Exact<{
+  where: SchemeWhereUniqueInput;
+  questionsWhere?: InputMaybe<QuestionWhereInput>;
+  schemeTagsWhere?: InputMaybe<TagWhereInput>;
+}>;
+
+export type WorkflowDataQuery = {
+  __typename?: 'Query';
+  scheme?: {
+    __typename?: 'Scheme';
+    questions: Array<{
+      __typename?: 'Question';
+      id: string;
+      questionOn: QuestionModel;
+      type: AnswerType;
+      questionFormatted: string;
+      optionsFormFormatted?: Array<{
+        __typename?: 'AnswerOption';
+        value: string;
+        label: string;
+      }> | null;
+    }>;
+    schemeTags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+    members: Array<{
+      __typename?: 'UserScheme';
+      role: Role;
+      userId: string;
+      user: { __typename?: 'User'; fullName: string };
+    }>;
+    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+  } | null;
+};
+
 export const FeedTodoFragmentDoc = gql`
   fragment FeedTodo on Todo {
     description
@@ -78605,6 +79091,38 @@ export const FeedUpdateFragmentDoc = gql`
   }
   ${FeedImageFragmentDoc}
 `;
+export const SetPasswordDocument = gql`
+  mutation SetPassword($data: SetPasswordData!) {
+    setPassword(data: $data) {
+      id
+    }
+  }
+`;
+export type SetPasswordMutationFn = Apollo.MutationFunction<
+  SetPasswordMutation,
+  SetPasswordMutationVariables
+>;
+export function useSetPasswordMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SetPasswordMutation,
+    SetPasswordMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<SetPasswordMutation, SetPasswordMutationVariables>(
+    SetPasswordDocument,
+    options
+  );
+}
+export type SetPasswordMutationHookResult = ReturnType<
+  typeof useSetPasswordMutation
+>;
+export type SetPasswordMutationResult =
+  Apollo.MutationResult<SetPasswordMutation>;
+export type SetPasswordMutationOptions = Apollo.BaseMutationOptions<
+  SetPasswordMutation,
+  SetPasswordMutationVariables
+>;
 export const UpdateTaskDocument = gql`
   mutation UpdateTask($data: TodoUpdateInput!, $where: TodoWhereUniqueInput!) {
     updateTodoDefault(data: $data, where: $where) {
@@ -85486,13 +86004,70 @@ export type InvestigationSuggestionsQueryResult = Apollo.QueryResult<
   InvestigationSuggestionsQuery,
   InvestigationSuggestionsQueryVariables
 >;
+export const ListInvestigationsAllSchemesDocument = gql`
+  query listInvestigationsAllSchemes(
+    $take: Int
+    $skip: Int
+    $where: InvestigationWhereInput
+  ) {
+    listInvestigationsAllSchemes(where: $where, take: $take, skip: $skip) {
+      total
+      investigations {
+        id
+        name
+        description
+        status
+      }
+    }
+  }
+`;
+export function useListInvestigationsAllSchemesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    ListInvestigationsAllSchemesQuery,
+    ListInvestigationsAllSchemesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    ListInvestigationsAllSchemesQuery,
+    ListInvestigationsAllSchemesQueryVariables
+  >(ListInvestigationsAllSchemesDocument, options);
+}
+export function useListInvestigationsAllSchemesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListInvestigationsAllSchemesQuery,
+    ListInvestigationsAllSchemesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ListInvestigationsAllSchemesQuery,
+    ListInvestigationsAllSchemesQueryVariables
+  >(ListInvestigationsAllSchemesDocument, options);
+}
+export type ListInvestigationsAllSchemesQueryHookResult = ReturnType<
+  typeof useListInvestigationsAllSchemesQuery
+>;
+export type ListInvestigationsAllSchemesLazyQueryHookResult = ReturnType<
+  typeof useListInvestigationsAllSchemesLazyQuery
+>;
+export type ListInvestigationsAllSchemesQueryResult = Apollo.QueryResult<
+  ListInvestigationsAllSchemesQuery,
+  ListInvestigationsAllSchemesQueryVariables
+>;
 export const ListInvestigationsDocument = gql`
   query listInvestigations(
     $scheme: SchemeWhereUniqueInput!
     $take: Int
     $skip: Int
+    $where: InvestigationWhereInput
   ) {
-    listInvestigations(scheme: $scheme, take: $take, skip: $skip) {
+    listInvestigations(
+      scheme: $scheme
+      where: $where
+      take: $take
+      skip: $skip
+    ) {
       total
       investigations {
         id
@@ -86645,6 +87220,88 @@ export type AddImagesToOffenderMutationResult =
 export type AddImagesToOffenderMutationOptions = Apollo.BaseMutationOptions<
   AddImagesToOffenderMutation,
   AddImagesToOffenderMutationVariables
+>;
+export const CopyOffenderDocument = gql`
+  mutation copyOffender($where: UniqueId!, $data: CreateOffenderData!) {
+    copyOffender(where: $where, data: $data) {
+      id
+      createdAt
+      updatedAt
+      age
+      build
+      height
+      dateOfBirth
+      dateSource
+      hair
+      gender
+      name
+      race
+      peculiarities
+      approved
+      active
+      idVerified
+      idSource
+      images {
+        id
+        url
+        optimised
+        card
+        position
+        rotation
+        primary
+        policeImage
+      }
+      groups {
+        id
+        name
+      }
+      tags {
+        id
+        name
+      }
+      bans {
+        id
+        location
+        description
+        startDate
+        endDate
+        type
+      }
+      createdBy {
+        id
+        fullName
+        businesses {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
+export type CopyOffenderMutationFn = Apollo.MutationFunction<
+  CopyOffenderMutation,
+  CopyOffenderMutationVariables
+>;
+export function useCopyOffenderMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CopyOffenderMutation,
+    CopyOffenderMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CopyOffenderMutation,
+    CopyOffenderMutationVariables
+  >(CopyOffenderDocument, options);
+}
+export type CopyOffenderMutationHookResult = ReturnType<
+  typeof useCopyOffenderMutation
+>;
+export type CopyOffenderMutationResult =
+  Apollo.MutationResult<CopyOffenderMutation>;
+export type CopyOffenderMutationOptions = Apollo.BaseMutationOptions<
+  CopyOffenderMutation,
+  CopyOffenderMutationVariables
 >;
 export const CreateSimpleOffenderDocument = gql`
   mutation CreateSimpleOffender($data: CreateOffenderData!) {
@@ -90392,6 +91049,7 @@ export const UpdateSchemeDocument = gql`
       defaultMessagePush
       defaultOffenderEmail
       defaultOffenderPush
+      autoPopulateDescription
       incidentRetention
       offenderRetention
       logo {
@@ -90496,6 +91154,7 @@ export const SchemeDocument = gql`
       defaultPublicOffenderDOB
       incidentRetention
       offenderRetention
+      autoPopulateDescription
       darkLogo {
         id
         url
@@ -91240,6 +91899,85 @@ export type ListTodosLazyQueryHookResult = ReturnType<
 export type ListTodosQueryResult = Apollo.QueryResult<
   ListTodosQuery,
   ListTodosQueryVariables
+>;
+export const TranslateDocument = gql`
+  query Translate($data: TranslateTextInput!) {
+    translateText(data: $data) {
+      origText
+      translatedText
+    }
+  }
+`;
+export function useTranslateQuery(
+  baseOptions: Apollo.QueryHookOptions<TranslateQuery, TranslateQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<TranslateQuery, TranslateQueryVariables>(
+    TranslateDocument,
+    options
+  );
+}
+export function useTranslateLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    TranslateQuery,
+    TranslateQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<TranslateQuery, TranslateQueryVariables>(
+    TranslateDocument,
+    options
+  );
+}
+export type TranslateQueryHookResult = ReturnType<typeof useTranslateQuery>;
+export type TranslateLazyQueryHookResult = ReturnType<
+  typeof useTranslateLazyQuery
+>;
+export type TranslateQueryResult = Apollo.QueryResult<
+  TranslateQuery,
+  TranslateQueryVariables
+>;
+export const TranslateTextDocument = gql`
+  query TranslateText($data: TranslateTextInput!) {
+    translateText(data: $data) {
+      translatedText
+      origText
+    }
+  }
+`;
+export function useTranslateTextQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    TranslateTextQuery,
+    TranslateTextQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<TranslateTextQuery, TranslateTextQueryVariables>(
+    TranslateTextDocument,
+    options
+  );
+}
+export function useTranslateTextLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    TranslateTextQuery,
+    TranslateTextQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<TranslateTextQuery, TranslateTextQueryVariables>(
+    TranslateTextDocument,
+    options
+  );
+}
+export type TranslateTextQueryHookResult = ReturnType<
+  typeof useTranslateTextQuery
+>;
+export type TranslateTextLazyQueryHookResult = ReturnType<
+  typeof useTranslateTextLazyQuery
+>;
+export type TranslateTextQueryResult = Apollo.QueryResult<
+  TranslateTextQuery,
+  TranslateTextQueryVariables
 >;
 export const CreateUpdateOnCrimeGroupDocument = gql`
   mutation CreateUpdateOnCrimeGroup(
@@ -92557,6 +93295,8 @@ export const CurrentUserDocument = gql`
           facialRecognition
           imagesRequiredOnOffenders
           taskTimeTracking
+          languageCount
+          autoPopulateDescription
         }
       }
       incidentEmail
@@ -93063,6 +93803,8 @@ export const ListUserNotificationsDocument = gql`
             defaultPublicOffenderDOB
             userTodos
             userNotifications
+            languageCount
+            autoPopulateDescription
             logo {
               optimisedPersisted
               id
@@ -93159,6 +93901,8 @@ export const UserNotificationsDocument = gql`
             defaultPublicOffenderDOB
             userTodos
             userNotifications
+            languageCount
+            autoPopulateDescription
             logo {
               optimisedPersisted
               id
@@ -94828,4 +95572,249 @@ export type UserListLazyQueryHookResult = ReturnType<
 export type UserListQueryResult = Apollo.QueryResult<
   UserListQuery,
   UserListQueryVariables
+>;
+export const CreateOneWorkflowDocument = gql`
+  mutation CreateOneWorkflow($data: WorkflowCreateInput!) {
+    createOneWorkflow(data: $data) {
+      id
+      name
+      trigger
+      triggerModels
+      actions {
+        type
+        outputModel
+        timesRun
+      }
+    }
+  }
+`;
+export type CreateOneWorkflowMutationFn = Apollo.MutationFunction<
+  CreateOneWorkflowMutation,
+  CreateOneWorkflowMutationVariables
+>;
+export function useCreateOneWorkflowMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateOneWorkflowMutation,
+    CreateOneWorkflowMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateOneWorkflowMutation,
+    CreateOneWorkflowMutationVariables
+  >(CreateOneWorkflowDocument, options);
+}
+export type CreateOneWorkflowMutationHookResult = ReturnType<
+  typeof useCreateOneWorkflowMutation
+>;
+export type CreateOneWorkflowMutationResult =
+  Apollo.MutationResult<CreateOneWorkflowMutation>;
+export type CreateOneWorkflowMutationOptions = Apollo.BaseMutationOptions<
+  CreateOneWorkflowMutation,
+  CreateOneWorkflowMutationVariables
+>;
+export const UpdateOneWorkflowDocument = gql`
+  mutation UpdateOneWorkflow(
+    $data: WorkflowUpdateInput!
+    $where: WorkflowWhereUniqueInput!
+  ) {
+    updateOneWorkflow(data: $data, where: $where) {
+      id
+      name
+      trigger
+      triggerModels
+      actions {
+        type
+        outputModel
+        timesRun
+      }
+    }
+  }
+`;
+export type UpdateOneWorkflowMutationFn = Apollo.MutationFunction<
+  UpdateOneWorkflowMutation,
+  UpdateOneWorkflowMutationVariables
+>;
+export function useUpdateOneWorkflowMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateOneWorkflowMutation,
+    UpdateOneWorkflowMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateOneWorkflowMutation,
+    UpdateOneWorkflowMutationVariables
+  >(UpdateOneWorkflowDocument, options);
+}
+export type UpdateOneWorkflowMutationHookResult = ReturnType<
+  typeof useUpdateOneWorkflowMutation
+>;
+export type UpdateOneWorkflowMutationResult =
+  Apollo.MutationResult<UpdateOneWorkflowMutation>;
+export type UpdateOneWorkflowMutationOptions = Apollo.BaseMutationOptions<
+  UpdateOneWorkflowMutation,
+  UpdateOneWorkflowMutationVariables
+>;
+export const WorkflowsDocument = gql`
+  query Workflows(
+    $where: WorkflowWhereInput
+    $orderBy: [WorkflowOrderByWithRelationInput!]
+  ) {
+    workflows(where: $where, orderBy: $orderBy) {
+      id
+      name
+      trigger
+      triggerModels
+      actions {
+        type
+        outputModel
+        timesRun
+      }
+    }
+  }
+`;
+export function useWorkflowsQuery(
+  baseOptions?: Apollo.QueryHookOptions<WorkflowsQuery, WorkflowsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<WorkflowsQuery, WorkflowsQueryVariables>(
+    WorkflowsDocument,
+    options
+  );
+}
+export function useWorkflowsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    WorkflowsQuery,
+    WorkflowsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<WorkflowsQuery, WorkflowsQueryVariables>(
+    WorkflowsDocument,
+    options
+  );
+}
+export type WorkflowsQueryHookResult = ReturnType<typeof useWorkflowsQuery>;
+export type WorkflowsLazyQueryHookResult = ReturnType<
+  typeof useWorkflowsLazyQuery
+>;
+export type WorkflowsQueryResult = Apollo.QueryResult<
+  WorkflowsQuery,
+  WorkflowsQueryVariables
+>;
+export const ViewWorkflowDocument = gql`
+  query ViewWorkflow($where: WorkflowWhereUniqueInput!) {
+    workflow(where: $where) {
+      name
+      conditions
+      actions {
+        data
+        id
+      }
+    }
+  }
+`;
+export function useViewWorkflowQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ViewWorkflowQuery,
+    ViewWorkflowQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ViewWorkflowQuery, ViewWorkflowQueryVariables>(
+    ViewWorkflowDocument,
+    options
+  );
+}
+export function useViewWorkflowLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ViewWorkflowQuery,
+    ViewWorkflowQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ViewWorkflowQuery, ViewWorkflowQueryVariables>(
+    ViewWorkflowDocument,
+    options
+  );
+}
+export type ViewWorkflowQueryHookResult = ReturnType<
+  typeof useViewWorkflowQuery
+>;
+export type ViewWorkflowLazyQueryHookResult = ReturnType<
+  typeof useViewWorkflowLazyQuery
+>;
+export type ViewWorkflowQueryResult = Apollo.QueryResult<
+  ViewWorkflowQuery,
+  ViewWorkflowQueryVariables
+>;
+export const WorkflowDataDocument = gql`
+  query WorkflowData(
+    $where: SchemeWhereUniqueInput!
+    $questionsWhere: QuestionWhereInput
+    $schemeTagsWhere: TagWhereInput
+  ) {
+    scheme(where: $where) {
+      questions(where: $questionsWhere) {
+        id
+        questionOn
+        optionsFormFormatted {
+          value
+          label
+        }
+        type
+        questionFormatted
+      }
+      schemeTags(where: $schemeTagsWhere) {
+        id
+        name
+      }
+      members {
+        role
+        userId
+        user {
+          fullName
+        }
+      }
+      groups {
+        id
+        name
+      }
+    }
+  }
+`;
+export function useWorkflowDataQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    WorkflowDataQuery,
+    WorkflowDataQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<WorkflowDataQuery, WorkflowDataQueryVariables>(
+    WorkflowDataDocument,
+    options
+  );
+}
+export function useWorkflowDataLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    WorkflowDataQuery,
+    WorkflowDataQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<WorkflowDataQuery, WorkflowDataQueryVariables>(
+    WorkflowDataDocument,
+    options
+  );
+}
+export type WorkflowDataQueryHookResult = ReturnType<
+  typeof useWorkflowDataQuery
+>;
+export type WorkflowDataLazyQueryHookResult = ReturnType<
+  typeof useWorkflowDataLazyQuery
+>;
+export type WorkflowDataQueryResult = Apollo.QueryResult<
+  WorkflowDataQuery,
+  WorkflowDataQueryVariables
 >;

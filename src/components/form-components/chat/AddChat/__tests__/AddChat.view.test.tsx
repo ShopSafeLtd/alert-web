@@ -26,6 +26,7 @@ describe('Detail Officer View', () => {
     const { getByText } = render(
       <MemoryRouter>
         <AddChat
+          form={{} as any}
           onSubmit={jest.fn()}
           onClose={jest.fn()}
           usersData={usersData}

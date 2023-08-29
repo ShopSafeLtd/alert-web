@@ -12,10 +12,10 @@ import {
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faSquareCheck,
-  faRotate,
   faBellOn,
   faBellSlash,
+  faRotate,
+  faSquareCheck,
 } from '@fortawesome/pro-light-svg-icons';
 import type { ListUserNotificationsQuery } from 'graphql/generated';
 import { Link } from 'react-router-dom';

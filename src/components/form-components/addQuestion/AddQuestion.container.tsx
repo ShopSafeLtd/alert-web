@@ -1,14 +1,16 @@
 import React from 'react';
 import useAddQuestion from './useAddQuestion';
 import View from './AddQuestion.view';
+import type { TagQuestion } from '../update-question-on-tag/UpdateQuestion.container';
 
 interface Props {
   onClose: () => void;
+  tagQuestions?: TagQuestion[];
 }
 
-const AddQuestionContainer = ({ onClose }: Props) => {
+const AddQuestionContainer = ({ onClose, tagQuestions }: Props) => {
   const { data, form, questionData, saving, loading, onSubmit } =
-    useAddQuestion({ onClose });
+    useAddQuestion({ onClose, tagQuestions });
   return (
     <View
       data={data}
@@ -17,6 +19,7 @@ const AddQuestionContainer = ({ onClose }: Props) => {
       loading={loading}
       onSubmit={onSubmit}
       saving={saving}
+      tagQuestions={tagQuestions}
       onClose={onClose}
     />
   );

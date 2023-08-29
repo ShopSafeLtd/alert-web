@@ -40,17 +40,17 @@ const IncidentTable = ({
   const classes = useStyles();
   const navigate = useNavigate();
   const intl = useIntl();
-  const restrictIncidentAccess = useStoreState(
-    (state) => state.scheme.restrictIncidentAccess
-  );
   const role = useStoreState((state) => state.user.role);
+  const restrictIncidentAccess =
+    useStoreState((state) => state.scheme.restrictIncidentAccess) &&
+    role === Role.User;
 
   return (
     <Table
       size="small"
       rowClassName={classes.row}
       onRow={(record) =>
-        hasNavigation && role === Role.User && restrictIncidentAccess
+        hasNavigation && !restrictIncidentAccess
           ? {
               onClick: () => navigate(`/app/incidents/view/${record.key}`),
             }

@@ -730,7 +730,10 @@ const ViewTag = ({
         onClose={toggleAddQuestion}
       >
         {addQuestion ? (
-          <AddQuestionContainer onClose={() => toggleAddQuestion()} />
+          <AddQuestionContainer
+            tagQuestions={tagQsFormatted || []}
+            onClose={() => toggleAddQuestion()}
+          />
         ) : (
           <div />
         )}

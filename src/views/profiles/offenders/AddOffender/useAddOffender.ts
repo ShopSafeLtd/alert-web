@@ -23,8 +23,8 @@ import {
   useSchemeGroupsQuery,
   useTagsQuery,
 } from 'graphql/generated';
-import type { FormInstance } from 'antd';
-import { Form, message, Modal, notification, Upload } from 'antd';
+import type { FormInstance, UploadFile } from 'antd';
+import { Form, message, Modal, notification } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
 import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import type { MutationUpdaterFn } from '@apollo/client';
@@ -41,6 +41,7 @@ import type {
 import update from 'immutability-helper';
 import errorNotification from 'types/error_notification';
 import { useIntl } from 'react-intl';
+import compressImage from 'utils/compress-images';
 
 const { confirm } = Modal;
 
@@ -91,6 +92,8 @@ interface Return {
   editExclusion: boolean;
   editImage: Image | null;
   fileList: Image[];
+  documentList: UploadFile[];
+  documentUploadProps: UploadProps;
   form: FormInstance<FormData>;
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
@@ -167,6 +170,8 @@ const useAddOffender = (): Return => {
 
   const [imageChange, setImageChange] = useState(false);
   const [fileList, setFileList] = useState<Image[]>([]);
+  const [documentList, setDocumentList] = useState<UploadFile[]>([]);
+
   const [addExclusion, setAddExclusion] = useState(false);
   const [editExclusion, setEditExclusion] = useState(false);
   const [bansData, setBansData] = useState<BanData[]>([]);
@@ -538,6 +543,13 @@ const useAddOffender = (): Return => {
                   }))
                 : undefined,
           },
+          documents:
+            documentList.map((file) => ({
+              url: file.url || '',
+              name: file.name || '',
+              fileType: file.type || '',
+              origFileName: file.fileName || '',
+            })) || [],
           bans:
             bansData && bansData.length > 0
               ? bansData.map((ban) => ({
@@ -577,15 +589,10 @@ const useAddOffender = (): Return => {
     const isFileDuplicate = fileList.find((item) => item.name === file.name);
     if (isFileDuplicate) {
       void message.error(
-        intl.formatMessage({
-          defaultMessage:
-            'This image already exists, please choose another one.',
-          id: 'ILB9M+',
-        })
+        'This image already exists, please choose another one.'
       );
     }
-
-    return !isFileDuplicate || Upload.LIST_IGNORE;
+    return compressImage(file);
   };
 
   const imgChange: UploadProps['onChange'] = (info) => {
@@ -606,7 +613,27 @@ const useAddOffender = (): Return => {
       setImageChange(true);
     }
   };
+  // evidence
+  const handleChange: UploadProps['onChange'] = (info) => {
+    let newFileList = [...info.fileList];
 
+    newFileList = newFileList.map((file) => {
+      if (file.response) {
+        // eslint-disable-next-line no-param-reassign
+        file.url = file.response[0].url;
+        // eslint-disable-next-line no-param-reassign
+        file.fileName = file.response[0].blobName;
+      }
+      return file;
+    });
+
+    setDocumentList(newFileList);
+  };
+  const documentUploadProps: UploadProps = {
+    action: import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT,
+    onChange: handleChange,
+    multiple: true,
+  };
   const toggleAddOffenderTag = () => {
     setAddOffenderTag(!addOffenderTag);
   };
@@ -741,19 +768,7 @@ const useAddOffender = (): Return => {
   };
 
   const onRemoveImage = (imageId: string) => {
-    confirm({
-      title: intl.formatMessage({
-        defaultMessage: 'Do you want to remove the image?',
-        id: 'n0NLsa',
-      }),
-      content: intl.formatMessage({
-        defaultMessage: 'This action cannot be undone.',
-        id: 'JDJoIZ',
-      }),
-      onOk() {
-        setFileList(fileList.filter((item) => item.uid !== imageId));
-      },
-    });
+    setFileList(fileList.filter((item) => item.uid !== imageId));
   };
 
   const toggleEditImage = (image?: Image) => {
@@ -788,6 +803,7 @@ const useAddOffender = (): Return => {
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     // onPreview,
     onRemoveImage,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     beforeUpload,
     fileList,
     addOffenderTag,
@@ -824,6 +840,8 @@ const useAddOffender = (): Return => {
     toggleAddCustomGallery,
     updateNewCustomGalleryData,
     updateNewOffenderTagData,
+    documentList,
+    documentUploadProps,
   };
 };
 
