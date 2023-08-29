@@ -67314,6 +67314,15 @@ export type Xy = {
   y: Scalars['Int'];
 };
 
+export type SetPasswordMutationVariables = Exact<{
+  data: SetPasswordData;
+}>;
+
+export type SetPasswordMutation = {
+  __typename?: 'Mutation';
+  setPassword?: { __typename?: 'User'; id: string } | null;
+};
+
 export type UpdateTaskMutationVariables = Exact<{
   data: TodoUpdateInput;
   where: TodoWhereUniqueInput;
@@ -78982,6 +78991,38 @@ export const FeedUpdateFragmentDoc = gql`
   }
   ${FeedImageFragmentDoc}
 `;
+export const SetPasswordDocument = gql`
+  mutation SetPassword($data: SetPasswordData!) {
+    setPassword(data: $data) {
+      id
+    }
+  }
+`;
+export type SetPasswordMutationFn = Apollo.MutationFunction<
+  SetPasswordMutation,
+  SetPasswordMutationVariables
+>;
+export function useSetPasswordMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SetPasswordMutation,
+    SetPasswordMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<SetPasswordMutation, SetPasswordMutationVariables>(
+    SetPasswordDocument,
+    options
+  );
+}
+export type SetPasswordMutationHookResult = ReturnType<
+  typeof useSetPasswordMutation
+>;
+export type SetPasswordMutationResult =
+  Apollo.MutationResult<SetPasswordMutation>;
+export type SetPasswordMutationOptions = Apollo.BaseMutationOptions<
+  SetPasswordMutation,
+  SetPasswordMutationVariables
+>;
 export const UpdateTaskDocument = gql`
   mutation UpdateTask($data: TodoUpdateInput!, $where: TodoWhereUniqueInput!) {
     updateTodoDefault(data: $data, where: $where) {

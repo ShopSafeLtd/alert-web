@@ -51,6 +51,8 @@ describe('Detail Officer View', () => {
     const { getByText } = render(
       <MemoryRouter>
         <UserDetail
+          editPassword={false}
+          toggleEditPassword={jest.fn()}
           userRole={Role.ContentAdmin}
           demLink={false}
           toggleDemLink={jest.fn()}

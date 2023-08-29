@@ -34,6 +34,7 @@ import { GetUserStatusValues } from 'types/enums/user_status';
 import formatLoginTime from 'utils/format-login-time';
 import LinkDem from '../../../../components/form-components/user/LinkDem';
 import useStyles from './UserDetail.styles';
+import SetPassword from '../../../../components/form-components/SetPassword';
 
 interface Props {
   data: UserQuery | undefined;
@@ -49,6 +50,8 @@ interface Props {
   deleteConfirm: () => void;
   toggleDemLink: () => void;
   userRole: Role | undefined;
+  toggleEditPassword: () => void;
+  editPassword: boolean;
 }
 const getTextStatus = (value: UserStatus) => {
   if (value === UserStatus.Active) return 'green';
@@ -70,7 +73,9 @@ const userDetail = ({
   toggleDemLink,
   demId,
   userRole,
-}: Props): JSX.Element => {
+  toggleEditPassword,
+  editPassword,
+}: Props): React.JSX.Element => {
   const intl = useIntl();
   const classes = useStyles();
   const navigate = useNavigate();
@@ -90,6 +95,9 @@ const userDetail = ({
           </Tag>
         }
         extra={[
+          <Button key="5" disabled={saving} onClick={toggleEditPassword}>
+            <FormattedMessage defaultMessage="Edit Password" id="8/FSbQ" />
+          </Button>,
           <Button
             key="3"
             // disabled={saving || !!data?.user?.demId || !demId}
@@ -472,6 +480,17 @@ const userDetail = ({
         onClose={toggleEditUser}
       >
         {editUser ? <EditUser onClose={toggleEditUser} /> : <div />}
+      </Drawer>
+      <Drawer
+        title={<FormattedMessage defaultMessage="Edit Password" id="8/FSbQ" />}
+        visible={editPassword}
+        width="600"
+        onClose={toggleEditPassword}
+      >
+        <SetPassword
+          userId={data?.user?.id || ''}
+          onClose={toggleEditPassword}
+        />
       </Drawer>
       <Drawer
         title={
