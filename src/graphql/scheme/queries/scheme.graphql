@@ -15,6 +15,7 @@ query scheme($where: SchemeWhereUniqueInput!) {
     defaultPublicOffenderDOB
     incidentRetention
     offenderRetention
+    autoPopulateDescription
     darkLogo {
       id
       url

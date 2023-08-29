@@ -644,12 +644,13 @@ const useAddIncident = (): Return => {
     }
   };
 
+  const { autoPopulateDescription } = useStoreState((state) => state.scheme);
   const onValuesChange = (changedValues: FormData, values: FormData) => {
     if (changedValues.description) {
       setDescriptionPristine(false);
     }
 
-    if (descriptionPristine) {
+    if (descriptionPristine && autoPopulateDescription) {
       // build description as data is completed
       const tags = values.tags
         .map((id) => tagsData && tagsData.tags.find((tag) => tag.id === id))

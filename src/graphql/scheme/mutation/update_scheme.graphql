@@ -13,6 +13,7 @@ mutation updateScheme($where: UniqueId!, $data: SchemeUpdateInput!) {
     defaultMessagePush
     defaultOffenderEmail
     defaultOffenderPush
+    autoPopulateDescription
     incidentRetention
     offenderRetention
     logo {
