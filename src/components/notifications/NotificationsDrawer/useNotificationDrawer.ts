@@ -50,7 +50,6 @@ interface Scheme {
   userNotifications?: number | null | undefined;
   languageCount: number;
   autoPopulateDescription: boolean;
-
   logo?:
     | {
         optimisedPersisted?: string | null | undefined;

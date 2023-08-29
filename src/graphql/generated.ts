@@ -77820,6 +77820,7 @@ export type ListUserNotificationsQuery = {
           userTodos?: number | null;
           userNotifications?: number | null;
           languageCount: number;
+          autoPopulateDescription: boolean;
           imagesRequiredOnOffenders: boolean;
           goodsMode: GoodsMode;
           facialRecognition: boolean;
@@ -77892,6 +77893,7 @@ export type UserNotificationsQuery = {
           userTodos?: number | null;
           userNotifications?: number | null;
           languageCount: number;
+          autoPopulateDescription: boolean;
           imagesRequiredOnOffenders: boolean;
           goodsMode: GoodsMode;
           facialRecognition: boolean;
@@ -93798,6 +93800,7 @@ export const ListUserNotificationsDocument = gql`
             userTodos
             userNotifications
             languageCount
+            autoPopulateDescription
             logo {
               optimisedPersisted
               id
@@ -93895,6 +93898,7 @@ export const UserNotificationsDocument = gql`
             userTodos
             userNotifications
             languageCount
+            autoPopulateDescription
             logo {
               optimisedPersisted
               id
