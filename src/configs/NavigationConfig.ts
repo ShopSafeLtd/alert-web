@@ -365,19 +365,7 @@ const adminOnlyItems: NavItem[] = [
       },
     ],
   },
-  {
-    key: 'workflow',
-    path: `${APP_PREFIX_PATH}/workflow`,
-    title: 'Workflow',
-    icon: faArrowProgress,
-    breadcrumb: true,
-    intl: defineMessage({
-      id: 'workflow',
-      defaultMessage: 'Workflow',
-    }),
-    roles: [Role.SchemeAdmin, Role.ShopsafeAdmin],
-    submenu: [],
-  },
+
   {
     key: 'settings',
     path: `${APP_PREFIX_PATH}/scheme-settings`,
@@ -449,6 +437,18 @@ const adminOnlyItems: NavItem[] = [
         }),
         icon: faListCheck,
         breadcrumb: true,
+        submenu: [],
+      },
+      {
+        key: 'workflow',
+        path: `${APP_PREFIX_PATH}/scheme-settings/workflow`,
+        title: 'Workflow',
+        icon: faArrowProgress,
+        breadcrumb: true,
+        intl: defineMessage({
+          id: 'workflow',
+          defaultMessage: 'Workflow',
+        }),
         submenu: [],
       },
       {
