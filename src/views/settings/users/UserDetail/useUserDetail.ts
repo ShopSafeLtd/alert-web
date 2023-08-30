@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import type { UserQuery, Role } from 'graphql/generated';
+import type { Role, UserQuery } from 'graphql/generated';
 import {
-  UserStatus,
   useDeleteUserFromSchemeMutation,
+  UserStatus,
   useSendInviteMutation,
   useUpdateUserDisableMutation,
   useUserQuery,
@@ -29,6 +29,8 @@ interface Return {
   disableConfirm: () => void;
   deleteConfirm: () => void;
   userRole: Role | undefined;
+  editPassword: boolean;
+  toggleEditPassword: () => void;
 }
 
 const useUserDetail = (userId: string): Return => {
@@ -44,6 +46,11 @@ const useUserDetail = (userId: string): Return => {
   // TODO: need to change this to be based on current business
   const business = useStoreState((state) => state.user.businesses);
   const demId = business.map((item) => item.demId)[0];
+
+  const [editPassword, setEditPassword] = useState(false);
+  const toggleEditPassword = () => {
+    setEditPassword(!editPassword);
+  };
 
   const { data, loading } = useUserQuery({
     fetchPolicy: 'cache-and-network',
@@ -258,6 +265,8 @@ const useUserDetail = (userId: string): Return => {
     toggleDemLink,
     demId,
     userRole: data?.user?.schemes.find((el) => el.schemeId === schemeId)?.role,
+    editPassword,
+    toggleEditPassword,
   };
 };
 

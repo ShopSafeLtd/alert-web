@@ -22,6 +22,7 @@ describe('List Officer View', () => {
       defaultOffenderEmail: false,
       defaultOffenderPush: false,
       defaultPublicOffenderDOB: true,
+      autoPopulateDescription: false,
     },
   };
   it('renders the page', () => {

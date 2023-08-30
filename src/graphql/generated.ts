@@ -8117,6 +8117,9 @@ export type CreateOffenderVehicles = {
 };
 
 export type CreateQuestionInput = {
+  dependentAnswer?: InputMaybe<Scalars['String']>;
+  dependentOnQId?: InputMaybe<Scalars['String']>;
+  dependentOnTagQId?: InputMaybe<Scalars['String']>;
   model?: InputMaybe<QuestionModel>;
   options?: InputMaybe<Array<Scalars['String']>>;
   question: Scalars['String'];
@@ -37013,6 +37016,7 @@ export type PerformanceReport = {
 
 export enum PoliceResponseTime {
   NoResponse = 'NO_RESPONSE',
+  Over_24Hours = 'OVER_24_HOURS',
   Within_1Hour = 'WITHIN_1_HOUR',
   Within_3Hours = 'WITHIN_3_HOURS',
   Within_12Hours = 'WITHIN_12_HOURS',
@@ -40751,6 +40755,7 @@ export type ResetPasswordData = {
 
 export enum Role {
   ContentAdmin = 'CONTENT_ADMIN',
+  GroupAdmin = 'GROUP_ADMIN',
   SchemeAdmin = 'SCHEME_ADMIN',
   ShopsafeAdmin = 'SHOPSAFE_ADMIN',
   User = 'USER',
@@ -40763,6 +40768,7 @@ export type Scheme = {
   articles: Array<Article>;
   autoApproveIncidents: Scalars['Boolean'];
   autoApproveOffenders: Scalars['Boolean'];
+  autoPopulateDescription: Scalars['Boolean'];
   bans: Array<Ban>;
   businesses: Array<Business>;
   chats: Array<Chat>;
@@ -41099,6 +41105,7 @@ export type SchemeCreateInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -41167,6 +41174,7 @@ export type SchemeCreateManyDarkLogoInput = {
   approvalDueDays?: InputMaybe<Scalars['Int']>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   defaultIncidentEmail?: InputMaybe<Scalars['Boolean']>;
@@ -41203,6 +41211,7 @@ export type SchemeCreateManyLogoInput = {
   approvalDueDays?: InputMaybe<Scalars['Int']>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogoId?: InputMaybe<Scalars['String']>;
@@ -41723,6 +41732,7 @@ export type SchemeCreateWithoutActionsInSchemeInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -41793,6 +41803,7 @@ export type SchemeCreateWithoutActionsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -41863,6 +41874,7 @@ export type SchemeCreateWithoutArticlesInput = {
   approvalDueDays?: InputMaybe<Scalars['Int']>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -41934,6 +41946,7 @@ export type SchemeCreateWithoutBansInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
@@ -42004,6 +42017,7 @@ export type SchemeCreateWithoutBusinessesInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
@@ -42074,6 +42088,7 @@ export type SchemeCreateWithoutChatsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
@@ -42144,6 +42159,7 @@ export type SchemeCreateWithoutContactsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -42214,6 +42230,7 @@ export type SchemeCreateWithoutCrimeGroupsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -42284,6 +42301,7 @@ export type SchemeCreateWithoutCustomGalleriesInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -42354,6 +42372,7 @@ export type SchemeCreateWithoutDarkLogoInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -42424,6 +42443,7 @@ export type SchemeCreateWithoutDocumentsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -42494,6 +42514,7 @@ export type SchemeCreateWithoutFeedItemsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -42564,6 +42585,7 @@ export type SchemeCreateWithoutGroupsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -42634,6 +42656,7 @@ export type SchemeCreateWithoutImagesInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -42704,6 +42727,7 @@ export type SchemeCreateWithoutIncidentFormInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -42774,6 +42798,7 @@ export type SchemeCreateWithoutIncidentsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -42844,6 +42869,7 @@ export type SchemeCreateWithoutIntelInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -42914,6 +42940,7 @@ export type SchemeCreateWithoutInvestigationsInSchemeInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -42984,6 +43011,7 @@ export type SchemeCreateWithoutInvestigationsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -43054,6 +43082,7 @@ export type SchemeCreateWithoutLoginEventsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -43124,6 +43153,7 @@ export type SchemeCreateWithoutLogoInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -43194,6 +43224,7 @@ export type SchemeCreateWithoutMembersInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -43264,6 +43295,7 @@ export type SchemeCreateWithoutMessagesInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -43334,6 +43366,7 @@ export type SchemeCreateWithoutNotificationsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -43404,6 +43437,7 @@ export type SchemeCreateWithoutOffendersInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -43474,6 +43508,7 @@ export type SchemeCreateWithoutQuestionGroupsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -43544,6 +43579,7 @@ export type SchemeCreateWithoutQuestionsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -43614,6 +43650,7 @@ export type SchemeCreateWithoutRecycledItemsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -43684,6 +43721,7 @@ export type SchemeCreateWithoutRekCollectionsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -43754,6 +43792,7 @@ export type SchemeCreateWithoutReportIconsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -43824,6 +43863,7 @@ export type SchemeCreateWithoutReportTemplatesInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -43894,6 +43934,7 @@ export type SchemeCreateWithoutSchemeTagsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -43964,6 +44005,7 @@ export type SchemeCreateWithoutStatementTemplatesInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -44034,6 +44076,7 @@ export type SchemeCreateWithoutTagOrdersInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -44104,6 +44147,7 @@ export type SchemeCreateWithoutTagsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -44174,6 +44218,7 @@ export type SchemeCreateWithoutTermsInSchemeInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -44244,6 +44289,7 @@ export type SchemeCreateWithoutTermsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -44314,6 +44360,7 @@ export type SchemeCreateWithoutTodosInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -44384,6 +44431,7 @@ export type SchemeCreateWithoutVehiclesInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -44454,6 +44502,7 @@ export type SchemeCreateWithoutWorkflowsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
@@ -44538,6 +44587,7 @@ export type SchemeOrderByWithRelationInput = {
   articles?: InputMaybe<ArticleOrderByRelationAggregateInput>;
   autoApproveIncidents?: InputMaybe<SortOrder>;
   autoApproveOffenders?: InputMaybe<SortOrder>;
+  autoPopulateDescription?: InputMaybe<SortOrder>;
   bans?: InputMaybe<BanOrderByRelationAggregateInput>;
   businesses?: InputMaybe<BusinessOrderByRelationAggregateInput>;
   chats?: InputMaybe<ChatOrderByRelationAggregateInput>;
@@ -44616,6 +44666,7 @@ export type SchemeScalarWhereInput = {
   approvalDueDays?: InputMaybe<IntNullableFilter>;
   autoApproveIncidents?: InputMaybe<BoolFilter>;
   autoApproveOffenders?: InputMaybe<BoolFilter>;
+  autoPopulateDescription?: InputMaybe<BoolFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   customTranslations?: InputMaybe<JsonNullableListFilter>;
   darkLogoId?: InputMaybe<StringNullableFilter>;
@@ -44651,6 +44702,7 @@ export type SchemeUpdateInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -44719,6 +44771,7 @@ export type SchemeUpdateManyMutationInput = {
   approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   defaultIncidentEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -45529,6 +45582,7 @@ export type SchemeUpdateWithoutActionsInSchemeInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -45599,6 +45653,7 @@ export type SchemeUpdateWithoutActionsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -45669,6 +45724,7 @@ export type SchemeUpdateWithoutArticlesInput = {
   approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -45740,6 +45796,7 @@ export type SchemeUpdateWithoutBansInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
@@ -45810,6 +45867,7 @@ export type SchemeUpdateWithoutBusinessesInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
@@ -45880,6 +45938,7 @@ export type SchemeUpdateWithoutChatsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
@@ -45950,6 +46009,7 @@ export type SchemeUpdateWithoutContactsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -46020,6 +46080,7 @@ export type SchemeUpdateWithoutCrimeGroupsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -46090,6 +46151,7 @@ export type SchemeUpdateWithoutCustomGalleriesInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -46160,6 +46222,7 @@ export type SchemeUpdateWithoutDarkLogoInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -46230,6 +46293,7 @@ export type SchemeUpdateWithoutDocumentsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -46300,6 +46364,7 @@ export type SchemeUpdateWithoutFeedItemsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -46370,6 +46435,7 @@ export type SchemeUpdateWithoutGroupsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -46440,6 +46506,7 @@ export type SchemeUpdateWithoutImagesInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -46510,6 +46577,7 @@ export type SchemeUpdateWithoutIncidentFormInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -46580,6 +46648,7 @@ export type SchemeUpdateWithoutIncidentsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -46650,6 +46719,7 @@ export type SchemeUpdateWithoutIntelInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -46720,6 +46790,7 @@ export type SchemeUpdateWithoutInvestigationsInSchemeInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -46790,6 +46861,7 @@ export type SchemeUpdateWithoutInvestigationsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -46860,6 +46932,7 @@ export type SchemeUpdateWithoutLoginEventsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -46930,6 +47003,7 @@ export type SchemeUpdateWithoutLogoInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -47000,6 +47074,7 @@ export type SchemeUpdateWithoutMembersInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -47070,6 +47145,7 @@ export type SchemeUpdateWithoutMessagesInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -47140,6 +47216,7 @@ export type SchemeUpdateWithoutNotificationsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -47210,6 +47287,7 @@ export type SchemeUpdateWithoutOffendersInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -47280,6 +47358,7 @@ export type SchemeUpdateWithoutQuestionGroupsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -47350,6 +47429,7 @@ export type SchemeUpdateWithoutQuestionsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -47420,6 +47500,7 @@ export type SchemeUpdateWithoutRecycledItemsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -47490,6 +47571,7 @@ export type SchemeUpdateWithoutRekCollectionsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -47560,6 +47642,7 @@ export type SchemeUpdateWithoutReportIconsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -47630,6 +47713,7 @@ export type SchemeUpdateWithoutReportTemplatesInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -47700,6 +47784,7 @@ export type SchemeUpdateWithoutSchemeTagsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -47770,6 +47855,7 @@ export type SchemeUpdateWithoutStatementTemplatesInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -47840,6 +47926,7 @@ export type SchemeUpdateWithoutTagOrdersInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -47910,6 +47997,7 @@ export type SchemeUpdateWithoutTagsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -47980,6 +48068,7 @@ export type SchemeUpdateWithoutTermsInSchemeInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -48050,6 +48139,7 @@ export type SchemeUpdateWithoutTermsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -48120,6 +48210,7 @@ export type SchemeUpdateWithoutTodosInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -48190,6 +48281,7 @@ export type SchemeUpdateWithoutVehiclesInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -48260,6 +48352,7 @@ export type SchemeUpdateWithoutWorkflowsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
@@ -48560,6 +48653,7 @@ export type SchemeWhereInput = {
   articles?: InputMaybe<ArticleListRelationFilter>;
   autoApproveIncidents?: InputMaybe<BoolFilter>;
   autoApproveOffenders?: InputMaybe<BoolFilter>;
+  autoPopulateDescription?: InputMaybe<BoolFilter>;
   bans?: InputMaybe<BanListRelationFilter>;
   businesses?: InputMaybe<BusinessListRelationFilter>;
   chats?: InputMaybe<ChatListRelationFilter>;
@@ -67333,6 +67427,15 @@ export type Xy = {
   y: Scalars['Int'];
 };
 
+export type SetPasswordMutationVariables = Exact<{
+  data: SetPasswordData;
+}>;
+
+export type SetPasswordMutation = {
+  __typename?: 'Mutation';
+  setPassword?: { __typename?: 'User'; id: string } | null;
+};
+
 export type UpdateTaskMutationVariables = Exact<{
   data: TodoUpdateInput;
   where: TodoWhereUniqueInput;
@@ -75933,6 +76036,7 @@ export type UpdateSchemeMutation = {
     defaultMessagePush: boolean;
     defaultOffenderEmail: boolean;
     defaultOffenderPush: boolean;
+    autoPopulateDescription: boolean;
     incidentRetention?: number | null;
     offenderRetention?: number | null;
     logo?: {
@@ -75991,6 +76095,7 @@ export type SchemeQuery = {
     defaultPublicOffenderDOB: boolean;
     incidentRetention?: number | null;
     offenderRetention?: number | null;
+    autoPopulateDescription: boolean;
     darkLogo?: {
       __typename?: 'Image';
       id: string;
@@ -77505,6 +77610,7 @@ export type CurrentUserQuery = {
         imagesRequiredOnOffenders: boolean;
         taskTimeTracking: boolean;
         languageCount: number;
+        autoPopulateDescription: boolean;
         logo?: {
           __typename?: 'Image';
           optimisedPersisted?: string | null;
@@ -77869,6 +77975,7 @@ export type ListUserNotificationsQuery = {
           userTodos?: number | null;
           userNotifications?: number | null;
           languageCount: number;
+          autoPopulateDescription: boolean;
           imagesRequiredOnOffenders: boolean;
           goodsMode: GoodsMode;
           facialRecognition: boolean;
@@ -77941,6 +78048,7 @@ export type UserNotificationsQuery = {
           userTodos?: number | null;
           userNotifications?: number | null;
           languageCount: number;
+          autoPopulateDescription: boolean;
           imagesRequiredOnOffenders: boolean;
           goodsMode: GoodsMode;
           facialRecognition: boolean;
@@ -79134,6 +79242,38 @@ export const FeedUpdateFragmentDoc = gql`
   }
   ${FeedImageFragmentDoc}
 `;
+export const SetPasswordDocument = gql`
+  mutation SetPassword($data: SetPasswordData!) {
+    setPassword(data: $data) {
+      id
+    }
+  }
+`;
+export type SetPasswordMutationFn = Apollo.MutationFunction<
+  SetPasswordMutation,
+  SetPasswordMutationVariables
+>;
+export function useSetPasswordMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SetPasswordMutation,
+    SetPasswordMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<SetPasswordMutation, SetPasswordMutationVariables>(
+    SetPasswordDocument,
+    options
+  );
+}
+export type SetPasswordMutationHookResult = ReturnType<
+  typeof useSetPasswordMutation
+>;
+export type SetPasswordMutationResult =
+  Apollo.MutationResult<SetPasswordMutation>;
+export type SetPasswordMutationOptions = Apollo.BaseMutationOptions<
+  SetPasswordMutation,
+  SetPasswordMutationVariables
+>;
 export const UpdateTaskDocument = gql`
   mutation UpdateTask($data: TodoUpdateInput!, $where: TodoWhereUniqueInput!) {
     updateTodoDefault(data: $data, where: $where) {
@@ -91283,6 +91423,7 @@ export const UpdateSchemeDocument = gql`
       defaultMessagePush
       defaultOffenderEmail
       defaultOffenderPush
+      autoPopulateDescription
       incidentRetention
       offenderRetention
       logo {
@@ -91387,6 +91528,7 @@ export const SchemeDocument = gql`
       defaultPublicOffenderDOB
       incidentRetention
       offenderRetention
+      autoPopulateDescription
       darkLogo {
         id
         url
@@ -93486,6 +93628,7 @@ export const CurrentUserDocument = gql`
           imagesRequiredOnOffenders
           taskTimeTracking
           languageCount
+          autoPopulateDescription
         }
       }
       incidentEmail
@@ -93993,6 +94136,7 @@ export const ListUserNotificationsDocument = gql`
             userTodos
             userNotifications
             languageCount
+            autoPopulateDescription
             logo {
               optimisedPersisted
               id
@@ -94090,6 +94234,7 @@ export const UserNotificationsDocument = gql`
             userTodos
             userNotifications
             languageCount
+            autoPopulateDescription
             logo {
               optimisedPersisted
               id

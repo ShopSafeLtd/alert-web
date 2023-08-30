@@ -23,6 +23,7 @@ describe('List Officer View', () => {
               autoApproveOffenders: false,
               restrictIncidentAccess: false,
               defaultPublicOffenderDOB: false,
+              autoPopulateDescription: false,
               members: [
                 {
                   id: 'id',

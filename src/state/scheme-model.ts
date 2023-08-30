@@ -26,6 +26,7 @@ export interface SetSchemePayload {
   imagesRequiredOnOffenders: boolean;
   taskTimeTracking: boolean;
   languageCount: number;
+  autoPopulateDescription: boolean;
 }
 
 export interface SchemeModel {
@@ -47,6 +48,7 @@ export interface SchemeModel {
   imagesRequiredOnOffenders: boolean;
   taskTimeTracking: boolean;
   languageCount: number;
+  autoPopulateDescription: boolean;
 }
 
 const userModel: SchemeModel = {
@@ -66,6 +68,7 @@ const userModel: SchemeModel = {
   imagesRequiredOnOffenders: false,
   taskTimeTracking: false,
   languageCount: 0,
+  autoPopulateDescription: true,
   setScheme: action((state, payload) => {
     state.id = payload.id;
     state.autoApproveIncidents = payload.autoApproveIncidents;
@@ -83,6 +86,7 @@ const userModel: SchemeModel = {
     state.imagesRequiredOnOffenders = payload.imagesRequiredOnOffenders;
     state.taskTimeTracking = payload.taskTimeTracking;
     state.languageCount = payload.languageCount;
+    state.autoPopulateDescription = payload.autoPopulateDescription;
   }),
   clearScheme: action((state) => {
     state.id = '';
@@ -101,6 +105,7 @@ const userModel: SchemeModel = {
     state.imagesRequiredOnOffenders = false;
     state.taskTimeTracking = false;
     state.languageCount = 0;
+    state.autoPopulateDescription = true;
   }),
 };
 

@@ -77,6 +77,7 @@ export interface Scheme {
     facialRecognition: boolean;
     taskTimeTracking: boolean;
     imagesRequiredOnOffenders: boolean;
+    autoPopulateDescription: boolean;
   };
 }
 

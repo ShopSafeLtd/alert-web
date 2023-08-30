@@ -75,7 +75,7 @@ export const NavScheme = () => {
 
     setScheme({
       languageCount: scheme.scheme.languageCount,
-
+      autoPopulateDescription: scheme.scheme.autoPopulateDescription,
       autoApproveIncidents: scheme.scheme.autoApproveIncidents,
       autoApproveOffenders: scheme.scheme.autoApproveOffenders,
       defaultPublicOffenderDOB: scheme.scheme.defaultPublicOffenderDOB,

@@ -70,6 +70,7 @@ interface Scheme {
   imagesRequiredOnOffenders: boolean;
   taskTimeTracking: boolean;
   languageCount: number;
+  autoPopulateDescription: boolean;
 }
 interface Return {
   data:
@@ -328,6 +329,7 @@ const useNotificationLists = (): Return => {
     );
 
     setScheme({
+      autoPopulateDescription: scheme.autoPopulateDescription,
       languageCount: scheme.languageCount,
       autoApproveIncidents: scheme.autoApproveIncidents,
       autoApproveOffenders: scheme.autoApproveOffenders,

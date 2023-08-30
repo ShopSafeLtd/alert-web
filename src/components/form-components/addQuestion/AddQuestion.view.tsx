@@ -1,8 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access,unicorn/no-useless-promise-resolve-reject,consistent-return,@typescript-eslint/no-unsafe-call */
 import type { FormInstance } from 'antd';
-import { Button, Card, Checkbox, Col, Form, Input, Row, Select } from 'antd';
+import {
+  Button,
+  Card,
+  Checkbox,
+  Col,
+  DatePicker,
+  Form,
+  Input,
+  InputNumber,
+  Radio,
+  Row,
+  Select,
+} from 'antd';
 import React from 'react';
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import type { FormData } from './useAddQuestion';
 import type { AvailableQuestionsQuery } from '../../../graphql/generated';
 import { AnswerType } from '../../../graphql/generated';
@@ -14,6 +26,7 @@ import {
   TimePreview,
   YesNoPreview,
 } from './previews';
+import type { TagQuestion } from '../update-question-on-tag/UpdateQuestion.container';
 
 interface AddQuestionViewProps {
   questionData: AvailableQuestionsQuery | undefined;
@@ -23,6 +36,7 @@ interface AddQuestionViewProps {
   onSubmit: (value: FormData) => void;
   onClose: () => void;
   saving: boolean;
+  tagQuestions?: TagQuestion[];
 }
 
 const AddQuestionView = ({
@@ -33,12 +47,14 @@ const AddQuestionView = ({
   onSubmit,
   onClose,
   saving,
+  tagQuestions,
 }: AddQuestionViewProps) => {
   const answerType = Form.useWatch('type', form);
   const question = Form.useWatch('question', form) || '';
   const opt = Form.useWatch('options', form) || [];
   const selectedId = Form.useWatch('selectedId', form);
   const intl = useIntl();
+  const dependentOn = Form.useWatch('dependentOn', form);
 
   const generatePreview = () => {
     if (answerType === AnswerType.String) {
@@ -61,8 +77,57 @@ const AddQuestionView = ({
         <SelectPreview question={question} options={opt.filter(Boolean)} />
       );
     }
+
     return <div />;
   };
+
+  const generateFormItem = () => {
+    if (!tagQuestions) return <div />;
+    const dependentQuestion = tagQuestions.find(
+      (q) => q.tagQuestionId === dependentOn
+    );
+    if (!dependentOn || !dependentQuestion) return <div />;
+    switch (dependentQuestion.type) {
+      case AnswerType.String: {
+        return <Input />;
+      }
+      case AnswerType.Boolean: {
+        return (
+          <Radio.Group size="small">
+            <Radio.Button value="true">
+              <FormattedMessage defaultMessage="Yes" id="a5msuh" />
+            </Radio.Button>
+            <Radio.Button value="false">
+              <FormattedMessage defaultMessage="No" id="oUWADl" />
+            </Radio.Button>
+          </Radio.Group>
+        );
+      }
+      case AnswerType.Date: {
+        return <DatePicker />;
+      }
+      case AnswerType.Time: {
+        return <DatePicker.TimePicker />;
+      }
+      case AnswerType.Select: {
+        return (
+          <Select
+            options={dependentQuestion.options?.map((o) => ({
+              label: o,
+              value: o.toLowerCase(),
+            }))}
+          />
+        );
+      }
+      case AnswerType.Number: {
+        return <InputNumber />;
+      }
+      default: {
+        return <div />;
+      }
+    }
+  };
+
   return (
     <Form<FormData>
       form={form}
@@ -282,6 +347,45 @@ const AddQuestionView = ({
       >
         {generatePreview()}
       </Card>
+      {tagQuestions && (
+        <Card loading={loading}>
+          <Form.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Dependent Question',
+              id: 'GH/JnG',
+            })}
+            name="dependentOn"
+          >
+            <Select
+              onSelect={() => form.setFieldsValue({ dependentAnswer: '' })}
+              options={tagQuestions.map((q) => ({
+                label: q.question,
+                value: q.tagQuestionId,
+              }))}
+            />
+          </Form.Item>
+          <Form.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Dependent Answer',
+              id: 'uVG0Go',
+            })}
+            rules={[
+              {
+                required: !!dependentOn,
+                message: intl.formatMessage({
+                  defaultMessage:
+                    'Please select an answer that this question will depend on to show in the form',
+                  id: 'DigMoX',
+                }),
+              },
+            ]}
+            required={!!dependentOn}
+            name="dependentAnswer"
+          >
+            {generateFormItem()}
+          </Form.Item>
+        </Card>
+      )}
       <Form.Item>
         <Row style={{ marginTop: 10 }} gutter={10} justify="end">
           <Col>

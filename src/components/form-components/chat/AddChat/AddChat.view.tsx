@@ -1,9 +1,10 @@
 import React from 'react';
+import type { FormInstance } from 'antd';
 import { Button, Col, Form, Input, Row, Select } from 'antd';
 import { useIntl } from 'react-intl';
 import type { ListSchemeUsersQuery } from 'graphql/generated';
 
-interface FormData {
+export interface FormData {
   name: string;
   description: string;
   users: string[];
@@ -15,6 +16,7 @@ interface Props {
   usersData: ListSchemeUsersQuery | undefined;
   usersLoading: boolean;
   saving: boolean;
+  form: FormInstance<FormData>;
 }
 
 const AddChat = ({
@@ -23,11 +25,12 @@ const AddChat = ({
   usersData,
   usersLoading,
   saving,
+  form,
 }: Props): JSX.Element => {
   const intl = useIntl();
 
   return (
-    <Form layout="vertical" onFinish={onSubmit}>
+    <Form<FormData> layout="vertical" onFinish={onSubmit} form={form}>
       <Row gutter={16}>
         <Col span={23}>
           <Form.Item

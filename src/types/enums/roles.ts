@@ -10,4 +10,5 @@ export const RoleValues = {
   [Role.ContentAdmin]: 'Content Admin',
   [Role.User]: 'User',
   [Role.ShopsafeAdmin]: 'Shopsafe Admin',
+  [Role.GroupAdmin]: 'Group Admin',
 } as const;
