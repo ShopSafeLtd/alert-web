@@ -1,6 +1,7 @@
 import React from 'react';
 import type { FormInstance } from 'antd';
 import {
+  Empty,
   Form,
   Button,
   Col,
@@ -100,7 +101,6 @@ const ImageSection = ({
                   : import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT
               }
               className="incident-form-images-no-offenders"
-              listType="picture-card"
               accept=".png,.jpeg"
               disabled={disabled}
               beforeUpload={async (file) => compressImage(file)}
@@ -137,108 +137,134 @@ const ImageSection = ({
             </Upload>
           </Col>
         </Row>
+        {(fileList && fileList.length > 0) || (images && images.length > 0) ? (
+          <>
+            {images && images.length > 0 && (
+              <Form.Item
+                name="images"
+                label={intl.formatMessage({
+                  defaultMessage: 'Images',
+                  id: 'Fip4H8',
+                })}
+              >
+                <Upload
+                  fileList={images}
+                  onChange={onImageChange}
+                  action={
+                    facialRec
+                      ? import.meta.env.VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT
+                      : import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT
+                  }
+                  className="incident-form-images-no-offenders"
+                  listType="picture-card"
+                  accept=".png,.jpeg"
+                  disabled={disabled}
+                  beforeUpload={async (file) => compressImage(file)}
+                  // TODO
+                  // eslint-disable-next-line react/no-unstable-nested-components
+                  itemRender={(el, file: StateImageData) => (
+                    <div
+                      className="image-card"
+                      style={{ width: 200 }}
+                      key={el.key}
+                    >
+                      {file.url === undefined && (
+                        <div className="image-card-loading">
+                          <Spin />
+                        </div>
+                      )}
 
-        <Form.Item
-          name="images"
-          label={intl.formatMessage({ defaultMessage: 'Images', id: 'Fip4H8' })}
-        >
-          <Upload
-            fileList={images}
-            onChange={onImageChange}
-            action={
-              facialRec
-                ? import.meta.env.VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT
-                : import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT
-            }
-            className="incident-form-images-no-offenders"
-            listType="picture-card"
-            accept=".png,.jpeg"
-            disabled={disabled}
-            beforeUpload={async (file) => compressImage(file)}
-            // TODO
-            // eslint-disable-next-line react/no-unstable-nested-components
-            itemRender={(el, file: StateImageData) => (
-              <div className="image-card" style={{ width: 200 }} key={el.key}>
-                {file.url === undefined && (
-                  <div className="image-card-loading">
-                    <Spin />
-                  </div>
-                )}
-
-                <div className="image-card-image">
-                  <WatermarkImage
-                    position={file.position || ImagePosition.CenterCenter}
-                    url={file.url || file.thumbUrl || ''}
-                  />
-                  <div className="image-remove-button">
-                    <Row gutter={4}>
-                      <Col>
-                        <Button
-                          size="small"
-                          disabled={disabled}
-                          onClick={() => setEditImage(file)}
-                          icon={<FontAwesomeIcon icon={faEdit} />}
+                      <div className="image-card-image">
+                        <WatermarkImage
+                          position={file.position || ImagePosition.CenterCenter}
+                          url={file.url || file.thumbUrl || ''}
                         />
-                      </Col>
-                      <Col>
-                        <Popconfirm
-                          placement="topLeft"
-                          trigger="hover"
-                          title={intl.formatMessage({
-                            defaultMessage: 'Remove the image?',
-                            id: 'bRha+v',
-                          })}
-                          onConfirm={() => onRemoveImage(file.uid)}
-                          okText={intl.formatMessage({
-                            defaultMessage: 'Yes',
-                            id: 'a5msuh',
-                          })}
-                          cancelText={intl.formatMessage({
-                            defaultMessage: 'No',
-                            id: 'oUWADl',
-                          })}
-                          overlayInnerStyle={{ padding: 10 }}
-                        >
-                          <Button
-                            size="small"
-                            disabled={disabled}
-                            icon={<FontAwesomeIcon icon={faTrash} />}
-                          />
-                        </Popconfirm>
-                      </Col>
-                    </Row>
-                  </div>
-                </div>
-              </div>
+                        <div className="image-remove-button">
+                          <Row gutter={4}>
+                            <Col>
+                              <Button
+                                size="small"
+                                disabled={disabled}
+                                onClick={() => setEditImage(file)}
+                                icon={<FontAwesomeIcon icon={faEdit} />}
+                              />
+                            </Col>
+                            <Col>
+                              <Popconfirm
+                                placement="topLeft"
+                                trigger="hover"
+                                title={intl.formatMessage({
+                                  defaultMessage: 'Remove the image?',
+                                  id: 'bRha+v',
+                                })}
+                                onConfirm={() => onRemoveImage(file.uid)}
+                                okText={intl.formatMessage({
+                                  defaultMessage: 'Yes',
+                                  id: 'a5msuh',
+                                })}
+                                cancelText={intl.formatMessage({
+                                  defaultMessage: 'No',
+                                  id: 'oUWADl',
+                                })}
+                                overlayInnerStyle={{ padding: 10 }}
+                              >
+                                <Button
+                                  size="small"
+                                  disabled={disabled}
+                                  icon={<FontAwesomeIcon icon={faTrash} />}
+                                />
+                              </Popconfirm>
+                            </Col>
+                          </Row>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                >
+                  {images.length < 10 &&
+                    intl.formatMessage({
+                      defaultMessage: '+ Upload',
+                      id: '3QJWLZ',
+                    })}
+                </Upload>
+              </Form.Item>
             )}
-          >
-            {images.length < 10 &&
-              intl.formatMessage({ defaultMessage: '+ Upload', id: '3QJWLZ' })}
-          </Upload>
-        </Form.Item>
-
-        <Form.Item
-          name="documents"
-          label={intl.formatMessage({
-            defaultMessage: 'Other Media',
-            id: 'w9BFSc',
-          })}
-        >
-          <Upload
-            // eslint-disable-next-line react/jsx-props-no-spreading
-            {...documentUploadProps}
-            listType="picture"
-            style={{ display: 'flex' }}
-            fileList={fileList}
-          >
-            <Button icon={<UploadOutlined />}>
-              {intl.formatMessage({
-                defaultMessage: 'Upload Document',
-                id: 'Kc9MAV',
+            {fileList && fileList.length > 0 && (
+              <Form.Item
+                name="documents"
+                label={intl.formatMessage({
+                  defaultMessage: 'Other Media',
+                  id: 'w9BFSc',
+                })}
+              >
+                <Upload
+                  // eslint-disable-next-line react/jsx-props-no-spreading
+                  {...documentUploadProps}
+                  listType="picture"
+                  style={{ display: 'flex' }}
+                  fileList={fileList}
+                >
+                  <Button icon={<UploadOutlined />}>
+                    {intl.formatMessage({
+                      defaultMessage: 'Upload Document',
+                      id: 'Kc9MAV',
+                    })}
+                  </Button>
+                </Upload>
+              </Form.Item>
+            )}
+          </>
+        ) : (
+          <Row justify="center">
+            <Empty
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
+              description={intl.formatMessage({
+                defaultMessage: 'No images & media added yet.',
+                id: 'EgTScc',
               })}
-            </Button>
-          </Upload>
-        </Form.Item>
+            />
+          </Row>
+        )}
 
         {/* TODO! */}
         <ImageEditor
