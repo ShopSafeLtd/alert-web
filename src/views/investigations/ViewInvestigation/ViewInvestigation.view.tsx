@@ -39,6 +39,7 @@ interface Props {
   submitCrimeGroup: (value: string) => void;
   submitIncident: (value: string) => void;
   toggleSubscribe: () => void;
+  takeAllSchemes: boolean;
 }
 
 const useStyles = createUseStyles({
@@ -81,6 +82,7 @@ const ViewInvestigation = ({
   submitCrimeGroup,
   submitIncident,
   toggleSubscribe,
+  takeAllSchemes,
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
@@ -187,6 +189,7 @@ const ViewInvestigation = ({
             offenderIds={offenderIds}
             onClose={toggleAddExistingOffender}
             update={(submitData) => submitOffender(submitData.id)}
+            takeAllSchemes={takeAllSchemes}
           />
         ) : (
           <div />
@@ -209,6 +212,7 @@ const ViewInvestigation = ({
             update={(submitData) => submitVehicle(submitData.id)}
             onClose={toggleAddExistingVehicle}
             vehicleIds={vehicleIds}
+            takeAllSchemes={takeAllSchemes}
           />
         ) : (
           <div />
@@ -253,6 +257,7 @@ const ViewInvestigation = ({
             incidentIds={incidentIds}
             onClose={toggleAddExistingIncident}
             update={(submitData) => submitIncident(submitData.id)}
+            takeAllSchemes={takeAllSchemes}
           />
         ) : (
           <div />

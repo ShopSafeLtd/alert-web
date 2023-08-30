@@ -1,5 +1,5 @@
 import React from 'react';
-import type { ListIncidentsQuery } from 'graphql/generated';
+import type { ListIncidentsAllSchemesQuery } from 'graphql/generated';
 import { Row, Col, Input, Table, Button } from 'antd';
 import { useIntl } from 'react-intl';
 
@@ -7,7 +7,7 @@ interface Props {
   onClose: () => void;
   onSubmit: () => void;
   saving: boolean;
-  data: ListIncidentsQuery | undefined;
+  data: ListIncidentsAllSchemesQuery | undefined;
   loading: boolean;
   search: string;
   setSearch: (value: string) => void;
@@ -84,27 +84,29 @@ const LinkIncident = ({
             }),
           },
         ]}
-        dataSource={data?.listIncidents?.incidents.map((incident) => ({
-          subject: incident.subject,
-          reference: incident.reference,
-          type: incident.crimeTypes
-            .map((type, index) => `${index > 0 ? ' ' : ''}${type.name}`)
-            .toString(),
-          date: incident.dayTime,
-          location: incident.createdBy.businesses[0]?.name,
-          offenders: incident.offenders
-            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-            .map((type, index) => `${index > 0 ? ' ' : ''}${type.name}`)
-            .toString(),
-          key: incident.id,
-        }))}
+        dataSource={data?.listIncidentsAllSchemes?.incidents.map(
+          (incident) => ({
+            subject: incident.subject,
+            reference: incident.reference,
+            type: incident.crimeTypes
+              .map((type, index) => `${index > 0 ? ' ' : ''}${type.name}`)
+              .toString(),
+            date: incident.dayTime,
+            location: incident.createdBy.businesses[0]?.name,
+            offenders: incident.offenders
+              // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+              .map((type, index) => `${index > 0 ? ' ' : ''}${type.name}`)
+              .toString(),
+            key: incident.id,
+          })
+        )}
         rowSelection={{
           type: 'radio',
           onSelect,
         }}
         pagination={{
           hideOnSinglePage: true,
-          total: data?.listIncidents?.total,
+          total: data?.listIncidentsAllSchemes?.total,
           onChange: onPaginationChange,
           pageSize: 24,
           showSizeChanger: false,

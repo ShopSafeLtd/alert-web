@@ -214,7 +214,7 @@ const OffenderImage = ({
             )}
 
             {documentList.length > 0 && (
-              <div style={{ width: '50%' }}>
+              <div style={{ width: '35%' }}>
                 <Form.Item
                   name="documents"
                   label={intl.formatMessage({

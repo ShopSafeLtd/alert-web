@@ -16,12 +16,14 @@ interface Props {
   incidentIds: string[] | undefined;
   update?: (value: IncidentCardData) => void;
   getIncident?: (value: Incident) => void;
+  takeAllSchemes?: boolean;
 }
 const LinkIncident = ({
   onClose,
   update,
   incidentIds,
   getIncident,
+  takeAllSchemes,
 }: Props): JSX.Element => {
   const {
     onSubmit,
@@ -32,7 +34,13 @@ const LinkIncident = ({
     setSearch,
     onPaginationChange,
     onSelect,
-  } = useLinkIncident({ onClose, update, incidentIds, getIncident });
+  } = useLinkIncident({
+    onClose,
+    update,
+    incidentIds,
+    getIncident,
+    takeAllSchemes,
+  });
 
   return (
     <View

@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
-import type { ListOffendersQuery } from 'graphql/generated';
+import type { ListOffendersAllSchemesQuery } from 'graphql/generated';
 import { Role, Age, Build, Gender, Race } from 'graphql/generated';
 import {
   Button,
@@ -37,7 +37,7 @@ const { Paragraph, Text } = Typography;
 
 interface Props {
   onSubmit: (value: string | undefined) => void;
-  data: ListOffendersQuery | undefined;
+  data: ListOffendersAllSchemesQuery | undefined;
   loading: boolean;
   search: string;
   setSearch: (value: string) => void;
@@ -46,7 +46,7 @@ interface Props {
   setCurrentId: (value: string | undefined) => void;
   selectedOffender:
     | Exclude<
-        ListOffendersQuery['listOffenders'],
+        ListOffendersAllSchemesQuery['listOffendersAllSchemes'],
         undefined | null
       >['offenders'][0]
     | undefined
@@ -106,10 +106,10 @@ const AddExistingOffender = ({
     useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
     role !== Role.User;
   const existingOffenders = (): JSX.Element => {
-    if (!data?.listOffenders && loading) {
+    if (!data?.listOffendersAllSchemes && loading) {
       return (
         <Row wrap gutter={16}>
-          {Array.from({ length: data?.listOffenders?.total || 24 })
+          {Array.from({ length: data?.listOffendersAllSchemes?.total || 24 })
             .fill(0)
             .map(() => (
               <Col span={6} className="offender-item">
@@ -120,10 +120,14 @@ const AddExistingOffender = ({
       );
     }
 
-    if (data && data.listOffenders && data.listOffenders.offenders.length > 0) {
+    if (
+      data &&
+      data.listOffendersAllSchemes &&
+      data.listOffendersAllSchemes.offenders.length > 0
+    ) {
       return (
         <Row wrap gutter={16} style={{ marginRight: 0 }}>
-          {data.listOffenders.offenders.map((offender) => (
+          {data.listOffendersAllSchemes.offenders.map((offender) => (
             <Col span={6} key={offender.id} className="offender-item">
               <OffenderTile
                 offender={offender}
@@ -170,7 +174,7 @@ const AddExistingOffender = ({
                 width: '100%',
                 justifyContent: 'center',
               }}
-              total={data?.listOffenders?.total}
+              total={data?.listOffendersAllSchemes?.total}
               size="small"
               showSizeChanger={false}
               onChange={onPaginationChange}

@@ -36,6 +36,7 @@ interface Return {
   submitCrimeGroup: (value: string) => void;
   submitIncident: (value: string) => void;
   toggleSubscribe: () => void;
+  takeAllSchemes: boolean;
 }
 const useViewInvestigation = (investigationId: string): Return => {
   const intl = useIntl();
@@ -50,6 +51,9 @@ const useViewInvestigation = (investigationId: string): Return => {
   const [addDocument, setAddDocument] = useState(false);
   const [addDemDocument, setAddDemDocument] = useState(false);
   const demId = useStoreState((state) => state.user.demId);
+  const investigationAllSchemes = useStoreState(
+    (state) => state.user.investigationAllSchemes
+  );
   const { data, loading } = useViewInvestigationQuery({
     variables: {
       where: {
@@ -232,6 +236,7 @@ const useViewInvestigation = (investigationId: string): Return => {
     submitCrimeGroup,
     submitIncident,
     toggleSubscribe,
+    takeAllSchemes: investigationAllSchemes,
   };
 };
 

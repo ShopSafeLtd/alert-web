@@ -7,9 +7,15 @@ interface Props {
   onClose: () => void;
   update: (value: VehicleData) => void;
   vehicleIds: string[] | undefined;
+  takeAllSchemes?: boolean;
 }
 
-const LinkVehicle = ({ onClose, update, vehicleIds }: Props): JSX.Element => {
+const LinkVehicle = ({
+  onClose,
+  update,
+  vehicleIds,
+  takeAllSchemes,
+}: Props): JSX.Element => {
   const {
     onSubmit,
     data,
@@ -22,7 +28,7 @@ const LinkVehicle = ({ onClose, update, vehicleIds }: Props): JSX.Element => {
     openLightbox,
     lightBoxOpen,
     pagination,
-  } = useLinkVehicle({ onClose, update, vehicleIds });
+  } = useLinkVehicle({ onClose, update, vehicleIds, takeAllSchemes });
 
   return (
     <View

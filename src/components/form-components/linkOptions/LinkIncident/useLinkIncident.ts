@@ -1,10 +1,17 @@
 import { useState } from 'react';
-import type { ListIncidentsQuery } from 'graphql/generated';
-import { QueryMode, SortOrder, useListIncidentsQuery } from 'graphql/generated';
+import type {
+  ListIncidentsAllSchemesQuery,
+  ListIncidentsQuery,
+} from 'graphql/generated';
+import {
+  useListIncidentsAllSchemesQuery,
+  QueryMode,
+  SortOrder,
+} from 'graphql/generated';
 import { useStoreActions, useStoreState } from 'state';
 import type { IncidentCardData } from 'types/DataType';
 
-interface Incident {
+export interface Incident {
   incident: Exclude<
     ListIncidentsQuery['listIncidents'],
     null | undefined
@@ -15,12 +22,13 @@ interface Props {
   update?: (value: IncidentCardData) => void;
   incidentIds: string[] | undefined;
   getIncident?: (value: Incident) => void;
+  takeAllSchemes?: boolean;
 }
 
 interface Return {
   onSubmit: () => void;
   saving: boolean;
-  data: ListIncidentsQuery | undefined;
+  data: ListIncidentsAllSchemesQuery | undefined;
   loading: boolean;
   search: string;
   setSearch: (value: string) => void;
@@ -33,10 +41,14 @@ const useLinkIncident = ({
   update,
   incidentIds,
   getIncident,
+  takeAllSchemes,
 }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [selected, setSelected] = useState<string | undefined>();
   const schemeId = useStoreState((state) => state.scheme.id);
+  const userSchemeIds = useStoreState((state) => state.user.schemes).map(
+    (el) => el.scheme.id
+  );
   const order = useStoreState((state) => state.data.incidents.order);
   const pagination = useStoreState((state) => state.data.incidents.pagination);
   const variables = useStoreState((state) => state.data.incidents.variables);
@@ -44,17 +56,17 @@ const useLinkIncident = ({
     (actions) => actions.data.setIncidents
   );
 
-  const { data, loading } = useListIncidentsQuery({
+  const { data, loading } = useListIncidentsAllSchemesQuery({
     variables: {
-      scheme: {
-        id: schemeId,
-      },
       order: {
         createdAt: SortOrder.Desc,
       },
       take: pagination.pageSize,
       skip: (pagination.page - 1) * pagination.pageSize,
       where: {
+        schemeId: {
+          in: takeAllSchemes ? userSchemeIds : [schemeId],
+        },
         id: {
           notIn: incidentIds,
         },
@@ -120,7 +132,7 @@ const useLinkIncident = ({
   };
   const onSubmit = () => {
     setSaving(true);
-    const selectedData = data?.listIncidents?.incidents.find(
+    const selectedData = data?.listIncidentsAllSchemes?.incidents.find(
       ({ id }) => id === selected
     );
     if (selectedData) {
@@ -139,7 +151,7 @@ const useLinkIncident = ({
         });
       }
       if (getIncident) {
-        const incident = data?.listIncidents?.incidents?.find(
+        const incident = data?.listIncidentsAllSchemes?.incidents?.find(
           (item) => item.id === selected
         );
         if (incident) {
@@ -159,7 +171,7 @@ const useLinkIncident = ({
     onSubmit,
     saving,
     data,
-    loading: data?.listIncidents ? false : loading,
+    loading: data?.listIncidentsAllSchemes ? false : loading,
     search: variables.search,
     setSearch,
     onPaginationChange,

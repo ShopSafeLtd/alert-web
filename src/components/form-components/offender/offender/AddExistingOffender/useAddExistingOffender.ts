@@ -5,10 +5,14 @@ import type {
   Build,
   Gender,
   ImagePosition,
-  ListOffendersQuery,
+  ListOffendersAllSchemesQuery,
   Race,
 } from 'graphql/generated';
-import { QueryMode, SortOrder, useListOffendersQuery } from 'graphql/generated';
+import {
+  useListOffendersAllSchemesQuery,
+  QueryMode,
+  SortOrder,
+} from 'graphql/generated';
 import { useStoreState } from 'state';
 
 export interface OffenderData {
@@ -55,12 +59,13 @@ interface Props {
   onClose: () => void;
   update: (value: OffenderData) => void;
   offenderIds: string[] | undefined;
+  takeAllSchemes?: boolean;
 }
 
 interface Return {
   onSubmit: (value: string | undefined) => void;
   saving: boolean;
-  data: ListOffendersQuery | undefined;
+  data: ListOffendersAllSchemesQuery | undefined;
   loading: boolean;
   search: string;
   setSearch: (value: string) => void;
@@ -69,7 +74,7 @@ interface Return {
   setCurrentId: (value: string | undefined) => void;
   selectedOffender:
     | Exclude<
-        ListOffendersQuery['listOffenders'],
+        ListOffendersAllSchemesQuery['listOffendersAllSchemes'],
         undefined | null
       >['offenders'][0]
     | null
@@ -98,7 +103,11 @@ const useAddExistingOffender = ({
   onClose,
   update,
   offenderIds,
+  takeAllSchemes,
 }: Props): Return => {
+  const userSchemeIds = useStoreState((state) => state.user.schemes).map(
+    (el) => el.scheme.id
+  );
   const [saving, setSaving] = useState(false);
   const [currentId, setCurrentId] = useState<string | undefined>(undefined);
   const [ethnicity, setEthnicity] = useState<Race[]>([]);
@@ -115,7 +124,7 @@ const useAddExistingOffender = ({
 
   const [selectedOffender, setSelectedOffender] = useState<
     | Exclude<
-        ListOffendersQuery['listOffenders'],
+        ListOffendersAllSchemesQuery['listOffendersAllSchemes'],
         undefined | null
       >['offenders'][0]
     | null
@@ -127,17 +136,17 @@ const useAddExistingOffender = ({
     open: false,
     index: 0,
   });
-  const { data, loading } = useListOffendersQuery({
+  const { data, loading } = useListOffendersAllSchemesQuery({
     variables: {
-      scheme: {
-        id: schemeId,
-      },
       order: {
         updatedAt: SortOrder.Desc,
       },
       take: pagination.pageSize,
       skip: (pagination.page - 1) * pagination.pageSize,
       where: {
+        schemeId: {
+          in: takeAllSchemes ? userSchemeIds : [schemeId],
+        },
         id:
           offenderIds && offenderIds?.length > 0
             ? {
@@ -222,8 +231,8 @@ const useAddExistingOffender = ({
   const onSubmit = () => {
     setSaving(true);
     if (
-      data?.listOffenders?.offenders &&
-      data.listOffenders.offenders.length > 0 &&
+      data?.listOffendersAllSchemes?.offenders &&
+      data.listOffendersAllSchemes.offenders.length > 0 &&
       selectedOffender
     ) {
       update({
@@ -263,7 +272,7 @@ const useAddExistingOffender = ({
   useEffect(() => {
     if (currentId) {
       setSelectedOffender(
-        data?.listOffenders?.offenders.find(
+        data?.listOffendersAllSchemes?.offenders.find(
           (offender) => offender.id === currentId
         )
       );
@@ -275,7 +284,7 @@ const useAddExistingOffender = ({
     onSubmit,
     saving,
     data,
-    loading: data?.listOffenders ? false : loading,
+    loading: data?.listOffendersAllSchemes ? false : loading,
     search,
     setSearch,
     onPaginationChange,

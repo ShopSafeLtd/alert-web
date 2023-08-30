@@ -6,7 +6,7 @@ import AddExistingOffender from '../AddExistingOffender.view';
 
 describe('Detail Officer View', () => {
   const data = {
-    listOffenders: {
+    listOffendersAllSchemes: {
       total: 1,
       offenders: [
         {
