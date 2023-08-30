@@ -1,0 +1,62 @@
+query listIncidentsAllSchemes(
+  $where: IncidentWhereInput
+  $order: IncidentOrderByWithRelationInput
+  $take: Int
+  $skip: Int
+) {
+  listIncidentsAllSchemes(
+    where: $where
+    order: $order
+    take: $take
+    skip: $skip
+  ) {
+    incidents {
+      id
+      subject
+      totalImages
+      description
+      dayTime
+      reference
+      policeRef
+      crimeTypes {
+        id
+        name
+      }
+      approved
+      business {
+        id
+        name
+      }
+      location {
+        id
+        full
+      }
+      createdBy {
+        id
+        fullName
+        businesses {
+          id
+          name
+        }
+      }
+      images {
+        id
+        optimised
+        position
+        rotation
+        primary
+        policeImage
+        low
+      }
+      groups {
+        id
+        name
+      }
+      offenders {
+        id
+        name
+      }
+    }
+    total
+  }
+}

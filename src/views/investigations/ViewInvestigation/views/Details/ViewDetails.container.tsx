@@ -18,7 +18,6 @@ const ViewDetails = ({
   const {
     data,
     loading,
-
     scrolledToTop,
     loadMore,
     userId,

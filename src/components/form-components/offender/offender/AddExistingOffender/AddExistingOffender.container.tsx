@@ -55,6 +55,7 @@ interface Props {
   update: (value: OffenderData) => void;
   offenderIds: string[] | undefined;
   addOverride?: string;
+  takeAllSchemes?: boolean;
 }
 
 const AddExistingOffender = ({
@@ -62,6 +63,7 @@ const AddExistingOffender = ({
   update,
   offenderIds,
   addOverride,
+  takeAllSchemes,
 }: Props): JSX.Element => {
   const {
     onSubmit,
@@ -88,7 +90,7 @@ const AddExistingOffender = ({
     setHair,
     setPeculiarities,
     clearFilters,
-  } = useAddExistingOffender({ onClose, update, offenderIds });
+  } = useAddExistingOffender({ onClose, update, offenderIds, takeAllSchemes });
 
   return (
     <View

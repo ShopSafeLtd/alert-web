@@ -42,6 +42,9 @@ export interface SetUserTodos {
 export interface SetUserNotifications {
   userNotifications: number;
 }
+export interface SetInvestigationAllSchemes {
+  investigationAllSchemes: boolean;
+}
 
 export interface Scheme {
   id: string;
@@ -105,9 +108,11 @@ export interface UserModel {
   }[];
   role: Role;
   isSet: boolean;
+  investigationAllSchemes: boolean;
   setUser: Action<UserModel, SetUserPayload>;
   setRole: Action<UserModel, SetUserRole>;
   setTodos: Action<UserModel, SetUserTodos>;
+  setInvestigationAllSchemes: Action<UserModel, SetInvestigationAllSchemes>;
   setNotifications: Action<UserModel, SetUserNotifications>;
   clearUser: Action<UserModel>;
 }
@@ -128,7 +133,7 @@ const userModel: UserModel = {
   demId: '',
   userTodos: 0,
   userNotifications: 0,
-
+  investigationAllSchemes: false,
   setUser: action((state, payload) => {
     state.id = payload.id;
     state.email = payload.email;
@@ -152,6 +157,9 @@ const userModel: UserModel = {
   setNotifications: action((state, payload) => {
     state.userNotifications = payload.userNotifications;
   }),
+  setInvestigationAllSchemes: action((state, payload) => {
+    state.investigationAllSchemes = payload.investigationAllSchemes;
+  }),
   clearUser: action((state) => {
     state.id = '';
     state.email = '';
@@ -166,6 +174,7 @@ const userModel: UserModel = {
     state.demId = '';
     state.userTodos = 0;
     state.userNotifications = 0;
+    state.investigationAllSchemes = false;
   }),
 };
 
