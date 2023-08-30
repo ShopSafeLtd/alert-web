@@ -27,6 +27,7 @@ import DiscImport from 'views/settings/data-import/disc-import/DiscImport.contai
 import CustomSchemeTerms from '../../../views/settings/terms/ViewCustomTerms/ViewTermsContainer';
 import ListStatements from '../../../views/settings/statements/ListStatements';
 import TagView from '../../../views/settings/tags/ViewTag/ViewTag.container';
+import Workflows from '../workflow/router';
 
 const SchemeSettings = (): JSX.Element => (
   <Routes>
@@ -68,6 +69,7 @@ const SchemeSettings = (): JSX.Element => (
     <Route path="businesses/view/:id" element={<ViewBusiness />} />
     <Route path="data-import" element={<DiscMenu />} />
     <Route path="data-import/disc" element={<DiscImport />} />
+    <Route key="workflow" path="workflow/*" element={<Workflows />} />
 
     {/* Statement temlates */}
     <Route path="statement-templates/*" element={<ListStatements />} />
