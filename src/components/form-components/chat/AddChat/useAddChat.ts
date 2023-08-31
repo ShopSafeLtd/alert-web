@@ -12,10 +12,11 @@ import {
 import { useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { FormInstance } from 'antd';
-import { notification } from 'antd';
+import { Form, notification } from 'antd';
 import errorNotification from 'types/error_notification';
 import { useIntl } from 'react-intl';
-import { useForm } from 'antd/lib/form/Form';
+
+const { useForm } = Form;
 
 interface FormData {
   name: string;

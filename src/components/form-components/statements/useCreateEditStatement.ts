@@ -1,5 +1,5 @@
 import type { FormInstance } from 'antd';
-import { useForm } from 'antd/lib/form/Form';
+import { Form } from 'antd';
 import { useState } from 'react';
 import type { FormData } from './createEditStatement.view';
 import { useStoreState } from '../../../state';
@@ -18,6 +18,7 @@ interface Return {
     value: string;
   }[];
 }
+const { useForm } = Form;
 
 const useCreateEditStatement = ({
   initData,
