@@ -10,11 +10,12 @@ import {
 } from 'graphql/generated';
 import errorNotification from 'types/error_notification';
 import type { FormInstance } from 'antd';
-import { notification } from 'antd';
+import { Form, notification } from 'antd';
 import { useStoreState } from 'state';
 import { useIntl } from 'react-intl';
-import { useForm } from 'antd/lib/form/Form';
 import moment from 'moment';
+
+const { useForm } = Form;
 
 export interface FormData {
   name: string;

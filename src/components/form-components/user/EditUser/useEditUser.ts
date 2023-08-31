@@ -17,10 +17,9 @@ import {
   useUserQuery,
 } from 'graphql/generated';
 import type { FormInstance } from 'antd';
-import { notification } from 'antd';
+import { Form, notification } from 'antd';
 import { useApolloClient } from '@apollo/client';
 import type { BusinessData, SelectOptions } from 'types/DataType';
-import { useForm } from 'antd/lib/form/Form';
 import errorNotification from 'types/error_notification';
 import { useIntl } from 'react-intl';
 
@@ -67,6 +66,8 @@ interface Return {
   toggleAddBusinessVisible: () => void;
   updateNewBusinessData: (values: BusinessData) => void;
 }
+
+const { useForm } = Form;
 
 const useEditUser = ({ onClose, userId }: Props): Return => {
   const client = useApolloClient();
