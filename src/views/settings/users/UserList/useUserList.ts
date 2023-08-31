@@ -2,15 +2,15 @@ import { useState } from 'react';
 import type {
   CreateUserInDatabaseMutation,
   InviteExistingUserMutation,
-  UserStatus,
   UserListQuery,
+  UserStatus,
 } from 'graphql/generated';
 import {
-  SortOrder,
-  QueryMode,
-  useSchemeGroupsQuery,
   ListUsersDocument,
+  QueryMode,
   Role,
+  SortOrder,
+  useSchemeGroupsQuery,
   useUserListQuery,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
@@ -209,8 +209,7 @@ const useUserList = (): Return => {
       query: ListUsersDocument,
       data: {
         listUsers: {
-          total: [...existingData.listUsers.users, res.createUserInDatabase]
-            .length,
+          total: existingData.listUsers.total + 1,
           users: [...existingData.listUsers.users, res.createUserInDatabase],
         },
         __typename: 'Query',
@@ -241,8 +240,8 @@ const useUserList = (): Return => {
       query: ListUsersDocument,
       data: {
         listUsers: {
-          total: [...existingData.listUsers.users, res.inviteExistingUser]
-            .length,
+          total: existingData.listUsers.total + 1,
+
           users: [...existingData.listUsers.users, res.inviteExistingUser],
         },
         __typename: 'Query',
