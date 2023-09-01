@@ -170,8 +170,8 @@ const EditArticleView = ({
                   <Form.Item
                     name="groups"
                     label={intl.formatMessage({
-                      defaultMessage: 'Groups',
-                      id: 'hzmswI',
+                      defaultMessage: 'Content Groups',
+                      id: '3lRewT',
                     })}
                     rules={[
                       {
@@ -185,8 +185,8 @@ const EditArticleView = ({
                   >
                     <Select
                       placeholder={intl.formatMessage({
-                        defaultMessage: 'Groups',
-                        id: 'hzmswI',
+                        defaultMessage: 'Content Groups',
+                        id: '3lRewT',
                       })}
                       mode="multiple"
                       size="small"

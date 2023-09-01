@@ -525,8 +525,8 @@ const EditOffender = ({
                     >
                       {intl.formatMessage({
                         defaultMessage:
-                          '- Please select the groups that this incident is for',
-                        id: 'X2zpcf',
+                          '- Please select the content groups that this incident is for',
+                        id: 'dx+dmJ',
                       })}
                     </Paragraph>
                   </Col>
@@ -536,8 +536,8 @@ const EditOffender = ({
                     <Form.Item
                       name="groups"
                       label={intl.formatMessage({
-                        defaultMessage: 'Groups',
-                        id: 'hzmswI',
+                        defaultMessage: 'Content Groups',
+                        id: '3lRewT',
                       })}
                       tooltip={intl.formatMessage({
                         defaultMessage:

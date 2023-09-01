@@ -63,8 +63,8 @@ const PerformanceReport = ({
         <Col span={6}>
           <Select
             placeholder={intl.formatMessage({
-              defaultMessage: 'Select Groups',
-              id: 'q2cuIU',
+              defaultMessage: 'Select Content Groups',
+              id: '5D6XJu',
             })}
             mode="multiple"
             maxTagCount="responsive"

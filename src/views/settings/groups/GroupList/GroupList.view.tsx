@@ -55,7 +55,7 @@ const GroupList = ({
               />
             }
           >
-            <FormattedMessage defaultMessage="New Group" id="mx9Iyw" />
+            <FormattedMessage defaultMessage="New Content Group" id="EjgE/i" />
           </Button>
         </Col>
       </Row>
@@ -104,8 +104,8 @@ const GroupList = ({
 
       <Drawer
         title={intl.formatMessage({
-          defaultMessage: 'Create New Group',
-          id: 'jmg9o5',
+          defaultMessage: 'Create New Content Group',
+          id: 'pTLcTT',
         })}
         visible={addGroup}
         width="400"

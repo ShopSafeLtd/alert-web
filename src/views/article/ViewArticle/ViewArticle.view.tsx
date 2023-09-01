@@ -106,8 +106,8 @@ const ViewArticleView = ({
             <Col style={{ marginRight: 5 }}>
               <Text style={{ fontSize: 16, fontWeight: 400 }}>
                 {intl.formatMessage({
-                  id: 'JcJ/mL',
-                  defaultMessage: 'Groups:',
+                  id: 'ud8CEw',
+                  defaultMessage: 'Content Groups:',
                 })}
               </Text>
             </Col>
