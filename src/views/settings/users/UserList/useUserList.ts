@@ -112,6 +112,8 @@ const useUserList = (): Return => {
                 },
               },
             }
+          : role === Role.GroupAdmin
+          ? { some: { id: { equals: userId } } }
           : undefined,
       OR: [
         {
@@ -144,6 +146,16 @@ const useUserList = (): Return => {
           equals: schemeId,
         },
       },
+      users:
+        role === Role.GroupAdmin
+          ? {
+              some: {
+                id: {
+                  equals: null,
+                },
+              },
+            }
+          : undefined,
     },
   };
 
@@ -161,7 +173,7 @@ const useUserList = (): Return => {
           },
         },
         users:
-          role === Role.User
+          role === Role.User || role === Role.GroupAdmin
             ? {
                 some: {
                   id: {
