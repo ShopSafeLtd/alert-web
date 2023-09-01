@@ -301,7 +301,9 @@ const useViewOffender = (offenderId: string): Return => {
     },
     banWhere: {
       groups:
-        role === Role.User || role === Role.ContentAdmin
+        role === Role.User ||
+        role === Role.ContentAdmin ||
+        role === Role.GroupAdmin
           ? { some: { id: { in: groupsId } } }
           : undefined,
     },
@@ -1540,7 +1542,12 @@ const useViewOffender = (offenderId: string): Return => {
 
   useEffect(() => {
     if (
-      [Role.ContentAdmin, Role.SchemeAdmin, Role.ShopsafeAdmin].includes(role)
+      [
+        Role.ContentAdmin,
+        Role.SchemeAdmin,
+        Role.ShopsafeAdmin,
+        Role.GroupAdmin,
+      ].includes(role)
     ) {
       setOptionsMenuItems([
         {

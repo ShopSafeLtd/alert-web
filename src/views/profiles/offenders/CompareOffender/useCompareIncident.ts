@@ -8,7 +8,7 @@ import {
   useViewOffendersCompareLazyQuery,
 } from 'graphql/generated';
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import type { OffenderData } from 'components/form-components/offender/offender/AddExistingOffender/AddExistingOffender.container';
 
 function useQuery() {
@@ -280,6 +280,7 @@ const compareIncident = (): Return => {
     //   tags: preview.tags.map(({ id }) => ({ id })),
     // };
     // const otherOffenders = offenders.filter(({ id }) => id !== preview.id);
+
     void mergeOffenders({
       variables: {
         data: {
@@ -292,7 +293,7 @@ const compareIncident = (): Return => {
           dateOfBirth: preview.dateOfBirth,
           gender: preview.gender,
           hair: preview.hair,
-          mainOffenderId: preview.id,
+          mainOffenderId: offenderId || '',
           offenderIds: offenders
             .map(({ id }) => id)
             .filter((id) => id !== preview.id),

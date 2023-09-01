@@ -65,7 +65,13 @@ const userOnlyItems: NavItem[] = [
     icon: faHome,
     breadcrumb: false,
     submenu: [],
-    roles: [Role.User, Role.ContentAdmin, Role.SchemeAdmin, Role.ShopsafeAdmin],
+    roles: [
+      Role.User,
+      Role.ContentAdmin,
+      Role.SchemeAdmin,
+      Role.ShopsafeAdmin,
+      Role.GroupAdmin,
+    ],
     intl: defineMessage({
       id: 'sidenav.dashboard',
       defaultMessage: 'Dashboard',
@@ -96,7 +102,13 @@ const userOnlyItems: NavItem[] = [
       id: 'incidents',
       defaultMessage: 'Incidents',
     }),
-    roles: [Role.User, Role.ContentAdmin, Role.SchemeAdmin, Role.ShopsafeAdmin],
+    roles: [
+      Role.User,
+      Role.ContentAdmin,
+      Role.SchemeAdmin,
+      Role.ShopsafeAdmin,
+      Role.GroupAdmin,
+    ],
   },
   {
     key: 'profiles',
@@ -104,7 +116,13 @@ const userOnlyItems: NavItem[] = [
     title: 'Profiles',
     icon: faAddressCard,
     breadcrumb: true,
-    roles: [Role.User, Role.ContentAdmin, Role.SchemeAdmin, Role.ShopsafeAdmin],
+    roles: [
+      Role.User,
+      Role.ContentAdmin,
+      Role.SchemeAdmin,
+      Role.ShopsafeAdmin,
+      Role.GroupAdmin,
+    ],
     intl: defineMessage({
       id: 'profiles',
       defaultMessage: 'Profiles',
@@ -125,6 +143,7 @@ const userOnlyItems: NavItem[] = [
           Role.User,
           Role.ContentAdmin,
           Role.SchemeAdmin,
+          Role.GroupAdmin,
           Role.ShopsafeAdmin,
         ],
       },
@@ -144,6 +163,7 @@ const userOnlyItems: NavItem[] = [
           Role.ContentAdmin,
           Role.SchemeAdmin,
           Role.ShopsafeAdmin,
+          Role.GroupAdmin,
         ],
       },
       {
@@ -162,6 +182,7 @@ const userOnlyItems: NavItem[] = [
           Role.ContentAdmin,
           Role.SchemeAdmin,
           Role.ShopsafeAdmin,
+          Role.GroupAdmin,
         ],
       },
     ],
@@ -177,7 +198,13 @@ const userOnlyItems: NavItem[] = [
       id: 'chat',
       defaultMessage: 'Chat',
     }),
-    roles: [Role.User, Role.ContentAdmin, Role.SchemeAdmin, Role.ShopsafeAdmin],
+    roles: [
+      Role.User,
+      Role.ContentAdmin,
+      Role.SchemeAdmin,
+      Role.ShopsafeAdmin,
+      Role.GroupAdmin,
+    ],
   },
   {
     key: 'bulletins',
@@ -190,7 +217,13 @@ const userOnlyItems: NavItem[] = [
       defaultMessage: 'Bulletins',
     }),
     submenu: [],
-    roles: [Role.User, Role.ContentAdmin, Role.SchemeAdmin, Role.ShopsafeAdmin],
+    roles: [
+      Role.User,
+      Role.ContentAdmin,
+      Role.SchemeAdmin,
+      Role.ShopsafeAdmin,
+      Role.GroupAdmin,
+    ],
   },
   {
     key: 'investigations',
@@ -224,7 +257,13 @@ const userOnlyItems: NavItem[] = [
       defaultMessage: 'Resources',
     }),
     breadcrumb: true,
-    roles: [Role.User, Role.ContentAdmin, Role.SchemeAdmin, Role.ShopsafeAdmin],
+    roles: [
+      Role.User,
+      Role.ContentAdmin,
+      Role.SchemeAdmin,
+      Role.ShopsafeAdmin,
+      Role.GroupAdmin,
+    ],
     submenu: [
       {
         key: 'training',
@@ -242,6 +281,7 @@ const userOnlyItems: NavItem[] = [
           Role.ContentAdmin,
           Role.SchemeAdmin,
           Role.ShopsafeAdmin,
+          Role.GroupAdmin,
         ],
       },
       {
@@ -260,6 +300,7 @@ const userOnlyItems: NavItem[] = [
           Role.ContentAdmin,
           Role.SchemeAdmin,
           Role.ShopsafeAdmin,
+          Role.GroupAdmin,
         ],
       },
     ],
@@ -376,7 +417,7 @@ const adminOnlyItems: NavItem[] = [
       id: 'settings',
       defaultMessage: 'Settings',
     }),
-    roles: [Role.SchemeAdmin, Role.ShopsafeAdmin],
+    roles: [Role.SchemeAdmin, Role.ShopsafeAdmin, Role.GroupAdmin],
     submenu: [
       {
         key: 'users',
@@ -389,6 +430,7 @@ const adminOnlyItems: NavItem[] = [
         icon: faUser,
         breadcrumb: true,
         submenu: [],
+        roles: [Role.SchemeAdmin, Role.ShopsafeAdmin, Role.GroupAdmin],
       },
       {
         key: 'businesses',
@@ -401,18 +443,20 @@ const adminOnlyItems: NavItem[] = [
         icon: faBuilding,
         breadcrumb: true,
         submenu: [],
+        roles: [Role.SchemeAdmin, Role.ShopsafeAdmin, Role.GroupAdmin],
       },
       {
-        key: 'groups',
+        key: 'contentGroups',
         path: `${APP_PREFIX_PATH}/scheme-settings/groups`,
-        title: 'Groups',
+        title: 'Content Groups',
         intl: defineMessage({
-          id: 'groups',
-          defaultMessage: 'Groups',
+          id: 'contentGroups',
+          defaultMessage: 'Content Groups',
         }),
         icon: faUsers,
         breadcrumb: true,
         submenu: [],
+        roles: [Role.SchemeAdmin, Role.ShopsafeAdmin],
       },
       {
         key: 'chat-groups',
@@ -425,6 +469,7 @@ const adminOnlyItems: NavItem[] = [
         icon: faCommentLines,
         breadcrumb: true,
         submenu: [],
+        roles: [Role.SchemeAdmin, Role.ShopsafeAdmin],
       },
 
       {
@@ -438,6 +483,7 @@ const adminOnlyItems: NavItem[] = [
         icon: faListCheck,
         breadcrumb: true,
         submenu: [],
+        roles: [Role.SchemeAdmin, Role.ShopsafeAdmin],
       },
       {
         key: 'workflow',
@@ -450,6 +496,7 @@ const adminOnlyItems: NavItem[] = [
           defaultMessage: 'Workflow',
         }),
         submenu: [],
+        roles: [Role.SchemeAdmin, Role.ShopsafeAdmin],
       },
       {
         key: 'statement-templates',
@@ -475,6 +522,7 @@ const adminOnlyItems: NavItem[] = [
         icon: faClipboardList,
         breadcrumb: true,
         submenu: [],
+        roles: [Role.SchemeAdmin, Role.ShopsafeAdmin],
       },
       {
         key: 'offender-warnings',
@@ -487,6 +535,7 @@ const adminOnlyItems: NavItem[] = [
         icon: faCircleExclamation,
         breadcrumb: true,
         submenu: [],
+        roles: [Role.SchemeAdmin, Role.ShopsafeAdmin],
       },
       {
         key: 'incidentSettings',
@@ -499,6 +548,7 @@ const adminOnlyItems: NavItem[] = [
         }),
         breadcrumb: true,
         submenu: [],
+        roles: [Role.SchemeAdmin, Role.ShopsafeAdmin],
       },
       {
         key: 'recycle-bin',
@@ -511,6 +561,7 @@ const adminOnlyItems: NavItem[] = [
         icon: faTrash,
         breadcrumb: true,
         submenu: [],
+        roles: [Role.SchemeAdmin, Role.ShopsafeAdmin],
       },
       {
         key: 'data-import',
@@ -523,6 +574,7 @@ const adminOnlyItems: NavItem[] = [
         icon: faFileImport,
         breadcrumb: true,
         submenu: [],
+        roles: [Role.SchemeAdmin, Role.ShopsafeAdmin],
       },
     ],
   },

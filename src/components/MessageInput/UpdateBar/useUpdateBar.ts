@@ -222,7 +222,7 @@ const useUpdateBar = ({
             },
           },
         },
-        OR: [Role.User, Role.ContentAdmin].includes(userRole)
+        OR: [Role.User, Role.ContentAdmin, Role.GroupAdmin].includes(userRole)
           ? [
               {
                 groups: {
