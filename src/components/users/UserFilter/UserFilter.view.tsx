@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Col, Row, Select, Typography } from 'antd';
-import { UserStatus, Role } from 'graphql/generated';
+import { Role, UserStatus } from 'graphql/generated';
 
 import { UserSort } from 'types/enums/user_sort';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -135,6 +135,9 @@ const UserFilter = ({
             </Select.Option>
             <Select.Option value={Role.ContentAdmin}>
               <FormattedMessage id="juchkY" defaultMessage="Content Admin" />
+            </Select.Option>
+            <Select.Option value={Role.GroupAdmin}>
+              <FormattedMessage id="UmJl0N" defaultMessage="Group Admin" />
             </Select.Option>
             <Select.Option value={Role.SchemeAdmin}>
               <FormattedMessage id="ZENz1B" defaultMessage="Scheme Admin" />
