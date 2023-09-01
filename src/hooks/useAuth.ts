@@ -68,8 +68,7 @@ const useAuth = (): Return => {
       window.localStorage.setItem('currentScheme', schemeDetails?.id || '');
       setRole({ role: schemes[0]?.role });
       setScheme({
-        autoPopulateDescription: schemeDetails.autoPopulateDescription,
-
+        autoPopulateDescription: schemeDetails?.autoPopulateDescription,
         autoApproveIncidents: schemeDetails?.autoApproveIncidents,
         autoApproveOffenders: schemeDetails?.autoApproveOffenders,
         restrictIncidentAccess: schemeDetails?.restrictIncidentAccess,
@@ -105,7 +104,6 @@ const useAuth = (): Return => {
         setRole({ role: schemeDetails.role });
         setScheme({
           autoPopulateDescription: schemeDetails.scheme.autoPopulateDescription,
-
           autoApproveIncidents: schemeDetails.scheme.autoApproveIncidents,
           autoApproveOffenders: schemeDetails.scheme.autoApproveOffenders,
           restrictIncidentAccess: schemeDetails.scheme.restrictIncidentAccess,
