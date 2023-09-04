@@ -318,8 +318,8 @@ const OffenderProfile = ({
                 >
                   <Button size="small" onClick={() => toggleMerge(offender.id)}>
                     <FormattedMessage
-                      defaultMessage="Merge Offender"
-                      id="m7BuLw"
+                      defaultMessage="Merge Person"
+                      id="J2W0xX"
                     />
                   </Button>
                 </Tooltip>
@@ -335,10 +335,7 @@ const OffenderProfile = ({
                   danger
                   disabled={!mergeSelected}
                 >
-                  <FormattedMessage
-                    defaultMessage="Merge Offenders"
-                    id="kt+2/B"
-                  />
+                  <FormattedMessage defaultMessage="Merge People" id="FX2Nbd" />
                 </Button>
                 <Button size="small" onClick={() => toggleMerge(null)}>
                   <FormattedMessage defaultMessage="Cancel" id="47FYwb" />
@@ -377,6 +374,7 @@ const OffenderProfile = ({
                           : import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT
                       }
                       showUploadList={false}
+                      accept=".png,.jpeg"
                     >
                       <Button
                         loading={uploading}
@@ -434,8 +432,8 @@ const OffenderProfile = ({
       {!offender.confirmedInIncident && (
         <Paragraph type="danger" style={{ marginTop: 5 }}>
           <FormattedMessage
-            defaultMessage="Please confirm if this offender was involved"
-            id="W+/1cJ"
+            defaultMessage="Please confirm if this person was involved"
+            id="Ej8PCR"
           />
         </Paragraph>
       )}

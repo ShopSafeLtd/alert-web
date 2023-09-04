@@ -81,6 +81,7 @@ const AddIncident = ({
           involvedTags: [],
           offenders: null,
           vehicles: null,
+          images: [],
         }}
         onFinish={onSubmit}
         layout="vertical"
