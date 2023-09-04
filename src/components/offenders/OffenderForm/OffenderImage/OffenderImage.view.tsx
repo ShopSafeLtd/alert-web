@@ -8,17 +8,22 @@ import {
   Form,
   Popconfirm,
   Row,
+  Tooltip,
   Typography,
   Upload,
 } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash, faUpload } from '@fortawesome/pro-light-svg-icons';
+import {
+  faEdit,
+  faTrash,
+  faImages,
+  faFileArrowUp,
+} from '@fortawesome/pro-light-svg-icons';
 import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import ImageEditor from 'components/form-components/ImageEditor/ImageEditor.view';
 import { useIntl } from 'react-intl';
 import type { Image } from 'types/DataType';
-import { UploadOutlined } from '@ant-design/icons';
 
 const { Title, Paragraph } = Typography;
 
@@ -92,20 +97,32 @@ const OffenderImage = ({
               beforeUpload={beforeUpload}
               showUploadList={false}
             >
-              <Button
-                icon={
-                  <FontAwesomeIcon icon={faUpload} style={{ marginRight: 5 }} />
-                }
-                style={{ color: 'red' }}
-              >
-                {intl.formatMessage({
-                  defaultMessage: 'Upload Image',
-                  id: 'MntrZe',
+              <Tooltip
+                title={intl.formatMessage({
+                  defaultMessage:
+                    'Upload any images you have for the offender.',
+                  id: 's30QVQ',
                 })}
-              </Button>
+                placement="bottom"
+              >
+                <Button
+                  icon={
+                    <FontAwesomeIcon
+                      icon={faImages}
+                      style={{ marginRight: 5 }}
+                    />
+                  }
+                  style={{ color: 'red' }}
+                >
+                  {intl.formatMessage({
+                    defaultMessage: 'Upload Image',
+                    id: 'MntrZe',
+                  })}
+                </Button>
+              </Tooltip>
             </Upload>
           </Col>
-          <Col style={{ marginLeft: 30 }}>
+          <Col style={{ marginLeft: 10 }}>
             <Upload
               // eslint-disable-next-line react/jsx-props-no-spreading
               {...documentUploadProps}
@@ -114,12 +131,29 @@ const OffenderImage = ({
               fileList={documentList}
               showUploadList={false}
             >
-              <Button icon={<UploadOutlined />} style={{ color: 'red' }}>
-                {intl.formatMessage({
-                  defaultMessage: 'Upload Document',
-                  id: 'Kc9MAV',
+              <Tooltip
+                title={intl.formatMessage({
+                  defaultMessage:
+                    'Add documents to the offender such as PDFs or videos.',
+                  id: 'zYeqDc',
                 })}
-              </Button>
+                placement="bottom"
+              >
+                <Button
+                  type="text"
+                  icon={
+                    <FontAwesomeIcon
+                      icon={faFileArrowUp}
+                      style={{ marginRight: 5 }}
+                    />
+                  }
+                >
+                  {intl.formatMessage({
+                    defaultMessage: 'Upload Document',
+                    id: 'Kc9MAV',
+                  })}
+                </Button>
+              </Tooltip>
             </Upload>
           </Col>
         </Row>
