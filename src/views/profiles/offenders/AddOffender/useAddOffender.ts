@@ -153,6 +153,9 @@ const useAddOffender = (): Return => {
   const userId = useStoreState((state) => state.user.id);
   const role = useStoreState((state) => state.user.role);
   const pagination = useStoreState((state) => state.data.offenders.pagination);
+  const imagesRequired = useStoreState(
+    (state) => state.scheme.imagesRequiredOnOffenders
+  );
   const variables = useStoreState((state) => state.data.offenders.variables);
   const order = useStoreState((state) => state.data.offenders.order);
   const setOffendersState = useStoreActions(
@@ -337,6 +340,16 @@ const useAddOffender = (): Return => {
   });
 
   const onSubmit = (data: FormData) => {
+    if (imagesRequired && fileList.length === 0) {
+      confirm({
+        title: 'Please add at least one image to the offender.',
+        content:
+          'An offender needs to have one image to be created in the database',
+        type: 'error',
+      });
+      return;
+    }
+
     setSaving(true);
 
     const getVehicles = (): CreateOffenderData['vehicles'] => {
