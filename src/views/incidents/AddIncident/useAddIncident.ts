@@ -417,24 +417,32 @@ const useAddIncident = (): Return => {
                     scheme: { connect: { id: schemeId } },
                     createdBy: { connect: { id: userId } },
                     localId: offender.id,
+                    idVerified: offender.idVerified,
+                    idSource: offender.idSource,
                   }))
                 : undefined,
             update: editedOffenders.map((offender) => ({
               data: {
-                name: { set: offender.name },
-                alias: offender.alias ? { set: offender.alias } : undefined,
+                name: { set: offender.name || '' },
+                alias: { set: offender.alias || [] },
                 gender: { set: offender.gender },
                 race: { set: offender.race },
                 build: { set: offender.build },
                 height: { set: offender.height },
                 hair: { set: offender.hair },
-                peculiarities: { set: offender.peculiarities },
-                comment: { set: offender.comment },
-                age: { set: offender.age },
-                dateSource: offender.dateSource
-                  ? { set: offender.dateSource }
+                peculiarities: { set: offender.peculiarities || '' },
+                comment: { set: offender.comment || '' },
+                dateOfBirth: offender.dateOfBirth
+                  ? { set: offender.dateOfBirth }
                   : undefined,
-                dateOfBirth: { set: offender.dateOfBirth },
+                age: { set: offender.age },
+                dateSource: { set: offender.dateSource || '' },
+                idVerified: offender.idVerified
+                  ? { set: offender.idVerified }
+                  : undefined,
+                idSource: offender.idSource
+                  ? { set: offender.idSource }
+                  : undefined,
               },
               where: { id: offender.id },
             })),
