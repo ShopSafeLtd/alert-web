@@ -417,7 +417,10 @@ const useAddIncident = (): Return => {
                     scheme: { connect: { id: schemeId } },
                     createdBy: { connect: { id: userId } },
                     localId: offender.id,
-                    idVerified: offender.idVerified,
+                    idVerified:
+                      offender.idVerified === null
+                        ? false
+                        : offender.idVerified,
                     idSource: offender.idSource,
                   }))
                 : undefined,
