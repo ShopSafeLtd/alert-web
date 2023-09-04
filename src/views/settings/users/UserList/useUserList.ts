@@ -113,7 +113,7 @@ const useUserList = (): Return => {
               },
             }
           : role === Role.GroupAdmin
-          ? { some: { id: { equals: userId } } }
+          ? { some: { users: { some: { id: { equals: userId } } } } }
           : undefined,
       OR: [
         {
@@ -147,11 +147,11 @@ const useUserList = (): Return => {
         },
       },
       users:
-        role === Role.GroupAdmin
+        role === Role.User || role === Role.GroupAdmin
           ? {
               some: {
                 id: {
-                  equals: null,
+                  equals: userId,
                 },
               },
             }

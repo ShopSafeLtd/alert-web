@@ -4,9 +4,9 @@ import React from 'react';
 import { Role } from 'graphql/generated';
 import type { FormInstance } from 'antd';
 import {
-  Drawer,
   Button,
   Col,
+  Drawer,
   Form,
   Input,
   Row,
@@ -237,6 +237,25 @@ const AddUser = ({
                     })}
                   </Typography.Paragraph>
                 </Select.Option>
+                <Select.Option key={Role.GroupAdmin} value={Role.GroupAdmin}>
+                  <Typography.Text>
+                    {intl.formatMessage({
+                      defaultMessage: 'Group Admin',
+                      id: 'UmJl0N',
+                    })}
+                  </Typography.Text>
+                  <Typography.Paragraph
+                    type="secondary"
+                    style={{ fontSize: 13, margin: 0, fontWeight: 400 }}
+                  >
+                    {intl.formatMessage({
+                      defaultMessage:
+                        'An account that allows for submitting and administering data and limited access to settings within their group.',
+                      id: 'Y3CqF1',
+                    })}
+                  </Typography.Paragraph>
+                </Select.Option>
+
                 <Select.Option key={Role.SchemeAdmin} value={Role.SchemeAdmin}>
                   <Typography.Text>
                     {intl.formatMessage({

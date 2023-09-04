@@ -1,14 +1,17 @@
 import { useState } from 'react';
 import type {
+  BusinessOrderBy,
+  BusinessWhereInput,
+  InputMaybe,
   ListBusinessesQuery,
   ListBusinessesQueryVariables,
 } from 'graphql/generated';
 import {
-  useDeleteBusinessMutation,
   ListBusinessesDocument,
   QueryMode,
   SortOrder,
   useCreateBusinessMutation,
+  useDeleteBusinessMutation,
   useListBusinessesQuery,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
@@ -38,12 +41,17 @@ const useListBusinesses = (): Return => {
   const [addVisible, setAddVisible] = useState(false);
   const [linkVisible, setLinkVisible] = useState(false);
   const [saving, setSaving] = useState(false);
-  const variables = {
+
+  const variables: {
+    where?: InputMaybe<BusinessWhereInput> | undefined;
+    orderBy?: InputMaybe<BusinessOrderBy>;
+  } = {
     where: {
       name: {
         contains: searchValue,
         mode: QueryMode.Insensitive,
       },
+
       schemes: {
         some: {
           id: {

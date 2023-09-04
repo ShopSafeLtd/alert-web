@@ -66,7 +66,7 @@ export const AppViews = (): JSX.Element => {
           element={<Notifications />}
         />
         <Route key="user" path="user-settings/*" element={<User />} />
-        {role === 'SCHEME_ADMIN' && (
+        {(role === 'SCHEME_ADMIN' || role === 'GROUP_ADMIN') && (
           <Route key="scheme" path="scheme-settings/*" element={<Scheme />} />
         )}
         <Route key="article" path="article/*" element={<Article />} />
