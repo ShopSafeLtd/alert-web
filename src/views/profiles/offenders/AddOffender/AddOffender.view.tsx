@@ -356,8 +356,8 @@ const AddOffender = ({
                   >
                     {intl.formatMessage({
                       defaultMessage:
-                        '- Please select the groups that this offender is for',
-                      id: 'yLxJj+',
+                        '- Please select the content groups that this offender is for',
+                      id: '36xlXI',
                     })}
                   </Paragraph>
                 </Col>
@@ -367,13 +367,13 @@ const AddOffender = ({
                   <Form.Item
                     name="groups"
                     label={intl.formatMessage({
-                      defaultMessage: 'Groups',
-                      id: 'hzmswI',
+                      defaultMessage: 'Content Groups',
+                      id: '3lRewT',
                     })}
                     tooltip={intl.formatMessage({
                       defaultMessage:
-                        'Select the groups that you would like this offender to be visible to.',
-                      id: '/oJY/I',
+                        'Select the content groups that you would like this offender to be visible to.',
+                      id: 'cfTvTq',
                     })}
                     rules={[
                       {

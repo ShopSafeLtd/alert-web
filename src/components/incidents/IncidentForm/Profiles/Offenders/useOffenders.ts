@@ -384,8 +384,8 @@ const useOffenders = ({ value, onChange, form }: Props): Return => {
     info: UploadChangeParam<StateImageData>,
     offenderId: string
   ) => {
-    if (images !== undefined && info.file) {
-      if (images.some(({ uid }) => uid === info.file.uid)) {
+    if (info.file) {
+      if (images?.some(({ uid }) => uid === info.file.uid)) {
         if (info.file.response && info.file.response[0]) {
           // add the image to the offender in state
           setOffenders(
@@ -463,7 +463,7 @@ const useOffenders = ({ value, onChange, form }: Props): Return => {
         // add the new image to the images form state
         setUploading(true);
         form.setFieldsValue({
-          images: update<StateImageData[]>(images, {
+          images: update<StateImageData[]>(images || [], {
             $push: [info.file],
           }),
         });

@@ -184,45 +184,52 @@ const SideNavContent = (props: SideNavContentProps) => {
               icon={<Icon icon={menu.icon} />}
               title={setLocale(localization, menu.intl.id)}
             >
-              {menu.submenu.map((subMenuFirst) =>
-                subMenuFirst.submenu.length > 0 ? (
-                  <SubMenu
-                    icon={
-                      subMenuFirst.icon ? (
-                        <Icon icon={subMenuFirst?.icon} />
-                      ) : null
-                    }
-                    key={subMenuFirst.key}
-                    title={setLocale(localization, subMenuFirst.intl.id)}
-                  >
-                    {subMenuFirst.submenu.map((subMenuSecond) => (
-                      <Menu.Item key={subMenuSecond.key}>
-                        {subMenuSecond.icon ? (
-                          <Icon icon={subMenuSecond?.icon} />
-                        ) : null}
-                        <span>
-                          {setLocale(localization, subMenuSecond.intl.id)}
-                        </span>
-                        <Link
-                          onClick={() => closeMobileNav()}
-                          to={subMenuSecond.path}
-                        />
-                      </Menu.Item>
-                    ))}
-                  </SubMenu>
-                ) : (
-                  <Menu.Item key={subMenuFirst.key} style={{ paddingLeft: 15 }}>
-                    {subMenuFirst.icon ? (
-                      <SubIcon icon={subMenuFirst.icon} />
-                    ) : null}
-                    <span>{setLocale(localization, subMenuFirst.intl.id)}</span>
-                    <Link
-                      onClick={() => closeMobileNav()}
-                      to={subMenuFirst.path}
-                    />
-                  </Menu.Item>
-                )
-              )}
+              {menu.submenu
+                .filter((el) => (el.roles ? el.roles.includes(userRole) : true))
+                .map((subMenuFirst) =>
+                  subMenuFirst.submenu.length > 0 ? (
+                    <SubMenu
+                      icon={
+                        subMenuFirst.icon ? (
+                          <Icon icon={subMenuFirst?.icon} />
+                        ) : null
+                      }
+                      key={subMenuFirst.key}
+                      title={setLocale(localization, subMenuFirst.intl.id)}
+                    >
+                      {subMenuFirst.submenu.map((subMenuSecond) => (
+                        <Menu.Item key={subMenuSecond.key}>
+                          {subMenuSecond.icon ? (
+                            <Icon icon={subMenuSecond?.icon} />
+                          ) : null}
+                          <span>
+                            {setLocale(localization, subMenuSecond.intl.id)}
+                          </span>
+                          <Link
+                            onClick={() => closeMobileNav()}
+                            to={subMenuSecond.path}
+                          />
+                        </Menu.Item>
+                      ))}
+                    </SubMenu>
+                  ) : (
+                    <Menu.Item
+                      key={subMenuFirst.key}
+                      style={{ paddingLeft: 15 }}
+                    >
+                      {subMenuFirst.icon ? (
+                        <SubIcon icon={subMenuFirst.icon} />
+                      ) : null}
+                      <span>
+                        {setLocale(localization, subMenuFirst.intl.id)}
+                      </span>
+                      <Link
+                        onClick={() => closeMobileNav()}
+                        to={subMenuFirst.path}
+                      />
+                    </Menu.Item>
+                  )
+                )}
             </Menu.SubMenu>
           ) : (
             <Menu.Item key={menu.key}>

@@ -1,20 +1,14 @@
 /* eslint-disable  */
-import { Tree } from 'antd';
+import { Tree, Typography } from 'antd';
 import type { DataNode, TreeProps } from 'antd/es/tree';
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 
 interface TreeNode {
-  title: string;
+  title: JSX.Element;
   key: string;
   children?: TreeNode[];
 }
-
-interface TreeNode {
-  title: string;
-  key: string;
-  children?: TreeNode[];
-}
-
 // function list_to_tree(
 //   list: { name: string; id: string; parentId: string | null }[]
 // ): TreeNode[] {
@@ -43,10 +37,22 @@ function buildTree(
   nodes: { name: string; id: string; parentId: string | null }[]
 ): TreeNode[] {
   const nodeMap = new Map<string, TreeNode>();
+  const navigate = useNavigate();
 
   // First pass: create nodes without parent-child relationships
   for (const { name, id } of nodes) {
-    const node: TreeNode = { title: name, key: id };
+    const node: TreeNode = {
+      title: (
+        <Typography.Link
+          onClick={() => {
+            navigate(`/app/scheme-settings/crime-types/view/${id}`);
+          }}
+        >
+          {name}
+        </Typography.Link>
+      ),
+      key: id,
+    };
     nodeMap.set(id, node);
   }
 

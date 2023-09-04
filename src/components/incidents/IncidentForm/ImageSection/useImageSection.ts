@@ -14,6 +14,7 @@ import type { FormData } from 'views/incidents/AddIncident/useAddIncident';
 import update from 'immutability-helper';
 import { useStoreState } from 'state';
 import type { UploadChangeParam } from 'antd/lib/upload';
+import { Form } from 'antd';
 import type { StateOffenderData } from '../Profiles/Offenders/useOffenders';
 
 export const getClosestAgeRange = (high: number, low: number) => {
@@ -91,12 +92,8 @@ interface Return {
   documentUploadProps: UploadProps;
 }
 
-const useImageSection = ({
-  incidentForm,
-  form,
-  value,
-  onChange,
-}: Props): Return => {
+const useImageSection = ({ incidentForm, form, onChange }: Props): Return => {
+  const formImages = Form.useWatch('images', form);
   const [images, setImages] = useState<StateImageData[]>([]);
   const [editImage, setEditImage] = useState<StateImageData | null>(null);
   const facialRecognition = useStoreState(
@@ -105,13 +102,13 @@ const useImageSection = ({
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   useEffect(() => {
-    if (value && value !== images) {
-      setImages(value);
+    if (formImages && formImages !== images) {
+      setImages(formImages);
     }
-  }, [value]);
+  }, [formImages]);
 
   useEffect(() => {
-    if (onChange && value?.length !== images.length) onChange(images);
+    if (onChange && formImages?.length !== images.length) onChange(images);
   }, [images]);
 
   useEffect(() => {

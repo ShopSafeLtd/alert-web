@@ -168,8 +168,8 @@ const CreateArticleView = ({
                 <Form.Item
                   name="groups"
                   label={intl.formatMessage({
-                    defaultMessage: 'Groups',
-                    id: 'hzmswI',
+                    defaultMessage: 'Content Groups',
+                    id: '3lRewT',
                   })}
                   rules={[
                     {
@@ -183,8 +183,8 @@ const CreateArticleView = ({
                 >
                   <Select
                     placeholder={intl.formatMessage({
-                      defaultMessage: 'Groups',
-                      id: 'hzmswI',
+                      defaultMessage: 'Content Groups',
+                      id: '3lRewT',
                     })}
                     mode="multiple"
                     size="small"
