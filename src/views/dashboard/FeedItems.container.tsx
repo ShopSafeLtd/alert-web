@@ -36,7 +36,6 @@ const FeedItems = (): JSX.Element => {
     setGallery,
     setCreatedAtFilter,
     createdAtFilter,
-    restrictIncidentAccess,
   } = useFeedItems();
 
   return (
@@ -70,7 +69,6 @@ const FeedItems = (): JSX.Element => {
       setGallery={setGallery}
       setCreatedAtFilter={setCreatedAtFilter}
       createdAtFilter={createdAtFilter}
-      restrictIncidentAccess={restrictIncidentAccess}
     />
   );
 };
