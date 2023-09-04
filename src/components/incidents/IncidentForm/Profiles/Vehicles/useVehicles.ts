@@ -133,7 +133,6 @@ const useVehicles = ({ value, onChange, form }: Props): Return => {
     const makeUpdated = !data.make || !!matchExistingOpen?.make;
     const modelUpdated = !data.model || !!matchExistingOpen?.model;
     const colourUpdated = !data.colour || !!matchExistingOpen?.colour;
-
     const newImages = data.images || [];
     const existingImages = data.images || [];
 

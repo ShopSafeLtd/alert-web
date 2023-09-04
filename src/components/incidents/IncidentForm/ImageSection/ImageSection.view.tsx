@@ -100,6 +100,7 @@ const ImageSection = ({
                 : import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT
             }
             className="incident-form-images-no-offenders"
+            // listType="picture-card"
             accept=".png,.jpeg"
             disabled={disabled}
             beforeUpload={async (file) => compressImage(file)}
