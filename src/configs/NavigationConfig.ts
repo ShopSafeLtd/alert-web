@@ -84,7 +84,7 @@ const userOnlyItems: NavItem[] = [
     icon: faCalendarCheck,
     breadcrumb: false,
     submenu: [],
-    roles: [Role.SchemeAdmin, Role.ShopsafeAdmin],
+    roles: [Role.SchemeAdmin, Role.ShopsafeAdmin, Role.GroupAdmin],
     badge: BadgeTypes.todo,
     intl: defineMessage({
       id: 'Activities',
@@ -236,7 +236,7 @@ const userOnlyItems: NavItem[] = [
     }),
     breadcrumb: true,
     submenu: [],
-    roles: [Role.SchemeAdmin, Role.ShopsafeAdmin],
+    roles: [Role.SchemeAdmin, Role.ShopsafeAdmin, Role.GroupAdmin],
   },
   // {
   //   key: 'face-ai',
@@ -318,7 +318,7 @@ const adminOnlyItems: NavItem[] = [
       id: 'reports',
       defaultMessage: 'Reports',
     }),
-    roles: [Role.SchemeAdmin, Role.ShopsafeAdmin],
+    roles: [Role.SchemeAdmin, Role.ShopsafeAdmin, Role.GroupAdmin],
     submenu: [
       {
         key: 'performance',
