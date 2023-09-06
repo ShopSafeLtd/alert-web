@@ -1,16 +1,19 @@
 import type { FormInstance } from 'antd';
 import {
   Button,
-  Card,
   Col,
   Form,
   InputNumber,
   Row,
   Select,
   Typography,
+  Divider,
+  Descriptions,
+  Skeleton,
 } from 'antd';
 import React from 'react';
 import { useIntl } from 'react-intl';
+import moment from 'moment';
 import type { TodoQuery } from '../../../../graphql/generated';
 import type { CustomQuestion } from '../../../../types/DataType';
 import CustomQuestions from '../../../../views/incidents/AddIncident/components/IncidentCustom/CustomQuestion.view';
@@ -29,6 +32,7 @@ interface Props {
   ) => void;
   loading: boolean;
   onClose: () => void;
+  confirmText?: string;
 }
 
 const TodoView = ({
@@ -42,11 +46,12 @@ const TodoView = ({
   setAvailableUsers,
   loading,
   onClose,
+  confirmText,
 }: Props) => {
   const intl = useIntl();
   const questions = todo?.todo?.questions.map(({ question, id }) => {
     form.setFieldValue(
-      id,
+      question.id,
       todo?.todo?.answers?.find((answer) => answer?.taskQuestion?.id === id)
         ?.answer
     );
@@ -67,52 +72,113 @@ const TodoView = ({
   }) as CustomQuestion[];
 
   return (
-    <Card loading={loading}>
-      <h1>{todo?.todo?.name || ''}</h1>
-      <Form form={form} onFinish={onSubmit} layout="vertical">
-        <Typography.Title level={4}>
-          {intl.formatMessage({
-            defaultMessage: 'Questions',
-            id: 'KV/9Hv',
+    <div>
+      <Typography.Title level={4}>
+        {intl.formatMessage({
+          defaultMessage: 'Details',
+          id: 'Lv0zJu',
+        })}
+      </Typography.Title>
+      <Descriptions>
+        <Descriptions.Item
+          label={intl.formatMessage({
+            defaultMessage: 'Name',
+            id: 'HAlOn1',
           })}
-        </Typography.Title>
-        {questions ? (
+        >
+          {loading ? (
+            <Skeleton.Input style={{ height: 24 }} />
+          ) : (
+            todo?.todo?.name || ''
+          )}
+        </Descriptions.Item>
+        <Descriptions.Item
+          label={intl.formatMessage({
+            defaultMessage: 'Created At',
+            id: 'wittYy',
+          })}
+        >
+          {todo?.todo ? moment(todo.todo.createdAt).format('DD/MM/YY') : null}
+        </Descriptions.Item>
+        <Descriptions.Item
+          label={intl.formatMessage({
+            defaultMessage: 'Due Date',
+            id: '8XUukm',
+          })}
+        >
+          {todo?.todo ? moment(todo.todo.dueDate).format('DD/MM/YY') : null}
+        </Descriptions.Item>
+        <Descriptions.Item
+          label={intl.formatMessage({
+            defaultMessage: 'Description',
+            id: 'Q8Qw5B',
+          })}
+        >
+          {todo?.todo?.description}
+        </Descriptions.Item>
+      </Descriptions>
+      <Divider style={{ marginTop: 10 }} />
+      <Form
+        form={form}
+        onFinish={onSubmit}
+        layout="vertical"
+        initialValues={{ questions: [] }}
+      >
+        {questions && questions.length > 0 ? (
+          <Typography.Title level={4}>
+            {intl.formatMessage({
+              defaultMessage: 'Questions',
+              id: 'KV/9Hv',
+            })}
+          </Typography.Title>
+        ) : null}
+        {questions && questions.length > 0 ? (
           <CustomQuestions questions={questions} disabled={saving} />
+        ) : null}
+        {questions && questions.length > 0 ? (
+          <Divider style={{ marginTop: 10 }} />
         ) : null}
         <Row>
           <Col span={24}>
             <Typography.Title level={4}>
               {intl.formatMessage({
-                defaultMessage: 'Users',
-                id: 'YDMrKK',
-              })}
-            </Typography.Title>
-            {users.map((user) => (
-              <Form.Item label={user.name} name={user.id} colon>
-                <InputNumber
-                  min={0}
-                  addonAfter={intl.formatMessage({
-                    defaultMessage: 'mins',
-                    id: '6G3yvH',
-                  })}
-                />
-              </Form.Item>
-            ))}
-          </Col>
-        </Row>
-        <Row>
-          <Col span={24}>
-            <Typography.Title level={4}>
-              {intl.formatMessage({
-                defaultMessage: 'Add user',
-                id: 'Dra4ET',
+                defaultMessage: 'Time Tracking',
+                id: 'm1/6Jj',
               })}
             </Typography.Title>
             <Row>
-              <Col span={24}>
+              <Col flex={1}>
+                {users.map((user) => (
+                  <Form.Item
+                    label={user.name}
+                    name={user.id}
+                    colon
+                    rules={[
+                      { required: true, message: 'Add time for this user' },
+                    ]}
+                  >
+                    <InputNumber
+                      min={0}
+                      addonAfter={intl.formatMessage({
+                        defaultMessage: 'mins',
+                        id: '6G3yvH',
+                      })}
+                    />
+                  </Form.Item>
+                ))}
+              </Col>
+              <Col>
+                <Typography.Paragraph
+                  style={{ marginBottom: 5, fontWeight: 600 }}
+                >
+                  {intl.formatMessage({
+                    defaultMessage: 'Add Another User',
+                    id: 'sy3PlZ',
+                  })}
+                </Typography.Paragraph>
                 <Select
                   value={null}
-                  style={{ width: '50%' }}
+                  style={{ width: 200 }}
                   options={availableUsers.map((user) => ({
                     label: user.name,
                     value: user.id,
@@ -131,8 +197,9 @@ const TodoView = ({
             </Row>
           </Col>
         </Row>
+        <Divider />
         <Form.Item>
-          <Row style={{ marginTop: 30 }} gutter={16} justify="end">
+          <Row style={{ marginTop: 10 }} gutter={16} justify="end">
             <Col>
               <Button
                 disabled={saving}
@@ -153,16 +220,17 @@ const TodoView = ({
                 disabled={saving}
                 loading={saving}
               >
-                {intl.formatMessage({
-                  id: '8fwjt4',
-                  defaultMessage: 'Complete Activity',
-                })}
+                {confirmText ||
+                  intl.formatMessage({
+                    id: '8fwjt4',
+                    defaultMessage: 'Complete Activity',
+                  })}
               </Button>
             </Col>
           </Row>
         </Form.Item>
       </Form>
-    </Card>
+    </div>
   );
 };
 

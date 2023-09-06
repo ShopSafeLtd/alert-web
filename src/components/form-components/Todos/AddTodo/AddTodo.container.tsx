@@ -10,13 +10,7 @@ interface Props {
   update?: MutationUpdaterFn<CreateTodoMutation>;
   incidentId?: string;
   initData?: {
-    name: string;
-    description: string;
-    questions: {
-      id: string;
-      question: string;
-    }[];
-    defaultDueDays: number;
+    id: string;
   };
 }
 
@@ -35,10 +29,17 @@ const AddTodo = ({
     setAddQuestion,
     update,
     selectedIds,
-    selectedQuestions,
-    setSelectedQuestions,
-    setSelectedIds,
+    // selectedQuestions,
+    // setSelectedQuestions,
+    // setSelectedIds,
     form,
+    templatesLoading,
+    templatesData,
+    questions,
+    setUsers,
+    setAvailableUsers,
+    users,
+    availableUsers,
   } = useAddTodo({
     onClose,
     updateMutation,
@@ -49,18 +50,25 @@ const AddTodo = ({
   return (
     <View
       form={form}
-      setSelectedIds={setSelectedIds}
+      // setSelectedIds={setSelectedIds}
       addQuestion={addQuestion}
       setAddQuestion={setAddQuestion}
       update={update}
       selectedIds={selectedIds}
-      selectedQuestions={selectedQuestions}
-      setSelectedQuestions={setSelectedQuestions}
+      // selectedQuestions={selectedQuestions}
+      // setSelectedQuestions={setSelectedQuestions}
       onSubmit={onSubmit}
       onClose={onClose}
       saving={saving}
       adminUsersData={adminUsersData}
       usersLoading={usersLoading}
+      templatesLoading={templatesLoading}
+      templatesData={templatesData}
+      questions={questions}
+      availableUsers={availableUsers}
+      setAvailableUsers={setAvailableUsers}
+      setUsers={setUsers}
+      users={users}
     />
   );
 };
