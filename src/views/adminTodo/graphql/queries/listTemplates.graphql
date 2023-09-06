@@ -1,6 +1,6 @@
-query QuestionGroupOnScheme($where: SchemeWhereUniqueInput!) {
+query QuestionGroupOnScheme($where: SchemeWhereUniqueInput!, $questionGroupsWhere: QuestionGroupWhereInput) {
   scheme(where: $where) {
-    questionGroups {
+    questionGroups(where: $questionGroupsWhere) {
       id
       name
       description
@@ -8,6 +8,11 @@ query QuestionGroupOnScheme($where: SchemeWhereUniqueInput!) {
       questions {
         questionFormatted
         id
+        optionsFormFormatted {
+          label
+          value
+        }
+        type
       }
     }
   }

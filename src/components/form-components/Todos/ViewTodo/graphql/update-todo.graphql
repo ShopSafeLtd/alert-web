@@ -1,5 +1,13 @@
 mutation UpdateTask($data: TodoUpdateInput!, $where: TodoWhereUniqueInput!) {
   updateTodoDefault(data: $data, where: $where) {
     id
+    name
+    description
+    dueDate
+    completed
+    assignedUsers {
+      id
+      fullName
+    }
   }
 }

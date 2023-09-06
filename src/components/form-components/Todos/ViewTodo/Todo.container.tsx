@@ -1,15 +1,21 @@
 import React from 'react';
+import type { MutationUpdaterFn } from '@apollo/client';
 import View from './Todo.view';
 import useTodo from './useTodo';
+import type { UpdateTaskMutation } from '../../../../graphql/generated';
 
 const ViewTodo = ({
   id,
   onClose,
   updateTodo,
+  confirmText,
+  updateQuery,
 }: {
   id: string | null;
   onClose: () => void;
   updateTodo: (value: boolean, i?: string) => void;
+  confirmText?: string;
+  updateQuery?: MutationUpdaterFn<UpdateTaskMutation>;
 }) => {
   const {
     todo,
@@ -25,6 +31,7 @@ const ViewTodo = ({
     id,
     onClose,
     updateTodo,
+    updateQuery,
   });
   return (
     <View
@@ -38,6 +45,7 @@ const ViewTodo = ({
       setAvailableUsers={setAvailableUsers}
       loading={loading}
       onClose={onClose}
+      confirmText={confirmText}
     />
   );
 };

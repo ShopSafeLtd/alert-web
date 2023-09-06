@@ -88,6 +88,12 @@ const ViewIncident = (): JSX.Element => {
     translateText,
     isTranslated,
     languageCount,
+    templatesData,
+    templatesLoading,
+    setViewTodoVisible,
+    setCompleteTodoVisible,
+    completeTodoVisible,
+    viewTodoVisible,
   } = useViewIncident(incidentId);
   const { onApprove, onReject, approving } = useApproveIncident({ incidentId });
 
@@ -178,6 +184,12 @@ const ViewIncident = (): JSX.Element => {
       updateDocumentList={updateDocumentList}
       updateDeleteDocument={updateDeleteDocument}
       hideIncident={hideIncident}
+      templatesData={templatesData}
+      templatesLoading={templatesLoading}
+      completeTodoVisible={completeTodoVisible}
+      setCompleteTodoVisible={setCompleteTodoVisible}
+      setViewTodoVisible={setViewTodoVisible}
+      viewTodoVisible={viewTodoVisible}
     />
   );
 };

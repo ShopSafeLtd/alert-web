@@ -1,18 +1,24 @@
 import { useEffect, useState } from 'react';
-import type { SelectOptions } from 'types/DataType';
+import type { CustomQuestion, SelectOptions } from 'types/DataType';
 import type { MutationUpdaterFn } from '@apollo/client';
-import type { CreateTodoMutation } from 'graphql/generated';
+import type {
+  CreateTodoMutation,
+  QuestionGroupOnSchemeQuery,
+} from 'graphql/generated';
 import {
+  AnswerType,
   Role,
   SortOrder,
   useCreateTodoMutation,
   useListSchemeUsersQuery,
+  useQuestionGroupOnSchemeQuery,
 } from 'graphql/generated';
 import errorNotification from 'types/error_notification';
 import type { FormInstance } from 'antd';
 import { Form, notification } from 'antd';
 import { useStoreState } from 'state';
 import { useIntl } from 'react-intl';
+import type { Moment } from 'moment';
 import moment from 'moment';
 
 const { useForm } = Form;
@@ -20,8 +26,10 @@ const { useForm } = Form;
 export interface FormData {
   name: string;
   description: string;
-  dueDate: Date;
+  dueDate: Moment;
   assignedUsers: string[];
+  questionGroup?: string;
+  [answer: string]: string | string[] | undefined | Moment | number;
 }
 
 interface Props {
@@ -29,13 +37,7 @@ interface Props {
   incidentId?: string;
   updateMutation?: MutationUpdaterFn<CreateTodoMutation>;
   initData?: {
-    name: string;
-    description: string;
-    questions: {
-      id: string;
-      question: string;
-    }[];
-    defaultDueDays: number;
+    id: string;
   };
 }
 
@@ -48,10 +50,21 @@ interface Return {
   setAddQuestion: (value: boolean) => void;
   update: (id: string, question: string) => void;
   selectedIds?: string[];
-  selectedQuestions: { id: string; question: string }[];
-  setSelectedQuestions: (value: { id: string; question: string }[]) => void;
+  selectedQuestions: { id: string; question: string; type: AnswerType }[];
+  setSelectedQuestions: (
+    value: { id: string; question: string; type: AnswerType }[]
+  ) => void;
   setSelectedIds: (value: string[]) => void;
   form: FormInstance<FormData>;
+  templatesData: QuestionGroupOnSchemeQuery | undefined;
+  templatesLoading: boolean;
+  questions: CustomQuestion[];
+  users: { id: string; name: string; timeTaken: number }[];
+  setUsers: (users: { id: string; name: string; timeTaken: number }[]) => void;
+  availableUsers: { id: string; name: string; timeTaken: number }[];
+  setAvailableUsers: (
+    users: { id: string; name: string; timeTaken: number }[]
+  ) => void;
 }
 
 const useAddTodo = ({
@@ -67,37 +80,87 @@ const useAddTodo = ({
   const [saving, setSaving] = useState(false);
   const [addQuestion, setAddQuestion] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-
+  const [questions, setQuestions] = useState<CustomQuestion[]>([]);
+  const [users, setUsers] = useState<
+    { id: string; name: string; timeTaken: number }[]
+  >([]);
+  const [availableUsers, setAvailableUsers] = useState<
+    { id: string; name: string; timeTaken: number }[]
+  >([]);
   const [selectedQuestions, setSelectedQuestions] = useState<
-    { id: string; question: string }[]
+    { id: string; question: string; type: AnswerType }[]
   >([]);
 
+  const { data: templatesData, loading: templatesLoading } =
+    useQuestionGroupOnSchemeQuery({
+      variables: {
+        where: {
+          id: schemeId,
+        },
+      },
+    });
+
   const update = (id: string, question: string) => {
-    setSelectedQuestions([...selectedQuestions, { id, question }]);
+    setSelectedQuestions([
+      ...selectedQuestions,
+      { id, question, type: AnswerType.String },
+    ]);
     setSelectedIds([...selectedIds, id]);
   };
   useEffect(() => {
     if (initData) {
-      const { name, description, questions, defaultDueDays } = initData;
+      form.setFieldsValue({
+        questionGroup: initData.id,
+      });
+    }
+  }, [initData]);
+
+  const questionGroup = Form.useWatch('questionGroup', form);
+
+  useEffect(() => {
+    const template = templatesData?.scheme?.questionGroups.find(
+      ({ id }) => id === questionGroup
+    );
+    if (template) {
+      const {
+        defaultDueDate,
+        name,
+        description,
+        questions: templateQuestions,
+      } = template;
       const dueDate = new Date();
-      dueDate.setDate(dueDate.getDate() + defaultDueDays);
+      dueDate.setDate(dueDate.getDate() + defaultDueDate);
 
       const formattedDate = moment(dueDate);
-      setSelectedIds(questions.map((question) => question.id));
+      setSelectedIds(templateQuestions.map((question) => question.id));
       setSelectedQuestions(
-        questions.map((question) => ({
+        templateQuestions.map((question) => ({
           id: question.id,
-          question: question.question,
+          question: question.questionFormatted,
+          type: question.type,
         }))
       );
 
       form.setFieldsValue({
         name,
-        description,
+        description: description || '',
         dueDate: formattedDate,
       });
+
+      setQuestions(
+        templateQuestions.map((question) => ({
+          answerType: question.type,
+          label: question.questionFormatted,
+          questionId: question.id,
+          required: false,
+          tagQuestionId: '',
+          value: '',
+          options: question.optionsFormFormatted || [],
+        }))
+      );
     }
-  }, [initData]);
+  }, [questionGroup, templatesData]);
+
   const { data: usersData, loading: usersLoading } = useListSchemeUsersQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
@@ -141,6 +204,34 @@ const useAddTodo = ({
     },
   });
 
+  const assignedUsers = Form.useWatch('assignedUsers', form);
+  useEffect(() => {
+    if (usersData?.users && assignedUsers) {
+      const u = usersData?.users
+        .map((user) => ({
+          id: user?.id || '',
+          name: user?.fullName || '',
+          timeTaken: 0,
+        }))
+        .filter((user) => !assignedUsers.includes(user.id));
+      setAvailableUsers(u || []);
+
+      setUsers([
+        ...users,
+        ...assignedUsers
+          .filter((id) => !users.some((user) => user.id === id))
+          .map((id) => {
+            const fullUser = usersData.users.find((user) => user.id === id);
+            return {
+              id,
+              name: fullUser?.fullName || '',
+              timeTaken: 0,
+            };
+          }),
+      ]);
+    }
+  }, [assignedUsers, usersData]);
+
   const [createTodo] = useCreateTodoMutation({
     onCompleted: () => {
       setSaving(false);
@@ -166,6 +257,17 @@ const useAddTodo = ({
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
+
+    const userTime = users.map((user) => ({
+      id: user.id,
+      timeTaken: data[user.id],
+    }));
+    const timeTaken = userTime
+      .map((time) => ({
+        timeTaken: time.timeTaken as number,
+        userId: time.id,
+      }))
+      ?.filter((time) => time.timeTaken && time.timeTaken > 0);
     void createTodo({
       variables: {
         data: {
@@ -178,14 +280,32 @@ const useAddTodo = ({
           questions:
             selectedQuestions && selectedQuestions.length > 0
               ? {
+                  create: selectedQuestions.map((question) => ({
+                    question: {
+                      connect: {
+                        id: question.id,
+                      },
+                    },
+                    answers: {
+                      create: [
+                        {
+                          answer: (data[question.id] as string) || '',
+                          type: question.type,
+                        },
+                      ],
+                    },
+                  })),
+                }
+              : undefined,
+          timeTaken:
+            userTime && timeTaken
+              ? {
                   createMany: {
-                    data: selectedQuestions.map((question) => ({
-                      questionId: question.id,
-                    })),
+                    data: timeTaken,
                   },
                 }
               : undefined,
-          dueDate: data.dueDate,
+          dueDate: data.dueDate.toDate(),
           completed: false,
           incident: incidentId ? { connect: { id: incidentId } } : undefined,
           createdBy: { connect: { id: userId } },
@@ -217,6 +337,13 @@ const useAddTodo = ({
     setSelectedQuestions,
     setSelectedIds,
     form,
+    templatesData,
+    templatesLoading,
+    questions,
+    setAvailableUsers,
+    setUsers,
+    users,
+    availableUsers,
   };
 };
 export default useAddTodo;
