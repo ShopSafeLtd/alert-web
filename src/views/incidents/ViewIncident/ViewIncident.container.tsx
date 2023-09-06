@@ -94,6 +94,7 @@ const ViewIncident = (): JSX.Element => {
     setCompleteTodoVisible,
     completeTodoVisible,
     viewTodoVisible,
+    updateTodo,
   } = useViewIncident(incidentId);
   const { onApprove, onReject, approving } = useApproveIncident({ incidentId });
 
@@ -190,6 +191,7 @@ const ViewIncident = (): JSX.Element => {
       setCompleteTodoVisible={setCompleteTodoVisible}
       setViewTodoVisible={setViewTodoVisible}
       viewTodoVisible={viewTodoVisible}
+      updateTodo={updateTodo}
     />
   );
 };
