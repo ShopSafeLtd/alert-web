@@ -1,7 +1,11 @@
 import type { FormInstance } from 'antd';
 import { Form } from 'antd';
 import { useEffect, useState } from 'react';
-import type { TodoQuery } from '../../../../graphql/generated';
+import type { MutationUpdaterFn } from '@apollo/client';
+import type {
+  TodoQuery,
+  UpdateTaskMutation,
+} from '../../../../graphql/generated';
 import {
   Role,
   SortOrder,
@@ -35,10 +39,12 @@ const useTodo = ({
   id,
   onClose,
   updateTodo,
+  updateQuery,
 }: {
   id: string | null;
   onClose: () => void;
   updateTodo: (value: boolean, i?: string) => void;
+  updateQuery?: MutationUpdaterFn<UpdateTaskMutation>;
 }): Return => {
   const [form] = useForm();
 
@@ -50,6 +56,7 @@ const useTodo = ({
     { id: string; name: string; timeTaken: number }[]
   >([]);
   const schemeId = useStoreState((state) => state.scheme.id);
+
   const { data: todo, loading } = useTodoQuery({
     variables: {
       where: {
@@ -68,6 +75,9 @@ const useTodo = ({
             ?.timeTaken || 0,
       }));
       setUsers(u || []);
+      form.setFieldsValue(
+        Object.fromEntries(u.map((item) => [item.id, item.timeTaken]))
+      );
     }
   }, [todo]);
 
@@ -122,6 +132,7 @@ const useTodo = ({
     onError: () => {
       setSaving(false);
     },
+    update: updateQuery,
   });
 
   useEffect(() => {

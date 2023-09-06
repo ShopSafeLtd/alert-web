@@ -11,6 +11,8 @@ import type {
   ViewIncidentQuery,
   ViewIncidentQueryVariables,
   LanguageCode,
+  QuestionGroupOnSchemeQuery,
+  UpdateTaskMutation,
 } from 'graphql/generated';
 import {
   Role,
@@ -18,6 +20,7 @@ import {
   useCreateSimpleOffenderMutation,
   useCreateSimpleVehicleMutation,
   useDeleteUpdateMutation,
+  useQuestionGroupOnSchemeQuery,
   useRecycleIncidentMutation,
   useSubscribeToIncidentMutation,
   useTranslateLazyQuery,
@@ -159,6 +162,13 @@ interface Return {
   translateText: () => Promise<void>;
   isTranslated: string | null;
   languageCount: number;
+  templatesData: QuestionGroupOnSchemeQuery | undefined;
+  templatesLoading: boolean;
+  viewTodoVisible: string | null;
+  setViewTodoVisible: (value: string | null) => void;
+  completeTodoVisible: string | null;
+  setCompleteTodoVisible: (value: string | null) => void;
+  updateTodo: MutationUpdaterFn<UpdateTaskMutation>;
 }
 
 const useViewIncident = (incidentId: string): Return => {
@@ -222,6 +232,10 @@ const useViewIncident = (incidentId: string): Return => {
   const [editImageData, setEditImageData] = useState<EditFeedImage | null>(
     null
   );
+  const [viewTodoVisible, setViewTodoVisible] = useState<string | null>(null);
+  const [completeTodoVisible, setCompleteTodoVisible] = useState<string | null>(
+    null
+  );
 
   const openLightbox = (index: number) => {
     setLightBoxOpen({ open: !lightBoxOpen.open, index });
@@ -267,6 +281,20 @@ const useViewIncident = (incidentId: string): Return => {
         { title, type: type.toLocaleLowerCase() }
       ),
       placement: 'bottomRight',
+    });
+
+  const { data: templatesData, loading: templatesLoading } =
+    useQuestionGroupOnSchemeQuery({
+      variables: {
+        where: {
+          id: schemeId,
+        },
+        questionGroupsWhere: {
+          defaultForIncidents: {
+            equals: true,
+          },
+        },
+      },
     });
 
   const [updateIncident] = useUpdateIncidentMutation({
@@ -1588,6 +1616,44 @@ const useViewIncident = (incidentId: string): Return => {
     );
   };
 
+  const updateTodo: MutationUpdaterFn<UpdateTaskMutation> = (
+    store,
+    { data: res }
+  ) => {
+    if (res === null || res === undefined) return;
+    if (res.updateTodoDefault === null || res.updateTodoDefault === undefined)
+      return;
+    // get existing group list data from Apollo store
+    const existingData = store.readQuery<
+      ViewIncidentQuery,
+      ViewIncidentQueryVariables
+    >({
+      query: ViewIncidentDocument,
+      variables,
+    });
+
+    if (existingData === null) return;
+    if (existingData?.incident?.todos === undefined) return;
+
+    // write the new data to the Apollo store
+    store.writeQuery<ViewIncidentQuery, ViewIncidentQueryVariables>({
+      query: ViewIncidentDocument,
+      data: {
+        incident: update<ViewIncidentQuery['incident']>(existingData.incident, {
+          todos: {
+            [existingData.incident.todos.findIndex(
+              ({ id }) => id === res.updateTodoDefault?.id
+            )]: {
+              $set: res.updateTodoDefault,
+            },
+          },
+        }),
+        __typename: 'Query',
+      },
+      variables,
+    });
+  };
+
   return {
     addImages,
     addOffenderRights: role !== Role.User,
@@ -1672,6 +1738,13 @@ const useViewIncident = (incidentId: string): Return => {
     translateText,
     isTranslated,
     languageCount,
+    templatesData,
+    templatesLoading,
+    setViewTodoVisible,
+    setCompleteTodoVisible,
+    completeTodoVisible,
+    viewTodoVisible,
+    updateTodo,
   };
 };
 

@@ -7,6 +7,8 @@ import type {
   DeleteDocumentMutation,
   Role,
   ViewIncidentQuery,
+  QuestionGroupOnSchemeQuery,
+  UpdateTaskMutation,
 } from 'graphql/generated';
 import { GoodsMode, UpdateType } from 'graphql/generated';
 import {
@@ -92,6 +94,7 @@ import UpdateContent from './Update.view';
 import useStyles from './ViewIncident.styles';
 import EvidenceTable from '../../../components/tables/EvidenceTable';
 import formatAnswer from '../../../utils/format-answer';
+import ViewTodo from '../../../components/form-components/Todos/ViewTodo/Todo.container';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -103,6 +106,7 @@ interface TableItem {
   assignedUsers: { id: string; fullName: string }[];
   completed: boolean;
 }
+
 interface Props {
   userRole: Role;
   data: ViewIncidentQuery | undefined;
@@ -211,6 +215,13 @@ interface Props {
   translateText: () => Promise<void>;
   isTranslated: string | null;
   languageCount: number;
+  templatesData: QuestionGroupOnSchemeQuery | undefined;
+  templatesLoading: boolean;
+  viewTodoVisible: string | null;
+  setViewTodoVisible: (value: string | null) => void;
+  completeTodoVisible: string | null;
+  setCompleteTodoVisible: (value: string | null) => void;
+  updateTodo: MutationUpdaterFn<UpdateTaskMutation>;
 }
 
 const ViewIncident = ({
@@ -299,6 +310,13 @@ const ViewIncident = ({
   translateText,
   isTranslated,
   languageCount,
+  templatesLoading,
+  templatesData,
+  setViewTodoVisible,
+  viewTodoVisible,
+  setCompleteTodoVisible,
+  completeTodoVisible,
+  updateTodo,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
@@ -1624,6 +1642,8 @@ const ViewIncident = ({
                                   <Button
                                     size="small"
                                     onClick={toggleAddTodo}
+                                    loading={templatesLoading}
+                                    disabled={templatesLoading}
                                     icon={
                                       <FontAwesomeIcon
                                         icon={faPlus}
@@ -1655,6 +1675,30 @@ const ViewIncident = ({
                                       id: 'HAlOn1',
                                     }),
                                     dataIndex: 'name',
+                                  },
+                                  {
+                                    key: 'completed',
+                                    dataIndex: 'completed',
+                                    title: intl.formatMessage({
+                                      defaultMessage: 'Status',
+                                      id: 'tzMNF3',
+                                    }),
+                                    ellipsis: true,
+                                    render: (value: boolean) => (
+                                      <Typography.Text
+                                        type={value ? 'success' : 'warning'}
+                                      >
+                                        {value
+                                          ? intl.formatMessage({
+                                              defaultMessage: 'Completed',
+                                              id: '95stPq',
+                                            })
+                                          : intl.formatMessage({
+                                              defaultMessage: 'Open',
+                                              id: 'JfG49w',
+                                            })}
+                                      </Typography.Text>
+                                    ),
                                   },
                                   {
                                     key: 'description',
@@ -1712,6 +1756,33 @@ const ViewIncident = ({
                                           </Col>
                                         ))}
                                       </Row>
+                                    ),
+                                  },
+                                  {
+                                    key: 'actions',
+                                    dataIndex: 'completed',
+                                    render: (value: boolean, item) => (
+                                      <Button
+                                        size="small"
+                                        type={value ? 'text' : 'ghost'}
+                                        danger={!value}
+                                        onClick={() => {
+                                          if (value)
+                                            setViewTodoVisible(item.key);
+                                          if (!value)
+                                            setCompleteTodoVisible(item.key);
+                                        }}
+                                      >
+                                        {value
+                                          ? intl.formatMessage({
+                                              defaultMessage: 'View',
+                                              id: 'FgydNe',
+                                            })
+                                          : intl.formatMessage({
+                                              defaultMessage: 'Complete',
+                                              id: 'U78NhE',
+                                            })}
+                                      </Button>
                                     ),
                                   },
                                 ]}
@@ -2350,6 +2421,58 @@ const ViewIncident = ({
             update={updateTodoList}
             onClose={toggleAddTodo}
             incidentId={data?.incident?.id}
+            initData={
+              templatesData?.scheme &&
+              templatesData.scheme.questionGroups.length > 0
+                ? {
+                    id: templatesData?.scheme?.questionGroups[0].id,
+                  }
+                : undefined
+            }
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Complete Activity',
+          id: '8fwjt4',
+        })}
+        open={completeTodoVisible !== null}
+        width={800}
+        onClose={() => setCompleteTodoVisible(null)}
+      >
+        {completeTodoVisible ? (
+          <ViewTodo
+            id={completeTodoVisible}
+            onClose={() => setCompleteTodoVisible(null)}
+            updateQuery={updateTodo}
+            updateTodo={() => {}}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'View Activity',
+          id: 'swvNLe',
+        })}
+        open={!!viewTodoVisible}
+        width={800}
+        onClose={() => setViewTodoVisible(null)}
+      >
+        {viewTodoVisible ? (
+          <ViewTodo
+            id={viewTodoVisible}
+            onClose={() => setViewTodoVisible(null)}
+            confirmText={intl.formatMessage({
+              defaultMessage: 'Save Activity',
+              id: 'Z6L1UV',
+            })}
+            updateQuery={updateTodo}
+            updateTodo={() => {}}
           />
         ) : (
           <div />

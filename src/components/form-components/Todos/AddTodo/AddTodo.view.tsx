@@ -7,16 +7,19 @@ import {
   Drawer,
   Form,
   Input,
+  InputNumber,
   Row,
   Select,
+  Tooltip,
+  Typography,
 } from 'antd';
 import type { RangePickerProps } from 'antd/es/date-picker';
-import type { SelectOptions } from 'types/DataType';
+import type { SelectOptions, CustomQuestion } from 'types/DataType';
 import { useIntl } from 'react-intl';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/pro-light-svg-icons';
 import type { FormData } from './useAddTodo';
 import CreateQuestionContainer from '../../createQuestion/CreateQuestion.container';
+import type { QuestionGroupOnSchemeQuery } from '../../../../graphql/generated';
+import CustomQuestions from '../../../../views/incidents/AddIncident/components/IncidentCustom/CustomQuestion.view';
 
 interface Props {
   onClose: () => void;
@@ -28,10 +31,19 @@ interface Props {
   setAddQuestion: (value: boolean) => void;
   update: (id: string, question: string) => void;
   selectedIds?: string[];
-  setSelectedIds: (value: string[]) => void;
-  selectedQuestions: { id: string; question: string }[];
-  setSelectedQuestions: (value: { id: string; question: string }[]) => void;
+  // setSelectedIds: (value: string[]) => void;
+  // selectedQuestions: { id: string; question: string }[];
+  // setSelectedQuestions: (value: { id: string; question: string }[]) => void;
   form: FormInstance<FormData>;
+  templatesData: QuestionGroupOnSchemeQuery | undefined;
+  templatesLoading: boolean;
+  questions: CustomQuestion[];
+  users: { id: string; name: string; timeTaken: number }[];
+  setUsers: (users: { id: string; name: string; timeTaken: number }[]) => void;
+  availableUsers: { id: string; name: string; timeTaken: number }[];
+  setAvailableUsers: (
+    users: { id: string; name: string; timeTaken: number }[]
+  ) => void;
 }
 
 const disabledDate: RangePickerProps['disabledDate'] = (current) =>
@@ -47,18 +59,30 @@ const AddTodo = ({
   setAddQuestion,
   update,
   selectedIds,
-  setSelectedIds,
-  selectedQuestions,
-  setSelectedQuestions,
+  // setSelectedIds,
+  // selectedQuestions,
+  // setSelectedQuestions,
   form,
+  templatesLoading,
+  templatesData,
+  questions,
+  users,
+  setUsers,
+  setAvailableUsers,
+  availableUsers,
 }: Props): JSX.Element => {
   const intl = useIntl();
 
   return (
     <>
-      <Form layout="vertical" onFinish={onSubmit} form={form}>
+      <Form
+        layout="vertical"
+        onFinish={onSubmit}
+        form={form}
+        initialValues={{ assignedUsers: [] }}
+      >
         <Row gutter={16}>
-          <Col span={23}>
+          <Col span={16}>
             <Form.Item
               name="name"
               label={intl.formatMessage({
@@ -78,9 +102,34 @@ const AddTodo = ({
               <Input disabled={saving} />
             </Form.Item>
           </Col>
+          <Col span={8}>
+            <Form.Item
+              name="questionGroup"
+              label={intl.formatMessage({
+                id: 'lOuJa8',
+                defaultMessage: 'Activity Template',
+              })}
+            >
+              <Select
+                placeholder={intl.formatMessage({
+                  id: 'C+ZsI4',
+                  defaultMessage: 'No template selected',
+                })}
+                disabled={saving}
+                options={templatesData?.scheme?.questionGroups.map(
+                  (template) => ({
+                    label: template.name,
+                    value: template.id,
+                  })
+                )}
+                allowClear
+                loading={templatesLoading}
+              />
+            </Form.Item>
+          </Col>
         </Row>
         <Row gutter={16}>
-          <Col span={23}>
+          <Col span={6}>
             <Form.Item
               name="dueDate"
               label={intl.formatMessage({
@@ -105,14 +154,12 @@ const AddTodo = ({
               />
             </Form.Item>
           </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={23}>
+          <Col span={17}>
             <Form.Item
               name="assignedUsers"
               label={intl.formatMessage({
-                id: 'Y03BBv',
-                defaultMessage: 'Assign To Admins',
+                id: '8oku8d',
+                defaultMessage: 'Assigned Users',
               })}
               rules={[
                 {
@@ -150,43 +197,124 @@ const AddTodo = ({
             </Form.Item>
           </Col>
         </Row>
+        {questions && questions.length > 0 ? (
+          <CustomQuestions questions={questions} disabled={saving} />
+        ) : null}
+        {/* <Row> */}
+        {/*  <Col span={23}> */}
+        {/*    <Form.Item */}
+        {/*      name="questions" */}
+        {/*      label={intl.formatMessage({ */}
+        {/*        id: 'KV/9Hv', */}
+        {/*        defaultMessage: 'Questions', */}
+        {/*      })} */}
+        {/*      style={{ marginBottom: 10 }} */}
+        {/*    > */}
+        {/*      {selectedQuestions.map((question) => ( */}
+        {/*        <Row> */}
+        {/*          <Col flex={1}> */}
+        {/*            <p>{question.question}</p> */}
+        {/*          </Col> */}
+        {/*          <Col> */}
+        {/*            <Button */}
+        {/*              size="small" */}
+        {/*              onClick={() => { */}
+        {/*                setSelectedQuestions( */}
+        {/*                  selectedQuestions.filter((q) => q.id !== question.id) */}
+        {/*                ); */}
+        {/*                setSelectedIds( */}
+        {/*                  selectedIds?.filter((id) => id !== question.id) || [] */}
+        {/*                ); */}
+        {/*              }} */}
+        {/*              icon={<FontAwesomeIcon icon={faTrash} />} */}
+        {/*            /> */}
+        {/*          </Col> */}
+        {/*        </Row> */}
+        {/*      ))} */}
+        {/*    </Form.Item> */}
+        {/*    <Row justify="end"> */}
+        {/*      <Col> */}
+        {/*        <Button size="small" onClick={() => setAddQuestion(true)}> */}
+        {/*          {intl.formatMessage({ */}
+        {/*            id: '7nSzTq', */}
+        {/*            defaultMessage: 'Add Question', */}
+        {/*          })} */}
+        {/*        </Button> */}
+        {/*      </Col> */}
+        {/*    </Row> */}
+        {/*  </Col> */}
+        {/* </Row> */}
+
         <Row>
-          <Col span={23}>
-            <Form.Item
-              name="questions"
-              label={intl.formatMessage({
-                id: 'KV/9Hv',
-                defaultMessage: 'Questions',
-              })}
-            >
-              {selectedQuestions.map((question) => (
-                <Row>
-                  <Col flex={1}>
-                    <p>{question.question}</p>
-                  </Col>
-                  <Col>
-                    <Button
-                      size="small"
-                      onClick={() => {
-                        setSelectedQuestions(
-                          selectedQuestions.filter((q) => q.id !== question.id)
-                        );
-                        setSelectedIds(
-                          selectedIds?.filter((id) => id !== question.id) || []
-                        );
-                      }}
-                      icon={<FontAwesomeIcon icon={faTrash} />}
+          <Col span={24}>
+            {users.length > 0 && (
+              <Typography.Title level={4}>
+                {intl.formatMessage({
+                  defaultMessage: 'Time Tracking',
+                  id: 'm1/6Jj',
+                })}
+              </Typography.Title>
+            )}
+            <Row>
+              <Col flex={1}>
+                {users.map((user) => (
+                  <Form.Item
+                    label={user.name}
+                    name={user.id}
+                    colon
+                    required={false}
+                    rules={[
+                      {
+                        required: true,
+                        message: intl.formatMessage({
+                          defaultMessage: 'Please add a time for this user.',
+                          id: 'VVl5Mn',
+                        }),
+                      },
+                    ]}
+                  >
+                    <InputNumber
+                      min={0}
+                      addonAfter={intl.formatMessage({
+                        defaultMessage: 'mins',
+                        id: '6G3yvH',
+                      })}
+                      disabled={saving}
                     />
-                  </Col>
-                </Row>
-              ))}
-            </Form.Item>
-            <Button type="dashed" onClick={() => setAddQuestion(true)}>
-              {intl.formatMessage({
-                id: 'kgZDDS',
-                defaultMessage: 'New Question',
-              })}
-            </Button>
+                  </Form.Item>
+                ))}
+              </Col>
+              {users.length > 0 && (
+                <Col>
+                  <Typography.Paragraph
+                    style={{ marginBottom: 5, fontWeight: 600 }}
+                  >
+                    {intl.formatMessage({
+                      defaultMessage: 'Add Another User',
+                      id: 'sy3PlZ',
+                    })}
+                  </Typography.Paragraph>
+                  <Select
+                    value={null}
+                    style={{ width: 200 }}
+                    options={availableUsers.map((user) => ({
+                      label: user.name,
+                      value: user.id,
+                    }))}
+                    disabled={saving}
+                    onSelect={(value) => {
+                      const user = availableUsers.find((u) => u.id === value);
+                      if (user) {
+                        setUsers([...users, user]);
+                        setAvailableUsers(
+                          availableUsers.filter((u) => u.id !== value)
+                        );
+                      }
+                    }}
+                  />
+                </Col>
+              )}
+            </Row>
           </Col>
         </Row>
 
@@ -201,6 +329,26 @@ const AddTodo = ({
               </Button>
             </Col>
             <Col>
+              <Tooltip
+                title={intl.formatMessage({
+                  id: 'KF4Xpe',
+                  defaultMessage: 'Create activity to be completed later.',
+                })}
+              >
+                <Button
+                  danger
+                  disabled={saving}
+                  loading={saving}
+                  onClick={() => onSubmit(form.getFieldsValue())}
+                >
+                  {intl.formatMessage({
+                    id: '8RIxKm',
+                    defaultMessage: 'Create Activity',
+                  })}
+                </Button>
+              </Tooltip>
+            </Col>
+            <Col>
               <Button
                 type="primary"
                 htmlType="submit"
@@ -208,8 +356,8 @@ const AddTodo = ({
                 loading={saving}
               >
                 {intl.formatMessage({
-                  id: '6kyt/v',
-                  defaultMessage: 'New Activity',
+                  id: 'svLGby',
+                  defaultMessage: 'Create & Complete',
                 })}
               </Button>
             </Col>
