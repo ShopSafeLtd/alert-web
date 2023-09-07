@@ -72,6 +72,7 @@ const useAuth = (): Return => {
         autoApproveIncidents: schemeDetails?.autoApproveIncidents,
         autoApproveOffenders: schemeDetails?.autoApproveOffenders,
         restrictIncidentAccess: schemeDetails?.restrictIncidentAccess,
+        reportOnly: schemeDetails?.reportOnly,
         defaultPublicOffenderDOB: schemeDetails?.defaultPublicOffenderDOB,
         id: schemeDetails?.id,
         name: schemeDetails?.name,
@@ -107,6 +108,7 @@ const useAuth = (): Return => {
           autoApproveIncidents: schemeDetails.scheme.autoApproveIncidents,
           autoApproveOffenders: schemeDetails.scheme.autoApproveOffenders,
           restrictIncidentAccess: schemeDetails.scheme.restrictIncidentAccess,
+          reportOnly: schemeDetails.scheme.reportOnly,
           defaultPublicOffenderDOB:
             schemeDetails.scheme.defaultPublicOffenderDOB,
           id: schemeDetails.scheme.id,

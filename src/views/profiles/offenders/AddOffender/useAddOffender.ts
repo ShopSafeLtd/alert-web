@@ -129,6 +129,7 @@ interface Return {
   toggleAddCustomGallery: () => void;
   updateNewCustomGalleryData: (values: CustomGalleryData) => void;
   updateNewOffenderTagData: (values: TagData) => void;
+  reportOnly: boolean;
 }
 
 // const onPreview = async (file: UploadFile) => {
@@ -149,9 +150,11 @@ interface Return {
 const useAddOffender = (): Return => {
   const intl = useIntl();
   const [form] = Form.useForm<FormData>();
-  const schemeId = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
   const role = useStoreState((state) => state.user.role);
+  const schemeId = useStoreState((state) => state.scheme.id);
+  const reportOnly =
+    useStoreState((state) => state.scheme.reportOnly) && role === Role.User;
   const pagination = useStoreState((state) => state.data.offenders.pagination);
   const imagesRequired = useStoreState(
     (state) => state.scheme.imagesRequiredOnOffenders
@@ -174,7 +177,6 @@ const useAddOffender = (): Return => {
   const [imageChange, setImageChange] = useState(false);
   const [fileList, setFileList] = useState<Image[]>([]);
   const [documentList, setDocumentList] = useState<UploadFile[]>([]);
-
   const [addExclusion, setAddExclusion] = useState(false);
   const [editExclusion, setEditExclusion] = useState(false);
   const [bansData, setBansData] = useState<BanData[]>([]);
@@ -313,7 +315,6 @@ const useAddOffender = (): Return => {
       },
     });
   };
-
   const [createOffender] = useCreateOffenderMutation({
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onCompleted: async () => {
@@ -329,8 +330,11 @@ const useAddOffender = (): Return => {
         }),
         placement: 'bottomRight',
       });
-
-      navigate('/app/offenders');
+      if (reportOnly) {
+        navigate('/app/offenders/add');
+      } else {
+        navigate('/app/offenders');
+      }
     },
     onError: () => {
       setSaving(false);
@@ -642,6 +646,7 @@ const useAddOffender = (): Return => {
 
     setDocumentList(newFileList);
   };
+
   const documentUploadProps: UploadProps = {
     action: import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT,
     onChange: handleChange,
@@ -855,6 +860,7 @@ const useAddOffender = (): Return => {
     updateNewOffenderTagData,
     documentList,
     documentUploadProps,
+    reportOnly,
   };
 };
 

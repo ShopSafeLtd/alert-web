@@ -3,6 +3,7 @@ mutation updateScheme($where: UniqueId!, $data: SchemeUpdateInput!) {
     id
     name
     restrictIncidentAccess
+    reportOnly
     autoApproveIncidents
     autoApproveOffenders
     defaultPublicOffenderDOB
@@ -14,6 +15,8 @@ mutation updateScheme($where: UniqueId!, $data: SchemeUpdateInput!) {
     defaultOffenderEmail
     defaultOffenderPush
     autoPopulateDescription
+    facialRecognition
+    imagesRequiredOnOffenders
     incidentRetention
     offenderRetention
     logo {

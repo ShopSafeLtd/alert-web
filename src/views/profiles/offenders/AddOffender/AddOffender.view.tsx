@@ -82,6 +82,7 @@ interface Props {
   updateNewCustomGalleryData: (values: CustomGalleryData) => void;
   documentList: UploadFile[];
   documentUploadProps: UploadProps;
+  reportOnly: boolean;
 }
 
 const AddOffender = ({
@@ -133,12 +134,13 @@ const AddOffender = ({
   updateNewCustomGalleryData,
   documentList,
   documentUploadProps,
+  reportOnly,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return (
     <div className="list-view">
       <PageHeader
-        onBack={() => window.history.back()}
+        onBack={reportOnly ? undefined : () => window.history.back()}
         title={intl.formatMessage({
           defaultMessage: 'Add Offender',
           id: 'm3ChN4',
@@ -406,12 +408,17 @@ const AddOffender = ({
         )}
 
         <Form.Item>
-          <Row style={{ marginTop: 30 }} gutter={10} justify="end">
-            <Col>
-              <Button disabled={saving} onClick={() => window.history.back()}>
-                {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
-              </Button>
-            </Col>
+          <Row style={{ marginTop: 10 }} gutter={10} justify="end">
+            {!reportOnly && (
+              <Col>
+                <Button disabled={saving} onClick={() => window.history.back()}>
+                  {intl.formatMessage({
+                    defaultMessage: 'Cancel',
+                    id: '47FYwb',
+                  })}
+                </Button>
+              </Col>
+            )}
             <Col>
               <Button
                 disabled={saving}

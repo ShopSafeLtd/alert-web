@@ -157,15 +157,17 @@ interface Return {
   incidentForm: IncidentFormField[];
   customQuestions: CustomQuestion[];
   goodsMode: GoodsMode;
+  reportOnly: boolean;
 }
 
 const useAddIncident = (): Return => {
   const [form] = useForm<FormData>();
   const intl = useIntl();
-  const schemeId = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
   const businesses = useStoreState((state) => state.user.businesses);
   const role = useStoreState((state) => state.user.role);
+  const reportOnly =
+    useStoreState((state) => state.scheme.reportOnly) && role === Role.User;
   const pagination = useStoreState((state) => state.data.incidents.pagination);
   const variables = useStoreState((state) => state.data.incidents.variables);
   const order = useStoreState((state) => state.data.incidents.order);
@@ -173,8 +175,8 @@ const useAddIncident = (): Return => {
   const setIncidentsState = useStoreActions(
     (actions) => actions.data.setIncidents
   );
-  const restrictIncidentAccess = useStoreState(
-    (state) => state.scheme.restrictIncidentAccess
+  const { id: schemeId, restrictIncidentAccess } = useStoreState(
+    (state) => state.scheme
   );
 
   const [goodsVisible, setGoodsVisible] = useState(false);
@@ -342,6 +344,8 @@ const useAddIncident = (): Return => {
       });
       if (restrictIncidentAccess && role === Role.User) {
         navigate('/app/dashboard');
+      } else if (reportOnly) {
+        navigate('/app/incidents/add');
       } else {
         navigate('/app/incidents');
       }
@@ -885,6 +889,7 @@ const useAddIncident = (): Return => {
     incidentForm,
     customQuestions,
     goodsMode,
+    reportOnly,
   };
 };
 

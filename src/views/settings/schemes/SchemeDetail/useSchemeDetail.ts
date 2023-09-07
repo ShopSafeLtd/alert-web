@@ -21,6 +21,7 @@ interface FormData {
   logo?: { id: string; url: string; optimised: string };
   restrictIncidentAccess: boolean;
   autoApproveOffenders: boolean;
+  reportOnly: boolean;
   autoApproveIncidents: boolean;
   defaultIncidentEmail: boolean;
   defaultIncidentPush: boolean;
@@ -33,6 +34,8 @@ interface FormData {
   defaultPublicOffenderDOB: boolean;
   incidentRetention: number | null;
   offenderRetention: number | null;
+  facialRecognition: boolean;
+  imagesRequiredOnOffenders: boolean;
 }
 
 interface Return {
@@ -40,7 +43,6 @@ interface Return {
   loading: boolean;
   saving: boolean;
   onSubmit: (value: FormData) => void;
-
   onPreview: (value: UploadFile) => void;
   fileList: UploadFile[];
   imgChange: UploadProps['onChange'];
@@ -156,6 +158,7 @@ const useSchemeDetail = (): Return => {
           name: { set: data.name },
           autoPopulateDescription: { set: data.autoPopulateDescription },
           restrictIncidentAccess: { set: data.restrictIncidentAccess },
+          reportOnly: { set: data.reportOnly },
           autoApproveIncidents: { set: data.autoApproveOffenders },
           autoApproveOffenders: { set: data.autoApproveIncidents },
           incidentRetention: { set: data.incidentRetention },
@@ -172,6 +175,8 @@ const useSchemeDetail = (): Return => {
           defaultOffenderEmail: { set: data.defaultOffenderEmail },
           defaultOffenderPush: { set: data.defaultOffenderPush },
           defaultPublicOffenderDOB: { set: data.defaultPublicOffenderDOB },
+          facialRecognition: { set: data.facialRecognition },
+          imagesRequiredOnOffenders: { set: data.imagesRequiredOnOffenders },
           logo: {
             ...(imageChange && fileList.length > 0
               ? {

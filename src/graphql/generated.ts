@@ -76133,6 +76133,7 @@ export type UpdateSchemeMutation = {
     id: string;
     name: string;
     restrictIncidentAccess: boolean;
+    reportOnly: boolean;
     autoApproveIncidents: boolean;
     autoApproveOffenders: boolean;
     defaultPublicOffenderDOB: boolean;
@@ -76144,6 +76145,8 @@ export type UpdateSchemeMutation = {
     defaultOffenderEmail: boolean;
     defaultOffenderPush: boolean;
     autoPopulateDescription: boolean;
+    facialRecognition: boolean;
+    imagesRequiredOnOffenders: boolean;
     incidentRetention?: number | null;
     offenderRetention?: number | null;
     logo?: {
@@ -76190,6 +76193,7 @@ export type SchemeQuery = {
     id: string;
     name: string;
     restrictIncidentAccess: boolean;
+    reportOnly: boolean;
     autoApproveIncidents: boolean;
     autoApproveOffenders: boolean;
     defaultIncidentEmail: boolean;
@@ -76203,6 +76207,8 @@ export type SchemeQuery = {
     incidentRetention?: number | null;
     offenderRetention?: number | null;
     autoPopulateDescription: boolean;
+    facialRecognition: boolean;
+    imagesRequiredOnOffenders: boolean;
     darkLogo?: {
       __typename?: 'Image';
       id: string;
@@ -77713,6 +77719,7 @@ export type CurrentUserQuery = {
         autoApproveOffenders: boolean;
         defaultPublicOffenderDOB: boolean;
         restrictIncidentAccess: boolean;
+        reportOnly: boolean;
         facialRecognition: boolean;
         imagesRequiredOnOffenders: boolean;
         taskTimeTracking: boolean;
@@ -78078,6 +78085,7 @@ export type ListUserNotificationsQuery = {
           autoApproveIncidents: boolean;
           autoApproveOffenders: boolean;
           restrictIncidentAccess: boolean;
+          reportOnly: boolean;
           defaultPublicOffenderDOB: boolean;
           userTodos?: number | null;
           userNotifications?: number | null;
@@ -78151,6 +78159,7 @@ export type UserNotificationsQuery = {
           autoApproveIncidents: boolean;
           autoApproveOffenders: boolean;
           restrictIncidentAccess: boolean;
+          reportOnly: boolean;
           defaultPublicOffenderDOB: boolean;
           userTodos?: number | null;
           userNotifications?: number | null;
@@ -91537,6 +91546,7 @@ export const UpdateSchemeDocument = gql`
       id
       name
       restrictIncidentAccess
+      reportOnly
       autoApproveIncidents
       autoApproveOffenders
       defaultPublicOffenderDOB
@@ -91548,6 +91558,8 @@ export const UpdateSchemeDocument = gql`
       defaultOffenderEmail
       defaultOffenderPush
       autoPopulateDescription
+      facialRecognition
+      imagesRequiredOnOffenders
       incidentRetention
       offenderRetention
       logo {
@@ -91640,6 +91652,7 @@ export const SchemeDocument = gql`
       id
       name
       restrictIncidentAccess
+      reportOnly
       autoApproveIncidents
       autoApproveOffenders
       defaultIncidentEmail
@@ -91653,6 +91666,8 @@ export const SchemeDocument = gql`
       incidentRetention
       offenderRetention
       autoPopulateDescription
+      facialRecognition
+      imagesRequiredOnOffenders
       darkLogo {
         id
         url
@@ -93748,6 +93763,7 @@ export const CurrentUserDocument = gql`
           autoApproveOffenders
           defaultPublicOffenderDOB
           restrictIncidentAccess
+          reportOnly
           facialRecognition
           imagesRequiredOnOffenders
           taskTimeTracking
@@ -94256,6 +94272,7 @@ export const ListUserNotificationsDocument = gql`
             autoApproveIncidents
             autoApproveOffenders
             restrictIncidentAccess
+            reportOnly
             defaultPublicOffenderDOB
             userTodos
             userNotifications
@@ -94354,6 +94371,7 @@ export const UserNotificationsDocument = gql`
             autoApproveIncidents
             autoApproveOffenders
             restrictIncidentAccess
+            reportOnly
             defaultPublicOffenderDOB
             userTodos
             userNotifications
