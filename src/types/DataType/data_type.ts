@@ -91,7 +91,7 @@ export interface IncidentCardData {
   createdBy?: {
     id: string;
     fullName: string;
-    businesses: Array<{ id: string; fullName: string; name: string }>;
+    businesses: Array<{ id: string; name: string }>;
   };
 }
 
