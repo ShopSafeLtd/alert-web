@@ -42,6 +42,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
+    width: 230,
   },
   involvedQuestion: {
     width: 200,

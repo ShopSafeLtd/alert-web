@@ -143,7 +143,7 @@ const IncidentTable = ({
       ]}
       dataSource={incidents.map((incident) => ({
         reference: incident.reference,
-        types: incident.crimeTypes.map(
+        types: incident.crimeTypes?.map(
           (type, index) => `${index > 0 ? ' ' : ''}${type.name}`
         ),
         date: incident.dayTime,

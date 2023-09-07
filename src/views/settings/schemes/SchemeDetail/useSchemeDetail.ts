@@ -16,7 +16,7 @@ import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import errorNotification from 'types/error_notification';
 import { useIntl } from 'react-intl';
 
-interface FormData {
+export interface FormData {
   name: string;
   logo?: { id: string; url: string; optimised: string };
   restrictIncidentAccess: boolean;
