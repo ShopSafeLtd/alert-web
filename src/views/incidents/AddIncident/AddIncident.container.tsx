@@ -21,6 +21,7 @@ const AddIncident = (): JSX.Element => {
     incidentForm,
     customQuestions,
     goodsMode,
+    reportOnly,
   } = useAddIncident();
 
   return (
@@ -43,6 +44,7 @@ const AddIncident = (): JSX.Element => {
         incidentForm={incidentForm}
         customQuestions={customQuestions}
         goodsMode={goodsMode}
+        reportOnly={reportOnly}
       />
     </div>
   );

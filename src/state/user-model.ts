@@ -56,6 +56,7 @@ export interface Scheme {
     autoApproveIncidents: boolean;
     autoApproveOffenders: boolean;
     restrictIncidentAccess: boolean;
+    reportOnly: boolean;
     defaultPublicOffenderDOB: boolean;
     userTodos?: number | null | undefined;
     userNotifications?: number | null | undefined;

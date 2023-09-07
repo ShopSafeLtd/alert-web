@@ -19,6 +19,7 @@ import { faBell } from '@fortawesome/pro-light-svg-icons';
 import { createUseStyles } from 'react-jss';
 import { Theme } from 'configs/ThemeConfig';
 import NotificationsDrawer from 'components/notifications/NotificationsDrawer/NotificationDrawer.container';
+import ReportOnlyNavigationConfig from 'configs/ReportOnlyNavigationConfig';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   notificationCol: {
@@ -114,11 +115,14 @@ const SideNavContent = (props: SideNavContentProps) => {
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
   const userRole = useStoreState((state) => state.user.role);
   const userId = useStoreState((state) => state.user.id);
-  const restrictIncidentAccess = useStoreState(
-    (state) => state.scheme.restrictIncidentAccess
+  const { restrictIncidentAccess, reportOnly } = useStoreState(
+    (state) => state.scheme
   );
 
   const getNavigationConfig = () => {
+    if (userRole === 'USER' && reportOnly) {
+      return ReportOnlyNavigationConfig;
+    }
     const filteredConfig = navConfig.filter((el) =>
       el.roles?.includes(userRole)
     );
