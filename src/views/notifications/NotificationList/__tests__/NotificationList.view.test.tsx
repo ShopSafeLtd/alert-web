@@ -24,14 +24,15 @@ describe('List Officer View', () => {
               restrictIncidentAccess: false,
               defaultPublicOffenderDOB: false,
               autoPopulateDescription: false,
+              reportOnly: true,
+              facialRecognition: true,
+              imagesRequiredOnOffenders: true,
               members: [
                 {
                   id: 'id',
                   role: Role.ContentAdmin,
                 },
               ],
-              facialRecognition: false,
-              imagesRequiredOnOffenders: false,
               goodsMode: GoodsMode.Generic,
               taskTimeTracking: false,
               languageCount: 0,

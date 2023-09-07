@@ -19,6 +19,7 @@ import {
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { FormattedMessage, useIntl } from 'react-intl';
 import BuildTree from '../../../../utils/tags/tree-helper';
+import type { FormData } from './useSchemeDetail';
 
 const { Title, Text } = Typography;
 
@@ -37,26 +38,6 @@ interface Props {
   updateTagParent: (tagId: string, parentTagId: string | null) => void;
 }
 
-interface FormData {
-  name: string;
-  autoApproveIncidents: boolean;
-  autoApproveOffenders: boolean;
-  restrictIncidentAccess: boolean;
-  reportOnly: boolean;
-  defaultIncidentEmail: boolean;
-  defaultIncidentPush: boolean;
-  defaultSubscribedIncidentOnly: boolean;
-  defaultSubscribedOffenderOnly: boolean;
-  defaultMessagePush: boolean;
-  defaultOffenderEmail: boolean;
-  defaultOffenderPush: boolean;
-  defaultPublicOffenderDOB: boolean;
-  autoPopulateDescription: boolean;
-  incidentRetention: number | null;
-  offenderRetention: number | null;
-  logo?: { id: string; url: string; optimised: string };
-  darkLogo?: { id: string; url: string; optimised: string };
-}
 // wait to check
 const options = [
   { value: -1, label: 'Disabled' },
