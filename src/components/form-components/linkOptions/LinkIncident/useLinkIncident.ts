@@ -67,9 +67,13 @@ const useLinkIncident = ({
         schemeId: {
           in: takeAllSchemes ? userSchemeIds : [schemeId],
         },
-        id: {
-          notIn: incidentIds,
-        },
+        id:
+          incidentIds && incidentIds?.length > 0
+            ? {
+                notIn: incidentIds,
+              }
+            : undefined,
+
         OR: [
           {
             subject: {

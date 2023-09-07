@@ -41,6 +41,7 @@ interface Props {
   incidentForm: IncidentFormField[];
   customQuestions: CustomQuestion[];
   goodsMode: string;
+  reportOnly: boolean;
 }
 
 const AddIncident = ({
@@ -61,13 +62,14 @@ const AddIncident = ({
   setPrimaryImage,
   incidentForm,
   goodsMode,
+  reportOnly,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
   return (
     <div className="page-view">
       <PageHeader
-        onBack={() => window.history.back()}
+        onBack={reportOnly ? undefined : () => window.history.back()}
         title={intl.formatMessage({
           defaultMessage: 'Add Incident',
           id: 'kG1p3q',
@@ -161,11 +163,16 @@ const AddIncident = ({
         {/* Buttons */}
         <Form.Item>
           <Row style={{ marginTop: 10 }} gutter={10} justify="end">
-            <Col>
-              <Button disabled={saving} onClick={() => window.history.back()}>
-                {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}
-              </Button>
-            </Col>
+            {!reportOnly && (
+              <Col>
+                <Button disabled={saving} onClick={() => window.history.back()}>
+                  {intl.formatMessage({
+                    defaultMessage: 'Cancel',
+                    id: '47FYwb',
+                  })}
+                </Button>
+              </Col>
+            )}
             <Col>
               <Button
                 disabled={saving}

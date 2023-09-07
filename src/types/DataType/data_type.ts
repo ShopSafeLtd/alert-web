@@ -84,6 +84,15 @@ export interface IncidentCardData {
   description?: string;
   dayTime?: string | null;
   images?: Array<ImageCardData>;
+  crimeTypes?: Array<{
+    id: string;
+    name: string;
+  }>;
+  createdBy?: {
+    id: string;
+    fullName: string;
+    businesses: Array<{ id: string; fullName: string; name: string }>;
+  };
 }
 
 // Vehicle
