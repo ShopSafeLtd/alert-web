@@ -47,10 +47,10 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
       }
       createdBy {
         id
+        fullName
         businesses {
           id
           name
-          fullName
         }
       }
     }

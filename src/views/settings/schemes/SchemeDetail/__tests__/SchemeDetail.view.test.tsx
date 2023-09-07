@@ -23,6 +23,9 @@ describe('List Officer View', () => {
       defaultOffenderPush: false,
       defaultPublicOffenderDOB: true,
       autoPopulateDescription: false,
+      reportOnly: true,
+      facialRecognition: true,
+      imagesRequiredOnOffenders: true,
     },
   };
   it('renders the page', () => {

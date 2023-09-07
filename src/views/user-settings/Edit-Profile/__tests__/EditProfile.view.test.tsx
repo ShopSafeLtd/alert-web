@@ -47,6 +47,7 @@ describe('Detail Officer View', () => {
             facialRecognition: false,
             imagesRequiredOnOffenders: false,
             taskTimeTracking: false,
+            reportOnly: true,
           },
         },
       ],

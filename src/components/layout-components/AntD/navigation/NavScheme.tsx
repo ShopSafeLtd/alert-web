@@ -90,6 +90,7 @@ export const NavScheme = () => {
       imagesRequiredOnOffenders: scheme.scheme.imagesRequiredOnOffenders,
       taskTimeTracking: scheme.scheme.taskTimeTracking,
       restrictIncidentAccess: scheme.scheme.restrictIncidentAccess,
+      reportOnly: scheme.scheme.reportOnly,
     });
     setTodos({ userTodos: scheme.scheme.userTodos || 0 });
     setNotifications({

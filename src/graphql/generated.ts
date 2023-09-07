@@ -78727,11 +78727,11 @@ export type VehicleQuery = {
       createdBy: {
         __typename?: 'User';
         id: string;
+        fullName: string;
         businesses: Array<{
           __typename?: 'Business';
           id: string;
           name: string;
-          fullName: string;
         }>;
       };
     }>;
@@ -95379,10 +95379,10 @@ export const VehicleDocument = gql`
         }
         createdBy {
           id
+          fullName
           businesses {
             id
             name
-            fullName
           }
         }
       }

@@ -1,6 +1,5 @@
 import {
   Button,
-  Checkbox,
   Col,
   Divider,
   Popconfirm,
@@ -89,13 +88,6 @@ const OffenderProfile = ({
             : classes.profileCard
         }
       >
-        {mergeActive && mergeActive !== offender.id && (
-          <Checkbox
-            className={classes.mergeCheck}
-            onChange={() => toggleMergeSelected(offender.id)}
-            checked={mergeSelected === offender.id}
-          />
-        )}
         {offender.images && offender.images.length > 0 && (
           <div className={classes.profileImage}>
             {offender.images[0]?.boundingBox && (
@@ -189,16 +181,27 @@ const OffenderProfile = ({
             <div className={classes.grow} />
             {mergeActive ? (
               <Row gutter={8} justify="end" style={{ marginTop: 10 }}>
+                {/* <Col>
+                  {mergeActive && mergeActive !== offender.id && (
+                    <Checkbox
+                      className={classes.mergeCheck}
+                      onChange={() => toggleMergeSelected(offender.id)}
+                      checked={mergeSelected === offender.id}
+                    />
+                  )}
+                </Col> */}
                 <Col>
                   <Button
+                    type={mergeSelected === offender.id ? 'primary' : 'default'}
                     onClick={() => {
                       toggleMergeSelected(offender.id);
                     }}
                   >
-                    <FormattedMessage
-                      defaultMessage="Merge with this Person"
-                      id="AKcMRJ"
-                    />
+                    {mergeSelected === offender.id ? (
+                      <FormattedMessage defaultMessage="Selected" id="byP6IC" />
+                    ) : (
+                      <FormattedMessage defaultMessage="Merge" id="NLSvjh" />
+                    )}
                   </Button>
                 </Col>
               </Row>
@@ -306,14 +309,24 @@ const OffenderProfile = ({
                   <Row gutter={8} justify="end">
                     <Col>
                       <Button
+                        type={
+                          mergeSelected === offender.id ? 'primary' : 'default'
+                        }
                         onClick={() => {
                           toggleMergeSelected(offender.id);
                         }}
                       >
-                        <FormattedMessage
-                          defaultMessage="Merge with this Person"
-                          id="AKcMRJ"
-                        />
+                        {mergeSelected === offender.id ? (
+                          <FormattedMessage
+                            defaultMessage="Selected"
+                            id="byP6IC"
+                          />
+                        ) : (
+                          <FormattedMessage
+                            defaultMessage="Merge"
+                            id="NLSvjh"
+                          />
+                        )}
                       </Button>
                     </Col>
                   </Row>

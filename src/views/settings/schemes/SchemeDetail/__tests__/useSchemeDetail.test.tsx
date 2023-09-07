@@ -90,6 +90,9 @@ const UseRecycledItemListTest = () => {
             defaultSubscribedIncidentOnly: true,
             defaultSubscribedOffenderOnly: true,
             defaultPublicOffenderDOB: true,
+            reportOnly: true,
+            facialRecognition: true,
+            imagesRequiredOnOffenders: true,
           })
         }
       >
