@@ -67,6 +67,7 @@ interface Scheme {
   imagesRequiredOnOffenders: boolean;
   taskTimeTracking: boolean;
   restrictIncidentAccess: boolean;
+  reportOnly: boolean;
 }
 interface Return {
   data:
@@ -319,7 +320,7 @@ const useNotificationLists = (): Return => {
 
     setScheme({
       autoPopulateDescription: scheme.autoPopulateDescription,
-
+      reportOnly: scheme.reportOnly,
       languageCount: scheme.languageCount,
       autoApproveIncidents: scheme.autoApproveIncidents,
       autoApproveOffenders: scheme.autoApproveOffenders,

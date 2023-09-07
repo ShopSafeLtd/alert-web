@@ -41,6 +41,7 @@ export interface NotificationData {
   read: boolean;
 }
 interface Scheme {
+  reportOnly: boolean;
   id: string;
   name: string;
   autoApproveIncidents: boolean;
@@ -345,6 +346,7 @@ const useNotificationLists = (): Return => {
       facialRecognition: scheme.facialRecognition,
       imagesRequiredOnOffenders: scheme.imagesRequiredOnOffenders,
       taskTimeTracking: scheme.taskTimeTracking,
+      reportOnly: scheme.reportOnly,
     });
     setTodos({ userTodos: scheme.userTodos || 0 });
     setNotifications({

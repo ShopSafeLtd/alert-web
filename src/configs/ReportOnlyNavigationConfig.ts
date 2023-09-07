@@ -6,27 +6,7 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import { Role } from 'graphql/generated';
 import { defineMessage } from 'react-intl';
-
-export interface MenuItem {
-  key: string;
-  path: string;
-  title: string;
-  icon?: any;
-  breadcrumb: boolean;
-  roles?: Role[];
-  // badge?: boolean;
-  intl: { id: string; defaultMessage: string };
-}
-
-export interface SubMenuItem extends MenuItem {
-  submenu: MenuItem[];
-}
-
-export interface NavItem extends MenuItem {
-  submenu: SubMenuItem[];
-}
-
-export type NavTree = NavItem[];
+import { NavItem } from './NavigationConfig';
 
 const ReportOnlyNavigationConfig: NavItem[] = [
   {
