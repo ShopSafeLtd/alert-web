@@ -42,6 +42,7 @@ interface FormData {
   autoApproveIncidents: boolean;
   autoApproveOffenders: boolean;
   restrictIncidentAccess: boolean;
+  reportOnly: boolean;
   defaultIncidentEmail: boolean;
   defaultIncidentPush: boolean;
   defaultSubscribedIncidentOnly: boolean;
@@ -102,6 +103,7 @@ const SchemeDetail = ({
             autoApproveOffenders: data?.scheme?.autoApproveOffenders,
             autoApproveIncidents: data?.scheme?.autoApproveIncidents,
             restrictIncidentAccess: data?.scheme?.restrictIncidentAccess,
+            reportOnly: data?.scheme?.reportOnly,
             incidentRetention: data?.scheme?.incidentRetention,
             offenderRetention: data?.scheme?.offenderRetention,
             defaultIncidentEmail: data?.scheme?.defaultIncidentEmail,
@@ -114,8 +116,9 @@ const SchemeDetail = ({
             defaultMessagePush: data?.scheme?.defaultMessagePush,
             defaultOffenderEmail: data?.scheme?.defaultOffenderEmail,
             defaultOffenderPush: data?.scheme?.defaultOffenderPush,
-            defaultPublicOffenderDOB:
-              data?.scheme?.defaultPublicOffenderDOB || false,
+            defaultPublicOffenderDOB: data?.scheme?.defaultPublicOffenderDOB,
+            facialRecognition: data?.scheme?.facialRecognition,
+            imagesRequiredOnOffenders: data?.scheme?.imagesRequiredOnOffenders,
           }}
         >
           <Card>
@@ -521,6 +524,39 @@ const SchemeDetail = ({
           <Card>
             <Title level={4}>
               {intl.formatMessage({
+                defaultMessage: 'Default User Settings:',
+                id: '0f4k8n',
+              })}
+            </Title>
+            {/* <Text type="secondary">
+                The settings that will be selected by default for all new users
+                created in the scheme.
+              </Text> */}
+
+            <Row>
+              <Col span={15}>
+                <Form.Item
+                  label={intl.formatMessage({
+                    defaultMessage:
+                      'Only allow user to report, no access to view any content',
+                    id: 'jHFLLl',
+                  })}
+                  name="reportOnly"
+                  valuePropName="checked"
+                  style={{ marginBottom: 0 }}
+                >
+                  <Switch
+                    disabled={saving}
+                    style={{ marginLeft: 5 }}
+                    className="scheme-detail-switch"
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+          </Card>
+          <Card>
+            <Title level={4}>
+              {intl.formatMessage({
                 defaultMessage: 'Default Offender Settings:',
                 id: 'lEBqus',
               })}
@@ -538,6 +574,42 @@ const SchemeDetail = ({
                     id: '0rgxT7',
                   })}
                   name="defaultPublicOffenderDOB"
+                  valuePropName="checked"
+                  style={{ marginBottom: 0 }}
+                >
+                  <Switch
+                    disabled={saving}
+                    style={{ marginLeft: 5 }}
+                    className="scheme-detail-switch"
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={15}>
+                <Form.Item
+                  label={intl.formatMessage({
+                    defaultMessage:
+                      'Faces of offenders are available for recognition',
+                    id: 'tFYz4Z',
+                  })}
+                  name="facialRecognition"
+                  valuePropName="checked"
+                  style={{ marginBottom: 0 }}
+                >
+                  <Switch
+                    disabled={saving}
+                    style={{ marginLeft: 5 }}
+                    className="scheme-detail-switch"
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={15}>
+                <Form.Item
+                  label={intl.formatMessage({
+                    defaultMessage:
+                      'Images of offenders are required for identification',
+                    id: 'dOQCOj',
+                  })}
+                  name="imagesRequiredOnOffenders"
                   valuePropName="checked"
                   style={{ marginBottom: 0 }}
                 >

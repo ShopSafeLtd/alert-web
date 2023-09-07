@@ -3,6 +3,7 @@ query scheme($where: SchemeWhereUniqueInput!) {
     id
     name
     restrictIncidentAccess
+    reportOnly
     autoApproveIncidents
     autoApproveOffenders
     defaultIncidentEmail
@@ -16,6 +17,8 @@ query scheme($where: SchemeWhereUniqueInput!) {
     incidentRetention
     offenderRetention
     autoPopulateDescription
+    facialRecognition
+    imagesRequiredOnOffenders
     darkLogo {
       id
       url

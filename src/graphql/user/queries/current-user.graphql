@@ -42,6 +42,7 @@ query currentUser($scheme: UniqueId) {
         autoApproveOffenders
         defaultPublicOffenderDOB
         restrictIncidentAccess
+        reportOnly
         facialRecognition
         imagesRequiredOnOffenders
         taskTimeTracking

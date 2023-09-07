@@ -220,41 +220,6 @@ const useListVehicles = (): Return => {
       },
       variables,
     });
-    // const existingCustomGallery = store.readQuery<ListCustomGalleriesQuery>({
-    //   query: ListCustomGalleriesDocument,
-    //   variables,
-    // });
-    // if (existingCustomGallery === null) return;
-    // store.writeQuery<ListCustomGalleriesQuery>({
-    //   query: ListVehiclesDocument,
-    //   data: {
-    //     listCustomGalleries: {
-    //       ...existingCustomGallery.listCustomGalleries,
-    //       customGalleries:
-    //         existingCustomGallery?.listCustomGalleries.total > 0
-    //           ? [
-    //               ...(existingCustomGallery?.listCustomGalleries
-    //                 ?.customGalleries || []),
-    //               ...(Array.isArray(res.createVehicle.customGalleries)
-    //                 ? res.createVehicle.customGalleries
-    //                 : [res.createVehicle.customGalleries]),
-    //             ]
-    //           : [res.createVehicle],
-    //     },
-    //     __typename: 'Query',
-    //   },
-    //   variables: {
-    //     where: {
-    //       schemes: {
-    //         some: {
-    //           id: {
-    //             equals: schemeId,
-    //           },
-    //         },
-    //       },
-    //     },
-    //   },
-    // });
   };
 
   const [createVehicle] = useCreateVehicleMutation({

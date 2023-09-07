@@ -1,10 +1,12 @@
 import React from 'react';
-import { Table, Tooltip } from 'antd';
+import { Button, Col, Popconfirm, Row, Table, Tooltip } from 'antd';
 import { useNavigate } from 'react-router';
 import { createUseStyles } from 'react-jss';
 import { useIntl } from 'react-intl';
 import { Role } from 'graphql/generated';
 import { useStoreState } from 'state';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/pro-light-svg-icons';
 
 const useStyles = createUseStyles({
   row: { cursor: 'pointer' },
@@ -16,8 +18,8 @@ interface Props {
         id: string;
         reference?: number | null;
         dayTime?: string | null;
-        crimeTypes: Array<{ id: string; name: string }>;
-        createdBy: {
+        crimeTypes?: Array<{ id: string; name: string }>;
+        createdBy?: {
           id: string;
           fullName?: string;
           businesses: Array<{ id: string; name: string }>;
@@ -30,12 +32,18 @@ interface Props {
 
   hasNavigation: boolean;
   pageSize?: number;
+  onDelete?: (id: string) => void;
+  deleteRights?: boolean;
+  saving?: boolean;
 }
 
 const IncidentTable = ({
   incidents,
   pageSize = 5,
   hasNavigation,
+  onDelete,
+  deleteRights,
+  saving,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const navigate = useNavigate();
@@ -85,6 +93,52 @@ const IncidentTable = ({
           dataIndex: 'location',
           ellipsis: true,
           render: (value: string) => <Tooltip title={value}>{value}</Tooltip>,
+        },
+        {
+          key: 'Options',
+          title: '',
+          dataIndex: 'Options',
+          width: 100,
+          render: (_, record) => (
+            <Row gutter={8}>
+              {deleteRights && (
+                <Col>
+                  <Tooltip
+                    title={intl.formatMessage({
+                      defaultMessage: 'Remove Offender',
+                      id: 'cZH2Kj',
+                    })}
+                  >
+                    <Popconfirm
+                      placement="topLeft"
+                      title={intl.formatMessage({
+                        defaultMessage: 'Remove the offender?',
+                        id: 'ttuPSC',
+                      })}
+                      onConfirm={() => {
+                        if (onDelete) onDelete(record.key);
+                      }}
+                      okText={intl.formatMessage({
+                        defaultMessage: 'Yes',
+                        id: 'a5msuh',
+                      })}
+                      cancelText={intl.formatMessage({
+                        defaultMessage: 'No',
+                        id: 'oUWADl',
+                      })}
+                      overlayInnerStyle={{ padding: 10 }}
+                    >
+                      <Button
+                        size="small"
+                        disabled={saving}
+                        icon={<FontAwesomeIcon icon={faTrash} />}
+                      />
+                    </Popconfirm>
+                  </Tooltip>
+                </Col>
+              )}
+            </Row>
+          ),
         },
       ]}
       dataSource={incidents.map((incident) => ({

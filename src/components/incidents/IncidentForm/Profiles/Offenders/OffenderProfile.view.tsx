@@ -187,83 +187,139 @@ const OffenderProfile = ({
               )}
             </Row>
             <div className={classes.grow} />
-            <Row gutter={8} justify="end" style={{ marginTop: 10 }}>
-              <Col>
-                <Tooltip
-                  title={intl.formatMessage({
-                    id: 'YJ2Q25',
-                    defaultMessage:
-                      'Change values or add new details this this offender.',
-                  })}
-                >
+            {mergeActive ? (
+              <Row gutter={8} justify="end" style={{ marginTop: 10 }}>
+                <Col>
                   <Button
-                    size="small"
-                    className={offender.blank ? classes.redButton : ''}
-                    onClick={() => setUpdateOpen(offender)}
-                    disabled={saving}
+                    onClick={() => {
+                      toggleMergeSelected(offender.id);
+                    }}
                   >
                     <FormattedMessage
-                      defaultMessage="Add Details"
-                      id="g5aL72"
+                      defaultMessage="Merge with this Person"
+                      id="AKcMRJ"
                     />
                   </Button>
-                </Tooltip>
-              </Col>
-              {offender.new && (
+                </Col>
+              </Row>
+            ) : (
+              <Row gutter={8} justify="end" style={{ marginTop: 10 }}>
                 <Col>
                   <Tooltip
                     title={intl.formatMessage({
-                      id: 'lXviWk',
+                      id: 'YJ2Q25',
                       defaultMessage:
-                        'Search existing offenders if this person already exists in the system.',
+                        'Change values or add new details this this offender.',
                     })}
                   >
                     <Button
                       size="small"
-                      onClick={() => setMatchExistingOpen(offender)}
+                      className={offender.blank ? classes.redButton : ''}
+                      onClick={() => setUpdateOpen(offender)}
                       disabled={saving}
                     >
                       <FormattedMessage
-                        defaultMessage="Match Offender"
-                        id="n446LP"
+                        defaultMessage="Add Details"
+                        id="g5aL72"
                       />
                     </Button>
                   </Tooltip>
                 </Col>
-              )}
-              <Col>
-                <Popconfirm
-                  placement="topLeft"
-                  title={intl.formatMessage({
-                    id: 'ttuPSC',
-                    defaultMessage: 'Remove the offender?',
-                  })}
-                  onConfirm={() => {
-                    onRemoveOffender(offender.id);
-                  }}
-                  okText={intl.formatMessage({
-                    id: 'a5msuh',
-                    defaultMessage: 'Yes',
-                  })}
-                  cancelText={intl.formatMessage({
-                    id: 'oUWADl',
-                    defaultMessage: 'No',
-                  })}
-                  overlayInnerStyle={{ padding: 10 }}
-                >
-                  <Button
-                    disabled={saving}
-                    style={{ height: 36 }}
-                    icon={<FontAwesomeIcon size="xs" icon={faTrash} />}
-                  />
-                </Popconfirm>
-              </Col>
-            </Row>
+                {offender.new && (
+                  <Col>
+                    <Tooltip
+                      title={intl.formatMessage({
+                        id: 'lXviWk',
+                        defaultMessage:
+                          'Search existing offenders if this person already exists in the system.',
+                      })}
+                    >
+                      <Button
+                        size="small"
+                        onClick={() => setMatchExistingOpen(offender)}
+                        disabled={saving}
+                      >
+                        <FormattedMessage
+                          defaultMessage="Match Offender"
+                          id="n446LP"
+                        />
+                      </Button>
+                    </Tooltip>
+                  </Col>
+                )}
+                <Col>
+                  <Popconfirm
+                    placement="topLeft"
+                    title={intl.formatMessage({
+                      id: 'ttuPSC',
+                      defaultMessage: 'Remove the offender?',
+                    })}
+                    onConfirm={() => {
+                      onRemoveOffender(offender.id);
+                    }}
+                    okText={intl.formatMessage({
+                      id: 'a5msuh',
+                      defaultMessage: 'Yes',
+                    })}
+                    cancelText={intl.formatMessage({
+                      id: 'oUWADl',
+                      defaultMessage: 'No',
+                    })}
+                    overlayInnerStyle={{ padding: 10 }}
+                  >
+                    <Button
+                      disabled={saving}
+                      style={{ height: 36 }}
+                      icon={<FontAwesomeIcon size="xs" icon={faTrash} />}
+                    />
+                  </Popconfirm>
+                </Col>
+              </Row>
+            )}
           </div>
         )}
         {!offender.confirmedInIncident && (
           <div className={classes.involvedContainer}>
-            {mergeActive !== offender.id && (
+            {mergeActive ? (
+              mergeActive === offender.id ? (
+                <>
+                  <Button
+                    size="small"
+                    onClick={onMerge}
+                    type="ghost"
+                    className={classes.mergeButton}
+                    danger
+                    disabled={!mergeSelected}
+                  >
+                    <FormattedMessage
+                      defaultMessage="Merge People"
+                      id="FX2Nbd"
+                    />
+                  </Button>
+                  <Button size="small" onClick={() => toggleMerge(null)}>
+                    <FormattedMessage defaultMessage="Cancel" id="47FYwb" />
+                  </Button>
+                </>
+              ) : (
+                <>
+                  {/* <div className={classes.grow} /> */}
+                  <Row gutter={8} justify="end">
+                    <Col>
+                      <Button
+                        onClick={() => {
+                          toggleMergeSelected(offender.id);
+                        }}
+                      >
+                        <FormattedMessage
+                          defaultMessage="Merge with this Person"
+                          id="AKcMRJ"
+                        />
+                      </Button>
+                    </Col>
+                  </Row>
+                </>
+              )
+            ) : (
               <>
                 <Paragraph className={classes.involvedQuestion}>
                   <FormattedMessage
@@ -323,23 +379,6 @@ const OffenderProfile = ({
                     />
                   </Button>
                 </Tooltip>
-              </>
-            )}
-            {mergeActive === offender.id && (
-              <>
-                <Button
-                  size="small"
-                  onClick={onMerge}
-                  type="ghost"
-                  className={classes.mergeButton}
-                  danger
-                  disabled={!mergeSelected}
-                >
-                  <FormattedMessage defaultMessage="Merge People" id="FX2Nbd" />
-                </Button>
-                <Button size="small" onClick={() => toggleMerge(null)}>
-                  <FormattedMessage defaultMessage="Cancel" id="47FYwb" />
-                </Button>
               </>
             )}
           </div>
