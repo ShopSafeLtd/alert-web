@@ -32,10 +32,11 @@ const IncidentWhere = ({
   const classes = useStyles();
   const intl = useIntl();
 
-  return hideField ? (
-    <div />
-  ) : (
-    <Card className={classes.card}>
+  return (
+    <Card
+      className={classes.card}
+      style={hideField ? { display: 'none' } : undefined}
+    >
       <Row align="bottom" style={{ marginBottom: 20 }}>
         <Col>
           <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
