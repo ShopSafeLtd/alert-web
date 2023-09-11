@@ -9,6 +9,21 @@ const ImportMenu = () => {
     <div style={{ padding: 20 }}>
       <Row>
         <Col>
+          <Link to="/app/scheme-settings/data-import/csv/stock-items">
+            <Card
+              title={intl.formatMessage({
+                defaultMessage: 'CSV Import',
+                id: 'kvnrW/',
+              })}
+            >
+              <Typography.Text type="secondary">
+                <FormattedMessage
+                  defaultMessage="Import data from a csv file into alert."
+                  id="82WowD"
+                />
+              </Typography.Text>
+            </Card>
+          </Link>
           <Link to="/app/scheme-settings/data-import/disc">
             <Card
               title={intl.formatMessage({

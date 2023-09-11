@@ -111,6 +111,7 @@ const AddIncident = ({
                   goodsVisible={goodsVisible}
                   knowGoods={knowGoods}
                   goodsMode={goodsMode}
+                  form={form}
                 />
               );
             }
