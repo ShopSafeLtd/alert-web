@@ -1,0 +1,5 @@
+mutation StockItemImport($data: [StockItemsCreateInput!]!) {
+    stockItemImport(data: $data) {
+        success
+    }
+}

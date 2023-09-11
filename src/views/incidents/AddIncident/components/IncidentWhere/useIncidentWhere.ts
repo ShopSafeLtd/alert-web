@@ -26,6 +26,7 @@ const useIncidentWhere = (): Return => {
   const [hideField, setHideField] = useState(true);
 
   useEffect(() => {
+    console.log(role !== Role.User, businesses.length);
     if (role !== Role.User || businesses.length > 1) {
       setHideField(false);
     } else {

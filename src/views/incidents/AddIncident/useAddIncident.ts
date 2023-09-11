@@ -107,6 +107,8 @@ export interface FormData {
     quantity?: number;
     recoveredQuantity?: number;
     sku?: string;
+    name?: string;
+    stockItem?: string;
   }[];
   offenders: StateOffenderData[] | null;
   vehicles: StateVehicleData[] | null;
@@ -610,11 +612,23 @@ const useAddIncident = (): Return => {
                         ({ id }) => id === item.goodsType
                       )?.name) ||
                     '',
-                  value: item.value || 0,
-                  recoveredValue: item.recoveredValue || 0,
+                  value:
+                    goodsMode === GoodsMode.Specific
+                      ? (item.value || 0) * (item.quantity || 0)
+                      : item.value || 0,
+                  recoveredValue:
+                    goodsMode === GoodsMode.Specific
+                      ? (item.recoveredValue || 0) *
+                        (item.recoveredQuantity || 0)
+                      : item.recoveredValue || 0,
                   sku: item.sku,
                   quantity: item.quantity,
                   recoveredQuantity: item.recoveredQuantity,
+                  stockItem: item.stockItem
+                    ? {
+                        id: item.stockItem,
+                      }
+                    : undefined,
                 })),
             policeInvolved: data.policeInvolved,
             policeRef: data.policeRef,
@@ -793,20 +807,21 @@ const useAddIncident = (): Return => {
 
   const knowGoods = () => {
     setGoodsVisible(true);
-    form.setFieldsValue({
-      goods: [
-        {
-          goodsType: undefined,
-          recoveredValue: 0,
-          value: undefined,
-        },
-        {
-          goodsType: undefined,
-          recoveredValue: 0,
-          value: undefined,
-        },
-      ],
-    });
+    if (goodsMode === GoodsMode.Generic)
+      form.setFieldsValue({
+        goods: [
+          {
+            goodsType: undefined,
+            recoveredValue: 0,
+            value: undefined,
+          },
+          {
+            goodsType: undefined,
+            recoveredValue: 0,
+            value: undefined,
+          },
+        ],
+      });
   };
 
   const formTags = Form.useWatch('tags', form);

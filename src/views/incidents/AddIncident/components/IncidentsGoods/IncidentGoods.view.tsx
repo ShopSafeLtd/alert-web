@@ -18,6 +18,8 @@ import type { ListGoodsTypesQuery } from 'graphql/generated';
 import Input from 'antd/es/input/Input';
 import { GoodsMode } from 'graphql/generated';
 import useStyles from '../../AddIncident.styles';
+import type { StockItemValue } from '../../../../../components/form-components/StockItemSearch/StockItemSearch.view';
+import StockItemSearch from '../../../../../components/form-components/StockItemSearch/StockItemSearch.view';
 
 const { Paragraph, Title } = Typography;
 
@@ -27,6 +29,8 @@ interface Props {
   knowGoods: () => void;
   goodsTypesData: ListGoodsTypesQuery | undefined;
   goodsMode: string;
+  onAddItem: (data: StockItemValue) => void;
+  division: string | undefined;
 }
 
 const IncidentGoods = ({
@@ -35,6 +39,8 @@ const IncidentGoods = ({
   dontKnowGoods,
   goodsTypesData,
   goodsMode,
+  onAddItem,
+  division,
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
@@ -89,7 +95,7 @@ const IncidentGoods = ({
         >
           {(fields, { add, remove }) => (
             <>
-              {fields.length === 0 && (
+              {goodsMode === GoodsMode.Generic && fields.length === 0 && (
                 <Empty
                   image={Empty.PRESENTED_IMAGE_SIMPLE}
                   description={intl.formatMessage({
@@ -123,6 +129,30 @@ const IncidentGoods = ({
                     </Row>
                   </Form.Item>
                 </Empty>
+              )}
+              {goodsMode === GoodsMode.Specific && (
+                <StockItemSearch
+                  showSearch
+                  allowClear
+                  placeholder={intl.formatMessage({
+                    defaultMessage:
+                      'Search for an item to add to the incident...',
+                    id: 'kK3vTg',
+                  })}
+                  style={{ width: 500, marginBottom: 20 }}
+                  onAddItem={onAddItem}
+                  division={division}
+                />
+              )}
+              {goodsMode === GoodsMode.Specific && fields.length === 0 && (
+                <Empty
+                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                  description={intl.formatMessage({
+                    id: '9mMWzj',
+                    defaultMessage:
+                      'Search for an item to add to this incident.',
+                  })}
+                />
               )}
               {fields.map(({ key, name, ...restField }, index) => (
                 <Row key={key} gutter={8}>
@@ -248,6 +278,37 @@ const IncidentGoods = ({
                     <Col>
                       <Form.Item
                         {...restField}
+                        name={[name, 'name']}
+                        label={
+                          index
+                            ? ''
+                            : intl.formatMessage({
+                                defaultMessage: 'Item Name',
+                                id: 'd0Q+yP',
+                              })
+                        }
+                        rules={[
+                          {
+                            required: index === 0,
+                            message: intl.formatMessage({
+                              defaultMessage: 'Please enter the name',
+                              id: '42iFTN',
+                            }),
+                          },
+                        ]}
+                        tooltip={intl.formatMessage({
+                          defaultMessage: 'The SKU of the name.',
+                          id: 'XKEvdm',
+                        })}
+                      >
+                        <Input readOnly style={{ width: 250 }} />
+                      </Form.Item>
+                    </Col>
+                  )}
+                  {goodsMode === GoodsMode.Specific && (
+                    <Col>
+                      <Form.Item
+                        {...restField}
                         name={[name, 'sku']}
                         label={
                           index
@@ -271,7 +332,43 @@ const IncidentGoods = ({
                           id: 'rrLaZs',
                         })}
                       >
-                        <Input style={{ width: 250 }} />
+                        <Input readOnly style={{ width: 250 }} />
+                      </Form.Item>
+                    </Col>
+                  )}
+                  {goodsMode === GoodsMode.Specific && (
+                    <Col>
+                      <Form.Item
+                        {...restField}
+                        name={[name, 'value']}
+                        label={
+                          index
+                            ? ''
+                            : intl.formatMessage({
+                                defaultMessage: 'Value',
+                                id: 'GufXy5',
+                              })
+                        }
+                        rules={[
+                          {
+                            required: index === 0,
+                            message: intl.formatMessage({
+                              defaultMessage: 'Please enter the value',
+                              id: 'wP/hlO',
+                            }),
+                          },
+                        ]}
+                        tooltip={intl.formatMessage({
+                          defaultMessage: 'The value of the item.',
+                          id: 'xYuu48',
+                        })}
+                      >
+                        <InputNumber
+                          style={{ width: 150 }}
+                          // prefix="£"
+                          precision={2}
+                          min={0}
+                        />
                       </Form.Item>
                     </Col>
                   )}
@@ -360,7 +457,7 @@ const IncidentGoods = ({
                   )}
                 </Row>
               ))}
-              {fields.length > 0 && (
+              {goodsMode === GoodsMode.Generic && fields.length > 0 && (
                 <Form.Item>
                   <Row justify="center">
                     <Col>

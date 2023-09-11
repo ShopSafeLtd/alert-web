@@ -123,7 +123,6 @@ const useStyles = createUseStyles((theme: Theme) => ({
     fontWeight: 500,
     marginBottom: 20,
     marginTop: 20,
-    color: '#FFF',
   },
   subHeaderRequired: {
     display: 'inline-block',

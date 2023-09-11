@@ -1,12 +1,15 @@
 import React from 'react';
+import type { FormInstance } from 'antd';
 import View from './IncidentGoods.view';
 import useIncidentGoods from './useIncidentGoods';
+import type { FormData } from '../../useAddIncident';
 
 interface Props {
   goodsVisible: boolean;
   dontKnowGoods: () => void;
   knowGoods: () => void;
   goodsMode: string;
+  form: FormInstance<FormData>;
 }
 
 const IncidentGoods = ({
@@ -14,8 +17,9 @@ const IncidentGoods = ({
   knowGoods,
   dontKnowGoods,
   goodsMode,
+  form,
 }: Props) => {
-  const { goodsTypesData } = useIncidentGoods();
+  const { goodsTypesData, onAddItem, division } = useIncidentGoods({ form });
   return (
     <View
       goodsTypesData={goodsTypesData}
@@ -23,6 +27,8 @@ const IncidentGoods = ({
       knowGoods={knowGoods}
       dontKnowGoods={dontKnowGoods}
       goodsMode={goodsMode}
+      onAddItem={onAddItem}
+      division={division}
     />
   );
 };
