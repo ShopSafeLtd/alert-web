@@ -97,8 +97,7 @@ const StockItemSearch = ({
           },
         },
       })
-      .then((res) => res)
-      .catch((error) => console.log(error));
+      .then((res) => res);
   };
 
   const debounceFetcher = useMemo(() => {
