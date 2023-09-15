@@ -620,7 +620,6 @@ const ViewInvestigation = ({
                   setEditData={setEditCrimeGroupData}
                   onDelete={onDeleteCrimeGroup}
                   saving={saving}
-                  // editRights
                   deleteRights
                 />
               </div>

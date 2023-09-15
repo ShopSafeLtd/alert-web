@@ -114,6 +114,7 @@ const CrimeGroupTable = ({
   const classes = useStyles();
   const navigate = useNavigate();
   const intl = useIntl();
+  console.log('crimeGroups', crimeGroups);
 
   return (
     // <Table<CrimeGroupsTable>
@@ -142,7 +143,7 @@ const CrimeGroupTable = ({
         {
           key: 'totalOffenders',
           dataIndex: 'totalOffenders',
-          title: <FormattedMessage id="xb54TN" defaultMessage="Offenders" />,
+          title: <FormattedMessage id="+a+2ug" defaultMessage="Members" />,
         },
         {
           key: 'totalIncidents',

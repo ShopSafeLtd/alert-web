@@ -1,0 +1,6 @@
+fragment Investigations on Investigation {
+  id
+  name
+  description
+  status
+}

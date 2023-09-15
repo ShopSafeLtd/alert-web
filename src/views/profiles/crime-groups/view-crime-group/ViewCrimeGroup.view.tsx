@@ -18,6 +18,7 @@ import {
 } from 'antd';
 import type {
   CreateDocumentMutation,
+  CreateInvestigationMutation,
   CrimeGroupQuery,
   DeleteDocumentMutation,
   SuggestedCrimeGroupMembersQuery,
@@ -55,6 +56,8 @@ import EvidenceTable from 'components/tables/EvidenceTable';
 import { ProfileUpdatedModel } from 'types/enums/profile-update-type';
 import AddDocument from 'components/form-components/documents/AddDocument';
 import type { MutationUpdaterFn } from '@apollo/client';
+import InvestigationTable from 'components/tables/InvestigationTable';
+import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
 import useStyles from './ViewCrimeGroup.styles';
 
 const { Title } = Typography;
@@ -117,6 +120,9 @@ interface Props {
   addDocument: boolean;
   updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
   updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
+  toggleAddInvestigation: () => void;
+  addInvestigation: boolean;
+  updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
 }
 
 const ViewCrimeGroup = ({
@@ -164,6 +170,9 @@ const ViewCrimeGroup = ({
   addDocument,
   updateDocumentList,
   updateDeleteDocument,
+  addInvestigation,
+  toggleAddInvestigation,
+  updateInvestigationList,
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
@@ -548,7 +557,7 @@ const ViewCrimeGroup = ({
                   />
                 )}
               </Card>
-              <Card style={{ marginTop: 20 }}>
+              <Card loading={loading}>
                 <Row gutter={8} align="middle" style={{ marginBottom: 10 }}>
                   <Col flex={1}>
                     <Title level={4}>
@@ -596,6 +605,53 @@ const ViewCrimeGroup = ({
                   />
                 )}
               </Card>
+
+              {editRights && (
+                <Card loading={loading}>
+                  <Row gutter={8} align="middle" style={{ marginBottom: 10 }}>
+                    <Col flex={1}>
+                      <Title level={4}>
+                        {intl.formatMessage({
+                          defaultMessage: 'Investigations',
+                          id: 'juQ8mz',
+                        })}
+                      </Title>
+                    </Col>
+
+                    <Col>
+                      <Button
+                        size="small"
+                        onClick={toggleAddInvestigation}
+                        icon={
+                          <FontAwesomeIcon
+                            icon={faPlus}
+                            style={{ marginRight: 5 }}
+                          />
+                        }
+                      >
+                        {intl.formatMessage({
+                          defaultMessage: 'Add Investigation',
+                          id: 'U5+v9Y',
+                        })}
+                      </Button>
+                    </Col>
+                  </Row>
+                  {data?.crimeGroup?.investigations.length && !loading ? (
+                    <InvestigationTable
+                      investigations={data?.crimeGroup?.investigations}
+                    />
+                  ) : (
+                    <Empty
+                      description={intl.formatMessage({
+                        defaultMessage:
+                          'No investigations for this crime group',
+                        id: 'FCzPwl',
+                      })}
+                      image={Empty.PRESENTED_IMAGE_SIMPLE}
+                    />
+                  )}
+                </Card>
+              )}
             </div>
 
             <Modal
@@ -1015,6 +1071,26 @@ const ViewCrimeGroup = ({
             crimeGroupId={data?.crimeGroup?.id || ''}
             onClose={toggleAddDocument}
             update={updateDocumentList}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      {/* investigation */}
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Add New Investigation',
+          id: 'QaKS9A',
+        })}
+        visible={addInvestigation}
+        width="500"
+        onClose={toggleAddInvestigation}
+      >
+        {addInvestigation ? (
+          <AddInvestigation
+            update={updateInvestigationList}
+            incidentId={data?.crimeGroup?.id || ''}
+            onClose={toggleAddInvestigation}
           />
         ) : (
           <div />

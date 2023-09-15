@@ -50,6 +50,7 @@ import {
   faTags,
   faTrash,
   faUpload,
+  faUser,
   faUsers,
   faUserTag,
 } from '@fortawesome/pro-light-svg-icons';
@@ -621,7 +622,7 @@ const ViewIncident = ({
                               />
                             </div>
                           )}
-                          {/* <Card
+                          {/* <Card loading={loading}
                             key={image.id}
                             bodyStyle={{
                               padding: 0,
@@ -703,7 +704,7 @@ const ViewIncident = ({
                       <Skeleton />
                     ) : (
                       <div className="incident-tab-content">
-                        <Card>
+                        <Card loading={loading}>
                           <Title className={classes.headerTitle} level={4}>
                             {data?.incident?.subject}
                           </Title>
@@ -768,6 +769,23 @@ const ViewIncident = ({
                               ) : (
                                 data?.incident?.business?.name
                               )}
+                            </Descriptions.Item>
+                            <Descriptions.Item
+                              className={classes.detail}
+                              label={
+                                <span>
+                                  <FontAwesomeIcon
+                                    className={classes.descIcon}
+                                    icon={faUser}
+                                  />
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Created By',
+                                    id: 'uAfuJA',
+                                  })}
+                                </span>
+                              }
+                            >
+                              {data?.incident?.createdBy.fullName}
                             </Descriptions.Item>
                             <Descriptions.Item
                               className={classes.detail}
@@ -928,7 +946,7 @@ const ViewIncident = ({
                             />
                           </Col>
                           <Col xs={24} xl={12}>
-                            <Card>
+                            <Card loading={loading}>
                               <Title level={4}>
                                 {intl.formatMessage({
                                   defaultMessage: 'Police Information',
@@ -1017,249 +1035,247 @@ const ViewIncident = ({
                           </Col>
                         </Row>
 
-                        {data?.incident?.incidentItems &&
-                          data.incident.incidentItems.length > 0 && (
-                            <Card style={{ marginBottom: 20 }}>
-                              <Row
-                                gutter={8}
-                                align="middle"
-                                style={{ marginBottom: 10 }}
-                              >
-                                <Col flex={1}>
-                                  <Title level={4}>
-                                    {intl.formatMessage({
-                                      defaultMessage: 'Items',
-                                      id: 'yNmV/R',
-                                    })}
-                                  </Title>
-                                </Col>
-                                {editRights && (
-                                  <Col>
-                                    <Button
-                                      size="small"
-                                      onClick={toggleAddGoods}
-                                      icon={
-                                        <FontAwesomeIcon
-                                          icon={faPlus}
-                                          style={{ marginRight: 5 }}
-                                        />
-                                      }
-                                    >
-                                      {intl.formatMessage({
-                                        defaultMessage: 'Add Item',
-                                        id: 'kNLPWW',
-                                      })}
-                                    </Button>
-                                  </Col>
-                                )}
-                              </Row>
-
-                              <Table
-                                pagination={{
-                                  hideOnSinglePage: true,
-                                  pageSize: 5,
-                                }}
-                                columns={
-                                  goodsMode === GoodsMode.Generic
-                                    ? [
-                                        {
-                                          title: intl.formatMessage({
-                                            defaultMessage: 'Name',
-                                            id: 'HAlOn1',
-                                          }),
-                                          dataIndex: 'name',
-                                          key: 'name',
-                                        },
-                                        {
-                                          title: intl.formatMessage({
-                                            defaultMessage: 'Value',
-                                            id: 'GufXy5',
-                                          }),
-                                          dataIndex: 'value',
-                                          key: 'value',
-                                          render: (value: number) =>
-                                            `£${value.toFixed(2)}`,
-                                        },
-                                        {
-                                          title: intl.formatMessage({
-                                            defaultMessage: 'Recovered Value',
-                                            id: 'bGwFFv',
-                                          }),
-                                          dataIndex: 'recoveredValue',
-                                          key: 'recoveredValue',
-                                          render: (value: number) =>
-                                            `£${value.toFixed(2)}`,
-                                        },
-                                        {
-                                          key: 'Options',
-                                          title: '',
-                                          dataIndex: 'Options',
-                                          width: 100,
-                                          render: (_, record) => (
-                                            <Row gutter={8}>
-                                              {editRights && (
-                                                <Col>
-                                                  <Tooltip
+                        <Card loading={loading}>
+                          <Row
+                            gutter={8}
+                            align="middle"
+                            style={{ marginBottom: 10 }}
+                          >
+                            <Col flex={1}>
+                              <Title level={4}>
+                                {intl.formatMessage({
+                                  defaultMessage: 'Items',
+                                  id: 'yNmV/R',
+                                })}
+                              </Title>
+                            </Col>
+                            {editRights && (
+                              <Col>
+                                <Button
+                                  size="small"
+                                  onClick={toggleAddGoods}
+                                  icon={
+                                    <FontAwesomeIcon
+                                      icon={faPlus}
+                                      style={{ marginRight: 5 }}
+                                    />
+                                  }
+                                >
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Add Item',
+                                    id: 'kNLPWW',
+                                  })}
+                                </Button>
+                              </Col>
+                            )}
+                          </Row>
+                          {data?.incident?.offenders.length && !loading ? (
+                            <Table
+                              pagination={{
+                                hideOnSinglePage: true,
+                                pageSize: 5,
+                              }}
+                              columns={
+                                goodsMode === GoodsMode.Generic
+                                  ? [
+                                      {
+                                        title: intl.formatMessage({
+                                          defaultMessage: 'Name',
+                                          id: 'HAlOn1',
+                                        }),
+                                        dataIndex: 'name',
+                                        key: 'name',
+                                      },
+                                      {
+                                        title: intl.formatMessage({
+                                          defaultMessage: 'Value',
+                                          id: 'GufXy5',
+                                        }),
+                                        dataIndex: 'value',
+                                        key: 'value',
+                                        render: (value: number) =>
+                                          `£${value.toFixed(2)}`,
+                                      },
+                                      {
+                                        title: intl.formatMessage({
+                                          defaultMessage: 'Recovered Value',
+                                          id: 'bGwFFv',
+                                        }),
+                                        dataIndex: 'recoveredValue',
+                                        key: 'recoveredValue',
+                                        render: (value: number) =>
+                                          `£${value.toFixed(2)}`,
+                                      },
+                                      {
+                                        key: 'Options',
+                                        title: '',
+                                        dataIndex: 'Options',
+                                        width: 100,
+                                        render: (_, record) => (
+                                          <Row gutter={8}>
+                                            {editRights && (
+                                              <Col>
+                                                <Tooltip
+                                                  title={intl.formatMessage({
+                                                    defaultMessage: 'Edit Item',
+                                                    id: 'Jm7MY5',
+                                                  })}
+                                                >
+                                                  <Button
+                                                    size="small"
+                                                    disabled={saving}
+                                                    onClick={() => {
+                                                      setEditGoodsData(
+                                                        record.item
+                                                      );
+                                                    }}
+                                                    icon={
+                                                      <FontAwesomeIcon
+                                                        icon={faPenToSquare}
+                                                      />
+                                                    }
+                                                  />
+                                                </Tooltip>
+                                              </Col>
+                                            )}
+                                            {deleteRights && (
+                                              <Col>
+                                                <Tooltip
+                                                  title={intl.formatMessage({
+                                                    defaultMessage:
+                                                      'Remove Item',
+                                                    id: 'BBWWVV',
+                                                  })}
+                                                >
+                                                  <Popconfirm
+                                                    placement="topLeft"
+                                                    trigger="hover"
                                                     title={intl.formatMessage({
                                                       defaultMessage:
-                                                        'Edit Item',
-                                                      id: 'Jm7MY5',
+                                                        'Remove the item?',
+                                                      id: 'NKL3Y8',
                                                     })}
+                                                    onConfirm={() =>
+                                                      onDeleteGoods(record.key)
+                                                    }
+                                                    okText={intl.formatMessage({
+                                                      defaultMessage: 'Yes',
+                                                      id: 'a5msuh',
+                                                    })}
+                                                    cancelText={intl.formatMessage(
+                                                      {
+                                                        defaultMessage: 'No',
+                                                        id: 'oUWADl',
+                                                      }
+                                                    )}
+                                                    overlayInnerStyle={{
+                                                      padding: 10,
+                                                    }}
                                                   >
                                                     <Button
                                                       size="small"
                                                       disabled={saving}
-                                                      onClick={() => {
-                                                        setEditGoodsData(
-                                                          record.item
-                                                        );
-                                                      }}
+                                                      // onClick={() =>
+                                                      //   onDeleteGoods(record.key)
+                                                      // }
                                                       icon={
                                                         <FontAwesomeIcon
-                                                          icon={faPenToSquare}
+                                                          icon={faTrash}
                                                         />
                                                       }
                                                     />
-                                                  </Tooltip>
-                                                </Col>
-                                              )}
-                                              {deleteRights && (
-                                                <Col>
-                                                  <Tooltip
-                                                    title={intl.formatMessage({
-                                                      defaultMessage:
-                                                        'Remove Item',
-                                                      id: 'BBWWVV',
-                                                    })}
-                                                  >
-                                                    <Popconfirm
-                                                      placement="topLeft"
-                                                      trigger="hover"
-                                                      title={intl.formatMessage(
-                                                        {
-                                                          defaultMessage:
-                                                            'Remove the item?',
-                                                          id: 'NKL3Y8',
-                                                        }
-                                                      )}
-                                                      onConfirm={() =>
-                                                        onDeleteGoods(
-                                                          record.key
-                                                        )
-                                                      }
-                                                      okText={intl.formatMessage(
-                                                        {
-                                                          defaultMessage: 'Yes',
-                                                          id: 'a5msuh',
-                                                        }
-                                                      )}
-                                                      cancelText={intl.formatMessage(
-                                                        {
-                                                          defaultMessage: 'No',
-                                                          id: 'oUWADl',
-                                                        }
-                                                      )}
-                                                      overlayInnerStyle={{
-                                                        padding: 10,
-                                                      }}
-                                                    >
-                                                      <Button
-                                                        size="small"
-                                                        disabled={saving}
-                                                        // onClick={() =>
-                                                        //   onDeleteGoods(record.key)
-                                                        // }
-                                                        icon={
-                                                          <FontAwesomeIcon
-                                                            icon={faTrash}
-                                                          />
-                                                        }
-                                                      />
-                                                    </Popconfirm>
-                                                  </Tooltip>
-                                                </Col>
-                                              )}
-                                            </Row>
-                                          ),
-                                        },
-                                      ]
-                                    : [
-                                        {
-                                          title: intl.formatMessage({
-                                            defaultMessage: 'SKU',
-                                            id: 'k4brJy',
-                                          }),
-                                          dataIndex: 'sku',
-                                          key: 'name',
-                                        },
-                                        {
-                                          title: intl.formatMessage({
-                                            defaultMessage: 'Quantity',
-                                            id: 'qVGRIE',
-                                          }),
-                                          dataIndex: 'quantity',
-                                          key: 'quantity',
-                                        },
-                                        {
-                                          title: intl.formatMessage({
-                                            defaultMessage:
-                                              'Recovered Quantity',
-                                            id: '+30ZkY',
-                                          }),
-                                          dataIndex: 'recoveredQuantity',
-                                          key: 'recoveredQuantity',
-                                        },
-                                      ]
-                                }
-                                dataSource={data?.incident?.incidentItems.map(
-                                  (item) => ({
-                                    key: item.id,
-                                    name: item.name || '',
-                                    value: item.value || 0,
-                                    recoveredValue: item.recoveredValue || 0,
-                                    sku: item.sku || '',
-                                    quantity: item.quantity || 0,
-                                    recoveredQuantity:
-                                      item.recoveredQuantity || 0,
-                                    item,
-                                  })
-                                )}
-                                size="small"
-                                // TODO
-                                // eslint-disable-next-line react/no-unstable-nested-components
-                                summary={(tableData) => {
-                                  const totalValue = tableData
-                                    .map((item) => item.value || 0)
-                                    .reduce((a, b) => a + b, 0);
-                                  const totalRecovered = tableData
-                                    .map((item) => item.recoveredValue || 0)
-                                    .reduce((a, b) => a + b, 0);
+                                                  </Popconfirm>
+                                                </Tooltip>
+                                              </Col>
+                                            )}
+                                          </Row>
+                                        ),
+                                      },
+                                    ]
+                                  : [
+                                      {
+                                        title: intl.formatMessage({
+                                          defaultMessage: 'SKU',
+                                          id: 'k4brJy',
+                                        }),
+                                        dataIndex: 'sku',
+                                        key: 'name',
+                                      },
+                                      {
+                                        title: intl.formatMessage({
+                                          defaultMessage: 'Quantity',
+                                          id: 'qVGRIE',
+                                        }),
+                                        dataIndex: 'quantity',
+                                        key: 'quantity',
+                                      },
+                                      {
+                                        title: intl.formatMessage({
+                                          defaultMessage: 'Recovered Quantity',
+                                          id: '+30ZkY',
+                                        }),
+                                        dataIndex: 'recoveredQuantity',
+                                        key: 'recoveredQuantity',
+                                      },
+                                    ]
+                              }
+                              dataSource={data?.incident?.incidentItems.map(
+                                (item) => ({
+                                  key: item.id,
+                                  name: item.name || '',
+                                  value: item.value || 0,
+                                  recoveredValue: item.recoveredValue || 0,
+                                  sku: item.sku || '',
+                                  quantity: item.quantity || 0,
+                                  recoveredQuantity:
+                                    item.recoveredQuantity || 0,
+                                  item,
+                                })
+                              )}
+                              size="small"
+                              // TODO
+                              // eslint-disable-next-line react/no-unstable-nested-components
+                              summary={(tableData) => {
+                                const totalValue = tableData
+                                  .map((item) => item.value || 0)
+                                  .reduce((a, b) => a + b, 0);
+                                const totalRecovered = tableData
+                                  .map((item) => item.recoveredValue || 0)
+                                  .reduce((a, b) => a + b, 0);
 
-                                  return (
-                                    <Table.Summary.Row>
-                                      <Table.Summary.Cell index={0}>
-                                        {intl.formatMessage({
-                                          defaultMessage: 'Total: ',
-                                          id: 'ILhZuX',
-                                        })}
-                                      </Table.Summary.Cell>
-                                      {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                                      <Table.Summary.Cell index={1}>
-                                        £{totalValue.toFixed(2)}
-                                      </Table.Summary.Cell>
-                                      {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                                      <Table.Summary.Cell index={1}>
-                                        £{totalRecovered.toFixed(2)}
-                                      </Table.Summary.Cell>
-                                    </Table.Summary.Row>
-                                  );
-                                }}
-                              />
-                            </Card>
+                                return (
+                                  <Table.Summary.Row>
+                                    <Table.Summary.Cell index={0}>
+                                      {intl.formatMessage({
+                                        defaultMessage: 'Total: ',
+                                        id: 'ILhZuX',
+                                      })}
+                                    </Table.Summary.Cell>
+                                    {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                                    <Table.Summary.Cell index={1}>
+                                      £{totalValue.toFixed(2)}
+                                    </Table.Summary.Cell>
+                                    {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                                    <Table.Summary.Cell index={1}>
+                                      £{totalRecovered.toFixed(2)}
+                                    </Table.Summary.Cell>
+                                  </Table.Summary.Row>
+                                );
+                              }}
+                            />
+                          ) : (
+                            <Empty
+                              description={intl.formatMessage({
+                                defaultMessage: 'No items for this incident',
+                                id: 'A993Ny',
+                              })}
+                              image={Empty.PRESENTED_IMAGE_SIMPLE}
+                            />
                           )}
+                        </Card>
 
                         {data?.incident && data.incident.answers.length > 0 && (
-                          <Card>
+                          <Card loading={loading}>
                             <Title level={4}>
                               {intl.formatMessage({
                                 defaultMessage: 'Incident Details',
@@ -1278,7 +1294,7 @@ const ViewIncident = ({
                           </Card>
                         )}
 
-                        <Card>
+                        <Card loading={loading}>
                           <Row
                             gutter={8}
                             align="middle"
@@ -1373,7 +1389,7 @@ const ViewIncident = ({
                           )}
                         </Card>
 
-                        <Card style={{ marginTop: 20 }}>
+                        <Card loading={loading}>
                           <Row
                             gutter={8}
                             align="middle"
@@ -1467,7 +1483,7 @@ const ViewIncident = ({
                           )}
                         </Card>
 
-                        <Card style={{ marginTop: 20 }}>
+                        <Card loading={loading}>
                           <Row
                             gutter={8}
                             align="middle"
@@ -1623,7 +1639,7 @@ const ViewIncident = ({
                         </Card>
 
                         {editRights && (
-                          <Card>
+                          <Card loading={loading}>
                             <Row
                               gutter={8}
                               align="middle"
@@ -1679,7 +1695,7 @@ const ViewIncident = ({
                         )}
 
                         {editRights && (
-                          <Card>
+                          <Card loading={loading}>
                             <Row
                               gutter={8}
                               align="middle"

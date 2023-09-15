@@ -6,6 +6,7 @@ import type {
   VehicleQueryVariables,
   CreateDocumentMutation,
   DeleteDocumentMutation,
+  CreateInvestigationMutation,
 } from 'graphql/generated';
 import {
   Role,
@@ -76,6 +77,9 @@ interface Return {
   addDocument: boolean;
   updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
   updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
+  toggleAddInvestigation: () => void;
+  addInvestigation: boolean;
+  updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
 }
 
 const useViewVehicle = (vehicleId: string): Return => {
@@ -97,6 +101,7 @@ const useViewVehicle = (vehicleId: string): Return => {
     []
   );
   const [addDocument, setAddDocument] = useState(false);
+  const [addInvestigation, setAddInvestigation] = useState(false);
 
   // const [optionMenuItems, setOptionsMenuItems] = useState<ItemType[]>([]);
 
@@ -548,6 +553,36 @@ const useViewVehicle = (vehicleId: string): Return => {
       variables,
     });
   };
+  // investigation
+  const updateInvestigationList: MutationUpdaterFn<
+    CreateInvestigationMutation
+  > = (store, { data: res }) => {
+    if (
+      res?.createInvestigation === null ||
+      res?.createInvestigation === undefined
+    )
+      return;
+    const existingData = store.readQuery<VehicleQuery>({
+      query: VehicleDocument,
+      variables,
+    });
+
+    if (!existingData?.vehicle) return;
+    store.writeQuery<VehicleQuery>({
+      query: VehicleDocument,
+      data: {
+        vehicle: {
+          ...existingData.vehicle,
+          investigations: [
+            ...existingData.vehicle.investigations,
+            res.createInvestigation,
+          ],
+        },
+        __typename: 'Query',
+      },
+      variables,
+    });
+  };
   const toggleEditVehicle = () => {
     setEditVehicle(!editVehicle);
   };
@@ -560,6 +595,9 @@ const useViewVehicle = (vehicleId: string): Return => {
   };
   const toggleAddDocument = () => {
     setAddDocument(() => !addDocument);
+  };
+  const toggleAddInvestigation = () => {
+    setAddInvestigation(() => !addInvestigation);
   };
   return {
     data: vehicleData,
@@ -592,6 +630,9 @@ const useViewVehicle = (vehicleId: string): Return => {
     updateDocumentList,
     updateDeleteDocument,
     // optionMenuItems,
+    addInvestigation,
+    toggleAddInvestigation,
+    updateInvestigationList,
   };
 };
 

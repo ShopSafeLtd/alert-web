@@ -72216,6 +72216,60 @@ export type FeedUpdateFragment = {
   }>;
 };
 
+export type ImagesFragment = {
+  __typename?: 'Image';
+  id: string;
+  url?: string | null;
+  optimised?: string | null;
+  position: ImagePosition;
+  rotation: number;
+  primary?: boolean | null;
+  policeImage?: boolean | null;
+};
+
+export type OffendersFragment = {
+  __typename?: 'Offender';
+  id: string;
+  reference?: number | null;
+  age?: Age | null;
+  build?: Build | null;
+  dateOfBirth?: Date | null;
+  gender?: Gender | null;
+  name?: string | null;
+  race?: Race | null;
+  images: Array<{
+    __typename?: 'Image';
+    card?: string | null;
+    id: string;
+    url?: string | null;
+    optimised?: string | null;
+    position: ImagePosition;
+    rotation: number;
+    primary?: boolean | null;
+    policeImage?: boolean | null;
+  }>;
+};
+
+export type VehiclesFragment = {
+  __typename?: 'Vehicle';
+  id: string;
+  reference?: number | null;
+  colour?: string | null;
+  model?: string | null;
+  make?: string | null;
+  registration?: string | null;
+  images: Array<{
+    __typename?: 'Image';
+    id: string;
+    url?: string | null;
+    optimised?: string | null;
+    position: ImagePosition;
+    rotation: number;
+    primary?: boolean | null;
+    policeImage?: boolean | null;
+  }>;
+};
+
 export type ListGoodsTypesQueryVariables = Exact<{ [key: string]: never }>;
 
 export type ListGoodsTypesQuery = {
@@ -73771,9 +73825,9 @@ export type ViewIncidentQuery = {
         __typename?: 'Image';
         id: string;
         url?: string | null;
+        optimised?: string | null;
         position: ImagePosition;
         rotation: number;
-        optimised?: string | null;
         primary?: boolean | null;
         policeImage?: boolean | null;
       }>;
@@ -73797,19 +73851,13 @@ export type ViewIncidentQuery = {
       reference?: number | null;
       age?: Age | null;
       build?: Build | null;
-      height?: Height | null;
       dateOfBirth?: Date | null;
-      dateSource?: string | null;
       gender?: Gender | null;
-      hair?: string | null;
       name?: string | null;
-      peculiarities?: string | null;
       race?: Race | null;
-      approved?: boolean | null;
-      uploaded?: boolean | null;
-      active?: boolean | null;
       images: Array<{
         __typename?: 'Image';
+        card?: string | null;
         id: string;
         url?: string | null;
         optimised?: string | null;
@@ -73817,7 +73865,6 @@ export type ViewIncidentQuery = {
         rotation: number;
         primary?: boolean | null;
         policeImage?: boolean | null;
-        card?: string | null;
       }>;
     }>;
     updates: Array<{
@@ -81236,6 +81283,48 @@ export const FeedUpdateFragmentDoc = gql`
   }
   ${FeedImageFragmentDoc}
 `;
+export const ImagesFragmentDoc = gql`
+  fragment Images on Image {
+    id
+    url
+    optimised
+    position
+    rotation
+    primary
+    policeImage
+  }
+`;
+export const OffendersFragmentDoc = gql`
+  fragment Offenders on Offender {
+    id
+    reference
+    age
+    build
+    dateOfBirth
+    gender
+    name
+    race
+    images {
+      ...Images
+      card
+    }
+  }
+  ${ImagesFragmentDoc}
+`;
+export const VehiclesFragmentDoc = gql`
+  fragment Vehicles on Vehicle {
+    id
+    reference
+    colour
+    model
+    make
+    registration
+    images {
+      ...Images
+    }
+  }
+  ${ImagesFragmentDoc}
+`;
 export const SetPasswordDocument = gql`
   mutation SetPassword($data: SetPasswordData!) {
     setPassword(data: $data) {
@@ -87654,21 +87743,7 @@ export const ViewIncidentDocument = gql`
         totalValue
       }
       vehicles {
-        id
-        reference
-        colour
-        model
-        make
-        registration
-        images {
-          id
-          url
-          position
-          rotation
-          optimised
-          primary
-          policeImage
-        }
+        ...Vehicles
       }
       todos {
         id
@@ -87682,31 +87757,7 @@ export const ViewIncidentDocument = gql`
         }
       }
       offenders {
-        id
-        reference
-        age
-        build
-        height
-        dateOfBirth
-        dateSource
-        gender
-        hair
-        name
-        peculiarities
-        race
-        approved
-        uploaded
-        active
-        images {
-          id
-          url
-          optimised
-          position
-          rotation
-          primary
-          policeImage
-          card
-        }
+        ...Offenders
       }
       updates(orderBy: { createdAt: asc }) {
         id
@@ -87895,6 +87946,8 @@ export const ViewIncidentDocument = gql`
       }
     }
   }
+  ${VehiclesFragmentDoc}
+  ${OffendersFragmentDoc}
 `;
 export function useViewIncidentQuery(
   baseOptions: Apollo.QueryHookOptions<

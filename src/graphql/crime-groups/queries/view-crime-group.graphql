@@ -12,247 +12,27 @@ query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
     groups {
       id
     }
-    evidence {
-      id
-      name
-      url
-      fileType
-    }
-    investigations {
-      id
-      name
-      description
-      status
-    }
-    offenders {
-      id
-      name
-      reference
-      lastActive {
-        id
-        dayTime
-      }
-      hair
-      peculiarities
-      race
-      dateOfBirth
-      dateSource
-      build
-      height
-      age
-      gender
-      images {
-        id
-        optimised
-        position
-        rotation
-      }
-      totalTheftSuccess
-      totalRecoveredValue
-      totalIncidents
-      totalValue
+
+    incidents {
+      ...Incidents
     }
     vehicles {
-      id
-      reference
-      make
-      model
-      updatedAt
-      colour
-      registration
-      totalOffenders
-      totalIncidents
-      totalCrimeGroups
+      ...Vehicles
     }
-    incidents {
-      id
-      reference
-      dayTime
-      date
-      crimeTypes {
-        id
-        name
-      }
-      createdBy {
-        id
-        businesses {
-          id
-          name
-          fullName
-        }
-      }
-      location {
-        full
-        id
-        geoLat
-        geoLng
-      }
+    todos {
+      ...Todos
+    }
+    offenders {
+      ...Offenders
+    }
+    evidence {
+      ...Documents
+    }
+    investigations {
+      ...Investigations
     }
     updates(orderBy: { createdAt: desc }) {
-      id
-      text
-      type
-      createdAt
-      images {
-        id
-        url
-        optimised
-        position
-        rotation
-        card
-      }
-      linkedCrimeGroups {
-        totalOffenders
-        totalIncidents
-        alias
-        id
-        reference
-        totalRecoveredValue
-        totalTheftSuccess
-        totalValue
-        updatedAt
-      }
-      linkedVehicles {
-        updatedAt
-        totalOffenders
-        registration
-        reference
-        model
-        make
-        id
-        colour
-        images {
-          id
-          url
-          optimised
-          position
-          rotation
-        }
-      }
-      linkedIncidents {
-        id
-        subject
-        description
-        dayTime
-        images {
-          id
-          url
-          optimised
-          position
-          rotation
-        }
-      }
-      linkedOffenders {
-        id
-        updatedAt
-        age
-        build
-        height
-        dateOfBirth
-        name
-        race
-        gender
-        images {
-          id
-          url
-          optimised
-          position
-          rotation
-        }
-      }
-      createdBy {
-        origName
-        id
-        fullName
-        businesses {
-          id
-          name
-          fullName
-        }
-      }
-      replies {
-        id
-        text
-        type
-        createdAt
-        images {
-          id
-          url
-          optimised
-          card
-          position
-          rotation
-        }
-        linkedCrimeGroups {
-          totalOffenders
-          totalIncidents
-          alias
-          id
-          reference
-          totalRecoveredValue
-          totalTheftSuccess
-          totalValue
-          updatedAt
-        }
-        linkedVehicles {
-          updatedAt
-          totalOffenders
-          registration
-          reference
-          model
-          make
-          id
-          colour
-          images {
-            id
-            url
-            optimised
-            position
-            rotation
-          }
-        }
-        linkedIncidents {
-          id
-          subject
-          description
-          dayTime
-          images {
-            id
-            url
-            optimised
-            position
-            rotation
-          }
-        }
-        linkedOffenders {
-          id
-          updatedAt
-          age
-          build
-          height
-          dateOfBirth
-          name
-          race
-          gender
-          images {
-            id
-            url
-            optimised
-            position
-            rotation
-          }
-        }
-        createdBy {
-          origName
-          id
-          fullName
-          businesses {
-            id
-            name
-            fullName
-          }
-        }
-      }
+      ...Updates
     }
   }
 }

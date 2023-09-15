@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import type {
   AssociatedOffendersQuery,
   CreateDocumentMutation,
+  CreateInvestigationMutation,
   DeleteDocumentMutation,
   LanguageCode,
   UpdateOffenderBansMutation,
@@ -179,6 +180,9 @@ interface Return {
   translateText: () => Promise<void>;
   isTranslated: string | null;
   languageCount: number;
+  toggleAddInvestigation: () => void;
+  addInvestigation: boolean;
+  updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
 }
 
 const useViewOffender = (offenderId: string): Return => {
@@ -229,6 +233,7 @@ const useViewOffender = (offenderId: string): Return => {
   );
   const [addBan, setAddBan] = useState(false);
   const [editBanData, setEditBanData] = useState<BanData | null>(null);
+  const [addInvestigation, setAddInvestigation] = useState(false);
 
   const openLightbox = (index: number) => {
     setLightBoxOpen({ open: !lightBoxOpen.open, index });
@@ -1311,6 +1316,37 @@ const useViewOffender = (offenderId: string): Return => {
       variables,
     });
   };
+
+  // investigation
+  const updateInvestigationList: MutationUpdaterFn<
+    CreateInvestigationMutation
+  > = (store, { data: res }) => {
+    if (
+      res?.createInvestigation === null ||
+      res?.createInvestigation === undefined
+    )
+      return;
+    const existingData = store.readQuery<ViewOffenderQuery>({
+      query: ViewOffenderDocument,
+      variables,
+    });
+
+    if (!existingData?.offender) return;
+    store.writeQuery<ViewOffenderQuery>({
+      query: ViewOffenderDocument,
+      data: {
+        offender: {
+          ...existingData.offender,
+          investigations: [
+            ...existingData.offender.investigations,
+            res.createInvestigation,
+          ],
+        },
+        __typename: 'Query',
+      },
+      variables,
+    });
+  };
   const [subscribe] = useSubscribeToOffenderMutation();
   const [unsubscribeFromOffender] = useUnsubscribeFromOffenderMutation();
 
@@ -1615,6 +1651,9 @@ const useViewOffender = (offenderId: string): Return => {
   const onAssociateFilterChange = (value: string[]) => {
     setAssociatedFilters(value);
   };
+  const toggleAddInvestigation = () => {
+    setAddInvestigation(() => !addInvestigation);
+  };
 
   const [isTranslated, setIsTranslated] = useState<string | null>(null);
   const currentLanguage = useStoreState((state) => state.theme.locale);
@@ -1736,6 +1775,9 @@ const useViewOffender = (offenderId: string): Return => {
     translateText,
     isTranslated,
     languageCount,
+    addInvestigation,
+    toggleAddInvestigation,
+    updateInvestigationList,
   };
 };
 

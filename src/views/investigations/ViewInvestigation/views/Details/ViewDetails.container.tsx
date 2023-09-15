@@ -84,6 +84,7 @@ const ViewDetails = ({
   } = useViewDetails({
     investigationId,
   });
+  console.log('data.crimeGroups', data?.investigation?.crimeGroups);
 
   return (
     <View
