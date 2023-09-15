@@ -21,15 +21,15 @@ import AddVehicle from 'components/form-components/Vehicle/AddVehicle';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faArrowUpRightFromSquare,
   faChevronDown,
   faFilter,
+  faPlus,
 } from '@fortawesome/pro-light-svg-icons';
-import { useNavigate } from 'react-router';
 import type { DateType, VehicleData } from 'types/DataType';
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
 import VehicleFilter from 'components/vehicles/VehicleFilter';
 import { useIntl } from 'react-intl';
+import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
 import useStyles from './ListVehicles.styles';
 
 interface Props {
@@ -56,6 +56,8 @@ interface Props {
   customGalleries: string[];
   order: SortOrder;
   setOrder: (value: SortOrder) => void;
+  addInvestigation: string;
+  toggleAddInvestigation: (value: string) => void;
 }
 
 const ListVehicles = ({
@@ -82,10 +84,11 @@ const ListVehicles = ({
   setGallery,
   order,
   setOrder,
+  addInvestigation,
+  toggleAddInvestigation,
 }: Props) => {
   const intl = useIntl();
   const classes = useStyles();
-  const navigate = useNavigate();
   const galleryOptions = [
     {
       label: 'Following',
@@ -286,11 +289,26 @@ const ListVehicles = ({
             title: '',
             dataIndex: 'actions',
             key: 'actions',
+            width: 120,
             render: (_, record) => (
-              <FontAwesomeIcon
-                icon={faArrowUpRightFromSquare}
-                onClick={() => navigate(`view/${record.key}`)}
-              />
+              // <FontAwesomeIcon
+              //   icon={faArrowUpRightFromSquare}
+              //   onClick={() => navigate(`view/${record.key}`)}
+              // />
+              <Button
+                type="ghost"
+                onClick={() => toggleAddInvestigation(record.key)}
+              >
+                <FontAwesomeIcon
+                  size="1x"
+                  style={{ marginRight: 8 }}
+                  icon={faPlus}
+                />
+                {intl.formatMessage({
+                  defaultMessage: 'Investigation',
+                  id: 'tNseQe',
+                })}
+              </Button>
             ),
           },
         ]}
@@ -330,6 +348,25 @@ const ListVehicles = ({
           clearFilters={clearFilters}
           setCreatedAtFilter={setCreatedAtFilter}
         />
+      </Drawer>
+      {/* investigation */}
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Add New Investigation',
+          id: 'QaKS9A',
+        })}
+        visible={!!addInvestigation}
+        width="500"
+        onClose={() => toggleAddInvestigation('')}
+      >
+        {addInvestigation ? (
+          <AddInvestigation
+            vehicleId={addInvestigation}
+            onClose={() => toggleAddInvestigation('')}
+          />
+        ) : (
+          <div />
+        )}
       </Drawer>
     </div>
   );

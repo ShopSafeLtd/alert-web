@@ -3,7 +3,7 @@ import {
   useCreateOneQuestionGroupMutation,
   useUpdateQuestionGroupMutation,
 } from 'graphql/generated';
-import errorNotification from 'types/error_notification';
+import errorNotification from 'types/mutation_notifications/error_notification';
 import type { FormInstance } from 'antd';
 import { Form, notification } from 'antd';
 import { useStoreState } from 'state';

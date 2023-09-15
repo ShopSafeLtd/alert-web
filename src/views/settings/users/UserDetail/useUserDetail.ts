@@ -11,7 +11,7 @@ import { useStoreState } from 'state';
 import { useNavigate } from 'react-router-dom';
 import { Modal, notification } from 'antd';
 import { useIntl } from 'react-intl';
-import errorNotification from 'types/error_notification';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 const { confirm } = Modal;
 

@@ -9,6 +9,7 @@ export enum ProfileUpdatedModel {
   Offender = 'offender',
   Vehicle = 'vehicle',
   Crime_Group = 'crime group',
+  Investigation = 'investigation',
   Incident_Item = 'incident item',
   Images = 'images',
   Image = 'image',

@@ -4,12 +4,13 @@ import {
   Card,
   Col,
   Drawer,
+  Dropdown,
   Input,
+  Menu,
   Modal,
   Popover,
   Row,
   Statistic,
-  Table,
   Tag,
   Typography,
 } from 'antd';
@@ -19,7 +20,12 @@ import type {
 } from 'graphql/generated';
 import { InvestigationStatus, UpdateType } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
+import {
+  faEdit,
+  faMagnifyingGlass,
+  faPlus,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
 import moment from 'moment';
 // import { Link } from 'react-router-dom';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -31,6 +37,16 @@ import SuggestedVehicles from 'components/investigations/SuggestedVehicles';
 import SuggestedIncidents from 'components/investigations/SuggestedIncidents';
 import { useIntl } from 'react-intl';
 import GetInvestigationStatusValues from 'types/enums/investigation-status';
+import ActivityTable from 'components/tables/ActivityTable';
+import type {
+  CrimeGroupCardData,
+  OffenderData,
+  VehicleData,
+} from 'types/DataType';
+import IncidentTable from 'components/tables/IncidentTable';
+import VehicleTable from 'components/tables/VehicleTable';
+import CrimeGroupTable from 'components/tables/CrimeGroupTable';
+import EditIncidentFeed from 'components/form-components/incident/EditIncidentFeed';
 import useStyles from './ViewDetails.styles';
 import UpdateContent from '../../../../incidents/ViewIncident/Update.view';
 import UpdateBar from '../../../../../components/MessageInput/UpdateBar';
@@ -68,9 +84,6 @@ interface Props {
   editUpdate: { id: string; text: string } | null;
   editUpdateInput: string;
   setEditUpdateInput: (value: string) => void;
-  toggleAddExistingOffender: () => void;
-  toggleAddExistingIncident: () => void;
-  toggleAddExistingVehicle: () => void;
   optionRowShow: boolean;
   setOptionRowShow: (value: boolean) => void;
   suggestedData: InvestigationSuggestionsQuery | undefined;
@@ -83,6 +96,26 @@ interface Props {
   toggleViewSuggestedIncidents: () => void;
   viewSuggestedVehicles: boolean;
   toggleViewSuggestedVehicles: () => void;
+  templatesLoading: boolean;
+  toggleAddTodo: () => void;
+  setViewTodoVisible: (value: string | null) => void;
+  setCompleteTodoVisible: (value: string | null) => void;
+  toggleAddOffender: () => void;
+  toggleAddExistingOffender: () => void;
+  setEditOffenderData: (value: OffenderData | null) => void;
+  onDeleteOffender: (id: string) => void;
+  toggleAddVehicle: () => void;
+  toggleAddExistingVehicle: () => void;
+  setEditVehicleData: (value: VehicleData | null) => void;
+  onDeleteVehicle: (id: string) => void;
+  toggleAddCrimeGroup: () => void;
+  toggleAddExistingCrimeGroup: () => void;
+  setEditCrimeGroupData: (value: CrimeGroupCardData | null) => void;
+  onDeleteCrimeGroup: (id: string) => void;
+  toggleAddExistingIncident: () => void;
+  onDeleteIncident: (id: string) => void;
+  editIncidentId: string;
+  setEditIncidentId: (value: string) => void;
 }
 const getTextStatus = (value: InvestigationStatus) => {
   if (value === InvestigationStatus.Open) return 'green';
@@ -97,7 +130,6 @@ const ViewInvestigation = ({
   loadMore,
   userId,
   editRights,
-  saving,
   replyTo,
   setEditUpdate,
   confirmDeleteUpdate,
@@ -107,9 +139,6 @@ const ViewInvestigation = ({
   setEditUpdateInput,
   editUpdateInput,
   editUpdate,
-  toggleAddExistingOffender,
-  toggleAddExistingIncident,
-  toggleAddExistingVehicle,
   optionRowShow,
   setOptionRowShow,
   suggestedData,
@@ -122,6 +151,27 @@ const ViewInvestigation = ({
   toggleViewSuggestedVehicles,
   viewSuggestedIncidents,
   viewSuggestedVehicles,
+  templatesLoading,
+  setViewTodoVisible,
+  setCompleteTodoVisible,
+  toggleAddTodo,
+  toggleAddOffender,
+  toggleAddExistingOffender,
+  setEditOffenderData,
+  onDeleteOffender,
+  toggleAddVehicle,
+  toggleAddExistingVehicle,
+  setEditVehicleData,
+  onDeleteVehicle,
+  toggleAddCrimeGroup,
+  toggleAddExistingCrimeGroup,
+  setEditCrimeGroupData,
+  onDeleteCrimeGroup,
+  toggleAddExistingIncident,
+  onDeleteIncident,
+  editIncidentId,
+  setEditIncidentId,
+  saving,
 }: Props) => {
   const classes = useStyles();
   const navigate = useNavigate();
@@ -130,7 +180,7 @@ const ViewInvestigation = ({
     <>
       <TabContent>
         <Row className={classes.content}>
-          <Col flex={1} className={classes.detailsContainer}>
+          <Col span={18} className={classes.detailsContainer}>
             <Card>
               <Title className={classes.headerTitle} level={4}>
                 {data?.investigation?.name}
@@ -218,6 +268,7 @@ const ViewInvestigation = ({
                 {suggestedData?.investigation?.suggestedOffenders && (
                   <Col>
                     <Button
+                      disabled={saving}
                       size="small"
                       danger
                       type="ghost"
@@ -233,28 +284,68 @@ const ViewInvestigation = ({
                   </Col>
                 )}
                 <Col>
-                  <Button
-                    key="3"
-                    size="small"
-                    onClick={toggleAddExistingOffender}
-                    icon={
-                      <FontAwesomeIcon
-                        icon={faPlus}
-                        style={{ marginRight: 5 }}
+                  <Dropdown
+                    overlay={
+                      <Menu
+                        items={[
+                          {
+                            label: intl.formatMessage({
+                              id: 'w4XD3a',
+                              defaultMessage: 'Add Existing Offender',
+                            }),
+                            key: '1',
+                            icon: (
+                              <FontAwesomeIcon
+                                icon={faMagnifyingGlass}
+                                style={{ marginRight: 5 }}
+                              />
+                            ),
+                            onClick: () => toggleAddExistingOffender(),
+                          },
+                          {
+                            label: intl.formatMessage({
+                              id: '58ir77',
+                              defaultMessage: 'Create New Offender',
+                            }),
+                            key: '2',
+                            icon: (
+                              <FontAwesomeIcon
+                                icon={faPlus}
+                                style={{ marginRight: 5 }}
+                              />
+                            ),
+                            onClick: () => toggleAddOffender(),
+                          },
+                        ]}
                       />
                     }
                   >
-                    {intl.formatMessage({
-                      defaultMessage: 'Add Offenders',
-                      id: 'KaNxum',
-                    })}
-                  </Button>
+                    <Button
+                      size="small"
+                      icon={
+                        <FontAwesomeIcon
+                          icon={faPlus}
+                          style={{ marginRight: 5 }}
+                        />
+                      }
+                    >
+                      {intl.formatMessage({
+                        defaultMessage: 'Add Offenders',
+                        id: 'KaNxum',
+                      })}
+                    </Button>
+                  </Dropdown>
                 </Col>
               </Row>
-              <OffenderTable
-                offenders={data?.investigation?.offenders || []}
-                hasNavigation
-              />
+              <div className={classes.table}>
+                <OffenderTable
+                  offenders={data?.investigation?.offenders || []}
+                  deleteRights
+                  onDeleteOffender={onDeleteOffender}
+                  setEditOffenderData={setEditOffenderData}
+                  hasNavigation
+                />
+              </div>
             </Card>
             <Card loading={loading}>
               <Row align="middle" gutter={8}>
@@ -270,6 +361,7 @@ const ViewInvestigation = ({
                   suggestedData.investigation.suggestedIncidents.length > 0 && (
                     <Col>
                       <Button
+                        disabled={saving}
                         danger
                         size="small"
                         onClick={toggleViewSuggestedIncidents}
@@ -283,93 +375,71 @@ const ViewInvestigation = ({
                       </Button>
                     </Col>
                   )}
+
                 <Col>
-                  <Button
-                    key="3"
-                    size="small"
-                    onClick={toggleAddExistingIncident}
-                    icon={
-                      <FontAwesomeIcon
-                        icon={faPlus}
-                        style={{ marginRight: 5 }}
+                  <Dropdown
+                    overlay={
+                      <Menu
+                        items={[
+                          {
+                            label: intl.formatMessage({
+                              defaultMessage: 'Add Existing Incidents',
+                              id: 'Ppof3h',
+                            }),
+                            key: '1',
+                            icon: (
+                              <FontAwesomeIcon
+                                icon={faMagnifyingGlass}
+                                style={{ marginRight: 5 }}
+                              />
+                            ),
+                            onClick: () => toggleAddExistingIncident(),
+                          },
+                          {
+                            label: intl.formatMessage({
+                              defaultMessage: 'Create New Incident',
+                              id: 'eyw+JQ',
+                            }),
+                            key: '2',
+                            icon: (
+                              <FontAwesomeIcon
+                                icon={faPlus}
+                                style={{ marginRight: 5 }}
+                              />
+                            ),
+                            onClick: () =>
+                              navigate(`/app/incidents/add/${investigationId}`),
+                          },
+                        ]}
                       />
                     }
                   >
-                    {intl.formatMessage({
-                      defaultMessage: 'Add Incidents',
-                      id: 'kKj7sq',
-                    })}
-                  </Button>
+                    <Button
+                      size="small"
+                      icon={
+                        <FontAwesomeIcon
+                          icon={faPlus}
+                          style={{ marginRight: 5 }}
+                        />
+                      }
+                    >
+                      {intl.formatMessage({
+                        defaultMessage: 'Add Incidents',
+                        id: 'kKj7sq',
+                      })}
+                    </Button>
+                  </Dropdown>
                 </Col>
               </Row>
-              <Table
-                className={classes.table}
-                columns={[
-                  {
-                    key: 'reference',
-                    dataIndex: 'reference',
-                    title: intl.formatMessage({
-                      defaultMessage: 'Alert ID',
-                      id: 'k8ZNgH',
-                    }),
-                  },
-                  {
-                    key: 'policeRef',
-                    dataIndex: 'policeRef',
-                    title: intl.formatMessage({
-                      defaultMessage: 'Crime No.',
-                      id: 'B0ihHq',
-                    }),
-                  },
-                  {
-                    key: 'subject',
-                    dataIndex: 'subject',
-                    title: intl.formatMessage({
-                      defaultMessage: 'Subject',
-                      id: 'LLtKhp',
-                    }),
-                  },
-                  {
-                    key: 'date',
-                    dataIndex: 'date',
-                    title: intl.formatMessage({
-                      defaultMessage: 'Date',
-                      id: 'P7PLVj',
-                    }),
-                  },
-                  {
-                    key: 'loss',
-                    dataIndex: 'loss',
-                    title: intl.formatMessage({
-                      defaultMessage: 'Loss',
-                      id: 'mv038n',
-                    }),
-                    render: (value: number) => `£${value.toLocaleString()}`,
-                  },
-                  {
-                    key: 'location',
-                    dataIndex: 'location',
-                    title: intl.formatMessage({
-                      defaultMessage: 'Location',
-                      id: 'rvirM2',
-                    }),
-                  },
-                ]}
-                size="small"
-                dataSource={
-                  data?.investigation?.incidents?.map((incident) => ({
-                    key: incident?.id,
-                    reference: incident?.reference,
-                    policeRef: incident?.policeRef,
-                    subject: incident?.subject,
-                    date: incident?.dayTime,
-                    location: incident?.location?.full,
-                    loss:
-                      (incident?.totalValue || 0) -
-                      (incident?.totalRecoveredValue || 0),
-                  })) || []
-                }
-              />
+              <div className={classes.table}>
+                <IncidentTable
+                  // className={classes.table}
+                  setEditData={setEditIncidentId}
+                  incidents={data?.investigation?.incidents}
+                  deleteRights
+                  onDelete={onDeleteIncident}
+                />
+              </div>
             </Card>
             {data?.investigation?.incidents &&
               data?.investigation?.incidents.length > 0 && (
@@ -398,6 +468,7 @@ const ViewInvestigation = ({
                   suggestedData.investigation.suggestedVehicles.length > 0 && (
                     <Col>
                       <Button
+                        disabled={saving}
                         danger
                         size="small"
                         onClick={toggleViewSuggestedVehicles}
@@ -411,11 +482,167 @@ const ViewInvestigation = ({
                       </Button>
                     </Col>
                   )}
+
+                <Col>
+                  <Dropdown
+                    overlay={
+                      <Menu
+                        items={[
+                          {
+                            label: intl.formatMessage({
+                              id: 'goP1s6',
+                              defaultMessage: 'Add Existing Vehicles',
+                            }),
+                            key: '1',
+                            icon: (
+                              <FontAwesomeIcon
+                                icon={faMagnifyingGlass}
+                                style={{ marginRight: 5 }}
+                              />
+                            ),
+                            onClick: () => toggleAddExistingVehicle(),
+                          },
+                          {
+                            label: intl.formatMessage({
+                              id: 'xiAZxN',
+                              defaultMessage: 'Create New Vehicle',
+                            }),
+                            key: '2',
+                            icon: (
+                              <FontAwesomeIcon
+                                icon={faPlus}
+                                style={{ marginRight: 5 }}
+                              />
+                            ),
+                            onClick: () => toggleAddVehicle(),
+                          },
+                        ]}
+                      />
+                    }
+                  >
+                    <Button
+                      disabled={saving}
+                      icon={
+                        <FontAwesomeIcon
+                          icon={faPlus}
+                          style={{ marginRight: 5 }}
+                        />
+                      }
+                    >
+                      {intl.formatMessage({
+                        id: 'iKGwyV',
+                        defaultMessage: 'Add Vehicles',
+                      })}
+                    </Button>
+                  </Dropdown>
+                </Col>
+              </Row>
+              <div className={classes.table}>
+                <VehicleTable
+                  vehicles={data?.investigation?.vehicles}
+                  setEditVehicleData={setEditVehicleData}
+                  onDeleteVehicle={onDeleteVehicle}
+                  saving={saving}
+                  editRights
+                  deleteRights
+                />
+              </div>
+            </Card>
+
+            <Card loading={loading}>
+              <Row align="middle" gutter={8}>
+                <Col flex={1}>
+                  <Title level={4}>
+                    {intl.formatMessage({
+                      defaultMessage: 'Crime Groups',
+                      id: 'a0aLil',
+                    })}
+                  </Title>
+                </Col>
+
+                <Col>
+                  <Dropdown
+                    overlay={
+                      <Menu
+                        items={[
+                          {
+                            label: intl.formatMessage({
+                              id: '3HDZC+',
+                              defaultMessage: 'Add Existing Crime Groups',
+                            }),
+                            key: '1',
+                            icon: (
+                              <FontAwesomeIcon
+                                icon={faMagnifyingGlass}
+                                style={{ marginRight: 5 }}
+                              />
+                            ),
+                            onClick: () => toggleAddExistingCrimeGroup(),
+                          },
+                          {
+                            label: intl.formatMessage({
+                              id: 'zYHO7w',
+                              defaultMessage: 'Create New Crime Group',
+                            }),
+                            key: '2',
+                            icon: (
+                              <FontAwesomeIcon
+                                icon={faPlus}
+                                style={{ marginRight: 5 }}
+                              />
+                            ),
+                            onClick: () => toggleAddCrimeGroup(),
+                          },
+                        ]}
+                      />
+                    }
+                  >
+                    <Button
+                      disabled={saving}
+                      icon={
+                        <FontAwesomeIcon
+                          icon={faPlus}
+                          style={{ marginRight: 5 }}
+                        />
+                      }
+                    >
+                      {intl.formatMessage({
+                        id: 'mYgStg',
+                        defaultMessage: 'Add Crime Groups',
+                      })}
+                    </Button>
+                  </Dropdown>
+                </Col>
+              </Row>
+              <div className={classes.table}>
+                <CrimeGroupTable
+                  crimeGroups={data?.investigation?.crimeGroups}
+                  setEditData={setEditCrimeGroupData}
+                  onDelete={onDeleteCrimeGroup}
+                  saving={saving}
+                  // editRights
+                  deleteRights
+                />
+              </div>
+            </Card>
+            <Card loading={loading}>
+              <Row align="middle" gutter={8}>
+                <Col flex={1}>
+                  <Title level={4}>
+                    {intl.formatMessage({
+                      defaultMessage: 'Activities',
+                      id: 'UmEsZF',
+                    })}
+                  </Title>
+                </Col>
+
                 <Col>
                   <Button
+                    disabled={templatesLoading}
                     key="3"
                     size="small"
-                    onClick={toggleAddExistingVehicle}
+                    onClick={toggleAddTodo}
+                    loading={templatesLoading}
                     icon={
                       <FontAwesomeIcon
                         icon={faPlus}
@@ -424,96 +651,20 @@ const ViewInvestigation = ({
                     }
                   >
                     {intl.formatMessage({
-                      defaultMessage: 'Add Vehicles',
-                      id: 'iKGwyV',
+                      defaultMessage: 'Add Activity',
+                      id: 'VOiupa',
                     })}
                   </Button>
                 </Col>
               </Row>
-              <Table
-                className={classes.table}
-                dataSource={data?.investigation?.vehicles.map((vehicle) => ({
-                  key: vehicle.id,
-                  reference: vehicle?.reference,
-                  make: vehicle.make,
-                  colour: vehicle.colour,
-                  model: vehicle.model,
-                  registration: vehicle.registration,
-
-                  totalOffenders: vehicle.totalOffenders,
-                  totalIncidents: vehicle.totalIncidents,
-                }))}
-                loading={loading}
-                size="small"
-                onRow={(record) => ({
-                  // onClick: () => <Link to={`view/${record.key}`} />,
-                  onClick: () =>
-                    navigate(`/app/investigations/view/${record.key}`),
-                })}
-                pagination={{
-                  hideOnSinglePage: true,
-                }}
-                columns={[
-                  {
-                    key: 'reference',
-                    dataIndex: 'reference',
-                    title: intl.formatMessage({
-                      defaultMessage: 'Alert ID',
-                      id: 'k8ZNgH',
-                    }),
-                  },
-                  {
-                    key: 'registration',
-                    dataIndex: 'registration',
-                    title: intl.formatMessage({
-                      defaultMessage: 'Registration',
-                      id: 'qv7ied',
-                    }),
-                  },
-
-                  {
-                    key: 'make',
-                    dataIndex: 'make',
-                    title: intl.formatMessage({
-                      defaultMessage: 'Make',
-                      id: '6AAM0P',
-                    }),
-                  },
-
-                  {
-                    key: 'colour',
-                    dataIndex: 'colour',
-                    title: intl.formatMessage({
-                      defaultMessage: 'Colour',
-                      id: '+e8vAT',
-                    }),
-                  },
-                  {
-                    key: 'model',
-                    dataIndex: 'model',
-                    title: intl.formatMessage({
-                      defaultMessage: 'Model',
-                      id: 'rhSI1/',
-                    }),
-                  },
-                  {
-                    key: 'totalOffenders',
-                    dataIndex: 'totalOffenders',
-                    title: intl.formatMessage({
-                      defaultMessage: 'Members',
-                      id: '+a+2ug',
-                    }),
-                  },
-                  {
-                    key: 'totalIncidents',
-                    dataIndex: 'totalIncidents',
-                    title: intl.formatMessage({
-                      defaultMessage: 'Incidents',
-                      id: 'mtr3R4',
-                    }),
-                  },
-                ]}
-              />
+              <div className={classes.table}>
+                <ActivityTable
+                  todos={data?.investigation?.todos}
+                  saving={saving || loading}
+                  setViewTodoVisible={setViewTodoVisible}
+                  setCompleteTodoVisible={setCompleteTodoVisible}
+                />
+              </div>
             </Card>
           </Col>
           <Col
@@ -566,8 +717,8 @@ const ViewInvestigation = ({
                             }}
                           >
                             <Button
-                              type="text"
                               disabled={saving}
+                              type="text"
                               icon={
                                 <FontAwesomeIcon
                                   style={{ marginRight: 5 }}
@@ -589,8 +740,8 @@ const ViewInvestigation = ({
                               })}
                             </Button>
                             <Button
-                              type="text"
                               disabled={saving}
+                              type="text"
                               icon={
                                 <FontAwesomeIcon
                                   style={{ marginRight: 5 }}
@@ -661,8 +812,8 @@ const ViewInvestigation = ({
                                 }}
                               >
                                 <Button
-                                  type="text"
                                   disabled={saving}
+                                  type="text"
                                   icon={
                                     <FontAwesomeIcon
                                       style={{ marginRight: 5 }}
@@ -684,8 +835,8 @@ const ViewInvestigation = ({
                                   })}
                                 </Button>
                                 <Button
-                                  type="text"
                                   disabled={saving}
+                                  type="text"
                                   icon={
                                     <FontAwesomeIcon
                                       style={{ marginRight: 5 }}
@@ -745,6 +896,7 @@ const ViewInvestigation = ({
                       {update.type !== UpdateType.System && (
                         <Col>
                           <Button
+                            disabled={saving}
                             style={{
                               marginLeft: update.replies.length > 0 ? 48 : 0,
                             }}
@@ -835,7 +987,7 @@ const ViewInvestigation = ({
           handleAddSuggestion={handleConnectIncident}
         />
       </Drawer>
-
+      {/* vehicle */}
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Suggested Vehicles',
@@ -849,6 +1001,26 @@ const ViewInvestigation = ({
           suggestedData={suggestedData}
           handleAddSuggestion={handleConnectVehicle}
         />
+      </Drawer>
+
+      {/* incident */}
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Edit Incident',
+          id: 'E6VJFN',
+        })}
+        visible={!!editIncidentId}
+        width="600"
+        onClose={() => setEditIncidentId('')}
+      >
+        {editIncidentId ? (
+          <EditIncidentFeed
+            onClose={() => setEditIncidentId('null')}
+            incidentId={editIncidentId}
+          />
+        ) : (
+          <div />
+        )}
       </Drawer>
     </>
   );

@@ -220,7 +220,7 @@ const LightBox = ({
       )}
 
       <Drawer
-        width={linkNewOffender ? 600 : 800}
+        width={linkNewOffender ? 600 : 1000}
         title={intl.formatMessage({
           defaultMessage: 'Link an offender to face',
           id: '70s5j7',

@@ -1,5 +1,5 @@
-mutation UpdateTask($data: TodoUpdateInput!, $where: TodoWhereUniqueInput!) {
-  updateTodoDefault(data: $data, where: $where) {
+mutation UpdateTask($data: TodoUpdateInput!, $where: UniqueId!) {
+  updateTodo(data: $data, where: $where) {
     id
     name
     description
@@ -8,6 +8,12 @@ mutation UpdateTask($data: TodoUpdateInput!, $where: TodoWhereUniqueInput!) {
     assignedUsers {
       id
       fullName
+    }
+    evidence {
+      id
+      name
+      url
+      fileType
     }
   }
 }

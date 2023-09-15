@@ -7,6 +7,7 @@ interface Props {
   onClose: () => void;
   update?: (value: CrimeGroupData) => void;
   crimeGroupIds: string[] | undefined;
+  takeAllSchemes?: boolean;
   getCrimeGroup?: (value: { crimeGroup: CrimeGroupData }) => void;
 }
 const LinkCrimeGroup = ({
@@ -14,6 +15,7 @@ const LinkCrimeGroup = ({
   update,
   crimeGroupIds,
   getCrimeGroup,
+  takeAllSchemes,
 }: Props): JSX.Element => {
   const {
     onSubmit,
@@ -24,7 +26,13 @@ const LinkCrimeGroup = ({
     setSearch,
     onPaginationChange,
     onSelect,
-  } = useLinkCrimeGroup({ onClose, update, crimeGroupIds, getCrimeGroup });
+  } = useLinkCrimeGroup({
+    onClose,
+    update,
+    crimeGroupIds,
+    getCrimeGroup,
+    takeAllSchemes,
+  });
 
   return (
     <View

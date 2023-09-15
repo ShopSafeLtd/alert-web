@@ -18,6 +18,12 @@ query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
       url
       fileType
     }
+    investigations {
+      id
+      name
+      description
+      status
+    }
     offenders {
       id
       name

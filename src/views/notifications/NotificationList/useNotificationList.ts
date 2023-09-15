@@ -17,7 +17,7 @@ import {
 import { useState } from 'react';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { notification } from 'antd';
-import errorNotification from 'types/error_notification';
+import errorNotification from 'types/mutation_notifications/error_notification';
 import { useNavigate } from 'react-router';
 import { LocalStorageKeys } from 'types';
 import { useIntl } from 'react-intl';

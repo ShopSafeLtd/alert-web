@@ -48,7 +48,7 @@ import type {
   LocationData,
   VehicleData,
 } from 'types/DataType';
-import errorNotification from 'types/error_notification';
+import errorNotification from 'types/mutation_notifications/error_notification';
 import type { MutationUpdaterFn } from '@apollo/client';
 import {
   ProfileUpdatedModel,

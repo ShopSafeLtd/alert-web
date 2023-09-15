@@ -914,7 +914,7 @@ const ViewCrimeGroup = ({
           defaultMessage: 'Add Existing Offenders',
         })}
         visible={addExistingOffender}
-        width={800}
+        width="1000"
         onClose={toggleAddExistingOffender}
         zIndex={1001}
       >

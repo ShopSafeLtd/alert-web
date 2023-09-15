@@ -26,7 +26,7 @@ import { useEffect, useState } from 'react';
 import update from 'immutability-helper';
 import { useStoreState } from 'state';
 import type { OffenderData, VehicleData } from 'types/DataType';
-import errorNotification from 'types/error_notification';
+import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 import type { MutationUpdaterFn } from '@apollo/client';
 

@@ -6417,6 +6417,7 @@ export type Business = {
   publicName: Scalars['Boolean'];
   reference?: Maybe<Scalars['Int']>;
   schemes: Array<Scheme>;
+  todos: Array<Todo>;
   totalUsers: Scalars['Int'];
   updatedAt: Scalars['DateTime'];
   users: Array<User>;
@@ -6461,6 +6462,15 @@ export type BusinessSchemesArgs = {
   before?: InputMaybe<SchemeWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+};
+
+export type BusinessTodosArgs = {
+  after?: InputMaybe<TodoWhereUniqueInput>;
+  before?: InputMaybe<TodoWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<TodoOrderByWithRelationInput>>;
+  where?: InputMaybe<TodoWhereInput>;
 };
 
 export type BusinessUsersArgs = {
@@ -7738,6 +7748,13 @@ export type ChatWhereUniqueInput = {
   id?: InputMaybe<Scalars['String']>;
 };
 
+export type CompleteTodoInput = {
+  answers?: InputMaybe<Array<TaskAnswerInput>>;
+  documents?: InputMaybe<Array<InputMaybe<CreateDocument>>>;
+  taskId: Scalars['String'];
+  userTime?: InputMaybe<Array<UserTimeInput>>;
+};
+
 export type ConnectImageToIncident = {
   id: Scalars['String'];
   offenders?: InputMaybe<Array<InputMaybe<IncidentOffenderWhereInput>>>;
@@ -8015,6 +8032,9 @@ export type CreateCommentData = {
 };
 
 export type CreateCrimeGroupDataInput = {
+  alias?: InputMaybe<Scalars['String']>;
+  investigationId?: InputMaybe<Scalars['String']>;
+  investigations?: InputMaybe<InvestigationCreateNestedManyWithoutCrimeGroupsInput>;
   offenders: OffenderCreateNestedManyWithoutCrimeGroupsInput;
   schemes: SchemeCreateNestedManyWithoutCrimeGroupsInput;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutCrimeGroupInput>;
@@ -8090,6 +8110,7 @@ export type CreateIncidentData = {
   documents?: InputMaybe<Array<InputMaybe<CreateDocument>>>;
   groups: Array<InputMaybe<UniqueId>>;
   images: CreateIncidentImages;
+  investigationId?: InputMaybe<Scalars['String']>;
   items?: InputMaybe<Array<CreateIncidentItemInput>>;
   location?: InputMaybe<CreateIncidentLocation>;
   offenders: CreateIncidentOffenders;
@@ -8194,6 +8215,7 @@ export type CreateOffenderData = {
   image?: InputMaybe<ImageCreateNestedManyWithoutOffendersInput>;
   images?: InputMaybe<Array<InputMaybe<UploadOffenderImage>>>;
   incidentId?: InputMaybe<Scalars['String']>;
+  investigationId?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
@@ -8281,6 +8303,7 @@ export type CreateVehicleDataInput = {
   image?: InputMaybe<ImageCreateNestedManyWithoutVehiclesInput>;
   images?: InputMaybe<Array<InputMaybe<UploadVehicleImage>>>;
   incidents?: InputMaybe<Array<InputMaybe<UniqueId>>>;
+  investigationId?: InputMaybe<Scalars['String']>;
   make?: InputMaybe<Scalars['String']>;
   model?: InputMaybe<Scalars['String']>;
   offenders?: InputMaybe<Array<InputMaybe<UniqueId>>>;
@@ -8324,6 +8347,7 @@ export type CrimeGroup = {
   id: Scalars['String'];
   incidents?: Maybe<Array<Maybe<Incident>>>;
   intel: Array<Intel>;
+  investigations: Array<Investigation>;
   latestUpdate?: Maybe<Update>;
   offenders: Array<Offender>;
   ref?: Maybe<Scalars['String']>;
@@ -8369,6 +8393,15 @@ export type CrimeGroupIntelArgs = {
   before?: InputMaybe<IntelWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+};
+
+export type CrimeGroupInvestigationsArgs = {
+  after?: InputMaybe<InvestigationWhereUniqueInput>;
+  before?: InputMaybe<InvestigationWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<InvestigationOrderByWithRelationInput>>;
+  where?: InputMaybe<InvestigationWhereInput>;
 };
 
 export type CrimeGroupOffendersArgs = {
@@ -18375,6 +18408,7 @@ export type Incident = {
   impressions: Array<Impression>;
   incidentItems: Array<IncidentItem>;
   intel: Array<Intel>;
+  investigations: Array<Investigation>;
   involvedTags: Array<Tag>;
   latestUpdate?: Maybe<Update>;
   location?: Maybe<Address>;
@@ -18507,6 +18541,15 @@ export type IncidentIntelArgs = {
   last?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<IntelOrderByWithRelationInput>>;
   where?: InputMaybe<IntelWhereInput>;
+};
+
+export type IncidentInvestigationsArgs = {
+  after?: InputMaybe<InvestigationWhereUniqueInput>;
+  before?: InputMaybe<InvestigationWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<InvestigationOrderByWithRelationInput>>;
+  where?: InputMaybe<InvestigationWhereInput>;
 };
 
 export type IncidentInvolvedTagsArgs = {
@@ -25168,6 +25211,7 @@ export type Investigation = {
   suggestedIncidents?: Maybe<Array<Incident>>;
   suggestedOffenders?: Maybe<Array<Offender>>;
   suggestedVehicles?: Maybe<Array<Vehicle>>;
+  todos: Array<Todo>;
   totalCrimeGroups?: Maybe<Scalars['Int']>;
   totalIncidents?: Maybe<Scalars['Int']>;
   totalOffenders?: Maybe<Scalars['Int']>;
@@ -25235,6 +25279,15 @@ export type InvestigationSubscribedUsersArgs = {
   before?: InputMaybe<UserWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+};
+
+export type InvestigationTodosArgs = {
+  after?: InputMaybe<TodoWhereUniqueInput>;
+  before?: InputMaybe<TodoWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<TodoOrderByWithRelationInput>>;
+  where?: InputMaybe<TodoWhereInput>;
 };
 
 export type InvestigationUpdatesArgs = {
@@ -29715,6 +29768,7 @@ export type Mutation = {
   createTermsAndConditions?: Maybe<TermsAndCondition>;
   createTimes?: Maybe<Array<Incident>>;
   createTodo: Todo;
+  createTodoDefault: Todo;
   createUnlinkedImage?: Maybe<UnlinkedImage>;
   createUpdateOnCrimeGroup?: Maybe<Update>;
   createUpdateOnIncident?: Maybe<Update>;
@@ -30063,6 +30117,10 @@ export type MutationCreateTermsAndConditionsArgs = {
 };
 
 export type MutationCreateTodoArgs = {
+  data: TodoCreateInput;
+};
+
+export type MutationCreateTodoDefaultArgs = {
   data: TodoCreateInput;
 };
 
@@ -32558,6 +32616,7 @@ export type Offender = {
   incidentsByHour: Array<TagTotal>;
   incidentsByMonth: Array<TagTotal>;
   intel: Array<Intel>;
+  investigations: Array<Investigation>;
   knownAssociates?: Maybe<Array<Offender>>;
   lastActive?: Maybe<Incident>;
   latestUpdate?: Maybe<Update>;
@@ -32710,6 +32769,15 @@ export type OffenderIntelArgs = {
   last?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<IntelOrderByWithRelationInput>>;
   where?: InputMaybe<IntelWhereInput>;
+};
+
+export type OffenderInvestigationsArgs = {
+  after?: InputMaybe<InvestigationWhereUniqueInput>;
+  before?: InputMaybe<InvestigationWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<InvestigationOrderByWithRelationInput>>;
+  where?: InputMaybe<InvestigationWhereInput>;
 };
 
 export type OffenderKnownAssociatesArgs = {
@@ -52631,6 +52699,12 @@ export type TargetedGood = {
   totalSuccessRate: Scalars['Float'];
 };
 
+export type TaskAnswerInput = {
+  answer: Scalars['String'];
+  questionId: Scalars['String'];
+  type: AnswerType;
+};
+
 export type TaskQuestion = {
   __typename?: 'TaskQuestion';
   answers: Array<Answer>;
@@ -53403,6 +53477,7 @@ export type Todo = {
   __typename?: 'Todo';
   answers: Array<Answer>;
   assignedUsers: Array<User>;
+  business?: Maybe<Business>;
   chatId?: Maybe<Scalars['String']>;
   completed?: Maybe<Scalars['Boolean']>;
   completedBy?: Maybe<User>;
@@ -53414,6 +53489,7 @@ export type Todo = {
   crimeGroupId?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   dueDate?: Maybe<Scalars['DateTime']>;
+  evidence: Array<Document>;
   id: Scalars['String'];
   incidentId?: Maybe<Scalars['String']>;
   investigationId?: Maybe<Scalars['String']>;
@@ -53437,6 +53513,13 @@ export type TodoAnswersArgs = {
 export type TodoAssignedUsersArgs = {
   after?: InputMaybe<UserWhereUniqueInput>;
   before?: InputMaybe<UserWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+export type TodoEvidenceArgs = {
+  after?: InputMaybe<DocumentWhereUniqueInput>;
+  before?: InputMaybe<DocumentWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
 };
@@ -53474,6 +53557,7 @@ export type TodoCreateInput = {
   createdBy?: InputMaybe<UserCreateNestedOneWithoutCreatedTodosInput>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedOneWithoutTodosInput>;
   description?: InputMaybe<Scalars['String']>;
+  documents?: InputMaybe<Array<InputMaybe<CreateDocument>>>;
   dueDate?: InputMaybe<Scalars['DateTime']>;
   evidence?: InputMaybe<DocumentCreateNestedManyWithoutTodosInput>;
   id?: InputMaybe<Scalars['String']>;
@@ -54383,6 +54467,7 @@ export type TodoUpdateInput = {
   createdBy?: InputMaybe<UserUpdateOneWithoutCreatedTodosNestedInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateOneWithoutTodosNestedInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  documents?: InputMaybe<Array<InputMaybe<UpdateDocument>>>;
   dueDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   evidence?: InputMaybe<DocumentUpdateManyWithoutTodosNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -56090,6 +56175,11 @@ export type UpdateCrimeGroupDataInput = {
   alias?: InputMaybe<Scalars['String']>;
   offenders?: InputMaybe<CreateCrimeGroupOffenders>;
   vehicles?: InputMaybe<CreateCrimeGroupVehicles>;
+};
+
+export type UpdateDocument = {
+  deleted?: InputMaybe<Array<InputMaybe<UniqueId>>>;
+  upload?: InputMaybe<Array<InputMaybe<CreateDocument>>>;
 };
 
 export type UpdateFlowData = {
@@ -62256,6 +62346,11 @@ export type UserTermWhereUniqueInput = {
   id?: InputMaybe<Scalars['String']>;
 };
 
+export type UserTimeInput = {
+  timeTakes: Scalars['Int'];
+  userId: Scalars['String'];
+};
+
 export enum UserType {
   Guest = 'GUEST',
   User = 'USER',
@@ -66477,6 +66572,7 @@ export type Vehicle = {
   id: Scalars['String'];
   images: Array<Image>;
   incidents: Array<Incident>;
+  investigations: Array<Investigation>;
   latestUpdate?: Maybe<Update>;
   make?: Maybe<Scalars['String']>;
   model?: Maybe<Scalars['String']>;
@@ -66547,6 +66643,15 @@ export type VehicleIncidentsArgs = {
   before?: InputMaybe<IncidentWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+};
+
+export type VehicleInvestigationsArgs = {
+  after?: InputMaybe<InvestigationWhereUniqueInput>;
+  before?: InputMaybe<InvestigationWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<InvestigationOrderByWithRelationInput>>;
+  where?: InputMaybe<InvestigationWhereInput>;
 };
 
 export type VehicleNotificationsArgs = {
@@ -69099,12 +69204,12 @@ export type SetPasswordMutation = {
 
 export type UpdateTaskMutationVariables = Exact<{
   data: TodoUpdateInput;
-  where: TodoWhereUniqueInput;
+  where: UniqueId;
 }>;
 
 export type UpdateTaskMutation = {
   __typename?: 'Mutation';
-  updateTodoDefault?: {
+  updateTodo?: {
     __typename?: 'Todo';
     id: string;
     name?: string | null;
@@ -69112,6 +69217,13 @@ export type UpdateTaskMutation = {
     dueDate?: Date | null;
     completed?: boolean | null;
     assignedUsers: Array<{ __typename?: 'User'; id: string; fullName: string }>;
+    evidence: Array<{
+      __typename?: 'Document';
+      id: string;
+      name: string;
+      url: string;
+      fileType?: FileType | null;
+    }>;
   } | null;
 };
 
@@ -69134,6 +69246,13 @@ export type TodoQuery = {
       id: string;
       answer: string;
       taskQuestion?: { __typename?: 'TaskQuestion'; id: string } | null;
+    }>;
+    evidence: Array<{
+      __typename?: 'Document';
+      id: string;
+      name: string;
+      url: string;
+      fileType?: FileType | null;
     }>;
     timeTaken: Array<{
       __typename?: 'TimeTaken';
@@ -70262,6 +70381,44 @@ export type BusinessQuery = {
     fullName: string;
     publicName: boolean;
     demId?: string | null;
+    incidents: Array<{
+      __typename?: 'Incident';
+      id: string;
+      reference?: number | null;
+      dayTime?: string | null;
+      date: Date;
+      crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+      createdBy: {
+        __typename?: 'User';
+        id: string;
+        businesses: Array<{
+          __typename?: 'Business';
+          id: string;
+          name: string;
+          fullName: string;
+        }>;
+      };
+      location?: {
+        __typename?: 'Address';
+        id: string;
+        full?: string | null;
+        geoLat?: number | null;
+        geoLng?: number | null;
+      } | null;
+    }>;
+    todos: Array<{
+      __typename?: 'Todo';
+      id: string;
+      name?: string | null;
+      description?: string | null;
+      dueDate?: Date | null;
+      completed?: boolean | null;
+      assignedUsers: Array<{
+        __typename?: 'User';
+        id: string;
+        fullName: string;
+      }>;
+    }>;
     parent?: {
       __typename?: 'Business';
       id: string;
@@ -70808,6 +70965,13 @@ export type CrimeGroupQuery = {
       name: string;
       url: string;
       fileType?: FileType | null;
+    }>;
+    investigations: Array<{
+      __typename?: 'Investigation';
+      id: string;
+      name: string;
+      description?: string | null;
+      status: InvestigationStatus;
     }>;
     offenders: Array<{
       __typename?: 'Offender';
@@ -73535,6 +73699,13 @@ export type ViewIncidentQuery = {
       url: string;
       fileType?: FileType | null;
     }>;
+    investigations: Array<{
+      __typename?: 'Investigation';
+      id: string;
+      name: string;
+      description?: string | null;
+      status: InvestigationStatus;
+    }>;
     scheme: {
       __typename?: 'Scheme';
       mg11Available: boolean;
@@ -73968,6 +74139,20 @@ export type UpdateInvestigationMutation = {
       name?: string | null;
       reference?: number | null;
       totalIncidents?: number | null;
+      age?: Age | null;
+      gender?: Gender | null;
+      race?: Race | null;
+      build?: Build | null;
+      height?: Height | null;
+      dateOfBirth?: Date | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimised?: string | null;
+        optimisedPersisted?: string | null;
+        position: ImagePosition;
+        rotation: number;
+      }>;
     }>;
     incidents: Array<{
       __typename?: 'Incident';
@@ -74219,6 +74404,19 @@ export type ViewInvestigationQuery = {
       url: string;
       thumbnailUrl?: string | null;
       tags: Array<{ __typename?: 'Tag'; name: string; id: string }>;
+    }>;
+    todos: Array<{
+      __typename?: 'Todo';
+      id: string;
+      name?: string | null;
+      description?: string | null;
+      dueDate?: Date | null;
+      completed?: boolean | null;
+      assignedUsers: Array<{
+        __typename?: 'User';
+        id: string;
+        fullName: string;
+      }>;
     }>;
     vehicles: Array<{
       __typename?: 'Vehicle';
@@ -74473,6 +74671,37 @@ export type ViewInvestigationQuery = {
       id: string;
       alias?: string | null;
       reference?: number | null;
+      offenders: Array<{
+        __typename?: 'Offender';
+        id: string;
+        name?: string | null;
+        reference?: number | null;
+        totalIncidents?: number | null;
+        age?: Age | null;
+        gender?: Gender | null;
+        race?: Race | null;
+        build?: Build | null;
+        height?: Height | null;
+        dateOfBirth?: Date | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          optimised?: string | null;
+          optimisedPersisted?: string | null;
+          position: ImagePosition;
+          rotation: number;
+        }>;
+      }>;
+      vehicles: Array<{
+        __typename?: 'Vehicle';
+        id: string;
+        make?: string | null;
+        model?: string | null;
+        colour?: string | null;
+        registration?: string | null;
+        updatedAt: Date;
+        reference?: number | null;
+      }>;
     }>;
     flows: Array<{
       __typename?: 'Flow';
@@ -76197,6 +76426,13 @@ export type ViewOffenderQuery = {
       name: string;
       url: string;
       fileType?: FileType | null;
+    }>;
+    investigations: Array<{
+      __typename?: 'Investigation';
+      id: string;
+      name: string;
+      description?: string | null;
+      status: InvestigationStatus;
     }>;
     scheme: { __typename?: 'Scheme'; mg11Available: boolean };
     customGalleries: Array<{
@@ -80324,6 +80560,13 @@ export type VehicleQuery = {
       url: string;
       fileType?: FileType | null;
     }>;
+    investigations: Array<{
+      __typename?: 'Investigation';
+      id: string;
+      name: string;
+      description?: string | null;
+      status: InvestigationStatus;
+    }>;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     images: Array<{
       __typename?: 'Image';
@@ -80340,11 +80583,18 @@ export type VehicleQuery = {
       id: string;
       reference?: number | null;
       dayTime?: string | null;
-      date: Date;
       policeRef?: string | null;
       subject?: string | null;
-      value?: number | null;
+      totalValue?: number | null;
+      totalRecoveredValue?: number | null;
       crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+      location?: {
+        __typename?: 'Address';
+        id: string;
+        full?: string | null;
+        geoLat?: number | null;
+        geoLng?: number | null;
+      } | null;
       createdBy: {
         __typename?: 'User';
         id: string;
@@ -81019,8 +81269,8 @@ export type SetPasswordMutationOptions = Apollo.BaseMutationOptions<
   SetPasswordMutationVariables
 >;
 export const UpdateTaskDocument = gql`
-  mutation UpdateTask($data: TodoUpdateInput!, $where: TodoWhereUniqueInput!) {
-    updateTodoDefault(data: $data, where: $where) {
+  mutation UpdateTask($data: TodoUpdateInput!, $where: UniqueId!) {
+    updateTodo(data: $data, where: $where) {
       id
       name
       description
@@ -81029,6 +81279,12 @@ export const UpdateTaskDocument = gql`
       assignedUsers {
         id
         fullName
+      }
+      evidence {
+        id
+        name
+        url
+        fileType
       }
     }
   }
@@ -81074,6 +81330,12 @@ export const TodoDocument = gql`
           id
         }
         answer
+      }
+      evidence {
+        id
+        name
+        url
+        fileType
       }
       timeTaken {
         user {
@@ -82903,6 +83165,41 @@ export const BusinessDocument = gql`
       fullName
       publicName
       demId
+      incidents {
+        id
+        reference
+        dayTime
+        date
+        crimeTypes {
+          id
+          name
+        }
+        createdBy {
+          id
+          businesses {
+            id
+            name
+            fullName
+          }
+        }
+        location {
+          id
+          full
+          geoLat
+          geoLng
+        }
+      }
+      todos {
+        id
+        name
+        description
+        dueDate
+        completed
+        assignedUsers {
+          id
+          fullName
+        }
+      }
       parent {
         id
         name
@@ -83921,6 +84218,12 @@ export const CrimeGroupDocument = gql`
         name
         url
         fileType
+      }
+      investigations {
+        id
+        name
+        description
+        status
       }
       offenders {
         id
@@ -87279,6 +87582,12 @@ export const ViewIncidentDocument = gql`
         url
         fileType
       }
+      investigations {
+        id
+        name
+        description
+        status
+      }
       scheme {
         mg11Available
         restrictIncidentAccess
@@ -87849,6 +88158,19 @@ export const UpdateInvestigationDocument = gql`
         name
         reference
         totalIncidents
+        age
+        gender
+        race
+        build
+        height
+        dateOfBirth
+        images {
+          id
+          optimised
+          optimisedPersisted
+          position
+          rotation
+        }
       }
       incidents {
         id
@@ -88224,6 +88546,17 @@ export const ViewInvestigationDocument = gql`
         }
       }
       subscribed
+      todos {
+        id
+        name
+        description
+        dueDate
+        completed
+        assignedUsers {
+          id
+          fullName
+        }
+      }
       vehicles {
         id
         make
@@ -88451,6 +88784,34 @@ export const ViewInvestigationDocument = gql`
         id
         alias
         reference
+        offenders {
+          id
+          name
+          reference
+          totalIncidents
+          age
+          gender
+          race
+          build
+          height
+          dateOfBirth
+          images {
+            id
+            optimised
+            optimisedPersisted
+            position
+            rotation
+          }
+        }
+        vehicles {
+          id
+          make
+          model
+          colour
+          registration
+          updatedAt
+          reference
+        }
       }
       flows {
         updatedAt
@@ -91064,6 +91425,12 @@ export const ViewOffenderDocument = gql`
         name
         url
         fileType
+      }
+      investigations {
+        id
+        name
+        description
+        status
       }
       scheme {
         mg11Available
@@ -97107,6 +97474,12 @@ export const VehicleDocument = gql`
         url
         fileType
       }
+      investigations {
+        id
+        name
+        description
+        status
+      }
       groups {
         id
         name
@@ -97125,13 +97498,19 @@ export const VehicleDocument = gql`
         id
         reference
         dayTime
-        date
         policeRef
         subject
-        value
+        totalValue
+        totalRecoveredValue
         crimeTypes {
           id
           name
+        }
+        location {
+          id
+          full
+          geoLat
+          geoLng
         }
         createdBy {
           id

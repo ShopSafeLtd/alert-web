@@ -1,0 +1,17 @@
+query ListStockItems($where: StockItemsWhereInput) {
+  listStockItems(where: $where) {
+    total
+    stockItems {
+      id
+      barcode
+      brand
+      costPriceLocal
+      costPriceStandard
+      division
+      name
+      salesPriceLocal
+      salesPriceStandard
+      sku
+    }
+  }
+}

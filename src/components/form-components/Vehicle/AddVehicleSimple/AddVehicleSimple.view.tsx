@@ -11,7 +11,7 @@ interface Props {
   onSubmit: (value: FormData) => void;
   saving?: boolean;
   form: FormInstance<FormData>;
-  images: ImageData[] | undefined;
+  images?: ImageData[] | undefined;
 }
 
 const AddVehicle = ({

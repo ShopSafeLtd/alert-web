@@ -24,6 +24,17 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
       }
     }
     subscribed
+    todos {
+      id
+      name
+      description
+      dueDate
+      completed
+      assignedUsers {
+        id
+        fullName
+      }
+    }
     vehicles {
       id
       make
@@ -209,7 +220,6 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
         }
       }
     }
-
     offenders {
       id
       name
@@ -252,6 +262,34 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
       id
       alias
       reference
+      offenders {
+        id
+        name
+        reference
+        totalIncidents
+        age
+        gender
+        race
+        build
+        height
+        dateOfBirth
+        images {
+          id
+          optimised
+          optimisedPersisted
+          position
+          rotation
+        }
+      }
+      vehicles {
+        id
+        make
+        model
+        colour
+        registration
+        updatedAt
+        reference
+      }
     }
     flows {
       updatedAt

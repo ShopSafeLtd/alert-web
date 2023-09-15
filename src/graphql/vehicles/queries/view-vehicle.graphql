@@ -19,6 +19,12 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
       url
       fileType
     }
+    investigations {
+      id
+      name
+      description
+      status
+    }
     groups {
       id
       name
@@ -37,13 +43,19 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
       id
       reference
       dayTime
-      date
       policeRef
       subject
-      value
+      totalValue
+      totalRecoveredValue
       crimeTypes {
         id
         name
+      }
+      location {
+        id
+        full
+        geoLat
+        geoLng
       }
       createdBy {
         id

@@ -1,4 +1,5 @@
-import type { FormInstance } from 'antd';
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import type { FormInstance, UploadFile, UploadProps } from 'antd';
 import { Form } from 'antd';
 import { useEffect, useState } from 'react';
 import type { MutationUpdaterFn } from '@apollo/client';
@@ -18,7 +19,6 @@ import { useStoreState } from '../../../../state';
 export interface FormData {
   [key: string]: string | number | boolean | undefined;
 }
-
 interface Return {
   todo: TodoQuery | undefined;
   form: FormInstance;
@@ -31,6 +31,8 @@ interface Return {
     users: { id: string; name: string; timeTaken: number }[]
   ) => void;
   loading: boolean;
+  documentList: UploadFile[];
+  documentUploadProps?: UploadProps;
 }
 
 const { useForm } = Form;
@@ -56,12 +58,24 @@ const useTodo = ({
     { id: string; name: string; timeTaken: number }[]
   >([]);
   const schemeId = useStoreState((state) => state.scheme.id);
+  const [documentList, setDocumentList] = useState<UploadFile[]>([]);
 
   const { data: todo, loading } = useTodoQuery({
     variables: {
       where: {
         id: id || '',
       },
+    },
+    onCompleted: () => {
+      if (todo?.todo?.evidence && todo?.todo?.evidence.length > 0)
+        setDocumentList(
+          todo?.todo?.evidence?.map((document) => ({
+            uid: document.id,
+            name: document.name,
+            status: 'done',
+            url: document.url,
+          }))
+        );
     },
   });
 
@@ -176,12 +190,36 @@ const useTodo = ({
         userId: time.id,
       }))
       ?.filter((time) => time.timeTaken && time.timeTaken > 0);
+    const existingDocumentIds = todo?.todo?.evidence.map((el) => el.id);
+    const newDocuments = documentList.filter(
+      (el) => !existingDocumentIds?.includes(el.uid)
+    );
+    const deletedDocuments = existingDocumentIds?.filter((documentId) =>
+      documentList.map((el) => el.uid !== documentId)
+    );
+
     void updateTodoMutation({
       variables: {
         where: {
           id: id || '',
         },
         data: {
+          documents: {
+            // @ts-expect-error TODO fix this date issue Wait to check
+            deleted:
+              deletedDocuments && deletedDocuments.length > 0
+                ? deletedDocuments.map((el) => ({ id: el }))
+                : undefined,
+            upload:
+              newDocuments && newDocuments.length > 0
+                ? newDocuments.map((file) => ({
+                    url: file.url || '',
+                    name: file.name || '',
+                    fileType: file.type || '',
+                    origFileName: file.fileName || '',
+                  }))
+                : undefined,
+          },
           completed: {
             set: true,
           },
@@ -238,6 +276,28 @@ const useTodo = ({
     });
     updateTodo(true, id || '');
   };
+  // evidence
+  const handleChange: UploadProps['onChange'] = (info) => {
+    let newFileList = [...info.fileList];
+    newFileList = newFileList.map((file) => {
+      if (file.response) {
+        // eslint-disable-next-line  @typescript-eslint/no-unsafe-assignment,no-param-reassign,
+        file.url = file.response[0].url;
+
+        // eslint-disable-next-line  @typescript-eslint/no-unsafe-assignment,no-param-reassign,
+        file.fileName = file.response[0].blobName;
+      }
+      return file;
+    });
+
+    setDocumentList(newFileList);
+  };
+
+  const documentUploadProps: UploadProps = {
+    action: import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT,
+    onChange: handleChange,
+    multiple: true,
+  };
   return {
     todo,
     form,
@@ -248,6 +308,8 @@ const useTodo = ({
     setUsers,
     setAvailableUsers,
     loading: loading || usersLoading,
+    documentList,
+    documentUploadProps,
   };
 };
 

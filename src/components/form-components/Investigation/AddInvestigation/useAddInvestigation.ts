@@ -4,7 +4,7 @@ import { useCreateInvestigationMutation } from 'graphql/generated';
 import { notification } from 'antd';
 import { useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
-import errorNotification from 'types/error_notification';
+import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 
 export interface InvestigationData {
@@ -15,7 +15,11 @@ export interface InvestigationData {
 
 interface Props {
   onClose: () => void;
-  update: MutationUpdaterFn<CreateInvestigationMutation>;
+  incidentId?: string | null;
+  offenderId?: string | null;
+  vehicleId?: string | null;
+  crimeGroupId?: string | null;
+  update?: MutationUpdaterFn<CreateInvestigationMutation>;
 }
 
 interface Return {
@@ -23,7 +27,14 @@ interface Return {
   saving: boolean;
 }
 
-const useAddInvestigation = ({ onClose, update }: Props): Return => {
+const useAddInvestigation = ({
+  onClose,
+  update,
+  offenderId,
+  incidentId,
+  vehicleId,
+  crimeGroupId,
+}: Props): Return => {
   const intl = useIntl();
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
@@ -58,6 +69,10 @@ const useAddInvestigation = ({ onClose, update }: Props): Return => {
           name: data.name || '',
           description: data.description,
           schemeId,
+          incidentId: incidentId || null,
+          offenderId: offenderId || null,
+          vehicleId: vehicleId || null,
+          crimeGroupId: crimeGroupId || null,
         },
       },
     });

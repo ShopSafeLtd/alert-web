@@ -35,6 +35,12 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
       url
       fileType
     }
+    investigations {
+      id
+      name
+      description
+      status
+    }
     scheme {
       mg11Available
       restrictIncidentAccess

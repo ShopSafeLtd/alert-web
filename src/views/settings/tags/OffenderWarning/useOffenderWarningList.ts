@@ -11,7 +11,7 @@ import {
 import { useStoreState } from 'state';
 
 import { Modal, notification } from 'antd';
-import errorNotification from 'types/error_notification';
+import errorNotification from 'types/mutation_notifications/error_notification';
 import type { TagData } from 'types/DataType';
 import { useIntl } from 'react-intl';
 

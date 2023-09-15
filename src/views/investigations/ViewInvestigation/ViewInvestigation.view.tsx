@@ -8,7 +8,26 @@ import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
 import { faBell, faBellSlash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormattedMessage, useIntl } from 'react-intl';
-import type { ViewInvestigationQuery } from '../../../graphql/generated';
+import ViewTodo from 'components/form-components/Todos/ViewTodo/Todo.container';
+import AddTodo from 'components/form-components/Todos/AddTodo';
+import type { MutationUpdaterFn } from '@apollo/client';
+import type {
+  CrimeGroupCardData,
+  OffenderData,
+  VehicleData,
+} from 'types/DataType';
+import AddVehicleSimple from 'components/form-components/Vehicle/AddVehicleSimple';
+import AddNewOffenderSimple from 'components/form-components/offender/offender/AddNewOffenderSimple';
+import SimpleEditOffender from 'components/form-components/offender/offender/SimpleEditOffender';
+import EditVehicleSimple from 'components/form-components/Vehicle/EditVehicleSimple';
+import AddCrimeGroup from 'components/form-components/crimeGroup/AddCrimeGroup';
+import EditCrimeGroup from 'components/form-components/crimeGroup/EditCrimeGroup';
+import type {
+  CreateTodoMutation,
+  QuestionGroupOnSchemeQuery,
+  UpdateTaskMutation,
+  ViewInvestigationQuery,
+} from '../../../graphql/generated';
 import Flow from './views/Flow/Flow.container';
 import ViewDetails from './views/Details';
 import DocumentsContainer from './views/Documents/Documents.container';
@@ -19,14 +38,6 @@ interface Props {
   data: ViewInvestigationQuery | undefined;
   offenderIds: string[];
   vehicleIds: string[];
-  addExistingOffender: boolean;
-  toggleAddExistingOffender: () => void;
-  addExistingVehicle: boolean;
-  toggleAddExistingVehicle: () => void;
-  addExistingCrimeGroup: boolean;
-  toggleAddExistingCrimeGroup: () => void;
-  addExistingIncident: boolean;
-  toggleAddExistingIncident: () => void;
   toggleAddDocument: () => void;
   addDocument: boolean;
   toggleAddDemDocument: () => void;
@@ -34,12 +45,53 @@ interface Props {
   crimeGroupIds: string[];
   incidentIds: string[];
   demId: string | undefined | null;
-  submitOffender: (value: string) => void;
-  submitVehicle: (value: string) => void;
-  submitCrimeGroup: (value: string) => void;
-  submitIncident: (value: string) => void;
   toggleSubscribe: () => void;
   takeAllSchemes: boolean;
+  addTodo: boolean;
+  toggleAddTodo: () => void;
+  templatesData: QuestionGroupOnSchemeQuery | undefined;
+  templatesLoading: boolean;
+  viewTodoVisible: string | null;
+  setViewTodoVisible: (value: string | null) => void;
+  completeTodoVisible: string | null;
+  setCompleteTodoVisible: (value: string | null) => void;
+  updateTodo: MutationUpdaterFn<UpdateTaskMutation>;
+  updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
+  addOffender: boolean;
+  addExistingOffender: boolean;
+  toggleAddOffender: () => void;
+  toggleAddExistingOffender: () => void;
+  editOffenderData: OffenderData | null;
+  setEditOffenderData: (value: OffenderData | null) => void;
+  onDeleteOffender: (id: string) => void;
+  addVehicle: boolean;
+  addExistingVehicle: boolean;
+  toggleAddVehicle: () => void;
+  toggleAddExistingVehicle: () => void;
+  editVehicleData: VehicleData | null;
+  setEditVehicleData: (value: VehicleData | null) => void;
+  onDeleteVehicle: (id: string) => void;
+  addCrimeGroup: boolean;
+  addExistingCrimeGroup: boolean;
+  toggleAddCrimeGroup: () => void;
+  toggleAddExistingCrimeGroup: () => void;
+  editCrimeGroupData: CrimeGroupCardData | null;
+  setEditCrimeGroupData: (value: CrimeGroupCardData | null) => void;
+  onDeleteCrimeGroup: (id: string) => void;
+  addExistingIncident: boolean;
+  toggleAddExistingIncident: () => void;
+  onAddExistingOffender: (value: string) => void;
+  onAddExistingVehicle: (value: string) => void;
+  onAddExistingCrimeGroup: (value: string) => void;
+  onAddExistingIncident: (value: string) => void;
+  onAddOffender: (value: OffenderData) => void;
+  onEditOffender: (value: OffenderData) => void;
+  onAddVehicle: (value: VehicleData) => void;
+  onEditVehicle: (value: VehicleData) => void;
+  onAddCrimeGroup: (value: CrimeGroupCardData) => void;
+  onEditCrimeGroup: (value: CrimeGroupCardData) => void;
+  onDeleteIncident: (id: string) => void;
+  saving: boolean;
 }
 
 const useStyles = createUseStyles({
@@ -65,24 +117,57 @@ const ViewInvestigation = ({
   vehicleIds,
   incidentIds,
   crimeGroupIds,
-  addExistingOffender,
-  toggleAddExistingOffender,
-  addExistingVehicle,
-  toggleAddExistingVehicle,
-  addExistingCrimeGroup,
-  toggleAddExistingCrimeGroup,
-  addExistingIncident,
-  toggleAddExistingIncident,
   addDemDocument,
   toggleAddDocument,
   addDocument,
   toggleAddDemDocument,
-  submitOffender,
-  submitVehicle,
-  submitCrimeGroup,
-  submitIncident,
   toggleSubscribe,
   takeAllSchemes,
+  addTodo,
+  toggleAddTodo,
+  templatesData,
+  templatesLoading,
+  setViewTodoVisible,
+  setCompleteTodoVisible,
+  completeTodoVisible,
+  viewTodoVisible,
+  updateTodo,
+  updateTodoList,
+  addOffender,
+  addExistingOffender,
+  toggleAddOffender,
+  toggleAddExistingOffender,
+  editOffenderData,
+  setEditOffenderData,
+  onDeleteOffender,
+  addVehicle,
+  addExistingVehicle,
+  toggleAddVehicle,
+  toggleAddExistingVehicle,
+  editVehicleData,
+  setEditVehicleData,
+  onDeleteVehicle,
+  addCrimeGroup,
+  addExistingCrimeGroup,
+  toggleAddCrimeGroup,
+  toggleAddExistingCrimeGroup,
+  editCrimeGroupData,
+  setEditCrimeGroupData,
+  addExistingIncident,
+  toggleAddExistingIncident,
+  onAddExistingOffender,
+  onAddExistingVehicle,
+  onAddExistingCrimeGroup,
+  onAddExistingIncident,
+  onAddOffender,
+  onEditOffender,
+  onAddVehicle,
+  onEditVehicle,
+  onAddCrimeGroup,
+  onEditCrimeGroup,
+  onDeleteCrimeGroup,
+  onDeleteIncident,
+  saving,
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
@@ -132,10 +217,26 @@ const ViewInvestigation = ({
             tab={<FormattedMessage defaultMessage="Details" id="Lv0zJu" />}
           >
             <ViewDetails
+              toggleAddOffender={toggleAddOffender}
               toggleAddExistingOffender={toggleAddExistingOffender}
-              toggleAddExistingIncident={toggleAddExistingIncident}
+              setEditOffenderData={setEditOffenderData}
+              onDeleteOffender={onDeleteOffender}
+              toggleAddVehicle={toggleAddVehicle}
               toggleAddExistingVehicle={toggleAddExistingVehicle}
+              setEditVehicleData={setEditVehicleData}
+              onDeleteVehicle={onDeleteVehicle}
+              toggleAddCrimeGroup={toggleAddCrimeGroup}
+              toggleAddExistingCrimeGroup={toggleAddExistingCrimeGroup}
+              setEditCrimeGroupData={setEditCrimeGroupData}
+              onDeleteCrimeGroup={onDeleteCrimeGroup}
+              toggleAddExistingIncident={toggleAddExistingIncident}
+              onDeleteIncident={onDeleteIncident}
+              saving={saving}
+              toggleAddTodo={toggleAddTodo}
               investigationId={data?.investigation?.id || ''}
+              templatesLoading={templatesLoading}
+              setViewTodoVisible={setViewTodoVisible}
+              setCompleteTodoVisible={setCompleteTodoVisible}
             />
           </Tabs.TabPane>
           <Tabs.TabPane
@@ -172,6 +273,7 @@ const ViewInvestigation = ({
           </Tabs.TabPane>
         </Tabs>
       </div>
+      {/* offenders */}
       <Drawer
         title={
           <FormattedMessage
@@ -180,7 +282,7 @@ const ViewInvestigation = ({
           />
         }
         visible={addExistingOffender}
-        width="800"
+        width="1000"
         onClose={toggleAddExistingOffender}
         zIndex={1001}
       >
@@ -188,13 +290,53 @@ const ViewInvestigation = ({
           <AddExistingOffender
             offenderIds={offenderIds}
             onClose={toggleAddExistingOffender}
-            update={(submitData) => submitOffender(submitData.id)}
+            update={(submitData) => onAddExistingOffender(submitData.id)}
             takeAllSchemes={takeAllSchemes}
           />
         ) : (
           <div />
         )}
       </Drawer>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Add New Offender',
+          id: 'V+RsEq',
+        })}
+        open={addOffender}
+        width="700"
+        zIndex={999}
+        onClose={toggleAddOffender}
+      >
+        {addOffender ? (
+          <AddNewOffenderSimple
+            update={onAddOffender}
+            onClose={toggleAddOffender}
+            images={[]}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Edit Offender',
+          id: '+OfJ4/',
+        })}
+        open={!!editOffenderData}
+        width="700"
+        onClose={() => setEditOffenderData(null)}
+      >
+        {editOffenderData ? (
+          <SimpleEditOffender
+            data={editOffenderData}
+            onClose={() => setEditOffenderData(null)}
+            update={onEditOffender}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      {/* vehicles */}
       <Drawer
         title={
           <FormattedMessage
@@ -209,7 +351,7 @@ const ViewInvestigation = ({
       >
         {addExistingVehicle ? (
           <LinkVehicle
-            update={(submitData) => submitVehicle(submitData.id)}
+            update={(submitData) => onAddExistingVehicle(submitData.id)}
             onClose={toggleAddExistingVehicle}
             vehicleIds={vehicleIds}
             takeAllSchemes={takeAllSchemes}
@@ -218,6 +360,44 @@ const ViewInvestigation = ({
           <div />
         )}
       </Drawer>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Add New Vehicle',
+          id: 'cHbTr7',
+        })}
+        open={addVehicle}
+        width="700"
+        zIndex={999}
+        onClose={toggleAddVehicle}
+      >
+        {addVehicle ? (
+          <AddVehicleSimple update={onAddVehicle} onClose={toggleAddVehicle} />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Edit Vehicle',
+          id: 'X/6z9r',
+        })}
+        open={!!editVehicleData}
+        width="800"
+        onClose={() => setEditVehicleData(null)}
+        zIndex={1001}
+      >
+        {editVehicleData ? (
+          <EditVehicleSimple
+            editData={editVehicleData}
+            update={onEditVehicle}
+            onClose={() => setEditVehicleData(null)}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      {/* crime Group  */}
       <Drawer
         title={
           <FormattedMessage
@@ -230,16 +410,58 @@ const ViewInvestigation = ({
         onClose={toggleAddExistingCrimeGroup}
         zIndex={1001}
       >
-        {addExistingVehicle ? (
+        {addExistingCrimeGroup ? (
           <LinkCrimeGroup
-            update={(submitData) => submitCrimeGroup(submitData.id)}
+            update={(submitData) => onAddExistingCrimeGroup(submitData.id)}
             crimeGroupIds={crimeGroupIds}
             onClose={toggleAddExistingCrimeGroup}
+            takeAllSchemes={takeAllSchemes}
           />
         ) : (
           <div />
         )}
       </Drawer>
+
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Add New Crime Group',
+          id: 'Ya+GhB',
+        })}
+        open={addCrimeGroup}
+        width="700"
+        zIndex={999}
+        onClose={toggleAddCrimeGroup}
+      >
+        {addCrimeGroup ? (
+          <AddCrimeGroup
+            update={onAddCrimeGroup}
+            onClose={toggleAddCrimeGroup}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Edit Crime Group',
+          id: 'uK1ewV',
+        })}
+        open={!!editCrimeGroupData}
+        width="800"
+        onClose={() => setEditCrimeGroupData(null)}
+      >
+        {editCrimeGroupData ? (
+          <EditCrimeGroup
+            editData={editCrimeGroupData}
+            update={onEditCrimeGroup}
+            onClose={() => setEditCrimeGroupData(null)}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      {/* incident */}
       <Drawer
         title={
           <FormattedMessage
@@ -256,13 +478,15 @@ const ViewInvestigation = ({
           <LinkIncident
             incidentIds={incidentIds}
             onClose={toggleAddExistingIncident}
-            update={(submitData) => submitIncident(submitData.id)}
+            update={(submitData) => onAddExistingIncident(submitData.id)}
             takeAllSchemes={takeAllSchemes}
           />
         ) : (
           <div />
         )}
       </Drawer>
+
+      {/*  document */}
       <Drawer
         title={<FormattedMessage defaultMessage="Add Document" id="r9vGqd" />}
         visible={addDocument}
@@ -292,6 +516,78 @@ const ViewInvestigation = ({
           <AddEvidence
             investigationId={data?.investigation?.id || ''}
             onClose={toggleAddDemDocument}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      {/* todo */}
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Add Activity',
+          id: 'VOiupa',
+        })}
+        open={addTodo}
+        width="600"
+        onClose={toggleAddTodo}
+      >
+        {addTodo ? (
+          <AddTodo
+            update={updateTodoList}
+            onClose={toggleAddTodo}
+            investigationId={data?.investigation?.id}
+            initData={
+              templatesData?.scheme &&
+              templatesData.scheme.questionGroups.length > 0
+                ? {
+                    id: templatesData?.scheme?.questionGroups[0].id,
+                  }
+                : undefined
+            }
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Complete Activity',
+          id: '8fwjt4',
+        })}
+        open={completeTodoVisible !== null}
+        width={800}
+        onClose={() => setCompleteTodoVisible(null)}
+      >
+        {completeTodoVisible ? (
+          <ViewTodo
+            id={completeTodoVisible}
+            onClose={() => setCompleteTodoVisible(null)}
+            updateQuery={updateTodo}
+            updateTodo={() => {}}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'View Activity',
+          id: 'swvNLe',
+        })}
+        open={!!viewTodoVisible}
+        width={800}
+        onClose={() => setViewTodoVisible(null)}
+      >
+        {viewTodoVisible ? (
+          <ViewTodo
+            id={viewTodoVisible}
+            onClose={() => setViewTodoVisible(null)}
+            confirmText={intl.formatMessage({
+              defaultMessage: 'Save Activity',
+              id: 'Z6L1UV',
+            })}
+            updateQuery={updateTodo}
+            updateTodo={() => {}}
           />
         ) : (
           <div />
