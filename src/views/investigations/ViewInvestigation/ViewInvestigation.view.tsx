@@ -92,6 +92,7 @@ interface Props {
   onEditCrimeGroup: (value: CrimeGroupCardData) => void;
   onDeleteIncident: (id: string) => void;
   saving: boolean;
+  loading: boolean;
 }
 
 const useStyles = createUseStyles({
@@ -111,6 +112,7 @@ const useStyles = createUseStyles({
 });
 
 const ViewInvestigation = ({
+  loading,
   data,
   demId,
   offenderIds,
@@ -217,6 +219,8 @@ const ViewInvestigation = ({
             tab={<FormattedMessage defaultMessage="Details" id="Lv0zJu" />}
           >
             <ViewDetails
+              data={data}
+              loading={loading}
               toggleAddOffender={toggleAddOffender}
               toggleAddExistingOffender={toggleAddExistingOffender}
               setEditOffenderData={setEditOffenderData}

@@ -12,7 +12,6 @@ import {
   useInvestigationSuggestionsQuery,
   useUpdateInvestigationMutation,
   useUpdateUpdateMutation,
-  useViewInvestigationQuery,
   ViewInvestigationDocument,
 } from 'graphql/generated';
 import { useEffect, useState } from 'react';
@@ -24,8 +23,6 @@ import { useStoreState } from '../../../../../state';
 const { confirm } = Modal;
 
 interface Return {
-  data: ViewInvestigationQuery | undefined;
-  loading: boolean;
   scrolledToTop: () => void;
   loadMore: boolean;
   handleEditUpdate: () => void;
@@ -92,14 +89,15 @@ const useViewDetails = ({ investigationId }: Props): Return => {
     createdAt: string;
     createdBy: string;
   } | null>(null);
-  const { data, loading } = useViewInvestigationQuery({
-    fetchPolicy: 'cache-and-network',
-    variables: {
-      where: {
-        id: investigationId,
-      },
-    },
-  });
+
+  // const { data, loading } = useViewInvestigationQuery({
+  //   fetchPolicy: 'cache-and-network',
+  //   variables: {
+  //     where: {
+  //       id: investigationId,
+  //     },
+  //   },
+  // });
 
   const { data: suggestedData } = useInvestigationSuggestionsQuery({
     variables: {
@@ -470,12 +468,9 @@ const useViewDetails = ({ investigationId }: Props): Return => {
 
   return {
     confirmDeleteUpdate,
-    data,
     scrolledToTop,
-    loading: data && data.investigation ? false : loading,
     loadMore,
     editRights: role !== Role.User,
-
     replyTo,
     setEditUpdate,
     setReplyTo,

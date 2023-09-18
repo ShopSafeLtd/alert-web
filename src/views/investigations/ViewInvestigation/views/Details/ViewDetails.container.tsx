@@ -6,6 +6,7 @@ import type {
 } from 'types/DataType';
 import View from './ViewDetails.view';
 import useViewDetails from './useViewDetails';
+import type { ViewInvestigationQuery } from '../../../../../graphql/generated';
 
 interface Props {
   investigationId: string;
@@ -28,6 +29,8 @@ interface Props {
   setViewTodoVisible: (value: string | null) => void;
   setCompleteTodoVisible: (value: string | null) => void;
   saving: boolean;
+  data: ViewInvestigationQuery | undefined;
+  loading: boolean;
 }
 
 const ViewDetails = ({
@@ -51,10 +54,10 @@ const ViewDetails = ({
   setViewTodoVisible,
   setCompleteTodoVisible,
   toggleAddTodo,
+  data,
+  loading,
 }: Props) => {
   const {
-    data,
-    loading,
     scrolledToTop,
     loadMore,
     userId,
@@ -84,7 +87,6 @@ const ViewDetails = ({
   } = useViewDetails({
     investigationId,
   });
-  console.log('data.crimeGroups', data?.investigation?.crimeGroups);
 
   return (
     <View

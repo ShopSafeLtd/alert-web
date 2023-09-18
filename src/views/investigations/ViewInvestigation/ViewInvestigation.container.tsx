@@ -65,9 +65,11 @@ const ViewCustomer: React.FC = () => {
     onDeleteCrimeGroup,
     onDeleteIncident,
     saving,
+    loading,
   } = useViewCustomer(id || '');
   return (
     <View
+      loading={loading}
       demId={demId}
       toggleAddDocument={toggleAddDocument}
       addDocument={addDocument}

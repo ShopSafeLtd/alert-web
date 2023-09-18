@@ -27,7 +27,6 @@ import {
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
 import moment from 'moment';
-// import { Link } from 'react-router-dom';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useNavigate } from 'react-router';
 import OffenderTable from 'components/tables/OffenderTable/OffenderTable.view';
