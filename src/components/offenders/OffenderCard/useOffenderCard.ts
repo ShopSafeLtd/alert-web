@@ -12,7 +12,7 @@ import {
 import { notification } from 'antd';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { useIntl } from 'react-intl';
-import errorNotification from 'types/error_notification';
+import errorNotification from 'types/mutation_notifications/error_notification';
 import { useNavigate } from 'react-router';
 import { useState } from 'react';
 import type { EditFeedImage } from 'types/DataType';
@@ -37,6 +37,8 @@ interface Return {
   editImageId: string;
   setEditImageId: (id: string) => void;
   onEditImage: (value: EditFeedImage) => void;
+  toggleAddInvestigation: () => void;
+  addInvestigation: boolean;
 }
 const useOffenderCard = ({ offender, update }: Props): Return => {
   const navigate = useNavigate();
@@ -50,6 +52,7 @@ const useOffenderCard = ({ offender, update }: Props): Return => {
   const deleteRights = role !== Role.User;
   const [editOffenderFeed, setEditOffenderFeed] = useState(false);
   const [editImage, setEditImage] = useState(false);
+  const [addInvestigation, setAddInvestigation] = useState(false);
   const [editImageId, setEditImageId] = useState<string>(
     offender?.images[0]?.id || ''
   );
@@ -153,6 +156,9 @@ const useOffenderCard = ({ offender, update }: Props): Return => {
   const toggleEditImage = () => {
     setEditImage(!editImage);
   };
+  const toggleAddInvestigation = () => {
+    setAddInvestigation(() => !addInvestigation);
+  };
   return {
     approvalRights,
     menuRights,
@@ -166,6 +172,8 @@ const useOffenderCard = ({ offender, update }: Props): Return => {
     setEditImageId,
     onEditImage,
     onNavigate,
+    addInvestigation,
+    toggleAddInvestigation,
   };
 };
 

@@ -6,7 +6,7 @@ import {
 import { notification, Modal } from 'antd';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
-import errorNotification from 'types/error_notification';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 const { confirm } = Modal;
 

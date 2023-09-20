@@ -1,0 +1,6 @@
+fragment Documents on Document {
+  id
+  name
+  url
+  fileType
+}

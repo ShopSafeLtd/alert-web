@@ -33,6 +33,8 @@ const IncidentCard = ({
     editImageId,
     setEditImageId,
     onEditImage,
+    addInvestigation,
+    toggleAddInvestigation,
   } = useIncidentCard({
     incident,
     update,
@@ -53,6 +55,8 @@ const IncidentCard = ({
       editImageId={editImageId}
       setEditImageId={setEditImageId}
       onEditImage={onEditImage}
+      addInvestigation={addInvestigation}
+      toggleAddInvestigation={toggleAddInvestigation}
     />
   );
 };

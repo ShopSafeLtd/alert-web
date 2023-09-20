@@ -26,7 +26,7 @@ import { useApolloClient } from '@apollo/client';
 import type { FormInstance } from 'antd';
 import { Form, Modal, notification } from 'antd';
 import type { BusinessData, SelectOptions } from 'types/DataType';
-import errorNotification from 'types/error_notification';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 const { confirm } = Modal;
 const { useForm } = Form;

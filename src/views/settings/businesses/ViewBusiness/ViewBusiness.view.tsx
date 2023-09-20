@@ -21,10 +21,13 @@ import {
 import type {
   AddUsersToBusinessMutation,
   BusinessQuery,
+  CreateTodoMutation,
   CreateUserInDatabaseMutation,
   InviteExistingUserMutation,
   ListActionsQuery,
   ListBusinessUsersQuery,
+  QuestionGroupOnSchemeQuery,
+  UpdateTaskMutation,
 } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -42,6 +45,10 @@ import AddUser from 'components/form-components/user/AddUser';
 import AddUserToBusiness from 'components/form-components/user/AddUserToBusiness';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { useIntl } from 'react-intl';
+import AddTodo from 'components/form-components/Todos/AddTodo';
+import ViewTodo from 'components/form-components/Todos/ViewTodo/Todo.container';
+import ActivityTable from 'components/tables/ActivityTable';
+import IncidentTable from 'components/tables/IncidentTable';
 import useStyles from './ViewBusiness.styles';
 import LinkDem from '../../../../components/form-components/businesses/LinkDem';
 
@@ -74,6 +81,16 @@ interface Props {
   linkDemVisible: boolean;
   saving: boolean;
   deleteConfirm: (value: string) => void;
+  addTodo: boolean;
+  toggleAddTodo: () => void;
+  templatesData: QuestionGroupOnSchemeQuery | undefined;
+  templatesLoading: boolean;
+  viewTodoVisible: string | null;
+  setViewTodoVisible: (value: string | null) => void;
+  completeTodoVisible: string | null;
+  setCompleteTodoVisible: (value: string | null) => void;
+  updateTodo: MutationUpdaterFn<UpdateTaskMutation>;
+  updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
 }
 
 const ViewBusiness = ({
@@ -97,6 +114,16 @@ const ViewBusiness = ({
   linkDemVisible,
   saving,
   deleteConfirm,
+  addTodo,
+  toggleAddTodo,
+  templatesData,
+  templatesLoading,
+  setViewTodoVisible,
+  setCompleteTodoVisible,
+  completeTodoVisible,
+  viewTodoVisible,
+  updateTodo,
+  updateTodoList,
 }: Props) => {
   const classNames = useStyles();
   const intl = useIntl();
@@ -275,6 +302,7 @@ const ViewBusiness = ({
                     </Dropdown>
                   </Col>
                 </Row>
+
                 <Table<UserTable>
                   columns={[
                     {
@@ -373,6 +401,57 @@ const ViewBusiness = ({
                     })) || []
                   }
                   size="small"
+                />
+              </Card>
+              <Card>
+                <Typography.Title level={4}>
+                  {intl.formatMessage({
+                    defaultMessage: 'Incidents',
+                    id: 'mtr3R4',
+                  })}
+                </Typography.Title>
+                <IncidentTable
+                  incidents={data?.business?.incidents || []}
+                  hasNavigation
+                />
+              </Card>
+
+              <Card>
+                <Row align="middle" className={classNames.cardHeader}>
+                  <Col flex={1}>
+                    <Typography.Title level={4}>
+                      {intl.formatMessage({
+                        defaultMessage: 'Activities',
+                        id: 'UmEsZF',
+                      })}
+                    </Typography.Title>
+                  </Col>
+                  <Col>
+                    <Button
+                      size="small"
+                      onClick={toggleAddTodo}
+                      loading={templatesLoading}
+                      disabled={templatesLoading}
+                      icon={
+                        <FontAwesomeIcon
+                          icon={faPlus}
+                          style={{ marginRight: 5 }}
+                        />
+                      }
+                    >
+                      {intl.formatMessage({
+                        defaultMessage: 'Add Activity',
+                        id: 'VOiupa',
+                      })}
+                    </Button>
+                  </Col>
+                </Row>
+
+                <ActivityTable
+                  todos={data?.business?.todos}
+                  saving={saving || loading}
+                  setViewTodoVisible={setViewTodoVisible}
+                  setCompleteTodoVisible={setCompleteTodoVisible}
                 />
               </Card>
             </Col>
@@ -495,6 +574,78 @@ const ViewBusiness = ({
             onClose={toggleAddUser}
             update={updateAddUsersToBusiness}
           />
+        )}
+      </Drawer>
+      {/* todo */}
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Add Activity',
+          id: 'VOiupa',
+        })}
+        open={addTodo}
+        width="600"
+        onClose={toggleAddTodo}
+      >
+        {addTodo ? (
+          <AddTodo
+            update={updateTodoList}
+            onClose={toggleAddTodo}
+            businessId={data?.business?.id}
+            initData={
+              templatesData?.scheme &&
+              templatesData.scheme.questionGroups.length > 0
+                ? {
+                    id: templatesData?.scheme?.questionGroups[0].id,
+                  }
+                : undefined
+            }
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Complete Activity',
+          id: '8fwjt4',
+        })}
+        open={completeTodoVisible !== null}
+        width={800}
+        onClose={() => setCompleteTodoVisible(null)}
+      >
+        {completeTodoVisible ? (
+          <ViewTodo
+            id={completeTodoVisible}
+            onClose={() => setCompleteTodoVisible(null)}
+            updateQuery={updateTodo}
+            updateTodo={() => {}}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'View Activity',
+          id: 'swvNLe',
+        })}
+        open={!!viewTodoVisible}
+        width={800}
+        onClose={() => setViewTodoVisible(null)}
+      >
+        {viewTodoVisible ? (
+          <ViewTodo
+            id={viewTodoVisible}
+            onClose={() => setViewTodoVisible(null)}
+            confirmText={intl.formatMessage({
+              defaultMessage: 'Save Activity',
+              id: 'Z6L1UV',
+            })}
+            updateQuery={updateTodo}
+            updateTodo={() => {}}
+          />
+        ) : (
+          <div />
         )}
       </Drawer>
     </div>

@@ -95,6 +95,9 @@ const ViewIncident = (): JSX.Element => {
     completeTodoVisible,
     viewTodoVisible,
     updateTodo,
+    addInvestigation,
+    toggleAddInvestigation,
+    updateInvestigationList,
   } = useViewIncident(incidentId);
   const { onApprove, onReject, approving } = useApproveIncident({ incidentId });
 
@@ -192,6 +195,9 @@ const ViewIncident = (): JSX.Element => {
       setViewTodoVisible={setViewTodoVisible}
       viewTodoVisible={viewTodoVisible}
       updateTodo={updateTodo}
+      addInvestigation={addInvestigation}
+      toggleAddInvestigation={toggleAddInvestigation}
+      updateInvestigationList={updateInvestigationList}
     />
   );
 };

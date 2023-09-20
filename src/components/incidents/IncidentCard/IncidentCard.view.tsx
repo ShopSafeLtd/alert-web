@@ -22,6 +22,7 @@ import {
   faEllipsisV,
   faImage,
   faLocationDot,
+  faPlus,
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
 import {
@@ -37,6 +38,7 @@ import { useIntl } from 'react-intl';
 import EditIncidentFeed from 'components/form-components/incident/EditIncidentFeed';
 import FeedImageEditor from 'components/form-components/ImageEditor/FeedImageEditor.view';
 import type { EditFeedImage } from 'types/DataType';
+import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
 
 const { Title, Text, Paragraph } = Typography;
 const { confirm } = Modal;
@@ -58,6 +60,8 @@ interface Props {
   editImageId: string;
   setEditImageId: (id: string) => void;
   onEditImage: (value: EditFeedImage) => void;
+  toggleAddInvestigation: () => void;
+  addInvestigation: boolean;
 }
 
 const IncidentCard = ({
@@ -74,6 +78,8 @@ const IncidentCard = ({
   editImageId,
   setEditImageId,
   onEditImage,
+  addInvestigation,
+  toggleAddInvestigation,
 }: Props): JSX.Element => {
   const imagesRef = useRef<CarouselRef>(null);
   const intl = useIntl();
@@ -135,6 +141,7 @@ const IncidentCard = ({
                       icon: <FontAwesomeIcon icon={faImage} />,
                     }
                   : null,
+
                 {
                   key: 2,
                   label: intl.formatMessage({
@@ -160,7 +167,16 @@ const IncidentCard = ({
                     }),
                   icon: <FontAwesomeIcon icon={faTrash} />,
                 },
-                //
+                {
+                  key: 3,
+                  label: intl.formatMessage({
+                    defaultMessage: 'Add Investigation',
+                    id: 'U5+v9Y',
+                  }),
+                  onClick: () => toggleAddInvestigation(),
+                  icon: <FontAwesomeIcon icon={faPlus} />,
+                },
+                // ???
               ].filter((item) => item?.key !== 2 || deleteRights)}
             />
           }
@@ -449,6 +465,25 @@ const IncidentCard = ({
           <EditIncidentFeed
             onClose={toggleEditIncidentFeed}
             incidentId={incident.id}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      {/* investigation */}
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Add New Investigation',
+          id: 'QaKS9A',
+        })}
+        visible={addInvestigation}
+        width="500"
+        onClose={toggleAddInvestigation}
+      >
+        {addInvestigation ? (
+          <AddInvestigation
+            incidentId={incident.id}
+            onClose={toggleAddInvestigation}
           />
         ) : (
           <div />

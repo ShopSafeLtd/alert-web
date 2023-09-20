@@ -23,7 +23,7 @@ import { useStoreActions, useStoreState } from 'state';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 
 import { useNavigate } from 'react-router';
-import errorNotification from 'types/error_notification';
+import errorNotification from 'types/mutation_notifications/error_notification';
 import type { TagData } from 'types/DataType';
 import { useIntl } from 'react-intl';
 

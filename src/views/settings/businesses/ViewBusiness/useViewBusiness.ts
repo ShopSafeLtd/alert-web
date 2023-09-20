@@ -2,13 +2,19 @@ import { useState } from 'react';
 import type {
   AddUsersToBusinessMutation,
   BusinessQuery,
+  BusinessQueryVariables,
+  CreateTodoMutation,
   CreateUserInDatabaseMutation,
   InviteExistingUserMutation,
   ListActionsQuery,
   ListBusinessUsersQuery,
   ListBusinessUsersQueryVariables,
+  QuestionGroupOnSchemeQuery,
+  UpdateTaskMutation,
 } from 'graphql/generated';
 import {
+  BusinessDocument,
+  useQuestionGroupOnSchemeQuery,
   useDeleteBusinessMutation,
   ListBusinessUsersDocument,
   SortOrder,
@@ -21,8 +27,9 @@ import { useNavigate, useParams } from 'react-router';
 import { useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { Modal, notification } from 'antd';
-import errorNotification from 'types/error_notification';
+import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
+import update from 'immutability-helper';
 
 interface Return {
   data: BusinessQuery | undefined;
@@ -46,6 +53,16 @@ interface Return {
   linkDemVisible: boolean;
   saving: boolean;
   deleteConfirm: (value: string) => void;
+  addTodo: boolean;
+  toggleAddTodo: () => void;
+  templatesData: QuestionGroupOnSchemeQuery | undefined;
+  templatesLoading: boolean;
+  viewTodoVisible: string | null;
+  setViewTodoVisible: (value: string | null) => void;
+  completeTodoVisible: string | null;
+  setCompleteTodoVisible: (value: string | null) => void;
+  updateTodo: MutationUpdaterFn<UpdateTaskMutation>;
+  updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
 }
 
 const useViewBusiness = (): Return => {
@@ -57,15 +74,20 @@ const useViewBusiness = (): Return => {
   const [inviteUserVisible, setInviteUserVisible] = useState(false);
   const [addUserVisible, setAddUserVisible] = useState(false);
   const [linkDemVisible, setLinkDemVisible] = useState(false);
+  const [addTodo, setAddTodo] = useState(false);
+  const [viewTodoVisible, setViewTodoVisible] = useState<string | null>(null);
+  const [completeTodoVisible, setCompleteTodoVisible] = useState<string | null>(
+    null
+  );
   const [saving, setSaving] = useState(false);
-
+  const variables = {
+    where: {
+      id: params.id,
+    },
+  };
   const { data } = useBusinessQuery({
     fetchPolicy: 'cache-and-network',
-    variables: {
-      where: {
-        id: params.id,
-      },
-    },
+    variables,
   });
 
   const { data: usersData } = useListBusinessUsersQuery({
@@ -113,7 +135,19 @@ const useViewBusiness = (): Return => {
       },
     },
   });
-
+  const { data: templatesData, loading: templatesLoading } =
+    useQuestionGroupOnSchemeQuery({
+      variables: {
+        where: {
+          id: currentScheme,
+        },
+        questionGroupsWhere: {
+          defaultForIncidents: {
+            equals: true,
+          },
+        },
+      },
+    });
   const [removeUserFromBusiness] = useRemoveUserFromBusinessMutation({
     onCompleted: () => {
       notification.success({
@@ -253,6 +287,66 @@ const useViewBusiness = (): Return => {
       },
     });
   };
+
+  // todo
+  const updateTodoList: MutationUpdaterFn<CreateTodoMutation> = (
+    store,
+    { data: res }
+  ) => {
+    if (res?.createTodo === null || res?.createTodo === undefined) return;
+    const existingData = store.readQuery<BusinessQuery>({
+      query: BusinessDocument,
+      variables,
+    });
+
+    if (!existingData?.business) return;
+    store.writeQuery<BusinessQuery>({
+      query: BusinessDocument,
+      data: {
+        business: {
+          ...existingData.business,
+          todos: [...existingData.business.todos, res.createTodo],
+        },
+        __typename: 'Query',
+      },
+      variables,
+    });
+  };
+  const updateTodo: MutationUpdaterFn<UpdateTaskMutation> = (
+    store,
+    { data: res }
+  ) => {
+    if (res === null || res === undefined) return;
+    if (res.updateTodo === null || res.updateTodo === undefined) return;
+    // get existing group list data from Apollo store
+    const existingData = store.readQuery<BusinessQuery, BusinessQueryVariables>(
+      {
+        query: BusinessDocument,
+        variables,
+      }
+    );
+
+    if (existingData === null) return;
+    if (existingData?.business?.todos === undefined) return;
+
+    // write the new data to the Apollo store
+    store.writeQuery<BusinessQuery, BusinessQueryVariables>({
+      query: BusinessDocument,
+      data: {
+        business: update<BusinessQuery['business']>(existingData.business, {
+          todos: {
+            [existingData.business.todos.findIndex(
+              ({ id }) => id === res.updateTodo?.id
+            )]: {
+              $set: res.updateTodo,
+            },
+          },
+        }),
+        __typename: 'Query',
+      },
+      variables,
+    });
+  };
   const toggleEdit = () => {
     setEditVisible(!editVisible);
   };
@@ -266,6 +360,9 @@ const useViewBusiness = (): Return => {
 
   const toggleAddUser = () => {
     setAddUserVisible(!addUserVisible);
+  };
+  const toggleAddTodo = () => {
+    setAddTodo(!addTodo);
   };
 
   const updateUsersList: MutationUpdaterFn<CreateUserInDatabaseMutation> = (
@@ -492,6 +589,16 @@ const useViewBusiness = (): Return => {
     linkDemVisible,
     saving,
     deleteConfirm,
+    addTodo,
+    toggleAddTodo,
+    templatesData,
+    templatesLoading,
+    setViewTodoVisible,
+    setCompleteTodoVisible,
+    completeTodoVisible,
+    viewTodoVisible,
+    updateTodo,
+    updateTodoList,
   };
 };
 

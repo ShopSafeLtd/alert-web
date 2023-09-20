@@ -6,10 +6,11 @@ import moment from 'moment';
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
 import CrimeGroupFilter from 'components/crimeGroups/CrimeGroupFilter';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFilter } from '@fortawesome/pro-light-svg-icons';
+import { faFilter, faPlus } from '@fortawesome/pro-light-svg-icons';
 import type { DateType } from 'types/DataType';
 import { useIntl } from 'react-intl';
 import FormatCalendar from 'utils/format-calendar-24h';
+import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
 import useStyles from './ListCrimeGroups.styles';
 
 interface Props {
@@ -29,6 +30,8 @@ interface Props {
   setCreatedAtFilter: (value: DateType | undefined) => void;
   order: SortOrder;
   setOrder: (value: SortOrder) => void;
+  addInvestigation: string;
+  toggleAddInvestigation: (value: string) => void;
 }
 
 const ListCrimeGroups = ({
@@ -48,6 +51,8 @@ const ListCrimeGroups = ({
   setOrder,
   groups,
   groupsLoading,
+  addInvestigation,
+  toggleAddInvestigation,
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
@@ -206,6 +211,32 @@ const ListCrimeGroups = ({
             render: (value: Date | undefined) =>
               FormatCalendar(value || moment()),
           },
+          {
+            title: '',
+            dataIndex: 'actions',
+            key: 'actions',
+            width: 120,
+            render: (_, record) => (
+              // <FontAwesomeIcon
+              //   icon={faArrowUpRightFromSquare}
+              //   onClick={() => navigate(`view/${record.key}`)}
+              // />
+              <Button
+                type="ghost"
+                onClick={() => toggleAddInvestigation(record.key)}
+              >
+                <FontAwesomeIcon
+                  size="1x"
+                  style={{ marginRight: 8 }}
+                  icon={faPlus}
+                />
+                {intl.formatMessage({
+                  defaultMessage: 'Investigation',
+                  id: 'tNseQe',
+                })}
+              </Button>
+            ),
+          },
         ]}
         pagination={{
           hideOnSinglePage: true,
@@ -232,6 +263,25 @@ const ListCrimeGroups = ({
           groups={groups}
           groupsLoading={groupsLoading}
         />
+      </Drawer>
+      {/* investigation */}
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Add New Investigation',
+          id: 'QaKS9A',
+        })}
+        visible={!!addInvestigation}
+        width="500"
+        onClose={() => toggleAddInvestigation('')}
+      >
+        {addInvestigation ? (
+          <AddInvestigation
+            vehicleId={addInvestigation}
+            onClose={() => toggleAddInvestigation('')}
+          />
+        ) : (
+          <div />
+        )}
       </Drawer>
     </div>
   );

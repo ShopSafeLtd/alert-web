@@ -93,6 +93,9 @@ export interface IncidentCardData {
     fullName: string;
     businesses: Array<{ id: string; name: string }>;
   };
+  policeRef?: string | null;
+  totalValue?: number | null;
+  totalRecoveredValue?: number | null;
 }
 
 // Vehicle
@@ -149,6 +152,10 @@ export interface CrimeGroupCardData {
   alias?: string | null;
   reference?: number | null;
   totalOffenders?: number | null;
+  totalIncidents?: number | null;
+  totalValue?: number | null;
+  vehicles?: VehicleData[];
+  offenders?: OffenderData[];
 }
 
 // image

@@ -20,7 +20,7 @@ import {
 } from 'graphql/generated';
 import { notification } from 'antd';
 import { useStoreState } from 'state';
-import errorNotification from 'types/error_notification';
+import errorNotification from 'types/mutation_notifications/error_notification';
 
 import { useIntl } from 'react-intl';
 

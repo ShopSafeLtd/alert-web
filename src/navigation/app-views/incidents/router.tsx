@@ -10,6 +10,7 @@ const Incidents = (): JSX.Element => (
   <Routes>
     <Route index element={<IncidentFeed />} />
     <Route path="view/:id" element={<ViewIncident />} />
+    <Route path="add/:id" element={<AddIncident />} />
     <Route path="add" element={<AddIncident />} />
     <Route path="edit/:id" element={<EditIncident reviewed={false} />} />
     {/* <Route path="review/:id" element={<ReviewIncident />} /> */}

@@ -17,6 +17,7 @@ interface Props {
   onClose: () => void;
   update?: (value: CrimeGroupData) => void;
   crimeGroupIds: string[] | undefined;
+  takeAllSchemes?: boolean;
   getCrimeGroup?: (value: { crimeGroup: CrimeGroupData }) => void;
 }
 
@@ -36,10 +37,14 @@ const useLinkCrimeGroup = ({
   update,
   crimeGroupIds,
   getCrimeGroup,
+  takeAllSchemes,
 }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [selected, setSelected] = useState<string | undefined>();
   const schemeId = useStoreState((state) => state.scheme.id);
+  const userSchemeIds = useStoreState((state) => state.user.schemes).map(
+    (el) => el.scheme.id
+  );
   const pagination = useStoreState(
     (state) => state.data.crimeGroups.pagination
   );
@@ -60,7 +65,7 @@ const useLinkCrimeGroup = ({
         schemes: {
           some: {
             id: {
-              equals: schemeId,
+              in: takeAllSchemes ? userSchemeIds : [schemeId],
             },
           },
         },

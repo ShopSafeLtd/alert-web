@@ -1,6 +1,7 @@
 import { Modal, notification } from 'antd';
 import type {
   CreateDocumentMutation,
+  CreateInvestigationMutation,
   CrimeGroupQuery,
   CrimeGroupQueryVariables,
   DeleteDocumentMutation,
@@ -26,7 +27,7 @@ import { useEffect, useState } from 'react';
 import update from 'immutability-helper';
 import { useStoreState } from 'state';
 import type { OffenderData, VehicleData } from 'types/DataType';
-import errorNotification from 'types/error_notification';
+import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 import type { MutationUpdaterFn } from '@apollo/client';
 
@@ -87,6 +88,9 @@ interface Return {
   addDocument: boolean;
   updateDocumentList: MutationUpdaterFn<CreateDocumentMutation>;
   updateDeleteDocument: MutationUpdaterFn<DeleteDocumentMutation>;
+  toggleAddInvestigation: () => void;
+  addInvestigation: boolean;
+  updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
 }
 
 const useViewCrimeGroup = (crimeGroupId: string): Return => {
@@ -106,6 +110,7 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
   const [viewSuggestedOpen, setViewSuggestedOpen] = useState(false);
   const [editUpdateInput, setEditUpdateInput] = useState('');
   const [addDocument, setAddDocument] = useState(false);
+  const [addInvestigation, setAddInvestigation] = useState(false);
   const [editUpdate, setEditUpdate] = useState<{
     id: string;
     text: string;
@@ -719,10 +724,44 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
       variables,
     });
   };
+
+  // investigation
+  const updateInvestigationList: MutationUpdaterFn<
+    CreateInvestigationMutation
+  > = (store, { data: res }) => {
+    if (
+      res?.createInvestigation === null ||
+      res?.createInvestigation === undefined
+    )
+      return;
+    const existingData = store.readQuery<CrimeGroupQuery>({
+      query: CrimeGroupDocument,
+      variables,
+    });
+
+    if (!existingData?.crimeGroup) return;
+    store.writeQuery<CrimeGroupQuery>({
+      query: CrimeGroupDocument,
+      data: {
+        crimeGroup: {
+          ...existingData.crimeGroup,
+          investigations: [
+            ...existingData.crimeGroup.investigations,
+            res.createInvestigation,
+          ],
+        },
+        __typename: 'Query',
+      },
+      variables,
+    });
+  };
+
   const toggleAddDocument = () => {
     setAddDocument(() => !addDocument);
   };
-
+  const toggleAddInvestigation = () => {
+    setAddInvestigation(() => !addInvestigation);
+  };
   return {
     data: crimeGroupsData,
     loading:
@@ -768,6 +807,9 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
     addDocument,
     updateDocumentList,
     updateDeleteDocument,
+    addInvestigation,
+    toggleAddInvestigation,
+    updateInvestigationList,
   };
 };
 

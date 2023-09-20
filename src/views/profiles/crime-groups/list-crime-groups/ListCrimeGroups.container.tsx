@@ -20,6 +20,8 @@ const ListCrimeGroups = () => {
     setOrder,
     groups,
     groupsLoading,
+    addInvestigation,
+    toggleAddInvestigation,
   } = useListCrimeGroups();
 
   return (
@@ -40,6 +42,8 @@ const ListCrimeGroups = () => {
       setOrder={setOrder}
       groups={groups}
       groupsLoading={groupsLoading}
+      addInvestigation={addInvestigation}
+      toggleAddInvestigation={toggleAddInvestigation}
     />
   );
 };

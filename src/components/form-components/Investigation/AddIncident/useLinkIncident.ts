@@ -11,7 +11,7 @@ import {
 import { useStoreActions, useStoreState } from 'state';
 import { notification } from 'antd';
 import { useParams } from 'react-router';
-import errorNotification from 'types/error_notification';
+import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 
 interface Props {

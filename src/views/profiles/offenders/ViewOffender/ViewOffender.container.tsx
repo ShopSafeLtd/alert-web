@@ -90,8 +90,10 @@ const ViewOffender = (): JSX.Element => {
     toggleAddDocument,
     addDocument,
     updateDocumentList,
-
     updateDeleteDocument,
+    addInvestigation,
+    toggleAddInvestigation,
+    updateInvestigationList,
   } = useViewOffender(offenderId);
   const { onApprove, onReject, approving } = useApproveOffender({ offenderId });
   return (
@@ -183,6 +185,9 @@ const ViewOffender = (): JSX.Element => {
       onApprove={onApprove}
       onReject={onReject}
       approving={approving}
+      addInvestigation={addInvestigation}
+      toggleAddInvestigation={toggleAddInvestigation}
+      updateInvestigationList={updateInvestigationList}
     />
   );
 };

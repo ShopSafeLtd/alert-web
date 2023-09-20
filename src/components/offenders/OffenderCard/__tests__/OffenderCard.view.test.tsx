@@ -44,6 +44,8 @@ describe('Detail Officer View', () => {
         <OffenderCard
           offender={data}
           approvalRights={false}
+          toggleAddInvestigation={jest.fn()}
+          addInvestigation={false}
           deleteRights={false}
           menuRights={false}
           openLightbox={jest.fn()}

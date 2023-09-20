@@ -1,0 +1,11 @@
+fragment Todos on Todo {
+  id
+  name
+  description
+  dueDate
+  completed
+  assignedUsers {
+    id
+    fullName
+  }
+}

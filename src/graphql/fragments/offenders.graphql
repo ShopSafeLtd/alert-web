@@ -1,0 +1,14 @@
+fragment Offenders on Offender {
+  id
+  reference
+  name
+  gender
+  build
+  height
+  race
+  age
+  dateOfBirth
+  images {
+    ...Images
+  }
+}

@@ -1,5 +1,6 @@
-import type { FormInstance } from 'antd';
+import type { FormInstance, UploadFile, UploadProps } from 'antd';
 import {
+  Upload,
   Button,
   Col,
   Form,
@@ -14,6 +15,7 @@ import {
 import React from 'react';
 import { useIntl } from 'react-intl';
 import moment from 'moment';
+import { UploadOutlined } from '@ant-design/icons';
 import type { TodoQuery } from '../../../../graphql/generated';
 import type { CustomQuestion } from '../../../../types/DataType';
 import CustomQuestions from '../../../../views/incidents/AddIncident/components/IncidentCustom/CustomQuestion.view';
@@ -33,6 +35,8 @@ interface Props {
   loading: boolean;
   onClose: () => void;
   confirmText?: string;
+  documentList: UploadFile[];
+  documentUploadProps?: UploadProps;
 }
 
 const TodoView = ({
@@ -47,6 +51,8 @@ const TodoView = ({
   loading,
   onClose,
   confirmText,
+  documentList,
+  documentUploadProps,
 }: Props) => {
   const intl = useIntl();
   const questions = todo?.todo?.questions.map(({ question, id }) => {
@@ -197,6 +203,28 @@ const TodoView = ({
             </Row>
           </Col>
         </Row>
+        <Form.Item
+          name="documents"
+          label={intl.formatMessage({
+            defaultMessage: 'Evidence',
+            id: '6g7+6N',
+          })}
+        >
+          <Upload
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            {...documentUploadProps}
+            listType="picture"
+            style={{ display: 'flex' }}
+            fileList={documentList}
+          >
+            <Button icon={<UploadOutlined />}>
+              {intl.formatMessage({
+                defaultMessage: 'Upload Document',
+                id: 'Kc9MAV',
+              })}
+            </Button>
+          </Upload>
+        </Form.Item>
         <Divider />
         <Form.Item>
           <Row style={{ marginTop: 10 }} gutter={16} justify="end">

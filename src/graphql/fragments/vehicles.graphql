@@ -1,0 +1,11 @@
+fragment Vehicles on Vehicle {
+  id
+  reference
+  colour
+  model
+  make
+  registration
+  images {
+    ...Images
+  }
+}

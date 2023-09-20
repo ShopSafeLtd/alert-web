@@ -38,7 +38,7 @@ import type {
   VehicleData,
 } from 'types/DataType';
 import update from 'immutability-helper';
-import errorNotification from 'types/error_notification';
+import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 
 const { confirm } = Modal;
