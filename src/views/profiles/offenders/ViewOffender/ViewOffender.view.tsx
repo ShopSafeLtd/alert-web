@@ -4,6 +4,7 @@ import React from 'react';
 import type {
   AssociatedOffendersQuery,
   CreateDocumentMutation,
+  CreateInvestigationMutation,
   DeleteDocumentMutation,
   ViewOffenderQuery,
 } from 'graphql/generated';
@@ -105,6 +106,8 @@ import type { MutationUpdaterFn } from '@apollo/client';
 import AddVehicleSimple from 'components/form-components/Vehicle/AddVehicleSimple';
 import EditVehicleSimple from 'components/form-components/Vehicle/EditVehicleSimple';
 import CopyOffender from 'components/form-components/offender/CopyOffender';
+import InvestigationTable from 'components/tables/InvestigationTable';
+import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
 import useStyles from './ViewOffender.styles';
 import type { ViewAssociate } from './useViewOffender';
 import TranslateButton from '../../../../components/util-components/TranslateButton';
@@ -224,6 +227,9 @@ interface Props {
   onReject: () => void;
   onApprove: () => void;
   approving: boolean;
+  toggleAddInvestigation: () => void;
+  addInvestigation: boolean;
+  updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
 }
 
 const ViewOffender = ({
@@ -314,6 +320,9 @@ const ViewOffender = ({
   approving,
   onReject,
   onApprove,
+  addInvestigation,
+  toggleAddInvestigation,
+  updateInvestigationList,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const classes = useStyles();
@@ -652,7 +661,7 @@ const ViewOffender = ({
                       <Skeleton />
                     ) : (
                       <div>
-                        <Card>
+                        <Card loading={loading}>
                           <Row gutter={[8, 8]}>
                             <Col span={12}>
                               <Row gutter={10}>
@@ -833,6 +842,7 @@ const ViewOffender = ({
                                 />
                               ) : (
                                 <Card
+                                  loading={loading}
                                   style={{
                                     height: 'calc(100% - 20px)',
                                     display: 'flex',
@@ -854,7 +864,7 @@ const ViewOffender = ({
                         </Card>
                         <Row gutter={16}>
                           <Col span={24}>
-                            <Card>
+                            <Card loading={loading}>
                               <Title level={4} style={{ marginBottom: 10 }}>
                                 {intl.formatMessage({
                                   defaultMessage: 'Physical Description',
@@ -1032,7 +1042,7 @@ const ViewOffender = ({
                             </Card>
                           </Col>
                         </Row>
-                        <Card>
+                        <Card loading={loading}>
                           <Row style={{ marginBottom: 20 }} align="middle">
                             <Col>
                               <Title
@@ -1111,6 +1121,7 @@ const ViewOffender = ({
                               (associate) => (
                                 <Col key={associate.id}>
                                   <Card
+                                    loading={loading}
                                     // onClick={() => setAddRecentOffender(offender)}
                                     style={{ border: 0 }}
                                     bodyStyle={{
@@ -1209,7 +1220,7 @@ const ViewOffender = ({
                             )}
                           </Row>
                         </Card>
-                        <Card>
+                        <Card loading={loading}>
                           <Title level={4}>
                             {intl.formatMessage({
                               defaultMessage: 'Incidents',
@@ -1221,7 +1232,7 @@ const ViewOffender = ({
                             hasNavigation
                           />
                         </Card>
-                        <Card>
+                        <Card loading={loading}>
                           <Row
                             gutter={8}
                             align="middle"
@@ -1434,7 +1445,7 @@ const ViewOffender = ({
                           />
                         </Card>
                         {editRights && (
-                          <Card>
+                          <Card loading={loading}>
                             <Row
                               gutter={8}
                               align="middle"
@@ -1600,7 +1611,7 @@ const ViewOffender = ({
                             )}
                           </Card>
                         )}
-                        <Card>
+                        <Card loading={loading}>
                           <Row
                             gutter={8}
                             align="middle"
@@ -1693,7 +1704,7 @@ const ViewOffender = ({
                             />
                           )}
                         </Card>
-                        <Card>
+                        <Card loading={loading}>
                           <Title level={4}>
                             {intl.formatMessage({
                               defaultMessage: 'Crime Groups',
@@ -1719,7 +1730,7 @@ const ViewOffender = ({
                           )}
                         </Card>
 
-                        <Card style={{ marginTop: 20 }}>
+                        <Card loading={loading}>
                           <Row
                             gutter={8}
                             align="middle"
@@ -1773,6 +1784,57 @@ const ViewOffender = ({
                             />
                           )}
                         </Card>
+                        {editRights && (
+                          <Card loading={loading}>
+                            <Row
+                              gutter={8}
+                              align="middle"
+                              style={{ marginBottom: 10 }}
+                            >
+                              <Col flex={1}>
+                                <Title level={4}>
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Investigations',
+                                    id: 'juQ8mz',
+                                  })}
+                                </Title>
+                              </Col>
+
+                              <Col>
+                                <Button
+                                  size="small"
+                                  onClick={toggleAddInvestigation}
+                                  icon={
+                                    <FontAwesomeIcon
+                                      icon={faPlus}
+                                      style={{ marginRight: 5 }}
+                                    />
+                                  }
+                                >
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Add Investigation',
+                                    id: 'U5+v9Y',
+                                  })}
+                                </Button>
+                              </Col>
+                            </Row>
+                            {data?.offender?.investigations.length &&
+                            !loading ? (
+                              <InvestigationTable
+                                investigations={data?.offender?.investigations}
+                              />
+                            ) : (
+                              <Empty
+                                description={intl.formatMessage({
+                                  defaultMessage:
+                                    'No investigations for this offender',
+                                  id: 'uK+FKa',
+                                })}
+                                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                              />
+                            )}
+                          </Card>
+                        )}
                       </div>
                     )}
                   </div>
@@ -2448,6 +2510,26 @@ const ViewOffender = ({
             offenderId={data?.offender?.id || ''}
             onClose={toggleAddDocument}
             update={updateDocumentList}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      {/* investigation */}
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Add New Investigation',
+          id: 'QaKS9A',
+        })}
+        visible={addInvestigation}
+        width="500"
+        onClose={toggleAddInvestigation}
+      >
+        {addInvestigation ? (
+          <AddInvestigation
+            update={updateInvestigationList}
+            incidentId={data?.offender?.id || ''}
+            onClose={toggleAddInvestigation}
           />
         ) : (
           <div />

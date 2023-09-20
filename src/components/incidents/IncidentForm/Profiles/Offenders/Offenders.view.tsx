@@ -198,7 +198,7 @@ const Offenders = ({
           id: '1FbM4r',
         })}
         open={addExistingOpen}
-        width="800"
+        width="1000"
         onClose={toggleAddExistingOpen}
         zIndex={1001}
       >
@@ -219,7 +219,7 @@ const Offenders = ({
           id: 'E3wLhk',
         })}
         open={!!matchExistingOpen}
-        width="800"
+        width="1000"
         onClose={() => setMatchExistingOpen(null)}
         zIndex={1001}
       >

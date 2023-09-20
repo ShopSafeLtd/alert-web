@@ -24,234 +24,29 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
       }
     }
     subscribed
+    todos {
+      ...Todos
+    }
     vehicles {
-      id
-      make
-      model
-      colour
-      registration
-      updatedAt
-      totalCrimeGroups
-      totalOffenders
-      totalIncidents
-      reference
+      ...Vehicles
     }
-    updates(orderBy: { createdAt: desc }) {
-      id
-      text
-      type
-      createdAt
-      images {
-        id
-        url
-        optimised
-        optimisedPersisted
-        card
-        position
-        rotation
-      }
-      linkedCrimeGroups {
-        totalOffenders
-        totalIncidents
-        alias
-        id
-        reference
-        totalRecoveredValue
-        totalTheftSuccess
-        totalValue
-        updatedAt
-      }
-      linkedVehicles {
-        images {
-          id
-          url
-          optimised
-          optimisedPersisted
-          position
-          rotation
-        }
-        updatedAt
-        totalOffenders
-        registration
-        reference
-        model
-        make
-        id
-        colour
-      }
-      linkedIncidents {
-        id
-        subject
-        description
-        dayTime
-        images {
-          id
-          url
-          optimised
-          optimisedPersisted
-          position
-          rotation
-        }
-      }
-      linkedOffenders {
-        id
-        updatedAt
-        age
-        build
-        height
-        dateOfBirth
-        name
-        race
-        gender
-        images {
-          id
-          url
-          optimised
-          optimisedPersisted
-          position
-          rotation
-        }
-      }
-      createdBy {
-        origName
-        id
-        fullName
-        businesses {
-          id
-          name
-          fullName
-        }
-      }
-      replies {
-        id
-        text
-        type
-        createdAt
-        images {
-          id
-          url
-          optimisedPersisted
-          optimised
-          card
-          position
-          rotation
-        }
-        linkedCrimeGroups {
-          totalOffenders
-          totalIncidents
-          alias
-          id
-          reference
-          totalRecoveredValue
-          totalTheftSuccess
-          totalValue
-          updatedAt
-        }
-        linkedVehicles {
-          images {
-            id
-            url
-            optimisedPersisted
-            optimised
-            position
-            rotation
-          }
-          updatedAt
-          totalOffenders
-          registration
-          reference
-          model
-          make
-          id
-          colour
-        }
-        linkedIncidents {
-          id
-          subject
-          description
-          dayTime
-          images {
-            id
-            url
-            optimised
-            position
-            rotation
-          }
-        }
-        linkedOffenders {
-          id
-          updatedAt
-          age
-          build
-          height
-          dateOfBirth
-          name
-          race
-          gender
-          images {
-            id
-            url
-            optimised
-            optimisedPersisted
-            position
-            rotation
-          }
-        }
-        createdBy {
-          origName
-          id
-          fullName
-          businesses {
-            id
-            name
-            fullName
-          }
-        }
-      }
-    }
-
     offenders {
-      id
-      name
-      reference
-      totalIncidents
-      age
-      gender
-      race
-      build
-      height
-      dateOfBirth
-      images {
-        id
-        optimised
-        optimisedPersisted
-        position
-        rotation
-      }
+      ...Offenders
     }
     incidents {
-      id
-      policeRef
-      dayTime
-      createdBy {
-        organisation
-      }
-      reference
-      subject
-      date
-      location {
-        id
-        full
-        geoLat
-        geoLng
-      }
-      totalValue
-      totalRecoveredValue
+      ...Incidents
+    }
+    updates(orderBy: { createdAt: desc }) {
+      ...Updates
     }
     crimeGroups {
-      id
-      alias
-      reference
+      ...CrimeGroups
+      vehicles {
+        ...Vehicles
+      }
+      offenders {
+        ...Offenders
+      }
     }
     flows {
       updatedAt

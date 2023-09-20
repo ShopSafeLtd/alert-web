@@ -27,6 +27,8 @@ const ListVehicles = () => {
     setGallery,
     order,
     setOrder,
+    addInvestigation,
+    toggleAddInvestigation,
   } = useListVehicles();
 
   return (
@@ -54,6 +56,8 @@ const ListVehicles = () => {
       customGalleries={customGalleries}
       order={order}
       setOrder={setOrder}
+      addInvestigation={addInvestigation}
+      toggleAddInvestigation={toggleAddInvestigation}
     />
   );
 };

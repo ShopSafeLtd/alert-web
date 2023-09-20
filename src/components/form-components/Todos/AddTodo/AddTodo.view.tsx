@@ -1,6 +1,7 @@
 import React from 'react';
-import type { FormInstance } from 'antd';
+import type { FormInstance, UploadFile, UploadProps } from 'antd';
 import {
+  Upload,
   Button,
   Col,
   DatePicker,
@@ -16,6 +17,7 @@ import {
 import type { RangePickerProps } from 'antd/es/date-picker';
 import type { SelectOptions, CustomQuestion } from 'types/DataType';
 import { useIntl } from 'react-intl';
+import { UploadOutlined } from '@ant-design/icons';
 import type { FormData } from './useAddTodo';
 import CreateQuestionContainer from '../../createQuestion/CreateQuestion.container';
 import type { QuestionGroupOnSchemeQuery } from '../../../../graphql/generated';
@@ -44,6 +46,8 @@ interface Props {
   setAvailableUsers: (
     users: { id: string; name: string; timeTaken: number }[]
   ) => void;
+  documentList: UploadFile[];
+  documentUploadProps?: UploadProps;
 }
 
 const disabledDate: RangePickerProps['disabledDate'] = (current) =>
@@ -70,6 +74,8 @@ const AddTodo = ({
   setUsers,
   setAvailableUsers,
   availableUsers,
+  documentList,
+  documentUploadProps,
 }: Props): JSX.Element => {
   const intl = useIntl();
 
@@ -317,7 +323,28 @@ const AddTodo = ({
             </Row>
           </Col>
         </Row>
-
+        <Form.Item
+          name="documents"
+          label={intl.formatMessage({
+            defaultMessage: 'Evidence',
+            id: '6g7+6N',
+          })}
+        >
+          <Upload
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            {...documentUploadProps}
+            listType="picture"
+            style={{ display: 'flex' }}
+            fileList={documentList}
+          >
+            <Button icon={<UploadOutlined />}>
+              {intl.formatMessage({
+                defaultMessage: 'Upload Document',
+                id: 'Kc9MAV',
+              })}
+            </Button>
+          </Upload>
+        </Form.Item>
         <Form.Item>
           <Row style={{ marginTop: 30 }} gutter={16} justify="end">
             <Col>

@@ -1,0 +1,65 @@
+fragment Updates on Update {
+  id
+  text
+  type
+  createdAt
+  images {
+    ...Images
+  }
+  linkedCrimeGroups {
+    ...CrimeGroups
+  }
+  linkedVehicles {
+    ...Vehicles
+  }
+  linkedIncidents {
+    ...Incidents
+    ...Images
+  }
+  linkedOffenders {
+    ...Offenders
+  }
+  createdBy {
+    origName
+    id
+    fullName
+    businesses {
+      id
+      name
+      fullName
+    }
+  }
+  replies {
+    id
+    text
+    type
+    createdAt
+    images {
+      ...Images
+    }
+    linkedCrimeGroups {
+      ...CrimeGroups
+    }
+    linkedVehicles {
+      ...Vehicles
+    }
+    linkedIncidents {
+      ...Incidents
+      ...Images
+    }
+    linkedOffenders {
+      ...Offenders
+    }
+
+    createdBy {
+      origName
+      id
+      fullName
+      businesses {
+        id
+        name
+        fullName
+      }
+    }
+  }
+}

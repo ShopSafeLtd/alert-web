@@ -1,80 +1,94 @@
-mutation UpdateInvestigation($where: UniqueId!, $data: UpdateInvestigationInput!) {
-    updateInvestigation(where: $where, data: $data) {
-        id
-        description
-        name
-        createdBy {
-            id
-            fullName
-        }
-        vehicles {
-            id
-            make
-            model
-            colour
-            registration
-            updatedAt
-            totalCrimeGroups
-            totalOffenders
-            totalIncidents
-        }
-        offenders {
-            id
-            name
-            reference
-            totalIncidents
-        }
-        incidents {
-            id
-            policeRef
-            dayTime
-            createdBy {
-                organisation
-            }
-            reference
-            subject
-            date
-            location {
-                id
-
-            }
-            value
-            recoveredValue
-        }
-        crimeGroups {
-            id
-            alias
-            reference
-
-        }
-        flows {
-            name
-
-            description
-            edges{
-                id
-                type
-                markerEnd
-                source
-                sourceHandle
-                target
-                targetHandle
-            }
-            nodes{
-                id
-                type
-                data
-                height
-                width
-                position {
-                    x
-                    y
-                }
-                positionAbsolute {
-                    x
-                    y
-                }
-            }
-        }
+mutation UpdateInvestigation(
+  $where: UniqueId!
+  $data: UpdateInvestigationInput!
+) {
+  updateInvestigation(where: $where, data: $data) {
+    id
+    description
+    name
+    createdBy {
+      id
+      fullName
     }
+    vehicles {
+      id
+      make
+      model
+      colour
+      registration
+      updatedAt
+      totalCrimeGroups
+      totalOffenders
+      totalIncidents
+    }
+    offenders {
+      id
+      name
+      reference
+      totalIncidents
+      age
+      gender
+      race
+      build
+      height
+      dateOfBirth
+      images {
+        id
+        optimised
+        optimisedPersisted
+        position
+        rotation
+      }
+    }
+    incidents {
+      id
+      policeRef
+      dayTime
+      createdBy {
+        organisation
+      }
+      reference
+      subject
+      date
+      location {
+        id
+      }
+      value
+      recoveredValue
+    }
+    crimeGroups {
+      id
+      alias
+      reference
+    }
+    flows {
+      name
+
+      description
+      edges {
+        id
+        type
+        markerEnd
+        source
+        sourceHandle
+        target
+        targetHandle
+      }
+      nodes {
+        id
+        type
+        data
+        height
+        width
+        position {
+          x
+          y
+        }
+        positionAbsolute {
+          x
+          y
+        }
+      }
+    }
+  }
 }

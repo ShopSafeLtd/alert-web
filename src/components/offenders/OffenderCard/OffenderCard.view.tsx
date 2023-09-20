@@ -27,6 +27,7 @@ import {
   faLocationDot,
   faMarsAndVenus,
   faPeople,
+  faPlus,
   faTrash,
   faUserClock,
   faUserTag,
@@ -57,6 +58,7 @@ import EditOffenderFeed from 'components/form-components/offender/EditOffenderFe
 import FeedImageEditor from 'components/form-components/ImageEditor/FeedImageEditor.view';
 import type { EditFeedImage } from 'types/DataType';
 import { useStoreState } from 'state';
+import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
 
 const { Title, Text } = Typography;
 const { confirm } = Modal;
@@ -80,6 +82,8 @@ interface Props {
   setEditImageId: (id: string) => void;
   onEditImage: (value: EditFeedImage) => void;
   onNavigate: (id?: string | undefined, url?: string | undefined) => void;
+  toggleAddInvestigation: () => void;
+  addInvestigation: boolean;
 }
 
 const OffenderCard = ({
@@ -98,6 +102,8 @@ const OffenderCard = ({
   editImageId,
   setEditImageId,
   onEditImage,
+  addInvestigation,
+  toggleAddInvestigation,
 }: Props): JSX.Element => {
   const role = useStoreState((state) => state.user.role);
   const publicOffenderDOB =
@@ -195,6 +201,15 @@ const OffenderCard = ({
                       onOk: () => onDelete(offender?.id || ''),
                     }),
                   icon: <FontAwesomeIcon size="lg" icon={faTrash} />,
+                },
+                {
+                  key: 4,
+                  label: intl.formatMessage({
+                    defaultMessage: 'Add Investigation',
+                    id: 'U5+v9Y',
+                  }),
+                  onClick: () => toggleAddInvestigation(),
+                  icon: <FontAwesomeIcon icon={faPlus} />,
                 },
               ].filter((item) => item?.key !== 3 || deleteRights)}
             />
@@ -560,6 +575,25 @@ const OffenderCard = ({
           <EditOffenderFeed
             onClose={toggleEditOffenderFeed}
             offenderId={offender.id}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      {/* investigation */}
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Add New Investigation',
+          id: 'QaKS9A',
+        })}
+        visible={addInvestigation}
+        width="500"
+        onClose={toggleAddInvestigation}
+      >
+        {addInvestigation ? (
+          <AddInvestigation
+            offenderId={offender.id}
+            onClose={toggleAddInvestigation}
           />
         ) : (
           <div />

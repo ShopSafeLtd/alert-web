@@ -14,6 +14,12 @@ query Todo($where: TodoWhereUniqueInput!) {
       }
       answer
     }
+    evidence {
+      id
+      name
+      url
+      fileType
+    }
     timeTaken {
       user {
         id

@@ -1,8 +1,11 @@
 import React from 'react';
+import { useParams } from 'react-router';
 import View from './AddIncident.view';
 import useAddIncident from './useAddIncident';
 
 const AddIncident = (): JSX.Element => {
+  const investigationId = useParams().id || '';
+
   const {
     form,
     onSubmit,
@@ -22,7 +25,7 @@ const AddIncident = (): JSX.Element => {
     customQuestions,
     goodsMode,
     reportOnly,
-  } = useAddIncident();
+  } = useAddIncident({ investigationId });
 
   return (
     <div>

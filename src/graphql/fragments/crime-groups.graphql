@@ -1,0 +1,10 @@
+fragment CrimeGroups on CrimeGroup {
+  id
+  reference
+  alias
+  totalIncidents
+  totalOffenders
+  totalRecoveredValue
+  totalTheftSuccess
+  totalValue
+}

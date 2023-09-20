@@ -27,6 +27,8 @@ interface Return {
   setCreatedAtFilter: (value: DateType | undefined) => void;
   order: SortOrder;
   setOrder: (value: SortOrder) => void;
+  addInvestigation: string;
+  toggleAddInvestigation: (value: string) => void;
 }
 
 const useListCrimeGroups = (): Return => {
@@ -36,7 +38,7 @@ const useListCrimeGroups = (): Return => {
   const [sortFilter, setSortFilter] = useState(false);
   const [order, setOrder] = useState<SortOrder>(SortOrder.Desc);
   const [gallery, setGallery] = useState<string[]>([]);
-
+  const [addInvestigation, setAddInvestigation] = useState('');
   const [groupsFilter, setGroupsFilter] = useState<string[]>([]);
   const [createdAtFilter, setCreatedAtFilter] = useState<
     DateType | undefined
@@ -163,6 +165,8 @@ const useListCrimeGroups = (): Return => {
     setGallery,
     order,
     setOrder,
+    addInvestigation,
+    toggleAddInvestigation: setAddInvestigation,
   };
 };
 

@@ -135,7 +135,9 @@ export interface VehicleData {
   existing: boolean;
   edited: boolean;
 }
-
+interface Props {
+  investigationId?: string;
+}
 interface Return {
   addressLoading: boolean;
   adminRights: boolean;
@@ -162,7 +164,7 @@ interface Return {
   reportOnly: boolean;
 }
 
-const useAddIncident = (): Return => {
+const useAddIncident = ({ investigationId }: Props): Return => {
   const [form] = useForm<FormData>();
   const intl = useIntl();
   const userId = useStoreState((state) => state.user.id);
@@ -344,10 +346,12 @@ const useAddIncident = (): Return => {
         }),
         placement: 'bottomRight',
       });
-      if (restrictIncidentAccess && role === Role.User) {
-        navigate('/app/dashboard');
+      if (investigationId) {
+        navigate('/app/investigations/view/investigationId');
       } else if (reportOnly) {
         navigate('/app/incidents/add');
+      } else if (restrictIncidentAccess && role === Role.User) {
+        navigate('/app/dashboard');
       } else {
         navigate('/app/incidents');
       }
@@ -380,7 +384,6 @@ const useAddIncident = (): Return => {
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
-    console.log('data', data);
 
     const allOffendersConfirmed = !data.offenders
       ?.map((offender) => offender.confirmedInIncident)
@@ -593,6 +596,7 @@ const useAddIncident = (): Return => {
               : {
                   id: businesses[0]?.id,
                 },
+            investigationId: investigationId || null,
             items:
               data.goods &&
               data.goods

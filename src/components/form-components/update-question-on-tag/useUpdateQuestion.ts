@@ -7,7 +7,7 @@ import {
   useQuestionDetailsQuery,
   useUpdateQuestionOnTagMutation,
 } from '../../../graphql/generated';
-import errorNotification from '../../../types/error_notification';
+import errorNotification from '../../../types/mutation_notifications/error_notification';
 import type { TagQuestion } from './UpdateQuestion.container';
 
 interface Return {

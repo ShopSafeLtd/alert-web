@@ -132,7 +132,6 @@ const ListInvestigations = ({
             key: 'status',
             dataIndex: 'status',
             // width: 100,
-            // ???
             // title: intl.formatMessage({
             //   defaultMessage: 'Status',
             //   id: 'tzMNF3',
@@ -161,7 +160,7 @@ const ListInvestigations = ({
           />
         }
         visible={addInvestigation}
-        width="600"
+        width="500"
         onClose={toggleAddInvestigation}
       >
         {addInvestigation ? (

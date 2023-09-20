@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { useEffect, useState } from 'react';
 import type { CustomQuestion, SelectOptions } from 'types/DataType';
 import type { MutationUpdaterFn } from '@apollo/client';
@@ -13,8 +14,9 @@ import {
   useListSchemeUsersQuery,
   useQuestionGroupOnSchemeQuery,
 } from 'graphql/generated';
-import errorNotification from 'types/error_notification';
-import type { FormInstance } from 'antd';
+import errorNotification from 'types/mutation_notifications/error_notification';
+import type { FormInstance, UploadFile } from 'antd';
+import type { UploadProps } from 'antd/es/upload/interface';
 import { Form, notification } from 'antd';
 import { useStoreState } from 'state';
 import { useIntl } from 'react-intl';
@@ -35,6 +37,8 @@ export interface FormData {
 interface Props {
   onClose: () => void;
   incidentId?: string;
+  investigationId?: string;
+  businessId?: string;
   updateMutation?: MutationUpdaterFn<CreateTodoMutation>;
   initData?: {
     id: string;
@@ -65,12 +69,16 @@ interface Return {
   setAvailableUsers: (
     users: { id: string; name: string; timeTaken: number }[]
   ) => void;
+  documentList: UploadFile[];
+  documentUploadProps?: UploadProps;
 }
 
 const useAddTodo = ({
   updateMutation,
   onClose,
   incidentId,
+  investigationId,
+  businessId,
   initData,
 }: Props): Return => {
   const [form] = useForm<FormData>();
@@ -90,6 +98,7 @@ const useAddTodo = ({
   const [selectedQuestions, setSelectedQuestions] = useState<
     { id: string; question: string; type: AnswerType }[]
   >([]);
+  const [documentList, setDocumentList] = useState<UploadFile[]>([]);
 
   const { data: templatesData, loading: templatesLoading } =
     useQuestionGroupOnSchemeQuery({
@@ -308,7 +317,18 @@ const useAddTodo = ({
           dueDate: data.dueDate.toDate(),
           completed: false,
           incident: incidentId ? { connect: { id: incidentId } } : undefined,
+          investigation: investigationId
+            ? { connect: { id: investigationId } }
+            : undefined,
+          business: businessId ? { connect: { id: businessId } } : undefined,
           createdBy: { connect: { id: userId } },
+          documents:
+            documentList.map((file) => ({
+              url: file.url || '',
+              name: file.name || '',
+              fileType: file.type || '',
+              origFileName: file.fileName || '',
+            })) || [],
           schemes: {
             connect: [
               {
@@ -320,7 +340,28 @@ const useAddTodo = ({
       },
     });
   };
+  // evidence
+  const handleChange: UploadProps['onChange'] = (info) => {
+    let newFileList = [...info.fileList];
+    newFileList = newFileList.map((file) => {
+      if (file.response) {
+        // eslint-disable-next-line  @typescript-eslint/no-unsafe-assignment,no-param-reassign,
+        file.url = file.response[0].url;
 
+        // eslint-disable-next-line  @typescript-eslint/no-unsafe-assignment,no-param-reassign,
+        file.fileName = file.response[0].blobName;
+      }
+      return file;
+    });
+
+    setDocumentList(newFileList);
+  };
+
+  const documentUploadProps: UploadProps = {
+    action: import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT,
+    onChange: handleChange,
+    multiple: true,
+  };
   return {
     onSubmit,
     saving,
@@ -344,6 +385,8 @@ const useAddTodo = ({
     setUsers,
     users,
     availableUsers,
+    documentList,
+    documentUploadProps,
   };
 };
 export default useAddTodo;

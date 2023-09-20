@@ -266,7 +266,7 @@ const AssignImageOffender = ({
             defaultMessage: 'Add Existing Offenders',
             id: '1FbM4r',
           })}
-          width="800"
+          width="1000"
           zIndex={1001}
         >
           {addExistingOffender && (

@@ -50,6 +50,9 @@ const ViewCrimeGroup = () => {
     addDocument,
     updateDocumentList,
     updateDeleteDocument,
+    addInvestigation,
+    toggleAddInvestigation,
+    updateInvestigationList,
   } = useViewCrimeGroup(crimeGroupId);
 
   return (
@@ -98,6 +101,9 @@ const ViewCrimeGroup = () => {
       addDocument={addDocument}
       updateDocumentList={updateDocumentList}
       updateDeleteDocument={updateDeleteDocument}
+      addInvestigation={addInvestigation}
+      toggleAddInvestigation={toggleAddInvestigation}
+      updateInvestigationList={updateInvestigationList}
     />
   );
 };

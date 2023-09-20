@@ -6,13 +6,12 @@ import type {
   GoodsMode,
   ImageUpdateWithWhereUniqueWithoutIncidentInput,
   UpdateIncidentGoodsMutation,
-  UpdateIncidentOffendersMutation,
-  UpdateIncidentVehiclesMutation,
   ViewIncidentQuery,
   ViewIncidentQueryVariables,
   LanguageCode,
   QuestionGroupOnSchemeQuery,
   UpdateTaskMutation,
+  CreateInvestigationMutation,
 } from 'graphql/generated';
 import {
   Role,
@@ -41,7 +40,7 @@ import update from 'immutability-helper';
 import { useStoreState } from 'state';
 import { Modal, notification } from 'antd';
 import { useIntl } from 'react-intl';
-import errorNotification from 'types/error_notification';
+
 import type {
   EditFeedImage,
   GoodsData,
@@ -54,6 +53,8 @@ import {
   ProfileUpdatedType,
 } from 'types/enums/profile-update-type';
 import type { MutationUpdaterFn } from '@apollo/client';
+import errorNotification from 'types/mutation_notifications/error_notification';
+import successNotification from 'types/mutation_notifications/success_notification';
 
 const { confirm } = Modal;
 
@@ -169,6 +170,9 @@ interface Return {
   completeTodoVisible: string | null;
   setCompleteTodoVisible: (value: string | null) => void;
   updateTodo: MutationUpdaterFn<UpdateTaskMutation>;
+  toggleAddInvestigation: () => void;
+  addInvestigation: boolean;
+  updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
 }
 
 const useViewIncident = (incidentId: string): Return => {
@@ -188,6 +192,7 @@ const useViewIncident = (incidentId: string): Return => {
   const [optionRowShow, setOptionRowShow] = useState(false);
   const [addTodo, setAddTodo] = useState(false);
   const [addDocument, setAddDocument] = useState(false);
+  const [addInvestigation, setAddInvestigation] = useState(false);
 
   const [editUpdate, setEditUpdate] = useState<{
     id: string;
@@ -261,27 +266,6 @@ const useViewIncident = (incidentId: string): Return => {
       );
     },
   });
-  const getNotificationContent = (
-    title: ProfileUpdatedModel,
-    type: ProfileUpdatedType
-  ) =>
-    notification.success({
-      message: intl.formatMessage(
-        {
-          defaultMessage: 'Successfully {type}!',
-          id: 'cAM3G8',
-        },
-        { type }
-      ),
-      description: intl.formatMessage(
-        {
-          defaultMessage: 'The {title} of the incident have been {type}!',
-          id: 'B5KlHg',
-        },
-        { title, type: type.toLocaleLowerCase() }
-      ),
-      placement: 'bottomRight',
-    });
 
   const { data: templatesData, loading: templatesLoading } =
     useQuestionGroupOnSchemeQuery({
@@ -431,8 +415,9 @@ const useViewIncident = (incidentId: string): Return => {
         },
       },
       onCompleted: () => {
-        getNotificationContent(
+        successNotification(
           ProfileUpdatedModel.Images,
+          ProfileUpdatedModel.Incident,
           ProfileUpdatedType.updated
         );
       },
@@ -482,12 +467,12 @@ const useViewIncident = (incidentId: string): Return => {
           },
         },
         onCompleted: () => {
-          getNotificationContent(
+          successNotification(
             ProfileUpdatedModel.Image,
+            ProfileUpdatedModel.Incident,
             ProfileUpdatedType.updated
           );
         },
-        // update: updateImageList,
       }).finally(() => {
         setEditImageData(null);
         setSaving(false);
@@ -504,8 +489,9 @@ const useViewIncident = (incidentId: string): Return => {
         },
       },
       onCompleted: () => {
-        getNotificationContent(
+        successNotification(
           ProfileUpdatedModel.Image,
+          ProfileUpdatedModel.Incident,
           ProfileUpdatedType.deleted
         );
       },
@@ -540,34 +526,7 @@ const useViewIncident = (incidentId: string): Return => {
       errorNotification();
     },
   });
-  const updateVehicleList: MutationUpdaterFn<UpdateIncidentVehiclesMutation> = (
-    store,
-    { data: res }
-  ) => {
-    if (res?.updateIncident === null || res?.updateIncident === undefined)
-      return;
 
-    const existingData = store.readQuery<ViewIncidentQuery>({
-      query: ViewIncidentDocument,
-      variables,
-    });
-
-    if (!existingData?.incident) return;
-    store.writeQuery<ViewIncidentQuery>({
-      query: ViewIncidentDocument,
-      data: {
-        incident: {
-          ...existingData.incident,
-          vehicles: [
-            ...existingData.incident.vehicles,
-            ...res.updateIncident.vehicles,
-          ],
-        },
-        __typename: 'Query',
-      },
-      variables,
-    });
-  };
   const [updateVehicle] = useUpdateSimpleVehicleMutation({
     onError: () => {
       errorNotification();
@@ -654,8 +613,9 @@ const useViewIncident = (incidentId: string): Return => {
           },
         },
         onCompleted: () => {
-          getNotificationContent(
+          successNotification(
             ProfileUpdatedModel.Vehicle,
+            ProfileUpdatedModel.Incident,
             ProfileUpdatedType.updated
           );
         },
@@ -730,8 +690,9 @@ const useViewIncident = (incidentId: string): Return => {
           },
         },
         onCompleted: () => {
-          getNotificationContent(
+          successNotification(
             ProfileUpdatedModel.Vehicle,
+            ProfileUpdatedModel.Incident,
             ProfileUpdatedType.added
           );
         },
@@ -752,12 +713,37 @@ const useViewIncident = (incidentId: string): Return => {
           },
         },
         onCompleted: () => {
-          getNotificationContent(
+          successNotification(
             ProfileUpdatedModel.Vehicle,
+            ProfileUpdatedModel.Incident,
             ProfileUpdatedType.added
           );
         },
-        update: updateVehicleList,
+        update: (store, { data: res }) => {
+          if (res?.updateIncident === null || res?.updateIncident === undefined)
+            return;
+
+          const existingData = store.readQuery<ViewIncidentQuery>({
+            query: ViewIncidentDocument,
+            variables,
+          });
+
+          if (!existingData?.incident) return;
+          store.writeQuery<ViewIncidentQuery>({
+            query: ViewIncidentDocument,
+            data: {
+              incident: {
+                ...existingData.incident,
+                vehicles: [
+                  ...existingData.incident.vehicles,
+                  ...res.updateIncident.vehicles,
+                ],
+              },
+              __typename: 'Query',
+            },
+            variables,
+          });
+        },
       }).finally(() => {
         setAddExistingVehicle(false);
         setSaving(false);
@@ -772,8 +758,9 @@ const useViewIncident = (incidentId: string): Return => {
           vehicles: { disconnect: [{ id: value }] },
         },
         onCompleted: () => {
-          getNotificationContent(
+          successNotification(
             ProfileUpdatedModel.Vehicle,
+            ProfileUpdatedModel.Incident,
             ProfileUpdatedType.deleted
           );
         },
@@ -810,33 +797,7 @@ const useViewIncident = (incidentId: string): Return => {
       errorNotification();
     },
   });
-  const updateOffenderList: MutationUpdaterFn<
-    UpdateIncidentOffendersMutation
-  > = (store, { data: res }) => {
-    if (res?.updateIncident === null || res?.updateIncident === undefined)
-      return;
 
-    const existingData = store.readQuery<ViewIncidentQuery>({
-      query: ViewIncidentDocument,
-      variables,
-    });
-
-    if (!existingData?.incident) return;
-    store.writeQuery<ViewIncidentQuery>({
-      query: ViewIncidentDocument,
-      data: {
-        incident: {
-          ...existingData.incident,
-          offenders: [
-            ...existingData.incident.offenders,
-            ...res.updateIncident.offenders,
-          ],
-        },
-        __typename: 'Query',
-      },
-      variables,
-    });
-  };
   const [updateOffender] = useUpdateSimpleOffenderMutation({
     onError: () => {
       errorNotification();
@@ -935,8 +896,9 @@ const useViewIncident = (incidentId: string): Return => {
           },
         },
         onCompleted: () => {
-          getNotificationContent(
+          successNotification(
             ProfileUpdatedModel.Offender,
+            ProfileUpdatedModel.Incident,
             ProfileUpdatedType.updated
           );
         },
@@ -949,8 +911,9 @@ const useViewIncident = (incidentId: string): Return => {
   };
   const [createOffender] = useCreateSimpleOffenderMutation({
     onCompleted: () => {
-      getNotificationContent(
+      successNotification(
         ProfileUpdatedModel.Offender,
+        ProfileUpdatedModel.Incident,
         ProfileUpdatedType.added
       );
     },
@@ -1050,12 +1013,37 @@ const useViewIncident = (incidentId: string): Return => {
           },
         },
         onCompleted: () => {
-          getNotificationContent(
+          successNotification(
             ProfileUpdatedModel.Offender,
+            ProfileUpdatedModel.Incident,
             ProfileUpdatedType.added
           );
         },
-        update: updateOffenderList,
+        update: (store, { data: res }) => {
+          if (res?.updateIncident === null || res?.updateIncident === undefined)
+            return;
+
+          const existingData = store.readQuery<ViewIncidentQuery>({
+            query: ViewIncidentDocument,
+            variables,
+          });
+
+          if (!existingData?.incident) return;
+          store.writeQuery<ViewIncidentQuery>({
+            query: ViewIncidentDocument,
+            data: {
+              incident: {
+                ...existingData.incident,
+                offenders: [
+                  ...existingData.incident.offenders,
+                  ...res.updateIncident.offenders,
+                ],
+              },
+              __typename: 'Query',
+            },
+            variables,
+          });
+        },
       }).finally(() => {
         setAddExistingOffender(false);
         setSaving(false);
@@ -1070,8 +1058,9 @@ const useViewIncident = (incidentId: string): Return => {
           offenders: { disconnect: [{ id: value }] },
         },
         onCompleted: () => {
-          getNotificationContent(
+          successNotification(
             ProfileUpdatedModel.Offender,
+            ProfileUpdatedModel.Incident,
             ProfileUpdatedType.added
           );
         },
@@ -1162,8 +1151,9 @@ const useViewIncident = (incidentId: string): Return => {
           },
         },
         onCompleted: () => {
-          getNotificationContent(
+          successNotification(
             ProfileUpdatedModel.Incident_Item,
+            ProfileUpdatedModel.Incident,
             ProfileUpdatedType.updated
           );
         },
@@ -1195,8 +1185,9 @@ const useViewIncident = (incidentId: string): Return => {
           },
         },
         onCompleted: () => {
-          getNotificationContent(
+          successNotification(
             ProfileUpdatedModel.Incident_Item,
+            ProfileUpdatedModel.Incident,
             ProfileUpdatedType.added
           );
         },
@@ -1227,8 +1218,9 @@ const useViewIncident = (incidentId: string): Return => {
           setSaving(false);
         },
         onCompleted: () => {
-          getNotificationContent(
+          successNotification(
             ProfileUpdatedModel.Incident_Item,
+            ProfileUpdatedModel.Incident,
             ProfileUpdatedType.deleted
           );
           setSaving(false);
@@ -1278,6 +1270,43 @@ const useViewIncident = (incidentId: string): Return => {
           ...existingData.incident,
           todos: [...existingData.incident.todos, res.createTodo],
         },
+        __typename: 'Query',
+      },
+      variables,
+    });
+  };
+
+  const updateTodo: MutationUpdaterFn<UpdateTaskMutation> = (
+    store,
+    { data: res }
+  ) => {
+    if (res === null || res === undefined) return;
+    if (res.updateTodo === null || res.updateTodo === undefined) return;
+    // get existing group list data from Apollo store
+    const existingData = store.readQuery<
+      ViewIncidentQuery,
+      ViewIncidentQueryVariables
+    >({
+      query: ViewIncidentDocument,
+      variables,
+    });
+
+    if (existingData === null) return;
+    if (existingData?.incident?.todos === undefined) return;
+
+    // write the new data to the Apollo store
+    store.writeQuery<ViewIncidentQuery, ViewIncidentQueryVariables>({
+      query: ViewIncidentDocument,
+      data: {
+        incident: update<ViewIncidentQuery['incident']>(existingData.incident, {
+          todos: {
+            [existingData.incident.todos.findIndex(
+              ({ id }) => id === res.updateTodo?.id
+            )]: {
+              $set: res.updateTodo,
+            },
+          },
+        }),
         __typename: 'Query',
       },
       variables,
@@ -1335,6 +1364,38 @@ const useViewIncident = (incidentId: string): Return => {
       variables,
     });
   };
+
+  // investigation
+  const updateInvestigationList: MutationUpdaterFn<
+    CreateInvestigationMutation
+  > = (store, { data: res }) => {
+    if (
+      res?.createInvestigation === null ||
+      res?.createInvestigation === undefined
+    )
+      return;
+    const existingData = store.readQuery<ViewIncidentQuery>({
+      query: ViewIncidentDocument,
+      variables,
+    });
+
+    if (!existingData?.incident) return;
+    store.writeQuery<ViewIncidentQuery>({
+      query: ViewIncidentDocument,
+      data: {
+        incident: {
+          ...existingData.incident,
+          investigations: [
+            ...existingData.incident.investigations,
+            res.createInvestigation,
+          ],
+        },
+        __typename: 'Query',
+      },
+      variables,
+    });
+  };
+
   const [subscribeToIncident] = useSubscribeToIncidentMutation();
   const [unsubscribeFromIncident] = useUnsubscribeFromIncidentMutation();
 
@@ -1588,6 +1649,9 @@ const useViewIncident = (incidentId: string): Return => {
   const toggleAddDocument = () => {
     setAddDocument(() => !addDocument);
   };
+  const toggleAddInvestigation = () => {
+    setAddInvestigation(() => !addInvestigation);
+  };
 
   const [isTranslated, setIsTranslated] = useState<string | null>(null);
   const currentLanguage = useStoreState((state) => state.theme.locale);
@@ -1614,44 +1678,6 @@ const useViewIncident = (incidentId: string): Return => {
         data?.incident?.description ||
         ''
     );
-  };
-
-  const updateTodo: MutationUpdaterFn<UpdateTaskMutation> = (
-    store,
-    { data: res }
-  ) => {
-    if (res === null || res === undefined) return;
-    if (res.updateTodoDefault === null || res.updateTodoDefault === undefined)
-      return;
-    // get existing group list data from Apollo store
-    const existingData = store.readQuery<
-      ViewIncidentQuery,
-      ViewIncidentQueryVariables
-    >({
-      query: ViewIncidentDocument,
-      variables,
-    });
-
-    if (existingData === null) return;
-    if (existingData?.incident?.todos === undefined) return;
-
-    // write the new data to the Apollo store
-    store.writeQuery<ViewIncidentQuery, ViewIncidentQueryVariables>({
-      query: ViewIncidentDocument,
-      data: {
-        incident: update<ViewIncidentQuery['incident']>(existingData.incident, {
-          todos: {
-            [existingData.incident.todos.findIndex(
-              ({ id }) => id === res.updateTodoDefault?.id
-            )]: {
-              $set: res.updateTodoDefault,
-            },
-          },
-        }),
-        __typename: 'Query',
-      },
-      variables,
-    });
   };
 
   return {
@@ -1745,6 +1771,9 @@ const useViewIncident = (incidentId: string): Return => {
     completeTodoVisible,
     viewTodoVisible,
     updateTodo,
+    addInvestigation,
+    toggleAddInvestigation,
+    updateInvestigationList,
   };
 };
 

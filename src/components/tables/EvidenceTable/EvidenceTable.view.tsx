@@ -14,7 +14,7 @@ import { useDeleteDocumentMutation } from 'graphql/generated';
 import { useIntl } from 'react-intl';
 import { faFileArrowDown, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import errorNotification from 'types/error_notification';
+import errorNotification from 'types/mutation_notifications/error_notification';
 import type { ProfileUpdatedModel } from 'types/enums/profile-update-type';
 import type { MutationUpdaterFn } from '@apollo/client';
 
@@ -29,7 +29,8 @@ interface Props {
         name?: string;
         url?: string;
         fileType?: FileType | null | undefined;
-      }[];
+      }[]
+    | undefined;
   saving?: boolean;
   title: ProfileUpdatedModel;
   deleteRights: boolean;
@@ -174,11 +175,13 @@ const EvidenceTable = ({
           ),
         },
       ]}
-      dataSource={evidence.map((e) => ({
-        key: e.id,
-        fileUrl: e.url,
-        name: e.name || 'File',
-      }))}
+      dataSource={
+        evidence?.map((e) => ({
+          key: e.id,
+          fileUrl: e.url,
+          name: e.name || 'File',
+        })) || []
+      }
     />
   );
 };

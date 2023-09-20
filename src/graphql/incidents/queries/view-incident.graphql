@@ -29,12 +29,6 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
       }
       type
     }
-    evidence {
-      id
-      name
-      url
-      fileType
-    }
     scheme {
       mg11Available
       restrictIncidentAccess
@@ -52,7 +46,6 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
       id
       name
     }
-
     incidentItems {
       id
       name
@@ -70,272 +63,37 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
       id
       name
     }
-    createdBy {
-      id
-      fullName
-      businesses {
-        id
-        name
-      }
-    }
-    images {
-      id
-      url
-      optimised
-      position
-      rotation
-      primary
-      policeImage
-    }
+
     groups {
       id
       name
     }
+    createdBy {
+      ...CreatedBy
+    }
+    images {
+      ...Images
+    }
     crimeGroups {
-      id
-      reference
-      alias
-      totalIncidents
-      totalOffenders
-      totalRecoveredValue
-      totalTheftSuccess
-      totalValue
+      ...CrimeGroups
     }
     vehicles {
-      id
-      reference
-      colour
-      model
-      make
-      registration
-      images {
-        id
-        url
-        position
-        rotation
-        optimised
-        primary
-        policeImage
-      }
+      ...Vehicles
     }
     todos {
-      id
-      name
-      description
-      dueDate
-      completed
-      assignedUsers {
-        id
-        fullName
-      }
+      ...Todos
     }
-
     offenders {
-      id
-      reference
-      age
-      build
-      height
-      dateOfBirth
-      dateSource
-      gender
-      hair
-      name
-      peculiarities
-      race
-      approved
-      uploaded
-      active
-      images {
-        id
-        url
-        optimised
-        position
-        rotation
-        primary
-        policeImage
-        card
-      }
+      ...Offenders
     }
-    updates(orderBy: { createdAt: asc }) {
-      id
-      text
-      type
-      createdAt
-      images {
-        id
-        url
-        optimised
-        position
-        rotation
-        card
-      }
-      linkedCrimeGroups {
-        totalOffenders
-        totalIncidents
-        alias
-        id
-        reference
-        totalRecoveredValue
-        totalTheftSuccess
-        totalValue
-        updatedAt
-      }
-      linkedVehicles {
-        images {
-          id
-          url
-          position
-          rotation
-          optimised
-        }
-        updatedAt
-        totalOffenders
-        registration
-        reference
-        model
-        make
-        id
-        colour
-        images {
-          id
-          url
-          optimised
-          position
-          rotation
-        }
-      }
-      linkedIncidents {
-        id
-        subject
-        description
-        dayTime
-        images {
-          id
-          url
-          optimised
-          position
-          rotation
-        }
-      }
-      linkedOffenders {
-        id
-        updatedAt
-        age
-        build
-        height
-        dateOfBirth
-        name
-        race
-        gender
-        images {
-          id
-          url
-          optimised
-          position
-          rotation
-        }
-      }
-      createdBy {
-        origName
-        id
-        fullName
-        businesses {
-          id
-          name
-          fullName
-        }
-      }
-      replies {
-        id
-        text
-        type
-        createdAt
-        images {
-          id
-          url
-          optimised
-          position
-          rotation
-          card
-        }
-        linkedCrimeGroups {
-          totalOffenders
-          totalIncidents
-          alias
-          id
-          reference
-          totalRecoveredValue
-          totalTheftSuccess
-          totalValue
-          updatedAt
-        }
-        linkedVehicles {
-          images {
-            id
-            url
-            optimised
-            position
-            rotation
-          }
-          updatedAt
-          totalOffenders
-          registration
-          reference
-          model
-          make
-          id
-          colour
-          images {
-            id
-            url
-            optimised
-            position
-            rotation
-          }
-        }
-        linkedIncidents {
-          id
-          subject
-          description
-          dayTime
-          images {
-            id
-            url
-            optimised
-            position
-            rotation
-          }
-        }
-        linkedOffenders {
-          id
-          updatedAt
-          age
-          build
-          height
-          dateOfBirth
-          name
-          race
-          gender
-          images {
-            id
-            url
-            optimised
-            position
-            rotation
-          }
-        }
-        createdBy {
-          origName
-          id
-          fullName
-          businesses {
-            id
-            name
-            fullName
-          }
-        }
-      }
+    evidence {
+      ...Documents
+    }
+    investigations {
+      ...Investigations
+    }
+    updates(orderBy: { createdAt: desc }) {
+      ...Updates
     }
     location {
       geoLat

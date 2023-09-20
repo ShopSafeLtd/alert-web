@@ -19,7 +19,7 @@ import { useNavigate } from 'react-router-dom';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { notification } from 'antd';
 import type { DateType, PaginationModel } from 'types/DataType';
-import errorNotification from 'types/error_notification';
+import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 
 interface Return {

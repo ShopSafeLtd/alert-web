@@ -150,7 +150,7 @@ const OffenderTable = ({
           width: 100,
           render: (_, record) => (
             <Row gutter={8}>
-              {editRights && (
+              {editRights && setEditOffenderData && (
                 <Col>
                   <Tooltip
                     title={intl.formatMessage({
@@ -162,15 +162,14 @@ const OffenderTable = ({
                       size="small"
                       disabled={saving}
                       onClick={() => {
-                        if (setEditOffenderData)
-                          setEditOffenderData(record.offender);
+                        setEditOffenderData(record.offender);
                       }}
                       icon={<FontAwesomeIcon icon={faPenToSquare} />}
                     />
                   </Tooltip>
                 </Col>
               )}
-              {deleteRights && (
+              {deleteRights && onDeleteOffender && (
                 <Col>
                   <Tooltip
                     title={intl.formatMessage({
@@ -185,7 +184,7 @@ const OffenderTable = ({
                         id: 'ttuPSC',
                       })}
                       onConfirm={() => {
-                        if (onDeleteOffender) onDeleteOffender(record.key);
+                        onDeleteOffender(record.key);
                       }}
                       okText={intl.formatMessage({
                         defaultMessage: 'Yes',
@@ -210,26 +209,28 @@ const OffenderTable = ({
           ),
         },
       ]}
-      dataSource={offenders.map((offender) => ({
-        key: offender.id,
-        reference: offender.reference,
-        name: offender.name,
-        gender:
-          getOffenderGender(offender.gender) === 'Unknown'
-            ? ''
-            : getOffenderGender(offender.gender),
-        ethnicity:
-          getOffenderRace(offender.race, true) === 'Unknown'
-            ? ''
-            : getOffenderRace(offender.race, true),
-        age: publicOffenderDOB ? getAgeValue(offender) : '',
-        build:
-          getOffenderBuild(offender.build) === 'Unknown'
-            ? ''
-            : getOffenderBuild(offender.build),
-        images: offender.images,
-        offender,
-      }))}
+      dataSource={
+        offenders?.map((offender) => ({
+          key: offender.id,
+          reference: offender.reference,
+          name: offender.name,
+          gender:
+            getOffenderGender(offender.gender) === 'Unknown'
+              ? ''
+              : getOffenderGender(offender.gender),
+          ethnicity:
+            getOffenderRace(offender.race, true) === 'Unknown'
+              ? ''
+              : getOffenderRace(offender.race, true),
+          age: publicOffenderDOB ? getAgeValue(offender) : '',
+          build:
+            getOffenderBuild(offender.build) === 'Unknown'
+              ? ''
+              : getOffenderBuild(offender.build),
+          images: offender.images,
+          offender,
+        })) || []
+      }
       pagination={{
         hideOnSinglePage: true,
         pageSize: 5,

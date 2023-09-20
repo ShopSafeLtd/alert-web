@@ -5,6 +5,41 @@ query Business($where: BusinessWhereUniqueInput!) {
     fullName
     publicName
     demId
+    incidents {
+      id
+      reference
+      dayTime
+      date
+      crimeTypes {
+        id
+        name
+      }
+      createdBy {
+        id
+        businesses {
+          id
+          name
+          fullName
+        }
+      }
+      location {
+        id
+        full
+        geoLat
+        geoLng
+      }
+    }
+    todos {
+      id
+      name
+      description
+      dueDate
+      completed
+      assignedUsers {
+        id
+        fullName
+      }
+    }
     parent {
       id
       name

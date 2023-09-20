@@ -12,7 +12,7 @@ import {
 import { notification } from 'antd';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { useIntl } from 'react-intl';
-import errorNotification from 'types/error_notification';
+import errorNotification from 'types/mutation_notifications/error_notification';
 import { useState } from 'react';
 import type { EditFeedImage } from 'types/DataType';
 
@@ -37,6 +37,8 @@ interface Return {
   editImageId: string;
   setEditImageId: (id: string) => void;
   onEditImage: (value: EditFeedImage) => void;
+  toggleAddInvestigation: () => void;
+  addInvestigation: boolean;
 }
 const useIncidentCard = ({ incident, update }: Props): Return => {
   // const navigate = useNavigate();
@@ -45,6 +47,7 @@ const useIncidentCard = ({ incident, update }: Props): Return => {
   const userId = useStoreState((state) => state.user.id);
   const [editIncidentFeed, setEditIncidentFeed] = useState(false);
   const [editImage, setEditImage] = useState(false);
+  const [addInvestigation, setAddInvestigation] = useState(false);
   const [editImageId, setEditImageId] = useState<string>(
     incident?.images[0]?.id || ''
   );
@@ -149,6 +152,9 @@ const useIncidentCard = ({ incident, update }: Props): Return => {
   const toggleEditImage = () => {
     setEditImage(!editImage);
   };
+  const toggleAddInvestigation = () => {
+    setAddInvestigation(() => !addInvestigation);
+  };
   return {
     approvalRights,
     menuRights,
@@ -162,6 +168,8 @@ const useIncidentCard = ({ incident, update }: Props): Return => {
     editImageId,
     setEditImageId,
     onEditImage,
+    addInvestigation,
+    toggleAddInvestigation,
   };
 };
 
