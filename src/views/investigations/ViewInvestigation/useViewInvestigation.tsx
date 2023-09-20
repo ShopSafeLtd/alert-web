@@ -6,18 +6,18 @@ import type {
   ViewInvestigationQueryVariables,
 } from 'graphql/generated';
 import {
-  useUpdateCrimeGroupMutation,
   useCreateCrimeGroupMutation,
   useCreateSimpleOffenderMutation,
   useCreateSimpleVehicleMutation,
-  useUpdateSimpleOffenderMutation,
-  useUpdateSimpleVehicleMutation,
-  ViewInvestigationDocument,
   useQuestionGroupOnSchemeQuery,
   useSubscribeToInvestigationMutation,
   useUnsubscribeToInvestigationMutation,
+  useUpdateCrimeGroupMutation,
   useUpdateInvestigationMutation,
+  useUpdateSimpleOffenderMutation,
+  useUpdateSimpleVehicleMutation,
   useViewInvestigationQuery,
+  ViewInvestigationDocument,
 } from 'graphql/generated';
 import { useState } from 'react';
 import errorNotification from 'types/mutation_notifications/error_notification';
@@ -626,7 +626,6 @@ const useViewInvestigation = (investigationId: string): Return => {
         data: {
           investigation: {
             ...existingData.investigation,
-            // @ts-expect-error TODO fix this date issue Wait to check
             vehicles: update(existingData.investigation.vehicles, {
               [index]: {
                 $set: { ...res.updateVehicle },
@@ -723,9 +722,7 @@ const useViewInvestigation = (investigationId: string): Return => {
           investigation: {
             ...existingData.investigation,
             vehicles: [
-              // @ts-expect-error TODO fix this date issue Wait to check
               ...existingData.investigation.vehicles,
-              // @ts-expect-error TODO fix this date issue Wait to check
               res.createVehicle,
             ],
           },

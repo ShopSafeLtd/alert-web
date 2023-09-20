@@ -10156,6 +10156,25 @@ export enum CrimeType {
   Violence = 'VIOLENCE',
 }
 
+export type CsvImport = {
+  __typename?: 'CsvImport';
+  createdAt: Scalars['DateTime'];
+  errors: Array<Scalars['Json']>;
+  file: Scalars['String'];
+  headersToModel: Array<Scalars['Json']>;
+  id: Scalars['String'];
+  imported: Scalars['Int'];
+  percentage: Scalars['Int'];
+  scheme: Scheme;
+  schemeId: Scalars['String'];
+  status: CsvStatus;
+  total: Scalars['Int'];
+  type: CsvType;
+  updatedAt: Scalars['DateTime'];
+  user: User;
+  userId: Scalars['String'];
+};
+
 export type CsvImportCreateManySchemeInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   errors?: InputMaybe<CsvImportCreateerrorsInput>;
@@ -10430,6 +10449,11 @@ export type CsvImportWhereInput = {
 
 export type CsvImportWhereUniqueInput = {
   id?: InputMaybe<Scalars['String']>;
+};
+
+export type CsvInput = {
+  dateRange?: InputMaybe<DateRangeInput>;
+  schemeId: Scalars['String'];
 };
 
 export enum CsvStatus {
@@ -30054,6 +30078,7 @@ export type Mutation = {
   createCollection?: Maybe<RekCollection>;
   createComment?: Maybe<Intel>;
   createCrimeGroup: CrimeGroup;
+  createCsvZip?: Maybe<Scalars['String']>;
   createCustomGallery: CustomGallery;
   createDocument?: Maybe<Document>;
   createFlow?: Maybe<Flow>;
@@ -30329,6 +30354,10 @@ export type MutationCreateCommentArgs = {
 
 export type MutationCreateCrimeGroupArgs = {
   data: CreateCrimeGroupDataInput;
+};
+
+export type MutationCreateCsvZipArgs = {
+  input: CsvInput;
 };
 
 export type MutationCreateCustomGalleryArgs = {
@@ -71808,6 +71837,66 @@ export type CrimeGroupQuery = {
     subscribed?: boolean | null;
     alias?: string | null;
     groups: Array<{ __typename?: 'Group'; id: string }>;
+    incidents?: Array<{
+      __typename?: 'Incident';
+      id: string;
+      reference?: number | null;
+      dayTime?: string | null;
+      policeRef?: string | null;
+      subject?: string | null;
+      totalValue?: number | null;
+      totalRecoveredValue?: number | null;
+      location?: {
+        __typename?: 'Address';
+        id: string;
+        full?: string | null;
+        geoLat?: number | null;
+        geoLng?: number | null;
+      } | null;
+    } | null> | null;
+    vehicles: Array<{
+      __typename?: 'Vehicle';
+      id: string;
+      reference?: number | null;
+      colour?: string | null;
+      model?: string | null;
+      make?: string | null;
+      registration?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+        position: ImagePosition;
+        rotation: number;
+        primary?: boolean | null;
+        policeImage?: boolean | null;
+        card?: string | null;
+      }>;
+    }>;
+    offenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      reference?: number | null;
+      name?: string | null;
+      gender?: Gender | null;
+      build?: Build | null;
+      height?: Height | null;
+      race?: Race | null;
+      age?: Age | null;
+      dateOfBirth?: Date | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+        position: ImagePosition;
+        rotation: number;
+        primary?: boolean | null;
+        policeImage?: boolean | null;
+        card?: string | null;
+      }>;
+    }>;
     evidence: Array<{
       __typename?: 'Document';
       id: string;
@@ -71822,75 +71911,6 @@ export type CrimeGroupQuery = {
       description?: string | null;
       status: InvestigationStatus;
     }>;
-    offenders: Array<{
-      __typename?: 'Offender';
-      id: string;
-      name?: string | null;
-      reference?: number | null;
-      hair?: string | null;
-      peculiarities?: string | null;
-      race?: Race | null;
-      dateOfBirth?: Date | null;
-      dateSource?: string | null;
-      build?: Build | null;
-      height?: Height | null;
-      age?: Age | null;
-      gender?: Gender | null;
-      totalTheftSuccess?: number | null;
-      totalRecoveredValue?: number | null;
-      totalIncidents?: number | null;
-      totalValue?: number | null;
-      lastActive?: {
-        __typename?: 'Incident';
-        id: string;
-        dayTime?: string | null;
-      } | null;
-      images: Array<{
-        __typename?: 'Image';
-        id: string;
-        optimised?: string | null;
-        position: ImagePosition;
-        rotation: number;
-      }>;
-    }>;
-    vehicles: Array<{
-      __typename?: 'Vehicle';
-      id: string;
-      reference?: number | null;
-      make?: string | null;
-      model?: string | null;
-      updatedAt: Date;
-      colour?: string | null;
-      registration?: string | null;
-      totalOffenders?: number | null;
-      totalIncidents?: number | null;
-      totalCrimeGroups?: number | null;
-    }>;
-    incidents?: Array<{
-      __typename?: 'Incident';
-      id: string;
-      reference?: number | null;
-      dayTime?: string | null;
-      date: Date;
-      crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
-      createdBy: {
-        __typename?: 'User';
-        id: string;
-        businesses: Array<{
-          __typename?: 'Business';
-          id: string;
-          name: string;
-          fullName: string;
-        }>;
-      };
-      location?: {
-        __typename?: 'Address';
-        full?: string | null;
-        id: string;
-        geoLat?: number | null;
-        geoLng?: number | null;
-      } | null;
-    } | null> | null;
     updates: Array<{
       __typename?: 'Update';
       id: string;
@@ -71904,30 +71924,29 @@ export type CrimeGroupQuery = {
         optimised?: string | null;
         position: ImagePosition;
         rotation: number;
+        primary?: boolean | null;
+        policeImage?: boolean | null;
         card?: string | null;
       }>;
       linkedCrimeGroups: Array<{
         __typename?: 'CrimeGroup';
-        totalOffenders?: number | null;
-        totalIncidents?: number | null;
-        alias?: string | null;
         id: string;
         reference?: number | null;
+        alias?: string | null;
+        totalIncidents?: number | null;
+        totalOffenders?: number | null;
         totalRecoveredValue?: number | null;
         totalTheftSuccess?: number | null;
         totalValue?: number | null;
-        updatedAt: Date;
       }>;
       linkedVehicles: Array<{
         __typename?: 'Vehicle';
-        updatedAt: Date;
-        totalOffenders?: number | null;
-        registration?: string | null;
+        id: string;
         reference?: number | null;
+        colour?: string | null;
         model?: string | null;
         make?: string | null;
-        id: string;
-        colour?: string | null;
+        registration?: string | null;
         images: Array<{
           __typename?: 'Image';
           id: string;
@@ -71935,14 +71954,20 @@ export type CrimeGroupQuery = {
           optimised?: string | null;
           position: ImagePosition;
           rotation: number;
+          primary?: boolean | null;
+          policeImage?: boolean | null;
+          card?: string | null;
         }>;
       }>;
       linkedIncidents: Array<{
         __typename?: 'Incident';
         id: string;
-        subject?: string | null;
-        description: string;
+        reference?: number | null;
         dayTime?: string | null;
+        policeRef?: string | null;
+        subject?: string | null;
+        totalValue?: number | null;
+        totalRecoveredValue?: number | null;
         images: Array<{
           __typename?: 'Image';
           id: string;
@@ -71950,19 +71975,29 @@ export type CrimeGroupQuery = {
           optimised?: string | null;
           position: ImagePosition;
           rotation: number;
+          primary?: boolean | null;
+          policeImage?: boolean | null;
+          card?: string | null;
         }>;
+        location?: {
+          __typename?: 'Address';
+          id: string;
+          full?: string | null;
+          geoLat?: number | null;
+          geoLng?: number | null;
+        } | null;
       }>;
       linkedOffenders: Array<{
         __typename?: 'Offender';
         id: string;
-        updatedAt: Date;
-        age?: Age | null;
+        reference?: number | null;
+        name?: string | null;
+        gender?: Gender | null;
         build?: Build | null;
         height?: Height | null;
-        dateOfBirth?: Date | null;
-        name?: string | null;
         race?: Race | null;
-        gender?: Gender | null;
+        age?: Age | null;
+        dateOfBirth?: Date | null;
         images: Array<{
           __typename?: 'Image';
           id: string;
@@ -71970,6 +72005,9 @@ export type CrimeGroupQuery = {
           optimised?: string | null;
           position: ImagePosition;
           rotation: number;
+          primary?: boolean | null;
+          policeImage?: boolean | null;
+          card?: string | null;
         }>;
       }>;
       createdBy: {
@@ -71995,32 +72033,31 @@ export type CrimeGroupQuery = {
           id: string;
           url?: string | null;
           optimised?: string | null;
-          card?: string | null;
           position: ImagePosition;
           rotation: number;
+          primary?: boolean | null;
+          policeImage?: boolean | null;
+          card?: string | null;
         }>;
         linkedCrimeGroups: Array<{
           __typename?: 'CrimeGroup';
-          totalOffenders?: number | null;
-          totalIncidents?: number | null;
-          alias?: string | null;
           id: string;
           reference?: number | null;
+          alias?: string | null;
+          totalIncidents?: number | null;
+          totalOffenders?: number | null;
           totalRecoveredValue?: number | null;
           totalTheftSuccess?: number | null;
           totalValue?: number | null;
-          updatedAt: Date;
         }>;
         linkedVehicles: Array<{
           __typename?: 'Vehicle';
-          updatedAt: Date;
-          totalOffenders?: number | null;
-          registration?: string | null;
+          id: string;
           reference?: number | null;
+          colour?: string | null;
           model?: string | null;
           make?: string | null;
-          id: string;
-          colour?: string | null;
+          registration?: string | null;
           images: Array<{
             __typename?: 'Image';
             id: string;
@@ -72028,14 +72065,20 @@ export type CrimeGroupQuery = {
             optimised?: string | null;
             position: ImagePosition;
             rotation: number;
+            primary?: boolean | null;
+            policeImage?: boolean | null;
+            card?: string | null;
           }>;
         }>;
         linkedIncidents: Array<{
           __typename?: 'Incident';
           id: string;
-          subject?: string | null;
-          description: string;
+          reference?: number | null;
           dayTime?: string | null;
+          policeRef?: string | null;
+          subject?: string | null;
+          totalValue?: number | null;
+          totalRecoveredValue?: number | null;
           images: Array<{
             __typename?: 'Image';
             id: string;
@@ -72043,19 +72086,29 @@ export type CrimeGroupQuery = {
             optimised?: string | null;
             position: ImagePosition;
             rotation: number;
+            primary?: boolean | null;
+            policeImage?: boolean | null;
+            card?: string | null;
           }>;
+          location?: {
+            __typename?: 'Address';
+            id: string;
+            full?: string | null;
+            geoLat?: number | null;
+            geoLng?: number | null;
+          } | null;
         }>;
         linkedOffenders: Array<{
           __typename?: 'Offender';
           id: string;
-          updatedAt: Date;
-          age?: Age | null;
+          reference?: number | null;
+          name?: string | null;
+          gender?: Gender | null;
           build?: Build | null;
           height?: Height | null;
-          dateOfBirth?: Date | null;
-          name?: string | null;
           race?: Race | null;
-          gender?: Gender | null;
+          age?: Age | null;
+          dateOfBirth?: Date | null;
           images: Array<{
             __typename?: 'Image';
             id: string;
@@ -72063,6 +72116,9 @@ export type CrimeGroupQuery = {
             optimised?: string | null;
             position: ImagePosition;
             rotation: number;
+            primary?: boolean | null;
+            policeImage?: boolean | null;
+            card?: string | null;
           }>;
         }>;
         createdBy: {
@@ -72962,6 +73018,33 @@ export type ListOffendersFeedQuery = {
   } | null;
 };
 
+export type CreatedByFragment = {
+  __typename?: 'User';
+  id: string;
+  fullName: string;
+  businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
+};
+
+export type CrimeGroupsFragment = {
+  __typename?: 'CrimeGroup';
+  id: string;
+  reference?: number | null;
+  alias?: string | null;
+  totalIncidents?: number | null;
+  totalOffenders?: number | null;
+  totalRecoveredValue?: number | null;
+  totalTheftSuccess?: number | null;
+  totalValue?: number | null;
+};
+
+export type DocumentsFragment = {
+  __typename?: 'Document';
+  id: string;
+  name: string;
+  url: string;
+  fileType?: FileType | null;
+};
+
 export type FeedImageFragment = {
   __typename?: 'Image';
   id: string;
@@ -73074,21 +73157,48 @@ export type ImagesFragment = {
   rotation: number;
   primary?: boolean | null;
   policeImage?: boolean | null;
+  card?: string | null;
+};
+
+export type IncidentsFragment = {
+  __typename?: 'Incident';
+  id: string;
+  reference?: number | null;
+  dayTime?: string | null;
+  policeRef?: string | null;
+  subject?: string | null;
+  totalValue?: number | null;
+  totalRecoveredValue?: number | null;
+  location?: {
+    __typename?: 'Address';
+    id: string;
+    full?: string | null;
+    geoLat?: number | null;
+    geoLng?: number | null;
+  } | null;
+};
+
+export type InvestigationsFragment = {
+  __typename?: 'Investigation';
+  id: string;
+  name: string;
+  description?: string | null;
+  status: InvestigationStatus;
 };
 
 export type OffendersFragment = {
   __typename?: 'Offender';
   id: string;
   reference?: number | null;
-  age?: Age | null;
-  build?: Build | null;
-  dateOfBirth?: Date | null;
-  gender?: Gender | null;
   name?: string | null;
+  gender?: Gender | null;
+  build?: Build | null;
+  height?: Height | null;
   race?: Race | null;
+  age?: Age | null;
+  dateOfBirth?: Date | null;
   images: Array<{
     __typename?: 'Image';
-    card?: string | null;
     id: string;
     url?: string | null;
     optimised?: string | null;
@@ -73096,6 +73206,242 @@ export type OffendersFragment = {
     rotation: number;
     primary?: boolean | null;
     policeImage?: boolean | null;
+    card?: string | null;
+  }>;
+};
+
+export type TodosFragment = {
+  __typename?: 'Todo';
+  id: string;
+  name?: string | null;
+  description?: string | null;
+  dueDate?: Date | null;
+  completed?: boolean | null;
+  assignedUsers: Array<{ __typename?: 'User'; id: string; fullName: string }>;
+};
+
+export type UpdatesFragment = {
+  __typename?: 'Update';
+  id: string;
+  text?: string | null;
+  type: UpdateType;
+  createdAt: Date;
+  images: Array<{
+    __typename?: 'Image';
+    id: string;
+    url?: string | null;
+    optimised?: string | null;
+    position: ImagePosition;
+    rotation: number;
+    primary?: boolean | null;
+    policeImage?: boolean | null;
+    card?: string | null;
+  }>;
+  linkedCrimeGroups: Array<{
+    __typename?: 'CrimeGroup';
+    id: string;
+    reference?: number | null;
+    alias?: string | null;
+    totalIncidents?: number | null;
+    totalOffenders?: number | null;
+    totalRecoveredValue?: number | null;
+    totalTheftSuccess?: number | null;
+    totalValue?: number | null;
+  }>;
+  linkedVehicles: Array<{
+    __typename?: 'Vehicle';
+    id: string;
+    reference?: number | null;
+    colour?: string | null;
+    model?: string | null;
+    make?: string | null;
+    registration?: string | null;
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+      position: ImagePosition;
+      rotation: number;
+      primary?: boolean | null;
+      policeImage?: boolean | null;
+      card?: string | null;
+    }>;
+  }>;
+  linkedIncidents: Array<{
+    __typename?: 'Incident';
+    id: string;
+    reference?: number | null;
+    dayTime?: string | null;
+    policeRef?: string | null;
+    subject?: string | null;
+    totalValue?: number | null;
+    totalRecoveredValue?: number | null;
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+      position: ImagePosition;
+      rotation: number;
+      primary?: boolean | null;
+      policeImage?: boolean | null;
+      card?: string | null;
+    }>;
+    location?: {
+      __typename?: 'Address';
+      id: string;
+      full?: string | null;
+      geoLat?: number | null;
+      geoLng?: number | null;
+    } | null;
+  }>;
+  linkedOffenders: Array<{
+    __typename?: 'Offender';
+    id: string;
+    reference?: number | null;
+    name?: string | null;
+    gender?: Gender | null;
+    build?: Build | null;
+    height?: Height | null;
+    race?: Race | null;
+    age?: Age | null;
+    dateOfBirth?: Date | null;
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+      position: ImagePosition;
+      rotation: number;
+      primary?: boolean | null;
+      policeImage?: boolean | null;
+      card?: string | null;
+    }>;
+  }>;
+  createdBy: {
+    __typename?: 'User';
+    origName: string;
+    id: string;
+    fullName: string;
+    businesses: Array<{
+      __typename?: 'Business';
+      id: string;
+      name: string;
+      fullName: string;
+    }>;
+  };
+  replies: Array<{
+    __typename?: 'Update';
+    id: string;
+    text?: string | null;
+    type: UpdateType;
+    createdAt: Date;
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+      position: ImagePosition;
+      rotation: number;
+      primary?: boolean | null;
+      policeImage?: boolean | null;
+      card?: string | null;
+    }>;
+    linkedCrimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      id: string;
+      reference?: number | null;
+      alias?: string | null;
+      totalIncidents?: number | null;
+      totalOffenders?: number | null;
+      totalRecoveredValue?: number | null;
+      totalTheftSuccess?: number | null;
+      totalValue?: number | null;
+    }>;
+    linkedVehicles: Array<{
+      __typename?: 'Vehicle';
+      id: string;
+      reference?: number | null;
+      colour?: string | null;
+      model?: string | null;
+      make?: string | null;
+      registration?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+        position: ImagePosition;
+        rotation: number;
+        primary?: boolean | null;
+        policeImage?: boolean | null;
+        card?: string | null;
+      }>;
+    }>;
+    linkedIncidents: Array<{
+      __typename?: 'Incident';
+      id: string;
+      reference?: number | null;
+      dayTime?: string | null;
+      policeRef?: string | null;
+      subject?: string | null;
+      totalValue?: number | null;
+      totalRecoveredValue?: number | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+        position: ImagePosition;
+        rotation: number;
+        primary?: boolean | null;
+        policeImage?: boolean | null;
+        card?: string | null;
+      }>;
+      location?: {
+        __typename?: 'Address';
+        id: string;
+        full?: string | null;
+        geoLat?: number | null;
+        geoLng?: number | null;
+      } | null;
+    }>;
+    linkedOffenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      reference?: number | null;
+      name?: string | null;
+      gender?: Gender | null;
+      build?: Build | null;
+      height?: Height | null;
+      race?: Race | null;
+      age?: Age | null;
+      dateOfBirth?: Date | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+        position: ImagePosition;
+        rotation: number;
+        primary?: boolean | null;
+        policeImage?: boolean | null;
+        card?: string | null;
+      }>;
+    }>;
+    createdBy: {
+      __typename?: 'User';
+      origName: string;
+      id: string;
+      fullName: string;
+      businesses: Array<{
+        __typename?: 'Business';
+        id: string;
+        name: string;
+        fullName: string;
+      }>;
+    };
   }>;
 };
 
@@ -73116,6 +73462,7 @@ export type VehiclesFragment = {
     rotation: number;
     primary?: boolean | null;
     policeImage?: boolean | null;
+    card?: string | null;
   }>;
 };
 
@@ -74595,20 +74942,6 @@ export type ViewIncidentQuery = {
         question: { __typename?: 'Question'; id: string; question: string };
       } | null;
     }>;
-    evidence: Array<{
-      __typename?: 'Document';
-      id: string;
-      name: string;
-      url: string;
-      fileType?: FileType | null;
-    }>;
-    investigations: Array<{
-      __typename?: 'Investigation';
-      id: string;
-      name: string;
-      description?: string | null;
-      status: InvestigationStatus;
-    }>;
     scheme: {
       __typename?: 'Scheme';
       mg11Available: boolean;
@@ -74634,6 +74967,7 @@ export type ViewIncidentQuery = {
       goodsType?: { __typename?: 'GoodsType'; id: string } | null;
     }>;
     business?: { __typename?: 'Business'; id: string; name: string } | null;
+    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     createdBy: {
       __typename?: 'User';
       id: string;
@@ -74649,8 +74983,8 @@ export type ViewIncidentQuery = {
       rotation: number;
       primary?: boolean | null;
       policeImage?: boolean | null;
+      card?: string | null;
     }>;
-    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     crimeGroups: Array<{
       __typename?: 'CrimeGroup';
       id: string;
@@ -74679,6 +75013,7 @@ export type ViewIncidentQuery = {
         rotation: number;
         primary?: boolean | null;
         policeImage?: boolean | null;
+        card?: string | null;
       }>;
     }>;
     todos: Array<{
@@ -74698,15 +75033,15 @@ export type ViewIncidentQuery = {
       __typename?: 'Offender';
       id: string;
       reference?: number | null;
-      age?: Age | null;
-      build?: Build | null;
-      dateOfBirth?: Date | null;
-      gender?: Gender | null;
       name?: string | null;
+      gender?: Gender | null;
+      build?: Build | null;
+      height?: Height | null;
       race?: Race | null;
+      age?: Age | null;
+      dateOfBirth?: Date | null;
       images: Array<{
         __typename?: 'Image';
-        card?: string | null;
         id: string;
         url?: string | null;
         optimised?: string | null;
@@ -74714,7 +75049,22 @@ export type ViewIncidentQuery = {
         rotation: number;
         primary?: boolean | null;
         policeImage?: boolean | null;
+        card?: string | null;
       }>;
+    }>;
+    evidence: Array<{
+      __typename?: 'Document';
+      id: string;
+      name: string;
+      url: string;
+      fileType?: FileType | null;
+    }>;
+    investigations: Array<{
+      __typename?: 'Investigation';
+      id: string;
+      name: string;
+      description?: string | null;
+      status: InvestigationStatus;
     }>;
     updates: Array<{
       __typename?: 'Update';
@@ -74729,45 +75079,50 @@ export type ViewIncidentQuery = {
         optimised?: string | null;
         position: ImagePosition;
         rotation: number;
+        primary?: boolean | null;
+        policeImage?: boolean | null;
         card?: string | null;
       }>;
       linkedCrimeGroups: Array<{
         __typename?: 'CrimeGroup';
-        totalOffenders?: number | null;
-        totalIncidents?: number | null;
-        alias?: string | null;
         id: string;
         reference?: number | null;
+        alias?: string | null;
+        totalIncidents?: number | null;
+        totalOffenders?: number | null;
         totalRecoveredValue?: number | null;
         totalTheftSuccess?: number | null;
         totalValue?: number | null;
-        updatedAt: Date;
       }>;
       linkedVehicles: Array<{
         __typename?: 'Vehicle';
-        updatedAt: Date;
-        totalOffenders?: number | null;
-        registration?: string | null;
+        id: string;
         reference?: number | null;
+        colour?: string | null;
         model?: string | null;
         make?: string | null;
-        id: string;
-        colour?: string | null;
+        registration?: string | null;
         images: Array<{
           __typename?: 'Image';
           id: string;
           url?: string | null;
+          optimised?: string | null;
           position: ImagePosition;
           rotation: number;
-          optimised?: string | null;
+          primary?: boolean | null;
+          policeImage?: boolean | null;
+          card?: string | null;
         }>;
       }>;
       linkedIncidents: Array<{
         __typename?: 'Incident';
         id: string;
-        subject?: string | null;
-        description: string;
+        reference?: number | null;
         dayTime?: string | null;
+        policeRef?: string | null;
+        subject?: string | null;
+        totalValue?: number | null;
+        totalRecoveredValue?: number | null;
         images: Array<{
           __typename?: 'Image';
           id: string;
@@ -74775,19 +75130,29 @@ export type ViewIncidentQuery = {
           optimised?: string | null;
           position: ImagePosition;
           rotation: number;
+          primary?: boolean | null;
+          policeImage?: boolean | null;
+          card?: string | null;
         }>;
+        location?: {
+          __typename?: 'Address';
+          id: string;
+          full?: string | null;
+          geoLat?: number | null;
+          geoLng?: number | null;
+        } | null;
       }>;
       linkedOffenders: Array<{
         __typename?: 'Offender';
         id: string;
-        updatedAt: Date;
-        age?: Age | null;
+        reference?: number | null;
+        name?: string | null;
+        gender?: Gender | null;
         build?: Build | null;
         height?: Height | null;
-        dateOfBirth?: Date | null;
-        name?: string | null;
         race?: Race | null;
-        gender?: Gender | null;
+        age?: Age | null;
+        dateOfBirth?: Date | null;
         images: Array<{
           __typename?: 'Image';
           id: string;
@@ -74795,6 +75160,9 @@ export type ViewIncidentQuery = {
           optimised?: string | null;
           position: ImagePosition;
           rotation: number;
+          primary?: boolean | null;
+          policeImage?: boolean | null;
+          card?: string | null;
         }>;
       }>;
       createdBy: {
@@ -74822,30 +75190,29 @@ export type ViewIncidentQuery = {
           optimised?: string | null;
           position: ImagePosition;
           rotation: number;
+          primary?: boolean | null;
+          policeImage?: boolean | null;
           card?: string | null;
         }>;
         linkedCrimeGroups: Array<{
           __typename?: 'CrimeGroup';
-          totalOffenders?: number | null;
-          totalIncidents?: number | null;
-          alias?: string | null;
           id: string;
           reference?: number | null;
+          alias?: string | null;
+          totalIncidents?: number | null;
+          totalOffenders?: number | null;
           totalRecoveredValue?: number | null;
           totalTheftSuccess?: number | null;
           totalValue?: number | null;
-          updatedAt: Date;
         }>;
         linkedVehicles: Array<{
           __typename?: 'Vehicle';
-          updatedAt: Date;
-          totalOffenders?: number | null;
-          registration?: string | null;
+          id: string;
           reference?: number | null;
+          colour?: string | null;
           model?: string | null;
           make?: string | null;
-          id: string;
-          colour?: string | null;
+          registration?: string | null;
           images: Array<{
             __typename?: 'Image';
             id: string;
@@ -74853,14 +75220,20 @@ export type ViewIncidentQuery = {
             optimised?: string | null;
             position: ImagePosition;
             rotation: number;
+            primary?: boolean | null;
+            policeImage?: boolean | null;
+            card?: string | null;
           }>;
         }>;
         linkedIncidents: Array<{
           __typename?: 'Incident';
           id: string;
-          subject?: string | null;
-          description: string;
+          reference?: number | null;
           dayTime?: string | null;
+          policeRef?: string | null;
+          subject?: string | null;
+          totalValue?: number | null;
+          totalRecoveredValue?: number | null;
           images: Array<{
             __typename?: 'Image';
             id: string;
@@ -74868,19 +75241,29 @@ export type ViewIncidentQuery = {
             optimised?: string | null;
             position: ImagePosition;
             rotation: number;
+            primary?: boolean | null;
+            policeImage?: boolean | null;
+            card?: string | null;
           }>;
+          location?: {
+            __typename?: 'Address';
+            id: string;
+            full?: string | null;
+            geoLat?: number | null;
+            geoLng?: number | null;
+          } | null;
         }>;
         linkedOffenders: Array<{
           __typename?: 'Offender';
           id: string;
-          updatedAt: Date;
-          age?: Age | null;
+          reference?: number | null;
+          name?: string | null;
+          gender?: Gender | null;
           build?: Build | null;
           height?: Height | null;
-          dateOfBirth?: Date | null;
-          name?: string | null;
           race?: Race | null;
-          gender?: Gender | null;
+          age?: Age | null;
+          dateOfBirth?: Date | null;
           images: Array<{
             __typename?: 'Image';
             id: string;
@@ -74888,6 +75271,9 @@ export type ViewIncidentQuery = {
             optimised?: string | null;
             position: ImagePosition;
             rotation: number;
+            primary?: boolean | null;
+            policeImage?: boolean | null;
+            card?: string | null;
           }>;
         }>;
         createdBy: {
@@ -75028,6 +75414,17 @@ export type UpdateInvestigationMutation = {
       totalCrimeGroups?: number | null;
       totalOffenders?: number | null;
       totalIncidents?: number | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+        position: ImagePosition;
+        rotation: number;
+        primary?: boolean | null;
+        policeImage?: boolean | null;
+        card?: string | null;
+      }>;
     }>;
     offenders: Array<{
       __typename?: 'Offender';
@@ -75317,209 +75714,21 @@ export type ViewInvestigationQuery = {
     vehicles: Array<{
       __typename?: 'Vehicle';
       id: string;
-      make?: string | null;
-      model?: string | null;
-      colour?: string | null;
-      registration?: string | null;
-      updatedAt: Date;
-      totalCrimeGroups?: number | null;
-      totalOffenders?: number | null;
-      totalIncidents?: number | null;
       reference?: number | null;
-    }>;
-    updates: Array<{
-      __typename?: 'Update';
-      id: string;
-      text?: string | null;
-      type: UpdateType;
-      createdAt: Date;
+      colour?: string | null;
+      model?: string | null;
+      make?: string | null;
+      registration?: string | null;
       images: Array<{
         __typename?: 'Image';
         id: string;
         url?: string | null;
         optimised?: string | null;
-        optimisedPersisted?: string | null;
-        card?: string | null;
         position: ImagePosition;
         rotation: number;
-      }>;
-      linkedCrimeGroups: Array<{
-        __typename?: 'CrimeGroup';
-        totalOffenders?: number | null;
-        totalIncidents?: number | null;
-        alias?: string | null;
-        id: string;
-        reference?: number | null;
-        totalRecoveredValue?: number | null;
-        totalTheftSuccess?: number | null;
-        totalValue?: number | null;
-        updatedAt: Date;
-      }>;
-      linkedVehicles: Array<{
-        __typename?: 'Vehicle';
-        updatedAt: Date;
-        totalOffenders?: number | null;
-        registration?: string | null;
-        reference?: number | null;
-        model?: string | null;
-        make?: string | null;
-        id: string;
-        colour?: string | null;
-        images: Array<{
-          __typename?: 'Image';
-          id: string;
-          url?: string | null;
-          optimised?: string | null;
-          optimisedPersisted?: string | null;
-          position: ImagePosition;
-          rotation: number;
-        }>;
-      }>;
-      linkedIncidents: Array<{
-        __typename?: 'Incident';
-        id: string;
-        subject?: string | null;
-        description: string;
-        dayTime?: string | null;
-        images: Array<{
-          __typename?: 'Image';
-          id: string;
-          url?: string | null;
-          optimised?: string | null;
-          optimisedPersisted?: string | null;
-          position: ImagePosition;
-          rotation: number;
-        }>;
-      }>;
-      linkedOffenders: Array<{
-        __typename?: 'Offender';
-        id: string;
-        updatedAt: Date;
-        age?: Age | null;
-        build?: Build | null;
-        height?: Height | null;
-        dateOfBirth?: Date | null;
-        name?: string | null;
-        race?: Race | null;
-        gender?: Gender | null;
-        images: Array<{
-          __typename?: 'Image';
-          id: string;
-          url?: string | null;
-          optimised?: string | null;
-          optimisedPersisted?: string | null;
-          position: ImagePosition;
-          rotation: number;
-        }>;
-      }>;
-      createdBy: {
-        __typename?: 'User';
-        origName: string;
-        id: string;
-        fullName: string;
-        businesses: Array<{
-          __typename?: 'Business';
-          id: string;
-          name: string;
-          fullName: string;
-        }>;
-      };
-      replies: Array<{
-        __typename?: 'Update';
-        id: string;
-        text?: string | null;
-        type: UpdateType;
-        createdAt: Date;
-        images: Array<{
-          __typename?: 'Image';
-          id: string;
-          url?: string | null;
-          optimisedPersisted?: string | null;
-          optimised?: string | null;
-          card?: string | null;
-          position: ImagePosition;
-          rotation: number;
-        }>;
-        linkedCrimeGroups: Array<{
-          __typename?: 'CrimeGroup';
-          totalOffenders?: number | null;
-          totalIncidents?: number | null;
-          alias?: string | null;
-          id: string;
-          reference?: number | null;
-          totalRecoveredValue?: number | null;
-          totalTheftSuccess?: number | null;
-          totalValue?: number | null;
-          updatedAt: Date;
-        }>;
-        linkedVehicles: Array<{
-          __typename?: 'Vehicle';
-          updatedAt: Date;
-          totalOffenders?: number | null;
-          registration?: string | null;
-          reference?: number | null;
-          model?: string | null;
-          make?: string | null;
-          id: string;
-          colour?: string | null;
-          images: Array<{
-            __typename?: 'Image';
-            id: string;
-            url?: string | null;
-            optimisedPersisted?: string | null;
-            optimised?: string | null;
-            position: ImagePosition;
-            rotation: number;
-          }>;
-        }>;
-        linkedIncidents: Array<{
-          __typename?: 'Incident';
-          id: string;
-          subject?: string | null;
-          description: string;
-          dayTime?: string | null;
-          images: Array<{
-            __typename?: 'Image';
-            id: string;
-            url?: string | null;
-            optimised?: string | null;
-            position: ImagePosition;
-            rotation: number;
-          }>;
-        }>;
-        linkedOffenders: Array<{
-          __typename?: 'Offender';
-          id: string;
-          updatedAt: Date;
-          age?: Age | null;
-          build?: Build | null;
-          height?: Height | null;
-          dateOfBirth?: Date | null;
-          name?: string | null;
-          race?: Race | null;
-          gender?: Gender | null;
-          images: Array<{
-            __typename?: 'Image';
-            id: string;
-            url?: string | null;
-            optimised?: string | null;
-            optimisedPersisted?: string | null;
-            position: ImagePosition;
-            rotation: number;
-          }>;
-        }>;
-        createdBy: {
-          __typename?: 'User';
-          origName: string;
-          id: string;
-          fullName: string;
-          businesses: Array<{
-            __typename?: 'Business';
-            id: string;
-            name: string;
-            fullName: string;
-          }>;
-        };
+        primary?: boolean | null;
+        policeImage?: boolean | null;
+        card?: string | null;
       }>;
     }>;
     offenders: Array<{
@@ -75546,14 +75755,12 @@ export type ViewInvestigationQuery = {
     incidents: Array<{
       __typename?: 'Incident';
       id: string;
-      policeRef?: string | null;
-      dayTime?: string | null;
       reference?: number | null;
+      dayTime?: string | null;
+      policeRef?: string | null;
       subject?: string | null;
-      date: Date;
       totalValue?: number | null;
       totalRecoveredValue?: number | null;
-      createdBy: { __typename?: 'User'; organisation: string };
       location?: {
         __typename?: 'Address';
         id: string;
@@ -75562,41 +75769,282 @@ export type ViewInvestigationQuery = {
         geoLng?: number | null;
       } | null;
     }>;
-    crimeGroups: Array<{
-      __typename?: 'CrimeGroup';
+    updates: Array<{
+      __typename?: 'Update';
       id: string;
-      alias?: string | null;
-      reference?: number | null;
-      offenders: Array<{
+      text?: string | null;
+      type: UpdateType;
+      createdAt: Date;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+        position: ImagePosition;
+        rotation: number;
+        primary?: boolean | null;
+        policeImage?: boolean | null;
+        card?: string | null;
+      }>;
+      linkedCrimeGroups: Array<{
+        __typename?: 'CrimeGroup';
+        id: string;
+        reference?: number | null;
+        alias?: string | null;
+        totalIncidents?: number | null;
+        totalOffenders?: number | null;
+        totalRecoveredValue?: number | null;
+        totalTheftSuccess?: number | null;
+        totalValue?: number | null;
+      }>;
+      linkedVehicles: Array<{
+        __typename?: 'Vehicle';
+        id: string;
+        reference?: number | null;
+        colour?: string | null;
+        model?: string | null;
+        make?: string | null;
+        registration?: string | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+          position: ImagePosition;
+          rotation: number;
+          primary?: boolean | null;
+          policeImage?: boolean | null;
+          card?: string | null;
+        }>;
+      }>;
+      linkedIncidents: Array<{
+        __typename?: 'Incident';
+        id: string;
+        reference?: number | null;
+        dayTime?: string | null;
+        policeRef?: string | null;
+        subject?: string | null;
+        totalValue?: number | null;
+        totalRecoveredValue?: number | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+          position: ImagePosition;
+          rotation: number;
+          primary?: boolean | null;
+          policeImage?: boolean | null;
+          card?: string | null;
+        }>;
+        location?: {
+          __typename?: 'Address';
+          id: string;
+          full?: string | null;
+          geoLat?: number | null;
+          geoLng?: number | null;
+        } | null;
+      }>;
+      linkedOffenders: Array<{
         __typename?: 'Offender';
         id: string;
-        name?: string | null;
         reference?: number | null;
-        totalIncidents?: number | null;
-        age?: Age | null;
+        name?: string | null;
         gender?: Gender | null;
-        race?: Race | null;
         build?: Build | null;
         height?: Height | null;
+        race?: Race | null;
+        age?: Age | null;
         dateOfBirth?: Date | null;
         images: Array<{
           __typename?: 'Image';
           id: string;
+          url?: string | null;
           optimised?: string | null;
-          optimisedPersisted?: string | null;
           position: ImagePosition;
           rotation: number;
+          primary?: boolean | null;
+          policeImage?: boolean | null;
+          card?: string | null;
         }>;
       }>;
+      createdBy: {
+        __typename?: 'User';
+        origName: string;
+        id: string;
+        fullName: string;
+        businesses: Array<{
+          __typename?: 'Business';
+          id: string;
+          name: string;
+          fullName: string;
+        }>;
+      };
+      replies: Array<{
+        __typename?: 'Update';
+        id: string;
+        text?: string | null;
+        type: UpdateType;
+        createdAt: Date;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+          position: ImagePosition;
+          rotation: number;
+          primary?: boolean | null;
+          policeImage?: boolean | null;
+          card?: string | null;
+        }>;
+        linkedCrimeGroups: Array<{
+          __typename?: 'CrimeGroup';
+          id: string;
+          reference?: number | null;
+          alias?: string | null;
+          totalIncidents?: number | null;
+          totalOffenders?: number | null;
+          totalRecoveredValue?: number | null;
+          totalTheftSuccess?: number | null;
+          totalValue?: number | null;
+        }>;
+        linkedVehicles: Array<{
+          __typename?: 'Vehicle';
+          id: string;
+          reference?: number | null;
+          colour?: string | null;
+          model?: string | null;
+          make?: string | null;
+          registration?: string | null;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+            position: ImagePosition;
+            rotation: number;
+            primary?: boolean | null;
+            policeImage?: boolean | null;
+            card?: string | null;
+          }>;
+        }>;
+        linkedIncidents: Array<{
+          __typename?: 'Incident';
+          id: string;
+          reference?: number | null;
+          dayTime?: string | null;
+          policeRef?: string | null;
+          subject?: string | null;
+          totalValue?: number | null;
+          totalRecoveredValue?: number | null;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+            position: ImagePosition;
+            rotation: number;
+            primary?: boolean | null;
+            policeImage?: boolean | null;
+            card?: string | null;
+          }>;
+          location?: {
+            __typename?: 'Address';
+            id: string;
+            full?: string | null;
+            geoLat?: number | null;
+            geoLng?: number | null;
+          } | null;
+        }>;
+        linkedOffenders: Array<{
+          __typename?: 'Offender';
+          id: string;
+          reference?: number | null;
+          name?: string | null;
+          gender?: Gender | null;
+          build?: Build | null;
+          height?: Height | null;
+          race?: Race | null;
+          age?: Age | null;
+          dateOfBirth?: Date | null;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+            position: ImagePosition;
+            rotation: number;
+            primary?: boolean | null;
+            policeImage?: boolean | null;
+            card?: string | null;
+          }>;
+        }>;
+        createdBy: {
+          __typename?: 'User';
+          origName: string;
+          id: string;
+          fullName: string;
+          businesses: Array<{
+            __typename?: 'Business';
+            id: string;
+            name: string;
+            fullName: string;
+          }>;
+        };
+      }>;
+    }>;
+    crimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      id: string;
+      reference?: number | null;
+      alias?: string | null;
+      totalIncidents?: number | null;
+      totalOffenders?: number | null;
+      totalRecoveredValue?: number | null;
+      totalTheftSuccess?: number | null;
+      totalValue?: number | null;
       vehicles: Array<{
         __typename?: 'Vehicle';
         id: string;
-        make?: string | null;
-        model?: string | null;
-        colour?: string | null;
-        registration?: string | null;
-        updatedAt: Date;
         reference?: number | null;
+        colour?: string | null;
+        model?: string | null;
+        make?: string | null;
+        registration?: string | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+          position: ImagePosition;
+          rotation: number;
+          primary?: boolean | null;
+          policeImage?: boolean | null;
+          card?: string | null;
+        }>;
+      }>;
+      offenders: Array<{
+        __typename?: 'Offender';
+        id: string;
+        reference?: number | null;
+        name?: string | null;
+        gender?: Gender | null;
+        build?: Build | null;
+        height?: Height | null;
+        race?: Race | null;
+        age?: Age | null;
+        dateOfBirth?: Date | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+          position: ImagePosition;
+          rotation: number;
+          primary?: boolean | null;
+          policeImage?: boolean | null;
+          card?: string | null;
+        }>;
       }>;
     }>;
     flows: Array<{
@@ -77310,26 +77758,6 @@ export type ViewOffenderQuery = {
     idVerified: boolean;
     idSource?: IdSource | null;
     totalImages?: number | null;
-    createdBy: {
-      __typename?: 'User';
-      fullName: string;
-      id: string;
-      businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
-    };
-    evidence: Array<{
-      __typename?: 'Document';
-      id: string;
-      name: string;
-      url: string;
-      fileType?: FileType | null;
-    }>;
-    investigations: Array<{
-      __typename?: 'Investigation';
-      id: string;
-      name: string;
-      description?: string | null;
-      status: InvestigationStatus;
-    }>;
     scheme: { __typename?: 'Scheme'; mg11Available: boolean };
     customGalleries: Array<{
       __typename?: 'CustomGallery';
@@ -77343,8 +77771,9 @@ export type ViewOffenderQuery = {
       optimised?: string | null;
       position: ImagePosition;
       rotation: number;
-      policeImage?: boolean | null;
       primary?: boolean | null;
+      policeImage?: boolean | null;
+      card?: string | null;
       faces: Array<{
         __typename?: 'RekFace';
         id: string;
@@ -77384,6 +77813,12 @@ export type ViewOffenderQuery = {
       endDate: Date;
       type?: BanType | null;
     }>;
+    createdBy: {
+      __typename?: 'User';
+      id: string;
+      fullName: string;
+      businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
+    };
     crimeGroups: Array<{
       __typename?: 'CrimeGroup';
       id: string;
@@ -77408,10 +77843,11 @@ export type ViewOffenderQuery = {
         id: string;
         url?: string | null;
         optimised?: string | null;
-        policeImage?: boolean | null;
-        primary?: boolean | null;
         position: ImagePosition;
         rotation: number;
+        primary?: boolean | null;
+        policeImage?: boolean | null;
+        card?: string | null;
       }>;
     }>;
     incidents: Array<{
@@ -77419,18 +77855,10 @@ export type ViewOffenderQuery = {
       id: string;
       reference?: number | null;
       dayTime?: string | null;
-      date: Date;
-      crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
-      createdBy: {
-        __typename?: 'User';
-        id: string;
-        businesses: Array<{
-          __typename?: 'Business';
-          id: string;
-          name: string;
-          fullName: string;
-        }>;
-      };
+      policeRef?: string | null;
+      subject?: string | null;
+      totalValue?: number | null;
+      totalRecoveredValue?: number | null;
       location?: {
         __typename?: 'Address';
         id: string;
@@ -77438,6 +77866,20 @@ export type ViewOffenderQuery = {
         geoLat?: number | null;
         geoLng?: number | null;
       } | null;
+    }>;
+    evidence: Array<{
+      __typename?: 'Document';
+      id: string;
+      name: string;
+      url: string;
+      fileType?: FileType | null;
+    }>;
+    investigations: Array<{
+      __typename?: 'Investigation';
+      id: string;
+      name: string;
+      description?: string | null;
+      status: InvestigationStatus;
     }>;
     updates: Array<{
       __typename?: 'Update';
@@ -77452,30 +77894,29 @@ export type ViewOffenderQuery = {
         optimised?: string | null;
         position: ImagePosition;
         rotation: number;
+        primary?: boolean | null;
+        policeImage?: boolean | null;
         card?: string | null;
       }>;
       linkedCrimeGroups: Array<{
         __typename?: 'CrimeGroup';
-        totalOffenders?: number | null;
-        totalIncidents?: number | null;
-        alias?: string | null;
         id: string;
         reference?: number | null;
+        alias?: string | null;
+        totalIncidents?: number | null;
+        totalOffenders?: number | null;
         totalRecoveredValue?: number | null;
         totalTheftSuccess?: number | null;
         totalValue?: number | null;
-        updatedAt: Date;
       }>;
       linkedVehicles: Array<{
         __typename?: 'Vehicle';
-        updatedAt: Date;
-        totalOffenders?: number | null;
-        registration?: string | null;
+        id: string;
         reference?: number | null;
+        colour?: string | null;
         model?: string | null;
         make?: string | null;
-        id: string;
-        colour?: string | null;
+        registration?: string | null;
         images: Array<{
           __typename?: 'Image';
           id: string;
@@ -77483,14 +77924,20 @@ export type ViewOffenderQuery = {
           optimised?: string | null;
           position: ImagePosition;
           rotation: number;
+          primary?: boolean | null;
+          policeImage?: boolean | null;
+          card?: string | null;
         }>;
       }>;
       linkedIncidents: Array<{
         __typename?: 'Incident';
         id: string;
-        subject?: string | null;
-        description: string;
+        reference?: number | null;
         dayTime?: string | null;
+        policeRef?: string | null;
+        subject?: string | null;
+        totalValue?: number | null;
+        totalRecoveredValue?: number | null;
         images: Array<{
           __typename?: 'Image';
           id: string;
@@ -77498,19 +77945,29 @@ export type ViewOffenderQuery = {
           optimised?: string | null;
           position: ImagePosition;
           rotation: number;
+          primary?: boolean | null;
+          policeImage?: boolean | null;
+          card?: string | null;
         }>;
+        location?: {
+          __typename?: 'Address';
+          id: string;
+          full?: string | null;
+          geoLat?: number | null;
+          geoLng?: number | null;
+        } | null;
       }>;
       linkedOffenders: Array<{
         __typename?: 'Offender';
         id: string;
-        updatedAt: Date;
-        age?: Age | null;
+        reference?: number | null;
+        name?: string | null;
+        gender?: Gender | null;
         build?: Build | null;
         height?: Height | null;
-        dateOfBirth?: Date | null;
-        name?: string | null;
         race?: Race | null;
-        gender?: Gender | null;
+        age?: Age | null;
+        dateOfBirth?: Date | null;
         images: Array<{
           __typename?: 'Image';
           id: string;
@@ -77518,6 +77975,9 @@ export type ViewOffenderQuery = {
           optimised?: string | null;
           position: ImagePosition;
           rotation: number;
+          primary?: boolean | null;
+          policeImage?: boolean | null;
+          card?: string | null;
         }>;
       }>;
       createdBy: {
@@ -77543,32 +78003,31 @@ export type ViewOffenderQuery = {
           id: string;
           url?: string | null;
           optimised?: string | null;
-          card?: string | null;
           position: ImagePosition;
           rotation: number;
+          primary?: boolean | null;
+          policeImage?: boolean | null;
+          card?: string | null;
         }>;
         linkedCrimeGroups: Array<{
           __typename?: 'CrimeGroup';
-          totalOffenders?: number | null;
-          totalIncidents?: number | null;
-          alias?: string | null;
           id: string;
           reference?: number | null;
+          alias?: string | null;
+          totalIncidents?: number | null;
+          totalOffenders?: number | null;
           totalRecoveredValue?: number | null;
           totalTheftSuccess?: number | null;
           totalValue?: number | null;
-          updatedAt: Date;
         }>;
         linkedVehicles: Array<{
           __typename?: 'Vehicle';
-          updatedAt: Date;
-          totalOffenders?: number | null;
-          registration?: string | null;
+          id: string;
           reference?: number | null;
+          colour?: string | null;
           model?: string | null;
           make?: string | null;
-          id: string;
-          colour?: string | null;
+          registration?: string | null;
           images: Array<{
             __typename?: 'Image';
             id: string;
@@ -77576,14 +78035,20 @@ export type ViewOffenderQuery = {
             optimised?: string | null;
             position: ImagePosition;
             rotation: number;
+            primary?: boolean | null;
+            policeImage?: boolean | null;
+            card?: string | null;
           }>;
         }>;
         linkedIncidents: Array<{
           __typename?: 'Incident';
           id: string;
-          subject?: string | null;
-          description: string;
+          reference?: number | null;
           dayTime?: string | null;
+          policeRef?: string | null;
+          subject?: string | null;
+          totalValue?: number | null;
+          totalRecoveredValue?: number | null;
           images: Array<{
             __typename?: 'Image';
             id: string;
@@ -77591,19 +78056,29 @@ export type ViewOffenderQuery = {
             optimised?: string | null;
             position: ImagePosition;
             rotation: number;
+            primary?: boolean | null;
+            policeImage?: boolean | null;
+            card?: string | null;
           }>;
+          location?: {
+            __typename?: 'Address';
+            id: string;
+            full?: string | null;
+            geoLat?: number | null;
+            geoLng?: number | null;
+          } | null;
         }>;
         linkedOffenders: Array<{
           __typename?: 'Offender';
           id: string;
-          updatedAt: Date;
-          age?: Age | null;
+          reference?: number | null;
+          name?: string | null;
+          gender?: Gender | null;
           build?: Build | null;
           height?: Height | null;
-          dateOfBirth?: Date | null;
-          name?: string | null;
           race?: Race | null;
-          gender?: Gender | null;
+          age?: Age | null;
+          dateOfBirth?: Date | null;
           images: Array<{
             __typename?: 'Image';
             id: string;
@@ -77611,6 +78086,9 @@ export type ViewOffenderQuery = {
             optimised?: string | null;
             position: ImagePosition;
             rotation: number;
+            primary?: boolean | null;
+            policeImage?: boolean | null;
+            card?: string | null;
           }>;
         }>;
         createdBy: {
@@ -79012,6 +79490,31 @@ export type ListStatementTemplatesQuery = {
   }>;
 };
 
+export type ListStockItemsQueryVariables = Exact<{
+  where?: InputMaybe<StockItemsWhereInput>;
+}>;
+
+export type ListStockItemsQuery = {
+  __typename?: 'Query';
+  listStockItems: {
+    __typename?: 'ListStockItems';
+    total: number;
+    stockItems: Array<{
+      __typename?: 'StockItem';
+      id: string;
+      barcode?: string | null;
+      brand?: string | null;
+      costPriceLocal?: number | null;
+      costPriceStandard?: number | null;
+      division?: string | null;
+      name?: string | null;
+      salesPriceLocal?: number | null;
+      salesPriceStandard?: number | null;
+      sku?: string | null;
+    }>;
+  };
+};
+
 export type DeleteTagMutationVariables = Exact<{
   id: Scalars['String'];
 }>;
@@ -79297,6 +79800,19 @@ export type TranslateQuery = {
     __typename?: 'TranslatedText';
     origText: string;
     translatedText: string;
+  }>;
+};
+
+export type TranslateTextQueryVariables = Exact<{
+  data: TranslateTextInput;
+}>;
+
+export type TranslateTextQuery = {
+  __typename?: 'Query';
+  translateText: Array<{
+    __typename?: 'TranslatedText';
+    translatedText: string;
+    origText: string;
   }>;
 };
 
@@ -81424,6 +81940,69 @@ export type VehicleQuery = {
       id: string;
       name: string;
     }>;
+    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+      position: ImagePosition;
+      rotation: number;
+      primary?: boolean | null;
+      policeImage?: boolean | null;
+      card?: string | null;
+    }>;
+    crimeGroup: Array<{
+      __typename?: 'CrimeGroup';
+      id: string;
+      reference?: number | null;
+      alias?: string | null;
+      totalIncidents?: number | null;
+      totalOffenders?: number | null;
+      totalRecoveredValue?: number | null;
+      totalTheftSuccess?: number | null;
+      totalValue?: number | null;
+    }>;
+    offenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      reference?: number | null;
+      name?: string | null;
+      gender?: Gender | null;
+      build?: Build | null;
+      height?: Height | null;
+      race?: Race | null;
+      age?: Age | null;
+      dateOfBirth?: Date | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+        position: ImagePosition;
+        rotation: number;
+        primary?: boolean | null;
+        policeImage?: boolean | null;
+        card?: string | null;
+      }>;
+    }>;
+    incidents: Array<{
+      __typename?: 'Incident';
+      id: string;
+      reference?: number | null;
+      dayTime?: string | null;
+      policeRef?: string | null;
+      subject?: string | null;
+      totalValue?: number | null;
+      totalRecoveredValue?: number | null;
+      location?: {
+        __typename?: 'Address';
+        id: string;
+        full?: string | null;
+        geoLat?: number | null;
+        geoLng?: number | null;
+      } | null;
+    }>;
     evidence: Array<{
       __typename?: 'Document';
       id: string;
@@ -81438,87 +82017,6 @@ export type VehicleQuery = {
       description?: string | null;
       status: InvestigationStatus;
     }>;
-    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
-    images: Array<{
-      __typename?: 'Image';
-      id: string;
-      optimised?: string | null;
-      url?: string | null;
-      position: ImagePosition;
-      rotation: number;
-      policeImage?: boolean | null;
-      primary?: boolean | null;
-    }>;
-    incidents: Array<{
-      __typename?: 'Incident';
-      id: string;
-      reference?: number | null;
-      dayTime?: string | null;
-      policeRef?: string | null;
-      subject?: string | null;
-      totalValue?: number | null;
-      totalRecoveredValue?: number | null;
-      crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
-      location?: {
-        __typename?: 'Address';
-        id: string;
-        full?: string | null;
-        geoLat?: number | null;
-        geoLng?: number | null;
-      } | null;
-      createdBy: {
-        __typename?: 'User';
-        id: string;
-        fullName: string;
-        businesses: Array<{
-          __typename?: 'Business';
-          id: string;
-          name: string;
-        }>;
-      };
-    }>;
-    offenders: Array<{
-      __typename?: 'Offender';
-      id: string;
-      name?: string | null;
-      reference?: number | null;
-      hair?: string | null;
-      peculiarities?: string | null;
-      race?: Race | null;
-      dateOfBirth?: Date | null;
-      dateSource?: string | null;
-      build?: Build | null;
-      height?: Height | null;
-      age?: Age | null;
-      gender?: Gender | null;
-      totalTheftSuccess?: number | null;
-      totalRecoveredValue?: number | null;
-      totalIncidents?: number | null;
-      totalValue?: number | null;
-      lastActive?: {
-        __typename?: 'Incident';
-        id: string;
-        dayTime?: string | null;
-      } | null;
-      images: Array<{
-        __typename?: 'Image';
-        id: string;
-        optimised?: string | null;
-        position: ImagePosition;
-        rotation: number;
-      }>;
-    }>;
-    crimeGroup: Array<{
-      __typename?: 'CrimeGroup';
-      id: string;
-      reference?: number | null;
-      totalIncidents?: number | null;
-      totalOffenders?: number | null;
-      totalRecoveredValue?: number | null;
-      totalTheftSuccess?: number | null;
-      totalValue?: number | null;
-      alias?: string | null;
-    }>;
     updates: Array<{
       __typename?: 'Update';
       id: string;
@@ -81530,32 +82028,31 @@ export type VehicleQuery = {
         id: string;
         url?: string | null;
         optimised?: string | null;
-        card?: string | null;
         position: ImagePosition;
         rotation: number;
+        primary?: boolean | null;
+        policeImage?: boolean | null;
+        card?: string | null;
       }>;
       linkedCrimeGroups: Array<{
         __typename?: 'CrimeGroup';
-        totalOffenders?: number | null;
-        totalIncidents?: number | null;
-        alias?: string | null;
         id: string;
         reference?: number | null;
+        alias?: string | null;
+        totalIncidents?: number | null;
+        totalOffenders?: number | null;
         totalRecoveredValue?: number | null;
         totalTheftSuccess?: number | null;
         totalValue?: number | null;
-        updatedAt: Date;
       }>;
       linkedVehicles: Array<{
         __typename?: 'Vehicle';
-        updatedAt: Date;
-        totalOffenders?: number | null;
-        registration?: string | null;
+        id: string;
         reference?: number | null;
+        colour?: string | null;
         model?: string | null;
         make?: string | null;
-        id: string;
-        colour?: string | null;
+        registration?: string | null;
         images: Array<{
           __typename?: 'Image';
           id: string;
@@ -81563,14 +82060,20 @@ export type VehicleQuery = {
           optimised?: string | null;
           position: ImagePosition;
           rotation: number;
+          primary?: boolean | null;
+          policeImage?: boolean | null;
+          card?: string | null;
         }>;
       }>;
       linkedIncidents: Array<{
         __typename?: 'Incident';
         id: string;
-        subject?: string | null;
-        description: string;
+        reference?: number | null;
         dayTime?: string | null;
+        policeRef?: string | null;
+        subject?: string | null;
+        totalValue?: number | null;
+        totalRecoveredValue?: number | null;
         images: Array<{
           __typename?: 'Image';
           id: string;
@@ -81578,19 +82081,29 @@ export type VehicleQuery = {
           optimised?: string | null;
           position: ImagePosition;
           rotation: number;
+          primary?: boolean | null;
+          policeImage?: boolean | null;
+          card?: string | null;
         }>;
+        location?: {
+          __typename?: 'Address';
+          id: string;
+          full?: string | null;
+          geoLat?: number | null;
+          geoLng?: number | null;
+        } | null;
       }>;
       linkedOffenders: Array<{
         __typename?: 'Offender';
         id: string;
-        updatedAt: Date;
-        age?: Age | null;
+        reference?: number | null;
+        name?: string | null;
+        gender?: Gender | null;
         build?: Build | null;
         height?: Height | null;
-        dateOfBirth?: Date | null;
-        name?: string | null;
         race?: Race | null;
-        gender?: Gender | null;
+        age?: Age | null;
+        dateOfBirth?: Date | null;
         images: Array<{
           __typename?: 'Image';
           id: string;
@@ -81598,6 +82111,9 @@ export type VehicleQuery = {
           optimised?: string | null;
           position: ImagePosition;
           rotation: number;
+          primary?: boolean | null;
+          policeImage?: boolean | null;
+          card?: string | null;
         }>;
       }>;
       createdBy: {
@@ -81623,32 +82139,31 @@ export type VehicleQuery = {
           id: string;
           url?: string | null;
           optimised?: string | null;
-          card?: string | null;
           position: ImagePosition;
           rotation: number;
+          primary?: boolean | null;
+          policeImage?: boolean | null;
+          card?: string | null;
         }>;
         linkedCrimeGroups: Array<{
           __typename?: 'CrimeGroup';
-          totalOffenders?: number | null;
-          totalIncidents?: number | null;
-          alias?: string | null;
           id: string;
           reference?: number | null;
+          alias?: string | null;
+          totalIncidents?: number | null;
+          totalOffenders?: number | null;
           totalRecoveredValue?: number | null;
           totalTheftSuccess?: number | null;
           totalValue?: number | null;
-          updatedAt: Date;
         }>;
         linkedVehicles: Array<{
           __typename?: 'Vehicle';
-          updatedAt: Date;
-          totalOffenders?: number | null;
-          registration?: string | null;
+          id: string;
           reference?: number | null;
+          colour?: string | null;
           model?: string | null;
           make?: string | null;
-          id: string;
-          colour?: string | null;
+          registration?: string | null;
           images: Array<{
             __typename?: 'Image';
             id: string;
@@ -81656,14 +82171,20 @@ export type VehicleQuery = {
             optimised?: string | null;
             position: ImagePosition;
             rotation: number;
+            primary?: boolean | null;
+            policeImage?: boolean | null;
+            card?: string | null;
           }>;
         }>;
         linkedIncidents: Array<{
           __typename?: 'Incident';
           id: string;
-          subject?: string | null;
-          description: string;
+          reference?: number | null;
           dayTime?: string | null;
+          policeRef?: string | null;
+          subject?: string | null;
+          totalValue?: number | null;
+          totalRecoveredValue?: number | null;
           images: Array<{
             __typename?: 'Image';
             id: string;
@@ -81671,19 +82192,29 @@ export type VehicleQuery = {
             optimised?: string | null;
             position: ImagePosition;
             rotation: number;
+            primary?: boolean | null;
+            policeImage?: boolean | null;
+            card?: string | null;
           }>;
+          location?: {
+            __typename?: 'Address';
+            id: string;
+            full?: string | null;
+            geoLat?: number | null;
+            geoLng?: number | null;
+          } | null;
         }>;
         linkedOffenders: Array<{
           __typename?: 'Offender';
           id: string;
-          updatedAt: Date;
-          age?: Age | null;
+          reference?: number | null;
+          name?: string | null;
+          gender?: Gender | null;
           build?: Build | null;
           height?: Height | null;
-          dateOfBirth?: Date | null;
-          name?: string | null;
           race?: Race | null;
-          gender?: Gender | null;
+          age?: Age | null;
+          dateOfBirth?: Date | null;
           images: Array<{
             __typename?: 'Image';
             id: string;
@@ -81691,6 +82222,9 @@ export type VehicleQuery = {
             optimised?: string | null;
             position: ImagePosition;
             rotation: number;
+            primary?: boolean | null;
+            policeImage?: boolean | null;
+            card?: string | null;
           }>;
         }>;
         createdBy: {
@@ -82023,6 +82557,24 @@ export type WorkflowDataQuery = {
   } | null;
 };
 
+export const CreatedByFragmentDoc = gql`
+  fragment CreatedBy on User {
+    id
+    fullName
+    businesses {
+      id
+      name
+    }
+  }
+`;
+export const DocumentsFragmentDoc = gql`
+  fragment Documents on Document {
+    id
+    name
+    url
+    fileType
+  }
+`;
 export const FeedTodoFragmentDoc = gql`
   fragment FeedTodo on Todo {
     description
@@ -82107,6 +82659,27 @@ export const FeedUpdateFragmentDoc = gql`
   }
   ${FeedImageFragmentDoc}
 `;
+export const InvestigationsFragmentDoc = gql`
+  fragment Investigations on Investigation {
+    id
+    name
+    description
+    status
+  }
+`;
+export const TodosFragmentDoc = gql`
+  fragment Todos on Todo {
+    id
+    name
+    description
+    dueDate
+    completed
+    assignedUsers {
+      id
+      fullName
+    }
+  }
+`;
 export const ImagesFragmentDoc = gql`
   fragment Images on Image {
     id
@@ -82116,24 +82689,20 @@ export const ImagesFragmentDoc = gql`
     rotation
     primary
     policeImage
+    card
   }
 `;
-export const OffendersFragmentDoc = gql`
-  fragment Offenders on Offender {
+export const CrimeGroupsFragmentDoc = gql`
+  fragment CrimeGroups on CrimeGroup {
     id
     reference
-    age
-    build
-    dateOfBirth
-    gender
-    name
-    race
-    images {
-      ...Images
-      card
-    }
+    alias
+    totalIncidents
+    totalOffenders
+    totalRecoveredValue
+    totalTheftSuccess
+    totalValue
   }
-  ${ImagesFragmentDoc}
 `;
 export const VehiclesFragmentDoc = gql`
   fragment Vehicles on Vehicle {
@@ -82148,6 +82717,115 @@ export const VehiclesFragmentDoc = gql`
     }
   }
   ${ImagesFragmentDoc}
+`;
+export const IncidentsFragmentDoc = gql`
+  fragment Incidents on Incident {
+    id
+    reference
+    dayTime
+    policeRef
+    subject
+    totalValue
+    totalRecoveredValue
+    location {
+      id
+      full
+      geoLat
+      geoLng
+    }
+  }
+`;
+export const OffendersFragmentDoc = gql`
+  fragment Offenders on Offender {
+    id
+    reference
+    name
+    gender
+    build
+    height
+    race
+    age
+    dateOfBirth
+    images {
+      ...Images
+    }
+  }
+  ${ImagesFragmentDoc}
+`;
+export const UpdatesFragmentDoc = gql`
+  fragment Updates on Update {
+    id
+    text
+    type
+    createdAt
+    images {
+      ...Images
+    }
+    linkedCrimeGroups {
+      ...CrimeGroups
+    }
+    linkedVehicles {
+      ...Vehicles
+    }
+    linkedIncidents {
+      ...Incidents
+      images {
+        ...Images
+      }
+    }
+    linkedOffenders {
+      ...Offenders
+    }
+    createdBy {
+      origName
+      id
+      fullName
+      businesses {
+        id
+        name
+        fullName
+      }
+    }
+    replies {
+      id
+      text
+      type
+      createdAt
+      images {
+        ...Images
+      }
+      linkedCrimeGroups {
+        ...CrimeGroups
+      }
+      linkedVehicles {
+        ...Vehicles
+      }
+      linkedIncidents {
+        ...Incidents
+        images {
+          ...Images
+        }
+      }
+      linkedOffenders {
+        ...Offenders
+      }
+      createdBy {
+        origName
+        id
+        fullName
+        businesses {
+          id
+          name
+          fullName
+        }
+      }
+    }
+  }
+  ${ImagesFragmentDoc}
+  ${CrimeGroupsFragmentDoc}
+  ${VehiclesFragmentDoc}
+  ${IncidentsFragmentDoc}
+  ${OffendersFragmentDoc}
 `;
 export const SetPasswordDocument = gql`
   mutation SetPassword($data: SetPasswordData!) {
@@ -85127,250 +85805,32 @@ export const CrimeGroupDocument = gql`
       groups {
         id
       }
-      evidence {
-        id
-        name
-        url
-        fileType
-      }
-      investigations {
-        id
-        name
-        description
-        status
-      }
-      offenders {
-        id
-        name
-        reference
-        lastActive {
-          id
-          dayTime
-        }
-        hair
-        peculiarities
-        race
-        dateOfBirth
-        dateSource
-        build
-        height
-        age
-        gender
-        images {
-          id
-          optimised
-          position
-          rotation
-        }
-        totalTheftSuccess
-        totalRecoveredValue
-        totalIncidents
-        totalValue
+      incidents {
+        ...Incidents
       }
       vehicles {
-        id
-        reference
-        make
-        model
-        updatedAt
-        colour
-        registration
-        totalOffenders
-        totalIncidents
-        totalCrimeGroups
+        ...Vehicles
       }
-      incidents {
-        id
-        reference
-        dayTime
-        date
-        crimeTypes {
-          id
-          name
-        }
-        createdBy {
-          id
-          businesses {
-            id
-            name
-            fullName
-          }
-        }
-        location {
-          full
-          id
-          geoLat
-          geoLng
-        }
+      offenders {
+        ...Offenders
+      }
+      evidence {
+        ...Documents
+      }
+      investigations {
+        ...Investigations
       }
       updates(orderBy: { createdAt: desc }) {
-        id
-        text
-        type
-        createdAt
-        images {
-          id
-          url
-          optimised
-          position
-          rotation
-          card
-        }
-        linkedCrimeGroups {
-          totalOffenders
-          totalIncidents
-          alias
-          id
-          reference
-          totalRecoveredValue
-          totalTheftSuccess
-          totalValue
-          updatedAt
-        }
-        linkedVehicles {
-          updatedAt
-          totalOffenders
-          registration
-          reference
-          model
-          make
-          id
-          colour
-          images {
-            id
-            url
-            optimised
-            position
-            rotation
-          }
-        }
-        linkedIncidents {
-          id
-          subject
-          description
-          dayTime
-          images {
-            id
-            url
-            optimised
-            position
-            rotation
-          }
-        }
-        linkedOffenders {
-          id
-          updatedAt
-          age
-          build
-          height
-          dateOfBirth
-          name
-          race
-          gender
-          images {
-            id
-            url
-            optimised
-            position
-            rotation
-          }
-        }
-        createdBy {
-          origName
-          id
-          fullName
-          businesses {
-            id
-            name
-            fullName
-          }
-        }
-        replies {
-          id
-          text
-          type
-          createdAt
-          images {
-            id
-            url
-            optimised
-            card
-            position
-            rotation
-          }
-          linkedCrimeGroups {
-            totalOffenders
-            totalIncidents
-            alias
-            id
-            reference
-            totalRecoveredValue
-            totalTheftSuccess
-            totalValue
-            updatedAt
-          }
-          linkedVehicles {
-            updatedAt
-            totalOffenders
-            registration
-            reference
-            model
-            make
-            id
-            colour
-            images {
-              id
-              url
-              optimised
-              position
-              rotation
-            }
-          }
-          linkedIncidents {
-            id
-            subject
-            description
-            dayTime
-            images {
-              id
-              url
-              optimised
-              position
-              rotation
-            }
-          }
-          linkedOffenders {
-            id
-            updatedAt
-            age
-            build
-            height
-            dateOfBirth
-            name
-            race
-            gender
-            images {
-              id
-              url
-              optimised
-              position
-              rotation
-            }
-          }
-          createdBy {
-            origName
-            id
-            fullName
-            businesses {
-              id
-              name
-              fullName
-            }
-          }
-        }
+        ...Updates
       }
     }
   }
+  ${IncidentsFragmentDoc}
+  ${VehiclesFragmentDoc}
+  ${OffendersFragmentDoc}
+  ${DocumentsFragmentDoc}
+  ${InvestigationsFragmentDoc}
+  ${UpdatesFragmentDoc}
 `;
 export function useCrimeGroupQuery(
   baseOptions: Apollo.QueryHookOptions<
@@ -88490,18 +88950,6 @@ export const ViewIncidentDocument = gql`
         }
         type
       }
-      evidence {
-        id
-        name
-        url
-        fileType
-      }
-      investigations {
-        id
-        name
-        description
-        status
-      }
       scheme {
         mg11Available
         restrictIncidentAccess
@@ -88536,233 +88984,36 @@ export const ViewIncidentDocument = gql`
         id
         name
       }
-      createdBy {
-        id
-        fullName
-        businesses {
-          id
-          name
-        }
-      }
-      images {
-        id
-        url
-        optimised
-        position
-        rotation
-        primary
-        policeImage
-      }
       groups {
         id
         name
       }
+      createdBy {
+        ...CreatedBy
+      }
+      images {
+        ...Images
+      }
       crimeGroups {
-        id
-        reference
-        alias
-        totalIncidents
-        totalOffenders
-        totalRecoveredValue
-        totalTheftSuccess
-        totalValue
+        ...CrimeGroups
       }
       vehicles {
         ...Vehicles
       }
       todos {
-        id
-        name
-        description
-        dueDate
-        completed
-        assignedUsers {
-          id
-          fullName
-        }
+        ...Todos
       }
       offenders {
         ...Offenders
       }
-      updates(orderBy: { createdAt: asc }) {
-        id
-        text
-        type
-        createdAt
-        images {
-          id
-          url
-          optimised
-          position
-          rotation
-          card
-        }
-        linkedCrimeGroups {
-          totalOffenders
-          totalIncidents
-          alias
-          id
-          reference
-          totalRecoveredValue
-          totalTheftSuccess
-          totalValue
-          updatedAt
-        }
-        linkedVehicles {
-          images {
-            id
-            url
-            position
-            rotation
-            optimised
-          }
-          updatedAt
-          totalOffenders
-          registration
-          reference
-          model
-          make
-          id
-          colour
-          images {
-            id
-            url
-            optimised
-            position
-            rotation
-          }
-        }
-        linkedIncidents {
-          id
-          subject
-          description
-          dayTime
-          images {
-            id
-            url
-            optimised
-            position
-            rotation
-          }
-        }
-        linkedOffenders {
-          id
-          updatedAt
-          age
-          build
-          height
-          dateOfBirth
-          name
-          race
-          gender
-          images {
-            id
-            url
-            optimised
-            position
-            rotation
-          }
-        }
-        createdBy {
-          origName
-          id
-          fullName
-          businesses {
-            id
-            name
-            fullName
-          }
-        }
-        replies {
-          id
-          text
-          type
-          createdAt
-          images {
-            id
-            url
-            optimised
-            position
-            rotation
-            card
-          }
-          linkedCrimeGroups {
-            totalOffenders
-            totalIncidents
-            alias
-            id
-            reference
-            totalRecoveredValue
-            totalTheftSuccess
-            totalValue
-            updatedAt
-          }
-          linkedVehicles {
-            images {
-              id
-              url
-              optimised
-              position
-              rotation
-            }
-            updatedAt
-            totalOffenders
-            registration
-            reference
-            model
-            make
-            id
-            colour
-            images {
-              id
-              url
-              optimised
-              position
-              rotation
-            }
-          }
-          linkedIncidents {
-            id
-            subject
-            description
-            dayTime
-            images {
-              id
-              url
-              optimised
-              position
-              rotation
-            }
-          }
-          linkedOffenders {
-            id
-            updatedAt
-            age
-            build
-            height
-            dateOfBirth
-            name
-            race
-            gender
-            images {
-              id
-              url
-              optimised
-              position
-              rotation
-            }
-          }
-          createdBy {
-            origName
-            id
-            fullName
-            businesses {
-              id
-              name
-              fullName
-            }
-          }
-        }
+      evidence {
+        ...Documents
+      }
+      investigations {
+        ...Investigations
+      }
+      updates(orderBy: { createdAt: desc }) {
+        ...Updates
       }
       location {
         geoLat
@@ -88771,8 +89022,15 @@ export const ViewIncidentDocument = gql`
       }
     }
   }
+  ${CreatedByFragmentDoc}
+  ${ImagesFragmentDoc}
+  ${CrimeGroupsFragmentDoc}
   ${VehiclesFragmentDoc}
+  ${TodosFragmentDoc}
   ${OffendersFragmentDoc}
+  ${DocumentsFragmentDoc}
+  ${InvestigationsFragmentDoc}
+  ${UpdatesFragmentDoc}
 `;
 export function useViewIncidentQuery(
   baseOptions: Apollo.QueryHookOptions<
@@ -89030,6 +89288,9 @@ export const UpdateInvestigationDocument = gql`
         totalCrimeGroups
         totalOffenders
         totalIncidents
+        images {
+          ...Images
+        }
       }
       offenders {
         id
@@ -89101,6 +89362,7 @@ export const UpdateInvestigationDocument = gql`
       }
     }
   }
+  ${ImagesFragmentDoc}
 `;
 export type UpdateInvestigationMutationFn = Apollo.MutationFunction<
   UpdateInvestigationMutation,
@@ -89425,200 +89687,10 @@ export const ViewInvestigationDocument = gql`
       }
       subscribed
       todos {
-        id
-        name
-        description
-        dueDate
-        completed
-        assignedUsers {
-          id
-          fullName
-        }
+        ...Todos
       }
       vehicles {
-        id
-        make
-        model
-        colour
-        registration
-        updatedAt
-        totalCrimeGroups
-        totalOffenders
-        totalIncidents
-        reference
-      }
-      updates(orderBy: { createdAt: desc }) {
-        id
-        text
-        type
-        createdAt
-        images {
-          id
-          url
-          optimised
-          optimisedPersisted
-          card
-          position
-          rotation
-        }
-        linkedCrimeGroups {
-          totalOffenders
-          totalIncidents
-          alias
-          id
-          reference
-          totalRecoveredValue
-          totalTheftSuccess
-          totalValue
-          updatedAt
-        }
-        linkedVehicles {
-          images {
-            id
-            url
-            optimised
-            optimisedPersisted
-            position
-            rotation
-          }
-          updatedAt
-          totalOffenders
-          registration
-          reference
-          model
-          make
-          id
-          colour
-        }
-        linkedIncidents {
-          id
-          subject
-          description
-          dayTime
-          images {
-            id
-            url
-            optimised
-            optimisedPersisted
-            position
-            rotation
-          }
-        }
-        linkedOffenders {
-          id
-          updatedAt
-          age
-          build
-          height
-          dateOfBirth
-          name
-          race
-          gender
-          images {
-            id
-            url
-            optimised
-            optimisedPersisted
-            position
-            rotation
-          }
-        }
-        createdBy {
-          origName
-          id
-          fullName
-          businesses {
-            id
-            name
-            fullName
-          }
-        }
-        replies {
-          id
-          text
-          type
-          createdAt
-          images {
-            id
-            url
-            optimisedPersisted
-            optimised
-            card
-            position
-            rotation
-          }
-          linkedCrimeGroups {
-            totalOffenders
-            totalIncidents
-            alias
-            id
-            reference
-            totalRecoveredValue
-            totalTheftSuccess
-            totalValue
-            updatedAt
-          }
-          linkedVehicles {
-            images {
-              id
-              url
-              optimisedPersisted
-              optimised
-              position
-              rotation
-            }
-            updatedAt
-            totalOffenders
-            registration
-            reference
-            model
-            make
-            id
-            colour
-          }
-          linkedIncidents {
-            id
-            subject
-            description
-            dayTime
-            images {
-              id
-              url
-              optimised
-              position
-              rotation
-            }
-          }
-          linkedOffenders {
-            id
-            updatedAt
-            age
-            build
-            height
-            dateOfBirth
-            name
-            race
-            gender
-            images {
-              id
-              url
-              optimised
-              optimisedPersisted
-              position
-              rotation
-            }
-          }
-          createdBy {
-            origName
-            id
-            fullName
-            businesses {
-              id
-              name
-              fullName
-            }
-          }
-        }
+        ...Vehicles
       }
       offenders {
         id
@@ -89640,55 +89712,18 @@ export const ViewInvestigationDocument = gql`
         }
       }
       incidents {
-        id
-        policeRef
-        dayTime
-        createdBy {
-          organisation
-        }
-        reference
-        subject
-        date
-        location {
-          id
-          full
-          geoLat
-          geoLng
-        }
-        totalValue
-        totalRecoveredValue
+        ...Incidents
+      }
+      updates(orderBy: { createdAt: desc }) {
+        ...Updates
       }
       crimeGroups {
-        id
-        alias
-        reference
-        offenders {
-          id
-          name
-          reference
-          totalIncidents
-          age
-          gender
-          race
-          build
-          height
-          dateOfBirth
-          images {
-            id
-            optimised
-            optimisedPersisted
-            position
-            rotation
-          }
-        }
+        ...CrimeGroups
         vehicles {
-          id
-          make
-          model
-          colour
-          registration
-          updatedAt
-          reference
+          ...Vehicles
+        }
+        offenders {
+          ...Offenders
         }
       }
       flows {
@@ -89727,6 +89762,12 @@ export const ViewInvestigationDocument = gql`
       }
     }
   }
+  ${TodosFragmentDoc}
+  ${VehiclesFragmentDoc}
+  ${IncidentsFragmentDoc}
+  ${UpdatesFragmentDoc}
+  ${CrimeGroupsFragmentDoc}
+  ${OffendersFragmentDoc}
 `;
 export function useViewInvestigationQuery(
   baseOptions: Apollo.QueryHookOptions<
@@ -92295,21 +92336,6 @@ export const ViewOffenderDocument = gql`
       id
       alias
       createdAt
-      createdBy {
-        fullName
-      }
-      evidence {
-        id
-        name
-        url
-        fileType
-      }
-      investigations {
-        id
-        name
-        description
-        status
-      }
       scheme {
         mg11Available
       }
@@ -92337,11 +92363,7 @@ export const ViewOffenderDocument = gql`
         name
       }
       images {
-        id
-        url
-        optimised
-        position
-        rotation
+        ...Images
         faces {
           id
           confidence
@@ -92357,9 +92379,6 @@ export const ViewOffenderDocument = gql`
             id
           }
         }
-        policeImage
-        rotation
-        primary
       }
       addresses {
         id
@@ -92388,240 +92407,43 @@ export const ViewOffenderDocument = gql`
         endDate
         type
       }
+      createdBy {
+        ...CreatedBy
+      }
+      images {
+        ...Images
+      }
       crimeGroups {
-        id
-        reference
-        alias
-        totalIncidents
-        totalOffenders
-        totalRecoveredValue
-        totalTheftSuccess
-        totalValue
+        ...CrimeGroups
       }
       vehicles {
-        id
-        reference
-        colour
-        model
-        make
-        registration
-        images {
-          id
-          url
-          optimised
-          policeImage
-          primary
-          position
-          rotation
-        }
-      }
-      createdBy {
-        id
-        fullName
-        businesses {
-          id
-          name
-        }
+        ...Vehicles
       }
       incidents {
-        id
-        reference
-        dayTime
-        date
-        crimeTypes {
-          id
-          name
-        }
-        createdBy {
-          id
-          businesses {
-            id
-            name
-            fullName
-          }
-        }
-        location {
-          id
-          full
-          geoLat
-          geoLng
-        }
+        ...Incidents
       }
-      crimeGroups {
-        id
-        reference
+      evidence {
+        ...Documents
+      }
+      investigations {
+        ...Investigations
       }
       updates(orderBy: { createdAt: desc }) {
-        id
-        text
-        type
-        createdAt
-        images {
-          id
-          url
-          optimised
-          position
-          rotation
-          card
-        }
-        linkedCrimeGroups {
-          totalOffenders
-          totalIncidents
-          alias
-          id
-          reference
-          totalRecoveredValue
-          totalTheftSuccess
-          totalValue
-          updatedAt
-        }
-        linkedVehicles {
-          images {
-            id
-            url
-            optimised
-            position
-            rotation
-          }
-          updatedAt
-          totalOffenders
-          registration
-          reference
-          model
-          make
-          id
-          colour
-        }
-        linkedIncidents {
-          id
-          subject
-          description
-          dayTime
-          images {
-            id
-            url
-            optimised
-            position
-            rotation
-          }
-        }
-        linkedOffenders {
-          id
-          updatedAt
-          age
-          build
-          height
-          dateOfBirth
-          name
-          race
-          gender
-          images {
-            id
-            url
-            optimised
-            position
-            rotation
-          }
-        }
-        createdBy {
-          origName
-          id
-          fullName
-          businesses {
-            id
-            name
-            fullName
-          }
-        }
-        replies {
-          id
-          text
-          type
-          createdAt
-          images {
-            id
-            url
-            optimised
-            card
-            position
-            rotation
-          }
-          linkedCrimeGroups {
-            totalOffenders
-            totalIncidents
-            alias
-            id
-            reference
-            totalRecoveredValue
-            totalTheftSuccess
-            totalValue
-            updatedAt
-          }
-          linkedVehicles {
-            images {
-              id
-              url
-              optimised
-              position
-              rotation
-            }
-            updatedAt
-            totalOffenders
-            registration
-            reference
-            model
-            make
-            id
-            colour
-          }
-          linkedIncidents {
-            id
-            subject
-            description
-            dayTime
-            images {
-              id
-              url
-              optimised
-              position
-              rotation
-            }
-          }
-          linkedOffenders {
-            id
-            updatedAt
-            age
-            build
-            height
-            dateOfBirth
-            name
-            race
-            gender
-            images {
-              id
-              url
-              optimised
-              position
-              rotation
-            }
-          }
-          createdBy {
-            origName
-            id
-            fullName
-            businesses {
-              id
-              name
-              fullName
-            }
-          }
-        }
+        ...Updates
       }
       searchedMatches {
         id
       }
     }
   }
+  ${ImagesFragmentDoc}
+  ${CreatedByFragmentDoc}
+  ${CrimeGroupsFragmentDoc}
+  ${VehiclesFragmentDoc}
+  ${IncidentsFragmentDoc}
+  ${DocumentsFragmentDoc}
+  ${InvestigationsFragmentDoc}
+  ${UpdatesFragmentDoc}
 `;
 export function useViewOffenderQuery(
   baseOptions: Apollo.QueryHookOptions<
@@ -94824,6 +94646,59 @@ export type ListStatementTemplatesQueryResult = Apollo.QueryResult<
   ListStatementTemplatesQuery,
   ListStatementTemplatesQueryVariables
 >;
+export const ListStockItemsDocument = gql`
+  query ListStockItems($where: StockItemsWhereInput) {
+    listStockItems(where: $where) {
+      total
+      stockItems {
+        id
+        barcode
+        brand
+        costPriceLocal
+        costPriceStandard
+        division
+        name
+        salesPriceLocal
+        salesPriceStandard
+        sku
+      }
+    }
+  }
+`;
+export function useListStockItemsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    ListStockItemsQuery,
+    ListStockItemsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ListStockItemsQuery, ListStockItemsQueryVariables>(
+    ListStockItemsDocument,
+    options
+  );
+}
+export function useListStockItemsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListStockItemsQuery,
+    ListStockItemsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ListStockItemsQuery, ListStockItemsQueryVariables>(
+    ListStockItemsDocument,
+    options
+  );
+}
+export type ListStockItemsQueryHookResult = ReturnType<
+  typeof useListStockItemsQuery
+>;
+export type ListStockItemsLazyQueryHookResult = ReturnType<
+  typeof useListStockItemsLazyQuery
+>;
+export type ListStockItemsQueryResult = Apollo.QueryResult<
+  ListStockItemsQuery,
+  ListStockItemsQueryVariables
+>;
 export const DeleteTagDocument = gql`
   mutation deleteTag($id: String!) {
     deleteTag(where: { id: $id }) {
@@ -95397,6 +95272,48 @@ export type TranslateLazyQueryHookResult = ReturnType<
 export type TranslateQueryResult = Apollo.QueryResult<
   TranslateQuery,
   TranslateQueryVariables
+>;
+export const TranslateTextDocument = gql`
+  query TranslateText($data: TranslateTextInput!) {
+    translateText(data: $data) {
+      translatedText
+      origText
+    }
+  }
+`;
+export function useTranslateTextQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    TranslateTextQuery,
+    TranslateTextQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<TranslateTextQuery, TranslateTextQueryVariables>(
+    TranslateTextDocument,
+    options
+  );
+}
+export function useTranslateTextLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    TranslateTextQuery,
+    TranslateTextQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<TranslateTextQuery, TranslateTextQueryVariables>(
+    TranslateTextDocument,
+    options
+  );
+}
+export type TranslateTextQueryHookResult = ReturnType<
+  typeof useTranslateTextQuery
+>;
+export type TranslateTextLazyQueryHookResult = ReturnType<
+  typeof useTranslateTextLazyQuery
+>;
+export type TranslateTextQueryResult = Apollo.QueryResult<
+  TranslateTextQuery,
+  TranslateTextQueryVariables
 >;
 export const CreateUpdateOnCrimeGroupDocument = gql`
   mutation CreateUpdateOnCrimeGroup(
@@ -98293,267 +98210,42 @@ export const VehicleDocument = gql`
         id
         name
       }
-      evidence {
-        id
-        name
-        url
-        fileType
-      }
-      investigations {
-        id
-        name
-        description
-        status
-      }
       groups {
         id
         name
       }
       images {
-        id
-        optimised
-        url
-        position
-        rotation
-        policeImage
-        rotation
-        primary
-      }
-      incidents {
-        id
-        reference
-        dayTime
-        policeRef
-        subject
-        totalValue
-        totalRecoveredValue
-        crimeTypes {
-          id
-          name
-        }
-        location {
-          id
-          full
-          geoLat
-          geoLng
-        }
-        createdBy {
-          id
-          fullName
-          businesses {
-            id
-            name
-          }
-        }
-      }
-      offenders {
-        id
-        name
-        reference
-        lastActive {
-          id
-          dayTime
-        }
-        hair
-        peculiarities
-        race
-        dateOfBirth
-        dateSource
-        build
-        height
-        age
-        gender
-        images {
-          id
-          optimised
-          position
-          rotation
-        }
-        totalTheftSuccess
-        totalRecoveredValue
-        totalIncidents
-        totalValue
+        ...Images
       }
       updatedAt
       colour
       crimeGroup {
-        id
-        reference
-        totalIncidents
-        totalOffenders
-        totalRecoveredValue
-        totalTheftSuccess
-        totalValue
-        alias
+        ...CrimeGroups
+      }
+      offenders {
+        ...Offenders
+      }
+      incidents {
+        ...Incidents
+      }
+      evidence {
+        ...Documents
+      }
+      investigations {
+        ...Investigations
       }
       updates(orderBy: { createdAt: desc }) {
-        id
-        text
-        type
-        createdAt
-        images {
-          id
-          url
-          optimised
-          card
-          position
-          rotation
-        }
-        linkedCrimeGroups {
-          totalOffenders
-          totalIncidents
-          alias
-          id
-          reference
-          totalRecoveredValue
-          totalTheftSuccess
-          totalValue
-          updatedAt
-        }
-        linkedVehicles {
-          images {
-            id
-            url
-            optimised
-            position
-            rotation
-          }
-          updatedAt
-          totalOffenders
-          registration
-          reference
-          model
-          make
-          id
-          colour
-        }
-        linkedIncidents {
-          id
-          subject
-          description
-          dayTime
-          images {
-            id
-            url
-            optimised
-            position
-            rotation
-          }
-        }
-        linkedOffenders {
-          id
-          updatedAt
-          age
-          build
-          height
-          dateOfBirth
-          name
-          race
-          gender
-          images {
-            id
-            url
-            optimised
-            position
-            rotation
-          }
-        }
-        createdBy {
-          origName
-          id
-          fullName
-          businesses {
-            id
-            name
-            fullName
-          }
-        }
-        replies {
-          id
-          text
-          type
-          createdAt
-          images {
-            id
-            url
-            optimised
-            card
-            position
-            rotation
-          }
-          linkedCrimeGroups {
-            totalOffenders
-            totalIncidents
-            alias
-            id
-            reference
-            totalRecoveredValue
-            totalTheftSuccess
-            totalValue
-            updatedAt
-          }
-          linkedVehicles {
-            images {
-              id
-              url
-              optimised
-              position
-              rotation
-            }
-            updatedAt
-            totalOffenders
-            registration
-            reference
-            model
-            make
-            id
-            colour
-          }
-          linkedIncidents {
-            id
-            subject
-            description
-            dayTime
-            images {
-              id
-              url
-              optimised
-              position
-              rotation
-            }
-          }
-          linkedOffenders {
-            id
-            updatedAt
-            age
-            build
-            height
-            dateOfBirth
-            name
-            race
-            gender
-            images {
-              id
-              url
-              optimised
-              position
-              rotation
-            }
-          }
-          createdBy {
-            origName
-            id
-            fullName
-            businesses {
-              id
-              name
-              fullName
-            }
-          }
-        }
+        ...Updates
       }
     }
   }
+  ${ImagesFragmentDoc}
+  ${CrimeGroupsFragmentDoc}
+  ${OffendersFragmentDoc}
+  ${IncidentsFragmentDoc}
+  ${DocumentsFragmentDoc}
+  ${InvestigationsFragmentDoc}
+  ${UpdatesFragmentDoc}
 `;
 export function useVehicleQuery(
   baseOptions: Apollo.QueryHookOptions<VehicleQuery, VehicleQueryVariables>

@@ -14,7 +14,9 @@ fragment Updates on Update {
   }
   linkedIncidents {
     ...Incidents
-    ...Images
+    images {
+      ...Images
+    }
   }
   linkedOffenders {
     ...Offenders
@@ -45,7 +47,9 @@ fragment Updates on Update {
     }
     linkedIncidents {
       ...Incidents
-      ...Images
+      images {
+        ...Images
+      }
     }
     linkedOffenders {
       ...Offenders

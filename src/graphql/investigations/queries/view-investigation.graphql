@@ -31,7 +31,23 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
       ...Vehicles
     }
     offenders {
-      ...Offenders
+      id
+      name
+      reference
+      totalIncidents
+      age
+      gender
+      race
+      build
+      height
+      dateOfBirth
+      images {
+        id
+        optimised
+        optimisedPersisted
+        position
+        rotation
+      }
     }
     incidents {
       ...Incidents

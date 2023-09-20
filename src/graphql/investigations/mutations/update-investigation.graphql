@@ -20,6 +20,9 @@ mutation UpdateInvestigation(
       totalCrimeGroups
       totalOffenders
       totalIncidents
+      images {
+        ...Images
+      }
     }
     offenders {
       id

@@ -19,9 +19,6 @@ query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
     vehicles {
       ...Vehicles
     }
-    todos {
-      ...Todos
-    }
     offenders {
       ...Offenders
     }

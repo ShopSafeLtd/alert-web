@@ -18,17 +18,17 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
       id
       name
     }
+    images {
+      ...Images
+    }
 
     updatedAt
     colour
-    crimeGroups {
+    crimeGroup {
       ...CrimeGroups
     }
     offenders {
       ...Offenders
-    }
-    todos {
-      ...Todos
     }
     incidents {
       ...Incidents

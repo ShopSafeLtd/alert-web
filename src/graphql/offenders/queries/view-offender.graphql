@@ -89,9 +89,6 @@ query ViewOffender(
     vehicles {
       ...Vehicles
     }
-    todos {
-      ...Todos
-    }
     incidents {
       ...Incidents
     }
