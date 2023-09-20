@@ -126,6 +126,13 @@ const useArticlesSection = ({
     },
     skip: (page - 1) * pageSize,
     take: pageSize,
+    groupsWhere: {
+      scheme: {
+        id: {
+          equals: schemeId,
+        },
+      },
+    },
   };
 
   const { data, loading, fetchMore } = useListArticlesQuery({

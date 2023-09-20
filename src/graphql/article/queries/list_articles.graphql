@@ -4,6 +4,7 @@ query listArticles(
   $take: Int
   $skip: Int
   $order: ArticleOrderByWithRelationInput
+  $groupsWhere: GroupWhereInput
 ) {
   listArticles(
     where: $where
@@ -43,7 +44,7 @@ query listArticles(
         }
         id
       }
-      groups {
+      groups(where: $groupsWhere) {
         id
         name
       }
