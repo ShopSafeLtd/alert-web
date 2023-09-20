@@ -7,7 +7,7 @@ import {
 } from 'graphql/generated';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import errorNotification from 'types/error_notification';
+import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 import FONT_FAMILIES from '../../../components/onboarding/Onboarding/SchemeTerms/utils/Fonts';
 import type { Mg11Data } from './FinalSignMg11.view';

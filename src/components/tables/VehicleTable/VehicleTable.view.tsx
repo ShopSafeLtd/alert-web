@@ -19,7 +19,8 @@ interface Props {
         make?: string | null;
         colour?: string | null;
         model?: string | null;
-      }[];
+      }[]
+    | undefined;
   hasNavigation?: boolean;
   saving?: boolean;
   setEditVehicleData?: (value: VehicleData | null) => void;
@@ -60,6 +61,13 @@ const VehicleTable = ({
             defaultMessage: 'Alert ID',
             id: 'k8ZNgH',
           }),
+          // render: (_, record) => {
+          //   hasNavigation ? (
+          //     <Link to={`vehicles/view/${record.key}`} />
+          //   ) : (
+          //     <Typography.Text>{record.reference}</Typography.Text>
+          //   );
+          // },
           width: 100,
         },
         {
@@ -101,7 +109,7 @@ const VehicleTable = ({
           width: 100,
           render: (_, record) => (
             <Row gutter={8}>
-              {editRights && (
+              {editRights && setEditVehicleData && (
                 <Col>
                   <Tooltip
                     title={intl.formatMessage({
@@ -113,15 +121,14 @@ const VehicleTable = ({
                       size="small"
                       disabled={saving}
                       onClick={() => {
-                        if (setEditVehicleData)
-                          setEditVehicleData(record.vehicle);
+                        setEditVehicleData(record.vehicle);
                       }}
                       icon={<FontAwesomeIcon icon={faPenToSquare} />}
                     />
                   </Tooltip>
                 </Col>
               )}
-              {deleteRights && (
+              {deleteRights && onDeleteVehicle && (
                 <Col>
                   <Tooltip
                     title={intl.formatMessage({
@@ -136,7 +143,7 @@ const VehicleTable = ({
                         id: 'hHs0lD',
                       })}
                       onConfirm={() => {
-                        if (onDeleteVehicle) onDeleteVehicle(record.key);
+                        onDeleteVehicle(record.key);
                       }}
                       okText={intl.formatMessage({
                         defaultMessage: 'Yes',
@@ -161,15 +168,17 @@ const VehicleTable = ({
           ),
         },
       ]}
-      dataSource={vehicles.map((vehicle) => ({
-        key: vehicle.id,
-        reference: vehicle.reference,
-        make: vehicle.make,
-        colour: vehicle.colour,
-        model: vehicle.model,
-        registration: vehicle.registration,
-        vehicle,
-      }))}
+      dataSource={
+        vehicles?.map((vehicle) => ({
+          key: vehicle.id,
+          reference: vehicle.reference,
+          make: vehicle.make,
+          colour: vehicle.colour,
+          model: vehicle.model,
+          registration: vehicle.registration,
+          vehicle,
+        })) || []
+      }
       pagination={{
         hideOnSinglePage: true,
         pageSize: 5,

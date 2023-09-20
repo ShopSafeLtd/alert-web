@@ -49,6 +49,7 @@ describe('List Officer View', () => {
       incidents: [],
       bans: [],
       vehicles: [],
+      investigations: [],
       idVerified: false,
       addresses: [],
       alias: [],

@@ -112,7 +112,7 @@ const AddExistingOffender = ({
           {Array.from({ length: data?.listOffendersAllSchemes?.total || 24 })
             .fill(0)
             .map(() => (
-              <Col span={6} className="offender-item">
+              <Col span={4} className="offender-item">
                 <OffenderTileSkeleton />
               </Col>
             ))}
@@ -128,7 +128,7 @@ const AddExistingOffender = ({
       return (
         <Row wrap gutter={16} style={{ marginRight: 0 }}>
           {data.listOffendersAllSchemes.offenders.map((offender) => (
-            <Col span={6} key={offender.id} className="offender-item">
+            <Col span={4} key={offender.id} className="offender-item">
               <OffenderTile
                 offender={offender}
                 onClick={() => setCurrentId(offender.id)}
@@ -155,7 +155,7 @@ const AddExistingOffender = ({
   return (
     <div className="add-existing-offender">
       <Row wrap={false}>
-        <Col span={18} className={classes.offenders}>
+        <Col span={20} className={classes.offenders}>
           <Input
             value={search}
             className={classes.searchBar}
@@ -184,7 +184,7 @@ const AddExistingOffender = ({
             />
           </div>
         </Col>
-        <Col className={classes.filters} span={6}>
+        <Col className={classes.filters} span={4}>
           <Paragraph className={classes.filterTitle}>
             {intl.formatMessage({ defaultMessage: 'Filters', id: 'zSOvI0' })}
           </Paragraph>

@@ -21,7 +21,7 @@ import type {
   IncidentCardData,
 } from 'types/DataType';
 import update from 'immutability-helper';
-import errorNotification from 'types/error_notification';
+import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
 import { compressImage } from '../../../../utils/compress-images';
@@ -241,6 +241,13 @@ const useAddVehicle = (): Return => {
               ? offendersData.map(({ id }) => ({ id }))
               : [],
           schemes: schemeId,
+          documents:
+            documentList.map((file) => ({
+              url: file.url || '',
+              name: file.name || '',
+              fileType: file.type || '',
+              origFileName: file.fileName || '',
+            })) || [],
           image: {
             upload:
               imageChange && fileList.length > 0

@@ -5,7 +5,7 @@ import { useDeleteArticleMutation, Role } from 'graphql/generated';
 import { notification } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import type { MutationUpdaterFn } from '@apollo/client';
-import errorNotification from 'types/error_notification';
+import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 
 interface Props {

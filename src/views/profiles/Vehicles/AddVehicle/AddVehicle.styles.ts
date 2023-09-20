@@ -1,7 +1,7 @@
 import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles({
-  card: {},
+  page: { padding: 15, marginRight: 15 },
 });
 
 export default useStyles;

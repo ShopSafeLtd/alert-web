@@ -37,6 +37,8 @@ describe('Detail Officer View', () => {
       <MemoryRouter>
         <IncidentCard
           incident={data}
+          toggleAddInvestigation={jest.fn()}
+          addInvestigation={false}
           approvalRights={false}
           deleteRights={false}
           menuRights={false}

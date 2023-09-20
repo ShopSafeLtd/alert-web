@@ -8,7 +8,7 @@ import type { StateImageData } from '../../../../incidents/IncidentForm/ImageSec
 interface Props {
   onClose: () => void;
   update: (value: OffenderData) => void;
-  images: ImageData[] | undefined;
+  images?: ImageData[] | undefined;
   onImagesUploaded?: (values: StateImageData[]) => void;
 }
 const AddNewOffender = ({

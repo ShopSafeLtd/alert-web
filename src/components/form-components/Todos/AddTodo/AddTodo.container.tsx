@@ -9,6 +9,8 @@ interface Props {
   onClose: () => void;
   update?: MutationUpdaterFn<CreateTodoMutation>;
   incidentId?: string;
+  investigationId?: string;
+  businessId?: string;
   initData?: {
     id: string;
   };
@@ -18,6 +20,8 @@ const AddTodo = ({
   update: updateMutation,
   onClose,
   incidentId,
+  investigationId,
+  businessId,
   initData,
 }: Props): JSX.Element => {
   const {
@@ -40,10 +44,14 @@ const AddTodo = ({
     setAvailableUsers,
     users,
     availableUsers,
+    documentList,
+    documentUploadProps,
   } = useAddTodo({
     onClose,
     updateMutation,
     incidentId,
+    investigationId,
+    businessId,
     initData,
   });
 
@@ -69,6 +77,8 @@ const AddTodo = ({
       setAvailableUsers={setAvailableUsers}
       setUsers={setUsers}
       users={users}
+      documentList={documentList}
+      documentUploadProps={documentUploadProps}
     />
   );
 };

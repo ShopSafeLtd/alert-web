@@ -10,7 +10,7 @@ import {
 } from 'graphql/generated';
 import { notification } from 'antd';
 import type { SelectOptions } from 'types/DataType';
-import errorNotification from 'types/error_notification';
+import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 
 export interface FormData {

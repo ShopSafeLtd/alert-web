@@ -13,7 +13,7 @@ import { message, notification, Upload } from 'antd';
 import { useStoreState } from 'state';
 
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-import errorNotification from 'types/error_notification';
+import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 
 export interface FormData {

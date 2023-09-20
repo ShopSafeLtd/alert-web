@@ -12,7 +12,6 @@ import {
   useInvestigationSuggestionsQuery,
   useUpdateInvestigationMutation,
   useUpdateUpdateMutation,
-  useViewInvestigationQuery,
   ViewInvestigationDocument,
 } from 'graphql/generated';
 import { useEffect, useState } from 'react';
@@ -24,16 +23,11 @@ import { useStoreState } from '../../../../../state';
 const { confirm } = Modal;
 
 interface Return {
-  data: ViewInvestigationQuery | undefined;
-  loading: boolean;
-
   scrolledToTop: () => void;
   loadMore: boolean;
   handleEditUpdate: () => void;
-
   editRights: boolean;
   userId: string;
-  saving: boolean;
   setEditUpdate: (value: { id: string; text: string } | null) => void;
   confirmDeleteUpdate: (updateId: string) => void;
   setReplyTo: (
@@ -65,6 +59,8 @@ interface Return {
   toggleViewSuggestedIncidents: () => void;
   viewSuggestedVehicles: boolean;
   toggleViewSuggestedVehicles: () => void;
+  editIncidentId: string;
+  setEditIncidentId: (value: string) => void;
 }
 
 interface Props {
@@ -85,7 +81,7 @@ const useViewDetails = ({ investigationId }: Props): Return => {
   const [viewSuggestedVehicles, setViewSuggestedVehicles] = useState(false);
   const role = useStoreState((state) => state.user.role);
   const userId = useStoreState((state) => state.user.id);
-  const [saving] = useState(false);
+  const [editIncidentId, setEditIncidentId] = useState('');
 
   const [replyTo, setReplyTo] = useState<{
     id: string;
@@ -93,14 +89,15 @@ const useViewDetails = ({ investigationId }: Props): Return => {
     createdAt: string;
     createdBy: string;
   } | null>(null);
-  const { data, loading } = useViewInvestigationQuery({
-    fetchPolicy: 'cache-and-network',
-    variables: {
-      where: {
-        id: investigationId,
-      },
-    },
-  });
+
+  // const { data, loading } = useViewInvestigationQuery({
+  //   fetchPolicy: 'cache-and-network',
+  //   variables: {
+  //     where: {
+  //       id: investigationId,
+  //     },
+  //   },
+  // });
 
   const { data: suggestedData } = useInvestigationSuggestionsQuery({
     variables: {
@@ -471,12 +468,9 @@ const useViewDetails = ({ investigationId }: Props): Return => {
 
   return {
     confirmDeleteUpdate,
-    data,
     scrolledToTop,
-    loading: data && data.investigation ? false : loading,
     loadMore,
     editRights: role !== Role.User,
-    saving,
     replyTo,
     setEditUpdate,
     setReplyTo,
@@ -497,6 +491,8 @@ const useViewDetails = ({ investigationId }: Props): Return => {
     toggleViewSuggestedVehicles,
     viewSuggestedIncidents,
     viewSuggestedVehicles,
+    editIncidentId,
+    setEditIncidentId,
   };
 };
 

@@ -19,7 +19,7 @@ import {
 import { useState } from 'react';
 import { useStoreState } from 'state';
 import type { DateType, VehicleData } from 'types/DataType';
-import errorNotification from 'types/error_notification';
+import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 
 interface Return {
@@ -45,6 +45,8 @@ interface Return {
   customGalleries: string[];
   order: SortOrder;
   setOrder: (value: SortOrder) => void;
+  addInvestigation: string;
+  toggleAddInvestigation: (value: string) => void;
 }
 
 const useListVehicles = (): Return => {
@@ -61,6 +63,7 @@ const useListVehicles = (): Return => {
   const [createdAtFilter, setCreatedAtFilter] = useState<
     DateType | undefined
   >();
+  const [addInvestigation, setAddInvestigation] = useState('');
 
   const variables = {
     order: {
@@ -371,6 +374,8 @@ const useListVehicles = (): Return => {
     setGallery,
     order,
     setOrder,
+    addInvestigation,
+    toggleAddInvestigation: setAddInvestigation,
   };
 };
 

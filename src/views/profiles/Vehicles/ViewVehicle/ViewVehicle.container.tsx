@@ -36,6 +36,9 @@ const ViewVehicle = () => {
     addDocument,
     updateDocumentList,
     updateDeleteDocument,
+    addInvestigation,
+    toggleAddInvestigation,
+    updateInvestigationList,
   } = useViewVehicle(vehicleId);
 
   return (
@@ -70,6 +73,9 @@ const ViewVehicle = () => {
       addDocument={addDocument}
       updateDocumentList={updateDocumentList}
       updateDeleteDocument={updateDeleteDocument}
+      addInvestigation={addInvestigation}
+      toggleAddInvestigation={toggleAddInvestigation}
+      updateInvestigationList={updateInvestigationList}
     />
   );
 };

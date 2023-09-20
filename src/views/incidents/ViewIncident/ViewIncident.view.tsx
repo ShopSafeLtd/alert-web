@@ -9,10 +9,10 @@ import type {
   ViewIncidentQuery,
   QuestionGroupOnSchemeQuery,
   UpdateTaskMutation,
+  CreateInvestigationMutation,
 } from 'graphql/generated';
 import { GoodsMode, UpdateType } from 'graphql/generated';
 import {
-  Avatar,
   Button,
   Card,
   Checkbox,
@@ -50,6 +50,7 @@ import {
   faTags,
   faTrash,
   faUpload,
+  faUser,
   faUsers,
   faUserTag,
 } from '@fortawesome/pro-light-svg-icons';
@@ -85,11 +86,13 @@ import EditGoods from 'components/form-components/incident/goods/EditGoods';
 import EditImageList from 'components/images/EditImageList';
 import type { MutationUpdaterFn } from '@apollo/client';
 import AddTodo from 'components/form-components/Todos/AddTodo';
-import FormatCalendar from 'utils/format-calendar-24h';
 import AddDocument from 'components/form-components/documents/AddDocument';
 import { ProfileUpdatedModel } from 'types/enums/profile-update-type';
 import AddVehicleSimple from 'components/form-components/Vehicle/AddVehicleSimple';
 import EditVehicleSimple from 'components/form-components/Vehicle/EditVehicleSimple';
+import ActivityTable from 'components/tables/ActivityTable';
+import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
+import InvestigationTable from 'components/tables/InvestigationTable';
 import UpdateContent from './Update.view';
 import useStyles from './ViewIncident.styles';
 import EvidenceTable from '../../../components/tables/EvidenceTable';
@@ -97,15 +100,6 @@ import formatAnswer from '../../../utils/format-answer';
 import ViewTodo from '../../../components/form-components/Todos/ViewTodo/Todo.container';
 
 const { Title, Paragraph, Text } = Typography;
-
-interface TableItem {
-  key: string;
-  name: string;
-  description: string | null | undefined;
-  dueDate?: Date | null;
-  assignedUsers: { id: string; fullName: string }[];
-  completed: boolean;
-}
 
 interface Props {
   userRole: Role;
@@ -222,6 +216,9 @@ interface Props {
   completeTodoVisible: string | null;
   setCompleteTodoVisible: (value: string | null) => void;
   updateTodo: MutationUpdaterFn<UpdateTaskMutation>;
+  toggleAddInvestigation: () => void;
+  addInvestigation: boolean;
+  updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
 }
 
 const ViewIncident = ({
@@ -317,23 +314,13 @@ const ViewIncident = ({
   setCompleteTodoVisible,
   completeTodoVisible,
   updateTodo,
+  addInvestigation,
+  toggleAddInvestigation,
+  updateInvestigationList,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
   const navigate = useNavigate();
-  const expandedRowRender = (record: TableItem) => (
-    <Text style={{ fontSize: 14, padding: 0, margin: 0 }}>
-      {intl.formatMessage(
-        {
-          defaultMessage: ' Description: {description}',
-          id: 'b/Uf3s',
-        },
-        {
-          description: record.description,
-        }
-      )}
-    </Text>
-  );
 
   if (userRole === 'USER' && data?.incident?.approved === false) {
     navigate('/app/incidents');
@@ -492,7 +479,21 @@ const ViewIncident = ({
                         </Link> */}
                       </Col>
                     )}
-
+                    {/* {editRights && (
+                      <Col>
+                        <Button type="ghost" onClick={toggleAddInvestigation}>
+                          <FontAwesomeIcon
+                            size="1x"
+                            style={{ marginRight: 8 }}
+                            icon={faPlus}
+                          />
+                          {intl.formatMessage({
+                            defaultMessage: 'Add Investigation',
+                            id: 'U5+v9Y',
+                          })}
+                        </Button>
+                      </Col>
+                    )} */}
                     {deleteRights && (
                       <Col>
                         <Button
@@ -621,7 +622,7 @@ const ViewIncident = ({
                               />
                             </div>
                           )}
-                          {/* <Card
+                          {/* <Card loading={loading}
                             key={image.id}
                             bodyStyle={{
                               padding: 0,
@@ -703,7 +704,7 @@ const ViewIncident = ({
                       <Skeleton />
                     ) : (
                       <div className="incident-tab-content">
-                        <Card>
+                        <Card loading={loading}>
                           <Title className={classes.headerTitle} level={4}>
                             {data?.incident?.subject}
                           </Title>
@@ -768,6 +769,23 @@ const ViewIncident = ({
                               ) : (
                                 data?.incident?.business?.name
                               )}
+                            </Descriptions.Item>
+                            <Descriptions.Item
+                              className={classes.detail}
+                              label={
+                                <span>
+                                  <FontAwesomeIcon
+                                    className={classes.descIcon}
+                                    icon={faUser}
+                                  />
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Created By',
+                                    id: 'uAfuJA',
+                                  })}
+                                </span>
+                              }
+                            >
+                              {data?.incident?.createdBy.fullName}
                             </Descriptions.Item>
                             <Descriptions.Item
                               className={classes.detail}
@@ -928,7 +946,7 @@ const ViewIncident = ({
                             />
                           </Col>
                           <Col xs={24} xl={12}>
-                            <Card>
+                            <Card loading={loading}>
                               <Title level={4}>
                                 {intl.formatMessage({
                                   defaultMessage: 'Police Information',
@@ -1017,249 +1035,247 @@ const ViewIncident = ({
                           </Col>
                         </Row>
 
-                        {data?.incident?.incidentItems &&
-                          data.incident.incidentItems.length > 0 && (
-                            <Card style={{ marginBottom: 20 }}>
-                              <Row
-                                gutter={8}
-                                align="middle"
-                                style={{ marginBottom: 10 }}
-                              >
-                                <Col flex={1}>
-                                  <Title level={4}>
-                                    {intl.formatMessage({
-                                      defaultMessage: 'Items',
-                                      id: 'yNmV/R',
-                                    })}
-                                  </Title>
-                                </Col>
-                                {editRights && (
-                                  <Col>
-                                    <Button
-                                      size="small"
-                                      onClick={toggleAddGoods}
-                                      icon={
-                                        <FontAwesomeIcon
-                                          icon={faPlus}
-                                          style={{ marginRight: 5 }}
-                                        />
-                                      }
-                                    >
-                                      {intl.formatMessage({
-                                        defaultMessage: 'Add Item',
-                                        id: 'kNLPWW',
-                                      })}
-                                    </Button>
-                                  </Col>
-                                )}
-                              </Row>
-
-                              <Table
-                                pagination={{
-                                  hideOnSinglePage: true,
-                                  pageSize: 5,
-                                }}
-                                columns={
-                                  goodsMode === GoodsMode.Generic
-                                    ? [
-                                        {
-                                          title: intl.formatMessage({
-                                            defaultMessage: 'Name',
-                                            id: 'HAlOn1',
-                                          }),
-                                          dataIndex: 'name',
-                                          key: 'name',
-                                        },
-                                        {
-                                          title: intl.formatMessage({
-                                            defaultMessage: 'Value',
-                                            id: 'GufXy5',
-                                          }),
-                                          dataIndex: 'value',
-                                          key: 'value',
-                                          render: (value: number) =>
-                                            `£${value.toFixed(2)}`,
-                                        },
-                                        {
-                                          title: intl.formatMessage({
-                                            defaultMessage: 'Recovered Value',
-                                            id: 'bGwFFv',
-                                          }),
-                                          dataIndex: 'recoveredValue',
-                                          key: 'recoveredValue',
-                                          render: (value: number) =>
-                                            `£${value.toFixed(2)}`,
-                                        },
-                                        {
-                                          key: 'Options',
-                                          title: '',
-                                          dataIndex: 'Options',
-                                          width: 100,
-                                          render: (_, record) => (
-                                            <Row gutter={8}>
-                                              {editRights && (
-                                                <Col>
-                                                  <Tooltip
+                        <Card loading={loading}>
+                          <Row
+                            gutter={8}
+                            align="middle"
+                            style={{ marginBottom: 10 }}
+                          >
+                            <Col flex={1}>
+                              <Title level={4}>
+                                {intl.formatMessage({
+                                  defaultMessage: 'Items',
+                                  id: 'yNmV/R',
+                                })}
+                              </Title>
+                            </Col>
+                            {editRights && (
+                              <Col>
+                                <Button
+                                  size="small"
+                                  onClick={toggleAddGoods}
+                                  icon={
+                                    <FontAwesomeIcon
+                                      icon={faPlus}
+                                      style={{ marginRight: 5 }}
+                                    />
+                                  }
+                                >
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Add Item',
+                                    id: 'kNLPWW',
+                                  })}
+                                </Button>
+                              </Col>
+                            )}
+                          </Row>
+                          {data?.incident?.offenders.length && !loading ? (
+                            <Table
+                              pagination={{
+                                hideOnSinglePage: true,
+                                pageSize: 5,
+                              }}
+                              columns={
+                                goodsMode === GoodsMode.Generic
+                                  ? [
+                                      {
+                                        title: intl.formatMessage({
+                                          defaultMessage: 'Name',
+                                          id: 'HAlOn1',
+                                        }),
+                                        dataIndex: 'name',
+                                        key: 'name',
+                                      },
+                                      {
+                                        title: intl.formatMessage({
+                                          defaultMessage: 'Value',
+                                          id: 'GufXy5',
+                                        }),
+                                        dataIndex: 'value',
+                                        key: 'value',
+                                        render: (value: number) =>
+                                          `£${value.toFixed(2)}`,
+                                      },
+                                      {
+                                        title: intl.formatMessage({
+                                          defaultMessage: 'Recovered Value',
+                                          id: 'bGwFFv',
+                                        }),
+                                        dataIndex: 'recoveredValue',
+                                        key: 'recoveredValue',
+                                        render: (value: number) =>
+                                          `£${value.toFixed(2)}`,
+                                      },
+                                      {
+                                        key: 'Options',
+                                        title: '',
+                                        dataIndex: 'Options',
+                                        width: 100,
+                                        render: (_, record) => (
+                                          <Row gutter={8}>
+                                            {editRights && (
+                                              <Col>
+                                                <Tooltip
+                                                  title={intl.formatMessage({
+                                                    defaultMessage: 'Edit Item',
+                                                    id: 'Jm7MY5',
+                                                  })}
+                                                >
+                                                  <Button
+                                                    size="small"
+                                                    disabled={saving}
+                                                    onClick={() => {
+                                                      setEditGoodsData(
+                                                        record.item
+                                                      );
+                                                    }}
+                                                    icon={
+                                                      <FontAwesomeIcon
+                                                        icon={faPenToSquare}
+                                                      />
+                                                    }
+                                                  />
+                                                </Tooltip>
+                                              </Col>
+                                            )}
+                                            {deleteRights && (
+                                              <Col>
+                                                <Tooltip
+                                                  title={intl.formatMessage({
+                                                    defaultMessage:
+                                                      'Remove Item',
+                                                    id: 'BBWWVV',
+                                                  })}
+                                                >
+                                                  <Popconfirm
+                                                    placement="topLeft"
+                                                    trigger="hover"
                                                     title={intl.formatMessage({
                                                       defaultMessage:
-                                                        'Edit Item',
-                                                      id: 'Jm7MY5',
+                                                        'Remove the item?',
+                                                      id: 'NKL3Y8',
                                                     })}
+                                                    onConfirm={() =>
+                                                      onDeleteGoods(record.key)
+                                                    }
+                                                    okText={intl.formatMessage({
+                                                      defaultMessage: 'Yes',
+                                                      id: 'a5msuh',
+                                                    })}
+                                                    cancelText={intl.formatMessage(
+                                                      {
+                                                        defaultMessage: 'No',
+                                                        id: 'oUWADl',
+                                                      }
+                                                    )}
+                                                    overlayInnerStyle={{
+                                                      padding: 10,
+                                                    }}
                                                   >
                                                     <Button
                                                       size="small"
                                                       disabled={saving}
-                                                      onClick={() => {
-                                                        setEditGoodsData(
-                                                          record.item
-                                                        );
-                                                      }}
+                                                      // onClick={() =>
+                                                      //   onDeleteGoods(record.key)
+                                                      // }
                                                       icon={
                                                         <FontAwesomeIcon
-                                                          icon={faPenToSquare}
+                                                          icon={faTrash}
                                                         />
                                                       }
                                                     />
-                                                  </Tooltip>
-                                                </Col>
-                                              )}
-                                              {deleteRights && (
-                                                <Col>
-                                                  <Tooltip
-                                                    title={intl.formatMessage({
-                                                      defaultMessage:
-                                                        'Remove Item',
-                                                      id: 'BBWWVV',
-                                                    })}
-                                                  >
-                                                    <Popconfirm
-                                                      placement="topLeft"
-                                                      trigger="hover"
-                                                      title={intl.formatMessage(
-                                                        {
-                                                          defaultMessage:
-                                                            'Remove the item?',
-                                                          id: 'NKL3Y8',
-                                                        }
-                                                      )}
-                                                      onConfirm={() =>
-                                                        onDeleteGoods(
-                                                          record.key
-                                                        )
-                                                      }
-                                                      okText={intl.formatMessage(
-                                                        {
-                                                          defaultMessage: 'Yes',
-                                                          id: 'a5msuh',
-                                                        }
-                                                      )}
-                                                      cancelText={intl.formatMessage(
-                                                        {
-                                                          defaultMessage: 'No',
-                                                          id: 'oUWADl',
-                                                        }
-                                                      )}
-                                                      overlayInnerStyle={{
-                                                        padding: 10,
-                                                      }}
-                                                    >
-                                                      <Button
-                                                        size="small"
-                                                        disabled={saving}
-                                                        // onClick={() =>
-                                                        //   onDeleteGoods(record.key)
-                                                        // }
-                                                        icon={
-                                                          <FontAwesomeIcon
-                                                            icon={faTrash}
-                                                          />
-                                                        }
-                                                      />
-                                                    </Popconfirm>
-                                                  </Tooltip>
-                                                </Col>
-                                              )}
-                                            </Row>
-                                          ),
-                                        },
-                                      ]
-                                    : [
-                                        {
-                                          title: intl.formatMessage({
-                                            defaultMessage: 'SKU',
-                                            id: 'k4brJy',
-                                          }),
-                                          dataIndex: 'sku',
-                                          key: 'name',
-                                        },
-                                        {
-                                          title: intl.formatMessage({
-                                            defaultMessage: 'Quantity',
-                                            id: 'qVGRIE',
-                                          }),
-                                          dataIndex: 'quantity',
-                                          key: 'quantity',
-                                        },
-                                        {
-                                          title: intl.formatMessage({
-                                            defaultMessage:
-                                              'Recovered Quantity',
-                                            id: '+30ZkY',
-                                          }),
-                                          dataIndex: 'recoveredQuantity',
-                                          key: 'recoveredQuantity',
-                                        },
-                                      ]
-                                }
-                                dataSource={data?.incident?.incidentItems.map(
-                                  (item) => ({
-                                    key: item.id,
-                                    name: item.name || '',
-                                    value: item.value || 0,
-                                    recoveredValue: item.recoveredValue || 0,
-                                    sku: item.sku || '',
-                                    quantity: item.quantity || 0,
-                                    recoveredQuantity:
-                                      item.recoveredQuantity || 0,
-                                    item,
-                                  })
-                                )}
-                                size="small"
-                                // TODO
-                                // eslint-disable-next-line react/no-unstable-nested-components
-                                summary={(tableData) => {
-                                  const totalValue = tableData
-                                    .map((item) => item.value || 0)
-                                    .reduce((a, b) => a + b, 0);
-                                  const totalRecovered = tableData
-                                    .map((item) => item.recoveredValue || 0)
-                                    .reduce((a, b) => a + b, 0);
+                                                  </Popconfirm>
+                                                </Tooltip>
+                                              </Col>
+                                            )}
+                                          </Row>
+                                        ),
+                                      },
+                                    ]
+                                  : [
+                                      {
+                                        title: intl.formatMessage({
+                                          defaultMessage: 'SKU',
+                                          id: 'k4brJy',
+                                        }),
+                                        dataIndex: 'sku',
+                                        key: 'name',
+                                      },
+                                      {
+                                        title: intl.formatMessage({
+                                          defaultMessage: 'Quantity',
+                                          id: 'qVGRIE',
+                                        }),
+                                        dataIndex: 'quantity',
+                                        key: 'quantity',
+                                      },
+                                      {
+                                        title: intl.formatMessage({
+                                          defaultMessage: 'Recovered Quantity',
+                                          id: '+30ZkY',
+                                        }),
+                                        dataIndex: 'recoveredQuantity',
+                                        key: 'recoveredQuantity',
+                                      },
+                                    ]
+                              }
+                              dataSource={data?.incident?.incidentItems.map(
+                                (item) => ({
+                                  key: item.id,
+                                  name: item.name || '',
+                                  value: item.value || 0,
+                                  recoveredValue: item.recoveredValue || 0,
+                                  sku: item.sku || '',
+                                  quantity: item.quantity || 0,
+                                  recoveredQuantity:
+                                    item.recoveredQuantity || 0,
+                                  item,
+                                })
+                              )}
+                              size="small"
+                              // TODO
+                              // eslint-disable-next-line react/no-unstable-nested-components
+                              summary={(tableData) => {
+                                const totalValue = tableData
+                                  .map((item) => item.value || 0)
+                                  .reduce((a, b) => a + b, 0);
+                                const totalRecovered = tableData
+                                  .map((item) => item.recoveredValue || 0)
+                                  .reduce((a, b) => a + b, 0);
 
-                                  return (
-                                    <Table.Summary.Row>
-                                      <Table.Summary.Cell index={0}>
-                                        {intl.formatMessage({
-                                          defaultMessage: 'Total: ',
-                                          id: 'ILhZuX',
-                                        })}
-                                      </Table.Summary.Cell>
-                                      {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                                      <Table.Summary.Cell index={1}>
-                                        £{totalValue.toFixed(2)}
-                                      </Table.Summary.Cell>
-                                      {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                                      <Table.Summary.Cell index={1}>
-                                        £{totalRecovered.toFixed(2)}
-                                      </Table.Summary.Cell>
-                                    </Table.Summary.Row>
-                                  );
-                                }}
-                              />
-                            </Card>
+                                return (
+                                  <Table.Summary.Row>
+                                    <Table.Summary.Cell index={0}>
+                                      {intl.formatMessage({
+                                        defaultMessage: 'Total: ',
+                                        id: 'ILhZuX',
+                                      })}
+                                    </Table.Summary.Cell>
+                                    {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                                    <Table.Summary.Cell index={1}>
+                                      £{totalValue.toFixed(2)}
+                                    </Table.Summary.Cell>
+                                    {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                                    <Table.Summary.Cell index={1}>
+                                      £{totalRecovered.toFixed(2)}
+                                    </Table.Summary.Cell>
+                                  </Table.Summary.Row>
+                                );
+                              }}
+                            />
+                          ) : (
+                            <Empty
+                              description={intl.formatMessage({
+                                defaultMessage: 'No items for this incident',
+                                id: 'A993Ny',
+                              })}
+                              image={Empty.PRESENTED_IMAGE_SIMPLE}
+                            />
                           )}
+                        </Card>
 
                         {data?.incident && data.incident.answers.length > 0 && (
-                          <Card>
+                          <Card loading={loading}>
                             <Title level={4}>
                               {intl.formatMessage({
                                 defaultMessage: 'Incident Details',
@@ -1278,7 +1294,7 @@ const ViewIncident = ({
                           </Card>
                         )}
 
-                        <Card>
+                        <Card loading={loading}>
                           <Row
                             gutter={8}
                             align="middle"
@@ -1373,7 +1389,7 @@ const ViewIncident = ({
                           )}
                         </Card>
 
-                        <Card style={{ marginTop: 20 }}>
+                        <Card loading={loading}>
                           <Row
                             gutter={8}
                             align="middle"
@@ -1467,7 +1483,7 @@ const ViewIncident = ({
                           )}
                         </Card>
 
-                        <Card style={{ marginTop: 20 }}>
+                        <Card loading={loading}>
                           <Row
                             gutter={8}
                             align="middle"
@@ -1623,7 +1639,7 @@ const ViewIncident = ({
                         </Card>
 
                         {editRights && (
-                          <Card>
+                          <Card loading={loading}>
                             <Row
                               gutter={8}
                               align="middle"
@@ -1637,171 +1653,33 @@ const ViewIncident = ({
                                   })}
                                 </Title>
                               </Col>
-                              {editRights && (
-                                <Col>
-                                  <Button
-                                    size="small"
-                                    onClick={toggleAddTodo}
-                                    loading={templatesLoading}
-                                    disabled={templatesLoading}
-                                    icon={
-                                      <FontAwesomeIcon
-                                        icon={faPlus}
-                                        style={{ marginRight: 5 }}
-                                      />
-                                    }
-                                  >
-                                    {intl.formatMessage({
-                                      defaultMessage: 'Add Activity',
-                                      id: 'VOiupa',
-                                    })}
-                                  </Button>
-                                </Col>
-                              )}
+
+                              <Col>
+                                <Button
+                                  size="small"
+                                  onClick={toggleAddTodo}
+                                  loading={templatesLoading}
+                                  disabled={templatesLoading}
+                                  icon={
+                                    <FontAwesomeIcon
+                                      icon={faPlus}
+                                      style={{ marginRight: 5 }}
+                                    />
+                                  }
+                                >
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Add Activity',
+                                    id: 'VOiupa',
+                                  })}
+                                </Button>
+                              </Col>
                             </Row>
                             {data?.incident?.todos.length && !loading ? (
-                              <Table
-                                size="small"
-                                loading={loading}
-                                pagination={{
-                                  hideOnSinglePage: true,
-                                  pageSize: 5,
-                                }}
-                                columns={[
-                                  {
-                                    key: 'name',
-                                    title: intl.formatMessage({
-                                      defaultMessage: 'Name',
-                                      id: 'HAlOn1',
-                                    }),
-                                    dataIndex: 'name',
-                                  },
-                                  {
-                                    key: 'completed',
-                                    dataIndex: 'completed',
-                                    title: intl.formatMessage({
-                                      defaultMessage: 'Status',
-                                      id: 'tzMNF3',
-                                    }),
-                                    ellipsis: true,
-                                    render: (value: boolean) => (
-                                      <Typography.Text
-                                        type={value ? 'success' : 'warning'}
-                                      >
-                                        {value
-                                          ? intl.formatMessage({
-                                              defaultMessage: 'Completed',
-                                              id: '95stPq',
-                                            })
-                                          : intl.formatMessage({
-                                              defaultMessage: 'Open',
-                                              id: 'JfG49w',
-                                            })}
-                                      </Typography.Text>
-                                    ),
-                                  },
-                                  {
-                                    key: 'description',
-                                    dataIndex: 'description',
-                                    title: intl.formatMessage({
-                                      defaultMessage: 'Description',
-                                      id: 'Q8Qw5B',
-                                    }),
-                                    ellipsis: true,
-                                  },
-
-                                  {
-                                    key: 'dueDate',
-                                    dataIndex: 'dueDate',
-                                    title: intl.formatMessage({
-                                      defaultMessage: 'Due Date',
-                                      id: '8XUukm',
-                                    }),
-                                    render: (value: Date) =>
-                                      FormatCalendar(new Date(value), true),
-                                  },
-                                  {
-                                    key: 'assignedUsers',
-                                    dataIndex: 'assignedUsers',
-                                    title: intl.formatMessage({
-                                      defaultMessage: 'Assigned Users',
-                                      id: '8oku8d',
-                                    }),
-                                    ellipsis: true,
-                                    render: (
-                                      value: { id: string; fullName: string }[]
-                                    ) => (
-                                      <Row gutter={4}>
-                                        {value.map((item) => (
-                                          <Col key={item.id}>
-                                            <Tooltip title={item.fullName}>
-                                              <Avatar
-                                                style={{
-                                                  cursor: 'pointer',
-                                                  fontSize: 14,
-                                                }}
-                                                size={30}
-                                              >
-                                                {item.fullName
-                                                  .split(' ')
-                                                  .map((split) =>
-                                                    split
-                                                      .slice(0, 1)
-                                                      .toUpperCase()
-                                                  )
-                                                  .toString()
-                                                  .replace(',', '')}
-                                              </Avatar>
-                                            </Tooltip>
-                                          </Col>
-                                        ))}
-                                      </Row>
-                                    ),
-                                  },
-                                  {
-                                    key: 'actions',
-                                    dataIndex: 'completed',
-                                    render: (value: boolean, item) => (
-                                      <Button
-                                        size="small"
-                                        type={value ? 'text' : 'ghost'}
-                                        danger={!value}
-                                        onClick={() => {
-                                          if (value)
-                                            setViewTodoVisible(item.key);
-                                          if (!value)
-                                            setCompleteTodoVisible(item.key);
-                                        }}
-                                      >
-                                        {value
-                                          ? intl.formatMessage({
-                                              defaultMessage: 'View',
-                                              id: 'FgydNe',
-                                            })
-                                          : intl.formatMessage({
-                                              defaultMessage: 'Complete',
-                                              id: 'U78NhE',
-                                            })}
-                                      </Button>
-                                    ),
-                                  },
-                                ]}
-                                dataSource={data?.incident?.todos.map(
-                                  (todo) => ({
-                                    key: todo.id,
-                                    name: todo.name || '',
-                                    description: todo?.description,
-                                    dueDate: todo.dueDate,
-                                    completed: todo.completed || false,
-                                    assignedUsers: todo.assignedUsers,
-                                    // todo,
-                                  })
-                                )}
-                                expandable={{
-                                  expandedRowRender,
-                                  rowExpandable: (record) =>
-                                    !!record.description,
-                                }}
+                              <ActivityTable
+                                todos={data?.incident?.todos}
+                                saving={saving || loading}
+                                setViewTodoVisible={setViewTodoVisible}
+                                setCompleteTodoVisible={setCompleteTodoVisible}
                               />
                             ) : (
                               <Empty
@@ -1809,6 +1687,58 @@ const ViewIncident = ({
                                   defaultMessage:
                                     'No activities for this incident',
                                   id: 'JLTkJo',
+                                })}
+                                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                              />
+                            )}
+                          </Card>
+                        )}
+
+                        {editRights && (
+                          <Card loading={loading}>
+                            <Row
+                              gutter={8}
+                              align="middle"
+                              style={{ marginBottom: 10 }}
+                            >
+                              <Col flex={1}>
+                                <Title level={4}>
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Investigations',
+                                    id: 'juQ8mz',
+                                  })}
+                                </Title>
+                              </Col>
+
+                              <Col>
+                                <Button
+                                  size="small"
+                                  onClick={toggleAddInvestigation}
+                                  icon={
+                                    <FontAwesomeIcon
+                                      icon={faPlus}
+                                      style={{ marginRight: 5 }}
+                                    />
+                                  }
+                                >
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Add Investigation',
+                                    id: 'U5+v9Y',
+                                  })}
+                                </Button>
+                              </Col>
+                            </Row>
+                            {data?.incident?.investigations.length &&
+                            !loading ? (
+                              <InvestigationTable
+                                investigations={data?.incident?.investigations}
+                              />
+                            ) : (
+                              <Empty
+                                description={intl.formatMessage({
+                                  defaultMessage:
+                                    'No investigations for this incident',
+                                  id: 'nLJULF',
                                 })}
                                 image={Empty.PRESENTED_IMAGE_SIMPLE}
                               />
@@ -2181,7 +2111,7 @@ const ViewIncident = ({
           id: 'UhSUQG',
         })}
         open={linkOffender}
-        width="800"
+        width="1000"
         onClose={toggleLinkOffender}
       >
         {linkOffender ? (
@@ -2291,7 +2221,7 @@ const ViewIncident = ({
           id: '1FbM4r',
         })}
         open={addExistingOffender}
-        width="800"
+        width="1000"
         onClose={toggleAddExistingOffender}
         zIndex={1001}
       >
@@ -2495,6 +2425,26 @@ const ViewIncident = ({
             incidentId={data?.incident?.id || ''}
             onClose={toggleAddDocument}
             update={updateDocumentList}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      {/* investigation */}
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Add New Investigation',
+          id: 'QaKS9A',
+        })}
+        visible={addInvestigation}
+        width="500"
+        onClose={toggleAddInvestigation}
+      >
+        {addInvestigation ? (
+          <AddInvestigation
+            update={updateInvestigationList}
+            incidentId={data?.incident?.id || ''}
+            onClose={toggleAddInvestigation}
           />
         ) : (
           <div />

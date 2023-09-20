@@ -24,6 +24,16 @@ const ViewBusiness = () => {
     linkDemVisible,
     saving,
     deleteConfirm,
+    addTodo,
+    toggleAddTodo,
+    templatesData,
+    templatesLoading,
+    setViewTodoVisible,
+    setCompleteTodoVisible,
+    completeTodoVisible,
+    viewTodoVisible,
+    updateTodo,
+    updateTodoList,
   } = useViewBusiness();
 
   return (
@@ -48,6 +58,16 @@ const ViewBusiness = () => {
       onRemoveBusiness={onRemoveBusiness}
       saving={saving}
       deleteConfirm={deleteConfirm}
+      addTodo={addTodo}
+      toggleAddTodo={toggleAddTodo}
+      templatesData={templatesData}
+      templatesLoading={templatesLoading}
+      setViewTodoVisible={setViewTodoVisible}
+      setCompleteTodoVisible={setCompleteTodoVisible}
+      completeTodoVisible={completeTodoVisible}
+      viewTodoVisible={viewTodoVisible}
+      updateTodo={updateTodo}
+      updateTodoList={updateTodoList}
     />
   );
 };

@@ -27,6 +27,8 @@ const ViewTodo = ({
     setUsers,
     setAvailableUsers,
     loading,
+    documentList,
+    documentUploadProps,
   } = useTodo({
     id,
     onClose,
@@ -46,6 +48,8 @@ const ViewTodo = ({
       loading={loading}
       onClose={onClose}
       confirmText={confirmText}
+      documentList={documentList}
+      documentUploadProps={documentUploadProps}
     />
   );
 };

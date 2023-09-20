@@ -8,7 +8,7 @@ import {
 } from 'graphql/generated';
 import { Modal, notification } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import errorNotification from 'types/error_notification';
+import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 
 const { confirm } = Modal;

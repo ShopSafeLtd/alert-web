@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { TagQuery } from 'graphql/generated';
 import { useUpdateTagMutation, useTagQuery } from 'graphql/generated';
 import { notification } from 'antd';
-import errorNotification from 'types/error_notification';
+import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 
 interface FormData {

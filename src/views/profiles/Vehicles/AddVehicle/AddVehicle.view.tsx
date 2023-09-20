@@ -13,7 +13,6 @@ import {
   Drawer,
   Form,
   Input,
-  Modal,
   Row,
   Select,
   Table,
@@ -46,8 +45,8 @@ import ImageEditor from 'components/form-components/ImageEditor/ImageEditor.view
 import IncidentTable from 'components/tables/IncidentTable';
 import OffenderTable from 'components/tables/OffenderTable';
 import type { FormData } from './useAddVehicle';
+import useStyles from './AddVehicle.styles';
 
-const { confirm } = Modal;
 const { Title, Paragraph } = Typography;
 
 interface Props {
@@ -132,9 +131,10 @@ const AddVehicle = ({
   form,
   reportOnly,
 }: Props): JSX.Element => {
+  const classes = useStyles();
   const intl = useIntl();
   return (
-    <div className="list-view">
+    <div className={classes.page}>
       <Form<FormData> layout="vertical" onFinish={onSubmit} form={form}>
         <PageHeader
           onBack={reportOnly ? undefined : () => window.history.back()}
@@ -435,90 +435,6 @@ const AddVehicle = ({
                           hasNavigation={false}
                           deleteRights={adminRights}
                           onDelete={removeIncident}
-                        />
-                        <Table
-                          columns={[
-                            {
-                              key: 'reference',
-                              dataIndex: 'reference',
-                              title: intl.formatMessage({
-                                defaultMessage: 'Alert ID',
-                                id: 'k8ZNgH',
-                              }),
-                            },
-                            {
-                              key: 'subject',
-                              dataIndex: 'subject',
-                              title: intl.formatMessage({
-                                defaultMessage: 'Subject',
-                                id: 'LLtKhp',
-                              }),
-                            },
-                            {
-                              key: 'date',
-                              dataIndex: 'date',
-                              title: intl.formatMessage({
-                                defaultMessage: 'Date',
-                                id: 'P7PLVj',
-                              }),
-                            },
-                            {
-                              key: 'Options',
-                              title: intl.formatMessage({
-                                defaultMessage: 'Delete',
-                                id: 'K3r6DQ',
-                              }),
-                              dataIndex: 'Options',
-                              width: 5,
-                              render: (_, record) => (
-                                <Row>
-                                  <Col>
-                                    <Tooltip
-                                      title={intl.formatMessage({
-                                        defaultMessage: 'Remove Incident',
-                                        id: 'NhpFO7',
-                                      })}
-                                    >
-                                      <Button
-                                        size="small"
-                                        disabled={saving}
-                                        onClick={() => {
-                                          confirm({
-                                            title: intl.formatMessage({
-                                              defaultMessage:
-                                                'Do you want to remove the incident?',
-                                              id: 'wN3wVs',
-                                            }),
-                                            content: intl.formatMessage({
-                                              defaultMessage:
-                                                'This action cannot be undone.',
-                                              id: 'JDJoIZ',
-                                            }),
-                                            onOk() {
-                                              removeIncident(record.key);
-                                            },
-                                          });
-                                        }}
-                                        icon={
-                                          <FontAwesomeIcon icon={faTrash} />
-                                        }
-                                      />
-                                    </Tooltip>
-                                  </Col>
-                                </Row>
-                              ),
-                            },
-                          ]}
-                          dataSource={incidentsData.map((incident) => ({
-                            subject: incident.subject,
-                            reference: incident.reference,
-
-                            date: incident.dayTime,
-
-                            key: incident.id,
-                          }))}
-                          pagination={false}
-                          size="small"
                         />
                       </>
                     ) : null}

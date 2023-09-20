@@ -31,7 +31,7 @@ interface Props {
   ageCheck: boolean | undefined;
   form: FormInstance<FormData>;
   idVerified: boolean | undefined;
-  images: ImageData[] | undefined;
+  images?: ImageData[] | undefined;
 }
 
 const AddNewOffender = ({

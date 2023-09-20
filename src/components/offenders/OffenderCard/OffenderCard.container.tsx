@@ -36,6 +36,8 @@ const OffenderCard = ({
     setEditImageId,
     onEditImage,
     onNavigate,
+    addInvestigation,
+    toggleAddInvestigation,
   } = useOffenderCard({
     offender,
     update,
@@ -58,6 +60,8 @@ const OffenderCard = ({
       setEditImageId={setEditImageId}
       onEditImage={onEditImage}
       onNavigate={onNavigate}
+      addInvestigation={addInvestigation}
+      toggleAddInvestigation={toggleAddInvestigation}
     />
   );
 };

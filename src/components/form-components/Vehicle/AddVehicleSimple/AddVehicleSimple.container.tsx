@@ -9,7 +9,7 @@ interface Props {
   onClose: () => void;
   update: (value: VehicleData) => void;
   saving?: boolean;
-  images: ImageData[] | undefined;
+  images?: ImageData[] | undefined;
   onImagesUploaded?: (values: StateImageData[]) => void;
 }
 
