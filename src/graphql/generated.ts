@@ -3572,6 +3572,7 @@ export type ArticleGroupsArgs = {
   before?: InputMaybe<GroupWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<GroupWhereInput>;
 };
 
 export type ArticleImagesArgs = {
@@ -10122,6 +10123,295 @@ export enum CrimeType {
   Violence = 'VIOLENCE',
 }
 
+export type CsvImportCreateManySchemeInput = {
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  errors?: InputMaybe<CsvImportCreateerrorsInput>;
+  file: Scalars['String'];
+  headersToModel?: InputMaybe<CsvImportCreateheadersToModelInput>;
+  id?: InputMaybe<Scalars['String']>;
+  imported?: InputMaybe<Scalars['Int']>;
+  percentage?: InputMaybe<Scalars['Int']>;
+  status?: InputMaybe<CsvStatus>;
+  total: Scalars['Int'];
+  type: CsvType;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  userId: Scalars['String'];
+};
+
+export type CsvImportCreateManySchemeInputEnvelope = {
+  data?: InputMaybe<Array<CsvImportCreateManySchemeInput>>;
+  skipDuplicates?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type CsvImportCreateManyUserInput = {
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  errors?: InputMaybe<CsvImportCreateerrorsInput>;
+  file: Scalars['String'];
+  headersToModel?: InputMaybe<CsvImportCreateheadersToModelInput>;
+  id?: InputMaybe<Scalars['String']>;
+  imported?: InputMaybe<Scalars['Int']>;
+  percentage?: InputMaybe<Scalars['Int']>;
+  schemeId: Scalars['String'];
+  status?: InputMaybe<CsvStatus>;
+  total: Scalars['Int'];
+  type: CsvType;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type CsvImportCreateManyUserInputEnvelope = {
+  data?: InputMaybe<Array<CsvImportCreateManyUserInput>>;
+  skipDuplicates?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type CsvImportCreateNestedManyWithoutSchemeInput = {
+  connect?: InputMaybe<Array<CsvImportWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<CsvImportCreateOrConnectWithoutSchemeInput>
+  >;
+  create?: InputMaybe<Array<CsvImportCreateWithoutSchemeInput>>;
+  createMany?: InputMaybe<CsvImportCreateManySchemeInputEnvelope>;
+};
+
+export type CsvImportCreateNestedManyWithoutUserInput = {
+  connect?: InputMaybe<Array<CsvImportWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<CsvImportCreateOrConnectWithoutUserInput>>;
+  create?: InputMaybe<Array<CsvImportCreateWithoutUserInput>>;
+  createMany?: InputMaybe<CsvImportCreateManyUserInputEnvelope>;
+};
+
+export type CsvImportCreateOrConnectWithoutSchemeInput = {
+  create: CsvImportCreateWithoutSchemeInput;
+  where: CsvImportWhereUniqueInput;
+};
+
+export type CsvImportCreateOrConnectWithoutUserInput = {
+  create: CsvImportCreateWithoutUserInput;
+  where: CsvImportWhereUniqueInput;
+};
+
+export type CsvImportCreateWithoutSchemeInput = {
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  errors?: InputMaybe<CsvImportCreateerrorsInput>;
+  file: Scalars['String'];
+  headersToModel?: InputMaybe<CsvImportCreateheadersToModelInput>;
+  id?: InputMaybe<Scalars['String']>;
+  imported?: InputMaybe<Scalars['Int']>;
+  percentage?: InputMaybe<Scalars['Int']>;
+  status?: InputMaybe<CsvStatus>;
+  total: Scalars['Int'];
+  type: CsvType;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  user: UserCreateNestedOneWithoutCsvImportsInput;
+};
+
+export type CsvImportCreateWithoutUserInput = {
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  errors?: InputMaybe<CsvImportCreateerrorsInput>;
+  file: Scalars['String'];
+  headersToModel?: InputMaybe<CsvImportCreateheadersToModelInput>;
+  id?: InputMaybe<Scalars['String']>;
+  imported?: InputMaybe<Scalars['Int']>;
+  percentage?: InputMaybe<Scalars['Int']>;
+  scheme: SchemeCreateNestedOneWithoutCsvImportsInput;
+  status?: InputMaybe<CsvStatus>;
+  total: Scalars['Int'];
+  type: CsvType;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type CsvImportCreateerrorsInput = {
+  set?: InputMaybe<Array<Scalars['Json']>>;
+};
+
+export type CsvImportCreateheadersToModelInput = {
+  set?: InputMaybe<Array<Scalars['Json']>>;
+};
+
+export type CsvImportListRelationFilter = {
+  every?: InputMaybe<CsvImportWhereInput>;
+  none?: InputMaybe<CsvImportWhereInput>;
+  some?: InputMaybe<CsvImportWhereInput>;
+};
+
+export type CsvImportOrderByRelationAggregateInput = {
+  _count?: InputMaybe<SortOrder>;
+};
+
+export type CsvImportScalarWhereInput = {
+  AND?: InputMaybe<Array<CsvImportScalarWhereInput>>;
+  NOT?: InputMaybe<Array<CsvImportScalarWhereInput>>;
+  OR?: InputMaybe<Array<CsvImportScalarWhereInput>>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  errors?: InputMaybe<JsonNullableListFilter>;
+  file?: InputMaybe<StringFilter>;
+  headersToModel?: InputMaybe<JsonNullableListFilter>;
+  id?: InputMaybe<StringFilter>;
+  imported?: InputMaybe<IntFilter>;
+  percentage?: InputMaybe<IntFilter>;
+  schemeId?: InputMaybe<StringFilter>;
+  status?: InputMaybe<EnumCsvStatusFilter>;
+  total?: InputMaybe<IntFilter>;
+  type?: InputMaybe<EnumCsvTypeFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+  userId?: InputMaybe<StringFilter>;
+};
+
+export type CsvImportUpdateManyMutationInput = {
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  errors?: InputMaybe<CsvImportUpdateerrorsInput>;
+  file?: InputMaybe<StringFieldUpdateOperationsInput>;
+  headersToModel?: InputMaybe<CsvImportUpdateheadersToModelInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  imported?: InputMaybe<IntFieldUpdateOperationsInput>;
+  percentage?: InputMaybe<IntFieldUpdateOperationsInput>;
+  status?: InputMaybe<EnumCsvStatusFieldUpdateOperationsInput>;
+  total?: InputMaybe<IntFieldUpdateOperationsInput>;
+  type?: InputMaybe<EnumCsvTypeFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type CsvImportUpdateManyWithWhereWithoutSchemeInput = {
+  data: CsvImportUpdateManyMutationInput;
+  where: CsvImportScalarWhereInput;
+};
+
+export type CsvImportUpdateManyWithWhereWithoutUserInput = {
+  data: CsvImportUpdateManyMutationInput;
+  where: CsvImportScalarWhereInput;
+};
+
+export type CsvImportUpdateManyWithoutSchemeNestedInput = {
+  connect?: InputMaybe<Array<CsvImportWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<CsvImportCreateOrConnectWithoutSchemeInput>
+  >;
+  create?: InputMaybe<Array<CsvImportCreateWithoutSchemeInput>>;
+  createMany?: InputMaybe<CsvImportCreateManySchemeInputEnvelope>;
+  delete?: InputMaybe<Array<CsvImportWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<CsvImportScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<CsvImportWhereUniqueInput>>;
+  set?: InputMaybe<Array<CsvImportWhereUniqueInput>>;
+  update?: InputMaybe<Array<CsvImportUpdateWithWhereUniqueWithoutSchemeInput>>;
+  updateMany?: InputMaybe<
+    Array<CsvImportUpdateManyWithWhereWithoutSchemeInput>
+  >;
+  upsert?: InputMaybe<Array<CsvImportUpsertWithWhereUniqueWithoutSchemeInput>>;
+};
+
+export type CsvImportUpdateManyWithoutUserNestedInput = {
+  connect?: InputMaybe<Array<CsvImportWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<CsvImportCreateOrConnectWithoutUserInput>>;
+  create?: InputMaybe<Array<CsvImportCreateWithoutUserInput>>;
+  createMany?: InputMaybe<CsvImportCreateManyUserInputEnvelope>;
+  delete?: InputMaybe<Array<CsvImportWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<CsvImportScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<CsvImportWhereUniqueInput>>;
+  set?: InputMaybe<Array<CsvImportWhereUniqueInput>>;
+  update?: InputMaybe<Array<CsvImportUpdateWithWhereUniqueWithoutUserInput>>;
+  updateMany?: InputMaybe<Array<CsvImportUpdateManyWithWhereWithoutUserInput>>;
+  upsert?: InputMaybe<Array<CsvImportUpsertWithWhereUniqueWithoutUserInput>>;
+};
+
+export type CsvImportUpdateWithWhereUniqueWithoutSchemeInput = {
+  data: CsvImportUpdateWithoutSchemeInput;
+  where: CsvImportWhereUniqueInput;
+};
+
+export type CsvImportUpdateWithWhereUniqueWithoutUserInput = {
+  data: CsvImportUpdateWithoutUserInput;
+  where: CsvImportWhereUniqueInput;
+};
+
+export type CsvImportUpdateWithoutSchemeInput = {
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  errors?: InputMaybe<CsvImportUpdateerrorsInput>;
+  file?: InputMaybe<StringFieldUpdateOperationsInput>;
+  headersToModel?: InputMaybe<CsvImportUpdateheadersToModelInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  imported?: InputMaybe<IntFieldUpdateOperationsInput>;
+  percentage?: InputMaybe<IntFieldUpdateOperationsInput>;
+  status?: InputMaybe<EnumCsvStatusFieldUpdateOperationsInput>;
+  total?: InputMaybe<IntFieldUpdateOperationsInput>;
+  type?: InputMaybe<EnumCsvTypeFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  user?: InputMaybe<UserUpdateOneRequiredWithoutCsvImportsNestedInput>;
+};
+
+export type CsvImportUpdateWithoutUserInput = {
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  errors?: InputMaybe<CsvImportUpdateerrorsInput>;
+  file?: InputMaybe<StringFieldUpdateOperationsInput>;
+  headersToModel?: InputMaybe<CsvImportUpdateheadersToModelInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  imported?: InputMaybe<IntFieldUpdateOperationsInput>;
+  percentage?: InputMaybe<IntFieldUpdateOperationsInput>;
+  scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutCsvImportsNestedInput>;
+  status?: InputMaybe<EnumCsvStatusFieldUpdateOperationsInput>;
+  total?: InputMaybe<IntFieldUpdateOperationsInput>;
+  type?: InputMaybe<EnumCsvTypeFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type CsvImportUpdateerrorsInput = {
+  push?: InputMaybe<Scalars['Json']>;
+  set?: InputMaybe<Array<Scalars['Json']>>;
+};
+
+export type CsvImportUpdateheadersToModelInput = {
+  push?: InputMaybe<Scalars['Json']>;
+  set?: InputMaybe<Array<Scalars['Json']>>;
+};
+
+export type CsvImportUpsertWithWhereUniqueWithoutSchemeInput = {
+  create: CsvImportCreateWithoutSchemeInput;
+  update: CsvImportUpdateWithoutSchemeInput;
+  where: CsvImportWhereUniqueInput;
+};
+
+export type CsvImportUpsertWithWhereUniqueWithoutUserInput = {
+  create: CsvImportCreateWithoutUserInput;
+  update: CsvImportUpdateWithoutUserInput;
+  where: CsvImportWhereUniqueInput;
+};
+
+export type CsvImportWhereInput = {
+  AND?: InputMaybe<Array<CsvImportWhereInput>>;
+  NOT?: InputMaybe<Array<CsvImportWhereInput>>;
+  OR?: InputMaybe<Array<CsvImportWhereInput>>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  errors?: InputMaybe<JsonNullableListFilter>;
+  file?: InputMaybe<StringFilter>;
+  headersToModel?: InputMaybe<JsonNullableListFilter>;
+  id?: InputMaybe<StringFilter>;
+  imported?: InputMaybe<IntFilter>;
+  percentage?: InputMaybe<IntFilter>;
+  scheme?: InputMaybe<SchemeWhereInput>;
+  schemeId?: InputMaybe<StringFilter>;
+  status?: InputMaybe<EnumCsvStatusFilter>;
+  total?: InputMaybe<IntFilter>;
+  type?: InputMaybe<EnumCsvTypeFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+  user?: InputMaybe<UserWhereInput>;
+  userId?: InputMaybe<StringFilter>;
+};
+
+export type CsvImportWhereUniqueInput = {
+  id?: InputMaybe<Scalars['String']>;
+};
+
+export enum CsvStatus {
+  Completed = 'COMPLETED',
+  Failed = 'FAILED',
+  Pending = 'PENDING',
+  Processing = 'PROCESSING',
+}
+
+export enum CsvType {
+  Incident = 'INCIDENT',
+  Offender = 'OFFENDER',
+  Vehicle = 'VEHICLE',
+}
+
 export type CustomGallery = {
   __typename?: 'CustomGallery';
   createdAt: Scalars['DateTime'];
@@ -11809,6 +12099,28 @@ export type EnumCrimeTypeNullableFilter = {
   in?: InputMaybe<Array<CrimeType>>;
   not?: InputMaybe<NestedEnumCrimeTypeNullableFilter>;
   notIn?: InputMaybe<Array<CrimeType>>;
+};
+
+export type EnumCsvStatusFieldUpdateOperationsInput = {
+  set?: InputMaybe<CsvStatus>;
+};
+
+export type EnumCsvStatusFilter = {
+  equals?: InputMaybe<CsvStatus>;
+  in?: InputMaybe<Array<CsvStatus>>;
+  not?: InputMaybe<NestedEnumCsvStatusFilter>;
+  notIn?: InputMaybe<Array<CsvStatus>>;
+};
+
+export type EnumCsvTypeFieldUpdateOperationsInput = {
+  set?: InputMaybe<CsvType>;
+};
+
+export type EnumCsvTypeFilter = {
+  equals?: InputMaybe<CsvType>;
+  in?: InputMaybe<Array<CsvType>>;
+  not?: InputMaybe<NestedEnumCsvTypeFilter>;
+  notIn?: InputMaybe<Array<CsvType>>;
 };
 
 export type EnumFeedItemTypeFieldUpdateOperationsInput = {
@@ -30764,6 +31076,20 @@ export type NestedEnumCrimeTypeNullableFilter = {
   notIn?: InputMaybe<Array<CrimeType>>;
 };
 
+export type NestedEnumCsvStatusFilter = {
+  equals?: InputMaybe<CsvStatus>;
+  in?: InputMaybe<Array<CsvStatus>>;
+  not?: InputMaybe<NestedEnumCsvStatusFilter>;
+  notIn?: InputMaybe<Array<CsvStatus>>;
+};
+
+export type NestedEnumCsvTypeFilter = {
+  equals?: InputMaybe<CsvType>;
+  in?: InputMaybe<Array<CsvType>>;
+  not?: InputMaybe<NestedEnumCsvTypeFilter>;
+  notIn?: InputMaybe<Array<CsvType>>;
+};
+
 export type NestedEnumFeedItemTypeFilter = {
   equals?: InputMaybe<FeedItemType>;
   in?: InputMaybe<Array<FeedItemType>>;
@@ -41763,6 +42089,7 @@ export type SchemeCreateInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -42097,6 +42424,12 @@ export type SchemeCreateNestedOneWithoutChatsInput = {
   create?: InputMaybe<SchemeCreateWithoutChatsInput>;
 };
 
+export type SchemeCreateNestedOneWithoutCsvImportsInput = {
+  connect?: InputMaybe<SchemeWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<SchemeCreateOrConnectWithoutCsvImportsInput>;
+  create?: InputMaybe<SchemeCreateWithoutCsvImportsInput>;
+};
+
 export type SchemeCreateNestedOneWithoutDocumentsInput = {
   connect?: InputMaybe<SchemeWhereUniqueInput>;
   connectOrCreate?: InputMaybe<SchemeCreateOrConnectWithoutDocumentsInput>;
@@ -42224,6 +42557,11 @@ export type SchemeCreateOrConnectWithoutContactsInput = {
 
 export type SchemeCreateOrConnectWithoutCrimeGroupsInput = {
   create: SchemeCreateWithoutCrimeGroupsInput;
+  where: SchemeWhereUniqueInput;
+};
+
+export type SchemeCreateOrConnectWithoutCsvImportsInput = {
+  create: SchemeCreateWithoutCsvImportsInput;
   where: SchemeWhereUniqueInput;
 };
 
@@ -42405,6 +42743,7 @@ export type SchemeCreateWithoutActionsInSchemeInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -42478,6 +42817,7 @@ export type SchemeCreateWithoutActionsInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -42551,6 +42891,7 @@ export type SchemeCreateWithoutArticlesInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -42624,6 +42965,7 @@ export type SchemeCreateWithoutBansInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -42697,6 +43039,7 @@ export type SchemeCreateWithoutBusinessesInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -42770,6 +43113,7 @@ export type SchemeCreateWithoutChatsInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -42843,6 +43187,7 @@ export type SchemeCreateWithoutContactsInput = {
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -42916,6 +43261,81 @@ export type SchemeCreateWithoutCrimeGroupsInput = {
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
+  customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
+  customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
+  darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
+  defaultIncidentEmail?: InputMaybe<Scalars['Boolean']>;
+  defaultIncidentPush?: InputMaybe<Scalars['Boolean']>;
+  defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
+  defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
+  defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
+  defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
+  defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
+  documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
+  facialRecognition?: InputMaybe<Scalars['Boolean']>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutSchemesInput>;
+  goodsMode?: InputMaybe<GoodsMode>;
+  groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
+  id?: InputMaybe<Scalars['String']>;
+  images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  imagesRequiredOnOffenders?: InputMaybe<Scalars['Boolean']>;
+  incidentForm?: InputMaybe<IncidentFormCreateNestedManyWithoutSchemeInput>;
+  incidentImpact?: InputMaybe<Scalars['Boolean']>;
+  incidentRetention?: InputMaybe<Scalars['Int']>;
+  incidents?: InputMaybe<IncidentCreateNestedManyWithoutSchemeInput>;
+  intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
+  investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
+  investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  languages?: InputMaybe<LanguageCreateNestedManyWithoutSchemesInput>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutSchemeInput>;
+  logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
+  members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
+  mentionDueDays?: InputMaybe<Scalars['Int']>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutSchemeInput>;
+  mg11Available?: InputMaybe<Scalars['Boolean']>;
+  name: Scalars['String'];
+  notifications?: InputMaybe<NotificationCreateNestedManyWithoutSchemesInput>;
+  offenderRetention?: InputMaybe<Scalars['Int']>;
+  offenders?: InputMaybe<OffenderCreateNestedManyWithoutSchemeInput>;
+  questionGroups?: InputMaybe<QuestionGroupCreateNestedManyWithoutSchemesInput>;
+  questions?: InputMaybe<QuestionCreateNestedManyWithoutSchemesInput>;
+  recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutSchemeInput>;
+  rekCollections?: InputMaybe<RekCollectionCreateNestedManyWithoutSchemesInput>;
+  reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
+  reportOnly?: InputMaybe<Scalars['Boolean']>;
+  reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
+  restrictIncidentAccess?: InputMaybe<Scalars['Boolean']>;
+  schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  statementTemplates?: InputMaybe<StatementTemplateCreateNestedManyWithoutSchemesInput>;
+  stockItems?: InputMaybe<StockItemCreateNestedManyWithoutSchemeInput>;
+  tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
+  tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
+  taskTimeTracking?: InputMaybe<Scalars['Boolean']>;
+  terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
+  termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
+  todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploadOffenderImagesOnMobile?: InputMaybe<Scalars['Boolean']>;
+  vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+  workflows?: InputMaybe<WorkflowCreateNestedManyWithoutSchemesInput>;
+};
+
+export type SchemeCreateWithoutCsvImportsInput = {
+  actions?: InputMaybe<ActionCreateNestedManyWithoutSchemeInput>;
+  actionsInScheme?: InputMaybe<ActionCreateNestedManyWithoutInSchemeInput>;
+  approvalDueDays?: InputMaybe<Scalars['Int']>;
+  articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
+  autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
+  autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
+  bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
+  businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
+  chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -42990,6 +43410,7 @@ export type SchemeCreateWithoutCustomGalleriesInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
   defaultIncidentEmail?: InputMaybe<Scalars['Boolean']>;
@@ -43063,6 +43484,7 @@ export type SchemeCreateWithoutDarkLogoInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   defaultIncidentEmail?: InputMaybe<Scalars['Boolean']>;
@@ -43136,6 +43558,7 @@ export type SchemeCreateWithoutDocumentsInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -43209,6 +43632,7 @@ export type SchemeCreateWithoutFeedItemsInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -43282,6 +43706,7 @@ export type SchemeCreateWithoutGroupsInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -43355,6 +43780,7 @@ export type SchemeCreateWithoutImagesInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -43428,6 +43854,7 @@ export type SchemeCreateWithoutIncidentFormInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -43501,6 +43928,7 @@ export type SchemeCreateWithoutIncidentsInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -43574,6 +44002,7 @@ export type SchemeCreateWithoutIntelInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -43647,6 +44076,7 @@ export type SchemeCreateWithoutInvestigationsInSchemeInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -43720,6 +44150,7 @@ export type SchemeCreateWithoutInvestigationsInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -43793,6 +44224,7 @@ export type SchemeCreateWithoutLoginEventsInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -43866,6 +44298,7 @@ export type SchemeCreateWithoutLogoInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -43939,6 +44372,7 @@ export type SchemeCreateWithoutMembersInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -44012,6 +44446,7 @@ export type SchemeCreateWithoutMessagesInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -44085,6 +44520,7 @@ export type SchemeCreateWithoutNotificationsInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -44158,6 +44594,7 @@ export type SchemeCreateWithoutOffendersInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -44231,6 +44668,7 @@ export type SchemeCreateWithoutQuestionGroupsInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -44304,6 +44742,7 @@ export type SchemeCreateWithoutQuestionsInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -44377,6 +44816,7 @@ export type SchemeCreateWithoutRecycledItemsInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -44450,6 +44890,7 @@ export type SchemeCreateWithoutRekCollectionsInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -44523,6 +44964,7 @@ export type SchemeCreateWithoutReportIconsInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -44596,6 +45038,7 @@ export type SchemeCreateWithoutReportTemplatesInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -44669,6 +45112,7 @@ export type SchemeCreateWithoutSchemeTagsInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -44742,6 +45186,7 @@ export type SchemeCreateWithoutStatementTemplatesInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -44815,6 +45260,7 @@ export type SchemeCreateWithoutStockItemsInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -44888,6 +45334,7 @@ export type SchemeCreateWithoutTagOrdersInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -44961,6 +45408,7 @@ export type SchemeCreateWithoutTagsInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -45034,6 +45482,7 @@ export type SchemeCreateWithoutTermsInSchemeInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -45107,6 +45556,7 @@ export type SchemeCreateWithoutTermsInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -45180,6 +45630,7 @@ export type SchemeCreateWithoutTodosInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -45253,6 +45704,7 @@ export type SchemeCreateWithoutVehiclesInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -45326,6 +45778,7 @@ export type SchemeCreateWithoutWorkflowsInput = {
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
   customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutSchemesInput>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
@@ -45413,6 +45866,7 @@ export type SchemeOrderByWithRelationInput = {
   contacts?: InputMaybe<ContactOrderByRelationAggregateInput>;
   createdAt?: InputMaybe<SortOrder>;
   crimeGroups?: InputMaybe<CrimeGroupOrderByRelationAggregateInput>;
+  csvImports?: InputMaybe<CsvImportOrderByRelationAggregateInput>;
   customGalleries?: InputMaybe<CustomGalleryOrderByRelationAggregateInput>;
   customTranslations?: InputMaybe<SortOrder>;
   darkLogo?: InputMaybe<ImageOrderByWithRelationInput>;
@@ -45531,6 +45985,7 @@ export type SchemeUpdateInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -46153,6 +46608,14 @@ export type SchemeUpdateOneRequiredWithoutChatsNestedInput = {
   upsert?: InputMaybe<SchemeUpsertWithoutChatsInput>;
 };
 
+export type SchemeUpdateOneRequiredWithoutCsvImportsNestedInput = {
+  connect?: InputMaybe<SchemeWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<SchemeCreateOrConnectWithoutCsvImportsInput>;
+  create?: InputMaybe<SchemeCreateWithoutCsvImportsInput>;
+  update?: InputMaybe<SchemeUpdateWithoutCsvImportsInput>;
+  upsert?: InputMaybe<SchemeUpsertWithoutCsvImportsInput>;
+};
+
 export type SchemeUpdateOneRequiredWithoutGroupsNestedInput = {
   connect?: InputMaybe<SchemeWhereUniqueInput>;
   connectOrCreate?: InputMaybe<SchemeCreateOrConnectWithoutGroupsInput>;
@@ -46424,6 +46887,7 @@ export type SchemeUpdateWithoutActionsInSchemeInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -46497,6 +46961,7 @@ export type SchemeUpdateWithoutActionsInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -46570,6 +47035,7 @@ export type SchemeUpdateWithoutArticlesInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -46643,6 +47109,7 @@ export type SchemeUpdateWithoutBansInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -46716,6 +47183,7 @@ export type SchemeUpdateWithoutBusinessesInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -46789,6 +47257,7 @@ export type SchemeUpdateWithoutChatsInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -46862,6 +47331,7 @@ export type SchemeUpdateWithoutContactsInput = {
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -46935,6 +47405,81 @@ export type SchemeUpdateWithoutCrimeGroupsInput = {
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
+  customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
+  customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
+  darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
+  defaultIncidentEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultIncidentPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
+  facialRecognition?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutSchemesNestedInput>;
+  goodsMode?: InputMaybe<EnumGoodsModeFieldUpdateOperationsInput>;
+  groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  imagesRequiredOnOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  incidentForm?: InputMaybe<IncidentFormUpdateManyWithoutSchemeNestedInput>;
+  incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  incidents?: InputMaybe<IncidentUpdateManyWithoutSchemeNestedInput>;
+  intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
+  investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
+  investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  languages?: InputMaybe<LanguageUpdateManyWithoutSchemesNestedInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutSchemeNestedInput>;
+  logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
+  members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
+  mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutSchemeNestedInput>;
+  mg11Available?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  notifications?: InputMaybe<NotificationUpdateManyWithoutSchemesNestedInput>;
+  offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  offenders?: InputMaybe<OffenderUpdateManyWithoutSchemeNestedInput>;
+  questionGroups?: InputMaybe<QuestionGroupUpdateManyWithoutSchemesNestedInput>;
+  questions?: InputMaybe<QuestionUpdateManyWithoutSchemesNestedInput>;
+  recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutSchemeNestedInput>;
+  rekCollections?: InputMaybe<RekCollectionUpdateManyWithoutSchemesNestedInput>;
+  reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
+  reportOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
+  restrictIncidentAccess?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  statementTemplates?: InputMaybe<StatementTemplateUpdateManyWithoutSchemesNestedInput>;
+  stockItems?: InputMaybe<StockItemUpdateManyWithoutSchemeNestedInput>;
+  tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
+  tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
+  taskTimeTracking?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
+  termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
+  todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploadOffenderImagesOnMobile?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+  workflows?: InputMaybe<WorkflowUpdateManyWithoutSchemesNestedInput>;
+};
+
+export type SchemeUpdateWithoutCsvImportsInput = {
+  actions?: InputMaybe<ActionUpdateManyWithoutSchemeNestedInput>;
+  actionsInScheme?: InputMaybe<ActionUpdateManyWithoutInSchemeNestedInput>;
+  approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
+  autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
+  businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
+  chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -47009,6 +47554,7 @@ export type SchemeUpdateWithoutCustomGalleriesInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
   defaultIncidentEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -47082,6 +47628,7 @@ export type SchemeUpdateWithoutDarkLogoInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   defaultIncidentEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -47155,6 +47702,7 @@ export type SchemeUpdateWithoutDocumentsInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -47228,6 +47776,7 @@ export type SchemeUpdateWithoutFeedItemsInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -47301,6 +47850,7 @@ export type SchemeUpdateWithoutGroupsInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -47374,6 +47924,7 @@ export type SchemeUpdateWithoutImagesInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -47447,6 +47998,7 @@ export type SchemeUpdateWithoutIncidentFormInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -47520,6 +48072,7 @@ export type SchemeUpdateWithoutIncidentsInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -47593,6 +48146,7 @@ export type SchemeUpdateWithoutIntelInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -47666,6 +48220,7 @@ export type SchemeUpdateWithoutInvestigationsInSchemeInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -47739,6 +48294,7 @@ export type SchemeUpdateWithoutInvestigationsInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -47812,6 +48368,7 @@ export type SchemeUpdateWithoutLoginEventsInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -47885,6 +48442,7 @@ export type SchemeUpdateWithoutLogoInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -47958,6 +48516,7 @@ export type SchemeUpdateWithoutMembersInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -48031,6 +48590,7 @@ export type SchemeUpdateWithoutMessagesInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -48104,6 +48664,7 @@ export type SchemeUpdateWithoutNotificationsInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -48177,6 +48738,7 @@ export type SchemeUpdateWithoutOffendersInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -48250,6 +48812,7 @@ export type SchemeUpdateWithoutQuestionGroupsInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -48323,6 +48886,7 @@ export type SchemeUpdateWithoutQuestionsInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -48396,6 +48960,7 @@ export type SchemeUpdateWithoutRecycledItemsInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -48469,6 +49034,7 @@ export type SchemeUpdateWithoutRekCollectionsInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -48542,6 +49108,7 @@ export type SchemeUpdateWithoutReportIconsInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -48615,6 +49182,7 @@ export type SchemeUpdateWithoutReportTemplatesInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -48688,6 +49256,7 @@ export type SchemeUpdateWithoutSchemeTagsInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -48761,6 +49330,7 @@ export type SchemeUpdateWithoutStatementTemplatesInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -48834,6 +49404,7 @@ export type SchemeUpdateWithoutStockItemsInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -48907,6 +49478,7 @@ export type SchemeUpdateWithoutTagOrdersInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -48980,6 +49552,7 @@ export type SchemeUpdateWithoutTagsInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -49053,6 +49626,7 @@ export type SchemeUpdateWithoutTermsInSchemeInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -49126,6 +49700,7 @@ export type SchemeUpdateWithoutTermsInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -49199,6 +49774,7 @@ export type SchemeUpdateWithoutTodosInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -49272,6 +49848,7 @@ export type SchemeUpdateWithoutVehiclesInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -49345,6 +49922,7 @@ export type SchemeUpdateWithoutWorkflowsInput = {
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
   customGalleries?: InputMaybe<CustomGalleryUpdateManyWithoutSchemesNestedInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
@@ -49561,6 +50139,11 @@ export type SchemeUpsertWithoutChatsInput = {
   update: SchemeUpdateWithoutChatsInput;
 };
 
+export type SchemeUpsertWithoutCsvImportsInput = {
+  create: SchemeCreateWithoutCsvImportsInput;
+  update: SchemeUpdateWithoutCsvImportsInput;
+};
+
 export type SchemeUpsertWithoutDocumentsInput = {
   create: SchemeCreateWithoutDocumentsInput;
   update: SchemeUpdateWithoutDocumentsInput;
@@ -49653,6 +50236,7 @@ export type SchemeWhereInput = {
   contacts?: InputMaybe<ContactListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   crimeGroups?: InputMaybe<CrimeGroupListRelationFilter>;
+  csvImports?: InputMaybe<CsvImportListRelationFilter>;
   customGalleries?: InputMaybe<CustomGalleryListRelationFilter>;
   customTranslations?: InputMaybe<JsonNullableListFilter>;
   darkLogo?: InputMaybe<ImageWhereInput>;
@@ -57723,6 +58307,7 @@ export type UserCreateInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -57950,6 +58535,12 @@ export type UserCreateNestedOneWithoutCrimeGroupsInput = {
   create?: InputMaybe<UserCreateWithoutCrimeGroupsInput>;
 };
 
+export type UserCreateNestedOneWithoutCsvImportsInput = {
+  connect?: InputMaybe<UserWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<UserCreateOrConnectWithoutCsvImportsInput>;
+  create?: InputMaybe<UserCreateWithoutCsvImportsInput>;
+};
+
 export type UserCreateNestedOneWithoutFeedItemsInput = {
   connect?: InputMaybe<UserWhereUniqueInput>;
   connectOrCreate?: InputMaybe<UserCreateOrConnectWithoutFeedItemsInput>;
@@ -58132,6 +58723,11 @@ export type UserCreateOrConnectWithoutCrimeGroupsInput = {
   where: UserWhereUniqueInput;
 };
 
+export type UserCreateOrConnectWithoutCsvImportsInput = {
+  create: UserCreateWithoutCsvImportsInput;
+  where: UserWhereUniqueInput;
+};
+
 export type UserCreateOrConnectWithoutFeedItemsInput = {
   create: UserCreateWithoutFeedItemsInput;
   where: UserWhereUniqueInput;
@@ -58280,6 +58876,7 @@ export type UserCreateWithoutActionsByUserInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -58355,6 +58952,7 @@ export type UserCreateWithoutActionsInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -58430,6 +59028,7 @@ export type UserCreateWithoutAddressesInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -58505,6 +59104,7 @@ export type UserCreateWithoutApproverGroupsInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -58580,6 +59180,7 @@ export type UserCreateWithoutArticlesInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -58655,6 +59256,7 @@ export type UserCreateWithoutAssignedTodosInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -58730,6 +59332,7 @@ export type UserCreateWithoutBansInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -58805,6 +59408,7 @@ export type UserCreateWithoutBusinessesInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -58880,6 +59484,7 @@ export type UserCreateWithoutChatsInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -58955,6 +59560,7 @@ export type UserCreateWithoutCompletedTodosInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -59030,6 +59636,7 @@ export type UserCreateWithoutContactInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -59105,6 +59712,7 @@ export type UserCreateWithoutCreatedArticlesInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -59180,6 +59788,7 @@ export type UserCreateWithoutCreatedTagsInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -59255,6 +59864,7 @@ export type UserCreateWithoutCreatedTodosInput = {
   createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -59330,6 +59940,7 @@ export type UserCreateWithoutCreatedUpdatesInput = {
   createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -59405,6 +60016,83 @@ export type UserCreateWithoutCrimeGroupsInput = {
   createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
+  demId?: InputMaybe<Scalars['String']>;
+  disabled?: InputMaybe<Scalars['Boolean']>;
+  email: Scalars['String'];
+  expoPushTokens?: InputMaybe<ExpoPushTokenCreateNestedManyWithoutUserInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutCreatedByInput>;
+  fullName: Scalars['String'];
+  groups?: InputMaybe<GroupCreateNestedManyWithoutUsersInput>;
+  id?: InputMaybe<Scalars['String']>;
+  images?: InputMaybe<ImageCreateNestedManyWithoutUploadedByInput>;
+  impressions?: InputMaybe<ImpressionCreateNestedManyWithoutUserInput>;
+  incidentEmail?: InputMaybe<Scalars['Boolean']>;
+  incidentPush?: InputMaybe<Scalars['Boolean']>;
+  incidents?: InputMaybe<IncidentCreateNestedManyWithoutCreatedByInput>;
+  intel?: InputMaybe<IntelCreateNestedManyWithoutCreatedByInput>;
+  investigations?: InputMaybe<InvestigationCreateNestedManyWithoutCreatedByInput>;
+  ipAddress?: InputMaybe<Scalars['String']>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutUserInput>;
+  mentionedUpdated?: InputMaybe<UpdateCreateNestedManyWithoutMentionedUsersInput>;
+  messageMentions?: InputMaybe<MessageCreateNestedManyWithoutMentionsInput>;
+  messagePush?: InputMaybe<Scalars['Boolean']>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutFromInput>;
+  mg11s?: InputMaybe<Mg11CreateNestedManyWithoutCreatedByInput>;
+  newSchemeNotifications?: InputMaybe<NotificationCreateNestedManyWithoutUserInput>;
+  newUser?: InputMaybe<Scalars['Boolean']>;
+  notifications?: InputMaybe<UserNotificationCreateNestedManyWithoutUserInput>;
+  offenderEmail?: InputMaybe<Scalars['Boolean']>;
+  offenderPush?: InputMaybe<Scalars['Boolean']>;
+  offenders?: InputMaybe<OffenderCreateNestedManyWithoutCreatedByInput>;
+  onboardSteps?: InputMaybe<OnboardSteps>;
+  oneSignalIds?: InputMaybe<OneSignalIdCreateNestedManyWithoutUserInput>;
+  organisation: Scalars['String'];
+  platform?: InputMaybe<Scalars['String']>;
+  publicName?: InputMaybe<Scalars['Boolean']>;
+  recycled?: InputMaybe<Scalars['Boolean']>;
+  recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
+  reference?: InputMaybe<Scalars['Int']>;
+  reportToAllBusinesses?: InputMaybe<Scalars['Boolean']>;
+  schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  status?: InputMaybe<UserStatus>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
+  subscribedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
+  subscribedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutSubscribedUsersInput>;
+  tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
+  taskTimeTaken?: InputMaybe<TimeTakenCreateNestedManyWithoutUserInput>;
+  termsSigned?: InputMaybe<Scalars['Boolean']>;
+  timeSigned?: InputMaybe<Scalars['DateTime']>;
+  type?: InputMaybe<UserType>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploaded?: InputMaybe<Scalars['Boolean']>;
+  userTerms?: InputMaybe<UserTermCreateNestedManyWithoutUserInput>;
+  vehicles?: InputMaybe<VehicleCreateNestedManyWithoutCreatedByInput>;
+};
+
+export type UserCreateWithoutCsvImportsInput = {
+  actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
+  actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
+  addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
+  articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedTodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
+  auth0Id?: InputMaybe<Scalars['String']>;
+  bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
+  businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
+  chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedTodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
+  contact?: InputMaybe<ContactCreateNestedOneWithoutUserInput>;
+  createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
+  createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
+  createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -59481,6 +60169,7 @@ export type UserCreateWithoutFeedItemsInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -59556,6 +60245,7 @@ export type UserCreateWithoutGroupsInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -59631,6 +60321,7 @@ export type UserCreateWithoutImagesInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -59706,6 +60397,7 @@ export type UserCreateWithoutImpressionsInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -59781,6 +60473,7 @@ export type UserCreateWithoutIncidentsInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -59856,6 +60549,7 @@ export type UserCreateWithoutIntelInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -59931,6 +60625,7 @@ export type UserCreateWithoutInvestigationsInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -60006,6 +60701,7 @@ export type UserCreateWithoutLoginEventsInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -60081,6 +60777,7 @@ export type UserCreateWithoutMentionedUpdatedInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -60156,6 +60853,7 @@ export type UserCreateWithoutMessageMentionsInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -60231,6 +60929,7 @@ export type UserCreateWithoutMessagesInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -60306,6 +61005,7 @@ export type UserCreateWithoutMg11sInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -60381,6 +61081,7 @@ export type UserCreateWithoutNewSchemeNotificationsInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -60456,6 +61157,7 @@ export type UserCreateWithoutNotificationsInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -60531,6 +61233,7 @@ export type UserCreateWithoutOffendersInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -60606,6 +61309,7 @@ export type UserCreateWithoutRecycledItemsInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -60681,6 +61385,7 @@ export type UserCreateWithoutSchemesInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -60756,6 +61461,7 @@ export type UserCreateWithoutSubscribedCrimeGroupsInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -60831,6 +61537,7 @@ export type UserCreateWithoutSubscribedIncidentsInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -60906,6 +61613,7 @@ export type UserCreateWithoutSubscribedInvestigationsInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -60981,6 +61689,7 @@ export type UserCreateWithoutSubscribedOffendersInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -61056,6 +61765,7 @@ export type UserCreateWithoutSubscribedVehiclesInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -61131,6 +61841,7 @@ export type UserCreateWithoutTagsInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -61206,6 +61917,7 @@ export type UserCreateWithoutTaskTimeTakenInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -61281,6 +61993,7 @@ export type UserCreateWithoutUserTermsInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -61356,6 +62069,7 @@ export type UserCreateWithoutVehiclesInput = {
   createdTodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutUserInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -61682,6 +62396,7 @@ export type UserOrderByWithRelationInput = {
   createdTodos?: InputMaybe<TodoOrderByRelationAggregateInput>;
   createdUpdates?: InputMaybe<UpdateOrderByRelationAggregateInput>;
   crimeGroups?: InputMaybe<CrimeGroupOrderByRelationAggregateInput>;
+  csvImports?: InputMaybe<CsvImportOrderByRelationAggregateInput>;
   demId?: InputMaybe<SortOrder>;
   disabled?: InputMaybe<SortOrder>;
   email?: InputMaybe<SortOrder>;
@@ -62280,6 +62995,7 @@ export type UserUpdateInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -62725,6 +63441,14 @@ export type UserUpdateOneRequiredWithoutCreatedUpdatesNestedInput = {
   upsert?: InputMaybe<UserUpsertWithoutCreatedUpdatesInput>;
 };
 
+export type UserUpdateOneRequiredWithoutCsvImportsNestedInput = {
+  connect?: InputMaybe<UserWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<UserCreateOrConnectWithoutCsvImportsInput>;
+  create?: InputMaybe<UserCreateWithoutCsvImportsInput>;
+  update?: InputMaybe<UserUpdateWithoutCsvImportsInput>;
+  upsert?: InputMaybe<UserUpsertWithoutCsvImportsInput>;
+};
+
 export type UserUpdateOneRequiredWithoutImagesNestedInput = {
   connect?: InputMaybe<UserWhereUniqueInput>;
   connectOrCreate?: InputMaybe<UserCreateOrConnectWithoutImagesInput>;
@@ -63012,6 +63736,7 @@ export type UserUpdateWithoutActionsByUserInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -63087,6 +63812,7 @@ export type UserUpdateWithoutActionsInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -63162,6 +63888,7 @@ export type UserUpdateWithoutAddressesInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -63237,6 +63964,7 @@ export type UserUpdateWithoutApproverGroupsInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -63312,6 +64040,7 @@ export type UserUpdateWithoutArticlesInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -63387,6 +64116,7 @@ export type UserUpdateWithoutAssignedTodosInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -63462,6 +64192,7 @@ export type UserUpdateWithoutBansInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -63537,6 +64268,7 @@ export type UserUpdateWithoutBusinessesInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -63612,6 +64344,7 @@ export type UserUpdateWithoutChatsInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -63687,6 +64420,7 @@ export type UserUpdateWithoutCompletedTodosInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -63762,6 +64496,7 @@ export type UserUpdateWithoutContactInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -63837,6 +64572,7 @@ export type UserUpdateWithoutCreatedArticlesInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -63912,6 +64648,7 @@ export type UserUpdateWithoutCreatedTagsInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -63987,6 +64724,7 @@ export type UserUpdateWithoutCreatedTodosInput = {
   createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -64062,6 +64800,7 @@ export type UserUpdateWithoutCreatedUpdatesInput = {
   createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -64137,6 +64876,83 @@ export type UserUpdateWithoutCrimeGroupsInput = {
   createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
+  demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  email?: InputMaybe<StringFieldUpdateOperationsInput>;
+  expoPushTokens?: InputMaybe<ExpoPushTokenUpdateManyWithoutUserNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutCreatedByNestedInput>;
+  fullName?: InputMaybe<StringFieldUpdateOperationsInput>;
+  groups?: InputMaybe<GroupUpdateManyWithoutUsersNestedInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  images?: InputMaybe<ImageUpdateManyWithoutUploadedByNestedInput>;
+  impressions?: InputMaybe<ImpressionUpdateManyWithoutUserNestedInput>;
+  incidentEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  incidentPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  incidents?: InputMaybe<IncidentUpdateManyWithoutCreatedByNestedInput>;
+  intel?: InputMaybe<IntelUpdateManyWithoutCreatedByNestedInput>;
+  investigations?: InputMaybe<InvestigationUpdateManyWithoutCreatedByNestedInput>;
+  ipAddress?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutUserNestedInput>;
+  mentionedUpdated?: InputMaybe<UpdateUpdateManyWithoutMentionedUsersNestedInput>;
+  messageMentions?: InputMaybe<MessageUpdateManyWithoutMentionsNestedInput>;
+  messagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutFromNestedInput>;
+  mg11s?: InputMaybe<Mg11UpdateManyWithoutCreatedByNestedInput>;
+  newSchemeNotifications?: InputMaybe<NotificationUpdateManyWithoutUserNestedInput>;
+  newUser?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  notifications?: InputMaybe<UserNotificationUpdateManyWithoutUserNestedInput>;
+  offenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  offenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  offenders?: InputMaybe<OffenderUpdateManyWithoutCreatedByNestedInput>;
+  onboardSteps?: InputMaybe<EnumOnboardStepsFieldUpdateOperationsInput>;
+  oneSignalIds?: InputMaybe<OneSignalIdUpdateManyWithoutUserNestedInput>;
+  organisation?: InputMaybe<StringFieldUpdateOperationsInput>;
+  platform?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  publicName?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByNestedInput>;
+  reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  reportToAllBusinesses?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserNestedInput>;
+  status?: InputMaybe<NullableEnumUserStatusFieldUpdateOperationsInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  subscribedIncidents?: InputMaybe<IncidentUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  subscribedOffenders?: InputMaybe<OffenderUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedVehicles?: InputMaybe<VehicleUpdateManyWithoutSubscribedUsersNestedInput>;
+  tags?: InputMaybe<TagUpdateManyWithoutUsersNestedInput>;
+  taskTimeTaken?: InputMaybe<TimeTakenUpdateManyWithoutUserNestedInput>;
+  termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
+  type?: InputMaybe<EnumUserTypeFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploaded?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  userTerms?: InputMaybe<UserTermUpdateManyWithoutUserNestedInput>;
+  vehicles?: InputMaybe<VehicleUpdateManyWithoutCreatedByNestedInput>;
+};
+
+export type UserUpdateWithoutCsvImportsInput = {
+  actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
+  actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
+  addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
+  articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedTodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
+  auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
+  businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
+  chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedTodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
+  contact?: InputMaybe<ContactUpdateOneWithoutUserNestedInput>;
+  createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
+  createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
+  createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -64213,6 +65029,7 @@ export type UserUpdateWithoutFeedItemsInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -64288,6 +65105,7 @@ export type UserUpdateWithoutGroupsInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -64363,6 +65181,7 @@ export type UserUpdateWithoutImagesInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -64438,6 +65257,7 @@ export type UserUpdateWithoutImpressionsInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -64513,6 +65333,7 @@ export type UserUpdateWithoutIncidentsInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -64588,6 +65409,7 @@ export type UserUpdateWithoutIntelInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -64663,6 +65485,7 @@ export type UserUpdateWithoutInvestigationsInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -64738,6 +65561,7 @@ export type UserUpdateWithoutLoginEventsInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -64813,6 +65637,7 @@ export type UserUpdateWithoutMentionedUpdatedInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -64888,6 +65713,7 @@ export type UserUpdateWithoutMessageMentionsInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -64963,6 +65789,7 @@ export type UserUpdateWithoutMessagesInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -65038,6 +65865,7 @@ export type UserUpdateWithoutMg11sInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -65113,6 +65941,7 @@ export type UserUpdateWithoutNewSchemeNotificationsInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -65188,6 +66017,7 @@ export type UserUpdateWithoutNotificationsInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -65263,6 +66093,7 @@ export type UserUpdateWithoutOffendersInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -65338,6 +66169,7 @@ export type UserUpdateWithoutRecycledItemsInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -65413,6 +66245,7 @@ export type UserUpdateWithoutSchemesInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -65488,6 +66321,7 @@ export type UserUpdateWithoutSubscribedCrimeGroupsInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -65563,6 +66397,7 @@ export type UserUpdateWithoutSubscribedIncidentsInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -65638,6 +66473,7 @@ export type UserUpdateWithoutSubscribedInvestigationsInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -65713,6 +66549,7 @@ export type UserUpdateWithoutSubscribedOffendersInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -65788,6 +66625,7 @@ export type UserUpdateWithoutSubscribedVehiclesInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -65863,6 +66701,7 @@ export type UserUpdateWithoutTagsInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -65938,6 +66777,7 @@ export type UserUpdateWithoutTaskTimeTakenInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -66013,6 +66853,7 @@ export type UserUpdateWithoutUserTermsInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -66088,6 +66929,7 @@ export type UserUpdateWithoutVehiclesInput = {
   createdTodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  csvImports?: InputMaybe<CsvImportUpdateManyWithoutUserNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -66282,6 +67124,11 @@ export type UserUpsertWithoutCrimeGroupsInput = {
   update: UserUpdateWithoutCrimeGroupsInput;
 };
 
+export type UserUpsertWithoutCsvImportsInput = {
+  create: UserCreateWithoutCsvImportsInput;
+  update: UserUpdateWithoutCsvImportsInput;
+};
+
 export type UserUpsertWithoutFeedItemsInput = {
   create: UserCreateWithoutFeedItemsInput;
   update: UserUpdateWithoutFeedItemsInput;
@@ -66390,6 +67237,7 @@ export type UserWhereInput = {
   createdTodos?: InputMaybe<TodoListRelationFilter>;
   createdUpdates?: InputMaybe<UpdateListRelationFilter>;
   crimeGroups?: InputMaybe<CrimeGroupListRelationFilter>;
+  csvImports?: InputMaybe<CsvImportListRelationFilter>;
   demId?: InputMaybe<StringNullableFilter>;
   disabled?: InputMaybe<BoolFilter>;
   email?: InputMaybe<StringFilter>;
@@ -69679,6 +70527,7 @@ export type ListArticlesQueryVariables = Exact<{
   take?: InputMaybe<Scalars['Int']>;
   skip?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<ArticleOrderByWithRelationInput>;
+  groupsWhere?: InputMaybe<GroupWhereInput>;
 }>;
 
 export type ListArticlesQuery = {
@@ -77880,31 +78729,6 @@ export type ListStatementTemplatesQuery = {
   }>;
 };
 
-export type ListStockItemsQueryVariables = Exact<{
-  where?: InputMaybe<StockItemsWhereInput>;
-}>;
-
-export type ListStockItemsQuery = {
-  __typename?: 'Query';
-  listStockItems: {
-    __typename?: 'ListStockItems';
-    total: number;
-    stockItems: Array<{
-      __typename?: 'StockItem';
-      id: string;
-      barcode?: string | null;
-      brand?: string | null;
-      costPriceLocal?: number | null;
-      costPriceStandard?: number | null;
-      division?: string | null;
-      name?: string | null;
-      salesPriceLocal?: number | null;
-      salesPriceStandard?: number | null;
-      sku?: string | null;
-    }>;
-  };
-};
-
 export type DeleteTagMutationVariables = Exact<{
   id: Scalars['String'];
 }>;
@@ -81911,6 +82735,7 @@ export const ListArticlesDocument = gql`
     $take: Int
     $skip: Int
     $order: ArticleOrderByWithRelationInput
+    $groupsWhere: GroupWhereInput
   ) {
     listArticles(
       where: $where
@@ -81949,7 +82774,7 @@ export const ListArticlesDocument = gql`
           }
           id
         }
-        groups {
+        groups(where: $groupsWhere) {
           id
           name
         }
@@ -93578,59 +94403,6 @@ export type ListStatementTemplatesLazyQueryHookResult = ReturnType<
 export type ListStatementTemplatesQueryResult = Apollo.QueryResult<
   ListStatementTemplatesQuery,
   ListStatementTemplatesQueryVariables
->;
-export const ListStockItemsDocument = gql`
-  query ListStockItems($where: StockItemsWhereInput) {
-    listStockItems(where: $where) {
-      total
-      stockItems {
-        id
-        barcode
-        brand
-        costPriceLocal
-        costPriceStandard
-        division
-        name
-        salesPriceLocal
-        salesPriceStandard
-        sku
-      }
-    }
-  }
-`;
-export function useListStockItemsQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    ListStockItemsQuery,
-    ListStockItemsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<ListStockItemsQuery, ListStockItemsQueryVariables>(
-    ListStockItemsDocument,
-    options
-  );
-}
-export function useListStockItemsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    ListStockItemsQuery,
-    ListStockItemsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<ListStockItemsQuery, ListStockItemsQueryVariables>(
-    ListStockItemsDocument,
-    options
-  );
-}
-export type ListStockItemsQueryHookResult = ReturnType<
-  typeof useListStockItemsQuery
->;
-export type ListStockItemsLazyQueryHookResult = ReturnType<
-  typeof useListStockItemsLazyQuery
->;
-export type ListStockItemsQueryResult = Apollo.QueryResult<
-  ListStockItemsQuery,
-  ListStockItemsQueryVariables
 >;
 export const DeleteTagDocument = gql`
   mutation deleteTag($id: String!) {
