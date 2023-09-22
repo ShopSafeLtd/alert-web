@@ -31590,11 +31590,12 @@ tr > .ant-picker-cell-in-view.ant-picker-cell-range-hover:first-child::after {
   right: 0;
   bottom: 0;
   left: 0;
-  color: #fff;
+  color: rgb(0 0 0);
   background-color: #f5f5f5;
 }
 .chat-collage-image:hover .chat-collage-image-overlay {
-  opacity: 1;
+  opacity: 0.5;
+  color: rgb(0 0 0);
 }
 .feedItem-card-icon {
   margin-right: 5px;

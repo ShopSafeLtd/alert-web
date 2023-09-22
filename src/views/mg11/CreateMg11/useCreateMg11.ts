@@ -156,20 +156,31 @@ const useCreateMg11 = (): Return => {
 
   const completeNow = Form.useWatch('completeNow', form) === 'true';
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = (formData: FormData) => {
     setSaving(true);
-    // eslint-disable-next-line no-param-reassign
-    delete data.over18;
-    // eslint-disable-next-line no-param-reassign
-    delete data.businessStatement;
-    // eslint-disable-next-line no-param-reassign
-    delete data.completeNow;
+    // // eslint-disable-next-line no-param-reassign
+    // delete data.over18;
+    // // eslint-disable-next-line no-param-reassign
+    // delete data.businessStatement;
+    // // eslint-disable-next-line no-param-reassign
+    // delete data.completeNow;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const {
+      over18,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      businessStatement: bStatement,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      completeNow: completeN,
+      ...data
+    } = formData;
+
     createMg11({
       variables: {
         schemeId,
         data: {
           ...data,
-          age: data.over18 === 'true' ? 'Over 18' : data.age,
+          age: over18 && over18 === 'true' ? 'Over 18' : data.age,
           likelyToAttend: data.likelyToAttend === 'true',
           specialMeasures: data.specialMeasures === 'true',
           careNeeds: data.careNeeds === 'true',
