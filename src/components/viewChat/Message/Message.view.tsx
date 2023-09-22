@@ -1,7 +1,6 @@
 /* eslint-disable react/require-default-props */
 import React from 'react';
 import { Avatar, Col, Row, Typography } from 'antd';
-import { EyeOutlined } from '@ant-design/icons';
 
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import type {
@@ -18,7 +17,6 @@ import {
   OffenderMessageCard,
   VehicleMessageCard,
 } from 'components/MessageInput/MessageCard';
-import { FormattedMessage } from 'react-intl';
 
 const { Text } = Typography;
 
@@ -93,11 +91,16 @@ const CollageImage = ({ index, length, src }: CollageImageProps) => (
     }}
   >
     <WatermarkImage url={src} />
-    <div className="chat-collage-image-overlay">
-      <EyeOutlined style={{ marginRight: 5 }} />
-      <FormattedMessage defaultMessage="Preview" id="TJo5E6" />
-    </div>
-    <WatermarkImage url={src} />
+    {/* TODO: add in the preview functionality  */}
+    {/* <div */}
+    {/*   style={{ */}
+    {/*     color: 'black', */}
+    {/*   }} */}
+    {/*   className="chat-collage-image-overlay" */}
+    {/* > */}
+    {/*   <EyeOutlined style={{ marginRight: 5 }} /> */}
+    {/*   <FormattedMessage defaultMessage="Preview" id="TJo5E6" /> */}
+    {/* </div> */}
   </div>
 );
 
