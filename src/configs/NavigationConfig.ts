@@ -323,10 +323,10 @@ const adminOnlyItems: NavItem[] = [
       {
         key: 'performance',
         path: `${APP_PREFIX_PATH}/reports/performance-report`,
-        title: 'Performance',
+        title: 'Summary',
         intl: defineMessage({
-          id: 'performance',
-          defaultMessage: 'Performance',
+          id: 'Summary',
+          defaultMessage: 'Summary',
         }),
         icon: faPieChart,
         breadcrumb: true,
