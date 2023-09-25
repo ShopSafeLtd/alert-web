@@ -233,8 +233,8 @@ const useOffenderFeed = (): Return => {
           },
         },
         {
-          reference: {
-            equals: Number(variables.search),
+          referenceStr: {
+            contains: variables.search,
           },
         },
       ],

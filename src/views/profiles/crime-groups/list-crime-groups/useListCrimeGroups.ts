@@ -85,8 +85,8 @@ const useListCrimeGroups = (): Return => {
           },
         },
         {
-          reference: {
-            equals: Number(search),
+          referenceStr: {
+            contains: search,
           },
         },
         {

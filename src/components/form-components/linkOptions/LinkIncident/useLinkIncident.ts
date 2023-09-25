@@ -82,8 +82,8 @@ const useLinkIncident = ({
             },
           },
           {
-            reference: {
-              equals: Number(variables.search),
+            referenceStr: {
+              contains: variables.search,
             },
           },
           {

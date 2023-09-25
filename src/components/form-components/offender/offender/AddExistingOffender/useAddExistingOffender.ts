@@ -166,8 +166,8 @@ const useAddExistingOffender = ({
             },
           },
           {
-            reference: {
-              equals: Number(search),
+            referenceStr: {
+              contains: search,
             },
           },
         ],

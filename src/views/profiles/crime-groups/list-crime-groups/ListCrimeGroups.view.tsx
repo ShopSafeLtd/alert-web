@@ -146,8 +146,7 @@ const ListCrimeGroups = ({
               id: 'k8ZNgH',
             }),
             render: (value, item) => (
-              // eslint-disable-next-line formatjs/no-literal-string-in-jsx
-              <Link to={`view/${item.key}`}>CG-{value}</Link>
+              <Link to={`view/${item.key}`}>{value}</Link>
             ),
           },
           {

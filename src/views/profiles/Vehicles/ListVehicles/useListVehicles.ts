@@ -118,8 +118,8 @@ const useListVehicles = (): Return => {
           },
         },
         {
-          reference: {
-            equals: Number(search),
+          referenceStr: {
+            contains: search,
           },
         },
         {
