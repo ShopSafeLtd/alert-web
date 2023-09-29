@@ -31849,7 +31849,6 @@ tr > .ant-picker-cell-in-view.ant-picker-cell-range-hover:first-child::after {
 }
 .chat-collage-image:hover .chat-collage-image-overlay {
   opacity: 0.5;
-  color: rgb(0 0 0);
 }
 .feedItem-card-icon {
   margin-right: 5px;

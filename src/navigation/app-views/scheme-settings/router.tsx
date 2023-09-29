@@ -24,11 +24,12 @@ import ListBusinesses from 'views/settings/businesses/ListBusinesses';
 import ViewBusiness from 'views/settings/businesses/ViewBusiness';
 import DiscMenu from 'views/settings/data-import/menu/Menu.view';
 import DiscImport from 'views/settings/data-import/disc-import/DiscImport.container';
-import CSVImport from 'views/settings/data-import/csv/ImportStockItems/ImportStockItems.view';
+import CSVImport from 'views/settings/data-import/csv/ImportItems/ImportData.container';
 import CustomSchemeTerms from '../../../views/settings/terms/ViewCustomTerms/ViewTermsContainer';
 import ListStatements from '../../../views/settings/statements/ListStatements';
 import TagView from '../../../views/settings/tags/ViewTag/ViewTag.container';
 import Workflows from '../workflow/router';
+import DataExport from '../data-management/router';
 
 const SchemeSettings = (): JSX.Element => (
   <Routes>
@@ -70,6 +71,9 @@ const SchemeSettings = (): JSX.Element => (
     <Route path="businesses/view/:id" element={<ViewBusiness />} />
     <Route path="data-import" element={<DiscMenu />} />
     <Route path="data-import/disc" element={<DiscImport />} />
+    <Route path="data-import/csv" element={<CSVImport />} />
+    <Route path="data-export/*" element={<DataExport />} />
+
     <Route path="data-import/csv/stock-items" element={<CSVImport />} />
     <Route key="workflow" path="workflow/*" element={<Workflows />} />
 
