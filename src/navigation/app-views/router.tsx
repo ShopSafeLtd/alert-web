@@ -22,6 +22,7 @@ const Tasks = lazy(() => import(`./tasks/router`));
 const Notifications = lazy(() => import(`./notifications/router`));
 const Mg11 = lazy(() => import(`./mg11/router`));
 const FaceAi = lazy(() => import(`./face-ai/router`));
+const DataManagement = lazy(() => import(`./data-management/router`));
 
 export const AppViews = (): JSX.Element => {
   const { isLoading } = useAuth0();
@@ -79,6 +80,11 @@ export const AppViews = (): JSX.Element => {
         <Route key="resources" path="resources/*" element={<Documents />} />
         <Route key="mg11" path="mg11/*" element={<Mg11 />} />
         <Route key="face-ai" path="face-ai/*" element={<FaceAi />} />
+        <Route
+          key="data-management"
+          path="data-management/*"
+          element={<DataManagement />}
+        />
       </Routes>
     </Suspense>
   );
