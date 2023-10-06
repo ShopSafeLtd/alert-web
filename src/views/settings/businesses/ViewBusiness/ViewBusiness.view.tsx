@@ -49,6 +49,7 @@ import AddTodo from 'components/form-components/Todos/AddTodo';
 import ViewTodo from 'components/form-components/Todos/ViewTodo/Todo.container';
 import ActivityTable from 'components/tables/ActivityTable';
 import IncidentTable from 'components/tables/IncidentTable';
+import MapCard from 'components/map/MapCard';
 import useStyles from './ViewBusiness.styles';
 import LinkDem from '../../../../components/form-components/businesses/LinkDem';
 
@@ -189,54 +190,57 @@ const ViewBusiness = ({
 
           <Row gutter={16} className={classNames.details}>
             <Col span={16} xxl={12} className={classNames.detailCol}>
+              {data?.business?.parent?.name && (
+                <Card>
+                  <Typography.Title level={4}>
+                    {intl.formatMessage({
+                      defaultMessage: 'Details',
+                      id: 'Lv0zJu',
+                    })}
+                  </Typography.Title>
+                  <Descriptions column={1}>
+                    <Descriptions.Item
+                      label={intl.formatMessage({
+                        defaultMessage: 'Parent',
+                        id: 'zTbLfn',
+                      })}
+                    >
+                      <Link
+                        to={`/app/scheme-settings/businesses/view/${
+                          data?.business?.parent?.id || ''
+                        }`}
+                      >
+                        {loading ? (
+                          <Skeleton.Input style={{ height: 20 }} />
+                        ) : (
+                          data?.business?.parent?.name ||
+                          intl.formatMessage({
+                            defaultMessage: 'None',
+                            id: '450Fty',
+                          })
+                        )}
+                      </Link>
+                    </Descriptions.Item>
+                  </Descriptions>
+                </Card>
+              )}
               <Card>
                 <Typography.Title level={4}>
                   {intl.formatMessage({
-                    defaultMessage: 'Details',
-                    id: 'Lv0zJu',
+                    defaultMessage: 'Location',
+                    id: 'rvirM2',
                   })}
                 </Typography.Title>
-                <Descriptions column={1}>
-                  <Descriptions.Item
-                    style={{ paddingBottom: 5 }}
-                    label={intl.formatMessage({
-                      defaultMessage: 'Location',
-                      id: 'rvirM2',
-                    })}
-                  >
-                    {loading ? (
-                      <Skeleton.Input style={{ height: 20 }} />
-                    ) : (
-                      data?.business?.locations[0]?.full ||
-                      intl.formatMessage({
-                        defaultMessage: 'None',
-                        id: '450Fty',
-                      })
-                    )}
-                  </Descriptions.Item>
-                  <Descriptions.Item
-                    label={intl.formatMessage({
-                      defaultMessage: 'Parent',
-                      id: 'zTbLfn',
-                    })}
-                  >
-                    <Link
-                      to={`/app/scheme-settings/businesses/view/${
-                        data?.business?.parent?.id || ''
-                      }`}
-                    >
-                      {loading ? (
-                        <Skeleton.Input style={{ height: 20 }} />
-                      ) : (
-                        data?.business?.parent?.name ||
-                        intl.formatMessage({
-                          defaultMessage: 'None',
-                          id: '450Fty',
-                        })
-                      )}
-                    </Link>
-                  </Descriptions.Item>
-                </Descriptions>
+                <MapCard
+                  width="100%"
+                  height={194}
+                  markers={[
+                    {
+                      geoLat: data?.business?.locations[0].geoLat,
+                      geoLng: data?.business?.locations[0].geoLng,
+                    },
+                  ]}
+                />
               </Card>
               <Card>
                 <Row align="middle" className={classNames.cardHeader}>
@@ -400,6 +404,10 @@ const ViewBusiness = ({
                       status: user.status || 'Unknown',
                     })) || []
                   }
+                  pagination={{
+                    hideOnSinglePage: true,
+                    pageSize: 10,
+                  }}
                   size="small"
                 />
               </Card>

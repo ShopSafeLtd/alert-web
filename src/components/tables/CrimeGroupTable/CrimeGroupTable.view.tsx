@@ -238,13 +238,10 @@ const CrimeGroupTable = ({
           // totalTheftSuccess: crimeGroup.totalTheftSuccess,
         })) || []
       }
-      pagination={
-        crimeGroups && crimeGroups.length > 5
-          ? {
-              pageSize: 5,
-            }
-          : false
-      }
+      pagination={{
+        hideOnSinglePage: true,
+        pageSize: 5,
+      }}
     />
   );
 };

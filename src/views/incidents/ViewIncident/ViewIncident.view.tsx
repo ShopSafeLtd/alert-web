@@ -464,36 +464,9 @@ const ViewIncident = ({
                             })}
                           </Button>
                         </Dropdown>
-                        {/* <Link to={`/app/incidents/edit/${incidentId}`}>
-                          <Button type="ghost">
-                            <FontAwesomeIcon
-                              size="1x"
-                              style={{ marginRight: 8 }}
-                              icon={faEdit}
-                            />
-                            {intl.formatMessage({
-                              defaultMessage: 'Edit',
-                              id: 'wEQDC6',
-                            })}
-                          </Button>
-                        </Link> */}
                       </Col>
                     )}
-                    {/* {editRights && (
-                      <Col>
-                        <Button type="ghost" onClick={toggleAddInvestigation}>
-                          <FontAwesomeIcon
-                            size="1x"
-                            style={{ marginRight: 8 }}
-                            icon={faPlus}
-                          />
-                          {intl.formatMessage({
-                            defaultMessage: 'Add Investigation',
-                            id: 'U5+v9Y',
-                          })}
-                        </Button>
-                      </Col>
-                    )} */}
+
                     {deleteRights && (
                       <Col>
                         <Button
@@ -760,7 +733,7 @@ const ViewIncident = ({
                             >
                               {editRights ? (
                                 <Link
-                                  to={`/app/scheme-settings/business/view/${
+                                  to={`/app/scheme-settings/businesses/view/${
                                     data?.incident?.business?.id || ''
                                   }`}
                                 >

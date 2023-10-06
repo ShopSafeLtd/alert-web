@@ -6,6 +6,7 @@ import type {
   ViewInvestigationQueryVariables,
 } from 'graphql/generated';
 import {
+  useDeleteInvestigationMutation,
   useCreateCrimeGroupMutation,
   useCreateSimpleOffenderMutation,
   useCreateSimpleVehicleMutation,
@@ -33,6 +34,8 @@ import {
   ProfileUpdatedModel,
   ProfileUpdatedType,
 } from 'types/enums/profile-update-type';
+import { notification } from 'antd';
+import { useIntl } from 'react-intl';
 import { useStoreState } from '../../../state';
 
 interface Return {
@@ -94,8 +97,11 @@ interface Return {
   updateTodo: MutationUpdaterFn<UpdateTaskMutation>;
   updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
   saving: boolean;
+  onDeleteInvestigation: () => void;
 }
 const useViewInvestigation = (investigationId: string): Return => {
+  const intl = useIntl();
+
   const schemeId = useStoreState((state) => state.scheme.id);
   const demId = useStoreState((state) => state.user.demId);
   const investigationAllSchemes = useStoreState(
@@ -1231,6 +1237,40 @@ const useViewInvestigation = (investigationId: string): Return => {
         setSaving(false);
       });
   };
+
+  const [deleteInvestigation] = useDeleteInvestigationMutation({
+    onCompleted: () => {
+      console.log('onCompleted');
+      setSaving(false);
+      window.history.back();
+      notification.success({
+        message: intl.formatMessage({
+          defaultMessage: 'Successfully Deleted!',
+          id: 'dvDKi/',
+        }),
+        description: intl.formatMessage({
+          defaultMessage: 'The investigation has been deleted!',
+          id: 'GtLkNt',
+        }),
+        placement: 'bottomRight',
+      });
+    },
+    onError: () => {
+      console.log('onError');
+
+      setSaving(false);
+      errorNotification();
+    },
+  });
+
+  const onDeleteInvestigation = () => {
+    setSaving(true);
+    void deleteInvestigation({
+      variables: {
+        id: investigationId || '',
+      },
+    });
+  };
   const toggleAddOffender = () => {
     setAddOffender(!addOffender);
   };
@@ -1355,6 +1395,7 @@ const useViewInvestigation = (investigationId: string): Return => {
     onDeleteCrimeGroup,
     onDeleteIncident,
     saving,
+    onDeleteInvestigation,
   };
 };
 

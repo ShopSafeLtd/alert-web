@@ -94,6 +94,10 @@ export interface UserModel {
     fullName: string;
     id: string;
     demId?: string | null | undefined;
+    // locations: {
+    //   geoLng:float
+    //   geoLat:float
+    // }
   }[];
   onboarded: boolean;
   schemes: Scheme[];

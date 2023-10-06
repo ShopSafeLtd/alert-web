@@ -65,6 +65,7 @@ const BusinessSideList = ({
         pageSize={pagination.pageSize}
         current={pagination.page}
         onChange={onPaginationChange}
+        hideOnSinglePage
       />
     </div>
   );

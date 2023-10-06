@@ -35,6 +35,11 @@ const ViewBusiness = () => {
     updateTodo,
     updateTodoList,
   } = useViewBusiness();
+  console.log(
+    'data?.business?.locations[0].geoLat',
+    data?.business?.locations[0].geoLat,
+    data?.business?.locations[0].geoLng
+  );
 
   return (
     <View

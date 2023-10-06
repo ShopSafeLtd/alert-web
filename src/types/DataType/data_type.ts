@@ -118,7 +118,6 @@ export interface VehicleData {
 
 export interface VehicleCardData {
   id: string;
-  updatedAt?: Date;
   make?: string | null;
   model?: string | null;
   colour?: string | null | undefined;
@@ -198,12 +197,20 @@ export interface LocationData {
   id: string;
   alias?: string | null;
   building?: string | null;
-  street: string;
-  townCity: string;
+  street?: string;
+  townCity?: string;
   county?: string | null;
-  postcode: string;
+  postcode?: string;
+  geoLat?: number;
+  geoLng?: number;
+  full?: string;
 }
-
+export interface ViewportData {
+  latitude: number;
+  longitude: number;
+  transitionDuration?: number;
+  full?: string;
+}
 export interface AddressData {
   alias?: string | null;
   building?: string | null;

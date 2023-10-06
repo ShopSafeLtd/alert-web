@@ -379,6 +379,7 @@ const NewBusinessTable = ({
           )
         }
         pageSizeOptions={[10]}
+        hideOnSinglePage
       />
     </Card>
   );

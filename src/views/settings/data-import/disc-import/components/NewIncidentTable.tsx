@@ -532,6 +532,7 @@ const NewIncidentTable = ({
           )
         }
         pageSizeOptions={[10]}
+        hideOnSinglePage
       />
     </Card>
   );

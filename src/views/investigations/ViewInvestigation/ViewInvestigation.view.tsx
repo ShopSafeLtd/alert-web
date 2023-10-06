@@ -1,11 +1,21 @@
 import React from 'react';
-import { Badge, Button, Drawer, Tabs, Tooltip, Typography } from 'antd';
+import {
+  Badge,
+  Button,
+  Col,
+  Drawer,
+  Modal,
+  Row,
+  Tabs,
+  Tooltip,
+  Typography,
+} from 'antd';
 import { createUseStyles } from 'react-jss';
 import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
 import LinkCrimeGroup from 'components/form-components/linkOptions/LinkCrimeGroup';
 import AddExistingOffender from 'components/form-components/offender/offender/AddExistingOffender';
 import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
-import { faBell, faBellSlash } from '@fortawesome/pro-light-svg-icons';
+import { faBell, faBellSlash, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormattedMessage, useIntl } from 'react-intl';
 import ViewTodo from 'components/form-components/Todos/ViewTodo/Todo.container';
@@ -33,6 +43,8 @@ import ViewDetails from './views/Details';
 import DocumentsContainer from './views/Documents/Documents.container';
 import AddDocument from '../../../components/form-components/documents/AddDocument';
 import AddEvidence from '../../../components/form-components/documents/AddEvidence';
+
+const { confirm } = Modal;
 
 interface Props {
   data: ViewInvestigationQuery | undefined;
@@ -93,6 +105,7 @@ interface Props {
   onDeleteIncident: (id: string) => void;
   saving: boolean;
   loading: boolean;
+  onDeleteInvestigation: () => void;
 }
 
 const useStyles = createUseStyles({
@@ -169,6 +182,7 @@ const ViewInvestigation = ({
   onEditCrimeGroup,
   onDeleteCrimeGroup,
   onDeleteIncident,
+  onDeleteInvestigation,
   saving,
 }: Props) => {
   const classes = useStyles();
@@ -178,40 +192,81 @@ const ViewInvestigation = ({
       <div className={classes.sideListContent}>
         <Tabs
           tabBarExtraContent={
-            <Tooltip
-              title={
-                data?.investigation?.subscribed
-                  ? intl.formatMessage({
-                      defaultMessage: 'Stop getting notified about updates.',
-                      id: 'WpTY6U',
-                    })
-                  : intl.formatMessage({
-                      defaultMessage: 'Get notified about updates.',
-                      id: 'icr+Hj',
-                    })
-              }
-            >
-              <Button
-                onClick={toggleSubscribe}
-                type="text"
-                color={data?.investigation?.subscribed ? undefined : 'danger'}
-              >
-                <FontAwesomeIcon
-                  size="1x"
-                  style={{ marginRight: 8 }}
-                  icon={data?.investigation?.subscribed ? faBellSlash : faBell}
-                />
-                {data?.investigation?.subscribed
-                  ? intl.formatMessage({
-                      defaultMessage: 'Un-follow Updates',
-                      id: '45gIlS',
-                    })
-                  : intl.formatMessage({
-                      defaultMessage: 'Follow Updates',
-                      id: 'gBN+ok',
-                    })}
-              </Button>
-            </Tooltip>
+            <Row gutter={8} style={{ margin: 3 }}>
+              <Col>
+                <Tooltip
+                  title={
+                    data?.investigation?.subscribed
+                      ? intl.formatMessage({
+                          defaultMessage:
+                            'Stop getting notified about updates.',
+                          id: 'WpTY6U',
+                        })
+                      : intl.formatMessage({
+                          defaultMessage: 'Get notified about updates.',
+                          id: 'icr+Hj',
+                        })
+                  }
+                >
+                  <Button
+                    onClick={toggleSubscribe}
+                    type="ghost"
+                    // type="text"
+                    color={
+                      data?.investigation?.subscribed ? undefined : 'danger'
+                    }
+                  >
+                    <FontAwesomeIcon
+                      size="1x"
+                      style={{ marginRight: 8 }}
+                      icon={
+                        data?.investigation?.subscribed ? faBellSlash : faBell
+                      }
+                    />
+                    {data?.investigation?.subscribed
+                      ? intl.formatMessage({
+                          defaultMessage: 'Un-follow Updates',
+                          id: '45gIlS',
+                        })
+                      : intl.formatMessage({
+                          defaultMessage: 'Follow Updates',
+                          id: 'gBN+ok',
+                        })}
+                  </Button>
+                </Tooltip>
+              </Col>
+              <Col>
+                <Button
+                  type="ghost"
+                  onClick={() => {
+                    confirm({
+                      title: intl.formatMessage({
+                        defaultMessage:
+                          'Do you want to delete the investigation?',
+                        id: '6U5FpD',
+                      }),
+                      content: intl.formatMessage({
+                        defaultMessage: 'This action cannot be undone.',
+                        id: 'JDJoIZ',
+                      }),
+                      onOk() {
+                        onDeleteInvestigation();
+                      },
+                    });
+                  }}
+                >
+                  <FontAwesomeIcon
+                    size="1x"
+                    style={{ marginRight: 8 }}
+                    icon={faTrash}
+                  />
+                  {intl.formatMessage({
+                    defaultMessage: 'Delete',
+                    id: 'K3r6DQ',
+                  })}
+                </Button>
+              </Col>
+            </Row>
           }
         >
           <Tabs.TabPane

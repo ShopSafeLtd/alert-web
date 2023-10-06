@@ -2475,11 +2475,11 @@ export type Address = {
   incident?: Maybe<Incident>;
   offender?: Maybe<Offender>;
   offenderId?: Maybe<Scalars['String']>;
-  postcode: Scalars['String'];
+  postcode?: Maybe<Scalars['String']>;
   premises?: Maybe<Scalars['String']>;
   primary?: Maybe<Scalars['Boolean']>;
-  street: Scalars['String'];
-  townCity: Scalars['String'];
+  street?: Maybe<Scalars['String']>;
+  townCity?: Maybe<Scalars['String']>;
   updatedAt: Scalars['DateTime'];
   user?: Maybe<User>;
 };
@@ -2505,11 +2505,11 @@ export type AddressCreateInput = {
   id?: InputMaybe<Scalars['String']>;
   incident?: InputMaybe<IncidentCreateNestedOneWithoutLocationInput>;
   offender?: InputMaybe<OffenderCreateNestedOneWithoutAddressesInput>;
-  postcode: Scalars['String'];
+  postcode?: InputMaybe<Scalars['String']>;
   premises?: InputMaybe<Scalars['String']>;
   primary?: InputMaybe<Scalars['Boolean']>;
-  street: Scalars['String'];
-  townCity: Scalars['String'];
+  street?: InputMaybe<Scalars['String']>;
+  townCity?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   user?: InputMaybe<UserCreateNestedOneWithoutAddressesInput>;
 };
@@ -2524,11 +2524,11 @@ export type AddressCreateManyBusinessInput = {
   id?: InputMaybe<Scalars['String']>;
   incidentId?: InputMaybe<Scalars['String']>;
   offenderId?: InputMaybe<Scalars['String']>;
-  postcode: Scalars['String'];
+  postcode?: InputMaybe<Scalars['String']>;
   premises?: InputMaybe<Scalars['String']>;
   primary?: InputMaybe<Scalars['Boolean']>;
-  street: Scalars['String'];
-  townCity: Scalars['String'];
+  street?: InputMaybe<Scalars['String']>;
+  townCity?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   userId?: InputMaybe<Scalars['String']>;
 };
@@ -2548,11 +2548,11 @@ export type AddressCreateManyOffenderInput = {
   geoLng?: InputMaybe<Scalars['Float']>;
   id?: InputMaybe<Scalars['String']>;
   incidentId?: InputMaybe<Scalars['String']>;
-  postcode: Scalars['String'];
+  postcode?: InputMaybe<Scalars['String']>;
   premises?: InputMaybe<Scalars['String']>;
   primary?: InputMaybe<Scalars['Boolean']>;
-  street: Scalars['String'];
-  townCity: Scalars['String'];
+  street?: InputMaybe<Scalars['String']>;
+  townCity?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   userId?: InputMaybe<Scalars['String']>;
 };
@@ -2573,11 +2573,11 @@ export type AddressCreateManyUserInput = {
   id?: InputMaybe<Scalars['String']>;
   incidentId?: InputMaybe<Scalars['String']>;
   offenderId?: InputMaybe<Scalars['String']>;
-  postcode: Scalars['String'];
+  postcode?: InputMaybe<Scalars['String']>;
   premises?: InputMaybe<Scalars['String']>;
   primary?: InputMaybe<Scalars['Boolean']>;
-  street: Scalars['String'];
-  townCity: Scalars['String'];
+  street?: InputMaybe<Scalars['String']>;
+  townCity?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
@@ -2659,11 +2659,11 @@ export type AddressCreateWithoutActionsInput = {
   id?: InputMaybe<Scalars['String']>;
   incident?: InputMaybe<IncidentCreateNestedOneWithoutLocationInput>;
   offender?: InputMaybe<OffenderCreateNestedOneWithoutAddressesInput>;
-  postcode: Scalars['String'];
+  postcode?: InputMaybe<Scalars['String']>;
   premises?: InputMaybe<Scalars['String']>;
   primary?: InputMaybe<Scalars['Boolean']>;
-  street: Scalars['String'];
-  townCity: Scalars['String'];
+  street?: InputMaybe<Scalars['String']>;
+  townCity?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   user?: InputMaybe<UserCreateNestedOneWithoutAddressesInput>;
 };
@@ -2679,11 +2679,11 @@ export type AddressCreateWithoutBusinessInput = {
   id?: InputMaybe<Scalars['String']>;
   incident?: InputMaybe<IncidentCreateNestedOneWithoutLocationInput>;
   offender?: InputMaybe<OffenderCreateNestedOneWithoutAddressesInput>;
-  postcode: Scalars['String'];
+  postcode?: InputMaybe<Scalars['String']>;
   premises?: InputMaybe<Scalars['String']>;
   primary?: InputMaybe<Scalars['Boolean']>;
-  street: Scalars['String'];
-  townCity: Scalars['String'];
+  street?: InputMaybe<Scalars['String']>;
+  townCity?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   user?: InputMaybe<UserCreateNestedOneWithoutAddressesInput>;
 };
@@ -2699,11 +2699,11 @@ export type AddressCreateWithoutIncidentInput = {
   geoLng?: InputMaybe<Scalars['Float']>;
   id?: InputMaybe<Scalars['String']>;
   offender?: InputMaybe<OffenderCreateNestedOneWithoutAddressesInput>;
-  postcode: Scalars['String'];
+  postcode?: InputMaybe<Scalars['String']>;
   premises?: InputMaybe<Scalars['String']>;
   primary?: InputMaybe<Scalars['Boolean']>;
-  street: Scalars['String'];
-  townCity: Scalars['String'];
+  street?: InputMaybe<Scalars['String']>;
+  townCity?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   user?: InputMaybe<UserCreateNestedOneWithoutAddressesInput>;
 };
@@ -2719,11 +2719,11 @@ export type AddressCreateWithoutOffenderInput = {
   geoLng?: InputMaybe<Scalars['Float']>;
   id?: InputMaybe<Scalars['String']>;
   incident?: InputMaybe<IncidentCreateNestedOneWithoutLocationInput>;
-  postcode: Scalars['String'];
+  postcode?: InputMaybe<Scalars['String']>;
   premises?: InputMaybe<Scalars['String']>;
   primary?: InputMaybe<Scalars['Boolean']>;
-  street: Scalars['String'];
-  townCity: Scalars['String'];
+  street?: InputMaybe<Scalars['String']>;
+  townCity?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   user?: InputMaybe<UserCreateNestedOneWithoutAddressesInput>;
 };
@@ -2740,11 +2740,11 @@ export type AddressCreateWithoutUserInput = {
   id?: InputMaybe<Scalars['String']>;
   incident?: InputMaybe<IncidentCreateNestedOneWithoutLocationInput>;
   offender?: InputMaybe<OffenderCreateNestedOneWithoutAddressesInput>;
-  postcode: Scalars['String'];
+  postcode?: InputMaybe<Scalars['String']>;
   premises?: InputMaybe<Scalars['String']>;
   primary?: InputMaybe<Scalars['Boolean']>;
-  street: Scalars['String'];
-  townCity: Scalars['String'];
+  street?: InputMaybe<Scalars['String']>;
+  townCity?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
@@ -2773,11 +2773,11 @@ export type AddressOrderByWithRelationInput = {
   incidentId?: InputMaybe<SortOrderInput>;
   offender?: InputMaybe<OffenderOrderByWithRelationInput>;
   offenderId?: InputMaybe<SortOrderInput>;
-  postcode?: InputMaybe<SortOrder>;
+  postcode?: InputMaybe<SortOrderInput>;
   premises?: InputMaybe<SortOrderInput>;
   primary?: InputMaybe<SortOrderInput>;
-  street?: InputMaybe<SortOrder>;
-  townCity?: InputMaybe<SortOrder>;
+  street?: InputMaybe<SortOrderInput>;
+  townCity?: InputMaybe<SortOrderInput>;
   updatedAt?: InputMaybe<SortOrder>;
   user?: InputMaybe<UserOrderByWithRelationInput>;
   userId?: InputMaybe<SortOrderInput>;
@@ -2797,11 +2797,11 @@ export type AddressScalarWhereInput = {
   id?: InputMaybe<StringFilter>;
   incidentId?: InputMaybe<StringNullableFilter>;
   offenderId?: InputMaybe<StringNullableFilter>;
-  postcode?: InputMaybe<StringFilter>;
+  postcode?: InputMaybe<StringNullableFilter>;
   premises?: InputMaybe<StringNullableFilter>;
   primary?: InputMaybe<BoolNullableFilter>;
-  street?: InputMaybe<StringFilter>;
-  townCity?: InputMaybe<StringFilter>;
+  street?: InputMaybe<StringNullableFilter>;
+  townCity?: InputMaybe<StringNullableFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   userId?: InputMaybe<StringNullableFilter>;
 };
@@ -2818,11 +2818,11 @@ export type AddressUpdateInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incident?: InputMaybe<IncidentUpdateOneWithoutLocationNestedInput>;
   offender?: InputMaybe<OffenderUpdateOneWithoutAddressesNestedInput>;
-  postcode?: InputMaybe<StringFieldUpdateOperationsInput>;
+  postcode?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   premises?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   primary?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
-  street?: InputMaybe<StringFieldUpdateOperationsInput>;
-  townCity?: InputMaybe<StringFieldUpdateOperationsInput>;
+  street?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  townCity?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   user?: InputMaybe<UserUpdateOneWithoutAddressesNestedInput>;
 };
@@ -2835,11 +2835,11 @@ export type AddressUpdateManyMutationInput = {
   geoLat?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   geoLng?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
-  postcode?: InputMaybe<StringFieldUpdateOperationsInput>;
+  postcode?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   premises?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   primary?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
-  street?: InputMaybe<StringFieldUpdateOperationsInput>;
-  townCity?: InputMaybe<StringFieldUpdateOperationsInput>;
+  street?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  townCity?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
 
@@ -2964,11 +2964,11 @@ export type AddressUpdateWithoutActionsInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incident?: InputMaybe<IncidentUpdateOneWithoutLocationNestedInput>;
   offender?: InputMaybe<OffenderUpdateOneWithoutAddressesNestedInput>;
-  postcode?: InputMaybe<StringFieldUpdateOperationsInput>;
+  postcode?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   premises?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   primary?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
-  street?: InputMaybe<StringFieldUpdateOperationsInput>;
-  townCity?: InputMaybe<StringFieldUpdateOperationsInput>;
+  street?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  townCity?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   user?: InputMaybe<UserUpdateOneWithoutAddressesNestedInput>;
 };
@@ -2984,11 +2984,11 @@ export type AddressUpdateWithoutBusinessInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incident?: InputMaybe<IncidentUpdateOneWithoutLocationNestedInput>;
   offender?: InputMaybe<OffenderUpdateOneWithoutAddressesNestedInput>;
-  postcode?: InputMaybe<StringFieldUpdateOperationsInput>;
+  postcode?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   premises?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   primary?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
-  street?: InputMaybe<StringFieldUpdateOperationsInput>;
-  townCity?: InputMaybe<StringFieldUpdateOperationsInput>;
+  street?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  townCity?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   user?: InputMaybe<UserUpdateOneWithoutAddressesNestedInput>;
 };
@@ -3004,11 +3004,11 @@ export type AddressUpdateWithoutIncidentInput = {
   geoLng?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   offender?: InputMaybe<OffenderUpdateOneWithoutAddressesNestedInput>;
-  postcode?: InputMaybe<StringFieldUpdateOperationsInput>;
+  postcode?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   premises?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   primary?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
-  street?: InputMaybe<StringFieldUpdateOperationsInput>;
-  townCity?: InputMaybe<StringFieldUpdateOperationsInput>;
+  street?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  townCity?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   user?: InputMaybe<UserUpdateOneWithoutAddressesNestedInput>;
 };
@@ -3024,11 +3024,11 @@ export type AddressUpdateWithoutOffenderInput = {
   geoLng?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incident?: InputMaybe<IncidentUpdateOneWithoutLocationNestedInput>;
-  postcode?: InputMaybe<StringFieldUpdateOperationsInput>;
+  postcode?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   premises?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   primary?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
-  street?: InputMaybe<StringFieldUpdateOperationsInput>;
-  townCity?: InputMaybe<StringFieldUpdateOperationsInput>;
+  street?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  townCity?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   user?: InputMaybe<UserUpdateOneWithoutAddressesNestedInput>;
 };
@@ -3045,11 +3045,11 @@ export type AddressUpdateWithoutUserInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incident?: InputMaybe<IncidentUpdateOneWithoutLocationNestedInput>;
   offender?: InputMaybe<OffenderUpdateOneWithoutAddressesNestedInput>;
-  postcode?: InputMaybe<StringFieldUpdateOperationsInput>;
+  postcode?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   premises?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   primary?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
-  street?: InputMaybe<StringFieldUpdateOperationsInput>;
-  townCity?: InputMaybe<StringFieldUpdateOperationsInput>;
+  street?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  townCity?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
 
@@ -3101,11 +3101,11 @@ export type AddressWhereInput = {
   incidentId?: InputMaybe<StringNullableFilter>;
   offender?: InputMaybe<OffenderWhereInput>;
   offenderId?: InputMaybe<StringNullableFilter>;
-  postcode?: InputMaybe<StringFilter>;
+  postcode?: InputMaybe<StringNullableFilter>;
   premises?: InputMaybe<StringNullableFilter>;
   primary?: InputMaybe<BoolNullableFilter>;
-  street?: InputMaybe<StringFilter>;
-  townCity?: InputMaybe<StringFilter>;
+  street?: InputMaybe<StringNullableFilter>;
+  townCity?: InputMaybe<StringNullableFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   user?: InputMaybe<UserWhereInput>;
   userId?: InputMaybe<StringNullableFilter>;
@@ -3129,11 +3129,11 @@ export type AddressWhereUniqueInput = {
   incidentId?: InputMaybe<Scalars['String']>;
   offender?: InputMaybe<OffenderWhereInput>;
   offenderId?: InputMaybe<StringNullableFilter>;
-  postcode?: InputMaybe<StringFilter>;
+  postcode?: InputMaybe<StringNullableFilter>;
   premises?: InputMaybe<StringNullableFilter>;
   primary?: InputMaybe<BoolNullableFilter>;
-  street?: InputMaybe<StringFilter>;
-  townCity?: InputMaybe<StringFilter>;
+  street?: InputMaybe<StringNullableFilter>;
+  townCity?: InputMaybe<StringNullableFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   user?: InputMaybe<UserWhereInput>;
   userId?: InputMaybe<StringNullableFilter>;
@@ -73941,6 +73941,8 @@ export type BusinessQuery = {
       __typename?: 'Address';
       id: string;
       full?: string | null;
+      geoLat?: number | null;
+      geoLng?: number | null;
     }>;
   } | null;
 };
@@ -73967,10 +73969,10 @@ export type EditBusinessQuery = {
       __typename?: 'Address';
       id: string;
       building?: string | null;
-      street: string;
-      townCity: string;
+      street?: string | null;
+      townCity?: string | null;
       county?: string | null;
-      postcode: string;
+      postcode?: string | null;
     }>;
   } | null;
 };
@@ -74015,10 +74017,10 @@ export type ListBusinessesLocationsQuery = {
         __typename?: 'Address';
         id: string;
         building?: string | null;
-        street: string;
-        townCity: string;
+        street?: string | null;
+        townCity?: string | null;
         county?: string | null;
-        postcode: string;
+        postcode?: string | null;
       }>;
     }>;
   };
@@ -76395,10 +76397,10 @@ export type UpdateIncidentMutation = {
       __typename?: 'Address';
       id: string;
       building?: string | null;
-      street: string;
-      townCity: string;
+      street?: string | null;
+      townCity?: string | null;
       county?: string | null;
-      postcode: string;
+      postcode?: string | null;
       full?: string | null;
     } | null;
     createdBy: {
@@ -76558,10 +76560,10 @@ export type UpdateIncidentLocationMutation = {
       id: string;
       premises?: string | null;
       building?: string | null;
-      street: string;
-      townCity: string;
+      street?: string | null;
+      townCity?: string | null;
       county?: string | null;
-      postcode: string;
+      postcode?: string | null;
     } | null;
   } | null;
 };
@@ -76650,10 +76652,10 @@ export type AddressesQuery = {
     __typename?: 'Address';
     id: string;
     building?: string | null;
-    street: string;
-    townCity: string;
+    street?: string | null;
+    townCity?: string | null;
     county?: string | null;
-    postcode: string;
+    postcode?: string | null;
     primary?: boolean | null;
     full?: string | null;
   }>;
@@ -76702,10 +76704,10 @@ export type EditIncidentFeedQuery = {
       __typename?: 'Address';
       id: string;
       building?: string | null;
-      street: string;
-      townCity: string;
+      street?: string | null;
+      townCity?: string | null;
       county?: string | null;
-      postcode: string;
+      postcode?: string | null;
     } | null;
     business?: { __typename?: 'Business'; id: string; name: string } | null;
     createdBy: {
@@ -77027,10 +77029,10 @@ export type EditIncidentQuery = {
       __typename?: 'Address';
       id: string;
       building?: string | null;
-      street: string;
-      townCity: string;
+      street?: string | null;
+      townCity?: string | null;
       county?: string | null;
-      postcode: string;
+      postcode?: string | null;
     } | null;
     business?: { __typename?: 'Business'; id: string; name: string } | null;
     createdBy: {
@@ -77960,6 +77962,15 @@ export type CreateInvestigationMutation = {
     description?: string | null;
     status: InvestigationStatus;
   } | null;
+};
+
+export type DeleteInvestigationMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+export type DeleteInvestigationMutation = {
+  __typename?: 'Mutation';
+  deleteInvestigation?: { __typename?: 'Investigation'; id: string } | null;
 };
 
 export type SubscribeToInvestigationMutationVariables = Exact<{
@@ -79631,10 +79642,10 @@ export type UpdateOffenderAddressesMutation = {
       id: string;
       full?: string | null;
       building?: string | null;
-      street: string;
-      townCity: string;
+      street?: string | null;
+      townCity?: string | null;
       county?: string | null;
-      postcode: string;
+      postcode?: string | null;
       alias?: string | null;
     }>;
   } | null;
@@ -80429,10 +80440,10 @@ export type ViewOffenderQuery = {
       id: string;
       full?: string | null;
       building?: string | null;
-      street: string;
-      townCity: string;
+      street?: string | null;
+      townCity?: string | null;
       county?: string | null;
-      postcode: string;
+      postcode?: string | null;
       alias?: string | null;
     }>;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
@@ -82437,19 +82448,6 @@ export type TranslateQuery = {
   }>;
 };
 
-export type TranslateTextQueryVariables = Exact<{
-  data: TranslateTextInput;
-}>;
-
-export type TranslateTextQuery = {
-  __typename?: 'Query';
-  translateText: Array<{
-    __typename?: 'TranslatedText';
-    translatedText: string;
-    origText: string;
-  }>;
-};
-
 export type CreateUpdateOnCrimeGroupMutationVariables = Exact<{
   crimeGroup: UniqueId;
   data: CreateUpdateData;
@@ -84284,9 +84282,9 @@ export type SearchUserQuery = {
     addresses: Array<{
       __typename?: 'Address';
       id: string;
-      postcode: string;
-      street: string;
-      townCity: string;
+      postcode?: string | null;
+      street?: string | null;
+      townCity?: string | null;
       building?: string | null;
       county?: string | null;
     }>;
@@ -87497,6 +87495,8 @@ export const BusinessDocument = gql`
       locations {
         id
         full
+        geoLat
+        geoLng
       }
     }
   }
@@ -91832,6 +91832,38 @@ export type CreateInvestigationMutationOptions = Apollo.BaseMutationOptions<
   CreateInvestigationMutation,
   CreateInvestigationMutationVariables
 >;
+export const DeleteInvestigationDocument = gql`
+  mutation deleteInvestigation($id: String!) {
+    deleteInvestigation(where: { id: $id }) {
+      id
+    }
+  }
+`;
+export type DeleteInvestigationMutationFn = Apollo.MutationFunction<
+  DeleteInvestigationMutation,
+  DeleteInvestigationMutationVariables
+>;
+export function useDeleteInvestigationMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteInvestigationMutation,
+    DeleteInvestigationMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteInvestigationMutation,
+    DeleteInvestigationMutationVariables
+  >(DeleteInvestigationDocument, options);
+}
+export type DeleteInvestigationMutationHookResult = ReturnType<
+  typeof useDeleteInvestigationMutation
+>;
+export type DeleteInvestigationMutationResult =
+  Apollo.MutationResult<DeleteInvestigationMutation>;
+export type DeleteInvestigationMutationOptions = Apollo.BaseMutationOptions<
+  DeleteInvestigationMutation,
+  DeleteInvestigationMutationVariables
+>;
 export const SubscribeToInvestigationDocument = gql`
   mutation SubscribeToInvestigation($where: UniqueId!) {
     subscribeToInvestigation(where: $where) {
@@ -92388,6 +92420,9 @@ export const ViewInvestigationDocument = gql`
       }
       vehicles {
         ...Vehicles
+        images {
+          ...Images
+        }
       }
       offenders {
         id
@@ -92461,6 +92496,7 @@ export const ViewInvestigationDocument = gql`
   }
   ${TodosFragmentDoc}
   ${VehiclesFragmentDoc}
+  ${ImagesFragmentDoc}
   ${IncidentsFragmentDoc}
   ${UpdatesFragmentDoc}
   ${CrimeGroupsFragmentDoc}
@@ -97969,48 +98005,6 @@ export type TranslateLazyQueryHookResult = ReturnType<
 export type TranslateQueryResult = Apollo.QueryResult<
   TranslateQuery,
   TranslateQueryVariables
->;
-export const TranslateTextDocument = gql`
-  query TranslateText($data: TranslateTextInput!) {
-    translateText(data: $data) {
-      translatedText
-      origText
-    }
-  }
-`;
-export function useTranslateTextQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    TranslateTextQuery,
-    TranslateTextQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<TranslateTextQuery, TranslateTextQueryVariables>(
-    TranslateTextDocument,
-    options
-  );
-}
-export function useTranslateTextLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    TranslateTextQuery,
-    TranslateTextQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<TranslateTextQuery, TranslateTextQueryVariables>(
-    TranslateTextDocument,
-    options
-  );
-}
-export type TranslateTextQueryHookResult = ReturnType<
-  typeof useTranslateTextQuery
->;
-export type TranslateTextLazyQueryHookResult = ReturnType<
-  typeof useTranslateTextLazyQuery
->;
-export type TranslateTextQueryResult = Apollo.QueryResult<
-  TranslateTextQuery,
-  TranslateTextQueryVariables
 >;
 export const CreateUpdateOnCrimeGroupDocument = gql`
   mutation CreateUpdateOnCrimeGroup(

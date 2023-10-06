@@ -48,6 +48,8 @@ query Business($where: BusinessWhereUniqueInput!) {
     locations {
       id
       full
+      geoLat
+      geoLng
     }
   }
 }

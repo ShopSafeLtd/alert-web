@@ -109,6 +109,7 @@ const OffenderSideList = ({
           onChange={onPaginationChange}
           pageSize={pagination.pageSize}
           current={pagination.page}
+          hideOnSinglePage
         />
       )}
     </SideList>

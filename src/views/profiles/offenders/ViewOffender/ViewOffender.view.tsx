@@ -52,6 +52,7 @@ import {
   faUser,
   faUserClock,
   faUserHair,
+  faUserPen,
   faUsers,
   faUserTag,
 } from '@fortawesome/pro-light-svg-icons';
@@ -108,6 +109,7 @@ import EditVehicleSimple from 'components/form-components/Vehicle/EditVehicleSim
 import CopyOffender from 'components/form-components/offender/CopyOffender';
 import InvestigationTable from 'components/tables/InvestigationTable';
 import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
+import { useNavigate } from 'react-router';
 import useStyles from './ViewOffender.styles';
 import type { ViewAssociate } from './useViewOffender';
 import TranslateButton from '../../../../components/util-components/TranslateButton';
@@ -326,6 +328,8 @@ const ViewOffender = ({
 }: Props): JSX.Element => {
   const intl = useIntl();
   const classes = useStyles();
+  const navigate = useNavigate();
+
   const expandedRowRender = (record: TableItem) => (
     <Text style={{ fontSize: 14, padding: 0, margin: 0 }}>
       {intl.formatMessage(
@@ -496,21 +500,57 @@ const ViewOffender = ({
                         </Dropdown>
                       </Col>
                     )}
-                    {editRights && (
-                      <Col>
-                        <Button type="ghost" onClick={toggleCopyOffender}>
+
+                    <Col>
+                      <Dropdown
+                        overlay={
+                          <Menu
+                            items={[
+                              {
+                                key: 0,
+                                label: intl.formatMessage({
+                                  defaultMessage: 'Copy Offender',
+                                  id: 'rtuqfd',
+                                }),
+                                onClick: () => toggleCopyOffender(),
+                                icon: <FontAwesomeIcon icon={faCopy} />,
+                              },
+
+                              {
+                                key: 1,
+                                label: intl.formatMessage({
+                                  defaultMessage: 'Compare Offender',
+                                  id: 'Y64oGy',
+                                }),
+                                onClick: () =>
+                                  navigate(
+                                    `/app/offenders/compare/${
+                                      data?.offender?.id || ''
+                                    }`
+                                  ),
+                                icon: (
+                                  <FontAwesomeIcon size="lg" icon={faUsers} />
+                                ),
+                              },
+                            ].filter((item) => item?.key !== 0 || editRights)}
+                          />
+                        }
+                        placement="bottomRight"
+                        arrow={{ pointAtCenter: true }}
+                      >
+                        <Button type="ghost">
                           <FontAwesomeIcon
                             size="1x"
                             style={{ marginRight: 8 }}
-                            icon={faCopy}
+                            icon={faUserPen}
                           />
                           {intl.formatMessage({
-                            defaultMessage: 'Copy Offender',
-                            id: 'rtuqfd',
+                            defaultMessage: 'Offenders',
+                            id: 'xb54TN',
                           })}
                         </Button>
-                      </Col>
-                    )}
+                      </Dropdown>
+                    </Col>
                     {deleteRights && (
                       <Col>
                         <Button
@@ -533,30 +573,6 @@ const ViewOffender = ({
                   {loading ? (
                     <Skeleton />
                   ) : (
-                    // <Row
-                    //   style={{
-                    //     width: '100%',
-                    //     marginBottom: 20,
-                    //     marginLeft: 10,
-                    //   }}
-                    // >
-                    //   <Row gutter={8} className={classes.offenderRow}>
-                    //     {Array.from({ length: 3 }).map((_, index) => (
-                    //       // eslint-disable-next-line react/no-array-index-key
-                    //       <Col key={index}>
-                    //         <Skeleton.Avatar
-                    //           active
-                    //           shape="square"
-                    //           style={{
-                    //             height: 200,
-                    //             width: 150,
-                    //             borderRadius: '0.625rem',
-                    //           }}
-                    //         />
-                    //       </Col>
-                    //     ))}
-                    //   </Row>
-                    // </Row>
                     <Row
                       gutter={[8, 8]}
                       justify="start"

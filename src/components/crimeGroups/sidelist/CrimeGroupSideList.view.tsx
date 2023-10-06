@@ -73,6 +73,7 @@ const CrimeGroupSideList = ({
       ))}
       {!loading && (
         <Pagination
+          hideOnSinglePage
           total={data?.listCrimeGroups?.total}
           size="small"
           showSizeChanger={false}

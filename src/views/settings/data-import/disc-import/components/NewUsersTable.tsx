@@ -134,8 +134,7 @@ const NewUserRow = React.memo(
     };
 
     const onBlur = async () => {
-      const values = await form.getFieldsValue();
-      console.log(values);
+      const values = form.getFieldsValue();
       onUpdateUser({ ...user, ...values });
     };
 
@@ -372,6 +371,7 @@ const NewUsersTable = ({
         total={newUsers.length}
         showTotal={(total) => `Total Users: ${total}`}
         pageSizeOptions={[10]}
+        hideOnSinglePage
       />
     </Card>
   );

@@ -183,7 +183,7 @@ const Offenders = ({
       >
         {addNewOpen ? (
           <AddOffender
-            update={(data) => onAddOffenders([data], false)}
+            update={(data) => onAddOffenders([data], false, false)}
             onClose={toggleAddNewOpen}
             images={images}
             onImagesUploaded={onImagesUploadedInForm}
@@ -204,7 +204,7 @@ const Offenders = ({
       >
         {addExistingOpen ? (
           <AddExistingOffender
-            update={(data) => onAddOffenders([data], true)}
+            update={(data) => onAddOffenders([data], true, false)}
             offenderIds={offenders.map(({ id }) => id)}
             onClose={toggleAddExistingOpen}
           />

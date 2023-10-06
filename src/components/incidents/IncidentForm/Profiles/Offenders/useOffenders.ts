@@ -96,7 +96,11 @@ interface Props {
 
 interface Return {
   offenders: StateOffenderData[];
-  onAddOffenders: (values: AddOffenderData[], existing: boolean) => void;
+  onAddOffenders: (
+    values: AddOffenderData[],
+    existing: boolean,
+    blank: boolean
+  ) => void;
   onUpdateOffender: (value: AddOffenderData) => void;
   onRemoveOffender: (id: string) => void;
   onConfirmOffender: (id: string) => void;
@@ -159,7 +163,7 @@ const useOffenders = ({ value, onChange, form }: Props): Return => {
   const onAddOffenders = (
     values: AddOffenderData[],
     existing: boolean,
-    blank = false
+    blank: boolean
   ) => {
     const formattedOffenders: StateOffenderData[] = values.map(
       (offender): StateOffenderData => ({
