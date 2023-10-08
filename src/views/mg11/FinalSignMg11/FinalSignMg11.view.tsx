@@ -649,7 +649,7 @@ const generateMg11 = ({
                                   update(
                                     ReactDOMServer.renderToString(
                                       <img
-                                        src={`data:application/pdf;base64,${base64result}`}
+                                        src={base64File}
                                         alt="file"
                                         height={100}
                                         width={300}

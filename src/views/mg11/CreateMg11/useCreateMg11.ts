@@ -54,6 +54,7 @@ export interface FormData {
   witnessServiceDisclose?: string;
   signature?: string;
   witnessSignatureDate?: string;
+  termsSignature?: string;
 }
 
 interface Return {
@@ -172,6 +173,8 @@ const useCreateMg11 = (): Return => {
       businessStatement: bStatement,
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       completeNow: completeN,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      termsSignature,
       ...data
     } = formData;
 
