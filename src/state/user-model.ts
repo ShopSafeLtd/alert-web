@@ -27,6 +27,13 @@ export interface SetUserPayload {
       id: string;
     };
   }[];
+  defaultGroups: {
+    id: string;
+    name: string;
+    scheme: {
+      id: string;
+    };
+  }[];
   isSet: boolean;
   userNotifications: number;
 }
@@ -79,6 +86,13 @@ export interface Scheme {
     taskTimeTracking: boolean;
     imagesRequiredOnOffenders: boolean;
     autoPopulateDescription: boolean;
+    defaultGroups: {
+      id: string;
+      name: string;
+      scheme: {
+        id: string;
+      };
+    }[];
   };
 }
 
@@ -111,6 +125,13 @@ export interface UserModel {
       id: string;
     };
   }[];
+  defaultGroups: {
+    id: string;
+    name: string;
+    scheme: {
+      id: string;
+    };
+  }[];
   role: Role;
   isSet: boolean;
   investigationAllSchemes: boolean;
@@ -135,6 +156,7 @@ const userModel: UserModel = {
   role: Role.User,
   schemes: [],
   groups: [],
+  defaultGroups: [],
   demId: '',
   userTodos: 0,
   userNotifications: 0,
@@ -148,6 +170,9 @@ const userModel: UserModel = {
     state.businesses = payload.businesses;
     state.schemes = payload.schemes;
     state.groups = payload.groups;
+    // ??? how to get currentScheme
+    state.defaultGroups =
+      payload.defaultGroups || payload.schemes[0].scheme.defaultGroups || [];
     state.isSet = payload.isSet;
     state.demId = payload.demId;
     state.reference = payload.reference;

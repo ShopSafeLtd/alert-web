@@ -47,6 +47,9 @@ const setDefaultOpen = (key: string) => {
     const arr = key.split('-');
     for (const [index, elm] of arr.entries()) {
       index === 0 ? (keyString = elm) : (keyString = `${keyString}-${elm}`);
+      // ???
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       keyList.push(keyString);
     }
   }
@@ -143,7 +146,9 @@ const SideNavContent = (props: SideNavContentProps) => {
   const [notificationsOpen, setNotificationsOpen] = useState(false);
 
   const toggleNotificationOpen = () => setNotificationsOpen(!notificationsOpen);
-
+  // ???
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const isMobile = !utils.getBreakPoint(useBreakpoint()).includes('lg');
   const closeMobileNav = () => {
     if (isMobile) {

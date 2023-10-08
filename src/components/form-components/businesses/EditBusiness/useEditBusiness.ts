@@ -72,9 +72,9 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
               value: res.business?.parent?.id,
             }
           : undefined,
-        postcode: res.business?.locations[0]?.postcode,
+        postcode: res.business?.locations[0]?.postcode || '',
         street: res.business?.locations[0]?.street || '',
-        townCity: res.business?.locations[0]?.townCity,
+        townCity: res.business?.locations[0]?.townCity || '',
       });
     },
   });

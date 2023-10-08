@@ -93,6 +93,7 @@ const UseRecycledItemListTest = () => {
             reportOnly: true,
             facialRecognition: true,
             imagesRequiredOnOffenders: true,
+            defaultGroups: [],
           })
         }
       >

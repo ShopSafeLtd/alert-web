@@ -20,6 +20,7 @@ import { IncidentSort, useStoreActions, useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import type { DateType } from 'types/DataType';
+import type { IncidentFilters } from 'state/data-model';
 
 interface Return {
   data: ListIncidentsQuery | undefined;
@@ -36,42 +37,50 @@ interface Return {
   pagination: { page: number; pageSize: number; sizeOptions: string[] };
   order: IncidentSort;
   setOrder: (value: IncidentSort) => void;
-  search: string;
   setSearch: (value: string) => void;
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
-  onGroupsChange: (groups: string[]) => void;
-  variables: {
-    groups: string[];
-    crimeTypes: string[];
-  };
+  // onGroupsChange: (groups: string[]) => void;
+  // variables: {
+  //   groups: string[];
+  //   crimeTypes: string[];
+  // };
   crimeTypes: { value: string; label: string }[];
-  onCrimeTypesChange: (crimeTypes: string[]) => void;
+  // onCrimeTypesChange: (crimeTypes: string[]) => void;
   tagsLoading: boolean;
   updateIncidentList: MutationUpdaterFn<RecycleIncidentMutation>;
   onNavigate: () => void;
   sortFilter: boolean;
   toggleSortFilter: () => void;
   setPeculiarities: (value: string) => void;
-  peculiarities: string;
   clearFilters: () => void;
-  gallery: string[];
   setGallery: (values: string[]) => void;
-  groupsFilter: string[];
   setGroupsFilter: (value: string[]) => void;
-  crimeTypesFilter: string[];
   setCrimeTypesFilter: (value: string[]) => void;
-  goodsFilter: string[];
   goods: { value: string; label: string }[];
   setGoodsFilter: (value: string[]) => void;
   businesses: { value: string; label: string; location: string }[];
-  businessesFilter: string[];
   setBusinessesFilter: (value: string[]) => void;
   businessesLoading: boolean;
   goodsLoading: boolean;
-  setIncidentDateFilter: (value: DateType | undefined) => void;
-  setCreatedAtFilter: (value: DateType | undefined) => void;
+  setIncidentDateFilter: (
+    value:
+      | {
+          startDate: Date;
+          endDate: Date;
+        }
+      | undefined
+  ) => void;
+  setCreatedAtFilter: (
+    value:
+      | {
+          startDate: Date;
+          endDate: Date;
+        }
+      | undefined
+  ) => void;
   fetchMoreScroll: () => void;
+  variables: IncidentFilters;
 }
 
 const getSizeOptions = () => {
@@ -90,27 +99,34 @@ const useIncidentFeed = (): Return => {
 
   // Global State
   const { id: schemeId } = useStoreState((state) => state.scheme);
-  const { role, id: userId } = useStoreState((state) => state.user);
+  const {
+    role,
+    id: userId,
+    defaultGroups,
+  } = useStoreState((state) => state.user);
   const pagination = useStoreState((state) => state.data.incidents.pagination);
   const variables = useStoreState((state) => state.data.incidents.variables);
   const order = useStoreState((state) => state.data.incidents.order);
   const setIncidentsState = useStoreActions(
     (actions) => actions.data.setIncidents
   );
+  const defaultGroupsId = defaultGroups
+    .filter(({ scheme }) => scheme.id === schemeId)
+    .map(({ id }) => id);
+  const {
+    search,
+    crimeTypes: crimeTypesFilter,
+    groups: groupsFilter,
+    businesses: businessesFilter,
+    goods: goodsFilter,
+    createdAt: createdAtFilter,
+    incidentDate: incidentDateFilter,
+    gallery,
+    peculiarities,
+  } = variables;
+
   // filter initial state
   const [sortFilter, setSortFilter] = useState(false);
-  const [businessesFilter, setBusinessesFilter] = useState<string[]>([]);
-  const [crimeTypesFilter, setCrimeTypesFilter] = useState<string[]>([]);
-  const [groupsFilter, setGroupsFilter] = useState<string[]>([]);
-  const [goodsFilter, setGoodsFilter] = useState<string[]>([]);
-  const [peculiarities, setPeculiarities] = useState('');
-  const [gallery, setGallery] = useState<string[]>([]);
-  const [createdAtFilter, setCreatedAtFilter] = useState<
-    DateType | undefined
-  >();
-  const [incidentDateFilter, setIncidentDateFilter] = useState<
-    DateType | undefined
-  >();
 
   // lightBox
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
@@ -126,7 +142,7 @@ const useIncidentFeed = (): Return => {
       id: schemeId,
     },
     order: {
-      createdAt:
+      date:
         order === IncidentSort.createdAtDesc ? SortOrder.Desc : SortOrder.Asc,
     },
     where: {
@@ -197,13 +213,13 @@ const useIncidentFeed = (): Return => {
           OR: [
             {
               subject: {
-                contains: variables.search,
+                contains: search,
                 mode: QueryMode.Insensitive,
               },
             },
             {
               referenceStr: {
-                contains: variables.search,
+                contains: search,
               },
             },
             {
@@ -211,7 +227,7 @@ const useIncidentFeed = (): Return => {
                 OR: [
                   {
                     fullName: {
-                      contains: variables.search,
+                      contains: search,
                       mode: QueryMode.Insensitive,
                     },
                   },
@@ -220,7 +236,7 @@ const useIncidentFeed = (): Return => {
                     businesses: {
                       some: {
                         name: {
-                          contains: variables.search,
+                          contains: search,
                           mode: QueryMode.Insensitive,
                         },
                       },
@@ -268,7 +284,6 @@ const useIncidentFeed = (): Return => {
   // Queries
   // Fetch incidents
   const { data, loading, fetchMore } = useListIncidentsQuery({
-    // @ts-expect-error TODO fix date type
     variables: queryVariables,
     fetchPolicy: 'cache-and-network',
     // skip: role === Role.User && restrictIncidentAccess,
@@ -340,7 +355,7 @@ const useIncidentFeed = (): Return => {
                     groups: {
                       some: {
                         id: {
-                          in: variables.groups.map((id) => id),
+                          in: groupsFilter.map((id) => id),
                         },
                       },
                     },
@@ -350,7 +365,7 @@ const useIncidentFeed = (): Return => {
       },
     });
 
-  const { data: goodsData, loading: goodsLoading } = useListGoodsTypesQuery({});
+  const { data: goodsData, loading: goodsLoading } = useListGoodsTypesQuery();
 
   // On mount
   useEffect(() => {
@@ -362,7 +377,7 @@ const useIncidentFeed = (): Return => {
       },
       variables: {
         ...variables,
-        groups: groupsData?.groups.map((group) => group.id) || [],
+        groups: defaultGroupsId,
       },
       order,
     });
@@ -429,8 +444,17 @@ const useIncidentFeed = (): Return => {
       order,
     });
   };
+  const setOrder = (value: IncidentSort) => {
+    setIncidentsState({
+      pagination,
+      variables,
+      order: value,
+    });
+  };
 
-  const onGroupsChange = (values: string[]) => {
+  const setGroupsFilter = (values: string[]) => {
+    console.log('setGroupsFilter');
+
     setIncidentsState({
       pagination,
       variables: {
@@ -440,8 +464,28 @@ const useIncidentFeed = (): Return => {
       order,
     });
   };
+  const setBusinessesFilter = (values: string[]) => {
+    setIncidentsState({
+      pagination,
+      variables: {
+        ...variables,
+        businesses: values,
+      },
+      order,
+    });
+  };
+  const setGoodsFilter = (values: string[]) => {
+    setIncidentsState({
+      pagination,
+      variables: {
+        ...variables,
+        goods: values,
+      },
+      order,
+    });
+  };
 
-  const onCrimeTypesChange = (values: string[]) => {
+  const setCrimeTypesFilter = (values: string[]) => {
     setIncidentsState({
       pagination,
       variables: {
@@ -451,15 +495,47 @@ const useIncidentFeed = (): Return => {
       order,
     });
   };
-
-  const setOrder = (value: IncidentSort) => {
+  const setIncidentDateFilter = (values: DateType | undefined) => {
     setIncidentsState({
       pagination,
-      variables,
-      order: value,
+      variables: {
+        ...variables,
+        incidentDate: values,
+      },
+      order,
+    });
+  };
+  const setCreatedAtFilter = (values: DateType | undefined) => {
+    setIncidentsState({
+      pagination,
+      variables: {
+        ...variables,
+        createdAt: values,
+      },
+      order,
+    });
+  };
+  const setGallery = (values: string[]) => {
+    setIncidentsState({
+      pagination,
+      variables: {
+        ...variables,
+        gallery: values,
+      },
+      order,
     });
   };
 
+  const setPeculiarities = (value: string) => {
+    setIncidentsState({
+      pagination,
+      variables: {
+        ...variables,
+        peculiarities: value,
+      },
+      order,
+    });
+  };
   const setSearch = (value: string) => {
     setIncidentsState({
       pagination,
@@ -501,14 +577,23 @@ const useIncidentFeed = (): Return => {
   };
 
   const clearFilters = () => {
-    setGroupsFilter([]);
-    setCrimeTypesFilter([]);
-    setGoodsFilter([]);
-    setPeculiarities('');
-    setBusinessesFilter([]);
-    setOrder(IncidentSort.createdAtDesc);
-    setCreatedAtFilter(undefined);
+    setIncidentsState({
+      pagination,
+      variables: {
+        gallery: [],
+        search: '',
+        crimeTypes: [],
+        groups: [],
+        businesses: [],
+        createdAt: undefined,
+        incidentDate: undefined,
+        goods: [],
+        peculiarities: '',
+      },
+      order: IncidentSort.createdAtDesc,
+    });
   };
+
   return {
     data,
     loading,
@@ -516,7 +601,7 @@ const useIncidentFeed = (): Return => {
     pagination,
     order,
     setOrder,
-    search: variables.search,
+
     setSearch,
     groups:
       groupsData?.groups.map((group) => ({
@@ -524,9 +609,9 @@ const useIncidentFeed = (): Return => {
         label: group.name,
       })) || [],
     groupsLoading,
-    onGroupsChange,
+    // onGroupsChange,
     variables,
-    onCrimeTypesChange,
+    // onCrimeTypesChange,
     crimeTypes:
       tagsData?.tags?.map((tag) => ({
         value: tag?.id || '',
@@ -541,11 +626,8 @@ const useIncidentFeed = (): Return => {
     sortFilter,
     toggleSortFilter,
     clearFilters,
-    gallery,
-    peculiarities,
     setGallery,
     setPeculiarities,
-    groupsFilter,
     setGroupsFilter,
     businesses:
       businessesData?.listBusinesses.businesses.map((item) => ({
@@ -553,16 +635,13 @@ const useIncidentFeed = (): Return => {
         label: item.name,
         location: item.locations[0]?.full || '',
       })) || [],
-    businessesFilter,
     goods:
       goodsData?.listGoodsTypes.goodsTypes.map((item) => ({
         value: item.id,
         label: item.name,
       })) || [],
-    goodsFilter,
     setGoodsFilter,
     setBusinessesFilter,
-    crimeTypesFilter,
     setCrimeTypesFilter,
     goodsLoading,
     businessesLoading,

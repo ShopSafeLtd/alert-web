@@ -147,6 +147,7 @@ const UseEditProfileTest = () => {
             offenderEmail: false,
             offenderPush: false,
             messagePush: false,
+            defaultGroups: [],
           })
         }
       >

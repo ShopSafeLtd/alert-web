@@ -16,7 +16,9 @@ const SchemeDetail = (): JSX.Element => {
     darkFileList,
     tags,
     updateTagParent,
+    groups,
   } = useSchemeDetail();
+
   return (
     <View
       darkFileList={darkFileList}
@@ -31,6 +33,7 @@ const SchemeDetail = (): JSX.Element => {
       onPreview={onPreview}
       tags={tags}
       updateTagParent={updateTagParent}
+      groups={groups}
     />
   );
 };

@@ -10,10 +10,11 @@ import { Modal, notification } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
+import type { SelectOptions } from 'types/DataType';
 
 const { confirm } = Modal;
 
-interface FormData {
+export interface FormData {
   fullName: string;
   email: string;
   incidentEmail: boolean;
@@ -21,6 +22,7 @@ interface FormData {
   offenderEmail: boolean;
   offenderPush: boolean;
   messagePush: boolean;
+  defaultGroups: string[];
 }
 
 interface Return {
@@ -30,6 +32,7 @@ interface Return {
   data: CurrentUserQuery | undefined;
   loading: boolean;
   saving: boolean;
+  groups: SelectOptions[] | undefined;
 }
 
 const useEditProfile = (): Return => {
@@ -37,6 +40,7 @@ const useEditProfile = (): Return => {
   const navigate = useNavigate();
   const userId = useStoreState((state) => state.user.id);
   const schemeId = useStoreState((state) => state.scheme.id);
+  const userGroups = useStoreState((state) => state.user.groups);
   const [saving, setSaving] = useState(false);
 
   const onClose = () => navigate('/app/incidents');
@@ -69,6 +73,15 @@ const useEditProfile = (): Return => {
   const onSubmit = (data: FormData) => {
     setSaving(true);
     if (userId) {
+      const defaultGroupIds = userData?.currentUser?.defaultGroups.map(
+        (item) => item.id
+      );
+      const connectDefaultGroups = data.defaultGroups.filter(
+        (id) => !defaultGroupIds?.includes(id)
+      );
+      const disconnectDefaultGroups = defaultGroupIds?.filter(
+        (id) => !data.defaultGroups.map((item) => item).includes(id)
+      );
       updateUser({
         variables: {
           where: {
@@ -82,6 +95,14 @@ const useEditProfile = (): Return => {
             offenderEmail: { set: data.offenderEmail },
             offenderPush: { set: data.offenderPush },
             messagePush: { set: data.messagePush },
+            defaultGroups: {
+              connect: disconnectDefaultGroups
+                ? connectDefaultGroups.map((id) => ({ id }))
+                : undefined,
+              disconnect: disconnectDefaultGroups
+                ? disconnectDefaultGroups.map((id) => ({ id }))
+                : undefined,
+            },
           },
           groupWhere: {
             scheme: {
@@ -135,6 +156,10 @@ const useEditProfile = (): Return => {
     data: userData,
     loading,
     saving,
+    groups: userGroups.map((group) => ({
+      value: group.id,
+      label: group.name,
+    })),
   };
 };
 

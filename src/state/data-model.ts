@@ -1,6 +1,20 @@
 /* eslint-disable no-param-reassign */
 import type { Action } from 'easy-peasy';
 import { action } from 'easy-peasy';
+import type {
+  Age,
+  ArticlePriority,
+  Build,
+  Gender,
+  Model,
+  Race,
+  Role,
+} from 'graphql/generated';
+import {
+  SortOrder,
+  // UserStatus,
+} from 'graphql/generated';
+import type { DateType } from 'types/DataType';
 
 export enum IncidentSort {
   createdAtDesc = 'CREATED_AT_DESC',
@@ -10,9 +24,116 @@ export enum OffenderSort {
   updatedAtDesc = 'UPDATED_AT_DESC',
   updatedAtAsc = 'UPDATED_AT_ASC',
 }
-export enum FeedItemSort {
-  updatedAtDesc = 'UPDATED_AT_DESC',
-  updatedAtAsc = 'UPDATED_AT_ASC',
+
+export interface IncidentFilters {
+  search: string;
+  crimeTypes: string[];
+  groups: string[];
+  businesses: string[];
+  goods: string[];
+  createdAt: DateType | undefined;
+  incidentDate: DateType | undefined;
+  gallery: string[];
+  peculiarities: string;
+}
+export interface OffenderFilters {
+  search: string;
+  hair: string;
+  peculiarities: string;
+  gallery: string[];
+  customGalleries: string[];
+  businesses: string[];
+  warnings: string[];
+  groups: string[];
+  ethnicity: Race[];
+  build: Build[];
+  age: Age[];
+  sex: Gender[];
+  createdAt:
+    | {
+        startDate: Date;
+        endDate: Date;
+      }
+    | undefined;
+}
+
+export interface FeedItemFilters {
+  order: SortOrder;
+  groups: string[];
+  search: string;
+  gallery: string[];
+  createdAt:
+    | {
+        startDate: Date;
+        endDate: Date;
+      }
+    | undefined;
+  types: Model[];
+}
+
+export interface VehicleFilters {
+  order: SortOrder;
+  groups: string[];
+  search: string;
+  gallery: string[];
+  customGalleries: string[];
+  createdAt:
+    | {
+        startDate: Date;
+        endDate: Date;
+      }
+    | undefined;
+}
+export interface CrimeGroupFilters {
+  order: SortOrder;
+  groups: string[];
+  search: string;
+  gallery: string[];
+  createdAt:
+    | {
+        startDate: Date;
+        endDate: Date;
+      }
+    | undefined;
+}
+export interface InvestigationFilters {
+  orderBy: 'createdAtAsc' | 'createdAtDesc';
+  groups: string[];
+  createdAt:
+    | {
+        startDate: Date;
+        endDate: Date;
+      }
+    | undefined;
+}
+export interface ArticleFilters {
+  orderBy: 'createdAtAsc' | 'createdAtDesc';
+  groups: string[];
+  createdAt:
+    | {
+        startDate: Date;
+        endDate: Date;
+      }
+    | undefined;
+  priorities: ArticlePriority[];
+}
+export interface UserFilters {
+  orderBy: UserSort;
+  groups: string[];
+  status: UserStatus | undefined;
+  roles: Role[];
+}
+export enum UserSort {
+  createdAtDesc = 'CREATED_AT_DESC',
+  createdAtAsc = 'CREATED_AT_ASC',
+  nameDesc = 'NAME_DESC',
+  nameAsc = 'NAME_ASC',
+}
+export enum UserStatus {
+  'ACTIVE' = 'ACTIVE',
+  'DISABLED' = 'DISABLED',
+  'INVITED' = 'INVITED',
+  'ALL' = 'ALL',
 }
 interface Incidents {
   pagination: {
@@ -20,24 +141,18 @@ interface Incidents {
     pageSize: number;
     sizeOptions: string[];
   };
-  variables: {
-    search: string;
-    crimeTypes: string[];
-    groups: string[];
-  };
+  variables: IncidentFilters;
   order: IncidentSort;
+  // gallery: string[];
 }
+
 interface Offenders {
   pagination: {
     page: number;
     pageSize: number;
     sizeOptions: string[];
   };
-  variables: {
-    search: string;
-    tags: string[];
-    groups: string[];
-  };
+  variables: OffenderFilters;
   order: OffenderSort;
 }
 interface FeedItems {
@@ -46,11 +161,7 @@ interface FeedItems {
     pageSize: number;
     sizeOptions: string[];
   };
-  variables: {
-    search: string;
-    groups: string[];
-  };
-  order: FeedItemSort;
+  variables: FeedItemFilters;
 }
 
 interface Vehicles {
@@ -59,8 +170,7 @@ interface Vehicles {
     pageSize: number;
     sizeOptions: string[];
   };
-
-  search: string;
+  variables: VehicleFilters;
 }
 interface CrimeGroups {
   pagination: {
@@ -68,16 +178,15 @@ interface CrimeGroups {
     pageSize: number;
     sizeOptions: string[];
   };
-
-  search: string;
+  variables: CrimeGroupFilters;
 }
+
 export interface DataModel {
   incidents: Incidents;
   offenders: Offenders;
   feedItems: FeedItems;
   vehicles: Vehicles;
   crimeGroups: CrimeGroups;
-
   setIncidents: Action<DataModel, Incidents>;
   setOffenders: Action<DataModel, Offenders>;
   setFeedItems: Action<DataModel, FeedItems>;
@@ -96,8 +205,15 @@ const dataModel: DataModel = {
       search: '',
       crimeTypes: [],
       groups: [],
+      businesses: [],
+      createdAt: undefined,
+      incidentDate: undefined,
+      goods: [],
+      gallery: [],
+      peculiarities: '',
     },
     order: IncidentSort.createdAtDesc,
+    // gallery: [],
   },
 
   setIncidents: action((state, payload) => {
@@ -112,8 +228,18 @@ const dataModel: DataModel = {
     },
     variables: {
       search: '',
-      tags: [],
+      warnings: [],
       groups: [],
+      businesses: [],
+      createdAt: undefined,
+      gallery: [],
+      customGalleries: [],
+      peculiarities: '',
+      hair: '',
+      ethnicity: [],
+      build: [],
+      age: [],
+      sex: [],
     },
     order: OffenderSort.updatedAtDesc,
   },
@@ -129,10 +255,13 @@ const dataModel: DataModel = {
       sizeOptions: ['10'],
     },
     variables: {
+      order: SortOrder.Desc,
       search: '',
+      createdAt: undefined,
+      gallery: [],
       groups: [],
+      types: [],
     },
-    order: FeedItemSort.updatedAtDesc,
   },
 
   setFeedItems: action((state, payload) => {
@@ -145,8 +274,14 @@ const dataModel: DataModel = {
       pageSize: 20,
       sizeOptions: ['20'],
     },
-
-    search: '',
+    variables: {
+      order: SortOrder.Desc,
+      search: '',
+      createdAt: undefined,
+      gallery: [],
+      customGalleries: [],
+      groups: [],
+    },
   },
 
   setVehicles: action((state, payload) => {
@@ -159,7 +294,13 @@ const dataModel: DataModel = {
       pageSize: 20,
       sizeOptions: ['20'],
     },
-    search: '',
+    variables: {
+      order: SortOrder.Desc,
+      search: '',
+      createdAt: undefined,
+      gallery: [],
+      groups: [],
+    },
   },
 
   setCrimeGroups: action((state, payload) => {

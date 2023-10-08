@@ -6,8 +6,7 @@ import {
   SortOrder,
   useListCrimeGroupsQuery,
 } from 'graphql/generated';
-
-import { useStoreActions, useStoreState } from 'state';
+import { useStoreState } from 'state';
 import type { CrimeGroupData } from 'types/DataType';
 
 // interface CrimeGroup {
@@ -45,13 +44,11 @@ const useLinkCrimeGroup = ({
   const userSchemeIds = useStoreState((state) => state.user.schemes).map(
     (el) => el.scheme.id
   );
-  const pagination = useStoreState(
-    (state) => state.data.crimeGroups.pagination
-  );
-  const search = useStoreState((state) => state.data.crimeGroups.search);
-  const setCrimeGroupsState = useStoreActions(
-    (actions) => actions.data.setCrimeGroups
-  );
+  const [pagination, setPagination] = useState({
+    page: 1,
+    pageSize: 24,
+  });
+  const [search, setSearch] = useState('');
   const { data, loading } = useListCrimeGroupsQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
@@ -96,21 +93,6 @@ const useLinkCrimeGroup = ({
     },
   });
 
-  const onPaginationChange = (page: number) => {
-    setCrimeGroupsState({
-      pagination: {
-        ...pagination,
-        page,
-      },
-      search,
-    });
-  };
-  const setSearch = (value: string) => {
-    setCrimeGroupsState({
-      pagination,
-      search: value,
-    });
-  };
   const onSubmit = () => {
     setSaving(true);
     const selectedData = data?.listCrimeGroups?.crimeGroups.find(
@@ -141,7 +123,12 @@ const useLinkCrimeGroup = ({
   const onSelect = (item: { key: string }) => {
     setSelected(item.key);
   };
-
+  const onPaginationChange = (page: number) => {
+    setPagination({
+      ...pagination,
+      page,
+    });
+  };
   return {
     onSubmit,
     saving,

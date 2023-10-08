@@ -6,46 +6,69 @@ import {
   SortOrder,
   useListCrimeGroupsQuery,
 } from 'graphql/generated';
-import { useState } from 'react';
-import { useStoreState } from 'state';
+import { useEffect, useState } from 'react';
+import { useStoreActions, useStoreState } from 'state';
+import type { CrimeGroupFilters } from 'state/data-model';
 import type { DateType } from 'types/DataType';
 
 interface Return {
   data: ListCrimeGroupsQuery | undefined;
   loading: boolean;
-  search: string;
   setSearch: (value: string) => void;
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
   clearFilters: () => void;
   sortFilter: boolean;
   toggleSortFilter: () => void;
-  gallery: string[];
   setGallery: (values: string[]) => void;
-  groupsFilter: string[];
   setGroupsFilter: (value: string[]) => void;
   setCreatedAtFilter: (value: DateType | undefined) => void;
-  order: SortOrder;
   setOrder: (value: SortOrder) => void;
   addInvestigation: string;
   toggleAddInvestigation: (value: string) => void;
+  variables: CrimeGroupFilters;
 }
-
+const getSizeOptions = () => {
+  if (window.innerWidth > 1239 && window.innerWidth < 1800) {
+    return ['10', '20', '30'];
+  }
+  if (window.innerWidth > 1799) {
+    return ['10', '20', '30'];
+  }
+  return ['10'];
+};
 const useListCrimeGroups = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
-  const { role, id: userId } = useStoreState((state) => state.user);
-  const [search, setSearch] = useState('');
+  const {
+    role,
+    id: userId,
+    defaultGroups,
+  } = useStoreState((state) => state.user);
+  const defaultGroupsId = defaultGroups
+    .filter(({ scheme }) => scheme.id === schemeId)
+    .map(({ id }) => id);
+  const pagination = useStoreState(
+    (state) => state.data.crimeGroups.pagination
+  );
+  const filterVariables = useStoreState(
+    (state) => state.data.crimeGroups.variables
+  );
+  const setFilterState = useStoreActions(
+    (actions) => actions.data.setCrimeGroups
+  );
+
   const [sortFilter, setSortFilter] = useState(false);
-  const [order, setOrder] = useState<SortOrder>(SortOrder.Desc);
-  const [gallery, setGallery] = useState<string[]>([]);
   const [addInvestigation, setAddInvestigation] = useState('');
-  const [groupsFilter, setGroupsFilter] = useState<string[]>([]);
-  const [createdAtFilter, setCreatedAtFilter] = useState<
-    DateType | undefined
-  >();
+  const {
+    search,
+    groups: groupsFilter,
+    createdAt: createdAtFilter,
+    gallery,
+    order,
+  } = filterVariables;
   const variables = {
     order: {
-      updatedAt: SortOrder.Desc,
+      updatedAt: order,
     },
     where: {
       schemes: {
@@ -61,6 +84,16 @@ const useListCrimeGroups = (): Return => {
             lte: createdAtFilter.endDate,
           }
         : undefined,
+      groups:
+        groupsFilter.length > 0
+          ? {
+              some: {
+                id: {
+                  in: groupsFilter,
+                },
+              },
+            }
+          : undefined,
       createdBy: gallery.includes('MYDATA')
         ? {
             id: {
@@ -106,9 +139,24 @@ const useListCrimeGroups = (): Return => {
       ],
     },
   };
+
+  // On mount
+  useEffect(() => {
+    const sizeOptions = getSizeOptions();
+    setFilterState({
+      pagination: {
+        ...pagination,
+        sizeOptions,
+        pageSize: Number(sizeOptions[0]),
+      },
+      variables: {
+        ...filterVariables,
+        groups: defaultGroupsId,
+      },
+    });
+  }, []);
   const { data, loading } = useListCrimeGroupsQuery({
     fetchPolicy: 'cache-and-network',
-    // @ts-expect-error TODO fix this date issue
     variables,
   });
   const { data: groupData, loading: groupsLoading } = useSchemeGroupsQuery({
@@ -134,20 +182,74 @@ const useListCrimeGroups = (): Return => {
     fetchPolicy: 'cache-and-network',
     skip: role !== Role.SchemeAdmin,
   });
+  const setGallery = (values: string[]) => {
+    setFilterState({
+      pagination,
+      variables: {
+        ...filterVariables,
+        gallery: values,
+      },
+    });
+  };
+
+  const setCreatedAtFilter = (values: DateType | undefined) => {
+    setFilterState({
+      pagination,
+      variables: {
+        ...filterVariables,
+        createdAt: values,
+      },
+    });
+  };
+
+  const setOrder = (values: SortOrder) => {
+    setFilterState({
+      pagination,
+      variables: {
+        ...filterVariables,
+        order: values,
+      },
+    });
+  };
+
+  const setSearch = (value: string) => {
+    setFilterState({
+      pagination,
+      variables: {
+        ...filterVariables,
+        search: value,
+      },
+    });
+  };
+  const setGroupsFilter = (values: string[]) => {
+    setFilterState({
+      pagination,
+      variables: {
+        ...filterVariables,
+        groups: values,
+      },
+    });
+  };
   const toggleSortFilter = () => {
     setSortFilter(!sortFilter);
   };
 
   const clearFilters = () => {
-    setGroupsFilter([]);
-    setOrder(SortOrder.Desc);
-    setCreatedAtFilter(undefined);
+    setFilterState({
+      pagination,
+      variables: {
+        order: SortOrder.Desc,
+        search: '',
+        createdAt: undefined,
+        gallery: [],
+        groups: [],
+      },
+    });
   };
 
   return {
     data,
     loading,
-    search,
     setSearch,
     groups:
       groupData?.groups.map((group) => ({
@@ -155,18 +257,16 @@ const useListCrimeGroups = (): Return => {
         label: group.name,
       })) || [],
     groupsLoading,
-    groupsFilter,
     setGroupsFilter,
     setCreatedAtFilter,
     clearFilters,
     sortFilter,
     toggleSortFilter,
-    gallery,
     setGallery,
-    order,
     setOrder,
     addInvestigation,
     toggleAddInvestigation: setAddInvestigation,
+    variables: filterVariables,
   };
 };
 

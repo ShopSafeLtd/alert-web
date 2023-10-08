@@ -224,10 +224,15 @@ const useEditIncidentFeed = ({ onClose, incidentId }: Props): Return => {
                     id: data.business.value,
                   }
                 : undefined,
+              // ???
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
               disconnect:
                 incidentData?.incident?.business?.id &&
                 data.business?.value === undefined
-                  ? true
+                  ? {
+                      id: data.business?.value,
+                    }
                   : undefined,
             },
             policeInvolved: { set: data.policeInvolved || false },
@@ -235,7 +240,6 @@ const useEditIncidentFeed = ({ onClose, incidentId }: Props): Return => {
             policeNo: { set: data.policeNo || '' },
             policeReported: { set: data.policeReported || false },
             location: {
-              // ???
               upsert: {
                 update: {
                   premises: { set: '' },

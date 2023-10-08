@@ -1545,6 +1545,8 @@ const ViewOffender = ({
                                                 disabled={saving}
                                                 onClick={() => {
                                                   setEditAddressData(
+                                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                    // @ts-ignore
                                                     record.address
                                                   );
                                                 }}

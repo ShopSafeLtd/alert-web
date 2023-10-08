@@ -28,6 +28,13 @@ export interface SetSchemePayload {
   taskTimeTracking: boolean;
   languageCount: number;
   autoPopulateDescription: boolean;
+  defaultGroups: {
+    id: string;
+    name: string;
+    scheme: {
+      id: string;
+    };
+  }[];
 }
 
 export interface SchemeModel {
@@ -51,6 +58,13 @@ export interface SchemeModel {
   taskTimeTracking: boolean;
   languageCount: number;
   autoPopulateDescription: boolean;
+  defaultGroups: {
+    id: string;
+    name: string;
+    scheme: {
+      id: string;
+    };
+  }[];
 }
 
 const userModel: SchemeModel = {
@@ -72,6 +86,7 @@ const userModel: SchemeModel = {
   taskTimeTracking: false,
   languageCount: 0,
   autoPopulateDescription: true,
+  defaultGroups: [],
   setScheme: action((state, payload) => {
     state.id = payload.id;
     state.autoApproveIncidents = payload.autoApproveIncidents;
@@ -91,6 +106,7 @@ const userModel: SchemeModel = {
     state.taskTimeTracking = payload.taskTimeTracking;
     state.languageCount = payload.languageCount;
     state.autoPopulateDescription = payload.autoPopulateDescription;
+    state.defaultGroups = payload.defaultGroups;
   }),
   clearScheme: action((state) => {
     state.id = '';
@@ -111,6 +127,7 @@ const userModel: SchemeModel = {
     state.taskTimeTracking = false;
     state.languageCount = 0;
     state.autoPopulateDescription = true;
+    state.defaultGroups = [];
   }),
 };
 

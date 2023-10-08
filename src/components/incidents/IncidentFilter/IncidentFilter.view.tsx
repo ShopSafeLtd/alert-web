@@ -12,12 +12,15 @@ import {
 import { IncidentSort } from 'state';
 import type { DateType } from 'types/DataType';
 import { useIntl } from 'react-intl';
+import type { IncidentFilters } from 'state/data-model';
+import moment from 'moment';
 import useStyles from './IncidentFilter.styles';
 
 const { RangePicker } = DatePicker;
 const { useForm } = Form;
 interface FormData {
   date: Date;
+  createdAt: Date;
 }
 interface Props {
   order: IncidentSort;
@@ -26,23 +29,19 @@ interface Props {
   groupsLoading: boolean;
   crimeTypes: { value: string; label: string }[];
   tagsLoading: boolean;
-  crimeTypesFilter: string[];
   setCrimeTypesFilter: (value: string[]) => void;
   setPeculiarities: (value: string) => void;
-  peculiarities: string;
   clearFilters: () => void;
-  groupsFilter: string[];
   setGroupsFilter: (value: string[]) => void;
-  businessesFilter: string[];
   setBusinessesFilter: (value: string[]) => void;
   businesses: { value: string; label: string; location: string }[];
-  goodsFilter: string[];
   goods: { value: string; label: string }[];
   setGoodsFilter: (value: string[]) => void;
   businessesLoading: boolean;
   goodsLoading: boolean;
   setIncidentDateFilter: (value: DateType | undefined) => void;
   setCreatedAtFilter: (value: DateType | undefined) => void;
+  variables: IncidentFilters;
 }
 
 const IncidentFilter = ({
@@ -53,28 +52,50 @@ const IncidentFilter = ({
   crimeTypes,
   tagsLoading,
   clearFilters,
-  groupsFilter,
-  peculiarities,
   setGroupsFilter,
   setPeculiarities,
   goods,
-  goodsFilter,
   setGoodsFilter,
   businesses,
-  businessesFilter,
   setBusinessesFilter,
-  crimeTypesFilter,
   setCrimeTypesFilter,
   goodsLoading,
   businessesLoading,
   setCreatedAtFilter,
   setIncidentDateFilter,
+  variables,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const [form] = useForm<FormData>();
   const intl = useIntl();
+  const {
+    crimeTypes: crimeTypesFilter,
+    groups: groupsFilter,
+    businesses: businessesFilter,
+    goods: goodsFilter,
+    createdAt: createdAtFilter,
+    incidentDate: incidentDateFilter,
+    peculiarities,
+  } = variables;
+
   return (
-    <Form<FormData> form={form}>
+    <Form<FormData>
+      form={form}
+      initialValues={{
+        createdAt: createdAtFilter
+          ? [
+              moment(createdAtFilter?.startDate),
+              moment(createdAtFilter?.endDate),
+            ]
+          : undefined,
+        date: incidentDateFilter
+          ? [
+              moment(incidentDateFilter?.startDate),
+              moment(incidentDateFilter?.endDate),
+            ]
+          : undefined,
+      }}
+    >
       <Row justify="end">
         <Col>
           <Button
@@ -84,6 +105,7 @@ const IncidentFilter = ({
               clearFilters();
               form.setFieldsValue({
                 date: [],
+                createdAt: [],
               });
             }}
           >
@@ -114,8 +136,8 @@ const IncidentFilter = ({
             </Select.Option>
             <Select.Option value={IncidentSort.createdAtAsc}>
               {intl.formatMessage({
-                id: 'dZYazP',
-                defaultMessage: 'Newest First',
+                defaultMessage: 'Oldest First',
+                id: 'FqI37D',
               })}
             </Select.Option>
           </Select>
@@ -131,7 +153,7 @@ const IncidentFilter = ({
             })}
           </Typography.Paragraph>
 
-          <Form.Item name="date">
+          <Form.Item name="createdAt" style={{ marginBottom: 0 }}>
             <RangePicker
               className={classes.select}
               onChange={(value) => {
@@ -145,6 +167,7 @@ const IncidentFilter = ({
           </Form.Item>
         </Col>
       </Row>
+
       <Row gutter={16}>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
@@ -153,23 +176,27 @@ const IncidentFilter = ({
               id: '2u26fg',
             })}
           </Typography.Paragraph>
-          <RangePicker
-            className={classes.select}
-            onChange={(value) => {
-              if (value && value[0] && value[1])
-                setIncidentDateFilter({
-                  startDate: new Date(value[0].valueOf()),
-                  endDate: new Date(value[1].valueOf()),
-                });
-            }}
-          />
+          <Form.Item name="date" style={{ marginBottom: 0 }}>
+            <RangePicker
+              className={classes.select}
+              onChange={(value) => {
+                if (value && value[0] && value[1])
+                  setIncidentDateFilter({
+                    startDate: new Date(value[0].valueOf()),
+                    endDate: new Date(value[1].valueOf()),
+                  });
+              }}
+            />
+          </Form.Item>
         </Col>
       </Row>
+
       <Row gutter={16}>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
             {intl.formatMessage({ defaultMessage: 'Groups', id: 'hzmswI' })}
           </Typography.Paragraph>
+
           <Select
             className={classes.select}
             placeholder={intl.formatMessage({

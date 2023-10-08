@@ -11,43 +11,38 @@ import type { DateType } from 'types/DataType';
 import { useIntl } from 'react-intl';
 import FormatCalendar from 'utils/format-calendar-24h';
 import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
+import type { CrimeGroupFilters } from 'state/data-model';
 import useStyles from './ListCrimeGroups.styles';
 
 interface Props {
   data: ListCrimeGroupsQuery | undefined;
   loading: boolean;
-  search: string;
   setSearch: (value: string) => void;
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
   clearFilters: () => void;
   sortFilter: boolean;
   toggleSortFilter: () => void;
-  gallery: string[];
   setGallery: (values: string[]) => void;
-  groupsFilter: string[];
   setGroupsFilter: (value: string[]) => void;
   setCreatedAtFilter: (value: DateType | undefined) => void;
-  order: SortOrder;
   setOrder: (value: SortOrder) => void;
   addInvestigation: string;
   toggleAddInvestigation: (value: string) => void;
+  variables: CrimeGroupFilters;
 }
 
 const ListCrimeGroups = ({
   data,
   loading,
-  search,
   setSearch,
-  groupsFilter,
   setGroupsFilter,
   setCreatedAtFilter,
   clearFilters,
   sortFilter,
   toggleSortFilter,
-  gallery,
   setGallery,
-  order,
+  variables,
   setOrder,
   groups,
   groupsLoading,
@@ -56,6 +51,7 @@ const ListCrimeGroups = ({
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
+  const { search, gallery } = variables;
   const galleryOptions = [
     {
       label: intl.formatMessage({
@@ -253,9 +249,8 @@ const ListCrimeGroups = ({
         width={500}
       >
         <CrimeGroupFilter
-          order={order}
+          variables={variables}
           setOrder={setOrder}
-          groupsFilter={groupsFilter}
           setGroupsFilter={setGroupsFilter}
           clearFilters={clearFilters}
           setCreatedAtFilter={setCreatedAtFilter}

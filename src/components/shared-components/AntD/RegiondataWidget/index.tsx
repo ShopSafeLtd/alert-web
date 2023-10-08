@@ -165,6 +165,9 @@ export const RegionDataWidget = (props: RegionDataWidgetProps) => {
     content,
     list,
   } = props;
+  // ???
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const isMobile = !utils.getBreakPoint(useBreakpoint()).includes('lg');
   return (
     <Card bodyStyle={{ padding: 0 }}>

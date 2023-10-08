@@ -42,7 +42,6 @@ const mocks = [
 const UseGroupListTest = () => {
   const { data, loading } = useAdminTodos({
     fullSearch: 'a',
-    groupsFilter: [],
   });
   const uncompletedTodos =
     data &&

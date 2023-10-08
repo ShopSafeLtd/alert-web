@@ -72,6 +72,13 @@ interface Scheme {
   taskTimeTracking: boolean;
   languageCount: number;
   autoPopulateDescription: boolean;
+  defaultGroups: {
+    id: string;
+    name: string;
+    scheme: {
+      id: string;
+    };
+  }[];
 }
 interface Return {
   data:
@@ -347,6 +354,7 @@ const useNotificationLists = (): Return => {
       imagesRequiredOnOffenders: scheme.imagesRequiredOnOffenders,
       taskTimeTracking: scheme.taskTimeTracking,
       reportOnly: scheme.reportOnly,
+      defaultGroups: scheme.defaultGroups || [],
     });
     setTodos({ userTodos: scheme.userTodos || 0 });
     setNotifications({

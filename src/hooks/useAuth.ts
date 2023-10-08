@@ -60,6 +60,7 @@ const useAuth = (): Return => {
     groups,
     reference,
     userNotifications,
+    defaultGroups,
   }: HandleSuccessArgs) => {
     // const color = `hsl(${Math.random() * 360}, 70%, 30%)`;
 
@@ -86,6 +87,7 @@ const useAuth = (): Return => {
         imagesRequiredOnOffenders: schemeDetails?.imagesRequiredOnOffenders,
         taskTimeTracking: schemeDetails?.taskTimeTracking,
         languageCount: schemeDetails?.languageCount || 0,
+        defaultGroups: schemeDetails?.defaultGroups || [],
       });
       setTodos({ userTodos: schemes[0]?.scheme?.userTodos || 0 });
       setNotifications({
@@ -125,6 +127,7 @@ const useAuth = (): Return => {
             schemeDetails.scheme.imagesRequiredOnOffenders,
           taskTimeTracking: schemeDetails.scheme.taskTimeTracking,
           languageCount: schemeDetails.scheme.languageCount || 0,
+          defaultGroups: schemeDetails.scheme.defaultGroups || [],
         });
         setTodos({ userTodos: schemeDetails?.scheme?.userTodos || 0 });
       } else {
@@ -173,6 +176,7 @@ const useAuth = (): Return => {
       demId,
       reference,
       userNotifications,
+      defaultGroups,
     });
     authenticated(accessToken);
   };
@@ -213,6 +217,7 @@ const useAuth = (): Return => {
         onboarded: !currentUser?.newUser,
         schemes: currentUser?.schemes || [],
         groups: currentUser?.groups || [],
+        defaultGroups: currentUser?.defaultGroups || [],
         demId: currentUser?.demId || '',
         isSet: true,
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
@@ -291,6 +296,7 @@ const useAuth = (): Return => {
       businesses: data.businesses,
       schemes: data.schemes,
       groups: data.groups,
+      defaultGroups: data.defaultGroups,
       isSet: true,
       demId: data.demId,
       reference: data.reference,

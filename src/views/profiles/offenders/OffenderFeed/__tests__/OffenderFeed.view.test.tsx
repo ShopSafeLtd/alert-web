@@ -97,6 +97,21 @@ describe('Detail Officer View', () => {
                 open: false,
                 index: 0,
               }}
+              variables={{
+                search: '',
+                warnings: [],
+                groups: [],
+                businesses: [],
+                createdAt: undefined,
+                gallery: [],
+                customGalleries: [],
+                peculiarities: '',
+                hair: '',
+                ethnicity: [],
+                build: [],
+                age: [],
+                sex: [],
+              }}
               businessesLoading={false}
               data={data}
               loading={false}
@@ -110,7 +125,6 @@ describe('Detail Officer View', () => {
               }}
               order={OffenderSort.updatedAtAsc}
               setOrder={jest.fn()}
-              search=""
               setSearch={jest.fn()}
               groups={[]}
               groupsLoading={false}
@@ -120,14 +134,7 @@ describe('Detail Officer View', () => {
               onNavigate={jest.fn()}
               sortFilter
               toggleSortFilter={jest.fn()}
-              age={[]}
-              build={[]}
               clearFilters={jest.fn()}
-              ethnicity={[]}
-              gallery={[]}
-              groupsFilter={[]}
-              hair=""
-              peculiarities=""
               setAge={jest.fn()}
               setBuild={jest.fn()}
               setEthnicity={jest.fn()}
@@ -137,16 +144,12 @@ describe('Detail Officer View', () => {
               setPeculiarities={jest.fn()}
               setSex={jest.fn()}
               setWarnings={jest.fn()}
-              sex={[]}
-              warnings={[]}
               businessData={{ listBusinesses: { businesses: [], total: 0 } }}
-              businesses={[]}
               setBusinesses={jest.fn()}
               setCreatedAtFilter={jest.fn()}
               customGalleriesData={customGalleriesData}
               adminRights={false}
               onSelectCustomGalleries={jest.fn()}
-              customGalleries={[]}
               onSelectGallery={jest.fn()}
             />
           </MockedProvider>

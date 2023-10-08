@@ -26,6 +26,7 @@ describe('List Officer View', () => {
       reportOnly: true,
       facialRecognition: true,
       imagesRequiredOnOffenders: true,
+      defaultGroups: [],
     },
   };
   it('renders the page', () => {
@@ -44,6 +45,7 @@ describe('List Officer View', () => {
           fileList={[]}
           darkFileList={[]}
           darkImgChange={jest.fn()}
+          groups={[]}
         />
       </MemoryRouter>
     );

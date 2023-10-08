@@ -5,6 +5,7 @@ import type {
   Model,
 } from 'graphql/generated';
 import {
+  useSchemeGroupsQuery,
   FeedItemsDocument,
   QueryMode,
   Role,
@@ -14,31 +15,24 @@ import {
   useListOffendersFeedQuery,
 } from 'graphql/generated';
 import { useEffect, useState } from 'react';
-import { FeedItemSort, useStoreActions, useStoreState } from 'state';
+import { useStoreActions, useStoreState } from 'state';
 import { useNavigate } from 'react-router-dom';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { notification } from 'antd';
-import type { DateType, PaginationModel } from 'types/DataType';
+import type { DateType } from 'types/DataType';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
+import type { FeedItemFilters } from 'state/data-model';
 
 interface Return {
   data: FeedItemsQuery | undefined;
   loading: boolean;
   recentOffenderData: ListOffendersFeedQuery | undefined;
   recentOffenderLoading: boolean;
-  onPaginationChange: (page: number, pageSize: number) => void;
-  pagination: PaginationModel;
-  order: FeedItemSort;
-  setOrder: (value: FeedItemSort) => void;
-  search: string;
+  setOrder: (value: SortOrder) => void;
   setSearch: (value: string) => void;
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
-  onGroupsChange: (groups: string[]) => void;
-  variables: {
-    groups: string[];
-  };
   // updateIncidentList: MutationUpdaterFn<RecycleIncidentMutation>;
   onNavigate: () => void;
   onDeleteFeedItem: (value: string) => void;
@@ -46,17 +40,13 @@ interface Return {
   adminRights: boolean;
   sortFilter: boolean;
   toggleSortFilter: () => void;
-  groupsFilter: string[];
   setGroupsFilter: (value: string[]) => void;
-  typesFilter: Model[];
   setTypesFilter: (value: Model[]) => void;
   clearFilters: () => void;
-  gallery: string[];
   setGallery: (values: string[]) => void;
-  createdAtFilter: DateType | undefined;
   setCreatedAtFilter: (value: DateType | undefined) => void;
   fetchMoreScroll: () => void;
-  restrictIncidentAccess: boolean;
+  variables: FeedItemFilters;
 }
 
 const useFeedItems = (): Return => {
@@ -65,25 +55,32 @@ const useFeedItems = (): Return => {
   const intl = useIntl();
   // Global State
   const schemeId = useStoreState((state) => state.scheme.id);
-  const { role, id: userId } = useStoreState((state) => state.user);
-  const restrictIncidentAccess =
-    useStoreState((state) => state.scheme.restrictIncidentAccess) &&
-    role === Role.User;
+  const {
+    role,
+    id: userId,
+    defaultGroups,
+  } = useStoreState((state) => state.user);
+
+  const defaultGroupsId = defaultGroups
+    .filter(({ scheme }) => scheme.id === schemeId)
+    .map(({ id }) => id);
   const pagination = useStoreState((state) => state.data.feedItems.pagination);
   const variables = useStoreState((state) => state.data.feedItems.variables);
-  const order = useStoreState((state) => state.data.feedItems.order);
   const [saving, setSaving] = useState(false);
   const setFeedItemsState = useStoreActions(
     (actions) => actions.data.setFeedItems
   );
-  const [search, setSearch] = useState('');
   const [sortFilter, setSortFilter] = useState(false);
-  const [typesFilter, setTypesFilter] = useState<Model[]>([]);
-  const [groupsFilter, setGroupsFilter] = useState<string[]>([]);
-  const [createdAtFilter, setCreatedAtFilter] = useState<
-    DateType | undefined
-  >();
-  const [gallery, setGallery] = useState<string[]>([]);
+
+  const {
+    search,
+    groups: groupsFilter,
+    createdAt: createdAtFilter,
+    gallery,
+    order,
+    types: typesFilter,
+  } = variables;
+
   const itemVariables = {
     createdAt: createdAtFilter
       ? {
@@ -117,8 +114,7 @@ const useFeedItems = (): Return => {
     search,
     schemeId,
     order: {
-      updatedAt:
-        order === FeedItemSort.updatedAtDesc ? SortOrder.Desc : SortOrder.Asc,
+      updatedAt: order,
     },
     take: pagination.pageSize,
     skip: (pagination.page - 1) * pagination.pageSize,
@@ -192,59 +188,22 @@ const useFeedItems = (): Return => {
     },
   };
 
-  const schemeGroups =
-    useStoreState((state) => state.user.groups)
-      .filter((group) => group.scheme.id === schemeId)
-      .map((group) => ({
-        value: group.id,
-        label: group.name,
-      })) || [];
-
   // Queries
-  // // Fetch scheme groups if scheme admin
-  // const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
-  //   variables: {
-  //     where: {
-  //       scheme: {
-  //         id: {
-  //           equals: schemeId,
-  //         },
-  //       },
-  //       users:
-  //         role === Role.User
-  //           ? {
-  //               some: {
-  //                 id: {
-  //                   equals: userId,
-  //                 },
-  //               },
-  //             }
-  //           : undefined,
-  //     },
-  //   },
-  //   fetchPolicy: 'cache-and-network',
-  //   skip: role !== Role.SchemeAdmin,
-  // });
 
   // On mount
   useEffect(() => {
-    // const sizeOptions = getSizeOptions();
     setFeedItemsState({
       pagination: {
         ...pagination,
-        // sizeOptions,
-        // pageSize: Number(sizeOptions[0]),
       },
       variables: {
         ...variables,
-        groups: schemeGroups?.map((group) => group.value) || [],
+        groups: defaultGroupsId,
       },
-      order,
     });
   }, []);
 
   const { data, loading, fetchMore } = useFeedItemsQuery({
-    // @ts-expect-error TODO: Fix type
     variables: {
       ...queryVariables,
       groupsWhere2: {
@@ -259,7 +218,29 @@ const useFeedItems = (): Return => {
     },
     fetchPolicy: 'cache-and-network',
   });
-
+  const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
+    variables: {
+      where: {
+        scheme: {
+          id: {
+            equals: schemeId,
+          },
+        },
+        users:
+          role === Role.User
+            ? {
+                some: {
+                  id: {
+                    equals: userId,
+                  },
+                },
+              }
+            : undefined,
+      },
+    },
+    fetchPolicy: 'cache-and-network',
+    skip: role !== Role.SchemeAdmin,
+  });
   const { data: recentOffenderData, loading: recentOffenderLoading } =
     useListOffendersFeedQuery({
       fetchPolicy: 'cache-and-network',
@@ -272,7 +253,6 @@ const useFeedItems = (): Return => {
         },
         take: 10,
         where: {
-          // @ts-expect-error TODO: Fix type
           createdAt: createdAtFilter
             ? {
                 gte: createdAtFilter.startDate,
@@ -403,90 +383,107 @@ const useFeedItems = (): Return => {
       },
     });
   };
-  // Functions
-  const onPaginationChange = (page: number, pageSize: number) => {
+  // filter Functions
+  const setGallery = (values: string[]) => {
     setFeedItemsState({
-      pagination: {
-        ...pagination,
-        page,
-        pageSize,
+      pagination,
+      variables: {
+        ...variables,
+        gallery: values,
       },
-      variables,
-      order,
     });
   };
 
-  const onGroupsChange = (values: string[]) => {
+  const setCreatedAtFilter = (values: DateType | undefined) => {
+    setFeedItemsState({
+      pagination,
+      variables: {
+        ...variables,
+        createdAt: values,
+      },
+    });
+  };
+
+  const setOrder = (values: SortOrder) => {
+    setFeedItemsState({
+      pagination,
+      variables: {
+        ...variables,
+        order: values,
+      },
+    });
+  };
+
+  const setSearch = (value: string) => {
+    setFeedItemsState({
+      pagination,
+      variables: {
+        ...variables,
+        search: value,
+      },
+    });
+  };
+  const setGroupsFilter = (values: string[]) => {
     setFeedItemsState({
       pagination,
       variables: {
         ...variables,
         groups: values,
       },
-      order,
     });
   };
-
-  const setOrder = (value: FeedItemSort) => {
+  const setTypesFilter = (values: Model[]) => {
     setFeedItemsState({
       pagination,
-      variables,
-      order: value,
+      variables: {
+        ...variables,
+        types: values,
+      },
     });
   };
-
-  // const setSearch = (value: string) => {
-  //   setFeedItemsState({
-  //     pagination,
-  //     variables: {
-  //       ...variables,
-  //       search: value,
-  //     },
-  //     order,
-  //   });
-  // };
   const toggleSortFilter = () => {
     setSortFilter(!sortFilter);
   };
 
   const clearFilters = () => {
-    setGroupsFilter([]);
-    setTypesFilter([]);
-    setOrder(FeedItemSort.updatedAtDesc);
-    setCreatedAtFilter(undefined);
+    setFeedItemsState({
+      pagination,
+      variables: {
+        order: SortOrder.Desc,
+        search: '',
+        createdAt: undefined,
+        gallery: [],
+        groups: [],
+        types: [],
+      },
+    });
   };
   return {
     data,
     loading: !data && loading,
     recentOffenderData,
     recentOffenderLoading,
-    onPaginationChange,
-    pagination,
-    order,
     setOrder,
-    search,
     setSearch,
-    groups: schemeGroups,
-    groupsLoading: false,
-    onGroupsChange,
+    groups:
+      groupsData?.groups.map((group) => ({
+        value: group.id,
+        label: group.name,
+      })) || [],
+    groupsLoading,
     variables,
     onNavigate,
     onDeleteFeedItem,
     saving,
     adminRights: role !== Role.User,
-    typesFilter,
     setTypesFilter,
-    groupsFilter,
     setGroupsFilter,
     sortFilter,
     toggleSortFilter,
     clearFilters,
-    gallery,
     setGallery,
     setCreatedAtFilter,
-    createdAtFilter,
     fetchMoreScroll,
-    restrictIncidentAccess,
   };
 };
 

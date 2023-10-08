@@ -136,7 +136,6 @@ const useArticleFeed = (): Return => {
 
   const { data, loading } = useListArticlesQuery({
     fetchPolicy: 'cache-and-network',
-    // @ts-expect-error TODO: fix this
     variables,
   });
   // update Article list after deleting an item

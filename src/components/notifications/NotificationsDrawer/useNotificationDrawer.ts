@@ -68,6 +68,13 @@ interface Scheme {
   taskTimeTracking: boolean;
   restrictIncidentAccess: boolean;
   reportOnly: boolean;
+  defaultGroups: {
+    id: string;
+    name: string;
+    scheme: {
+      id: string;
+    };
+  }[];
 }
 interface Return {
   data:
@@ -336,6 +343,7 @@ const useNotificationLists = (): Return => {
       facialRecognition: scheme.facialRecognition,
       imagesRequiredOnOffenders: scheme.imagesRequiredOnOffenders,
       taskTimeTracking: scheme.taskTimeTracking,
+      defaultGroups: scheme.defaultGroups || [],
     });
     setTodos({ userTodos: scheme.userTodos || 0 });
     setNotifications({

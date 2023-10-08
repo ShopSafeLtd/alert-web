@@ -41,6 +41,7 @@ import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import OffenderFilter from 'components/offenders/OffenderFilter';
 import type { DateType } from 'types/DataType';
 import { useIntl } from 'react-intl';
+import type { OffenderFilters } from 'state/data-model';
 import useStyles from './OffenderFeed.styles';
 
 // import useStyles from './OffenderFeed.styles';
@@ -55,40 +56,29 @@ interface Props {
   pagination: { page: number; pageSize: number; sizeOptions: string[] };
   order: OffenderSort;
   setOrder: (value: OffenderSort) => void;
-  search: string;
   setSearch: (value: string) => void;
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
-  tags: { value: string; label: string }[];
-  tagsLoading: boolean;
-  updateOffenderList: MutationUpdaterFn<RecycleOffenderMutation>;
-  onNavigate: () => void;
   lightBoxOpen: {
     open: boolean;
     index: number;
   };
+  tags: { value: string; label: string }[];
+  tagsLoading: boolean;
+  updateOffenderList: MutationUpdaterFn<RecycleOffenderMutation>;
+  onNavigate: () => void;
   sortFilter: boolean;
   toggleSortFilter: () => void;
-  ethnicity: Race[];
   setEthnicity: (value: Race[]) => void;
-  age: Age[];
   setAge: (value: Age[]) => void;
-  build: Build[];
   setBuild: (value: Build[]) => void;
-  sex: Gender[];
   setSex: (value: Gender[]) => void;
   setHair: (value: string) => void;
   setPeculiarities: (value: string) => void;
-  hair: string;
-  peculiarities: string;
   clearFilters: () => void;
-  gallery: string[];
   setGallery: (values: string[]) => void;
-  groupsFilter: string[];
   setGroupsFilter: (value: string[]) => void;
-  warnings: string[];
   setWarnings: (value: string[]) => void;
-  businesses: string[];
   setBusinesses: (value: string[]) => void;
   businessData: SearchBusinessesQuery | undefined;
   businessesLoading: boolean;
@@ -96,8 +86,8 @@ interface Props {
   customGalleriesData: ListCustomGalleriesQuery | undefined;
   adminRights: boolean;
   onSelectCustomGalleries: (values: string) => void;
-  customGalleries: string[];
   onSelectGallery: (value: string) => void;
+  variables: OffenderFilters;
 }
 
 const OffenderFeed = ({
@@ -109,25 +99,17 @@ const OffenderFeed = ({
   pagination,
   order,
   setOrder,
-  search,
   setSearch,
   groups,
   groupsLoading,
   tags,
-  updateOffenderList,
   tagsLoading,
+  updateOffenderList,
   onNavigate,
   lightBoxOpen,
   sortFilter,
   toggleSortFilter,
-  age,
-  build,
   clearFilters,
-  ethnicity,
-  gallery,
-  groupsFilter,
-  hair,
-  peculiarities,
   setAge,
   setBuild,
   setEthnicity,
@@ -137,21 +119,20 @@ const OffenderFeed = ({
   setPeculiarities,
   setSex,
   setWarnings,
-  sex,
-  warnings,
   businessData,
-  businesses,
   setBusinesses,
   businessesLoading,
   setCreatedAtFilter,
   customGalleriesData,
-  adminRights,
-  customGalleries,
-  onSelectCustomGalleries,
   onSelectGallery,
+  adminRights,
+  onSelectCustomGalleries,
+  variables,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const classes = useStyles();
+  // ???
+  const { search, gallery, customGalleries } = variables;
   const galleryOptions = [
     {
       label: intl.formatMessage({ defaultMessage: 'Active', id: '3a5wL8' }),
@@ -220,6 +201,7 @@ const OffenderFeed = ({
       ))}
     </Menu>
   );
+
   return (
     <div className="feed-container">
       <Affix offsetTop={5}>
@@ -434,13 +416,8 @@ const OffenderFeed = ({
           groupsLoading={groupsLoading}
           tags={tags}
           tagsLoading={tagsLoading}
-          age={age}
-          build={build}
+          variables={variables}
           clearFilters={clearFilters}
-          ethnicity={ethnicity}
-          groupsFilter={groupsFilter}
-          hair={hair}
-          peculiarities={peculiarities}
           setAge={setAge}
           setBuild={setBuild}
           setEthnicity={setEthnicity}
@@ -449,13 +426,10 @@ const OffenderFeed = ({
           setPeculiarities={setPeculiarities}
           setSex={setSex}
           setWarnings={setWarnings}
-          sex={sex}
-          warnings={warnings}
-          businessData={businessData}
-          businesses={businesses}
           setBusinesses={setBusinesses}
           businessesLoading={businessesLoading}
           setCreatedAtFilter={setCreatedAtFilter}
+          businessData={businessData}
         />
       </Drawer>
 

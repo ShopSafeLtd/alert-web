@@ -30,6 +30,9 @@ function getOptionList(navigationTree: NavTree) {
   let optionTree = [];
   for (const navItem of navigationTree) {
     if (navItem.submenu.length === 0) {
+      // ???
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       optionTree.push(navItem);
     }
     if (navItem.submenu.length > 0) {
@@ -63,15 +66,27 @@ interface searchResultRes {
 
 const searchResult = () =>
   optionList.map((item) => {
+    // ???
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const category = item.key.split('-')[0];
     return {
+      // ???
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       value: item.path,
       label: (
+        // ???
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         <Link to={item.path}>
           <div className="search-list-item">
             <div className="icon">{getCategoryIcon(category)}</div>
             <div>
               <div className="font-weight-semibold">
+                {/* // ???
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore */}
                 <IntlMessage id={item.title} />
               </div>
               <div className="font-size-sm text-muted">{category} </div>

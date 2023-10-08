@@ -6,17 +6,14 @@ const ListCrimeGroups = () => {
   const {
     data,
     loading,
-    search,
     setSearch,
-    groupsFilter,
     setGroupsFilter,
     setCreatedAtFilter,
     clearFilters,
     sortFilter,
     toggleSortFilter,
-    gallery,
     setGallery,
-    order,
+    variables,
     setOrder,
     groups,
     groupsLoading,
@@ -28,17 +25,14 @@ const ListCrimeGroups = () => {
     <View
       data={data}
       loading={loading}
-      search={search}
+      variables={variables}
       setSearch={setSearch}
       sortFilter={sortFilter}
       clearFilters={clearFilters}
       toggleSortFilter={toggleSortFilter}
-      gallery={gallery}
-      groupsFilter={groupsFilter}
       setGallery={setGallery}
       setGroupsFilter={setGroupsFilter}
       setCreatedAtFilter={setCreatedAtFilter}
-      order={order}
       setOrder={setOrder}
       groups={groups}
       groupsLoading={groupsLoading}

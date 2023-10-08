@@ -70,7 +70,9 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
   const intl = useIntl();
   const schemeId = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
-  const groups = useStoreState((state) => state.user.groups);
+  const userGroups = useStoreState((state) => state.user.groups).filter(
+    ({ scheme }) => scheme.id === schemeId
+  );
   const role = useStoreState((state) => state.user.role);
   const [saving, setSaving] = useState(false);
   const [ageCheck, setAgeCheck] = useState(false);
@@ -195,9 +197,9 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
           dateOfBirth: { set: ageCheck ? data.dateOfBirth || null : null },
           groups: {
             set:
-              groups.length > 1
+              userGroups.length > 1
                 ? data.groups.map((id) => ({ id }))
-                : groups.map(({ id }) => ({ id })),
+                : userGroups.map(({ id }) => ({ id })),
           },
           tags: {
             set: data.tags.map((id) => ({ id })) || undefined,

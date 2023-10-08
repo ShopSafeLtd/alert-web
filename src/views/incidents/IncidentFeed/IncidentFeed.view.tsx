@@ -16,9 +16,10 @@ import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view'
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
 import IncidentFilter from 'components/incidents/IncidentFilter';
-import type { DateType } from 'types/DataType';
 import { useIntl } from 'react-intl';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import type { DateType } from 'types/DataType';
+import type { IncidentFilters } from 'state/data-model';
 import Loading from '../../../components/shared-components/AntD/Loading';
 
 interface Props {
@@ -32,11 +33,8 @@ interface Props {
     open: boolean;
     index: number;
   };
-  // onPaginationChange: (page: number, pageSize: number) => void;
-  // pagination: { page: number; pageSize: number; sizeOptions: string[] };
   order: IncidentSort;
   setOrder: (value: IncidentSort) => void;
-  search: string;
   setSearch: (value: string) => void;
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
@@ -47,25 +45,20 @@ interface Props {
   sortFilter: boolean;
   toggleSortFilter: () => void;
   setPeculiarities: (value: string) => void;
-  peculiarities: string;
   clearFilters: () => void;
-  gallery: string[];
   setGallery: (values: string[]) => void;
-  groupsFilter: string[];
   setGroupsFilter: (value: string[]) => void;
-  crimeTypesFilter: string[];
   setCrimeTypesFilter: (value: string[]) => void;
-  goodsFilter: string[];
   goods: { value: string; label: string }[];
   setGoodsFilter: (value: string[]) => void;
   businesses: { value: string; label: string; location: string }[];
-  businessesFilter: string[];
   setBusinessesFilter: (value: string[]) => void;
   goodsLoading: boolean;
   businessesLoading: boolean;
   setIncidentDateFilter: (value: DateType | undefined) => void;
   setCreatedAtFilter: (value: DateType | undefined) => void;
   fetchMoreScroll: () => void;
+  variables: IncidentFilters;
 }
 
 const IncidentFeed = ({
@@ -77,7 +70,6 @@ const IncidentFeed = ({
   // pagination,
   order,
   setOrder,
-  search,
   setSearch,
   groups,
   groupsLoading,
@@ -89,25 +81,20 @@ const IncidentFeed = ({
   sortFilter,
   toggleSortFilter,
   clearFilters,
-  gallery,
-  peculiarities,
   setGallery,
   setPeculiarities,
-  groupsFilter,
   setGroupsFilter,
   businesses,
-  businessesFilter,
   goods,
-  goodsFilter,
   setGoodsFilter,
   setBusinessesFilter,
   goodsLoading,
   businessesLoading,
-  crimeTypesFilter,
   setCrimeTypesFilter,
   setIncidentDateFilter,
   setCreatedAtFilter,
   fetchMoreScroll,
+  variables,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return (
@@ -125,14 +112,14 @@ const IncidentFeed = ({
                 defaultMessage: 'Search Incidents...',
                 id: 'gvqTQ8',
               })}
-              value={search}
+              value={variables.search || ''}
               onChange={(e) => setSearch(e.target.value)}
             />
           </Col>
           <Col flex={1}>
             <CheckTags
               mode="radio"
-              value={gallery}
+              value={variables.gallery}
               onChange={setGallery}
               options={[
                 {
@@ -259,7 +246,7 @@ const IncidentFeed = ({
             >
               <Empty
                 description={
-                  search === ''
+                  variables.search === ''
                     ? intl.formatMessage({
                         defaultMessage: 'No Incidents',
                         id: '+nJOH5',
@@ -307,25 +294,21 @@ const IncidentFeed = ({
           setOrder={setOrder}
           groups={groups}
           groupsLoading={groupsLoading}
-          groupsFilter={groupsFilter}
           setGroupsFilter={setGroupsFilter}
           crimeTypes={crimeTypes}
-          crimeTypesFilter={crimeTypesFilter}
           tagsLoading={tagsLoading}
           setCrimeTypesFilter={setCrimeTypesFilter}
           clearFilters={clearFilters}
-          peculiarities={peculiarities}
           setPeculiarities={setPeculiarities}
           goods={goods}
           setGoodsFilter={setGoodsFilter}
-          goodsFilter={goodsFilter}
-          businessesFilter={businessesFilter}
           businesses={businesses}
           setBusinessesFilter={setBusinessesFilter}
           goodsLoading={goodsLoading}
           businessesLoading={businessesLoading}
           setIncidentDateFilter={setIncidentDateFilter}
           setCreatedAtFilter={setCreatedAtFilter}
+          variables={variables}
         />
       </Drawer>
       <Lightbox

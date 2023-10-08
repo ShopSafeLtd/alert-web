@@ -70,6 +70,18 @@ describe('Detail Officer View', () => {
         <MemoryRouter>
           <MockedProvider mocks={[]} addTypename={false}>
             <IncidentFeed
+              goods={[]}
+              variables={{
+                gallery: [],
+                search: '',
+                crimeTypes: [],
+                groups: [],
+                businesses: [],
+                createdAt: undefined,
+                incidentDate: undefined,
+                goods: [],
+                peculiarities: '',
+              }}
               setCreatedAtFilter={jest.fn()}
               setIncidentDateFilter={jest.fn()}
               lightBoxOpen={{
@@ -77,16 +89,9 @@ describe('Detail Officer View', () => {
                 index: 0,
               }}
               businesses={[]}
-              businessesFilter={[]}
               businessesLoading={false}
               clearFilters={jest.fn()}
-              crimeTypesFilter={[]}
-              gallery={[]}
-              goods={[]}
               goodsLoading={false}
-              goodsFilter={[]}
-              groupsFilter={[]}
-              peculiarities=""
               setBusinessesFilter={jest.fn()}
               setGallery={jest.fn()}
               sortFilter={false}
@@ -108,7 +113,6 @@ describe('Detail Officer View', () => {
               fetchMoreScroll={jest.fn()}
               order={IncidentSort.createdAtAsc}
               setOrder={jest.fn()}
-              search=""
               setSearch={jest.fn()}
               groups={[]}
               groupsLoading={false}

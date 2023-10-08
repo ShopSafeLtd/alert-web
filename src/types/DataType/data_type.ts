@@ -247,8 +247,8 @@ export interface DatedMessages {
 
 // date
 export interface DateType {
-  startDate: Moment | Date;
-  endDate: Moment | Date;
+  startDate: Date;
+  endDate: Date;
 }
 
 // businessData

@@ -91,6 +91,7 @@ export const NavScheme = () => {
       taskTimeTracking: scheme.scheme.taskTimeTracking,
       restrictIncidentAccess: scheme.scheme.restrictIncidentAccess,
       reportOnly: scheme.scheme.reportOnly,
+      defaultGroups: scheme.scheme.defaultGroups || [],
     });
     setTodos({ userTodos: scheme.scheme.userTodos || 0 });
     setNotifications({

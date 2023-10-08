@@ -21,7 +21,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import BuildTree from '../../../../utils/tags/tree-helper';
 import type { FormData } from './useSchemeDetail';
 
-const { Title, Text } = Typography;
+const { Title, Text, Paragraph } = Typography;
 
 interface Props {
   data: SchemeQuery | undefined;
@@ -36,6 +36,12 @@ interface Props {
   fileList: UploadFile[];
   imgChange: UploadProps['onChange'];
   updateTagParent: (tagId: string, parentTagId: string | null) => void;
+  groups:
+    | {
+        value: string;
+        label: string;
+      }[]
+    | undefined;
 }
 
 // wait to check
@@ -62,6 +68,7 @@ const SchemeDetail = ({
   darkImgChange,
   darkFileList,
   updateTagParent,
+  groups,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return (
@@ -100,6 +107,11 @@ const SchemeDetail = ({
             defaultPublicOffenderDOB: data?.scheme?.defaultPublicOffenderDOB,
             facialRecognition: data?.scheme?.facialRecognition,
             imagesRequiredOnOffenders: data?.scheme?.imagesRequiredOnOffenders,
+            defaultGroups:
+              data?.scheme?.defaultGroups &&
+              data.scheme.defaultGroups.length > 0
+                ? data.scheme.defaultGroups.map(({ id }) => id)
+                : [],
           }}
         >
           <Card>
@@ -216,19 +228,29 @@ const SchemeDetail = ({
           </Card>
 
           <Card>
-            <Title level={4}>
-              <FormattedMessage
-                defaultMessage="Auto Approve Options:"
-                id="dU7aDE"
-              />
-            </Title>
-            <Text type="secondary">
-              {intl.formatMessage({
-                defaultMessage:
-                  'Enabling auto approve will automatically approve any new incidents and offenders without manual approval.',
-                id: 'U7hOD2',
-              })}
-            </Text>
+            <Row align="bottom" style={{ marginBottom: 10 }}>
+              <Col>
+                <Title style={{ marginBottom: 0 }} level={4}>
+                  {intl.formatMessage({
+                    defaultMessage: 'Auto Approve Options',
+                    id: 'eR+rwC',
+                  })}
+                </Title>
+              </Col>
+              <Col>
+                <Paragraph
+                  style={{ marginBottom: 1, marginLeft: 5 }}
+                  type="secondary"
+                  italic
+                >
+                  {intl.formatMessage({
+                    defaultMessage:
+                      '- Enabling auto approve will automatically approve any new incidents and offenders without manual approval.',
+                    id: '1BGVBM',
+                  })}
+                </Paragraph>
+              </Col>
+            </Row>
 
             <Row>
               <Col span={15}>
@@ -254,6 +276,7 @@ const SchemeDetail = ({
                     id: 'FID+qO',
                   })}
                   valuePropName="checked"
+                  style={{ marginBottom: 0 }}
                 >
                   <Switch
                     disabled={saving}
@@ -264,20 +287,31 @@ const SchemeDetail = ({
               </Col>
             </Row>
           </Card>
+
           <Card>
-            <Title level={4} style={{ marginBottom: 15 }}>
-              {intl.formatMessage({
-                defaultMessage: 'Date Retention:',
-                id: 'qcTvaq',
-              })}
-            </Title>
-            <Text type="secondary">
-              {intl.formatMessage({
-                defaultMessage:
-                  'Select a period of time to retain data before it is automatically deleted. You can also disable this feature and manually audit your data',
-                id: '6Inpr1',
-              })}
-            </Text>
+            <Row align="bottom" style={{ marginBottom: 15 }}>
+              <Col>
+                <Title style={{ marginBottom: 0 }} level={4}>
+                  {intl.formatMessage({
+                    defaultMessage: 'Date Retention',
+                    id: '4y0se4',
+                  })}
+                </Title>
+              </Col>
+              <Col>
+                <Paragraph
+                  style={{ marginBottom: 1, marginLeft: 5 }}
+                  type="secondary"
+                  italic
+                >
+                  {intl.formatMessage({
+                    defaultMessage:
+                      '- Select a period of time to retain data before it is automatically deleted. You can also disable this feature and manually audit your data',
+                    id: 'qRk0gy',
+                  })}
+                </Paragraph>
+              </Col>
+            </Row>
 
             <Row>
               <Col span={6}>
@@ -376,19 +410,29 @@ const SchemeDetail = ({
           </Card>
 
           <Card>
-            <Title level={4}>
-              {intl.formatMessage({
-                defaultMessage: 'Default New User Settings:',
-                id: '+yKhr6',
-              })}
-            </Title>
-            <Text type="secondary">
-              {intl.formatMessage({
-                defaultMessage:
-                  'The settings that will be selected by default for all new users created in the scheme.',
-                id: 'GFlSjL',
-              })}
-            </Text>
+            <Row align="bottom" style={{ marginBottom: 10 }}>
+              <Col>
+                <Title style={{ marginBottom: 0 }} level={4}>
+                  {intl.formatMessage({
+                    defaultMessage: 'Default New User Settings',
+                    id: 'si32g3',
+                  })}
+                </Title>
+              </Col>
+              <Col>
+                <Paragraph
+                  style={{ marginBottom: 1, marginLeft: 5 }}
+                  type="secondary"
+                  italic
+                >
+                  {intl.formatMessage({
+                    defaultMessage:
+                      '- The settings that will be selected by default for all new users created in the scheme.',
+                    id: 'TDAbcc',
+                  })}
+                </Paragraph>
+              </Col>
+            </Row>
 
             <Row>
               <Col span={15}>
@@ -484,6 +528,7 @@ const SchemeDetail = ({
                     className="scheme-detail-switch"
                   />
                 </Form.Item>
+
                 <Form.Item
                   name="defaultMessagePush"
                   label={intl.formatMessage({
@@ -492,6 +537,7 @@ const SchemeDetail = ({
                     id: '0UFWIV',
                   })}
                   valuePropName="checked"
+                  style={{ marginBottom: 0 }}
                 >
                   <Switch
                     disabled={saving}
@@ -502,6 +548,7 @@ const SchemeDetail = ({
               </Col>
             </Row>
           </Card>
+
           <Card>
             <Title level={4}>
               {intl.formatMessage({
@@ -509,18 +556,13 @@ const SchemeDetail = ({
                 id: '0f4k8n',
               })}
             </Title>
-            {/* <Text type="secondary">
-                The settings that will be selected by default for all new users
-                created in the scheme.
-              </Text> */}
-
             <Row>
               <Col span={15}>
                 <Form.Item
                   label={intl.formatMessage({
                     defaultMessage:
-                      'Only allow user to report, no access to view any content',
-                    id: 'jHFLLl',
+                      'Only allow user to report(no access to view any content)',
+                    id: 'CJJgGX',
                   })}
                   name="reportOnly"
                   valuePropName="checked"
@@ -538,8 +580,8 @@ const SchemeDetail = ({
           <Card>
             <Title level={4}>
               {intl.formatMessage({
-                defaultMessage: 'Default Offender Settings:',
-                id: 'lEBqus',
+                defaultMessage: 'Default Offender Settings',
+                id: 'TMSzEz',
               })}
             </Title>
             {/* <Text type="secondary">
@@ -606,8 +648,8 @@ const SchemeDetail = ({
           <Card>
             <Title level={4}>
               {intl.formatMessage({
-                defaultMessage: 'Default Incident Settings:',
-                id: 'NnYRAS',
+                defaultMessage: 'Default Incident Settings',
+                id: 'ubIaay',
               })}
             </Title>
             {/* <Text type="secondary">
@@ -645,6 +687,35 @@ const SchemeDetail = ({
                     disabled={saving}
                     style={{ marginLeft: 5 }}
                     className="scheme-detail-switch"
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+          </Card>
+          <Card>
+            <Title level={4}>
+              {intl.formatMessage({
+                defaultMessage: 'Default Filter Settings:',
+                id: 'eoObTj',
+              })}
+            </Title>
+            <Row>
+              <Col span={10}>
+                <Form.Item
+                  label={intl.formatMessage({
+                    defaultMessage: 'Default Groups',
+                    id: '2KZp/e',
+                  })}
+                  name="defaultGroups"
+                  style={{ marginBottom: 0 }}
+                >
+                  <Select
+                    disabled={saving}
+                    mode="multiple"
+                    maxTagCount={3}
+                    options={groups}
+                    optionFilterProp="label"
+                    optionLabelProp="label"
                   />
                 </Form.Item>
               </Col>

@@ -14,12 +14,14 @@ import { Role, Age, Build, Gender, Race } from 'graphql/generated';
 import { OffenderSort, useStoreState } from 'state';
 import type { DateType } from 'types/DataType';
 import { useIntl } from 'react-intl';
+import type { OffenderFilters } from 'state/data-model';
+import moment from 'moment';
 import useStyles from './OffenderFilter.styles';
 
 const { RangePicker } = DatePicker;
 const { useForm } = Form;
 interface FormData {
-  date: Date;
+  createdAt: Date;
 }
 interface Props {
   order: OffenderSort;
@@ -28,28 +30,20 @@ interface Props {
   groupsLoading: boolean;
   tags: { value: string; label: string }[];
   tagsLoading: boolean;
-  ethnicity: Race[];
   setEthnicity: (value: Race[]) => void;
-  age: Age[];
   setAge: (value: Age[]) => void;
-  build: Build[];
   setBuild: (value: Build[]) => void;
-  sex: Gender[];
   setSex: (value: Gender[]) => void;
   setHair: (value: string) => void;
   setPeculiarities: (value: string) => void;
-  hair: string;
-  peculiarities: string;
   clearFilters: () => void;
-  groupsFilter: string[];
   setGroupsFilter: (value: string[]) => void;
-  warnings: string[];
   setWarnings: (value: string[]) => void;
-  businesses: string[];
   setBusinesses: (value: string[]) => void;
   businessData: SearchBusinessesQuery | undefined;
   businessesLoading: boolean;
   setCreatedAtFilter: (value: DateType | undefined) => void;
+  variables: OffenderFilters;
 }
 
 const OffenderFilter = ({
@@ -59,13 +53,7 @@ const OffenderFilter = ({
   groupsLoading,
   tags,
   tagsLoading,
-  age,
-  build,
   clearFilters,
-  ethnicity,
-  groupsFilter,
-  hair,
-  peculiarities,
   setAge,
   setBuild,
   setEthnicity,
@@ -74,13 +62,11 @@ const OffenderFilter = ({
   setPeculiarities,
   setSex,
   setWarnings,
-  sex,
-  warnings,
   businessData,
-  businesses,
   setBusinesses,
   businessesLoading,
   setCreatedAtFilter,
+  variables,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const [form] = useForm<FormData>();
@@ -89,8 +75,31 @@ const OffenderFilter = ({
   const publicOffenderDOB =
     useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
     role !== Role.User;
+
+  const {
+    groups: groupsFilter,
+    businesses,
+    createdAt: createdAtFilter,
+    peculiarities,
+    hair,
+    warnings,
+    ethnicity,
+    age,
+    build,
+    sex,
+  } = variables;
   return (
-    <Form<FormData> form={form}>
+    <Form<FormData>
+      form={form}
+      initialValues={{
+        createdAt: createdAtFilter
+          ? [
+              moment(createdAtFilter?.startDate),
+              moment(createdAtFilter?.endDate),
+            ]
+          : undefined,
+      }}
+    >
       <Row justify="end">
         <Col>
           <Button
@@ -99,7 +108,7 @@ const OffenderFilter = ({
             onClick={() => {
               clearFilters();
               form.setFieldsValue({
-                date: [],
+                createdAt: [],
               });
             }}
           >
@@ -145,7 +154,7 @@ const OffenderFilter = ({
             })}
           </Typography.Paragraph>
 
-          <Form.Item name="date">
+          <Form.Item name="createdAt" style={{ marginBottom: 0 }}>
             <RangePicker
               className={classes.select}
               onChange={(value) => {
