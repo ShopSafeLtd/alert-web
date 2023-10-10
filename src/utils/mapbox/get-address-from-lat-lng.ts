@@ -10,8 +10,9 @@ interface Response {
 
 /**
  * Get the address from a lat lng pair.
- * @param {number} lat - The latitude.
- * @param {number} lng - The longitude.
+ * @param {Object} input - An object containing the lat and lng. Both are required.
+ * @param {number} input.lat - The latitude.
+ * @param {number} input.lng - The longitude.
  * @returns {Promise<{street: string, city: string, postcode: string, lat: number, lng: number}>} Returns an object containing the street, city, postcode, lat, and lng. On error returns empty strings and 0 for lat and lng.
  */
 const getAddressFromLatLng = async ({
@@ -41,8 +42,8 @@ const getAddressFromLatLng = async ({
       import.meta.env.VITE_MAPBOX_ACCESS_TOKEN
     }`
   );
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const data: Response = await response.json();
+
+  const data = (await response.json()) as Response;
   if (!data)
     return {
       street: '',
@@ -60,8 +61,8 @@ const getAddressFromLatLng = async ({
     context.id.includes('place')
   );
   const street = data.features[0].place_name.split(',')[0] || '';
-  const city = placeContext?.text || '';
-  const postcode = postcodeContext?.text || '';
+  const city = placeContext?.text ?? '';
+  const postcode = postcodeContext?.text ?? '';
 
   return {
     street,
