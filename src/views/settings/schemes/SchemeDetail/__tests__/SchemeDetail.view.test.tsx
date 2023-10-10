@@ -2,6 +2,7 @@ import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import SchemeList from '../SchemeDetail.view';
+import { GoodsMode } from 'graphql/generated';
 
 describe('List Officer View', () => {
   const data = {
@@ -26,7 +27,7 @@ describe('List Officer View', () => {
       reportOnly: true,
       facialRecognition: true,
       imagesRequiredOnOffenders: true,
-      defaultGroups: [],
+      goodsMode: GoodsMode.Generic,
     },
   };
   it('renders the page', () => {
@@ -45,7 +46,6 @@ describe('List Officer View', () => {
           fileList={[]}
           darkFileList={[]}
           darkImgChange={jest.fn()}
-          groups={[]}
         />
       </MemoryRouter>
     );

@@ -34,9 +34,8 @@ const useAuth = (): Return => {
   const handleSignOut = useStoreActions((actions) => actions.auth.signOut);
   const setUser = useStoreActions((actions) => actions.user.setUser);
   const clearUser = useStoreActions((actions) => actions.user.clearUser);
-  const { setRole, setTodos, setNotifications } = useStoreActions(
-    (actions) => actions.user
-  );
+  const { setRole, setTodos, setNotifications, setFilterDefaultGroup } =
+    useStoreActions((actions) => actions.user);
   const setScheme = useStoreActions((actions) => actions.scheme.setScheme);
   const setAuthMessage = useStoreActions(
     (actions) => actions.auth.setAuthMessage
@@ -87,7 +86,11 @@ const useAuth = (): Return => {
         imagesRequiredOnOffenders: schemeDetails?.imagesRequiredOnOffenders,
         taskTimeTracking: schemeDetails?.taskTimeTracking,
         languageCount: schemeDetails?.languageCount || 0,
-        defaultGroups: schemeDetails?.defaultGroups || [],
+      });
+      setFilterDefaultGroup({
+        filterDefaultGroups: defaultGroups.filter(
+          (el) => el.scheme.id === schemeDetails.id
+        ),
       });
       setTodos({ userTodos: schemes[0]?.scheme?.userTodos || 0 });
       setNotifications({
@@ -127,7 +130,11 @@ const useAuth = (): Return => {
             schemeDetails.scheme.imagesRequiredOnOffenders,
           taskTimeTracking: schemeDetails.scheme.taskTimeTracking,
           languageCount: schemeDetails.scheme.languageCount || 0,
-          defaultGroups: schemeDetails.scheme.defaultGroups || [],
+        });
+        setFilterDefaultGroup({
+          filterDefaultGroups: defaultGroups.filter(
+            (el) => el.scheme.id === schemeDetails.scheme.id
+          ),
         });
         setTodos({ userTodos: schemeDetails?.scheme?.userTodos || 0 });
       } else {
@@ -161,7 +168,9 @@ const useAuth = (): Return => {
       businessId: businesses[0]?.id || '',
       businessName: businesses[0]?.name || '',
     });
-
+    const filterDefaultGroups = defaultGroups.filter(
+      (el) => el.scheme.id === scheme
+    );
     Sentry.setUser({ email, username: fullName, id });
     setUser({
       id,
@@ -177,12 +186,14 @@ const useAuth = (): Return => {
       reference,
       userNotifications,
       defaultGroups,
+      filterDefaultGroups,
     });
     authenticated(accessToken);
   };
 
   const [getCurrentUser, { loading }] = useCurrentUserLazyQuery({
     nextFetchPolicy: 'cache-and-network',
+
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onCompleted: async ({ currentUser }) => {
       const scheme =
@@ -217,12 +228,15 @@ const useAuth = (): Return => {
         onboarded: !currentUser?.newUser,
         schemes: currentUser?.schemes || [],
         groups: currentUser?.groups || [],
-        defaultGroups: currentUser?.defaultGroups || [],
         demId: currentUser?.demId || '',
         isSet: true,
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         reference: `${currentUser?.reference}` || '',
         userNotifications: currentUser?.notificationCount || 0,
+        defaultGroups: currentUser?.defaultGroups || [],
+        filterDefaultGroups:
+          currentUser?.defaultGroups.filter((el) => el.scheme.id === scheme) ||
+          [],
       });
       if (currentUser?.newUser) {
         navigate('/app/onboarding');
@@ -296,11 +310,14 @@ const useAuth = (): Return => {
       businesses: data.businesses,
       schemes: data.schemes,
       groups: data.groups,
-      defaultGroups: data.defaultGroups,
       isSet: true,
       demId: data.demId,
       reference: data.reference,
       userNotifications: data.userNotifications,
+      defaultGroups: data.defaultGroups,
+      filterDefaultGroups: data.defaultGroups.filter(
+        (el) => el.scheme.id === scheme
+      ),
     });
   };
 

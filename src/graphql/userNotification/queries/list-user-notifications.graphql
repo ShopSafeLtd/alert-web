@@ -36,13 +36,7 @@ query listUserNotifications(
           userNotifications
           languageCount
           autoPopulateDescription
-          defaultGroups {
-            id
-            name
-            scheme {
-              id
-            }
-          }
+
           logo {
             optimisedPersisted
             id

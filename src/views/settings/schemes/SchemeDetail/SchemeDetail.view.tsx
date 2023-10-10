@@ -1,5 +1,6 @@
 import React from 'react';
 import type { ListSchemeTagsQuery, SchemeQuery } from 'graphql/generated';
+import { GoodsMode } from 'graphql/generated';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import {
   Button,
@@ -36,12 +37,6 @@ interface Props {
   fileList: UploadFile[];
   imgChange: UploadProps['onChange'];
   updateTagParent: (tagId: string, parentTagId: string | null) => void;
-  groups:
-    | {
-        value: string;
-        label: string;
-      }[]
-    | undefined;
 }
 
 // wait to check
@@ -68,7 +63,6 @@ const SchemeDetail = ({
   darkImgChange,
   darkFileList,
   updateTagParent,
-  groups,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return (
@@ -107,11 +101,7 @@ const SchemeDetail = ({
             defaultPublicOffenderDOB: data?.scheme?.defaultPublicOffenderDOB,
             facialRecognition: data?.scheme?.facialRecognition,
             imagesRequiredOnOffenders: data?.scheme?.imagesRequiredOnOffenders,
-            defaultGroups:
-              data?.scheme?.defaultGroups &&
-              data.scheme.defaultGroups.length > 0
-                ? data.scheme.defaultGroups.map(({ id }) => id)
-                : [],
+            goodsMode: data?.scheme?.goodsMode,
           }}
         >
           <Card>
@@ -658,7 +648,7 @@ const SchemeDetail = ({
               </Text> */}
 
             <Row>
-              <Col span={15}>
+              <Col span={6}>
                 <Form.Item
                   label={intl.formatMessage({
                     defaultMessage: 'Restrict users access to Incidents',
@@ -689,38 +679,39 @@ const SchemeDetail = ({
                     className="scheme-detail-switch"
                   />
                 </Form.Item>
-              </Col>
-            </Row>
-          </Card>
-          <Card>
-            <Title level={4}>
-              {intl.formatMessage({
-                defaultMessage: 'Default Filter Settings:',
-                id: 'eoObTj',
-              })}
-            </Title>
-            <Row>
-              <Col span={10}>
                 <Form.Item
                   label={intl.formatMessage({
-                    defaultMessage: 'Default Groups',
-                    id: '2KZp/e',
+                    defaultMessage: 'Goods Mode',
+                    id: '1Hqwa+',
                   })}
-                  name="defaultGroups"
+                  name="goodsMode"
                   style={{ marginBottom: 0 }}
                 >
-                  <Select
-                    disabled={saving}
-                    mode="multiple"
-                    maxTagCount={3}
-                    options={groups}
-                    optionFilterProp="label"
-                    optionLabelProp="label"
-                  />
+                  <Select disabled={saving}>
+                    <Select.Option
+                      key={GoodsMode.Generic}
+                      value={GoodsMode.Generic}
+                    >
+                      {intl.formatMessage({
+                        defaultMessage: 'Generic',
+                        id: 'IL4EQo',
+                      })}
+                    </Select.Option>
+                    <Select.Option
+                      key={GoodsMode.Specific}
+                      value={GoodsMode.Specific}
+                    >
+                      {intl.formatMessage({
+                        defaultMessage: 'Specific',
+                        id: 'Ky5YNj',
+                      })}
+                    </Select.Option>
+                  </Select>
                 </Form.Item>
               </Col>
             </Row>
           </Card>
+
           <Form.Item>
             <Row style={{ marginTop: 30 }} gutter={16} justify="end">
               <Col>

@@ -44,9 +44,7 @@ const useListCrimeGroups = (): Return => {
     id: userId,
     defaultGroups,
   } = useStoreState((state) => state.user);
-  const defaultGroupsId = defaultGroups
-    .filter(({ scheme }) => scheme.id === schemeId)
-    .map(({ id }) => id);
+
   const pagination = useStoreState(
     (state) => state.data.crimeGroups.pagination
   );
@@ -151,7 +149,7 @@ const useListCrimeGroups = (): Return => {
       },
       variables: {
         ...filterVariables,
-        groups: defaultGroupsId,
+        groups: defaultGroups.map(({ id }) => id),
       },
     });
   }, []);

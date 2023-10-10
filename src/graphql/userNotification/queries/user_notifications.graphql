@@ -7,6 +7,7 @@ query userNotifications(
     id
     totalNotifications
     totalUnreadNotifications
+
     notifications(where: $notificationWhere, orderBy: $orderBy) {
       id
       read
@@ -33,13 +34,7 @@ query userNotifications(
           userNotifications
           languageCount
           autoPopulateDescription
-          defaultGroups {
-            id
-            name
-            scheme {
-              id
-            }
-          }
+
           logo {
             optimisedPersisted
             id

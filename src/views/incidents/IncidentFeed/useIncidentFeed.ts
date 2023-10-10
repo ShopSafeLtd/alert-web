@@ -110,9 +110,7 @@ const useIncidentFeed = (): Return => {
   const setIncidentsState = useStoreActions(
     (actions) => actions.data.setIncidents
   );
-  const defaultGroupsId = defaultGroups
-    .filter(({ scheme }) => scheme.id === schemeId)
-    .map(({ id }) => id);
+
   const {
     search,
     crimeTypes: crimeTypesFilter,
@@ -377,7 +375,7 @@ const useIncidentFeed = (): Return => {
       },
       variables: {
         ...variables,
-        groups: defaultGroupsId,
+        groups: defaultGroups.map(({ id }) => id),
       },
       order,
     });

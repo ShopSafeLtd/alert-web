@@ -5,7 +5,11 @@ import { MockedProvider } from '@apollo/client/testing';
 import { createStore, StoreProvider } from 'easy-peasy';
 import { storeModel } from 'state';
 import { MemoryRouter } from 'react-router-dom';
-import { SchemeDocument, UpdateSchemeDocument } from 'graphql/generated';
+import {
+  GoodsMode,
+  SchemeDocument,
+  UpdateSchemeDocument,
+} from 'graphql/generated';
 import useSchemeDetail from '../useSchemeDetail';
 
 const mocks = [
@@ -93,7 +97,7 @@ const UseRecycledItemListTest = () => {
             reportOnly: true,
             facialRecognition: true,
             imagesRequiredOnOffenders: true,
-            defaultGroups: [],
+            goodsMode: GoodsMode.Generic,
           })
         }
       >

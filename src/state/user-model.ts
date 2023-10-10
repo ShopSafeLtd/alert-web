@@ -34,10 +34,25 @@ export interface SetUserPayload {
       id: string;
     };
   }[];
+  filterDefaultGroups: {
+    id: string;
+    name: string;
+    scheme: {
+      id: string;
+    };
+  }[];
   isSet: boolean;
   userNotifications: number;
 }
-
+export interface SetFilterDefaultGroup {
+  filterDefaultGroups: {
+    id: string;
+    name: string;
+    scheme: {
+      id: string;
+    };
+  }[];
+}
 export interface SetUserRole {
   role: Role;
 }
@@ -86,13 +101,6 @@ export interface Scheme {
     taskTimeTracking: boolean;
     imagesRequiredOnOffenders: boolean;
     autoPopulateDescription: boolean;
-    defaultGroups: {
-      id: string;
-      name: string;
-      scheme: {
-        id: string;
-      };
-    }[];
   };
 }
 
@@ -132,11 +140,19 @@ export interface UserModel {
       id: string;
     };
   }[];
+  filterDefaultGroups: {
+    id: string;
+    name: string;
+    scheme: {
+      id: string;
+    };
+  }[];
   role: Role;
   isSet: boolean;
   investigationAllSchemes: boolean;
   setUser: Action<UserModel, SetUserPayload>;
   setRole: Action<UserModel, SetUserRole>;
+  setFilterDefaultGroup: Action<UserModel, SetFilterDefaultGroup>;
   setTodos: Action<UserModel, SetUserTodos>;
   setInvestigationAllSchemes: Action<UserModel, SetInvestigationAllSchemes>;
   setNotifications: Action<UserModel, SetUserNotifications>;
@@ -157,6 +173,7 @@ const userModel: UserModel = {
   schemes: [],
   groups: [],
   defaultGroups: [],
+  filterDefaultGroups: [],
   demId: '',
   userTodos: 0,
   userNotifications: 0,
@@ -170,13 +187,15 @@ const userModel: UserModel = {
     state.businesses = payload.businesses;
     state.schemes = payload.schemes;
     state.groups = payload.groups;
-    // ??? how to get currentScheme
-    state.defaultGroups =
-      payload.defaultGroups || payload.schemes[0].scheme.defaultGroups || [];
+    state.defaultGroups = payload.defaultGroups || [];
+    state.filterDefaultGroups = payload.filterDefaultGroups || [];
     state.isSet = payload.isSet;
     state.demId = payload.demId;
     state.reference = payload.reference;
     state.userNotifications = payload.userNotifications;
+  }),
+  setFilterDefaultGroup: action((state, payload) => {
+    state.filterDefaultGroups = payload.filterDefaultGroups;
   }),
   setRole: action((state, payload) => {
     state.role = payload.role;

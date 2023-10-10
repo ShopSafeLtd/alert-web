@@ -47,6 +47,10 @@ export const NavScheme = () => {
   const setNotifications = useStoreActions(
     (actions) => actions.user.setNotifications
   );
+  const defaultGroups = useStoreState((state) => state.user.defaultGroups);
+  const setFilterDefaultGroup = useStoreActions(
+    (state) => state.user.setFilterDefaultGroup
+  );
 
   const [visible, setVisible] = useState(false);
 
@@ -72,7 +76,6 @@ export const NavScheme = () => {
       'logo-dark',
       scheme.scheme.darkLogo?.optimisedPersisted || ''
     );
-
     setScheme({
       languageCount: scheme.scheme.languageCount,
       autoPopulateDescription: scheme.scheme.autoPopulateDescription,
@@ -91,7 +94,11 @@ export const NavScheme = () => {
       taskTimeTracking: scheme.scheme.taskTimeTracking,
       restrictIncidentAccess: scheme.scheme.restrictIncidentAccess,
       reportOnly: scheme.scheme.reportOnly,
-      defaultGroups: scheme.scheme.defaultGroups || [],
+    });
+    setFilterDefaultGroup({
+      filterDefaultGroups: defaultGroups.filter(
+        (el) => el.scheme.id === scheme.scheme.id
+      ),
     });
     setTodos({ userTodos: scheme.scheme.userTodos || 0 });
     setNotifications({

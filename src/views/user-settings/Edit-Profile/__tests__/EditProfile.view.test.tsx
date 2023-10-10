@@ -57,7 +57,6 @@ describe('Detail Officer View', () => {
             imagesRequiredOnOffenders: false,
             taskTimeTracking: false,
             reportOnly: true,
-            defaultGroups: [],
           },
         },
       ],
@@ -74,6 +73,7 @@ describe('Detail Officer View', () => {
           onClose={jest.fn()}
           resetConfirm={jest.fn()}
           groups={[]}
+          userDefaultGroups={[]}
         />
       </MemoryRouter>
     );

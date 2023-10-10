@@ -227,17 +227,14 @@ class Utils {
    * @param {Object} screens - Grid.useBreakpoint() from antd
    * @return {Array} array of breakpoint size
    */
-  static getBreakPoint(screens: any) {
-    const breakpoints = [];
+  static getBreakPoint(screens: any): string[] {
+    const breakpoints: string[] = [];
     // eslint-disable-next-line no-restricted-syntax
     for (const key in screens) {
       // eslint-disable-next-line no-prototype-builtins
       if (screens.hasOwnProperty(key)) {
         const element = screens[key];
         if (element) {
-          // ???
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
           breakpoints.push(key);
         }
       }

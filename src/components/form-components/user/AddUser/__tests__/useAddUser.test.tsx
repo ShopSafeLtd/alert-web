@@ -278,6 +278,7 @@ const UseAddUserTest = () => {
             groups: ['groupId'],
             chats: ['chatId'],
             approverGroups: [],
+            defaultGroups: [],
           })
         }
       >

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-floating-promises,@typescript-eslint/no-unsafe-assignment */
 import { useState } from 'react';
-import type { SchemeQuery, ViewTagQuery } from 'graphql/generated';
+import type { GoodsMode, SchemeQuery, ViewTagQuery } from 'graphql/generated';
 import {
   Model,
   TagType,
@@ -36,7 +36,7 @@ export interface FormData {
   offenderRetention: number | null;
   facialRecognition: boolean;
   imagesRequiredOnOffenders: boolean;
-  defaultGroups: string[];
+  goodsMode: GoodsMode;
 }
 
 interface Return {
@@ -52,12 +52,6 @@ interface Return {
   darkImgChange: UploadProps['onChange'];
   updateTagParent: (tagId: string, parentTagId: string | null) => void;
   tags: ViewTagQuery | undefined;
-  groups:
-    | {
-        value: string;
-        label: string;
-      }[]
-    | undefined;
 }
 
 const useSchemeDetail = (): Return => {
@@ -68,9 +62,6 @@ const useSchemeDetail = (): Return => {
   const [darkImageChange, setDarkImageChange] = useState(false);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [darkFileList, setDarkFileList] = useState<UploadFile[]>([]);
-  const userGroups = useStoreState((state) => state.user.groups).filter(
-    ({ scheme }) => scheme.id === schemeId
-  );
 
   const { data: tags } = useListSchemeTagsQuery({
     variables: {
@@ -158,15 +149,6 @@ const useSchemeDetail = (): Return => {
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
-    const defaultGroupIds = schemeData?.scheme?.defaultGroups.map(
-      (item) => item.id
-    );
-    const connectDefaultGroups = data.defaultGroups.filter(
-      (id) => !defaultGroupIds?.includes(id)
-    );
-    const disconnectDefaultGroups = defaultGroupIds?.filter(
-      (id) => !data.defaultGroups.map((item) => item).includes(id)
-    );
 
     updateScheme({
       variables: {
@@ -196,14 +178,7 @@ const useSchemeDetail = (): Return => {
           defaultPublicOffenderDOB: { set: data.defaultPublicOffenderDOB },
           facialRecognition: { set: data.facialRecognition },
           imagesRequiredOnOffenders: { set: data.imagesRequiredOnOffenders },
-          defaultGroups: {
-            connect: disconnectDefaultGroups
-              ? connectDefaultGroups.map((id) => ({ id }))
-              : undefined,
-            disconnect: disconnectDefaultGroups
-              ? disconnectDefaultGroups.map((id) => ({ id }))
-              : undefined,
-          },
+          goodsMode: data.goodsMode ? { set: data.goodsMode } : undefined,
           // ???
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
@@ -364,10 +339,6 @@ const useSchemeDetail = (): Return => {
     darkFileList,
     darkImgChange,
     tags,
-    groups: userGroups.map((group) => ({
-      value: group.id,
-      label: group.name,
-    })),
   };
 };
 

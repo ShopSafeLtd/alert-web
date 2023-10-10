@@ -33,21 +33,27 @@ interface Return {
   loading: boolean;
   saving: boolean;
   groups: SelectOptions[] | undefined;
+  userDefaultGroups: string[] | undefined;
 }
 
 const useEditProfile = (): Return => {
   const intl = useIntl();
   const navigate = useNavigate();
-  const userId = useStoreState((state) => state.user.id);
+  const {
+    id: userId,
+    groups: userGroups,
+    filterDefaultGroups: defaultGroups,
+  } = useStoreState((state) => state.user);
   const schemeId = useStoreState((state) => state.scheme.id);
-  const userGroups = useStoreState((state) => state.user.groups);
   const [saving, setSaving] = useState(false);
-
   const onClose = () => navigate('/app/incidents');
 
   const { data: userData, loading } = useCurrentUserQuery({
     fetchPolicy: 'cache-and-network',
   });
+  const userDefaultGroups = userData?.currentUser?.defaultGroups.filter(
+    ({ scheme }) => scheme.id === schemeId
+  );
 
   const [updateUser] = useUpdateUserMutation({
     onCompleted: () => {
@@ -73,9 +79,7 @@ const useEditProfile = (): Return => {
   const onSubmit = (data: FormData) => {
     setSaving(true);
     if (userId) {
-      const defaultGroupIds = userData?.currentUser?.defaultGroups.map(
-        (item) => item.id
-      );
+      const defaultGroupIds = userDefaultGroups?.map((item) => item.id);
       const connectDefaultGroups = data.defaultGroups.filter(
         (id) => !defaultGroupIds?.includes(id)
       );
@@ -149,6 +153,7 @@ const useEditProfile = (): Return => {
       },
     });
   };
+
   return {
     onSubmit,
     onClose,
@@ -156,10 +161,13 @@ const useEditProfile = (): Return => {
     data: userData,
     loading,
     saving,
-    groups: userGroups.map((group) => ({
-      value: group.id,
-      label: group.name,
-    })),
+    groups: userGroups
+      .filter(({ scheme }) => scheme.id === schemeId)
+      .map((group) => ({
+        value: group.id,
+        label: group.name,
+      })),
+    userDefaultGroups: (userDefaultGroups || defaultGroups).map(({ id }) => id),
   };
 };
 

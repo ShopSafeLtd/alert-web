@@ -15,7 +15,6 @@ import {
 } from 'antd';
 import { FormattedMessage, useIntl } from 'react-intl';
 import type { SelectOptions } from 'types/DataType';
-import { useStoreState } from 'state';
 import type { FormData } from './useEditProfile';
 
 const { Title, Paragraph } = Typography;
@@ -28,6 +27,7 @@ interface Props {
   loading: boolean;
   saving: boolean;
   groups: SelectOptions[] | undefined;
+  userDefaultGroups: string[] | undefined;
 }
 const EditProfile = ({
   onSubmit,
@@ -37,9 +37,9 @@ const EditProfile = ({
   loading,
   saving,
   groups,
+  userDefaultGroups,
 }: Props): JSX.Element => {
   const intl = useIntl();
-  const defaultGroups = useStoreState((state) => state.user.defaultGroups);
 
   return (
     <div className="list-view">
@@ -78,11 +78,7 @@ const EditProfile = ({
             offenderEmail: data?.currentUser?.offenderEmail,
             offenderPush: data?.currentUser?.offenderPush,
             messagePush: data?.currentUser?.messagePush,
-            defaultGroups:
-              data?.currentUser?.defaultGroups &&
-              data.currentUser.defaultGroups.length > 0
-                ? data.currentUser.defaultGroups.map(({ id }) => id)
-                : defaultGroups.map(({ id }) => id),
+            defaultGroups: userDefaultGroups,
           }}
           onFinish={onSubmit}
         >

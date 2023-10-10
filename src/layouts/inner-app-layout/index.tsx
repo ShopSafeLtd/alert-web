@@ -62,9 +62,6 @@ interface InnerAppLayoutProps {
 
 export const InnerAppLayout = (props: InnerAppLayoutProps): JSX.Element => {
   const { mainContent, pageHeader, sideContentGutter = true } = props;
-  // ???
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   const isMobile = !utils.getBreakPoint(useBreakpoint()).includes('lg');
   const [visible, setVisible] = useState(false);
   const { style, contentStyle } = props;

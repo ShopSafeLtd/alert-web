@@ -62,9 +62,7 @@ const useListVehicles = (): Return => {
     id: userId,
     defaultGroups,
   } = useStoreState((state) => state.user);
-  const defaultGroupsId = defaultGroups
-    .filter(({ scheme }) => scheme.id === schemeId)
-    .map(({ id }) => id);
+
   const pagination = useStoreState((state) => state.data.vehicles.pagination);
   const filterVariables = useStoreState(
     (state) => state.data.vehicles.variables
@@ -176,7 +174,7 @@ const useListVehicles = (): Return => {
       },
       variables: {
         ...filterVariables,
-        groups: defaultGroupsId,
+        groups: defaultGroups.map(({ id }) => id),
       },
     });
   }, []);

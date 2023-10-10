@@ -39,9 +39,6 @@ export const AppLayout = ({ location }: Props): JSX.Element => {
 
   const { isAuthenticated, isLoading } = useAuth0();
   const screens = utils.getBreakPoint(useBreakpoint());
-  // ???
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   const isMobile = !screens.includes('lg');
   const isNavSide = navType === NavType.SIDE;
   const isNavTop = navType === NavType.TOP;

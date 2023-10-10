@@ -286,6 +286,7 @@ const UseAddUserTest = () => {
       role: Role.ContentAdmin,
       groups: [],
       approverGroups: [],
+      defaultGroups: [],
       approver: [],
       chats: [],
       incidentEmail: false,
@@ -299,6 +300,7 @@ const UseAddUserTest = () => {
       offenderPush: false,
     };
     const changedValues = { email: 'email' };
+
     onValuesChange(changedValues, value);
   };
   const Groups =
@@ -349,6 +351,7 @@ const UseAddUserTest = () => {
             messagePush: false,
             offenderEmail: false,
             offenderPush: false,
+            defaultGroups: [],
           })
         }
       >

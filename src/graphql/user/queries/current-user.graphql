@@ -55,13 +55,6 @@ query currentUser($scheme: UniqueId) {
         taskTimeTracking
         languageCount
         autoPopulateDescription
-        defaultGroups {
-          id
-          name
-          scheme {
-            id
-          }
-        }
       }
     }
     incidentEmail

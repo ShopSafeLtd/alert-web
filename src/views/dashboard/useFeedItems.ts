@@ -61,9 +61,6 @@ const useFeedItems = (): Return => {
     defaultGroups,
   } = useStoreState((state) => state.user);
 
-  const defaultGroupsId = defaultGroups
-    .filter(({ scheme }) => scheme.id === schemeId)
-    .map(({ id }) => id);
   const pagination = useStoreState((state) => state.data.feedItems.pagination);
   const variables = useStoreState((state) => state.data.feedItems.variables);
   const [saving, setSaving] = useState(false);
@@ -198,7 +195,7 @@ const useFeedItems = (): Return => {
       },
       variables: {
         ...variables,
-        groups: defaultGroupsId,
+        groups: defaultGroups.map(({ id }) => id),
       },
     });
   }, []);

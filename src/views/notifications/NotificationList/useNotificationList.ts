@@ -72,13 +72,6 @@ interface Scheme {
   taskTimeTracking: boolean;
   languageCount: number;
   autoPopulateDescription: boolean;
-  defaultGroups: {
-    id: string;
-    name: string;
-    scheme: {
-      id: string;
-    };
-  }[];
 }
 interface Return {
   data:
@@ -101,6 +94,7 @@ const useNotificationLists = (): Return => {
   const navigate = useNavigate();
   const intl = useIntl();
   const userId = useStoreState((state) => state.user.id);
+  const defaultGroups = useStoreState((state) => state.user.defaultGroups);
   const userSchemes = useStoreState((state) => state.user.schemes);
   const schemeId = useStoreState((state) => state.scheme.id);
   const setScheme = useStoreActions((actions) => actions.scheme.setScheme);
@@ -108,6 +102,9 @@ const useNotificationLists = (): Return => {
     (actions) => actions.user.setNotifications
   );
   const setTodos = useStoreActions((actions) => actions.user.setTodos);
+  const setFilterDefaultGroup = useStoreActions(
+    (state) => state.user.setFilterDefaultGroup
+  );
   const [saving, setSaving] = useState(false);
   const [takeAllSchemes, setTakeAllSchemes] = useState(true);
   const [search, setSearch] = useState('');
@@ -354,7 +351,11 @@ const useNotificationLists = (): Return => {
       imagesRequiredOnOffenders: scheme.imagesRequiredOnOffenders,
       taskTimeTracking: scheme.taskTimeTracking,
       reportOnly: scheme.reportOnly,
-      defaultGroups: scheme.defaultGroups || [],
+    });
+    setFilterDefaultGroup({
+      filterDefaultGroups: defaultGroups.filter(
+        (el) => el.scheme.id === scheme.id
+      ),
     });
     setTodos({ userTodos: scheme.userTodos || 0 });
     setNotifications({

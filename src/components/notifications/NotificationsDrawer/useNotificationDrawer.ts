@@ -68,13 +68,6 @@ interface Scheme {
   taskTimeTracking: boolean;
   restrictIncidentAccess: boolean;
   reportOnly: boolean;
-  defaultGroups: {
-    id: string;
-    name: string;
-    scheme: {
-      id: string;
-    };
-  }[];
 }
 interface Return {
   data:
@@ -101,6 +94,10 @@ const useNotificationLists = (): Return => {
   const userId = useStoreState((state) => state.user.id);
   const userSchemes = useStoreState((state) => state.user.schemes);
   const schemeId = useStoreState((state) => state.scheme.id);
+  const defaultGroups = useStoreState((state) => state.user.defaultGroups);
+  const setFilterDefaultGroup = useStoreActions(
+    (state) => state.user.setFilterDefaultGroup
+  );
   const setScheme = useStoreActions((actions) => actions.scheme.setScheme);
   const setNotifications = useStoreActions(
     (actions) => actions.user.setNotifications
@@ -343,7 +340,11 @@ const useNotificationLists = (): Return => {
       facialRecognition: scheme.facialRecognition,
       imagesRequiredOnOffenders: scheme.imagesRequiredOnOffenders,
       taskTimeTracking: scheme.taskTimeTracking,
-      defaultGroups: scheme.defaultGroups || [],
+    });
+    setFilterDefaultGroup({
+      filterDefaultGroups: defaultGroups.filter(
+        (el) => el.scheme.id === scheme.id
+      ),
     });
     setTodos({ userTodos: scheme.userTodos || 0 });
     setNotifications({

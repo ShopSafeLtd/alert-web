@@ -43851,7 +43851,6 @@ export type Scheme = {
   currentTerms?: Maybe<TermsAndCondition>;
   customTranslations: Array<Scalars['Json']>;
   darkLogo?: Maybe<Image>;
-  defaultGroups: Array<Group>;
   defaultIncidentEmail: Scalars['Boolean'];
   defaultIncidentPush: Scalars['Boolean'];
   defaultMessagePush: Scalars['Boolean'];
@@ -43963,13 +43962,6 @@ export type SchemeChatsArgs = {
 export type SchemeCrimeGroupsArgs = {
   after?: InputMaybe<CrimeGroupWhereUniqueInput>;
   before?: InputMaybe<CrimeGroupWhereUniqueInput>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-};
-
-export type SchemeDefaultGroupsArgs = {
-  after?: InputMaybe<GroupWhereUniqueInput>;
-  before?: InputMaybe<GroupWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
 };
@@ -60832,6 +60824,8 @@ export type UserDefaultGroupsArgs = {
   before?: InputMaybe<GroupWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<GroupOrderByWithRelationInput>>;
+  where?: InputMaybe<GroupWhereInput>;
 };
 
 export type UserExpoPushTokensArgs = {
@@ -82867,12 +82861,6 @@ export type UpdateSchemeMutation = {
     imagesRequiredOnOffenders: boolean;
     incidentRetention?: number | null;
     offenderRetention?: number | null;
-    defaultGroups: Array<{
-      __typename?: 'Group';
-      id: string;
-      name: string;
-      scheme: { __typename?: 'Scheme'; id: string };
-    }>;
     logo?: {
       __typename?: 'Image';
       id: string;
@@ -82933,12 +82921,7 @@ export type SchemeQuery = {
     autoPopulateDescription: boolean;
     facialRecognition: boolean;
     imagesRequiredOnOffenders: boolean;
-    defaultGroups: Array<{
-      __typename?: 'Group';
-      id: string;
-      name: string;
-      scheme: { __typename?: 'Scheme'; id: string };
-    }>;
+    goodsMode: GoodsMode;
     darkLogo?: {
       __typename?: 'Image';
       id: string;
@@ -84494,12 +84477,6 @@ export type CurrentUserQuery = {
           __typename?: 'Image';
           optimisedPersisted?: string | null;
         } | null;
-        defaultGroups: Array<{
-          __typename?: 'Group';
-          id: string;
-          name: string;
-          scheme: { __typename?: 'Scheme'; id: string };
-        }>;
       };
     }>;
   } | null;
@@ -84549,6 +84526,7 @@ export type UserQuery = {
     } | null;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     approverGroups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+    defaultGroups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     chats: Array<{
       __typename?: 'UserChat';
       id: string;
@@ -84862,12 +84840,6 @@ export type ListUserNotificationsQuery = {
           goodsMode: GoodsMode;
           facialRecognition: boolean;
           taskTimeTracking: boolean;
-          defaultGroups: Array<{
-            __typename?: 'Group';
-            id: string;
-            name: string;
-            scheme: { __typename?: 'Scheme'; id: string };
-          }>;
           logo?: {
             __typename?: 'Image';
             optimisedPersisted?: string | null;
@@ -84942,12 +84914,6 @@ export type UserNotificationsQuery = {
           goodsMode: GoodsMode;
           facialRecognition: boolean;
           taskTimeTracking: boolean;
-          defaultGroups: Array<{
-            __typename?: 'Group';
-            id: string;
-            name: string;
-            scheme: { __typename?: 'Scheme'; id: string };
-          }>;
           logo?: {
             __typename?: 'Image';
             optimisedPersisted?: string | null;
@@ -97964,13 +97930,6 @@ export const UpdateSchemeDocument = gql`
       imagesRequiredOnOffenders
       incidentRetention
       offenderRetention
-      defaultGroups {
-        id
-        name
-        scheme {
-          id
-        }
-      }
       logo {
         id
         url
@@ -98077,13 +98036,7 @@ export const SchemeDocument = gql`
       autoPopulateDescription
       facialRecognition
       imagesRequiredOnOffenders
-      defaultGroups {
-        id
-        name
-        scheme {
-          id
-        }
-      }
+      goodsMode
       darkLogo {
         id
         url
@@ -100245,13 +100198,6 @@ export const CurrentUserDocument = gql`
           taskTimeTracking
           languageCount
           autoPopulateDescription
-          defaultGroups {
-            id
-            name
-            scheme {
-              id
-            }
-          }
         }
       }
       incidentEmail
@@ -100336,7 +100282,11 @@ export const UserDocument = gql`
         id
         name
       }
-      approverGroups {
+      approverGroups(where: $groupWhere) {
+        id
+        name
+      }
+      defaultGroups(where: $groupWhere) {
         id
         name
       }
@@ -100761,13 +100711,6 @@ export const ListUserNotificationsDocument = gql`
             userNotifications
             languageCount
             autoPopulateDescription
-            defaultGroups {
-              id
-              name
-              scheme {
-                id
-              }
-            }
             logo {
               optimisedPersisted
               id
@@ -100867,13 +100810,6 @@ export const UserNotificationsDocument = gql`
             userNotifications
             languageCount
             autoPopulateDescription
-            defaultGroups {
-              id
-              name
-              scheme {
-                id
-              }
-            }
             logo {
               optimisedPersisted
               id
