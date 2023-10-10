@@ -8,6 +8,12 @@ interface Response {
   }[];
 }
 
+/**
+ * Get the address from a lat lng pair.
+ * @param {number} lat - The latitude.
+ * @param {number} lng - The longitude.
+ * @returns {Promise<{street: string, city: string, postcode: string, lat: number, lng: number}>} Returns an object containing the street, city, postcode, lat, and lng. On error returns empty strings and 0 for lat and lng.
+ */
 const getAddressFromLatLng = async ({
   lat,
   lng,
