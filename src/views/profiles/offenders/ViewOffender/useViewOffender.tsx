@@ -51,10 +51,6 @@ import type {
 } from 'types/DataType';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import type { MutationUpdaterFn } from '@apollo/client';
-import {
-  ProfileUpdatedModel,
-  ProfileUpdatedType,
-} from 'types/enums/profile-update-type';
 
 const { confirm } = Modal;
 
@@ -259,27 +255,7 @@ const useViewOffender = (offenderId: string): Return => {
   >(null);
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
   const [editUpdateInput, setEditUpdateInput] = useState('');
-  const getNotificationContent = (
-    title: ProfileUpdatedModel,
-    type: ProfileUpdatedType
-  ) =>
-    notification.success({
-      message: intl.formatMessage(
-        {
-          defaultMessage: 'Successfully {type}!',
-          id: 'cAM3G8',
-        },
-        { type }
-      ),
-      description: intl.formatMessage(
-        {
-          defaultMessage: 'The {title} of the offender have been {type}.!',
-          id: 'd9AbkL',
-        },
-        { title, type: type.toLocaleLowerCase() }
-      ),
-      placement: 'bottomRight',
-    });
+
   useEffect(() => {
     const incidents =
       window.localStorage.getItem(LINKED_INCIDENTS) === 'fasle'
@@ -507,10 +483,17 @@ const useViewOffender = (offenderId: string): Return => {
         },
       },
       onCompleted: () => {
-        getNotificationContent(
-          ProfileUpdatedModel.Images,
-          ProfileUpdatedType.updated
-        );
+        notification.success({
+          message: intl.formatMessage({
+            defaultMessage: 'Successfully updated!',
+            id: 'zJzbfm',
+          }),
+          description: intl.formatMessage({
+            defaultMessage: 'The images have been updated',
+            id: 'yRfbZE',
+          }),
+          placement: 'bottomRight',
+        });
       },
     }).finally(() => {
       setEditImages(false);
@@ -552,10 +535,17 @@ const useViewOffender = (offenderId: string): Return => {
           },
         },
         onCompleted: () => {
-          getNotificationContent(
-            ProfileUpdatedModel.Image,
-            ProfileUpdatedType.updated
-          );
+          notification.success({
+            message: intl.formatMessage({
+              defaultMessage: 'Successfully updated!',
+              id: 'zJzbfm',
+            }),
+            description: intl.formatMessage({
+              defaultMessage: 'The images have been updated',
+              id: 'yRfbZE',
+            }),
+            placement: 'bottomRight',
+          });
         },
         // update: updateImageList,
       }).finally(() => {
@@ -574,10 +564,17 @@ const useViewOffender = (offenderId: string): Return => {
         },
       },
       onCompleted: () => {
-        getNotificationContent(
-          ProfileUpdatedModel.Image,
-          ProfileUpdatedType.deleted
-        );
+        notification.success({
+          message: intl.formatMessage({
+            defaultMessage: 'Successfully deleted!',
+            id: 'RFD+id',
+          }),
+          description: intl.formatMessage({
+            defaultMessage: 'The image/s have been deleted',
+            id: '65D7dw',
+          }),
+          placement: 'bottomRight',
+        });
       },
       update: (store, { data: res }) => {
         if (res?.updateOffender === null || res?.updateOffender === undefined)
@@ -724,10 +721,17 @@ const useViewOffender = (offenderId: string): Return => {
           },
         },
         onCompleted: () => {
-          getNotificationContent(
-            ProfileUpdatedModel.Vehicle,
-            ProfileUpdatedType.updated
-          );
+          notification.success({
+            message: intl.formatMessage({
+              defaultMessage: 'Successfully updated!',
+              id: 'zJzbfm',
+            }),
+            description: intl.formatMessage({
+              defaultMessage: 'The vehicle/s have been updated',
+              id: 'UD3TUz',
+            }),
+            placement: 'bottomRight',
+          });
         },
       }).finally(() => {
         setEditVehicleData(null);
@@ -800,10 +804,17 @@ const useViewOffender = (offenderId: string): Return => {
           },
         },
         onCompleted: () => {
-          getNotificationContent(
-            ProfileUpdatedModel.Vehicle,
-            ProfileUpdatedType.added
-          );
+          notification.success({
+            message: intl.formatMessage({
+              defaultMessage: 'Successfully added!',
+              id: 'bYuIEA',
+            }),
+            description: intl.formatMessage({
+              defaultMessage: 'The vehicle/s have been added',
+              id: 'jLIci0',
+            }),
+            placement: 'bottomRight',
+          });
         },
         update: updateVehicleList,
       }).finally(() => {
@@ -824,10 +835,17 @@ const useViewOffender = (offenderId: string): Return => {
           },
         },
         onCompleted: () => {
-          getNotificationContent(
-            ProfileUpdatedModel.Vehicle,
-            ProfileUpdatedType.added
-          );
+          notification.success({
+            message: intl.formatMessage({
+              defaultMessage: 'Successfully added!',
+              id: 'bYuIEA',
+            }),
+            description: intl.formatMessage({
+              defaultMessage: 'The vehicle/s have been added',
+              id: 'jLIci0',
+            }),
+            placement: 'bottomRight',
+          });
         },
         update: updateVehicleList,
       }).finally(() => {
@@ -844,10 +862,17 @@ const useViewOffender = (offenderId: string): Return => {
           vehicles: { disconnect: [{ id: value }] },
         },
         onCompleted: () => {
-          getNotificationContent(
-            ProfileUpdatedModel.Vehicle,
-            ProfileUpdatedType.deleted
-          );
+          notification.success({
+            message: intl.formatMessage({
+              defaultMessage: 'Successfully deleted!',
+              id: 'RFD+id',
+            }),
+            description: intl.formatMessage({
+              defaultMessage: 'The vehicle/s have been deleted',
+              id: '2bEaE/',
+            }),
+            placement: 'bottomRight',
+          });
         },
         update: (store, { data: res }) => {
           if (res?.updateOffender === null || res?.updateOffender === undefined)
@@ -921,10 +946,17 @@ const useViewOffender = (offenderId: string): Return => {
           },
         },
         onCompleted: () => {
-          getNotificationContent(
-            ProfileUpdatedModel.Crime_Group,
-            ProfileUpdatedType.added
-          );
+          notification.success({
+            message: intl.formatMessage({
+              defaultMessage: 'Successfully added!',
+              id: 'bYuIEA',
+            }),
+            description: intl.formatMessage({
+              defaultMessage: 'The crime groups has been added',
+              id: 'gtAFT7',
+            }),
+            placement: 'bottomRight',
+          });
         },
         update: updateCrimeGroupList,
       }).finally(() => {
@@ -941,10 +973,17 @@ const useViewOffender = (offenderId: string): Return => {
           crimeGroups: { disconnect: [{ id: value }] },
         },
         onCompleted: () => {
-          getNotificationContent(
-            ProfileUpdatedModel.Vehicle,
-            ProfileUpdatedType.deleted
-          );
+          notification.success({
+            message: intl.formatMessage({
+              defaultMessage: 'Successfully removed!',
+              id: 'nvymrt',
+            }),
+            description: intl.formatMessage({
+              defaultMessage: 'The crime group has been removed',
+              id: 'nOqQ3P',
+            }),
+            placement: 'bottomRight',
+          });
         },
         update: (store, { data: res }) => {
           if (res?.updateOffender === null || res?.updateOffender === undefined)
@@ -1033,10 +1072,17 @@ const useViewOffender = (offenderId: string): Return => {
           },
         },
         onCompleted: () => {
-          getNotificationContent(
-            ProfileUpdatedModel.Address,
-            ProfileUpdatedType.updated
-          );
+          notification.success({
+            message: intl.formatMessage({
+              defaultMessage: 'Successfully updated!',
+              id: 'zJzbfm',
+            }),
+            description: intl.formatMessage({
+              defaultMessage: 'The address has been updated',
+              id: '5+GceR',
+            }),
+            placement: 'bottomRight',
+          });
         },
       }).finally(() => {
         setEditAddressData(null);
@@ -1063,10 +1109,17 @@ const useViewOffender = (offenderId: string): Return => {
           },
         },
         onCompleted: () => {
-          getNotificationContent(
-            ProfileUpdatedModel.Address,
-            ProfileUpdatedType.added
-          );
+          notification.success({
+            message: intl.formatMessage({
+              defaultMessage: 'Successfully added!',
+              id: 'bYuIEA',
+            }),
+            description: intl.formatMessage({
+              defaultMessage: 'The address has been added',
+              id: 'ASXk8Y',
+            }),
+            placement: 'bottomRight',
+          });
         },
         // update: updateAddressList,
       }).finally(() => {
@@ -1084,10 +1137,17 @@ const useViewOffender = (offenderId: string): Return => {
           addresses: { disconnect: [{ id: value }] },
         },
         onCompleted: () => {
-          getNotificationContent(
-            ProfileUpdatedModel.Address,
-            ProfileUpdatedType.deleted
-          );
+          notification.success({
+            message: intl.formatMessage({
+              defaultMessage: 'Successfully deleted!',
+              id: 'RFD+id',
+            }),
+            description: intl.formatMessage({
+              defaultMessage: 'The address has been removed',
+              id: '8BX6EA',
+            }),
+            placement: 'bottomRight',
+          });
         },
         update: (store, { data: res }) => {
           if (res?.updateOffender === null || res?.updateOffender === undefined)
@@ -1173,10 +1233,17 @@ const useViewOffender = (offenderId: string): Return => {
           },
         },
         onCompleted: () => {
-          getNotificationContent(
-            ProfileUpdatedModel.Ban,
-            ProfileUpdatedType.updated
-          );
+          notification.success({
+            message: intl.formatMessage({
+              defaultMessage: 'Successfully updated!',
+              id: 'zJzbfm',
+            }),
+            description: intl.formatMessage({
+              defaultMessage: 'The ban has been updated',
+              id: 'cUo6em',
+            }),
+            placement: 'bottomRight',
+          });
         },
       }).finally(() => {
         setEditBanData(null);
@@ -1212,10 +1279,17 @@ const useViewOffender = (offenderId: string): Return => {
           },
         },
         onCompleted: () => {
-          getNotificationContent(
-            ProfileUpdatedModel.Ban,
-            ProfileUpdatedType.added
-          );
+          notification.success({
+            message: intl.formatMessage({
+              defaultMessage: 'Successfully added!',
+              id: 'bYuIEA',
+            }),
+            description: intl.formatMessage({
+              defaultMessage: 'The ban have been added',
+              id: '/97vO4',
+            }),
+            placement: 'bottomRight',
+          });
         },
         update: updateBanList,
       }).finally(() => {
@@ -1233,10 +1307,17 @@ const useViewOffender = (offenderId: string): Return => {
           bans: { disconnect: [{ id: value }] },
         },
         onCompleted: () => {
-          getNotificationContent(
-            ProfileUpdatedModel.Ban,
-            ProfileUpdatedType.deleted
-          );
+          notification.success({
+            message: intl.formatMessage({
+              defaultMessage: 'Successfully deleted!',
+              id: 'RFD+id',
+            }),
+            description: intl.formatMessage({
+              defaultMessage: 'The ban has been removed',
+              id: '+Llm6i',
+            }),
+            placement: 'bottomRight',
+          });
         },
         update: (store, { data: res }) => {
           if (res?.updateOffender === null || res?.updateOffender === undefined)
