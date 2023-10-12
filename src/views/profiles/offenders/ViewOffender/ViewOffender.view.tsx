@@ -1729,7 +1729,7 @@ const ViewOffender = ({
                               id: 'a0aLil',
                             })}
                           </Title>
-                          {data?.offender?.vehicles.length && !loading ? (
+                          {data?.offender?.crimeGroups.length && !loading ? (
                             <CrimeGroupTable
                               crimeGroups={data?.offender?.crimeGroups || []}
                               onDelete={onDeleteCrimeGroup}
