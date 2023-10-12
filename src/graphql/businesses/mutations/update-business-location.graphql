@@ -1,0 +1,18 @@
+mutation UpdateBusinessLocation(
+  $data: UpdateBusinessDataInput!
+  $where: BusinessWhereUniqueInput!
+) {
+  updateBusiness(data: $data, where: $where) {
+    id
+    locations {
+      id
+      building
+      street
+      townCity
+      county
+      postcode
+      geoLng
+      geoLat
+    }
+  }
+}

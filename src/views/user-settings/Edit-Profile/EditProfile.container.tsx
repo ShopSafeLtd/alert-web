@@ -13,7 +13,6 @@ const EditProfile = (): JSX.Element => {
     groups,
     userDefaultGroups,
   } = useEditProfile();
-  console.log('userDefaultGroups', userDefaultGroups);
 
   return (
     <View

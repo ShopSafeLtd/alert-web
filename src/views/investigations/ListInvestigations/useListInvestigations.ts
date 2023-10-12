@@ -90,8 +90,6 @@ const useListInvestigations = (): Return => {
     setInvestigationAllSchemes({ investigationAllSchemes: !takeAllSchemes });
     setTakeAllSchemes(!takeAllSchemes);
   };
-  console.log('takeAllSchemes', takeAllSchemes);
-  console.log('investigationAllSchemes', investigationAllSchemes);
 
   return {
     data,

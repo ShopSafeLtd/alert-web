@@ -14,6 +14,7 @@ import {
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
+import type { LocationData } from 'types/DataType';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 interface OnSubmitValues {
@@ -43,6 +44,8 @@ interface Return {
   ) => Promise<{ label: string; value: string }[]>;
   form: FormInstance<OnSubmitValues>;
   loading: boolean;
+  location: LocationData | undefined;
+  setLocation: (value: LocationData) => void;
 }
 
 const useEditBusiness = ({ onClose, businessId }: Props): Return => {
@@ -52,8 +55,12 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
   const [form] = Form.useForm<OnSubmitValues>();
 
   const [saving, setSaving] = useState(false);
+  // const [locationLocading, setLocationLoading] = useState(false);
 
-  const { data } = useEditBusinessQuery({
+  const [location, setLocation] = useState<LocationData>();
+  // const [loading, setLoading] = useState(true);
+
+  const { data, loading } = useEditBusinessQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
       where: {
@@ -76,8 +83,27 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
         street: res.business?.locations[0]?.street || '',
         townCity: res.business?.locations[0]?.townCity || '',
       });
+      if (
+        res.business?.locations[0]?.geoLat &&
+        res.business?.locations[0]?.geoLng
+      ) {
+        setLocation({
+          geoLat: res.business?.locations[0]?.geoLat,
+          geoLng: res.business?.locations[0]?.geoLng,
+        });
+      }
     },
   });
+  const onSetLocation = (value: LocationData) => {
+    if (value) {
+      setLocation(value);
+      form.setFieldsValue({
+        street: value.street || '',
+        townCity: value.townCity || '',
+        postcode: value.postcode || '',
+      });
+    }
+  };
 
   const [updateBusiness] = useUpdateBusinessMutation({
     onCompleted: () => {
@@ -85,8 +111,8 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
       onClose();
       notification.success({
         message: intl.formatMessage({
-          defaultMessage: 'Business has been updated',
-          id: 'otzBb4',
+          defaultMessage: 'Shop has been updated',
+          id: 'SxquWc',
         }),
 
         placement: 'bottomRight',
@@ -129,33 +155,36 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
               postcode: { set: values.postcode },
               street: { set: values.street },
               townCity: { set: values.townCity },
+              geoLat: location?.geoLat ? { set: location?.geoLat } : undefined,
+              geoLng: location?.geoLng ? { set: location?.geoLng } : undefined,
             },
           },
         },
       },
-      optimisticResponse: {
-        updateBusiness: {
-          id: `${Math.random()}`,
-          name: values.name,
-          fullName: values.name,
-          publicName: values.publicName,
-          totalUsers: 0,
-          parent: values.parent
-            ? {
-                id: values.parent.value,
-                name: values.parent.label,
-                fullName: values.parent.label,
-                publicName: values.publicName,
-              }
-            : undefined,
-          locations: [
-            {
-              id: `${Math.random()}`,
-              full: `${values.building}, ${values.street}, ${values.townCity}, ${values.county}, ${values.postcode}`,
-            },
-          ],
-        },
-      },
+      // optimisticResponse: {
+      //   updateBusiness: {
+      //     id: `${Math.random()}`,
+      //     name: values.name,
+      //     fullName: values.name,
+      //     publicName: values.publicName,
+      //     totalUsers: 0,
+      //     parent: values.parent
+      //       ? {
+      //           id: values.parent.value,
+      //           name: values.parent.label,
+      //           fullName: values.parent.label,
+      //           publicName: values.publicName,
+      //         }
+      //       : undefined,
+      //     locations: [
+      //       {
+      //         id: `${Math.random()}`,
+      //         geoLat:,
+      //         full: `${values.building}, ${values.street}, ${values.townCity}, ${values.county}, ${values.postcode}`,
+      //       },
+      //     ],
+      //   },
+      // },
     });
   };
 
@@ -211,8 +240,10 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
     onSubmit,
     saving,
     onSearchBusiness,
-    loading: !data,
+    loading: !data && loading,
     form,
+    location,
+    setLocation: onSetLocation,
   };
 };
 

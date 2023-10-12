@@ -4,7 +4,7 @@ import View from './AddIncident.view';
 import useAddIncident from './useAddIncident';
 
 const AddIncident = (): JSX.Element => {
-  const investigationId = useParams().id || '';
+  const investigationId = useParams().investigationId || '';
 
   const {
     form,

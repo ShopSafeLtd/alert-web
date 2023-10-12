@@ -1019,33 +1019,6 @@ const useViewOffender = (offenderId: string): Return => {
       errorNotification();
     },
   });
-  // const updateAddressList: MutationUpdaterFn<
-  //   UpdateOffenderAddressesMutation
-  // > = (store, { data: res }) => {
-  //   if (res?.updateOffender === null || res?.updateOffender === undefined)
-  //     return;
-
-  //   const existingData = store.readQuery<ViewOffenderQuery>({
-  //     query: ViewOffenderDocument,
-  //     variables,
-  //   });
-
-  //   if (!existingData?.offender) return;
-  //   store.writeQuery<ViewOffenderQuery>({
-  //     query: ViewOffenderDocument,
-  //     data: {
-  //       offender: {
-  //         ...existingData.offender,
-  //         addresses: [
-  //           ...existingData.offender.addresses,
-  //           ...res.updateOffender.addresses,
-  //         ],
-  //       },
-  //       __typename: 'Query',
-  //     },
-  //     variables,
-  //   });
-  // };
 
   const onEditAddress = (value: LocationData) => {
     setSaving(true);
@@ -1066,6 +1039,8 @@ const useViewOffender = (offenderId: string): Return => {
                   alias: { set: value.alias },
                   building: { set: value.building },
                   county: { set: value.county },
+                  geoLat: value.geoLat ? { set: value.geoLat } : undefined,
+                  geoLng: value.geoLng ? { set: value.geoLng } : undefined,
                 },
               },
             ],
@@ -1104,6 +1079,8 @@ const useViewOffender = (offenderId: string): Return => {
                 alias: value.alias,
                 building: value.building,
                 county: value.county,
+                geoLat: value.geoLat,
+                geoLng: value.geoLng,
               },
             ],
           },

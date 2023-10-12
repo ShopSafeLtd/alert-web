@@ -114,7 +114,6 @@ const CrimeGroupTable = ({
   const classes = useStyles();
   const navigate = useNavigate();
   const intl = useIntl();
-  console.log('crimeGroups', crimeGroups);
 
   return (
     // <Table<CrimeGroupsTable>

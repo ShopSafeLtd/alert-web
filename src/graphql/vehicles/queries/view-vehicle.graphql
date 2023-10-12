@@ -29,6 +29,9 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
     }
     offenders {
       ...Offenders
+      images {
+        ...Images
+      }
     }
     incidents {
       ...Incidents

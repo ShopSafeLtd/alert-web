@@ -1,0 +1,27 @@
+mutation UpdateInvestigationCrimeGroups(
+  $id: String!
+  $crimeGroupIds: [String]
+  $disconnectCrimeGroupIds: [String]
+) {
+  updateInvestigation(
+    where: { id: $id }
+    data: {
+      crimeGroupIds: $crimeGroupIds
+      disconnectCrimeGroupIds: $disconnectCrimeGroupIds
+    }
+  ) {
+    id
+    crimeGroups {
+      ...CrimeGroups
+      vehicles {
+        ...Vehicles
+      }
+      offenders {
+        ...Offenders
+        images {
+          ...Images
+        }
+      }
+    }
+  }
+}

@@ -18,12 +18,14 @@ const UseAddLocationTest = () => {
         type="button"
         onClick={() =>
           onSubmit({
-            building: null,
-            county: null,
+            building: '',
+            county: '',
             postcode: 's3 7ab',
             street: 'street',
             townCity: 'town',
-            id: '',
+            alias: '',
+            geoLat: 0,
+            geoLng: 0,
           })
         }
       >

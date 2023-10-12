@@ -1,0 +1,5 @@
+mutation deleteCustomGallery($id: String!) {
+  deleteCustomGallery(where: { id: $id }) {
+    id
+  }
+}

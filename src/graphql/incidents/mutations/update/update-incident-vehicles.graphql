@@ -12,13 +12,7 @@ mutation UpdateIncidentVehicles(
       make
       registration
       images(first: 1) {
-        id
-        url
-        policeImage
-        primary
-        position
-        rotation
-        optimised
+        ...Images
       }
     }
   }

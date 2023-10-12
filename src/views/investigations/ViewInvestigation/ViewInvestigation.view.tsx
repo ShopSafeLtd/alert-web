@@ -32,6 +32,9 @@ import SimpleEditOffender from 'components/form-components/offender/offender/Sim
 import EditVehicleSimple from 'components/form-components/Vehicle/EditVehicleSimple';
 import AddCrimeGroup from 'components/form-components/crimeGroup/AddCrimeGroup';
 import EditCrimeGroup from 'components/form-components/crimeGroup/EditCrimeGroup';
+import MultiSelectOffenders from 'components/investigations/MultiSelectOffenders';
+import MultiSelectVehicles from 'components/investigations/MultiSelectVehicles';
+import EditInvestigation from 'components/form-components/Investigation/EditInvestigation';
 import type {
   CreateTodoMutation,
   QuestionGroupOnSchemeQuery,
@@ -106,6 +109,18 @@ interface Props {
   saving: boolean;
   loading: boolean;
   onDeleteInvestigation: () => void;
+  suggestedOffenders: OffenderData[] | undefined;
+  suggestedVehicles: VehicleData[] | undefined;
+  toggleCloseSuggestedOffenders: () => void;
+  toggleCloseSuggestedVehicles: () => void;
+  onAddExistingOffenders: (value: string[]) => void;
+  onAddExistingVehicles: (value: string[]) => void;
+  showSuggestedVehicles: boolean;
+  showSuggestedOffenders: boolean;
+  toggleShowSuggestedVehicles: () => void;
+  toggleShowSuggestedOffenders: () => void;
+  editInvestigation: boolean;
+  toggleEditInvestigation: () => void;
 }
 
 const useStyles = createUseStyles({
@@ -184,9 +199,22 @@ const ViewInvestigation = ({
   onDeleteIncident,
   onDeleteInvestigation,
   saving,
+  suggestedOffenders,
+  suggestedVehicles,
+  onAddExistingOffenders,
+  onAddExistingVehicles,
+  toggleCloseSuggestedOffenders,
+  toggleCloseSuggestedVehicles,
+  showSuggestedVehicles,
+  showSuggestedOffenders,
+  toggleShowSuggestedVehicles,
+  toggleShowSuggestedOffenders,
+  editInvestigation,
+  toggleEditInvestigation,
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
+
   return (
     <div style={{ height: '100vh' }}>
       <div className={classes.sideListContent}>
@@ -332,6 +360,31 @@ const ViewInvestigation = ({
           </Tabs.TabPane>
         </Tabs>
       </div>
+      {/* details */}
+      <Drawer
+        title={
+          <FormattedMessage
+            defaultMessage="Update Investigation Details"
+            id="6lYiJV"
+          />
+        }
+        visible={editInvestigation}
+        width="500"
+        onClose={toggleEditInvestigation}
+      >
+        {editInvestigation ? (
+          <EditInvestigation
+            onClose={toggleEditInvestigation}
+            investigationData={{
+              id: data?.investigation?.id || '',
+              name: data?.investigation?.name,
+              description: data?.investigation?.description,
+            }}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
       {/* offenders */}
       <Drawer
         title={
@@ -652,6 +705,95 @@ const ViewInvestigation = ({
           <div />
         )}
       </Drawer>
+
+      {/* suggestedData after creating incident  */}
+
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Suggested Offenders',
+          id: '5UuihT',
+        })}
+        open={showSuggestedVehicles}
+        onClose={toggleCloseSuggestedOffenders}
+        width="900"
+      >
+        <MultiSelectOffenders
+          offenders={suggestedOffenders}
+          onClose={toggleCloseSuggestedOffenders}
+          handleAddSuggestion={onAddExistingOffenders}
+        />
+      </Drawer>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Suggested Vehicles',
+          id: 'fzU5Bx',
+        })}
+        open={showSuggestedOffenders}
+        onClose={toggleCloseSuggestedVehicles}
+        width="900"
+      >
+        <MultiSelectVehicles
+          vehicles={suggestedVehicles}
+          onClose={toggleCloseSuggestedVehicles}
+          handleAddSuggestion={onAddExistingVehicles}
+        />
+      </Drawer>
+      <Modal
+        bodyStyle={{ borderRadius: 10 }}
+        open={
+          (suggestedOffenders && suggestedOffenders.length > 0) ||
+          (suggestedVehicles && suggestedVehicles.length > 0)
+        }
+        // zIndex={1010}
+        cancelText={intl.formatMessage({
+          defaultMessage: 'Close',
+          id: 'rbrahO',
+        })}
+        onCancel={() => {
+          toggleCloseSuggestedVehicles();
+          toggleCloseSuggestedOffenders();
+        }}
+        okButtonProps={{
+          style: {
+            display: 'none',
+          },
+        }}
+        // bodyStyle={{ padding: 0 }}
+        title={intl.formatMessage({
+          defaultMessage:
+            'Add suggested offenders and vehicles to this investigation?',
+          id: 'dVXgio',
+        })}
+      >
+        <Row gutter={16}>
+          <Col>
+            <Button
+              loading={saving}
+              disabled={suggestedOffenders?.length === 0}
+              onClick={toggleShowSuggestedOffenders}
+              type="primary"
+            >
+              {intl.formatMessage({
+                defaultMessage: 'Add Suggested Offedners',
+                id: 'IuW3g5',
+              })}
+            </Button>
+          </Col>
+          <Col>
+            <Button
+              loading={saving}
+              disabled={suggestedVehicles?.length === 0}
+              onClick={toggleShowSuggestedVehicles}
+              type="primary"
+            >
+              {intl.formatMessage({
+                defaultMessage: 'Add Suggested Vehicles',
+                id: 'Tl5uyE',
+              })}
+            </Button>
+          </Col>
+        </Row>
+      </Modal>
     </div>
   );
 };

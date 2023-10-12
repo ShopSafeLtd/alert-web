@@ -347,7 +347,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
         placement: 'bottomRight',
       });
       if (investigationId) {
-        navigate('/app/investigations/view/investigationId');
+        navigate(`/app/investigations/view/${investigationId}`);
       } else if (reportOnly) {
         navigate('/app/incidents/add');
       } else if (restrictIncidentAccess && role === Role.User) {
@@ -379,6 +379,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
   const toggleAddNewAddress = () => {
     setAddNewAddress(!addNewAddress);
   };
+
   const updateNewAddressData = (address: LocationData | undefined) =>
     setNewAddressData(address);
 
@@ -521,6 +522,8 @@ const useAddIncident = ({ investigationId }: Props): Return => {
               postcode: newAddressData.postcode,
               street: newAddressData.street,
               townCity: newAddressData.townCity,
+              geoLat: newAddressData.geoLat,
+              geoLng: newAddressData.geoLng,
             },
           };
         }

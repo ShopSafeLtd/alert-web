@@ -49,7 +49,8 @@ import AddTodo from 'components/form-components/Todos/AddTodo';
 import ViewTodo from 'components/form-components/Todos/ViewTodo/Todo.container';
 import ActivityTable from 'components/tables/ActivityTable';
 import IncidentTable from 'components/tables/IncidentTable';
-import MapCard from 'components/map/MapCard';
+import LocatingCard from 'components/map/LocatingCard';
+import type { LocationData } from 'types/DataType';
 import useStyles from './ViewBusiness.styles';
 import LinkDem from '../../../../components/form-components/businesses/LinkDem';
 
@@ -92,6 +93,7 @@ interface Props {
   setCompleteTodoVisible: (value: string | null) => void;
   updateTodo: MutationUpdaterFn<UpdateTaskMutation>;
   updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
+  onEditAddress: (value: LocationData) => void;
 }
 
 const ViewBusiness = ({
@@ -125,6 +127,7 @@ const ViewBusiness = ({
   viewTodoVisible,
   updateTodo,
   updateTodoList,
+  onEditAddress,
 }: Props) => {
   const classNames = useStyles();
   const intl = useIntl();
@@ -231,15 +234,11 @@ const ViewBusiness = ({
                     id: 'rvirM2',
                   })}
                 </Typography.Title>
-                <MapCard
+                <LocatingCard
                   width="100%"
                   height={194}
-                  markers={[
-                    {
-                      geoLat: data?.business?.locations[0].geoLat,
-                      geoLng: data?.business?.locations[0].geoLng,
-                    },
-                  ]}
+                  location={data?.business?.locations[0]}
+                  setLocation={onEditAddress}
                 />
               </Card>
               <Card>

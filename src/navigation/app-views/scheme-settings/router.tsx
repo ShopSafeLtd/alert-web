@@ -25,6 +25,7 @@ import ViewBusiness from 'views/settings/businesses/ViewBusiness';
 import DiscMenu from 'views/settings/data-import/menu/Menu.view';
 import DiscImport from 'views/settings/data-import/disc-import/DiscImport.container';
 import CSVImport from 'views/settings/data-import/csv/ImportItems/ImportData.container';
+import CustomGalleries from 'views/settings/customGallery';
 import CustomSchemeTerms from '../../../views/settings/terms/ViewCustomTerms/ViewTermsContainer';
 import ListStatements from '../../../views/settings/statements/ListStatements';
 import TagView from '../../../views/settings/tags/ViewTag/ViewTag.container';
@@ -62,7 +63,8 @@ const SchemeSettings = (): JSX.Element => (
     {/* crime types */}
     <Route path="crime-types/*" element={<CrimeTypes />} />
     <Route path="crime-types/view/:id" element={<TagView />} />
-
+    {/* custom galleries */}
+    <Route path="custom-galleries/*" element={<CustomGalleries />} />
     {/* recycle bin */}
     <Route path="recycle-bin/*" element={<RecycleBin />} />
 

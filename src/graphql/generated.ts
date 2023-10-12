@@ -3639,6 +3639,7 @@ export type Article = {
   feedItems: Array<FeedItem>;
   frequency?: Maybe<Scalars['Int']>;
   groups: Array<Group>;
+  groupsDef: Array<Group>;
   hideWatermark: Scalars['Boolean'];
   id: Scalars['String'];
   image?: Maybe<Image>;
@@ -3680,6 +3681,10 @@ export type ArticleFeedItemsArgs = {
 };
 
 export type ArticleGroupsArgs = {
+  where?: InputMaybe<GroupWhereInput>;
+};
+
+export type ArticleGroupsDefArgs = {
   after?: InputMaybe<GroupWhereUniqueInput>;
   before?: InputMaybe<GroupWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
@@ -11155,6 +11160,18 @@ export type CustomGalleryScalarWhereInput = {
   id?: InputMaybe<StringFilter>;
   name?: InputMaybe<StringFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type CustomGalleryUpdateInput = {
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  groups?: InputMaybe<GroupUpdateManyWithoutCustomGalleriesNestedInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  offenders?: InputMaybe<OffenderUpdateManyWithoutCustomGalleriesNestedInput>;
+  schemes?: InputMaybe<SchemeUpdateManyWithoutCustomGalleriesNestedInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  vehicles?: InputMaybe<VehicleUpdateManyWithoutCustomGalleriesNestedInput>;
 };
 
 export type CustomGalleryUpdateManyMutationInput = {
@@ -31769,6 +31786,7 @@ export type Mutation = {
   updateChatDefault?: Maybe<Chat>;
   updateCrimeGroup?: Maybe<CrimeGroup>;
   updateCustomGallery?: Maybe<CustomGallery>;
+  updateCustomGalleryDefault?: Maybe<CustomGallery>;
   updateFlow?: Maybe<Flow>;
   updateGroup?: Maybe<Group>;
   updateGroupDefault?: Maybe<Group>;
@@ -32444,8 +32462,13 @@ export type MutationUpdateCrimeGroupArgs = {
 };
 
 export type MutationUpdateCustomGalleryArgs = {
-  data: CreateCustomGalleryInput;
+  data: CustomGalleryUpdateInput;
   where: UniqueId;
+};
+
+export type MutationUpdateCustomGalleryDefaultArgs = {
+  data: CustomGalleryUpdateInput;
+  where: CustomGalleryWhereUniqueInput;
 };
 
 export type MutationUpdateFlowArgs = {
@@ -74620,6 +74643,30 @@ export type RemoveUserFromBusinessMutation = {
   };
 };
 
+export type UpdateBusinessLocationMutationVariables = Exact<{
+  data: UpdateBusinessDataInput;
+  where: BusinessWhereUniqueInput;
+}>;
+
+export type UpdateBusinessLocationMutation = {
+  __typename?: 'Mutation';
+  updateBusiness: {
+    __typename?: 'Business';
+    id: string;
+    locations: Array<{
+      __typename?: 'Address';
+      id: string;
+      building?: string | null;
+      street?: string | null;
+      townCity?: string | null;
+      county?: string | null;
+      postcode?: string | null;
+      geoLng?: number | null;
+      geoLat?: number | null;
+    }>;
+  };
+};
+
 export type UpdateBusinessMutationVariables = Exact<{
   data: UpdateBusinessDataInput;
   where: BusinessWhereUniqueInput;
@@ -74645,7 +74692,13 @@ export type UpdateBusinessMutation = {
     locations: Array<{
       __typename?: 'Address';
       id: string;
-      full?: string | null;
+      building?: string | null;
+      street?: string | null;
+      townCity?: string | null;
+      county?: string | null;
+      postcode?: string | null;
+      geoLng?: number | null;
+      geoLat?: number | null;
     }>;
   };
 };
@@ -74774,9 +74827,15 @@ export type BusinessQuery = {
       location?: {
         __typename?: 'Address';
         id: string;
-        full?: string | null;
+        building?: string | null;
+        street?: string | null;
+        townCity?: string | null;
+        county?: string | null;
+        postcode?: string | null;
         geoLat?: number | null;
         geoLng?: number | null;
+        full?: string | null;
+        alias?: string | null;
       } | null;
     }>;
     todos: Array<{
@@ -74834,6 +74893,8 @@ export type EditBusinessQuery = {
       townCity?: string | null;
       county?: string | null;
       postcode?: string | null;
+      geoLng?: number | null;
+      geoLat?: number | null;
     }>;
   } | null;
 };
@@ -75076,24 +75137,51 @@ export type SchemeChatsQuery = {
   }>;
 };
 
-export type ListCustomGalleriesQueryVariables = Exact<{
-  take?: InputMaybe<Scalars['Int']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<CustomGalleryWhereInput>;
-  order?: InputMaybe<CustomGalleryOrderByWithRelationInput>;
+export type CreateCrimeGroupSuggestedDataMutationVariables = Exact<{
+  data: CreateCrimeGroupDataInput;
 }>;
 
-export type ListCustomGalleriesQuery = {
-  __typename?: 'Query';
-  listCustomGalleries: {
-    __typename?: 'ListCustomGalleries';
-    total: number;
-    customGalleries: Array<{
-      __typename?: 'CustomGallery';
-      description?: string | null;
+export type CreateCrimeGroupSuggestedDataMutation = {
+  __typename?: 'Mutation';
+  createCrimeGroup: {
+    __typename?: 'CrimeGroup';
+    id: string;
+    alias?: string | null;
+    reference?: number | null;
+    vehicles: Array<{
+      __typename?: 'Vehicle';
       id: string;
-      name: string;
-      groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+      reference?: number | null;
+      colour?: string | null;
+      model?: string | null;
+      make?: string | null;
+      registration?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimised?: string | null;
+        position: ImagePosition;
+        rotation: number;
+      }>;
+    }>;
+    offenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      reference?: number | null;
+      name?: string | null;
+      gender?: Gender | null;
+      build?: Build | null;
+      height?: Height | null;
+      race?: Race | null;
+      age?: Age | null;
+      dateOfBirth?: Date | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimised?: string | null;
+        position: ImagePosition;
+        rotation: number;
+      }>;
     }>;
   };
 };
@@ -75359,17 +75447,6 @@ export type CrimeGroupQuery = {
       model?: string | null;
       make?: string | null;
       registration?: string | null;
-      images: Array<{
-        __typename?: 'Image';
-        id: string;
-        url?: string | null;
-        optimised?: string | null;
-        position: ImagePosition;
-        rotation: number;
-        primary?: boolean | null;
-        policeImage?: boolean | null;
-        card?: string | null;
-      }>;
     }>;
     offenders: Array<{
       __typename?: 'Offender';
@@ -75465,6 +75542,13 @@ export type CrimeGroupQuery = {
         subject?: string | null;
         totalValue?: number | null;
         totalRecoveredValue?: number | null;
+        location?: {
+          __typename?: 'Address';
+          id: string;
+          full?: string | null;
+          geoLat?: number | null;
+          geoLng?: number | null;
+        } | null;
         images: Array<{
           __typename?: 'Image';
           id: string;
@@ -75476,13 +75560,6 @@ export type CrimeGroupQuery = {
           policeImage?: boolean | null;
           card?: string | null;
         }>;
-        location?: {
-          __typename?: 'Address';
-          id: string;
-          full?: string | null;
-          geoLat?: number | null;
-          geoLng?: number | null;
-        } | null;
       }>;
       linkedOffenders: Array<{
         __typename?: 'Offender';
@@ -75576,6 +75653,13 @@ export type CrimeGroupQuery = {
           subject?: string | null;
           totalValue?: number | null;
           totalRecoveredValue?: number | null;
+          location?: {
+            __typename?: 'Address';
+            id: string;
+            full?: string | null;
+            geoLat?: number | null;
+            geoLng?: number | null;
+          } | null;
           images: Array<{
             __typename?: 'Image';
             id: string;
@@ -75587,13 +75671,6 @@ export type CrimeGroupQuery = {
             policeImage?: boolean | null;
             card?: string | null;
           }>;
-          location?: {
-            __typename?: 'Address';
-            id: string;
-            full?: string | null;
-            geoLat?: number | null;
-            geoLng?: number | null;
-          } | null;
         }>;
         linkedOffenders: Array<{
           __typename?: 'Offender';
@@ -75633,6 +75710,68 @@ export type CrimeGroupQuery = {
       }>;
     }>;
   } | null;
+};
+
+export type CreateCustomGalleryMutationVariables = Exact<{
+  data: CreateCustomGalleryInput;
+}>;
+
+export type CreateCustomGalleryMutation = {
+  __typename?: 'Mutation';
+  createCustomGallery: {
+    __typename?: 'CustomGallery';
+    id: string;
+    name: string;
+    description?: string | null;
+    groups: Array<{ __typename?: 'Group'; id: string }>;
+  };
+};
+
+export type DeleteCustomGalleryMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+export type DeleteCustomGalleryMutation = {
+  __typename?: 'Mutation';
+  deleteCustomGallery?: { __typename?: 'CustomGallery'; id: string } | null;
+};
+
+export type UpdateCustomGalleryMutationVariables = Exact<{
+  where: UniqueId;
+  data: CustomGalleryUpdateInput;
+}>;
+
+export type UpdateCustomGalleryMutation = {
+  __typename?: 'Mutation';
+  updateCustomGallery?: {
+    __typename?: 'CustomGallery';
+    id: string;
+    name: string;
+    description?: string | null;
+    groups: Array<{ __typename?: 'Group'; id: string }>;
+  } | null;
+};
+
+export type ListCustomGalleriesQueryVariables = Exact<{
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<CustomGalleryWhereInput>;
+  order?: InputMaybe<CustomGalleryOrderByWithRelationInput>;
+}>;
+
+export type ListCustomGalleriesQuery = {
+  __typename?: 'Query';
+  listCustomGalleries: {
+    __typename?: 'ListCustomGalleries';
+    total: number;
+    customGalleries: Array<{
+      __typename?: 'CustomGallery';
+      description?: string | null;
+      id: string;
+      name: string;
+      groups: Array<{ __typename?: 'Group'; id: string }>;
+    }>;
+  };
 };
 
 export type CopyEvidenceMutationVariables = Exact<{
@@ -76683,6 +76822,20 @@ export type InvestigationsFragment = {
   status: InvestigationStatus;
 };
 
+export type LocationsFragment = {
+  __typename?: 'Address';
+  id: string;
+  building?: string | null;
+  street?: string | null;
+  townCity?: string | null;
+  county?: string | null;
+  postcode?: string | null;
+  geoLat?: number | null;
+  geoLng?: number | null;
+  full?: string | null;
+  alias?: string | null;
+};
+
 export type OffendersFragment = {
   __typename?: 'Offender';
   id: string;
@@ -76694,17 +76847,6 @@ export type OffendersFragment = {
   race?: Race | null;
   age?: Age | null;
   dateOfBirth?: Date | null;
-  images: Array<{
-    __typename?: 'Image';
-    id: string;
-    url?: string | null;
-    optimised?: string | null;
-    position: ImagePosition;
-    rotation: number;
-    primary?: boolean | null;
-    policeImage?: boolean | null;
-    card?: string | null;
-  }>;
 };
 
 export type TodosFragment = {
@@ -76774,6 +76916,13 @@ export type UpdatesFragment = {
     subject?: string | null;
     totalValue?: number | null;
     totalRecoveredValue?: number | null;
+    location?: {
+      __typename?: 'Address';
+      id: string;
+      full?: string | null;
+      geoLat?: number | null;
+      geoLng?: number | null;
+    } | null;
     images: Array<{
       __typename?: 'Image';
       id: string;
@@ -76785,13 +76934,6 @@ export type UpdatesFragment = {
       policeImage?: boolean | null;
       card?: string | null;
     }>;
-    location?: {
-      __typename?: 'Address';
-      id: string;
-      full?: string | null;
-      geoLat?: number | null;
-      geoLng?: number | null;
-    } | null;
   }>;
   linkedOffenders: Array<{
     __typename?: 'Offender';
@@ -76885,6 +77027,13 @@ export type UpdatesFragment = {
       subject?: string | null;
       totalValue?: number | null;
       totalRecoveredValue?: number | null;
+      location?: {
+        __typename?: 'Address';
+        id: string;
+        full?: string | null;
+        geoLat?: number | null;
+        geoLng?: number | null;
+      } | null;
       images: Array<{
         __typename?: 'Image';
         id: string;
@@ -76896,13 +77045,6 @@ export type UpdatesFragment = {
         policeImage?: boolean | null;
         card?: string | null;
       }>;
-      location?: {
-        __typename?: 'Address';
-        id: string;
-        full?: string | null;
-        geoLat?: number | null;
-        geoLng?: number | null;
-      } | null;
     }>;
     linkedOffenders: Array<{
       __typename?: 'Offender';
@@ -76950,17 +77092,6 @@ export type VehiclesFragment = {
   model?: string | null;
   make?: string | null;
   registration?: string | null;
-  images: Array<{
-    __typename?: 'Image';
-    id: string;
-    url?: string | null;
-    optimised?: string | null;
-    position: ImagePosition;
-    rotation: number;
-    primary?: boolean | null;
-    policeImage?: boolean | null;
-    card?: string | null;
-  }>;
 };
 
 export type ListGoodsTypesQueryVariables = Exact<{ [key: string]: never }>;
@@ -77262,7 +77393,10 @@ export type UpdateIncidentMutation = {
       townCity?: string | null;
       county?: string | null;
       postcode?: string | null;
+      geoLat?: number | null;
+      geoLng?: number | null;
       full?: string | null;
+      alias?: string | null;
     } | null;
     createdBy: {
       __typename?: 'User';
@@ -77419,12 +77553,15 @@ export type UpdateIncidentLocationMutation = {
     location?: {
       __typename?: 'Address';
       id: string;
-      premises?: string | null;
       building?: string | null;
       street?: string | null;
       townCity?: string | null;
       county?: string | null;
       postcode?: string | null;
+      geoLat?: number | null;
+      geoLng?: number | null;
+      full?: string | null;
+      alias?: string | null;
     } | null;
   } | null;
 };
@@ -77493,11 +77630,12 @@ export type UpdateIncidentVehiclesMutation = {
         __typename?: 'Image';
         id: string;
         url?: string | null;
-        policeImage?: boolean | null;
-        primary?: boolean | null;
+        optimised?: string | null;
         position: ImagePosition;
         rotation: number;
-        optimised?: string | null;
+        primary?: boolean | null;
+        policeImage?: boolean | null;
+        card?: string | null;
       }>;
     }>;
   } | null;
@@ -77561,15 +77699,6 @@ export type EditIncidentFeedQuery = {
       recoveredValue?: number | null;
       goodsType?: { __typename?: 'GoodsType'; id: string } | null;
     }>;
-    location?: {
-      __typename?: 'Address';
-      id: string;
-      building?: string | null;
-      street?: string | null;
-      townCity?: string | null;
-      county?: string | null;
-      postcode?: string | null;
-    } | null;
     business?: { __typename?: 'Business'; id: string; name: string } | null;
     createdBy: {
       __typename?: 'User';
@@ -78501,17 +78630,6 @@ export type ViewIncidentQuery = {
       model?: string | null;
       make?: string | null;
       registration?: string | null;
-      images: Array<{
-        __typename?: 'Image';
-        id: string;
-        url?: string | null;
-        optimised?: string | null;
-        position: ImagePosition;
-        rotation: number;
-        primary?: boolean | null;
-        policeImage?: boolean | null;
-        card?: string | null;
-      }>;
     }>;
     todos: Array<{
       __typename?: 'Todo';
@@ -78620,6 +78738,13 @@ export type ViewIncidentQuery = {
         subject?: string | null;
         totalValue?: number | null;
         totalRecoveredValue?: number | null;
+        location?: {
+          __typename?: 'Address';
+          id: string;
+          full?: string | null;
+          geoLat?: number | null;
+          geoLng?: number | null;
+        } | null;
         images: Array<{
           __typename?: 'Image';
           id: string;
@@ -78631,13 +78756,6 @@ export type ViewIncidentQuery = {
           policeImage?: boolean | null;
           card?: string | null;
         }>;
-        location?: {
-          __typename?: 'Address';
-          id: string;
-          full?: string | null;
-          geoLat?: number | null;
-          geoLng?: number | null;
-        } | null;
       }>;
       linkedOffenders: Array<{
         __typename?: 'Offender';
@@ -78731,6 +78849,13 @@ export type ViewIncidentQuery = {
           subject?: string | null;
           totalValue?: number | null;
           totalRecoveredValue?: number | null;
+          location?: {
+            __typename?: 'Address';
+            id: string;
+            full?: string | null;
+            geoLat?: number | null;
+            geoLng?: number | null;
+          } | null;
           images: Array<{
             __typename?: 'Image';
             id: string;
@@ -78742,13 +78867,6 @@ export type ViewIncidentQuery = {
             policeImage?: boolean | null;
             card?: string | null;
           }>;
-          location?: {
-            __typename?: 'Address';
-            id: string;
-            full?: string | null;
-            geoLat?: number | null;
-            geoLng?: number | null;
-          } | null;
         }>;
         linkedOffenders: Array<{
           __typename?: 'Offender';
@@ -78789,9 +78907,16 @@ export type ViewIncidentQuery = {
     }>;
     location?: {
       __typename?: 'Address';
+      id: string;
+      building?: string | null;
+      street?: string | null;
+      townCity?: string | null;
+      county?: string | null;
+      postcode?: string | null;
       geoLat?: number | null;
       geoLng?: number | null;
-      id: string;
+      full?: string | null;
+      alias?: string | null;
     } | null;
   } | null;
 };
@@ -78965,12 +79090,85 @@ export type UpdateInvestigationMutation = {
       recoveredValue?: number | null;
       createdBy: { __typename?: 'User'; organisation: string };
       location?: { __typename?: 'Address'; id: string } | null;
+      vehicles: Array<{
+        __typename?: 'Vehicle';
+        id: string;
+        reference?: number | null;
+        colour?: string | null;
+        model?: string | null;
+        make?: string | null;
+        registration?: string | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          optimised?: string | null;
+          position: ImagePosition;
+          rotation: number;
+        }>;
+      }>;
+      offenders: Array<{
+        __typename?: 'Offender';
+        id: string;
+        reference?: number | null;
+        name?: string | null;
+        gender?: Gender | null;
+        build?: Build | null;
+        height?: Height | null;
+        race?: Race | null;
+        age?: Age | null;
+        dateOfBirth?: Date | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          optimised?: string | null;
+          position: ImagePosition;
+          rotation: number;
+        }>;
+      }>;
     }>;
     crimeGroups: Array<{
       __typename?: 'CrimeGroup';
       id: string;
       alias?: string | null;
       reference?: number | null;
+      vehicles: Array<{
+        __typename?: 'Vehicle';
+        id: string;
+        reference?: number | null;
+        registration?: string | null;
+        make?: string | null;
+        model?: string | null;
+        colour?: string | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          optimised?: string | null;
+          position: ImagePosition;
+          rotation: number;
+        }>;
+      }>;
+      offenders: Array<{
+        __typename?: 'Offender';
+        id: string;
+        name?: string | null;
+        alias: Array<string>;
+        reference?: number | null;
+        dateOfBirth?: Date | null;
+        age?: Age | null;
+        gender?: Gender | null;
+        build?: Build | null;
+        height?: Height | null;
+        race?: Race | null;
+        hair?: string | null;
+        peculiarities?: string | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          optimised?: string | null;
+          position: ImagePosition;
+          rotation: number;
+        }>;
+      }>;
     }>;
     flows: Array<{
       __typename?: 'Flow';
@@ -78996,6 +79194,217 @@ export type UpdateInvestigationMutation = {
         position?: { __typename?: 'XY'; x: number; y: number } | null;
         positionAbsolute?: { __typename?: 'XY'; x: number; y: number } | null;
       }>;
+    }>;
+  } | null;
+};
+
+export type UpdateInvestigationCrimeGroupsMutationVariables = Exact<{
+  id: Scalars['String'];
+  crimeGroupIds?: InputMaybe<
+    Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>
+  >;
+  disconnectCrimeGroupIds?: InputMaybe<
+    Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>
+  >;
+}>;
+
+export type UpdateInvestigationCrimeGroupsMutation = {
+  __typename?: 'Mutation';
+  updateInvestigation?: {
+    __typename?: 'Investigation';
+    id: string;
+    crimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      id: string;
+      reference?: number | null;
+      alias?: string | null;
+      totalIncidents?: number | null;
+      totalOffenders?: number | null;
+      totalRecoveredValue?: number | null;
+      totalTheftSuccess?: number | null;
+      totalValue?: number | null;
+      vehicles: Array<{
+        __typename?: 'Vehicle';
+        id: string;
+        reference?: number | null;
+        colour?: string | null;
+        model?: string | null;
+        make?: string | null;
+        registration?: string | null;
+      }>;
+      offenders: Array<{
+        __typename?: 'Offender';
+        id: string;
+        reference?: number | null;
+        name?: string | null;
+        gender?: Gender | null;
+        build?: Build | null;
+        height?: Height | null;
+        race?: Race | null;
+        age?: Age | null;
+        dateOfBirth?: Date | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+          position: ImagePosition;
+          rotation: number;
+          primary?: boolean | null;
+          policeImage?: boolean | null;
+          card?: string | null;
+        }>;
+      }>;
+    }>;
+  } | null;
+};
+
+export type UpdateInvestigationDetailsMutationVariables = Exact<{
+  where: UniqueId;
+  data: UpdateInvestigationInput;
+}>;
+
+export type UpdateInvestigationDetailsMutation = {
+  __typename?: 'Mutation';
+  updateInvestigation?: {
+    __typename?: 'Investigation';
+    id: string;
+    description?: string | null;
+    name: string;
+  } | null;
+};
+
+export type UpdateInvestigationIncidentsMutationVariables = Exact<{
+  id: Scalars['String'];
+  incidentIds?: InputMaybe<
+    Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>
+  >;
+  disconnectIncidentIds?: InputMaybe<
+    Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>
+  >;
+}>;
+
+export type UpdateInvestigationIncidentsMutation = {
+  __typename?: 'Mutation';
+  updateInvestigation?: {
+    __typename?: 'Investigation';
+    id: string;
+    incidents: Array<{
+      __typename?: 'Incident';
+      id: string;
+      reference?: number | null;
+      dayTime?: string | null;
+      policeRef?: string | null;
+      subject?: string | null;
+      totalValue?: number | null;
+      totalRecoveredValue?: number | null;
+      vehicles: Array<{
+        __typename?: 'Vehicle';
+        id: string;
+        reference?: number | null;
+        colour?: string | null;
+        model?: string | null;
+        make?: string | null;
+        registration?: string | null;
+      }>;
+      offenders: Array<{
+        __typename?: 'Offender';
+        id: string;
+        reference?: number | null;
+        name?: string | null;
+        gender?: Gender | null;
+        build?: Build | null;
+        height?: Height | null;
+        race?: Race | null;
+        age?: Age | null;
+        dateOfBirth?: Date | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+          position: ImagePosition;
+          rotation: number;
+          primary?: boolean | null;
+          policeImage?: boolean | null;
+          card?: string | null;
+        }>;
+      }>;
+      location?: {
+        __typename?: 'Address';
+        id: string;
+        full?: string | null;
+        geoLat?: number | null;
+        geoLng?: number | null;
+      } | null;
+    }>;
+  } | null;
+};
+
+export type UpdateInvestigationOffendersMutationVariables = Exact<{
+  id: Scalars['String'];
+  offenderIds?: InputMaybe<
+    Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>
+  >;
+  disconnectOffenderIds?: InputMaybe<
+    Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>
+  >;
+}>;
+
+export type UpdateInvestigationOffendersMutation = {
+  __typename?: 'Mutation';
+  updateInvestigation?: {
+    __typename?: 'Investigation';
+    id: string;
+    offenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      reference?: number | null;
+      name?: string | null;
+      gender?: Gender | null;
+      build?: Build | null;
+      height?: Height | null;
+      race?: Race | null;
+      age?: Age | null;
+      dateOfBirth?: Date | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+        position: ImagePosition;
+        rotation: number;
+        primary?: boolean | null;
+        policeImage?: boolean | null;
+        card?: string | null;
+      }>;
+    }>;
+  } | null;
+};
+
+export type UpdateInvestigationVehiclesMutationVariables = Exact<{
+  id: Scalars['String'];
+  vehicleIds?: InputMaybe<
+    Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>
+  >;
+  disconnectVehicleIds?: InputMaybe<
+    Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>
+  >;
+}>;
+
+export type UpdateInvestigationVehiclesMutation = {
+  __typename?: 'Mutation';
+  updateInvestigation?: {
+    __typename?: 'Investigation';
+    id: string;
+    vehicles: Array<{
+      __typename?: 'Vehicle';
+      id: string;
+      reference?: number | null;
+      colour?: string | null;
+      model?: string | null;
+      make?: string | null;
+      registration?: string | null;
     }>;
   } | null;
 };
@@ -79225,29 +79634,17 @@ export type ViewInvestigationQuery = {
       model?: string | null;
       make?: string | null;
       registration?: string | null;
-      images: Array<{
-        __typename?: 'Image';
-        id: string;
-        url?: string | null;
-        optimised?: string | null;
-        position: ImagePosition;
-        rotation: number;
-        primary?: boolean | null;
-        policeImage?: boolean | null;
-        card?: string | null;
-      }>;
     }>;
     offenders: Array<{
       __typename?: 'Offender';
       id: string;
-      name?: string | null;
       reference?: number | null;
-      totalIncidents?: number | null;
-      age?: Age | null;
+      name?: string | null;
       gender?: Gender | null;
-      race?: Race | null;
       build?: Build | null;
       height?: Height | null;
+      race?: Race | null;
+      age?: Age | null;
       dateOfBirth?: Date | null;
       images: Array<{
         __typename?: 'Image';
@@ -79267,6 +79664,38 @@ export type ViewInvestigationQuery = {
       subject?: string | null;
       totalValue?: number | null;
       totalRecoveredValue?: number | null;
+      vehicles: Array<{
+        __typename?: 'Vehicle';
+        id: string;
+        reference?: number | null;
+        colour?: string | null;
+        model?: string | null;
+        make?: string | null;
+        registration?: string | null;
+      }>;
+      offenders: Array<{
+        __typename?: 'Offender';
+        id: string;
+        reference?: number | null;
+        name?: string | null;
+        gender?: Gender | null;
+        build?: Build | null;
+        height?: Height | null;
+        race?: Race | null;
+        age?: Age | null;
+        dateOfBirth?: Date | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+          position: ImagePosition;
+          rotation: number;
+          primary?: boolean | null;
+          policeImage?: boolean | null;
+          card?: string | null;
+        }>;
+      }>;
       location?: {
         __typename?: 'Address';
         id: string;
@@ -79332,6 +79761,13 @@ export type ViewInvestigationQuery = {
         subject?: string | null;
         totalValue?: number | null;
         totalRecoveredValue?: number | null;
+        location?: {
+          __typename?: 'Address';
+          id: string;
+          full?: string | null;
+          geoLat?: number | null;
+          geoLng?: number | null;
+        } | null;
         images: Array<{
           __typename?: 'Image';
           id: string;
@@ -79343,13 +79779,6 @@ export type ViewInvestigationQuery = {
           policeImage?: boolean | null;
           card?: string | null;
         }>;
-        location?: {
-          __typename?: 'Address';
-          id: string;
-          full?: string | null;
-          geoLat?: number | null;
-          geoLng?: number | null;
-        } | null;
       }>;
       linkedOffenders: Array<{
         __typename?: 'Offender';
@@ -79443,6 +79872,13 @@ export type ViewInvestigationQuery = {
           subject?: string | null;
           totalValue?: number | null;
           totalRecoveredValue?: number | null;
+          location?: {
+            __typename?: 'Address';
+            id: string;
+            full?: string | null;
+            geoLat?: number | null;
+            geoLng?: number | null;
+          } | null;
           images: Array<{
             __typename?: 'Image';
             id: string;
@@ -79454,13 +79890,6 @@ export type ViewInvestigationQuery = {
             policeImage?: boolean | null;
             card?: string | null;
           }>;
-          location?: {
-            __typename?: 'Address';
-            id: string;
-            full?: string | null;
-            geoLat?: number | null;
-            geoLng?: number | null;
-          } | null;
         }>;
         linkedOffenders: Array<{
           __typename?: 'Offender';
@@ -79517,17 +79946,6 @@ export type ViewInvestigationQuery = {
         model?: string | null;
         make?: string | null;
         registration?: string | null;
-        images: Array<{
-          __typename?: 'Image';
-          id: string;
-          url?: string | null;
-          optimised?: string | null;
-          position: ImagePosition;
-          rotation: number;
-          primary?: boolean | null;
-          policeImage?: boolean | null;
-          card?: string | null;
-        }>;
       }>;
       offenders: Array<{
         __typename?: 'Offender';
@@ -80501,12 +80919,14 @@ export type UpdateOffenderAddressesMutation = {
     addresses: Array<{
       __typename?: 'Address';
       id: string;
-      full?: string | null;
       building?: string | null;
       street?: string | null;
       townCity?: string | null;
       county?: string | null;
       postcode?: string | null;
+      geoLat?: number | null;
+      geoLng?: number | null;
+      full?: string | null;
       alias?: string | null;
     }>;
   } | null;
@@ -81299,12 +81719,14 @@ export type ViewOffenderQuery = {
     addresses: Array<{
       __typename?: 'Address';
       id: string;
-      full?: string | null;
       building?: string | null;
       street?: string | null;
       townCity?: string | null;
       county?: string | null;
       postcode?: string | null;
+      geoLat?: number | null;
+      geoLng?: number | null;
+      full?: string | null;
       alias?: string | null;
     }>;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
@@ -81344,17 +81766,6 @@ export type ViewOffenderQuery = {
       model?: string | null;
       make?: string | null;
       registration?: string | null;
-      images: Array<{
-        __typename?: 'Image';
-        id: string;
-        url?: string | null;
-        optimised?: string | null;
-        position: ImagePosition;
-        rotation: number;
-        primary?: boolean | null;
-        policeImage?: boolean | null;
-        card?: string | null;
-      }>;
     }>;
     incidents: Array<{
       __typename?: 'Incident';
@@ -81444,6 +81855,13 @@ export type ViewOffenderQuery = {
         subject?: string | null;
         totalValue?: number | null;
         totalRecoveredValue?: number | null;
+        location?: {
+          __typename?: 'Address';
+          id: string;
+          full?: string | null;
+          geoLat?: number | null;
+          geoLng?: number | null;
+        } | null;
         images: Array<{
           __typename?: 'Image';
           id: string;
@@ -81455,13 +81873,6 @@ export type ViewOffenderQuery = {
           policeImage?: boolean | null;
           card?: string | null;
         }>;
-        location?: {
-          __typename?: 'Address';
-          id: string;
-          full?: string | null;
-          geoLat?: number | null;
-          geoLng?: number | null;
-        } | null;
       }>;
       linkedOffenders: Array<{
         __typename?: 'Offender';
@@ -81555,6 +81966,13 @@ export type ViewOffenderQuery = {
           subject?: string | null;
           totalValue?: number | null;
           totalRecoveredValue?: number | null;
+          location?: {
+            __typename?: 'Address';
+            id: string;
+            full?: string | null;
+            geoLat?: number | null;
+            geoLng?: number | null;
+          } | null;
           images: Array<{
             __typename?: 'Image';
             id: string;
@@ -81566,13 +81984,6 @@ export type ViewOffenderQuery = {
             policeImage?: boolean | null;
             card?: string | null;
           }>;
-          location?: {
-            __typename?: 'Address';
-            id: string;
-            full?: string | null;
-            geoLat?: number | null;
-            geoLng?: number | null;
-          } | null;
         }>;
         linkedOffenders: Array<{
           __typename?: 'Offender';
@@ -85575,6 +85986,13 @@ export type VehicleQuery = {
         subject?: string | null;
         totalValue?: number | null;
         totalRecoveredValue?: number | null;
+        location?: {
+          __typename?: 'Address';
+          id: string;
+          full?: string | null;
+          geoLat?: number | null;
+          geoLng?: number | null;
+        } | null;
         images: Array<{
           __typename?: 'Image';
           id: string;
@@ -85586,13 +86004,6 @@ export type VehicleQuery = {
           policeImage?: boolean | null;
           card?: string | null;
         }>;
-        location?: {
-          __typename?: 'Address';
-          id: string;
-          full?: string | null;
-          geoLat?: number | null;
-          geoLng?: number | null;
-        } | null;
       }>;
       linkedOffenders: Array<{
         __typename?: 'Offender';
@@ -85686,6 +86097,13 @@ export type VehicleQuery = {
           subject?: string | null;
           totalValue?: number | null;
           totalRecoveredValue?: number | null;
+          location?: {
+            __typename?: 'Address';
+            id: string;
+            full?: string | null;
+            geoLat?: number | null;
+            geoLng?: number | null;
+          } | null;
           images: Array<{
             __typename?: 'Image';
             id: string;
@@ -85697,13 +86115,6 @@ export type VehicleQuery = {
             policeImage?: boolean | null;
             card?: string | null;
           }>;
-          location?: {
-            __typename?: 'Address';
-            id: string;
-            full?: string | null;
-            geoLat?: number | null;
-            geoLng?: number | null;
-          } | null;
         }>;
         linkedOffenders: Array<{
           __typename?: 'Offender';
@@ -86131,6 +86542,18 @@ export const CreatedByFragmentDoc = gql`
     }
   }
 `;
+export const CrimeGroupsFragmentDoc = gql`
+  fragment CrimeGroups on CrimeGroup {
+    id
+    reference
+    alias
+    totalIncidents
+    totalOffenders
+    totalRecoveredValue
+    totalTheftSuccess
+    totalValue
+  }
+`;
 export const DocumentsFragmentDoc = gql`
   fragment Documents on Document {
     id
@@ -86223,27 +86646,6 @@ export const FeedUpdateFragmentDoc = gql`
   }
   ${FeedImageFragmentDoc}
 `;
-export const InvestigationsFragmentDoc = gql`
-  fragment Investigations on Investigation {
-    id
-    name
-    description
-    status
-  }
-`;
-export const TodosFragmentDoc = gql`
-  fragment Todos on Todo {
-    id
-    name
-    description
-    dueDate
-    completed
-    assignedUsers {
-      id
-      fullName
-    }
-  }
-`;
 export const ImagesFragmentDoc = gql`
   fragment Images on Image {
     id
@@ -86255,32 +86657,6 @@ export const ImagesFragmentDoc = gql`
     policeImage
     card
   }
-`;
-export const CrimeGroupsFragmentDoc = gql`
-  fragment CrimeGroups on CrimeGroup {
-    id
-    reference
-    alias
-    totalIncidents
-    totalOffenders
-    totalRecoveredValue
-    totalTheftSuccess
-    totalValue
-  }
-`;
-export const VehiclesFragmentDoc = gql`
-  fragment Vehicles on Vehicle {
-    id
-    reference
-    colour
-    model
-    make
-    registration
-    images {
-      ...Images
-    }
-  }
-  ${ImagesFragmentDoc}
 `;
 export const IncidentsFragmentDoc = gql`
   fragment Incidents on Incident {
@@ -86299,6 +86675,28 @@ export const IncidentsFragmentDoc = gql`
     }
   }
 `;
+export const InvestigationsFragmentDoc = gql`
+  fragment Investigations on Investigation {
+    id
+    name
+    description
+    status
+  }
+`;
+export const LocationsFragmentDoc = gql`
+  fragment Locations on Address {
+    id
+    building
+    street
+    townCity
+    county
+    postcode
+    geoLat
+    geoLng
+    full
+    alias
+  }
+`;
 export const OffendersFragmentDoc = gql`
   fragment Offenders on Offender {
     id
@@ -86310,11 +86708,20 @@ export const OffendersFragmentDoc = gql`
     race
     age
     dateOfBirth
-    images {
-      ...Images
+  }
+`;
+export const TodosFragmentDoc = gql`
+  fragment Todos on Todo {
+    id
+    name
+    description
+    dueDate
+    completed
+    assignedUsers {
+      id
+      fullName
     }
   }
-  ${ImagesFragmentDoc}
 `;
 export const UpdatesFragmentDoc = gql`
   fragment Updates on Update {
@@ -86323,22 +86730,88 @@ export const UpdatesFragmentDoc = gql`
     type
     createdAt
     images {
-      ...Images
+      id
+      url
+      optimised
+      position
+      rotation
+      primary
+      policeImage
+      card
     }
     linkedCrimeGroups {
-      ...CrimeGroups
+      id
+      reference
+      alias
+      totalIncidents
+      totalOffenders
+      totalRecoveredValue
+      totalTheftSuccess
+      totalValue
     }
     linkedVehicles {
-      ...Vehicles
+      id
+      reference
+      colour
+      model
+      make
+      registration
+      images {
+        id
+        url
+        optimised
+        position
+        rotation
+        primary
+        policeImage
+        card
+      }
     }
     linkedIncidents {
-      ...Incidents
+      id
+      reference
+      dayTime
+      policeRef
+      subject
+      totalValue
+      totalRecoveredValue
+      location {
+        id
+        full
+        geoLat
+        geoLng
+      }
       images {
-        ...Images
+        id
+        url
+        optimised
+        position
+        rotation
+        primary
+        policeImage
+        card
       }
     }
     linkedOffenders {
-      ...Offenders
+      id
+      reference
+      name
+      gender
+      build
+      height
+      race
+      age
+      dateOfBirth
+      images {
+        id
+        url
+        optimised
+        position
+        rotation
+        primary
+        policeImage
+        card
+      }
     }
     createdBy {
       origName
@@ -86356,22 +86829,88 @@ export const UpdatesFragmentDoc = gql`
       type
       createdAt
       images {
-        ...Images
+        id
+        url
+        optimised
+        position
+        rotation
+        primary
+        policeImage
+        card
       }
       linkedCrimeGroups {
-        ...CrimeGroups
+        id
+        reference
+        alias
+        totalIncidents
+        totalOffenders
+        totalRecoveredValue
+        totalTheftSuccess
+        totalValue
       }
       linkedVehicles {
-        ...Vehicles
+        id
+        reference
+        colour
+        model
+        make
+        registration
+        images {
+          id
+          url
+          optimised
+          position
+          rotation
+          primary
+          policeImage
+          card
+        }
       }
       linkedIncidents {
-        ...Incidents
+        id
+        reference
+        dayTime
+        policeRef
+        subject
+        totalValue
+        totalRecoveredValue
+        location {
+          id
+          full
+          geoLat
+          geoLng
+        }
         images {
-          ...Images
+          id
+          url
+          optimised
+          position
+          rotation
+          primary
+          policeImage
+          card
         }
       }
       linkedOffenders {
-        ...Offenders
+        id
+        reference
+        name
+        gender
+        build
+        height
+        race
+        age
+        dateOfBirth
+        images {
+          id
+          url
+          optimised
+          position
+          rotation
+          primary
+          policeImage
+          card
+        }
       }
       createdBy {
         origName
@@ -86385,11 +86924,16 @@ export const UpdatesFragmentDoc = gql`
       }
     }
   }
-  ${ImagesFragmentDoc}
-  ${CrimeGroupsFragmentDoc}
-  ${VehiclesFragmentDoc}
-  ${IncidentsFragmentDoc}
-  ${OffendersFragmentDoc}
+`;
+export const VehiclesFragmentDoc = gql`
+  fragment Vehicles on Vehicle {
+    id
+    reference
+    colour
+    model
+    make
+    registration
+  }
 `;
 export const SetPasswordDocument = gql`
   mutation SetPassword($data: SetPasswordData!) {
@@ -88111,6 +88655,51 @@ export type RemoveUserFromBusinessMutationOptions = Apollo.BaseMutationOptions<
   RemoveUserFromBusinessMutation,
   RemoveUserFromBusinessMutationVariables
 >;
+export const UpdateBusinessLocationDocument = gql`
+  mutation UpdateBusinessLocation(
+    $data: UpdateBusinessDataInput!
+    $where: BusinessWhereUniqueInput!
+  ) {
+    updateBusiness(data: $data, where: $where) {
+      id
+      locations {
+        id
+        building
+        street
+        townCity
+        county
+        postcode
+        geoLng
+        geoLat
+      }
+    }
+  }
+`;
+export type UpdateBusinessLocationMutationFn = Apollo.MutationFunction<
+  UpdateBusinessLocationMutation,
+  UpdateBusinessLocationMutationVariables
+>;
+export function useUpdateBusinessLocationMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateBusinessLocationMutation,
+    UpdateBusinessLocationMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateBusinessLocationMutation,
+    UpdateBusinessLocationMutationVariables
+  >(UpdateBusinessLocationDocument, options);
+}
+export type UpdateBusinessLocationMutationHookResult = ReturnType<
+  typeof useUpdateBusinessLocationMutation
+>;
+export type UpdateBusinessLocationMutationResult =
+  Apollo.MutationResult<UpdateBusinessLocationMutation>;
+export type UpdateBusinessLocationMutationOptions = Apollo.BaseMutationOptions<
+  UpdateBusinessLocationMutation,
+  UpdateBusinessLocationMutationVariables
+>;
 export const UpdateBusinessDocument = gql`
   mutation UpdateBusiness(
     $data: UpdateBusinessDataInput!
@@ -88130,7 +88719,13 @@ export const UpdateBusinessDocument = gql`
       }
       locations {
         id
-        full
+        building
+        street
+        townCity
+        county
+        postcode
+        geoLng
+        geoLat
       }
       totalUsers
     }
@@ -88339,10 +88934,7 @@ export const BusinessDocument = gql`
           }
         }
         location {
-          id
-          full
-          geoLat
-          geoLng
+          ...Locations
         }
       }
       todos {
@@ -88369,6 +88961,7 @@ export const BusinessDocument = gql`
       }
     }
   }
+  ${LocationsFragmentDoc}
 `;
 export function useBusinessQuery(
   baseOptions: Apollo.QueryHookOptions<BusinessQuery, BusinessQueryVariables>
@@ -88418,6 +89011,8 @@ export const EditBusinessDocument = gql`
         townCity
         county
         postcode
+        geoLng
+        geoLat
       }
     }
   }
@@ -88920,66 +89515,61 @@ export type SchemeChatsQueryResult = Apollo.QueryResult<
   SchemeChatsQuery,
   SchemeChatsQueryVariables
 >;
-export const ListCustomGalleriesDocument = gql`
-  query listCustomGalleries(
-    $take: Int
-    $skip: Int
-    $where: CustomGalleryWhereInput
-    $order: CustomGalleryOrderByWithRelationInput
-  ) {
-    listCustomGalleries(
-      take: $take
-      skip: $skip
-      where: $where
-      order: $order
-    ) {
-      customGalleries {
-        description
-        groups {
+export const CreateCrimeGroupSuggestedDataDocument = gql`
+  mutation CreateCrimeGroupSuggestedData($data: CreateCrimeGroupDataInput!) {
+    createCrimeGroup(data: $data) {
+      id
+      alias
+      reference
+      vehicles {
+        ...Vehicles
+        images {
           id
-          name
+          optimised
+          position
+          rotation
         }
-        id
-        name
       }
-      total
+      offenders {
+        ...Offenders
+        images {
+          id
+          optimised
+          position
+          rotation
+        }
+      }
     }
   }
+  ${VehiclesFragmentDoc}
+  ${OffendersFragmentDoc}
 `;
-export function useListCustomGalleriesQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    ListCustomGalleriesQuery,
-    ListCustomGalleriesQueryVariables
+export type CreateCrimeGroupSuggestedDataMutationFn = Apollo.MutationFunction<
+  CreateCrimeGroupSuggestedDataMutation,
+  CreateCrimeGroupSuggestedDataMutationVariables
+>;
+export function useCreateCrimeGroupSuggestedDataMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateCrimeGroupSuggestedDataMutation,
+    CreateCrimeGroupSuggestedDataMutationVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    ListCustomGalleriesQuery,
-    ListCustomGalleriesQueryVariables
-  >(ListCustomGalleriesDocument, options);
+  return Apollo.useMutation<
+    CreateCrimeGroupSuggestedDataMutation,
+    CreateCrimeGroupSuggestedDataMutationVariables
+  >(CreateCrimeGroupSuggestedDataDocument, options);
 }
-export function useListCustomGalleriesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    ListCustomGalleriesQuery,
-    ListCustomGalleriesQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    ListCustomGalleriesQuery,
-    ListCustomGalleriesQueryVariables
-  >(ListCustomGalleriesDocument, options);
-}
-export type ListCustomGalleriesQueryHookResult = ReturnType<
-  typeof useListCustomGalleriesQuery
+export type CreateCrimeGroupSuggestedDataMutationHookResult = ReturnType<
+  typeof useCreateCrimeGroupSuggestedDataMutation
 >;
-export type ListCustomGalleriesLazyQueryHookResult = ReturnType<
-  typeof useListCustomGalleriesLazyQuery
->;
-export type ListCustomGalleriesQueryResult = Apollo.QueryResult<
-  ListCustomGalleriesQuery,
-  ListCustomGalleriesQueryVariables
->;
+export type CreateCrimeGroupSuggestedDataMutationResult =
+  Apollo.MutationResult<CreateCrimeGroupSuggestedDataMutation>;
+export type CreateCrimeGroupSuggestedDataMutationOptions =
+  Apollo.BaseMutationOptions<
+    CreateCrimeGroupSuggestedDataMutation,
+    CreateCrimeGroupSuggestedDataMutationVariables
+  >;
 export const CreateCrimeGroupDocument = gql`
   mutation CreateCrimeGroup($data: CreateCrimeGroupDataInput!) {
     createCrimeGroup(data: $data) {
@@ -89379,6 +89969,9 @@ export const CrimeGroupDocument = gql`
       }
       offenders {
         ...Offenders
+        images {
+          ...Images
+        }
       }
       evidence {
         ...Documents
@@ -89394,6 +89987,7 @@ export const CrimeGroupDocument = gql`
   ${IncidentsFragmentDoc}
   ${VehiclesFragmentDoc}
   ${OffendersFragmentDoc}
+  ${ImagesFragmentDoc}
   ${DocumentsFragmentDoc}
   ${InvestigationsFragmentDoc}
   ${UpdatesFragmentDoc}
@@ -89429,6 +90023,174 @@ export type CrimeGroupLazyQueryHookResult = ReturnType<
 export type CrimeGroupQueryResult = Apollo.QueryResult<
   CrimeGroupQuery,
   CrimeGroupQueryVariables
+>;
+export const CreateCustomGalleryDocument = gql`
+  mutation createCustomGallery($data: CreateCustomGalleryInput!) {
+    createCustomGallery(data: $data) {
+      id
+      name
+      description
+      groups {
+        id
+      }
+    }
+  }
+`;
+export type CreateCustomGalleryMutationFn = Apollo.MutationFunction<
+  CreateCustomGalleryMutation,
+  CreateCustomGalleryMutationVariables
+>;
+export function useCreateCustomGalleryMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateCustomGalleryMutation,
+    CreateCustomGalleryMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateCustomGalleryMutation,
+    CreateCustomGalleryMutationVariables
+  >(CreateCustomGalleryDocument, options);
+}
+export type CreateCustomGalleryMutationHookResult = ReturnType<
+  typeof useCreateCustomGalleryMutation
+>;
+export type CreateCustomGalleryMutationResult =
+  Apollo.MutationResult<CreateCustomGalleryMutation>;
+export type CreateCustomGalleryMutationOptions = Apollo.BaseMutationOptions<
+  CreateCustomGalleryMutation,
+  CreateCustomGalleryMutationVariables
+>;
+export const DeleteCustomGalleryDocument = gql`
+  mutation deleteCustomGallery($id: String!) {
+    deleteCustomGallery(where: { id: $id }) {
+      id
+    }
+  }
+`;
+export type DeleteCustomGalleryMutationFn = Apollo.MutationFunction<
+  DeleteCustomGalleryMutation,
+  DeleteCustomGalleryMutationVariables
+>;
+export function useDeleteCustomGalleryMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteCustomGalleryMutation,
+    DeleteCustomGalleryMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteCustomGalleryMutation,
+    DeleteCustomGalleryMutationVariables
+  >(DeleteCustomGalleryDocument, options);
+}
+export type DeleteCustomGalleryMutationHookResult = ReturnType<
+  typeof useDeleteCustomGalleryMutation
+>;
+export type DeleteCustomGalleryMutationResult =
+  Apollo.MutationResult<DeleteCustomGalleryMutation>;
+export type DeleteCustomGalleryMutationOptions = Apollo.BaseMutationOptions<
+  DeleteCustomGalleryMutation,
+  DeleteCustomGalleryMutationVariables
+>;
+export const UpdateCustomGalleryDocument = gql`
+  mutation updateCustomGallery(
+    $where: UniqueId!
+    $data: CustomGalleryUpdateInput!
+  ) {
+    updateCustomGallery(where: $where, data: $data) {
+      id
+      name
+      description
+      groups {
+        id
+      }
+    }
+  }
+`;
+export type UpdateCustomGalleryMutationFn = Apollo.MutationFunction<
+  UpdateCustomGalleryMutation,
+  UpdateCustomGalleryMutationVariables
+>;
+export function useUpdateCustomGalleryMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateCustomGalleryMutation,
+    UpdateCustomGalleryMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateCustomGalleryMutation,
+    UpdateCustomGalleryMutationVariables
+  >(UpdateCustomGalleryDocument, options);
+}
+export type UpdateCustomGalleryMutationHookResult = ReturnType<
+  typeof useUpdateCustomGalleryMutation
+>;
+export type UpdateCustomGalleryMutationResult =
+  Apollo.MutationResult<UpdateCustomGalleryMutation>;
+export type UpdateCustomGalleryMutationOptions = Apollo.BaseMutationOptions<
+  UpdateCustomGalleryMutation,
+  UpdateCustomGalleryMutationVariables
+>;
+export const ListCustomGalleriesDocument = gql`
+  query listCustomGalleries(
+    $take: Int
+    $skip: Int
+    $where: CustomGalleryWhereInput
+    $order: CustomGalleryOrderByWithRelationInput
+  ) {
+    listCustomGalleries(
+      take: $take
+      skip: $skip
+      where: $where
+      order: $order
+    ) {
+      customGalleries {
+        description
+        groups {
+          id
+        }
+        id
+        name
+      }
+      total
+    }
+  }
+`;
+export function useListCustomGalleriesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    ListCustomGalleriesQuery,
+    ListCustomGalleriesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    ListCustomGalleriesQuery,
+    ListCustomGalleriesQueryVariables
+  >(ListCustomGalleriesDocument, options);
+}
+export function useListCustomGalleriesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListCustomGalleriesQuery,
+    ListCustomGalleriesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ListCustomGalleriesQuery,
+    ListCustomGalleriesQueryVariables
+  >(ListCustomGalleriesDocument, options);
+}
+export type ListCustomGalleriesQueryHookResult = ReturnType<
+  typeof useListCustomGalleriesQuery
+>;
+export type ListCustomGalleriesLazyQueryHookResult = ReturnType<
+  typeof useListCustomGalleriesLazyQuery
+>;
+export type ListCustomGalleriesQueryResult = Apollo.QueryResult<
+  ListCustomGalleriesQuery,
+  ListCustomGalleriesQueryVariables
 >;
 export const CopyEvidenceDocument = gql`
   mutation CopyEvidence($data: ImportDemEvidence!, $where: UniqueId!) {
@@ -90848,13 +91610,7 @@ export const UpdateIncidentDocument = gql`
       }
       approved
       location {
-        id
-        building
-        street
-        townCity
-        county
-        postcode
-        full
+        ...Locations
       }
       createdBy {
         id
@@ -90909,6 +91665,7 @@ export const UpdateIncidentDocument = gql`
       }
     }
   }
+  ${LocationsFragmentDoc}
 `;
 export type UpdateIncidentMutationFn = Apollo.MutationFunction<
   UpdateIncidentMutation,
@@ -91151,16 +91908,11 @@ export const UpdateIncidentLocationDocument = gql`
     updateIncident(where: { id: $id }, data: { location: $location }) {
       id
       location {
-        id
-        premises
-        building
-        street
-        townCity
-        county
-        postcode
+        ...Locations
       }
     }
   }
+  ${LocationsFragmentDoc}
 `;
 export type UpdateIncidentLocationMutationFn = Apollo.MutationFunction<
   UpdateIncidentLocationMutation,
@@ -91263,17 +92015,12 @@ export const UpdateIncidentVehiclesDocument = gql`
         make
         registration
         images(first: 1) {
-          id
-          url
-          policeImage
-          primary
-          position
-          rotation
-          optimised
+          ...Images
         }
       }
     }
   }
+  ${ImagesFragmentDoc}
 `;
 export type UpdateIncidentVehiclesMutationFn = Apollo.MutationFunction<
   UpdateIncidentVehiclesMutation,
@@ -91381,14 +92128,6 @@ export const EditIncidentFeedDocument = gql`
         goodsType {
           id
         }
-      }
-      location {
-        id
-        building
-        street
-        townCity
-        county
-        postcode
       }
       approved
       business {
@@ -92571,6 +93310,9 @@ export const ViewIncidentDocument = gql`
       }
       offenders {
         ...Offenders
+        images {
+          ...Images
+        }
       }
       evidence {
         ...Documents
@@ -92582,9 +93324,7 @@ export const ViewIncidentDocument = gql`
         ...Updates
       }
       location {
-        geoLat
-        geoLng
-        id
+        ...Locations
       }
     }
   }
@@ -92597,6 +93337,7 @@ export const ViewIncidentDocument = gql`
   ${DocumentsFragmentDoc}
   ${InvestigationsFragmentDoc}
   ${UpdatesFragmentDoc}
+  ${LocationsFragmentDoc}
 `;
 export function useViewIncidentQuery(
   baseOptions: Apollo.QueryHookOptions<
@@ -92924,11 +93665,63 @@ export const UpdateInvestigationDocument = gql`
         }
         value
         recoveredValue
+        vehicles {
+          ...Vehicles
+          images {
+            id
+            optimised
+            position
+            rotation
+          }
+        }
+        offenders {
+          ...Offenders
+          images {
+            id
+            optimised
+            position
+            rotation
+          }
+        }
       }
       crimeGroups {
         id
         alias
         reference
+        vehicles {
+          id
+          reference
+          registration
+          make
+          model
+          images {
+            id
+            optimised
+            position
+            rotation
+          }
+          colour
+        }
+        offenders {
+          id
+          name
+          alias
+          reference
+          dateOfBirth
+          age
+          gender
+          build
+          height
+          race
+          hair
+          peculiarities
+          images {
+            id
+            optimised
+            position
+            rotation
+          }
+        }
       }
       flows {
         name
@@ -92961,6 +93754,8 @@ export const UpdateInvestigationDocument = gql`
     }
   }
   ${ImagesFragmentDoc}
+  ${VehiclesFragmentDoc}
+  ${OffendersFragmentDoc}
 `;
 export type UpdateInvestigationMutationFn = Apollo.MutationFunction<
   UpdateInvestigationMutation,
@@ -92987,6 +93782,260 @@ export type UpdateInvestigationMutationOptions = Apollo.BaseMutationOptions<
   UpdateInvestigationMutation,
   UpdateInvestigationMutationVariables
 >;
+export const UpdateInvestigationCrimeGroupsDocument = gql`
+  mutation UpdateInvestigationCrimeGroups(
+    $id: String!
+    $crimeGroupIds: [String]
+    $disconnectCrimeGroupIds: [String]
+  ) {
+    updateInvestigation(
+      where: { id: $id }
+      data: {
+        crimeGroupIds: $crimeGroupIds
+        disconnectCrimeGroupIds: $disconnectCrimeGroupIds
+      }
+    ) {
+      id
+      crimeGroups {
+        ...CrimeGroups
+        vehicles {
+          ...Vehicles
+        }
+        offenders {
+          ...Offenders
+          images {
+            ...Images
+          }
+        }
+      }
+    }
+  }
+  ${CrimeGroupsFragmentDoc}
+  ${VehiclesFragmentDoc}
+  ${OffendersFragmentDoc}
+  ${ImagesFragmentDoc}
+`;
+export type UpdateInvestigationCrimeGroupsMutationFn = Apollo.MutationFunction<
+  UpdateInvestigationCrimeGroupsMutation,
+  UpdateInvestigationCrimeGroupsMutationVariables
+>;
+export function useUpdateInvestigationCrimeGroupsMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateInvestigationCrimeGroupsMutation,
+    UpdateInvestigationCrimeGroupsMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateInvestigationCrimeGroupsMutation,
+    UpdateInvestigationCrimeGroupsMutationVariables
+  >(UpdateInvestigationCrimeGroupsDocument, options);
+}
+export type UpdateInvestigationCrimeGroupsMutationHookResult = ReturnType<
+  typeof useUpdateInvestigationCrimeGroupsMutation
+>;
+export type UpdateInvestigationCrimeGroupsMutationResult =
+  Apollo.MutationResult<UpdateInvestigationCrimeGroupsMutation>;
+export type UpdateInvestigationCrimeGroupsMutationOptions =
+  Apollo.BaseMutationOptions<
+    UpdateInvestigationCrimeGroupsMutation,
+    UpdateInvestigationCrimeGroupsMutationVariables
+  >;
+export const UpdateInvestigationDetailsDocument = gql`
+  mutation UpdateInvestigationDetails(
+    $where: UniqueId!
+    $data: UpdateInvestigationInput!
+  ) {
+    updateInvestigation(where: $where, data: $data) {
+      id
+      description
+      name
+    }
+  }
+`;
+export type UpdateInvestigationDetailsMutationFn = Apollo.MutationFunction<
+  UpdateInvestigationDetailsMutation,
+  UpdateInvestigationDetailsMutationVariables
+>;
+export function useUpdateInvestigationDetailsMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateInvestigationDetailsMutation,
+    UpdateInvestigationDetailsMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateInvestigationDetailsMutation,
+    UpdateInvestigationDetailsMutationVariables
+  >(UpdateInvestigationDetailsDocument, options);
+}
+export type UpdateInvestigationDetailsMutationHookResult = ReturnType<
+  typeof useUpdateInvestigationDetailsMutation
+>;
+export type UpdateInvestigationDetailsMutationResult =
+  Apollo.MutationResult<UpdateInvestigationDetailsMutation>;
+export type UpdateInvestigationDetailsMutationOptions =
+  Apollo.BaseMutationOptions<
+    UpdateInvestigationDetailsMutation,
+    UpdateInvestigationDetailsMutationVariables
+  >;
+export const UpdateInvestigationIncidentsDocument = gql`
+  mutation UpdateInvestigationIncidents(
+    $id: String!
+    $incidentIds: [String]
+    $disconnectIncidentIds: [String]
+  ) {
+    updateInvestigation(
+      where: { id: $id }
+      data: {
+        incidentIds: $incidentIds
+        disconnectIncidentIds: $disconnectIncidentIds
+      }
+    ) {
+      id
+      incidents {
+        ...Incidents
+        vehicles {
+          ...Vehicles
+        }
+        offenders {
+          ...Offenders
+          images {
+            ...Images
+          }
+        }
+      }
+    }
+  }
+  ${IncidentsFragmentDoc}
+  ${VehiclesFragmentDoc}
+  ${OffendersFragmentDoc}
+  ${ImagesFragmentDoc}
+`;
+export type UpdateInvestigationIncidentsMutationFn = Apollo.MutationFunction<
+  UpdateInvestigationIncidentsMutation,
+  UpdateInvestigationIncidentsMutationVariables
+>;
+export function useUpdateInvestigationIncidentsMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateInvestigationIncidentsMutation,
+    UpdateInvestigationIncidentsMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateInvestigationIncidentsMutation,
+    UpdateInvestigationIncidentsMutationVariables
+  >(UpdateInvestigationIncidentsDocument, options);
+}
+export type UpdateInvestigationIncidentsMutationHookResult = ReturnType<
+  typeof useUpdateInvestigationIncidentsMutation
+>;
+export type UpdateInvestigationIncidentsMutationResult =
+  Apollo.MutationResult<UpdateInvestigationIncidentsMutation>;
+export type UpdateInvestigationIncidentsMutationOptions =
+  Apollo.BaseMutationOptions<
+    UpdateInvestigationIncidentsMutation,
+    UpdateInvestigationIncidentsMutationVariables
+  >;
+export const UpdateInvestigationOffendersDocument = gql`
+  mutation UpdateInvestigationOffenders(
+    $id: String!
+    $offenderIds: [String]
+    $disconnectOffenderIds: [String]
+  ) {
+    updateInvestigation(
+      where: { id: $id }
+      data: {
+        offenderIds: $offenderIds
+        disconnectOffenderIds: $disconnectOffenderIds
+      }
+    ) {
+      id
+      offenders {
+        ...Offenders
+        images {
+          ...Images
+        }
+      }
+    }
+  }
+  ${OffendersFragmentDoc}
+  ${ImagesFragmentDoc}
+`;
+export type UpdateInvestigationOffendersMutationFn = Apollo.MutationFunction<
+  UpdateInvestigationOffendersMutation,
+  UpdateInvestigationOffendersMutationVariables
+>;
+export function useUpdateInvestigationOffendersMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateInvestigationOffendersMutation,
+    UpdateInvestigationOffendersMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateInvestigationOffendersMutation,
+    UpdateInvestigationOffendersMutationVariables
+  >(UpdateInvestigationOffendersDocument, options);
+}
+export type UpdateInvestigationOffendersMutationHookResult = ReturnType<
+  typeof useUpdateInvestigationOffendersMutation
+>;
+export type UpdateInvestigationOffendersMutationResult =
+  Apollo.MutationResult<UpdateInvestigationOffendersMutation>;
+export type UpdateInvestigationOffendersMutationOptions =
+  Apollo.BaseMutationOptions<
+    UpdateInvestigationOffendersMutation,
+    UpdateInvestigationOffendersMutationVariables
+  >;
+export const UpdateInvestigationVehiclesDocument = gql`
+  mutation UpdateInvestigationVehicles(
+    $id: String!
+    $vehicleIds: [String]
+    $disconnectVehicleIds: [String]
+  ) {
+    updateInvestigation(
+      where: { id: $id }
+      data: {
+        vehicleIds: $vehicleIds
+        disconnectVehicleIds: $disconnectVehicleIds
+      }
+    ) {
+      id
+      vehicles {
+        ...Vehicles
+      }
+    }
+  }
+  ${VehiclesFragmentDoc}
+`;
+export type UpdateInvestigationVehiclesMutationFn = Apollo.MutationFunction<
+  UpdateInvestigationVehiclesMutation,
+  UpdateInvestigationVehiclesMutationVariables
+>;
+export function useUpdateInvestigationVehiclesMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateInvestigationVehiclesMutation,
+    UpdateInvestigationVehiclesMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateInvestigationVehiclesMutation,
+    UpdateInvestigationVehiclesMutationVariables
+  >(UpdateInvestigationVehiclesDocument, options);
+}
+export type UpdateInvestigationVehiclesMutationHookResult = ReturnType<
+  typeof useUpdateInvestigationVehiclesMutation
+>;
+export type UpdateInvestigationVehiclesMutationResult =
+  Apollo.MutationResult<UpdateInvestigationVehiclesMutation>;
+export type UpdateInvestigationVehiclesMutationOptions =
+  Apollo.BaseMutationOptions<
+    UpdateInvestigationVehiclesMutation,
+    UpdateInvestigationVehiclesMutationVariables
+  >;
 export const InvestigationSuggestionsDocument = gql`
   query InvestigationSuggestions(
     $where: InvestigationWhereUniqueInput!
@@ -93291,16 +94340,7 @@ export const ViewInvestigationDocument = gql`
         ...Vehicles
       }
       offenders {
-        id
-        name
-        reference
-        totalIncidents
-        age
-        gender
-        race
-        build
-        height
-        dateOfBirth
+        ...Offenders
         images {
           id
           optimised
@@ -93311,6 +94351,15 @@ export const ViewInvestigationDocument = gql`
       }
       incidents {
         ...Incidents
+        vehicles {
+          ...Vehicles
+        }
+        offenders {
+          ...Offenders
+          images {
+            ...Images
+          }
+        }
       }
       updates(orderBy: { createdAt: desc }) {
         ...Updates
@@ -93322,6 +94371,9 @@ export const ViewInvestigationDocument = gql`
         }
         offenders {
           ...Offenders
+          images {
+            ...Images
+          }
         }
       }
       flows {
@@ -93362,10 +94414,11 @@ export const ViewInvestigationDocument = gql`
   }
   ${TodosFragmentDoc}
   ${VehiclesFragmentDoc}
+  ${OffendersFragmentDoc}
   ${IncidentsFragmentDoc}
+  ${ImagesFragmentDoc}
   ${UpdatesFragmentDoc}
   ${CrimeGroupsFragmentDoc}
-  ${OffendersFragmentDoc}
 `;
 export function useViewInvestigationQuery(
   baseOptions: Apollo.QueryHookOptions<
@@ -94701,17 +95754,11 @@ export const UpdateOffenderAddressesDocument = gql`
     updateOffender(where: { id: $id }, data: { addresses: $addresses }) {
       id
       addresses {
-        id
-        full
-        building
-        street
-        townCity
-        county
-        postcode
-        alias
+        ...Locations
       }
     }
   }
+  ${LocationsFragmentDoc}
 `;
 export type UpdateOffenderAddressesMutationFn = Apollo.MutationFunction<
   UpdateOffenderAddressesMutation,
@@ -95979,14 +97026,7 @@ export const ViewOffenderDocument = gql`
         }
       }
       addresses {
-        id
-        full
-        building
-        street
-        townCity
-        county
-        postcode
-        alias
+        ...Locations
       }
       groups {
         id
@@ -96035,6 +97075,7 @@ export const ViewOffenderDocument = gql`
     }
   }
   ${ImagesFragmentDoc}
+  ${LocationsFragmentDoc}
   ${CreatedByFragmentDoc}
   ${CrimeGroupsFragmentDoc}
   ${VehiclesFragmentDoc}
@@ -101792,6 +102833,9 @@ export const VehicleDocument = gql`
       }
       offenders {
         ...Offenders
+        images {
+          ...Images
+        }
       }
       incidents {
         ...Incidents

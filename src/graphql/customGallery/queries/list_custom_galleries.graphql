@@ -9,7 +9,6 @@ query listCustomGalleries(
       description
       groups {
         id
-        name
       }
       id
       name

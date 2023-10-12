@@ -12,6 +12,8 @@ import {
 } from 'antd';
 import DebounceSelect from 'components/form-components/DebounceSelect';
 import { useIntl } from 'react-intl';
+import LocatingCard from 'components/map/LocatingCard';
+import type { LocationData } from 'types/DataType';
 
 interface FormData {
   name: string;
@@ -36,6 +38,8 @@ interface Props {
   saving: boolean;
   loading: boolean;
   form: FormInstance<FormData>;
+  location: LocationData | undefined;
+  setLocation: (value: LocationData) => void;
 }
 
 const EditBusiness = ({
@@ -45,6 +49,8 @@ const EditBusiness = ({
   saving,
   form,
   loading,
+  location,
+  setLocation,
 }: Props) => {
   const intl = useIntl();
 
@@ -106,6 +112,12 @@ const EditBusiness = ({
       <Typography.Text style={{ fontSize: 16, fontWeight: 500 }}>
         {intl.formatMessage({ defaultMessage: 'Location', id: 'rvirM2' })}
       </Typography.Text>
+      <LocatingCard
+        width="100%"
+        height={194}
+        location={location}
+        setLocation={setLocation}
+      />
       <Row style={{ marginTop: 10 }} gutter={16}>
         <Col>
           <Form.Item
@@ -129,7 +141,7 @@ const EditBusiness = ({
               defaultMessage: 'Street',
               id: 'BaIwdV',
             })}
-            rules={[{ required: true }]}
+            // rules={[{ required: true }]}
           >
             {loading ? (
               <Skeleton.Input />
@@ -147,7 +159,7 @@ const EditBusiness = ({
               defaultMessage: 'Town/City',
               id: 'byaTQZ',
             })}
-            rules={[{ required: true }]}
+            // rules={[{ required: true }]}
           >
             {loading ? (
               <Skeleton.Input />
@@ -180,7 +192,7 @@ const EditBusiness = ({
               defaultMessage: 'Postcode',
               id: 'FJhjgz',
             })}
-            rules={[{ required: true }]}
+            // rules={[{ required: true }]}
           >
             {loading ? <Skeleton.Input /> : <Input disabled={saving} />}
           </Form.Item>

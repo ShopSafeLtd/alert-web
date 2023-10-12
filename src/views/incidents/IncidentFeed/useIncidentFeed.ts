@@ -451,8 +451,6 @@ const useIncidentFeed = (): Return => {
   };
 
   const setGroupsFilter = (values: string[]) => {
-    console.log('setGroupsFilter');
-
     setIncidentsState({
       pagination,
       variables: {

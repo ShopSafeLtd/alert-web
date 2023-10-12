@@ -34,12 +34,8 @@ const ViewBusiness = () => {
     viewTodoVisible,
     updateTodo,
     updateTodoList,
+    onEditAddress,
   } = useViewBusiness();
-  console.log(
-    'data?.business?.locations[0].geoLat',
-    data?.business?.locations[0].geoLat,
-    data?.business?.locations[0].geoLng
-  );
 
   return (
     <View
@@ -73,6 +69,7 @@ const ViewBusiness = () => {
       viewTodoVisible={viewTodoVisible}
       updateTodo={updateTodo}
       updateTodoList={updateTodoList}
+      onEditAddress={onEditAddress}
     />
   );
 };

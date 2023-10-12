@@ -17,6 +17,7 @@ import {
   faFile,
   faFileExport,
   faFileImport,
+  faFilterList,
   faHome,
   faLineChart,
   faListCheck,
@@ -546,6 +547,19 @@ const adminOnlyItems: NavItem[] = [
         intl: defineMessage({
           id: 'incidentSettings',
           defaultMessage: 'Incident Settings',
+        }),
+        breadcrumb: true,
+        submenu: [],
+        roles: [Role.SchemeAdmin, Role.ShopsafeAdmin],
+      },
+      {
+        key: 'customGalleries',
+        path: `${APP_PREFIX_PATH}/scheme-settings/custom-galleries`,
+        title: 'Custom Galleries',
+        icon: faFilterList,
+        intl: defineMessage({
+          id: 'customGalleries',
+          defaultMessage: 'Custom Galleries',
         }),
         breadcrumb: true,
         submenu: [],
