@@ -1285,8 +1285,8 @@ const useViewOffender = (offenderId: string): Return => {
               id: 'bYuIEA',
             }),
             description: intl.formatMessage({
-              defaultMessage: 'The ban have been added',
-              id: '/97vO4',
+              defaultMessage: 'The ban has been added',
+              id: '5mHoFH',
             }),
             placement: 'bottomRight',
           });
