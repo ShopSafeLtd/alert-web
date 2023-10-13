@@ -70,10 +70,15 @@ const AddInvestigation = ({
                 disabled={saving}
                 loading={saving}
               >
-                {intl.formatMessage({
-                  id: 'cihgU6',
-                  defaultMessage: 'Create Investigation',
-                })}
+                {investigationData
+                  ? intl.formatMessage({
+                      id: 'w5+hs4',
+                      defaultMessage: 'Save Details',
+                    })
+                  : intl.formatMessage({
+                      id: 'cihgU6',
+                      defaultMessage: 'Create Investigation',
+                    })}
               </Button>
             </Col>
           </Row>

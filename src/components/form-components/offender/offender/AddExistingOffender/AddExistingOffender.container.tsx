@@ -1,54 +1,8 @@
 import React from 'react';
-import type {
-  Age,
-  Build,
-  Gender,
-  ImagePosition,
-  Race,
-} from 'graphql/generated';
+import type { OffenderData } from 'types/DataType';
 
 import View from './AddExistingOffender.view';
 import useAddExistingOffender from './useAddExistingOffender';
-
-export interface OffenderData {
-  id: string;
-  updatedAt?: Date;
-  name?: string | null;
-  age?: Age | null;
-  gender?: Gender | null;
-  race?: Race | null;
-  build?: Build | null;
-  dateOfBirth?: Date | null;
-  hair?: string | null;
-  dateSource?: string | null;
-  peculiarities?: string | null;
-  approved?: boolean | null;
-  groups?:
-    | {
-        id: string;
-        name: string;
-      }[]
-    | undefined;
-  images?: {
-    id: string;
-    optimised?: string | null;
-    url?: string | null;
-    fileName?: string | null;
-    type?: string | null;
-    new?: boolean;
-    position: ImagePosition;
-    rotation: number;
-  }[];
-  imageUid?: string[] | undefined;
-  tags: {
-    id: string;
-    name: string;
-  }[];
-  lastActive:
-    | { id: string; dayTime?: string | null | undefined }
-    | null
-    | undefined;
-}
 
 interface Props {
   onClose: () => void;

@@ -81,9 +81,6 @@ const ViewCustomer: React.FC = () => {
     toggleEditInvestigation,
   } = useViewCustomer(id || '');
 
-  console.log('suggestedOffenders', suggestedOffenders);
-  console.log('suggestedVehicles', suggestedVehicles);
-
   return (
     <View
       loading={loading}

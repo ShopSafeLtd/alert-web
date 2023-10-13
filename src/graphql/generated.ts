@@ -77295,32 +77295,36 @@ export type CreateIncidentMutation = {
       rotation: number;
     }>;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+    vehicles: Array<{
+      __typename?: 'Vehicle';
+      id: string;
+      reference?: number | null;
+      colour?: string | null;
+      model?: string | null;
+      make?: string | null;
+      registration?: string | null;
+    }>;
     offenders: Array<{
       __typename?: 'Offender';
       id: string;
-      createdAt: Date;
-      updatedAt: Date;
-      age?: Age | null;
+      reference?: number | null;
+      name?: string | null;
+      gender?: Gender | null;
       build?: Build | null;
       height?: Height | null;
-      dateOfBirth?: Date | null;
-      dateSource?: string | null;
-      gender?: Gender | null;
-      hair?: string | null;
-      name?: string | null;
-      peculiarities?: string | null;
       race?: Race | null;
-      approved?: boolean | null;
-      uploaded?: boolean | null;
-      active?: boolean | null;
+      age?: Age | null;
+      dateOfBirth?: Date | null;
       images: Array<{
         __typename?: 'Image';
         id: string;
         url?: string | null;
         optimised?: string | null;
-        card?: string | null;
         position: ImagePosition;
         rotation: number;
+        primary?: boolean | null;
+        policeImage?: boolean | null;
+        card?: string | null;
       }>;
       tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
     }>;
@@ -91433,30 +91437,13 @@ export const CreateIncidentDocument = gql`
         id
         name
       }
+      vehicles {
+        ...Vehicles
+      }
       offenders {
-        id
-        createdAt
-        updatedAt
-        age
-        build
-        height
-        dateOfBirth
-        dateSource
-        gender
-        hair
-        name
-        peculiarities
-        race
-        approved
-        uploaded
-        active
+        ...Offenders
         images {
-          id
-          url
-          optimised
-          card
-          position
-          rotation
+          ...Images
         }
         tags {
           id
@@ -91465,6 +91452,9 @@ export const CreateIncidentDocument = gql`
       }
     }
   }
+  ${VehiclesFragmentDoc}
+  ${OffendersFragmentDoc}
+  ${ImagesFragmentDoc}
 `;
 export type CreateIncidentMutationFn = Apollo.MutationFunction<
   CreateIncidentMutation,

@@ -319,10 +319,7 @@ const useViewInvestigation = (investigationId: string): Return => {
       data: {
         investigation: {
           ...existingData.investigation,
-          offenders: [
-            ...existingData.investigation.offenders,
-            ...res.updateInvestigation.offenders,
-          ],
+          offenders: res.updateInvestigation.offenders,
         },
         __typename: 'Query',
       },
@@ -651,10 +648,7 @@ const useViewInvestigation = (investigationId: string): Return => {
       data: {
         investigation: {
           ...existingData.investigation,
-          vehicles: [
-            ...existingData.investigation.vehicles,
-            ...res.updateInvestigation.vehicles,
-          ],
+          vehicles: res.updateInvestigation.vehicles,
         },
         __typename: 'Query',
       },
@@ -978,10 +972,7 @@ const useViewInvestigation = (investigationId: string): Return => {
             data: {
               investigation: {
                 ...existingData.investigation,
-                crimeGroups: [
-                  ...existingData.investigation.crimeGroups,
-                  ...res.updateInvestigation.crimeGroups,
-                ],
+                crimeGroups: res.updateInvestigation.crimeGroups,
               },
               __typename: 'Query',
             },
@@ -1280,10 +1271,7 @@ const useViewInvestigation = (investigationId: string): Return => {
             data: {
               investigation: {
                 ...existingData.investigation,
-                incidents: [
-                  ...existingData.investigation.incidents,
-                  ...res.updateInvestigation.incidents,
-                ],
+                incidents: res.updateInvestigation.incidents,
               },
               __typename: 'Query',
             },

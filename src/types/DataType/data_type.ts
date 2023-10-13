@@ -47,6 +47,14 @@ export interface OffenderData {
         name: string;
       }[]
     | undefined;
+  tags?: {
+    id: string;
+    name: string;
+  }[];
+  lastActive?:
+    | { id: string; dayTime?: string | null | undefined }
+    | null
+    | undefined;
   images?: ImageCardData[] | null | undefined;
   imageUid?: string[] | undefined;
   bans?: BanData[] | undefined;

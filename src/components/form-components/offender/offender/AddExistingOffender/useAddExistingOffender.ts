@@ -4,7 +4,6 @@ import type {
   Age,
   Build,
   Gender,
-  ImagePosition,
   ListOffendersAllSchemesQuery,
   Race,
 } from 'graphql/generated';
@@ -14,46 +13,7 @@ import {
   SortOrder,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
-
-export interface OffenderData {
-  id: string;
-  updatedAt?: Date;
-  name?: string | null;
-  age?: Age | null;
-  gender?: Gender | null;
-  race?: Race | null;
-  build?: Build | null;
-  dateOfBirth?: Date | null;
-  hair?: string | null;
-  dateSource?: string | null;
-  peculiarities?: string | null;
-  approved?: boolean | null;
-  groups?:
-    | {
-        id: string;
-        name: string;
-      }[]
-    | undefined;
-  tags: {
-    id: string;
-    name: string;
-  }[];
-  images?: {
-    id: string;
-    optimised?: string | null;
-    url?: string | null;
-    fileName?: string | null;
-    type?: string | null;
-    new?: boolean;
-    position: ImagePosition;
-    rotation: number;
-  }[];
-  imageUid?: string[] | undefined;
-  lastActive:
-    | { id: string; dayTime?: string | null | undefined }
-    | null
-    | undefined;
-}
+import type { OffenderData } from 'types/DataType';
 
 interface Props {
   onClose: () => void;
@@ -237,7 +197,7 @@ const useAddExistingOffender = ({
     ) {
       update({
         id: selectedOffender.id,
-        updatedAt: selectedOffender.updatedAt,
+        reference: selectedOffender.reference,
         name: selectedOffender.name,
         age: selectedOffender.age || null,
         gender: selectedOffender.gender || null,

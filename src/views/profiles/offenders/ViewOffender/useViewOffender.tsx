@@ -625,10 +625,7 @@ const useViewOffender = (offenderId: string): Return => {
       data: {
         offender: {
           ...existingData.offender,
-          vehicles: [
-            ...existingData.offender.vehicles,
-            ...res.updateOffender.vehicles,
-          ],
+          vehicles: res.updateOffender.vehicles,
         },
         __typename: 'Query',
       },
@@ -924,10 +921,7 @@ const useViewOffender = (offenderId: string): Return => {
       data: {
         offender: {
           ...existingData.offender,
-          crimeGroups: [
-            ...existingData.offender.crimeGroups,
-            ...res.updateOffender.crimeGroups,
-          ],
+          crimeGroups: res.updateOffender.crimeGroups,
         },
         __typename: 'Query',
       },
@@ -1178,7 +1172,7 @@ const useViewOffender = (offenderId: string): Return => {
       data: {
         offender: {
           ...existingData.offender,
-          bans: [...existingData.offender.bans, ...res.updateOffender.bans],
+          bans: res.updateOffender.bans,
         },
         __typename: 'Query',
       },

@@ -324,6 +324,7 @@ const ViewInvestigation = ({
               templatesLoading={templatesLoading}
               setViewTodoVisible={setViewTodoVisible}
               setCompleteTodoVisible={setCompleteTodoVisible}
+              toggleEditInvestigation={toggleEditInvestigation}
             />
           </Tabs.TabPane>
           <Tabs.TabPane
@@ -560,7 +561,7 @@ const ViewInvestigation = ({
           id: 'uK1ewV',
         })}
         open={!!editCrimeGroupData}
-        width="800"
+        width="700"
         onClose={() => setEditCrimeGroupData(null)}
       >
         {editCrimeGroupData ? (
@@ -713,7 +714,7 @@ const ViewInvestigation = ({
           defaultMessage: 'Suggested Offenders',
           id: '5UuihT',
         })}
-        open={showSuggestedVehicles}
+        open={showSuggestedOffenders}
         onClose={toggleCloseSuggestedOffenders}
         width="900"
       >
@@ -728,7 +729,7 @@ const ViewInvestigation = ({
           defaultMessage: 'Suggested Vehicles',
           id: 'fzU5Bx',
         })}
-        open={showSuggestedOffenders}
+        open={showSuggestedVehicles}
         onClose={toggleCloseSuggestedVehicles}
         width="900"
       >
@@ -758,11 +759,10 @@ const ViewInvestigation = ({
             display: 'none',
           },
         }}
-        // bodyStyle={{ padding: 0 }}
         title={intl.formatMessage({
           defaultMessage:
-            'Add suggested offenders and vehicles to this investigation?',
-          id: 'dVXgio',
+            'Add suggested offenders and vehicles to the investigation?',
+          id: 'zYlYqu',
         })}
       >
         <Row gutter={16}>

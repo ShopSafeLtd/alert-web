@@ -740,10 +740,7 @@ const useViewIncident = (incidentId: string): Return => {
             data: {
               incident: {
                 ...existingData.incident,
-                vehicles: [
-                  ...existingData.incident.vehicles,
-                  ...res.updateIncident.vehicles,
-                ],
+                vehicles: res.updateIncident.vehicles,
               },
               __typename: 'Query',
             },
@@ -1039,10 +1036,7 @@ const useViewIncident = (incidentId: string): Return => {
             data: {
               incident: {
                 ...existingData.incident,
-                offenders: [
-                  ...existingData.incident.offenders,
-                  ...res.updateIncident.offenders,
-                ],
+                offenders: res.updateIncident.offenders,
               },
               __typename: 'Query',
             },
@@ -1119,10 +1113,7 @@ const useViewIncident = (incidentId: string): Return => {
       data: {
         incident: {
           ...existingData.incident,
-          incidentItems: [
-            ...existingData.incident.incidentItems,
-            ...res.updateIncident.incidentItems,
-          ],
+          incidentItems: res.updateIncident.incidentItems,
         },
         __typename: 'Query',
       },

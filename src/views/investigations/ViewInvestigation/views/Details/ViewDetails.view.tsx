@@ -23,6 +23,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faEdit,
   faMagnifyingGlass,
+  faPenToSquare,
   faPlus,
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
@@ -115,6 +116,7 @@ interface Props {
   onDeleteIncident: (id: string) => void;
   editIncidentId: string;
   setEditIncidentId: (value: string) => void;
+  toggleEditInvestigation: () => void;
 }
 const getTextStatus = (value: InvestigationStatus) => {
   if (value === InvestigationStatus.Open) return 'green';
@@ -171,6 +173,7 @@ const ViewInvestigation = ({
   editIncidentId,
   setEditIncidentId,
   saving,
+  toggleEditInvestigation,
 }: Props) => {
   const classes = useStyles();
   const navigate = useNavigate();
@@ -181,22 +184,48 @@ const ViewInvestigation = ({
         <Row className={classes.content}>
           <Col span={18} className={classes.detailsContainer}>
             <Card>
-              <Title className={classes.headerTitle} level={4}>
-                {data?.investigation?.name}
-                <Tag
-                  color={getTextStatus(
-                    data?.investigation?.status || InvestigationStatus.Open
-                  )}
-                  style={{ marginLeft: 10, marginTop: -5 }}
-                >
-                  {
-                    GetInvestigationStatusValues[
-                      data?.investigation?.status || InvestigationStatus.Open
-                    ]
-                  }
-                </Tag>
-              </Title>
-              <Paragraph style={{ margin: 0, marginBottom: 10 }}>
+              <Row gutter={8} align="middle">
+                <Col flex={1}>
+                  <Title className={classes.headerTitle} level={4}>
+                    {data?.investigation?.name}
+                    <Tag
+                      color={getTextStatus(
+                        data?.investigation?.status || InvestigationStatus.Open
+                      )}
+                      style={{ marginLeft: 10, marginTop: -10 }}
+                    >
+                      {
+                        GetInvestigationStatusValues[
+                          data?.investigation?.status ||
+                            InvestigationStatus.Open
+                        ]
+                      }
+                    </Tag>
+                  </Title>
+                </Col>
+                <Col>
+                  <Button
+                    disabled={saving}
+                    icon={
+                      <FontAwesomeIcon
+                        style={{ marginRight: 5 }}
+                        size="lg"
+                        icon={faPenToSquare}
+                      />
+                    }
+                    onClick={toggleEditInvestigation}
+                  >
+                    {intl.formatMessage({
+                      defaultMessage: 'Edit Details',
+                      id: 'A2fHI3',
+                    })}
+                  </Button>
+                </Col>
+              </Row>
+
+              <Paragraph
+                style={{ margin: 0, marginBottom: 10, marginTop: -15 }}
+              >
                 {data?.investigation?.description}
               </Paragraph>
               <Row gutter={32}>
@@ -264,24 +293,26 @@ const ViewInvestigation = ({
                     })}
                   </Title>
                 </Col>
-                {suggestedData?.investigation?.suggestedOffenders && (
-                  <Col>
-                    <Button
-                      disabled={saving}
-                      size="small"
-                      danger
-                      type="ghost"
-                      onClick={toggleViewSuggestedOffenders}
-                    >
-                      {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                      {suggestedData.investigation?.suggestedOffenders.length}{' '}
-                      {intl.formatMessage({
-                        defaultMessage: 'Suggested Offenders',
-                        id: '5UuihT',
-                      })}
-                    </Button>
-                  </Col>
-                )}
+                {suggestedData?.investigation?.suggestedOffenders &&
+                  suggestedData?.investigation?.suggestedOffenders.length >
+                    0 && (
+                    <Col>
+                      <Button
+                        disabled={saving}
+                        size="small"
+                        danger
+                        type="ghost"
+                        onClick={toggleViewSuggestedOffenders}
+                      >
+                        {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                        {suggestedData.investigation?.suggestedOffenders.length}{' '}
+                        {intl.formatMessage({
+                          defaultMessage: 'Suggested Offenders',
+                          id: '5UuihT',
+                        })}
+                      </Button>
+                    </Col>
+                  )}
                 <Col>
                   <Dropdown
                     overlay={

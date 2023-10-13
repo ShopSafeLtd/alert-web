@@ -14,8 +14,10 @@ import type {
   ListIncidentsQuery,
   PoliceResponseTime,
   Race,
+  ViewInvestigationQuery,
 } from 'graphql/generated';
 import {
+  ViewInvestigationDocument,
   AnswerType,
   GoodsMode,
   IncidentFormField,
@@ -329,6 +331,46 @@ const useAddIncident = ({ investigationId }: Props): Return => {
       },
     });
   };
+  const updateInvestigation: MutationUpdaterFn<CreateIncidentMutation> = (
+    store,
+    { data: res }
+  ) => {
+    if (res === null || res === undefined) return;
+    if (res.createIncident === null || res.createIncident === undefined) return;
+
+    const existingData = store.readQuery<ViewInvestigationQuery>({
+      query: ViewInvestigationDocument,
+      variables: {
+        where: {
+          id: investigationId,
+        },
+      },
+    });
+
+    if (!existingData?.investigation) return;
+    store.writeQuery<ViewInvestigationQuery>({
+      query: ViewInvestigationDocument,
+      data: {
+        investigation: {
+          ...existingData.investigation,
+          incidents: [
+            ...existingData.investigation.incidents,
+            res.createIncident,
+          ],
+          offenders: [
+            ...existingData.investigation.offenders,
+            ...res.createIncident.offenders,
+          ],
+          vehicles: [
+            ...existingData.investigation.vehicles,
+            ...res.createIncident.vehicles,
+          ],
+        },
+        __typename: 'Query',
+      },
+      variables,
+    });
+  };
 
   // mutation
   const [createIncident] = useCreateIncidentMutation({
@@ -372,7 +414,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
       });
     },
 
-    update: updateIncident,
+    update: investigationId ? updateInvestigation : updateIncident,
   });
 
   // functions
@@ -434,6 +476,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                     idSource: offender.idSource,
                   }))
                 : undefined,
+
             update: editedOffenders.map((offender) => ({
               data: {
                 name: { set: offender.name || '' },

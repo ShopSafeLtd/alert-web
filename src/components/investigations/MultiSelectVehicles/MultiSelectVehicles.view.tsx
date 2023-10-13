@@ -34,7 +34,7 @@ const SuggestedVehicles = ({
           {
             key: 'reference',
             dataIndex: 'reference',
-            title: <FormattedMessage id="mcUhhf" defaultMessage="Reference" />,
+            title: <FormattedMessage id="k8ZNgH" defaultMessage="Alert ID" />,
           },
           {
             key: 'registration',
