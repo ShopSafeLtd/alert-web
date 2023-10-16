@@ -24,7 +24,13 @@ interface OnLoginSuccessArgs extends SetUserPayload {
 }
 
 const useAuth = (): Return => {
-  const { getAccessTokenSilently, isAuthenticated, user } = useAuth0();
+  const {
+    getAccessTokenSilently,
+    isAuthenticated,
+    user,
+    isLoading,
+    loginWithRedirect,
+  } = useAuth0();
   const navigate = useNavigate();
   // const client = useApolloClient();
   const authenticated = useStoreActions(
@@ -193,9 +199,21 @@ const useAuth = (): Return => {
 
   const [getCurrentUser, { loading }] = useCurrentUserLazyQuery({
     nextFetchPolicy: 'cache-and-network',
-
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onCompleted: async ({ currentUser }) => {
+      if (!currentUser) {
+        if (!isLoading && isAuthenticated) {
+          expired();
+        } else if (!isLoading && !isAuthenticated) {
+          if (localStorage.getItem('logo')?.endsWith('.webp')) {
+            void loginWithRedirect({
+              'ext-logo': localStorage.getItem('logo'),
+            });
+          } else {
+            void loginWithRedirect();
+          }
+        }
+      }
       const scheme =
         currentScheme || window.localStorage.getItem('currentScheme');
 

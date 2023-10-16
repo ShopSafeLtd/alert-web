@@ -45,6 +45,7 @@ export interface ImageResponseType {
   blobName?: string;
   mimetype?: string;
   faces?: {
+    imageURL: string;
     Gender: {
       Value: 'Male' | 'Female';
     };
@@ -173,8 +174,8 @@ const useImageSection = ({ incidentForm, form, onChange }: Props): Return => {
               images: [
                 {
                   id: info.file.uid,
-                  optimised: image.url,
-                  url: image.url,
+                  optimised: face.imageURL || image.url,
+                  url: face.imageURL || image.url,
                   new: true,
                   boundingBox: {
                     height: face.BoundingBox.Height,

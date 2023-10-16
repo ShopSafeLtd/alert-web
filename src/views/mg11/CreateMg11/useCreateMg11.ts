@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import type { FormInstance } from 'antd';
 import { Form, notification } from 'antd';
 import type { ListStatementTemplatesQuery } from 'graphql/generated';
@@ -90,7 +91,7 @@ const useCreateMg11 = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
   const { id: incidentId } = useParams();
-
+  const { fullName: interviewerName } = useStoreState((state) => state.user);
   const [selectedFont, setSelectedFont] = useState(FONT_FAMILIES[0]);
   const [sign, setSign] = useState('');
   const [tab, setTab] = useState('generate');
@@ -159,22 +160,12 @@ const useCreateMg11 = (): Return => {
 
   const onSubmit = (formData: FormData) => {
     setSaving(true);
-    // // eslint-disable-next-line no-param-reassign
-    // delete data.over18;
-    // // eslint-disable-next-line no-param-reassign
-    // delete data.businessStatement;
-    // // eslint-disable-next-line no-param-reassign
-    // delete data.completeNow;
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const {
       over18,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      businessStatement: bStatement,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      completeNow: completeN,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      termsSignature,
+      businessStatement: _,
+      completeNow: __,
+      termsSignature: ___,
       ...data
     } = formData;
 
@@ -200,11 +191,13 @@ const useCreateMg11 = (): Return => {
           ethnicity:
             data.ethnicity === 'other' ? data.ethnicityOther : data.ethnicity,
           status: completeNow ? Mg11Status.Completed : Mg11Status.Sent,
-          incident: {
-            connect: {
-              id: incidentId,
-            },
-          },
+          incident: incidentId
+            ? {
+                connect: {
+                  id: incidentId,
+                },
+              }
+            : undefined,
           createdBy: {
             connect: {
               id: userId,
@@ -226,7 +219,7 @@ const useCreateMg11 = (): Return => {
   };
 
   const name = Form.useWatch('name', form) || '';
-  const { fullName: interviewerName } = useStoreState((state) => state.user);
+
   return {
     onSubmit,
     saving,

@@ -23,7 +23,6 @@ import {
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import CropFaceImage from 'components/images/CropFaceImage';
 import { Role } from 'graphql/generated';
 import useStyles from '../Profiles.styles';
 import type { StateOffenderData } from './useOffenders';
@@ -91,13 +90,25 @@ const OffenderProfile = ({
         {offender.images && offender.images.length > 0 && (
           <div className={classes.profileImage}>
             {offender.images[0]?.boundingBox && (
-              <CropFaceImage
-                url={offender.images[0].url || ''}
-                boundingBox={offender.images[0].boundingBox}
+              <img
+                src={offender.images[0].url || ''}
+                // eslint-disable-next-line formatjs/no-literal-string-in-jsx
+                alt={offender.name || 'offender image'}
                 height={210}
                 width={210}
+                style={{
+                  objectFit: 'contain',
+                }}
               />
             )}
+            {/* {offender.images[0]?.boundingBox && ( */}
+            {/*   <CropFaceImage */}
+            {/*     url={offender.images[0].url || ''} */}
+            {/*     boundingBox={offender.images[0].boundingBox} */}
+            {/*     height={210} */}
+            {/*     width={210} */}
+            {/*   /> */}
+            {/* )} */}
             {!offender.images[0]?.boundingBox && (
               <WatermarkImage url={offender.images[0]?.optimised || ''} />
             )}
