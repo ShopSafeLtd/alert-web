@@ -433,8 +433,8 @@ const ViewIncident = ({
                                 {
                                   key: 0,
                                   label: intl.formatMessage({
-                                    defaultMessage: 'Edit Incident',
-                                    id: 'E6VJFN',
+                                    defaultMessage: 'Edit Details',
+                                    id: 'A2fHI3',
                                   }),
                                   onClick: () => toggleEditIncident(),
                                   icon: <FontAwesomeIcon icon={faEdit} />,
@@ -2116,8 +2116,8 @@ const ViewIncident = ({
       {/* incident details */}
       <Drawer
         title={intl.formatMessage({
-          defaultMessage: 'Edit Incident',
-          id: 'E6VJFN',
+          defaultMessage: 'Edit Incident Details',
+          id: 'XU7doq',
         })}
         visible={editIncident}
         width="600"

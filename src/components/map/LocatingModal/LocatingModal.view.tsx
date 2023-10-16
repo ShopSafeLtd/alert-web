@@ -8,6 +8,7 @@ import Map, { Marker } from 'react-map-gl';
 import mapboxgl from 'mapbox-gl';
 import { useIntl } from 'react-intl';
 import type { ViewportData } from 'types/DataType';
+
 import MapPin from '../MapPin';
 import GeocoderControl from './geocoder-control';
 
@@ -73,16 +74,15 @@ const LocatingModal = ({
       // transitionDuration: 500,
     });
   };
-  const handleClick = (e) => {
-    // ???
-    // eslint-disable-next-line
+  const handleClick = (e: {
+    lngLat: {
+      lat: number;
+      lng: number;
+    };
+  }) => {
     if (e.lngLat) {
       setViewport({
-        // ???
-        // eslint-disable-next-line
         latitude: e.lngLat.lat,
-        // ???
-        // eslint-disable-next-line
         longitude: e.lngLat.lng,
       });
     }
@@ -140,6 +140,10 @@ const LocatingModal = ({
                 onResult={handleOnResult}
                 marker={false}
               />
+              {/* <Row>
+                <Col>search</Col>
+                <Col>search</Col>
+              </Row> */}
 
               <Marker
                 longitude={viewport.longitude}

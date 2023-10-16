@@ -4,6 +4,7 @@ import type {
   Age,
   Build,
   Gender,
+  ImagePosition,
   ListOffendersAllSchemesQuery,
   Race,
 } from 'graphql/generated';
@@ -13,7 +14,47 @@ import {
   SortOrder,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
-import type { OffenderData } from 'types/DataType';
+
+export interface OffenderData {
+  id: string;
+  reference?: number | null;
+  updatedAt?: Date;
+  name?: string | null;
+  age?: Age | null;
+  gender?: Gender | null;
+  race?: Race | null;
+  build?: Build | null;
+  dateOfBirth?: Date | null;
+  hair?: string | null;
+  dateSource?: string | null;
+  peculiarities?: string | null;
+  approved?: boolean | null;
+  groups?:
+    | {
+        id: string;
+        name: string;
+      }[]
+    | undefined;
+  images?: {
+    id: string;
+    optimised?: string | null;
+    url?: string | null;
+    fileName?: string | null;
+    type?: string | null;
+    new?: boolean;
+    position: ImagePosition;
+    rotation: number;
+  }[];
+  imageUid?: string[] | undefined;
+  tags: {
+    id: string;
+    name: string;
+  }[];
+  lastActive:
+    | { id: string; dayTime?: string | null | undefined }
+    | null
+    | undefined;
+}
 
 interface Props {
   onClose: () => void;
