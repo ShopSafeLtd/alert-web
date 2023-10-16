@@ -4,7 +4,7 @@ export async function compressImage(file: File): Promise<File> {
   const blobPromise: Promise<File | Blob> = new Promise((resolve) => {
     // eslint-disable-next-line no-new
     new Compressor(file, {
-      convertSize: 4_000_000,
+      convertSize: 2_000_000,
       success: (result) => resolve(result),
       error: () => resolve(file),
     });
