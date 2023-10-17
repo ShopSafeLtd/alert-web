@@ -17,21 +17,21 @@ interface Return {
   toggleAddInvestigation: () => void;
   updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
   takeAllSchemes: boolean;
-  toggleTakeAllSchemes: () => void;
+  setTakeAllSchemes: (value: boolean) => void;
 }
 
 const useListInvestigations = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const userSchemes = useStoreState((state) => state.user.schemes);
-  const setInvestigationAllSchemes = useStoreActions(
-    (actions) => actions.user.setInvestigationAllSchemes
+  const setInvestigations = useStoreActions(
+    (actions) => actions.data.setInvestigations
   );
-  const investigationAllSchemes = useStoreState(
-    (state) => state.user.investigationAllSchemes
+  const takeAllSchemes = useStoreState(
+    (state) => state.data.investigations.takeAllSchemes
   );
   const userSchemeIds = userSchemes.map((el) => el.scheme.id);
   const [addInvestigation, setAddInvestigation] = useState(false);
-  const [takeAllSchemes, setTakeAllSchemes] = useState(investigationAllSchemes);
+  // const [takeAllSchemes, setTakeAllSchemes] = useState(investigationAllSchemes);
   const variables = {
     where: {
       schemes: {
@@ -86,10 +86,14 @@ const useListInvestigations = (): Return => {
       variables,
     });
   };
-  const toggleTakeAllSchemes = () => {
-    setInvestigationAllSchemes({ investigationAllSchemes: !takeAllSchemes });
-    setTakeAllSchemes(!takeAllSchemes);
+  const setTakeAllSchemes = (value: boolean) => {
+    setInvestigations({
+      takeAllSchemes: value,
+    });
   };
+  // const toggleTakeAllSchemes = () => {
+  //   setInvestigationAllSchemes({ takeAllSchemes: !takeAllSchemes });
+  // };
 
   return {
     data,
@@ -98,7 +102,7 @@ const useListInvestigations = (): Return => {
     toggleAddInvestigation,
     updateInvestigationList,
     takeAllSchemes,
-    toggleTakeAllSchemes,
+    setTakeAllSchemes,
   };
 };
 

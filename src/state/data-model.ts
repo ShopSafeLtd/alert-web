@@ -180,18 +180,22 @@ interface CrimeGroups {
   };
   variables: CrimeGroupFilters;
 }
-
+interface Investigations {
+  takeAllSchemes: boolean;
+}
 export interface DataModel {
   incidents: Incidents;
   offenders: Offenders;
   feedItems: FeedItems;
   vehicles: Vehicles;
   crimeGroups: CrimeGroups;
+  investigations: Investigations;
   setIncidents: Action<DataModel, Incidents>;
   setOffenders: Action<DataModel, Offenders>;
   setFeedItems: Action<DataModel, FeedItems>;
   setVehicles: Action<DataModel, Vehicles>;
   setCrimeGroups: Action<DataModel, CrimeGroups>;
+  setInvestigations: Action<DataModel, Investigations>;
 }
 
 const dataModel: DataModel = {
@@ -305,6 +309,12 @@ const dataModel: DataModel = {
 
   setCrimeGroups: action((state, payload) => {
     state.crimeGroups = payload;
+  }),
+
+  investigations: { takeAllSchemes: false },
+
+  setInvestigations: action((state, payload) => {
+    state.investigations = payload;
   }),
 };
 

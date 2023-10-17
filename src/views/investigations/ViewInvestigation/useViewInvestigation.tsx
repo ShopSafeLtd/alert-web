@@ -121,8 +121,8 @@ const useViewInvestigation = (investigationId: string): Return => {
 
   const schemeId = useStoreState((state) => state.scheme.id);
   const demId = useStoreState((state) => state.user.demId);
-  const investigationAllSchemes = useStoreState(
-    (state) => state.user.investigationAllSchemes
+  const takeAllSchemes = useStoreState(
+    (state) => state.data.investigations.takeAllSchemes
   );
   const [offenderIds, setOffenderIds] = useState<string[]>([]);
   const [vehicleIds, setVehicleIds] = useState<string[]>([]);
@@ -1447,7 +1447,7 @@ const useViewInvestigation = (investigationId: string): Return => {
     toggleAddDocument,
     demId,
     toggleSubscribe,
-    takeAllSchemes: investigationAllSchemes,
+    takeAllSchemes,
     addTodo,
     toggleAddTodo,
     templatesData,
