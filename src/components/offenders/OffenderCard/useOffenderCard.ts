@@ -1,7 +1,7 @@
 import { useStoreState } from 'state';
 import type {
   ImageUpdateWithWhereUniqueWithoutOffendersInput,
-  OffenderFeedListQuery,
+  OffenderCardFragment,
   RecycleOffenderMutation,
 } from 'graphql/generated';
 import {
@@ -18,10 +18,7 @@ import { useState } from 'react';
 import type { EditFeedImage } from 'types/DataType';
 
 interface Props {
-  offender: Exclude<
-    OffenderFeedListQuery['listOffenders'],
-    undefined | null
-  >['offenders'][0];
+  offender: OffenderCardFragment;
   update?: MutationUpdaterFn<RecycleOffenderMutation>;
 }
 interface Return {

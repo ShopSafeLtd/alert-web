@@ -13,7 +13,7 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import type { OffenderFeedListQuery } from 'graphql/generated';
+import type { OffenderCardFragment } from 'graphql/generated';
 import { Role } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -64,10 +64,7 @@ const { Title, Text } = Typography;
 const { confirm } = Modal;
 
 interface Props {
-  offender: Exclude<
-    OffenderFeedListQuery['listOffenders'],
-    undefined | null
-  >['offenders'][0];
+  offender: OffenderCardFragment;
   approvalRights: boolean;
   deleteRights: boolean;
   menuRights: boolean;
