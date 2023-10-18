@@ -58,7 +58,7 @@ const useFeedItems = (): Return => {
   const {
     role,
     id: userId,
-    defaultGroups,
+    filterDefaultGroups: defaultGroups,
   } = useStoreState((state) => state.user);
 
   const pagination = useStoreState((state) => state.data.feedItems.pagination);
