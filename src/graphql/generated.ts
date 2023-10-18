@@ -73899,75 +73899,35 @@ export type CreateArticleMutation = {
         offenders: Array<{
           __typename?: 'Offender';
           id: string;
-          createdAt: Date;
-          updatedAt: Date;
-          age?: Age | null;
+          name?: string | null;
+          totalIncidents?: number | null;
+          reference?: number | null;
           build?: Build | null;
           height?: Height | null;
-          dateOfBirth?: Date | null;
-          dateSource?: string | null;
-          hair?: string | null;
           gender?: Gender | null;
-          name?: string | null;
+          dateOfBirth?: Date | null;
+          age?: Age | null;
           race?: Race | null;
-          peculiarities?: string | null;
+          updatedAt: Date;
+          totalImages?: number | null;
+          createdByUser: boolean;
           approved?: boolean | null;
-          active?: boolean | null;
-          lastActive?: {
+          latestIncident?: {
             __typename?: 'Incident';
             id: string;
-            dayTime?: string | null;
+            dateAgo: number;
+            reportedBusinessName: string;
           } | null;
           tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+          groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
           images: Array<{
             __typename?: 'Image';
             id: string;
-            optimised?: string | null;
+            rotation: number;
             position: ImagePosition;
-          }>;
-          groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
-          createdBy: {
-            __typename?: 'User';
-            id: string;
-            fullName: string;
-            businesses: Array<{
-              __typename?: 'Business';
-              fullName: string;
-              id: string;
-              name: string;
-            }>;
-          };
-          incidents: Array<{
-            __typename?: 'Incident';
-            id: string;
-            subject?: string | null;
-            description: string;
-            dayTime?: string | null;
-            date: Date;
-            approved?: boolean | null;
-            crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
-            location?: {
-              __typename?: 'Address';
-              id: string;
-              full?: string | null;
-            } | null;
-            createdBy: {
-              __typename?: 'User';
-              id: string;
-              fullName: string;
-              businesses: Array<{
-                __typename?: 'Business';
-                fullName: string;
-                id: string;
-                name: string;
-              }>;
-            };
-            images: Array<{
-              __typename?: 'Image';
-              id: string;
-              optimised?: string | null;
-              position: ImagePosition;
-            }>;
+            optimised?: string | null;
+            primary?: boolean | null;
+            policeImage?: boolean | null;
           }>;
         }>;
       }>;
@@ -74072,75 +74032,35 @@ export type EditArticleMutation = {
         offenders: Array<{
           __typename?: 'Offender';
           id: string;
-          createdAt: Date;
-          updatedAt: Date;
-          age?: Age | null;
+          name?: string | null;
+          totalIncidents?: number | null;
+          reference?: number | null;
           build?: Build | null;
           height?: Height | null;
-          dateOfBirth?: Date | null;
-          dateSource?: string | null;
-          hair?: string | null;
           gender?: Gender | null;
-          name?: string | null;
+          dateOfBirth?: Date | null;
+          age?: Age | null;
           race?: Race | null;
-          peculiarities?: string | null;
+          updatedAt: Date;
+          totalImages?: number | null;
+          createdByUser: boolean;
           approved?: boolean | null;
-          active?: boolean | null;
-          lastActive?: {
+          latestIncident?: {
             __typename?: 'Incident';
             id: string;
-            dayTime?: string | null;
+            dateAgo: number;
+            reportedBusinessName: string;
           } | null;
           tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+          groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
           images: Array<{
             __typename?: 'Image';
             id: string;
-            optimised?: string | null;
+            rotation: number;
             position: ImagePosition;
-          }>;
-          groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
-          createdBy: {
-            __typename?: 'User';
-            id: string;
-            fullName: string;
-            businesses: Array<{
-              __typename?: 'Business';
-              fullName: string;
-              id: string;
-              name: string;
-            }>;
-          };
-          incidents: Array<{
-            __typename?: 'Incident';
-            id: string;
-            subject?: string | null;
-            description: string;
-            dayTime?: string | null;
-            date: Date;
-            approved?: boolean | null;
-            crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
-            location?: {
-              __typename?: 'Address';
-              id: string;
-              full?: string | null;
-            } | null;
-            createdBy: {
-              __typename?: 'User';
-              id: string;
-              fullName: string;
-              businesses: Array<{
-                __typename?: 'Business';
-                fullName: string;
-                id: string;
-                name: string;
-              }>;
-            };
-            images: Array<{
-              __typename?: 'Image';
-              id: string;
-              optimised?: string | null;
-              position: ImagePosition;
-            }>;
+            optimised?: string | null;
+            primary?: boolean | null;
+            policeImage?: boolean | null;
           }>;
         }>;
       }>;
@@ -87660,86 +87580,13 @@ export const CreateArticleDocument = gql`
             }
           }
           offenders {
-            id
-            createdAt
-            updatedAt
-            age
-            build
-            height
-            dateOfBirth
-            dateSource
-            hair
-            gender
-            name
-            race
-            peculiarities
-            approved
-            active
-            lastActive {
-              id
-              dayTime
-            }
-            tags {
-              id
-              name
-            }
-            images {
-              id
-              optimised
-              position
-            }
-            groups {
-              id
-              name
-            }
-            tags {
-              id
-              name
-            }
-            createdBy {
-              id
-              fullName
-              businesses {
-                fullName
-                id
-                name
-              }
-            }
-            incidents {
-              id
-              subject
-              description
-              dayTime
-              date
-              crimeTypes {
-                id
-                name
-              }
-              approved
-              location {
-                id
-                full
-              }
-              createdBy {
-                id
-                fullName
-                businesses {
-                  fullName
-                  id
-                  name
-                }
-              }
-              images {
-                id
-                optimised
-                position
-              }
-            }
+            ...OffenderCard
           }
         }
       }
     }
   }
+  ${OffenderCardFragmentDoc}
 `;
 export type CreateArticleMutationFn = Apollo.MutationFunction<
   CreateArticleMutation,
@@ -87882,86 +87729,13 @@ export const EditArticleDocument = gql`
             }
           }
           offenders {
-            id
-            createdAt
-            updatedAt
-            age
-            build
-            height
-            dateOfBirth
-            dateSource
-            hair
-            gender
-            name
-            race
-            peculiarities
-            approved
-            active
-            lastActive {
-              id
-              dayTime
-            }
-            tags {
-              id
-              name
-            }
-            images {
-              id
-              optimised
-              position
-            }
-            groups {
-              id
-              name
-            }
-            tags {
-              id
-              name
-            }
-            createdBy {
-              id
-              fullName
-              businesses {
-                fullName
-                id
-                name
-              }
-            }
-            incidents {
-              id
-              subject
-              description
-              dayTime
-              date
-              crimeTypes {
-                id
-                name
-              }
-              approved
-              location {
-                id
-                full
-              }
-              createdBy {
-                id
-                fullName
-                businesses {
-                  fullName
-                  id
-                  name
-                }
-              }
-              images {
-                id
-                optimised
-                position
-              }
-            }
+            ...OffenderCard
           }
         }
       }
     }
   }
+  ${OffenderCardFragmentDoc}
 `;
 export type EditArticleMutationFn = Apollo.MutationFunction<
   EditArticleMutation,

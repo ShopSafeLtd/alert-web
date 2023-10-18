@@ -4,7 +4,7 @@ import type {
   Build,
   Gender,
   ListCustomGalleriesQuery,
-  ListOffendersQuery,
+  OffenderFeedListQuery,
   Race,
   RecycleOffenderMutation,
   SearchBusinessesQuery,
@@ -46,7 +46,7 @@ import useStyles from './OffenderFeed.styles';
 
 // import useStyles from './OffenderFeed.styles';
 interface Props {
-  data: ListOffendersQuery | undefined;
+  data: OffenderFeedListQuery | undefined;
   loading: boolean;
   lightboxElements: {
     src: string;

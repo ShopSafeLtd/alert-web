@@ -491,7 +491,7 @@ const OffenderCard = ({
                     lastOffence: getLastOffence(
                       undefined,
                       undefined,
-                      offender.latestIncident
+                      offender.latestIncident ?? undefined
                     ).message,
                   }
                 )}
