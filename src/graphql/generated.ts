@@ -74279,6 +74279,11 @@ export type ArticleQuery = {
           totalImages?: number | null;
           createdByUser: boolean;
           approved?: boolean | null;
+          lastActive?: {
+            __typename?: 'Incident';
+            id: string;
+            dayTime?: string | null;
+          } | null;
           latestIncident?: {
             __typename?: 'Incident';
             id: string;
@@ -88022,6 +88027,10 @@ export const ArticleDocument = gql`
           }
           offenders {
             ...OffenderCard
+            lastActive {
+              id
+              dayTime
+            }
           }
         }
       }

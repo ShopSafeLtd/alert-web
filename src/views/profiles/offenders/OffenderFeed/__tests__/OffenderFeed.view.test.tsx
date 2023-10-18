@@ -51,6 +51,7 @@ describe('Detail Officer View', () => {
           peculiarities: null,
           approved: null,
           active: null,
+          createdByUser: false,
           createdBy: {
             fullName: 'aaa',
             id: 'cl4pe3eu91312371op4c4k2lih2',

@@ -94,6 +94,10 @@ query Article($where: ArticleWhereUniqueInput!) {
         }
         offenders {
           ...OffenderCard
+          lastActive {
+            id
+            dayTime
+          }
         }
       }
     }
