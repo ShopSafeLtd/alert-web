@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useRef } from 'react';
-import type { ListOffendersQuery } from 'graphql/generated';
+import type { ListOffendersSelectQuery } from 'graphql/generated';
 import { Button, Carousel, Col, Descriptions, Row, Typography } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -40,12 +40,12 @@ const { Title } = Typography;
 interface Props {
   onClose: () => void;
   onSubmit: (value: string | undefined) => void;
-  data: ListOffendersQuery | undefined;
+  data: ListOffendersSelectQuery | undefined;
   loading: boolean;
   setCurrentId: (value: string | undefined) => void;
   selectedOffender:
     | Exclude<
-        ListOffendersQuery['listOffenders'],
+        ListOffendersSelectQuery['listOffenders'],
         undefined | null
       >['offenders'][0]
     | undefined
@@ -137,7 +137,7 @@ const AddExistingOffender = ({
                           className="offender-image"
                           onClick={() => openLightbox(i)}
                         >
-                          <WatermarkImage url={image.optimised} />
+                          <WatermarkImage url={image.optimisedPersisted} />
                         </div>
                       </div>
                     ))}
@@ -348,7 +348,7 @@ const AddExistingOffender = ({
         }}
         slides={
           selectedOffender?.images.map((image) => ({
-            src: image.optimised || '',
+            src: image.optimisedPersisted || '',
           })) || []
         }
         render={{

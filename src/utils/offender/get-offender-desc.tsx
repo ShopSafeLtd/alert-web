@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import type { Incident } from 'graphql/generated';
-import { Height, Age, Build, Gender, IdSource, Race } from 'graphql/generated';
+import { Age, Build, Gender, Height, IdSource, Race } from 'graphql/generated';
 
 export const getOffenderGender = (
   gender: Gender | undefined | null
@@ -134,17 +134,48 @@ export const calcAge = (date: string | Date): number => {
 
 /**
  *
+ * @param latestIncident
  * @param incidentsArray Array of incidents which must each include a date and location property
  * @param short
  * @returns Object - { days, location } where days is the number of days since the incident, and location is the location.full of the incident
  */
 export const getLastOffence = (
-  incidentsArray: unknown[],
-  short?: boolean
+  incidentsArray?: unknown[],
+  short?: boolean,
+  latestIncident?: {
+    id: string;
+    dateAgo: number;
+    reportedBusinessName: string;
+  }
 ): {
   message: ReactNode | undefined;
   id: string | undefined;
 } => {
+  if (latestIncident) {
+    return {
+      message: (
+        <FormattedMessage
+          id="G5QTki"
+          defaultMessage="{reference} days ago {reference2}"
+          values={{
+            reference: latestIncident.dateAgo.toFixed(0),
+            reference2: short ? (
+              ''
+            ) : (
+              <FormattedMessage
+                id="4bSKnr"
+                defaultMessage=", reported by {reference}"
+                values={{
+                  reference: latestIncident.reportedBusinessName,
+                }}
+              />
+            ),
+          }}
+        />
+      ),
+      id: latestIncident.id,
+    };
+  }
   if (!incidentsArray) return { message: undefined, id: undefined };
   const incidents = [...incidentsArray] as Incident[];
 

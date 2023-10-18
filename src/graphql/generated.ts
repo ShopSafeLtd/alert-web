@@ -19785,6 +19785,7 @@ export type Incident = {
   crimeGroups: Array<CrimeGroup>;
   crimeTypes: Array<Tag>;
   date: Scalars['DateTime'];
+  dateAgo: Scalars['Int'];
   dayOfMonth?: Maybe<Scalars['Int']>;
   dayOfWeek?: Maybe<Scalars['Int']>;
   dayTime?: Maybe<Scalars['String']>;
@@ -19820,6 +19821,7 @@ export type Incident = {
   ref?: Maybe<Scalars['String']>;
   reference?: Maybe<Scalars['Int']>;
   referenceStr?: Maybe<Scalars['String']>;
+  reportedBusinessName: Scalars['String'];
   scheme: Scheme;
   schemeId: Scalars['String'];
   subject?: Maybe<Scalars['String']>;
@@ -31728,6 +31730,7 @@ export type Mutation = {
   dismissMatch?: Maybe<RekMatch>;
   editArticle?: Maybe<Article>;
   enableSchemeRekognition?: Maybe<RekCollection>;
+  exportInvestigationZip?: Maybe<Scalars['String']>;
   generateFeedItems?: Maybe<SystemTask>;
   indexExistingImages?: Maybe<SystemTask>;
   indexFaces?: Maybe<SystemTask>;
@@ -32263,6 +32266,10 @@ export type MutationEditArticleArgs = {
 export type MutationEnableSchemeRekognitionArgs = {
   data: EnableSchemeRekognotionInput;
   where: SchemeWhereUniqueInput;
+};
+
+export type MutationExportInvestigationZipArgs = {
+  where: UniqueId;
 };
 
 export type MutationGenerateFeedItemsArgs = {
@@ -34566,6 +34573,7 @@ export type Offender = {
   comment?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
   createdBy: User;
+  createdByUser: Scalars['Boolean'];
   crimeGroups: Array<CrimeGroup>;
   customGalleries: Array<CustomGallery>;
   dateOfBirth?: Maybe<Scalars['DateTime']>;
@@ -34593,6 +34601,7 @@ export type Offender = {
   investigations: Array<Investigation>;
   knownAssociates?: Maybe<Array<Offender>>;
   lastActive?: Maybe<Incident>;
+  latestIncident?: Maybe<Incident>;
   latestUpdate?: Maybe<Update>;
   name?: Maybe<Scalars['String']>;
   peculiarities?: Maybe<Scalars['String']>;
@@ -74337,77 +74346,35 @@ export type ArticleQuery = {
         offenders: Array<{
           __typename?: 'Offender';
           id: string;
-          createdAt: Date;
-          updatedAt: Date;
-          age?: Age | null;
+          name?: string | null;
+          totalIncidents?: number | null;
+          reference?: number | null;
           build?: Build | null;
           height?: Height | null;
-          dateOfBirth?: Date | null;
-          dateSource?: string | null;
-          hair?: string | null;
           gender?: Gender | null;
-          name?: string | null;
+          dateOfBirth?: Date | null;
+          age?: Age | null;
           race?: Race | null;
-          peculiarities?: string | null;
+          updatedAt: Date;
+          totalImages?: number | null;
+          createdByUser: boolean;
           approved?: boolean | null;
-          active?: boolean | null;
-          lastActive?: {
+          latestIncident?: {
             __typename?: 'Incident';
             id: string;
-            dayTime?: string | null;
+            dateAgo: number;
+            reportedBusinessName: string;
           } | null;
           tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+          groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
           images: Array<{
             __typename?: 'Image';
             id: string;
-            optimised?: string | null;
-            position: ImagePosition;
             rotation: number;
-          }>;
-          groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
-          createdBy: {
-            __typename?: 'User';
-            id: string;
-            fullName: string;
-            businesses: Array<{
-              __typename?: 'Business';
-              fullName: string;
-              id: string;
-              name: string;
-            }>;
-          };
-          incidents: Array<{
-            __typename?: 'Incident';
-            id: string;
-            subject?: string | null;
-            description: string;
-            dayTime?: string | null;
-            date: Date;
-            approved?: boolean | null;
-            crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
-            location?: {
-              __typename?: 'Address';
-              id: string;
-              full?: string | null;
-            } | null;
-            createdBy: {
-              __typename?: 'User';
-              id: string;
-              fullName: string;
-              businesses: Array<{
-                __typename?: 'Business';
-                fullName: string;
-                id: string;
-                name: string;
-              }>;
-            };
-            images: Array<{
-              __typename?: 'Image';
-              id: string;
-              optimised?: string | null;
-              position: ImagePosition;
-              rotation: number;
-            }>;
+            position: ImagePosition;
+            optimised?: string | null;
+            primary?: boolean | null;
+            policeImage?: boolean | null;
           }>;
         }>;
       }>;
@@ -76834,6 +76801,41 @@ export type LocationsFragment = {
   geoLng?: number | null;
   full?: string | null;
   alias?: string | null;
+};
+
+export type OffenderCardFragment = {
+  __typename?: 'Offender';
+  id: string;
+  name?: string | null;
+  totalIncidents?: number | null;
+  reference?: number | null;
+  build?: Build | null;
+  height?: Height | null;
+  gender?: Gender | null;
+  dateOfBirth?: Date | null;
+  age?: Age | null;
+  race?: Race | null;
+  updatedAt: Date;
+  totalImages?: number | null;
+  createdByUser: boolean;
+  approved?: boolean | null;
+  latestIncident?: {
+    __typename?: 'Incident';
+    id: string;
+    dateAgo: number;
+    reportedBusinessName: string;
+  } | null;
+  tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+  groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+  images: Array<{
+    __typename?: 'Image';
+    id: string;
+    rotation: number;
+    position: ImagePosition;
+    optimised?: string | null;
+    primary?: boolean | null;
+    policeImage?: boolean | null;
+  }>;
 };
 
 export type OffendersFragment = {
@@ -81354,6 +81356,93 @@ export type ListOffendersAllSchemesQuery = {
   } | null;
 };
 
+export type ListOffendersSelectQueryVariables = Exact<{
+  scheme: SchemeWhereUniqueInput;
+  where?: InputMaybe<OffenderWhereInput>;
+  order?: InputMaybe<OffenderOrderByWithRelationInput>;
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type ListOffendersSelectQuery = {
+  __typename?: 'Query';
+  listOffenders?: {
+    __typename?: 'ListOffenders';
+    total: number;
+    offenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      reference?: number | null;
+      totalImages?: number | null;
+      createdAt: Date;
+      updatedAt: Date;
+      totalIncidents?: number | null;
+      age?: Age | null;
+      build?: Build | null;
+      height?: Height | null;
+      dateOfBirth?: Date | null;
+      dateSource?: string | null;
+      hair?: string | null;
+      gender?: Gender | null;
+      name?: string | null;
+      race?: Race | null;
+      peculiarities?: string | null;
+      approved?: boolean | null;
+      active?: boolean | null;
+      lastActive?: {
+        __typename?: 'Incident';
+        id: string;
+        dayTime?: string | null;
+      } | null;
+      tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimisedPersisted?: string | null;
+        position: ImagePosition;
+        rotation: number;
+        primary?: boolean | null;
+        policeImage?: boolean | null;
+      }>;
+      groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+      createdBy: {
+        __typename?: 'User';
+        id: string;
+        fullName: string;
+        businesses: Array<{
+          __typename?: 'Business';
+          id: string;
+          name: string;
+        }>;
+      };
+      incidents: Array<{
+        __typename?: 'Incident';
+        id: string;
+        reference?: number | null;
+        subject?: string | null;
+        description: string;
+        dayTime?: string | null;
+        date: Date;
+        location?: {
+          __typename?: 'Address';
+          id: string;
+          full?: string | null;
+        } | null;
+        createdBy: {
+          __typename?: 'User';
+          id: string;
+          fullName: string;
+          businesses: Array<{
+            __typename?: 'Business';
+            id: string;
+            name: string;
+          }>;
+        };
+      }>;
+    }>;
+  } | null;
+};
+
 export type ListOffendersQueryVariables = Exact<{
   scheme: SchemeWhereUniqueInput;
   where?: InputMaybe<OffenderWhereInput>;
@@ -81401,7 +81490,6 @@ export type ListOffendersQuery = {
         rotation: number;
         primary?: boolean | null;
         policeImage?: boolean | null;
-        optimisedPersisted?: string | null;
       }>;
       groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
       createdBy: {
@@ -83722,6 +83810,19 @@ export type TranslateQuery = {
     __typename?: 'TranslatedText';
     origText: string;
     translatedText: string;
+  }>;
+};
+
+export type TranslateTextQueryVariables = Exact<{
+  data: TranslateTextInput;
+}>;
+
+export type TranslateTextQuery = {
+  __typename?: 'Query';
+  translateText: Array<{
+    __typename?: 'TranslatedText';
+    translatedText: string;
+    origText: string;
   }>;
 };
 
@@ -86276,6 +86377,56 @@ export type ExportFiltersQuery = {
   } | null;
 };
 
+export type OffenderFeedListQueryVariables = Exact<{
+  scheme: SchemeWhereUniqueInput;
+  where?: InputMaybe<OffenderWhereInput>;
+  order?: InputMaybe<OffenderOrderByWithRelationInput>;
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type OffenderFeedListQuery = {
+  __typename?: 'Query';
+  listOffenders?: {
+    __typename?: 'ListOffenders';
+    total: number;
+    offenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      name?: string | null;
+      totalIncidents?: number | null;
+      reference?: number | null;
+      build?: Build | null;
+      height?: Height | null;
+      gender?: Gender | null;
+      dateOfBirth?: Date | null;
+      age?: Age | null;
+      race?: Race | null;
+      updatedAt: Date;
+      totalImages?: number | null;
+      createdByUser: boolean;
+      approved?: boolean | null;
+      latestIncident?: {
+        __typename?: 'Incident';
+        id: string;
+        dateAgo: number;
+        reportedBusinessName: string;
+      } | null;
+      tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+      groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        rotation: number;
+        position: ImagePosition;
+        optimised?: string | null;
+        primary?: boolean | null;
+        policeImage?: boolean | null;
+      }>;
+    }>;
+  } | null;
+};
+
 export type CreateCsvImportMutationVariables = Exact<{
   data: CsvImportCreateInput;
 }>;
@@ -86699,6 +86850,45 @@ export const LocationsFragmentDoc = gql`
     geoLng
     full
     alias
+  }
+`;
+export const OffenderCardFragmentDoc = gql`
+  fragment OffenderCard on Offender {
+    id
+    name
+    totalIncidents
+    reference
+    build
+    height
+    gender
+    dateOfBirth
+    age
+    race
+    updatedAt
+    totalImages
+    createdByUser
+    approved
+    latestIncident {
+      id
+      dateAgo
+      reportedBusinessName
+    }
+    tags {
+      id
+      name
+    }
+    groups {
+      id
+      name
+    }
+    images {
+      id
+      rotation
+      position
+      optimised
+      primary
+      policeImage
+    }
   }
 `;
 export const OffendersFragmentDoc = gql`
@@ -88057,88 +88247,13 @@ export const ArticleDocument = gql`
             }
           }
           offenders {
-            id
-            createdAt
-            updatedAt
-            age
-            build
-            height
-            dateOfBirth
-            dateSource
-            hair
-            gender
-            name
-            race
-            peculiarities
-            approved
-            active
-            lastActive {
-              id
-              dayTime
-            }
-            tags {
-              id
-              name
-            }
-            images {
-              id
-              optimised
-              position
-              rotation
-            }
-            groups {
-              id
-              name
-            }
-            tags {
-              id
-              name
-            }
-            createdBy {
-              id
-              fullName
-              businesses {
-                fullName
-                id
-                name
-              }
-            }
-            incidents {
-              id
-              subject
-              description
-              dayTime
-              date
-              crimeTypes {
-                id
-                name
-              }
-              approved
-              location {
-                id
-                full
-              }
-              createdBy {
-                id
-                fullName
-                businesses {
-                  fullName
-                  id
-                  name
-                }
-              }
-              images {
-                id
-                optimised
-                position
-                rotation
-              }
-            }
+            ...OffenderCard
           }
         }
       }
     }
   }
+  ${OffenderCardFragmentDoc}
 `;
 export function useArticleQuery(
   baseOptions: Apollo.QueryHookOptions<ArticleQuery, ArticleQueryVariables>
@@ -96514,6 +96629,132 @@ export type ListOffendersAllSchemesQueryResult = Apollo.QueryResult<
   ListOffendersAllSchemesQuery,
   ListOffendersAllSchemesQueryVariables
 >;
+export const ListOffendersSelectDocument = gql`
+  query listOffendersSelect(
+    $scheme: SchemeWhereUniqueInput!
+    $where: OffenderWhereInput
+    $order: OffenderOrderByWithRelationInput
+    $take: Int
+    $skip: Int
+  ) {
+    listOffenders(
+      scheme: $scheme
+      where: $where
+      order: $order
+      take: $take
+      skip: $skip
+    ) {
+      offenders {
+        id
+        reference
+        totalImages
+        createdAt
+        updatedAt
+        totalIncidents
+        reference
+        age
+        build
+        height
+        dateOfBirth
+        dateSource
+        hair
+        gender
+        name
+        race
+        peculiarities
+        approved
+        active
+        lastActive {
+          id
+          dayTime
+        }
+        tags {
+          id
+          name
+        }
+        images {
+          id
+          optimisedPersisted
+          position
+          rotation
+          primary
+          policeImage
+        }
+        groups {
+          id
+          name
+        }
+        tags {
+          id
+          name
+        }
+        createdBy {
+          id
+          fullName
+          businesses {
+            id
+            name
+          }
+        }
+        incidents {
+          id
+          reference
+          subject
+          description
+          dayTime
+          date
+          location {
+            id
+            full
+          }
+          createdBy {
+            id
+            fullName
+            businesses {
+              id
+              name
+            }
+          }
+        }
+      }
+      total
+    }
+  }
+`;
+export function useListOffendersSelectQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ListOffendersSelectQuery,
+    ListOffendersSelectQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    ListOffendersSelectQuery,
+    ListOffendersSelectQueryVariables
+  >(ListOffendersSelectDocument, options);
+}
+export function useListOffendersSelectLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListOffendersSelectQuery,
+    ListOffendersSelectQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ListOffendersSelectQuery,
+    ListOffendersSelectQueryVariables
+  >(ListOffendersSelectDocument, options);
+}
+export type ListOffendersSelectQueryHookResult = ReturnType<
+  typeof useListOffendersSelectQuery
+>;
+export type ListOffendersSelectLazyQueryHookResult = ReturnType<
+  typeof useListOffendersSelectLazyQuery
+>;
+export type ListOffendersSelectQueryResult = Apollo.QueryResult<
+  ListOffendersSelectQuery,
+  ListOffendersSelectQueryVariables
+>;
 export const ListOffendersDocument = gql`
   query listOffenders(
     $scheme: SchemeWhereUniqueInput!
@@ -96564,7 +96805,6 @@ export const ListOffendersDocument = gql`
           rotation
           primary
           policeImage
-          optimisedPersisted
         }
         groups {
           id
@@ -99903,6 +100143,48 @@ export type TranslateQueryResult = Apollo.QueryResult<
   TranslateQuery,
   TranslateQueryVariables
 >;
+export const TranslateTextDocument = gql`
+  query TranslateText($data: TranslateTextInput!) {
+    translateText(data: $data) {
+      translatedText
+      origText
+    }
+  }
+`;
+export function useTranslateTextQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    TranslateTextQuery,
+    TranslateTextQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<TranslateTextQuery, TranslateTextQueryVariables>(
+    TranslateTextDocument,
+    options
+  );
+}
+export function useTranslateTextLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    TranslateTextQuery,
+    TranslateTextQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<TranslateTextQuery, TranslateTextQueryVariables>(
+    TranslateTextDocument,
+    options
+  );
+}
+export type TranslateTextQueryHookResult = ReturnType<
+  typeof useTranslateTextQuery
+>;
+export type TranslateTextLazyQueryHookResult = ReturnType<
+  typeof useTranslateTextLazyQuery
+>;
+export type TranslateTextQueryResult = Apollo.QueryResult<
+  TranslateTextQuery,
+  TranslateTextQueryVariables
+>;
 export const CreateUpdateOnCrimeGroupDocument = gql`
   mutation CreateUpdateOnCrimeGroup(
     $crimeGroup: UniqueId!
@@ -103172,6 +103454,63 @@ export type ExportFiltersLazyQueryHookResult = ReturnType<
 export type ExportFiltersQueryResult = Apollo.QueryResult<
   ExportFiltersQuery,
   ExportFiltersQueryVariables
+>;
+export const OffenderFeedListDocument = gql`
+  query offenderFeedList(
+    $scheme: SchemeWhereUniqueInput!
+    $where: OffenderWhereInput
+    $order: OffenderOrderByWithRelationInput
+    $take: Int
+    $skip: Int
+  ) {
+    listOffenders(
+      scheme: $scheme
+      where: $where
+      order: $order
+      take: $take
+      skip: $skip
+    ) {
+      offenders {
+        ...OffenderCard
+      }
+      total
+    }
+  }
+  ${OffenderCardFragmentDoc}
+`;
+export function useOffenderFeedListQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    OffenderFeedListQuery,
+    OffenderFeedListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<OffenderFeedListQuery, OffenderFeedListQueryVariables>(
+    OffenderFeedListDocument,
+    options
+  );
+}
+export function useOffenderFeedListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    OffenderFeedListQuery,
+    OffenderFeedListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    OffenderFeedListQuery,
+    OffenderFeedListQueryVariables
+  >(OffenderFeedListDocument, options);
+}
+export type OffenderFeedListQueryHookResult = ReturnType<
+  typeof useOffenderFeedListQuery
+>;
+export type OffenderFeedListLazyQueryHookResult = ReturnType<
+  typeof useOffenderFeedListLazyQuery
+>;
+export type OffenderFeedListQueryResult = Apollo.QueryResult<
+  OffenderFeedListQuery,
+  OffenderFeedListQueryVariables
 >;
 export const CreateCsvImportDocument = gql`
   mutation CreateCsvImport($data: CsvImportCreateInput!) {

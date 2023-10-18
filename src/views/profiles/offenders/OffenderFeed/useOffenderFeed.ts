@@ -4,19 +4,19 @@ import type {
   Build,
   Gender,
   ListCustomGalleriesQuery,
-  ListOffendersQuery,
+  OffenderFeedListQuery,
   Race,
   RecycleOffenderMutation,
   SearchBusinessesQuery,
 } from 'graphql/generated';
 import {
-  useListCustomGalleriesQuery,
-  ListOffendersDocument,
   Model,
+  OffenderFeedListDocument,
   QueryMode,
   Role,
   SortOrder,
-  useListOffendersQuery,
+  useListCustomGalleriesQuery,
+  useOffenderFeedListQuery,
   useSchemeGroupsQuery,
   useSearchBusinessesQuery,
   useTagsQuery,
@@ -29,7 +29,7 @@ import type { DateType } from 'types/DataType';
 import type { OffenderFilters } from 'state/data-model';
 
 interface Return {
-  data: ListOffendersQuery | undefined;
+  data: OffenderFeedListQuery | undefined;
   loading: boolean;
   lightboxElements: {
     src: string;
@@ -357,7 +357,7 @@ const useOffenderFeed = (): Return => {
   });
 
   // Fetch Offenders
-  const { data, loading } = useListOffendersQuery({
+  const { data, loading } = useOffenderFeedListQuery({
     variables: queryVariables,
     fetchPolicy: 'cache-and-network',
   });
@@ -404,16 +404,16 @@ const useOffenderFeed = (): Return => {
   ) => {
     if (res === null || res === undefined) return;
 
-    const existingData = store.readQuery<ListOffendersQuery>({
-      query: ListOffendersDocument,
+    const existingData = store.readQuery<OffenderFeedListQuery>({
+      query: OffenderFeedListDocument,
       variables: queryVariables,
     });
 
     if (existingData === null) return;
     if (existingData?.listOffenders?.offenders === undefined) return;
 
-    store.writeQuery<ListOffendersQuery>({
-      query: ListOffendersDocument,
+    store.writeQuery<OffenderFeedListQuery>({
+      query: OffenderFeedListDocument,
       data: {
         listOffenders: {
           ...existingData.listOffenders,

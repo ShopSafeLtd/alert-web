@@ -1,7 +1,7 @@
 import { useStoreState } from 'state';
 import type {
   ImageUpdateWithWhereUniqueWithoutOffendersInput,
-  ListOffendersQuery,
+  OffenderFeedListQuery,
   RecycleOffenderMutation,
 } from 'graphql/generated';
 import {
@@ -19,7 +19,7 @@ import type { EditFeedImage } from 'types/DataType';
 
 interface Props {
   offender: Exclude<
-    ListOffendersQuery['listOffenders'],
+    OffenderFeedListQuery['listOffenders'],
     undefined | null
   >['offenders'][0];
   update?: MutationUpdaterFn<RecycleOffenderMutation>;
@@ -43,11 +43,10 @@ interface Return {
 const useOffenderCard = ({ offender, update }: Props): Return => {
   const navigate = useNavigate();
   const role = useStoreState((state) => state.user.role);
-  const userId = useStoreState((state) => state.user.id);
   const intl = useIntl();
   const approvalRights = update ? role !== Role.User : false;
   const menuRights = update
-    ? role !== Role.User || userId === offender.createdBy.id
+    ? role !== Role.User || offender.createdByUser
     : false;
   const deleteRights = role !== Role.User;
   const [editOffenderFeed, setEditOffenderFeed] = useState(false);
