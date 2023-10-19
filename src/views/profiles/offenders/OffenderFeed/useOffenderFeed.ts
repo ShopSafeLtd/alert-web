@@ -27,6 +27,7 @@ import type { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import type { DateType } from 'types/DataType';
 import type { OffenderFilters } from 'state/data-model';
+import cacheOrLoading from 'utils/cache-or-loading';
 
 interface Return {
   data: OffenderFeedListQuery | undefined;
@@ -648,7 +649,10 @@ const useOffenderFeed = (): Return => {
 
   return {
     data,
-    loading,
+    loading: cacheOrLoading({
+      loading,
+      data,
+    }),
     lightBoxOpen,
     openLightbox: triggerLightbox,
     lightboxElements,
