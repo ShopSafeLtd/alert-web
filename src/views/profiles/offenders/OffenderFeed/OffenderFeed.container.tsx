@@ -41,10 +41,12 @@ const OffenderFeed = (): JSX.Element => {
     adminRights,
     onSelectCustomGalleries,
     variables,
+    fetchMoreScroll,
   } = useOffenderFeed();
 
   return (
     <View
+      fetchMoreScroll={fetchMoreScroll}
       lightBoxOpen={lightBoxOpen}
       data={data}
       loading={loading}

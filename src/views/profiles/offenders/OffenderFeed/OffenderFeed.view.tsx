@@ -10,7 +10,6 @@ import type {
   SearchBusinessesQuery,
 } from 'graphql/generated';
 import {
-  Affix,
   Button,
   Card,
   Checkbox,
@@ -20,7 +19,6 @@ import {
   Empty,
   Input,
   Menu,
-  Pagination,
   Row,
 } from 'antd';
 import OffenderCard from 'components/offenders/OffenderCard';
@@ -42,18 +40,19 @@ import OffenderFilter from 'components/offenders/OffenderFilter';
 import type { DateType } from 'types/DataType';
 import { useIntl } from 'react-intl';
 import type { OffenderFilters } from 'state/data-model';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import useStyles from './OffenderFeed.styles';
+import Loading from '../../../../components/shared-components/AntD/Loading';
 
 // import useStyles from './OffenderFeed.styles';
 interface Props {
+  fetchMoreScroll: () => void;
   data: OffenderFeedListQuery | undefined;
   loading: boolean;
   lightboxElements: {
     src: string;
   }[];
   openLightbox: (elements: { src: string }[], index: number) => void;
-  onPaginationChange: (page: number, pageSize: number) => void;
-  pagination: { page: number; pageSize: number; sizeOptions: string[] };
   order: OffenderSort;
   setOrder: (value: OffenderSort) => void;
   setSearch: (value: string) => void;
@@ -95,8 +94,6 @@ const OffenderFeed = ({
   loading,
   lightboxElements,
   openLightbox,
-  onPaginationChange,
-  pagination,
   order,
   setOrder,
   setSearch,
@@ -128,11 +125,13 @@ const OffenderFeed = ({
   adminRights,
   onSelectCustomGalleries,
   variables,
+  fetchMoreScroll,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const classes = useStyles();
   // ???
   const { search, gallery, customGalleries } = variables;
+
   const galleryOptions = [
     {
       label: intl.formatMessage({ defaultMessage: 'Active', id: '3a5wL8' }),
@@ -203,121 +202,133 @@ const OffenderFeed = ({
   );
 
   return (
-    <div className="feed-container">
-      <Affix offsetTop={5}>
-        <Card bodyStyle={{ padding: 10 }} style={{ marginBottom: 5 }}>
-          <Row align="middle" gutter={16}>
-            <Col
-              span={customGalleriesData?.listCustomGalleries.total ? 8 : 4}
-              xxl={6}
-            >
-              <Input
-                size="small"
-                placeholder={intl.formatMessage({
-                  defaultMessage: 'Search Offenders...',
-                  id: 'mCDjFM',
-                })}
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
+    <div
+      className="feed-container"
+      style={loading ? {} : { padding: 10, paddingRight: 0 }}
+    >
+      <Card
+        bodyStyle={{ padding: 10 }}
+        style={{ marginBottom: 5, marginRight: 10 }}
+      >
+        <Row align="middle" gutter={16}>
+          <Col
+            span={customGalleriesData?.listCustomGalleries.total ? 8 : 4}
+            xxl={6}
+          >
+            <Input
+              size="small"
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Search Offenders...',
+                id: 'mCDjFM',
+              })}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </Col>
+          <Col>
+            {customGalleriesData?.listCustomGalleries.total ? (
+              <Dropdown
+                overlay={galleryMenu}
+                placement="bottom"
+                arrow={{ pointAtCenter: true }}
+              >
+                <Button className={classes.selectBox}>
+                  {intl.formatMessage({
+                    defaultMessage: 'Gallery',
+                    id: 'WExVSr',
+                  })}
+                  <FontAwesomeIcon
+                    icon={faChevronDown}
+                    style={{ marginLeft: 10 }}
+                  />
+                </Button>
+              </Dropdown>
+            ) : (
+              <CheckTags
+                mode="check"
+                value={gallery}
+                onChange={setGallery}
+                options={galleryOptions}
               />
-            </Col>
-            <Col>
-              {customGalleriesData?.listCustomGalleries.total ? (
-                <Dropdown
-                  overlay={galleryMenu}
-                  placement="bottom"
-                  arrow={{ pointAtCenter: true }}
-                >
-                  <Button className={classes.selectBox}>
-                    {intl.formatMessage({
-                      defaultMessage: 'Gallery',
-                      id: 'WExVSr',
-                    })}
-                    <FontAwesomeIcon
-                      icon={faChevronDown}
-                      style={{ marginLeft: 10 }}
-                    />
-                  </Button>
-                </Dropdown>
-              ) : (
-                <CheckTags
-                  mode="check"
-                  value={gallery}
-                  onChange={setGallery}
-                  options={galleryOptions}
-                />
-              )}
-            </Col>
+            )}
+          </Col>
 
-            <Col flex={1}>
-              {customGalleriesData?.listCustomGalleries.total ? (
-                <Dropdown
-                  // trigger={['click']}
-                  overlay={menu}
-                  placement="bottom"
-                  arrow={{ pointAtCenter: true }}
-                >
-                  <Button className={classes.selectBox}>
-                    {/* <FontAwesomeIcon
+          <Col flex={1}>
+            {customGalleriesData?.listCustomGalleries.total ? (
+              <Dropdown
+                // trigger={['click']}
+                overlay={menu}
+                placement="bottom"
+                arrow={{ pointAtCenter: true }}
+              >
+                <Button className={classes.selectBox}>
+                  {/* <FontAwesomeIcon
                     size="lg"
                     style={{ marginRight: 5 }}
                     icon={faUserTag}
                   /> */}
-                    {intl.formatMessage({
-                      defaultMessage: 'Custom Gallery',
-                      id: '/b4BmP',
-                    })}
-                    <FontAwesomeIcon
-                      icon={faChevronDown}
-                      style={{ marginLeft: 10 }}
-                    />
-                  </Button>
-                </Dropdown>
-              ) : null}
-            </Col>
-            <Col>
-              <Button
-                onClick={toggleSortFilter}
-                icon={
+                  {intl.formatMessage({
+                    defaultMessage: 'Custom Gallery',
+                    id: '/b4BmP',
+                  })}
                   <FontAwesomeIcon
-                    icon={faFilter}
-                    size="lg"
-                    style={{ marginRight: 5 }}
+                    icon={faChevronDown}
+                    style={{ marginLeft: 10 }}
                   />
-                }
-              >
-                {intl.formatMessage({
-                  defaultMessage: 'Sort & Filter',
-                  id: 'f2g3SM',
-                })}
-              </Button>
-            </Col>
-            <Col>
-              <Button
-                type="primary"
-                onClick={onNavigate}
-                icon={
-                  <FontAwesomeIcon
-                    icon={faPlus}
-                    size="lg"
-                    style={{ marginRight: 5 }}
-                  />
-                }
-              >
-                {intl.formatMessage({
-                  defaultMessage: 'Add Offender',
-                  id: 'm3ChN4',
-                })}
-              </Button>
-            </Col>
-          </Row>
-        </Card>
-      </Affix>
+                </Button>
+              </Dropdown>
+            ) : null}
+          </Col>
+          <Col>
+            <Button
+              onClick={toggleSortFilter}
+              icon={
+                <FontAwesomeIcon
+                  icon={faFilter}
+                  size="lg"
+                  style={{ marginRight: 5 }}
+                />
+              }
+            >
+              {intl.formatMessage({
+                defaultMessage: 'Sort & Filter',
+                id: 'f2g3SM',
+              })}
+            </Button>
+          </Col>
+          <Col>
+            <Button
+              type="primary"
+              onClick={onNavigate}
+              icon={
+                <FontAwesomeIcon
+                  icon={faPlus}
+                  size="lg"
+                  style={{ marginRight: 5 }}
+                />
+              }
+            >
+              {intl.formatMessage({
+                defaultMessage: 'Add Offender',
+                id: 'm3ChN4',
+              })}
+            </Button>
+          </Col>
+        </Row>
+      </Card>
 
       <div style={{ paddingBottom: 10 }}>
-        <Row gutter={8}>
-          {loading ? (
-            Array.from({ length: 24 }).map((_, index) => (
+        {loading ? (
+          <Row
+            gutter={[8, 16]}
+            align="stretch"
+            style={{
+              alignItems: 'stretch',
+              padding: 10,
+              overflowX: 'hidden',
+            }}
+          >
+            {Array.from({ length: 24 }).map((_, index) => (
               <Col
                 style={{ marginBottom: 10 }}
                 // eslint-disable-next-line react/no-array-index-key
@@ -330,74 +341,100 @@ const OffenderFeed = ({
               >
                 <OffenderSkeletonCard />
               </Col>
-            ))
-          ) : data?.listOffenders?.total ? (
-            data?.listOffenders?.offenders?.map((item) => (
-              <Col
-                style={{ marginBottom: 10 }}
-                sm={24}
-                md={12}
-                lg={8}
-                xl={8}
-                xxl={6}
-                key={item?.id}
-              >
-                <OffenderCard
-                  offender={item}
-                  openLightbox={openLightbox}
-                  update={updateOffenderList}
-                />
-              </Col>
-            ))
-          ) : (
-            <div
+            ))}
+          </Row>
+        ) : data?.listOffenders?.total ? (
+          <InfiniteScroll
+            dataLength={data?.listOffenders?.offenders.length}
+            next={() => fetchMoreScroll()}
+            hasMore={
+              data?.listOffenders?.offenders.length < data?.listOffenders?.total
+            }
+            loader={<Loading />}
+            height="calc(100vh - 87px)"
+            style={{ overflowX: 'hidden' }}
+            endMessage={
+              <p style={{ textAlign: 'center' }}>
+                {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                <b>-----------</b>
+              </p>
+            }
+          >
+            <Row
+              gutter={[8, 16]}
+              align="stretch"
               style={{
-                display: 'flex',
-                flex: 1,
-                height: 'calc(100vh - 100px)',
-                alignItems: 'center',
-                justifyContent: 'center',
+                alignItems: 'stretch',
+                padding: 10,
+                overflowX: 'hidden',
               }}
             >
-              <Empty
-                description={
-                  search === ''
-                    ? intl.formatMessage({
-                        defaultMessage: 'No Offenders',
-                        id: 'hO5g1p',
-                      })
-                    : intl.formatMessage({
-                        defaultMessage:
-                          'No offenders match your search criteria',
-                        id: 'i7eap9',
-                      })
-                }
-              />
-            </div>
-          )}
-        </Row>
-
-        <Row justify="center">
-          <Col>
-            <Pagination
-              total={data?.listOffenders?.total}
-              pageSizeOptions={pagination.sizeOptions}
-              pageSize={pagination.pageSize}
-              current={pagination.page}
-              onChange={onPaginationChange}
-              showTotal={(total) =>
-                intl.formatMessage(
-                  {
-                    defaultMessage: 'Total Offenders: {total}',
-                    id: '3JpVG2',
-                  },
-                  { total }
-                )
+              {data?.listOffenders?.offenders?.map((item) => (
+                <Col
+                  style={{ marginBottom: 10 }}
+                  sm={24}
+                  md={12}
+                  lg={8}
+                  xl={8}
+                  xxl={6}
+                  key={item?.id}
+                >
+                  <OffenderCard
+                    offender={item}
+                    openLightbox={openLightbox}
+                    update={updateOffenderList}
+                  />
+                </Col>
+              ))}
+            </Row>
+          </InfiniteScroll>
+        ) : (
+          <div
+            style={{
+              display: 'flex',
+              flex: 1,
+              height: 'calc(100vh - 100px)',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Empty
+              description={
+                search === ''
+                  ? intl.formatMessage({
+                      defaultMessage: 'No Offenders',
+                      id: 'hO5g1p',
+                    })
+                  : intl.formatMessage({
+                      defaultMessage: 'No offenders match your search criteria',
+                      id: 'i7eap9',
+                    })
               }
-              hideOnSinglePage
             />
-          </Col>
-        </Row>
+          </div>
+        )}
+
+        {/* <Row justify="center"> */}
+        {/*   <Col> */}
+        {/*     <Pagination */}
+        {/*       total={data?.listOffenders?.total} */}
+        {/*       pageSizeOptions={pagination.sizeOptions} */}
+        {/*       pageSize={pagination.pageSize} */}
+        {/*       current={pagination.page} */}
+        {/*       onChange={onPaginationChange} */}
+        {/*       showTotal={(total) => */}
+        {/*         intl.formatMessage( */}
+        {/*           { */}
+        {/*             defaultMessage: 'Total Offenders: {total}', */}
+        {/*             id: '3JpVG2', */}
+        {/*           }, */}
+        {/*           { total } */}
+        {/*         ) */}
+        {/*       } */}
+        {/*       hideOnSinglePage */}
+        {/*     /> */}
+        {/*   </Col> */}
+        {/* </Row> */}
       </div>
 
       <Drawer

@@ -72,16 +72,17 @@ interface Return {
   onSelectCustomGalleries: (values: string) => void;
   onSelectGallery: (value: string) => void;
   variables: OffenderFilters;
+  fetchMoreScroll: () => void;
 }
 
 const getSizeOptions = () => {
   if (window.innerWidth > 1239 && window.innerWidth < 1800) {
-    return ['24', '48', '96'];
+    return ['12', '24', '48', '96'];
   }
   if (window.innerWidth > 1799) {
-    return ['24', '48', '96'];
+    return ['12', '24', '48', '96'];
   }
-  return ['24'];
+  return ['12'];
 };
 
 const useOffenderFeed = (): Return => {
@@ -358,7 +359,7 @@ const useOffenderFeed = (): Return => {
   });
 
   // Fetch Offenders
-  const { data, loading } = useOffenderFeedListQuery({
+  const { data, loading, fetchMore } = useOffenderFeedListQuery({
     variables: queryVariables,
     fetchPolicy: 'cache-and-network',
   });
@@ -647,7 +648,34 @@ const useOffenderFeed = (): Return => {
     });
   };
 
+  const fetchMoreScroll = () => {
+    void fetchMore({
+      variables: {
+        ...queryVariables,
+        take: 12,
+        skip: data?.listOffenders?.offenders?.length || 0,
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        return {
+          listOffenders: {
+            ...fetchMoreResult.listOffenders,
+            total:
+              fetchMoreResult.listOffenders?.total ||
+              prev.listOffenders?.total ||
+              0,
+            offenders: [
+              ...(prev.listOffenders?.offenders || []),
+              ...(fetchMoreResult.listOffenders?.offenders || []),
+            ],
+          },
+        };
+      },
+    });
+  };
+
   return {
+    fetchMoreScroll,
     data,
     loading: cacheOrLoading({
       loading,
