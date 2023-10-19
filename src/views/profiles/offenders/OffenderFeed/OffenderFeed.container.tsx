@@ -8,8 +8,8 @@ const OffenderFeed = (): JSX.Element => {
     loading,
     lightboxElements,
     openLightbox,
-    onPaginationChange,
-    pagination,
+    // onPaginationChange,
+    // pagination,
     order,
     setOrder,
     setSearch,
@@ -52,8 +52,8 @@ const OffenderFeed = (): JSX.Element => {
       loading={loading}
       lightboxElements={lightboxElements}
       openLightbox={openLightbox}
-      onPaginationChange={onPaginationChange}
-      pagination={pagination}
+      // onPaginationChange={onPaginationChange}
+      // pagination={pagination}
       order={order}
       setOrder={setOrder}
       setSearch={setSearch}
