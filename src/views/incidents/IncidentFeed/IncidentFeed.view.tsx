@@ -1,6 +1,6 @@
 import React from 'react';
 import type {
-  ListIncidentsQuery,
+  ListIncidentsFeedQuery,
   RecycleIncidentMutation,
 } from 'graphql/generated';
 import { Button, Card, Col, Drawer, Empty, Input, Row } from 'antd';
@@ -23,7 +23,7 @@ import type { IncidentFilters } from 'state/data-model';
 import Loading from '../../../components/shared-components/AntD/Loading';
 
 interface Props {
-  data: ListIncidentsQuery | undefined;
+  data: ListIncidentsFeedQuery | undefined;
   loading: boolean;
   lightboxElements: {
     src: string;
@@ -98,7 +98,10 @@ const IncidentFeed = ({
 }: Props): JSX.Element => {
   const intl = useIntl();
   return (
-    <div className="feed-container" style={{ padding: 10, paddingRight: 0 }}>
+    <div
+      className="feed-container"
+      style={loading ? {} : { padding: 10, paddingRight: 0 }}
+    >
       <Card
         bodyStyle={{ padding: 10 }}
         style={{ marginBottom: 5, marginRight: 10 }}

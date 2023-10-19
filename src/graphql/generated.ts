@@ -19782,6 +19782,7 @@ export type Incident = {
   completedTodos?: Maybe<Array<Maybe<Todo>>>;
   createdAt: Scalars['DateTime'];
   createdBy: User;
+  createdByUser: Scalars['Boolean'];
   crimeGroups: Array<CrimeGroup>;
   crimeTypes: Array<Tag>;
   date: Scalars['DateTime'];
@@ -74227,6 +74228,7 @@ export type ArticleQuery = {
           dayTime?: string | null;
           reference?: number | null;
           policeRef?: string | null;
+          createdByUser: boolean;
           approved?: boolean | null;
           uploaded?: boolean | null;
           crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
@@ -76686,6 +76688,36 @@ export type ImagesFragment = {
   primary?: boolean | null;
   policeImage?: boolean | null;
   card?: string | null;
+};
+
+export type IncidentCardFragment = {
+  __typename?: 'Incident';
+  approved?: boolean | null;
+  id: string;
+  totalImages?: number | null;
+  subject?: string | null;
+  reference?: number | null;
+  policeRef?: string | null;
+  dayTime?: string | null;
+  description: string;
+  createdByUser: boolean;
+  crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+  images: Array<{
+    __typename?: 'Image';
+    low?: string | null;
+    id: string;
+    rotation: number;
+    position: ImagePosition;
+    primary?: boolean | null;
+  }>;
+  offenders: Array<{
+    __typename?: 'Offender';
+    name?: string | null;
+    id: string;
+  }>;
+  business?: { __typename?: 'Business'; name: string } | null;
+  location?: { __typename?: 'Address'; full?: string | null } | null;
+  groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
 };
 
 export type IncidentsFragment = {
@@ -86302,6 +86334,51 @@ export type ExportFiltersQuery = {
   } | null;
 };
 
+export type ListIncidentsFeedQueryVariables = Exact<{
+  scheme: SchemeWhereUniqueInput;
+  where?: InputMaybe<IncidentWhereInput>;
+  order?: InputMaybe<IncidentOrderByWithRelationInput>;
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type ListIncidentsFeedQuery = {
+  __typename?: 'Query';
+  listIncidents?: {
+    __typename?: 'ListIncidents';
+    total: number;
+    incidents: Array<{
+      __typename?: 'Incident';
+      approved?: boolean | null;
+      id: string;
+      totalImages?: number | null;
+      subject?: string | null;
+      reference?: number | null;
+      policeRef?: string | null;
+      dayTime?: string | null;
+      description: string;
+      createdByUser: boolean;
+      crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+      images: Array<{
+        __typename?: 'Image';
+        low?: string | null;
+        id: string;
+        rotation: number;
+        position: ImagePosition;
+        primary?: boolean | null;
+      }>;
+      offenders: Array<{
+        __typename?: 'Offender';
+        name?: string | null;
+        id: string;
+      }>;
+      business?: { __typename?: 'Business'; name: string } | null;
+      location?: { __typename?: 'Address'; full?: string | null } | null;
+      groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+    }>;
+  } | null;
+};
+
 export type OffenderFeedListQueryVariables = Exact<{
   scheme: SchemeWhereUniqueInput;
   where?: InputMaybe<OffenderWhereInput>;
@@ -86736,6 +86813,44 @@ export const ImagesFragmentDoc = gql`
     primary
     policeImage
     card
+  }
+`;
+export const IncidentCardFragmentDoc = gql`
+  fragment IncidentCard on Incident {
+    approved
+    id
+    totalImages
+    crimeTypes {
+      id
+      name
+    }
+    images {
+      low
+      id
+      rotation
+      position
+      primary
+    }
+    subject
+    reference
+    policeRef
+    offenders {
+      name
+      id
+    }
+    dayTime
+    business {
+      name
+    }
+    location {
+      full
+    }
+    description
+    createdByUser
+    groups {
+      id
+      name
+    }
   }
 `;
 export const IncidentsFragmentDoc = gql`
@@ -87986,6 +88101,7 @@ export const ArticleDocument = gql`
             dayTime
             reference
             policeRef
+            createdByUser
             crimeTypes {
               id
               name
@@ -103237,6 +103353,63 @@ export type ExportFiltersLazyQueryHookResult = ReturnType<
 export type ExportFiltersQueryResult = Apollo.QueryResult<
   ExportFiltersQuery,
   ExportFiltersQueryVariables
+>;
+export const ListIncidentsFeedDocument = gql`
+  query ListIncidentsFeed(
+    $scheme: SchemeWhereUniqueInput!
+    $where: IncidentWhereInput
+    $order: IncidentOrderByWithRelationInput
+    $take: Int
+    $skip: Int
+  ) {
+    listIncidents(
+      scheme: $scheme
+      where: $where
+      order: $order
+      take: $take
+      skip: $skip
+    ) {
+      incidents {
+        ...IncidentCard
+      }
+      total
+    }
+  }
+  ${IncidentCardFragmentDoc}
+`;
+export function useListIncidentsFeedQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ListIncidentsFeedQuery,
+    ListIncidentsFeedQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    ListIncidentsFeedQuery,
+    ListIncidentsFeedQueryVariables
+  >(ListIncidentsFeedDocument, options);
+}
+export function useListIncidentsFeedLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListIncidentsFeedQuery,
+    ListIncidentsFeedQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ListIncidentsFeedQuery,
+    ListIncidentsFeedQueryVariables
+  >(ListIncidentsFeedDocument, options);
+}
+export type ListIncidentsFeedQueryHookResult = ReturnType<
+  typeof useListIncidentsFeedQuery
+>;
+export type ListIncidentsFeedLazyQueryHookResult = ReturnType<
+  typeof useListIncidentsFeedLazyQuery
+>;
+export type ListIncidentsFeedQueryResult = Apollo.QueryResult<
+  ListIncidentsFeedQuery,
+  ListIncidentsFeedQueryVariables
 >;
 export const OffenderFeedListDocument = gql`
   query offenderFeedList(

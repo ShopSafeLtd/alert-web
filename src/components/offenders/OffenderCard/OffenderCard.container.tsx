@@ -1,6 +1,6 @@
 import React from 'react';
 import type {
-  OffenderFeedListQuery,
+  OffenderCardFragment,
   RecycleOffenderMutation,
 } from 'graphql/generated';
 import type { MutationUpdaterFn } from '@apollo/client';
@@ -8,10 +8,7 @@ import View from './OffenderCard.view';
 import useOffenderCard from './useOffenderCard';
 
 interface Props {
-  offender: Exclude<
-    OffenderFeedListQuery['listOffenders'],
-    undefined | null
-  >['offenders'][0];
+  offender: OffenderCardFragment;
   openLightbox: (elements: { src: string }[], index: number) => void;
   update?: MutationUpdaterFn<RecycleOffenderMutation>;
   isArticle?: boolean;

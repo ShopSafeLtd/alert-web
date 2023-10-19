@@ -53,6 +53,7 @@ query Article($where: ArticleWhereUniqueInput!) {
           dayTime
           reference
           policeRef
+          createdByUser
           crimeTypes {
             id
             name

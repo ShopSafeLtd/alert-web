@@ -43,11 +43,7 @@ describe('Detail Officer View', () => {
           dayTime: '11:40 - Wed 10, Aug 22',
           description: 'test description',
           location: null,
-          createdBy: {
-            fullName: 'aaa',
-            id: 'cl4pe3eu91312371op4c4k2lih2',
-            businesses: [{ name: 'test business', id: '' }],
-          },
+          createdByUser: false,
           crimeTypes: [
             { id: 'ckdhdhmr500186mnyy5k9sunm', name: 'Theft & Handling ' },
           ],
