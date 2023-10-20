@@ -373,13 +373,13 @@ export const TargetGoodsColumns: ColumnsType<TargetedGoodsTableData> = [
     sorter: (a: TargetedGoodsTableData, b: TargetedGoodsTableData) =>
       a.incidentsCreated - b.incidentsCreated,
   },
-  {
-    key: 'offendersCreated',
-    dataIndex: 'offendersCreated',
-    title: <FormattedMessage id="xb54TN" defaultMessage="Offenders" />,
-    sorter: (a: TargetedGoodsTableData, b: TargetedGoodsTableData) =>
-      a.offendersCreated - b.offendersCreated,
-  },
+  // {
+  //   key: 'offendersCreated',
+  //   dataIndex: 'offendersCreated',
+  //   title: <FormattedMessage id="xb54TN" defaultMessage="Offenders" />,
+  //   sorter: (a: TargetedGoodsTableData, b: TargetedGoodsTableData) =>
+  //     a.offendersCreated - b.offendersCreated,
+  // },
   {
     key: 'lostValue',
     dataIndex: 'lostValue',

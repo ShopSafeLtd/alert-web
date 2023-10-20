@@ -15,6 +15,7 @@ import {
   faChartBar,
   faChartLineDown,
   faChartPie,
+  faCircleExclamation,
   faClipboard,
   faMoneyBill,
   faTrash,
@@ -44,7 +45,7 @@ import moment from 'moment';
 import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
 import type { OffenderReportQuery } from '../../../../graphql/generated';
-import { Role, Age, Build, Gender, Race } from '../../../../graphql/generated';
+import { Age, Build, Gender, Race, Role } from '../../../../graphql/generated';
 import useStyles from '../../styles/report.styles';
 import WatermarkImage from '../../../../components/images/WatermarkImage.view';
 import RadialGraph from '../../../../components/reports/graphs/radialGraph';
@@ -288,6 +289,20 @@ const OffenderReportLayout = ({
             </Title>
           </Col>
           <Row className="stats-row">
+            <Statistic
+              className={classes.stats}
+              title={intl.formatMessage({
+                defaultMessage: 'Total Incidents',
+                id: 'pUlxda',
+              })}
+              value={data?.offenderReport?.incidentSummary?.totalIncidents || 0}
+              prefix={
+                <FontAwesomeIcon
+                  className={classes.prefixIcon}
+                  icon={faCircleExclamation}
+                />
+              }
+            />
             <Statistic
               className={classes.stats}
               title={intl.formatMessage({
