@@ -1,11 +1,21 @@
 import React from 'react';
-import { Badge, Button, Drawer, Tabs, Tooltip, Typography } from 'antd';
+import {
+  Badge,
+  Button,
+  Col,
+  Drawer,
+  Modal,
+  Row,
+  Tabs,
+  Tooltip,
+  Typography,
+} from 'antd';
 import { createUseStyles } from 'react-jss';
 import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
 import LinkCrimeGroup from 'components/form-components/linkOptions/LinkCrimeGroup';
 import AddExistingOffender from 'components/form-components/offender/offender/AddExistingOffender';
 import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
-import { faBell, faBellSlash } from '@fortawesome/pro-light-svg-icons';
+import { faBell, faBellSlash, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormattedMessage, useIntl } from 'react-intl';
 import ViewTodo from 'components/form-components/Todos/ViewTodo/Todo.container';
@@ -22,6 +32,9 @@ import SimpleEditOffender from 'components/form-components/offender/offender/Sim
 import EditVehicleSimple from 'components/form-components/Vehicle/EditVehicleSimple';
 import AddCrimeGroup from 'components/form-components/crimeGroup/AddCrimeGroup';
 import EditCrimeGroup from 'components/form-components/crimeGroup/EditCrimeGroup';
+import MultiSelectOffenders from 'components/investigations/MultiSelectOffenders';
+import MultiSelectVehicles from 'components/investigations/MultiSelectVehicles';
+import EditInvestigation from 'components/form-components/Investigation/EditInvestigation';
 import type {
   CreateTodoMutation,
   QuestionGroupOnSchemeQuery,
@@ -33,6 +46,8 @@ import ViewDetails from './views/Details';
 import DocumentsContainer from './views/Documents/Documents.container';
 import AddDocument from '../../../components/form-components/documents/AddDocument';
 import AddEvidence from '../../../components/form-components/documents/AddEvidence';
+
+const { confirm } = Modal;
 
 interface Props {
   data: ViewInvestigationQuery | undefined;
@@ -93,6 +108,19 @@ interface Props {
   onDeleteIncident: (id: string) => void;
   saving: boolean;
   loading: boolean;
+  onDeleteInvestigation: () => void;
+  suggestedOffenders: OffenderData[] | undefined;
+  suggestedVehicles: VehicleData[] | undefined;
+  toggleCloseSuggestedOffenders: () => void;
+  toggleCloseSuggestedVehicles: () => void;
+  onAddExistingOffenders: (value: string[]) => void;
+  onAddExistingVehicles: (value: string[]) => void;
+  showSuggestedVehicles: boolean;
+  showSuggestedOffenders: boolean;
+  toggleShowSuggestedVehicles: () => void;
+  toggleShowSuggestedOffenders: () => void;
+  editInvestigation: boolean;
+  toggleEditInvestigation: () => void;
 }
 
 const useStyles = createUseStyles({
@@ -169,49 +197,104 @@ const ViewInvestigation = ({
   onEditCrimeGroup,
   onDeleteCrimeGroup,
   onDeleteIncident,
+  onDeleteInvestigation,
   saving,
+  suggestedOffenders,
+  suggestedVehicles,
+  onAddExistingOffenders,
+  onAddExistingVehicles,
+  toggleCloseSuggestedOffenders,
+  toggleCloseSuggestedVehicles,
+  showSuggestedVehicles,
+  showSuggestedOffenders,
+  toggleShowSuggestedVehicles,
+  toggleShowSuggestedOffenders,
+  editInvestigation,
+  toggleEditInvestigation,
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
+
   return (
     <div style={{ height: '100vh' }}>
       <div className={classes.sideListContent}>
         <Tabs
           tabBarExtraContent={
-            <Tooltip
-              title={
-                data?.investigation?.subscribed
-                  ? intl.formatMessage({
-                      defaultMessage: 'Stop getting notified about updates.',
-                      id: 'WpTY6U',
-                    })
-                  : intl.formatMessage({
-                      defaultMessage: 'Get notified about updates.',
-                      id: 'icr+Hj',
-                    })
-              }
-            >
-              <Button
-                onClick={toggleSubscribe}
-                type="text"
-                color={data?.investigation?.subscribed ? undefined : 'danger'}
-              >
-                <FontAwesomeIcon
-                  size="1x"
-                  style={{ marginRight: 8 }}
-                  icon={data?.investigation?.subscribed ? faBellSlash : faBell}
-                />
-                {data?.investigation?.subscribed
-                  ? intl.formatMessage({
-                      defaultMessage: 'Un-follow Updates',
-                      id: '45gIlS',
-                    })
-                  : intl.formatMessage({
-                      defaultMessage: 'Follow Updates',
-                      id: 'gBN+ok',
-                    })}
-              </Button>
-            </Tooltip>
+            <Row gutter={8} style={{ margin: 3 }}>
+              <Col>
+                <Tooltip
+                  title={
+                    data?.investigation?.subscribed
+                      ? intl.formatMessage({
+                          defaultMessage:
+                            'Stop getting notified about updates.',
+                          id: 'WpTY6U',
+                        })
+                      : intl.formatMessage({
+                          defaultMessage: 'Get notified about updates.',
+                          id: 'icr+Hj',
+                        })
+                  }
+                >
+                  <Button
+                    onClick={toggleSubscribe}
+                    type="ghost"
+                    // type="text"
+                    color={
+                      data?.investigation?.subscribed ? undefined : 'danger'
+                    }
+                  >
+                    <FontAwesomeIcon
+                      size="1x"
+                      style={{ marginRight: 8 }}
+                      icon={
+                        data?.investigation?.subscribed ? faBellSlash : faBell
+                      }
+                    />
+                    {data?.investigation?.subscribed
+                      ? intl.formatMessage({
+                          defaultMessage: 'Un-follow Updates',
+                          id: '45gIlS',
+                        })
+                      : intl.formatMessage({
+                          defaultMessage: 'Follow Updates',
+                          id: 'gBN+ok',
+                        })}
+                  </Button>
+                </Tooltip>
+              </Col>
+              <Col>
+                <Button
+                  type="ghost"
+                  onClick={() => {
+                    confirm({
+                      title: intl.formatMessage({
+                        defaultMessage:
+                          'Do you want to delete the investigation?',
+                        id: '6U5FpD',
+                      }),
+                      content: intl.formatMessage({
+                        defaultMessage: 'This action cannot be undone.',
+                        id: 'JDJoIZ',
+                      }),
+                      onOk() {
+                        onDeleteInvestigation();
+                      },
+                    });
+                  }}
+                >
+                  <FontAwesomeIcon
+                    size="1x"
+                    style={{ marginRight: 8 }}
+                    icon={faTrash}
+                  />
+                  {intl.formatMessage({
+                    defaultMessage: 'Delete',
+                    id: 'K3r6DQ',
+                  })}
+                </Button>
+              </Col>
+            </Row>
           }
         >
           <Tabs.TabPane
@@ -241,6 +324,7 @@ const ViewInvestigation = ({
               templatesLoading={templatesLoading}
               setViewTodoVisible={setViewTodoVisible}
               setCompleteTodoVisible={setCompleteTodoVisible}
+              toggleEditInvestigation={toggleEditInvestigation}
             />
           </Tabs.TabPane>
           <Tabs.TabPane
@@ -277,6 +361,31 @@ const ViewInvestigation = ({
           </Tabs.TabPane>
         </Tabs>
       </div>
+      {/* details */}
+      <Drawer
+        title={
+          <FormattedMessage
+            defaultMessage="Update Investigation Details"
+            id="6lYiJV"
+          />
+        }
+        visible={editInvestigation}
+        width="500"
+        onClose={toggleEditInvestigation}
+      >
+        {editInvestigation ? (
+          <EditInvestigation
+            onClose={toggleEditInvestigation}
+            investigationData={{
+              id: data?.investigation?.id || '',
+              name: data?.investigation?.name,
+              description: data?.investigation?.description,
+            }}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
       {/* offenders */}
       <Drawer
         title={
@@ -452,7 +561,7 @@ const ViewInvestigation = ({
           id: 'uK1ewV',
         })}
         open={!!editCrimeGroupData}
-        width="800"
+        width="700"
         onClose={() => setEditCrimeGroupData(null)}
       >
         {editCrimeGroupData ? (
@@ -597,6 +706,94 @@ const ViewInvestigation = ({
           <div />
         )}
       </Drawer>
+
+      {/* suggestedData after creating incident  */}
+
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Suggested Offenders',
+          id: '5UuihT',
+        })}
+        open={showSuggestedOffenders}
+        onClose={toggleCloseSuggestedOffenders}
+        width="900"
+      >
+        <MultiSelectOffenders
+          offenders={suggestedOffenders}
+          onClose={toggleCloseSuggestedOffenders}
+          handleAddSuggestion={onAddExistingOffenders}
+        />
+      </Drawer>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Suggested Vehicles',
+          id: 'fzU5Bx',
+        })}
+        open={showSuggestedVehicles}
+        onClose={toggleCloseSuggestedVehicles}
+        width="900"
+      >
+        <MultiSelectVehicles
+          vehicles={suggestedVehicles}
+          onClose={toggleCloseSuggestedVehicles}
+          handleAddSuggestion={onAddExistingVehicles}
+        />
+      </Drawer>
+      <Modal
+        bodyStyle={{ borderRadius: 10 }}
+        open={
+          (suggestedOffenders && suggestedOffenders.length > 0) ||
+          (suggestedVehicles && suggestedVehicles.length > 0)
+        }
+        // zIndex={1010}
+        cancelText={intl.formatMessage({
+          defaultMessage: 'Close',
+          id: 'rbrahO',
+        })}
+        onCancel={() => {
+          toggleCloseSuggestedVehicles();
+          toggleCloseSuggestedOffenders();
+        }}
+        okButtonProps={{
+          style: {
+            display: 'none',
+          },
+        }}
+        title={intl.formatMessage({
+          defaultMessage:
+            'Add suggested offenders and vehicles to the investigation?',
+          id: 'zYlYqu',
+        })}
+      >
+        <Row gutter={16}>
+          <Col>
+            <Button
+              loading={saving}
+              disabled={suggestedOffenders?.length === 0}
+              onClick={toggleShowSuggestedOffenders}
+              type="primary"
+            >
+              {intl.formatMessage({
+                defaultMessage: 'Add Suggested Offedners',
+                id: 'IuW3g5',
+              })}
+            </Button>
+          </Col>
+          <Col>
+            <Button
+              loading={saving}
+              disabled={suggestedVehicles?.length === 0}
+              onClick={toggleShowSuggestedVehicles}
+              type="primary"
+            >
+              {intl.formatMessage({
+                defaultMessage: 'Add Suggested Vehicles',
+                id: 'Tl5uyE',
+              })}
+            </Button>
+          </Col>
+        </Row>
+      </Modal>
     </div>
   );
 };

@@ -81,82 +81,8 @@ mutation EditArticle($data: CreateArticleInput!, $where: UniqueId!) {
             name
           }
         }
-        offenders {
-          id
-          createdAt
-          updatedAt
-          age
-          build
-          height
-          dateOfBirth
-          dateSource
-          hair
-          gender
-          name
-          race
-          peculiarities
-          approved
-          active
-          lastActive {
-            id
-            dayTime
-          }
-          tags {
-            id
-            name
-          }
-          images {
-            id
-            optimised
-            position
-          }
-          groups {
-            id
-            name
-          }
-          tags {
-            id
-            name
-          }
-          createdBy {
-            id
-            fullName
-            businesses {
-              fullName
-              id
-              name
-            }
-          }
-          incidents {
-            id
-            subject
-            description
-            dayTime
-            date
-            crimeTypes {
-              id
-              name
-            }
-            approved
-            location {
-              id
-              full
-            }
-            createdBy {
-              id
-              fullName
-              businesses {
-                fullName
-                id
-                name
-              }
-            }
-            images {
-              id
-              optimised
-              position
-            }
-          }
+offenders {
+          ...OffenderCard
         }
       }
     }

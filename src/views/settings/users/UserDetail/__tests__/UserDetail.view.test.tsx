@@ -23,6 +23,7 @@ describe('Detail Officer View', () => {
       offenderEmail: false,
       offenderPush: false,
       publicName: true,
+      defaultGroups: [],
       groups: [
         {
           id: 'test',

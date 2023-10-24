@@ -19,6 +19,7 @@ mutation updateScheme($where: UniqueId!, $data: SchemeUpdateInput!) {
     imagesRequiredOnOffenders
     incidentRetention
     offenderRetention
+
     logo {
       id
       url

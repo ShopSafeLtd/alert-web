@@ -59,15 +59,35 @@ const useStyles = createUseStyles({
 });
 
 const getPosition = (position?: ImagePosition): string => {
-  if (position === ImagePosition.CenterBottom) return 'center bottom';
-  if (position === ImagePosition.CenterTop) return 'center top';
-  if (position === ImagePosition.LeftBottom) return 'left bottom';
-  if (position === ImagePosition.LeftCenter) return 'left center';
-  if (position === ImagePosition.LeftTop) return 'left top';
-  if (position === ImagePosition.RightBottom) return 'right bottom';
-  if (position === ImagePosition.RightCenter) return 'right center';
-  if (position === ImagePosition.RightTop) return 'right top';
-  return 'center center';
+  switch (position) {
+    case ImagePosition.CenterBottom: {
+      return 'center bottom';
+    }
+    case ImagePosition.CenterTop: {
+      return 'center top';
+    }
+    case ImagePosition.LeftBottom: {
+      return 'left bottom';
+    }
+    case ImagePosition.LeftCenter: {
+      return 'left center';
+    }
+    case ImagePosition.LeftTop: {
+      return 'left top';
+    }
+    case ImagePosition.RightBottom: {
+      return 'right bottom';
+    }
+    case ImagePosition.RightCenter: {
+      return 'right center';
+    }
+    case ImagePosition.RightTop: {
+      return 'right top';
+    }
+    default: {
+      return 'center center';
+    }
+  }
 };
 
 interface Props {
@@ -75,12 +95,43 @@ interface Props {
   image?: boolean;
   position?: ImagePosition;
   rotation?: number;
+  showWatermark?: boolean;
 }
 
-const WatermarkImage = ({ url, image, position, rotation }: Props) => {
+const WatermarkImage = ({
+  url,
+  image,
+  position,
+  rotation,
+  showWatermark = true,
+}: Props) => {
   const classes = useStyles();
   const reference = useStoreState((state) => state.user.reference);
-
+  if (!showWatermark) {
+    return (
+      <div className={image ? classes.imageContainer : classes.container}>
+        {!image && (
+          <div
+            className={classes.image}
+            style={{
+              // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+              backgroundImage: `url(${url})`,
+              backgroundPosition: getPosition(position),
+              transform: `rotate(${rotation || 0}deg)`,
+            }}
+          />
+        )}
+        {image && (
+          <img
+            className={classes.standardImage}
+            src={url || undefined}
+            // eslint-disable-next-line formatjs/no-literal-string-in-jsx
+            alt="lightbox"
+          />
+        )}
+      </div>
+    );
+  }
   return (
     <div className={image ? classes.imageContainer : classes.container}>
       <div className={classes.textOverlay} />

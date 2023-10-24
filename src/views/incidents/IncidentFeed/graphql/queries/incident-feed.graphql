@@ -1,0 +1,8 @@
+query ListIncidentsFeed($scheme: SchemeWhereUniqueInput!, $where: IncidentWhereInput, $order: IncidentOrderByWithRelationInput, $take: Int, $skip: Int) {
+  listIncidents(scheme: $scheme, where: $where, order: $order, take: $take, skip: $skip) {
+    incidents {
+      ...IncidentCard
+    }
+    total
+  }
+}

@@ -72,6 +72,7 @@ const userModel: SchemeModel = {
   taskTimeTracking: false,
   languageCount: 0,
   autoPopulateDescription: true,
+
   setScheme: action((state, payload) => {
     state.id = payload.id;
     state.autoApproveIncidents = payload.autoApproveIncidents;

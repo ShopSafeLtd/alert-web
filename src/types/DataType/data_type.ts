@@ -47,6 +47,14 @@ export interface OffenderData {
         name: string;
       }[]
     | undefined;
+  tags?: {
+    id: string;
+    name: string;
+  }[];
+  lastActive?:
+    | { id: string; dayTime?: string | null | undefined }
+    | null
+    | undefined;
   images?: ImageCardData[] | null | undefined;
   imageUid?: string[] | undefined;
   bans?: BanData[] | undefined;
@@ -118,7 +126,6 @@ export interface VehicleData {
 
 export interface VehicleCardData {
   id: string;
-  updatedAt?: Date;
   make?: string | null;
   model?: string | null;
   colour?: string | null | undefined;
@@ -157,7 +164,11 @@ export interface CrimeGroupCardData {
   vehicles?: VehicleData[];
   offenders?: OffenderData[];
 }
-
+export interface InvestigationDetails {
+  id: string;
+  name?: string;
+  description?: string | null;
+}
 // image
 export interface ImageCardData {
   id: string;
@@ -195,15 +206,35 @@ export interface EditFeedImage {
 }
 // LocationData
 export interface LocationData {
-  id: string;
+  id?: string;
   alias?: string | null;
   building?: string | null;
-  street: string;
-  townCity: string;
+  street?: string | null;
+  townCity?: string | null;
   county?: string | null;
-  postcode: string;
+  postcode?: string | null;
+  geoLat?: number | null;
+  geoLng?: number | null;
+  full?: string | null;
 }
-
+export interface NewLocationData {
+  geoLat: number;
+  geoLng: number;
+  full?: string;
+  street?: string;
+  townCity?: string;
+  postcode?: string;
+}
+export interface ViewportData {
+  latitude: number;
+  longitude: number;
+  full?: string;
+  zoom?: number;
+  transitionDuration?: number;
+  // street?: string;
+  // townCity?: string;
+  // postcode?: string;
+}
 export interface AddressData {
   alias?: string | null;
   building?: string | null;
@@ -240,8 +271,8 @@ export interface DatedMessages {
 
 // date
 export interface DateType {
-  startDate: Moment | Date;
-  endDate: Moment | Date;
+  startDate: Date;
+  endDate: Date;
 }
 
 // businessData
@@ -253,31 +284,28 @@ export interface BusinessData {
     | {
         id: string;
         name: string;
+        // disconnectId?: string;
       }
     | null
     | undefined;
-  locations:
-    | {
-        id: string;
-        building?: string;
-        county?: string;
-        postcode?: string;
-        street?: string;
-        townCity?: string;
-        full?: string | null | undefined;
-      }[];
-  // | undefined;
+  locations: LocationData[];
   isConnected?: boolean;
   isNew?: boolean;
 }
 export interface CustomGalleryData {
   id: string;
   name: string;
-  description?: string;
+  description?: string | null;
   groups?: string[];
   schemes?: string[];
   isConnected?: boolean;
   isNew?: boolean;
+}
+export interface CustomGalleryQueryData {
+  id: string;
+  name: string;
+  description?: string;
+  groups?: { id: string; name?: string }[];
 }
 export interface TagData {
   id: string;

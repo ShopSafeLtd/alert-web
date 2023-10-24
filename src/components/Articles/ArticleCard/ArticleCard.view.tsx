@@ -8,6 +8,7 @@ import {
   Modal,
   Row,
   Tag,
+  Tooltip,
   Typography,
 } from 'antd';
 import type { ListArticlesQuery } from 'graphql/generated';
@@ -31,7 +32,7 @@ import { Link } from 'react-router-dom';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import SkeletonImage from 'components/images/SkeletonImage.view';
 import FormatCalendar from 'utils/format-calendar-24h';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import useStyles from './ArticleCard.styles';
 
 const { Title, Text, Paragraph } = Typography;
@@ -60,6 +61,7 @@ const ArticleCard = ({
   onNavigate,
   onDelete,
 }: Props): JSX.Element => {
+  const intl = useIntl();
   const imagesRef = useRef<CarouselRef>(null);
   const classes = useStyles();
   const {
@@ -72,6 +74,7 @@ const ArticleCard = ({
     priority,
     createdBy,
     tags,
+    watermarkImage,
   } = article || {};
   return (
     <div className={classes.card}>
@@ -138,12 +141,32 @@ const ArticleCard = ({
       )}
       <div className={classes.tags}>
         <Row gutter={8}>
-          {tags?.map((tag, i) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <Col key={i}>
+          {tags?.slice(0, 2).map((tag) => (
+            <Col key={tag.id}>
               <Tag className={classes.tag}>{tag.name}</Tag>
             </Col>
           ))}
+          {tags && tags.length > 2 && (
+            <Tooltip title={tags.map((item) => ` ${item.name}`).toString()}>
+              <Tag className="incident-card-tag" color="red">
+                {intl.formatMessage(
+                  {
+                    defaultMessage: '+ {num} more',
+                    id: 'fi2Xie',
+                  },
+                  {
+                    num: tags.length - 1,
+                  }
+                )}
+              </Tag>
+            </Tooltip>
+          )}
+          {/* {tags?.map((tag, i) => ( */}
+          {/*   // eslint-disable-next-line react/no-array-index-key */}
+          {/*   <Col key={i}> */}
+          {/*     <Tag className={classes.tag}>{tag.name}</Tag> */}
+          {/*   </Col> */}
+          {/* ))} */}
         </Row>
       </div>
       {images && images.length > 0 ? (
@@ -154,6 +177,7 @@ const ArticleCard = ({
                 url={image.optimised}
                 rotation={image.rotation}
                 position={image.position}
+                showWatermark={watermarkImage}
               />
             </div>
           ))}
@@ -161,7 +185,7 @@ const ArticleCard = ({
       ) : (
         <SkeletonImage height={280} />
       )}
-      {images && images.length > 0 && (
+      {images && images.length > 1 && (
         <Row className={classes.controls}>
           <Col>
             <FontAwesomeIcon
@@ -197,7 +221,13 @@ const ArticleCard = ({
       )}
       <div className={classes.content}>
         <div className={classes.details}>
-          <Title level={4}>
+          <Title
+            level={4}
+            ellipsis={{
+              rows: 2,
+              tooltip: title?.replace(/^\S/, (s) => s.toUpperCase()),
+            }}
+          >
             {priority === ArticlePriority.High && (
               <FontAwesomeIcon
                 size="sm"

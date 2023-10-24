@@ -165,6 +165,7 @@ export const RegionDataWidget = (props: RegionDataWidgetProps) => {
     content,
     list,
   } = props;
+
   const isMobile = !utils.getBreakPoint(useBreakpoint()).includes('lg');
   return (
     <Card bodyStyle={{ padding: 0 }}>

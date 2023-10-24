@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-floating-promises,@typescript-eslint/no-unsafe-assignment */
 import { useState } from 'react';
-import type { SchemeQuery, ViewTagQuery } from 'graphql/generated';
+import type { GoodsMode, SchemeQuery, ViewTagQuery } from 'graphql/generated';
 import {
   Model,
   TagType,
@@ -36,6 +36,7 @@ export interface FormData {
   offenderRetention: number | null;
   facialRecognition: boolean;
   imagesRequiredOnOffenders: boolean;
+  goodsMode: GoodsMode;
 }
 
 interface Return {
@@ -177,6 +178,10 @@ const useSchemeDetail = (): Return => {
           defaultPublicOffenderDOB: { set: data.defaultPublicOffenderDOB },
           facialRecognition: { set: data.facialRecognition },
           imagesRequiredOnOffenders: { set: data.imagesRequiredOnOffenders },
+          goodsMode: data.goodsMode ? { set: data.goodsMode } : undefined,
+          // ???
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           logo: {
             ...(imageChange && fileList.length > 0
               ? {
@@ -192,6 +197,9 @@ const useSchemeDetail = (): Return => {
 
             ...(imageChange && fileList.length === 0 ? { delete: true } : {}),
           },
+          // ???
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           darkLogo: {
             ...(darkImageChange && darkFileList.length > 0
               ? {
@@ -306,6 +314,9 @@ const useSchemeDetail = (): Return => {
           },
           data: {
             parentTag: {
+              // ???
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
               disconnect: true,
             },
           },

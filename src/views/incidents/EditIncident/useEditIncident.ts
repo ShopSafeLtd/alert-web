@@ -1047,6 +1047,9 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
                     id: data.business.value,
                   }
                 : undefined,
+              // ???
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
               disconnect:
                 incidentData?.incident?.business?.id &&
                 data.business?.value === undefined

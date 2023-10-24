@@ -15,7 +15,7 @@ interface Props {
   saving: boolean;
 }
 
-const AddOffenderWarning = ({
+const AddCustomGallery = ({
   onSubmit,
   onClose,
   saving,
@@ -29,8 +29,8 @@ const AddOffenderWarning = ({
           <Text type="secondary">
             {intl.formatMessage({
               defaultMessage:
-                'Custom galleries are added to offenders to sort.',
-              id: 'tClut2',
+                'Custom galleries are added to offenders or vehicles to sort.',
+              id: 'Ne01v6',
             })}
           </Text>
         </Col>
@@ -44,9 +44,8 @@ const AddOffenderWarning = ({
               {
                 required: true,
                 message: intl.formatMessage({
-                  defaultMessage:
-                    'Please enter a name for the new custom gallery.',
-                  id: 'x8deu0',
+                  defaultMessage: 'Please enter a name for the custom gallery.',
+                  id: 'uOtpVl',
                 }),
               },
             ]}
@@ -91,4 +90,4 @@ const AddOffenderWarning = ({
   );
 };
 
-export default AddOffenderWarning;
+export default AddCustomGallery;

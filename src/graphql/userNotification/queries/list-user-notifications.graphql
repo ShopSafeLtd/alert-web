@@ -36,6 +36,7 @@ query listUserNotifications(
           userNotifications
           languageCount
           autoPopulateDescription
+
           logo {
             optimisedPersisted
             id

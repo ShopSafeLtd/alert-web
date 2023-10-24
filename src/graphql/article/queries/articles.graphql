@@ -6,6 +6,7 @@ query Articles(
     previewImage
     previewText
     priority
+    watermarkImage
     tags {
       id
       name

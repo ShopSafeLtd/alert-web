@@ -8,11 +8,10 @@ const OffenderFeed = (): JSX.Element => {
     loading,
     lightboxElements,
     openLightbox,
-    onPaginationChange,
-    pagination,
+    // onPaginationChange,
+    // pagination,
     order,
     setOrder,
-    search,
     setSearch,
     groups,
     groupsLoading,
@@ -23,14 +22,7 @@ const OffenderFeed = (): JSX.Element => {
     lightBoxOpen,
     sortFilter,
     toggleSortFilter,
-    age,
-    build,
     clearFilters,
-    ethnicity,
-    gallery,
-    groupsFilter,
-    hair,
-    peculiarities,
     setAge,
     setBuild,
     setEthnicity,
@@ -40,10 +32,7 @@ const OffenderFeed = (): JSX.Element => {
     setPeculiarities,
     setSex,
     setWarnings,
-    sex,
-    warnings,
     businessData,
-    businesses,
     setBusinesses,
     businessesLoading,
     setCreatedAtFilter,
@@ -51,21 +40,22 @@ const OffenderFeed = (): JSX.Element => {
     onSelectGallery,
     adminRights,
     onSelectCustomGalleries,
-    customGalleries,
+    variables,
+    fetchMoreScroll,
   } = useOffenderFeed();
 
   return (
     <View
+      fetchMoreScroll={fetchMoreScroll}
       lightBoxOpen={lightBoxOpen}
       data={data}
       loading={loading}
       lightboxElements={lightboxElements}
       openLightbox={openLightbox}
-      onPaginationChange={onPaginationChange}
-      pagination={pagination}
+      // onPaginationChange={onPaginationChange}
+      // pagination={pagination}
       order={order}
       setOrder={setOrder}
-      search={search}
       setSearch={setSearch}
       groups={groups}
       groupsLoading={groupsLoading}
@@ -75,14 +65,7 @@ const OffenderFeed = (): JSX.Element => {
       onNavigate={onNavigate}
       sortFilter={sortFilter}
       toggleSortFilter={toggleSortFilter}
-      age={age}
-      build={build}
       clearFilters={clearFilters}
-      ethnicity={ethnicity}
-      gallery={gallery}
-      groupsFilter={groupsFilter}
-      hair={hair}
-      peculiarities={peculiarities}
       setAge={setAge}
       setBuild={setBuild}
       setEthnicity={setEthnicity}
@@ -92,10 +75,7 @@ const OffenderFeed = (): JSX.Element => {
       setPeculiarities={setPeculiarities}
       setSex={setSex}
       setWarnings={setWarnings}
-      sex={sex}
-      warnings={warnings}
       businessData={businessData}
-      businesses={businesses}
       setBusinesses={setBusinesses}
       businessesLoading={businessesLoading}
       setCreatedAtFilter={setCreatedAtFilter}
@@ -103,7 +83,7 @@ const OffenderFeed = (): JSX.Element => {
       onSelectGallery={onSelectGallery}
       adminRights={adminRights}
       onSelectCustomGalleries={onSelectCustomGalleries}
-      customGalleries={customGalleries}
+      variables={variables}
     />
   );
 };

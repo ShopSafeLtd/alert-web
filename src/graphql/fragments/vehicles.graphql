@@ -5,7 +5,4 @@ fragment Vehicles on Vehicle {
   model
   make
   registration
-  images {
-    ...Images
-  }
 }

@@ -44,6 +44,9 @@ const useStyles = createUseStyles({
   action: {
     marginTop: -20,
   },
+  clickableOverlay: {
+    cursor: 'pointer',
+  },
 });
 
 interface Props {
@@ -118,7 +121,7 @@ const HeatMapLayer = (
   />
 );
 
-const MapCard = ({ height, width, markers }: Props) => {
+const LocatingCard = ({ height, width, markers }: Props) => {
   const mapRef = useRef<MapRef>(null);
   const intl = useIntl();
   const classes = useStyles();
@@ -319,4 +322,4 @@ const MapCard = ({ height, width, markers }: Props) => {
   );
 };
 
-export default MapCard;
+export default LocatingCard;

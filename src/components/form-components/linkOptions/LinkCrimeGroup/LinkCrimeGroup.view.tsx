@@ -113,7 +113,7 @@ const LinkCrimeGroup = ({
         loading={loading}
         size="small"
       />
-      <Row gutter={16} style={{ paddingBottom: 30 }} justify="end">
+      <Row gutter={16} style={{ marginTop: 30 }} justify="end">
         <Col>
           <Button onClick={onClose} disabled={saving} type="text">
             {intl.formatMessage({ defaultMessage: 'Cancel', id: '47FYwb' })}

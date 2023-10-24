@@ -1,0 +1,12 @@
+fragment Locations on Address {
+  id
+  building
+  street
+  townCity
+  county
+  postcode
+  geoLat
+  geoLng
+  full
+  alias
+}

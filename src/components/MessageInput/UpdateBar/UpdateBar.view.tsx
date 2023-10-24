@@ -356,7 +356,7 @@ const UpdateBar = ({
         <Row
           wrap={false}
           gutter={5}
-          style={{ height: '45px', margin: '0 10px 10px', overflow: 'auto' }}
+          style={{ height: '45px', margin: '0 10px', overflow: 'auto' }}
         >
           <Col>
             <Popover

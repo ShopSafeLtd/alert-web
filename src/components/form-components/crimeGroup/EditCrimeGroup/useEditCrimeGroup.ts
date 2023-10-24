@@ -40,7 +40,6 @@ const useEditCrimeGroup = ({ update, editData }: Props): Return => {
   const [linkVehicle, setLinkVehicle] = useState(false);
   const [offendersData, setOffendersData] = useState<OffenderData[]>([]);
   const [vehiclesData, setVehiclesData] = useState<VehicleData[]>([]);
-  console.log('editData', editData);
 
   useEffect(() => {
     setOffendersData(<[]>editData?.offenders);

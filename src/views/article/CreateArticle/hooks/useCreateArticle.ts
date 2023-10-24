@@ -28,6 +28,7 @@ interface FormData {
   categories: string[];
   importance: ArticlePriority;
   schemes: string[];
+  watermarkImage: boolean;
 }
 
 export type { FormData };
@@ -44,6 +45,7 @@ const useCreateArticle = (): Props => {
     categories: [],
     importance: ArticlePriority.Normal,
     schemes: [],
+    watermarkImage: true,
   });
 
   const [selectedSchemes, setSelectedSchemes] = useState<string[]>([]);
@@ -445,6 +447,7 @@ const useCreateArticle = (): Props => {
           title: form.getFieldValue('title'),
           categories: selectedCategoryIds,
           groups: selectedGroups,
+          watermarkImage: form.getFieldValue('watermarkImage'),
           documents:
             fileList.map((file) => ({
               url: file.url || '',

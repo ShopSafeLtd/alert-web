@@ -1,6 +1,7 @@
 query Article($where: ArticleWhereUniqueInput!) {
   article(where: $where) {
     id
+    watermarkImage
     groups {
       id
       name
@@ -53,6 +54,7 @@ query Article($where: ArticleWhereUniqueInput!) {
           dayTime
           reference
           policeRef
+          createdByUser
           crimeTypes {
             id
             name
@@ -93,82 +95,10 @@ query Article($where: ArticleWhereUniqueInput!) {
           }
         }
         offenders {
-          id
-          createdAt
-          updatedAt
-          age
-          build
-          height
-          dateOfBirth
-          dateSource
-          hair
-          gender
-          name
-          race
-          peculiarities
-          approved
-          active
+          ...OffenderCard
           lastActive {
             id
             dayTime
-          }
-          tags {
-            id
-            name
-          }
-          images {
-            id
-            optimised
-            position
-            rotation
-          }
-          groups {
-            id
-            name
-          }
-          tags {
-            id
-            name
-          }
-          createdBy {
-            id
-            fullName
-            businesses {
-              fullName
-              id
-              name
-            }
-          }
-          incidents {
-            id
-            subject
-            description
-            dayTime
-            date
-            crimeTypes {
-              id
-              name
-            }
-            approved
-            location {
-              id
-              full
-            }
-            createdBy {
-              id
-              fullName
-              businesses {
-                fullName
-                id
-                name
-              }
-            }
-            images {
-              id
-              optimised
-              position
-              rotation
-            }
           }
         }
       }

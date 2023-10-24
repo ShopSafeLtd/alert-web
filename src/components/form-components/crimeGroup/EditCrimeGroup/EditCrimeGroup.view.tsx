@@ -1,6 +1,6 @@
 import React from 'react';
 import type { FormInstance } from 'antd';
-import { Drawer, Divider, Button, Col, Form, Input, Row } from 'antd';
+import { Card, Drawer, Button, Col, Form, Input, Row } from 'antd';
 import { useIntl } from 'react-intl';
 import type {
   CrimeGroupCardData,
@@ -63,7 +63,7 @@ const EditCrimeGroup = ({
         }}
       >
         <Row gutter={16}>
-          <Col span={23}>
+          <Col span={12}>
             <Form.Item
               name="alias"
               label={intl.formatMessage({
@@ -75,8 +75,8 @@ const EditCrimeGroup = ({
             </Form.Item>
           </Col>
         </Row>
-        <Row gutter={30}>
-          <Col>
+        <Row>
+          <Col span={12}>
             <Form.Item
               name="offenders"
               label={intl.formatMessage({
@@ -99,7 +99,8 @@ const EditCrimeGroup = ({
               ]}
             >
               <Button
-                type="primary"
+                danger
+                type="ghost"
                 onClick={toggleLinkOffender}
                 disabled={saving}
                 icon={
@@ -111,29 +112,12 @@ const EditCrimeGroup = ({
                 }
               >
                 {intl.formatMessage({
-                  defaultMessage: 'Link Offender',
-                  id: 'IWqg0R',
+                  defaultMessage: 'Select Offender',
+                  id: '8e5n4o',
                 })}
               </Button>
             </Form.Item>
           </Col>
-        </Row>
-        {offendersData && offendersData.length > 0 ? (
-          <div style={{ marginBottom: 50 }}>
-            <Divider>
-              {intl.formatMessage({
-                defaultMessage: 'Offenders',
-                id: 'xb54TN',
-              })}
-            </Divider>
-            <OffenderTable
-              offenders={offendersData}
-              deleteRights
-              onDeleteOffender={removeOffender}
-            />
-          </div>
-        ) : null}
-        <Row gutter={30} style={{ marginTop: 10 }}>
           <Col>
             <Form.Item
               name="offenders"
@@ -147,6 +131,8 @@ const EditCrimeGroup = ({
               })}
             >
               <Button
+                danger
+                type="ghost"
                 onClick={toggleLinkVehicle}
                 disabled={saving}
                 icon={
@@ -158,28 +144,47 @@ const EditCrimeGroup = ({
                 }
               >
                 {intl.formatMessage({
-                  defaultMessage: 'Link Vehicle',
-                  id: 'y26r3B',
+                  defaultMessage: 'Select Vehicle',
+                  id: 'tnv+4a',
                 })}
               </Button>
             </Form.Item>
           </Col>
         </Row>
+        {offendersData && offendersData.length > 0 ? (
+          <Card
+            title={intl.formatMessage({
+              defaultMessage: 'Offenders',
+              id: 'xb54TN',
+            })}
+            bodyStyle={{ padding: 0 }}
+            style={{ marginTop: 10 }}
+          >
+            <OffenderTable
+              offenders={offendersData}
+              deleteRights
+              onDeleteOffender={removeOffender}
+            />
+          </Card>
+        ) : null}
+
         {vehiclesData && vehiclesData.length > 0 ? (
-          <div style={{ marginBottom: 50 }}>
-            <Divider>
-              {intl.formatMessage({
-                defaultMessage: 'Vehicles',
-                id: 'r6wuJ3',
-              })}
-            </Divider>
+          <Card
+            title={intl.formatMessage({
+              defaultMessage: 'Vehicles',
+              id: 'r6wuJ3',
+            })}
+            headStyle={{ marginBottom: 5 }}
+            bodyStyle={{ padding: 0, paddingLeft: 5 }}
+            style={{ marginTop: 20 }}
+          >
             <VehicleTable
               vehicles={vehiclesData}
               onDeleteVehicle={removeVehicle}
               saving={saving}
               deleteRights
             />
-          </div>
+          </Card>
         ) : null}
         <Form.Item>
           <Row style={{ marginTop: 30 }} gutter={16} justify="end">
@@ -206,8 +211,8 @@ const EditCrimeGroup = ({
       </Form>
       <Drawer
         title={intl.formatMessage({
-          defaultMessage: 'Link Offenders',
-          id: 'UhSUQG',
+          defaultMessage: 'Select Offenders',
+          id: 'nNFHrE',
         })}
         visible={linkOffender}
         width="800"
@@ -225,8 +230,8 @@ const EditCrimeGroup = ({
       </Drawer>
       <Drawer
         title={intl.formatMessage({
-          defaultMessage: 'Link Vehicles',
-          id: 'rmI5oX',
+          defaultMessage: 'Select Vehicles',
+          id: '4Cza+w',
         })}
         visible={linkVehicle}
         width="800"

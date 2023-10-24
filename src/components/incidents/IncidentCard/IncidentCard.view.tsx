@@ -14,7 +14,7 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import type { ListIncidentsQuery } from 'graphql/generated';
+import type { IncidentCardFragment } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faClock,
@@ -44,10 +44,7 @@ const { Title, Text, Paragraph } = Typography;
 const { confirm } = Modal;
 
 interface Props {
-  incident: Exclude<
-    ListIncidentsQuery['listIncidents'],
-    undefined | null
-  >['incidents'][0];
+  incident: IncidentCardFragment;
   approvalRights: boolean;
   deleteRights: boolean;
   menuRights: boolean;

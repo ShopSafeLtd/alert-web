@@ -34,6 +34,7 @@ const ViewBusiness = () => {
     viewTodoVisible,
     updateTodo,
     updateTodoList,
+    onEditAddress,
   } = useViewBusiness();
 
   return (
@@ -68,6 +69,7 @@ const ViewBusiness = () => {
       viewTodoVisible={viewTodoVisible}
       updateTodo={updateTodo}
       updateTodoList={updateTodoList}
+      onEditAddress={onEditAddress}
     />
   );
 };

@@ -45,11 +45,6 @@ export interface FormData {
   tagsCrimeTypes: string[];
   tagsInvolved: string[];
   tagsImpact: string[];
-  building: string;
-  street: string;
-  townCity: string;
-  county: string;
-  postcode: string;
 }
 interface Props {
   onClose: () => void;
@@ -224,37 +219,21 @@ const useEditIncidentFeed = ({ onClose, incidentId }: Props): Return => {
                     id: data.business.value,
                   }
                 : undefined,
+              // ???
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
               disconnect:
                 incidentData?.incident?.business?.id &&
                 data.business?.value === undefined
-                  ? true
+                  ? {
+                      id: data.business?.value,
+                    }
                   : undefined,
             },
             policeInvolved: { set: data.policeInvolved || false },
             policeRef: { set: data.policeRef || '' },
             policeNo: { set: data.policeNo || '' },
             policeReported: { set: data.policeReported || false },
-            location: {
-              // ???
-              upsert: {
-                update: {
-                  premises: { set: '' },
-                  building: { set: data.building || '' },
-                  street: { set: data.street || '' },
-                  townCity: { set: data.townCity || '' },
-                  county: { set: data.county || '' },
-                  postcode: { set: data.postcode || '' },
-                },
-                create: {
-                  premises: '',
-                  building: data.building || '',
-                  street: data.street || '',
-                  townCity: data.townCity || '',
-                  county: data.county || '',
-                  postcode: data.postcode || '',
-                },
-              },
-            },
           },
         },
       });

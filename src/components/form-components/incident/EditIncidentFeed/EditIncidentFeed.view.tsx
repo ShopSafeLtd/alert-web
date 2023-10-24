@@ -10,7 +10,6 @@ import {
   Row,
   Select,
   Skeleton,
-  Typography,
 } from 'antd';
 import { useIntl } from 'react-intl';
 import moment from 'moment';
@@ -85,11 +84,6 @@ const EditGroup = ({
           data?.impactTags && data?.impactTags.length > 0
             ? data?.impactTags.map(({ id }) => id)
             : [],
-        building: data?.location?.building,
-        street: data?.location?.street,
-        townCity: data?.location?.townCity,
-        county: data?.location?.county,
-        postcode: data?.location?.postcode,
       }}
       layout="vertical"
       onFinish={onSubmit}
@@ -328,96 +322,7 @@ const EditGroup = ({
           </Form.Item>
         </Col>
       </Row>
-      <Typography.Title level={4}>
-        {intl.formatMessage({
-          defaultMessage: 'Location',
-          id: 'rvirM2',
-        })}
-      </Typography.Title>
-      <Row gutter={16}>
-        <Col span={12}>
-          <Form.Item
-            name="building"
-            label={intl.formatMessage({
-              defaultMessage: 'Building',
-              id: 'oS/nae',
-            })}
-          >
-            <Input />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item
-            name="street"
-            label={intl.formatMessage({
-              defaultMessage: 'Street',
-              id: 'BaIwdV',
-            })}
-            rules={[
-              {
-                required: true,
-                message: intl.formatMessage({
-                  defaultMessage: 'Please enter a street for the incident.',
-                  id: '+dEOlx',
-                }),
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item
-            name="townCity"
-            label={intl.formatMessage({
-              defaultMessage: 'Town/City',
-              id: 'byaTQZ',
-            })}
-            rules={[
-              {
-                required: true,
-                message: intl.formatMessage({
-                  defaultMessage: 'Please enter a town/city for the incident.',
-                  id: 'A3DgcN',
-                }),
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item
-            name="county"
-            label={intl.formatMessage({
-              defaultMessage: 'County',
-              id: 'B+KJhc',
-            })}
-          >
-            <Input />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item
-            name="postcode"
-            label={intl.formatMessage({
-              defaultMessage: 'Postcode',
-              id: 'FJhjgz',
-            })}
-            rules={[
-              {
-                required: true,
-                message: intl.formatMessage({
-                  defaultMessage: 'Please enter a postcode for the incident.',
-                  id: '2S6C4z',
-                }),
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-        </Col>
-      </Row>
+
       <Row gutter={50}>
         <Col>
           <Form.Item

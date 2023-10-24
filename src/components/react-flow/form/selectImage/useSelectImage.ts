@@ -11,6 +11,7 @@ export interface ImagesData {
     name: string;
     images: {
       url: string;
+      optimisedPersisted?: string;
     }[];
   }[];
 }

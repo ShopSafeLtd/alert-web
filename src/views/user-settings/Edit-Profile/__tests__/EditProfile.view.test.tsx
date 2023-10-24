@@ -29,6 +29,15 @@ describe('Detail Officer View', () => {
           },
         },
       ],
+      defaultGroups: [
+        {
+          id: 'test',
+          name: 'test group',
+          scheme: {
+            id: 'id',
+          },
+        },
+      ],
       schemes: [
         {
           id: 'schemeId',
@@ -63,6 +72,8 @@ describe('Detail Officer View', () => {
           onSubmit={jest.fn()}
           onClose={jest.fn()}
           resetConfirm={jest.fn()}
+          groups={[]}
+          userDefaultGroups={[]}
         />
       </MemoryRouter>
     );

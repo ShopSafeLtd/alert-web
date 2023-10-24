@@ -1,23 +1,23 @@
 import React from 'react';
 import type { FormInstance } from 'antd';
 import {
-  Empty,
-  Form,
   Button,
   Col,
+  Empty,
+  Form,
   Popconfirm,
   Row,
   Spin,
+  Tooltip,
   Typography,
   Upload,
-  Tooltip,
 } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faEdit,
-  faTrash,
-  faImages,
   faFileArrowUp,
+  faImages,
+  faTrash,
 } from '@fortawesome/pro-light-svg-icons';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import ImageEditor from 'components/form-components/ImageEditor/ImageEditor.view';
@@ -101,7 +101,7 @@ const ImageSection = ({
             onChange={onImageChange}
             action={
               facialRec
-                ? import.meta.env.VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT
+                ? import.meta.env.VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT_GO
                 : import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT
             }
             className="incident-form-images-no-offenders"
@@ -202,7 +202,7 @@ const ImageSection = ({
           onChange={onImageChange}
           action={
             facialRec
-              ? import.meta.env.VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT
+              ? import.meta.env.VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT_GO
               : import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT
           }
           className="incident-form-images-no-offenders"

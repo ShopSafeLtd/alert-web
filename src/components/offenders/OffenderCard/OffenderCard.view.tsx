@@ -13,7 +13,7 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import type { ListOffendersQuery } from 'graphql/generated';
+import type { OffenderCardFragment } from 'graphql/generated';
 import { Role } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -64,10 +64,7 @@ const { Title, Text } = Typography;
 const { confirm } = Modal;
 
 interface Props {
-  offender: Exclude<
-    ListOffendersQuery['listOffenders'],
-    undefined | null
-  >['offenders'][0];
+  offender: OffenderCardFragment;
   approvalRights: boolean;
   deleteRights: boolean;
   menuRights: boolean;
@@ -461,9 +458,9 @@ const OffenderCard = ({
         </Row>
         <Link
           to={
-            getLastOffence(offender.incidents).id
+            offender?.latestIncident
               ? // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-                `/app/incidents/view/${getLastOffence(offender.incidents).id}`
+                `/app/incidents/view/${offender.latestIncident.id}`
               : ''
           }
         >
@@ -488,7 +485,11 @@ const OffenderCard = ({
                     id: '9eFYpD',
                   },
                   {
-                    lastOffence: getLastOffence(offender.incidents).message,
+                    lastOffence: getLastOffence(
+                      undefined,
+                      undefined,
+                      offender.latestIncident ?? undefined
+                    ).message,
                   }
                 )}
               </Text>

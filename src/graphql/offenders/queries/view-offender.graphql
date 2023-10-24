@@ -51,14 +51,7 @@ query ViewOffender(
       }
     }
     addresses {
-      id
-      full
-      building
-      street
-      townCity
-      county
-      postcode
-      alias
+      ...Locations
     }
     groups {
       id

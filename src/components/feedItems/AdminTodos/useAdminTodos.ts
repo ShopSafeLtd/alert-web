@@ -12,7 +12,6 @@ import type { MutationUpdaterFn } from '@apollo/client';
 
 interface Props {
   fullSearch: string;
-  groupsFilter: string[];
 }
 interface Return {
   data:
@@ -32,7 +31,7 @@ interface Return {
   currentPageSize: number;
 }
 
-const useAdminTodos = ({ fullSearch, groupsFilter }: Props): Return => {
+const useAdminTodos = ({ fullSearch }: Props): Return => {
   const userId = useStoreState((state) => state.user.id);
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
@@ -58,16 +57,7 @@ const useAdminTodos = ({ fullSearch, groupsFilter }: Props): Return => {
           },
         },
       },
-      groups:
-        groupsFilter.length > 0
-          ? {
-              some: {
-                id: {
-                  in: groupsFilter,
-                },
-              },
-            }
-          : undefined,
+
       assignedUsers: {
         some: {
           id: {

@@ -4,22 +4,88 @@ fragment Updates on Update {
   type
   createdAt
   images {
-    ...Images
+    id
+    url
+    optimised
+    position
+    rotation
+    primary
+    policeImage
+    card
   }
   linkedCrimeGroups {
-    ...CrimeGroups
+    id
+    reference
+    alias
+    totalIncidents
+    totalOffenders
+    totalRecoveredValue
+    totalTheftSuccess
+    totalValue
   }
   linkedVehicles {
-    ...Vehicles
+    id
+    reference
+    colour
+    model
+    make
+    registration
+    images {
+      id
+      url
+      optimised
+      position
+      rotation
+      primary
+      policeImage
+      card
+    }
   }
   linkedIncidents {
-    ...Incidents
+    id
+    reference
+    dayTime
+    policeRef
+    subject
+    totalValue
+    totalRecoveredValue
+    location {
+      id
+      full
+      geoLat
+      geoLng
+    }
     images {
-      ...Images
+      id
+      url
+      optimised
+      position
+      rotation
+      primary
+      policeImage
+      card
     }
   }
   linkedOffenders {
-    ...Offenders
+    id
+    reference
+    name
+    gender
+    build
+    height
+    race
+    age
+    dateOfBirth
+    images {
+      id
+      url
+      optimised
+      position
+      rotation
+      primary
+      policeImage
+      card
+    }
   }
   createdBy {
     origName
@@ -37,22 +103,88 @@ fragment Updates on Update {
     type
     createdAt
     images {
-      ...Images
+      id
+      url
+      optimised
+      position
+      rotation
+      primary
+      policeImage
+      card
     }
     linkedCrimeGroups {
-      ...CrimeGroups
+      id
+      reference
+      alias
+      totalIncidents
+      totalOffenders
+      totalRecoveredValue
+      totalTheftSuccess
+      totalValue
     }
     linkedVehicles {
-      ...Vehicles
+      id
+      reference
+      colour
+      model
+      make
+      registration
+      images {
+        id
+        url
+        optimised
+        position
+        rotation
+        primary
+        policeImage
+        card
+      }
     }
     linkedIncidents {
-      ...Incidents
+      id
+      reference
+      dayTime
+      policeRef
+      subject
+      totalValue
+      totalRecoveredValue
+      location {
+        id
+        full
+        geoLat
+        geoLng
+      }
       images {
-        ...Images
+        id
+        url
+        optimised
+        position
+        rotation
+        primary
+        policeImage
+        card
       }
     }
     linkedOffenders {
-      ...Offenders
+      id
+      reference
+      name
+      gender
+      build
+      height
+      race
+      age
+      dateOfBirth
+      images {
+        id
+        url
+        optimised
+        position
+        rotation
+        primary
+        policeImage
+        card
+      }
     }
 
     createdBy {

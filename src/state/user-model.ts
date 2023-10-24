@@ -27,10 +27,32 @@ export interface SetUserPayload {
       id: string;
     };
   }[];
+  defaultGroups: {
+    id: string;
+    name: string;
+    scheme: {
+      id: string;
+    };
+  }[];
+  filterDefaultGroups: {
+    id: string;
+    name: string;
+    scheme: {
+      id: string;
+    };
+  }[];
   isSet: boolean;
   userNotifications: number;
 }
-
+export interface SetFilterDefaultGroup {
+  filterDefaultGroups: {
+    id: string;
+    name: string;
+    scheme: {
+      id: string;
+    };
+  }[];
+}
 export interface SetUserRole {
   role: Role;
 }
@@ -94,6 +116,10 @@ export interface UserModel {
     fullName: string;
     id: string;
     demId?: string | null | undefined;
+    // locations: {
+    //   geoLng:float
+    //   geoLat:float
+    // }
   }[];
   onboarded: boolean;
   schemes: Scheme[];
@@ -107,11 +133,26 @@ export interface UserModel {
       id: string;
     };
   }[];
+  defaultGroups: {
+    id: string;
+    name: string;
+    scheme: {
+      id: string;
+    };
+  }[];
+  filterDefaultGroups: {
+    id: string;
+    name: string;
+    scheme: {
+      id: string;
+    };
+  }[];
   role: Role;
   isSet: boolean;
   investigationAllSchemes: boolean;
   setUser: Action<UserModel, SetUserPayload>;
   setRole: Action<UserModel, SetUserRole>;
+  setFilterDefaultGroup: Action<UserModel, SetFilterDefaultGroup>;
   setTodos: Action<UserModel, SetUserTodos>;
   setInvestigationAllSchemes: Action<UserModel, SetInvestigationAllSchemes>;
   setNotifications: Action<UserModel, SetUserNotifications>;
@@ -131,6 +172,8 @@ const userModel: UserModel = {
   role: Role.User,
   schemes: [],
   groups: [],
+  defaultGroups: [],
+  filterDefaultGroups: [],
   demId: '',
   userTodos: 0,
   userNotifications: 0,
@@ -144,10 +187,15 @@ const userModel: UserModel = {
     state.businesses = payload.businesses;
     state.schemes = payload.schemes;
     state.groups = payload.groups;
+    state.defaultGroups = payload.defaultGroups || [];
+    state.filterDefaultGroups = payload.filterDefaultGroups || [];
     state.isSet = payload.isSet;
     state.demId = payload.demId;
     state.reference = payload.reference;
     state.userNotifications = payload.userNotifications;
+  }),
+  setFilterDefaultGroup: action((state, payload) => {
+    state.filterDefaultGroups = payload.filterDefaultGroups;
   }),
   setRole: action((state, payload) => {
     state.role = payload.role;

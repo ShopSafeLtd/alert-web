@@ -58,11 +58,63 @@ mutation UpdateInvestigation(
       }
       value
       recoveredValue
+      vehicles {
+        ...Vehicles
+        images {
+          id
+          optimised
+          position
+          rotation
+        }
+      }
+      offenders {
+        ...Offenders
+        images {
+          id
+          optimised
+          position
+          rotation
+        }
+      }
     }
     crimeGroups {
       id
       alias
       reference
+      vehicles {
+        id
+        reference
+        registration
+        make
+        model
+        images {
+          id
+          optimised
+          position
+          rotation
+        }
+        colour
+      }
+      offenders {
+        id
+        name
+        alias
+        reference
+        dateOfBirth
+        age
+        gender
+        build
+        height
+        race
+        hair
+        peculiarities
+        images {
+          id
+          optimised
+          position
+          rotation
+        }
+      }
     }
     flows {
       name

@@ -73,6 +73,8 @@ const AddUser = ({
   updateNewBusinessData,
 }: Props): JSX.Element => {
   const intl = useIntl();
+  // const [selectedGroups, setSelectedGroups] = useState<string[]>();
+
   return (
     <Form<FormData>
       form={form}
@@ -475,10 +477,10 @@ const AddUser = ({
           </Form.Item>
         </Col>
       </Row>
-      {selectedRole === Role.SchemeAdmin &&
-        selectedGroups &&
-        selectedGroups.length > 0 && (
-          <Row gutter={16}>
+
+      {selectedGroups && selectedGroups.length > 0 && (
+        <Row gutter={16}>
+          {selectedRole === Role.SchemeAdmin && (
             <Col span={12}>
               <Form.Item
                 name="approverGroups"
@@ -500,8 +502,30 @@ const AddUser = ({
                 />
               </Form.Item>
             </Col>
-          </Row>
-        )}
+          )}
+          <Col span={12}>
+            <Form.Item
+              name="defaultGroups"
+              label={intl.formatMessage({
+                defaultMessage: 'Default Groups',
+                id: '2KZp/e',
+              })}
+            >
+              <Select
+                loading={chatsLoading}
+                disabled={saving}
+                mode="multiple"
+                maxTagCount={3}
+                options={groupsData?.filter(({ value }) =>
+                  form.getFieldValue('groups').includes(value)
+                )}
+                optionFilterProp="label"
+                optionLabelProp="label"
+              />
+            </Form.Item>
+          </Col>
+        </Row>
+      )}
       <Row>
         <Col span={12}>
           <Form.Item

@@ -48,6 +48,7 @@ export interface FormData {
   publicName: boolean;
   reportToAllBusinesses: boolean;
   approverGroups: string[];
+  defaultGroups: string[];
 }
 
 interface Props {
@@ -356,6 +357,10 @@ const useAddUser = ({
               data.approverGroups && data.approverGroups.length > 0
                 ? { connect: data.approverGroups.map((id) => ({ id })) }
                 : undefined,
+            defaultGroups:
+              data.defaultGroups && data.defaultGroups.length > 0
+                ? { connect: data.defaultGroups.map((id) => ({ id })) }
+                : undefined,
             chats:
               data.chats.length > 0
                 ? {
@@ -397,6 +402,9 @@ const useAddUser = ({
             groups: data.groups.map((id) => ({ id })),
             approverGroups: data.approverGroups
               ? data.approverGroups.map((id) => ({ id }))
+              : undefined,
+            defaultGroups: data.defaultGroups
+              ? data.defaultGroups.map((id) => ({ id }))
               : undefined,
             role: data.role,
             publicName: data.publicName,

@@ -115,15 +115,8 @@ const ImageSelect = ({ images: imagesProp, value, onChange }: Props) => {
       onChange(selected);
     }
   }, [selected]);
-  // console.log('images', images);
 
   const toggleSelected = (image: ImageData) => {
-    // console.log('image', image);
-    // console.log(
-    //   'select',
-    //   selected.some(({ id }) => id === image.uid)
-    // );
-
     if (selected.some(({ id }) => id === image.uid)) {
       setSelected(selected.filter(({ id }) => id !== image.uid));
     } else {

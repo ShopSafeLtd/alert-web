@@ -19,6 +19,7 @@ query scheme($where: SchemeWhereUniqueInput!) {
     autoPopulateDescription
     facialRecognition
     imagesRequiredOnOffenders
+    goodsMode
     darkLogo {
       id
       url

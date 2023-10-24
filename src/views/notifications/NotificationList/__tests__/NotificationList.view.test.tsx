@@ -27,6 +27,7 @@ describe('List Officer View', () => {
               reportOnly: true,
               facialRecognition: true,
               imagesRequiredOnOffenders: true,
+              defaultGroups: [],
               members: [
                 {
                   id: 'id',

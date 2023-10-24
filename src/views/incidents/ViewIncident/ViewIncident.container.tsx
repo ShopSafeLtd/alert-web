@@ -98,6 +98,9 @@ const ViewIncident = (): JSX.Element => {
     addInvestigation,
     toggleAddInvestigation,
     updateInvestigationList,
+    editAddress,
+    toggleEditAddress,
+    onEditAddress,
   } = useViewIncident(incidentId);
   const { onApprove, onReject, approving } = useApproveIncident({ incidentId });
 
@@ -198,6 +201,9 @@ const ViewIncident = (): JSX.Element => {
       addInvestigation={addInvestigation}
       toggleAddInvestigation={toggleAddInvestigation}
       updateInvestigationList={updateInvestigationList}
+      editAddress={editAddress}
+      toggleEditAddress={toggleEditAddress}
+      onEditAddress={onEditAddress}
     />
   );
 };

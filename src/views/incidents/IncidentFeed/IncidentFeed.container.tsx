@@ -12,7 +12,6 @@ const IncidentFeed = (): JSX.Element => {
     // pagination,
     order,
     setOrder,
-    search,
     setSearch,
     groups,
     groupsLoading,
@@ -24,25 +23,20 @@ const IncidentFeed = (): JSX.Element => {
     sortFilter,
     toggleSortFilter,
     clearFilters,
-    gallery,
-    peculiarities,
     setGallery,
     setPeculiarities,
-    groupsFilter,
     setGroupsFilter,
     businesses,
-    businessesFilter,
     goods,
-    goodsFilter,
     setCrimeTypesFilter,
     setGoodsFilter,
     setBusinessesFilter,
-    crimeTypesFilter,
     goodsLoading,
     businessesLoading,
     setIncidentDateFilter,
     setCreatedAtFilter,
     fetchMoreScroll,
+    variables,
   } = useIncidentFeed();
 
   return (
@@ -53,36 +47,25 @@ const IncidentFeed = (): JSX.Element => {
       loading={loading}
       lightboxElements={lightboxElements}
       openLightbox={openLightbox}
-      // onPaginationChange={onPaginationChange}
-      // pagination={pagination}
       order={order}
       setOrder={setOrder}
-      search={search}
       setSearch={setSearch}
       groups={groups}
       groupsLoading={groupsLoading}
-      // onGroupsChange={onGroupsChange}
-      // variables={variables}
+      variables={variables}
       crimeTypes={crimeTypes}
-      // onCrimeTypesChange={onCrimeTypesChange}
       tagsLoading={tagsLoading}
       updateIncidentList={updateIncidentList}
       onNavigate={onNavigate}
       sortFilter={sortFilter}
       toggleSortFilter={toggleSortFilter}
       clearFilters={clearFilters}
-      gallery={gallery}
-      groupsFilter={groupsFilter}
       setCrimeTypesFilter={setCrimeTypesFilter}
-      crimeTypesFilter={crimeTypesFilter}
-      peculiarities={peculiarities}
       setGoodsFilter={setGoodsFilter}
-      goodsFilter={goodsFilter}
       goods={goods}
       setGallery={setGallery}
       setGroupsFilter={setGroupsFilter}
       setPeculiarities={setPeculiarities}
-      businessesFilter={businessesFilter}
       businesses={businesses}
       setBusinessesFilter={setBusinessesFilter}
       goodsLoading={goodsLoading}

@@ -16,7 +16,13 @@ mutation UpdateBusiness(
     }
     locations {
       id
-      full
+      building
+      street
+      townCity
+      county
+      postcode
+      geoLng
+      geoLat
     }
     totalUsers
   }

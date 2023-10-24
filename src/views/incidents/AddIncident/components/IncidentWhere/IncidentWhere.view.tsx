@@ -106,11 +106,58 @@ const IncidentWhere = ({
                       />
                     }
                   >
-                    {intl.formatMessage(
-                      { defaultMessage: 'Use An Address', id: 'Fbk02A' },
-                      {}
-                    )}
+                    {intl.formatMessage({
+                      defaultMessage: 'Use An Address',
+                      id: 'Fbk02A',
+                    })}
                   </Button>
+                  {/* <Dropdown
+                    overlay={
+                      <Menu
+                        items={[
+                          {
+                            key: 0,
+                            label: (
+                              <FormattedMessage
+                                id="BFQcBO"
+                                defaultMessage="Pin on Map"
+                              />
+                            ),
+                            onClick: () => togglePinNewAddress(),
+                            icon: <FontAwesomeIcon icon={faLocationDot} />,
+                          },
+                          {
+                            key: 1,
+                            label: (
+                              <FormattedMessage
+                                id="HE6RQ/"
+                                defaultMessage="Enter Manually"
+                              />
+                            ),
+                            onClick: () => toggleAddNewAddress(),
+                            icon: <FontAwesomeIcon icon={faLocationPen} />,
+                          },
+                        ]}
+                      />
+                    }
+                    placement="bottomRight"
+                    arrow={{ pointAtCenter: true }}
+                  >
+                    <Button
+                      style={{ marginLeft: 5, marginTop: 30 }}
+                      icon={
+                        <FontAwesomeIcon
+                          icon={faPlus}
+                          style={{ marginRight: 5 }}
+                        />
+                      }
+                    >
+                      {intl.formatMessage({
+                        defaultMessage: 'Use An Address',
+                        id: 'Fbk02A',
+                      })}
+                    </Button>
+                  </Dropdown> */}
                 </Col>
               </Row>
             </Col>
@@ -132,13 +179,22 @@ const IncidentWhere = ({
           </Row>
           <Row align="middle" gutter={16}>
             <Col>
-              <Text>
-                {newAddressData?.building && `${newAddressData?.building}, `}
-                {`${newAddressData?.street}, `}
-                {`${newAddressData?.townCity}, `}
-                {newAddressData?.county && `${newAddressData?.county}, `}
-                {newAddressData?.postcode}
-              </Text>
+              {newAddressData?.postcode ? (
+                <Text>
+                  {newAddressData?.building && `${newAddressData?.building}, `}
+                  {newAddressData?.street && `${newAddressData?.street}, `}
+                  {newAddressData?.townCity && `${newAddressData?.townCity}, `}
+                  {newAddressData?.county && `${newAddressData?.county}, `}
+                  {newAddressData?.postcode}
+                </Text>
+              ) : (
+                <Text>
+                  {newAddressData?.geoLng &&
+                    `Longitude: ${newAddressData?.geoLng}, `}
+                  {newAddressData?.geoLat &&
+                    `Latitude: ${newAddressData?.geoLat}`}
+                </Text>
+              )}
             </Col>
             <Col className={classes.clearButton}>
               <Button

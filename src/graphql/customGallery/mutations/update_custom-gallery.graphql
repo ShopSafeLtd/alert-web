@@ -1,0 +1,13 @@
+mutation updateCustomGallery(
+  $where: UniqueId!
+  $data: CustomGalleryUpdateInput!
+) {
+  updateCustomGallery(where: $where, data: $data) {
+    id
+    name
+    description
+    groups {
+      id
+    }
+  }
+}

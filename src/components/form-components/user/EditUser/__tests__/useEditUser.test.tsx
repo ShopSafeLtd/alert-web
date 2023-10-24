@@ -317,6 +317,7 @@ const UseEditUserTest = () => {
             subscribedIncidentOnly: false,
             subscribedOffenderOnly: false,
             approverGroups: [],
+            defaultGroups: [],
           })
         }
       >

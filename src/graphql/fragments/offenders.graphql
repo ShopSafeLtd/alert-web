@@ -8,7 +8,4 @@ fragment Offenders on Offender {
   race
   age
   dateOfBirth
-  images {
-    ...Images
-  }
 }

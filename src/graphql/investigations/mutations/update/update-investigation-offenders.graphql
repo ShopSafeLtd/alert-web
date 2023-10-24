@@ -1,0 +1,21 @@
+mutation UpdateInvestigationOffenders(
+  $id: String!
+  $offenderIds: [String]
+  $disconnectOffenderIds: [String]
+) {
+  updateInvestigation(
+    where: { id: $id }
+    data: {
+      offenderIds: $offenderIds
+      disconnectOffenderIds: $disconnectOffenderIds
+    }
+  ) {
+    id
+    offenders {
+      ...Offenders
+      images {
+        ...Images
+      }
+    }
+  }
+}

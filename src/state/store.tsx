@@ -12,6 +12,8 @@ import type { SchemeModel } from './scheme-model';
 import schemeModel from './scheme-model';
 import type { DataModel } from './data-model';
 import dataModel from './data-model';
+// import type { FilterModel } from './filter-model';
+// import filterModel from './filter-model';
 
 interface StoreModel {
   auth: AuthModel;
@@ -19,6 +21,7 @@ interface StoreModel {
   user: UserModel;
   scheme: SchemeModel;
   data: DataModel;
+  // filter: FilterModel;
 }
 
 const typedHooks = createTypedHooks<StoreModel>();
@@ -36,6 +39,7 @@ export const storeModel: StoreModel = {
   user: userModel,
   scheme: schemeModel,
   data: dataModel,
+  // filter: filterModel,
 };
 export const Store = ({ children }: GlobalStoreProps): JSX.Element => {
   const store = createStore(storeModel);

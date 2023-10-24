@@ -31,16 +31,7 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
       ...Vehicles
     }
     offenders {
-      id
-      name
-      reference
-      totalIncidents
-      age
-      gender
-      race
-      build
-      height
-      dateOfBirth
+      ...Offenders
       images {
         id
         optimised
@@ -51,6 +42,15 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
     }
     incidents {
       ...Incidents
+      vehicles {
+        ...Vehicles
+      }
+      offenders {
+        ...Offenders
+        images {
+          ...Images
+        }
+      }
     }
     updates(orderBy: { createdAt: desc }) {
       ...Updates
@@ -62,6 +62,9 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
       }
       offenders {
         ...Offenders
+        images {
+          ...Images
+        }
       }
     }
     flows {

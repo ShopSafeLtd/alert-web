@@ -5,10 +5,10 @@ import type {
 } from 'graphql/generated';
 import {
   ListArticlesDocument,
-  useListArticlesQuery,
   QueryMode,
   Role,
   SortOrder,
+  useListArticlesQuery,
   useSchemeGroupsQuery,
 } from 'graphql/generated';
 import { useState } from 'react';
@@ -53,6 +53,7 @@ interface Return {
   gallery: string[];
   setGallery: (values: string[]) => void;
   updateArticleList: MutationUpdaterFn<DeleteArticleMutation>;
+  fetchMoreScroll: () => void;
 }
 
 const useArticleFeed = (): Return => {
@@ -63,7 +64,7 @@ const useArticleFeed = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const { role, id: userId } = useStoreState((state) => state.user);
   const [search, setSearch] = useState('');
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(12);
   const [page, setPage] = useState(1);
   const [gallery, setGallery] = useState<string[]>([]);
   // filter initial state
@@ -134,9 +135,8 @@ const useArticleFeed = (): Return => {
     take: pageSize,
   };
 
-  const { data, loading } = useListArticlesQuery({
+  const { data, loading, fetchMore } = useListArticlesQuery({
     fetchPolicy: 'cache-and-network',
-    // @ts-expect-error TODO: fix this
     variables,
   });
   // update Article list after deleting an item
@@ -228,7 +228,34 @@ const useArticleFeed = (): Return => {
     }
   };
 
+  const fetchMoreScroll = () => {
+    void fetchMore({
+      variables: {
+        ...variables,
+        take: 12,
+        skip: data?.listArticles?.articles?.length || 0,
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        return {
+          listArticles: {
+            ...fetchMoreResult.listArticles,
+            total:
+              fetchMoreResult.listArticles?.total ||
+              prev.listArticles?.total ||
+              0,
+            articles: [
+              ...(prev.listArticles?.articles || []),
+              ...(fetchMoreResult.listArticles?.articles || []),
+            ],
+          },
+        };
+      },
+    });
+  };
+
   return {
+    fetchMoreScroll,
     data: data?.listArticles,
     loading: (data === null || data === undefined) && loading,
     onPaginationChange,

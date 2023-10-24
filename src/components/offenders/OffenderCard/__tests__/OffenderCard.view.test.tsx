@@ -25,6 +25,7 @@ describe('Detail Officer View', () => {
       id: 'cl4pe3eu91312371op4c4k2lih2',
       businesses: [{ name: 'user business', id: '' }],
     },
+    createdByUser: false,
     tags: [{ id: 'ckdhdhmr500186mnyy5k9sunm', name: 'Theft & Handling ' }],
     groups: [{ id: 'ckqtnb4r056540229myw4yk8zvq', name: 'NightSafe' }],
     images: [

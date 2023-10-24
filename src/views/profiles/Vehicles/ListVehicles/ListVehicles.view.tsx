@@ -30,40 +30,35 @@ import CheckTags from 'components/form-components/check-tags/CheckTags.view';
 import VehicleFilter from 'components/vehicles/VehicleFilter';
 import { useIntl } from 'react-intl';
 import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
+import type { VehicleFilters } from 'state/data-model';
 import useStyles from './ListVehicles.styles';
 
 interface Props {
   data: ListVehiclesQuery | undefined;
   loading: boolean;
-  search: string;
   setSearch: (value: string) => void;
   addVehicle: boolean;
   toggleAddVehicle: () => void;
-  // updateVehicleList: MutationUpdaterFn<CreateVehicleMutation>;
   onSubmit: (value: VehicleData) => void;
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
   clearFilters: () => void;
   sortFilter: boolean;
   toggleSortFilter: () => void;
-  gallery: string[];
   setGallery: (values: string[]) => void;
-  groupsFilter: string[];
   setGroupsFilter: (value: string[]) => void;
   setCreatedAtFilter: (value: DateType | undefined) => void;
   customGalleriesData: ListCustomGalleriesQuery | undefined;
   onSelectCustomGalleries: (values: string) => void;
-  customGalleries: string[];
-  order: SortOrder;
   setOrder: (value: SortOrder) => void;
   addInvestigation: string;
   toggleAddInvestigation: (value: string) => void;
+  variables: VehicleFilters;
 }
 
 const ListVehicles = ({
   data,
   loading,
-  search,
   setSearch,
   addVehicle,
   toggleAddVehicle,
@@ -71,24 +66,22 @@ const ListVehicles = ({
   onSubmit,
   groups,
   groupsLoading,
-  groupsFilter,
   setGroupsFilter,
   setCreatedAtFilter,
   clearFilters,
   sortFilter,
   toggleSortFilter,
   customGalleriesData,
-  customGalleries,
   onSelectCustomGalleries,
-  gallery,
   setGallery,
-  order,
   setOrder,
   addInvestigation,
   toggleAddInvestigation,
+  variables,
 }: Props) => {
   const intl = useIntl();
   const classes = useStyles();
+  const { search, gallery, customGalleries } = variables;
   const galleryOptions = [
     {
       label: 'Following',
@@ -215,8 +208,7 @@ const ListVehicles = ({
               id: 'k8ZNgH',
             }),
             render: (value, item) => (
-              // eslint-disable-next-line formatjs/no-literal-string-in-jsx
-              <Link to={`view/${item.key}`}>V-{value}</Link>
+              <Link to={`view/${item.key}`}>{value}</Link>
             ),
           },
           {
@@ -339,11 +331,10 @@ const ListVehicles = ({
         width={500}
       >
         <VehicleFilter
-          order={order}
+          variables={variables}
           setOrder={setOrder}
           groups={groups}
           groupsLoading={groupsLoading}
-          groupsFilter={groupsFilter}
           setGroupsFilter={setGroupsFilter}
           clearFilters={clearFilters}
           setCreatedAtFilter={setCreatedAtFilter}

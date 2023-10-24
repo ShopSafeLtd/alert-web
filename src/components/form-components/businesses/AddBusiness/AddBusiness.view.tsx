@@ -1,21 +1,11 @@
 import React from 'react';
+import type { FormInstance } from 'antd';
 import { Button, Col, Form, Input, Row, Switch, Typography } from 'antd';
 import DebounceSelect from 'components/form-components/DebounceSelect';
 import { useIntl } from 'react-intl';
-
-interface FormData {
-  name: string;
-  parent: {
-    label: string;
-    value: string;
-  };
-  building: string;
-  street: string;
-  townCity: string;
-  county: string;
-  postcode: string;
-  publicName: boolean;
-}
+import type { LocationData } from 'types/DataType';
+import LocatingCard from 'components/map/LocatingCard';
+import type { FormData } from './useAddBusiness';
 
 interface Props {
   onSubmit: (values: FormData) => void;
@@ -24,6 +14,9 @@ interface Props {
     value: string
   ) => Promise<{ label: string; value: string }[]>;
   saving: boolean;
+  form: FormInstance<FormData>;
+  location: LocationData | undefined;
+  setLocation: (value: LocationData) => void;
 }
 
 const AddBusiness = ({
@@ -31,6 +24,9 @@ const AddBusiness = ({
   onClose,
   onSearchBusiness,
   saving,
+  form,
+  location,
+  setLocation,
 }: Props) => {
   const intl = useIntl();
 
@@ -39,6 +35,7 @@ const AddBusiness = ({
       layout="vertical"
       onFinish={onSubmit}
       initialValues={{ publicName: true }}
+      form={form}
     >
       <Form.Item
         name="name"
@@ -91,6 +88,12 @@ const AddBusiness = ({
       <Typography.Text style={{ fontSize: 16, fontWeight: 500 }}>
         {intl.formatMessage({ defaultMessage: 'Location', id: 'rvirM2' })}
       </Typography.Text>
+      <LocatingCard
+        width="100%"
+        height={194}
+        location={location}
+        setLocation={setLocation}
+      />
       <Row style={{ marginTop: 10 }} gutter={16}>
         <Col>
           <Form.Item
@@ -110,7 +113,7 @@ const AddBusiness = ({
               defaultMessage: 'Street',
               id: 'BaIwdV',
             })}
-            rules={[{ required: true }]}
+            // rules={[{ required: true }]}
           >
             <Input style={{ width: 200 }} disabled={saving} />
           </Form.Item>
@@ -124,7 +127,7 @@ const AddBusiness = ({
               defaultMessage: 'Town/City',
               id: 'byaTQZ',
             })}
-            rules={[{ required: true }]}
+            // rules={[{ required: true }]}
           >
             <Input style={{ width: 200 }} disabled={saving} />
           </Form.Item>
@@ -149,7 +152,7 @@ const AddBusiness = ({
               defaultMessage: 'Postcode',
               id: 'FJhjgz',
             })}
-            rules={[{ required: true }]}
+            // rules={[{ required: true }]}
           >
             <Input disabled={saving} />
           </Form.Item>

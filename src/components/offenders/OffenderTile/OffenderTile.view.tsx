@@ -13,7 +13,10 @@ interface Props {
     id: string;
     reference?: number | null;
     name?: string | null | undefined;
-    images: { optimised?: string | null | undefined }[];
+    images: {
+      optimised?: string | null | undefined;
+      optimisedPersisted?: string | null | undefined;
+    }[];
   };
   onClick: () => void;
   selectedOffenderIds?: string[];
@@ -53,7 +56,12 @@ const OffenderTile = ({
           cursor: 'pointer',
         }}
       >
-        <WatermarkImage url={offender.images[0]?.optimised} />
+        <WatermarkImage
+          url={
+            offender.images[0]?.optimised ||
+            offender.images[0]?.optimisedPersisted
+          }
+        />
         <Paragraph
           className={classes.offenderParagraph}
           style={{

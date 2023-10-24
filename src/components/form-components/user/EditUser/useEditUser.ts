@@ -30,6 +30,8 @@ export interface FormData {
   role: Role;
   groups: string[];
   approverGroups: string[];
+  defaultGroups: string[];
+
   chats: string[];
   incidentEmail: boolean;
   incidentPush: boolean;
@@ -301,6 +303,17 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
                     .filter(
                       ({ id }) =>
                         !data.approverGroups.map((item) => item).includes(id)
+                    )
+                    .map(({ id }) => ({ id })),
+                }
+              : undefined,
+            defaultGroups: data.defaultGroups
+              ? {
+                  connect: data.defaultGroups.map((id) => ({ id })),
+                  disconnect: userData?.user?.defaultGroups
+                    .filter(
+                      ({ id }) =>
+                        !data.defaultGroups.map((item) => item).includes(id)
                     )
                     .map(({ id }) => ({ id })),
                 }

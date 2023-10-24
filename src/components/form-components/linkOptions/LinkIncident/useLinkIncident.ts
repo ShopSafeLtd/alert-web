@@ -8,7 +8,7 @@ import {
   QueryMode,
   SortOrder,
 } from 'graphql/generated';
-import { useStoreActions, useStoreState } from 'state';
+import { useStoreState } from 'state';
 import type { IncidentCardData } from 'types/DataType';
 
 export interface Incident {
@@ -49,12 +49,11 @@ const useLinkIncident = ({
   const userSchemeIds = useStoreState((state) => state.user.schemes).map(
     (el) => el.scheme.id
   );
-  const order = useStoreState((state) => state.data.incidents.order);
-  const pagination = useStoreState((state) => state.data.incidents.pagination);
-  const variables = useStoreState((state) => state.data.incidents.variables);
-  const setIncidentsState = useStoreActions(
-    (actions) => actions.data.setIncidents
-  );
+  const [pagination, setPagination] = useState({
+    page: 1,
+    pageSize: 24,
+  });
+  const [search, setSearch] = useState('');
 
   const { data, loading } = useListIncidentsAllSchemesQuery({
     variables: {
@@ -77,13 +76,13 @@ const useLinkIncident = ({
         OR: [
           {
             subject: {
-              contains: variables.search,
+              contains: search,
               mode: QueryMode.Insensitive,
             },
           },
           {
-            reference: {
-              equals: Number(variables.search),
+            referenceStr: {
+              contains: search,
             },
           },
           {
@@ -91,7 +90,7 @@ const useLinkIncident = ({
               OR: [
                 {
                   fullName: {
-                    contains: variables.search,
+                    contains: search,
                     mode: QueryMode.Insensitive,
                   },
                 },
@@ -99,7 +98,7 @@ const useLinkIncident = ({
                   businesses: {
                     some: {
                       name: {
-                        contains: variables.search,
+                        contains: search,
                         mode: QueryMode.Insensitive,
                       },
                     },
@@ -115,25 +114,12 @@ const useLinkIncident = ({
   });
 
   const onPaginationChange = (page: number) => {
-    setIncidentsState({
-      pagination: {
-        ...pagination,
-        page,
-      },
-      variables,
-      order,
+    setPagination({
+      ...pagination,
+      page,
     });
   };
-  const setSearch = (value: string) => {
-    setIncidentsState({
-      pagination,
-      variables: {
-        ...variables,
-        search: value,
-      },
-      order,
-    });
-  };
+
   const onSubmit = () => {
     setSaving(true);
     const selectedData = data?.listIncidentsAllSchemes?.incidents.find(
@@ -176,7 +162,7 @@ const useLinkIncident = ({
     saving,
     data,
     loading: data?.listIncidentsAllSchemes ? false : loading,
-    search: variables.search,
+    search,
     setSearch,
     onPaginationChange,
     onSelect,

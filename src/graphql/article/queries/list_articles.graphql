@@ -15,6 +15,7 @@ query listArticles(
     scheme: $scheme
   ) {
     articles {
+      watermarkImage
       previewImage
       previewText
       priority

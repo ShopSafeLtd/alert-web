@@ -3,40 +3,50 @@ import { Button, Col, Row, Select, Typography, DatePicker, Form } from 'antd';
 import { SortOrder } from 'graphql/generated';
 import type { DateType } from 'types/DataType';
 import { useIntl } from 'react-intl';
+import type { CrimeGroupFilters } from 'state/data-model';
+import moment from 'moment';
 import useStyles from './CrimeGroupFilter.styles';
 
 const { RangePicker } = DatePicker;
 const { useForm } = Form;
 interface FormData {
-  date: Date;
+  createdAt: Date;
 }
 interface Props {
-  order: SortOrder;
   setOrder: (value: SortOrder) => void;
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
-  groupsFilter: string[];
   setGroupsFilter: (value: string[]) => void;
   clearFilters: () => void;
   setCreatedAtFilter: (value: DateType | undefined) => void;
+  variables: CrimeGroupFilters;
 }
 
 const CrimeGroupFilter = ({
-  order,
   setOrder,
   groups,
   groupsLoading,
-  groupsFilter,
   setGroupsFilter,
   clearFilters,
   setCreatedAtFilter,
+  variables,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const [form] = useForm<FormData>();
   const intl = useIntl();
-
+  const { groups: groupsFilter, createdAt: createdAtFilter, order } = variables;
   return (
-    <Form<FormData> form={form}>
+    <Form<FormData>
+      form={form}
+      initialValues={{
+        createdAt: createdAtFilter
+          ? [
+              moment(createdAtFilter?.startDate),
+              moment(createdAtFilter?.endDate),
+            ]
+          : undefined,
+      }}
+    >
       <Row justify="end">
         <Col>
           <Button
@@ -45,7 +55,7 @@ const CrimeGroupFilter = ({
             onClick={() => {
               clearFilters();
               form.setFieldsValue({
-                date: [],
+                createdAt: [],
               });
             }}
           >
@@ -92,7 +102,7 @@ const CrimeGroupFilter = ({
             })}
           </Typography.Paragraph>
 
-          <Form.Item name="date">
+          <Form.Item name="createdAt" style={{ marginBottom: 0 }}>
             <RangePicker
               className={classes.select}
               onChange={(value) => {

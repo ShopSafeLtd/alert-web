@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
-import { Button, Col, Descriptions, Divider, Row, Tag, Typography } from 'antd';
+import {
+  Button,
+  Card,
+  Col,
+  Descriptions,
+  Divider,
+  Row,
+  Tag,
+  Typography,
+} from 'antd';
 import type { InvestigationSuggestionsQuery } from 'graphql/generated';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
@@ -122,13 +131,21 @@ const SuggestedIncidents = ({
             </Descriptions.Item>
           </Descriptions>
           {incident.offenders && incident.offenders.length > 0 && (
-            <div className={classes.tableContainer}>
+            <Card
+              title={
+                <FormattedMessage id="xb54TN" defaultMessage="Offenders" />
+              }
+              headStyle={{ marginTop: -5 }}
+              bodyStyle={{ padding: 0 }}
+              className={classes.tableContainer}
+            >
               <OffenderTable
                 offenders={incident.offenders}
                 hasNavigation={false}
               />
-            </div>
+            </Card>
           )}
+
           <Row gutter={8} justify="end">
             <Col>
               <Link to={`/app/incidents/view/${incident.id}`} onClick={onClose}>

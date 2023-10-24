@@ -33,6 +33,20 @@ const EditOffenderAddress = ({ onClose, onSubmit, data }: Props) => {
         });
       }}
     >
+      {/* <Form.Item
+        name="location"
+        label={intl.formatMessage({
+          defaultMessage: 'Location',
+          id: 'rvirM2',
+        })}
+      >
+        <LocatingCard
+          width="100%"
+          height={194}
+          location={location}
+          setLocation={setLocation}
+        />
+      </Form.Item> */}
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item

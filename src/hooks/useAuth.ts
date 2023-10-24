@@ -24,7 +24,13 @@ interface OnLoginSuccessArgs extends SetUserPayload {
 }
 
 const useAuth = (): Return => {
-  const { getAccessTokenSilently, isAuthenticated, user } = useAuth0();
+  const {
+    getAccessTokenSilently,
+    isAuthenticated,
+    user,
+    isLoading,
+    loginWithRedirect,
+  } = useAuth0();
   const navigate = useNavigate();
   // const client = useApolloClient();
   const authenticated = useStoreActions(
@@ -34,9 +40,8 @@ const useAuth = (): Return => {
   const handleSignOut = useStoreActions((actions) => actions.auth.signOut);
   const setUser = useStoreActions((actions) => actions.user.setUser);
   const clearUser = useStoreActions((actions) => actions.user.clearUser);
-  const { setRole, setTodos, setNotifications } = useStoreActions(
-    (actions) => actions.user
-  );
+  const { setRole, setTodos, setNotifications, setFilterDefaultGroup } =
+    useStoreActions((actions) => actions.user);
   const setScheme = useStoreActions((actions) => actions.scheme.setScheme);
   const setAuthMessage = useStoreActions(
     (actions) => actions.auth.setAuthMessage
@@ -60,6 +65,7 @@ const useAuth = (): Return => {
     groups,
     reference,
     userNotifications,
+    defaultGroups,
   }: HandleSuccessArgs) => {
     // const color = `hsl(${Math.random() * 360}, 70%, 30%)`;
 
@@ -86,6 +92,11 @@ const useAuth = (): Return => {
         imagesRequiredOnOffenders: schemeDetails?.imagesRequiredOnOffenders,
         taskTimeTracking: schemeDetails?.taskTimeTracking,
         languageCount: schemeDetails?.languageCount || 0,
+      });
+      setFilterDefaultGroup({
+        filterDefaultGroups: defaultGroups.filter(
+          (el) => el.scheme.id === schemeDetails.id
+        ),
       });
       setTodos({ userTodos: schemes[0]?.scheme?.userTodos || 0 });
       setNotifications({
@@ -126,6 +137,11 @@ const useAuth = (): Return => {
           taskTimeTracking: schemeDetails.scheme.taskTimeTracking,
           languageCount: schemeDetails.scheme.languageCount || 0,
         });
+        setFilterDefaultGroup({
+          filterDefaultGroups: defaultGroups.filter(
+            (el) => el.scheme.id === schemeDetails.scheme.id
+          ),
+        });
         setTodos({ userTodos: schemeDetails?.scheme?.userTodos || 0 });
       } else {
         handleNoValidScheme();
@@ -158,7 +174,9 @@ const useAuth = (): Return => {
       businessId: businesses[0]?.id || '',
       businessName: businesses[0]?.name || '',
     });
-
+    const filterDefaultGroups = defaultGroups.filter(
+      (el) => el.scheme.id === scheme
+    );
     Sentry.setUser({ email, username: fullName, id });
     setUser({
       id,
@@ -173,6 +191,8 @@ const useAuth = (): Return => {
       demId,
       reference,
       userNotifications,
+      defaultGroups,
+      filterDefaultGroups,
     });
     authenticated(accessToken);
   };
@@ -181,6 +201,19 @@ const useAuth = (): Return => {
     nextFetchPolicy: 'cache-and-network',
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onCompleted: async ({ currentUser }) => {
+      if (!currentUser) {
+        if (!isLoading && isAuthenticated) {
+          expired();
+        } else if (!isLoading && !isAuthenticated) {
+          if (localStorage.getItem('logo')?.endsWith('.webp')) {
+            void loginWithRedirect({
+              'ext-logo': localStorage.getItem('logo'),
+            });
+          } else {
+            void loginWithRedirect();
+          }
+        }
+      }
       const scheme =
         currentScheme || window.localStorage.getItem('currentScheme');
 
@@ -218,6 +251,10 @@ const useAuth = (): Return => {
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         reference: `${currentUser?.reference}` || '',
         userNotifications: currentUser?.notificationCount || 0,
+        defaultGroups: currentUser?.defaultGroups || [],
+        filterDefaultGroups:
+          currentUser?.defaultGroups.filter((el) => el.scheme.id === scheme) ||
+          [],
       });
       if (currentUser?.newUser) {
         navigate('/app/onboarding');
@@ -295,6 +332,10 @@ const useAuth = (): Return => {
       demId: data.demId,
       reference: data.reference,
       userNotifications: data.userNotifications,
+      defaultGroups: data.defaultGroups,
+      filterDefaultGroups: data.defaultGroups.filter(
+        (el) => el.scheme.id === scheme
+      ),
     });
   };
 

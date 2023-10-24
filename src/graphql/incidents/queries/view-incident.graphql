@@ -85,6 +85,9 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
     }
     offenders {
       ...Offenders
+      images {
+        ...Images
+      }
     }
     evidence {
       ...Documents
@@ -96,9 +99,7 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
       ...Updates
     }
     location {
-      geoLat
-      geoLng
-      id
+      ...Locations
     }
   }
 }

@@ -4,19 +4,19 @@ import type {
   Build,
   Gender,
   ListCustomGalleriesQuery,
-  ListOffendersQuery,
+  OffenderFeedListQuery,
   Race,
   RecycleOffenderMutation,
   SearchBusinessesQuery,
 } from 'graphql/generated';
 import {
-  useListCustomGalleriesQuery,
-  ListOffendersDocument,
   Model,
+  OffenderFeedListDocument,
   QueryMode,
   Role,
   SortOrder,
-  useListOffendersQuery,
+  useListCustomGalleriesQuery,
+  useOffenderFeedListQuery,
   useSchemeGroupsQuery,
   useSearchBusinessesQuery,
   useTagsQuery,
@@ -26,9 +26,11 @@ import { OffenderSort, useStoreActions, useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import type { DateType } from 'types/DataType';
+import type { OffenderFilters } from 'state/data-model';
+import cacheOrLoading from 'utils/cache-or-loading';
 
 interface Return {
-  data: ListOffendersQuery | undefined;
+  data: OffenderFeedListQuery | undefined;
   loading: boolean;
   lightboxElements: {
     src: string;
@@ -38,46 +40,29 @@ interface Return {
   pagination: { page: number; pageSize: number; sizeOptions: string[] };
   order: OffenderSort;
   setOrder: (value: OffenderSort) => void;
-  search: string;
   setSearch: (value: string) => void;
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
-  onGroupsChange: (groups: string[]) => void;
-  variables: {
-    groups: string[];
-    tags: string[];
-  };
   lightBoxOpen: {
     open: boolean;
     index: number;
   };
   tags: { value: string; label: string }[];
-  onTagsChange: (tags: string[]) => void;
   tagsLoading: boolean;
   updateOffenderList: MutationUpdaterFn<RecycleOffenderMutation>;
   onNavigate: () => void;
   sortFilter: boolean;
   toggleSortFilter: () => void;
-  ethnicity: Race[];
   setEthnicity: (value: Race[]) => void;
-  age: Age[];
   setAge: (value: Age[]) => void;
-  build: Build[];
   setBuild: (value: Build[]) => void;
-  sex: Gender[];
   setSex: (value: Gender[]) => void;
   setHair: (value: string) => void;
   setPeculiarities: (value: string) => void;
-  hair: string;
-  peculiarities: string;
   clearFilters: () => void;
-  gallery: string[];
   setGallery: (values: string[]) => void;
-  groupsFilter: string[];
   setGroupsFilter: (value: string[]) => void;
-  warnings: string[];
   setWarnings: (value: string[]) => void;
-  businesses: string[];
   setBusinesses: (value: string[]) => void;
   businessData: SearchBusinessesQuery | undefined;
   businessesLoading: boolean;
@@ -85,18 +70,19 @@ interface Return {
   customGalleriesData: ListCustomGalleriesQuery | undefined;
   adminRights: boolean;
   onSelectCustomGalleries: (values: string) => void;
-  customGalleries: string[];
   onSelectGallery: (value: string) => void;
+  variables: OffenderFilters;
+  fetchMoreScroll: () => void;
 }
 
 const getSizeOptions = () => {
   if (window.innerWidth > 1239 && window.innerWidth < 1800) {
-    return ['24', '48', '96'];
+    return ['12', '24', '48', '96'];
   }
   if (window.innerWidth > 1799) {
-    return ['24', '48', '96'];
+    return ['12', '24', '48', '96'];
   }
-  return ['24'];
+  return ['12'];
 };
 
 const useOffenderFeed = (): Return => {
@@ -105,14 +91,20 @@ const useOffenderFeed = (): Return => {
 
   // Global State
   const schemeId = useStoreState((state) => state.scheme.id);
-  const { role, id: userId } = useStoreState((state) => state.user);
+  const {
+    role,
+    id: userId,
+    defaultGroups,
+  } = useStoreState((state) => state.user);
   const pagination = useStoreState((state) => state.data.offenders.pagination);
   const variables = useStoreState((state) => state.data.offenders.variables);
   const order = useStoreState((state) => state.data.offenders.order);
   const setOffendersState = useStoreActions(
     (actions) => actions.data.setOffenders
   );
-
+  const defaultGroupsId = defaultGroups
+    .filter(({ scheme }) => scheme.id === schemeId)
+    .map(({ id }) => id);
   // local State
   const [sortFilter, setSortFilter] = useState(false);
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
@@ -122,21 +114,35 @@ const useOffenderFeed = (): Return => {
     open: false,
     index: 0,
   });
-  const [groupsFilter, setGroupsFilter] = useState<string[]>([]);
-  const [warnings, setWarnings] = useState<string[]>([]);
-  const [ethnicity, setEthnicity] = useState<Race[]>([]);
-  const [age, setAge] = useState<Age[]>([]);
-  const [build, setBuild] = useState<Build[]>([]);
-  const [sex, setSex] = useState<Gender[]>([]);
-  const [hair, setHair] = useState('');
-  const [peculiarities, setPeculiarities] = useState('');
-  const [gallery, setGallery] = useState<string[]>([]);
-  const [customGalleries, setCustomGalleries] = useState<string[]>([]);
-  const [businesses, setBusinesses] = useState<string[]>([]);
-  const [createdAtFilter, setCreatedAtFilter] = useState<
-    DateType | undefined
-  >();
-
+  // const [groupsFilter, setGroupsFilter] = useState<string[]>([]);
+  // const [warnings, setWarnings] = useState<string[]>([]);
+  // const [ethnicity, setEthnicity] = useState<Race[]>([]);
+  // const [age, setAge] = useState<Age[]>([]);
+  // const [build, setBuild] = useState<Build[]>([]);
+  // const [sex, setSex] = useState<Gender[]>([]);
+  // const [hair, setHair] = useState('');
+  // const [peculiarities, setPeculiarities] = useState('');
+  // const [gallery, setGallery] = useState<string[]>([]);
+  // const [customGalleries, setCustomGalleries] = useState<string[]>([]);
+  // const [businesses, setBusinesses] = useState<string[]>([]);
+  // const [createdAtFilter, setCreatedAtFilter] = useState<
+  //   DateType | undefined
+  // >();
+  const {
+    search,
+    groups: groupsFilter,
+    businesses,
+    createdAt: createdAtFilter,
+    gallery,
+    customGalleries,
+    peculiarities,
+    hair,
+    warnings,
+    ethnicity,
+    age,
+    build,
+    sex,
+  } = variables;
   const queryVariables = {
     scheme: {
       id: schemeId,
@@ -223,18 +229,18 @@ const useOffenderFeed = (): Return => {
       OR: [
         {
           name: {
-            contains: variables.search,
+            contains: search,
             mode: QueryMode.Insensitive,
           },
         },
         {
           alias: {
-            hasSome: [variables.search],
+            hasSome: [search],
           },
         },
         {
-          reference: {
-            equals: Number(variables.search),
+          referenceStr: {
+            contains: search,
           },
         },
       ],
@@ -328,7 +334,7 @@ const useOffenderFeed = (): Return => {
       },
       variables: {
         ...variables,
-        groups: groupData?.groups.map((group) => group.id) || [],
+        groups: defaultGroupsId,
       },
       order,
     });
@@ -353,8 +359,7 @@ const useOffenderFeed = (): Return => {
   });
 
   // Fetch Offenders
-  const { data, loading } = useListOffendersQuery({
-    // @ts-expect-error TODO fix date mismatch
+  const { data, loading, fetchMore } = useOffenderFeedListQuery({
     variables: queryVariables,
     fetchPolicy: 'cache-and-network',
   });
@@ -401,16 +406,16 @@ const useOffenderFeed = (): Return => {
   ) => {
     if (res === null || res === undefined) return;
 
-    const existingData = store.readQuery<ListOffendersQuery>({
-      query: ListOffendersDocument,
+    const existingData = store.readQuery<OffenderFeedListQuery>({
+      query: OffenderFeedListDocument,
       variables: queryVariables,
     });
 
     if (existingData === null) return;
     if (existingData?.listOffenders?.offenders === undefined) return;
 
-    store.writeQuery<ListOffendersQuery>({
-      query: ListOffendersDocument,
+    store.writeQuery<OffenderFeedListQuery>({
+      query: OffenderFeedListDocument,
       data: {
         listOffenders: {
           ...existingData.listOffenders,
@@ -455,7 +460,7 @@ const useOffenderFeed = (): Return => {
     });
   };
 
-  const onGroupsChange = (values: string[]) => {
+  const setGroupsFilter = (values: string[]) => {
     setOffendersState({
       pagination,
       variables: {
@@ -466,12 +471,93 @@ const useOffenderFeed = (): Return => {
     });
   };
 
-  const onTagsChange = (values: string[]) => {
+  const setWarnings = (values: string[]) => {
     setOffendersState({
       pagination,
       variables: {
         ...variables,
-        tags: values,
+        warnings: values,
+      },
+      order,
+    });
+  };
+  const setBusinesses = (values: string[]) => {
+    setOffendersState({
+      pagination,
+      variables: {
+        ...variables,
+        businesses: values,
+      },
+      order,
+    });
+  };
+  const setEthnicity = (values: Race[]) => {
+    setOffendersState({
+      pagination,
+      variables: {
+        ...variables,
+        ethnicity: values,
+      },
+      order,
+    });
+  };
+
+  const setBuild = (values: Build[]) => {
+    setOffendersState({
+      pagination,
+      variables: {
+        ...variables,
+        build: values,
+      },
+      order,
+    });
+  };
+  const setAge = (values: Age[]) => {
+    setOffendersState({
+      pagination,
+      variables: {
+        ...variables,
+        age: values,
+      },
+      order,
+    });
+  };
+  const setSex = (values: Gender[]) => {
+    setOffendersState({
+      pagination,
+      variables: {
+        ...variables,
+        sex: values,
+      },
+      order,
+    });
+  };
+  const setGallery = (values: string[]) => {
+    setOffendersState({
+      pagination,
+      variables: {
+        ...variables,
+        gallery: values,
+      },
+      order,
+    });
+  };
+  const setCustomGalleries = (values: string[]) => {
+    setOffendersState({
+      pagination,
+      variables: {
+        ...variables,
+        customGalleries: values,
+      },
+      order,
+    });
+  };
+  const setCreatedAtFilter = (values: DateType | undefined) => {
+    setOffendersState({
+      pagination,
+      variables: {
+        ...variables,
+        createdAt: values,
       },
       order,
     });
@@ -495,6 +581,26 @@ const useOffenderFeed = (): Return => {
       order,
     });
   };
+  const setPeculiarities = (value: string) => {
+    setOffendersState({
+      pagination,
+      variables: {
+        ...variables,
+        peculiarities: value,
+      },
+      order,
+    });
+  };
+  const setHair = (value: string) => {
+    setOffendersState({
+      pagination,
+      variables: {
+        ...variables,
+        hair: value,
+      },
+      order,
+    });
+  };
 
   const toggleSortFilter = () => {
     setSortFilter(!sortFilter);
@@ -512,30 +618,69 @@ const useOffenderFeed = (): Return => {
 
   const onSelectGallery = (id: string) => {
     if (id) {
-      if (customGalleries.includes(id)) {
-        setGallery(customGalleries.filter((index) => index !== id));
+      if (gallery.includes(id)) {
+        setGallery(gallery.filter((index) => index !== id));
       } else {
-        setGallery([...customGalleries, id]);
+        setGallery([...gallery, id]);
       }
     }
   };
+
   const clearFilters = () => {
-    setGroupsFilter([]);
-    setWarnings([]);
-    setAge([]);
-    setBuild([]);
-    setEthnicity([]);
-    setHair('');
-    setPeculiarities('');
-    setSex([]);
-    setBusinesses([]);
-    setOrder(OffenderSort.updatedAtDesc);
-    setCreatedAtFilter(undefined);
+    setOffendersState({
+      pagination,
+      variables: {
+        search: '',
+        warnings: [],
+        groups: [],
+        businesses: [],
+        createdAt: undefined,
+        gallery: [],
+        customGalleries: [],
+        peculiarities: '',
+        hair: '',
+        ethnicity: [],
+        build: [],
+        age: [],
+        sex: [],
+      },
+      order: OffenderSort.updatedAtDesc,
+    });
+  };
+
+  const fetchMoreScroll = () => {
+    void fetchMore({
+      variables: {
+        ...queryVariables,
+        take: 12,
+        skip: data?.listOffenders?.offenders?.length || 0,
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        return {
+          listOffenders: {
+            ...fetchMoreResult.listOffenders,
+            total:
+              fetchMoreResult.listOffenders?.total ||
+              prev.listOffenders?.total ||
+              0,
+            offenders: [
+              ...(prev.listOffenders?.offenders || []),
+              ...(fetchMoreResult.listOffenders?.offenders || []),
+            ],
+          },
+        };
+      },
+    });
   };
 
   return {
+    fetchMoreScroll,
     data,
-    loading,
+    loading: cacheOrLoading({
+      loading,
+      data,
+    }),
     lightBoxOpen,
     openLightbox: triggerLightbox,
     lightboxElements,
@@ -543,7 +688,6 @@ const useOffenderFeed = (): Return => {
     pagination,
     order,
     setOrder,
-    search: variables.search,
     setSearch,
     groups:
       groupData?.groups.map((group) => ({
@@ -551,9 +695,7 @@ const useOffenderFeed = (): Return => {
         label: group.name,
       })) || [],
     groupsLoading,
-    onGroupsChange,
     variables,
-    onTagsChange,
     tags:
       tagsData?.tags.map((tag) => ({ value: tag.id, label: tag.name })) || [],
     tagsLoading,
@@ -561,13 +703,7 @@ const useOffenderFeed = (): Return => {
     onNavigate,
     sortFilter,
     toggleSortFilter,
-    age,
-    build,
     clearFilters,
-    ethnicity,
-    gallery,
-    hair,
-    peculiarities,
     setAge,
     setBuild,
     setEthnicity,
@@ -575,19 +711,14 @@ const useOffenderFeed = (): Return => {
     setHair,
     setPeculiarities,
     setSex,
-    sex,
-    groupsFilter,
     setGroupsFilter,
     setWarnings,
-    warnings,
     businessData,
-    businesses,
     setBusinesses,
     businessesLoading,
     setCreatedAtFilter,
     customGalleriesData,
     adminRights: role !== Role.User,
-    customGalleries,
     onSelectCustomGalleries,
     onSelectGallery,
   };

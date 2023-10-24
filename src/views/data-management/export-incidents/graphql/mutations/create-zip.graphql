@@ -1,0 +1,3 @@
+mutation CreateCsvZip($where: IncidentExportInput!) {
+  createCsvZip(where: $where)
+}

@@ -42,6 +42,7 @@ import {
   faEdit,
   faImage,
   faLanguage,
+  faLocationDot,
   faMagnifyingGlass,
   faPage,
   faPenToSquare,
@@ -65,13 +66,13 @@ import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import OffenderTable from 'components/tables/OffenderTable';
 import VehicleTable from 'components/tables/VehicleTable';
-import MapCard from 'components/map/MapCard/MapCard.view';
 import { FormattedMessage, useIntl } from 'react-intl';
 import moment from 'moment';
 import type {
   EditFeedImage,
   GoodsData,
   ImageCardData,
+  LocationData,
   OffenderData,
   VehicleData,
 } from 'types/DataType';
@@ -93,6 +94,8 @@ import EditVehicleSimple from 'components/form-components/Vehicle/EditVehicleSim
 import ActivityTable from 'components/tables/ActivityTable';
 import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
 import InvestigationTable from 'components/tables/InvestigationTable';
+import AddLocation from 'components/form-components/addresses/AddLocation';
+import LocatingCard from 'components/map/LocatingCard';
 import UpdateContent from './Update.view';
 import useStyles from './ViewIncident.styles';
 import EvidenceTable from '../../../components/tables/EvidenceTable';
@@ -219,6 +222,9 @@ interface Props {
   toggleAddInvestigation: () => void;
   addInvestigation: boolean;
   updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
+  editAddress: boolean;
+  toggleEditAddress: () => void;
+  onEditAddress: (value: LocationData) => void;
 }
 
 const ViewIncident = ({
@@ -317,6 +323,9 @@ const ViewIncident = ({
   addInvestigation,
   toggleAddInvestigation,
   updateInvestigationList,
+  editAddress,
+  toggleEditAddress,
+  onEditAddress,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
@@ -424,8 +433,8 @@ const ViewIncident = ({
                                 {
                                   key: 0,
                                   label: intl.formatMessage({
-                                    defaultMessage: 'Edit Incident',
-                                    id: 'E6VJFN',
+                                    defaultMessage: 'Edit Details',
+                                    id: 'A2fHI3',
                                   }),
                                   onClick: () => toggleEditIncident(),
                                   icon: <FontAwesomeIcon icon={faEdit} />,
@@ -446,6 +455,17 @@ const ViewIncident = ({
                                   onClick: () => toggleEditImages(),
                                   icon: <FontAwesomeIcon icon={faImage} />,
                                 },
+                                {
+                                  key: 2,
+                                  label: intl.formatMessage({
+                                    defaultMessage: 'Edit Address',
+                                    id: 'uSpe21',
+                                  }),
+                                  onClick: () => toggleEditAddress(),
+                                  icon: (
+                                    <FontAwesomeIcon icon={faLocationDot} />
+                                  ),
+                                },
                               ]}
                             />
                           }
@@ -464,36 +484,9 @@ const ViewIncident = ({
                             })}
                           </Button>
                         </Dropdown>
-                        {/* <Link to={`/app/incidents/edit/${incidentId}`}>
-                          <Button type="ghost">
-                            <FontAwesomeIcon
-                              size="1x"
-                              style={{ marginRight: 8 }}
-                              icon={faEdit}
-                            />
-                            {intl.formatMessage({
-                              defaultMessage: 'Edit',
-                              id: 'wEQDC6',
-                            })}
-                          </Button>
-                        </Link> */}
                       </Col>
                     )}
-                    {/* {editRights && (
-                      <Col>
-                        <Button type="ghost" onClick={toggleAddInvestigation}>
-                          <FontAwesomeIcon
-                            size="1x"
-                            style={{ marginRight: 8 }}
-                            icon={faPlus}
-                          />
-                          {intl.formatMessage({
-                            defaultMessage: 'Add Investigation',
-                            id: 'U5+v9Y',
-                          })}
-                        </Button>
-                      </Col>
-                    )} */}
+
                     {deleteRights && (
                       <Col>
                         <Button
@@ -760,7 +753,7 @@ const ViewIncident = ({
                             >
                               {editRights ? (
                                 <Link
-                                  to={`/app/scheme-settings/business/view/${
+                                  to={`/app/scheme-settings/businesses/view/${
                                     data?.incident?.business?.id || ''
                                   }`}
                                 >
@@ -934,15 +927,11 @@ const ViewIncident = ({
                         </Card>
                         <Row gutter={16}>
                           <Col xs={24} xl={12}>
-                            <MapCard
+                            <LocatingCard
                               width="100%"
                               height={194}
-                              markers={[
-                                {
-                                  geoLat: data?.incident?.location?.geoLat,
-                                  geoLng: data?.incident?.location?.geoLng,
-                                },
-                              ]}
+                              location={data?.incident?.location}
+                              setLocation={onEditAddress}
                             />
                           </Col>
                           <Col xs={24} xl={12}>
@@ -2127,8 +2116,8 @@ const ViewIncident = ({
       {/* incident details */}
       <Drawer
         title={intl.formatMessage({
-          defaultMessage: 'Edit Incident',
-          id: 'E6VJFN',
+          defaultMessage: 'Edit Incident Details',
+          id: 'XU7doq',
         })}
         visible={editIncident}
         width="600"
@@ -2450,6 +2439,28 @@ const ViewIncident = ({
           <div />
         )}
       </Drawer>
+      {/* address */}
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Edit Incident Address',
+          id: 'Lnv8OW',
+        })}
+        open={editAddress}
+        width="600"
+        zIndex={999}
+        onClose={toggleEditAddress}
+      >
+        {editAddress ? (
+          <AddLocation
+            locationData={data?.incident?.location ?? undefined}
+            onClose={toggleEditAddress}
+            update={onEditAddress}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+
       <Lightbox
         open={lightBoxOpen.open}
         close={() => openLightbox(0)}
