@@ -3656,6 +3656,7 @@ export type Article = {
   title: Scalars['String'];
   updatedAt: Scalars['DateTime'];
   users: Array<User>;
+  watermarkImage: Scalars['Boolean'];
   when?: Maybe<When>;
 };
 
@@ -4187,6 +4188,7 @@ export type ArticleCreateManyCreatedByInput = {
   start?: InputMaybe<Scalars['DateTime']>;
   title: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  watermarkImage?: InputMaybe<Scalars['Boolean']>;
   when?: InputMaybe<When>;
 };
 
@@ -4371,6 +4373,7 @@ export type ArticleCreateWithoutActionsInput = {
   title: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   users?: InputMaybe<UserCreateNestedManyWithoutArticlesInput>;
+  watermarkImage?: InputMaybe<Scalars['Boolean']>;
   when?: InputMaybe<When>;
 };
 
@@ -4400,6 +4403,7 @@ export type ArticleCreateWithoutCreatedByInput = {
   title: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   users?: InputMaybe<UserCreateNestedManyWithoutArticlesInput>;
+  watermarkImage?: InputMaybe<Scalars['Boolean']>;
   when?: InputMaybe<When>;
 };
 
@@ -4429,6 +4433,7 @@ export type ArticleCreateWithoutDocumentsInput = {
   title: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   users?: InputMaybe<UserCreateNestedManyWithoutArticlesInput>;
+  watermarkImage?: InputMaybe<Scalars['Boolean']>;
   when?: InputMaybe<When>;
 };
 
@@ -4458,6 +4463,7 @@ export type ArticleCreateWithoutFeedItemsInput = {
   title: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   users?: InputMaybe<UserCreateNestedManyWithoutArticlesInput>;
+  watermarkImage?: InputMaybe<Scalars['Boolean']>;
   when?: InputMaybe<When>;
 };
 
@@ -4487,6 +4493,7 @@ export type ArticleCreateWithoutGroupsInput = {
   title: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   users?: InputMaybe<UserCreateNestedManyWithoutArticlesInput>;
+  watermarkImage?: InputMaybe<Scalars['Boolean']>;
   when?: InputMaybe<When>;
 };
 
@@ -4516,6 +4523,7 @@ export type ArticleCreateWithoutImageInput = {
   title: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   users?: InputMaybe<UserCreateNestedManyWithoutArticlesInput>;
+  watermarkImage?: InputMaybe<Scalars['Boolean']>;
   when?: InputMaybe<When>;
 };
 
@@ -4545,6 +4553,7 @@ export type ArticleCreateWithoutImagesInput = {
   title: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   users?: InputMaybe<UserCreateNestedManyWithoutArticlesInput>;
+  watermarkImage?: InputMaybe<Scalars['Boolean']>;
   when?: InputMaybe<When>;
 };
 
@@ -4574,6 +4583,7 @@ export type ArticleCreateWithoutImpressionsInput = {
   title: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   users?: InputMaybe<UserCreateNestedManyWithoutArticlesInput>;
+  watermarkImage?: InputMaybe<Scalars['Boolean']>;
   when?: InputMaybe<When>;
 };
 
@@ -4603,6 +4613,7 @@ export type ArticleCreateWithoutNotificationsInput = {
   title: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   users?: InputMaybe<UserCreateNestedManyWithoutArticlesInput>;
+  watermarkImage?: InputMaybe<Scalars['Boolean']>;
   when?: InputMaybe<When>;
 };
 
@@ -4632,6 +4643,7 @@ export type ArticleCreateWithoutRowsInput = {
   title: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   users?: InputMaybe<UserCreateNestedManyWithoutArticlesInput>;
+  watermarkImage?: InputMaybe<Scalars['Boolean']>;
   when?: InputMaybe<When>;
 };
 
@@ -4661,6 +4673,7 @@ export type ArticleCreateWithoutSchemesInput = {
   title: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   users?: InputMaybe<UserCreateNestedManyWithoutArticlesInput>;
+  watermarkImage?: InputMaybe<Scalars['Boolean']>;
   when?: InputMaybe<When>;
 };
 
@@ -4690,6 +4703,7 @@ export type ArticleCreateWithoutTagsInput = {
   title: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   users?: InputMaybe<UserCreateNestedManyWithoutArticlesInput>;
+  watermarkImage?: InputMaybe<Scalars['Boolean']>;
   when?: InputMaybe<When>;
 };
 
@@ -4719,6 +4733,7 @@ export type ArticleCreateWithoutUsersInput = {
   tags?: InputMaybe<TagCreateNestedManyWithoutArticlesInput>;
   title: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  watermarkImage?: InputMaybe<Scalars['Boolean']>;
   when?: InputMaybe<When>;
 };
 
@@ -4761,6 +4776,7 @@ export type ArticleOrderByWithRelationInput = {
   title?: InputMaybe<SortOrder>;
   updatedAt?: InputMaybe<SortOrder>;
   users?: InputMaybe<UserOrderByRelationAggregateInput>;
+  watermarkImage?: InputMaybe<SortOrder>;
   when?: InputMaybe<SortOrderInput>;
 };
 
@@ -4997,6 +5013,7 @@ export type ArticleScalarWhereInput = {
   start?: InputMaybe<DateTimeNullableFilter>;
   title?: InputMaybe<StringFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
+  watermarkImage?: InputMaybe<BoolFilter>;
   when?: InputMaybe<EnumWhenNullableFilter>;
 };
 
@@ -5025,6 +5042,7 @@ export type ArticleUpdateManyMutationInput = {
   start?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   title?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  watermarkImage?: InputMaybe<BoolFieldUpdateOperationsInput>;
   when?: InputMaybe<NullableEnumWhenFieldUpdateOperationsInput>;
 };
 
@@ -5314,6 +5332,7 @@ export type ArticleUpdateWithoutActionsInput = {
   title?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   users?: InputMaybe<UserUpdateManyWithoutArticlesNestedInput>;
+  watermarkImage?: InputMaybe<BoolFieldUpdateOperationsInput>;
   when?: InputMaybe<NullableEnumWhenFieldUpdateOperationsInput>;
 };
 
@@ -5343,6 +5362,7 @@ export type ArticleUpdateWithoutCreatedByInput = {
   title?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   users?: InputMaybe<UserUpdateManyWithoutArticlesNestedInput>;
+  watermarkImage?: InputMaybe<BoolFieldUpdateOperationsInput>;
   when?: InputMaybe<NullableEnumWhenFieldUpdateOperationsInput>;
 };
 
@@ -5372,6 +5392,7 @@ export type ArticleUpdateWithoutDocumentsInput = {
   title?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   users?: InputMaybe<UserUpdateManyWithoutArticlesNestedInput>;
+  watermarkImage?: InputMaybe<BoolFieldUpdateOperationsInput>;
   when?: InputMaybe<NullableEnumWhenFieldUpdateOperationsInput>;
 };
 
@@ -5401,6 +5422,7 @@ export type ArticleUpdateWithoutFeedItemsInput = {
   title?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   users?: InputMaybe<UserUpdateManyWithoutArticlesNestedInput>;
+  watermarkImage?: InputMaybe<BoolFieldUpdateOperationsInput>;
   when?: InputMaybe<NullableEnumWhenFieldUpdateOperationsInput>;
 };
 
@@ -5430,6 +5452,7 @@ export type ArticleUpdateWithoutGroupsInput = {
   title?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   users?: InputMaybe<UserUpdateManyWithoutArticlesNestedInput>;
+  watermarkImage?: InputMaybe<BoolFieldUpdateOperationsInput>;
   when?: InputMaybe<NullableEnumWhenFieldUpdateOperationsInput>;
 };
 
@@ -5459,6 +5482,7 @@ export type ArticleUpdateWithoutImageInput = {
   title?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   users?: InputMaybe<UserUpdateManyWithoutArticlesNestedInput>;
+  watermarkImage?: InputMaybe<BoolFieldUpdateOperationsInput>;
   when?: InputMaybe<NullableEnumWhenFieldUpdateOperationsInput>;
 };
 
@@ -5488,6 +5512,7 @@ export type ArticleUpdateWithoutImagesInput = {
   title?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   users?: InputMaybe<UserUpdateManyWithoutArticlesNestedInput>;
+  watermarkImage?: InputMaybe<BoolFieldUpdateOperationsInput>;
   when?: InputMaybe<NullableEnumWhenFieldUpdateOperationsInput>;
 };
 
@@ -5517,6 +5542,7 @@ export type ArticleUpdateWithoutImpressionsInput = {
   title?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   users?: InputMaybe<UserUpdateManyWithoutArticlesNestedInput>;
+  watermarkImage?: InputMaybe<BoolFieldUpdateOperationsInput>;
   when?: InputMaybe<NullableEnumWhenFieldUpdateOperationsInput>;
 };
 
@@ -5546,6 +5572,7 @@ export type ArticleUpdateWithoutNotificationsInput = {
   title?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   users?: InputMaybe<UserUpdateManyWithoutArticlesNestedInput>;
+  watermarkImage?: InputMaybe<BoolFieldUpdateOperationsInput>;
   when?: InputMaybe<NullableEnumWhenFieldUpdateOperationsInput>;
 };
 
@@ -5575,6 +5602,7 @@ export type ArticleUpdateWithoutRowsInput = {
   title?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   users?: InputMaybe<UserUpdateManyWithoutArticlesNestedInput>;
+  watermarkImage?: InputMaybe<BoolFieldUpdateOperationsInput>;
   when?: InputMaybe<NullableEnumWhenFieldUpdateOperationsInput>;
 };
 
@@ -5604,6 +5632,7 @@ export type ArticleUpdateWithoutSchemesInput = {
   title?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   users?: InputMaybe<UserUpdateManyWithoutArticlesNestedInput>;
+  watermarkImage?: InputMaybe<BoolFieldUpdateOperationsInput>;
   when?: InputMaybe<NullableEnumWhenFieldUpdateOperationsInput>;
 };
 
@@ -5633,6 +5662,7 @@ export type ArticleUpdateWithoutTagsInput = {
   title?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   users?: InputMaybe<UserUpdateManyWithoutArticlesNestedInput>;
+  watermarkImage?: InputMaybe<BoolFieldUpdateOperationsInput>;
   when?: InputMaybe<NullableEnumWhenFieldUpdateOperationsInput>;
 };
 
@@ -5662,6 +5692,7 @@ export type ArticleUpdateWithoutUsersInput = {
   tags?: InputMaybe<TagUpdateManyWithoutArticlesNestedInput>;
   title?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  watermarkImage?: InputMaybe<BoolFieldUpdateOperationsInput>;
   when?: InputMaybe<NullableEnumWhenFieldUpdateOperationsInput>;
 };
 
@@ -5775,6 +5806,7 @@ export type ArticleWhereInput = {
   title?: InputMaybe<StringFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   users?: InputMaybe<UserListRelationFilter>;
+  watermarkImage?: InputMaybe<BoolFilter>;
   when?: InputMaybe<EnumWhenNullableFilter>;
 };
 
@@ -5810,6 +5842,7 @@ export type ArticleWhereUniqueInput = {
   title?: InputMaybe<StringFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   users?: InputMaybe<UserListRelationFilter>;
+  watermarkImage?: InputMaybe<BoolFilter>;
   when?: InputMaybe<EnumWhenNullableFilter>;
 };
 
@@ -8379,6 +8412,7 @@ export type CreateArticleInput = {
   priority: ArticlePriority;
   schemes: Array<Scalars['String']>;
   title: Scalars['String'];
+  watermarkImage?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type CreateArticlePreviewImage = {
@@ -74083,6 +74117,7 @@ export type ArticlesQuery = {
     previewImage?: string | null;
     previewText?: string | null;
     priority: ArticlePriority;
+    watermarkImage: boolean;
     title: string;
     updatedAt: Date;
     id: string;
@@ -74133,6 +74168,7 @@ export type ListArticlesQuery = {
     total: number;
     articles: Array<{
       __typename?: 'Article';
+      watermarkImage: boolean;
       previewImage?: string | null;
       previewText?: string | null;
       priority: ArticlePriority;
@@ -74180,6 +74216,7 @@ export type ArticleQuery = {
   article?: {
     __typename?: 'Article';
     id: string;
+    watermarkImage: boolean;
     createdAt: Date;
     updatedAt: Date;
     priority: ArticlePriority;
@@ -87891,6 +87928,7 @@ export const ArticlesDocument = gql`
       previewImage
       previewText
       priority
+      watermarkImage
       tags {
         id
         name
@@ -87970,6 +88008,7 @@ export const ListArticlesDocument = gql`
       scheme: $scheme
     ) {
       articles {
+        watermarkImage
         previewImage
         previewText
         priority
@@ -88049,6 +88088,7 @@ export const ArticleDocument = gql`
   query Article($where: ArticleWhereUniqueInput!) {
     article(where: $where) {
       id
+      watermarkImage
       groups {
         id
         name

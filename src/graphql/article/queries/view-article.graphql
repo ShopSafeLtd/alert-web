@@ -1,6 +1,7 @@
 query Article($where: ArticleWhereUniqueInput!) {
   article(where: $where) {
     id
+    watermarkImage
     groups {
       id
       name

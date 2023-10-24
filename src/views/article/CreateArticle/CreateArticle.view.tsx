@@ -4,6 +4,7 @@ import {
   Avatar,
   Button,
   Card,
+  Checkbox,
   Col,
   Drawer,
   Form,
@@ -111,7 +112,7 @@ const CreateArticleView = ({
   //   </>
   // );
   const theme = useStoreState((state) => state.theme).currentTheme === 'dark';
-
+  console.log(Form.useWatch('watermarkImage', form));
   return (
     <>
       <div className="page-view">
@@ -132,6 +133,7 @@ const CreateArticleView = ({
                 categories: [],
                 importance: 'Normal',
                 schemes: [],
+                watermarkImage: true,
               }
             }
             onFinish={onSubmit}
@@ -164,7 +166,7 @@ const CreateArticleView = ({
               </Col>
             </Row>
             <Row gutter={16} style={{ marginLeft: 10, marginRight: 10 }}>
-              <Col span={10}>
+              <Col span={8}>
                 <Form.Item
                   name="groups"
                   label={intl.formatMessage({
@@ -257,6 +259,18 @@ const CreateArticleView = ({
                     labelInValue
                     value={selectedCategories}
                   />
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item
+                  name="watermarkImage"
+                  valuePropName="checked"
+                  label={intl.formatMessage({
+                    defaultMessage: 'Watermark Preview',
+                    id: 'DmBmJf',
+                  })}
+                >
+                  <Checkbox />
                 </Form.Item>
               </Col>
             </Row>

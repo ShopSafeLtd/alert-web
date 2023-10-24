@@ -31,6 +31,7 @@ interface FormData {
   categories: SelectProps['options'];
   importance: ArticlePriority;
   schemes: string[];
+  watermarkImage: boolean;
 }
 
 export type { FormData };
@@ -50,6 +51,7 @@ const useEditArticle = (): Props => {
     categories: [],
     importance: ArticlePriority.Normal,
     schemes: [],
+    watermarkImage: true,
   });
 
   const [fileList, setFileList] = useState<UploadFile[]>([]);
@@ -91,6 +93,7 @@ const useEditArticle = (): Props => {
           label: tag.name || '',
         })) || [],
       importance: result?.article?.priority || ArticlePriority.Normal,
+      watermarkImage: !!result?.article?.watermarkImage,
       schemes:
         result?.article?.groups.map((group) => group.scheme.id || '') || [],
     });
