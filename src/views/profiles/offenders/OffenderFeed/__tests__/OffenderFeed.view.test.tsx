@@ -51,6 +51,7 @@ describe('Detail Officer View', () => {
           peculiarities: null,
           approved: null,
           active: null,
+          createdByUser: false,
           createdBy: {
             fullName: 'aaa',
             id: 'cl4pe3eu91312371op4c4k2lih2',
@@ -117,12 +118,13 @@ describe('Detail Officer View', () => {
               loading={false}
               lightboxElements={[]}
               openLightbox={jest.fn()}
-              onPaginationChange={jest.fn()}
-              pagination={{
-                page: 1,
-                pageSize: 1,
-                sizeOptions: [],
-              }}
+              // onPaginationChange={jest.fn()}
+              // pagination={{
+              //   page: 1,
+              //   pageSize: 1,
+              //   sizeOptions: [],
+              // }}
+              fetchMoreScroll={jest.fn()}
               order={OffenderSort.updatedAtAsc}
               setOrder={jest.fn()}
               setSearch={jest.fn()}

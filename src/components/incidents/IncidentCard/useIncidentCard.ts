@@ -1,7 +1,7 @@
 import { useStoreState } from 'state';
 import type {
   ImageUpdateWithWhereUniqueWithoutIncidentInput,
-  ListIncidentsQuery,
+  IncidentCardFragment,
   RecycleIncidentMutation,
 } from 'graphql/generated';
 import {
@@ -17,10 +17,7 @@ import { useState } from 'react';
 import type { EditFeedImage } from 'types/DataType';
 
 interface Props {
-  incident: Exclude<
-    ListIncidentsQuery['listIncidents'],
-    undefined | null
-  >['incidents'][0];
+  incident: IncidentCardFragment;
   update?: MutationUpdaterFn<RecycleIncidentMutation>;
 }
 
@@ -44,7 +41,6 @@ const useIncidentCard = ({ incident, update }: Props): Return => {
   // const navigate = useNavigate();
   const intl = useIntl();
   const role = useStoreState((state) => state.user.role);
-  const userId = useStoreState((state) => state.user.id);
   const [editIncidentFeed, setEditIncidentFeed] = useState(false);
   const [editImage, setEditImage] = useState(false);
   const [addInvestigation, setAddInvestigation] = useState(false);
@@ -54,7 +50,7 @@ const useIncidentCard = ({ incident, update }: Props): Return => {
 
   const approvalRights = update ? role !== Role.User : false;
   const menuRights = update
-    ? role !== Role.User || userId === incident?.createdBy.id
+    ? role !== Role.User || incident?.createdByUser
     : false;
   const deleteRights = role !== Role.User;
 

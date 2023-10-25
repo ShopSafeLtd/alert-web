@@ -23,6 +23,8 @@ describe('List Officer View', () => {
           url: null,
         },
         images: [],
+        watermarkImage: false,
+
         previewImage:
           'https://shopsafealert.blob.core.windows.net/images-1/ed58b498-6067-4f05-8416-85df6a6d02b0-filename-optimised.webp',
         previewText: null,

@@ -3656,6 +3656,7 @@ export type Article = {
   title: Scalars['String'];
   updatedAt: Scalars['DateTime'];
   users: Array<User>;
+  watermarkImage: Scalars['Boolean'];
   when?: Maybe<When>;
 };
 
@@ -4187,6 +4188,7 @@ export type ArticleCreateManyCreatedByInput = {
   start?: InputMaybe<Scalars['DateTime']>;
   title: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  watermarkImage?: InputMaybe<Scalars['Boolean']>;
   when?: InputMaybe<When>;
 };
 
@@ -4371,6 +4373,7 @@ export type ArticleCreateWithoutActionsInput = {
   title: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   users?: InputMaybe<UserCreateNestedManyWithoutArticlesInput>;
+  watermarkImage?: InputMaybe<Scalars['Boolean']>;
   when?: InputMaybe<When>;
 };
 
@@ -4400,6 +4403,7 @@ export type ArticleCreateWithoutCreatedByInput = {
   title: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   users?: InputMaybe<UserCreateNestedManyWithoutArticlesInput>;
+  watermarkImage?: InputMaybe<Scalars['Boolean']>;
   when?: InputMaybe<When>;
 };
 
@@ -4429,6 +4433,7 @@ export type ArticleCreateWithoutDocumentsInput = {
   title: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   users?: InputMaybe<UserCreateNestedManyWithoutArticlesInput>;
+  watermarkImage?: InputMaybe<Scalars['Boolean']>;
   when?: InputMaybe<When>;
 };
 
@@ -4458,6 +4463,7 @@ export type ArticleCreateWithoutFeedItemsInput = {
   title: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   users?: InputMaybe<UserCreateNestedManyWithoutArticlesInput>;
+  watermarkImage?: InputMaybe<Scalars['Boolean']>;
   when?: InputMaybe<When>;
 };
 
@@ -4487,6 +4493,7 @@ export type ArticleCreateWithoutGroupsInput = {
   title: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   users?: InputMaybe<UserCreateNestedManyWithoutArticlesInput>;
+  watermarkImage?: InputMaybe<Scalars['Boolean']>;
   when?: InputMaybe<When>;
 };
 
@@ -4516,6 +4523,7 @@ export type ArticleCreateWithoutImageInput = {
   title: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   users?: InputMaybe<UserCreateNestedManyWithoutArticlesInput>;
+  watermarkImage?: InputMaybe<Scalars['Boolean']>;
   when?: InputMaybe<When>;
 };
 
@@ -4545,6 +4553,7 @@ export type ArticleCreateWithoutImagesInput = {
   title: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   users?: InputMaybe<UserCreateNestedManyWithoutArticlesInput>;
+  watermarkImage?: InputMaybe<Scalars['Boolean']>;
   when?: InputMaybe<When>;
 };
 
@@ -4574,6 +4583,7 @@ export type ArticleCreateWithoutImpressionsInput = {
   title: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   users?: InputMaybe<UserCreateNestedManyWithoutArticlesInput>;
+  watermarkImage?: InputMaybe<Scalars['Boolean']>;
   when?: InputMaybe<When>;
 };
 
@@ -4603,6 +4613,7 @@ export type ArticleCreateWithoutNotificationsInput = {
   title: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   users?: InputMaybe<UserCreateNestedManyWithoutArticlesInput>;
+  watermarkImage?: InputMaybe<Scalars['Boolean']>;
   when?: InputMaybe<When>;
 };
 
@@ -4632,6 +4643,7 @@ export type ArticleCreateWithoutRowsInput = {
   title: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   users?: InputMaybe<UserCreateNestedManyWithoutArticlesInput>;
+  watermarkImage?: InputMaybe<Scalars['Boolean']>;
   when?: InputMaybe<When>;
 };
 
@@ -4661,6 +4673,7 @@ export type ArticleCreateWithoutSchemesInput = {
   title: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   users?: InputMaybe<UserCreateNestedManyWithoutArticlesInput>;
+  watermarkImage?: InputMaybe<Scalars['Boolean']>;
   when?: InputMaybe<When>;
 };
 
@@ -4690,6 +4703,7 @@ export type ArticleCreateWithoutTagsInput = {
   title: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   users?: InputMaybe<UserCreateNestedManyWithoutArticlesInput>;
+  watermarkImage?: InputMaybe<Scalars['Boolean']>;
   when?: InputMaybe<When>;
 };
 
@@ -4719,6 +4733,7 @@ export type ArticleCreateWithoutUsersInput = {
   tags?: InputMaybe<TagCreateNestedManyWithoutArticlesInput>;
   title: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  watermarkImage?: InputMaybe<Scalars['Boolean']>;
   when?: InputMaybe<When>;
 };
 
@@ -4761,6 +4776,7 @@ export type ArticleOrderByWithRelationInput = {
   title?: InputMaybe<SortOrder>;
   updatedAt?: InputMaybe<SortOrder>;
   users?: InputMaybe<UserOrderByRelationAggregateInput>;
+  watermarkImage?: InputMaybe<SortOrder>;
   when?: InputMaybe<SortOrderInput>;
 };
 
@@ -4997,6 +5013,7 @@ export type ArticleScalarWhereInput = {
   start?: InputMaybe<DateTimeNullableFilter>;
   title?: InputMaybe<StringFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
+  watermarkImage?: InputMaybe<BoolFilter>;
   when?: InputMaybe<EnumWhenNullableFilter>;
 };
 
@@ -5025,6 +5042,7 @@ export type ArticleUpdateManyMutationInput = {
   start?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   title?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  watermarkImage?: InputMaybe<BoolFieldUpdateOperationsInput>;
   when?: InputMaybe<NullableEnumWhenFieldUpdateOperationsInput>;
 };
 
@@ -5314,6 +5332,7 @@ export type ArticleUpdateWithoutActionsInput = {
   title?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   users?: InputMaybe<UserUpdateManyWithoutArticlesNestedInput>;
+  watermarkImage?: InputMaybe<BoolFieldUpdateOperationsInput>;
   when?: InputMaybe<NullableEnumWhenFieldUpdateOperationsInput>;
 };
 
@@ -5343,6 +5362,7 @@ export type ArticleUpdateWithoutCreatedByInput = {
   title?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   users?: InputMaybe<UserUpdateManyWithoutArticlesNestedInput>;
+  watermarkImage?: InputMaybe<BoolFieldUpdateOperationsInput>;
   when?: InputMaybe<NullableEnumWhenFieldUpdateOperationsInput>;
 };
 
@@ -5372,6 +5392,7 @@ export type ArticleUpdateWithoutDocumentsInput = {
   title?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   users?: InputMaybe<UserUpdateManyWithoutArticlesNestedInput>;
+  watermarkImage?: InputMaybe<BoolFieldUpdateOperationsInput>;
   when?: InputMaybe<NullableEnumWhenFieldUpdateOperationsInput>;
 };
 
@@ -5401,6 +5422,7 @@ export type ArticleUpdateWithoutFeedItemsInput = {
   title?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   users?: InputMaybe<UserUpdateManyWithoutArticlesNestedInput>;
+  watermarkImage?: InputMaybe<BoolFieldUpdateOperationsInput>;
   when?: InputMaybe<NullableEnumWhenFieldUpdateOperationsInput>;
 };
 
@@ -5430,6 +5452,7 @@ export type ArticleUpdateWithoutGroupsInput = {
   title?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   users?: InputMaybe<UserUpdateManyWithoutArticlesNestedInput>;
+  watermarkImage?: InputMaybe<BoolFieldUpdateOperationsInput>;
   when?: InputMaybe<NullableEnumWhenFieldUpdateOperationsInput>;
 };
 
@@ -5459,6 +5482,7 @@ export type ArticleUpdateWithoutImageInput = {
   title?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   users?: InputMaybe<UserUpdateManyWithoutArticlesNestedInput>;
+  watermarkImage?: InputMaybe<BoolFieldUpdateOperationsInput>;
   when?: InputMaybe<NullableEnumWhenFieldUpdateOperationsInput>;
 };
 
@@ -5488,6 +5512,7 @@ export type ArticleUpdateWithoutImagesInput = {
   title?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   users?: InputMaybe<UserUpdateManyWithoutArticlesNestedInput>;
+  watermarkImage?: InputMaybe<BoolFieldUpdateOperationsInput>;
   when?: InputMaybe<NullableEnumWhenFieldUpdateOperationsInput>;
 };
 
@@ -5517,6 +5542,7 @@ export type ArticleUpdateWithoutImpressionsInput = {
   title?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   users?: InputMaybe<UserUpdateManyWithoutArticlesNestedInput>;
+  watermarkImage?: InputMaybe<BoolFieldUpdateOperationsInput>;
   when?: InputMaybe<NullableEnumWhenFieldUpdateOperationsInput>;
 };
 
@@ -5546,6 +5572,7 @@ export type ArticleUpdateWithoutNotificationsInput = {
   title?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   users?: InputMaybe<UserUpdateManyWithoutArticlesNestedInput>;
+  watermarkImage?: InputMaybe<BoolFieldUpdateOperationsInput>;
   when?: InputMaybe<NullableEnumWhenFieldUpdateOperationsInput>;
 };
 
@@ -5575,6 +5602,7 @@ export type ArticleUpdateWithoutRowsInput = {
   title?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   users?: InputMaybe<UserUpdateManyWithoutArticlesNestedInput>;
+  watermarkImage?: InputMaybe<BoolFieldUpdateOperationsInput>;
   when?: InputMaybe<NullableEnumWhenFieldUpdateOperationsInput>;
 };
 
@@ -5604,6 +5632,7 @@ export type ArticleUpdateWithoutSchemesInput = {
   title?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   users?: InputMaybe<UserUpdateManyWithoutArticlesNestedInput>;
+  watermarkImage?: InputMaybe<BoolFieldUpdateOperationsInput>;
   when?: InputMaybe<NullableEnumWhenFieldUpdateOperationsInput>;
 };
 
@@ -5633,6 +5662,7 @@ export type ArticleUpdateWithoutTagsInput = {
   title?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   users?: InputMaybe<UserUpdateManyWithoutArticlesNestedInput>;
+  watermarkImage?: InputMaybe<BoolFieldUpdateOperationsInput>;
   when?: InputMaybe<NullableEnumWhenFieldUpdateOperationsInput>;
 };
 
@@ -5662,6 +5692,7 @@ export type ArticleUpdateWithoutUsersInput = {
   tags?: InputMaybe<TagUpdateManyWithoutArticlesNestedInput>;
   title?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  watermarkImage?: InputMaybe<BoolFieldUpdateOperationsInput>;
   when?: InputMaybe<NullableEnumWhenFieldUpdateOperationsInput>;
 };
 
@@ -5775,6 +5806,7 @@ export type ArticleWhereInput = {
   title?: InputMaybe<StringFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   users?: InputMaybe<UserListRelationFilter>;
+  watermarkImage?: InputMaybe<BoolFilter>;
   when?: InputMaybe<EnumWhenNullableFilter>;
 };
 
@@ -5810,6 +5842,7 @@ export type ArticleWhereUniqueInput = {
   title?: InputMaybe<StringFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   users?: InputMaybe<UserListRelationFilter>;
+  watermarkImage?: InputMaybe<BoolFilter>;
   when?: InputMaybe<EnumWhenNullableFilter>;
 };
 
@@ -8379,6 +8412,7 @@ export type CreateArticleInput = {
   priority: ArticlePriority;
   schemes: Array<Scalars['String']>;
   title: Scalars['String'];
+  watermarkImage?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type CreateArticlePreviewImage = {
@@ -19782,9 +19816,11 @@ export type Incident = {
   completedTodos?: Maybe<Array<Maybe<Todo>>>;
   createdAt: Scalars['DateTime'];
   createdBy: User;
+  createdByUser: Scalars['Boolean'];
   crimeGroups: Array<CrimeGroup>;
   crimeTypes: Array<Tag>;
   date: Scalars['DateTime'];
+  dateAgo: Scalars['Int'];
   dayOfMonth?: Maybe<Scalars['Int']>;
   dayOfWeek?: Maybe<Scalars['Int']>;
   dayTime?: Maybe<Scalars['String']>;
@@ -19820,6 +19856,7 @@ export type Incident = {
   ref?: Maybe<Scalars['String']>;
   reference?: Maybe<Scalars['Int']>;
   referenceStr?: Maybe<Scalars['String']>;
+  reportedBusinessName: Scalars['String'];
   scheme: Scheme;
   schemeId: Scalars['String'];
   subject?: Maybe<Scalars['String']>;
@@ -31728,6 +31765,7 @@ export type Mutation = {
   dismissMatch?: Maybe<RekMatch>;
   editArticle?: Maybe<Article>;
   enableSchemeRekognition?: Maybe<RekCollection>;
+  exportInvestigationZip?: Maybe<Scalars['String']>;
   generateFeedItems?: Maybe<SystemTask>;
   indexExistingImages?: Maybe<SystemTask>;
   indexFaces?: Maybe<SystemTask>;
@@ -32263,6 +32301,10 @@ export type MutationEditArticleArgs = {
 export type MutationEnableSchemeRekognitionArgs = {
   data: EnableSchemeRekognotionInput;
   where: SchemeWhereUniqueInput;
+};
+
+export type MutationExportInvestigationZipArgs = {
+  where: UniqueId;
 };
 
 export type MutationGenerateFeedItemsArgs = {
@@ -34566,6 +34608,7 @@ export type Offender = {
   comment?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
   createdBy: User;
+  createdByUser: Scalars['Boolean'];
   crimeGroups: Array<CrimeGroup>;
   customGalleries: Array<CustomGallery>;
   dateOfBirth?: Maybe<Scalars['DateTime']>;
@@ -34593,6 +34636,7 @@ export type Offender = {
   investigations: Array<Investigation>;
   knownAssociates?: Maybe<Array<Offender>>;
   lastActive?: Maybe<Incident>;
+  latestIncident?: Maybe<Incident>;
   latestUpdate?: Maybe<Update>;
   name?: Maybe<Scalars['String']>;
   peculiarities?: Maybe<Scalars['String']>;
@@ -73890,75 +73934,35 @@ export type CreateArticleMutation = {
         offenders: Array<{
           __typename?: 'Offender';
           id: string;
-          createdAt: Date;
-          updatedAt: Date;
-          age?: Age | null;
+          name?: string | null;
+          totalIncidents?: number | null;
+          reference?: number | null;
           build?: Build | null;
           height?: Height | null;
-          dateOfBirth?: Date | null;
-          dateSource?: string | null;
-          hair?: string | null;
           gender?: Gender | null;
-          name?: string | null;
+          dateOfBirth?: Date | null;
+          age?: Age | null;
           race?: Race | null;
-          peculiarities?: string | null;
+          updatedAt: Date;
+          totalImages?: number | null;
+          createdByUser: boolean;
           approved?: boolean | null;
-          active?: boolean | null;
-          lastActive?: {
+          latestIncident?: {
             __typename?: 'Incident';
             id: string;
-            dayTime?: string | null;
+            dateAgo: number;
+            reportedBusinessName: string;
           } | null;
           tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+          groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
           images: Array<{
             __typename?: 'Image';
             id: string;
-            optimised?: string | null;
+            rotation: number;
             position: ImagePosition;
-          }>;
-          groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
-          createdBy: {
-            __typename?: 'User';
-            id: string;
-            fullName: string;
-            businesses: Array<{
-              __typename?: 'Business';
-              fullName: string;
-              id: string;
-              name: string;
-            }>;
-          };
-          incidents: Array<{
-            __typename?: 'Incident';
-            id: string;
-            subject?: string | null;
-            description: string;
-            dayTime?: string | null;
-            date: Date;
-            approved?: boolean | null;
-            crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
-            location?: {
-              __typename?: 'Address';
-              id: string;
-              full?: string | null;
-            } | null;
-            createdBy: {
-              __typename?: 'User';
-              id: string;
-              fullName: string;
-              businesses: Array<{
-                __typename?: 'Business';
-                fullName: string;
-                id: string;
-                name: string;
-              }>;
-            };
-            images: Array<{
-              __typename?: 'Image';
-              id: string;
-              optimised?: string | null;
-              position: ImagePosition;
-            }>;
+            optimised?: string | null;
+            primary?: boolean | null;
+            policeImage?: boolean | null;
           }>;
         }>;
       }>;
@@ -74063,75 +74067,35 @@ export type EditArticleMutation = {
         offenders: Array<{
           __typename?: 'Offender';
           id: string;
-          createdAt: Date;
-          updatedAt: Date;
-          age?: Age | null;
+          name?: string | null;
+          totalIncidents?: number | null;
+          reference?: number | null;
           build?: Build | null;
           height?: Height | null;
-          dateOfBirth?: Date | null;
-          dateSource?: string | null;
-          hair?: string | null;
           gender?: Gender | null;
-          name?: string | null;
+          dateOfBirth?: Date | null;
+          age?: Age | null;
           race?: Race | null;
-          peculiarities?: string | null;
+          updatedAt: Date;
+          totalImages?: number | null;
+          createdByUser: boolean;
           approved?: boolean | null;
-          active?: boolean | null;
-          lastActive?: {
+          latestIncident?: {
             __typename?: 'Incident';
             id: string;
-            dayTime?: string | null;
+            dateAgo: number;
+            reportedBusinessName: string;
           } | null;
           tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+          groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
           images: Array<{
             __typename?: 'Image';
             id: string;
-            optimised?: string | null;
+            rotation: number;
             position: ImagePosition;
-          }>;
-          groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
-          createdBy: {
-            __typename?: 'User';
-            id: string;
-            fullName: string;
-            businesses: Array<{
-              __typename?: 'Business';
-              fullName: string;
-              id: string;
-              name: string;
-            }>;
-          };
-          incidents: Array<{
-            __typename?: 'Incident';
-            id: string;
-            subject?: string | null;
-            description: string;
-            dayTime?: string | null;
-            date: Date;
-            approved?: boolean | null;
-            crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
-            location?: {
-              __typename?: 'Address';
-              id: string;
-              full?: string | null;
-            } | null;
-            createdBy: {
-              __typename?: 'User';
-              id: string;
-              fullName: string;
-              businesses: Array<{
-                __typename?: 'Business';
-                fullName: string;
-                id: string;
-                name: string;
-              }>;
-            };
-            images: Array<{
-              __typename?: 'Image';
-              id: string;
-              optimised?: string | null;
-              position: ImagePosition;
-            }>;
+            optimised?: string | null;
+            primary?: boolean | null;
+            policeImage?: boolean | null;
           }>;
         }>;
       }>;
@@ -74153,6 +74117,7 @@ export type ArticlesQuery = {
     previewImage?: string | null;
     previewText?: string | null;
     priority: ArticlePriority;
+    watermarkImage: boolean;
     title: string;
     updatedAt: Date;
     id: string;
@@ -74203,6 +74168,7 @@ export type ListArticlesQuery = {
     total: number;
     articles: Array<{
       __typename?: 'Article';
+      watermarkImage: boolean;
       previewImage?: string | null;
       previewText?: string | null;
       priority: ArticlePriority;
@@ -74250,6 +74216,7 @@ export type ArticleQuery = {
   article?: {
     __typename?: 'Article';
     id: string;
+    watermarkImage: boolean;
     createdAt: Date;
     updatedAt: Date;
     priority: ArticlePriority;
@@ -74298,6 +74265,7 @@ export type ArticleQuery = {
           dayTime?: string | null;
           reference?: number | null;
           policeRef?: string | null;
+          createdByUser: boolean;
           approved?: boolean | null;
           uploaded?: boolean | null;
           crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
@@ -74337,77 +74305,40 @@ export type ArticleQuery = {
         offenders: Array<{
           __typename?: 'Offender';
           id: string;
-          createdAt: Date;
-          updatedAt: Date;
-          age?: Age | null;
+          name?: string | null;
+          totalIncidents?: number | null;
+          reference?: number | null;
           build?: Build | null;
           height?: Height | null;
-          dateOfBirth?: Date | null;
-          dateSource?: string | null;
-          hair?: string | null;
           gender?: Gender | null;
-          name?: string | null;
+          dateOfBirth?: Date | null;
+          age?: Age | null;
           race?: Race | null;
-          peculiarities?: string | null;
+          updatedAt: Date;
+          totalImages?: number | null;
+          createdByUser: boolean;
           approved?: boolean | null;
-          active?: boolean | null;
           lastActive?: {
             __typename?: 'Incident';
             id: string;
             dayTime?: string | null;
           } | null;
+          latestIncident?: {
+            __typename?: 'Incident';
+            id: string;
+            dateAgo: number;
+            reportedBusinessName: string;
+          } | null;
           tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+          groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
           images: Array<{
             __typename?: 'Image';
             id: string;
-            optimised?: string | null;
-            position: ImagePosition;
             rotation: number;
-          }>;
-          groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
-          createdBy: {
-            __typename?: 'User';
-            id: string;
-            fullName: string;
-            businesses: Array<{
-              __typename?: 'Business';
-              fullName: string;
-              id: string;
-              name: string;
-            }>;
-          };
-          incidents: Array<{
-            __typename?: 'Incident';
-            id: string;
-            subject?: string | null;
-            description: string;
-            dayTime?: string | null;
-            date: Date;
-            approved?: boolean | null;
-            crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
-            location?: {
-              __typename?: 'Address';
-              id: string;
-              full?: string | null;
-            } | null;
-            createdBy: {
-              __typename?: 'User';
-              id: string;
-              fullName: string;
-              businesses: Array<{
-                __typename?: 'Business';
-                fullName: string;
-                id: string;
-                name: string;
-              }>;
-            };
-            images: Array<{
-              __typename?: 'Image';
-              id: string;
-              optimised?: string | null;
-              position: ImagePosition;
-              rotation: number;
-            }>;
+            position: ImagePosition;
+            optimised?: string | null;
+            primary?: boolean | null;
+            policeImage?: boolean | null;
           }>;
         }>;
       }>;
@@ -76796,6 +76727,36 @@ export type ImagesFragment = {
   card?: string | null;
 };
 
+export type IncidentCardFragment = {
+  __typename?: 'Incident';
+  approved?: boolean | null;
+  id: string;
+  totalImages?: number | null;
+  subject?: string | null;
+  reference?: number | null;
+  policeRef?: string | null;
+  dayTime?: string | null;
+  description: string;
+  createdByUser: boolean;
+  crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+  images: Array<{
+    __typename?: 'Image';
+    low?: string | null;
+    id: string;
+    rotation: number;
+    position: ImagePosition;
+    primary?: boolean | null;
+  }>;
+  offenders: Array<{
+    __typename?: 'Offender';
+    name?: string | null;
+    id: string;
+  }>;
+  business?: { __typename?: 'Business'; name: string } | null;
+  location?: { __typename?: 'Address'; full?: string | null } | null;
+  groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+};
+
 export type IncidentsFragment = {
   __typename?: 'Incident';
   id: string;
@@ -76834,6 +76795,41 @@ export type LocationsFragment = {
   geoLng?: number | null;
   full?: string | null;
   alias?: string | null;
+};
+
+export type OffenderCardFragment = {
+  __typename?: 'Offender';
+  id: string;
+  name?: string | null;
+  totalIncidents?: number | null;
+  reference?: number | null;
+  build?: Build | null;
+  height?: Height | null;
+  gender?: Gender | null;
+  dateOfBirth?: Date | null;
+  age?: Age | null;
+  race?: Race | null;
+  updatedAt: Date;
+  totalImages?: number | null;
+  createdByUser: boolean;
+  approved?: boolean | null;
+  latestIncident?: {
+    __typename?: 'Incident';
+    id: string;
+    dateAgo: number;
+    reportedBusinessName: string;
+  } | null;
+  tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+  groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+  images: Array<{
+    __typename?: 'Image';
+    id: string;
+    rotation: number;
+    position: ImagePosition;
+    optimised?: string | null;
+    primary?: boolean | null;
+    policeImage?: boolean | null;
+  }>;
 };
 
 export type OffendersFragment = {
@@ -81354,6 +81350,93 @@ export type ListOffendersAllSchemesQuery = {
   } | null;
 };
 
+export type ListOffendersSelectQueryVariables = Exact<{
+  scheme: SchemeWhereUniqueInput;
+  where?: InputMaybe<OffenderWhereInput>;
+  order?: InputMaybe<OffenderOrderByWithRelationInput>;
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type ListOffendersSelectQuery = {
+  __typename?: 'Query';
+  listOffenders?: {
+    __typename?: 'ListOffenders';
+    total: number;
+    offenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      reference?: number | null;
+      totalImages?: number | null;
+      createdAt: Date;
+      updatedAt: Date;
+      totalIncidents?: number | null;
+      age?: Age | null;
+      build?: Build | null;
+      height?: Height | null;
+      dateOfBirth?: Date | null;
+      dateSource?: string | null;
+      hair?: string | null;
+      gender?: Gender | null;
+      name?: string | null;
+      race?: Race | null;
+      peculiarities?: string | null;
+      approved?: boolean | null;
+      active?: boolean | null;
+      lastActive?: {
+        __typename?: 'Incident';
+        id: string;
+        dayTime?: string | null;
+      } | null;
+      tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimisedPersisted?: string | null;
+        position: ImagePosition;
+        rotation: number;
+        primary?: boolean | null;
+        policeImage?: boolean | null;
+      }>;
+      groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+      createdBy: {
+        __typename?: 'User';
+        id: string;
+        fullName: string;
+        businesses: Array<{
+          __typename?: 'Business';
+          id: string;
+          name: string;
+        }>;
+      };
+      incidents: Array<{
+        __typename?: 'Incident';
+        id: string;
+        reference?: number | null;
+        subject?: string | null;
+        description: string;
+        dayTime?: string | null;
+        date: Date;
+        location?: {
+          __typename?: 'Address';
+          id: string;
+          full?: string | null;
+        } | null;
+        createdBy: {
+          __typename?: 'User';
+          id: string;
+          fullName: string;
+          businesses: Array<{
+            __typename?: 'Business';
+            id: string;
+            name: string;
+          }>;
+        };
+      }>;
+    }>;
+  } | null;
+};
+
 export type ListOffendersQueryVariables = Exact<{
   scheme: SchemeWhereUniqueInput;
   where?: InputMaybe<OffenderWhereInput>;
@@ -81401,7 +81484,6 @@ export type ListOffendersQuery = {
         rotation: number;
         primary?: boolean | null;
         policeImage?: boolean | null;
-        optimisedPersisted?: string | null;
       }>;
       groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
       createdBy: {
@@ -83722,6 +83804,19 @@ export type TranslateQuery = {
     __typename?: 'TranslatedText';
     origText: string;
     translatedText: string;
+  }>;
+};
+
+export type TranslateTextQueryVariables = Exact<{
+  data: TranslateTextInput;
+}>;
+
+export type TranslateTextQuery = {
+  __typename?: 'Query';
+  translateText: Array<{
+    __typename?: 'TranslatedText';
+    translatedText: string;
+    origText: string;
   }>;
 };
 
@@ -86276,6 +86371,101 @@ export type ExportFiltersQuery = {
   } | null;
 };
 
+export type ListIncidentsFeedQueryVariables = Exact<{
+  scheme: SchemeWhereUniqueInput;
+  where?: InputMaybe<IncidentWhereInput>;
+  order?: InputMaybe<IncidentOrderByWithRelationInput>;
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type ListIncidentsFeedQuery = {
+  __typename?: 'Query';
+  listIncidents?: {
+    __typename?: 'ListIncidents';
+    total: number;
+    incidents: Array<{
+      __typename?: 'Incident';
+      approved?: boolean | null;
+      id: string;
+      totalImages?: number | null;
+      subject?: string | null;
+      reference?: number | null;
+      policeRef?: string | null;
+      dayTime?: string | null;
+      description: string;
+      createdByUser: boolean;
+      crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+      images: Array<{
+        __typename?: 'Image';
+        low?: string | null;
+        id: string;
+        rotation: number;
+        position: ImagePosition;
+        primary?: boolean | null;
+      }>;
+      offenders: Array<{
+        __typename?: 'Offender';
+        name?: string | null;
+        id: string;
+      }>;
+      business?: { __typename?: 'Business'; name: string } | null;
+      location?: { __typename?: 'Address'; full?: string | null } | null;
+      groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+    }>;
+  } | null;
+};
+
+export type OffenderFeedListQueryVariables = Exact<{
+  scheme: SchemeWhereUniqueInput;
+  where?: InputMaybe<OffenderWhereInput>;
+  order?: InputMaybe<OffenderOrderByWithRelationInput>;
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type OffenderFeedListQuery = {
+  __typename?: 'Query';
+  listOffenders?: {
+    __typename?: 'ListOffenders';
+    total: number;
+    offenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      name?: string | null;
+      totalIncidents?: number | null;
+      reference?: number | null;
+      build?: Build | null;
+      height?: Height | null;
+      gender?: Gender | null;
+      dateOfBirth?: Date | null;
+      age?: Age | null;
+      race?: Race | null;
+      updatedAt: Date;
+      totalImages?: number | null;
+      createdByUser: boolean;
+      approved?: boolean | null;
+      latestIncident?: {
+        __typename?: 'Incident';
+        id: string;
+        dateAgo: number;
+        reportedBusinessName: string;
+      } | null;
+      tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+      groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        rotation: number;
+        position: ImagePosition;
+        optimised?: string | null;
+        primary?: boolean | null;
+        policeImage?: boolean | null;
+      }>;
+    }>;
+  } | null;
+};
+
 export type CreateCsvImportMutationVariables = Exact<{
   data: CsvImportCreateInput;
 }>;
@@ -86662,6 +86852,44 @@ export const ImagesFragmentDoc = gql`
     card
   }
 `;
+export const IncidentCardFragmentDoc = gql`
+  fragment IncidentCard on Incident {
+    approved
+    id
+    totalImages
+    crimeTypes {
+      id
+      name
+    }
+    images {
+      low
+      id
+      rotation
+      position
+      primary
+    }
+    subject
+    reference
+    policeRef
+    offenders {
+      name
+      id
+    }
+    dayTime
+    business {
+      name
+    }
+    location {
+      full
+    }
+    description
+    createdByUser
+    groups {
+      id
+      name
+    }
+  }
+`;
 export const IncidentsFragmentDoc = gql`
   fragment Incidents on Incident {
     id
@@ -86699,6 +86927,45 @@ export const LocationsFragmentDoc = gql`
     geoLng
     full
     alias
+  }
+`;
+export const OffenderCardFragmentDoc = gql`
+  fragment OffenderCard on Offender {
+    id
+    name
+    totalIncidents
+    reference
+    build
+    height
+    gender
+    dateOfBirth
+    age
+    race
+    updatedAt
+    totalImages
+    createdByUser
+    approved
+    latestIncident {
+      id
+      dateAgo
+      reportedBusinessName
+    }
+    tags {
+      id
+      name
+    }
+    groups {
+      id
+      name
+    }
+    images {
+      id
+      rotation
+      position
+      optimised
+      primary
+      policeImage
+    }
   }
 `;
 export const OffendersFragmentDoc = gql`
@@ -87470,86 +87737,13 @@ export const CreateArticleDocument = gql`
             }
           }
           offenders {
-            id
-            createdAt
-            updatedAt
-            age
-            build
-            height
-            dateOfBirth
-            dateSource
-            hair
-            gender
-            name
-            race
-            peculiarities
-            approved
-            active
-            lastActive {
-              id
-              dayTime
-            }
-            tags {
-              id
-              name
-            }
-            images {
-              id
-              optimised
-              position
-            }
-            groups {
-              id
-              name
-            }
-            tags {
-              id
-              name
-            }
-            createdBy {
-              id
-              fullName
-              businesses {
-                fullName
-                id
-                name
-              }
-            }
-            incidents {
-              id
-              subject
-              description
-              dayTime
-              date
-              crimeTypes {
-                id
-                name
-              }
-              approved
-              location {
-                id
-                full
-              }
-              createdBy {
-                id
-                fullName
-                businesses {
-                  fullName
-                  id
-                  name
-                }
-              }
-              images {
-                id
-                optimised
-                position
-              }
-            }
+            ...OffenderCard
           }
         }
       }
     }
   }
+  ${OffenderCardFragmentDoc}
 `;
 export type CreateArticleMutationFn = Apollo.MutationFunction<
   CreateArticleMutation,
@@ -87692,86 +87886,13 @@ export const EditArticleDocument = gql`
             }
           }
           offenders {
-            id
-            createdAt
-            updatedAt
-            age
-            build
-            height
-            dateOfBirth
-            dateSource
-            hair
-            gender
-            name
-            race
-            peculiarities
-            approved
-            active
-            lastActive {
-              id
-              dayTime
-            }
-            tags {
-              id
-              name
-            }
-            images {
-              id
-              optimised
-              position
-            }
-            groups {
-              id
-              name
-            }
-            tags {
-              id
-              name
-            }
-            createdBy {
-              id
-              fullName
-              businesses {
-                fullName
-                id
-                name
-              }
-            }
-            incidents {
-              id
-              subject
-              description
-              dayTime
-              date
-              crimeTypes {
-                id
-                name
-              }
-              approved
-              location {
-                id
-                full
-              }
-              createdBy {
-                id
-                fullName
-                businesses {
-                  fullName
-                  id
-                  name
-                }
-              }
-              images {
-                id
-                optimised
-                position
-              }
-            }
+            ...OffenderCard
           }
         }
       }
     }
   }
+  ${OffenderCardFragmentDoc}
 `;
 export type EditArticleMutationFn = Apollo.MutationFunction<
   EditArticleMutation,
@@ -87807,6 +87928,7 @@ export const ArticlesDocument = gql`
       previewImage
       previewText
       priority
+      watermarkImage
       tags {
         id
         name
@@ -87886,6 +88008,7 @@ export const ListArticlesDocument = gql`
       scheme: $scheme
     ) {
       articles {
+        watermarkImage
         previewImage
         previewText
         priority
@@ -87965,6 +88088,7 @@ export const ArticleDocument = gql`
   query Article($where: ArticleWhereUniqueInput!) {
     article(where: $where) {
       id
+      watermarkImage
       groups {
         id
         name
@@ -88017,6 +88141,7 @@ export const ArticleDocument = gql`
             dayTime
             reference
             policeRef
+            createdByUser
             crimeTypes {
               id
               name
@@ -88057,88 +88182,17 @@ export const ArticleDocument = gql`
             }
           }
           offenders {
-            id
-            createdAt
-            updatedAt
-            age
-            build
-            height
-            dateOfBirth
-            dateSource
-            hair
-            gender
-            name
-            race
-            peculiarities
-            approved
-            active
+            ...OffenderCard
             lastActive {
               id
               dayTime
-            }
-            tags {
-              id
-              name
-            }
-            images {
-              id
-              optimised
-              position
-              rotation
-            }
-            groups {
-              id
-              name
-            }
-            tags {
-              id
-              name
-            }
-            createdBy {
-              id
-              fullName
-              businesses {
-                fullName
-                id
-                name
-              }
-            }
-            incidents {
-              id
-              subject
-              description
-              dayTime
-              date
-              crimeTypes {
-                id
-                name
-              }
-              approved
-              location {
-                id
-                full
-              }
-              createdBy {
-                id
-                fullName
-                businesses {
-                  fullName
-                  id
-                  name
-                }
-              }
-              images {
-                id
-                optimised
-                position
-                rotation
-              }
             }
           }
         }
       }
     }
   }
+  ${OffenderCardFragmentDoc}
 `;
 export function useArticleQuery(
   baseOptions: Apollo.QueryHookOptions<ArticleQuery, ArticleQueryVariables>
@@ -96514,6 +96568,132 @@ export type ListOffendersAllSchemesQueryResult = Apollo.QueryResult<
   ListOffendersAllSchemesQuery,
   ListOffendersAllSchemesQueryVariables
 >;
+export const ListOffendersSelectDocument = gql`
+  query listOffendersSelect(
+    $scheme: SchemeWhereUniqueInput!
+    $where: OffenderWhereInput
+    $order: OffenderOrderByWithRelationInput
+    $take: Int
+    $skip: Int
+  ) {
+    listOffenders(
+      scheme: $scheme
+      where: $where
+      order: $order
+      take: $take
+      skip: $skip
+    ) {
+      offenders {
+        id
+        reference
+        totalImages
+        createdAt
+        updatedAt
+        totalIncidents
+        reference
+        age
+        build
+        height
+        dateOfBirth
+        dateSource
+        hair
+        gender
+        name
+        race
+        peculiarities
+        approved
+        active
+        lastActive {
+          id
+          dayTime
+        }
+        tags {
+          id
+          name
+        }
+        images {
+          id
+          optimisedPersisted
+          position
+          rotation
+          primary
+          policeImage
+        }
+        groups {
+          id
+          name
+        }
+        tags {
+          id
+          name
+        }
+        createdBy {
+          id
+          fullName
+          businesses {
+            id
+            name
+          }
+        }
+        incidents {
+          id
+          reference
+          subject
+          description
+          dayTime
+          date
+          location {
+            id
+            full
+          }
+          createdBy {
+            id
+            fullName
+            businesses {
+              id
+              name
+            }
+          }
+        }
+      }
+      total
+    }
+  }
+`;
+export function useListOffendersSelectQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ListOffendersSelectQuery,
+    ListOffendersSelectQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    ListOffendersSelectQuery,
+    ListOffendersSelectQueryVariables
+  >(ListOffendersSelectDocument, options);
+}
+export function useListOffendersSelectLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListOffendersSelectQuery,
+    ListOffendersSelectQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ListOffendersSelectQuery,
+    ListOffendersSelectQueryVariables
+  >(ListOffendersSelectDocument, options);
+}
+export type ListOffendersSelectQueryHookResult = ReturnType<
+  typeof useListOffendersSelectQuery
+>;
+export type ListOffendersSelectLazyQueryHookResult = ReturnType<
+  typeof useListOffendersSelectLazyQuery
+>;
+export type ListOffendersSelectQueryResult = Apollo.QueryResult<
+  ListOffendersSelectQuery,
+  ListOffendersSelectQueryVariables
+>;
 export const ListOffendersDocument = gql`
   query listOffenders(
     $scheme: SchemeWhereUniqueInput!
@@ -96564,7 +96744,6 @@ export const ListOffendersDocument = gql`
           rotation
           primary
           policeImage
-          optimisedPersisted
         }
         groups {
           id
@@ -99903,6 +100082,48 @@ export type TranslateQueryResult = Apollo.QueryResult<
   TranslateQuery,
   TranslateQueryVariables
 >;
+export const TranslateTextDocument = gql`
+  query TranslateText($data: TranslateTextInput!) {
+    translateText(data: $data) {
+      translatedText
+      origText
+    }
+  }
+`;
+export function useTranslateTextQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    TranslateTextQuery,
+    TranslateTextQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<TranslateTextQuery, TranslateTextQueryVariables>(
+    TranslateTextDocument,
+    options
+  );
+}
+export function useTranslateTextLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    TranslateTextQuery,
+    TranslateTextQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<TranslateTextQuery, TranslateTextQueryVariables>(
+    TranslateTextDocument,
+    options
+  );
+}
+export type TranslateTextQueryHookResult = ReturnType<
+  typeof useTranslateTextQuery
+>;
+export type TranslateTextLazyQueryHookResult = ReturnType<
+  typeof useTranslateTextLazyQuery
+>;
+export type TranslateTextQueryResult = Apollo.QueryResult<
+  TranslateTextQuery,
+  TranslateTextQueryVariables
+>;
 export const CreateUpdateOnCrimeGroupDocument = gql`
   mutation CreateUpdateOnCrimeGroup(
     $crimeGroup: UniqueId!
@@ -103172,6 +103393,120 @@ export type ExportFiltersLazyQueryHookResult = ReturnType<
 export type ExportFiltersQueryResult = Apollo.QueryResult<
   ExportFiltersQuery,
   ExportFiltersQueryVariables
+>;
+export const ListIncidentsFeedDocument = gql`
+  query ListIncidentsFeed(
+    $scheme: SchemeWhereUniqueInput!
+    $where: IncidentWhereInput
+    $order: IncidentOrderByWithRelationInput
+    $take: Int
+    $skip: Int
+  ) {
+    listIncidents(
+      scheme: $scheme
+      where: $where
+      order: $order
+      take: $take
+      skip: $skip
+    ) {
+      incidents {
+        ...IncidentCard
+      }
+      total
+    }
+  }
+  ${IncidentCardFragmentDoc}
+`;
+export function useListIncidentsFeedQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ListIncidentsFeedQuery,
+    ListIncidentsFeedQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    ListIncidentsFeedQuery,
+    ListIncidentsFeedQueryVariables
+  >(ListIncidentsFeedDocument, options);
+}
+export function useListIncidentsFeedLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListIncidentsFeedQuery,
+    ListIncidentsFeedQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ListIncidentsFeedQuery,
+    ListIncidentsFeedQueryVariables
+  >(ListIncidentsFeedDocument, options);
+}
+export type ListIncidentsFeedQueryHookResult = ReturnType<
+  typeof useListIncidentsFeedQuery
+>;
+export type ListIncidentsFeedLazyQueryHookResult = ReturnType<
+  typeof useListIncidentsFeedLazyQuery
+>;
+export type ListIncidentsFeedQueryResult = Apollo.QueryResult<
+  ListIncidentsFeedQuery,
+  ListIncidentsFeedQueryVariables
+>;
+export const OffenderFeedListDocument = gql`
+  query offenderFeedList(
+    $scheme: SchemeWhereUniqueInput!
+    $where: OffenderWhereInput
+    $order: OffenderOrderByWithRelationInput
+    $take: Int
+    $skip: Int
+  ) {
+    listOffenders(
+      scheme: $scheme
+      where: $where
+      order: $order
+      take: $take
+      skip: $skip
+    ) {
+      offenders {
+        ...OffenderCard
+      }
+      total
+    }
+  }
+  ${OffenderCardFragmentDoc}
+`;
+export function useOffenderFeedListQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    OffenderFeedListQuery,
+    OffenderFeedListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<OffenderFeedListQuery, OffenderFeedListQueryVariables>(
+    OffenderFeedListDocument,
+    options
+  );
+}
+export function useOffenderFeedListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    OffenderFeedListQuery,
+    OffenderFeedListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    OffenderFeedListQuery,
+    OffenderFeedListQueryVariables
+  >(OffenderFeedListDocument, options);
+}
+export type OffenderFeedListQueryHookResult = ReturnType<
+  typeof useOffenderFeedListQuery
+>;
+export type OffenderFeedListLazyQueryHookResult = ReturnType<
+  typeof useOffenderFeedListLazyQuery
+>;
+export type OffenderFeedListQueryResult = Apollo.QueryResult<
+  OffenderFeedListQuery,
+  OffenderFeedListQueryVariables
 >;
 export const CreateCsvImportDocument = gql`
   mutation CreateCsvImport($data: CsvImportCreateInput!) {

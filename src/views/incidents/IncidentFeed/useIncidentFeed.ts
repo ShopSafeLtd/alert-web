@@ -1,9 +1,9 @@
 import type {
-  ListIncidentsQuery,
+  ListIncidentsFeedQuery,
   RecycleIncidentMutation,
 } from 'graphql/generated';
 import {
-  ListIncidentsDocument,
+  ListIncidentsFeedDocument,
   Model,
   QueryMode,
   Role,
@@ -11,7 +11,7 @@ import {
   TagType,
   useListBusinessesQuery,
   useListGoodsTypesQuery,
-  useListIncidentsQuery,
+  useListIncidentsFeedQuery,
   useSchemeGroupsQuery,
   useTagsQuery,
 } from 'graphql/generated';
@@ -23,7 +23,7 @@ import type { DateType } from 'types/DataType';
 import type { IncidentFilters } from 'state/data-model';
 
 interface Return {
-  data: ListIncidentsQuery | undefined;
+  data: ListIncidentsFeedQuery | undefined;
   loading: boolean;
   lightboxElements: {
     src: string;
@@ -281,7 +281,7 @@ const useIncidentFeed = (): Return => {
   };
   // Queries
   // Fetch incidents
-  const { data, loading, fetchMore } = useListIncidentsQuery({
+  const { data, loading, fetchMore } = useListIncidentsFeedQuery({
     variables: queryVariables,
     fetchPolicy: 'cache-and-network',
     // skip: role === Role.User && restrictIncidentAccess,
@@ -388,16 +388,16 @@ const useIncidentFeed = (): Return => {
   ) => {
     if (res === null || res === undefined) return;
 
-    const existingData = store.readQuery<ListIncidentsQuery>({
-      query: ListIncidentsDocument,
+    const existingData = store.readQuery<ListIncidentsFeedQuery>({
+      query: ListIncidentsFeedDocument,
       variables: queryVariables,
     });
 
     if (existingData === null) return;
     if (existingData?.listIncidents?.incidents === undefined) return;
 
-    store.writeQuery<ListIncidentsQuery>({
-      query: ListIncidentsDocument,
+    store.writeQuery<ListIncidentsFeedQuery>({
+      query: ListIncidentsFeedDocument,
       data: {
         listIncidents: {
           ...existingData.listIncidents,

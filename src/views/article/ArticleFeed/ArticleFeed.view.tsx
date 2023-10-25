@@ -5,17 +5,7 @@ import type {
   ListArticlesQuery,
   SortOrder,
 } from 'graphql/generated';
-import {
-  Affix,
-  Button,
-  Card,
-  Col,
-  Drawer,
-  Empty,
-  Input,
-  Pagination,
-  Row,
-} from 'antd';
+import { Button, Card, Col, Drawer, Empty, Input, Row } from 'antd';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter, faPlus } from '@fortawesome/pro-light-svg-icons';
@@ -30,6 +20,8 @@ import ArticleCard from 'components/Articles/ArticleCard';
 import ArticleSkeletonCard from 'components/Articles/ArticleSkeletonCard';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { useIntl } from 'react-intl';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import Loading from '../../../components/shared-components/AntD/Loading';
 
 interface Props {
   data:
@@ -39,9 +31,6 @@ interface Props {
   loading: boolean;
   search: string;
   setSearch: (value: string) => void;
-  onPaginationChange: (page: number, pageSize: number) => void;
-  currentPage: number;
-  currentPageSize: number;
   sortFilter: boolean;
   toggleSortFilter: () => void;
   clearFilters: () => void;
@@ -66,18 +55,16 @@ interface Props {
   gallery: string[];
   setGallery: (values: string[]) => void;
   updateArticleList: MutationUpdaterFn<DeleteArticleMutation>;
+  fetchMoreScroll: () => void;
 }
 
 const Article = ({
   data,
   loading,
-  onPaginationChange,
   order,
   setOrder,
   search,
   setSearch,
-  currentPage,
-  currentPageSize,
   priorityFilter,
   setPriorityFilter,
   groups,
@@ -95,145 +82,182 @@ const Article = ({
   setGroupsFilter,
   setCreatedAtFilter,
   updateArticleList,
+  fetchMoreScroll,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return (
-    <div className="feed-container" style={{ padding: 10 }}>
-      <Affix offsetTop={5}>
-        <Card bodyStyle={{ padding: 10 }} style={{ marginBottom: 5 }}>
-          <Row align="middle" gutter={16}>
-            <Col span={4} xxl={6}>
-              <Input
-                size="small"
-                // style={{ width: 350 }}
-                placeholder={intl.formatMessage({
-                  defaultMessage: 'Search Bulletins...',
-                  id: 'bIrv01',
-                })}
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </Col>
-            <Col flex={1}>
-              <CheckTags
-                mode="radio"
-                value={gallery}
-                onChange={setGallery}
-                options={[
-                  {
-                    label: intl.formatMessage({
-                      defaultMessage: 'My Data',
-                      id: 'dr0ueW',
-                    }),
-                    value: 'MYDATA',
-                  },
-                ]}
-              />
-            </Col>
-            <Col>
-              <Button
-                onClick={toggleSortFilter}
-                icon={
-                  <FontAwesomeIcon
-                    icon={faFilter}
-                    size="lg"
-                    style={{ marginRight: 5 }}
-                  />
-                }
-              >
-                {intl.formatMessage({
-                  defaultMessage: 'Sort & Filter',
-                  id: 'f2g3SM',
-                })}
-              </Button>
-            </Col>
-            <Col>
-              <Button
-                type="primary"
-                onClick={onNavigate}
-                icon={
-                  <FontAwesomeIcon
-                    icon={faPlus}
-                    size="lg"
-                    style={{ marginRight: 5 }}
-                  />
-                }
-              >
-                {intl.formatMessage({
-                  defaultMessage: 'Add Bulletin',
-                  id: 'x52+I1',
-                })}
-              </Button>
-            </Col>
-          </Row>
-        </Card>
-      </Affix>
+    <div
+      className="feed-container"
+      style={loading ? {} : { padding: 10, paddingRight: 0 }}
+    >
+      <Card
+        bodyStyle={{ padding: 10 }}
+        style={{ marginBottom: 5, marginRight: 10 }}
+      >
+        <Row align="middle" gutter={16}>
+          <Col span={4} xxl={6}>
+            <Input
+              size="small"
+              // style={{ width: 350 }}
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Search Bulletins...',
+                id: 'bIrv01',
+              })}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </Col>
+          <Col flex={1}>
+            <CheckTags
+              mode="radio"
+              value={gallery}
+              onChange={setGallery}
+              options={[
+                {
+                  label: intl.formatMessage({
+                    defaultMessage: 'My Data',
+                    id: 'dr0ueW',
+                  }),
+                  value: 'MYDATA',
+                },
+              ]}
+            />
+          </Col>
+          <Col>
+            <Button
+              onClick={toggleSortFilter}
+              icon={
+                <FontAwesomeIcon
+                  icon={faFilter}
+                  size="lg"
+                  style={{ marginRight: 5 }}
+                />
+              }
+            >
+              {intl.formatMessage({
+                defaultMessage: 'Sort & Filter',
+                id: 'f2g3SM',
+              })}
+            </Button>
+          </Col>
+          <Col>
+            <Button
+              type="primary"
+              onClick={onNavigate}
+              icon={
+                <FontAwesomeIcon
+                  icon={faPlus}
+                  size="lg"
+                  style={{ marginRight: 5 }}
+                />
+              }
+            >
+              {intl.formatMessage({
+                defaultMessage: 'Add Bulletin',
+                id: 'x52+I1',
+              })}
+            </Button>
+          </Col>
+        </Row>
+      </Card>
 
       <div style={{ paddingBottom: 10 }}>
-        <Row gutter={8}>
-          {loading ? (
-            Array.from({ length: 24 }).map((_, index) => (
+        {loading ? (
+          <Row
+            gutter={[8, 16]}
+            align="stretch"
+            style={{
+              alignItems: 'stretch',
+              padding: 10,
+              overflowX: 'hidden',
+            }}
+          >
+            {Array.from({ length: 24 }).map((_, index) => (
               // eslint-disable-next-line react/no-array-index-key
               <Col key={index} sm={24} md={12} lg={8} xl={8} xxl={6}>
                 <ArticleSkeletonCard inFeedList />
               </Col>
-            ))
-          ) : data?.total ? (
-            data?.articles.map((article) => (
-              <Col sm={24} md={12} lg={8} xl={8} xxl={6} key={article?.id}>
-                <ArticleCard
-                  article={article}
-                  openLightbox={openLightbox}
-                  update={updateArticleList}
-                />
-              </Col>
-            ))
-          ) : (
-            <div
+            ))}
+          </Row>
+        ) : data?.total ? (
+          <InfiniteScroll
+            dataLength={data?.articles.length}
+            next={() => fetchMoreScroll()}
+            hasMore={data?.articles.length < data?.total}
+            loader={<Loading />}
+            height="calc(100vh - 87px)"
+            style={{ overflowX: 'hidden' }}
+            endMessage={
+              <p style={{ textAlign: 'center' }}>
+                {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                <b>-----------</b>
+              </p>
+            }
+          >
+            <Row
+              gutter={[8, 16]}
+              align="stretch"
               style={{
-                display: 'flex',
-                flex: 1,
-                height: 'calc(100vh - 100px)',
-                alignItems: 'center',
-                justifyContent: 'center',
+                alignItems: 'stretch',
+                padding: 10,
+                overflowX: 'hidden',
               }}
             >
-              <Empty
-                description={
-                  search === ''
-                    ? intl.formatMessage({
-                        defaultMessage: 'No Bulletins',
-                        id: '7Pv3BL',
-                      })
-                    : intl.formatMessage({
-                        defaultMessage:
-                          'No bulletins match your search criteria',
-                        id: 'pZaTHe',
-                      })
-                }
-              />
-            </div>
-          )}
-        </Row>
-        <Row justify="center">
-          <Col>
-            <Pagination
-              total={data?.total}
-              // pageSizeOptions={['12']}
-              showSizeChanger={false}
-              pageSize={currentPageSize}
-              current={currentPage}
-              onChange={onPaginationChange}
-              showTotal={(total) =>
-                intl.formatMessage(
-                  { defaultMessage: `Total Bulletins: {total}`, id: '8LkFAr' },
-                  { total }
-                )
+              {data?.articles.map((article) => (
+                <Col sm={24} md={12} lg={8} xl={8} xxl={6} key={article?.id}>
+                  <ArticleCard
+                    article={article}
+                    openLightbox={openLightbox}
+                    update={updateArticleList}
+                  />
+                </Col>
+              ))}
+            </Row>
+          </InfiniteScroll>
+        ) : (
+          <div
+            style={{
+              display: 'flex',
+              flex: 1,
+              height: 'calc(100vh - 100px)',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Empty
+              description={
+                search === ''
+                  ? intl.formatMessage({
+                      defaultMessage: 'No Bulletins',
+                      id: '7Pv3BL',
+                    })
+                  : intl.formatMessage({
+                      defaultMessage: 'No bulletins match your search criteria',
+                      id: 'pZaTHe',
+                    })
               }
-              hideOnSinglePage
             />
-          </Col>
-        </Row>
+          </div>
+        )}
+        {/* <Row justify="center"> */}
+        {/*   <Col> */}
+        {/*     <Pagination */}
+        {/*       total={data?.total} */}
+        {/*       // pageSizeOptions={['12']} */}
+        {/*       showSizeChanger={false} */}
+        {/*       pageSize={currentPageSize} */}
+        {/*       current={currentPage} */}
+        {/*       onChange={onPaginationChange} */}
+        {/*       showTotal={(total) => */}
+        {/*         intl.formatMessage( */}
+        {/*           { defaultMessage: `Total Bulletins: {total}`, id: '8LkFAr' }, */}
+        {/*           { total } */}
+        {/*         ) */}
+        {/*       } */}
+        {/*       hideOnSinglePage */}
+        {/*     /> */}
+        {/*   </Col> */}
+        {/* </Row> */}
       </div>
       <Drawer
         title={intl.formatMessage({

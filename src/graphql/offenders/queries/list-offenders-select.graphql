@@ -1,4 +1,4 @@
-query listOffenders(
+query listOffendersSelect(
   $scheme: SchemeWhereUniqueInput!
   $where: OffenderWhereInput
   $order: OffenderOrderByWithRelationInput
@@ -42,7 +42,7 @@ query listOffenders(
       }
       images {
         id
-        optimised
+        optimisedPersisted
         position
         rotation
         primary

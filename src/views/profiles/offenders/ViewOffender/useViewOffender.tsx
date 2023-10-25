@@ -258,7 +258,7 @@ const useViewOffender = (offenderId: string): Return => {
 
   useEffect(() => {
     const incidents =
-      window.localStorage.getItem(LINKED_INCIDENTS) === 'fasle'
+      window.localStorage.getItem(LINKED_INCIDENTS) === 'false'
         ? undefined
         : LINKED_INCIDENTS;
     const crimeGroups =

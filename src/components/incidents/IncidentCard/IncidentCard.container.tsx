@@ -1,6 +1,6 @@
 import React from 'react';
 import type {
-  ListIncidentsQuery,
+  IncidentCardFragment,
   RecycleIncidentMutation,
 } from 'graphql/generated';
 import type { MutationUpdaterFn } from '@apollo/client';
@@ -8,10 +8,7 @@ import View from './IncidentCard.view';
 import useIncidentCard from './useIncidentCard';
 
 interface Props {
-  incident: Exclude<
-    ListIncidentsQuery['listIncidents'],
-    undefined | null
-  >['incidents'][0];
+  incident: IncidentCardFragment;
   openLightbox: (elements: { src: string }[], index: number) => void;
   update?: MutationUpdaterFn<RecycleIncidentMutation>;
 }

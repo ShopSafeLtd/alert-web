@@ -433,7 +433,7 @@ const OffenderProfile = ({
                       action={
                         facialRec
                           ? import.meta.env
-                              .VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT
+                              .VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT_GO
                           : import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT
                       }
                       showUploadList={false}

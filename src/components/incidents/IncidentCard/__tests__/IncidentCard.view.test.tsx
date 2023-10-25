@@ -14,11 +14,7 @@ describe('Detail Officer View', () => {
     time: '2022-08-11T10:40:09.985Z',
     dayTime: '11:40 - Wed 10, Aug 22',
     description: 'test description',
-    createdBy: {
-      fullName: 'aaa',
-      id: 'cl4pe3eu91312371op4c4k2lih2',
-      businesses: [{ name: 'user business', id: '' }],
-    },
+    createdByUser: false,
     crimeTypes: [{ id: 'ckdhdhmr500186mnyy5k9sunm', name: 'Theft & Handling' }],
     groups: [{ id: 'ckqtnb4r056540229myw4yk8zvq', name: 'NightSafe' }],
     images: [

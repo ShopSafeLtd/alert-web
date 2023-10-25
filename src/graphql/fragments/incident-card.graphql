@@ -1,0 +1,36 @@
+fragment IncidentCard on Incident {
+  approved
+  id
+  totalImages
+  crimeTypes {
+    id
+    name
+  }
+  images {
+    low
+    id
+    rotation
+    position
+    primary
+  }
+  subject
+  reference
+  policeRef
+  offenders {
+    name
+    id
+  }
+  dayTime
+  business {
+    name
+  }
+  location {
+    full
+  }
+  description
+  createdByUser
+  groups {
+    id
+    name
+  }
+}
