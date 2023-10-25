@@ -5,13 +5,7 @@ mutation UpdateIncidentLocation(
   updateIncident(where: { id: $id }, data: { location: $location }) {
     id
     location {
-      id
-      premises
-      building
-      street
-      townCity
-      county
-      postcode
+      ...Locations
     }
   }
 }

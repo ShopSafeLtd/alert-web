@@ -95,11 +95,11 @@ const AdminTodos = ({
     >
       <Row align="middle" gutter={5} wrap={false} style={{ marginBottom: 10 }}>
         <Col style={{ minWidth: 'min-content' }}>
-          <Title className={classes.title} level={4}>
+          <Title className={classes.title} style={{ fontSize: 16 }}>
             {intl.formatMessage({ defaultMessage: 'Activities', id: 'UmEsZF' })}
           </Title>
         </Col>
-        <Col flex={1} style={{ marginRight: -10, marginLeft: 10 }}>
+        <Col flex={1} style={{ marginRight: -10, marginLeft: 5 }}>
           <Input
             placeholder={intl.formatMessage({
               defaultMessage: 'Search for a activity...',

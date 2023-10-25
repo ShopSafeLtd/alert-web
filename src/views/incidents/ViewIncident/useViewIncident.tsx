@@ -14,6 +14,7 @@ import type {
   CreateInvestigationMutation,
 } from 'graphql/generated';
 import {
+  useUpdateIncidentLocationMutation,
   Role,
   useAddImagesToIncidentMutation,
   useCreateSimpleOffenderMutation,
@@ -45,6 +46,7 @@ import type {
   EditFeedImage,
   GoodsData,
   ImageCardData,
+  LocationData,
   OffenderData,
   VehicleData,
 } from 'types/DataType';
@@ -173,6 +175,9 @@ interface Return {
   toggleAddInvestigation: () => void;
   addInvestigation: boolean;
   updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
+  editAddress: boolean;
+  toggleEditAddress: () => void;
+  onEditAddress: (value: LocationData) => void;
 }
 
 const useViewIncident = (incidentId: string): Return => {
@@ -193,6 +198,7 @@ const useViewIncident = (incidentId: string): Return => {
   const [addTodo, setAddTodo] = useState(false);
   const [addDocument, setAddDocument] = useState(false);
   const [addInvestigation, setAddInvestigation] = useState(false);
+  const [editAddress, setEditAddress] = useState(false);
 
   const [editUpdate, setEditUpdate] = useState<{
     id: string;
@@ -734,10 +740,7 @@ const useViewIncident = (incidentId: string): Return => {
             data: {
               incident: {
                 ...existingData.incident,
-                vehicles: [
-                  ...existingData.incident.vehicles,
-                  ...res.updateIncident.vehicles,
-                ],
+                vehicles: res.updateIncident.vehicles,
               },
               __typename: 'Query',
             },
@@ -902,7 +905,6 @@ const useViewIncident = (incidentId: string): Return => {
             ProfileUpdatedType.updated
           );
         },
-        // update: updateOffenderList,
       }).finally(() => {
         setEditOffenderData(null);
         setSaving(false);
@@ -1034,10 +1036,7 @@ const useViewIncident = (incidentId: string): Return => {
             data: {
               incident: {
                 ...existingData.incident,
-                offenders: [
-                  ...existingData.incident.offenders,
-                  ...res.updateIncident.offenders,
-                ],
+                offenders: res.updateIncident.offenders,
               },
               __typename: 'Query',
             },
@@ -1114,10 +1113,7 @@ const useViewIncident = (incidentId: string): Return => {
       data: {
         incident: {
           ...existingData.incident,
-          incidentItems: [
-            ...existingData.incident.incidentItems,
-            ...res.updateIncident.incidentItems,
-          ],
+          incidentItems: res.updateIncident.incidentItems,
         },
         __typename: 'Query',
       },
@@ -1396,6 +1392,69 @@ const useViewIncident = (incidentId: string): Return => {
     });
   };
 
+  // location
+  const [updateIncidentLocation] = useUpdateIncidentLocationMutation({
+    onError: () => {
+      errorNotification();
+    },
+  });
+
+  const onEditAddress = (value: LocationData) => {
+    setSaving(true);
+    if (value)
+      void updateIncidentLocation({
+        variables: {
+          id: incidentId,
+          location: {
+            create: {
+              premises: '',
+              building: value.building,
+              street: value.street,
+              townCity: value.townCity,
+              county: value.county,
+              postcode: value.postcode,
+              geoLat: value.geoLat || undefined,
+              geoLng: value.geoLng || undefined,
+            },
+            // upsert: {
+            //   update: {
+            //     premises: { set: '' },
+            //     building: { set: value.building || '' },
+            //     street: { set: value.street || '' },
+            //     townCity: { set: value.townCity || '' },
+            //     county: { set: value.county || '' },
+            //     postcode: { set: value.postcode || '' },
+            //     geoLat: value.geoLat ? { set: value.geoLat } : undefined,
+            //     geoLng: value.geoLng ? { set: value.geoLng } : undefined,
+            //   },
+            //   create: {
+            //     premises: '',
+            //     building: value.building || '',
+            //     street: value.street || '',
+            //     townCity: value.townCity || '',
+            //     county: value.county || '',
+            //     postcode: value.postcode || '',
+            //     geoLat: value.geoLat,
+            //     geoLng: value.geoLng,
+            //   },
+            // },
+          },
+        },
+        onCompleted: () => {
+          successNotification(
+            ProfileUpdatedModel.Address,
+            ProfileUpdatedModel.Incident,
+            ProfileUpdatedType.updated
+          );
+        },
+        // update: updateGoodsList,
+      }).finally(() => {
+        setEditAddress(false);
+        setSaving(false);
+      });
+  };
+  // const onPiNLocation =
+
   const [subscribeToIncident] = useSubscribeToIncidentMutation();
   const [unsubscribeFromIncident] = useUnsubscribeFromIncidentMutation();
 
@@ -1628,6 +1687,9 @@ const useViewIncident = (incidentId: string): Return => {
   const toggleEditImages = () => {
     setEditImages(!editImages);
   };
+  const toggleEditAddress = () => {
+    setEditAddress(!editAddress);
+  };
   const toggleAddOffender = () => {
     setAddOffender(!addOffender);
   };
@@ -1774,6 +1836,9 @@ const useViewIncident = (incidentId: string): Return => {
     addInvestigation,
     toggleAddInvestigation,
     updateInvestigationList,
+    editAddress,
+    toggleEditAddress,
+    onEditAddress,
   };
 };
 

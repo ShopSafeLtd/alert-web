@@ -13,6 +13,7 @@ import type {
   UpdateTaskMutation,
 } from 'graphql/generated';
 import {
+  useUpdateBusinessLocationMutation,
   BusinessDocument,
   useQuestionGroupOnSchemeQuery,
   useDeleteBusinessMutation,
@@ -30,6 +31,7 @@ import { Modal, notification } from 'antd';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 import update from 'immutability-helper';
+import type { LocationData } from 'types/DataType';
 
 interface Return {
   data: BusinessQuery | undefined;
@@ -63,6 +65,7 @@ interface Return {
   setCompleteTodoVisible: (value: string | null) => void;
   updateTodo: MutationUpdaterFn<UpdateTaskMutation>;
   updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
+  onEditAddress: (value: LocationData) => void;
 }
 
 const useViewBusiness = (): Return => {
@@ -148,6 +151,74 @@ const useViewBusiness = (): Return => {
         },
       },
     });
+
+  // update Business
+  const [updateBusinessLocation] = useUpdateBusinessLocationMutation({
+    onCompleted: () => {
+      setSaving(false);
+      notification.success({
+        message: intl.formatMessage({
+          defaultMessage: 'Location of the shop has been updated',
+          id: 'JEoDSx',
+        }),
+        placement: 'bottomRight',
+      });
+    },
+    onError: () => {
+      setSaving(false);
+      errorNotification();
+    },
+  });
+  const onEditAddress = (values: LocationData) => {
+    void updateBusinessLocation({
+      variables: {
+        where: {
+          id: data?.business?.id,
+        },
+        data: {
+          name: { set: data?.business?.name },
+          publicName: data?.business?.publicName || false,
+          location: {
+            where: {
+              id: data?.business?.locations[0]?.id,
+            },
+            data: {
+              building: { set: values.building || '' },
+              county: { set: values.county || '' },
+              postcode: { set: values.postcode || '' },
+              street: { set: values.street || '' },
+              townCity: { set: values.townCity || '' },
+              geoLat: { set: values.geoLat },
+              geoLng: { set: values.geoLng },
+            },
+          },
+        },
+      },
+      // optimisticResponse: {
+      //   updateBusiness: {
+      //     id: `${Math.random()}`,
+      //     name: data?.business?.name,
+      //     fullName: values.name,
+      //     publicName: values.publicName,
+      //     totalUsers: 0,
+      //     parent: values.parent
+      //       ? {
+      //           id: values.parent.value,
+      //           name: values.parent.label,
+      //           fullName: values.parent.label,
+      //           publicName: values.publicName,
+      //         }
+      //       : undefined,
+      //     locations: [
+      //       {
+      //         id: `${Math.random()}`,
+      //         full: `${values.building}, ${values.street}, ${values.townCity}, ${values.county}, ${values.postcode}`,
+      //       },
+      //     ],
+      //   },
+      // },
+    });
+  };
   const [removeUserFromBusiness] = useRemoveUserFromBusinessMutation({
     onCompleted: () => {
       notification.success({
@@ -347,6 +418,7 @@ const useViewBusiness = (): Return => {
       variables,
     });
   };
+
   const toggleEdit = () => {
     setEditVisible(!editVisible);
   };
@@ -599,6 +671,7 @@ const useViewBusiness = (): Return => {
     viewTodoVisible,
     updateTodo,
     updateTodoList,
+    onEditAddress,
   };
 };
 

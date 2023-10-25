@@ -1,10 +1,10 @@
 import React from 'react';
 import { Button, Col, Row, Select, Typography, DatePicker, Form } from 'antd';
-
-import { FeedItemSort } from 'state';
-import { Model } from 'graphql/generated';
+import { SortOrder, Model } from 'graphql/generated';
 import type { DateType } from 'types/DataType';
 import { useIntl } from 'react-intl';
+import type { FeedItemFilters } from 'state/data-model';
+import moment from 'moment';
 import useStyles from './FeedItemFilter.styles';
 
 const { RangePicker } = DatePicker;
@@ -13,36 +13,48 @@ interface FormData {
   date: Date;
 }
 interface Props {
-  order: FeedItemSort;
-  setOrder: (value: FeedItemSort) => void;
+  setOrder: (value: SortOrder) => void;
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
-  groupsFilter: string[];
   setGroupsFilter: (value: string[]) => void;
-  typesFilter: Model[];
   setTypesFilter: (value: Model[]) => void;
   clearFilters: () => void;
   setCreatedAtFilter: (value: DateType | undefined) => void;
+  variables: FeedItemFilters;
 }
 
 const FeedItemFilter = ({
-  order,
   setOrder,
   groups,
   groupsLoading,
-  typesFilter,
   setTypesFilter,
-  groupsFilter,
   setGroupsFilter,
   clearFilters,
   setCreatedAtFilter,
+  variables,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const [form] = useForm<FormData>();
   const intl = useIntl();
+  const {
+    groups: groupsFilter,
+    createdAt: createdAtFilter,
+    types: typesFilter,
+    order,
+  } = variables;
 
   return (
-    <Form form={form}>
+    <Form
+      form={form}
+      initialValues={{
+        createdAt: createdAtFilter
+          ? [
+              moment(createdAtFilter?.startDate),
+              moment(createdAtFilter?.endDate),
+            ]
+          : undefined,
+      }}
+    >
       <Row justify="end">
         <Col>
           <Button
@@ -73,13 +85,13 @@ const FeedItemFilter = ({
             onChange={setOrder}
             size="small"
           >
-            <Select.Option value={FeedItemSort.updatedAtDesc}>
+            <Select.Option value={SortOrder.Desc}>
               {intl.formatMessage({
                 defaultMessage: 'Newest First',
                 id: 'dZYazP',
               })}
             </Select.Option>
-            <Select.Option value={FeedItemSort.updatedAtAsc}>
+            <Select.Option value={SortOrder.Asc}>
               {intl.formatMessage({
                 defaultMessage: 'Oldest First',
                 id: 'FqI37D',
@@ -97,7 +109,7 @@ const FeedItemFilter = ({
             })}
           </Typography.Paragraph>
 
-          <Form.Item name="date">
+          <Form.Item name="date" style={{ marginBottom: 0 }}>
             <RangePicker
               className={classes.select}
               onChange={(value) => {

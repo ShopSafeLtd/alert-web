@@ -31,6 +31,7 @@ interface Props {
   saving: boolean;
   data: ViewInvestigationQuery | undefined;
   loading: boolean;
+  toggleEditInvestigation: () => void;
 }
 
 const ViewDetails = ({
@@ -56,6 +57,7 @@ const ViewDetails = ({
   toggleAddTodo,
   data,
   loading,
+  toggleEditInvestigation,
 }: Props) => {
   const {
     scrolledToTop,
@@ -138,6 +140,7 @@ const ViewDetails = ({
       toggleAddTodo={toggleAddTodo}
       editIncidentId={editIncidentId}
       setEditIncidentId={setEditIncidentId}
+      toggleEditInvestigation={toggleEditInvestigation}
     />
   );
 };

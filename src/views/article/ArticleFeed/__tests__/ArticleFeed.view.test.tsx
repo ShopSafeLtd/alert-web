@@ -25,6 +25,7 @@ describe('Detail Officer View', () => {
           url: null,
         },
         images: [],
+        watermarkImage: false,
         previewImage:
           'https://shopsafealert.blob.core.windows.net/images-1/ed58b498-6067-4f05-8416-85df6a6d02b0-filename-optimised.webp',
         previewText: null,
@@ -41,6 +42,7 @@ describe('Detail Officer View', () => {
       <MemoryRouter>
         <MockedProvider mocks={[]} addTypename={false}>
           <ArticleFeed
+            fetchMoreScroll={jest.fn()}
             setCreatedAtFilter={jest.fn()}
             lightBoxOpen={{
               open: false,
@@ -57,7 +59,6 @@ describe('Detail Officer View', () => {
             loading={false}
             lightboxElements={[]}
             openLightbox={jest.fn()}
-            onPaginationChange={jest.fn()}
             order={SortOrder.Asc}
             setOrder={jest.fn()}
             search=""
@@ -66,8 +67,6 @@ describe('Detail Officer View', () => {
             groupsLoading={false}
             updateArticleList={jest.fn()}
             onNavigate={jest.fn()}
-            currentPage={1}
-            currentPageSize={1}
             priorityFilter={[]}
             setPriorityFilter={jest.fn()}
           />

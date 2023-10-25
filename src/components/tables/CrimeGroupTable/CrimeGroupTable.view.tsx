@@ -114,7 +114,6 @@ const CrimeGroupTable = ({
   const classes = useStyles();
   const navigate = useNavigate();
   const intl = useIntl();
-  console.log('crimeGroups', crimeGroups);
 
   return (
     // <Table<CrimeGroupsTable>
@@ -238,13 +237,10 @@ const CrimeGroupTable = ({
           // totalTheftSuccess: crimeGroup.totalTheftSuccess,
         })) || []
       }
-      pagination={
-        crimeGroups && crimeGroups.length > 5
-          ? {
-              pageSize: 5,
-            }
-          : false
-      }
+      pagination={{
+        hideOnSinglePage: true,
+        pageSize: 5,
+      }}
     />
   );
 };

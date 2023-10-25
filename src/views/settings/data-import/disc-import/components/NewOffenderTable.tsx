@@ -489,6 +489,7 @@ const NewOffenderTable = ({
             }
           )
         }
+        hideOnSinglePage
         pageSizeOptions={[10]}
       />
     </Card>

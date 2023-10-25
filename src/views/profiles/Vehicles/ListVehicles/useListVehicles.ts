@@ -16,16 +16,16 @@ import {
   useListVehiclesQuery,
   useSchemeGroupsQuery,
 } from 'graphql/generated';
-import { useState } from 'react';
-import { useStoreState } from 'state';
+import { useEffect, useState } from 'react';
+import { useStoreActions, useStoreState } from 'state';
 import type { DateType, VehicleData } from 'types/DataType';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
+import type { VehicleFilters } from 'state/data-model';
 
 interface Return {
   data: ListVehiclesQuery | undefined;
   loading: boolean;
-  search: string;
   setSearch: (value: string) => void;
   addVehicle: boolean;
   toggleAddVehicle: () => void;
@@ -35,35 +35,50 @@ interface Return {
   clearFilters: () => void;
   sortFilter: boolean;
   toggleSortFilter: () => void;
-  gallery: string[];
   setGallery: (values: string[]) => void;
-  groupsFilter: string[];
   setGroupsFilter: (value: string[]) => void;
   setCreatedAtFilter: (value: DateType | undefined) => void;
   customGalleriesData: ListCustomGalleriesQuery | undefined;
   onSelectCustomGalleries: (values: string) => void;
-  customGalleries: string[];
-  order: SortOrder;
   setOrder: (value: SortOrder) => void;
   addInvestigation: string;
   toggleAddInvestigation: (value: string) => void;
+  variables: VehicleFilters;
 }
-
+const getSizeOptions = () => {
+  if (window.innerWidth > 1239 && window.innerWidth < 1800) {
+    return ['10', '20', '30'];
+  }
+  if (window.innerWidth > 1799) {
+    return ['10', '20', '30'];
+  }
+  return ['10'];
+};
 const useListVehicles = (): Return => {
   const intl = useIntl();
   const schemeId = useStoreState((state) => state.scheme.id);
-  const { role, id: userId } = useStoreState((state) => state.user);
+  const {
+    role,
+    id: userId,
+    defaultGroups,
+  } = useStoreState((state) => state.user);
+
+  const pagination = useStoreState((state) => state.data.vehicles.pagination);
+  const filterVariables = useStoreState(
+    (state) => state.data.vehicles.variables
+  );
+  const setFilterState = useStoreActions((actions) => actions.data.setVehicles);
   const [addVehicle, setAddVehicle] = useState(false);
-  const [search, setSearch] = useState('');
   const [sortFilter, setSortFilter] = useState(false);
-  const [order, setOrder] = useState<SortOrder>(SortOrder.Desc);
-  const [gallery, setGallery] = useState<string[]>([]);
-  const [customGalleries, setCustomGalleries] = useState<string[]>([]);
-  const [groupsFilter, setGroupsFilter] = useState<string[]>([]);
-  const [createdAtFilter, setCreatedAtFilter] = useState<
-    DateType | undefined
-  >();
   const [addInvestigation, setAddInvestigation] = useState('');
+  const {
+    search,
+    groups: groupsFilter,
+    createdAt: createdAtFilter,
+    gallery,
+    customGalleries,
+    order,
+  } = filterVariables;
 
   const variables = {
     order: {
@@ -83,6 +98,16 @@ const useListVehicles = (): Return => {
             lte: createdAtFilter.endDate,
           }
         : undefined,
+      groups:
+        groupsFilter.length > 0
+          ? {
+              some: {
+                id: {
+                  in: groupsFilter,
+                },
+              },
+            }
+          : undefined,
       createdBy: gallery.includes('MYDATA')
         ? {
             id: {
@@ -118,8 +143,8 @@ const useListVehicles = (): Return => {
           },
         },
         {
-          reference: {
-            equals: Number(search),
+          referenceStr: {
+            contains: search,
           },
         },
         {
@@ -137,10 +162,24 @@ const useListVehicles = (): Return => {
       ],
     },
   };
+
+  // On mount
+  useEffect(() => {
+    const sizeOptions = getSizeOptions();
+    setFilterState({
+      pagination: {
+        ...pagination,
+        sizeOptions,
+        pageSize: Number(sizeOptions[0]),
+      },
+      variables: {
+        ...filterVariables,
+        groups: defaultGroups.map(({ id }) => id),
+      },
+    });
+  }, []);
   const { data: vehiclesData, loading } = useListVehiclesQuery({
     fetchPolicy: 'cache-and-network',
-
-    // @ts-expect-error TODO check the dates on variables, can be Moment or date
     variables,
   });
   const { data: groupData, loading: groupsLoading } = useSchemeGroupsQuery({
@@ -329,9 +368,67 @@ const useListVehicles = (): Return => {
       },
     });
   };
+  const setGallery = (values: string[]) => {
+    setFilterState({
+      pagination,
+      variables: {
+        ...filterVariables,
+        gallery: values,
+      },
+    });
+  };
+  const setCustomGalleries = (values: string[]) => {
+    setFilterState({
+      pagination,
+      variables: {
+        ...filterVariables,
+        customGalleries: values,
+      },
+    });
+  };
+  const setCreatedAtFilter = (values: DateType | undefined) => {
+    setFilterState({
+      pagination,
+      variables: {
+        ...filterVariables,
+        createdAt: values,
+      },
+    });
+  };
+
+  const setOrder = (values: SortOrder) => {
+    setFilterState({
+      pagination,
+      variables: {
+        ...filterVariables,
+        order: values,
+      },
+    });
+  };
+
+  const setSearch = (value: string) => {
+    setFilterState({
+      pagination,
+      variables: {
+        ...filterVariables,
+        search: value,
+      },
+    });
+  };
+  const setGroupsFilter = (values: string[]) => {
+    setFilterState({
+      pagination,
+      variables: {
+        ...filterVariables,
+        groups: values,
+      },
+    });
+  };
+
   const toggleSortFilter = () => {
     setSortFilter(!sortFilter);
   };
+
   const onSelectCustomGalleries = (id: string) => {
     if (id) {
       if (customGalleries.includes(id)) {
@@ -341,15 +438,31 @@ const useListVehicles = (): Return => {
       }
     }
   };
+  // const onSelectGalleries = (id: string) => {
+  //   if (id) {
+  //     if (gallery.includes(id)) {
+  //       setGallery(gallery.filter((index) => index !== id));
+  //     } else {
+  //       setCustomGalleries([...gallery, id]);
+  //     }
+  //   }
+  // };
   const clearFilters = () => {
-    setGroupsFilter([]);
-    setOrder(SortOrder.Desc);
-    setCreatedAtFilter(undefined);
+    setFilterState({
+      pagination,
+      variables: {
+        order: SortOrder.Desc,
+        search: '',
+        createdAt: undefined,
+        gallery: [],
+        customGalleries: [],
+        groups: [],
+      },
+    });
   };
   return {
     data: vehiclesData,
     loading,
-    search,
     setSearch,
     addVehicle,
     toggleAddVehicle,
@@ -361,21 +474,18 @@ const useListVehicles = (): Return => {
         label: group.name,
       })) || [],
     groupsLoading,
-    groupsFilter,
     setGroupsFilter,
     setCreatedAtFilter,
     clearFilters,
     sortFilter,
     toggleSortFilter,
     customGalleriesData,
-    customGalleries,
     onSelectCustomGalleries,
-    gallery,
     setGallery,
-    order,
     setOrder,
     addInvestigation,
     toggleAddInvestigation: setAddInvestigation,
+    variables: filterVariables,
   };
 };
 

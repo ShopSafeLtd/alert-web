@@ -1,0 +1,25 @@
+mutation CreateCrimeGroupSuggestedData($data: CreateCrimeGroupDataInput!) {
+  createCrimeGroup(data: $data) {
+    id
+    alias
+    reference
+    vehicles {
+      ...Vehicles
+      images {
+        id
+        optimised
+        position
+        rotation
+      }
+    }
+    offenders {
+      ...Offenders
+      images {
+        id
+        optimised
+        position
+        rotation
+      }
+    }
+  }
+}

@@ -10,7 +10,7 @@ import moment from 'moment';
 import IncidentDetails from 'components/incidents/IncidentForm/IncidentDetails';
 import Profiles from 'components/incidents/IncidentForm/Profiles';
 import ImageSection from 'components/incidents/IncidentForm/ImageSection';
-import AddLocation from 'components/form-components/incident/location/AddLocation';
+import AddLocation from 'components/form-components/addresses/AddLocation';
 import { useIntl } from 'react-intl';
 import useStyles from './AddIncident.styles';
 import type { FormData } from './useAddIncident';

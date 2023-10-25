@@ -44,7 +44,7 @@ interface Props {
 
 const IncidentTable = ({
   incidents,
-  pageSize = 5,
+  pageSize,
   hasNavigation,
   onDelete,
   deleteRights,
@@ -199,13 +199,10 @@ const IncidentTable = ({
             (incident?.totalValue || 0) - (incident?.totalRecoveredValue || 0),
         })) || []
       }
-      pagination={
-        incidents && incidents.length > pageSize
-          ? {
-              pageSize,
-            }
-          : false
-      }
+      pagination={{
+        hideOnSinglePage: true,
+        pageSize: pageSize || 5,
+      }}
     />
   );
 };

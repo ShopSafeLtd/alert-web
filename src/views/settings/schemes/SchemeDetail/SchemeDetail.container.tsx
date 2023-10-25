@@ -17,6 +17,7 @@ const SchemeDetail = (): JSX.Element => {
     tags,
     updateTagParent,
   } = useSchemeDetail();
+
   return (
     <View
       darkFileList={darkFileList}

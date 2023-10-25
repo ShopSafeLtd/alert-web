@@ -6,13 +6,10 @@ const ArticleFeed = (): JSX.Element => {
   const {
     data,
     loading,
-    onPaginationChange,
     order,
     setOrder,
     search,
     setSearch,
-    currentPage,
-    currentPageSize,
     priorityFilter,
     setPriorityFilter,
     groups,
@@ -30,10 +27,12 @@ const ArticleFeed = (): JSX.Element => {
     setGroupsFilter,
     setCreatedAtFilter,
     updateArticleList,
+    fetchMoreScroll,
   } = useArticleFeed();
 
   return (
     <View
+      fetchMoreScroll={fetchMoreScroll}
       lightBoxOpen={lightBoxOpen}
       lightboxElements={lightboxElements}
       openLightbox={openLightbox}
@@ -41,9 +40,6 @@ const ArticleFeed = (): JSX.Element => {
       loading={loading}
       search={search}
       setSearch={setSearch}
-      onPaginationChange={onPaginationChange}
-      currentPage={currentPage}
-      currentPageSize={currentPageSize}
       order={order}
       setOrder={setOrder}
       groups={groups}

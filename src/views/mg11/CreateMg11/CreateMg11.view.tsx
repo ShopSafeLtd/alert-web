@@ -897,7 +897,7 @@ const CreateMg11 = ({
                                       update(
                                         ReactDOMServer.renderToString(
                                           <img
-                                            src={`data:application/pdf;base64,${base64result}`}
+                                            src={base64File}
                                             alt="file"
                                             height={100}
                                             width={300}
@@ -1082,6 +1082,17 @@ const CreateMg11 = ({
                                         const base64result =
                                           base64File.split(',')[1];
 
+                                        // file mime type
+                                        console.log(
+                                          ReactDOMServer.renderToString(
+                                            <img
+                                              src={base64File}
+                                              alt="file"
+                                              height={100}
+                                              width={300}
+                                            />
+                                          )
+                                        );
                                         interviewerSetFile({
                                           file: base64result,
                                           name: f.name,
@@ -1089,7 +1100,7 @@ const CreateMg11 = ({
                                         update(
                                           ReactDOMServer.renderToString(
                                             <img
-                                              src={`data:application/pdf;base64,${base64result}`}
+                                              src={base64File}
                                               alt="file"
                                               height={100}
                                               width={300}

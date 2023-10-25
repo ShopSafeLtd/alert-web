@@ -36,14 +36,7 @@ query EditIncidentFeed($where: IncidentWhereUniqueInput!) {
         id
       }
     }
-    location {
-      id
-      building
-      street
-      townCity
-      county
-      postcode
-    }
+
     approved
     business {
       id

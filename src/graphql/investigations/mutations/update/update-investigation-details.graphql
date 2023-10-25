@@ -1,0 +1,10 @@
+mutation UpdateInvestigationDetails(
+  $where: UniqueId!
+  $data: UpdateInvestigationInput!
+) {
+  updateInvestigation(where: $where, data: $data) {
+    id
+    description
+    name
+  }
+}

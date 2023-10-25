@@ -1,0 +1,5 @@
+mutation CreateCsvImport($data: CsvImportCreateInput!) {
+  createOneCsvImport(data: $data) {
+    id
+  }
+}

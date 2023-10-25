@@ -6,36 +6,24 @@ const FeedItems = (): JSX.Element => {
   const {
     data,
     loading,
-
     recentOffenderData,
     recentOffenderLoading,
-    // onPaginationChange,
-    // pagination,
-
-    search,
+    setOrder,
     setSearch,
-    fetchMoreScroll,
-
-    // updateIncidentList,
-    // onNavigate,
+    groups,
+    groupsLoading,
+    variables,
     onDeleteFeedItem,
     saving,
     adminRights,
-    typesFilter,
     setTypesFilter,
-    groupsFilter,
     setGroupsFilter,
     sortFilter,
     toggleSortFilter,
     clearFilters,
-    order,
-    setOrder,
-    groups,
-    groupsLoading,
-    gallery,
     setGallery,
     setCreatedAtFilter,
-    createdAtFilter,
+    fetchMoreScroll,
   } = useFeedItems();
 
   return (
@@ -45,30 +33,21 @@ const FeedItems = (): JSX.Element => {
       loading={loading}
       recentOffenderData={recentOffenderData}
       recentOffenderLoading={recentOffenderLoading}
-      // onPaginationChange={onPaginationChange}
-      // pagination={pagination}
-      search={search}
+      variables={variables}
       setSearch={setSearch}
       onDeleteFeedItem={onDeleteFeedItem}
       saving={saving}
       adminRights={adminRights}
-      // updateIncidentList={updateIncidentList}
-      // onNavigate={onNavigate}
-      typesFilter={typesFilter}
       setTypesFilter={setTypesFilter}
-      groupsFilter={groupsFilter}
       setGroupsFilter={setGroupsFilter}
       sortFilter={sortFilter}
       toggleSortFilter={toggleSortFilter}
       clearFilters={clearFilters}
-      order={order}
       setOrder={setOrder}
       groups={groups}
       groupsLoading={groupsLoading}
-      gallery={gallery}
       setGallery={setGallery}
       setCreatedAtFilter={setCreatedAtFilter}
-      createdAtFilter={createdAtFilter}
     />
   );
 };

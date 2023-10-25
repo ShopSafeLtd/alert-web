@@ -1,0 +1,90 @@
+query listOffendersSelect(
+  $scheme: SchemeWhereUniqueInput!
+  $where: OffenderWhereInput
+  $order: OffenderOrderByWithRelationInput
+  $take: Int
+  $skip: Int
+) {
+  listOffenders(
+    scheme: $scheme
+    where: $where
+    order: $order
+    take: $take
+    skip: $skip
+  ) {
+    offenders {
+      id
+      reference
+      totalImages
+      createdAt
+      updatedAt
+      totalIncidents
+      reference
+      age
+      build
+      height
+      dateOfBirth
+      dateSource
+      hair
+      gender
+      name
+      race
+      peculiarities
+      approved
+      active
+      lastActive {
+        id
+        dayTime
+      }
+      tags {
+        id
+        name
+      }
+      images {
+        id
+        optimisedPersisted
+        position
+        rotation
+        primary
+        policeImage
+      }
+      groups {
+        id
+        name
+      }
+      tags {
+        id
+        name
+      }
+      createdBy {
+        id
+        fullName
+        businesses {
+          id
+          name
+        }
+      }
+      incidents {
+        id
+        reference
+        subject
+        description
+        dayTime
+        date
+        location {
+          id
+          full
+        }
+        createdBy {
+          id
+          fullName
+          businesses {
+            id
+            name
+          }
+        }
+      }
+    }
+    total
+  }
+}

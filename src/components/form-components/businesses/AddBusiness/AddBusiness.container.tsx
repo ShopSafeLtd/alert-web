@@ -10,9 +10,10 @@ interface Props {
 }
 
 const AddBusiness = ({ onClose, update, saving }: Props) => {
-  const { onSubmit, onSearchBusiness } = useAddBusiness({
-    update,
-  });
+  const { onSubmit, onSearchBusiness, form, location, setLocation } =
+    useAddBusiness({
+      update,
+    });
 
   return (
     <View
@@ -20,6 +21,9 @@ const AddBusiness = ({ onClose, update, saving }: Props) => {
       onClose={onClose}
       onSearchBusiness={onSearchBusiness}
       saving={saving}
+      form={form}
+      location={location}
+      setLocation={setLocation}
     />
   );
 };

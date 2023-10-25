@@ -3,6 +3,7 @@ import type {
   FeedItemsQuery,
   ListOffendersFeedQuery,
   Model,
+  SortOrder,
 } from 'graphql/generated';
 import { FeedItemType } from 'graphql/generated';
 import {
@@ -38,7 +39,6 @@ import type { DateType } from 'types/DataType';
 import InvestigationFeed from 'components/feedItems/FeedItemSection/investigationFeed';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import FeedItemFilter from 'components/feedItems/FeedItemFilter';
-import type { FeedItemSort } from 'state';
 import VehicleFeed from 'components/feedItems/FeedItemSection/VehicleFeed';
 import CrimeGroupFeed from 'components/feedItems/FeedItemSection/CrimeGroupFeed';
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
@@ -49,6 +49,7 @@ import ArticlesSection from 'components/feedItems/Articles/ArticlesSection';
 import FormatCalendar from 'utils/format-calendar-24h';
 import { useIntl } from 'react-intl';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import type { FeedItemFilters } from 'state/data-model';
 import useStyles from './FeedItem.styles';
 import Loading from '../../components/shared-components/AntD/Loading';
 
@@ -58,34 +59,25 @@ const { confirm } = Modal;
 interface Props {
   data: FeedItemsQuery | undefined;
   loading: boolean;
-
   recentOffenderData: ListOffendersFeedQuery | undefined;
   recentOffenderLoading: boolean;
-  // onPaginationChange: (page: number, pageSize: number) => void;
-  // pagination: { page: number; pageSize: number; sizeOptions: string[] };
-
-  search: string;
+  setOrder: (value: SortOrder) => void;
   setSearch: (value: string) => void;
-
+  groups: { value: string; label: string }[];
+  groupsLoading: boolean;
+  // updateIncidentList: MutationUpdaterFn<RecycleIncidentMutation>;
   onDeleteFeedItem: (value: string) => void;
   saving: boolean;
   adminRights: boolean;
   sortFilter: boolean;
   toggleSortFilter: () => void;
-  groupsFilter: string[];
   setGroupsFilter: (value: string[]) => void;
-  typesFilter: Model[];
   setTypesFilter: (value: Model[]) => void;
   clearFilters: () => void;
-  order: FeedItemSort;
-  setOrder: (value: FeedItemSort) => void;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
-  gallery: string[];
   setGallery: (values: string[]) => void;
   setCreatedAtFilter: (value: DateType | undefined) => void;
-  createdAtFilter: DateType | undefined;
   fetchMoreScroll: () => void;
+  variables: FeedItemFilters;
 }
 
 const FeedItem = ({
@@ -93,34 +85,33 @@ const FeedItem = ({
   loading,
   recentOffenderData,
   recentOffenderLoading,
-  // onPaginationChange,
-  // pagination,
-  search,
+  setOrder,
   setSearch,
+  groups,
+  groupsLoading,
+  variables,
   onDeleteFeedItem,
   saving,
   adminRights,
-  typesFilter,
   setTypesFilter,
-  groupsFilter,
   setGroupsFilter,
   sortFilter,
   toggleSortFilter,
   clearFilters,
-  order,
-  setOrder,
-  groups,
-  groupsLoading,
-  gallery,
   setGallery,
   setCreatedAtFilter,
-  createdAtFilter,
   fetchMoreScroll,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
   const total = data?.listFeedItems?.total || 0;
   const feedItems = data?.listFeedItems?.feedItems.length || 0;
+  const {
+    search,
+    gallery,
+    groups: groupsFilter,
+    createdAt: createdAtFilter,
+  } = variables;
   return (
     <div
       className="feed-container"
@@ -596,7 +587,7 @@ const FeedItem = ({
             </Col>
             {adminRights && (
               <Col span={12} style={{ height: '100%' }}>
-                <AdminTodos fullSearch={search} groupsFilter={groupsFilter} />
+                <AdminTodos fullSearch={search} />
               </Col>
             )}
           </Row>
@@ -612,13 +603,11 @@ const FeedItem = ({
         width={500}
       >
         <FeedItemFilter
-          order={order}
+          variables={variables}
           setOrder={setOrder}
           groups={groups}
           groupsLoading={groupsLoading}
-          typesFilter={typesFilter}
           setTypesFilter={setTypesFilter}
-          groupsFilter={groupsFilter}
           setGroupsFilter={setGroupsFilter}
           clearFilters={clearFilters}
           setCreatedAtFilter={setCreatedAtFilter}

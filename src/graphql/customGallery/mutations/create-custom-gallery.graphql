@@ -1,0 +1,10 @@
+mutation createCustomGallery($data: CreateCustomGalleryInput!) {
+  createCustomGallery(data: $data) {
+    id
+    name
+    description
+    groups {
+      id
+    }
+  }
+}

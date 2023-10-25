@@ -17,6 +17,7 @@ import { useStoreState } from 'state';
 
 export interface OffenderData {
   id: string;
+  reference?: number | null;
   updatedAt?: Date;
   name?: string | null;
   age?: Age | null;
@@ -34,10 +35,6 @@ export interface OffenderData {
         name: string;
       }[]
     | undefined;
-  tags: {
-    id: string;
-    name: string;
-  }[];
   images?: {
     id: string;
     optimised?: string | null;
@@ -49,6 +46,10 @@ export interface OffenderData {
     rotation: number;
   }[];
   imageUid?: string[] | undefined;
+  tags: {
+    id: string;
+    name: string;
+  }[];
   lastActive:
     | { id: string; dayTime?: string | null | undefined }
     | null
@@ -166,8 +167,8 @@ const useAddExistingOffender = ({
             },
           },
           {
-            reference: {
-              equals: Number(search),
+            referenceStr: {
+              contains: search,
             },
           },
         ],
@@ -237,7 +238,7 @@ const useAddExistingOffender = ({
     ) {
       update({
         id: selectedOffender.id,
-        updatedAt: selectedOffender.updatedAt,
+        reference: selectedOffender.reference,
         name: selectedOffender.name,
         age: selectedOffender.age || null,
         gender: selectedOffender.gender || null,

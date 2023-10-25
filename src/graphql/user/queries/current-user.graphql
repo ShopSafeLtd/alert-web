@@ -23,6 +23,13 @@ query currentUser($scheme: UniqueId) {
         id
       }
     }
+    defaultGroups {
+      id
+      name
+      scheme {
+        id
+      }
+    }
     schemes {
       id
       role

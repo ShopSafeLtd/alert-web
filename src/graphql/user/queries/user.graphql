@@ -39,7 +39,11 @@ query User(
       id
       name
     }
-    approverGroups {
+    approverGroups(where: $groupWhere) {
+      id
+      name
+    }
+    defaultGroups(where: $groupWhere) {
       id
       name
     }

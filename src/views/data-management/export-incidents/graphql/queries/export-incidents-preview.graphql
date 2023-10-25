@@ -1,0 +1,18 @@
+query PreviewIncidentExport(
+  $where: IncidentExportInput!
+  $take: Int!
+  $skip: Int!
+) {
+  previewIncidentExport(where: $where, take: $take, skip: $skip) {
+    activityCount
+    incidentCount
+    incidentItemsCount
+    incidents {
+      id
+      date
+      description
+    }
+    offenderCount
+    vehicleCount
+  }
+}

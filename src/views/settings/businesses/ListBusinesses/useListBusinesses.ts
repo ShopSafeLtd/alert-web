@@ -244,6 +244,8 @@ const useListBusinesses = (): Return => {
             postcode: values.locations[0].postcode || '',
             street: values.locations[0].street || '',
             townCity: values.locations[0].townCity || '',
+            geoLat: values.locations[0].geoLat,
+            geoLng: values.locations[0].geoLng,
           },
         },
       },

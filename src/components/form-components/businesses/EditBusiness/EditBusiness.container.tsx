@@ -8,9 +8,16 @@ interface Props {
 }
 
 const EditBusiness = ({ onClose, businessId }: Props) => {
-  const { onSubmit, onSearchBusiness, saving, form, loading } = useEditBusiness(
-    { onClose, businessId }
-  );
+  const {
+    onSubmit,
+    onSearchBusiness,
+    saving,
+    form,
+    loading,
+    location,
+    setLocation,
+  } = useEditBusiness({ onClose, businessId });
+  console.log('EditBusiness', location);
 
   return (
     <View
@@ -20,6 +27,8 @@ const EditBusiness = ({ onClose, businessId }: Props) => {
       saving={saving}
       form={form}
       loading={loading}
+      location={location}
+      setLocation={setLocation}
     />
   );
 };

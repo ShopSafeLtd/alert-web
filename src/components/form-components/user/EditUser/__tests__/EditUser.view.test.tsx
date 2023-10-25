@@ -48,6 +48,7 @@ describe('Detail Officer View', () => {
       offenderEmail: true,
       offenderPush: true,
       approverGroups: [],
+      defaultGroups: [],
     },
   };
 

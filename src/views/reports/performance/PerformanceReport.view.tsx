@@ -233,8 +233,8 @@ const PerformanceReport = ({
         <Title level={2} className="print-title">
           {intl.formatMessage(
             {
-              defaultMessage: 'Performance Report: {startDate} - {endDate}',
-              id: 'DgIVkj',
+              defaultMessage: 'Summary Report: {startDate} - {endDate}',
+              id: 'CT8UPX',
             },
             {
               startDate: dateRange.startDate.toLocaleDateString(),

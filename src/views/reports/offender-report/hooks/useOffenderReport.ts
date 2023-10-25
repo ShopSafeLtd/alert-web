@@ -163,9 +163,8 @@ const useOffenderReport = (): Return => {
         successRate: ((business.totalSuccessRate || 0) * 100).toFixed(2),
         commonLost: business.mostCommonGoodLost || 'unknown',
         highestValueLost:
-          Number.parseInt(
-            (business.highestTotalValueGoodLost || 0).toFixed(2),
-            10
+          Number.parseFloat(
+            (business.highestTotalValueGoodLost || 0).toFixed(2)
           ) || 0,
         avgLost: business?.averageLossValue?.toFixed(2) || '0',
       })) || [];

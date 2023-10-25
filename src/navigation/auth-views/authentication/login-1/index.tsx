@@ -13,9 +13,9 @@ const getRedirect = () => {
   if (location.includes('localhost')) {
     return location;
   }
-  if (location.includes('staging')) {
-    return 'https://app.shopsafealert.co.uk/';
-  }
+  // if (location.includes('staging')) {
+  //   return 'https://app.shopsafealert.co.uk/';
+  // }
   return location;
 };
 

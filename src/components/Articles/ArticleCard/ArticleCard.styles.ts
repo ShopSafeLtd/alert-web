@@ -9,6 +9,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
     overflow: 'hidden',
     margin: '5px 5px 10px 5px',
     paddingBottom: 10,
+    height: 550,
   },
   image: {
     width: '100%',
@@ -59,9 +60,9 @@ const useStyles = createUseStyles((theme: Theme) => ({
   },
   menuButton: {
     position: 'absolute',
-    top: 0,
+    top: 5,
     right: 9,
-    zIndex: 1,
+    zIndex: 100,
     width: 45,
     borderTopRightRadius: 8,
     borderBottomRightRadius: 0,
@@ -71,7 +72,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
   content: {
     display: 'flex',
     flexDirection: 'column',
-    height: 200,
+    height: 240,
     margin: '10px 20px 0px',
   },
   details: { flex: 1 },

@@ -1,5 +1,25 @@
 function extracted(html: string | undefined): string {
   const doc = new DOMParser().parseFromString(html || '', 'text/html');
+  const links = doc.getElementsByTagName('a');
+  const currentUrl = window.location.href;
+
+  const currentUrlSplit = currentUrl.split('/app/');
+  if (currentUrlSplit.length > 1) {
+    currentUrlSplit[0] = `${currentUrlSplit[0]}/app`;
+  }
+
+  // eslint-disable-next-line no-restricted-syntax, @typescript-eslint/naming-convention,no-underscore-dangle
+  for (const link_ of links) {
+    const href = link_.getAttribute('href');
+    if (
+      href &&
+      (href.startsWith('../../offenders/') ||
+        href.startsWith('../../incidents/'))
+    ) {
+      link_.setAttribute('href', href.replace('../..', currentUrlSplit[0]));
+    }
+  }
+
   const imgs = doc.getElementsByTagName('img');
   // eslint-disable-next-line no-restricted-syntax, @typescript-eslint/naming-convention,no-underscore-dangle
   for (const img_ of imgs) {

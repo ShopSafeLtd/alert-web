@@ -18,13 +18,7 @@ mutation updateIncident($where: UniqueId!, $data: IncidentUpdateInput!) {
     }
     approved
     location {
-      id
-      building
-      street
-      townCity
-      county
-      postcode
-      full
+      ...Locations
     }
     createdBy {
       id

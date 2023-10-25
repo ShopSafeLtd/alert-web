@@ -1,0 +1,6 @@
+query GoodsTypes {
+  goodsTypes {
+    id
+    name
+  }
+}

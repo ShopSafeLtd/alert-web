@@ -90,6 +90,10 @@ const EditUser = ({
           data?.user?.approverGroups && data.user.approverGroups.length > 0
             ? data.user.approverGroups.map(({ id }) => id)
             : [],
+        defaultGroups:
+          data?.user?.defaultGroups && data.user.defaultGroups.length > 0
+            ? data.user.defaultGroups.map(({ id }) => id)
+            : [],
         chats:
           data?.user?.chats && data.user.chats.length > 0
             ? data.user.chats.map(({ chat }) => chat.id)
@@ -361,10 +365,9 @@ const EditUser = ({
         </Col>
       </Row>
 
-      {selectedRole === Role.SchemeAdmin &&
-        selectedGroups &&
-        selectedGroups.length > 0 && (
-          <Row gutter={16}>
+      {selectedGroups && selectedGroups.length > 0 && (
+        <Row gutter={16}>
+          {selectedRole === Role.SchemeAdmin && (
             <Col span={12}>
               <Form.Item
                 name="approverGroups"
@@ -386,8 +389,30 @@ const EditUser = ({
                 />
               </Form.Item>
             </Col>
-          </Row>
-        )}
+          )}
+          <Col span={12}>
+            <Form.Item
+              name="defaultGroups"
+              label={intl.formatMessage({
+                defaultMessage: 'Default Groups',
+                id: '2KZp/e',
+              })}
+            >
+              <Select
+                loading={chatsLoading}
+                disabled={saving}
+                mode="multiple"
+                maxTagCount={3}
+                options={groupsData?.filter(({ value }) =>
+                  selectedGroups.includes(value)
+                )}
+                optionFilterProp="label"
+                optionLabelProp="label"
+              />
+            </Form.Item>
+          </Col>
+        </Row>
+      )}
       <Row>
         <Col span={12}>
           <Form.Item

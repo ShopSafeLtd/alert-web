@@ -91,8 +91,8 @@ const useLinkVehicle = ({
             },
           },
           {
-            reference: {
-              equals: Number(search),
+            referenceStr: {
+              contains: search,
             },
           },
         ],

@@ -13,7 +13,7 @@ const useStyles = createUseStyles({
     maxHeight: '100vh',
     width: 250,
     maxWidth: 250,
-    overflowY: 'scroll',
+    overflowY: 'auto',
 
     '& .ant-pagination': {
       margin: '15px 0',

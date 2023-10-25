@@ -52,6 +52,7 @@ import {
   faUser,
   faUserClock,
   faUserHair,
+  faUserPen,
   faUsers,
   faUserTag,
 } from '@fortawesome/pro-light-svg-icons';
@@ -95,8 +96,6 @@ import FeedImageEditor from 'components/form-components/ImageEditor/FeedImageEdi
 import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
 import EditExclusion from 'components/form-components/offender/exclusion/EditExclusion';
 import AddExclusion from 'components/form-components/offender/exclusion/AddExclusion';
-import NewOffenderAddress from 'components/form-components/addresses/NewOffenderAddress';
-import EditOffenderAddress from 'components/form-components/addresses/EditOffenderAddress';
 import LinkCrimeGroup from 'components/form-components/linkOptions/LinkCrimeGroup';
 import EditOffenderFeed from 'components/form-components/offender/EditOffenderFeed';
 import EvidenceTable from 'components/tables/EvidenceTable';
@@ -108,6 +107,8 @@ import EditVehicleSimple from 'components/form-components/Vehicle/EditVehicleSim
 import CopyOffender from 'components/form-components/offender/CopyOffender';
 import InvestigationTable from 'components/tables/InvestigationTable';
 import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
+import { useNavigate } from 'react-router';
+import AddLocation from 'components/form-components/addresses/AddLocation';
 import useStyles from './ViewOffender.styles';
 import type { ViewAssociate } from './useViewOffender';
 import TranslateButton from '../../../../components/util-components/TranslateButton';
@@ -326,6 +327,8 @@ const ViewOffender = ({
 }: Props): JSX.Element => {
   const intl = useIntl();
   const classes = useStyles();
+  const navigate = useNavigate();
+
   const expandedRowRender = (record: TableItem) => (
     <Text style={{ fontSize: 14, padding: 0, margin: 0 }}>
       {intl.formatMessage(
@@ -496,21 +499,57 @@ const ViewOffender = ({
                         </Dropdown>
                       </Col>
                     )}
-                    {editRights && (
-                      <Col>
-                        <Button type="ghost" onClick={toggleCopyOffender}>
+
+                    <Col>
+                      <Dropdown
+                        overlay={
+                          <Menu
+                            items={[
+                              {
+                                key: 0,
+                                label: intl.formatMessage({
+                                  defaultMessage: 'Copy Offender',
+                                  id: 'rtuqfd',
+                                }),
+                                onClick: () => toggleCopyOffender(),
+                                icon: <FontAwesomeIcon icon={faCopy} />,
+                              },
+
+                              {
+                                key: 1,
+                                label: intl.formatMessage({
+                                  defaultMessage: 'Compare Offender',
+                                  id: 'Y64oGy',
+                                }),
+                                onClick: () =>
+                                  navigate(
+                                    `/app/offenders/compare/${
+                                      data?.offender?.id || ''
+                                    }`
+                                  ),
+                                icon: (
+                                  <FontAwesomeIcon size="lg" icon={faUsers} />
+                                ),
+                              },
+                            ].filter((item) => item?.key !== 0 || editRights)}
+                          />
+                        }
+                        placement="bottomRight"
+                        arrow={{ pointAtCenter: true }}
+                      >
+                        <Button type="ghost">
                           <FontAwesomeIcon
                             size="1x"
                             style={{ marginRight: 8 }}
-                            icon={faCopy}
+                            icon={faUserPen}
                           />
                           {intl.formatMessage({
-                            defaultMessage: 'Copy Offender',
-                            id: 'rtuqfd',
+                            defaultMessage: 'Offenders',
+                            id: 'xb54TN',
                           })}
                         </Button>
-                      </Col>
-                    )}
+                      </Dropdown>
+                    </Col>
                     {deleteRights && (
                       <Col>
                         <Button
@@ -533,30 +572,6 @@ const ViewOffender = ({
                   {loading ? (
                     <Skeleton />
                   ) : (
-                    // <Row
-                    //   style={{
-                    //     width: '100%',
-                    //     marginBottom: 20,
-                    //     marginLeft: 10,
-                    //   }}
-                    // >
-                    //   <Row gutter={8} className={classes.offenderRow}>
-                    //     {Array.from({ length: 3 }).map((_, index) => (
-                    //       // eslint-disable-next-line react/no-array-index-key
-                    //       <Col key={index}>
-                    //         <Skeleton.Avatar
-                    //           active
-                    //           shape="square"
-                    //           style={{
-                    //             height: 200,
-                    //             width: 150,
-                    //             borderRadius: '0.625rem',
-                    //           }}
-                    //         />
-                    //       </Col>
-                    //     ))}
-                    //   </Row>
-                    // </Row>
                     <Row
                       gutter={[8, 8]}
                       justify="start"
@@ -1227,10 +1242,21 @@ const ViewOffender = ({
                               id: 'mtr3R4',
                             })}
                           </Title>
-                          <IncidentTable
-                            incidents={data?.offender?.incidents || []}
-                            hasNavigation
-                          />
+                          {data?.offender?.incidents.length && !loading ? (
+                            <IncidentTable
+                              incidents={data?.offender?.incidents || []}
+                              hasNavigation
+                            />
+                          ) : (
+                            <Empty
+                              description={intl.formatMessage({
+                                defaultMessage:
+                                  'No incidents for this offender',
+                                id: 'wOpY6l',
+                              })}
+                              image={Empty.PRESENTED_IMAGE_SIMPLE}
+                            />
+                          )}
                         </Card>
                         <Card loading={loading}>
                           <Row
@@ -1266,183 +1292,195 @@ const ViewOffender = ({
                               </Col>
                             )}
                           </Row>
-                          <Table
-                            size="small"
-                            loading={loading}
-                            pagination={
-                              data?.offender?.bans &&
-                              data.offender.bans.length > 5
-                                ? {
-                                    pageSize: 5,
-                                  }
-                                : false
-                            }
-                            expandable={{
-                              expandedRowRender,
-                              rowExpandable: (record) => !!record.description,
-                            }}
-                            columns={[
-                              {
-                                key: 'duration',
-                                title: intl.formatMessage({
-                                  defaultMessage: 'Duration',
-                                  id: 'IuFETn',
-                                }),
-                                dataIndex: 'duration',
-                                width: 110,
-                                render: (value) => <Text>{value}</Text>,
-                              },
-                              {
-                                key: 'activeDay',
-                                title: intl.formatMessage({
-                                  defaultMessage: 'Active Days',
-                                  id: 'YEneNi',
-                                }),
-                                dataIndex: 'activeDay',
-                              },
-                              {
-                                key: 'status',
-                                title: intl.formatMessage({
-                                  defaultMessage: 'Status',
-                                  id: 'tzMNF3',
-                                }),
-                                dataIndex: 'status',
-                                render: (value, record) =>
-                                  calcExpired(new Date(record.endDate)) ? (
-                                    <Tag color="red">
-                                      {intl.formatMessage({
-                                        defaultMessage: 'EXPIRED',
-                                        id: 'GftNg3',
-                                      })}
-                                    </Tag>
-                                  ) : (
-                                    <Tag color="success">
-                                      {intl.formatMessage({
-                                        defaultMessage: 'ACTIVE',
-                                        id: 'LQPOVs',
-                                      })}
-                                    </Tag>
-                                  ),
-                              },
-                              {
-                                key: 'location',
-                                title: intl.formatMessage({
-                                  defaultMessage: 'Location',
-                                  id: 'rvirM2',
-                                }),
-                                dataIndex: 'location',
-                                ellipsis: true,
-                              },
+                          {data?.offender?.bans.length && !loading ? (
+                            <Table
+                              size="small"
+                              loading={loading}
+                              pagination={
+                                data?.offender?.bans &&
+                                data.offender.bans.length > 5
+                                  ? {
+                                      pageSize: 5,
+                                    }
+                                  : false
+                              }
+                              expandable={{
+                                expandedRowRender,
+                                rowExpandable: (record) => !!record.description,
+                              }}
+                              columns={[
+                                {
+                                  key: 'duration',
+                                  title: intl.formatMessage({
+                                    defaultMessage: 'Duration',
+                                    id: 'IuFETn',
+                                  }),
+                                  dataIndex: 'duration',
+                                  width: 110,
+                                  render: (value) => <Text>{value}</Text>,
+                                },
+                                {
+                                  key: 'activeDay',
+                                  title: intl.formatMessage({
+                                    defaultMessage: 'Active Days',
+                                    id: 'YEneNi',
+                                  }),
+                                  dataIndex: 'activeDay',
+                                },
+                                {
+                                  key: 'status',
+                                  title: intl.formatMessage({
+                                    defaultMessage: 'Status',
+                                    id: 'tzMNF3',
+                                  }),
+                                  dataIndex: 'status',
+                                  render: (value, record) =>
+                                    calcExpired(new Date(record.endDate)) ? (
+                                      <Tag color="red">
+                                        {intl.formatMessage({
+                                          defaultMessage: 'EXPIRED',
+                                          id: 'GftNg3',
+                                        })}
+                                      </Tag>
+                                    ) : (
+                                      <Tag color="success">
+                                        {intl.formatMessage({
+                                          defaultMessage: 'ACTIVE',
+                                          id: 'LQPOVs',
+                                        })}
+                                      </Tag>
+                                    ),
+                                },
+                                {
+                                  key: 'location',
+                                  title: intl.formatMessage({
+                                    defaultMessage: 'Location',
+                                    id: 'rvirM2',
+                                  }),
+                                  dataIndex: 'location',
+                                  ellipsis: true,
+                                },
 
-                              {
-                                key: 'type',
-                                title: intl.formatMessage({
-                                  defaultMessage: 'Type',
-                                  id: '+U6ozc',
-                                }),
-                                dataIndex: 'type',
-                                ellipsis: true,
-                              },
-                              {
-                                key: 'Options',
-                                title: '',
-                                dataIndex: 'Options',
-                                // width: 100,
-                                render: (_, record) => (
-                                  <Row gutter={8}>
-                                    {editRights && (
-                                      <Col>
-                                        <Tooltip
-                                          title={intl.formatMessage({
-                                            defaultMessage: 'Edit Exclusion',
-                                            id: '22olP0',
-                                          })}
-                                        >
-                                          <Button
-                                            size="small"
-                                            disabled={saving}
-                                            onClick={() => {
-                                              setEditBanData(record.ban);
-                                            }}
-                                            icon={
-                                              <FontAwesomeIcon
-                                                icon={faPenToSquare}
-                                              />
-                                            }
-                                          />
-                                        </Tooltip>
-                                      </Col>
-                                    )}
-                                    {deleteRights && (
-                                      <Col>
-                                        <Tooltip
-                                          title={intl.formatMessage({
-                                            defaultMessage: 'Remove Exclusion',
-                                            id: '8y70Xm',
-                                          })}
-                                        >
-                                          <Popconfirm
-                                            placement="topLeft"
-                                            trigger="hover"
+                                {
+                                  key: 'type',
+                                  title: intl.formatMessage({
+                                    defaultMessage: 'Type',
+                                    id: '+U6ozc',
+                                  }),
+                                  dataIndex: 'type',
+                                  ellipsis: true,
+                                },
+                                {
+                                  key: 'Options',
+                                  title: '',
+                                  dataIndex: 'Options',
+                                  // width: 100,
+                                  render: (_, record) => (
+                                    <Row gutter={8}>
+                                      {editRights && (
+                                        <Col>
+                                          <Tooltip
                                             title={intl.formatMessage({
-                                              defaultMessage:
-                                                'Remove the exclusion?',
-                                              id: 'Dc7IO/',
+                                              defaultMessage: 'Edit Exclusion',
+                                              id: '22olP0',
                                             })}
-                                            onConfirm={() =>
-                                              onDeleteBan(record.key)
-                                            }
-                                            okText={intl.formatMessage({
-                                              defaultMessage: 'Yes',
-                                              id: 'a5msuh',
-                                            })}
-                                            cancelText={intl.formatMessage({
-                                              defaultMessage: 'No',
-                                              id: 'oUWADl',
-                                            })}
-                                            overlayInnerStyle={{
-                                              padding: 10,
-                                            }}
                                           >
                                             <Button
                                               size="small"
                                               disabled={saving}
+                                              onClick={() => {
+                                                setEditBanData(record.ban);
+                                              }}
                                               icon={
                                                 <FontAwesomeIcon
-                                                  icon={faTrash}
+                                                  icon={faPenToSquare}
                                                 />
                                               }
                                             />
-                                          </Popconfirm>
-                                        </Tooltip>
-                                      </Col>
-                                    )}
-                                  </Row>
+                                          </Tooltip>
+                                        </Col>
+                                      )}
+                                      {deleteRights && (
+                                        <Col>
+                                          <Tooltip
+                                            title={intl.formatMessage({
+                                              defaultMessage:
+                                                'Remove Exclusion',
+                                              id: '8y70Xm',
+                                            })}
+                                          >
+                                            <Popconfirm
+                                              placement="topLeft"
+                                              trigger="hover"
+                                              title={intl.formatMessage({
+                                                defaultMessage:
+                                                  'Remove the exclusion?',
+                                                id: 'Dc7IO/',
+                                              })}
+                                              onConfirm={() =>
+                                                onDeleteBan(record.key)
+                                              }
+                                              okText={intl.formatMessage({
+                                                defaultMessage: 'Yes',
+                                                id: 'a5msuh',
+                                              })}
+                                              cancelText={intl.formatMessage({
+                                                defaultMessage: 'No',
+                                                id: 'oUWADl',
+                                              })}
+                                              overlayInnerStyle={{
+                                                padding: 10,
+                                              }}
+                                            >
+                                              <Button
+                                                size="small"
+                                                disabled={saving}
+                                                icon={
+                                                  <FontAwesomeIcon
+                                                    icon={faTrash}
+                                                  />
+                                                }
+                                              />
+                                            </Popconfirm>
+                                          </Tooltip>
+                                        </Col>
+                                      )}
+                                    </Row>
+                                  ),
+                                },
+                              ]}
+                              dataSource={data?.offender?.bans.map((ban) => ({
+                                key: ban.id,
+                                endDate: ban.endDate,
+                                duration: `${FormatCalendar(
+                                  ban?.startDate,
+                                  true
+                                )}  ->  ${FormatCalendar(ban?.endDate, true)}`,
+                                activeDay: calcDuration(
+                                  new Date(ban?.startDate),
+                                  new Date(ban?.endDate)
                                 ),
-                              },
-                            ]}
-                            dataSource={data?.offender?.bans.map((ban) => ({
-                              key: ban.id,
-                              endDate: ban.endDate,
-                              duration: `${FormatCalendar(
-                                ban?.startDate,
-                                true
-                              )}  ->  ${FormatCalendar(ban?.endDate, true)}`,
-                              activeDay: calcDuration(
-                                new Date(ban?.startDate),
-                                new Date(ban?.endDate)
-                              ),
-                              status: `${new Date(
-                                ban?.startDate
-                              ).toDateString()}  -->  ${new Date(
-                                ban?.endDate
-                              ).toDateString()}`,
-                              location: ban.location,
-                              description: ban.description,
-                              type: ban.type,
-                              ban,
-                            }))}
-                          />
+                                status: `${new Date(
+                                  ban?.startDate
+                                ).toDateString()}  -->  ${new Date(
+                                  ban?.endDate
+                                ).toDateString()}`,
+                                location: ban.location,
+                                description: ban.description,
+                                type: ban.type,
+                                ban,
+                              }))}
+                            />
+                          ) : (
+                            <Empty
+                              description={intl.formatMessage({
+                                defaultMessage:
+                                  'No exclusions for this offender',
+                                id: 'OCazY3',
+                              })}
+                              image={Empty.PRESENTED_IMAGE_SIMPLE}
+                            />
+                          )}
                         </Card>
                         {editRights && (
                           <Card loading={loading}>
@@ -1529,6 +1567,8 @@ const ViewOffender = ({
                                                 disabled={saving}
                                                 onClick={() => {
                                                   setEditAddressData(
+                                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                    // @ts-ignore
                                                     record.address
                                                   );
                                                 }}
@@ -1711,7 +1751,7 @@ const ViewOffender = ({
                               id: 'a0aLil',
                             })}
                           </Title>
-                          {data?.offender?.vehicles.length && !loading ? (
+                          {data?.offender?.crimeGroups.length && !loading ? (
                             <CrimeGroupTable
                               crimeGroups={data?.offender?.crimeGroups || []}
                               onDelete={onDeleteCrimeGroup}
@@ -2424,7 +2464,7 @@ const ViewOffender = ({
       </Drawer>
 
       {/* Address  */}
-      <Drawer
+      {/* <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Address',
           id: 'xg14pg',
@@ -2441,6 +2481,27 @@ const ViewOffender = ({
             }
           />
         )}
+      </Drawer> */}
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Add Address',
+          id: 'xg14pg',
+        })}
+        visible={addAddress}
+        width="600"
+        onClose={toggleAddAddress}
+      >
+        {addAddress ? (
+          <AddLocation
+            onClose={toggleAddAddress}
+            update={(value) =>
+              onAddAddress({ ...value, id: `${Math.random()}` })
+            }
+            showAlias
+          />
+        ) : (
+          <div />
+        )}
       </Drawer>
       <Drawer
         title={intl.formatMessage({
@@ -2452,10 +2513,18 @@ const ViewOffender = ({
         onClose={() => setEditAddressData(null)}
       >
         {editAddressData && (
-          <EditOffenderAddress
+          // <EditOffenderAddress
+          //   onClose={() => setEditAddressData(null)}
+          //   onSubmit={onEditAddress}
+          //   data={editAddressData}
+          // />
+          <AddLocation
             onClose={() => setEditAddressData(null)}
-            onSubmit={onEditAddress}
-            data={editAddressData}
+            update={(value) =>
+              onEditAddress({ ...value, id: editAddressData.id })
+            }
+            locationData={editAddressData}
+            showAlias
           />
         )}
       </Drawer>

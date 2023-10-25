@@ -1,7 +1,7 @@
 import React from 'react';
 import type { CustomGalleryData } from 'types/DataType';
 import View from './AddCustomGallery.view';
-import useAddOffenderWarning from './useAddCustomGallery';
+import useAddCustomGallery from './useAddCustomGallery';
 
 interface Props {
   onClose: () => void;
@@ -9,12 +9,8 @@ interface Props {
   saving?: boolean;
 }
 
-const AddOffenderWarning = ({
-  onClose,
-  update,
-  saving,
-}: Props): JSX.Element => {
-  const { onSubmit } = useAddOffenderWarning({
+const AddCustomGallery = ({ onClose, update, saving }: Props): JSX.Element => {
+  const { onSubmit } = useAddCustomGallery({
     update,
   });
 
@@ -23,4 +19,4 @@ const AddOffenderWarning = ({
   );
 };
 
-export default AddOffenderWarning;
+export default AddCustomGallery;

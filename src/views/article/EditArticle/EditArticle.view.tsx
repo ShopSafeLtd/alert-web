@@ -4,6 +4,7 @@ import {
   Avatar,
   Button,
   Card,
+  Checkbox,
   Col,
   Drawer,
   Form,
@@ -132,6 +133,7 @@ const EditArticleView = ({
                 categories: [],
                 importance: 'Normal',
                 schemes: [],
+                watermarkImage: true,
               }
             }
             onFinish={onSubmit}
@@ -259,6 +261,18 @@ const EditArticleView = ({
                       optionFilterProp="value"
                       labelInValue
                     />
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item
+                    name="watermarkImage"
+                    valuePropName="checked"
+                    label={intl.formatMessage({
+                      defaultMessage: 'Watermark Preview',
+                      id: 'DmBmJf',
+                    })}
+                  >
+                    <Checkbox />
                   </Form.Item>
                 </Col>
               </Row>

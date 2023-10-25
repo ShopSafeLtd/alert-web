@@ -22,7 +22,7 @@ interface Props {
   toggleAddInvestigation: () => void;
   updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
   takeAllSchemes: boolean;
-  toggleTakeAllSchemes: () => void;
+  setTakeAllSchemes: (value: boolean) => void;
 }
 const getTextStatus = (value: InvestigationStatus) => {
   if (value === InvestigationStatus.Open) return 'success';
@@ -37,7 +37,7 @@ const ListInvestigations = ({
   toggleAddInvestigation,
   updateInvestigationList,
   takeAllSchemes,
-  toggleTakeAllSchemes,
+  setTakeAllSchemes,
 }: Props) => {
   const classes = useStyles();
   const navigate = useNavigate();
@@ -58,7 +58,7 @@ const ListInvestigations = ({
         <Col>
           <Button
             type={takeAllSchemes ? 'text' : 'primary'}
-            onClick={toggleTakeAllSchemes}
+            onClick={() => setTakeAllSchemes(false)}
             // disabled={saving}
           >
             {intl.formatMessage({
@@ -70,7 +70,7 @@ const ListInvestigations = ({
         <Col>
           <Button
             type={takeAllSchemes ? 'primary' : 'text'}
-            onClick={toggleTakeAllSchemes}
+            onClick={() => setTakeAllSchemes(true)}
           >
             {intl.formatMessage({
               defaultMessage: 'All Schemes',
@@ -81,7 +81,7 @@ const ListInvestigations = ({
         <Col style={{ marginLeft: 10 }}>
           <Button
             type="default"
-            onClick={toggleTakeAllSchemes}
+            onClick={() => setTakeAllSchemes(!takeAllSchemes)}
             icon={<FontAwesomeIcon icon={faRotate} size="10x" />}
           />
         </Col>

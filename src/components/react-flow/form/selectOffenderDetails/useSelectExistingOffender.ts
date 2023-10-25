@@ -4,10 +4,10 @@ import type {
   Age,
   Build,
   Gender,
-  ListOffendersQuery,
+  ListOffendersSelectQuery,
   Race,
 } from 'graphql/generated';
-import { SortOrder, useListOffendersQuery } from 'graphql/generated';
+import { SortOrder, useListOffendersSelectQuery } from 'graphql/generated';
 import { useStoreState } from 'state';
 
 export interface Offender {
@@ -39,12 +39,12 @@ interface Props {
 
 interface Return {
   onSubmit: (value: string | undefined) => void;
-  data: ListOffendersQuery | undefined;
+  data: ListOffendersSelectQuery | undefined;
   loading: boolean;
   setCurrentId: (value: string | undefined) => void;
   selectedOffender:
     | Exclude<
-        ListOffendersQuery['listOffenders'],
+        ListOffendersSelectQuery['listOffenders'],
         undefined | null
       >['offenders'][0]
     | null
@@ -65,7 +65,7 @@ const useSelectExistingOffender = ({
 
   const [selectedOffender, setSelectedOffender] = useState<
     | Exclude<
-        ListOffendersQuery['listOffenders'],
+        ListOffendersSelectQuery['listOffenders'],
         undefined | null
       >['offenders'][0]
     | null
@@ -76,7 +76,7 @@ const useSelectExistingOffender = ({
     open: false,
     index: 0,
   });
-  const { data, loading } = useListOffendersQuery({
+  const { data, loading } = useListOffendersSelectQuery({
     variables: {
       scheme: {
         id: schemeId,

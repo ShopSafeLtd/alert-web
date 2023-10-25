@@ -66,7 +66,21 @@ const ViewCustomer: React.FC = () => {
     onDeleteIncident,
     saving,
     loading,
+    onDeleteInvestigation,
+    suggestedOffenders,
+    suggestedVehicles,
+    toggleCloseSuggestedOffenders,
+    toggleCloseSuggestedVehicles,
+    onAddExistingOffenders,
+    onAddExistingVehicles,
+    showSuggestedVehicles,
+    showSuggestedOffenders,
+    toggleShowSuggestedVehicles,
+    toggleShowSuggestedOffenders,
+    editInvestigation,
+    toggleEditInvestigation,
   } = useViewCustomer(id || '');
+
   return (
     <View
       loading={loading}
@@ -127,6 +141,19 @@ const ViewCustomer: React.FC = () => {
       onDeleteCrimeGroup={onDeleteCrimeGroup}
       onDeleteIncident={onDeleteIncident}
       saving={saving}
+      onDeleteInvestigation={onDeleteInvestigation}
+      suggestedOffenders={suggestedOffenders}
+      suggestedVehicles={suggestedVehicles}
+      toggleCloseSuggestedOffenders={toggleCloseSuggestedOffenders}
+      toggleCloseSuggestedVehicles={toggleCloseSuggestedVehicles}
+      onAddExistingOffenders={onAddExistingOffenders}
+      onAddExistingVehicles={onAddExistingVehicles}
+      showSuggestedVehicles={showSuggestedVehicles}
+      showSuggestedOffenders={showSuggestedOffenders}
+      toggleShowSuggestedVehicles={toggleShowSuggestedVehicles}
+      toggleShowSuggestedOffenders={toggleShowSuggestedOffenders}
+      editInvestigation={editInvestigation}
+      toggleEditInvestigation={toggleEditInvestigation}
     />
   );
 };

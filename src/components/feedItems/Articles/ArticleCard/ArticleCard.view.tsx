@@ -85,7 +85,13 @@ const ArticleCard = ({ article, openLightbox }: Props): JSX.Element => {
         )}
         <div className={classes.content}>
           <div className={classes.details}>
-            <Title level={4}>
+            <Title
+              level={4}
+              ellipsis={{
+                rows: 2,
+                tooltip: title?.replace(/^\S/, (s) => s.toUpperCase()),
+              }}
+            >
               {priority === ArticlePriority.High && (
                 <FontAwesomeIcon
                   size="sm"

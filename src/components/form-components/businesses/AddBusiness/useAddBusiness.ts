@@ -1,16 +1,19 @@
 /* eslint-disable sonarjs/no-nested-template-literals */
 import { useApolloClient } from '@apollo/client';
+import type { FormInstance } from 'antd';
+import { Form } from 'antd';
 import type {
   SearchBusinessesQuery,
   SearchBusinessesQueryVariables,
 } from 'graphql/generated';
 import { QueryMode, SearchBusinessesDocument } from 'graphql/generated';
+import { useState } from 'react';
 import { useIntl } from 'react-intl';
 
 import { useStoreState } from 'state';
-import type { BusinessData } from 'types/DataType';
+import type { BusinessData, LocationData } from 'types/DataType';
 
-interface OnSubmitValues {
+export interface FormData {
   name: string;
   parent: {
     label: string;
@@ -30,20 +33,33 @@ interface Props {
 }
 
 interface Return {
-  onSubmit: (values: OnSubmitValues) => void;
+  onSubmit: (values: FormData) => void;
   onSearchBusiness: (
     value: string
   ) => Promise<{ label: string; value: string }[]>;
+  form: FormInstance<FormData>;
+  location: LocationData | undefined;
+  setLocation: (value: LocationData) => void;
 }
 
 const useAddBusiness = ({ update }: Props): Return => {
   const intl = useIntl();
   const client = useApolloClient();
   const currentScheme = useStoreState((state) => state.scheme.id);
+  const [form] = Form.useForm<FormData>();
+  const [location, setLocation] = useState<LocationData>();
 
-  const onSubmit = (values: OnSubmitValues) => {
-    // console.log('values.parent.value', values.parent.value);
-
+  const onSetLocation = (value: LocationData) => {
+    if (value) {
+      setLocation(value);
+      form.setFieldsValue({
+        street: value.street || '',
+        townCity: value.townCity || '',
+        postcode: value.postcode || '',
+      });
+    }
+  };
+  const onSubmit = (values: FormData) => {
     update({
       id: Math.floor(Math.random() * 1000).toString(),
       name: values.name,
@@ -53,12 +69,14 @@ const useAddBusiness = ({ update }: Props): Return => {
         : undefined,
       locations: [
         {
-          id: Math.floor(Math.random() * 1000).toString(),
+          // id: Math.floor(Math.random() * 1000).toString(),
           building: values.building,
           county: values.county,
           postcode: values.postcode,
           street: values.street,
           townCity: values.townCity,
+          geoLat: location?.geoLat,
+          geoLng: location?.geoLng,
           full: `${values.building ? `${values.building}, ` : ''}${
             values.street ? `${values.street}, ` : ''
           }${values.townCity ? `${values.townCity}, ` : ''}${
@@ -111,6 +129,9 @@ const useAddBusiness = ({ update }: Props): Return => {
   return {
     onSubmit,
     onSearchBusiness,
+    form,
+    location,
+    setLocation: onSetLocation,
   };
 };
 
