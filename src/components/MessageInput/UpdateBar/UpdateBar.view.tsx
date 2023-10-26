@@ -217,7 +217,7 @@ const UpdateBar = ({
         >
           <Col style={{ marginLeft: 10, marginRight: -8 }}>
             <Upload
-              action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
+              action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT_GO}
               accept=".png,.jpeg,.webp"
               listType="picture-card"
               fileList={updateFileList}
@@ -385,7 +385,7 @@ const UpdateBar = ({
 
           <Col>
             <Upload
-              action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
+              action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT_GO}
               accept=".png,.jpeg,.webp"
               fileList={updateFileList}
               onChange={onUpdateImageChange}

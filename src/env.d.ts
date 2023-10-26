@@ -10,6 +10,7 @@ interface ImportMetaEnv {
   readonly VITE_MIXPANEL_TOKEN: string;
   readonly VITE_CSV_UPLOAD_ENDPOINT: string;
   readonly VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT_GO: string;
+  readonly VITE_APP_IMAGE_UPLOAD_ENDPOINT_GO: string;
 }
 
 interface ImportMeta {

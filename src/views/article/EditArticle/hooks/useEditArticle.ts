@@ -351,7 +351,7 @@ const useEditArticle = (): Props => {
     new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.withCredentials = false;
-      xhr.open('POST', import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT);
+      xhr.open('POST', import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT_GO);
 
       xhr.upload.addEventListener('progress', (e) => {
         progress((e.loaded / e.total) * 100);
@@ -407,7 +407,7 @@ const useEditArticle = (): Props => {
     new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.withCredentials = false;
-      xhr.open('POST', import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT);
+      xhr.open('POST', import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT_GO);
 
       xhr.addEventListener('load', () => {
         if (xhr.status === 403) {
@@ -646,7 +646,7 @@ const useEditArticle = (): Props => {
     setFileList(newFileList);
   };
   const documentUploadProps: UploadProps = {
-    action: import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT,
+    action: import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT_GO,
     onChange: handleChange,
     multiple: true,
   };

@@ -703,7 +703,7 @@ const EditOffender = ({
                   </Col>
                   <Col style={{ marginLeft: 30 }}>
                     <Upload
-                      action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
+                      action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT_GO}
                       fileList={fileList}
                       onChange={imgChange}
                       beforeUpload={beforeUpload}
@@ -729,7 +729,7 @@ const EditOffender = ({
 
                 <Form.Item name="images">
                   <Upload
-                    action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
+                    action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT_GO}
                     listType="picture-card"
                     fileList={fileList}
                     onChange={imgChange}

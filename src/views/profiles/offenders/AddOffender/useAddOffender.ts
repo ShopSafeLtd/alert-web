@@ -648,7 +648,7 @@ const useAddOffender = (): Return => {
   };
 
   const documentUploadProps: UploadProps = {
-    action: import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT,
+    action: import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT_GO,
     onChange: handleChange,
     multiple: true,
   };
