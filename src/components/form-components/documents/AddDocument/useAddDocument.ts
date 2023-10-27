@@ -19,6 +19,7 @@ import { useState } from 'react';
 import { useStoreState } from 'state';
 import type { UploadFile } from 'antd/es/upload/interface';
 import type { MutationUpdaterFn } from '@apollo/client';
+import customRequest from '../../../../utils/custom-request';
 
 interface OnSubmitValues {
   name: string;
@@ -295,7 +296,7 @@ const useAddDocument = ({
   };
 
   const documentUploadProps: UploadProps = {
-    action: import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT_GO,
+    customRequest,
     onChange: handleChange,
     multiple: false,
     headers: {
