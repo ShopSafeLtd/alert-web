@@ -42,6 +42,7 @@ import update from 'immutability-helper';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 import compressImage from 'utils/compress-images';
+import customRequest from '../../../../utils/custom-request';
 
 const { confirm } = Modal;
 
@@ -648,7 +649,7 @@ const useAddOffender = (): Return => {
   };
 
   const documentUploadProps: UploadProps = {
-    action: import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT_GO,
+    customRequest,
     onChange: handleChange,
     multiple: true,
   };

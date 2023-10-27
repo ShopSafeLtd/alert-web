@@ -352,7 +352,7 @@ const useEditArticle = (): Props => {
     new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.withCredentials = false;
-      xhr.open('POST', import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT_GO);
+      xhr.open('POST', import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT);
 
       xhr.upload.addEventListener('progress', (e) => {
         progress((e.loaded / e.total) * 100);
@@ -408,7 +408,7 @@ const useEditArticle = (): Props => {
     new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.withCredentials = false;
-      xhr.open('POST', import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT_GO);
+      xhr.open('POST', import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT);
 
       xhr.addEventListener('load', () => {
         if (xhr.status === 403) {

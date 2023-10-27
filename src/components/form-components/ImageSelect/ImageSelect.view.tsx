@@ -171,7 +171,7 @@ const ImageSelect = ({ images: imagesProp, value, onChange }: Props) => {
         onChange={onImageChange}
         // listType="picture-card"
         // action={import.meta.env.VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT}
-        action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT_GO}
+        action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
         // showUploadList={false}
       >
         <Button loading={uploading} disabled={uploading}>

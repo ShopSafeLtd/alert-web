@@ -56,7 +56,7 @@ const UploadImage = ({
             <Upload
               accept=".png,.jpeg,.webp"
               className="upload-images"
-              action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT_GO}
+              action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
               listType="picture-card"
               fileList={fileList}
               onChange={imgChange}
