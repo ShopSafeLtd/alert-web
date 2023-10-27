@@ -434,7 +434,7 @@ const OffenderProfile = ({
                         facialRec
                           ? import.meta.env
                               .VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT_GO
-                          : import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT
+                          : import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT_GO
                       }
                       showUploadList={false}
                       accept=".png,.jpeg"

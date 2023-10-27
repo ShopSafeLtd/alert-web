@@ -91,7 +91,7 @@ const OffenderImage = ({
           <Col style={{ marginLeft: 30 }}>
             <Upload
               accept=".png,.jpeg,.webp"
-              action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
+              action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT_GO}
               fileList={fileList}
               onChange={imgChange}
               beforeUpload={beforeUpload}
@@ -170,7 +170,7 @@ const OffenderImage = ({
               >
                 <Upload
                   accept=".png,.jpeg,.webp"
-                  action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
+                  action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT_GO}
                   listType="picture-card"
                   fileList={fileList}
                   onChange={imgChange}

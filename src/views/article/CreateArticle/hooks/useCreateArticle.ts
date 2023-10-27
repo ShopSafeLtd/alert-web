@@ -18,6 +18,7 @@ import { useStoreState } from '../../../../state';
 import type { OffenderData } from '../../../../components/form-components/offender/offender/AddExistingOffender/AddExistingOffender.container';
 import type { Incident } from '../../../../components/form-components/linkOptions/LinkIncident/LinkIncident.container';
 import extracted from '../../../../utils/add-default-to-article';
+import customRequest from '../../../../utils/custom-request';
 
 const { useForm } = Form;
 
@@ -513,6 +514,7 @@ const useCreateArticle = (): Props => {
   };
 
   const handleChange: UploadProps['onChange'] = (info) => {
+    console.log(info);
     let newFileList = [...info.fileList];
 
     newFileList = newFileList.map((file) => {
@@ -527,8 +529,9 @@ const useCreateArticle = (): Props => {
 
     setFileList(newFileList);
   };
+
   const documentUploadProps: UploadProps = {
-    action: import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT,
+    customRequest,
     onChange: handleChange,
     multiple: true,
   };
