@@ -159,6 +159,7 @@ const useEditArticle = (): Props => {
       title: result?.article?.title || '',
       content: result?.article?.rows[0].columns[0].text || '',
       groups: result?.article?.groups.map((group) => group.id || '') || [],
+      watermarkImage: !!result?.article?.watermarkImage,
       categories:
         result?.article?.tags.map((tag) => ({
           value: tag.name || '',
