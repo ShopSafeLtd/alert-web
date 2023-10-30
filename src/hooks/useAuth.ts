@@ -52,6 +52,16 @@ const useAuth = (): Return => {
     accessToken: string;
   }
 
+  const loginRoute = () => {
+    if (localStorage.getItem('logo')?.endsWith('.webp')) {
+      void loginWithRedirect({
+        'ext-logo': localStorage.getItem('logo'),
+      });
+    } else {
+      void loginWithRedirect();
+    }
+  };
+
   const handleSuccess = async ({
     id,
     accessToken,
@@ -205,13 +215,7 @@ const useAuth = (): Return => {
         if (!isLoading && isAuthenticated) {
           expired();
         } else if (!isLoading && !isAuthenticated) {
-          if (localStorage.getItem('logo')?.endsWith('.webp')) {
-            void loginWithRedirect({
-              'ext-logo': localStorage.getItem('logo'),
-            });
-          } else {
-            void loginWithRedirect();
-          }
+          loginRoute();
         }
       }
       const scheme =
@@ -273,9 +277,13 @@ const useAuth = (): Return => {
           void getCurrentUser();
         } else {
           expired();
+
+          loginRoute();
         }
       } else {
         expired();
+
+        loginRoute();
       }
     } else if (isAuthenticated) {
       void getCurrentUser();
