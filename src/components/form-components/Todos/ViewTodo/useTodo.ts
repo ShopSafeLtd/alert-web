@@ -15,6 +15,7 @@ import {
   useUpdateTaskMutation,
 } from '../../../../graphql/generated';
 import { useStoreState } from '../../../../state';
+import customRequest from '../../../../utils/custom-request';
 
 export interface FormData {
   [key: string]: string | number | boolean | undefined;
@@ -294,7 +295,7 @@ const useTodo = ({
   };
 
   const documentUploadProps: UploadProps = {
-    action: import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT,
+    customRequest,
     onChange: handleChange,
     multiple: true,
   };

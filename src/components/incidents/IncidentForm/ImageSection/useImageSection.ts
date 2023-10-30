@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { useEffect, useState } from 'react';
 import type { FormInstance, UploadFile, UploadProps } from 'antd';
+import { Form } from 'antd';
 import {
   Age,
   Build,
@@ -14,8 +15,8 @@ import type { FormData } from 'views/incidents/AddIncident/useAddIncident';
 import update from 'immutability-helper';
 import { useStoreState } from 'state';
 import type { UploadChangeParam } from 'antd/lib/upload';
-import { Form } from 'antd';
 import type { StateOffenderData } from '../Profiles/Offenders/useOffenders';
+import customRequest from '../../../../utils/custom-request';
 
 export const getClosestAgeRange = (high: number, low: number) => {
   const middle = high - (high - low) / 2;
@@ -249,7 +250,7 @@ const useImageSection = ({ incidentForm, form, onChange }: Props): Return => {
   // };
 
   // const documentUploadProps: UploadProps = {
-  //   action: import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT,
+  //   action: import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT_GO,
   //   onChange: handleChange,
   //   multiple: false,
   //   headers: {
@@ -274,7 +275,7 @@ const useImageSection = ({ incidentForm, form, onChange }: Props): Return => {
     setFileList(newFileList);
   };
   const documentUploadProps: UploadProps = {
-    action: import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT,
+    customRequest,
     onChange: handleChange,
     multiple: true,
   };

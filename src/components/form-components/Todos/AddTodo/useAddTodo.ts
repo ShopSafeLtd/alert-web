@@ -16,12 +16,13 @@ import {
 } from 'graphql/generated';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import type { FormInstance, UploadFile } from 'antd';
-import type { UploadProps } from 'antd/es/upload/interface';
 import { Form, notification } from 'antd';
+import type { UploadProps } from 'antd/es/upload/interface';
 import { useStoreState } from 'state';
 import { useIntl } from 'react-intl';
 import type { Moment } from 'moment';
 import moment from 'moment';
+import customRequest from '../../../../utils/custom-request';
 
 const { useForm } = Form;
 
@@ -358,7 +359,7 @@ const useAddTodo = ({
   };
 
   const documentUploadProps: UploadProps = {
-    action: import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT,
+    customRequest,
     onChange: handleChange,
     multiple: true,
   };
