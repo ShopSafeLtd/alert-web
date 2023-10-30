@@ -97,7 +97,6 @@ const customRequest = ({
       uploadXhr.onload = () => {
         if (uploadXhr.status >= 200 && uploadXhr.status < 300) {
           if (onSuccess && typeof file !== 'string') {
-            console.log(uploadXhr.status, onSuccess);
             onSuccess(
               [
                 {

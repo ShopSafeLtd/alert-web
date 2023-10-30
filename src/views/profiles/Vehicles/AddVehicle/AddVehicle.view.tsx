@@ -634,7 +634,7 @@ const AddVehicle = ({
             <Col style={{ marginLeft: 30 }}>
               <Upload
                 accept=".png,.jpeg,.webp"
-                action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT_GO}
+                action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
                 fileList={fileList}
                 onChange={imgChange}
                 beforeUpload={beforeUpload}
@@ -713,7 +713,7 @@ const AddVehicle = ({
                 >
                   <Upload
                     accept=".png,.jpeg,.webp"
-                    action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT_GO}
+                    action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
                     listType="picture-card"
                     fileList={fileList}
                     onChange={imgChange}

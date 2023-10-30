@@ -154,7 +154,7 @@ const SchemeDetail = ({
                   labelCol={{ span: 24 }}
                 >
                   <Upload
-                    action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT_GO}
+                    action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
                     listType="picture-card"
                     fileList={fileList}
                     beforeUpload={(file) => beforeUpload(file)}
@@ -183,7 +183,7 @@ const SchemeDetail = ({
                   labelCol={{ span: 24 }}
                 >
                   <Upload
-                    action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT_GO}
+                    action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
                     listType="picture-card"
                     fileList={darkFileList}
                     beforeUpload={(file) => beforeUpload(file, 'dark')}
