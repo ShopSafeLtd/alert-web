@@ -2,15 +2,15 @@
 import { useState } from 'react';
 import type { CreateVehicleDataInput } from 'graphql/generated';
 import {
-  useCreateVehicleMutation,
   ImagePosition,
   Role,
   SortOrder,
+  useCreateVehicleMutation,
   useListCustomGalleriesQuery,
   useSchemeGroupsQuery,
 } from 'graphql/generated';
 import type { FormInstance, UploadFile } from 'antd';
-import { notification, Form, message } from 'antd';
+import { Form, message, notification } from 'antd';
 import { useStoreState } from 'state';
 import type { OffenderData } from 'components/viewChat/ViewMessage/useViewMessage';
 import type { RcFile, UploadProps } from 'antd/es/upload/interface';
@@ -24,7 +24,8 @@ import update from 'immutability-helper';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
-import { compressImage } from '../../../../utils/compress-images';
+import { compressImage } from 'utils/compress-images';
+import customRequest from 'utils/custom-request';
 
 export interface FormData {
   name: string;
