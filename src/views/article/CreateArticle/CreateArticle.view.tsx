@@ -112,7 +112,6 @@ const CreateArticleView = ({
   //   </>
   // );
   const theme = useStoreState((state) => state.theme).currentTheme === 'dark';
-  console.log(Form.useWatch('watermarkImage', form));
   return (
     <>
       <div className="page-view">
