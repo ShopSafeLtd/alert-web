@@ -50,6 +50,7 @@ import {
   OffenderMessageCard,
   VehicleMessageCard,
 } from '../MessageCard';
+import customRequest from '../../../utils/custom-request';
 
 const { Option, getMentions } = Mentions;
 const { Text } = Typography;
@@ -217,7 +218,7 @@ const UpdateBar = ({
         >
           <Col style={{ marginLeft: 10, marginRight: -8 }}>
             <Upload
-              action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
+              customRequest={customRequest}
               accept=".png,.jpeg,.webp"
               listType="picture-card"
               fileList={updateFileList}
