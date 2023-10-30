@@ -567,6 +567,7 @@ const useEditArticle = (): Props => {
           title: form.getFieldValue('title'),
           categories: selectedCategoryIds,
           groups: selectedGroups,
+          watermarkImage: form.getFieldValue('watermarkImage'),
           documents:
             fileList.map((file) => ({
               url: file.url || '',
