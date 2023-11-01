@@ -21,6 +21,7 @@ import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { FormattedMessage, useIntl } from 'react-intl';
 import BuildTree from '../../../../utils/tags/tree-helper';
 import type { FormData } from './useSchemeDetail';
+import customRequest from '../../../../utils/custom-request';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -154,7 +155,7 @@ const SchemeDetail = ({
                   labelCol={{ span: 24 }}
                 >
                   <Upload
-                    action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
+                    customRequest={customRequest}
                     listType="picture-card"
                     fileList={fileList}
                     beforeUpload={(file) => beforeUpload(file)}
@@ -183,7 +184,7 @@ const SchemeDetail = ({
                   labelCol={{ span: 24 }}
                 >
                   <Upload
-                    action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
+                    customRequest={customRequest}
                     listType="picture-card"
                     fileList={darkFileList}
                     beforeUpload={(file) => beforeUpload(file, 'dark')}

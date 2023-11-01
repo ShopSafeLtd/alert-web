@@ -1,9 +1,9 @@
-import type { ListIncidentsQuery } from 'graphql/generated';
-import { SortOrder, useListIncidentsQuery } from 'graphql/generated';
+import type { ListIncidentsFeedQuery } from 'graphql/generated';
+import { SortOrder, useListIncidentsFeedQuery } from 'graphql/generated';
 import { IncidentSort, useStoreState } from 'state';
 
 interface Return {
-  data: ListIncidentsQuery | undefined;
+  data: ListIncidentsFeedQuery | undefined;
   loading: boolean;
   next: () => void;
 }
@@ -11,13 +11,12 @@ interface Return {
 const useIncidentSideList = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const order = useStoreState((state) => state.data.incidents.order);
-  const pagination = useStoreState((state) => state.data.incidents.pagination);
   // const variables = useStoreState((state) => state.data.incidents.variables);
   // const setIncidentsState = useStoreActions(
   //   (actions) => actions.data.setIncidents
   // );
   const role = useStoreState((state) => state.user.role);
-  const { data, loading, fetchMore } = useListIncidentsQuery({
+  const { data, loading, fetchMore } = useListIncidentsFeedQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
       scheme: {
@@ -35,8 +34,8 @@ const useIncidentSideList = (): Return => {
         createdAt:
           order === IncidentSort.createdAtDesc ? SortOrder.Desc : SortOrder.Asc,
       },
-      take: pagination.pageSize,
-      skip: (pagination.page - 1) * pagination.pageSize,
+      take: 12,
+      skip: 0,
     },
   });
 

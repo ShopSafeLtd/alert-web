@@ -1,5 +1,5 @@
 import React from 'react';
-import type { ListIncidentsQuery } from 'graphql/generated';
+import type { ListIncidentsFeedQuery } from 'graphql/generated';
 import { Col, Row, Typography } from 'antd';
 import { Link } from 'react-router-dom';
 import SideListItem from 'components/side-list/SideListItem.view';
@@ -8,7 +8,7 @@ import useStyles from './IncidentSideList.styles';
 import Loading from '../../shared-components/AntD/Loading';
 
 interface Props {
-  data: ListIncidentsQuery | undefined;
+  data: ListIncidentsFeedQuery | undefined;
   loading: boolean;
   // eslint-disable-next-line react/require-default-props
   current?: string;
@@ -30,23 +30,10 @@ const IncidentSideList = ({
 }: Props): JSX.Element => {
   const classes = useStyles();
 
-  const isLoading = loading && !data?.listIncidents?.incidents.length;
+  const isLoading = loading && !data?.listIncidents?.total;
 
   return (
     <div className={classes.sideList}>
-      {/* {loading && ( */}
-      {/*   <div */}
-      {/*     style={{ */}
-      {/*       display: 'flex', */}
-      {/*       justifyContent: 'center', */}
-      {/*       alignItems: 'center', */}
-      {/*       flex: 1, */}
-      {/*       height: '100vh', */}
-      {/*     }} */}
-      {/*   > */}
-      {/*     <Spin /> */}
-      {/*   </div> */}
-      {/* )} */}
       <InfiniteScroll
         dataLength={data?.listIncidents?.incidents.length || 0}
         next={next}

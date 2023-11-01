@@ -60,6 +60,7 @@ import {
 } from 'components/MessageInput/MessageCard';
 import { useIntl } from 'react-intl';
 import Content from '../Message/Message.view';
+import customRequest from '../../../utils/custom-request';
 
 const { Option, getMentions } = Mentions;
 const { Text } = Typography;
@@ -435,7 +436,7 @@ const ViewMessages = ({
         >
           <Col style={{ marginLeft: 10, marginRight: -8 }}>
             <Upload
-              action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
+              customRequest={customRequest}
               accept=".png,.jpeg,.webp"
               listType="picture-card"
               fileList={fileList}
@@ -612,7 +613,7 @@ const ViewMessages = ({
 
           <Col>
             <Upload
-              action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
+              customRequest={customRequest}
               accept=".png,.jpeg,.webp"
               fileList={fileList}
               onChange={imgChange}

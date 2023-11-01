@@ -43,6 +43,7 @@ import moment from 'moment';
 import type { TagData } from 'types/DataType';
 import { useIntl } from 'react-intl';
 import type { FormData } from './useEditOffender';
+import customRequest from '../../../../../utils/custom-request';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -703,7 +704,7 @@ const EditOffender = ({
                   </Col>
                   <Col style={{ marginLeft: 30 }}>
                     <Upload
-                      action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
+                      customRequest={customRequest}
                       fileList={fileList}
                       onChange={imgChange}
                       beforeUpload={beforeUpload}
@@ -729,7 +730,7 @@ const EditOffender = ({
 
                 <Form.Item name="images">
                   <Upload
-                    action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
+                    customRequest={customRequest}
                     listType="picture-card"
                     fileList={fileList}
                     onChange={imgChange}

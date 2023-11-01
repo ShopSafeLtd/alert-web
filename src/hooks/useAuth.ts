@@ -17,6 +17,7 @@ interface Return {
   onLoginSuccess: (data: OnLoginSuccessArgs) => void;
   getCurrentUser: () => void;
   loading: boolean;
+  expired: () => void;
 }
 
 interface OnLoginSuccessArgs extends SetUserPayload {
@@ -31,6 +32,7 @@ const useAuth = (): Return => {
     isLoading,
     loginWithRedirect,
   } = useAuth0();
+
   const navigate = useNavigate();
   // const client = useApolloClient();
   const authenticated = useStoreActions(
@@ -277,13 +279,9 @@ const useAuth = (): Return => {
           void getCurrentUser();
         } else {
           expired();
-
-          loginRoute();
         }
       } else {
         expired();
-
-        loginRoute();
       }
     } else if (isAuthenticated) {
       void getCurrentUser();
@@ -454,6 +452,7 @@ const useAuth = (): Return => {
     onLoginSuccess,
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     getCurrentUser,
+    expired,
   };
 };
 

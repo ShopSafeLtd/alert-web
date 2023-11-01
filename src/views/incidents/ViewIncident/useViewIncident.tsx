@@ -1,20 +1,19 @@
 import { useEffect, useState } from 'react';
 import type {
   CreateDocumentMutation,
+  CreateInvestigationMutation,
   CreateTodoMutation,
   DeleteDocumentMutation,
   GoodsMode,
   ImageUpdateWithWhereUniqueWithoutIncidentInput,
-  UpdateIncidentGoodsMutation,
-  ViewIncidentQuery,
-  ViewIncidentQueryVariables,
   LanguageCode,
   QuestionGroupOnSchemeQuery,
+  UpdateIncidentGoodsMutation,
   UpdateTaskMutation,
-  CreateInvestigationMutation,
+  ViewIncidentQuery,
+  ViewIncidentQueryVariables,
 } from 'graphql/generated';
 import {
-  useUpdateIncidentLocationMutation,
   Role,
   useAddImagesToIncidentMutation,
   useCreateSimpleOffenderMutation,
@@ -27,6 +26,7 @@ import {
   useUnsubscribeFromIncidentMutation,
   useUpdateIncidentGoodsMutation,
   useUpdateIncidentImagesMutation,
+  useUpdateIncidentLocationMutation,
   useUpdateIncidentMutation,
   useUpdateIncidentOffendersMutation,
   useUpdateIncidentVehiclesMutation,
@@ -260,9 +260,14 @@ const useViewIncident = (incidentId: string): Return => {
       id: incidentId,
     },
   };
+
   const { data, loading } = useViewIncidentQuery({
     fetchPolicy: 'cache-and-network',
-    variables,
+    variables: {
+      where: {
+        id: incidentId,
+      },
+    },
 
     onCompleted: (res) => {
       setLightboxElements(

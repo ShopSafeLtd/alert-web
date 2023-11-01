@@ -46,6 +46,7 @@ import IncidentTable from 'components/tables/IncidentTable';
 import OffenderTable from 'components/tables/OffenderTable';
 import type { FormData } from './useAddVehicle';
 import useStyles from './AddVehicle.styles';
+import customRequest from '../../../../utils/custom-request';
 
 const { Title, Paragraph } = Typography;
 
@@ -634,7 +635,7 @@ const AddVehicle = ({
             <Col style={{ marginLeft: 30 }}>
               <Upload
                 accept=".png,.jpeg,.webp"
-                action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
+                customRequest={customRequest}
                 fileList={fileList}
                 onChange={imgChange}
                 beforeUpload={beforeUpload}
@@ -713,7 +714,7 @@ const AddVehicle = ({
                 >
                   <Upload
                     accept=".png,.jpeg,.webp"
-                    action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
+                    customRequest={customRequest}
                     listType="picture-card"
                     fileList={fileList}
                     onChange={imgChange}

@@ -1,118 +1,121 @@
 import React from 'react';
-import type { ListOffendersQuery } from 'graphql/generated';
-import { Col, Pagination, Row, Skeleton, Spin, Typography } from 'antd';
+import type { OffenderFeedListQuery } from 'graphql/generated';
+import { Col, Row, Skeleton, Typography } from 'antd';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl'; // Import the useIntl hook
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import SideList from 'components/side-list/SideList.view';
 import SideListItem from 'components/side-list/SideListItem.view';
 import { getEthnicity, getSex } from 'utils';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import useStyles from './OffenderSideList.styles';
+import Loading from '../../shared-components/AntD/Loading';
 
 const { Text, Paragraph } = Typography;
 
 interface Props {
-  data: ListOffendersQuery | undefined;
+  data: OffenderFeedListQuery | undefined;
   loading: boolean;
   // eslint-disable-next-line react/require-default-props
   current?: string;
-  onPaginationChange: (page: number, pageSize: number) => void;
+
   to?: string;
-  pagination: {
-    page: number;
-    pageSize: number;
-  };
+  fetchMoreScroll: () => void;
 }
 
 const OffenderSideList = ({
   data,
   loading,
   current,
-  onPaginationChange,
+  fetchMoreScroll,
   to,
-  pagination,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl(); // Use the useIntl hook to access the intl object
+  const isLoading = loading && !data?.listOffenders?.total;
 
   return (
-    <SideList>
-      {loading && (
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            flex: 1,
-            height: '100vh',
-          }}
-        >
-          <Spin />
-        </div>
-      )}
-      {data?.listOffenders?.offenders.map((offender) => (
-        <Link
-          to={`${to || '/app/offenders/view/'}${offender.id}`}
-          key={offender.id}
-        >
-          <SideListItem current={current === offender.id}>
-            <Row wrap={false}>
-              <Col>
-                {offender.images.length > 0 ? (
-                  <div className={classes.image}>
-                    <WatermarkImage
-                      url={offender.images[0].optimised}
-                      position={offender.images[0].position}
-                    />
-                  </div>
-                ) : (
-                  <Skeleton.Image className={classes.imageSkeleton} />
-                )}
-              </Col>
-              <Col className={classes.content} flex={1}>
-                <Text
-                  className={classes.name}
-                  strong={current === offender.id}
-                  ellipsis
-                >
-                  {offender.name}
-                </Text>
-                <Paragraph
-                  className={classes.reference}
-                  strong={current === offender.id}
-                  ellipsis
-                >
-                  {intl.formatMessage(
-                    {
-                      id: '377fsC',
-                      defaultMessage: 'Alert ID: {reference}',
-                    },
-                    { reference: offender.reference }
-                  )}
-                </Paragraph>
-                <Paragraph className={classes.detail} ellipsis>
-                  {offender.race && getEthnicity(offender.race)}
-                </Paragraph>
-                <Paragraph className={classes.detail} ellipsis>
-                  {offender.gender && getSex(offender.gender)}
-                </Paragraph>
-              </Col>
-            </Row>
-          </SideListItem>
-        </Link>
-      ))}
-      {!loading && (
-        <Pagination
-          total={data?.listOffenders?.total}
-          size="small"
-          showSizeChanger={false}
-          onChange={onPaginationChange}
-          pageSize={pagination.pageSize}
-          current={pagination.page}
-          hideOnSinglePage
-        />
-      )}
-    </SideList>
+    <div className={classes.sideList}>
+      <InfiniteScroll
+        dataLength={data?.listOffenders?.offenders.length || 0}
+        next={fetchMoreScroll}
+        hasMore={
+          (data?.listOffenders?.offenders?.length || 0) <
+            (data?.listOffenders?.total || 0) || false
+        }
+        loader={<Loading />}
+        style={{ overflowX: 'hidden' }}
+        height="100vh"
+        endMessage={
+          <p style={{ textAlign: 'center' }}>
+            {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+            <b>-----------</b>
+          </p>
+        }
+        className={classes.infiniteScroll}
+      >
+        {isLoading
+          ? Array.from({ length: 24 }).map(() => (
+              <SideListItem loading current={false}>
+                <Row wrap={false}>
+                  <Col className={classes.itemContent} flex={1}>
+                    <div />
+                  </Col>
+                </Row>
+              </SideListItem>
+            ))
+          : data?.listOffenders?.offenders.map((offender) => (
+              <Link
+                to={`${to || '/app/offenders/view/'}${offender.id}`}
+                key={offender.id}
+              >
+                <SideListItem current={current === offender.id}>
+                  <Row wrap={false}>
+                    <Col>
+                      {offender.images.length > 0 ? (
+                        <div className={classes.image}>
+                          <WatermarkImage
+                            url={offender.images[0].optimised}
+                            position={offender.images[0].position}
+                          />
+                        </div>
+                      ) : (
+                        <Skeleton.Image className={classes.imageSkeleton} />
+                      )}
+                    </Col>
+                    <Col className={classes.content} flex={1}>
+                      <Text
+                        className={classes.name}
+                        strong={current === offender.id}
+                        ellipsis
+                      >
+                        {offender.name}
+                      </Text>
+                      <Paragraph
+                        className={classes.reference}
+                        strong={current === offender.id}
+                        ellipsis
+                      >
+                        {intl.formatMessage(
+                          {
+                            id: '377fsC',
+                            defaultMessage: 'Alert ID: {reference}',
+                          },
+                          { reference: offender.reference }
+                        )}
+                      </Paragraph>
+                      <Paragraph className={classes.detail} ellipsis>
+                        {offender.race && getEthnicity(offender.race)}
+                      </Paragraph>
+                      <Paragraph className={classes.detail} ellipsis>
+                        {offender.gender && getSex(offender.gender)}
+                      </Paragraph>
+                    </Col>
+                  </Row>
+                </SideListItem>
+              </Link>
+            ))}
+      </InfiniteScroll>
+    </div>
   );
 };
 
