@@ -75305,6 +75305,8 @@ export type UpdateBusinessMutation = {
       geoLng?: number | null;
       geoLat?: number | null;
     }>;
+    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+    tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
   };
 };
 
@@ -89607,6 +89609,14 @@ export const UpdateBusinessDocument = gql`
         postcode
         geoLng
         geoLat
+      }
+      groups {
+        id
+        name
+      }
+      tags {
+        id
+        name
       }
       totalUsers
     }

@@ -152,7 +152,7 @@ const ViewBusiness = ({
               </Button>
             </Col>
             <Col>
-              <Button type="ghost">
+              <Button type="ghost" onClick={toggleEdit}>
                 <FontAwesomeIcon
                   size="1x"
                   style={{ marginRight: 8 }}

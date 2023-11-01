@@ -13,6 +13,7 @@ import type {
   Race,
 } from 'graphql/generated';
 import {
+  QueryMode,
   useSearchOffendersLazyQuery,
   ImagePosition,
   ListOffendersDocument,
@@ -220,7 +221,7 @@ const useAddOffender = (): Return => {
           where: {
             name: {
               equals: offenderName,
-              // mode: QueryMode.Insensitive,
+              mode: QueryMode.Insensitive,
             },
             groups:
               role === Role.ContentAdmin

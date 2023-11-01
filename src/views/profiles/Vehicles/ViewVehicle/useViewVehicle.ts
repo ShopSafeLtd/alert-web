@@ -701,7 +701,7 @@ const useViewVehicle = (vehicleId: string): Return => {
                   : vehicleData?.vehicle?.groups.map(({ id }) => ({ id })),
             },
             scheme: schemeId,
-            vehicleId,
+            vehicles: { connect: [{ id: vehicleId }] },
             // createdBy: { connect: { id: userId } },
             // localId: value.id,
             image:
