@@ -102,7 +102,7 @@ const ImageSection = ({
             action={
               facialRec
                 ? import.meta.env.VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT_GO
-                : import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT_GO
+                : import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT
             }
             className="incident-form-images-no-offenders"
             // listType="picture-card"
@@ -203,7 +203,7 @@ const ImageSection = ({
           action={
             facialRec
               ? import.meta.env.VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT_GO
-              : import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT_GO
+              : import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT
           }
           className="incident-form-images-no-offenders"
           listType="picture-card"

@@ -61,6 +61,7 @@ const EditArticleView = ({
 }: ViewProps) => {
   const intl = useIntl();
   const noSchemes = selectedSchemes;
+
   const forms = {
     // eslint-disable-next-line react/jsx-no-useless-fragment
     null: <></>,
