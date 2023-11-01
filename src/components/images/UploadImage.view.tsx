@@ -7,6 +7,7 @@ import WatermarkImage from 'components/images/WatermarkImage.view';
 import ImageEditor from 'components/form-components/ImageEditor/ImageEditor.view';
 import { useIntl } from 'react-intl';
 import type { Image } from 'types/DataType';
+import customRequest from '../../utils/custom-request';
 
 interface Props {
   imgChange: UploadProps['onChange'];
@@ -56,7 +57,7 @@ const UploadImage = ({
             <Upload
               accept=".png,.jpeg,.webp"
               className="upload-images"
-              action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
+              customRequest={customRequest}
               listType="picture-card"
               fileList={fileList}
               onChange={imgChange}

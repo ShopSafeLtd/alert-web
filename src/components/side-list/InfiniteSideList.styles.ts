@@ -1,14 +1,6 @@
 import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles({
-  image: {
-    height: 100,
-    width: 70,
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'cover',
-    opacity: 0.8,
-  },
   itemContent: {
     padding: '10px 12px 5px',
   },
@@ -39,19 +31,6 @@ const useStyles = createUseStyles({
   },
   content: {
     padding: 10,
-  },
-  divider: {
-    margin: 0,
-  },
-  name: {
-    fontSize: 14,
-  },
-  reference: {
-    fontSize: 12,
-  },
-  detail: {
-    fontSize: 10,
-    marginBottom: '2px !important',
   },
   infiniteScroll: {
     paddingTop: 10,

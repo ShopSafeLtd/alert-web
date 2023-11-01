@@ -12,6 +12,7 @@ import type { UploadChangeParam } from 'antd/lib/upload';
 import type { ImagePosition } from 'graphql/generated';
 import WatermarkImage from '../../images/WatermarkImage.view';
 import type { StateImageData } from '../../incidents/IncidentForm/ImageSection/useImageSection';
+import customRequest from '../../../utils/custom-request';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   image: {
@@ -171,7 +172,8 @@ const ImageSelect = ({ images: imagesProp, value, onChange }: Props) => {
         onChange={onImageChange}
         // listType="picture-card"
         // action={import.meta.env.VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT}
-        action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
+        // action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
+        customRequest={customRequest}
         // showUploadList={false}
       >
         <Button loading={uploading} disabled={uploading}>

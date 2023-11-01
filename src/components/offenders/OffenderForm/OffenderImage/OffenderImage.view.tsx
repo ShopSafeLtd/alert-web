@@ -24,6 +24,7 @@ import WatermarkImage from 'components/images/WatermarkImage.view';
 import ImageEditor from 'components/form-components/ImageEditor/ImageEditor.view';
 import { useIntl } from 'react-intl';
 import type { Image } from 'types/DataType';
+import customRequest from '../../../../utils/custom-request';
 
 const { Title, Paragraph } = Typography;
 
@@ -91,7 +92,7 @@ const OffenderImage = ({
           <Col style={{ marginLeft: 30 }}>
             <Upload
               accept=".png,.jpeg,.webp"
-              action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
+              customRequest={customRequest}
               fileList={fileList}
               onChange={imgChange}
               beforeUpload={beforeUpload}
@@ -170,7 +171,7 @@ const OffenderImage = ({
               >
                 <Upload
                   accept=".png,.jpeg,.webp"
-                  action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
+                  customRequest={customRequest}
                   listType="picture-card"
                   fileList={fileList}
                   onChange={imgChange}
