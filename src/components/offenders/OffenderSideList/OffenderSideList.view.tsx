@@ -6,9 +6,8 @@ import { useIntl } from 'react-intl'; // Import the useIntl hook
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import SideListItem from 'components/side-list/SideListItem.view';
 import { getEthnicity, getSex } from 'utils';
-import InfiniteScroll from 'react-infinite-scroll-component';
 import useStyles from './OffenderSideList.styles';
-import Loading from '../../shared-components/AntD/Loading';
+import InfiniteSideScrollList from '../../side-list/InfiniteSideList';
 
 const { Text, Paragraph } = Typography;
 
@@ -29,93 +28,72 @@ const OffenderSideList = ({
   fetchMoreScroll,
   to,
 }: Props): JSX.Element => {
+  const { listOffenders } = data || {};
+  const { offenders, total } = listOffenders || {};
   const classes = useStyles();
-  const intl = useIntl(); // Use the useIntl hook to access the intl object
+  const intl = useIntl();
   const isLoading = loading && !data?.listOffenders?.total;
 
+  const offenderItems = offenders?.map((offender) => (
+    <Link
+      to={`${to || '/app/offenders/view/'}${offender.id}`}
+      key={offender.id}
+    >
+      <SideListItem current={current === offender.id}>
+        <Row wrap={false}>
+          <Col>
+            {offender.images.length > 0 ? (
+              <div className={classes.image}>
+                <WatermarkImage
+                  url={offender.images[0].optimised}
+                  position={offender.images[0].position}
+                />
+              </div>
+            ) : (
+              <Skeleton.Image className={classes.imageSkeleton} />
+            )}
+          </Col>
+          <Col className={classes.content} flex={1}>
+            <Text
+              className={classes.name}
+              strong={current === offender.id}
+              ellipsis
+            >
+              {offender.name}
+            </Text>
+            <Paragraph
+              className={classes.reference}
+              strong={current === offender.id}
+              ellipsis
+            >
+              {intl.formatMessage(
+                {
+                  id: '377fsC',
+                  defaultMessage: 'Alert ID: {reference}',
+                },
+                { reference: offender.reference }
+              )}
+            </Paragraph>
+            <Paragraph className={classes.detail} ellipsis>
+              {offender.race && getEthnicity(offender.race)}
+            </Paragraph>
+            <Paragraph className={classes.detail} ellipsis>
+              {offender.gender && getSex(offender.gender)}
+            </Paragraph>
+          </Col>
+        </Row>
+      </SideListItem>
+    </Link>
+  ));
+
   return (
-    <div className={classes.sideList}>
-      <InfiniteScroll
-        dataLength={data?.listOffenders?.offenders.length || 0}
-        next={fetchMoreScroll}
-        hasMore={
-          (data?.listOffenders?.offenders?.length || 0) <
-            (data?.listOffenders?.total || 0) || false
-        }
-        loader={<Loading />}
-        style={{ overflowX: 'hidden' }}
-        height="100vh"
-        endMessage={
-          <p style={{ textAlign: 'center' }}>
-            {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-            <b>-----------</b>
-          </p>
-        }
-        className={classes.infiniteScroll}
-      >
-        {isLoading
-          ? Array.from({ length: 24 }).map(() => (
-              <SideListItem loading current={false}>
-                <Row wrap={false}>
-                  <Col className={classes.itemContent} flex={1}>
-                    <div />
-                  </Col>
-                </Row>
-              </SideListItem>
-            ))
-          : data?.listOffenders?.offenders.map((offender) => (
-              <Link
-                to={`${to || '/app/offenders/view/'}${offender.id}`}
-                key={offender.id}
-              >
-                <SideListItem current={current === offender.id}>
-                  <Row wrap={false}>
-                    <Col>
-                      {offender.images.length > 0 ? (
-                        <div className={classes.image}>
-                          <WatermarkImage
-                            url={offender.images[0].optimised}
-                            position={offender.images[0].position}
-                          />
-                        </div>
-                      ) : (
-                        <Skeleton.Image className={classes.imageSkeleton} />
-                      )}
-                    </Col>
-                    <Col className={classes.content} flex={1}>
-                      <Text
-                        className={classes.name}
-                        strong={current === offender.id}
-                        ellipsis
-                      >
-                        {offender.name}
-                      </Text>
-                      <Paragraph
-                        className={classes.reference}
-                        strong={current === offender.id}
-                        ellipsis
-                      >
-                        {intl.formatMessage(
-                          {
-                            id: '377fsC',
-                            defaultMessage: 'Alert ID: {reference}',
-                          },
-                          { reference: offender.reference }
-                        )}
-                      </Paragraph>
-                      <Paragraph className={classes.detail} ellipsis>
-                        {offender.race && getEthnicity(offender.race)}
-                      </Paragraph>
-                      <Paragraph className={classes.detail} ellipsis>
-                        {offender.gender && getSex(offender.gender)}
-                      </Paragraph>
-                    </Col>
-                  </Row>
-                </SideListItem>
-              </Link>
-            ))}
-      </InfiniteScroll>
-    </div>
+    <InfiniteSideScrollList
+      dataLength={offenders?.length}
+      next={fetchMoreScroll}
+      hasMore={(offenders?.length || 0) < (total || 0)}
+      isLoading={isLoading}
+      items={offenderItems}
+    />
   );
 };
 
