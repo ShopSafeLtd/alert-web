@@ -5,6 +5,14 @@ query Business($where: BusinessWhereUniqueInput!) {
     fullName
     publicName
     demId
+    groups {
+      id
+      name
+    }
+    tags {
+      id
+      name
+    }
     incidents {
       id
       reference
@@ -27,15 +35,7 @@ query Business($where: BusinessWhereUniqueInput!) {
       }
     }
     todos {
-      id
-      name
-      description
-      dueDate
-      completed
-      assignedUsers {
-        id
-        fullName
-      }
+      ...Todos
     }
     parent {
       id

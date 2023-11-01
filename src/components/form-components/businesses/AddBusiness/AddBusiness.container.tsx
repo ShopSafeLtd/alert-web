@@ -10,10 +10,22 @@ interface Props {
 }
 
 const AddBusiness = ({ onClose, update, saving }: Props) => {
-  const { onSubmit, onSearchBusiness, form, location, setLocation } =
-    useAddBusiness({
-      update,
-    });
+  const {
+    onSubmit,
+    onSearchBusiness,
+    form,
+    location,
+    setLocation,
+    tags,
+    tagsLoading,
+    addTag,
+    toggleAddTag,
+    updateNewTagData,
+    groups,
+    groupsLoading,
+  } = useAddBusiness({
+    update,
+  });
 
   return (
     <View
@@ -24,6 +36,13 @@ const AddBusiness = ({ onClose, update, saving }: Props) => {
       form={form}
       location={location}
       setLocation={setLocation}
+      tags={tags}
+      tagsLoading={tagsLoading}
+      addTag={addTag}
+      toggleAddTag={toggleAddTag}
+      updateNewTagData={updateNewTagData}
+      groups={groups}
+      groupsLoading={groupsLoading}
     />
   );
 };

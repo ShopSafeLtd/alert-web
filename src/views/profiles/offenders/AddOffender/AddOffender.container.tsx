@@ -53,6 +53,10 @@ const AddOffender = (): JSX.Element => {
     documentList,
     documentUploadProps,
     reportOnly,
+    potentialOffenders,
+    toggleViewPotentialOffenders,
+    onSearchOffender,
+    viewPotentialOffenders,
   } = useAddOffender();
 
   return (
@@ -106,6 +110,10 @@ const AddOffender = (): JSX.Element => {
         documentList={documentList}
         documentUploadProps={documentUploadProps}
         reportOnly={reportOnly}
+        potentialOffenders={potentialOffenders}
+        viewPotentialOffenders={viewPotentialOffenders}
+        toggleViewPotentialOffenders={toggleViewPotentialOffenders}
+        onSearchOffender={onSearchOffender}
       />
     </div>
   );

@@ -1,0 +1,22 @@
+mutation updateVehicleDetails($where: UniqueId!, $data: VehicleUpdateInput!) {
+  updateVehicle(where: $where, data: $data) {
+    id
+    make
+    model
+    registration
+    reference
+    images {
+      ...Images
+    }
+    customGalleries {
+      id
+      name
+    }
+    groups {
+      id
+      name
+    }
+    updatedAt
+    colour
+  }
+}

@@ -8,6 +8,7 @@ export interface TodoData {
   crimeGroupId?: string | null;
   incidentId?: string | null;
   investigationId?: string | null;
+  similarOffenderIds?: string[] | null;
   chatId?: string | null;
 }
 // calculate the difference in days between start and end date
@@ -19,6 +20,9 @@ const getTodoUrl = (todo: TodoData) => {
     }
     case TodoType.OffenderApprove: {
       return `/app/offenders/review/${todo.offenderId}`;
+    }
+    case TodoType.OffenderCompare: {
+      return `/app/offenders/compare/${todo.offenderId}?similarOffenders=${todo.similarOffenderIds}`;
     }
     // mention
     case TodoType.IncidentUpdate: {
@@ -39,6 +43,7 @@ const getTodoUrl = (todo: TodoData) => {
     case TodoType.ChatMessage: {
       return `/app/chat/${todo.chatId}`;
     }
+
     default: {
       return `/app/tasks`;
     }

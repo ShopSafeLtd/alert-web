@@ -84,7 +84,7 @@ const useEditProfile = (): Return => {
         (id) => !defaultGroupIds?.includes(id)
       );
       const disconnectDefaultGroups = defaultGroupIds?.filter(
-        (id) => !data.defaultGroups.map((item) => item).includes(id)
+        (id) => !data.defaultGroups.includes(id)
       );
       updateUser({
         variables: {
@@ -100,7 +100,7 @@ const useEditProfile = (): Return => {
             offenderPush: { set: data.offenderPush },
             messagePush: { set: data.messagePush },
             defaultGroups: {
-              connect: disconnectDefaultGroups
+              connect: connectDefaultGroups
                 ? connectDefaultGroups.map((id) => ({ id }))
                 : undefined,
               disconnect: disconnectDefaultGroups

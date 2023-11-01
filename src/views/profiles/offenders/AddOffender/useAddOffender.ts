@@ -13,6 +13,7 @@ import type {
   Race,
 } from 'graphql/generated';
 import {
+  useSearchOffendersLazyQuery,
   ImagePosition,
   ListOffendersDocument,
   Model,
@@ -37,6 +38,7 @@ import type {
   SelectOptions,
   TagData,
   VehicleData,
+  OffenderData,
 } from 'types/DataType';
 import update from 'immutability-helper';
 import errorNotification from 'types/mutation_notifications/error_notification';
@@ -131,6 +133,10 @@ interface Return {
   updateNewCustomGalleryData: (values: CustomGalleryData) => void;
   updateNewOffenderTagData: (values: TagData) => void;
   reportOnly: boolean;
+  potentialOffenders: OffenderData[];
+  viewPotentialOffenders: boolean;
+  toggleViewPotentialOffenders: () => void;
+  onSearchOffender: () => void;
 }
 
 // const onPreview = async (file: UploadFile) => {
@@ -187,10 +193,63 @@ const useAddOffender = (): Return => {
   const [editImage, setEditImage] = useState<Image | null>(null);
   const navigate = useNavigate();
   const [primaryImage, setPrimaryImage] = useState<string>('');
+  const [potentialOffenders, setPotentialOffenders] = useState<OffenderData[]>(
+    []
+  );
+  const [viewPotentialOffenders, setViewPotentialOffenders] = useState(false);
 
   const onValuesChange = (changedValues: FormData) => {
     if (changedValues.idVerified !== undefined) {
       setIDVerified(changedValues.idVerified);
+    }
+    // if (
+    //   changedValues.name !== undefined ||
+    //   changedValues.name !== 'Unidentified Offender'
+    // ) {
+    //   setSearch(changedValues.name);
+    // }
+  };
+  const [queryOffenders] = useSearchOffendersLazyQuery();
+
+  const onSearchOffender = () => {
+    const offenderName = form.getFieldValue('name');
+    if (offenderName && offenderName !== 'Unidentified Offender') {
+      void queryOffenders({
+        fetchPolicy: 'cache-and-network',
+        variables: {
+          where: {
+            name: {
+              equals: offenderName,
+              // mode: QueryMode.Insensitive,
+            },
+            groups:
+              role === Role.ContentAdmin
+                ? undefined
+                : {
+                    some: {
+                      users: {
+                        some: {
+                          id: {
+                            equals: userId,
+                          },
+                        },
+                      },
+                    },
+                  },
+          },
+          scheme: {
+            id: schemeId,
+          },
+        },
+        // skip: !offenderName || offenderName === 'Unidentified Offender',
+        onCompleted: ({ listOffenders }) => {
+          if (listOffenders && listOffenders?.total > 0) {
+            setPotentialOffenders(listOffenders?.offenders);
+          } else {
+            setPotentialOffenders([]);
+          }
+        },
+      });
     }
   };
 
@@ -794,6 +853,9 @@ const useAddOffender = (): Return => {
   const toggleEditImage = (image?: Image) => {
     setEditImage(image || null);
   };
+  const toggleViewPotentialOffenders = () => {
+    setViewPotentialOffenders(!viewPotentialOffenders);
+  };
 
   return {
     onSubmit,
@@ -863,6 +925,10 @@ const useAddOffender = (): Return => {
     documentList,
     documentUploadProps,
     reportOnly,
+    potentialOffenders,
+    toggleViewPotentialOffenders,
+    onSearchOffender,
+    viewPotentialOffenders,
   };
 };
 

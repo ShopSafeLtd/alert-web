@@ -11,6 +11,7 @@ import {
   Table,
 } from 'antd';
 import type {
+  ImagePosition,
   ListCustomGalleriesQuery,
   ListVehiclesQuery,
   SortOrder,
@@ -18,7 +19,6 @@ import type {
 import { Link } from 'react-router-dom';
 // import type { MutationUpdaterFn } from '@apollo/client';
 import AddVehicle from 'components/form-components/Vehicle/AddVehicle';
-import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faChevronDown,
@@ -31,6 +31,9 @@ import VehicleFilter from 'components/vehicles/VehicleFilter';
 import { useIntl } from 'react-intl';
 import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
 import type { VehicleFilters } from 'state/data-model';
+import WatermarkImage from 'components/images/WatermarkImage.view';
+import FormatCalendar from 'utils/format-calendar-24h';
+import type { Moment } from 'moment';
 import useStyles from './ListVehicles.styles';
 
 interface Props {
@@ -111,6 +114,7 @@ const ListVehicles = ({
       )}
     </Menu>
   );
+
   return (
     <div className={classes.page}>
       <Row align="middle" gutter={16} className={classes.headerRow}>
@@ -182,15 +186,13 @@ const ListVehicles = ({
       <Table
         dataSource={data?.listVehicles.vehicles.map((vehicle) => ({
           key: vehicle.id,
+          images: vehicle.images,
           make: vehicle.make,
           reference: vehicle?.reference,
           colour: vehicle.colour,
           model: vehicle.model,
           registration: vehicle.registration,
           updatedAt: vehicle.updatedAt,
-          totalCrimeGroups: vehicle.totalCrimeGroups,
-          totalOffenders: vehicle.totalOffenders,
-          totalIncidents: vehicle.totalIncidents,
         }))}
         loading={loading}
         size="small"
@@ -201,6 +203,27 @@ const ListVehicles = ({
         }}
         columns={[
           {
+            key: 'images',
+            dataIndex: 'images',
+            title: '',
+            width: 120,
+            render: (
+              item: {
+                position: ImagePosition | undefined;
+                rotation: number | undefined;
+                optimised?: string | null | undefined;
+              }[]
+            ) => (
+              <div style={{ height: 100, width: 100 }}>
+                <WatermarkImage
+                  url={item[0]?.optimised}
+                  rotation={item[0]?.rotation}
+                  position={item[0]?.position}
+                />
+              </div>
+            ),
+          },
+          {
             key: 'reference',
             dataIndex: 'reference',
             title: intl.formatMessage({
@@ -208,8 +231,10 @@ const ListVehicles = ({
               id: 'k8ZNgH',
             }),
             render: (value, item) => (
+              // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
               <Link to={`view/${item.key}`}>{value}</Link>
             ),
+            // sorter: (a, b) => a.reference - b.reference,
           },
           {
             key: 'registration',
@@ -250,33 +275,11 @@ const ListVehicles = ({
               defaultMessage: 'UpdatedAt',
               id: 'tjQ2Mx',
             }),
-            render: (value: Date | undefined) =>
-              moment(value || moment()).calendar(),
+            render: (value: Date | Moment) => FormatCalendar(value),
+            sorter: (a, b) =>
+              new Date(a.updatedAt).valueOf() - new Date(b.updatedAt).valueOf(),
           },
-          {
-            key: 'totalOffenders',
-            dataIndex: 'totalOffenders',
-            title: intl.formatMessage({
-              defaultMessage: 'Members',
-              id: '+a+2ug',
-            }),
-          },
-          {
-            key: 'totalIncidents',
-            dataIndex: 'totalIncidents',
-            title: intl.formatMessage({
-              defaultMessage: 'Incidents',
-              id: 'mtr3R4',
-            }),
-          },
-          {
-            key: 'totalCrimeGroups',
-            dataIndex: 'totalCrimeGroups',
-            title: intl.formatMessage({
-              defaultMessage: 'Crime Groups',
-              id: 'a0aLil',
-            }),
-          },
+
           {
             title: '',
             dataIndex: 'actions',

@@ -14,13 +14,14 @@ interface Props {
 
 interface Return {
   onSubmit: (value: FormData) => void;
-
   userSchemes: Scheme[];
   schemeId: string;
 }
 
 const useAddOffenderWarning = ({ update }: Props): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
+  const userId = useStoreState((state) => state.user.id);
+
   const userSchemes = useStoreState((state) => state.user.schemes);
 
   const onSubmit = (data: FormData) => {
@@ -29,6 +30,7 @@ const useAddOffenderWarning = ({ update }: Props): Return => {
       name: data.name,
       description: data.description || '',
       schemes: data.schemes,
+      createdById: userId,
     });
   };
 

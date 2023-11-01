@@ -10,6 +10,7 @@ import type {
   CreateUserData,
 } from 'graphql/generated';
 import {
+  Model,
   QueryMode,
   SearchBusinessesDocument,
   SortOrder,
@@ -291,6 +292,27 @@ const useAddUser = ({
                       id: el.parent.id,
                     },
                   }
+                : undefined,
+              tags: {
+                connect:
+                  el.tags && el.tags.length > 0
+                    ? el.tags.map((id) => ({ id }))
+                    : undefined,
+                create:
+                  el.newTags && el.newTags.length > 0
+                    ? el.newTags.map((value) => ({
+                        name: value.name,
+                        description: value.description || '',
+                        schemes: {
+                          connect: value.schemes.map((id) => ({ id })),
+                        },
+                        createdBy: { connect: { id: value.createdById } },
+                        dataType: Model.Business,
+                      }))
+                    : undefined,
+              },
+              groups: el?.groups
+                ? { connect: el?.groups?.map((id) => ({ id })) }
                 : undefined,
               locations: {
                 create: [

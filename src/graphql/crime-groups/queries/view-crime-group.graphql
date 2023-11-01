@@ -18,6 +18,9 @@ query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
     }
     vehicles {
       ...Vehicles
+      images {
+        ...Images
+      }
     }
     offenders {
       ...Offenders

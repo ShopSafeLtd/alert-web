@@ -7,6 +7,7 @@ mutation UpdateTodo($data: TodoUpdateInput!, $where: UniqueId!) {
     completed
     id
     name
+    similarOffenderIds
     createdBy {
       id
       fullName

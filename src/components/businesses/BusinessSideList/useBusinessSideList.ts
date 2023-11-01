@@ -1,23 +1,17 @@
 import type { ListBusinessesQuery } from 'graphql/generated';
 import { SortOrder, useListBusinessesQuery } from 'graphql/generated';
-import { useState } from 'react';
 import { useStoreState } from 'state';
 
 interface Return {
   data: ListBusinessesQuery | undefined;
   loading: boolean;
-  onPaginationChange: (page: number, pageSize: number) => void;
-  pagination: { page: number; pageSize: number };
+  next: () => void;
 }
 
 const useBusinessSideList = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
-  const [pagination, setPagination] = useState({
-    page: 1,
-    pageSize: 20,
-  });
 
-  const { data, loading } = useListBusinessesQuery({
+  const { data, loading, fetchMore } = useListBusinessesQuery({
     variables: {
       where: {
         schemes: {
@@ -29,25 +23,44 @@ const useBusinessSideList = (): Return => {
         },
       },
       orderBy: { name: SortOrder.Asc },
-      take: pagination.pageSize,
-      skip: (pagination.page - 1) * pagination.pageSize,
+      take: 12,
     },
     fetchPolicy: 'cache-and-network',
   });
 
-  const onPaginationChange = (page: number, pageSize: number) => {
-    setPagination({
-      ...pagination,
-      page,
-      pageSize,
+  const next = () => {
+    void fetchMore({
+      variables: {
+        scheme: {
+          id: schemeId,
+        },
+        orderBy: { name: SortOrder.Asc },
+        take: 12,
+        skip: data?.listBusinesses.businesses?.length || 0,
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        return {
+          listBusinesses: {
+            ...fetchMoreResult.listBusinesses,
+            total:
+              fetchMoreResult.listBusinesses?.total ||
+              prev.listBusinesses?.total ||
+              0,
+            businesses: [
+              ...(prev.listBusinesses?.businesses || []),
+              ...(fetchMoreResult.listBusinesses?.businesses || []),
+            ],
+          },
+        };
+      },
     });
   };
 
   return {
     data,
     loading: data?.listBusinesses ? false : loading,
-    onPaginationChange,
-    pagination,
+    next,
   };
 };
 

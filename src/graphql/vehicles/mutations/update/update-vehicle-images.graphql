@@ -1,0 +1,8 @@
+mutation updateVehicleImages($where: UniqueId!, $data: VehicleUpdateInput!) {
+  updateVehicle(where: $where, data: $data) {
+    id
+    images {
+      ...Images
+    }
+  }
+}

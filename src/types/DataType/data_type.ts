@@ -91,7 +91,7 @@ export interface IncidentCardData {
   subject?: string | null;
   description?: string;
   dayTime?: string | null;
-  images?: Array<ImageCardData>;
+  images?: ImageCardData[] | null | undefined;
   crimeTypes?: Array<{
     id: string;
     name: string;
@@ -121,7 +121,7 @@ export interface VehicleData {
   offenders?: string[];
   customGalleries?: string[];
   newCustomGalleriesData?: CustomGalleryData[];
-  images?: Array<ImageCardData>;
+  images?: ImageCardData[] | null | undefined;
 }
 
 export interface VehicleCardData {
@@ -135,7 +135,7 @@ export interface VehicleCardData {
   groups?: string[];
   crimeGroup?: string[];
   customGalleries?: string[];
-  images?: Array<ImageCardData>;
+  images?: ImageCardData[] | null | undefined;
   incidents?: IncidentCardData[];
   offenders?: OffenderData[];
 }
@@ -183,6 +183,10 @@ export interface ImageCardData {
   primary?: boolean | null | undefined;
   policeImage?: boolean | null | undefined;
   rotation?: number;
+  offenders?: {
+    id: string;
+    images: { id: string; optimised?: string | undefined | null }[];
+  }[];
 }
 export interface Image extends UploadFile {
   // id: string;
@@ -289,6 +293,9 @@ export interface BusinessData {
     | null
     | undefined;
   locations: LocationData[];
+  tags?: string[];
+  newTags?: TagData[];
+  groups?: string[];
   isConnected?: boolean;
   isNew?: boolean;
 }
@@ -312,10 +319,19 @@ export interface TagData {
   name: string;
   description?: string;
   schemes: string[];
+  createdById: string;
   isConnected?: boolean;
   isNew?: boolean;
 }
-
+export interface NewTagData {
+  id: string;
+  name: string;
+  description?: string;
+  schemes: string[];
+  createdById?: string;
+  isConnected?: boolean;
+  isNew?: boolean;
+}
 export interface CustomQuestion {
   answerType: AnswerType;
   label: string;

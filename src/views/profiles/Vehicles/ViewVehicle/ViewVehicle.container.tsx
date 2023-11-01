@@ -39,6 +39,23 @@ const ViewVehicle = () => {
     addInvestigation,
     toggleAddInvestigation,
     updateInvestigationList,
+    editImages,
+    toggleEditImages,
+    editImageData,
+    setEditImageData,
+    onDeleteImage,
+    onEditImage,
+    onUpdateImages,
+    addOffender,
+    addExistingOffender,
+    editOffenderData,
+    setEditOffenderData,
+    onDeleteOffender,
+    toggleAddOffender,
+    toggleAddExistingOffender,
+    onEditOffender,
+    onAddOffender,
+    onAddExistingOffender,
   } = useViewVehicle(vehicleId);
 
   return (
@@ -76,6 +93,23 @@ const ViewVehicle = () => {
       addInvestigation={addInvestigation}
       toggleAddInvestigation={toggleAddInvestigation}
       updateInvestigationList={updateInvestigationList}
+      editImages={editImages}
+      toggleEditImages={toggleEditImages}
+      editImageData={editImageData}
+      setEditImageData={setEditImageData}
+      onDeleteImage={onDeleteImage}
+      onEditImage={onEditImage}
+      onUpdateImages={onUpdateImages}
+      addOffender={addOffender}
+      addExistingOffender={addExistingOffender}
+      editOffenderData={editOffenderData}
+      setEditOffenderData={setEditOffenderData}
+      onDeleteOffender={onDeleteOffender}
+      toggleAddOffender={toggleAddOffender}
+      toggleAddExistingOffender={toggleAddExistingOffender}
+      onEditOffender={onEditOffender}
+      onAddOffender={onAddOffender}
+      onAddExistingOffender={onAddExistingOffender}
     />
   );
 };

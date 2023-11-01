@@ -1,6 +1,16 @@
 import React from 'react';
 import type { ListBusinessesQuery } from 'graphql/generated';
-import { Button, Col, Drawer, Input, Row, Table, Tooltip } from 'antd';
+import {
+  Button,
+  Col,
+  Drawer,
+  Input,
+  Row,
+  Table,
+  Tag,
+  Tooltip,
+  Typography,
+} from 'antd';
 import { Link } from 'react-router-dom';
 import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -48,6 +58,32 @@ const ListBusinesses = ({
 }: Props) => {
   const classNames = useStyles();
   const intl = useIntl();
+  // const tagIds = new Set(
+  //   data?.listBusinesses.businesses?.flatMap((el) =>
+  //     el.tags.map(({ id }) => id)
+  //   )
+  // );
+  // const tagData = data?.listBusinesses.businesses?.flatMap(({ tags }) => tags);
+  // const tagFilter = [...tagIds]
+  //   .map((id) => tagData?.find((el) => el.id === id))
+  //   .map((el) => ({ text: el?.name || '', value: el?.id || '' }));
+  const groupIds = new Set(
+    data?.listBusinesses.businesses?.flatMap((el) =>
+      el.groups.map(({ id }) => id)
+    )
+  );
+  const groupData = data?.listBusinesses.businesses?.flatMap(
+    ({ groups }) => groups
+  );
+  const groupFilter = [...groupIds]
+    .map((id) => groupData?.find((el) => el.id === id))
+    .map((el) => ({ text: el?.name || '', value: el?.id || '' }));
+  const tags = new Set(
+    data?.listBusinesses.businesses?.flatMap((business) =>
+      business.tags.map((tag) => tag.name)
+    ) || []
+  );
+  const tagsArray = [...tags];
   return (
     <div className={classNames.page}>
       <Row gutter={8} className={classNames.actions}>
@@ -139,8 +175,55 @@ const ListBusinesses = ({
             }),
           },
           {
+            key: 'tags',
+            title: intl.formatMessage({
+              defaultMessage: 'Tags',
+              id: '1EYCdR',
+            }),
+            dataIndex: 'tags',
+            // filters: tagFilter,
+            filters: tagsArray.map((tag) => ({
+              text: tag,
+              value: tag,
+            })),
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            onFilter: (value: string, record: { tags: string[] }) =>
+              record.tags.includes(value),
+            render: (value: string[]) => (
+              <Tag color="red">
+                {value
+                  .map((tag, index) => (index === 0 ? tag : ` ${tag}`))
+                  .toString()}
+              </Tag>
+            ),
+          },
+          {
+            key: 'groups',
+            title: intl.formatMessage({
+              defaultMessage: 'Content Groups',
+              id: '3lRewT',
+            }),
+            dataIndex: 'groups',
+            filters: groupFilter,
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            onFilter: (
+              value: string | number | boolean,
+              record: { groups: { id: string; name: string }[] }
+            ) => record.groups.some((el) => el.id === value),
+            render: (value: { id: string; name: string }[]) => (
+              <Typography.Text>
+                {value
+                  .map((group, index) =>
+                    index === 0 ? group.name : ` ${group.name}`
+                  )
+                  .toString()}
+              </Typography.Text>
+            ),
+          },
+          {
             key: 'Options',
-            // title: '',
             dataIndex: 'Options',
             width: 60,
             render: (_, record) => (
@@ -169,6 +252,8 @@ const ListBusinesses = ({
           parent: item.parent?.name,
           parentId: item.parent?.id,
           location: item.locations[0]?.full || '',
+          groups: item.groups,
+          tags: item.tags.map(({ name }) => name),
         }))}
         loading={loading}
         size="small"

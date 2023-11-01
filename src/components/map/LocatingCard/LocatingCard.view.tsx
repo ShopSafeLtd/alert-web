@@ -65,12 +65,9 @@ const LocatingCard = ({ height, width, location, setLocation }: Props) => {
   const [largeOpen, setLargeOpen] = useState(false);
   const [viewport, setViewport] = useState<ViewportData>();
   const [currentViewport, setCurrentViewport] = useState<ViewportData>();
-  console.log('LocatingCard-location', location);
 
   // get current location
   useEffect(() => {
-    console.log('1');
-
     navigator.geolocation.getCurrentPosition((pos) => {
       setCurrentViewport({
         latitude: pos.coords.latitude,
@@ -80,25 +77,18 @@ const LocatingCard = ({ height, width, location, setLocation }: Props) => {
   }, []);
   useEffect(() => {
     if (location?.geoLat && location?.geoLng) {
-      console.log('2');
-
       setViewport({
         latitude: location.geoLat,
         longitude: location.geoLng,
       });
     }
     if (!(location?.geoLat && location?.geoLng) && currentViewport) {
-      console.log('3');
-
       setViewport({
         latitude: currentViewport.latitude,
         longitude: currentViewport.longitude,
       });
     }
-    console.log('LocatingCard2-viewport', viewport);
   }, [location, currentViewport]);
-
-  console.log('LocatingCard3-viewport', viewport);
 
   const toggleLargeOpen = () => setLargeOpen(!largeOpen);
   const onSubmit = async (value: ViewportData) => {

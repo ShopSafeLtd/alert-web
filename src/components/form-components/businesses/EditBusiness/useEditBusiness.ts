@@ -4,8 +4,12 @@ import { notification, Form } from 'antd';
 import type {
   SearchBusinessesQuery,
   SearchBusinessesQueryVariables,
+  BusinessUpdateInput,
 } from 'graphql/generated';
 import {
+  Model,
+  useSchemeGroupsQuery,
+  useTagsQuery,
   QueryMode,
   SearchBusinessesDocument,
   useEditBusinessQuery,
@@ -14,7 +18,7 @@ import {
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
-import type { LocationData } from 'types/DataType';
+import type { LocationData, TagData } from 'types/DataType';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
 interface OnSubmitValues {
@@ -29,6 +33,8 @@ interface OnSubmitValues {
   county: string;
   postcode: string;
   publicName: boolean;
+  tags?: Array<string | { value: string; label: string }>;
+  groups?: string[];
 }
 
 interface Props {
@@ -46,19 +52,27 @@ interface Return {
   loading: boolean;
   location: LocationData | undefined;
   setLocation: (value: LocationData) => void;
+  tags: { value: string; label: string }[];
+  tagsLoading: boolean;
+  addTag: boolean;
+  toggleAddTag: () => void;
+  updateNewTagData: (values: TagData) => void;
+  groups: { value: string; label: string }[];
+  groupsLoading: boolean;
 }
 
 const useEditBusiness = ({ onClose, businessId }: Props): Return => {
   const client = useApolloClient();
+  const userId = useStoreState((state) => state.user.id);
   const currentScheme = useStoreState((state) => state.scheme.id);
   const intl = useIntl();
   const [form] = Form.useForm<OnSubmitValues>();
 
   const [saving, setSaving] = useState(false);
-  // const [locationLocading, setLocationLoading] = useState(false);
 
   const [location, setLocation] = useState<LocationData>();
-  // const [loading, setLoading] = useState(true);
+  const [tagData, setTagData] = useState<TagData[]>([]);
+  const [addTag, setAddTag] = useState(false);
 
   const { data, loading } = useEditBusinessQuery({
     fetchPolicy: 'cache-and-network',
@@ -73,6 +87,11 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
         county: res.business?.locations[0]?.county || '',
         name: res.business?.name || '',
         publicName: res.business?.publicName,
+        groups: res.business?.groups.map(({ id }) => id),
+        tags: res.business?.tags.map((el) => ({
+          label: el.name,
+          value: el.id,
+        })),
         parent: res.business
           ? {
               label: res.business?.parent?.name,
@@ -93,6 +112,44 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
         });
       }
     },
+  });
+
+  const { data: tagsData, loading: tagsLoading } = useTagsQuery({
+    fetchPolicy: 'cache-and-network',
+    variables: {
+      where: {
+        schemes: {
+          some: {
+            id: {
+              in: [currentScheme],
+            },
+          },
+        },
+        dataType: {
+          equals: Model.Business,
+        },
+      },
+    },
+  });
+
+  const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
+    variables: {
+      where: {
+        scheme: {
+          id: {
+            equals: currentScheme,
+          },
+        },
+        users: {
+          some: {
+            id: {
+              equals: userId,
+            },
+          },
+        },
+      },
+    },
+    fetchPolicy: 'cache-and-network',
   });
   const onSetLocation = (value: LocationData) => {
     if (value) {
@@ -135,6 +192,67 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
       if (data?.business?.parent?.id) return { disconnect: true };
       return undefined;
     };
+    const getTags = (): BusinessUpdateInput['tags'] => {
+      const existingTagIds = data?.business?.tags?.map(({ id }) => id);
+
+      const tagIds = values?.tags?.map((el) => {
+        if (typeof el === 'object') {
+          return el.value;
+        }
+        return el;
+      });
+
+      const newTags = tagData?.filter(
+        (item) => item.isNew && tagIds?.includes(item.id)
+      );
+
+      const connectedTags = tagIds?.filter(
+        (id) =>
+          !(
+            newTags.map((el) => el.id).includes(id) ||
+            existingTagIds?.includes(id)
+          )
+      );
+      const disconnectedTags = existingTagIds?.filter(
+        (id) => !tagIds?.includes(id)
+      );
+      return {
+        disconnect:
+          disconnectedTags && disconnectedTags.length > 0
+            ? disconnectedTags.map((id) => ({ id }))
+            : undefined,
+        connect:
+          connectedTags && connectedTags.length > 0
+            ? connectedTags.map((id) => ({ id }))
+            : undefined,
+        create:
+          newTags.length > 0
+            ? newTags.map((value) => ({
+                name: value.name,
+                description: value.description || '',
+                schemes: {
+                  connect: value.schemes.map((id) => ({ id })),
+                },
+                createdBy: { connect: { id: value.createdById } },
+                // schemes: value.schemes.includes(currentScheme)
+                //   ? {
+                //       connect: value.schemes.map((id) => ({
+                //         id,
+                //       })),
+                //     }
+                //   : {
+                //       connect: [
+                //         ...value.schemes.map((id) => ({
+                //           id,
+                //         })),
+                //         { id: currentScheme },
+                //       ],
+                //     },
+                dataType: Model.Business,
+              }))
+            : undefined,
+      };
+    };
 
     void updateBusiness({
       variables: {
@@ -145,19 +263,31 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
           name: { set: values.name },
           publicName: values.publicName,
           parent: getParent(),
-          location: {
-            where: {
-              id: data?.business?.locations[0]?.id,
-            },
-            data: {
-              building: { set: values.building },
-              county: { set: values.county },
-              postcode: { set: values.postcode },
-              street: { set: values.street },
-              townCity: { set: values.townCity },
-              geoLat: location?.geoLat ? { set: location?.geoLat } : undefined,
-              geoLng: location?.geoLng ? { set: location?.geoLng } : undefined,
-            },
+          tags: getTags(),
+          groups: {
+            set: values.groups?.map((id: string) => ({ id })) || [],
+          },
+          locations: {
+            update: [
+              {
+                where: {
+                  id: data?.business?.locations[0]?.id,
+                },
+                data: {
+                  building: { set: values.building },
+                  county: { set: values.county },
+                  postcode: { set: values.postcode },
+                  street: { set: values.street },
+                  townCity: { set: values.townCity },
+                  geoLat: location?.geoLat
+                    ? { set: location?.geoLat }
+                    : undefined,
+                  geoLng: location?.geoLng
+                    ? { set: location?.geoLng }
+                    : undefined,
+                },
+              },
+            ],
           },
         },
       },
@@ -235,7 +365,25 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
             ]
       );
   };
-
+  const updateNewTagData = (values: TagData) => {
+    setAddTag(false);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const selectedTag = form.getFieldValue('tags');
+    if (selectedTag) {
+      form.setFieldsValue({
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        tags: [...selectedTag, { value: values.id, label: values.name }],
+      });
+    } else {
+      form.setFieldsValue({
+        tags: [{ value: values.id, label: values.name }],
+      });
+    }
+    setTagData([...tagData, { ...values, isNew: true }]);
+  };
+  const toggleAddTag = () => {
+    setAddTag(!addTag);
+  };
   return {
     onSubmit,
     saving,
@@ -244,6 +392,21 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
     form,
     location,
     setLocation: onSetLocation,
+    tags:
+      tagsData?.tags.map((tag) => ({
+        value: tag.id,
+        label: tag.name,
+      })) || [],
+    tagsLoading,
+    addTag,
+    toggleAddTag,
+    updateNewTagData,
+    groups:
+      groupsData?.groups.map((group) => ({
+        value: group.id,
+        label: group.name,
+      })) || [],
+    groupsLoading,
   };
 };
 

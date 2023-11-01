@@ -12,10 +12,12 @@ export interface AddVehicleData {
   colour?: string | null | undefined;
   reference?: number | null;
   registration?: string | null | undefined;
-  images?: {
-    id: string;
-    optimised?: string | null;
-  }[];
+  images?:
+    | {
+        id: string;
+        optimised?: string | null;
+      }[]
+    | null;
 }
 
 export interface StateVehicleData extends AddVehicleData {

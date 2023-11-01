@@ -42,6 +42,9 @@ mutation createIncident($data: CreateIncidentData!) {
     }
     vehicles {
       ...Vehicles
+      images {
+        ...Images
+      }
     }
     offenders {
       ...Offenders

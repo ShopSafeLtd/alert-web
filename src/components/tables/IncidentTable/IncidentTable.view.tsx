@@ -1,12 +1,12 @@
 import React from 'react';
-import { Button, Col, Popconfirm, Row, Table, Tooltip } from 'antd';
-import { useNavigate } from 'react-router';
+import { Button, Col, Popconfirm, Row, Table, Tooltip, Typography } from 'antd';
 import { createUseStyles } from 'react-jss';
 import { useIntl } from 'react-intl';
 import { Role } from 'graphql/generated';
 import { useStoreState } from 'state';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faTrash } from '@fortawesome/pro-light-svg-icons';
+import { Link } from 'react-router-dom';
 
 const useStyles = createUseStyles({
   row: { cursor: 'pointer' },
@@ -52,7 +52,6 @@ const IncidentTable = ({
   saving,
 }: Props): JSX.Element => {
   const classes = useStyles();
-  const navigate = useNavigate();
   const intl = useIntl();
   const role = useStoreState((state) => state.user.role);
   const restrictIncidentAccess =
@@ -63,13 +62,6 @@ const IncidentTable = ({
     <Table
       size="small"
       rowClassName={classes.row}
-      onRow={(record) =>
-        hasNavigation && !restrictIncidentAccess
-          ? {
-              onClick: () => navigate(`/app/incidents/view/${record.key}`),
-            }
-          : {}
-      }
       columns={[
         {
           key: 'reference',
@@ -78,7 +70,22 @@ const IncidentTable = ({
             id: 'k8ZNgH',
             defaultMessage: 'Alert ID',
           }),
-          width: 100,
+          render: (
+            _,
+            record: { key: string; reference: number | null | undefined }
+          ) => {
+            if (hasNavigation && !restrictIncidentAccess) {
+              return (
+                <Link to={`/app/incidents/view/${record.key}`}>
+                  <Typography.Text type="warning">
+                    {record.reference}
+                  </Typography.Text>
+                </Link>
+              );
+            }
+            return <Typography.Text>{record.reference}</Typography.Text>;
+          },
+          width: 80,
         },
         {
           key: 'policeRef',
@@ -126,9 +133,9 @@ const IncidentTable = ({
           title: '',
           dataIndex: 'Options',
           width: 100,
-          render: (_, record) => (
+          render: (_, record: { key: string }) => (
             <Row gutter={8}>
-              {deleteRights && setEditData && (
+              {setEditData && (
                 <Col>
                   <Tooltip
                     title={intl.formatMessage({
@@ -147,7 +154,7 @@ const IncidentTable = ({
                   </Tooltip>
                 </Col>
               )}
-              {deleteRights && onDelete && (
+              {onDelete && (
                 <Col>
                   <Tooltip
                     title={intl.formatMessage({
@@ -186,7 +193,7 @@ const IncidentTable = ({
             </Row>
           ),
         },
-      ]}
+      ].filter((item) => item?.key !== 'Options' || deleteRights)}
       dataSource={
         incidents?.map((incident) => ({
           key: incident?.id,

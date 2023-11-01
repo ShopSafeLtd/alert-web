@@ -1365,6 +1365,7 @@ const ViewIncident = ({
                               saving={saving}
                               editRights={editRights}
                               deleteRights={deleteRights}
+                              hasNavigation
                             />
                           ) : (
                             <Empty
@@ -1460,6 +1461,7 @@ const ViewIncident = ({
                               saving={saving}
                               editRights={editRights}
                               deleteRights={deleteRights}
+                              hasNavigation
                             />
                           ) : (
                             <Empty

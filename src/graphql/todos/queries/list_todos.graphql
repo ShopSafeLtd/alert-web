@@ -5,40 +5,21 @@ query listTodos(
   $orderBy: [TodoOrderBy!]
 ) {
   listTodos(where: $where, orderBy: $orderBy, take: $take, skip: $skip) {
-    uncompletedTodos {
-      type
+    todos {
       description
-      dueDate
-      completedDate
       id
       name
-      createdBy {
-        id
-        fullName
-      }
-      completedBy {
-        id
-        fullName
-      }
-      assignedUsers {
-        id
-        fullName
-      }
+      dueDate
       completed
+      type
       vehicleId
       offenderId
       crimeGroupId
       incidentId
       investigationId
       chatId
-    }
-    completedTodos {
-      type
-      description
-      dueDate
+      similarOffenderIds
       completedDate
-      id
-      name
       createdBy {
         id
         fullName
@@ -51,10 +32,9 @@ query listTodos(
         id
         fullName
       }
-      completed
     }
-    totalUserTodos
+    total
     uncompletedTotal
-    completedTotal
+    totalUserTodos
   }
 }

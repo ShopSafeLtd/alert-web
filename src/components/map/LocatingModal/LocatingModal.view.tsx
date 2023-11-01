@@ -54,7 +54,7 @@ const LocatingModal = ({
     mapRef.current?.moveLayer('clusters');
     mapRef.current?.moveLayer('cluster-count');
   }, [showHeatmap, showMarkers]);
-  console.log('LocatingModal-viewport', viewport);
+  // console.log('LocatingModal-viewport', viewport);
 
   useEffect(() => {
     if (viewportData) {

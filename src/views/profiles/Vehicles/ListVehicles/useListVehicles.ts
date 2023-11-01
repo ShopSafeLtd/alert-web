@@ -1,7 +1,6 @@
 import type { MutationUpdaterFn } from '@apollo/client';
 import { notification } from 'antd';
 import type {
-  CreateVehicleDataInput,
   CreateVehicleMutation,
   ListCustomGalleriesQuery,
   ListVehiclesQuery,
@@ -288,18 +287,21 @@ const useListVehicles = (): Return => {
   });
 
   const onSubmit = (data: VehicleData) => {
-    // setSaving(true);
-    const getCustomGalleries =
-      (): CreateVehicleDataInput['customGalleries'] => {
-        if (data.customGalleries) {
-          const connectedCustomGalleries = data.customGalleries.filter(
-            (id) =>
-              !data.newCustomGalleriesData?.map((el) => el.id).includes(id)
-          );
-          return {
+    void createVehicle({
+      variables: {
+        data: {
+          make: data.make || '',
+          model: data.model || '',
+          colour: data.colour || '',
+          registration: data.registration || '',
+          groups:
+            data?.groups && data.groups.length > 0
+              ? data?.groups?.map((id) => ({ id }))
+              : [],
+          customGalleries: {
             connect:
-              connectedCustomGalleries && connectedCustomGalleries.length > 0
-                ? connectedCustomGalleries.map((id) => ({ id }))
+              data.customGalleries && data.customGalleries.length > 0
+                ? data.customGalleries.map((id) => ({ id }))
                 : undefined,
             create:
               data.newCustomGalleriesData &&
@@ -316,25 +318,7 @@ const useListVehicles = (): Return => {
                     },
                   }))
                 : undefined,
-          };
-        }
-        return {
-          connect: undefined,
-          create: undefined,
-        };
-      };
-    void createVehicle({
-      variables: {
-        data: {
-          make: data.make || '',
-          model: data.model || '',
-          colour: data.colour || '',
-          registration: data.registration || '',
-          groups:
-            data?.groups && data.groups.length > 0
-              ? data?.groups?.map((id) => ({ id }))
-              : [],
-          customGalleries: getCustomGalleries(),
+          },
           crimeGroup:
             data?.crimeGroup && data.crimeGroup.length > 0
               ? data?.crimeGroup?.map((id) => ({ id }))

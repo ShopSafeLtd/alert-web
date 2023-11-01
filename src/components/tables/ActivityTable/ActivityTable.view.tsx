@@ -51,7 +51,6 @@ const ActivityTable = ({
   return (
     <Table
       size="small"
-      // loading={loading}
       pagination={{
         hideOnSinglePage: true,
         pageSize: 5,
@@ -65,28 +64,7 @@ const ActivityTable = ({
           }),
           dataIndex: 'name',
         },
-        {
-          key: 'completed',
-          dataIndex: 'completed',
-          title: intl.formatMessage({
-            defaultMessage: 'Status',
-            id: 'tzMNF3',
-          }),
-          ellipsis: true,
-          render: (value: boolean) => (
-            <Typography.Text type={value ? 'success' : 'warning'}>
-              {value
-                ? intl.formatMessage({
-                    defaultMessage: 'Completed',
-                    id: '95stPq',
-                  })
-                : intl.formatMessage({
-                    defaultMessage: 'Open',
-                    id: 'JfG49w',
-                  })}
-            </Typography.Text>
-          ),
-        },
+
         {
           key: 'description',
           dataIndex: 'description',

@@ -1,6 +1,8 @@
 import React from 'react';
 import type { FormInstance } from 'antd';
 import {
+  Drawer,
+  Select,
   Button,
   Col,
   Form,
@@ -13,7 +15,10 @@ import {
 import DebounceSelect from 'components/form-components/DebounceSelect';
 import { useIntl } from 'react-intl';
 import LocatingCard from 'components/map/LocatingCard';
-import type { LocationData } from 'types/DataType';
+import type { LocationData, TagData } from 'types/DataType';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/pro-light-svg-icons';
+import AddTag from 'components/form-components/tags/AddTag';
 
 interface FormData {
   name: string;
@@ -40,6 +45,13 @@ interface Props {
   form: FormInstance<FormData>;
   location: LocationData | undefined;
   setLocation: (value: LocationData) => void;
+  tags: { value: string; label: string }[];
+  tagsLoading: boolean;
+  addTag: boolean;
+  toggleAddTag: () => void;
+  updateNewTagData: (values: TagData) => void;
+  groups: { value: string; label: string }[];
+  groupsLoading: boolean;
 }
 
 const EditBusiness = ({
@@ -51,21 +63,32 @@ const EditBusiness = ({
   loading,
   location,
   setLocation,
+  tagsLoading,
+  tags,
+  addTag,
+  toggleAddTag,
+  updateNewTagData,
+  groups,
+  groupsLoading,
 }: Props) => {
   const intl = useIntl();
 
   return (
     <Form<FormData> layout="vertical" onFinish={onSubmit} form={form}>
-      <Form.Item
-        name="name"
-        label={intl.formatMessage({
-          defaultMessage: 'Business Name',
-          id: 'pGwRxT',
-        })}
-        rules={[{ required: true }]}
-      >
-        {loading ? <Skeleton.Input /> : <Input disabled={saving} />}
-      </Form.Item>
+      <Row gutter={16}>
+        <Col span={18}>
+          <Form.Item
+            name="name"
+            label={intl.formatMessage({
+              defaultMessage: 'Business Name',
+              id: 'pGwRxT',
+            })}
+            rules={[{ required: true }]}
+          >
+            {loading ? <Skeleton.Input /> : <Input disabled={saving} />}
+          </Form.Item>
+        </Col>
+      </Row>
 
       <Form.Item
         label={intl.formatMessage({
@@ -86,29 +109,115 @@ const EditBusiness = ({
           className="scheme-detail-switch"
         />
       </Form.Item>
-      <Form.Item
-        name="parent"
-        label={intl.formatMessage({
-          defaultMessage: 'Parent Business',
-          id: 'Av/UtY',
-        })}
-      >
-        {loading ? (
-          <Skeleton.Input />
-        ) : (
-          <DebounceSelect
-            showSearch
-            allowClear
-            disabled={saving}
-            placeholder={intl.formatMessage({
-              defaultMessage: 'Search for a business...',
-              id: 'qaJxSS',
+      <Row gutter={16}>
+        <Col span={18}>
+          <Form.Item
+            name="parent"
+            label={intl.formatMessage({
+              defaultMessage: 'Parent Business',
+              id: 'Av/UtY',
             })}
-            fetchOptions={onSearchBusiness}
-            style={{ width: 400 }}
-          />
-        )}
-      </Form.Item>
+          >
+            {loading ? (
+              <Skeleton.Input />
+            ) : (
+              <DebounceSelect
+                showSearch
+                allowClear
+                disabled={saving}
+                placeholder={intl.formatMessage({
+                  defaultMessage: 'Search for a business...',
+                  id: 'qaJxSS',
+                })}
+                fetchOptions={onSearchBusiness}
+                // style={{ width: 400 }}
+              />
+            )}
+          </Form.Item>
+        </Col>
+      </Row>
+
+      <Row gutter={16}>
+        <Col span={18}>
+          <Form.Item
+            name="groups"
+            label={intl.formatMessage({
+              defaultMessage: 'Content Groups',
+              id: '3lRewT',
+            })}
+            tooltip={intl.formatMessage({
+              defaultMessage:
+                'select the content groups that are relevant to this shop.',
+              id: 'iKCl0b',
+            })}
+          >
+            <Select
+              loading={groupsLoading}
+              disabled={saving}
+              mode="multiple"
+              maxTagCount={3}
+              optionFilterProp="label"
+            >
+              {groups.map((el) => (
+                <Select.Option value={el.value} label={el.label}>
+                  {el.label}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={24}>
+          <Row gutter={16} align="middle">
+            <Col span={18}>
+              <Form.Item
+                name="tags"
+                label={intl.formatMessage({
+                  defaultMessage: 'Tags',
+                  id: '1EYCdR',
+                })}
+                tooltip={intl.formatMessage({
+                  defaultMessage:
+                    'select of any tags that are relevant to this shop or add your own.',
+                  id: 'EdSN+T',
+                })}
+              >
+                <Select
+                  loading={tagsLoading}
+                  disabled={saving}
+                  mode="multiple"
+                  maxTagCount={3}
+                  optionFilterProp="label"
+                  // value={selectedItems}
+                  // onChange={onSelectCustomGallery}
+                >
+                  {tags.map((el) => (
+                    <Select.Option value={el.value} label={el.label}>
+                      {el.label}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col>
+              <Button
+                disabled={saving}
+                style={{ color: 'red', padding: 8 }}
+                onClick={toggleAddTag}
+                icon={
+                  <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
+                }
+              >
+                {intl.formatMessage({
+                  defaultMessage: 'Add Tag',
+                  id: 'GUW//c',
+                })}
+              </Button>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
       <Typography.Text style={{ fontSize: 16, fontWeight: 500 }}>
         {intl.formatMessage({ defaultMessage: 'Location', id: 'rvirM2' })}
       </Typography.Text>
@@ -119,7 +228,7 @@ const EditBusiness = ({
         setLocation={setLocation}
       />
       <Row style={{ marginTop: 10 }} gutter={16}>
-        <Col>
+        <Col span={12}>
           <Form.Item
             name="building"
             label={intl.formatMessage({
@@ -134,7 +243,7 @@ const EditBusiness = ({
             )}
           </Form.Item>
         </Col>
-        <Col>
+        <Col span={12}>
           <Form.Item
             name="street"
             label={intl.formatMessage({
@@ -152,7 +261,7 @@ const EditBusiness = ({
         </Col>
       </Row>
       <Row gutter={16}>
-        <Col>
+        <Col span={12}>
           <Form.Item
             name="townCity"
             label={intl.formatMessage({
@@ -168,7 +277,7 @@ const EditBusiness = ({
             )}
           </Form.Item>
         </Col>
-        <Col>
+        <Col span={12}>
           <Form.Item
             name="county"
             label={intl.formatMessage({
@@ -185,7 +294,7 @@ const EditBusiness = ({
         </Col>
       </Row>
       <Row>
-        <Col>
+        <Col span={12}>
           <Form.Item
             name="postcode"
             label={intl.formatMessage({
@@ -220,6 +329,24 @@ const EditBusiness = ({
           </Col>
         </Row>
       </Form.Item>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Add Business Tag',
+          id: 'frQeQr',
+        })}
+        visible={addTag}
+        width="600"
+        onClose={toggleAddTag}
+      >
+        <AddTag
+          update={updateNewTagData}
+          onClose={toggleAddTag}
+          description={intl.formatMessage({
+            defaultMessage: 'Tags are added to sort shops.',
+            id: 'M1v6uH',
+          })}
+        />
+      </Drawer>
     </Form>
   );
 };

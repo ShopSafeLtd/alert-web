@@ -14,25 +14,12 @@ describe('List Officer View', () => {
         completed: false,
         completedBy: null,
         createdBy: null,
-        completedDate: new Date('2022-07-25T08:57:55.299Z'),
-        dueDate: new Date('2022-07-25T08:57:55.299Z'),
-      },
-    ],
-    completedTodos: [
-      {
-        id: 'test',
-        name: 'completedTodos',
-        description: null,
-        assignedUsers: [],
-        completed: true,
-        completedBy: { id: 'completedTodos', fullName: 'completedTodos' },
-        createdBy: null,
+        similarOffenderIds: [],
         completedDate: new Date('2022-07-25T08:57:55.299Z'),
         dueDate: new Date('2022-07-25T08:57:55.299Z'),
       },
     ],
     uncompletedTotal: 1,
-    completedTotal: 1,
     totalUserTodos: 1,
   };
   it('renders the page', () => {

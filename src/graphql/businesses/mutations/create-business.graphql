@@ -13,6 +13,14 @@ mutation CreateBusiness($data: CreateBusinessDataInput!) {
       id
       full
     }
+    groups {
+      id
+      name
+    }
+    tags {
+      id
+      name
+    }
     totalUsers
   }
 }

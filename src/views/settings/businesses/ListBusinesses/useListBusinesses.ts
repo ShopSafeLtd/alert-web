@@ -7,6 +7,7 @@ import type {
   ListBusinessesQueryVariables,
 } from 'graphql/generated';
 import {
+  Model,
   ListBusinessesDocument,
   QueryMode,
   SortOrder,
@@ -231,6 +232,25 @@ const useListBusinesses = (): Return => {
               },
             ],
           },
+          tags: {
+            connect:
+              values.tags && values.tags.length > 0
+                ? values.tags.map((id) => ({ id }))
+                : undefined,
+            create:
+              values.newTags && values.newTags.length > 0
+                ? values.newTags.map((value) => ({
+                    name: value.name,
+                    description: value.description || '',
+                    schemes: {
+                      connect: value.schemes.map((id) => ({ id })),
+                    },
+                    createdBy: { connect: { id: value.createdById } },
+                    dataType: Model.Business,
+                  }))
+                : undefined,
+          },
+          groups: values?.groups?.map((id) => ({ id })) || [],
           parent: values.parent
             ? {
                 connect: {
@@ -247,29 +267,6 @@ const useListBusinesses = (): Return => {
             geoLat: values.locations[0].geoLat,
             geoLng: values.locations[0].geoLng,
           },
-        },
-      },
-      optimisticResponse: {
-        createBusiness: {
-          id: `${Math.random()}`,
-          name: values.name,
-          fullName: values.name,
-          publicName: values.publicName || false,
-          totalUsers: 0,
-          parent: values.parent
-            ? {
-                id: values.parent.id,
-                name: values.parent.name,
-              }
-            : null,
-          locations: [
-            {
-              id: `${Math.random()}`,
-              // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-              full: `${values.locations[0].building}, ${values.locations[0].street}, ${values.locations[0].townCity}, ${values.locations[0].county}, ${values.locations[0].postcode}`,
-            },
-          ],
-          demId: '',
         },
       },
     });

@@ -4,9 +4,9 @@ import {
   Avatar,
   Button,
   Card,
-  Checkbox,
+  // Checkbox,
   Col,
-  Collapse,
+  // Collapse,
   Drawer,
   Empty,
   Input,
@@ -26,11 +26,13 @@ import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { useIntl } from 'react-intl';
 import FormatCalendar from 'utils/format-calendar-24h';
 import { useStoreState } from 'state';
-import useStyles from './TodoList.styles';
+import { Link } from 'react-router-dom';
+import getTodoUrl from 'utils/get-to-do-url';
+// import useStyles from './TodoList.styles';
 import ViewTodo from '../../../components/form-components/Todos/ViewTodo/Todo.container';
 import type { ListData } from '../useActivities';
 
-const { Panel } = Collapse;
+// const { Panel } = Collapse;
 
 type TemplateData = ListData;
 
@@ -80,10 +82,61 @@ const AdminTodos = ({
   selectTemplate,
   selectedTemplate,
 }: Props): JSX.Element => {
-  const classes = useStyles();
+  // const classes = useStyles();
   const intl = useIntl();
   const shouldOpen = useStoreState((state) => state.scheme.taskTimeTracking);
-  // const shouldOpen = true;
+  const typesFilter = [
+    {
+      text: intl.formatMessage({
+        defaultMessage: 'Incident',
+        id: 'zaYxwd',
+      }),
+      value: 'incident',
+    },
+    {
+      text: intl.formatMessage({
+        defaultMessage: 'Offender',
+        id: 'AN7Aru',
+      }),
+      value: 'offender',
+    },
+    {
+      text: intl.formatMessage({
+        defaultMessage: 'Investigation',
+        id: 'tNseQe',
+      }),
+      value: 'investigation',
+    },
+    {
+      text: intl.formatMessage({
+        defaultMessage: 'Vehicle',
+        id: '4T7son',
+      }),
+      value: 'vehicle',
+    },
+    {
+      text: intl.formatMessage({
+        defaultMessage: 'Crime Group',
+        id: 'FY/YfT',
+      }),
+      value: 'crime group',
+    },
+    {
+      text: intl.formatMessage({
+        defaultMessage: 'Chat',
+        id: 'WTrOy3',
+      }),
+      value: 'chat',
+    },
+  ];
+
+  const userIds = new Set(
+    data?.todos.flatMap((todo) => todo.assignedUsers.map(({ id }) => id))
+  );
+  const userData = data?.todos.flatMap(({ assignedUsers }) => assignedUsers);
+  const userFilter = [...userIds]
+    .map((id) => userData?.find((el) => el.id === id))
+    .map((el) => ({ text: el?.fullName || '', value: el?.id || '' }));
 
   const completeTodo = (value: boolean, id?: string) => {
     if (value && id) {
@@ -183,9 +236,9 @@ const AdminTodos = ({
             // eslint-disable-next-line react/no-array-index-key
             <Skeleton key={index} />
           ))
-        ) : data?.uncompletedTotal ? (
+        ) : data?.total ? (
           <Table
-            dataSource={data?.uncompletedTodos?.map((todo) => ({
+            dataSource={data?.todos?.map((todo) => ({
               key: todo.id,
               name: todo.name,
               description: todo?.description,
@@ -218,6 +271,14 @@ const AdminTodos = ({
                   defaultMessage: 'Name',
                   id: 'HAlOn1',
                 }),
+                render: (value, record) => (
+                  <Link to={`${getTodoUrl(record.todo)}`}>{value}</Link>
+                ),
+                filters: typesFilter,
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                onFilter: (value: string, record) =>
+                  record.name?.includes(value),
               },
               {
                 key: 'description',
@@ -236,7 +297,11 @@ const AdminTodos = ({
                   defaultMessage: 'Due Date',
                   id: '8XUukm',
                 }),
-                render: (value) => FormatCalendar(value),
+                render: (value: Date) => FormatCalendar(value),
+                sorter: (a, b) =>
+                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                  // @ts-ignore
+                  new Date(a.dueDate).valueOf() - new Date(b.dueDate).valueOf(),
               },
               {
                 key: 'assignedUsers',
@@ -246,6 +311,11 @@ const AdminTodos = ({
                   id: '8oku8d',
                 }),
                 ellipsis: true,
+                filters: userFilter,
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                onFilter: (value: string, record) =>
+                  record.assignedUsers.some((el) => el.id === value),
                 render: (value: { id: string; fullName: string }[]) => (
                   <Row gutter={4}>
                     {value.map((item) => (
@@ -269,47 +339,97 @@ const AdminTodos = ({
               },
               {
                 title: intl.formatMessage({
-                  defaultMessage: 'Completed',
-                  id: '95stPq',
+                  defaultMessage: 'Status',
+                  id: 'tzMNF3',
                 }),
                 dataIndex: 'actions',
                 key: 'actions',
                 width: 130,
-                render: (_, record) => (
-                  <Button
-                    onClick={() => {
-                      if (shouldOpen) {
-                        setSelectedTodo(record.todo.id);
-                      } else {
-                        onCompletedTodo(record.todo.id);
-                      }
-                    }}
-                  >
-                    {intl.formatMessage({
-                      defaultMessage: 'Complete',
-                      id: 'U78NhE',
-                    })}
-                  </Button>
-                  // <Popconfirm
-                  //   title={intl.formatMessage({
-                  //     defaultMessage: 'Complete this activity?',
-                  //     id: 'i2Qvui',
-                  //   })}
-                  //   // description="Do you complete this activity?"
-                  //   onConfirm={() => onCompletedTodo(record.key)}
-                  //   okText={intl.formatMessage({
-                  //     defaultMessage: 'Yes',
-                  //     id: 'a5msuh',
-                  //   })}
-                  //   cancelText={intl.formatMessage({
-                  //     defaultMessage: 'No',
-                  //     id: 'oUWADl',
-                  //   })}
-                  //   overlayInnerStyle={{ padding: 10 }}
-                  // >
-                  //   <Checkbox checked={!!record.completed} />
-                  // </Popconfirm>
-                ),
+                filters: [
+                  {
+                    text: intl.formatMessage({
+                      defaultMessage: 'Uncompleted',
+                      id: 'vtoZdb',
+                    }),
+                    value: false,
+                  },
+                  {
+                    text: intl.formatMessage({
+                      defaultMessage: 'Completed',
+                      id: '95stPq',
+                    }),
+                    value: true,
+                  },
+                ],
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                onFilter: (value: boolean, record) =>
+                  record.completed === value,
+                render: (_, record) =>
+                  record.completed ? (
+                    <Popconfirm
+                      title={intl.formatMessage({
+                        defaultMessage: 'Uncompleted this activity?',
+                        id: 'AN8gwr',
+                      })}
+                      // description="Do you complete this activity?"
+                      onConfirm={() => onUncompletedTodo(record.key)}
+                      okText={intl.formatMessage({
+                        defaultMessage: 'Yes',
+                        id: 'a5msuh',
+                      })}
+                      cancelText={intl.formatMessage({
+                        defaultMessage: 'No',
+                        id: 'oUWADl',
+                      })}
+                      overlayInnerStyle={{ padding: 10 }}
+                    >
+                      <Button size="small" style={{ width: 110, padding: 2 }}>
+                        {intl.formatMessage({
+                          defaultMessage: 'Completed',
+                          id: '95stPq',
+                        })}
+                      </Button>
+                    </Popconfirm>
+                  ) : (
+                    <Button
+                      size="small"
+                      type="ghost"
+                      danger
+                      style={{ width: 110, padding: 2 }}
+                      onClick={() => {
+                        if (shouldOpen) {
+                          setSelectedTodo(record.todo.id);
+                        } else {
+                          onCompletedTodo(record.todo.id);
+                        }
+                      }}
+                    >
+                      {intl.formatMessage({
+                        defaultMessage: 'Uncompleted',
+                        id: 'vtoZdb',
+                      })}
+                    </Button>
+                  ),
+                // <Popconfirm
+                //   title={intl.formatMessage({
+                //     defaultMessage: 'Complete this activity?',
+                //     id: 'i2Qvui',
+                //   })}
+                //   // description="Do you complete this activity?"
+                //   onConfirm={() => onCompletedTodo(record.key)}
+                //   okText={intl.formatMessage({
+                //     defaultMessage: 'Yes',
+                //     id: 'a5msuh',
+                //   })}
+                //   cancelText={intl.formatMessage({
+                //     defaultMessage: 'No',
+                //     id: 'oUWADl',
+                //   })}
+                //   overlayInnerStyle={{ padding: 10 }}
+                // >
+                //   <Checkbox checked={!!record.completed} />
+                // </Popconfirm>
               },
             ]}
           />
@@ -333,7 +453,7 @@ const AdminTodos = ({
         )}
       </Card>
 
-      <Collapse className={classes.title}>
+      {/* <Collapse className={classes.title}>
         <Panel
           header={intl.formatMessage({
             defaultMessage: 'Completed Activities',
@@ -458,7 +578,7 @@ const AdminTodos = ({
             )}
           </Card>
         </Panel>
-      </Collapse>
+      </Collapse> */}
 
       <Drawer
         title={intl.formatMessage({

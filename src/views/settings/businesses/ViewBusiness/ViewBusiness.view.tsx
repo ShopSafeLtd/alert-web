@@ -8,7 +8,6 @@ import {
   Dropdown,
   Empty,
   Menu,
-  PageHeader,
   Popconfirm,
   Row,
   Skeleton,
@@ -129,316 +128,157 @@ const ViewBusiness = ({
   updateTodoList,
   onEditAddress,
 }: Props) => {
-  const classNames = useStyles();
+  const classes = useStyles();
   const intl = useIntl();
   return (
-    <div className={classNames.page}>
-      <Row wrap={false} style={{ height: '100vh', display: 'hidden' }}>
+    <div className="page-container">
+      <Row wrap={false}>
         <Col>
           <BusinessSideList current={businessId} />
         </Col>
-        <Col flex={1} className={classNames.content}>
-          <PageHeader
-            onBack={() => window.history.back()}
-            title={data?.business?.name}
-            extra={[
+        <Col flex={1} className={classes.content}>
+          <Row gutter={8} className={classes.headerBar} justify="end">
+            <Col>
               <Button
-                key="5"
                 // disabled={!!data?.business?.demId}
                 disabled
                 onClick={toggleLinkDem}
+                type="ghost"
               >
                 {intl.formatMessage({
                   defaultMessage: 'Link to DEM',
                   id: '14N7fW',
                 })}
-              </Button>,
-
-              <Button
-                key="4"
-                icon={
-                  <FontAwesomeIcon
-                    style={{ marginRight: 5 }}
-                    size="lg"
-                    icon={faEdit}
-                  />
-                }
-                onClick={toggleEdit}
-              >
+              </Button>
+            </Col>
+            <Col>
+              <Button type="ghost">
+                <FontAwesomeIcon
+                  size="1x"
+                  style={{ marginRight: 8 }}
+                  icon={faEdit}
+                />
                 {intl.formatMessage({
                   defaultMessage: 'Edit Business',
                   id: '9k1Jt/',
                 })}
-              </Button>,
+              </Button>
+            </Col>
+            <Col>
               <Button
-                key="4"
-                disabled={saving}
-                type="primary"
-                icon={
-                  <FontAwesomeIcon
-                    style={{ marginRight: 5 }}
-                    size="lg"
-                    icon={faTrash}
-                  />
-                }
+                type="ghost"
                 onClick={() => deleteConfirm(data?.business?.id || '')}
               >
+                <FontAwesomeIcon
+                  size="1x"
+                  style={{ marginRight: 8 }}
+                  icon={faTrash}
+                />
                 {intl.formatMessage({
-                  defaultMessage: 'Delete Business',
-                  id: 'pneJSz',
+                  defaultMessage: 'Delete',
+                  id: 'K3r6DQ',
                 })}
-              </Button>,
-            ]}
-          />
-
-          <Row gutter={16} className={classNames.details}>
-            <Col span={16} xxl={12} className={classNames.detailCol}>
-              {data?.business?.parent?.name && (
-                <Card>
+              </Button>
+            </Col>
+          </Row>
+          <div className={classes.details}>
+            {data?.business?.parent?.name && (
+              <Card>
+                <Typography.Title level={4}>
+                  {intl.formatMessage({
+                    defaultMessage: 'Details',
+                    id: 'Lv0zJu',
+                  })}
+                </Typography.Title>
+                <Descriptions column={1}>
+                  <Descriptions.Item
+                    label={intl.formatMessage({
+                      defaultMessage: 'Parent',
+                      id: 'zTbLfn',
+                    })}
+                  >
+                    <Link
+                      to={`/app/scheme-settings/businesses/view/${
+                        data?.business?.parent?.id || ''
+                      }`}
+                    >
+                      {loading ? (
+                        <Skeleton.Input style={{ height: 20 }} />
+                      ) : (
+                        data?.business?.parent?.name ||
+                        intl.formatMessage({
+                          defaultMessage: 'None',
+                          id: '450Fty',
+                        })
+                      )}
+                    </Link>
+                  </Descriptions.Item>
+                </Descriptions>
+              </Card>
+            )}
+            <Card>
+              <Typography.Title level={4}>
+                {intl.formatMessage({
+                  defaultMessage: 'Location',
+                  id: 'rvirM2',
+                })}
+              </Typography.Title>
+              <LocatingCard
+                width="100%"
+                height={194}
+                location={data?.business?.locations[0]}
+                setLocation={onEditAddress}
+              />
+            </Card>
+            <Card>
+              <Row align="middle" className={classes.cardHeader}>
+                <Col flex={1}>
                   <Typography.Title level={4}>
                     {intl.formatMessage({
-                      defaultMessage: 'Details',
-                      id: 'Lv0zJu',
+                      defaultMessage: 'Users',
+                      id: 'YDMrKK',
                     })}
                   </Typography.Title>
-                  <Descriptions column={1}>
-                    <Descriptions.Item
-                      label={intl.formatMessage({
-                        defaultMessage: 'Parent',
-                        id: 'zTbLfn',
-                      })}
-                    >
-                      <Link
-                        to={`/app/scheme-settings/businesses/view/${
-                          data?.business?.parent?.id || ''
-                        }`}
-                      >
-                        {loading ? (
-                          <Skeleton.Input style={{ height: 20 }} />
-                        ) : (
-                          data?.business?.parent?.name ||
-                          intl.formatMessage({
-                            defaultMessage: 'None',
-                            id: '450Fty',
-                          })
-                        )}
-                      </Link>
-                    </Descriptions.Item>
-                  </Descriptions>
-                </Card>
-              )}
-              <Card>
-                <Typography.Title level={4}>
-                  {intl.formatMessage({
-                    defaultMessage: 'Location',
-                    id: 'rvirM2',
-                  })}
-                </Typography.Title>
-                <LocatingCard
-                  width="100%"
-                  height={194}
-                  location={data?.business?.locations[0]}
-                  setLocation={onEditAddress}
-                />
-              </Card>
-              <Card>
-                <Row align="middle" className={classNames.cardHeader}>
-                  <Col flex={1}>
-                    <Typography.Title level={4}>
-                      {intl.formatMessage({
-                        defaultMessage: 'Users',
-                        id: 'YDMrKK',
-                      })}
-                    </Typography.Title>
-                  </Col>
-                  <Col>
-                    <Dropdown
-                      overlay={
-                        <Menu
-                          items={[
-                            {
-                              label: intl.formatMessage({
-                                defaultMessage: 'Add Existing',
-                                id: 'tUOcWp',
-                              }),
-                              key: '1',
-                              onClick: toggleAddUser,
-                              icon: (
-                                <FontAwesomeIcon
-                                  icon={faMagnifyingGlass}
-                                  style={{ marginRight: 5 }}
-                                />
-                              ),
-                            },
-                            {
-                              label: intl.formatMessage({
-                                defaultMessage: 'Invite New User',
-                                id: 'EbeHm3',
-                              }),
-                              key: '2',
-                              onClick: toggleInviteUser,
-                              icon: (
-                                <FontAwesomeIcon
-                                  icon={faPaperPlane}
-                                  style={{ marginRight: 5 }}
-                                />
-                              ),
-                            },
-                          ]}
-                        />
-                      }
-                    >
-                      <Button
-                        size="small"
-                        icon={
-                          <FontAwesomeIcon
-                            icon={faPlus}
-                            style={{ marginRight: 5 }}
-                          />
-                        }
-                      >
-                        {intl.formatMessage({
-                          defaultMessage: 'Add User',
-                          id: '7c3ANV',
-                        })}
-                      </Button>
-                    </Dropdown>
-                  </Col>
-                </Row>
-
-                <Table<UserTable>
-                  columns={[
-                    {
-                      key: 'name',
-                      dataIndex: 'name',
-                      title: intl.formatMessage({
-                        defaultMessage: 'Name',
-                        id: 'HAlOn1',
-                      }),
-                      render: (value, item) => (
-                        <Link
-                          to={`/app/scheme-settings/users/view/${item.key}`}
-                        >
-                          {value}
-                        </Link>
-                      ),
-                    },
-                    {
-                      key: 'status',
-                      dataIndex: 'status',
-                      title: intl.formatMessage({
-                        defaultMessage: 'Status',
-                        id: 'tzMNF3',
-                      }),
-                      render: (value) => (
-                        <Typography.Text
-                          type={value === 'Enabled' ? 'success' : 'warning'}
-                        >
-                          {value}
-                        </Typography.Text>
-                      ),
-                    },
-                    {
-                      key: 'lastLogin',
-                      dataIndex: 'lastLogin',
-                      title: intl.formatMessage({
-                        defaultMessage: 'Last Login',
-                        id: 'LPUHNC',
-                      }),
-                    },
-                    {
-                      key: 'groups',
-                      dataIndex: 'groups',
-                      title: intl.formatMessage({
-                        defaultMessage: 'Groups',
-                        id: 'hzmswI',
-                      }),
-                      render: (values: { id: string; name: string }[]) =>
-                        values.map((group) => (
-                          <Tag key={group.id}>{group.name}</Tag>
-                        )),
-                    },
-                    {
-                      key: 'actions',
-                      dataIndex: 'actions',
-                      render: (_, item) => (
-                        <Popconfirm
-                          title={intl.formatMessage({
-                            defaultMessage: 'Are you sure?',
-                            id: '2oCaym',
-                          })}
-                          onConfirm={() => onRemoveBusiness(item.key)}
-                          overlayInnerStyle={{ padding: 10 }}
-                        >
-                          <Tooltip
-                            title={intl.formatMessage({
-                              defaultMessage: 'Remove From Business',
-                              id: 'NuAnYs',
-                            })}
-                          >
-                            <Button
-                              type="text"
-                              style={{ padding: '0px 8px' }}
-                              size="small"
-                            >
-                              <FontAwesomeIcon icon={faTrash} />
-                            </Button>
-                          </Tooltip>
-                        </Popconfirm>
-                      ),
-                    },
-                  ]}
-                  loading={usersLoading}
-                  dataSource={
-                    usersData?.users.map((user) => ({
-                      groups: user.groups,
-                      key: user.id,
-                      lastLogin:
-                        user.loginEvents && user.loginEvents.length > 0
-                          ? moment(user.loginEvents[0]?.loginTime || '').format(
-                              'HH:mm DD/MM/YY'
-                            )
-                          : 'No LogIn Data',
-                      name: user.fullName,
-                      status: user.status || 'Unknown',
-                    })) || []
-                  }
-                  pagination={{
-                    hideOnSinglePage: true,
-                    pageSize: 10,
-                  }}
-                  size="small"
-                />
-              </Card>
-              <Card>
-                <Typography.Title level={4}>
-                  {intl.formatMessage({
-                    defaultMessage: 'Incidents',
-                    id: 'mtr3R4',
-                  })}
-                </Typography.Title>
-                <IncidentTable
-                  incidents={data?.business?.incidents || []}
-                  hasNavigation
-                />
-              </Card>
-
-              <Card>
-                <Row align="middle" className={classNames.cardHeader}>
-                  <Col flex={1}>
-                    <Typography.Title level={4}>
-                      {intl.formatMessage({
-                        defaultMessage: 'Activities',
-                        id: 'UmEsZF',
-                      })}
-                    </Typography.Title>
-                  </Col>
-                  <Col>
+                </Col>
+                <Col>
+                  <Dropdown
+                    overlay={
+                      <Menu
+                        items={[
+                          {
+                            label: intl.formatMessage({
+                              defaultMessage: 'Add Existing',
+                              id: 'tUOcWp',
+                            }),
+                            key: '1',
+                            onClick: toggleAddUser,
+                            icon: (
+                              <FontAwesomeIcon
+                                icon={faMagnifyingGlass}
+                                style={{ marginRight: 5 }}
+                              />
+                            ),
+                          },
+                          {
+                            label: intl.formatMessage({
+                              defaultMessage: 'Invite New User',
+                              id: 'EbeHm3',
+                            }),
+                            key: '2',
+                            onClick: toggleInviteUser,
+                            icon: (
+                              <FontAwesomeIcon
+                                icon={faPaperPlane}
+                                style={{ marginRight: 5 }}
+                              />
+                            ),
+                          },
+                        ]}
+                      />
+                    }
+                  >
                     <Button
                       size="small"
-                      onClick={toggleAddTodo}
-                      loading={templatesLoading}
-                      disabled={templatesLoading}
                       icon={
                         <FontAwesomeIcon
                           icon={faPlus}
@@ -447,73 +287,217 @@ const ViewBusiness = ({
                       }
                     >
                       {intl.formatMessage({
-                        defaultMessage: 'Add Activity',
-                        id: 'VOiupa',
+                        defaultMessage: 'Add User',
+                        id: '7c3ANV',
                       })}
                     </Button>
-                  </Col>
-                </Row>
+                  </Dropdown>
+                </Col>
+              </Row>
 
-                <ActivityTable
-                  todos={data?.business?.todos}
-                  saving={saving || loading}
-                  setViewTodoVisible={setViewTodoVisible}
-                  setCompleteTodoVisible={setCompleteTodoVisible}
-                />
-              </Card>
-            </Col>
-            <Col span={8} xxl={12} className={classNames.detailCol}>
-              <Card>
-                <Typography.Title level={4} style={{ marginBottom: 30 }}>
-                  {intl.formatMessage({
-                    defaultMessage: 'Recent Activity',
-                    id: 'nc8QpJ',
-                  })}
-                </Typography.Title>
+              <Table<UserTable>
+                columns={[
+                  {
+                    key: 'name',
+                    dataIndex: 'name',
+                    title: intl.formatMessage({
+                      defaultMessage: 'Name',
+                      id: 'HAlOn1',
+                    }),
+                    render: (value, item) => (
+                      <Link to={`/app/scheme-settings/users/view/${item.key}`}>
+                        {value}
+                      </Link>
+                    ),
+                  },
+                  {
+                    key: 'status',
+                    dataIndex: 'status',
+                    title: intl.formatMessage({
+                      defaultMessage: 'Status',
+                      id: 'tzMNF3',
+                    }),
+                    render: (value) => (
+                      <Typography.Text
+                        type={value === 'Enabled' ? 'success' : 'warning'}
+                      >
+                        {value}
+                      </Typography.Text>
+                    ),
+                  },
+                  {
+                    key: 'lastLogin',
+                    dataIndex: 'lastLogin',
+                    title: intl.formatMessage({
+                      defaultMessage: 'Last Login',
+                      id: 'LPUHNC',
+                    }),
+                  },
+                  {
+                    key: 'groups',
+                    dataIndex: 'groups',
+                    title: intl.formatMessage({
+                      defaultMessage: 'Groups',
+                      id: 'hzmswI',
+                    }),
+                    render: (values: { id: string; name: string }[]) =>
+                      values.map((group) => (
+                        <Tag key={group.id}>{group.name}</Tag>
+                      )),
+                  },
+                  {
+                    key: 'actions',
+                    dataIndex: 'actions',
+                    render: (_, item) => (
+                      <Popconfirm
+                        title={intl.formatMessage({
+                          defaultMessage: 'Are you sure?',
+                          id: '2oCaym',
+                        })}
+                        onConfirm={() => onRemoveBusiness(item.key)}
+                        overlayInnerStyle={{ padding: 10 }}
+                      >
+                        <Tooltip
+                          title={intl.formatMessage({
+                            defaultMessage: 'Remove From Business',
+                            id: 'NuAnYs',
+                          })}
+                        >
+                          <Button
+                            type="text"
+                            style={{ padding: '0px 8px' }}
+                            size="small"
+                          >
+                            <FontAwesomeIcon icon={faTrash} />
+                          </Button>
+                        </Tooltip>
+                      </Popconfirm>
+                    ),
+                  },
+                ]}
+                loading={usersLoading}
+                dataSource={
+                  usersData?.users.map((user) => ({
+                    groups: user.groups,
+                    key: user.id,
+                    lastLogin:
+                      user.loginEvents && user.loginEvents.length > 0
+                        ? moment(user.loginEvents[0]?.loginTime || '').format(
+                            'HH:mm DD/MM/YY'
+                          )
+                        : 'No LogIn Data',
+                    name: user.fullName,
+                    status: user.status || 'Unknown',
+                  })) || []
+                }
+                pagination={{
+                  hideOnSinglePage: true,
+                  pageSize: 10,
+                }}
+                size="small"
+              />
+            </Card>
+            <Card>
+              <Typography.Title level={4}>
+                {intl.formatMessage({
+                  defaultMessage: 'Incidents',
+                  id: 'mtr3R4',
+                })}
+              </Typography.Title>
+              <IncidentTable
+                incidents={data?.business?.incidents || []}
+                hasNavigation
+              />
+            </Card>
 
-                {actionsData?.listActions.actions &&
-                actionsData?.listActions.actions.length > 0 ? (
-                  <Timeline>
-                    {actionsData.listActions.actions.map((action) => (
-                      <Timeline.Item key={action.id}>
-                        <Typography.Text>{action.description}</Typography.Text>
-                        <Row gutter={32}>
-                          <Col>
-                            <Typography.Paragraph
-                              type="secondary"
-                              style={{ fontSize: 12, marginBottom: 0 }}
-                            >
-                              {moment(action.createdAt).format(
-                                'HH:mm DD/MM/YY'
-                              )}
-                            </Typography.Paragraph>
-                          </Col>
-                          <Col>
-                            <Typography.Paragraph
-                              type="secondary"
-                              style={{ fontSize: 12, marginBottom: 0 }}
-                            >
-                              {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                              {action.byUser.fullName} -{' '}
-                              {action.byUser.businesses[0]?.name}
-                            </Typography.Paragraph>
-                          </Col>
-                        </Row>
-                      </Timeline.Item>
-                    ))}
-                  </Timeline>
-                ) : (
-                  <Empty
-                    description={intl.formatMessage({
-                      defaultMessage: 'No Recent Activity',
-                      id: 'oN/glA',
+            <Card loading={loading}>
+              <Row align="middle" className={classes.cardHeader}>
+                <Col flex={1}>
+                  <Typography.Title level={4}>
+                    {intl.formatMessage({
+                      defaultMessage: 'Activities',
+                      id: 'UmEsZF',
                     })}
-                    image={Empty.PRESENTED_IMAGE_SIMPLE}
-                  />
-                )}
-              </Card>
-            </Col>
-          </Row>
+                  </Typography.Title>
+                </Col>
+                <Col>
+                  <Button
+                    size="small"
+                    onClick={toggleAddTodo}
+                    loading={templatesLoading}
+                    disabled={templatesLoading}
+                    icon={
+                      <FontAwesomeIcon
+                        icon={faPlus}
+                        style={{ marginRight: 5 }}
+                      />
+                    }
+                  >
+                    {intl.formatMessage({
+                      defaultMessage: 'Add Activity',
+                      id: 'VOiupa',
+                    })}
+                  </Button>
+                </Col>
+              </Row>
+
+              <ActivityTable
+                todos={data?.business?.todos}
+                saving={saving || loading}
+                setViewTodoVisible={setViewTodoVisible}
+                setCompleteTodoVisible={setCompleteTodoVisible}
+              />
+            </Card>
+          </div>
+        </Col>
+        <Col span={6} className={classes.updatesContainer}>
+          <Card>
+            <Typography.Title level={4} style={{ marginBottom: 30 }}>
+              {intl.formatMessage({
+                defaultMessage: 'Recent Activity',
+                id: 'nc8QpJ',
+              })}
+            </Typography.Title>
+
+            {actionsData?.listActions.actions &&
+            actionsData?.listActions.actions.length > 0 ? (
+              <Timeline>
+                {actionsData.listActions.actions.map((action) => (
+                  <Timeline.Item key={action.id}>
+                    <Typography.Text>{action.description}</Typography.Text>
+                    <Row gutter={32}>
+                      <Col>
+                        <Typography.Paragraph
+                          type="secondary"
+                          style={{ fontSize: 12, marginBottom: 0 }}
+                        >
+                          {moment(action.createdAt).format('HH:mm DD/MM/YY')}
+                        </Typography.Paragraph>
+                      </Col>
+                      <Col>
+                        <Typography.Paragraph
+                          type="secondary"
+                          style={{ fontSize: 12, marginBottom: 0 }}
+                        >
+                          {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                          {action.byUser.fullName} -{' '}
+                          {action.byUser.businesses[0]?.name}
+                        </Typography.Paragraph>
+                      </Col>
+                    </Row>
+                  </Timeline.Item>
+                ))}
+              </Timeline>
+            ) : (
+              <Empty
+                description={intl.formatMessage({
+                  defaultMessage: 'No Recent Activity',
+                  id: 'oN/glA',
+                })}
+                image={Empty.PRESENTED_IMAGE_SIMPLE}
+              />
+            )}
+          </Card>
         </Col>
       </Row>
 

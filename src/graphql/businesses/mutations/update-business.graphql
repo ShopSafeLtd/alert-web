@@ -1,5 +1,5 @@
 mutation UpdateBusiness(
-  $data: UpdateBusinessDataInput!
+  $data: BusinessUpdateInput!
   $where: BusinessWhereUniqueInput!
 ) {
   updateBusiness(data: $data, where: $where) {

@@ -56,7 +56,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
   images: {
     width: '100%',
     padding: '0px 10px',
-    margin: '10px 0 20px',
+    margin: '10px 0 15px',
     transition: 'all 0.3s ease-in-out',
     overflowY: 'hidden',
     overflowX: 'auto',

@@ -158,9 +158,14 @@ const useAddVehicle = ({ update: updateVehicle }: Props): Return => {
       }
       return el;
     });
+
     const newCustomGalleries = customGalleryData.filter(
       (item) => item.isNew && customGalleriesIds?.includes(item.id)
     );
+    const connectCustomGalleriesIds = customGalleriesIds?.filter(
+      (id) => !newCustomGalleries.map((el) => el.id).includes(id)
+    );
+
     updateVehicle({
       id: Math.floor(Math.random() * 1000).toString(),
       make: data.make || '',
@@ -168,8 +173,8 @@ const useAddVehicle = ({ update: updateVehicle }: Props): Return => {
       colour: data.colour || '',
       registration: data.registration || '',
       customGalleries:
-        customGalleriesIds && customGalleriesIds.length > 0
-          ? customGalleriesIds
+        connectCustomGalleriesIds && connectCustomGalleriesIds.length > 0
+          ? connectCustomGalleriesIds
           : [],
       newCustomGalleriesData:
         newCustomGalleries && newCustomGalleries.length > 0

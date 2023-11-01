@@ -1,12 +1,12 @@
 import React from 'react';
-import { Button, Col, Popconfirm, Row, Table, Tooltip } from 'antd';
-import { useNavigate } from 'react-router';
+import { Button, Col, Popconfirm, Row, Table, Tooltip, Typography } from 'antd';
 import { createUseStyles } from 'react-jss';
 // import type { ColumnsType } from 'antd/es/table/interface';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faTrash } from '@fortawesome/pro-light-svg-icons';
 import type { CrimeGroupCardData } from 'types/DataType';
+import { Link } from 'react-router-dom';
 
 const useStyles = createUseStyles({
   row: { cursor: 'pointer' },
@@ -112,7 +112,7 @@ const CrimeGroupTable = ({
   deleteRights,
 }: Props): JSX.Element => {
   const classes = useStyles();
-  const navigate = useNavigate();
+
   const intl = useIntl();
 
   return (
@@ -120,19 +120,27 @@ const CrimeGroupTable = ({
     <Table
       size="small"
       rowClassName={classes.row}
-      onRow={(record) =>
-        hasNavigation
-          ? {
-              onClick: () => navigate(`/app/crime-groups/view/${record.key}`),
-            }
-          : {}
-      }
       columns={[
         {
           key: 'reference',
           dataIndex: 'reference',
           title: <FormattedMessage id="k8ZNgH" defaultMessage="Alert ID" />,
           width: 100,
+          render: (
+            _,
+            record: { key: string; reference: number | null | undefined }
+          ) => {
+            if (hasNavigation) {
+              return (
+                <Link to={`/app/crime-groups/view/${record.key}`}>
+                  <Typography.Text type="warning">
+                    {record.reference}
+                  </Typography.Text>
+                </Link>
+              );
+            }
+            return <Typography.Text>{record.reference}</Typography.Text>;
+          },
         },
         {
           key: 'alias',
@@ -160,7 +168,13 @@ const CrimeGroupTable = ({
           title: '',
           dataIndex: 'Options',
           width: 100,
-          render: (_, record) => (
+          render: (
+            _,
+            record: {
+              crimeGroup: CrimeGroupCardData | null;
+              key: string;
+            }
+          ) => (
             <Row gutter={8}>
               {deleteRights && setEditData && (
                 <Col>
@@ -220,7 +234,7 @@ const CrimeGroupTable = ({
             </Row>
           ),
         },
-      ]}
+      ].filter((item) => item?.key !== 'Options' || deleteRights)}
       dataSource={
         crimeGroups?.map((crimeGroup) => ({
           key: crimeGroup.id,

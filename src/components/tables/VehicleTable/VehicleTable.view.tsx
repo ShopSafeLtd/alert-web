@@ -1,11 +1,13 @@
 import React from 'react';
-import { Button, Col, Popconfirm, Row, Table, Tooltip } from 'antd';
-import { useNavigate } from 'react-router';
+import { Button, Col, Popconfirm, Row, Table, Tooltip, Typography } from 'antd';
 import { createUseStyles } from 'react-jss';
 import type { VehicleData } from 'types/DataType';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { useIntl } from 'react-intl';
+import WatermarkImage from 'components/images/WatermarkImage.view';
+import { Link } from 'react-router-dom';
+import type { ImagePosition } from 'graphql/generated';
 
 const useStyles = createUseStyles({
   row: { cursor: 'pointer' },
@@ -19,6 +21,15 @@ interface Props {
         make?: string | null;
         colour?: string | null;
         model?: string | null;
+        images?:
+          | {
+              id: string;
+              optimised?: string | null | undefined;
+              position?: ImagePosition;
+              rotation?: number;
+            }[]
+          | null
+          | undefined;
       }[]
     | undefined;
   hasNavigation?: boolean;
@@ -39,21 +50,33 @@ const VehicleTable = ({
   deleteRights,
 }: Props): JSX.Element => {
   const classes = useStyles();
-  const navigate = useNavigate();
   const intl = useIntl();
 
   return (
     <Table
       size="small"
       rowClassName={classes.row}
-      onRow={(record) =>
-        hasNavigation
-          ? {
-              onClick: () => navigate(`/app/vehicles/view/${record.key}`),
-            }
-          : {}
-      }
       columns={[
+        {
+          key: 'images',
+          dataIndex: 'images',
+          title: '',
+          render: (
+            item: {
+              position: ImagePosition | undefined;
+              rotation: number | undefined;
+              optimised?: string | null | undefined;
+            }[]
+          ) => (
+            <div style={{ height: 100, width: 80 }}>
+              <WatermarkImage
+                url={item[0]?.optimised}
+                rotation={item[0]?.rotation}
+                position={item[0]?.position}
+              />
+            </div>
+          ),
+        },
         {
           key: 'reference',
           dataIndex: 'reference',
@@ -61,14 +84,22 @@ const VehicleTable = ({
             defaultMessage: 'Alert ID',
             id: 'k8ZNgH',
           }),
-          // render: (_, record) => {
-          //   hasNavigation ? (
-          //     <Link to={`vehicles/view/${record.key}`} />
-          //   ) : (
-          //     <Typography.Text>{record.reference}</Typography.Text>
-          //   );
-          // },
-          width: 100,
+          render: (
+            _,
+            record: { key: string; reference: number | null | undefined }
+          ) => {
+            if (hasNavigation) {
+              return (
+                <Link to={`/app/vehicles/view/${record.key}`}>
+                  <Typography.Text type="warning">
+                    {record.reference}
+                  </Typography.Text>
+                </Link>
+              );
+            }
+            return <Typography.Text>{record.reference}</Typography.Text>;
+          },
+          width: 80,
         },
         {
           key: 'registration',
@@ -107,7 +138,7 @@ const VehicleTable = ({
           title: '',
           dataIndex: 'Options',
           width: 100,
-          render: (_, record) => (
+          render: (_, record: { vehicle: VehicleData | null; key: string }) => (
             <Row gutter={8}>
               {editRights && setEditVehicleData && (
                 <Col>
@@ -167,7 +198,7 @@ const VehicleTable = ({
             </Row>
           ),
         },
-      ]}
+      ].filter((item) => item?.key !== 'Options' || deleteRights || editRights)}
       dataSource={
         vehicles?.map((vehicle) => ({
           key: vehicle.id,
@@ -176,6 +207,7 @@ const VehicleTable = ({
           colour: vehicle.colour,
           model: vehicle.model,
           registration: vehicle.registration,
+          images: vehicle.images,
           vehicle,
         })) || []
       }

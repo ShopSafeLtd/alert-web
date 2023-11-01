@@ -224,19 +224,18 @@ const useFeedItems = (): Return => {
           },
         },
         users:
-          role === Role.User
-            ? {
+          role === Role.SchemeAdmin
+            ? undefined
+            : {
                 some: {
                   id: {
                     equals: userId,
                   },
                 },
-              }
-            : undefined,
+              },
       },
     },
     fetchPolicy: 'cache-and-network',
-    skip: role !== Role.SchemeAdmin,
   });
   const { data: recentOffenderData, loading: recentOffenderLoading } =
     useListOffendersFeedQuery({

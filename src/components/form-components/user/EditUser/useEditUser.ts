@@ -8,6 +8,7 @@ import type {
   UserUpdateInput,
 } from 'graphql/generated';
 import {
+  Model,
   QueryMode,
   SearchBusinessesDocument,
   SortOrder,
@@ -175,6 +176,9 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
     setSaving(true);
 
     if (userId) {
+      const disconnectGroupsId = userData?.user?.groups
+        .filter(({ id }) => !data.groups.map((item) => item).includes(id))
+        .map(({ id }) => id);
       const getBusiness = (): UserUpdateInput['businesses'] => {
         if (data.businesses) {
           const businessIds = new Set(
@@ -221,6 +225,27 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
                             id: el.parent.id,
                           },
                         }
+                      : undefined,
+                    tags: {
+                      connect:
+                        el.tags && el.tags.length > 0
+                          ? el.tags.map((id) => ({ id }))
+                          : undefined,
+                      create:
+                        el.newTags && el.newTags.length > 0
+                          ? el.newTags.map((value) => ({
+                              name: value.name,
+                              description: value.description || '',
+                              schemes: {
+                                connect: value.schemes.map((id) => ({ id })),
+                              },
+                              createdBy: { connect: { id: value.createdById } },
+                              dataType: Model.Business,
+                            }))
+                          : undefined,
+                    },
+                    groups: el?.groups
+                      ? { connect: el?.groups?.map((id) => ({ id })) }
                       : undefined,
                     locations: {
                       create: [
@@ -283,11 +308,10 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
                     !userData?.user?.groups.map((item) => item.id).includes(id)
                 )
                 .map((id) => ({ id })),
-              disconnect: userData?.user?.groups
-                .filter(
-                  ({ id }) => !data.groups.map((item) => item).includes(id)
-                )
-                .map(({ id }) => ({ id })),
+              disconnect:
+                disconnectGroupsId && disconnectGroupsId.length > 0
+                  ? disconnectGroupsId?.map((id) => ({ id }))
+                  : undefined,
             },
             approverGroups: data.approverGroups
               ? {
@@ -302,18 +326,27 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
                   disconnect: userData?.user?.approverGroups
                     .filter(
                       ({ id }) =>
-                        !data.approverGroups.map((item) => item).includes(id)
+                        !data.approverGroups.map((item) => item).includes(id) ||
+                        disconnectGroupsId?.includes(id)
                     )
                     .map(({ id }) => ({ id })),
                 }
               : undefined,
             defaultGroups: data.defaultGroups
               ? {
-                  connect: data.defaultGroups.map((id) => ({ id })),
+                  connect: data.defaultGroups
+                    .filter(
+                      (id) =>
+                        !userData?.user?.defaultGroups
+                          .map((item) => item.id)
+                          .includes(id)
+                    )
+                    .map((id) => ({ id })),
                   disconnect: userData?.user?.defaultGroups
                     .filter(
                       ({ id }) =>
-                        !data.defaultGroups.map((item) => item).includes(id)
+                        !data.defaultGroups.map((item) => item).includes(id) ||
+                        disconnectGroupsId?.includes(id)
                     )
                     .map(({ id }) => ({ id })),
                 }

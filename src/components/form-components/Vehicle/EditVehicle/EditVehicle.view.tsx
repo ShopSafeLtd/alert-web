@@ -1,40 +1,17 @@
 import React from 'react';
 import type { FormInstance } from 'antd';
-import {
-  Button,
-  Col,
-  Divider,
-  Drawer,
-  Form,
-  Input,
-  Modal,
-  Row,
-  Select,
-  Skeleton,
-  Table,
-  Tooltip,
-} from 'antd';
+import { Button, Col, Drawer, Form, Input, Row, Select, Skeleton } from 'antd';
 import type { ListCrimeGroupsQuery } from 'graphql/generated';
-import LinkOffender from 'components/form-components/offender/offender/AddExistingOffender';
-import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
-import WatermarkImage from 'components/images/WatermarkImage.view';
+import { faPlus } from '@fortawesome/pro-light-svg-icons';
+
 import type { RcFile, UploadProps } from 'antd/es/upload/interface';
-import type {
-  CustomGalleryData,
-  Image,
-  IncidentCardData,
-  OffenderData,
-  VehicleCardData,
-} from 'types/DataType';
+import type { CustomGalleryData, Image, VehicleCardData } from 'types/DataType';
 import UploadImage from 'components/images/UploadImage.view';
 import AddCustomGallery from 'components/form-components/customGalleries/AddCustomGallery';
 import { useIntl } from 'react-intl';
-import useStyles from './EditVehicle.styles';
+// import useStyles from './EditVehicle.styles';
 import type { FormData } from './useEditVehicle';
-
-const { confirm } = Modal;
 
 interface Props {
   onClose: () => void;
@@ -43,16 +20,6 @@ interface Props {
   CrimeGroupsData: ListCrimeGroupsQuery | undefined;
   CrimeGroupsLoading: boolean;
   saving: boolean;
-  offendersData: OffenderData[];
-  incidentsData: IncidentCardData[];
-  linkIncident: boolean;
-  linkOffender: boolean;
-  toggleLinkIncident: () => void;
-  toggleLinkOffender: () => void;
-  updateOffendersList: (value: OffenderData) => void;
-  updateIncidentList: (value: IncidentCardData) => void;
-  removeOffender: (value: string | undefined) => void;
-  removeIncident: (value: string | undefined) => void;
   adminRights: boolean;
   imgChange: UploadProps['onChange'];
   beforeUpload: (value: RcFile) => void;
@@ -66,8 +33,6 @@ interface Props {
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
   showGroups?: boolean;
-  fromIncident?: boolean;
-  fromOffender?: boolean;
   customGalleries: { value: string; label: string }[];
   customGalleriesLoading: boolean;
   addCustomGallery: boolean;
@@ -83,16 +48,6 @@ const EditVehicle = ({
   CrimeGroupsData,
   CrimeGroupsLoading,
   saving,
-  offendersData,
-  incidentsData,
-  linkIncident,
-  linkOffender,
-  toggleLinkIncident,
-  toggleLinkOffender,
-  updateIncidentList,
-  updateOffendersList,
-  removeOffender,
-  removeIncident,
   adminRights,
   imgChange,
   beforeUpload,
@@ -106,8 +61,6 @@ const EditVehicle = ({
   groups,
   groupsLoading,
   showGroups,
-  fromIncident,
-  fromOffender,
   customGalleries,
   customGalleriesLoading,
   addCustomGallery,
@@ -115,7 +68,7 @@ const EditVehicle = ({
   updateNewCustomGalleryData,
   form,
 }: Props): JSX.Element => {
-  const classes = useStyles();
+  // const classes = useStyles();
   const intl = useIntl();
   return editData ? (
     <div>
@@ -284,8 +237,8 @@ const EditVehicle = ({
                     })}
                     tooltip={intl.formatMessage({
                       defaultMessage:
-                        'Select any custom galleries that are relevant to this offender or add your own.',
-                      id: 'lGUu1k',
+                        'Select any custom galleries that are relevant to this vehicle or add your own.',
+                      id: '2pmewe',
                     })}
                   >
                     <Select
@@ -343,241 +296,6 @@ const EditVehicle = ({
           })}
         />
 
-        {adminRights && (
-          <Row gutter={16}>
-            {!fromIncident && (
-              <Col>
-                <Button
-                  onClick={toggleLinkIncident}
-                  disabled={saving || linkOffender}
-                  icon={
-                    <FontAwesomeIcon
-                      className="button-icon"
-                      icon={faPlus}
-                      size="lg"
-                    />
-                  }
-                >
-                  {intl.formatMessage({
-                    defaultMessage: 'Link Incident',
-                    id: '4sHDoC',
-                  })}
-                </Button>
-              </Col>
-            )}
-
-            {!fromOffender && (
-              <Col>
-                <div>
-                  <Button
-                    onClick={toggleLinkOffender}
-                    disabled={saving || linkIncident}
-                    icon={
-                      <FontAwesomeIcon
-                        className="button-icon"
-                        icon={faPlus}
-                        size="lg"
-                      />
-                    }
-                  >
-                    {intl.formatMessage({
-                      defaultMessage: 'Link Offender',
-                      id: 'IWqg0R',
-                    })}
-                  </Button>
-                </div>
-              </Col>
-            )}
-          </Row>
-        )}
-
-        {incidentsData && incidentsData.length > 0 ? (
-          <>
-            <Divider>
-              {intl.formatMessage({
-                defaultMessage: 'Linked Incidents',
-                id: 'RDsV4v',
-              })}
-            </Divider>
-            <Table
-              columns={[
-                {
-                  key: 'reference',
-                  dataIndex: 'reference',
-                  title: intl.formatMessage({
-                    defaultMessage: 'Alert ID',
-                    id: 'k8ZNgH',
-                  }),
-                },
-                {
-                  key: 'subject',
-                  dataIndex: 'subject',
-                  title: intl.formatMessage({
-                    defaultMessage: 'Subject',
-                    id: 'LLtKhp',
-                  }),
-                },
-                {
-                  key: 'date',
-                  dataIndex: 'date',
-                  title: intl.formatMessage({
-                    defaultMessage: 'Date',
-                    id: 'P7PLVj',
-                  }),
-                },
-                {
-                  key: 'Options',
-                  title: intl.formatMessage({
-                    defaultMessage: 'Delete',
-                    id: 'K3r6DQ',
-                  }),
-                  dataIndex: 'Options',
-                  width: 5,
-                  render: (_, record) => (
-                    <Row>
-                      <Col>
-                        <Tooltip
-                          title={intl.formatMessage({
-                            defaultMessage: 'Remove Incident',
-                            id: 'NhpFO7',
-                          })}
-                        >
-                          <Button
-                            size="small"
-                            disabled={saving}
-                            onClick={() => {
-                              confirm({
-                                title: intl.formatMessage({
-                                  defaultMessage:
-                                    'Do you want to remove the incident?',
-                                  id: 'wN3wVs',
-                                }),
-                                content: intl.formatMessage({
-                                  defaultMessage:
-                                    'This action cannot be undone.',
-                                  id: 'JDJoIZ',
-                                }),
-                                onOk() {
-                                  removeIncident(record.key);
-                                },
-                              });
-                            }}
-                            icon={<FontAwesomeIcon icon={faTrash} />}
-                          />
-                        </Tooltip>
-                      </Col>
-                    </Row>
-                  ),
-                },
-              ]}
-              dataSource={incidentsData.map((incident) => ({
-                subject: incident.subject,
-                reference: incident.reference,
-                date: incident.dayTime,
-                key: incident.id,
-              }))}
-              pagination={false}
-              size="small"
-            />
-          </>
-        ) : null}
-
-        {offendersData && offendersData.length > 0 ? (
-          <>
-            <Divider>
-              {intl.formatMessage({
-                defaultMessage: 'Linked Offenders',
-                id: 'hyrc8o',
-              })}
-            </Divider>
-            <Table
-              columns={[
-                {
-                  key: 'images',
-                  dataIndex: 'images',
-                  title: intl.formatMessage({
-                    defaultMessage: 'Image',
-                    id: '+0zv6g',
-                  }),
-                  render: (images: { id: string; optimised: string }[]) =>
-                    // eslint-disable-next-line
-                    images.length > 0 ? (
-                      <div className={classes.searchImageContainer}>
-                        <div className={classes.searchImage}>
-                          <WatermarkImage url={images[0]?.optimised} />
-                        </div>
-                      </div>
-                    ) : (
-                      <Skeleton.Image className={classes.imageSkeleton} />
-                    ),
-                  onCell: () => ({
-                    className: classes.imageCell,
-                  }),
-                },
-                {
-                  key: 'name',
-                  dataIndex: 'name',
-                  title: intl.formatMessage({
-                    defaultMessage: 'Name',
-                    id: 'HAlOn1',
-                  }),
-                },
-                {
-                  key: 'Options',
-                  title: intl.formatMessage({
-                    defaultMessage: 'Delete',
-                    id: 'K3r6DQ',
-                  }),
-                  dataIndex: 'Options',
-                  width: 5,
-                  render: (_, record) => (
-                    <Row>
-                      <Col>
-                        <Tooltip
-                          title={intl.formatMessage({
-                            defaultMessage: 'Remove Offender',
-                            id: 'cZH2Kj',
-                          })}
-                        >
-                          <Button
-                            size="small"
-                            disabled={saving}
-                            onClick={() => {
-                              confirm({
-                                title: intl.formatMessage({
-                                  defaultMessage:
-                                    'Do you want to remove the offender?',
-                                  id: 'B3Hfqo',
-                                }),
-                                content: intl.formatMessage({
-                                  defaultMessage:
-                                    'This action cannot be undone.',
-                                  id: 'JDJoIZ',
-                                }),
-                                onOk() {
-                                  removeOffender(record.key);
-                                },
-                              });
-                            }}
-                            icon={<FontAwesomeIcon icon={faTrash} />}
-                          />
-                        </Tooltip>
-                      </Col>
-                    </Row>
-                  ),
-                },
-              ]}
-              dataSource={offendersData.map((offender) => ({
-                key: offender.id,
-                name: offender.name,
-                images: offender.images,
-              }))}
-              pagination={false}
-              size="small"
-            />
-          </>
-        ) : null}
-
         <Form.Item>
           <Row style={{ marginTop: 30 }} gutter={16} justify="end">
             <Col>
@@ -598,44 +316,7 @@ const EditVehicle = ({
           </Row>
         </Form.Item>
       </Form>
-      <Drawer
-        title={intl.formatMessage({
-          defaultMessage: 'Link Offenders',
-          id: 'UhSUQG',
-        })}
-        visible={linkOffender}
-        width="800"
-        onClose={toggleLinkOffender}
-      >
-        {linkOffender ? (
-          <LinkOffender
-            update={updateOffendersList}
-            onClose={toggleLinkOffender}
-            offenderIds={offendersData.map(({ id }) => id)}
-          />
-        ) : (
-          <div />
-        )}
-      </Drawer>
-      <Drawer
-        title={intl.formatMessage({
-          defaultMessage: 'Link Incidents',
-          id: '1Vs3Qr',
-        })}
-        visible={linkIncident}
-        width="800"
-        onClose={toggleLinkIncident}
-      >
-        {linkIncident ? (
-          <LinkIncident
-            update={updateIncidentList}
-            onClose={toggleLinkIncident}
-            incidentIds={incidentsData?.map(({ id }) => id)}
-          />
-        ) : (
-          <div />
-        )}
-      </Drawer>
+
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Custom Gallery',

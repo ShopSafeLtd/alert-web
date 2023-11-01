@@ -30,6 +30,7 @@ import type { CarouselRef } from 'antd/lib/carousel';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
+import FormatCalendar from 'utils/format-calendar-24h';
 
 const { Title, Text } = Typography;
 
@@ -156,9 +157,7 @@ const OffenderCard = ({ offender }: Props): JSX.Element => {
                     defaultMessage: 'Last updated: {date}',
                   },
                   {
-                    date: moment(offender?.updatedAt || moment()).format(
-                      `ddd MMM DD YYYY - HH:mm`
-                    ),
+                    date: FormatCalendar(offender?.updatedAt || moment()),
                   }
                 )}
               </Text>
