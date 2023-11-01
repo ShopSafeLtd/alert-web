@@ -9,13 +9,17 @@ import type {
   CreateInvestigationMutation,
 } from 'graphql/generated';
 import {
+  useCreateSimpleOffenderMutation,
+  useUpdateVehicleOffendersMutation,
+  useUpdateSimpleOffenderMutation,
+  useUpdateVehicleDetailsMutation,
+  useUpdateVehicleImagesMutation,
   Role,
   useDeleteUpdateMutation,
   useDeleteVehicleMutation,
   useSubscribeToVehicleMutation,
   useUnsubscribeToVehicleMutation,
   useUpdateUpdateMutation,
-  useUpdateVehicleMutation,
   useVehicleQuery,
   VehicleDocument,
 } from 'graphql/generated';
@@ -23,9 +27,20 @@ import { useEffect, useState } from 'react';
 import update from 'immutability-helper';
 import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
-import type { VehicleData } from 'types/DataType';
+import type {
+  EditFeedImage,
+  ImageCardData,
+  OffenderData,
+  VehicleData,
+} from 'types/DataType';
 import { useIntl } from 'react-intl';
 import type { MutationUpdaterFn } from '@apollo/client';
+import successNotifications from 'types/mutation_notifications/show_success_notification';
+import {
+  ProfileUpdatedModel,
+  ProfileUpdatedType,
+} from 'types/enums/profile-update-type';
+import successNotification from 'types/mutation_notifications/success_notification';
 
 const { confirm } = Modal;
 
@@ -80,6 +95,23 @@ interface Return {
   toggleAddInvestigation: () => void;
   addInvestigation: boolean;
   updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
+  editImages: boolean;
+  toggleEditImages: () => void;
+  editImageData: EditFeedImage | null;
+  setEditImageData: (value: EditFeedImage | null) => void;
+  onDeleteImage: (id: string) => void;
+  onEditImage: (id: EditFeedImage) => void;
+  onUpdateImages: (value: ImageCardData[]) => void;
+  onEditOffender: (value: OffenderData) => void;
+  onAddOffender: (value: OffenderData) => void;
+  onAddExistingOffender: (id: string) => void;
+  addOffender: boolean;
+  addExistingOffender: boolean;
+  toggleAddOffender: () => void;
+  toggleAddExistingOffender: () => void;
+  editOffenderData: OffenderData | null;
+  setEditOffenderData: (value: OffenderData | null) => void;
+  onDeleteOffender: (id: string) => void;
 }
 
 const useViewVehicle = (vehicleId: string): Return => {
@@ -102,7 +134,15 @@ const useViewVehicle = (vehicleId: string): Return => {
   );
   const [addDocument, setAddDocument] = useState(false);
   const [addInvestigation, setAddInvestigation] = useState(false);
-
+  const [editImages, setEditImages] = useState(false);
+  const [editImageData, setEditImageData] = useState<EditFeedImage | null>(
+    null
+  );
+  const [addOffender, setAddOffender] = useState(false);
+  const [addExistingOffender, setAddExistingOffender] = useState(false);
+  const [editOffenderData, setEditOffenderData] = useState<OffenderData | null>(
+    null
+  );
   // const [optionMenuItems, setOptionsMenuItems] = useState<ItemType[]>([]);
 
   const [replyTo, setReplyTo] = useState<{
@@ -137,7 +177,7 @@ const useViewVehicle = (vehicleId: string): Return => {
       );
     },
   });
-  const [updateVehicle] = useUpdateVehicleMutation({
+  const [updateVehicle] = useUpdateVehicleDetailsMutation({
     onCompleted: () => {
       setSaving(false);
       notification.success({
@@ -208,52 +248,41 @@ const useViewVehicle = (vehicleId: string): Return => {
         vehicleData?.vehicle?.customGalleries.map(({ id }) => id);
       const customGalleryIds = data.customGalleries;
 
-      if (customGalleryIds) {
-        const newCustomGalleries = data.newCustomGalleriesData;
-        const connectedCustomGalleries = customGalleryIds?.filter(
-          (id) =>
-            !(
-              newCustomGalleries?.map((el) => el.id).includes(id) ||
-              existingCustomGalleryIds?.includes(id)
-            )
-        );
-        const disconnectedCustomGalleries = existingCustomGalleryIds?.filter(
-          (id) => !customGalleryIds?.includes(id)
-        );
+      const newCustomGalleries = data.newCustomGalleriesData;
+      const connectedCustomGalleries = customGalleryIds?.filter(
+        (id) =>
+          !(
+            newCustomGalleries?.map((el) => el.id).includes(id) ||
+            existingCustomGalleryIds?.includes(id)
+          )
+      );
+      const disconnectedCustomGalleries = existingCustomGalleryIds?.filter(
+        (id) => !customGalleryIds?.includes(id)
+      );
 
-        return {
-          disconnect:
-            disconnectedCustomGalleries &&
-            disconnectedCustomGalleries.length > 0
-              ? disconnectedCustomGalleries.map((id) => ({ id }))
-              : undefined,
-
-          connect:
-            connectedCustomGalleries.length > 0
-              ? connectedCustomGalleries.map((id) => ({ id }))
-              : undefined,
-          create:
-            newCustomGalleries && newCustomGalleries.length > 0
-              ? newCustomGalleries.map((value) => ({
-                  name: value.name,
-                  description: value.description || '',
-                  schemes: { connect: [{ id: schemeId }] },
-                  groups: {
-                    connect:
-                      data.groups && data.groups.length > 0
-                        ? data.groups.map((id) => ({ id }))
-                        : [],
-                  },
-                }))
-              : undefined,
-        };
-      }
       return {
-        connect: undefined,
-        create: undefined,
         disconnect:
-          existingCustomGalleryIds && existingCustomGalleryIds.length > 0
-            ? existingCustomGalleryIds.map((id) => ({ id }))
+          disconnectedCustomGalleries && disconnectedCustomGalleries.length > 0
+            ? disconnectedCustomGalleries.map((id) => ({ id }))
+            : undefined,
+
+        connect:
+          connectedCustomGalleries && connectedCustomGalleries.length > 0
+            ? connectedCustomGalleries.map((id) => ({ id }))
+            : undefined,
+        create:
+          newCustomGalleries && newCustomGalleries.length > 0
+            ? newCustomGalleries.map((value) => ({
+                name: value.name,
+                description: value.description || '',
+                schemes: { connect: [{ id: schemeId }] },
+                groups: {
+                  connect:
+                    data.groups && data.groups.length > 0
+                      ? data.groups.map((id) => ({ id }))
+                      : [],
+                },
+              }))
             : undefined,
       };
     };
@@ -288,19 +317,6 @@ const useViewVehicle = (vehicleId: string): Return => {
                 ? data?.crimeGroup?.map((id) => ({ id }))
                 : [],
           },
-          incidents: {
-            set:
-              data.incidents && data.incidents.length > 0
-                ? data.incidents.map((id) => ({ id }))
-                : [],
-          },
-          offenders: {
-            set:
-              data.offenders && data.offenders.length > 0
-                ? data.offenders.map((id) => ({ id }))
-                : [],
-          },
-
           customGalleries: getCustomGalleries(),
           images: getImages(),
         },
@@ -337,6 +353,489 @@ const useViewVehicle = (vehicleId: string): Return => {
       },
     });
   };
+  // image
+  const [updateVehicleImages] = useUpdateVehicleImagesMutation({
+    onError: () => {
+      errorNotification();
+    },
+  });
+
+  const onUpdateImages = (value: ImageCardData[]) => {
+    setSaving(true);
+    const disconnect = value
+      .filter(({ deleted }) => deleted)
+      .map(({ id }) => ({ id }));
+    const newImages = value.filter((el) => el.new);
+    const editedImages = value.filter(({ edited }) => edited);
+
+    void updateVehicleImages({
+      variables: {
+        where: {
+          id: vehicleId,
+        },
+        data: {
+          images: {
+            disconnect:
+              disconnect && disconnect.length > 0 ? disconnect : undefined,
+            upload:
+              newImages && newImages.length > 0
+                ? newImages
+                    .map((item) => ({
+                      url: {
+                        filename: item.fileName || '',
+                        mimetype: item.type || '',
+                        url: item.url || '',
+                      },
+                      position: item.position,
+                      primary: item.primary,
+                      policeImage: item.policeImage,
+                      rotation: item.rotation || 0,
+                    }))
+                    .filter((obj) => obj.url !== undefined)
+                : undefined,
+            update:
+              editedImages && editedImages.length > 0
+                ? editedImages.map((item) => ({
+                    where: {
+                      id: item.id,
+                    },
+                    data: {
+                      position: { set: item.position },
+                      primary: { set: item.primary },
+                      policeImage: { set: item.policeImage },
+                      rotation: { set: item.rotation },
+                    },
+                  }))
+                : undefined,
+          },
+        },
+      },
+      onCompleted: () => {
+        notification.success({
+          message: intl.formatMessage({
+            defaultMessage: 'Successfully updated!',
+            id: 'zJzbfm',
+          }),
+          description: intl.formatMessage({
+            defaultMessage: 'The images have been updated',
+            id: 'yRfbZE',
+          }),
+          placement: 'bottomRight',
+        });
+      },
+    }).finally(() => {
+      setEditImages(false);
+      setSaving(false);
+    });
+  };
+
+  const onEditImage = (value: EditFeedImage) => {
+    setSaving(true);
+    if (value) {
+      const findPrimaryId = vehicleData?.vehicle?.images.find(
+        ({ primary }) => primary
+      )?.id;
+      void updateVehicleImages({
+        variables: {
+          where: {
+            id: vehicleId,
+          },
+          data: {
+            images: {
+              update: [
+                {
+                  where: {
+                    id: value.id,
+                  },
+                  data: {
+                    position: { set: value.position },
+                    primary: { set: value.primary || false },
+                    policeImage: { set: value.policeImage || false },
+                    rotation: { set: value.rotation || 0 },
+                  },
+                },
+                {
+                  where: {
+                    id: findPrimaryId,
+                  },
+                  data: {
+                    primary: { set: !value.primary },
+                  },
+                },
+              ],
+            },
+          },
+        },
+        onCompleted: () => {
+          successNotifications(
+            ProfileUpdatedModel.Vehicle,
+            ProfileUpdatedType.updated,
+            ProfileUpdatedModel.Image
+          );
+        },
+        // update: updateImageList,
+      }).finally(() => {
+        setEditImageData(null);
+        setSaving(false);
+      });
+    }
+  };
+  const onDeleteImage = (value: string) => {
+    setSaving(false);
+    void updateVehicleImages({
+      variables: {
+        where: {
+          id: vehicleId,
+        },
+        data: {
+          images: {
+            disconnect: [{ id: value }],
+          },
+        },
+      },
+      onCompleted: () => {
+        notification.success({
+          message: intl.formatMessage({
+            defaultMessage: 'Successfully deleted!',
+            id: 'RFD+id',
+          }),
+          description: intl.formatMessage({
+            defaultMessage: 'The image/s have been deleted',
+            id: '65D7dw',
+          }),
+          placement: 'bottomRight',
+        });
+      },
+      update: (store, { data: res }) => {
+        if (res?.updateVehicle === null || res?.updateVehicle === undefined)
+          return;
+        const existingData = store.readQuery<VehicleQuery>({
+          query: VehicleDocument,
+          variables,
+        });
+
+        if (!existingData?.vehicle) return;
+        store.writeQuery<VehicleQuery>({
+          query: VehicleDocument,
+          data: {
+            vehicle: {
+              ...existingData.vehicle,
+              images: existingData.vehicle.images.filter(
+                ({ id }) => id !== value
+              ),
+            },
+            __typename: 'Query',
+          },
+          variables,
+        });
+      },
+    });
+  };
+  // offender
+
+  const [updateOffender] = useUpdateSimpleOffenderMutation({
+    onError: () => {
+      errorNotification();
+    },
+    update: (store, { data: res }) => {
+      if (res?.updateOffender === null || res?.updateOffender === undefined)
+        return;
+      const existingData = store.readQuery<VehicleQuery>({
+        query: VehicleDocument,
+        variables,
+      });
+      if (!existingData?.vehicle) return;
+      const index = existingData?.vehicle?.offenders
+        .map((item) => item.id)
+        .indexOf(res.updateOffender.id);
+
+      store.writeQuery<VehicleQuery>({
+        query: VehicleDocument,
+        data: {
+          vehicle: {
+            ...existingData.vehicle,
+            offenders: update(existingData.vehicle.offenders, {
+              [index]: {
+                $set: { ...res.updateOffender },
+              },
+            }),
+          },
+          __typename: 'Query',
+        },
+        variables,
+      });
+    },
+  });
+  const onEditOffender = (value: OffenderData) => {
+    setSaving(true);
+    if (value) {
+      const existingImageIds = editOffenderData?.images?.map(({ id }) => id);
+      const deleteIds = existingImageIds?.filter(
+        (id) => !value.images?.map((el) => el.id).includes(id)
+      );
+
+      void updateOffender({
+        variables: {
+          where: {
+            id: value.id,
+          },
+          data: {
+            name: { set: value.name },
+            gender: { set: value.gender || null },
+            race: { set: value.race || null },
+            build: { set: value.build || null },
+            hair: { set: value.hair || 'Unknown' },
+            peculiarities: { set: value.peculiarities || '' },
+            age: { set: value.age || null },
+            dateSource: { set: value.dateSource || null },
+            dateOfBirth: { set: value.dateOfBirth || null },
+            groups: {
+              set:
+                value.groups && value.groups.length > 0
+                  ? value.groups.map(({ id }) => ({ id }))
+                  : undefined,
+            },
+            images:
+              value.images && value.images.length > 0
+                ? {
+                    delete:
+                      deleteIds && deleteIds.length > 0
+                        ? deleteIds.map((id) => ({ id }))
+                        : undefined,
+                    connect: value.images
+                      ?.filter((image) => !image.new)
+                      .map((image) => ({
+                        id: image.id,
+                      })),
+                    upload: value.images
+                      ?.filter((image) => image.new)
+                      .map((item) => ({
+                        url: {
+                          filename: item.fileName || '',
+                          mimetype: item.type || '',
+                          url: item.url || '',
+                        },
+                        position: item.position,
+                        primary: item.primary,
+                        policeImage: item.policeImage,
+                        rotation: item.rotation || 0,
+                      }))
+                      .filter((obj) => obj.url !== undefined),
+                  }
+                : {
+                    delete:
+                      deleteIds && deleteIds.length > 0
+                        ? deleteIds.map((id) => ({ id }))
+                        : undefined,
+                  },
+          },
+        },
+        onCompleted: () => {
+          successNotification(
+            ProfileUpdatedModel.Offender,
+            ProfileUpdatedModel.Vehicle,
+            ProfileUpdatedType.updated
+          );
+        },
+      }).finally(() => {
+        setEditOffenderData(null);
+        setSaving(false);
+      });
+    }
+  };
+  const [createOffender] = useCreateSimpleOffenderMutation({
+    onCompleted: () => {
+      successNotification(
+        ProfileUpdatedModel.Offender,
+        ProfileUpdatedModel.Vehicle,
+        ProfileUpdatedType.added
+      );
+    },
+    onError: () => {
+      errorNotification();
+    },
+    update: (store, { data: res }) => {
+      if (res?.createOffender === null || res?.createOffender === undefined)
+        return;
+      const existingData = store.readQuery<VehicleQuery>({
+        query: VehicleDocument,
+        variables,
+      });
+
+      if (!existingData?.vehicle) return;
+      store.writeQuery<VehicleQuery>({
+        query: VehicleDocument,
+        data: {
+          vehicle: {
+            ...existingData.vehicle,
+            offenders: [...existingData.vehicle.offenders, res.createOffender],
+          },
+          __typename: 'Query',
+        },
+        variables,
+      });
+    },
+  });
+
+  const onAddOffender = (value: OffenderData) => {
+    setSaving(true);
+    if (value) {
+      void createOffender({
+        variables: {
+          data: {
+            name: value.name,
+            gender: value.gender || null,
+            race: value.race || null,
+            build: value.build || null,
+            height: value.height || null,
+            hair: value.hair || null,
+            peculiarities: value.peculiarities || null,
+            comment: value.comment || null,
+            age: value.age || null,
+            dateSource: value.dateSource || null,
+            dateOfBirth: value.dateOfBirth || null,
+            groups: {
+              connect:
+                value.groups && value.groups.length > 0
+                  ? value.groups.map(({ id }) => ({ id }))
+                  : vehicleData?.vehicle?.groups.map(({ id }) => ({ id })),
+            },
+            scheme: schemeId,
+            vehicleId,
+            // createdBy: { connect: { id: userId } },
+            // localId: value.id,
+            image:
+              value.images && value.images.length > 0
+                ? {
+                    connect: value.images
+                      ?.filter((image) => !image.new)
+                      .map((image) => ({
+                        id: image.id,
+                      })),
+                    upload: value.images
+                      ?.filter((image) => image.new)
+                      .map((item) => ({
+                        url: {
+                          filename: item.fileName || '',
+                          mimetype: item.type || '',
+                          url: item.url || '',
+                        },
+                        position: item.position,
+                        primary: item.primary,
+                        policeImage: item.policeImage,
+                        rotation: item.rotation || 0,
+                      }))
+                      .filter((obj) => obj.url !== undefined),
+                  }
+                : {},
+          },
+        },
+      }).finally(() => {
+        setAddOffender(false);
+        setSaving(false);
+      });
+    }
+  };
+  const [updateVehicleOffenders] = useUpdateVehicleOffendersMutation({
+    onError: () => {
+      errorNotification();
+    },
+  });
+  const onAddExistingOffender = (value: string) => {
+    setSaving(true);
+    if (value)
+      void updateVehicleOffenders({
+        variables: {
+          where: {
+            id: vehicleId,
+          },
+          data: {
+            offenders: {
+              connect: [{ id: value }],
+            },
+          },
+        },
+        onCompleted: () => {
+          successNotification(
+            ProfileUpdatedModel.Offender,
+            ProfileUpdatedModel.Vehicle,
+            ProfileUpdatedType.added
+          );
+        },
+        update: (store, { data: res }) => {
+          if (res?.updateVehicle === null || res?.updateVehicle === undefined)
+            return;
+
+          const existingData = store.readQuery<VehicleQuery>({
+            query: VehicleDocument,
+            variables,
+          });
+
+          if (!existingData?.vehicle) return;
+          store.writeQuery<VehicleQuery>({
+            query: VehicleDocument,
+            data: {
+              vehicle: {
+                ...existingData.vehicle,
+                offenders: res.updateVehicle.offenders,
+              },
+              __typename: 'Query',
+            },
+            variables,
+          });
+        },
+      }).finally(() => {
+        setAddExistingOffender(false);
+        setSaving(false);
+      });
+  };
+  const onDeleteOffender = (value: string) => {
+    setSaving(true);
+    if (value)
+      void updateVehicleOffenders({
+        variables: {
+          where: {
+            id: vehicleId,
+          },
+          data: {
+            offenders: { disconnect: [{ id: value }] },
+          },
+        },
+        onCompleted: () => {
+          successNotification(
+            ProfileUpdatedModel.Offender,
+            ProfileUpdatedModel.Vehicle,
+            ProfileUpdatedType.added
+          );
+        },
+        update: (store, { data: res }) => {
+          if (res?.updateVehicle === null || res?.updateVehicle === undefined)
+            return;
+          const existingData = store.readQuery<VehicleQuery>({
+            query: VehicleDocument,
+            variables,
+          });
+
+          if (!existingData?.vehicle) return;
+          store.writeQuery<VehicleQuery>({
+            query: VehicleDocument,
+            data: {
+              vehicle: {
+                ...existingData.vehicle,
+                offenders: existingData.vehicle.offenders.filter(
+                  ({ id }) => id !== value
+                ),
+              },
+              __typename: 'Query',
+            },
+            variables,
+          });
+        },
+      }).finally(() => {
+        setSaving(false);
+      });
+  };
+  // update
   const [deleteUpdate] = useDeleteUpdateMutation();
 
   const handleDeleteUpdate = (updateId: string) => {
@@ -599,6 +1098,15 @@ const useViewVehicle = (vehicleId: string): Return => {
   const toggleAddInvestigation = () => {
     setAddInvestigation(() => !addInvestigation);
   };
+  const toggleEditImages = () => {
+    setEditImages(!editImages);
+  };
+  const toggleAddOffender = () => {
+    setAddOffender(!addOffender);
+  };
+  const toggleAddExistingOffender = () => {
+    setAddExistingOffender(!addExistingOffender);
+  };
   return {
     data: vehicleData,
     loading: (vehicleData === null || vehicleData === undefined) && loading,
@@ -633,6 +1141,23 @@ const useViewVehicle = (vehicleId: string): Return => {
     addInvestigation,
     toggleAddInvestigation,
     updateInvestigationList,
+    editImages,
+    toggleEditImages,
+    onUpdateImages,
+    editImageData,
+    setEditImageData,
+    onDeleteImage,
+    onEditImage,
+    addOffender,
+    addExistingOffender,
+    editOffenderData,
+    setEditOffenderData,
+    onDeleteOffender,
+    toggleAddOffender,
+    toggleAddExistingOffender,
+    onEditOffender,
+    onAddOffender,
+    onAddExistingOffender,
   };
 };
 

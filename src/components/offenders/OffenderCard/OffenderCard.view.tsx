@@ -50,7 +50,6 @@ import {
 import type { CarouselRef } from 'antd/lib/carousel';
 
 import { Link } from 'react-router-dom';
-import moment from 'moment';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import SkeletonImage from 'components/images/SkeletonImage.view';
 import { useIntl } from 'react-intl';
@@ -59,6 +58,7 @@ import FeedImageEditor from 'components/form-components/ImageEditor/FeedImageEdi
 import type { EditFeedImage } from 'types/DataType';
 import { useStoreState } from 'state';
 import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
+import FormatCalendar from 'utils/format-calendar-24h';
 
 const { Title, Text } = Typography;
 const { confirm } = Modal;
@@ -448,9 +448,7 @@ const OffenderCard = ({
                   id: 'SYtNVL',
                 },
                 {
-                  updatedAt: moment(offender?.updatedAt || moment()).format(
-                    'ddd MMM DD YYYY - HH:mm'
-                  ),
+                  updatedAt: FormatCalendar(offender?.updatedAt),
                 }
               )}
             </Text>

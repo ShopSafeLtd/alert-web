@@ -13,9 +13,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
   },
   headerBar: {
     width: '100%',
-    borderBottom: `1px solid ${theme.borderColor}`,
-    backgroundColor: theme.componentBackground,
-    padding: '7px 20px',
+    padding: '7px 0px 3px',
     display: 'flex',
     alignItems: 'center',
   },
@@ -26,11 +24,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
     display: 'flex',
     alignItems: 'center',
   },
-  content: {
-    width: '100%',
-    height: 'calc(100vh - 60px)',
-    marginTop: '5px',
-  },
+
   detailsHeader: {
     paddingRight: 20,
   },
@@ -38,15 +32,18 @@ const useStyles = createUseStyles((theme: Theme) => ({
     position: 'relative',
     height: '100%',
   },
-  detailsContent: {
+  content: {
     background: theme.bodyBackground,
-    height: '100%',
     overflow: 'auto',
     borderRight: `1px solid ${theme.borderColor}`,
-    padding: '0 5px',
+    height: '100vh',
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
   },
   details: {
-    padding: '15px 20px',
+    padding: '0px 15px 70px 8px',
+    position: 'relative',
   },
   detail: {
     paddingBottom: '8px !important',
@@ -54,34 +51,24 @@ const useStyles = createUseStyles((theme: Theme) => ({
   },
   images: {
     width: '100%',
-    height: 180,
     padding: '0px 10px',
+    margin: '10px 0 15px',
     transition: 'all 0.3s ease-in-out',
     overflowY: 'hidden',
     overflowX: 'auto',
-    '@media only screen and (min-height: 800px)': {
-      height: 250,
-    },
   },
   image: {
     height: 160,
-    width: 160,
+    width: 150,
     backgroundColor: theme.imageBackgroundColor,
     cursor: 'pointer',
-    borderRadius: 5,
+    borderRadius: 10,
+    border: `2px solid ${theme.borderColor}`,
     overflow: 'hidden',
     transition: 'all 0.3s ease-in-out',
-    '&:hover': {
-      height: 170,
-      width: 170,
-      '@media only screen and (min-height: 800px)': {
-        height: 240,
-        width: 240,
-      },
-    },
     '@media only screen and (min-height: 800px)': {
       height: 230,
-      width: 230,
+      width: 170,
     },
   },
   descIcon: {

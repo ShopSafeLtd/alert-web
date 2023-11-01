@@ -457,8 +457,8 @@ const ViewOffender = ({
                                 {
                                   key: 0,
                                   label: intl.formatMessage({
-                                    defaultMessage: 'Edit Offender',
-                                    id: '+OfJ4/',
+                                    defaultMessage: 'Edit Details',
+                                    id: 'A2fHI3',
                                   }),
                                   onClick: () => toggleEditOffender(),
                                   icon: <FontAwesomeIcon icon={faEdit} />,
@@ -679,7 +679,7 @@ const ViewOffender = ({
                         <Card loading={loading}>
                           <Row gutter={[8, 8]}>
                             <Col span={12}>
-                              <Row gutter={10}>
+                              <Row gutter={10} align="middle">
                                 <Col>
                                   <Title style={{ margin: 0 }} level={3}>
                                     {data?.offender?.name}
@@ -1716,8 +1716,8 @@ const ViewOffender = ({
                                     }
                                   >
                                     {intl.formatMessage({
-                                      defaultMessage: 'Vehicles',
-                                      id: 'r6wuJ3',
+                                      defaultMessage: 'Add Vehicles',
+                                      id: 'iKGwyV',
                                     })}
                                   </Button>
                                 </Dropdown>
@@ -1733,6 +1733,7 @@ const ViewOffender = ({
                               saving={saving}
                               editRights={editRights}
                               deleteRights={deleteRights}
+                              hasNavigation
                             />
                           ) : (
                             <Empty
@@ -1757,6 +1758,7 @@ const ViewOffender = ({
                               onDelete={onDeleteCrimeGroup}
                               saving={saving}
                               deleteRights={deleteRights}
+                              hasNavigation
                             />
                           ) : (
                             <Empty

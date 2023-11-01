@@ -269,6 +269,9 @@ const EditOffender = ({
                 updateNewOffenderTagData={updateNewOffenderTagData}
                 addCustomGallery={addCustomGallery}
                 updateNewCustomGalleryData={updateNewCustomGalleryData}
+                onSearchOffender={() => {}}
+                potentialOffenders={0}
+                toggleViewPotentialOffenders={() => {}}
               />
             </Card>
             {adminRights && (

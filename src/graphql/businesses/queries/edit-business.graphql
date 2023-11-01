@@ -9,6 +9,14 @@ query EditBusiness($where: BusinessWhereUniqueInput!) {
       name
       fullName
     }
+    groups {
+      id
+      name
+    }
+    tags {
+      id
+      name
+    }
     locations {
       id
       building

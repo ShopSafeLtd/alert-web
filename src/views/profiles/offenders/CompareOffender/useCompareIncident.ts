@@ -1,5 +1,6 @@
 import type { ViewOffendersCompareQuery } from 'graphql/generated';
 import {
+  Role,
   Age,
   Build,
   Gender,
@@ -10,6 +11,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import type { OffenderData } from 'components/form-components/offender/offender/AddExistingOffender/AddExistingOffender.container';
+import { useStoreState } from 'state';
 
 function useQuery() {
   const { search } = useLocation();
@@ -65,7 +67,7 @@ const compareIncident = (): Return => {
   const { id: offenderId } = useParams();
   const query = useQuery();
   const navigate = useNavigate();
-
+  const { role, id: userId } = useStoreState((state) => state.user);
   const [mode, setMode] = useState<'grid' | 'column'>('column');
   const [addOffender, setAddOffender] = useState(false);
   const [offenders, setOffenders] = useState<Offender[]>([]);
@@ -93,14 +95,19 @@ const compareIncident = (): Return => {
     dateSource: null,
   });
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
+  // const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const [queryOffenders, { data }] = useViewOffendersCompareLazyQuery();
 
+  useEffect(() => {}, []);
+
   useEffect(() => {
     const urlOffender = query.get('offenders');
+    const similarOffenders = query.get('similarOffenders')?.split(',');
     let ids: string[] = [];
     if (offenderId) ids = [...ids, offenderId];
     if (urlOffender) ids = [...ids, urlOffender];
+    if (similarOffenders) ids = [...ids, ...similarOffenders];
     void queryOffenders({
       fetchPolicy: 'cache-and-network',
       variables: {
@@ -108,6 +115,20 @@ const compareIncident = (): Return => {
           id: {
             in: ids,
           },
+          groups:
+            role === Role.ContentAdmin
+              ? undefined
+              : {
+                  some: {
+                    users: {
+                      some: {
+                        id: {
+                          equals: userId,
+                        },
+                      },
+                    },
+                  },
+                },
         },
       },
     });
@@ -133,11 +154,17 @@ const compareIncident = (): Return => {
       }
     }
     if (data?.offenders) {
-      const offenderIds = new Set(offenders.map(({ id }) => id));
-      setOffenders([
-        ...offenders,
-        ...data.offenders.filter(({ id }) => !offenderIds.has(id)),
-      ]);
+      setOffenders(data.offenders);
+      // const offenderIds = new Set(offenders.map(({ id }) => id));
+      // if (query.get('similarOffenders')) {
+      //   setOffenders(data.offenders);
+      // } else {
+      //   // ????
+      //   setOffenders([
+      //     ...offenders,
+      //     ...data.offenders.filter(({ id }) => !offenderIds.has(id)),
+      //   ]);
+      // }
     }
   }, [data]);
   const toggleAddOffender = () => {

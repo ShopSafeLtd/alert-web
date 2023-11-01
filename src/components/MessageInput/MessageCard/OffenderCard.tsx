@@ -12,8 +12,9 @@ import {
 } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import type { OffenderCardData } from 'types/DataType';
-import moment from 'moment';
 import { useIntl } from 'react-intl';
+import FormatCalendar from 'utils/format-calendar-24h';
+import moment from 'moment';
 
 const { Title } = Typography;
 
@@ -88,9 +89,7 @@ const OffenderCard = ({ offender, removeOffender, saving }: Props) => {
                 id: 'l/6hum',
               })}
             >
-              {moment(offender.updatedAt || moment()).format(
-                `ddd MMM DD YYYY - HH:mm`
-              )}
+              {FormatCalendar(offender.updatedAt || moment())}
             </Descriptions.Item>
           </Descriptions>
         </Col>

@@ -23,8 +23,6 @@ import {
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
-
-import moment from 'moment';
 import OffenderTile from 'components/offenders/OffenderTile';
 import OffenderTileSkeleton from 'components/offenders/OffenderTileSkeleton';
 import Lightbox from 'yet-another-react-lightbox';
@@ -34,6 +32,7 @@ import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view'
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import { FormattedMessage, useIntl } from 'react-intl';
+import FormatCalendar from 'utils/format-calendar-24h';
 
 const { Title } = Typography;
 
@@ -185,9 +184,7 @@ const AddExistingOffender = ({
                       </span>
                     }
                   >
-                    {moment(selectedOffender.updatedAt || moment()).format(
-                      `ddd MMM DD YYYY - HH:mm`
-                    )}
+                    {FormatCalendar(selectedOffender.updatedAt)}
                   </Descriptions.Item>
                   <Descriptions.Item
                     label={

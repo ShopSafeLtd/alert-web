@@ -338,7 +338,7 @@ const CreateCrimeGroup = ({
                           </Text>
                         </Col>
                       </Row>
-                      <Row gutter={8}>
+                      {/* <Row gutter={8}>
                         <Col>
                           <Text className={classes.offenderDetail}>
                             {intl.formatMessage({
@@ -350,10 +350,10 @@ const CreateCrimeGroup = ({
                             className={classes.offenderDetail}
                             type="secondary"
                           >
-                            {offender.lastActive?.dayTime}
+                            {offender.}
                           </Text>
                         </Col>
-                      </Row>
+                      </Row> */}
                     </div>
                   </Card>
                 </Col>

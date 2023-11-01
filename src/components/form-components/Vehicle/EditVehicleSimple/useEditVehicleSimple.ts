@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import type { FormInstance } from 'antd';
 import { Form } from 'antd';
+import type { VehicleData } from 'types/DataType';
 import type { StateImageData } from '../../../incidents/IncidentForm/ImageSection/useImageSection';
 import type { ImageValue } from '../../ImageSelect/ImageSelect.view';
 import { ImagePosition } from '../../../../graphql/generated';
@@ -22,7 +23,7 @@ export interface UpdateVehicleData {
 interface Props {
   onClose: () => void;
   update: (value: UpdateVehicleData) => void;
-  editData: UpdateVehicleData | undefined | null;
+  editData: VehicleData | undefined | null;
   onImagesUploaded?: (values: StateImageData[]) => void;
 }
 

@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
 import React from 'react';
-import { Button, Col, Popconfirm, Row, Table, Tooltip } from 'antd';
-import { useNavigate } from 'react-router';
+import { Button, Col, Popconfirm, Row, Table, Tooltip, Typography } from 'antd';
 import { createUseStyles } from 'react-jss';
 import {
   calcAge,
@@ -23,6 +22,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faTrash } from '@fortawesome/pro-light-svg-icons';
 import type { OffenderData } from 'types/DataType';
 import { useStoreState } from 'state';
+import { Link } from 'react-router-dom';
 
 const useStyles = createUseStyles({
   row: { cursor: 'pointer' },
@@ -41,6 +41,7 @@ interface Offender {
         id: string;
         optimised?: string | null | undefined;
         position?: ImagePosition;
+        rotation?: number;
       }[]
     | null
     | undefined;
@@ -73,7 +74,6 @@ const OffenderTable = ({
   deleteRights,
 }: Props): JSX.Element => {
   const classes = useStyles();
-  const navigate = useNavigate();
   const intl = useIntl();
   const publicOffenderDOB =
     useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
@@ -83,19 +83,25 @@ const OffenderTable = ({
     <Table
       size="small"
       rowClassName={classes.row}
-      onRow={(record) =>
-        hasNavigation
-          ? {
-              onClick: () => navigate(`/app/offenders/view/${record.key}`),
-            }
-          : {}
-      }
+      // onRow={(record) =>
+      //   hasNavigation
+      //     ? {
+      //         onClick: () => navigate(`/app/offenders/view/${record.key}`),
+      //       }
+      //     : {}
+      // }
       columns={[
         {
           key: 'images',
           dataIndex: 'images',
           title: '',
-          render: (item) => (
+          render: (
+            item: {
+              position: ImagePosition | undefined;
+              rotation: number | undefined;
+              optimised?: string | null | undefined;
+            }[]
+          ) => (
             <div style={{ height: 100, width: 80 }}>
               <WatermarkImage
                 url={item[0]?.optimised}
@@ -112,7 +118,22 @@ const OffenderTable = ({
             id: 'k8ZNgH',
             defaultMessage: 'Alert ID',
           }),
-          width: 100,
+          width: 80,
+          render: (
+            _,
+            record: { key: string; reference: number | null | undefined }
+          ) => {
+            if (hasNavigation) {
+              return (
+                <Link to={`/app/offenders/view/${record.key}`}>
+                  <Typography.Text type="warning">
+                    {record.reference}
+                  </Typography.Text>
+                </Link>
+              );
+            }
+            return <Typography.Text>{record.reference}</Typography.Text>;
+          },
         },
 
         {
@@ -148,7 +169,10 @@ const OffenderTable = ({
           title: '',
           dataIndex: 'Options',
           width: 100,
-          render: (_, record) => (
+          render: (
+            _,
+            record: { offender: OffenderData | null; key: string }
+          ) => (
             <Row gutter={8}>
               {editRights && setEditOffenderData && (
                 <Col>
@@ -162,7 +186,10 @@ const OffenderTable = ({
                       size="small"
                       disabled={saving}
                       onClick={() => {
-                        setEditOffenderData(record.offender);
+                        console.log('Edit');
+
+                        if (record?.offender)
+                          setEditOffenderData(record?.offender);
                       }}
                       icon={<FontAwesomeIcon icon={faPenToSquare} />}
                     />
@@ -208,7 +235,7 @@ const OffenderTable = ({
             </Row>
           ),
         },
-      ]}
+      ].filter((item) => item?.key !== 'Options' || deleteRights || editRights)}
       dataSource={
         offenders?.map((offender) => ({
           key: offender.id,

@@ -11,4 +11,5 @@ fragment FeedTodo on Todo {
   incidentId
   investigationId
   chatId
+  similarOffenderIds
 }

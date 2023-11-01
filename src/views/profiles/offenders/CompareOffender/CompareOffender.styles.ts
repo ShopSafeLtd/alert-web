@@ -39,7 +39,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
   titleField: {
     textAlign: 'right',
     width: '100%',
-    padding: '15px 20px',
+    padding: '15px',
     height: 56,
     alignItems: 'center',
     display: 'flex',

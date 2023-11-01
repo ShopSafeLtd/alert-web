@@ -376,6 +376,25 @@ const userDetail = ({
                     </Row>
                   </Descriptions.Item>
                 )}
+              {data?.user?.defaultGroups &&
+                data?.user?.defaultGroups.length > 0 && (
+                  <Descriptions.Item
+                    label={
+                      <FormattedMessage
+                        defaultMessage="Default Groups"
+                        id="2KZp/e"
+                      />
+                    }
+                  >
+                    <Row gutter={[0, 8]}>
+                      {data?.user?.defaultGroups.map(({ name, id }) => (
+                        <Col key={id}>
+                          <Tag color="blue">{name}</Tag>
+                        </Col>
+                      ))}
+                    </Row>
+                  </Descriptions.Item>
+                )}
               {data?.user?.chats && data?.user?.chats.length > 0 && (
                 <Descriptions.Item
                   label={

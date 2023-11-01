@@ -3,6 +3,7 @@ import type { RecycledItemQuery } from 'graphql/generated';
 import { Button, Col, Row, Skeleton, Descriptions, Popconfirm } from 'antd';
 import moment from 'moment';
 import { useIntl } from 'react-intl';
+import FormatCalendar from 'utils/format-calendar-24h';
 
 interface Props {
   onSubmit: () => void;
@@ -50,9 +51,7 @@ const RestoreIncident = ({
         <Descriptions.Item
           label={intl.formatMessage({ defaultMessage: 'Date', id: 'P7PLVj' })}
         >
-          {moment(data?.recycledItem?.incident?.date || moment()).format(
-            `ddd MMM DD YYYY - HH:mm`
-          )}
+          {FormatCalendar(data?.recycledItem?.incident?.date || moment())}
         </Descriptions.Item>
         <Descriptions.Item
           label={intl.formatMessage({ defaultMessage: 'Remark', id: 'fTlL2P' })}

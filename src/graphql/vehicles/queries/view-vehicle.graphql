@@ -9,6 +9,7 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
     totalCrimeGroups
     reference
     subscribed
+    totalImages
     customGalleries {
       id
       name

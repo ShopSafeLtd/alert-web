@@ -5,8 +5,6 @@ mutation updateVehicle($where: UniqueId!, $data: VehicleUpdateInput!) {
     model
     registration
     reference
-    totalOffenders
-    totalIncidents
     images {
       id
       optimised

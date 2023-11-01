@@ -175,7 +175,10 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
         },
         data: {
           approved: { set: true },
-          name: { set: data.name },
+          name:
+            data.name === offenderData?.offender?.name
+              ? undefined
+              : { set: data.name },
           gender: { set: data.gender || null },
           race: { set: data.race || null },
           build: { set: data.build || null },

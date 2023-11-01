@@ -38,7 +38,8 @@ const useStyles = createUseStyles((theme: Theme) => ({
     padding: '0 5px',
   },
   details: {
-    padding: '15px 20px',
+    padding: '10px 15px 70px 8px',
+    position: 'relative',
   },
   detail: {
     paddingBottom: '8px !important',

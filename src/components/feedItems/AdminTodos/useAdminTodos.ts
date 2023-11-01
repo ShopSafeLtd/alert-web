@@ -1,10 +1,10 @@
 import { useStoreActions, useStoreState } from 'state';
 import type { CreateTodoMutation, FeedTodosQuery } from 'graphql/generated';
 import {
+  useFeedTodosQuery,
   FeedTodosDocument,
   QueryMode,
   SortOrder,
-  useFeedTodosQuery,
   useUpdateTodoMutation,
 } from 'graphql/generated';
 import { useState } from 'react';
@@ -37,7 +37,7 @@ const useAdminTodos = ({ fullSearch }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [addTodo, setAddTodo] = useState(false);
   const [search, setSearch] = useState('');
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(15);
   const [page, setPage] = useState(1);
 
   const setTodoList = useStoreActions((actions) => actions.user.setTodos);
@@ -50,6 +50,9 @@ const useAdminTodos = ({ fullSearch }: Props): Return => {
     skip: (page - 1) * pageSize,
     take: pageSize,
     where: {
+      completed: {
+        equals: false,
+      },
       schemes: {
         some: {
           id: {
@@ -108,17 +111,16 @@ const useAdminTodos = ({ fullSearch }: Props): Return => {
       query: FeedTodosDocument,
       data: {
         listTodos: {
-          uncompletedTotal: [
-            ...(<[]>existingData.listTodos.uncompletedTodos),
-            res.createTodo,
-          ].length,
           uncompletedTodos: [
             ...(<[]>existingData.listTodos.uncompletedTodos),
             res.createTodo,
           ],
-          completedTodos: existingData.listTodos.completedTodos,
-          completedTotal: existingData.listTodos.completedTotal,
-          totalUserTodos: existingData.listTodos.totalUserTodos,
+          uncompletedTotal: res.createTodo.completed
+            ? existingData.listTodos.uncompletedTotal
+            : existingData.listTodos.uncompletedTotal + 1,
+          totalUserTodos: res.createTodo.completed
+            ? existingData.listTodos.totalUserTodos
+            : existingData.listTodos.totalUserTodos + 1,
         },
         __typename: 'Query',
       },
@@ -143,52 +145,25 @@ const useAdminTodos = ({ fullSearch }: Props): Return => {
       });
 
       if (!existingData?.listTodos) return;
-      if (res.updateTodo.completed) {
-        store.writeQuery<FeedTodosQuery>({
-          query: FeedTodosDocument,
-          data: {
-            listTodos: {
-              totalUserTodos: existingData.listTodos.totalUserTodos - 1,
-              // completedTotal: [
-              //   ...(<[]>existingData.listTodos.completedTodos),
-              //   res.updateTodo,
-              // ].length,
-              completedTotal: existingData.listTodos.completedTotal + 1,
-              completedTodos: [
-                ...(<[]>existingData.listTodos.completedTodos),
-                res.updateTodo,
-              ],
-              uncompletedTotal: existingData.listTodos.uncompletedTotal - 1,
-              uncompletedTodos: existingData.listTodos.uncompletedTodos.filter(
-                (todo) => todo.id !== res?.updateTodo?.id
-              ),
-            },
-            __typename: 'Query',
+      store.writeQuery<FeedTodosQuery>({
+        query: FeedTodosDocument,
+        data: {
+          listTodos: {
+            uncompletedTodos: [
+              ...(<[]>existingData.listTodos.uncompletedTodos),
+              res.updateTodo,
+            ],
+            uncompletedTotal: res.updateTodo.completed
+              ? existingData.listTodos.uncompletedTotal
+              : existingData.listTodos.uncompletedTotal + 1,
+            totalUserTodos: res.updateTodo.completed
+              ? existingData.listTodos.totalUserTodos
+              : existingData.listTodos.totalUserTodos + 1,
           },
-          variables,
-        });
-      }
-      if (!res.updateTodo.completed) {
-        store.writeQuery<FeedTodosQuery>({
-          query: FeedTodosDocument,
-          data: {
-            listTodos: {
-              totalUserTodos: existingData.listTodos.totalUserTodos + 1,
-              uncompletedTotal: existingData.listTodos.uncompletedTotal + 1,
-              uncompletedTodos: [
-                ...(<[]>existingData.listTodos.uncompletedTodos),
-                res.updateTodo,
-              ],
-              completedTodos: existingData.listTodos.completedTodos.filter(
-                (todo) => todo.id !== res?.updateTodo?.id
-              ),
-              completedTotal: existingData.listTodos.completedTotal - 1,
-            },
-            __typename: 'Query',
-          },
-          variables,
-        });
-      }
+          __typename: 'Query',
+        },
+        variables,
+      });
     },
   });
   // function

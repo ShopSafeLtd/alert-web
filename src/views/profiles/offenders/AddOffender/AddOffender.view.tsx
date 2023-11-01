@@ -3,6 +3,7 @@ import type { ListVehiclesQuery } from 'graphql/generated';
 
 import type { FormInstance } from 'antd';
 import {
+  Drawer,
   Button,
   Card,
   Col,
@@ -20,6 +21,7 @@ import type {
   CrimeGroupData,
   CustomGalleryData,
   Image,
+  OffenderData,
   TagData,
   VehicleData,
 } from 'types/DataType';
@@ -27,8 +29,8 @@ import Profiles from 'components/offenders/OffenderForm/Profiles';
 import OffenderDetails from 'components/offenders/OffenderForm/OffenderDetails';
 import OffenderExclusions from 'components/offenders/OffenderForm/OffenderExclusions';
 import OffenderImage from 'components/offenders/OffenderForm/OffenderImage';
-
 import { useIntl } from 'react-intl';
+import PotentialOffenders from 'components/offenders/potentialOffenders';
 import type { FormData } from './useAddOffender';
 
 const { Title, Paragraph } = Typography;
@@ -83,6 +85,10 @@ interface Props {
   documentList: UploadFile[];
   documentUploadProps: UploadProps;
   reportOnly: boolean;
+  potentialOffenders: OffenderData[];
+  viewPotentialOffenders: boolean;
+  toggleViewPotentialOffenders: () => void;
+  onSearchOffender: () => void;
 }
 
 const AddOffender = ({
@@ -135,6 +141,10 @@ const AddOffender = ({
   documentList,
   documentUploadProps,
   reportOnly,
+  potentialOffenders,
+  viewPotentialOffenders,
+  toggleViewPotentialOffenders,
+  onSearchOffender,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return (
@@ -145,7 +155,23 @@ const AddOffender = ({
           defaultMessage: 'Add Offender',
           id: 'm3ChN4',
         })}
+        // extra={[
+        //   <Button
+        //     key="1"
+        //     type="primary"
+        //     onClick={toggleViewPotentialOffenders}
+        //     // disabled={saving}
+        //   >
+        //     {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+        //     {potentialOffenders ? potentialOffenders.length : 0}{' '}
+        //     {intl.formatMessage({
+        //       defaultMessage: 'Potential Offenders',
+        //       id: 'KMCham',
+        //     })}
+        //   </Button>,
+        // ]}
       />
+
       <Form
         form={form}
         onFinish={onSubmit}
@@ -172,6 +198,11 @@ const AddOffender = ({
             updateNewOffenderTagData={updateNewOffenderTagData}
             addCustomGallery={addCustomGallery}
             updateNewCustomGalleryData={updateNewCustomGalleryData}
+            potentialOffenders={
+              potentialOffenders ? potentialOffenders.length : 0
+            }
+            toggleViewPotentialOffenders={toggleViewPotentialOffenders}
+            onSearchOffender={onSearchOffender}
           />
         </Card>
         <Card>
@@ -432,6 +463,20 @@ const AddOffender = ({
           </Row>
         </Form.Item>
       </Form>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Potential Offenders',
+          id: 'KMCham',
+        })}
+        open={viewPotentialOffenders}
+        onClose={toggleViewPotentialOffenders}
+        width="900"
+      >
+        <PotentialOffenders
+          suggestedData={potentialOffenders}
+          onClose={toggleViewPotentialOffenders}
+        />
+      </Drawer>
     </div>
   );
 };

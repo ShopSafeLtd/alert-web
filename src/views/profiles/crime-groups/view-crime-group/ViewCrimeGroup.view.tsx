@@ -11,7 +11,6 @@ import {
   Modal,
   Popover,
   Row,
-  Space,
   Statistic,
   Tooltip,
   Typography,
@@ -28,7 +27,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBell,
   faBellSlash,
-  faChevronDown,
   faEdit,
   faMagnifyingGlass,
   faPlus,
@@ -176,34 +174,34 @@ const ViewCrimeGroup = ({
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
-  const optionMenuItems = [
-    {
-      label: intl.formatMessage({ defaultMessage: 'Add Alias', id: 'KDH1mp' }),
-      key: '1',
-      icon: <FontAwesomeIcon size="3x" icon={faPlus} />,
-      onClick: toggleAddAlias,
-    },
-    {
-      label: intl.formatMessage({ defaultMessage: 'Delete', id: 'K3r6DQ' }),
-      key: '2',
-      icon: <FontAwesomeIcon icon={faTrash} />,
-      onClick: () => {
-        confirm({
-          title: intl.formatMessage({
-            defaultMessage: 'Do you want to delete the crime group?',
-            id: 'sozjTX',
-          }),
-          content: intl.formatMessage({
-            defaultMessage: 'This action cannot be undone.',
-            id: 'JDJoIZ',
-          }),
-          onOk() {
-            onDeleteCrimeGroup();
-          },
-        });
-      },
-    },
-  ];
+  // const optionMenuItems = [
+  //   {
+  //     label: intl.formatMessage({ defaultMessage: 'Add Alias', id: 'KDH1mp' }),
+  //     key: '1',
+  //     icon: <FontAwesomeIcon size="3x" icon={faPlus} />,
+  //     onClick: toggleAddAlias,
+  //   },
+  //   {
+  //     label: intl.formatMessage({ defaultMessage: 'Delete', id: 'K3r6DQ' }),
+  //     key: '2',
+  //     icon: <FontAwesomeIcon icon={faTrash} />,
+  //     onClick: () => {
+  //       confirm({
+  //         title: intl.formatMessage({
+  //           defaultMessage: 'Do you want to delete the crime group?',
+  //           id: 'sozjTX',
+  //         }),
+  //         content: intl.formatMessage({
+  //           defaultMessage: 'This action cannot be undone.',
+  //           id: 'JDJoIZ',
+  //         }),
+  //         onOk() {
+  //           onDeleteCrimeGroup();
+  //         },
+  //       });
+  //     },
+  //   },
+  // ];
 
   return (
     <div className="page-container">
@@ -231,7 +229,7 @@ const ViewCrimeGroup = ({
                   onClick={toggleSubscribe}
                   disabled={saving}
                   loading={saving}
-                  type="text"
+                  type="ghost"
                   color={data?.crimeGroup?.subscribed ? undefined : 'danger'}
                 >
                   <FontAwesomeIcon
@@ -241,17 +239,17 @@ const ViewCrimeGroup = ({
                   />
                   {data?.crimeGroup?.subscribed
                     ? intl.formatMessage({
-                        defaultMessage: 'Un-follow Updates',
-                        id: '45gIlS',
+                        defaultMessage: 'Un-follow',
+                        id: 'U9yypY',
                       })
                     : intl.formatMessage({
-                        defaultMessage: 'Follow Updates',
-                        id: 'gBN+ok',
+                        defaultMessage: 'Follow',
+                        id: 'ieGrWo',
                       })}
                 </Button>
               </Tooltip>
             </Col>
-            {editRights && (
+            {/* {editRights && (
               <Col>
                 <Dropdown overlay={<Menu items={optionMenuItems} />}>
                   <Button type="text">
@@ -264,6 +262,54 @@ const ViewCrimeGroup = ({
                     </Space>
                   </Button>
                 </Dropdown>
+              </Col>
+            )} */}
+            {editRights && (
+              <Col>
+                <Button type="ghost" onClick={toggleAddAlias}>
+                  <FontAwesomeIcon
+                    size="1x"
+                    style={{ marginRight: 8 }}
+                    icon={faEdit}
+                  />
+                  {intl.formatMessage({
+                    defaultMessage: 'Edit',
+                    id: 'wEQDC6',
+                  })}
+                </Button>
+              </Col>
+            )}
+            {editRights && (
+              <Col>
+                <Button
+                  type="ghost"
+                  onClick={() => {
+                    confirm({
+                      title: intl.formatMessage({
+                        defaultMessage:
+                          'Do you want to delete the crime group?',
+                        id: 'sozjTX',
+                      }),
+                      content: intl.formatMessage({
+                        defaultMessage: 'This action cannot be undone.',
+                        id: 'JDJoIZ',
+                      }),
+                      onOk() {
+                        onDeleteCrimeGroup();
+                      },
+                    });
+                  }}
+                >
+                  <FontAwesomeIcon
+                    size="1x"
+                    style={{ marginRight: 8 }}
+                    icon={faTrash}
+                  />
+                  {intl.formatMessage({
+                    defaultMessage: 'Delete',
+                    id: 'K3r6DQ',
+                  })}
+                </Button>
               </Col>
             )}
           </Row>
@@ -360,8 +406,8 @@ const ViewCrimeGroup = ({
                         >
                           {suggestedData.crimeGroup.suggestedMembers.length}
                           {intl.formatMessage({
-                            defaultMessage: 'Suggested Members',
-                            id: 'TxnvVF',
+                            defaultMessage: ' Suggested Members',
+                            id: 'H5II3L',
                           })}
                         </Button>
                       </Col>
@@ -1032,7 +1078,7 @@ const ViewCrimeGroup = ({
           defaultMessage: 'Add New Alias',
         })}
         open={addAlias}
-        width={600}
+        width={400}
         onClose={toggleAddAlias}
       >
         {addAlias ? <AddAlias onClose={toggleAddAlias} /> : <div />}

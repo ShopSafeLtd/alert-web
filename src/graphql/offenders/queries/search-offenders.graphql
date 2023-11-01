@@ -13,43 +13,13 @@ query searchOffenders(
     skip: $skip
   ) {
     offenders {
-      id
-      updatedAt
-      age
-      build
-      height
-      dateOfBirth
-      dateSource
-      hair
-      gender
-      name
-      race
-      peculiarities
+      ...Offenders
       images {
-        id
-        position
-        rotation
-        optimised
-      }
-      groups {
-        id
-        name
+        ...Images
       }
       tags {
         id
         name
-      }
-      createdBy {
-        id
-        fullName
-        businesses {
-          id
-          name
-        }
-      }
-      lastActive {
-        id
-        dayTime
       }
     }
     total

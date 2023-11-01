@@ -199,7 +199,6 @@ const useViewIncident = (incidentId: string): Return => {
   const [addDocument, setAddDocument] = useState(false);
   const [addInvestigation, setAddInvestigation] = useState(false);
   const [editAddress, setEditAddress] = useState(false);
-
   const [editUpdate, setEditUpdate] = useState<{
     id: string;
     text: string;
@@ -800,6 +799,7 @@ const useViewIncident = (incidentId: string): Return => {
       });
   };
 
+  // offender
   const [updateIncidentOffenders] = useUpdateIncidentOffendersMutation({
     onError: () => {
       errorNotification();
@@ -1095,6 +1095,8 @@ const useViewIncident = (incidentId: string): Return => {
         setSaving(false);
       });
   };
+
+  // goodså
   const [updateIncidentGoods] = useUpdateIncidentGoodsMutation({
     onError: () => {
       errorNotification();
@@ -1421,28 +1423,6 @@ const useViewIncident = (incidentId: string): Return => {
               geoLat: value.geoLat || undefined,
               geoLng: value.geoLng || undefined,
             },
-            // upsert: {
-            //   update: {
-            //     premises: { set: '' },
-            //     building: { set: value.building || '' },
-            //     street: { set: value.street || '' },
-            //     townCity: { set: value.townCity || '' },
-            //     county: { set: value.county || '' },
-            //     postcode: { set: value.postcode || '' },
-            //     geoLat: value.geoLat ? { set: value.geoLat } : undefined,
-            //     geoLng: value.geoLng ? { set: value.geoLng } : undefined,
-            //   },
-            //   create: {
-            //     premises: '',
-            //     building: value.building || '',
-            //     street: value.street || '',
-            //     townCity: value.townCity || '',
-            //     county: value.county || '',
-            //     postcode: value.postcode || '',
-            //     geoLat: value.geoLat,
-            //     geoLng: value.geoLng,
-            //   },
-            // },
           },
         },
         onCompleted: () => {

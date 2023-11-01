@@ -40,6 +40,9 @@ interface Props {
   updateNewOffenderTagData: (values: TagData) => void;
   addCustomGallery: boolean;
   updateNewCustomGalleryData: (values: CustomGalleryData) => void;
+  onSearchOffender: () => void;
+  potentialOffenders: number;
+  toggleViewPotentialOffenders: () => void;
 }
 
 const OffenderDetails = ({
@@ -58,11 +61,14 @@ const OffenderDetails = ({
   updateNewOffenderTagData,
   addCustomGallery,
   updateNewCustomGalleryData,
+  onSearchOffender,
+  potentialOffenders,
+  toggleViewPotentialOffenders,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return (
     <>
-      <Row align="bottom" style={{ marginBottom: 30 }}>
+      <Row align="middle" style={{ marginBottom: 30 }}>
         <Col>
           {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
           <Title style={{ marginBottom: 0 }} level={4}>
@@ -90,6 +96,24 @@ const OffenderDetails = ({
             })}
           </Paragraph>
         </Col>
+
+        <Col>
+          <Button
+            disabled={saving || potentialOffenders === 0}
+            size="small"
+            danger
+            type="ghost"
+            onClick={toggleViewPotentialOffenders}
+            style={{ marginLeft: 20 }}
+          >
+            {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+            {potentialOffenders}{' '}
+            {intl.formatMessage({
+              defaultMessage: 'Potential Offenders',
+              id: 'KMCham',
+            })}
+          </Button>
+        </Col>
       </Row>
       <Row gutter={50}>
         <Col span={8}>
@@ -102,7 +126,7 @@ const OffenderDetails = ({
               id: 'pYHIHH',
             })}
           >
-            <Input disabled={saving} />
+            <Input disabled={saving} onBlur={onSearchOffender} />
           </Form.Item>
         </Col>
         <Col span={8}>

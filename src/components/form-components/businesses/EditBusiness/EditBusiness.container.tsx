@@ -16,8 +16,14 @@ const EditBusiness = ({ onClose, businessId }: Props) => {
     loading,
     location,
     setLocation,
+    tags,
+    tagsLoading,
+    addTag,
+    toggleAddTag,
+    updateNewTagData,
+    groups,
+    groupsLoading,
   } = useEditBusiness({ onClose, businessId });
-  console.log('EditBusiness', location);
 
   return (
     <View
@@ -29,6 +35,13 @@ const EditBusiness = ({ onClose, businessId }: Props) => {
       loading={loading}
       location={location}
       setLocation={setLocation}
+      tags={tags}
+      tagsLoading={tagsLoading}
+      addTag={addTag}
+      toggleAddTag={toggleAddTag}
+      updateNewTagData={updateNewTagData}
+      groups={groups}
+      groupsLoading={groupsLoading}
     />
   );
 };

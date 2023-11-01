@@ -1,0 +1,28 @@
+fragment TodoItem on Todo {
+  description
+  id
+  name
+  dueDate
+  completed
+  type
+  vehicleId
+  offenderId
+  crimeGroupId
+  incidentId
+  investigationId
+  chatId
+  similarOffenderIds
+  completedDate
+  createdBy {
+    id
+    fullName
+  }
+  completedBy {
+    id
+    fullName
+  }
+  assignedUsers {
+    id
+    fullName
+  }
+}

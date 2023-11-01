@@ -18,6 +18,14 @@ mutation LinkBusinessToScheme(
       id
       full
     }
+    groups {
+      id
+      name
+    }
+    tags {
+      id
+      name
+    }
     totalUsers
   }
 }

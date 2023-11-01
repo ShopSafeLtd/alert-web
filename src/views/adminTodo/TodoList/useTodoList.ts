@@ -42,9 +42,11 @@ interface Props {
 }
 
 const useAdminTodos = ({ templateData }: Props): Return => {
-  const userId = useStoreState((state) => state.user.id);
+  const { id: userId, schemes: userSchemes } = useStoreState(
+    (state) => state.user
+  );
   const schemeId = useStoreState((state) => state.scheme.id);
-  const userSchemes = useStoreState((state) => state.user.schemes);
+
   const [saving, setSaving] = useState(false);
   const [addTodo, setAddTodo] = useState(false);
   const [allUsers, setAllUsers] = useState(false);
@@ -138,17 +140,14 @@ const useAdminTodos = ({ templateData }: Props): Return => {
       query: ListTodosDocument,
       data: {
         listTodos: {
-          uncompletedTotal: [
-            ...(<[]>existingData.listTodos.uncompletedTodos),
-            res.createTodo,
-          ].length,
-          uncompletedTodos: [
-            ...(<[]>existingData.listTodos.uncompletedTodos),
-            res.createTodo,
-          ],
-          completedTodos: existingData.listTodos.completedTodos,
-          completedTotal: existingData.listTodos.completedTotal,
-          totalUserTodos: existingData.listTodos.totalUserTodos,
+          todos: [...(<[]>existingData.listTodos.todos), res.createTodo],
+          total: existingData.listTodos.total + 1,
+          uncompletedTotal: res.createTodo.completed
+            ? existingData.listTodos.uncompletedTotal
+            : existingData.listTodos.uncompletedTotal + 1,
+          totalUserTodos: res.createTodo.completed
+            ? existingData.listTodos.totalUserTodos
+            : existingData.listTodos.totalUserTodos + 1,
         },
         __typename: 'Query',
       },
@@ -162,60 +161,6 @@ const useAdminTodos = ({ templateData }: Props): Return => {
     },
     onError: () => {
       setSaving(false);
-    },
-    update: (store, { data: res }) => {
-      if (res?.updateTodo === null || res?.updateTodo === undefined) return;
-
-      // get existing group list data from Apollo store
-      const existingData = store.readQuery<ListTodosQuery>({
-        query: ListTodosDocument,
-        variables,
-      });
-
-      if (!existingData?.listTodos) return;
-      if (res.updateTodo.completed) {
-        store.writeQuery<ListTodosQuery>({
-          query: ListTodosDocument,
-          data: {
-            listTodos: {
-              totalUserTodos: existingData.listTodos.totalUserTodos + 1,
-              completedTotal: existingData.listTodos.completedTotal + 1,
-
-              completedTodos: [
-                ...(<[]>existingData.listTodos.completedTodos),
-                res.updateTodo,
-              ],
-              uncompletedTotal: existingData.listTodos.uncompletedTotal - 1,
-              uncompletedTodos: existingData.listTodos.uncompletedTodos.filter(
-                (todo) => todo.id !== res?.updateTodo?.id
-              ),
-            },
-            __typename: 'Query',
-          },
-          variables,
-        });
-      }
-      if (!res.updateTodo.completed) {
-        store.writeQuery<ListTodosQuery>({
-          query: ListTodosDocument,
-          data: {
-            listTodos: {
-              totalUserTodos: existingData.listTodos.totalUserTodos - 1,
-              uncompletedTotal: existingData.listTodos.uncompletedTotal + 1,
-              uncompletedTodos: [
-                ...(<[]>existingData.listTodos.uncompletedTodos),
-                res.updateTodo,
-              ],
-              completedTodos: existingData.listTodos.completedTodos.filter(
-                (todo) => todo.id !== res?.updateTodo?.id
-              ),
-              completedTotal: existingData.listTodos.completedTotal - 1,
-            },
-            __typename: 'Query',
-          },
-          variables,
-        });
-      }
     },
   });
   // function
@@ -255,6 +200,28 @@ const useAdminTodos = ({ templateData }: Props): Return => {
           completedBy: undefined,
         },
       },
+      // optimisticResponse: {
+      //   __typename: 'Mutation',
+
+      //   updateTodo: {
+      //     assignedUsers: [],
+      //     id: '',
+      //     name: '',
+      //     createdBy: {
+      //       fullName,
+      //       id: userId,
+      //       __typename: 'User',
+      //     },
+      //     completedBy: {
+      //       fullName,
+      //       id: userId,
+      //       __typename: 'User',
+      //     },
+      //     __typename: 'Todo',
+      //     completedDate: new Date(),
+      //     completed: false,
+      //   },
+      // },
     });
     setTodoList({
       userTodos: userTodos ? userTodos + 1 : 1,

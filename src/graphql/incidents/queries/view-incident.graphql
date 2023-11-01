@@ -79,6 +79,9 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
     }
     vehicles {
       ...Vehicles
+      images {
+        ...Images
+      }
     }
     todos {
       ...Todos

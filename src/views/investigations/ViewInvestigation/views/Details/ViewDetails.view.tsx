@@ -468,6 +468,7 @@ const ViewInvestigation = ({
                   incidents={data?.investigation?.incidents}
                   deleteRights
                   onDelete={onDeleteIncident}
+                  hasNavigation
                 />
               </div>
             </Card>
@@ -575,6 +576,7 @@ const ViewInvestigation = ({
                   saving={saving}
                   editRights
                   deleteRights
+                  hasNavigation
                 />
               </div>
             </Card>
@@ -651,6 +653,7 @@ const ViewInvestigation = ({
                   onDelete={onDeleteCrimeGroup}
                   saving={saving}
                   deleteRights
+                  hasNavigation
                 />
               </div>
             </Card>

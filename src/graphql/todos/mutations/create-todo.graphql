@@ -7,6 +7,7 @@ mutation CreateTodo($data: TodoCreateInput!) {
     completed
     id
     name
+    similarOffenderIds
     createdBy {
       id
       fullName

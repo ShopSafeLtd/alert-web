@@ -8,12 +8,6 @@ interface Props {
   update: (value: VehicleData) => void;
   editData: VehicleCardData | undefined | null;
   showGroups?: boolean;
-  fromIncident?: boolean | undefined;
-  fromOffender?: boolean | undefined;
-  // editData:
-  //   | Exclude<VehicleQuery['vehicle'], undefined | null>
-  //   | undefined
-  //   | null;
 }
 
 const EditVehicle = ({
@@ -21,24 +15,12 @@ const EditVehicle = ({
   update,
   editData,
   showGroups,
-  fromIncident,
-  fromOffender,
 }: Props): JSX.Element => {
   const {
     onSubmit,
     CrimeGroupsData,
     CrimeGroupsLoading,
     saving,
-    offendersData,
-    incidentsData,
-    linkIncident,
-    linkOffender,
-    toggleLinkIncident,
-    toggleLinkOffender,
-    updateIncidentList,
-    updateOffendersList,
-    removeOffender,
-    removeIncident,
     adminRights,
     imgChange,
     beforeUpload,
@@ -70,16 +52,6 @@ const EditVehicle = ({
       CrimeGroupsData={CrimeGroupsData}
       CrimeGroupsLoading={CrimeGroupsLoading}
       saving={saving}
-      offendersData={offendersData}
-      incidentsData={incidentsData}
-      linkIncident={linkIncident}
-      linkOffender={linkOffender}
-      toggleLinkIncident={toggleLinkIncident}
-      toggleLinkOffender={toggleLinkOffender}
-      updateIncidentList={updateIncidentList}
-      updateOffendersList={updateOffendersList}
-      removeOffender={removeOffender}
-      removeIncident={removeIncident}
       adminRights={adminRights}
       imgChange={imgChange}
       beforeUpload={beforeUpload}
@@ -94,8 +66,6 @@ const EditVehicle = ({
       showGroups={showGroups}
       groups={groups}
       groupsLoading={groupsLoading}
-      fromIncident={fromIncident}
-      fromOffender={fromOffender}
       customGalleries={customGalleries}
       customGalleriesLoading={customGalleriesLoading}
       addCustomGallery={addCustomGallery}

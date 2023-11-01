@@ -8,11 +8,7 @@ query FeedTodos(
     uncompletedTodos {
       ...FeedTodo
     }
-    completedTodos {
-          ...FeedTodo
-    }
     totalUserTodos
     uncompletedTotal
-    completedTotal
   }
 }

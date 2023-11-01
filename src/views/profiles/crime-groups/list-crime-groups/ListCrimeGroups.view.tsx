@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Col, Drawer, Input, Row, Table } from 'antd';
 import type { ListCrimeGroupsQuery, SortOrder } from 'graphql/generated';
 import { Link } from 'react-router-dom';
+import type { Moment } from 'moment';
 import moment from 'moment';
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
 import CrimeGroupFilter from 'components/crimeGroups/CrimeGroupFilter';
@@ -203,8 +204,9 @@ const ListCrimeGroups = ({
               defaultMessage: 'Updated At',
               id: 'ECx6bx',
             }),
-            render: (value: Date | undefined) =>
-              FormatCalendar(value || moment()),
+            render: (value: Date | Moment) => FormatCalendar(value || moment()),
+            sorter: (a, b) =>
+              new Date(a.updatedAt).valueOf() - new Date(b.updatedAt).valueOf(),
           },
           {
             title: '',

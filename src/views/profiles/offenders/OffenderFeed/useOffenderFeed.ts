@@ -94,7 +94,7 @@ const useOffenderFeed = (): Return => {
   const {
     role,
     id: userId,
-    defaultGroups,
+    filterDefaultGroups: defaultGroups,
   } = useStoreState((state) => state.user);
   const pagination = useStoreState((state) => state.data.offenders.pagination);
   const variables = useStoreState((state) => state.data.offenders.variables);

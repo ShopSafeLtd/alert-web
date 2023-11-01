@@ -42,7 +42,7 @@ const useListCrimeGroups = (): Return => {
   const {
     role,
     id: userId,
-    defaultGroups,
+    filterDefaultGroups: defaultGroups,
   } = useStoreState((state) => state.user);
 
   const pagination = useStoreState(
