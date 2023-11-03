@@ -265,7 +265,7 @@ const ViewInvestigation = ({
               </Col>
               <Col>
                 <Button
-                  type="ghost"
+                  type="primary"
                   onClick={() => {
                     confirm({
                       title: intl.formatMessage({
@@ -289,8 +289,8 @@ const ViewInvestigation = ({
                     icon={faTrash}
                   />
                   {intl.formatMessage({
-                    defaultMessage: 'Delete',
-                    id: 'K3r6DQ',
+                    defaultMessage: 'Delete Investigation',
+                    id: 'ONMazI',
                   })}
                 </Button>
               </Col>
