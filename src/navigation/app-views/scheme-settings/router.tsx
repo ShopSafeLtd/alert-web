@@ -24,7 +24,7 @@ import ListBusinesses from 'views/settings/businesses/ListBusinesses';
 import ViewBusiness from 'views/settings/businesses/ViewBusiness';
 import DiscMenu from 'views/settings/data-import/menu/Menu.view';
 import DiscImport from 'views/settings/data-import/disc-import/DiscImport.container';
-import CSVImport from 'views/settings/data-import/csv/ImportItems/ImportData.container';
+import CSVImport from 'views/settings/data-import/csv/data-import/ImportData.container';
 import CustomGalleries from 'views/settings/customGallery';
 import CustomSchemeTerms from '../../../views/settings/terms/ViewCustomTerms/ViewTermsContainer';
 import ListStatements from '../../../views/settings/statements/ListStatements';
