@@ -328,7 +328,7 @@ const ImportStockItems = ({
         ];
       }
       default: {
-        return [{}];
+        return [];
       }
     }
   };
