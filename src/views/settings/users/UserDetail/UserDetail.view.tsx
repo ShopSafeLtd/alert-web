@@ -307,10 +307,16 @@ const userDetail = ({
                 {data?.user?.status}
               </Typography.Text> */}
                 <Tag
-                  color={getTextStatus(data?.user?.status || UserStatus.Active)}
+                  color={getTextStatus(
+                    data?.user?.status || UserStatus.Inactive
+                  )}
                   style={{ marginTop: -5 }}
                 >
-                  {GetUserStatusValues[data?.user?.status || UserStatus.Active]}
+                  {
+                    GetUserStatusValues[
+                      data?.user?.status || UserStatus.Inactive
+                    ]
+                  }
                 </Tag>
               </Descriptions.Item>
               <Descriptions.Item
@@ -319,13 +325,17 @@ const userDetail = ({
                 }
                 style={{ paddingBottom: 8 }}
               >
-                <Link
-                  to={`/app/scheme-settings/businesses/view/${
-                    data?.user?.businesses[0]?.id || ''
-                  }`}
-                >
-                  {data?.user?.businesses[0]?.name}
-                </Link>
+                <Row gutter={16}>
+                  {data?.user?.businesses.map(({ id, name }) => (
+                    <Col>
+                      <Link
+                        to={`/app/scheme-settings/businesses/view/${id || ''}`}
+                      >
+                        {name}
+                      </Link>
+                    </Col>
+                  ))}
+                </Row>
               </Descriptions.Item>
               <Descriptions.Item
                 label={

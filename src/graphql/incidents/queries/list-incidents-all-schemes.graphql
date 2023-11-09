@@ -13,15 +13,11 @@ query listIncidentsAllSchemes(
     incidents {
       id
       subject
-      totalImages
       description
       dayTime
       reference
       policeRef
-      crimeTypes {
-        id
-        name
-      }
+      date
       approved
       business {
         id
@@ -30,27 +26,6 @@ query listIncidentsAllSchemes(
       location {
         id
         full
-      }
-      createdBy {
-        id
-        fullName
-        businesses {
-          id
-          name
-        }
-      }
-      images {
-        id
-        optimised
-        position
-        rotation
-        primary
-        policeImage
-        low
-      }
-      groups {
-        id
-        name
       }
       offenders {
         id

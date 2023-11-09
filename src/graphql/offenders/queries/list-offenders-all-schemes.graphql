@@ -13,16 +13,11 @@ query listOffendersAllSchemes(
     offenders {
       id
       reference
-      totalImages
-      createdAt
-      updatedAt
-      totalIncidents
       reference
       age
       build
       height
       dateOfBirth
-      dateSource
       hair
       gender
       name
@@ -46,42 +41,6 @@ query listOffendersAllSchemes(
         primary
         policeImage
         optimisedPersisted
-      }
-      groups {
-        id
-        name
-      }
-      tags {
-        id
-        name
-      }
-      createdBy {
-        id
-        fullName
-        businesses {
-          id
-          name
-        }
-      }
-      incidents {
-        id
-        reference
-        subject
-        description
-        dayTime
-        date
-        location {
-          id
-          full
-        }
-        createdBy {
-          id
-          fullName
-          businesses {
-            id
-            name
-          }
-        }
       }
     }
     total

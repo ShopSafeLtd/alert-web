@@ -40,13 +40,7 @@ interface Return {
   setSearch: (value: string) => void;
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
-  // onGroupsChange: (groups: string[]) => void;
-  // variables: {
-  //   groups: string[];
-  //   crimeTypes: string[];
-  // };
   crimeTypes: { value: string; label: string }[];
-  // onCrimeTypesChange: (crimeTypes: string[]) => void;
   tagsLoading: boolean;
   updateIncidentList: MutationUpdaterFn<RecycleIncidentMutation>;
   onNavigate: () => void;
@@ -113,12 +107,12 @@ const useIncidentFeed = (): Return => {
 
   const {
     search,
-    crimeTypes: crimeTypesFilter,
-    groups: groupsFilter,
-    businesses: businessesFilter,
-    goods: goodsFilter,
-    createdAt: createdAtFilter,
-    incidentDate: incidentDateFilter,
+    crimeTypes,
+    groups,
+    businesses,
+    goods,
+    createdAt,
+    incidentDate,
     gallery,
     peculiarities,
   } = variables;
@@ -144,34 +138,54 @@ const useIncidentFeed = (): Return => {
         order === IncidentSort.createdAtDesc ? SortOrder.Desc : SortOrder.Asc,
     },
     where: {
-      createdAt: createdAtFilter
+      createdAt: createdAt
         ? {
-            gte: createdAtFilter.startDate,
-            lte: createdAtFilter.endDate,
+            gte: createdAt.startDate,
+            lte: createdAt.endDate,
           }
         : undefined,
-      date: incidentDateFilter
+      date: incidentDate
         ? {
-            gte: incidentDateFilter.startDate,
-            lte: incidentDateFilter.endDate,
+            gte: incidentDate.startDate,
+            lte: incidentDate.endDate,
           }
         : undefined,
       crimeTypes:
-        crimeTypesFilter.length > 0
+        crimeTypes.length > 0
           ? {
               some: {
                 id: {
-                  in: crimeTypesFilter,
+                  in: crimeTypes,
                 },
               },
             }
           : undefined,
       groups:
-        groupsFilter.length > 0
+        groups.length > 0
           ? {
               some: {
                 id: {
-                  in: groupsFilter,
+                  in: groups,
+                },
+              },
+            }
+          : undefined,
+      business:
+        businesses.length > 0
+          ? {
+              id: {
+                in: businesses,
+              },
+            }
+          : undefined,
+      incidentItems:
+        goods.length > 0
+          ? {
+              some: {
+                goodsType: {
+                  id: {
+                    in: goods,
+                  },
                 },
               },
             }
@@ -182,6 +196,7 @@ const useIncidentFeed = (): Return => {
             contains: peculiarities,
           }
         : undefined,
+
       approved: gallery.includes('NOT APPROVED')
         ? {
             equals: false,
@@ -255,26 +270,6 @@ const useIncidentFeed = (): Return => {
             : undefined,
         },
       ],
-      business:
-        businessesFilter.length > 0
-          ? {
-              id: {
-                in: businessesFilter,
-              },
-            }
-          : undefined,
-      incidentItems:
-        goodsFilter.length > 0
-          ? {
-              some: {
-                goodsType: {
-                  id: {
-                    in: goodsFilter,
-                  },
-                },
-              },
-            }
-          : undefined,
     },
     take: pagination.pageSize,
     skip: pagination.pageSize * (pagination.page - 1),
@@ -353,7 +348,7 @@ const useIncidentFeed = (): Return => {
                     groups: {
                       some: {
                         id: {
-                          in: groupsFilter.map((id) => id),
+                          in: groups.map((id) => id),
                         },
                       },
                     },
@@ -379,7 +374,6 @@ const useIncidentFeed = (): Return => {
       },
       order,
     });
-    // eslint-disable-next-line
   }, []);
   // update Incident list after deleting an item
   const updateIncidentList: MutationUpdaterFn<RecycleIncidentMutation> = (
@@ -597,7 +591,6 @@ const useIncidentFeed = (): Return => {
     pagination,
     order,
     setOrder,
-
     setSearch,
     groups:
       groupsData?.groups.map((group) => ({

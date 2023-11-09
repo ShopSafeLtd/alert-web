@@ -31,6 +31,7 @@ import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view'
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
+import { Link } from 'react-router-dom';
 import useStyles from './AddExistingOffender.styles';
 
 const { Paragraph, Text } = Typography;
@@ -519,6 +520,14 @@ const AddExistingOffender = ({
                   })}
               </Descriptions.Item>
             </Descriptions>
+            <Link to={`/app/offenders/view/${selectedOffender?.id || ''}`}>
+              <Button type="ghost" danger>
+                {intl.formatMessage({
+                  defaultMessage: 'View Offender',
+                  id: 'GszQTo',
+                })}
+              </Button>
+            </Link>
           </Col>
         </Row>
       </Modal>

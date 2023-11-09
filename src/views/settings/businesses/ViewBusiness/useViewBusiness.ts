@@ -178,19 +178,18 @@ const useViewBusiness = (): Return => {
         data: {
           name: { set: data?.business?.name },
           publicName: data?.business?.publicName || false,
-          location: {
-            where: {
-              id: data?.business?.locations[0]?.id,
-            },
-            data: {
-              building: { set: values.building || '' },
-              county: { set: values.county || '' },
-              postcode: { set: values.postcode || '' },
-              street: { set: values.street || '' },
-              townCity: { set: values.townCity || '' },
-              geoLat: { set: values.geoLat },
-              geoLng: { set: values.geoLng },
-            },
+          locations: {
+            update: [
+              {
+                where: {
+                  id: data?.business?.locations[0]?.id,
+                },
+                data: {
+                  geoLat: { set: values.geoLat },
+                  geoLng: { set: values.geoLng },
+                },
+              },
+            ],
           },
         },
       },

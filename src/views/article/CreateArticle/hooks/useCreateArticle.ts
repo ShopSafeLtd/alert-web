@@ -535,7 +535,7 @@ const useCreateArticle = (): Props => {
     onChange: handleChange,
     multiple: true,
   };
-
+  // ?????
   const insertIncident = (incident: Incident) => {
     if (selectedSchemes && selectedSchemes?.length <= 1) {
       setIncidents((prev) => [...prev, incident]);

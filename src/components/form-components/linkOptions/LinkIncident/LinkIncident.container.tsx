@@ -32,8 +32,24 @@ const LinkIncident = ({
     loading,
     search,
     setSearch,
+    pagination,
     onPaginationChange,
     onSelect,
+    setPeculiarities,
+    setGroupsFilter,
+    businesses,
+    goods,
+    setCrimeTypesFilter,
+    setGoodsFilter,
+    setBusinessesFilter,
+    goodsLoading,
+    businessesLoading,
+    variables,
+    groups,
+    groupsLoading,
+    crimeTypes,
+    tagsLoading,
+    clearFilters,
   } = useLinkIncident({
     onClose,
     update,
@@ -51,8 +67,24 @@ const LinkIncident = ({
       setSearch={setSearch}
       loading={loading}
       onClose={onClose}
+      pagination={pagination}
       onPaginationChange={onPaginationChange}
       onSelect={onSelect}
+      clearFilters={clearFilters}
+      setCrimeTypesFilter={setCrimeTypesFilter}
+      setGoodsFilter={setGoodsFilter}
+      goods={goods}
+      setGroupsFilter={setGroupsFilter}
+      setPeculiarities={setPeculiarities}
+      businesses={businesses}
+      setBusinessesFilter={setBusinessesFilter}
+      goodsLoading={goodsLoading}
+      businessesLoading={businessesLoading}
+      variables={variables}
+      crimeTypes={crimeTypes}
+      tagsLoading={tagsLoading}
+      groups={groups}
+      groupsLoading={groupsLoading}
     />
   );
 };

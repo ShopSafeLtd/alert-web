@@ -13,7 +13,7 @@ import {
   QueryMode,
   SortOrder,
 } from 'graphql/generated';
-import { useStoreState } from 'state';
+import { OffenderSort, useStoreActions, useStoreState } from 'state';
 
 export interface OffenderData {
   id: string;
@@ -55,7 +55,15 @@ export interface OffenderData {
     | null
     | undefined;
 }
-
+const getSizeOptions = () => {
+  if (window.innerWidth > 1239 && window.innerWidth < 1800) {
+    return ['12', '24', '48', '96'];
+  }
+  if (window.innerWidth > 1799) {
+    return ['12', '24', '48', '96'];
+  }
+  return ['12'];
+};
 interface Props {
   onClose: () => void;
   update: (value: OffenderData) => void;
@@ -106,23 +114,24 @@ const useAddExistingOffender = ({
   offenderIds,
   takeAllSchemes,
 }: Props): Return => {
+  const schemeId = useStoreState((state) => state.scheme.id);
   const userSchemeIds = useStoreState((state) => state.user.schemes).map(
     (el) => el.scheme.id
   );
+  const defaultGroups = useStoreState(
+    (state) => state.user.filterDefaultGroups
+  );
   const [saving, setSaving] = useState(false);
   const [currentId, setCurrentId] = useState<string | undefined>(undefined);
-  const [ethnicity, setEthnicity] = useState<Race[]>([]);
-  const [age, setAge] = useState<Age[]>([]);
-  const [build, setBuild] = useState<Build[]>([]);
-  const [sex, setSex] = useState<Gender[]>([]);
-  const [pagination, setPagination] = useState({
-    page: 1,
-    pageSize: 24,
-  });
-  const [search, setSearch] = useState('');
-  const [hair, setHair] = useState('');
-  const [peculiarities, setPeculiarities] = useState('');
+  const pagination = useStoreState((state) => state.data.offenders.pagination);
+  const variables = useStoreState((state) => state.data.offenders.variables);
+  const order = useStoreState((state) => state.data.offenders.order);
+  const setOffendersState = useStoreActions(
+    (actions) => actions.data.setOffenders
+  );
 
+  const { search, groups, peculiarities, hair, ethnicity, age, build, sex } =
+    variables;
   const [selectedOffender, setSelectedOffender] = useState<
     | Exclude<
         ListOffendersAllSchemesQuery['listOffendersAllSchemes'],
@@ -131,7 +140,6 @@ const useAddExistingOffender = ({
     | null
     | undefined
   >(undefined);
-  const schemeId = useStoreState((state) => state.scheme.id);
 
   const [lightBoxOpen, setLightBoxOpen] = useState({
     open: false,
@@ -140,7 +148,8 @@ const useAddExistingOffender = ({
   const { data, loading } = useListOffendersAllSchemesQuery({
     variables: {
       order: {
-        updatedAt: SortOrder.Desc,
+        updatedAt:
+          order === OffenderSort.updatedAtDesc ? SortOrder.Desc : SortOrder.Asc,
       },
       take: pagination.pageSize,
       skip: (pagination.page - 1) * pagination.pageSize,
@@ -154,24 +163,16 @@ const useAddExistingOffender = ({
                 notIn: offenderIds,
               }
             : undefined,
-        OR: [
-          {
-            name: {
-              contains: search,
-              mode: QueryMode.Insensitive,
-            },
-          },
-          {
-            alias: {
-              hasSome: [search],
-            },
-          },
-          {
-            referenceStr: {
-              contains: search,
-            },
-          },
-        ],
+        groups:
+          groups.length > 0
+            ? {
+                some: {
+                  id: {
+                    in: groups,
+                  },
+                },
+              }
+            : undefined,
         gender:
           sex.length > 0
             ? {
@@ -208,24 +209,149 @@ const useAddExistingOffender = ({
               contains: peculiarities,
             }
           : undefined,
+        OR: [
+          {
+            name: {
+              contains: search,
+              mode: QueryMode.Insensitive,
+            },
+          },
+          {
+            alias: {
+              hasSome: [search],
+            },
+          },
+          {
+            referenceStr: {
+              contains: search,
+            },
+          },
+        ],
       },
     },
     fetchPolicy: 'cache-and-network',
   });
-
-  const clearFilters = () => {
-    setAge([]);
-    setBuild([]);
-    setEthnicity([]);
-    setSex([]);
-    setHair('');
-    setPeculiarities('');
+  // On mount
+  useEffect(() => {
+    const sizeOptions = getSizeOptions();
+    setOffendersState({
+      pagination: {
+        ...pagination,
+        sizeOptions,
+      },
+      variables: {
+        ...variables,
+        groups: defaultGroups.map(({ id }) => id),
+      },
+      order,
+    });
+  }, []);
+  const setSearch = (value: string) => {
+    setOffendersState({
+      pagination,
+      variables: {
+        ...variables,
+        search: value,
+      },
+      order,
+    });
+  };
+  const setPeculiarities = (value: string) => {
+    setOffendersState({
+      pagination,
+      variables: {
+        ...variables,
+        peculiarities: value,
+      },
+      order,
+    });
+  };
+  const setHair = (value: string) => {
+    setOffendersState({
+      pagination,
+      variables: {
+        ...variables,
+        hair: value,
+      },
+      order,
+    });
+  };
+  const onPaginationChange = (page: number, pageSize: number) => {
+    setOffendersState({
+      pagination: {
+        ...pagination,
+        page,
+        pageSize,
+      },
+      variables,
+      order,
+    });
+    // setPagination({
+    //   ...pagination,
+    //   page,
+    // })
   };
 
-  const onPaginationChange = (page: number) => {
-    setPagination({
-      ...pagination,
-      page,
+  const setEthnicity = (values: Race[]) => {
+    setOffendersState({
+      pagination,
+      variables: {
+        ...variables,
+        ethnicity: values,
+      },
+      order,
+    });
+  };
+
+  const setBuild = (values: Build[]) => {
+    setOffendersState({
+      pagination,
+      variables: {
+        ...variables,
+        build: values,
+      },
+      order,
+    });
+  };
+  const setAge = (values: Age[]) => {
+    setOffendersState({
+      pagination,
+      variables: {
+        ...variables,
+        age: values,
+      },
+      order,
+    });
+  };
+  const setSex = (values: Gender[]) => {
+    setOffendersState({
+      pagination,
+      variables: {
+        ...variables,
+        sex: values,
+      },
+      order,
+    });
+  };
+  const clearFilters = () => {
+    setOffendersState({
+      pagination,
+      variables: {
+        search: '',
+        warnings: [],
+        groups: [],
+        businesses: [],
+        createdAt: undefined,
+        gallery: [],
+        customGalleries: [],
+        peculiarities: '',
+        hair: '',
+        ethnicity: [],
+        build: [],
+        age: [],
+        sex: [],
+      },
+      order: OffenderSort.updatedAtDesc,
     });
   };
 

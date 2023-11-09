@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Col, Drawer, Input, Row, Table, Typography } from 'antd';
+import { Button, Col, Drawer, Input, Row, Table, Tag, Typography } from 'antd';
 import { UserStatus } from 'graphql/generated';
 import type {
   CreateUserInDatabaseMutation,
@@ -16,7 +16,7 @@ import EditUser from 'components/form-components/user/EditUser';
 import type { UserSort } from 'types/enums/user_sort';
 import UserFilter from 'components/users/UserFilter';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { GetUserStatusValues } from 'types/enums/user_status';
+import { GetUserStatusValues, userStatusValues } from 'types/enums/user_status';
 
 interface Props {
   data: UserListQuery | undefined;
@@ -81,7 +81,20 @@ const UserList = ({
   clearFilters,
 }: Props): JSX.Element => {
   const intl = useIntl();
-
+  const groupIds = new Set(
+    data?.listUsers.users?.flatMap((el) => el.groups.map(({ id }) => id))
+  );
+  const groupData = data?.listUsers.users?.flatMap((el) => el.groups);
+  const groupFilter = [...groupIds]
+    .map((id) => groupData?.find((el) => el.id === id))
+    .map((el) => ({ text: el?.name || '', value: el?.id || '' }));
+  const businessIds = new Set(
+    data?.listUsers.users?.flatMap((el) => el.businesses.map(({ id }) => id))
+  );
+  const businessData = data?.listUsers.users?.flatMap((el) => el.businesses);
+  const businessFilter = [...businessIds]
+    .map((id) => businessData?.find((el) => el.id === id))
+    .map((el) => ({ text: el?.name || '', value: el?.id || '' }));
   return (
     <div className="list-view">
       <Row gutter={8} style={{ marginBottom: 10 }}>
@@ -162,9 +175,17 @@ const UserList = ({
               id: 'tzMNF3',
             }),
             dataIndex: 'status',
+            filters: userStatusValues.map((el) => ({
+              text: el.label,
+              value: el.value,
+            })),
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            onFilter: (value: UserStatus, record: { status: UserStatus }) =>
+              record.status.includes(value),
             render: (value: UserStatus) => (
               <Typography.Text type={getTextStatus(value)}>
-                {GetUserStatusValues[value || UserStatus.Active]}
+                {GetUserStatusValues[value]}
               </Typography.Text>
             ),
           },
@@ -183,13 +204,19 @@ const UserList = ({
               id: 'w1Fanr',
             }),
             dataIndex: 'business',
-            render: (value, record) => (
-              <Link
-                to={`/app/scheme-settings/businesses/view/${record.businessId}`}
-              >
-                {value}
-              </Link>
-            ),
+            filters: businessFilter,
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            onFilter: (
+              value: string | number | boolean,
+              record: { businesses: { id: string; name: string }[] }
+            ) => record.businesses.some(({ id }) => id === value),
+            render: (_, record) =>
+              record.businesses.map(({ id, name }) => (
+                <Link to={`/app/scheme-settings/businesses/view/${id}`}>
+                  <Tag color="red">{name}</Tag>
+                </Link>
+              )),
           },
           {
             key: 'groups',
@@ -198,6 +225,20 @@ const UserList = ({
               id: 'hzmswI',
             }),
             dataIndex: 'groups',
+            filters: groupFilter,
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            onFilter: (
+              value: string | number | boolean,
+              record: { groups: { id: string; name: string }[] }
+            ) => record.groups.some(({ id }) => id === value),
+            render: (value: { id: string; name: string }[]) => (
+              <Typography.Text>
+                {value
+                  .map(({ name }, index) => (index === 0 ? name : ` ${name}`))
+                  .toString()}
+              </Typography.Text>
+            ),
           },
           {
             key: 'actions',
@@ -219,14 +260,12 @@ const UserList = ({
           key: user.id,
           name: user.fullName,
           emailAddress: user.email,
-          business: user.businesses.length > 0 ? user.businesses[0].name : '',
-          businessId: user.businesses.length > 0 ? user.businesses[0].id : '',
-          groups: user.groups
-            .map((group, index) =>
-              index === 0 ? group.name : ` ${group.name}`
-            )
-            .toString(),
-          status: user.status || UserStatus.Active,
+          businesses: user.businesses.map((el) => ({
+            name: el.name,
+            id: el.id,
+          })),
+          groups: user.groups,
+          status: user.status || UserStatus.Inactive,
         }))}
       />
       <Drawer

@@ -9,9 +9,11 @@ interface Props {
 }
 
 const CrimeGroupSideList = ({ current, to }: Props): JSX.Element => {
-  const { data, loading } = useCrimeGroupSideList();
+  const { data, loading, next } = useCrimeGroupSideList();
 
-  return <View data={data} loading={loading} current={current} to={to} />;
+  return (
+    <View data={data} loading={loading} current={current} to={to} next={next} />
+  );
 };
 
 export default CrimeGroupSideList;

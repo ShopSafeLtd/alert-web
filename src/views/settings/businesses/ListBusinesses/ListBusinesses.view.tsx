@@ -78,6 +78,16 @@ const ListBusinesses = ({
   const groupFilter = [...groupIds]
     .map((id) => groupData?.find((el) => el.id === id))
     .map((el) => ({ text: el?.name || '', value: el?.id || '' }));
+  const parentIds = new Set(
+    data?.listBusinesses.businesses?.map((el) => el.parent?.id)
+  );
+  const parentData = data?.listBusinesses.businesses?.filter(
+    (el) => !!el.parent
+  );
+  const parentFilter = [...parentIds]
+    .filter((el) => !!el)
+    .map((id) => parentData?.find((el) => el?.id === id))
+    .map((el) => ({ text: el?.name, value: el?.id || '' }));
   const tags = new Set(
     data?.listBusinesses.businesses?.flatMap((business) =>
       business.tags.map((tag) => tag.name)
@@ -163,6 +173,13 @@ const ListBusinesses = ({
               defaultMessage: 'Parent',
               id: 'zTbLfn',
             }),
+            filters: parentFilter,
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            onFilter: (
+              value: string | number | boolean,
+              record: { parent: string; parentId: string }
+            ) => record.parentId === value,
             render: (value, item) =>
               value ? <Link to={`/${item.parentId || ''}`}>{value}</Link> : '',
           },
@@ -211,13 +228,11 @@ const ListBusinesses = ({
             onFilter: (
               value: string | number | boolean,
               record: { groups: { id: string; name: string }[] }
-            ) => record.groups.some((el) => el.id === value),
+            ) => record.groups.some(({ id }) => id === value),
             render: (value: { id: string; name: string }[]) => (
               <Typography.Text>
                 {value
-                  .map((group, index) =>
-                    index === 0 ? group.name : ` ${group.name}`
-                  )
+                  .map(({ name }, index) => (index === 0 ? name : ` ${name}`))
                   .toString()}
               </Typography.Text>
             ),

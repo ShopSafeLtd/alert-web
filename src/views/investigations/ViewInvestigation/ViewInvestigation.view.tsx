@@ -583,7 +583,7 @@ const ViewInvestigation = ({
           />
         }
         visible={addExistingIncident}
-        width="800"
+        width="1000"
         onClose={toggleAddExistingIncident}
         zIndex={1001}
       >

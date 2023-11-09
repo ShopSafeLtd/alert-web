@@ -102,9 +102,7 @@ const useOffenderFeed = (): Return => {
   const setOffendersState = useStoreActions(
     (actions) => actions.data.setOffenders
   );
-  const defaultGroupsId = defaultGroups
-    .filter(({ scheme }) => scheme.id === schemeId)
-    .map(({ id }) => id);
+
   // local State
   const [sortFilter, setSortFilter] = useState(false);
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
@@ -114,25 +112,12 @@ const useOffenderFeed = (): Return => {
     open: false,
     index: 0,
   });
-  // const [groupsFilter, setGroupsFilter] = useState<string[]>([]);
-  // const [warnings, setWarnings] = useState<string[]>([]);
-  // const [ethnicity, setEthnicity] = useState<Race[]>([]);
-  // const [age, setAge] = useState<Age[]>([]);
-  // const [build, setBuild] = useState<Build[]>([]);
-  // const [sex, setSex] = useState<Gender[]>([]);
-  // const [hair, setHair] = useState('');
-  // const [peculiarities, setPeculiarities] = useState('');
-  // const [gallery, setGallery] = useState<string[]>([]);
-  // const [customGalleries, setCustomGalleries] = useState<string[]>([]);
-  // const [businesses, setBusinesses] = useState<string[]>([]);
-  // const [createdAtFilter, setCreatedAtFilter] = useState<
-  //   DateType | undefined
-  // >();
+
   const {
     search,
-    groups: groupsFilter,
+    groups,
     businesses,
-    createdAt: createdAtFilter,
+    createdAt,
     gallery,
     customGalleries,
     peculiarities,
@@ -152,10 +137,10 @@ const useOffenderFeed = (): Return => {
         order === OffenderSort.updatedAtDesc ? SortOrder.Desc : SortOrder.Asc,
     },
     where: {
-      createdAt: createdAtFilter
+      createdAt: createdAt
         ? {
-            gte: createdAtFilter.startDate,
-            lte: createdAtFilter.endDate,
+            gte: createdAt.startDate,
+            lte: createdAt.endDate,
           }
         : undefined,
       tags:
@@ -169,11 +154,11 @@ const useOffenderFeed = (): Return => {
             }
           : undefined,
       groups:
-        groupsFilter.length > 0
+        groups.length > 0
           ? {
               some: {
                 id: {
-                  in: groupsFilter,
+                  in: groups,
                 },
               },
             }
@@ -334,7 +319,7 @@ const useOffenderFeed = (): Return => {
       },
       variables: {
         ...variables,
-        groups: defaultGroupsId,
+        groups: defaultGroups.map(({ id }) => id),
       },
       order,
     });

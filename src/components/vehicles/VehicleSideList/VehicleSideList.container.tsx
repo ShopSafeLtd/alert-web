@@ -9,18 +9,10 @@ interface Props {
 }
 
 const VehicleSideList = ({ current, to }: Props): JSX.Element => {
-  const { data, loading, onPaginationChange, pagination } =
-    useVehicleSideList();
+  const { data, loading, next } = useVehicleSideList();
 
   return (
-    <View
-      data={data}
-      loading={loading}
-      current={current}
-      onPaginationChange={onPaginationChange}
-      to={to}
-      pagination={pagination}
-    />
+    <View data={data} loading={loading} current={current} next={next} to={to} />
   );
 };
 
