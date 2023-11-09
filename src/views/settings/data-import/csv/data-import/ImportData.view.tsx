@@ -127,7 +127,7 @@ const AdditionInfo = ({
       </Row>
     );
   }
-  return null;
+  return <div />;
 };
 
 interface Props {
