@@ -119,6 +119,7 @@ const useIncidentFeed = (): Return => {
 
   // filter initial state
   const [sortFilter, setSortFilter] = useState(false);
+  const isUser = role === Role.User;
 
   // lightBox
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
@@ -196,8 +197,11 @@ const useIncidentFeed = (): Return => {
             contains: peculiarities,
           }
         : undefined,
-
-      approved: gallery.includes('NOT APPROVED')
+      approved: isUser
+        ? {
+            equals: true,
+          }
+        : gallery.includes('NOT APPROVED')
         ? {
             equals: false,
           }

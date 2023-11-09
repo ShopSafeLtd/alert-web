@@ -112,7 +112,7 @@ const useOffenderFeed = (): Return => {
     open: false,
     index: 0,
   });
-
+  const isUser = role === Role.User;
   const {
     search,
     groups,
@@ -246,7 +246,11 @@ const useOffenderFeed = (): Return => {
             equals: true,
           }
         : undefined,
-      approved: gallery.includes('NOT APPROVED')
+      approved: isUser
+        ? {
+            equals: true,
+          }
+        : gallery.includes('NOT APPROVED')
         ? {
             equals: false,
           }
