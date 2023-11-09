@@ -127,7 +127,7 @@ const AdditionInfo = ({
       </Row>
     );
   }
-  return null;
+  return <div />;
 };
 
 interface Props {
@@ -328,7 +328,7 @@ const ImportStockItems = ({
         ];
       }
       default: {
-        return [{}];
+        return [];
       }
     }
   };

@@ -128,6 +128,8 @@ const useOffenderFeed = (): Return => {
   // const [createdAtFilter, setCreatedAtFilter] = useState<
   //   DateType | undefined
   // >();
+  const isUser = role === Role.User;
+
   const {
     search,
     groups: groupsFilter,
@@ -261,7 +263,11 @@ const useOffenderFeed = (): Return => {
             equals: true,
           }
         : undefined,
-      approved: gallery.includes('NOT APPROVED')
+      approved: isUser
+        ? {
+            equals: true,
+          }
+        : gallery.includes('NOT APPROVED')
         ? {
             equals: false,
           }
