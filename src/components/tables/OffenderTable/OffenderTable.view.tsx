@@ -19,13 +19,19 @@ import type {
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import { useIntl } from 'react-intl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPenToSquare, faTrash } from '@fortawesome/pro-light-svg-icons';
+import {
+  faEye,
+  faPenToSquare,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
 import type { OffenderData } from 'types/DataType';
 import { useStoreState } from 'state';
 import { Link } from 'react-router-dom';
 
 const useStyles = createUseStyles({
-  row: { cursor: 'pointer' },
+  row: {
+    // cursor: 'pointer'
+  },
 });
 interface Offender {
   id: string;
@@ -126,9 +132,7 @@ const OffenderTable = ({
             if (hasNavigation) {
               return (
                 <Link to={`/app/offenders/view/${record.key}`}>
-                  <Typography.Text type="warning">
-                    {record.reference}
-                  </Typography.Text>
+                  {record.reference}
                 </Link>
               );
             }
@@ -174,6 +178,24 @@ const OffenderTable = ({
             record: { offender: OffenderData | null; key: string }
           ) => (
             <Row gutter={8}>
+              {hasNavigation && (
+                <Col>
+                  <Tooltip
+                    title={intl.formatMessage({
+                      defaultMessage: 'View Offender',
+                      id: 'GszQTo',
+                    })}
+                  >
+                    <Link to={`/app/offenders/view/${record.key}`}>
+                      <Button
+                        size="small"
+                        disabled={saving}
+                        icon={<FontAwesomeIcon icon={faEye} />}
+                      />
+                    </Link>
+                  </Tooltip>
+                </Col>
+              )}
               {editRights && setEditOffenderData && (
                 <Col>
                   <Tooltip
@@ -186,8 +208,6 @@ const OffenderTable = ({
                       size="small"
                       disabled={saving}
                       onClick={() => {
-                        console.log('Edit');
-
                         if (record?.offender)
                           setEditOffenderData(record?.offender);
                       }}

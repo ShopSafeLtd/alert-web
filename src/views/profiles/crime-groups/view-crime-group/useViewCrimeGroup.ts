@@ -77,7 +77,7 @@ interface Return {
   editRights: boolean;
   toggleSubscribe: () => void;
   submitNewVehicle: (value: VehicleData) => void;
-  submitOffender: (value: string) => void;
+  submitOffender: (value: string[]) => void;
   submitVehicle: (value: string) => void;
   submitNewOffender: (value: OffenderData) => void;
   suggestedData: SuggestedCrimeGroupMembersQuery | undefined;
@@ -248,9 +248,9 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
       },
     });
   };
-  const submitOffender = (value: string) => {
+  const submitOffender = (values: string[]) => {
     setSaving(true);
-    if (value) {
+    if (values) {
       void updateCrimeGroup({
         variables: {
           where: {
@@ -258,7 +258,7 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
           },
           data: {
             offenders: {
-              connect: [{ id: value }],
+              connect: values.map((value) => ({ id: value })),
             },
           },
         },

@@ -7,8 +7,6 @@ import {
   Menu,
   Modal,
   Row,
-  Tag,
-  Tooltip,
   Typography,
 } from 'antd';
 import type { ListArticlesQuery } from 'graphql/generated';
@@ -67,13 +65,12 @@ const ArticleCard = ({
   const {
     id,
     title,
-    groups,
     images,
     previewText,
     updatedAt,
     priority,
     createdBy,
-    tags,
+    // tags,
     watermarkImage,
   } = article || {};
   return (
@@ -139,7 +136,7 @@ const ArticleCard = ({
           </Button>
         </Dropdown>
       )}
-      <div className={classes.tags}>
+      {/* <div className={classes.tags}>
         <Row gutter={8}>
           {tags?.slice(0, 2).map((tag) => (
             <Col key={tag.id}>
@@ -161,14 +158,8 @@ const ArticleCard = ({
               </Tag>
             </Tooltip>
           )}
-          {/* {tags?.map((tag, i) => ( */}
-          {/*   // eslint-disable-next-line react/no-array-index-key */}
-          {/*   <Col key={i}> */}
-          {/*     <Tag className={classes.tag}>{tag.name}</Tag> */}
-          {/*   </Col> */}
-          {/* ))} */}
         </Row>
-      </div>
+      </div> */}
       {images && images.length > 0 ? (
         <Carousel ref={imagesRef}>
           {images.map((image) => (
@@ -262,7 +253,7 @@ const ArticleCard = ({
             <Text>{FormatCalendar(updatedAt)}</Text>
           </Col>
         </Row>
-        {groups && groups.length > 0 ? (
+        {/* {groups && groups.length > 0 ? (
           <Row wrap={false} className={classes.tagRow}>
             {groups.map((group) => (
               <Col key={group.id}>
@@ -274,17 +265,17 @@ const ArticleCard = ({
           </Row>
         ) : (
           <div style={{ marginBottom: 5 }} />
-        )}
+        )} */}
 
         <Row justify="center" style={{ marginBottom: -5, padding: 0 }}>
           <Col>
             {/* eslint-disable-next-line @typescript-eslint/restrict-template-expressions */}
             <Link to={`/app/article/view/${id}`}>
               <Button size="small" type="text">
-                <FormattedMessage
-                  id="Pgum6c"
-                  defaultMessage="View Full Article"
-                />
+                {intl.formatMessage({
+                  defaultMessage: 'View Full Article',
+                  id: 'Pgum6c',
+                })}
               </Button>
             </Link>
           </Col>

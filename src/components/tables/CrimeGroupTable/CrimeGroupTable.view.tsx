@@ -4,12 +4,18 @@ import { createUseStyles } from 'react-jss';
 // import type { ColumnsType } from 'antd/es/table/interface';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPenToSquare, faTrash } from '@fortawesome/pro-light-svg-icons';
+import {
+  faEye,
+  faPenToSquare,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
 import type { CrimeGroupCardData } from 'types/DataType';
 import { Link } from 'react-router-dom';
 
 const useStyles = createUseStyles({
-  row: { cursor: 'pointer' },
+  row: {
+    // cursor: 'pointer'
+  },
 });
 interface Props {
   crimeGroups: CrimeGroupCardData[] | undefined;
@@ -133,9 +139,7 @@ const CrimeGroupTable = ({
             if (hasNavigation) {
               return (
                 <Link to={`/app/crime-groups/view/${record.key}`}>
-                  <Typography.Text type="warning">
-                    {record.reference}
-                  </Typography.Text>
+                  {record.reference}
                 </Link>
               );
             }
@@ -176,6 +180,24 @@ const CrimeGroupTable = ({
             }
           ) => (
             <Row gutter={8}>
+              {hasNavigation && (
+                <Col>
+                  <Tooltip
+                    title={intl.formatMessage({
+                      defaultMessage: 'View Crime Group',
+                      id: 'NCLKFX',
+                    })}
+                  >
+                    <Link to={`/app/crime-groups/view/${record.key}`}>
+                      <Button
+                        size="small"
+                        disabled={saving}
+                        icon={<FontAwesomeIcon icon={faEye} />}
+                      />
+                    </Link>
+                  </Tooltip>
+                </Col>
+              )}
               {deleteRights && setEditData && (
                 <Col>
                   <Tooltip

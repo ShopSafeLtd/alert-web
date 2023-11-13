@@ -54,6 +54,18 @@ query listIncidents(
         id
         name
       }
+      incidentItems {
+        id
+        name
+        value
+        recoveredValue
+        sku
+        quantity
+        recoveredQuantity
+        goodsType {
+          id
+        }
+      }
       offenders {
         id
         name

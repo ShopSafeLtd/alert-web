@@ -29092,10 +29092,10 @@ export type Investigation = {
   totalCrimeGroups?: Maybe<Scalars['Int']>;
   totalIncidents?: Maybe<Scalars['Int']>;
   totalOffenders?: Maybe<Scalars['Int']>;
-  totalRecoveredValue?: Maybe<Scalars['Int']>;
+  totalRecoveredValue?: Maybe<Scalars['Float']>;
   totalTheftSuccess?: Maybe<Scalars['Float']>;
   totalUpdates?: Maybe<Scalars['Int']>;
-  totalValue?: Maybe<Scalars['Int']>;
+  totalValue?: Maybe<Scalars['Float']>;
   totalVehicles?: Maybe<Scalars['Int']>;
   updatedAt: Scalars['DateTime'];
   updates: Array<Update>;

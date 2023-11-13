@@ -19,7 +19,9 @@ import type { ProfileUpdatedModel } from 'types/enums/profile-update-type';
 import type { MutationUpdaterFn } from '@apollo/client';
 
 const useStyles = createUseStyles({
-  row: { cursor: 'pointer' },
+  row: {
+    // cursor: 'pointer'
+  },
 });
 
 interface Props {

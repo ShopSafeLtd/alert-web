@@ -31,7 +31,7 @@ import {
 } from 'graphql/generated';
 import { useStoreState } from 'state';
 import type { FormInstance } from 'antd';
-import { Form, Mentions, message, Modal, notification, Upload } from 'antd';
+import { Form, message, Modal, notification, Upload } from 'antd';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { useApolloClient } from '@apollo/client';
 import { useNavigate } from 'react-router';
@@ -41,13 +41,14 @@ import update from 'immutability-helper';
 import type {
   CrimeGroupData,
   IncidentCardData,
+  SchemeUserData,
   VehicleData,
 } from 'types/DataType';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
+import { getText, appendDuplicates } from 'utils/getMentions/get-mention-text';
 
 const { confirm } = Modal;
-const { getMentions } = Mentions;
 const { useForm } = Form;
 
 interface Props {
@@ -85,13 +86,6 @@ export interface OffenderData {
   imageUid?: string[] | undefined;
 }
 
-interface MemberData {
-  id: string;
-  origName: string;
-  businesses: { id: string; name: string }[];
-  firstLetter?: string | null;
-}
-
 interface Return {
   onSubmit: () => void;
   data: ChatMessagesQuery | undefined;
@@ -107,7 +101,7 @@ interface Return {
   deleteChatConfirm: () => void;
   manageChat: boolean;
   toggleManageChat: () => void;
-  membersData: MemberData[] | undefined;
+  membersData: SchemeUserData[] | undefined;
   inputStr: string;
   setInputStr: (value: string) => void;
   showPicker: boolean;
@@ -170,7 +164,9 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   const [messageSent, setMessageSent] = useState(true);
   const [fetching, setFetching] = useState(true);
   const [manageChat, setManageChat] = useState(false);
-  const [membersData, setMembersData] = useState<MemberData[] | undefined>([]);
+  const [membersData, setMembersData] = useState<SchemeUserData[] | undefined>(
+    []
+  );
   const [inputStr, setInputStr] = useState('');
   const [showPicker, setShowPicker] = useState(false);
   const [imageChange, setImageChange] = useState(false);
@@ -222,33 +218,43 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     onCompleted: ({ chat }) => {
       if (chat?.members && chat.members.length > 0) {
         setMembersData(
-          chat.members
-            .map((userChat) => userChat.user)
-            .map((member, i, arr) => {
-              const arrBeforeMember = arr
-                .slice(0, i)
-                .map(({ origName }) => origName);
-              if (arrBeforeMember.includes(member.origName)) {
-                const { length } = arrBeforeMember.filter(
-                  (item) => item === member.origName
-                );
-                return {
-                  ...member,
-                  origName: `${member.origName.replace(' ', '_')}_${length}`,
-                };
-              }
-              return {
-                ...member,
-                origName: member.origName.replace(' ', '_'),
-              };
-            })
+          appendDuplicates(
+            chat.members
+              .map((userChat) => userChat.user)
+              .map((user) => ({
+                fullName: user.origName,
+                oldFullName: user.origName,
+                id: user.id,
+                businesses: user.businesses,
+                firstLetter: user.firstLetter,
+              }))
+          )
+          // chat.members
+          //   .map((userChat) => userChat.user)
+          //   .map((member, i, arr) => {
+          //     const arrBeforeMember = arr
+          //       .slice(0, i)
+          //       .map(({ origName }) => origName);
+          //     if (arrBeforeMember.includes(member.origName)) {
+          //       const { length } = arrBeforeMember.filter(
+          //         (item) => item === member.origName
+          //       );
+          //       return {
+          //         ...member,
+          //         origName: `${member.origName.replace(' ', '_')}_${length}`,
+          //       };
+          //     }
+          //     return {
+          //       ...member,
+          //       origName: member.origName.replace(' ', '_'),
+          //     };
+          //   })
         );
       }
     },
   });
 
-  console.log(chatData?.chat?.totalMessages);
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const subscribeToNewMessage = () => {
     subscribeToMore({
       document: MessagesSubscriptionDocument,
@@ -850,24 +856,6 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     update: updateData,
   });
 
-  const getText = (text: string) => {
-    const mentions = getMentions(text);
-    let newText = text;
-
-    // eslint-disable-next-line no-restricted-syntax
-    for (const mention of mentions) {
-      const mentioned = membersData?.find(
-        (member) => mention.value === member.origName
-      );
-      if (mentioned)
-        newText = newText.replace(
-          `@${mention.value}`,
-          `@[${mentioned.origName}]`
-        );
-    }
-
-    return newText;
-  };
   const onSubmit = async () => {
     if (
       inputStr.length === 0 &&
@@ -909,7 +897,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                   ? mentionedUser.map(({ id }) => ({ id }))
                   : undefined,
             },
-            content: getText(inputStr),
+            content: getText(inputStr, membersData),
             images:
               imageChange && fileList.length > 0
                 ? fileList
@@ -949,7 +937,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
         optimisticResponse: {
           __typename: 'Mutation',
           createMessage: {
-            content: getText(inputStr),
+            content: getText(inputStr, membersData),
             createdAt: new Date(),
             id: `${Math.random()}`,
             images:

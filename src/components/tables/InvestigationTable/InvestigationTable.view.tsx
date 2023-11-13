@@ -4,7 +4,13 @@ import { useIntl } from 'react-intl';
 import type { InvestigationStatus } from 'graphql/generated';
 import GetInvestigationStatusValues from 'types/enums/investigation-status';
 import { useNavigate } from 'react-router';
+import { createUseStyles } from 'react-jss';
 
+const useStyles = createUseStyles({
+  row: {
+    cursor: 'pointer',
+  },
+});
 interface Props {
   investigations:
     | {
@@ -18,12 +24,15 @@ interface Props {
 
 const InvestigationTable = ({ investigations }: Props): JSX.Element => {
   const intl = useIntl();
+  const classes = useStyles();
+
   const navigate = useNavigate();
 
   return (
     <Table
       size="small"
       // loading={loading}
+      rowClassName={classes.row}
       pagination={{
         hideOnSinglePage: true,
         pageSize: 5,

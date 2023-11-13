@@ -5,11 +5,17 @@ import { useIntl } from 'react-intl';
 import { Role } from 'graphql/generated';
 import { useStoreState } from 'state';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPenToSquare, faTrash } from '@fortawesome/pro-light-svg-icons';
+import {
+  faEye,
+  faPenToSquare,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
 import { Link } from 'react-router-dom';
 
 const useStyles = createUseStyles({
-  row: { cursor: 'pointer' },
+  row: {
+    // cursor: 'pointer'
+  },
 });
 
 interface Props {
@@ -77,9 +83,7 @@ const IncidentTable = ({
             if (hasNavigation && !restrictIncidentAccess) {
               return (
                 <Link to={`/app/incidents/view/${record.key}`}>
-                  <Typography.Text type="warning">
-                    {record.reference}
-                  </Typography.Text>
+                  {record.reference}
                 </Link>
               );
             }
@@ -135,6 +139,24 @@ const IncidentTable = ({
           width: 100,
           render: (_, record: { key: string }) => (
             <Row gutter={8}>
+              {hasNavigation && (
+                <Col>
+                  <Tooltip
+                    title={intl.formatMessage({
+                      defaultMessage: 'View Incident',
+                      id: 'f4Tgpp',
+                    })}
+                  >
+                    <Link to={`/app/incidents/view/${record.key}`}>
+                      <Button
+                        size="small"
+                        disabled={saving}
+                        icon={<FontAwesomeIcon icon={faEye} />}
+                      />
+                    </Link>
+                  </Tooltip>
+                </Col>
+              )}
               {setEditData && (
                 <Col>
                   <Tooltip

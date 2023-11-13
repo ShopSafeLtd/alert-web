@@ -13,8 +13,6 @@ import {
 import { createUseStyles } from 'react-jss';
 import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
 import LinkCrimeGroup from 'components/form-components/linkOptions/LinkCrimeGroup';
-import AddExistingOffender from 'components/form-components/offender/offender/AddExistingOffender';
-import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
 import { faBell, faBellSlash, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -35,6 +33,8 @@ import EditCrimeGroup from 'components/form-components/crimeGroup/EditCrimeGroup
 import MultiSelectOffenders from 'components/investigations/MultiSelectOffenders';
 import MultiSelectVehicles from 'components/investigations/MultiSelectVehicles';
 import EditInvestigation from 'components/form-components/Investigation/EditInvestigation';
+import SelectIncidents from 'components/form-components/linkOptions/SelectIncidents';
+import SelectedOffenders from 'components/form-components/linkOptions/SelectOffenders';
 import type {
   CreateTodoMutation,
   QuestionGroupOnSchemeQuery,
@@ -95,10 +95,10 @@ interface Props {
   onDeleteCrimeGroup: (id: string) => void;
   addExistingIncident: boolean;
   toggleAddExistingIncident: () => void;
-  onAddExistingOffender: (value: string) => void;
+  onAddExistingOffender: (value: string[]) => void;
   onAddExistingVehicle: (value: string) => void;
   onAddExistingCrimeGroup: (value: string) => void;
-  onAddExistingIncident: (value: string) => void;
+  onAddExistingIncident: (value: string[]) => void;
   onAddOffender: (value: OffenderData) => void;
   onEditOffender: (value: OffenderData) => void;
   onAddVehicle: (value: VehicleData) => void;
@@ -400,10 +400,10 @@ const ViewInvestigation = ({
         zIndex={1001}
       >
         {addExistingOffender ? (
-          <AddExistingOffender
+          <SelectedOffenders
             offenderIds={offenderIds}
             onClose={toggleAddExistingOffender}
-            update={(submitData) => onAddExistingOffender(submitData.id)}
+            update={onAddExistingOffender}
             takeAllSchemes={takeAllSchemes}
           />
         ) : (
@@ -588,10 +588,10 @@ const ViewInvestigation = ({
         zIndex={1001}
       >
         {addExistingIncident ? (
-          <LinkIncident
+          <SelectIncidents
             incidentIds={incidentIds}
             onClose={toggleAddExistingIncident}
-            update={(submitData) => onAddExistingIncident(submitData.id)}
+            update={onAddExistingIncident}
             takeAllSchemes={takeAllSchemes}
           />
         ) : (

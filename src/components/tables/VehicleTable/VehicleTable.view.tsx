@@ -3,14 +3,20 @@ import { Button, Col, Popconfirm, Row, Table, Tooltip, Typography } from 'antd';
 import { createUseStyles } from 'react-jss';
 import type { VehicleData } from 'types/DataType';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPenToSquare, faTrash } from '@fortawesome/pro-light-svg-icons';
+import {
+  faEye,
+  faPenToSquare,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
 import { useIntl } from 'react-intl';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import { Link } from 'react-router-dom';
 import type { ImagePosition } from 'graphql/generated';
 
 const useStyles = createUseStyles({
-  row: { cursor: 'pointer' },
+  row: {
+    // cursor: 'pointer'
+  },
 });
 interface Props {
   vehicles:
@@ -91,9 +97,7 @@ const VehicleTable = ({
             if (hasNavigation) {
               return (
                 <Link to={`/app/vehicles/view/${record.key}`}>
-                  <Typography.Text type="warning">
-                    {record.reference}
-                  </Typography.Text>
+                  {record.reference}
                 </Link>
               );
             }
@@ -140,6 +144,24 @@ const VehicleTable = ({
           width: 100,
           render: (_, record: { vehicle: VehicleData | null; key: string }) => (
             <Row gutter={8}>
+              {hasNavigation && (
+                <Col>
+                  <Tooltip
+                    title={intl.formatMessage({
+                      defaultMessage: 'View Vehicle',
+                      id: '4ePc9G',
+                    })}
+                  >
+                    <Link to={`/app/vehicles/view/${record.key}`}>
+                      <Button
+                        size="small"
+                        disabled={saving}
+                        icon={<FontAwesomeIcon icon={faEye} />}
+                      />
+                    </Link>
+                  </Tooltip>
+                </Col>
+              )}
               {editRights && setEditVehicleData && (
                 <Col>
                   <Tooltip

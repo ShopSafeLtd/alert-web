@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
 import type { FormInstance } from 'antd';
-import { Form, Mentions, message } from 'antd';
+import { Form, message } from 'antd';
 import type { RcFile } from 'antd/lib/upload';
 import Upload from 'antd/lib/upload';
 import type { UploadFile, UploadProps } from 'antd/lib/upload/interface';
@@ -53,8 +53,7 @@ import type {
 } from 'types/DataType';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
-
-const { getMentions } = Mentions;
+import { getText, appendDuplicates } from 'utils/getMentions/get-mention-text';
 
 interface Return {
   beforeUpdateImageUpload: (value: RcFile) => void;
@@ -119,29 +118,6 @@ interface Props {
   subscribed: boolean;
   setOptionRowShow?: (value: boolean) => void;
 }
-
-const appendDuplicates = (arr: SchemeUserData[]) => {
-  // to store number of instances for each type
-  const counts: { [key: string]: number } = {};
-
-  const fullNames = arr.map((elem) => {
-    if (counts[elem.fullName] === undefined) {
-      counts[elem.fullName] = 0;
-      return `[${elem.id}]${elem.fullName}`;
-    }
-    counts[elem.fullName] += 1;
-    return `[${elem.id}]${elem.fullName}_${counts[elem.fullName]}`;
-  });
-
-  return arr.map((item) => ({
-    ...item,
-    fullName:
-      fullNames
-        .find((name) => name.split('[')[1].split(']')[0] === item.id)
-        ?.split(']')[1]
-        .replace(' ', '_') || '',
-  }));
-};
 
 const useUpdateBar = ({
   replyTo,
@@ -458,28 +434,10 @@ const useUpdateBar = ({
         return UpdateType.Text;
       };
 
-      const getText = (text: string) => {
-        const mentions = getMentions(text);
-        let newText = text;
-
-        // eslint-disable-next-line no-restricted-syntax
-        for (const mention of mentions) {
-          const mentioned = schemeUsers?.find(
-            (member) => mention.value === member.fullName
-          );
-          if (mentioned)
-            newText = newText.replace(
-              `@${mention.value}`,
-              `@[${mentioned.oldFullName}]`
-            );
-        }
-
-        return newText;
-      };
       const data = {
         icon: UpdateIcon.Comment,
         type: getUpdateType(),
-        text: getText(updateInput),
+        text: getText(updateInput, schemeUsers),
         replyTo: replyTo
           ? {
               id: replyTo.id,
@@ -550,7 +508,7 @@ const useUpdateBar = ({
               replies: [],
               type: getUpdateType(),
               __typename: 'Update',
-              text: getText(updateInput),
+              text: getText(updateInput, schemeUsers),
               linkedIncidents: [],
               linkedOffenders: [],
               linkedCrimeGroups: [],
@@ -640,7 +598,7 @@ const useUpdateBar = ({
               replies: [],
               type: getUpdateType(),
               __typename: 'Update',
-              text: getText(updateInput),
+              text: getText(updateInput, schemeUsers),
               linkedIncidents: [],
               linkedOffenders: [],
               linkedCrimeGroups: [],
@@ -730,7 +688,7 @@ const useUpdateBar = ({
               replies: [],
               type: getUpdateType(),
               __typename: 'Update',
-              text: getText(updateInput),
+              text: getText(updateInput, schemeUsers),
               linkedIncidents: [],
               linkedOffenders: [],
               linkedCrimeGroups: [],
@@ -823,7 +781,7 @@ const useUpdateBar = ({
               replies: [],
               type: getUpdateType(),
               __typename: 'Update',
-              text: getText(updateInput),
+              text: getText(updateInput, schemeUsers),
               linkedIncidents: [],
               linkedOffenders: [],
               linkedCrimeGroups: [],
@@ -911,7 +869,7 @@ const useUpdateBar = ({
               replies: [],
               type: getUpdateType(),
               __typename: 'Update',
-              text: getText(updateInput),
+              text: getText(updateInput, schemeUsers),
               linkedIncidents: [],
               linkedOffenders: [],
               linkedCrimeGroups: [],

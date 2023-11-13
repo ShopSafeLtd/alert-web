@@ -43,7 +43,6 @@ import AddVehicle from 'components/form-components/Vehicle/AddVehicle';
 import VehicleTable from 'components/tables/VehicleTable';
 import OffenderTable from 'components/tables/OffenderTable';
 import IncidentTable from 'components/tables/IncidentTable';
-import AddExistingOffender from 'components/form-components/offender/offender/AddExistingOffender';
 import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
 import CrimeGroupSideList from 'components/crimeGroups/sidelist';
 import SuggestedMembers from 'components/crimeGroups/SuggestedMembers/SuggestedMembers.view';
@@ -56,6 +55,7 @@ import AddDocument from 'components/form-components/documents/AddDocument';
 import type { MutationUpdaterFn } from '@apollo/client';
 import InvestigationTable from 'components/tables/InvestigationTable';
 import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
+import SelectedOffenders from 'components/form-components/linkOptions/SelectOffenders';
 import useStyles from './ViewCrimeGroup.styles';
 
 const { Title } = Typography;
@@ -107,7 +107,7 @@ interface Props {
   toggleSubscribe: () => void;
   crimeGroupId: string;
   submitNewVehicle: (value: VehicleData) => void;
-  submitOffender: (value: string) => void;
+  submitOffender: (value: string[]) => void;
   submitVehicle: (value: string) => void;
   submitNewOffender: (value: OffenderData) => void;
   suggestedData: SuggestedCrimeGroupMembersQuery | undefined;
@@ -1021,10 +1021,10 @@ const ViewCrimeGroup = ({
         zIndex={1001}
       >
         {addExistingOffender ? (
-          <AddExistingOffender
+          <SelectedOffenders
             offenderIds={offenderIds}
             onClose={toggleAddExistingOffender}
-            update={(submitData) => submitOffender(submitData.id)}
+            update={submitOffender}
           />
         ) : (
           <div />

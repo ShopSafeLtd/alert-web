@@ -78,10 +78,10 @@ interface Return {
   toggleAddDemDocument: () => void;
   addDemDocument: boolean;
   demId: string | null | undefined;
-  onAddExistingOffender: (value: string) => void;
+  onAddExistingOffender: (value: string[]) => void;
   onAddExistingVehicle: (value: string) => void;
   onAddExistingCrimeGroup: (value: string) => void;
-  onAddExistingIncident: (value: string) => void;
+  onAddExistingIncident: (value: string[]) => void;
   onAddOffender: (value: OffenderData) => void;
   onEditOffender: (value: OffenderData) => void;
   onAddVehicle: (value: VehicleData) => void;
@@ -348,13 +348,13 @@ const useViewInvestigation = (investigationId: string): Return => {
       });
     }
   };
-  const onAddExistingOffender = (value: string) => {
+  const onAddExistingOffender = (values: string[]) => {
     setSaving(true);
-    if (value) {
+    if (values) {
       void updateInvestigationOffenders({
         variables: {
           id: investigationId,
-          offenderIds: value,
+          offenderIds: values,
         },
         onCompleted: () => {
           successNotification(
@@ -1231,21 +1231,26 @@ const useViewInvestigation = (investigationId: string): Return => {
         errorNotification();
       },
     });
-  const onAddExistingIncident = (value: string) => {
+  const onAddExistingIncident = (values: string[]) => {
     setSaving(true);
-    if (value) {
+    if (values) {
       void updateInvestigationIncidents({
         variables: {
           id: investigationId,
-          incidentIds: [value],
+          incidentIds: values,
         },
         onCompleted: (res) => {
-          const newData = res.updateInvestigation?.incidents.find(
-            ({ id }) => id === value
+          const newData = res.updateInvestigation?.incidents.filter(({ id }) =>
+            values.includes(id)
           );
-          if (newData) {
-            onSetSuggestedOffenders(newData?.offenders);
-            onSetSuggestedVehicles(newData?.vehicles);
+          const newOffenders = newData?.flatMap((el) => el.offenders);
+          const newVehicles = newData?.flatMap((el) => el.vehicles);
+
+          if (newOffenders && newOffenders.length > 0) {
+            onSetSuggestedOffenders(newOffenders);
+          }
+          if (newVehicles) {
+            onSetSuggestedVehicles(newVehicles);
           }
           successNotification(
             ProfileUpdatedModel.Incident,

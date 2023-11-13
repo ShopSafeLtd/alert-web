@@ -47,6 +47,7 @@ import WatermarkImage from 'components/images/WatermarkImage.view';
 import type {
   CrimeGroupData,
   IncidentCardData,
+  SchemeUserData,
   VehicleData,
 } from 'types/DataType';
 import LinkCrimeGroup from 'components/form-components/linkOptions/LinkCrimeGroup';
@@ -98,12 +99,6 @@ interface OffenderData {
 // interface FormData {
 //   newMessage: string;
 // }
-interface MemberData {
-  id: string;
-  origName: string;
-  businesses: { id: string; name: string }[];
-  firstLetter?: string | null;
-}
 
 interface Props {
   onSubmit: () => void;
@@ -119,7 +114,7 @@ interface Props {
   manageChat: boolean;
   toggleManageChat: () => void;
   chatId: string;
-  membersData: MemberData[] | undefined;
+  membersData: SchemeUserData[] | undefined;
   inputStr: string;
   setInputStr: (value: string) => void;
   showPicker: boolean;
@@ -539,22 +534,22 @@ const ViewMessages = ({
                   mentions
                     .map((mention) =>
                       membersData?.find(
-                        (member) => mention.value === member.origName
+                        (member) => mention.value === member.fullName
                       )
                     )
                     .map((item) => ({
                       id: item?.id || '',
-                      value: item?.origName || '',
+                      value: item?.fullName || '',
                     }))
                     .filter((item) => item.value !== '')
                 );
               }}
               prefix="@"
             >
-              {membersData?.map(({ id, origName, businesses }) => (
-                <Option key={id} value={origName.replace(' ', '_')}>
+              {membersData?.map(({ id, fullName, businesses }) => (
+                <Option key={id} value={fullName.replace(' ', '_')}>
                   {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                  {origName} ({businesses[0]?.name})
+                  {fullName} ({businesses[0]?.name})
                 </Option>
               ))}
             </Mentions>
