@@ -19,7 +19,7 @@
     "@mapbox/mapbox-gl-geocoder": "^5.0.1",
     "@mediapipe/tasks-vision": "^0.1.0-alpha-12",
     "@nivo/bar": "^0.81.0",
-    "@nivo/core": "^0.81.0",
+    "@nivo/core": "^0.83.1",
     "@nivo/line": "^0.81.0",
     "@nivo/pie": "^0.81.0",
     "@nivo/radar": "^0.82.1",
