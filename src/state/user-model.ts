@@ -44,6 +44,10 @@ export interface SetUserPayload {
   isSet: boolean;
   userNotifications: number;
 }
+
+export interface SetDemPayload {
+  dem: { id: string; name: string }[];
+}
 export interface SetFilterDefaultGroup {
   filterDefaultGroups: {
     id: string;
@@ -111,6 +115,7 @@ export interface UserModel {
   origName: string;
   reference: string;
   picture: string;
+  dem: { id: string; name: string }[];
   businesses: {
     name: string;
     fullName: string;
@@ -157,6 +162,7 @@ export interface UserModel {
   setInvestigationAllSchemes: Action<UserModel, SetInvestigationAllSchemes>;
   setNotifications: Action<UserModel, SetUserNotifications>;
   clearUser: Action<UserModel>;
+  setDem: Action<UserModel, SetDemPayload>;
 }
 
 const userModel: UserModel = {
@@ -178,6 +184,7 @@ const userModel: UserModel = {
   userTodos: 0,
   userNotifications: 0,
   investigationAllSchemes: false,
+  dem: [],
   setUser: action((state, payload) => {
     state.id = payload.id;
     state.email = payload.email;
@@ -209,6 +216,9 @@ const userModel: UserModel = {
   setInvestigationAllSchemes: action((state, payload) => {
     state.investigationAllSchemes = payload.investigationAllSchemes;
   }),
+  setDem: action((state, payload) => {
+    state.dem = payload.dem;
+  }),
   clearUser: action((state) => {
     state.id = '';
     state.email = '';
@@ -224,6 +234,7 @@ const userModel: UserModel = {
     state.userTodos = 0;
     state.userNotifications = 0;
     state.investigationAllSchemes = false;
+    state.dem = [];
   }),
 };
 

@@ -116,8 +116,12 @@ const SideNavContent = (props: SideNavContentProps) => {
   } = props;
 
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
-  const userRole = useStoreState((state) => state.user.role);
-  const userId = useStoreState((state) => state.user.id);
+  const {
+    role: userRole,
+    id: userId,
+    dem,
+    businesses,
+  } = useStoreState((state) => state.user);
   const { restrictIncidentAccess, reportOnly } = useStoreState(
     (state) => state.scheme
   );
@@ -186,82 +190,86 @@ const SideNavContent = (props: SideNavContentProps) => {
             : 'nav-menu-overflowed'
         }
       >
-        {navigationConfig.map((menu) =>
-          menu.submenu.length > 0 ? (
-            <Menu.SubMenu
-              key={menu.key}
-              icon={<Icon icon={menu.icon} />}
-              title={setLocale(localization, menu.intl.id)}
-            >
-              {menu.submenu
-                .filter((el) => (el.roles ? el.roles.includes(userRole) : true))
-                .map((subMenuFirst) =>
-                  subMenuFirst.submenu.length > 0 ? (
-                    <SubMenu
-                      icon={
-                        subMenuFirst.icon ? (
-                          <Icon icon={subMenuFirst?.icon} />
-                        ) : null
-                      }
-                      key={subMenuFirst.key}
-                      title={setLocale(localization, subMenuFirst.intl.id)}
-                    >
-                      {subMenuFirst.submenu.map((subMenuSecond) => (
-                        <Menu.Item key={subMenuSecond.key}>
-                          {subMenuSecond.icon ? (
-                            <Icon icon={subMenuSecond?.icon} />
-                          ) : null}
-                          <span>
-                            {setLocale(localization, subMenuSecond.intl.id)}
-                          </span>
-                          <Link
-                            onClick={() => closeMobileNav()}
-                            to={subMenuSecond.path}
-                          />
-                        </Menu.Item>
-                      ))}
-                    </SubMenu>
-                  ) : (
-                    <Menu.Item
-                      key={subMenuFirst.key}
-                      style={{ paddingLeft: 15 }}
-                    >
-                      {subMenuFirst.icon ? (
-                        <SubIcon icon={subMenuFirst.icon} />
-                      ) : null}
-                      <span>
-                        {setLocale(localization, subMenuFirst.intl.id)}
-                      </span>
-                      <Link
-                        onClick={() => closeMobileNav()}
-                        to={subMenuFirst.path}
-                      />
-                    </Menu.Item>
+        {navigationConfig
+          .filter((el) => (el.requireDemId ? dem.length > 0 : true))
+          .map((menu) =>
+            menu.submenu.length > 0 ? (
+              <Menu.SubMenu
+                key={menu.key}
+                icon={<Icon icon={menu.icon} />}
+                title={setLocale(localization, menu.intl.id)}
+              >
+                {menu.submenu
+                  .filter((el) =>
+                    el.roles ? el.roles.includes(userRole) : true
                   )
-                )}
-            </Menu.SubMenu>
-          ) : (
-            <Menu.Item key={menu.key}>
-              {menu.icon ? <Icon icon={menu?.icon} /> : null}
-              {menu.badge ? (
-                <Badge
-                  offset={[9, 0]}
-                  size="small"
-                  count={getBadgeCount[menu.badge]}
-                  showZero
-                  style={{ height: 20, padding: 3 }}
-                >
+                  .map((subMenuFirst) =>
+                    subMenuFirst.submenu.length > 0 ? (
+                      <SubMenu
+                        icon={
+                          subMenuFirst.icon ? (
+                            <Icon icon={subMenuFirst?.icon} />
+                          ) : null
+                        }
+                        key={subMenuFirst.key}
+                        title={setLocale(localization, subMenuFirst.intl.id)}
+                      >
+                        {subMenuFirst.submenu.map((subMenuSecond) => (
+                          <Menu.Item key={subMenuSecond.key}>
+                            {subMenuSecond.icon ? (
+                              <Icon icon={subMenuSecond?.icon} />
+                            ) : null}
+                            <span>
+                              {setLocale(localization, subMenuSecond.intl.id)}
+                            </span>
+                            <Link
+                              onClick={() => closeMobileNav()}
+                              to={subMenuSecond.path}
+                            />
+                          </Menu.Item>
+                        ))}
+                      </SubMenu>
+                    ) : (
+                      <Menu.Item
+                        key={subMenuFirst.key}
+                        style={{ paddingLeft: 15 }}
+                      >
+                        {subMenuFirst.icon ? (
+                          <SubIcon icon={subMenuFirst.icon} />
+                        ) : null}
+                        <span>
+                          {setLocale(localization, subMenuFirst.intl.id)}
+                        </span>
+                        <Link
+                          onClick={() => closeMobileNav()}
+                          to={subMenuFirst.path}
+                        />
+                      </Menu.Item>
+                    )
+                  )}
+              </Menu.SubMenu>
+            ) : (
+              <Menu.Item key={menu.key}>
+                {menu.icon ? <Icon icon={menu?.icon} /> : null}
+                {menu.badge ? (
+                  <Badge
+                    offset={[9, 0]}
+                    size="small"
+                    count={getBadgeCount[menu.badge]}
+                    showZero
+                    style={{ height: 20, padding: 3 }}
+                  >
+                    <span>{setLocale(localization, menu?.intl.id)}</span>
+                  </Badge>
+                ) : (
                   <span>{setLocale(localization, menu?.intl.id)}</span>
-                </Badge>
-              ) : (
-                <span>{setLocale(localization, menu?.intl.id)}</span>
-              )}{' '}
-              {menu.path ? (
-                <Link onClick={() => closeMobileNav()} to={menu.path} />
-              ) : null}
-            </Menu.Item>
-          )
-        )}
+                )}{' '}
+                {menu.path ? (
+                  <Link onClick={() => closeMobileNav()} to={menu.path} />
+                ) : null}
+              </Menu.Item>
+            )
+          )}
       </Menu>
       <NavScheme />
       <Row style={{ width: '100%' }}>

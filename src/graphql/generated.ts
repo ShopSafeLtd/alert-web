@@ -7751,6 +7751,7 @@ export type BusinessCreateOrConnectWithoutUsersInput = {
 export type BusinessCreateWithoutActionsInput = {
   checklists?: InputMaybe<ActiveChecklistCreateNestedManyWithoutBusinessInput>;
   children?: InputMaybe<BusinessCreateNestedManyWithoutParentInput>;
+  contentGroups?: InputMaybe<ContentGroupCreateNestedManyWithoutBusinessesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   demId?: InputMaybe<Scalars['String']>;
   division?: InputMaybe<Scalars['String']>;
@@ -7840,6 +7841,7 @@ export type BusinessCreateWithoutIncidentsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutBusinessInput>;
   checklists?: InputMaybe<ActiveChecklistCreateNestedManyWithoutBusinessInput>;
   children?: InputMaybe<BusinessCreateNestedManyWithoutParentInput>;
+  contentGroups?: InputMaybe<ContentGroupCreateNestedManyWithoutBusinessesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   demId?: InputMaybe<Scalars['String']>;
   division?: InputMaybe<Scalars['String']>;
@@ -7862,6 +7864,7 @@ export type BusinessCreateWithoutLocationsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutBusinessInput>;
   checklists?: InputMaybe<ActiveChecklistCreateNestedManyWithoutBusinessInput>;
   children?: InputMaybe<BusinessCreateNestedManyWithoutParentInput>;
+  contentGroups?: InputMaybe<ContentGroupCreateNestedManyWithoutBusinessesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   demId?: InputMaybe<Scalars['String']>;
   division?: InputMaybe<Scalars['String']>;
@@ -7884,6 +7887,7 @@ export type BusinessCreateWithoutParentInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutBusinessInput>;
   checklists?: InputMaybe<ActiveChecklistCreateNestedManyWithoutBusinessInput>;
   children?: InputMaybe<BusinessCreateNestedManyWithoutParentInput>;
+  contentGroups?: InputMaybe<ContentGroupCreateNestedManyWithoutBusinessesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   demId?: InputMaybe<Scalars['String']>;
   division?: InputMaybe<Scalars['String']>;
@@ -7906,6 +7910,7 @@ export type BusinessCreateWithoutSchemesInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutBusinessInput>;
   checklists?: InputMaybe<ActiveChecklistCreateNestedManyWithoutBusinessInput>;
   children?: InputMaybe<BusinessCreateNestedManyWithoutParentInput>;
+  contentGroups?: InputMaybe<ContentGroupCreateNestedManyWithoutBusinessesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   demId?: InputMaybe<Scalars['String']>;
   division?: InputMaybe<Scalars['String']>;
@@ -7950,6 +7955,7 @@ export type BusinessCreateWithoutTodosInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutBusinessInput>;
   checklists?: InputMaybe<ActiveChecklistCreateNestedManyWithoutBusinessInput>;
   children?: InputMaybe<BusinessCreateNestedManyWithoutParentInput>;
+  contentGroups?: InputMaybe<ContentGroupCreateNestedManyWithoutBusinessesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   demId?: InputMaybe<Scalars['String']>;
   division?: InputMaybe<Scalars['String']>;
@@ -7972,6 +7978,7 @@ export type BusinessCreateWithoutUsersInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutBusinessInput>;
   checklists?: InputMaybe<ActiveChecklistCreateNestedManyWithoutBusinessInput>;
   children?: InputMaybe<BusinessCreateNestedManyWithoutParentInput>;
+  contentGroups?: InputMaybe<ContentGroupCreateNestedManyWithoutBusinessesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   demId?: InputMaybe<Scalars['String']>;
   division?: InputMaybe<Scalars['String']>;
@@ -8060,6 +8067,7 @@ export type BusinessOrderByWithRelationInput = {
   actions?: InputMaybe<ActionOrderByRelationAggregateInput>;
   checklists?: InputMaybe<ActiveChecklistOrderByRelationAggregateInput>;
   children?: InputMaybe<BusinessOrderByRelationAggregateInput>;
+  contentGroups?: InputMaybe<ContentGroupOrderByRelationAggregateInput>;
   createdAt?: InputMaybe<SortOrder>;
   demId?: InputMaybe<SortOrderInput>;
   division?: InputMaybe<SortOrderInput>;
@@ -8377,6 +8385,7 @@ export type BusinessUpdateWithWhereUniqueWithoutUsersInput = {
 export type BusinessUpdateWithoutActionsInput = {
   checklists?: InputMaybe<ActiveChecklistUpdateManyWithoutBusinessNestedInput>;
   children?: InputMaybe<BusinessUpdateManyWithoutParentNestedInput>;
+  contentGroups?: InputMaybe<ContentGroupUpdateManyWithoutBusinessesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   division?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -8466,6 +8475,7 @@ export type BusinessUpdateWithoutIncidentsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutBusinessNestedInput>;
   checklists?: InputMaybe<ActiveChecklistUpdateManyWithoutBusinessNestedInput>;
   children?: InputMaybe<BusinessUpdateManyWithoutParentNestedInput>;
+  contentGroups?: InputMaybe<ContentGroupUpdateManyWithoutBusinessesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   division?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -8488,6 +8498,7 @@ export type BusinessUpdateWithoutLocationsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutBusinessNestedInput>;
   checklists?: InputMaybe<ActiveChecklistUpdateManyWithoutBusinessNestedInput>;
   children?: InputMaybe<BusinessUpdateManyWithoutParentNestedInput>;
+  contentGroups?: InputMaybe<ContentGroupUpdateManyWithoutBusinessesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   division?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -8510,6 +8521,7 @@ export type BusinessUpdateWithoutParentInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutBusinessNestedInput>;
   checklists?: InputMaybe<ActiveChecklistUpdateManyWithoutBusinessNestedInput>;
   children?: InputMaybe<BusinessUpdateManyWithoutParentNestedInput>;
+  contentGroups?: InputMaybe<ContentGroupUpdateManyWithoutBusinessesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   division?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -8532,6 +8544,7 @@ export type BusinessUpdateWithoutSchemesInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutBusinessNestedInput>;
   checklists?: InputMaybe<ActiveChecklistUpdateManyWithoutBusinessNestedInput>;
   children?: InputMaybe<BusinessUpdateManyWithoutParentNestedInput>;
+  contentGroups?: InputMaybe<ContentGroupUpdateManyWithoutBusinessesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   division?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -8576,6 +8589,7 @@ export type BusinessUpdateWithoutTodosInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutBusinessNestedInput>;
   checklists?: InputMaybe<ActiveChecklistUpdateManyWithoutBusinessNestedInput>;
   children?: InputMaybe<BusinessUpdateManyWithoutParentNestedInput>;
+  contentGroups?: InputMaybe<ContentGroupUpdateManyWithoutBusinessesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   division?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -8598,6 +8612,7 @@ export type BusinessUpdateWithoutUsersInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutBusinessNestedInput>;
   checklists?: InputMaybe<ActiveChecklistUpdateManyWithoutBusinessNestedInput>;
   children?: InputMaybe<BusinessUpdateManyWithoutParentNestedInput>;
+  contentGroups?: InputMaybe<ContentGroupUpdateManyWithoutBusinessesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   division?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -8689,6 +8704,7 @@ export type BusinessWhereInput = {
   actions?: InputMaybe<ActionListRelationFilter>;
   checklists?: InputMaybe<ActiveChecklistListRelationFilter>;
   children?: InputMaybe<BusinessListRelationFilter>;
+  contentGroups?: InputMaybe<ContentGroupListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   demId?: InputMaybe<StringNullableFilter>;
   division?: InputMaybe<StringNullableFilter>;
@@ -8716,6 +8732,7 @@ export type BusinessWhereUniqueInput = {
   actions?: InputMaybe<ActionListRelationFilter>;
   checklists?: InputMaybe<ActiveChecklistListRelationFilter>;
   children?: InputMaybe<BusinessListRelationFilter>;
+  contentGroups?: InputMaybe<ContentGroupListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   demId?: InputMaybe<StringNullableFilter>;
   division?: InputMaybe<StringNullableFilter>;
@@ -10274,6 +10291,125 @@ export type ContactWhereUniqueInput = {
   schemes?: InputMaybe<SchemeListRelationFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   user?: InputMaybe<UserWhereInput>;
+};
+
+export type ContentGroupCreateNestedManyWithoutBusinessesInput = {
+  connect?: InputMaybe<Array<ContentGroupWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<ContentGroupCreateOrConnectWithoutBusinessesInput>
+  >;
+  create?: InputMaybe<Array<ContentGroupCreateWithoutBusinessesInput>>;
+};
+
+export type ContentGroupCreateOrConnectWithoutBusinessesInput = {
+  create: ContentGroupCreateWithoutBusinessesInput;
+  where: ContentGroupWhereUniqueInput;
+};
+
+export type ContentGroupCreateWithoutBusinessesInput = {
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  description?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type ContentGroupListRelationFilter = {
+  every?: InputMaybe<ContentGroupWhereInput>;
+  none?: InputMaybe<ContentGroupWhereInput>;
+  some?: InputMaybe<ContentGroupWhereInput>;
+};
+
+export type ContentGroupOrderByRelationAggregateInput = {
+  _count?: InputMaybe<SortOrder>;
+};
+
+export type ContentGroupScalarWhereInput = {
+  AND?: InputMaybe<Array<ContentGroupScalarWhereInput>>;
+  NOT?: InputMaybe<Array<ContentGroupScalarWhereInput>>;
+  OR?: InputMaybe<Array<ContentGroupScalarWhereInput>>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  description?: InputMaybe<StringNullableFilter>;
+  id?: InputMaybe<StringFilter>;
+  name?: InputMaybe<StringFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type ContentGroupUpdateManyMutationInput = {
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type ContentGroupUpdateManyWithWhereWithoutBusinessesInput = {
+  data: ContentGroupUpdateManyMutationInput;
+  where: ContentGroupScalarWhereInput;
+};
+
+export type ContentGroupUpdateManyWithoutBusinessesNestedInput = {
+  connect?: InputMaybe<Array<ContentGroupWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<ContentGroupCreateOrConnectWithoutBusinessesInput>
+  >;
+  create?: InputMaybe<Array<ContentGroupCreateWithoutBusinessesInput>>;
+  delete?: InputMaybe<Array<ContentGroupWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<ContentGroupScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<ContentGroupWhereUniqueInput>>;
+  set?: InputMaybe<Array<ContentGroupWhereUniqueInput>>;
+  update?: InputMaybe<
+    Array<ContentGroupUpdateWithWhereUniqueWithoutBusinessesInput>
+  >;
+  updateMany?: InputMaybe<
+    Array<ContentGroupUpdateManyWithWhereWithoutBusinessesInput>
+  >;
+  upsert?: InputMaybe<
+    Array<ContentGroupUpsertWithWhereUniqueWithoutBusinessesInput>
+  >;
+};
+
+export type ContentGroupUpdateWithWhereUniqueWithoutBusinessesInput = {
+  data: ContentGroupUpdateWithoutBusinessesInput;
+  where: ContentGroupWhereUniqueInput;
+};
+
+export type ContentGroupUpdateWithoutBusinessesInput = {
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type ContentGroupUpsertWithWhereUniqueWithoutBusinessesInput = {
+  create: ContentGroupCreateWithoutBusinessesInput;
+  update: ContentGroupUpdateWithoutBusinessesInput;
+  where: ContentGroupWhereUniqueInput;
+};
+
+export type ContentGroupWhereInput = {
+  AND?: InputMaybe<Array<ContentGroupWhereInput>>;
+  NOT?: InputMaybe<Array<ContentGroupWhereInput>>;
+  OR?: InputMaybe<Array<ContentGroupWhereInput>>;
+  businesses?: InputMaybe<BusinessListRelationFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  description?: InputMaybe<StringNullableFilter>;
+  id?: InputMaybe<StringFilter>;
+  name?: InputMaybe<StringFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type ContentGroupWhereUniqueInput = {
+  AND?: InputMaybe<Array<ContentGroupWhereInput>>;
+  NOT?: InputMaybe<Array<ContentGroupWhereInput>>;
+  OR?: InputMaybe<Array<ContentGroupWhereInput>>;
+  businesses?: InputMaybe<BusinessListRelationFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  description?: InputMaybe<StringNullableFilter>;
+  id?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<StringFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
 export type Count = {
@@ -13378,6 +13514,18 @@ export type DemEvidence = {
   type?: Maybe<Scalars['String']>;
 };
 
+export type DemEvidenceExtended = {
+  __typename?: 'DemEvidenceExtended';
+  duration?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  importance?: Maybe<Scalars['String']>;
+  officerName?: Maybe<Scalars['String']>;
+  playbackUrl?: Maybe<Scalars['String']>;
+  recordedAt?: Maybe<Scalars['DateTime']>;
+  thumbnailUrl?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+};
+
 export type DemUser = {
   __typename?: 'DemUser';
   email?: Maybe<Scalars['String']>;
@@ -13739,6 +13887,7 @@ export type DocumentCreateWithoutArticlesInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutEvidenceInput>;
   description?: InputMaybe<Scalars['String']>;
+  documentTags?: InputMaybe<DocumentTagCreateNestedManyWithoutDocumentsInput>;
   fileType?: InputMaybe<FileType>;
   fileTypeLit?: InputMaybe<Scalars['String']>;
   hash?: InputMaybe<Scalars['String']>;
@@ -13785,6 +13934,7 @@ export type DocumentCreateWithoutCrimeGroupsInput = {
   checklist?: InputMaybe<ActiveChecklistCreateNestedOneWithoutDocumentInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
+  documentTags?: InputMaybe<DocumentTagCreateNestedManyWithoutDocumentsInput>;
   fileType?: InputMaybe<FileType>;
   fileTypeLit?: InputMaybe<Scalars['String']>;
   hash?: InputMaybe<Scalars['String']>;
@@ -13809,6 +13959,7 @@ export type DocumentCreateWithoutIncidentsInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutEvidenceInput>;
   description?: InputMaybe<Scalars['String']>;
+  documentTags?: InputMaybe<DocumentTagCreateNestedManyWithoutDocumentsInput>;
   fileType?: InputMaybe<FileType>;
   fileTypeLit?: InputMaybe<Scalars['String']>;
   hash?: InputMaybe<Scalars['String']>;
@@ -13832,6 +13983,7 @@ export type DocumentCreateWithoutInvestigationInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutEvidenceInput>;
   description?: InputMaybe<Scalars['String']>;
+  documentTags?: InputMaybe<DocumentTagCreateNestedManyWithoutDocumentsInput>;
   fileType?: InputMaybe<FileType>;
   fileTypeLit?: InputMaybe<Scalars['String']>;
   hash?: InputMaybe<Scalars['String']>;
@@ -13855,6 +14007,7 @@ export type DocumentCreateWithoutMg11Input = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutEvidenceInput>;
   description?: InputMaybe<Scalars['String']>;
+  documentTags?: InputMaybe<DocumentTagCreateNestedManyWithoutDocumentsInput>;
   fileType?: InputMaybe<FileType>;
   fileTypeLit?: InputMaybe<Scalars['String']>;
   hash?: InputMaybe<Scalars['String']>;
@@ -13878,6 +14031,7 @@ export type DocumentCreateWithoutOffendersInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutEvidenceInput>;
   description?: InputMaybe<Scalars['String']>;
+  documentTags?: InputMaybe<DocumentTagCreateNestedManyWithoutDocumentsInput>;
   fileType?: InputMaybe<FileType>;
   fileTypeLit?: InputMaybe<Scalars['String']>;
   hash?: InputMaybe<Scalars['String']>;
@@ -13901,6 +14055,7 @@ export type DocumentCreateWithoutSchemeInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutEvidenceInput>;
   description?: InputMaybe<Scalars['String']>;
+  documentTags?: InputMaybe<DocumentTagCreateNestedManyWithoutDocumentsInput>;
   fileType?: InputMaybe<FileType>;
   fileTypeLit?: InputMaybe<Scalars['String']>;
   hash?: InputMaybe<Scalars['String']>;
@@ -13924,6 +14079,7 @@ export type DocumentCreateWithoutTagsInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutEvidenceInput>;
   description?: InputMaybe<Scalars['String']>;
+  documentTags?: InputMaybe<DocumentTagCreateNestedManyWithoutDocumentsInput>;
   fileType?: InputMaybe<FileType>;
   fileTypeLit?: InputMaybe<Scalars['String']>;
   hash?: InputMaybe<Scalars['String']>;
@@ -13947,6 +14103,7 @@ export type DocumentCreateWithoutTodosInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutEvidenceInput>;
   description?: InputMaybe<Scalars['String']>;
+  documentTags?: InputMaybe<DocumentTagCreateNestedManyWithoutDocumentsInput>;
   fileType?: InputMaybe<FileType>;
   fileTypeLit?: InputMaybe<Scalars['String']>;
   hash?: InputMaybe<Scalars['String']>;
@@ -13970,6 +14127,7 @@ export type DocumentCreateWithoutVehiclesInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutEvidenceInput>;
   description?: InputMaybe<Scalars['String']>;
+  documentTags?: InputMaybe<DocumentTagCreateNestedManyWithoutDocumentsInput>;
   fileType?: InputMaybe<FileType>;
   fileTypeLit?: InputMaybe<Scalars['String']>;
   hash?: InputMaybe<Scalars['String']>;
@@ -14014,6 +14172,121 @@ export type DocumentScalarWhereInput = {
   thumbnailUrl?: InputMaybe<StringNullableFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   url?: InputMaybe<StringFilter>;
+};
+
+export type DocumentTagCreateNestedManyWithoutDocumentsInput = {
+  connect?: InputMaybe<Array<DocumentTagWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<DocumentTagCreateOrConnectWithoutDocumentsInput>
+  >;
+  create?: InputMaybe<Array<DocumentTagCreateWithoutDocumentsInput>>;
+};
+
+export type DocumentTagCreateOrConnectWithoutDocumentsInput = {
+  create: DocumentTagCreateWithoutDocumentsInput;
+  where: DocumentTagWhereUniqueInput;
+};
+
+export type DocumentTagCreateWithoutDocumentsInput = {
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  description?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type DocumentTagListRelationFilter = {
+  every?: InputMaybe<DocumentTagWhereInput>;
+  none?: InputMaybe<DocumentTagWhereInput>;
+  some?: InputMaybe<DocumentTagWhereInput>;
+};
+
+export type DocumentTagScalarWhereInput = {
+  AND?: InputMaybe<Array<DocumentTagScalarWhereInput>>;
+  NOT?: InputMaybe<Array<DocumentTagScalarWhereInput>>;
+  OR?: InputMaybe<Array<DocumentTagScalarWhereInput>>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  description?: InputMaybe<StringNullableFilter>;
+  id?: InputMaybe<StringFilter>;
+  name?: InputMaybe<StringFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type DocumentTagUpdateManyMutationInput = {
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type DocumentTagUpdateManyWithWhereWithoutDocumentsInput = {
+  data: DocumentTagUpdateManyMutationInput;
+  where: DocumentTagScalarWhereInput;
+};
+
+export type DocumentTagUpdateManyWithoutDocumentsNestedInput = {
+  connect?: InputMaybe<Array<DocumentTagWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<DocumentTagCreateOrConnectWithoutDocumentsInput>
+  >;
+  create?: InputMaybe<Array<DocumentTagCreateWithoutDocumentsInput>>;
+  delete?: InputMaybe<Array<DocumentTagWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<DocumentTagScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<DocumentTagWhereUniqueInput>>;
+  set?: InputMaybe<Array<DocumentTagWhereUniqueInput>>;
+  update?: InputMaybe<
+    Array<DocumentTagUpdateWithWhereUniqueWithoutDocumentsInput>
+  >;
+  updateMany?: InputMaybe<
+    Array<DocumentTagUpdateManyWithWhereWithoutDocumentsInput>
+  >;
+  upsert?: InputMaybe<
+    Array<DocumentTagUpsertWithWhereUniqueWithoutDocumentsInput>
+  >;
+};
+
+export type DocumentTagUpdateWithWhereUniqueWithoutDocumentsInput = {
+  data: DocumentTagUpdateWithoutDocumentsInput;
+  where: DocumentTagWhereUniqueInput;
+};
+
+export type DocumentTagUpdateWithoutDocumentsInput = {
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type DocumentTagUpsertWithWhereUniqueWithoutDocumentsInput = {
+  create: DocumentTagCreateWithoutDocumentsInput;
+  update: DocumentTagUpdateWithoutDocumentsInput;
+  where: DocumentTagWhereUniqueInput;
+};
+
+export type DocumentTagWhereInput = {
+  AND?: InputMaybe<Array<DocumentTagWhereInput>>;
+  NOT?: InputMaybe<Array<DocumentTagWhereInput>>;
+  OR?: InputMaybe<Array<DocumentTagWhereInput>>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  description?: InputMaybe<StringNullableFilter>;
+  documents?: InputMaybe<DocumentListRelationFilter>;
+  id?: InputMaybe<StringFilter>;
+  name?: InputMaybe<StringFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type DocumentTagWhereUniqueInput = {
+  AND?: InputMaybe<Array<DocumentTagWhereInput>>;
+  NOT?: InputMaybe<Array<DocumentTagWhereInput>>;
+  OR?: InputMaybe<Array<DocumentTagWhereInput>>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  description?: InputMaybe<StringNullableFilter>;
+  documents?: InputMaybe<DocumentListRelationFilter>;
+  id?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<StringFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
 export type DocumentUpdateManyMutationInput = {
@@ -14314,6 +14587,7 @@ export type DocumentUpdateWithoutArticlesInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutEvidenceNestedInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  documentTags?: InputMaybe<DocumentTagUpdateManyWithoutDocumentsNestedInput>;
   fileType?: InputMaybe<NullableEnumFileTypeFieldUpdateOperationsInput>;
   fileTypeLit?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   hash?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -14360,6 +14634,7 @@ export type DocumentUpdateWithoutCrimeGroupsInput = {
   checklist?: InputMaybe<ActiveChecklistUpdateOneWithoutDocumentNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  documentTags?: InputMaybe<DocumentTagUpdateManyWithoutDocumentsNestedInput>;
   fileType?: InputMaybe<NullableEnumFileTypeFieldUpdateOperationsInput>;
   fileTypeLit?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   hash?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -14384,6 +14659,7 @@ export type DocumentUpdateWithoutIncidentsInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutEvidenceNestedInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  documentTags?: InputMaybe<DocumentTagUpdateManyWithoutDocumentsNestedInput>;
   fileType?: InputMaybe<NullableEnumFileTypeFieldUpdateOperationsInput>;
   fileTypeLit?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   hash?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -14407,6 +14683,7 @@ export type DocumentUpdateWithoutInvestigationInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutEvidenceNestedInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  documentTags?: InputMaybe<DocumentTagUpdateManyWithoutDocumentsNestedInput>;
   fileType?: InputMaybe<NullableEnumFileTypeFieldUpdateOperationsInput>;
   fileTypeLit?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   hash?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -14430,6 +14707,7 @@ export type DocumentUpdateWithoutMg11Input = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutEvidenceNestedInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  documentTags?: InputMaybe<DocumentTagUpdateManyWithoutDocumentsNestedInput>;
   fileType?: InputMaybe<NullableEnumFileTypeFieldUpdateOperationsInput>;
   fileTypeLit?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   hash?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -14453,6 +14731,7 @@ export type DocumentUpdateWithoutOffendersInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutEvidenceNestedInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  documentTags?: InputMaybe<DocumentTagUpdateManyWithoutDocumentsNestedInput>;
   fileType?: InputMaybe<NullableEnumFileTypeFieldUpdateOperationsInput>;
   fileTypeLit?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   hash?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -14476,6 +14755,7 @@ export type DocumentUpdateWithoutSchemeInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutEvidenceNestedInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  documentTags?: InputMaybe<DocumentTagUpdateManyWithoutDocumentsNestedInput>;
   fileType?: InputMaybe<NullableEnumFileTypeFieldUpdateOperationsInput>;
   fileTypeLit?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   hash?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -14499,6 +14779,7 @@ export type DocumentUpdateWithoutTagsInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutEvidenceNestedInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  documentTags?: InputMaybe<DocumentTagUpdateManyWithoutDocumentsNestedInput>;
   fileType?: InputMaybe<NullableEnumFileTypeFieldUpdateOperationsInput>;
   fileTypeLit?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   hash?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -14522,6 +14803,7 @@ export type DocumentUpdateWithoutTodosInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutEvidenceNestedInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  documentTags?: InputMaybe<DocumentTagUpdateManyWithoutDocumentsNestedInput>;
   fileType?: InputMaybe<NullableEnumFileTypeFieldUpdateOperationsInput>;
   fileTypeLit?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   hash?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -14545,6 +14827,7 @@ export type DocumentUpdateWithoutVehiclesInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutEvidenceNestedInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  documentTags?: InputMaybe<DocumentTagUpdateManyWithoutDocumentsNestedInput>;
   fileType?: InputMaybe<NullableEnumFileTypeFieldUpdateOperationsInput>;
   fileTypeLit?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   hash?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -14638,6 +14921,7 @@ export type DocumentWhereInput = {
   createdAt?: InputMaybe<DateTimeFilter>;
   crimeGroups?: InputMaybe<CrimeGroupListRelationFilter>;
   description?: InputMaybe<StringNullableFilter>;
+  documentTags?: InputMaybe<DocumentTagListRelationFilter>;
   fileType?: InputMaybe<EnumFileTypeNullableFilter>;
   fileTypeLit?: InputMaybe<StringNullableFilter>;
   hash?: InputMaybe<StringNullableFilter>;
@@ -14668,6 +14952,7 @@ export type DocumentWhereUniqueInput = {
   createdAt?: InputMaybe<DateTimeFilter>;
   crimeGroups?: InputMaybe<CrimeGroupListRelationFilter>;
   description?: InputMaybe<StringNullableFilter>;
+  documentTags?: InputMaybe<DocumentTagListRelationFilter>;
   fileType?: InputMaybe<EnumFileTypeNullableFilter>;
   fileTypeLit?: InputMaybe<StringNullableFilter>;
   hash?: InputMaybe<StringNullableFilter>;
@@ -31200,6 +31485,12 @@ export type ListDemEvidence = {
   total: Scalars['Int'];
 };
 
+export type ListDemEvidenceExtended = {
+  __typename?: 'ListDemEvidenceExtended';
+  demEvidence: Array<DemEvidenceExtended>;
+  total: Scalars['Int'];
+};
+
 export type ListDemUsers = {
   __typename?: 'ListDemUsers';
   demUsers: Array<DemUser>;
@@ -42169,6 +42460,7 @@ export type Query = {
   listCustomGalleries: ListCustomGalleries;
   listDemCompanies: ListDemCompanies;
   listDemEvidence: ListDemEvidence;
+  listDemEvidenceExtendedWithoutUser: ListDemEvidenceExtended;
   listDemUsers: ListDemUsers;
   listFeedItems?: Maybe<ListFeedItems>;
   listGoodsTypes: ListGoodsTypes;
@@ -42473,6 +42765,12 @@ export type QueryListDemCompaniesArgs = {
 };
 
 export type QueryListDemEvidenceArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where: Scalars['String'];
+};
+
+export type QueryListDemEvidenceExtendedWithoutUserArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where: Scalars['String'];
@@ -89487,6 +89785,31 @@ export type ExportFiltersQuery = {
   } | null;
 };
 
+export type ListDemEvidenceExtendedWithoutUserQueryVariables = Exact<{
+  where: Scalars['String'];
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type ListDemEvidenceExtendedWithoutUserQuery = {
+  __typename?: 'Query';
+  listDemEvidenceExtendedWithoutUser: {
+    __typename?: 'ListDemEvidenceExtended';
+    total: number;
+    demEvidence: Array<{
+      __typename?: 'DemEvidenceExtended';
+      type?: string | null;
+      thumbnailUrl?: string | null;
+      recordedAt?: Date | null;
+      playbackUrl?: string | null;
+      id?: string | null;
+      importance?: string | null;
+      officerName?: string | null;
+      duration?: string | null;
+    }>;
+  };
+};
+
 export type ListIncidentsFeedQueryVariables = Exact<{
   scheme: SchemeWhereUniqueInput;
   where?: InputMaybe<IncidentWhereInput>;
@@ -106568,6 +106891,65 @@ export type ExportFiltersLazyQueryHookResult = ReturnType<
 export type ExportFiltersQueryResult = Apollo.QueryResult<
   ExportFiltersQuery,
   ExportFiltersQueryVariables
+>;
+export const ListDemEvidenceExtendedWithoutUserDocument = gql`
+  query listDemEvidenceExtendedWithoutUser(
+    $where: String!
+    $skip: Int
+    $take: Int
+  ) {
+    listDemEvidenceExtendedWithoutUser(
+      where: $where
+      skip: $skip
+      take: $take
+    ) {
+      demEvidence {
+        type
+        thumbnailUrl
+        recordedAt
+        playbackUrl
+        id
+        importance
+        officerName
+        duration
+      }
+      total
+    }
+  }
+`;
+export function useListDemEvidenceExtendedWithoutUserQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ListDemEvidenceExtendedWithoutUserQuery,
+    ListDemEvidenceExtendedWithoutUserQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    ListDemEvidenceExtendedWithoutUserQuery,
+    ListDemEvidenceExtendedWithoutUserQueryVariables
+  >(ListDemEvidenceExtendedWithoutUserDocument, options);
+}
+export function useListDemEvidenceExtendedWithoutUserLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListDemEvidenceExtendedWithoutUserQuery,
+    ListDemEvidenceExtendedWithoutUserQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ListDemEvidenceExtendedWithoutUserQuery,
+    ListDemEvidenceExtendedWithoutUserQueryVariables
+  >(ListDemEvidenceExtendedWithoutUserDocument, options);
+}
+export type ListDemEvidenceExtendedWithoutUserQueryHookResult = ReturnType<
+  typeof useListDemEvidenceExtendedWithoutUserQuery
+>;
+export type ListDemEvidenceExtendedWithoutUserLazyQueryHookResult = ReturnType<
+  typeof useListDemEvidenceExtendedWithoutUserLazyQuery
+>;
+export type ListDemEvidenceExtendedWithoutUserQueryResult = Apollo.QueryResult<
+  ListDemEvidenceExtendedWithoutUserQuery,
+  ListDemEvidenceExtendedWithoutUserQueryVariables
 >;
 export const ListIncidentsFeedDocument = gql`
   query ListIncidentsFeed(
