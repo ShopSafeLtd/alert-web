@@ -40,7 +40,7 @@ const useAuth = (): Return => {
   const handleSignOut = useStoreActions((actions) => actions.auth.signOut);
   const setUser = useStoreActions((actions) => actions.user.setUser);
   const clearUser = useStoreActions((actions) => actions.user.clearUser);
-  const { setRole, setTodos, setNotifications, setFilterDefaultGroup } =
+  const { setRole, setTodos, setNotifications, setFilterDefaultGroup, setDem } =
     useStoreActions((actions) => actions.user);
   const setScheme = useStoreActions((actions) => actions.scheme.setScheme);
   const setAuthMessage = useStoreActions(
@@ -194,6 +194,13 @@ const useAuth = (): Return => {
       defaultGroups,
       filterDefaultGroups,
     });
+
+    const businessToDem = (businesses
+      .map((business) =>
+        business.demId ? { name: business.name, id: business.demId } : null
+      )
+      .filter((el) => el !== null) || []) as { id: string; name: string }[];
+    setDem({ dem: businessToDem });
     authenticated(accessToken);
   };
 

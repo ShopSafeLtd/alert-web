@@ -1,0 +1,19 @@
+query listDemEvidenceExtendedWithoutUser(
+  $where: String!
+  $skip: Int
+  $take: Int
+) {
+  listDemEvidenceExtendedWithoutUser(where: $where, skip: $skip, take: $take) {
+    demEvidence {
+      type
+      thumbnailUrl
+      recordedAt
+      playbackUrl
+      id
+      importance
+      officerName
+      duration
+    }
+    total
+  }
+}

@@ -23,6 +23,7 @@ const Notifications = lazy(() => import(`./notifications/router`));
 const Mg11 = lazy(() => import(`./mg11/router`));
 const FaceAi = lazy(() => import(`./face-ai/router`));
 const DataManagement = lazy(() => import(`./data-management/router`));
+const Evidence = lazy(() => import(`./evidence/router`));
 
 export const AppViews = (): JSX.Element => {
   const { isLoading } = useAuth0();
@@ -71,6 +72,8 @@ export const AppViews = (): JSX.Element => {
           <Route key="scheme" path="scheme-settings/*" element={<Scheme />} />
         )}
         <Route key="article" path="article/*" element={<Article />} />
+        <Route key="evidence" path="evidence/*" element={<Evidence />} />
+
         <Route key="reports" path="reports/*" element={<Reports />} />
         <Route
           key="investigations"

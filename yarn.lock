@@ -2858,18 +2858,20 @@
     lodash "^4.17.21"
     prop-types "^15.7.2"
 
-"@nivo/core@^0.81.0":
-  version "0.81.0"
-  resolved "https://registry.yarnpkg.com/@nivo/core/-/core-0.81.0.tgz#8931e268c2475c89dbc513d8c34d798618a35f04"
-  integrity sha512-hddRtShpGc82B9Vx6JXczXSlMsgY45LxwResLS5Mx8mWlVSbRgOP8ruVNJ8USGtofecL/gwB985fadHR9asAbg==
+"@nivo/core@0.83.1", "@nivo/core@^0.83.1":
+  version "0.83.1"
+  resolved "https://registry.yarnpkg.com/@nivo/core/-/core-0.83.1.tgz#f1ab4382a2ea8c60018422192851941a533160b2"
+  integrity sha512-1PunY9sH+ieCVVqB3pMjkYEMCsuiDU45CEvkfaNIYbbeeQfgVFuqGquHZXlWeBUqaDHMLRUQqpazh/95tK7Q/g==
   dependencies:
-    "@nivo/recompose" "0.81.0"
+    "@nivo/recompose" "0.83.0"
+    "@nivo/tooltip" "0.83.1"
     "@react-spring/web" "9.4.5 || ^9.7.2"
+    "@types/d3-shape" "^2.0.0"
     d3-color "^3.1.0"
     d3-format "^1.4.4"
-    d3-interpolate "^2.0.1"
+    d3-interpolate "^3.0.1"
     d3-scale "^3.2.3"
-    d3-scale-chromatic "^2.0.0"
+    d3-scale-chromatic "^3.0.0"
     d3-shape "^1.3.5"
     d3-time-format "^3.0.0"
     lodash "^4.17.21"
@@ -2959,11 +2961,14 @@
     d3-scale "^3.2.3"
     d3-shape "^1.3.5"
 
-"@nivo/recompose@0.81.0":
-  version "0.81.0"
-  resolved "https://registry.yarnpkg.com/@nivo/recompose/-/recompose-0.81.0.tgz#83cb1ecc6a1ee11ca530320323f7466f31c93ae2"
-  integrity sha512-YbD2Aete3O8DFcNXD5OEhCb4ZyBBIc/OQkux3p7ughs84j7Bl5hVl1ySU6h0DGktmeB7/RazG/j33GzBREN1zg==
+"@nivo/recompose@0.83.0":
+  version "0.83.0"
+  resolved "https://registry.yarnpkg.com/@nivo/recompose/-/recompose-0.83.0.tgz#5ea1f638e4a376b0266b8d0761b5ccf27d1db890"
+  integrity sha512-3cLEoi9ZoE4LTn6B98oUVd0MRAy5bWK7W3yb0u4EkjLoXXCRvUAI08Wr2AAagOzVOg5PmvghIDgvkz1tlFZTGQ==
   dependencies:
+    "@types/prop-types" "^15.7.2"
+    "@types/react-lifecycles-compat" "^3.0.1"
+    prop-types "^15.7.2"
     react-lifecycles-compat "^3.0.4"
 
 "@nivo/scales@0.80.0":
@@ -3005,6 +3010,14 @@
   resolved "https://registry.yarnpkg.com/@nivo/tooltip/-/tooltip-0.82.1.tgz#a3631f660f67c1521556467f19f38e9a212e8ac9"
   integrity sha512-5M9YIjxn8DqJ/DcJHWBuPiiLl3p7Zvbt5SRpMF3Rh9FdnuWudtdv+5hrxXmfjoZzRnFl3NphuXi2blhxReZGOQ==
   dependencies:
+    "@react-spring/web" "9.4.5 || ^9.7.2"
+
+"@nivo/tooltip@0.83.1":
+  version "0.83.1"
+  resolved "https://registry.yarnpkg.com/@nivo/tooltip/-/tooltip-0.83.1.tgz#84f330856b296f46c9150614b960fe0292a5d740"
+  integrity sha512-r266BQhWWtb8FOWyYD0HrlF+xdiKo1XR4uhCYXqARtWSuCUmovBKFUmDGdfMDvLTFnUQYJ6hUbFO7VYp+5AQ9g==
+  dependencies:
+    "@nivo/core" "0.83.1"
     "@react-spring/web" "9.4.5 || ^9.7.2"
 
 "@nivo/voronoi@0.81.0":
@@ -4404,6 +4417,13 @@
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/@types/react-grid-layout/-/react-grid-layout-1.3.2.tgz#9f195666a018a5ae2b773887e3b552cb4378d67f"
   integrity sha512-ZzpBEOC1JTQ7MGe1h1cPKSLP4jSWuxc+yvT4TsAlEW9+EFPzAf8nxQfFd7ea9gL17Em7PbwJZAsiwfQQBUklZQ==
+  dependencies:
+    "@types/react" "*"
+
+"@types/react-lifecycles-compat@^3.0.1":
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/@types/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#87eb56ce6cce9e9db4557825ab559d90f72995dc"
+  integrity sha512-1CM48Y9ztL5S4wjt7DK2izrkgPp/Ql0zCJu/vHzhgl7J+BD4UbSGjHN1M2TlePms472JvOazUtAO1/G3oFZqIQ==
   dependencies:
     "@types/react" "*"
 
@@ -6861,14 +6881,14 @@ d3-hexbin@^0.2.1:
   resolved "https://registry.yarnpkg.com/d3-hexbin/-/d3-hexbin-0.2.2.tgz#9c5837dacfd471ab05337a9e91ef10bfc4f98831"
   integrity sha512-KS3fUT2ReD4RlGCjvCEm1RgMtp2NFZumdMu4DBzQK8AZv3fXRM6Xm8I4fSU07UXvH4xxg03NwWKWdvxfS/yc4w==
 
-"d3-interpolate@1 - 2", "d3-interpolate@1.2.0 - 2", d3-interpolate@^2.0.1:
+"d3-interpolate@1 - 2", "d3-interpolate@1.2.0 - 2":
   version "2.0.1"
   resolved "https://registry.npmjs.org/d3-interpolate/-/d3-interpolate-2.0.1.tgz"
   integrity sha512-c5UhwwTs/yybcmTpAVqwSFl6vrQ8JZJoT5F7xNFK9pymv5C0Ymcc9/LIJHtYIggg/yS9YHw8i8O8tgb9pupjeQ==
   dependencies:
     d3-color "1 - 2"
 
-"d3-interpolate@1 - 3", "d3-interpolate@1.2.0 - 3":
+"d3-interpolate@1 - 3", "d3-interpolate@1.2.0 - 3", d3-interpolate@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/d3-interpolate/-/d3-interpolate-3.0.1.tgz#3c47aa5b32c5b3dfb56ef3fd4342078a632b400d"
   integrity sha512-3bYs1rOD33uo8aqJfKP3JWPAibgw8Zm2+L9vBKEHJ2Rg+viTR7o5Mmv5mZcieN+FRYaAOWX5SJATX6k1PWz72g==
@@ -6887,6 +6907,14 @@ d3-scale-chromatic@^2.0.0:
   dependencies:
     d3-color "1 - 2"
     d3-interpolate "1 - 2"
+
+d3-scale-chromatic@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/d3-scale-chromatic/-/d3-scale-chromatic-3.0.0.tgz#15b4ceb8ca2bb0dcb6d1a641ee03d59c3b62376a"
+  integrity sha512-Lx9thtxAKrO2Pq6OO2Ua474opeziKr279P/TKZsMAhYyNDD3EnCffdbgeSYN5O7m2ByQsxtuP2CSDczNUIZ22g==
+  dependencies:
+    d3-color "1 - 3"
+    d3-interpolate "1 - 3"
 
 d3-scale@^3.2.3:
   version "3.3.0"
@@ -7186,6 +7214,11 @@ deep-strict-equal@^0.2.0:
   integrity sha512-3daSWyvZ/zwJvuMGlzG1O+Ow0YSadGfb3jsh9xoCutv2tWyB9dA4YvR9L9/fSdDZa2dByYQe+TqapSGUrjnkoA==
   dependencies:
     core-assert "^0.2.0"
+
+deepmerge@^4.0.0:
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-4.3.1.tgz#44b5f2147cd3b00d4b56137685966f26fd25dd4a"
+  integrity sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A==
 
 deepmerge@^4.2.2:
   version "4.2.2"
@@ -11551,6 +11584,11 @@ load-json-file@^1.0.0:
     pinkie-promise "^2.0.0"
     strip-bom "^2.0.0"
 
+load-script@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/load-script/-/load-script-1.0.0.tgz#0491939e0bee5643ee494a7e3da3d2bac70c6ca4"
+  integrity sha512-kPEjMFtZvwL9TaZo0uZ2ml+Ye9HUMmPwbYRJ324qF9tqMejwykJ5ggTyvzmrbBeapCAbk98BSbTeovHEEP1uCA==
+
 localforage@^1.8.1:
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/localforage/-/localforage-1.10.0.tgz#5c465dc5f62b2807c3a84c0c6a1b1b3212781dd4"
@@ -14121,6 +14159,11 @@ react-event-listener@^0.6.0:
     prop-types "^15.6.0"
     warning "^4.0.1"
 
+react-fast-compare@^3.0.1:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-3.2.2.tgz#929a97a532304ce9fee4bcae44234f1ce2c21d49"
+  integrity sha512-nsO+KSNgo1SbJqJEYRE9ERzo7YtYbou/OqjSQKxV7jcKox7+usiUVZOAC+XnDOABXggQTno0Y1CpVnuWEc1boQ==
+
 react-frame-component@^4.1.3:
   version "4.1.3"
   resolved "https://registry.npmjs.org/react-frame-component/-/react-frame-component-4.1.3.tgz"
@@ -14286,6 +14329,17 @@ react-onesignal@^2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/react-onesignal/-/react-onesignal-2.0.4.tgz#d3bf7e4ff4c176b542ff4a2fa2a67a899dbb5472"
   integrity sha512-llZ4PV1+EsWWZDt0BRils6gAxaxMoYP0Z3rlNivQy4xqUaiO1/PcRaIJ6CuzCci/koDsw5IzLOXEHlV4Yn+d9Q==
+
+react-player@^2.13.0:
+  version "2.13.0"
+  resolved "https://registry.yarnpkg.com/react-player/-/react-player-2.13.0.tgz#b6fb252bf70574608ac711f6c83d7057c8fb0c14"
+  integrity sha512-gkY7ZdbVFztlKFFhCPcnDrFQm+L399b8fhWsKatZ+b2wpKJwfUHBXQFMRxqYQGT0ic1/wQ7D7EZEWy7ZBqk2pw==
+  dependencies:
+    deepmerge "^4.0.0"
+    load-script "^1.0.0"
+    memoize-one "^5.1.1"
+    prop-types "^15.7.2"
+    react-fast-compare "^3.0.1"
 
 react-quill@^1.3.5:
   version "1.3.5"

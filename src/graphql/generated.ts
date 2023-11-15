@@ -6907,7 +6907,9 @@ export type BusinessCreateOrConnectWithoutUsersInput = {
 };
 
 export type BusinessCreateWithoutActionsInput = {
+  businessTags?: InputMaybe<BusinessTagCreateNestedManyWithoutBusinessesInput>;
   children?: InputMaybe<BusinessCreateNestedManyWithoutParentInput>;
+  contentGroups?: InputMaybe<ContentGroupCreateNestedManyWithoutBusinessesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   demId?: InputMaybe<Scalars['String']>;
   division?: InputMaybe<Scalars['String']>;
@@ -6927,6 +6929,8 @@ export type BusinessCreateWithoutActionsInput = {
 
 export type BusinessCreateWithoutChildrenInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutBusinessInput>;
+  businessTags?: InputMaybe<BusinessTagCreateNestedManyWithoutBusinessesInput>;
+  contentGroups?: InputMaybe<ContentGroupCreateNestedManyWithoutBusinessesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   demId?: InputMaybe<Scalars['String']>;
   division?: InputMaybe<Scalars['String']>;
@@ -6946,7 +6950,9 @@ export type BusinessCreateWithoutChildrenInput = {
 
 export type BusinessCreateWithoutIncidentsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutBusinessInput>;
+  businessTags?: InputMaybe<BusinessTagCreateNestedManyWithoutBusinessesInput>;
   children?: InputMaybe<BusinessCreateNestedManyWithoutParentInput>;
+  contentGroups?: InputMaybe<ContentGroupCreateNestedManyWithoutBusinessesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   demId?: InputMaybe<Scalars['String']>;
   division?: InputMaybe<Scalars['String']>;
@@ -6965,7 +6971,9 @@ export type BusinessCreateWithoutIncidentsInput = {
 
 export type BusinessCreateWithoutLocationsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutBusinessInput>;
+  businessTags?: InputMaybe<BusinessTagCreateNestedManyWithoutBusinessesInput>;
   children?: InputMaybe<BusinessCreateNestedManyWithoutParentInput>;
+  contentGroups?: InputMaybe<ContentGroupCreateNestedManyWithoutBusinessesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   demId?: InputMaybe<Scalars['String']>;
   division?: InputMaybe<Scalars['String']>;
@@ -6984,7 +6992,9 @@ export type BusinessCreateWithoutLocationsInput = {
 
 export type BusinessCreateWithoutParentInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutBusinessInput>;
+  businessTags?: InputMaybe<BusinessTagCreateNestedManyWithoutBusinessesInput>;
   children?: InputMaybe<BusinessCreateNestedManyWithoutParentInput>;
+  contentGroups?: InputMaybe<ContentGroupCreateNestedManyWithoutBusinessesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   demId?: InputMaybe<Scalars['String']>;
   division?: InputMaybe<Scalars['String']>;
@@ -7003,7 +7013,9 @@ export type BusinessCreateWithoutParentInput = {
 
 export type BusinessCreateWithoutSchemesInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutBusinessInput>;
+  businessTags?: InputMaybe<BusinessTagCreateNestedManyWithoutBusinessesInput>;
   children?: InputMaybe<BusinessCreateNestedManyWithoutParentInput>;
+  contentGroups?: InputMaybe<ContentGroupCreateNestedManyWithoutBusinessesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   demId?: InputMaybe<Scalars['String']>;
   division?: InputMaybe<Scalars['String']>;
@@ -7022,7 +7034,9 @@ export type BusinessCreateWithoutSchemesInput = {
 
 export type BusinessCreateWithoutTodosInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutBusinessInput>;
+  businessTags?: InputMaybe<BusinessTagCreateNestedManyWithoutBusinessesInput>;
   children?: InputMaybe<BusinessCreateNestedManyWithoutParentInput>;
+  contentGroups?: InputMaybe<ContentGroupCreateNestedManyWithoutBusinessesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   demId?: InputMaybe<Scalars['String']>;
   division?: InputMaybe<Scalars['String']>;
@@ -7041,7 +7055,9 @@ export type BusinessCreateWithoutTodosInput = {
 
 export type BusinessCreateWithoutUsersInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutBusinessInput>;
+  businessTags?: InputMaybe<BusinessTagCreateNestedManyWithoutBusinessesInput>;
   children?: InputMaybe<BusinessCreateNestedManyWithoutParentInput>;
+  contentGroups?: InputMaybe<ContentGroupCreateNestedManyWithoutBusinessesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   demId?: InputMaybe<Scalars['String']>;
   division?: InputMaybe<Scalars['String']>;
@@ -7126,7 +7142,9 @@ export type BusinessOrderByRelationAggregateInput = {
 
 export type BusinessOrderByWithRelationInput = {
   actions?: InputMaybe<ActionOrderByRelationAggregateInput>;
+  businessTags?: InputMaybe<BusinessTagOrderByRelationAggregateInput>;
   children?: InputMaybe<BusinessOrderByRelationAggregateInput>;
+  contentGroups?: InputMaybe<ContentGroupOrderByRelationAggregateInput>;
   createdAt?: InputMaybe<SortOrder>;
   demId?: InputMaybe<SortOrderInput>;
   division?: InputMaybe<SortOrderInput>;
@@ -7186,6 +7204,119 @@ export type BusinessScalarWhereInput = {
   publicName?: InputMaybe<BoolFilter>;
   recycled?: InputMaybe<BoolFilter>;
   reference?: InputMaybe<IntNullableFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type BusinessTagCreateNestedManyWithoutBusinessesInput = {
+  connect?: InputMaybe<Array<BusinessTagWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<BusinessTagCreateOrConnectWithoutBusinessesInput>
+  >;
+  create?: InputMaybe<Array<BusinessTagCreateWithoutBusinessesInput>>;
+};
+
+export type BusinessTagCreateOrConnectWithoutBusinessesInput = {
+  create: BusinessTagCreateWithoutBusinessesInput;
+  where: BusinessTagWhereUniqueInput;
+};
+
+export type BusinessTagCreateWithoutBusinessesInput = {
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  id?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type BusinessTagListRelationFilter = {
+  every?: InputMaybe<BusinessTagWhereInput>;
+  none?: InputMaybe<BusinessTagWhereInput>;
+  some?: InputMaybe<BusinessTagWhereInput>;
+};
+
+export type BusinessTagOrderByRelationAggregateInput = {
+  _count?: InputMaybe<SortOrder>;
+};
+
+export type BusinessTagScalarWhereInput = {
+  AND?: InputMaybe<Array<BusinessTagScalarWhereInput>>;
+  NOT?: InputMaybe<Array<BusinessTagScalarWhereInput>>;
+  OR?: InputMaybe<Array<BusinessTagScalarWhereInput>>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  id?: InputMaybe<StringFilter>;
+  name?: InputMaybe<StringFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type BusinessTagUpdateManyMutationInput = {
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type BusinessTagUpdateManyWithWhereWithoutBusinessesInput = {
+  data: BusinessTagUpdateManyMutationInput;
+  where: BusinessTagScalarWhereInput;
+};
+
+export type BusinessTagUpdateManyWithoutBusinessesNestedInput = {
+  connect?: InputMaybe<Array<BusinessTagWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<BusinessTagCreateOrConnectWithoutBusinessesInput>
+  >;
+  create?: InputMaybe<Array<BusinessTagCreateWithoutBusinessesInput>>;
+  delete?: InputMaybe<Array<BusinessTagWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<BusinessTagScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<BusinessTagWhereUniqueInput>>;
+  set?: InputMaybe<Array<BusinessTagWhereUniqueInput>>;
+  update?: InputMaybe<
+    Array<BusinessTagUpdateWithWhereUniqueWithoutBusinessesInput>
+  >;
+  updateMany?: InputMaybe<
+    Array<BusinessTagUpdateManyWithWhereWithoutBusinessesInput>
+  >;
+  upsert?: InputMaybe<
+    Array<BusinessTagUpsertWithWhereUniqueWithoutBusinessesInput>
+  >;
+};
+
+export type BusinessTagUpdateWithWhereUniqueWithoutBusinessesInput = {
+  data: BusinessTagUpdateWithoutBusinessesInput;
+  where: BusinessTagWhereUniqueInput;
+};
+
+export type BusinessTagUpdateWithoutBusinessesInput = {
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type BusinessTagUpsertWithWhereUniqueWithoutBusinessesInput = {
+  create: BusinessTagCreateWithoutBusinessesInput;
+  update: BusinessTagUpdateWithoutBusinessesInput;
+  where: BusinessTagWhereUniqueInput;
+};
+
+export type BusinessTagWhereInput = {
+  AND?: InputMaybe<Array<BusinessTagWhereInput>>;
+  NOT?: InputMaybe<Array<BusinessTagWhereInput>>;
+  OR?: InputMaybe<Array<BusinessTagWhereInput>>;
+  businesses?: InputMaybe<BusinessListRelationFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  id?: InputMaybe<StringFilter>;
+  name?: InputMaybe<StringFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type BusinessTagWhereUniqueInput = {
+  AND?: InputMaybe<Array<BusinessTagWhereInput>>;
+  NOT?: InputMaybe<Array<BusinessTagWhereInput>>;
+  OR?: InputMaybe<Array<BusinessTagWhereInput>>;
+  businesses?: InputMaybe<BusinessListRelationFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  id?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<StringFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
@@ -7353,7 +7484,9 @@ export type BusinessUpdateWithWhereUniqueWithoutUsersInput = {
 };
 
 export type BusinessUpdateWithoutActionsInput = {
+  businessTags?: InputMaybe<BusinessTagUpdateManyWithoutBusinessesNestedInput>;
   children?: InputMaybe<BusinessUpdateManyWithoutParentNestedInput>;
+  contentGroups?: InputMaybe<ContentGroupUpdateManyWithoutBusinessesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   division?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -7373,6 +7506,8 @@ export type BusinessUpdateWithoutActionsInput = {
 
 export type BusinessUpdateWithoutChildrenInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutBusinessNestedInput>;
+  businessTags?: InputMaybe<BusinessTagUpdateManyWithoutBusinessesNestedInput>;
+  contentGroups?: InputMaybe<ContentGroupUpdateManyWithoutBusinessesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   division?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -7392,7 +7527,9 @@ export type BusinessUpdateWithoutChildrenInput = {
 
 export type BusinessUpdateWithoutIncidentsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutBusinessNestedInput>;
+  businessTags?: InputMaybe<BusinessTagUpdateManyWithoutBusinessesNestedInput>;
   children?: InputMaybe<BusinessUpdateManyWithoutParentNestedInput>;
+  contentGroups?: InputMaybe<ContentGroupUpdateManyWithoutBusinessesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   division?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -7411,7 +7548,9 @@ export type BusinessUpdateWithoutIncidentsInput = {
 
 export type BusinessUpdateWithoutLocationsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutBusinessNestedInput>;
+  businessTags?: InputMaybe<BusinessTagUpdateManyWithoutBusinessesNestedInput>;
   children?: InputMaybe<BusinessUpdateManyWithoutParentNestedInput>;
+  contentGroups?: InputMaybe<ContentGroupUpdateManyWithoutBusinessesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   division?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -7430,7 +7569,9 @@ export type BusinessUpdateWithoutLocationsInput = {
 
 export type BusinessUpdateWithoutParentInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutBusinessNestedInput>;
+  businessTags?: InputMaybe<BusinessTagUpdateManyWithoutBusinessesNestedInput>;
   children?: InputMaybe<BusinessUpdateManyWithoutParentNestedInput>;
+  contentGroups?: InputMaybe<ContentGroupUpdateManyWithoutBusinessesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   division?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -7449,7 +7590,9 @@ export type BusinessUpdateWithoutParentInput = {
 
 export type BusinessUpdateWithoutSchemesInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutBusinessNestedInput>;
+  businessTags?: InputMaybe<BusinessTagUpdateManyWithoutBusinessesNestedInput>;
   children?: InputMaybe<BusinessUpdateManyWithoutParentNestedInput>;
+  contentGroups?: InputMaybe<ContentGroupUpdateManyWithoutBusinessesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   division?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -7468,7 +7611,9 @@ export type BusinessUpdateWithoutSchemesInput = {
 
 export type BusinessUpdateWithoutTodosInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutBusinessNestedInput>;
+  businessTags?: InputMaybe<BusinessTagUpdateManyWithoutBusinessesNestedInput>;
   children?: InputMaybe<BusinessUpdateManyWithoutParentNestedInput>;
+  contentGroups?: InputMaybe<ContentGroupUpdateManyWithoutBusinessesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   division?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -7487,7 +7632,9 @@ export type BusinessUpdateWithoutTodosInput = {
 
 export type BusinessUpdateWithoutUsersInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutBusinessNestedInput>;
+  businessTags?: InputMaybe<BusinessTagUpdateManyWithoutBusinessesNestedInput>;
   children?: InputMaybe<BusinessUpdateManyWithoutParentNestedInput>;
+  contentGroups?: InputMaybe<ContentGroupUpdateManyWithoutBusinessesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   division?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -7557,7 +7704,9 @@ export type BusinessWhereInput = {
   NOT?: InputMaybe<Array<BusinessWhereInput>>;
   OR?: InputMaybe<Array<BusinessWhereInput>>;
   actions?: InputMaybe<ActionListRelationFilter>;
+  businessTags?: InputMaybe<BusinessTagListRelationFilter>;
   children?: InputMaybe<BusinessListRelationFilter>;
+  contentGroups?: InputMaybe<ContentGroupListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   demId?: InputMaybe<StringNullableFilter>;
   division?: InputMaybe<StringNullableFilter>;
@@ -7581,7 +7730,9 @@ export type BusinessWhereUniqueInput = {
   NOT?: InputMaybe<Array<BusinessWhereInput>>;
   OR?: InputMaybe<Array<BusinessWhereInput>>;
   actions?: InputMaybe<ActionListRelationFilter>;
+  businessTags?: InputMaybe<BusinessTagListRelationFilter>;
   children?: InputMaybe<BusinessListRelationFilter>;
+  contentGroups?: InputMaybe<ContentGroupListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   demId?: InputMaybe<StringNullableFilter>;
   division?: InputMaybe<StringNullableFilter>;
@@ -8384,6 +8535,125 @@ export type ContactWhereUniqueInput = {
   schemes?: InputMaybe<SchemeListRelationFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   user?: InputMaybe<UserWhereInput>;
+};
+
+export type ContentGroupCreateNestedManyWithoutBusinessesInput = {
+  connect?: InputMaybe<Array<ContentGroupWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<ContentGroupCreateOrConnectWithoutBusinessesInput>
+  >;
+  create?: InputMaybe<Array<ContentGroupCreateWithoutBusinessesInput>>;
+};
+
+export type ContentGroupCreateOrConnectWithoutBusinessesInput = {
+  create: ContentGroupCreateWithoutBusinessesInput;
+  where: ContentGroupWhereUniqueInput;
+};
+
+export type ContentGroupCreateWithoutBusinessesInput = {
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  description?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type ContentGroupListRelationFilter = {
+  every?: InputMaybe<ContentGroupWhereInput>;
+  none?: InputMaybe<ContentGroupWhereInput>;
+  some?: InputMaybe<ContentGroupWhereInput>;
+};
+
+export type ContentGroupOrderByRelationAggregateInput = {
+  _count?: InputMaybe<SortOrder>;
+};
+
+export type ContentGroupScalarWhereInput = {
+  AND?: InputMaybe<Array<ContentGroupScalarWhereInput>>;
+  NOT?: InputMaybe<Array<ContentGroupScalarWhereInput>>;
+  OR?: InputMaybe<Array<ContentGroupScalarWhereInput>>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  description?: InputMaybe<StringNullableFilter>;
+  id?: InputMaybe<StringFilter>;
+  name?: InputMaybe<StringFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type ContentGroupUpdateManyMutationInput = {
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type ContentGroupUpdateManyWithWhereWithoutBusinessesInput = {
+  data: ContentGroupUpdateManyMutationInput;
+  where: ContentGroupScalarWhereInput;
+};
+
+export type ContentGroupUpdateManyWithoutBusinessesNestedInput = {
+  connect?: InputMaybe<Array<ContentGroupWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<ContentGroupCreateOrConnectWithoutBusinessesInput>
+  >;
+  create?: InputMaybe<Array<ContentGroupCreateWithoutBusinessesInput>>;
+  delete?: InputMaybe<Array<ContentGroupWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<ContentGroupScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<ContentGroupWhereUniqueInput>>;
+  set?: InputMaybe<Array<ContentGroupWhereUniqueInput>>;
+  update?: InputMaybe<
+    Array<ContentGroupUpdateWithWhereUniqueWithoutBusinessesInput>
+  >;
+  updateMany?: InputMaybe<
+    Array<ContentGroupUpdateManyWithWhereWithoutBusinessesInput>
+  >;
+  upsert?: InputMaybe<
+    Array<ContentGroupUpsertWithWhereUniqueWithoutBusinessesInput>
+  >;
+};
+
+export type ContentGroupUpdateWithWhereUniqueWithoutBusinessesInput = {
+  data: ContentGroupUpdateWithoutBusinessesInput;
+  where: ContentGroupWhereUniqueInput;
+};
+
+export type ContentGroupUpdateWithoutBusinessesInput = {
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type ContentGroupUpsertWithWhereUniqueWithoutBusinessesInput = {
+  create: ContentGroupCreateWithoutBusinessesInput;
+  update: ContentGroupUpdateWithoutBusinessesInput;
+  where: ContentGroupWhereUniqueInput;
+};
+
+export type ContentGroupWhereInput = {
+  AND?: InputMaybe<Array<ContentGroupWhereInput>>;
+  NOT?: InputMaybe<Array<ContentGroupWhereInput>>;
+  OR?: InputMaybe<Array<ContentGroupWhereInput>>;
+  businesses?: InputMaybe<BusinessListRelationFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  description?: InputMaybe<StringNullableFilter>;
+  id?: InputMaybe<StringFilter>;
+  name?: InputMaybe<StringFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type ContentGroupWhereUniqueInput = {
+  AND?: InputMaybe<Array<ContentGroupWhereInput>>;
+  NOT?: InputMaybe<Array<ContentGroupWhereInput>>;
+  OR?: InputMaybe<Array<ContentGroupWhereInput>>;
+  businesses?: InputMaybe<BusinessListRelationFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  description?: InputMaybe<StringNullableFilter>;
+  id?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<StringFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
 export type Count = {
@@ -11485,6 +11755,18 @@ export type DemEvidence = {
   type?: Maybe<Scalars['String']>;
 };
 
+export type DemEvidenceExtended = {
+  __typename?: 'DemEvidenceExtended';
+  duration?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  importance?: Maybe<Scalars['String']>;
+  officerName?: Maybe<Scalars['String']>;
+  playbackUrl?: Maybe<Scalars['String']>;
+  recordedAt?: Maybe<Scalars['DateTime']>;
+  thumbnailUrl?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+};
+
 export type DemUser = {
   __typename?: 'DemUser';
   email?: Maybe<Scalars['String']>;
@@ -11833,6 +12115,7 @@ export type DocumentCreateWithoutArticlesInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutEvidenceInput>;
   description?: InputMaybe<Scalars['String']>;
+  documentTags?: InputMaybe<DocumentTagCreateNestedManyWithoutDocumentsInput>;
   fileType?: InputMaybe<FileType>;
   fileTypeLit?: InputMaybe<Scalars['String']>;
   hash?: InputMaybe<Scalars['String']>;
@@ -11855,6 +12138,7 @@ export type DocumentCreateWithoutCrimeGroupsInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutDocumentsInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
+  documentTags?: InputMaybe<DocumentTagCreateNestedManyWithoutDocumentsInput>;
   fileType?: InputMaybe<FileType>;
   fileTypeLit?: InputMaybe<Scalars['String']>;
   hash?: InputMaybe<Scalars['String']>;
@@ -11878,6 +12162,7 @@ export type DocumentCreateWithoutIncidentsInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutEvidenceInput>;
   description?: InputMaybe<Scalars['String']>;
+  documentTags?: InputMaybe<DocumentTagCreateNestedManyWithoutDocumentsInput>;
   fileType?: InputMaybe<FileType>;
   fileTypeLit?: InputMaybe<Scalars['String']>;
   hash?: InputMaybe<Scalars['String']>;
@@ -11900,6 +12185,7 @@ export type DocumentCreateWithoutInvestigationInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutEvidenceInput>;
   description?: InputMaybe<Scalars['String']>;
+  documentTags?: InputMaybe<DocumentTagCreateNestedManyWithoutDocumentsInput>;
   fileType?: InputMaybe<FileType>;
   fileTypeLit?: InputMaybe<Scalars['String']>;
   hash?: InputMaybe<Scalars['String']>;
@@ -11922,6 +12208,7 @@ export type DocumentCreateWithoutMg11Input = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutEvidenceInput>;
   description?: InputMaybe<Scalars['String']>;
+  documentTags?: InputMaybe<DocumentTagCreateNestedManyWithoutDocumentsInput>;
   fileType?: InputMaybe<FileType>;
   fileTypeLit?: InputMaybe<Scalars['String']>;
   hash?: InputMaybe<Scalars['String']>;
@@ -11944,6 +12231,7 @@ export type DocumentCreateWithoutOffendersInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutEvidenceInput>;
   description?: InputMaybe<Scalars['String']>;
+  documentTags?: InputMaybe<DocumentTagCreateNestedManyWithoutDocumentsInput>;
   fileType?: InputMaybe<FileType>;
   fileTypeLit?: InputMaybe<Scalars['String']>;
   hash?: InputMaybe<Scalars['String']>;
@@ -11966,6 +12254,7 @@ export type DocumentCreateWithoutSchemeInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutEvidenceInput>;
   description?: InputMaybe<Scalars['String']>;
+  documentTags?: InputMaybe<DocumentTagCreateNestedManyWithoutDocumentsInput>;
   fileType?: InputMaybe<FileType>;
   fileTypeLit?: InputMaybe<Scalars['String']>;
   hash?: InputMaybe<Scalars['String']>;
@@ -11988,6 +12277,7 @@ export type DocumentCreateWithoutTagsInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutEvidenceInput>;
   description?: InputMaybe<Scalars['String']>;
+  documentTags?: InputMaybe<DocumentTagCreateNestedManyWithoutDocumentsInput>;
   fileType?: InputMaybe<FileType>;
   fileTypeLit?: InputMaybe<Scalars['String']>;
   hash?: InputMaybe<Scalars['String']>;
@@ -12010,6 +12300,7 @@ export type DocumentCreateWithoutTodosInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutEvidenceInput>;
   description?: InputMaybe<Scalars['String']>;
+  documentTags?: InputMaybe<DocumentTagCreateNestedManyWithoutDocumentsInput>;
   fileType?: InputMaybe<FileType>;
   fileTypeLit?: InputMaybe<Scalars['String']>;
   hash?: InputMaybe<Scalars['String']>;
@@ -12032,6 +12323,7 @@ export type DocumentCreateWithoutVehiclesInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutEvidenceInput>;
   description?: InputMaybe<Scalars['String']>;
+  documentTags?: InputMaybe<DocumentTagCreateNestedManyWithoutDocumentsInput>;
   fileType?: InputMaybe<FileType>;
   fileTypeLit?: InputMaybe<Scalars['String']>;
   hash?: InputMaybe<Scalars['String']>;
@@ -12075,6 +12367,121 @@ export type DocumentScalarWhereInput = {
   thumbnailUrl?: InputMaybe<StringNullableFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   url?: InputMaybe<StringFilter>;
+};
+
+export type DocumentTagCreateNestedManyWithoutDocumentsInput = {
+  connect?: InputMaybe<Array<DocumentTagWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<DocumentTagCreateOrConnectWithoutDocumentsInput>
+  >;
+  create?: InputMaybe<Array<DocumentTagCreateWithoutDocumentsInput>>;
+};
+
+export type DocumentTagCreateOrConnectWithoutDocumentsInput = {
+  create: DocumentTagCreateWithoutDocumentsInput;
+  where: DocumentTagWhereUniqueInput;
+};
+
+export type DocumentTagCreateWithoutDocumentsInput = {
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  description?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type DocumentTagListRelationFilter = {
+  every?: InputMaybe<DocumentTagWhereInput>;
+  none?: InputMaybe<DocumentTagWhereInput>;
+  some?: InputMaybe<DocumentTagWhereInput>;
+};
+
+export type DocumentTagScalarWhereInput = {
+  AND?: InputMaybe<Array<DocumentTagScalarWhereInput>>;
+  NOT?: InputMaybe<Array<DocumentTagScalarWhereInput>>;
+  OR?: InputMaybe<Array<DocumentTagScalarWhereInput>>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  description?: InputMaybe<StringNullableFilter>;
+  id?: InputMaybe<StringFilter>;
+  name?: InputMaybe<StringFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type DocumentTagUpdateManyMutationInput = {
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type DocumentTagUpdateManyWithWhereWithoutDocumentsInput = {
+  data: DocumentTagUpdateManyMutationInput;
+  where: DocumentTagScalarWhereInput;
+};
+
+export type DocumentTagUpdateManyWithoutDocumentsNestedInput = {
+  connect?: InputMaybe<Array<DocumentTagWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<DocumentTagCreateOrConnectWithoutDocumentsInput>
+  >;
+  create?: InputMaybe<Array<DocumentTagCreateWithoutDocumentsInput>>;
+  delete?: InputMaybe<Array<DocumentTagWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<DocumentTagScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<DocumentTagWhereUniqueInput>>;
+  set?: InputMaybe<Array<DocumentTagWhereUniqueInput>>;
+  update?: InputMaybe<
+    Array<DocumentTagUpdateWithWhereUniqueWithoutDocumentsInput>
+  >;
+  updateMany?: InputMaybe<
+    Array<DocumentTagUpdateManyWithWhereWithoutDocumentsInput>
+  >;
+  upsert?: InputMaybe<
+    Array<DocumentTagUpsertWithWhereUniqueWithoutDocumentsInput>
+  >;
+};
+
+export type DocumentTagUpdateWithWhereUniqueWithoutDocumentsInput = {
+  data: DocumentTagUpdateWithoutDocumentsInput;
+  where: DocumentTagWhereUniqueInput;
+};
+
+export type DocumentTagUpdateWithoutDocumentsInput = {
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type DocumentTagUpsertWithWhereUniqueWithoutDocumentsInput = {
+  create: DocumentTagCreateWithoutDocumentsInput;
+  update: DocumentTagUpdateWithoutDocumentsInput;
+  where: DocumentTagWhereUniqueInput;
+};
+
+export type DocumentTagWhereInput = {
+  AND?: InputMaybe<Array<DocumentTagWhereInput>>;
+  NOT?: InputMaybe<Array<DocumentTagWhereInput>>;
+  OR?: InputMaybe<Array<DocumentTagWhereInput>>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  description?: InputMaybe<StringNullableFilter>;
+  documents?: InputMaybe<DocumentListRelationFilter>;
+  id?: InputMaybe<StringFilter>;
+  name?: InputMaybe<StringFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type DocumentTagWhereUniqueInput = {
+  AND?: InputMaybe<Array<DocumentTagWhereInput>>;
+  NOT?: InputMaybe<Array<DocumentTagWhereInput>>;
+  OR?: InputMaybe<Array<DocumentTagWhereInput>>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  description?: InputMaybe<StringNullableFilter>;
+  documents?: InputMaybe<DocumentListRelationFilter>;
+  id?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<StringFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
 export type DocumentUpdateManyMutationInput = {
@@ -12359,6 +12766,7 @@ export type DocumentUpdateWithoutArticlesInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutEvidenceNestedInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  documentTags?: InputMaybe<DocumentTagUpdateManyWithoutDocumentsNestedInput>;
   fileType?: InputMaybe<NullableEnumFileTypeFieldUpdateOperationsInput>;
   fileTypeLit?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   hash?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -12381,6 +12789,7 @@ export type DocumentUpdateWithoutCrimeGroupsInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutDocumentsNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  documentTags?: InputMaybe<DocumentTagUpdateManyWithoutDocumentsNestedInput>;
   fileType?: InputMaybe<NullableEnumFileTypeFieldUpdateOperationsInput>;
   fileTypeLit?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   hash?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -12404,6 +12813,7 @@ export type DocumentUpdateWithoutIncidentsInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutEvidenceNestedInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  documentTags?: InputMaybe<DocumentTagUpdateManyWithoutDocumentsNestedInput>;
   fileType?: InputMaybe<NullableEnumFileTypeFieldUpdateOperationsInput>;
   fileTypeLit?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   hash?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -12426,6 +12836,7 @@ export type DocumentUpdateWithoutInvestigationInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutEvidenceNestedInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  documentTags?: InputMaybe<DocumentTagUpdateManyWithoutDocumentsNestedInput>;
   fileType?: InputMaybe<NullableEnumFileTypeFieldUpdateOperationsInput>;
   fileTypeLit?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   hash?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -12448,6 +12859,7 @@ export type DocumentUpdateWithoutMg11Input = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutEvidenceNestedInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  documentTags?: InputMaybe<DocumentTagUpdateManyWithoutDocumentsNestedInput>;
   fileType?: InputMaybe<NullableEnumFileTypeFieldUpdateOperationsInput>;
   fileTypeLit?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   hash?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -12470,6 +12882,7 @@ export type DocumentUpdateWithoutOffendersInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutEvidenceNestedInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  documentTags?: InputMaybe<DocumentTagUpdateManyWithoutDocumentsNestedInput>;
   fileType?: InputMaybe<NullableEnumFileTypeFieldUpdateOperationsInput>;
   fileTypeLit?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   hash?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -12492,6 +12905,7 @@ export type DocumentUpdateWithoutSchemeInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutEvidenceNestedInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  documentTags?: InputMaybe<DocumentTagUpdateManyWithoutDocumentsNestedInput>;
   fileType?: InputMaybe<NullableEnumFileTypeFieldUpdateOperationsInput>;
   fileTypeLit?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   hash?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -12514,6 +12928,7 @@ export type DocumentUpdateWithoutTagsInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutEvidenceNestedInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  documentTags?: InputMaybe<DocumentTagUpdateManyWithoutDocumentsNestedInput>;
   fileType?: InputMaybe<NullableEnumFileTypeFieldUpdateOperationsInput>;
   fileTypeLit?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   hash?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -12536,6 +12951,7 @@ export type DocumentUpdateWithoutTodosInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutEvidenceNestedInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  documentTags?: InputMaybe<DocumentTagUpdateManyWithoutDocumentsNestedInput>;
   fileType?: InputMaybe<NullableEnumFileTypeFieldUpdateOperationsInput>;
   fileTypeLit?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   hash?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -12558,6 +12974,7 @@ export type DocumentUpdateWithoutVehiclesInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutEvidenceNestedInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  documentTags?: InputMaybe<DocumentTagUpdateManyWithoutDocumentsNestedInput>;
   fileType?: InputMaybe<NullableEnumFileTypeFieldUpdateOperationsInput>;
   fileTypeLit?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   hash?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -12643,6 +13060,7 @@ export type DocumentWhereInput = {
   createdAt?: InputMaybe<DateTimeFilter>;
   crimeGroups?: InputMaybe<CrimeGroupListRelationFilter>;
   description?: InputMaybe<StringNullableFilter>;
+  documentTags?: InputMaybe<DocumentTagListRelationFilter>;
   fileType?: InputMaybe<EnumFileTypeNullableFilter>;
   fileTypeLit?: InputMaybe<StringNullableFilter>;
   hash?: InputMaybe<StringNullableFilter>;
@@ -12671,6 +13089,7 @@ export type DocumentWhereUniqueInput = {
   createdAt?: InputMaybe<DateTimeFilter>;
   crimeGroups?: InputMaybe<CrimeGroupListRelationFilter>;
   description?: InputMaybe<StringNullableFilter>;
+  documentTags?: InputMaybe<DocumentTagListRelationFilter>;
   fileType?: InputMaybe<EnumFileTypeNullableFilter>;
   fileTypeLit?: InputMaybe<StringNullableFilter>;
   hash?: InputMaybe<StringNullableFilter>;
@@ -26948,10 +27367,10 @@ export type Investigation = {
   totalCrimeGroups?: Maybe<Scalars['Int']>;
   totalIncidents?: Maybe<Scalars['Int']>;
   totalOffenders?: Maybe<Scalars['Int']>;
-  totalRecoveredValue?: Maybe<Scalars['Int']>;
+  totalRecoveredValue?: Maybe<Scalars['Float']>;
   totalTheftSuccess?: Maybe<Scalars['Float']>;
   totalUpdates?: Maybe<Scalars['Int']>;
-  totalValue?: Maybe<Scalars['Int']>;
+  totalValue?: Maybe<Scalars['Float']>;
   totalVehicles?: Maybe<Scalars['Int']>;
   updatedAt: Scalars['DateTime'];
   updates: Array<Update>;
@@ -29053,6 +29472,12 @@ export type ListDemCompanies = {
 export type ListDemEvidence = {
   __typename?: 'ListDemEvidence';
   demEvidence: Array<DemEvidence>;
+  total: Scalars['Int'];
+};
+
+export type ListDemEvidenceExtended = {
+  __typename?: 'ListDemEvidenceExtended';
+  demEvidence: Array<DemEvidenceExtended>;
   total: Scalars['Int'];
 };
 
@@ -31765,7 +32190,6 @@ export type Mutation = {
   dismissMatch?: Maybe<RekMatch>;
   editArticle?: Maybe<Article>;
   enableSchemeRekognition?: Maybe<RekCollection>;
-  exportInvestigationZip?: Maybe<Scalars['String']>;
   generateFeedItems?: Maybe<SystemTask>;
   indexExistingImages?: Maybe<SystemTask>;
   indexFaces?: Maybe<SystemTask>;
@@ -32301,10 +32725,6 @@ export type MutationEditArticleArgs = {
 export type MutationEnableSchemeRekognitionArgs = {
   data: EnableSchemeRekognotionInput;
   where: SchemeWhereUniqueInput;
-};
-
-export type MutationExportInvestigationZipArgs = {
-  where: UniqueId;
 };
 
 export type MutationGenerateFeedItemsArgs = {
@@ -34632,6 +35052,7 @@ export type Offender = {
   incidentsByDayOfWeek: Array<TagTotal>;
   incidentsByHour: Array<TagTotal>;
   incidentsByMonth: Array<TagTotal>;
+  incidentsFull: Array<Incident>;
   intel: Array<Intel>;
   investigations: Array<Investigation>;
   knownAssociates?: Maybe<Array<Offender>>;
@@ -34773,6 +35194,11 @@ export type OffenderImpressionsArgs = {
 };
 
 export type OffenderIncidentsArgs = {
+  orderBy?: InputMaybe<Array<IncidentOrderByWithRelationInput>>;
+  where?: InputMaybe<IncidentWhereInput>;
+};
+
+export type OffenderIncidentsFullArgs = {
   after?: InputMaybe<IncidentWhereUniqueInput>;
   before?: InputMaybe<IncidentWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
@@ -40001,6 +40427,7 @@ export type Query = {
   listCustomGalleries: ListCustomGalleries;
   listDemCompanies: ListDemCompanies;
   listDemEvidence: ListDemEvidence;
+  listDemEvidenceExtendedWithoutUser: ListDemEvidenceExtended;
   listDemUsers: ListDemUsers;
   listFeedItems?: Maybe<ListFeedItems>;
   listGoodsTypes: ListGoodsTypes;
@@ -40304,6 +40731,12 @@ export type QueryListDemCompaniesArgs = {
 };
 
 export type QueryListDemEvidenceArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where: Scalars['String'];
+};
+
+export type QueryListDemEvidenceExtendedWithoutUserArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where: Scalars['String'];
@@ -44249,6 +44682,7 @@ export type SchemeCreateInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -44319,6 +44753,7 @@ export type SchemeCreateManyDarkLogoInput = {
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
   autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   defaultIncidentEmail?: InputMaybe<Scalars['Boolean']>;
@@ -44357,6 +44792,7 @@ export type SchemeCreateManyLogoInput = {
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
   autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   customTranslations?: InputMaybe<SchemeCreatecustomTranslationsInput>;
   darkLogoId?: InputMaybe<Scalars['String']>;
@@ -44917,6 +45353,7 @@ export type SchemeCreateWithoutActionsInSchemeInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -44992,6 +45429,7 @@ export type SchemeCreateWithoutActionsInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -45067,6 +45505,7 @@ export type SchemeCreateWithoutArticlesInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -45142,6 +45581,7 @@ export type SchemeCreateWithoutBansInput = {
   autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -45217,6 +45657,7 @@ export type SchemeCreateWithoutBusinessesInput = {
   autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -45292,6 +45733,7 @@ export type SchemeCreateWithoutChatsInput = {
   autoPopulateDescription?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -45368,6 +45810,7 @@ export type SchemeCreateWithoutContactsInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
   csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
@@ -45443,6 +45886,7 @@ export type SchemeCreateWithoutCrimeGroupsInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   csvImports?: InputMaybe<CsvImportCreateNestedManyWithoutSchemeInput>;
@@ -45518,6 +45962,7 @@ export type SchemeCreateWithoutCsvImportsInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -45593,6 +46038,7 @@ export type SchemeCreateWithoutCustomGalleriesInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -45668,6 +46114,7 @@ export type SchemeCreateWithoutDarkLogoInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -45743,6 +46190,7 @@ export type SchemeCreateWithoutDefaultGroupsInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -45818,6 +46266,7 @@ export type SchemeCreateWithoutDocumentsInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -45893,6 +46342,7 @@ export type SchemeCreateWithoutFeedItemsInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -45968,6 +46418,7 @@ export type SchemeCreateWithoutGroupsInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -46043,6 +46494,7 @@ export type SchemeCreateWithoutImagesInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -46118,6 +46570,7 @@ export type SchemeCreateWithoutIncidentFormInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -46193,6 +46646,7 @@ export type SchemeCreateWithoutIncidentsInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -46268,6 +46722,7 @@ export type SchemeCreateWithoutIntelInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -46343,6 +46798,7 @@ export type SchemeCreateWithoutInvestigationsInSchemeInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -46418,6 +46874,7 @@ export type SchemeCreateWithoutInvestigationsInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -46493,6 +46950,7 @@ export type SchemeCreateWithoutLoginEventsInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -46568,6 +47026,7 @@ export type SchemeCreateWithoutLogoInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -46643,6 +47102,7 @@ export type SchemeCreateWithoutMembersInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -46718,6 +47178,7 @@ export type SchemeCreateWithoutMessagesInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -46793,6 +47254,7 @@ export type SchemeCreateWithoutNotificationsInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -46868,6 +47330,7 @@ export type SchemeCreateWithoutOffendersInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -46943,6 +47406,7 @@ export type SchemeCreateWithoutQuestionGroupsInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -47018,6 +47482,7 @@ export type SchemeCreateWithoutQuestionsInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -47093,6 +47558,7 @@ export type SchemeCreateWithoutRecycledItemsInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -47168,6 +47634,7 @@ export type SchemeCreateWithoutRekCollectionsInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -47243,6 +47710,7 @@ export type SchemeCreateWithoutReportIconsInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -47318,6 +47786,7 @@ export type SchemeCreateWithoutReportTemplatesInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -47393,6 +47862,7 @@ export type SchemeCreateWithoutSchemeTagsInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -47468,6 +47938,7 @@ export type SchemeCreateWithoutStatementTemplatesInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -47543,6 +48014,7 @@ export type SchemeCreateWithoutStockItemsInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -47618,6 +48090,7 @@ export type SchemeCreateWithoutTagOrdersInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -47693,6 +48166,7 @@ export type SchemeCreateWithoutTagsInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -47768,6 +48242,7 @@ export type SchemeCreateWithoutTermsInSchemeInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -47843,6 +48318,7 @@ export type SchemeCreateWithoutTermsInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -47918,6 +48394,7 @@ export type SchemeCreateWithoutTodosInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -47993,6 +48470,7 @@ export type SchemeCreateWithoutVehiclesInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -48068,6 +48546,7 @@ export type SchemeCreateWithoutWorkflowsInput = {
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
   chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  checklistFeatureActive?: InputMaybe<Scalars['Boolean']>;
   contacts?: InputMaybe<ContactCreateNestedManyWithoutSchemesInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
@@ -48157,6 +48636,7 @@ export type SchemeOrderByWithRelationInput = {
   bans?: InputMaybe<BanOrderByRelationAggregateInput>;
   businesses?: InputMaybe<BusinessOrderByRelationAggregateInput>;
   chats?: InputMaybe<ChatOrderByRelationAggregateInput>;
+  checklistFeatureActive?: InputMaybe<SortOrder>;
   contacts?: InputMaybe<ContactOrderByRelationAggregateInput>;
   createdAt?: InputMaybe<SortOrder>;
   crimeGroups?: InputMaybe<CrimeGroupOrderByRelationAggregateInput>;
@@ -48237,6 +48717,7 @@ export type SchemeScalarWhereInput = {
   autoApproveIncidents?: InputMaybe<BoolFilter>;
   autoApproveOffenders?: InputMaybe<BoolFilter>;
   autoPopulateDescription?: InputMaybe<BoolFilter>;
+  checklistFeatureActive?: InputMaybe<BoolFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   customTranslations?: InputMaybe<JsonNullableListFilter>;
   darkLogoId?: InputMaybe<StringNullableFilter>;
@@ -48277,6 +48758,7 @@ export type SchemeUpdateInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -48347,6 +48829,7 @@ export type SchemeUpdateManyMutationInput = {
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   customTranslations?: InputMaybe<SchemeUpdatecustomTranslationsInput>;
   defaultIncidentEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -49311,6 +49794,7 @@ export type SchemeUpdateWithoutActionsInSchemeInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -49386,6 +49870,7 @@ export type SchemeUpdateWithoutActionsInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -49461,6 +49946,7 @@ export type SchemeUpdateWithoutArticlesInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -49536,6 +50022,7 @@ export type SchemeUpdateWithoutBansInput = {
   autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -49611,6 +50098,7 @@ export type SchemeUpdateWithoutBusinessesInput = {
   autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -49686,6 +50174,7 @@ export type SchemeUpdateWithoutChatsInput = {
   autoPopulateDescription?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -49762,6 +50251,7 @@ export type SchemeUpdateWithoutContactsInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
   csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
@@ -49837,6 +50327,7 @@ export type SchemeUpdateWithoutCrimeGroupsInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   csvImports?: InputMaybe<CsvImportUpdateManyWithoutSchemeNestedInput>;
@@ -49912,6 +50403,7 @@ export type SchemeUpdateWithoutCsvImportsInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -49987,6 +50479,7 @@ export type SchemeUpdateWithoutCustomGalleriesInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -50062,6 +50555,7 @@ export type SchemeUpdateWithoutDarkLogoInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -50137,6 +50631,7 @@ export type SchemeUpdateWithoutDefaultGroupsInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -50212,6 +50707,7 @@ export type SchemeUpdateWithoutDocumentsInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -50287,6 +50783,7 @@ export type SchemeUpdateWithoutFeedItemsInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -50362,6 +50859,7 @@ export type SchemeUpdateWithoutGroupsInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -50437,6 +50935,7 @@ export type SchemeUpdateWithoutImagesInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -50512,6 +51011,7 @@ export type SchemeUpdateWithoutIncidentFormInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -50587,6 +51087,7 @@ export type SchemeUpdateWithoutIncidentsInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -50662,6 +51163,7 @@ export type SchemeUpdateWithoutIntelInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -50737,6 +51239,7 @@ export type SchemeUpdateWithoutInvestigationsInSchemeInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -50812,6 +51315,7 @@ export type SchemeUpdateWithoutInvestigationsInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -50887,6 +51391,7 @@ export type SchemeUpdateWithoutLoginEventsInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -50962,6 +51467,7 @@ export type SchemeUpdateWithoutLogoInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -51037,6 +51543,7 @@ export type SchemeUpdateWithoutMembersInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -51112,6 +51619,7 @@ export type SchemeUpdateWithoutMessagesInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -51187,6 +51695,7 @@ export type SchemeUpdateWithoutNotificationsInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -51262,6 +51771,7 @@ export type SchemeUpdateWithoutOffendersInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -51337,6 +51847,7 @@ export type SchemeUpdateWithoutQuestionGroupsInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -51412,6 +51923,7 @@ export type SchemeUpdateWithoutQuestionsInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -51487,6 +51999,7 @@ export type SchemeUpdateWithoutRecycledItemsInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -51562,6 +52075,7 @@ export type SchemeUpdateWithoutRekCollectionsInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -51637,6 +52151,7 @@ export type SchemeUpdateWithoutReportIconsInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -51712,6 +52227,7 @@ export type SchemeUpdateWithoutReportTemplatesInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -51787,6 +52303,7 @@ export type SchemeUpdateWithoutSchemeTagsInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -51862,6 +52379,7 @@ export type SchemeUpdateWithoutStatementTemplatesInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -51937,6 +52455,7 @@ export type SchemeUpdateWithoutStockItemsInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -52012,6 +52531,7 @@ export type SchemeUpdateWithoutTagOrdersInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -52087,6 +52607,7 @@ export type SchemeUpdateWithoutTagsInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -52162,6 +52683,7 @@ export type SchemeUpdateWithoutTermsInSchemeInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -52237,6 +52759,7 @@ export type SchemeUpdateWithoutTermsInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -52312,6 +52835,7 @@ export type SchemeUpdateWithoutTodosInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -52387,6 +52911,7 @@ export type SchemeUpdateWithoutVehiclesInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -52462,6 +52987,7 @@ export type SchemeUpdateWithoutWorkflowsInput = {
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
   chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  checklistFeatureActive?: InputMaybe<BoolFieldUpdateOperationsInput>;
   contacts?: InputMaybe<ContactUpdateManyWithoutSchemesNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
@@ -52803,6 +53329,7 @@ export type SchemeWhereInput = {
   bans?: InputMaybe<BanListRelationFilter>;
   businesses?: InputMaybe<BusinessListRelationFilter>;
   chats?: InputMaybe<ChatListRelationFilter>;
+  checklistFeatureActive?: InputMaybe<BoolFilter>;
   contacts?: InputMaybe<ContactListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   crimeGroups?: InputMaybe<CrimeGroupListRelationFilter>;
@@ -52884,6 +53411,7 @@ export type SchemeWhereUniqueInput = {
   bans?: InputMaybe<BanListRelationFilter>;
   businesses?: InputMaybe<BusinessListRelationFilter>;
   chats?: InputMaybe<ChatListRelationFilter>;
+  checklistFeatureActive?: InputMaybe<BoolFilter>;
   contacts?: InputMaybe<ContactListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   crimeGroups?: InputMaybe<CrimeGroupListRelationFilter>;
@@ -86371,6 +86899,31 @@ export type ExportFiltersQuery = {
   } | null;
 };
 
+export type ListDemEvidenceExtendedWithoutUserQueryVariables = Exact<{
+  where: Scalars['String'];
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type ListDemEvidenceExtendedWithoutUserQuery = {
+  __typename?: 'Query';
+  listDemEvidenceExtendedWithoutUser: {
+    __typename?: 'ListDemEvidenceExtended';
+    total: number;
+    demEvidence: Array<{
+      __typename?: 'DemEvidenceExtended';
+      type?: string | null;
+      thumbnailUrl?: string | null;
+      recordedAt?: Date | null;
+      playbackUrl?: string | null;
+      id?: string | null;
+      importance?: string | null;
+      officerName?: string | null;
+      duration?: string | null;
+    }>;
+  };
+};
+
 export type ListIncidentsFeedQueryVariables = Exact<{
   scheme: SchemeWhereUniqueInput;
   where?: InputMaybe<IncidentWhereInput>;
@@ -103393,6 +103946,65 @@ export type ExportFiltersLazyQueryHookResult = ReturnType<
 export type ExportFiltersQueryResult = Apollo.QueryResult<
   ExportFiltersQuery,
   ExportFiltersQueryVariables
+>;
+export const ListDemEvidenceExtendedWithoutUserDocument = gql`
+  query listDemEvidenceExtendedWithoutUser(
+    $where: String!
+    $skip: Int
+    $take: Int
+  ) {
+    listDemEvidenceExtendedWithoutUser(
+      where: $where
+      skip: $skip
+      take: $take
+    ) {
+      demEvidence {
+        type
+        thumbnailUrl
+        recordedAt
+        playbackUrl
+        id
+        importance
+        officerName
+        duration
+      }
+      total
+    }
+  }
+`;
+export function useListDemEvidenceExtendedWithoutUserQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ListDemEvidenceExtendedWithoutUserQuery,
+    ListDemEvidenceExtendedWithoutUserQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    ListDemEvidenceExtendedWithoutUserQuery,
+    ListDemEvidenceExtendedWithoutUserQueryVariables
+  >(ListDemEvidenceExtendedWithoutUserDocument, options);
+}
+export function useListDemEvidenceExtendedWithoutUserLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListDemEvidenceExtendedWithoutUserQuery,
+    ListDemEvidenceExtendedWithoutUserQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ListDemEvidenceExtendedWithoutUserQuery,
+    ListDemEvidenceExtendedWithoutUserQueryVariables
+  >(ListDemEvidenceExtendedWithoutUserDocument, options);
+}
+export type ListDemEvidenceExtendedWithoutUserQueryHookResult = ReturnType<
+  typeof useListDemEvidenceExtendedWithoutUserQuery
+>;
+export type ListDemEvidenceExtendedWithoutUserLazyQueryHookResult = ReturnType<
+  typeof useListDemEvidenceExtendedWithoutUserLazyQuery
+>;
+export type ListDemEvidenceExtendedWithoutUserQueryResult = Apollo.QueryResult<
+  ListDemEvidenceExtendedWithoutUserQuery,
+  ListDemEvidenceExtendedWithoutUserQueryVariables
 >;
 export const ListIncidentsFeedDocument = gql`
   query ListIncidentsFeed(

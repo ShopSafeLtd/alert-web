@@ -25,6 +25,7 @@ import {
   faNewspaper,
   faPeopleGroup,
   faPieChart,
+  faPlayCircle,
   faSirenOn,
   faTrash,
   faUser,
@@ -46,6 +47,7 @@ export interface MenuItem {
   roles?: Role[];
   // badge?: boolean;
   badge?: BadgeTypes;
+  requireDemId?: boolean;
   intl: { id: string; defaultMessage: string };
 }
 
@@ -249,6 +251,26 @@ const userOnlyItems: NavItem[] = [
   //   submenu: [],
   //   roles: [Role.SchemeAdmin, Role.ShopsafeAdmin],
   // },
+  {
+    key: 'evidence',
+    path: `${APP_PREFIX_PATH}/evidence`,
+    title: 'Evidence',
+    icon: faPlayCircle,
+    breadcrumb: false,
+    submenu: [],
+    requireDemId: true,
+    intl: defineMessage({
+      id: 'evidence',
+      defaultMessage: 'Evidence',
+    }),
+    roles: [
+      Role.User,
+      Role.ContentAdmin,
+      Role.SchemeAdmin,
+      Role.ShopsafeAdmin,
+      Role.GroupAdmin,
+    ],
+  },
   {
     key: 'resources',
     path: `${APP_PREFIX_PATH}/resources`,
