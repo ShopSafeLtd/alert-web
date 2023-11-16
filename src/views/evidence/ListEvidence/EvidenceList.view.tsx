@@ -13,9 +13,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileAudio } from '@fortawesome/pro-light-svg-icons';
 import { FormattedMessage, useIntl } from 'react-intl';
 import ReactPlayer from 'react-player';
+import Loading from 'components/shared-components/AntD/Loading';
 import type { ListDemEvidenceExtendedWithoutUserQuery } from '../../../graphql/generated';
 import { PageHeader } from '../../../components/layout-components/AntD';
-import Loading from '../../../components/loading';
 import useStyles from '../../profiles/crime-groups/list-crime-groups/ListCrimeGroups.styles';
 
 interface ViewEvidenceListProps {
