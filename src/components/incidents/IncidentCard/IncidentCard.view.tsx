@@ -40,6 +40,8 @@ import FeedImageEditor from 'components/form-components/ImageEditor/FeedImageEdi
 import type { EditFeedImage } from 'types/DataType';
 import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
 
+import useStyles from './IncidentCard.styles';
+
 const { Title, Text, Paragraph } = Typography;
 const { confirm } = Modal;
 
@@ -59,6 +61,7 @@ interface Props {
   onEditImage: (value: EditFeedImage) => void;
   toggleAddInvestigation: () => void;
   addInvestigation: boolean;
+  compactView: boolean;
 }
 
 const IncidentCard = ({
@@ -77,120 +80,347 @@ const IncidentCard = ({
   onEditImage,
   addInvestigation,
   toggleAddInvestigation,
+  compactView,
 }: Props): JSX.Element => {
   const imagesRef = useRef<CarouselRef>(null);
   const intl = useIntl();
+  const classes = useStyles();
+
   return (
-    <Card
-      className="incident-card"
-      key={incident.id || ''}
-      bodyStyle={{
-        overflow: 'hidden',
-        borderRadius: 10,
-        display: 'flex',
-        flexDirection: 'column',
-        flexGrow: 1,
-      }}
-    >
-      {!incident?.approved && (
-        <div className="incident-card-overlay">
-          <Title level={4} className="incident-card-approval-title">
-            {intl.formatMessage({
-              defaultMessage: 'This incident is awaiting approval',
-              id: 'ONEXvQ',
-            })}
-          </Title>
-          {approvalRights && (
-            <Link to={`view/${incident?.id}`}>
-              <Button>
-                {intl.formatMessage({
-                  defaultMessage: 'Review Incident',
-                  id: 'c+kQCf',
-                })}
-              </Button>
-            </Link>
-          )}
-        </div>
-      )}
-      {menuRights && (
-        <Dropdown
-          trigger={['click']}
-          overlay={
-            <Menu
-              items={[
-                {
-                  key: 0,
-                  label: intl.formatMessage({
-                    defaultMessage: 'Edit Incident',
-                    id: 'E6VJFN',
-                  }),
-                  onClick: () => toggleEditIncidentFeed(),
-                  icon: <FontAwesomeIcon icon={faEdit} />,
-                },
-                incident.totalImages && incident.totalImages > 0
-                  ? {
-                      key: 1,
-                      label: intl.formatMessage({
-                        defaultMessage: 'Edit Image',
-                        id: '9UlLIw',
-                      }),
-                      onClick: () => toggleEditImage(),
-                      icon: <FontAwesomeIcon icon={faImage} />,
-                    }
-                  : null,
-
-                {
-                  key: 2,
-                  label: intl.formatMessage({
-                    defaultMessage: 'Delete Incident',
-                    id: 's8QPty',
-                  }),
-                  onClick: () =>
-                    confirm({
-                      title: intl.formatMessage({
-                        defaultMessage: 'Are you sure?',
-                        id: '2oCaym',
-                      }),
-                      content: intl.formatMessage({
-                        defaultMessage:
-                          'Click delete if you wish to delete this incident. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
-                        id: 'TNOl3z',
-                      }),
-                      okText: intl.formatMessage({
-                        defaultMessage: 'Delete',
-                        id: 'K3r6DQ',
-                      }),
-                      onOk: () => onDelete(incident?.id || ''),
-                    }),
-                  icon: <FontAwesomeIcon icon={faTrash} />,
-                },
-                {
-                  key: 3,
-                  label: intl.formatMessage({
-                    defaultMessage: 'Add Investigation',
-                    id: 'U5+v9Y',
-                  }),
-                  onClick: () => toggleAddInvestigation(),
-                  icon: <FontAwesomeIcon icon={faPlus} />,
-                },
-                // ???
-              ].filter((item) => item?.key !== 2 || deleteRights)}
-            />
-          }
-          placement="bottomRight"
-          arrow={{ pointAtCenter: true }}
+    <div>
+      {compactView ? (
+        <Card
+          key={incident.id || ''}
+          bodyStyle={{
+            borderRadius: 10,
+            padding: 0,
+            overflow: 'hidden',
+            height: 150,
+          }}
         >
-          <Button className="incident-card-menu">
-            <FontAwesomeIcon
-              // size="5x"
-              style={{ height: '100%' }}
-              icon={faEllipsisV}
-            />
-          </Button>
-        </Dropdown>
-      )}
+          {!incident?.approved && (
+            <div className={classes.cardOverlay}>
+              <Row justify="center">
+                <Col>
+                  <Title level={4} style={{ color: '#fff' }}>
+                    {intl.formatMessage({
+                      defaultMessage: 'This incident is awaiting approval',
+                      id: 'ONEXvQ',
+                    })}
+                  </Title>
+                </Col>
+              </Row>
+              {approvalRights && (
+                <Row justify="center">
+                  <Col>
+                    <Link to={`view/${incident?.id}`}>
+                      <Button>
+                        {intl.formatMessage({
+                          defaultMessage: 'Review Incident',
+                          id: 'c+kQCf',
+                        })}
+                      </Button>
+                    </Link>
+                  </Col>
+                </Row>
+              )}
+            </div>
+          )}
 
-      <div className="incident-card-tags">
+          <Row wrap={false}>
+            <Col>
+              <div className={classes.imageContainer}>
+                {incident.totalImages && incident.totalImages > 0 ? (
+                  <Carousel
+                    ref={imagesRef}
+                    afterChange={(currentSlide: number) => {
+                      setEditImageId(incident.images[currentSlide].id);
+                    }}
+                  >
+                    {incident?.images.map((image) => (
+                      <div className={classes.image} key={image.id}>
+                        <WatermarkImage
+                          url={image.low}
+                          rotation={image.rotation}
+                          position={image.position}
+                        />
+                      </div>
+                    ))}
+                  </Carousel>
+                ) : (
+                  <div>
+                    <SkeletonImage height={150} />
+                  </div>
+                )}
+                {incident.totalImages && incident.totalImages > 1 ? (
+                  <Row className={classes.cardControls}>
+                    <Col>
+                      <FontAwesomeIcon
+                        className={classes.cardControl}
+                        icon={faAngleLeft}
+                        onClick={() => imagesRef.current?.prev()}
+                      />
+                    </Col>
+                    <Col flex={1} />
+                    <Col>
+                      <FontAwesomeIcon
+                        className={classes.cardControl}
+                        icon={faAngleRight}
+                        onClick={() => imagesRef.current?.next()}
+                      />
+                    </Col>
+                  </Row>
+                ) : null}
+                {incident.totalImages && incident.totalImages > 0 ? (
+                  <FontAwesomeIcon
+                    className={classes.imageExpand}
+                    icon={faArrowsMaximize}
+                    onClick={() =>
+                      openLightbox(
+                        incident?.images.map((image) => ({
+                          src: image.low || '',
+                        })) || [],
+                        0
+                      )
+                    }
+                  />
+                ) : null}
+              </div>
+            </Col>
+
+            <Col flex={1} className={classes.cardContent}>
+              <Link to={`/app/incidents/view/${incident?.id}`}>
+                <Row wrap={false}>
+                  <Col flex={1}>
+                    <Title level={4} ellipsis>
+                      {incident?.subject}
+                    </Title>
+                  </Col>
+                  {menuRights && (
+                    <Col style={{ marginTop: -2 }}>
+                      <Dropdown
+                        trigger={['click']}
+                        overlay={
+                          <Menu
+                            items={[
+                              {
+                                key: 0,
+                                label: intl.formatMessage({
+                                  defaultMessage: 'Edit Incident',
+                                  id: 'E6VJFN',
+                                }),
+                                onClick: () => toggleEditIncidentFeed(),
+                                icon: <FontAwesomeIcon icon={faEdit} />,
+                              },
+                              incident.totalImages && incident.totalImages > 0
+                                ? {
+                                    key: 1,
+                                    label: intl.formatMessage({
+                                      defaultMessage: 'Edit Image',
+                                      id: '9UlLIw',
+                                    }),
+                                    onClick: () => toggleEditImage(),
+                                    icon: <FontAwesomeIcon icon={faImage} />,
+                                  }
+                                : null,
+
+                              {
+                                key: 2,
+                                label: intl.formatMessage({
+                                  defaultMessage: 'Delete Incident',
+                                  id: 's8QPty',
+                                }),
+                                onClick: () =>
+                                  confirm({
+                                    title: intl.formatMessage({
+                                      defaultMessage: 'Are you sure?',
+                                      id: '2oCaym',
+                                    }),
+                                    content: intl.formatMessage({
+                                      defaultMessage:
+                                        'Click delete if you wish to delete this incident. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
+                                      id: 'TNOl3z',
+                                    }),
+                                    okText: intl.formatMessage({
+                                      defaultMessage: 'Delete',
+                                      id: 'K3r6DQ',
+                                    }),
+                                    onOk: () => onDelete(incident?.id || ''),
+                                  }),
+                                icon: <FontAwesomeIcon icon={faTrash} />,
+                              },
+                              {
+                                key: 3,
+                                label: intl.formatMessage({
+                                  defaultMessage: 'Add Investigation',
+                                  id: 'U5+v9Y',
+                                }),
+                                onClick: () => toggleAddInvestigation(),
+                                icon: <FontAwesomeIcon icon={faPlus} />,
+                              },
+                            ].filter((item) => item?.key !== 2 || deleteRights)}
+                          />
+                        }
+                        placement="bottomRight"
+                        arrow={{ pointAtCenter: true }}
+                      >
+                        <Button className={classes.menuButton}>
+                          <FontAwesomeIcon size="lg" icon={faEllipsisV} />
+                        </Button>
+                      </Dropdown>
+                    </Col>
+                  )}
+                </Row>
+                <div className={classes.alertId}>
+                  <Text type="secondary">
+                    {intl.formatMessage(
+                      {
+                        defaultMessage:
+                          'Alert ID: {incidentReference} {policeRef, plural, =1 {{policeRefS}} other {}}',
+                        id: '2rCZPy',
+                      },
+                      {
+                        incidentReference: incident?.reference,
+                        policeRefS: incident.policeRef,
+                        policeRef: incident.policeRef ? 1 : 0,
+                      }
+                    )}
+                  </Text>
+                </div>
+                <Paragraph type="secondary" ellipsis={{ rows: 2 }}>
+                  {incident?.description}
+                </Paragraph>
+              </Link>
+              <div className={classes.bottomRow}>
+                <Row wrap={false}>
+                  <Col>
+                    <FontAwesomeIcon
+                      size="sm"
+                      className={classes.icon}
+                      icon={faClock}
+                    />
+                  </Col>
+                  <Col>
+                    <Text type="secondary" style={{ fontSize: 14 }}>
+                      {incident.dayTime}
+                    </Text>
+                  </Col>
+                </Row>
+              </div>
+            </Col>
+          </Row>
+        </Card>
+      ) : (
+        <Card
+          className="incident-card"
+          key={incident.id || ''}
+          bodyStyle={{
+            overflow: 'hidden',
+            borderRadius: 10,
+            display: 'flex',
+            flexDirection: 'column',
+            flexGrow: 1,
+          }}
+        >
+          {!incident?.approved && (
+            <div className="incident-card-overlay">
+              <Title level={4} className="incident-card-approval-title">
+                {intl.formatMessage({
+                  defaultMessage: 'This incident is awaiting approval',
+                  id: 'ONEXvQ',
+                })}
+              </Title>
+              {approvalRights && (
+                <Link to={`view/${incident?.id}`}>
+                  <Button>
+                    {intl.formatMessage({
+                      defaultMessage: 'Review Incident',
+                      id: 'c+kQCf',
+                    })}
+                  </Button>
+                </Link>
+              )}
+            </div>
+          )}
+          {menuRights && (
+            <Dropdown
+              trigger={['click']}
+              overlay={
+                <Menu
+                  items={[
+                    {
+                      key: 0,
+                      label: intl.formatMessage({
+                        defaultMessage: 'Edit Incident',
+                        id: 'E6VJFN',
+                      }),
+                      onClick: () => toggleEditIncidentFeed(),
+                      icon: <FontAwesomeIcon icon={faEdit} />,
+                    },
+                    incident.totalImages && incident.totalImages > 0
+                      ? {
+                          key: 1,
+                          label: intl.formatMessage({
+                            defaultMessage: 'Edit Image',
+                            id: '9UlLIw',
+                          }),
+                          onClick: () => toggleEditImage(),
+                          icon: <FontAwesomeIcon icon={faImage} />,
+                        }
+                      : null,
+
+                    {
+                      key: 2,
+                      label: intl.formatMessage({
+                        defaultMessage: 'Delete Incident',
+                        id: 's8QPty',
+                      }),
+                      onClick: () =>
+                        confirm({
+                          title: intl.formatMessage({
+                            defaultMessage: 'Are you sure?',
+                            id: '2oCaym',
+                          }),
+                          content: intl.formatMessage({
+                            defaultMessage:
+                              'Click delete if you wish to delete this incident. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
+                            id: 'TNOl3z',
+                          }),
+                          okText: intl.formatMessage({
+                            defaultMessage: 'Delete',
+                            id: 'K3r6DQ',
+                          }),
+                          onOk: () => onDelete(incident?.id || ''),
+                        }),
+                      icon: <FontAwesomeIcon icon={faTrash} />,
+                    },
+                    {
+                      key: 3,
+                      label: intl.formatMessage({
+                        defaultMessage: 'Add Investigation',
+                        id: 'U5+v9Y',
+                      }),
+                      onClick: () => toggleAddInvestigation(),
+                      icon: <FontAwesomeIcon icon={faPlus} />,
+                    },
+                    // ???
+                  ].filter((item) => item?.key !== 2 || deleteRights)}
+                />
+              }
+              placement="bottomRight"
+              arrow={{ pointAtCenter: true }}
+            >
+              <Button className="incident-card-menu">
+                <FontAwesomeIcon
+                  // size="5x"
+                  style={{ height: '100%' }}
+                  icon={faEllipsisV}
+                />
+              </Button>
+            </Dropdown>
+          )}
+
+          {/* <div className="incident-card-tags">
         <Row gutter={8}>
           {incident?.crimeTypes.slice(0, 2).map((crimeType) => (
             <Col key={crimeType.id}>
@@ -219,236 +449,239 @@ const IncidentCard = ({
             </Tooltip>
           )}
         </Row>
-      </div>
-      <div>
-        {incident.totalImages && incident.totalImages > 0 ? (
-          <Carousel
-            ref={imagesRef}
-            afterChange={(currentSlide: number) => {
-              setEditImageId(incident.images[currentSlide].id);
-            }}
-          >
-            {incident?.images.map((image) => (
-              <div key={image.id}>
-                <div className="incident-card-image">
-                  <WatermarkImage
-                    url={image.low}
-                    rotation={image.rotation}
-                    position={image.position}
-                  />
-                </div>
-              </div>
-            ))}
-          </Carousel>
-        ) : (
-          <SkeletonImage height={280} />
-        )}
-      </div>
-      {incident.totalImages && incident.totalImages > 1 ? (
-        <Row className="incident-card-controls">
-          <Col>
-            <FontAwesomeIcon
-              className="incident-card-control"
-              icon={faAngleLeft}
-              onClick={() => imagesRef.current?.prev()}
-            />
-          </Col>
-          <Col flex={1} />
-          <Col>
-            <FontAwesomeIcon
-              className="incident-card-control"
-              icon={faAngleRight}
-              onClick={() => imagesRef.current?.next()}
-            />
-          </Col>
-        </Row>
-      ) : null}
-      {incident.totalImages && incident.totalImages > 0 ? (
-        <FontAwesomeIcon
-          className="incident-card-expand"
-          icon={faArrowsMaximize}
-          onClick={() =>
-            openLightbox(
-              incident?.images.map((image) => ({
-                src: image.low || '',
-              })) || [],
-              0
-            )
-          }
-        />
-      ) : null}
-      <div className="incident-card-content">
-        <Space direction="vertical">
-          <Title level={4} ellipsis>
-            {incident?.subject}
-          </Title>
+      </div> */}
+
           <div>
-            <Text type="secondary">
-              {intl.formatMessage(
-                {
-                  defaultMessage:
-                    'Alert ID: {incidentReference} {policeRef, plural, =1 {{policeRefS}} other {}}',
-                  id: '2rCZPy',
-                },
-                {
-                  incidentReference: incident?.reference,
-                  policeRefS: incident.policeRef,
-                  policeRef: incident.policeRef ? 1 : 0,
-                }
-              )}
-            </Text>
+            {incident.totalImages && incident.totalImages > 0 ? (
+              <Carousel
+                ref={imagesRef}
+                afterChange={(currentSlide: number) => {
+                  setEditImageId(incident.images[currentSlide].id);
+                }}
+              >
+                {incident?.images.map((image) => (
+                  <div key={image.id}>
+                    <div className="incident-card-image">
+                      <WatermarkImage
+                        url={image.low}
+                        rotation={image.rotation}
+                        position={image.position}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </Carousel>
+            ) : (
+              <SkeletonImage height={280} />
+            )}
           </div>
-          {incident.offenders.length > 0 ? (
-            <Row wrap={false}>
-              {incident.offenders.slice(0, 1).map((offender) => (
-                <Link to={`/app/offenders/view/${offender?.id}`}>
-                  <Tag key={offender.id}>
-                    {offender.name ||
-                      intl.formatMessage({
-                        defaultMessage: 'Unknown Offender',
-                        id: 'wS+Y5g',
-                      })}
-                  </Tag>
-                </Link>
-              ))}
-              {incident.offenders.length > 1 && (
-                <Tooltip
-                  title={incident.offenders.slice(1).map((item, index) => (
-                    <Link to={`/app/offenders/view/${item?.id}`}>
-                      {/* eslint-disable-next-line @typescript-eslint/restrict-template-expressions,formatjs/no-literal-string-in-jsx */}
-                      {index > 0 && ', '}
-                      {item.name}
+          {incident.totalImages && incident.totalImages > 1 ? (
+            <Row className="incident-card-controls">
+              <Col>
+                <FontAwesomeIcon
+                  className="incident-card-control"
+                  icon={faAngleLeft}
+                  onClick={() => imagesRef.current?.prev()}
+                />
+              </Col>
+              <Col flex={1} />
+              <Col>
+                <FontAwesomeIcon
+                  className="incident-card-control"
+                  icon={faAngleRight}
+                  onClick={() => imagesRef.current?.next()}
+                />
+              </Col>
+            </Row>
+          ) : null}
+          {incident.totalImages && incident.totalImages > 0 ? (
+            <FontAwesomeIcon
+              className="incident-card-expand"
+              icon={faArrowsMaximize}
+              onClick={() =>
+                openLightbox(
+                  incident?.images.map((image) => ({
+                    src: image.low || '',
+                  })) || [],
+                  0
+                )
+              }
+            />
+          ) : null}
+          <div className="incident-card-content">
+            <Space direction="vertical">
+              <Title level={4} ellipsis>
+                {incident?.subject}
+              </Title>
+              <div>
+                <Text type="secondary">
+                  {intl.formatMessage(
+                    {
+                      defaultMessage:
+                        'Alert ID: {incidentReference} {policeRef, plural, =1 {{policeRefS}} other {}}',
+                      id: '2rCZPy',
+                    },
+                    {
+                      incidentReference: incident?.reference,
+                      policeRefS: incident.policeRef,
+                      policeRef: incident.policeRef ? 1 : 0,
+                    }
+                  )}
+                </Text>
+              </div>
+              {incident.offenders.length > 0 ? (
+                <Row wrap={false}>
+                  {incident.offenders.slice(0, 1).map((offender) => (
+                    <Link to={`/app/offenders/view/${offender?.id}`}>
+                      <Tag key={offender.id}>
+                        {offender.name ||
+                          intl.formatMessage({
+                            defaultMessage: 'Unknown Offender',
+                            id: 'wS+Y5g',
+                          })}
+                      </Tag>
                     </Link>
                   ))}
-                >
-                  <Tag>
-                    {intl.formatMessage(
-                      {
-                        defaultMessage: '+ {num} more',
-                        id: 'fi2Xie',
-                      },
-                      {
-                        num: incident.offenders.length - 1,
-                      }
-                    )}
-                  </Tag>
-                </Tooltip>
+                  {incident.offenders.length > 1 && (
+                    <Tooltip
+                      title={incident.offenders.slice(1).map((item, index) => (
+                        <Link to={`/app/offenders/view/${item?.id}`}>
+                          {/* eslint-disable-next-line @typescript-eslint/restrict-template-expressions,formatjs/no-literal-string-in-jsx */}
+                          {index > 0 && ', '}
+                          {item.name}
+                        </Link>
+                      ))}
+                    >
+                      <Tag>
+                        {intl.formatMessage(
+                          {
+                            defaultMessage: '+ {num} more',
+                            id: 'fi2Xie',
+                          },
+                          {
+                            num: incident.offenders.length - 1,
+                          }
+                        )}
+                      </Tag>
+                    </Tooltip>
+                  )}
+                </Row>
+              ) : (
+                <div />
               )}
-            </Row>
-          ) : (
-            <div />
-          )}
-          <Link to={`/app/incidents/view/${incident?.id}`}>
-            <Row
-              wrap={false}
-              gutter={8}
-              style={{ marginBottom: 5, maxWidth: '100%' }}
-            >
-              <Col span={12}>
-                <Row wrap={false}>
-                  <Col>
-                    <FontAwesomeIcon
-                      size="sm"
-                      className="incident-card-icon"
-                      icon={faClock}
-                    />
+              <Link to={`/app/incidents/view/${incident?.id}`}>
+                <Row
+                  wrap={false}
+                  gutter={8}
+                  style={{ marginBottom: 5, maxWidth: '100%' }}
+                >
+                  <Col span={12}>
+                    <Row wrap={false}>
+                      <Col>
+                        <FontAwesomeIcon
+                          size="sm"
+                          className="incident-card-icon"
+                          icon={faClock}
+                        />
+                      </Col>
+                      <Col>
+                        <Text type="secondary">{incident?.dayTime}</Text>
+                      </Col>
+                    </Row>
                   </Col>
-                  <Col>
-                    <Text type="secondary">{incident?.dayTime}</Text>
+                  <Col span={12}>
+                    <Row wrap={false}>
+                      <Col>
+                        <FontAwesomeIcon
+                          size="sm"
+                          className="incident-card-icon"
+                          icon={faLocationDot}
+                        />
+                      </Col>
+                      <Col>
+                        <Text style={{ flex: 1 }} ellipsis type="secondary">
+                          {incident?.business?.name || incident?.location?.full}
+                        </Text>
+                      </Col>
+                    </Row>
                   </Col>
                 </Row>
-              </Col>
-              <Col span={12}>
-                <Row wrap={false}>
-                  <Col>
-                    <FontAwesomeIcon
-                      size="sm"
-                      className="incident-card-icon"
-                      icon={faLocationDot}
-                    />
-                  </Col>
-                  <Col>
-                    <Text style={{ flex: 1 }} ellipsis type="secondary">
-                      {incident?.business?.name || incident?.location?.full}
+
+                <Paragraph
+                  style={
+                    {
+                      // height: incident.offenders.length > 0 ? 60 : 95,
+                      // marginBottom: 10,
+                    }
+                  }
+                  type="secondary"
+                  ellipsis={{ rows: 2 }}
+                >
+                  {incident?.description}
+                </Paragraph>
+                <Row
+                  wrap={false}
+                  align="middle"
+                  style={{
+                    overflowX: 'auto',
+                    // marginBottom: incident.offenders.length > 2 ? 3 : 15,
+                  }}
+                >
+                  <Col style={{ minWidth: 60 }}>
+                    <Text strong type="secondary">
+                      {intl.formatMessage({
+                        defaultMessage: 'Groups:',
+                        id: 'JcJ/mL',
+                      })}
                     </Text>
                   </Col>
+                  {incident.groups.slice(0, 1).map((group) => (
+                    <Col key={group.id}>
+                      <Tag>{group.name}</Tag>
+                    </Col>
+                  ))}
+                  {incident.groups.length > 1 && (
+                    <Col>
+                      <Tooltip
+                        title={incident.groups
+                          .map((item) => ` ${item.name}`)
+                          .toString()}
+                      >
+                        <Tag>
+                          {intl.formatMessage(
+                            {
+                              defaultMessage: '+ {num} more',
+                              id: 'fi2Xie',
+                            },
+                            {
+                              num: incident.groups.length - 1,
+                            }
+                          )}
+                        </Tag>
+                      </Tooltip>
+                    </Col>
+                  )}
                 </Row>
-              </Col>
-            </Row>
-
-            <Paragraph
-              // style={{ height: incident.offenders.length > 0 ? 24 : 66 }}
-              // className="incident-card-desc"
-              style={{
-                height: incident.offenders.length > 0 ? 60 : 95,
-                marginBottom: 10,
-              }}
-              type="secondary"
-              ellipsis={{ rows: 2 }}
-            >
-              {incident?.description}
-            </Paragraph>
+              </Link>
+            </Space>
             <Row
-              wrap={false}
-              align="middle"
-              style={{
-                overflowX: 'auto',
-                // marginBottom: incident.offenders.length > 2 ? 3 : 15,
-              }}
+              justify="center"
+              style={{ marginTop: 10, flexGrow: 1, alignContent: 'flex-end' }}
             >
-              <Col style={{ minWidth: 60 }}>
-                <Text strong type="secondary">
-                  {intl.formatMessage({
-                    defaultMessage: 'Groups:',
-                    id: 'JcJ/mL',
-                  })}
-                </Text>
+              <Col>
+                <Link to={`/app/incidents/view/${incident?.id}`}>
+                  <Button size="small" type="text">
+                    {intl.formatMessage({
+                      defaultMessage: 'View Incident',
+                      id: 'f4Tgpp',
+                    })}
+                  </Button>
+                </Link>
               </Col>
-              {incident.groups.slice(0, 1).map((group) => (
-                <Col key={group.id}>
-                  <Tag>{group.name}</Tag>
-                </Col>
-              ))}
-              {incident.groups.length > 1 && (
-                <Col>
-                  <Tooltip
-                    title={incident.groups
-                      .map((item) => ` ${item.name}`)
-                      .toString()}
-                  >
-                    <Tag>
-                      {intl.formatMessage(
-                        {
-                          defaultMessage: '+ {num} more',
-                          id: 'fi2Xie',
-                        },
-                        {
-                          num: incident.groups.length - 1,
-                        }
-                      )}
-                    </Tag>
-                  </Tooltip>
-                </Col>
-              )}
             </Row>
-          </Link>
-        </Space>
-        <Row
-          justify="center"
-          style={{ marginTop: 10, flexGrow: 1, alignContent: 'flex-end' }}
-        >
-          <Col>
-            <Link to={`/app/incidents/view/${incident?.id}`}>
-              <Button size="small" type="text">
-                {intl.formatMessage({
-                  defaultMessage: 'View Incident',
-                  id: 'f4Tgpp',
-                })}
-              </Button>
-            </Link>
-          </Col>
-        </Row>
-      </div>
+          </div>
+        </Card>
+      )}
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Edit Incident',
@@ -492,7 +725,7 @@ const IncidentCard = ({
         open={editImage}
         image={incident.images.find((image) => editImageId === image.id)}
       />
-    </Card>
+    </div>
   );
 };
 

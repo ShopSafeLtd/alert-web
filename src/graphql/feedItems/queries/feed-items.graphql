@@ -158,7 +158,12 @@ query FeedItems(
       incidentId
       offender {
         id
-        createdAt
+        totalIncidents
+        latestIncident {
+          id
+          dateAgo
+          reportedBusinessName
+        }
         reference
         updatedAt
         age
@@ -181,8 +186,6 @@ query FeedItems(
         gender
         hair
         name
-        totalIncidents
-        totalUpdates
         peculiarities
         race
         approved

@@ -92,7 +92,7 @@ import type {
   VehicleData,
 } from 'types/DataType';
 import EditImageList from 'components/images/EditImageList';
-import FeedImageEditor from 'components/form-components/ImageEditor/FeedImageEditor.view';
+
 import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
 import EditExclusion from 'components/form-components/offender/exclusion/EditExclusion';
 import AddExclusion from 'components/form-components/offender/exclusion/AddExclusion';
@@ -109,6 +109,7 @@ import InvestigationTable from 'components/tables/InvestigationTable';
 import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
 import { useNavigate } from 'react-router';
 import AddLocation from 'components/form-components/addresses/AddLocation';
+import ImagesList from 'components/ViewPage/ImagesList';
 import useStyles from './ViewOffender.styles';
 import type { ViewAssociate } from './useViewOffender';
 import TranslateButton from '../../../../components/util-components/TranslateButton';
@@ -569,107 +570,25 @@ const ViewOffender = ({
                       </Col>
                     )}
                   </Row>
-                  {loading ? (
-                    <Skeleton />
-                  ) : (
-                    <Row
-                      gutter={[8, 8]}
-                      justify="start"
-                      align="middle"
-                      wrap={false}
-                      className={classes.images}
-                      style={{
-                        height:
-                          data?.offender?.images &&
-                          data?.offender?.images.length > 0
-                            ? undefined
-                            : 0,
-                      }}
-                    >
-                      {data?.offender?.images.map((image, i) => (
-                        <Col key={image.id}>
-                          <Popover
-                            trigger="hover"
-                            placement="left"
-                            content={
-                              <div
-                                style={{
-                                  display: 'flex',
-                                  flexDirection: 'column',
-                                }}
-                              >
-                                <Button
-                                  type="text"
-                                  disabled={saving}
-                                  icon={
-                                    <FontAwesomeIcon
-                                      style={{ marginRight: 5 }}
-                                      icon={faEdit}
-                                      size="lg"
-                                    />
-                                  }
-                                  onClick={() => setEditImageData(image)}
-                                  size="small"
-                                >
-                                  {intl.formatMessage({
-                                    defaultMessage: 'Edit Image',
-                                    id: '9UlLIw',
-                                  })}
-                                </Button>
-                                <Popconfirm
-                                  placement="topLeft"
-                                  title={intl.formatMessage({
-                                    defaultMessage: 'Remove the image?',
-                                    id: 'bRha+v',
-                                  })}
-                                  onConfirm={() => onDeleteImage(image.id)}
-                                  okText={intl.formatMessage({
-                                    defaultMessage: 'Yes',
-                                    id: 'a5msuh',
-                                  })}
-                                  cancelText={intl.formatMessage({
-                                    defaultMessage: 'No',
-                                    id: 'oUWADl',
-                                  })}
-                                  overlayInnerStyle={{ padding: 10 }}
-                                >
-                                  <Button
-                                    type="text"
-                                    disabled={saving}
-                                    icon={
-                                      <FontAwesomeIcon
-                                        style={{ marginRight: 5 }}
-                                        icon={faTrash}
-                                        size="lg"
-                                      />
-                                    }
-                                    // onClick={() => onDeleteImage(image.id)}
-                                    size="small"
-                                  >
-                                    {intl.formatMessage({
-                                      defaultMessage: 'Delete Image',
-                                      id: 'u5uVrC',
-                                    })}
-                                  </Button>
-                                </Popconfirm>
-                              </div>
-                            }
-                          >
-                            <div
-                              onClick={() => openLightbox(i)}
-                              className={classes.image}
-                            >
-                              <WatermarkImage
-                                url={image.optimised}
-                                rotation={image.rotation}
-                                position={image.position}
-                              />
-                            </div>
-                          </Popover>
-                        </Col>
-                      ))}
-                    </Row>
-                  )}
+                  <ImagesList
+                    imagesData={data?.offender?.images}
+                    loading={loading}
+                    saving={saving}
+                    editRights={editRights}
+                    openLightbox={openLightbox}
+                    // lightBoxOpen={lightBoxOpen}
+                    // lightboxElements={lightboxElements}
+                    editImageData={editImageData}
+                    setEditImageData={setEditImageData}
+                    onDeleteImage={onDeleteImage}
+                    onEditImage={onEditImage}
+                    hasImages={
+                      !!(
+                        data?.offender?.images &&
+                        data?.offender?.images.length > 0
+                      )
+                    }
+                  />
 
                   <div className={classes.details}>
                     {loading ? (
@@ -2375,12 +2294,7 @@ const ViewOffender = ({
           <div />
         )}
       </Drawer>
-      <FeedImageEditor
-        submitImage={onEditImage}
-        onClose={() => setEditImageData(null)}
-        open={!!editImageData}
-        image={editImageData}
-      />
+
       {/* vehicle */}
       <Drawer
         title={intl.formatMessage({

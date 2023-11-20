@@ -26,9 +26,7 @@ interface Return {
   toggleAddTodo: () => void;
   updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
   setSearch: (value: string) => void;
-  onPaginationChange: (page: number, pageSize: number) => void;
-  currentPage: number;
-  currentPageSize: number;
+  fetchMoreScroll: () => void;
 }
 
 const useAdminTodos = ({ fullSearch }: Props): Return => {
@@ -37,8 +35,6 @@ const useAdminTodos = ({ fullSearch }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [addTodo, setAddTodo] = useState(false);
   const [search, setSearch] = useState('');
-  const [pageSize, setPageSize] = useState(15);
-  const [page, setPage] = useState(1);
 
   const setTodoList = useStoreActions((actions) => actions.user.setTodos);
   const userTodos = useStoreState((state) => state.user.userTodos);
@@ -47,8 +43,7 @@ const useAdminTodos = ({ fullSearch }: Props): Return => {
     orderBy: {
       createdAt: SortOrder.Desc,
     },
-    skip: (page - 1) * pageSize,
-    take: pageSize,
+    take: 24,
     where: {
       completed: {
         equals: false,
@@ -84,7 +79,7 @@ const useAdminTodos = ({ fullSearch }: Props): Return => {
       ],
     },
   };
-  const { data, loading } = useFeedTodosQuery({
+  const { data, loading, fetchMore } = useFeedTodosQuery({
     variables,
     onCompleted: (res) => {
       if (res.listTodos) {
@@ -92,6 +87,34 @@ const useAdminTodos = ({ fullSearch }: Props): Return => {
       }
     },
   });
+  const fetchMoreScroll = () => {
+    void fetchMore({
+      variables: {
+        ...variables,
+        skip: data?.listTodos.uncompletedTodos?.length || 0,
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        return {
+          listTodos: {
+            ...fetchMoreResult.listTodos,
+            uncompletedTodos: [
+              ...(prev.listTodos?.uncompletedTodos || []),
+              ...(fetchMoreResult.listTodos?.uncompletedTodos || []),
+            ],
+            uncompletedTotal:
+              prev.listTodos?.uncompletedTotal ||
+              fetchMoreResult?.listTodos?.uncompletedTotal ||
+              0,
+            totalUserTodos:
+              prev.listTodos?.totalUserTodos ||
+              fetchMoreResult?.listTodos?.totalUserTodos ||
+              0,
+          },
+        };
+      },
+    });
+  };
 
   const updateTodoList: MutationUpdaterFn<CreateTodoMutation> = (
     store,
@@ -210,10 +233,7 @@ const useAdminTodos = ({ fullSearch }: Props): Return => {
   const toggleAddTodo = () => {
     setAddTodo(!addTodo);
   };
-  const onPaginationChange = (pageVale: number, pageSizeValue: number) => {
-    setPage(pageVale);
-    setPageSize(pageSizeValue);
-  };
+
   return {
     data: data?.listTodos,
     loading: (data === null || data === undefined) && loading,
@@ -224,9 +244,8 @@ const useAdminTodos = ({ fullSearch }: Props): Return => {
     toggleAddTodo,
     updateTodoList,
     setSearch,
-    onPaginationChange,
-    currentPage: page,
-    currentPageSize: pageSize,
+
+    fetchMoreScroll,
   };
 };
 

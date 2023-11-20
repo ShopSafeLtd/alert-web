@@ -47,6 +47,14 @@ interface Return {
   setCreatedAtFilter: (value: DateType | undefined) => void;
   fetchMoreScroll: () => void;
   variables: FeedItemFilters;
+  lightboxElements: {
+    src: string;
+  }[];
+  lightBoxOpen: {
+    open: boolean;
+    index: number;
+  };
+  openLightbox: (elements: { src: string }[], index: number) => void;
 }
 
 const useFeedItems = (): Return => {
@@ -68,7 +76,14 @@ const useFeedItems = (): Return => {
     (actions) => actions.data.setFeedItems
   );
   const [sortFilter, setSortFilter] = useState(false);
-
+  // lightBox
+  const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
+    []
+  );
+  const [lightBoxOpen, setLightBoxOpen] = useState({
+    open: false,
+    index: 0,
+  });
   const {
     search,
     groups: groupsFilter,
@@ -113,8 +128,7 @@ const useFeedItems = (): Return => {
     order: {
       updatedAt: order,
     },
-    take: pagination.pageSize,
-    skip: (pagination.page - 1) * pagination.pageSize,
+    take: 10,
     where: {
       groups:
         groupsFilter.length > 0
@@ -358,7 +372,7 @@ const useFeedItems = (): Return => {
     void fetchMore({
       variables: {
         ...queryVariables,
-        take: 10,
+
         skip: data?.listFeedItems?.feedItems?.length || 0,
       },
       updateQuery: (prev, { fetchMoreResult }) => {
@@ -454,6 +468,26 @@ const useFeedItems = (): Return => {
       },
     });
   };
+
+  // lightBox
+  const triggerLightbox = (elements: { src: string }[], index: number) => {
+    setLightboxElements(elements);
+    if (lightBoxOpen.open) {
+      setLightBoxOpen({
+        open: !lightBoxOpen.open,
+        index,
+      });
+    } else {
+      setTimeout(
+        () =>
+          setLightBoxOpen({
+            open: !lightBoxOpen.open,
+            index,
+          }),
+        0.3
+      );
+    }
+  };
   return {
     data,
     loading: !data && loading,
@@ -480,6 +514,9 @@ const useFeedItems = (): Return => {
     setGallery,
     setCreatedAtFilter,
     fetchMoreScroll,
+    lightboxElements,
+    lightBoxOpen,
+    openLightbox: triggerLightbox,
   };
 };
 

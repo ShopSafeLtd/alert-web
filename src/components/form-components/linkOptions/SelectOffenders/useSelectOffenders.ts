@@ -152,7 +152,7 @@ const useSelectedOffenders = ({
       updatedAt:
         order === OffenderSort.updatedAtDesc ? SortOrder.Desc : SortOrder.Asc,
     },
-    take: 12,
+    take: 64,
     where: {
       schemeId: {
         in: takeAllSchemes ? userSchemeIds : [schemeId],

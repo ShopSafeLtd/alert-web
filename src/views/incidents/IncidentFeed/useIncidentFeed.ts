@@ -33,8 +33,7 @@ interface Return {
     index: number;
   };
   openLightbox: (elements: { src: string }[], index: number) => void;
-  onPaginationChange: (page: number, pageSize: number) => void;
-  pagination: { page: number; pageSize: number; sizeOptions: string[] };
+
   order: IncidentSort;
   setOrder: (value: IncidentSort) => void;
   setSearch: (value: string) => void;
@@ -75,17 +74,8 @@ interface Return {
   ) => void;
   fetchMoreScroll: () => void;
   variables: IncidentFilters;
+  setCompactView: () => void;
 }
-
-const getSizeOptions = () => {
-  if (window.innerWidth > 1239 && window.innerWidth < 1800) {
-    return ['12', '24', '48', '96'];
-  }
-  if (window.innerWidth > 1799) {
-    return ['12', '24', '48', '96'];
-  }
-  return ['12'];
-};
 
 const useIncidentFeed = (): Return => {
   const navigate = useNavigate();
@@ -115,6 +105,7 @@ const useIncidentFeed = (): Return => {
     incidentDate,
     gallery,
     peculiarities,
+    compactView,
   } = variables;
 
   // filter initial state
@@ -275,8 +266,7 @@ const useIncidentFeed = (): Return => {
         },
       ],
     },
-    take: pagination.pageSize,
-    skip: pagination.pageSize * (pagination.page - 1),
+    take: compactView ? 48 : 12,
   };
   // Queries
   // Fetch incidents
@@ -366,12 +356,8 @@ const useIncidentFeed = (): Return => {
 
   // On mount
   useEffect(() => {
-    const sizeOptions = getSizeOptions();
     setIncidentsState({
-      pagination: {
-        ...pagination,
-        sizeOptions,
-      },
+      pagination,
       variables: {
         ...variables,
         groups: defaultGroups.map(({ id }) => id),
@@ -429,17 +415,6 @@ const useIncidentFeed = (): Return => {
     }
   };
 
-  const onPaginationChange = (page: number, pageSize: number) => {
-    setIncidentsState({
-      pagination: {
-        ...pagination,
-        page,
-        pageSize,
-      },
-      variables,
-      order,
-    });
-  };
   const setOrder = (value: IncidentSort) => {
     setIncidentsState({
       pagination,
@@ -520,6 +495,16 @@ const useIncidentFeed = (): Return => {
     });
   };
 
+  const setCompactView = () => {
+    setIncidentsState({
+      pagination,
+      variables: {
+        ...variables,
+        compactView: !compactView,
+      },
+      order,
+    });
+  };
   const setPeculiarities = (value: string) => {
     setIncidentsState({
       pagination,
@@ -548,7 +533,7 @@ const useIncidentFeed = (): Return => {
     void fetchMore({
       variables: {
         ...queryVariables,
-        take: 12,
+        take: compactView ? 48 : 12,
         skip: data?.listIncidents?.incidents?.length || 0,
       },
       updateQuery: (prev, { fetchMoreResult }) => {
@@ -574,6 +559,7 @@ const useIncidentFeed = (): Return => {
     setIncidentsState({
       pagination,
       variables: {
+        ...variables,
         gallery: [],
         search: '',
         crimeTypes: [],
@@ -591,8 +577,6 @@ const useIncidentFeed = (): Return => {
   return {
     data,
     loading,
-    onPaginationChange,
-    pagination,
     order,
     setOrder,
     setSearch,
@@ -641,6 +625,7 @@ const useIncidentFeed = (): Return => {
     setCreatedAtFilter,
     setIncidentDateFilter,
     fetchMoreScroll,
+    setCompactView,
   };
 };
 

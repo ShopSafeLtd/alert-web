@@ -8,8 +8,6 @@ const IncidentFeed = (): JSX.Element => {
     loading,
     lightboxElements,
     openLightbox,
-    // onPaginationChange,
-    // pagination,
     order,
     setOrder,
     setSearch,
@@ -37,6 +35,7 @@ const IncidentFeed = (): JSX.Element => {
     setCreatedAtFilter,
     fetchMoreScroll,
     variables,
+    setCompactView,
   } = useIncidentFeed();
 
   return (
@@ -72,6 +71,7 @@ const IncidentFeed = (): JSX.Element => {
       businessesLoading={businessesLoading}
       setIncidentDateFilter={setIncidentDateFilter}
       setCreatedAtFilter={setCreatedAtFilter}
+      setCompactView={setCompactView}
     />
   );
 };

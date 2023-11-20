@@ -12,6 +12,7 @@ interface Props {
   openLightbox: (elements: { src: string }[], index: number) => void;
   update?: MutationUpdaterFn<RecycleOffenderMutation>;
   isArticle?: boolean;
+  compactView?: boolean;
 }
 
 const OffenderCard = ({
@@ -19,6 +20,7 @@ const OffenderCard = ({
   openLightbox,
   update,
   isArticle,
+  compactView,
 }: Props): JSX.Element => {
   const {
     approvalRights,
@@ -59,6 +61,7 @@ const OffenderCard = ({
       onNavigate={onNavigate}
       addInvestigation={addInvestigation}
       toggleAddInvestigation={toggleAddInvestigation}
+      compactView={compactView || false}
     />
   );
 };

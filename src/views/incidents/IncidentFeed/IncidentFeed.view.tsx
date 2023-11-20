@@ -20,6 +20,8 @@ import { useIntl } from 'react-intl';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import type { DateType } from 'types/DataType';
 import type { IncidentFilters } from 'state/data-model';
+import CheckTag from 'components/form-components/check-tag/CheckTag.view';
+import CompactSkeletonCard from 'components/offenders/OffenderCard/OffenderSkeletonCard.view';
 import Loading from '../../../components/shared-components/AntD/Loading';
 
 interface Props {
@@ -59,6 +61,7 @@ interface Props {
   setCreatedAtFilter: (value: DateType | undefined) => void;
   fetchMoreScroll: () => void;
   variables: IncidentFilters;
+  setCompactView: () => void;
 }
 
 const IncidentFeed = ({
@@ -95,8 +98,11 @@ const IncidentFeed = ({
   setCreatedAtFilter,
   fetchMoreScroll,
   variables,
+  setCompactView,
 }: Props): JSX.Element => {
   const intl = useIntl();
+  const { search, gallery, compactView } = variables;
+
   return (
     <div
       className="feed-container"
@@ -115,14 +121,14 @@ const IncidentFeed = ({
                 defaultMessage: 'Search Incidents...',
                 id: 'gvqTQ8',
               })}
-              value={variables.search || ''}
+              value={search || ''}
               onChange={(e) => setSearch(e.target.value)}
             />
           </Col>
           <Col flex={1}>
             <CheckTags
               mode="radio"
-              value={variables.gallery}
+              value={gallery}
               onChange={setGallery}
               options={[
                 {
@@ -149,6 +155,44 @@ const IncidentFeed = ({
                 },
               ]}
             />
+          </Col>
+          <Col>
+            <CheckTag
+              option={{
+                label: intl.formatMessage({
+                  defaultMessage: 'Compact View',
+                  id: '9P0/Y7',
+                }),
+                value: 'Compact',
+                tooltip: intl.formatMessage({
+                  defaultMessage: 'Present incidents in compact card',
+                  id: 'tga/q5',
+                }),
+              }}
+              active={compactView}
+              onClick={setCompactView}
+            />
+            {/* <CheckTags
+              mode="radio"
+              value={compactView ? ['Compact'] : ['Default']}
+              onChange={setCompactView}
+              options={[
+                {
+                  label: intl.formatMessage({
+                    defaultMessage: 'Default Card',
+                    id: '1K+0py',
+                  }),
+                  value: 'Default',
+                },
+                {
+                  label: intl.formatMessage({
+                    defaultMessage: 'Compact Card',
+                    id: 'O3k0C9',
+                  }),
+                  value: 'Compact',
+                },
+              ]}
+            /> */}
           </Col>
           <Col>
             <Button
@@ -190,11 +234,28 @@ const IncidentFeed = ({
 
       <div style={{ paddingBottom: 10 }}>
         {loading ? (
-          <Row gutter={[8, 16]}>
-            {Array.from({ length: 24 }).map((_, index) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <Col key={index} sm={24} md={12} lg={8} xl={8} xxl={6}>
-                <IncidentSkeletonCard />
+          <Row
+            gutter={24}
+            align="stretch"
+            style={{
+              alignItems: 'stretch',
+              padding: 10,
+              overflowX: 'hidden',
+            }}
+          >
+            {Array.from({ length: compactView ? 48 : 24 }).map((_, index) => (
+              <Col
+                // eslint-disable-next-line react/no-array-index-key
+                key={index}
+                style={{ marginBottom: compactView ? 0 : 20 }}
+                span={compactView ? 6 : 8}
+                xxl={compactView ? 4 : 6}
+              >
+                {compactView ? (
+                  <CompactSkeletonCard />
+                ) : (
+                  <IncidentSkeletonCard />
+                )}
               </Col>
             ))}
           </Row>
@@ -216,7 +277,7 @@ const IncidentFeed = ({
             }
           >
             <Row
-              gutter={[8, 16]}
+              gutter={compactView ? 12 : [8, 16]}
               align="stretch"
               style={{
                 alignItems: 'stretch',
@@ -225,12 +286,17 @@ const IncidentFeed = ({
               }}
             >
               {data?.listIncidents?.incidents?.map((el) => (
-                <Col sm={24} md={12} lg={8} xl={8} xxl={6} key={el?.id}>
+                <Col
+                  span={compactView ? 6 : 8}
+                  xxl={compactView ? 4 : 6}
+                  key={el?.id}
+                >
                   <IncidentCard
                     key={el?.id}
                     incident={el}
                     openLightbox={openLightbox}
                     update={updateIncidentList}
+                    compactView={compactView}
                   />
                 </Col>
               ))}
@@ -249,7 +315,7 @@ const IncidentFeed = ({
             >
               <Empty
                 description={
-                  variables.search === ''
+                  search === ''
                     ? intl.formatMessage({
                         defaultMessage: 'No Incidents',
                         id: '+nJOH5',
@@ -264,24 +330,6 @@ const IncidentFeed = ({
             </div>
           </Row>
         )}
-        {/* <Row justify="center"> */}
-        {/*   <Col> */}
-        {/*     <Pagination */}
-        {/*       total={data?.listIncidents?.total} */}
-        {/*       pageSizeOptions={pagination.sizeOptions} */}
-        {/*       pageSize={pagination.pageSize} */}
-        {/*       current={pagination.page} */}
-        {/*       onChange={onPaginationChange} */}
-        {/*       showTotal={(total) => */}
-        {/*         intl.formatMessage( */}
-        {/*           { defaultMessage: `Total Incidents: {total}`, id: 'SHEopq' }, */}
-        {/*           { total } */}
-        {/*         ) */}
-        {/*       } */}
-        {/*       hideOnSinglePage */}
-        {/*     /> */}
-        {/*   </Col> */}
-        {/* </Row> */}
       </div>
       <Drawer
         title={intl.formatMessage({

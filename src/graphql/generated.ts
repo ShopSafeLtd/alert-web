@@ -79434,7 +79434,7 @@ export type FeedItemsQuery = {
       offender?: {
         __typename?: 'Offender';
         id: string;
-        createdAt: Date;
+        totalIncidents?: number | null;
         reference?: number | null;
         updatedAt: Date;
         age?: Age | null;
@@ -79445,14 +79445,18 @@ export type FeedItemsQuery = {
         gender?: Gender | null;
         hair?: string | null;
         name?: string | null;
-        totalIncidents?: number | null;
-        totalUpdates?: number | null;
         peculiarities?: string | null;
         race?: Race | null;
         approved?: boolean | null;
         subscribed?: boolean | null;
         uploaded?: boolean | null;
         active?: boolean | null;
+        latestIncident?: {
+          __typename?: 'Incident';
+          id: string;
+          dateAgo: number;
+          reportedBusinessName: string;
+        } | null;
         tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
         bans: Array<{
           __typename?: 'Ban';
@@ -81565,6 +81569,17 @@ export type ListIncidentsQuery = {
         low?: string | null;
       }>;
       groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+      incidentItems: Array<{
+        __typename?: 'IncidentItem';
+        id: string;
+        name?: string | null;
+        value?: number | null;
+        recoveredValue?: number | null;
+        sku?: string | null;
+        quantity?: number | null;
+        recoveredQuantity?: number | null;
+        goodsType?: { __typename?: 'GoodsType'; id: string } | null;
+      }>;
       offenders: Array<{
         __typename?: 'Offender';
         id: string;
@@ -94015,7 +94030,12 @@ export const FeedItemsDocument = gql`
         incidentId
         offender {
           id
-          createdAt
+          totalIncidents
+          latestIncident {
+            id
+            dateAgo
+            reportedBusinessName
+          }
           reference
           updatedAt
           age
@@ -94038,8 +94058,6 @@ export const FeedItemsDocument = gql`
           gender
           hair
           name
-          totalIncidents
-          totalUpdates
           peculiarities
           race
           approved
@@ -96300,6 +96318,18 @@ export const ListIncidentsDocument = gql`
         groups {
           id
           name
+        }
+        incidentItems {
+          id
+          name
+          value
+          recoveredValue
+          sku
+          quantity
+          recoveredQuantity
+          goodsType {
+            id
+          }
         }
         offenders {
           id

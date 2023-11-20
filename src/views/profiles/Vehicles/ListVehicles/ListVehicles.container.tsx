@@ -7,10 +7,6 @@ const ListVehicles = () => {
     data,
     loading,
     setSearch,
-    addVehicle,
-    toggleAddVehicle,
-    // updateVehicleList,
-    onSubmit,
     groups,
     groupsLoading,
     setGroupsFilter,
@@ -25,6 +21,7 @@ const ListVehicles = () => {
     addInvestigation,
     toggleAddInvestigation,
     variables,
+    onNavigate,
   } = useListVehicles();
 
   return (
@@ -33,9 +30,7 @@ const ListVehicles = () => {
       loading={loading}
       variables={variables}
       setSearch={setSearch}
-      addVehicle={addVehicle}
-      toggleAddVehicle={toggleAddVehicle}
-      onSubmit={onSubmit}
+      onNavigate={onNavigate}
       sortFilter={sortFilter}
       clearFilters={clearFilters}
       toggleSortFilter={toggleSortFilter}

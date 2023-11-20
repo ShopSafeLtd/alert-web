@@ -7,8 +7,8 @@ const ArticleSkeletonCard = (): JSX.Element => (
       <Col>
         <Skeleton.Image
           style={{
-            width: 140,
-            height: 160,
+            width: 130,
+            height: 130,
             borderRadius: 5,
           }}
         />

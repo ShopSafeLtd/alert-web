@@ -59,10 +59,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import IncidentSideList from 'components/incidents/IncidentSideList';
 import UpdateBar from 'components/MessageInput/UpdateBar';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import Lightbox from 'yet-another-react-lightbox';
-import Zoom from 'yet-another-react-lightbox/plugins/zoom';
-import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
-import WatermarkSlide from 'components/images/WatermartkSlide.view';
+
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import OffenderTable from 'components/tables/OffenderTable';
 import VehicleTable from 'components/tables/VehicleTable';
@@ -77,7 +74,6 @@ import type {
   VehicleData,
 } from 'types/DataType';
 import EditIncidentFeed from 'components/form-components/incident/EditIncidentFeed';
-import FeedImageEditor from 'components/form-components/ImageEditor/FeedImageEditor.view';
 import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
 import AddNewOffenderSimple from 'components/form-components/offender/offender/AddNewOffenderSimple';
 import AddExistingOffender from 'components/form-components/offender/offender/AddExistingOffender';
@@ -96,6 +92,7 @@ import AddInvestigation from 'components/form-components/Investigation/AddInvest
 import InvestigationTable from 'components/tables/InvestigationTable';
 import AddLocation from 'components/form-components/addresses/AddLocation';
 import LocatingCard from 'components/map/LocatingCard';
+import ImagesList from 'components/ViewPage/ImagesList';
 import UpdateContent from './Update.view';
 import useStyles from './ViewIncident.styles';
 import EvidenceTable from '../../../components/tables/EvidenceTable';
@@ -506,192 +503,25 @@ const ViewIncident = ({
                       </Col>
                     )}
                   </Row>
-                  {loading ? (
-                    <Skeleton />
-                  ) : (
-                    <Row
-                      gutter={[8, 8]}
-                      justify="start"
-                      align="middle"
-                      wrap
-                      className={classes.images}
-                      style={{
-                        height:
-                          data?.incident?.images &&
-                          data?.incident?.images.length > 0
-                            ? undefined
-                            : 0,
-                      }}
-                    >
-                      {data?.incident?.images.map((image, i) => (
-                        <Col key={image.id}>
-                          {editRights ? (
-                            <Popover
-                              trigger="hover"
-                              placement="left"
-                              content={
-                                <div
-                                  style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                  }}
-                                >
-                                  <Button
-                                    type="text"
-                                    disabled={saving}
-                                    icon={
-                                      <FontAwesomeIcon
-                                        style={{ marginRight: 5 }}
-                                        icon={faEdit}
-                                        size="lg"
-                                      />
-                                    }
-                                    onClick={() => setEditImageData(image)}
-                                    size="small"
-                                  >
-                                    {intl.formatMessage({
-                                      defaultMessage: 'Edit Image',
-                                      id: '9UlLIw',
-                                    })}
-                                  </Button>
-                                  <Popconfirm
-                                    placement="topLeft"
-                                    title={intl.formatMessage({
-                                      defaultMessage: 'Remove the image?',
-                                      id: 'bRha+v',
-                                    })}
-                                    onConfirm={() => onDeleteImage(image.id)}
-                                    okText={intl.formatMessage({
-                                      defaultMessage: 'Yes',
-                                      id: 'a5msuh',
-                                    })}
-                                    cancelText={intl.formatMessage({
-                                      defaultMessage: 'No',
-                                      id: 'oUWADl',
-                                    })}
-                                    overlayInnerStyle={{ padding: 10 }}
-                                  >
-                                    <Button
-                                      type="text"
-                                      disabled={saving}
-                                      icon={
-                                        <FontAwesomeIcon
-                                          style={{ marginRight: 5 }}
-                                          icon={faTrash}
-                                          size="lg"
-                                        />
-                                      }
-                                      size="small"
-                                    >
-                                      {intl.formatMessage({
-                                        defaultMessage: 'Delete Image',
-                                        id: 'u5uVrC',
-                                      })}
-                                    </Button>
-                                  </Popconfirm>
-                                </div>
-                              }
-                            >
-                              <div
-                                onClick={() => openLightbox(i)}
-                                className={classes.image}
-                              >
-                                <WatermarkImage
-                                  url={image.optimised}
-                                  rotation={image.rotation}
-                                  position={image.position}
-                                />
-                              </div>
-                            </Popover>
-                          ) : (
-                            <div
-                              onClick={() => openLightbox(i)}
-                              className={classes.image}
-                            >
-                              <WatermarkImage
-                                url={image.optimised}
-                                rotation={image.rotation}
-                                position={image.position}
-                              />
-                            </div>
-                          )}
-                          {/* <Card loading={loading}
-                            key={image.id}
-                            bodyStyle={{
-                              padding: 0,
-                              overflow: 'hidden',
-                              borderRadius: 10,
-                            }}
-                          >
-                            <div style={{ height: 200, width: '100%' }}>
-                              {editRights && (
-                                <Dropdown
-                                  overlay={
-                                    <Menu
-                                      style={{
-                                        // position: 'absolute',
-                                        zIndex: 1000,
-                                        // padding: '6.5px 10px',
-                                        // top: 5,
-                                        // right: 5,
-                                      }}
-                                      items={[
-                                        {
-                                          key: 0,
-                                          label: intl.formatMessage({
-                                            defaultMessage: 'Edit',
-                                            id: 'wEQDC6',
-                                          }),
-                                          icon: (
-                                            <FontAwesomeIcon icon={faEdit} />
-                                          ),
-                                        },
-                                        {
-                                          key: 1,
-                                          label: intl.formatMessage({
-                                            defaultMessage: 'Delete',
-                                            id: 'K3r6DQ',
-                                          }),
-                                          icon: (
-                                            <FontAwesomeIcon icon={faEdit} />
-                                          ),
-                                        },
-                                      ]}
-                                    />
-                                  }
-                                  placement="topRight"
-                                  arrow={{ pointAtCenter: true }}
-                                >
-                                  <Button
-                                    size="small"
-                                    style={{
-                                      position: 'absolute',
-                                      zIndex: 10,
-                                      padding: '6.5px 10px',
-                                      top: 5,
-                                      right: 5,
-                                    }}
-                                  >
-                                    <FontAwesomeIcon
-                                      // size="5x"
-                                      style={{ height: '100%' }}
-                                      icon={faEllipsisV}
-                                    />
-                                  </Button>
-                                </Dropdown>
-                              )}
-
-                              <WatermarkImage
-                                url={image.optimised}
-                                rotation={image.rotation}
-                                position={image.position}
-                              />
-                            </div>
-                          </Card> */}
-                        </Col>
-                      ))}
-                    </Row>
-                  )}
+                  <ImagesList
+                    imagesData={data?.incident?.images}
+                    loading={loading}
+                    saving={saving}
+                    editRights={editRights}
+                    openLightbox={openLightbox}
+                    lightBoxOpen={lightBoxOpen}
+                    lightboxElements={lightboxElements}
+                    editImageData={editImageData}
+                    setEditImageData={setEditImageData}
+                    onDeleteImage={onDeleteImage}
+                    onEditImage={onEditImage}
+                    hasImages={
+                      !!(
+                        data?.incident?.images &&
+                        data?.incident?.images.length > 0
+                      )
+                    }
+                  />
                   <div className={classes.details}>
                     {loading ? (
                       <Skeleton />
@@ -2159,12 +1989,7 @@ const ViewIncident = ({
           <div />
         )}
       </Drawer>
-      <FeedImageEditor
-        submitImage={onEditImage}
-        onClose={() => setEditImageData(null)}
-        open={!!editImageData}
-        image={editImageData}
-      />
+
       {/* offender */}
       <Drawer
         title={intl.formatMessage({
@@ -2462,22 +2287,6 @@ const ViewIncident = ({
           <div />
         )}
       </Drawer>
-
-      <Lightbox
-        open={lightBoxOpen.open}
-        close={() => openLightbox(0)}
-        plugins={[Zoom]}
-        index={lightBoxOpen.index}
-        slides={lightboxElements}
-        controller={{
-          closeOnBackdropClick: true,
-        }}
-        render={{
-          slide: (slide: WatermarkSlideType) => (
-            <WatermarkSlide slide={slide} />
-          ),
-        }}
-      />
     </div>
   );
 };

@@ -36,8 +36,6 @@ interface Return {
     src: string;
   }[];
   openLightbox: (elements: { src: string }[], index: number) => void;
-  onPaginationChange: (page: number, pageSize: number) => void;
-  pagination: { page: number; pageSize: number; sizeOptions: string[] };
   order: OffenderSort;
   setOrder: (value: OffenderSort) => void;
   setSearch: (value: string) => void;
@@ -73,17 +71,8 @@ interface Return {
   onSelectGallery: (value: string) => void;
   variables: OffenderFilters;
   fetchMoreScroll: () => void;
+  setCompactView: () => void;
 }
-
-const getSizeOptions = () => {
-  if (window.innerWidth > 1239 && window.innerWidth < 1800) {
-    return ['12', '24', '48', '96'];
-  }
-  if (window.innerWidth > 1799) {
-    return ['12', '24', '48', '96'];
-  }
-  return ['12'];
-};
 
 const useOffenderFeed = (): Return => {
   const navigate = useNavigate();
@@ -127,6 +116,7 @@ const useOffenderFeed = (): Return => {
     age,
     build,
     sex,
+    compactView,
   } = variables;
   const queryVariables = {
     scheme: {
@@ -284,8 +274,7 @@ const useOffenderFeed = (): Return => {
             }
           : undefined,
     },
-    take: pagination.pageSize,
-    skip: pagination.pageSize * (pagination.page - 1),
+    take: compactView ? 48 : 12,
   };
   // Queries
   // Fetch scheme groups if scheme admin
@@ -314,13 +303,8 @@ const useOffenderFeed = (): Return => {
   });
   // On mount
   useEffect(() => {
-    const sizeOptions = getSizeOptions();
     setOffendersState({
-      pagination: {
-        ...pagination,
-        sizeOptions,
-        pageSize: Number(sizeOptions[0]),
-      },
+      pagination,
       variables: {
         ...variables,
         groups: defaultGroups.map(({ id }) => id),
@@ -436,17 +420,6 @@ const useOffenderFeed = (): Return => {
         0.3
       );
     }
-  };
-  const onPaginationChange = (page: number, pageSize: number) => {
-    setOffendersState({
-      pagination: {
-        ...pagination,
-        page,
-        pageSize,
-      },
-      variables,
-      order,
-    });
   };
 
   const setGroupsFilter = (values: string[]) => {
@@ -614,11 +587,22 @@ const useOffenderFeed = (): Return => {
       }
     }
   };
+  const setCompactView = () => {
+    setOffendersState({
+      pagination,
+      variables: {
+        ...variables,
+        compactView: !compactView,
+      },
+      order,
+    });
+  };
 
   const clearFilters = () => {
     setOffendersState({
       pagination,
       variables: {
+        ...variables,
         search: '',
         warnings: [],
         groups: [],
@@ -641,7 +625,6 @@ const useOffenderFeed = (): Return => {
     void fetchMore({
       variables: {
         ...queryVariables,
-        take: 12,
         skip: data?.listOffenders?.offenders?.length || 0,
       },
       updateQuery: (prev, { fetchMoreResult }) => {
@@ -673,8 +656,7 @@ const useOffenderFeed = (): Return => {
     lightBoxOpen,
     openLightbox: triggerLightbox,
     lightboxElements,
-    onPaginationChange,
-    pagination,
+
     order,
     setOrder,
     setSearch,
@@ -710,6 +692,7 @@ const useOffenderFeed = (): Return => {
     adminRights: role !== Role.User,
     onSelectCustomGalleries,
     onSelectGallery,
+    setCompactView,
   };
 };
 
