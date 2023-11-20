@@ -28,7 +28,9 @@ const DonutGraph = ({
         <ResponsivePie
           fit
           theme={{
-            textColor: darkMode ? '#ffffff' : '#000',
+            text: {
+              color: darkMode ? '#fff' : '#000',
+            },
           }}
           innerRadius={type === 'donut' || !type ? 0.5 : 0}
           padAngle={0.7}

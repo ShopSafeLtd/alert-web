@@ -43,7 +43,9 @@ const LineGraph = ({
       {data && data.length > 0 ? (
         <ResponsiveLine
           theme={{
-            textColor: darkMode ? '#fff' : '#000',
+            text: {
+              color: darkMode ? '#fff' : '#000',
+            },
           }}
           data={[
             {

@@ -13378,6 +13378,18 @@ export type DemEvidence = {
   type?: Maybe<Scalars['String']>;
 };
 
+export type DemEvidenceExtended = {
+  __typename?: 'DemEvidenceExtended';
+  duration?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  importance?: Maybe<Scalars['String']>;
+  officerName?: Maybe<Scalars['String']>;
+  playbackUrl?: Maybe<Scalars['String']>;
+  recordedAt?: Maybe<Scalars['DateTime']>;
+  thumbnailUrl?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+};
+
 export type DemUser = {
   __typename?: 'DemUser';
   email?: Maybe<Scalars['String']>;
@@ -31200,6 +31212,12 @@ export type ListDemEvidence = {
   total: Scalars['Int'];
 };
 
+export type ListDemEvidenceExtended = {
+  __typename?: 'ListDemEvidenceExtended';
+  demEvidence: Array<DemEvidenceExtended>;
+  total: Scalars['Int'];
+};
+
 export type ListDemUsers = {
   __typename?: 'ListDemUsers';
   demUsers: Array<DemUser>;
@@ -42169,6 +42187,7 @@ export type Query = {
   listCustomGalleries: ListCustomGalleries;
   listDemCompanies: ListDemCompanies;
   listDemEvidence: ListDemEvidence;
+  listDemEvidenceExtendedWithoutUser: ListDemEvidenceExtended;
   listDemUsers: ListDemUsers;
   listFeedItems?: Maybe<ListFeedItems>;
   listGoodsTypes: ListGoodsTypes;
@@ -42473,6 +42492,12 @@ export type QueryListDemCompaniesArgs = {
 };
 
 export type QueryListDemEvidenceArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where: Scalars['String'];
+};
+
+export type QueryListDemEvidenceExtendedWithoutUserArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where: Scalars['String'];
@@ -89502,6 +89527,31 @@ export type ExportFiltersQuery = {
   } | null;
 };
 
+export type ListDemEvidenceExtendedWithoutUserQueryVariables = Exact<{
+  where: Scalars['String'];
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type ListDemEvidenceExtendedWithoutUserQuery = {
+  __typename?: 'Query';
+  listDemEvidenceExtendedWithoutUser: {
+    __typename?: 'ListDemEvidenceExtended';
+    total: number;
+    demEvidence: Array<{
+      __typename?: 'DemEvidenceExtended';
+      type?: string | null;
+      thumbnailUrl?: string | null;
+      recordedAt?: Date | null;
+      playbackUrl?: string | null;
+      id?: string | null;
+      importance?: string | null;
+      officerName?: string | null;
+      duration?: string | null;
+    }>;
+  };
+};
+
 export type ListIncidentsFeedQueryVariables = Exact<{
   scheme: SchemeWhereUniqueInput;
   where?: InputMaybe<IncidentWhereInput>;
@@ -106598,6 +106648,65 @@ export type ExportFiltersLazyQueryHookResult = ReturnType<
 export type ExportFiltersQueryResult = Apollo.QueryResult<
   ExportFiltersQuery,
   ExportFiltersQueryVariables
+>;
+export const ListDemEvidenceExtendedWithoutUserDocument = gql`
+  query listDemEvidenceExtendedWithoutUser(
+    $where: String!
+    $skip: Int
+    $take: Int
+  ) {
+    listDemEvidenceExtendedWithoutUser(
+      where: $where
+      skip: $skip
+      take: $take
+    ) {
+      demEvidence {
+        type
+        thumbnailUrl
+        recordedAt
+        playbackUrl
+        id
+        importance
+        officerName
+        duration
+      }
+      total
+    }
+  }
+`;
+export function useListDemEvidenceExtendedWithoutUserQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ListDemEvidenceExtendedWithoutUserQuery,
+    ListDemEvidenceExtendedWithoutUserQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    ListDemEvidenceExtendedWithoutUserQuery,
+    ListDemEvidenceExtendedWithoutUserQueryVariables
+  >(ListDemEvidenceExtendedWithoutUserDocument, options);
+}
+export function useListDemEvidenceExtendedWithoutUserLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListDemEvidenceExtendedWithoutUserQuery,
+    ListDemEvidenceExtendedWithoutUserQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ListDemEvidenceExtendedWithoutUserQuery,
+    ListDemEvidenceExtendedWithoutUserQueryVariables
+  >(ListDemEvidenceExtendedWithoutUserDocument, options);
+}
+export type ListDemEvidenceExtendedWithoutUserQueryHookResult = ReturnType<
+  typeof useListDemEvidenceExtendedWithoutUserQuery
+>;
+export type ListDemEvidenceExtendedWithoutUserLazyQueryHookResult = ReturnType<
+  typeof useListDemEvidenceExtendedWithoutUserLazyQuery
+>;
+export type ListDemEvidenceExtendedWithoutUserQueryResult = Apollo.QueryResult<
+  ListDemEvidenceExtendedWithoutUserQuery,
+  ListDemEvidenceExtendedWithoutUserQueryVariables
 >;
 export const ListIncidentsFeedDocument = gql`
   query ListIncidentsFeed(

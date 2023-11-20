@@ -177,9 +177,9 @@ const ImagesList = ({
                           size="lg"
                         />
                       }
-                      // eslint-disable-next-line @typescript-eslint/no-misused-promises
                       onClick={() =>
-                        downloadImage(
+                        // eslint-disable-next-line no-void
+                        void downloadImage(
                           image.optimised || image.url || '',
                           `${image.id}`
                         )
