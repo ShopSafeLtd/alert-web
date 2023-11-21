@@ -81,5 +81,6 @@ const useStyles = createUseStyles((theme: Theme) => ({
   offenderRow: {
     cursor: 'pointer',
   },
+  icon: { marginRight: 5 },
 }));
 export default useStyles;

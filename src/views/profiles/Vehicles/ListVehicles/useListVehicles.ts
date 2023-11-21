@@ -21,13 +21,13 @@ import type { DateType, VehicleData } from 'types/DataType';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 import type { VehicleFilters } from 'state/data-model';
+import { useNavigate } from 'react-router';
 
 interface Return {
   data: ListVehiclesQuery | undefined;
   loading: boolean;
   setSearch: (value: string) => void;
-  addVehicle: boolean;
-  toggleAddVehicle: () => void;
+
   onSubmit: (value: VehicleData) => void;
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
@@ -43,6 +43,7 @@ interface Return {
   addInvestigation: string;
   toggleAddInvestigation: (value: string) => void;
   variables: VehicleFilters;
+  onNavigate: () => void;
 }
 const getSizeOptions = () => {
   if (window.innerWidth > 1239 && window.innerWidth < 1800) {
@@ -55,6 +56,8 @@ const getSizeOptions = () => {
 };
 const useListVehicles = (): Return => {
   const intl = useIntl();
+  const navigate = useNavigate();
+  const onNavigate = () => navigate(`/app/vehicles/add`);
   const schemeId = useStoreState((state) => state.scheme.id);
   const {
     role,
@@ -67,7 +70,7 @@ const useListVehicles = (): Return => {
     (state) => state.data.vehicles.variables
   );
   const setFilterState = useStoreActions((actions) => actions.data.setVehicles);
-  const [addVehicle, setAddVehicle] = useState(false);
+
   const [sortFilter, setSortFilter] = useState(false);
   const [addInvestigation, setAddInvestigation] = useState('');
   const {
@@ -223,9 +226,6 @@ const useListVehicles = (): Return => {
       },
     },
   });
-  const toggleAddVehicle = () => {
-    setAddVehicle(!addVehicle);
-  };
 
   const updateVehicleList: MutationUpdaterFn<CreateVehicleMutation> = (
     store,
@@ -266,7 +266,6 @@ const useListVehicles = (): Return => {
   const [createVehicle] = useCreateVehicleMutation({
     onCompleted: () => {
       // setSaving(false);
-      toggleAddVehicle();
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Added!',
@@ -448,8 +447,7 @@ const useListVehicles = (): Return => {
     data: vehiclesData,
     loading,
     setSearch,
-    addVehicle,
-    toggleAddVehicle,
+
     // updateVehicleList,
     onSubmit,
     groups:
@@ -470,6 +468,7 @@ const useListVehicles = (): Return => {
     addInvestigation,
     toggleAddInvestigation: setAddInvestigation,
     variables: filterVariables,
+    onNavigate,
   };
 };
 

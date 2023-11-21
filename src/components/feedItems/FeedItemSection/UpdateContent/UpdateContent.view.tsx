@@ -13,6 +13,7 @@ import VehicleCard from 'components/MessageInput/MessageCard/VehicleCard';
 import OffenderCard from 'components/MessageInput/MessageCard/OffenderCard';
 import CrimeGroupList from 'components/MessageInput/MessageCard/CrimeGroupList';
 import { useIntl } from 'react-intl';
+import useStyles from './UpdateContent.styles';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -55,6 +56,8 @@ const getContent = (content: string) =>
 
 const UpdateContent = ({ update, title }: Props): JSX.Element => {
   const intl = useIntl();
+  const classes = useStyles();
+
   return update?.linkedIncidents.length ||
     update?.linkedOffenders.length ||
     update?.linkedCrimeGroups.length ||
@@ -65,7 +68,7 @@ const UpdateContent = ({ update, title }: Props): JSX.Element => {
           <Title style={{ fontSize: 14, marginLeft: 5 }}>
             <FontAwesomeIcon
               size="sm"
-              className="feedItem-card-icon"
+              className={classes.icon}
               icon={faMessageDots}
             />
             {update?.text
@@ -83,7 +86,7 @@ const UpdateContent = ({ update, title }: Props): JSX.Element => {
           <Title style={{ fontSize: 14, marginLeft: 5 }}>
             <FontAwesomeIcon
               size="sm"
-              className="feedItem-card-icon"
+              className={classes.icon}
               icon={faMessageDots}
             />
             {update?.text
@@ -101,7 +104,7 @@ const UpdateContent = ({ update, title }: Props): JSX.Element => {
           <Title style={{ fontSize: 14, marginLeft: 5 }}>
             <FontAwesomeIcon
               size="sm"
-              className="feedItem-card-icon"
+              className={classes.icon}
               icon={faMessageDots}
             />
             {update?.text
@@ -119,7 +122,7 @@ const UpdateContent = ({ update, title }: Props): JSX.Element => {
           <Title style={{ fontSize: 14, marginLeft: 5 }}>
             <FontAwesomeIcon
               size="sm"
-              className="feedItem-card-icon"
+              className={classes.icon}
               icon={faMessageDots}
             />
             {update?.text
@@ -134,25 +137,27 @@ const UpdateContent = ({ update, title }: Props): JSX.Element => {
       ) : null}
     </>
   ) : (
-    <div style={{ marginBottom: -10 }}>
+    <div>
       <Title level={4} style={{ marginBottom: 2 }} ellipsis>
         {title}
       </Title>
 
       {update?.text ? (
         <Paragraph
-          style={{ fontSize: 14, marginTop: 5 }}
+          style={{ fontSize: 14 }}
           type="secondary"
-          ellipsis={{ rows: 3 }}
+          ellipsis={{ rows: 1 }}
         >
           <FontAwesomeIcon
             size="sm"
-            className="feedItem-card-icon"
+            className={classes.icon}
             icon={faMessageDots}
           />
           {getContent(update.text)}
         </Paragraph>
-      ) : null}
+      ) : (
+        <div style={{ height: 35 }} />
+      )}
     </div>
   );
 };

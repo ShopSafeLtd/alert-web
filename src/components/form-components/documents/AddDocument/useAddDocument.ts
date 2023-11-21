@@ -293,6 +293,7 @@ const useAddDocument = ({
     });
 
     setFileList(newFileList);
+    console.log('fi', fileList);
   };
 
   const documentUploadProps: UploadProps = {

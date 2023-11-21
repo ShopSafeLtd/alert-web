@@ -41,10 +41,11 @@ import type { DateType } from 'types/DataType';
 import { useIntl } from 'react-intl';
 import type { OffenderFilters } from 'state/data-model';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import CheckTag from 'components/form-components/check-tag/CheckTag.view';
+import CompactSkeletonCard from 'components/offenders/OffenderCard/OffenderSkeletonCard.view';
 import useStyles from './OffenderFeed.styles';
 import Loading from '../../../../components/shared-components/AntD/Loading';
 
-// import useStyles from './OffenderFeed.styles';
 interface Props {
   fetchMoreScroll: () => void;
   data: OffenderFeedListQuery | undefined;
@@ -87,6 +88,7 @@ interface Props {
   onSelectCustomGalleries: (values: string) => void;
   onSelectGallery: (value: string) => void;
   variables: OffenderFilters;
+  setCompactView: () => void;
 }
 
 const OffenderFeed = ({
@@ -126,11 +128,11 @@ const OffenderFeed = ({
   onSelectCustomGalleries,
   variables,
   fetchMoreScroll,
+  setCompactView,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const classes = useStyles();
-  // ???
-  const { search, gallery, customGalleries } = variables;
+  const { search, gallery, customGalleries, compactView } = variables;
 
   const galleryOptions = [
     {
@@ -280,6 +282,44 @@ const OffenderFeed = ({
             ) : null}
           </Col>
           <Col>
+            <CheckTag
+              option={{
+                label: intl.formatMessage({
+                  defaultMessage: 'Compact View',
+                  id: '9P0/Y7',
+                }),
+                value: 'Compact',
+                tooltip: intl.formatMessage({
+                  defaultMessage: 'Present offenders in compact card',
+                  id: 'wctZp9',
+                }),
+              }}
+              active={compactView}
+              onClick={setCompactView}
+            />
+            {/* <CheckTags
+              mode="radio"
+              value={compactView ? ['Compact'] : ['Default']}
+              onChange={setCompactView}
+              options={[
+                {
+                  label: intl.formatMessage({
+                    defaultMessage: 'Default Card',
+                    id: '1K+0py',
+                  }),
+                  value: 'Default',
+                },
+                {
+                  label: intl.formatMessage({
+                    defaultMessage: 'Compact Card',
+                    id: 'O3k0C9',
+                  }),
+                  value: 'Compact',
+                },
+              ]}
+            /> */}
+          </Col>
+          <Col>
             <Button
               onClick={toggleSortFilter}
               icon={
@@ -320,7 +360,7 @@ const OffenderFeed = ({
       <div style={{ paddingBottom: 10 }}>
         {loading ? (
           <Row
-            gutter={[8, 16]}
+            gutter={24}
             align="stretch"
             style={{
               alignItems: 'stretch',
@@ -328,18 +368,19 @@ const OffenderFeed = ({
               overflowX: 'hidden',
             }}
           >
-            {Array.from({ length: 24 }).map((_, index) => (
+            {Array.from({ length: compactView ? 48 : 24 }).map((_, index) => (
               <Col
-                style={{ marginBottom: 10 }}
+                style={{ marginBottom: compactView ? 0 : 20 }}
                 // eslint-disable-next-line react/no-array-index-key
                 key={index}
-                sm={24}
-                md={12}
-                lg={8}
-                xl={8}
-                xxl={6}
+                span={compactView ? 6 : 8}
+                xxl={compactView ? 4 : 6}
               >
-                <OffenderSkeletonCard />
+                {compactView ? (
+                  <CompactSkeletonCard />
+                ) : (
+                  <OffenderSkeletonCard />
+                )}
               </Col>
             ))}
           </Row>
@@ -361,7 +402,7 @@ const OffenderFeed = ({
             }
           >
             <Row
-              gutter={[8, 16]}
+              gutter={compactView ? 12 : [8, 16]}
               align="stretch"
               style={{
                 alignItems: 'stretch',
@@ -372,17 +413,15 @@ const OffenderFeed = ({
               {data?.listOffenders?.offenders?.map((item) => (
                 <Col
                   style={{ marginBottom: 10 }}
-                  sm={24}
-                  md={12}
-                  lg={8}
-                  xl={8}
-                  xxl={6}
+                  span={compactView ? 6 : 8}
+                  xxl={compactView ? 4 : 6}
                   key={item?.id}
                 >
                   <OffenderCard
                     offender={item}
                     openLightbox={openLightbox}
                     update={updateOffenderList}
+                    compactView={compactView}
                   />
                 </Col>
               ))}
@@ -413,28 +452,6 @@ const OffenderFeed = ({
             />
           </div>
         )}
-
-        {/* <Row justify="center"> */}
-        {/*   <Col> */}
-        {/*     <Pagination */}
-        {/*       total={data?.listOffenders?.total} */}
-        {/*       pageSizeOptions={pagination.sizeOptions} */}
-        {/*       pageSize={pagination.pageSize} */}
-        {/*       current={pagination.page} */}
-        {/*       onChange={onPaginationChange} */}
-        {/*       showTotal={(total) => */}
-        {/*         intl.formatMessage( */}
-        {/*           { */}
-        {/*             defaultMessage: 'Total Offenders: {total}', */}
-        {/*             id: '3JpVG2', */}
-        {/*           }, */}
-        {/*           { total } */}
-        {/*         ) */}
-        {/*       } */}
-        {/*       hideOnSinglePage */}
-        {/*     /> */}
-        {/*   </Col> */}
-        {/* </Row> */}
       </div>
 
       <Drawer

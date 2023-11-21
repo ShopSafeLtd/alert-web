@@ -8,8 +8,6 @@ const OffenderFeed = (): JSX.Element => {
     loading,
     lightboxElements,
     openLightbox,
-    // onPaginationChange,
-    // pagination,
     order,
     setOrder,
     setSearch,
@@ -42,6 +40,7 @@ const OffenderFeed = (): JSX.Element => {
     onSelectCustomGalleries,
     variables,
     fetchMoreScroll,
+    setCompactView,
   } = useOffenderFeed();
 
   return (
@@ -52,8 +51,6 @@ const OffenderFeed = (): JSX.Element => {
       loading={loading}
       lightboxElements={lightboxElements}
       openLightbox={openLightbox}
-      // onPaginationChange={onPaginationChange}
-      // pagination={pagination}
       order={order}
       setOrder={setOrder}
       setSearch={setSearch}
@@ -84,6 +81,7 @@ const OffenderFeed = (): JSX.Element => {
       adminRights={adminRights}
       onSelectCustomGalleries={onSelectCustomGalleries}
       variables={variables}
+      setCompactView={setCompactView}
     />
   );
 };

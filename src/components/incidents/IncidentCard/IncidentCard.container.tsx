@@ -11,12 +11,14 @@ interface Props {
   incident: IncidentCardFragment;
   openLightbox: (elements: { src: string }[], index: number) => void;
   update?: MutationUpdaterFn<RecycleIncidentMutation>;
+  compactView?: boolean;
 }
 
 const IncidentCard = ({
   incident,
   openLightbox,
   update,
+  compactView,
 }: Props): JSX.Element => {
   const {
     approvalRights,
@@ -54,6 +56,7 @@ const IncidentCard = ({
       onEditImage={onEditImage}
       addInvestigation={addInvestigation}
       toggleAddInvestigation={toggleAddInvestigation}
+      compactView={compactView || false}
     />
   );
 };

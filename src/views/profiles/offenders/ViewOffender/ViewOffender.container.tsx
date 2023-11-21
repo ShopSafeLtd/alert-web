@@ -36,6 +36,7 @@ const ViewOffender = (): JSX.Element => {
     setEditUpdateInput,
     toggleSelectImages,
     lightBoxOpen,
+
     optionRowShow,
     setOptionRowShow,
     publicOffenderDOB,

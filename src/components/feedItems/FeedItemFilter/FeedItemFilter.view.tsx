@@ -192,6 +192,9 @@ const FeedItemFilter = ({
             <Select.Option value={Model.Article}>
               {intl.formatMessage({ defaultMessage: 'Article', id: 'jx7Hn3' })}
             </Select.Option>
+            <Select.Option value={Model.Ban}>
+              {intl.formatMessage({ defaultMessage: 'Ban', id: 'XtUrMc' })}
+            </Select.Option>
           </Select>
         </Col>
       </Row>

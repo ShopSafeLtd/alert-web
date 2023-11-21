@@ -24,6 +24,9 @@ const FeedItems = (): JSX.Element => {
     setGallery,
     setCreatedAtFilter,
     fetchMoreScroll,
+    lightboxElements,
+    openLightbox,
+    lightBoxOpen,
   } = useFeedItems();
 
   return (
@@ -48,6 +51,9 @@ const FeedItems = (): JSX.Element => {
       groupsLoading={groupsLoading}
       setGallery={setGallery}
       setCreatedAtFilter={setCreatedAtFilter}
+      lightBoxOpen={lightBoxOpen}
+      lightboxElements={lightboxElements}
+      openLightbox={openLightbox}
     />
   );
 };

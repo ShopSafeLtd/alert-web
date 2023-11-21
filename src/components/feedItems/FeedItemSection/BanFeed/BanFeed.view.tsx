@@ -1,28 +1,41 @@
 import React from 'react';
-import { Col, Row, Tag, Typography } from 'antd';
+import { Button, Col, Divider, Modal, Row, Tag, Typography } from 'antd';
 import type { FeedItemsQuery } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCalendarPen,
   faCalendarStar,
+  faClock,
   faLocationDot,
-  faUserClock,
+  faTrash,
 } from '@fortawesome/pro-light-svg-icons';
 import { Link } from 'react-router-dom';
 import FormatCalendar from 'utils/format-calendar-24h';
 import { useIntl } from 'react-intl';
 import ImageContainer from '../ImageContainer';
+import useStyles from './BanFeed.styles';
 
-const { Title, Text, Paragraph } = Typography;
+const { Title, Text } = Typography;
+const { confirm } = Modal;
 
 interface Props {
   feedItem:
     | Exclude<FeedItemsQuery['listFeedItems'], undefined | null>['feedItems'][0]
     | null
     | undefined;
+  onDeleteFeedItem: (value: string) => void;
+  saving: boolean;
+  adminRights: boolean;
+  openLightbox: (elements: { src: string }[], index: number) => void;
 }
 
-const BanFeed = ({ feedItem }: Props): JSX.Element => {
+const BanFeed = ({
+  feedItem,
+  onDeleteFeedItem,
+  saving,
+  adminRights,
+  openLightbox,
+}: Props): JSX.Element => {
   // const offender?.imagesRef = useRef<CarouselRef>(null);
 
   const {
@@ -30,82 +43,153 @@ const BanFeed = ({ feedItem }: Props): JSX.Element => {
     startDate,
     // updatedAt,
     title,
-    type,
-    // active,
     expired,
-    // id,
     location,
     offender,
-    description,
     feedImage,
   } = feedItem?.ban || {};
   const intl = useIntl();
+  const classes = useStyles();
+  console.log('lo', location);
+
   return (
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    <Link to={`/app/offenders/view/${offender?.id}`}>
-      <Row gutter={20} wrap={false} style={{ width: '100%' }}>
-        {feedImage ? (
-          <Col>
-            <ImageContainer
-              position={feedImage.position}
-              src={feedImage.low || ''}
-            />
-          </Col>
-        ) : null}
+    // <Link to={`/app/offenders/view/${offender?.id}`}>
+    <Row wrap={false} key={offender?.id || ''}>
+      {feedImage ? (
+        <Col
+          style={{ cursor: 'pointer', zIndex: 2 }}
+          onClick={() =>
+            openLightbox(
+              [
+                {
+                  src: feedImage?.low || '',
+                },
+              ],
+              0
+            )
+          }
+        >
+          <ImageContainer
+            position={feedImage.position}
+            src={feedImage.low || ''}
+          />
+        </Col>
+      ) : null}
 
-        <Col flex={1} style={{ padding: 10, marginLeft: 15 }}>
-          <>
-            <Title level={4} ellipsis>
-              {title || offender?.name}
+      <Col flex={1} className={classes.contentContainer}>
+        <Row className={classes.contentHeader} align="middle" wrap={false}>
+          <Col flex={1}>
+            <Title style={{ margin: 0, fontSize: 14 }} level={4} ellipsis>
+              {feedItem?.message}
             </Title>
-            {/* <Row style={{ marginTop: -5, marginBottom: 5 }}>
-              <Col>
-                <Text style={{ fontSize: 14 }} type="secondary">
-                  Alert ID: {offender.reference}
-                </Text>
-              </Col>
-            </Row> */}
-            <div style={{ marginTop: -5, marginBottom: 10 }}>
-              {expired ? (
-                <Tag color="red">
-                  {intl.formatMessage({
-                    defaultMessage: 'EXPIRED',
-                    id: 'GftNg3',
-                  })}
-                </Tag>
-              ) : (
-                <Tag color="green">
-                  {intl.formatMessage({
-                    defaultMessage: 'ACTIVE',
-                    id: 'LQPOVs',
-                  })}
-                </Tag>
-              )}
-            </div>
-
+          </Col>
+          <Col>
+            {adminRights && (
+              <Button
+                type="text"
+                style={{ height: 28, width: 25 }}
+                disabled={saving}
+                icon={
+                  <FontAwesomeIcon
+                    style={{ marginBottom: 2 }}
+                    icon={faTrash}
+                    size="sm"
+                  />
+                }
+                onClick={() => {
+                  confirm({
+                    title: intl.formatMessage({
+                      defaultMessage: 'Do you want to delete the feed item?',
+                      id: 'VZeM4L',
+                    }),
+                    content: intl.formatMessage({
+                      defaultMessage: 'This action cannot be undone.',
+                      id: 'JDJoIZ',
+                    }),
+                    onOk() {
+                      onDeleteFeedItem(feedItem?.id || '');
+                    },
+                  });
+                }}
+                size="small"
+              />
+            )}
+          </Col>
+        </Row>
+        <Divider style={{ margin: 0 }} />
+        <Link to={`/app/offenders/view/${offender?.id || ''}`}>
+          <div className={classes.content}>
             <Row>
+              <Col flex={1}>
+                <Title level={4} ellipsis>
+                  {title || offender?.name}
+                </Title>
+              </Col>
+              <Col
+                style={{ marginTop: -5, marginBottom: 10, marginRight: -10 }}
+              >
+                {expired ? (
+                  <Tag color="red">
+                    {intl.formatMessage({
+                      defaultMessage: 'EXPIRED',
+                      id: 'GftNg3',
+                    })}
+                  </Tag>
+                ) : (
+                  <Tag color="green">
+                    {intl.formatMessage({
+                      defaultMessage: 'ACTIVE',
+                      id: 'LQPOVs',
+                    })}
+                  </Tag>
+                )}
+              </Col>
+              {/* <Col>
+                <Text style={{ fontSize: 14 }} type="secondary">
+                  {intl.formatMessage(
+                    {
+                      defaultMessage: 'Alert ID: {reference}',
+                      id: '377fsC',
+                    },
+                    {
+                      reference: offender.,
+                    }
+                  )}
+                </Text>
+              </Col> */}
+            </Row>
+
+            <Row gutter={8} style={{ marginBottom: 10 }}>
               <Col>
                 <FontAwesomeIcon
                   size="sm"
-                  style={{ marginRight: 5 }}
-                  className="feedItem-card-icon"
+                  className={classes.icon}
                   icon={faCalendarPen}
                 />
                 <Text style={{ fontSize: 14 }} type="secondary">
-                  {intl.formatMessage({
-                    defaultMessage: 'Start: ',
-                    id: 'npEJui',
-                  })}
-                  {FormatCalendar(startDate || new Date())}
+                  {intl.formatMessage(
+                    {
+                      defaultMessage: 'Start: {date} ',
+                      id: 'IUhT8d',
+                    },
+                    {
+                      date: FormatCalendar(startDate || new Date()),
+                    }
+                  )}
                 </Text>
               </Col>
-            </Row>
-            <Row>
+              <Col>
+                <Text style={{ fontSize: 14 }} type="secondary">
+                  {intl.formatMessage({
+                    defaultMessage: '-- --',
+                    id: 'TWi2vv',
+                  })}
+                </Text>
+              </Col>
               <Col>
                 <FontAwesomeIcon
                   size="sm"
-                  style={{ marginRight: 5 }}
-                  className="feedItem-card-icon"
+                  className={classes.icon}
                   icon={faCalendarStar}
                 />
                 <Text style={{ fontSize: 14 }} type="secondary">
@@ -117,13 +201,13 @@ const BanFeed = ({ feedItem }: Props): JSX.Element => {
                 </Text>
               </Col>
             </Row>
-            {type && (
+            {/* {type && (
               <Row>
                 <Col>
                   <FontAwesomeIcon
                     size="sm"
-                    style={{ marginRight: 5 }}
-                    className="feedItem-card-icon"
+                    className={classes.icon}
+                    
                     icon={faUserClock}
                   />
                   <Text style={{ fontSize: 14 }} type="secondary">
@@ -135,35 +219,45 @@ const BanFeed = ({ feedItem }: Props): JSX.Element => {
                   </Text>
                 </Col>
               </Row>
-            )}
-            <Row wrap={false}>
+            )} */}
+
+            <Row wrap={false} className={classes.bottomRow}>
+              {location ? (
+                <>
+                  <Col>
+                    <FontAwesomeIcon
+                      size="sm"
+                      className={classes.icon}
+                      icon={faLocationDot}
+                    />
+                  </Col>
+                  <Col flex={1}>
+                    <Text style={{ fontSize: 14 }} ellipsis type="secondary">
+                      {location}
+                    </Text>
+                  </Col>
+                </>
+              ) : (
+                <Col flex={1} />
+              )}
+
               <Col>
                 <FontAwesomeIcon
                   size="sm"
-                  style={{ marginRight: 5 }}
-                  className="feedItem-card-icon"
-                  icon={faLocationDot}
+                  className={classes.icon}
+                  icon={faClock}
                 />
               </Col>
               <Col>
-                <Text style={{ fontSize: 14 }} ellipsis type="secondary">
-                  {location}
+                <Text type="secondary" style={{ fontSize: 14 }}>
+                  {FormatCalendar(feedItem?.updatedAt || new Date())}
                 </Text>
               </Col>
             </Row>
-            {description && (
-              <Paragraph
-                type="secondary"
-                style={{ fontSize: 14, marginTop: 10 }}
-                ellipsis={{ rows: 3 }}
-              >
-                {description}
-              </Paragraph>
-            )}
-          </>
-        </Col>
-      </Row>
-    </Link>
+          </div>
+        </Link>
+      </Col>
+    </Row>
   );
 };
 

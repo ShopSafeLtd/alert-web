@@ -14,9 +14,9 @@ const ImageContainer = ({
 }) => (
   <div
     style={{
-      width: 150,
-      height: 180,
-      marginRight: -15,
+      width: 130,
+      height: 130,
+      marginRight: -5,
     }}
   >
     <WatermarkImage url={src} position={position} rotation={rotation || 0} />

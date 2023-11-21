@@ -35,6 +35,7 @@ export interface IncidentFilters {
   incidentDate: DateType | undefined;
   gallery: string[];
   peculiarities: string;
+  compactView: boolean;
 }
 export interface OffenderFilters {
   search: string;
@@ -55,6 +56,7 @@ export interface OffenderFilters {
         endDate: Date;
       }
     | undefined;
+  compactView: boolean;
 }
 
 export interface FeedItemFilters {
@@ -215,6 +217,7 @@ const dataModel: DataModel = {
       goods: [],
       gallery: [],
       peculiarities: '',
+      compactView: false,
     },
     order: IncidentSort.createdAtDesc,
     // gallery: [],
@@ -244,6 +247,7 @@ const dataModel: DataModel = {
       build: [],
       age: [],
       sex: [],
+      compactView: false,
     },
     order: OffenderSort.updatedAtDesc,
   },

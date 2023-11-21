@@ -10,7 +10,6 @@ import {
   Input,
   Menu,
   Modal,
-  Popconfirm,
   Popover,
   Row,
   Skeleton,
@@ -38,12 +37,7 @@ import EditVehicle from 'components/form-components/Vehicle/EditVehicle';
 import moment from 'moment';
 import UpdateContent from 'views/incidents/ViewIncident/Update.view';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
-import WatermarkSlide from 'components/images/WatermartkSlide.view';
-import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import UpdateBar from 'components/MessageInput/UpdateBar';
-import Lightbox from 'yet-another-react-lightbox';
-import WatermarkImage from 'components/images/WatermarkImage.view';
 import OffenderTable from 'components/tables/OffenderTable';
 import CrimeGroupTable from 'components/tables/CrimeGroupTable';
 import IncidentTable from 'components/tables/IncidentTable';
@@ -63,11 +57,11 @@ import AddInvestigation from 'components/form-components/Investigation/AddInvest
 import VehicleSideList from 'components/vehicles/VehicleSideList';
 import FormatCalendar from 'utils/format-calendar-24h';
 import EditImageList from 'components/images/EditImageList';
-import FeedImageEditor from 'components/form-components/ImageEditor/FeedImageEditor.view';
 import MapCard from 'components/map/MapCard';
 import SimpleEditOffender from 'components/form-components/offender/offender/SimpleEditOffender';
 import AddNewOffenderSimple from 'components/form-components/offender/offender/AddNewOffenderSimple';
 import AddExistingOffender from 'components/form-components/offender/offender/AddExistingOffender';
+import ImagesList from 'components/ViewPage/ImagesList';
 import useStyles from './ViewVehicle.styles';
 
 const { Title } = Typography;
@@ -204,6 +198,7 @@ const ViewVehicle = ({
     defaultMessage: 'Unknown',
     id: '5jeq8P',
   });
+
   return (
     <div className="page-container">
       <Row wrap={false}>
@@ -347,109 +342,23 @@ const ViewVehicle = ({
               </Col>
             )}
           </Row>
-
+          <ImagesList
+            imagesData={data?.vehicle?.images}
+            loading={loading}
+            saving={saving}
+            editRights={editRights}
+            openLightbox={openLightbox}
+            lightBoxOpen={lightBoxOpen}
+            lightboxElements={lightboxElements}
+            editImageData={editImageData}
+            setEditImageData={setEditImageData}
+            onDeleteImage={onDeleteImage}
+            onEditImage={onEditImage}
+            hasImages={
+              !!(data?.vehicle?.images && data?.vehicle?.images.length > 0)
+            }
+          />
           <div className={classes.details}>
-            {loading ? (
-              <Skeleton />
-            ) : (
-              <Row
-                gutter={8}
-                justify="start"
-                align="middle"
-                wrap={false}
-                className={classes.images}
-                style={{
-                  height:
-                    data?.vehicle?.images && data?.vehicle?.images.length > 0
-                      ? undefined
-                      : 0,
-                }}
-              >
-                {data?.vehicle?.images.map((image, i) => (
-                  <Col key={image.id}>
-                    <Popover
-                      trigger="hover"
-                      placement="left"
-                      content={
-                        <div
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                          }}
-                        >
-                          <Button
-                            type="text"
-                            disabled={saving}
-                            icon={
-                              <FontAwesomeIcon
-                                style={{ marginRight: 5 }}
-                                icon={faEdit}
-                                size="lg"
-                              />
-                            }
-                            onClick={() => setEditImageData(image)}
-                            size="small"
-                          >
-                            {intl.formatMessage({
-                              defaultMessage: 'Edit Image',
-                              id: '9UlLIw',
-                            })}
-                          </Button>
-                          <Popconfirm
-                            placement="topLeft"
-                            title={intl.formatMessage({
-                              defaultMessage: 'Remove the image?',
-                              id: 'bRha+v',
-                            })}
-                            onConfirm={() => onDeleteImage(image.id)}
-                            okText={intl.formatMessage({
-                              defaultMessage: 'Yes',
-                              id: 'a5msuh',
-                            })}
-                            cancelText={intl.formatMessage({
-                              defaultMessage: 'No',
-                              id: 'oUWADl',
-                            })}
-                            overlayInnerStyle={{ padding: 10 }}
-                          >
-                            <Button
-                              type="text"
-                              disabled={saving}
-                              icon={
-                                <FontAwesomeIcon
-                                  style={{ marginRight: 5 }}
-                                  icon={faTrash}
-                                  size="lg"
-                                />
-                              }
-                              onClick={() => onDeleteImage(image.id)}
-                              size="small"
-                            >
-                              {intl.formatMessage({
-                                defaultMessage: 'Delete Image',
-                                id: 'u5uVrC',
-                              })}
-                            </Button>
-                          </Popconfirm>
-                        </div>
-                      }
-                    >
-                      <Button
-                        onClick={() => openLightbox(i)}
-                        className={classes.image}
-                        style={{ padding: 0 }}
-                      >
-                        <WatermarkImage
-                          url={image.optimised}
-                          rotation={image.rotation}
-                          position={image.position}
-                        />
-                      </Button>
-                    </Popover>
-                  </Col>
-                ))}
-              </Row>
-            )}
             {loading ? (
               <Skeleton />
             ) : (
@@ -621,7 +530,7 @@ const ViewVehicle = ({
                               icon: (
                                 <FontAwesomeIcon
                                   icon={faMagnifyingGlass}
-                                  style={{ marginRight: 5 }}
+                                  className={classes.icon}
                                 />
                               ),
                               onClick: () => toggleAddExistingOffender(),
@@ -635,7 +544,7 @@ const ViewVehicle = ({
                               icon: (
                                 <FontAwesomeIcon
                                   icon={faPlus}
-                                  style={{ marginRight: 5 }}
+                                  className={classes.icon}
                                 />
                               ),
                               onClick: () => toggleAddOffender(),
@@ -649,7 +558,7 @@ const ViewVehicle = ({
                         icon={
                           <FontAwesomeIcon
                             icon={faPlus}
-                            style={{ marginRight: 5 }}
+                            className={classes.icon}
                           />
                         }
                       >
@@ -745,7 +654,7 @@ const ViewVehicle = ({
                       icon={
                         <FontAwesomeIcon
                           icon={faPlus}
-                          style={{ marginRight: 5 }}
+                          className={classes.icon}
                         />
                       }
                     >
@@ -794,7 +703,7 @@ const ViewVehicle = ({
                       icon={
                         <FontAwesomeIcon
                           icon={faPlus}
-                          style={{ marginRight: 5 }}
+                          className={classes.icon}
                         />
                       }
                     >
@@ -874,7 +783,7 @@ const ViewVehicle = ({
                             disabled={saving}
                             icon={
                               <FontAwesomeIcon
-                                style={{ marginRight: 5 }}
+                                className={classes.icon}
                                 icon={faEdit}
                                 size="lg"
                               />
@@ -897,7 +806,7 @@ const ViewVehicle = ({
                             disabled={saving}
                             icon={
                               <FontAwesomeIcon
-                                style={{ marginRight: 5 }}
+                                className={classes.icon}
                                 icon={faTrash}
                                 size="lg"
                               />
@@ -969,7 +878,7 @@ const ViewVehicle = ({
                                 disabled={saving}
                                 icon={
                                   <FontAwesomeIcon
-                                    style={{ marginRight: 5 }}
+                                    className={classes.icon}
                                     icon={faEdit}
                                     size="lg"
                                   />
@@ -992,7 +901,7 @@ const ViewVehicle = ({
                                 disabled={saving}
                                 icon={
                                   <FontAwesomeIcon
-                                    style={{ marginRight: 5 }}
+                                    className={classes.icon}
                                     icon={faTrash}
                                     size="lg"
                                   />
@@ -1146,22 +1055,6 @@ const ViewVehicle = ({
             onChange={(e) => setEditUpdateInput(e.target.value)}
           />
         </Modal>
-
-        <Lightbox
-          open={lightBoxOpen.open}
-          close={() => openLightbox(0)}
-          plugins={[Zoom]}
-          index={lightBoxOpen.index}
-          slides={lightboxElements}
-          controller={{
-            closeOnBackdropClick: true,
-          }}
-          render={{
-            slide: (slide: WatermarkSlideType) => (
-              <WatermarkSlide slide={slide} />
-            ),
-          }}
-        />
       </Row>
       {/* evidence */}
       <Drawer
@@ -1229,12 +1122,7 @@ const ViewVehicle = ({
           <div />
         )}
       </Drawer>
-      <FeedImageEditor
-        submitImage={onEditImage}
-        onClose={() => setEditImageData(null)}
-        open={!!editImageData}
-        image={editImageData}
-      />
+
       {/* offender */}
       <Drawer
         title={intl.formatMessage({

@@ -10,11 +10,9 @@ import {
   Button,
   Card,
   Col,
-  Divider,
   Drawer,
   Empty,
   Input,
-  Modal,
   Row,
   Skeleton,
   Tooltip,
@@ -26,7 +24,6 @@ import {
   faExclamationCircle,
   faFilter,
   faNewspaper,
-  faTrash,
   faUser,
   faUsers,
 } from '@fortawesome/pro-light-svg-icons';
@@ -46,15 +43,17 @@ import FeedItemSkeletonCard from 'components/feedItems/FeedItemSection/FeedItemS
 import AdminTodos from 'components/feedItems/AdminTodos';
 import BanFeed from 'components/feedItems/FeedItemSection/BanFeed';
 import ArticlesSection from 'components/feedItems/Articles/ArticlesSection';
-import FormatCalendar from 'utils/format-calendar-24h';
 import { useIntl } from 'react-intl';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import type { FeedItemFilters } from 'state/data-model';
+import Lightbox from 'yet-another-react-lightbox';
+import Zoom from 'yet-another-react-lightbox/plugins/zoom';
+import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
+import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import useStyles from './FeedItem.styles';
 import Loading from '../../components/shared-components/AntD/Loading';
 
-const { Title, Paragraph, Text } = Typography;
-const { confirm } = Modal;
+const { Title, Paragraph } = Typography;
 
 interface Props {
   data: FeedItemsQuery | undefined;
@@ -78,6 +77,14 @@ interface Props {
   setCreatedAtFilter: (value: DateType | undefined) => void;
   fetchMoreScroll: () => void;
   variables: FeedItemFilters;
+  lightboxElements: {
+    src: string;
+  }[];
+  openLightbox: (elements: { src: string }[], index: number) => void;
+  lightBoxOpen: {
+    open: boolean;
+    index: number;
+  };
 }
 
 const FeedItem = ({
@@ -101,6 +108,9 @@ const FeedItem = ({
   setGallery,
   setCreatedAtFilter,
   fetchMoreScroll,
+  lightboxElements,
+  openLightbox,
+  lightBoxOpen,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
@@ -258,18 +268,21 @@ const FeedItem = ({
                     key={feedItem?.id}
                     bodyStyle={{
                       padding: 0,
+                      margin: 0,
+
                       overflow: 'hidden',
                       borderRadius: 10,
+                      maxHeight: 130,
                     }}
                     loading={loading}
                   >
                     <>
-                      <Row
+                      {/* <Row><Col sapn={4}></Col></Row> */}
+                      {/* <Row
                         style={{ margin: '8px 8px 4px' }}
                         // justify="end"
                         wrap={false}
                       >
-                        {/* <Col> */}
                         <Title
                           style={{ margin: 0, fontSize: 14, maxWidth: '60%' }}
                           level={4}
@@ -277,7 +290,6 @@ const FeedItem = ({
                         >
                           {feedItem?.message}
                         </Title>
-                        {/* </Col> */}
                         <Col flex={1} />
                         <Col>
                           <Text type="secondary" style={{ fontSize: 14 }}>
@@ -307,7 +319,10 @@ const FeedItem = ({
                                   confirm({
                                     title:
                                       'Do you want to delete the feed item?',
-                                    content: 'This action cannot be undone.',
+                                    content: intl.formatMessage({
+                      defaultMessage: 'This action cannot be undone.',
+                      id: 'JDJoIZ',
+                    }),
                                     onOk() {
                                       onDeleteFeedItem(feedItem.id);
                                     },
@@ -319,77 +334,201 @@ const FeedItem = ({
                           </Col>
                         ) : null}
                       </Row>
-                      <Divider style={{ margin: 0 }} />
-                      <div style={{ padding: 0 }}>
-                        {/* create new incident/offender */}
-                        {feedItem?.type === FeedItemType.NewIncident && (
-                          <IncidentFeed feedItem={feedItem} isNewIncident />
-                        )}
-                        {feedItem?.type === FeedItemType.NewOffender && (
-                          <OffenderFeed feedItem={feedItem} isNewOffender />
-                        )}
-                        {feedItem?.type === FeedItemType.NewInvestigation && (
-                          <InvestigationFeed
+                      <Divider style={{ margin: 0 }} /> */}
+
+                      {/* create new incident/offender */}
+                      {feedItem?.type === FeedItemType.NewIncident &&
+                        feedItem.incident && (
+                          <IncidentFeed
                             feedItem={feedItem}
-                            isNewInvestigation
+                            adminRights={adminRights}
+                            onDeleteFeedItem={onDeleteFeedItem}
+                            saving={saving}
+                            openLightbox={openLightbox}
+                            isNewIncident
                           />
                         )}
-                        {feedItem?.type === FeedItemType.NewVehicle && (
-                          <VehicleFeed feedItem={feedItem} isNewVehicle />
+                      {feedItem?.type === FeedItemType.NewOffender && (
+                        <OffenderFeed
+                          feedItem={feedItem}
+                          adminRights={adminRights}
+                          onDeleteFeedItem={onDeleteFeedItem}
+                          saving={saving}
+                          openLightbox={openLightbox}
+                          isNewOffender
+                        />
+                      )}
+                      {feedItem?.type === FeedItemType.NewInvestigation && (
+                        <InvestigationFeed
+                          feedItem={feedItem}
+                          adminRights={adminRights}
+                          onDeleteFeedItem={onDeleteFeedItem}
+                          saving={saving}
+                          openLightbox={openLightbox}
+                          isNewInvestigation
+                        />
+                      )}
+                      {feedItem?.type === FeedItemType.NewVehicle && (
+                        <VehicleFeed
+                          feedItem={feedItem}
+                          adminRights={adminRights}
+                          onDeleteFeedItem={onDeleteFeedItem}
+                          saving={saving}
+                          openLightbox={openLightbox}
+                          isNewVehicle
+                        />
+                      )}
+                      {feedItem?.type === FeedItemType.NewCrimegroup && (
+                        <CrimeGroupFeed
+                          feedItem={feedItem}
+                          adminRights={adminRights}
+                          openLightbox={openLightbox}
+                          onDeleteFeedItem={onDeleteFeedItem}
+                          saving={saving}
+                          isNewCrimeGroup
+                        />
+                      )}
+                      {/* update details  */}
+                      {feedItem?.type === FeedItemType.Incident &&
+                        feedItem.incident && (
+                          <IncidentFeed
+                            adminRights={adminRights}
+                            onDeleteFeedItem={onDeleteFeedItem}
+                            saving={saving}
+                            feedItem={feedItem}
+                            openLightbox={openLightbox}
+                          />
                         )}
-                        {feedItem?.type === FeedItemType.NewCrimegroup && (
-                          <CrimeGroupFeed feedItem={feedItem} isNewCrimeGroup />
+                      {feedItem?.type === FeedItemType.Offender &&
+                        feedItem.incident && (
+                          <OffenderFeed
+                            feedItem={feedItem}
+                            adminRights={adminRights}
+                            onDeleteFeedItem={onDeleteFeedItem}
+                            saving={saving}
+                            openLightbox={openLightbox}
+                          />
                         )}
-                        {/* update details  */}
-                        {feedItem?.type === FeedItemType.Incident && (
-                          <IncidentFeed feedItem={feedItem} />
-                        )}
-                        {feedItem?.type === FeedItemType.Offender && (
-                          <OffenderFeed feedItem={feedItem} />
-                        )}
-                        {feedItem?.type === FeedItemType.Investigation && (
-                          <InvestigationFeed feedItem={feedItem} />
-                        )}
+                      {feedItem?.type === FeedItemType.Investigation && (
+                        <InvestigationFeed
+                          feedItem={feedItem}
+                          adminRights={adminRights}
+                          onDeleteFeedItem={onDeleteFeedItem}
+                          saving={saving}
+                          openLightbox={openLightbox}
+                        />
+                      )}
 
-                        {/* add new images */}
-                        {feedItem?.type === FeedItemType.IncidentImage && (
-                          <IncidentFeed feedItem={feedItem} isNewImage />
+                      {/* add new images */}
+                      {feedItem?.type === FeedItemType.IncidentImage &&
+                        feedItem.incident && (
+                          <IncidentFeed
+                            adminRights={adminRights}
+                            onDeleteFeedItem={onDeleteFeedItem}
+                            saving={saving}
+                            feedItem={feedItem}
+                            openLightbox={openLightbox}
+                            isNewImage
+                          />
                         )}
-                        {feedItem?.type === FeedItemType.OffenderImage && (
-                          <OffenderFeed feedItem={feedItem} isNewImage />
+                      {feedItem?.type === FeedItemType.OffenderImage && (
+                        <OffenderFeed
+                          feedItem={feedItem}
+                          adminRights={adminRights}
+                          onDeleteFeedItem={onDeleteFeedItem}
+                          saving={saving}
+                          openLightbox={openLightbox}
+                          isNewImage
+                        />
+                      )}
+                      {feedItem?.type === FeedItemType.InvestigationImage && (
+                        <InvestigationFeed
+                          feedItem={feedItem}
+                          adminRights={adminRights}
+                          onDeleteFeedItem={onDeleteFeedItem}
+                          saving={saving}
+                          openLightbox={openLightbox}
+                          isNewImage
+                        />
+                      )}
+                      {feedItem?.type === FeedItemType.VehicleImage && (
+                        <VehicleFeed
+                          feedItem={feedItem}
+                          adminRights={adminRights}
+                          onDeleteFeedItem={onDeleteFeedItem}
+                          saving={saving}
+                          openLightbox={openLightbox}
+                          isNewImage
+                        />
+                      )}
+                      {/* add new intel */}
+                      {feedItem?.type === FeedItemType.IncidentIntel &&
+                        feedItem.incident && (
+                          <IncidentFeed
+                            adminRights={adminRights}
+                            onDeleteFeedItem={onDeleteFeedItem}
+                            saving={saving}
+                            feedItem={feedItem}
+                            openLightbox={openLightbox}
+                          />
                         )}
-                        {feedItem?.type === FeedItemType.InvestigationImage && (
-                          <InvestigationFeed feedItem={feedItem} isNewImage />
-                        )}
-                        {feedItem?.type === FeedItemType.VehicleImage && (
-                          <VehicleFeed feedItem={feedItem} isNewImage />
-                        )}
-                        {/* add new intel */}
-                        {feedItem?.type === FeedItemType.IncidentIntel && (
-                          <IncidentFeed feedItem={feedItem} />
-                        )}
-                        {feedItem?.type === FeedItemType.OffenderIntel && (
-                          <OffenderFeed feedItem={feedItem} />
-                        )}
-                        {feedItem?.type === FeedItemType.InvestigationIntel && (
-                          <InvestigationFeed feedItem={feedItem} />
-                        )}
-                        {feedItem?.type === FeedItemType.VehicleIntel && (
-                          <VehicleFeed feedItem={feedItem} />
-                        )}
-                        {feedItem?.type === FeedItemType.CrimegroupIntel && (
-                          <CrimeGroupFeed feedItem={feedItem} />
-                        )}
+                      {feedItem?.type === FeedItemType.OffenderIntel && (
+                        <OffenderFeed
+                          feedItem={feedItem}
+                          adminRights={adminRights}
+                          onDeleteFeedItem={onDeleteFeedItem}
+                          saving={saving}
+                          openLightbox={openLightbox}
+                        />
+                      )}
+                      {feedItem?.type === FeedItemType.InvestigationIntel && (
+                        <InvestigationFeed
+                          feedItem={feedItem}
+                          adminRights={adminRights}
+                          onDeleteFeedItem={onDeleteFeedItem}
+                          saving={saving}
+                          openLightbox={openLightbox}
+                        />
+                      )}
+                      {feedItem?.type === FeedItemType.VehicleIntel && (
+                        <VehicleFeed
+                          feedItem={feedItem}
+                          adminRights={adminRights}
+                          onDeleteFeedItem={onDeleteFeedItem}
+                          saving={saving}
+                          openLightbox={openLightbox}
+                        />
+                      )}
+                      {feedItem?.type === FeedItemType.CrimegroupIntel && (
+                        <CrimeGroupFeed
+                          feedItem={feedItem}
+                          adminRights={adminRights}
+                          onDeleteFeedItem={onDeleteFeedItem}
+                          saving={saving}
+                          openLightbox={openLightbox}
+                        />
+                      )}
 
-                        {/* article */}
-                        {feedItem?.type === FeedItemType.NewArticle && (
-                          <ArticleFeed feedItem={feedItem} />
-                        )}
-                        {/* ban */}
-                        {feedItem?.type === FeedItemType.NewBan && (
-                          <BanFeed feedItem={feedItem} />
-                        )}
-                      </div>
+                      {/* article */}
+                      {feedItem?.type === FeedItemType.NewArticle && (
+                        <ArticleFeed
+                          feedItem={feedItem}
+                          adminRights={adminRights}
+                          onDeleteFeedItem={onDeleteFeedItem}
+                          saving={saving}
+                          openLightbox={openLightbox}
+                        />
+                      )}
+                      {/* ban */}
+                      {feedItem?.type === FeedItemType.NewBan && (
+                        <BanFeed
+                          feedItem={feedItem}
+                          adminRights={adminRights}
+                          onDeleteFeedItem={onDeleteFeedItem}
+                          saving={saving}
+                          openLightbox={openLightbox}
+                        />
+                      )}
                     </>
                   </Card>
                 ))}
@@ -613,6 +752,21 @@ const FeedItem = ({
           setCreatedAtFilter={setCreatedAtFilter}
         />
       </Drawer>
+      <Lightbox
+        open={lightBoxOpen.open}
+        close={() => openLightbox([], 0)}
+        plugins={[Zoom]}
+        index={lightBoxOpen.index}
+        slides={lightboxElements}
+        controller={{
+          closeOnBackdropClick: true,
+        }}
+        render={{
+          slide: (slide: WatermarkSlideType) => (
+            <WatermarkSlide slide={slide} />
+          ),
+        }}
+      />
     </div>
   );
 };

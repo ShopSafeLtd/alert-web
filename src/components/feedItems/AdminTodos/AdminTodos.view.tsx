@@ -4,12 +4,13 @@ import {
   Button,
   Card,
   Col,
+  Divider,
   Drawer,
   Empty,
   Input,
   Row,
   Skeleton,
-  Table,
+  // Table,
   Typography,
 } from 'antd';
 import type { CreateTodoMutation, FeedTodosQuery } from 'graphql/generated';
@@ -20,7 +21,9 @@ import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import FormatCalendar from 'utils/format-calendar-24h';
-import type { TodoData } from '../../../utils/get-to-do-url';
+// import type { TodoData } from '../../../utils/get-to-do-url';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import Loading from 'components/shared-components/AntD/Loading';
 import getTodoUrl from '../../../utils/get-to-do-url';
 import useStyles from './AdminTodos.styles';
 
@@ -39,20 +42,19 @@ interface Props {
   toggleAddTodo: () => void;
   updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
   setSearch: (value: string) => void;
-  onPaginationChange: (page: number, pageSize: number) => void;
-  currentPage: number;
-  currentPageSize: number;
+
+  fetchMoreScroll: () => void;
 }
 
-interface TableItem {
-  key: string;
-  name: string | null | undefined;
-  description: string | null | undefined;
-  completedDate?: Date | null | undefined;
-  completedBy?: string | undefined;
-  completed?: boolean | null | undefined;
-  todo: TodoData;
-}
+// interface TableItem {
+//   key: string;
+//   name: string | null | undefined;
+//   description: string | null | undefined;
+//   completedDate?: Date | null | undefined;
+//   completedBy?: string | undefined;
+//   completed?: boolean | null | undefined;
+//   todo: TodoData;
+// }
 
 const AdminTodos = ({
   data,
@@ -64,33 +66,32 @@ const AdminTodos = ({
   toggleAddTodo,
   updateTodoList,
   setSearch,
-  onPaginationChange,
-  currentPage,
-  currentPageSize,
+  fetchMoreScroll,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
 
-  const expandedRowRender = (record: TableItem) => (
-    <Text style={{ fontSize: 14, padding: 0, margin: 0 }}>
-      {intl.formatMessage(
-        { defaultMessage: 'Description: {description}', id: 'US7L2J' },
-        {
-          description: record.description,
-        }
-      )}
-    </Text>
-  );
+  // const expandedRowRender = (record: TableItem) => (
+  //   <Text style={{ fontSize: 14, padding: 0, margin: 0 }}>
+  //     {intl.formatMessage(
+  //       { defaultMessage: 'Description: {description}', id: 'US7L2J' },
+  //       {
+  //         description: record.description,
+  //       }
+  //     )}
+  //   </Text>
+  // );
 
   return (
     <Card
       bodyStyle={{
         padding: 10,
-        overflow: 'auto',
+        // overflow: 'auto',
         height: 'calc(100vh - 300px)',
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
+        overflow: 'hidden',
       }}
     >
       <Row align="middle" gutter={5} wrap={false} style={{ marginBottom: 10 }}>
@@ -130,81 +131,135 @@ const AdminTodos = ({
         // eslint-disable-next-line react/no-array-index-key
         Array.from({ length: 5 }).map((_, index) => <Skeleton key={index} />)
       ) : data?.uncompletedTotal ? (
-        <Table
-          dataSource={data?.uncompletedTodos?.map((todo) => ({
-            key: todo.id,
-            name: todo.name,
-            description: todo?.description,
-            dueDate: todo.dueDate,
-            completed: todo.completed,
-            todo,
-          }))}
-          loading={loading}
-          size="small"
-          pagination={{
-            hideOnSinglePage: true,
-            total: data?.uncompletedTotal,
-            onChange: onPaginationChange,
-            pageSize: currentPageSize,
-            current: currentPage,
-            showSizeChanger: false,
-            position: ['bottomCenter'],
-          }}
-          columns={[
-            // {
-            //   dataIndex: 'actions',
-            //   key: 'actions',
-            //   width: 40,
-            //   render: (_, record) => (
-            //     <Popconfirm
-            //       title={intl.formatMessage({
-            //         defaultMessage: 'Complete this activity?',
-            //         id: 'UCqqOk',
-            //       })}
-            //       onConfirm={() => onCompletedTodo(record.key)}
-            //       okText={intl.formatMessage({
-            //         defaultMessage: 'Yes',
-            //         id: 'a5msuh',
-            //       })}
-            //       cancelText={intl.formatMessage({
-            //         defaultMessage: 'No',
-            //         id: 'oUWADl',
-            //       })}
-            //       overlayInnerStyle={{ padding: 10 }}
-            //     >
-            //       <Checkbox checked={!!record.completed} />
-            //     </Popconfirm>
-            //   ),
-            // },
-            {
-              key: 'name',
-              dataIndex: 'name',
-              title: intl.formatMessage({
-                defaultMessage: 'Name',
+        <InfiniteScroll
+          dataLength={data?.uncompletedTodos?.length}
+          next={() => fetchMoreScroll()}
+          hasMore={
+            (data?.uncompletedTodos?.length || 0) <
+            (data?.uncompletedTotal || 0)
+          }
+          loader={<Loading />}
+          height="calc(100vh - 350px)"
+          endMessage={
+            <p style={{ textAlign: 'center' }}>
+              {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+              <b>-----------</b>
+            </p>
+          }
+        >
+          <Row wrap={false} className={classes.header}>
+            <Col flex={1}>
+              {intl.formatMessage({
                 id: 'HAlOn1',
-              }),
-              ellipsis: true,
-              render: (value, record) => (
-                <Link to={`${getTodoUrl(record.todo)}`}>{value}</Link>
-              ),
-            },
-            {
-              key: 'dueDate',
-              dataIndex: 'dueDate',
-              title: intl.formatMessage({
-                defaultMessage: 'Due Date',
+                defaultMessage: 'Name',
+              })}
+            </Col>
+            <Col>
+              {intl.formatMessage({
                 id: '8XUukm',
-              }),
-              width: 120,
-              render: (value) => FormatCalendar(value),
-            },
-          ]}
-          expandable={{
-            expandedRowRender,
-            rowExpandable: (record) => !!record.description,
-          }}
-        />
+                defaultMessage: 'Due Date',
+              })}
+            </Col>
+          </Row>
+          <Divider style={{ margin: 0 }} />
+
+          {data?.uncompletedTodos.map((todo) => (
+            <>
+              <Row wrap={false} className={classes.contentRow}>
+                <Col flex={1}>
+                  <Text style={{ fontSize: 14 }}>
+                    <Link to={`${getTodoUrl(todo)}`} key={todo.id}>
+                      {todo.name}
+                    </Link>
+                  </Text>
+                </Col>
+                {todo.dueDate && (
+                  <Col>
+                    <Text style={{ fontSize: 14 }}>
+                      {FormatCalendar(todo.dueDate)}
+                    </Text>
+                  </Col>
+                )}
+              </Row>
+              <Divider style={{ margin: 0 }} />
+            </>
+          ))}
+        </InfiniteScroll>
       ) : (
+        // <Table
+        //   dataSource={data?.uncompletedTodos?.map((todo) => ({
+        //     key: todo.id,
+        //     name: todo.name,
+        //     description: todo?.description,
+        //     dueDate: todo.dueDate,
+        //     completed: todo.completed,
+        //     todo,
+        //   }))}
+        //   loading={loading}
+        //   size="small"
+        //   pagination={{
+        //     hideOnSinglePage: true,
+        //     total: data?.uncompletedTotal,
+        //     onChange: onPaginationChange,
+        //     pageSize: currentPageSize,
+        //     current: currentPage,
+        //     showSizeChanger: false,
+        //     position: ['bottomCenter'],
+        //   }}
+        //   columns={[
+        //     // {
+        //     //   dataIndex: 'actions',
+        //     //   key: 'actions',
+        //     //   width: 40,
+        //     //   render: (_, record) => (
+        //     //     <Popconfirm
+        //     //       title={intl.formatMessage({
+        //     //         defaultMessage: 'Complete this activity?',
+        //     //         id: 'UCqqOk',
+        //     //       })}
+        //     //       onConfirm={() => onCompletedTodo(record.key)}
+        //     //       okText={intl.formatMessage({
+        //     //         defaultMessage: 'Yes',
+        //     //         id: 'a5msuh',
+        //     //       })}
+        //     //       cancelText={intl.formatMessage({
+        //     //         defaultMessage: 'No',
+        //     //         id: 'oUWADl',
+        //     //       })}
+        //     //       overlayInnerStyle={{ padding: 10 }}
+        //     //     >
+        //     //       <Checkbox checked={!!record.completed} />
+        //     //     </Popconfirm>
+        //     //   ),
+        //     // },
+        //     {
+        //       key: 'name',
+        //       dataIndex: 'name',
+        //       title: intl.formatMessage({
+        //         defaultMessage: 'Name',
+        //         id: 'HAlOn1',
+        //       }),
+        //       ellipsis: true,
+        //       render: (value, record) => (
+        //         <Link to={`${getTodoUrl(record.todo)}`}>{value}</Link>
+        //       ),
+        //     },
+        //     {
+        //       key: 'dueDate',
+        //       dataIndex: 'dueDate',
+        //       title: intl.formatMessage({
+        //         defaultMessage: 'Due Date',
+        //         id: '8XUukm',
+        //       }),
+        //       width: 120,
+        //       render: (value) => FormatCalendar(value),
+        //     },
+        //   ]}
+        //   expandable={{
+        //     expandedRowRender,
+        //     rowExpandable: (record) => !!record.description,
+        //   }}
+        // />
         <div
           style={{
             display: 'flex',

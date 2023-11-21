@@ -16,9 +16,7 @@ const AdminTodos = ({ fullSearch }: Props): JSX.Element => {
     toggleAddTodo,
     updateTodoList,
     setSearch,
-    onPaginationChange,
-    currentPage,
-    currentPageSize,
+    fetchMoreScroll,
   } = useAdminTodos({ fullSearch });
 
   return (
@@ -31,9 +29,7 @@ const AdminTodos = ({ fullSearch }: Props): JSX.Element => {
       toggleAddTodo={toggleAddTodo}
       updateTodoList={updateTodoList}
       setSearch={setSearch}
-      onPaginationChange={onPaginationChange}
-      currentPage={currentPage}
-      currentPageSize={currentPageSize}
+      fetchMoreScroll={fetchMoreScroll}
     />
   );
 };

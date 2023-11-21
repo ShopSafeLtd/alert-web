@@ -18,14 +18,13 @@ import type {
 } from 'graphql/generated';
 import { Link } from 'react-router-dom';
 // import type { MutationUpdaterFn } from '@apollo/client';
-import AddVehicle from 'components/form-components/Vehicle/AddVehicle';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faChevronDown,
   faFilter,
   faPlus,
 } from '@fortawesome/pro-light-svg-icons';
-import type { DateType, VehicleData } from 'types/DataType';
+import type { DateType } from 'types/DataType';
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
 import VehicleFilter from 'components/vehicles/VehicleFilter';
 import { useIntl } from 'react-intl';
@@ -40,9 +39,6 @@ interface Props {
   data: ListVehiclesQuery | undefined;
   loading: boolean;
   setSearch: (value: string) => void;
-  addVehicle: boolean;
-  toggleAddVehicle: () => void;
-  onSubmit: (value: VehicleData) => void;
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
   clearFilters: () => void;
@@ -57,16 +53,14 @@ interface Props {
   addInvestigation: string;
   toggleAddInvestigation: (value: string) => void;
   variables: VehicleFilters;
+  onNavigate: () => void;
 }
 
 const ListVehicles = ({
   data,
   loading,
   setSearch,
-  addVehicle,
-  toggleAddVehicle,
   // updateVehicleList,
-  onSubmit,
   groups,
   groupsLoading,
   setGroupsFilter,
@@ -81,10 +75,12 @@ const ListVehicles = ({
   addInvestigation,
   toggleAddInvestigation,
   variables,
+  onNavigate,
 }: Props) => {
   const intl = useIntl();
   const classes = useStyles();
   const { search, gallery, customGalleries } = variables;
+
   const galleryOptions = [
     {
       label: 'Following',
@@ -142,6 +138,7 @@ const ListVehicles = ({
             <Dropdown
               overlay={menu}
               placement="bottom"
+              trigger={['contextMenu']}
               arrow={{ pointAtCenter: true }}
             >
               <Button className={classes.selectBox}>
@@ -175,7 +172,7 @@ const ListVehicles = ({
           </Button>
         </Col>
         <Col>
-          <Button type="primary" onClick={toggleAddVehicle}>
+          <Button type="primary" onClick={onNavigate}>
             {intl.formatMessage({
               defaultMessage: 'Add New Vehicle',
               id: 'cHbTr7',
@@ -308,22 +305,7 @@ const ListVehicles = ({
           },
         ]}
       />
-      <Drawer
-        title={intl.formatMessage({
-          defaultMessage: 'Add New Vehicle',
-          id: 'cHbTr7',
-        })}
-        visible={addVehicle}
-        width="700"
-        zIndex={999}
-        onClose={toggleAddVehicle}
-      >
-        {addVehicle ? (
-          <AddVehicle update={onSubmit} onClose={toggleAddVehicle} showGroups />
-        ) : (
-          <div />
-        )}
-      </Drawer>
+
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Vehicle Filters',
