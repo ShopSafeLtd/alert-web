@@ -7,6 +7,7 @@ import EditProfile from '../EditProfile.view';
 describe('Detail Officer View', () => {
   const data: CurrentUserQuery | undefined = {
     currentUser: {
+      notificationCount: 0,
       reportToAllBusinesses: true,
       id: 'userId',
       fullName: 'test user',
@@ -43,6 +44,9 @@ describe('Detail Officer View', () => {
           id: 'schemeId',
           role: Role.ContentAdmin,
           scheme: {
+            userTodos: 0,
+            logo: null,
+            darkLogo: null,
             autoPopulateDescription: false,
             languageCount: 0,
             customTranslations: [],

@@ -223,8 +223,8 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
   const [updateOffender] = useUpdateOffenderMutation({
     onCompleted: (res) => {
       update({
-        id: offenderId,
         ...res.updateOffender,
+        id: offenderId,
       });
       setSaving(false);
       notification.success({

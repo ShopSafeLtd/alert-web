@@ -140,7 +140,10 @@ const ViewArticleView = ({
               <Row>
                 {data?.article?.rows[0].columns[0].incidents.map((el) => (
                   <Col sm={24} md={12} lg={12} xl={8} xxl={6} key={el?.id}>
-                    <IncidentCard incident={el} openLightbox={openLightbox} />
+                    <IncidentCard
+                      incident={{ ...el, totalImages: el?.images?.length }}
+                      openLightbox={openLightbox}
+                    />
                   </Col>
                 ))}
               </Row>

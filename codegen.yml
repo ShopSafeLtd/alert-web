@@ -12,5 +12,6 @@ generates:
       useTypeImports: true,
       scalars: {
         DateTime: 'Date',
+        Date: 'Date',
         JSON: '{ [key: string]: any }',      }
     }

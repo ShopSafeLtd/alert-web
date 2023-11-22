@@ -37,6 +37,8 @@ describe('Detail Officer View', () => {
       total: 1,
       offenders: [
         {
+          totalIncidents: 1,
+          totalImages: 1,
           id: 'offenderId',
           createdAt: new Date('2022-07-25T08:57:55.299Z'),
           updatedAt: new Date('2022-07-25T08:57:55.299Z'),
@@ -112,7 +114,9 @@ describe('Detail Officer View', () => {
                 build: [],
                 age: [],
                 sex: [],
+                compactView: false,
               }}
+              setCompactView={jest.fn()}
               businessesLoading={false}
               data={data}
               loading={false}

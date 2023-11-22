@@ -183,7 +183,7 @@ const useTodo = ({
       type: question?.type,
     }));
 
-    const answerIds = todo?.todo?.answers.map(({ id: aId }) => aId);
+    const answerIds = todo?.todo?.answers?.map(({ id: aId }) => aId);
 
     const timeTaken = userTime
       .map((time) => ({

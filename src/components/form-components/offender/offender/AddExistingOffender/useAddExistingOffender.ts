@@ -350,6 +350,7 @@ const useAddExistingOffender = ({
         build: [],
         age: [],
         sex: [],
+        compactView: false,
       },
       order: OffenderSort.updatedAtDesc,
     });

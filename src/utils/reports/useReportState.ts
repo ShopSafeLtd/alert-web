@@ -326,7 +326,7 @@ const useReportState = ({
             .map((template) => ({
               id: template.id || '',
               name: template.name || '',
-              metaData: template.metaData || [],
+              metaData: (template.metaData as MetaData[]) || [],
               layout:
                 (template.layout.map((item) => ({
                   ...item,
@@ -339,6 +339,8 @@ const useReportState = ({
           {
             id: d.updateReportTemplate.id || '',
             name: d.updateReportTemplate.name || '',
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             metaData: (d.updateReportTemplate.metaData as MetaData[]) || [],
             layout:
               (d.updateReportTemplate.layout.map((item) => ({
@@ -402,9 +404,7 @@ const useReportState = ({
         variables: {
           data: {
             name,
-            metaData: {
-              set: metadata,
-            },
+            metaData: metadata,
             schemes: {
               connect: [
                 {
@@ -492,9 +492,7 @@ const useReportState = ({
             id: selectedTemplate,
           },
           data: {
-            metaData: {
-              set: metadata,
-            },
+            metaData: metadata,
             schemes: {
               connect: [
                 {

@@ -140,7 +140,7 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
             edges: flow.edges.map((edge: Edge) => ({
               id: edge.id,
               type: edge.type || '',
-              markerEnd: edge.markerEnd || '',
+              markerEnd: edge.markerEnd || {},
               source: edge.source || '',
               sourceHandle: edge.sourceHandle || '',
               target: edge.target || '',

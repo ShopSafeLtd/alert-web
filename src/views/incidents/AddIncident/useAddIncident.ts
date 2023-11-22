@@ -354,6 +354,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
         investigation: {
           ...existingData.investigation,
           incidents: [
+            // TODO check
             ...existingData.investigation.incidents,
             res.createIncident,
           ],

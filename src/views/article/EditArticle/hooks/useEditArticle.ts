@@ -109,7 +109,11 @@ const useEditArticle = (): Props => {
     );
     setIncidents(
       result?.article?.rows[0].columns[0].incidents.map((i) => ({
-        incident: i,
+        incident: {
+          ...i,
+          totalImages: i.images.length,
+          incidentItems: [],
+        },
       })) || []
     );
     setFileList(

@@ -358,6 +358,7 @@ const useAddOffender = (): Return => {
       data: {
         listOffenders: {
           ...existingData.listOffenders,
+          // TODO fix graphql type
           offenders:
             existingData?.listOffenders?.offenders &&
             existingData.listOffenders.offenders.length > 0

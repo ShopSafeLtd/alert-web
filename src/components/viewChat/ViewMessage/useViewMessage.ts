@@ -46,7 +46,7 @@ import type {
 } from 'types/DataType';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
-import { getText, appendDuplicates } from 'utils/getMentions/get-mention-text';
+import { appendDuplicates, getText } from 'utils/getMentions/get-mention-text';
 
 const { confirm } = Modal;
 const { useForm } = Form;
@@ -309,8 +309,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
             data: {
               chat: {
                 ...existingChat?.chat,
-                totalMessages:
-                  ((existingChat?.chat?.totalMessages as number) || 0) + 1,
+                totalMessages: (existingChat?.chat?.totalMessages || 0) + 1,
               },
             },
           });
@@ -538,6 +537,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       data: {
         user: {
           id: existingChatListData.user.id,
+          totalChats: existingChatListData.user.totalChats,
           chats: update(existingChatListData.user.chats, {
             [chatIndex]: {
               chat: {
@@ -965,7 +965,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                     reference: incident.reference,
                     subject: incident.subject,
                     description: incident.description || '',
-                    dayTime: incident.dayTime,
+                    dayTime: incident.dayTime || '',
                   }))
                 : [],
             offenders:
@@ -1010,7 +1010,8 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                     id: crimeGroup.id,
                     reference: crimeGroup.reference,
                     alias: crimeGroup.alias,
-                    totalOffenders: crimeGroup.totalOffenders,
+                    totalOffenders: crimeGroup.totalOffenders || 0,
+                    totalIncidents: crimeGroup.totalIncidents || 0,
                   }))
                 : [],
             sent: false,
@@ -1018,6 +1019,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
             currentUser: true,
             formattedDateTime: moment().format('HH:mm'),
             from: {
+              origFirstLetter: userOrigName.slice(1)[0],
               fullName: userOrigName,
               id: userId,
               firstLetter: userOrigName.slice(1)[0],

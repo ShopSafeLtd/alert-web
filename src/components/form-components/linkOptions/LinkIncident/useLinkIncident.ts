@@ -338,6 +338,7 @@ const useLinkIncident = ({
           (item) => item.id === selected
         );
         if (incident) {
+          // TODO fix types
           getIncident({ incident });
         }
       }

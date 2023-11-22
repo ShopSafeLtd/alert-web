@@ -3,10 +3,13 @@ import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import { Role, UserQuery } from 'graphql/generated';
 import UserDetail from '../UserDetail.view';
+import UserDetail from '../UserDetail.container';
 
 describe('Detail Officer View', () => {
   const data: UserQuery | undefined = {
+    // @ts-ignore TODO fix
     user: {
+      demId: 'test demId',
       reportToAllBusinesses: true,
       approverGroups: [],
       id: 'test UserId',

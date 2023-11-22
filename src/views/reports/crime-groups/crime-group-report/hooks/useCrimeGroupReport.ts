@@ -91,7 +91,7 @@ const useCrimeGroupReport = (): Return => {
           ) || []),
         ]);
         const importedTemplates: IReportTemplate[] =
-          groupsData.scheme?.reportTemplates.map((template) => ({
+          (groupsData.scheme?.reportTemplates.map((template) => ({
             id: template.id || '',
             name: template.name || '',
             metaData: template.metaData || [],
@@ -103,7 +103,7 @@ const useCrimeGroupReport = (): Return => {
                 minH: item.minH ?? undefined,
                 minW: item.minW ?? undefined,
               })) as RGL.Layout[]) || [],
-          })) || [];
+          })) as IReportTemplate[]) || [];
 
         setTemplates([defaultTemplate, ...importedTemplates]);
       },

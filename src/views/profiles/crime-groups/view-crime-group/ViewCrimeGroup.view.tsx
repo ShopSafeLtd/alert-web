@@ -586,7 +586,6 @@ const ViewCrimeGroup = ({
                 data?.crimeGroup?.incidents.length > 0 &&
                 !loading ? (
                   <IncidentTable // TODO
-                    // @ts-expect-error says can be null
                     incidents={data?.crimeGroup?.incidents.filter(
                       (incident) => incident !== null
                     )}

@@ -1,10 +1,10 @@
 import type { ViewOffendersCompareQuery } from 'graphql/generated';
 import {
-  Role,
   Age,
   Build,
   Gender,
   Race,
+  Role,
   useMergeOffendersMutation,
   useViewOffendersCompareLazyQuery,
 } from 'graphql/generated';
@@ -19,16 +19,18 @@ function useQuery() {
   return React.useMemo(() => new URLSearchParams(search), [search]);
 }
 
-type Offender = Exclude<
-  ViewOffendersCompareQuery['offenders'][number],
+type Offenders = Exclude<
+  ViewOffendersCompareQuery['offenders'],
   undefined | null
 >;
+
+type Offender = Offenders[number];
+
 export type OffenderField =
   | 'name'
   | 'age'
   | 'build'
   | 'gender'
-  | 'name'
   | 'race'
   | 'hair'
   | 'peculiarities'
@@ -187,7 +189,10 @@ const compareIncident = (): Return => {
         dateSource: value.dateSource,
         gender: value.gender,
         hair: value.hair,
-        lastActive: value.lastActive,
+        lastActive: {
+          id: value.lastActive?.id || '',
+          dayTime: value.lastActive?.dayTime || '',
+        },
         name: value.name,
         peculiarities: value.peculiarities,
         race: value.race,

@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-floating-promises,@typescript-eslint/no-unsafe-assignment */
 import { useState } from 'react';
-import type { GoodsMode, SchemeQuery, ViewTagQuery } from 'graphql/generated';
+import type {
+  GoodsMode,
+  ListSchemeTagsQuery,
+  SchemeQuery,
+} from 'graphql/generated';
 import {
   Model,
   TagType,
@@ -51,7 +55,7 @@ interface Return {
   darkFileList: UploadFile[];
   darkImgChange: UploadProps['onChange'];
   updateTagParent: (tagId: string, parentTagId: string | null) => void;
-  tags: ViewTagQuery | undefined;
+  tags: ListSchemeTagsQuery | undefined;
 }
 
 const useSchemeDetail = (): Return => {

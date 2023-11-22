@@ -358,6 +358,7 @@ const useSelectedOffenders = ({
         build: [],
         age: [],
         sex: [],
+        compactView: false,
       },
       order: OffenderSort.updatedAtDesc,
     });

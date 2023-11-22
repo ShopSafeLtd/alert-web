@@ -53,7 +53,7 @@ import type {
 } from 'types/DataType';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
-import { getText, appendDuplicates } from 'utils/getMentions/get-mention-text';
+import { appendDuplicates, getText } from 'utils/getMentions/get-mention-text';
 
 interface Return {
   beforeUpdateImageUpload: (value: RcFile) => void;
@@ -901,6 +901,7 @@ const useUpdateBar = ({
                   data: {
                     vehicle: {
                       ...oldData.vehicle,
+                      // TODO check types
                       updates: replyTo
                         ? update(oldData.vehicle.updates, {
                             [oldData.vehicle.updates
@@ -1052,16 +1053,19 @@ const useUpdateBar = ({
       return { investigationId, type: TodoType.InvestigationUpdate };
     return { type: TodoType.IncidentUpdate };
   };
-
+  const [updated, setUpdated] = useState(false);
   const handleMarkAsRead = () => {
-    void updateTodoMention({
-      variables: {
-        where: {
-          userId,
-          ...getWhereArgs(),
+    if (!updated) {
+      void updateTodoMention({
+        variables: {
+          where: {
+            userId,
+            ...getWhereArgs(),
+          },
         },
-      },
-    });
+      });
+      setUpdated(true);
+    }
   };
 
   return {

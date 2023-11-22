@@ -37,6 +37,7 @@ describe('List Officer View', () => {
     const { getByText } = render(
       <MemoryRouter>
         <RecycledItemList
+          //  @ts-ignore TODO fix
           data={data}
           loading={false}
           saving={false}

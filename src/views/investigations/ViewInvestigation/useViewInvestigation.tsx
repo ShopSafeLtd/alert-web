@@ -1048,6 +1048,7 @@ const useViewInvestigation = (investigationId: string): Return => {
           investigation: {
             ...existingData.investigation,
             crimeGroups: [
+              // TODO change graphql
               ...existingData.investigation.crimeGroups,
               res.createCrimeGroup,
             ],

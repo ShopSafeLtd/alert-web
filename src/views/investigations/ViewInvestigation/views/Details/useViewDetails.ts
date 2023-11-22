@@ -100,6 +100,7 @@ const useViewDetails = ({ investigationId }: Props): Return => {
   // });
 
   const { data: suggestedData } = useInvestigationSuggestionsQuery({
+    skip: !investigationId,
     variables: {
       where: {
         id: investigationId,

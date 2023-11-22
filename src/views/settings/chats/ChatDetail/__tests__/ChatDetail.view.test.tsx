@@ -6,6 +6,8 @@ import ChatDetail from '../ChatDetail.view';
 describe('Detail Officer View', () => {
   const data = {
     chat: {
+      totalMessages: 0,
+      totalMembers: 0,
       id: 'test ChatId',
       name: 'test Chat',
       members: [
@@ -16,6 +18,9 @@ describe('Detail Officer View', () => {
             origName: 'test user',
             id: 'test userId',
             fullName: 'test user',
+            firstLetter: 'a',
+            origFirstLetter: 'a',
+
             businesses: [
               {
                 name: 'test business',
