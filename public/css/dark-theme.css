@@ -30161,7 +30161,6 @@ tr > .ant-picker-cell-in-view.ant-picker-cell-range-hover:first-child::after {
 }
 .incident-card .incident-card-content {
   padding: 10px 10px 5px;
-  overflow: auto;
   display: flex;
   flex-direction: column;
   min-height: -webkit-min-content;

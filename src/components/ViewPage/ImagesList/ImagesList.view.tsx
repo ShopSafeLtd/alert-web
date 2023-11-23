@@ -6,15 +6,12 @@ import {
   faFolderArrowDown,
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
-
 import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-
 import type { EditFeedImage } from 'types/DataType';
 import { useIntl } from 'react-intl';
-
 import FeedImageEditor from 'components/form-components/ImageEditor/FeedImageEditor.view';
 import Lightbox from 'yet-another-react-lightbox';
 import { createUseStyles } from 'react-jss';

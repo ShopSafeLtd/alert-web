@@ -89,227 +89,231 @@ const IncidentCard = ({
   return (
     <div>
       {compactView ? (
-        <Card
-          key={incident.id || ''}
-          bodyStyle={{
-            borderRadius: 10,
-            padding: 0,
-            overflow: 'hidden',
-            height: 150,
-          }}
-        >
-          {!incident?.approved && (
-            <div className={classes.cardOverlay}>
-              <Row justify="center">
-                <Col>
-                  <Title level={4} style={{ color: '#fff' }}>
-                    {intl.formatMessage({
-                      defaultMessage: 'This incident is awaiting approval',
-                      id: 'ONEXvQ',
-                    })}
-                  </Title>
-                </Col>
-              </Row>
-              {approvalRights && (
+        <Tooltip title={incident?.subject}>
+          <Card
+            key={incident.id || ''}
+            bodyStyle={{
+              borderRadius: 10,
+              padding: 0,
+              overflow: 'hidden',
+              height: 150,
+            }}
+          >
+            {!incident?.approved && (
+              <div className={classes.cardOverlay}>
                 <Row justify="center">
                   <Col>
-                    <Link to={`view/${incident?.id}`}>
-                      <Button>
-                        {intl.formatMessage({
-                          defaultMessage: 'Review Incident',
-                          id: 'c+kQCf',
-                        })}
-                      </Button>
-                    </Link>
-                  </Col>
-                </Row>
-              )}
-            </div>
-          )}
-
-          <Row wrap={false}>
-            <Col>
-              <div className={classes.imageContainer}>
-                {incident.totalImages && incident.totalImages > 0 ? (
-                  <Carousel
-                    ref={imagesRef}
-                    afterChange={(currentSlide: number) => {
-                      setEditImageId(incident.images[currentSlide].id);
-                    }}
-                  >
-                    {incident?.images.map((image) => (
-                      <div className={classes.image} key={image.id}>
-                        <WatermarkImage
-                          url={image.low}
-                          rotation={image.rotation}
-                          position={image.position}
-                        />
-                      </div>
-                    ))}
-                  </Carousel>
-                ) : (
-                  <div>
-                    <SkeletonImage height={150} />
-                  </div>
-                )}
-                {incident.totalImages && incident.totalImages > 1 ? (
-                  <Row className={classes.cardControls}>
-                    <Col>
-                      <FontAwesomeIcon
-                        className={classes.cardControl}
-                        icon={faAngleLeft}
-                        onClick={() => imagesRef.current?.prev()}
-                      />
-                    </Col>
-                    <Col flex={1} />
-                    <Col>
-                      <FontAwesomeIcon
-                        className={classes.cardControl}
-                        icon={faAngleRight}
-                        onClick={() => imagesRef.current?.next()}
-                      />
-                    </Col>
-                  </Row>
-                ) : null}
-                {incident.totalImages && incident.totalImages > 0 ? (
-                  <FontAwesomeIcon
-                    className={classes.imageExpand}
-                    icon={faArrowsMaximize}
-                    onClick={() =>
-                      openLightbox(
-                        incident?.images.map((image) => ({
-                          src: image.low || '',
-                        })) || [],
-                        0
-                      )
-                    }
-                  />
-                ) : null}
-              </div>
-            </Col>
-
-            <Col flex={1} className={classes.cardContent}>
-              <Link to={`/app/incidents/view/${incident?.id}`}>
-                <Row wrap={false}>
-                  <Col flex={1}>
-                    <Title level={4} ellipsis>
-                      {incident?.subject}
+                    <Title level={4} style={{ color: '#fff' }}>
+                      {intl.formatMessage({
+                        defaultMessage: 'This incident is awaiting approval',
+                        id: 'ONEXvQ',
+                      })}
                     </Title>
                   </Col>
-                  {menuRights && (
-                    <Col style={{ marginTop: -2 }}>
-                      <Dropdown
-                        trigger={['click']}
-                        overlay={
-                          <Menu
-                            items={[
-                              {
-                                key: 0,
-                                label: intl.formatMessage({
-                                  defaultMessage: 'Edit Incident',
-                                  id: 'E6VJFN',
-                                }),
-                                onClick: () => toggleEditIncidentFeed(),
-                                icon: <FontAwesomeIcon icon={faEdit} />,
-                              },
-                              incident.totalImages && incident.totalImages > 0
-                                ? {
-                                    key: 1,
-                                    label: intl.formatMessage({
-                                      defaultMessage: 'Edit Image',
-                                      id: '9UlLIw',
-                                    }),
-                                    onClick: () => toggleEditImage(),
-                                    icon: <FontAwesomeIcon icon={faImage} />,
-                                  }
-                                : null,
-
-                              {
-                                key: 2,
-                                label: intl.formatMessage({
-                                  defaultMessage: 'Delete Incident',
-                                  id: 's8QPty',
-                                }),
-                                onClick: () =>
-                                  confirm({
-                                    title: intl.formatMessage({
-                                      defaultMessage: 'Are you sure?',
-                                      id: '2oCaym',
-                                    }),
-                                    content: intl.formatMessage({
-                                      defaultMessage:
-                                        'Click delete if you wish to delete this incident. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
-                                      id: 'TNOl3z',
-                                    }),
-                                    okText: intl.formatMessage({
-                                      defaultMessage: 'Delete',
-                                      id: 'K3r6DQ',
-                                    }),
-                                    onOk: () => onDelete(incident?.id || ''),
-                                  }),
-                                icon: <FontAwesomeIcon icon={faTrash} />,
-                              },
-                              {
-                                key: 3,
-                                label: intl.formatMessage({
-                                  defaultMessage: 'Add Investigation',
-                                  id: 'U5+v9Y',
-                                }),
-                                onClick: () => toggleAddInvestigation(),
-                                icon: <FontAwesomeIcon icon={faPlus} />,
-                              },
-                            ].filter((item) => item?.key !== 2 || deleteRights)}
-                          />
-                        }
-                        placement="bottomRight"
-                        arrow={{ pointAtCenter: true }}
-                      >
-                        <Button className={classes.menuButton}>
-                          <FontAwesomeIcon size="lg" icon={faEllipsisV} />
+                </Row>
+                {approvalRights && (
+                  <Row justify="center">
+                    <Col>
+                      <Link to={`view/${incident?.id}`}>
+                        <Button>
+                          {intl.formatMessage({
+                            defaultMessage: 'Review Incident',
+                            id: 'c+kQCf',
+                          })}
                         </Button>
-                      </Dropdown>
+                      </Link>
                     </Col>
-                  )}
-                </Row>
-                <div className={classes.alertId}>
-                  <Text type="secondary">
-                    {intl.formatMessage(
-                      {
-                        defaultMessage:
-                          'Alert ID: {incidentReference} {policeRef, plural, =1 {{policeRefS}} other {}}',
-                        id: '2rCZPy',
-                      },
-                      {
-                        incidentReference: incident?.reference,
-                        policeRefS: incident.policeRef,
-                        policeRef: incident.policeRef ? 1 : 0,
-                      }
-                    )}
-                  </Text>
-                </div>
-                <Paragraph type="secondary" ellipsis={{ rows: 2 }}>
-                  {incident?.description}
-                </Paragraph>
-              </Link>
-              <div className={classes.bottomRow}>
-                <Row wrap={false}>
-                  <Col>
-                    <FontAwesomeIcon
-                      size="sm"
-                      className={classes.icon}
-                      icon={faClock}
-                    />
-                  </Col>
-                  <Col>
-                    <Text type="secondary" style={{ fontSize: 14 }}>
-                      {incident.dayTime}
-                    </Text>
-                  </Col>
-                </Row>
+                  </Row>
+                )}
               </div>
-            </Col>
-          </Row>
-        </Card>
+            )}
+
+            <Row wrap={false}>
+              <Col>
+                <div className={classes.imageContainer}>
+                  {incident.totalImages && incident.totalImages > 0 ? (
+                    <Carousel
+                      ref={imagesRef}
+                      afterChange={(currentSlide: number) => {
+                        setEditImageId(incident.images[currentSlide].id);
+                      }}
+                    >
+                      {incident?.images.map((image) => (
+                        <div className={classes.image} key={image.id}>
+                          <WatermarkImage
+                            url={image.low}
+                            rotation={image.rotation}
+                            position={image.position}
+                          />
+                        </div>
+                      ))}
+                    </Carousel>
+                  ) : (
+                    <div>
+                      <SkeletonImage height={150} />
+                    </div>
+                  )}
+                  {incident.totalImages && incident.totalImages > 1 ? (
+                    <Row className={classes.cardControls}>
+                      <Col>
+                        <FontAwesomeIcon
+                          className={classes.cardControl}
+                          icon={faAngleLeft}
+                          onClick={() => imagesRef.current?.prev()}
+                        />
+                      </Col>
+                      <Col flex={1} />
+                      <Col>
+                        <FontAwesomeIcon
+                          className={classes.cardControl}
+                          icon={faAngleRight}
+                          onClick={() => imagesRef.current?.next()}
+                        />
+                      </Col>
+                    </Row>
+                  ) : null}
+                  {incident.totalImages && incident.totalImages > 0 ? (
+                    <FontAwesomeIcon
+                      className={classes.imageExpand}
+                      icon={faArrowsMaximize}
+                      onClick={() =>
+                        openLightbox(
+                          incident?.images.map((image) => ({
+                            src: image.low || '',
+                          })) || [],
+                          0
+                        )
+                      }
+                    />
+                  ) : null}
+                </div>
+              </Col>
+
+              <Col flex={1} className={classes.cardContent}>
+                <Link to={`/app/incidents/view/${incident?.id}`}>
+                  <Row wrap={false}>
+                    <Col flex={1}>
+                      <Title level={4} ellipsis>
+                        {incident?.subject}
+                      </Title>
+                    </Col>
+                    {menuRights && (
+                      <Col style={{ marginTop: -2 }}>
+                        <Dropdown
+                          trigger={['click']}
+                          overlay={
+                            <Menu
+                              items={[
+                                {
+                                  key: 0,
+                                  label: intl.formatMessage({
+                                    defaultMessage: 'Edit Incident',
+                                    id: 'E6VJFN',
+                                  }),
+                                  onClick: () => toggleEditIncidentFeed(),
+                                  icon: <FontAwesomeIcon icon={faEdit} />,
+                                },
+                                incident.totalImages && incident.totalImages > 0
+                                  ? {
+                                      key: 1,
+                                      label: intl.formatMessage({
+                                        defaultMessage: 'Edit Image',
+                                        id: '9UlLIw',
+                                      }),
+                                      onClick: () => toggleEditImage(),
+                                      icon: <FontAwesomeIcon icon={faImage} />,
+                                    }
+                                  : null,
+
+                                {
+                                  key: 2,
+                                  label: intl.formatMessage({
+                                    defaultMessage: 'Delete Incident',
+                                    id: 's8QPty',
+                                  }),
+                                  onClick: () =>
+                                    confirm({
+                                      title: intl.formatMessage({
+                                        defaultMessage: 'Are you sure?',
+                                        id: '2oCaym',
+                                      }),
+                                      content: intl.formatMessage({
+                                        defaultMessage:
+                                          'Click delete if you wish to delete this incident. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
+                                        id: 'TNOl3z',
+                                      }),
+                                      okText: intl.formatMessage({
+                                        defaultMessage: 'Delete',
+                                        id: 'K3r6DQ',
+                                      }),
+                                      onOk: () => onDelete(incident?.id || ''),
+                                    }),
+                                  icon: <FontAwesomeIcon icon={faTrash} />,
+                                },
+                                {
+                                  key: 3,
+                                  label: intl.formatMessage({
+                                    defaultMessage: 'Add Investigation',
+                                    id: 'U5+v9Y',
+                                  }),
+                                  onClick: () => toggleAddInvestigation(),
+                                  icon: <FontAwesomeIcon icon={faPlus} />,
+                                },
+                              ].filter(
+                                (item) => item?.key !== 2 || deleteRights
+                              )}
+                            />
+                          }
+                          placement="bottomRight"
+                          arrow={{ pointAtCenter: true }}
+                        >
+                          <Button className={classes.menuButton}>
+                            <FontAwesomeIcon size="lg" icon={faEllipsisV} />
+                          </Button>
+                        </Dropdown>
+                      </Col>
+                    )}
+                  </Row>
+                  <div className={classes.alertId}>
+                    <Text type="secondary">
+                      {intl.formatMessage(
+                        {
+                          defaultMessage:
+                            'Alert ID: {incidentReference} {policeRef, plural, =1 {{policeRefS}} other {}}',
+                          id: '2rCZPy',
+                        },
+                        {
+                          incidentReference: incident?.reference,
+                          policeRefS: incident.policeRef,
+                          policeRef: incident.policeRef ? 1 : 0,
+                        }
+                      )}
+                    </Text>
+                  </div>
+                  <Paragraph type="secondary" ellipsis={{ rows: 2 }}>
+                    {incident?.description}
+                  </Paragraph>
+                </Link>
+                <div className={classes.bottomRow}>
+                  <Row wrap={false}>
+                    <Col>
+                      <FontAwesomeIcon
+                        size="sm"
+                        className={classes.icon}
+                        icon={faClock}
+                      />
+                    </Col>
+                    <Col>
+                      <Text type="secondary" style={{ fontSize: 14 }}>
+                        {incident.dayTime}
+                      </Text>
+                    </Col>
+                  </Row>
+                </div>
+              </Col>
+            </Row>
+          </Card>
+        </Tooltip>
       ) : (
         <Card
           className="incident-card"
@@ -320,6 +324,7 @@ const IncidentCard = ({
             display: 'flex',
             flexDirection: 'column',
             flexGrow: 1,
+            height: 555,
           }}
         >
           {!incident?.approved && (
@@ -403,7 +408,6 @@ const IncidentCard = ({
                       onClick: () => toggleAddInvestigation(),
                       icon: <FontAwesomeIcon icon={faPlus} />,
                     },
-                    // ???
                   ].filter((item) => item?.key !== 2 || deleteRights)}
                 />
               }
