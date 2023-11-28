@@ -1,15 +1,16 @@
 query listDocumentsOnScheme($where: SchemeWhereUniqueInput!) {
-    scheme(where: $where) {
-        documents {
-            id
-            name
-            tags {
-                name
-                id
-            }
-            url
-            thumbnailUrl
-            createdAt
-        }
+  scheme(where: $where) {
+    mg11Available
+    documents {
+      id
+      name
+      tags {
+        name
+        id
+      }
+      url
+      thumbnailUrl
+      createdAt
     }
+  }
 }

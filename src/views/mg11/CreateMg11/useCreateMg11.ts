@@ -132,8 +132,10 @@ const useCreateMg11 = (): Return => {
       });
       if (businessStatement) {
         navigate(`/app/mg11/create-bis/${incidentId || ''}`);
-      } else {
+      } else if (incidentId) {
         navigate(`/app/incidents/view/${incidentId || ''}`);
+      } else {
+        window.history.back();
       }
     },
     onError: () => {

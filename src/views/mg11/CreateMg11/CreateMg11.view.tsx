@@ -956,7 +956,7 @@ const CreateMg11 = ({
                     rules={[
                       () => ({
                         validator() {
-                          if (tab === 'generate') {
+                          if (interviewerTab === 'generate') {
                             if (interviewerSelectedFont) {
                               return Promise.resolve();
                             }
@@ -964,7 +964,7 @@ const CreateMg11 = ({
                               new Error('Please select a signature!')
                             );
                           }
-                          if (tab === 'upload') {
+                          if (interviewerTab === 'upload') {
                             if (interviewerFile) {
                               return Promise.resolve();
                             }
@@ -972,7 +972,7 @@ const CreateMg11 = ({
                               new Error('Please upload a signature!')
                             );
                           }
-                          if (tab === 'draw') {
+                          if (interviewerTab === 'draw') {
                             if (interviewerSign) {
                               return Promise.resolve();
                             }

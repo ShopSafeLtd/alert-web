@@ -15,8 +15,14 @@ import AddDocument from 'components/form-components/documents/AddDocument';
 
 import TabContent from 'components/TabContent';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass, faPlus } from '@fortawesome/pro-light-svg-icons';
+import {
+  faMagnifyingGlass,
+  faPage,
+  faPlus,
+  faUpload,
+} from '@fortawesome/pro-light-svg-icons';
 import { useIntl } from 'react-intl';
+import { useNavigate } from 'react-router';
 import type { Props } from './types/Documents';
 
 const isImage = (url: string) => {
@@ -38,6 +44,48 @@ const DocumentsView = ({
   // convert tags to string array
   const tagsArray = [...tags];
   const intl = useIntl();
+  const navigate = useNavigate();
+  const dropdownItems = [
+    {
+      label: intl.formatMessage({
+        defaultMessage: 'Add Document',
+        id: 'r9vGqd',
+      }),
+      key: '5',
+      icon: (
+        <FontAwesomeIcon icon={faMagnifyingGlass} style={{ marginRight: 5 }} />
+      ),
+      // disabled: !listVehiclesData?.listVehicles.total,
+      onClick: () => toggleAddDocument(),
+    },
+
+    {
+      label: intl.formatMessage({
+        defaultMessage: 'Upload',
+        id: 'p4N05H',
+      }),
+      key: '3',
+      icon: (
+        <FontAwesomeIcon size="1x" style={{ marginRight: 8 }} icon={faUpload} />
+      ),
+      // disabled: !listVehiclesData?.listVehicles.total,
+      onClick: () => toggleAddDocument(),
+    },
+  ];
+  const mg11Button = {
+    label: intl.formatMessage({
+      defaultMessage: 'Create MG11',
+      id: 'CpvwMZ',
+    }),
+    key: '1',
+    icon: (
+      <FontAwesomeIcon size="1x" style={{ marginRight: 8 }} icon={faPage} />
+    ),
+
+    // disabled: !listVehiclesData?.listVehicles.total,
+    onClick: () => navigate(`/app/mg11/create/`),
+  };
+
   return (
     <TabContent>
       <Card style={{ marginLeft: 20, marginRight: 20, marginTop: 20 }}>
@@ -52,23 +100,11 @@ const DocumentsView = ({
               <Dropdown
                 overlay={
                   <Menu
-                    items={[
-                      {
-                        label: intl.formatMessage({
-                          defaultMessage: 'Add Document',
-                          id: 'r9vGqd',
-                        }),
-                        key: '5',
-                        icon: (
-                          <FontAwesomeIcon
-                            icon={faMagnifyingGlass}
-                            style={{ marginRight: 5 }}
-                          />
-                        ),
-                        // disabled: !listVehiclesData?.listVehicles.total,
-                        onClick: () => toggleAddDocument(),
-                      },
-                    ]}
+                    items={
+                      data?.scheme.mg11Available
+                        ? [...dropdownItems, mg11Button]
+                        : dropdownItems
+                    }
                   />
                 }
               >

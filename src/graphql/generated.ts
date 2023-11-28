@@ -37564,7 +37564,6 @@ export type Mutation = {
   updateTagDefault: Tag;
   updateTagQs: Array<TagQuestion>;
   updateTodo: Todo;
-  updateTodo2: Todo;
   updateTodoDefault: Todo;
   updateTodoMention: Array<Todo>;
   updateUpdate: Update;
@@ -38363,11 +38362,6 @@ export type MutationUpdateTodoArgs = {
   where: UniqueId;
 };
 
-export type MutationUpdateTodo2Args = {
-  data: TodoUpdateInput;
-  where: UniqueId;
-};
-
 export type MutationUpdateTodoDefaultArgs = {
   data: TodoUpdateInput;
   where: TodoWhereUniqueInput;
@@ -39059,7 +39053,7 @@ export type NewOffender = {
 export type Notification = {
   __typename?: 'Notification';
   articleId?: Maybe<Scalars['String']>;
-  ban: Ban;
+  ban?: Maybe<Ban>;
   body?: Maybe<Scalars['String']>;
   chatId?: Maybe<Scalars['String']>;
   createdAt: Scalars['Date'];
@@ -84782,6 +84776,7 @@ export type ListDocumentsOnSchemeQuery = {
   __typename?: 'Query';
   scheme: {
     __typename?: 'Scheme';
+    mg11Available: boolean;
     documents: Array<{
       __typename?: 'Document';
       id: string;
@@ -93983,11 +93978,11 @@ export type UpdateUserNotificationsMutation = {
       vehicleId?: string | null;
       userId?: string | null;
       schemes: Array<{ __typename?: 'Scheme'; id: string }>;
-      ban: {
+      ban?: {
         __typename?: 'Ban';
         id: string;
         offender: { __typename?: 'Offender'; id: string };
-      };
+      } | null;
     };
   }>;
 };
@@ -94055,11 +94050,11 @@ export type ListUserNotificationsQuery = {
             optimisedPersisted?: string | null;
           } | null;
         }>;
-        ban: {
+        ban?: {
           __typename?: 'Ban';
           id: string;
           offender: { __typename?: 'Offender'; id: string };
-        };
+        } | null;
       };
     }>;
   };
@@ -94130,11 +94125,11 @@ export type UserNotificationsQuery = {
           } | null;
           members: Array<{ __typename?: 'UserScheme'; id: string; role: Role }>;
         }>;
-        ban: {
+        ban?: {
           __typename?: 'Ban';
           id: string;
           offender: { __typename?: 'Offender'; id: string };
-        };
+        } | null;
       };
     }>;
   };
@@ -99479,6 +99474,7 @@ export type DeleteDocumentMutationOptions = Apollo.BaseMutationOptions<
 export const ListDocumentsOnSchemeDocument = gql`
   query listDocumentsOnScheme($where: SchemeWhereUniqueInput!) {
     scheme(where: $where) {
+      mg11Available
       documents {
         id
         name
