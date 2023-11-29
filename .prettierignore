@@ -3,3 +3,4 @@ build
 coverage
 .eslintcache
 /en/lang.json
+src/graphql/generated.ts
