@@ -1,6 +1,6 @@
 mutation UpdateIncidentGoods(
   $id: String!
-  $incidentItems: IncidentItemUpdateManyWithoutIncidentNestedInput
+  $incidentItems: IncidentItemUpdateManyWithoutIncidentInput
 ) {
   updateIncident(where: { id: $id }, data: { incidentItems: $incidentItems }) {
     id

@@ -5,7 +5,7 @@ import type {
   CreateTodoMutation,
   DeleteDocumentMutation,
   GoodsMode,
-  ImageUpdateWithWhereUniqueWithoutIncidentInput,
+  ImageUpdateWhereDataWithoutIncidentInput,
   LanguageCode,
   QuestionGroupOnSchemeQuery,
   UpdateIncidentGoodsMutation,
@@ -444,7 +444,7 @@ const useViewIncident = (incidentId: string): Return => {
         ({ primary }) => primary
       )?.id;
 
-      const updateImages: ImageUpdateWithWhereUniqueWithoutIncidentInput[] = [
+      const updateImages: ImageUpdateWhereDataWithoutIncidentInput[] = [
         {
           where: {
             id: value.id,
@@ -1142,7 +1142,7 @@ const useViewIncident = (incidentId: string): Return => {
                 data: {
                   goodsType: {
                     connect: {
-                      id: value.goodsTypeId,
+                      id: value.goodsTypeId || '',
                     },
                   },
                   name: { set: value.name },
@@ -1177,7 +1177,7 @@ const useViewIncident = (incidentId: string): Return => {
               {
                 goodsType: {
                   connect: {
-                    id: value.goodsTypeId,
+                    id: value.goodsTypeId || '',
                   },
                 },
                 name: value.name,

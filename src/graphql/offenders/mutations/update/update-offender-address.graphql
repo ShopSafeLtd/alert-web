@@ -1,6 +1,6 @@
 mutation updateOffenderAddresses(
   $id: String!
-  $addresses: AddressUpdateManyWithoutOffenderNestedInput
+  $addresses: UpdateSimpleLocationOnOffender
 ) {
   updateOffender(where: { id: $id }, data: { addresses: $addresses }) {
     id

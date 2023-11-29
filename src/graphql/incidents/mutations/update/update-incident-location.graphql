@@ -1,7 +1,4 @@
-mutation UpdateIncidentLocation(
-  $id: String!
-  $location: AddressUpdateOneWithoutIncidentNestedInput
-) {
+mutation UpdateIncidentLocation($id: String!, $location: UpdateSimpleLocation) {
   updateIncident(where: { id: $id }, data: { location: $location }) {
     id
     location {

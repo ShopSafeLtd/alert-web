@@ -3,12 +3,12 @@ mutation updateOffenderDetails(
   $alias: OffenderUpdatealiasInput
   $age: NullableEnumAgeFieldUpdateOperationsInput
   $build: NullableEnumBuildFieldUpdateOperationsInput
-  $dateOfBirth: NullableDateTimeFieldUpdateOperationsInput
-  $dateSource: NullableStringFieldUpdateOperationsInput
+  $dateOfBirth: NullableSetDateHelper
+  $dateSource: NullableSetStringHelper
   $gender: NullableEnumGenderFieldUpdateOperationsInput
-  $hair: NullableStringFieldUpdateOperationsInput
-  $name: NullableStringFieldUpdateOperationsInput
-  $peculiarities: NullableStringFieldUpdateOperationsInput
+  $hair: NullableSetStringHelper
+  $name: NullableSetStringHelper
+  $peculiarities: NullableSetStringHelper
   $race: NullableEnumRaceFieldUpdateOperationsInput
 ) {
   updateOffender(

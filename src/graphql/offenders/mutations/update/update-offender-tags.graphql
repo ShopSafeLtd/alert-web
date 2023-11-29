@@ -1,6 +1,6 @@
 mutation updateOffenderTags(
   $id: String!
-  $tags: TagUpdateManyWithoutOffendersNestedInput
+  $tags: TagUpdateManyWithoutIncidentsInput
 ) {
   updateOffender(where: { id: $id }, data: { tags: $tags }) {
     id

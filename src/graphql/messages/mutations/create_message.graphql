@@ -1,4 +1,4 @@
-mutation createMessage($data: MessageCreateWithoutActionsInput!) {
+mutation createMessage($data: MessageCreateInput!) {
   createMessage(data: $data) {
     id
     content

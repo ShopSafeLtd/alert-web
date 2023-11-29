@@ -1,4 +1,7 @@
-mutation updateOffenderImages($id: String!, $images: UpdateOffenderImage) {
+mutation updateOffenderImages(
+  $id: String!
+  $images: ImageUpdateManyWithoutOffenderNestedInput
+) {
   updateOffender(where: { id: $id }, data: { images: $images }) {
     id
     images {

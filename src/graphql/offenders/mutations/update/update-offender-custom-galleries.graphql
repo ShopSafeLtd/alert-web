@@ -1,6 +1,6 @@
 mutation updateOffenderCustomGalleries(
   $id: String!
-  $customGalleries: CustomGalleryUpdateManyWithoutOffendersNestedInput
+  $customGalleries: NestedCustomGalleryOnOffender
 ) {
   updateOffender(
     where: { id: $id }
