@@ -839,6 +839,7 @@ const useViewInvestigation = (investigationId: string): Return => {
             registration: value.registration || '',
             investigationId,
             schemes: schemeId,
+
             image:
               value.images && value.images.length > 0
                 ? {

@@ -1,5 +1,0 @@
-mutation deleteUserChat($id: String!) {
-  deleteUserChat(where: { id: $id }) {
-    id
-  }
-}

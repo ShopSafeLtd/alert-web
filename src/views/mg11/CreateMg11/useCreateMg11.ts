@@ -17,45 +17,45 @@ import FONT_FAMILIES from '../../../components/onboarding/Onboarding/SchemeTerms
 const { useForm } = Form;
 
 export interface FormData {
-  statement?: string;
   address?: string;
-  postcode?: string;
-  homeTel?: string;
-  workTel?: string;
-  mobileTel?: string;
-  email?: string;
-  name?: string;
-  over18?: string;
   age?: string;
-  urn?: string;
-  occupation?: string;
-  visualRecording?: string;
-  prefContact?: string;
-  gender?: string;
-  dobPlace?: string;
-  formerName?: string;
-  height?: string;
-  ethnicity?: string;
-  ethnicityOther?: string;
   availability?: string;
-  likelyToAttend?: string;
-  likelyToAttendReason?: string;
-  specialMeasures?: string;
+  businessStatement?: string;
   careNeeds?: string;
   careNeedsDetails?: string;
-  station?: string;
-  statementWhereWhen?: string;
-  businessStatement?: string;
+  civilProceedingsRelease?: string;
   completeNow?: string;
   detailsExplained?: string;
+  dobPlace?: string;
+  email?: string;
+  ethnicity?: string;
+  ethnicityOther?: string;
+  formerName?: string;
+  gender?: string;
+  height?: string;
+  homeTel?: string;
   leafletReceived?: string;
-  medicalReleasedPolice?: string;
+  likelyToAttend?: string;
+  likelyToAttendReason?: string;
   medicalReleasedDefence?: string;
-  civilProceedingsRelease?: string;
-  witnessServiceDisclose?: string;
+  medicalReleasedPolice?: string;
+  mobileTel?: string;
+  name?: string;
+  occupation?: string;
+  over18?: string;
+  postcode?: string;
+  prefContact?: string;
   signature?: string;
-  witnessSignatureDate?: string;
+  specialMeasures?: string;
+  statement?: string;
+  statementWhereWhen?: string;
+  station?: string;
   termsSignature?: string;
+  urn?: string;
+  visualRecording?: string;
+  witnessServiceDisclose?: string;
+  witnessSignatureDate?: string;
+  workTel?: string;
 }
 
 interface Return {
@@ -177,22 +177,16 @@ const useCreateMg11 = (): Return => {
         data: {
           ...data,
           age: over18 && over18 === 'true' ? 'Over 18' : data.age,
-          likelyToAttend: data.likelyToAttend === 'true',
-          specialMeasures: data.specialMeasures === 'true',
           careNeeds: data.careNeeds === 'true',
-          visualRecording: data.visualRecording === 'true',
-          witnessSignatureDate: new Date(),
-          detailsExplained: data.detailsExplained === 'true',
-          leafletReceived: data.leafletReceived === 'true',
-          medicalReleasedPolice: data.medicalReleasedPolice,
-          medicalReleasedDefence: data.medicalReleasedDefence,
           civilProceedingsRelease: data.civilProceedingsRelease,
-          witnessServiceDisclose: data.witnessServiceDisclose === 'true',
-          witnessSignature: sign,
-          interviewerSignature: interviewerSign,
+          createdBy: {
+            connect: {
+              id: userId,
+            },
+          },
+          detailsExplained: data.detailsExplained === 'true',
           ethnicity:
             data.ethnicity === 'other' ? data.ethnicityOther : data.ethnicity,
-          status: completeNow ? Mg11Status.Completed : Mg11Status.Sent,
           incident: incidentId
             ? {
                 connect: {
@@ -200,11 +194,17 @@ const useCreateMg11 = (): Return => {
                 },
               }
             : undefined,
-          createdBy: {
-            connect: {
-              id: userId,
-            },
-          },
+          interviewerSignature: interviewerSign,
+          leafletReceived: data.leafletReceived === 'true',
+          likelyToAttend: data.likelyToAttend === 'true',
+          medicalReleasedDefence: data.medicalReleasedDefence,
+          medicalReleasedPolice: data.medicalReleasedPolice,
+          specialMeasures: data.specialMeasures === 'true',
+          status: completeNow ? Mg11Status.Completed : Mg11Status.Sent,
+          visualRecording: data.visualRecording === 'true',
+          witnessServiceDisclose: data.witnessServiceDisclose === 'true',
+          witnessSignature: sign,
+          witnessSignatureDate: new Date(),
         },
       },
     }).finally(() => {

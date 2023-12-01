@@ -331,6 +331,7 @@ const useListVehicles = (): Return => {
               ? data.offenders.map((id) => ({ id }))
               : [],
           schemes: schemeId,
+
           image: {
             upload:
               data.images && data.images.length > 0

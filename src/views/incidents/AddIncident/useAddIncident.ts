@@ -17,7 +17,6 @@ import type {
   ViewInvestigationQuery,
 } from 'graphql/generated';
 import {
-  ViewInvestigationDocument,
   AnswerType,
   GoodsMode,
   IncidentFormField,
@@ -30,6 +29,7 @@ import {
   useListIncidentTagsQuery,
   useSchemeGroupsQuery,
   useTagsQuery,
+  ViewInvestigationDocument,
 } from 'graphql/generated';
 import moment from 'moment';
 import type React from 'react';
@@ -449,57 +449,57 @@ const useAddIncident = ({ investigationId }: Props): Return => {
             create:
               newOffenders.length > 0
                 ? newOffenders.map((offender) => ({
-                    name: offender.name,
-                    alias: offender.alias ? { set: offender.alias } : undefined,
-                    gender: offender.gender || null,
-                    race: offender.race || null,
-                    build: offender.build || null,
-                    height: offender.height || null,
-                    hair: offender.hair || null,
-                    peculiarities: offender.peculiarities || null,
-                    comment: offender.comment || null,
                     age: offender.age || null,
-                    dateSource: offender.dateSource || null,
+                    alias: offender.alias ? { set: offender.alias } : undefined,
+                    build: offender.build || null,
+                    comment: offender.comment || null,
+                    createdBy: { connect: { id: userId } },
                     dateOfBirth: offender.dateOfBirth || null,
+                    dateSource: offender.dateSource || null,
+                    gender: offender.gender || null,
                     groups: {
                       connect:
                         groupData?.groups && groupData.groups.length === 1
                           ? groupData?.groups.map(({ id }) => ({ id }))
                           : data.groups.map((id) => ({ id })),
                     },
-                    scheme: { connect: { id: schemeId } },
-                    createdBy: { connect: { id: userId } },
-                    localId: offender.id,
+                    hair: offender.hair || null,
+                    height: offender.height || null,
+                    idSource: offender.idSource,
                     idVerified:
                       offender.idVerified === null
                         ? false
                         : offender.idVerified,
-                    idSource: offender.idSource,
+                    localId: offender.id,
+                    name: offender.name,
+                    peculiarities: offender.peculiarities || null,
+                    race: offender.race || null,
+                    scheme: { connect: { id: schemeId } },
                   }))
                 : undefined,
 
             update: editedOffenders.map((offender) => ({
               data: {
-                name: { set: offender.name || '' },
+                age: { set: offender.age },
                 alias: { set: offender.alias || [] },
-                gender: { set: offender.gender },
-                race: { set: offender.race },
                 build: { set: offender.build },
-                height: { set: offender.height },
-                hair: { set: offender.hair },
-                peculiarities: { set: offender.peculiarities || '' },
                 comment: { set: offender.comment || '' },
                 dateOfBirth: offender.dateOfBirth
                   ? { set: offender.dateOfBirth }
                   : undefined,
-                age: { set: offender.age },
                 dateSource: { set: offender.dateSource || '' },
-                idVerified: offender.idVerified
-                  ? { set: offender.idVerified }
-                  : undefined,
+                gender: { set: offender.gender },
+                hair: { set: offender.hair },
+                height: { set: offender.height },
                 idSource: offender.idSource
                   ? { set: offender.idSource }
                   : undefined,
+                idVerified: offender.idVerified
+                  ? { set: offender.idVerified }
+                  : undefined,
+                name: { set: offender.name || '' },
+                peculiarities: { set: offender.peculiarities || '' },
+                race: { set: offender.race },
               },
               where: { id: offender.id },
             })),
@@ -526,26 +526,23 @@ const useAddIncident = ({ investigationId }: Props): Return => {
               ? editedVehicles.map((vehicle) => ({
                   where: { id: vehicle.id },
                   data: {
-                    make: { set: vehicle.make },
-                    model: { set: vehicle.model },
                     colour: { set: vehicle.colour },
-                    registration: { set: vehicle.registration },
                     groups: {
                       connect:
                         groupData?.groups && groupData.groups.length === 1
                           ? groupData?.groups.map(({ id }) => ({ id }))
                           : data.groups.map((id) => ({ id })),
                     },
+                    make: { set: vehicle.make },
+                    model: { set: vehicle.model },
+                    registration: { set: vehicle.registration },
                   },
                 }))
               : undefined,
           create:
             newVehicles.length > 0
               ? newVehicles.map((vehicle) => ({
-                  make: vehicle.make,
-                  model: vehicle.model,
                   colour: vehicle.colour,
-                  registration: vehicle.registration,
                   groups: {
                     connect:
                       groupData?.groups && groupData.groups.length === 1
@@ -553,6 +550,9 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                         : data.groups.map((id) => ({ id })),
                   },
                   localId: vehicle.id,
+                  make: vehicle.make,
+                  model: vehicle.model,
+                  registration: vehicle.registration,
                 }))
               : undefined,
         };
@@ -632,10 +632,13 @@ const useAddIncident = ({ investigationId }: Props): Return => {
       void createIncident({
         variables: {
           data: {
-            subject: data.subject,
-            description: data.description,
-            date: data.date,
-            time: data.date,
+            answers: customQuestions.map((question) => ({
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore TODO: fix noImplicitAny error here
+              answer: data[question.questionId] || '',
+              type: question.answerType,
+              tagQuestionId: question.tagQuestionId,
+            })),
             business: data.business?.value
               ? {
                   id: data.business?.value,
@@ -643,6 +646,20 @@ const useAddIncident = ({ investigationId }: Props): Return => {
               : {
                   id: businesses[0]?.id,
                 },
+            crimeGroups: {},
+            crimeTypes: [
+              ...data.tags.map((id) => ({ id })),
+              ...involved,
+              ...impact,
+            ],
+            date: data.date,
+            description: data.description,
+            documents: getDocuments(),
+            groups:
+              groupData?.groups && groupData.groups.length === 1
+                ? groupData?.groups.map(({ id }) => ({ id }))
+                : data.groups.map((id) => ({ id })),
+            images: getImages(),
             investigationId: investigationId || null,
             items:
               data.goods &&
@@ -681,35 +698,18 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                       }
                     : undefined,
                 })),
+            location: getLocation(),
+            offenders: getOffenders(),
             policeInvolved: data.policeInvolved,
-            policeRef: data.policeRef,
             policeNo: data.policeNo,
+            policeRef: data.policeRef,
             policeReported: data.policeReported,
             policeResponse: data.policeResponse,
-            groups:
-              groupData?.groups && groupData.groups.length === 1
-                ? groupData?.groups.map(({ id }) => ({ id }))
-                : data.groups.map((id) => ({ id })),
             scheme: schemeId,
-            crimeTypes: [
-              ...data.tags.map((id) => ({ id })),
-              ...involved,
-              ...impact,
-            ],
-            offenders: getOffenders(),
-            vehicles: getVehicles(),
-            crimeGroups: {},
-            images: getImages(),
-            documents: getDocuments(),
+            subject: data.subject,
 
-            location: getLocation(),
-            answers: customQuestions.map((question) => ({
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-ignore TODO: fix noImplicitAny error here
-              answer: data[question.questionId] || '',
-              type: question.answerType,
-              tagQuestionId: question.tagQuestionId,
-            })),
+            time: data.date,
+            vehicles: getVehicles(),
           },
         },
       });
