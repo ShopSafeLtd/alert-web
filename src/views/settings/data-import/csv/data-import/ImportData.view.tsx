@@ -11,124 +11,11 @@ import {
   Table,
   Typography,
 } from 'antd';
-import type { IntlShape } from 'react-intl';
 import { FormattedMessage, useIntl } from 'react-intl';
 import type { IFileInfo } from 'react-csv-reader';
 import CSVReader from 'react-csv-reader';
 import { Role } from 'graphql/generated';
 import type { Action, CSVData, DataType, State } from './useImport';
-
-const AdditionInfo = ({
-  state,
-  dispatch,
-  intl,
-}: {
-  state: State;
-  dispatch: Dispatch<Action>;
-  intl: IntlShape;
-}) => {
-  if (state.dataTypes === 'stockItems') {
-    return (
-      <Select
-        placeholder={intl.formatMessage({
-          defaultMessage: 'Goods Type',
-          id: 'sesFK5',
-        })}
-        style={{
-          width: '80%',
-        }}
-        defaultValue={state.additionalInfo.goodsType}
-        options={state.goods}
-        onChange={(value: string) =>
-          dispatch({
-            type: 'SET_ADDITIONAL_INFO',
-            payload: {
-              ...state.additionalInfo,
-              goodsType: value,
-            },
-          })
-        }
-      />
-    );
-  }
-  if (state.dataTypes === 'users') {
-    return (
-      <Row gutter={[8, 8]}>
-        <Col>
-          <Select
-            placeholder={intl.formatMessage({
-              defaultMessage: 'Role',
-              id: '1ZgrhW',
-            })}
-            defaultValue={state.additionalInfo.role}
-            options={[
-              {
-                label: intl.formatMessage({
-                  defaultMessage: 'Admin',
-                  id: 'iHN12u',
-                }),
-                value: Role.GroupAdmin,
-              },
-              {
-                label: intl.formatMessage({
-                  defaultMessage: 'User',
-                  id: 'EwRIOm',
-                }),
-                value: Role.User,
-              },
-            ]}
-            onChange={(value: string) =>
-              dispatch({
-                type: 'SET_ADDITIONAL_INFO',
-                payload: {
-                  ...state.additionalInfo,
-                  role: value,
-                },
-              })
-            }
-          />
-        </Col>
-        <Col>
-          <Input
-            defaultValue={state.additionalInfo.password || undefined}
-            placeholder={intl.formatMessage({
-              defaultMessage: 'Default Password',
-              id: 'lrV/4+',
-            })}
-            onChange={(e) =>
-              dispatch({
-                type: 'SET_ADDITIONAL_INFO',
-                payload: {
-                  ...state.additionalInfo,
-                  password: e.target.value,
-                },
-              })
-            }
-          />
-        </Col>
-        <Col>
-          <Input
-            defaultValue={state.additionalInfo.password || undefined}
-            placeholder={intl.formatMessage({
-              defaultMessage: 'Organisation',
-              id: 'ZA6cIU',
-            })}
-            onChange={(e) =>
-              dispatch({
-                type: 'SET_ADDITIONAL_INFO',
-                payload: {
-                  ...state.additionalInfo,
-                  organisation: e.target.value,
-                },
-              })
-            }
-          />
-        </Col>
-      </Row>
-    );
-  }
-  return <div />;
-};
 
 interface Props {
   onItemsLoaded: (
@@ -150,7 +37,110 @@ const ImportStockItems = ({
   onSubmit,
 }: Props) => {
   const intl = useIntl();
-
+  // eslint-disable-next-line react/no-unstable-nested-components
+  const AdditionInfo = () => {
+    if (state.dataTypes === 'stockItems') {
+      return (
+        <Select
+          placeholder={intl.formatMessage({
+            defaultMessage: 'Goods Type',
+            id: 'sesFK5',
+          })}
+          style={{
+            width: '80%',
+          }}
+          defaultValue={state.additionalInfo.goodsType}
+          options={state.goods}
+          onChange={(value: string) =>
+            dispatch({
+              type: 'SET_ADDITIONAL_INFO',
+              payload: {
+                ...state.additionalInfo,
+                goodsType: value,
+              },
+            })
+          }
+        />
+      );
+    }
+    if (state.dataTypes === 'users') {
+      return (
+        <Row gutter={[8, 8]}>
+          <Col>
+            <Select
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Role',
+                id: '1ZgrhW',
+              })}
+              defaultValue={state.additionalInfo.role}
+              options={[
+                {
+                  label: intl.formatMessage({
+                    defaultMessage: 'Admin',
+                    id: 'iHN12u',
+                  }),
+                  value: Role.GroupAdmin,
+                },
+                {
+                  label: intl.formatMessage({
+                    defaultMessage: 'User',
+                    id: 'EwRIOm',
+                  }),
+                  value: Role.User,
+                },
+              ]}
+              onChange={(value: string) =>
+                dispatch({
+                  type: 'SET_ADDITIONAL_INFO',
+                  payload: {
+                    ...state.additionalInfo,
+                    role: value,
+                  },
+                })
+              }
+            />
+          </Col>
+          <Col>
+            <Input
+              defaultValue={state.additionalInfo.password || undefined}
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Default Password',
+                id: 'lrV/4+',
+              })}
+              onChange={(e) =>
+                dispatch({
+                  type: 'SET_ADDITIONAL_INFO',
+                  payload: {
+                    ...state.additionalInfo,
+                    password: e.target.value,
+                  },
+                })
+              }
+            />
+          </Col>
+          <Col>
+            <Input
+              defaultValue={state.additionalInfo.password || undefined}
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Organisation',
+                id: 'ZA6cIU',
+              })}
+              onChange={(e) =>
+                dispatch({
+                  type: 'SET_ADDITIONAL_INFO',
+                  payload: {
+                    ...state.additionalInfo,
+                    organisation: e.target.value,
+                  },
+                })
+              }
+            />
+          </Col>
+        </Row>
+      );
+    }
+    return <div />;
+  };
   const getColumns = (type: DataType) => {
     switch (type) {
       case 'stockItems': {
@@ -488,7 +478,7 @@ const ImportStockItems = ({
                 })}
               </div>
             ) : (
-              <AdditionInfo intl={intl} dispatch={dispatch} state={state} />
+              AdditionInfo()
             )}
           </Card>
         </Col>
