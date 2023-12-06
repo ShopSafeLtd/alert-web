@@ -77,7 +77,7 @@ const UseVehicleSideListTest = () => {
   const { data } = useVehicleSideList();
   const ListVehicles =
     data &&
-    data.listVehicles?.vehicles.map((el) => (
+    data.vehicles?.map((el) => (
       <div key={el.id}>
         <span>{el.id}</span>
         <span>{el.reference}</span>

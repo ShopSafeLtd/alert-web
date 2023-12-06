@@ -155,6 +155,7 @@ const useViewChat = ({ chatId }: Props): Return => {
       data: {
         user: {
           id: userId,
+          totalChats: existingData.user.totalChats + 1,
           chats: [...existingData.user.chats, res.createChat.members[0]],
         },
         __typename: 'Query',

@@ -37,6 +37,7 @@ describe('Detail Officer View', () => {
       total: 1,
       incidents: [
         {
+          totalImages: 0,
           id: 'incidentId',
           date: '2022-08-10T10:40:06.191Z',
           time: '2022-08-11T10:40:09.985Z',
@@ -68,6 +69,7 @@ describe('Detail Officer View', () => {
             <IncidentFeed
               goods={[]}
               variables={{
+                compactView: false,
                 gallery: [],
                 search: '',
                 crimeTypes: [],
@@ -116,6 +118,7 @@ describe('Detail Officer View', () => {
               tagsLoading={false}
               updateIncidentList={jest.fn()}
               onNavigate={jest.fn()}
+              setCompactView={jest.fn()}
             />
           </MockedProvider>
         </MemoryRouter>

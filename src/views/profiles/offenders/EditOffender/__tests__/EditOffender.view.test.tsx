@@ -55,6 +55,7 @@ describe('List Officer View', () => {
       alias: [],
       customGalleries: [],
       searchedMatches: [],
+      totalImages: 0,
     },
   };
 

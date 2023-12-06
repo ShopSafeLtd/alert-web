@@ -17,6 +17,18 @@ describe('List Officer View', () => {
         recycled: true,
         incidents: [],
       },
+      incident: {
+        id: 'incidentId',
+        subject: 'test subject',
+        recycled: true,
+        date: '2022-08-10T10:40:06.191Z' as unknown as Date,
+        location: null,
+        createdBy: {
+          fullName: 'aaa',
+          id: 'cl4pe3eu91312371op4c4k2lih2',
+          businesses: [{ name: 'user business', id: '' }],
+        },
+      },
       scheme: { id: 'schemeId' },
     },
   };

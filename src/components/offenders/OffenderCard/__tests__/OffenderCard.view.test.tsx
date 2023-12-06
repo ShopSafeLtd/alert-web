@@ -38,6 +38,8 @@ describe('Detail Officer View', () => {
       },
     ],
     incidents: [],
+    totalIncidents: 0,
+    totalImages: 0,
   };
   it('renders the page', () => {
     const { getByText } = render(
@@ -59,6 +61,7 @@ describe('Detail Officer View', () => {
           editImageId={'id'}
           setEditImageId={jest.fn()}
           onEditImage={jest.fn()}
+          compactView
         />
       </MemoryRouter>
     );

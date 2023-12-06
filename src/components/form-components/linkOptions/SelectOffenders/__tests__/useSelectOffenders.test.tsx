@@ -92,7 +92,7 @@ const UseAddExistingOffenderTest = () => {
   });
   const ListOffenders =
     data &&
-    data.listOffendersAllSchemes?.offenders.map((el) => (
+    data.offenders?.map((el) => (
       <div key={el.id}>
         <span>{el.id}</span>
         <span>{el.name}</span>

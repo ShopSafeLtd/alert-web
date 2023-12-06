@@ -49,6 +49,9 @@ describe('Detail Officer View', () => {
       offenderPush: true,
       approverGroups: [],
       defaultGroups: [],
+      totalLastYearLogin: 0,
+      totalThirtyDaysLogin: 0,
+      lastTenLogin: [],
     },
   };
 

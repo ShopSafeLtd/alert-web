@@ -53,6 +53,7 @@ describe('List Officer View', () => {
       totalRecoveredValue: 0,
       totalValue: 0,
       incidentItems: [],
+      ref: '',
     },
   };
 

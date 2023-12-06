@@ -8,6 +8,14 @@ describe('List Officer View', () => {
     recycledItem: {
       id: 'recycledId',
       systemTask: false,
+      offender: {
+        id: 'offenderId',
+        gender: null,
+        name: 'test offender',
+        race: null,
+        recycled: true,
+        incidents: [],
+      },
       incident: {
         id: 'incidentId',
         date: new Date('2022-07-25T08:57:55.299Z'),

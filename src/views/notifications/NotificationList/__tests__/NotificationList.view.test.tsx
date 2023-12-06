@@ -17,6 +17,8 @@ describe('List Officer View', () => {
           createdAt: new Date('2022-07-25T08:57:55.299Z'),
           schemes: [
             {
+              userTodos: 0,
+              userNotifications: 0,
               id: 'id',
               name: 'scheme',
               autoApproveIncidents: false,

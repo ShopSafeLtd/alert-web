@@ -26,6 +26,7 @@ describe('Detail Officer View', () => {
         rotation: 0,
       },
     ],
+    totalImages: 0,
     offenders: [],
   };
   it('renders the page', () => {
