@@ -2,11 +2,11 @@ import { useState } from 'react';
 import type { ListCustomGalleriesQuery } from 'graphql/generated';
 import {
   ListCustomGalleriesDocument,
-  useUpdateCustomGalleryMutation,
-  useListCustomGalleriesQuery,
-  useDeleteCustomGalleryMutation,
   QueryMode,
   useCreateCustomGalleryMutation,
+  useDeleteCustomGalleryMutation,
+  useListCustomGalleriesQuery,
+  useUpdateCustomGalleryMutation,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
 
@@ -127,10 +127,12 @@ const useCustomGalleries = (): Return => {
           name: value.name,
           description: value.description || '',
           schemes: schemeId,
-          groups:
-            value.groups && value.groups.length > 0
-              ? value.groups?.map((id) => ({ id }))
-              : [],
+          groups: {
+            connect:
+              value.groups && value.groups.length > 0
+                ? value.groups?.map((id) => ({ id }))
+                : [],
+          },
         },
       },
     }).finally(() => {
@@ -207,7 +209,7 @@ const useCustomGalleries = (): Return => {
         },
         data: {
           name: { set: value.name },
-          description: { set: value.description },
+          description: { set: value.description || '' },
           groups: {
             set:
               value.groups && value.groups.length > 0

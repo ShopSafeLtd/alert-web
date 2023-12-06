@@ -1,0 +1,66 @@
+fragment ArticlePreview on Article {
+  previewText
+  watermarkImage
+  previewImage
+  priority
+  tags {
+    id
+    name
+  }
+  images {
+    id
+    url
+    optimised
+    card
+    position
+    rotation
+  }
+  image {
+    id
+    url
+    optimised
+    card
+  }
+  createdBy {
+    fullName
+    businesses {
+      id
+      name
+    }
+    id
+  }
+  groups(where: $groupsWhere) {
+    id
+    name
+  }
+  title
+  updatedAt
+  id
+}
+
+query ListArticlesFeed(
+  $where: ArticleWhereInput
+  $scheme: SchemeWhereUniqueInput!
+  $order: ArticleOrderByWithRelationInput
+  $first: Int
+  $after: String
+  $groupsWhere: GroupWhereInput
+) {
+  listArticlesRelay(
+    where: $where
+    scheme: $scheme
+    order: $order
+    first: $first
+    after: $after
+  ) {
+    edges {
+      node {
+        ...ArticlePreview
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}

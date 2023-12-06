@@ -3,7 +3,7 @@ mutation updateVehicleOffenders($where: UniqueId!, $data: VehicleUpdateInput!) {
     id
     offenders {
       ...Offenders
-      images(first: 1) {
+      images(take: 1) {
         id
         url
         optimised

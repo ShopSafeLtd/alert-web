@@ -6,7 +6,7 @@ mutation updateSimpleVehicle($where: UniqueId!, $data: VehicleUpdateInput!) {
     model
     make
     registration
-    images(first: 1) {
+    images(take: 1) {
       id
       url
       policeImage

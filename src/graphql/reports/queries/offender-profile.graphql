@@ -56,7 +56,7 @@ query OffenderProfile(
         name
       }
     }
-    images(first: $first) {
+    images(take: $first) {
       id
       optimised
       url

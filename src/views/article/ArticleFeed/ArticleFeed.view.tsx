@@ -2,7 +2,7 @@ import React from 'react';
 import type {
   ArticlePriority,
   DeleteArticleMutation,
-  ListArticlesQuery,
+  ListArticlesFeedQuery,
   SortOrder,
 } from 'graphql/generated';
 import { Button, Card, Col, Drawer, Empty, Input, Row } from 'antd';
@@ -25,7 +25,7 @@ import Loading from '../../../components/shared-components/AntD/Loading';
 
 interface Props {
   data:
-    | Exclude<ListArticlesQuery['listArticles'], undefined | null>
+    | Exclude<ListArticlesFeedQuery['listArticlesRelay'], undefined | null>
     | null
     | undefined;
   loading: boolean;
@@ -179,11 +179,11 @@ const Article = ({
               </Col>
             ))}
           </Row>
-        ) : data?.total ? (
+        ) : data?.edges && data?.edges.length > 0 ? (
           <InfiniteScroll
-            dataLength={data?.articles.length}
+            dataLength={data?.edges.length}
             next={() => fetchMoreScroll()}
-            hasMore={data?.articles.length < data?.total}
+            hasMore={data?.pageInfo.hasNextPage}
             loader={<Loading />}
             height="calc(100vh - 87px)"
             style={{ overflowX: 'hidden' }}
@@ -203,10 +203,10 @@ const Article = ({
                 overflowX: 'hidden',
               }}
             >
-              {data?.articles.map((article) => (
-                <Col sm={24} md={12} lg={8} xl={8} xxl={6} key={article?.id}>
+              {data?.edges.map((t) => (
+                <Col sm={24} md={12} lg={8} xl={8} xxl={6} key={t?.node?.id}>
                   <ArticleCard
-                    article={article}
+                    article={t?.node}
                     openLightbox={openLightbox}
                     update={updateArticleList}
                   />

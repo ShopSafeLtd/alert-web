@@ -176,7 +176,7 @@ const useViewBusiness = (): Return => {
           id: data?.business?.id,
         },
         data: {
-          name: { set: data?.business?.name },
+          name: { set: data?.business?.name || '' },
           publicName: data?.business?.publicName || false,
           locations: {
             update: [

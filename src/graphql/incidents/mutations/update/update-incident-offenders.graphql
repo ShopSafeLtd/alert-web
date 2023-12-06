@@ -14,7 +14,7 @@ mutation UpdateIncidentOffenders(
       build
       height
       comment
-      images(first: 1) {
+      images(take: 1) {
         id
         url
         optimised

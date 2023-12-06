@@ -1,20 +1,14 @@
 import React from 'react';
 import type {
+  ArticlePreviewFragment,
   DeleteArticleMutation,
-  ListArticlesQuery,
 } from 'graphql/generated';
 import type { MutationUpdaterFn } from '@apollo/client';
 import View from './ArticleCard.view';
 import useArticleCard from './useArticleCard';
 
 interface Props {
-  article:
-    | Exclude<
-        ListArticlesQuery['listArticles'],
-        undefined | null
-      >['articles'][0]
-    | null
-    | undefined;
+  article: ArticlePreviewFragment | null | undefined;
   openLightbox: (elements: { src: string }[], index: number) => void;
   update: MutationUpdaterFn<DeleteArticleMutation>;
 }

@@ -1,14 +1,15 @@
 import type {
   ArticlePriority,
   DeleteArticleMutation,
+  ListArticlesFeedQuery,
   ListArticlesQuery,
 } from 'graphql/generated';
 import {
-  ListArticlesDocument,
+  ListArticlesFeedDocument,
   QueryMode,
   Role,
   SortOrder,
-  useListArticlesQuery,
+  useListArticlesFeedQuery,
   useSchemeGroupsQuery,
 } from 'graphql/generated';
 import { useState } from 'react';
@@ -20,7 +21,7 @@ import type { MutationUpdaterFn } from '@apollo/client';
 
 interface Return {
   data:
-    | Exclude<ListArticlesQuery['listArticles'], undefined | null>
+    | Exclude<ListArticlesFeedQuery['listArticlesRelay'], undefined | null>
     | null
     | undefined;
   loading: boolean;
@@ -131,11 +132,15 @@ const useArticleFeed = (): Return => {
     order: {
       updatedAt: order,
     },
-    skip: (page - 1) * pageSize,
-    take: pageSize,
+    first: pageSize,
   };
 
-  const { data, loading, fetchMore } = useListArticlesQuery({
+  // const { data, loading, fetchMore } = useListArticlesQuery({
+  //   fetchPolicy: 'cache-and-network',
+  //   variables,
+  // });
+
+  const { data, loading, fetchMore } = useListArticlesFeedQuery({
     fetchPolicy: 'cache-and-network',
     variables,
   });
@@ -146,21 +151,21 @@ const useArticleFeed = (): Return => {
   ) => {
     if (res === null || res === undefined) return;
 
-    const existingData = store.readQuery<ListArticlesQuery>({
-      query: ListArticlesDocument,
+    const existingData = store.readQuery<ListArticlesFeedQuery>({
+      query: ListArticlesFeedDocument,
       variables,
     });
 
     if (existingData === null) return;
-    if (existingData?.listArticles?.articles === undefined) return;
+    if (existingData?.listArticlesRelay?.edges === undefined) return;
 
     store.writeQuery<ListArticlesQuery>({
-      query: ListArticlesDocument,
+      query: ListArticlesFeedDocument,
       data: {
-        listArticles: {
-          ...existingData.listArticles,
-          articles: existingData.listArticles?.articles.filter(
-            (article) => article.id !== res?.deleteArticle?.id
+        listArticlesRelay: {
+          ...existingData.listArticlesRelay,
+          edges: existingData.listArticlesRelay?.edges.filter(
+            (article) => article.node?.id !== res?.deleteArticle?.id
           ),
         },
         __typename: 'Query',
@@ -232,21 +237,16 @@ const useArticleFeed = (): Return => {
     void fetchMore({
       variables: {
         ...variables,
-        take: 12,
-        skip: data?.listArticles?.articles?.length || 0,
+        after: data?.listArticlesRelay?.pageInfo?.endCursor,
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return {
-          listArticles: {
-            ...fetchMoreResult.listArticles,
-            total:
-              fetchMoreResult.listArticles?.total ||
-              prev.listArticles?.total ||
-              0,
-            articles: [
-              ...(prev.listArticles?.articles || []),
-              ...(fetchMoreResult.listArticles?.articles || []),
+          listArticlesRelay: {
+            ...fetchMoreResult.listArticlesRelay,
+            edges: [
+              ...(prev.listArticlesRelay?.edges || []),
+              ...(fetchMoreResult.listArticlesRelay?.edges || []),
             ],
           },
         };
@@ -256,7 +256,7 @@ const useArticleFeed = (): Return => {
 
   return {
     fetchMoreScroll,
-    data: data?.listArticles,
+    data: data?.listArticlesRelay || null,
     loading: (data === null || data === undefined) && loading,
     onPaginationChange,
     order,

@@ -11,7 +11,7 @@ mutation UpdateIncidentVehicles(
       model
       make
       registration
-      images(first: 1) {
+      images(take: 1) {
         ...Images
       }
     }

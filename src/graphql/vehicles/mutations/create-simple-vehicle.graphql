@@ -6,7 +6,7 @@ mutation CreateSimpleVehicle($data: CreateVehicleDataInput!) {
     model
     make
     registration
-    images(first: 1) {
+    images(take: 1) {
       id
       url
       policeImage

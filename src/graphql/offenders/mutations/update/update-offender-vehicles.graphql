@@ -11,7 +11,7 @@ mutation UpdateOffenderVehicles(
       model
       make
       registration
-      images(first: 1) {
+      images(take: 1) {
         id
         url
         position

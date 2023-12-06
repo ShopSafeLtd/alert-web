@@ -4,7 +4,7 @@ import View from './UserDetail.view';
 
 import useUserDetail from './useUserDetail';
 
-const UserDetail = (): JSX.Element => {
+const UserDetailContainer = (): JSX.Element => {
   const userId = useParams().id || '';
 
   const {
@@ -46,4 +46,4 @@ const UserDetail = (): JSX.Element => {
   );
 };
 
-export default UserDetail;
+export default UserDetailContainer;
