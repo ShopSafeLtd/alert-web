@@ -2,7 +2,6 @@ import type {
   ArticlePriority,
   DeleteArticleMutation,
   ListArticlesFeedQuery,
-  ListArticlesQuery,
 } from 'graphql/generated';
 import {
   ListArticlesFeedDocument,
@@ -159,13 +158,13 @@ const useArticleFeed = (): Return => {
     if (existingData === null) return;
     if (existingData?.listArticlesRelay?.edges === undefined) return;
 
-    store.writeQuery<ListArticlesQuery>({
+    store.writeQuery<ListArticlesFeedQuery>({
       query: ListArticlesFeedDocument,
       data: {
         listArticlesRelay: {
           ...existingData.listArticlesRelay,
           edges: existingData.listArticlesRelay?.edges.filter(
-            (article) => article.node?.id !== res?.deleteArticle?.id
+            (article) => article?.node?.id !== res?.deleteArticle?.id
           ),
         },
         __typename: 'Query',

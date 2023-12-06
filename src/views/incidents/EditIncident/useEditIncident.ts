@@ -870,13 +870,14 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
                     offender.images.length > 0 &&
                     offender.images?.filter((image) => image.new === true)
                       ? {
-                          connect: offender.images
-                            ?.filter((image) => image.new === true)
-                            .map((image) => ({
-                              id: image.id,
-                            })),
+                          connect:
+                            offender.images
+                              ?.filter((image) => image.new === true)
+                              .map((image) => ({
+                                id: image.id,
+                              })) || [],
                         }
-                      : {},
+                      : undefined,
                 }))
               : undefined,
           disconnect:
@@ -1065,7 +1066,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
                         .map((item) => ({
                           goodsType: {
                             connect: {
-                              id: item.goodsType,
+                              id: item.goodsType || '',
                             },
                           },
                           name:
@@ -1082,7 +1083,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
                           data: {
                             goodsType: {
                               connect: {
-                                id: item.goodsType,
+                                id: item.goodsType || '',
                               },
                             },
                             name: {

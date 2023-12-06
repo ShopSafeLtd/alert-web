@@ -9,17 +9,17 @@ import type {
 } from 'graphql/generated';
 import {
   useCreateCrimeGroupSuggestedDataMutation,
-  useUpdateInvestigationCrimeGroupsMutation,
-  useUpdateInvestigationIncidentsMutation,
-  useUpdateInvestigationOffendersMutation,
-  useUpdateInvestigationVehiclesMutation,
-  useDeleteInvestigationMutation,
   useCreateSimpleOffenderMutation,
   useCreateSimpleVehicleMutation,
+  useDeleteInvestigationMutation,
   useQuestionGroupOnSchemeQuery,
   useSubscribeToInvestigationMutation,
   useUnsubscribeToInvestigationMutation,
   useUpdateCrimeGroupMutation,
+  useUpdateInvestigationCrimeGroupsMutation,
+  useUpdateInvestigationIncidentsMutation,
+  useUpdateInvestigationOffendersMutation,
+  useUpdateInvestigationVehiclesMutation,
   useUpdateSimpleOffenderMutation,
   useUpdateSimpleVehicleMutation,
   useViewInvestigationQuery,
@@ -1076,15 +1076,17 @@ const useViewInvestigation = (investigationId: string): Return => {
               ],
             },
             offenders: {
-              connect: value?.offenders?.map(({ id }) => ({
-                id,
-              })),
+              connect:
+                value?.offenders?.map(({ id }) => ({
+                  id,
+                })) || [],
             },
 
             vehicles: {
-              connect: value?.vehicles?.map(({ id }) => ({
-                id,
-              })),
+              connect:
+                value?.vehicles?.map(({ id }) => ({
+                  id,
+                })) || [],
             },
             investigations: {
               connect: [{ id: investigationId }],

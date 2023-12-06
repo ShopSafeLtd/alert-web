@@ -94,7 +94,7 @@ const useViewChat = ({ chatId }: Props): Return => {
                     mentioned: { set: false },
                   },
                   where: {
-                    id: userChatId,
+                    id: { equals: userChatId },
                   },
                 },
               ],

@@ -971,7 +971,7 @@ const useViewIncident = (incidentId: string): Return => {
               connect:
                 value.groups && value.groups.length > 0
                   ? value.groups.map(({ id }) => ({ id }))
-                  : data?.incident?.groups.map(({ id }) => ({ id })),
+                  : data?.incident?.groups.map(({ id }) => ({ id })) || [],
             },
             scheme: schemeId,
             incidentId,

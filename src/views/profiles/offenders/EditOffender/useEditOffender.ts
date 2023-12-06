@@ -29,10 +29,10 @@ import { useStoreActions, useStoreState } from 'state';
 import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import { useNavigate } from 'react-router';
 import type {
-  Image,
   BanData,
   CrimeGroupData,
   CustomGalleryData,
+  Image,
   SelectOptions,
   TagData,
   VehicleData,
@@ -703,12 +703,12 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
               ? newCustomGalleries.map((value) => ({
                   name: value.name,
                   description: value.description || '',
-                  schemes: { connect: [{ id: schemeId }] },
+                  schemes: { connect: { id: schemeId } },
                   groups: {
                     connect:
                       groupData?.groups && groupData.groups.length === 1
                         ? groupData?.groups.map(({ id }) => ({ id }))
-                        : data.groups.map((id) => ({ id })),
+                        : data.groups.map((id) => ({ id })) || [],
                   },
                 }))
               : undefined,

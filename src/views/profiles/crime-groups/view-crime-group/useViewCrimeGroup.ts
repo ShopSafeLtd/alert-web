@@ -221,9 +221,10 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
                 createdBy: { connect: { id: userId } },
                 scheme: { connect: { id: schemeId } },
                 groups: {
-                  connect: crimeGroupsData?.crimeGroup?.groups.map(
-                    ({ id }) => ({ id })
-                  ),
+                  connect:
+                    crimeGroupsData?.crimeGroup?.groups.map(({ id }) => ({
+                      id,
+                    })) || [],
                 },
                 images: {
                   upload:

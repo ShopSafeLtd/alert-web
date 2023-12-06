@@ -126,7 +126,9 @@ const useCustomGalleries = (): Return => {
         data: {
           name: value.name,
           description: value.description || '',
-          schemes: schemeId,
+          schemes: {
+            connect: { id: schemeId },
+          },
           groups: {
             connect:
               value.groups && value.groups.length > 0

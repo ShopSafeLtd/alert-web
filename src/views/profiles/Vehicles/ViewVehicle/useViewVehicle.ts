@@ -1,25 +1,25 @@
 import { Modal, notification } from 'antd';
 
 import type {
-  VehicleUpdateInput,
+  CreateDocumentMutation,
+  CreateInvestigationMutation,
+  DeleteDocumentMutation,
   VehicleQuery,
   VehicleQueryVariables,
-  CreateDocumentMutation,
-  DeleteDocumentMutation,
-  CreateInvestigationMutation,
+  VehicleUpdateInput,
 } from 'graphql/generated';
 import {
-  useCreateSimpleOffenderMutation,
-  useUpdateVehicleOffendersMutation,
-  useUpdateSimpleOffenderMutation,
-  useUpdateVehicleDetailsMutation,
-  useUpdateVehicleImagesMutation,
   Role,
+  useCreateSimpleOffenderMutation,
   useDeleteUpdateMutation,
   useDeleteVehicleMutation,
   useSubscribeToVehicleMutation,
   useUnsubscribeToVehicleMutation,
+  useUpdateSimpleOffenderMutation,
   useUpdateUpdateMutation,
+  useUpdateVehicleDetailsMutation,
+  useUpdateVehicleImagesMutation,
+  useUpdateVehicleOffendersMutation,
   useVehicleQuery,
   VehicleDocument,
 } from 'graphql/generated';
@@ -275,7 +275,7 @@ const useViewVehicle = (vehicleId: string): Return => {
             ? newCustomGalleries.map((value) => ({
                 name: value.name,
                 description: value.description || '',
-                schemes: { connect: [{ id: schemeId }] },
+                schemes: { connect: { id: schemeId } },
                 groups: {
                   connect:
                     data.groups && data.groups.length > 0
@@ -698,7 +698,8 @@ const useViewVehicle = (vehicleId: string): Return => {
               connect:
                 value.groups && value.groups.length > 0
                   ? value.groups.map(({ id }) => ({ id }))
-                  : vehicleData?.vehicle?.groups.map(({ id }) => ({ id })),
+                  : vehicleData?.vehicle?.groups.map(({ id }) => ({ id })) ||
+                    [],
             },
             scheme: schemeId,
             vehicles: { connect: [{ id: vehicleId }] },

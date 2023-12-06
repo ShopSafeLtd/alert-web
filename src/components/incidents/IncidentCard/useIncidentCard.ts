@@ -1,8 +1,8 @@
 import { useStoreState } from 'state';
 import type {
-  ImageUpdateWithWhereUniqueWithoutIncidentInput,
   IncidentCardFragment,
   RecycleIncidentMutation,
+  ImagePosition,
 } from 'graphql/generated';
 import {
   Role,
@@ -97,7 +97,15 @@ const useIncidentCard = ({ incident, update }: Props): Return => {
   const onEditImage = (value: EditFeedImage) => {
     if (value) {
       const findPrimaryId = incident?.images.find(({ primary }) => primary)?.id;
-      const u: ImageUpdateWithWhereUniqueWithoutIncidentInput[] = [
+      const u: {
+        data: {
+          policeImage?: { set: boolean };
+          rotation?: { set: number };
+          position?: { set: ImagePosition | undefined };
+          primary: { set: boolean };
+        };
+        where: { id: string };
+      }[] = [
         {
           where: {
             id: value.id,

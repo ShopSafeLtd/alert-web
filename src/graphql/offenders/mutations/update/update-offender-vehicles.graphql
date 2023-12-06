@@ -1,6 +1,6 @@
 mutation UpdateOffenderVehicles(
   $id: String!
-  $vehicles: NullableConnectArrayHelper
+  $vehicles: VehicleUpdateManyWithoutOffenderNestedInput
 ) {
   updateOffender(where: { id: $id }, data: { vehicles: $vehicles }) {
     id

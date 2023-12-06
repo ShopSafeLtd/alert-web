@@ -1611,6 +1611,7 @@ export type BanWhereUniqueInput = {
 export type BansOnOffenderUpdate = {
   create?: InputMaybe<Array<BanCreateInput>>;
   delete?: InputMaybe<Array<UniqueId>>;
+  disconnect?: InputMaybe<Array<UniqueId>>;
   update?: InputMaybe<Array<BanNestedUpdate>>;
 };
 
@@ -1812,6 +1813,7 @@ export type BusinessContributions = {
 export type BusinessCreateNestedManyWithoutUsersInput = {
   connect?: InputMaybe<Array<BusinessWhereUniqueInput>>;
   create?: InputMaybe<Array<CreateBusinessOnUserDataInput>>;
+  disconnect?: InputMaybe<Array<BusinessWhereUniqueInput>>;
   update?: InputMaybe<Array<UpdateBusinessOnUserEnvelope>>;
 };
 
@@ -2105,6 +2107,7 @@ export type ChatMembersCreate = {
 export type ChatMembersUpdate = {
   create?: InputMaybe<Array<UserChatCreate>>;
   delete?: InputMaybe<Array<UniqueId>>;
+  update?: InputMaybe<Array<UserChatUpdateEnvelope>>;
 };
 
 export type ChatMessagesWhereInput = {
@@ -2718,7 +2721,7 @@ export type ConnectOnlyArrayHelper = {
 export type ConnectSetHelper = {
   connect?: InputMaybe<Array<UniqueId>>;
   disconnect?: InputMaybe<Array<UniqueId>>;
-  set?: InputMaybe<SetArrayHelper>;
+  set?: InputMaybe<Array<UniqueId>>;
 };
 
 export type Contact = {
@@ -2920,7 +2923,7 @@ export type CreateCustomGalleryInput = {
   groups: ConnectOnlyArrayHelper;
   name: Scalars['String'];
   offenders?: InputMaybe<Array<UniqueId>>;
-  schemes: Scalars['String'];
+  schemes: ConnectHelper;
   vehicles?: InputMaybe<Array<UniqueId>>;
 };
 
@@ -2968,7 +2971,6 @@ export type CreateImageOptimistic = {
 
 export type CreateIncidentCrimeGroups = {
   connect?: InputMaybe<Array<UniqueId>>;
-  update?: InputMaybe<Array<CreateIncidentUpdateCrimeGroups>>;
 };
 
 export type CreateIncidentData = {
@@ -3046,11 +3048,6 @@ export type CreateIncidentOffenders = {
   connect?: InputMaybe<Array<UniqueId>>;
   create?: InputMaybe<Array<CreateIncidentOffender>>;
   update?: InputMaybe<Array<CreateIncidentUpdateOffenders>>;
-};
-
-export type CreateIncidentUpdateCrimeGroups = {
-  data?: InputMaybe<UniqueId>;
-  where?: InputMaybe<UniqueId>;
 };
 
 export type CreateIncidentUpdateOffenders = {
@@ -3198,6 +3195,22 @@ export type CreateVehicleDataInput = {
   offenders?: InputMaybe<Array<UniqueId>>;
   registration?: InputMaybe<Scalars['String']>;
   schemes: Scalars['String'];
+};
+
+export type CreateVehicleWithoutOffenderDataInput = {
+  colour?: InputMaybe<Scalars['String']>;
+  crimeGroup?: InputMaybe<NullableConnectArrayHelper>;
+  customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutOffender>;
+  documents?: InputMaybe<Array<CreateDocument>>;
+  groups?: InputMaybe<Array<UniqueId>>;
+  image?: InputMaybe<ImageCreateNestedManyWithoutVehiclesInput>;
+  images?: InputMaybe<Array<UploadVehicleImage>>;
+  incidents?: InputMaybe<NullableConnectArrayHelper>;
+  investigationId?: InputMaybe<Scalars['String']>;
+  make?: InputMaybe<Scalars['String']>;
+  model?: InputMaybe<Scalars['String']>;
+  registration?: InputMaybe<Scalars['String']>;
+  schemes?: InputMaybe<Scalars['String']>;
 };
 
 export type CreatedDataCounts = {
@@ -9143,17 +9156,17 @@ export type MessageVehiclesArgs = {
 export type MessageCreateInput = {
   chat: ConnectHelper;
   content: Scalars['String'];
-  crimeGroups?: InputMaybe<ConnectHelper>;
+  crimeGroups?: InputMaybe<NullableConnectOnlyArrayHelper>;
   from: ConnectHelper;
   images?: InputMaybe<Array<UrlImage>>;
-  incidents?: InputMaybe<ConnectOnlyArrayHelper>;
-  mentions?: InputMaybe<ConnectOnlyArrayHelper>;
-  offenders?: InputMaybe<ConnectOnlyArrayHelper>;
+  incidents?: InputMaybe<NullableConnectOnlyArrayHelper>;
+  mentions?: InputMaybe<NullableConnectOnlyArrayHelper>;
+  offenders?: InputMaybe<NullableConnectOnlyArrayHelper>;
   optimisticImages?: InputMaybe<Array<CreateImageOptimistic>>;
   scheme: ConnectHelper;
   sent?: InputMaybe<Scalars['Boolean']>;
   updatedAt?: InputMaybe<Scalars['Date']>;
-  vehicles?: InputMaybe<ConnectOnlyArrayHelper>;
+  vehicles?: InputMaybe<NullableConnectOnlyArrayHelper>;
 };
 
 export type MessageItem = {
@@ -11078,6 +11091,12 @@ export type NullableConnectOnlyArrayHelper = {
   connect?: InputMaybe<Array<UniqueId>>;
 };
 
+export type NullableConnectSetArrayHelper = {
+  connect?: InputMaybe<Array<UniqueId>>;
+  disconnect?: InputMaybe<Array<UniqueId>>;
+  set?: InputMaybe<Array<UniqueId>>;
+};
+
 export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: InputMaybe<Scalars['Date']>;
 };
@@ -11829,7 +11848,7 @@ export type OffenderUpdateInput = {
   tags?: InputMaybe<TagUpdateManyWithoutIncidentsInput>;
   tempId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<NullableSetDateHelper>;
-  vehicles?: InputMaybe<NullableConnectArrayHelper>;
+  vehicles?: InputMaybe<VehicleUpdateManyWithoutOffenderNestedInput>;
 };
 
 export type OffenderUpdateManyWithoutIncidentsNested = {
@@ -12958,7 +12977,7 @@ export type QueryWorkflowsArgs = {
 
 export type QueryListArticlesRelayConnection = {
   __typename?: 'QueryListArticlesRelayConnection';
-  edges: Array<Maybe<QueryListArticlesRelayConnectionEdge>>;
+  edges: Array<QueryListArticlesRelayConnectionEdge>;
   pageInfo: PageInfo;
 };
 
@@ -14970,15 +14989,16 @@ export type SimpleLocation = {
 };
 
 export type SimpleLocationSet = {
-  building?: InputMaybe<SetStringHelper>;
+  alias?: InputMaybe<NullableSetStringHelper>;
+  building?: InputMaybe<NullableSetStringHelper>;
   country?: InputMaybe<SetStringHelper>;
-  county?: InputMaybe<SetStringHelper>;
+  county?: InputMaybe<NullableSetStringHelper>;
   geoLat?: InputMaybe<SetIntHelper>;
   geoLng?: InputMaybe<SetIntHelper>;
-  postcode?: InputMaybe<SetStringHelper>;
+  postcode?: InputMaybe<NullableSetStringHelper>;
   premises?: InputMaybe<SetStringHelper>;
-  street?: InputMaybe<SetStringHelper>;
-  townCity?: InputMaybe<SetStringHelper>;
+  street?: InputMaybe<NullableSetStringHelper>;
+  townCity?: InputMaybe<NullableSetStringHelper>;
 };
 
 export type SimpleTagCreate = {
@@ -15062,7 +15082,7 @@ export type StatementTemplateScalarWhereWithAggregatesInput = {
 export type StatementTemplateUpdateInput = {
   content?: InputMaybe<SetStringHelper>;
   name?: InputMaybe<SetStringHelper>;
-  schemes?: InputMaybe<NullableConnectArrayHelper>;
+  schemes?: InputMaybe<NullableConnectSetArrayHelper>;
 };
 
 export type StatementTemplateWhereInput = {
@@ -16223,12 +16243,16 @@ export type TimeTaken = {
 };
 
 export type TimeTakenCreateManyEnvelope = {
-  createMany?: InputMaybe<Array<TimeTakenCreateManyInput>>;
+  createMany?: InputMaybe<TimeTakenCreateManyInputEnvelope>;
 };
 
 export type TimeTakenCreateManyInput = {
   timeTaken: Scalars['Int'];
   userId: Scalars['String'];
+};
+
+export type TimeTakenCreateManyInputEnvelope = {
+  data?: InputMaybe<Array<TimeTakenCreateManyInput>>;
 };
 
 export type TimeTakenCreateManyTodoInput = {
@@ -16961,6 +16985,7 @@ export type UpdateSimpleLocation = {
 export type UpdateSimpleLocationOnOffender = {
   create?: InputMaybe<Array<SimpleLocation>>;
   delete?: InputMaybe<Array<UniqueId>>;
+  disconnect?: InputMaybe<Array<UniqueId>>;
   update?: InputMaybe<Array<LocationUpdate>>;
   upsert?: InputMaybe<Array<LocationUpsert>>;
 };
@@ -17675,9 +17700,9 @@ export type UserChat = {
 };
 
 export type UserChatCreate = {
-  chat: ConnectHelper;
+  chat?: InputMaybe<ConnectHelper>;
   newMessages?: InputMaybe<Scalars['Boolean']>;
-  user: ConnectHelper;
+  user?: InputMaybe<ConnectHelper>;
 };
 
 export type UserChatListRelationFilter = {
@@ -17736,6 +17761,16 @@ export type UserChatScalarWhereWithAggregatesInput = {
   newMessages?: InputMaybe<BoolNullableWithAggregatesFilter>;
   updatedAt?: InputMaybe<DateTimeWithAggregatesFilter>;
   userId?: InputMaybe<StringWithAggregatesFilter>;
+};
+
+export type UserChatUpdateData = {
+  mentioned: SetBooleanHelper;
+  newMessages: SetBooleanHelper;
+};
+
+export type UserChatUpdateEnvelope = {
+  data: UserChatUpdateData;
+  where: UserChatWhereInput;
 };
 
 export type UserChatWhereInput = {
@@ -18667,10 +18702,14 @@ export type VehicleUpdatesArgs = {
 export type VehicleCreateWithoutCrimeGroupInput = {
   colour?: InputMaybe<Scalars['String']>;
   crimeGroup?: InputMaybe<NullableConnectArrayHelper>;
+  customGalleries?: InputMaybe<CustomGalleryCreateNestedManyWithoutOffender>;
+  groups?: InputMaybe<NullableConnectArrayHelper>;
+  incidents?: InputMaybe<NullableConnectArrayHelper>;
   make?: InputMaybe<Scalars['String']>;
   model?: InputMaybe<Scalars['String']>;
   offenders?: InputMaybe<NullableConnectArrayHelper>;
   registration?: InputMaybe<Scalars['String']>;
+  schemes?: InputMaybe<NullableConnectArrayHelper>;
 };
 
 export type VehicleCreateWithoutIncidentsInput = {
@@ -18794,11 +18833,11 @@ export type VehicleScalarWhereWithAggregatesInput = {
 
 export type VehicleUpdateInput = {
   colour?: InputMaybe<NullableSetStringHelper>;
-  crimeGroup?: InputMaybe<SetArrayHelper>;
+  crimeGroup?: InputMaybe<ConnectSetHelper>;
   customGalleries?: InputMaybe<NestedCustomGalleryOnOffender>;
-  groups?: InputMaybe<NullableSetStringHelper>;
+  groups?: InputMaybe<SetArrayHelper>;
   images?: InputMaybe<ImageUpdateManyWithoutOffenderNestedInput>;
-  incidents?: InputMaybe<SetArrayHelper>;
+  incidents?: InputMaybe<ConnectSetHelper>;
   make?: InputMaybe<NullableSetStringHelper>;
   model?: InputMaybe<NullableSetStringHelper>;
   offenders?: InputMaybe<ConnectSetHelper>;
@@ -18810,6 +18849,18 @@ export type VehicleUpdateManyWithoutIncidentsInput = {
   create?: InputMaybe<Array<VehicleCreateWithoutIncidentsInput>>;
   disconnect?: InputMaybe<Array<VehicleWhereUniqueInput>>;
   update?: InputMaybe<Array<VehicleUpdateWithWhereUniqueWithoutIncidents>>;
+};
+
+export type VehicleUpdateManyWithoutOffenderNestedInput = {
+  connect?: InputMaybe<Array<UniqueId>>;
+  create?: InputMaybe<Array<CreateVehicleWithoutOffenderDataInput>>;
+  disconnect?: InputMaybe<Array<UniqueId>>;
+  update?: InputMaybe<Array<VehicleUpdateWhereDataWithoutOffenderInput>>;
+};
+
+export type VehicleUpdateWhereDataWithoutOffenderInput = {
+  data: VehicleUpdateInput;
+  where: VehicleWhereUniqueInput;
 };
 
 export type VehicleUpdateWithWhereUniqueWithoutIncidents = {
@@ -20297,7 +20348,7 @@ export type UpdateOffenderTagsMutation = { __typename?: 'Mutation', updateOffend
 
 export type UpdateOffenderVehiclesMutationVariables = Exact<{
   id: Scalars['String'];
-  vehicles?: InputMaybe<NullableConnectArrayHelper>;
+  vehicles?: InputMaybe<VehicleUpdateManyWithoutOffenderNestedInput>;
 }>;
 
 
@@ -21142,7 +21193,7 @@ export type ListArticlesFeedQueryVariables = Exact<{
 }>;
 
 
-export type ListArticlesFeedQuery = { __typename?: 'Query', listArticlesRelay: { __typename?: 'QueryListArticlesRelayConnection', edges: Array<{ __typename?: 'QueryListArticlesRelayConnectionEdge', node: { __typename?: 'Article', previewText?: string | null, watermarkImage: boolean, previewImage?: string | null, priority: ArticlePriority, title: string, updatedAt: Date, id: string, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null, position: ImagePosition, rotation: number }>, image?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null } | null, createdBy: { __typename?: 'User', fullName: string, id: string, businesses: Array<{ __typename?: 'Business', id: string, name: string }> }, groups: Array<{ __typename?: 'Group', id: string, name: string }> } } | null>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null } } };
+export type ListArticlesFeedQuery = { __typename?: 'Query', listArticlesRelay: { __typename?: 'QueryListArticlesRelayConnection', edges: Array<{ __typename?: 'QueryListArticlesRelayConnectionEdge', node: { __typename?: 'Article', previewText?: string | null, watermarkImage: boolean, previewImage?: string | null, priority: ArticlePriority, title: string, updatedAt: Date, id: string, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null, position: ImagePosition, rotation: number }>, image?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null } | null, createdBy: { __typename?: 'User', fullName: string, id: string, businesses: Array<{ __typename?: 'Business', id: string, name: string }> }, groups: Array<{ __typename?: 'Group', id: string, name: string }> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null } } };
 
 export type CreateCsvZipMutationVariables = Exact<{
   where: IncidentExportInput;
@@ -27576,7 +27627,7 @@ export type UpdateOffenderTagsMutationHookResult = ReturnType<typeof useUpdateOf
 export type UpdateOffenderTagsMutationResult = Apollo.MutationResult<UpdateOffenderTagsMutation>;
 export type UpdateOffenderTagsMutationOptions = Apollo.BaseMutationOptions<UpdateOffenderTagsMutation, UpdateOffenderTagsMutationVariables>;
 export const UpdateOffenderVehiclesDocument = gql`
-    mutation UpdateOffenderVehicles($id: String!, $vehicles: NullableConnectArrayHelper) {
+    mutation UpdateOffenderVehicles($id: String!, $vehicles: VehicleUpdateManyWithoutOffenderNestedInput) {
   updateOffender(where: {id: $id}, data: {vehicles: $vehicles}) {
     id
     vehicles {

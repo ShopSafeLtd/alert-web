@@ -206,7 +206,7 @@ const useAddVehicle = (): Return => {
                       connect:
                         groupsData?.groups && groupsData.groups.length === 1
                           ? groupsData?.groups.map(({ id }) => ({ id }))
-                          : data.groups?.map((id) => ({ id })),
+                          : data.groups?.map((id) => ({ id })) || [],
                     },
                   }))
                 : undefined,

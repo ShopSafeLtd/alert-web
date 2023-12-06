@@ -313,7 +313,7 @@ const useListVehicles = (): Return => {
                       connect:
                         groupData?.groups && groupData.groups.length === 1
                           ? groupData?.groups.map(({ id }) => ({ id }))
-                          : data.groups?.map((id) => ({ id })),
+                          : data.groups?.map((id) => ({ id })) || [],
                     },
                   }))
                 : undefined,

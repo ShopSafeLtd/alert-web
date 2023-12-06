@@ -1,8 +1,8 @@
 import { useStoreState } from 'state';
 import type {
-  ImageUpdateWithWhereUniqueWithoutOffendersInput,
   OffenderCardFragment,
   RecycleOffenderMutation,
+  ImagePosition,
 } from 'graphql/generated';
 import {
   Role,
@@ -101,7 +101,15 @@ const useOffenderCard = ({ offender, update }: Props): Return => {
   const onEditImage = (value: EditFeedImage) => {
     if (value) {
       const findPrimaryId = offender?.images.find(({ primary }) => primary)?.id;
-      const u: ImageUpdateWithWhereUniqueWithoutOffendersInput[] = [
+      const u: {
+        data: {
+          policeImage?: { set: boolean };
+          rotation?: { set: number };
+          position?: { set: ImagePosition | undefined };
+          primary: { set: boolean };
+        };
+        where: { id: string };
+      }[] = [
         {
           where: {
             id: value.id,

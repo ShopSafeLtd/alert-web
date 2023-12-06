@@ -124,10 +124,10 @@ const UseArticleFeedTest = () => {
   const { data, loading, groups, groupsLoading } = useArticleFeed();
   const ListArticles =
     data &&
-    data.articles.map((el) => (
-      <div key={el.id}>
-        <span>{el.id}</span>
-        <span>{el.title}</span>
+    data.edges.map((el) => (
+      <div key={el?.node?.id}>
+        <span>{el?.node?.id}</span>
+        <span>{el?.node?.title}</span>
       </div>
     ));
 
