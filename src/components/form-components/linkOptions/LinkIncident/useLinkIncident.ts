@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
-import type { ListIncidentsAllSchemesQuery } from 'graphql/generated';
+import type {
+  ListIncidentsAllSchemesQuery,
+  ListIncidentsQuery,
+} from 'graphql/generated';
 import {
   Model,
   QueryMode,
@@ -17,10 +20,15 @@ import type { IncidentCardData } from 'types/DataType';
 import type { IncidentFilters } from 'state/data-model';
 
 export interface Incident {
-  incident: Exclude<
-    ListIncidentsAllSchemesQuery['listIncidentsAllSchemes'],
-    undefined | null
-  >['incidents'][0];
+  incident:
+    | Exclude<
+        ListIncidentsAllSchemesQuery['listIncidentsAllSchemes'],
+        undefined | null
+      >['incidents'][0]
+    | Exclude<
+        ListIncidentsQuery['listIncidents'],
+        null | undefined
+      >['incidents'][0];
 }
 interface Props {
   onClose: () => void;
