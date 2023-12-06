@@ -9,6 +9,9 @@ describe('Detail Officer View', () => {
     chat: {
       id: 'test ChatId',
       name: 'test Chat',
+      totalMembers: 0,
+      totalMessages: 0,
+
       members: [
         {
           id: 'userChatId',
@@ -19,6 +22,8 @@ describe('Detail Officer View', () => {
             reportToAllBusinesses: false,
             businesses: [{ name: 'user business', id: '', fullName: '' }],
             origName: 'test user',
+            firstLetter: 'A',
+            origFirstLetter: 'A',
           },
         },
       ],
@@ -39,6 +44,8 @@ describe('Detail Officer View', () => {
         groups: [{ id: 'groupId', name: 'test group' }],
         schemes: [],
         approverGroups: [],
+        firstLetter: 'A',
+        origFirstLetter: 'A',
       },
     ],
   };

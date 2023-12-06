@@ -26,6 +26,7 @@ describe('List Officer View', () => {
     const { getByText } = render(
       <MemoryRouter>
         <TodoList
+          fetchMoreScroll={jest.fn()}
           data={data}
           loading={false}
           setSearch={jest.fn()}
@@ -33,9 +34,6 @@ describe('List Officer View', () => {
           addTodo={false}
           toggleAddTodo={jest.fn()}
           updateTodoList={jest.fn()}
-          onPaginationChange={jest.fn()}
-          currentPage={1}
-          currentPageSize={1}
         />
       </MemoryRouter>
     );

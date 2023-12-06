@@ -106,7 +106,7 @@ const UseLinkIncidentTest = () => {
   });
   const ListIncidents =
     data &&
-    data.listIncidentsAllSchemes?.incidents.map((el) => (
+    data?.incidents.map((el) => (
       <div key={el.id}>
         <span>{el.id}</span>
         <span>{el.subject}</span>

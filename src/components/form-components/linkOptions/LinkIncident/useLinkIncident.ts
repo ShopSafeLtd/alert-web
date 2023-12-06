@@ -1,19 +1,16 @@
 import { useEffect, useState } from 'react';
-import type {
-  ListIncidentsAllSchemesQuery,
-  ListIncidentsQuery,
-} from 'graphql/generated';
+import type { ListIncidentsAllSchemesQuery } from 'graphql/generated';
 import {
-  TagType,
-  Role,
   Model,
+  QueryMode,
+  Role,
+  SortOrder,
+  TagType,
   useListBusinessesQuery,
   useListGoodsTypesQuery,
+  useListIncidentsAllSchemesQuery,
   useSchemeGroupsQuery,
   useTagsQuery,
-  useListIncidentsAllSchemesQuery,
-  QueryMode,
-  SortOrder,
 } from 'graphql/generated';
 import { useStoreActions, useStoreState } from 'state';
 import type { IncidentCardData } from 'types/DataType';
@@ -21,8 +18,8 @@ import type { IncidentFilters } from 'state/data-model';
 
 export interface Incident {
   incident: Exclude<
-    ListIncidentsQuery['listIncidents'],
-    null | undefined
+    ListIncidentsAllSchemesQuery['listIncidentsAllSchemes'],
+    undefined | null
   >['incidents'][0];
 }
 interface Props {

@@ -19,6 +19,8 @@ describe('Detail Officer View', () => {
         groups: [{ id: 'groupId', name: 'test group' }],
         schemes: [],
         approverGroups: [],
+        firstLetter: 'A',
+        origFirstLetter: 'A',
       },
     ],
   };
