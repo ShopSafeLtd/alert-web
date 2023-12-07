@@ -91,6 +91,7 @@
     "mixpanel-browser": "^2.46.0",
     "moment": "2.29.4",
     "moment-timezone": "0.5.35",
+    "papaparse": "^5.4.1",
     "prismjs": "1.27.0",
     "prop-types": "^15.8.1",
     "qr-code-styling": "^1.6.0-rc.0",
