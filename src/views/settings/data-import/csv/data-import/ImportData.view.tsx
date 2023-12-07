@@ -15,7 +15,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import type { IFileInfo } from 'react-csv-reader';
 import { Role } from 'graphql/generated';
 import type { Action, CSVData, DataType, State } from './useImport';
-import CSVReader from './CSVReader';
+import CSVReader from '../../../../../components/CSVReader/CSVReader';
 
 interface Props {
   onItemsLoaded: (

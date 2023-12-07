@@ -1,6 +1,5 @@
 /* eslint-disable formatjs/no-literal-string-in-jsx */
 import React from 'react';
-import CSVReader from 'react-csv-reader';
 import type { FormInstance, UploadFile, UploadProps } from 'antd';
 import {
   Badge,
@@ -42,6 +41,7 @@ import NewUsersTable from './components/NewUsersTable';
 import NewOffenderTable from './components/NewOffenderTable';
 import NewBusinessTable from './components/NewBusinessTable';
 import NewIncidentTable from './components/NewIncidentTable';
+import CSVReader from '../../../../components/CSVReader/CSVReader';
 
 const { Title } = Typography;
 
