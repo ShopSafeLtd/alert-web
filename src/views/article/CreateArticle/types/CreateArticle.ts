@@ -6,7 +6,7 @@ import type { UploadFile } from 'antd/es/upload/interface';
 import type { AddIncident, AddOffender } from '../hooks/Forms';
 import type { DrawerType } from '../../../../hooks';
 import type { OffenderData } from '../../../../components/form-components/offender/offender/AddExistingOffender/AddExistingOffender.container';
-import type { Incident } from '../../../../components/form-components/linkOptions/LinkIncident/LinkIncident.container';
+import type { Incident } from '../../../../components/form-components/linkOptions/LinkIncident/useLinkIncident';
 import type { FormData } from '../hooks/useCreateArticle';
 
 export interface Props {

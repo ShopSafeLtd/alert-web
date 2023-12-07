@@ -13,16 +13,16 @@ import type {
   Race,
 } from 'graphql/generated';
 import {
-  QueryMode,
-  useSearchOffendersLazyQuery,
   ImagePosition,
   ListOffendersDocument,
   Model,
+  QueryMode,
   Role,
   useCreateOffenderMutation,
   useListCustomGalleriesQuery,
   useListVehiclesQuery,
   useSchemeGroupsQuery,
+  useSearchOffendersLazyQuery,
   useTagsQuery,
 } from 'graphql/generated';
 import type { FormInstance, UploadFile } from 'antd';
@@ -32,14 +32,14 @@ import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import type {
-  Image,
   BanData,
   CrimeGroupData,
   CustomGalleryData,
+  Image,
+  OffenderData,
   SelectOptions,
   TagData,
   VehicleData,
-  OffenderData,
 } from 'types/DataType';
 import update from 'immutability-helper';
 import errorNotification from 'types/mutation_notifications/error_notification';
@@ -363,10 +363,18 @@ const useAddOffender = (): Return => {
             existingData?.listOffenders?.offenders &&
             existingData.listOffenders.offenders.length > 0
               ? // eslint-disable-next-line unicorn/prefer-spread
-                existingData?.listOffenders?.offenders.concat(
-                  res.createOffender
-                )
-              : [res.createOffender],
+                existingData?.listOffenders?.offenders.concat({
+                  ...res.createOffender,
+                  totalImages: res?.createOffender.images.length || 0,
+                  totalIncidents: res?.createOffender.incidents.length || 0,
+                })
+              : [
+                  {
+                    ...res.createOffender,
+                    totalImages: res?.createOffender.images.length || 0,
+                    totalIncidents: res?.createOffender.incidents.length || 0,
+                  },
+                ],
         },
         __typename: 'Query',
       },

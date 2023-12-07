@@ -541,13 +541,28 @@ const useUpdateBar = ({
                     data: {
                       incident: {
                         ...oldData.incident,
+                        // TODO check types
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
                         updates: replyTo
                           ? update(oldData.incident.updates, {
                               [oldData.incident.updates
                                 .map((item) => item.id)
                                 .indexOf(replyTo.id)]: {
                                 replies: {
-                                  $push: [result.data.createUpdateOnIncident],
+                                  $push: [
+                                    {
+                                      ...result.data.createUpdateOnIncident,
+                                      linkedIncidents:
+                                        result.data.createUpdateOnIncident.linkedIncidents?.map(
+                                          (inc) => ({
+                                            ...inc,
+                                            totalValue: 0,
+                                            totalRecoveredValue: 0,
+                                          })
+                                        ),
+                                    },
+                                  ],
                                 },
                               },
                             })
@@ -631,13 +646,28 @@ const useUpdateBar = ({
                     data: {
                       offender: {
                         ...oldData.offender,
+                        // TODO check types
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore,
                         updates: replyTo
                           ? update(oldData.offender.updates, {
                               [oldData.offender.updates
                                 .map((item) => item.id)
                                 .indexOf(replyTo.id)]: {
                                 replies: {
-                                  $push: [result.data.createUpdateOnOffender],
+                                  $push: [
+                                    {
+                                      ...result.data.createUpdateOnOffender,
+                                      linkedIncidents:
+                                        result.data.createUpdateOnOffender.linkedIncidents?.map(
+                                          (inc) => ({
+                                            ...inc,
+                                            totalValue: 0,
+                                            totalRecoveredValue: 0,
+                                          })
+                                        ),
+                                    },
+                                  ],
                                 },
                               },
                             })
@@ -723,6 +753,9 @@ const useUpdateBar = ({
                   data: {
                     investigation: {
                       ...oldData.investigation,
+                      // TODO check types
+                      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                      // @ts-ignore
                       updates: replyTo
                         ? update(oldData.investigation.updates, {
                             [oldData.investigation.updates
@@ -730,7 +763,17 @@ const useUpdateBar = ({
                               .indexOf(replyTo.id)]: {
                               replies: {
                                 $push: [
-                                  result.data.createUpdateOnInvestigation,
+                                  {
+                                    ...result.data.createUpdateOnInvestigation,
+                                    linkedIncidents:
+                                      result.data.createUpdateOnInvestigation.linkedIncidents?.map(
+                                        (inc) => ({
+                                          ...inc,
+                                          totalValue: 0,
+                                          totalRecoveredValue: 0,
+                                        })
+                                      ),
+                                  },
                                 ],
                               },
                             },
@@ -813,13 +856,28 @@ const useUpdateBar = ({
                   data: {
                     crimeGroup: {
                       ...oldData.crimeGroup,
+                      // TODO check types
+                      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                      // @ts-ignore
                       updates: replyTo
                         ? update(oldData.crimeGroup.updates, {
                             [oldData.crimeGroup.updates
                               .map((item) => item.id)
                               .indexOf(replyTo.id)]: {
                               replies: {
-                                $push: [result.data.createUpdateOnCrimeGroup],
+                                $push: [
+                                  {
+                                    ...result.data.createUpdateOnCrimeGroup,
+                                    linkedIncidents:
+                                      result.data.createUpdateOnCrimeGroup.linkedIncidents?.map(
+                                        (inc) => ({
+                                          ...inc,
+                                          totalValue: 0,
+                                          totalRecoveredValue: 0,
+                                        })
+                                      ),
+                                  },
+                                ],
                               },
                             },
                           })
@@ -890,7 +948,7 @@ const useUpdateBar = ({
                 },
               });
 
-              if (oldData?.vehicle)
+              if (oldData?.vehicle) {
                 store.writeQuery<VehicleQuery, VehicleQueryVariables>({
                   query: VehicleDocument,
                   variables: {
@@ -902,23 +960,48 @@ const useUpdateBar = ({
                     vehicle: {
                       ...oldData.vehicle,
                       // TODO check types
+                      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                      // @ts-ignore
                       updates: replyTo
                         ? update(oldData.vehicle.updates, {
                             [oldData.vehicle.updates
                               .map((item) => item.id)
                               .indexOf(replyTo.id)]: {
                               replies: {
-                                $push: [result.data.createUpdateOnVehicle],
+                                $push: [
+                                  {
+                                    ...result.data.createUpdateOnVehicle,
+                                    linkedIncidents:
+                                      result.data.createUpdateOnVehicle.linkedIncidents?.map(
+                                        (inc) => ({
+                                          ...inc,
+                                          totalValue: 0,
+                                          totalRecoveredValue: 0,
+                                        })
+                                      ),
+                                  },
+                                ],
                               },
                             },
                           })
                         : [
-                            result.data.createUpdateOnVehicle,
                             ...oldData.vehicle.updates,
+                            {
+                              ...result.data.createUpdateOnVehicle,
+                              linkedIncidents:
+                                result.data.createUpdateOnVehicle.linkedIncidents?.map(
+                                  (inc) => ({
+                                    ...inc,
+                                    totalValue: 0,
+                                    totalRecoveredValue: 0,
+                                  })
+                                ),
+                            },
                           ],
                     },
                   },
                 });
+              }
             }
           },
         });

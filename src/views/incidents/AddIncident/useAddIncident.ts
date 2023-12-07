@@ -318,9 +318,24 @@ const useAddIncident = ({ investigationId }: Props): Return => {
           incidents:
             existingData?.listIncidents?.incidents &&
             existingData.listIncidents.incidents.length > 0
-              ? // eslint-disable-next-line no-unsafe-optional-chaining
-                [...existingData?.listIncidents?.incidents, res.createIncident]
-              : [res.createIncident],
+              ? [
+                  // eslint-disable-next-line no-unsafe-optional-chaining
+                  ...existingData?.listIncidents?.incidents,
+                  {
+                    ...res.createIncident,
+                    // TODO fix this
+                    totalImages: res?.createIncident.images.length || 0,
+                    incidentItems: [],
+                  },
+                ]
+              : [
+                  {
+                    ...res.createIncident,
+                    // TODO fix this
+                    totalImages: res?.createIncident.images.length || 0,
+                    incidentItems: [],
+                  },
+                ],
         },
         __typename: 'Query',
       },
@@ -356,7 +371,11 @@ const useAddIncident = ({ investigationId }: Props): Return => {
           incidents: [
             // TODO check
             ...existingData.investigation.incidents,
-            res.createIncident,
+            {
+              ...res.createIncident,
+              totalValue: res.createIncident.value || 0,
+              totalRecoveredValue: res.createIncident.recoveredValue || 0,
+            },
           ],
           offenders: [
             ...existingData.investigation.offenders,

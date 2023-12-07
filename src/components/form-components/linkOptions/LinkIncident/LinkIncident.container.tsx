@@ -1,15 +1,8 @@
 import React from 'react';
 import type { IncidentCardData } from 'types/DataType';
 import View from './LinkIncident.view';
+import type { Incident } from './useLinkIncident';
 import useLinkIncident from './useLinkIncident';
-import type { ListIncidentsQuery } from '../../../../graphql/generated';
-
-export interface Incident {
-  incident: Exclude<
-    ListIncidentsQuery['listIncidents'],
-    null | undefined
-  >['incidents'][0];
-}
 
 interface Props {
   onClose: () => void;

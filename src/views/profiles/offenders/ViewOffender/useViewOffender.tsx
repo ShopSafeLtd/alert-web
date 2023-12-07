@@ -3,6 +3,7 @@ import type {
   AssociatedOffendersQuery,
   CreateDocumentMutation,
   CreateInvestigationMutation,
+  CreateSimpleVehicleMutation,
   DeleteDocumentMutation,
   LanguageCode,
   UpdateOffenderBansMutation,
@@ -632,6 +633,29 @@ const useViewOffender = (offenderId: string): Return => {
       variables,
     });
   };
+  const createSimpleVehicleList: MutationUpdaterFn<
+    CreateSimpleVehicleMutation
+  > = (store, { data: res }) => {
+    if (res?.createVehicle === null || res?.createVehicle === undefined) return;
+
+    const existingData = store.readQuery<ViewOffenderQuery>({
+      query: ViewOffenderDocument,
+      variables,
+    });
+
+    if (!existingData?.offender) return;
+    store.writeQuery<ViewOffenderQuery>({
+      query: ViewOffenderDocument,
+      data: {
+        offender: {
+          ...existingData.offender,
+          vehicles: [...existingData.offender.vehicles, res.createVehicle],
+        },
+        __typename: 'Query',
+      },
+      variables,
+    });
+  };
   const [updateVehicle] = useUpdateSimpleVehicleMutation({
     onError: () => {
       errorNotification();
@@ -665,6 +689,7 @@ const useViewOffender = (offenderId: string): Return => {
       });
     },
   });
+
   const onEditVehicle = (value: VehicleData) => {
     setSaving(true);
     if (value) {
@@ -813,7 +838,7 @@ const useViewOffender = (offenderId: string): Return => {
             placement: 'bottomRight',
           });
         },
-        update: updateVehicleList,
+        update: createSimpleVehicleList,
       }).finally(() => {
         setAddVehicle(false);
         setSaving(false);

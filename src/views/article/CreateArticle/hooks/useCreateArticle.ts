@@ -16,7 +16,7 @@ import {
 } from '../../../../graphql/generated';
 import { useStoreState } from '../../../../state';
 import type { OffenderData } from '../../../../components/form-components/offender/offender/AddExistingOffender/AddExistingOffender.container';
-import type { Incident } from '../../../../components/form-components/linkOptions/LinkIncident/LinkIncident.container';
+import type { Incident } from '../../../../components/form-components/linkOptions/LinkIncident/useLinkIncident';
 import extracted from '../../../../utils/add-default-to-article';
 import customRequest from '../../../../utils/custom-request';
 
