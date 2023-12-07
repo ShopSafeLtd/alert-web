@@ -18,3 +18,29 @@ query offenderFeedList(
     total
   }
 }
+
+query ListOffendersRelay(
+  $after: String
+  $first: Int
+  $order: OffenderOrderByWithRelationInput
+  $scheme: SchemeWhereUniqueInput
+  $where: OffenderWhereInput
+) {
+  listOffendersRelay(
+    after: $after
+    first: $first
+    order: $order
+    scheme: $scheme
+    where: $where
+  ) {
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    edges {
+      node {
+        ...OffenderCard
+      }
+    }
+  }
+}

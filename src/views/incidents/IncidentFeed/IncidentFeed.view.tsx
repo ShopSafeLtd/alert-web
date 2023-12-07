@@ -106,7 +106,11 @@ const IncidentFeed = ({
   return (
     <div
       className="feed-container"
-      style={loading ? {} : { padding: 10, paddingRight: 0 }}
+      style={
+        loading
+          ? { padding: 10, paddingRight: 12 }
+          : { padding: 10, paddingRight: 0, paddingBottom: 0 }
+      }
     >
       <Card
         bodyStyle={{ padding: 10 }}
@@ -232,7 +236,7 @@ const IncidentFeed = ({
         </Row>
       </Card>
 
-      <div style={{ paddingBottom: 10 }}>
+      <div>
         {loading ? (
           <Row
             gutter={24}
@@ -267,7 +271,7 @@ const IncidentFeed = ({
               data?.listIncidents?.incidents.length < data?.listIncidents?.total
             }
             loader={<Loading />}
-            height="calc(100vh - 87px)"
+            height="calc(100vh - 78px)"
             style={{ overflowX: 'hidden' }}
             endMessage={
               <p style={{ textAlign: 'center' }}>

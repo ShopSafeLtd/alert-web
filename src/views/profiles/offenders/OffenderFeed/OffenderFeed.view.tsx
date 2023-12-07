@@ -4,7 +4,7 @@ import type {
   Build,
   Gender,
   ListCustomGalleriesQuery,
-  OffenderFeedListQuery,
+  ListOffendersRelayQuery,
   Race,
   RecycleOffenderMutation,
   SearchBusinessesQuery,
@@ -48,7 +48,7 @@ import Loading from '../../../../components/shared-components/AntD/Loading';
 
 interface Props {
   fetchMoreScroll: () => void;
-  data: OffenderFeedListQuery | undefined;
+  data: ListOffendersRelayQuery | undefined;
   loading: boolean;
   lightboxElements: {
     src: string;
@@ -206,7 +206,11 @@ const OffenderFeed = ({
   return (
     <div
       className="feed-container"
-      style={loading ? {} : { padding: 10, paddingRight: 0 }}
+      style={
+        loading
+          ? { padding: 10, paddingRight: 12 }
+          : { padding: 10, paddingRight: 0, paddingBottom: 0 }
+      }
     >
       <Card
         bodyStyle={{ padding: 10 }}
@@ -357,7 +361,7 @@ const OffenderFeed = ({
         </Row>
       </Card>
 
-      <div style={{ paddingBottom: 10 }}>
+      <div>
         {loading ? (
           <Row
             gutter={24}
@@ -384,15 +388,14 @@ const OffenderFeed = ({
               </Col>
             ))}
           </Row>
-        ) : data?.listOffenders?.total ? (
+        ) : data?.listOffendersRelay?.edges &&
+          data?.listOffendersRelay?.edges.length > 0 ? (
           <InfiniteScroll
-            dataLength={data?.listOffenders?.offenders.length}
+            dataLength={data?.listOffendersRelay?.edges.length}
             next={() => fetchMoreScroll()}
-            hasMore={
-              data?.listOffenders?.offenders.length < data?.listOffenders?.total
-            }
+            hasMore={data.listOffendersRelay.pageInfo.hasNextPage}
             loader={<Loading />}
-            height="calc(100vh - 87px)"
+            height="calc(100vh - 78px)"
             style={{ overflowX: 'hidden' }}
             endMessage={
               <p style={{ textAlign: 'center' }}>
@@ -410,21 +413,24 @@ const OffenderFeed = ({
                 overflowX: 'hidden',
               }}
             >
-              {data?.listOffenders?.offenders?.map((item) => (
-                <Col
-                  style={{ marginBottom: 10 }}
-                  span={compactView ? 6 : 8}
-                  xxl={compactView ? 4 : 6}
-                  key={item?.id}
-                >
-                  <OffenderCard
-                    offender={item}
-                    openLightbox={openLightbox}
-                    update={updateOffenderList}
-                    compactView={compactView}
-                  />
-                </Col>
-              ))}
+              {data?.listOffendersRelay?.edges?.map((t) => {
+                if (!t?.node?.id) return null;
+                return (
+                  <Col
+                    style={{ marginBottom: 10 }}
+                    span={compactView ? 6 : 8}
+                    xxl={compactView ? 4 : 6}
+                    key={t?.node?.id}
+                  >
+                    <OffenderCard
+                      offender={t?.node}
+                      openLightbox={openLightbox}
+                      update={updateOffenderList}
+                      compactView={compactView}
+                    />
+                  </Col>
+                );
+              })}
             </Row>
           </InfiniteScroll>
         ) : (

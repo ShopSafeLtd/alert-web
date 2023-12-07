@@ -4,19 +4,19 @@ import type {
   Build,
   Gender,
   ListCustomGalleriesQuery,
-  OffenderFeedListQuery,
+  ListOffendersRelayQuery,
   Race,
   RecycleOffenderMutation,
   SearchBusinessesQuery,
 } from 'graphql/generated';
 import {
+  ListOffendersRelayDocument,
   Model,
-  OffenderFeedListDocument,
   QueryMode,
   Role,
   SortOrder,
   useListCustomGalleriesQuery,
-  useOffenderFeedListQuery,
+  useListOffendersRelayQuery,
   useSchemeGroupsQuery,
   useSearchBusinessesQuery,
   useTagsQuery,
@@ -30,7 +30,7 @@ import type { OffenderFilters } from 'state/data-model';
 import cacheOrLoading from 'utils/cache-or-loading';
 
 interface Return {
-  data: OffenderFeedListQuery | undefined;
+  data: ListOffendersRelayQuery | undefined;
   loading: boolean;
   lightboxElements: {
     src: string;
@@ -274,7 +274,7 @@ const useOffenderFeed = (): Return => {
             }
           : undefined,
     },
-    take: compactView ? 48 : 12,
+    first: compactView ? 48 : 12,
   };
   // Queries
   // Fetch scheme groups if scheme admin
@@ -332,7 +332,7 @@ const useOffenderFeed = (): Return => {
   });
 
   // Fetch Offenders
-  const { data, loading, fetchMore } = useOffenderFeedListQuery({
+  const { data, loading, fetchMore } = useListOffendersRelayQuery({
     variables: queryVariables,
     fetchPolicy: 'cache-and-network',
   });
@@ -372,6 +372,7 @@ const useOffenderFeed = (): Return => {
       },
     },
   });
+
   // update Offender list after deleting an item
   const updateOffenderList: MutationUpdaterFn<RecycleOffenderMutation> = (
     store,
@@ -379,21 +380,21 @@ const useOffenderFeed = (): Return => {
   ) => {
     if (res === null || res === undefined) return;
 
-    const existingData = store.readQuery<OffenderFeedListQuery>({
-      query: OffenderFeedListDocument,
+    const existingData = store.readQuery<ListOffendersRelayQuery>({
+      query: ListOffendersRelayDocument,
       variables: queryVariables,
     });
 
     if (existingData === null) return;
-    if (existingData?.listOffenders?.offenders === undefined) return;
+    if (existingData?.listOffendersRelay?.edges === undefined) return;
 
-    store.writeQuery<OffenderFeedListQuery>({
-      query: OffenderFeedListDocument,
+    store.writeQuery<ListOffendersRelayQuery>({
+      query: ListOffendersRelayDocument,
       data: {
-        listOffenders: {
-          ...existingData.listOffenders,
-          offenders: existingData.listOffenders?.offenders.filter(
-            (offender) => offender.id !== res?.recycleOffender?.id
+        listOffendersRelay: {
+          ...existingData.listOffendersRelay,
+          edges: existingData.listOffendersRelay?.edges.filter(
+            (edge) => edge?.node?.id !== res?.recycleOffender?.id
           ),
         },
         __typename: 'Query',
@@ -401,6 +402,7 @@ const useOffenderFeed = (): Return => {
       variables: queryVariables,
     });
   };
+
   // Functions
   const triggerLightbox = (elements: { src: string }[], index: number) => {
     setLightboxElements(elements);
@@ -463,7 +465,6 @@ const useOffenderFeed = (): Return => {
       order,
     });
   };
-
   const setBuild = (values: Build[]) => {
     setOffendersState({
       pagination,
@@ -524,7 +525,6 @@ const useOffenderFeed = (): Return => {
       order,
     });
   };
-
   const setOrder = (value: OffenderSort) => {
     setOffendersState({
       pagination,
@@ -532,7 +532,6 @@ const useOffenderFeed = (): Return => {
       order: value,
     });
   };
-
   const setSearch = (value: string) => {
     setOffendersState({
       pagination,
@@ -577,7 +576,6 @@ const useOffenderFeed = (): Return => {
       }
     }
   };
-
   const onSelectGallery = (id: string) => {
     if (id) {
       if (gallery.includes(id)) {
@@ -587,6 +585,7 @@ const useOffenderFeed = (): Return => {
       }
     }
   };
+
   const setCompactView = () => {
     setOffendersState({
       pagination,
@@ -624,21 +623,17 @@ const useOffenderFeed = (): Return => {
   const fetchMoreScroll = () => {
     void fetchMore({
       variables: {
-        ...queryVariables,
-        skip: data?.listOffenders?.offenders?.length || 0,
+        ...variables,
+        after: data?.listOffendersRelay?.pageInfo?.endCursor,
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return {
-          listOffenders: {
-            ...fetchMoreResult.listOffenders,
-            total:
-              fetchMoreResult.listOffenders?.total ||
-              prev.listOffenders?.total ||
-              0,
-            offenders: [
-              ...(prev.listOffenders?.offenders || []),
-              ...(fetchMoreResult.listOffenders?.offenders || []),
+          listOffendersRelay: {
+            ...fetchMoreResult.listOffendersRelay,
+            edges: [
+              ...(prev.listOffendersRelay?.edges || []),
+              ...(fetchMoreResult.listOffendersRelay?.edges || []),
             ],
           },
         };

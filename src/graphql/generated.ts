@@ -23,7 +23,7 @@ export type Scalars = {
   Upload: any;
 };
 
-export type Action = {
+export type Action = Node & {
   __typename?: 'Action';
   Address?: Maybe<Address>;
   Ban?: Maybe<Ban>;
@@ -899,7 +899,7 @@ export type ApproveIncidentData = {
   groups?: InputMaybe<ApproveGroupsData>;
 };
 
-export type Article = {
+export type Article = Node & {
   __typename?: 'Article';
   actions: Array<Action>;
   createdAt: Scalars['Date'];
@@ -10855,6 +10855,10 @@ export type NestedStringWithAggregatesFilter = {
   startsWith?: InputMaybe<Scalars['String']>;
 };
 
+export type Node = {
+  id: Scalars['ID'];
+};
+
 export type Notification = {
   __typename?: 'Notification';
   articleId?: Maybe<Scalars['String']>;
@@ -12156,6 +12160,7 @@ export type Query = {
   listNotifications: ListNotifications;
   listOffenders: ListOffenders;
   listOffendersAllSchemes: ListOffenders;
+  listOffendersRelay: QueryListOffendersRelayConnection;
   listRekMatches: ListRekMatches;
   listStockItems: ListStockItems;
   listTags: ListTags;
@@ -12169,6 +12174,8 @@ export type Query = {
   message: Message;
   messages: Array<Message>;
   mg11: Mg11;
+  node?: Maybe<Node>;
+  nodes: Array<Maybe<Node>>;
   offender: Offender;
   offenderByName: ListOffenders;
   offenderFeed: Array<Offender>;
@@ -12616,6 +12623,17 @@ export type QueryListOffendersAllSchemesArgs = {
 };
 
 
+export type QueryListOffendersRelayArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<OffenderOrderByWithRelationInput>;
+  scheme?: InputMaybe<SchemeWhereUniqueInput>;
+  where?: InputMaybe<OffenderWhereInput>;
+};
+
+
 export type QueryListRekMatchesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
@@ -12708,6 +12726,16 @@ export type QueryMessagesArgs = {
 
 export type QueryMg11Args = {
   where: Mg11WhereUniqueInput;
+};
+
+
+export type QueryNodeArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryNodesArgs = {
+  ids: Array<Scalars['ID']>;
 };
 
 
@@ -12985,6 +13013,18 @@ export type QueryListArticlesRelayConnectionEdge = {
   __typename?: 'QueryListArticlesRelayConnectionEdge';
   cursor: Scalars['String'];
   node: Article;
+};
+
+export type QueryListOffendersRelayConnection = {
+  __typename?: 'QueryListOffendersRelayConnection';
+  edges: Array<QueryListOffendersRelayConnectionEdge>;
+  pageInfo: PageInfo;
+};
+
+export type QueryListOffendersRelayConnectionEdge = {
+  __typename?: 'QueryListOffendersRelayConnectionEdge';
+  cursor: Scalars['String'];
+  node: Offender;
 };
 
 export enum QueryMode {
@@ -21248,6 +21288,17 @@ export type OffenderFeedListQueryVariables = Exact<{
 
 
 export type OffenderFeedListQuery = { __typename?: 'Query', listOffenders: { __typename?: 'ListOffenders', total: number, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, totalIncidents: number, reference?: number | null, build?: Build | null, height?: Height | null, gender?: Gender | null, dateOfBirth?: Date | null, age?: Age | null, race?: Race | null, updatedAt: Date, totalImages: number, createdByUser: boolean, approved?: boolean | null, latestIncident?: { __typename?: 'Incident', id: string, dateAgo: number, reportedBusinessName: string } | null, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, images: Array<{ __typename?: 'Image', id: string, rotation: number, position: ImagePosition, optimised?: string | null, primary?: boolean | null, policeImage?: boolean | null }> }> } };
+
+export type ListOffendersRelayQueryVariables = Exact<{
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<OffenderOrderByWithRelationInput>;
+  scheme?: InputMaybe<SchemeWhereUniqueInput>;
+  where?: InputMaybe<OffenderWhereInput>;
+}>;
+
+
+export type ListOffendersRelayQuery = { __typename?: 'Query', listOffendersRelay: { __typename?: 'QueryListOffendersRelayConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'QueryListOffendersRelayConnectionEdge', node: { __typename?: 'Offender', id: string, name?: string | null, totalIncidents: number, reference?: number | null, build?: Build | null, height?: Height | null, gender?: Gender | null, dateOfBirth?: Date | null, age?: Age | null, race?: Race | null, updatedAt: Date, totalImages: number, createdByUser: boolean, approved?: boolean | null, latestIncident?: { __typename?: 'Incident', id: string, dateAgo: number, reportedBusinessName: string } | null, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, images: Array<{ __typename?: 'Image', id: string, rotation: number, position: ImagePosition, optimised?: string | null, primary?: boolean | null, policeImage?: boolean | null }> } }> } };
 
 export type CreateCsvImportMutationVariables = Exact<{
   data: CsvImportCreateInput;
@@ -32702,6 +32753,38 @@ export function useOffenderFeedListLazyQuery(baseOptions?: Apollo.LazyQueryHookO
 export type OffenderFeedListQueryHookResult = ReturnType<typeof useOffenderFeedListQuery>;
 export type OffenderFeedListLazyQueryHookResult = ReturnType<typeof useOffenderFeedListLazyQuery>;
 export type OffenderFeedListQueryResult = Apollo.QueryResult<OffenderFeedListQuery, OffenderFeedListQueryVariables>;
+export const ListOffendersRelayDocument = gql`
+    query ListOffendersRelay($after: String, $first: Int, $order: OffenderOrderByWithRelationInput, $scheme: SchemeWhereUniqueInput, $where: OffenderWhereInput) {
+  listOffendersRelay(
+    after: $after
+    first: $first
+    order: $order
+    scheme: $scheme
+    where: $where
+  ) {
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    edges {
+      node {
+        ...OffenderCard
+      }
+    }
+  }
+}
+    ${OffenderCardFragmentDoc}`;
+export function useListOffendersRelayQuery(baseOptions?: Apollo.QueryHookOptions<ListOffendersRelayQuery, ListOffendersRelayQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ListOffendersRelayQuery, ListOffendersRelayQueryVariables>(ListOffendersRelayDocument, options);
+      }
+export function useListOffendersRelayLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListOffendersRelayQuery, ListOffendersRelayQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ListOffendersRelayQuery, ListOffendersRelayQueryVariables>(ListOffendersRelayDocument, options);
+        }
+export type ListOffendersRelayQueryHookResult = ReturnType<typeof useListOffendersRelayQuery>;
+export type ListOffendersRelayLazyQueryHookResult = ReturnType<typeof useListOffendersRelayLazyQuery>;
+export type ListOffendersRelayQueryResult = Apollo.QueryResult<ListOffendersRelayQuery, ListOffendersRelayQueryVariables>;
 export const CreateCsvImportDocument = gql`
     mutation CreateCsvImport($data: CsvImportCreateInput!) {
   createOneCsvImport(data: $data) {
