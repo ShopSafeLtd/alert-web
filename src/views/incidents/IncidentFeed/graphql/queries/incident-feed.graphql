@@ -1,8 +1,29 @@
-query ListIncidentsFeed($scheme: SchemeWhereUniqueInput!, $where: IncidentWhereInput, $order: IncidentOrderByWithRelationInput, $take: Int, $skip: Int) {
-  listIncidents(scheme: $scheme, where: $where, order: $order, take: $take, skip: $skip) {
-    incidents {
-      ...IncidentCard
+query IncidentsFeed(
+  $order: IncidentOrderByWithRelationInput
+  $search: String
+  $first: Int
+  $after: String
+  $crimeTypes: [String!]
+  $groups: [String]
+  $schemeId: String!
+) {
+  incidentsRelay(
+    order: $order
+    first: $first
+    after: $after
+    search: $search
+    crimeTypes: $crimeTypes
+    groups: $groups
+    schemeId: $schemeId
+  ) {
+    edges {
+      node {
+        ...IncidentCard
+      }
     }
-    total
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
   }
 }

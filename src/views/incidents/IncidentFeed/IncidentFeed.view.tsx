@@ -1,6 +1,6 @@
 import React from 'react';
 import type {
-  ListIncidentsFeedQuery,
+  IncidentsFeedQuery,
   RecycleIncidentMutation,
 } from 'graphql/generated';
 import { Button, Card, Col, Drawer, Empty, Input, Row } from 'antd';
@@ -25,7 +25,7 @@ import CompactSkeletonCard from 'components/offenders/OffenderCard/OffenderSkele
 import Loading from '../../../components/shared-components/AntD/Loading';
 
 interface Props {
-  data: ListIncidentsFeedQuery | undefined;
+  data: IncidentsFeedQuery | undefined;
   loading: boolean;
   lightboxElements: {
     src: string;
@@ -263,13 +263,11 @@ const IncidentFeed = ({
               </Col>
             ))}
           </Row>
-        ) : data?.listIncidents?.total ? (
+        ) : data?.incidentsRelay && data.incidentsRelay.edges.length > 0 ? (
           <InfiniteScroll
-            dataLength={data?.listIncidents?.incidents.length}
+            dataLength={data?.incidentsRelay.edges.length}
             next={() => fetchMoreScroll()}
-            hasMore={
-              data?.listIncidents?.incidents.length < data?.listIncidents?.total
-            }
+            hasMore={data?.incidentsRelay.pageInfo.hasNextPage}
             loader={<Loading />}
             height="calc(100vh - 78px)"
             style={{ overflowX: 'hidden' }}
@@ -289,15 +287,15 @@ const IncidentFeed = ({
                 overflowX: 'hidden',
               }}
             >
-              {data?.listIncidents?.incidents?.map((el) => (
+              {data.incidentsRelay.edges.map(({ node }) => (
                 <Col
                   span={compactView ? 6 : 8}
                   xxl={compactView ? 4 : 6}
-                  key={el?.id}
+                  key={node?.id}
                 >
                   <IncidentCard
-                    key={el?.id}
-                    incident={el}
+                    key={node?.id}
+                    incident={node}
                     openLightbox={openLightbox}
                     update={updateIncidentList}
                     compactView={compactView}
