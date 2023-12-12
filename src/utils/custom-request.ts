@@ -86,7 +86,7 @@ const customRequest = ({
       const xhr = new XMLHttpRequest();
       xhr.open(
         'POST',
-        'https://util-server-go-595137580681.herokuapp.com/get-upload-urls',
+        'https://util-server-go-595137580681.herokuapp.com/get-upload-url',
         true
       );
       xhr.setRequestHeader('Content-Type', 'application/json');
