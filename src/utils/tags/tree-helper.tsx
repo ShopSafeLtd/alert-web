@@ -34,23 +34,32 @@ interface TreeNode {
 // }
 
 function buildTree(
-  nodes: { name: string; id: string; parentId: string | null }[]
+  nodes: {
+    name: string;
+    description?: string | null;
+    id: string;
+    parentId: string | null;
+  }[]
 ): TreeNode[] {
   const nodeMap = new Map<string, TreeNode>();
   const navigate = useNavigate();
 
   // First pass: create nodes without parent-child relationships
-  for (const { name, id } of nodes) {
+  for (const { name, id, description } of nodes) {
     const node: TreeNode = {
       title: (
-        <Typography.Link
-          onClick={() => {
-            navigate(`/app/scheme-settings/crime-types/view/${id}`);
-          }}
-        >
-          {name}
-        </Typography.Link>
+        <Typography.Paragraph style={{ color: '#999' }}>
+          <Typography.Link
+            onClick={() => {
+              navigate(`/app/scheme-settings/crime-types/view/${id}`);
+            }}
+          >
+            {name}
+          </Typography.Link>
+          {description ? ` (${description})` : ``}
+        </Typography.Paragraph>
       ),
+
       key: id,
     };
     nodeMap.set(id, node);
@@ -85,9 +94,11 @@ function buildTree(
 const BuildTree = ({
   InitData,
   updateTagParent,
+  draggable = true,
 }: {
   InitData: { parentId: string | null; id: string; name: string }[];
   updateTagParent: (tagId: string, parentTagId: string | null) => void;
+  draggable?: boolean;
 }) => {
   const newTree = buildTree(InitData) as DataNode[];
   const [gData, setGData] = useState<DataNode[]>([]);
@@ -95,7 +106,7 @@ const BuildTree = ({
   useEffect(() => {
     if (gData.length === 0) setGData(newTree);
   }, [InitData]);
-  const [expandedKeys] = useState(['0-0', '0-0-0', '0-0-0-0']);
+  // const [expandedKeys] = useState(['0-0', '0-0-0', '0-0-0-0']);
 
   const onDrop: TreeProps['onDrop'] = (info) => {
     const dropKey = info.node.key;
@@ -132,7 +143,6 @@ const BuildTree = ({
       // Drop on the content
       loop(data, dropKey, (item) => {
         item.children = item.children || [];
-        // where to insert 示例添加到头部，可以是随意位置
         item.children.unshift(dragObj);
       });
     } else if (
@@ -142,10 +152,7 @@ const BuildTree = ({
     ) {
       loop(data, dropKey, (item) => {
         item.children = item.children || [];
-        // where to insert 示例添加到头部，可以是随意位置
         item.children.unshift(dragObj);
-        // in previous version, we use item.children.push(dragObj) to insert the
-        // item to the tail of the children
       });
     } else {
       let ar: DataNode[] = [];
@@ -170,9 +177,9 @@ const BuildTree = ({
   return (
     <Tree
       className="draggable-tree"
-      defaultExpandedKeys={expandedKeys}
-      draggable
-      blockNode
+      // defaultExpandedKeys={expandedKeys}
+      draggable={draggable}
+      blockNode={draggable}
       onDrop={onDrop}
       treeData={gData}
     />

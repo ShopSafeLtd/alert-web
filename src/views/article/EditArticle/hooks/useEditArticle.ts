@@ -22,6 +22,7 @@ import type { OffenderData } from '../../../../components/form-components/offend
 import type { Incident } from '../../../../components/form-components/linkOptions/LinkIncident/LinkIncident.container';
 import extracted from '../../../../utils/add-default-to-article';
 import customRequest from '../../../../utils/custom-request';
+import { extractFilename } from '../../CreateArticle/hooks/useCreateArticle';
 
 const { useForm } = Form;
 
@@ -82,6 +83,7 @@ const useEditArticle = (): Props => {
     },
     fetchPolicy: 'cache-and-network',
   });
+  const [documentLinkFiles, setDocumentLinkFiles] = useState<UploadFile[]>([]);
 
   useEffect(() => {
     setData({
@@ -473,14 +475,18 @@ const useEditArticle = (): Props => {
           fileName: blobInfo.filename(),
         }).then((url) => {
           blobCache.add(blobInfo);
+          const originalFileName = extractFilename(url) || file.name;
 
           if (meta.filetype === 'file') {
-            fileList.push({
-              ...file,
-              url,
-              name: file.name,
-              uid: id,
-            } as UploadFile);
+            setDocumentLinkFiles([
+              {
+                ...file,
+                url,
+                name: file.name,
+                fileName: originalFileName,
+                uid: id,
+              } as UploadFile,
+            ]);
           }
           if (meta.filetype === 'image') {
             imageList.push({
@@ -530,6 +536,12 @@ const useEditArticle = (): Props => {
   //   mimetype: previewImageFile[0].type || '',
   //   url: previewImageFile[0].url || '',
   // });
+  useEffect(() => {
+    if (documentLinkFiles.length > 0) {
+      setFileList([...fileList, ...documentLinkFiles]);
+      setDocumentLinkFiles([]);
+    }
+  }, [documentLinkFiles]);
   const onSubmit = async () => {
     setSaving(true);
 
@@ -558,7 +570,6 @@ const useEditArticle = (): Props => {
       editorRef.current?.getContent() || ''
     );
     const submittedSchemes: string[] = selectedSchemes;
-
     await submitArticle({
       variables: {
         where: {

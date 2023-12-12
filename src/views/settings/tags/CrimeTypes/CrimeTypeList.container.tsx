@@ -5,7 +5,7 @@ import useCrimeTypeList from './useCrimeTypeList';
 const CrimeTypeList = (): JSX.Element => {
   const {
     data,
-    loading,
+    // loading,
     search,
     setSearch,
     incidentId,
@@ -27,11 +27,13 @@ const CrimeTypeList = (): JSX.Element => {
     toggleAddInvolved,
     updateImpactList,
     updateInvolvedList,
+    updateTagParent,
   } = useCrimeTypeList();
   return (
     <View
+      updateTagParent={updateTagParent}
       data={data}
-      loading={loading}
+      // loading={loading}
       search={search}
       setSearch={setSearch}
       incidentId={incidentId}
