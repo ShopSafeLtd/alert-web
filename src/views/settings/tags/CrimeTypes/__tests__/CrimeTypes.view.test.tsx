@@ -20,7 +20,6 @@ describe('List Officer View', () => {
       <MemoryRouter>
         <TagList
           data={data}
-          loading={false}
           search=""
           setSearch={jest.fn()}
           editIncident={false}
@@ -42,6 +41,7 @@ describe('List Officer View', () => {
           toggleAddInvolved={jest.fn()}
           updateImpactList={jest.fn()}
           updateInvolvedList={jest.fn()}
+          updateTagParent={jest.fn()}
         />
       </MemoryRouter>
     );
