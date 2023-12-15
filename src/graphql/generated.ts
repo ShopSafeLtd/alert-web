@@ -23,7 +23,7 @@ export type Scalars = {
   Upload: any;
 };
 
-export type Action = Node & {
+export type Action = {
   __typename?: 'Action';
   Address?: Maybe<Address>;
   Ban?: Maybe<Ban>;
@@ -499,7 +499,6 @@ export type AddImageIntelData = {
 
 export type Address = {
   __typename?: 'Address';
-  actions: Array<Action>;
   alias?: Maybe<Scalars['String']>;
   building?: Maybe<Scalars['String']>;
   business?: Maybe<Business>;
@@ -523,16 +522,6 @@ export type Address = {
   updatedAt: Scalars['Date'];
   user?: Maybe<User>;
   userId?: Maybe<Scalars['String']>;
-};
-
-
-export type AddressActionsArgs = {
-  cursor?: InputMaybe<ActionWhereUniqueInput>;
-  distinct?: InputMaybe<Array<ActionScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<ActionOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<ActionWhereInput>;
 };
 
 export type AddressListRelationFilter = {
@@ -899,7 +888,7 @@ export type ApproveIncidentData = {
   groups?: InputMaybe<ApproveGroupsData>;
 };
 
-export type Article = Node & {
+export type Article = {
   __typename?: 'Article';
   actions: Array<Action>;
   createdAt: Scalars['Date'];
@@ -1655,7 +1644,7 @@ export enum Build {
 export type Business = {
   __typename?: 'Business';
   actions: Array<Action>;
-  checklists: Array<ActiveChecklist>;
+  checklists: Array<Checklist>;
   children: Array<Business>;
   createdAt: Scalars['Date'];
   demId?: Maybe<Scalars['String']>;
@@ -9374,6 +9363,7 @@ export type Mutation = {
   createIncident: Incident;
   createIncidentForm: IncidentForm;
   createInvestigation: Investigation;
+  createInvestigationCsvZip: Scalars['String'];
   /** NOTE: This is triggered without context externally by auth0, no way to know what scheme they are logging into. May have to add a update query one they have logged in  that updates the last login with the scheme they are logging into */
   createLoginEvent?: Maybe<LoginEvent>;
   createMessage: MessageItem;
@@ -9650,6 +9640,11 @@ export type MutationCreateIncidentFormArgs = {
 
 export type MutationCreateInvestigationArgs = {
   data: CreateInvestigationInput;
+};
+
+
+export type MutationCreateInvestigationCsvZipArgs = {
+  where: UniqueId;
 };
 
 
@@ -10853,10 +10848,6 @@ export type NestedStringWithAggregatesFilter = {
   not?: InputMaybe<NestedStringWithAggregatesFilter>;
   notIn?: InputMaybe<Array<Scalars['String']>>;
   startsWith?: InputMaybe<Scalars['String']>;
-};
-
-export type Node = {
-  id: Scalars['ID'];
 };
 
 export type Notification = {
@@ -12137,6 +12128,7 @@ export type Query = {
   incidentFeed: Array<Incident>;
   incidentHeatPerformance: ListIncidents;
   incidents: Array<Incident>;
+  incidentsRelay: QueryIncidentsRelayConnection;
   investigation: Investigation;
   investigations: Array<Investigation>;
   listActions: ListActions;
@@ -12174,8 +12166,6 @@ export type Query = {
   message: Message;
   messages: Array<Message>;
   mg11: Mg11;
-  node?: Maybe<Node>;
-  nodes: Array<Maybe<Node>>;
   offender: Offender;
   offenderByName: ListOffenders;
   offenderFeed: Array<Offender>;
@@ -12438,6 +12428,20 @@ export type QueryIncidentsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<IncidentWhereInput>;
+};
+
+
+export type QueryIncidentsRelayArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  approved?: InputMaybe<Scalars['Boolean']>;
+  before?: InputMaybe<Scalars['String']>;
+  crimeTypes?: InputMaybe<Array<Scalars['String']>>;
+  first?: InputMaybe<Scalars['Int']>;
+  groups?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  last?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<IncidentOrderByWithRelationInput>;
+  schemeId: Scalars['String'];
+  search?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -12729,16 +12733,6 @@ export type QueryMg11Args = {
 };
 
 
-export type QueryNodeArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type QueryNodesArgs = {
-  ids: Array<Scalars['ID']>;
-};
-
-
 export type QueryOffenderArgs = {
   where: OffenderWhereUniqueInput;
 };
@@ -12815,6 +12809,7 @@ export type QueryRecycledItemsArgs = {
   order?: InputMaybe<RecycledItemOrderByWithRelationInput>;
   schemeId: Scalars['String'];
   search?: InputMaybe<Scalars['String']>;
+  take?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -13001,6 +12996,18 @@ export type QueryWorkflowsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<WorkflowWhereInput>;
+};
+
+export type QueryIncidentsRelayConnection = {
+  __typename?: 'QueryIncidentsRelayConnection';
+  edges: Array<QueryIncidentsRelayConnectionEdge>;
+  pageInfo: PageInfo;
+};
+
+export type QueryIncidentsRelayConnectionEdge = {
+  __typename?: 'QueryIncidentsRelayConnectionEdge';
+  cursor: Scalars['String'];
+  node: Incident;
 };
 
 export type QueryListArticlesRelayConnection = {
@@ -17199,7 +17206,7 @@ export type User = {
   bans: Array<Ban>;
   businesses: Array<Business>;
   chats: Array<UserChat>;
-  checklists: Array<ActiveChecklist>;
+  checklists: Array<Checklist>;
   completedTodos: Array<Todo>;
   contact?: Maybe<Contact>;
   contactId?: Maybe<Scalars['String']>;
@@ -20818,7 +20825,7 @@ export type TagsQueryVariables = Exact<{
 }>;
 
 
-export type TagsQuery = { __typename?: 'Query', tags: Array<{ __typename?: 'Tag', id: string, name: string, description: string, crimeType?: CrimeType | null, type: TagType }> };
+export type TagsQuery = { __typename?: 'Query', tags: Array<{ __typename?: 'Tag', id: string, name: string, description: string, crimeType?: CrimeType | null, type: TagType, parentTag?: { __typename?: 'Tag', id: string } | null }> };
 
 export type CreateTodoMutationVariables = Exact<{
   data: TodoCreateInput;
@@ -20858,13 +20865,6 @@ export type TranslateQueryVariables = Exact<{
 
 
 export type TranslateQuery = { __typename?: 'Query', translateText: Array<{ __typename?: 'TranslatedText', origText: string, translatedText: string }> };
-
-export type TranslateTextQueryVariables = Exact<{
-  data: TranslateTextInput;
-}>;
-
-
-export type TranslateTextQuery = { __typename?: 'Query', translateText: Array<{ __typename?: 'TranslatedText', translatedText: string, origText: string }> };
 
 export type CreateUpdateOnCrimeGroupMutationVariables = Exact<{
   crimeGroup: UniqueId;
@@ -30089,6 +30089,9 @@ export const TagsDocument = gql`
     description
     crimeType
     type
+    parentTag {
+      id
+    }
   }
 }
     `;
@@ -30266,25 +30269,6 @@ export function useTranslateLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type TranslateQueryHookResult = ReturnType<typeof useTranslateQuery>;
 export type TranslateLazyQueryHookResult = ReturnType<typeof useTranslateLazyQuery>;
 export type TranslateQueryResult = Apollo.QueryResult<TranslateQuery, TranslateQueryVariables>;
-export const TranslateTextDocument = gql`
-    query TranslateText($data: TranslateTextInput!) {
-  translateText(data: $data) {
-    translatedText
-    origText
-  }
-}
-    `;
-export function useTranslateTextQuery(baseOptions: Apollo.QueryHookOptions<TranslateTextQuery, TranslateTextQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<TranslateTextQuery, TranslateTextQueryVariables>(TranslateTextDocument, options);
-      }
-export function useTranslateTextLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TranslateTextQuery, TranslateTextQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<TranslateTextQuery, TranslateTextQueryVariables>(TranslateTextDocument, options);
-        }
-export type TranslateTextQueryHookResult = ReturnType<typeof useTranslateTextQuery>;
-export type TranslateTextLazyQueryHookResult = ReturnType<typeof useTranslateTextLazyQuery>;
-export type TranslateTextQueryResult = Apollo.QueryResult<TranslateTextQuery, TranslateTextQueryVariables>;
 export const CreateUpdateOnCrimeGroupDocument = gql`
     mutation CreateUpdateOnCrimeGroup($crimeGroup: UniqueId!, $data: CreateUpdateData!) {
   createUpdateOnCrimeGroup(crimeGroup: $crimeGroup, data: $data) {

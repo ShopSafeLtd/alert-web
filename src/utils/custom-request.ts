@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { v4 as uuidv4 } from 'uuid';
-import { message } from 'antd';
 import type { RcFile, UploadRequestOption } from 'rc-upload/lib/interface';
 
 const getExtension = (filename: string): string =>
@@ -46,6 +45,7 @@ interface UploadResponseBody {
  *     }
  * });
  */
+
 const customRequest = ({
   file,
   onSuccess,
@@ -60,72 +60,247 @@ const customRequest = ({
   } else {
     filename = `${uuidv4()}`;
   }
+  const sendRequest = (url: string, type: string): Promise<XMLHttpRequest> =>
+    new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('PUT', url, true);
+      xhr.setRequestHeader('x-ms-blob-type', 'BlockBlob');
+      xhr.setRequestHeader('Content-Type', type);
 
-  const xhr = new XMLHttpRequest();
-
-  xhr.open(
-    'POST',
-    'https://util-server-go-595137580681.herokuapp.com/get-upload-url',
-    true
-  );
-  xhr.setRequestHeader('Content-Type', 'application/json');
-  xhr.send(JSON.stringify({ filename }));
-
-  xhr.onload = () => {
-    if (xhr.status >= 200 && xhr.status < 300) {
-      const responseBody = JSON.parse(xhr.responseText) as {
-        url: string;
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          resolve(xhr);
+        } else {
+          reject(new Error('Upload failed during PUT request.'));
+        }
       };
-      const { url: sasUrl } = responseBody;
 
-      if (!sasUrl) {
-        if (onError) onError(new Error('Failed to get the SAS URL'));
-        void message.error('Failed to upload file');
-        return;
-      }
+      xhr.onerror = () =>
+        reject(new Error('Network error during PUT request.'));
 
-      const type =
+      xhr.send(file);
+    });
+
+  const getRequestUrl = (): Promise<string> =>
+    new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open(
+        'POST',
+        'https://util-server-go-595137580681.herokuapp.com/get-upload-url',
+        true
+      );
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.send(JSON.stringify({ filename }));
+
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          const responseBody = JSON.parse(xhr.responseText) as { url: string };
+          resolve(responseBody.url);
+        } else {
+          reject(new Error('Failed to get the SAS URL.'));
+        }
+      };
+
+      xhr.onerror = () =>
+        reject(new Error('Network error during SAS URL request.'));
+    });
+
+  getRequestUrl()
+    .then((sasUrl) => {
+      const fileType =
         typeof file !== 'string' && 'type' in file
           ? file.type
           : 'application/octet-stream';
-      const uploadXhr = new XMLHttpRequest();
+      return sendRequest(sasUrl, fileType);
+    })
+    .then((uploadXhr) => {
+      if (onSuccess && typeof file !== 'string') {
+        onSuccess(
+          [
+            {
+              ...file,
+              mimetype: file.type,
+              url: uploadXhr.responseURL,
+              blobName: filename,
+            },
+          ],
+          uploadXhr
+        );
+      }
+    })
+    .catch((error) => {
+      try {
+        const xhr3 = new XMLHttpRequest();
 
-      uploadXhr.open('PUT', sasUrl, true);
-      uploadXhr.setRequestHeader('x-ms-blob-type', 'BlockBlob');
-      uploadXhr.setRequestHeader('Content-Type', type);
+        const upload = ({
+          blob,
+          fileName,
+        }: {
+          blob: Blob;
+          fileName: string;
+        }): Promise<string> =>
+          new Promise((resolve, reject) => {
+            xhr3.withCredentials = false;
+            xhr3.open('POST', import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT);
 
-      uploadXhr.onload = () => {
-        if (uploadXhr.status >= 200 && uploadXhr.status < 300) {
+            xhr3.addEventListener('load', () => {
+              if (xhr3.status === 403) {
+                // eslint-disable-next-line prefer-promise-reject-errors
+                reject({ message: `HTTP Error: ${xhr3.status}`, remove: true });
+                return;
+              }
+
+              if (xhr3.status < 200 || xhr3.status >= 300) {
+                reject(new Error(`HTTP Error: ${xhr3.status}`));
+                return;
+              }
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment
+              const json = JSON.parse(xhr3.responseText)[0];
+
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+              if (!json || typeof json.url !== 'string') {
+                reject(new Error(`Invalid JSON: ${xhr3.responseText}`));
+                return;
+              }
+
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
+              resolve(json.url);
+            });
+
+            xhr3.onerror = () => {
+              reject(
+                new Error(
+                  `Image upload failed due to a XHR Transport error. Code: ${xhr3.status}`
+                )
+              );
+            };
+
+            const formData = new FormData();
+            formData.append('file', blob, fileName);
+
+            xhr3.send(formData);
+          });
+
+        void upload({
+          blob: file as RcFile,
+          fileName: filename,
+        }).then((url) => {
+          const type =
+            typeof file !== 'string' && 'type' in file
+              ? file.type
+              : 'application/octet-stream';
+
           if (onSuccess && typeof file !== 'string') {
             onSuccess(
               [
                 {
                   ...file,
                   mimetype: type,
-                  url: sasUrl,
+                  url,
                   blobName: filename,
                 },
               ],
-              uploadXhr
+              xhr3
             );
           }
-        } else if (onError)
-          onError(new Error(`Upload failed with status: ${uploadXhr.status}`));
-      };
-
-      uploadXhr.onerror = () => {
-        if (onError) onError(new Error('Upload encountered a network error'));
-      };
-
-      uploadXhr.send(file);
-    } else if (onError)
-      onError(new Error(`Request failed with status: ${xhr.status}`));
-  };
-
-  xhr.onerror = () => {
-    if (onError)
-      onError(new Error('Network error encountered when getting SAS URL'));
-  };
+        });
+      } catch {
+        if (onError) {
+          onError(new Error('Failed to get the SAS URL.'));
+        }
+      }
+    });
 };
 
 export { customRequest as default };
+//
+// const customRequest = ({
+//   file,
+//   onSuccess,
+//   onError,
+// }: UploadRequestOption): void => {
+//   let filename: string;
+//
+//   if (typeof file === 'string') {
+//     filename = `${uuidv4()}`;
+//   } else if ('name' in file) {
+//     filename = `${uuidv4()}.${getExtension(file.name)}`;
+//   } else {
+//     filename = `${uuidv4()}`;
+//   }
+//
+//   try {
+//     const xhr = new XMLHttpRequest();
+//
+//     xhr.open(
+//       'POST',
+//       'https://util-server-go-595137580681.herokuapp.com/get-upload-urls',
+//       true
+//     );
+//     xhr.setRequestHeader('Content-Type', 'application/json');
+//     xhr.send(JSON.stringify({ filename }));
+//
+//     xhr.onload = () => {
+//       if (xhr.status >= 200 && xhr.status < 300) {
+//         const responseBody = JSON.parse(xhr.responseText) as {
+//           url: string;
+//         };
+//         const { url: sasUrl } = responseBody;
+//
+//         if (!sasUrl) {
+//           throw new Error('Failed to get the SAS URL');
+//         }
+//
+//         const type =
+//           typeof file !== 'string' && 'type' in file
+//             ? file.type
+//             : 'application/octet-stream';
+//         const uploadXhr = new XMLHttpRequest();
+//
+//         uploadXhr.open('PUT', sasUrl, true);
+//         uploadXhr.setRequestHeader('x-ms-blob-type', 'BlockBlob');
+//         uploadXhr.setRequestHeader('Content-Type', type);
+//
+//         uploadXhr.onload = () => {
+//           if (uploadXhr.status >= 200 && uploadXhr.status < 300) {
+//             if (onSuccess && typeof file !== 'string') {
+//               onSuccess(
+//                 [
+//                   {
+//                     ...file,
+//                     mimetype: type,
+//                     url: sasUrl,
+//                     blobName: filename,
+//                   },
+//                 ],
+//                 uploadXhr
+//               );
+//             }
+//           } else {
+//             throw new Error('Failed to get the SAS URL');
+//           }
+//         };
+//
+//         uploadXhr.onerror = () => {
+//           if (onError) {
+//             throw new Error('Failed to get the SAS URL');
+//           }
+//         };
+//
+//         uploadXhr.send(file);
+//       } else {
+//         throw new Error('Failed to get the SAS URL');
+//       }
+//     };
+//
+//     xhr.onerror = () => {
+//       throw new Error('Failed to get the SAS URL');
+//     };
+//   } catch {
+//       if (onError) {
+//         onError(new Error('Failed to get the SAS URL'));
+//       }
+//   }
+// };
+//
+// export { customRequest as default };

@@ -5,5 +5,8 @@ query tags($where: TagWhereInput!, $orderBy: [TagOrderByWithRelationInput!]) {
     description
     crimeType
     type
+    parentTag {
+      id
+    }
   }
 }

@@ -5,12 +5,13 @@ import type {
   TagsQuery,
 } from 'graphql/generated';
 import {
-  useRecycleTagMutation,
   Model,
   QueryMode,
   TagsDocument,
   TagType,
+  useRecycleTagMutation,
   useTagsQuery,
+  useUpdateTagMutation,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
@@ -44,6 +45,7 @@ interface Return {
   toggleEditIncident: () => void;
   saving: boolean;
   deleteConfirm: (value: string) => void;
+  updateTagParent: (tagId: string, parentTagId: string | null) => void;
 }
 
 const useCrimeTypeList = (): Return => {
@@ -72,20 +74,20 @@ const useCrimeTypeList = (): Return => {
       dataType: {
         equals: Model.Incident,
       },
-      OR: [
-        {
-          name: {
-            contains: search,
-            mode: QueryMode.Insensitive,
-          },
-        },
-        {
-          description: {
-            contains: search,
-            mode: QueryMode.Insensitive,
-          },
-        },
-      ],
+      // OR: [
+      //   {
+      //     name: {
+      //       contains: search,
+      //       mode: QueryMode.Insensitive,
+      //     },
+      //   },
+      //   {
+      //     description: {
+      //       contains: search,
+      //       mode: QueryMode.Insensitive,
+      //     },
+      //   },
+      // ],
     },
   });
   const [involvedTagsVars, setInvolvedTagsVars] = useState({
@@ -155,20 +157,20 @@ const useCrimeTypeList = (): Return => {
     setCrimeTypesVars({
       where: {
         ...crimeTypesVars.where,
-        OR: [
-          {
-            name: {
-              contains: search,
-              mode: QueryMode.Insensitive,
-            },
-          },
-          {
-            description: {
-              contains: search,
-              mode: QueryMode.Insensitive,
-            },
-          },
-        ],
+        // OR: [
+        //   {
+        //     name: {
+        //       contains: search,
+        //       mode: QueryMode.Insensitive,
+        //     },
+        //   },
+        //   {
+        //     description: {
+        //       contains: search,
+        //       mode: QueryMode.Insensitive,
+        //     },
+        //   },
+        // ],
       },
     });
 
@@ -414,6 +416,46 @@ const useCrimeTypeList = (): Return => {
     });
   };
 
+  const [updateTag] = useUpdateTagMutation();
+
+  const updateTagParent = (tagId: string, parentTagId: string | null) => {
+    if (parentTagId) {
+      void updateTag({
+        variables: {
+          where: {
+            id: tagId,
+          },
+          data: {
+            parentTag: {
+              connect: {
+                id: parentTagId,
+              },
+            },
+          },
+        },
+      });
+    } else {
+      void updateTag({
+        variables: {
+          where: {
+            id: tagId,
+          },
+          data: {
+            parentTag: {
+              disconnect: {
+                id: {
+                  equals:
+                    data?.tags?.find((tag) => tag?.id === tagId)?.parentTag
+                      ?.id || '',
+                },
+              },
+            },
+          },
+        },
+      });
+    }
+  };
+
   return {
     data,
     loading,
@@ -438,6 +480,7 @@ const useCrimeTypeList = (): Return => {
     impactLoading,
     updateInvolvedList,
     updateImpactList,
+    updateTagParent,
   };
 };
 
