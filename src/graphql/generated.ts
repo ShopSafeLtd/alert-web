@@ -9363,6 +9363,7 @@ export type Mutation = {
   createIncident: Incident;
   createIncidentForm: IncidentForm;
   createInvestigation: Investigation;
+  createInvestigationCsvZip: Scalars['String'];
   /** NOTE: This is triggered without context externally by auth0, no way to know what scheme they are logging into. May have to add a update query one they have logged in  that updates the last login with the scheme they are logging into */
   createLoginEvent?: Maybe<LoginEvent>;
   createMessage: MessageItem;
@@ -9639,6 +9640,11 @@ export type MutationCreateIncidentFormArgs = {
 
 export type MutationCreateInvestigationArgs = {
   data: CreateInvestigationInput;
+};
+
+
+export type MutationCreateInvestigationCsvZipArgs = {
+  where: UniqueId;
 };
 
 
@@ -20834,7 +20840,7 @@ export type TagsQueryVariables = Exact<{
 }>;
 
 
-export type TagsQuery = { __typename?: 'Query', tags: Array<{ __typename?: 'Tag', id: string, name: string, description: string, crimeType?: CrimeType | null, type: TagType }> };
+export type TagsQuery = { __typename?: 'Query', tags: Array<{ __typename?: 'Tag', id: string, name: string, description: string, crimeType?: CrimeType | null, type: TagType, parentTag?: { __typename?: 'Tag', id: string } | null }> };
 
 export type CreateTodoMutationVariables = Exact<{
   data: TodoCreateInput;
@@ -30107,6 +30113,9 @@ export const TagsDocument = gql`
     description
     crimeType
     type
+    parentTag {
+      id
+    }
   }
 }
     `;

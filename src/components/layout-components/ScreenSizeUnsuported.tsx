@@ -9,7 +9,7 @@ interface Props {
 }
 
 const ScreenSizeUnsupported: React.FC<Props> = ({ children }: Props) => {
-  const isSupported = useMediaQuery({ minWidth: 1024 });
+  const isSupported = useMediaQuery({ minWidth: 992 });
   const intl = useIntl();
 
   if (isSupported) {

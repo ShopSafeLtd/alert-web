@@ -217,10 +217,7 @@ const OffenderFeed = ({
         style={{ marginBottom: 5, marginRight: 10 }}
       >
         <Row align="middle" gutter={16}>
-          <Col
-            span={customGalleriesData?.listCustomGalleries.total ? 8 : 4}
-            xxl={6}
-          >
+          <Col span={4} xxl={4}>
             <Input
               size="small"
               placeholder={intl.formatMessage({

@@ -27,9 +27,11 @@ const CrimeTypeList = (): JSX.Element => {
     toggleAddInvolved,
     updateImpactList,
     updateInvolvedList,
+    updateTagParent,
   } = useCrimeTypeList();
   return (
     <View
+      updateTagParent={updateTagParent}
       data={data}
       loading={loading}
       search={search}

@@ -325,7 +325,7 @@ const useUpdateBar = ({
       updateInput.length === 0 &&
       updateFileList.length === 0 &&
       updateOffenders.length === 0 &&
-      !updateIncidents?.length &&
+      updateIncidents?.length === 0 &&
       vehiclesData.length === 0 &&
       crimeGroupsData.length === 0
     ) {

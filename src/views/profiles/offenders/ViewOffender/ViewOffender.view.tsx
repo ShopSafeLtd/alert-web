@@ -1644,7 +1644,7 @@ const ViewOffender = ({
                             )}
                           </Row>
 
-                          {data?.offender?.vehicles.length && !loading ? (
+                          {data?.offender?.vehicles?.length && !loading ? (
                             <VehicleTable
                               vehicles={data?.offender?.vehicles}
                               setEditVehicleData={setEditVehicleData}

@@ -34,6 +34,11 @@ interface FormData {
 
 export type { FormData };
 
+export function extractFilename(url: string): string | null {
+  const match = /\/temp\/([^?]+)/.exec(url);
+  return match ? match[1] : null;
+}
+
 const useCreateArticle = (): Props => {
   const siteUrl = `${window.location.href.split('/app/')[0]}`;
   const schemeId = useStoreState((state) => state.scheme.id);
@@ -52,7 +57,6 @@ const useCreateArticle = (): Props => {
   const [selectedSchemes, setSelectedSchemes] = useState<string[]>([]);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const editorRef = useRef<Editor | null>(null);
-
   const [previewText, setPreviewText] = useState<string>('');
   const [previewImage, setPreviewImage] = useState<string>('');
   const [imageList, setImageList] = useState<UploadFile[]>([]);
@@ -352,17 +356,20 @@ const useCreateArticle = (): Props => {
         const { blobCache } = (window as any).tinymce.activeEditor.editorUpload;
         const base64 = (reader.result as string).split(',')[1];
         const blobInfo = blobCache.create(id, file, base64);
+
         void upload({
           blob: blobInfo.blob(),
           fileName: blobInfo.filename(),
         }).then((url) => {
           blobCache.add(blobInfo);
 
+          const originalFileName = extractFilename(url) || file.name;
           if (meta.filetype === 'file') {
             fileList.push({
               ...file,
               url,
               name: file.name,
+              fileName: originalFileName,
               uid: id,
             } as UploadFile);
           }
@@ -454,7 +461,7 @@ const useCreateArticle = (): Props => {
               url: file.url || '',
               name: file.name || '',
               fileType: file.type || '',
-              origFileName: file.fileName || '',
+              origFileName: file.fileName || file.name || '',
             })) || [],
           htmlBody: htmlWithDefaultWidth || '',
           previewImage: img,
@@ -514,7 +521,6 @@ const useCreateArticle = (): Props => {
   };
 
   const handleChange: UploadProps['onChange'] = (info) => {
-    console.log(info);
     let newFileList = [...info.fileList];
 
     newFileList = newFileList.map((file) => {
