@@ -1,17 +1,17 @@
 import type {
-  ListIncidentsFeedQuery,
+  IncidentsFeedQuery,
   RecycleIncidentMutation,
 } from 'graphql/generated';
 import {
-  ListIncidentsFeedDocument,
+  IncidentsFeedDocument,
   Model,
   QueryMode,
   Role,
   SortOrder,
   TagType,
+  useIncidentsFeedQuery,
   useListBusinessesQuery,
   useListGoodsTypesQuery,
-  useListIncidentsFeedQuery,
   useSchemeGroupsQuery,
   useTagsQuery,
 } from 'graphql/generated';
@@ -23,7 +23,7 @@ import type { DateType } from 'types/DataType';
 import type { IncidentFilters } from 'state/data-model';
 
 interface Return {
-  data: ListIncidentsFeedQuery | undefined;
+  data: IncidentsFeedQuery | undefined;
   loading: boolean;
   lightboxElements: {
     src: string;
@@ -122,9 +122,7 @@ const useIncidentFeed = (): Return => {
   });
 
   const queryVariables = {
-    scheme: {
-      id: schemeId,
-    },
+    schemeId,
     order: {
       date:
         order === IncidentSort.createdAtDesc ? SortOrder.Desc : SortOrder.Asc,
@@ -266,11 +264,11 @@ const useIncidentFeed = (): Return => {
         },
       ],
     },
-    take: compactView ? 48 : 12,
+    first: compactView ? 48 : 12,
   };
   // Queries
   // Fetch incidents
-  const { data, loading, fetchMore } = useListIncidentsFeedQuery({
+  const { data, loading, fetchMore } = useIncidentsFeedQuery({
     variables: queryVariables,
     fetchPolicy: 'cache-and-network',
     // skip: role === Role.User && restrictIncidentAccess,
@@ -372,21 +370,21 @@ const useIncidentFeed = (): Return => {
   ) => {
     if (res === null || res === undefined) return;
 
-    const existingData = store.readQuery<ListIncidentsFeedQuery>({
-      query: ListIncidentsFeedDocument,
+    const existingData = store.readQuery<IncidentsFeedQuery>({
+      query: IncidentsFeedDocument,
       variables: queryVariables,
     });
 
     if (existingData === null) return;
-    if (existingData?.listIncidents?.incidents === undefined) return;
+    if (existingData?.incidentsRelay?.edges === undefined) return;
 
-    store.writeQuery<ListIncidentsFeedQuery>({
-      query: ListIncidentsFeedDocument,
+    store.writeQuery<IncidentsFeedQuery>({
+      query: IncidentsFeedDocument,
       data: {
-        listIncidents: {
-          ...existingData.listIncidents,
-          incidents: existingData.listIncidents?.incidents.filter(
-            (incident) => incident.id !== res?.recycleIncident?.id
+        incidentsRelay: {
+          ...existingData.incidentsRelay,
+          edges: existingData.incidentsRelay?.edges.filter(
+            (n) => n.node.id !== res?.recycleIncident?.id
           ),
         },
         __typename: 'Query',
@@ -533,21 +531,16 @@ const useIncidentFeed = (): Return => {
     void fetchMore({
       variables: {
         ...queryVariables,
-        take: compactView ? 48 : 12,
-        skip: data?.listIncidents?.incidents?.length || 0,
+        after: data?.incidentsRelay?.pageInfo?.endCursor,
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return {
-          listIncidents: {
-            ...fetchMoreResult.listIncidents,
-            total:
-              fetchMoreResult.listIncidents?.total ||
-              prev.listIncidents?.total ||
-              0,
-            incidents: [
-              ...(prev.listIncidents?.incidents || []),
-              ...(fetchMoreResult.listIncidents?.incidents || []),
+          incidentsRelay: {
+            ...fetchMoreResult.incidentsRelay,
+            edges: [
+              ...(prev.incidentsRelay?.edges || []),
+              ...(fetchMoreResult.incidentsRelay?.edges || []),
             ],
           },
         };

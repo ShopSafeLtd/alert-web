@@ -19,6 +19,7 @@ describe('List Officer View', () => {
     const { getByText } = render(
       <MemoryRouter>
         <TagList
+          updateTagParent={jest.fn()}
           data={data}
           search=""
           setSearch={jest.fn()}

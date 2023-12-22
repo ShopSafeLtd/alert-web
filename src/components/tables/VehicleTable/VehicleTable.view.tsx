@@ -73,15 +73,19 @@ const VehicleTable = ({
               rotation: number | undefined;
               optimised?: string | null | undefined;
             }[]
-          ) => (
-            <div style={{ height: 100, width: 80 }}>
-              <WatermarkImage
-                url={item[0]?.optimised}
-                rotation={item[0]?.rotation}
-                position={item[0]?.position}
-              />
-            </div>
-          ),
+          ) => {
+            if (item && item[0])
+              return (
+                <div style={{ height: 100, width: 80 }}>
+                  <WatermarkImage
+                    url={item[0]?.optimised}
+                    rotation={item[0]?.rotation}
+                    position={item[0]?.position}
+                  />
+                </div>
+              );
+            return null;
+          },
         },
         {
           key: 'reference',

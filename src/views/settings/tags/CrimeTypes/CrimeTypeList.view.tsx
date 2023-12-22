@@ -79,7 +79,6 @@ const CrimeTypeList = ({
   updateTagParent,
 }: Props): JSX.Element => {
   const intl = useIntl();
-  // const navigate = useNavigate();
   return (
     <div className="list-view">
       <Card>

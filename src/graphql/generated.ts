@@ -21267,16 +21267,18 @@ export type ListDemEvidenceExtendedWithoutUserQueryVariables = Exact<{
 
 export type ListDemEvidenceExtendedWithoutUserQuery = { __typename?: 'Query', listDemEvidenceExtendedWithoutUser: { __typename?: 'ListDemEvidenceExtended', total: number, demEvidence: Array<{ __typename?: 'DemEvidenceExtended', type?: string | null, thumbnailUrl?: string | null, recordedAt?: Date | null, playbackUrl?: string | null, id?: string | null, importance?: string | null, officerName?: string | null, duration?: string | null }> } };
 
-export type ListIncidentsFeedQueryVariables = Exact<{
-  scheme: SchemeWhereUniqueInput;
-  where?: InputMaybe<IncidentWhereInput>;
+export type IncidentsFeedQueryVariables = Exact<{
   order?: InputMaybe<IncidentOrderByWithRelationInput>;
-  take?: InputMaybe<Scalars['Int']>;
-  skip?: InputMaybe<Scalars['Int']>;
+  search?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']>;
+  crimeTypes?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+  groups?: InputMaybe<Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>>;
+  schemeId: Scalars['String'];
 }>;
 
 
-export type ListIncidentsFeedQuery = { __typename?: 'Query', listIncidents?: { __typename?: 'ListIncidents', total: number, incidents: Array<{ __typename?: 'Incident', approved?: boolean | null, id: string, totalImages: number, subject?: string | null, reference?: number | null, policeRef?: string | null, dayTime: string, description: string, createdByUser: boolean, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, images: Array<{ __typename?: 'Image', low?: string | null, id: string, rotation: number, position: ImagePosition, primary?: boolean | null }>, offenders: Array<{ __typename?: 'Offender', name?: string | null, id: string }>, business?: { __typename?: 'Business', name: string } | null, location?: { __typename?: 'Address', full: string } | null, groups: Array<{ __typename?: 'Group', id: string, name: string }> }> } | null };
+export type IncidentsFeedQuery = { __typename?: 'Query', incidentsRelay: { __typename?: 'QueryIncidentsRelayConnection', edges: Array<{ __typename?: 'QueryIncidentsRelayConnectionEdge', node: { __typename?: 'Incident', approved?: boolean | null, id: string, totalImages: number, subject?: string | null, reference?: number | null, policeRef?: string | null, dayTime: string, description: string, createdByUser: boolean, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, images: Array<{ __typename?: 'Image', low?: string | null, id: string, rotation: number, position: ImagePosition, primary?: boolean | null }>, offenders: Array<{ __typename?: 'Offender', name?: string | null, id: string }>, business?: { __typename?: 'Business', name: string } | null, location?: { __typename?: 'Address', full: string } | null, groups: Array<{ __typename?: 'Group', id: string, name: string }> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null } } };
 
 export type OffenderFeedListQueryVariables = Exact<{
   scheme: SchemeWhereUniqueInput;
@@ -32683,33 +32685,40 @@ export function useListDemEvidenceExtendedWithoutUserLazyQuery(baseOptions?: Apo
 export type ListDemEvidenceExtendedWithoutUserQueryHookResult = ReturnType<typeof useListDemEvidenceExtendedWithoutUserQuery>;
 export type ListDemEvidenceExtendedWithoutUserLazyQueryHookResult = ReturnType<typeof useListDemEvidenceExtendedWithoutUserLazyQuery>;
 export type ListDemEvidenceExtendedWithoutUserQueryResult = Apollo.QueryResult<ListDemEvidenceExtendedWithoutUserQuery, ListDemEvidenceExtendedWithoutUserQueryVariables>;
-export const ListIncidentsFeedDocument = gql`
-    query ListIncidentsFeed($scheme: SchemeWhereUniqueInput!, $where: IncidentWhereInput, $order: IncidentOrderByWithRelationInput, $take: Int, $skip: Int) {
-  listIncidents(
-    scheme: $scheme
-    where: $where
+export const IncidentsFeedDocument = gql`
+    query IncidentsFeed($order: IncidentOrderByWithRelationInput, $search: String, $first: Int, $after: String, $crimeTypes: [String!], $groups: [String], $schemeId: String!) {
+  incidentsRelay(
     order: $order
-    take: $take
-    skip: $skip
+    first: $first
+    after: $after
+    search: $search
+    crimeTypes: $crimeTypes
+    groups: $groups
+    schemeId: $schemeId
   ) {
-    incidents {
-      ...IncidentCard
+    edges {
+      node {
+        ...IncidentCard
+      }
     }
-    total
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
   }
 }
     ${IncidentCardFragmentDoc}`;
-export function useListIncidentsFeedQuery(baseOptions: Apollo.QueryHookOptions<ListIncidentsFeedQuery, ListIncidentsFeedQueryVariables>) {
+export function useIncidentsFeedQuery(baseOptions: Apollo.QueryHookOptions<IncidentsFeedQuery, IncidentsFeedQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ListIncidentsFeedQuery, ListIncidentsFeedQueryVariables>(ListIncidentsFeedDocument, options);
+        return Apollo.useQuery<IncidentsFeedQuery, IncidentsFeedQueryVariables>(IncidentsFeedDocument, options);
       }
-export function useListIncidentsFeedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListIncidentsFeedQuery, ListIncidentsFeedQueryVariables>) {
+export function useIncidentsFeedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IncidentsFeedQuery, IncidentsFeedQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ListIncidentsFeedQuery, ListIncidentsFeedQueryVariables>(ListIncidentsFeedDocument, options);
+          return Apollo.useLazyQuery<IncidentsFeedQuery, IncidentsFeedQueryVariables>(IncidentsFeedDocument, options);
         }
-export type ListIncidentsFeedQueryHookResult = ReturnType<typeof useListIncidentsFeedQuery>;
-export type ListIncidentsFeedLazyQueryHookResult = ReturnType<typeof useListIncidentsFeedLazyQuery>;
-export type ListIncidentsFeedQueryResult = Apollo.QueryResult<ListIncidentsFeedQuery, ListIncidentsFeedQueryVariables>;
+export type IncidentsFeedQueryHookResult = ReturnType<typeof useIncidentsFeedQuery>;
+export type IncidentsFeedLazyQueryHookResult = ReturnType<typeof useIncidentsFeedLazyQuery>;
+export type IncidentsFeedQueryResult = Apollo.QueryResult<IncidentsFeedQuery, IncidentsFeedQueryVariables>;
 export const OffenderFeedListDocument = gql`
     query offenderFeedList($scheme: SchemeWhereUniqueInput!, $where: OffenderWhereInput, $order: OffenderOrderByWithRelationInput, $take: Int, $skip: Int) {
   listOffenders(

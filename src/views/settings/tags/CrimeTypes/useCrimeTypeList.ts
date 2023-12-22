@@ -442,13 +442,7 @@ const useCrimeTypeList = (): Return => {
           },
           data: {
             parentTag: {
-              disconnect: {
-                id: {
-                  equals:
-                    data?.tags?.find((tag) => tag?.id === tagId)?.parentTag
-                      ?.id || '',
-                },
-              },
+              disconnect: true,
             },
           },
         },
