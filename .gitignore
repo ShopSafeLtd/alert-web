@@ -20,3 +20,7 @@ translations/
 en/
 
 .vscode/
+
+vite.config.d.ts
+
+vite.config.js

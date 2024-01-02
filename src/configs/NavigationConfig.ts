@@ -271,6 +271,26 @@ const userOnlyItems: NavItem[] = [
       Role.GroupAdmin,
     ],
   },
+  // {
+  //   key: 'checklists',
+  //   path: `${APP_PREFIX_PATH}/checklists`,
+  //   title: 'Checklists',
+  //   icon: faClipboardListCheck,
+  //   breadcrumb: false,
+  //   submenu: [],
+  //   requireDemId: true,
+  //   intl: defineMessage({
+  //     id: 'checklists',
+  //     defaultMessage: 'Checklists',
+  //   }),
+  //   roles: [
+  //     Role.ContentAdmin,
+  //     Role.SchemeAdmin,
+  //     Role.ShopsafeAdmin,
+  //     Role.GroupAdmin,
+  //   ],
+  // },
+
   {
     key: 'resources',
     path: `${APP_PREFIX_PATH}/resources`,

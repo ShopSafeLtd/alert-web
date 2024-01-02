@@ -23,7 +23,7 @@ export type Scalars = {
   Upload: any;
 };
 
-export type Action = Node & {
+export type Action = {
   __typename?: 'Action';
   Address?: Maybe<Address>;
   Ban?: Maybe<Ban>;
@@ -258,6 +258,7 @@ export type ActiveChecklist = {
   businessId?: Maybe<Scalars['String']>;
   checklist: Checklist;
   checklistId: Scalars['String'];
+  checklistSection: Array<ActiveChecklistSections>;
   comments?: Maybe<Scalars['String']>;
   completedAt?: Maybe<Scalars['Date']>;
   completedBy?: Maybe<User>;
@@ -267,6 +268,7 @@ export type ActiveChecklist = {
   fields: Array<ActiveChecklistFields>;
   id: Scalars['ID'];
   maxWeight: Scalars['Int'];
+  name?: Maybe<Scalars['String']>;
   percentComplete: Scalars['Int'];
   signature?: Maybe<Scalars['String']>;
   status: ChecklistStatus;
@@ -293,6 +295,7 @@ export type ActiveChecklistFields = {
   availableAnswers: Array<Scalars['JSON']>;
   createdAt: Scalars['Date'];
   id: Scalars['ID'];
+  order: Scalars['Int'];
   question: Scalars['JSON'];
   section: Scalars['Int'];
   subsection: Scalars['Int'];
@@ -314,7 +317,6 @@ export type ActiveChecklistFieldsOrderByRelationAggregateInput = {
 export type ActiveChecklistFieldsOrderByWithRelationInput = {
   activeChecklist?: InputMaybe<ActiveChecklistOrderByWithRelationInput>;
   activeChecklistId?: InputMaybe<SortOrder>;
-  answer?: InputMaybe<ChecklistAnswerOrderByWithRelationInput>;
   answerTranslations?: InputMaybe<SortOrder>;
   availableAnswers?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
@@ -346,8 +348,6 @@ export type ActiveChecklistFieldsScalarWhereWithAggregatesInput = {
   NOT?: InputMaybe<Array<ActiveChecklistFieldsScalarWhereWithAggregatesInput>>;
   OR?: InputMaybe<Array<ActiveChecklistFieldsScalarWhereWithAggregatesInput>>;
   activeChecklistId?: InputMaybe<StringWithAggregatesFilter>;
-  answerTranslations?: InputMaybe<JsonNullableListFilter>;
-  availableAnswers?: InputMaybe<JsonNullableListFilter>;
   createdAt?: InputMaybe<DateTimeWithAggregatesFilter>;
   id?: InputMaybe<StringWithAggregatesFilter>;
   question?: InputMaybe<JsonWithAggregatesFilter>;
@@ -364,9 +364,6 @@ export type ActiveChecklistFieldsWhereInput = {
   OR?: InputMaybe<Array<ActiveChecklistFieldsWhereInput>>;
   activeChecklist?: InputMaybe<ActiveChecklistWhereInput>;
   activeChecklistId?: InputMaybe<StringFilter>;
-  answer?: InputMaybe<ChecklistAnswerWhereInput>;
-  answerTranslations?: InputMaybe<JsonNullableListFilter>;
-  availableAnswers?: InputMaybe<JsonNullableListFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   id?: InputMaybe<StringFilter>;
   question?: InputMaybe<JsonFilter>;
@@ -383,9 +380,6 @@ export type ActiveChecklistFieldsWhereUniqueInput = {
   OR?: InputMaybe<Array<ActiveChecklistFieldsWhereInput>>;
   activeChecklist?: InputMaybe<ActiveChecklistWhereInput>;
   activeChecklistId?: InputMaybe<StringFilter>;
-  answer?: InputMaybe<ChecklistAnswerWhereInput>;
-  answerTranslations?: InputMaybe<JsonNullableListFilter>;
-  availableAnswers?: InputMaybe<JsonNullableListFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   id?: InputMaybe<Scalars['String']>;
   question?: InputMaybe<JsonFilter>;
@@ -443,6 +437,20 @@ export enum ActiveChecklistScalarFieldEnum {
   UpdatedAt = 'updatedAt'
 }
 
+export type ActiveChecklistSections = {
+  __typename?: 'ActiveChecklistSections';
+  activeChecklist: ActiveChecklist;
+  activeChecklistId: Scalars['String'];
+  id: Scalars['ID'];
+  maxWeight: Scalars['Int'];
+  section: Scalars['Int'];
+  sub: Scalars['Boolean'];
+  subsection?: Maybe<Scalars['Int']>;
+  title?: Maybe<Scalars['String']>;
+  titleLocaled: Scalars['String'];
+  titleTranslations: Array<Scalars['JSON']>;
+};
+
 export type ActiveChecklistWhereInput = {
   AND?: InputMaybe<Array<ActiveChecklistWhereInput>>;
   NOT?: InputMaybe<Array<ActiveChecklistWhereInput>>;
@@ -457,7 +465,6 @@ export type ActiveChecklistWhereInput = {
   completedById?: InputMaybe<StringNullableFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   document?: InputMaybe<DocumentWhereInput>;
-  fields?: InputMaybe<ActiveChecklistFieldsListRelationFilter>;
   id?: InputMaybe<StringFilter>;
   maxWeight?: InputMaybe<IntFilter>;
   percentComplete?: InputMaybe<IntFilter>;
@@ -481,7 +488,6 @@ export type ActiveChecklistWhereUniqueInput = {
   completedById?: InputMaybe<StringNullableFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   document?: InputMaybe<DocumentWhereInput>;
-  fields?: InputMaybe<ActiveChecklistFieldsListRelationFilter>;
   id?: InputMaybe<Scalars['String']>;
   maxWeight?: InputMaybe<IntFilter>;
   percentComplete?: InputMaybe<IntFilter>;
@@ -768,6 +774,11 @@ export type AnswerWeight = {
   weight: Scalars['Int'];
 };
 
+export type AnswerWeightInput = {
+  answer: Scalars['String'];
+  weight?: InputMaybe<Scalars['Int']>;
+};
+
 export type AnswerWeightListRelationFilter = {
   every?: InputMaybe<AnswerWeightWhereInput>;
   none?: InputMaybe<AnswerWeightWhereInput>;
@@ -781,7 +792,6 @@ export type AnswerWeightOrderByRelationAggregateInput = {
 export type AnswerWeightOrderByWithRelationInput = {
   answer?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
-  question?: InputMaybe<ChecklistQuestionOrderByWithRelationInput>;
   questionId?: InputMaybe<SortOrder>;
   weight?: InputMaybe<SortOrder>;
 };
@@ -819,7 +829,6 @@ export type AnswerWeightWhereInput = {
   OR?: InputMaybe<Array<AnswerWeightWhereInput>>;
   answer?: InputMaybe<StringFilter>;
   id?: InputMaybe<StringFilter>;
-  question?: InputMaybe<ChecklistQuestionWhereInput>;
   questionId?: InputMaybe<StringFilter>;
   weight?: InputMaybe<IntFilter>;
 };
@@ -830,7 +839,6 @@ export type AnswerWeightWhereUniqueInput = {
   OR?: InputMaybe<Array<AnswerWeightWhereInput>>;
   answer?: InputMaybe<StringFilter>;
   id?: InputMaybe<Scalars['String']>;
-  question?: InputMaybe<ChecklistQuestionWhereInput>;
   questionId?: InputMaybe<StringFilter>;
   weight?: InputMaybe<IntFilter>;
 };
@@ -888,7 +896,7 @@ export type ApproveIncidentData = {
   groups?: InputMaybe<ApproveGroupsData>;
 };
 
-export type Article = Node & {
+export type Article = {
   __typename?: 'Article';
   actions: Array<Action>;
   createdAt: Scalars['Date'];
@@ -1644,7 +1652,7 @@ export enum Build {
 export type Business = {
   __typename?: 'Business';
   actions: Array<Action>;
-  checklists: Array<ActiveChecklist>;
+  checklists: Array<Checklist>;
   children: Array<Business>;
   createdAt: Scalars['Date'];
   demId?: Maybe<Scalars['String']>;
@@ -1952,7 +1960,6 @@ export type BusinessWhereInput = {
   NOT?: InputMaybe<Array<BusinessWhereInput>>;
   OR?: InputMaybe<Array<BusinessWhereInput>>;
   actions?: InputMaybe<ActionListRelationFilter>;
-  checklists?: InputMaybe<ActiveChecklistListRelationFilter>;
   children?: InputMaybe<BusinessListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   demId?: InputMaybe<StringNullableFilter>;
@@ -1979,7 +1986,6 @@ export type BusinessWhereUniqueInput = {
   NOT?: InputMaybe<Array<BusinessWhereInput>>;
   OR?: InputMaybe<Array<BusinessWhereInput>>;
   actions?: InputMaybe<ActionListRelationFilter>;
-  checklists?: InputMaybe<ActiveChecklistListRelationFilter>;
   children?: InputMaybe<BusinessListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   demId?: InputMaybe<StringNullableFilter>;
@@ -2182,10 +2188,12 @@ export type Checklist = {
   activeChecklists: Array<ActiveChecklist>;
   createdAt: Scalars['Date'];
   description?: Maybe<Scalars['String']>;
+  descriptionLocaled: Scalars['String'];
   id: Scalars['ID'];
   schemes: Array<Scheme>;
   sections: Array<ChecklistSection>;
   title: Scalars['String'];
+  titleLocaled: Scalars['String'];
   titleTranslations: Array<Scalars['JSON']>;
   updatedAt: Scalars['Date'];
 };
@@ -2210,16 +2218,6 @@ export type ChecklistSchemesArgs = {
   where?: InputMaybe<SchemeWhereInput>;
 };
 
-
-export type ChecklistSectionsArgs = {
-  cursor?: InputMaybe<ChecklistSectionWhereUniqueInput>;
-  distinct?: InputMaybe<Array<ChecklistSectionScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<ChecklistSectionOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<ChecklistSectionWhereInput>;
-};
-
 export type ChecklistAnswer = {
   __typename?: 'ChecklistAnswer';
   additionalComments?: Maybe<Scalars['String']>;
@@ -2230,36 +2228,8 @@ export type ChecklistAnswer = {
   fieldId: Scalars['String'];
   id: Scalars['ID'];
   images: Array<Scalars['String']>;
-  type: ChecklistAnswerType;
+  type: AnswerType;
   updatedAt: Scalars['Date'];
-};
-
-export type ChecklistAnswerOrderByWithRelationInput = {
-  additionalComments?: InputMaybe<SortOrder>;
-  answer?: InputMaybe<SortOrder>;
-  answerTranslations?: InputMaybe<SortOrder>;
-  createdAt?: InputMaybe<SortOrder>;
-  field?: InputMaybe<ActiveChecklistFieldsOrderByWithRelationInput>;
-  fieldId?: InputMaybe<SortOrder>;
-  id?: InputMaybe<SortOrder>;
-  images?: InputMaybe<SortOrder>;
-  type?: InputMaybe<SortOrder>;
-  updatedAt?: InputMaybe<SortOrder>;
-};
-
-export type ChecklistAnswerScalarWhereWithAggregatesInput = {
-  AND?: InputMaybe<Array<ChecklistAnswerScalarWhereWithAggregatesInput>>;
-  NOT?: InputMaybe<Array<ChecklistAnswerScalarWhereWithAggregatesInput>>;
-  OR?: InputMaybe<Array<ChecklistAnswerScalarWhereWithAggregatesInput>>;
-  additionalComments?: InputMaybe<StringNullableWithAggregatesFilter>;
-  answer?: InputMaybe<StringWithAggregatesFilter>;
-  answerTranslations?: InputMaybe<JsonNullableListFilter>;
-  createdAt?: InputMaybe<DateTimeWithAggregatesFilter>;
-  fieldId?: InputMaybe<StringWithAggregatesFilter>;
-  id?: InputMaybe<StringWithAggregatesFilter>;
-  images?: InputMaybe<StringNullableListFilter>;
-  type?: InputMaybe<EnumChecklistAnswerTypeWithAggregatesFilter>;
-  updatedAt?: InputMaybe<DateTimeWithAggregatesFilter>;
 };
 
 export enum ChecklistAnswerType {
@@ -2269,36 +2239,12 @@ export enum ChecklistAnswerType {
   YesNo = 'YES_NO'
 }
 
-export type ChecklistAnswerWhereInput = {
-  AND?: InputMaybe<Array<ChecklistAnswerWhereInput>>;
-  NOT?: InputMaybe<Array<ChecklistAnswerWhereInput>>;
-  OR?: InputMaybe<Array<ChecklistAnswerWhereInput>>;
-  additionalComments?: InputMaybe<StringNullableFilter>;
-  answer?: InputMaybe<StringFilter>;
-  answerTranslations?: InputMaybe<JsonNullableListFilter>;
-  createdAt?: InputMaybe<DateTimeFilter>;
-  field?: InputMaybe<ActiveChecklistFieldsWhereInput>;
-  fieldId?: InputMaybe<StringFilter>;
-  id?: InputMaybe<StringFilter>;
-  images?: InputMaybe<StringNullableListFilter>;
-  type?: InputMaybe<EnumChecklistAnswerTypeFilter>;
-  updatedAt?: InputMaybe<DateTimeFilter>;
-};
-
-export type ChecklistAnswerWhereUniqueInput = {
-  AND?: InputMaybe<Array<ChecklistAnswerWhereInput>>;
-  NOT?: InputMaybe<Array<ChecklistAnswerWhereInput>>;
-  OR?: InputMaybe<Array<ChecklistAnswerWhereInput>>;
-  additionalComments?: InputMaybe<StringNullableFilter>;
-  answer?: InputMaybe<StringFilter>;
-  answerTranslations?: InputMaybe<JsonNullableListFilter>;
-  createdAt?: InputMaybe<DateTimeFilter>;
-  field?: InputMaybe<ActiveChecklistFieldsWhereInput>;
-  fieldId?: InputMaybe<Scalars['String']>;
-  id?: InputMaybe<Scalars['String']>;
-  images?: InputMaybe<StringNullableListFilter>;
-  type?: InputMaybe<EnumChecklistAnswerTypeFilter>;
-  updatedAt?: InputMaybe<DateTimeFilter>;
+export type ChecklistCreateUpdateInput = {
+  businessIds?: InputMaybe<Array<Scalars['String']>>;
+  description?: InputMaybe<Scalars['String']>;
+  sections: Array<SectionInput>;
+  title: Scalars['String'];
+  userIds?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export type ChecklistOrderByWithRelationInput = {
@@ -2308,7 +2254,6 @@ export type ChecklistOrderByWithRelationInput = {
   descriptionTranslations?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
   schemes?: InputMaybe<SchemeOrderByRelationAggregateInput>;
-  sections?: InputMaybe<ChecklistSectionOrderByRelationAggregateInput>;
   title?: InputMaybe<SortOrder>;
   titleTranslations?: InputMaybe<SortOrder>;
   updatedAt?: InputMaybe<SortOrder>;
@@ -2323,7 +2268,7 @@ export type ChecklistQuestion = {
   maxWeight: Scalars['Int'];
   order: Scalars['Int'];
   question: Scalars['JSON'];
-  type: AnswerType;
+  type: ChecklistAnswerType;
   updatedAt: Scalars['Date'];
   weight: Array<AnswerWeight>;
 };
@@ -2338,110 +2283,12 @@ export type ChecklistQuestionWeightArgs = {
   where?: InputMaybe<AnswerWeightWhereInput>;
 };
 
-export type ChecklistQuestionListRelationFilter = {
-  every?: InputMaybe<ChecklistQuestionWhereInput>;
-  none?: InputMaybe<ChecklistQuestionWhereInput>;
-  some?: InputMaybe<ChecklistQuestionWhereInput>;
-};
-
-export type ChecklistQuestionOrderByRelationAggregateInput = {
-  _count?: InputMaybe<SortOrder>;
-};
-
-export type ChecklistQuestionOrderByWithRelationInput = {
-  checklistSubsection?: InputMaybe<ChecklistSubsectionOrderByWithRelationInput>;
-  checklistSubsectionId?: InputMaybe<SortOrder>;
-  createdAt?: InputMaybe<SortOrder>;
-  id?: InputMaybe<SortOrder>;
-  maxWeight?: InputMaybe<SortOrder>;
-  order?: InputMaybe<SortOrder>;
-  question?: InputMaybe<SortOrder>;
-  type?: InputMaybe<SortOrder>;
-  updatedAt?: InputMaybe<SortOrder>;
-  weight?: InputMaybe<AnswerWeightOrderByRelationAggregateInput>;
-};
-
-export enum ChecklistQuestionScalarFieldEnum {
-  ChecklistSubsectionId = 'checklistSubsectionId',
-  CreatedAt = 'createdAt',
-  Id = 'id',
-  MaxWeight = 'maxWeight',
-  Order = 'order',
-  Question = 'question',
-  Type = 'type',
-  UpdatedAt = 'updatedAt'
-}
-
-export type ChecklistQuestionScalarWhereInput = {
-  AND?: InputMaybe<Array<ChecklistQuestionScalarWhereInput>>;
-  NOT?: InputMaybe<Array<ChecklistQuestionScalarWhereInput>>;
-  OR?: InputMaybe<Array<ChecklistQuestionScalarWhereInput>>;
-  checklistSubsectionId?: InputMaybe<StringNullableFilter>;
-  createdAt?: InputMaybe<DateTimeFilter>;
-  id?: InputMaybe<StringFilter>;
-  maxWeight?: InputMaybe<IntFilter>;
-  order?: InputMaybe<IntFilter>;
-  question?: InputMaybe<JsonFilter>;
-  type?: InputMaybe<EnumAnswerTypeFilter>;
-  updatedAt?: InputMaybe<DateTimeFilter>;
-};
-
-export type ChecklistQuestionScalarWhereWithAggregatesInput = {
-  AND?: InputMaybe<Array<ChecklistQuestionScalarWhereWithAggregatesInput>>;
-  NOT?: InputMaybe<Array<ChecklistQuestionScalarWhereWithAggregatesInput>>;
-  OR?: InputMaybe<Array<ChecklistQuestionScalarWhereWithAggregatesInput>>;
-  checklistSubsectionId?: InputMaybe<StringNullableWithAggregatesFilter>;
-  createdAt?: InputMaybe<DateTimeWithAggregatesFilter>;
-  id?: InputMaybe<StringWithAggregatesFilter>;
-  maxWeight?: InputMaybe<IntWithAggregatesFilter>;
-  order?: InputMaybe<IntWithAggregatesFilter>;
-  question?: InputMaybe<JsonWithAggregatesFilter>;
-  type?: InputMaybe<EnumAnswerTypeWithAggregatesFilter>;
-  updatedAt?: InputMaybe<DateTimeWithAggregatesFilter>;
-};
-
-export type ChecklistQuestionWhereInput = {
-  AND?: InputMaybe<Array<ChecklistQuestionWhereInput>>;
-  NOT?: InputMaybe<Array<ChecklistQuestionWhereInput>>;
-  OR?: InputMaybe<Array<ChecklistQuestionWhereInput>>;
-  checklistSubsection?: InputMaybe<ChecklistSubsectionWhereInput>;
-  checklistSubsectionId?: InputMaybe<StringNullableFilter>;
-  createdAt?: InputMaybe<DateTimeFilter>;
-  id?: InputMaybe<StringFilter>;
-  maxWeight?: InputMaybe<IntFilter>;
-  order?: InputMaybe<IntFilter>;
-  question?: InputMaybe<JsonFilter>;
-  type?: InputMaybe<EnumAnswerTypeFilter>;
-  updatedAt?: InputMaybe<DateTimeFilter>;
-  weight?: InputMaybe<AnswerWeightListRelationFilter>;
-};
-
-export type ChecklistQuestionWhereUniqueInput = {
-  AND?: InputMaybe<Array<ChecklistQuestionWhereInput>>;
-  NOT?: InputMaybe<Array<ChecklistQuestionWhereInput>>;
-  OR?: InputMaybe<Array<ChecklistQuestionWhereInput>>;
-  checklistSubsection?: InputMaybe<ChecklistSubsectionWhereInput>;
-  checklistSubsectionId?: InputMaybe<StringNullableFilter>;
-  createdAt?: InputMaybe<DateTimeFilter>;
-  id?: InputMaybe<Scalars['String']>;
-  maxWeight?: InputMaybe<IntFilter>;
-  order?: InputMaybe<IntFilter>;
-  question?: InputMaybe<JsonFilter>;
-  type?: InputMaybe<EnumAnswerTypeFilter>;
-  updatedAt?: InputMaybe<DateTimeFilter>;
-  weight?: InputMaybe<AnswerWeightListRelationFilter>;
-};
-
 export type ChecklistScalarWhereWithAggregatesInput = {
   AND?: InputMaybe<Array<ChecklistScalarWhereWithAggregatesInput>>;
   NOT?: InputMaybe<Array<ChecklistScalarWhereWithAggregatesInput>>;
   OR?: InputMaybe<Array<ChecklistScalarWhereWithAggregatesInput>>;
   createdAt?: InputMaybe<DateTimeWithAggregatesFilter>;
-  description?: InputMaybe<StringNullableWithAggregatesFilter>;
-  descriptionTranslations?: InputMaybe<JsonNullableListFilter>;
   id?: InputMaybe<StringWithAggregatesFilter>;
-  title?: InputMaybe<StringWithAggregatesFilter>;
-  titleTranslations?: InputMaybe<JsonNullableListFilter>;
   updatedAt?: InputMaybe<DateTimeWithAggregatesFilter>;
 };
 
@@ -2456,94 +2303,6 @@ export type ChecklistSection = {
   title: Scalars['String'];
   titleTranslations: Array<Scalars['JSON']>;
   updatedAt: Scalars['Date'];
-};
-
-export type ChecklistSectionListRelationFilter = {
-  every?: InputMaybe<ChecklistSectionWhereInput>;
-  none?: InputMaybe<ChecklistSectionWhereInput>;
-  some?: InputMaybe<ChecklistSectionWhereInput>;
-};
-
-export type ChecklistSectionOrderByRelationAggregateInput = {
-  _count?: InputMaybe<SortOrder>;
-};
-
-export type ChecklistSectionOrderByWithRelationInput = {
-  checklist?: InputMaybe<ChecklistOrderByWithRelationInput>;
-  checklistId?: InputMaybe<SortOrder>;
-  createdAt?: InputMaybe<SortOrder>;
-  id?: InputMaybe<SortOrder>;
-  order?: InputMaybe<SortOrder>;
-  subsections?: InputMaybe<ChecklistSubsectionOrderByRelationAggregateInput>;
-  title?: InputMaybe<SortOrder>;
-  titleTranslations?: InputMaybe<SortOrder>;
-  updatedAt?: InputMaybe<SortOrder>;
-};
-
-export enum ChecklistSectionScalarFieldEnum {
-  ChecklistId = 'checklistId',
-  CreatedAt = 'createdAt',
-  Id = 'id',
-  Order = 'order',
-  Title = 'title',
-  TitleTranslations = 'titleTranslations',
-  UpdatedAt = 'updatedAt'
-}
-
-export type ChecklistSectionScalarWhereInput = {
-  AND?: InputMaybe<Array<ChecklistSectionScalarWhereInput>>;
-  NOT?: InputMaybe<Array<ChecklistSectionScalarWhereInput>>;
-  OR?: InputMaybe<Array<ChecklistSectionScalarWhereInput>>;
-  checklistId?: InputMaybe<StringFilter>;
-  createdAt?: InputMaybe<DateTimeFilter>;
-  id?: InputMaybe<StringFilter>;
-  order?: InputMaybe<IntFilter>;
-  title?: InputMaybe<StringFilter>;
-  titleTranslations?: InputMaybe<JsonNullableListFilter>;
-  updatedAt?: InputMaybe<DateTimeFilter>;
-};
-
-export type ChecklistSectionScalarWhereWithAggregatesInput = {
-  AND?: InputMaybe<Array<ChecklistSectionScalarWhereWithAggregatesInput>>;
-  NOT?: InputMaybe<Array<ChecklistSectionScalarWhereWithAggregatesInput>>;
-  OR?: InputMaybe<Array<ChecklistSectionScalarWhereWithAggregatesInput>>;
-  checklistId?: InputMaybe<StringWithAggregatesFilter>;
-  createdAt?: InputMaybe<DateTimeWithAggregatesFilter>;
-  id?: InputMaybe<StringWithAggregatesFilter>;
-  order?: InputMaybe<IntWithAggregatesFilter>;
-  title?: InputMaybe<StringWithAggregatesFilter>;
-  titleTranslations?: InputMaybe<JsonNullableListFilter>;
-  updatedAt?: InputMaybe<DateTimeWithAggregatesFilter>;
-};
-
-export type ChecklistSectionWhereInput = {
-  AND?: InputMaybe<Array<ChecklistSectionWhereInput>>;
-  NOT?: InputMaybe<Array<ChecklistSectionWhereInput>>;
-  OR?: InputMaybe<Array<ChecklistSectionWhereInput>>;
-  checklist?: InputMaybe<ChecklistWhereInput>;
-  checklistId?: InputMaybe<StringFilter>;
-  createdAt?: InputMaybe<DateTimeFilter>;
-  id?: InputMaybe<StringFilter>;
-  order?: InputMaybe<IntFilter>;
-  subsections?: InputMaybe<ChecklistSubsectionListRelationFilter>;
-  title?: InputMaybe<StringFilter>;
-  titleTranslations?: InputMaybe<JsonNullableListFilter>;
-  updatedAt?: InputMaybe<DateTimeFilter>;
-};
-
-export type ChecklistSectionWhereUniqueInput = {
-  AND?: InputMaybe<Array<ChecklistSectionWhereInput>>;
-  NOT?: InputMaybe<Array<ChecklistSectionWhereInput>>;
-  OR?: InputMaybe<Array<ChecklistSectionWhereInput>>;
-  checklist?: InputMaybe<ChecklistWhereInput>;
-  checklistId?: InputMaybe<StringFilter>;
-  createdAt?: InputMaybe<DateTimeFilter>;
-  id?: InputMaybe<Scalars['String']>;
-  order?: InputMaybe<IntFilter>;
-  subsections?: InputMaybe<ChecklistSubsectionListRelationFilter>;
-  title?: InputMaybe<StringFilter>;
-  titleTranslations?: InputMaybe<JsonNullableListFilter>;
-  updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
 export enum ChecklistStatus {
@@ -2564,107 +2323,15 @@ export type ChecklistSubsection = {
   updatedAt: Scalars['Date'];
 };
 
-export type ChecklistSubsectionListRelationFilter = {
-  every?: InputMaybe<ChecklistSubsectionWhereInput>;
-  none?: InputMaybe<ChecklistSubsectionWhereInput>;
-  some?: InputMaybe<ChecklistSubsectionWhereInput>;
-};
-
-export type ChecklistSubsectionOrderByRelationAggregateInput = {
-  _count?: InputMaybe<SortOrder>;
-};
-
-export type ChecklistSubsectionOrderByWithRelationInput = {
-  createdAt?: InputMaybe<SortOrder>;
-  id?: InputMaybe<SortOrder>;
-  order?: InputMaybe<SortOrder>;
-  questions?: InputMaybe<ChecklistQuestionOrderByRelationAggregateInput>;
-  section?: InputMaybe<ChecklistSectionOrderByWithRelationInput>;
-  sectionId?: InputMaybe<SortOrder>;
-  title?: InputMaybe<SortOrder>;
-  titleTranslations?: InputMaybe<SortOrder>;
-  updatedAt?: InputMaybe<SortOrder>;
-};
-
-export enum ChecklistSubsectionScalarFieldEnum {
-  CreatedAt = 'createdAt',
-  Id = 'id',
-  Order = 'order',
-  SectionId = 'sectionId',
-  Title = 'title',
-  TitleTranslations = 'titleTranslations',
-  UpdatedAt = 'updatedAt'
-}
-
-export type ChecklistSubsectionScalarWhereInput = {
-  AND?: InputMaybe<Array<ChecklistSubsectionScalarWhereInput>>;
-  NOT?: InputMaybe<Array<ChecklistSubsectionScalarWhereInput>>;
-  OR?: InputMaybe<Array<ChecklistSubsectionScalarWhereInput>>;
-  createdAt?: InputMaybe<DateTimeFilter>;
-  id?: InputMaybe<StringFilter>;
-  order?: InputMaybe<IntFilter>;
-  sectionId?: InputMaybe<StringFilter>;
-  title?: InputMaybe<StringFilter>;
-  titleTranslations?: InputMaybe<JsonNullableListFilter>;
-  updatedAt?: InputMaybe<DateTimeFilter>;
-};
-
-export type ChecklistSubsectionScalarWhereWithAggregatesInput = {
-  AND?: InputMaybe<Array<ChecklistSubsectionScalarWhereWithAggregatesInput>>;
-  NOT?: InputMaybe<Array<ChecklistSubsectionScalarWhereWithAggregatesInput>>;
-  OR?: InputMaybe<Array<ChecklistSubsectionScalarWhereWithAggregatesInput>>;
-  createdAt?: InputMaybe<DateTimeWithAggregatesFilter>;
-  id?: InputMaybe<StringWithAggregatesFilter>;
-  order?: InputMaybe<IntWithAggregatesFilter>;
-  sectionId?: InputMaybe<StringWithAggregatesFilter>;
-  title?: InputMaybe<StringWithAggregatesFilter>;
-  titleTranslations?: InputMaybe<JsonNullableListFilter>;
-  updatedAt?: InputMaybe<DateTimeWithAggregatesFilter>;
-};
-
-export type ChecklistSubsectionWhereInput = {
-  AND?: InputMaybe<Array<ChecklistSubsectionWhereInput>>;
-  NOT?: InputMaybe<Array<ChecklistSubsectionWhereInput>>;
-  OR?: InputMaybe<Array<ChecklistSubsectionWhereInput>>;
-  createdAt?: InputMaybe<DateTimeFilter>;
-  id?: InputMaybe<StringFilter>;
-  order?: InputMaybe<IntFilter>;
-  questions?: InputMaybe<ChecklistQuestionListRelationFilter>;
-  section?: InputMaybe<ChecklistSectionWhereInput>;
-  sectionId?: InputMaybe<StringFilter>;
-  title?: InputMaybe<StringFilter>;
-  titleTranslations?: InputMaybe<JsonNullableListFilter>;
-  updatedAt?: InputMaybe<DateTimeFilter>;
-};
-
-export type ChecklistSubsectionWhereUniqueInput = {
-  AND?: InputMaybe<Array<ChecklistSubsectionWhereInput>>;
-  NOT?: InputMaybe<Array<ChecklistSubsectionWhereInput>>;
-  OR?: InputMaybe<Array<ChecklistSubsectionWhereInput>>;
-  createdAt?: InputMaybe<DateTimeFilter>;
-  id?: InputMaybe<Scalars['String']>;
-  order?: InputMaybe<IntFilter>;
-  questions?: InputMaybe<ChecklistQuestionListRelationFilter>;
-  section?: InputMaybe<ChecklistSectionWhereInput>;
-  sectionId?: InputMaybe<StringFilter>;
-  title?: InputMaybe<StringFilter>;
-  titleTranslations?: InputMaybe<JsonNullableListFilter>;
-  updatedAt?: InputMaybe<DateTimeFilter>;
-};
-
 export type ChecklistWhereInput = {
   AND?: InputMaybe<Array<ChecklistWhereInput>>;
   NOT?: InputMaybe<Array<ChecklistWhereInput>>;
   OR?: InputMaybe<Array<ChecklistWhereInput>>;
   activeChecklists?: InputMaybe<ActiveChecklistListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
-  description?: InputMaybe<StringNullableFilter>;
-  descriptionTranslations?: InputMaybe<JsonNullableListFilter>;
+  deleted?: InputMaybe<BoolFilter>;
   id?: InputMaybe<StringFilter>;
   schemes?: InputMaybe<SchemeListRelationFilter>;
-  sections?: InputMaybe<ChecklistSectionListRelationFilter>;
-  title?: InputMaybe<StringFilter>;
-  titleTranslations?: InputMaybe<JsonNullableListFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
@@ -2674,13 +2341,8 @@ export type ChecklistWhereUniqueInput = {
   OR?: InputMaybe<Array<ChecklistWhereInput>>;
   activeChecklists?: InputMaybe<ActiveChecklistListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
-  description?: InputMaybe<StringNullableFilter>;
-  descriptionTranslations?: InputMaybe<JsonNullableListFilter>;
   id?: InputMaybe<Scalars['String']>;
   schemes?: InputMaybe<SchemeListRelationFilter>;
-  sections?: InputMaybe<ChecklistSectionListRelationFilter>;
-  title?: InputMaybe<StringFilter>;
-  titleTranslations?: InputMaybe<JsonNullableListFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
@@ -2814,6 +2476,12 @@ export type Count = {
   __typename?: 'Count';
   count: Array<Scalars['Int']>;
   name: Scalars['String'];
+};
+
+export type CreateActiveChecklistInput = {
+  businessId?: InputMaybe<Scalars['String']>;
+  checklistId: Scalars['String'];
+  title: Scalars['String'];
 };
 
 export type CreateArticleImages = {
@@ -3136,6 +2804,7 @@ export type CreateTermsInput = {
 export type CreateUpdateData = {
   icon: UpdateIcon;
   images?: InputMaybe<Array<UrlImage>>;
+  linkedArticles?: InputMaybe<Array<UniqueId>>;
   linkedCrimeGroups?: InputMaybe<Array<UniqueId>>;
   linkedIncidents?: InputMaybe<Array<UniqueId>>;
   linkedOffenders?: InputMaybe<Array<UniqueId>>;
@@ -9348,6 +9017,7 @@ export type Mutation = {
   approveOffender: Offender;
   copyEvidenceOnInvestigation: Document;
   copyOffender: Offender;
+  createActiveChecklist: ActiveChecklist;
   createArticle: Article;
   createBlankImage: Image;
   createBusiness: Business;
@@ -9381,6 +9051,7 @@ export type Mutation = {
   createTimes: Array<Incident>;
   createTodo: Todo;
   createUnlinkedImage: UnlinkedImage;
+  createUpdateChecklist: Checklist;
   createUpdateOnCrimeGroup: Update;
   createUpdateOnIncident: Update;
   createUpdateOnInvestigation: Update;
@@ -9566,6 +9237,11 @@ export type MutationCopyOffenderArgs = {
 };
 
 
+export type MutationCreateActiveChecklistArgs = {
+  data: CreateActiveChecklistInput;
+};
+
+
 export type MutationCreateArticleArgs = {
   data: CreateArticleInput;
 };
@@ -9728,6 +9404,12 @@ export type MutationCreateUnlinkedImageArgs = {
   file: Scalars['Upload'];
   localId: Scalars['String'];
   scheme: Scalars['String'];
+};
+
+
+export type MutationCreateUpdateChecklistArgs = {
+  data: ChecklistCreateUpdateInput;
+  id?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -10850,10 +10532,6 @@ export type NestedStringWithAggregatesFilter = {
   startsWith?: InputMaybe<Scalars['String']>;
 };
 
-export type Node = {
-  id: Scalars['ID'];
-};
-
 export type Notification = {
   __typename?: 'Notification';
   articleId?: Maybe<Scalars['String']>;
@@ -11220,6 +10898,7 @@ export type Offender = {
   intel: Array<Intel>;
   investigations: Array<Investigation>;
   knownAssociates: Array<Offender>;
+  knownFor: Array<Scalars['String']>;
   lastActive?: Maybe<Incident>;
   latestIncident?: Maybe<Incident>;
   latestUpdate?: Maybe<Update>;
@@ -11244,6 +10923,8 @@ export type Offender = {
   subscribed: Scalars['Boolean'];
   subscribedUsers: Array<User>;
   tags: Array<Tag>;
+  targetedBusinesses?: Maybe<Array<Business>>;
+  targetedGoods: Array<Scalars['String']>;
   tempId?: Maybe<Scalars['String']>;
   todos: Array<Todo>;
   /** To be used on the known associates field to show total number of linking crime groups */
@@ -12099,6 +11780,8 @@ export type Query = {
   __typename?: 'Query';
   action: Action;
   actions: Array<Action>;
+  activeChecklist: ActiveChecklist;
+  activeChecklists: QueryActiveChecklistsConnection;
   address: Address;
   addresses: Array<Address>;
   article: Article;
@@ -12115,6 +11798,8 @@ export type Query = {
   chat: Chat;
   chatMessages: Array<MessageItem>;
   chats: Array<Chat>;
+  checklist: Checklist;
+  checklists: Array<Checklist>;
   compareFaces: SystemTask;
   crimeGroup: CrimeGroup;
   crimeGroupPerformance: ListCrimeGroupPerformance;
@@ -12170,8 +11855,6 @@ export type Query = {
   message: Message;
   messages: Array<Message>;
   mg11: Mg11;
-  node?: Maybe<Node>;
-  nodes: Array<Maybe<Node>>;
   offender: Offender;
   offenderByName: ListOffenders;
   offenderFeed: Array<Offender>;
@@ -12225,6 +11908,21 @@ export type QueryActionsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ActionWhereInput>;
+};
+
+
+export type QueryActiveChecklistArgs = {
+  where: ActiveChecklistWhereUniqueInput;
+};
+
+
+export type QueryActiveChecklistsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<ActiveChecklistOrderByWithRelationInput>;
+  where?: InputMaybe<ActiveChecklistWhereInput>;
 };
 
 
@@ -12326,6 +12024,16 @@ export type QueryChatsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ChatWhereInput>;
+};
+
+
+export type QueryChecklistArgs = {
+  where: ChecklistWhereUniqueInput;
+};
+
+
+export type QueryChecklistsArgs = {
+  where: ChecklistWhereInput;
 };
 
 
@@ -12739,16 +12447,6 @@ export type QueryMg11Args = {
 };
 
 
-export type QueryNodeArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type QueryNodesArgs = {
-  ids: Array<Scalars['ID']>;
-};
-
-
 export type QueryOffenderArgs = {
   where: OffenderWhereUniqueInput;
 };
@@ -12825,6 +12523,7 @@ export type QueryRecycledItemsArgs = {
   order?: InputMaybe<RecycledItemOrderByWithRelationInput>;
   schemeId: Scalars['String'];
   search?: InputMaybe<Scalars['String']>;
+  take?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -13013,6 +12712,19 @@ export type QueryWorkflowsArgs = {
   where?: InputMaybe<WorkflowWhereInput>;
 };
 
+export type QueryActiveChecklistsConnection = {
+  __typename?: 'QueryActiveChecklistsConnection';
+  edges: Array<QueryActiveChecklistsConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryActiveChecklistsConnectionEdge = {
+  __typename?: 'QueryActiveChecklistsConnectionEdge';
+  cursor: Scalars['String'];
+  node: ActiveChecklist;
+};
+
 export type QueryIncidentsRelayConnection = {
   __typename?: 'QueryIncidentsRelayConnection';
   edges: Array<QueryIncidentsRelayConnectionEdge>;
@@ -13164,6 +12876,13 @@ export type QuestionGroupWhereUniqueInput = {
   questions?: InputMaybe<QuestionListRelationFilter>;
   schemes?: InputMaybe<SchemeListRelationFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type QuestionInput = {
+  order: Scalars['Int'];
+  question: Scalars['String'];
+  type: ChecklistAnswerType;
+  weight?: InputMaybe<Array<AnswerWeightInput>>;
 };
 
 export type QuestionListRelationFilter = {
@@ -14973,6 +14692,12 @@ export type SchemeWhereUniqueInput = {
   workflows?: InputMaybe<WorkflowListRelationFilter>;
 };
 
+export type SectionInput = {
+  order: Scalars['Int'];
+  subsections: Array<SubsectionInput>;
+  title: Scalars['String'];
+};
+
 export type SetArrayHelper = {
   set?: InputMaybe<Array<UniqueId>>;
 };
@@ -15467,6 +15192,12 @@ export type SubscriptionChatMessagesArgs = {
 
 export type SubscriptionNewMessageArgs = {
   chatId: Scalars['ID'];
+};
+
+export type SubsectionInput = {
+  order: Scalars['Int'];
+  questions: Array<QuestionInput>;
+  title: Scalars['String'];
 };
 
 export type SystemTask = {
@@ -16753,6 +16484,7 @@ export type Update = {
   incidentId?: Maybe<Scalars['String']>;
   investigation?: Maybe<Investigation>;
   investigationId?: Maybe<Scalars['String']>;
+  linkedArticles: Array<Article>;
   linkedCrimeGroups: Array<CrimeGroup>;
   linkedIncidents: Array<Incident>;
   linkedInvestigations: Array<Investigation>;
@@ -16779,6 +16511,16 @@ export type UpdateImagesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ImageWhereInput>;
+};
+
+
+export type UpdateLinkedArticlesArgs = {
+  cursor?: InputMaybe<ArticleWhereUniqueInput>;
+  distinct?: InputMaybe<ArticleScalarFieldEnum>;
+  orderBy?: InputMaybe<ArticleOrderByWithRelationInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<ArticleWhereInput>;
 };
 
 
@@ -16948,6 +16690,7 @@ export type UpdateOrderByWithRelationInput = {
   incidentId?: InputMaybe<SortOrder>;
   investigation?: InputMaybe<InvestigationOrderByWithRelationInput>;
   investigationId?: InputMaybe<SortOrder>;
+  linkedArticles?: InputMaybe<ArticleOrderByRelationAggregateInput>;
   linkedCrimeGroups?: InputMaybe<CrimeGroupOrderByRelationAggregateInput>;
   linkedIncidents?: InputMaybe<IncidentOrderByRelationAggregateInput>;
   linkedInvestigations?: InputMaybe<InvestigationOrderByRelationAggregateInput>;
@@ -17071,6 +16814,7 @@ export type UpdateTodoMention = {
 
 export enum UpdateType {
   Image = 'IMAGE',
+  LinkedArticle = 'LINKED_ARTICLE',
   LinkedCrimeGroup = 'LINKED_CRIME_GROUP',
   LinkedIncident = 'LINKED_INCIDENT',
   LinkedInvestigation = 'LINKED_INVESTIGATION',
@@ -17100,6 +16844,7 @@ export type UpdateWhereInput = {
   incidentId?: InputMaybe<StringNullableFilter>;
   investigation?: InputMaybe<InvestigationWhereInput>;
   investigationId?: InputMaybe<StringNullableFilter>;
+  linkedArticles?: InputMaybe<ArticleListRelationFilter>;
   linkedCrimeGroups?: InputMaybe<CrimeGroupListRelationFilter>;
   linkedIncidents?: InputMaybe<IncidentListRelationFilter>;
   linkedInvestigations?: InputMaybe<InvestigationListRelationFilter>;
@@ -17138,6 +16883,7 @@ export type UpdateWhereUniqueInput = {
   incidentId?: InputMaybe<StringNullableFilter>;
   investigation?: InputMaybe<InvestigationWhereInput>;
   investigationId?: InputMaybe<StringNullableFilter>;
+  linkedArticles?: InputMaybe<ArticleListRelationFilter>;
   linkedCrimeGroups?: InputMaybe<CrimeGroupListRelationFilter>;
   linkedIncidents?: InputMaybe<IncidentListRelationFilter>;
   linkedInvestigations?: InputMaybe<InvestigationListRelationFilter>;
@@ -17221,7 +16967,7 @@ export type User = {
   bans: Array<Ban>;
   businesses: Array<Business>;
   chats: Array<UserChat>;
-  checklists: Array<ActiveChecklist>;
+  checklists: Array<Checklist>;
   completedTodos: Array<Todo>;
   contact?: Maybe<Contact>;
   contactId?: Maybe<Scalars['String']>;
@@ -18385,7 +18131,6 @@ export type UserWhereInput = {
   bans?: InputMaybe<BanListRelationFilter>;
   businesses?: InputMaybe<BusinessListRelationFilter>;
   chats?: InputMaybe<UserChatListRelationFilter>;
-  checklists?: InputMaybe<ActiveChecklistListRelationFilter>;
   completedTodos?: InputMaybe<TodoListRelationFilter>;
   contact?: InputMaybe<ContactWhereInput>;
   contactId?: InputMaybe<StringNullableFilter>;
@@ -18468,7 +18213,6 @@ export type UserWhereUniqueInput = {
   bans?: InputMaybe<BanListRelationFilter>;
   businesses?: InputMaybe<BusinessListRelationFilter>;
   chats?: InputMaybe<UserChatListRelationFilter>;
-  checklists?: InputMaybe<ActiveChecklistListRelationFilter>;
   completedTodos?: InputMaybe<TodoListRelationFilter>;
   contact?: InputMaybe<ContactWhereInput>;
   contactId?: InputMaybe<Scalars['String']>;
@@ -21256,6 +21000,52 @@ export type ListArticlesFeedQueryVariables = Exact<{
 
 
 export type ListArticlesFeedQuery = { __typename?: 'Query', listArticlesRelay: { __typename?: 'QueryListArticlesRelayConnection', edges: Array<{ __typename?: 'QueryListArticlesRelayConnectionEdge', node: { __typename?: 'Article', previewText?: string | null, watermarkImage: boolean, previewImage?: string | null, priority: ArticlePriority, title: string, updatedAt: Date, id: string, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null, position: ImagePosition, rotation: number }>, image?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null } | null, createdBy: { __typename?: 'User', fullName: string, id: string, businesses: Array<{ __typename?: 'Business', id: string, name: string }> }, groups: Array<{ __typename?: 'Group', id: string, name: string }> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null } } };
+
+export type CreateActiveChecklistMutationVariables = Exact<{
+  data: CreateActiveChecklistInput;
+}>;
+
+
+export type CreateActiveChecklistMutation = { __typename?: 'Mutation', createActiveChecklist: { __typename?: 'ActiveChecklist', id: string } };
+
+export type CreateUpdateChecklistMutationVariables = Exact<{
+  data: ChecklistCreateUpdateInput;
+  createUpdateChecklistId?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type CreateUpdateChecklistMutation = { __typename?: 'Mutation', createUpdateChecklist: { __typename?: 'Checklist', id: string } };
+
+export type ActiveChecklistsQueryVariables = Exact<{
+  first?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']>;
+  order?: InputMaybe<ActiveChecklistOrderByWithRelationInput>;
+  where?: InputMaybe<ActiveChecklistWhereInput>;
+}>;
+
+
+export type ActiveChecklistsQuery = { __typename?: 'Query', activeChecklists: { __typename?: 'QueryActiveChecklistsConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null }, edges: Array<{ __typename?: 'QueryActiveChecklistsConnectionEdge', node: { __typename?: 'ActiveChecklist', id: string, name?: string | null, percentComplete: number, status: ChecklistStatus, completedAt?: Date | null, document?: { __typename?: 'Document', id: string, url: string } | null } }> } };
+
+export type ChecklistsQueryVariables = Exact<{
+  where: ChecklistWhereInput;
+}>;
+
+
+export type ChecklistsQuery = { __typename?: 'Query', checklists: Array<{ __typename?: 'Checklist', id: string, titleLocaled: string, descriptionLocaled: string }> };
+
+export type ActiveChecklistQueryVariables = Exact<{
+  where: ActiveChecklistWhereUniqueInput;
+}>;
+
+
+export type ActiveChecklistQuery = { __typename?: 'Query', activeChecklist: { __typename?: 'ActiveChecklist', id: string, name?: string | null, fields: Array<{ __typename?: 'ActiveChecklistFields', id: string, question: { [key: string]: any }, type: ChecklistAnswerType, availableAnswers: Array<{ [key: string]: any }>, section: number, subsection: number, order: number, answer?: { __typename?: 'ChecklistAnswer', answer: string, additionalComments?: string | null, images: Array<string> } | null }>, checklistSection: Array<{ __typename?: 'ActiveChecklistSections', sub: boolean, section: number, subsection?: number | null, titleLocaled: string }> } };
+
+export type ChecklistQueryVariables = Exact<{
+  where: ChecklistWhereUniqueInput;
+}>;
+
+
+export type ChecklistQuery = { __typename?: 'Query', checklist: { __typename?: 'Checklist', id: string, title: string, description?: string | null, sections: Array<{ __typename?: 'ChecklistSection', order: number, title: string, subsections: Array<{ __typename?: 'ChecklistSubsection', title: string, order: number, questions: Array<{ __typename?: 'ChecklistQuestion', order: number, question: { [key: string]: any }, type: ChecklistAnswerType, weight: Array<{ __typename?: 'AnswerWeight', weight: number, answer: string }> }> }> }> } };
 
 export type CreateCsvZipMutationVariables = Exact<{
   where: IncidentExportInput;
@@ -32629,6 +32419,166 @@ export function useListArticlesFeedLazyQuery(baseOptions?: Apollo.LazyQueryHookO
 export type ListArticlesFeedQueryHookResult = ReturnType<typeof useListArticlesFeedQuery>;
 export type ListArticlesFeedLazyQueryHookResult = ReturnType<typeof useListArticlesFeedLazyQuery>;
 export type ListArticlesFeedQueryResult = Apollo.QueryResult<ListArticlesFeedQuery, ListArticlesFeedQueryVariables>;
+export const CreateActiveChecklistDocument = gql`
+    mutation CreateActiveChecklist($data: CreateActiveChecklistInput!) {
+  createActiveChecklist(data: $data) {
+    id
+  }
+}
+    `;
+export type CreateActiveChecklistMutationFn = Apollo.MutationFunction<CreateActiveChecklistMutation, CreateActiveChecklistMutationVariables>;
+export function useCreateActiveChecklistMutation(baseOptions?: Apollo.MutationHookOptions<CreateActiveChecklistMutation, CreateActiveChecklistMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateActiveChecklistMutation, CreateActiveChecklistMutationVariables>(CreateActiveChecklistDocument, options);
+      }
+export type CreateActiveChecklistMutationHookResult = ReturnType<typeof useCreateActiveChecklistMutation>;
+export type CreateActiveChecklistMutationResult = Apollo.MutationResult<CreateActiveChecklistMutation>;
+export type CreateActiveChecklistMutationOptions = Apollo.BaseMutationOptions<CreateActiveChecklistMutation, CreateActiveChecklistMutationVariables>;
+export const CreateUpdateChecklistDocument = gql`
+    mutation CreateUpdateChecklist($data: ChecklistCreateUpdateInput!, $createUpdateChecklistId: String) {
+  createUpdateChecklist(data: $data, id: $createUpdateChecklistId) {
+    id
+  }
+}
+    `;
+export type CreateUpdateChecklistMutationFn = Apollo.MutationFunction<CreateUpdateChecklistMutation, CreateUpdateChecklistMutationVariables>;
+export function useCreateUpdateChecklistMutation(baseOptions?: Apollo.MutationHookOptions<CreateUpdateChecklistMutation, CreateUpdateChecklistMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateUpdateChecklistMutation, CreateUpdateChecklistMutationVariables>(CreateUpdateChecklistDocument, options);
+      }
+export type CreateUpdateChecklistMutationHookResult = ReturnType<typeof useCreateUpdateChecklistMutation>;
+export type CreateUpdateChecklistMutationResult = Apollo.MutationResult<CreateUpdateChecklistMutation>;
+export type CreateUpdateChecklistMutationOptions = Apollo.BaseMutationOptions<CreateUpdateChecklistMutation, CreateUpdateChecklistMutationVariables>;
+export const ActiveChecklistsDocument = gql`
+    query ActiveChecklists($first: Int, $after: String, $order: ActiveChecklistOrderByWithRelationInput, $where: ActiveChecklistWhereInput) {
+  activeChecklists(first: $first, after: $after, order: $order, where: $where) {
+    totalCount
+    pageInfo {
+      endCursor
+    }
+    edges {
+      node {
+        id
+        name
+        percentComplete
+        status
+        document {
+          id
+          url
+        }
+        completedAt
+      }
+    }
+  }
+}
+    `;
+export function useActiveChecklistsQuery(baseOptions?: Apollo.QueryHookOptions<ActiveChecklistsQuery, ActiveChecklistsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ActiveChecklistsQuery, ActiveChecklistsQueryVariables>(ActiveChecklistsDocument, options);
+      }
+export function useActiveChecklistsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ActiveChecklistsQuery, ActiveChecklistsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ActiveChecklistsQuery, ActiveChecklistsQueryVariables>(ActiveChecklistsDocument, options);
+        }
+export type ActiveChecklistsQueryHookResult = ReturnType<typeof useActiveChecklistsQuery>;
+export type ActiveChecklistsLazyQueryHookResult = ReturnType<typeof useActiveChecklistsLazyQuery>;
+export type ActiveChecklistsQueryResult = Apollo.QueryResult<ActiveChecklistsQuery, ActiveChecklistsQueryVariables>;
+export const ChecklistsDocument = gql`
+    query Checklists($where: ChecklistWhereInput!) {
+  checklists(where: $where) {
+    id
+    titleLocaled
+    descriptionLocaled
+  }
+}
+    `;
+export function useChecklistsQuery(baseOptions: Apollo.QueryHookOptions<ChecklistsQuery, ChecklistsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ChecklistsQuery, ChecklistsQueryVariables>(ChecklistsDocument, options);
+      }
+export function useChecklistsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ChecklistsQuery, ChecklistsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ChecklistsQuery, ChecklistsQueryVariables>(ChecklistsDocument, options);
+        }
+export type ChecklistsQueryHookResult = ReturnType<typeof useChecklistsQuery>;
+export type ChecklistsLazyQueryHookResult = ReturnType<typeof useChecklistsLazyQuery>;
+export type ChecklistsQueryResult = Apollo.QueryResult<ChecklistsQuery, ChecklistsQueryVariables>;
+export const ActiveChecklistDocument = gql`
+    query ActiveChecklist($where: ActiveChecklistWhereUniqueInput!) {
+  activeChecklist(where: $where) {
+    id
+    name
+    fields {
+      id
+      question
+      type
+      availableAnswers
+      answer {
+        answer
+        additionalComments
+        images
+      }
+      section
+      subsection
+      order
+    }
+    checklistSection {
+      sub
+      section
+      subsection
+      titleLocaled
+    }
+  }
+}
+    `;
+export function useActiveChecklistQuery(baseOptions: Apollo.QueryHookOptions<ActiveChecklistQuery, ActiveChecklistQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ActiveChecklistQuery, ActiveChecklistQueryVariables>(ActiveChecklistDocument, options);
+      }
+export function useActiveChecklistLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ActiveChecklistQuery, ActiveChecklistQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ActiveChecklistQuery, ActiveChecklistQueryVariables>(ActiveChecklistDocument, options);
+        }
+export type ActiveChecklistQueryHookResult = ReturnType<typeof useActiveChecklistQuery>;
+export type ActiveChecklistLazyQueryHookResult = ReturnType<typeof useActiveChecklistLazyQuery>;
+export type ActiveChecklistQueryResult = Apollo.QueryResult<ActiveChecklistQuery, ActiveChecklistQueryVariables>;
+export const ChecklistDocument = gql`
+    query Checklist($where: ChecklistWhereUniqueInput!) {
+  checklist(where: $where) {
+    id
+    title
+    description
+    sections {
+      order
+      title
+      subsections {
+        title
+        order
+        questions {
+          order
+          question
+          type
+          weight {
+            weight
+            answer
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+export function useChecklistQuery(baseOptions: Apollo.QueryHookOptions<ChecklistQuery, ChecklistQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ChecklistQuery, ChecklistQueryVariables>(ChecklistDocument, options);
+      }
+export function useChecklistLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ChecklistQuery, ChecklistQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ChecklistQuery, ChecklistQueryVariables>(ChecklistDocument, options);
+        }
+export type ChecklistQueryHookResult = ReturnType<typeof useChecklistQuery>;
+export type ChecklistLazyQueryHookResult = ReturnType<typeof useChecklistLazyQuery>;
+export type ChecklistQueryResult = Apollo.QueryResult<ChecklistQuery, ChecklistQueryVariables>;
 export const CreateCsvZipDocument = gql`
     mutation CreateCsvZip($where: IncidentExportInput!) {
   createCsvZip(where: $where)

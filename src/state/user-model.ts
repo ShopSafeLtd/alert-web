@@ -12,6 +12,8 @@ export interface SetUserPayload {
   origName: string;
   reference: string;
   onboarded: boolean;
+  reportToAllBusinesses: boolean;
+
   businesses: {
     name: string;
     fullName: string;
@@ -127,6 +129,8 @@ export interface UserModel {
     // }
   }[];
   onboarded: boolean;
+  reportToAllBusinesses: boolean;
+
   schemes: Scheme[];
   demId: string | null | undefined;
   userTodos?: number | null | undefined;
@@ -180,6 +184,8 @@ const userModel: UserModel = {
   groups: [],
   defaultGroups: [],
   filterDefaultGroups: [],
+  reportToAllBusinesses: false,
+
   demId: '',
   userTodos: 0,
   userNotifications: 0,
@@ -200,6 +206,7 @@ const userModel: UserModel = {
     state.demId = payload.demId;
     state.reference = payload.reference;
     state.userNotifications = payload.userNotifications;
+    state.reportToAllBusinesses = payload.reportToAllBusinesses;
   }),
   setFilterDefaultGroup: action((state, payload) => {
     state.filterDefaultGroups = payload.filterDefaultGroups;
@@ -235,6 +242,7 @@ const userModel: UserModel = {
     state.userNotifications = 0;
     state.investigationAllSchemes = false;
     state.dem = [];
+    state.reportToAllBusinesses = false;
   }),
 };
 

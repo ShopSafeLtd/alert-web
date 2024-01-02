@@ -78,6 +78,7 @@ const useAuth = (): Return => {
     reference,
     userNotifications,
     defaultGroups,
+    reportToAllBusinesses,
   }: HandleSuccessArgs) => {
     // const color = `hsl(${Math.random() * 360}, 70%, 30%)`;
 
@@ -205,6 +206,7 @@ const useAuth = (): Return => {
       userNotifications,
       defaultGroups,
       filterDefaultGroups,
+      reportToAllBusinesses,
     });
 
     const businessToDem = (businesses
@@ -261,6 +263,8 @@ const useAuth = (): Return => {
         groups: currentUser?.groups || [],
         demId: currentUser?.demId || '',
         isSet: true,
+        reportToAllBusinesses: currentUser?.reportToAllBusinesses || false,
+
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         reference: `${currentUser?.reference}` || '',
         userNotifications: currentUser?.notificationCount || 0,
@@ -346,6 +350,8 @@ const useAuth = (): Return => {
       reference: data.reference,
       userNotifications: data.userNotifications,
       defaultGroups: data.defaultGroups,
+      reportToAllBusinesses: data.reportToAllBusinesses,
+
       filterDefaultGroups: data.defaultGroups.filter(
         (el) => el.scheme.id === scheme
       ),

@@ -399,8 +399,8 @@ const NewOffenderRow = React.memo(
             <Form.Item
               name="peculiarities"
               label={intl.formatMessage({
-                defaultMessage: 'Peculiarities',
-                id: '9s+ZmX',
+                defaultMessage: 'Characteristics',
+                id: 'xksukL',
               })}
             >
               <Input.TextArea rows={5} onBlur={onBlur} />
