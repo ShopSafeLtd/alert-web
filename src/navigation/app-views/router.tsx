@@ -11,6 +11,7 @@ import { useAuth } from 'hooks';
 import { useStoreState } from 'state';
 import { useAuth0 } from '@auth0/auth0-react';
 import type { Role } from '../../graphql/generated';
+import type { NavItem as ConfigNavItem } from '../../configs/NavigationConfig';
 import navigationConfig from '../../configs/NavigationConfig';
 import { APP_PREFIX_PATH } from '../../configs/AppConfig';
 
@@ -43,18 +44,23 @@ interface NavItem {
 
 // Flatten the navigation items to include submenus
 const flattenNavigationItems = (
-  items: NavItem[],
+  items: ConfigNavItem[],
   parentRoles: Role[] = []
 ): NavItem[] =>
   // eslint-disable-next-line unicorn/no-array-reduce
-  items.reduce((acc: NavItem[], item: NavItem) => {
+  items.reduce((acc: NavItem[], item: ConfigNavItem) => {
     const safeParentRoles = parentRoles || [];
     const safeRoles = item.roles || [];
     const combinedRoles = [...new Set([...safeRoles, ...safeParentRoles])];
     acc.push({ path: item.path, roles: combinedRoles, submenu: [] });
 
     if (item.submenu.length > 0) {
-      acc.push(...flattenNavigationItems(item.submenu, combinedRoles));
+      acc.push(
+        ...flattenNavigationItems(
+          item.submenu as ConfigNavItem[],
+          combinedRoles
+        )
+      );
     }
 
     return acc;
