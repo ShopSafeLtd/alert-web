@@ -5,7 +5,6 @@ import type {
   Model,
 } from 'graphql/generated';
 import {
-  useSchemeGroupsQuery,
   FeedItemsDocument,
   QueryMode,
   Role,
@@ -13,6 +12,7 @@ import {
   useDeleteFeedItemMutation,
   useFeedItemsQuery,
   useListOffendersFeedQuery,
+  useSchemeGroupsQuery,
 } from 'graphql/generated';
 import { useEffect, useState } from 'react';
 import { useStoreActions, useStoreState } from 'state';
@@ -209,10 +209,13 @@ const useFeedItems = (): Return => {
       },
       variables: {
         ...variables,
-        groups: defaultGroups.map(({ id }) => id),
+        groups:
+          defaultGroups
+            ?.filter(({ scheme }) => scheme.id === schemeId)
+            ?.map(({ id }) => id) || [],
       },
     });
-  }, []);
+  }, [schemeId]);
 
   const { data, loading, fetchMore } = useFeedItemsQuery({
     variables: {
