@@ -1,9 +1,18 @@
-import React, { lazy, Suspense, useEffect } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import React, { lazy, Suspense, useEffect, useMemo } from 'react';
+import {
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 import Loading from 'components/shared-components/AntD/Loading';
 import { useAuth } from 'hooks';
 import { useStoreState } from 'state';
 import { useAuth0 } from '@auth0/auth0-react';
+import type { Role } from '../../graphql/generated';
+import navigationConfig from '../../configs/NavigationConfig';
+import { APP_PREFIX_PATH } from '../../configs/AppConfig';
 
 const Onboarding = lazy(() => import(`./onboarding/router`));
 const Incidents = lazy(() => import(`./incidents/router`));
@@ -25,14 +34,74 @@ const FaceAi = lazy(() => import(`./face-ai/router`));
 const DataManagement = lazy(() => import(`./data-management/router`));
 const Evidence = lazy(() => import(`./evidence/router`));
 
+// Define the interface for your navigation items
+interface NavItem {
+  path: string;
+  roles?: Role[];
+  submenu: NavItem[];
+}
+
+// Flatten the navigation items to include submenus
+const flattenNavigationItems = (
+  items: NavItem[],
+  parentRoles: Role[] = []
+): NavItem[] =>
+  // eslint-disable-next-line unicorn/no-array-reduce
+  items.reduce((acc: NavItem[], item: NavItem) => {
+    const safeParentRoles = parentRoles || [];
+    const safeRoles = item.roles || [];
+    const combinedRoles = [...new Set([...safeRoles, ...safeParentRoles])];
+    acc.push({ path: item.path, roles: combinedRoles, submenu: [] });
+
+    if (item.submenu.length > 0) {
+      acc.push(...flattenNavigationItems(item.submenu, combinedRoles));
+    }
+
+    return acc;
+  }, []);
+
+// Function to check if a role is allowed for a specific path
+const isRoleAllowedForPath = (
+  role: Role,
+  path: string,
+  flattenedNavItems: NavItem[]
+): boolean => {
+  const item = flattenedNavItems.find((i) => i.path === path);
+  if (!item) {
+    return true;
+  }
+  if (!item.roles || item.roles.length === 0) return true;
+  return item ? item.roles.includes(role) : false;
+};
+
 export const AppViews = (): JSX.Element => {
   const { isLoading } = useAuth0();
   const { getCurrentUser, loading } = useAuth();
   const { role, onboarded, isSet } = useStoreState((state) => state.user);
-
   useEffect(() => {
     getCurrentUser();
   }, []);
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { pathname } = location;
+
+  const flattenedNavItems = useMemo(
+    () => flattenNavigationItems(navigationConfig),
+    []
+  );
+
+  const isAllowed = useMemo(
+    () => isRoleAllowedForPath(role, pathname, flattenedNavItems),
+    [role, pathname]
+  );
+
+  useEffect(() => {
+    if (!pathname || loading || isLoading || !isSet) return;
+    if (!isAllowed) {
+      navigate(`${APP_PREFIX_PATH}/dashboard`);
+    }
+  }, [pathname, role]);
 
   if (loading || isLoading || !isSet) return <Loading cover="content" />;
   return (
