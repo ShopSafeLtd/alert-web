@@ -1602,6 +1602,7 @@ const useViewOffender = (offenderId: string): Return => {
         },
       },
     });
+    setShowIncidentOptions(false);
     setSelectedImages([]);
     setSelectedIncidentId('');
   };
@@ -1618,15 +1619,14 @@ const useViewOffender = (offenderId: string): Return => {
   };
   const onSelectUpdateImages = () => {
     if (selectedImages) {
-      if (!addImageToIncidents) {
-        onAddUpdateImagesToOffender(selectedImages.map((id) => ({ id })));
-      }
       if (addImageToIncidents && data?.offender.incidents) {
         if (data?.offender.incidents.length > 1) {
           setShowIncidentOptions(true);
-        } else {
+        } else if (data?.offender.incidents.length === 1) {
           onAddUpdateImagesToIncident(data?.offender.incidents[0].id);
         }
+      } else {
+        onAddUpdateImagesToOffender(selectedImages.map((id) => ({ id })));
       }
       setAddImages(null);
     }
@@ -1636,9 +1636,7 @@ const useViewOffender = (offenderId: string): Return => {
     images: { id: string; url: string }[],
     addToIncident?: boolean
   ) => {
-    if (addToIncident) {
-      setAddImageToIncidents(addToIncident);
-    }
+    setAddImageToIncidents(!!addToIncident);
     if (images.length > 1) {
       setAddImages(images);
     }

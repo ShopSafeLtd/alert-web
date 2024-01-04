@@ -45,6 +45,7 @@ export interface SetUserPayload {
   }[];
   isSet: boolean;
   userNotifications: number;
+  userMessages: number;
 }
 
 export interface SetDemPayload {
@@ -70,6 +71,9 @@ export interface SetUserTodos {
 export interface SetUserNotifications {
   userNotifications: number;
 }
+export interface SetUserMessages {
+  userMessages: number;
+}
 export interface SetInvestigationAllSchemes {
   investigationAllSchemes: boolean;
 }
@@ -88,6 +92,7 @@ export interface Scheme {
     defaultPublicOffenderDOB: boolean;
     userTodos?: number | null | undefined;
     userNotifications?: number | null | undefined;
+    userMessages?: number | null | undefined;
     customTranslations?: Translations[];
     languageCount: number;
     logo?:
@@ -136,6 +141,7 @@ export interface UserModel {
   demId: string | null | undefined;
   userTodos?: number | null | undefined;
   userNotifications?: number | null | undefined;
+  userMessages?: number | null | undefined;
   groups: {
     id: string;
     name: string;
@@ -166,6 +172,7 @@ export interface UserModel {
   setTodos: Action<UserModel, SetUserTodos>;
   setInvestigationAllSchemes: Action<UserModel, SetInvestigationAllSchemes>;
   setNotifications: Action<UserModel, SetUserNotifications>;
+  setMessages: Action<UserModel, SetUserMessages>;
   clearUser: Action<UserModel>;
   setDem: Action<UserModel, SetDemPayload>;
 }
@@ -190,6 +197,7 @@ const userModel: UserModel = {
   demId: '',
   userTodos: 0,
   userNotifications: 0,
+  userMessages: 0,
   investigationAllSchemes: false,
   dem: [],
   setUser: action((state, payload) => {
@@ -207,6 +215,7 @@ const userModel: UserModel = {
     state.demId = payload.demId;
     state.reference = payload.reference;
     state.userNotifications = payload.userNotifications;
+    state.userMessages = payload.userMessages;
     state.reportToAllBusinesses = payload.reportToAllBusinesses;
   }),
   setFilterDefaultGroup: action((state, payload) => {
@@ -220,6 +229,9 @@ const userModel: UserModel = {
   }),
   setNotifications: action((state, payload) => {
     state.userNotifications = payload.userNotifications;
+  }),
+  setMessages: action((state, payload) => {
+    state.userMessages = payload.userMessages;
   }),
   setInvestigationAllSchemes: action((state, payload) => {
     state.investigationAllSchemes = payload.investigationAllSchemes;

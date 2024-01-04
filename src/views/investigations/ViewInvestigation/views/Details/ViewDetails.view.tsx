@@ -8,7 +8,6 @@ import {
   Input,
   Menu,
   Modal,
-  Popover,
   Row,
   Statistic,
   Tag,
@@ -18,17 +17,14 @@ import type {
   InvestigationSuggestionsQuery,
   ViewInvestigationQuery,
 } from 'graphql/generated';
-import { InvestigationStatus, UpdateType } from 'graphql/generated';
+import { InvestigationStatus } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faEdit,
   faMagnifyingGlass,
   faPenToSquare,
   faPlus,
-  faTrash,
 } from '@fortawesome/pro-light-svg-icons';
-import moment from 'moment';
-import InfiniteScroll from 'react-infinite-scroll-component';
+
 import { useNavigate } from 'react-router';
 import OffenderTable from 'components/tables/OffenderTable/OffenderTable.view';
 import MapCard from 'components/map/MapCard/MapCard.view';
@@ -47,8 +43,9 @@ import IncidentTable from 'components/tables/IncidentTable';
 import VehicleTable from 'components/tables/VehicleTable';
 import CrimeGroupTable from 'components/tables/CrimeGroupTable';
 import EditIncidentFeed from 'components/form-components/incident/EditIncidentFeed';
+import IntelSection from 'components/ViewPage/IntelSection';
 import useStyles from './ViewDetails.styles';
-import UpdateContent from '../../../../incidents/ViewIncident/Update.view';
+
 import UpdateBar from '../../../../../components/MessageInput/UpdateBar';
 import TabContent from '../../../../../components/TabContent';
 
@@ -704,263 +701,18 @@ const ViewInvestigation = ({
             style={{ display: 'hidden', height: 'calc(100vh - 65px)' }}
           >
             <div className={classes.updatesContainer}>
-              <InfiniteScroll
-                height={
-                  optionRowShow ? 'calc(100vh - 279px)' : 'calc(100vh - 169px)'
-                }
-                className="update-scroll"
-                initialScrollY={0}
-                dataLength={data?.investigation?.updates?.length || 0}
-                next={scrolledToTop}
-                hasMore={loadMore}
-                inverse
-                style={{
-                  justifyContent: 'end',
-                  // display: 'flex',
-                  flexDirection: 'column',
-                }}
-                loader={
-                  <div className="message-date">
-                    <div className="date-line" />
-                    <div className="date">
-                      {intl.formatMessage({
-                        defaultMessage: 'Loading...',
-                        id: 'gjBiyj',
-                      })}
-                    </div>
-                    <div className="date-line" />
-                  </div>
-                }
-              >
-                {data?.investigation?.updates.map((update) => (
-                  <div key={update.id} className="update-wrapper">
-                    {editRights && update.type !== UpdateType.System ? (
-                      <Popover
-                        trigger="click"
-                        placement={
-                          update.createdBy.id === userId ? 'left' : 'right'
-                        }
-                        overlayClassName="message-popover"
-                        content={
-                          <div
-                            style={{
-                              display: 'flex',
-                              flexDirection: 'column',
-                            }}
-                          >
-                            <Button
-                              disabled={saving}
-                              type="text"
-                              icon={
-                                <FontAwesomeIcon
-                                  style={{ marginRight: 5 }}
-                                  icon={faEdit}
-                                  size="lg"
-                                />
-                              }
-                              onClick={() => {
-                                setEditUpdate({
-                                  id: update.id,
-                                  text: update.text || '',
-                                });
-                              }}
-                              size="small"
-                            >
-                              {intl.formatMessage({
-                                defaultMessage: 'Edit Update',
-                                id: 'pCzvx3',
-                              })}
-                            </Button>
-                            <Button
-                              disabled={saving}
-                              type="text"
-                              icon={
-                                <FontAwesomeIcon
-                                  style={{ marginRight: 5 }}
-                                  icon={faTrash}
-                                  size="lg"
-                                />
-                              }
-                              onClick={() => {
-                                confirmDeleteUpdate(update.id);
-                              }}
-                              size="small"
-                            >
-                              {intl.formatMessage({
-                                defaultMessage: 'Delete Update',
-                                id: 'ef1dfd',
-                              })}
-                            </Button>
-                          </div>
-                        }
-                      >
-                        <div>
-                          <UpdateContent
-                            userId={userId}
-                            content={update.text}
-                            createdAt={moment(update.createdAt)}
-                            from={update.createdBy}
-                            id={update.id}
-                            images={update.images}
-                            incidents={update.linkedIncidents}
-                            offenders={update.linkedOffenders}
-                            vehicles={update.linkedVehicles}
-                            crimeGroups={update.linkedCrimeGroups}
-                            showDate
-                            showUser
-                          />
-                        </div>
-                      </Popover>
-                    ) : (
-                      <UpdateContent
-                        userId={userId}
-                        content={update.text}
-                        createdAt={moment(update.createdAt)}
-                        from={update.createdBy}
-                        id={update.id}
-                        images={update.images}
-                        incidents={update.linkedIncidents}
-                        offenders={update.linkedOffenders}
-                        vehicles={update.linkedVehicles}
-                        crimeGroups={update.linkedCrimeGroups}
-                        showDate
-                        showUser
-                      />
-                    )}
-                    {update.replies.map((reply) => (
-                      <div className="update-reply">
-                        {editRights ? (
-                          <Popover
-                            trigger="click"
-                            placement={
-                              reply.createdBy.id === userId ? 'left' : 'right'
-                            }
-                            overlayClassName="message-popover"
-                            content={
-                              <div
-                                style={{
-                                  display: 'flex',
-                                  flexDirection: 'column',
-                                }}
-                              >
-                                <Button
-                                  disabled={saving}
-                                  type="text"
-                                  icon={
-                                    <FontAwesomeIcon
-                                      style={{ marginRight: 5 }}
-                                      icon={faEdit}
-                                      size="lg"
-                                    />
-                                  }
-                                  onClick={() => {
-                                    setEditUpdate({
-                                      id: reply.id,
-                                      text: reply.text || '',
-                                    });
-                                  }}
-                                  size="small"
-                                >
-                                  {intl.formatMessage({
-                                    defaultMessage: 'Edit Update',
-                                    id: 'pCzvx3',
-                                  })}
-                                </Button>
-                                <Button
-                                  disabled={saving}
-                                  type="text"
-                                  icon={
-                                    <FontAwesomeIcon
-                                      style={{ marginRight: 5 }}
-                                      icon={faTrash}
-                                      size="lg"
-                                    />
-                                  }
-                                  onClick={() => {
-                                    confirmDeleteUpdate(reply.id);
-                                  }}
-                                  size="small"
-                                >
-                                  {intl.formatMessage({
-                                    defaultMessage: 'Delete Update',
-                                    id: 'ef1dfd',
-                                  })}
-                                </Button>
-                              </div>
-                            }
-                          >
-                            <div>
-                              <UpdateContent
-                                userId={userId}
-                                content={reply.text}
-                                createdAt={moment(reply.createdAt)}
-                                from={reply.createdBy}
-                                id={reply.id}
-                                images={reply.images}
-                                incidents={reply.linkedIncidents}
-                                offenders={reply.linkedOffenders}
-                                vehicles={update.linkedVehicles}
-                                crimeGroups={update.linkedCrimeGroups}
-                                showDate
-                                showUser
-                              />
-                            </div>
-                          </Popover>
-                        ) : (
-                          <UpdateContent
-                            userId={userId}
-                            content={reply.text}
-                            createdAt={moment(reply.createdAt)}
-                            from={reply.createdBy}
-                            id={reply.id}
-                            images={reply.images}
-                            incidents={reply.linkedIncidents}
-                            offenders={reply.linkedOffenders}
-                            vehicles={update.linkedVehicles}
-                            crimeGroups={update.linkedCrimeGroups}
-                            showDate
-                            showUser
-                          />
-                        )}
-                      </div>
-                    ))}
-                    <Row>
-                      {update.type !== UpdateType.System && (
-                        <Col>
-                          <Button
-                            disabled={saving}
-                            style={{
-                              marginLeft: update.replies.length > 0 ? 48 : 0,
-                            }}
-                            type="text"
-                            danger
-                            size="small"
-                            onClick={() =>
-                              setReplyTo({
-                                createdAt: update.createdAt.toString(),
-                                createdBy:
-                                  userId === update.createdBy.id
-                                    ? intl.formatMessage({
-                                        defaultMessage: 'You',
-                                        id: 'kJ5W29',
-                                      })
-                                    : `${update.createdBy.fullName} - ${update.createdBy.businesses[0]?.name}`,
-                                id: update.id,
-                                text: update.text || '',
-                              })
-                            }
-                          >
-                            {intl.formatMessage({
-                              defaultMessage: 'Reply',
-                              id: '9HU8vw',
-                            })}
-                          </Button>
-                        </Col>
-                      )}
-                    </Row>
-                  </div>
-                ))}
-              </InfiniteScroll>
+              <IntelSection
+                updates={data?.investigation?.updates}
+                scrolledToTop={scrolledToTop}
+                loadMore={loadMore}
+                saving={saving}
+                editRights={editRights}
+                userId={userId}
+                confirmDeleteUpdate={confirmDeleteUpdate}
+                setEditUpdate={setEditUpdate}
+                setReplyTo={setReplyTo}
+                optionRowShow={optionRowShow}
+              />
               <UpdateBar
                 replyTo={replyTo}
                 investigationId={investigationId}

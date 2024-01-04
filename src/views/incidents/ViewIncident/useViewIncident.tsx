@@ -1512,6 +1512,7 @@ const useViewIncident = (incidentId: string): Return => {
         },
       },
     });
+    setShowOffenderOptions(false);
     setSelectedImages([]);
     setSelectedOffenderId('');
   };
@@ -1534,9 +1535,8 @@ const useViewIncident = (incidentId: string): Return => {
     images: { id: string; url: string }[],
     addToOffender?: boolean
   ) => {
-    if (addToOffender) {
-      setAddImageToOffenders(addToOffender);
-    }
+    setAddImageToOffenders(!!addToOffender);
+
     if (images.length > 1) {
       setAddImages(images);
     }

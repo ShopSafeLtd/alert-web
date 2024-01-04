@@ -38,6 +38,7 @@ import { defineMessage } from 'react-intl';
 export enum BadgeTypes {
   todo = 'TODO',
   notification = 'NOTIFICATION',
+  message = 'MESSAGE',
 }
 export interface MenuItem {
   key: string;
@@ -198,6 +199,7 @@ const userOnlyItems: NavItem[] = [
     title: 'Chat',
     icon: faComments,
     breadcrumb: true,
+    badge: BadgeTypes.message,
     submenu: [],
     intl: defineMessage({
       id: 'chat',

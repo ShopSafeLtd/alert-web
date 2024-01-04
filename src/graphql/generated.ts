@@ -2019,6 +2019,7 @@ export type Chat = {
   firstLetter: Scalars['String'];
   id: Scalars['ID'];
   members: Array<UserChat>;
+  messageCount: Scalars['Int'];
   messages: Array<Message>;
   name: Scalars['String'];
   notifications: Array<Notification>;
@@ -2535,11 +2536,13 @@ export type CreateBusinessDataInput = {
 };
 
 export type CreateBusinessOnUserDataInput = {
+  groups?: InputMaybe<ConnectArrayHelper>;
   locations?: InputMaybe<CreateSimpleLocationEnvelope>;
   name: Scalars['String'];
   parent?: InputMaybe<BusinessParentInput>;
   publicName: Scalars['Boolean'];
   schemes: ConnectArrayHelper;
+  tags?: InputMaybe<NullableConnectArrayHelper>;
 };
 
 export type CreateCollectionInput = {
@@ -17078,6 +17081,7 @@ export type User = {
   lastTenLogin: Array<LoginEvent>;
   loginEvents: Array<LoginEvent>;
   mentionedUpdated: Array<Update>;
+  messageCount: Scalars['Int'];
   messageMentions: Array<Message>;
   messagePush: Scalars['Boolean'];
   messages: Array<Message>;
@@ -20834,7 +20838,7 @@ export type CurrentUserQueryVariables = Exact<{
 }>;
 
 
-export type CurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: string, fullName: string, origName: string, email: string, reference?: number | null, demId?: string | null, publicName: boolean, reportToAllBusinesses: boolean, notificationCount: number, newUser: boolean, incidentEmail: boolean, incidentPush: boolean, offenderEmail: boolean, offenderPush: boolean, messagePush: boolean, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string, demId?: string | null }>, groups: Array<{ __typename?: 'Group', id: string, name: string, scheme: { __typename?: 'Scheme', id: string } }>, defaultGroups: Array<{ __typename?: 'Group', id: string, name: string, scheme: { __typename?: 'Scheme', id: string } }>, schemes: Array<{ __typename?: 'UserScheme', id: string, role: Role, scheme: { __typename?: 'Scheme', customTranslations: Array<{ [key: string]: any }>, userTodos: number, id: string, name: string, goodsMode: GoodsMode, autoApproveIncidents: boolean, autoApproveOffenders: boolean, defaultPublicOffenderDOB: boolean, restrictIncidentAccess: boolean, reportOnly: boolean, facialRecognition: boolean, imagesRequiredOnOffenders: boolean, taskTimeTracking: boolean, languageCount: number, autoPopulateDescription: boolean, needJustification: boolean, logo?: { __typename?: 'Image', optimisedPersisted?: string | null } | null, darkLogo?: { __typename?: 'Image', optimisedPersisted?: string | null } | null } }> } | null };
+export type CurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: string, fullName: string, origName: string, email: string, reference?: number | null, demId?: string | null, publicName: boolean, reportToAllBusinesses: boolean, notificationCount: number, messageCount: number, newUser: boolean, incidentEmail: boolean, incidentPush: boolean, offenderEmail: boolean, offenderPush: boolean, messagePush: boolean, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string, demId?: string | null }>, groups: Array<{ __typename?: 'Group', id: string, name: string, scheme: { __typename?: 'Scheme', id: string } }>, defaultGroups: Array<{ __typename?: 'Group', id: string, name: string, scheme: { __typename?: 'Scheme', id: string } }>, schemes: Array<{ __typename?: 'UserScheme', id: string, role: Role, scheme: { __typename?: 'Scheme', customTranslations: Array<{ [key: string]: any }>, userTodos: number, id: string, name: string, goodsMode: GoodsMode, autoApproveIncidents: boolean, autoApproveOffenders: boolean, defaultPublicOffenderDOB: boolean, restrictIncidentAccess: boolean, reportOnly: boolean, facialRecognition: boolean, imagesRequiredOnOffenders: boolean, taskTimeTracking: boolean, languageCount: number, autoPopulateDescription: boolean, needJustification: boolean, logo?: { __typename?: 'Image', optimisedPersisted?: string | null } | null, darkLogo?: { __typename?: 'Image', optimisedPersisted?: string | null } | null } }> } | null };
 
 export type UserQueryVariables = Exact<{
   where: UserWhereUniqueInput;
@@ -20861,7 +20865,7 @@ export type UserChatsQueryVariables = Exact<{
 }>;
 
 
-export type UserChatsQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, totalChats: number, chats: Array<{ __typename?: 'UserChat', id: string, newMessages?: boolean | null, mentioned?: boolean | null, updatedAt: Date, createdAt: Date, chat: { __typename?: 'Chat', id: string, name: string, firstLetter: string, totalMembers: number, messages: Array<{ __typename?: 'Message', id: string, content: string, createdAt: Date, from: { __typename?: 'User', id: string, origName: string }, images: Array<{ __typename?: 'Image', id: string }>, incidents: Array<{ __typename?: 'Incident', id: string }>, offenders: Array<{ __typename?: 'Offender', id: string }>, vehicles: Array<{ __typename?: 'Vehicle', id: string }>, crimeGroups: Array<{ __typename?: 'CrimeGroup', id: string }>, articles: Array<{ __typename?: 'Article', id: string }> }> } }> } };
+export type UserChatsQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, totalChats: number, chats: Array<{ __typename?: 'UserChat', id: string, newMessages?: boolean | null, mentioned?: boolean | null, updatedAt: Date, createdAt: Date, chat: { __typename?: 'Chat', id: string, name: string, firstLetter: string, totalMembers: number, messageCount: number, messages: Array<{ __typename?: 'Message', id: string, content: string, createdAt: Date, from: { __typename?: 'User', id: string, origName: string }, images: Array<{ __typename?: 'Image', id: string }>, incidents: Array<{ __typename?: 'Incident', id: string }>, offenders: Array<{ __typename?: 'Offender', id: string }>, vehicles: Array<{ __typename?: 'Vehicle', id: string }>, crimeGroups: Array<{ __typename?: 'CrimeGroup', id: string }>, articles: Array<{ __typename?: 'Article', id: string }> }> } }> } };
 
 export type UpdateUserNotificationsMutationVariables = Exact<{
   where: UserNotificationWhereInput;
@@ -30528,6 +30532,7 @@ export const CurrentUserDocument = gql`
     publicName
     reportToAllBusinesses
     notificationCount(scheme: $scheme)
+    messageCount
     businesses {
       id
       name
@@ -30764,6 +30769,7 @@ export const UserChatsDocument = gql`
         name
         firstLetter
         totalMembers
+        messageCount
         messages(first: 1, orderBy: [{createdAt: desc}]) {
           id
           content

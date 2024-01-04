@@ -77,6 +77,7 @@ const useAuth = (): Return => {
     groups,
     reference,
     userNotifications,
+    userMessages,
     defaultGroups,
     reportToAllBusinesses,
   }: HandleSuccessArgs) => {
@@ -206,6 +207,7 @@ const useAuth = (): Return => {
       demId,
       reference,
       userNotifications,
+      userMessages,
       defaultGroups,
       filterDefaultGroups,
       reportToAllBusinesses,
@@ -270,6 +272,7 @@ const useAuth = (): Return => {
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         reference: `${currentUser?.reference}` || '',
         userNotifications: currentUser?.notificationCount || 0,
+        userMessages: currentUser?.messageCount || 0,
         defaultGroups: currentUser?.defaultGroups || [],
         filterDefaultGroups:
           currentUser?.defaultGroups.filter((el) => el.scheme.id === scheme) ||
@@ -351,6 +354,7 @@ const useAuth = (): Return => {
       demId: data.demId,
       reference: data.reference,
       userNotifications: data.userNotifications,
+      userMessages: data.userMessages,
       defaultGroups: data.defaultGroups,
       reportToAllBusinesses: data.reportToAllBusinesses,
 

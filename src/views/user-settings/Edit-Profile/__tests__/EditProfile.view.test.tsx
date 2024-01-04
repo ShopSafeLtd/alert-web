@@ -8,6 +8,7 @@ describe('Detail Officer View', () => {
   const data: CurrentUserQuery | undefined = {
     currentUser: {
       notificationCount: 0,
+      messageCount: 0,
       reportToAllBusinesses: true,
       id: 'userId',
       fullName: 'test user',

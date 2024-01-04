@@ -18,7 +18,6 @@ import type {
 } from 'graphql/generated';
 import {
   CrimeGroupDocument,
-  ImagePosition,
   Role,
   SortOrder,
   TodoType,
@@ -144,10 +143,9 @@ const useUpdateBar = ({
   const {
     role: userRole,
     id: userId,
-    origName: fullName,
     groups: userGroups,
-    businesses,
   } = useStoreState((state) => state.user);
+  const groupsId = userGroups.map((group) => group.id);
   const [saving, setSaving] = useState(false);
   const [showUpdatePicker, setShowUpdatePicker] = useState(false);
   const [linkIncident, setLinkIncident] = useState(false);
@@ -446,121 +444,121 @@ const useUpdateBar = ({
         if (articlesData.length > 0) return UpdateType.LinkedArticle;
         return UpdateType.Text;
       };
-      const newResponse = {
-        // __typename: 'Update',
-        createdAt: new Date(),
-        id: `optimistic-${new Date().toISOString()}`,
-        createdBy: {
-          fullName,
-          origName: fullName,
-          id: userId,
-          businesses,
-          // __typename: 'User',
-        },
-        images:
-          updateFileList.length > 0
-            ? updateFileList.map((image) => ({
-                id: image.uid,
-                // __typename: 'Image',
-                card: image.url,
-                optimised: image.url,
-                url: image.url,
-                position: ImagePosition.CenterCenter,
-                rotation: 0,
-              }))
-            : [],
-        replies: [],
-        type: getUpdateType(),
-        text: getText(updateInput, schemeUsers),
-        linkedIncidents:
-          updateIncidents && updateIncidents.length > 0
-            ? updateIncidents.map((incident) => ({
-                id: incident.id,
-                images:
-                  incident.images?.map((image) => ({
-                    ...image,
-                    position: ImagePosition.CenterCenter,
-                    rotation: 0,
-                  })) || [],
-                reference: incident.reference,
-                subject: incident.subject,
-                description: incident.description || '',
-                dayTime: incident.dayTime || '',
-                totalValue: incident.totalValue || 0,
-                totalRecoveredValue: incident.totalRecoveredValue || 0,
-              }))
-            : [],
-        linkedOffenders:
-          updateOffenders && updateOffenders.length > 0
-            ? updateOffenders.map((offender) => ({
-                id: offender.id,
-                images:
-                  offender.images?.map((image) => ({
-                    ...image,
-                    position: ImagePosition.CenterCenter,
-                    rotation: 0,
-                  })) || [],
-                updatedAt: offender.updatedAt || new Date(),
-                age: offender.age,
-                build: offender.build,
-                dateOfBirth: offender.dateOfBirth,
-                gender: offender.gender,
-                name: offender.name,
-                race: offender.race,
-              }))
-            : [],
-        linkedVehicles:
-          vehiclesData && vehiclesData.length > 0
-            ? vehiclesData.map((vehicle) => ({
-                id: vehicle.id,
-                images:
-                  vehicle.images?.map((image) => ({
-                    ...image,
-                    position: ImagePosition.CenterCenter,
-                    rotation: 0,
-                  })) || [],
-                reference: vehicle.reference,
-                registration: vehicle.registration,
-                colour: vehicle.colour,
-                make: vehicle.make,
-                model: vehicle.model,
-              }))
-            : [],
-        linkedCrimeGroups:
-          crimeGroupsData && crimeGroupsData.length > 0
-            ? crimeGroupsData.map((crimeGroup) => ({
-                id: crimeGroup.id,
-                reference: crimeGroup.reference,
-                alias: crimeGroup.alias,
-                totalOffenders: crimeGroup.totalOffenders || 0,
-                totalIncidents: crimeGroup.totalIncidents || 0,
-                totalRecoveredValue: crimeGroup.totalRecoveredValue || 0,
-                totalTheftSuccess: crimeGroup.totalTheftSuccess || 0,
-                totalValue: crimeGroup.totalValue || 0,
-              }))
-            : [],
-        linkedArticles:
-          articlesData && articlesData.length > 0
-            ? articlesData.map((article) => ({
-                id: article.id,
-                images:
-                  article.images?.map((image) => ({
-                    ...image,
-                    position: ImagePosition.CenterCenter,
-                    rotation: 0,
-                  })) || [],
-                title: article.title,
-                updatedAt: article.updatedAt || new Date(),
-                watermarkImage: article.watermarkImage || false,
-                previewText: article.previewText,
-                priority: article.priority,
-                createdBy: {
-                  id: article.createdBy?.id || '',
-                  fullName: article.createdBy?.fullName || '',
-                },
-              }))
-            : [],
-      };
+      // const newResponse = {
+      //   // __typename: 'Update',
+      //   createdAt: new Date(),
+      //   id: `optimistic-${new Date().toISOString()}`,
+      //   createdBy: {
+      //     fullName,
+      //     origName: fullName,
+      //     id: userId,
+      //     businesses,
+      //     // __typename: 'User',
+      //   },
+      //   images:
+      //     updateFileList.length > 0
+      //       ? updateFileList.map((image) => ({
+      //           id: image.uid,
+      //           // __typename: 'Image',
+      //           card: image.url,
+      //           optimised: image.url,
+      //           url: image.url,
+      //           position: ImagePosition.CenterCenter,
+      //           rotation: 0,
+      //         }))
+      //       : [],
+      //   replies: [],
+      //   type: getUpdateType(),
+      //   text: getText(updateInput, schemeUsers),
+      //   linkedIncidents:
+      //     updateIncidents && updateIncidents.length > 0
+      //       ? updateIncidents.map((incident) => ({
+      //           id: incident.id,
+      //           images:
+      //             incident.images?.map((image) => ({
+      //               ...image,
+      //               position: ImagePosition.CenterCenter,
+      //               rotation: 0,
+      //             })) || [],
+      //           reference: incident.reference,
+      //           subject: incident.subject,
+      //           description: incident.description || '',
+      //           dayTime: incident.dayTime || '',
+      //           totalValue: incident.totalValue || 0,
+      //           totalRecoveredValue: incident.totalRecoveredValue || 0,
+      //         }))
+      //       : [],
+      //   linkedOffenders:
+      //     updateOffenders && updateOffenders.length > 0
+      //       ? updateOffenders.map((offender) => ({
+      //           id: offender.id,
+      //           images:
+      //             offender.images?.map((image) => ({
+      //               ...image,
+      //               position: ImagePosition.CenterCenter,
+      //               rotation: 0,
+      //             })) || [],
+      //           updatedAt: offender.updatedAt || new Date(),
+      //           age: offender.age,
+      //           build: offender.build,
+      //           dateOfBirth: offender.dateOfBirth,
+      //           gender: offender.gender,
+      //           name: offender.name,
+      //           race: offender.race,
+      //         }))
+      //       : [],
+      //   linkedVehicles:
+      //     vehiclesData && vehiclesData.length > 0
+      //       ? vehiclesData.map((vehicle) => ({
+      //           id: vehicle.id,
+      //           images:
+      //             vehicle.images?.map((image) => ({
+      //               ...image,
+      //               position: ImagePosition.CenterCenter,
+      //               rotation: 0,
+      //             })) || [],
+      //           reference: vehicle.reference,
+      //           registration: vehicle.registration,
+      //           colour: vehicle.colour,
+      //           make: vehicle.make,
+      //           model: vehicle.model,
+      //         }))
+      //       : [],
+      //   linkedCrimeGroups:
+      //     crimeGroupsData && crimeGroupsData.length > 0
+      //       ? crimeGroupsData.map((crimeGroup) => ({
+      //           id: crimeGroup.id,
+      //           reference: crimeGroup.reference,
+      //           alias: crimeGroup.alias,
+      //           totalOffenders: crimeGroup.totalOffenders || 0,
+      //           totalIncidents: crimeGroup.totalIncidents || 0,
+      //           totalRecoveredValue: crimeGroup.totalRecoveredValue || 0,
+      //           totalTheftSuccess: crimeGroup.totalTheftSuccess || 0,
+      //           totalValue: crimeGroup.totalValue || 0,
+      //         }))
+      //       : [],
+      //   linkedArticles:
+      //     articlesData && articlesData.length > 0
+      //       ? articlesData.map((article) => ({
+      //           id: article.id,
+      //           images:
+      //             article.images?.map((image) => ({
+      //               ...image,
+      //               position: ImagePosition.CenterCenter,
+      //               rotation: 0,
+      //             })) || [],
+      //           title: article.title,
+      //           updatedAt: article.updatedAt || new Date(),
+      //           watermarkImage: article.watermarkImage || false,
+      //           previewText: article.previewText,
+      //           priority: article.priority,
+      //           createdBy: {
+      //             id: article.createdBy?.id || '',
+      //             fullName: article.createdBy?.fullName || '',
+      //           },
+      //         }))
+      //       : [],
+      // };
 
       const data = {
         icon: UpdateIcon.Comment,
@@ -606,8 +604,6 @@ const useUpdateBar = ({
       };
 
       if (incidentId) {
-        console.log('createIncidentUpdate');
-
         void createIncidentUpdate({
           variables: {
             data,
@@ -615,11 +611,7 @@ const useUpdateBar = ({
               id: incidentId,
             },
           },
-          // ???
-          optimisticResponse: {
-            __typename: 'Mutation',
-            createUpdateOnIncident: newResponse,
-          },
+
           update: (store, result) => {
             if (result.data?.createUpdateOnIncident) {
               const oldData = store.readQuery<
@@ -646,7 +638,6 @@ const useUpdateBar = ({
                     data: {
                       incident: {
                         ...oldData.incident,
-
                         updates: replyTo
                           ? update(oldData.incident.updates, {
                               [oldData.incident.updates
@@ -689,10 +680,10 @@ const useUpdateBar = ({
               id: offenderId,
             },
           },
-          optimisticResponse: {
-            __typename: 'Mutation',
-            createUpdateOnOffender: newResponse,
-          },
+          // optimisticResponse: {
+          //   __typename: 'Mutation',
+          //   createUpdateOnOffender: newResponse,
+          // },
           update: (store, result) => {
             if (result.data?.createUpdateOnOffender) {
               const oldData = store.readQuery<
@@ -704,6 +695,14 @@ const useUpdateBar = ({
                   where: {
                     id: offenderId,
                   },
+                  banWhere: {
+                    groups:
+                      userRole === Role.User ||
+                      userRole === Role.ContentAdmin ||
+                      userRole === Role.GroupAdmin
+                        ? { some: { id: { in: groupsId } } }
+                        : undefined,
+                  },
                 },
               });
 
@@ -714,6 +713,14 @@ const useUpdateBar = ({
                     variables: {
                       where: {
                         id: offenderId,
+                      },
+                      banWhere: {
+                        groups:
+                          userRole === Role.User ||
+                          userRole === Role.ContentAdmin ||
+                          userRole === Role.GroupAdmin
+                            ? { some: { id: { in: groupsId } } }
+                            : undefined,
                       },
                     },
                     data: {
@@ -764,10 +771,7 @@ const useUpdateBar = ({
               id: investigationId,
             },
           },
-          optimisticResponse: {
-            __typename: 'Mutation',
-            createUpdateOnInvestigation: newResponse,
-          },
+
           update: (store, result) => {
             if (result.data?.createUpdateOnInvestigation) {
               const oldData = store.readQuery<
@@ -840,10 +844,7 @@ const useUpdateBar = ({
               id: crimeGroupId,
             },
           },
-          optimisticResponse: {
-            __typename: 'Mutation',
-            createUpdateOnCrimeGroup: newResponse,
-          },
+
           update: (store, result) => {
             if (result.data?.createUpdateOnCrimeGroup) {
               const oldData = store.readQuery<
@@ -869,9 +870,6 @@ const useUpdateBar = ({
                   data: {
                     crimeGroup: {
                       ...oldData.crimeGroup,
-                      // TODO check types
-                      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                      // @ts-ignore
                       updates: replyTo
                         ? update(oldData.crimeGroup.updates, {
                             [oldData.crimeGroup.updates
@@ -913,32 +911,7 @@ const useUpdateBar = ({
               id: vehicleId,
             },
           },
-          optimisticResponse: {
-            __typename: 'Mutation',
-            createUpdateOnVehicle: {
-              __typename: 'Update',
-              createdBy: {
-                fullName,
-                origName: fullName,
-                id: userId,
-                businesses,
-                __typename: 'User',
-              },
-              images:
-                updateFileList.length > 0
-                  ? updateFileList.map((image) => ({
-                      id: image.uid,
-                      __typename: 'Image',
-                      card: image.url,
-                      optimised: image.url,
-                      url: image.url,
-                      position: ImagePosition.CenterCenter,
-                      rotation: 0,
-                    }))
-                  : [],
-              ...newResponse,
-            },
-          },
+
           update: (store, result) => {
             if (result.data?.createUpdateOnVehicle) {
               const oldData = store.readQuery<
@@ -964,9 +937,6 @@ const useUpdateBar = ({
                   data: {
                     vehicle: {
                       ...oldData.vehicle,
-                      // TODO check types
-                      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                      // @ts-ignore
                       updates: replyTo
                         ? update(oldData.vehicle.updates, {
                             [oldData.vehicle.updates
@@ -990,18 +960,8 @@ const useUpdateBar = ({
                             },
                           })
                         : [
+                            result.data.createUpdateOnVehicle,
                             ...oldData.vehicle.updates,
-                            {
-                              ...result.data.createUpdateOnVehicle,
-                              linkedIncidents:
-                                result.data.createUpdateOnVehicle.linkedIncidents?.map(
-                                  (inc) => ({
-                                    ...inc,
-                                    totalValue: 0,
-                                    totalRecoveredValue: 0,
-                                  })
-                                ),
-                            },
                           ],
                     },
                   },

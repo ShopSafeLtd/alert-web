@@ -9,6 +9,7 @@ query currentUser($scheme: UniqueId) {
     publicName
     reportToAllBusinesses
     notificationCount(scheme: $scheme)
+    messageCount
     businesses {
       id
       name

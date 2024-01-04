@@ -1,7 +1,11 @@
 import React from 'react';
 import { Button, Col, Dropdown, Menu, Popover, Row } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash } from '@fortawesome/pro-light-svg-icons';
+import {
+  faFolderPlus,
+  faEdit,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
 import { useIntl } from 'react-intl';
 import { createUseStyles } from 'react-jss';
 import type { Theme } from 'configs/ThemeConfig';
@@ -378,13 +382,8 @@ const IntelSection = ({
                                 defaultMessage: 'Add Image to Incident',
                                 id: 'VN9g7W',
                               }),
-                              disabled: !onAddToIncident,
                               onClick: () => {
-                                if (
-                                  onAddToIncident &&
-                                  update?.images &&
-                                  update?.images.length > 0
-                                )
+                                if (onAddToIncident)
                                   onAddToIncident(
                                     update.images.map(({ id, optimised }) => ({
                                       id,
@@ -392,7 +391,7 @@ const IntelSection = ({
                                     }))
                                   );
                               },
-                              icon: <FontAwesomeIcon icon={faEdit} />,
+                              icon: <FontAwesomeIcon icon={faFolderPlus} />,
                             },
                             {
                               key: 1,
@@ -400,13 +399,8 @@ const IntelSection = ({
                                 defaultMessage: 'Add Image to Offender',
                                 id: 'dy/65U',
                               }),
-                              disabled: !onAddToOffender,
                               onClick: () => {
-                                if (
-                                  onAddToOffender &&
-                                  update?.images &&
-                                  update?.images.length > 0
-                                )
+                                if (onAddToOffender)
                                   onAddToOffender(
                                     update.images.map(({ id, optimised }) => ({
                                       id,
@@ -414,9 +408,13 @@ const IntelSection = ({
                                     }))
                                   );
                               },
-                              icon: <FontAwesomeIcon icon={faEdit} />,
+                              icon: <FontAwesomeIcon icon={faFolderPlus} />,
                             },
-                          ]}
+                          ].filter(
+                            (item) =>
+                              (item.key !== 0 || onAddToIncident) &&
+                              (item.key !== 1 || onAddToOffender)
+                          )}
                         />
                       }
                       placement="bottomRight"

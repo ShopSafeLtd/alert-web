@@ -79,6 +79,7 @@ interface SideNavContentProps {
   localization: boolean;
   todos: number;
   notifications: number;
+  messages: number;
   onMobileNavToggle(value: boolean): void;
 }
 
@@ -113,6 +114,7 @@ const SideNavContent = (props: SideNavContentProps) => {
     onMobileNavToggle,
     todos,
     notifications,
+    messages,
   } = props;
 
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
@@ -165,6 +167,7 @@ const SideNavContent = (props: SideNavContentProps) => {
   const getBadgeCount = {
     [BadgeTypes.todo]: todos,
     [BadgeTypes.notification]: notifications,
+    [BadgeTypes.message]: messages,
   };
 
   return (
@@ -251,7 +254,7 @@ const SideNavContent = (props: SideNavContentProps) => {
             ) : (
               <Menu.Item key={menu.key}>
                 {menu.icon ? <Icon icon={menu?.icon} /> : null}
-                {menu.badge ? (
+                {menu.badge && getBadgeCount[menu.badge] > 0 ? (
                   <Badge
                     offset={[9, 0]}
                     size="small"
@@ -446,6 +449,7 @@ const MenuContent = (props: Props) => {
   );
   const [todoCount, setTodoCount] = useState(0);
   const [notificationCount, setNotificationCount] = useState(0);
+  const [messageCount, setMessageCount] = useState(0);
 
   const store = useStore();
 
@@ -456,12 +460,16 @@ const MenuContent = (props: Props) => {
   useEffect(() => {
     setNotificationCount(userNotifications || 0);
   }, [userNotifications]);
+  useEffect(() => {
+    setMessageCount(messageCount || 0);
+  }, [messageCount]);
 
   return props.type === NavType.SIDE ? (
     <SideNavContent
       {...props}
       todos={todoCount}
       notifications={notificationCount}
+      messages={messageCount}
       onMobileNavToggle={onMobileNavToggle}
       sideNavTheme={sideNavTheme}
     />

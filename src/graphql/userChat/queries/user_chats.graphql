@@ -20,6 +20,7 @@ query userChats(
         name
         firstLetter
         totalMembers
+        messageCount
         messages(first: 1, orderBy: [{ createdAt: desc }]) {
           id
           content
