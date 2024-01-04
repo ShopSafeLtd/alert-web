@@ -308,8 +308,8 @@ const LinkIncident = ({
           <div className={classes.filter}>
             <Text>
               {intl.formatMessage({
-                defaultMessage: 'Peculiarities',
-                id: '9s+ZmX',
+                defaultMessage: 'Characteristics',
+                id: 'xksukL',
               })}
             </Text>
             <Input.TextArea

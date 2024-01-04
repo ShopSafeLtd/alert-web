@@ -454,8 +454,8 @@ const SelectedOffenders = ({
           <div className={classes.filter}>
             <Text>
               {intl.formatMessage({
-                defaultMessage: 'Peculiarities',
-                id: '9s+ZmX',
+                defaultMessage: 'Characteristics',
+                id: 'xksukL',
               })}
             </Text>
             <Input.TextArea
@@ -599,8 +599,8 @@ const SelectedOffenders = ({
               </Descriptions.Item>
               <Descriptions.Item
                 label={intl.formatMessage({
-                  defaultMessage: 'Peculiarities',
-                  id: '9s+ZmX',
+                  defaultMessage: 'Characteristics',
+                  id: 'xksukL',
                 })}
               >
                 {selectedOffender?.peculiarities ||

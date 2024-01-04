@@ -205,8 +205,8 @@ const OffenderProfile = ({
                       <Descriptions.Item
                         className={classes.descItem}
                         label={intl.formatMessage({
-                          defaultMessage: 'Peculiarities',
-                          id: '9s+ZmX',
+                          defaultMessage: 'Characteristics',
+                          id: 'xksukL',
                         })}
                       >
                         {offenderProfileData?.offender?.peculiarities ||

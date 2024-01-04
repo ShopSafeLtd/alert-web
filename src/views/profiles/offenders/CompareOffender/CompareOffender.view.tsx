@@ -296,8 +296,8 @@ const CompareIncident = ({
               <div className={classes.titleField}>
                 <Text strong>
                   {intl.formatMessage({
-                    defaultMessage: 'Perculiarities:',
-                    id: '242AjY',
+                    defaultMessage: 'Characteristics:',
+                    id: 'BxC/6v',
                   })}
                 </Text>
               </div>

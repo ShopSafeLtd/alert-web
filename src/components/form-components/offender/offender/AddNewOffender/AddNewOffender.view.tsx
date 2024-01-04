@@ -185,8 +185,8 @@ const AddNewOffender = ({
           <Form.Item
             name="peculiarities"
             label={intl.formatMessage({
-              defaultMessage: 'Peculiarities',
-              id: '9s+ZmX',
+              defaultMessage: 'Characteristics',
+              id: 'xksukL',
             })}
             tooltip={intl.formatMessage({
               defaultMessage: 'Anything distinctive features of the offender.',

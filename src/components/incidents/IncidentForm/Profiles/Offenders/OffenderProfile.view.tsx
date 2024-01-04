@@ -179,8 +179,8 @@ const OffenderProfile = ({
                 <Col>
                   <Text>
                     <FormattedMessage
-                      defaultMessage="Peculiarities: {peculiarities}"
-                      id="Rn7UHK"
+                      defaultMessage="Characteristics: {peculiarities}"
+                      id="b0wnxq"
                       values={{
                         peculiarities: offender.peculiarities,
                       }}

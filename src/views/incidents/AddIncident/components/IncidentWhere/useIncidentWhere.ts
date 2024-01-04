@@ -22,12 +22,13 @@ const useIncidentWhere = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const role = useStoreState((state) => state.user.role);
   const businesses = useStoreState((state) => state.user.businesses);
-
+  const reportToAllBusinesses = useStoreState(
+    (state) => state.user.reportToAllBusinesses
+  );
   const [hideField, setHideField] = useState(true);
 
   useEffect(() => {
-    console.log(role !== Role.User, businesses.length);
-    if (role !== Role.User || businesses.length > 1) {
+    if (role !== Role.User || businesses.length > 1 || reportToAllBusinesses) {
       setHideField(false);
     } else {
       setHideField(true);

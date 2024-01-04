@@ -1122,8 +1122,8 @@ const EditIncident = ({
               </Descriptions.Item>
               <Descriptions.Item
                 label={intl.formatMessage({
-                  defaultMessage: 'Peculiarities',
-                  id: '9s+ZmX',
+                  defaultMessage: 'Characteristics',
+                  id: 'xksukL',
                 })}
               >
                 {addRecentOffender?.peculiarities ||
