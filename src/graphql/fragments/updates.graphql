@@ -9,10 +9,9 @@ fragment Updates on Update {
     optimised
     position
     rotation
-    primary
-    policeImage
     card
   }
+
   linkedCrimeGroups {
     id
     reference
@@ -36,8 +35,6 @@ fragment Updates on Update {
       optimised
       position
       rotation
-      primary
-      policeImage
       card
     }
   }
@@ -47,22 +44,12 @@ fragment Updates on Update {
     dayTime
     policeRef
     subject
-    totalValue
-    totalRecoveredValue
-    location {
-      id
-      full
-      geoLat
-      geoLng
-    }
     images {
       id
       url
       optimised
       position
       rotation
-      primary
-      policeImage
       card
     }
   }
@@ -82,9 +69,28 @@ fragment Updates on Update {
       optimised
       position
       rotation
-      primary
-      policeImage
       card
+    }
+  }
+  linkedArticles {
+    id
+    title
+    updatedAt
+    watermarkImage
+    previewImage
+    previewText
+    priority
+    images {
+      id
+      url
+      optimised
+      card
+      position
+      rotation
+    }
+    createdBy {
+      fullName
+      id
     }
   }
   createdBy {
@@ -108,8 +114,6 @@ fragment Updates on Update {
       optimised
       position
       rotation
-      primary
-      policeImage
       card
     }
     linkedCrimeGroups {
@@ -135,8 +139,6 @@ fragment Updates on Update {
         optimised
         position
         rotation
-        primary
-        policeImage
         card
       }
     }
@@ -146,8 +148,6 @@ fragment Updates on Update {
       dayTime
       policeRef
       subject
-      totalValue
-      totalRecoveredValue
       location {
         id
         full
@@ -160,8 +160,6 @@ fragment Updates on Update {
         optimised
         position
         rotation
-        primary
-        policeImage
         card
       }
     }
@@ -181,9 +179,28 @@ fragment Updates on Update {
         optimised
         position
         rotation
-        primary
-        policeImage
         card
+      }
+    }
+    linkedArticles {
+      id
+      title
+      updatedAt
+      watermarkImage
+      previewImage
+      previewText
+      priority
+      images {
+        id
+        url
+        optimised
+        card
+        position
+        rotation
+      }
+      createdBy {
+        fullName
+        id
       }
     }
 

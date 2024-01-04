@@ -20,29 +20,39 @@ const LinkVehicle = ({
     onSubmit,
     data,
     loading,
-    search,
     setSearch,
-    onPaginationChange,
-    setCurrentId,
     selectedVehicle,
+    setSelectedVehicle,
     openLightbox,
     lightBoxOpen,
-    pagination,
+    filterVariables,
+    setOrder,
+    setGroupsFilter,
+    setCreatedAtFilter,
+    groups,
+    groupsLoading,
+    clearFilters,
+    fetchMoreScroll,
   } = useLinkVehicle({ onClose, update, vehicleIds, takeAllSchemes });
 
   return (
     <View
-      lightBoxOpen={lightBoxOpen}
-      openLightbox={openLightbox}
       onSubmit={onSubmit}
       data={data}
-      search={search}
-      setSearch={setSearch}
       loading={loading}
-      onPaginationChange={onPaginationChange}
-      setCurrentId={setCurrentId}
+      setSearch={setSearch}
       selectedVehicle={selectedVehicle}
-      pagination={pagination}
+      setSelectedVehicle={setSelectedVehicle}
+      openLightbox={openLightbox}
+      lightBoxOpen={lightBoxOpen}
+      filterVariables={filterVariables}
+      setOrder={setOrder}
+      setGroupsFilter={setGroupsFilter}
+      setCreatedAtFilter={setCreatedAtFilter}
+      groups={groups}
+      groupsLoading={groupsLoading}
+      clearFilters={clearFilters}
+      fetchMoreScroll={fetchMoreScroll}
     />
   );
 };

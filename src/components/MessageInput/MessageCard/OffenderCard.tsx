@@ -26,11 +26,13 @@ interface Props {
 
 const OffenderCard = ({ offender, removeOffender, saving }: Props) => {
   const intl = useIntl();
+  const hasImage = offender.images && offender.images.length > 0;
+
   return (
     <Card
       style={{
         margin: removeOffender ? 0 : 5,
-        maxWidth: 370,
+        width: hasImage ? 300 : 200,
         overflow: 'hidden',
       }}
       bodyStyle={{
@@ -60,7 +62,7 @@ const OffenderCard = ({ offender, removeOffender, saving }: Props) => {
             <Button
               size="small"
               disabled={saving}
-              className="info-remove-button"
+              style={{ position: 'absolute', top: -5, right: -5, zIndex: 100 }}
               shape="circle"
               type="text"
               icon={<FontAwesomeIcon icon={faCircleXmark} size="lg" />}
@@ -69,10 +71,11 @@ const OffenderCard = ({ offender, removeOffender, saving }: Props) => {
         )}
 
         <Col>
-          {offender.images && offender.images.length > 0 && (
+          {hasImage && (
             <div style={{ width: 100, height: 100 }}>
               <WatermarkImage
                 url={
+                  // @ts-expect-error  null
                   offender.images[0].optimised || offender.images[0].url || ''
                 }
               />

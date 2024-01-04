@@ -3,6 +3,8 @@ import { Button, Col, Row, Select, Typography, DatePicker, Form } from 'antd';
 import { SortOrder, ArticlePriority } from 'graphql/generated';
 import type { DateType } from 'types/DataType';
 import { useIntl } from 'react-intl';
+import moment from 'moment';
+import type { ArticleFilters } from 'state/data-model';
 import useStyles from './ArticleFilter.styles';
 
 const { RangePicker } = DatePicker;
@@ -13,36 +15,49 @@ interface FormData {
 }
 
 interface Props {
-  order: SortOrder;
+  clearFilters: () => void;
+  setGroupsFilter: (value: string[]) => void;
+  setPriorityFilter: (value: ArticlePriority[]) => void;
+  setCreatedAtFilter: (value: DateType | undefined) => void;
   setOrder: (value: SortOrder) => void;
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
-  groupsFilter: string[];
-  setGroupsFilter: (value: string[]) => void;
-  priorityFilter: ArticlePriority[];
-  setPriorityFilter: (value: ArticlePriority[]) => void;
-  clearFilters: () => void;
-  setCreatedAtFilter: (value: DateType | undefined) => void;
+  filterVariables: ArticleFilters;
 }
 
 const ArticleFilter = ({
-  order,
+  clearFilters,
+  setGroupsFilter,
+  setPriorityFilter,
+  setCreatedAtFilter,
   setOrder,
   groups,
   groupsLoading,
-  priorityFilter,
-  setPriorityFilter,
-  groupsFilter,
-  setGroupsFilter,
-  clearFilters,
-  setCreatedAtFilter,
+  filterVariables,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const [form] = useForm<FormData>();
   const intl = useIntl();
 
+  const {
+    groups: groupsFilter,
+    createdAt: createdAtFilter,
+    order,
+    priorities: priorityFilter,
+  } = filterVariables;
+
   return (
-    <Form<FormData> form={form}>
+    <Form<FormData>
+      form={form}
+      initialValues={{
+        createdAt: createdAtFilter
+          ? [
+              moment(createdAtFilter?.startDate),
+              moment(createdAtFilter?.endDate),
+            ]
+          : undefined,
+      }}
+    >
       <Row justify="end">
         <Col>
           <Button
@@ -106,6 +121,7 @@ const ArticleFilter = ({
                     startDate: new Date(value[0].valueOf()),
                     endDate: new Date(value[1].valueOf()),
                   });
+                else setCreatedAtFilter(undefined);
               }}
             />
           </Form.Item>

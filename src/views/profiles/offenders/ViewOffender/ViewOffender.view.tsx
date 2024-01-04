@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import type {
   AssociatedOffendersQuery,
@@ -8,7 +6,6 @@ import type {
   DeleteDocumentMutation,
   ViewOffenderQuery,
 } from 'graphql/generated';
-import { UpdateType } from 'graphql/generated';
 import {
   Badge,
   Button,
@@ -23,7 +20,6 @@ import {
   Menu,
   Modal,
   Popconfirm,
-  Popover,
   Row,
   Skeleton,
   Table,
@@ -35,19 +31,24 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBell,
   faBellSlash,
+  faCartShopping,
   faCircleInfo,
   faClock,
   faComment,
   faCopy,
   faEarth,
   faEdit,
+  faEye,
   faHeadSide,
   faImage,
   faMagnifyingGlass,
   faMarsAndVenus,
+  faMemoCircleInfo,
+  faNotebook,
   faPassport,
   faPenToSquare,
   faPlus,
+  faSirenOn,
   faTrash,
   faUser,
   faUserClock,
@@ -69,8 +70,6 @@ import { calcExpired } from 'utils/offender/get-offender-exclusion';
 import OffenderSideList from 'components/offenders/OffenderSideList';
 import moment from 'moment';
 import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import UpdateContent from 'views/incidents/ViewIncident/Update.view';
 import UpdateBar from 'components/MessageInput/UpdateBar';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import IncidentTable from 'components/tables/IncidentTable';
@@ -110,6 +109,8 @@ import AddInvestigation from 'components/form-components/Investigation/AddInvest
 import { useNavigate } from 'react-router';
 import AddLocation from 'components/form-components/addresses/AddLocation';
 import ImagesList from 'components/ViewPage/ImagesList';
+import KnowOffender from 'components/form-components/offender/KnowOffender';
+import IntelSection from 'components/ViewPage/IntelSection';
 import useStyles from './ViewOffender.styles';
 import type { ViewAssociate } from './useViewOffender';
 import TranslateButton from '../../../../components/util-components/TranslateButton';
@@ -152,7 +153,11 @@ interface Props {
   ) => void;
   setEditUpdate: (value: { id: string; text: string } | null) => void;
   confirmDeleteUpdate: (updateId: string) => void;
-  confirmUpdateImages: (images: { id: string; url: string }[]) => void;
+  onAddUpdateImages: (
+    images: { id: string; url: string }[],
+    addToIncident?: boolean
+  ) => void;
+
   editUpdate: { id: string; text: string } | null;
   selectedImages: string[];
   addImages:
@@ -165,7 +170,6 @@ interface Props {
   editUpdateInput: string;
   setEditUpdateInput: (value: string) => void;
   toggleSelectImages: (id: string) => void;
-  addUpdateImages: (images: { id: string }[]) => void;
   closeAddImages: () => void;
   lightBoxOpen: {
     open: boolean;
@@ -232,6 +236,14 @@ interface Props {
   toggleAddInvestigation: () => void;
   addInvestigation: boolean;
   updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
+  knowOffender: boolean;
+  toggleKnowOffender: () => void;
+  onSelectUpdateImages: () => void;
+  showIncidentOptions: boolean;
+  toggleShowIncidentOptions: () => void;
+  onAddUpdateImagesToIncident: (id: string) => void;
+  selectedIncidentId: string;
+  onSelect: (item: { key: string }) => void;
 }
 
 const ViewOffender = ({
@@ -252,7 +264,7 @@ const ViewOffender = ({
   setEditUpdate,
   confirmDeleteUpdate,
   setReplyTo,
-  confirmUpdateImages,
+  onAddUpdateImages,
   replyTo,
   addImages,
   editUpdate,
@@ -260,7 +272,6 @@ const ViewOffender = ({
   editUpdateInput,
   handleEditUpdate,
   setEditUpdateInput,
-  addUpdateImages,
   closeAddImages,
   toggleSelectImages,
   lightBoxOpen,
@@ -325,6 +336,14 @@ const ViewOffender = ({
   addInvestigation,
   toggleAddInvestigation,
   updateInvestigationList,
+  knowOffender,
+  toggleKnowOffender,
+  onSelectUpdateImages,
+  showIncidentOptions,
+  toggleShowIncidentOptions,
+  onAddUpdateImagesToIncident,
+  selectedIncidentId,
+  onSelect,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const classes = useStyles();
@@ -432,7 +451,7 @@ const ViewOffender = ({
                         >
                           <FontAwesomeIcon
                             size="1x"
-                            style={{ marginRight: 8 }}
+                            className={classes.icon}
                             icon={
                               data?.offender?.subscribed ? faBellSlash : faBell
                             }
@@ -489,7 +508,7 @@ const ViewOffender = ({
                           <Button type="ghost">
                             <FontAwesomeIcon
                               size="1x"
-                              style={{ marginRight: 8 }}
+                              className={classes.icon}
                               icon={faEdit}
                             />
                             {intl.formatMessage({
@@ -500,6 +519,21 @@ const ViewOffender = ({
                         </Dropdown>
                       </Col>
                     )}
+                    {!editRights &&
+                      data?.offender.name === 'Unidentified Offender' && (
+                        <Col>
+                          <Button type="ghost" onClick={toggleKnowOffender}>
+                            <FontAwesomeIcon
+                              className={classes.icon}
+                              icon={faEdit}
+                            />
+                            {intl.formatMessage({
+                              defaultMessage: 'Know this offender?',
+                              id: 'SvQc4C',
+                            })}
+                          </Button>
+                        </Col>
+                      )}
 
                     <Col>
                       <Dropdown
@@ -532,7 +566,28 @@ const ViewOffender = ({
                                   <FontAwesomeIcon size="lg" icon={faUsers} />
                                 ),
                               },
-                            ].filter((item) => item?.key !== 0 || editRights)}
+                              {
+                                key: 2,
+                                label: intl.formatMessage({
+                                  defaultMessage: 'View Original',
+                                  id: 'rcByoO',
+                                }),
+                                onClick: () =>
+                                  navigate(
+                                    `/app/offenders/view/${
+                                      data?.offender?.origOffenderId || ''
+                                    }`
+                                  ),
+                                icon: (
+                                  <FontAwesomeIcon size="lg" icon={faEye} />
+                                ),
+                              },
+                            ].filter(
+                              (item) =>
+                                (item.key !== 0 || editRights) &&
+                                (item.key !== 2 ||
+                                  data?.offender?.origOffenderId)
+                            )}
                           />
                         }
                         placement="bottomRight"
@@ -541,7 +596,7 @@ const ViewOffender = ({
                         <Button type="ghost">
                           <FontAwesomeIcon
                             size="1x"
-                            style={{ marginRight: 8 }}
+                            className={classes.icon}
                             icon={faUserPen}
                           />
                           {intl.formatMessage({
@@ -559,7 +614,7 @@ const ViewOffender = ({
                         >
                           <FontAwesomeIcon
                             size="1x"
-                            style={{ marginRight: 8 }}
+                            className={classes.icon}
                             icon={faTrash}
                           />
                           {intl.formatMessage({
@@ -636,6 +691,7 @@ const ViewOffender = ({
                                 {data?.offender?.alias &&
                                   data.offender.alias.length > 0 && (
                                     <Descriptions.Item
+                                      className={classes.descItem}
                                       label={
                                         <span className={classes.tagLabel}>
                                           <FontAwesomeIcon
@@ -659,7 +715,29 @@ const ViewOffender = ({
                                       </Row>
                                     </Descriptions.Item>
                                   )}
+                                {data?.offender?.infoSource && (
+                                  <Descriptions.Item
+                                    className={classes.descItem}
+                                    label={
+                                      <span>
+                                        <FontAwesomeIcon
+                                          className={classes.descIcon}
+                                          icon={faMemoCircleInfo}
+                                        />
+                                        {intl.formatMessage({
+                                          defaultMessage: 'Information Source',
+                                          id: 'LUqHSz',
+                                        })}
+                                      </span>
+                                    }
+                                  >
+                                    <Typography.Text>
+                                      {data.offender.infoSource}
+                                    </Typography.Text>
+                                  </Descriptions.Item>
+                                )}
                                 <Descriptions.Item
+                                  className={classes.descItem}
                                   label={
                                     <span>
                                       <FontAwesomeIcon
@@ -697,6 +775,7 @@ const ViewOffender = ({
                                   )}
                                 </Descriptions.Item>
                                 <Descriptions.Item
+                                  className={classes.descItem}
                                   label={
                                     <span>
                                       <FontAwesomeIcon
@@ -715,6 +794,26 @@ const ViewOffender = ({
                                   )}
                                 </Descriptions.Item>
                                 <Descriptions.Item
+                                  className={classes.descItem}
+                                  label={
+                                    <span className={classes.tagLabel}>
+                                      <FontAwesomeIcon
+                                        className={classes.descIcon}
+                                        icon={faUser}
+                                      />
+                                      {intl.formatMessage({
+                                        defaultMessage: 'Created By',
+                                        id: 'uAfuJA',
+                                      })}
+                                    </span>
+                                  }
+                                >
+                                  <Row>
+                                    {data?.offender?.createdBy.fullName}
+                                  </Row>
+                                </Descriptions.Item>
+                                <Descriptions.Item
+                                  className={classes.descItem}
                                   label={
                                     <span className={classes.tagLabel}>
                                       <FontAwesomeIcon
@@ -739,24 +838,80 @@ const ViewOffender = ({
                                     ))}
                                   </Row>
                                 </Descriptions.Item>
-                                <Descriptions.Item
-                                  label={
-                                    <span className={classes.tagLabel}>
-                                      <FontAwesomeIcon
-                                        className={classes.descIcon}
-                                        icon={faUser}
-                                      />
-                                      {intl.formatMessage({
-                                        defaultMessage: 'Created By',
-                                        id: 'uAfuJA',
-                                      })}
-                                    </span>
-                                  }
-                                >
-                                  <Row>
-                                    {data?.offender?.createdBy.fullName}
-                                  </Row>
-                                </Descriptions.Item>
+
+                                {data?.offender?.targetedGoods &&
+                                  data?.offender?.targetedGoods.length > 0 && (
+                                    <Descriptions.Item
+                                      className={classes.descItem}
+                                      label={
+                                        <span className={classes.tagLabel}>
+                                          <FontAwesomeIcon
+                                            className={classes.descIcon}
+                                            icon={faCartShopping}
+                                          />
+                                          {intl.formatMessage({
+                                            defaultMessage: 'Goods',
+                                            id: 'u5dS1t',
+                                          })}
+                                        </span>
+                                      }
+                                    >
+                                      <Row>
+                                        {data?.offender?.knownFor?.map((el) => (
+                                          <Tag key={el} className={classes.tag}>
+                                            {el}
+                                          </Tag>
+                                        ))}
+                                      </Row>
+                                    </Descriptions.Item>
+                                  )}
+                                {data?.offender?.knownFor &&
+                                  data?.offender?.knownFor.length > 0 && (
+                                    <Descriptions.Item
+                                      className={classes.descItem}
+                                      label={
+                                        <span className={classes.tagLabel}>
+                                          <FontAwesomeIcon
+                                            className={classes.descIcon}
+                                            icon={faSirenOn}
+                                          />
+                                          {intl.formatMessage({
+                                            defaultMessage: 'Crime types',
+                                            id: 'p0eRpU',
+                                          })}
+                                        </span>
+                                      }
+                                    >
+                                      <Row>
+                                        {data?.offender?.knownFor?.map((el) => (
+                                          <Tag key={el} className={classes.tag}>
+                                            {el}
+                                          </Tag>
+                                        ))}
+                                      </Row>
+                                    </Descriptions.Item>
+                                  )}
+                                <Descriptions column={1}>
+                                  {data?.offender?.justification && (
+                                    <Descriptions.Item
+                                      className={classes.descItem}
+                                      label={
+                                        <span>
+                                          <FontAwesomeIcon
+                                            className={classes.descIcon}
+                                            icon={faNotebook}
+                                          />
+                                          {intl.formatMessage({
+                                            defaultMessage: 'Justification',
+                                            id: 'i0xkcf',
+                                          })}
+                                        </span>
+                                      }
+                                    >
+                                      {data?.offender?.justification}
+                                    </Descriptions.Item>
+                                  )}
+                                </Descriptions>
                               </Descriptions>
                             </Col>
                             <Col span={12}>
@@ -808,6 +963,7 @@ const ViewOffender = ({
                               <Descriptions column={1}>
                                 {publicOffenderDOB && (
                                   <Descriptions.Item
+                                    className={classes.descItem}
                                     label={
                                       <span>
                                         <FontAwesomeIcon
@@ -827,6 +983,7 @@ const ViewOffender = ({
                                   </Descriptions.Item>
                                 )}
                                 <Descriptions.Item
+                                  className={classes.descItem}
                                   label={
                                     <span>
                                       <FontAwesomeIcon
@@ -843,6 +1000,7 @@ const ViewOffender = ({
                                   {getOffenderGender(data?.offender?.gender)}
                                 </Descriptions.Item>
                                 <Descriptions.Item
+                                  className={classes.descItem}
                                   label={
                                     <span>
                                       <FontAwesomeIcon
@@ -859,6 +1017,7 @@ const ViewOffender = ({
                                   {getOffenderBuild(data?.offender?.build)}
                                 </Descriptions.Item>
                                 <Descriptions.Item
+                                  className={classes.descItem}
                                   label={
                                     <span>
                                       <FontAwesomeIcon
@@ -875,6 +1034,7 @@ const ViewOffender = ({
                                   {getOffenderHeight(data?.offender?.height)}
                                 </Descriptions.Item>
                                 <Descriptions.Item
+                                  className={classes.descItem}
                                   label={
                                     <span>
                                       <FontAwesomeIcon
@@ -892,6 +1052,7 @@ const ViewOffender = ({
                                 </Descriptions.Item>
                                 {data?.offender?.hair && (
                                   <Descriptions.Item
+                                    className={classes.descItem}
                                     label={
                                       <span>
                                         <FontAwesomeIcon
@@ -912,6 +1073,7 @@ const ViewOffender = ({
                               <Descriptions column={1}>
                                 {data?.offender?.peculiarities && (
                                   <Descriptions.Item
+                                    className={classes.descItem}
                                     label={
                                       <span>
                                         <FontAwesomeIcon
@@ -956,6 +1118,7 @@ const ViewOffender = ({
                               <Descriptions column={1}>
                                 {data?.offender?.comment && (
                                   <Descriptions.Item
+                                    className={classes.descItem}
                                     label={
                                       <span>
                                         <FontAwesomeIcon
@@ -1803,7 +1966,26 @@ const ViewOffender = ({
               </Col>
               <Col span={8}>
                 <div className={classes.updatesContainer}>
-                  <InfiniteScroll
+                  <IntelSection
+                    updates={data?.offender?.updates}
+                    scrolledToTop={scrolledToTop}
+                    loadMore={loadMore}
+                    saving={saving}
+                    editRights={editRights}
+                    userId={userId}
+                    confirmDeleteUpdate={confirmDeleteUpdate}
+                    setEditUpdate={setEditUpdate}
+                    setReplyTo={setReplyTo}
+                    onAddToIncident={
+                      data?.offender.incidents &&
+                      data?.offender.incidents.length > 0
+                        ? (value) => onAddUpdateImages(value, true)
+                        : undefined
+                    }
+                    onAddToOffender={(value) => onAddUpdateImages(value)}
+                    optionRowShow={optionRowShow}
+                  />
+                  {/* <InfiniteScroll
                     height={
                       optionRowShow
                         ? 'calc(100vh - 279px)'
@@ -2062,34 +2244,85 @@ const ViewOffender = ({
                           )}
                           {update.type === UpdateType.Image && editRights && (
                             <Col>
-                              <Button
-                                style={{
-                                  marginLeft:
-                                    update.replies.length > 0 ? 48 : 0,
-                                }}
-                                type="text"
-                                danger
-                                size="small"
-                                onClick={() =>
-                                  confirmUpdateImages(
-                                    update.images.map(({ id, optimised }) => ({
-                                      id,
-                                      url: optimised || '',
-                                    }))
-                                  )
+                              <Dropdown
+                                overlay={
+                                  <Menu
+                                    items={[
+                                      {
+                                        key: 0,
+                                        label: intl.formatMessage({
+                                          defaultMessage:
+                                            'Add Image to Incident',
+                                          id: 'VN9g7W',
+                                        }),
+                                        onClick: () => {
+                                          onAddUpdateImages(
+                                            update.images.map(
+                                              ({ id, optimised }) => ({
+                                                id,
+                                                url: optimised || '',
+                                              })
+                                            ),
+                                            true
+                                          );
+                                        },
+                                        icon: <FontAwesomeIcon icon={faEdit} />,
+                                      },
+                                      {
+                                        key: 1,
+                                        label: intl.formatMessage({
+                                          defaultMessage:
+                                            'Add Image to Offender',
+                                          id: 'dy/65U',
+                                        }),
+                                        onClick: () =>
+                                          onAddUpdateImages(
+                                            update.images.map(
+                                              ({ id, optimised }) => ({
+                                                id,
+                                                url: optimised || '',
+                                              })
+                                            )
+                                          ),
+                                        icon: <FontAwesomeIcon icon={faEdit} />,
+                                      },
+                                    ]}
+                                  />
                                 }
+                                placement="bottomRight"
+                                arrow={{ pointAtCenter: true }}
                               >
-                                {intl.formatMessage({
-                                  defaultMessage: 'Add Image To Incident',
-                                  id: 'N6jrgc',
-                                })}
-                              </Button>
+                                <Button
+                                  style={{
+                                    marginLeft:
+                                      update.replies.length > 0 ? 48 : 0,
+                                  }}
+                                  type="text"
+                                  danger
+                                  size="small"
+                                  onClick={() =>
+                                    onAddUpdateImages(
+                                      update.images.map(
+                                        ({ id, optimised }) => ({
+                                          id,
+                                          url: optimised || '',
+                                        })
+                                      )
+                                    )
+                                  }
+                                >
+                                  {intl.formatMessage({
+                                    defaultMessage: 'Add Image',
+                                    id: 'u1ETNe',
+                                  })}
+                                </Button>
+                              </Dropdown>
                             </Col>
                           )}
                         </Row>
                       </div>
                     ))}
-                  </InfiniteScroll>
+                  </InfiniteScroll> */}
                   <UpdateBar
                     replyTo={replyTo}
                     offenderId={offenderId}
@@ -2147,7 +2380,10 @@ const ViewOffender = ({
           id: 'AmI4Rg',
         })}
         open={addImages !== null}
-        onOk={() => addUpdateImages(selectedImages.map((id) => ({ id })))}
+        onOk={() => {
+          if (selectedImages && selectedImages.length > 0)
+            onSelectUpdateImages();
+        }}
         onCancel={closeAddImages}
         width={addImages ? addImages.length * 250 : 400}
         okText={intl.formatMessage({
@@ -2157,21 +2393,11 @@ const ViewOffender = ({
       >
         <Row justify="center" gutter={8}>
           {addImages?.map((image) => (
-            <Col
-              key={image.id}
-              style={{
-                position: 'relative',
-              }}
-            >
+            <Col key={image.id} className={classes.selectCard}>
               <Checkbox
                 onChange={() => toggleSelectImages(image.id)}
                 checked={selectedImages.includes(image.id)}
-                style={{
-                  position: 'absolute',
-                  top: 5,
-                  left: 10,
-                  zIndex: 100,
-                }}
+                className={classes.checkBox}
               />
               <div style={{ width: 200, height: 200, marginBottom: 10 }}>
                 <WatermarkImage url={image.url} />
@@ -2180,7 +2406,89 @@ const ViewOffender = ({
           ))}
         </Row>
       </Modal>
-
+      <Modal
+        title={intl.formatMessage({
+          defaultMessage: 'Select an incident to add the update images',
+          id: 'aEYfE5',
+        })}
+        open={showIncidentOptions}
+        onOk={() => {
+          if (selectedIncidentId)
+            onAddUpdateImagesToIncident(selectedIncidentId);
+        }}
+        onCancel={() => {
+          toggleShowIncidentOptions();
+          closeAddImages();
+        }}
+        width={600}
+        okText={intl.formatMessage({
+          defaultMessage: 'Add Incident',
+          id: 'kG1p3q',
+        })}
+      >
+        <Table
+          columns={[
+            {
+              key: 'reference',
+              dataIndex: 'reference',
+              width: 65,
+              title: intl.formatMessage({
+                defaultMessage: 'Alert ID',
+                id: 'k8ZNgH',
+              }),
+            },
+            {
+              key: 'subject',
+              dataIndex: 'subject',
+              title: intl.formatMessage({
+                defaultMessage: 'Subject',
+                id: 'LLtKhp',
+              }),
+              ellipsis: {
+                showTitle: false,
+              },
+              render: (subject: string) => (
+                <Tooltip placement="topLeft" title={subject}>
+                  {subject}
+                </Tooltip>
+              ),
+            },
+            {
+              key: 'date',
+              dataIndex: 'date',
+              title: intl.formatMessage({
+                defaultMessage: 'Date',
+                id: 'P7PLVj',
+              }),
+              ellipsis: {
+                showTitle: false,
+              },
+              render: (date: string) => (
+                <Tooltip placement="topLeft" title={date}>
+                  {date}
+                </Tooltip>
+              ),
+            },
+          ]}
+          dataSource={data?.offender.incidents.map((incident) => ({
+            incidentId: incident.id,
+            subject: incident.subject,
+            reference: incident.reference,
+            date: incident.dayTime,
+            // location: incident.business?.name || incident.location?.full,
+            key: incident.id,
+          }))}
+          rowSelection={{
+            type: 'radio',
+            onSelect,
+          }}
+          size="small"
+          pagination={{
+            hideOnSinglePage: true,
+            defaultPageSize: 8,
+          }}
+        />
+      </Modal>
       <Modal
         title={intl.formatMessage({
           defaultMessage: 'Edit update content',
@@ -2253,6 +2561,24 @@ const ViewOffender = ({
       </Drawer>
       <Drawer
         title={intl.formatMessage({
+          defaultMessage: 'Know This Offender',
+          id: '1EqoEi',
+        })}
+        visible={knowOffender}
+        width="400"
+        onClose={toggleKnowOffender}
+      >
+        {knowOffender ? (
+          <KnowOffender
+            onClose={toggleKnowOffender}
+            offenderId={data?.offender?.id || ''}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <Drawer
+        title={intl.formatMessage({
           defaultMessage: 'Copy Offender To Another Scheme',
           id: 'cMu3Y5',
         })}
@@ -2305,6 +2631,7 @@ const ViewOffender = ({
         width="800"
         onClose={toggleAddExistingVehicle}
         zIndex={1001}
+        bodyStyle={{ overflow: 'hidden' }}
       >
         {addExistingVehicle ? (
           <LinkVehicle

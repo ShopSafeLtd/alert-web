@@ -27,7 +27,6 @@ interface Return {
   data: ListVehiclesQuery | undefined;
   loading: boolean;
   setSearch: (value: string) => void;
-
   onSubmit: (value: VehicleData) => void;
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
@@ -64,13 +63,11 @@ const useListVehicles = (): Return => {
     id: userId,
     filterDefaultGroups: defaultGroups,
   } = useStoreState((state) => state.user);
-
   const pagination = useStoreState((state) => state.data.vehicles.pagination);
   const filterVariables = useStoreState(
     (state) => state.data.vehicles.variables
   );
   const setFilterState = useStoreActions((actions) => actions.data.setVehicles);
-
   const [sortFilter, setSortFilter] = useState(false);
   const [addInvestigation, setAddInvestigation] = useState('');
   const {
@@ -168,17 +165,28 @@ const useListVehicles = (): Return => {
   // On mount
   useEffect(() => {
     const sizeOptions = getSizeOptions();
-    setFilterState({
-      pagination: {
-        ...pagination,
-        sizeOptions,
-        pageSize: Number(sizeOptions[0]),
-      },
-      variables: {
-        ...filterVariables,
-        groups: defaultGroups.map(({ id }) => id),
-      },
-    });
+    if (groupsFilter.length === 0) {
+      setFilterState({
+        pagination: {
+          ...pagination,
+          sizeOptions,
+          pageSize: Number(sizeOptions[0]),
+        },
+        variables: {
+          ...filterVariables,
+          groups: defaultGroups.map(({ id }) => id),
+        },
+      });
+    } else {
+      setFilterState({
+        pagination: {
+          ...pagination,
+          sizeOptions,
+          pageSize: Number(sizeOptions[0]),
+        },
+        variables: filterVariables,
+      });
+    }
   }, []);
   const { data: vehiclesData, loading } = useListVehiclesQuery({
     fetchPolicy: 'cache-and-network',

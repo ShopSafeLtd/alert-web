@@ -8,6 +8,7 @@ import {
   Empty,
   Form,
   List,
+  Popconfirm,
   Row,
   Skeleton,
   Tag,
@@ -103,13 +104,30 @@ const EditChat = ({
                         </Tag>
                       </Col>
                       <Col>
-                        <Button
-                          disabled={saving}
-                          onClick={() => deleteConfirm(id || '')}
-                          style={{ color: 'red' }}
-                          // type="primary"
-                          icon={<FontAwesomeIcon icon={faTrash} size="lg" />}
-                        />
+                        <Popconfirm
+                          placement="left"
+                          trigger="click"
+                          title={intl.formatMessage({
+                            defaultMessage: 'Remove this member from the chat?',
+                            id: 'DbUQdV',
+                          })}
+                          onConfirm={() => deleteConfirm(id)}
+                          okText={intl.formatMessage({
+                            defaultMessage: 'Yes',
+                            id: 'a5msuh',
+                          })}
+                          cancelText={intl.formatMessage({
+                            defaultMessage: 'No',
+                            id: 'oUWADl',
+                          })}
+                          overlayInnerStyle={{ padding: 10 }}
+                        >
+                          <Button
+                            disabled={saving}
+                            style={{ color: 'red' }}
+                            icon={<FontAwesomeIcon icon={faTrash} size="lg" />}
+                          />
+                        </Popconfirm>
                       </Col>
                     </Row>
                   }

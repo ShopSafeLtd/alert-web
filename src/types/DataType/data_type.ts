@@ -2,6 +2,7 @@ import type { UploadFile } from 'antd';
 import type {
   Age,
   AnswerType,
+  ArticlePriority,
   BanType,
   Build,
   Gender,
@@ -10,6 +11,7 @@ import type {
   ImagePosition,
   ListIncidentsQuery,
   Race,
+  UpdateType,
 } from 'graphql/generated';
 import type { Moment } from 'moment';
 
@@ -90,7 +92,7 @@ export interface IncidentCardData {
   reference?: number | null;
   subject?: string | null;
   description?: string;
-  dayTime?: string | null;
+  dayTime?: string | undefined | null;
   images?: ImageCardData[] | null | undefined;
   crimeTypes?: Array<{
     id: string;
@@ -101,8 +103,8 @@ export interface IncidentCardData {
     fullName: string;
     businesses: Array<{ id: string; name: string }>;
   };
-  policeRef?: string | null;
-  totalValue?: number | null;
+  policeRef?: string | undefined | null;
+  totalValue?: number | undefined | null;
   totalRecoveredValue?: number | null;
 }
 
@@ -365,4 +367,42 @@ export enum UserSort {
   createdAtAsc = 'CREATED_AT_ASC',
   nameDesc = 'NAME_DESC',
   nameAsc = 'NAME_ASC',
+}
+
+export interface ArticleData {
+  id: string;
+  title: string;
+  previewText?: string | undefined | null;
+  priority: ArticlePriority;
+  createdBy?: {
+    id: string;
+    fullName: string;
+    businesses?: Array<{ id: string; name: string }>;
+  };
+  watermarkImage?: boolean;
+  image?: ImageCardData | null;
+  images?: ImageCardData[];
+  updatedAt?: Date;
+}
+
+export interface Update {
+  id: string;
+  text?: string | undefined | null;
+  createdBy: {
+    id: string;
+    origName: string;
+    fullName: string;
+    businesses: { id: string; name: string; fullName: string }[];
+  };
+  images?: ImageCardData[];
+  linkedOffenders?: OffenderCardData[];
+  linkedIncidents?: IncidentCardData[];
+  linkedVehicles?: VehicleData[];
+  linkedCrimeGroups?: CrimeGroupData[];
+  linkedArticles?: ArticleData[];
+  createdAt: Moment;
+  type: UpdateType;
+}
+export interface UpdateData extends Update {
+  replies: Update[];
 }

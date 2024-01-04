@@ -37,6 +37,8 @@ const OffenderCard = ({
     onNavigate,
     addInvestigation,
     toggleAddInvestigation,
+    knowOffender,
+    toggleKnowOffender,
   } = useOffenderCard({
     offender,
     update,
@@ -62,6 +64,8 @@ const OffenderCard = ({
       addInvestigation={addInvestigation}
       toggleAddInvestigation={toggleAddInvestigation}
       compactView={compactView || false}
+      knowOffender={knowOffender}
+      toggleKnowOffender={toggleKnowOffender}
     />
   );
 };

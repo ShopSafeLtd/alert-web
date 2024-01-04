@@ -3,3 +3,4 @@ export { default as OffenderMessageCard } from './OffenderCard';
 export { default as CrimeGroupMessageCard } from './CrimeGroupCard';
 export { default as CrimeGroupMessageList } from './CrimeGroupList';
 export { default as VehicleMessageCard } from './VehicleCard';
+export { default as ArticleMessageCard } from './ArticleCard';

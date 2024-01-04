@@ -14,6 +14,7 @@ import type {
   ViewIncidentQueryVariables,
 } from 'graphql/generated';
 import {
+  useAddImagesToOffenderMutation,
   Role,
   useAddImagesToIncidentMutation,
   useCreateSimpleOffenderMutation,
@@ -89,8 +90,6 @@ interface Return {
     } | null
   ) => void;
   toggleSubscribe: () => void;
-  confirmUpdateImages: (images: { id: string; url: string }[]) => void;
-  addUpdateImages: (images: { id: string }[]) => void;
   addImages:
     | {
         id: string;
@@ -178,6 +177,16 @@ interface Return {
   editAddress: boolean;
   toggleEditAddress: () => void;
   onEditAddress: (value: LocationData) => void;
+  onAddUpdateImages: (
+    images: { id: string; url: string }[],
+    addToOffender?: boolean
+  ) => void;
+  onSelectUpdateImages: () => void;
+  showOffenderOptions: boolean;
+  toggleShowOffenderOptions: () => void;
+  onAddUpdateImagesToOffender: (id: string) => void;
+  selectedOffenderId: string;
+  setSelectedOffenderId: (id: string) => void;
 }
 
 const useViewIncident = (incidentId: string): Return => {
@@ -246,6 +255,9 @@ const useViewIncident = (incidentId: string): Return => {
   const [completeTodoVisible, setCompleteTodoVisible] = useState<string | null>(
     null
   );
+  const [showOffenderOptions, setShowOffenderOptions] = useState(false);
+  const [addImageToOffenders, setAddImageToOffenders] = useState(false);
+  const [selectedOffenderId, setSelectedOffenderId] = useState<string>('');
 
   const openLightbox = (index: number) => {
     setLightBoxOpen({ open: !lightBoxOpen.open, index });
@@ -968,6 +980,8 @@ const useViewIncident = (incidentId: string): Return => {
             dateSource: value.dateSource || null,
             dateOfBirth: value.dateOfBirth || null,
             groups: {
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore TODO graphql
               connect:
                 value.groups && value.groups.length > 0
                   ? value.groups.map(({ id }) => ({ id }))
@@ -1475,9 +1489,10 @@ const useViewIncident = (incidentId: string): Return => {
     }
   };
 
+  const [addImagesToOffender] = useAddImagesToOffenderMutation();
   const [addImagesToIncident] = useAddImagesToIncidentMutation();
 
-  const addUpdateImages = (images: { id: string }[]) => {
+  const onAddUpdateImagesToIncident = (images: { id: string }[]) => {
     void addImagesToIncident({
       variables: {
         images,
@@ -1486,37 +1501,95 @@ const useViewIncident = (incidentId: string): Return => {
         },
       },
     });
-    setAddImages(null);
     setSelectedImages([]);
   };
-
-  const confirmUpdateImages = (images: { id: string; url: string }[]) => {
+  const onAddUpdateImagesToOffender = (offenderId: string) => {
+    void addImagesToOffender({
+      variables: {
+        images: selectedImages.map((id) => ({ id })),
+        offender: {
+          id: offenderId,
+        },
+      },
+    });
+    setSelectedImages([]);
+    setSelectedOffenderId('');
+  };
+  const onSelectUpdateImages = () => {
+    if (selectedImages) {
+      if (!addImageToOffenders) {
+        onAddUpdateImagesToIncident(selectedImages.map((id) => ({ id })));
+      }
+      if (addImageToOffenders && data?.incident.offenders) {
+        if (data?.incident.offenders.length > 1) {
+          setShowOffenderOptions(true);
+        } else {
+          onAddUpdateImagesToOffender(data?.incident.offenders[0].id);
+        }
+      }
+      setAddImages(null);
+    }
+  };
+  const onAddUpdateImages = (
+    images: { id: string; url: string }[],
+    addToOffender?: boolean
+  ) => {
+    if (addToOffender) {
+      setAddImageToOffenders(addToOffender);
+    }
     if (images.length > 1) {
       setAddImages(images);
-    } else {
-      confirm({
-        title: intl.formatMessage({
-          defaultMessage: 'Are you sure?',
-          id: '2oCaym',
-        }),
-        content: intl.formatMessage({
-          defaultMessage:
-            'Adding this image will notify any other users following the incident.',
-          id: 'qfS4of',
-        }),
-        onOk() {
-          addUpdateImages(images.map(({ id }) => ({ id })));
-        },
-        okText: intl.formatMessage({
-          defaultMessage: 'Add Images',
-          id: 'b4GGYZ',
-        }),
-      });
+    }
+    if (images.length === 1) {
+      if (addToOffender && data?.incident.offenders) {
+        if (data?.incident.offenders.length > 1) {
+          setShowOffenderOptions(true);
+        } else {
+          confirm({
+            title: intl.formatMessage({
+              defaultMessage: 'Are you sure?',
+              id: '2oCaym',
+            }),
+            content: intl.formatMessage({
+              defaultMessage:
+                'Adding this image will notify any other users following the incident.',
+              id: 'qfS4of',
+            }),
+            onOk() {
+              onAddUpdateImagesToOffender(data?.incident.offenders[0].id);
+            },
+            okText: intl.formatMessage({
+              defaultMessage: 'Add Images',
+              id: 'b4GGYZ',
+            }),
+          });
+        }
+      } else {
+        confirm({
+          title: intl.formatMessage({
+            defaultMessage: 'Are you sure?',
+            id: '2oCaym',
+          }),
+          content: intl.formatMessage({
+            defaultMessage:
+              'Adding this image will notify any other users following the offender.',
+            id: '8Vqbat',
+          }),
+          onOk() {
+            onAddUpdateImagesToIncident(images.map(({ id }) => ({ id })));
+          },
+          okText: intl.formatMessage({
+            defaultMessage: 'Add Images',
+            id: 'b4GGYZ',
+          }),
+        });
+      }
     }
   };
 
   const closeAddImages = () => {
     setAddImages(null);
+    setSelectedImages([]);
   };
 
   const toggleSelectImages = (id: string) => {
@@ -1699,6 +1772,9 @@ const useViewIncident = (incidentId: string): Return => {
   const toggleAddInvestigation = () => {
     setAddInvestigation(() => !addInvestigation);
   };
+  const toggleShowOffenderOptions = () => {
+    setShowOffenderOptions(!showOffenderOptions);
+  };
 
   const [isTranslated, setIsTranslated] = useState<string | null>(null);
   const currentLanguage = useStoreState((state) => state.theme.locale);
@@ -1730,10 +1806,8 @@ const useViewIncident = (incidentId: string): Return => {
   return {
     addImages,
     addOffenderRights: role !== Role.User,
-    addUpdateImages,
     closeAddImages,
     confirmDeleteUpdate,
-    confirmUpdateImages,
     data,
     deleteRights: role !== Role.User,
     // ||(userId === data?.incident?.createdBy.id && !data?.incident?.approved),
@@ -1824,6 +1898,13 @@ const useViewIncident = (incidentId: string): Return => {
     editAddress,
     toggleEditAddress,
     onEditAddress,
+    onSelectUpdateImages,
+    showOffenderOptions,
+    toggleShowOffenderOptions,
+    onAddUpdateImagesToOffender,
+    selectedOffenderId,
+    setSelectedOffenderId,
+    onAddUpdateImages,
   };
 };
 

@@ -203,7 +203,7 @@ const SelectedOffenders = ({
   //   );
   // };
   return (
-    <div className="add-existing-offender">
+    <div style={{ overflow: 'hidden' }}>
       <Row wrap={false}>
         <Col span={20} className={classes.offenders}>
           <Input

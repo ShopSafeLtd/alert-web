@@ -1,14 +1,14 @@
-import { useStoreState } from 'state';
-import type { ArticlePriority, ListArticlesQuery } from 'graphql/generated';
-import { QueryMode, SortOrder, useListArticlesQuery } from 'graphql/generated';
-import { useState } from 'react';
+import { useStoreActions, useStoreState } from 'state';
+import type { ListArticlesQuery } from 'graphql/generated';
+import { QueryMode, useListArticlesQuery } from 'graphql/generated';
+import { useEffect, useState } from 'react';
 import type { DateType } from 'types/DataType';
 
 interface Props {
   fullSearch: string;
-  searchMydata: boolean;
   fullCreatedAtFilter: DateType | undefined;
   fullGroupFilter: string[];
+  fullGallery: string[];
 }
 
 interface Return {
@@ -19,103 +19,83 @@ interface Return {
   loading: boolean;
   search: string;
   setSearch: (value: string) => void;
-  onPaginationChange: (page: number, pageSize: number) => void;
-  currentPage: number;
-  currentPageSize: number;
   sortFilter: boolean;
   toggleSortFilter: () => void;
-  clearFilters: () => void;
-  groupsFilter: string[];
-  setGroupsFilter: (value: string[]) => void;
-  priorityFilter: ArticlePriority[];
-  setPriorityFilter: (value: ArticlePriority[]) => void;
-  setCreatedAtFilter: (value: DateType | undefined) => void;
-  order: SortOrder;
-  setOrder: (value: SortOrder) => void;
   fetchMoreScroll: () => void;
 }
 
 const useArticlesSection = ({
   fullSearch,
-  searchMydata,
   fullCreatedAtFilter,
   fullGroupFilter,
+  fullGallery,
 }: Props): Return => {
-  const userId = useStoreState((state) => state.user.id);
+  const { id: userId, defaultGroups } = useStoreState((state) => state.user);
   const schemeId = useStoreState((state) => state.scheme.id);
-  const [search, setSearch] = useState('');
-  const [pageSize, setPageSize] = useState(6);
-  const [page, setPage] = useState(1);
-  const [order, setOrder] = useState<SortOrder>(SortOrder.Desc);
   const [sortFilter, setSortFilter] = useState(false);
-  const [priorityFilter, setPriorityFilter] = useState<ArticlePriority[]>([]);
-  const [groupsFilter, setGroupsFilter] = useState<string[]>([]);
-  const [createdAtFilter, setCreatedAtFilter] = useState<
-    DateType | undefined
-  >();
+  const filterVariables = useStoreState(
+    (state) => state.data.articles.variables
+  );
+  const setFilterState = useStoreActions((actions) => actions.data.setArticles);
+  const {
+    groups: groupsFilter,
+    createdAt: createdAtFilter,
+    order,
+    priorities: priorityFilter,
+    search,
+    gallery,
+  } = filterVariables;
 
-  const getCreatedAtFilter = () => {
-    if (createdAtFilter) {
-      return {
-        gte: createdAtFilter.startDate,
-        lte: createdAtFilter.endDate,
-      };
-    }
-    if (fullCreatedAtFilter) {
-      return {
-        gte: fullCreatedAtFilter.startDate,
-        lte: fullCreatedAtFilter.endDate,
-      };
-    }
-    return undefined;
-  };
-  const getGroupFilter = () => {
-    if (groupsFilter && groupsFilter.length > 0) {
-      return {
-        some: {
-          id: {
-            in: groupsFilter,
-          },
-        },
-      };
-    }
-    if (fullGroupFilter && fullGroupFilter.length > 0) {
-      return {
-        some: {
-          id: {
-            in: fullGroupFilter,
-          },
-        },
-      };
-    }
-    return undefined;
-  };
+  useEffect(() => {
+    setFilterState({
+      variables: {
+        ...filterVariables,
+        search: fullSearch,
+        gallery: fullGallery,
+        groups: fullGroupFilter || defaultGroups?.map(({ id }) => id),
+        createdAt: fullCreatedAtFilter,
+      },
+    });
+  }, []);
 
   const variables = {
     scheme: {
       id: schemeId,
     },
     where: {
-      createdAt: getCreatedAtFilter(),
-
-      createdBy: searchMydata
+      createdAt: createdAtFilter
+        ? {
+            gte: createdAtFilter.startDate,
+            lte: createdAtFilter.endDate,
+          }
+        : undefined,
+      createdBy: gallery.includes('MYDATA')
         ? {
             id: {
               equals: userId,
             },
           }
         : undefined,
+      groups:
+        groupsFilter.length > 0
+          ? {
+              some: {
+                id: {
+                  in: groupsFilter,
+                },
+              },
+            }
+          : undefined,
       priority:
         priorityFilter.length > 0
           ? {
               in: priorityFilter,
             }
           : undefined,
-      groups: getGroupFilter(),
       OR: [
         {
           title: {
-            contains: search || fullSearch,
+            contains: search,
             mode: QueryMode.Insensitive,
           },
         },
@@ -124,15 +104,7 @@ const useArticlesSection = ({
     order: {
       updatedAt: order,
     },
-    skip: (page - 1) * pageSize,
-    take: pageSize,
-    groupsWhere: {
-      scheme: {
-        id: {
-          equals: schemeId,
-        },
-      },
-    },
+    take: 6,
   };
 
   const { data, loading, fetchMore } = useListArticlesQuery({
@@ -145,15 +117,13 @@ const useArticlesSection = ({
   const toggleSortFilter = () => {
     setSortFilter(!sortFilter);
   };
-  const clearFilters = () => {
-    setGroupsFilter([]);
-    setPriorityFilter([]);
-    setOrder(SortOrder.Desc);
-    setCreatedAtFilter(undefined);
-  };
-  const onPaginationChange = (pageVale: number, pageSizeValue: number) => {
-    setPage(pageVale);
-    setPageSize(pageSizeValue);
+  const setSearch = (value: string) => {
+    setFilterState({
+      variables: {
+        ...filterVariables,
+        search: value,
+      },
+    });
   };
 
   const fetchMoreScroll = () => {
@@ -187,19 +157,8 @@ const useArticlesSection = ({
     loading: (data === null || data === undefined) && loading,
     sortFilter,
     toggleSortFilter,
-    clearFilters,
     search,
     setSearch,
-    onPaginationChange,
-    currentPage: page,
-    currentPageSize: pageSize,
-    groupsFilter,
-    setGroupsFilter,
-    priorityFilter,
-    setPriorityFilter,
-    setCreatedAtFilter,
-    order,
-    setOrder,
     fetchMoreScroll,
   };
 };

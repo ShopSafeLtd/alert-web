@@ -50,6 +50,10 @@ mutation updateUserChat($where: UniqueId!, $data: UserUpdateInput!) {
             id
             name
           }
+          articles {
+            id
+            title
+          }
         }
       }
     }

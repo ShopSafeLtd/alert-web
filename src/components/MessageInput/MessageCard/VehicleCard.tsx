@@ -24,11 +24,12 @@ interface Props {
 
 const VehicleCard = ({ vehicle, removeVehicle, saving }: Props) => {
   const intl = useIntl();
+  const hasImage = vehicle.images && vehicle.images.length > 0;
   return (
     <Card
       style={{
         margin: removeVehicle ? 0 : 5,
-        maxWidth: 370,
+        width: hasImage ? 280 : 200,
         overflow: 'hidden',
       }}
       bodyStyle={{
@@ -58,7 +59,7 @@ const VehicleCard = ({ vehicle, removeVehicle, saving }: Props) => {
             <Button
               size="small"
               disabled={saving}
-              className="info-remove-button"
+              style={{ position: 'absolute', top: -5, right: -5, zIndex: 100 }}
               shape="circle"
               type="text"
               icon={<FontAwesomeIcon icon={faCircleXmark} size="lg" />}
@@ -67,9 +68,10 @@ const VehicleCard = ({ vehicle, removeVehicle, saving }: Props) => {
         )}
 
         <Col>
-          {vehicle.images && vehicle.images.length > 0 && (
+          {hasImage && (
             <div style={{ width: 100, height: 100 }}>
               <WatermarkImage
+                // @ts-expect-error  null
                 url={vehicle.images[0].optimised || vehicle.images[0].url || ''}
               />
             </div>

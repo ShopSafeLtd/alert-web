@@ -48,6 +48,7 @@ describe('Detail Officer View', () => {
             logo: null,
             darkLogo: null,
             autoPopulateDescription: false,
+            needJustification: false,
             languageCount: 0,
             customTranslations: [],
             defaultPublicOffenderDOB: true,

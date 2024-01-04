@@ -4,19 +4,19 @@ import type {
   ListArticlesFeedQuery,
 } from 'graphql/generated';
 import {
+  SortOrder,
   ListArticlesFeedDocument,
   QueryMode,
   Role,
-  SortOrder,
   useListArticlesFeedQuery,
   useSchemeGroupsQuery,
 } from 'graphql/generated';
-import { useState } from 'react';
-import { useStoreState } from 'state';
-
+import { useEffect, useState } from 'react';
+import { useStoreActions, useStoreState } from 'state';
 import { useNavigate } from 'react-router-dom';
 import type { DateType } from 'types/DataType';
 import type { MutationUpdaterFn } from '@apollo/client';
+import type { ArticleFilters } from 'state/data-model';
 
 interface Return {
   data:
@@ -24,20 +24,13 @@ interface Return {
     | null
     | undefined;
   loading: boolean;
-  search: string;
   setSearch: (value: string) => void;
-  onPaginationChange: (page: number, pageSize: number) => void;
-  currentPage: number;
-  currentPageSize: number;
   sortFilter: boolean;
   toggleSortFilter: () => void;
   clearFilters: () => void;
-  groupsFilter: string[];
   setGroupsFilter: (value: string[]) => void;
-  priorityFilter: ArticlePriority[];
   setPriorityFilter: (value: ArticlePriority[]) => void;
   setCreatedAtFilter: (value: DateType | undefined) => void;
-  order: SortOrder;
   setOrder: (value: SortOrder) => void;
   lightboxElements: {
     src: string;
@@ -50,10 +43,10 @@ interface Return {
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
   onNavigate: () => void;
-  gallery: string[];
   setGallery: (values: string[]) => void;
   updateArticleList: MutationUpdaterFn<DeleteArticleMutation>;
   fetchMoreScroll: () => void;
+  filterVariables: ArticleFilters;
 }
 
 const useArticleFeed = (): Return => {
@@ -62,19 +55,25 @@ const useArticleFeed = (): Return => {
 
   // Global State
   const schemeId = useStoreState((state) => state.scheme.id);
-  const { role, id: userId } = useStoreState((state) => state.user);
-  const [search, setSearch] = useState('');
-  const [pageSize, setPageSize] = useState(12);
-  const [page, setPage] = useState(1);
-  const [gallery, setGallery] = useState<string[]>([]);
-  // filter initial state
-  const [order, setOrder] = useState<SortOrder>(SortOrder.Desc);
+  const {
+    role,
+    id: userId,
+    filterDefaultGroups: defaultGroups,
+  } = useStoreState((state) => state.user);
+  const filterVariables = useStoreState(
+    (state) => state.data.articles.variables
+  );
+
+  const setFilterState = useStoreActions((actions) => actions.data.setArticles);
+  const {
+    groups: groupsFilter,
+    createdAt: createdAtFilter,
+    order,
+    priorities: priorityFilter,
+    search,
+    gallery,
+  } = filterVariables;
   const [sortFilter, setSortFilter] = useState(false);
-  const [priorityFilter, setPriorityFilter] = useState<ArticlePriority[]>([]);
-  const [groupsFilter, setGroupsFilter] = useState<string[]>([]);
-  const [createdAtFilter, setCreatedAtFilter] = useState<
-    DateType | undefined
-  >();
 
   // lightBox
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
@@ -86,6 +85,10 @@ const useArticleFeed = (): Return => {
   });
 
   const variables = {
+    order: {
+      updatedAt: order,
+    },
+    take: 12,
     scheme: {
       id: schemeId,
     },
@@ -128,12 +131,17 @@ const useArticleFeed = (): Return => {
         },
       ],
     },
-    order: {
-      updatedAt: order,
-    },
-    first: pageSize,
   };
-
+  // On mount
+  useEffect(() => {
+    if (groupsFilter.length === 0)
+      setFilterState({
+        variables: {
+          ...filterVariables,
+          groups: defaultGroups.map(({ id }) => id),
+        },
+      });
+  }, []);
   // const { data, loading, fetchMore } = useListArticlesQuery({
   //   fetchPolicy: 'cache-and-network',
   //   variables,
@@ -172,21 +180,7 @@ const useArticleFeed = (): Return => {
       variables,
     });
   };
-  // function
 
-  const toggleSortFilter = () => {
-    setSortFilter(!sortFilter);
-  };
-  const clearFilters = () => {
-    setGroupsFilter([]);
-    setPriorityFilter([]);
-    setOrder(SortOrder.Desc);
-    setCreatedAtFilter(undefined);
-  };
-  const onPaginationChange = (pageVale: number, pageSizeValue: number) => {
-    setPage(pageVale);
-    setPageSize(pageSizeValue);
-  };
   // Fetch scheme groups if scheme admin
   const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
     variables: {
@@ -252,19 +246,79 @@ const useArticleFeed = (): Return => {
       },
     });
   };
+  // function
 
+  const toggleSortFilter = () => {
+    setSortFilter(!sortFilter);
+  };
+  const setCreatedAtFilter = (values: DateType | undefined) => {
+    setFilterState({
+      variables: {
+        ...filterVariables,
+        createdAt: values,
+      },
+    });
+  };
+
+  const setOrder = (values: SortOrder) => {
+    setFilterState({
+      variables: {
+        ...filterVariables,
+        order: values,
+      },
+    });
+  };
+  const setGallery = (values: string[]) => {
+    setFilterState({
+      variables: {
+        ...filterVariables,
+        gallery: values,
+      },
+    });
+  };
+  const setSearch = (value: string) => {
+    setFilterState({
+      variables: {
+        ...filterVariables,
+        search: value,
+      },
+    });
+  };
+  const setGroupsFilter = (values: string[]) => {
+    setFilterState({
+      variables: {
+        ...filterVariables,
+        groups: values,
+      },
+    });
+  };
+  const setPriorityFilter = (values: ArticlePriority[]) => {
+    setFilterState({
+      variables: {
+        ...filterVariables,
+        priorities: values,
+      },
+    });
+  };
+  const clearFilters = () => {
+    setFilterState({
+      variables: {
+        search: '',
+        gallery: [],
+        order: SortOrder.Desc,
+        createdAt: undefined,
+        groups: [],
+        priorities: [],
+      },
+    });
+  };
   return {
     fetchMoreScroll,
     data: data?.listArticlesRelay || null,
     loading: (data === null || data === undefined) && loading,
-    onPaginationChange,
-    order,
     setOrder,
-    search,
+    setGallery,
     setSearch,
-    currentPage: page,
-    currentPageSize: pageSize,
-    priorityFilter,
     setPriorityFilter,
     groups:
       groupsData?.groups.map((group) => ({
@@ -279,12 +333,10 @@ const useArticleFeed = (): Return => {
     sortFilter,
     toggleSortFilter,
     clearFilters,
-    gallery,
-    setGallery,
-    groupsFilter,
     setGroupsFilter,
     setCreatedAtFilter,
     updateArticleList,
+    filterVariables,
   };
 };
 

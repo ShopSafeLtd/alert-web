@@ -17,8 +17,10 @@ query scheme($where: SchemeWhereUniqueInput!) {
     incidentRetention
     offenderRetention
     autoPopulateDescription
+    needJustification
     facialRecognition
     imagesRequiredOnOffenders
+    needJustification
     goodsMode
     darkLogo {
       id

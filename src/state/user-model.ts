@@ -107,6 +107,7 @@ export interface Scheme {
     taskTimeTracking: boolean;
     imagesRequiredOnOffenders: boolean;
     autoPopulateDescription: boolean;
+    needJustification: boolean;
   };
 }
 

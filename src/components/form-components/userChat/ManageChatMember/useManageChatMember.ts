@@ -7,11 +7,9 @@ import {
   useListSchemeUsersQuery,
   useUpdateChatMutation,
 } from 'graphql/generated';
-import { Modal, notification } from 'antd';
+import { notification } from 'antd';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
-
-const { confirm } = Modal;
 
 interface FormData {
   user: string[];
@@ -145,21 +143,7 @@ const useEditChat = ({ onClose, chatId }: Props): Return => {
     }
   };
   const deleteConfirm = (currentId: string) => {
-    confirm({
-      title: intl.formatMessage({
-        defaultMessage:
-          'Please select or add at least one offender for the incident.',
-        id: 'o0nzyY',
-      }),
-      content: intl.formatMessage({
-        defaultMessage: 'This action cannot be undone.',
-        id: 'JDJoIZ',
-      }),
-
-      onOk() {
-        setMembersData(membersData?.filter((el) => el.id !== currentId));
-      },
-    });
+    setMembersData(membersData?.filter((el) => el.id !== currentId));
   };
 
   const onSubmit = () => {

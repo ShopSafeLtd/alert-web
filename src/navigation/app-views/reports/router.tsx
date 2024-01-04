@@ -11,6 +11,7 @@ import CrimeGroupList from 'views/reports/crime-groups/list-crime-groups';
 import CrimeGroupReport from 'views/reports/crime-groups/crime-group-report';
 import BusinessReport from 'views/reports/business/BusinessReport';
 import UserEngagement from 'views/reports/UserEngagement';
+import DataAudit from 'views/reports/DataAudit';
 
 const Article = (): JSX.Element => (
   <Routes>
@@ -21,6 +22,7 @@ const Article = (): JSX.Element => (
     <Route path="business" element={<BusinessSearch />} />
     <Route path="business-engagement" element={<BusinessEngagement />} />
     <Route path="user-engagement" element={<UserEngagement />} />
+    <Route path="data-audit" element={<DataAudit />} />
     <Route path="crime-groups" element={<CrimeGroupList />} />
     <Route path="crime-groups/:id" element={<CrimeGroupReport />} />
     <Route path="business/:id" element={<BusinessReport />} />

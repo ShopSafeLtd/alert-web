@@ -24,6 +24,7 @@ describe('List Officer View', () => {
       defaultOffenderPush: false,
       defaultPublicOffenderDOB: true,
       autoPopulateDescription: false,
+      needJustification: false,
       reportOnly: true,
       facialRecognition: true,
       imagesRequiredOnOffenders: true,

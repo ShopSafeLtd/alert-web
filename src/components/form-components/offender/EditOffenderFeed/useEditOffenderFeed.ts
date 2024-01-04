@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-misused-promises,@typescript-eslint/no-unsafe-member-access */
 import { useState } from 'react';
 import type {
   Age,
@@ -7,16 +6,16 @@ import type {
   Height,
   IdSource,
   Race,
-  ViewOffenderQuery,
+  EditOffenderQuery,
 } from 'graphql/generated';
 import {
+  useEditOffenderQuery,
   useListCustomGalleriesQuery,
   Model,
   Role,
   useSchemeGroupsQuery,
   useTagsQuery,
   useUpdateOffenderMutation,
-  useViewOffenderQuery,
 } from 'graphql/generated';
 import { notification } from 'antd';
 import { useStoreState } from 'state';
@@ -46,11 +45,15 @@ export interface FormData {
   customGalleries: string[];
   idVerified?: boolean;
   idSource?: IdSource;
+  infoSource: string;
+  knownFor: string[];
+  targetedGoods: string[];
+  justification: string;
 }
 
 interface Return {
   onSubmit: (value: FormData) => void;
-  data: ViewOffenderQuery | undefined;
+  data: EditOffenderQuery | undefined;
   loading: boolean;
   saving: boolean;
   groups: { value: string; label: string }[];
@@ -64,11 +67,14 @@ interface Return {
   idVerified: boolean;
   onValuesChange?: (changedValues: FormData, values: FormData) => void;
   adminRights: boolean;
+  needJustification: boolean;
 }
 
 const useEditOffender = ({ offenderId, onClose }: Props): Return => {
   const intl = useIntl();
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const { needJustification, id: schemeId } = useStoreState(
+    (state) => state.scheme
+  );
   const userId = useStoreState((state) => state.user.id);
   const userGroups = useStoreState((state) => state.user.groups).filter(
     ({ scheme }) => scheme.id === schemeId
@@ -78,7 +84,7 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
   const [ageCheck, setAgeCheck] = useState(false);
   const [idVerified, setIDVerified] = useState(false);
 
-  const { data: offenderData, loading } = useViewOffenderQuery({
+  const { data: offenderData, loading } = useEditOffenderQuery({
     variables: {
       where: {
         id: offenderId,
@@ -168,6 +174,10 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
+    const knownFor = new Set(data.knownFor);
+    const targetedGoods = new Set(data.targetedGoods);
+    const alias = new Set(data.alias);
+
     void updateOffender({
       variables: {
         where: {
@@ -211,6 +221,11 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
             set: data.customGalleries.map((id) => ({ id })) || undefined,
           },
           scheme: { connect: { id: schemeId } },
+          infoSource: { set: data.infoSource || '' },
+          knownFor: { set: [...knownFor] },
+          targetedGoods: { set: [...targetedGoods] },
+          alias: { set: [...alias] },
+          justification: { set: data.justification || '' },
         },
       },
     });
@@ -247,6 +262,7 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
     idVerified,
     onValuesChange,
     adminRights: role !== Role.User,
+    needJustification,
   };
 };
 

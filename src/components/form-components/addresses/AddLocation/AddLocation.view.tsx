@@ -30,6 +30,7 @@ const AddLocation = ({
   const intl = useIntl();
 
   // const businesses = useStoreState((state) => state.user.businesses);
+  console.log('location', location);
 
   return (
     <Form
@@ -90,15 +91,15 @@ const AddLocation = ({
               defaultMessage: 'Street',
               id: 'BaIwdV',
             })}
-            // rules={[
-            //   {
-            //     required: true,
-            //     message: intl.formatMessage({
-            //       defaultMessage: 'Please enter a street for the new location.',
-            //       id: 'LDupfj',
-            //     }),
-            //   },
-            // ]}
+            rules={[
+              {
+                required: !location,
+                message: intl.formatMessage({
+                  defaultMessage: 'Please enter a street for the new location.',
+                  id: 'LDupfj',
+                }),
+              },
+            ]}
           >
             <Input disabled={saving} />
           </Form.Item>
@@ -111,16 +112,16 @@ const AddLocation = ({
               defaultMessage: 'Town/City',
               id: 'byaTQZ',
             })}
-            // rules={[
-            //   {
-            //     required: true,
-            //     message: intl.formatMessage({
-            //       defaultMessage:
-            //         'Please enter a town/city for the new location.',
-            //       id: 'MVCGSr',
-            //     }),
-            //   },
-            // ]}
+            rules={[
+              {
+                required: !location,
+                message: intl.formatMessage({
+                  defaultMessage:
+                    'Please enter a town/city for the new location.',
+                  id: 'MVCGSr',
+                }),
+              },
+            ]}
           >
             <Input disabled={saving} />
           </Form.Item>
@@ -144,16 +145,16 @@ const AddLocation = ({
               defaultMessage: 'Postcode',
               id: 'FJhjgz',
             })}
-            // rules={[
-            //   {
-            //     required: true,
-            //     message: intl.formatMessage({
-            //       defaultMessage:
-            //         'Please enter a postcode for the new location.',
-            //       id: 'NwJPpe',
-            //     }),
-            //   },
-            // ]}
+            rules={[
+              {
+                required: !location,
+                message: intl.formatMessage({
+                  defaultMessage:
+                    'Please enter a postcode for the new location.',
+                  id: 'NwJPpe',
+                }),
+              },
+            ]}
           >
             <Input disabled={saving} />
           </Form.Item>

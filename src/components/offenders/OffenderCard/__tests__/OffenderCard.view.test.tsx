@@ -40,6 +40,8 @@ describe('Detail Officer View', () => {
     incidents: [],
     totalIncidents: 0,
     totalImages: 0,
+    knownFor: [],
+    targetedGoods: [],
   };
   it('renders the page', () => {
     const { getByText } = render(
@@ -62,6 +64,8 @@ describe('Detail Officer View', () => {
           setEditImageId={jest.fn()}
           onEditImage={jest.fn()}
           compactView
+          knowOffender={false}
+          toggleKnowOffender={jest.fn()}
         />
       </MemoryRouter>
     );

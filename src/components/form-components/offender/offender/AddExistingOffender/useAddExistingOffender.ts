@@ -234,17 +234,28 @@ const useAddExistingOffender = ({
   // On mount
   useEffect(() => {
     const sizeOptions = getSizeOptions();
-    setOffendersState({
-      pagination: {
-        ...pagination,
-        sizeOptions,
-      },
-      variables: {
-        ...variables,
-        groups: defaultGroups.map(({ id }) => id),
-      },
-      order,
-    });
+    if (groups.length === 0) {
+      setOffendersState({
+        pagination: {
+          ...pagination,
+          sizeOptions,
+        },
+        variables: {
+          ...variables,
+          groups: defaultGroups.map(({ id }) => id),
+        },
+        order,
+      });
+    } else {
+      setOffendersState({
+        pagination: {
+          ...pagination,
+          sizeOptions,
+        },
+        variables,
+        order,
+      });
+    }
   }, []);
   const setSearch = (value: string) => {
     setOffendersState({

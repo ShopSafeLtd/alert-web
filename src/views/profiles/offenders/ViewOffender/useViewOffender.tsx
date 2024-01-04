@@ -13,6 +13,7 @@ import type {
   ViewOffenderQueryVariables,
 } from 'graphql/generated';
 import {
+  useAddImagesToIncidentMutation,
   Role,
   TagType,
   useAddImagesToOffenderMutation,
@@ -99,7 +100,10 @@ interface Return {
   ) => void;
   setEditUpdate: (value: { id: string; text: string } | null) => void;
   confirmDeleteUpdate: (updateId: string) => void;
-  confirmUpdateImages: (images: { id: string; url: string }[]) => void;
+  onAddUpdateImages: (
+    images: { id: string; url: string }[],
+    addToIncident?: boolean
+  ) => void;
   editUpdate: { id: string; text: string } | null;
   selectedImages: string[];
   addImages:
@@ -112,7 +116,6 @@ interface Return {
   editUpdateInput: string;
   setEditUpdateInput: (value: string) => void;
   toggleSelectImages: (id: string) => void;
-  addUpdateImages: (images: { id: string }[]) => void;
   openLightbox: (index: number) => void;
   lightBoxOpen: {
     open: boolean;
@@ -180,6 +183,14 @@ interface Return {
   toggleAddInvestigation: () => void;
   addInvestigation: boolean;
   updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
+  knowOffender: boolean;
+  toggleKnowOffender: () => void;
+  onSelectUpdateImages: () => void;
+  showIncidentOptions: boolean;
+  toggleShowIncidentOptions: () => void;
+  onAddUpdateImagesToIncident: (id: string) => void;
+  selectedIncidentId: string;
+  onSelect: (item: { key: string }) => void;
 }
 
 const useViewOffender = (offenderId: string): Return => {
@@ -214,6 +225,7 @@ const useViewOffender = (offenderId: string): Return => {
   );
   const [copyOffender, setCopyOffender] = useState(false);
   const [editOffender, setEditOffender] = useState(false);
+  const [knowOffender, setKnowOffender] = useState(false);
   const [editImages, setEditImages] = useState(false);
   const [editImageData, setEditImageData] = useState<EditFeedImage | null>(
     null
@@ -231,6 +243,9 @@ const useViewOffender = (offenderId: string): Return => {
   const [addBan, setAddBan] = useState(false);
   const [editBanData, setEditBanData] = useState<BanData | null>(null);
   const [addInvestigation, setAddInvestigation] = useState(false);
+  const [showIncidentOptions, setShowIncidentOptions] = useState(false);
+  const [addImageToIncidents, setAddImageToIncidents] = useState(false);
+  const [selectedIncidentId, setSelectedIncidentId] = useState<string>('');
 
   const openLightbox = (index: number) => {
     setLightBoxOpen({ open: !lightBoxOpen.open, index });
@@ -358,9 +373,9 @@ const useViewOffender = (offenderId: string): Return => {
     },
   });
 
-  const updateIncidentList = (selectedIncidentId: string) => {
+  const updateIncidentList = (incidentId: string) => {
     setSaving(true);
-    if (offenderId && selectedIncidentId) {
+    if (offenderId && incidentId) {
       void updateOffender({
         variables: {
           where: {
@@ -368,7 +383,7 @@ const useViewOffender = (offenderId: string): Return => {
           },
           data: {
             incidents: {
-              connect: [{ id: selectedIncidentId }],
+              connect: [{ id: incidentId }],
             },
           },
         },
@@ -1575,10 +1590,23 @@ const useViewOffender = (offenderId: string): Return => {
     });
   };
 
-  const [addImagesToIncident] = useAddImagesToOffenderMutation();
+  const [addImagesToOffender] = useAddImagesToOffenderMutation();
+  const [addImagesToIncident] = useAddImagesToIncidentMutation();
 
-  const addUpdateImages = (images: { id: string }[]) => {
+  const onAddUpdateImagesToIncident = (incidentId: string) => {
     void addImagesToIncident({
+      variables: {
+        images: selectedImages.map((id) => ({ id })),
+        incident: {
+          id: incidentId,
+        },
+      },
+    });
+    setSelectedImages([]);
+    setSelectedIncidentId('');
+  };
+  const onAddUpdateImagesToOffender = (images: { id: string }[]) => {
+    void addImagesToOffender({
       variables: {
         images,
         offender: {
@@ -1586,32 +1614,78 @@ const useViewOffender = (offenderId: string): Return => {
         },
       },
     });
-    setAddImages(null);
     setSelectedImages([]);
   };
+  const onSelectUpdateImages = () => {
+    if (selectedImages) {
+      if (!addImageToIncidents) {
+        onAddUpdateImagesToOffender(selectedImages.map((id) => ({ id })));
+      }
+      if (addImageToIncidents && data?.offender.incidents) {
+        if (data?.offender.incidents.length > 1) {
+          setShowIncidentOptions(true);
+        } else {
+          onAddUpdateImagesToIncident(data?.offender.incidents[0].id);
+        }
+      }
+      setAddImages(null);
+    }
+  };
 
-  const confirmUpdateImages = (images: { id: string; url: string }[]) => {
+  const onAddUpdateImages = (
+    images: { id: string; url: string }[],
+    addToIncident?: boolean
+  ) => {
+    if (addToIncident) {
+      setAddImageToIncidents(addToIncident);
+    }
     if (images.length > 1) {
       setAddImages(images);
-    } else {
-      confirm({
-        title: intl.formatMessage({
-          defaultMessage: 'Are you sure?',
-          id: '2oCaym',
-        }),
-        content: intl.formatMessage({
-          defaultMessage:
-            'Adding this image will notify any other users following the incident.',
-          id: 'qfS4of',
-        }),
-        onOk() {
-          addUpdateImages(images.map(({ id }) => ({ id })));
-        },
-        okText: intl.formatMessage({
-          defaultMessage: 'Add Images',
-          id: 'b4GGYZ',
-        }),
-      });
+    }
+    if (images.length === 1) {
+      if (addToIncident && data?.offender.incidents) {
+        if (data?.offender.incidents.length > 1) {
+          setShowIncidentOptions(true);
+        } else {
+          confirm({
+            title: intl.formatMessage({
+              defaultMessage: 'Are you sure?',
+              id: '2oCaym',
+            }),
+            content: intl.formatMessage({
+              defaultMessage:
+                'Adding this image will notify any other users following the incident.',
+              id: 'qfS4of',
+            }),
+            onOk() {
+              onAddUpdateImagesToIncident(data?.offender.incidents[0].id);
+            },
+            okText: intl.formatMessage({
+              defaultMessage: 'Add Images',
+              id: 'b4GGYZ',
+            }),
+          });
+        }
+      } else {
+        confirm({
+          title: intl.formatMessage({
+            defaultMessage: 'Are you sure?',
+            id: '2oCaym',
+          }),
+          content: intl.formatMessage({
+            defaultMessage:
+              'Adding this image will notify any other users following the offender.',
+            id: '8Vqbat',
+          }),
+          onOk() {
+            onAddUpdateImagesToOffender(images.map(({ id }) => ({ id })));
+          },
+          okText: intl.formatMessage({
+            defaultMessage: 'Add Images',
+            id: 'b4GGYZ',
+          }),
+        });
+      }
     }
   };
 
@@ -1651,6 +1725,7 @@ const useViewOffender = (offenderId: string): Return => {
 
   const closeAddImages = () => {
     setAddImages(null);
+    setSelectedImages([]);
   };
 
   useEffect(() => {
@@ -1704,6 +1779,9 @@ const useViewOffender = (offenderId: string): Return => {
   const toggleEditOffender = () => {
     setEditOffender(!editOffender);
   };
+  const toggleKnowOffender = () => {
+    setKnowOffender(!knowOffender);
+  };
   const toggleEditImages = () => {
     setEditImages(!editImages);
   };
@@ -1730,6 +1808,12 @@ const useViewOffender = (offenderId: string): Return => {
   };
   const toggleAddInvestigation = () => {
     setAddInvestigation(() => !addInvestigation);
+  };
+  const toggleShowIncidentOptions = () => {
+    setShowIncidentOptions(!showIncidentOptions);
+  };
+  const onSelect = (item: { key: string }) => {
+    setSelectedIncidentId(item.key);
   };
 
   const [isTranslated, setIsTranslated] = useState<string | null>(null);
@@ -1782,12 +1866,11 @@ const useViewOffender = (offenderId: string): Return => {
     setReplyTo,
     confirmDeleteUpdate,
     setEditUpdate,
-    confirmUpdateImages,
+    onAddUpdateImages,
     addImages,
     editUpdate,
     selectedImages,
     handleEditUpdate,
-    addUpdateImages,
     closeAddImages,
     editUpdateInput,
     setEditUpdateInput,
@@ -1810,6 +1893,8 @@ const useViewOffender = (offenderId: string): Return => {
     toggleCopyOffender,
     editOffender,
     toggleEditOffender,
+    knowOffender,
+    toggleKnowOffender,
     editImages,
     toggleEditImages,
     editImageData,
@@ -1855,6 +1940,12 @@ const useViewOffender = (offenderId: string): Return => {
     addInvestigation,
     toggleAddInvestigation,
     updateInvestigationList,
+    onSelectUpdateImages,
+    showIncidentOptions,
+    toggleShowIncidentOptions,
+    onAddUpdateImagesToIncident,
+    selectedIncidentId,
+    onSelect,
   };
 };
 

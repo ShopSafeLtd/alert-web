@@ -24,6 +24,8 @@ const Value = (props: ValueProps) => {
       value = <h3 className="mb-0 font-weight-bold">{props.value}</h3>;
     }
   }
+  // ?????
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return value;
 };
 

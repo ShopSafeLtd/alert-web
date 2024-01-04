@@ -30648,7 +30648,7 @@ tr > .ant-picker-cell-in-view.ant-picker-cell-range-hover:first-child::after {
   padding-bottom: 5px;
 }
 .feed-card .no-image.offender-card {
-  height: 220px;
+  height: 250px;
 }
 .feed-card .offender-card-date {
   font-size: 12px;
@@ -30723,7 +30723,7 @@ tr > .ant-picker-cell-in-view.ant-picker-cell-range-hover:first-child::after {
 }
 .offender-card .offender-card-content {
   padding: 10px 10px 5px;
-  height: 265px;
+  height: 320px;
   overflow: auto;
 }
 .offender-card .offender-card-desc {

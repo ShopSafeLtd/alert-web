@@ -50,6 +50,7 @@ interface Scheme {
   userNotifications?: number | null | undefined;
   languageCount: number;
   autoPopulateDescription: boolean;
+  needJustification: boolean;
   logo?:
     | {
         optimisedPersisted?: string | null | undefined;
@@ -324,6 +325,7 @@ const useNotificationLists = (): Return => {
 
     setScheme({
       autoPopulateDescription: scheme.autoPopulateDescription,
+      needJustification: scheme.needJustification,
       reportOnly: scheme.reportOnly,
       languageCount: scheme.languageCount,
       autoApproveIncidents: scheme.autoApproveIncidents,

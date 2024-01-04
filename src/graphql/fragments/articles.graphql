@@ -1,0 +1,22 @@
+fragment Articles on Article {
+  id
+  title
+  updatedAt
+  watermarkImage
+  previewImage
+  previewText
+  priority
+  images {
+    id
+    url
+    optimised
+    card
+    position
+    rotation
+  }
+
+  createdBy {
+    fullName
+    id
+  }
+}

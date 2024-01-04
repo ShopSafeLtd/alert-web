@@ -157,6 +157,7 @@ const Vehicles = ({
         open={addExistingOpen}
         width="800"
         onClose={toggleAddExistingOpen}
+        bodyStyle={{ overflow: 'hidden' }}
         zIndex={1001}
       >
         {addExistingOpen ? (
@@ -178,6 +179,7 @@ const Vehicles = ({
         width="800"
         onClose={() => setMatchExistingOpen(null)}
         zIndex={1001}
+        bodyStyle={{ overflow: 'hidden' }}
       >
         {matchExistingOpen ? (
           <LinkVehicle

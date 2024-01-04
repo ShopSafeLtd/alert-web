@@ -47,6 +47,7 @@ const UpdateBar = ({
     removeUpdateOffender,
     removeCrimeGroup,
     removeVehicle,
+    removeArticle,
     schemeUsers,
     setMentionedUser,
     setUpdateInput,
@@ -56,6 +57,7 @@ const UpdateBar = ({
     toggleShowUpdatePicker,
     toggleLinkVehicle,
     toggleLinkCrimeGroup,
+    toggleLinkArticle,
     updateFileList,
     updateForm,
     updateIncidents,
@@ -64,16 +66,20 @@ const UpdateBar = ({
     updateOffendersList,
     updateVehicleList,
     updateCrimeGroupList,
+    updateArticleList,
     linkIncident,
     linkOffender,
     linkVehicle,
     linkCrimeGroup,
+    linkArticle,
     updateOffenders,
     crimeGroupsData,
     vehiclesData,
+    articlesData,
     saving,
     handleMarkAsRead,
     hideIncident,
+    adminRights,
   } = useUpdateBar({
     replyTo,
     incidentId,
@@ -88,6 +94,8 @@ const UpdateBar = ({
 
   return (
     <View
+      replyTo={replyTo}
+      setReplyTo={setReplyTo}
       beforeUpdateImageUpload={beforeUpdateImageUpload}
       onSubmitUpdate={onSubmitUpdate}
       onUpdateImageChange={onUpdateImageChange}
@@ -97,6 +105,7 @@ const UpdateBar = ({
       removeUpdateOffender={removeUpdateOffender}
       removeCrimeGroup={removeCrimeGroup}
       removeVehicle={removeVehicle}
+      removeArticle={removeArticle}
       schemeUsers={schemeUsers}
       setMentionedUser={setMentionedUser}
       setUpdateInput={setUpdateInput}
@@ -106,24 +115,27 @@ const UpdateBar = ({
       toggleShowUpdatePicker={toggleShowUpdatePicker}
       toggleLinkVehicle={toggleLinkVehicle}
       toggleLinkCrimeGroup={toggleLinkCrimeGroup}
+      toggleLinkArticle={toggleLinkArticle}
       updateFileList={updateFileList}
       updateForm={updateForm}
       updateIncidents={updateIncidents}
       updateInput={updateInput}
-      replyTo={replyTo}
-      setReplyTo={setReplyTo}
       updateIncidentList={updateIncidentList}
       updateOffendersList={updateOffendersList}
       updateVehicleList={updateVehicleList}
       updateCrimeGroupList={updateCrimeGroupList}
+      updateArticleList={updateArticleList}
       linkIncident={linkIncident}
       linkOffender={linkOffender}
       linkVehicle={linkVehicle}
       linkCrimeGroup={linkCrimeGroup}
+      linkArticle={linkArticle}
       updateOffenders={updateOffenders}
       crimeGroupsData={crimeGroupsData}
       vehiclesData={vehiclesData}
+      articlesData={articlesData}
       saving={saving}
+      adminRights={adminRights}
       handleMarkAsRead={handleMarkAsRead}
       hideIncident={hideIncident}
     />

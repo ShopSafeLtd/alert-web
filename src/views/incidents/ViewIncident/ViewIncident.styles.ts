@@ -123,5 +123,15 @@ const useStyles = createUseStyles((theme: Theme) => ({
     padding: '10px 15px 10px',
     zIndex: 10,
   },
+  selectCard: {
+    position: 'relative',
+  },
+  checkBox: {
+    position: 'absolute',
+    top: 3,
+    right: 8,
+    zIndex: 100,
+    color: theme.borderColor,
+  },
 }));
 export default useStyles;

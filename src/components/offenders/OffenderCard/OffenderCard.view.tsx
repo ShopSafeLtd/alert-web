@@ -59,9 +59,10 @@ import type { EditFeedImage } from 'types/DataType';
 import { useStoreState } from 'state';
 import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
 import FormatCalendar from 'utils/format-calendar-24h';
+import KnowOffender from 'components/form-components/offender/KnowOffender';
 import useStyles from './OffenderCard.styles';
 
-const { Title, Text } = Typography;
+const { Title, Text, Paragraph } = Typography;
 const { confirm } = Modal;
 
 interface Props {
@@ -83,6 +84,8 @@ interface Props {
   toggleAddInvestigation: () => void;
   addInvestigation: boolean;
   compactView: boolean;
+  knowOffender: boolean;
+  toggleKnowOffender: () => void;
 }
 
 const OffenderCard = ({
@@ -104,6 +107,8 @@ const OffenderCard = ({
   addInvestigation,
   toggleAddInvestigation,
   compactView,
+  toggleKnowOffender,
+  knowOffender,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const role = useStoreState((state) => state.user.role);
@@ -230,102 +235,134 @@ const OffenderCard = ({
               </Col>
 
               <Col flex={1} className={classes.cardContent}>
-                <Link to={`/app/offenders/view/${offender?.id}`}>
-                  <Row align="middle" wrap={false}>
-                    <Col flex={1}>
-                      <Title level={4} ellipsis>
-                        {offender?.name}
-                      </Title>
-                    </Col>
-                    {menuRights && (
-                      <Dropdown
-                        trigger={['click']}
-                        overlay={
-                          <Menu
-                            items={[
-                              {
-                                key: 0,
-                                label: intl.formatMessage({
-                                  defaultMessage: 'Edit Offender',
-                                  id: '+OfJ4/',
-                                }),
-                                onClick: () => toggleEditOffenderFeed(),
-                                icon: <FontAwesomeIcon icon={faEdit} />,
-                              },
-                              offender.totalImages && offender.totalImages > 0
-                                ? {
-                                    key: 1,
-                                    label: intl.formatMessage({
-                                      defaultMessage: 'Edit Image',
-                                      id: '9UlLIw',
-                                    }),
-                                    onClick: () => toggleEditImage(),
-                                    icon: <FontAwesomeIcon icon={faImage} />,
-                                  }
-                                : null,
-                              {
-                                key: 2,
-                                label: intl.formatMessage({
-                                  defaultMessage: 'Compare Offender',
-                                  id: 'Y64oGy',
-                                }),
-                                onClick: () =>
-                                  onNavigate(
-                                    undefined,
-                                    `/app/offenders/compare/${offender?.id}`
-                                  ),
-                                icon: (
-                                  <FontAwesomeIcon size="lg" icon={faPeople} />
-                                ),
-                              },
-                              {
-                                key: 3,
-                                label: intl.formatMessage({
-                                  defaultMessage: 'Delete Offender',
-                                  id: 'IyEJgq',
-                                }),
-                                onClick: () =>
-                                  confirm({
-                                    title: intl.formatMessage({
-                                      defaultMessage: 'Are you sure?',
-                                      id: '2oCaym',
-                                    }),
-                                    content: intl.formatMessage({
-                                      defaultMessage:
-                                        'Click delete if you wish to delete this offender. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
-                                      id: 'J35F/I',
-                                    }),
-                                    okText: intl.formatMessage({
-                                      defaultMessage: 'Delete',
-                                      id: 'K3r6DQ',
-                                    }),
-                                    onOk: () => onDelete(offender?.id || ''),
+                {!menuRights && offender.name === 'Unidentified Offender' ? (
+                  <Tooltip
+                    title={intl.formatMessage({
+                      defaultMessage:
+                        'Please click this button if you know the name of this offender',
+                      id: 'eejF52',
+                    })}
+                  >
+                    <Button
+                      className={classes.knowButton}
+                      onClick={toggleKnowOffender}
+                      danger
+                    >
+                      {intl.formatMessage({
+                        defaultMessage: 'Know this offender?',
+                        id: 'SvQc4C',
+                      })}
+                    </Button>
+                  </Tooltip>
+                ) : (
+                  <Link to={`/app/offenders/view/${offender?.id}`}>
+                    <Row
+                      align="middle"
+                      wrap={false}
+                      style={{ marginBottom: 5 }}
+                    >
+                      <Col flex={1}>
+                        <Title level={4} ellipsis>
+                          {offender?.name}
+                        </Title>
+                      </Col>
+                      {menuRights && (
+                        <Dropdown
+                          trigger={['click']}
+                          overlay={
+                            <Menu
+                              items={[
+                                {
+                                  key: 0,
+                                  label: intl.formatMessage({
+                                    defaultMessage: 'Edit Offender',
+                                    id: '+OfJ4/',
                                   }),
-                                icon: (
-                                  <FontAwesomeIcon size="lg" icon={faTrash} />
-                                ),
-                              },
-                              {
-                                key: 4,
-                                label: intl.formatMessage({
-                                  defaultMessage: 'Add Investigation',
-                                  id: 'U5+v9Y',
-                                }),
-                                onClick: () => toggleAddInvestigation(),
-                                icon: <FontAwesomeIcon icon={faPlus} />,
-                              },
-                            ].filter((item) => item?.key !== 3 || deleteRights)}
-                          />
-                        }
-                        placement="bottomRight"
-                        arrow={{ pointAtCenter: true }}
-                      >
-                        <Button className={classes.menuButton}>
-                          <FontAwesomeIcon size="lg" icon={faEllipsisV} />
-                        </Button>
-                      </Dropdown>
-                    )}
-                  </Row>
+                                  onClick: () => toggleEditOffenderFeed(),
+                                  icon: <FontAwesomeIcon icon={faEdit} />,
+                                },
+                                offender.totalImages && offender.totalImages > 0
+                                  ? {
+                                      key: 1,
+                                      label: intl.formatMessage({
+                                        defaultMessage: 'Edit Image',
+                                        id: '9UlLIw',
+                                      }),
+                                      onClick: () => toggleEditImage(),
+                                      icon: <FontAwesomeIcon icon={faImage} />,
+                                    }
+                                  : null,
+                                {
+                                  key: 2,
+                                  label: intl.formatMessage({
+                                    defaultMessage: 'Compare Offender',
+                                    id: 'Y64oGy',
+                                  }),
+                                  onClick: () =>
+                                    onNavigate(
+                                      undefined,
+                                      `/app/offenders/compare/${offender?.id}`
+                                    ),
+                                  icon: (
+                                    <FontAwesomeIcon
+                                      size="lg"
+                                      icon={faPeople}
+                                    />
+                                  ),
+                                },
+                                {
+                                  key: 3,
+                                  label: intl.formatMessage({
+                                    defaultMessage: 'Delete Offender',
+                                    id: 'IyEJgq',
+                                  }),
+                                  onClick: () =>
+                                    confirm({
+                                      title: intl.formatMessage({
+                                        defaultMessage: 'Are you sure?',
+                                        id: '2oCaym',
+                                      }),
+                                      content: intl.formatMessage({
+                                        defaultMessage:
+                                          'Click delete if you wish to delete this offender. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
+                                        id: 'J35F/I',
+                                      }),
+                                      okText: intl.formatMessage({
+                                        defaultMessage: 'Delete',
+                                        id: 'K3r6DQ',
+                                      }),
+                                      onOk: () => onDelete(offender?.id || ''),
+                                    }),
+                                  icon: (
+                                    <FontAwesomeIcon size="lg" icon={faTrash} />
+                                  ),
+                                },
+                                {
+                                  key: 4,
+                                  label: intl.formatMessage({
+                                    defaultMessage: 'Add Investigation',
+                                    id: 'U5+v9Y',
+                                  }),
+                                  onClick: () => toggleAddInvestigation(),
+                                  icon: <FontAwesomeIcon icon={faPlus} />,
+                                },
+                              ].filter(
+                                (item) => item?.key !== 3 || deleteRights
+                              )}
+                            />
+                          }
+                          placement="bottomRight"
+                          arrow={{ pointAtCenter: true }}
+                        >
+                          <Button className={classes.menuButton}>
+                            <FontAwesomeIcon size="lg" icon={faEllipsisV} />
+                          </Button>
+                        </Dropdown>
+                      )}
+                    </Row>
+                  </Link>
+                )}
+                <Link to={`/app/offenders/view/${offender?.id}`}>
                   <Row>
                     <Col flex={1}>
                       <Text className={classes.alertId}>
@@ -346,7 +383,6 @@ const OffenderCard = ({
                     </Col>
                   </Row>
                 </Link>
-
                 {/* </div> */}
                 <div className={classes.bottomRow}>
                   {/* <Row>
@@ -378,34 +414,35 @@ const OffenderCard = ({
                         : ''
                     }
                   >
-                    <Row style={{ marginTop: 5 }}>
-                      <Col className={classes.icon}>
-                        <FontAwesomeIcon
-                          size="sm"
-                          className={classes.icon}
-                          icon={faLocationDot}
-                        />
-                        <Text type="secondary">
-                          {intl.formatMessage({
-                            defaultMessage: 'Last Offence: ',
-                            id: 'GxIpv7',
-                          })}
-                        </Text>
-                      </Col>
-                      <Col>
-                        <Text type="secondary" ellipsis>
-                          {getLastOffence(
-                            undefined,
-                            undefined,
-                            offender.latestIncident ?? undefined
-                          ).message ||
+                    <Paragraph
+                      style={{ padding: 0, margin: 0 }}
+                      ellipsis={{
+                        rows: 2,
+                      }}
+                    >
+                      <FontAwesomeIcon
+                        className={classes.icon}
+                        icon={faLocationDot}
+                      />
+                      {intl.formatMessage(
+                        {
+                          defaultMessage: 'Last Offence: {ref}',
+                          id: 'WiLpcl',
+                        },
+                        {
+                          ref:
+                            getLastOffence(
+                              undefined,
+                              undefined,
+                              offender.latestIncident ?? undefined
+                            ).message ||
                             intl.formatMessage({
                               defaultMessage: 'Unknown',
                               id: '5jeq8P',
-                            })}
-                        </Text>
-                      </Col>
-                    </Row>
+                            }),
+                        }
+                      )}
+                    </Paragraph>
                   </Link>
                 </div>
               </Col>
@@ -415,6 +452,12 @@ const OffenderCard = ({
       ) : (
         <Card
           className="offender-card"
+          // bodyStyle={{
+          //   borderRadius: 10,
+          //   padding: 0,
+          //   overflow: 'hidden',
+          //   height: 250,
+          // }}
           key={offender.id || ''}
           style={{ overflow: 'hidden', marginBottom: 0 }}
           // bodyStyle={{ height: '100%' }}
@@ -606,6 +649,26 @@ const OffenderCard = ({
               }
             />
           ) : null}
+          {!menuRights && offender.name === 'Unidentified Offender' && (
+            <Tooltip
+              title={intl.formatMessage({
+                defaultMessage:
+                  'Please click this button if you know the name of this offender',
+                id: 'eejF52',
+              })}
+            >
+              <Button
+                className={classes.knowButtonLarge}
+                onClick={toggleKnowOffender}
+                type="primary"
+              >
+                {intl.formatMessage({
+                  defaultMessage: 'Know this offender?',
+                  id: 'SvQc4C',
+                })}
+              </Button>
+            </Tooltip>
+          )}
           <div className="offender-card-content">
             <Link
               to={
@@ -798,37 +861,75 @@ const OffenderCard = ({
                 </Col>
               </Row>
             </Link>
-            <Link
-              to={
-                isArticle
-                  ? `/app/offenders/view/${offender?.id}`
-                  : `view/${offender?.id}`
-              }
-            >
+
+            <div className={classes.bottomContainer}>
               {offender?.groups && offender.groups.length > 0 && (
-                <Row
-                  wrap={false}
-                  style={{ overflowX: 'auto', marginTop: 15 }}
-                  align="middle"
+                <Link
+                  to={
+                    isArticle
+                      ? `/app/offenders/view/${offender?.id}`
+                      : `view/${offender?.id}`
+                  }
                 >
+                  <Row wrap={false} className={classes.tagRow} align="middle">
+                    <Col style={{ minWidth: 60 }}>
+                      <Text type="secondary">
+                        {intl.formatMessage({
+                          defaultMessage: 'Groups:',
+                          id: 'JcJ/mL',
+                        })}
+                      </Text>
+                    </Col>
+                    {offender.groups.slice(0, 1).map((group) => (
+                      <Col key={group.id}>
+                        <Tag>{group.name}</Tag>
+                      </Col>
+                    ))}
+                    {offender.groups.length > 1 && (
+                      <Col>
+                        <Tooltip
+                          title={offender.groups
+                            .map((item) => ` ${item.name}`)
+                            .toString()}
+                        >
+                          <Tag>
+                            {intl.formatMessage(
+                              {
+                                defaultMessage: '+{count} more',
+                                id: '/zFGgP',
+                              },
+                              {
+                                count: offender.groups.length - 1,
+                              }
+                            )}
+                          </Tag>
+                        </Tooltip>
+                      </Col>
+                    )}
+                  </Row>
+                </Link>
+              )}
+
+              {offender?.targetedGoods && offender.targetedGoods.length > 0 && (
+                <Row wrap={false} className={classes.tagRow} align="middle">
                   <Col style={{ minWidth: 60 }}>
                     <Text type="secondary">
                       {intl.formatMessage({
-                        defaultMessage: 'Groups:',
-                        id: 'JcJ/mL',
+                        defaultMessage: 'Goods:',
+                        id: '6WIx8l',
                       })}
                     </Text>
                   </Col>
-                  {offender.groups.slice(0, 1).map((group) => (
-                    <Col key={group.id}>
-                      <Tag>{group.name}</Tag>
+                  {offender.targetedGoods.slice(0, 1).map((el) => (
+                    <Col key={el}>
+                      <Tag>{el}</Tag>
                     </Col>
                   ))}
-                  {offender.groups.length > 1 && (
+                  {offender.targetedGoods.length > 1 && (
                     <Col>
                       <Tooltip
-                        title={offender.groups
-                          .map((item) => ` ${item.name}`)
+                        title={offender.targetedGoods
+                          .map((el) => ` ${el}`)
                           .toString()}
                       >
                         <Tag>
@@ -838,7 +939,7 @@ const OffenderCard = ({
                               id: '/zFGgP',
                             },
                             {
-                              count: offender.groups.length - 1,
+                              count: offender.targetedGoods.length - 1,
                             }
                           )}
                         </Tag>
@@ -847,7 +948,46 @@ const OffenderCard = ({
                   )}
                 </Row>
               )}
-            </Link>
+
+              {offender?.knownFor && offender.knownFor.length > 0 && (
+                <Row wrap={false} className={classes.tagRow} align="middle">
+                  <Col style={{ minWidth: 90 }}>
+                    <Text type="secondary">
+                      {intl.formatMessage({
+                        defaultMessage: 'Crime types:',
+                        id: 'KhwX14',
+                      })}
+                    </Text>
+                  </Col>
+                  {offender.knownFor.slice(0, 1).map((el) => (
+                    <Col key={el}>
+                      <Tag>{el}</Tag>
+                    </Col>
+                  ))}
+                  {offender.knownFor.length > 1 && (
+                    <Col>
+                      <Tooltip
+                        title={offender.knownFor
+                          .map((el) => ` ${el}`)
+                          .toString()}
+                      >
+                        <Tag>
+                          {intl.formatMessage(
+                            {
+                              defaultMessage: '+{count} more',
+                              id: '/zFGgP',
+                            },
+                            {
+                              count: offender.knownFor.length - 1,
+                            }
+                          )}
+                        </Tag>
+                      </Tooltip>
+                    </Col>
+                  )}
+                </Row>
+              )}
+            </div>
 
             <Row justify="center">
               <Col>
@@ -883,6 +1023,24 @@ const OffenderCard = ({
           <EditOffenderFeed
             onClose={toggleEditOffenderFeed}
             offenderId={offender.id}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Know This Offender',
+          id: '1EqoEi',
+        })}
+        visible={knowOffender}
+        width="400"
+        onClose={toggleKnowOffender}
+      >
+        {knowOffender ? (
+          <KnowOffender
+            onClose={toggleKnowOffender}
+            offenderId={offender.id || ''}
           />
         ) : (
           <div />

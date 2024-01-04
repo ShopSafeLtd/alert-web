@@ -1,0 +1,7 @@
+fragment SimpleImages on Image {
+  id
+  url
+  optimised
+  position
+  rotation
+}

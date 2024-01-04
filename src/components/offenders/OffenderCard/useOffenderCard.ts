@@ -36,6 +36,8 @@ interface Return {
   onEditImage: (value: EditFeedImage) => void;
   toggleAddInvestigation: () => void;
   addInvestigation: boolean;
+  knowOffender: boolean;
+  toggleKnowOffender: () => void;
 }
 const useOffenderCard = ({ offender, update }: Props): Return => {
   const navigate = useNavigate();
@@ -52,6 +54,8 @@ const useOffenderCard = ({ offender, update }: Props): Return => {
   const [editImageId, setEditImageId] = useState<string>(
     offender?.images[0]?.id || ''
   );
+  const [knowOffender, setKnowOffender] = useState(false);
+
   const onNavigate = (id: string | undefined, url: string | undefined) => {
     if (id) {
       navigate(`/app/offenders/edit/${id}`);
@@ -163,6 +167,9 @@ const useOffenderCard = ({ offender, update }: Props): Return => {
   const toggleAddInvestigation = () => {
     setAddInvestigation(() => !addInvestigation);
   };
+  const toggleKnowOffender = () => {
+    setKnowOffender(!knowOffender);
+  };
   return {
     approvalRights,
     menuRights,
@@ -178,6 +185,8 @@ const useOffenderCard = ({ offender, update }: Props): Return => {
     onNavigate,
     addInvestigation,
     toggleAddInvestigation,
+    knowOffender,
+    toggleKnowOffender,
   };
 };
 

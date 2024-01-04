@@ -4,6 +4,7 @@ import { Avatar, Col, Row, Typography } from 'antd';
 
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import type {
+  ArticleData,
   CrimeGroupData,
   ImageCardData,
   IncidentCardData,
@@ -12,6 +13,7 @@ import type {
 } from 'types/DataType';
 
 import {
+  ArticleMessageCard,
   CrimeGroupMessageList,
   IncidentMessageCard,
   OffenderMessageCard,
@@ -121,6 +123,7 @@ interface Props {
   incidents?: IncidentCardData[];
   vehicles?: VehicleData[];
   crimeGroups?: CrimeGroupData[];
+  articles?: ArticleData[];
   content: string;
   id: string;
   currentUser?: boolean | undefined | null;
@@ -148,6 +151,7 @@ const Content = ({
   incidents,
   vehicles,
   crimeGroups,
+  articles,
   content,
   id,
   currentUser,
@@ -249,6 +253,11 @@ const Content = ({
         {crimeGroups && crimeGroups.length > 0 && (
           <CrimeGroupMessageList crimeGroups={crimeGroups} />
         )}
+        {articles &&
+          articles.length > 0 &&
+          articles.map((article) => (
+            <ArticleMessageCard key={article.id} article={article} />
+          ))}
         {content && (
           <Row key={id}>
             <div className="message-content-bubble">

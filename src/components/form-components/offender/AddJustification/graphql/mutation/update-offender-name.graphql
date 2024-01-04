@@ -1,0 +1,9 @@
+mutation updateOffenderJustification(
+  $id: String!
+  $data: OffenderUpdateInput!
+) {
+  updateOffender(where: { id: $id }, data: $data) {
+    id
+    justification
+  }
+}

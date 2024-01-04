@@ -45,6 +45,7 @@ import { useEffect, useState } from 'react';
 import { useStoreState } from 'state';
 import update from 'immutability-helper';
 import type {
+  ArticleData,
   CrimeGroupData,
   IncidentCardData,
   OffenderData,
@@ -65,6 +66,7 @@ interface Return {
   removeUpdateOffender: (value: string | undefined) => void;
   removeCrimeGroup: (value: string | undefined) => void;
   removeVehicle: (value: string | undefined) => void;
+  removeArticle: (value: string | undefined) => void;
   schemeUsers: SchemeUserData[] | undefined;
   setMentionedUser: (value: { id: string; value: string }[]) => void;
   setUpdateInput: (value: string) => void;
@@ -74,6 +76,7 @@ interface Return {
   toggleShowUpdatePicker: () => void;
   toggleLinkVehicle: () => void;
   toggleLinkCrimeGroup: () => void;
+  toggleLinkArticle: () => void;
   updateFileList: UploadFile[];
   updateForm: FormInstance<FormData>;
   updateIncidents: IncidentCardData[];
@@ -82,13 +85,16 @@ interface Return {
   updateOffendersList: (value: OffenderData) => void;
   updateVehicleList: (value: VehicleData) => void;
   updateCrimeGroupList: (value: CrimeGroupData) => void;
+  updateArticleList: (value: ArticleData) => void;
   linkIncident: boolean;
   linkOffender: boolean;
   linkVehicle: boolean;
   linkCrimeGroup: boolean;
+  linkArticle: boolean;
   updateOffenders: OffenderData[];
   crimeGroupsData: CrimeGroupData[];
   vehiclesData: VehicleData[];
+  articlesData: ArticleData[];
   saving: boolean;
   adminRights: boolean;
   handleMarkAsRead: () => void;
@@ -148,6 +154,7 @@ const useUpdateBar = ({
   const [linkOffender, setLinkOffender] = useState(false);
   const [linkVehicle, setLinkVehicle] = useState(false);
   const [linkCrimeGroup, setLinkCrimeGroup] = useState(false);
+  const [linkArticle, setLinkArticle] = useState(false);
 
   const [updateInput, setUpdateInput] = useState('');
   const [schemeUsers, setSchemeUsers] = useState<SchemeUserData[] | undefined>(
@@ -163,6 +170,7 @@ const useUpdateBar = ({
   const [updateOffenders, setUpdateOffenders] = useState<OffenderData[]>([]);
   const [crimeGroupsData, setCrimeGroupsData] = useState<CrimeGroupData[]>([]);
   const [vehiclesData, setVehiclesData] = useState<VehicleData[]>([]);
+  const [articlesData, setArticlesData] = useState<ArticleData[]>([]);
 
   useEffect(() => {
     if (setOptionRowShow)
@@ -171,7 +179,8 @@ const useUpdateBar = ({
         (updateOffenders && updateOffenders.length > 0) ||
         (updateIncidents && updateIncidents.length > 0) ||
         (vehiclesData && vehiclesData.length > 0) ||
-        (crimeGroupsData && crimeGroupsData.length > 0)
+        (crimeGroupsData && crimeGroupsData.length > 0) ||
+        (articlesData && articlesData.length > 0)
       ) {
         setOptionRowShow(true);
       } else {
@@ -183,6 +192,7 @@ const useUpdateBar = ({
     updateIncidents,
     vehiclesData,
     crimeGroupsData,
+    articlesData,
     setOptionRowShow,
   ]);
 
@@ -268,6 +278,7 @@ const useUpdateBar = ({
     setUpdateOffenders([]);
     setVehiclesData([]);
     setCrimeGroupsData([]);
+    setArticlesData([]);
   };
   const [createIncidentUpdate] = useCreateUpdateOnIncidentMutation({
     onCompleted: () => {},
@@ -327,7 +338,8 @@ const useUpdateBar = ({
       updateOffenders.length === 0 &&
       updateIncidents?.length === 0 &&
       vehiclesData.length === 0 &&
-      crimeGroupsData.length === 0
+      crimeGroupsData.length === 0 &&
+      articlesData.length === 0
     ) {
       void message.info(
         intl.formatMessage({
@@ -431,7 +443,123 @@ const useUpdateBar = ({
         if (updateOffenders.length > 0) return UpdateType.LinkedOffender;
         if (vehiclesData.length > 0) return UpdateType.LinkedVehicle;
         if (crimeGroupsData.length > 0) return UpdateType.LinkedCrimeGroup;
+        if (articlesData.length > 0) return UpdateType.LinkedArticle;
         return UpdateType.Text;
+      };
+      const newResponse = {
+        // __typename: 'Update',
+        createdAt: new Date(),
+        id: `optimistic-${new Date().toISOString()}`,
+        createdBy: {
+          fullName,
+          origName: fullName,
+          id: userId,
+          businesses,
+          // __typename: 'User',
+        },
+        images:
+          updateFileList.length > 0
+            ? updateFileList.map((image) => ({
+                id: image.uid,
+                // __typename: 'Image',
+                card: image.url,
+                optimised: image.url,
+                url: image.url,
+                position: ImagePosition.CenterCenter,
+                rotation: 0,
+              }))
+            : [],
+        replies: [],
+        type: getUpdateType(),
+        text: getText(updateInput, schemeUsers),
+        linkedIncidents:
+          updateIncidents && updateIncidents.length > 0
+            ? updateIncidents.map((incident) => ({
+                id: incident.id,
+                images:
+                  incident.images?.map((image) => ({
+                    ...image,
+                    position: ImagePosition.CenterCenter,
+                    rotation: 0,
+                  })) || [],
+                reference: incident.reference,
+                subject: incident.subject,
+                description: incident.description || '',
+                dayTime: incident.dayTime || '',
+                totalValue: incident.totalValue || 0,
+                totalRecoveredValue: incident.totalRecoveredValue || 0,
+              }))
+            : [],
+        linkedOffenders:
+          updateOffenders && updateOffenders.length > 0
+            ? updateOffenders.map((offender) => ({
+                id: offender.id,
+                images:
+                  offender.images?.map((image) => ({
+                    ...image,
+                    position: ImagePosition.CenterCenter,
+                    rotation: 0,
+                  })) || [],
+                updatedAt: offender.updatedAt || new Date(),
+                age: offender.age,
+                build: offender.build,
+                dateOfBirth: offender.dateOfBirth,
+                gender: offender.gender,
+                name: offender.name,
+                race: offender.race,
+              }))
+            : [],
+        linkedVehicles:
+          vehiclesData && vehiclesData.length > 0
+            ? vehiclesData.map((vehicle) => ({
+                id: vehicle.id,
+                images:
+                  vehicle.images?.map((image) => ({
+                    ...image,
+                    position: ImagePosition.CenterCenter,
+                    rotation: 0,
+                  })) || [],
+                reference: vehicle.reference,
+                registration: vehicle.registration,
+                colour: vehicle.colour,
+                make: vehicle.make,
+                model: vehicle.model,
+              }))
+            : [],
+        linkedCrimeGroups:
+          crimeGroupsData && crimeGroupsData.length > 0
+            ? crimeGroupsData.map((crimeGroup) => ({
+                id: crimeGroup.id,
+                reference: crimeGroup.reference,
+                alias: crimeGroup.alias,
+                totalOffenders: crimeGroup.totalOffenders || 0,
+                totalIncidents: crimeGroup.totalIncidents || 0,
+                totalRecoveredValue: crimeGroup.totalRecoveredValue || 0,
+                totalTheftSuccess: crimeGroup.totalTheftSuccess || 0,
+                totalValue: crimeGroup.totalValue || 0,
+              }))
+            : [],
+        linkedArticles:
+          articlesData && articlesData.length > 0
+            ? articlesData.map((article) => ({
+                id: article.id,
+                images:
+                  article.images?.map((image) => ({
+                    ...image,
+                    position: ImagePosition.CenterCenter,
+                    rotation: 0,
+                  })) || [],
+                title: article.title,
+                updatedAt: article.updatedAt || new Date(),
+                watermarkImage: article.watermarkImage || false,
+                previewText: article.previewText,
+                priority: article.priority,
+                createdBy: {
+                  id: article.createdBy?.id || '',
+                  fullName: article.createdBy?.fullName || '',
+                },
+              }))
+            : [],
       };
 
       const data = {
@@ -467,6 +595,10 @@ const useUpdateBar = ({
           crimeGroupsData && crimeGroupsData.length > 0
             ? crimeGroupsData.map(({ id }) => ({ id }))
             : undefined,
+        linkedArticles:
+          articlesData && articlesData.length > 0
+            ? articlesData.map(({ id }) => ({ id }))
+            : undefined,
         mentionedUsers:
           mentionedUser.length > 0
             ? mentionedUser.map(({ id }) => ({ id }))
@@ -474,6 +606,8 @@ const useUpdateBar = ({
       };
 
       if (incidentId) {
+        console.log('createIncidentUpdate');
+
         void createIncidentUpdate({
           variables: {
             data,
@@ -481,39 +615,10 @@ const useUpdateBar = ({
               id: incidentId,
             },
           },
+          // ???
           optimisticResponse: {
             __typename: 'Mutation',
-            createUpdateOnIncident: {
-              createdAt: new Date(),
-              createdBy: {
-                fullName,
-                origName: fullName,
-                id: userId,
-                businesses,
-                __typename: 'User',
-              },
-              id: `optimistic-${new Date().toISOString()}`,
-              images:
-                updateFileList.length > 0
-                  ? updateFileList.map((image) => ({
-                      id: image.uid,
-                      __typename: 'Image',
-                      card: image.url,
-                      optimised: image.url,
-                      url: image.url,
-                      position: ImagePosition.CenterCenter,
-                      rotation: 0,
-                    }))
-                  : [],
-              replies: [],
-              type: getUpdateType(),
-              __typename: 'Update',
-              text: getText(updateInput, schemeUsers),
-              linkedIncidents: [],
-              linkedOffenders: [],
-              linkedCrimeGroups: [],
-              linkedVehicles: [],
-            },
+            createUpdateOnIncident: newResponse,
           },
           update: (store, result) => {
             if (result.data?.createUpdateOnIncident) {
@@ -541,14 +646,12 @@ const useUpdateBar = ({
                     data: {
                       incident: {
                         ...oldData.incident,
-                        // TODO check types
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore
+
                         updates: replyTo
                           ? update(oldData.incident.updates, {
                               [oldData.incident.updates
                                 .map((item) => item.id)
-                                .indexOf(replyTo.id)]: {
+                                .indexOf(replyTo?.id)]: {
                                 replies: {
                                   $push: [
                                     {
@@ -588,37 +691,7 @@ const useUpdateBar = ({
           },
           optimisticResponse: {
             __typename: 'Mutation',
-            createUpdateOnOffender: {
-              createdAt: new Date(),
-              createdBy: {
-                fullName,
-                origName: fullName,
-                id: userId,
-                businesses,
-                __typename: 'User',
-              },
-              id: `optimistic-${new Date().toISOString()}`,
-              images:
-                updateFileList.length > 0
-                  ? updateFileList.map((image) => ({
-                      id: image.uid,
-                      __typename: 'Image',
-                      card: image.url,
-                      optimised: image.url,
-                      url: image.url,
-                      position: ImagePosition.CenterCenter,
-                      rotation: 0,
-                    }))
-                  : [],
-              replies: [],
-              type: getUpdateType(),
-              __typename: 'Update',
-              text: getText(updateInput, schemeUsers),
-              linkedIncidents: [],
-              linkedOffenders: [],
-              linkedCrimeGroups: [],
-              linkedVehicles: [],
-            },
+            createUpdateOnOffender: newResponse,
           },
           update: (store, result) => {
             if (result.data?.createUpdateOnOffender) {
@@ -693,37 +766,7 @@ const useUpdateBar = ({
           },
           optimisticResponse: {
             __typename: 'Mutation',
-            createUpdateOnInvestigation: {
-              createdAt: new Date(),
-              createdBy: {
-                fullName,
-                origName: fullName,
-                id: userId,
-                businesses,
-                __typename: 'User',
-              },
-              id: `optimistic-${new Date().toISOString()}`,
-              images:
-                updateFileList.length > 0
-                  ? updateFileList.map((image) => ({
-                      id: image.uid,
-                      __typename: 'Image',
-                      card: image.url,
-                      optimised: image.url,
-                      url: image.url,
-                      position: ImagePosition.CenterCenter,
-                      rotation: 0,
-                    }))
-                  : [],
-              replies: [],
-              type: getUpdateType(),
-              __typename: 'Update',
-              text: getText(updateInput, schemeUsers),
-              linkedIncidents: [],
-              linkedOffenders: [],
-              linkedCrimeGroups: [],
-              linkedVehicles: [],
-            },
+            createUpdateOnInvestigation: newResponse,
           },
           update: (store, result) => {
             if (result.data?.createUpdateOnInvestigation) {
@@ -799,37 +842,7 @@ const useUpdateBar = ({
           },
           optimisticResponse: {
             __typename: 'Mutation',
-            createUpdateOnCrimeGroup: {
-              createdAt: new Date(),
-              createdBy: {
-                fullName,
-                origName: fullName,
-                id: userId,
-                businesses,
-                __typename: 'User',
-              },
-              id: `optimistic-${new Date().toISOString()}`,
-              images:
-                updateFileList.length > 0
-                  ? updateFileList.map((image) => ({
-                      id: image.uid,
-                      __typename: 'Image',
-                      card: image.url,
-                      optimised: image.url,
-                      url: image.url,
-                      position: ImagePosition.CenterCenter,
-                      rotation: 0,
-                    }))
-                  : [],
-              replies: [],
-              type: getUpdateType(),
-              __typename: 'Update',
-              text: getText(updateInput, schemeUsers),
-              linkedIncidents: [],
-              linkedOffenders: [],
-              linkedCrimeGroups: [],
-              linkedVehicles: [],
-            },
+            createUpdateOnCrimeGroup: newResponse,
           },
           update: (store, result) => {
             if (result.data?.createUpdateOnCrimeGroup) {
@@ -903,7 +916,7 @@ const useUpdateBar = ({
           optimisticResponse: {
             __typename: 'Mutation',
             createUpdateOnVehicle: {
-              createdAt: new Date(),
+              __typename: 'Update',
               createdBy: {
                 fullName,
                 origName: fullName,
@@ -911,7 +924,6 @@ const useUpdateBar = ({
                 businesses,
                 __typename: 'User',
               },
-              id: `optimistic-${new Date().toISOString()}`,
               images:
                 updateFileList.length > 0
                   ? updateFileList.map((image) => ({
@@ -924,14 +936,7 @@ const useUpdateBar = ({
                       rotation: 0,
                     }))
                   : [],
-              replies: [],
-              type: getUpdateType(),
-              __typename: 'Update',
-              text: getText(updateInput, schemeUsers),
-              linkedIncidents: [],
-              linkedOffenders: [],
-              linkedCrimeGroups: [],
-              linkedVehicles: [],
+              ...newResponse,
             },
           },
           update: (store, result) => {
@@ -1067,6 +1072,11 @@ const useUpdateBar = ({
       setVehiclesData(vehiclesData?.filter((vehicle) => vehicle.id !== value));
     }
   };
+  const removeArticle = (value: string | undefined) => {
+    if (value) {
+      setArticlesData(articlesData?.filter((article) => article.id !== value));
+    }
+  };
 
   const toggleLinkUpdateIncident = () => {
     setLinkIncident(!linkIncident);
@@ -1079,6 +1089,9 @@ const useUpdateBar = ({
   };
   const toggleLinkCrimeGroup = () => {
     setLinkCrimeGroup(!linkCrimeGroup);
+  };
+  const toggleLinkArticle = () => {
+    setLinkArticle(!linkArticle);
   };
   const toggleShowUpdatePicker = () => {
     setShowUpdatePicker(!showUpdatePicker);
@@ -1126,6 +1139,11 @@ const useUpdateBar = ({
       setVehiclesData([...vehiclesData, selectedVehicle]);
     }
   };
+  const updateArticleList = (selectedArticle: ArticleData) => {
+    if (selectedArticle) {
+      setArticlesData([...articlesData, selectedArticle]);
+    }
+  };
   const [updateTodoMention] = useUpdateTodoMentionMutation();
   const getWhereArgs = () => {
     if (incidentId) return { incidentId, type: TodoType.IncidentUpdate };
@@ -1152,7 +1170,6 @@ const useUpdateBar = ({
   };
 
   return {
-    updateForm,
     beforeUpdateImageUpload,
     onSubmitUpdate,
     onUpdateImageChange,
@@ -1163,6 +1180,7 @@ const useUpdateBar = ({
     removeUpdateOffender,
     removeCrimeGroup,
     removeVehicle,
+    removeArticle,
     schemeUsers,
     setMentionedUser,
     setUpdateInput,
@@ -1172,20 +1190,25 @@ const useUpdateBar = ({
     toggleShowUpdatePicker,
     toggleLinkVehicle,
     toggleLinkCrimeGroup,
+    toggleLinkArticle,
+    updateFileList,
+    updateForm,
+    updateIncidents,
+    updateInput,
     updateIncidentList,
     updateOffendersList,
     updateVehicleList,
     updateCrimeGroupList,
-    linkOffender,
+    updateArticleList,
     linkIncident,
+    linkOffender,
     linkVehicle,
     linkCrimeGroup,
-    updateFileList,
-    updateIncidents,
-    updateInput,
+    linkArticle,
     updateOffenders,
     crimeGroupsData,
     vehiclesData,
+    articlesData,
     saving,
     adminRights: userRole !== Role.User,
     handleMarkAsRead,

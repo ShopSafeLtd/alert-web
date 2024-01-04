@@ -461,6 +461,7 @@ const ViewInvestigation = ({
         width="800"
         onClose={toggleAddExistingVehicle}
         zIndex={1001}
+        bodyStyle={{ overflow: 'hidden' }}
       >
         {addExistingVehicle ? (
           <LinkVehicle

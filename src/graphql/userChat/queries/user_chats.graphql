@@ -43,6 +43,9 @@ query userChats(
           crimeGroups {
             id
           }
+          articles {
+            id
+          }
         }
       }
     }

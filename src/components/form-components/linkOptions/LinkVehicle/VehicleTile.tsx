@@ -8,11 +8,12 @@ const { Paragraph } = Typography;
 
 const useStyles = createUseStyles({
   image: {
-    height: 160,
-    minWidth: 140,
+    height: 140,
+    width: 140,
   },
   details: {
-    padding: 15,
+    padding: 10,
+    overflow: 'hidden',
   },
   text: {
     marginBottom: '5px !important',
@@ -35,14 +36,18 @@ interface Props {
 const VehicleTile = ({ vehicle, onClick }: Props): JSX.Element => {
   const intl = useIntl();
   const classes = useStyles();
+  const unknown = intl.formatMessage({
+    defaultMessage: 'Unknown',
+    id: '5jeq8P',
+  });
 
   return (
     <Tooltip
       placement="bottom"
       title={intl.formatMessage(
         {
-          defaultMessage: 'Add {ref} to incident',
-          id: 'XnxQnj',
+          defaultMessage: 'Add Alert ID: {ref} to incident',
+          id: 'bwgI7n',
         },
         { ref: vehicle.reference }
       )}
@@ -55,9 +60,10 @@ const VehicleTile = ({ vehicle, onClick }: Props): JSX.Element => {
           borderRadius: '0.625rem',
           overflow: 'hidden',
           display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          // alignItems: 'center',
+          // justifyContent: 'center',
           cursor: 'pointer',
+          height: 140,
         }}
       >
         {vehicle.images.length > 0 && (
@@ -66,61 +72,41 @@ const VehicleTile = ({ vehicle, onClick }: Props): JSX.Element => {
           </div>
         )}
         <div className={classes.details}>
-          <Paragraph className={classes.text}>
+          <Paragraph ellipsis className={classes.text}>
             {intl.formatMessage(
               { defaultMessage: 'Alert ID: {ref}', id: 'umL9sI' },
               { ref: vehicle.reference }
             )}
           </Paragraph>
-          <Paragraph className={classes.text}>
+          <Paragraph ellipsis className={classes.text}>
             {intl.formatMessage(
               { defaultMessage: 'Registration: {reg}', id: 'OkCUcT' },
               {
-                reg:
-                  vehicle.registration ||
-                  intl.formatMessage({
-                    defaultMessage: 'Unknown',
-                    id: '5jeq8P',
-                  }),
+                reg: vehicle.registration || unknown,
               }
             )}
           </Paragraph>
-          <Paragraph className={classes.text}>
+          <Paragraph ellipsis className={classes.text}>
             {intl.formatMessage(
               { defaultMessage: 'Make: {make}', id: 'cPuur1' },
               {
-                make:
-                  vehicle.make ||
-                  intl.formatMessage({
-                    defaultMessage: 'Unknown',
-                    id: '5jeq8P',
-                  }),
+                make: vehicle.make || unknown,
               }
             )}
           </Paragraph>
-          <Paragraph className={classes.text}>
+          <Paragraph ellipsis className={classes.text}>
             {intl.formatMessage(
               { defaultMessage: 'Model: {model}', id: '6gT5ZW' },
               {
-                model:
-                  vehicle.model ||
-                  intl.formatMessage({
-                    defaultMessage: 'Unknown',
-                    id: '5jeq8P',
-                  }),
+                model: vehicle.model || unknown,
               }
             )}
           </Paragraph>
-          <Paragraph className={classes.text}>
+          <Paragraph ellipsis className={classes.text}>
             {intl.formatMessage(
               { defaultMessage: 'Colour: {colour}', id: 'pukOve' },
               {
-                colour:
-                  vehicle.colour ||
-                  intl.formatMessage({
-                    defaultMessage: 'Unknown',
-                    id: '5jeq8P',
-                  }),
+                colour: vehicle.colour || unknown,
               }
             )}
           </Paragraph>

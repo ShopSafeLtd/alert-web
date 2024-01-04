@@ -1,5 +1,5 @@
 import React from 'react';
-import type { ViewOffenderQuery } from 'graphql/generated';
+import type { EditOffenderQuery } from 'graphql/generated';
 import { IdSource } from 'graphql/generated';
 
 import {
@@ -23,7 +23,7 @@ import type { FormData } from './useEditOffenderFeed';
 interface Props {
   onClose: () => void;
   onSubmit: (value: FormData) => void;
-  data: ViewOffenderQuery | undefined;
+  data: EditOffenderQuery | undefined;
   loading: boolean;
   saving: boolean;
   groups: { value: string; label: string }[];
@@ -37,6 +37,7 @@ interface Props {
   idVerified: boolean;
   onValuesChange?: (changedValues: FormData, values: FormData) => void;
   adminRights: boolean;
+  needJustification: boolean;
 }
 
 const EditOffender = ({
@@ -56,8 +57,10 @@ const EditOffender = ({
   idVerified,
   onValuesChange,
   adminRights,
+  needJustification,
 }: Props): JSX.Element => {
   const intl = useIntl();
+
   return (
     <div className="list-view">
       {loading ? (
@@ -97,6 +100,11 @@ const EditOffender = ({
                 : [],
             idVerified: data?.offender?.idVerified || false,
             idSource: data?.offender?.idSource,
+            infoSource: data?.offender?.infoSource || '',
+            knownFor: data?.offender?.knownFor || [],
+            targetedGoods: data?.offender?.targetedGoods || [],
+            justification: data?.offender?.justification || '',
+            comment: data?.offender?.comment || '',
           }}
         >
           <Row gutter={30}>
@@ -116,6 +124,7 @@ const EditOffender = ({
                 <Input disabled={saving} />
               </Form.Item>
             </Col>
+
             <Col span={12}>
               <Form.Item
                 name="alias"
@@ -162,7 +171,6 @@ const EditOffender = ({
                 <Select options={heightValues} disabled={saving} />
               </Form.Item>
             </Col>
-            {/* </Row> */}
             <Col span={12}>
               <Form.Item
                 name="gender"
@@ -210,6 +218,7 @@ const EditOffender = ({
                 <Input disabled={saving} />
               </Form.Item>
             </Col>
+
             <Col span={24}>
               <Form.Item
                 name="ageCheck"
@@ -491,7 +500,77 @@ const EditOffender = ({
               </Col>
             </Row>
           )}
+          {data?.offender.knownFor && data?.offender.knownFor.length > 1 && (
+            <Row>
+              <Col span={24}>
+                <Form.Item
+                  name="knownFor"
+                  label={intl.formatMessage({
+                    defaultMessage: 'Crime Types',
+                    id: 'Piba4q',
+                  })}
+                  tooltip={intl.formatMessage({
+                    defaultMessage:
+                      'Select the relevant crime types for this offender, these help to categorize the offender.',
+                    id: 'ly6B/b',
+                  })}
+                >
+                  <Select disabled={saving} mode="multiple" maxTagCount={3}>
+                    {data?.offender.knownFor.map((el) => (
+                      <Select.Option key={el} value={el}>
+                        {el}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              </Col>
+            </Row>
+          )}
+          {data?.offender.targetedGoods &&
+            data?.offender.targetedGoods.length > 1 && (
+              <Row>
+                <Col span={24}>
+                  <Form.Item
+                    name="targetedGoods"
+                    label={intl.formatMessage({
+                      defaultMessage: 'Goods',
+                      id: 'u5dS1t',
+                    })}
+                    tooltip={intl.formatMessage({
+                      defaultMessage:
+                        'Select the Goods that this offender stole.',
+                      id: 'cjsTZ/',
+                    })}
+                  >
+                    <Select disabled={saving} mode="multiple" maxTagCount={3}>
+                      {data?.offender.targetedGoods.map((el) => (
+                        <Select.Option key={el} value={el}>
+                          {el}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  </Form.Item>
+                </Col>
+              </Row>
+            )}
           <Row gutter={16}>
+            {data?.offender?.infoSource && (
+              <Col span={23}>
+                <Form.Item
+                  name="infoSource"
+                  label={intl.formatMessage({
+                    defaultMessage: 'Information Source',
+                    id: 'LUqHSz',
+                  })}
+                  tooltip={intl.formatMessage({
+                    defaultMessage: `Enter the information source of the offender's name`,
+                    id: 'WYJoK2',
+                  })}
+                >
+                  <Input.TextArea disabled={saving} />
+                </Form.Item>
+              </Col>
+            )}
             <Col span={23}>
               <Form.Item
                 name="peculiarities"
@@ -508,8 +587,6 @@ const EditOffender = ({
                 <Input.TextArea disabled={saving} />
               </Form.Item>
             </Col>
-          </Row>
-          <Row gutter={16}>
             <Col span={23}>
               <Form.Item
                 name="comment"
@@ -525,9 +602,34 @@ const EditOffender = ({
                 <Input.TextArea disabled={saving} />
               </Form.Item>
             </Col>
+            {(needJustification || data?.offender.justification) && (
+              <Col span={23}>
+                <Form.Item
+                  name="justification"
+                  label={intl.formatMessage({
+                    defaultMessage: 'Justification',
+                    id: 'i0xkcf',
+                  })}
+                  tooltip={intl.formatMessage({
+                    defaultMessage: `Enter a justification to explain why this offender doesn't connect with an incident.`,
+                    id: 'P7rUrU',
+                  })}
+                  rules={[
+                    {
+                      required: needJustification,
+                      message: intl.formatMessage({
+                        defaultMessage:
+                          'Please enter a justification for the offender.',
+                        id: '11rxZC',
+                      }),
+                    },
+                  ]}
+                >
+                  <Input.TextArea disabled={saving} />
+                </Form.Item>
+              </Col>
+            )}
           </Row>
-          <Row gutter={30} />
-          <Row gutter={30} />
 
           <Form.Item>
             <Row style={{ marginTop: 30 }} gutter={10} justify="end">

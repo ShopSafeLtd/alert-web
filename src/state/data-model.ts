@@ -109,7 +109,7 @@ export interface InvestigationFilters {
     | undefined;
 }
 export interface ArticleFilters {
-  orderBy: 'createdAtAsc' | 'createdAtDesc';
+  order: SortOrder;
   groups: string[];
   createdAt:
     | {
@@ -118,6 +118,8 @@ export interface ArticleFilters {
       }
     | undefined;
   priorities: ArticlePriority[];
+  search: string;
+  gallery: string[];
 }
 export interface UserFilters {
   orderBy: UserSort;
@@ -165,7 +167,9 @@ interface FeedItems {
   };
   variables: FeedItemFilters;
 }
-
+interface Articles {
+  variables: ArticleFilters;
+}
 interface Vehicles {
   pagination: {
     page: number;
@@ -185,6 +189,7 @@ interface CrimeGroups {
 interface Investigations {
   takeAllSchemes: boolean;
 }
+
 export interface DataModel {
   incidents: Incidents;
   offenders: Offenders;
@@ -192,6 +197,8 @@ export interface DataModel {
   vehicles: Vehicles;
   crimeGroups: CrimeGroups;
   investigations: Investigations;
+  articles: Articles;
+  setArticles: Action<DataModel, Articles>;
   setIncidents: Action<DataModel, Incidents>;
   setOffenders: Action<DataModel, Offenders>;
   setFeedItems: Action<DataModel, FeedItems>;
@@ -274,6 +281,19 @@ const dataModel: DataModel = {
 
   setFeedItems: action((state, payload) => {
     state.feedItems = payload;
+  }),
+  articles: {
+    variables: {
+      order: SortOrder.Desc,
+      createdAt: undefined,
+      groups: [],
+      priorities: [],
+      search: '',
+      gallery: [],
+    },
+  },
+  setArticles: action((state, payload) => {
+    state.articles = payload;
   }),
 
   vehicles: {

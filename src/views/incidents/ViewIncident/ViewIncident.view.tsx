@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import type {
   CreateDocumentMutation,
@@ -11,7 +9,7 @@ import type {
   UpdateTaskMutation,
   CreateInvestigationMutation,
 } from 'graphql/generated';
-import { GoodsMode, UpdateType } from 'graphql/generated';
+import { GoodsMode } from 'graphql/generated';
 import {
   Button,
   Card,
@@ -25,7 +23,6 @@ import {
   Menu,
   Modal,
   Popconfirm,
-  Popover,
   Row,
   Skeleton,
   Table,
@@ -58,13 +55,10 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import IncidentSideList from 'components/incidents/IncidentSideList';
 import UpdateBar from 'components/MessageInput/UpdateBar';
-import InfiniteScroll from 'react-infinite-scroll-component';
-
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import OffenderTable from 'components/tables/OffenderTable';
 import VehicleTable from 'components/tables/VehicleTable';
 import { FormattedMessage, useIntl } from 'react-intl';
-import moment from 'moment';
 import type {
   EditFeedImage,
   GoodsData,
@@ -93,7 +87,8 @@ import InvestigationTable from 'components/tables/InvestigationTable';
 import AddLocation from 'components/form-components/addresses/AddLocation';
 import LocatingCard from 'components/map/LocatingCard';
 import ImagesList from 'components/ViewPage/ImagesList';
-import UpdateContent from './Update.view';
+import IntelSection from 'components/ViewPage/IntelSection';
+import OffenderTile from 'components/form-components/linkOptions/SelectOffenders/OffenderTile';
 import useStyles from './ViewIncident.styles';
 import EvidenceTable from '../../../components/tables/EvidenceTable';
 import formatAnswer from '../../../utils/format-answer';
@@ -102,12 +97,13 @@ import ViewTodo from '../../../components/form-components/Todos/ViewTodo/Todo.co
 const { Title, Paragraph, Text } = Typography;
 
 interface Props {
+  incidentId: string;
   userRole: Role;
   data: ViewIncidentQuery | undefined;
   loading: boolean;
   saving: boolean;
   openLightbox: (index: number) => void;
-  incidentId: string;
+
   editRights: boolean;
   deleteRights: boolean;
   linkOffender: boolean;
@@ -130,8 +126,6 @@ interface Props {
       createdBy: string;
     } | null
   ) => void;
-  confirmUpdateImages: (images: { id: string; url: string }[]) => void;
-  addUpdateImages: (images: { id: string }[]) => void;
   addImages:
     | {
         id: string;
@@ -222,6 +216,16 @@ interface Props {
   editAddress: boolean;
   toggleEditAddress: () => void;
   onEditAddress: (value: LocationData) => void;
+  onAddUpdateImages: (
+    images: { id: string; url: string }[],
+    addToOffender?: boolean
+  ) => void;
+  onSelectUpdateImages: () => void;
+  showOffenderOptions: boolean;
+  toggleShowOffenderOptions: () => void;
+  onAddUpdateImagesToOffender: (id: string) => void;
+  selectedOffenderId: string;
+  setSelectedOffenderId: (id: string) => void;
 }
 
 const ViewIncident = ({
@@ -240,9 +244,7 @@ const ViewIncident = ({
   userId,
   replyTo,
   setReplyTo,
-  confirmUpdateImages,
   addImages,
-  addUpdateImages,
   closeAddImages,
   toggleSubscribe,
   selectedImages,
@@ -323,6 +325,13 @@ const ViewIncident = ({
   editAddress,
   toggleEditAddress,
   onEditAddress,
+  onSelectUpdateImages,
+  showOffenderOptions,
+  toggleShowOffenderOptions,
+  onAddUpdateImagesToOffender,
+  selectedOffenderId,
+  setSelectedOffenderId,
+  onAddUpdateImages,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
@@ -1573,290 +1582,26 @@ const ViewIncident = ({
               </Col>
               <Col span={8}>
                 <div className={classes.updatesContainer}>
-                  <InfiniteScroll
-                    // height="calc(100vh - 225px)"
-                    height={
-                      optionRowShow
-                        ? 'calc(100vh - 279px)'
-                        : 'calc(100vh - 169px)'
+                  <IntelSection
+                    updates={data?.incident?.updates}
+                    scrolledToTop={scrolledToTop}
+                    loadMore={loadMore}
+                    saving={saving}
+                    editRights={editRights}
+                    userId={userId}
+                    confirmDeleteUpdate={confirmDeleteUpdate}
+                    setEditUpdate={setEditUpdate}
+                    setReplyTo={setReplyTo}
+                    onAddToIncident={(value) => onAddUpdateImages(value)}
+                    onAddToOffender={
+                      data?.incident.offenders &&
+                      data?.incident.offenders.length > 0
+                        ? (value) => onAddUpdateImages(value, true)
+                        : undefined
                     }
-                    className="update-scroll"
-                    initialScrollY={0}
-                    dataLength={data?.incident?.updates?.length || 0}
-                    next={scrolledToTop}
-                    hasMore={loadMore}
-                    inverse
-                    style={{
-                      justifyContent: 'end',
-                      // display: 'flex',
-                      flexDirection: 'column',
-                    }}
-                    loader={
-                      <div className="message-date">
-                        <div className="date-line" />
-                        <div className="date">
-                          {intl.formatMessage({
-                            defaultMessage: 'Loading...',
-                            id: 'gjBiyj',
-                          })}
-                        </div>
-                        <div className="date-line" />
-                      </div>
-                    }
-                  >
-                    {data?.incident?.updates.map((update) => (
-                      <div key={update.id} className="update-wrapper">
-                        {editRights && update.type !== UpdateType.System ? (
-                          <Popover
-                            trigger="click"
-                            placement={
-                              update.createdBy.id === userId ? 'left' : 'right'
-                            }
-                            overlayClassName="message-popover"
-                            content={
-                              <div
-                                style={{
-                                  display: 'flex',
-                                  flexDirection: 'column',
-                                }}
-                              >
-                                <Button
-                                  type="text"
-                                  disabled={saving}
-                                  icon={
-                                    <FontAwesomeIcon
-                                      style={{ marginRight: 5 }}
-                                      icon={faEdit}
-                                      size="lg"
-                                    />
-                                  }
-                                  onClick={() => {
-                                    setEditUpdate({
-                                      id: update.id,
-                                      text: update.text || '',
-                                    });
-                                  }}
-                                  size="small"
-                                >
-                                  {intl.formatMessage({
-                                    defaultMessage: 'Edit Update',
-                                    id: 'pCzvx3',
-                                  })}
-                                </Button>
-                                <Button
-                                  type="text"
-                                  disabled={saving}
-                                  icon={
-                                    <FontAwesomeIcon
-                                      style={{ marginRight: 5 }}
-                                      icon={faTrash}
-                                      size="lg"
-                                    />
-                                  }
-                                  onClick={() => {
-                                    confirmDeleteUpdate(update.id);
-                                  }}
-                                  size="small"
-                                >
-                                  {intl.formatMessage({
-                                    defaultMessage: 'Delete Update',
-                                    id: 'ef1dfd',
-                                  })}
-                                </Button>
-                              </div>
-                            }
-                          >
-                            <div>
-                              <UpdateContent
-                                userId={userId}
-                                content={update.text}
-                                createdAt={moment(update.createdAt)}
-                                from={update.createdBy}
-                                id={update.id}
-                                images={update.images}
-                                incidents={update.linkedIncidents}
-                                offenders={update.linkedOffenders}
-                                vehicles={update.linkedVehicles}
-                                crimeGroups={update.linkedCrimeGroups}
-                                showDate
-                                showUser
-                              />
-                            </div>
-                          </Popover>
-                        ) : (
-                          <UpdateContent
-                            userId={userId}
-                            content={update.text}
-                            createdAt={moment(update.createdAt)}
-                            from={update.createdBy}
-                            id={update.id}
-                            images={update.images}
-                            incidents={update.linkedIncidents}
-                            offenders={update.linkedOffenders}
-                            vehicles={update.linkedVehicles}
-                            crimeGroups={update.linkedCrimeGroups}
-                            showDate
-                            showUser
-                          />
-                        )}
-                        {update.replies.map((reply) => (
-                          <div className="update-reply">
-                            {editRights ? (
-                              <Popover
-                                trigger="click"
-                                placement={
-                                  reply.createdBy.id === userId
-                                    ? 'left'
-                                    : 'right'
-                                }
-                                overlayClassName="message-popover"
-                                content={
-                                  <div
-                                    style={{
-                                      display: 'flex',
-                                      flexDirection: 'column',
-                                    }}
-                                  >
-                                    <Button
-                                      type="text"
-                                      disabled={saving}
-                                      icon={
-                                        <FontAwesomeIcon
-                                          style={{ marginRight: 5 }}
-                                          icon={faEdit}
-                                          size="lg"
-                                        />
-                                      }
-                                      onClick={() => {
-                                        setEditUpdate({
-                                          id: reply.id,
-                                          text: reply.text || '',
-                                        });
-                                      }}
-                                      size="small"
-                                    >
-                                      {intl.formatMessage({
-                                        defaultMessage: 'Edit Update',
-                                        id: 'pCzvx3',
-                                      })}
-                                    </Button>
-                                    <Button
-                                      type="text"
-                                      disabled={saving}
-                                      icon={
-                                        <FontAwesomeIcon
-                                          style={{ marginRight: 5 }}
-                                          icon={faTrash}
-                                          size="lg"
-                                        />
-                                      }
-                                      onClick={() => {
-                                        confirmDeleteUpdate(reply.id);
-                                      }}
-                                      size="small"
-                                    >
-                                      {intl.formatMessage({
-                                        defaultMessage: 'Delete Update',
-                                        id: 'ef1dfd',
-                                      })}
-                                    </Button>
-                                  </div>
-                                }
-                              >
-                                <div>
-                                  <UpdateContent
-                                    userId={userId}
-                                    content={reply.text}
-                                    createdAt={moment(reply.createdAt)}
-                                    from={reply.createdBy}
-                                    id={reply.id}
-                                    images={reply.images}
-                                    incidents={reply.linkedIncidents}
-                                    offenders={reply.linkedOffenders}
-                                    showDate
-                                    showUser
-                                  />
-                                </div>
-                              </Popover>
-                            ) : (
-                              <UpdateContent
-                                userId={userId}
-                                content={reply.text}
-                                createdAt={moment(reply.createdAt)}
-                                from={reply.createdBy}
-                                id={reply.id}
-                                images={reply.images}
-                                incidents={reply.linkedIncidents}
-                                offenders={reply.linkedOffenders}
-                                showDate
-                                showUser
-                              />
-                            )}
-                          </div>
-                        ))}
-                        <Row>
-                          {update.type !== UpdateType.System && (
-                            <Col>
-                              <Button
-                                style={{
-                                  marginLeft:
-                                    update.replies.length > 0 ? 48 : 0,
-                                }}
-                                type="text"
-                                danger
-                                size="small"
-                                onClick={() =>
-                                  setReplyTo({
-                                    createdAt: update.createdAt.toString(),
-                                    createdBy:
-                                      userId === update.createdBy.id
-                                        ? intl.formatMessage({
-                                            defaultMessage: 'You',
-                                            id: 'kJ5W29',
-                                          })
-                                        : `${update.createdBy.fullName} - ${update.createdBy.businesses[0]?.name}`,
-                                    id: update.id,
-                                    text: update.text || '',
-                                  })
-                                }
-                              >
-                                {intl.formatMessage({
-                                  defaultMessage: 'Reply',
-                                  id: '9HU8vw',
-                                })}
-                              </Button>
-                            </Col>
-                          )}
-                          {update.type === UpdateType.Image && editRights && (
-                            <Col>
-                              <Button
-                                style={{
-                                  marginLeft:
-                                    update.replies.length > 0 ? 48 : 0,
-                                }}
-                                type="text"
-                                danger
-                                size="small"
-                                onClick={() =>
-                                  confirmUpdateImages(
-                                    update.images.map(({ id, optimised }) => ({
-                                      id,
-                                      url: optimised || '',
-                                    }))
-                                  )
-                                }
-                              >
-                                {intl.formatMessage({
-                                  defaultMessage: 'Add Image to Incident',
-                                  id: 'VN9g7W',
-                                })}
-                              </Button>
-                            </Col>
-                          )}
-                        </Row>
-                      </div>
-                    ))}
-                  </InfiniteScroll>
+                    optionRowShow={optionRowShow}
+                  />
+
                   <UpdateBar
                     replyTo={replyTo}
                     incidentId={incidentId}
@@ -1876,7 +1621,10 @@ const ViewIncident = ({
           id: 'eSO3MA',
         })}
         open={addImages !== null}
-        onOk={() => addUpdateImages(selectedImages.map((id) => ({ id })))}
+        onOk={() => {
+          if (selectedImages && selectedImages.length > 0)
+            onSelectUpdateImages();
+        }}
         onCancel={closeAddImages}
         width={addImages ? addImages.length * 250 : 400}
         okText={intl.formatMessage({
@@ -1886,21 +1634,11 @@ const ViewIncident = ({
       >
         <Row justify="center" gutter={8}>
           {addImages?.map((image) => (
-            <Col
-              key={image.id}
-              style={{
-                position: 'relative',
-              }}
-            >
+            <Col key={image.id} className={classes.selectCard}>
               <Checkbox
                 onChange={() => toggleSelectImages(image.id)}
                 checked={selectedImages.includes(image.id)}
-                style={{
-                  position: 'absolute',
-                  top: 5,
-                  left: 10,
-                  zIndex: 100,
-                }}
+                className={classes.checkBox}
               />
               <div style={{ width: 200, height: 200, marginBottom: 10 }}>
                 <WatermarkImage url={image.url} />
@@ -1909,7 +1647,49 @@ const ViewIncident = ({
           ))}
         </Row>
       </Modal>
+      <Modal
+        title={intl.formatMessage({
+          defaultMessage: 'Select an offender to add the update images',
+          id: 'JiCzW0',
+        })}
+        open={showOffenderOptions}
+        onOk={() => {
+          if (selectedOffenderId)
+            onAddUpdateImagesToOffender(selectedOffenderId);
+        }}
+        onCancel={() => {
+          toggleShowOffenderOptions();
+          closeAddImages();
+          setSelectedOffenderId('');
+        }}
+        width={700}
+        okText={intl.formatMessage({
+          defaultMessage: 'Add Offender',
+          id: 'm3ChN4',
+        })}
+      >
+        <Row gutter={8}>
+          {data?.incident.offenders?.map((offender) => (
+            <Col
+              className={classes.selectCard}
+              key={offender.id}
+              span={offender.images && offender.images.length > 0 ? 12 : 6}
+            >
+              <Checkbox
+                value={offender.id}
+                checked={offender.id === selectedOffenderId}
+                onChange={() => setSelectedOffenderId(offender.id)}
+                className={classes.checkBox}
+              />
 
+              <OffenderTile
+                offender={offender}
+                onClick={() => setSelectedOffenderId(offender.id)}
+              />
+            </Col>
+          ))}
+        </Row>
+      </Modal>
       <Modal
         title={intl.formatMessage({
           defaultMessage: 'Edit Update Content',
@@ -2062,6 +1842,7 @@ const ViewIncident = ({
         width="800"
         onClose={toggleAddExistingVehicle}
         zIndex={1001}
+        bodyStyle={{ overflow: 'hidden' }}
       >
         {addExistingVehicle ? (
           <LinkVehicle

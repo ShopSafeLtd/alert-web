@@ -34,7 +34,7 @@ query userNotifications(
           userNotifications
           languageCount
           autoPopulateDescription
-
+          needJustification
           logo {
             optimisedPersisted
             id

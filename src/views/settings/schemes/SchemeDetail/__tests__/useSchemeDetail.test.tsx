@@ -81,6 +81,7 @@ const UseRecycledItemListTest = () => {
           onSubmit({
             name: 'new name',
             autoPopulateDescription: false,
+            needJustification: false,
             autoApproveIncidents: false,
             autoApproveOffenders: false,
             restrictIncidentAccess: false,

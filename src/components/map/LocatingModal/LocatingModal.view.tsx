@@ -63,12 +63,9 @@ const LocatingModal = ({
   }, [viewportData]);
 
   const handleOnResult = (event) => {
-    // console.log('handleOnResult', event.result);
     setViewport({
-      // ???
       // eslint-disable-next-line
       latitude: event.result.center[1],
-      // ???
       // eslint-disable-next-line
       longitude: event.result.center[0],
       // transitionDuration: 500,

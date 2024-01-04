@@ -205,6 +205,7 @@ const ViewOffender = ({
                         {messages && messages.length > 0
                           ? // eslint-disable-next-line formatjs/no-literal-string-in-jsx
                             `${messages?.slice(-1)[0].from.origName} : ${
+                              // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
                               getContent(messages?.slice(-1)[0].content) ||
                               (messages?.slice(-1)[0].images &&
                                 messages?.slice(-1)[0].images.length &&
@@ -235,6 +236,14 @@ const ViewOffender = ({
                                 intl.formatMessage({
                                   defaultMessage: 'Linked a crime group',
                                   id: 'PQ3WJD',
+                                })) ||
+                              (messages?.slice(-1)[0].articles &&
+                                // ?????
+                                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                                messages?.slice(-1)[0].articles.length &&
+                                intl.formatMessage({
+                                  defaultMessage: 'Linked an article',
+                                  id: 'YFR/Y5',
                                 }))
                             }`
                           : intl.formatMessage({

@@ -4,7 +4,6 @@ import type { ListArticlesQuery } from 'graphql/generated';
 import { ArticlePriority, Role } from 'graphql/generated';
 import { Link } from 'react-router-dom';
 import SkeletonImage from 'components/images/SkeletonImage.view';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamationCircle } from '@fortawesome/pro-solid-svg-icons';
 
@@ -17,6 +16,7 @@ import WatermarkImage from 'components/images/WatermarkImage.view';
 import FormatCalendar from 'utils/format-calendar-24h';
 import { useStoreState } from 'state';
 import { useIntl } from 'react-intl';
+import moment from 'moment';
 import useStyles from './ArticleCard.styles';
 
 const { Title, Paragraph, Text } = Typography;
@@ -122,7 +122,7 @@ const ArticleCard = ({ article, openLightbox }: Props): JSX.Element => {
                 icon={faClock}
                 style={{ marginRight: 5 }}
               />
-              <Text>{FormatCalendar(updatedAt || new Date())}</Text>
+              <Text>{FormatCalendar(updatedAt || moment())}</Text>
             </Col>
           </Row>
           {userGroups.length > 0 &&

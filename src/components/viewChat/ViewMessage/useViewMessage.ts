@@ -39,6 +39,7 @@ import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import moment from 'moment';
 import update from 'immutability-helper';
 import type {
+  ArticleData,
   CrimeGroupData,
   IncidentCardData,
   SchemeUserData,
@@ -114,22 +115,27 @@ interface Return {
   incidentsData: IncidentCardData[];
   crimeGroupsData: CrimeGroupData[];
   vehiclesData: VehicleData[];
+  articlesData: ArticleData[];
   linkIncident: boolean;
   linkOffender: boolean;
   linkVehicle: boolean;
   linkCrimeGroup: boolean;
+  linkArticle: boolean;
   toggleLinkIncident: () => void;
   toggleLinkOffender: () => void;
   toggleLinkVehicle: () => void;
   toggleLinkCrimeGroup: () => void;
+  toggleLinkArticle: () => void;
   updateOffendersList: (value: OffenderData) => void;
   updateIncidentList: (value: IncidentCardData) => void;
   updateVehicleList: (value: VehicleData) => void;
   updateCrimeGroupList: (value: CrimeGroupData) => void;
+  updateArticleList: (value: ArticleData) => void;
   removeOffender: (value: string | undefined) => void;
   removeIncident: (value: string | undefined) => void;
   removeCrimeGroup: (value: string | undefined) => void;
   removeVehicle: (value: string | undefined) => void;
+  removeArticle: (value: string | undefined) => void;
   removeImage: (uid: string) => void;
   mentionedUser: { id: string; value: string }[];
   setMentionedUser: (value: { id: string; value: string }[]) => void;
@@ -175,6 +181,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   const [linkOffender, setLinkOffender] = useState(false);
   const [linkVehicle, setLinkVehicle] = useState(false);
   const [linkCrimeGroup, setLinkCrimeGroup] = useState(false);
+  const [linkArticle, setLinkArticle] = useState(false);
   const [offendersData, setOffendersData] = useState<OffenderData[]>([]);
   const [mentionedUser, setMentionedUser] = useState<
     { id: string; value: string }[]
@@ -183,6 +190,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   const [incidentsData, setIncidentsData] = useState<IncidentCardData[]>([]);
   const [crimeGroupsData, setCrimeGroupsData] = useState<CrimeGroupData[]>([]);
   const [vehiclesData, setVehiclesData] = useState<VehicleData[]>([]);
+  const [articlesData, setArticlesData] = useState<ArticleData[]>([]);
 
   useEffect(() => {
     setLoading(true);
@@ -347,6 +355,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                             offenders: newMessage.offenders,
                             vehicles: newMessage.vehicles,
                             crimeGroups: newMessage.crimeGroups,
+                            articles: newMessage.articles,
                           },
                         ],
                       },
@@ -413,6 +422,8 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                     subscriptionData.data.chatMessages[0]?.showUser || false,
                   vehicles:
                     subscriptionData.data.chatMessages[0]?.vehicles || [],
+                  articles:
+                    subscriptionData.data.chatMessages[0]?.articles || [],
                   from: {
                     fullName:
                       subscriptionData.data.chatMessages[0]?.from?.fullName ||
@@ -556,6 +567,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                       offenders: res.createMessage.offenders,
                       crimeGroups: res.createMessage.crimeGroups,
                       vehicles: res.createMessage.vehicles,
+                      articles: res.createMessage.articles,
                     },
                   ],
                 },
@@ -733,6 +745,9 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   const toggleLinkCrimeGroup = () => {
     setLinkCrimeGroup(!linkCrimeGroup);
   };
+  const toggleLinkArticle = () => {
+    setLinkArticle(!linkArticle);
+  };
   const updateOffendersList = (selectedOffender: OffenderData) => {
     if (!offendersData?.find(({ id }) => id === selectedOffender.id)) {
       setOffendersData([...offendersData, selectedOffender]);
@@ -753,6 +768,11 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       setVehiclesData([...vehiclesData, selectedVehicle]);
     }
   };
+  const updateArticleList = (selectedArticle: ArticleData) => {
+    if (!articlesData?.find(({ id }) => id === selectedArticle.id)) {
+      setArticlesData([...articlesData, selectedArticle]);
+    }
+  };
   const removeOffender = (offenderId: string | undefined) => {
     if (offenderId) {
       setOffendersData(
@@ -760,6 +780,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       );
     }
   };
+
   const removeIncident = (incidentId: string | undefined) => {
     if (incidentId) {
       setIncidentsData(
@@ -778,6 +799,13 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     if (vehicleId) {
       setVehiclesData(
         vehiclesData?.filter((vehicle) => vehicle.id !== vehicleId)
+      );
+    }
+  };
+  const removeArticle = (articleId: string | undefined) => {
+    if (articleId) {
+      setArticlesData(
+        articlesData?.filter((article) => article.id !== articleId)
       );
     }
   };
@@ -843,6 +871,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     setOffendersData([]);
     setVehiclesData([]);
     setCrimeGroupsData([]);
+    setArticlesData([]);
     setMentionedUser([]);
   };
   const [sendMessage] = useCreateMessageMutation({
@@ -863,7 +892,8 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       !(incidentsData && incidentsData.length > 0) &&
       offendersData.length === 0 &&
       vehiclesData.length === 0 &&
-      crimeGroupsData.length === 0
+      crimeGroupsData.length === 0 &&
+      articlesData.length === 0
     ) {
       void message.info(
         intl.formatMessage({
@@ -932,6 +962,12 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                   ? crimeGroupsData.map(({ id }) => ({ id }))
                   : undefined,
             },
+            articles: {
+              connect:
+                articlesData && articlesData.length > 0
+                  ? articlesData.map(({ id }) => ({ id }))
+                  : undefined,
+            },
           },
         },
         optimisticResponse: {
@@ -966,6 +1002,8 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                     subject: incident.subject,
                     description: incident.description || '',
                     dayTime: incident.dayTime || '',
+                    totalValue: incident.totalValue || 0,
+                    totalRecoveredValue: incident.totalRecoveredValue || 0,
                   }))
                 : [],
             offenders:
@@ -988,7 +1026,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                   }))
                 : [],
             vehicles:
-              incidentsData && vehiclesData.length > 0
+              vehiclesData && vehiclesData.length > 0
                 ? vehiclesData.map((vehicle) => ({
                     id: vehicle.id,
                     images:
@@ -1012,6 +1050,30 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                     alias: crimeGroup.alias,
                     totalOffenders: crimeGroup.totalOffenders || 0,
                     totalIncidents: crimeGroup.totalIncidents || 0,
+                    totalRecoveredValue: crimeGroup.totalRecoveredValue || 0,
+                    totalTheftSuccess: crimeGroup.totalTheftSuccess || 0,
+                    totalValue: crimeGroup.totalValue || 0,
+                  }))
+                : [],
+            articles:
+              articlesData && articlesData.length > 0
+                ? articlesData.map((article) => ({
+                    id: article.id,
+                    images:
+                      article.images?.map((image) => ({
+                        ...image,
+                        position: ImagePosition.CenterCenter,
+                        rotation: 0,
+                      })) || [],
+                    title: article.title,
+                    updatedAt: article.updatedAt || new Date(),
+                    watermarkImage: article.watermarkImage || false,
+                    previewText: article.previewText,
+                    priority: article.priority,
+                    createdBy: {
+                      id: article.createdBy?.id || '',
+                      fullName: article.createdBy?.fullName || '',
+                    },
                   }))
                 : [],
             sent: false,
@@ -1044,6 +1106,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       setIncidentsData([]);
       setOffendersData([]);
       setVehiclesData([]);
+      setArticlesData([]);
       setCrimeGroupsData([]);
       setMentionedUser([]);
     }
@@ -1082,20 +1145,26 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     linkIncident,
     linkOffender,
     linkVehicle,
+    linkArticle,
+
     linkCrimeGroup,
     toggleLinkIncident,
     toggleLinkOffender,
     toggleLinkVehicle,
+    toggleLinkArticle,
+
     toggleLinkCrimeGroup,
     updateIncidentList,
     updateOffendersList,
     updateVehicleList,
+    updateArticleList,
     updateCrimeGroupList,
     removeOffender,
     removeIncident,
     removeImage,
     removeCrimeGroup,
     removeVehicle,
+    removeArticle,
     mentionedUser,
     setMentionedUser,
     deleteImageConfirm: () => {},
@@ -1105,6 +1174,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     setMessageSent,
     totalChats: chatData?.chat?.totalMessages || 0,
     restrictIncidentAccess,
+    articlesData,
   };
 };
 

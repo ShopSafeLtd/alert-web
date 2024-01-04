@@ -293,17 +293,28 @@ const useLinkIncident = ({
   // On mount
   useEffect(() => {
     const sizeOptions = getSizeOptions();
-    setIncidentsState({
-      pagination: {
-        ...pagination,
-        sizeOptions,
-      },
-      variables: {
-        ...variables,
-        groups: defaultGroups.map(({ id }) => id),
-      },
-      order,
-    });
+    if (groups.length === 0) {
+      setIncidentsState({
+        pagination: {
+          ...pagination,
+          sizeOptions,
+        },
+        variables: {
+          ...variables,
+          groups: defaultGroups.map(({ id }) => id),
+        },
+        order,
+      });
+    } else {
+      setIncidentsState({
+        pagination: {
+          ...pagination,
+          sizeOptions,
+        },
+        variables,
+        order,
+      });
+    }
   }, []);
 
   const onPaginationChange = (page: number, pageSize: number) => {

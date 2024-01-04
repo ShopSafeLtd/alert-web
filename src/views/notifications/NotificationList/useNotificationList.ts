@@ -72,6 +72,7 @@ interface Scheme {
   taskTimeTracking: boolean;
   languageCount: number;
   autoPopulateDescription: boolean;
+  needJustification: boolean;
 }
 interface Return {
   data:
@@ -335,6 +336,7 @@ const useNotificationLists = (): Return => {
 
     setScheme({
       autoPopulateDescription: scheme.autoPopulateDescription,
+      needJustification: scheme.needJustification,
       languageCount: scheme.languageCount,
       autoApproveIncidents: scheme.autoApproveIncidents,
       autoApproveOffenders: scheme.autoApproveOffenders,

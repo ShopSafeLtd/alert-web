@@ -57,6 +57,7 @@ const AddOffender = (): JSX.Element => {
     toggleViewPotentialOffenders,
     onSearchOffender,
     viewPotentialOffenders,
+    needJustification,
   } = useAddOffender();
 
   return (
@@ -114,6 +115,7 @@ const AddOffender = (): JSX.Element => {
         viewPotentialOffenders={viewPotentialOffenders}
         toggleViewPotentialOffenders={toggleViewPotentialOffenders}
         onSearchOffender={onSearchOffender}
+        needJustification={needJustification}
       />
     </div>
   );

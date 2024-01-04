@@ -9,11 +9,11 @@ const useStyles = createUseStyles((theme: Theme) => ({
     overflow: 'hidden',
     margin: '5px 5px 10px 5px',
     paddingBottom: 10,
-    height: 550,
+    height: 480,
   },
   image: {
     width: '100%',
-    height: 280,
+    height: 250,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
     backgroundPosition: 'center center',
@@ -21,7 +21,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
   imageExpand: {
     position: 'absolute',
     right: 0,
-    top: '230px',
+    top: '200px',
     color: '#fff',
     padding: '15px',
     cursor: ' pointer',
@@ -72,10 +72,11 @@ const useStyles = createUseStyles((theme: Theme) => ({
   content: {
     display: 'flex',
     flexDirection: 'column',
-    height: 240,
+    // height: 220,
     margin: '10px 20px 0px',
   },
-  details: { flex: 1 },
+  details: { height: 150 },
+
   skeletonImage: {
     height: '280px !important',
     width: '100% !important',

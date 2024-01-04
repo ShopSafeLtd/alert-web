@@ -24,6 +24,7 @@ const EditOffender = ({ offenderId, onClose }: Props): JSX.Element => {
     idVerified,
     onValuesChange,
     adminRights,
+    needJustification,
   } = useEditOffender({ offenderId, onClose });
   return (
     <div>
@@ -44,6 +45,7 @@ const EditOffender = ({ offenderId, onClose }: Props): JSX.Element => {
         customGalleries={customGalleries}
         customGalleriesLoading={customGalleriesLoading}
         adminRights={adminRights}
+        needJustification={needJustification}
       />
     </div>
   );

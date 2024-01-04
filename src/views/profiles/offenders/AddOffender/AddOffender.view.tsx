@@ -89,6 +89,7 @@ interface Props {
   viewPotentialOffenders: boolean;
   toggleViewPotentialOffenders: () => void;
   onSearchOffender: () => void;
+  needJustification: boolean;
 }
 
 const AddOffender = ({
@@ -145,6 +146,7 @@ const AddOffender = ({
   viewPotentialOffenders,
   toggleViewPotentialOffenders,
   onSearchOffender,
+  needJustification,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return (
@@ -437,7 +439,69 @@ const AddOffender = ({
             </>
           </Card>
         )}
-
+        {needJustification && (
+          <Card>
+            <>
+              <Row align="bottom" style={{ marginBottom: 30 }}>
+                <Col>
+                  <Title style={{ marginBottom: 0 }} level={4}>
+                    {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                    {adminRights ? '7.' : '5.'}
+                  </Title>
+                </Col>
+                <Col>
+                  <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
+                    {intl.formatMessage({
+                      defaultMessage:
+                        'Justification for adding the offender to Alert',
+                      id: '+66o7X',
+                    })}
+                  </Title>
+                </Col>
+                <Col>
+                  <Paragraph
+                    style={{ marginBottom: 1, marginLeft: 5 }}
+                    type="secondary"
+                    italic
+                  >
+                    {intl.formatMessage({
+                      defaultMessage:
+                        '- Please enter a justification for the offender',
+                      id: 'Fraazv',
+                    })}
+                  </Paragraph>
+                </Col>
+              </Row>
+              <Row>
+                <Col span={23}>
+                  <Form.Item
+                    name="justification"
+                    label={intl.formatMessage({
+                      defaultMessage: 'Justification',
+                      id: 'i0xkcf',
+                    })}
+                    tooltip={intl.formatMessage({
+                      defaultMessage: `Enter a justification to explain why this offender doesn't connect with an incident.`,
+                      id: 'P7rUrU',
+                    })}
+                    rules={[
+                      {
+                        required: true,
+                        message: intl.formatMessage({
+                          defaultMessage:
+                            'Please enter a justification for the offender.',
+                          id: '11rxZC',
+                        }),
+                      },
+                    ]}
+                  >
+                    <Input.TextArea disabled={saving} />
+                  </Form.Item>
+                </Col>
+              </Row>
+            </>
+          </Card>
+        )}
         <Form.Item>
           <Row style={{ marginTop: 10 }} gutter={10} justify="end">
             {!reportOnly && (

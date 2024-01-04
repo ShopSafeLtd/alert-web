@@ -1,0 +1,20 @@
+query ListVehiclesCard(
+  $take: Int
+  $skip: Int
+  $where: VehicleWhereInput
+  $order: VehicleOrderByWithRelationInput
+) {
+  listVehicles(take: $take, skip: $skip, where: $where, order: $order) {
+    vehicles {
+      ...Vehicles
+      images {
+        id
+        optimised
+        url
+        position
+        rotation
+      }
+    }
+    total
+  }
+}

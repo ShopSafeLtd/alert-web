@@ -715,13 +715,13 @@ const FeedItem = ({
             <Col span={adminRights ? 12 : 24} style={{ height: '100%' }}>
               <ArticlesSection
                 fullSearch={search}
-                searchMydata={gallery.includes('MYDATA')}
                 fullCreatedAtFilter={createdAtFilter}
                 fullGroupFilter={groupsFilter}
                 saving={saving}
                 groups={groups}
                 groupsLoading={groupsLoading}
                 adminRights={adminRights}
+                fullGallery={gallery}
               />
             </Col>
             {adminRights && (

@@ -92,6 +92,7 @@ const SchemeDetail = ({
             defaultIncidentEmail: data?.scheme?.defaultIncidentEmail,
             defaultIncidentPush: data?.scheme?.defaultIncidentPush,
             autoPopulateDescription: data?.scheme?.autoPopulateDescription,
+            needJustification: data?.scheme?.needJustification,
             defaultSubscribedIncidentOnly:
               data?.scheme?.defaultSubscribedIncidentOnly,
             defaultSubscribedOffenderOnly:
@@ -624,6 +625,24 @@ const SchemeDetail = ({
                     id: 'dOQCOj',
                   })}
                   name="imagesRequiredOnOffenders"
+                  valuePropName="checked"
+                  style={{ marginBottom: 0 }}
+                >
+                  <Switch
+                    disabled={saving}
+                    style={{ marginLeft: 5 }}
+                    className="scheme-detail-switch"
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={15}>
+                <Form.Item
+                  label={intl.formatMessage({
+                    defaultMessage:
+                      'Justification is required for offenders without an incident',
+                    id: 'XOl7FF',
+                  })}
+                  name="needJustification"
                   valuePropName="checked"
                   style={{ marginBottom: 0 }}
                 >

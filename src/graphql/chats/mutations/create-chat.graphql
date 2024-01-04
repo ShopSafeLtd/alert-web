@@ -39,6 +39,9 @@ mutation createChat($data: ChatCreateInput!) {
           crimeGroups {
             id
           }
+          articles {
+            id
+          }
         }
       }
     }

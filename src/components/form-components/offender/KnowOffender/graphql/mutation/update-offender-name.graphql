@@ -1,0 +1,7 @@
+mutation updateOffenderName($id: String!, $data: OffenderUpdateInput!) {
+  updateOffender(where: { id: $id }, data: $data) {
+    id
+    name
+    infoSource
+  }
+}

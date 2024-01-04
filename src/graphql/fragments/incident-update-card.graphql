@@ -1,0 +1,15 @@
+fragment IncidentUpdateCards on Incident {
+  id
+  reference
+  dayTime
+  policeRef
+  subject
+  totalValue
+  totalRecoveredValue
+  location {
+    id
+    full
+    geoLat
+    geoLng
+  }
+}

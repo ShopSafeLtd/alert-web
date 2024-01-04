@@ -1,9 +1,7 @@
 import React from 'react';
 import type {
-  ArticlePriority,
   DeleteArticleMutation,
   ListArticlesFeedQuery,
-  SortOrder,
 } from 'graphql/generated';
 import { Button, Card, Col, Drawer, Empty, Input, Row } from 'antd';
 
@@ -14,13 +12,13 @@ import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
-import type { DateType } from 'types/DataType';
 import ArticleFilter from 'components/Articles/ArticleFilter';
 import ArticleCard from 'components/Articles/ArticleCard';
 import ArticleSkeletonCard from 'components/Articles/ArticleSkeletonCard';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { useIntl } from 'react-intl';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import type { ArticleFilters } from 'state/data-model';
 import Loading from '../../../components/shared-components/AntD/Loading';
 
 interface Props {
@@ -29,18 +27,9 @@ interface Props {
     | null
     | undefined;
   loading: boolean;
-  search: string;
   setSearch: (value: string) => void;
   sortFilter: boolean;
   toggleSortFilter: () => void;
-  clearFilters: () => void;
-  groupsFilter: string[];
-  setGroupsFilter: (value: string[]) => void;
-  priorityFilter: ArticlePriority[];
-  setPriorityFilter: (value: ArticlePriority[]) => void;
-  setCreatedAtFilter: (value: DateType | undefined) => void;
-  order: SortOrder;
-  setOrder: (value: SortOrder) => void;
   lightboxElements: {
     src: string;
   }[];
@@ -49,42 +38,41 @@ interface Props {
     index: number;
   };
   openLightbox: (elements: { src: string }[], index: number) => void;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
+  // groups: { value: string; label: string }[];
+  // groupsLoading: boolean;
   onNavigate: () => void;
-  gallery: string[];
   setGallery: (values: string[]) => void;
   updateArticleList: MutationUpdaterFn<DeleteArticleMutation>;
   fetchMoreScroll: () => void;
+  filterVariables: ArticleFilters;
 }
 
 const Article = ({
   data,
   loading,
-  order,
-  setOrder,
-  search,
   setSearch,
-  priorityFilter,
-  setPriorityFilter,
-  groups,
-  groupsLoading,
-  onNavigate,
+  sortFilter,
+  toggleSortFilter,
   lightboxElements,
   lightBoxOpen,
   openLightbox,
-  sortFilter,
-  toggleSortFilter,
-  clearFilters,
-  gallery,
+  // groups,
+  // groupsLoading,
+  onNavigate,
   setGallery,
-  groupsFilter,
-  setGroupsFilter,
-  setCreatedAtFilter,
   updateArticleList,
   fetchMoreScroll,
+  filterVariables,
 }: Props): JSX.Element => {
   const intl = useIntl();
+  const {
+    // groups: groupsFilter,
+    // // createdAt: createdAtFilter,
+    // order,
+    // priorities: priorityFilter,
+    search,
+    gallery,
+  } = filterVariables;
   return (
     <div
       className="feed-container"
@@ -268,18 +256,7 @@ const Article = ({
         onClose={toggleSortFilter}
         width={500}
       >
-        <ArticleFilter
-          order={order}
-          setOrder={setOrder}
-          groups={groups}
-          groupsLoading={groupsLoading}
-          priorityFilter={priorityFilter}
-          setPriorityFilter={setPriorityFilter}
-          groupsFilter={groupsFilter}
-          setGroupsFilter={setGroupsFilter}
-          clearFilters={clearFilters}
-          setCreatedAtFilter={setCreatedAtFilter}
-        />
+        <ArticleFilter />
       </Drawer>
       <Lightbox
         open={lightBoxOpen.open}

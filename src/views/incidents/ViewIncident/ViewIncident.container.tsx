@@ -21,9 +21,7 @@ const ViewIncident = (): JSX.Element => {
     userId,
     replyTo,
     setReplyTo,
-    confirmUpdateImages,
     addImages,
-    addUpdateImages,
     closeAddImages,
     toggleSubscribe,
     selectedImages,
@@ -101,6 +99,13 @@ const ViewIncident = (): JSX.Element => {
     editAddress,
     toggleEditAddress,
     onEditAddress,
+    onAddUpdateImages,
+    onSelectUpdateImages,
+    showOffenderOptions,
+    toggleShowOffenderOptions,
+    onAddUpdateImagesToOffender,
+    selectedOffenderId,
+    setSelectedOffenderId,
   } = useViewIncident(incidentId);
   const { onApprove, onReject, approving } = useApproveIncident({ incidentId });
 
@@ -125,9 +130,7 @@ const ViewIncident = (): JSX.Element => {
       userId={userId}
       replyTo={replyTo}
       setReplyTo={setReplyTo}
-      confirmUpdateImages={confirmUpdateImages}
       addImages={addImages}
-      addUpdateImages={addUpdateImages}
       closeAddImages={closeAddImages}
       toggleSubscribe={toggleSubscribe}
       selectedImages={selectedImages}
@@ -204,6 +207,13 @@ const ViewIncident = (): JSX.Element => {
       editAddress={editAddress}
       toggleEditAddress={toggleEditAddress}
       onEditAddress={onEditAddress}
+      onAddUpdateImages={onAddUpdateImages}
+      onSelectUpdateImages={onSelectUpdateImages}
+      showOffenderOptions={showOffenderOptions}
+      toggleShowOffenderOptions={toggleShowOffenderOptions}
+      onAddUpdateImagesToOffender={onAddUpdateImagesToOffender}
+      selectedOffenderId={selectedOffenderId}
+      setSelectedOffenderId={setSelectedOffenderId}
     />
   );
 };

@@ -354,14 +354,15 @@ const useIncidentFeed = (): Return => {
 
   // On mount
   useEffect(() => {
-    setIncidentsState({
-      pagination,
-      variables: {
-        ...variables,
-        groups: defaultGroups.map(({ id }) => id),
-      },
-      order,
-    });
+    if (groups.length === 0)
+      setIncidentsState({
+        pagination,
+        variables: {
+          ...variables,
+          groups: defaultGroups.map(({ id }) => id),
+        },
+        order,
+      });
   }, []);
   // update Incident list after deleting an item
   const updateIncidentList: MutationUpdaterFn<RecycleIncidentMutation> = (

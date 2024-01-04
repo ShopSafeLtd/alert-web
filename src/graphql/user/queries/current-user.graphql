@@ -55,6 +55,7 @@ query currentUser($scheme: UniqueId) {
         taskTimeTracking
         languageCount
         autoPopulateDescription
+        needJustification
       }
     }
     incidentEmail

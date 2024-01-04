@@ -222,6 +222,7 @@ const AddCrimeGroup = ({
         visible={linkVehicle}
         width="800"
         onClose={toggleLinkVehicle}
+        bodyStyle={{ overflow: 'hidden' }}
       >
         {linkVehicle ? (
           <LinkVehicle

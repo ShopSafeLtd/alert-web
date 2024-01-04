@@ -10,13 +10,8 @@ import {
   Row,
   Typography,
 } from 'antd';
-import type {
-  ArticlePriority,
-  ListArticlesQuery,
-  SortOrder,
-} from 'graphql/generated';
+import type { ListArticlesQuery } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { DateType } from 'types/DataType';
 import { faFilter } from '@fortawesome/pro-light-svg-icons';
 import { useIntl } from 'react-intl';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -38,20 +33,9 @@ interface Props {
   setSearch: (value: string) => void;
   sortFilter: boolean;
   toggleSortFilter: () => void;
-  clearFilters: () => void;
-  groupsFilter: string[];
-  setGroupsFilter: (value: string[]) => void;
-  priorityFilter: ArticlePriority[];
-  setPriorityFilter: (value: ArticlePriority[]) => void;
-
-  setCreatedAtFilter: (value: DateType | undefined) => void;
-  order: SortOrder;
-  setOrder: (value: SortOrder) => void;
-  saving: boolean;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
-  adminRights: boolean;
   fetchMoreScroll: () => void;
+  saving: boolean;
+  adminRights: boolean;
 }
 
 const ArticlesSection = ({
@@ -59,21 +43,11 @@ const ArticlesSection = ({
   loading,
   search,
   setSearch,
-  priorityFilter,
-  setPriorityFilter,
-  groupsFilter,
-  setGroupsFilter,
   sortFilter,
   toggleSortFilter,
-  clearFilters,
-  order,
-  setOrder,
-  setCreatedAtFilter,
-  saving,
-  groups,
-  groupsLoading,
-  adminRights,
   fetchMoreScroll,
+  saving,
+  adminRights,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
@@ -200,25 +174,7 @@ const ArticlesSection = ({
           </div>
         </Row>
       )}
-      {/* <Row justify="center" style={{ marginTop: 15 }}> */}
-      {/*   <Col> */}
-      {/*     <Pagination */}
-      {/*       total={data?.total} */}
-      {/*       // pageSizeOptions={['12']} */}
-      {/*       showSizeChanger={false} */}
-      {/*       pageSize={currentPageSize} */}
-      {/*       current={currentPage} */}
-      {/*       onChange={onPaginationChange} */}
-      {/*       showTotal={(total) => */}
-      {/*         intl.formatMessage( */}
-      {/*           { defaultMessage: `Total Bulletins: {total}`, id: '8LkFAr' }, */}
-      {/*           { total } */}
-      {/*         ) */}
-      {/*       } */}
-      {/*       hideOnSinglePage */}
-      {/*     /> */}
-      {/*   </Col> */}
-      {/* </Row> */}
+
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Bulletin Filters',
@@ -228,18 +184,7 @@ const ArticlesSection = ({
         onClose={toggleSortFilter}
         width={500}
       >
-        <ArticleFilter
-          order={order}
-          setOrder={setOrder}
-          groups={groups}
-          groupsLoading={groupsLoading}
-          priorityFilter={priorityFilter}
-          setPriorityFilter={setPriorityFilter}
-          groupsFilter={groupsFilter}
-          setGroupsFilter={setGroupsFilter}
-          clearFilters={clearFilters}
-          setCreatedAtFilter={setCreatedAtFilter}
-        />
+        <ArticleFilter />
       </Drawer>
     </Card>
   );

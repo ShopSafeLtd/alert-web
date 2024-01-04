@@ -305,7 +305,12 @@ const EvidenceList: React.FC<ViewEvidenceListProps> = ({
                           id: evidenceList.id || '',
                           url: evidenceList.thumbnailUrl || '',
                         },
-                        name: evidenceList.officerName ?? 'No name provided',
+                        name:
+                          evidenceList.officerName ??
+                          intl.formatMessage({
+                            defaultMessage: 'No name provided',
+                            id: 'Qadyhn',
+                          }),
                         playbackUrl:
                           evidenceList.playbackUrl ?? 'No playbackUrl provided',
                         date: evidenceList.recordedAt,

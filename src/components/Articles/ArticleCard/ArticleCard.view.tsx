@@ -121,7 +121,7 @@ const ArticleCard = ({
                     }),
                   icon: <FontAwesomeIcon icon={faTrash} />,
                 },
-              ].filter((item) => item.key !== 1 || deleteRights)}
+              ].filter((item) => !(item.key === 1 && deleteRights))}
             />
           }
           placement="bottomRight"
@@ -174,7 +174,7 @@ const ArticleCard = ({
           ))}
         </Carousel>
       ) : (
-        <SkeletonImage height={280} />
+        <SkeletonImage height={250} />
       )}
       {images && images.length > 1 && (
         <Row className={classes.controls}>
@@ -229,6 +229,7 @@ const ArticleCard = ({
             )}
             {title?.replace(/^\S/, (s) => s.toUpperCase())}
           </Title>
+
           <Paragraph ellipsis={{ rows: 3 }}>{previewText}</Paragraph>
         </div>
 

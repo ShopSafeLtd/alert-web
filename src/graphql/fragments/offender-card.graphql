@@ -13,6 +13,9 @@ fragment OffenderCard on Offender {
   totalImages
   createdByUser
   approved
+  infoSource
+  knownFor
+  targetedGoods
   latestIncident {
     id
     dateAgo

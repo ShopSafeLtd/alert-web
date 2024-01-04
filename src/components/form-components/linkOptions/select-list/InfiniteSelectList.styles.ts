@@ -9,7 +9,6 @@ const useStyles = createUseStyles({
     maxHeight: '100vh',
     width: '100%',
     // maxWidth: 250,
-
     '& .ant-pagination': {
       margin: '15px 0',
       textAlign: 'center',

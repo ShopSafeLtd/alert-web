@@ -1,1 +1,1 @@
-export { default } from './ArticleFilter.view';
+export { default } from './ArticleFilter.container';

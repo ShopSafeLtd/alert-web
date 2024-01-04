@@ -45,15 +45,15 @@ const useRecycleBin = (): Return => {
   const [saving, setSaving] = useState(false);
   const [restoreOffender, setRestoreOffender] = useState(false);
   const [restoreIncident, setRestoreIncident] = useState(false);
-
+  const variables = {
+    schemeId,
+    order: {
+      deletedAt: SortOrder.Desc,
+    },
+  };
   const { data, loading } = useRecycledItemsQuery({
     fetchPolicy: 'cache-and-network',
-    variables: {
-      schemeId,
-      order: {
-        deletedAt: SortOrder.Asc,
-      },
-    },
+    variables,
   });
 
   // update RestoreIncident
@@ -80,9 +80,7 @@ const useRecycleBin = (): Return => {
         ),
         __typename: 'Query',
       },
-      variables: {
-        schemeId,
-      },
+      variables,
     });
   };
   // update DeleteIncident
@@ -94,9 +92,7 @@ const useRecycleBin = (): Return => {
 
     const existingData = store.readQuery<RecycledItemsQuery>({
       query: RecycledItemsDocument,
-      variables: {
-        schemeId,
-      },
+      variables,
     });
 
     if (existingData === null) return;
@@ -109,9 +105,7 @@ const useRecycleBin = (): Return => {
         ),
         __typename: 'Query',
       },
-      variables: {
-        schemeId,
-      },
+      variables,
     });
   };
 
@@ -124,9 +118,7 @@ const useRecycleBin = (): Return => {
 
     const existingData = store.readQuery<RecycledItemsQuery>({
       query: RecycledItemsDocument,
-      variables: {
-        schemeId,
-      },
+      variables,
     });
 
     if (existingData === null) return;
@@ -139,9 +131,7 @@ const useRecycleBin = (): Return => {
         ),
         __typename: 'Query',
       },
-      variables: {
-        schemeId,
-      },
+      variables,
     });
   };
   // update DeleteOffender
@@ -153,9 +143,7 @@ const useRecycleBin = (): Return => {
 
     const existingData = store.readQuery<RecycledItemsQuery>({
       query: RecycledItemsDocument,
-      variables: {
-        schemeId,
-      },
+      variables,
     });
 
     if (existingData === null) return;
@@ -168,9 +156,7 @@ const useRecycleBin = (): Return => {
         ),
         __typename: 'Query',
       },
-      variables: {
-        schemeId,
-      },
+      variables,
     });
   };
   // function

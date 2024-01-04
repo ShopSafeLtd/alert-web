@@ -54,7 +54,7 @@ const CrimeGroupCard = ({ crimeGroup, removeCrimeGroup, saving }: Props) => {
             <Button
               size="small"
               disabled={saving}
-              className="info-remove-button"
+              style={{ position: 'absolute', top: -5, right: -5, zIndex: 100 }}
               shape="circle"
               type="text"
               icon={<FontAwesomeIcon icon={faCircleXmark} size="lg" />}
@@ -63,29 +63,30 @@ const CrimeGroupCard = ({ crimeGroup, removeCrimeGroup, saving }: Props) => {
         )}
 
         <Col flex={1} style={{ marginTop: 10, marginLeft: 5 }}>
-          <Title ellipsis level={4}>
-            {crimeGroup.alias}
+          <Title ellipsis level={4} style={{ marginBottom: 5 }}>
+            {crimeGroup.alias ||
+              intl.formatMessage(
+                {
+                  defaultMessage: 'Alert ID: {ref}',
+                  id: 'umL9sI',
+                },
+                { ref: crimeGroup.reference }
+              )}
           </Title>
-          {/* <Paragraph
-            strong
-            ellipsis
-            style={{
-              fontSize: 16,
-            }}
-          >
-            {crimeGroup.alias || 'unk'}
-          </Paragraph> */}
-          <Descriptions size="small">
-            <Descriptions.Item
-              label={intl.formatMessage({
-                defaultMessage: 'Alert ID',
-                id: 'k8ZNgH',
-              })}
-            >
-              {crimeGroup.reference}
-            </Descriptions.Item>
-          </Descriptions>
-          <Descriptions size="small">
+
+          <Descriptions size="small" column={1}>
+            {crimeGroup.alias && (
+              <Descriptions.Item
+                style={{ paddingBottom: 0 }}
+                label={intl.formatMessage({
+                  defaultMessage: 'Alert ID',
+                  id: 'k8ZNgH',
+                })}
+              >
+                {crimeGroup.reference}
+              </Descriptions.Item>
+            )}
+
             <Descriptions.Item
               label={intl.formatMessage({
                 defaultMessage: 'Members',

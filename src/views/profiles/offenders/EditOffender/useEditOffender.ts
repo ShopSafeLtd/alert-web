@@ -698,20 +698,20 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
             connectedCustomGalleries.length > 0
               ? connectedCustomGalleries.map((id) => ({ id }))
               : undefined,
-          create:
-            newCustomGalleries.length > 0
-              ? newCustomGalleries.map((value) => ({
-                  name: value.name,
-                  description: value.description || '',
-                  schemes: { connect: { id: schemeId } },
-                  groups: {
-                    connect:
-                      groupData?.groups && groupData.groups.length === 1
-                        ? groupData?.groups.map(({ id }) => ({ id }))
-                        : data.groups.map((id) => ({ id })) || [],
-                  },
-                }))
-              : undefined,
+          // create:
+          //   newCustomGalleries.length > 0
+          //     ? newCustomGalleries.map((value) => ({
+          //         name: value.name,
+          //         description: value.description || '',
+          //         schemes: schemeId,
+          //         groups: {
+          //           connect:
+          //             groupData?.groups && groupData.groups.length === 1
+          //               ? groupData?.groups.map(({ id }) => ({ id }))
+          //               : data.groups.map((id) => ({ id })) || [],
+          //         },
+          //       }))
+          //     : undefined,
         };
       }
       return {

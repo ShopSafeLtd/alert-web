@@ -4,6 +4,7 @@ import type { UpdateType } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMessageDots } from '@fortawesome/pro-light-svg-icons';
 import type {
+  ArticleData,
   CrimeGroupData,
   IncidentCardData,
   VehicleData,
@@ -13,6 +14,7 @@ import VehicleCard from 'components/MessageInput/MessageCard/VehicleCard';
 import OffenderCard from 'components/MessageInput/MessageCard/OffenderCard';
 import CrimeGroupList from 'components/MessageInput/MessageCard/CrimeGroupList';
 import { useIntl } from 'react-intl';
+import ArticleCard from 'components/MessageInput/MessageCard/ArticleCard';
 import useStyles from './UpdateContent.styles';
 
 const { Title, Text, Paragraph } = Typography;
@@ -35,6 +37,7 @@ interface UpdateData {
   }[];
   linkedVehicles: VehicleData[];
   linkedCrimeGroups: CrimeGroupData[];
+  linkedArticles: ArticleData[];
 }
 
 interface Props {
@@ -61,8 +64,13 @@ const UpdateContent = ({ update, title }: Props): JSX.Element => {
   return update?.linkedIncidents.length ||
     update?.linkedOffenders.length ||
     update?.linkedCrimeGroups.length ||
-    update?.linkedVehicles.length ? (
-    <>
+    update?.linkedVehicles.length ||
+    update?.linkedArticles.length ? (
+    <div
+      style={{
+        overflow: 'hidden',
+      }}
+    >
       {update?.linkedIncidents[0] ? (
         <>
           <Title style={{ fontSize: 14, marginLeft: 5 }}>
@@ -135,7 +143,25 @@ const UpdateContent = ({ update, title }: Props): JSX.Element => {
           <CrimeGroupList crimeGroups={update.linkedCrimeGroups} isIntel />
         </>
       ) : null}
-    </>
+      {update?.linkedArticles[0] ? (
+        <>
+          <Title style={{ fontSize: 14, marginLeft: 5 }}>
+            <FontAwesomeIcon
+              size="sm"
+              className={classes.icon}
+              icon={faMessageDots}
+            />
+            {update?.text
+              ? getContent(update?.text)
+              : intl.formatMessage({
+                  defaultMessage: 'Link an article',
+                  id: 'IyYrMy',
+                })}
+          </Title>
+          <ArticleCard article={update.linkedArticles[0]} />
+        </>
+      ) : null}
+    </div>
   ) : (
     <div>
       <Title level={4} style={{ marginBottom: 2 }} ellipsis>

@@ -13,6 +13,7 @@ const styles = createUseStyles((theme: Theme) => ({
     display: 'flex',
     flexDirection: 'column',
     cursor: 'pointer',
+    overflow: 'hidden',
   },
   bottomRow: { marginTop: 'auto' },
   icon: { marginRight: 5, color: theme.primary },

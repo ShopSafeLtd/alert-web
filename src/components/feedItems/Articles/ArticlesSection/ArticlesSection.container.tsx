@@ -6,67 +6,45 @@ import useArticlesSection from './useArticlesSection';
 
 interface Props {
   fullSearch: string;
-  searchMydata: boolean;
   fullCreatedAtFilter: DateType | undefined;
   fullGroupFilter: string[];
+  fullGallery: string[];
   saving: boolean;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
   adminRights: boolean;
 }
 const ArticlesSection = ({
   fullSearch,
-  searchMydata,
   fullCreatedAtFilter,
   saving,
-  groups,
-  groupsLoading,
   adminRights,
   fullGroupFilter,
+  fullGallery,
 }: Props): JSX.Element => {
   const {
     data,
     loading,
-    setSearch,
     search,
-    priorityFilter,
-    setPriorityFilter,
-    groupsFilter,
-    setGroupsFilter,
+    setSearch,
     sortFilter,
     toggleSortFilter,
-    clearFilters,
-    order,
-    setOrder,
-    setCreatedAtFilter,
     fetchMoreScroll,
   } = useArticlesSection({
     fullSearch,
     fullGroupFilter,
-    searchMydata,
     fullCreatedAtFilter,
+    fullGallery,
   });
 
   return (
     <View
-      fetchMoreScroll={fetchMoreScroll}
       data={data}
       loading={loading}
       saving={saving}
       search={search}
       setSearch={setSearch}
-      order={order}
-      setOrder={setOrder}
-      groups={groups}
-      groupsLoading={groupsLoading}
-      setCreatedAtFilter={setCreatedAtFilter}
-      priorityFilter={priorityFilter}
-      setPriorityFilter={setPriorityFilter}
-      groupsFilter={groupsFilter}
-      setGroupsFilter={setGroupsFilter}
       sortFilter={sortFilter}
       toggleSortFilter={toggleSortFilter}
-      clearFilters={clearFilters}
+      fetchMoreScroll={fetchMoreScroll}
       adminRights={adminRights}
     />
   );

@@ -303,14 +303,15 @@ const useOffenderFeed = (): Return => {
   });
   // On mount
   useEffect(() => {
-    setOffendersState({
-      pagination,
-      variables: {
-        ...variables,
-        groups: defaultGroups.map(({ id }) => id),
-      },
-      order,
-    });
+    if (groups.length === 0)
+      setOffendersState({
+        pagination,
+        variables: {
+          ...variables,
+          groups: defaultGroups.map(({ id }) => id),
+        },
+        order,
+      });
   }, []);
 
   // Fetch scheme tags

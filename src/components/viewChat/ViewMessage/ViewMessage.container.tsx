@@ -60,6 +60,11 @@ const ViewMessages = ({ chatId, updateUserChatList }: Props): JSX.Element => {
     messageSent,
     setMessageSent,
     restrictIncidentAccess,
+    articlesData,
+    linkArticle,
+    toggleLinkArticle,
+    updateArticleList,
+    removeArticle,
   } = useViewMessages({ chatId, updateUserChatList });
 
   return (
@@ -115,6 +120,11 @@ const ViewMessages = ({ chatId, updateUserChatList }: Props): JSX.Element => {
       setMessageSent={setMessageSent}
       totalChats={totalChats}
       restrictIncidentAccess={restrictIncidentAccess}
+      articlesData={articlesData}
+      linkArticle={linkArticle}
+      toggleLinkArticle={toggleLinkArticle}
+      updateArticleList={updateArticleList}
+      removeArticle={removeArticle}
     />
   );
 };

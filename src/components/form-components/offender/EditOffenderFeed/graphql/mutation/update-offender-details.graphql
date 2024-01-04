@@ -1,0 +1,37 @@
+mutation updateOffenderDetails($id: String!, $data: OffenderUpdateInput!) {
+  updateOffender(where: { id: $id }, data: $data) {
+    id
+    alias
+    infoSource
+    knownFor
+    targetedGoods
+    age
+    build
+    height
+    dateOfBirth
+    dateSource
+    hair
+    gender
+    comment
+    name
+    reference
+    race
+    peculiarities
+    approved
+    idVerified
+    idSource
+    justification
+    customGalleries {
+      id
+      name
+    }
+    groups {
+      id
+      name
+    }
+    tags {
+      id
+      name
+    }
+  }
+}

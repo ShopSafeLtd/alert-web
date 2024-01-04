@@ -260,14 +260,16 @@ const useSelectedOffenders = ({
   };
   // On mount
   useEffect(() => {
-    setOffendersState({
-      pagination,
-      variables: {
-        ...filterVariables,
-        groups: defaultGroups.map(({ id }) => id),
-      },
-      order,
-    });
+    if (groups.length === 0) {
+      setOffendersState({
+        pagination,
+        variables: {
+          ...filterVariables,
+          groups: defaultGroups.map(({ id }) => id),
+        },
+        order,
+      });
+    }
   }, []);
   const setSearch = (value: string) => {
     setOffendersState({

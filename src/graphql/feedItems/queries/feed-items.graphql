@@ -232,7 +232,7 @@ query FeedItems(
           startDate
           endDate
         }
-        incidents {
+        incidents(where: { recycled: { equals: false } }) {
           id
           subject
           description

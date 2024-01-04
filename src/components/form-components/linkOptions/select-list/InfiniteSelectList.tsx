@@ -40,7 +40,7 @@ const InfiniteSelectScrollList: React.FC<InfiniteScrollListProps> = ({
         hasMore={hasMore}
         loader={loader}
         style={{ overflowX: 'hidden' }}
-        height="100vh"
+        height="calc(100vh - 140px)"
         endMessage={endMessage}
         className={classes.infiniteScroll}
       >
@@ -49,7 +49,7 @@ const InfiniteSelectScrollList: React.FC<InfiniteScrollListProps> = ({
             ? Array.from({ length: 24 })
                 .fill(0)
                 .map(() => (
-                  <Col span={4} className="offender-item">
+                  <Col span={6} className="offender-item">
                     {loadingItems}
                   </Col>
                 ))

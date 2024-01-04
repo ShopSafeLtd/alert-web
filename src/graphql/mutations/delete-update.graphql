@@ -1,0 +1,6 @@
+mutation DeleteUpdate($where: UpdateWhereUnique!) {
+  deleteUpdate(where: $where) {
+    id
+    replyToId
+  }
+}

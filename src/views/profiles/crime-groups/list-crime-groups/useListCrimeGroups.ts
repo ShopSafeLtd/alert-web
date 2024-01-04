@@ -141,17 +141,28 @@ const useListCrimeGroups = (): Return => {
   // On mount
   useEffect(() => {
     const sizeOptions = getSizeOptions();
-    setFilterState({
-      pagination: {
-        ...pagination,
-        sizeOptions,
-        pageSize: Number(sizeOptions[0]),
-      },
-      variables: {
-        ...filterVariables,
-        groups: defaultGroups.map(({ id }) => id),
-      },
-    });
+    if (groupsFilter.length === 0) {
+      setFilterState({
+        pagination: {
+          ...pagination,
+          sizeOptions,
+          pageSize: Number(sizeOptions[0]),
+        },
+        variables: {
+          ...filterVariables,
+          groups: defaultGroups.map(({ id }) => id),
+        },
+      });
+    } else {
+      setFilterState({
+        pagination: {
+          ...pagination,
+          sizeOptions,
+          pageSize: Number(sizeOptions[0]),
+        },
+        variables: filterVariables,
+      });
+    }
   }, []);
   const { data, loading } = useListCrimeGroupsQuery({
     fetchPolicy: 'cache-and-network',

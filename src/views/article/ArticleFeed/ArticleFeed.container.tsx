@@ -6,56 +6,48 @@ const ArticleFeed = (): JSX.Element => {
   const {
     data,
     loading,
-    order,
-    setOrder,
-    search,
     setSearch,
-    priorityFilter,
-    setPriorityFilter,
-    groups,
-    groupsLoading,
-    onNavigate,
+    sortFilter,
+    toggleSortFilter,
+    // clearFilters,
+    // setGroupsFilter,
+    // setPriorityFilter,
+    // setCreatedAtFilter,
+    // setOrder,
     lightboxElements,
     lightBoxOpen,
     openLightbox,
-    sortFilter,
-    toggleSortFilter,
-    clearFilters,
-    gallery,
+    // groups,
+    // groupsLoading,
+    onNavigate,
     setGallery,
-    groupsFilter,
-    setGroupsFilter,
-    setCreatedAtFilter,
     updateArticleList,
     fetchMoreScroll,
+    filterVariables,
   } = useArticleFeed();
 
   return (
     <View
-      fetchMoreScroll={fetchMoreScroll}
-      lightBoxOpen={lightBoxOpen}
-      lightboxElements={lightboxElements}
-      openLightbox={openLightbox}
       data={data}
       loading={loading}
-      search={search}
       setSearch={setSearch}
-      order={order}
-      setOrder={setOrder}
-      groups={groups}
-      groupsLoading={groupsLoading}
-      setCreatedAtFilter={setCreatedAtFilter}
-      priorityFilter={priorityFilter}
-      setPriorityFilter={setPriorityFilter}
-      groupsFilter={groupsFilter}
-      setGroupsFilter={setGroupsFilter}
       sortFilter={sortFilter}
       toggleSortFilter={toggleSortFilter}
-      clearFilters={clearFilters}
+      // clearFilters={clearFilters}
+      // setGroupsFilter={setGroupsFilter}
+      // setPriorityFilter={setPriorityFilter}
+      // setCreatedAtFilter={setCreatedAtFilter}
+      // setOrder={setOrder}
+      lightboxElements={lightboxElements}
+      lightBoxOpen={lightBoxOpen}
+      openLightbox={openLightbox}
+      // groups={groups}
+      // groupsLoading={groupsLoading}
       onNavigate={onNavigate}
-      gallery={gallery}
       setGallery={setGallery}
       updateArticleList={updateArticleList}
+      fetchMoreScroll={fetchMoreScroll}
+      filterVariables={filterVariables}
     />
   );
 };

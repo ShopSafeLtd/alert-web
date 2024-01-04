@@ -75,6 +75,7 @@ export interface FormData {
   county?: string;
   postcode?: string;
   customGalleries: Array<string | SelectOptions>;
+  justification?: string;
 }
 
 interface VehicleType extends VehicleData {
@@ -138,6 +139,7 @@ interface Return {
   viewPotentialOffenders: boolean;
   toggleViewPotentialOffenders: () => void;
   onSearchOffender: () => void;
+  needJustification: boolean;
 }
 
 // const onPreview = async (file: UploadFile) => {
@@ -158,9 +160,10 @@ interface Return {
 const useAddOffender = (): Return => {
   const intl = useIntl();
   const [form] = Form.useForm<FormData>();
-  const userId = useStoreState((state) => state.user.id);
-  const role = useStoreState((state) => state.user.role);
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const { role, id: userId } = useStoreState((state) => state.user);
+  const { needJustification, id: schemeId } = useStoreState(
+    (state) => state.scheme
+  );
   const reportOnly =
     useStoreState((state) => state.scheme.reportOnly) && role === Role.User;
   const pagination = useStoreState((state) => state.data.offenders.pagination);
@@ -593,6 +596,7 @@ const useAddOffender = (): Return => {
             data.alias && data.alias.length > 0
               ? [...new Set(data.alias?.map((el) => el.trim().toLowerCase()))]
               : [],
+          justification: data.justification || null,
           gender: data.gender || null,
           race: data.race || null,
           build: data.build || null,
@@ -939,6 +943,7 @@ const useAddOffender = (): Return => {
     toggleViewPotentialOffenders,
     onSearchOffender,
     viewPotentialOffenders,
+    needJustification,
   };
 };
 

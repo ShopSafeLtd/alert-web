@@ -19,7 +19,7 @@ const ViewOffender = (): JSX.Element => {
     updateIncidentList,
     toggleSubscribe,
     confirmDeleteUpdate,
-    confirmUpdateImages,
+    onAddUpdateImages,
     editUpdate,
     loadMore,
     replyTo,
@@ -29,7 +29,7 @@ const ViewOffender = (): JSX.Element => {
     setReplyTo,
     userId,
     addImages,
-    addUpdateImages,
+
     closeAddImages,
     editUpdateInput,
     handleEditUpdate,
@@ -95,6 +95,14 @@ const ViewOffender = (): JSX.Element => {
     addInvestigation,
     toggleAddInvestigation,
     updateInvestigationList,
+    knowOffender,
+    toggleKnowOffender,
+    onSelectUpdateImages,
+    showIncidentOptions,
+    toggleShowIncidentOptions,
+    onAddUpdateImagesToIncident,
+    selectedIncidentId,
+    onSelect,
   } = useViewOffender(offenderId);
   const { onApprove, onReject, approving } = useApproveOffender({ offenderId });
   return (
@@ -114,7 +122,7 @@ const ViewOffender = (): JSX.Element => {
       updateIncidentList={updateIncidentList}
       toggleSubscribe={toggleSubscribe}
       confirmDeleteUpdate={confirmDeleteUpdate}
-      confirmUpdateImages={confirmUpdateImages}
+      onAddUpdateImages={onAddUpdateImages}
       editUpdate={editUpdate}
       loadMore={loadMore}
       replyTo={replyTo}
@@ -124,7 +132,6 @@ const ViewOffender = (): JSX.Element => {
       setReplyTo={setReplyTo}
       userId={userId}
       addImages={addImages}
-      addUpdateImages={addUpdateImages}
       closeAddImages={closeAddImages}
       editUpdateInput={editUpdateInput}
       handleEditUpdate={handleEditUpdate}
@@ -189,6 +196,14 @@ const ViewOffender = (): JSX.Element => {
       addInvestigation={addInvestigation}
       toggleAddInvestigation={toggleAddInvestigation}
       updateInvestigationList={updateInvestigationList}
+      knowOffender={knowOffender}
+      toggleKnowOffender={toggleKnowOffender}
+      onSelectUpdateImages={onSelectUpdateImages}
+      showIncidentOptions={showIncidentOptions}
+      toggleShowIncidentOptions={toggleShowIncidentOptions}
+      onAddUpdateImagesToIncident={onAddUpdateImagesToIncident}
+      selectedIncidentId={selectedIncidentId}
+      onSelect={onSelect}
     />
   );
 };

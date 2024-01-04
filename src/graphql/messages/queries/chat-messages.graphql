@@ -21,63 +21,33 @@ query ChatMessages($where: ChatMessagesWhereInput!, $take: Int, $skip: Int) {
     paddingTop
     type
     images {
-      id
-      url
-      position
-      rotation
-      optimised
+      ...SimpleImages
     }
     crimeGroups {
-      totalOffenders
-      totalIncidents
-      alias
-      id
-      reference
+      ...CrimeGroups
     }
     vehicles {
-      registration
-      reference
-      model
-      make
-      id
-      colour
+      ...Vehicles
       images {
-        id
-        optimised
-        url
-        position
-        rotation
+        ...SimpleImages
       }
     }
     incidents {
-      id
-      subject
-      description
-      dayTime
+      ...Incidents
       images {
-        id
-        url
-        optimised
-        position
-        rotation
+        ...SimpleImages
       }
     }
     offenders {
-      id
-      updatedAt
-      age
-      build
-      height
-      dateOfBirth
-      name
-      race
-      gender
+      ...Offenders
       images {
-        id
-        url
-        optimised
-        position
-        rotation
+        ...SimpleImages
+      }
+    }
+    articles {
+      ...Articles
+      images {
+        ...SimpleImages
       }
     }
   }

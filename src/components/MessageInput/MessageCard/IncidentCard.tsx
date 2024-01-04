@@ -28,7 +28,7 @@ const IncidentCard = ({ incident, removeIncident, saving }: Props) => {
     <Card
       style={{
         margin: removeIncident ? 0 : 5,
-        maxWidth: 370,
+        width: 200,
         overflow: 'hidden',
       }}
       bodyStyle={{
@@ -58,7 +58,7 @@ const IncidentCard = ({ incident, removeIncident, saving }: Props) => {
             <Button
               size="small"
               disabled={saving}
-              className="info-remove-button"
+              style={{ position: 'absolute', top: -5, right: -5, zIndex: 100 }}
               shape="circle"
               type="text"
               icon={<FontAwesomeIcon icon={faCircleXmark} size="lg" />}

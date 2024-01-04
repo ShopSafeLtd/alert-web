@@ -10,6 +10,11 @@ query ViewOffender(
       mg11Available
     }
     updatedAt
+    justification
+    infoSource
+    origOffenderId
+    knownFor
+    targetedGoods
     age
     build
     height
@@ -96,6 +101,9 @@ query ViewOffender(
     }
     searchedMatches {
       id
+    }
+    updates(orderBy: { createdAt: desc }) {
+      ...Updates
     }
   }
 }

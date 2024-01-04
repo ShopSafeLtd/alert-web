@@ -80,6 +80,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
     overflowX: 'auto',
   },
   tagLabel: { marginTop: 2 },
+  descItem: { paddingBottom: '10px !important', overflow: 'auto' },
   tag: {
     marginBottom: 3,
   },
@@ -112,6 +113,18 @@ const useStyles = createUseStyles((theme: Theme) => ({
     width: 'calc(100% - 1px)',
     padding: '10px 15px 10px',
     zIndex: 10,
+  },
+
+  icon: { marginRight: 8 },
+  selectCard: {
+    position: 'relative',
+  },
+  checkBox: {
+    position: 'absolute',
+    top: 3,
+    right: 8,
+    zIndex: 100,
+    color: theme.borderColor,
   },
 }));
 

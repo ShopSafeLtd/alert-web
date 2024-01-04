@@ -50,7 +50,11 @@ const useStyles = createUseStyles({
     cursor: 'pointer',
   },
 });
-
+// enum Permissions {
+//   denied = 'denied',
+//   prompt = 'prompt',
+//   granted = 'granted',
+// }
 interface Props {
   height: number | string;
   width: number | string;
@@ -65,9 +69,22 @@ const LocatingCard = ({ height, width, location, setLocation }: Props) => {
   const [largeOpen, setLargeOpen] = useState(false);
   const [viewport, setViewport] = useState<ViewportData>();
   const [currentViewport, setCurrentViewport] = useState<ViewportData>();
-
+  // const [getCurrentLocation, setGetCurrentLocation] = useState(true);
+  const [status, setStatus] = useState<'denied' | 'prompt' | 'granted'>();
+  const originalViewport = {
+    latitude: 51.6,
+    longitude: 0.12,
+  };
+  useEffect(() => {}, []);
   // get current location
   useEffect(() => {
+    void navigator.permissions.query({ name: 'geolocation' }).then((result) => {
+      const newStatus = result.state;
+      setStatus(newStatus);
+      result.addEventListener('change', () => {
+        setStatus(newStatus);
+      });
+    });
     navigator.geolocation.getCurrentPosition((pos) => {
       setCurrentViewport({
         latitude: pos.coords.latitude,
@@ -75,6 +92,15 @@ const LocatingCard = ({ height, width, location, setLocation }: Props) => {
       });
     });
   }, []);
+
+  // useEffect(() => {
+  //   if (status === 'denied')
+  //     setCurrentViewport({
+  //       latitude: 51.6,
+  //       longitude: 0.12,
+  //     });
+  // }, [status]);
+
   useEffect(() => {
     if (location?.geoLat && location?.geoLng) {
       setViewport({
@@ -93,6 +119,7 @@ const LocatingCard = ({ height, width, location, setLocation }: Props) => {
   const toggleLargeOpen = () => setLargeOpen(!largeOpen);
   const onSubmit = async (value: ViewportData) => {
     if (value) {
+      console.log('onSubmit');
       const result = await getAddressFromLatLng({
         lat: value.latitude,
         lng: value.longitude,
@@ -117,7 +144,7 @@ const LocatingCard = ({ height, width, location, setLocation }: Props) => {
         position: 'relative',
       }}
     >
-      {viewport ? (
+      {viewport || status === 'denied' ? (
         <>
           <div
             onKeyPress={toggleLargeOpen}
@@ -138,7 +165,7 @@ const LocatingCard = ({ height, width, location, setLocation }: Props) => {
           <Map
             mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}
             // eslint-disable-next-line react/jsx-props-no-spreading
-            {...viewport}
+            {...(viewport || originalViewport)}
             // initialViewState={{
             //   longitude: viewport.longitude,
             //   latitude: viewport.latitude,
@@ -165,20 +192,27 @@ const LocatingCard = ({ height, width, location, setLocation }: Props) => {
                 : 'mapbox://styles/wgarrod/clgkn5gb7007u01qmahuhbi6o'
             }
           >
-            <Marker
-              longitude={viewport.longitude}
-              latitude={viewport.latitude}
-              anchor="bottom"
-            >
-              <MapPin />
-            </Marker>
+            {viewport && (
+              <Marker
+                longitude={viewport.longitude}
+                latitude={viewport.latitude}
+                anchor="bottom"
+              >
+                <MapPin />
+              </Marker>
+            )}
           </Map>
 
           <LocatingModal
             // eslint-disable-next-line @typescript-eslint/no-misused-promises
             handleSubmit={onSubmit}
             onClose={toggleLargeOpen}
-            viewportData={viewport}
+            viewportData={
+              viewport || {
+                latitude: 51.6,
+                longitude: 0.12,
+              }
+            }
             open={largeOpen}
           />
         </>

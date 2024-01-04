@@ -1,0 +1,37 @@
+query EditOffender($where: OffenderWhereUniqueInput!) {
+  offender(where: $where) {
+    id
+    alias
+    infoSource
+    knownFor
+    targetedGoods
+    justification
+    age
+    build
+    height
+    dateOfBirth
+    dateSource
+    hair
+    gender
+    comment
+    name
+    reference
+    race
+    peculiarities
+    approved
+    idVerified
+    idSource
+    customGalleries {
+      id
+      name
+    }
+    groups {
+      id
+      name
+    }
+    tags {
+      id
+      name
+    }
+  }
+}
