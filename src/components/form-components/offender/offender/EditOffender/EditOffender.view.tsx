@@ -778,7 +778,7 @@ const EditOffender = ({
               defaultMessage: 'Add Offender Warning',
               id: 'JQTlrb',
             })}
-            visible={addOffenderTag}
+            open={addOffenderTag}
             width="400"
             onClose={toggleAddOffenderTag}
           >
@@ -796,7 +796,7 @@ const EditOffender = ({
               defaultMessage: 'Add Exclusion',
               id: 'QPeZMN',
             })}
-            visible={addExclusion}
+            open={addExclusion}
             width="400"
             onClose={toggleAddExclusion}
           >
@@ -814,7 +814,7 @@ const EditOffender = ({
               defaultMessage: 'Edit Exclusion',
               id: '22olP0',
             })}
-            visible={editExclusion}
+            open={editExclusion}
             width="400"
             onClose={toggleEditExclusion}
           >

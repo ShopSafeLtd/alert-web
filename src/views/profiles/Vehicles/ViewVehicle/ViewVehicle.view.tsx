@@ -759,7 +759,7 @@ const ViewVehicle = ({
               id="AWN+hV"
             />
           }
-          visible={editVehicle}
+          open={editVehicle}
           width={700}
           zIndex={999}
           onClose={toggleEditVehicle}
@@ -797,7 +797,7 @@ const ViewVehicle = ({
               id="8sZeJM"
             />
           }
-          visible={editUpdate !== null}
+          open={editUpdate !== null}
           onOk={handleEditUpdate}
           onCancel={() => setEditUpdate(null)}
           okText={<FormattedMessage defaultMessage="Save" id="jvo0vs" />}
@@ -814,7 +814,7 @@ const ViewVehicle = ({
           defaultMessage: 'Add Evidence',
           id: 'vgVasT',
         })}
-        visible={addDocument}
+        open={addDocument}
         width="600"
         onClose={toggleAddDocument}
         zIndex={1001}
@@ -835,7 +835,7 @@ const ViewVehicle = ({
           defaultMessage: 'Add New Investigation',
           id: 'QaKS9A',
         })}
-        visible={addInvestigation}
+        open={addInvestigation}
         width="500"
         onClose={toggleAddInvestigation}
       >

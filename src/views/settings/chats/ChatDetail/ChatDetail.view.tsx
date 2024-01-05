@@ -115,7 +115,7 @@ const ChatDetail = ({
             defaultMessage: 'Edit Chat Group Details',
             id: 'DV1/IH',
           })}
-          visible={editChat}
+          open={editChat}
           width="400"
           onClose={toggleEditChat}
         >

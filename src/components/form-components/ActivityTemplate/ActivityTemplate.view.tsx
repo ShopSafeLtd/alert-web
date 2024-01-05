@@ -169,7 +169,7 @@ const AddTodo = ({
           defaultMessage: 'Add/Create Question',
           id: '/vx2Ey',
         })}
-        visible={addQuestion}
+        open={addQuestion}
         width="800"
         onClose={() => setAddQuestion(false)}
       >

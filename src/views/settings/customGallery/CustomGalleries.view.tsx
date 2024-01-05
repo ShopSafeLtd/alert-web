@@ -188,7 +188,7 @@ const CustomGalleries = ({
           defaultMessage: 'Add Custom Gallery',
           id: 'rLyRNN',
         })}
-        visible={addCustomGallery}
+        open={addCustomGallery}
         width="400"
         onClose={toggleAddCustomGallery}
       >
@@ -207,7 +207,7 @@ const CustomGalleries = ({
           defaultMessage: 'Edit Custom Gallery',
           id: 'CugUH2',
         })}
-        visible={!!editCustomGallery}
+        open={!!editCustomGallery}
         width="400"
         onClose={() => setEditCustomGallery(undefined)}
       >

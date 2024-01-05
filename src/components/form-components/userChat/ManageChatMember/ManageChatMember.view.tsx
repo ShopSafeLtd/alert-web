@@ -184,7 +184,7 @@ const EditChat = ({
           defaultMessage: 'Add Chat Members',
           id: '74pOam',
         })}
-        visible={addMember}
+        open={addMember}
         width="400"
         onClose={toggleAddMember}
       >

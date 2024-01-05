@@ -481,7 +481,7 @@ const CrimeTypeList = ({
           defaultMessage: 'Add Crime Types',
           id: 'hm9cEh',
         })}
-        visible={addIncident}
+        open={addIncident}
         width="800"
         onClose={toggleAddIncident}
       >
@@ -500,7 +500,7 @@ const CrimeTypeList = ({
           defaultMessage: 'Add Involved Tag',
           id: 'Hnfici',
         })}
-        visible={addInvolved}
+        open={addInvolved}
         width="400"
         onClose={toggleAddInvolved}
       >
@@ -519,7 +519,7 @@ const CrimeTypeList = ({
           defaultMessage: 'Add Impact Tag',
           id: 'sl+yfu',
         })}
-        visible={addImpact}
+        open={addImpact}
         width="400"
         onClose={toggleAddImpact}
       >
@@ -538,7 +538,7 @@ const CrimeTypeList = ({
           defaultMessage: 'Edit Tag',
           id: 'uJkv2X',
         })}
-        visible={editIncident}
+        open={editIncident}
         width="400"
         onClose={toggleEditIncident}
       >

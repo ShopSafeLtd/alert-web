@@ -850,7 +850,7 @@ const WorkflowView: React.FC<WorkflowProps> = ({
             defaultMessage: 'Add/Create Question',
             id: '/vx2Ey',
           })}
-          visible={newQuestion}
+          open={newQuestion}
           width="800"
           onClose={() => onClose()}
         >

@@ -159,7 +159,7 @@ const ListInvestigations = ({
             id="QaKS9A"
           />
         }
-        visible={addInvestigation}
+        open={addInvestigation}
         width="500"
         onClose={toggleAddInvestigation}
       >

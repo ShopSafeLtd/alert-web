@@ -338,7 +338,7 @@ const IncidentFeed = ({
           defaultMessage: 'Incident Filters',
           id: 'd3tEdR',
         })}
-        visible={sortFilter}
+        open={sortFilter}
         onClose={toggleSortFilter}
         width={500}
       >

@@ -369,7 +369,7 @@ const ViewInvestigation = ({
             id="6lYiJV"
           />
         }
-        visible={editInvestigation}
+        open={editInvestigation}
         width="500"
         onClose={toggleEditInvestigation}
       >
@@ -394,7 +394,7 @@ const ViewInvestigation = ({
             id="1FbM4r"
           />
         }
-        visible={addExistingOffender}
+        open={addExistingOffender}
         width="1000"
         onClose={toggleAddExistingOffender}
         zIndex={1001}
@@ -457,7 +457,7 @@ const ViewInvestigation = ({
             id="goP1s6"
           />
         }
-        visible={addExistingVehicle}
+        open={addExistingVehicle}
         width="800"
         onClose={toggleAddExistingVehicle}
         zIndex={1001}
@@ -519,7 +519,7 @@ const ViewInvestigation = ({
             id="3HDZC+"
           />
         }
-        visible={addExistingCrimeGroup}
+        open={addExistingCrimeGroup}
         width="800"
         onClose={toggleAddExistingCrimeGroup}
         zIndex={1001}
@@ -583,7 +583,7 @@ const ViewInvestigation = ({
             id="1GC81u"
           />
         }
-        visible={addExistingIncident}
+        open={addExistingIncident}
         width="1000"
         onClose={toggleAddExistingIncident}
         zIndex={1001}
@@ -603,7 +603,7 @@ const ViewInvestigation = ({
       {/*  document */}
       <Drawer
         title={<FormattedMessage defaultMessage="Add Document" id="r9vGqd" />}
-        visible={addDocument}
+        open={addDocument}
         width="800"
         onClose={toggleAddDocument}
         zIndex={1001}
@@ -621,7 +621,7 @@ const ViewInvestigation = ({
         title={
           <FormattedMessage defaultMessage="Add DEM Document" id="gDnUVp" />
         }
-        visible={addDemDocument}
+        open={addDemDocument}
         width="800"
         onClose={toggleAddDemDocument}
         zIndex={1001}

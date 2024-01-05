@@ -311,7 +311,7 @@ const ListVehicles = ({
           defaultMessage: 'Vehicle Filters',
           id: '1KlEM/',
         })}
-        visible={sortFilter}
+        open={sortFilter}
         onClose={toggleSortFilter}
         width={500}
       >
@@ -331,7 +331,7 @@ const ListVehicles = ({
           defaultMessage: 'Add New Investigation',
           id: 'QaKS9A',
         })}
-        visible={!!addInvestigation}
+        open={!!addInvestigation}
         width="500"
         onClose={() => toggleAddInvestigation('')}
       >

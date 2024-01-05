@@ -34,7 +34,7 @@ const FormDrawer = ({
 }: FormDrawerProps): JSX.Element => (
   <Drawer
     title={title}
-    visible={visible}
+    open={visible}
     onClose={onClose}
     width={width}
     // eslint-disable-next-line react/jsx-props-no-spreading

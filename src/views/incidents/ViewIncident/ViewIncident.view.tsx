@@ -1731,7 +1731,7 @@ const ViewIncident = ({
           defaultMessage: 'Edit Incident Details',
           id: 'XU7doq',
         })}
-        visible={editIncident}
+        open={editIncident}
         width="600"
         onClose={toggleEditIncident}
       >
@@ -2012,7 +2012,7 @@ const ViewIncident = ({
           defaultMessage: 'Add Evidence',
           id: 'vgVasT',
         })}
-        visible={addDocument}
+        open={addDocument}
         width="600"
         onClose={toggleAddDocument}
         zIndex={1001}
@@ -2033,7 +2033,7 @@ const ViewIncident = ({
           defaultMessage: 'Add New Investigation',
           id: 'QaKS9A',
         })}
-        visible={addInvestigation}
+        open={addInvestigation}
         width="500"
         onClose={toggleAddInvestigation}
       >

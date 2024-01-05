@@ -368,7 +368,7 @@ const CreateCrimeGroup = ({
           id: 'KaNxum',
           defaultMessage: 'Add Offenders',
         })}
-        visible={addOffender}
+        open={addOffender}
         width="800"
         onClose={toggleAddOffender}
         zIndex={1001}

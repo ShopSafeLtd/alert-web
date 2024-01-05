@@ -273,7 +273,7 @@ const UserList = ({
           defaultMessage: 'User Filters',
           id: 'cmwbt4',
         })}
-        visible={sortFilter}
+        open={sortFilter}
         onClose={toggleSortFilter}
         width={400}
       >

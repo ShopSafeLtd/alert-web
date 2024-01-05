@@ -42,7 +42,7 @@ const SideContentMobile = (props: SideContentMobileProps) => {
       placement="left"
       closable={false}
       onClose={onSideContentClose}
-      visible={visible}
+      open={visible}
       bodyStyle={{ paddingLeft: 0, paddingRight: 0 }}
     >
       <div className="h-100">{sideContent}</div>
@@ -78,7 +78,7 @@ export const InnerAppLayout = (props: InnerAppLayoutProps): JSX.Element => {
     <div className="inner-app-layout" style={style}>
       {isMobile ? (
         <SideContentMobile
-          visible={visible}
+          open={visible}
           onSideContentClose={close}
           {...props}
         />

@@ -214,7 +214,7 @@ const EditCrimeGroup = ({
           defaultMessage: 'Select Offenders',
           id: 'nNFHrE',
         })}
-        visible={linkOffender}
+        open={linkOffender}
         width="800"
         onClose={toggleLinkOffender}
       >
@@ -233,7 +233,7 @@ const EditCrimeGroup = ({
           defaultMessage: 'Select Vehicles',
           id: '4Cza+w',
         })}
-        visible={linkVehicle}
+        open={linkVehicle}
         width="800"
         onClose={toggleLinkVehicle}
         bodyStyle={{ overflow: 'hidden' }}

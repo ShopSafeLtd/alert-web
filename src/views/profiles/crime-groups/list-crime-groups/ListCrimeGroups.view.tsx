@@ -246,7 +246,7 @@ const ListCrimeGroups = ({
           defaultMessage: 'Crime Group Filters',
           id: 'Dz/qC3',
         })}
-        visible={sortFilter}
+        open={sortFilter}
         onClose={toggleSortFilter}
         width={500}
       >
@@ -266,7 +266,7 @@ const ListCrimeGroups = ({
           defaultMessage: 'Add New Investigation',
           id: 'QaKS9A',
         })}
-        visible={!!addInvestigation}
+        open={!!addInvestigation}
         width="500"
         onClose={() => toggleAddInvestigation('')}
       >

@@ -729,7 +729,7 @@ const ViewInvestigation = ({
           defaultMessage: 'Edit Update Content',
           id: '8sZeJM',
         })}
-        visible={editUpdate !== null}
+        open={editUpdate !== null}
         onOk={handleEditUpdate}
         onCancel={() => setEditUpdate(null)}
         okText={intl.formatMessage({ defaultMessage: 'Save', id: 'jvo0vs' })}
@@ -793,7 +793,7 @@ const ViewInvestigation = ({
           defaultMessage: 'Edit Incident',
           id: 'E6VJFN',
         })}
-        visible={!!editIncidentId}
+        open={!!editIncidentId}
         width="600"
         onClose={() => setEditIncidentId('')}
       >

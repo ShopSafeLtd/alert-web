@@ -646,7 +646,7 @@ const CompareIncident = ({
           defaultMessage: 'Add Offender',
           id: 'm3ChN4',
         })}
-        visible={addOffender}
+        open={addOffender}
         width="800"
         onClose={toggleAddOffender}
         zIndex={1001}

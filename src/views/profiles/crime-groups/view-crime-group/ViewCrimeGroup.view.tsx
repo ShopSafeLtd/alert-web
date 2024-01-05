@@ -700,7 +700,7 @@ const ViewCrimeGroup = ({
                 id: '8sZeJM',
                 defaultMessage: 'Edit Update Content',
               })}
-              visible={editUpdate !== null}
+              open={editUpdate !== null}
               onOk={handleEditUpdate}
               onCancel={() => setEditUpdate(null)}
               okText={intl.formatMessage({
@@ -745,7 +745,7 @@ const ViewCrimeGroup = ({
           id: 'V+RsEq',
           defaultMessage: 'Add New Offender',
         })}
-        visible={addOffender}
+        open={addOffender}
         width={700}
         onClose={toggleAddOffender}
         zIndex={999}
@@ -765,7 +765,7 @@ const ViewCrimeGroup = ({
           id: '1FbM4r',
           defaultMessage: 'Add Existing Offenders',
         })}
-        visible={addExistingOffender}
+        open={addExistingOffender}
         width="1000"
         onClose={toggleAddExistingOffender}
         zIndex={1001}
@@ -858,7 +858,7 @@ const ViewCrimeGroup = ({
           defaultMessage: 'Add Evidence',
           id: 'vgVasT',
         })}
-        visible={addDocument}
+        open={addDocument}
         width="600"
         onClose={toggleAddDocument}
         zIndex={1001}
@@ -879,7 +879,7 @@ const ViewCrimeGroup = ({
           defaultMessage: 'Add New Investigation',
           id: 'QaKS9A',
         })}
-        visible={addInvestigation}
+        open={addInvestigation}
         width="500"
         onClose={toggleAddInvestigation}
       >

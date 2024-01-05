@@ -536,7 +536,7 @@ const OffenderDetails = ({
           defaultMessage: 'Add Offender Warning',
           id: 'JQTlrb',
         })}
-        visible={addOffenderTag}
+        open={addOffenderTag}
         width="400"
         onClose={toggleAddOffenderTag}
       >
@@ -555,7 +555,7 @@ const OffenderDetails = ({
           defaultMessage: 'Add Custom Gallery',
           id: 'rLyRNN',
         })}
-        visible={addCustomGallery}
+        open={addCustomGallery}
         width="400"
         onClose={toggleAddCustomGallery}
       >

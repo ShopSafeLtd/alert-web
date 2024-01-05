@@ -587,7 +587,7 @@ const AddVehicle = ({
           defaultMessage: 'Link Offenders',
           id: 'UhSUQG',
         })}
-        visible={linkOffender}
+        open={linkOffender}
         width="800"
         onClose={toggleLinkOffender}
       >
@@ -606,7 +606,7 @@ const AddVehicle = ({
           defaultMessage: 'Link Incidents',
           id: '1Vs3Qr',
         })}
-        visible={linkIncident}
+        open={linkIncident}
         width="800"
         onClose={toggleLinkIncident}
       >
@@ -625,7 +625,7 @@ const AddVehicle = ({
           defaultMessage: 'Add Custom Gallery',
           id: 'rLyRNN',
         })}
-        visible={addCustomGallery}
+        open={addCustomGallery}
         width="800"
         onClose={toggleAddCustomGallery}
       >

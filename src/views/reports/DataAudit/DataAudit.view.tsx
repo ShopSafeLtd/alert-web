@@ -215,7 +215,7 @@ const DataAudit = ({
           defaultMessage: 'Add Justification for Offender',
           id: 'l+lhch',
         })}
-        visible={!!offenderId}
+        open={!!offenderId}
         width="400"
         onClose={() => setOffenderId('')}
       >

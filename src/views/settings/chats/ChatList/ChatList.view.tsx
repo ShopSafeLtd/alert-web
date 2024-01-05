@@ -107,7 +107,7 @@ const ChatList = ({
           defaultMessage: 'New Chat Group',
           id: 'bekTqS',
         })}
-        visible={addChat}
+        open={addChat}
         width="400"
         onClose={toggleAddChat}
       >

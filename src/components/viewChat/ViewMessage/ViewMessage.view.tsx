@@ -611,7 +611,7 @@ const ViewMessages = ({
             <Popover
               placement="topLeft"
               trigger="click"
-              visible={showPicker}
+              open={showPicker}
               overlayStyle={{ width: '50%' }}
               content={
                 <Picker
@@ -784,7 +784,7 @@ const ViewMessages = ({
           defaultMessage: 'Manage Chat Members',
           id: 'eVn+j4',
         })}
-        visible={manageChat}
+        open={manageChat}
         width="600"
         onClose={toggleManageChat}
       >
@@ -800,7 +800,7 @@ const ViewMessages = ({
           defaultMessage: 'Link Offenders',
           id: 'UhSUQG',
         })}
-        visible={linkOffender}
+        open={linkOffender}
         width="800"
         onClose={toggleLinkOffender}
       >
@@ -819,7 +819,7 @@ const ViewMessages = ({
           defaultMessage: 'Link Incidents',
           id: '1Vs3Qr',
         })}
-        visible={linkIncident}
+        open={linkIncident}
         width="1000"
         onClose={toggleLinkIncident}
       >
@@ -838,7 +838,7 @@ const ViewMessages = ({
           defaultMessage: 'Link Crime Groups',
           id: 'nsggw+',
         })}
-        visible={linkCrimeGroup}
+        open={linkCrimeGroup}
         width="800"
         onClose={toggleLinkCrimeGroup}
       >
@@ -857,7 +857,7 @@ const ViewMessages = ({
           defaultMessage: 'Link Vehicles',
           id: 'rmI5oX',
         })}
-        visible={linkVehicle}
+        open={linkVehicle}
         width="800"
         onClose={toggleLinkVehicle}
         bodyStyle={{ overflow: 'hidden' }}
@@ -878,7 +878,7 @@ const ViewMessages = ({
           defaultMessage: 'Link Bulletins',
           id: '5KxsaV',
         })}
-        visible={linkArticle}
+        open={linkArticle}
         width="1000"
         onClose={toggleLinkArticle}
       >

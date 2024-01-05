@@ -279,7 +279,7 @@ const OffenderExclusions = ({
           defaultMessage: 'Add Exclusion',
           id: 'QPeZMN',
         })}
-        visible={addExclusion}
+        open={addExclusion}
         width="400"
         onClose={toggleAddExclusion}
       >
@@ -294,7 +294,7 @@ const OffenderExclusions = ({
           defaultMessage: 'Edit Exclusion',
           id: '22olP0',
         })}
-        visible={editExclusion}
+        open={editExclusion}
         width="400"
         onClose={toggleEditExclusion}
       >

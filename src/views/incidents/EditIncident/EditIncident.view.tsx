@@ -1003,7 +1003,7 @@ const EditIncident = ({
           defaultMessage: 'Add Crime Type',
           id: 'OAVeBQ',
         })}
-        visible={addIncidentTag}
+        open={addIncidentTag}
         width="400"
         onClose={toggleAddIncidentTag}
       >
@@ -1019,7 +1019,7 @@ const EditIncident = ({
 
       <Modal
         onCancel={() => setAddRecentOffender(null)}
-        visible={addRecentOffender !== null}
+        open={addRecentOffender !== null}
         onOk={() => {
           // TODO fix this
           if (addRecentOffender)

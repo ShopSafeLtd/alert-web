@@ -454,7 +454,7 @@ const IncidentCard = ({
           defaultMessage: 'Edit Incident',
           id: 'E6VJFN',
         })}
-        visible={editIncidentFeed}
+        open={editIncidentFeed}
         width="600"
         onClose={toggleEditIncidentFeed}
       >
@@ -473,7 +473,7 @@ const IncidentCard = ({
           defaultMessage: 'Add New Investigation',
           id: 'QaKS9A',
         })}
-        visible={addInvestigation}
+        open={addInvestigation}
         width="500"
         onClose={toggleAddInvestigation}
       >

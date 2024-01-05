@@ -545,7 +545,7 @@ const EditArticleView = ({
       <Drawer
         title={drawer.defaultTitle}
         width={1000}
-        visible={drawer.visible}
+        open={drawer.visible}
         onClose={() => drawer.close()}
       >
         {forms[drawer.id]}

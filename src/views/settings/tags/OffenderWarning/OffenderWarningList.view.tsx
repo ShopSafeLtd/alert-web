@@ -186,7 +186,7 @@ const OffenderWarningList = ({
           defaultMessage: 'Add Offender Warning',
           id: 'JQTlrb',
         })}
-        visible={addOffenderWarning}
+        open={addOffenderWarning}
         width="400"
         onClose={toggleAddOffenderWarning}
       >
@@ -205,7 +205,7 @@ const OffenderWarningList = ({
           defaultMessage: 'Edit Offender Warning',
           id: 'b/YSMD',
         })}
-        visible={editOffenderWarning}
+        open={editOffenderWarning}
         width="400"
         onClose={toggleEditOffenderWarning}
       >

@@ -210,7 +210,7 @@ const DocumentsView = ({
           defaultMessage: 'Add Evidence',
           id: 'vgVasT',
         })}
-        visible={addDocument}
+        open={addDocument}
         width="800"
         onClose={toggleAddDocument}
         zIndex={1001}

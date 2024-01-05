@@ -2546,7 +2546,7 @@ const ViewOffender = ({
           defaultMessage: 'Edit Offender Details',
           id: 'DomujL',
         })}
-        visible={editOffender}
+        open={editOffender}
         width="600"
         onClose={toggleEditOffender}
       >
@@ -2564,7 +2564,7 @@ const ViewOffender = ({
           defaultMessage: 'Know This Offender',
           id: '1EqoEi',
         })}
-        visible={knowOffender}
+        open={knowOffender}
         width="400"
         onClose={toggleKnowOffender}
       >
@@ -2582,7 +2582,7 @@ const ViewOffender = ({
           defaultMessage: 'Copy Offender To Another Scheme',
           id: 'cMu3Y5',
         })}
-        visible={copyOffender}
+        open={copyOffender}
         width="600"
         onClose={toggleCopyOffender}
       >
@@ -2712,7 +2712,7 @@ const ViewOffender = ({
           defaultMessage: 'Add Address',
           id: 'xg14pg',
         })}
-        visible={addAddress}
+        open={addAddress}
         width="600"
         onClose={toggleAddAddress}
       >
@@ -2730,7 +2730,7 @@ const ViewOffender = ({
           defaultMessage: 'Add Address',
           id: 'xg14pg',
         })}
-        visible={addAddress}
+        open={addAddress}
         width="600"
         onClose={toggleAddAddress}
       >
@@ -2751,7 +2751,7 @@ const ViewOffender = ({
           defaultMessage: 'Edit Address',
           id: 'uSpe21',
         })}
-        visible={!!editAddressData}
+        open={!!editAddressData}
         width="600"
         onClose={() => setEditAddressData(null)}
       >
@@ -2777,7 +2777,7 @@ const ViewOffender = ({
           defaultMessage: 'Add Exclusion',
           id: 'QPeZMN',
         })}
-        visible={addBan}
+        open={addBan}
         width="400"
         onClose={toggleAddBan}
       >
@@ -2792,7 +2792,7 @@ const ViewOffender = ({
           defaultMessage: 'Edit Exclusion',
           id: '22olP0',
         })}
-        visible={!!editBanData}
+        open={!!editBanData}
         width="400"
         onClose={() => setEditBanData(null)}
       >
@@ -2812,7 +2812,7 @@ const ViewOffender = ({
           defaultMessage: 'Add Evidence',
           id: 'vgVasT',
         })}
-        visible={addDocument}
+        open={addDocument}
         width="600"
         onClose={toggleAddDocument}
         zIndex={1001}
@@ -2833,7 +2833,7 @@ const ViewOffender = ({
           defaultMessage: 'Add New Investigation',
           id: 'QaKS9A',
         })}
-        visible={addInvestigation}
+        open={addInvestigation}
         width="500"
         onClose={toggleAddInvestigation}
       >

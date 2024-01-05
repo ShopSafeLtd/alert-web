@@ -109,7 +109,7 @@ const GroupDetail = ({
             defaultMessage: 'Edit Group Details',
             id: 'mKqoi7',
           })}
-          visible={editGroup}
+          open={editGroup}
           width="400"
           onClose={toggleEditGroup}
         >

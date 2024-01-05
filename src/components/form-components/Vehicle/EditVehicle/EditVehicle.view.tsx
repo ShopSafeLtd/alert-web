@@ -322,7 +322,7 @@ const EditVehicle = ({
           defaultMessage: 'Add Custom Gallery',
           id: 'rLyRNN',
         })}
-        visible={addCustomGallery}
+        open={addCustomGallery}
         width="400"
         onClose={toggleAddCustomGallery}
       >

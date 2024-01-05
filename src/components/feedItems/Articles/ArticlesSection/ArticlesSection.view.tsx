@@ -180,7 +180,7 @@ const ArticlesSection = ({
           defaultMessage: 'Bulletin Filters',
           id: 'o9w9ud',
         })}
-        visible={sortFilter}
+        open={sortFilter}
         onClose={toggleSortFilter}
         width={500}
       >

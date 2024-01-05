@@ -242,7 +242,7 @@ const AssignImageOffender = ({
         </div>
 
         <Drawer
-          visible={addOffender}
+          open={addOffender}
           onClose={toggleAddOffender}
           title={intl.formatMessage({
             defaultMessage: 'Add New Offender',
@@ -260,7 +260,7 @@ const AssignImageOffender = ({
         </Drawer>
 
         <Drawer
-          visible={addExistingOffender}
+          open={addExistingOffender}
           onClose={toggleAddExistingOffender}
           title={intl.formatMessage({
             defaultMessage: 'Add Existing Offenders',

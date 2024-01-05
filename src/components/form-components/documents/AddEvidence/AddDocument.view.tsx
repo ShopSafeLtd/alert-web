@@ -155,7 +155,7 @@ const AddBusiness = ({
           defaultMessage: 'Add DEM Evidence',
           id: 'yyf+RN',
         })}
-        visible={searchEvidence}
+        open={searchEvidence}
         width="800"
         onClose={toggleSearchEvidence}
         zIndex={1011}

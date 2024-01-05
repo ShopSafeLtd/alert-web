@@ -107,7 +107,7 @@ const GroupList = ({
           defaultMessage: 'Create New Content Group',
           id: 'pTLcTT',
         })}
-        visible={addGroup}
+        open={addGroup}
         width="400"
         onClose={toggleAddGroup}
       >

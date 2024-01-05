@@ -180,7 +180,7 @@ const RecycleBin = ({
           defaultMessage: 'Recycled Incident',
           id: 'bcJvHG',
         })}
-        visible={restoreIncident}
+        open={restoreIncident}
         width="400"
         onClose={toggleRestoreIncident}
       >
@@ -198,7 +198,7 @@ const RecycleBin = ({
           defaultMessage: 'Recycled Offender',
           id: 'WxqFHl',
         })}
-        visible={restoreOffender}
+        open={restoreOffender}
         width="400"
         onClose={toggleRestoreOffender}
       >

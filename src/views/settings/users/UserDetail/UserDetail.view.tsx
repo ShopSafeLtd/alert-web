@@ -504,7 +504,7 @@ const userDetail = ({
         title={
           <FormattedMessage defaultMessage="Edit User Details" id="OaNQvU" />
         }
-        visible={editUser}
+        open={editUser}
         width="600"
         onClose={toggleEditUser}
       >
@@ -512,7 +512,7 @@ const userDetail = ({
       </Drawer>
       <Drawer
         title={<FormattedMessage defaultMessage="Edit Password" id="8/FSbQ" />}
-        visible={editPassword}
+        open={editPassword}
         width="600"
         onClose={toggleEditPassword}
       >
@@ -525,7 +525,7 @@ const userDetail = ({
         title={
           <FormattedMessage defaultMessage="Link to dem user" id="lk9fDC" />
         }
-        visible={demLink && !!demId}
+        open={demLink && !!demId}
         width="800"
         onClose={toggleDemLink}
       >

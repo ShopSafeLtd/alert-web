@@ -303,7 +303,7 @@ const AddBusiness = ({
           defaultMessage: 'Add Business Tag',
           id: 'frQeQr',
         })}
-        visible={addTag}
+        open={addTag}
         width="600"
         onClose={toggleAddTag}
       >

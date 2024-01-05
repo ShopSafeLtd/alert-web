@@ -462,7 +462,7 @@ const OffenderFeed = ({
           defaultMessage: 'Offender Filters',
           id: 'gxEHRQ',
         })}
-        visible={sortFilter}
+        open={sortFilter}
         onClose={toggleSortFilter}
         width={500}
       >

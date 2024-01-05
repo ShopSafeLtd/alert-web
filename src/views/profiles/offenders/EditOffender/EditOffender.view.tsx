@@ -623,7 +623,7 @@ const EditOffender = ({
               defaultMessage: 'Add Address',
               id: 'xg14pg',
             })}
-            visible={addAddress}
+            open={addAddress}
             width="600"
             onClose={toggleAddAddress}
           >
@@ -639,7 +639,7 @@ const EditOffender = ({
               defaultMessage: 'Edit Address',
               id: 'uSpe21',
             })}
-            visible={editAddress !== null}
+            open={editAddress !== null}
             width="600"
             onClose={() => toggleEditAddress(null)}
           >

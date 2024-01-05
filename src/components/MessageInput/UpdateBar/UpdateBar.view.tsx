@@ -397,7 +397,7 @@ const UpdateBar = ({
             <Popover
               placement="topLeft"
               trigger="click"
-              visible={showUpdatePicker}
+              open={showUpdatePicker}
               overlayStyle={{ width: '50%' }}
               content={
                 <Picker
@@ -573,7 +573,7 @@ const UpdateBar = ({
           defaultMessage: 'Link Offenders',
           id: 'UhSUQG',
         })}
-        visible={linkOffender}
+        open={linkOffender}
         width="800"
         onClose={toggleLinkUpdateOffender}
       >
@@ -592,7 +592,7 @@ const UpdateBar = ({
           defaultMessage: 'Link Incidents',
           id: '1Vs3Qr',
         })}
-        visible={linkIncident}
+        open={linkIncident}
         width="1000"
         onClose={toggleLinkUpdateIncident}
       >
@@ -611,7 +611,7 @@ const UpdateBar = ({
           defaultMessage: 'Link CrimeGroups',
           id: 'S+q256',
         })}
-        visible={linkCrimeGroup}
+        open={linkCrimeGroup}
         width="800"
         onClose={toggleLinkCrimeGroup}
       >
@@ -630,7 +630,7 @@ const UpdateBar = ({
           defaultMessage: 'Link Vehicles',
           id: 'rmI5oX',
         })}
-        visible={linkVehicle}
+        open={linkVehicle}
         width="800"
         onClose={toggleLinkVehicle}
         bodyStyle={{ overflow: 'hidden' }}
@@ -650,7 +650,7 @@ const UpdateBar = ({
           defaultMessage: 'Link Bulletins',
           id: '5KxsaV',
         })}
-        visible={linkArticle}
+        open={linkArticle}
         width="1000"
         onClose={toggleLinkArticle}
       >

@@ -1015,7 +1015,7 @@ const OffenderCard = ({
           defaultMessage: 'Edit Offender',
           id: '+OfJ4/',
         })}
-        visible={editOffenderFeed}
+        open={editOffenderFeed}
         width="600"
         onClose={toggleEditOffenderFeed}
       >
@@ -1033,7 +1033,7 @@ const OffenderCard = ({
           defaultMessage: 'Know This Offender',
           id: '1EqoEi',
         })}
-        visible={knowOffender}
+        open={knowOffender}
         width="400"
         onClose={toggleKnowOffender}
       >
@@ -1052,7 +1052,7 @@ const OffenderCard = ({
           defaultMessage: 'Add New Investigation',
           id: 'QaKS9A',
         })}
-        visible={addInvestigation}
+        open={addInvestigation}
         width="500"
         onClose={toggleAddInvestigation}
       >

@@ -238,8 +238,6 @@ const ViewOffender = ({
                                   id: 'PQ3WJD',
                                 })) ||
                               (messages?.slice(-1)[0].articles &&
-                                // ?????
-                                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                                 messages?.slice(-1)[0].articles.length &&
                                 intl.formatMessage({
                                   defaultMessage: 'Linked an article',
@@ -329,7 +327,7 @@ const ViewOffender = ({
           defaultMessage: 'Create A New Chat',
           id: 'E5LFtn',
         })}
-        visible={addChat}
+        open={addChat}
         width="400"
         onClose={toggleAddChat}
       >

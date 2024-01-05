@@ -725,7 +725,7 @@ const ViewTag = ({
           defaultMessage: 'Add/Create Question',
           id: '/vx2Ey',
         })}
-        visible={addQuestion}
+        open={addQuestion}
         width={800}
         onClose={toggleAddQuestion}
       >
@@ -743,7 +743,7 @@ const ViewTag = ({
           defaultMessage: 'Add/Create Question',
           id: '/vx2Ey',
         })}
-        visible={!!selectedQuestion}
+        open={!!selectedQuestion}
         width={800}
         onClose={() => setSelectedQuestion(null)}
       >

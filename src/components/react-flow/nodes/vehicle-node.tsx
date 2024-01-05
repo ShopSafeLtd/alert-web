@@ -171,7 +171,7 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
       <Drawer
         title={drawer.defaultTitle}
         width={1000}
-        visible={drawer.visible}
+        open={drawer.visible}
         onClose={() => {
           setIsEditing(false);
           drawer.close();
