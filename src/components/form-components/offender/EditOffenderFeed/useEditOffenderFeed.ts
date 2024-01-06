@@ -174,9 +174,6 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
-    const knownFor = new Set(data.knownFor);
-    const targetedGoods = new Set(data.targetedGoods);
-    const alias = new Set(data.alias);
 
     void updateOffender({
       variables: {
@@ -222,9 +219,9 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
           },
           scheme: { connect: { id: schemeId } },
           infoSource: { set: data.infoSource || '' },
-          knownFor: { set: [...knownFor] },
-          targetedGoods: { set: [...targetedGoods] },
-          alias: { set: [...alias] },
+          knownFor: { set: data.knownFor },
+          targetedGoods: { set: data.targetedGoods },
+          alias: { set: data.alias },
           justification: { set: data.justification || '' },
         },
       },

@@ -1,11 +1,19 @@
 fragment Offenders on Offender {
   id
-  reference
   name
+  alias
+  age
   gender
+  race
   build
   height
-  race
-  age
+  hair
+  peculiarities
+  comment
+  dateSource
   dateOfBirth
+  idVerified
+  idSource
+  knownFor
+  targetedGoods
 }

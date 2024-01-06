@@ -31,6 +31,10 @@ export interface OffenderData {
   reference?: number | null;
   name?: string | null;
   alias?: string[] | null;
+  knownFor?: string[] | null;
+  targetedGoods?: string[] | null;
+  infoSource?: string | null;
+  justification?: string | null;
   age?: Age | null;
   gender?: Gender | null;
   race?: Race | null;

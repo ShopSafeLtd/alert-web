@@ -16,6 +16,7 @@ mutation createChat($data: ChatCreateInput!) {
         name
         firstLetter
         totalMembers
+        messageCount
         messages {
           id
           content

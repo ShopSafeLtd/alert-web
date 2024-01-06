@@ -459,7 +459,7 @@ const EditOffender = ({
               </Col>
             </Row>
           )}
-          {groups.length > 1 && (
+          {groups.length > 0 && (
             <Row>
               <Col span={24}>
                 <Form.Item
@@ -500,7 +500,7 @@ const EditOffender = ({
               </Col>
             </Row>
           )}
-          {data?.offender.knownFor && data?.offender.knownFor.length > 1 && (
+          {data?.offender.knownFor && data?.offender.knownFor.length > 0 && (
             <Row>
               <Col span={24}>
                 <Form.Item
@@ -527,7 +527,7 @@ const EditOffender = ({
             </Row>
           )}
           {data?.offender.targetedGoods &&
-            data?.offender.targetedGoods.length > 1 && (
+            data?.offender.targetedGoods.length > 0 && (
               <Row>
                 <Col span={24}>
                   <Form.Item
@@ -602,6 +602,7 @@ const EditOffender = ({
                 <Input.TextArea disabled={saving} />
               </Form.Item>
             </Col>
+
             {(needJustification || data?.offender.justification) && (
               <Col span={23}>
                 <Form.Item
