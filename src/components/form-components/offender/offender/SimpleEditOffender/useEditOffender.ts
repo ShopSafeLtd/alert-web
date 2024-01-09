@@ -34,7 +34,7 @@ export interface OffenderData {
   peculiarities?: string | null;
   comment?: string | null;
   idVerified?: boolean;
-  idSource?: IdSource;
+  idSource?: IdSource | null;
   images?: OffenderImage[] | null;
 }
 

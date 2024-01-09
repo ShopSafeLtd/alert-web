@@ -9127,6 +9127,7 @@ export type Mutation = {
   linkBusinessToScheme: Business;
   linkOrgToDem: Business;
   linkUserToDem: User;
+  markAsReadMessages: UserChat;
   mergeBusinessesWithSameName: Business;
   mergeOffender: Offender;
   recycleExpiredData: SystemTask;
@@ -9673,6 +9674,11 @@ export type MutationLinkOrgToDemArgs = {
 export type MutationLinkUserToDemArgs = {
   data: UniqueId;
   where: UniqueId;
+};
+
+
+export type MutationMarkAsReadMessagesArgs = {
+  userChatId: Scalars['String'];
 };
 
 
@@ -17719,6 +17725,15 @@ export type UserListRelationFilter = {
   some?: InputMaybe<UserWhereInput>;
 };
 
+export type UserMessage = {
+  __typename?: 'UserMessage';
+  createdAt: Scalars['Date'];
+  id: Scalars['String'];
+  message: Message;
+  read: Scalars['Boolean'];
+  user: User;
+};
+
 export type UserNew = {
   __typename?: 'UserNew';
   email: Scalars['String'];
@@ -19835,7 +19850,7 @@ export type UpdateIncidentMutationVariables = Exact<{
 }>;
 
 
-export type UpdateIncidentMutation = { __typename?: 'Mutation', updateIncident: { __typename?: 'Incident', id: string, subject?: string | null, description: string, dayTime: string, date: Date, time: Date, value?: number | null, recoveredValue?: number | null, policeReported: boolean, policeRef?: string | null, policeInvolved: boolean, subscribed: boolean, approved?: boolean | null, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, location?: { __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, geoLat?: number | null, geoLng?: number | null, full: string, alias?: string | null } | null, createdBy: { __typename?: 'User', id: string, fullName: string, businesses: Array<{ __typename?: 'Business', fullName: string, id: string, name: string }> }, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null, position: ImagePosition, rotation: number, url?: string | null, card?: string | null }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, offenders: Array<{ __typename?: 'Offender', id: string, createdAt: Date, updatedAt: Date, age?: Age | null, build?: Build | null, height?: Height | null, dateOfBirth?: Date | null, dateSource?: string | null, gender?: Gender | null, hair?: string | null, name?: string | null, peculiarities?: string | null, race?: Race | null, approved?: boolean | null, uploaded?: boolean | null, active?: boolean | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, position: ImagePosition, rotation: number, optimised?: string | null, card?: string | null }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }> }> } };
+export type UpdateIncidentMutation = { __typename?: 'Mutation', updateIncident: { __typename?: 'Incident', id: string, subject?: string | null, description: string, dayTime: string, date: Date, time: Date, value?: number | null, recoveredValue?: number | null, policeReported: boolean, policeRef?: string | null, policeInvolved: boolean, subscribed: boolean, approved?: boolean | null, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, location?: { __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, geoLat?: number | null, geoLng?: number | null, full: string, alias?: string | null } | null, createdBy: { __typename?: 'User', id: string, fullName: string, businesses: Array<{ __typename?: 'Business', fullName: string, id: string, name: string }> }, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null, position: ImagePosition, rotation: number, url?: string | null, card?: string | null }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, alias: Array<string>, age?: Age | null, gender?: Gender | null, race?: Race | null, build?: Build | null, height?: Height | null, hair?: string | null, peculiarities?: string | null, comment?: string | null, dateSource?: string | null, dateOfBirth?: Date | null, idVerified: boolean, idSource?: IdSource | null, knownFor: Array<string>, targetedGoods: Array<string>, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }> }> } };
 
 export type UpdateIncidentGoodsMutationVariables = Exact<{
   id: Scalars['String'];
@@ -20218,7 +20233,7 @@ export type CreateSimpleOffenderMutationVariables = Exact<{
 }>;
 
 
-export type CreateSimpleOffenderMutation = { __typename?: 'Mutation', createOffender: { __typename?: 'Offender', id: string, name?: string | null, age?: Age | null, gender?: Gender | null, race?: Race | null, dateOfBirth?: Date | null, build?: Build | null, height?: Height | null, comment?: string | null, recycled: boolean, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null, position: ImagePosition, rotation: number, primary?: boolean | null, policeImage?: boolean | null }> } };
+export type CreateSimpleOffenderMutation = { __typename?: 'Mutation', createOffender: { __typename?: 'Offender', recycled: boolean, id: string, name?: string | null, alias: Array<string>, age?: Age | null, gender?: Gender | null, race?: Race | null, build?: Build | null, height?: Height | null, hair?: string | null, peculiarities?: string | null, comment?: string | null, dateSource?: string | null, dateOfBirth?: Date | null, idVerified: boolean, idSource?: IdSource | null, knownFor: Array<string>, targetedGoods: Array<string>, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number }> } };
 
 export type CreateOffenderMutationVariables = Exact<{
   data: CreateOffenderData;
@@ -20269,7 +20284,7 @@ export type UpdateSimpleOffenderMutationVariables = Exact<{
 }>;
 
 
-export type UpdateSimpleOffenderMutation = { __typename?: 'Mutation', updateOffender: { __typename?: 'Offender', recycled: boolean, id: string, name?: string | null, alias: Array<string>, age?: Age | null, gender?: Gender | null, race?: Race | null, build?: Build | null, height?: Height | null, hair?: string | null, peculiarities?: string | null, comment?: string | null, dateSource?: string | null, dateOfBirth?: Date | null, idVerified: boolean, idSource?: IdSource | null, knownFor: Array<string>, targetedGoods: Array<string>, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null, position: ImagePosition, rotation: number, primary?: boolean | null, policeImage?: boolean | null }> } };
+export type UpdateSimpleOffenderMutation = { __typename?: 'Mutation', updateOffender: { __typename?: 'Offender', recycled: boolean, id: string, name?: string | null, alias: Array<string>, age?: Age | null, gender?: Gender | null, race?: Race | null, build?: Build | null, height?: Height | null, hair?: string | null, peculiarities?: string | null, comment?: string | null, dateSource?: string | null, dateOfBirth?: Date | null, idVerified: boolean, idSource?: IdSource | null, knownFor: Array<string>, targetedGoods: Array<string>, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number }> } };
 
 export type UpdateOffenderAddressesMutationVariables = Exact<{
   id: Scalars['String'];
@@ -20850,13 +20865,12 @@ export type UserQueryVariables = Exact<{
 
 export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, fullName: string, email: string, status?: UserStatus | null, demId?: string | null, publicName: boolean, reportToAllBusinesses: boolean, disabled: boolean, newUser: boolean, incidentEmail: boolean, incidentPush: boolean, subscribedIncidentOnly: boolean, subscribedOffenderOnly: boolean, messagePush: boolean, offenderEmail: boolean, offenderPush: boolean, totalLastYearLogin: number, totalThirtyDaysLogin: number, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string, demId?: string | null }>, signedTerms?: { __typename?: 'UserTerm', id: string, signature?: string | null, terms: { __typename?: 'TermsAndCondition', id: string, version: number } } | null, groups: Array<{ __typename?: 'Group', id: string, name: string }>, approverGroups: Array<{ __typename?: 'Group', id: string, name: string }>, defaultGroups: Array<{ __typename?: 'Group', id: string, name: string }>, chats: Array<{ __typename?: 'UserChat', id: string, chat: { __typename?: 'Chat', id: string, name: string } }>, schemes: Array<{ __typename?: 'UserScheme', id: string, schemeId: string, role: Role }>, lastTenLogin: Array<{ __typename?: 'LoginEvent', loginTime: Date, id: string }>, lastLogin?: { __typename?: 'LoginEvent', loginTime: Date, id: string } | null } };
 
-export type UpdateUserChatMutationVariables = Exact<{
-  where: UniqueId;
-  data: UserUpdateInput;
+export type MarkAsReadMessagesMutationVariables = Exact<{
+  userChatId: Scalars['String'];
 }>;
 
 
-export type UpdateUserChatMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, chats: Array<{ __typename?: 'UserChat', id: string, newMessages?: boolean | null, mentioned?: boolean | null, updatedAt: Date, createdAt: Date, user: { __typename?: 'User', id: string, fullName: string, firstLetter: string }, chat: { __typename?: 'Chat', id: string, name: string, firstLetter: string, totalMembers: number, messages: Array<{ __typename?: 'Message', id: string, content: string, createdAt: Date, from: { __typename?: 'User', id: string, fullName: string, origFirstLetter: string, origName: string }, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number }>, vehicles: Array<{ __typename?: 'Vehicle', id: string, reference?: number | null }>, crimeGroups: Array<{ __typename?: 'CrimeGroup', id: string, reference?: number | null }>, incidents: Array<{ __typename?: 'Incident', id: string, subject?: string | null }>, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null }>, articles: Array<{ __typename?: 'Article', id: string, title: string }> }> } }> } };
+export type MarkAsReadMessagesMutation = { __typename?: 'Mutation', markAsReadMessages: { __typename?: 'UserChat', id: string, newMessages?: boolean | null, mentioned?: boolean | null, updatedAt: Date, createdAt: Date, user: { __typename?: 'User', id: string, fullName: string, firstLetter: string }, chat: { __typename?: 'Chat', id: string, name: string, firstLetter: string, totalMembers: number, messages: Array<{ __typename?: 'Message', id: string, content: string, createdAt: Date, from: { __typename?: 'User', id: string, fullName: string, origFirstLetter: string, origName: string }, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number }>, vehicles: Array<{ __typename?: 'Vehicle', id: string, reference?: number | null }>, crimeGroups: Array<{ __typename?: 'CrimeGroup', id: string, reference?: number | null }>, incidents: Array<{ __typename?: 'Incident', id: string, subject?: string | null }>, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null }>, articles: Array<{ __typename?: 'Article', id: string, title: string }> }> } } };
 
 export type UserChatsQueryVariables = Exact<{
   where: UserWhereUniqueInput;
@@ -24928,29 +24942,9 @@ export const UpdateIncidentDocument = gql`
       name
     }
     offenders {
-      id
-      createdAt
-      updatedAt
-      age
-      build
-      height
-      dateOfBirth
-      dateSource
-      gender
-      hair
-      name
-      peculiarities
-      race
-      approved
-      uploaded
-      active
+      ...Offenders
       images {
-        id
-        url
-        position
-        rotation
-        optimised
-        card
+        ...SimpleImages
       }
       tags {
         id
@@ -24959,7 +24953,9 @@ export const UpdateIncidentDocument = gql`
     }
   }
 }
-    ${LocationsFragmentDoc}`;
+    ${LocationsFragmentDoc}
+${OffendersFragmentDoc}
+${SimpleImagesFragmentDoc}`;
 export type UpdateIncidentMutationFn = Apollo.MutationFunction<UpdateIncidentMutation, UpdateIncidentMutationVariables>;
 export function useUpdateIncidentMutation(baseOptions?: Apollo.MutationHookOptions<UpdateIncidentMutation, UpdateIncidentMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
@@ -27397,29 +27393,15 @@ export type CopyOffenderMutationOptions = Apollo.BaseMutationOptions<CopyOffende
 export const CreateSimpleOffenderDocument = gql`
     mutation CreateSimpleOffender($data: CreateOffenderData!) {
   createOffender(data: $data) {
-    id
-    name
-    age
-    gender
-    race
-    dateOfBirth
-    build
-    height
-    comment
+    ...Offenders
     images(take: 1) {
-      id
-      url
-      optimised
-      card
-      position
-      rotation
-      primary
-      policeImage
+      ...SimpleImages
     }
     recycled
   }
 }
-    `;
+    ${OffendersFragmentDoc}
+${SimpleImagesFragmentDoc}`;
 export type CreateSimpleOffenderMutationFn = Apollo.MutationFunction<CreateSimpleOffenderMutation, CreateSimpleOffenderMutationVariables>;
 export function useCreateSimpleOffenderMutation(baseOptions?: Apollo.MutationHookOptions<CreateSimpleOffenderMutation, CreateSimpleOffenderMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
@@ -27653,19 +27635,13 @@ export const UpdateSimpleOffenderDocument = gql`
   updateOffender(where: $where, data: $data) {
     ...Offenders
     images(take: 1) {
-      id
-      url
-      optimised
-      card
-      position
-      rotation
-      primary
-      policeImage
+      ...SimpleImages
     }
     recycled
   }
 }
-    ${OffendersFragmentDoc}`;
+    ${OffendersFragmentDoc}
+${SimpleImagesFragmentDoc}`;
 export type UpdateSimpleOffenderMutationFn = Apollo.MutationFunction<UpdateSimpleOffenderMutation, UpdateSimpleOffenderMutationVariables>;
 export function useUpdateSimpleOffenderMutation(baseOptions?: Apollo.MutationHookOptions<UpdateSimpleOffenderMutation, UpdateSimpleOffenderMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
@@ -30683,77 +30659,74 @@ export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQ
 export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
 export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
 export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
-export const UpdateUserChatDocument = gql`
-    mutation updateUserChat($where: UniqueId!, $data: UserUpdateInput!) {
-  updateUser(where: $where, data: $data) {
+export const MarkAsReadMessagesDocument = gql`
+    mutation markAsReadMessages($userChatId: String!) {
+  markAsReadMessages(userChatId: $userChatId) {
     id
-    chats {
+    newMessages
+    mentioned
+    updatedAt
+    createdAt
+    user {
       id
-      newMessages
-      mentioned
-      updatedAt
-      createdAt
-      user {
+      fullName
+      firstLetter
+    }
+    chat {
+      id
+      name
+      firstLetter
+      totalMembers
+      messages {
         id
-        fullName
-        firstLetter
-      }
-      chat {
-        id
-        name
-        firstLetter
-        totalMembers
-        messages {
+        content
+        createdAt
+        from {
           id
-          content
-          createdAt
-          from {
-            id
-            fullName
-            origFirstLetter
-            origName
-          }
-          images {
-            id
-            url
-            optimised
-            position
-            rotation
-          }
-          vehicles {
-            id
-            reference
-          }
-          crimeGroups {
-            id
-            reference
-          }
-          incidents {
-            id
-            subject
-          }
-          offenders {
-            id
-            name
-          }
-          articles {
-            id
-            title
-          }
+          fullName
+          origFirstLetter
+          origName
+        }
+        images {
+          id
+          url
+          optimised
+          position
+          rotation
+        }
+        vehicles {
+          id
+          reference
+        }
+        crimeGroups {
+          id
+          reference
+        }
+        incidents {
+          id
+          subject
+        }
+        offenders {
+          id
+          name
+        }
+        articles {
+          id
+          title
         }
       }
     }
   }
 }
     `;
-export type UpdateUserChatMutationFn = Apollo.MutationFunction<UpdateUserChatMutation, UpdateUserChatMutationVariables>;
-export function useUpdateUserChatMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserChatMutation, UpdateUserChatMutationVariables>) {
+export type MarkAsReadMessagesMutationFn = Apollo.MutationFunction<MarkAsReadMessagesMutation, MarkAsReadMessagesMutationVariables>;
+export function useMarkAsReadMessagesMutation(baseOptions?: Apollo.MutationHookOptions<MarkAsReadMessagesMutation, MarkAsReadMessagesMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateUserChatMutation, UpdateUserChatMutationVariables>(UpdateUserChatDocument, options);
+        return Apollo.useMutation<MarkAsReadMessagesMutation, MarkAsReadMessagesMutationVariables>(MarkAsReadMessagesDocument, options);
       }
-export type UpdateUserChatMutationHookResult = ReturnType<typeof useUpdateUserChatMutation>;
-export type UpdateUserChatMutationResult = Apollo.MutationResult<UpdateUserChatMutation>;
-export type UpdateUserChatMutationOptions = Apollo.BaseMutationOptions<UpdateUserChatMutation, UpdateUserChatMutationVariables>;
+export type MarkAsReadMessagesMutationHookResult = ReturnType<typeof useMarkAsReadMessagesMutation>;
+export type MarkAsReadMessagesMutationResult = Apollo.MutationResult<MarkAsReadMessagesMutation>;
+export type MarkAsReadMessagesMutationOptions = Apollo.BaseMutationOptions<MarkAsReadMessagesMutation, MarkAsReadMessagesMutationVariables>;
 export const UserChatsDocument = gql`
     query userChats($where: UserWhereUniqueInput!, $orderBy: [UserChatOrderByWithRelationInput!], $scheme: String!) {
   user(where: $where) {

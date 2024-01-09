@@ -447,6 +447,7 @@ const MenuContent = (props: Props) => {
   const userNotifications = useStoreState(
     (state) => state.user.userNotifications
   );
+  const userMessages = useStoreState((state) => state.user.userMessages);
   const [todoCount, setTodoCount] = useState(0);
   const [notificationCount, setNotificationCount] = useState(0);
   const [messageCount, setMessageCount] = useState(0);
@@ -460,9 +461,10 @@ const MenuContent = (props: Props) => {
   useEffect(() => {
     setNotificationCount(userNotifications || 0);
   }, [userNotifications]);
+
   useEffect(() => {
-    setMessageCount(messageCount || 0);
-  }, [messageCount]);
+    setMessageCount(userMessages || 0);
+  }, [userMessages]);
 
   return props.type === NavType.SIDE ? (
     <SideNavContent

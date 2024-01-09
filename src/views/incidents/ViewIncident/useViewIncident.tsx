@@ -969,6 +969,9 @@ const useViewIncident = (incidentId: string): Return => {
         variables: {
           data: {
             name: value.name,
+            alias: value.alias,
+            idSource: value.idSource,
+            idVerified: value.idVerified,
             gender: value.gender || null,
             race: value.race || null,
             build: value.build || null,

@@ -2,7 +2,7 @@ mutation UpdateSimpleOffender($where: UniqueId!, $data: OffenderUpdateInput!) {
   updateOffender(where: $where, data: $data) {
     ...Offenders
     images(take: 1) {
-      Images
+      ...SimpleImages
     }
     recycled
   }

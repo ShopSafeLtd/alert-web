@@ -3,6 +3,7 @@
 import React from 'react';
 import {
   Avatar,
+  Badge,
   Button,
   Col,
   Drawer,
@@ -42,16 +43,15 @@ interface Props {
   loading: boolean;
 }
 
-const getContent = (content: string) =>
-  content
-    .split(/(@\[.*?]\(.*?\))/)
-    .map((item) => {
-      if (item.includes('@[')) {
-        return `${item.replace('@[', '').replace(/(]\(.*?\))/, '')} `;
-      }
-      return item;
-    })
-    .join('');
+const getContent = (content: string) => content.replace(/@\[([^]+?)]/g, '@$1');
+// .split(/(@\[.*?]\(.*?\))/)
+// .map((item) => {
+//   if (item.includes('@[')) {
+//     return `${item.replace('@[', '').replace(/(]\(.*?\))/, '')} `;
+//   }
+//   return item;
+// })
+// .join('');
 
 const ViewOffender = ({
   data,
@@ -123,7 +123,7 @@ const ViewOffender = ({
           newMessages,
           createdAt,
           mentioned,
-          chat: { id, name, firstLetter, messages, totalMembers },
+          chat: { id, name, firstLetter, messages, totalMembers, messageCount },
         }) => (
           <Link to={`/app/chat/${id}`} key={id}>
             <List.Item
@@ -133,7 +133,15 @@ const ViewOffender = ({
             >
               <List.Item.Meta
                 avatar={
-                  <Avatar className="chat-item-avatar">{firstLetter}</Avatar>
+                  <Badge
+                    offset={[8, 0]}
+                    size="default"
+                    count={messageCount || 0}
+                    overflowCount={99}
+                    style={{ zIndex: 100, right: 3, top: 5 }}
+                  >
+                    <Avatar className="chat-item-avatar">{firstLetter}</Avatar>
+                  </Badge>
                 }
                 title={
                   <Row style={{ marginRight: 5 }}>

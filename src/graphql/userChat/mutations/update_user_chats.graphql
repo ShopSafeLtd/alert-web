@@ -1,59 +1,56 @@
-mutation updateUserChat($where: UniqueId!, $data: UserUpdateInput!) {
-  updateUser(where: $where, data: $data) {
+mutation markAsReadMessages($userChatId: String!) {
+  markAsReadMessages(userChatId: $userChatId) {
     id
-    chats {
+    newMessages
+    mentioned
+    updatedAt
+    createdAt
+    user {
       id
-      newMessages
-      mentioned
-      updatedAt
-      createdAt
-      user {
+      fullName
+      firstLetter
+    }
+    chat {
+      id
+      name
+      firstLetter
+      totalMembers
+      messages {
         id
-        fullName
-        firstLetter
-      }
-      chat {
-        id
-        name
-        firstLetter
-        totalMembers
-        messages {
+        content
+        createdAt
+        from {
           id
-          content
-          createdAt
-          from {
-            id
-            fullName
-            origFirstLetter
-            origName
-          }
-          images {
-            id
-            url
-            optimised
-            position
-            rotation
-          }
-          vehicles {
-            id
-            reference
-          }
-          crimeGroups {
-            id
-            reference
-          }
-          incidents {
-            id
-            subject
-          }
-          offenders {
-            id
-            name
-          }
-          articles {
-            id
-            title
-          }
+          fullName
+          origFirstLetter
+          origName
+        }
+        images {
+          id
+          url
+          optimised
+          position
+          rotation
+        }
+        vehicles {
+          id
+          reference
+        }
+        crimeGroups {
+          id
+          reference
+        }
+        incidents {
+          id
+          subject
+        }
+        offenders {
+          id
+          name
+        }
+        articles {
+          id
+          title
         }
       }
     }

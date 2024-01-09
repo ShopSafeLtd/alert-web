@@ -42,29 +42,9 @@ mutation updateIncident($where: UniqueId!, $data: IncidentUpdateInput!) {
       name
     }
     offenders {
-      id
-      createdAt
-      updatedAt
-      age
-      build
-      height
-      dateOfBirth
-      dateSource
-      gender
-      hair
-      name
-      peculiarities
-      race
-      approved
-      uploaded
-      active
+      ...Offenders
       images {
-        id
-        url
-        position
-        rotation
-        optimised
-        card
+        ...SimpleImages
       }
       tags {
         id

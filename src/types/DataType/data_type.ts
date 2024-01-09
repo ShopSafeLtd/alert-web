@@ -65,7 +65,7 @@ export interface OffenderData {
   imageUid?: string[] | undefined;
   bans?: BanData[] | undefined;
   idVerified?: boolean;
-  idSource?: IdSource;
+  idSource?: IdSource | null;
   new?: boolean;
   existing?: boolean;
   edited?: boolean;

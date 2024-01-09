@@ -1,23 +1,8 @@
 mutation CreateSimpleOffender($data: CreateOffenderData!) {
   createOffender(data: $data) {
-    id
-    name
-    age
-    gender
-    race
-    dateOfBirth
-    build
-    height
-    comment
+    ...Offenders
     images(take: 1) {
-      id
-      url
-      optimised
-      card
-      position
-      rotation
-      primary
-      policeImage
+      ...SimpleImages
     }
     recycled
   }

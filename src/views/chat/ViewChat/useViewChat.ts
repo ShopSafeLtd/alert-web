@@ -6,12 +6,12 @@ import type {
   UserChatsQuery,
 } from 'graphql/generated';
 import {
+  useMarkAsReadMessagesMutation,
   Role,
   SortOrder,
   TodoType,
   UserChatsDocument,
   useUpdateTodoMentionMutation,
-  useUpdateUserChatMutation,
   useUserChatsQuery,
 } from 'graphql/generated';
 import type { MutationUpdaterFn } from '@apollo/client';
@@ -70,7 +70,7 @@ const useViewChat = ({ chatId }: Props): Return => {
     navigate('/app/chat');
   }, [schemeId]);
 
-  const [updateUserChat] = useUpdateUserChatMutation({
+  const [markAsReadMessages] = useMarkAsReadMessagesMutation({
     onCompleted: () => {
       setSaving(false);
       void refetch();
@@ -80,27 +80,8 @@ const useViewChat = ({ chatId }: Props): Return => {
   const handleMarkAsRead = (userChatId: string | undefined) => {
     if (userChatId) {
       setSaving(true);
-      void updateUserChat({
-        variables: {
-          where: {
-            id: userId,
-          },
-          data: {
-            chats: {
-              update: [
-                {
-                  data: {
-                    newMessages: { set: false },
-                    mentioned: { set: false },
-                  },
-                  where: {
-                    id: { equals: userChatId },
-                  },
-                },
-              ],
-            },
-          },
-        },
+      void markAsReadMessages({
+        variables: { userChatId },
       });
 
       void updateTodoMention({

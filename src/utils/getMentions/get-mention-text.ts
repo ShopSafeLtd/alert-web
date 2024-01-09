@@ -60,3 +60,4 @@ export const getText = (
 
   return newText;
 };
+console.log('content', content);

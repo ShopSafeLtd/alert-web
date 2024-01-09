@@ -1023,6 +1023,10 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                     gender: offender.gender,
                     name: offender.name,
                     race: offender.race,
+                    alias: [],
+                    idVerified: false,
+                    knownFor: [],
+                    targetedGoods: [],
                   }))
                 : [],
             vehicles:
