@@ -876,8 +876,8 @@ const ViewOffender = ({
                                             icon={faSirenOn}
                                           />
                                           {intl.formatMessage({
-                                            defaultMessage: 'Crime types',
-                                            id: 'p0eRpU',
+                                            defaultMessage: 'Crime Types',
+                                            id: 'Piba4q',
                                           })}
                                         </span>
                                       }

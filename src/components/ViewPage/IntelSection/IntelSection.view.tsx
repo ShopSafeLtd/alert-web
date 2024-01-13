@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Button, Col, Dropdown, Menu, Popover, Row } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -93,6 +93,7 @@ const IntelSection = ({
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
+  const ref = useRef<HTMLDivElement | null>(null);
 
   return (
     <InfiniteScroll
@@ -117,9 +118,10 @@ const IntelSection = ({
         </div>
       }
     >
+      <div ref={ref} />
       {updates &&
         updates.length > 0 &&
-        updates.map((update) => (
+        [...updates].reverse().map((update) => (
           <div key={update.id} className={classes.wrapper}>
             {editRights && update.type !== UpdateType.System ? (
               <Popover

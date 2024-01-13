@@ -60,4 +60,5 @@ export const getText = (
 
   return newText;
 };
-console.log('content', content);
+export const getChatListContent = (content: string) =>
+  content.replace(/@\[([^]+?)]/g, '@$1');

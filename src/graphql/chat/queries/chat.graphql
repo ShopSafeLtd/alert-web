@@ -4,7 +4,7 @@ query Chat($where: ChatWhereUniqueInput!) {
     name
     description
     totalMembers
-totalMessages
+    totalMessages
     members {
       id
       user {

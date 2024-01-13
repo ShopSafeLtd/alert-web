@@ -954,8 +954,8 @@ const OffenderCard = ({
                   <Col style={{ minWidth: 90 }}>
                     <Text type="secondary">
                       {intl.formatMessage({
-                        defaultMessage: 'Crime types:',
-                        id: 'KhwX14',
+                        defaultMessage: 'Crime Types:',
+                        id: 'oSTdJE',
                       })}
                     </Text>
                   </Col>
