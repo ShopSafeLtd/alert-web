@@ -3,18 +3,18 @@ query IncidentsFeed(
   $search: String
   $first: Int
   $after: String
-  $crimeTypes: [String!]
-  $groups: [String]
+  $where: IncidentWhereInput
   $schemeId: String!
+  $approved: Boolean
 ) {
   incidentsRelay(
     order: $order
     first: $first
     after: $after
     search: $search
-    crimeTypes: $crimeTypes
-    groups: $groups
+    where: $where
     schemeId: $schemeId
+    approved: $approved
   ) {
     edges {
       node {

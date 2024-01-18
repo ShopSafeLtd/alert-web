@@ -127,6 +127,11 @@ const useIncidentFeed = (): Return => {
       date:
         order === IncidentSort.createdAtDesc ? SortOrder.Desc : SortOrder.Asc,
     },
+    approved: isUser
+      ? true
+      : gallery.includes('NOT APPROVED')
+      ? false
+      : undefined,
     where: {
       createdAt: createdAt
         ? {
