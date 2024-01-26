@@ -44,18 +44,24 @@ const useIncidentWhere = ({ showSiteNumber }: Props): Return => {
         query: SearchBusinessesDocument,
         variables: {
           where: {
-            siteNumber: showSiteNumber
-              ? {
-                  equals: value,
-                  mode: QueryMode.Insensitive,
-                }
-              : undefined,
-            name: showSiteNumber
-              ? undefined
-              : {
-                  contains: value,
-                  mode: QueryMode.Insensitive,
-                },
+            OR: [
+              {
+                siteNumber: showSiteNumber
+                  ? {
+                      equals: value,
+                      mode: QueryMode.Insensitive,
+                    }
+                  : undefined,
+              },
+              {
+                name: showSiteNumber
+                  ? undefined
+                  : {
+                      contains: value,
+                      mode: QueryMode.Insensitive,
+                    },
+              },
+            ],
             schemes: {
               some: {
                 id: {
