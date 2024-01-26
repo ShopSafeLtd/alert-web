@@ -11,6 +11,7 @@ query SearchBusinesses(
       name
       fullName
       publicName
+      siteNumber
       locations {
         id
         full

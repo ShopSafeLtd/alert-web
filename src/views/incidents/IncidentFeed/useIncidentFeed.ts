@@ -364,7 +364,10 @@ const useIncidentFeed = (): Return => {
         pagination,
         variables: {
           ...variables,
-          groups: defaultGroups.map(({ id }) => id),
+          groups:
+            defaultGroups
+              ?.filter(({ scheme }) => scheme.id === schemeId)
+              ?.map(({ id }) => id) || [],
         },
         order,
       });

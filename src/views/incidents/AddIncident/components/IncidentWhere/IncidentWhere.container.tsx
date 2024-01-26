@@ -8,6 +8,7 @@ interface Props {
   toggleAddNewAddress: () => void;
   newAddressData: LocationData | undefined;
   updateNewAddressData: (value: LocationData | undefined) => void;
+  showSiteNumber: boolean;
 }
 
 const IncidentWhere = ({
@@ -15,8 +16,9 @@ const IncidentWhere = ({
   toggleAddNewAddress,
   updateNewAddressData,
   newAddressData,
+  showSiteNumber,
 }: Props) => {
-  const { onSearchBusiness, hideField } = useIncidentWhere();
+  const { onSearchBusiness, hideField } = useIncidentWhere({ showSiteNumber });
 
   return (
     <View
@@ -26,6 +28,7 @@ const IncidentWhere = ({
       toggleAddNewAddress={toggleAddNewAddress}
       updateNewAddressData={updateNewAddressData}
       hideField={hideField}
+      showSiteNumber={showSiteNumber}
     />
   );
 };

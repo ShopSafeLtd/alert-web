@@ -19,11 +19,7 @@ import type {
 import { Link } from 'react-router-dom';
 // import type { MutationUpdaterFn } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faChevronDown,
-  faFilter,
-  faPlus,
-} from '@fortawesome/pro-light-svg-icons';
+import { faChevronDown, faFilter } from '@fortawesome/pro-light-svg-icons';
 import type { DateType } from 'types/DataType';
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
 import VehicleFilter from 'components/vehicles/VehicleFilter';
@@ -277,32 +273,32 @@ const ListVehicles = ({
               new Date(a.updatedAt).valueOf() - new Date(b.updatedAt).valueOf(),
           },
 
-          {
-            title: '',
-            dataIndex: 'actions',
-            key: 'actions',
-            width: 120,
-            render: (_, record) => (
-              // <FontAwesomeIcon
-              //   icon={faArrowUpRightFromSquare}
-              //   onClick={() => navigate(`view/${record.key}`)}
-              // />
-              <Button
-                type="ghost"
-                onClick={() => toggleAddInvestigation(record.key)}
-              >
-                <FontAwesomeIcon
-                  size="1x"
-                  style={{ marginRight: 8 }}
-                  icon={faPlus}
-                />
-                {intl.formatMessage({
-                  defaultMessage: 'Investigation',
-                  id: 'tNseQe',
-                })}
-              </Button>
-            ),
-          },
+          // {
+          //   title: '',
+          //   dataIndex: 'actions',
+          //   key: 'actions',
+          //   width: 120,
+          //   render: (_, record) => (
+          //     // <FontAwesomeIcon
+          //     //   icon={faArrowUpRightFromSquare}
+          //     //   onClick={() => navigate(`view/${record.key}`)}
+          //     // />
+          //     <Button
+          //       type="ghost"
+          //       onClick={() => toggleAddInvestigation(record.key)}
+          //     >
+          //       <FontAwesomeIcon
+          //         size="1x"
+          //         style={{ marginRight: 8 }}
+          //         icon={faPlus}
+          //       />
+          //       {intl.formatMessage({
+          //         defaultMessage: 'Investigation',
+          //         id: 'tNseQe',
+          //       })}
+          //     </Button>
+          //   ),
+          // },
         ]}
       />
 

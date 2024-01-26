@@ -286,6 +286,16 @@ export type ActiveChecklistFieldsArgs = {
   where?: InputMaybe<ActiveChecklistFieldsWhereInput>;
 };
 
+export type ActiveChecklistAnswerInput = {
+  additionalInfo?: InputMaybe<Scalars['String']>;
+  answer?: InputMaybe<Scalars['String']>;
+  fieldId: Scalars['String'];
+  flagged: Scalars['Boolean'];
+  images?: InputMaybe<Array<Scalars['String']>>;
+  na: Scalars['Boolean'];
+  weight?: InputMaybe<Scalars['Int']>;
+};
+
 export type ActiveChecklistFields = {
   __typename?: 'ActiveChecklistFields';
   activeChecklist: ActiveChecklist;
@@ -617,10 +627,6 @@ export type AddressWhereInput = {
 };
 
 export type AddressWhereUniqueInput = {
-  AND?: InputMaybe<Array<AddressWhereInput>>;
-  NOT?: InputMaybe<Array<AddressWhereInput>>;
-  OR?: InputMaybe<Array<AddressWhereInput>>;
-  actions?: InputMaybe<ActionListRelationFilter>;
   alias?: InputMaybe<StringNullableFilter>;
   building?: InputMaybe<StringNullableFilter>;
   business?: InputMaybe<BusinessWhereInput>;
@@ -1670,6 +1676,7 @@ export type Business = {
   recycled: Scalars['Boolean'];
   reference?: Maybe<Scalars['Int']>;
   schemes: Array<Scheme>;
+  siteNumber?: Maybe<Scalars['String']>;
   tags: Array<Tag>;
   todos: Array<Todo>;
   totalUsers: Scalars['Int'];
@@ -1952,6 +1959,7 @@ export type BusinessUpdateInput = {
   parent?: InputMaybe<BusinessParentInput>;
   publicName?: InputMaybe<Scalars['Boolean']>;
   schemes?: InputMaybe<NullableConnectArrayHelper>;
+  siteNumber?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<TagsOnBusiness>;
 };
 
@@ -1975,6 +1983,7 @@ export type BusinessWhereInput = {
   recycled?: InputMaybe<BoolFilter>;
   reference?: InputMaybe<IntNullableFilter>;
   schemes?: InputMaybe<SchemeListRelationFilter>;
+  siteNumber?: InputMaybe<StringFilter>;
   tags?: InputMaybe<TagListRelationFilter>;
   todos?: InputMaybe<TodoListRelationFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
@@ -2347,6 +2356,13 @@ export type ChecklistWhereUniqueInput = {
   updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
+export type CompleteActiveChecklistInput = {
+  additionalInfo?: InputMaybe<Scalars['String']>;
+  answers: Array<ActiveChecklistAnswerInput>;
+  draft: Scalars['Boolean'];
+  signature?: InputMaybe<Scalars['String']>;
+};
+
 export type ConnectArrayHelper = {
   connect: Array<UniqueId>;
   disconnect?: InputMaybe<Array<UniqueId>>;
@@ -2532,6 +2548,7 @@ export type CreateBusinessDataInput = {
   parent?: InputMaybe<BusinessParentInput>;
   publicName: Scalars['Boolean'];
   schemes: ConnectArrayHelper;
+  siteNumber?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<TagsOnBusiness>;
 };
 
@@ -9044,6 +9061,7 @@ export type Mutation = {
   addUsersToBusiness: Business;
   approveIncident: Incident;
   approveOffender: Offender;
+  completeChecklist: ActiveChecklist;
   copyEvidenceOnInvestigation: Document;
   copyOffender: Offender;
   createActiveChecklist: ActiveChecklist;
@@ -9252,6 +9270,12 @@ export type MutationApproveIncidentArgs = {
 export type MutationApproveOffenderArgs = {
   data: ApproveIncidentData;
   where: UniqueId;
+};
+
+
+export type MutationCompleteChecklistArgs = {
+  data: CompleteActiveChecklistInput;
+  where: Scalars['String'];
 };
 
 
@@ -11848,6 +11872,33 @@ export type PerformanceReport = {
   lossTotals: LossTotals;
 };
 
+export enum PermissionMethod {
+  Approve = 'APPROVE',
+  Delete = 'DELETE',
+  Edit = 'EDIT',
+  Read = 'READ',
+  Write = 'WRITE'
+}
+
+export enum PermissionModel {
+  Articles = 'ARTICLES',
+  Businesses = 'BUSINESSES',
+  Chat = 'CHAT',
+  Checklist = 'CHECKLIST',
+  CrimeGroups = 'CRIME_GROUPS',
+  Dashboard = 'DASHBOARD',
+  Documents = 'DOCUMENTS',
+  Groups = 'GROUPS',
+  Incidents = 'INCIDENTS',
+  Investigations = 'INVESTIGATIONS',
+  Offenders = 'OFFENDERS',
+  Reports = 'REPORTS',
+  Settings = 'SETTINGS',
+  Tasks = 'TASKS',
+  Users = 'USERS',
+  Vehicles = 'VEHICLES'
+}
+
 export enum PoliceResponseTime {
   NoResponse = 'NO_RESPONSE',
   Over_24Hours = 'OVER_24_HOURS',
@@ -12237,6 +12288,7 @@ export type QueryIncidentsRelayArgs = {
   order?: InputMaybe<IncidentOrderByWithRelationInput>;
   schemeId: Scalars['String'];
   search?: InputMaybe<Scalars['String']>;
+  where?: InputMaybe<IncidentWhereInput>;
 };
 
 
@@ -13980,6 +14032,7 @@ export type Scheme = {
   reportIcons: Array<Image>;
   reportOnly: Scalars['Boolean'];
   reportTemplates: Array<ReportTemplate>;
+  requireSiteNumberForUsers: Scalars['Boolean'];
   restrictIncidentAccess: Scalars['Boolean'];
   schemeTags: Array<Tag>;
   statementTemplates: Array<StatementTemplate>;
@@ -14527,6 +14580,7 @@ export type SchemeOrderByWithRelationInput = {
   reportIcons?: InputMaybe<ImageOrderByRelationAggregateInput>;
   reportOnly?: InputMaybe<SortOrder>;
   reportTemplates?: InputMaybe<ReportTemplateOrderByRelationAggregateInput>;
+  requireSiteNumberForUsers?: InputMaybe<SortOrder>;
   restrictIncidentAccess?: InputMaybe<SortOrder>;
   schemeTags?: InputMaybe<TagOrderByRelationAggregateInput>;
   statementTemplates?: InputMaybe<StatementTemplateOrderByRelationAggregateInput>;
@@ -14578,6 +14632,7 @@ export enum SchemeScalarFieldEnum {
   NeedJustification = 'needJustification',
   OffenderRetention = 'offenderRetention',
   ReportOnly = 'reportOnly',
+  RequireSiteNumberForUsers = 'requireSiteNumberForUsers',
   RestrictIncidentAccess = 'restrictIncidentAccess',
   TaskTimeTracking = 'taskTimeTracking',
   UpdatedAt = 'updatedAt',
@@ -14606,6 +14661,7 @@ export type SchemeUpdateInput = {
   needJustification?: InputMaybe<SetBooleanHelper>;
   offenderRetention?: InputMaybe<SetIntHelper>;
   reportOnly?: InputMaybe<SetBooleanHelper>;
+  requireSiteNumberForUsers?: InputMaybe<SetBooleanHelper>;
   restrictIncidentAccess?: InputMaybe<SetBooleanHelper>;
 };
 
@@ -14678,6 +14734,7 @@ export type SchemeWhereInput = {
   reportIcons?: InputMaybe<ImageListRelationFilter>;
   reportOnly?: InputMaybe<BoolFilter>;
   reportTemplates?: InputMaybe<ReportTemplateListRelationFilter>;
+  requireSiteNumberForUsers?: InputMaybe<BoolFilter>;
   restrictIncidentAccess?: InputMaybe<BoolFilter>;
   schemeTags?: InputMaybe<TagListRelationFilter>;
   statementTemplates?: InputMaybe<StatementTemplateListRelationFilter>;
@@ -14763,6 +14820,7 @@ export type SchemeWhereUniqueInput = {
   reportIcons?: InputMaybe<ImageListRelationFilter>;
   reportOnly?: InputMaybe<BoolFilter>;
   reportTemplates?: InputMaybe<ReportTemplateListRelationFilter>;
+  requireSiteNumberForUsers?: InputMaybe<BoolFilter>;
   restrictIncidentAccess?: InputMaybe<BoolFilter>;
   schemeTags?: InputMaybe<TagListRelationFilter>;
   statementTemplates?: InputMaybe<StatementTemplateListRelationFilter>;
@@ -14798,11 +14856,7 @@ export type SetDateHelper = {
 };
 
 export type SetFloatHelper = {
-  decrement?: InputMaybe<Scalars['Int']>;
-  divide?: InputMaybe<Scalars['Int']>;
-  increment?: InputMaybe<Scalars['Int']>;
-  multiply?: InputMaybe<Scalars['Int']>;
-  set?: InputMaybe<Scalars['Int']>;
+  set?: InputMaybe<Scalars['Float']>;
 };
 
 export type SetIntHelper = {
@@ -19351,7 +19405,7 @@ export type CreateBusinessMutationVariables = Exact<{
 }>;
 
 
-export type CreateBusinessMutation = { __typename?: 'Mutation', createBusiness: { __typename?: 'Business', id: string, name: string, fullName: string, publicName: boolean, demId?: string | null, totalUsers: number, parent?: { __typename?: 'Business', id: string, name: string } | null, locations: Array<{ __typename?: 'Address', id: string, full: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }> } };
+export type CreateBusinessMutation = { __typename?: 'Mutation', createBusiness: { __typename?: 'Business', id: string, name: string, fullName: string, publicName: boolean, siteNumber?: string | null, demId?: string | null, totalUsers: number, parent?: { __typename?: 'Business', id: string, name: string } | null, locations: Array<{ __typename?: 'Address', id: string, full: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }> } };
 
 export type DeleteBusinessMutationVariables = Exact<{
   id: Scalars['String'];
@@ -19392,7 +19446,7 @@ export type UpdateBusinessMutationVariables = Exact<{
 }>;
 
 
-export type UpdateBusinessMutation = { __typename?: 'Mutation', updateBusiness: { __typename?: 'Business', id: string, name: string, fullName: string, publicName: boolean, demId?: string | null, totalUsers: number, parent?: { __typename?: 'Business', id: string, name: string, fullName: string, publicName: boolean } | null, locations: Array<{ __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, geoLng?: number | null, geoLat?: number | null }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }> } };
+export type UpdateBusinessMutation = { __typename?: 'Mutation', updateBusiness: { __typename?: 'Business', id: string, name: string, siteNumber?: string | null, fullName: string, publicName: boolean, demId?: string | null, totalUsers: number, parent?: { __typename?: 'Business', id: string, name: string, fullName: string, publicName: boolean } | null, locations: Array<{ __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, geoLng?: number | null, geoLat?: number | null }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }> } };
 
 export type BusinessLocationsQueryVariables = Exact<{
   where?: InputMaybe<BusinessWhereInput>;
@@ -19411,7 +19465,7 @@ export type BusinessReportQueryVariables = Exact<{
 }>;
 
 
-export type BusinessReportQuery = { __typename?: 'Query', business: { __typename?: 'Business', id: string, name: string, incidents: Array<{ __typename?: 'Incident', id: string, subject?: string | null, createdAt: Date, reference?: number | null, policeRef?: string | null, totalRecoveredValue: number, totalValue: number, date: Date, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, createdBy: { __typename?: 'User', id: string, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string }> } }>, locations: Array<{ __typename?: 'Address', id: string, full: string }>, valueStats?: { __typename?: 'ValueTotals', avgLostValue: number, businessId: string, avgRecoveredValue: number, successRate: number, totalLostValue: number, totalRecoveredValue: number } | null, goodsTypesTotals?: Array<{ __typename?: 'BusinessGoodsTotals', avgLostValue?: number | null, businessId?: string | null, avgRecoveredValue?: number | null, count?: number | null, successRate?: number | null, totalRecoveredValue?: number | null, totalLostValue?: number | null, goodsType?: { __typename?: 'GoodsType', id: string, name: string } | null }> | null } };
+export type BusinessReportQuery = { __typename?: 'Query', business: { __typename?: 'Business', id: string, name: string, siteNumber?: string | null, incidents: Array<{ __typename?: 'Incident', id: string, subject?: string | null, createdAt: Date, reference?: number | null, policeRef?: string | null, totalRecoveredValue: number, totalValue: number, date: Date, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, createdBy: { __typename?: 'User', id: string, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string }> } }>, locations: Array<{ __typename?: 'Address', id: string, full: string }>, valueStats?: { __typename?: 'ValueTotals', avgLostValue: number, businessId: string, avgRecoveredValue: number, successRate: number, totalLostValue: number, totalRecoveredValue: number } | null, goodsTypesTotals?: Array<{ __typename?: 'BusinessGoodsTotals', avgLostValue?: number | null, businessId?: string | null, avgRecoveredValue?: number | null, count?: number | null, successRate?: number | null, totalRecoveredValue?: number | null, totalLostValue?: number | null, goodsType?: { __typename?: 'GoodsType', id: string, name: string } | null }> | null } };
 
 export type BusinessQueryVariables = Exact<{
   where: BusinessWhereUniqueInput;
@@ -19425,7 +19479,7 @@ export type EditBusinessQueryVariables = Exact<{
 }>;
 
 
-export type EditBusinessQuery = { __typename?: 'Query', business: { __typename?: 'Business', id: string, name: string, fullName: string, publicName: boolean, parent?: { __typename?: 'Business', id: string, name: string, fullName: string } | null, groups: Array<{ __typename?: 'Group', id: string, name: string }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, locations: Array<{ __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, geoLng?: number | null, geoLat?: number | null }> } };
+export type EditBusinessQuery = { __typename?: 'Query', business: { __typename?: 'Business', id: string, name: string, fullName: string, publicName: boolean, siteNumber?: string | null, parent?: { __typename?: 'Business', id: string, name: string, fullName: string } | null, groups: Array<{ __typename?: 'Group', id: string, name: string }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, locations: Array<{ __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, geoLng?: number | null, geoLat?: number | null }> } };
 
 export type ListBusinessesDivisionQueryVariables = Exact<{
   where?: InputMaybe<BusinessWhereInput>;
@@ -19455,7 +19509,7 @@ export type ListBusinessesQueryVariables = Exact<{
 }>;
 
 
-export type ListBusinessesQuery = { __typename?: 'Query', listBusinesses: { __typename?: 'ListBusinesses', total: number, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string, publicName: boolean, demId?: string | null, totalUsers: number, parent?: { __typename?: 'Business', id: string, name: string } | null, locations: Array<{ __typename?: 'Address', id: string, full: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }> }> } };
+export type ListBusinessesQuery = { __typename?: 'Query', listBusinesses: { __typename?: 'ListBusinesses', total: number, businesses: Array<{ __typename?: 'Business', id: string, name: string, siteNumber?: string | null, fullName: string, publicName: boolean, demId?: string | null, totalUsers: number, parent?: { __typename?: 'Business', id: string, name: string } | null, locations: Array<{ __typename?: 'Address', id: string, full: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }> }> } };
 
 export type SearchBusinessesQueryVariables = Exact<{
   where?: InputMaybe<BusinessWhereInput>;
@@ -19465,7 +19519,7 @@ export type SearchBusinessesQueryVariables = Exact<{
 }>;
 
 
-export type SearchBusinessesQuery = { __typename?: 'Query', listBusinesses: { __typename?: 'ListBusinesses', total: number, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string, publicName: boolean, locations: Array<{ __typename?: 'Address', id: string, full: string }> }> } };
+export type SearchBusinessesQuery = { __typename?: 'Query', listBusinesses: { __typename?: 'ListBusinesses', total: number, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string, publicName: boolean, siteNumber?: string | null, locations: Array<{ __typename?: 'Address', id: string, full: string }> }> } };
 
 export type DeleteChatMutationVariables = Exact<{
   id: Scalars['String'];
@@ -19882,7 +19936,7 @@ export type UpdateIncidentOffendersMutationVariables = Exact<{
 }>;
 
 
-export type UpdateIncidentOffendersMutation = { __typename?: 'Mutation', updateIncident: { __typename?: 'Incident', id: string, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, age?: Age | null, gender?: Gender | null, race?: Race | null, dateOfBirth?: Date | null, build?: Build | null, height?: Height | null, comment?: string | null, recycled: boolean, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null, position: ImagePosition, rotation: number, primary?: boolean | null, policeImage?: boolean | null, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null }> }> }> } };
+export type UpdateIncidentOffendersMutation = { __typename?: 'Mutation', updateIncident: { __typename?: 'Incident', id: string, offenders: Array<{ __typename?: 'Offender', recycled: boolean, id: string, name?: string | null, alias: Array<string>, age?: Age | null, gender?: Gender | null, race?: Race | null, build?: Build | null, height?: Height | null, hair?: string | null, peculiarities?: string | null, comment?: string | null, dateSource?: string | null, dateOfBirth?: Date | null, idVerified: boolean, idSource?: IdSource | null, knownFor: Array<string>, targetedGoods: Array<string>, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, primary?: boolean | null, policeImage?: boolean | null, card?: string | null, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null }> }> }> } };
 
 export type UpdateIncidentVehiclesMutationVariables = Exact<{
   id: Scalars['String'];
@@ -20655,7 +20709,7 @@ export type UpdateSchemeMutationVariables = Exact<{
 }>;
 
 
-export type UpdateSchemeMutation = { __typename?: 'Mutation', updateScheme: { __typename?: 'Scheme', id: string, name: string, restrictIncidentAccess: boolean, reportOnly: boolean, autoApproveIncidents: boolean, autoApproveOffenders: boolean, defaultPublicOffenderDOB: boolean, defaultIncidentEmail: boolean, defaultIncidentPush: boolean, defaultSubscribedIncidentOnly: boolean, defaultSubscribedOffenderOnly: boolean, defaultMessagePush: boolean, defaultOffenderEmail: boolean, defaultOffenderPush: boolean, autoPopulateDescription: boolean, needJustification: boolean, facialRecognition: boolean, imagesRequiredOnOffenders: boolean, incidentRetention?: number | null, offenderRetention?: number | null, logo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, optimisedPersisted?: string | null } | null, darkLogo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, optimisedPersisted?: string | null } | null } };
+export type UpdateSchemeMutation = { __typename?: 'Mutation', updateScheme: { __typename?: 'Scheme', id: string, name: string, restrictIncidentAccess: boolean, reportOnly: boolean, autoApproveIncidents: boolean, autoApproveOffenders: boolean, defaultPublicOffenderDOB: boolean, defaultIncidentEmail: boolean, defaultIncidentPush: boolean, defaultSubscribedIncidentOnly: boolean, defaultSubscribedOffenderOnly: boolean, defaultMessagePush: boolean, defaultOffenderEmail: boolean, defaultOffenderPush: boolean, autoPopulateDescription: boolean, needJustification: boolean, requireSiteNumberForUsers: boolean, facialRecognition: boolean, imagesRequiredOnOffenders: boolean, incidentRetention?: number | null, offenderRetention?: number | null, logo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, optimisedPersisted?: string | null } | null, darkLogo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, optimisedPersisted?: string | null } | null } };
 
 export type CurrentSchemeTermsQueryVariables = Exact<{
   where: SchemeWhereUniqueInput;
@@ -20669,7 +20723,7 @@ export type SchemeQueryVariables = Exact<{
 }>;
 
 
-export type SchemeQuery = { __typename?: 'Query', scheme: { __typename?: 'Scheme', id: string, name: string, restrictIncidentAccess: boolean, reportOnly: boolean, autoApproveIncidents: boolean, autoApproveOffenders: boolean, defaultIncidentEmail: boolean, defaultIncidentPush: boolean, defaultSubscribedIncidentOnly: boolean, defaultSubscribedOffenderOnly: boolean, defaultMessagePush: boolean, defaultOffenderEmail: boolean, defaultOffenderPush: boolean, defaultPublicOffenderDOB: boolean, incidentRetention?: number | null, offenderRetention?: number | null, autoPopulateDescription: boolean, needJustification: boolean, facialRecognition: boolean, imagesRequiredOnOffenders: boolean, goodsMode: GoodsMode, darkLogo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null } | null, logo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null } | null } };
+export type SchemeQuery = { __typename?: 'Query', scheme: { __typename?: 'Scheme', id: string, name: string, restrictIncidentAccess: boolean, reportOnly: boolean, autoApproveIncidents: boolean, autoApproveOffenders: boolean, defaultIncidentEmail: boolean, defaultIncidentPush: boolean, defaultSubscribedIncidentOnly: boolean, defaultSubscribedOffenderOnly: boolean, defaultMessagePush: boolean, defaultOffenderEmail: boolean, defaultOffenderPush: boolean, defaultPublicOffenderDOB: boolean, incidentRetention?: number | null, offenderRetention?: number | null, autoPopulateDescription: boolean, needJustification: boolean, facialRecognition: boolean, imagesRequiredOnOffenders: boolean, requireSiteNumberForUsers: boolean, goodsMode: GoodsMode, darkLogo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null } | null, logo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null } | null } };
 
 export type CreateOneStatementTemplateMutationVariables = Exact<{
   data: StatementTemplateCreateInput;
@@ -20853,7 +20907,7 @@ export type CurrentUserQueryVariables = Exact<{
 }>;
 
 
-export type CurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: string, fullName: string, origName: string, email: string, reference?: number | null, demId?: string | null, publicName: boolean, reportToAllBusinesses: boolean, notificationCount: number, messageCount: number, newUser: boolean, incidentEmail: boolean, incidentPush: boolean, offenderEmail: boolean, offenderPush: boolean, messagePush: boolean, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string, demId?: string | null }>, groups: Array<{ __typename?: 'Group', id: string, name: string, scheme: { __typename?: 'Scheme', id: string } }>, defaultGroups: Array<{ __typename?: 'Group', id: string, name: string, scheme: { __typename?: 'Scheme', id: string } }>, schemes: Array<{ __typename?: 'UserScheme', id: string, role: Role, scheme: { __typename?: 'Scheme', customTranslations: Array<{ [key: string]: any }>, userTodos: number, id: string, name: string, goodsMode: GoodsMode, autoApproveIncidents: boolean, autoApproveOffenders: boolean, defaultPublicOffenderDOB: boolean, restrictIncidentAccess: boolean, reportOnly: boolean, facialRecognition: boolean, imagesRequiredOnOffenders: boolean, taskTimeTracking: boolean, languageCount: number, autoPopulateDescription: boolean, needJustification: boolean, logo?: { __typename?: 'Image', optimisedPersisted?: string | null } | null, darkLogo?: { __typename?: 'Image', optimisedPersisted?: string | null } | null } }> } | null };
+export type CurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: string, fullName: string, origName: string, email: string, reference?: number | null, demId?: string | null, publicName: boolean, reportToAllBusinesses: boolean, notificationCount: number, messageCount: number, newUser: boolean, incidentEmail: boolean, incidentPush: boolean, offenderEmail: boolean, offenderPush: boolean, messagePush: boolean, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string, demId?: string | null }>, groups: Array<{ __typename?: 'Group', id: string, name: string, scheme: { __typename?: 'Scheme', id: string } }>, defaultGroups: Array<{ __typename?: 'Group', id: string, name: string, scheme: { __typename?: 'Scheme', id: string } }>, schemes: Array<{ __typename?: 'UserScheme', id: string, role: Role, scheme: { __typename?: 'Scheme', customTranslations: Array<{ [key: string]: any }>, userTodos: number, id: string, name: string, goodsMode: GoodsMode, autoApproveIncidents: boolean, autoApproveOffenders: boolean, defaultPublicOffenderDOB: boolean, restrictIncidentAccess: boolean, reportOnly: boolean, facialRecognition: boolean, imagesRequiredOnOffenders: boolean, taskTimeTracking: boolean, languageCount: number, autoPopulateDescription: boolean, needJustification: boolean, requireSiteNumberForUsers: boolean, logo?: { __typename?: 'Image', optimisedPersisted?: string | null } | null, darkLogo?: { __typename?: 'Image', optimisedPersisted?: string | null } | null } }> } | null };
 
 export type UserQueryVariables = Exact<{
   where: UserWhereUniqueInput;
@@ -20896,7 +20950,7 @@ export type ListUserNotificationsQueryVariables = Exact<{
 }>;
 
 
-export type ListUserNotificationsQuery = { __typename?: 'Query', listUserNotifications: { __typename?: 'ListUserNotifications', total: number, notifications: Array<{ __typename?: 'UserNotification', id: string, read: boolean, createdAt: Date, notification: { __typename?: 'Notification', id: string, crimeGroupId?: string | null, createdAt: Date, chatId?: string | null, body?: string | null, articleId?: string | null, incidentId?: string | null, investigationId?: string | null, offenderId?: string | null, title?: string | null, type?: Model | null, vehicleId?: string | null, userId?: string | null, schemes: Array<{ __typename?: 'Scheme', id: string, name: string, autoApproveIncidents: boolean, autoApproveOffenders: boolean, restrictIncidentAccess: boolean, reportOnly: boolean, defaultPublicOffenderDOB: boolean, userTodos: number, userNotifications: number, languageCount: number, autoPopulateDescription: boolean, needJustification: boolean, imagesRequiredOnOffenders: boolean, goodsMode: GoodsMode, facialRecognition: boolean, taskTimeTracking: boolean, logo?: { __typename?: 'Image', optimisedPersisted?: string | null, id: string } | null, darkLogo?: { __typename?: 'Image', id: string, optimisedPersisted?: string | null } | null }>, ban?: { __typename?: 'Ban', id: string, offender: { __typename?: 'Offender', id: string } } | null } }> } };
+export type ListUserNotificationsQuery = { __typename?: 'Query', listUserNotifications: { __typename?: 'ListUserNotifications', total: number, notifications: Array<{ __typename?: 'UserNotification', id: string, read: boolean, createdAt: Date, notification: { __typename?: 'Notification', id: string, crimeGroupId?: string | null, createdAt: Date, chatId?: string | null, body?: string | null, articleId?: string | null, incidentId?: string | null, investigationId?: string | null, offenderId?: string | null, title?: string | null, type?: Model | null, vehicleId?: string | null, userId?: string | null, schemes: Array<{ __typename?: 'Scheme', id: string, name: string, autoApproveIncidents: boolean, autoApproveOffenders: boolean, restrictIncidentAccess: boolean, reportOnly: boolean, defaultPublicOffenderDOB: boolean, userTodos: number, userNotifications: number, languageCount: number, autoPopulateDescription: boolean, needJustification: boolean, requireSiteNumberForUsers: boolean, imagesRequiredOnOffenders: boolean, goodsMode: GoodsMode, facialRecognition: boolean, taskTimeTracking: boolean, logo?: { __typename?: 'Image', optimisedPersisted?: string | null, id: string } | null, darkLogo?: { __typename?: 'Image', id: string, optimisedPersisted?: string | null } | null }>, ban?: { __typename?: 'Ban', id: string, offender: { __typename?: 'Offender', id: string } } | null } }> } };
 
 export type UserNotificationsQueryVariables = Exact<{
   where: UserWhereUniqueInput;
@@ -20905,7 +20959,7 @@ export type UserNotificationsQueryVariables = Exact<{
 }>;
 
 
-export type UserNotificationsQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, totalNotifications: number, totalUnreadNotifications: number, notifications: Array<{ __typename?: 'UserNotification', id: string, read: boolean, createdAt: Date, notification: { __typename?: 'Notification', id: string, crimeGroupId?: string | null, createdAt: Date, chatId?: string | null, body?: string | null, articleId?: string | null, incidentId?: string | null, investigationId?: string | null, offenderId?: string | null, title?: string | null, type?: Model | null, vehicleId?: string | null, userId?: string | null, schemes: Array<{ __typename?: 'Scheme', id: string, name: string, autoApproveIncidents: boolean, autoApproveOffenders: boolean, restrictIncidentAccess: boolean, reportOnly: boolean, defaultPublicOffenderDOB: boolean, userTodos: number, userNotifications: number, languageCount: number, autoPopulateDescription: boolean, needJustification: boolean, imagesRequiredOnOffenders: boolean, goodsMode: GoodsMode, facialRecognition: boolean, taskTimeTracking: boolean, logo?: { __typename?: 'Image', optimisedPersisted?: string | null, id: string } | null, darkLogo?: { __typename?: 'Image', id: string, optimisedPersisted?: string | null } | null, members: Array<{ __typename?: 'UserScheme', id: string, role: Role }> }>, ban?: { __typename?: 'Ban', id: string, offender: { __typename?: 'Offender', id: string } } | null } }> } };
+export type UserNotificationsQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, totalNotifications: number, totalUnreadNotifications: number, notifications: Array<{ __typename?: 'UserNotification', id: string, read: boolean, createdAt: Date, notification: { __typename?: 'Notification', id: string, crimeGroupId?: string | null, createdAt: Date, chatId?: string | null, body?: string | null, articleId?: string | null, incidentId?: string | null, investigationId?: string | null, offenderId?: string | null, title?: string | null, type?: Model | null, vehicleId?: string | null, userId?: string | null, schemes: Array<{ __typename?: 'Scheme', id: string, name: string, autoApproveIncidents: boolean, autoApproveOffenders: boolean, restrictIncidentAccess: boolean, reportOnly: boolean, defaultPublicOffenderDOB: boolean, userTodos: number, userNotifications: number, languageCount: number, autoPopulateDescription: boolean, needJustification: boolean, requireSiteNumberForUsers: boolean, imagesRequiredOnOffenders: boolean, goodsMode: GoodsMode, facialRecognition: boolean, taskTimeTracking: boolean, logo?: { __typename?: 'Image', optimisedPersisted?: string | null, id: string } | null, darkLogo?: { __typename?: 'Image', id: string, optimisedPersisted?: string | null } | null, members: Array<{ __typename?: 'UserScheme', id: string, role: Role }> }>, ban?: { __typename?: 'Ban', id: string, offender: { __typename?: 'Offender', id: string } } | null } }> } };
 
 export type CreateUserInDatabaseMutationVariables = Exact<{
   data: CreateUserData;
@@ -21157,9 +21211,9 @@ export type IncidentsFeedQueryVariables = Exact<{
   search?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
   after?: InputMaybe<Scalars['String']>;
-  crimeTypes?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
-  groups?: InputMaybe<Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>>;
+  where?: InputMaybe<IncidentWhereInput>;
   schemeId: Scalars['String'];
+  approved?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 
@@ -22946,6 +23000,7 @@ export const CreateBusinessDocument = gql`
     name
     fullName
     publicName
+    siteNumber
     demId
     parent {
       id
@@ -23087,6 +23142,7 @@ export const UpdateBusinessDocument = gql`
   updateBusiness(data: $data, where: $where) {
     id
     name
+    siteNumber
     fullName
     publicName
     demId
@@ -23161,6 +23217,7 @@ export const BusinessReportDocument = gql`
   business(where: $where) {
     id
     name
+    siteNumber
     incidents {
       id
       subject
@@ -23296,6 +23353,7 @@ export const EditBusinessDocument = gql`
     name
     fullName
     publicName
+    siteNumber
     parent {
       id
       name
@@ -23392,6 +23450,7 @@ export const ListBusinessesDocument = gql`
     businesses {
       id
       name
+      siteNumber
       fullName
       publicName
       demId
@@ -23436,6 +23495,7 @@ export const SearchBusinessesDocument = gql`
       name
       fullName
       publicName
+      siteNumber
       locations {
         id
         full
@@ -25035,24 +25095,9 @@ export const UpdateIncidentOffendersDocument = gql`
   updateIncident(where: {id: $id}, data: {offenders: $offenders}) {
     id
     offenders(where: {recycled: {equals: false}}) {
-      id
-      name
-      age
-      gender
-      race
-      dateOfBirth
-      build
-      height
-      comment
+      ...Offenders
       images(take: 1) {
-        id
-        url
-        optimised
-        card
-        position
-        rotation
-        primary
-        policeImage
+        ...Images
         offenders {
           id
           name
@@ -25062,7 +25107,8 @@ export const UpdateIncidentOffendersDocument = gql`
     }
   }
 }
-    `;
+    ${OffendersFragmentDoc}
+${ImagesFragmentDoc}`;
 export type UpdateIncidentOffendersMutationFn = Apollo.MutationFunction<UpdateIncidentOffendersMutation, UpdateIncidentOffendersMutationVariables>;
 export function useUpdateIncidentOffendersMutation(baseOptions?: Apollo.MutationHookOptions<UpdateIncidentOffendersMutation, UpdateIncidentOffendersMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
@@ -29818,6 +29864,7 @@ export const UpdateSchemeDocument = gql`
     defaultOffenderPush
     autoPopulateDescription
     needJustification
+    requireSiteNumberForUsers
     facialRecognition
     imagesRequiredOnOffenders
     incidentRetention
@@ -29889,7 +29936,7 @@ export const SchemeDocument = gql`
     needJustification
     facialRecognition
     imagesRequiredOnOffenders
-    needJustification
+    requireSiteNumberForUsers
     goodsMode
     darkLogo {
       id
@@ -30557,6 +30604,7 @@ export const CurrentUserDocument = gql`
         languageCount
         autoPopulateDescription
         needJustification
+        requireSiteNumberForUsers
       }
     }
     incidentEmail
@@ -30863,6 +30911,7 @@ export const ListUserNotificationsDocument = gql`
           languageCount
           autoPopulateDescription
           needJustification
+          requireSiteNumberForUsers
           logo {
             optimisedPersisted
             id
@@ -30936,6 +30985,7 @@ export const UserNotificationsDocument = gql`
           languageCount
           autoPopulateDescription
           needJustification
+          requireSiteNumberForUsers
           logo {
             optimisedPersisted
             id
@@ -31878,15 +31928,15 @@ export type ListDemEvidenceExtendedWithoutUserQueryHookResult = ReturnType<typeo
 export type ListDemEvidenceExtendedWithoutUserLazyQueryHookResult = ReturnType<typeof useListDemEvidenceExtendedWithoutUserLazyQuery>;
 export type ListDemEvidenceExtendedWithoutUserQueryResult = Apollo.QueryResult<ListDemEvidenceExtendedWithoutUserQuery, ListDemEvidenceExtendedWithoutUserQueryVariables>;
 export const IncidentsFeedDocument = gql`
-    query IncidentsFeed($order: IncidentOrderByWithRelationInput, $search: String, $first: Int, $after: String, $crimeTypes: [String!], $groups: [String], $schemeId: String!) {
+    query IncidentsFeed($order: IncidentOrderByWithRelationInput, $search: String, $first: Int, $after: String, $where: IncidentWhereInput, $schemeId: String!, $approved: Boolean) {
   incidentsRelay(
     order: $order
     first: $first
     after: $after
     search: $search
-    crimeTypes: $crimeTypes
-    groups: $groups
+    where: $where
     schemeId: $schemeId
+    approved: $approved
   ) {
     edges {
       node {

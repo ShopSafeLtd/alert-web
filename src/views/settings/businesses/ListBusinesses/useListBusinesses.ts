@@ -224,6 +224,7 @@ const useListBusinesses = (): Return => {
       variables: {
         data: {
           name: values.name,
+          siteNumber: values.siteNumber,
           publicName: values.publicName || false,
           schemes: {
             connect: [

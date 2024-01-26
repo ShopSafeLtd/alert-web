@@ -113,6 +113,7 @@ export interface Scheme {
     imagesRequiredOnOffenders: boolean;
     autoPopulateDescription: boolean;
     needJustification: boolean;
+    requireSiteNumberForUsers: boolean;
   };
 }
 

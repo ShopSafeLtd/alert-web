@@ -121,7 +121,10 @@ const useLinkArticle = ({ onClose, update, articleIds }: Props): Return => {
       setFilterState({
         variables: {
           ...filterVariables,
-          groups: defaultGroups.map(({ id }) => id),
+          groups:
+            defaultGroups
+              ?.filter(({ scheme }) => scheme.id === schemeId)
+              ?.map(({ id }) => id) || [],
         },
       });
     }
@@ -137,6 +140,7 @@ const useLinkArticle = ({ onClose, update, articleIds }: Props): Return => {
         ...variables,
         after: data?.listArticlesRelay?.pageInfo?.endCursor,
       },
+      // ?????
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return {

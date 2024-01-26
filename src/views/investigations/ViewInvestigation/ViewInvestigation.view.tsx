@@ -36,8 +36,10 @@ import EditInvestigation from 'components/form-components/Investigation/EditInve
 import SelectIncidents from 'components/form-components/linkOptions/SelectIncidents';
 import SelectedOffenders from 'components/form-components/linkOptions/SelectOffenders';
 import type {
+  CreateSimpleOffenderMutation,
   CreateTodoMutation,
   QuestionGroupOnSchemeQuery,
+  UpdateSimpleOffenderMutation,
   UpdateTaskMutation,
   ViewInvestigationQuery,
 } from '../../../graphql/generated';
@@ -99,8 +101,7 @@ interface Props {
   onAddExistingVehicle: (value: string) => void;
   onAddExistingCrimeGroup: (value: string) => void;
   onAddExistingIncident: (value: string[]) => void;
-  onAddOffender: (value: OffenderData) => void;
-  onEditOffender: (value: OffenderData) => void;
+
   onAddVehicle: (value: VehicleData) => void;
   onEditVehicle: (value: VehicleData) => void;
   onAddCrimeGroup: (value: CrimeGroupCardData) => void;
@@ -121,6 +122,10 @@ interface Props {
   toggleShowSuggestedOffenders: () => void;
   editInvestigation: boolean;
   toggleEditInvestigation: () => void;
+  updateEditOffenderList: MutationUpdaterFn<UpdateSimpleOffenderMutation>;
+  onCompletedEditOffender: () => void;
+  updateAddOffenderList: MutationUpdaterFn<CreateSimpleOffenderMutation>;
+  onCompletedAddOffender: () => void;
 }
 
 const useStyles = createUseStyles({
@@ -189,8 +194,7 @@ const ViewInvestigation = ({
   onAddExistingVehicle,
   onAddExistingCrimeGroup,
   onAddExistingIncident,
-  onAddOffender,
-  onEditOffender,
+
   onAddVehicle,
   onEditVehicle,
   onAddCrimeGroup,
@@ -211,6 +215,10 @@ const ViewInvestigation = ({
   toggleShowSuggestedOffenders,
   editInvestigation,
   toggleEditInvestigation,
+  updateEditOffenderList,
+  onCompletedEditOffender,
+  onCompletedAddOffender,
+  updateAddOffenderList,
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
@@ -422,7 +430,9 @@ const ViewInvestigation = ({
       >
         {addOffender ? (
           <AddNewOffenderSimple
-            update={onAddOffender}
+            onCompleted={onCompletedAddOffender}
+            update={updateAddOffenderList}
+            investigationId={data?.investigation.id}
             onClose={toggleAddOffender}
             images={[]}
           />
@@ -443,7 +453,8 @@ const ViewInvestigation = ({
           <SimpleEditOffender
             data={editOffenderData}
             onClose={() => setEditOffenderData(null)}
-            update={onEditOffender}
+            update={updateEditOffenderList}
+            onCompleted={onCompletedEditOffender}
           />
         ) : (
           <div />

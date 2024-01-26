@@ -5,6 +5,7 @@ mutation UpdateBusiness(
   updateBusiness(data: $data, where: $where) {
     id
     name
+    siteNumber
     fullName
     publicName
     demId

@@ -211,6 +211,7 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
               newBusinesses && newBusinesses.length > 0
                 ? newBusinesses.map((el) => ({
                     name: el.name,
+                    siteNumber: el.siteNumber,
                     publicName: el.publicName || false,
                     schemes: {
                       connect: [

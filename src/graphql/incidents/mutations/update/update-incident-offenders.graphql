@@ -5,24 +5,9 @@ mutation UpdateIncidentOffenders(
   updateIncident(where: { id: $id }, data: { offenders: $offenders }) {
     id
     offenders(where: { recycled: { equals: false } }) {
-      id
-      name
-      age
-      gender
-      race
-      dateOfBirth
-      build
-      height
-      comment
+      ...Offenders
       images(take: 1) {
-        id
-        url
-        optimised
-        card
-        position
-        rotation
-        primary
-        policeImage
+        ...Images
         offenders {
           id
           name

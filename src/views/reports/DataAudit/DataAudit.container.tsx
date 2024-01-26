@@ -6,9 +6,12 @@ const DataAudit = () => {
   const {
     data,
     loading,
-
     offenderId,
     setOffenderId,
+    search,
+    setSearch,
+    toggleSortFilter,
+    sortFilter,
   } = useDataAudit();
 
   return (
@@ -17,6 +20,10 @@ const DataAudit = () => {
       data={data}
       offenderId={offenderId}
       setOffenderId={setOffenderId}
+      search={search}
+      setSearch={setSearch}
+      toggleSortFilter={toggleSortFilter}
+      sortFilter={sortFilter}
     />
   );
 };

@@ -76,7 +76,7 @@ const EditBusiness = ({
   return (
     <Form<FormData> layout="vertical" onFinish={onSubmit} form={form}>
       <Row gutter={16}>
-        <Col span={18}>
+        <Col span={12}>
           <Form.Item
             name="name"
             label={intl.formatMessage({
@@ -84,6 +84,17 @@ const EditBusiness = ({
               id: 'pGwRxT',
             })}
             rules={[{ required: true }]}
+          >
+            {loading ? <Skeleton.Input /> : <Input disabled={saving} />}
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            name="siteNumber"
+            label={intl.formatMessage({
+              defaultMessage: 'Site Number',
+              id: 'rAGVXn',
+            })}
           >
             {loading ? <Skeleton.Input /> : <Input disabled={saving} />}
           </Form.Item>

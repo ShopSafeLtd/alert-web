@@ -8,6 +8,8 @@ import type {
   QuestionGroupOnSchemeQuery,
   UpdateTaskMutation,
   CreateInvestigationMutation,
+  UpdateSimpleOffenderMutation,
+  CreateSimpleOffenderMutation,
 } from 'graphql/generated';
 import { GoodsMode } from 'graphql/generated';
 import {
@@ -185,8 +187,8 @@ interface Props {
   onEditVehicle: (value: VehicleData) => void;
   onAddVehicle: (value: VehicleData) => void;
   onAddExistingVehicle: (id: string) => void;
-  onEditOffender: (value: OffenderData) => void;
-  onAddOffender: (value: OffenderData) => void;
+  // onEditOffender: (value: OffenderData) => void;
+  // onAddOffender: (value: OffenderData) => void;
   onAddExistingOffender: (id: string) => void;
   onEditGoods: (value: GoodsData) => void;
   onAddGoods: (value: GoodsData) => void;
@@ -226,6 +228,10 @@ interface Props {
   onAddUpdateImagesToOffender: (id: string) => void;
   selectedOffenderId: string;
   setSelectedOffenderId: (id: string) => void;
+  updateEditOffenderList: MutationUpdaterFn<UpdateSimpleOffenderMutation>;
+  onCompletedEditOffender: () => void;
+  updateAddOffenderList: MutationUpdaterFn<CreateSimpleOffenderMutation>;
+  onCompletedAddOffender: () => void;
 }
 
 const ViewIncident = ({
@@ -292,8 +298,8 @@ const ViewIncident = ({
   toggleAddGoods,
   onEditGoods,
   onAddGoods,
-  onEditOffender,
-  onAddOffender,
+  // onEditOffender,
+  // onAddOffender,
   onAddExistingOffender,
   onEditVehicle,
   onAddVehicle,
@@ -332,6 +338,10 @@ const ViewIncident = ({
   selectedOffenderId,
   setSelectedOffenderId,
   onAddUpdateImages,
+  updateEditOffenderList,
+  onCompletedEditOffender,
+  updateAddOffenderList,
+  onCompletedAddOffender,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
@@ -1784,8 +1794,9 @@ const ViewIncident = ({
           <SimpleEditOffender
             data={editOffenderData}
             onClose={() => setEditOffenderData(null)}
-            update={onEditOffender}
+            update={updateEditOffenderList}
             images={data?.incident?.images}
+            onCompleted={onCompletedEditOffender}
           />
         ) : (
           <div />
@@ -1803,7 +1814,10 @@ const ViewIncident = ({
       >
         {addOffender ? (
           <AddNewOffenderSimple
-            update={onAddOffender}
+            onCompleted={onCompletedAddOffender}
+            update={updateAddOffenderList}
+            incidentId={data?.incident.id}
+            groupsIds={data?.incident.groups.map(({ id }) => id)}
             onClose={toggleAddOffender}
             images={data?.incident?.images.map((el) => ({ ...el, uid: el.id }))}
           />

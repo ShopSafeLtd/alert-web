@@ -35,6 +35,7 @@ interface OnSubmitValues {
   publicName: boolean;
   tags?: Array<string | { value: string; label: string }>;
   groups?: string[];
+  siteNumber: string;
 }
 
 interface Props {
@@ -86,6 +87,7 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
         building: res.business?.locations[0]?.building || '',
         county: res.business?.locations[0]?.county || '',
         name: res.business?.name || '',
+        siteNumber: res.business?.siteNumber || '',
         publicName: res.business?.publicName,
         groups: res.business?.groups.map(({ id }) => id),
         tags: res.business?.tags.map((el) => ({
@@ -261,6 +263,7 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
         },
         data: {
           name: { set: values.name },
+          siteNumber: values.siteNumber,
           publicName: values.publicName,
           parent: getParent(),
           tags: getTags(),

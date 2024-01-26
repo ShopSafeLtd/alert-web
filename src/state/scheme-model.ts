@@ -29,6 +29,7 @@ export interface SetSchemePayload {
   languageCount: number;
   autoPopulateDescription: boolean;
   needJustification: boolean;
+  requireSiteNumberForUsers: boolean;
 }
 
 export interface SchemeModel {
@@ -53,6 +54,7 @@ export interface SchemeModel {
   languageCount: number;
   autoPopulateDescription: boolean;
   needJustification: boolean;
+  requireSiteNumberForUsers: boolean;
 }
 
 const userModel: SchemeModel = {
@@ -75,7 +77,7 @@ const userModel: SchemeModel = {
   languageCount: 0,
   autoPopulateDescription: true,
   needJustification: false,
-
+  requireSiteNumberForUsers: false,
   setScheme: action((state, payload) => {
     state.id = payload.id;
     state.autoApproveIncidents = payload.autoApproveIncidents;
@@ -96,6 +98,7 @@ const userModel: SchemeModel = {
     state.languageCount = payload.languageCount;
     state.autoPopulateDescription = payload.autoPopulateDescription;
     state.needJustification = payload.needJustification;
+    state.requireSiteNumberForUsers = payload.requireSiteNumberForUsers;
   }),
   clearScheme: action((state) => {
     state.id = '';
@@ -117,6 +120,7 @@ const userModel: SchemeModel = {
     state.languageCount = 0;
     state.autoPopulateDescription = true;
     state.needJustification = false;
+    state.requireSiteNumberForUsers = false;
   }),
 };
 

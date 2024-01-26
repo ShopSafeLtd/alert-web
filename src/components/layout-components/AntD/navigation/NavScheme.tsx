@@ -80,6 +80,7 @@ export const NavScheme = () => {
       languageCount: scheme.scheme.languageCount,
       autoPopulateDescription: scheme.scheme.autoPopulateDescription,
       needJustification: scheme.scheme.needJustification,
+      requireSiteNumberForUsers: scheme.scheme.requireSiteNumberForUsers,
       autoApproveIncidents: scheme.scheme.autoApproveIncidents,
       autoApproveOffenders: scheme.scheme.autoApproveOffenders,
       defaultPublicOffenderDOB: scheme.scheme.defaultPublicOffenderDOB,

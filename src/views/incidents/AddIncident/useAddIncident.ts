@@ -164,6 +164,7 @@ interface Return {
   customQuestions: CustomQuestion[];
   goodsMode: GoodsMode;
   reportOnly: boolean;
+  showSiteNumber: boolean;
 }
 
 const useAddIncident = ({ investigationId }: Props): Return => {
@@ -181,9 +182,11 @@ const useAddIncident = ({ investigationId }: Props): Return => {
   const setIncidentsState = useStoreActions(
     (actions) => actions.data.setIncidents
   );
-  const { id: schemeId, restrictIncidentAccess } = useStoreState(
-    (state) => state.scheme
-  );
+  const {
+    id: schemeId,
+    restrictIncidentAccess,
+    requireSiteNumberForUsers,
+  } = useStoreState((state) => state.scheme);
 
   const [goodsVisible, setGoodsVisible] = useState(false);
   const [addNewAddress, setAddNewAddress] = useState(false);
@@ -197,13 +200,14 @@ const useAddIncident = ({ investigationId }: Props): Return => {
     IncidentFormField.Types,
   ]);
   const [customQuestions, setCustomQuestions] = useState<CustomQuestion[]>([]);
+  const showSiteNumber = requireSiteNumberForUsers && role === Role.User;
 
   useEffect(() => {
     Mixpanel.track('Start new incident form');
   }, []);
 
   useEffect(() => {
-    if (businesses.length > 0) {
+    if (businesses.length > 0 && !showSiteNumber) {
       form.setFieldsValue({
         business: {
           label: businesses[0].name,
@@ -975,6 +979,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
     customQuestions,
     goodsMode,
     reportOnly,
+    showSiteNumber,
   };
 };
 

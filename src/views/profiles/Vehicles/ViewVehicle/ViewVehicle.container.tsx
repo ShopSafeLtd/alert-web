@@ -53,9 +53,11 @@ const ViewVehicle = () => {
     onDeleteOffender,
     toggleAddOffender,
     toggleAddExistingOffender,
-    onEditOffender,
-    onAddOffender,
     onAddExistingOffender,
+    updateEditOffenderList,
+    onCompletedEditOffender,
+    onCompletedAddOffender,
+    updateAddOffenderList,
   } = useViewVehicle(vehicleId);
 
   return (
@@ -107,9 +109,11 @@ const ViewVehicle = () => {
       onDeleteOffender={onDeleteOffender}
       toggleAddOffender={toggleAddOffender}
       toggleAddExistingOffender={toggleAddExistingOffender}
-      onEditOffender={onEditOffender}
-      onAddOffender={onAddOffender}
       onAddExistingOffender={onAddExistingOffender}
+      updateEditOffenderList={updateEditOffenderList}
+      onCompletedEditOffender={onCompletedEditOffender}
+      updateAddOffenderList={updateAddOffenderList}
+      onCompletedAddOffender={onCompletedAddOffender}
     />
   );
 };

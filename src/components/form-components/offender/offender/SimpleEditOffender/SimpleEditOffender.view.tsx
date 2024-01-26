@@ -77,6 +77,8 @@ const EditOffender = ({
           idVerified: data.idVerified || null,
           idSource: data.idSource || null,
           images: data.images || null,
+          knownFor: data.knownFor || [],
+          targetedGoods: data.targetedGoods || [],
         }}
       >
         <Row gutter={16}>
@@ -391,6 +393,57 @@ const EditOffender = ({
             </Col>
           )}
         </Row>
+        {data.knownFor && data.knownFor.length > 0 && (
+          <Row>
+            <Col span={24}>
+              <Form.Item
+                name="knownFor"
+                label={intl.formatMessage({
+                  defaultMessage: 'Crime Types',
+                  id: 'Piba4q',
+                })}
+                tooltip={intl.formatMessage({
+                  defaultMessage:
+                    'Select the relevant crime types for this offender, these help to categorize the offender.',
+                  id: 'ly6B/b',
+                })}
+              >
+                <Select mode="multiple" maxTagCount={3}>
+                  {data.knownFor.map((el) => (
+                    <Select.Option key={el} value={el}>
+                      {el}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
+        )}
+        {data.targetedGoods && data.targetedGoods.length > 0 && (
+          <Row>
+            <Col span={24}>
+              <Form.Item
+                name="targetedGoods"
+                label={intl.formatMessage({
+                  defaultMessage: 'Goods',
+                  id: 'u5dS1t',
+                })}
+                tooltip={intl.formatMessage({
+                  defaultMessage: 'Select the Goods that this offender stole.',
+                  id: 'cjsTZ/',
+                })}
+              >
+                <Select mode="multiple" maxTagCount={3}>
+                  {data.targetedGoods.map((el) => (
+                    <Select.Option key={el} value={el}>
+                      {el}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
+        )}
 
         <Form.Item
           name="images"

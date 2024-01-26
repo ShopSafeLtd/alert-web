@@ -150,7 +150,10 @@ const useListCrimeGroups = (): Return => {
         },
         variables: {
           ...filterVariables,
-          groups: defaultGroups.map(({ id }) => id),
+          groups:
+            defaultGroups
+              ?.filter(({ scheme }) => scheme.id === schemeId)
+              ?.map(({ id }) => id) || [],
         },
       });
     } else {

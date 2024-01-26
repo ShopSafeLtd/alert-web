@@ -19,7 +19,9 @@ import {
 import type {
   CreateDocumentMutation,
   CreateInvestigationMutation,
+  CreateSimpleOffenderMutation,
   DeleteDocumentMutation,
+  UpdateSimpleOffenderMutation,
   VehicleQuery,
 } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -124,8 +126,7 @@ interface Props {
   onDeleteImage: (id: string) => void;
   onEditImage: (id: EditFeedImage) => void;
   onUpdateImages: (value: ImageCardData[]) => void;
-  onEditOffender: (value: OffenderData) => void;
-  onAddOffender: (value: OffenderData) => void;
+
   onAddExistingOffender: (id: string) => void;
   addOffender: boolean;
   addExistingOffender: boolean;
@@ -134,6 +135,10 @@ interface Props {
   editOffenderData: OffenderData | null;
   setEditOffenderData: (value: OffenderData | null) => void;
   onDeleteOffender: (id: string) => void;
+  updateEditOffenderList: MutationUpdaterFn<UpdateSimpleOffenderMutation>;
+  onCompletedEditOffender: () => void;
+  updateAddOffenderList: MutationUpdaterFn<CreateSimpleOffenderMutation>;
+  onCompletedAddOffender: () => void;
 }
 
 const ViewVehicle = ({
@@ -184,9 +189,11 @@ const ViewVehicle = ({
   onDeleteOffender,
   toggleAddOffender,
   toggleAddExistingOffender,
-  onEditOffender,
-  onAddOffender,
   onAddExistingOffender,
+  updateEditOffenderList,
+  onCompletedEditOffender,
+  updateAddOffenderList,
+  onCompletedAddOffender,
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
@@ -889,8 +896,9 @@ const ViewVehicle = ({
           <SimpleEditOffender
             data={editOffenderData}
             onClose={() => setEditOffenderData(null)}
-            update={onEditOffender}
+            update={updateEditOffenderList}
             images={data?.vehicle?.images}
+            onCompleted={onCompletedEditOffender}
           />
         ) : (
           <div />
@@ -908,7 +916,10 @@ const ViewVehicle = ({
       >
         {addOffender ? (
           <AddNewOffenderSimple
-            update={onAddOffender}
+            onCompleted={onCompletedAddOffender}
+            update={updateAddOffenderList}
+            vehicleId={data?.vehicle.id}
+            groupsIds={data?.vehicle.groups.map(({ id }) => id)}
             onClose={toggleAddOffender}
             images={data?.vehicle?.images.map((el) => ({ ...el, uid: el.id }))}
           />

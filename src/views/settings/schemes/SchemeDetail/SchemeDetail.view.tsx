@@ -93,6 +93,7 @@ const SchemeDetail = ({
             defaultIncidentPush: data?.scheme?.defaultIncidentPush,
             autoPopulateDescription: data?.scheme?.autoPopulateDescription,
             needJustification: data?.scheme?.needJustification,
+            requireSiteNumberForUsers: data?.scheme?.requireSiteNumberForUsers,
             defaultSubscribedIncidentOnly:
               data?.scheme?.defaultSubscribedIncidentOnly,
             defaultSubscribedOffenderOnly:
@@ -553,8 +554,26 @@ const SchemeDetail = ({
                 <Form.Item
                   label={intl.formatMessage({
                     defaultMessage:
-                      'Only allow user to report(no access to view any content)',
-                    id: 'CJJgGX',
+                      'Allow users to report(no access to view any content)',
+                    id: '4N0N30',
+                  })}
+                  name="reportOnly"
+                  valuePropName="checked"
+                  style={{ marginBottom: 0 }}
+                >
+                  <Switch
+                    disabled={saving}
+                    style={{ marginLeft: 5 }}
+                    className="scheme-detail-switch"
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={15}>
+                <Form.Item
+                  label={intl.formatMessage({
+                    defaultMessage:
+                      'Allow users to search for business by site number',
+                    id: '5m2FVN',
                   })}
                   name="reportOnly"
                   valuePropName="checked"

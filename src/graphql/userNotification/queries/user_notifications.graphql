@@ -35,6 +35,7 @@ query userNotifications(
           languageCount
           autoPopulateDescription
           needJustification
+          requireSiteNumberForUsers
           logo {
             optimisedPersisted
             id

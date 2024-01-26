@@ -6,10 +6,16 @@ import type {
   Race,
   Height,
   IdSource,
+  UpdateSimpleOffenderMutation,
+} from 'graphql/generated';
+import {
+  useUpdateSimpleOffenderMutation,
+  ImagePosition,
 } from 'graphql/generated';
 import type { FormInstance } from 'antd';
 import { Form } from 'antd';
-import { ImagePosition } from 'graphql/generated';
+import type { MutationUpdaterFn } from '@apollo/client';
+import errorNotification from 'types/mutation_notifications/error_notification';
 import type { ImageValue } from '../../../ImageSelect/ImageSelect.view';
 import type { StateImageData } from '../../../../incidents/IncidentForm/ImageSection/useImageSection';
 
@@ -36,13 +42,16 @@ export interface OffenderData {
   idVerified?: boolean;
   idSource?: IdSource | null;
   images?: OffenderImage[] | null;
+  knownFor?: string[] | null;
+  targetedGoods?: string[] | null;
 }
 
 interface Props {
   onClose: () => void;
   data: OffenderData;
-  update: (value: OffenderData) => void;
-  onImagesUploaded?: (values: StateImageData[]) => void;
+  onCompleted: () => void;
+  update: MutationUpdaterFn<UpdateSimpleOffenderMutation>;
+  onImagesUploaded?: (value: StateImageData[]) => void;
 }
 
 export interface FormData {
@@ -63,6 +72,10 @@ export interface FormData {
   idVerified?: boolean;
   idSource?: IdSource;
   images: ImageValue[];
+  knownFor: string[];
+  targetedGoods: string[];
+  justification: string;
+  infoSource: string;
 }
 
 interface Return {
@@ -77,46 +90,125 @@ const useEditOffender = ({
   onClose,
   update,
   onImagesUploaded,
+  onCompleted,
 }: Props): Return => {
   const [form] = Form.useForm<FormData>();
 
   const ageCheck = Form.useWatch('ageCheck', form);
   const idVerified = Form.useWatch('idVerified', form);
+  const [updateOffender] = useUpdateSimpleOffenderMutation({
+    onCompleted,
+    onError: () => {
+      errorNotification();
+    },
+    update,
+  });
+  const onSubmit = (value: FormData) => {
+    // update({
+    //   ...data,
+    //   name: value.name || 'Unidentified Offender',
+    //   alias: value.alias || [],
+    //   knownFor: value.knownFor || [],
+    //   targetedGoods: value.targetedGoods || [],
+    //   gender: value.gender || null,
+    //   race: value.race || null,
+    //   build: value.build || null,
+    //   hair: value.hair || null,
+    //   peculiarities: value.peculiarities || null,
+    //   age: ageCheck ? null : value.age || null,
+    //   dateSource: ageCheck ? value.dateSource || null : null,
+    //   dateOfBirth: ageCheck ? value.dateOfBirth || null : null,
+    //   idVerified: value.idVerified,
+    //   idSource: value.idSource,
+    //   images: value.images.map((item) => ({
+    //     id: item.id || '',
+    //     url: item.url,
+    //     optimised: item.optimised,
+    //     fileName: item.file?.response && item.file.response[0].blobName,
+    //     type: item.file?.response && item.file.response[0].mimetype,
+    //     position: item.position,
+    //     primary: false,
+    //     policeImage: item.policeImage || false,
+    //     rotation: item.rotation,
+    //     new: !!item.file,
+    //   })),
+    // });
 
-  const onSubmit = (values: FormData) => {
-    update({
-      ...data,
-      name: values.name || 'Unidentified Offender',
-      alias:
-        values.alias && values.alias.length > 0
-          ? [...new Set(values.alias?.map((el) => el.trim().toLowerCase()))]
-          : [],
-      // ???
-      gender: values.gender || null,
-      race: values.race || null,
-      build: values.build || null,
-      hair: values.hair || null,
-      peculiarities: values.peculiarities || null,
-      age: ageCheck ? null : values.age || null,
-      dateSource: ageCheck ? values.dateSource || null : null,
-      dateOfBirth: ageCheck ? values.dateOfBirth || null : null,
-      idVerified: values.idVerified,
-      idSource: values.idSource,
-      images: values.images.map((item) => ({
-        id: item.id || '',
-        url: item.url,
-        optimised: item.optimised,
-        fileName: item.file?.response && item.file.response[0].blobName,
-        type: item.file?.response && item.file.response[0].mimetype,
-        position: item.position,
-        primary: false,
-        policeImage: item.policeImage || false,
-        rotation: item.rotation,
-        new: !!item.file,
-      })),
-    });
+    const imageData = value.images.map((item) => ({
+      id: item.id || '',
+      url: item.url,
+      optimised: item.optimised,
+      fileName: item.file?.response && item.file.response[0].blobName,
+      type: item.file?.response && item.file.response[0].mimetype,
+      position: item.position,
+      primary: false,
+      policeImage: item.policeImage || false,
+      rotation: item.rotation,
+      new: !!item.file,
+    }));
+    const existingImageIds = data?.images?.map(({ id }) => id);
+    const deleteIds = existingImageIds?.filter(
+      (id) => !imageData?.map((el) => el.id).includes(id)
+    );
+    void updateOffender({
+      variables: {
+        where: {
+          id: data.id,
+        },
+        data: {
+          name: { set: value.name },
+          gender: { set: value.gender || null },
+          race: { set: value.race || null },
+          build: { set: value.build || null },
+          height: { set: value.height || null },
+          hair: { set: value.hair || 'Unknown' },
+          peculiarities: { set: value.peculiarities || '' },
+          age: { set: value.age || null },
+          dateSource: { set: value.dateSource || null },
+          dateOfBirth: { set: value.dateOfBirth || null },
+          justification: { set: value.justification || null },
+          infoSource: { set: value.infoSource || null },
+          knownFor: { set: value.knownFor },
+          targetedGoods: { set: value.targetedGoods },
+          alias: { set: value.alias },
+          images:
+            value.images && value.images.length > 0
+              ? {
+                  delete:
+                    deleteIds && deleteIds.length > 0
+                      ? deleteIds.map((id) => ({ id }))
+                      : undefined,
+                  connect: imageData
+                    ?.filter((image) => !image.new)
+                    .map((image) => ({
+                      id: image.id,
+                    })),
+                  upload: imageData
+                    ?.filter((image) => image.new)
+                    .map((item) => ({
+                      url: {
+                        filename: item.fileName || '',
+                        mimetype: item.type || '',
+                        url: item.url || '',
+                      },
+                      position: item.position,
+                      primary: item.primary,
+                      policeImage: item.policeImage,
+                      rotation: item.rotation || 0,
+                    }))
+                    .filter((obj) => obj.url !== undefined),
+                }
+              : {
+                  delete:
+                    deleteIds && deleteIds.length > 0
+                      ? deleteIds.map((id) => ({ id }))
+                      : undefined,
+                },
+        },
+      },
+    }).finally(() => onClose());
 
-    const uploadedImages = values.images?.filter((image) => image.file) || [];
+    const uploadedImages = value.images?.filter((image) => image.file) || [];
     if (uploadedImages.length > 0 && onImagesUploaded) {
       onImagesUploaded(
         uploadedImages.map(
@@ -134,8 +226,6 @@ const useEditOffender = ({
         )
       );
     }
-
-    onClose();
   };
 
   return {

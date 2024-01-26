@@ -73,6 +73,7 @@ interface Scheme {
   languageCount: number;
   autoPopulateDescription: boolean;
   needJustification: boolean;
+  requireSiteNumberForUsers: boolean;
 }
 interface Return {
   data:
@@ -337,6 +338,7 @@ const useNotificationLists = (): Return => {
     setScheme({
       autoPopulateDescription: scheme.autoPopulateDescription,
       needJustification: scheme.needJustification,
+      requireSiteNumberForUsers: scheme.requireSiteNumberForUsers,
       languageCount: scheme.languageCount,
       autoApproveIncidents: scheme.autoApproveIncidents,
       autoApproveOffenders: scheme.autoApproveOffenders,

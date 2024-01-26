@@ -213,6 +213,20 @@ const ViewBusiness = ({
                       )}
                     </Link>
                   </Descriptions.Item>
+                  {data?.business?.siteNumber && (
+                    <Descriptions.Item
+                      label={intl.formatMessage({
+                        defaultMessage: 'Site Number',
+                        id: 'rAGVXn',
+                      })}
+                    >
+                      {loading ? (
+                        <Skeleton.Input style={{ height: 20 }} />
+                      ) : (
+                        data?.business?.siteNumber
+                      )}
+                    </Descriptions.Item>
+                  )}
                 </Descriptions>
               </Card>
             )}

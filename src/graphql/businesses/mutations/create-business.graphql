@@ -4,6 +4,7 @@ mutation CreateBusiness($data: CreateBusinessDataInput!) {
     name
     fullName
     publicName
+    siteNumber
     demId
     parent {
       id

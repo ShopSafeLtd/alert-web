@@ -19,6 +19,7 @@ interface Props {
   newAddressData: LocationData | undefined;
   updateNewAddressData: (value: LocationData | undefined) => void;
   hideField: boolean;
+  showSiteNumber: boolean;
 }
 
 const IncidentWhere = ({
@@ -28,6 +29,7 @@ const IncidentWhere = ({
   newAddressData,
   updateNewAddressData,
   hideField,
+  showSiteNumber,
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
@@ -58,8 +60,8 @@ const IncidentWhere = ({
             {intl.formatMessage(
               {
                 defaultMessage:
-                  '- Select a the business that this incident relates to.',
-                id: 'hCXJmL',
+                  '- Select the business that this incident relates to.',
+                id: '0Q4UI4',
               },
               {}
             )}
@@ -95,23 +97,24 @@ const IncidentWhere = ({
                     />
                   </Form.Item>
                 </Col>
-                <Col>
-                  <Button
-                    style={{ marginLeft: 5, marginTop: 30 }}
-                    onClick={toggleAddNewAddress}
-                    icon={
-                      <FontAwesomeIcon
-                        icon={faPlus}
-                        style={{ marginRight: 5 }}
-                      />
-                    }
-                  >
-                    {intl.formatMessage({
-                      defaultMessage: 'Use An Address',
-                      id: 'Fbk02A',
-                    })}
-                  </Button>
-                  {/* <Dropdown
+                {!showSiteNumber && (
+                  <Col>
+                    <Button
+                      style={{ marginLeft: 5, marginTop: 30 }}
+                      onClick={toggleAddNewAddress}
+                      icon={
+                        <FontAwesomeIcon
+                          icon={faPlus}
+                          style={{ marginRight: 5 }}
+                        />
+                      }
+                    >
+                      {intl.formatMessage({
+                        defaultMessage: 'Use An Address',
+                        id: 'Fbk02A',
+                      })}
+                    </Button>
+                    {/* <Dropdown
                     overlay={
                       <Menu
                         items={[
@@ -158,7 +161,8 @@ const IncidentWhere = ({
                       })}
                     </Button>
                   </Dropdown> */}
-                </Col>
+                  </Col>
+                )}
               </Row>
             </Col>
           </Row>

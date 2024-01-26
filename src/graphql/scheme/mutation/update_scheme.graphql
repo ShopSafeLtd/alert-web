@@ -16,6 +16,7 @@ mutation updateScheme($where: UniqueId!, $data: SchemeUpdateInput!) {
     defaultOffenderPush
     autoPopulateDescription
     needJustification
+    requireSiteNumberForUsers
     facialRecognition
     imagesRequiredOnOffenders
     incidentRetention

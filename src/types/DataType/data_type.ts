@@ -290,6 +290,7 @@ export interface BusinessData {
   id: string;
   name: string;
   publicName?: boolean;
+  siteNumber?: string;
   parent?:
     | {
         id: string;

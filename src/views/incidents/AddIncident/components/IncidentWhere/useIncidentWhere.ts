@@ -9,6 +9,9 @@ import { QueryMode, Role, SearchBusinessesDocument } from 'graphql/generated';
 import { useStoreState } from 'state';
 import { useIntl } from 'react-intl';
 
+interface Props {
+  showSiteNumber: boolean;
+}
 interface Return {
   onSearchBusiness: (
     value: string
@@ -16,14 +19,12 @@ interface Return {
   hideField: boolean;
 }
 
-const useIncidentWhere = (): Return => {
+const useIncidentWhere = ({ showSiteNumber }: Props): Return => {
   const client = useApolloClient();
   const intl = useIntl();
-  const schemeId = useStoreState((state) => state.scheme.id);
-  const role = useStoreState((state) => state.user.role);
-  const businesses = useStoreState((state) => state.user.businesses);
-  const reportToAllBusinesses = useStoreState(
-    (state) => state.user.reportToAllBusinesses
+  const { id: schemeId } = useStoreState((state) => state.scheme);
+  const { role, businesses, reportToAllBusinesses } = useStoreState(
+    (state) => state.user
   );
   const [hideField, setHideField] = useState(true);
 
@@ -35,16 +36,26 @@ const useIncidentWhere = (): Return => {
     }
   }, [role, businesses]);
 
+  // const variables =
+
   const onSearchBusiness = async (value: string) =>
     client
       .query<SearchBusinessesQuery, SearchBusinessesQueryVariables>({
         query: SearchBusinessesDocument,
         variables: {
           where: {
-            name: {
-              contains: value,
-              mode: QueryMode.Insensitive,
-            },
+            siteNumber: showSiteNumber
+              ? {
+                  equals: value,
+                  mode: QueryMode.Insensitive,
+                }
+              : undefined,
+            name: showSiteNumber
+              ? undefined
+              : {
+                  contains: value,
+                  mode: QueryMode.Insensitive,
+                },
             schemes: {
               some: {
                 id: {
@@ -60,6 +71,7 @@ const useIncidentWhere = (): Return => {
           ? response.data.listBusinesses.businesses.map((item) => ({
               label: item?.name || '',
               value: item?.id || '',
+              siteNumber: item?.siteNumber || '',
               location: item?.locations[0].full || '',
             }))
           : [

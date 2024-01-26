@@ -69,8 +69,8 @@ const ViewIncident = (): JSX.Element => {
     onAddExistingVehicle,
     onEditGoods,
     onAddGoods,
-    onEditOffender,
-    onAddOffender,
+    // onEditOffender,
+    // onAddOffender,
     onAddExistingOffender,
     onUpdateImages,
     goodsMode,
@@ -106,6 +106,10 @@ const ViewIncident = (): JSX.Element => {
     onAddUpdateImagesToOffender,
     selectedOffenderId,
     setSelectedOffenderId,
+    updateEditOffenderList,
+    onCompletedEditOffender,
+    onCompletedAddOffender,
+    updateAddOffenderList,
   } = useViewIncident(incidentId);
   const { onApprove, onReject, approving } = useApproveIncident({ incidentId });
 
@@ -181,8 +185,8 @@ const ViewIncident = (): JSX.Element => {
       onAddExistingVehicle={onAddExistingVehicle}
       onEditGoods={onEditGoods}
       onAddGoods={onAddGoods}
-      onEditOffender={onEditOffender}
-      onAddOffender={onAddOffender}
+      // onEditOffender={onEditOffender}
+      // onAddOffender={onAddOffender}
       onAddExistingOffender={onAddExistingOffender}
       onUpdateImages={onUpdateImages}
       goodsMode={goodsMode}
@@ -214,6 +218,10 @@ const ViewIncident = (): JSX.Element => {
       onAddUpdateImagesToOffender={onAddUpdateImagesToOffender}
       selectedOffenderId={selectedOffenderId}
       setSelectedOffenderId={setSelectedOffenderId}
+      updateEditOffenderList={updateEditOffenderList}
+      onCompletedEditOffender={onCompletedEditOffender}
+      updateAddOffenderList={updateAddOffenderList}
+      onCompletedAddOffender={onCompletedAddOffender}
     />
   );
 };

@@ -33,6 +33,7 @@ export interface FormData {
   county: string;
   postcode: string;
   publicName: boolean;
+  siteNumber: string;
 }
 
 interface Props {
@@ -139,6 +140,7 @@ const useAddBusiness = ({ update }: Props): Return => {
       tags: connectTagIds || [],
       newTags: newTags || [],
       groups: values.groups || [],
+      siteNumber: values.siteNumber,
       locations: [
         {
           // id: Math.floor(Math.random() * 1000).toString(),

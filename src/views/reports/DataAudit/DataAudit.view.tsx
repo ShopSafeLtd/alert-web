@@ -9,8 +9,13 @@ import { useIntl } from 'react-intl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import WatermarkImageView from 'components/images/WatermarkImage.view';
-import { faEye, faPenToSquare } from '@fortawesome/pro-light-svg-icons';
+import {
+  faEye,
+  faFilter,
+  faPenToSquare,
+} from '@fortawesome/pro-light-svg-icons';
 import AddJustification from 'components/form-components/offender/AddJustification';
+import OffenderFilter from 'components/offenders/OffenderFilter';
 import useStyles from './DataAudit.styles';
 
 interface Props {
@@ -24,14 +29,21 @@ interface Props {
     | undefined;
   offenderId: string;
   setOffenderId: (id: string) => void;
+  search: string;
+  setSearch: (value: string) => void;
+  sortFilter: boolean;
+  toggleSortFilter: () => void;
 }
 
 const DataAudit = ({
   data,
   loading,
-
   offenderId,
   setOffenderId,
+  search,
+  setSearch,
+  toggleSortFilter,
+  sortFilter,
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
@@ -41,8 +53,8 @@ const DataAudit = ({
       <Row gutter={16} className={classes.headerRow}>
         <Col flex={1}>
           <Input
-            // value={search}
-            // onChange={(event) => setSearch(event.target.value)}
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
             allowClear
             className={classes.searchInput}
             placeholder={intl.formatMessage({
@@ -50,6 +62,23 @@ const DataAudit = ({
               id: 'mCDjFM',
             })}
           />
+        </Col>
+        <Col>
+          <Button
+            onClick={toggleSortFilter}
+            icon={
+              <FontAwesomeIcon
+                icon={faFilter}
+                size="lg"
+                style={{ marginRight: 5 }}
+              />
+            }
+          >
+            {intl.formatMessage({
+              defaultMessage: 'Sort & Filter',
+              id: 'f2g3SM',
+            })}
+          </Button>
         </Col>
         <Col>
           <Link to="/app/offenders/add">
@@ -210,6 +239,17 @@ const DataAudit = ({
           pageSize: 10,
         }}
       />
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Offender Filters',
+          id: 'gxEHRQ',
+        })}
+        open={sortFilter}
+        onClose={toggleSortFilter}
+        width={500}
+      >
+        <OffenderFilter />
+      </Drawer>
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Add Justification for Offender',

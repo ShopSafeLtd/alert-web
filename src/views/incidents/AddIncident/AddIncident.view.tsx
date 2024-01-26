@@ -42,6 +42,7 @@ interface Props {
   customQuestions: CustomQuestion[];
   goodsMode: string;
   reportOnly: boolean;
+  showSiteNumber: boolean;
 }
 
 const AddIncident = ({
@@ -63,6 +64,7 @@ const AddIncident = ({
   incidentForm,
   goodsMode,
   reportOnly,
+  showSiteNumber,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
@@ -101,6 +103,7 @@ const AddIncident = ({
                   newAddressData={newAddressData}
                   toggleAddNewAddress={toggleAddNewAddress}
                   saving={saving}
+                  showSiteNumber={showSiteNumber}
                 />
               );
             }

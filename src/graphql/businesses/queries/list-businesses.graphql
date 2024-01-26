@@ -9,6 +9,7 @@ query ListBusinesses(
     businesses {
       id
       name
+      siteNumber
       fullName
       publicName
       demId

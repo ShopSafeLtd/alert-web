@@ -10,8 +10,8 @@ import {
   Form,
 } from 'antd';
 import type { SearchBusinessesQuery } from 'graphql/generated';
-import { Role, Age, Build, Gender, Race } from 'graphql/generated';
-import { OffenderSort, useStoreState } from 'state';
+import { Age, Build, Gender, Race } from 'graphql/generated';
+import { OffenderSort } from 'state';
 import type { DateType } from 'types/DataType';
 import { useIntl } from 'react-intl';
 import type { OffenderFilters } from 'state/data-model';
@@ -26,10 +26,6 @@ interface FormData {
 interface Props {
   order: OffenderSort;
   setOrder: (value: OffenderSort) => void;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
-  tags: { value: string; label: string }[];
-  tagsLoading: boolean;
   setEthnicity: (value: Race[]) => void;
   setAge: (value: Age[]) => void;
   setBuild: (value: Build[]) => void;
@@ -40,10 +36,15 @@ interface Props {
   setGroupsFilter: (value: string[]) => void;
   setWarnings: (value: string[]) => void;
   setBusinesses: (value: string[]) => void;
-  businessData: SearchBusinessesQuery | undefined;
-  businessesLoading: boolean;
   setCreatedAtFilter: (value: DateType | undefined) => void;
   variables: OffenderFilters;
+  groups: { value: string; label: string }[];
+  groupsLoading: boolean;
+  tags: { value: string; label: string }[];
+  tagsLoading: boolean;
+  businessData: SearchBusinessesQuery | undefined;
+  businessesLoading: boolean;
+  publicOffenderDOB: boolean;
 }
 
 const OffenderFilter = ({
@@ -67,14 +68,11 @@ const OffenderFilter = ({
   businessesLoading,
   setCreatedAtFilter,
   variables,
+  publicOffenderDOB,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const [form] = useForm<FormData>();
   const intl = useIntl();
-  const role = useStoreState((state) => state.user.role);
-  const publicOffenderDOB =
-    useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
-    role !== Role.User;
 
   const {
     groups: groupsFilter,

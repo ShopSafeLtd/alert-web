@@ -90,6 +90,7 @@ const useAuth = (): Return => {
       setScheme({
         autoPopulateDescription: schemeDetails?.autoPopulateDescription,
         needJustification: schemeDetails?.needJustification,
+        requireSiteNumberForUsers: schemeDetails?.requireSiteNumberForUsers,
         autoApproveIncidents: schemeDetails?.autoApproveIncidents,
         autoApproveOffenders: schemeDetails?.autoApproveOffenders,
         restrictIncidentAccess: schemeDetails?.restrictIncidentAccess,
@@ -132,6 +133,9 @@ const useAuth = (): Return => {
         setScheme({
           autoPopulateDescription: schemeDetails.scheme.autoPopulateDescription,
           needJustification: schemeDetails.scheme.needJustification,
+          requireSiteNumberForUsers:
+            schemeDetails.scheme.requireSiteNumberForUsers,
+
           autoApproveIncidents: schemeDetails.scheme.autoApproveIncidents,
           autoApproveOffenders: schemeDetails.scheme.autoApproveOffenders,
           restrictIncidentAccess: schemeDetails.scheme.restrictIncidentAccess,

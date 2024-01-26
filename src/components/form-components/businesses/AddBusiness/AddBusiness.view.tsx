@@ -65,7 +65,7 @@ const AddBusiness = ({
       form={form}
     >
       <Row gutter={16}>
-        <Col span={19}>
+        <Col span={12}>
           <Form.Item
             name="name"
             label={intl.formatMessage({
@@ -73,6 +73,17 @@ const AddBusiness = ({
               id: 'pGwRxT',
             })}
             rules={[{ required: true }]}
+          >
+            <Input disabled={saving} />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            name="name"
+            label={intl.formatMessage({
+              defaultMessage: 'Site Number',
+              id: 'rAGVXn',
+            })}
           >
             <Input disabled={saving} />
           </Form.Item>
@@ -99,7 +110,7 @@ const AddBusiness = ({
         />
       </Form.Item>
       <Row gutter={16}>
-        <Col span={19}>
+        <Col span={18}>
           <Form.Item
             name="parent"
             label={intl.formatMessage({
@@ -116,13 +127,12 @@ const AddBusiness = ({
                 id: 'qaJxSS',
               })}
               fetchOptions={onSearchBusiness}
-              // style={{ width: 400 }}
             />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={16}>
-        <Col span={19}>
+        <Col span={18}>
           <Form.Item
             name="groups"
             label={intl.formatMessage({
@@ -152,9 +162,9 @@ const AddBusiness = ({
         </Col>
       </Row>
       <Row gutter={16}>
-        <Col span={24}>
+        <Col span={18}>
           <Row gutter={16} align="middle">
-            <Col span={19}>
+            <Col span={18}>
               <Form.Item
                 name="tags"
                 label={intl.formatMessage({

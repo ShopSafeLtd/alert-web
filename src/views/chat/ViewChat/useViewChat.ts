@@ -83,7 +83,6 @@ const useViewChat = ({ chatId }: Props): Return => {
       void markAsReadMessages({
         variables: { userChatId },
       });
-
       void updateTodoMention({
         variables: {
           where: {

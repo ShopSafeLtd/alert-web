@@ -1,13 +1,8 @@
 import React from 'react';
 import type {
-  Age,
-  Build,
-  Gender,
   ListCustomGalleriesQuery,
   ListOffendersRelayQuery,
-  Race,
   RecycleOffenderMutation,
-  SearchBusinessesQuery,
 } from 'graphql/generated';
 import {
   Button,
@@ -23,7 +18,6 @@ import {
 } from 'antd';
 import OffenderCard from 'components/offenders/OffenderCard';
 import OffenderSkeletonCard from 'components/offenders/OffenderSkeletonCard/OffenderSkeletonCard.view';
-import type { OffenderSort } from 'state';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faChevronDown,
@@ -37,7 +31,6 @@ import CheckTags from 'components/form-components/check-tags/CheckTags.view';
 import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import OffenderFilter from 'components/offenders/OffenderFilter';
-import type { DateType } from 'types/DataType';
 import { useIntl } from 'react-intl';
 import type { OffenderFilters } from 'state/data-model';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -47,47 +40,28 @@ import useStyles from './OffenderFeed.styles';
 import Loading from '../../../../components/shared-components/AntD/Loading';
 
 interface Props {
-  fetchMoreScroll: () => void;
   data: ListOffendersRelayQuery | undefined;
   loading: boolean;
   lightboxElements: {
     src: string;
   }[];
   openLightbox: (elements: { src: string }[], index: number) => void;
-  order: OffenderSort;
-  setOrder: (value: OffenderSort) => void;
   setSearch: (value: string) => void;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
   lightBoxOpen: {
     open: boolean;
     index: number;
   };
-  tags: { value: string; label: string }[];
-  tagsLoading: boolean;
   updateOffenderList: MutationUpdaterFn<RecycleOffenderMutation>;
   onNavigate: () => void;
   sortFilter: boolean;
   toggleSortFilter: () => void;
-  setEthnicity: (value: Race[]) => void;
-  setAge: (value: Age[]) => void;
-  setBuild: (value: Build[]) => void;
-  setSex: (value: Gender[]) => void;
-  setHair: (value: string) => void;
-  setPeculiarities: (value: string) => void;
-  clearFilters: () => void;
   setGallery: (values: string[]) => void;
-  setGroupsFilter: (value: string[]) => void;
-  setWarnings: (value: string[]) => void;
-  setBusinesses: (value: string[]) => void;
-  businessData: SearchBusinessesQuery | undefined;
-  businessesLoading: boolean;
-  setCreatedAtFilter: (value: DateType | undefined) => void;
   customGalleriesData: ListCustomGalleriesQuery | undefined;
   adminRights: boolean;
   onSelectCustomGalleries: (values: string) => void;
   onSelectGallery: (value: string) => void;
   variables: OffenderFilters;
+  fetchMoreScroll: () => void;
   setCompactView: () => void;
 }
 
@@ -96,32 +70,13 @@ const OffenderFeed = ({
   loading,
   lightboxElements,
   openLightbox,
-  order,
-  setOrder,
   setSearch,
-  groups,
-  groupsLoading,
-  tags,
-  tagsLoading,
   updateOffenderList,
   onNavigate,
   lightBoxOpen,
   sortFilter,
   toggleSortFilter,
-  clearFilters,
-  setAge,
-  setBuild,
-  setEthnicity,
   setGallery,
-  setGroupsFilter,
-  setHair,
-  setPeculiarities,
-  setSex,
-  setWarnings,
-  businessData,
-  setBusinesses,
-  businessesLoading,
-  setCreatedAtFilter,
   customGalleriesData,
   onSelectGallery,
   adminRights,
@@ -466,28 +421,7 @@ const OffenderFeed = ({
         onClose={toggleSortFilter}
         width={500}
       >
-        <OffenderFilter
-          order={order}
-          setOrder={setOrder}
-          groups={groups}
-          groupsLoading={groupsLoading}
-          tags={tags}
-          tagsLoading={tagsLoading}
-          variables={variables}
-          clearFilters={clearFilters}
-          setAge={setAge}
-          setBuild={setBuild}
-          setEthnicity={setEthnicity}
-          setGroupsFilter={setGroupsFilter}
-          setHair={setHair}
-          setPeculiarities={setPeculiarities}
-          setSex={setSex}
-          setWarnings={setWarnings}
-          setBusinesses={setBusinesses}
-          businessesLoading={businessesLoading}
-          setCreatedAtFilter={setCreatedAtFilter}
-          businessData={businessData}
-        />
+        <OffenderFilter />
       </Drawer>
 
       <Lightbox

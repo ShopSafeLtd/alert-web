@@ -56,8 +56,6 @@ const ViewCustomer: React.FC = () => {
     onAddExistingVehicle,
     onAddExistingCrimeGroup,
     onAddExistingIncident,
-    onAddOffender,
-    onEditOffender,
     onAddVehicle,
     onEditVehicle,
     onAddCrimeGroup,
@@ -79,6 +77,10 @@ const ViewCustomer: React.FC = () => {
     toggleShowSuggestedOffenders,
     editInvestigation,
     toggleEditInvestigation,
+    updateEditOffenderList,
+    onCompletedEditOffender,
+    onCompletedAddOffender,
+    updateAddOffenderList,
   } = useViewCustomer(id || '');
 
   return (
@@ -132,8 +134,6 @@ const ViewCustomer: React.FC = () => {
       onAddExistingVehicle={onAddExistingVehicle}
       onAddExistingCrimeGroup={onAddExistingCrimeGroup}
       onAddExistingIncident={onAddExistingIncident}
-      onAddOffender={onAddOffender}
-      onEditOffender={onEditOffender}
       onAddVehicle={onAddVehicle}
       onEditVehicle={onEditVehicle}
       onAddCrimeGroup={onAddCrimeGroup}
@@ -154,6 +154,10 @@ const ViewCustomer: React.FC = () => {
       toggleShowSuggestedOffenders={toggleShowSuggestedOffenders}
       editInvestigation={editInvestigation}
       toggleEditInvestigation={toggleEditInvestigation}
+      updateEditOffenderList={updateEditOffenderList}
+      onCompletedEditOffender={onCompletedEditOffender}
+      updateAddOffenderList={updateAddOffenderList}
+      onCompletedAddOffender={onCompletedAddOffender}
     />
   );
 };

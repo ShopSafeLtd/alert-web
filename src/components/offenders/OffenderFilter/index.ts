@@ -1,1 +1,1 @@
-export { default } from './OffenderFilter.view';
+export { default } from './OffenderFilter.container';

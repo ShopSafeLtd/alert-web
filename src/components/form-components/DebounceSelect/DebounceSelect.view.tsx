@@ -25,6 +25,7 @@ const DebounceSelect = <
     // label: React.ReactNode;
     label: string;
     location?: string;
+    siteNumber?: string;
     value: string | number;
   } = any
 >({
@@ -72,6 +73,11 @@ const DebounceSelect = <
           label={option.label}
         >
           <Typography.Text>{option.label}</Typography.Text>
+          {option.siteNumber && (
+            // eslint-disable-next-line formatjs/no-literal-string-in-jsx
+            <Typography.Text>({option.siteNumber})</Typography.Text>
+          )}
+
           {option.location && (
             <Typography.Paragraph
               type="secondary"
