@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router';
 import CreateArticle from 'views/article/CreateArticle/CreateArticle.container';
 import EditArticle from 'views/article/EditArticle/EditArticle.container';
 import ArticleFeed from 'views/article/ArticleFeed';
+import ViewArticle from 'views/article/ViewArticle/ViewArticle.container';
 import PermissionCheckWrapper from '../../../components/PermissionCheck/PermissionCheckWrapper';
 import { PermissionMethod, PermissionModel } from '../../../graphql/generated';
 
@@ -43,7 +44,7 @@ const Article = (): JSX.Element => (
             method: PermissionMethod.Read,
           }}
         >
-          <ArticleFeed />
+          <ViewArticle />
         </PermissionCheckWrapper>
       }
     />
