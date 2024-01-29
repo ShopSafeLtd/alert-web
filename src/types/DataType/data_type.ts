@@ -352,6 +352,7 @@ export interface CustomQuestion {
   }[];
   dependentOnQuestionId?: string | null;
   dependentOnAnswerValue?: string | null;
+  dependentOnBrandIds?: string[];
 }
 
 export interface GoodsData {

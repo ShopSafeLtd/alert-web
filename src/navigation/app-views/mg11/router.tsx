@@ -8,7 +8,6 @@ import FinalSign from '../../../views/mg11/FinalSignMg11';
 const Mg11 = (): JSX.Element => (
   <Routes>
     <Route path="create/" element={<CreateMg11 />} />
-
     <Route path="create/:id" element={<CreateMg11 />} />
     <Route path="witness/:id" element={<WitnessSign />} />
     <Route path="sign/:id" element={<FinalSign />} />

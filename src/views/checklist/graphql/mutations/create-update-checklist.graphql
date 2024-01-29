@@ -1,0 +1,8 @@
+mutation CreateUpdateChecklist(
+  $data: ChecklistCreateUpdateInput!
+  $createUpdateChecklistId: String
+) {
+  createUpdateChecklist(data: $data, id: $createUpdateChecklistId) {
+    id
+  }
+}

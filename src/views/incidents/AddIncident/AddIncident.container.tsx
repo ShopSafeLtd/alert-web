@@ -25,12 +25,16 @@ const AddIncident = (): JSX.Element => {
     customQuestions,
     goodsMode,
     reportOnly,
+    brands,
+    setBrands,
     showSiteNumber,
   } = useAddIncident({ investigationId });
 
   return (
     <div>
       <View
+        brands={brands}
+        setBrands={setBrands}
         form={form}
         onSubmit={onSubmit}
         primaryAddress={primaryAddress}

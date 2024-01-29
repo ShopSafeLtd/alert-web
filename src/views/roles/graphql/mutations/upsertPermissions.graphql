@@ -1,0 +1,5 @@
+mutation UpsertPermission($data: UpsertRole!) {
+  upsertPermission(data: $data) {
+    id
+  }
+}

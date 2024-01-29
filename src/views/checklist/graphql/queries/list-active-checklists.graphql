@@ -1,0 +1,41 @@
+query ActiveChecklists(
+  $first: Int
+  $after: String
+  $order: ActiveChecklistOrderByWithRelationInput
+  $where: ActiveChecklistWhereInput
+  $take: Int
+  $skip: Int
+) {
+  activeChecklists(
+    first: $first
+    after: $after
+    order: $order
+    where: $where
+    take: $take
+    skip: $skip
+  ) {
+    totalCount
+    pageInfo {
+      endCursor
+    }
+    edges {
+      node {
+        id
+        name
+        percentageScore
+        percentComplete
+        status
+        document {
+          id
+          url
+        }
+        updatedAt
+        business {
+          name
+          id
+        }
+        completedAt
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+query Checklists(
+  $where: ChecklistWhereInput!
+  $order: ChecklistOrderByWithRelationInput
+  $take: Int
+  $skip: Int
+) {
+  checklists(where: $where, order: $order, take: $take, skip: $skip) {
+    id
+    titleLocaled
+    descriptionLocaled
+  }
+}

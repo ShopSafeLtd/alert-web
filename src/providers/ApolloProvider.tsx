@@ -167,6 +167,14 @@ const Apollo = ({ children }: Props): JSX.Element => {
         }
 
       if (networkError) {
+        console.log(`[Network error]: ${networkError}`);
+        if ('statusCode' in networkError) {
+          console.log(`Status code: ${networkError.statusCode}`);
+        }
+        if ('bodyText' in networkError) {
+          console.log(`Body: ${networkError.bodyText}`);
+        }
+
         Sentry.captureException(networkError);
       }
     }

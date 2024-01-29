@@ -1,0 +1,5 @@
+mutation RecycleChecklist($recycleChecklistId: String!) {
+  recycleChecklist(id: $recycleChecklistId) {
+    id
+  }
+}

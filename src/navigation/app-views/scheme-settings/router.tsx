@@ -31,56 +31,441 @@ import ListStatements from '../../../views/settings/statements/ListStatements';
 import TagView from '../../../views/settings/tags/ViewTag/ViewTag.container';
 import Workflows from '../workflow/router';
 import DataExport from '../data-management/router';
+import RolesContainer from '../../../views/roles/roles/Roles.container';
+import Role from '../../../views/roles/role/ViewRole.container';
+import PermissionCheckWrapper from '../../../components/PermissionCheck/PermissionCheckWrapper';
+import { PermissionMethod, PermissionModel } from '../../../graphql/generated';
 
 const SchemeSettings = (): JSX.Element => (
   <Routes>
-    {/* <Route path="*" element={<AdminMenu />} /> */}
-    {/* users */}
-    <Route index element={<SchemeDetails />} />
-    <Route path="users/*" element={<UserList />} />
-    <Route path="users/view/:id" element={<ViewUser />} />
-
-    {/* groups */}
-    <Route path="groups/*" element={<GroupList />} />
-    <Route path="groups/view/:id" element={<ViewGroup />} />
-
-    {/* chats */}
-    <Route path="chat-groups/*" element={<ChatGroupsList />} />
-    <Route path="chat-groups/view/:id" element={<ViewChatGroup />} />
-
-    {/* scheme-details */}
-    <Route path="scheme-details" element={<SchemeDetails />} />
-
-    {/* terms */}
-    <Route path="terms/*" element={<Terms />} />
-    <Route path="terms/user-terms/*" element={<UserTerms />} />
-    <Route path="terms/scheme-terms/*" element={<SchemeTerms />} />
-    <Route path="terms/scheme/:id" element={<CustomSchemeTerms />} />
-    <Route path="terms/scheme/create" element={<CreateTermsContainer />} />
-    {/* offender tags */}
-    <Route path="offender-warnings/*" element={<OffenderWarnings />} />
-
-    {/* crime types */}
-    <Route path="crime-types/*" element={<CrimeTypes />} />
-    <Route path="crime-types/view/:id" element={<TagView />} />
-    {/* custom galleries */}
-    <Route path="custom-galleries/*" element={<CustomGalleries />} />
-    {/* recycle bin */}
-    <Route path="recycle-bin/*" element={<RecycleBin />} />
-
-    {/* businesses */}
-    <Route path="businesses/*" element={<ListBusinesses />} />
-    <Route path="businesses/view/:id" element={<ViewBusiness />} />
-    <Route path="data-import" element={<DiscMenu />} />
-    <Route path="data-import/disc" element={<DiscImport />} />
-    <Route path="data-import/csv" element={<CSVImport />} />
-    <Route path="data-export/*" element={<DataExport />} />
-
-    <Route path="data-import/csv/stock-items" element={<CSVImport />} />
-    <Route key="workflow" path="workflow/*" element={<Workflows />} />
-
-    {/* Statement temlates */}
-    <Route path="statement-templates/*" element={<ListStatements />} />
+    <Route
+      index
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Settings,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <SchemeDetails />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="users/*"
+      element={
+        <PermissionCheckWrapper
+          permission={[
+            {
+              model: PermissionModel.Settings,
+              method: PermissionMethod.Read,
+            },
+            {
+              model: PermissionModel.Users,
+              method: PermissionMethod.Read,
+            },
+          ]}
+        >
+          <UserList />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="users/view/:id"
+      element={
+        <PermissionCheckWrapper
+          permission={[
+            {
+              model: PermissionModel.Settings,
+              method: PermissionMethod.Read,
+            },
+            {
+              model: PermissionModel.Users,
+              method: PermissionMethod.Read,
+            },
+          ]}
+        >
+          <ViewUser />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="groups/*"
+      element={
+        <PermissionCheckWrapper
+          permission={[
+            {
+              model: PermissionModel.Settings,
+              method: PermissionMethod.Read,
+            },
+            {
+              model: PermissionModel.Groups,
+              method: PermissionMethod.Read,
+            },
+          ]}
+        >
+          <GroupList />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="groups/view/:id"
+      element={
+        <PermissionCheckWrapper
+          permission={[
+            {
+              model: PermissionModel.Settings,
+              method: PermissionMethod.Read,
+            },
+            {
+              model: PermissionModel.Groups,
+              method: PermissionMethod.Read,
+            },
+          ]}
+        >
+          <ViewGroup />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="chat-groups/*"
+      element={
+        <PermissionCheckWrapper
+          permission={[
+            {
+              model: PermissionModel.Settings,
+              method: PermissionMethod.Read,
+            },
+            {
+              model: PermissionModel.Chat,
+              method: PermissionMethod.Write,
+            },
+          ]}
+        >
+          <ChatGroupsList />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="chat-groups/view/:id"
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Settings,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <ViewChatGroup />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="scheme-details"
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Settings,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <SchemeDetails />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="terms/*"
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Settings,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <Terms />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="terms/user-terms/*"
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Settings,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <UserTerms />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="terms/scheme-terms/*"
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Settings,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <SchemeTerms />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="terms/scheme/:id"
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Settings,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <CustomSchemeTerms />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="terms/scheme/create"
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Settings,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <CreateTermsContainer />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="offender-warnings/*"
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Settings,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <OffenderWarnings />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="crime-types/*"
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Settings,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <CrimeTypes />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="crime-types/view/:id"
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Settings,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <TagView />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="custom-galleries/*"
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Settings,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <CustomGalleries />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="recycle-bin/*"
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Settings,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <RecycleBin />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="businesses/*"
+      element={
+        <PermissionCheckWrapper
+          permission={[
+            {
+              model: PermissionModel.Settings,
+              method: PermissionMethod.Read,
+            },
+            {
+              model: PermissionModel.Businesses,
+              method: PermissionMethod.Read,
+            },
+          ]}
+        >
+          <ListBusinesses />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="businesses/view/:id"
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Settings,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <ViewBusiness />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="data-import"
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Settings,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <DiscMenu />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="data-import/disc"
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Settings,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <DiscImport />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="data-import/csv"
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Settings,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <CSVImport />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="data-export/*"
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Settings,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <DataExport />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="roles/*"
+      index
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Settings,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <RolesContainer />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="roles/create"
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Settings,
+            method: PermissionMethod.Edit,
+          }}
+        >
+          <Role create />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="roles/:id"
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Settings,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <Role />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="data-import/csv/stock-items"
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Settings,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <CSVImport />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      key="workflow"
+      path="workflow/*"
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Settings,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <Workflows />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="statement-templates/*"
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Settings,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <ListStatements />
+        </PermissionCheckWrapper>
+      }
+    />
   </Routes>
 );
 

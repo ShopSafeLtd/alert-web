@@ -34,6 +34,7 @@ const Mg11 = lazy(() => import(`./mg11/router`));
 const FaceAi = lazy(() => import(`./face-ai/router`));
 const DataManagement = lazy(() => import(`./data-management/router`));
 const Evidence = lazy(() => import(`./evidence/router`));
+const Checklists = lazy(() => import(`./checklist/router`));
 
 // Define the interface for your navigation items
 interface NavItem {
@@ -148,7 +149,7 @@ export const AppViews = (): JSX.Element => {
         )}
         <Route key="article" path="article/*" element={<Article />} />
         <Route key="evidence" path="evidence/*" element={<Evidence />} />
-
+        <Route key="checklists" path="checklists/*" element={<Checklists />} />
         <Route key="reports" path="reports/*" element={<Reports />} />
         <Route
           key="investigations"

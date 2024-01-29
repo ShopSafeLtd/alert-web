@@ -1,7 +1,11 @@
 /* eslint-disable no-param-reassign */
 import type { Action } from 'easy-peasy';
 import { action } from 'easy-peasy';
-import type { GoodsMode } from 'graphql/generated';
+import type {
+  GoodsMode,
+  PermissionMethod,
+  PermissionModel,
+} from 'graphql/generated';
 import { Role } from 'graphql/generated';
 import type { Translations } from './scheme-model';
 
@@ -19,6 +23,7 @@ export interface SetUserPayload {
     fullName: string;
     id: string;
     demId?: string | null | undefined;
+    brands: string[];
   }[];
   schemes: Scheme[];
   demId: string | null | undefined;
@@ -78,10 +83,15 @@ export interface SetInvestigationAllSchemes {
   investigationAllSchemes: boolean;
 }
 
+export interface Permissions {
+  model: PermissionModel;
+  allowedMethods: PermissionMethod[];
+}
+
 export interface Scheme {
   id: string;
   role: Role;
-
+  permissions: Permissions[];
   scheme: {
     id: string;
     name: string;
@@ -130,6 +140,7 @@ export interface UserModel {
     fullName: string;
     id: string;
     demId?: string | null | undefined;
+    brands: string[];
     // locations: {
     //   geoLng:float
     //   geoLat:float

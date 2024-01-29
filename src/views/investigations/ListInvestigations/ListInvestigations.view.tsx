@@ -10,8 +10,6 @@ import type { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router';
 import { FormattedMessage, useIntl } from 'react-intl';
 import GetInvestigationStatusValues from 'types/enums/investigation-status';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRotate } from '@fortawesome/pro-light-svg-icons';
 import useStyles from './ListInvestigations.styles';
 import AddInvestigation from '../../../components/form-components/Investigation/AddInvestigation';
 
@@ -67,24 +65,24 @@ const ListInvestigations = ({
             })}
           </Button>
         </Col>
-        <Col>
-          <Button
-            type={takeAllSchemes ? 'primary' : 'text'}
-            onClick={() => setTakeAllSchemes(true)}
-          >
-            {intl.formatMessage({
-              defaultMessage: 'All Schemes',
-              id: '4zN3gE',
-            })}
-          </Button>
-        </Col>
-        <Col style={{ marginLeft: 10 }}>
-          <Button
-            type="default"
-            onClick={() => setTakeAllSchemes(!takeAllSchemes)}
-            icon={<FontAwesomeIcon icon={faRotate} size="10x" />}
-          />
-        </Col>
+        {/* <Col> */}
+        {/*   <Button */}
+        {/*     type={takeAllSchemes ? 'primary' : 'text'} */}
+        {/*     onClick={() => setTakeAllSchemes(true)} */}
+        {/*   > */}
+        {/*     {intl.formatMessage({ */}
+        {/*       defaultMessage: 'All Schemes', */}
+        {/*       id: '4zN3gE', */}
+        {/*     })} */}
+        {/*   </Button> */}
+        {/* </Col> */}
+        {/* <Col style={{ marginLeft: 10 }}> */}
+        {/*   <Button */}
+        {/*     type="default" */}
+        {/*     onClick={() => setTakeAllSchemes(!takeAllSchemes)} */}
+        {/*     icon={<FontAwesomeIcon icon={faRotate} size="10x" />} */}
+        {/*   /> */}
+        {/* </Col> */}
         {/*  <Col flex={1}> */}
         {/*    <Input */}
         {/*      value={search} */}
