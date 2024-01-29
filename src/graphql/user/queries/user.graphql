@@ -22,6 +22,8 @@ query User(
     newUser
     incidentEmail
     incidentPush
+    bulletinEmails
+    bulletinPush
     subscribedIncidentOnly
     subscribedOffenderOnly
     messagePush

@@ -41,6 +41,8 @@ export interface FormData {
   chats: string[];
   incidentEmail: boolean;
   incidentPush: boolean;
+  bulletinEmails: boolean;
+  bulletinPush: boolean;
   subscribedIncidentOnly: boolean;
   subscribedOffenderOnly: boolean;
   messagePush: boolean;
@@ -437,6 +439,8 @@ const useAddUser = ({
             messagePush: data.messagePush,
             offenderEmail: data.offenderEmail,
             offenderPush: data.offenderPush,
+            bulletinEmails: data.bulletinEmails,
+            bulletinPush: data.bulletinPush,
             subscribedIncidentOnly: data.subscribedIncidentOnly,
             subscribedOffenderOnly: data.subscribedOffenderOnly,
             scheme: {

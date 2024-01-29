@@ -77,6 +77,8 @@ const EditProfile = ({
             incidentPush: data?.currentUser?.incidentPush,
             offenderEmail: data?.currentUser?.offenderEmail,
             offenderPush: data?.currentUser?.offenderPush,
+            bulletinEmails: data?.currentUser?.bulletinEmail,
+            bulletinPush: data?.currentUser?.bulletinPush,
             messagePush: data?.currentUser?.messagePush,
             defaultGroups: userDefaultGroups,
           }}
@@ -278,6 +280,62 @@ const EditProfile = ({
                     />
                   }
                   name="offenderPush"
+                  valuePropName="checked"
+                  style={{ marginBottom: 0 }}
+                >
+                  <Switch disabled={saving} style={{ marginLeft: 5 }} />
+                </Form.Item>
+              </Col>
+            </Row>
+          </Card>
+          <Card>
+            <Row align="bottom" style={{ marginBottom: 10 }}>
+              <Col>
+                <Title style={{ marginBottom: 0, fontSize: 16 }} level={4}>
+                  {intl.formatMessage({
+                    defaultMessage: 'Bulletins',
+                    id: 'tgD5sa',
+                  })}
+                </Title>
+              </Col>
+              <Col>
+                <Paragraph
+                  style={{ marginBottom: 1, marginLeft: 5 }}
+                  type="secondary"
+                  italic
+                >
+                  {intl.formatMessage({
+                    defaultMessage:
+                      '- Receive notifications for new bulletins.',
+                    id: 'RONpey',
+                  })}
+                </Paragraph>
+              </Col>
+            </Row>
+
+            <Row>
+              <Col span={15}>
+                <Form.Item
+                  label={
+                    <FormattedMessage
+                      defaultMessage="Email Notifications"
+                      id="1V1nJ/"
+                    />
+                  }
+                  name="bulletinEmail"
+                  valuePropName="checked"
+                  style={{ marginBottom: 0 }}
+                >
+                  <Switch disabled={saving} style={{ marginLeft: 5 }} />
+                </Form.Item>
+                <Form.Item
+                  label={
+                    <FormattedMessage
+                      defaultMessage="Push Notifications (Mobile App)"
+                      id="Tb4qgA"
+                    />
+                  }
+                  name="bulletinPush"
                   valuePropName="checked"
                   style={{ marginBottom: 0 }}
                 >

@@ -32,10 +32,11 @@ export interface FormData {
   groups: string[];
   approverGroups: string[];
   defaultGroups: string[];
-
   chats: string[];
   incidentEmail: boolean;
   incidentPush: boolean;
+  bulletinEmails: boolean;
+  bulletinPush: boolean;
   subscribedIncidentOnly: boolean;
   subscribedOffenderOnly: boolean;
   messagePush: boolean;
@@ -282,6 +283,8 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
             fullName: { set: data.fullName },
             incidentEmail: { set: data.incidentEmail },
             incidentPush: { set: data.incidentPush },
+            bulletinEmails: { set: data.bulletinEmail },
+            bulletinPush: { set: data.bulletinPush },
             publicName: { set: data.publicName },
             reportToAllBusinesses: { set: data.reportToAllBusinesses },
             subscribedIncidentOnly: { set: data.subscribedIncidentOnly },

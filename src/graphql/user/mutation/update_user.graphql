@@ -23,6 +23,8 @@ mutation updateUser(
     newUser
     incidentEmail
     incidentPush
+    bulletinEmails
+    bulletinPush
     subscribedIncidentOnly
     subscribedOffenderOnly
     messagePush

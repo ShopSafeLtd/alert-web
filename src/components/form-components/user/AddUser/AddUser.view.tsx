@@ -577,6 +577,12 @@ const AddUser = ({
           id: 'op0fQr',
         })}
       </Title>
+      <Title style={{ marginBottom: 8, fontSize: 16 }}>
+        {intl.formatMessage({
+          defaultMessage: 'Incidents:',
+          id: '+nRUf9',
+        })}
+      </Title>
       <Form.Item
         label={intl.formatMessage({
           defaultMessage:
@@ -638,6 +644,12 @@ const AddUser = ({
           loading={schemeLoading}
         />
       </Form.Item>
+      <Title style={{ marginBottom: 8, marginTop: 10, fontSize: 16 }}>
+        {intl.formatMessage({
+          defaultMessage: 'Offenders:',
+          id: 'HEnuMU',
+        })}
+      </Title>
       <Form.Item
         name="subscribedOffenderOnly"
         label={intl.formatMessage({
@@ -699,6 +711,56 @@ const AddUser = ({
           loading={schemeLoading}
         />
       </Form.Item>
+      <Title style={{ marginBottom: 8, marginTop: 10, fontSize: 16 }}>
+        {intl.formatMessage({
+          defaultMessage: 'Bulletins:',
+          id: '3woXlC',
+        })}
+      </Title>
+      <Form.Item
+        label={intl.formatMessage({
+          defaultMessage: 'Send app notifications for bulletins:',
+          id: 'sXEYqs',
+        })}
+        name="bulletinPush"
+        valuePropName="checked"
+        style={{
+          marginBottom: 0,
+          flexDirection: 'row',
+          justifyItems: 'center',
+        }}
+      >
+        <Switch
+          disabled={saving}
+          style={{ marginLeft: 10, marginTop: -22 }}
+          className="scheme-detail-switch"
+        />
+      </Form.Item>
+      <Form.Item
+        label={intl.formatMessage({
+          defaultMessage: 'Send emails for bulletins:',
+          id: '6iDV7o',
+        })}
+        name="bulletinEmails"
+        valuePropName="checked"
+        style={{
+          marginBottom: 0,
+          flexDirection: 'row',
+          justifyItems: 'center',
+        }}
+      >
+        <Switch
+          disabled={saving}
+          style={{ marginLeft: 10, marginTop: -22 }}
+          className="scheme-detail-switch"
+        />
+      </Form.Item>
+      <Title style={{ marginBottom: 8, marginTop: 10, fontSize: 16 }}>
+        {intl.formatMessage({
+          defaultMessage: 'Chat Messages:',
+          id: 'UT42Ko',
+        })}
+      </Title>
       <Form.Item
         name="messagePush"
         label={intl.formatMessage({

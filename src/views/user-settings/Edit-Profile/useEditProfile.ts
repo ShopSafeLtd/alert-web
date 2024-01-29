@@ -21,6 +21,8 @@ export interface FormData {
   incidentPush: boolean;
   offenderEmail: boolean;
   offenderPush: boolean;
+  bulletinEmails: boolean;
+  bulletinPush: boolean;
   messagePush: boolean;
   defaultGroups: string[];
 }
@@ -98,6 +100,8 @@ const useEditProfile = (): Return => {
             incidentPush: { set: data.incidentPush },
             offenderEmail: { set: data.offenderEmail },
             offenderPush: { set: data.offenderPush },
+            bulletinEmails: { set: data.bulletinEmail },
+            bulletinPush: { set: data.bulletinPush },
             messagePush: { set: data.messagePush },
             defaultGroups: {
               connect: connectDefaultGroups
