@@ -9,7 +9,7 @@ const { Content } = Layout;
 
 export const GuestLayout = (): JSX.Element => {
   const { status } = useThemeSwitcher();
-  console.log('test');
+
   if (status === 'loading') {
     return <Loading cover="page" />;
   }

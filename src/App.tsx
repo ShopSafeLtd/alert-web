@@ -11,8 +11,7 @@ import { LoadScript } from '@react-google-maps/api';
 import * as Sentry from '@sentry/react';
 import { configureScope, reactRouterV6Instrumentation } from '@sentry/react';
 import LogRocket from 'logrocket';
-import { BrowserTracing } from '@sentry/tracing';
-import { CaptureConsole } from '@sentry/integrations';
+import { CaptureConsole, HttpClient } from '@sentry/integrations';
 import mixpanel from 'mixpanel-browser';
 import ApolloProvider from './providers/ApolloProvider';
 import 'react-grid-layout/css/styles.css';
@@ -30,11 +29,11 @@ if (import.meta.env.PROD) {
   mixpanel.init(import.meta.env.VITE_MIXPANEL_TOKEN);
   Sentry.init({
     dsn: import.meta.env.VITE_SENTRY_DSN,
+    sendDefaultPii: true,
+
     integrations: [
-      new CaptureConsole({
-        levels: ['error'],
-      }),
-      new BrowserTracing({
+      new CaptureConsole(),
+      new Sentry.BrowserTracing({
         routingInstrumentation: reactRouterV6Instrumentation(
           React.useEffect,
           useLocation,
@@ -43,11 +42,12 @@ if (import.meta.env.PROD) {
           matchRoutes
         ),
       }),
+      new HttpClient(),
     ],
     // Set tracesSampleRate to 1.0 to capture 100%
     // of transactions for performance monitoring.
     // Adjust for production
-    tracesSampleRate: 0.3,
+    tracesSampleRate: 0.4,
     beforeSend(event) {
       const logRocketSession = LogRocket.sessionURL;
       if (logRocketSession !== null && event.extra) {

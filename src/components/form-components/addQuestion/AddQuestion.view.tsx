@@ -37,6 +37,10 @@ interface AddQuestionViewProps {
   onClose: () => void;
   saving: boolean;
   tagQuestions?: TagQuestion[];
+  brands: {
+    label: string;
+    value: string;
+  }[];
 }
 
 const AddQuestionView = ({
@@ -48,6 +52,7 @@ const AddQuestionView = ({
   onClose,
   saving,
   tagQuestions,
+  brands,
 }: AddQuestionViewProps) => {
   const answerType = Form.useWatch('type', form);
   const question = Form.useWatch('question', form) || '';
@@ -380,9 +385,20 @@ const AddQuestionView = ({
               },
             ]}
             required={!!dependentOn}
+            hidden={!dependentOn}
             name="dependentAnswer"
           >
             {generateFormItem()}
+          </Form.Item>
+          <Form.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Dependent Brands',
+              id: 'Lw8lSX',
+            })}
+            name="dependentBrands"
+            hidden={brands?.length === 0}
+          >
+            <Select options={brands} mode="multiple" showSearch />
           </Form.Item>
         </Card>
       )}

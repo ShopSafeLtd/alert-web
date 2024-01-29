@@ -6,5 +6,9 @@ query QuestionDetails($where: QuestionWhereUniqueInput!) {
     optionsFormatted
     type
     options
+    tags {
+      id
+      dependentBrands
+    }
   }
 }

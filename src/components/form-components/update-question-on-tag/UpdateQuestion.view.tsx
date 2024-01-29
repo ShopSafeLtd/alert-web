@@ -27,6 +27,10 @@ interface AddQuestionViewProps {
   onClose: () => void;
   saving: boolean;
   tagQuestions: TagQuestion[];
+  brands: {
+    label: string;
+    value: string;
+  }[];
 }
 
 const UpdateQuestionView = ({
@@ -37,6 +41,7 @@ const UpdateQuestionView = ({
   onClose,
   saving,
   tagQuestions,
+  brands,
 }: AddQuestionViewProps) => {
   const answerType = data.type;
   const opt = data.newOptions || [];
@@ -208,7 +213,13 @@ const UpdateQuestionView = ({
         </Card>
       )}
 
-      <Card loading={loading}>
+      <Card
+        loading={loading}
+        title={intl.formatMessage({
+          defaultMessage: 'Dependencies',
+          id: '37Z5zj',
+        })}
+      >
         <Form.Item
           label={intl.formatMessage({
             defaultMessage: 'Dependent Question',
@@ -224,25 +235,39 @@ const UpdateQuestionView = ({
             }))}
           />
         </Form.Item>
+        {dependentOn && (
+          <Form.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Dependent Answer',
+              id: 'uVG0Go',
+            })}
+            rules={[
+              {
+                required: !!dependentOn,
+                message: intl.formatMessage({
+                  defaultMessage:
+                    'Please select an answer that this question will depend on to show in the form',
+                  id: 'DigMoX',
+                }),
+              },
+            ]}
+            required={!!dependentOn}
+            hidden={!dependentOn}
+            name="dependentAnswer"
+          >
+            {generateFormItem()}
+          </Form.Item>
+        )}
+
         <Form.Item
           label={intl.formatMessage({
-            defaultMessage: 'Dependent Answer',
-            id: 'uVG0Go',
+            defaultMessage: 'Dependent Brands',
+            id: 'Lw8lSX',
           })}
-          rules={[
-            {
-              required: !!dependentOn,
-              message: intl.formatMessage({
-                defaultMessage:
-                  'Please select an answer that this question will depend on to show in the form',
-                id: 'DigMoX',
-              }),
-            },
-          ]}
-          required={!!dependentOn}
-          name="dependentAnswer"
+          name="dependentBrands"
+          hidden={brands?.length === 0}
         >
-          {generateFormItem()}
+          <Select options={brands} mode="multiple" showSearch />
         </Form.Item>
       </Card>
       <Form.Item>

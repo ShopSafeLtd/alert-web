@@ -270,6 +270,7 @@ export type ActiveChecklist = {
   maxWeight: Scalars['Int'];
   name?: Maybe<Scalars['String']>;
   percentComplete: Scalars['Int'];
+  percentageScore: Scalars['String'];
   signature?: Maybe<Scalars['String']>;
   status: ChecklistStatus;
   totalWeight: Scalars['Int'];
@@ -424,6 +425,7 @@ export type ActiveChecklistOrderByWithRelationInput = {
   fields?: InputMaybe<ActiveChecklistFieldsOrderByRelationAggregateInput>;
   id?: InputMaybe<SortOrder>;
   maxWeight?: InputMaybe<SortOrder>;
+  name?: InputMaybe<SortOrder>;
   percentComplete?: InputMaybe<SortOrder>;
   signature?: InputMaybe<SortOrder>;
   status?: InputMaybe<SortOrder>;
@@ -1648,6 +1650,57 @@ export type BoolWithAggregatesFilter = {
   not?: InputMaybe<NestedBoolWithAggregatesFilter>;
 };
 
+export type Brand = {
+  __typename?: 'Brand';
+  businesses: Array<Business>;
+  description?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  recycled: Scalars['Boolean'];
+  scheme: Scheme;
+  schemeId: Scalars['String'];
+};
+
+export type BrandOrderBy = {
+  name?: InputMaybe<SortOrder>;
+};
+
+export type BrandOrderByWithRelationInput = {
+  businesses?: InputMaybe<BusinessOrderByRelationAggregateInput>;
+  createdAt?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  name?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
+};
+
+export type BrandWhereInput = {
+  AND?: InputMaybe<Array<BrandWhereInput>>;
+  NOT?: InputMaybe<Array<BrandWhereInput>>;
+  OR?: InputMaybe<Array<BrandWhereInput>>;
+  businesses?: InputMaybe<BusinessListRelationFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  description?: InputMaybe<StringNullableFilter>;
+  id?: InputMaybe<StringFilter>;
+  name?: InputMaybe<StringFilter>;
+  recycled?: InputMaybe<BoolFilter>;
+  scheme?: InputMaybe<SchemeWhereInput>;
+  schemeId?: InputMaybe<StringFilter>;
+};
+
+export type BrandWhereUniqueInput = {
+  AND?: InputMaybe<Array<BrandWhereInput>>;
+  NOT?: InputMaybe<Array<BrandWhereInput>>;
+  OR?: InputMaybe<Array<BrandWhereInput>>;
+  businesses?: InputMaybe<BusinessListRelationFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  description?: InputMaybe<StringNullableFilter>;
+  id?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<StringFilter>;
+  recycled?: InputMaybe<BoolFilter>;
+  scheme?: InputMaybe<SchemeWhereInput>;
+  schemeId?: InputMaybe<StringFilter>;
+};
+
 export enum Build {
   Large = 'LARGE',
   Medium = 'MEDIUM',
@@ -1658,6 +1711,8 @@ export enum Build {
 export type Business = {
   __typename?: 'Business';
   actions: Array<Action>;
+  brands: Array<Scalars['String']>;
+  brandsList: Array<Brand>;
   checklists: Array<Checklist>;
   children: Array<Business>;
   createdAt: Scalars['Date'];
@@ -2338,11 +2393,13 @@ export type ChecklistWhereInput = {
   NOT?: InputMaybe<Array<ChecklistWhereInput>>;
   OR?: InputMaybe<Array<ChecklistWhereInput>>;
   activeChecklists?: InputMaybe<ActiveChecklistListRelationFilter>;
+  business?: InputMaybe<BusinessListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   deleted?: InputMaybe<BoolFilter>;
   id?: InputMaybe<StringFilter>;
   schemes?: InputMaybe<SchemeListRelationFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
+  users?: InputMaybe<UserListRelationFilter>;
 };
 
 export type ChecklistWhereUniqueInput = {
@@ -2360,7 +2417,9 @@ export type CompleteActiveChecklistInput = {
   additionalInfo?: InputMaybe<Scalars['String']>;
   answers: Array<ActiveChecklistAnswerInput>;
   draft: Scalars['Boolean'];
+  max?: InputMaybe<Scalars['Int']>;
   signature?: InputMaybe<Scalars['String']>;
+  total?: InputMaybe<Scalars['Int']>;
 };
 
 export type ConnectArrayHelper = {
@@ -2810,6 +2869,7 @@ export type CreateOffenderVehicles = {
 };
 
 export type CreateQuestionInput = {
+  brands?: InputMaybe<Array<Scalars['String']>>;
   dependentAnswer?: InputMaybe<Scalars['String']>;
   dependentOnQId?: InputMaybe<Scalars['String']>;
   dependentOnTagQId?: InputMaybe<Scalars['String']>;
@@ -3579,6 +3639,38 @@ export type CustomGalleryWhereUniqueInput = {
   schemes?: InputMaybe<SchemeListRelationFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   vehicles?: InputMaybe<VehicleListRelationFilter>;
+};
+
+export type CustomRole = {
+  __typename?: 'CustomRole';
+  createdAt: Scalars['DateTime'];
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  permissions: Array<Permission>;
+  scheme: Scheme;
+  type: Role;
+  updatedAt: Scalars['DateTime'];
+  users: Array<UserScheme>;
+  usersCount: Scalars['Int'];
+};
+
+export type CustomRoleWhereInput = {
+  AND?: InputMaybe<Array<CustomRoleWhereInput>>;
+  NOT?: InputMaybe<Array<CustomRoleWhereInput>>;
+  OR?: InputMaybe<Array<CustomRoleWhereInput>>;
+  id?: InputMaybe<StringFilter>;
+  name?: InputMaybe<StringFilter>;
+  users?: InputMaybe<UserSchemeListRelationFilter>;
+};
+
+export type CustomRoleWhereUniqueInput = {
+  AND?: InputMaybe<Array<CustomRoleWhereInput>>;
+  NOT?: InputMaybe<Array<CustomRoleWhereInput>>;
+  OR?: InputMaybe<Array<CustomRoleWhereInput>>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  id?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<StringFilter>;
+  users?: InputMaybe<UserSchemeListRelationFilter>;
 };
 
 export type DateRangeInput = {
@@ -7024,6 +7116,7 @@ export type IncidentQuestions = {
   __typename?: 'IncidentQuestions';
   answerType: AnswerType;
   dependentOnAnswerValue?: Maybe<Scalars['String']>;
+  dependentOnBrandIds?: Maybe<Array<Scalars['String']>>;
   dependentOnQuestionId?: Maybe<Scalars['String']>;
   label: Scalars['String'];
   options: Array<AnswerOption>;
@@ -9148,6 +9241,7 @@ export type Mutation = {
   markAsReadMessages: UserChat;
   mergeBusinessesWithSameName: Business;
   mergeOffender: Offender;
+  recycleChecklist: Checklist;
   recycleExpiredData: SystemTask;
   recycleIncident: Incident;
   recycleOffender: Offender;
@@ -9215,7 +9309,9 @@ export type Mutation = {
   updateVehicle: Vehicle;
   uploadImage: Image;
   uploadToImage: Image;
+  upsertBrand: Brand;
   upsertIncidentForm: IncidentForm;
+  upsertPermission: CustomRole;
 };
 
 
@@ -9716,6 +9812,11 @@ export type MutationMergeOffenderArgs = {
 };
 
 
+export type MutationRecycleChecklistArgs = {
+  id: Scalars['String'];
+};
+
+
 export type MutationRecycleIncidentArgs = {
   where: UniqueId;
 };
@@ -10031,8 +10132,18 @@ export type MutationUploadToImageArgs = {
 };
 
 
+export type MutationUpsertBrandArgs = {
+  data: UpsertBrand;
+};
+
+
 export type MutationUpsertIncidentFormArgs = {
   data: UpsertIncidentFormInput;
+};
+
+
+export type MutationUpsertPermissionArgs = {
+  data: UpsertRole;
 };
 
 export type NestedBoolFilter = {
@@ -11872,6 +11983,19 @@ export type PerformanceReport = {
   lossTotals: LossTotals;
 };
 
+export type Permission = {
+  __typename?: 'Permission';
+  allowedMethods: Array<PermissionMethod>;
+  id: Scalars['ID'];
+  model: PermissionModel;
+  role: CustomRole;
+};
+
+export type PermissionInput = {
+  allowedMethods: Array<PermissionMethod>;
+  model: PermissionModel;
+};
+
 export enum PermissionMethod {
   Approve = 'APPROVE',
   Delete = 'DELETE',
@@ -11899,6 +12023,12 @@ export enum PermissionModel {
   Vehicles = 'VEHICLES'
 }
 
+export type Permissions = {
+  __typename?: 'Permissions';
+  allowedMethods: Array<PermissionMethod>;
+  model: PermissionModel;
+};
+
 export enum PoliceResponseTime {
   NoResponse = 'NO_RESPONSE',
   Over_24Hours = 'OVER_24_HOURS',
@@ -11923,6 +12053,8 @@ export type Query = {
   availableTaskQuestions: Array<Question>;
   ban: Ban;
   bans: Array<Ban>;
+  brand: Brand;
+  brands: Array<Brand>;
   business: Business;
   businessContribution: ListBusinessContribution;
   businessImpact: BusinessImpact;
@@ -12001,6 +12133,8 @@ export type Query = {
   reportTemplate: ReportTemplate;
   reportTemplates: Array<ReportTemplate>;
   reportUserLogin: User;
+  role: CustomRole;
+  roles: QueryRolesConnection;
   scheme: Scheme;
   schemes: Array<Scheme>;
   statementTemplate: StatementTemplate;
@@ -12054,6 +12188,8 @@ export type QueryActiveChecklistsArgs = {
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<ActiveChecklistOrderByWithRelationInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<ActiveChecklistWhereInput>;
 };
 
@@ -12116,6 +12252,20 @@ export type QueryBansArgs = {
 };
 
 
+export type QueryBrandArgs = {
+  where: BrandWhereUniqueInput;
+};
+
+
+export type QueryBrandsArgs = {
+  cursor?: InputMaybe<BrandWhereUniqueInput>;
+  orderBy?: InputMaybe<Array<BrandOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<BrandWhereInput>;
+};
+
+
 export type QueryBusinessArgs = {
   where: BusinessWhereUniqueInput;
 };
@@ -12165,6 +12315,9 @@ export type QueryChecklistArgs = {
 
 
 export type QueryChecklistsArgs = {
+  order?: InputMaybe<ChecklistOrderByWithRelationInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
   where: ChecklistWhereInput;
 };
 
@@ -12681,6 +12834,22 @@ export type QueryReportUserLoginArgs = {
 };
 
 
+export type QueryRoleArgs = {
+  where: CustomRoleWhereUniqueInput;
+};
+
+
+export type QueryRolesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  schemeId: Scalars['String'];
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+};
+
+
 export type QuerySchemeArgs = {
   where: SchemeWhereUniqueInput;
 };
@@ -12898,6 +13067,19 @@ export enum QueryMode {
   Default = 'default',
   Insensitive = 'insensitive'
 }
+
+export type QueryRolesConnection = {
+  __typename?: 'QueryRolesConnection';
+  edges: Array<QueryRolesConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryRolesConnectionEdge = {
+  __typename?: 'QueryRolesConnectionEdge';
+  cursor: Scalars['String'];
+  node: CustomRole;
+};
 
 export type Question = {
   __typename?: 'Question';
@@ -14034,6 +14216,7 @@ export type Scheme = {
   reportTemplates: Array<ReportTemplate>;
   requireSiteNumberForUsers: Scalars['Boolean'];
   restrictIncidentAccess: Scalars['Boolean'];
+  roles: Array<CustomRole>;
   schemeTags: Array<Tag>;
   statementTemplates: Array<StatementTemplate>;
   stockItems: Array<StockItem>;
@@ -15642,6 +15825,7 @@ export type TagQuestion = {
   __typename?: 'TagQuestion';
   answers: Array<Answer>;
   createdAt: Scalars['Date'];
+  dependentBrands: Array<Scalars['String']>;
   dependentQuestions: Array<Scalars['JSON']>;
   id: Scalars['String'];
   priority: Scalars['Int'];
@@ -16857,6 +17041,7 @@ export type UpdatePasswordData = {
 };
 
 export type UpdateQuestionOnTagInput = {
+  brands?: InputMaybe<Array<Scalars['String']>>;
   dependentAnswer?: InputMaybe<Scalars['String']>;
   dependentOnQId?: InputMaybe<Scalars['String']>;
   dependentOnTagQId?: InputMaybe<Scalars['String']>;
@@ -17091,9 +17276,26 @@ export type UploadVehicleImage = {
   url?: InputMaybe<UrlImage>;
 };
 
+export type UpsertBrand = {
+  brandId?: InputMaybe<Scalars['String']>;
+  businesses: Array<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+  schemeId: Scalars['String'];
+};
+
 export type UpsertIncidentFormInput = {
   formFields: Array<IncidentFormFieldsInput>;
   tagId: Scalars['String'];
+};
+
+export type UpsertRole = {
+  name?: InputMaybe<Scalars['String']>;
+  permissions: Array<PermissionInput>;
+  roleId?: InputMaybe<Scalars['String']>;
+  schemeId: Scalars['String'];
+  type?: InputMaybe<Role>;
+  userIds?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export type User = {
@@ -17120,6 +17322,7 @@ export type User = {
   crimeGroups: Array<CrimeGroup>;
   csvImports: Array<CsvImport>;
   defaultGroups: Array<Group>;
+  defaultScheme?: Maybe<Scalars['String']>;
   demId?: Maybe<Scalars['String']>;
   disabled: Scalars['Boolean'];
   email: Scalars['String'];
@@ -18007,6 +18210,8 @@ export type UserScheme = {
   createdAt: Scalars['Date'];
   id: Scalars['String'];
   notificationCount: Scalars['Int'];
+  orignalPermissions: CustomRole;
+  permissions: Array<Permissions>;
   recycled: Scalars['Boolean'];
   role: Role;
   scheme: Scheme;
@@ -19278,7 +19483,7 @@ export type QuestionDetailsQueryVariables = Exact<{
 }>;
 
 
-export type QuestionDetailsQuery = { __typename?: 'Query', question: { __typename?: 'Question', id: string, questionFormatted: string, question: string, optionsFormatted?: Array<string> | null, type: AnswerType, options: Array<{ [key: string]: any }> } };
+export type QuestionDetailsQuery = { __typename?: 'Query', question: { __typename?: 'Question', id: string, questionFormatted: string, question: string, optionsFormatted?: Array<string> | null, type: AnswerType, options: Array<{ [key: string]: any }>, tags: Array<{ __typename?: 'TagQuestion', id: string, dependentBrands: Array<string> }> } };
 
 export type UpdateQuestionOnTagMutationVariables = Exact<{
   data: UpdateQuestionOnTagInput;
@@ -19447,6 +19652,13 @@ export type UpdateBusinessMutationVariables = Exact<{
 
 
 export type UpdateBusinessMutation = { __typename?: 'Mutation', updateBusiness: { __typename?: 'Business', id: string, name: string, siteNumber?: string | null, fullName: string, publicName: boolean, demId?: string | null, totalUsers: number, parent?: { __typename?: 'Business', id: string, name: string, fullName: string, publicName: boolean } | null, locations: Array<{ __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, geoLng?: number | null, geoLat?: number | null }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }> } };
+
+export type BusinessBrandsQueryVariables = Exact<{
+  where: BusinessWhereUniqueInput;
+}>;
+
+
+export type BusinessBrandsQuery = { __typename?: 'Query', business: { __typename?: 'Business', id: string, brands: Array<string> } };
 
 export type BusinessLocationsQueryVariables = Exact<{
   where?: InputMaybe<BusinessWhereInput>;
@@ -20802,7 +21014,7 @@ export type ListIncidentTagsQueryVariables = Exact<{
 }>;
 
 
-export type ListIncidentTagsQuery = { __typename?: 'Query', listIncidentTags: Array<{ __typename?: 'IncidentTags', hasChildren: boolean, label: string, parentId?: string | null, parents: Array<string>, tier: number, value: string, tooltip?: string | null, incidentForm?: Array<{ __typename?: 'IncidentFormOnTag', position: number, type: IncidentFormField }> | null, questions?: Array<{ __typename?: 'IncidentQuestions', answerType: AnswerType, label: string, questionId: string, required: boolean, tagQuestionId: string, priority: number, dependentOnQuestionId?: string | null, dependentOnAnswerValue?: string | null, options: Array<{ __typename?: 'AnswerOption', label: string, value: string }> }> | null }> };
+export type ListIncidentTagsQuery = { __typename?: 'Query', listIncidentTags: Array<{ __typename?: 'IncidentTags', hasChildren: boolean, label: string, parentId?: string | null, parents: Array<string>, tier: number, value: string, tooltip?: string | null, incidentForm?: Array<{ __typename?: 'IncidentFormOnTag', position: number, type: IncidentFormField }> | null, questions?: Array<{ __typename?: 'IncidentQuestions', answerType: AnswerType, label: string, questionId: string, required: boolean, tagQuestionId: string, priority: number, dependentOnQuestionId?: string | null, dependentOnAnswerValue?: string | null, dependentOnBrandIds?: Array<string> | null, options: Array<{ __typename?: 'AnswerOption', label: string, value: string }> }> | null }> };
 
 export type ListTagsQueryVariables = Exact<{
   where: TagWhereInput;
@@ -20861,6 +21073,13 @@ export type TranslateQueryVariables = Exact<{
 
 export type TranslateQuery = { __typename?: 'Query', translateText: Array<{ __typename?: 'TranslatedText', origText: string, translatedText: string }> };
 
+export type TranslateTextQueryVariables = Exact<{
+  data: TranslateTextInput;
+}>;
+
+
+export type TranslateTextQuery = { __typename?: 'Query', translateText: Array<{ __typename?: 'TranslatedText', translatedText: string, origText: string }> };
+
 export type DeleteUserFromSchemeMutationVariables = Exact<{
   id: Scalars['String'];
   scheme: Scalars['String'];
@@ -20907,7 +21126,7 @@ export type CurrentUserQueryVariables = Exact<{
 }>;
 
 
-export type CurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: string, fullName: string, origName: string, email: string, reference?: number | null, demId?: string | null, publicName: boolean, reportToAllBusinesses: boolean, notificationCount: number, messageCount: number, newUser: boolean, incidentEmail: boolean, incidentPush: boolean, offenderEmail: boolean, offenderPush: boolean, messagePush: boolean, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string, demId?: string | null }>, groups: Array<{ __typename?: 'Group', id: string, name: string, scheme: { __typename?: 'Scheme', id: string } }>, defaultGroups: Array<{ __typename?: 'Group', id: string, name: string, scheme: { __typename?: 'Scheme', id: string } }>, schemes: Array<{ __typename?: 'UserScheme', id: string, role: Role, scheme: { __typename?: 'Scheme', customTranslations: Array<{ [key: string]: any }>, userTodos: number, id: string, name: string, goodsMode: GoodsMode, autoApproveIncidents: boolean, autoApproveOffenders: boolean, defaultPublicOffenderDOB: boolean, restrictIncidentAccess: boolean, reportOnly: boolean, facialRecognition: boolean, imagesRequiredOnOffenders: boolean, taskTimeTracking: boolean, languageCount: number, autoPopulateDescription: boolean, needJustification: boolean, requireSiteNumberForUsers: boolean, logo?: { __typename?: 'Image', optimisedPersisted?: string | null } | null, darkLogo?: { __typename?: 'Image', optimisedPersisted?: string | null } | null } }> } | null };
+export type CurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: string, fullName: string, origName: string, email: string, reference?: number | null, demId?: string | null, publicName: boolean, reportToAllBusinesses: boolean, notificationCount: number, messageCount: number, defaultScheme?: string | null, newUser: boolean, incidentEmail: boolean, incidentPush: boolean, offenderEmail: boolean, offenderPush: boolean, messagePush: boolean, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string, demId?: string | null, brands: Array<string> }>, groups: Array<{ __typename?: 'Group', id: string, name: string, scheme: { __typename?: 'Scheme', id: string } }>, defaultGroups: Array<{ __typename?: 'Group', id: string, name: string, scheme: { __typename?: 'Scheme', id: string } }>, schemes: Array<{ __typename?: 'UserScheme', id: string, role: Role, scheme: { __typename?: 'Scheme', customTranslations: Array<{ [key: string]: any }>, userTodos: number, id: string, name: string, goodsMode: GoodsMode, autoApproveIncidents: boolean, autoApproveOffenders: boolean, defaultPublicOffenderDOB: boolean, restrictIncidentAccess: boolean, reportOnly: boolean, facialRecognition: boolean, imagesRequiredOnOffenders: boolean, taskTimeTracking: boolean, languageCount: number, autoPopulateDescription: boolean, needJustification: boolean, requireSiteNumberForUsers: boolean, logo?: { __typename?: 'Image', optimisedPersisted?: string | null } | null, darkLogo?: { __typename?: 'Image', optimisedPersisted?: string | null } | null }, permissions: Array<{ __typename?: 'Permissions', model: PermissionModel, allowedMethods: Array<PermissionMethod> }> }> } | null };
 
 export type UserQueryVariables = Exact<{
   where: UserWhereUniqueInput;
@@ -21174,6 +21393,86 @@ export type ListArticlesFeedQueryVariables = Exact<{
 
 export type ListArticlesFeedQuery = { __typename?: 'Query', listArticlesRelay: { __typename?: 'QueryListArticlesRelayConnection', edges: Array<{ __typename?: 'QueryListArticlesRelayConnectionEdge', node: { __typename?: 'Article', previewText?: string | null, watermarkImage: boolean, previewImage?: string | null, priority: ArticlePriority, title: string, updatedAt: Date, id: string, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null, position: ImagePosition, rotation: number }>, image?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null } | null, createdBy: { __typename?: 'User', fullName: string, id: string, businesses: Array<{ __typename?: 'Business', id: string, name: string }> }, groups: Array<{ __typename?: 'Group', id: string, name: string }> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null } } };
 
+export type BrandQueryVariables = Exact<{
+  where: BrandWhereUniqueInput;
+}>;
+
+
+export type BrandQuery = { __typename?: 'Query', brand: { __typename?: 'Brand', name: string, id: string, description?: string | null, businesses: Array<{ __typename?: 'Business', id: string, name: string }> } };
+
+export type BrandsQueryVariables = Exact<{
+  where?: InputMaybe<BrandWhereInput>;
+}>;
+
+
+export type BrandsQuery = { __typename?: 'Query', brands: Array<{ __typename?: 'Brand', name: string, id: string, description?: string | null, businesses: Array<{ __typename?: 'Business', id: string, name: string }> }> };
+
+export type CompleteChecklistMutationVariables = Exact<{
+  data: CompleteActiveChecklistInput;
+  where: Scalars['String'];
+}>;
+
+
+export type CompleteChecklistMutation = { __typename?: 'Mutation', completeChecklist: { __typename?: 'ActiveChecklist', id: string, name?: string | null, comments?: string | null, signature?: string | null, status: ChecklistStatus, completedAt?: Date | null, completedBy?: { __typename?: 'User', origName: string } | null, fields: Array<{ __typename?: 'ActiveChecklistFields', id: string, question: { [key: string]: any }, type: ChecklistAnswerType, availableAnswers: Array<{ [key: string]: any }>, section: number, subsection: number, order: number, answer?: { __typename?: 'ChecklistAnswer', answer: string, additionalComments?: string | null, images: Array<string> } | null }>, checklistSection: Array<{ __typename?: 'ActiveChecklistSections', sub: boolean, section: number, subsection?: number | null, titleLocaled: string }> } };
+
+export type CreateActiveChecklistMutationVariables = Exact<{
+  data: CreateActiveChecklistInput;
+}>;
+
+
+export type CreateActiveChecklistMutation = { __typename?: 'Mutation', createActiveChecklist: { __typename?: 'ActiveChecklist', id: string } };
+
+export type CreateUpdateChecklistMutationVariables = Exact<{
+  data: ChecklistCreateUpdateInput;
+  createUpdateChecklistId?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type CreateUpdateChecklistMutation = { __typename?: 'Mutation', createUpdateChecklist: { __typename?: 'Checklist', id: string } };
+
+export type RecycleChecklistMutationVariables = Exact<{
+  recycleChecklistId: Scalars['String'];
+}>;
+
+
+export type RecycleChecklistMutation = { __typename?: 'Mutation', recycleChecklist: { __typename?: 'Checklist', id: string } };
+
+export type ActiveChecklistsQueryVariables = Exact<{
+  first?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']>;
+  order?: InputMaybe<ActiveChecklistOrderByWithRelationInput>;
+  where?: InputMaybe<ActiveChecklistWhereInput>;
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type ActiveChecklistsQuery = { __typename?: 'Query', activeChecklists: { __typename?: 'QueryActiveChecklistsConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null }, edges: Array<{ __typename?: 'QueryActiveChecklistsConnectionEdge', node: { __typename?: 'ActiveChecklist', id: string, name?: string | null, percentageScore: string, percentComplete: number, status: ChecklistStatus, updatedAt: Date, completedAt?: Date | null, document?: { __typename?: 'Document', id: string, url: string } | null, business?: { __typename?: 'Business', name: string, id: string } | null } }> } };
+
+export type ChecklistsQueryVariables = Exact<{
+  where: ChecklistWhereInput;
+  order?: InputMaybe<ChecklistOrderByWithRelationInput>;
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type ChecklistsQuery = { __typename?: 'Query', checklists: Array<{ __typename?: 'Checklist', id: string, titleLocaled: string, descriptionLocaled: string }> };
+
+export type ActiveChecklistQueryVariables = Exact<{
+  where: ActiveChecklistWhereUniqueInput;
+}>;
+
+
+export type ActiveChecklistQuery = { __typename?: 'Query', activeChecklist: { __typename?: 'ActiveChecklist', id: string, name?: string | null, comments?: string | null, signature?: string | null, status: ChecklistStatus, completedAt?: Date | null, percentageScore: string, percentComplete: number, completedBy?: { __typename?: 'User', origName: string } | null, fields: Array<{ __typename?: 'ActiveChecklistFields', id: string, question: { [key: string]: any }, type: ChecklistAnswerType, availableAnswers: Array<{ [key: string]: any }>, section: number, subsection: number, order: number, answer?: { __typename?: 'ChecklistAnswer', answer: string, additionalComments?: string | null, images: Array<string> } | null }>, checklistSection: Array<{ __typename?: 'ActiveChecklistSections', sub: boolean, section: number, subsection?: number | null, titleLocaled: string }> } };
+
+export type ChecklistQueryVariables = Exact<{
+  where: ChecklistWhereUniqueInput;
+}>;
+
+
+export type ChecklistQuery = { __typename?: 'Query', checklist: { __typename?: 'Checklist', id: string, title: string, description?: string | null, sections: Array<{ __typename?: 'ChecklistSection', order: number, title: string, subsections: Array<{ __typename?: 'ChecklistSubsection', title: string, order: number, questions: Array<{ __typename?: 'ChecklistQuestion', order: number, question: { [key: string]: any }, type: ChecklistAnswerType, weight: Array<{ __typename?: 'AnswerWeight', weight: number, answer: string }> }> }> }> } };
+
 export type CreateCsvZipMutationVariables = Exact<{
   where: IncidentExportInput;
 }>;
@@ -21240,6 +21539,31 @@ export type ListOffendersRelayQueryVariables = Exact<{
 
 
 export type ListOffendersRelayQuery = { __typename?: 'Query', listOffendersRelay: { __typename?: 'QueryListOffendersRelayConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'QueryListOffendersRelayConnectionEdge', node: { __typename?: 'Offender', id: string, name?: string | null, totalIncidents: number, reference?: number | null, build?: Build | null, height?: Height | null, gender?: Gender | null, dateOfBirth?: Date | null, age?: Age | null, race?: Race | null, updatedAt: Date, totalImages: number, createdByUser: boolean, approved?: boolean | null, infoSource?: string | null, knownFor: Array<string>, targetedGoods: Array<string>, latestIncident?: { __typename?: 'Incident', id: string, dateAgo: number, reportedBusinessName: string } | null, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, images: Array<{ __typename?: 'Image', id: string, rotation: number, position: ImagePosition, optimised?: string | null, primary?: boolean | null, policeImage?: boolean | null }> } }> } };
+
+export type UpsertPermissionMutationVariables = Exact<{
+  data: UpsertRole;
+}>;
+
+
+export type UpsertPermissionMutation = { __typename?: 'Mutation', upsertPermission: { __typename?: 'CustomRole', id: string } };
+
+export type RoleQueryVariables = Exact<{
+  where: CustomRoleWhereUniqueInput;
+}>;
+
+
+export type RoleQuery = { __typename?: 'Query', role: { __typename?: 'CustomRole', id: string, name: string, usersCount: number, type: Role, permissions: Array<{ __typename?: 'Permission', allowedMethods: Array<PermissionMethod>, model: PermissionModel }>, users: Array<{ __typename?: 'UserScheme', user: { __typename?: 'User', fullName: string, id: string, email: string } }> } };
+
+export type RolesQueryVariables = Exact<{
+  schemeId: Scalars['String'];
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type RolesQuery = { __typename?: 'Query', roles: { __typename?: 'QueryRolesConnection', totalCount: number, edges: Array<{ __typename?: 'QueryRolesConnectionEdge', node: { __typename?: 'CustomRole', id: string, name: string, type: Role, usersCount: number } }>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean } } };
 
 export type CreateCsvImportMutationVariables = Exact<{
   data: CsvImportCreateInput;
@@ -22336,6 +22660,10 @@ export const QuestionDetailsDocument = gql`
     optionsFormatted
     type
     options
+    tags {
+      id
+      dependentBrands
+    }
   }
 }
     `;
@@ -23182,6 +23510,25 @@ export function useUpdateBusinessMutation(baseOptions?: Apollo.MutationHookOptio
 export type UpdateBusinessMutationHookResult = ReturnType<typeof useUpdateBusinessMutation>;
 export type UpdateBusinessMutationResult = Apollo.MutationResult<UpdateBusinessMutation>;
 export type UpdateBusinessMutationOptions = Apollo.BaseMutationOptions<UpdateBusinessMutation, UpdateBusinessMutationVariables>;
+export const BusinessBrandsDocument = gql`
+    query BusinessBrands($where: BusinessWhereUniqueInput!) {
+  business(where: $where) {
+    id
+    brands
+  }
+}
+    `;
+export function useBusinessBrandsQuery(baseOptions: Apollo.QueryHookOptions<BusinessBrandsQuery, BusinessBrandsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BusinessBrandsQuery, BusinessBrandsQueryVariables>(BusinessBrandsDocument, options);
+      }
+export function useBusinessBrandsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BusinessBrandsQuery, BusinessBrandsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BusinessBrandsQuery, BusinessBrandsQueryVariables>(BusinessBrandsDocument, options);
+        }
+export type BusinessBrandsQueryHookResult = ReturnType<typeof useBusinessBrandsQuery>;
+export type BusinessBrandsLazyQueryHookResult = ReturnType<typeof useBusinessBrandsLazyQuery>;
+export type BusinessBrandsQueryResult = Apollo.QueryResult<BusinessBrandsQuery, BusinessBrandsQueryVariables>;
 export const BusinessLocationsDocument = gql`
     query businessLocations($where: BusinessWhereInput, $skip: Int, $take: Int, $orderBy: [BusinessOrderBy!]) {
   listBusinesses(where: $where, skip: $skip, take: $take, orderBy: $orderBy) {
@@ -30188,6 +30535,7 @@ export const ListIncidentTagsDocument = gql`
       priority
       dependentOnQuestionId
       dependentOnAnswerValue
+      dependentOnBrandIds
       options {
         label
         value
@@ -30423,6 +30771,25 @@ export function useTranslateLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type TranslateQueryHookResult = ReturnType<typeof useTranslateQuery>;
 export type TranslateLazyQueryHookResult = ReturnType<typeof useTranslateLazyQuery>;
 export type TranslateQueryResult = Apollo.QueryResult<TranslateQuery, TranslateQueryVariables>;
+export const TranslateTextDocument = gql`
+    query TranslateText($data: TranslateTextInput!) {
+  translateText(data: $data) {
+    translatedText
+    origText
+  }
+}
+    `;
+export function useTranslateTextQuery(baseOptions: Apollo.QueryHookOptions<TranslateTextQuery, TranslateTextQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<TranslateTextQuery, TranslateTextQueryVariables>(TranslateTextDocument, options);
+      }
+export function useTranslateTextLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TranslateTextQuery, TranslateTextQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<TranslateTextQuery, TranslateTextQueryVariables>(TranslateTextDocument, options);
+        }
+export type TranslateTextQueryHookResult = ReturnType<typeof useTranslateTextQuery>;
+export type TranslateTextLazyQueryHookResult = ReturnType<typeof useTranslateTextLazyQuery>;
+export type TranslateTextQueryResult = Apollo.QueryResult<TranslateTextQuery, TranslateTextQueryVariables>;
 export const DeleteUserFromSchemeDocument = gql`
     mutation deleteUserFromScheme($id: String!, $scheme: String!) {
   deleteUserFromScheme(id: $id, scheme: $scheme) {
@@ -30557,11 +30924,13 @@ export const CurrentUserDocument = gql`
     reportToAllBusinesses
     notificationCount(scheme: $scheme)
     messageCount
+    defaultScheme
     businesses {
       id
       name
       fullName
       demId
+      brands
     }
     newUser
     groups {
@@ -30605,6 +30974,10 @@ export const CurrentUserDocument = gql`
         autoPopulateDescription
         needJustification
         requireSiteNumberForUsers
+      }
+      permissions {
+        model
+        allowedMethods
       }
     }
     incidentEmail
@@ -31830,6 +32203,294 @@ export function useListArticlesFeedLazyQuery(baseOptions?: Apollo.LazyQueryHookO
 export type ListArticlesFeedQueryHookResult = ReturnType<typeof useListArticlesFeedQuery>;
 export type ListArticlesFeedLazyQueryHookResult = ReturnType<typeof useListArticlesFeedLazyQuery>;
 export type ListArticlesFeedQueryResult = Apollo.QueryResult<ListArticlesFeedQuery, ListArticlesFeedQueryVariables>;
+export const BrandDocument = gql`
+    query Brand($where: BrandWhereUniqueInput!) {
+  brand(where: $where) {
+    name
+    id
+    description
+    businesses {
+      id
+      name
+    }
+  }
+}
+    `;
+export function useBrandQuery(baseOptions: Apollo.QueryHookOptions<BrandQuery, BrandQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BrandQuery, BrandQueryVariables>(BrandDocument, options);
+      }
+export function useBrandLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BrandQuery, BrandQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BrandQuery, BrandQueryVariables>(BrandDocument, options);
+        }
+export type BrandQueryHookResult = ReturnType<typeof useBrandQuery>;
+export type BrandLazyQueryHookResult = ReturnType<typeof useBrandLazyQuery>;
+export type BrandQueryResult = Apollo.QueryResult<BrandQuery, BrandQueryVariables>;
+export const BrandsDocument = gql`
+    query Brands($where: BrandWhereInput) {
+  brands(where: $where) {
+    name
+    id
+    description
+    businesses {
+      id
+      name
+    }
+  }
+}
+    `;
+export function useBrandsQuery(baseOptions?: Apollo.QueryHookOptions<BrandsQuery, BrandsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BrandsQuery, BrandsQueryVariables>(BrandsDocument, options);
+      }
+export function useBrandsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BrandsQuery, BrandsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BrandsQuery, BrandsQueryVariables>(BrandsDocument, options);
+        }
+export type BrandsQueryHookResult = ReturnType<typeof useBrandsQuery>;
+export type BrandsLazyQueryHookResult = ReturnType<typeof useBrandsLazyQuery>;
+export type BrandsQueryResult = Apollo.QueryResult<BrandsQuery, BrandsQueryVariables>;
+export const CompleteChecklistDocument = gql`
+    mutation CompleteChecklist($data: CompleteActiveChecklistInput!, $where: String!) {
+  completeChecklist(data: $data, where: $where) {
+    id
+    name
+    comments
+    signature
+    status
+    completedAt
+    completedBy {
+      origName
+    }
+    fields {
+      id
+      question
+      type
+      availableAnswers
+      answer {
+        answer
+        additionalComments
+        images
+      }
+      section
+      subsection
+      order
+    }
+    checklistSection {
+      sub
+      section
+      subsection
+      titleLocaled
+    }
+  }
+}
+    `;
+export type CompleteChecklistMutationFn = Apollo.MutationFunction<CompleteChecklistMutation, CompleteChecklistMutationVariables>;
+export function useCompleteChecklistMutation(baseOptions?: Apollo.MutationHookOptions<CompleteChecklistMutation, CompleteChecklistMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CompleteChecklistMutation, CompleteChecklistMutationVariables>(CompleteChecklistDocument, options);
+      }
+export type CompleteChecklistMutationHookResult = ReturnType<typeof useCompleteChecklistMutation>;
+export type CompleteChecklistMutationResult = Apollo.MutationResult<CompleteChecklistMutation>;
+export type CompleteChecklistMutationOptions = Apollo.BaseMutationOptions<CompleteChecklistMutation, CompleteChecklistMutationVariables>;
+export const CreateActiveChecklistDocument = gql`
+    mutation CreateActiveChecklist($data: CreateActiveChecklistInput!) {
+  createActiveChecklist(data: $data) {
+    id
+  }
+}
+    `;
+export type CreateActiveChecklistMutationFn = Apollo.MutationFunction<CreateActiveChecklistMutation, CreateActiveChecklistMutationVariables>;
+export function useCreateActiveChecklistMutation(baseOptions?: Apollo.MutationHookOptions<CreateActiveChecklistMutation, CreateActiveChecklistMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateActiveChecklistMutation, CreateActiveChecklistMutationVariables>(CreateActiveChecklistDocument, options);
+      }
+export type CreateActiveChecklistMutationHookResult = ReturnType<typeof useCreateActiveChecklistMutation>;
+export type CreateActiveChecklistMutationResult = Apollo.MutationResult<CreateActiveChecklistMutation>;
+export type CreateActiveChecklistMutationOptions = Apollo.BaseMutationOptions<CreateActiveChecklistMutation, CreateActiveChecklistMutationVariables>;
+export const CreateUpdateChecklistDocument = gql`
+    mutation CreateUpdateChecklist($data: ChecklistCreateUpdateInput!, $createUpdateChecklistId: String) {
+  createUpdateChecklist(data: $data, id: $createUpdateChecklistId) {
+    id
+  }
+}
+    `;
+export type CreateUpdateChecklistMutationFn = Apollo.MutationFunction<CreateUpdateChecklistMutation, CreateUpdateChecklistMutationVariables>;
+export function useCreateUpdateChecklistMutation(baseOptions?: Apollo.MutationHookOptions<CreateUpdateChecklistMutation, CreateUpdateChecklistMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateUpdateChecklistMutation, CreateUpdateChecklistMutationVariables>(CreateUpdateChecklistDocument, options);
+      }
+export type CreateUpdateChecklistMutationHookResult = ReturnType<typeof useCreateUpdateChecklistMutation>;
+export type CreateUpdateChecklistMutationResult = Apollo.MutationResult<CreateUpdateChecklistMutation>;
+export type CreateUpdateChecklistMutationOptions = Apollo.BaseMutationOptions<CreateUpdateChecklistMutation, CreateUpdateChecklistMutationVariables>;
+export const RecycleChecklistDocument = gql`
+    mutation RecycleChecklist($recycleChecklistId: String!) {
+  recycleChecklist(id: $recycleChecklistId) {
+    id
+  }
+}
+    `;
+export type RecycleChecklistMutationFn = Apollo.MutationFunction<RecycleChecklistMutation, RecycleChecklistMutationVariables>;
+export function useRecycleChecklistMutation(baseOptions?: Apollo.MutationHookOptions<RecycleChecklistMutation, RecycleChecklistMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RecycleChecklistMutation, RecycleChecklistMutationVariables>(RecycleChecklistDocument, options);
+      }
+export type RecycleChecklistMutationHookResult = ReturnType<typeof useRecycleChecklistMutation>;
+export type RecycleChecklistMutationResult = Apollo.MutationResult<RecycleChecklistMutation>;
+export type RecycleChecklistMutationOptions = Apollo.BaseMutationOptions<RecycleChecklistMutation, RecycleChecklistMutationVariables>;
+export const ActiveChecklistsDocument = gql`
+    query ActiveChecklists($first: Int, $after: String, $order: ActiveChecklistOrderByWithRelationInput, $where: ActiveChecklistWhereInput, $take: Int, $skip: Int) {
+  activeChecklists(
+    first: $first
+    after: $after
+    order: $order
+    where: $where
+    take: $take
+    skip: $skip
+  ) {
+    totalCount
+    pageInfo {
+      endCursor
+    }
+    edges {
+      node {
+        id
+        name
+        percentageScore
+        percentComplete
+        status
+        document {
+          id
+          url
+        }
+        updatedAt
+        business {
+          name
+          id
+        }
+        completedAt
+      }
+    }
+  }
+}
+    `;
+export function useActiveChecklistsQuery(baseOptions?: Apollo.QueryHookOptions<ActiveChecklistsQuery, ActiveChecklistsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ActiveChecklistsQuery, ActiveChecklistsQueryVariables>(ActiveChecklistsDocument, options);
+      }
+export function useActiveChecklistsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ActiveChecklistsQuery, ActiveChecklistsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ActiveChecklistsQuery, ActiveChecklistsQueryVariables>(ActiveChecklistsDocument, options);
+        }
+export type ActiveChecklistsQueryHookResult = ReturnType<typeof useActiveChecklistsQuery>;
+export type ActiveChecklistsLazyQueryHookResult = ReturnType<typeof useActiveChecklistsLazyQuery>;
+export type ActiveChecklistsQueryResult = Apollo.QueryResult<ActiveChecklistsQuery, ActiveChecklistsQueryVariables>;
+export const ChecklistsDocument = gql`
+    query Checklists($where: ChecklistWhereInput!, $order: ChecklistOrderByWithRelationInput, $take: Int, $skip: Int) {
+  checklists(where: $where, order: $order, take: $take, skip: $skip) {
+    id
+    titleLocaled
+    descriptionLocaled
+  }
+}
+    `;
+export function useChecklistsQuery(baseOptions: Apollo.QueryHookOptions<ChecklistsQuery, ChecklistsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ChecklistsQuery, ChecklistsQueryVariables>(ChecklistsDocument, options);
+      }
+export function useChecklistsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ChecklistsQuery, ChecklistsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ChecklistsQuery, ChecklistsQueryVariables>(ChecklistsDocument, options);
+        }
+export type ChecklistsQueryHookResult = ReturnType<typeof useChecklistsQuery>;
+export type ChecklistsLazyQueryHookResult = ReturnType<typeof useChecklistsLazyQuery>;
+export type ChecklistsQueryResult = Apollo.QueryResult<ChecklistsQuery, ChecklistsQueryVariables>;
+export const ActiveChecklistDocument = gql`
+    query ActiveChecklist($where: ActiveChecklistWhereUniqueInput!) {
+  activeChecklist(where: $where) {
+    id
+    name
+    comments
+    signature
+    status
+    completedAt
+    percentageScore
+    percentComplete
+    completedBy {
+      origName
+    }
+    fields {
+      id
+      question
+      type
+      availableAnswers
+      answer {
+        answer
+        additionalComments
+        images
+      }
+      section
+      subsection
+      order
+    }
+    checklistSection {
+      sub
+      section
+      subsection
+      titleLocaled
+    }
+  }
+}
+    `;
+export function useActiveChecklistQuery(baseOptions: Apollo.QueryHookOptions<ActiveChecklistQuery, ActiveChecklistQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ActiveChecklistQuery, ActiveChecklistQueryVariables>(ActiveChecklistDocument, options);
+      }
+export function useActiveChecklistLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ActiveChecklistQuery, ActiveChecklistQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ActiveChecklistQuery, ActiveChecklistQueryVariables>(ActiveChecklistDocument, options);
+        }
+export type ActiveChecklistQueryHookResult = ReturnType<typeof useActiveChecklistQuery>;
+export type ActiveChecklistLazyQueryHookResult = ReturnType<typeof useActiveChecklistLazyQuery>;
+export type ActiveChecklistQueryResult = Apollo.QueryResult<ActiveChecklistQuery, ActiveChecklistQueryVariables>;
+export const ChecklistDocument = gql`
+    query Checklist($where: ChecklistWhereUniqueInput!) {
+  checklist(where: $where) {
+    id
+    title
+    description
+    sections {
+      order
+      title
+      subsections {
+        title
+        order
+        questions {
+          order
+          question
+          type
+          weight {
+            weight
+            answer
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+export function useChecklistQuery(baseOptions: Apollo.QueryHookOptions<ChecklistQuery, ChecklistQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ChecklistQuery, ChecklistQueryVariables>(ChecklistDocument, options);
+      }
+export function useChecklistLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ChecklistQuery, ChecklistQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ChecklistQuery, ChecklistQueryVariables>(ChecklistDocument, options);
+        }
+export type ChecklistQueryHookResult = ReturnType<typeof useChecklistQuery>;
+export type ChecklistLazyQueryHookResult = ReturnType<typeof useChecklistLazyQuery>;
+export type ChecklistQueryResult = Apollo.QueryResult<ChecklistQuery, ChecklistQueryVariables>;
 export const CreateCsvZipDocument = gql`
     mutation CreateCsvZip($where: IncidentExportInput!) {
   createCsvZip(where: $where)
@@ -32020,6 +32681,89 @@ export function useListOffendersRelayLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type ListOffendersRelayQueryHookResult = ReturnType<typeof useListOffendersRelayQuery>;
 export type ListOffendersRelayLazyQueryHookResult = ReturnType<typeof useListOffendersRelayLazyQuery>;
 export type ListOffendersRelayQueryResult = Apollo.QueryResult<ListOffendersRelayQuery, ListOffendersRelayQueryVariables>;
+export const UpsertPermissionDocument = gql`
+    mutation UpsertPermission($data: UpsertRole!) {
+  upsertPermission(data: $data) {
+    id
+  }
+}
+    `;
+export type UpsertPermissionMutationFn = Apollo.MutationFunction<UpsertPermissionMutation, UpsertPermissionMutationVariables>;
+export function useUpsertPermissionMutation(baseOptions?: Apollo.MutationHookOptions<UpsertPermissionMutation, UpsertPermissionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpsertPermissionMutation, UpsertPermissionMutationVariables>(UpsertPermissionDocument, options);
+      }
+export type UpsertPermissionMutationHookResult = ReturnType<typeof useUpsertPermissionMutation>;
+export type UpsertPermissionMutationResult = Apollo.MutationResult<UpsertPermissionMutation>;
+export type UpsertPermissionMutationOptions = Apollo.BaseMutationOptions<UpsertPermissionMutation, UpsertPermissionMutationVariables>;
+export const RoleDocument = gql`
+    query Role($where: CustomRoleWhereUniqueInput!) {
+  role(where: $where) {
+    id
+    name
+    usersCount
+    permissions {
+      allowedMethods
+      model
+    }
+    type
+    users {
+      user {
+        fullName
+        id
+        email
+      }
+    }
+  }
+}
+    `;
+export function useRoleQuery(baseOptions: Apollo.QueryHookOptions<RoleQuery, RoleQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<RoleQuery, RoleQueryVariables>(RoleDocument, options);
+      }
+export function useRoleLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RoleQuery, RoleQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<RoleQuery, RoleQueryVariables>(RoleDocument, options);
+        }
+export type RoleQueryHookResult = ReturnType<typeof useRoleQuery>;
+export type RoleLazyQueryHookResult = ReturnType<typeof useRoleLazyQuery>;
+export type RoleQueryResult = Apollo.QueryResult<RoleQuery, RoleQueryVariables>;
+export const RolesDocument = gql`
+    query Roles($schemeId: String!, $skip: Int, $take: Int, $after: String, $first: Int) {
+  roles(
+    schemeId: $schemeId
+    skip: $skip
+    take: $take
+    after: $after
+    first: $first
+  ) {
+    totalCount
+    edges {
+      node {
+        id
+        name
+        type
+        usersCount
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}
+    `;
+export function useRolesQuery(baseOptions: Apollo.QueryHookOptions<RolesQuery, RolesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<RolesQuery, RolesQueryVariables>(RolesDocument, options);
+      }
+export function useRolesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RolesQuery, RolesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<RolesQuery, RolesQueryVariables>(RolesDocument, options);
+        }
+export type RolesQueryHookResult = ReturnType<typeof useRolesQuery>;
+export type RolesLazyQueryHookResult = ReturnType<typeof useRolesLazyQuery>;
+export type RolesQueryResult = Apollo.QueryResult<RolesQuery, RolesQueryVariables>;
 export const CreateCsvImportDocument = gql`
     mutation CreateCsvImport($data: CsvImportCreateInput!) {
   createOneCsvImport(data: $data) {

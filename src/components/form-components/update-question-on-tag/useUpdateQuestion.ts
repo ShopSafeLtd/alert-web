@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react';
 import type { FormInstance } from 'antd';
 import { Form, notification } from 'antd';
 import { useIntl } from 'react-intl';
+import { useStoreState } from 'state';
 import {
   AnswerType,
+  useBrandsQuery,
   useQuestionDetailsQuery,
   useUpdateQuestionOnTagMutation,
 } from '../../../graphql/generated';
@@ -16,6 +18,10 @@ interface Return {
   data: FormData;
   onSubmit: (value: FormData) => void;
   saving: boolean;
+  brands: {
+    label: string;
+    value: string;
+  }[];
 }
 
 export interface FormData {
@@ -27,6 +33,7 @@ export interface FormData {
   required: boolean;
   dependentOn: string;
   dependentAnswer: string | number;
+  dependentBrands: string[];
 }
 
 const { useForm } = Form;
@@ -62,7 +69,6 @@ const useUpdateQuestion = ({
   dependent,
 }: Props): Return => {
   const intl = useIntl();
-
   const [form] = useForm<FormData>();
   const [saving, setSaving] = useState(false);
   const [data, setData] = useState<FormData>({
@@ -74,8 +80,9 @@ const useUpdateQuestion = ({
     newOptions: [],
     dependentOn: '',
     dependentAnswer: '',
+    dependentBrands: [],
   });
-
+  const { id: currentSchemeId } = useStoreState((state) => state.scheme);
   const { data: questionData, loading } = useQuestionDetailsQuery({
     fetchPolicy: 'network-only',
     variables: {
@@ -132,6 +139,9 @@ const useUpdateQuestion = ({
         origOptions: formatOption(),
         dependentOn: checkExists ? dependent?.dependentOn || '' : '',
         dependentAnswer: checkExists ? dependent?.dependentAnswer || '' : '',
+        dependentBrands:
+          questionData.question?.tags?.find((tag) => tag.id === tagQId)
+            ?.dependentBrands || [],
       });
 
       form.setFieldsValue({
@@ -143,9 +153,24 @@ const useUpdateQuestion = ({
         origOptions: formatOption(),
         dependentOn: checkExists ? dependent?.dependentOn || '' : '',
         dependentAnswer: checkExists ? dependent?.dependentAnswer || '' : '',
+        dependentBrands:
+          questionData.question?.tags?.find((tag) => tag.id === tagQId)
+            ?.dependentBrands || [],
       });
     }
   }, [questionData, required]);
+
+  const { data: BrandsData, loading: brandsLoading } = useBrandsQuery({
+    variables: {
+      where: {
+        scheme: {
+          id: {
+            equals: currentSchemeId,
+          },
+        },
+      },
+    },
+  });
 
   const onSubmit = (values: FormData) => {
     setSaving(true);
@@ -183,6 +208,7 @@ const useUpdateQuestion = ({
           dependentAnswer: answerString ?? undefined,
           dependentOnQId: dependentOnTag?.questionId,
           dependentOnTagQId: values.dependentOn ?? undefined,
+          brands: values.dependentBrands ?? [],
           tag: {
             id: tagQId,
             req: values.required,
@@ -191,7 +217,13 @@ const useUpdateQuestion = ({
       },
     });
   };
-  return { data, loading, form, onSubmit, saving };
+
+  const brands =
+    BrandsData?.brands?.map((brand) => ({
+      label: brand?.name || '',
+      value: brand?.id || '',
+    })) || [];
+  return { data, loading, form, onSubmit, saving, brands };
 };
 
 export default useUpdateQuestion;

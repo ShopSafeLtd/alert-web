@@ -1,0 +1,6 @@
+query BusinessBrands($where: BusinessWhereUniqueInput!) {
+  business(where: $where) {
+    id
+    brands
+  }
+}
