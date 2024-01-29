@@ -123,7 +123,12 @@ const SideNavContent = (props: SideNavContentProps) => {
     id: userId,
     dem,
     businesses,
+    schemes,
   } = useStoreState((state) => state.user);
+
+  const permissions = schemes.flatMap((scheme) =>
+    scheme.permissions.map(({ model }) => model)
+  );
   const { restrictIncidentAccess, reportOnly } = useStoreState(
     (state) => state.scheme
   );
@@ -132,10 +137,7 @@ const SideNavContent = (props: SideNavContentProps) => {
     if (userRole === 'USER' && reportOnly) {
       return ReportOnlyNavigationConfig;
     }
-    const filteredConfig = navConfig.filter((el) =>
-      el.roles?.includes(userRole)
-    );
-
+    const filteredConfig = navConfig;
     if (userRole === 'USER' && restrictIncidentAccess) {
       return filteredConfig.filter((el) => el.title !== 'Incidents');
     }
@@ -170,6 +172,19 @@ const SideNavContent = (props: SideNavContentProps) => {
     [BadgeTypes.message]: messages,
   };
 
+  // console.log('config', navigationConfig);
+  // console.log(
+  //   'childPermissions',
+  //   navigationConfig.filter((el) => {
+  //     console.log(el.childPermissions);
+  //     return el.childPermissions
+  //       ? el.childPermissions.some((childPermission) =>
+  //           permissions.includes(childPermission)
+  //         )
+  //       : true;
+  //   })
+  // );
+
   return (
     <div
       style={{
@@ -195,6 +210,18 @@ const SideNavContent = (props: SideNavContentProps) => {
       >
         {navigationConfig
           .filter((el) => (el.requireDemId ? dem.length > 0 : true))
+          .filter((el) =>
+            el.childPermissions
+              ? el.childPermissions.some((childPermission) =>
+                  permissions.includes(childPermission)
+                )
+              : true
+          )
+          .filter((el) =>
+            el.permission
+              ? el.permission.some((i) => permissions.includes(i.model))
+              : true
+          )
           .map((menu) =>
             menu.submenu.length > 0 ? (
               <Menu.SubMenu
@@ -204,7 +231,9 @@ const SideNavContent = (props: SideNavContentProps) => {
               >
                 {menu.submenu
                   .filter((el) =>
-                    el.roles ? el.roles.includes(userRole) : true
+                    el.permission
+                      ? el.permission.some((i) => permissions.includes(i.model))
+                      : true
                   )
                   .map((subMenuFirst) =>
                     subMenuFirst.submenu.length > 0 ? (

@@ -1,0 +1,5 @@
+mutation CreateActiveChecklist($data: CreateActiveChecklistInput!) {
+  createActiveChecklist(data: $data) {
+    id
+  }
+}

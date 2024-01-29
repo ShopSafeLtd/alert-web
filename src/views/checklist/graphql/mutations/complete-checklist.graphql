@@ -1,0 +1,36 @@
+mutation CompleteChecklist(
+  $data: CompleteActiveChecklistInput!
+  $where: String!
+) {
+  completeChecklist(data: $data, where: $where) {
+    id
+    name
+    comments
+    signature
+    status
+    completedAt
+    completedBy {
+      origName
+    }
+    fields {
+      id
+      question
+      type
+      availableAnswers
+      answer {
+        answer
+        additionalComments
+        images
+      }
+      section
+      subsection
+      order
+    }
+    checklistSection {
+      sub
+      section
+      subsection
+      titleLocaled
+    }
+  }
+}

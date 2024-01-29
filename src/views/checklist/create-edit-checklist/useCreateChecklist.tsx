@@ -1,0 +1,499 @@
+/* eslint-disable no-restricted-syntax */
+import { useEffect, useState } from 'react';
+import type { FormInstance } from 'antd';
+import { Form } from 'antd';
+import { useNavigate, useParams } from 'react-router';
+import type { ChecklistAnswerType } from '../../../graphql/generated';
+import {
+  useChecklistQuery,
+  useCreateUpdateChecklistMutation,
+} from '../../../graphql/generated';
+import { useStoreState } from '../../../state';
+
+export interface Section {
+  order: number;
+  title: string;
+  description: string;
+  subsections: Subsection[];
+}
+
+interface Subsection {
+  order: number;
+  title: string;
+  description: string;
+  questions: Question[];
+}
+
+interface Question {
+  order: number;
+  title: string;
+  type: 'PASS_FAIL' | 'YES_NO' | 'GOOD_BAD' | 'TEXT';
+  weighted: boolean;
+  passWeight?: number;
+  failWeight?: number;
+  // Add other question properties here
+}
+
+export function findChangedSectionIndex(
+  data: Section[] | Subsection[] | Question[]
+) {
+  return data.findIndex(Boolean);
+}
+
+export interface FormData {
+  title: string;
+  description: string;
+  sections: Section[];
+}
+
+interface Return {
+  form: FormInstance<FormData>;
+  onFinish: (data: FormData) => void;
+  handleAddSection: () => void;
+  handleRemoveSection: (index: number) => void;
+  handleSectionChange: (
+    changedValues: {
+      sections: Section[];
+    },
+    allValues: {
+      sections: Section[];
+    }
+  ) => void;
+  handleAddSubsection: (index: number) => void;
+  handleRemoveSubsection: (
+    sectionIndex: number,
+    subsectionIndex: number
+  ) => void;
+  handleAddQuestion: (sectionIndex: number, subSectionIndex: number) => void;
+  handleRemoveQuestion: (
+    sectionIndex: number,
+    subsectionIndex: number,
+    questionIndex: number
+  ) => void;
+  loading: boolean;
+}
+
+// create a funciton that gets an object of the following shape and an language code
+// {1 item
+// "en":"Who?"
+// }
+// find the correct language code and return the value
+// or return the first value if the language code is not found
+
+const getQuestion = (
+  question: {
+    [key: string]: string;
+  },
+  languageCode: string
+) => {
+  const keys = Object.keys(question);
+  const key = keys.find((k) => k === languageCode);
+  if (key) {
+    return question[key];
+  }
+  return question[keys[0]];
+};
+
+const getWeight = (
+  type: ChecklistAnswerType,
+  weights: {
+    answer: string;
+    weight: number;
+  }[]
+) => {
+  switch (type) {
+    case 'PASS_FAIL': {
+      return {
+        passWeight: weights.find((weight) => weight.answer === 'PASS')?.weight,
+        failWeight: weights.find((weight) => weight.answer === 'FAIL')?.weight,
+      };
+    }
+    case 'YES_NO': {
+      return {
+        passWeight: weights.find((weight) => weight.answer === 'YES')?.weight,
+        failWeight: weights.find((weight) => weight.answer === 'NO')?.weight,
+      };
+    }
+    case 'GOOD_BAD': {
+      return {
+        passWeight: weights.find((weight) => weight.answer === 'GOOD')?.weight,
+        failWeight: weights.find((weight) => weight.answer === 'BAD')?.weight,
+      };
+    }
+    case 'TEXT': {
+      return {
+        passWeight: weights.find((weight) => weight.answer === 'TEXT')?.weight,
+        failWeight: undefined,
+      };
+    }
+    // eslint-disable-next-line sonarjs/no-duplicated-branches
+    default: {
+      return {
+        passWeight: weights.find((weight) => weight.answer === 'PASS')?.weight,
+        failWeight: weights.find((weight) => weight.answer === 'FAIL')?.weight,
+      };
+    }
+  }
+};
+
+export function useCreateChecklist(): Return {
+  const [form] = Form.useForm();
+  const [sections, setSections] = useState<Section[]>([
+    { order: 1, title: '', description: '', subsections: [] },
+  ]);
+
+  const [createUpdateChecklist] = useCreateUpdateChecklistMutation();
+
+  const { id } = useParams();
+  const language = useStoreState((state) => state.theme.locale);
+  const createAnswerWeight = (
+    type: 'PASS_FAIL' | 'YES_NO' | 'GOOD_BAD' | 'TEXT',
+    passWeight: number,
+    failWeight: number
+  ) => {
+    switch (type) {
+      case 'PASS_FAIL': {
+        return [
+          { answer: 'PASS', weight: passWeight },
+          { answer: 'FAIL', weight: failWeight },
+        ];
+      }
+      case 'YES_NO': {
+        return [
+          { answer: 'YES', weight: passWeight },
+          { answer: 'NO', weight: failWeight },
+        ];
+      }
+      case 'GOOD_BAD': {
+        return [
+          { answer: 'GOOD', weight: passWeight },
+          { answer: 'BAD', weight: failWeight },
+        ];
+      }
+      case 'TEXT': {
+        return [{ answer: 'TEXT', weight: passWeight }];
+      }
+      // eslint-disable-next-line sonarjs/no-duplicated-branches
+      default: {
+        return [
+          { answer: 'PASS', weight: passWeight },
+          { answer: 'FAIL', weight: failWeight },
+        ];
+      }
+    }
+  };
+
+  const { loading } = useChecklistQuery({
+    skip: !id,
+    variables: {
+      where: {
+        id: id || '',
+      },
+    },
+    onCompleted: (data) => {
+      //      case 'PASS_FAIL': {
+      //         return [
+      //           { answer: 'PASS', weight: passWeight },
+      //           { answer: 'FAIL', weight: failWeight },
+      //         ];
+      //       }
+      //       case 'YES_NO': {
+      //         return [
+      //           { answer: 'YES', weight: passWeight },
+      //           { answer: 'NO', weight: failWeight },
+      //         ];
+      //       }
+      //       case 'GOOD_BAD': {
+      //         return [
+      //           { answer: 'GOOD', weight: passWeight },
+      //           { answer: 'BAD', weight: failWeight },
+      //         ];
+      //       }
+      //       case 'TEXT': {
+      //         return [{ answer: 'TEXT', weight: passWeight }];
+      //       }
+      //       // eslint-disable-next-line sonarjs/no-duplicated-branches
+      //       default: {
+      //         return [
+      //           { answer: 'PASS', weight: passWeight },
+      //           { answer: 'FAIL', weight: failWeight },
+      //         ];
+      //       }
+      // use the above when given a type find what format the pass and fail weight should be
+
+      form.setFieldsValue({
+        title: data.checklist.title,
+        description: data.checklist.description,
+        sections: data.checklist.sections.map((section) => ({
+          order: section.order,
+          title: section.title,
+          subsections: section.subsections.map((subsection) => ({
+            order: subsection.order,
+            title: subsection.title,
+            questions: subsection.questions.map((question) => ({
+              order: question.order,
+              title: getQuestion(question.question, language),
+              type: question.type,
+              weighted: question.weight.length > 0,
+              passWeight: getWeight(question.type, question.weight).passWeight,
+              failWeight: getWeight(question.type, question.weight).failWeight,
+            })),
+          })),
+        })),
+      });
+    },
+  });
+  const navigate = useNavigate();
+  const onFinish = (values: FormData) => {
+    void createUpdateChecklist({
+      variables: {
+        data: {
+          title: values.title,
+          description: values.description,
+          sections: values.sections.map((section) => ({
+            title: section.title,
+            order: section.order,
+            subsections: section.subsections.map((subsection) => ({
+              order: subsection.order,
+              title: subsection.title,
+              questions: subsection.questions.map((question) => ({
+                order: question.order,
+                question: question.title,
+                type: question.type as ChecklistAnswerType,
+                weight: question.weighted
+                  ? createAnswerWeight(
+                      question.type,
+                      question.passWeight || 5,
+                      question.failWeight || 0
+                    )
+                  : [],
+              })),
+            })),
+          })),
+        },
+      },
+      onCompleted: () => {
+        navigate('/app/checklists');
+      },
+    });
+  };
+
+  const handleAddSection = () => {
+    const formSections = form.getFieldValue('sections') as Section[];
+    const newOrder =
+      formSections.length > 0
+        ? Math.max(...formSections.map((s) => s.order)) + 1
+        : 1;
+    setSections([
+      ...formSections,
+      { order: newOrder, title: '', description: '', subsections: [] },
+    ]);
+  };
+
+  const handleRemoveSection = (index) => {
+    const formSections = form.getFieldValue('sections') as Section[];
+    const newSections = formSections.filter((_, i) => i !== index);
+
+    // Update the order of the remaining sections
+    for (const [newIndex, section] of newSections.entries()) {
+      section.order = newIndex + 1;
+    }
+
+    setSections(newSections);
+  };
+
+  const handleSectionChange = (
+    changedValues: {
+      sections: Section[];
+    },
+    allValues: {
+      sections: Section[];
+    }
+  ) => {
+    if ('sections' in changedValues) {
+      let changedSectionIndex = -1;
+      changedSectionIndex = findChangedSectionIndex(changedValues.sections);
+      // get the changed section
+      const changedSection = changedValues.sections[changedSectionIndex];
+      if (changedSection && 'subsections' in changedSection) {
+        const changedSubSectionIndex = findChangedSectionIndex(
+          changedSection.subsections
+        );
+        const changedSubSection =
+          changedSection.subsections[changedSubSectionIndex];
+        if (changedSubSection && 'questions' in changedSubSection) {
+          const changedQuestionIndex = findChangedSectionIndex(
+            changedSubSection.questions
+          );
+          const changedQuestion =
+            changedSubSection.questions[changedQuestionIndex];
+          if (changedQuestion?.order) {
+            const sectionToUpdate = allValues.sections[changedSectionIndex];
+            const { subsections } = sectionToUpdate;
+            const subsectionToUpdate = subsections[changedSubSectionIndex];
+            const { questions } = subsectionToUpdate;
+            const removed = questions.splice(changedQuestionIndex, 1);
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            questions.splice(changedQuestion.order - 1, 0, {
+              ...removed[0],
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              ...changedQuestion,
+            });
+            for (const [index, question] of questions.entries()) {
+              question.order = index + 1;
+            }
+            const updatedSections = allValues.sections.map(
+              (section, index) => ({
+                ...sections[index],
+                ...section,
+              })
+            );
+            setSections(updatedSections);
+          }
+
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+        } else if (changedSubSection.order) {
+          const sectionToUpdate = allValues.sections[changedSectionIndex];
+          const { subsections } = sectionToUpdate;
+          const removed = subsections.splice(changedSubSectionIndex, 1);
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+          subsections.splice(changedSubSection.order - 1, 0, {
+            ...removed[0],
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            ...changedSubSection,
+          });
+          for (const [index, subsection] of subsections.entries()) {
+            subsection.order = index + 1;
+          }
+          const updatedSections = allValues.sections.map((section, index) => ({
+            ...sections[index],
+            ...section,
+          }));
+          setSections(updatedSections);
+        }
+      } // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      else if (changedSection?.order) {
+        const updatedSections = allValues.sections.map((section, index) => ({
+          ...sections[index],
+          ...section,
+        }));
+
+        for (const [index, section] of updatedSections.entries()) {
+          if (section.order !== sections[index]?.order) {
+            changedSectionIndex = index;
+          }
+        }
+
+        if (changedSectionIndex !== -1) {
+          // Move the changed section to its new position
+          const removedSection = updatedSections.splice(
+            changedSectionIndex,
+            1
+          )[0];
+          const sectionToAdd = {
+            ...removedSection,
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            ...changedSection,
+          } as Section;
+
+          updatedSections.splice(removedSection.order - 1, 0, sectionToAdd);
+
+          // Normalize the order of all sections
+          for (const [index, section] of updatedSections.entries()) {
+            section.order = index + 1;
+          }
+
+          setSections(updatedSections);
+        }
+      }
+    }
+  };
+
+  const handleAddSubsection = (sectionIndex: number) => {
+    const formSections = form.getFieldValue('sections') as Section[];
+    const newSections = [...formSections];
+    const { subsections } = newSections[sectionIndex];
+    const newOrder =
+      subsections.length > 0
+        ? Math.max(...subsections.map((s) => s.order)) + 1
+        : 1;
+    subsections.push({
+      order: newOrder,
+      title: '',
+      description: '',
+      questions: [],
+    });
+    setSections(newSections);
+  };
+
+  const handleRemoveSubsection = (
+    sectionIndex: number,
+    subsectionIndex: number
+  ) => {
+    const formSections = form.getFieldValue('sections') as Section[];
+    const newSections = [...formSections];
+    const { subsections } = newSections[sectionIndex];
+    subsections.splice(subsectionIndex, 1);
+    for (const [newIndex, subsection] of subsections.entries()) {
+      subsection.order = newIndex + 1;
+    }
+    setSections(newSections);
+  };
+
+  const handleAddQuestion = (sectionIndex: number, subSectionIndex: number) => {
+    const formSections = form.getFieldValue('sections') as Section[];
+    const newSections = [...formSections];
+    const { subsections } = newSections[sectionIndex];
+    const subSectionToAddTo = subsections[subSectionIndex];
+    const { questions } = subSectionToAddTo;
+    const newOrder =
+      questions.length > 0 ? Math.max(...questions.map((s) => s.order)) + 1 : 1;
+    questions.push({
+      order: newOrder,
+      title: '',
+      type: 'PASS_FAIL',
+      weighted: false,
+    });
+    setSections(newSections);
+  };
+
+  const handleRemoveQuestion = (
+    sectionIndex: number,
+    subsectionIndex: number,
+    questionIndex: number
+  ) => {
+    const formSections = form.getFieldValue('sections') as Section[];
+    const newSections = [...formSections];
+    const { subsections } = newSections[sectionIndex];
+    const { questions } = subsections[subsectionIndex];
+    questions.splice(questionIndex, 1);
+    for (const [newIndex, question] of questions.entries()) {
+      question.order = newIndex + 1;
+    }
+    setSections(newSections);
+  };
+
+  useEffect(() => {
+    form.setFieldsValue({ sections });
+  }, [sections, form]);
+  return {
+    form,
+    loading,
+    onFinish,
+    handleAddSection,
+    handleRemoveSection,
+    handleSectionChange,
+    handleAddSubsection,
+    handleRemoveSubsection,
+    handleAddQuestion,
+    handleRemoveQuestion,
+  };
+}

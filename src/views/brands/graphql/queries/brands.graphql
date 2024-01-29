@@ -1,0 +1,11 @@
+query Brands($where: BrandWhereInput) {
+  brands(where: $where) {
+    name
+    id
+    description
+    businesses {
+      id
+      name
+    }
+  }
+}

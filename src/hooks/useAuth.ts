@@ -52,6 +52,7 @@ const useAuth = (): Return => {
 
   interface HandleSuccessArgs extends SetUserPayload {
     accessToken: string;
+    defaultScheme?: string;
   }
 
   const loginRoute = () => {
@@ -80,13 +81,17 @@ const useAuth = (): Return => {
     userMessages,
     defaultGroups,
     reportToAllBusinesses,
+    defaultScheme,
   }: HandleSuccessArgs) => {
     // const color = `hsl(${Math.random() * 360}, 70%, 30%)`;
 
     const handleNoValidScheme = () => {
-      const schemeDetails = schemes[0]?.scheme;
+      const defScheme =
+        schemes.find(({ scheme: { id: sId } }) => sId === defaultScheme) ||
+        schemes[0];
+      const schemeDetails = defScheme?.scheme;
       window.localStorage.setItem('currentScheme', schemeDetails?.id || '');
-      setRole({ role: schemes[0]?.role });
+      setRole({ role: defScheme?.role });
       setScheme({
         autoPopulateDescription: schemeDetails?.autoPopulateDescription,
         needJustification: schemeDetails?.needJustification,
@@ -114,9 +119,9 @@ const useAuth = (): Return => {
           (el) => el.scheme.id === schemeDetails.id
         ),
       });
-      setTodos({ userTodos: schemes[0]?.scheme?.userTodos || 0 });
+      setTodos({ userTodos: defScheme?.scheme?.userTodos || 0 });
       setNotifications({
-        userNotifications: schemes[0]?.scheme?.userNotifications || 0,
+        userNotifications: defScheme?.scheme?.userNotifications || 0,
       });
     };
 
@@ -278,6 +283,7 @@ const useAuth = (): Return => {
         userNotifications: currentUser?.notificationCount || 0,
         userMessages: currentUser?.messageCount || 0,
         defaultGroups: currentUser?.defaultGroups || [],
+        defaultScheme: currentUser?.defaultScheme || undefined,
         filterDefaultGroups:
           currentUser?.defaultGroups.filter((el) => el.scheme.id === scheme) ||
           [],

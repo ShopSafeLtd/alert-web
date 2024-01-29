@@ -10,11 +10,13 @@ query currentUser($scheme: UniqueId) {
     reportToAllBusinesses
     notificationCount(scheme: $scheme)
     messageCount
+    defaultScheme
     businesses {
       id
       name
       fullName
       demId
+      brands
     }
     newUser
     groups {
@@ -58,6 +60,10 @@ query currentUser($scheme: UniqueId) {
         autoPopulateDescription
         needJustification
         requireSiteNumberForUsers
+      }
+      permissions {
+        model
+        allowedMethods
       }
     }
     incidentEmail

@@ -1,0 +1,35 @@
+query ActiveChecklist($where: ActiveChecklistWhereUniqueInput!) {
+  activeChecklist(where: $where) {
+    id
+    name
+    comments
+    signature
+    status
+    completedAt
+    percentageScore
+    percentComplete
+    completedBy {
+      origName
+    }
+    fields {
+      id
+      question
+      type
+      availableAnswers
+      answer {
+        answer
+        additionalComments
+        images
+      }
+      section
+      subsection
+      order
+    }
+    checklistSection {
+      sub
+      section
+      subsection
+      titleLocaled
+    }
+  }
+}

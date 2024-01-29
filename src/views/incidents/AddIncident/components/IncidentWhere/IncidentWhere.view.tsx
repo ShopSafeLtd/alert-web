@@ -19,6 +19,7 @@ interface Props {
   newAddressData: LocationData | undefined;
   updateNewAddressData: (value: LocationData | undefined) => void;
   hideField: boolean;
+  onSelectedBusiness: (value: string) => void;
   showSiteNumber: boolean;
 }
 
@@ -29,6 +30,7 @@ const IncidentWhere = ({
   newAddressData,
   updateNewAddressData,
   hideField,
+  onSelectedBusiness,
   showSiteNumber,
 }: Props) => {
   const classes = useStyles();
@@ -94,6 +96,10 @@ const IncidentWhere = ({
                       )}
                       fetchOptions={onSearchBusiness}
                       style={{ width: 300 }}
+                      onSelect={({ value }) => {
+                        console.log(value);
+                        onSelectedBusiness(value as string);
+                      }}
                     />
                   </Form.Item>
                 </Col>

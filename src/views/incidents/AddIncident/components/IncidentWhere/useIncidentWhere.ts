@@ -5,21 +5,33 @@ import type {
   SearchBusinessesQuery,
   SearchBusinessesQueryVariables,
 } from 'graphql/generated';
-import { QueryMode, Role, SearchBusinessesDocument } from 'graphql/generated';
+import {
+  QueryMode,
+  Role,
+  SearchBusinessesDocument,
+  useBusinessBrandsLazyQuery,
+} from 'graphql/generated';
 import { useStoreState } from 'state';
 import { useIntl } from 'react-intl';
 
 interface Props {
   showSiteNumber: boolean;
+  brands: string[];
+  setBrands: (value: string[]) => void;
 }
 interface Return {
   onSearchBusiness: (
     value: string
   ) => Promise<{ label: React.ReactNode; value: string }[]>;
   hideField: boolean;
+  onSelectedBusiness: (value: string) => void;
 }
 
-const useIncidentWhere = ({ showSiteNumber }: Props): Return => {
+const useIncidentWhere = ({
+  showSiteNumber,
+  brands: _,
+  setBrands,
+}: Props): Return => {
   const client = useApolloClient();
   const intl = useIntl();
   const { id: schemeId } = useStoreState((state) => state.scheme);
@@ -92,9 +104,26 @@ const useIncidentWhere = ({ showSiteNumber }: Props): Return => {
             ]
       );
 
+  const [getBrands] = useBusinessBrandsLazyQuery();
+
+  const onSelectedBusiness = async (value: string) => {
+    const businessData = await getBrands({
+      variables: {
+        where: {
+          id: value,
+        },
+      },
+    });
+    if (businessData.data?.business?.brands) {
+      setBrands(businessData.data?.business?.brands || []);
+    }
+  };
+
   return {
     onSearchBusiness,
     hideField,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    onSelectedBusiness,
   };
 };
 

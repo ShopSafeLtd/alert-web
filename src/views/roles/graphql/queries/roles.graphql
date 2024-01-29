@@ -1,0 +1,29 @@
+query Roles(
+  $schemeId: String!
+  $skip: Int
+  $take: Int
+  $after: String
+  $first: Int
+) {
+  roles(
+    schemeId: $schemeId
+    skip: $skip
+    take: $take
+    after: $after
+    first: $first
+  ) {
+    totalCount
+    edges {
+      node {
+        id
+        name
+        type
+        usersCount
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}

@@ -7,10 +7,12 @@ import type { AvailableQuestionsQuery } from '../../../graphql/generated';
 import {
   AnswerType,
   useAvailableQuestionsQuery,
+  useBrandsQuery,
   useCreateOrAddQuestionMutation,
 } from '../../../graphql/generated';
 import errorNotification from '../../../types/mutation_notifications/error_notification';
 import type { TagQuestion } from '../update-question-on-tag/UpdateQuestion.container';
+import { useStoreState } from '../../../state';
 
 interface Return {
   questionData: AvailableQuestionsQuery | undefined;
@@ -19,6 +21,10 @@ interface Return {
   data: FormData;
   onSubmit: (value: FormData) => void;
   saving: boolean;
+  brands: {
+    label: string;
+    value: string;
+  }[];
 }
 
 export interface FormData {
@@ -29,6 +35,7 @@ export interface FormData {
   required: boolean;
   dependentOn: string;
   dependentAnswer: string | number;
+  dependentBrands: string[];
 }
 
 const { useForm } = Form;
@@ -59,6 +66,20 @@ const useAddQuestion = ({ onClose, tagQuestions }: Props): Return => {
     required: false,
     dependentOn: '',
     dependentAnswer: '',
+    dependentBrands: [],
+  });
+  const { id: currentSchemeId } = useStoreState((state) => state.scheme);
+
+  const { data: BrandsData, loading: brandsLoading } = useBrandsQuery({
+    variables: {
+      where: {
+        scheme: {
+          id: {
+            equals: currentSchemeId,
+          },
+        },
+      },
+    },
   });
 
   const [addQuestion] = useCreateOrAddQuestionMutation({
@@ -107,6 +128,7 @@ const useAddQuestion = ({ onClose, tagQuestions }: Props): Return => {
       dependentAnswer: answerString ?? undefined,
       dependentOnQId: dependentOnTag?.questionId ?? undefined,
       dependentOnTagQId: values.dependentOn ?? undefined,
+      brands: values.dependentBrands ?? [],
     };
     void addQuestion({
       variables: values.selectedId
@@ -121,7 +143,12 @@ const useAddQuestion = ({ onClose, tagQuestions }: Props): Return => {
           },
     });
   };
-  return { data, loading, form, questionData, onSubmit, saving };
+  const brands =
+    BrandsData?.brands?.map((brand) => ({
+      label: brand?.name || '',
+      value: brand?.id || '',
+    })) || [];
+  return { data, loading:loading||brandsLoading, form, questionData, onSubmit, saving, brands };
 };
 
 export default useAddQuestion;

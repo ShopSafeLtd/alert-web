@@ -8,6 +8,8 @@ interface Props {
   toggleAddNewAddress: () => void;
   newAddressData: LocationData | undefined;
   updateNewAddressData: (value: LocationData | undefined) => void;
+  brands: string[];
+  setBrands: (value: string[]) => void;
   showSiteNumber: boolean;
 }
 
@@ -16,12 +18,19 @@ const IncidentWhere = ({
   toggleAddNewAddress,
   updateNewAddressData,
   newAddressData,
+  brands,
+  setBrands,
   showSiteNumber,
 }: Props) => {
-  const { onSearchBusiness, hideField } = useIncidentWhere({ showSiteNumber });
+  const { onSearchBusiness, hideField, onSelectedBusiness } = useIncidentWhere({
+    brands,
+    setBrands,
+    showSiteNumber,
+  });
 
   return (
     <View
+      onSelectedBusiness={onSelectedBusiness}
       onSearchBusiness={onSearchBusiness}
       newAddressData={newAddressData}
       saving={saving}

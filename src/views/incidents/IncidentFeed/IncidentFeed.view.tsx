@@ -106,11 +106,7 @@ const IncidentFeed = ({
   return (
     <div
       className="feed-container"
-      style={
-        loading
-          ? { padding: 10, paddingRight: 12 }
-          : { padding: 10, paddingRight: 0, paddingBottom: 0 }
-      }
+      style={loading ? { padding: 10, paddingRight: 12 } : { paddingRight: 0 }}
     >
       <Card
         bodyStyle={{ padding: 10 }}

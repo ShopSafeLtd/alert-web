@@ -12,21 +12,155 @@ import CrimeGroupReport from 'views/reports/crime-groups/crime-group-report';
 import BusinessReport from 'views/reports/business/BusinessReport';
 import UserEngagement from 'views/reports/UserEngagement';
 import DataAudit from 'views/reports/DataAudit';
+import PermissionCheckWrapper from '../../../components/PermissionCheck/PermissionCheckWrapper';
+import { PermissionMethod, PermissionModel } from '../../../graphql/generated';
 
-const Article = (): JSX.Element => (
+const Reports = (): JSX.Element => (
   <Routes>
-    <Route path="performance-report" element={<PerformanceReport />} />
-    <Route path="offender-profile" element={<OffenderProfileSearch />} />
-    <Route path="offender-profile/:id" element={<OffenderEngagement />} />
-    <Route path="incident-map" element={<IncidentMap />} />
-    <Route path="business" element={<BusinessSearch />} />
-    <Route path="business-engagement" element={<BusinessEngagement />} />
-    <Route path="user-engagement" element={<UserEngagement />} />
-    <Route path="data-audit" element={<DataAudit />} />
-    <Route path="crime-groups" element={<CrimeGroupList />} />
-    <Route path="crime-groups/:id" element={<CrimeGroupReport />} />
-    <Route path="business/:id" element={<BusinessReport />} />
+    <Route
+      path="performance-report"
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Reports,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <PerformanceReport />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="offender-profile"
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Reports,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <OffenderProfileSearch />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="offender-profile/:id"
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Reports,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <OffenderEngagement />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="incident-map"
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Reports,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <IncidentMap />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="business"
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Reports,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <BusinessSearch />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="business-engagement"
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Reports,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <BusinessEngagement />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="user-engagement"
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Reports,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <UserEngagement />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="data-audit"
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Reports,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <DataAudit />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="crime-groups"
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Reports,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <CrimeGroupList />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="crime-groups/:id"
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Reports,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <CrimeGroupReport />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="business/:id"
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Reports,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <BusinessReport />
+        </PermissionCheckWrapper>
+      }
+    />
   </Routes>
 );
 
-export default Article;
+export default Reports;

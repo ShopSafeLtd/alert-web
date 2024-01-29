@@ -9,7 +9,7 @@ interface Props {
 }
 
 const AddQuestionContainer = ({ onClose, tagQuestions }: Props) => {
-  const { data, form, questionData, saving, loading, onSubmit } =
+  const { data, form, questionData, saving, loading, onSubmit, brands } =
     useAddQuestion({ onClose, tagQuestions });
   return (
     <View
@@ -21,6 +21,7 @@ const AddQuestionContainer = ({ onClose, tagQuestions }: Props) => {
       saving={saving}
       tagQuestions={tagQuestions}
       onClose={onClose}
+      brands={brands}
     />
   );
 };

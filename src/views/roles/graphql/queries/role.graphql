@@ -1,0 +1,19 @@
+query Role($where: CustomRoleWhereUniqueInput!) {
+  role(where: $where) {
+    id
+    name
+    usersCount
+    permissions {
+      allowedMethods
+      model
+    }
+    type
+    users {
+      user {
+        fullName
+        id
+        email
+      }
+    }
+  }
+}

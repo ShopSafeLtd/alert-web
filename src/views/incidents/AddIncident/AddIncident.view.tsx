@@ -42,6 +42,8 @@ interface Props {
   customQuestions: CustomQuestion[];
   goodsMode: string;
   reportOnly: boolean;
+  brands: string[];
+  setBrands: (value: string[]) => void;
   showSiteNumber: boolean;
 }
 
@@ -65,6 +67,8 @@ const AddIncident = ({
   goodsMode,
   reportOnly,
   showSiteNumber,
+  brands,
+  setBrands,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
@@ -99,6 +103,8 @@ const AddIncident = ({
             case IncidentFormField.Where: {
               return (
                 <IncidentWhere
+                  brands={brands}
+                  setBrands={setBrands}
                   updateNewAddressData={updateNewAddressData}
                   newAddressData={newAddressData}
                   toggleAddNewAddress={toggleAddNewAddress}

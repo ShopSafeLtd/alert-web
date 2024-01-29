@@ -17,6 +17,7 @@ query ListIncidentTags($where: IncidentTagsInput!) {
       priority
       dependentOnQuestionId
       dependentOnAnswerValue
+      dependentOnBrandIds
       options {
         label
         value

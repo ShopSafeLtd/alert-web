@@ -1,0 +1,6 @@
+query TranslateText($data: TranslateTextInput!) {
+  translateText(data: $data) {
+    translatedText
+    origText
+  }
+}

@@ -164,6 +164,8 @@ interface Return {
   customQuestions: CustomQuestion[];
   goodsMode: GoodsMode;
   reportOnly: boolean;
+  brands: string[];
+  setBrands: (value: string[]) => void;
   showSiteNumber: boolean;
 }
 
@@ -202,6 +204,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
   const [customQuestions, setCustomQuestions] = useState<CustomQuestion[]>([]);
   const showSiteNumber = requireSiteNumberForUsers && role === Role.User;
 
+  const [brands, setBrands] = useState<string[]>([]);
   useEffect(() => {
     Mixpanel.track('Start new incident form');
   }, []);
@@ -214,6 +217,9 @@ const useAddIncident = ({ investigationId }: Props): Return => {
           value: businesses[0].id,
         },
       });
+    } else {
+      const businessBrands = businesses[0].brands;
+      setBrands(businessBrands);
     }
   }, [businesses]);
 
@@ -937,23 +943,42 @@ const useAddIncident = ({ investigationId }: Props): Return => {
           incidentTagsData.listIncidentTags.find(
             (item) => item.value === formTags[0]
           );
-        if (tag?.questions)
-          setCustomQuestions(
-            tag.questions.map((question) => ({
-              answerType: question?.answerType || AnswerType.String,
-              label: question?.label || '',
-              questionId: question?.questionId || '',
-              required: question?.required || false,
-              tagQuestionId: question?.tagQuestionId || '',
-              value: '',
-              options: question?.options || [],
-              dependentOnQuestionId: question?.dependentOnQuestionId || null,
-              dependentOnAnswerValue: question?.dependentOnAnswerValue || null,
-            }))
-          );
+        if (tag?.questions) {
+          const tagQuestions = tag.questions.map((question) => ({
+            answerType: question?.answerType || AnswerType.String,
+            label: question?.label || '',
+            questionId: question?.questionId || '',
+            required: question?.required || false,
+            tagQuestionId: question?.tagQuestionId || '',
+            value: '',
+            options: question?.options || [],
+            dependentOnQuestionId: question?.dependentOnQuestionId || null,
+            dependentOnAnswerValue: question?.dependentOnAnswerValue || null,
+            dependentOnBrandIds: question?.dependentOnBrandIds || [],
+          }));
+          if (brands.length > 0) {
+            const filteredQuestions = tagQuestions.filter((question) => {
+              if (question.dependentOnBrandIds.length > 0) {
+                return question.dependentOnBrandIds.some((id) =>
+                  brands.includes(id)
+                );
+              }
+              return true;
+            });
+            setCustomQuestions(filteredQuestions);
+          } else {
+            const filteredQuestions = tagQuestions.filter((question) => {
+              if (question.dependentOnBrandIds.length > 0) {
+                return false;
+              }
+              return true;
+            });
+            setCustomQuestions(filteredQuestions);
+          }
+        }
       }
     }
-  }, [formTags, incidentTagsData]);
+  }, [formTags, incidentTagsData, brands]);
 
   return {
     onSubmit,
@@ -979,6 +1004,8 @@ const useAddIncident = ({ investigationId }: Props): Return => {
     customQuestions,
     goodsMode,
     reportOnly,
+    brands,
+    setBrands,
     showSiteNumber,
   };
 };
