@@ -1,10 +1,10 @@
 import { useDrawerState } from 'hooks';
 import React from 'react';
-import View from './CreateArticle.view';
-import useCreateArticle from './hooks/useCreateArticle';
+import View from './CreateEditArticle.view';
+import useCreateEditArticle from './hooks/useCreateEditArticle';
 import type { AddIncident, AddOffender } from './hooks/Forms';
 
-const CreateArticleContainer = () => {
+const CreateEditArticleContainer = () => {
   const {
     log,
     editorRef,
@@ -37,12 +37,14 @@ const CreateArticleContainer = () => {
     offenders,
     incidents,
     selectedSchemes,
-  } = useCreateArticle();
+    id,
+  } = useCreateEditArticle();
 
   const { drawer } = useDrawerState<AddOffender | AddIncident>();
 
   return (
     <View
+      id={id}
       selectedSchemes={selectedSchemes}
       incidents={incidents}
       removeIncident={removeIncident}
@@ -78,4 +80,4 @@ const CreateArticleContainer = () => {
   );
 };
 
-export default CreateArticleContainer;
+export default CreateEditArticleContainer;

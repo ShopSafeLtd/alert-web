@@ -1,7 +1,6 @@
 import React from 'react';
 import { Route, Routes } from 'react-router';
-import CreateArticle from 'views/article/CreateArticle/CreateArticle.container';
-import EditArticle from 'views/article/EditArticle/EditArticle.container';
+import CreateArticle from 'views/article/CreateEditArticle/CreateEditArticle.container';
 import ArticleFeed from 'views/article/ArticleFeed';
 import ViewArticle from 'views/article/ViewArticle/ViewArticle.container';
 import PermissionCheckWrapper from '../../../components/PermissionCheck/PermissionCheckWrapper';
@@ -57,7 +56,7 @@ const Article = (): JSX.Element => (
             method: PermissionMethod.Edit,
           }}
         >
-          <EditArticle />
+          <CreateArticle />
         </PermissionCheckWrapper>
       }
     />

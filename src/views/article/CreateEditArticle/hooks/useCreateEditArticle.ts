@@ -1,16 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-argument */
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { SelectProps, UploadProps } from 'antd';
 import { Form } from 'antd';
 import type { Editor } from 'tinymce';
 import type { UploadFile } from 'antd/es/upload/interface';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import type { Props } from '../types/CreateArticle';
 import {
   ArticlePriority,
   Model,
+  useArticleQuery,
   useCreateArticleMutation,
   useCreateTagMutation,
+  useEditArticleMutation,
   useSchemeGroupsQuery,
   useTagsQuery,
 } from '../../../../graphql/generated';
@@ -26,7 +28,7 @@ interface FormData {
   title: string;
   content: string;
   groups: string[];
-  categories: string[];
+  categories: SelectProps['options'];
   importance: ArticlePriority;
   schemes: string[];
   watermarkImage: boolean;
@@ -39,12 +41,14 @@ export function extractFilename(url: string): string | null {
   return match ? match[1] : null;
 }
 
-const useCreateArticle = (): Props => {
+const useCreateEditArticle = (): Props => {
+  const { id: articleId } = useParams();
+
   const siteUrl = `${window.location.href.split('/app/')[0]}`;
   const schemeId = useStoreState((state) => state.scheme.id);
   const { schemes, id: userId } = useStoreState((state) => state.user);
   const [form] = useForm<FormData>();
-  const [data] = useState<FormData>({
+  const [data, setData] = useState<FormData>({
     title: '',
     content: '',
     groups: [],
@@ -74,6 +78,108 @@ const useCreateArticle = (): Props => {
   >([]);
 
   const navigate = useNavigate();
+  const { data: result, loading } = useArticleQuery({
+    variables: {
+      where: { id: articleId },
+    },
+    skip: !articleId,
+    fetchPolicy: 'cache-and-network',
+  });
+
+  useEffect(() => {
+    setData({
+      title: result?.article?.title || '',
+      content: result?.article?.rows[0].columns[0].text || '',
+      groups: result?.article?.groups.map((group) => group.id || '') || [],
+      categories:
+        result?.article?.tags.map((tag) => ({
+          value: tag.name || '',
+          label: tag.name || '',
+        })) || [],
+      importance: result?.article?.priority || ArticlePriority.Normal,
+      watermarkImage: !!result?.article?.watermarkImage,
+      schemes:
+        result?.article?.groups.map((group) => group.scheme.id || '') || [],
+    });
+    setSelectedSchemes(
+      result?.article?.groups.map((group) => group.scheme.id || '') || []
+    );
+    setSelectedGroups(
+      result?.article?.groups.map((group) => group.id || '') || []
+    );
+    setOffenders(
+      (result?.article?.rows[0].columns[0].offenders as OffenderData[]) || []
+    );
+    setIncidents(
+      result?.article?.rows[0].columns[0].incidents.map((i) => ({
+        incident: {
+          ...i,
+          totalImages: i.images.length,
+          incidentItems: [],
+        },
+      })) || []
+    );
+    setFileList(
+      result?.article?.documents.map((document) => ({
+        uid: document.id,
+        name: document.name,
+        status: 'done',
+        url: document.url,
+      })) || []
+    );
+    setSelectedCategories(
+      result?.article?.tags.map((tag) => ({
+        value: tag.name || '',
+        label: tag.name || '',
+      })) || []
+    );
+    const html = result?.article?.rows[0].columns[0].text || '';
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    // // for each td, remove style tag
+    // const tds = doc.body.querySelectorAll('td');
+    // tds.forEach((td) => {
+    //   const { style } = td;
+    //   // console.log(style);
+    //   if (style) {
+    //     style.borderWidth = '0';
+    //   }
+    // });
+    // const table = doc.body.querySelector('table');
+    // if (table) {
+    //   table.style.borderWidth = '0';
+    // }
+    // console.log(doc.body.innerHTML);
+    const images = doc.body.querySelectorAll('img');
+    const imageSrcs = [...images].map((image) => image.src);
+
+    setImageList(
+      imageSrcs?.map((image) => ({
+        uid: image,
+        name: image,
+        status: 'done',
+        url: image || '',
+      })) || []
+    );
+
+    form.setFieldsValue({
+      title: result?.article?.title || '',
+      content: result?.article?.rows[0].columns[0].text || '',
+      groups: result?.article?.groups.map((group) => group.id || '') || [],
+      watermarkImage: !!result?.article?.watermarkImage,
+      categories:
+        result?.article?.tags.map((tag) => ({
+          value: tag.name || '',
+          label: tag.name || '',
+        })) || [],
+      importance: result?.article?.priority || ArticlePriority.Normal,
+      schemes: [],
+    });
+    editorRef.current?.setContent(
+      result?.article?.rows[0].columns[0].text || ''
+    );
+  }, [result]);
+
   const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
     variables: {
       where: {
@@ -85,8 +191,8 @@ const useCreateArticle = (): Props => {
       },
     },
     fetchPolicy: 'cache-and-network',
-    onCompleted: (result) => {
-      const groupsFormatted = result.groups.map((group) => ({
+    onCompleted: (r) => {
+      const groupsFormatted = r.groups.map((group) => ({
         value: group.id,
         label: `${group.name} (${group.scheme.name})`,
       }));
@@ -95,14 +201,14 @@ const useCreateArticle = (): Props => {
   });
 
   const [createTag] = useCreateTagMutation({
-    onCompleted: (result) => {
+    onCompleted: (r) => {
       const newCategory = {
-        value: result.createTag.name,
-        label: result.createTag.name,
+        value: r.createTag.name,
+        label: r.createTag.name,
       };
       const newCategoryIds = {
-        value: result.createTag.name,
-        id: result.createTag.id,
+        value: r.createTag.name,
+        id: r.createTag.id,
       };
       setCategoryIds([...(<[]>categoryIds), newCategoryIds]);
       setCategories([...(<[]>categories), newCategory]);
@@ -125,12 +231,12 @@ const useCreateArticle = (): Props => {
       },
     },
     fetchPolicy: 'cache-and-network',
-    onCompleted: (result) => {
-      const categoriesFormatted = result.tags.map((tag) => ({
+    onCompleted: (r) => {
+      const categoriesFormatted = r.tags.map((tag) => ({
         value: tag.name,
         label: tag.name,
       }));
-      const categoryIdsFormatted = result.tags.map((tag) => ({
+      const categoryIdsFormatted = r.tags.map((tag) => ({
         value: tag.name,
         id: tag.id,
       }));
@@ -179,14 +285,26 @@ const useCreateArticle = (): Props => {
               dataType: Model.Article,
             },
           },
-        }).then((result) => {
-          formattedValues.push(result.data?.createTag?.name || '');
+        }).then((r) => {
+          formattedValues.push(r.data?.createTag?.name || '');
         });
       }
     }
 
     setSelectedCategories(formattedValues.map((value) => ({ value })));
   };
+
+  useEffect(() => {
+    if (categories && categories?.length > 0 && result) {
+      setSelectedCategories(
+        result?.article?.tags.map((tag) => ({
+          value: tag.name || '',
+          label: tag.name || '',
+        })) || []
+      );
+    }
+  }, [categories, result]);
+
   const log = (): { text: string; img: string; imgSrc: string[] } => {
     if (editorRef.current) {
       const html = editorRef.current.getContent();
@@ -423,6 +541,8 @@ const useCreateArticle = (): Props => {
   // });
 
   const [saving, setSaving] = useState(false);
+  const [editArticle] = useEditArticleMutation();
+
   const onSubmit = async () => {
     setSaving(true);
     const selectedCategoryIds = selectedCategories
@@ -449,74 +569,96 @@ const useCreateArticle = (): Props => {
     );
 
     const submittedSchemes: string[] = selectedSchemes;
-    await submitArticle({
-      variables: {
-        data: {
-          title: form.getFieldValue('title'),
-          categories: selectedCategoryIds,
-          groups: selectedGroups,
-          watermarkImage: form.getFieldValue('watermarkImage'),
-          documents:
-            fileList.map((file) => ({
-              url: file.url || '',
-              name: file.name || '',
-              fileType: file.type || '',
-              origFileName: file.fileName || file.name || '',
-            })) || [],
-          htmlBody: htmlWithDefaultWidth || '',
-          previewImage: img,
-          previewText: text,
-          schemes:
-            submittedSchemes && submittedSchemes.length > 1
-              ? submittedSchemes.map((scheme) => scheme)
-              : [schemeId],
-          priority,
-          incidents:
-            submittedSchemes && submittedSchemes.length > 1
-              ? []
-              : incidents.map((incident) => incident.incident.id),
-          offenders:
-            submittedSchemes && submittedSchemes.length > 1
-              ? []
-              : offenders.map((offender) => offender.id),
-          images: {
-            upload:
-              articleImages && articleImages.length > 0
-                ? articleImages.map((item) => ({
-                    url: {
-                      filename: item.fileName || item.name || '',
-                      mimetype: item.type || '',
-                      url: item.url || '',
-                    },
-                  }))
-                : undefined,
-          },
-          // images: {
-          //   upload: previewImageFile
-          //     ? [
-          //         {
-          //           url: {
-          //             filename: previewImageFile[0].fileName || '',
-          //             mimetype: previewImageFile[0].type || '',
-          //             url: previewImageFile[0].url || '',
-          //           },
-          //         },
-          //       ]
-          //     : undefined,
-          // },
-        },
-      },
-    })
-      .then((res) => {
-        if (res && res.data && res.data.createArticle) {
-          setSaving(false);
 
-          navigate(`/app/article/view/${res?.data?.createArticle.id}`);
-        }
-      })
-      .catch(() => {
-        setSaving(false);
-      });
+    const variables = {
+      data: {
+        title: form.getFieldValue('title'),
+        categories: selectedCategoryIds,
+        groups: selectedGroups,
+        watermarkImage: form.getFieldValue('watermarkImage'),
+        documents:
+          fileList.map((file) => ({
+            url: file.url || '',
+            name: file.name || '',
+            fileType: file.type || '',
+            origFileName: file.fileName || file.name || '',
+          })) || [],
+        htmlBody: htmlWithDefaultWidth || '',
+        previewImage: img,
+        previewText: text,
+        schemes:
+          submittedSchemes && submittedSchemes.length > 1
+            ? submittedSchemes.map((scheme) => scheme)
+            : [schemeId],
+        priority,
+        incidents:
+          submittedSchemes && submittedSchemes.length > 1
+            ? []
+            : incidents.map((incident) => incident.incident.id),
+        offenders:
+          submittedSchemes && submittedSchemes.length > 1
+            ? []
+            : offenders.map((offender) => offender.id),
+        images: {
+          upload:
+            articleImages && articleImages.length > 0
+              ? articleImages.map((item) => ({
+                  url: {
+                    filename: item.fileName || item.name || '',
+                    mimetype: item.type || '',
+                    url: item.url || '',
+                  },
+                }))
+              : undefined,
+        },
+        // images: {
+        //   upload: previewImageFile
+        //     ? [
+        //         {
+        //           url: {
+        //             filename: previewImageFile[0].fileName || '',
+        //             mimetype: previewImageFile[0].type || '',
+        //             url: previewImageFile[0].url || '',
+        //           },
+        //         },
+        //       ]
+        //     : undefined,
+        // },
+      },
+    };
+
+    await (articleId
+      ? editArticle({
+          variables: {
+            where: {
+              id: articleId,
+            },
+            data: variables.data,
+          },
+        })
+          .then((res) => {
+            if (res && res.data && res.data.editArticle) {
+              setSaving(false);
+
+              navigate(`/app/article/view/${res?.data?.editArticle.id}`);
+            }
+          })
+          .catch(() => {
+            setSaving(false);
+          })
+      : submitArticle({
+          variables,
+        })
+          .then((res) => {
+            if (res && res.data && res.data.createArticle) {
+              setSaving(false);
+
+              navigate(`/app/article/view/${res?.data?.createArticle.id}`);
+            }
+          })
+          .catch(() => {
+            setSaving(false);
+          }));
     setSaving(false);
   };
 
@@ -600,7 +742,7 @@ const useCreateArticle = (): Props => {
     data,
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onSubmit,
-    loading: tagsLoading || saving,
+    loading: tagsLoading || loading || saving,
     fileList,
     documentUploadProps,
     insertOffender,
@@ -610,7 +752,8 @@ const useCreateArticle = (): Props => {
     removeOffender,
     removeIncident,
     selectedSchemes,
+    id: articleId,
   };
 };
 
-export default useCreateArticle;
+export default useCreateEditArticle;

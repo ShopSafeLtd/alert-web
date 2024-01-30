@@ -22,10 +22,10 @@ import { useIntl } from 'react-intl';
 import type { ViewProps } from './types/CreateArticle';
 import AddExistingOffender from '../../../components/form-components/offender/offender/AddExistingOffender/AddExistingOffender.container';
 import LinkIncident from '../../../components/form-components/linkOptions/LinkIncident';
-import type { FormData } from './hooks/useCreateArticle';
+import type { FormData } from './hooks/useCreateEditArticle';
 import { useStoreState } from '../../../state';
 
-const CreateArticleView = ({
+const CreateEditArticleView = ({
   // log,
   editorRef,
   exampleImageUploadHandler,
@@ -57,6 +57,7 @@ const CreateArticleView = ({
   removeOffender,
   removeIncident,
   selectedSchemes,
+  id,
 }: ViewProps) => {
   const intl = useIntl();
   const noSchemes = selectedSchemes;
@@ -116,10 +117,17 @@ const CreateArticleView = ({
     <>
       <div className="page-view">
         <PageHeader
-          title={intl.formatMessage({
-            defaultMessage: 'Create Article',
-            id: 'lpKDhF',
-          })}
+          title={
+            id
+              ? intl.formatMessage({
+                  defaultMessage: 'Edit Article',
+                  id: 'oZPIFV',
+                })
+              : intl.formatMessage({
+                  defaultMessage: 'Create Article',
+                  id: 'lpKDhF',
+                })
+          }
         />
         <Card style={{ marginLeft: 20, marginRight: 20, minHeight: 600 }}>
           <Form<FormData>
@@ -191,7 +199,7 @@ const CreateArticleView = ({
                     size="small"
                     maxTagCount={2}
                     style={{ minWidth: 200 }}
-                    loading={groupsLoading}
+                    loading={loading}
                     onChange={onGroupsChange}
                     optionFilterProp="label"
                   >
@@ -221,6 +229,7 @@ const CreateArticleView = ({
                   ]}
                 >
                   <Select
+                    loading={loading}
                     placeholder={intl.formatMessage({
                       defaultMessage: 'Type',
                       id: '+U6ozc',
@@ -251,7 +260,7 @@ const CreateArticleView = ({
                     size="small"
                     maxTagCount={2}
                     style={{ minWidth: 200 }}
-                    loading={categoriesLoading}
+                    loading={loading}
                     onChange={categoriesChange}
                     options={categories}
                     optionFilterProp="value"
@@ -524,10 +533,15 @@ const CreateArticleView = ({
                     disabled={loading}
                     htmlType="submit"
                   >
-                    {intl.formatMessage({
-                      defaultMessage: 'Create Article',
-                      id: 'lpKDhF',
-                    })}
+                    {id
+                      ? intl.formatMessage({
+                          defaultMessage: 'Save',
+                          id: 'jvo0vs',
+                        })
+                      : intl.formatMessage({
+                          defaultMessage: 'Create Article',
+                          id: 'lpKDhF',
+                        })}
                   </Button>
                 </Col>
               </Row>
@@ -547,4 +561,4 @@ const CreateArticleView = ({
   );
 };
 
-export default CreateArticleView;
+export default CreateEditArticleView;

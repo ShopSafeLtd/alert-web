@@ -7,7 +7,7 @@ import type { AddIncident, AddOffender } from '../hooks/Forms';
 import type { DrawerType } from '../../../../hooks';
 import type { OffenderData } from '../../../../components/form-components/offender/offender/AddExistingOffender/AddExistingOffender.container';
 import type { Incident } from '../../../../components/form-components/linkOptions/LinkIncident/useLinkIncident';
-import type { FormData } from '../hooks/useCreateArticle';
+import type { FormData } from '../hooks/useCreateEditArticle';
 
 export interface Props {
   editorRef: React.MutableRefObject<Editor | null>;
@@ -48,6 +48,7 @@ export interface Props {
     blobInfo: { blob: () => string | Blob; filename: () => string | undefined },
     progress: (arg0: number) => void
   ): Promise<string>;
+  id?: string;
 }
 
 export interface ViewProps extends Props {
