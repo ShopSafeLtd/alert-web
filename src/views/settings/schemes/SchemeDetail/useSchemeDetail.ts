@@ -29,6 +29,8 @@ export interface FormData {
   autoApproveIncidents: boolean;
   defaultIncidentEmail: boolean;
   defaultIncidentPush: boolean;
+  defaultBulletinEmails: boolean;
+  defaultBulletinPush: boolean;
   defaultSubscribedIncidentOnly: boolean;
   defaultSubscribedOffenderOnly: boolean;
   defaultMessagePush: boolean;
@@ -174,6 +176,8 @@ const useSchemeDetail = (): Return => {
           offenderRetention: { set: data.offenderRetention },
           defaultIncidentEmail: { set: data.defaultIncidentEmail },
           defaultIncidentPush: { set: data.defaultIncidentPush },
+          defaultBulletinEmails: { set: data.defaultBulletinEmails },
+          defaultBulletinPush: { set: data.defaultBulletinPush },
           defaultSubscribedIncidentOnly: {
             set: data.defaultSubscribedIncidentOnly,
           },

@@ -100,7 +100,7 @@ const useEditProfile = (): Return => {
             incidentPush: { set: data.incidentPush },
             offenderEmail: { set: data.offenderEmail },
             offenderPush: { set: data.offenderPush },
-            bulletinEmails: { set: data.bulletinEmail },
+            bulletinEmails: { set: data.bulletinEmails },
             bulletinPush: { set: data.bulletinPush },
             messagePush: { set: data.messagePush },
             defaultGroups: {

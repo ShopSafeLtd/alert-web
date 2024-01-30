@@ -283,7 +283,7 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
             fullName: { set: data.fullName },
             incidentEmail: { set: data.incidentEmail },
             incidentPush: { set: data.incidentPush },
-            bulletinEmails: { set: data.bulletinEmail },
+            bulletinEmails: { set: data.bulletinEmails },
             bulletinPush: { set: data.bulletinPush },
             publicName: { set: data.publicName },
             reportToAllBusinesses: { set: data.reportToAllBusinesses },

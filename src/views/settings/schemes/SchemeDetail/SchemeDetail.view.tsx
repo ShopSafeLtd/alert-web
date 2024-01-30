@@ -91,9 +91,12 @@ const SchemeDetail = ({
             offenderRetention: data?.scheme?.offenderRetention,
             defaultIncidentEmail: data?.scheme?.defaultIncidentEmail,
             defaultIncidentPush: data?.scheme?.defaultIncidentPush,
+            defaultBulletinEmails: data?.scheme?.defaultBulletinEmails,
+            defaultBulletinPush: data?.scheme?.defaultBulletinPush,
             autoPopulateDescription: data?.scheme?.autoPopulateDescription,
             needJustification: data?.scheme?.needJustification,
-            requireSiteNumberForUsers: data?.scheme?.requireSiteNumberForUsers,
+            requireSiteNumberForUsers:
+              data?.scheme?.requireSiteNumberForUsers || false,
             defaultSubscribedIncidentOnly:
               data?.scheme?.defaultSubscribedIncidentOnly,
             defaultSubscribedOffenderOnly:
@@ -521,7 +524,36 @@ const SchemeDetail = ({
                     className="scheme-detail-switch"
                   />
                 </Form.Item>
-
+                <Form.Item
+                  label={intl.formatMessage({
+                    defaultMessage: 'Send app notifications for bulletins',
+                    id: 'Bxzk3Z',
+                  })}
+                  name="defaultBulletinPush"
+                  valuePropName="checked"
+                  style={{ marginBottom: 0 }}
+                >
+                  <Switch
+                    disabled={saving}
+                    style={{ marginLeft: 5 }}
+                    className="scheme-detail-switch"
+                  />
+                </Form.Item>
+                <Form.Item
+                  label={intl.formatMessage({
+                    defaultMessage: 'Send emails for bulletins',
+                    id: 'q0g/bf',
+                  })}
+                  name="defaultBulletinEmails"
+                  valuePropName="checked"
+                  style={{ marginBottom: 0 }}
+                >
+                  <Switch
+                    disabled={saving}
+                    style={{ marginLeft: 5 }}
+                    className="scheme-detail-switch"
+                  />
+                </Form.Item>
                 <Form.Item
                   name="defaultMessagePush"
                   label={intl.formatMessage({
