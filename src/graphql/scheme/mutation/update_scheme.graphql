@@ -9,6 +9,8 @@ mutation updateScheme($where: UniqueId!, $data: SchemeUpdateInput!) {
     defaultPublicOffenderDOB
     defaultIncidentEmail
     defaultIncidentPush
+    defaultBulletinEmails
+    defaultBulletinPush
     defaultSubscribedIncidentOnly
     defaultSubscribedOffenderOnly
     defaultMessagePush

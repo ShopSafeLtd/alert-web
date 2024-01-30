@@ -77,7 +77,7 @@ const EditProfile = ({
             incidentPush: data?.currentUser?.incidentPush,
             offenderEmail: data?.currentUser?.offenderEmail,
             offenderPush: data?.currentUser?.offenderPush,
-            bulletinEmails: data?.currentUser?.bulletinEmail,
+            bulletinEmails: data?.currentUser?.bulletinEmails,
             bulletinPush: data?.currentUser?.bulletinPush,
             messagePush: data?.currentUser?.messagePush,
             defaultGroups: userDefaultGroups,
@@ -322,7 +322,7 @@ const EditProfile = ({
                       id="1V1nJ/"
                     />
                   }
-                  name="bulletinEmail"
+                  name="bulletinEmails"
                   valuePropName="checked"
                   style={{ marginBottom: 0 }}
                 >

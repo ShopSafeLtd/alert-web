@@ -741,7 +741,7 @@ const AddUser = ({
           defaultMessage: 'Send emails for bulletins:',
           id: '6iDV7o',
         })}
-        name="bulletinEmails"
+        name="bulletinEmails "
         valuePropName="checked"
         style={{
           marginBottom: 0,

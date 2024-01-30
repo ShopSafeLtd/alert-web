@@ -2908,6 +2908,8 @@ export type CreateUpdateData = {
 
 export type CreateUserData = {
   approverGroups?: InputMaybe<Array<UniqueId>>;
+  bulletinEmails?: InputMaybe<Scalars['Boolean']>;
+  bulletinPush?: InputMaybe<Scalars['Boolean']>;
   businesses: BusinessCreateNestedManyWithoutUsersInput;
   chats?: InputMaybe<Array<UniqueId>>;
   defaultGroups?: InputMaybe<Array<UniqueId>>;
@@ -14165,6 +14167,8 @@ export type Scheme = {
   customTranslations: Array<Scalars['JSON']>;
   darkLogo?: Maybe<Image>;
   darkLogoId?: Maybe<Scalars['String']>;
+  defaultBulletinEmails: Scalars['Boolean'];
+  defaultBulletinPush: Scalars['Boolean'];
   defaultGroups: Array<Group>;
   defaultIncidentEmail: Scalars['Boolean'];
   defaultIncidentPush: Scalars['Boolean'];
@@ -14719,6 +14723,8 @@ export type SchemeOrderByWithRelationInput = {
   customTranslations?: InputMaybe<SortOrder>;
   darkLogo?: InputMaybe<ImageOrderByWithRelationInput>;
   darkLogoId?: InputMaybe<SortOrder>;
+  defaultBulletinEmails?: InputMaybe<SortOrder>;
+  defaultBulletinPush?: InputMaybe<SortOrder>;
   defaultGroups?: InputMaybe<GroupOrderByRelationAggregateInput>;
   defaultIncidentEmail?: InputMaybe<SortOrder>;
   defaultIncidentPush?: InputMaybe<SortOrder>;
@@ -14794,6 +14800,8 @@ export enum SchemeScalarFieldEnum {
   CreatedAt = 'createdAt',
   CustomTranslations = 'customTranslations',
   DarkLogoId = 'darkLogoId',
+  DefaultBulletinEmails = 'defaultBulletinEmails',
+  DefaultBulletinPush = 'defaultBulletinPush',
   DefaultIncidentEmail = 'defaultIncidentEmail',
   DefaultIncidentPush = 'defaultIncidentPush',
   DefaultMessagePush = 'defaultMessagePush',
@@ -14827,6 +14835,8 @@ export type SchemeUpdateInput = {
   autoApproveOffenders?: InputMaybe<SetBooleanHelper>;
   autoPopulateDescription?: InputMaybe<SetBooleanHelper>;
   darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
+  defaultBulletinEmails?: InputMaybe<SetBooleanHelper>;
+  defaultBulletinPush?: InputMaybe<SetBooleanHelper>;
   defaultIncidentEmail?: InputMaybe<SetBooleanHelper>;
   defaultIncidentPush?: InputMaybe<SetBooleanHelper>;
   defaultMessagePush?: InputMaybe<SetBooleanHelper>;
@@ -14873,6 +14883,8 @@ export type SchemeWhereInput = {
   customTranslations?: InputMaybe<JsonNullableListFilter>;
   darkLogo?: InputMaybe<ImageWhereInput>;
   darkLogoId?: InputMaybe<StringNullableFilter>;
+  defaultBulletinEmails?: InputMaybe<BoolFilter>;
+  defaultBulletinPush?: InputMaybe<BoolFilter>;
   defaultGroups?: InputMaybe<GroupListRelationFilter>;
   defaultIncidentEmail?: InputMaybe<BoolFilter>;
   defaultIncidentPush?: InputMaybe<BoolFilter>;
@@ -14959,6 +14971,8 @@ export type SchemeWhereUniqueInput = {
   customTranslations?: InputMaybe<JsonNullableListFilter>;
   darkLogo?: InputMaybe<ImageWhereInput>;
   darkLogoId?: InputMaybe<StringNullableFilter>;
+  defaultBulletinEmails?: InputMaybe<BoolFilter>;
+  defaultBulletinPush?: InputMaybe<BoolFilter>;
   defaultGroups?: InputMaybe<GroupListRelationFilter>;
   defaultIncidentEmail?: InputMaybe<BoolFilter>;
   defaultIncidentPush?: InputMaybe<BoolFilter>;
@@ -17308,6 +17322,8 @@ export type User = {
   assignedTodos: Array<Todo>;
   auth0Id?: Maybe<Scalars['String']>;
   bans: Array<Ban>;
+  bulletinEmails: Scalars['Boolean'];
+  bulletinPush: Scalars['Boolean'];
   businesses: Array<Business>;
   chats: Array<UserChat>;
   checklists: Array<Checklist>;
@@ -18102,6 +18118,8 @@ export type UserOrderByWithRelationInput = {
   assignedTodos?: InputMaybe<TodoOrderByRelationAggregateInput>;
   auth0Id?: InputMaybe<SortOrder>;
   bans?: InputMaybe<BanOrderByRelationAggregateInput>;
+  bulletinEmails?: InputMaybe<SortOrder>;
+  bulletinPush?: InputMaybe<SortOrder>;
   businesses?: InputMaybe<BusinessOrderByRelationAggregateInput>;
   chats?: InputMaybe<UserChatOrderByRelationAggregateInput>;
   checklists?: InputMaybe<ActiveChecklistOrderByRelationAggregateInput>;
@@ -18174,6 +18192,8 @@ export type UserOrderByWithRelationInput = {
 
 export enum UserScalarFieldEnum {
   Auth0Id = 'auth0Id',
+  BulletinEmails = 'bulletinEmails',
+  BulletinPush = 'bulletinPush',
   ContactId = 'contactId',
   CreatedAt = 'createdAt',
   DemId = 'demId',
@@ -18222,6 +18242,7 @@ export type UserScheme = {
 };
 
 export type UserSchemeCreateWithoutUserInput = {
+  permissions?: InputMaybe<ConnectHelper>;
   role: Role;
   scheme?: InputMaybe<ConnectHelper>;
 };
@@ -18238,6 +18259,7 @@ export type UserSchemeOnUserInput = {
 };
 
 export type UserSchemeOnUserUpdateInput = {
+  permissions?: InputMaybe<ConnectHelper>;
   role?: InputMaybe<EnumRoleFieldUpdateOperationsInput>;
 };
 
@@ -18445,6 +18467,8 @@ export enum UserType {
 
 export type UserUpdateInput = {
   approverGroups?: InputMaybe<NullableConnectArrayHelper>;
+  bulletinEmails?: InputMaybe<SetBooleanHelper>;
+  bulletinPush?: InputMaybe<SetBooleanHelper>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
   chats?: InputMaybe<ChatMembersUpdate>;
   defaultGroups?: InputMaybe<NullableConnectArrayHelper>;
@@ -18485,6 +18509,8 @@ export type UserWhereInput = {
   assignedTodos?: InputMaybe<TodoListRelationFilter>;
   auth0Id?: InputMaybe<StringNullableFilter>;
   bans?: InputMaybe<BanListRelationFilter>;
+  bulletinEmails?: InputMaybe<BoolFilter>;
+  bulletinPush?: InputMaybe<BoolFilter>;
   businesses?: InputMaybe<BusinessListRelationFilter>;
   chats?: InputMaybe<UserChatListRelationFilter>;
   completedTodos?: InputMaybe<TodoListRelationFilter>;
@@ -18567,6 +18593,8 @@ export type UserWhereUniqueInput = {
   assignedTodos?: InputMaybe<TodoListRelationFilter>;
   auth0Id?: InputMaybe<Scalars['String']>;
   bans?: InputMaybe<BanListRelationFilter>;
+  bulletinEmails?: InputMaybe<BoolFilter>;
+  bulletinPush?: InputMaybe<BoolFilter>;
   businesses?: InputMaybe<BusinessListRelationFilter>;
   chats?: InputMaybe<UserChatListRelationFilter>;
   completedTodos?: InputMaybe<TodoListRelationFilter>;
@@ -20921,7 +20949,7 @@ export type UpdateSchemeMutationVariables = Exact<{
 }>;
 
 
-export type UpdateSchemeMutation = { __typename?: 'Mutation', updateScheme: { __typename?: 'Scheme', id: string, name: string, restrictIncidentAccess: boolean, reportOnly: boolean, autoApproveIncidents: boolean, autoApproveOffenders: boolean, defaultPublicOffenderDOB: boolean, defaultIncidentEmail: boolean, defaultIncidentPush: boolean, defaultSubscribedIncidentOnly: boolean, defaultSubscribedOffenderOnly: boolean, defaultMessagePush: boolean, defaultOffenderEmail: boolean, defaultOffenderPush: boolean, autoPopulateDescription: boolean, needJustification: boolean, requireSiteNumberForUsers: boolean, facialRecognition: boolean, imagesRequiredOnOffenders: boolean, incidentRetention?: number | null, offenderRetention?: number | null, logo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, optimisedPersisted?: string | null } | null, darkLogo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, optimisedPersisted?: string | null } | null } };
+export type UpdateSchemeMutation = { __typename?: 'Mutation', updateScheme: { __typename?: 'Scheme', id: string, name: string, restrictIncidentAccess: boolean, reportOnly: boolean, autoApproveIncidents: boolean, autoApproveOffenders: boolean, defaultPublicOffenderDOB: boolean, defaultIncidentEmail: boolean, defaultIncidentPush: boolean, defaultBulletinEmails: boolean, defaultBulletinPush: boolean, defaultSubscribedIncidentOnly: boolean, defaultSubscribedOffenderOnly: boolean, defaultMessagePush: boolean, defaultOffenderEmail: boolean, defaultOffenderPush: boolean, autoPopulateDescription: boolean, needJustification: boolean, requireSiteNumberForUsers: boolean, facialRecognition: boolean, imagesRequiredOnOffenders: boolean, incidentRetention?: number | null, offenderRetention?: number | null, logo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, optimisedPersisted?: string | null } | null, darkLogo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, optimisedPersisted?: string | null } | null } };
 
 export type CurrentSchemeTermsQueryVariables = Exact<{
   where: SchemeWhereUniqueInput;
@@ -20935,7 +20963,7 @@ export type SchemeQueryVariables = Exact<{
 }>;
 
 
-export type SchemeQuery = { __typename?: 'Query', scheme: { __typename?: 'Scheme', id: string, name: string, restrictIncidentAccess: boolean, reportOnly: boolean, autoApproveIncidents: boolean, autoApproveOffenders: boolean, defaultIncidentEmail: boolean, defaultIncidentPush: boolean, defaultSubscribedIncidentOnly: boolean, defaultSubscribedOffenderOnly: boolean, defaultMessagePush: boolean, defaultOffenderEmail: boolean, defaultOffenderPush: boolean, defaultPublicOffenderDOB: boolean, incidentRetention?: number | null, offenderRetention?: number | null, autoPopulateDescription: boolean, needJustification: boolean, facialRecognition: boolean, imagesRequiredOnOffenders: boolean, requireSiteNumberForUsers: boolean, goodsMode: GoodsMode, darkLogo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null } | null, logo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null } | null } };
+export type SchemeQuery = { __typename?: 'Query', scheme: { __typename?: 'Scheme', id: string, name: string, restrictIncidentAccess: boolean, reportOnly: boolean, autoApproveIncidents: boolean, autoApproveOffenders: boolean, defaultIncidentEmail: boolean, defaultIncidentPush: boolean, defaultBulletinEmails: boolean, defaultBulletinPush: boolean, defaultSubscribedIncidentOnly: boolean, defaultSubscribedOffenderOnly: boolean, defaultMessagePush: boolean, defaultOffenderEmail: boolean, defaultOffenderPush: boolean, defaultPublicOffenderDOB: boolean, incidentRetention?: number | null, offenderRetention?: number | null, autoPopulateDescription: boolean, needJustification: boolean, facialRecognition: boolean, imagesRequiredOnOffenders: boolean, requireSiteNumberForUsers: boolean, goodsMode: GoodsMode, darkLogo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null } | null, logo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null } | null } };
 
 export type CreateOneStatementTemplateMutationVariables = Exact<{
   data: StatementTemplateCreateInput;
@@ -21111,7 +21139,7 @@ export type UpdateUserMutationVariables = Exact<{
 }>;
 
 
-export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, fullName: string, email: string, status?: UserStatus | null, demId?: string | null, publicName: boolean, reportToAllBusinesses: boolean, disabled: boolean, newUser: boolean, incidentEmail: boolean, incidentPush: boolean, subscribedIncidentOnly: boolean, subscribedOffenderOnly: boolean, messagePush: boolean, offenderEmail: boolean, offenderPush: boolean, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string, demId?: string | null }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, approverGroups: Array<{ __typename?: 'Group', id: string, name: string }>, defaultGroups: Array<{ __typename?: 'Group', id: string, name: string }>, chats: Array<{ __typename?: 'UserChat', id: string, chat: { __typename?: 'Chat', id: string, name: string } }>, schemes: Array<{ __typename?: 'UserScheme', id: string, role: Role }> } };
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, fullName: string, email: string, status?: UserStatus | null, demId?: string | null, publicName: boolean, reportToAllBusinesses: boolean, disabled: boolean, newUser: boolean, incidentEmail: boolean, incidentPush: boolean, bulletinEmails: boolean, bulletinPush: boolean, subscribedIncidentOnly: boolean, subscribedOffenderOnly: boolean, messagePush: boolean, offenderEmail: boolean, offenderPush: boolean, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string, demId?: string | null }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, approverGroups: Array<{ __typename?: 'Group', id: string, name: string }>, defaultGroups: Array<{ __typename?: 'Group', id: string, name: string }>, chats: Array<{ __typename?: 'UserChat', id: string, chat: { __typename?: 'Chat', id: string, name: string } }>, schemes: Array<{ __typename?: 'UserScheme', id: string, role: Role }> } };
 
 export type UpdateUserDisableMutationVariables = Exact<{
   where: UniqueId;
@@ -21126,7 +21154,7 @@ export type CurrentUserQueryVariables = Exact<{
 }>;
 
 
-export type CurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: string, fullName: string, origName: string, email: string, reference?: number | null, demId?: string | null, publicName: boolean, reportToAllBusinesses: boolean, notificationCount: number, messageCount: number, defaultScheme?: string | null, newUser: boolean, incidentEmail: boolean, incidentPush: boolean, offenderEmail: boolean, offenderPush: boolean, messagePush: boolean, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string, demId?: string | null, brands: Array<string> }>, groups: Array<{ __typename?: 'Group', id: string, name: string, scheme: { __typename?: 'Scheme', id: string } }>, defaultGroups: Array<{ __typename?: 'Group', id: string, name: string, scheme: { __typename?: 'Scheme', id: string } }>, schemes: Array<{ __typename?: 'UserScheme', id: string, role: Role, scheme: { __typename?: 'Scheme', customTranslations: Array<{ [key: string]: any }>, userTodos: number, id: string, name: string, goodsMode: GoodsMode, autoApproveIncidents: boolean, autoApproveOffenders: boolean, defaultPublicOffenderDOB: boolean, restrictIncidentAccess: boolean, reportOnly: boolean, facialRecognition: boolean, imagesRequiredOnOffenders: boolean, taskTimeTracking: boolean, languageCount: number, autoPopulateDescription: boolean, needJustification: boolean, requireSiteNumberForUsers: boolean, logo?: { __typename?: 'Image', optimisedPersisted?: string | null } | null, darkLogo?: { __typename?: 'Image', optimisedPersisted?: string | null } | null }, permissions: Array<{ __typename?: 'Permissions', model: PermissionModel, allowedMethods: Array<PermissionMethod> }> }> } | null };
+export type CurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: string, fullName: string, origName: string, email: string, reference?: number | null, demId?: string | null, publicName: boolean, reportToAllBusinesses: boolean, notificationCount: number, messageCount: number, defaultScheme?: string | null, newUser: boolean, incidentEmail: boolean, incidentPush: boolean, offenderEmail: boolean, offenderPush: boolean, bulletinEmails: boolean, bulletinPush: boolean, messagePush: boolean, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string, demId?: string | null, brands: Array<string> }>, groups: Array<{ __typename?: 'Group', id: string, name: string, scheme: { __typename?: 'Scheme', id: string } }>, defaultGroups: Array<{ __typename?: 'Group', id: string, name: string, scheme: { __typename?: 'Scheme', id: string } }>, schemes: Array<{ __typename?: 'UserScheme', id: string, role: Role, scheme: { __typename?: 'Scheme', customTranslations: Array<{ [key: string]: any }>, userTodos: number, id: string, name: string, goodsMode: GoodsMode, autoApproveIncidents: boolean, autoApproveOffenders: boolean, defaultPublicOffenderDOB: boolean, restrictIncidentAccess: boolean, reportOnly: boolean, facialRecognition: boolean, imagesRequiredOnOffenders: boolean, taskTimeTracking: boolean, languageCount: number, autoPopulateDescription: boolean, needJustification: boolean, requireSiteNumberForUsers: boolean, logo?: { __typename?: 'Image', optimisedPersisted?: string | null } | null, darkLogo?: { __typename?: 'Image', optimisedPersisted?: string | null } | null }, permissions: Array<{ __typename?: 'Permissions', model: PermissionModel, allowedMethods: Array<PermissionMethod> }> }> } | null };
 
 export type UserQueryVariables = Exact<{
   where: UserWhereUniqueInput;
@@ -21136,7 +21164,7 @@ export type UserQueryVariables = Exact<{
 }>;
 
 
-export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, fullName: string, email: string, status?: UserStatus | null, demId?: string | null, publicName: boolean, reportToAllBusinesses: boolean, disabled: boolean, newUser: boolean, incidentEmail: boolean, incidentPush: boolean, subscribedIncidentOnly: boolean, subscribedOffenderOnly: boolean, messagePush: boolean, offenderEmail: boolean, offenderPush: boolean, totalLastYearLogin: number, totalThirtyDaysLogin: number, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string, demId?: string | null }>, signedTerms?: { __typename?: 'UserTerm', id: string, signature?: string | null, terms: { __typename?: 'TermsAndCondition', id: string, version: number } } | null, groups: Array<{ __typename?: 'Group', id: string, name: string }>, approverGroups: Array<{ __typename?: 'Group', id: string, name: string }>, defaultGroups: Array<{ __typename?: 'Group', id: string, name: string }>, chats: Array<{ __typename?: 'UserChat', id: string, chat: { __typename?: 'Chat', id: string, name: string } }>, schemes: Array<{ __typename?: 'UserScheme', id: string, schemeId: string, role: Role }>, lastTenLogin: Array<{ __typename?: 'LoginEvent', loginTime: Date, id: string }>, lastLogin?: { __typename?: 'LoginEvent', loginTime: Date, id: string } | null } };
+export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, fullName: string, email: string, status?: UserStatus | null, demId?: string | null, publicName: boolean, reportToAllBusinesses: boolean, disabled: boolean, newUser: boolean, incidentEmail: boolean, incidentPush: boolean, bulletinEmails: boolean, bulletinPush: boolean, subscribedIncidentOnly: boolean, subscribedOffenderOnly: boolean, messagePush: boolean, offenderEmail: boolean, offenderPush: boolean, totalLastYearLogin: number, totalThirtyDaysLogin: number, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string, demId?: string | null }>, signedTerms?: { __typename?: 'UserTerm', id: string, signature?: string | null, terms: { __typename?: 'TermsAndCondition', id: string, version: number } } | null, groups: Array<{ __typename?: 'Group', id: string, name: string }>, approverGroups: Array<{ __typename?: 'Group', id: string, name: string }>, defaultGroups: Array<{ __typename?: 'Group', id: string, name: string }>, chats: Array<{ __typename?: 'UserChat', id: string, chat: { __typename?: 'Chat', id: string, name: string } }>, schemes: Array<{ __typename?: 'UserScheme', id: string, schemeId: string, role: Role }>, lastTenLogin: Array<{ __typename?: 'LoginEvent', loginTime: Date, id: string }>, lastLogin?: { __typename?: 'LoginEvent', loginTime: Date, id: string } | null } };
 
 export type MarkAsReadMessagesMutationVariables = Exact<{
   userChatId: Scalars['String'];
@@ -30204,6 +30232,8 @@ export const UpdateSchemeDocument = gql`
     defaultPublicOffenderDOB
     defaultIncidentEmail
     defaultIncidentPush
+    defaultBulletinEmails
+    defaultBulletinPush
     defaultSubscribedIncidentOnly
     defaultSubscribedOffenderOnly
     defaultMessagePush
@@ -30271,6 +30301,8 @@ export const SchemeDocument = gql`
     autoApproveOffenders
     defaultIncidentEmail
     defaultIncidentPush
+    defaultBulletinEmails
+    defaultBulletinPush
     defaultSubscribedIncidentOnly
     defaultSubscribedOffenderOnly
     defaultMessagePush
@@ -30856,6 +30888,8 @@ export const UpdateUserDocument = gql`
     newUser
     incidentEmail
     incidentPush
+    bulletinEmails
+    bulletinPush
     subscribedIncidentOnly
     subscribedOffenderOnly
     messagePush
@@ -30984,6 +31018,8 @@ export const CurrentUserDocument = gql`
     incidentPush
     offenderEmail
     offenderPush
+    bulletinEmails
+    bulletinPush
     messagePush
   }
 }
@@ -31019,6 +31055,8 @@ export const UserDocument = gql`
     newUser
     incidentEmail
     incidentPush
+    bulletinEmails
+    bulletinPush
     subscribedIncidentOnly
     subscribedOffenderOnly
     messagePush

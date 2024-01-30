@@ -17,6 +17,8 @@ describe('List Officer View', () => {
       incidentRetention: null,
       defaultIncidentEmail: false,
       defaultIncidentPush: false,
+      defaultBulletinEmails: false,
+      defaultBulletinPush: false,
       defaultSubscribedIncidentOnly: false,
       defaultSubscribedOffenderOnly: false,
       defaultMessagePush: false,

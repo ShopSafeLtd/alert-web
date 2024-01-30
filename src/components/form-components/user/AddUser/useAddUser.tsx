@@ -162,6 +162,8 @@ const useAddUser = ({
       form.setFieldsValue({
         incidentEmail: data.scheme?.defaultIncidentEmail,
         incidentPush: data.scheme?.defaultIncidentPush,
+        bulletinEmails: data.scheme?.defaultBulletinEmails,
+        bulletinPush: data.scheme?.defaultBulletinPush,
         messagePush: data.scheme?.defaultMessagePush,
         offenderEmail: data.scheme?.defaultOffenderEmail,
         offenderPush: data.scheme?.defaultOffenderPush,

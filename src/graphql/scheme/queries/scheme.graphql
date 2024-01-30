@@ -8,6 +8,8 @@ query scheme($where: SchemeWhereUniqueInput!) {
     autoApproveOffenders
     defaultIncidentEmail
     defaultIncidentPush
+    defaultBulletinEmails
+    defaultBulletinPush
     defaultSubscribedIncidentOnly
     defaultSubscribedOffenderOnly
     defaultMessagePush

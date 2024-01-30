@@ -90,6 +90,8 @@ const UseRecycledItemListTest = () => {
             offenderRetention: 1,
             defaultIncidentEmail: true,
             defaultIncidentPush: true,
+            defaultBulletinEmails: false,
+            defaultBulletinPush: false,
             defaultMessagePush: true,
             defaultOffenderEmail: true,
             defaultOffenderPush: true,
