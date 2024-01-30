@@ -90,6 +90,7 @@ const HeatMapGoogle = ({
   label,
   emptyLabel,
   markers,
+  height,
 }: {
   data:
     | Array<{
@@ -108,8 +109,9 @@ const HeatMapGoogle = ({
       lng: number;
     };
   }>;
+  height?: string;
 }) => {
-  console.log(markers);
+  console.log(height);
   const mapRef = useRef<MapRef>(null);
 
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
@@ -130,7 +132,7 @@ const HeatMapGoogle = ({
           ref={mapRef}
           mapLib={mapboxgl}
           mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}
-          style={{ width: '100%', height: '400px' }} // will need to dynamically work out based on container size
+          style={{ width: '100%', height }} // will need to dynamically work out based on container size
           mapStyle={
             currentTheme === 'dark'
               ? 'mapbox://styles/wgarrod/clgkseekj009o01qz193sacyp'

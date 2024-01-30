@@ -854,6 +854,7 @@ const PerformanceReportLayout = ({
             defaultMessage: 'Incidents heatmap',
             id: 'UTvOxQ',
           })}
+          height={calculateHeight('incidentsHeatMap', 80)}
           data={
             data?.incidentHeatPerformance?.incidents
               ?.filter(

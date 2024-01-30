@@ -37,6 +37,7 @@ const LineGraph = ({
     </div>
   );
 
+  const min = data ? Math.min(...data.map((item) => item?.value || 0)) : 0;
   return (
     <div style={{ height: '100%', width: '100%%' }} className="no-break">
       <Typography.Title level={4}>{label}</Typography.Title>
@@ -45,6 +46,7 @@ const LineGraph = ({
           theme={{
             text: {
               color: darkMode ? '#fff' : '#000',
+              fill: darkMode ? '#fff' : '#000',
             },
           }}
           data={[
@@ -67,7 +69,7 @@ const LineGraph = ({
           xScale={{ type: 'point' }}
           yScale={{
             type: 'linear',
-            min: 'auto',
+            min,
             max: 'auto',
             stacked: true,
             reverse: false,
@@ -93,6 +95,7 @@ const LineGraph = ({
           enablePointLabel
           pointLabelYOffset={-12}
           enableArea
+          areaBaselineValue={min}
           areaOpacity={0.45}
           useMesh
           tooltip={tooltip}
