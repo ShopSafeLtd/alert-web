@@ -75,7 +75,7 @@ const RoleView = ({
   const intl = useIntl();
   const formatMessage = intl.formatMessage.bind(intl);
   const classes = useStyles();
-
+  const users = data?.role.users || [];
   const CheckboxComponent: Methods = {
     [PermissionMethod.Read]: (
       <Checkbox value={PermissionMethod.Read}>
@@ -444,7 +444,8 @@ const RoleView = ({
                         <Table
                           pagination={{
                             hideOnSinglePage: true,
-                            total: data?.role.users?.length,
+                            total: data?.role.usersCount || 0,
+                            defaultPageSize: 10,
                           }}
                           columns={[
                             {
@@ -464,7 +465,7 @@ const RoleView = ({
                               key: 'email',
                             },
                           ]}
-                          dataSource={data?.role.users?.map(({ user }) => ({
+                          dataSource={users.map(({ user }) => ({
                             key: user?.id,
                             name: user?.fullName,
                             email: user?.email,

@@ -2925,6 +2925,7 @@ export type CreateUserData = {
   publicName: Scalars['Boolean'];
   reportToAllBusinesses?: InputMaybe<Scalars['Boolean']>;
   role: Role;
+  roleId: Scalars['String'];
   scheme: UniqueId;
   subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
@@ -17383,6 +17384,7 @@ export type User = {
   recycledItems: Array<RecycledItem>;
   reference?: Maybe<Scalars['Int']>;
   reportToAllBusinesses: Scalars['Boolean'];
+  schemePermission?: Maybe<CustomRole>;
   schemes: Array<UserScheme>;
   signedTerms?: Maybe<UserTerm>;
   status?: Maybe<UserStatus>;
@@ -19520,6 +19522,13 @@ export type UpdateQuestionOnTagMutationVariables = Exact<{
 
 export type UpdateQuestionOnTagMutation = { __typename?: 'Mutation', updateQuestionOnTag: { __typename?: 'TagQuestion', id: string, tag: { __typename?: 'Tag', id: string }, question: { __typename?: 'Question', question: string, id: string } } };
 
+export type UserRolesQueryVariables = Exact<{
+  schemeId: Scalars['String'];
+}>;
+
+
+export type UserRolesQuery = { __typename?: 'Query', roles: { __typename?: 'QueryRolesConnection', edges: Array<{ __typename?: 'QueryRolesConnectionEdge', node: { __typename?: 'CustomRole', type: Role, id: string, name: string } }> } };
+
 export type ListActionsQueryVariables = Exact<{
   take?: InputMaybe<Scalars['Int']>;
   skip?: InputMaybe<Scalars['Int']>;
@@ -21164,7 +21173,7 @@ export type UserQueryVariables = Exact<{
 }>;
 
 
-export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, fullName: string, email: string, status?: UserStatus | null, demId?: string | null, publicName: boolean, reportToAllBusinesses: boolean, disabled: boolean, newUser: boolean, incidentEmail: boolean, incidentPush: boolean, bulletinEmails: boolean, bulletinPush: boolean, subscribedIncidentOnly: boolean, subscribedOffenderOnly: boolean, messagePush: boolean, offenderEmail: boolean, offenderPush: boolean, totalLastYearLogin: number, totalThirtyDaysLogin: number, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string, demId?: string | null }>, signedTerms?: { __typename?: 'UserTerm', id: string, signature?: string | null, terms: { __typename?: 'TermsAndCondition', id: string, version: number } } | null, groups: Array<{ __typename?: 'Group', id: string, name: string }>, approverGroups: Array<{ __typename?: 'Group', id: string, name: string }>, defaultGroups: Array<{ __typename?: 'Group', id: string, name: string }>, chats: Array<{ __typename?: 'UserChat', id: string, chat: { __typename?: 'Chat', id: string, name: string } }>, schemes: Array<{ __typename?: 'UserScheme', id: string, schemeId: string, role: Role }>, lastTenLogin: Array<{ __typename?: 'LoginEvent', loginTime: Date, id: string }>, lastLogin?: { __typename?: 'LoginEvent', loginTime: Date, id: string } | null } };
+export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, fullName: string, email: string, status?: UserStatus | null, demId?: string | null, publicName: boolean, reportToAllBusinesses: boolean, disabled: boolean, newUser: boolean, incidentEmail: boolean, incidentPush: boolean, bulletinEmails: boolean, bulletinPush: boolean, subscribedIncidentOnly: boolean, subscribedOffenderOnly: boolean, messagePush: boolean, offenderEmail: boolean, offenderPush: boolean, totalLastYearLogin: number, totalThirtyDaysLogin: number, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string, demId?: string | null }>, signedTerms?: { __typename?: 'UserTerm', id: string, signature?: string | null, terms: { __typename?: 'TermsAndCondition', id: string, version: number } } | null, groups: Array<{ __typename?: 'Group', id: string, name: string }>, approverGroups: Array<{ __typename?: 'Group', id: string, name: string }>, defaultGroups: Array<{ __typename?: 'Group', id: string, name: string }>, chats: Array<{ __typename?: 'UserChat', id: string, chat: { __typename?: 'Chat', id: string, name: string } }>, schemes: Array<{ __typename?: 'UserScheme', id: string, schemeId: string, role: Role }>, lastTenLogin: Array<{ __typename?: 'LoginEvent', loginTime: Date, id: string }>, lastLogin?: { __typename?: 'LoginEvent', loginTime: Date, id: string } | null, schemePermission?: { __typename?: 'CustomRole', id: string, name: string, type: Role } | null } };
 
 export type MarkAsReadMessagesMutationVariables = Exact<{
   userChatId: Scalars['String'];
@@ -22728,6 +22737,30 @@ export function useUpdateQuestionOnTagMutation(baseOptions?: Apollo.MutationHook
 export type UpdateQuestionOnTagMutationHookResult = ReturnType<typeof useUpdateQuestionOnTagMutation>;
 export type UpdateQuestionOnTagMutationResult = Apollo.MutationResult<UpdateQuestionOnTagMutation>;
 export type UpdateQuestionOnTagMutationOptions = Apollo.BaseMutationOptions<UpdateQuestionOnTagMutation, UpdateQuestionOnTagMutationVariables>;
+export const UserRolesDocument = gql`
+    query UserRoles($schemeId: String!) {
+  roles(schemeId: $schemeId) {
+    edges {
+      node {
+        type
+        id
+        name
+      }
+    }
+  }
+}
+    `;
+export function useUserRolesQuery(baseOptions: Apollo.QueryHookOptions<UserRolesQuery, UserRolesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserRolesQuery, UserRolesQueryVariables>(UserRolesDocument, options);
+      }
+export function useUserRolesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserRolesQuery, UserRolesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserRolesQuery, UserRolesQueryVariables>(UserRolesDocument, options);
+        }
+export type UserRolesQueryHookResult = ReturnType<typeof useUserRolesQuery>;
+export type UserRolesLazyQueryHookResult = ReturnType<typeof useUserRolesLazyQuery>;
+export type UserRolesQueryResult = Apollo.QueryResult<UserRolesQuery, UserRolesQueryVariables>;
 export const ListActionsDocument = gql`
     query ListActions($take: Int, $skip: Int, $where: ActionWhereInput, $orderBy: [ActionOrderByWithRelationInput!]) {
   listActions(take: $take, skip: $skip, where: $where, orderBy: $orderBy) {
@@ -31103,6 +31136,11 @@ export const UserDocument = gql`
     lastLogin {
       loginTime
       id
+    }
+    schemePermission {
+      id
+      name
+      type
     }
   }
 }

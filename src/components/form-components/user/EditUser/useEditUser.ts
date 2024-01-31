@@ -16,6 +16,7 @@ import {
   useSchemeGroupsQuery,
   useUpdateUserMutation,
   useUserQuery,
+  useUserRolesQuery,
 } from 'graphql/generated';
 import type { FormInstance } from 'antd';
 import { Form, notification } from 'antd';
@@ -28,7 +29,7 @@ export interface FormData {
   fullName: string;
   email: string;
   businesses: SelectOptions[];
-  role: Role;
+  role: string;
   groups: string[];
   approverGroups: string[];
   defaultGroups: string[];
@@ -61,8 +62,9 @@ interface Return {
   onSearchBusiness: (
     value: string
   ) => Promise<{ label: string; value: string; location?: string }[]>;
-  selectedRole: Role | undefined;
-  setSelectedRole: (value: Role) => void;
+  selectedRole: string | undefined;
+  setSelectedRole: (value: string) => void;
+  availableRoles: SelectOptions[];
   selectedGroups: string[] | undefined;
   setSelectedGroups: (value: string[]) => void;
   form: FormInstance<FormData>;
@@ -79,10 +81,25 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
   const [form] = useForm<FormData>();
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
-  const [selectedRole, setSelectedRole] = useState<Role>();
+  const [selectedRole, setSelectedRole] = useState<string>();
   const [selectedGroups, setSelectedGroups] = useState<string[]>();
   const [addBusinessVisible, setAddBusinessVisible] = useState(false);
   const [businessesData, setBusinessesData] = useState<BusinessData[]>([]);
+  const [availableRoles, setAvailableRoles] = useState<SelectOptions[]>([]);
+
+  const { data: rolesData, loading: rolesLoading } = useUserRolesQuery({
+    variables: {
+      schemeId,
+    },
+    skip: !schemeId,
+    onCompleted: ({ roles }) => {
+      const rolesFormatted = roles.edges.map(({ node: role }) => ({
+        label: role.name,
+        value: role.id,
+      }));
+      setAvailableRoles(rolesFormatted);
+    },
+  });
 
   const { data: userData, loading } = useUserQuery({
     variables: {
@@ -273,6 +290,13 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
               : undefined,
         };
       };
+
+      const foundRole = rolesData?.roles.edges.find(
+        ({ node: role }) => role.id === data.role
+      )?.node;
+      if (!foundRole) {
+        return;
+      }
       void updateUser({
         variables: {
           where: {
@@ -297,7 +321,12 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
               update: [
                 {
                   data: {
-                    role: { set: data.role },
+                    role: { set: foundRole.type as Role },
+                    permissions: {
+                      connect: {
+                        id: foundRole.id,
+                      },
+                    },
                   },
                   where: {
                     id: userData?.user?.schemes[0].id,
@@ -460,7 +489,7 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
   return {
     onSubmit,
     data: userData,
-    loading,
+    loading: loading || rolesLoading,
     groupsData: groupsData?.groups.map((group) => ({
       value: group.id,
       label: group.name,
@@ -481,6 +510,7 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
     addBusinessVisible,
     toggleAddBusinessVisible,
     updateNewBusinessData,
+    availableRoles,
   };
 };
 

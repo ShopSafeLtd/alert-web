@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment */
 import { useEffect, useState } from 'react';
 import type {
+  CreateUserData,
   CreateUserInDatabaseMutation,
   InviteExistingUserMutation,
   SearchBusinessesQuery,
   SearchBusinessesQueryVariables,
-  Role,
   UserUpdateInput,
-  CreateUserData,
 } from 'graphql/generated';
 import {
   Model,
@@ -20,6 +19,7 @@ import {
   useSchemeGroupsQuery,
   useSchemeQuery,
   useSearchUserQuery,
+  useUserRolesQuery,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
@@ -36,7 +36,7 @@ export interface FormData {
   fullName: string;
   email: string;
   businesses: SelectOptions[];
-  role: Role;
+  role: string;
   groups: string[];
   chats: string[];
   incidentEmail: boolean;
@@ -82,13 +82,14 @@ interface Return {
   onSearchBusiness: (
     value: string
   ) => Promise<{ label: string; value: string; location?: string }[]>;
-  selectedRole: Role | undefined;
-  setSelectedRole: (value: Role) => void;
+  selectedRole: string | undefined;
+  setSelectedRole: (value: string) => void;
   selectedGroups: string[] | undefined;
   setSelectedGroups: (value: string[]) => void;
   addBusinessVisible: boolean;
   toggleAddBusinessVisible: () => void;
   updateNewBusinessData: (values: BusinessData) => void;
+  availableRoles: SelectOptions[];
 }
 
 const useAddUser = ({
@@ -103,10 +104,26 @@ const useAddUser = ({
   const [existingUser, setExistingUser] = useState(false);
   const [saving, setSaving] = useState(false);
   const [search, setSearch] = useState<string | null>(null);
-  const [selectedRole, setSelectedRole] = useState<Role>();
+  const [selectedRole, setSelectedRole] = useState<string>();
   const [selectedGroups, setSelectedGroups] = useState<string[]>();
   const [addBusinessVisible, setAddBusinessVisible] = useState(false);
   const [businessesData, setBusinessesData] = useState<BusinessData[]>([]);
+
+  const [availableRoles, setAvailableRoles] = useState<SelectOptions[]>([]);
+
+  const { data: rolesData, loading: rolesLoading } = useUserRolesQuery({
+    variables: {
+      schemeId,
+    },
+    skip: !schemeId,
+    onCompleted: ({ roles }) => {
+      const rolesFormatted = roles.edges.map(({ node: role }) => ({
+        label: role.name,
+        value: role.id,
+      }));
+      setAvailableRoles(rolesFormatted);
+    },
+  });
 
   useEffect(() => {
     if (business)
@@ -372,6 +389,13 @@ const useAddUser = ({
           : undefined,
     });
 
+    const foundRole = rolesData?.roles.edges.find(
+      ({ node: role }) => role.id === data.role
+    )?.node;
+    if (!foundRole) {
+      return;
+    }
+
     if (existingUser && userData?.user) {
       void inviteExistingUser({
         variables: {
@@ -402,7 +426,12 @@ const useAddUser = ({
             schemes: {
               create: [
                 {
-                  role: data.role,
+                  role: foundRole.type,
+                  permissions: {
+                    connect: {
+                      id: foundRole.id,
+                    },
+                  },
                   scheme: {
                     connect: { id: schemeId },
                   },
@@ -433,7 +462,8 @@ const useAddUser = ({
             defaultGroups: data.defaultGroups
               ? data.defaultGroups.map((id) => ({ id }))
               : undefined,
-            role: data.role,
+            role: foundRole.type,
+            roleId: data.role,
             publicName: data.publicName,
             reportToAllBusinesses: data.reportToAllBusinesses,
             incidentEmail: data.incidentEmail,
@@ -538,7 +568,7 @@ const useAddUser = ({
     form,
     existingUser,
     onSearchBusiness,
-    schemeLoading,
+    schemeLoading: schemeLoading || rolesLoading,
     selectedRole,
     setSelectedRole,
     selectedGroups,
@@ -546,6 +576,7 @@ const useAddUser = ({
     addBusinessVisible,
     toggleAddBusinessVisible,
     updateNewBusinessData,
+    availableRoles,
   };
 };
 

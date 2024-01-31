@@ -1,0 +1,11 @@
+query UserRoles($schemeId: String!) {
+  roles(schemeId: $schemeId) {
+    edges {
+      node {
+        type
+        id
+        name
+      }
+    }
+  }
+}

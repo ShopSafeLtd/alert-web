@@ -38,8 +38,9 @@ interface Props {
   onSearchBusiness: (
     value: string
   ) => Promise<{ label: string; value: string; location?: string }[]>;
-  selectedRole: Role | undefined;
-  setSelectedRole: (value: Role) => void;
+  selectedRole: string | undefined;
+  setSelectedRole: (value: string) => void;
+  availableRoles: SelectOptions[];
   selectedGroups: string[] | undefined;
   setSelectedGroups: (value: string[]) => void;
   addBusinessVisible: boolean;
@@ -67,6 +68,7 @@ const EditUser = ({
   addBusinessVisible,
   toggleAddBusinessVisible,
   updateNewBusinessData,
+  availableRoles,
 }: Props): JSX.Element => {
   const intl = useIntl();
   return !data && loading ? (
@@ -81,7 +83,7 @@ const EditUser = ({
           label: name,
           value: id,
         })),
-        role: data?.user?.schemes && data?.user?.schemes[0].role,
+        role: data?.user?.schemePermission?.id || '',
         groups:
           data?.user?.groups && data.user.groups.length > 0
             ? data.user.groups.map(({ id }) => id)
@@ -235,80 +237,11 @@ const EditUser = ({
             ]}
           >
             <Select
+              loading={loading}
               disabled={saving}
               onChange={(value) => setSelectedRole(value)}
-            >
-              <Select.Option key={Role.User} value={Role.User}>
-                <Typography.Text>
-                  {intl.formatMessage({ defaultMessage: 'User', id: 'EwRIOm' })}
-                </Typography.Text>
-                <Typography.Paragraph
-                  type="secondary"
-                  style={{ fontSize: 13, margin: 0 }}
-                >
-                  {intl.formatMessage({
-                    defaultMessage:
-                      'A basic user account that is able to submit data but no admin features.',
-                    id: 'nPbds2',
-                  })}
-                </Typography.Paragraph>
-              </Select.Option>
-              <Select.Option key={Role.ContentAdmin} value={Role.ContentAdmin}>
-                <Typography.Text>
-                  {intl.formatMessage({
-                    defaultMessage: 'Content Admin',
-                    id: 'juchkY',
-                  })}
-                </Typography.Text>
-                <Typography.Paragraph
-                  type="secondary"
-                  style={{ fontSize: 13, margin: 0, fontWeight: 400 }}
-                >
-                  {intl.formatMessage({
-                    defaultMessage:
-                      'An account that allows for submitting and administering data but no access to settings.',
-                    id: 'RSZdzd',
-                  })}
-                </Typography.Paragraph>
-              </Select.Option>
-              <Select.Option key={Role.GroupAdmin} value={Role.GroupAdmin}>
-                <Typography.Text>
-                  {intl.formatMessage({
-                    defaultMessage: 'Group Admin',
-                    id: 'UmJl0N',
-                  })}
-                </Typography.Text>
-                <Typography.Paragraph
-                  type="secondary"
-                  style={{ fontSize: 13, margin: 0, fontWeight: 400 }}
-                >
-                  {intl.formatMessage({
-                    defaultMessage:
-                      'An account that allows for submitting and administering data and limited access to settings within their group.',
-                    id: 'Y3CqF1',
-                  })}
-                </Typography.Paragraph>
-              </Select.Option>
-
-              <Select.Option key={Role.SchemeAdmin} value={Role.SchemeAdmin}>
-                <Typography.Text>
-                  {intl.formatMessage({
-                    defaultMessage: 'Scheme Admin',
-                    id: 'ZENz1B',
-                  })}
-                </Typography.Text>
-                <Typography.Paragraph
-                  type="secondary"
-                  style={{ fontSize: 13, margin: 0 }}
-                >
-                  {intl.formatMessage({
-                    defaultMessage:
-                      'Full administrator account with access to all settings.',
-                    id: '9eTtQB',
-                  })}
-                </Typography.Paragraph>
-              </Select.Option>
-            </Select>
+              options={availableRoles}
+            />
           </Form.Item>
         </Col>
       </Row>

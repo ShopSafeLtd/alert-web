@@ -71,5 +71,10 @@ query User(
       loginTime
       id
     }
+    schemePermission {
+      id
+      name
+      type
+    }
   }
 }

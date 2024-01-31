@@ -28,6 +28,7 @@ const EditUser = ({ onClose, id }: Props): JSX.Element => {
     toggleAddBusinessVisible,
     updateNewBusinessData,
     form,
+    availableRoles
   } = useEditUser({
     onClose,
     userId,
@@ -52,6 +53,7 @@ const EditUser = ({ onClose, id }: Props): JSX.Element => {
       toggleAddBusinessVisible={toggleAddBusinessVisible}
       updateNewBusinessData={updateNewBusinessData}
       form={form}
+      availableRoles={availableRoles}
     />
   );
 };

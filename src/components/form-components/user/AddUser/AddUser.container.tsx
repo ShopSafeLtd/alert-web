@@ -42,10 +42,12 @@ const AddUser = ({
     addBusinessVisible,
     toggleAddBusinessVisible,
     updateNewBusinessData,
+    availableRoles,
   } = useAddUser({ onClose, update, updateSearch, business });
 
   return (
     <View
+      availableRoles={availableRoles}
       schemeLoading={schemeLoading}
       onSubmit={onSubmit}
       onClose={onClose}

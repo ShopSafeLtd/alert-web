@@ -41,8 +41,9 @@ interface Props {
   ) => Promise<{ label: string; value: string; location?: string }[]>;
   businessProvided: boolean;
   schemeLoading: boolean;
-  selectedRole: Role | undefined;
-  setSelectedRole: (value: Role) => void;
+  selectedRole: string | undefined;
+  setSelectedRole: (value: string) => void;
+  availableRoles: SelectOptions[];
   selectedGroups: string[] | undefined;
   setSelectedGroups: (value: string[]) => void;
   addBusinessVisible: boolean;
@@ -71,6 +72,7 @@ const AddUser = ({
   addBusinessVisible,
   toggleAddBusinessVisible,
   updateNewBusinessData,
+  availableRoles,
 }: Props): JSX.Element => {
   const intl = useIntl();
   // const [selectedGroups, setSelectedGroups] = useState<string[]>();
@@ -82,7 +84,7 @@ const AddUser = ({
         fullName: '',
         email: '',
         businesses: [],
-        role: Role.User,
+        role: '',
         postcode: '',
         street: '',
         townCity: '',
@@ -197,86 +199,11 @@ const AddUser = ({
               ]}
             >
               <Select
+                loading={schemeLoading}
                 disabled={saving}
                 onChange={(value) => setSelectedRole(value)}
-              >
-                <Select.Option key={Role.User} value={Role.User}>
-                  <Typography.Text>
-                    {intl.formatMessage({
-                      defaultMessage: 'User',
-                      id: 'EwRIOm',
-                    })}
-                  </Typography.Text>
-                  <Typography.Paragraph
-                    type="secondary"
-                    style={{ fontSize: 13, margin: 0 }}
-                  >
-                    {intl.formatMessage({
-                      defaultMessage:
-                        'A basic user account that can submit data but has no admin features.',
-                      id: 'CA2t76',
-                    })}
-                  </Typography.Paragraph>
-                </Select.Option>
-                <Select.Option
-                  key={Role.ContentAdmin}
-                  value={Role.ContentAdmin}
-                >
-                  <Typography.Text>
-                    {intl.formatMessage({
-                      defaultMessage: 'Content Admin',
-                      id: 'juchkY',
-                    })}
-                  </Typography.Text>
-                  <Typography.Paragraph
-                    type="secondary"
-                    style={{ fontSize: 13, margin: 0, fontWeight: 400 }}
-                  >
-                    {intl.formatMessage({
-                      defaultMessage:
-                        'An account that allows for submitting and administering data but has no access to settings.',
-                      id: 'Cv0frO',
-                    })}
-                  </Typography.Paragraph>
-                </Select.Option>
-                <Select.Option key={Role.GroupAdmin} value={Role.GroupAdmin}>
-                  <Typography.Text>
-                    {intl.formatMessage({
-                      defaultMessage: 'Group Admin',
-                      id: 'UmJl0N',
-                    })}
-                  </Typography.Text>
-                  <Typography.Paragraph
-                    type="secondary"
-                    style={{ fontSize: 13, margin: 0, fontWeight: 400 }}
-                  >
-                    {intl.formatMessage({
-                      defaultMessage:
-                        'An account that allows for submitting and administering data and limited access to settings within their group.',
-                      id: 'Y3CqF1',
-                    })}
-                  </Typography.Paragraph>
-                </Select.Option>
-
-                <Select.Option key={Role.SchemeAdmin} value={Role.SchemeAdmin}>
-                  <Typography.Text>
-                    {intl.formatMessage({
-                      defaultMessage: 'Scheme Admin',
-                      id: 'ZENz1B',
-                    })}
-                  </Typography.Text>
-                  <Typography.Paragraph
-                    type="secondary"
-                    style={{ fontSize: 13, margin: 0 }}
-                  >
-                    {intl.formatMessage({
-                      defaultMessage:
-                        'A full administrator account with access to all settings.',
-                      id: 'k5jo6H',
-                    })}
-                  </Typography.Paragraph>
-                </Select.Option>
-              </Select>
+                options={availableRoles}
+              />
             </Form.Item>
           </Col>
         </Row>
