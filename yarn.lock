@@ -6647,6 +6647,11 @@ cross-undici-fetch@^0.4.0:
     undici "^5.1.0"
     web-streams-polyfill "^3.2.0"
 
+crypto-hash@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/crypto-hash/-/crypto-hash-3.0.0.tgz#1f217b7134c5e05adc013d1edce67c64fa459f7f"
+  integrity sha512-5l5xGtzuvGTU28GXxGV1JYVFou68buZWpkV1Fx5hIDRPnfbQ8KzabTlNIuDIeSCYGVPFehupzDqlnbXm2IXmdQ==
+
 crypto-js@^4.1.1:
   version "4.1.1"
   resolved "https://registry.npmjs.org/crypto-js/-/crypto-js-4.1.1.tgz"

@@ -8,7 +8,6 @@ import {
   InMemoryCache,
   split,
 } from '@apollo/client';
-
 import { setContext } from '@apollo/client/link/context';
 import { getMainDefinition } from '@apollo/client/utilities';
 
@@ -17,7 +16,8 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { onError } from '@apollo/client/link/error';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
-
+import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries';
+import { sha256 } from 'crypto-hash';
 import * as Sentry from '@sentry/react';
 import { SentryLink } from 'apollo-link-sentry';
 import { useStoreState } from '../state';
@@ -67,6 +67,7 @@ const Apollo = ({ children }: Props): JSX.Element => {
 
   const httpLink = new HttpLink({
     uri: import.meta.env.VITE_GRAPHQL_URL,
+    useGETForQueries: true,
   });
 
   let activeSocket: WebSocket;
@@ -239,6 +240,8 @@ const Apollo = ({ children }: Props): JSX.Element => {
     .concat(errorLink)
     // eslint-disable-next-line unicorn/prefer-spread
     .concat(middlewareLink)
+    // eslint-disable-next-line unicorn/prefer-spread
+    .concat(createPersistedQueryLink({ sha256, useGETForHashedQueries: true }))
     // eslint-disable-next-line unicorn/prefer-spread
     .concat(httpLink);
 
