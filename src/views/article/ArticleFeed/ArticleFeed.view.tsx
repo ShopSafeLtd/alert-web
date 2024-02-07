@@ -45,6 +45,7 @@ interface Props {
   updateArticleList: MutationUpdaterFn<DeleteArticleMutation>;
   fetchMoreScroll: () => void;
   filterVariables: ArticleFilters;
+  hasCreateRights: boolean;
 }
 
 const Article = ({
@@ -63,6 +64,7 @@ const Article = ({
   updateArticleList,
   fetchMoreScroll,
   filterVariables,
+  hasCreateRights,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const {
@@ -130,24 +132,26 @@ const Article = ({
               />
             </Tooltip>
           </Col>
-          <Col>
-            <Button
-              type="primary"
-              onClick={onNavigate}
-              icon={
-                <FontAwesomeIcon
-                  icon={faPlus}
-                  size="lg"
-                  style={{ marginRight: 5 }}
-                />
-              }
-            >
-              {intl.formatMessage({
-                defaultMessage: 'Add Bulletin',
-                id: 'x52+I1',
-              })}
-            </Button>
-          </Col>
+          {hasCreateRights && (
+            <Col>
+              <Button
+                type="primary"
+                onClick={onNavigate}
+                icon={
+                  <FontAwesomeIcon
+                    icon={faPlus}
+                    size="lg"
+                    style={{ marginRight: 5 }}
+                  />
+                }
+              >
+                {intl.formatMessage({
+                  defaultMessage: 'Add Bulletin',
+                  id: 'x52+I1',
+                })}
+              </Button>
+            </Col>
+          )}
         </Row>
       </Card>
 

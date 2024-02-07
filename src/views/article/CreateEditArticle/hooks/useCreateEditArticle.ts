@@ -9,6 +9,7 @@ import type { Props } from '../types/CreateArticle';
 import {
   ArticlePriority,
   Model,
+  Role,
   useArticleQuery,
   useCreateArticleMutation,
   useCreateTagMutation,
@@ -57,6 +58,7 @@ const useCreateEditArticle = (): Props => {
     schemes: [],
     watermarkImage: true,
   });
+  const currentUserId = useStoreState((state) => state.user.id);
 
   const [selectedSchemes, setSelectedSchemes] = useState<string[]>([]);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
@@ -184,9 +186,33 @@ const useCreateEditArticle = (): Props => {
     variables: {
       where: {
         scheme: {
-          id: {
-            in: schemes?.map((scheme) => scheme?.scheme?.id || '') || [],
-          },
+          AND: [
+            {
+              id: {
+                in: schemes?.map((scheme) => scheme?.scheme?.id || '') || [],
+              },
+            },
+            {
+              members: {
+                some: {
+                  AND: [
+                    {
+                      user: {
+                        id: {
+                          equals: currentUserId,
+                        },
+                      },
+                    },
+                    {
+                      role: {
+                        equals: Role.SchemeAdmin,
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          ],
         },
       },
     },

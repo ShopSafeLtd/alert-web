@@ -24,6 +24,7 @@ const ArticleFeed = (): JSX.Element => {
     updateArticleList,
     fetchMoreScroll,
     filterVariables,
+    hasCreateRights,
   } = useArticleFeed();
 
   return (
@@ -33,6 +34,7 @@ const ArticleFeed = (): JSX.Element => {
       setSearch={setSearch}
       sortFilter={sortFilter}
       toggleSortFilter={toggleSortFilter}
+      hasCreateRights={hasCreateRights}
       // clearFilters={clearFilters}
       // setGroupsFilter={setGroupsFilter}
       // setPriorityFilter={setPriorityFilter}

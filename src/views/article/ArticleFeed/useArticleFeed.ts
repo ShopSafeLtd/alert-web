@@ -4,10 +4,10 @@ import type {
   ListArticlesFeedQuery,
 } from 'graphql/generated';
 import {
-  SortOrder,
   ListArticlesFeedDocument,
   QueryMode,
   Role,
+  SortOrder,
   useListArticlesFeedQuery,
   useSchemeGroupsQuery,
 } from 'graphql/generated';
@@ -47,6 +47,7 @@ interface Return {
   updateArticleList: MutationUpdaterFn<DeleteArticleMutation>;
   fetchMoreScroll: () => void;
   filterVariables: ArticleFilters;
+  hasCreateRights: boolean;
 }
 
 const useArticleFeed = (): Return => {
@@ -340,6 +341,8 @@ const useArticleFeed = (): Return => {
     setCreatedAtFilter,
     updateArticleList,
     filterVariables,
+    // TODO change to new permissions model
+    hasCreateRights: role === 'SCHEME_ADMIN' || role === 'GROUP_ADMIN',
   };
 };
 

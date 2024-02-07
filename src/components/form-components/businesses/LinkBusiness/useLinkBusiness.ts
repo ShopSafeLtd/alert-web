@@ -5,9 +5,10 @@ import type {
 import {
   ListBusinessesDocument,
   QueryMode,
+  Role,
+  SortOrder,
   useLinkBusinessToSchemeMutation,
   useListBusinessesQuery,
-  SortOrder,
 } from 'graphql/generated';
 import { useState } from 'react';
 import { useStoreState } from 'state';
@@ -39,6 +40,7 @@ const useLinkBusiness = ({ onClose }: Props): Return => {
   const [selectedValue, setSelectedValue] = useState<React.Key[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentPageSize, setCurrentPageSize] = useState(50);
+  const currentUserId = useStoreState((state) => state.user.id);
 
   const { data, loading } = useListBusinessesQuery({
     variables: {
@@ -52,11 +54,36 @@ const useLinkBusiness = ({ onClose }: Props): Return => {
         },
         schemes: {
           some: {
-            id: {
-              in: userSchemes
-                .map((item) => item.scheme.id)
-                .filter((item) => item !== currentScheme),
-            },
+            AND: [
+              {
+                id: {
+                  in: userSchemes
+                    .map((item) => item.scheme.id)
+                    .filter((item) => item !== currentScheme),
+                },
+              },
+              {
+                members: {
+                  some: {
+                    AND: [
+                      {
+                        user: {
+                          id: {
+                            equals: currentUserId,
+                          },
+                        },
+                      },
+                      {
+                        role: {
+                          // TODO change to new permissions when available
+                          equals: Role.SchemeAdmin,
+                        },
+                      },
+                    ],
+                  },
+                },
+              },
+            ],
           },
         },
       },

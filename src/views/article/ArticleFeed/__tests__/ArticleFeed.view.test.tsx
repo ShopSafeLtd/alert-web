@@ -55,6 +55,7 @@ describe('Detail Officer View', () => {
               open: false,
               index: 0,
             }}
+            hasCreateRights={true}
             sortFilter={false}
             toggleSortFilter={jest.fn()}
             data={data}
