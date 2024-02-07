@@ -409,6 +409,9 @@ const RoleView = ({
                             )}
                             {Object.values(PermissionModel)
                               .sort()
+                              .filter(
+                                (item) => item !== PermissionModel.Checklist
+                              )
                               .map((key) => fields[key as DataType])}
 
                             <Row>

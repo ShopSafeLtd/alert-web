@@ -118,6 +118,7 @@ const SideNavContent = (props: SideNavContentProps) => {
   } = props;
 
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
+  const { id: schemeId } = useStoreState((state) => state.scheme);
   const {
     role: userRole,
     id: userId,
@@ -126,9 +127,11 @@ const SideNavContent = (props: SideNavContentProps) => {
     schemes,
   } = useStoreState((state) => state.user);
 
-  const permissions = schemes.flatMap((scheme) =>
-    scheme.permissions.map(({ model }) => model)
-  );
+  const permissions =
+    schemes
+      .find((scheme) => scheme.scheme.id === schemeId)
+      ?.permissions.map(({ model }) => model) || [];
+
   const { restrictIncidentAccess, reportOnly } = useStoreState(
     (state) => state.scheme
   );
@@ -184,7 +187,6 @@ const SideNavContent = (props: SideNavContentProps) => {
   //       : true;
   //   })
   // );
-
   return (
     <div
       style={{
