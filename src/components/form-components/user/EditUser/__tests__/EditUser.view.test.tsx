@@ -47,6 +47,8 @@ describe('Detail Officer View', () => {
       messagePush: true,
       offenderEmail: true,
       offenderPush: true,
+      bulletinEmails: true,
+      bulletinPush: true,
       approverGroups: [],
       defaultGroups: [],
       totalLastYearLogin: 0,
@@ -81,6 +83,7 @@ describe('Detail Officer View', () => {
           addBusinessVisible={false}
           toggleAddBusinessVisible={jest.fn()}
           form={form}
+          availableRoles={[{ value: '', label: '' }]}
         />
       </MemoryRouter>
     );

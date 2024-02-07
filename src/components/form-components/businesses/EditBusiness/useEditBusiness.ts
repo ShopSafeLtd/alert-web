@@ -21,7 +21,7 @@ import { useStoreState } from 'state';
 import type { LocationData, TagData } from 'types/DataType';
 import errorNotification from 'types/mutation_notifications/error_notification';
 
-interface OnSubmitValues {
+export interface OnSubmitValues {
   name: string;
   parent: {
     label: string;

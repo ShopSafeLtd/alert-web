@@ -97,23 +97,25 @@ const OffenderDetails = ({
           </Paragraph>
         </Col>
 
-        <Col>
-          <Button
-            disabled={saving || potentialOffenders === 0}
-            size="small"
-            danger
-            type="ghost"
-            onClick={toggleViewPotentialOffenders}
-            style={{ marginLeft: 20 }}
-          >
-            {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-            {potentialOffenders}{' '}
-            {intl.formatMessage({
-              defaultMessage: 'Potential Offenders',
-              id: 'KMCham',
-            })}
-          </Button>
-        </Col>
+        {potentialOffenders > 0 && (
+          <Col>
+            <Button
+              disabled={saving || potentialOffenders === 0}
+              size="small"
+              danger
+              type="ghost"
+              onClick={toggleViewPotentialOffenders}
+              style={{ marginLeft: 20 }}
+            >
+              {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+              {potentialOffenders}{' '}
+              {intl.formatMessage({
+                defaultMessage: 'Potential Offenders',
+                id: 'KMCham',
+              })}
+            </Button>
+          </Col>
+        )}
       </Row>
       <Row gutter={50}>
         <Col span={8}>

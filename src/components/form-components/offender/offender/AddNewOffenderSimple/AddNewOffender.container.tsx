@@ -8,7 +8,7 @@ import type { StateImageData } from '../../../../incidents/IncidentForm/ImageSec
 
 interface Props {
   onClose: () => void;
-  onCompleted: () => void;
+  onCompleted?: () => void;
   update: MutationUpdaterFn<CreateSimpleOffenderMutation>;
   images?: ImageData[] | undefined;
   incidentId?: string;

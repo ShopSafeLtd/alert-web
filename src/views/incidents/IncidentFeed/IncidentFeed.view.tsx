@@ -3,25 +3,29 @@ import type {
   IncidentsFeedQuery,
   RecycleIncidentMutation,
 } from 'graphql/generated';
-import { Button, Card, Col, Drawer, Empty, Input, Row } from 'antd';
+import { Button, Card, Col, Drawer, Empty, Input, Row, Tooltip } from 'antd';
 import IncidentCard from 'components/incidents/IncidentCard';
 import IncidentSkeletonCard from 'components/incidents/IncidentSkeletonCard';
 import type { IncidentSort } from 'state';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFilter, faPlus } from '@fortawesome/pro-light-svg-icons';
+import {
+  faFilter,
+  faGrid,
+  faGrid2,
+  faPlus,
+} from '@fortawesome/pro-light-svg-icons';
 import type { MutationUpdaterFn } from '@apollo/client';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
-import CheckTags from 'components/form-components/check-tags/CheckTags.view';
 import IncidentFilter from 'components/incidents/IncidentFilter';
 import { useIntl } from 'react-intl';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import type { DateType } from 'types/DataType';
 import type { IncidentFilters } from 'state/data-model';
-import CheckTag from 'components/form-components/check-tag/CheckTag.view';
 import CompactSkeletonCard from 'components/offenders/OffenderCard/OffenderSkeletonCard.view';
+import CheckTags from 'components/form-components/check-tags/CheckTags.view';
 import Loading from '../../../components/shared-components/AntD/Loading';
 
 interface Props {
@@ -157,6 +161,33 @@ const IncidentFeed = ({
             />
           </Col>
           <Col>
+            <Tooltip
+              // placement="topLeft"
+              title={
+                compactView
+                  ? intl.formatMessage({
+                      defaultMessage: 'Present incidents card in normal size',
+                      id: 'uzVqOF',
+                    })
+                  : intl.formatMessage({
+                      defaultMessage: 'Present incidents in compact card',
+                      id: 'tga/q5',
+                    })
+              }
+            >
+              <Button
+                onClick={setCompactView}
+                icon={
+                  <FontAwesomeIcon
+                    icon={compactView ? faGrid2 : faGrid}
+                    size="lg"
+                    style={{ marginRight: 5 }}
+                  />
+                }
+              />
+            </Tooltip>
+          </Col>
+          {/* <Col>
             <CheckTag
               option={{
                 label: intl.formatMessage({
@@ -172,44 +203,25 @@ const IncidentFeed = ({
               active={compactView}
               onClick={setCompactView}
             />
-            {/* <CheckTags
-              mode="radio"
-              value={compactView ? ['Compact'] : ['Default']}
-              onChange={setCompactView}
-              options={[
-                {
-                  label: intl.formatMessage({
-                    defaultMessage: 'Default Card',
-                    id: '1K+0py',
-                  }),
-                  value: 'Default',
-                },
-                {
-                  label: intl.formatMessage({
-                    defaultMessage: 'Compact Card',
-                    id: 'O3k0C9',
-                  }),
-                  value: 'Compact',
-                },
-              ]}
-            /> */}
-          </Col>
+          </Col> */}
           <Col>
-            <Button
-              onClick={toggleSortFilter}
-              icon={
-                <FontAwesomeIcon
-                  icon={faFilter}
-                  size="lg"
-                  style={{ marginRight: 5 }}
-                />
-              }
-            >
-              {intl.formatMessage({
+            <Tooltip
+              title={intl.formatMessage({
                 defaultMessage: 'Sort & Filter',
                 id: 'f2g3SM',
               })}
-            </Button>
+            >
+              <Button
+                onClick={toggleSortFilter}
+                icon={
+                  <FontAwesomeIcon
+                    icon={faFilter}
+                    size="lg"
+                    style={{ marginRight: 5 }}
+                  />
+                }
+              />
+            </Tooltip>
           </Col>
           <Col>
             <Button

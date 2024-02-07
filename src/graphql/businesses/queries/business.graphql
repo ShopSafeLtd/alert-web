@@ -5,6 +5,7 @@ query Business($where: BusinessWhereUniqueInput!) {
     fullName
     publicName
     demId
+    siteNumber
     groups {
       id
       name

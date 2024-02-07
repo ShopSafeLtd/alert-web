@@ -2,12 +2,16 @@ import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import EditOffender from '../EditOffender.view';
-import type { ViewOffenderQuery } from '../../../../../graphql/generated';
+import { Height, ViewOffenderQuery } from '../../../../../graphql/generated';
 import { ImagePosition } from '../../../../../graphql/generated';
 
 describe('List Officer View', () => {
   const data: ViewOffenderQuery = {
     offender: {
+      height: Height.Tall,
+      reference: 1,
+      knownFor: [],
+      targetedGoods: [],
       evidence: [],
       scheme: {
         mg11Available: true,

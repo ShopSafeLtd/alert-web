@@ -11,30 +11,13 @@ mutation UpdateInvestigation(
       fullName
     }
     vehicles {
-      id
-      make
-      model
-      colour
-      registration
-      updatedAt
-      totalCrimeGroups
-      totalOffenders
-      totalIncidents
+      ...Vehicles
       images {
         ...Images
       }
     }
     offenders {
-      id
-      name
-      reference
-      totalIncidents
-      age
-      gender
-      race
-      build
-      height
-      dateOfBirth
+      ...Offenders
       images {
         id
         optimised

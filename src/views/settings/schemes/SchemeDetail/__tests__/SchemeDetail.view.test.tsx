@@ -28,6 +28,7 @@ describe('List Officer View', () => {
       autoPopulateDescription: false,
       needJustification: false,
       requireSiteNumberForUsers: false,
+      oneSelectedIncidentTypeOnly: false,
       reportOnly: true,
       facialRecognition: true,
       imagesRequiredOnOffenders: true,

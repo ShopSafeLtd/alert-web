@@ -27,6 +27,10 @@ const AddCrimeType = (): JSX.Element => {
     updateQuestionOnTag,
     selectedQuestion,
     setSelectedQuestion,
+    deleteConfirm,
+    editIncidentType,
+    setEditIncidentType,
+    saving,
   } = useViewTag();
 
   return (
@@ -54,6 +58,10 @@ const AddCrimeType = (): JSX.Element => {
       updateTagParent={updateTagParent}
       incidentFormLayoutChanged={incidentFormLayoutChanged}
       saveIncidentForm={saveIncidentForm}
+      deleteConfirm={deleteConfirm}
+      editIncidentType={editIncidentType}
+      setEditIncidentType={setEditIncidentType}
+      saving={saving}
     />
   );
 };

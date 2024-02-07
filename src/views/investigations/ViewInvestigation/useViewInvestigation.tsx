@@ -1184,20 +1184,17 @@ const useViewInvestigation = (investigationId: string): Return => {
         variables,
       });
       if (!existingData?.investigation) return;
-      const index = existingData?.investigation?.crimeGroups
-        .map((item) => item.id)
-        .indexOf(res.updateCrimeGroup.id);
+
+      const filterCrimeGroups = existingData?.investigation?.crimeGroups.filter(
+        ({ id }) => id !== res.updateCrimeGroup.id
+      );
 
       store.writeQuery<ViewInvestigationQuery>({
         query: ViewInvestigationDocument,
         data: {
           investigation: {
             ...existingData.investigation,
-            crimeGroups: update(existingData.investigation.crimeGroups, {
-              [index]: {
-                $set: { ...res.updateCrimeGroup },
-              },
-            }),
+            crimeGroups: [...filterCrimeGroups, res.updateCrimeGroup],
           },
           __typename: 'Query',
         },

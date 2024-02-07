@@ -318,6 +318,8 @@ const UseEditUserTest = () => {
             subscribedOffenderOnly: false,
             approverGroups: [],
             defaultGroups: [],
+            bulletinEmails: false,
+            bulletinPush: false,
           })
         }
       >

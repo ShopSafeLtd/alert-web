@@ -69,11 +69,17 @@ export interface FormData {
   ageCheck?: boolean;
   idSource?: IdSource;
   images: ImageValue[];
+  addressAlias?: string;
+  building?: string;
+  street?: string;
+  townCity?: string;
+  county?: string;
+  postcode?: string;
 }
 
 interface Props {
   onClose: () => void;
-  onCompleted: () => void;
+  onCompleted?: () => void;
   update: MutationUpdaterFn<CreateSimpleOffenderMutation>;
   onImagesUploaded?: (values: StateImageData[]) => void;
   incidentId?: string;
@@ -170,7 +176,17 @@ const useAddNewOffender = ({
           incidentId: incidentId || null,
           investigationId: investigationId || null,
           vehicles: vehicleId ? { connect: [{ id: vehicleId }] } : undefined,
-
+          address:
+            data.street && data.townCity && data.postcode
+              ? {
+                  alias: data.addressAlias,
+                  building: data.building,
+                  street: data.street,
+                  townCity: data.townCity,
+                  county: data.county,
+                  postcode: data.postcode,
+                }
+              : undefined,
           image:
             data.images && data.images.length > 0
               ? {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Card, Col, List, Row, Tag, Typography } from 'antd';
+import { Button, Card, Col, List, Row, Typography } from 'antd';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
@@ -102,7 +102,7 @@ const ViewArticleView = ({
               )}
             </Col>
           </Row>
-          <Row align="middle">
+          {/* <Row align="middle">
             <Col style={{ marginRight: 5 }}>
               <Text style={{ fontSize: 16, fontWeight: 400 }}>
                 {intl.formatMessage({
@@ -119,7 +119,7 @@ const ViewArticleView = ({
                 </Tag>
               </Col>
             ))}
-          </Row>
+          </Row> */}
           <div
             style={{ width: '100%', height: '100%', marginTop: 20 }}
             // eslint-disable-next-line react/no-danger

@@ -36,6 +36,7 @@ query userNotifications(
           autoPopulateDescription
           needJustification
           requireSiteNumberForUsers
+          oneSelectedIncidentTypeOnly
           logo {
             optimisedPersisted
             id

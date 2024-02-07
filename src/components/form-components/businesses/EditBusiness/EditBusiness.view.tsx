@@ -19,30 +19,17 @@ import type { LocationData, TagData } from 'types/DataType';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import AddTag from 'components/form-components/tags/AddTag';
-
-interface FormData {
-  name: string;
-  parent: {
-    label: string;
-    value: string;
-  };
-  building: string;
-  street: string;
-  townCity: string;
-  county: string;
-  publicName: boolean;
-  postcode: string;
-}
+import type { OnSubmitValues } from './useEditBusiness';
 
 interface Props {
-  onSubmit: (values: FormData) => void;
+  onSubmit: (values: OnSubmitValues) => void;
   onClose: () => void;
   onSearchBusiness: (
     value: string
   ) => Promise<{ label: string; value: string }[]>;
   saving: boolean;
   loading: boolean;
-  form: FormInstance<FormData>;
+  form: FormInstance<OnSubmitValues>;
   location: LocationData | undefined;
   setLocation: (value: LocationData) => void;
   tags: { value: string; label: string }[];
@@ -74,7 +61,7 @@ const EditBusiness = ({
   const intl = useIntl();
 
   return (
-    <Form<FormData> layout="vertical" onFinish={onSubmit} form={form}>
+    <Form<OnSubmitValues> layout="vertical" onFinish={onSubmit} form={form}>
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item

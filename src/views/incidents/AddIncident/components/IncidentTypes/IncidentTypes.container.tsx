@@ -8,8 +8,13 @@ interface Props {
 }
 
 const IncidentTypes = ({ incidentForm }: Props) => {
-  const { incidentTagsData, incidentTagsLoading, tagsLoading, tags } =
-    useIncidentTypes();
+  const {
+    incidentTagsData,
+    incidentTagsLoading,
+    tagsLoading,
+    tags,
+    oneSelectedIncidentTypeOnly,
+  } = useIncidentTypes();
 
   return (
     <View
@@ -18,6 +23,7 @@ const IncidentTypes = ({ incidentForm }: Props) => {
       tagsLoading={tagsLoading}
       tags={tags}
       incidentForm={incidentForm}
+      oneSelectedIncidentTypeOnly={oneSelectedIncidentTypeOnly}
     />
   );
 };

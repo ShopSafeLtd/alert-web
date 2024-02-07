@@ -279,6 +279,8 @@ const UseAddUserTest = () => {
             chats: ['chatId'],
             approverGroups: [],
             defaultGroups: [],
+            bulletinEmails: false,
+            bulletinPush: false,
           })
         }
       >

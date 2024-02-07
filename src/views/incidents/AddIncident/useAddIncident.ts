@@ -967,12 +967,9 @@ const useAddIncident = ({ investigationId }: Props): Return => {
             });
             setCustomQuestions(filteredQuestions);
           } else {
-            const filteredQuestions = tagQuestions.filter((question) => {
-              if (question.dependentOnBrandIds.length > 0) {
-                return false;
-              }
-              return true;
-            });
+            const filteredQuestions = tagQuestions.filter(
+              (question) => question.dependentOnBrandIds.length === 0
+            );
             setCustomQuestions(filteredQuestions);
           }
         }

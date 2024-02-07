@@ -23,6 +23,7 @@ query scheme($where: SchemeWhereUniqueInput!) {
     facialRecognition
     imagesRequiredOnOffenders
     requireSiteNumberForUsers
+    oneSelectedIncidentTypeOnly
     goodsMode
     darkLogo {
       id

@@ -83,6 +83,7 @@ const UseRecycledItemListTest = () => {
             autoPopulateDescription: false,
             needJustification: false,
             requireSiteNumberForUsers: false,
+            oneSelectedIncidentTypeOnly: false,
             autoApproveIncidents: false,
             autoApproveOffenders: false,
             restrictIncidentAccess: false,

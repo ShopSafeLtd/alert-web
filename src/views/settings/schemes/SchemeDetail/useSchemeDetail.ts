@@ -39,6 +39,7 @@ export interface FormData {
   autoPopulateDescription: boolean;
   needJustification: boolean;
   requireSiteNumberForUsers: boolean;
+  oneSelectedIncidentTypeOnly: boolean;
   defaultPublicOffenderDOB: boolean;
   incidentRetention: number | null;
   offenderRetention: number | null;
@@ -168,6 +169,9 @@ const useSchemeDetail = (): Return => {
           autoPopulateDescription: { set: data.autoPopulateDescription },
           needJustification: { set: data.needJustification },
           requireSiteNumberForUsers: { set: data.requireSiteNumberForUsers },
+          oneSelectedIncidentTypeOnly: {
+            set: data.oneSelectedIncidentTypeOnly,
+          },
           restrictIncidentAccess: { set: data.restrictIncidentAccess },
           reportOnly: { set: data.reportOnly },
           autoApproveIncidents: { set: data.autoApproveOffenders },

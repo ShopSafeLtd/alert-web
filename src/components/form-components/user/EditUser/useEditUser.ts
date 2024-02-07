@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useStoreState } from 'state';
 import type {
-  Role,
   SearchBusinessesQuery,
   SearchBusinessesQueryVariables,
   UserQuery,
@@ -321,7 +320,7 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
               update: [
                 {
                   data: {
-                    role: { set: foundRole.type as Role },
+                    role: { set: foundRole.type },
                     permissions: {
                       connect: {
                         id: foundRole.id,

@@ -444,6 +444,96 @@ const EditOffender = ({
             </Col>
           </Row>
         )}
+        {/* <Tooltip
+          title={intl.formatMessage({
+            defaultMessage:
+              'If there is a known address for the offender please enter it.',
+            id: 'uYwK0e',
+          })}
+        >
+          <Typography.Title
+            style={{ marginBottom: 0, marginLeft: 5 }}
+            level={4}
+          >
+            {intl.formatMessage({
+              defaultMessage: 'Addresses',
+              id: 'xBrtnx',
+            })}
+          </Typography.Title>
+        </Tooltip>
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item
+              name="addressAlias"
+              label={intl.formatMessage({
+                defaultMessage: 'Label',
+                id: '753yX5',
+              })}
+              tooltip={intl.formatMessage({
+                defaultMessage:
+                  'A friendly name for the address to identify it, such as home',
+                id: 'YI+p4u',
+              })}
+            >
+              <Input />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              name="building"
+              label={intl.formatMessage({
+                defaultMessage: 'Building',
+                id: 'oS/nae',
+              })}
+            >
+              <Input />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              name="street"
+              label={intl.formatMessage({
+                defaultMessage: 'Street',
+                id: 'BaIwdV',
+              })}
+            >
+              <Input />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              name="townCity"
+              label={intl.formatMessage({
+                defaultMessage: 'Town/City',
+                id: 'byaTQZ',
+              })}
+            >
+              <Input />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              name="county"
+              label={intl.formatMessage({
+                defaultMessage: 'County',
+                id: 'B+KJhc',
+              })}
+            >
+              <Input />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              name="postcode"
+              label={intl.formatMessage({
+                defaultMessage: 'Postcode',
+                id: 'FJhjgz',
+              })}
+            >
+              <Input />
+            </Form.Item>
+          </Col>
+        </Row> */}
 
         <Form.Item
           name="images"

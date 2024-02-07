@@ -298,6 +298,8 @@ const UseAddUserTest = () => {
       reportToAllBusinesses: false,
       offenderEmail: false,
       offenderPush: false,
+      bulletinEmails: false,
+      bulletinPush: false,
     };
     const changedValues = { email: 'email' };
 
@@ -352,6 +354,8 @@ const UseAddUserTest = () => {
             offenderEmail: false,
             offenderPush: false,
             defaultGroups: [],
+            bulletinEmails: false,
+            bulletinPush: false,
           })
         }
       >

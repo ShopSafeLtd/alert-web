@@ -140,11 +140,11 @@ const useLinkArticle = ({ onClose, update, articleIds }: Props): Return => {
         ...variables,
         after: data?.listArticlesRelay?.pageInfo?.endCursor,
       },
-      // ?????
+
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return {
-          listArticles: {
+          listArticlesRelay: {
             ...fetchMoreResult.listArticlesRelay,
             edges: [
               ...(prev.listArticlesRelay?.edges || []),

@@ -3,7 +3,7 @@ import type {
   DeleteArticleMutation,
   ListArticlesFeedQuery,
 } from 'graphql/generated';
-import { Button, Card, Col, Drawer, Empty, Input, Row } from 'antd';
+import { Button, Card, Col, Drawer, Empty, Input, Row, Tooltip } from 'antd';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter, faPlus } from '@fortawesome/pro-light-svg-icons';
@@ -112,21 +112,23 @@ const Article = ({
             />
           </Col>
           <Col>
-            <Button
-              onClick={toggleSortFilter}
-              icon={
-                <FontAwesomeIcon
-                  icon={faFilter}
-                  size="lg"
-                  style={{ marginRight: 5 }}
-                />
-              }
-            >
-              {intl.formatMessage({
+            <Tooltip
+              title={intl.formatMessage({
                 defaultMessage: 'Sort & Filter',
                 id: 'f2g3SM',
               })}
-            </Button>
+            >
+              <Button
+                onClick={toggleSortFilter}
+                icon={
+                  <FontAwesomeIcon
+                    icon={faFilter}
+                    size="lg"
+                    style={{ marginRight: 5 }}
+                  />
+                }
+              />
+            </Tooltip>
           </Col>
           <Col>
             <Button

@@ -96,6 +96,7 @@ const useAuth = (): Return => {
         autoPopulateDescription: schemeDetails?.autoPopulateDescription,
         needJustification: schemeDetails?.needJustification,
         requireSiteNumberForUsers: schemeDetails?.requireSiteNumberForUsers,
+        oneSelectedIncidentTypeOnly: schemeDetails?.oneSelectedIncidentTypeOnly,
         autoApproveIncidents: schemeDetails?.autoApproveIncidents,
         autoApproveOffenders: schemeDetails?.autoApproveOffenders,
         restrictIncidentAccess: schemeDetails?.restrictIncidentAccess,
@@ -140,7 +141,8 @@ const useAuth = (): Return => {
           needJustification: schemeDetails.scheme.needJustification,
           requireSiteNumberForUsers:
             schemeDetails.scheme.requireSiteNumberForUsers,
-
+          oneSelectedIncidentTypeOnly:
+            schemeDetails.scheme.oneSelectedIncidentTypeOnly,
           autoApproveIncidents: schemeDetails.scheme.autoApproveIncidents,
           autoApproveOffenders: schemeDetails.scheme.autoApproveOffenders,
           restrictIncidentAccess: schemeDetails.scheme.restrictIncidentAccess,

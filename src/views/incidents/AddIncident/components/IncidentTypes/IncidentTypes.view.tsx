@@ -14,6 +14,7 @@ interface Props {
   tagsLoading: boolean;
   tags: { value: string; label: string; tooltip: string; type: TagType }[];
   incidentForm: IncidentFormField[];
+  oneSelectedIncidentTypeOnly: boolean;
 }
 
 const IncidentTypes = ({
@@ -22,6 +23,7 @@ const IncidentTypes = ({
   tagsLoading,
   tags,
   incidentForm,
+  oneSelectedIncidentTypeOnly,
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
@@ -73,7 +75,7 @@ const IncidentTypes = ({
       >
         <CheckTags
           loading={incidentTagsLoading}
-          mode="check"
+          mode={oneSelectedIncidentTypeOnly ? 'radio' : 'check'}
           options={incidentTagsData?.listIncidentTags || []}
         />
       </Form.Item>

@@ -76,9 +76,9 @@ const mocks = [
 const UseArticleListTest = () => {
   const { data, loading } = useArticlesSection({
     fullSearch: 'a',
-    searchMydata: false,
     fullCreatedAtFilter: undefined,
     fullGroupFilter: [],
+    fullGallery: [],
   });
   const articles =
     data &&

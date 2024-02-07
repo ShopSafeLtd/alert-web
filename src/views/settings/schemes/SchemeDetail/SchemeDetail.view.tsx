@@ -97,6 +97,8 @@ const SchemeDetail = ({
             needJustification: data?.scheme?.needJustification,
             requireSiteNumberForUsers:
               data?.scheme?.requireSiteNumberForUsers || false,
+            oneSelectedIncidentTypeOnly:
+              data?.scheme?.oneSelectedIncidentTypeOnly || false,
             defaultSubscribedIncidentOnly:
               data?.scheme?.defaultSubscribedIncidentOnly,
             defaultSubscribedOffenderOnly:
@@ -432,6 +434,38 @@ const SchemeDetail = ({
 
             <Row>
               <Col span={15}>
+                <Form.Item
+                  label={intl.formatMessage({
+                    defaultMessage:
+                      'Allow users to search for business by site number.',
+                    id: 'yUl6L3',
+                  })}
+                  name="requireSiteNumberForUsers"
+                  valuePropName="checked"
+                  style={{ marginBottom: 0 }}
+                >
+                  <Switch
+                    disabled={saving}
+                    style={{ marginLeft: 5 }}
+                    className="scheme-detail-switch"
+                  />
+                </Form.Item>
+                <Form.Item
+                  label={intl.formatMessage({
+                    defaultMessage:
+                      'Only one incident type can be selected when creating a new incident.',
+                    id: 'x6f2Vl',
+                  })}
+                  name="oneSelectedIncidentTypeOnly"
+                  valuePropName="checked"
+                  style={{ marginBottom: 0 }}
+                >
+                  <Switch
+                    disabled={saving}
+                    style={{ marginLeft: 5 }}
+                    className="scheme-detail-switch"
+                  />
+                </Form.Item>
                 <Form.Item
                   label={intl.formatMessage({
                     defaultMessage:

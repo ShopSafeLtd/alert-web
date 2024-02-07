@@ -124,6 +124,7 @@ export interface Scheme {
     autoPopulateDescription: boolean;
     needJustification: boolean;
     requireSiteNumberForUsers: boolean;
+    oneSelectedIncidentTypeOnly: boolean;
   };
 }
 

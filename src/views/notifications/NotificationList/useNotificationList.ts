@@ -74,6 +74,7 @@ interface Scheme {
   autoPopulateDescription: boolean;
   needJustification: boolean;
   requireSiteNumberForUsers: boolean;
+  oneSelectedIncidentTypeOnly: boolean;
 }
 interface Return {
   data:
@@ -175,6 +176,9 @@ const useNotificationLists = (): Return => {
           userNotifications: res.user.totalUnreadNotifications || 0,
         });
       }
+    },
+    onError: (err) => {
+      console.log('useUserNotificationsQuery', err);
     },
   });
 
@@ -339,6 +343,7 @@ const useNotificationLists = (): Return => {
       autoPopulateDescription: scheme.autoPopulateDescription,
       needJustification: scheme.needJustification,
       requireSiteNumberForUsers: scheme.requireSiteNumberForUsers,
+      oneSelectedIncidentTypeOnly: scheme.oneSelectedIncidentTypeOnly,
       languageCount: scheme.languageCount,
       autoApproveIncidents: scheme.autoApproveIncidents,
       autoApproveOffenders: scheme.autoApproveOffenders,

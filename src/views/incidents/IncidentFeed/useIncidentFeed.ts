@@ -75,6 +75,7 @@ interface Return {
   fetchMoreScroll: () => void;
   variables: IncidentFilters;
   setCompactView: () => void;
+  isUser: boolean;
 }
 
 const useIncidentFeed = (): Return => {
@@ -628,6 +629,7 @@ const useIncidentFeed = (): Return => {
     setIncidentDateFilter,
     fetchMoreScroll,
     setCompactView,
+    isUser,
   };
 };
 

@@ -278,23 +278,24 @@ const useAddUser = ({
         connectedBusinesses && connectedBusinesses.length > 0
           ? connectedBusinesses.map(({ value }) => ({ id: value }))
           : undefined,
-      update:
-        updatedBusinesses && updatedBusinesses.length > 0
-          ? updatedBusinesses.map((el) => ({
-              where: {
-                id: el.id,
-              },
-              data: {
-                schemes: {
-                  connect: [
-                    {
-                      id: schemeId,
-                    },
-                  ],
-                },
-              },
-            }))
-          : undefined,
+      // ?????
+      // update:
+      //   updatedBusinesses && updatedBusinesses.length > 0
+      //     ? updatedBusinesses.map((el) => ({
+      //         where: {
+      //           id: el.id,
+      //         },
+      //         data: {
+      //           schemes: {
+      //             connect: [
+      //               {
+      //                 id: schemeId,
+      //               },
+      //             ],
+      //           },
+      //         },
+      //       }))
+      //     : undefined,
       create:
         newBusinesses && newBusinesses.length > 0
           ? newBusinesses.map((el) => ({
@@ -337,16 +338,30 @@ const useAddUser = ({
                 ? { connect: el?.groups?.map((id) => ({ id })) }
                 : undefined,
               locations: {
-                create: [
-                  {
-                    building: el.locations[0].building || null,
-                    county: el.locations[0].county || null,
-                    postcode: el.locations[0].postcode || '',
-                    street: el.locations[0].street || '',
-                    townCity: el.locations[0].townCity || '',
-                  },
-                ],
+                create:
+                  el?.locations && el?.locations.length > 0
+                    ? el?.locations.map((location) => ({
+                        building: location.building,
+                        county: location.county,
+                        postcode: location.postcode || '',
+                        street: location.street || '',
+                        townCity: location.townCity || '',
+                        geoLat: location.geoLat,
+                        geoLng: location.geoLng,
+                      }))
+                    : undefined,
               },
+              // locations: {
+              //   create: [
+              //     {
+              //       building: el.locations[0].building || null,
+              //       county: el.locations[0].county || null,
+              //       postcode: el.locations[0].postcode || '',
+              //       street: el.locations[0].street || '',
+              //       townCity: el.locations[0].townCity || '',
+              //     },
+              //   ],
+              // },
             }))
           : undefined,
     });
@@ -375,15 +390,18 @@ const useAddUser = ({
                   }
                 : undefined,
               locations: {
-                create: [
-                  {
-                    building: el.locations[0].building || null,
-                    county: el.locations[0].county || null,
-                    postcode: el.locations[0].postcode || '',
-                    street: el.locations[0].street || '',
-                    townCity: el.locations[0].townCity || '',
-                  },
-                ],
+                create:
+                  el?.locations && el?.locations.length > 0
+                    ? el?.locations.map((location) => ({
+                        building: location.building,
+                        county: location.county,
+                        postcode: location.postcode || '',
+                        street: location.street || '',
+                        townCity: location.townCity || '',
+                        geoLat: location.geoLat,
+                        geoLng: location.geoLng,
+                      }))
+                    : undefined,
               },
             }))
           : undefined,

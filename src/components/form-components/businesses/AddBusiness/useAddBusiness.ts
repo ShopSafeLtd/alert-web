@@ -143,7 +143,6 @@ const useAddBusiness = ({ update }: Props): Return => {
       siteNumber: values.siteNumber,
       locations: [
         {
-          // id: Math.floor(Math.random() * 1000).toString(),
           building: values.building,
           county: values.county,
           postcode: values.postcode,

@@ -148,6 +148,8 @@ const UseEditProfileTest = () => {
             offenderPush: false,
             messagePush: false,
             defaultGroups: [],
+            bulletinEmails: false,
+            bulletinPush: false,
           })
         }
       >

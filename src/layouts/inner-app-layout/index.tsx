@@ -78,7 +78,7 @@ export const InnerAppLayout = (props: InnerAppLayoutProps): JSX.Element => {
     <div className="inner-app-layout" style={style}>
       {isMobile ? (
         <SideContentMobile
-          open={visible}
+          visible={visible}
           onSideContentClose={close}
           {...props}
         />

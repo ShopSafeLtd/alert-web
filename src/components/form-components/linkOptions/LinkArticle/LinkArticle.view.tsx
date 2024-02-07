@@ -91,7 +91,7 @@ const LinkArticle = ({
     priorities: priorityFilter,
   } = filterVariables;
   // const isLoading = loading && !data?.total;
-  const articleItems = data?.edges?.map((t) => (
+  const articleItems = data?.edges.map((t) => (
     <Col
       key={t?.node?.id}
       span={t?.node?.images && t?.node.images.length > 0 ? 12 : 6}

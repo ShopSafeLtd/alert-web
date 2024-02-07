@@ -23,6 +23,7 @@ import {
   faPlus,
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
+import EditCrimeType from 'components/form-components/tags/crimeTypes/EditCrimeType';
 import { margin, rowHeight } from '../../../../components/reports/utils/utils';
 import type { ExtendedLayout } from '../../../reports/types';
 import 'react-grid-layout/css/styles.css';
@@ -67,6 +68,10 @@ interface Props {
   ) => void;
   selectedQuestion: string | null;
   setSelectedQuestion: (value: string | null) => void;
+  editIncidentType: string;
+  setEditIncidentType: (value: string) => void;
+  deleteConfirm: (value: string) => void;
+  saving: boolean;
 }
 
 const ViewTag = ({
@@ -93,6 +98,10 @@ const ViewTag = ({
   updateQuestionOnTag,
   selectedQuestion,
   setSelectedQuestion,
+  deleteConfirm,
+  editIncidentType,
+  setEditIncidentType,
+  saving,
 }: Props): JSX.Element => {
   const ReactGridLayout = useMemo(() => WidthProvider(RGL), []);
   const intl = useIntl();
@@ -581,6 +590,7 @@ const ViewTag = ({
         title={data?.tag?.name || ''}
         extra={[
           <Button
+            key="3"
             onClick={() => toggleAddQuestion()}
             icon={
               <FontAwesomeIcon
@@ -591,6 +601,41 @@ const ViewTag = ({
             }
           >
             <FormattedMessage defaultMessage="Add question" id="0eJKDI" />
+          </Button>,
+          <Button
+            key="2"
+            disabled={saving}
+            onClick={() => setEditIncidentType(data?.tag.id || '')}
+            icon={
+              <FontAwesomeIcon
+                size="lg"
+                icon={faPenToSquare}
+                style={{ marginRight: 5 }}
+              />
+            }
+          >
+            {intl.formatMessage({
+              defaultMessage: 'Edit Crime Type',
+              id: 'zwQmkF',
+            })}
+          </Button>,
+          <Button
+            key="1"
+            type="primary"
+            disabled={saving}
+            onClick={() => deleteConfirm(data?.tag.id || '')}
+            icon={
+              <FontAwesomeIcon
+                size="lg"
+                icon={faTrash}
+                style={{ marginRight: 5 }}
+              />
+            }
+          >
+            {intl.formatMessage({
+              defaultMessage: 'Delete Crime Type',
+              id: 'uymNG3',
+            })}
           </Button>,
         ]}
       />
@@ -763,6 +808,22 @@ const ViewTag = ({
           />
         ) : (
           <div />
+        )}
+      </Drawer>
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Edit Incident Type',
+          id: 'xTR8wo',
+        })}
+        open={!!editIncidentType}
+        width="400"
+        onClose={() => setEditIncidentType('')}
+      >
+        {editIncidentType && (
+          <EditCrimeType
+            incidentId={editIncidentType}
+            onClose={() => setEditIncidentType('')}
+          />
         )}
       </Drawer>
     </div>

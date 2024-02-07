@@ -51,32 +51,31 @@ describe('Detail Officer View', () => {
         <MockedProvider mocks={[]} addTypename={false}>
           <ArticleFeed
             fetchMoreScroll={jest.fn()}
-            setCreatedAtFilter={jest.fn()}
             lightBoxOpen={{
               open: false,
               index: 0,
             }}
-            clearFilters={jest.fn()}
-            gallery={[]}
-            groupsFilter={[]}
-            setGallery={jest.fn()}
             sortFilter={false}
-            setGroupsFilter={jest.fn()}
             toggleSortFilter={jest.fn()}
             data={data}
             loading={false}
             lightboxElements={[]}
             openLightbox={jest.fn()}
-            order={SortOrder.Asc}
-            setOrder={jest.fn()}
-            search=""
-            setSearch={jest.fn()}
-            groups={[]}
-            groupsLoading={false}
             updateArticleList={jest.fn()}
             onNavigate={jest.fn()}
-            priorityFilter={[]}
-            setPriorityFilter={jest.fn()}
+            setSearch={jest.fn()}
+            setGallery={jest.fn()}
+            filterVariables={{
+              order: SortOrder.Desc,
+              groups: [],
+              createdAt: {
+                startDate: new Date(),
+                endDate: new Date(),
+              },
+              priorities: [ArticlePriority.High],
+              search: '',
+              gallery: [],
+            }}
           />
         </MockedProvider>
       </MemoryRouter>

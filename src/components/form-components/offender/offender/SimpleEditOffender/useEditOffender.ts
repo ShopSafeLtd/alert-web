@@ -49,7 +49,7 @@ export interface OffenderData {
 interface Props {
   onClose: () => void;
   data: OffenderData;
-  onCompleted: () => void;
+  onCompleted?: () => void;
   update: MutationUpdaterFn<UpdateSimpleOffenderMutation>;
   onImagesUploaded?: (value: StateImageData[]) => void;
 }
@@ -76,6 +76,12 @@ export interface FormData {
   targetedGoods: string[];
   justification: string;
   infoSource: string;
+  // addressAlias?: string;
+  // building?: string;
+  // street?: string;
+  // townCity?: string;
+  // county?: string;
+  // postcode?: string;
 }
 
 interface Return {
@@ -171,6 +177,23 @@ const useEditOffender = ({
           knownFor: { set: value.knownFor },
           targetedGoods: { set: value.targetedGoods },
           alias: { set: value.alias },
+          // addresses: {
+          //   update: [
+          //     {
+          //       where: {
+          //         id: data.,
+          //       },
+          //       data: {
+          //         postcode: { set: value.postcode },
+          //         street: { set: value.street },
+          //         townCity: { set: value.townCity },
+          //         alias: { set: value.addressAlias || '' },
+          //         building: { set: value.building },
+          //         county: { set: value.county },
+          //       },
+          //     },
+          //   ],
+          // },
           images:
             value.images && value.images.length > 0
               ? {

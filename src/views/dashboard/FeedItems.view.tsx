@@ -172,21 +172,23 @@ const FeedItem = ({
             />
           </Col>
           <Col>
-            <Button
-              onClick={toggleSortFilter}
-              icon={
-                <FontAwesomeIcon
-                  icon={faFilter}
-                  size="lg"
-                  style={{ marginRight: 5 }}
-                />
-              }
-            >
-              {intl.formatMessage({
-                id: 'f2g3SM',
+            <Tooltip
+              title={intl.formatMessage({
                 defaultMessage: 'Sort & Filter',
+                id: 'f2g3SM',
               })}
-            </Button>
+            >
+              <Button
+                onClick={toggleSortFilter}
+                icon={
+                  <FontAwesomeIcon
+                    icon={faFilter}
+                    size="lg"
+                    style={{ marginRight: 5 }}
+                  />
+                }
+              />
+            </Tooltip>
           </Col>
           <Col>
             <Link to="/app/incidents/add">
@@ -718,8 +720,6 @@ const FeedItem = ({
                 fullCreatedAtFilter={createdAtFilter}
                 fullGroupFilter={groupsFilter}
                 saving={saving}
-                groups={groups}
-                groupsLoading={groupsLoading}
                 adminRights={adminRights}
                 fullGallery={gallery}
               />

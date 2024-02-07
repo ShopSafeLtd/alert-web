@@ -81,6 +81,7 @@ export const NavScheme = () => {
       autoPopulateDescription: scheme.scheme.autoPopulateDescription,
       needJustification: scheme.scheme.needJustification,
       requireSiteNumberForUsers: scheme.scheme.requireSiteNumberForUsers,
+      oneSelectedIncidentTypeOnly: scheme.scheme.oneSelectedIncidentTypeOnly,
       autoApproveIncidents: scheme.scheme.autoApproveIncidents,
       autoApproveOffenders: scheme.scheme.autoApproveOffenders,
       defaultPublicOffenderDOB: scheme.scheme.defaultPublicOffenderDOB,

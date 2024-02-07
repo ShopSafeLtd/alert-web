@@ -15,6 +15,7 @@ import {
   Input,
   Menu,
   Row,
+  Tooltip,
 } from 'antd';
 import OffenderCard from 'components/offenders/OffenderCard';
 import OffenderSkeletonCard from 'components/offenders/OffenderSkeletonCard/OffenderSkeletonCard.view';
@@ -276,21 +277,23 @@ const OffenderFeed = ({
             /> */}
           </Col>
           <Col>
-            <Button
-              onClick={toggleSortFilter}
-              icon={
-                <FontAwesomeIcon
-                  icon={faFilter}
-                  size="lg"
-                  style={{ marginRight: 5 }}
-                />
-              }
-            >
-              {intl.formatMessage({
+            <Tooltip
+              title={intl.formatMessage({
                 defaultMessage: 'Sort & Filter',
                 id: 'f2g3SM',
               })}
-            </Button>
+            >
+              <Button
+                onClick={toggleSortFilter}
+                icon={
+                  <FontAwesomeIcon
+                    icon={faFilter}
+                    size="lg"
+                    style={{ marginRight: 5 }}
+                  />
+                }
+              />
+            </Tooltip>
           </Col>
           <Col>
             <Button

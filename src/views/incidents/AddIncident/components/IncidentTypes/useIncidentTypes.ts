@@ -12,10 +12,13 @@ interface Return {
   incidentTagsData: ListIncidentTagsQuery | undefined;
   tagsLoading: boolean;
   tags: { value: string; label: string; tooltip: string; type: TagType }[];
+  oneSelectedIncidentTypeOnly: boolean;
 }
 
 const useIncidentTypes = (): Return => {
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const { id: schemeId, oneSelectedIncidentTypeOnly } = useStoreState(
+    (state) => state.scheme
+  );
 
   const { data: incidentTagsData, loading: incidentTagsLoading } =
     useListIncidentTagsQuery({
@@ -58,6 +61,7 @@ const useIncidentTypes = (): Return => {
       [tagsData]
     ),
     tagsLoading,
+    oneSelectedIncidentTypeOnly,
   };
 };
 

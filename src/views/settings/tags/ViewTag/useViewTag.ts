@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import type { AnswerType, ViewTagQuery } from 'graphql/generated';
 import {
+  useRecycleTagMutation,
   IncidentFormField,
   Model,
   TagType,
@@ -16,7 +17,12 @@ import type { Scheme } from 'state';
 import { useStoreState } from 'state';
 import { useParams } from 'react-router-dom';
 import { useApolloClient } from '@apollo/client';
+import { Modal, notification } from 'antd';
+import { useIntl } from 'react-intl';
+import errorNotification from 'types/mutation_notifications/error_notification';
 import type { ExtendedLayout } from '../../../reports/types';
+
+const { confirm } = Modal;
 
 interface FieldToLayoutMap {
   [key: string]: IncidentFormField[];
@@ -61,6 +67,9 @@ interface Return {
   ) => void;
   selectedQuestion: string | null;
   setSelectedQuestion: (value: string | null) => void;
+  editIncidentType: string;
+  setEditIncidentType: (value: string) => void;
+  deleteConfirm: (value: string) => void;
 }
 
 const fieldToLayoutSet: Record<string, IncidentFormField[]> = {
@@ -198,10 +207,14 @@ const useViewTag = (): Return => {
   };
 
   const { id } = useParams();
+  const intl = useIntl();
+
   const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeName = useStoreState((state) => state.scheme.name);
   const userSchemes = useStoreState((state) => state.user.schemes);
-  const [saving] = useState(false);
   const [addQuestion, setAddQuestion] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [editIncidentType, setEditIncidentType] = useState('');
   const [questionLayoutChanged, setQuestionLayoutChanged] = useState(false);
   const [questionsLayout, setQuestionsLayout] = useState<ExtendedLayout[]>([]);
   const [parentTag, setPTag] = useState<string | undefined | null>(undefined);
@@ -241,6 +254,9 @@ const useViewTag = (): Return => {
   });
 
   const [selectedQuestion, setSelectedQuestion] = useState<string | null>(null);
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
   useEffect(() => {
     if (data && data.tag?.tagQuestions) {
       // eslint-disable-next-line no-unsafe-optional-chaining
@@ -471,7 +487,7 @@ const useViewTag = (): Return => {
     setQuestionsLayout(tagQs);
   };
 
-  const store = useApolloClient();
+  const apolloStore = useApolloClient();
 
   const updateQuestionOnTag = (
     question: string,
@@ -482,7 +498,7 @@ const useViewTag = (): Return => {
       answer: string;
     }
   ) => {
-    const existingData = store.readQuery<ViewTagQuery>({
+    const existingData = apolloStore.readQuery<ViewTagQuery>({
       query: ViewTagDocument,
       variables: {
         where: {
@@ -539,7 +555,7 @@ const useViewTag = (): Return => {
       };
     }>;
 
-    store.writeQuery<ViewTagQuery>({
+    apolloStore.writeQuery<ViewTagQuery>({
       query: ViewTagDocument,
       data: {
         ...existingData,
@@ -612,9 +628,61 @@ const useViewTag = (): Return => {
     setIncidentFormLayoutChanged(false);
   };
 
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, []);
+  const [recycleTag] = useRecycleTagMutation({
+    onCompleted: () => {
+      setSaving(false);
+      window.history.back();
+      notification.success({
+        message: intl.formatMessage({
+          id: 'NzVm0o',
+          defaultMessage: 'Successfully Removed',
+        }),
+        description: intl.formatMessage(
+          {
+            defaultMessage:
+              'The incident type has been removed from {schemeName}',
+            id: 'NoJPMG',
+          },
+          { schemeName }
+        ),
+        placement: 'bottomRight',
+      });
+    },
+    onError: () => {
+      setSaving(false);
+      errorNotification();
+    },
+  });
+
+  const openDelete = (currentId: string) => {
+    setSaving(true);
+    if (currentId)
+      void recycleTag({
+        variables: {
+          where: {
+            id: currentId,
+          },
+        },
+      }).finally(() => setSaving(false));
+  };
+
+  const deleteConfirm = (currentId: string) => {
+    confirm({
+      title: intl.formatMessage({
+        id: '2oCaym',
+        defaultMessage: 'Are you sure?',
+      }),
+      content: intl.formatMessage({
+        id: 'Zyk6ao',
+        defaultMessage:
+          'This will remove this incident type from this scheme, bu not any other schemes you may have added it to.',
+      }),
+
+      onOk() {
+        openDelete(currentId);
+      },
+    });
+  };
 
   return {
     toggleField,
@@ -643,6 +711,9 @@ const useViewTag = (): Return => {
     updateQuestionOnTag,
     selectedQuestion,
     setSelectedQuestion,
+    deleteConfirm,
+    editIncidentType,
+    setEditIncidentType,
   };
 };
 export default useViewTag;

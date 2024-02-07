@@ -30,6 +30,7 @@ export interface SetSchemePayload {
   autoPopulateDescription: boolean;
   needJustification: boolean;
   requireSiteNumberForUsers: boolean;
+  oneSelectedIncidentTypeOnly: boolean;
 }
 
 export interface SchemeModel {
@@ -55,6 +56,7 @@ export interface SchemeModel {
   autoPopulateDescription: boolean;
   needJustification: boolean;
   requireSiteNumberForUsers: boolean;
+  oneSelectedIncidentTypeOnly: boolean;
 }
 
 const userModel: SchemeModel = {
@@ -78,6 +80,7 @@ const userModel: SchemeModel = {
   autoPopulateDescription: true,
   needJustification: false,
   requireSiteNumberForUsers: false,
+  oneSelectedIncidentTypeOnly: false,
   setScheme: action((state, payload) => {
     state.id = payload.id;
     state.autoApproveIncidents = payload.autoApproveIncidents;
@@ -99,6 +102,7 @@ const userModel: SchemeModel = {
     state.autoPopulateDescription = payload.autoPopulateDescription;
     state.needJustification = payload.needJustification;
     state.requireSiteNumberForUsers = payload.requireSiteNumberForUsers;
+    state.oneSelectedIncidentTypeOnly = payload.oneSelectedIncidentTypeOnly;
   }),
   clearScheme: action((state) => {
     state.id = '';
@@ -121,6 +125,7 @@ const userModel: SchemeModel = {
     state.autoPopulateDescription = true;
     state.needJustification = false;
     state.requireSiteNumberForUsers = false;
+    state.oneSelectedIncidentTypeOnly = false;
   }),
 };
 

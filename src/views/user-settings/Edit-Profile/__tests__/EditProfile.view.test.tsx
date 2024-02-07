@@ -1,12 +1,20 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
-import { CurrentUserQuery, GoodsMode, Role } from 'graphql/generated';
+import {
+  CurrentUserQuery,
+  GoodsMode,
+  PermissionMethod,
+  PermissionModel,
+  Role,
+} from 'graphql/generated';
 import EditProfile from '../EditProfile.view';
 
 describe('Detail Officer View', () => {
   const data: CurrentUserQuery | undefined = {
     currentUser: {
+      bulletinEmails: false,
+      bulletinPush: false,
       notificationCount: 0,
       messageCount: 0,
       reportToAllBusinesses: true,
@@ -63,7 +71,16 @@ describe('Detail Officer View', () => {
             imagesRequiredOnOffenders: false,
             taskTimeTracking: false,
             reportOnly: true,
+            oneSelectedIncidentTypeOnly: false,
+            requireSiteNumberForUsers: false,
           },
+
+          permissions: [
+            {
+              model: PermissionModel.Articles,
+              allowedMethods: [PermissionMethod.Approve],
+            },
+          ],
         },
       ],
     },

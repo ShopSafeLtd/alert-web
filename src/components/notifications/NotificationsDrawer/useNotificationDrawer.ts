@@ -52,6 +52,7 @@ interface Scheme {
   autoPopulateDescription: boolean;
   needJustification: boolean;
   requireSiteNumberForUsers: boolean;
+  oneSelectedIncidentTypeOnly: boolean;
   logo?:
     | {
         optimisedPersisted?: string | null | undefined;
@@ -328,6 +329,7 @@ const useNotificationLists = (): Return => {
       autoPopulateDescription: scheme.autoPopulateDescription,
       needJustification: scheme.needJustification,
       requireSiteNumberForUsers: scheme.requireSiteNumberForUsers,
+      oneSelectedIncidentTypeOnly: scheme.oneSelectedIncidentTypeOnly,
       reportOnly: scheme.reportOnly,
       languageCount: scheme.languageCount,
       autoApproveIncidents: scheme.autoApproveIncidents,

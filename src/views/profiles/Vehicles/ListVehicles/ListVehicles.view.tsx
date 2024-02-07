@@ -9,6 +9,7 @@ import {
   Menu,
   Row,
   Table,
+  Tooltip,
 } from 'antd';
 import type {
   ImagePosition,
@@ -151,21 +152,23 @@ const ListVehicles = ({
           ) : null}
         </Col>
         <Col>
-          <Button
-            onClick={toggleSortFilter}
-            icon={
-              <FontAwesomeIcon
-                icon={faFilter}
-                size="lg"
-                style={{ marginRight: 5 }}
-              />
-            }
-          >
-            {intl.formatMessage({
+          <Tooltip
+            title={intl.formatMessage({
               defaultMessage: 'Sort & Filter',
               id: 'f2g3SM',
             })}
-          </Button>
+          >
+            <Button
+              onClick={toggleSortFilter}
+              icon={
+                <FontAwesomeIcon
+                  icon={faFilter}
+                  size="lg"
+                  style={{ marginRight: 5 }}
+                />
+              }
+            />
+          </Tooltip>
         </Col>
         <Col>
           <Button type="primary" onClick={onNavigate}>

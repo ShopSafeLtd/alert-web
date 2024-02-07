@@ -33,6 +33,7 @@ describe('Detail Officer View', () => {
         setSelectedRole={jest.fn()}
         selectedGroups={[]}
         setSelectedGroups={jest.fn()}
+        availableRoles={[{ value: '', label: '' }]}
       />
     );
   };

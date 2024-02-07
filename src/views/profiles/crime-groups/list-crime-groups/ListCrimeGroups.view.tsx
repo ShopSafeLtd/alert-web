@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Col, Drawer, Input, Row, Table } from 'antd';
+import { Button, Col, Drawer, Input, Row, Table, Tooltip } from 'antd';
 import type { ListCrimeGroupsQuery, SortOrder } from 'graphql/generated';
 import { Link } from 'react-router-dom';
 import type { Moment } from 'moment';
@@ -93,21 +93,23 @@ const ListCrimeGroups = ({
           />
         </Col>
         <Col>
-          <Button
-            onClick={toggleSortFilter}
-            icon={
-              <FontAwesomeIcon
-                icon={faFilter}
-                size="lg"
-                style={{ marginRight: 5 }}
-              />
-            }
-          >
-            {intl.formatMessage({
+          <Tooltip
+            title={intl.formatMessage({
               defaultMessage: 'Sort & Filter',
               id: 'f2g3SM',
             })}
-          </Button>
+          >
+            <Button
+              onClick={toggleSortFilter}
+              icon={
+                <FontAwesomeIcon
+                  icon={faFilter}
+                  size="lg"
+                  style={{ marginRight: 5 }}
+                />
+              }
+            />
+          </Tooltip>
         </Col>
         <Col>
           <Link to="create">

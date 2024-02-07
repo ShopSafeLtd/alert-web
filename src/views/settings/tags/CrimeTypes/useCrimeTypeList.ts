@@ -373,10 +373,18 @@ const useCrimeTypeList = (): Return => {
   const [recycleTag] = useRecycleTagMutation({
     onCompleted: () => {
       setSaving(false);
-      // new thing to translate
       notification.success({
-        message: 'Successfully Removed',
-        description: `The crime type has been removed from ${schemeName}!`,
+        message: intl.formatMessage({
+          id: 'NzVm0o',
+          defaultMessage: 'Successfully Removed',
+        }),
+        description: intl.formatMessage(
+          {
+            defaultMessage: 'The crime type has been removed from {schemeName}',
+            id: 'Og1LWe',
+          },
+          { schemeName }
+        ),
         placement: 'bottomRight',
       });
     },

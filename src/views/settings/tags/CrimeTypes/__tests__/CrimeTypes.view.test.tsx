@@ -42,7 +42,6 @@ describe('List Officer View', () => {
           toggleAddInvolved={jest.fn()}
           updateImpactList={jest.fn()}
           updateInvolvedList={jest.fn()}
-          updateTagParent={jest.fn()}
         />
       </MemoryRouter>
     );
