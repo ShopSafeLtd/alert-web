@@ -5526,9 +5526,11 @@ export enum GoodsMode {
 export type GoodsType = {
   __typename?: 'GoodsType';
   createdAt: Scalars['Date'];
+  default: Scalars['Boolean'];
   id: Scalars['ID'];
   incidentItems: Array<IncidentItem>;
   name: Scalars['String'];
+  schemes: Array<Scheme>;
   updatedAt: Scalars['Date'];
 };
 
@@ -8160,6 +8162,10 @@ export type ListFeedItems = {
   __typename?: 'ListFeedItems';
   feedItems: Array<FeedItem>;
   total: Scalars['Int'];
+};
+
+export type ListGoodsTypeWhere = {
+  schemes: SchemeInputArg;
 };
 
 export type ListGoodsTypes = {
@@ -12555,6 +12561,11 @@ export type QueryListFeedItemsArgs = {
 };
 
 
+export type QueryListGoodsTypesArgs = {
+  where?: InputMaybe<ListGoodsTypeWhere>;
+};
+
+
 export type QueryListIncidentTagsArgs = {
   where: IncidentTagsInput;
 };
@@ -14692,6 +14703,10 @@ export type SchemeWorkflowsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<WorkflowWhereInput>;
+};
+
+export type SchemeInputArg = {
+  id?: InputMaybe<StringFilter>;
 };
 
 export type SchemeListRelationFilter = {
@@ -20062,7 +20077,9 @@ export type UpdatesFragment = { __typename?: 'Update', id: string, text?: string
 
 export type VehiclesFragment = { __typename?: 'Vehicle', id: string, reference?: number | null, colour?: string | null, model?: string | null, make?: string | null, registration?: string | null };
 
-export type ListGoodsTypesQueryVariables = Exact<{ [key: string]: never; }>;
+export type ListGoodsTypesQueryVariables = Exact<{
+  where?: InputMaybe<ListGoodsTypeWhere>;
+}>;
 
 
 export type ListGoodsTypesQuery = { __typename?: 'Query', listGoodsTypes: { __typename?: 'ListGoodsTypes', total: number, goodsTypes: Array<{ __typename?: 'GoodsType', id: string, name: string }> } };
@@ -25046,8 +25063,8 @@ export type ListOffendersFeedQueryHookResult = ReturnType<typeof useListOffender
 export type ListOffendersFeedLazyQueryHookResult = ReturnType<typeof useListOffendersFeedLazyQuery>;
 export type ListOffendersFeedQueryResult = Apollo.QueryResult<ListOffendersFeedQuery, ListOffendersFeedQueryVariables>;
 export const ListGoodsTypesDocument = gql`
-    query ListGoodsTypes {
-  listGoodsTypes {
+    query ListGoodsTypes($where: ListGoodsTypeWhere) {
+  listGoodsTypes(where: $where) {
     total
     goodsTypes {
       id
