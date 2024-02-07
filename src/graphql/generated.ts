@@ -19855,7 +19855,7 @@ export type UpdateCrimeGroupMutationVariables = Exact<{
 }>;
 
 
-export type UpdateCrimeGroupMutation = { __typename?: 'Mutation', updateCrimeGroup: { __typename?: 'CrimeGroup', id: string, alias?: string | null, reference?: number | null, totalIncidents: number, totalOffenders: number, totalRecoveredValue: number, totalTheftSuccess: number, totalValue: number, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, reference?: number | null, hair?: string | null, peculiarities?: string | null, race?: Race | null, dateOfBirth?: Date | null, dateSource?: string | null, build?: Build | null, height?: Height | null, age?: Age | null, gender?: Gender | null, totalTheftSuccess: number, totalRecoveredValue: number, totalIncidents: number, totalValue: number, lastActive?: { __typename?: 'Incident', id: string, dayTime: string } | null, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null, position: ImagePosition, rotation: number }> }>, vehicles: Array<{ __typename?: 'Vehicle', id: string }>, incidents: Array<{ __typename?: 'Incident', id: string, subject?: string | null, dayTime: string, value?: number | null, recoveredValue?: number | null, reference?: number | null, policeRef?: string | null, createdBy: { __typename?: 'User', id: string, businesses: Array<{ __typename?: 'Business', fullName: string, id: string, name: string }> } }> } };
+export type UpdateCrimeGroupMutation = { __typename?: 'Mutation', updateCrimeGroup: { __typename?: 'CrimeGroup', id: string, alias?: string | null, reference?: number | null, totalIncidents: number, totalOffenders: number, totalRecoveredValue: number, totalTheftSuccess: number, totalValue: number, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, reference?: number | null, hair?: string | null, peculiarities?: string | null, race?: Race | null, dateOfBirth?: Date | null, dateSource?: string | null, build?: Build | null, height?: Height | null, age?: Age | null, gender?: Gender | null, totalTheftSuccess: number, totalRecoveredValue: number, totalIncidents: number, totalValue: number, alias: Array<string>, comment?: string | null, idVerified: boolean, idSource?: IdSource | null, knownFor: Array<string>, targetedGoods: Array<string>, lastActive?: { __typename?: 'Incident', id: string, dayTime: string } | null, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null, position: ImagePosition, rotation: number }> }>, vehicles: Array<{ __typename?: 'Vehicle', id: string }>, incidents: Array<{ __typename?: 'Incident', id: string, subject?: string | null, dayTime: string, value?: number | null, recoveredValue?: number | null, reference?: number | null, policeRef?: string | null, createdBy: { __typename?: 'User', id: string, businesses: Array<{ __typename?: 'Business', fullName: string, id: string, name: string }> } }> } };
 
 export type ListCrimeGroupsQueryVariables = Exact<{
   take?: InputMaybe<Scalars['Int']>;
@@ -24209,6 +24209,7 @@ export const UpdateCrimeGroupDocument = gql`
     totalTheftSuccess
     totalValue
     offenders {
+      ...Offenders
       id
       name
       reference
@@ -24258,7 +24259,7 @@ export const UpdateCrimeGroupDocument = gql`
     }
   }
 }
-    `;
+    ${OffendersFragmentDoc}`;
 export type UpdateCrimeGroupMutationFn = Apollo.MutationFunction<UpdateCrimeGroupMutation, UpdateCrimeGroupMutationVariables>;
 export function useUpdateCrimeGroupMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCrimeGroupMutation, UpdateCrimeGroupMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}

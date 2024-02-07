@@ -12,6 +12,8 @@ mutation updateCrimeGroup(
     totalTheftSuccess
     totalValue
     offenders {
+      ...Offenders
+
       id
       name
       reference

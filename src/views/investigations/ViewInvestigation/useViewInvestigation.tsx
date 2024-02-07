@@ -120,6 +120,22 @@ interface Return {
   updateAddOffenderList: MutationUpdaterFn<CreateSimpleOffenderMutation>;
   onCompletedAddOffender: () => void;
 }
+
+const onCompletedEditOffender = () => {
+  successNotification(
+    ProfileUpdatedModel.Offender,
+    ProfileUpdatedModel.Investigation,
+    ProfileUpdatedType.updated
+  );
+};
+const onCompletedAddOffender = () => {
+  successNotification(
+    ProfileUpdatedModel.Offender,
+    ProfileUpdatedModel.Investigation,
+    ProfileUpdatedType.added
+  );
+};
+
 const useViewInvestigation = (investigationId: string): Return => {
   const intl = useIntl();
 
@@ -405,13 +421,7 @@ const useViewInvestigation = (investigationId: string): Return => {
       variables,
     });
   };
-  const onCompletedEditOffender = () => {
-    successNotification(
-      ProfileUpdatedModel.Offender,
-      ProfileUpdatedModel.Investigation,
-      ProfileUpdatedType.updated
-    );
-  };
+
   // const onEditOffender = (value: OffenderData) => {
   //   setSaving(true);
   //   if (value) {
@@ -611,13 +621,6 @@ const useViewInvestigation = (investigationId: string): Return => {
       },
       variables,
     });
-  };
-  const onCompletedAddOffender = () => {
-    successNotification(
-      ProfileUpdatedModel.Offender,
-      ProfileUpdatedModel.Investigation,
-      ProfileUpdatedType.added
-    );
   };
 
   const onDeleteOffender = (value: string) => {
@@ -1194,6 +1197,9 @@ const useViewInvestigation = (investigationId: string): Return => {
         data: {
           investigation: {
             ...existingData.investigation,
+            // TODO fix the types ?????
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             crimeGroups: [...filterCrimeGroups, res.updateCrimeGroup],
           },
           __typename: 'Query',

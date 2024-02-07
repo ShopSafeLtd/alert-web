@@ -62,6 +62,7 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
       }
       offenders {
         ...Offenders
+
         images {
           ...Images
         }
