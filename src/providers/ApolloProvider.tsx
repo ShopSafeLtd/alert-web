@@ -67,7 +67,6 @@ const Apollo = ({ children }: Props): JSX.Element => {
 
   const httpLink = new HttpLink({
     uri: import.meta.env.VITE_GRAPHQL_URL,
-    useGETForQueries: true,
   });
 
   let activeSocket: WebSocket;
