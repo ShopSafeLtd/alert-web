@@ -99,7 +99,8 @@ const Article = ({
           </Col>
           <Col flex={1}>
             <CheckTags
-              mode="radio"
+              mode="check"
+              noGutter
               value={gallery}
               onChange={setGallery}
               options={[

@@ -4,7 +4,7 @@ import { createUseStyles } from 'react-jss';
 const styles = createUseStyles((theme: Theme) => ({
   selectBox: {
     border: `1px solid ${theme.borderColor}`,
-    padding: '5px 10px 5px 5px',
+    padding: 5,
     borderRadius: 100,
     cursor: 'pointer',
     position: 'relative',

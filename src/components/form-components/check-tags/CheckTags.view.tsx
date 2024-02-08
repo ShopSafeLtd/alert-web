@@ -25,6 +25,7 @@ interface Props {
   mode?: Mode;
   loading?: boolean;
   disabled?: boolean;
+  noGutter?: boolean;
 }
 
 const CheckTags = ({
@@ -34,6 +35,7 @@ const CheckTags = ({
   mode: modeProp,
   loading = false,
   disabled = false,
+  noGutter,
 }: Props) => {
   // Global State
   const role = useStoreState((state) => state.user.role);
@@ -142,7 +144,7 @@ const CheckTags = ({
     <CheckTagsLoading />
   ) : (
     <>
-      <Row gutter={[10, 10]}>
+      <Row gutter={noGutter ? 0 : 10}>
         {options
           .filter((item) => item.tier === 0 || !hasChildOptions)
           .map((option) =>
