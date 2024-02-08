@@ -23,7 +23,15 @@ const useIncidentGoods = ({
 }): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
 
-  const { data: goodsTypesData } = useListGoodsTypesQuery();
+  const { data: goodsTypesData } = useListGoodsTypesQuery({
+    variables: {
+      where: {
+        schemes: {
+          id: { equals: schemeId },
+        },
+      },
+    },
+  });
   const { data: businessesData } = useListBusinessesDivisionQuery({
     variables: {
       where: {

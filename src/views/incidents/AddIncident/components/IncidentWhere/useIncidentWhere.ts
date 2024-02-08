@@ -63,7 +63,10 @@ const useIncidentWhere = ({
                       equals: value,
                       mode: QueryMode.Insensitive,
                     }
-                  : undefined,
+                  : {
+                      contains: value,
+                      mode: QueryMode.Insensitive,
+                    },
               },
               {
                 name: showSiteNumber
