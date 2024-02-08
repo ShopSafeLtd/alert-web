@@ -197,6 +197,15 @@ const useFeedItems = (): Return => {
         },
       ],
     },
+    groupsWhere2: {
+      users: {
+        some: {
+          id: {
+            equals: userId,
+          },
+        },
+      },
+    },
   };
 
   // Queries
@@ -218,18 +227,7 @@ const useFeedItems = (): Return => {
   }, [schemeId]);
 
   const { data, loading, fetchMore } = useFeedItemsQuery({
-    variables: {
-      ...queryVariables,
-      groupsWhere2: {
-        users: {
-          some: {
-            id: {
-              equals: userId,
-            },
-          },
-        },
-      },
-    },
+    variables: queryVariables,
     fetchPolicy: 'cache-and-network',
   });
   const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({

@@ -504,6 +504,19 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                     peculiarities: offender.peculiarities || null,
                     race: offender.race || null,
                     scheme: { connect: { id: schemeId } },
+                    address:
+                      offender?.address?.street &&
+                      offender?.address?.townCity &&
+                      offender?.address?.postcode
+                        ? {
+                            alias: offender?.address?.alias,
+                            building: offender?.address?.building,
+                            street: offender?.address?.street,
+                            townCity: offender?.address?.townCity,
+                            county: offender?.address?.county,
+                            postcode: offender?.address?.postcode,
+                          }
+                        : undefined,
                   }))
                 : undefined,
 
@@ -529,6 +542,10 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                 name: { set: offender.name || '' },
                 peculiarities: { set: offender.peculiarities || '' },
                 race: { set: offender.race },
+                justification: { set: offender.justification || null },
+                infoSource: { set: offender.infoSource || '' },
+                knownFor: offender.knownFor,
+                targetedGoods: offender.targetedGoods,
               },
               where: { id: offender.id },
             })),
