@@ -928,7 +928,6 @@ const useAddIncident = ({ investigationId }: Props): Return => {
         setIncidentForm([
           IncidentFormField.Types,
           IncidentFormField.Involved,
-          IncidentFormField.Impact,
           IncidentFormField.Where,
           IncidentFormField.Images,
           IncidentFormField.Offenders,
