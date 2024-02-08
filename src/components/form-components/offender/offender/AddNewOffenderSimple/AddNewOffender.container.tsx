@@ -1,6 +1,7 @@
 import React from 'react';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { CreateSimpleOffenderMutation } from 'graphql/generated';
+import type { AddOffenderData } from 'components/incidents/IncidentForm/Profiles/Offenders/useOffenders';
 import useAddNewOffender from './useAddNewOffender';
 import View from './AddNewOffender.view';
 import type { ImageData } from '../../../ImageSelect/ImageSelect.view';
@@ -9,7 +10,8 @@ import type { StateImageData } from '../../../../incidents/IncidentForm/ImageSec
 interface Props {
   onClose: () => void;
   onCompleted?: () => void;
-  update: MutationUpdaterFn<CreateSimpleOffenderMutation>;
+  update?: MutationUpdaterFn<CreateSimpleOffenderMutation>;
+  onAddOffender?: (value: AddOffenderData) => void;
   images?: ImageData[] | undefined;
   incidentId?: string;
   investigationId?: string;
@@ -20,6 +22,7 @@ interface Props {
 const AddNewOffender = ({
   onClose,
   update,
+  onAddOffender,
   onCompleted,
   images,
   onImagesUploaded,
@@ -31,6 +34,7 @@ const AddNewOffender = ({
   const { onSubmit, saving, ageCheck, idVerified, form } = useAddNewOffender({
     onClose,
     update,
+    onAddOffender,
     onCompleted,
     onImagesUploaded,
     incidentId,

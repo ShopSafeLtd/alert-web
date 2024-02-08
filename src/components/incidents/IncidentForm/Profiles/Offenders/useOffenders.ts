@@ -14,6 +14,7 @@ import type { FormInstance } from 'antd';
 import { Form } from 'antd';
 import { useStoreState } from 'state';
 import type { FormData } from 'views/incidents/AddIncident/useAddIncident';
+import type { AddressData } from 'types/DataType';
 import type { StateImageData } from '../../ImageSection/useImageSection';
 import type { FacesOpenSubmitData } from './FacesColumn.view';
 import {
@@ -77,6 +78,12 @@ export interface AddOffenderData {
   idVerified?: boolean;
   idSource?: IdSource;
   images?: ImageType[] | null;
+  knownFor?: string[] | null;
+  targetedGoods?: string[] | null;
+  infoSource?: string | null;
+  justification?: string | null;
+  address?: AddressData;
+  // groupIds?: string[];
 }
 
 export interface StateOffenderData extends AddOffenderData {
@@ -205,6 +212,10 @@ const useOffenders = ({ value, onChange, form }: Props): Return => {
               images: newData.images,
               idSource: newData.idSource,
               idVerified: newData.idVerified,
+              justification: newData.justification,
+              infoSource: newData.infoSource,
+              knownFor: newData.knownFor,
+              targetedGoods: newData.targetedGoods,
               edited: !currentData.new,
               blank: false,
             },

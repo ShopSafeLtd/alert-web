@@ -125,6 +125,7 @@ const ListVehicles = ({
         <Col>
           <CheckTags
             mode="check"
+            noGutter
             value={gallery}
             onChange={setGallery}
             options={galleryOptions}

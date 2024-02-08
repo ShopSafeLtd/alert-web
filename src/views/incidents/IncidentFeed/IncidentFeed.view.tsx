@@ -131,7 +131,8 @@ const IncidentFeed = ({
           </Col>
           <Col flex={1}>
             <CheckTags
-              mode="radio"
+              mode="check"
+              noGutter
               value={gallery}
               onChange={setGallery}
               options={[
@@ -166,8 +167,8 @@ const IncidentFeed = ({
               title={
                 compactView
                   ? intl.formatMessage({
-                      defaultMessage: 'Present incidents card in normal size',
-                      id: 'uzVqOF',
+                      defaultMessage: 'Present incidents in normal normal',
+                      id: 'vSF3nN',
                     })
                   : intl.formatMessage({
                       defaultMessage: 'Present incidents in compact card',

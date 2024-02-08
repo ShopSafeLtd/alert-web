@@ -183,9 +183,7 @@ const Offenders = ({
       >
         {addNewOpen ? (
           <AddOffender
-            update={(data) =>
-              onAddOffenders([{ ...data, id: 'id' }], false, false)
-            }
+            onAddOffender={(data) => onAddOffenders([data], false, false)}
             onClose={toggleAddNewOpen}
             images={images}
             onImagesUploaded={onImagesUploadedInForm}
@@ -251,7 +249,7 @@ const Offenders = ({
           <EditOffender
             data={updateOpen}
             onClose={() => setUpdateOpen(null)}
-            update={(values) => onUpdateOffender({ ...values, id: 'id' })}
+            onEditOffender={(values) => onUpdateOffender(values)}
             images={images?.map((el) => ({ ...el, id: `${Math.random()}` }))}
             onImagesUploaded={onImagesUploadedInForm}
           />

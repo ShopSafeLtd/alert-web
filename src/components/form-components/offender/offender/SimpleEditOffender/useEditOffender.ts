@@ -16,6 +16,7 @@ import type { FormInstance } from 'antd';
 import { Form } from 'antd';
 import type { MutationUpdaterFn } from '@apollo/client';
 import errorNotification from 'types/mutation_notifications/error_notification';
+import type { AddOffenderData } from 'components/incidents/IncidentForm/Profiles/Offenders/useOffenders';
 import type { ImageValue } from '../../../ImageSelect/ImageSelect.view';
 import type { StateImageData } from '../../../../incidents/IncidentForm/ImageSection/useImageSection';
 
@@ -50,7 +51,8 @@ interface Props {
   onClose: () => void;
   data: OffenderData;
   onCompleted?: () => void;
-  update: MutationUpdaterFn<UpdateSimpleOffenderMutation>;
+  update?: MutationUpdaterFn<UpdateSimpleOffenderMutation>;
+  onEditOffender?: (value: AddOffenderData) => void;
   onImagesUploaded?: (value: StateImageData[]) => void;
 }
 
@@ -94,6 +96,7 @@ interface Return {
 const useEditOffender = ({
   data,
   onClose,
+  onEditOffender,
   update,
   onImagesUploaded,
   onCompleted,
@@ -156,81 +159,110 @@ const useEditOffender = ({
     const deleteIds = existingImageIds?.filter(
       (id) => !imageData?.map((el) => el.id).includes(id)
     );
-    void updateOffender({
-      variables: {
-        where: {
-          id: data.id,
+    const alias =
+      data.alias && data.alias.length > 0
+        ? [...new Set(data.alias?.map((el) => el.trim().toLowerCase()))]
+        : [];
+    if (onEditOffender) {
+      onEditOffender({
+        ...data,
+        name: data.name || 'Unidentified Offender',
+        alias,
+        gender: data.gender || null,
+        race: data.race || null,
+        build: data.build || null,
+        hair: data.hair || null,
+        height: data.height || null,
+        peculiarities: data.peculiarities || null,
+        comment: data.comment || null,
+        age: ageCheck ? null : data.age || null,
+        dateSource: ageCheck ? data.dateSource || null : null,
+        dateOfBirth: ageCheck ? data.dateOfBirth || null : null,
+        idVerified: data.idVerified,
+        idSource: data.idSource || undefined,
+        images: imageData,
+        justification: value.justification || null,
+        infoSource: value.infoSource || null,
+        knownFor: value.knownFor,
+        targetedGoods: value.targetedGoods,
+      });
+    } else {
+      void updateOffender({
+        variables: {
+          where: {
+            id: data.id,
+          },
+          data: {
+            name: { set: value.name },
+            gender: { set: value.gender || null },
+            race: { set: value.race || null },
+            build: { set: value.build || null },
+            height: { set: value.height || null },
+            hair: { set: value.hair || 'Unknown' },
+            peculiarities: { set: value.peculiarities || '' },
+            age: { set: value.age || null },
+            dateSource: { set: value.dateSource || null },
+            dateOfBirth: { set: value.dateOfBirth || null },
+            justification: { set: value.justification || null },
+            infoSource: { set: value.infoSource || null },
+            knownFor: { set: value.knownFor },
+            targetedGoods: { set: value.targetedGoods },
+            alias: { set: alias },
+            // addresses: {
+            //   update: [
+            //     {
+            //       where: {
+            //         id: data.,
+            //       },
+            //       data: {
+            //         postcode: { set: value.postcode },
+            //         street: { set: value.street },
+            //         townCity: { set: value.townCity },
+            //         alias: { set: value.addressAlias || '' },
+            //         building: { set: value.building },
+            //         county: { set: value.county },
+            //       },
+            //     },
+            //   ],
+            // },
+            images:
+              value.images && value.images.length > 0
+                ? {
+                    delete:
+                      deleteIds && deleteIds.length > 0
+                        ? deleteIds.map((id) => ({ id }))
+                        : undefined,
+                    connect: imageData
+                      ?.filter((image) => !image.new)
+                      .map((image) => ({
+                        id: image.id,
+                      })),
+                    upload: imageData
+                      ?.filter((image) => image.new)
+                      .map((item) => ({
+                        url: {
+                          filename: item.fileName || '',
+                          mimetype: item.type || '',
+                          url: item.url || '',
+                        },
+                        position: item.position,
+                        primary: item.primary,
+                        policeImage: item.policeImage,
+                        rotation: item.rotation || 0,
+                      }))
+                      .filter((obj) => obj.url !== undefined),
+                  }
+                : {
+                    delete:
+                      deleteIds && deleteIds.length > 0
+                        ? deleteIds.map((id) => ({ id }))
+                        : undefined,
+                  },
+          },
         },
-        data: {
-          name: { set: value.name },
-          gender: { set: value.gender || null },
-          race: { set: value.race || null },
-          build: { set: value.build || null },
-          height: { set: value.height || null },
-          hair: { set: value.hair || 'Unknown' },
-          peculiarities: { set: value.peculiarities || '' },
-          age: { set: value.age || null },
-          dateSource: { set: value.dateSource || null },
-          dateOfBirth: { set: value.dateOfBirth || null },
-          justification: { set: value.justification || null },
-          infoSource: { set: value.infoSource || null },
-          knownFor: { set: value.knownFor },
-          targetedGoods: { set: value.targetedGoods },
-          alias: { set: value.alias },
-          // addresses: {
-          //   update: [
-          //     {
-          //       where: {
-          //         id: data.,
-          //       },
-          //       data: {
-          //         postcode: { set: value.postcode },
-          //         street: { set: value.street },
-          //         townCity: { set: value.townCity },
-          //         alias: { set: value.addressAlias || '' },
-          //         building: { set: value.building },
-          //         county: { set: value.county },
-          //       },
-          //     },
-          //   ],
-          // },
-          images:
-            value.images && value.images.length > 0
-              ? {
-                  delete:
-                    deleteIds && deleteIds.length > 0
-                      ? deleteIds.map((id) => ({ id }))
-                      : undefined,
-                  connect: imageData
-                    ?.filter((image) => !image.new)
-                    .map((image) => ({
-                      id: image.id,
-                    })),
-                  upload: imageData
-                    ?.filter((image) => image.new)
-                    .map((item) => ({
-                      url: {
-                        filename: item.fileName || '',
-                        mimetype: item.type || '',
-                        url: item.url || '',
-                      },
-                      position: item.position,
-                      primary: item.primary,
-                      policeImage: item.policeImage,
-                      rotation: item.rotation || 0,
-                    }))
-                    .filter((obj) => obj.url !== undefined),
-                }
-              : {
-                  delete:
-                    deleteIds && deleteIds.length > 0
-                      ? deleteIds.map((id) => ({ id }))
-                      : undefined,
-                },
-        },
-      },
-    }).finally(() => onClose());
-
+      });
+    }
+    onClose();
     const uploadedImages = value.images?.filter((image) => image.file) || [];
     if (uploadedImages.length > 0 && onImagesUploaded) {
       onImagesUploaded(

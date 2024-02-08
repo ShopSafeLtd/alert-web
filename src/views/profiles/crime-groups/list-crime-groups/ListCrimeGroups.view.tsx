@@ -87,6 +87,7 @@ const ListCrimeGroups = ({
         <Col flex={1}>
           <CheckTags
             mode="check"
+            noGutter
             value={gallery}
             onChange={setGallery}
             options={galleryOptions}

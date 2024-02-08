@@ -16,8 +16,8 @@ const OffenderFeed = (): JSX.Element => {
     toggleSortFilter,
     setGallery,
     customGalleriesData,
-    onSelectGallery,
-    adminRights,
+    // onSelectGallery,
+    // adminRights,
     onSelectCustomGalleries,
     variables,
     fetchMoreScroll,
@@ -39,8 +39,8 @@ const OffenderFeed = (): JSX.Element => {
       toggleSortFilter={toggleSortFilter}
       setGallery={setGallery}
       customGalleriesData={customGalleriesData}
-      onSelectGallery={onSelectGallery}
-      adminRights={adminRights}
+      // onSelectGallery={onSelectGallery}
+      // adminRights={adminRights}
       onSelectCustomGalleries={onSelectCustomGalleries}
       variables={variables}
       setCompactView={setCompactView}

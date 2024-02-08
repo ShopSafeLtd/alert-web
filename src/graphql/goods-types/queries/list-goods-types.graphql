@@ -1,5 +1,5 @@
-query ListGoodsTypes {
-  listGoodsTypes {
+query ListGoodsTypes($where: ListGoodsTypeWhere) {
+  listGoodsTypes(where: $where) {
     total
     goodsTypes {
       id

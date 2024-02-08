@@ -23,6 +23,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faChevronDown,
   faFilter,
+  faGrid,
+  faGrid2,
   faPlus,
 } from '@fortawesome/pro-light-svg-icons';
 import type { MutationUpdaterFn } from '@apollo/client';
@@ -35,7 +37,6 @@ import OffenderFilter from 'components/offenders/OffenderFilter';
 import { useIntl } from 'react-intl';
 import type { OffenderFilters } from 'state/data-model';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import CheckTag from 'components/form-components/check-tag/CheckTag.view';
 import CompactSkeletonCard from 'components/offenders/OffenderCard/OffenderSkeletonCard.view';
 import useStyles from './OffenderFeed.styles';
 import Loading from '../../../../components/shared-components/AntD/Loading';
@@ -58,9 +59,7 @@ interface Props {
   toggleSortFilter: () => void;
   setGallery: (values: string[]) => void;
   customGalleriesData: ListCustomGalleriesQuery | undefined;
-  adminRights: boolean;
   onSelectCustomGalleries: (values: string) => void;
-  onSelectGallery: (value: string) => void;
   variables: OffenderFilters;
   fetchMoreScroll: () => void;
   setCompactView: () => void;
@@ -79,8 +78,7 @@ const OffenderFeed = ({
   toggleSortFilter,
   setGallery,
   customGalleriesData,
-  onSelectGallery,
-  adminRights,
+
   onSelectCustomGalleries,
   variables,
   fetchMoreScroll,
@@ -139,25 +137,25 @@ const OffenderFeed = ({
       )}
     </Menu>
   );
-  const galleryMenu = () => (
-    <Menu>
-      {galleryOptions.map(({ label, value, needAdminRight }) => (
-        <Menu.Item key={value}>
-          {(!needAdminRight || adminRights) && (
-            <Checkbox
-              key={value}
-              checked={gallery.includes(value)}
-              onChange={() => {
-                onSelectGallery(value);
-              }}
-            >
-              {label}
-            </Checkbox>
-          )}
-        </Menu.Item>
-      ))}
-    </Menu>
-  );
+  // const galleryMenu = () => (
+  //   <Menu>
+  //     {galleryOptions.map(({ label, value, needAdminRight }) => (
+  //       <Menu.Item key={value}>
+  //         {(!needAdminRight || adminRights) && (
+  //           <Checkbox
+  //             key={value}
+  //             checked={gallery.includes(value)}
+  //             onChange={() => {
+  //               onSelectGallery(value);
+  //             }}
+  //           >
+  //             {label}
+  //           </Checkbox>
+  //         )}
+  //       </Menu.Item>
+  //     ))}
+  //   </Menu>
+  // );
 
   return (
     <div
@@ -172,7 +170,7 @@ const OffenderFeed = ({
         bodyStyle={{ padding: 10 }}
         style={{ marginBottom: 5, marginRight: 10 }}
       >
-        <Row align="middle" gutter={16}>
+        <Row align="middle" gutter={8}>
           <Col span={4} xxl={4}>
             <Input
               size="small"
@@ -184,8 +182,9 @@ const OffenderFeed = ({
               onChange={(e) => setSearch(e.target.value)}
             />
           </Col>
+
           <Col>
-            {customGalleriesData?.listCustomGalleries.total ? (
+            {/* {customGalleriesData?.listCustomGalleries.total ? (
               <Dropdown
                 overlay={galleryMenu}
                 placement="bottom"
@@ -202,14 +201,15 @@ const OffenderFeed = ({
                   />
                 </Button>
               </Dropdown>
-            ) : (
-              <CheckTags
-                mode="check"
-                value={gallery}
-                onChange={setGallery}
-                options={galleryOptions}
-              />
-            )}
+            ) : ( */}
+            <CheckTags
+              mode="check"
+              noGutter
+              value={gallery}
+              onChange={setGallery}
+              options={galleryOptions}
+            />
+            {/* )} */}
           </Col>
 
           <Col flex={1}>
@@ -239,42 +239,31 @@ const OffenderFeed = ({
             ) : null}
           </Col>
           <Col>
-            <CheckTag
-              option={{
-                label: intl.formatMessage({
-                  defaultMessage: 'Compact View',
-                  id: '9P0/Y7',
-                }),
-                value: 'Compact',
-                tooltip: intl.formatMessage({
-                  defaultMessage: 'Present offenders in compact card',
-                  id: 'wctZp9',
-                }),
-              }}
-              active={compactView}
-              onClick={setCompactView}
-            />
-            {/* <CheckTags
-              mode="radio"
-              value={compactView ? ['Compact'] : ['Default']}
-              onChange={setCompactView}
-              options={[
-                {
-                  label: intl.formatMessage({
-                    defaultMessage: 'Default Card',
-                    id: '1K+0py',
-                  }),
-                  value: 'Default',
-                },
-                {
-                  label: intl.formatMessage({
-                    defaultMessage: 'Compact Card',
-                    id: 'O3k0C9',
-                  }),
-                  value: 'Compact',
-                },
-              ]}
-            /> */}
+            <Tooltip
+              // placement="topLeft"
+              title={
+                compactView
+                  ? intl.formatMessage({
+                      defaultMessage: 'Present offenders card in normal card',
+                      id: 'dcfc8W',
+                    })
+                  : intl.formatMessage({
+                      defaultMessage: 'Present offenders in compact card',
+                      id: 'wctZp9',
+                    })
+              }
+            >
+              <Button
+                onClick={setCompactView}
+                icon={
+                  <FontAwesomeIcon
+                    icon={compactView ? faGrid2 : faGrid}
+                    size="lg"
+                    style={{ marginRight: 5 }}
+                  />
+                }
+              />
+            </Tooltip>
           </Col>
           <Col>
             <Tooltip
