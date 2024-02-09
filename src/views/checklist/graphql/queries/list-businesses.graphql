@@ -1,0 +1,14 @@
+query ListBusinessesChecklist(
+  $where: BusinessWhereInput
+  $skip: Int
+  $take: Int
+  $orderBy: [BusinessOrderBy!]
+) {
+  listBusinesses(where: $where, skip: $skip, take: $take, orderBy: $orderBy) {
+    total
+    businesses {
+      id
+      name
+    }
+  }
+}

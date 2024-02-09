@@ -20,5 +20,11 @@ query Checklist($where: ChecklistWhereUniqueInput!) {
         }
       }
     }
+    users {
+      id
+    }
+    business {
+      id
+    }
   }
 }

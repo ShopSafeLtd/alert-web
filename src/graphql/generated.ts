@@ -2251,6 +2251,7 @@ export type ChatWhereUniqueInput = {
 export type Checklist = {
   __typename?: 'Checklist';
   activeChecklists: Array<ActiveChecklist>;
+  business: Array<Business>;
   createdAt: Scalars['Date'];
   description?: Maybe<Scalars['String']>;
   descriptionLocaled: Scalars['String'];
@@ -2261,6 +2262,7 @@ export type Checklist = {
   titleLocaled: Scalars['String'];
   titleTranslations: Array<Scalars['JSON']>;
   updatedAt: Scalars['Date'];
+  users: Array<User>;
 };
 
 
@@ -12152,6 +12154,7 @@ export type Query = {
   tag: Tag;
   tags: Array<Tag>;
   targetedGoods: ListTargetedGoods;
+  test: Scalars['String'];
   todo: Todo;
   todos: Array<Todo>;
   translateText: Array<TranslatedText>;
@@ -21510,6 +21513,16 @@ export type ActiveChecklistsQueryVariables = Exact<{
 
 export type ActiveChecklistsQuery = { __typename?: 'Query', activeChecklists: { __typename?: 'QueryActiveChecklistsConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null }, edges: Array<{ __typename?: 'QueryActiveChecklistsConnectionEdge', node: { __typename?: 'ActiveChecklist', id: string, name?: string | null, percentageScore: string, percentComplete: number, status: ChecklistStatus, updatedAt: Date, completedAt?: Date | null, document?: { __typename?: 'Document', id: string, url: string } | null, business?: { __typename?: 'Business', name: string, id: string } | null } }> } };
 
+export type ListBusinessesChecklistQueryVariables = Exact<{
+  where?: InputMaybe<BusinessWhereInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<BusinessOrderBy> | BusinessOrderBy>;
+}>;
+
+
+export type ListBusinessesChecklistQuery = { __typename?: 'Query', listBusinesses: { __typename?: 'ListBusinesses', total: number, businesses: Array<{ __typename?: 'Business', id: string, name: string }> } };
+
 export type ChecklistsQueryVariables = Exact<{
   where: ChecklistWhereInput;
   order?: InputMaybe<ChecklistOrderByWithRelationInput>;
@@ -21519,6 +21532,16 @@ export type ChecklistsQueryVariables = Exact<{
 
 
 export type ChecklistsQuery = { __typename?: 'Query', checklists: Array<{ __typename?: 'Checklist', id: string, titleLocaled: string, descriptionLocaled: string }> };
+
+export type UserListChecklistQueryVariables = Exact<{
+  where?: InputMaybe<UserWhereInput>;
+  orderBy?: InputMaybe<Array<UserOrderByWithRelationInput> | UserOrderByWithRelationInput>;
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type UserListChecklistQuery = { __typename?: 'Query', listUsers: { __typename?: 'ListUsers', users: Array<{ __typename?: 'User', id: string, fullName: string }> } };
 
 export type ActiveChecklistQueryVariables = Exact<{
   where: ActiveChecklistWhereUniqueInput;
@@ -21532,7 +21555,7 @@ export type ChecklistQueryVariables = Exact<{
 }>;
 
 
-export type ChecklistQuery = { __typename?: 'Query', checklist: { __typename?: 'Checklist', id: string, title: string, description?: string | null, sections: Array<{ __typename?: 'ChecklistSection', order: number, title: string, subsections: Array<{ __typename?: 'ChecklistSubsection', title: string, order: number, questions: Array<{ __typename?: 'ChecklistQuestion', order: number, question: { [key: string]: any }, type: ChecklistAnswerType, weight: Array<{ __typename?: 'AnswerWeight', weight: number, answer: string }> }> }> }> } };
+export type ChecklistQuery = { __typename?: 'Query', checklist: { __typename?: 'Checklist', id: string, title: string, description?: string | null, sections: Array<{ __typename?: 'ChecklistSection', order: number, title: string, subsections: Array<{ __typename?: 'ChecklistSubsection', title: string, order: number, questions: Array<{ __typename?: 'ChecklistQuestion', order: number, question: { [key: string]: any }, type: ChecklistAnswerType, weight: Array<{ __typename?: 'AnswerWeight', weight: number, answer: string }> }> }> }>, users: Array<{ __typename?: 'User', id: string }>, business: Array<{ __typename?: 'Business', id: string }> } };
 
 export type CreateCsvZipMutationVariables = Exact<{
   where: IncidentExportInput;
@@ -32476,6 +32499,28 @@ export function useActiveChecklistsLazyQuery(baseOptions?: Apollo.LazyQueryHookO
 export type ActiveChecklistsQueryHookResult = ReturnType<typeof useActiveChecklistsQuery>;
 export type ActiveChecklistsLazyQueryHookResult = ReturnType<typeof useActiveChecklistsLazyQuery>;
 export type ActiveChecklistsQueryResult = Apollo.QueryResult<ActiveChecklistsQuery, ActiveChecklistsQueryVariables>;
+export const ListBusinessesChecklistDocument = gql`
+    query ListBusinessesChecklist($where: BusinessWhereInput, $skip: Int, $take: Int, $orderBy: [BusinessOrderBy!]) {
+  listBusinesses(where: $where, skip: $skip, take: $take, orderBy: $orderBy) {
+    total
+    businesses {
+      id
+      name
+    }
+  }
+}
+    `;
+export function useListBusinessesChecklistQuery(baseOptions?: Apollo.QueryHookOptions<ListBusinessesChecklistQuery, ListBusinessesChecklistQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ListBusinessesChecklistQuery, ListBusinessesChecklistQueryVariables>(ListBusinessesChecklistDocument, options);
+      }
+export function useListBusinessesChecklistLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListBusinessesChecklistQuery, ListBusinessesChecklistQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ListBusinessesChecklistQuery, ListBusinessesChecklistQueryVariables>(ListBusinessesChecklistDocument, options);
+        }
+export type ListBusinessesChecklistQueryHookResult = ReturnType<typeof useListBusinessesChecklistQuery>;
+export type ListBusinessesChecklistLazyQueryHookResult = ReturnType<typeof useListBusinessesChecklistLazyQuery>;
+export type ListBusinessesChecklistQueryResult = Apollo.QueryResult<ListBusinessesChecklistQuery, ListBusinessesChecklistQueryVariables>;
 export const ChecklistsDocument = gql`
     query Checklists($where: ChecklistWhereInput!, $order: ChecklistOrderByWithRelationInput, $take: Int, $skip: Int) {
   checklists(where: $where, order: $order, take: $take, skip: $skip) {
@@ -32496,6 +32541,27 @@ export function useChecklistsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type ChecklistsQueryHookResult = ReturnType<typeof useChecklistsQuery>;
 export type ChecklistsLazyQueryHookResult = ReturnType<typeof useChecklistsLazyQuery>;
 export type ChecklistsQueryResult = Apollo.QueryResult<ChecklistsQuery, ChecklistsQueryVariables>;
+export const UserListChecklistDocument = gql`
+    query UserListChecklist($where: UserWhereInput, $orderBy: [UserOrderByWithRelationInput!], $take: Int, $skip: Int) {
+  listUsers(where: $where, orderBy: $orderBy, take: $take, skip: $skip) {
+    users {
+      id
+      fullName
+    }
+  }
+}
+    `;
+export function useUserListChecklistQuery(baseOptions?: Apollo.QueryHookOptions<UserListChecklistQuery, UserListChecklistQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserListChecklistQuery, UserListChecklistQueryVariables>(UserListChecklistDocument, options);
+      }
+export function useUserListChecklistLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserListChecklistQuery, UserListChecklistQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserListChecklistQuery, UserListChecklistQueryVariables>(UserListChecklistDocument, options);
+        }
+export type UserListChecklistQueryHookResult = ReturnType<typeof useUserListChecklistQuery>;
+export type UserListChecklistLazyQueryHookResult = ReturnType<typeof useUserListChecklistLazyQuery>;
+export type UserListChecklistQueryResult = Apollo.QueryResult<UserListChecklistQuery, UserListChecklistQueryVariables>;
 export const ActiveChecklistDocument = gql`
     query ActiveChecklist($where: ActiveChecklistWhereUniqueInput!) {
   activeChecklist(where: $where) {
@@ -32566,6 +32632,12 @@ export const ChecklistDocument = gql`
           }
         }
       }
+    }
+    users {
+      id
+    }
+    business {
+      id
     }
   }
 }

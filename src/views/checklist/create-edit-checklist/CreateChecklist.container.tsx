@@ -13,9 +13,13 @@ const CreateChecklistContainer = () => {
     handleAddQuestion,
     handleRemoveQuestion,
     loading,
+    businesses,
+    users,
   } = useCreateChecklist();
   return (
     <View
+      businesses={businesses}
+      users={users}
       loading={loading}
       form={form}
       onFinish={onFinish}
