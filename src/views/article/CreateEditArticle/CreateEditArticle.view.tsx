@@ -24,6 +24,7 @@ import AddExistingOffender from '../../../components/form-components/offender/of
 import LinkIncident from '../../../components/form-components/linkOptions/LinkIncident';
 import type { FormData } from './hooks/useCreateEditArticle';
 import { useStoreState } from '../../../state';
+import Loading from '../../../components/shared-components/AntD/Loading';
 
 const CreateEditArticleView = ({
   // log,
@@ -129,6 +130,26 @@ const CreateEditArticleView = ({
                 })
           }
         />
+        {loading && (
+          <Card
+            style={{
+              height: '100%',
+              width: '98%',
+              position: 'absolute',
+              zIndex: 1000,
+            }}
+            bodyStyle={{
+              margin: 0,
+              padding: 0,
+              display: 'flex',
+              justifyContent: 'center',
+              height: '100vh',
+              alignItems: 'center',
+            }}
+          >
+            <Loading />
+          </Card>
+        )}
         <Card style={{ marginLeft: 20, marginRight: 20, minHeight: 600 }}>
           <Form<FormData>
             form={form}
@@ -285,8 +306,15 @@ const CreateEditArticleView = ({
             <div style={{ margin: 25 }}>
               <Editor
                 onInit={(evt, editor) => {
-                  // eslint-disable-next-line no-param-reassign
-                  editorRef.current = editor;
+                  if (editorRef?.current?.getContent()) {
+                    const storedContent = editorRef.current.getContent();
+                    // eslint-disable-next-line no-param-reassign
+                    editorRef.current = editor;
+                    editorRef.current.setContent(storedContent);
+                  } else {
+                    // eslint-disable-next-line no-param-reassign
+                    editorRef.current = editor;
+                  }
                 }}
                 tinymceScriptSrc="/tinymce/tinymce.min.js"
                 initialValue="<p>Create a new document here...</p>"
