@@ -67,7 +67,7 @@ const createActiveChecklistDrawer = ({
         </Select>
       </Form.Item>
       <Form.Item>
-        <Button onClick={close}>
+        <Button onClick={close} style={{ marginRight: 12 }}>
           {intl.formatMessage({ id: '47FYwb', defaultMessage: 'Cancel' })}
         </Button>
         <Button type="primary" htmlType="submit">

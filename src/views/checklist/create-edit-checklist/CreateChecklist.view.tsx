@@ -12,12 +12,13 @@ import {
   PageHeader,
   Radio,
   Row,
+  Select,
   Space,
 } from 'antd';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate, useParams } from 'react-router';
-import type { FormData, Section } from './useCreateChecklist';
+import type { FormData, Section, SelectOption } from './useCreateChecklist';
 
 interface Props {
   form: FormInstance<FormData>;
@@ -44,6 +45,8 @@ interface Props {
     questionIndex: number
   ) => void;
   loading: boolean;
+  businesses: SelectOption[];
+  users: SelectOption[];
 }
 const indexToLetter = (num: number) => (num + 10).toString(36).toUpperCase();
 const CreateChecklistView: React.FC<Props> = ({
@@ -57,6 +60,8 @@ const CreateChecklistView: React.FC<Props> = ({
   handleAddQuestion,
   handleRemoveQuestion,
   loading,
+  businesses,
+  users,
 }) => {
   const intl = useIntl();
   const { id } = useParams();
@@ -87,43 +92,93 @@ const CreateChecklistView: React.FC<Props> = ({
         layout="horizontal"
       >
         <Card loading={loading}>
-          <Form.Item
-            label={intl.formatMessage({
-              id: 'F+9MHk',
-              defaultMessage: 'Checklist Title',
-            })}
-            name="title"
-            rules={[
-              {
-                required: true,
-                message: intl.formatMessage({
-                  id: 'K+LnZG',
-                  defaultMessage: 'Missing title',
-                }),
-              },
-            ]}
-          >
-            <Input
-              placeholder={intl.formatMessage({
-                id: '9a9+ww',
-                defaultMessage: 'Title',
-              })}
-            />
-          </Form.Item>
-          <Form.Item
-            label={intl.formatMessage({
-              id: '1OyEjZ',
-              defaultMessage: 'Checklist Description',
-            })}
-            name="description"
-          >
-            <Input.TextArea
-              placeholder={intl.formatMessage({
-                id: 'Q8Qw5B',
-                defaultMessage: 'Description',
-              })}
-            />
-          </Form.Item>
+          <Row gutter={16}>
+            <Col span={8}>
+              <Form.Item
+                label={intl.formatMessage({
+                  id: 'F+9MHk',
+                  defaultMessage: 'Checklist Title',
+                })}
+                name="title"
+                rules={[
+                  {
+                    required: true,
+                    message: intl.formatMessage({
+                      id: 'K+LnZG',
+                      defaultMessage: 'Missing title',
+                    }),
+                  },
+                ]}
+              >
+                <Input
+                  placeholder={intl.formatMessage({
+                    id: '9a9+ww',
+                    defaultMessage: 'Title',
+                  })}
+                />
+              </Form.Item>
+            </Col>
+            <Col flex={1}>
+              <Form.Item
+                label={intl.formatMessage({
+                  id: '1OyEjZ',
+                  defaultMessage: 'Checklist Description',
+                })}
+                name="description"
+              >
+                <Input.TextArea
+                  placeholder={intl.formatMessage({
+                    id: 'Q8Qw5B',
+                    defaultMessage: 'Description',
+                  })}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={8}>
+              <Form.Item
+                label={intl.formatMessage({
+                  id: 'YDMrKK',
+                  defaultMessage: 'Users',
+                })}
+                name="userIds"
+              >
+                <Select
+                  optionFilterProp="label"
+                  showSearch
+                  mode="multiple"
+                  maxTagCount="responsive"
+                  placeholder={intl.formatMessage({
+                    id: 'YDMrKK',
+                    defaultMessage: 'Users',
+                  })}
+                  options={users}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item
+                label={intl.formatMessage({
+                  id: 'D0tMhW',
+                  defaultMessage: 'Businesses',
+                })}
+                name="businessIds"
+              >
+                <Select
+                  optionFilterProp="label"
+                  showSearch
+                  mode="multiple"
+                  maxTagCount="responsive"
+                  placeholder={intl.formatMessage({
+                    id: 'D0tMhW',
+                    defaultMessage: 'Businesses',
+                  })}
+                  options={businesses}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
         </Card>
         <Form.List name="sections">
           {(fields) => (

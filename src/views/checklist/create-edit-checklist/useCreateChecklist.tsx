@@ -7,9 +7,15 @@ import type { ChecklistAnswerType } from '../../../graphql/generated';
 import {
   useChecklistQuery,
   useCreateUpdateChecklistMutation,
+  useListBusinessesChecklistQuery,
+  useUserListChecklistQuery,
 } from '../../../graphql/generated';
 import { useStoreState } from '../../../state';
 
+export interface SelectOption {
+  label: string;
+  value: string;
+}
 export interface Section {
   order: number;
   title: string;
@@ -43,6 +49,8 @@ export function findChangedSectionIndex(
 export interface FormData {
   title: string;
   description: string;
+  businessIds: string[];
+  userIds: string[];
   sections: Section[];
 }
 
@@ -71,6 +79,8 @@ interface Return {
     questionIndex: number
   ) => void;
   loading: boolean;
+  businesses: SelectOption[];
+  users: SelectOption[];
 }
 
 // create a funciton that gets an object of the following shape and an language code
@@ -136,55 +146,60 @@ const getWeight = (
   }
 };
 
+const createAnswerWeight = (
+  type: 'PASS_FAIL' | 'YES_NO' | 'GOOD_BAD' | 'TEXT',
+  passWeight: number,
+  failWeight: number
+) => {
+  switch (type) {
+    case 'PASS_FAIL': {
+      return [
+        { answer: 'PASS', weight: passWeight },
+        { answer: 'FAIL', weight: failWeight },
+      ];
+    }
+    case 'YES_NO': {
+      return [
+        { answer: 'YES', weight: passWeight },
+        { answer: 'NO', weight: failWeight },
+      ];
+    }
+    case 'GOOD_BAD': {
+      return [
+        { answer: 'GOOD', weight: passWeight },
+        { answer: 'BAD', weight: failWeight },
+      ];
+    }
+    case 'TEXT': {
+      return [{ answer: 'TEXT', weight: passWeight }];
+    }
+    // eslint-disable-next-line sonarjs/no-duplicated-branches
+    default: {
+      return [
+        { answer: 'PASS', weight: passWeight },
+        { answer: 'FAIL', weight: failWeight },
+      ];
+    }
+  }
+};
+
 export function useCreateChecklist(): Return {
   const [form] = Form.useForm();
   const [sections, setSections] = useState<Section[]>([
     { order: 1, title: '', description: '', subsections: [] },
   ]);
 
+  const [businesses, setBusinesses] = useState<SelectOption[]>([]);
+  const [users, setUsers] = useState<SelectOption[]>([]);
   const [createUpdateChecklist] = useCreateUpdateChecklistMutation();
 
+  const { id: schemeId } = useStoreState((state) => state.scheme);
   const { id } = useParams();
   const language = useStoreState((state) => state.theme.locale);
-  const createAnswerWeight = (
-    type: 'PASS_FAIL' | 'YES_NO' | 'GOOD_BAD' | 'TEXT',
-    passWeight: number,
-    failWeight: number
-  ) => {
-    switch (type) {
-      case 'PASS_FAIL': {
-        return [
-          { answer: 'PASS', weight: passWeight },
-          { answer: 'FAIL', weight: failWeight },
-        ];
-      }
-      case 'YES_NO': {
-        return [
-          { answer: 'YES', weight: passWeight },
-          { answer: 'NO', weight: failWeight },
-        ];
-      }
-      case 'GOOD_BAD': {
-        return [
-          { answer: 'GOOD', weight: passWeight },
-          { answer: 'BAD', weight: failWeight },
-        ];
-      }
-      case 'TEXT': {
-        return [{ answer: 'TEXT', weight: passWeight }];
-      }
-      // eslint-disable-next-line sonarjs/no-duplicated-branches
-      default: {
-        return [
-          { answer: 'PASS', weight: passWeight },
-          { answer: 'FAIL', weight: failWeight },
-        ];
-      }
-    }
-  };
 
   const { loading } = useChecklistQuery({
     skip: !id,
+    fetchPolicy: 'network-only',
     variables: {
       where: {
         id: id || '',
@@ -224,6 +239,9 @@ export function useCreateChecklist(): Return {
       form.setFieldsValue({
         title: data.checklist.title,
         description: data.checklist.description,
+        userIds: data.checklist.users.map((user) => user.id) || [],
+        businessIds:
+          data.checklist.business.map((business) => business.id) || [],
         sections: data.checklist.sections.map((section) => ({
           order: section.order,
           title: section.title,
@@ -247,7 +265,10 @@ export function useCreateChecklist(): Return {
   const onFinish = (values: FormData) => {
     void createUpdateChecklist({
       variables: {
+        createUpdateChecklistId: id,
         data: {
+          businessIds: values.businessIds,
+          userIds: values.userIds,
           title: values.title,
           description: values.description,
           sections: values.sections.map((section) => ({
@@ -480,13 +501,70 @@ export function useCreateChecklist(): Return {
     }
     setSections(newSections);
   };
+  const { loading: businessLoading } = useListBusinessesChecklistQuery({
+    variables: {
+      where: {
+        schemes: {
+          some: {
+            id: {
+              equals: schemeId,
+            },
+          },
+        },
+      },
+    },
+    onCompleted: (businessData) => {
+      if (
+        businessData &&
+        businessData.listBusinesses &&
+        businessData.listBusinesses.businesses &&
+        businessData.listBusinesses.businesses.length > 0
+      )
+        setBusinesses(
+          businessData.listBusinesses.businesses.map((business) => ({
+            label: business.name,
+            value: business.id,
+          }))
+        );
+    },
+  });
+
+  const { loading: usersLoading } = useUserListChecklistQuery({
+    variables: {
+      where: {
+        schemes: {
+          some: {
+            scheme: {
+              id: {
+                equals: schemeId,
+              },
+            },
+          },
+        },
+      },
+    },
+    onCompleted: (usersData) => {
+      if (
+        usersData &&
+        usersData.listUsers &&
+        usersData.listUsers.users &&
+        usersData.listUsers.users.length > 0
+      )
+        setUsers(
+          usersData.listUsers.users.map((business) => ({
+            label: business.fullName,
+            value: business.id,
+          }))
+        );
+    },
+  });
 
   useEffect(() => {
     form.setFieldsValue({ sections });
   }, [sections, form]);
   return {
     form,
-    loading,
+    loading: loading || businessLoading || usersLoading,
     onFinish,
     handleAddSection,
     handleRemoveSection,
@@ -495,5 +573,7 @@ export function useCreateChecklist(): Return {
     handleRemoveSubsection,
     handleAddQuestion,
     handleRemoveQuestion,
+    businesses,
+    users,
   };
 }
