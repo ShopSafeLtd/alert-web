@@ -38,12 +38,14 @@ const CreateEditArticleContainer = () => {
     incidents,
     selectedSchemes,
     id,
+    initData,
   } = useCreateEditArticle();
 
   const { drawer } = useDrawerState<AddOffender | AddIncident>();
 
   return (
     <View
+      initData={initData}
       id={id}
       selectedSchemes={selectedSchemes}
       incidents={incidents}

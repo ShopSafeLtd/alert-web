@@ -78,6 +78,13 @@ const useCreateEditArticle = (): Props => {
   const [selectedCategories, setSelectedCategories] = useState<
     { value: string }[]
   >([]);
+  const [initialValue, setInitialValue] = useState<string | undefined>(
+    undefined
+  );
+
+  useEffect(() => {
+    if (!articleId) setInitialValue('<p>Create a new document here...</p>');
+  }, []);
 
   const navigate = useNavigate();
   const { data: res, loading } = useArticleQuery({
@@ -175,16 +182,9 @@ const useCreateEditArticle = (): Props => {
         importance: result?.article?.priority || ArticlePriority.Normal,
         schemes: [],
       });
+      setInitialValue(res?.article?.rows[0].columns[0].text || '');
     },
   });
-
-  useEffect(() => {
-    if (editorRef.current && res?.article?.rows[0].columns[0].text) {
-      editorRef.current?.setContent(
-        res?.article?.rows[0].columns[0].text || ''
-      );
-    }
-  }, [res, editorRef]);
 
   const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
     variables: {
@@ -783,6 +783,7 @@ const useCreateEditArticle = (): Props => {
     removeIncident,
     selectedSchemes,
     id: articleId,
+    initData: initialValue,
   };
 };
 

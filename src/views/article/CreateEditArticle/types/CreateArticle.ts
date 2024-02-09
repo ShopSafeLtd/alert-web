@@ -49,6 +49,7 @@ export interface Props {
     progress: (arg0: number) => void
   ): Promise<string>;
   id?: string;
+  initData: string | undefined;
 }
 
 export interface ViewProps extends Props {
