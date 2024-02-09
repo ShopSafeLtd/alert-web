@@ -59,6 +59,7 @@ const CreateEditArticleView = ({
   removeIncident,
   selectedSchemes,
   id,
+  initData,
 }: ViewProps) => {
   const intl = useIntl();
   const noSchemes = selectedSchemes;
@@ -306,18 +307,11 @@ const CreateEditArticleView = ({
             <div style={{ margin: 25 }}>
               <Editor
                 onInit={(evt, editor) => {
-                  if (editorRef?.current?.getContent()) {
-                    const storedContent = editorRef.current.getContent();
-                    // eslint-disable-next-line no-param-reassign
-                    editorRef.current = editor;
-                    editorRef.current.setContent(storedContent);
-                  } else {
-                    // eslint-disable-next-line no-param-reassign
-                    editorRef.current = editor;
-                  }
+                  // eslint-disable-next-line no-param-reassign
+                  editorRef.current = editor;
                 }}
                 tinymceScriptSrc="/tinymce/tinymce.min.js"
-                initialValue="<p>Create a new document here...</p>"
+                initialValue={initData}
                 init={{
                   skin: theme ? 'oxide-dark' : undefined,
                   content_css: theme ? 'dark' : undefined,
