@@ -231,6 +231,17 @@ const ChecklistsView: React.FC<ChecklistsViewProps> = ({
                         ),
                       },
                       {
+                        key: 'businessName',
+                        dataIndex: 'businessName',
+                        width: 200,
+                        title: (
+                          <FormattedMessage
+                            defaultMessage="Business"
+                            id="w1Fanr"
+                          />
+                        ),
+                      },
+                      {
                         key: 'percentComplete',
                         dataIndex: 'percentComplete',
                         sorter: true,
