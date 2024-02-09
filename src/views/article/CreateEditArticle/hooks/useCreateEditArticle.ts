@@ -85,7 +85,7 @@ const useCreateEditArticle = (): Props => {
       where: { id: articleId },
     },
     skip: !articleId,
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'network-only',
     onCompleted: (result) => {
       setData({
         title: result?.article?.title || '',
@@ -175,11 +175,16 @@ const useCreateEditArticle = (): Props => {
         importance: result?.article?.priority || ArticlePriority.Normal,
         schemes: [],
       });
-      editorRef.current?.setContent(
-        result?.article?.rows[0].columns[0].text || ''
-      );
     },
   });
+
+  useEffect(() => {
+    if (editorRef.current && res?.article?.rows[0].columns[0].text) {
+      editorRef.current?.setContent(
+        res?.article?.rows[0].columns[0].text || ''
+      );
+    }
+  }, [res, editorRef]);
 
   const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
     variables: {
