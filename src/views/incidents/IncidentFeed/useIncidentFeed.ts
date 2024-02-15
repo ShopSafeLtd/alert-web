@@ -356,7 +356,15 @@ const useIncidentFeed = (): Return => {
       },
     });
 
-  const { data: goodsData, loading: goodsLoading } = useListGoodsTypesQuery();
+  const { data: goodsData, loading: goodsLoading } = useListGoodsTypesQuery({
+    variables: {
+      where: {
+        schemes: {
+          id: { equals: schemeId },
+        },
+      },
+    },
+  });
 
   // On mount
   useEffect(() => {
