@@ -259,7 +259,15 @@ const useAddIncident = ({ investigationId }: Props): Return => {
     },
   });
 
-  const { data: goodsTypesData } = useListGoodsTypesQuery();
+  const { data: goodsTypesData } = useListGoodsTypesQuery({
+    variables: {
+      where: {
+        schemes: {
+          id: { equals: schemeId },
+        },
+      },
+    },
+  });
 
   const { data: addressData, loading: addressLoading } = useAddressesQuery({
     fetchPolicy: 'cache-and-network',
