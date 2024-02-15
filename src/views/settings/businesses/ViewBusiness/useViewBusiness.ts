@@ -73,6 +73,7 @@ const useViewBusiness = (): Return => {
   const intl = useIntl();
   const navigate = useNavigate();
   const currentScheme = useStoreState((state) => state.scheme.id);
+  const userId = useStoreState((state) => state.user.id);
   const [editVisible, setEditVisible] = useState(false);
   const [inviteUserVisible, setInviteUserVisible] = useState(false);
   const [addUserVisible, setAddUserVisible] = useState(false);
@@ -86,6 +87,17 @@ const useViewBusiness = (): Return => {
   const variables = {
     where: {
       id: params.id,
+    },
+    incidentsWhere: {
+      scheme: {
+        members: {
+          some: {
+            userId: {
+              equals: userId,
+            },
+          },
+        },
+      },
     },
   };
   const { data } = useBusinessQuery({
@@ -108,6 +120,15 @@ const useViewBusiness = (): Return => {
           some: {
             id: {
               equals: params.id,
+            },
+          },
+        },
+        schemes: {
+          some: {
+            scheme: {
+              id: {
+                equals: currentScheme,
+              },
             },
           },
         },

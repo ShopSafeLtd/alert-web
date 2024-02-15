@@ -1,4 +1,7 @@
-query Business($where: BusinessWhereUniqueInput!) {
+query Business(
+  $where: BusinessWhereUniqueInput!
+  $incidentsWhere: IncidentWhereInput
+) {
   business(where: $where) {
     id
     name
@@ -14,7 +17,7 @@ query Business($where: BusinessWhereUniqueInput!) {
       id
       name
     }
-    incidents {
+    incidents(where: $incidentsWhere) {
       id
       reference
       dayTime
