@@ -78,109 +78,113 @@ const useCreateEditArticle = (): Props => {
   const [selectedCategories, setSelectedCategories] = useState<
     { value: string }[]
   >([]);
+  const [initialValue, setInitialValue] = useState<string | undefined>(
+    undefined
+  );
+
+  useEffect(() => {
+    if (!articleId) setInitialValue('<p>Create a new document here...</p>');
+  }, []);
 
   const navigate = useNavigate();
-  const { data: result, loading } = useArticleQuery({
+  const { data: res, loading } = useArticleQuery({
     variables: {
       where: { id: articleId },
     },
     skip: !articleId,
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'network-only',
+    onCompleted: (result) => {
+      setData({
+        title: result?.article?.title || '',
+        content: result?.article?.rows[0].columns[0].text || '',
+        groups: result?.article?.groups.map((group) => group.id || '') || [],
+        categories:
+          result?.article?.tags.map((tag) => ({
+            value: tag.name || '',
+            label: tag.name || '',
+          })) || [],
+        importance: result?.article?.priority || ArticlePriority.Normal,
+        watermarkImage: !!result?.article?.watermarkImage,
+        schemes:
+          result?.article?.groups.map((group) => group.scheme.id || '') || [],
+      });
+      setSelectedSchemes(
+        result?.article?.groups.map((group) => group.scheme.id || '') || []
+      );
+      setSelectedGroups(
+        result?.article?.groups.map((group) => group.id || '') || []
+      );
+      setOffenders(
+        (result?.article?.rows[0].columns[0].offenders as OffenderData[]) || []
+      );
+      setIncidents(
+        result?.article?.rows[0].columns[0].incidents.map((i) => ({
+          incident: {
+            ...i,
+            totalImages: i.images.length,
+            incidentItems: [],
+          },
+        })) || []
+      );
+      setFileList(
+        result?.article?.documents.map((document) => ({
+          uid: document.id,
+          name: document.name,
+          status: 'done',
+          url: document.url,
+        })) || []
+      );
+      setSelectedCategories(
+        result?.article?.tags.map((tag) => ({
+          value: tag.name || '',
+          label: tag.name || '',
+        })) || []
+      );
+      const html = result?.article?.rows[0].columns[0].text || '';
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      // // for each td, remove style tag
+      // const tds = doc.body.querySelectorAll('td');
+      // tds.forEach((td) => {
+      //   const { style } = td;
+      //   // console.log(style);
+      //   if (style) {
+      //     style.borderWidth = '0';
+      //   }
+      // });
+      // const table = doc.body.querySelector('table');
+      // if (table) {
+      //   table.style.borderWidth = '0';
+      // }
+      // console.log(doc.body.innerHTML);
+      const images = doc.body.querySelectorAll('img');
+      const imageSrcs = [...images].map((image) => image.src);
+
+      setImageList(
+        imageSrcs?.map((image) => ({
+          uid: image,
+          name: image,
+          status: 'done',
+          url: image || '',
+        })) || []
+      );
+
+      form.setFieldsValue({
+        title: result?.article?.title || '',
+        content: result?.article?.rows[0].columns[0].text || '',
+        groups: result?.article?.groups.map((group) => group.id || '') || [],
+        watermarkImage: !!result?.article?.watermarkImage,
+        categories:
+          result?.article?.tags.map((tag) => ({
+            value: tag.name || '',
+            label: tag.name || '',
+          })) || [],
+        importance: result?.article?.priority || ArticlePriority.Normal,
+        schemes: [],
+      });
+      setInitialValue(res?.article?.rows[0].columns[0].text || '');
+    },
   });
-
-  useEffect(() => {
-    setData({
-      title: result?.article?.title || '',
-      content: result?.article?.rows[0].columns[0].text || '',
-      groups: result?.article?.groups.map((group) => group.id || '') || [],
-      categories:
-        result?.article?.tags.map((tag) => ({
-          value: tag.name || '',
-          label: tag.name || '',
-        })) || [],
-      importance: result?.article?.priority || ArticlePriority.Normal,
-      watermarkImage: !!result?.article?.watermarkImage,
-      schemes:
-        result?.article?.groups.map((group) => group.scheme.id || '') || [],
-    });
-    setSelectedSchemes(
-      result?.article?.groups.map((group) => group.scheme.id || '') || []
-    );
-    setSelectedGroups(
-      result?.article?.groups.map((group) => group.id || '') || []
-    );
-    setOffenders(
-      (result?.article?.rows[0].columns[0].offenders as OffenderData[]) || []
-    );
-    setIncidents(
-      result?.article?.rows[0].columns[0].incidents.map((i) => ({
-        incident: {
-          ...i,
-          totalImages: i.images.length,
-          incidentItems: [],
-        },
-      })) || []
-    );
-    setFileList(
-      result?.article?.documents.map((document) => ({
-        uid: document.id,
-        name: document.name,
-        status: 'done',
-        url: document.url,
-      })) || []
-    );
-    setSelectedCategories(
-      result?.article?.tags.map((tag) => ({
-        value: tag.name || '',
-        label: tag.name || '',
-      })) || []
-    );
-    const html = result?.article?.rows[0].columns[0].text || '';
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-    // // for each td, remove style tag
-    // const tds = doc.body.querySelectorAll('td');
-    // tds.forEach((td) => {
-    //   const { style } = td;
-    //   // console.log(style);
-    //   if (style) {
-    //     style.borderWidth = '0';
-    //   }
-    // });
-    // const table = doc.body.querySelector('table');
-    // if (table) {
-    //   table.style.borderWidth = '0';
-    // }
-    // console.log(doc.body.innerHTML);
-    const images = doc.body.querySelectorAll('img');
-    const imageSrcs = [...images].map((image) => image.src);
-
-    setImageList(
-      imageSrcs?.map((image) => ({
-        uid: image,
-        name: image,
-        status: 'done',
-        url: image || '',
-      })) || []
-    );
-
-    form.setFieldsValue({
-      title: result?.article?.title || '',
-      content: result?.article?.rows[0].columns[0].text || '',
-      groups: result?.article?.groups.map((group) => group.id || '') || [],
-      watermarkImage: !!result?.article?.watermarkImage,
-      categories:
-        result?.article?.tags.map((tag) => ({
-          value: tag.name || '',
-          label: tag.name || '',
-        })) || [],
-      importance: result?.article?.priority || ArticlePriority.Normal,
-      schemes: [],
-    });
-    editorRef.current?.setContent(
-      result?.article?.rows[0].columns[0].text || ''
-    );
-  }, [result]);
 
   const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
     variables: {
@@ -321,15 +325,15 @@ const useCreateEditArticle = (): Props => {
   };
 
   useEffect(() => {
-    if (categories && categories?.length > 0 && result) {
+    if (categories && categories?.length > 0 && res) {
       setSelectedCategories(
-        result?.article?.tags.map((tag) => ({
+        res?.article?.tags.map((tag) => ({
           value: tag.name || '',
           label: tag.name || '',
         })) || []
       );
     }
-  }, [categories, result]);
+  }, [categories, res]);
 
   const log = (): { text: string; img: string; imgSrc: string[] } => {
     if (editorRef.current) {
@@ -661,30 +665,30 @@ const useCreateEditArticle = (): Props => {
             },
             data: variables.data,
           },
-        })
-          .then((res) => {
-            if (res && res.data && res.data.editArticle) {
+          onCompleted: (resData) => {
+            if (resData && resData.editArticle) {
               setSaving(false);
 
-              navigate(`/app/article/view/${res?.data?.editArticle.id}`);
+              navigate(`/app/article/view/${resData?.editArticle.id}`);
             }
-          })
-          .catch(() => {
+          },
+          onError: () => {
             setSaving(false);
-          })
+          },
+        })
       : submitArticle({
           variables,
-        })
-          .then((res) => {
-            if (res && res.data && res.data.createArticle) {
+          onCompleted: (resData) => {
+            if (resData && resData.createArticle) {
               setSaving(false);
 
-              navigate(`/app/article/view/${res?.data?.createArticle.id}`);
+              navigate(`/app/article/view/${resData?.createArticle.id}`);
             }
-          })
-          .catch(() => {
+          },
+          onError: () => {
             setSaving(false);
-          }));
+          },
+        }));
     setSaving(false);
   };
 
@@ -779,6 +783,7 @@ const useCreateEditArticle = (): Props => {
     removeIncident,
     selectedSchemes,
     id: articleId,
+    initData: initialValue,
   };
 };
 
