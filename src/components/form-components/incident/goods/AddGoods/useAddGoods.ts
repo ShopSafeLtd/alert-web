@@ -14,8 +14,18 @@ interface Return {
 }
 
 const useAddGoods = ({ update }: Props): Return => {
+  const schemeId = useStoreState((state) => state.scheme.id);
+
   const goodsMode = useStoreState((state) => state.scheme.goodsMode);
-  const { data: goodsTypesData } = useListGoodsTypesQuery();
+  const { data: goodsTypesData } = useListGoodsTypesQuery({
+    variables: {
+      where: {
+        schemes: {
+          id: { equals: schemeId },
+        },
+      },
+    },
+  });
 
   const onSubmit = (value: GoodsData) => {
     update({
