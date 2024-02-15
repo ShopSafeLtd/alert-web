@@ -19743,6 +19743,7 @@ export type BusinessReportQuery = { __typename?: 'Query', business: { __typename
 
 export type BusinessQueryVariables = Exact<{
   where: BusinessWhereUniqueInput;
+  incidentsWhere?: InputMaybe<IncidentWhereInput>;
 }>;
 
 
@@ -23736,7 +23737,7 @@ export type BusinessReportQueryHookResult = ReturnType<typeof useBusinessReportQ
 export type BusinessReportLazyQueryHookResult = ReturnType<typeof useBusinessReportLazyQuery>;
 export type BusinessReportQueryResult = Apollo.QueryResult<BusinessReportQuery, BusinessReportQueryVariables>;
 export const BusinessDocument = gql`
-    query Business($where: BusinessWhereUniqueInput!) {
+    query Business($where: BusinessWhereUniqueInput!, $incidentsWhere: IncidentWhereInput) {
   business(where: $where) {
     id
     name
@@ -23752,7 +23753,7 @@ export const BusinessDocument = gql`
       id
       name
     }
-    incidents {
+    incidents(where: $incidentsWhere) {
       id
       reference
       dayTime
