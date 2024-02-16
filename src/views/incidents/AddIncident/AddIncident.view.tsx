@@ -127,9 +127,7 @@ const AddIncident = ({
             case IncidentFormField.Offenders: {
               return (
                 <Card className={classes.card}>
-                  <Form.Item name="profiles">
-                    <Profiles form={form} saving={saving} />
-                  </Form.Item>
+                  <Profiles form={form} saving={saving} />
                 </Card>
               );
             }

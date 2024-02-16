@@ -160,26 +160,26 @@ const useEditOffender = ({
       (id) => !imageData?.map((el) => el.id).includes(id)
     );
     const alias =
-      data.alias && data.alias.length > 0
-        ? [...new Set(data.alias?.map((el) => el.trim().toLowerCase()))]
+      value.alias && value.alias.length > 0
+        ? [...new Set(value.alias?.map((el) => el.trim().toLowerCase()))]
         : [];
     if (onEditOffender) {
       onEditOffender({
         ...data,
-        name: data.name || 'Unidentified Offender',
+        name: value.name || 'Unidentified Offender',
         alias,
-        gender: data.gender || null,
-        race: data.race || null,
-        build: data.build || null,
-        hair: data.hair || null,
-        height: data.height || null,
-        peculiarities: data.peculiarities || null,
-        comment: data.comment || null,
-        age: ageCheck ? null : data.age || null,
-        dateSource: ageCheck ? data.dateSource || null : null,
-        dateOfBirth: ageCheck ? data.dateOfBirth || null : null,
-        idVerified: data.idVerified,
-        idSource: data.idSource || undefined,
+        gender: value.gender || null,
+        race: value.race || null,
+        build: value.build || null,
+        hair: value.hair || null,
+        height: value.height || null,
+        peculiarities: value.peculiarities || null,
+        comment: value.comment || null,
+        age: ageCheck ? null : value.age || null,
+        dateSource: ageCheck ? value.dateSource || null : null,
+        dateOfBirth: ageCheck ? value.dateOfBirth || null : null,
+        idVerified: value.idVerified,
+        idSource: value.idSource || undefined,
         images: imageData,
         justification: value.justification || null,
         infoSource: value.infoSource || null,
