@@ -28,7 +28,6 @@ const IncidentCard = ({ incident, removeIncident, saving }: Props) => {
     <Card
       style={{
         margin: removeIncident ? 0 : 5,
-        width: 200,
         overflow: 'hidden',
       }}
       bodyStyle={{
