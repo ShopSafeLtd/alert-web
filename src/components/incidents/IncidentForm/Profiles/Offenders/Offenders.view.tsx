@@ -10,7 +10,7 @@ import CounterButton from '../../../../form-components/count-buttons/CounterButt
 import OffenderProfile from './OffenderProfile.view';
 import AddOffender from '../../../../form-components/offender/offender/AddNewOffenderSimple/AddNewOffender.container';
 import AddExistingOffender from '../../../../form-components/offender/offender/AddExistingOffender';
-import EditOffender from '../../../../form-components/offender/offender/SimpleEditOffender';
+import EditOffender from '../../../../form-components/offender/offender/AddIncidentEditOffender';
 import type { FormData } from '../../../../../views/incidents/AddIncident/useAddIncident';
 import FacesColumn from './FacesColumn.view';
 
