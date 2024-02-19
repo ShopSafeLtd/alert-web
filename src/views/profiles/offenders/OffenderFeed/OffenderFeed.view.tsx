@@ -170,7 +170,7 @@ const OffenderFeed = ({
         bodyStyle={{ padding: 10 }}
         style={{ marginBottom: 5, marginRight: 10 }}
       >
-        <Row align="middle" gutter={8}>
+        <Row align="middle" gutter={12}>
           <Col span={4} xxl={4}>
             <Input
               size="small"
@@ -259,7 +259,6 @@ const OffenderFeed = ({
                   <FontAwesomeIcon
                     icon={compactView ? faGrid2 : faGrid}
                     size="lg"
-                    style={{ marginRight: 5 }}
                   />
                 }
               />
@@ -274,13 +273,7 @@ const OffenderFeed = ({
             >
               <Button
                 onClick={toggleSortFilter}
-                icon={
-                  <FontAwesomeIcon
-                    icon={faFilter}
-                    size="lg"
-                    style={{ marginRight: 5 }}
-                  />
-                }
+                icon={<FontAwesomeIcon icon={faFilter} size="lg" />}
               />
             </Tooltip>
           </Col>

@@ -72,7 +72,7 @@ const ListCrimeGroups = ({
 
   return (
     <div className={classes.page}>
-      <Row align="middle" gutter={16} className={classes.headerRow}>
+      <Row align="middle" gutter={12} className={classes.headerRow}>
         <Col span={8} xxl={6}>
           <Input
             value={search}
@@ -102,13 +102,7 @@ const ListCrimeGroups = ({
           >
             <Button
               onClick={toggleSortFilter}
-              icon={
-                <FontAwesomeIcon
-                  icon={faFilter}
-                  size="lg"
-                  style={{ marginRight: 5 }}
-                />
-              }
+              icon={<FontAwesomeIcon icon={faFilter} size="lg" />}
             />
           </Tooltip>
         </Col>
