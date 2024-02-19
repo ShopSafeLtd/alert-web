@@ -116,7 +116,7 @@ const IncidentFeed = ({
         bodyStyle={{ padding: 10 }}
         style={{ marginBottom: 5, marginRight: 10 }}
       >
-        <Row align="middle" gutter={16}>
+        <Row align="middle" gutter={12}>
           <Col span={8} xxl={6}>
             <Input
               size="small"
@@ -182,7 +182,6 @@ const IncidentFeed = ({
                   <FontAwesomeIcon
                     icon={compactView ? faGrid2 : faGrid}
                     size="lg"
-                    style={{ marginRight: 5 }}
                   />
                 }
               />
@@ -214,13 +213,7 @@ const IncidentFeed = ({
             >
               <Button
                 onClick={toggleSortFilter}
-                icon={
-                  <FontAwesomeIcon
-                    icon={faFilter}
-                    size="lg"
-                    style={{ marginRight: 5 }}
-                  />
-                }
+                icon={<FontAwesomeIcon icon={faFilter} size="lg" />}
               />
             </Tooltip>
           </Col>

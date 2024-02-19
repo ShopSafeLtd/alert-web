@@ -128,7 +128,7 @@ const FeedItem = ({
       style={{ height: '100vh', padding: 15, overflow: 'hidden' }}
     >
       <Card bodyStyle={{ padding: 10 }} style={{ marginBottom: 10 }}>
-        <Row align="middle" gutter={16}>
+        <Row align="middle" gutter={12}>
           <Col span={4} xxl={6}>
             <Input
               size="small"
@@ -181,13 +181,7 @@ const FeedItem = ({
             >
               <Button
                 onClick={toggleSortFilter}
-                icon={
-                  <FontAwesomeIcon
-                    icon={faFilter}
-                    size="lg"
-                    style={{ marginRight: 5 }}
-                  />
-                }
+                icon={<FontAwesomeIcon icon={faFilter} size="lg" />}
               />
             </Tooltip>
           </Col>

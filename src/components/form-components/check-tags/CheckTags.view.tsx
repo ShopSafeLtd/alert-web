@@ -144,7 +144,7 @@ const CheckTags = ({
     <CheckTagsLoading />
   ) : (
     <>
-      <Row gutter={noGutter ? 0 : [10, 10]}>
+      <Row gutter={noGutter ? [8, 8] : [10, 10]}>
         {options
           .filter((item) => item.tier === 0 || !hasChildOptions)
           .map((option) =>
