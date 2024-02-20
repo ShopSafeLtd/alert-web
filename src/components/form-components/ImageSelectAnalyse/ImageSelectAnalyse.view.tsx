@@ -13,6 +13,7 @@ import type { ImagePosition } from 'graphql/generated';
 import WatermarkImage from '../../images/WatermarkImage.view';
 import type { StateImageData } from '../../incidents/IncidentForm/ImageSection/useImageSection';
 import { useStoreState } from '../../../state';
+import compressImage from '../../../utils/compress-images';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   image: {
@@ -168,12 +169,6 @@ const ImageSelectAnalyse = ({ images: imagesProp, value, onChange }: Props) => {
     }
   };
 
-  console.log(
-    facialRec
-      ? import.meta.env.VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT_GO
-      : import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT
-  );
-
   return (
     <div>
       <Upload
@@ -184,6 +179,7 @@ const ImageSelectAnalyse = ({ images: imagesProp, value, onChange }: Props) => {
             ? import.meta.env.VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT_GO
             : import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT
         }
+        beforeUpload={async (file) => compressImage(file)}
       >
         <Button loading={uploading} disabled={uploading}>
           <FontAwesomeIcon icon={faUpload} className={classes.uploadIcon} />

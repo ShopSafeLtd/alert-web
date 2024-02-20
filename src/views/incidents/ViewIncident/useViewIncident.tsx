@@ -8,6 +8,7 @@ import type {
   GoodsMode,
   ImageUpdateWhereDataWithoutIncidentInput,
   LanguageCode,
+  ListIncidentsAllSchemesQuery,
   QuestionGroupOnSchemeQuery,
   UpdateIncidentGoodsMutation,
   UpdateSimpleOffenderMutation,
@@ -16,9 +17,12 @@ import type {
   ViewIncidentQueryVariables,
 } from 'graphql/generated';
 import {
-  useAddImagesToOffenderMutation,
+  ListIncidentsAllSchemesDocument,
+  QueryMode,
   Role,
+  SortOrder,
   useAddImagesToIncidentMutation,
+  useAddImagesToOffenderMutation,
   useCreateSimpleVehicleMutation,
   useDeleteUpdateMutation,
   useQuestionGroupOnSchemeQuery,
@@ -32,7 +36,6 @@ import {
   useUpdateIncidentMutation,
   useUpdateIncidentOffendersMutation,
   useUpdateIncidentVehiclesMutation,
-  useUpdateSimpleOffenderMutation,
   useUpdateSimpleVehicleMutation,
   useUpdateUpdateMutation,
   useViewIncidentQuery,
@@ -40,7 +43,7 @@ import {
 } from 'graphql/generated';
 import update from 'immutability-helper';
 
-import { useStoreState } from 'state';
+import { IncidentSort, useStoreState } from 'state';
 import { Modal, notification } from 'antd';
 import { useIntl } from 'react-intl';
 
@@ -197,6 +200,10 @@ const useViewIncident = (incidentId: string): Return => {
   const intl = useIntl();
   const role = useStoreState((state) => state.user.role);
   const { languageCount } = useStoreState((state) => state.scheme);
+  const filterVariables = useStoreState(
+    (state) => state.data.incidents.variables
+  );
+  const order = useStoreState((state) => state.data.incidents.order);
 
   const userId = useStoreState((state) => state.user.id);
   const {
@@ -346,6 +353,169 @@ const useViewIncident = (incidentId: string): Return => {
     setSaving(false);
   };
 
+  const {
+    search,
+    crimeTypes,
+    groups,
+    businesses,
+    goods,
+    createdAt,
+    incidentDate,
+    peculiarities,
+    gallery,
+  } = filterVariables;
+  const sideListVars = {
+    take: 12,
+    skip: 0,
+    where: {
+      schemeId: {
+        equals: schemeId,
+      },
+      createdAt: createdAt
+        ? {
+            gte: createdAt.startDate,
+            lte: createdAt.endDate,
+          }
+        : undefined,
+      date: incidentDate
+        ? {
+            gte: incidentDate.startDate,
+            lte: incidentDate.endDate,
+          }
+        : undefined,
+      crimeTypes:
+        crimeTypes.length > 0
+          ? {
+              some: {
+                id: {
+                  in: crimeTypes,
+                },
+              },
+            }
+          : undefined,
+      groups:
+        groups.length > 0
+          ? {
+              some: {
+                id: {
+                  in: groups,
+                },
+              },
+            }
+          : undefined,
+      business:
+        businesses.length > 0
+          ? {
+              id: {
+                in: businesses,
+              },
+            }
+          : undefined,
+      incidentItems:
+        goods.length > 0
+          ? {
+              some: {
+                goodsType: {
+                  id: {
+                    in: goods,
+                  },
+                },
+              },
+            }
+          : undefined,
+      description: peculiarities
+        ? {
+            mode: QueryMode.Insensitive,
+            contains: peculiarities,
+          }
+        : undefined,
+      approved:
+        role === 'USER'
+          ? {
+              equals: true,
+            }
+          : gallery.includes('NOT APPROVED')
+          ? {
+              equals: false,
+            }
+          : undefined,
+
+      subscribedUsers: gallery.includes('FOLLOWING')
+        ? {
+            some: {
+              id: {
+                equals: userId,
+              },
+            },
+          }
+        : undefined,
+      policeInvolved: gallery.includes('POLICEINVOLVED')
+        ? {
+            equals: true,
+          }
+        : undefined,
+      policeReported: gallery.includes('POLICEREPORTED')
+        ? {
+            equals: true,
+          }
+        : undefined,
+
+      AND: [
+        {
+          OR: [
+            {
+              subject: {
+                contains: search,
+                mode: QueryMode.Insensitive,
+              },
+            },
+            {
+              referenceStr: {
+                contains: search,
+              },
+            },
+            {
+              createdBy: {
+                OR: [
+                  {
+                    fullName: {
+                      contains: search,
+                      mode: QueryMode.Insensitive,
+                    },
+                  },
+
+                  {
+                    businesses: {
+                      some: {
+                        name: {
+                          contains: search,
+                          mode: QueryMode.Insensitive,
+                        },
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        {
+          createdBy: gallery.includes('MYDATA')
+            ? {
+                id: {
+                  equals: userId,
+                },
+              }
+            : undefined,
+        },
+      ],
+    },
+    order: {
+      date:
+        order === IncidentSort.createdAtDesc ? SortOrder.Desc : SortOrder.Asc,
+    },
+  };
+
   const [recycleIncident] = useRecycleIncidentMutation({
     onCompleted: () => {
       window.history.back();
@@ -364,6 +534,30 @@ const useViewIncident = (incidentId: string): Return => {
     },
     onError: () => {
       errorNotification();
+    },
+    update: (store, { data: res }) => {
+      if (res?.recycleIncident === null || res?.recycleIncident === undefined)
+        return;
+      const existingData = store.readQuery<ListIncidentsAllSchemesQuery>({
+        query: ListIncidentsAllSchemesDocument,
+        variables: sideListVars,
+      });
+
+      if (!existingData?.listIncidentsAllSchemes?.incidents) return;
+
+      store.writeQuery<ListIncidentsAllSchemesQuery>({
+        query: ListIncidentsAllSchemesDocument,
+        data: {
+          listIncidentsAllSchemes: {
+            ...existingData.listIncidentsAllSchemes,
+            incidents: existingData.listIncidentsAllSchemes.incidents.filter(
+              ({ id }) => id !== incidentId
+            ),
+          },
+          __typename: 'Query',
+        },
+        variables: sideListVars,
+      });
     },
   });
   const onDelete = (id: string) => {
@@ -852,13 +1046,18 @@ const useViewIncident = (incidentId: string): Return => {
     });
   };
 
-  const onCompletedEditOffender = () => {
-    successNotification(
-      ProfileUpdatedModel.Offender,
-      ProfileUpdatedModel.Incident,
-      ProfileUpdatedType.updated
-    );
-  };
+  const onCompletedEditOffender = () =>
+    notification.success({
+      message: intl.formatMessage({
+        defaultMessage: 'Successfully updated!',
+        id: 'zJzbfm',
+      }),
+      description: intl.formatMessage({
+        defaultMessage: 'The offender has been updated on the incident!',
+        id: 'vx85aW',
+      }),
+      placement: 'bottomRight',
+    });
   // const [updateOffender] = useUpdateSimpleOffenderMutation({
   //   onError: () => {
   //     errorNotification();
@@ -996,14 +1195,19 @@ const useViewIncident = (incidentId: string): Return => {
       variables,
     });
   };
+  const onCompletedAddOffender = () =>
+    notification.success({
+      message: intl.formatMessage({
+        defaultMessage: 'Successfully added!',
+        id: 'bYuIEA',
+      }),
+      description: intl.formatMessage({
+        defaultMessage: 'The offender has been added to the incident!',
+        id: 'R15r48',
+      }),
+      placement: 'bottomRight',
+    });
 
-  const onCompletedAddOffender = () => {
-    successNotification(
-      ProfileUpdatedModel.Offender,
-      ProfileUpdatedModel.Incident,
-      ProfileUpdatedType.added
-    );
-  };
   const onAddExistingOffender = (value: string) => {
     setSaving(true);
     if (value)
@@ -1015,11 +1219,7 @@ const useViewIncident = (incidentId: string): Return => {
           },
         },
         onCompleted: () => {
-          successNotification(
-            ProfileUpdatedModel.Offender,
-            ProfileUpdatedModel.Incident,
-            ProfileUpdatedType.added
-          );
+          onCompletedAddOffender();
         },
         update: (store, { data: res }) => {
           if (res?.updateIncident === null || res?.updateIncident === undefined)
@@ -1057,11 +1257,7 @@ const useViewIncident = (incidentId: string): Return => {
           offenders: { disconnect: [{ id: value }] },
         },
         onCompleted: () => {
-          successNotification(
-            ProfileUpdatedModel.Offender,
-            ProfileUpdatedModel.Incident,
-            ProfileUpdatedType.added
-          );
+          onCompletedAddOffender();
         },
         update: (store, { data: res }) => {
           if (res?.updateIncident === null || res?.updateIncident === undefined)
