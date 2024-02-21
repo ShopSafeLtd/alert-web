@@ -476,7 +476,7 @@ const Apollo = ({ children }: Props): JSX.Element => {
     cache,
     connectToDevTools: true,
     defaultOptions: {
-      query: {
+      watchQuery: {
         returnPartialData: true,
       },
     },
