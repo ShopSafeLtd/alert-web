@@ -89,7 +89,7 @@ const HeatMapGoogle = ({
   data,
   label,
   emptyLabel,
-  markers,
+  markers: _,
   height,
 }: {
   data:
@@ -111,7 +111,6 @@ const HeatMapGoogle = ({
   }>;
   height?: string;
 }) => {
-  console.log(height);
   const mapRef = useRef<MapRef>(null);
 
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
@@ -129,6 +128,7 @@ const HeatMapGoogle = ({
       <Typography.Title level={4}>{label}</Typography.Title>
       {data && data.length > 0 ? (
         <Map
+          onError={() => {}}
           ref={mapRef}
           mapLib={mapboxgl}
           mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}

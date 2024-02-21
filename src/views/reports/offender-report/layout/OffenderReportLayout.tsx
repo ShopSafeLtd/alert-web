@@ -995,7 +995,6 @@ const OffenderReportLayout = ({
         )} no-break`}
         loading={loading}
         key="incidentsHeatMap"
-        style={{ height: calculateHeight('incidentsHeatMap') }}
       >
         <Button
           type="text"
@@ -1007,6 +1006,7 @@ const OffenderReportLayout = ({
           onClick={() => removeItem('incidentsHeatMap')}
         />
         <HeatMapGoogle
+          height={calculateHeight('incidentsHeatMap', 80)}
           label={intl.formatMessage({
             defaultMessage: 'Incidents Heat Map',
             id: 'q7E1ai',
