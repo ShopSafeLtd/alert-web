@@ -333,6 +333,7 @@ const IncidentMap = ({
         </div>
       ) : (
         <Map
+          onError={() => {}}
           ref={mapRef}
           mapLib={mapboxgl}
           mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}

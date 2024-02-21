@@ -113,6 +113,7 @@ const LocatingModal = ({
         <Col>
           {viewport ? (
             <Map
+              onError={() => {}}
               onClick={handleClick}
               ref={mapRef}
               mapLib={mapboxgl}
