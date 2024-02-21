@@ -93,8 +93,8 @@ const Apollo = ({ children }: Props): JSX.Element => {
   // });
   const httpLink = new BatchHttpLink({
     uri: import.meta.env.VITE_GRAPHQL_URL,
-    batchMax: 5, // No more than 5 operations per batch
-    batchInterval: 20, // Wait no more than 20ms after first batched operation
+    batchMax: 8, // No more than 5 operations per batch
+    batchInterval: 50, // Wait no more than 20ms after first batched operation
   });
 
   let activeSocket: WebSocket;
@@ -475,11 +475,6 @@ const Apollo = ({ children }: Props): JSX.Element => {
     link,
     cache,
     connectToDevTools: true,
-    defaultOptions: {
-      watchQuery: {
-        returnPartialData: true,
-      },
-    },
   });
 
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
