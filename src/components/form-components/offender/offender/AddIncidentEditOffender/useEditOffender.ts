@@ -3,20 +3,21 @@ import type {
   Age,
   Build,
   Gender,
-  Race,
   Height,
   IdSource,
+  Race,
   UpdateSimpleOffenderMutation,
 } from 'graphql/generated';
 import {
-  useUpdateSimpleOffenderMutation,
   ImagePosition,
+  useUpdateSimpleOffenderMutation,
 } from 'graphql/generated';
 import type { FormInstance } from 'antd';
 import { Form } from 'antd';
 import type { MutationUpdaterFn } from '@apollo/client';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import type { AddOffenderData } from 'components/incidents/IncidentForm/Profiles/Offenders/useOffenders';
+import { useState } from 'react';
 import type { ImageValue } from '../../../ImageSelect/ImageSelect.view';
 import type { StateImageData } from '../../../../incidents/IncidentForm/ImageSection/useImageSection';
 
@@ -91,6 +92,8 @@ interface Return {
   form: FormInstance<FormData>;
   ageCheck: boolean | undefined;
   idVerified: boolean | undefined;
+  uploading: boolean;
+  setUploading: (value: boolean) => void;
 }
 
 const useEditOffender = ({
@@ -102,7 +105,7 @@ const useEditOffender = ({
   onCompleted,
 }: Props): Return => {
   const [form] = Form.useForm<FormData>();
-
+  const [uploading, setUploading] = useState(false);
   const ageCheck = Form.useWatch('ageCheck', form);
   const idVerified = Form.useWatch('idVerified', form);
   const [updateOffender] = useUpdateSimpleOffenderMutation({
@@ -287,6 +290,8 @@ const useEditOffender = ({
     onSubmit,
     form,
     ageCheck,
+    uploading,
+    setUploading,
     idVerified,
   };
 };

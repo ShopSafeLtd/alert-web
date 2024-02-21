@@ -27,17 +27,20 @@ const EditOffender = ({
   images,
   onImagesUploaded,
 }: Props): JSX.Element => {
-  const { onSubmit, ageCheck, form, idVerified } = useEditOffender({
-    data,
-    onClose,
-    update,
-    onEditOffender,
-    onImagesUploaded,
-    onCompleted,
-  });
+  const { onSubmit, ageCheck, form, idVerified, uploading, setUploading } =
+    useEditOffender({
+      data,
+      onClose,
+      update,
+      onEditOffender,
+      onImagesUploaded,
+      onCompleted,
+    });
   return (
     <div>
       <View
+        setUploading={setUploading}
+        uploading={uploading}
         form={form}
         onSubmit={onSubmit}
         data={data}

@@ -17,6 +17,8 @@ describe('Detail Officer View', () => {
         idVerified={false}
         images={[]}
         form={form}
+        uploading={false}
+        setUploading={jest.fn()}
         // onSearchOffender={jest.fn()}
       />
     );
