@@ -6,10 +6,10 @@ import type {
   UserChatsQuery,
 } from 'graphql/generated';
 import {
-  useMarkAsReadMessagesMutation,
   Role,
   SortOrder,
   TodoType,
+  useMarkAsReadMessagesMutation,
   UserChatsDocument,
   useUpdateTodoMentionMutation,
   useUserChatsQuery,
@@ -76,7 +76,9 @@ const useViewChat = ({ chatId }: Props): Return => {
       void refetch();
     },
   });
-  const [updateTodoMention] = useUpdateTodoMentionMutation();
+  const [updateTodoMention] = useUpdateTodoMentionMutation({
+    ignoreResults: true,
+  });
   const handleMarkAsRead = (userChatId: string | undefined) => {
     if (userChatId) {
       setSaving(true);

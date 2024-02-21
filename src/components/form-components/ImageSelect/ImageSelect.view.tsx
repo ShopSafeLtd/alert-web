@@ -13,6 +13,7 @@ import type { ImagePosition } from 'graphql/generated';
 import WatermarkImage from '../../images/WatermarkImage.view';
 import type { StateImageData } from '../../incidents/IncidentForm/ImageSection/useImageSection';
 import customRequest from '../../../utils/custom-request';
+import compressImage from '../../../utils/compress-images';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   image: {
@@ -93,14 +94,21 @@ interface Props {
   // selectedImages: ImageData[] | undefined;
   value?: ImageValue[] | null;
   onChange?: (value?: ImageValue[]) => void;
+  uploading?: boolean;
+  setUploading?: (value: boolean) => void;
 }
 
-const ImageSelect = ({ images: imagesProp, value, onChange }: Props) => {
+const ImageSelect = ({
+  images: imagesProp,
+  value,
+  onChange,
+  uploading = false,
+  setUploading = (_arg1: boolean) => {},
+}: Props) => {
   const intl = useIntl();
   const classes = useStyles();
   const [selected, setSelected] = useState<ImageValue[]>([]);
   const [images, setImages] = useState<ImageData[]>([]);
-  const [uploading, setUploading] = useState(false);
 
   // console.log(imagesProp, 'value', onChange);
   useEffect(() => {
@@ -134,14 +142,15 @@ const ImageSelect = ({ images: imagesProp, value, onChange }: Props) => {
   };
 
   const onImageChange = (info: UploadChangeParam<StateImageData>) => {
-    if (info.file.status === 'uploading') {
-      setUploading(true);
-    }
+    // if (info.file.status === 'uploading') {
+    //   setUploading(true);
+    // }
     if (
       info.file.status === 'done' &&
       info.file.response &&
       info.file.response[0]
     ) {
+      console.log('setImage');
       setImages([
         ...images,
         {
@@ -164,6 +173,10 @@ const ImageSelect = ({ images: imagesProp, value, onChange }: Props) => {
       ]);
       setUploading(false);
     }
+    // if (info.file.status === 'error') {
+    //   setUploading(false);
+    //   void message.error('Image upload failed');
+    // }
   };
 
   return (
@@ -174,6 +187,8 @@ const ImageSelect = ({ images: imagesProp, value, onChange }: Props) => {
         // action={import.meta.env.VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT}
         // action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
         customRequest={customRequest}
+        beforeUpload={async (file) => compressImage(file)}
+
         // showUploadList={false}
       >
         <Button loading={uploading} disabled={uploading}>

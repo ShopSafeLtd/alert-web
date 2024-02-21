@@ -2,7 +2,6 @@ import React from 'react';
 
 import type { FormInstance } from 'antd';
 import {
-  Tooltip,
   Button,
   Col,
   DatePicker,
@@ -12,6 +11,7 @@ import {
   Row,
   Select,
   Switch,
+  Tooltip,
   Typography,
 } from 'antd';
 
@@ -35,6 +35,8 @@ interface Props {
   form: FormInstance<FormData>;
   idVerified: boolean | undefined;
   images?: ImageData[] | undefined;
+  uploading: boolean;
+  setUploading: (value: boolean) => void;
 }
 
 const AddNewOffender = ({
@@ -45,6 +47,8 @@ const AddNewOffender = ({
   idVerified,
   form,
   images,
+  uploading,
+  setUploading,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
@@ -463,20 +467,24 @@ const AddNewOffender = ({
           },
         ]}
       >
-        <ImageSelect images={images} />
+        <ImageSelect
+          setUploading={setUploading}
+          uploading={uploading}
+          images={images}
+        />
       </Form.Item>
 
       <Form.Item>
         <Row style={{ marginTop: 30 }} gutter={10} justify="end">
           <Col>
-            <Button disabled={saving} onClick={onClose}>
+            <Button disabled={saving || uploading} onClick={onClose}>
               <FormattedMessage defaultMessage="Cancel" id="47FYwb" />
             </Button>
           </Col>
           <Col>
             <Button
               disabled={saving}
-              loading={saving}
+              loading={saving || uploading}
               type="primary"
               htmlType="submit"
             >

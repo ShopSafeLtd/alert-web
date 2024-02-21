@@ -10,8 +10,8 @@ import type {
   Race,
 } from 'graphql/generated';
 import {
-  useCreateSimpleOffenderMutation,
   ImagePosition,
+  useCreateSimpleOffenderMutation,
 } from 'graphql/generated';
 import type { FormInstance } from 'antd';
 import { Form } from 'antd';
@@ -95,6 +95,8 @@ interface Return {
   ageCheck: boolean | undefined;
   idVerified: boolean | undefined;
   form: FormInstance<FormData>;
+  uploading: boolean;
+  setUploading: (value: boolean) => void;
 }
 
 const useAddNewOffender = ({
@@ -108,6 +110,7 @@ const useAddNewOffender = ({
   vehicleId,
   groupsIds,
 }: Props): Return => {
+  const [uploading, setUploading] = useState(false);
   const [form] = Form.useForm<FormData>();
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
@@ -270,6 +273,8 @@ const useAddNewOffender = ({
     ageCheck,
     idVerified,
     form,
+    uploading,
+    setUploading,
   };
 };
 

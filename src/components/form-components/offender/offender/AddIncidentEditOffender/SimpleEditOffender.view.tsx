@@ -30,6 +30,8 @@ interface Props {
   ageCheck: boolean | undefined;
   idVerified: boolean | undefined;
   images?: ImageData[];
+  uploading: boolean;
+  setUploading: (value: boolean) => void;
 }
 
 const EditOffender = ({
@@ -40,6 +42,8 @@ const EditOffender = ({
   ageCheck,
   idVerified,
   images,
+  uploading,
+  setUploading,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const imagesRequired = useStoreState(
@@ -555,12 +559,17 @@ const EditOffender = ({
             },
           ]}
         >
-          <ImageSelect images={allImages} value={data.images} />
+          <ImageSelect
+            images={allImages}
+            value={data.images}
+            setUploading={setUploading}
+            uploading={uploading}
+          />
         </Form.Item>
         <Form.Item>
           <Row style={{ marginTop: 30 }} gutter={10} justify="end">
             <Col>
-              <Button onClick={onClose}>
+              <Button onClick={onClose} loading={uploading}>
                 {intl.formatMessage({
                   defaultMessage: 'Cancel',
                   id: '47FYwb',
@@ -568,7 +577,7 @@ const EditOffender = ({
               </Button>
             </Col>
             <Col>
-              <Button type="primary" htmlType="submit">
+              <Button type="primary" htmlType="submit" loading={uploading}>
                 {intl.formatMessage({
                   defaultMessage: 'Save',
                   id: 'jvo0vs',
