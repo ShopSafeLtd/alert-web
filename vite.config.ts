@@ -8,11 +8,11 @@ import { sentryVitePlugin } from '@sentry/vite-plugin';
 import removeConsole from 'vite-plugin-remove-console';
 
 // local host launch fix
-const dns = require('node:dns');
+import dns from 'node:dns';
+
+import path from 'path';
+
 dns.setDefaultResultOrder('verbatim');
-
-const path = require('path');
-
 const pathResolve = (pathStr: string) => {
   return path.resolve(__dirname, pathStr);
 };
