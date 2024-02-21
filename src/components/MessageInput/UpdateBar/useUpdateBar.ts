@@ -1104,7 +1104,9 @@ const useUpdateBar = ({
       setArticlesData([...articlesData, selectedArticle]);
     }
   };
-  const [updateTodoMention] = useUpdateTodoMentionMutation();
+  const [updateTodoMention] = useUpdateTodoMentionMutation({
+    ignoreResults: true,
+  });
   const getWhereArgs = () => {
     if (incidentId) return { incidentId, type: TodoType.IncidentUpdate };
     if (offenderId) return { offenderId, type: TodoType.OffenderUpdate };

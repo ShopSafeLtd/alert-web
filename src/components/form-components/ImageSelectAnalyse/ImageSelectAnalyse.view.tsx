@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Row, Upload } from 'antd';
+import { Button, Col, message, Row, Upload } from 'antd';
 import { createUseStyles } from 'react-jss';
 import type { Theme } from 'configs/ThemeConfig';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -94,16 +94,23 @@ interface Props {
   // selectedImages: ImageData[] | undefined;
   value?: ImageValue[] | null;
   onChange?: (value?: ImageValue[]) => void;
+  uploading: boolean;
+  setUploading: (value: boolean) => void;
 }
 
-const ImageSelectAnalyse = ({ images: imagesProp, value, onChange }: Props) => {
+const ImageSelectAnalyse = ({
+  images: imagesProp,
+  value,
+  onChange,
+  setUploading,
+  uploading,
+}: Props) => {
   const intl = useIntl();
   const classes = useStyles();
   const facialRec = useStoreState((state) => state.scheme.facialRecognition);
 
   const [selected, setSelected] = useState<ImageValue[]>([]);
   const [images, setImages] = useState<ImageData[]>([]);
-  const [uploading, setUploading] = useState(false);
 
   // console.log(imagesProp, 'value', onChange);
   useEffect(() => {
@@ -166,6 +173,10 @@ const ImageSelectAnalyse = ({ images: imagesProp, value, onChange }: Props) => {
         },
       ]);
       setUploading(false);
+    }
+    if (info.file.status === 'error') {
+      setUploading(false);
+      void message.error('Image upload failed');
     }
   };
 

@@ -19,6 +19,7 @@ interface Props {
   groupsIds?: string[];
   onImagesUploaded?: (values: StateImageData[]) => void;
 }
+
 const AddNewOffender = ({
   onClose,
   update,
@@ -31,7 +32,15 @@ const AddNewOffender = ({
   vehicleId,
   groupsIds,
 }: Props): JSX.Element => {
-  const { onSubmit, saving, ageCheck, idVerified, form } = useAddNewOffender({
+  const {
+    onSubmit,
+    saving,
+    ageCheck,
+    idVerified,
+    form,
+    uploading,
+    setUploading,
+  } = useAddNewOffender({
     onClose,
     update,
     onAddOffender,
@@ -45,6 +54,8 @@ const AddNewOffender = ({
   return (
     <div>
       <View
+        setUploading={setUploading}
+        uploading={uploading}
         onSubmit={onSubmit}
         onClose={onClose}
         saving={saving}
