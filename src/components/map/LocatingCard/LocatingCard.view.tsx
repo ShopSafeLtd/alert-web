@@ -163,6 +163,7 @@ const LocatingCard = ({ height, width, location, setLocation }: Props) => {
           </div>
 
           <Map
+            onError={() => {}}
             mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}
             // eslint-disable-next-line react/jsx-props-no-spreading
             {...(viewport || originalViewport)}

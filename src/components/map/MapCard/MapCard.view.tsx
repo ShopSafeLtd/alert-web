@@ -165,6 +165,7 @@ const LocatingCard = ({ height, width, markers }: Props) => {
         </Text>
       </div>
       <Map
+        onError={() => {}}
         mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}
         longitude={markers[0]?.geoLng || 0}
         latitude={markers[0]?.geoLat || 0}
