@@ -4,7 +4,6 @@ import React from 'react';
 import {
   ApolloClient,
   ApolloProvider,
-  HttpLink,
   InMemoryCache,
   split,
 } from '@apollo/client';
@@ -17,9 +16,10 @@ import { onError } from '@apollo/client/link/error';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
 import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries';
-import { sha256 } from 'crypto-hash';
 import * as Sentry from '@sentry/react';
 import { SentryLink } from 'apollo-link-sentry';
+import { BatchHttpLink } from '@apollo/client/link/batch-http';
+import { sha256 } from 'crypto-hash';
 import { useStoreState } from '../state';
 
 interface Props {
@@ -64,9 +64,37 @@ const Apollo = ({ children }: Props): JSX.Element => {
   // );
 
   // const wsLink = new WebSocketLink(wsClient);
+  //
+  // function fetchWithTimeout(uri, options = {}, time): Promise<Response> {
+  //   return new Promise((resolve, reject) => {
+  //     const timer = setTimeout(() => {
+  //       reject(new Error('Request timed out.'));
+  //     }, time);
+  //     fetch(uri, options).then(
+  //       (response) => {
+  //         clearTimeout(timer);
+  //         resolve(response);
+  //       },
+  //       (error) => {
+  //         clearTimeout(timer);
+  //         reject(error);
+  //       }
+  //     );
+  //   });
+  // }
 
-  const httpLink = new HttpLink({
+  // const httpLink = new HttpLink({
+  //   uri: import.meta.env.VITE_GRAPHQL_URL,
+  //   // fetch: (uri, options) => {
+  //   //   const timeoutFromHeader = options?.headers?.['x-timeout'];
+  //   //   const timeout = timeoutFromHeader || 1;
+  //   //   return fetchWithTimeout(uri, options, timeout);
+  //   // },
+  // });
+  const httpLink = new BatchHttpLink({
     uri: import.meta.env.VITE_GRAPHQL_URL,
+    batchMax: 5, // No more than 5 operations per batch
+    batchInterval: 20, // Wait no more than 20ms after first batched operation
   });
 
   let activeSocket: WebSocket;
@@ -185,13 +213,14 @@ const Apollo = ({ children }: Props): JSX.Element => {
       try {
         const authToken = await getNewToken();
         return {
+          ...context,
+          http: { includeExtensions: true, includeQuery: false },
           headers: {
             ...headers,
             Authorization: authToken ? `Bearer ${authToken}` : '',
-            currentScheme,
             language: localLang,
+            currentScheme: currentScheme ?? null,
           },
-          ...context,
         };
       } catch (error) {
         if (error instanceof Error) {
@@ -217,12 +246,14 @@ const Apollo = ({ children }: Props): JSX.Element => {
       }
     }
     return {
+      ...context,
+      http: { includeExtensions: true, includeQuery: false },
       headers: {
         ...headers,
         Authorization: `Bearer ''`,
         language: localLang,
+        currentScheme: currentScheme ?? null,
       },
-      ...context,
     };
   });
 
@@ -234,13 +265,17 @@ const Apollo = ({ children }: Props): JSX.Element => {
   //   ...context,
   // }));
 
+  const persistedQueryLink = createPersistedQueryLink({
+    sha256,
+  });
+
   const authHttp = sentryLink
     // eslint-disable-next-line unicorn/prefer-spread
     .concat(errorLink)
     // eslint-disable-next-line unicorn/prefer-spread
     .concat(middlewareLink)
     // eslint-disable-next-line unicorn/prefer-spread
-    .concat(createPersistedQueryLink({ sha256, useGETForHashedQueries: true }))
+    .concat(persistedQueryLink)
     // eslint-disable-next-line unicorn/prefer-spread
     .concat(httpLink);
 
@@ -440,6 +475,11 @@ const Apollo = ({ children }: Props): JSX.Element => {
     link,
     cache,
     connectToDevTools: true,
+    defaultOptions: {
+      query: {
+        returnPartialData: true,
+      },
+    },
   });
 
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
