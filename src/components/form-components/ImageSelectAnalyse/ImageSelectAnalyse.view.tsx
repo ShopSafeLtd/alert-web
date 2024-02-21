@@ -94,8 +94,8 @@ interface Props {
   // selectedImages: ImageData[] | undefined;
   value?: ImageValue[] | null;
   onChange?: (value?: ImageValue[]) => void;
-  uploading: boolean;
   setUploading: (value: boolean) => void;
+  uploading: boolean;
 }
 
 const ImageSelectAnalyse = ({
@@ -108,7 +108,7 @@ const ImageSelectAnalyse = ({
   const intl = useIntl();
   const classes = useStyles();
   const facialRec = useStoreState((state) => state.scheme.facialRecognition);
-
+  const [localUpload, setLocalUpload] = useState(uploading);
   const [selected, setSelected] = useState<ImageValue[]>([]);
   const [images, setImages] = useState<ImageData[]>([]);
 
@@ -119,7 +119,7 @@ const ImageSelectAnalyse = ({
 
   useEffect(() => {
     if (imagesProp) setImages(imagesProp);
-  }, [imagesProp]);
+  }, []);
 
   useEffect(() => {
     if (onChange) {
@@ -146,6 +146,7 @@ const ImageSelectAnalyse = ({
   const onImageChange = (info: UploadChangeParam<StateImageData>) => {
     if (info.file.status === 'uploading') {
       setUploading(true);
+      setLocalUpload(true);
     }
     if (
       info.file.status === 'done' &&
@@ -163,6 +164,7 @@ const ImageSelectAnalyse = ({
           optimised: info.file.response[0].url,
         },
       ]);
+
       setSelected([
         ...selected,
         {
@@ -173,9 +175,11 @@ const ImageSelectAnalyse = ({
         },
       ]);
       setUploading(false);
+      setLocalUpload(false);
     }
     if (info.file.status === 'error') {
       setUploading(false);
+      setLocalUpload(false);
       void message.error('Image upload failed');
     }
   };
@@ -192,7 +196,7 @@ const ImageSelectAnalyse = ({
         }
         beforeUpload={async (file) => compressImage(file)}
       >
-        <Button loading={uploading} disabled={uploading}>
+        <Button loading={localUpload} disabled={localUpload}>
           <FontAwesomeIcon icon={faUpload} className={classes.uploadIcon} />
           {intl.formatMessage({
             defaultMessage: 'Upload Image',
