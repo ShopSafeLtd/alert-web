@@ -94,16 +94,16 @@ interface Props {
   // selectedImages: ImageData[] | undefined;
   value?: ImageValue[] | null;
   onChange?: (value?: ImageValue[]) => void;
-  uploading: boolean;
-  setUploading: (value: boolean) => void;
+  uploading?: boolean;
+  setUploading?: (value: boolean) => void;
 }
 
 const ImageSelect = ({
   images: imagesProp,
   value,
   onChange,
-  uploading,
-  setUploading,
+  uploading = false,
+  setUploading = (_arg1: boolean) => {},
 }: Props) => {
   const intl = useIntl();
   const classes = useStyles();
