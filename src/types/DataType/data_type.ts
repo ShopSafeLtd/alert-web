@@ -257,7 +257,9 @@ export interface AddressData {
 export interface SchemeUserData {
   id: string;
   fullName: string;
-  businesses: { id: string; name: string }[];
+  businessesName?: string;
+  businesses?: { id: string; name: string }[];
+
   firstLetter?: string | null;
   oldFullName: string;
 }

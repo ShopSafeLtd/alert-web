@@ -1,0 +1,9 @@
+query MentionableUsers {
+  mentionableUsers {
+    businessesName
+    firstLetter
+    fullName
+    id
+    oldFullName
+  }
+}

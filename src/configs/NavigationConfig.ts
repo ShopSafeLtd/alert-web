@@ -6,7 +6,6 @@ import {
   faArrowProgress,
   faBuilding,
   faCalendarCheck,
-  faCalendarLinesPen,
   faCar,
   faChalkboard,
   faCircleExclamation,
@@ -512,18 +511,18 @@ const adminOnlyItems: NavItem[] = [
         breadcrumb: true,
         submenu: [],
       },
-      {
-        key: 'data-audit',
-        path: `${APP_PREFIX_PATH}/reports/data-audit`,
-        title: 'Data Audit',
-        icon: faCalendarLinesPen,
-        intl: defineMessage({
-          id: 'data-audit',
-          defaultMessage: 'Data Audit',
-        }),
-        breadcrumb: true,
-        submenu: [],
-      },
+      // {
+      //   key: 'data-audit',
+      //   path: `${APP_PREFIX_PATH}/reports/data-audit`,
+      //   title: 'Data Audit',
+      //   icon: faCalendarLinesPen,
+      //   intl: defineMessage({
+      //     id: 'data-audit',
+      //     defaultMessage: 'Data Audit',
+      //   }),
+      //   breadcrumb: true,
+      //   submenu: [],
+      // },
       {
         key: 'crime-groups-report',
         path: `${APP_PREFIX_PATH}/reports/crime-groups`,
