@@ -19,7 +19,6 @@ import type {
 import {
   CrimeGroupDocument,
   Role,
-  SortOrder,
   TodoType,
   UpdateIcon,
   UpdateType,
@@ -28,7 +27,7 @@ import {
   useCreateUpdateOnInvestigationMutation,
   useCreateUpdateOnOffenderMutation,
   useCreateUpdateOnVehicleMutation,
-  useListSchemeUsersQuery,
+  useMentionableUsersQuery,
   useSubscribeToCrimeGroupMutation,
   useSubscribeToIncidentMutation,
   useSubscribeToInvestigationMutation,
@@ -53,7 +52,7 @@ import type {
 } from 'types/DataType';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
-import { appendDuplicates, getText } from 'utils/getMentions/get-mention-text';
+import { getText } from 'utils/getMentions/get-mention-text';
 
 interface Return {
   beforeUpdateImageUpload: (value: RcFile) => void;
@@ -66,7 +65,7 @@ interface Return {
   removeCrimeGroup: (value: string | undefined) => void;
   removeVehicle: (value: string | undefined) => void;
   removeArticle: (value: string | undefined) => void;
-  schemeUsers: SchemeUserData[] | undefined;
+  schemeUsers: Map<string, SchemeUserData> | undefined;
   setMentionedUser: (value: { id: string; value: string }[]) => void;
   setUpdateInput: (value: string) => void;
   showUpdatePicker: boolean;
@@ -136,10 +135,8 @@ const useUpdateBar = ({
   setOptionRowShow,
 }: Props): Return => {
   const [updateForm] = Form.useForm<FormData>();
-
-  const { restrictIncidentAccess, id: schemeId } = useStoreState(
-    (state) => state.scheme
-  );
+  const [formTouched, setFormTouched] = useState(false);
+  const { restrictIncidentAccess } = useStoreState((state) => state.scheme);
   const {
     role: userRole,
     id: userId,
@@ -155,9 +152,11 @@ const useUpdateBar = ({
   const [linkArticle, setLinkArticle] = useState(false);
 
   const [updateInput, setUpdateInput] = useState('');
-  const [schemeUsers, setSchemeUsers] = useState<SchemeUserData[] | undefined>(
-    []
+
+  const [schemeUsers, setSchemeUsers] = useState(
+    new Map<string, SchemeUserData>()
   );
+
   const [mentionedUser, setMentionedUser] = useState<
     { id: string; value: string }[]
   >([]);
@@ -194,71 +193,28 @@ const useUpdateBar = ({
     setOptionRowShow,
   ]);
 
-  useListSchemeUsersQuery({
-    variables: {
-      where: {
-        schemes: {
-          some: {
-            scheme: {
-              id: {
-                equals: schemeId,
-              },
-            },
-          },
-        },
-        OR: [Role.User, Role.ContentAdmin, Role.GroupAdmin].includes(userRole)
-          ? [
-              {
-                groups: {
-                  some: {
-                    id: {
-                      in: userGroups.map(({ id }) => id),
-                    },
-                  },
-                },
-                schemes: {
-                  some: {
-                    role: {
-                      in: [Role.SchemeAdmin, Role.ShopsafeAdmin],
-                    },
-                    scheme: {
-                      id: {
-                        equals: schemeId,
-                      },
-                    },
-                  },
-                },
-              },
-            ]
-          : undefined,
-      },
-      orderBy: {
-        fullName: SortOrder.Asc,
-      },
-      schemesWhere: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
-      },
-    },
-    onCompleted: (res) => {
-      if (res.users) {
-        setSchemeUsers(
-          appendDuplicates(
-            res.users.map((user) => ({
-              fullName: user.origName,
-              oldFullName: user.origName,
-              id: user.id,
-              businesses: user.businesses,
-              firstLetter: user.firstLetter,
-            }))
-          )
-        );
-      }
-    },
+  const { data: mentionableUsersData } = useMentionableUsersQuery({
+    fetchPolicy: 'cache-first',
+    skip: !formTouched,
   });
+
+  useEffect(() => {
+    if (mentionableUsersData?.mentionableUsers) {
+      const updatedSchemeUsers = new Map<string, SchemeUserData>();
+      // eslint-disable-next-line no-restricted-syntax
+      for (const user of mentionableUsersData.mentionableUsers) {
+        updatedSchemeUsers.set(user.fullName, {
+          // Here, I suggest using user.id as the key instead of user.fullName for uniqueness.
+          id: user.id,
+          fullName: user.fullName,
+          businessesName: user.businessesName,
+          firstLetter: user.firstLetter, // You might want to include this as well.
+          oldFullName: user.oldFullName,
+        });
+      }
+      setSchemeUsers(updatedSchemeUsers); // Update the state with the updated map.
+    }
+  }, [mentionableUsersData]); // Ensuring useEffect is called when mentionableUsersData changes.
 
   const [subscribeToIncident] = useSubscribeToIncidentMutation();
   const [subscribeToOffender] = useSubscribeToOffenderMutation();
@@ -1118,6 +1074,9 @@ const useUpdateBar = ({
   };
   const [updated, setUpdated] = useState(false);
   const handleMarkAsRead = () => {
+    if (!formTouched) {
+      setFormTouched(true);
+    }
     if (!updated) {
       void updateTodoMention({
         variables: {

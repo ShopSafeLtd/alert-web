@@ -2775,6 +2775,7 @@ export type CreateIncidentOffender = {
   height?: InputMaybe<Height>;
   idSource?: InputMaybe<IdSource>;
   idVerified?: InputMaybe<Scalars['Boolean']>;
+  images?: InputMaybe<IncidentOffenderImages>;
   infoSource?: InputMaybe<Scalars['String']>;
   justification?: InputMaybe<Scalars['String']>;
   knownFor?: InputMaybe<SetStringArrayHelper>;
@@ -3649,6 +3650,7 @@ export type CustomGalleryWhereUniqueInput = {
 export type CustomRole = {
   __typename?: 'CustomRole';
   createdAt: Scalars['DateTime'];
+  dashboard: Dashboard;
   id: Scalars['ID'];
   name: Scalars['String'];
   permissions: Array<Permission>;
@@ -3676,6 +3678,128 @@ export type CustomRoleWhereUniqueInput = {
   id?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<StringFilter>;
   users?: InputMaybe<UserSchemeListRelationFilter>;
+};
+
+export type Dashboard = {
+  __typename?: 'Dashboard';
+  createdAt: Scalars['Date'];
+  id: Scalars['String'];
+  layout: Array<DashboardLayout>;
+  name?: Maybe<Scalars['String']>;
+  roles: Array<CustomRole>;
+  scheme: Scheme;
+  updatedAt: Scalars['Date'];
+};
+
+export type DashboardCreateInput = {
+  layout: DashboardTemplateInput;
+  name: Scalars['String'];
+  roles?: ConnectOnlyArrayHelper;
+  scheme: ConnectHelper;
+};
+
+export type DashboardLayout = {
+  __typename?: 'DashboardLayout';
+  createdAt: Scalars['Date'];
+  dashboard: Dashboard;
+  dashboardId: Scalars['String'];
+  h: Scalars['Int'];
+  i: Scalars['String'];
+  id: Scalars['String'];
+  maxH?: Maybe<Scalars['Int']>;
+  maxW?: Maybe<Scalars['Int']>;
+  minH?: Maybe<Scalars['Int']>;
+  minW?: Maybe<Scalars['Int']>;
+  moved: Scalars['Boolean'];
+  static: Scalars['Boolean'];
+  updatedAt: Scalars['Date'];
+  w: Scalars['Int'];
+  x: Scalars['Int'];
+  y: Scalars['Int'];
+};
+
+export type DashboardLayoutCreateManyTemplateInput = {
+  h: Scalars['Int'];
+  i: Scalars['String'];
+  maxH?: InputMaybe<Scalars['Int']>;
+  maxW?: InputMaybe<Scalars['Int']>;
+  minH?: InputMaybe<Scalars['Int']>;
+  minW?: InputMaybe<Scalars['Int']>;
+  moved?: Scalars['Boolean'];
+  static: Scalars['Boolean'];
+  w: Scalars['Int'];
+  x: Scalars['Int'];
+  y: Scalars['Int'];
+};
+
+export type DashboardLayoutCreateManyTemplateInputEnvelope = {
+  data: Array<DashboardLayoutCreateManyTemplateInput>;
+  skipDuplicates?: Scalars['Boolean'];
+};
+
+export type DashboardLayoutScalarWhereInput = {
+  createdAt?: InputMaybe<DateTimeFilter>;
+  h?: InputMaybe<IntFilter>;
+  i?: InputMaybe<StringFilter>;
+  id?: InputMaybe<StringFilter>;
+  maxH?: InputMaybe<IntNullableFilter>;
+  maxW?: InputMaybe<IntNullableFilter>;
+  minH?: InputMaybe<IntNullableFilter>;
+  minW?: InputMaybe<IntNullableFilter>;
+  moved?: InputMaybe<BoolFilter>;
+  static?: InputMaybe<BoolFilter>;
+  templateId?: InputMaybe<StringFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+  w?: InputMaybe<IntFilter>;
+  x?: InputMaybe<IntFilter>;
+  y?: InputMaybe<IntFilter>;
+};
+
+export type DashboardLayoutUpdateManyWithoutTemplateNestedInput = {
+  createMany?: InputMaybe<DashboardLayoutCreateManyTemplateInputEnvelope>;
+  delete?: InputMaybe<Array<DashboardLayoutWhereUnique>>;
+  deleteMany?: InputMaybe<Array<DashboardLayoutScalarWhereInput>>;
+  updateMany?: InputMaybe<DashboardUpdateManyTemplateInput>;
+};
+
+export type DashboardLayoutWhereUnique = {
+  id: Scalars['String'];
+};
+
+export type DashboardOrderByWithRelationInput = {
+  createdAt?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  name?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
+};
+
+export type DashboardTemplateInput = {
+  createMany: DashboardLayoutCreateManyTemplateInputEnvelope;
+};
+
+export type DashboardTemplateUpdateInput = {
+  layout?: InputMaybe<DashboardLayoutUpdateManyWithoutTemplateNestedInput>;
+  name?: InputMaybe<NullableSetStringHelper>;
+  roles?: InputMaybe<NullableConnectArrayHelper>;
+  schemes?: InputMaybe<NullableConnectArrayHelper>;
+};
+
+export type DashboardUpdateManyTemplateInput = {
+  data: DashboardLayoutCreateManyTemplateInput;
+  where: DashboardLayoutWhereUnique;
+};
+
+export type DashboardWhereInput = {
+  id?: InputMaybe<StringFilter>;
+  scheme?: InputMaybe<SchemeWhereInput>;
+};
+
+export type DashboardWhereUniqueInput = {
+  createdAt?: InputMaybe<DateTimeFilter>;
+  id?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<StringNullableFilter>;
+  scheme?: InputMaybe<SchemeWhereInput>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
 export type DateRangeInput = {
@@ -7045,6 +7169,10 @@ export type IncidentListRelationFilter = {
   some?: InputMaybe<IncidentWhereInput>;
 };
 
+export type IncidentOffenderImages = {
+  create?: InputMaybe<Array<UploadIncidentOffenderImage>>;
+};
+
 export type IncidentOffenderWhereInput = {
   id?: InputMaybe<Scalars['String']>;
   localId?: InputMaybe<Scalars['String']>;
@@ -8827,6 +8955,15 @@ export type MapMarker = {
   name?: Maybe<Scalars['String']>;
 };
 
+export type MentionableUser = {
+  __typename?: 'MentionableUser';
+  businessesName: Scalars['String'];
+  firstLetter: Scalars['String'];
+  fullName: Scalars['String'];
+  id: Scalars['ID'];
+  oldFullName: Scalars['String'];
+};
+
 export type MergeOffendersInput = {
   age?: InputMaybe<Age>;
   build?: InputMaybe<Build>;
@@ -9179,6 +9316,7 @@ export type Mutation = {
   createCrimeGroup: CrimeGroup;
   createCsvZip: Scalars['String'];
   createCustomGallery: CustomGallery;
+  createDashboard: Dashboard;
   createDocument: Document;
   createFlow: Flow;
   createGroup: Group;
@@ -9218,6 +9356,7 @@ export type Mutation = {
   deleteChat: Chat;
   deleteCrimeGroup: CrimeGroup;
   deleteCustomGallery: CustomGallery;
+  deleteDashboardTemplate?: Maybe<Dashboard>;
   deleteDocument: Document;
   deleteExpired: SystemTask;
   deleteFace: RekFace;
@@ -9296,6 +9435,7 @@ export type Mutation = {
   updateCrimeGroup: CrimeGroup;
   updateCrimeGroupOffender: CrimeGroup;
   updateCustomGallery: CustomGallery;
+  updateDashboardTemplate: Dashboard;
   updateFlow: Flow;
   updateGroup: Group;
   updateIncident: Incident;
@@ -9448,6 +9588,11 @@ export type MutationCreateCsvZipArgs = {
 
 export type MutationCreateCustomGalleryArgs = {
   data: CreateCustomGalleryInput;
+};
+
+
+export type MutationCreateDashboardArgs = {
+  data: DashboardCreateInput;
 };
 
 
@@ -9648,6 +9793,11 @@ export type MutationDeleteCrimeGroupArgs = {
 
 export type MutationDeleteCustomGalleryArgs = {
   where: UniqueId;
+};
+
+
+export type MutationDeleteDashboardTemplateArgs = {
+  where: DashboardWhereUniqueInput;
 };
 
 
@@ -10000,6 +10150,12 @@ export type MutationUpdateCrimeGroupOffenderArgs = {
 export type MutationUpdateCustomGalleryArgs = {
   data: CustomGalleryUpdateInput;
   where: UniqueId;
+};
+
+
+export type MutationUpdateDashboardTemplateArgs = {
+  data: DashboardTemplateUpdateInput;
+  where: DashboardWhereUniqueInput;
 };
 
 
@@ -11762,6 +11918,7 @@ export type OffenderUpdateWithoutIncidents = {
   height?: InputMaybe<NullableEnumHeightFieldUpdateOperationsInput>;
   idSource?: InputMaybe<NullableEnumIdSourceFieldUpdateOperationsInput>;
   idVerified?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  images?: InputMaybe<IncidentOffenderImages>;
   infoSource?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   justification?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   knownFor?: InputMaybe<Array<Scalars['String']>>;
@@ -12082,6 +12239,8 @@ export type Query = {
   crimeGroupReport: CrimeGroupReport;
   currentUser?: Maybe<User>;
   customGallery: CustomGallery;
+  dashboard: Dashboard;
+  dashboards: QueryDashboardsConnection;
   feedItem: FeedItem;
   feedItems: Array<FeedItem>;
   goodsTypes: Array<GoodsType>;
@@ -12128,6 +12287,7 @@ export type Query = {
   listVehicles: ListVehicles;
   loginEvent: LoginEvent;
   loginEvents: Array<LoginEvent>;
+  mentionableUsers: Array<MentionableUser>;
   message: Message;
   messages: Array<Message>;
   mg11: Mg11;
@@ -12154,10 +12314,10 @@ export type Query = {
   tag: Tag;
   tags: Array<Tag>;
   targetedGoods: ListTargetedGoods;
-  test: Scalars['String'];
   todo: Todo;
   todos: Array<Todo>;
   translateText: Array<TranslatedText>;
+  updates: Array<Update>;
   user: User;
   userByEmail?: Maybe<User>;
   userChat: UserChat;
@@ -12352,6 +12512,23 @@ export type QueryCrimeGroupReportArgs = {
 
 export type QueryCustomGalleryArgs = {
   where: CustomGalleryWhereUniqueInput;
+};
+
+
+export type QueryDashboardArgs = {
+  where: DashboardWhereUniqueInput;
+};
+
+
+export type QueryDashboardsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  roles?: InputMaybe<Array<Scalars['String']>>;
+  scheme: SchemeWhereUniqueInput;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -12937,6 +13114,12 @@ export type QueryTranslateTextArgs = {
 };
 
 
+export type QueryUpdatesArgs = {
+  orderBy?: InputMaybe<Array<UpdateOrderByWithRelationInput>>;
+  where?: InputMaybe<UpdateWhereInput>;
+};
+
+
 export type QueryUserArgs = {
   where: UserWhereUniqueInput;
 };
@@ -13043,6 +13226,19 @@ export type QueryActiveChecklistsConnectionEdge = {
   __typename?: 'QueryActiveChecklistsConnectionEdge';
   cursor: Scalars['String'];
   node: ActiveChecklist;
+};
+
+export type QueryDashboardsConnection = {
+  __typename?: 'QueryDashboardsConnection';
+  edges: Array<QueryDashboardsConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryDashboardsConnectionEdge = {
+  __typename?: 'QueryDashboardsConnectionEdge';
+  cursor: Scalars['String'];
+  node: Dashboard;
 };
 
 export type QueryIncidentsRelayConnection = {
@@ -17284,6 +17480,10 @@ export type UploadIncidentImage = {
   vehicles?: InputMaybe<Array<ImageOffender>>;
 };
 
+export type UploadIncidentOffenderImage = {
+  url?: InputMaybe<UrlImage>;
+};
+
 export type UploadIncidentOptimisticImage = {
   offenders?: InputMaybe<Array<ImageOffender>>;
   url: UrlImage;
@@ -19439,6 +19639,11 @@ export type Xy = {
   x: Scalars['Int'];
   y: Scalars['Int'];
 };
+
+export type MentionableUsersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MentionableUsersQuery = { __typename?: 'Query', mentionableUsers: Array<{ __typename?: 'MentionableUser', businessesName: string, firstLetter: string, fullName: string, id: string, oldFullName: string }> };
 
 export type SetPasswordMutationVariables = Exact<{
   data: SetPasswordData;
@@ -22397,6 +22602,28 @@ export const ArticlePreviewFragmentDoc = gql`
   id
 }
     `;
+export const MentionableUsersDocument = gql`
+    query MentionableUsers {
+  mentionableUsers {
+    businessesName
+    firstLetter
+    fullName
+    id
+    oldFullName
+  }
+}
+    `;
+export function useMentionableUsersQuery(baseOptions?: Apollo.QueryHookOptions<MentionableUsersQuery, MentionableUsersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MentionableUsersQuery, MentionableUsersQueryVariables>(MentionableUsersDocument, options);
+      }
+export function useMentionableUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MentionableUsersQuery, MentionableUsersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MentionableUsersQuery, MentionableUsersQueryVariables>(MentionableUsersDocument, options);
+        }
+export type MentionableUsersQueryHookResult = ReturnType<typeof useMentionableUsersQuery>;
+export type MentionableUsersLazyQueryHookResult = ReturnType<typeof useMentionableUsersLazyQuery>;
+export type MentionableUsersQueryResult = Apollo.QueryResult<MentionableUsersQuery, MentionableUsersQueryVariables>;
 export const SetPasswordDocument = gql`
     mutation SetPassword($data: SetPasswordData!) {
   setPassword(data: $data) {
