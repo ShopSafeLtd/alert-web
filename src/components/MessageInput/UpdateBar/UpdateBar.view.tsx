@@ -85,7 +85,7 @@ interface Props {
   removeCrimeGroup: (value: string | undefined) => void;
   removeVehicle: (value: string | undefined) => void;
   removeArticle: (value: string | undefined) => void;
-  schemeUsers: SchemeUserData[] | undefined;
+  schemeUsers: Map<string, SchemeUserData> | undefined;
   setMentionedUser: (value: { id: string; value: string }[]) => void;
   setUpdateInput: (value: string) => void;
   showUpdatePicker: boolean;
@@ -167,7 +167,6 @@ const UpdateBar = ({
 }: Props) => {
   const intl = useIntl();
   const classes = useStyles();
-
   return (
     <>
       <Form
@@ -180,7 +179,13 @@ const UpdateBar = ({
         }}
         className="update-bar"
         style={{}}
-        onFocus={() => handleMarkAsRead()}
+        onMouseOver={() => {
+          console.log('moused over');
+        }}
+        onFocus={() => {
+          console.log('foucesed');
+          handleMarkAsRead();
+        }}
       >
         {replyTo && (
           <div className="reply-to">
@@ -349,11 +354,7 @@ const UpdateBar = ({
                 const mentions = getMentions(value);
                 setMentionedUser(
                   mentions
-                    .map((mention) =>
-                      schemeUsers?.find(
-                        (member) => mention.value === member.fullName
-                      )
-                    )
+                    .map((mention) => schemeUsers?.get(mention.value))
                     .map((item) => ({
                       id: item?.id || '',
                       value: item?.fullName || '',
@@ -363,20 +364,23 @@ const UpdateBar = ({
               }}
               prefix="@"
             >
-              {schemeUsers?.map(({ id, fullName, businesses }) => (
-                <Option key={id} value={fullName}>
-                  {intl.formatMessage(
-                    {
-                      id: 'hK8+eV',
-                      defaultMessage: '{fullName} ({businessName})',
-                    },
-                    {
-                      fullName,
-                      businessName: businesses[0]?.name,
-                    }
-                  )}
-                </Option>
-              ))}
+              {schemeUsers &&
+                [...schemeUsers.values()]?.map(
+                  ({ id, fullName, businessesName }) => (
+                    <Option key={id} value={fullName}>
+                      {intl.formatMessage(
+                        {
+                          id: 'hK8+eV',
+                          defaultMessage: '{fullName} ({businessName})',
+                        },
+                        {
+                          fullName,
+                          businessName: businessesName,
+                        }
+                      )}
+                    </Option>
+                  )
+                )}
             </Mentions>
           </Col>
 

@@ -1,3 +1,5 @@
+/* eslint-disable formatjs/no-literal-string-in-jsx */
+
 import React, { useEffect, useRef } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Picker from 'emoji-picker-react';
@@ -582,8 +584,11 @@ const ViewMessages = ({
             >
               {membersData?.map(({ id, fullName, businesses }) => (
                 <Option key={id} value={fullName.replace(' ', '_')}>
-                  {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                  {fullName} ({businesses[0]?.name})
+                  {fullName} (
+                  {businesses && businesses.length > 0
+                    ? businesses[0]?.name || ''
+                    : '-'}
+                  )
                 </Option>
               ))}
             </Mentions>

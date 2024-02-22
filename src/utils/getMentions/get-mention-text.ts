@@ -1,4 +1,5 @@
 import { Mentions } from 'antd';
+import type { SchemeUserData } from '../../types/DataType';
 
 /**
  *
@@ -6,13 +7,6 @@ import { Mentions } from 'antd';
  * @returns mention user data
  */
 
-interface SchemeUserData {
-  id: string;
-  fullName: string;
-  businesses: { id: string; name: string }[];
-  firstLetter?: string | null;
-  oldFullName: string;
-}
 const { getMentions } = Mentions;
 
 export const appendDuplicates = (arr: SchemeUserData[]) => {
@@ -40,24 +34,36 @@ export const appendDuplicates = (arr: SchemeUserData[]) => {
 
 export const getText = (
   text: string,
-  schemeUsers: SchemeUserData[] | undefined
+  schemeUsers: SchemeUserData[] | Map<string, SchemeUserData> | undefined
 ) => {
   const mentions = getMentions(text);
   let newText = text;
 
-  // eslint-disable-next-line no-restricted-syntax
-  for (const mention of mentions) {
-    const mentioned = schemeUsers?.find(
-      (member) => mention.value === member.fullName
-    );
+  if (typeof schemeUsers === 'object' && schemeUsers instanceof Map) {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const mention of mentions) {
+      const mentioned = schemeUsers?.get(mention.value);
 
-    if (mentioned)
-      newText = newText.replace(
-        `@${mention.value}`,
-        `@[${mentioned.oldFullName}]`
+      if (mentioned)
+        newText = newText.replace(
+          `@${mention.value}`,
+          `@[${mentioned.oldFullName}]`
+        );
+    }
+  } else {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const mention of mentions) {
+      const mentioned = schemeUsers?.find(
+        (member) => mention.value === member.fullName
       );
-  }
 
+      if (mentioned)
+        newText = newText.replace(
+          `@${mention.value}`,
+          `@[${mentioned.oldFullName}]`
+        );
+    }
+  }
   return newText;
 };
 export const getChatListContent = (content: string) =>
