@@ -907,7 +907,7 @@ const ViewIncident = ({
                               </Col>
                             )}
                           </Row>
-                          {data?.incident?.offenders.length && !loading ? (
+                          {data?.incident?.incidentItems.length && !loading ? (
                             <Table
                               pagination={{
                                 hideOnSinglePage: true,

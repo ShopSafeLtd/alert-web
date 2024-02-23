@@ -39,6 +39,21 @@ const ImportMenu = () => {
               </Typography.Text>
             </Card>
           </Link>
+          <Link to="/app/scheme-settings/data-import/mysafety">
+            <Card
+              title={intl.formatMessage({
+                defaultMessage: 'MySafety Import',
+                id: '2HeyWv',
+              })}
+            >
+              <Typography.Text type="secondary">
+                <FormattedMessage
+                  defaultMessage="Import data from a mysafety export into alert using a guided form"
+                  id="XGOMfQ"
+                />
+              </Typography.Text>
+            </Card>
+          </Link>
         </Col>
       </Row>
     </div>

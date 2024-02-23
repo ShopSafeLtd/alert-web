@@ -6584,6 +6584,7 @@ export type Incident = {
   policeRef?: Maybe<Scalars['String']>;
   policeReported: Scalars['Boolean'];
   policeResponse?: Maybe<PoliceResponseTime>;
+  priority: IncidentPriority;
   recoveredValue?: Maybe<Scalars['Float']>;
   recycleBin?: Maybe<RecycledItem>;
   recycleDate: Scalars['Date'];
@@ -7247,6 +7248,12 @@ export type IncidentOrderByWithRelationInput = {
   weekOfMonth?: InputMaybe<SortOrder>;
   weekOfYear?: InputMaybe<SortOrder>;
 };
+
+export enum IncidentPriority {
+  High = 'HIGH',
+  Medium = 'MEDIUM',
+  Normal = 'NORMAL'
+}
 
 export type IncidentQuestions = {
   __typename?: 'IncidentQuestions';
@@ -9392,6 +9399,7 @@ export type Mutation = {
   markAsReadMessages: UserChat;
   mergeBusinessesWithSameName: Business;
   mergeOffender: Offender;
+  mySafetyImportData: SystemTask;
   recycleChecklist: Checklist;
   recycleExpiredData: SystemTask;
   recycleIncident: Incident;
@@ -9974,6 +9982,11 @@ export type MutationMergeOffenderArgs = {
 };
 
 
+export type MutationMySafetyImportDataArgs = {
+  data: MySafetyImportDataInput;
+};
+
+
 export type MutationRecycleChecklistArgs = {
   id: Scalars['String'];
 };
@@ -10312,6 +10325,27 @@ export type MutationUpsertIncidentFormArgs = {
 
 export type MutationUpsertPermissionArgs = {
   data: UpsertRole;
+};
+
+export type MySafetyImportDataInput = {
+  groups: Array<UniqueId>;
+  incidents: Array<MySafetyImportIncidents>;
+  scheme: UniqueId;
+};
+
+export type MySafetyImportIncidents = {
+  actualValue?: InputMaybe<Scalars['Float']>;
+  createdByName: Scalars['String'];
+  crimeReferenceNumber?: InputMaybe<Scalars['String']>;
+  crimeType: Array<Scalars['String']>;
+  dateOccurred: Scalars['Date'];
+  description: Scalars['String'];
+  emergencyServicesAttend?: InputMaybe<Scalars['Boolean']>;
+  estimatedValue: Scalars['Float'];
+  incidentID: Scalars['String'];
+  site: Scalars['String'];
+  specificArea: Scalars['String'];
+  wereWeaponsUsed?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type NestedBoolFilter = {
@@ -14391,6 +14425,7 @@ export type Scheme = {
   defaultSubscribedIncidentOnly: Scalars['Boolean'];
   defaultSubscribedOffenderOnly: Scalars['Boolean'];
   documents: Array<Document>;
+  facialDetection: Scalars['Boolean'];
   facialRecognition: Scalars['Boolean'];
   feedItems: Array<FeedItem>;
   goodsMode: GoodsMode;
@@ -14400,6 +14435,7 @@ export type Scheme = {
   imagesRequiredOnOffenders: Scalars['Boolean'];
   incidentForm: Array<IncidentForm>;
   incidentImpact: Scalars['Boolean'];
+  incidentPriority: Scalars['Boolean'];
   incidentRetention?: Maybe<Scalars['Int']>;
   incidents: Array<Incident>;
   incidentsByType: IncidentsByType;
@@ -20344,6 +20380,13 @@ export type StockItemImportMutationVariables = Exact<{
 
 export type StockItemImportMutation = { __typename?: 'Mutation', stockItemImport: { __typename?: 'SystemTask', success: boolean } };
 
+export type MySafetyImportDataMutationVariables = Exact<{
+  data: MySafetyImportDataInput;
+}>;
+
+
+export type MySafetyImportDataMutation = { __typename?: 'Mutation', mySafetyImportData: { __typename?: 'SystemTask', success: boolean } };
+
 export type AddImagesToIncidentMutationVariables = Exact<{
   incident: IncidentWhereUniqueInput;
   images: Array<ImageWhereUniqueInput> | ImageWhereUniqueInput;
@@ -25500,6 +25543,21 @@ export function useStockItemImportMutation(baseOptions?: Apollo.MutationHookOpti
 export type StockItemImportMutationHookResult = ReturnType<typeof useStockItemImportMutation>;
 export type StockItemImportMutationResult = Apollo.MutationResult<StockItemImportMutation>;
 export type StockItemImportMutationOptions = Apollo.BaseMutationOptions<StockItemImportMutation, StockItemImportMutationVariables>;
+export const MySafetyImportDataDocument = gql`
+    mutation MySafetyImportData($data: MySafetyImportDataInput!) {
+  mySafetyImportData(data: $data) {
+    success
+  }
+}
+    `;
+export type MySafetyImportDataMutationFn = Apollo.MutationFunction<MySafetyImportDataMutation, MySafetyImportDataMutationVariables>;
+export function useMySafetyImportDataMutation(baseOptions?: Apollo.MutationHookOptions<MySafetyImportDataMutation, MySafetyImportDataMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<MySafetyImportDataMutation, MySafetyImportDataMutationVariables>(MySafetyImportDataDocument, options);
+      }
+export type MySafetyImportDataMutationHookResult = ReturnType<typeof useMySafetyImportDataMutation>;
+export type MySafetyImportDataMutationResult = Apollo.MutationResult<MySafetyImportDataMutation>;
+export type MySafetyImportDataMutationOptions = Apollo.BaseMutationOptions<MySafetyImportDataMutation, MySafetyImportDataMutationVariables>;
 export const AddImagesToIncidentDocument = gql`
     mutation AddImagesToIncident($incident: IncidentWhereUniqueInput!, $images: [ImageWhereUniqueInput!]!) {
   addImagesToIncident(incident: $incident, images: $images) {

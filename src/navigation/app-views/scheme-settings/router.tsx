@@ -33,6 +33,7 @@ import Workflows from '../workflow/router';
 import DataExport from '../data-management/router';
 import RolesContainer from '../../../views/roles/roles/Roles.container';
 import Role from '../../../views/roles/role/ViewRole.container';
+import MySafety from '../../../views/settings/data-import/mysafety/MySafety.view';
 import PermissionCheckWrapper from '../../../components/PermissionCheck/PermissionCheckWrapper';
 import { PermissionMethod, PermissionModel } from '../../../graphql/generated';
 
@@ -357,6 +358,19 @@ const SchemeSettings = (): JSX.Element => (
           }}
         >
           <DiscImport />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="data-import/mysafety"
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Settings,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <MySafety />
         </PermissionCheckWrapper>
       }
     />
