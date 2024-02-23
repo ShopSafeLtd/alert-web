@@ -12,7 +12,6 @@ import {
   Col,
   Drawer,
   Empty,
-  Input,
   Row,
   Skeleton,
   Tooltip,
@@ -52,6 +51,7 @@ import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view'
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import useStyles from './FeedItem.styles';
 import Loading from '../../components/shared-components/AntD/Loading';
+import DebouncedInput from '../../utils/debounced-input';
 
 const { Title, Paragraph } = Typography;
 
@@ -130,12 +130,13 @@ const FeedItem = ({
       <Card bodyStyle={{ padding: 10 }} style={{ marginBottom: 10 }}>
         <Row align="middle" gutter={12}>
           <Col span={4} xxl={6}>
-            <Input
+            <DebouncedInput
               size="small"
               placeholder={intl.formatMessage({
                 defaultMessage: 'Search for anything in alert...',
                 id: 'FZ9gwb',
               })}
+              allowClear
               // value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
