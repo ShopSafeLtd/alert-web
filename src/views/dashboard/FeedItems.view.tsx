@@ -136,6 +136,7 @@ const FeedItem = ({
                 defaultMessage: 'Search for anything in alert...',
                 id: 'FZ9gwb',
               })}
+              allowClear
               // value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
