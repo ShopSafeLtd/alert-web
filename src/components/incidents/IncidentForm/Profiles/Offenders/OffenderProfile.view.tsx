@@ -221,9 +221,8 @@ const OffenderProfile = ({
                 <Col>
                   <Tooltip
                     title={intl.formatMessage({
-                      id: 'YJ2Q25',
-                      defaultMessage:
-                        'Change values or add new details this this offender.',
+                      id: 'H+JgLj',
+                      defaultMessage: 'Add or edit details for this offender.',
                     })}
                   >
                     <Button

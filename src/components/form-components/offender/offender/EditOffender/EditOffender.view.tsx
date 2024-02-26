@@ -208,9 +208,8 @@ const EditOffender = ({
                     id: 'HAlOn1',
                   })}
                   tooltip={intl.formatMessage({
-                    defaultMessage:
-                      'Enter the offenders name if you know it, if not leave this field blank.',
-                    id: 'pYHIHH',
+                    defaultMessage: 'Enter the offenders name if you know it.',
+                    id: 'N9IX81',
                   })}
                 >
                   <Input disabled={saving} />

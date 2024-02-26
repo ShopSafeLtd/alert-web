@@ -56,8 +56,8 @@ const IncidentTypes = ({
         name="tags"
         tooltip={intl.formatMessage({
           defaultMessage:
-            'Select the relevant crime types for this incident, these help to categorize the incident.',
-          id: 'KxHHjU',
+            'Select the relevant incident type; this helps to categorise the incident',
+          id: 'wgsAeG',
         })}
         rules={[
           {

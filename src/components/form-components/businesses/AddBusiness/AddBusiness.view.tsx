@@ -79,7 +79,7 @@ const AddBusiness = ({
         </Col>
         <Col span={12}>
           <Form.Item
-            name="name"
+            name="siteNumber"
             label={intl.formatMessage({
               defaultMessage: 'Site Number',
               id: 'rAGVXn',

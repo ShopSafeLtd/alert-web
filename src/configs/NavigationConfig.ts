@@ -241,7 +241,7 @@ const userOnlyItems: NavItem[] = [
     title: 'Chat',
     icon: faComments,
     breadcrumb: true,
-    badge: BadgeTypes.message,
+    // badge: BadgeTypes.message,
     submenu: [],
     intl: defineMessage({
       id: 'chat',
