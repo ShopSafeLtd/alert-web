@@ -11,7 +11,7 @@ import type {
   UpdateSimpleOffenderMutation,
   CreateSimpleOffenderMutation,
 } from 'graphql/generated';
-import { GoodsMode } from 'graphql/generated';
+import { GoodsMode, IncidentPriority } from 'graphql/generated';
 import {
   Button,
   Card,
@@ -53,6 +53,7 @@ import {
   faUser,
   faUsers,
   faUserTag,
+  faExclamationCircle,
 } from '@fortawesome/pro-light-svg-icons';
 import { Link, useNavigate } from 'react-router-dom';
 import IncidentSideList from 'components/incidents/IncidentSideList';
@@ -95,6 +96,7 @@ import useStyles from './ViewIncident.styles';
 import EvidenceTable from '../../../components/tables/EvidenceTable';
 import formatAnswer from '../../../utils/format-answer';
 import ViewTodo from '../../../components/form-components/Todos/ViewTodo/Todo.container';
+import IncidentPriorityTag from '../../../components/incidents/IncidentPriority/IncidentPriorityTag.view';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -585,6 +587,32 @@ const ViewIncident = ({
                           </Paragraph>
 
                           <Descriptions column={1} className={classes.desc}>
+                            {data?.incident.priority ===
+                            'NORMAL' ? undefined : (
+                              <Descriptions.Item
+                                className={classes.detail}
+                                label={
+                                  <span>
+                                    <FontAwesomeIcon
+                                      className={classes.descIcon}
+                                      icon={faExclamationCircle}
+                                    />
+                                    {intl.formatMessage({
+                                      defaultMessage: 'Priority',
+                                      id: '8lCjAM',
+                                    })}
+                                  </span>
+                                }
+                              >
+                                <IncidentPriorityTag
+                                  value={
+                                    data?.incident?.priority ||
+                                    IncidentPriority.Normal
+                                  }
+                                />
+                              </Descriptions.Item>
+                            )}
+
                             <Descriptions.Item
                               className={classes.detail}
                               label={

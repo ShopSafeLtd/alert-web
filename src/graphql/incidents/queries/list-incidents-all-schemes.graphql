@@ -17,6 +17,7 @@ query listIncidentsAllSchemes(
       dayTime
       reference
       policeRef
+      priority
       date
       approved
       business {

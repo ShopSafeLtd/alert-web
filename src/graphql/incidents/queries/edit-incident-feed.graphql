@@ -14,6 +14,8 @@ query EditIncidentFeed($where: IncidentWhereUniqueInput!) {
     subscribed
     totalValue
     totalRecoveredValue
+    priority
+    customerRef
     crimeTypes {
       id
       name

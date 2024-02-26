@@ -4,8 +4,15 @@ import { Col, Row, Typography } from 'antd';
 import { Link } from 'react-router-dom';
 import SideListItem from 'components/side-list/SideListItem.view';
 import { useIntl } from 'react-intl';
+import { IncidentPriority } from 'graphql/generated';
 import useStyles from './IncidentSideList.styles';
 import InfiniteSideScrollList from '../../side-list/InfiniteSideList';
+
+const getPriorityBorder = (value: IncidentPriority) => {
+  if (value === IncidentPriority.High) return '5px solid rgb(222, 68, 54)';
+  if (value === IncidentPriority.Medium) return '5px solid #ffc542';
+  return undefined;
+};
 
 interface Props {
   data:
@@ -33,7 +40,12 @@ const IncidentSideList = ({
 
   const incidentItems = data?.incidents?.map((incident) => (
     <Link to={`/app/incidents/view/${incident.id}`} key={incident.id}>
-      <SideListItem current={current === incident.id}>
+      <SideListItem
+        style={{
+          borderLeft: getPriorityBorder(incident.priority),
+        }}
+        current={current === incident.id}
+      >
         <Row wrap={false}>
           <Col className={classes.itemContent} flex={1}>
             <Row>

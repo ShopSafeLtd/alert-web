@@ -283,7 +283,7 @@ const IncidentFeed = ({
             }
           >
             <Row
-              gutter={compactView ? 12 : [8, 16]}
+              gutter={compactView ? [10, 10] : [8, 16]}
               align="stretch"
               style={{
                 alignItems: 'stretch',
