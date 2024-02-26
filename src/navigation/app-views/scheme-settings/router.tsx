@@ -34,6 +34,7 @@ import DataExport from '../data-management/router';
 import RolesContainer from '../../../views/roles/roles/Roles.container';
 import Role from '../../../views/roles/role/ViewRole.container';
 import MySafety from '../../../views/settings/data-import/mysafety/MySafety.view';
+import IntelOne from '../../../views/settings/data-import/intel-one/IntelOne.view';
 import PermissionCheckWrapper from '../../../components/PermissionCheck/PermissionCheckWrapper';
 import { PermissionMethod, PermissionModel } from '../../../graphql/generated';
 
@@ -371,6 +372,19 @@ const SchemeSettings = (): JSX.Element => (
           }}
         >
           <MySafety />
+        </PermissionCheckWrapper>
+      }
+    />
+    <Route
+      path="data-import/intel-one"
+      element={
+        <PermissionCheckWrapper
+          permission={{
+            model: PermissionModel.Settings,
+            method: PermissionMethod.Read,
+          }}
+        >
+          <IntelOne />
         </PermissionCheckWrapper>
       }
     />

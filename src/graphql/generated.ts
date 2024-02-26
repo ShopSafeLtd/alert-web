@@ -6547,6 +6547,7 @@ export type Incident = {
   createdByUser: Scalars['Boolean'];
   crimeGroups: Array<CrimeGroup>;
   crimeTypes: Array<Tag>;
+  customerRef?: Maybe<Scalars['String']>;
   date: Scalars['Date'];
   dateAgo: Scalars['Int'];
   dayOfMonth?: Maybe<Scalars['Int']>;
@@ -7582,6 +7583,25 @@ export type IntelListRelationFilter = {
   every?: InputMaybe<IntelWhereInput>;
   none?: InputMaybe<IntelWhereInput>;
   some?: InputMaybe<IntelWhereInput>;
+};
+
+export type IntelOneImportDataInput = {
+  groups: Array<UniqueId>;
+  incidents: Array<IntelOneImportIncidents>;
+  scheme: UniqueId;
+};
+
+export type IntelOneImportIncidents = {
+  description: Scalars['String'];
+  lat?: InputMaybe<Scalars['String']>;
+  lng?: InputMaybe<Scalars['String']>;
+  offenderName: Array<Scalars['String']>;
+  postcode: Scalars['String'];
+  reference: Scalars['String'];
+  reportDate: Scalars['Date'];
+  siteName: Scalars['String'];
+  type: Scalars['String'];
+  value?: InputMaybe<Scalars['Float']>;
 };
 
 export type IntelOrderByRelationAggregateInput = {
@@ -9392,6 +9412,7 @@ export type Mutation = {
   indexExistingImages: SystemTask;
   indexFaces: SystemTask;
   indexImage: Image;
+  intelOneImportData: SystemTask;
   inviteExistingUser: User;
   linkBusinessToScheme: Business;
   linkOrgToDem: Business;
@@ -9415,6 +9436,7 @@ export type Mutation = {
   restoreIncident: Incident;
   restoreItem?: Maybe<RecycledItem>;
   restoreOffender: Offender;
+  scanIncident: Incident;
   searchExistingImages: Array<RekMatch>;
   searchFaces: SystemTask;
   sendInvite: User;
@@ -9943,6 +9965,11 @@ export type MutationIndexImageArgs = {
 };
 
 
+export type MutationIntelOneImportDataArgs = {
+  data: IntelOneImportDataInput;
+};
+
+
 export type MutationInviteExistingUserArgs = {
   data: UserUpdateInput;
   where: UniqueId;
@@ -10053,6 +10080,11 @@ export type MutationRestoreItemArgs = {
 export type MutationRestoreOffenderArgs = {
   data: RecycledItemWhereUniqueInput;
   where: UniqueId;
+};
+
+
+export type MutationScanIncidentArgs = {
+  where: ScanIncidentInput;
 };
 
 
@@ -14387,6 +14419,10 @@ export enum Role {
   ShopsafeAdmin = 'SHOPSAFE_ADMIN',
   User = 'USER'
 }
+
+export type ScanIncidentInput = {
+  id: Scalars['String'];
+};
 
 export type Scheme = {
   __typename?: 'Scheme';
@@ -20380,6 +20416,13 @@ export type StockItemImportMutationVariables = Exact<{
 
 export type StockItemImportMutation = { __typename?: 'Mutation', stockItemImport: { __typename?: 'SystemTask', success: boolean } };
 
+export type IntelOneImportDataMutationVariables = Exact<{
+  data: IntelOneImportDataInput;
+}>;
+
+
+export type IntelOneImportDataMutation = { __typename?: 'Mutation', intelOneImportData: { __typename?: 'SystemTask', success: boolean } };
+
 export type MySafetyImportDataMutationVariables = Exact<{
   data: MySafetyImportDataInput;
 }>;
@@ -25543,6 +25586,21 @@ export function useStockItemImportMutation(baseOptions?: Apollo.MutationHookOpti
 export type StockItemImportMutationHookResult = ReturnType<typeof useStockItemImportMutation>;
 export type StockItemImportMutationResult = Apollo.MutationResult<StockItemImportMutation>;
 export type StockItemImportMutationOptions = Apollo.BaseMutationOptions<StockItemImportMutation, StockItemImportMutationVariables>;
+export const IntelOneImportDataDocument = gql`
+    mutation IntelOneImportData($data: IntelOneImportDataInput!) {
+  intelOneImportData(data: $data) {
+    success
+  }
+}
+    `;
+export type IntelOneImportDataMutationFn = Apollo.MutationFunction<IntelOneImportDataMutation, IntelOneImportDataMutationVariables>;
+export function useIntelOneImportDataMutation(baseOptions?: Apollo.MutationHookOptions<IntelOneImportDataMutation, IntelOneImportDataMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<IntelOneImportDataMutation, IntelOneImportDataMutationVariables>(IntelOneImportDataDocument, options);
+      }
+export type IntelOneImportDataMutationHookResult = ReturnType<typeof useIntelOneImportDataMutation>;
+export type IntelOneImportDataMutationResult = Apollo.MutationResult<IntelOneImportDataMutation>;
+export type IntelOneImportDataMutationOptions = Apollo.BaseMutationOptions<IntelOneImportDataMutation, IntelOneImportDataMutationVariables>;
 export const MySafetyImportDataDocument = gql`
     mutation MySafetyImportData($data: MySafetyImportDataInput!) {
   mySafetyImportData(data: $data) {
