@@ -5,6 +5,7 @@ import type {
   EditIncidentFeedQuery,
   SearchBusinessesQuery,
   SearchBusinessesQueryVariables,
+  IncidentPriority,
 } from 'graphql/generated';
 import {
   Model,
@@ -24,6 +25,7 @@ import { useIntl } from 'react-intl';
 export interface FormData {
   subject: string;
   description: string;
+  customerRef: string;
   date: Date;
   value?: number;
   recoveredValue?: number;
@@ -31,6 +33,7 @@ export interface FormData {
   policeInvolved?: boolean;
   policeRef?: string;
   policeNo?: string;
+  priority: IncidentPriority;
   goods: {
     id: string;
     goodsType?: string;
@@ -203,6 +206,8 @@ const useEditIncidentFeed = ({ onClose, incidentId }: Props): Return => {
             description: { set: data.description },
             date: { set: data.date },
             time: { set: data.date },
+            customerRef: { set: data.customerRef },
+            priority: { set: data.priority },
             groups: {
               set: data.groups.map((id) => ({ id })),
             },

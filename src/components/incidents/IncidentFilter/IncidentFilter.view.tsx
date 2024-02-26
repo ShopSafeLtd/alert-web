@@ -9,12 +9,13 @@ import {
   Select,
   Typography,
 } from 'antd';
-import { IncidentSort } from 'state';
+import { IncidentSort, useStoreActions } from 'state';
 import type { DateType } from 'types/DataType';
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import type { IncidentFilters } from 'state/data-model';
 import moment from 'moment';
 import useStyles from './IncidentFilter.styles';
+import { IncidentPriority } from '../../../graphql/generated';
 
 const { RangePicker } = DatePicker;
 const { useForm } = Form;
@@ -68,6 +69,10 @@ const IncidentFilter = ({
   const classes = useStyles();
   const [form] = useForm<FormData>();
   const intl = useIntl();
+  const setIncidentPriority = useStoreActions(
+    (actions) => actions.data.setIncidentPriority
+  );
+
   const {
     crimeTypes: crimeTypesFilter,
     groups: groupsFilter,
@@ -76,6 +81,7 @@ const IncidentFilter = ({
     createdAt: createdAtFilter,
     incidentDate: incidentDateFilter,
     peculiarities,
+    priority,
   } = variables;
 
   return (
@@ -188,6 +194,38 @@ const IncidentFilter = ({
               }}
             />
           </Form.Item>
+        </Col>
+      </Row>
+
+      <Row gutter={16}>
+        <Col span={23}>
+          <Typography.Paragraph className={classes.selectTitle}>
+            {intl.formatMessage({ defaultMessage: 'Priority', id: '8lCjAM' })}
+          </Typography.Paragraph>
+
+          <Select
+            className={classes.select}
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Priority',
+              id: '8lCjAM',
+            })}
+            mode="multiple"
+            size="small"
+            maxTagCount={2}
+            allowClear
+            onChange={setIncidentPriority}
+            value={priority}
+          >
+            <Select.Option value={IncidentPriority.Normal}>
+              <FormattedMessage id="myq2ZL" defaultMessage="Normal" />
+            </Select.Option>
+            <Select.Option value={IncidentPriority.Medium}>
+              <FormattedMessage id="ovJ26C" defaultMessage="Medium" />
+            </Select.Option>
+            <Select.Option value={IncidentPriority.High}>
+              <FormattedMessage id="AxMhQr" defaultMessage="High" />
+            </Select.Option>
+          </Select>
         </Col>
       </Row>
 

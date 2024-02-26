@@ -13,6 +13,8 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
     policeRef
     policeNo
     policeInvolved
+    priority
+    customerRef
     subscribed
     totalValue
     totalRecoveredValue

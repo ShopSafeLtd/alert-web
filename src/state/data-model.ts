@@ -9,6 +9,7 @@ import type {
   Model,
   Race,
   Role,
+  IncidentPriority,
 } from 'graphql/generated';
 import {
   SortOrder,
@@ -20,6 +21,7 @@ export enum IncidentSort {
   createdAtDesc = 'CREATED_AT_DESC',
   createdAtAsc = 'CREATED_AT_ASC',
 }
+
 export enum OffenderSort {
   updatedAtDesc = 'UPDATED_AT_DESC',
   updatedAtAsc = 'UPDATED_AT_ASC',
@@ -36,7 +38,9 @@ export interface IncidentFilters {
   gallery: string[];
   peculiarities: string;
   compactView: boolean;
+  priority: IncidentPriority[];
 }
+
 export interface OffenderFilters {
   search: string;
   hair: string;
@@ -86,6 +90,7 @@ export interface VehicleFilters {
       }
     | undefined;
 }
+
 export interface CrimeGroupFilters {
   order: SortOrder;
   groups: string[];
@@ -98,6 +103,7 @@ export interface CrimeGroupFilters {
       }
     | undefined;
 }
+
 export interface InvestigationFilters {
   orderBy: 'createdAtAsc' | 'createdAtDesc';
   groups: string[];
@@ -108,6 +114,7 @@ export interface InvestigationFilters {
       }
     | undefined;
 }
+
 export interface ArticleFilters {
   order: SortOrder;
   groups: string[];
@@ -121,24 +128,28 @@ export interface ArticleFilters {
   search: string;
   gallery: string[];
 }
+
 export interface UserFilters {
   orderBy: UserSort;
   groups: string[];
   status: UserStatus | undefined;
   roles: Role[];
 }
+
 export enum UserSort {
   createdAtDesc = 'CREATED_AT_DESC',
   createdAtAsc = 'CREATED_AT_ASC',
   nameDesc = 'NAME_DESC',
   nameAsc = 'NAME_ASC',
 }
+
 export enum UserStatus {
   'ACTIVE' = 'ACTIVE',
   'DISABLED' = 'DISABLED',
   'INVITED' = 'INVITED',
   'ALL' = 'ALL',
 }
+
 interface Incidents {
   pagination: {
     page: number;
@@ -159,6 +170,7 @@ interface Offenders {
   variables: OffenderFilters;
   order: OffenderSort;
 }
+
 interface FeedItems {
   pagination: {
     page: number;
@@ -167,9 +179,11 @@ interface FeedItems {
   };
   variables: FeedItemFilters;
 }
+
 interface Articles {
   variables: ArticleFilters;
 }
+
 interface Vehicles {
   pagination: {
     page: number;
@@ -178,6 +192,7 @@ interface Vehicles {
   };
   variables: VehicleFilters;
 }
+
 interface CrimeGroups {
   pagination: {
     page: number;
@@ -186,6 +201,7 @@ interface CrimeGroups {
   };
   variables: CrimeGroupFilters;
 }
+
 interface Investigations {
   takeAllSchemes: boolean;
 }
@@ -200,6 +216,7 @@ export interface DataModel {
   articles: Articles;
   setArticles: Action<DataModel, Articles>;
   setIncidents: Action<DataModel, Incidents>;
+  setIncidentPriority: Action<DataModel, IncidentPriority[]>;
   setOffenders: Action<DataModel, Offenders>;
   setFeedItems: Action<DataModel, FeedItems>;
   setVehicles: Action<DataModel, Vehicles>;
@@ -225,13 +242,17 @@ const dataModel: DataModel = {
       gallery: [],
       peculiarities: '',
       compactView: false,
+      priority: [],
     },
     order: IncidentSort.createdAtDesc,
-    // gallery: [],
+    // gallery: []
   },
 
   setIncidents: action((state, payload) => {
     state.incidents = payload;
+  }),
+  setIncidentPriority: action((state, payload) => {
+    state.incidents.variables.priority = payload;
   }),
 
   offenders: {

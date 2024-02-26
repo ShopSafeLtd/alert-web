@@ -29,9 +29,10 @@ interface Props {
   children: ReactNode;
   current: boolean;
   loading?: boolean;
+  style?: React.CSSProperties;
 }
 
-const SideList = ({ children, current, loading }: Props) => {
+const SideList = ({ children, current, loading, style }: Props) => {
   const classes = useStyles();
 
   return (
@@ -40,7 +41,7 @@ const SideList = ({ children, current, loading }: Props) => {
       className={`${classes.item} ${current ? 'current' : undefined} ${
         loading ? 'loading' : undefined
       }`}
-      bodyStyle={{ padding: loading ? 10 : 0 }}
+      bodyStyle={{ padding: loading ? 10 : 0, ...style }}
     >
       {children}
     </Card>

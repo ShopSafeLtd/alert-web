@@ -12,6 +12,8 @@ mutation updateIncident($where: UniqueId!, $data: IncidentUpdateInput!) {
     policeRef
     policeInvolved
     subscribed
+    priority
+    customerRef
     crimeTypes {
       id
       name

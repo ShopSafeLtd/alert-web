@@ -6,6 +6,8 @@ fragment IncidentCard on Incident {
     id
     name
   }
+  priority
+  customerRef
   images {
     low
     id

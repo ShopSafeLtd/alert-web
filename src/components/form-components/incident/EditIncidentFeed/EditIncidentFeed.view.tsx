@@ -11,9 +11,10 @@ import {
   Select,
   Skeleton,
 } from 'antd';
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import moment from 'moment';
 import DebounceSelect from 'components/form-components/DebounceSelect';
+import { IncidentPriority } from 'graphql/generated';
 import type { FormData } from './useEditIncidentFeed';
 
 interface Props {
@@ -58,6 +59,7 @@ const EditGroup = ({
     <Form
       initialValues={{
         subject: data?.subject,
+        customerRef: data?.customerRef,
         description: data?.description,
         date: moment(data?.date, 'YYYY-MM-DD,HH:mm:ss'),
         business: {
@@ -68,6 +70,7 @@ const EditGroup = ({
         policeRef: data?.policeRef,
         policeNo: data?.policeNo,
         policeReported: data?.policeReported || false,
+        priority: data?.priority || false,
         groups:
           data?.groups && data?.groups.length > 0
             ? data?.groups.map(({ id }) => id)
@@ -181,6 +184,27 @@ const EditGroup = ({
             </Select>
           </Form.Item>
         </Col>
+        <Col span={12}>
+          <Form.Item
+            name="priority"
+            label={intl.formatMessage({
+              id: '8lCjAM',
+              defaultMessage: 'Priority',
+            })}
+          >
+            <Select disabled={saving}>
+              <Select.Option value={IncidentPriority.Normal}>
+                <FormattedMessage id="myq2ZL" defaultMessage="Normal" />
+              </Select.Option>
+              <Select.Option value={IncidentPriority.Medium}>
+                <FormattedMessage id="ovJ26C" defaultMessage="Medium" />
+              </Select.Option>
+              <Select.Option value={IncidentPriority.High}>
+                <FormattedMessage id="AxMhQr" defaultMessage="High" />
+              </Select.Option>
+            </Select>
+          </Form.Item>
+        </Col>
       </Row>
       <Row gutter={16}>
         <Col span={12}>
@@ -225,6 +249,17 @@ const EditGroup = ({
             label={intl.formatMessage({
               id: 'LLtKhp',
               defaultMessage: 'Subject',
+            })}
+          >
+            <Input disabled={saving} />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            name="customerRef"
+            label={intl.formatMessage({
+              id: 'QNmTpb',
+              defaultMessage: 'Customer Reference',
             })}
           >
             <Input disabled={saving} />
