@@ -116,6 +116,15 @@ const HeatMapGoogle = ({
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
   const [showHeatmap] = useState(true);
   const [showMarkers] = useState(true);
+  // const [image, setImage] = useState<string | null | undefined>(null);
+  // const updateMapImage = () => {
+  //   const mapImage = mapRef?.current
+  //     ?.getMap()
+  //     .getCanvas()
+  //     .toDataURL('image/png');
+  //   setImage(mapImage);
+  //   console.log('mapImage', mapImage);
+  // };
 
   useEffect(() => {
     mapRef.current?.moveLayer('unclustered-point');
@@ -128,6 +137,7 @@ const HeatMapGoogle = ({
       <Typography.Title level={4}>{label}</Typography.Title>
       {data && data.length > 0 ? (
         <Map
+          preserveDrawingBuffer
           onError={() => {}}
           ref={mapRef}
           mapLib={mapboxgl}
