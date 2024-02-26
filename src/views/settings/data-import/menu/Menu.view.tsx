@@ -7,8 +7,8 @@ const ImportMenu = () => {
   const intl = useIntl();
   return (
     <div style={{ padding: 20 }}>
-      <Row>
-        <Col>
+      <Row gutter={[16, 16]}>
+        <Col span={8}>
           <Link to="/app/scheme-settings/data-import/csv/stock-items">
             <Card
               title={intl.formatMessage({
@@ -24,6 +24,8 @@ const ImportMenu = () => {
               </Typography.Text>
             </Card>
           </Link>
+        </Col>
+        <Col span={8}>
           <Link to="/app/scheme-settings/data-import/disc">
             <Card
               title={intl.formatMessage({
@@ -33,8 +35,42 @@ const ImportMenu = () => {
             >
               <Typography.Text type="secondary">
                 <FormattedMessage
-                  defaultMessage="Import data from a disc data dump into alert using a guided form"
-                  id="vyqHbw"
+                  defaultMessage="Import data from a disc data dump into alert."
+                  id="m7BIIE"
+                />
+              </Typography.Text>
+            </Card>
+          </Link>
+        </Col>
+        <Col span={8}>
+          <Link to="/app/scheme-settings/data-import/mysafety">
+            <Card
+              title={intl.formatMessage({
+                defaultMessage: 'MySafety Import',
+                id: '2HeyWv',
+              })}
+            >
+              <Typography.Text type="secondary">
+                <FormattedMessage
+                  defaultMessage="Import data from a mysafety export into alert."
+                  id="dsmmty"
+                />
+              </Typography.Text>
+            </Card>
+          </Link>
+        </Col>
+        <Col span={8}>
+          <Link to="/app/scheme-settings/data-import/intel-one">
+            <Card
+              title={intl.formatMessage({
+                defaultMessage: 'Intel One Import',
+                id: '0gOWfx',
+              })}
+            >
+              <Typography.Text type="secondary">
+                <FormattedMessage
+                  defaultMessage="Import data from a intel one export into alert."
+                  id="qYoS6H"
                 />
               </Typography.Text>
             </Card>

@@ -116,9 +116,8 @@ const EditOffender = ({
                   id: 'HAlOn1',
                 })}
                 tooltip={intl.formatMessage({
-                  defaultMessage:
-                    'Enter the offenders name if you know it, if not leave this field blank.',
-                  id: 'pYHIHH',
+                  defaultMessage: 'Enter the offenders name if you know it.',
+                  id: 'N9IX81',
                 })}
               >
                 <Input disabled={saving} />
@@ -133,8 +132,8 @@ const EditOffender = ({
                   id: 'Ri9jA7',
                 })}
                 tooltip={intl.formatMessage({
-                  defaultMessage: 'Select the alias of the offender if known.',
-                  id: '54LWuR',
+                  defaultMessage: 'Add the alias of the offender if known.',
+                  id: 'WC4Y9J',
                 })}
               >
                 <Select disabled={saving} mode="tags" />
@@ -307,8 +306,8 @@ const EditOffender = ({
               <Form.Item
                 name="idVerified"
                 label={intl.formatMessage({
-                  defaultMessage: 'Has the offenders ID been verified?',
-                  id: 'xP3cvr',
+                  defaultMessage: "Has the offender's ID been verified?",
+                  id: 'FB6LSh',
                 })}
                 tooltip={intl.formatMessage({
                   defaultMessage:
@@ -595,8 +594,8 @@ const EditOffender = ({
                   id: 'LgbKvU',
                 })}
                 tooltip={intl.formatMessage({
-                  defaultMessage: 'Leave a comment for the offender.',
-                  id: 'YSNQlW',
+                  defaultMessage: 'Any other comments about this offender.',
+                  id: '8d0eZE',
                 })}
               >
                 <Input.TextArea disabled={saving} />

@@ -12,7 +12,6 @@ import {
   Drawer,
   Dropdown,
   Empty,
-  Input,
   Menu,
   Row,
   Tooltip,
@@ -38,6 +37,7 @@ import { useIntl } from 'react-intl';
 import type { OffenderFilters } from 'state/data-model';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import CompactSkeletonCard from 'components/offenders/OffenderCard/OffenderSkeletonCard.view';
+import DebouncedInput from 'utils/debounced-input';
 import useStyles from './OffenderFeed.styles';
 import Loading from '../../../../components/shared-components/AntD/Loading';
 
@@ -172,13 +172,14 @@ const OffenderFeed = ({
       >
         <Row align="middle" gutter={12}>
           <Col span={4} xxl={4}>
-            <Input
+            <DebouncedInput
               size="small"
               placeholder={intl.formatMessage({
                 defaultMessage: 'Search Offenders...',
                 id: 'mCDjFM',
               })}
-              value={search}
+              allowClear
+              defaultValue={search || ''}
               onChange={(e) => setSearch(e.target.value)}
             />
           </Col>

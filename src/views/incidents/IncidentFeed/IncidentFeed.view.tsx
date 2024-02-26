@@ -3,7 +3,7 @@ import type {
   IncidentsFeedQuery,
   RecycleIncidentMutation,
 } from 'graphql/generated';
-import { Button, Card, Col, Drawer, Empty, Input, Row, Tooltip } from 'antd';
+import { Button, Card, Col, Drawer, Empty, Row, Tooltip } from 'antd';
 import IncidentCard from 'components/incidents/IncidentCard';
 import IncidentSkeletonCard from 'components/incidents/IncidentSkeletonCard';
 import type { IncidentSort } from 'state';
@@ -27,6 +27,7 @@ import type { IncidentFilters } from 'state/data-model';
 import CompactSkeletonCard from 'components/offenders/OffenderCard/OffenderSkeletonCard.view';
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
 import Loading from '../../../components/shared-components/AntD/Loading';
+import DebouncedInput from '../../../utils/debounced-input';
 
 interface Props {
   data: IncidentsFeedQuery | undefined;
@@ -118,14 +119,15 @@ const IncidentFeed = ({
       >
         <Row align="middle" gutter={12}>
           <Col span={8} xxl={6}>
-            <Input
+            <DebouncedInput
               size="small"
               // style={{ width: 350 }}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Search Incidents...',
                 id: 'gvqTQ8',
               })}
-              value={search || ''}
+              allowClear
+              defaultValue={search || ''}
               onChange={(e) => setSearch(e.target.value)}
             />
           </Col>

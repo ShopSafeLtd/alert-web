@@ -138,8 +138,9 @@ const Offenders = ({
                   onClick={() => onAddBlankOffenders(count)}
                   text={intl.formatMessage(
                     {
-                      defaultMessage: '{count} Offender',
-                      id: 'q6iRDn',
+                      defaultMessage:
+                        '{count} {count, plural, one {Offender} other {Offenders}}',
+                      id: 'EmMs+9',
                     },
                     {
                       count,

@@ -1,0 +1,5 @@
+mutation MySafetyImportData($data: MySafetyImportDataInput!) {
+    mySafetyImportData(data: $data) {
+        success
+    }
+}

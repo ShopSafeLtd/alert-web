@@ -335,20 +335,6 @@ const SideNavContent = (props: SideNavContentProps) => {
           }}
         />
       )}
-      <Typography.Text
-        type="secondary"
-        style={{
-          paddingLeft: 12,
-          paddingRight: 12,
-          paddingBottom: 12,
-          paddingTop: 5,
-          fontSize: 10,
-        }}
-      >
-        Copyright &copy; {`${new Date().getFullYear()}`}
-        <span className="font-weight-semibold"> {`${APP_NAME}`} </span>
-        All rights reserved.
-      </Typography.Text>
 
       <Drawer
         title="Notifications"
