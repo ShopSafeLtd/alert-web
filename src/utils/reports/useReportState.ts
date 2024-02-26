@@ -502,7 +502,35 @@ const useReportState = ({
             },
             layout: {
               createMany: {
-                data: layout,
+                data: layout.map((item) => {
+                  const {
+                    i,
+                    x,
+                    y,
+                    w,
+                    h,
+                    minW,
+                    minH,
+                    maxW,
+                    maxH,
+                    static: staticVal,
+                    moved,
+                  } = item;
+
+                  return {
+                    i,
+                    x,
+                    y,
+                    w,
+                    h,
+                    minW,
+                    minH,
+                    maxW,
+                    maxH,
+                    static: staticVal,
+                    moved,
+                  };
+                }),
               },
               deleteMany: idsToDelete
                 ? [
