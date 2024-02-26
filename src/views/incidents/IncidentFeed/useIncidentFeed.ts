@@ -107,6 +107,7 @@ const useIncidentFeed = (): Return => {
     gallery,
     peculiarities,
     compactView,
+    priority,
   } = variables;
 
   // filter initial state
@@ -146,6 +147,12 @@ const useIncidentFeed = (): Return => {
             lte: incidentDate.endDate,
           }
         : undefined,
+      priority:
+        priority.length > 0
+          ? {
+              in: priority,
+            }
+          : undefined,
       crimeTypes:
         crimeTypes.length > 0
           ? {
