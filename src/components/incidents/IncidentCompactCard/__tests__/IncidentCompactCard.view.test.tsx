@@ -1,7 +1,7 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
-import { ImagePosition } from 'graphql/generated';
+import { ImagePosition, IncidentPriority } from 'graphql/generated';
 import IncidentCard from '../IncidentCompactCard.view';
 
 describe('Detail Officer View', () => {
@@ -9,6 +9,7 @@ describe('Detail Officer View', () => {
     id: 'incidentId',
     subject: 'test subject ',
     location: null,
+    priority: IncidentPriority.Normal,
     approved: null,
     date: '2022-08-10T10:40:06.191Z',
     time: '2022-08-11T10:40:09.985Z',

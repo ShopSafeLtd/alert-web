@@ -170,7 +170,7 @@ const OffenderFeed = ({
         bodyStyle={{ padding: 10 }}
         style={{ marginBottom: 5, marginRight: 10 }}
       >
-        <Row align="middle" gutter={12}>
+        <Row align="middle" gutter={8}>
           <Col span={4} xxl={4}>
             <DebouncedInput
               size="small"
@@ -239,7 +239,7 @@ const OffenderFeed = ({
               </Dropdown>
             ) : null}
           </Col>
-          <Col>
+          <Col style={{ display: 'flex', alignItems: 'center' }}>
             <Tooltip
               // placement="topLeft"
               title={
@@ -262,10 +262,13 @@ const OffenderFeed = ({
                     size="lg"
                   />
                 }
+                style={{
+                  borderTopRightRadius: 0,
+                  borderBottomRightRadius: 0,
+                  borderRight: '0px solid #000',
+                }}
               />
             </Tooltip>
-          </Col>
-          <Col>
             <Tooltip
               title={intl.formatMessage({
                 defaultMessage: 'Sort & Filter',
@@ -275,26 +278,39 @@ const OffenderFeed = ({
               <Button
                 onClick={toggleSortFilter}
                 icon={<FontAwesomeIcon icon={faFilter} size="lg" />}
+                style={{
+                  borderRadius: 0,
+                }}
               />
             </Tooltip>
-          </Col>
-          <Col>
-            <Button
-              type="primary"
-              onClick={onNavigate}
-              icon={
-                <FontAwesomeIcon
-                  icon={faPlus}
-                  size="lg"
-                  style={{ marginRight: 5 }}
-                />
-              }
-            >
-              {intl.formatMessage({
-                defaultMessage: 'Add Offender',
-                id: 'm3ChN4',
+            <Tooltip
+              title={intl.formatMessage({
+                defaultMessage: 'Add new offender',
+                id: 'GhCPy6',
               })}
-            </Button>
+            >
+              <Button
+                type="primary"
+                onClick={onNavigate}
+                style={{
+                  borderTopLeftRadius: 0,
+                  borderBottomLeftRadius: 0,
+                  borderLeftWidth: 0,
+                }}
+                icon={
+                  <FontAwesomeIcon
+                    icon={faPlus}
+                    size="lg"
+                    style={{ marginRight: 5 }}
+                  />
+                }
+              >
+                {intl.formatMessage({
+                  defaultMessage: 'Offender',
+                  id: 'AN7Aru',
+                })}
+              </Button>
+            </Tooltip>
           </Col>
         </Row>
       </Card>
@@ -343,7 +359,7 @@ const OffenderFeed = ({
             }
           >
             <Row
-              gutter={compactView ? 12 : [8, 16]}
+              gutter={[8, 8]}
               align="stretch"
               style={{
                 alignItems: 'stretch',
@@ -355,7 +371,6 @@ const OffenderFeed = ({
                 if (!t?.node?.id) return null;
                 return (
                   <Col
-                    style={{ marginBottom: 10 }}
                     span={compactView ? 6 : 8}
                     xxl={compactView ? 4 : 6}
                     key={t?.node?.id}

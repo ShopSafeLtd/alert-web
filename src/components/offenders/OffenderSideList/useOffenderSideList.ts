@@ -1,7 +1,7 @@
-import type { ListOffendersAllSchemesQuery } from 'graphql/generated';
+import type { ListOffendersRelayQuery } from 'graphql/generated';
 import {
   QueryMode,
-  useListOffendersAllSchemesQuery,
+  useListOffendersRelayQuery,
   SortOrder,
   Role,
 } from 'graphql/generated';
@@ -9,10 +9,7 @@ import { OffenderSort, useStoreState } from 'state';
 
 interface Return {
   data:
-    | Exclude<
-        ListOffendersAllSchemesQuery['listOffendersAllSchemes'],
-        undefined | null
-      >
+    | Exclude<ListOffendersRelayQuery['listOffendersRelay'], undefined | null>
     | null
     | undefined;
   loading: boolean;
@@ -204,7 +201,7 @@ const useOffenderSideList = (): Return => {
     take: 12,
     skip: 0,
   };
-  const { data, loading, fetchMore } = useListOffendersAllSchemesQuery({
+  const { data, loading, fetchMore } = useListOffendersRelayQuery({
     variables,
     fetchPolicy: 'cache-and-network',
     skip: role === Role.User && gallery.includes('NOT APPROVED'),
@@ -214,20 +211,16 @@ const useOffenderSideList = (): Return => {
     void fetchMore({
       variables: {
         ...variables,
-        skip: data?.listOffendersAllSchemes?.offenders?.length || 0,
+        skip: data?.listOffendersRelay?.edges?.length || 0,
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return {
-          listOffendersAllSchemes: {
-            ...fetchMoreResult.listOffendersAllSchemes,
-            total:
-              fetchMoreResult.listOffendersAllSchemes?.total ||
-              prev.listOffendersAllSchemes?.total ||
-              0,
-            offenders: [
-              ...(prev.listOffendersAllSchemes?.offenders || []),
-              ...(fetchMoreResult.listOffendersAllSchemes?.offenders || []),
+          listOffendersRelay: {
+            ...fetchMoreResult.listOffendersRelay,
+            edges: [
+              ...(prev.listOffendersRelay?.edges || []),
+              ...(fetchMoreResult.listOffendersRelay?.edges || []),
             ],
           },
         };
@@ -236,8 +229,8 @@ const useOffenderSideList = (): Return => {
   };
 
   return {
-    data: data?.listOffendersAllSchemes,
-    loading: data?.listOffendersAllSchemes ? false : loading,
+    data: data?.listOffendersRelay,
+    loading: data?.listOffendersRelay ? false : loading,
     fetchMoreScroll,
   };
 };

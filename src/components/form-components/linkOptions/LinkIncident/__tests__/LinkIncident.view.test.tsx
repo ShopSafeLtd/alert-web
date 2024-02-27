@@ -1,7 +1,7 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
-import { ImagePosition } from 'graphql/generated';
+import { ImagePosition, IncidentPriority } from 'graphql/generated';
 import LinkIncident from '../LinkIncident.view';
 
 describe('Detail Officer View', () => {
@@ -13,15 +13,9 @@ describe('Detail Officer View', () => {
         subject: 'test subject',
         location: null,
         approved: null,
-        date: '2022-08-10T10:40:06.191Z' as unknown as Date,
-        time: '2022-08-11T10:40:09.985Z',
         dayTime: '11:40 - Wed 10, Aug 22',
         description: 'test description',
-        createdBy: {
-          fullName: 'aaa',
-          id: 'cl4pe3eu91312371op4c4k2lih2',
-          businesses: [{ name: 'user business', id: '' }],
-        },
+        priority: IncidentPriority.Normal,
         crimeTypes: [
           { id: 'ckdhdhmr500186mnyy5k9sunm', name: 'Theft & Handling' },
         ],
@@ -29,13 +23,19 @@ describe('Detail Officer View', () => {
         images: [
           {
             id: 'cl6owsuzo33227f9pe9zk4wone',
-            optimised: null,
-            url: 'htt',
             position: ImagePosition.CenterCenter,
             rotation: 0,
+            low: '',
+            primary: false,
           },
         ],
         offenders: [],
+        business: {
+          name: '',
+        },
+        createdByUser: false,
+        customerRef: '',
+        totalImages: 0,
       },
     ],
   };
@@ -60,7 +60,7 @@ describe('Detail Officer View', () => {
           }}
           variables={{
             search: '',
-
+            priority: [IncidentPriority.Normal],
             crimeTypes: [],
             groups: [],
             businesses: [],

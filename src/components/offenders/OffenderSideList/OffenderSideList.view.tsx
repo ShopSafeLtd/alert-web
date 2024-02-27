@@ -1,22 +1,18 @@
 import React from 'react';
-import type { ListOffendersAllSchemesQuery } from 'graphql/generated';
+import type { ListOffendersRelayQuery } from 'graphql/generated';
 import { Col, Row, Skeleton, Typography } from 'antd';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl'; // Import the useIntl hook
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import SideListItem from 'components/side-list/SideListItem.view';
-import { getEthnicity, getSex } from 'utils';
 import useStyles from './OffenderSideList.styles';
 import InfiniteSideScrollList from '../../side-list/InfiniteSideList';
 
-const { Text, Paragraph } = Typography;
+const { Text } = Typography;
 
 interface Props {
   data:
-    | Exclude<
-        ListOffendersAllSchemesQuery['listOffendersAllSchemes'],
-        undefined | null
-      >
+    | Exclude<ListOffendersRelayQuery['listOffendersRelay'], undefined | null>
     | null
     | undefined;
   loading: boolean;
@@ -34,9 +30,9 @@ const OffenderSideList = ({
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
-  const isLoading = loading && !data?.total;
+  const isLoading = loading && !data?.pageInfo.hasNextPage;
 
-  const offenderItems = data?.offenders?.map((offender) => (
+  const offenderItems = data?.edges?.map(({ node: offender }) => (
     <Link
       to={`${to || '/app/offenders/view/'}${offender.id}`}
       key={offender.id}
@@ -64,13 +60,9 @@ const OffenderSideList = ({
               {offender.name}
             </Text>
 
-            <Row>
+            <Row style={{ marginTop: -5 }}>
               <Col flex={1}>
-                <Paragraph
-                  className={classes.reference}
-                  strong={current === offender.id}
-                  ellipsis
-                >
+                <Text className={classes.reference} ellipsis type="secondary">
                   {intl.formatMessage(
                     {
                       id: '377fsC',
@@ -78,32 +70,37 @@ const OffenderSideList = ({
                     },
                     { reference: offender.reference }
                   )}
-                </Paragraph>
-              </Col>
-              <Col style={{ fontSize: 12, marginRight: -5 }}>
-                {offender.approved ? (
-                  <Text type="success" ellipsis>
-                    {intl.formatMessage({
-                      defaultMessage: 'Approved',
-                      id: '6XFO/C',
-                    })}
-                  </Text>
-                ) : (
-                  <Text type="warning" ellipsis>
-                    {intl.formatMessage({
-                      defaultMessage: 'Unapproved',
-                      id: 'vfWKA1',
-                    })}
-                  </Text>
-                )}
+                </Text>
               </Col>
             </Row>
-            <Paragraph className={classes.detail} ellipsis>
-              {offender.race && getEthnicity(offender.race)}
-            </Paragraph>
-            <Paragraph className={classes.detail} ellipsis>
-              {offender.gender && getSex(offender.gender)}
-            </Paragraph>
+            {offender.approved ? (
+              <Text style={{ fontSize: 12 }} type="success" ellipsis>
+                {intl.formatMessage({
+                  defaultMessage: 'Approved',
+                  id: '6XFO/C',
+                })}
+              </Text>
+            ) : (
+              <Text style={{ fontSize: 12 }} type="warning" ellipsis>
+                {intl.formatMessage({
+                  defaultMessage: 'Unapproved',
+                  id: 'vfWKA1',
+                })}
+              </Text>
+            )}
+            <Row gutter={6} wrap={false}>
+              <Col>
+                <Text style={{ fontSize: 12 }} type="secondary">
+                  {intl.formatMessage({
+                    defaultMessage: 'Incidents:',
+                    id: '+nRUf9',
+                  })}
+                </Text>
+              </Col>
+              <Col>
+                <Text style={{ fontSize: 12 }}>{offender.totalIncidents}</Text>
+              </Col>
+            </Row>
           </Col>
         </Row>
       </SideListItem>
@@ -112,9 +109,9 @@ const OffenderSideList = ({
 
   return (
     <InfiniteSideScrollList
-      dataLength={data?.offenders?.length}
+      dataLength={data?.edges?.length}
       next={fetchMoreScroll}
-      hasMore={(data?.offenders?.length || 0) < (data?.total || 0)}
+      hasMore={data?.pageInfo.hasNextPage}
       isLoading={isLoading}
       items={offenderItems}
     />

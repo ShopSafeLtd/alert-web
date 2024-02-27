@@ -37,51 +37,9 @@ mutation CreateArticle($data: CreateArticleInput!) {
       columns {
         text
         incidents {
-          id
-          subject
-          description
-          dayTime
-          reference
-          policeRef
-          crimeTypes {
-            id
-            name
-          }
-          approved
-          uploaded
-          location {
-            id
-            full
-          }
-          createdBy {
-            id
-            fullName
-            businesses {
-              fullName
-              id
-              name
-            }
-          }
-          images {
-            id
-            url
-            position
-            optimised
-            card
-            offenders {
-              id
-            }
-          }
-          groups {
-            id
-            name
-          }
-          offenders {
-            id
-            name
-          }
+          ...IncidentCard
         }
-offenders {
+        offenders {
           ...OffenderCard
         }
       }

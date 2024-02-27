@@ -21,6 +21,8 @@ query listOffendersAllSchemes(
       hair
       gender
       name
+      totalIncidents
+      totalValue
       race
       peculiarities
       approved
