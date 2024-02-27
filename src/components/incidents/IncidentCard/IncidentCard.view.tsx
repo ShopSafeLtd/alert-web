@@ -626,65 +626,17 @@ const IncidentCard = ({
                 </Row>
 
                 <Paragraph
-                  style={
-                    {
-                      // height: incident.offenders.length > 0 ? 60 : 95,
-                      // marginBottom: 10,
-                    }
-                  }
+                  style={{ marginBottom: 5 }}
                   type="secondary"
-                  ellipsis={{ rows: 2 }}
+                  ellipsis={{ rows: 4 }}
                 >
                   {incident?.description}
                 </Paragraph>
-                <Row
-                  wrap={false}
-                  align="middle"
-                  style={{
-                    overflowX: 'auto',
-                    // marginBottom: incident.offenders.length > 2 ? 3 : 15,
-                  }}
-                >
-                  <Col style={{ minWidth: 60 }}>
-                    <Text strong type="secondary">
-                      {intl.formatMessage({
-                        defaultMessage: 'Groups:',
-                        id: 'JcJ/mL',
-                      })}
-                    </Text>
-                  </Col>
-                  {incident.groups.slice(0, 1).map((group) => (
-                    <Col key={group.id}>
-                      <Tag>{group.name}</Tag>
-                    </Col>
-                  ))}
-                  {incident.groups.length > 1 && (
-                    <Col>
-                      <Tooltip
-                        title={incident.groups
-                          .map((item) => ` ${item.name}`)
-                          .toString()}
-                      >
-                        <Tag>
-                          {intl.formatMessage(
-                            {
-                              defaultMessage: '+ {num} more',
-                              id: 'fi2Xie',
-                            },
-                            {
-                              num: incident.groups.length - 1,
-                            }
-                          )}
-                        </Tag>
-                      </Tooltip>
-                    </Col>
-                  )}
-                </Row>
               </Link>
             </Space>
             <Row
               justify="center"
-              style={{ marginTop: 10, flexGrow: 1, alignContent: 'flex-end' }}
+              style={{ marginTop: 0, flexGrow: 1, alignContent: 'flex-end' }}
             >
               <Col>
                 <Link to={`/app/incidents/view/${incident?.id}`}>

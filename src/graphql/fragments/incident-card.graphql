@@ -31,8 +31,4 @@ fragment IncidentCard on Incident {
   }
   description
   createdByUser
-  groups {
-    id
-    name
-  }
 }
