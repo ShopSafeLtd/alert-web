@@ -38,6 +38,7 @@ export interface IncidentFilters {
   gallery: string[];
   peculiarities: string;
   compactView: boolean;
+  tableView: boolean;
   priority: IncidentPriority[];
 }
 
@@ -242,6 +243,7 @@ const dataModel: DataModel = {
       gallery: [],
       peculiarities: '',
       compactView: false,
+      tableView: false,
       priority: [],
     },
     order: IncidentSort.createdAtDesc,

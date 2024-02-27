@@ -76,6 +76,8 @@ interface Return {
   variables: IncidentFilters;
   setCompactView: () => void;
   isUser: boolean;
+  setTableView: () => void;
+  tableView: boolean;
 }
 
 const useIncidentFeed = (): Return => {
@@ -108,6 +110,7 @@ const useIncidentFeed = (): Return => {
     peculiarities,
     compactView,
     priority,
+    tableView,
   } = variables;
 
   // filter initial state
@@ -262,6 +265,16 @@ const useIncidentFeed = (): Return => {
                     },
                   },
                 ],
+              },
+            },
+            {
+              offenders: {
+                some: {
+                  name: {
+                    contains: search,
+                    mode: QueryMode.Insensitive,
+                  },
+                },
               },
             },
           ],
@@ -528,6 +541,16 @@ const useIncidentFeed = (): Return => {
       order,
     });
   };
+  const setTableView = () => {
+    setIncidentsState({
+      pagination,
+      variables: {
+        ...variables,
+        tableView: !tableView,
+      },
+      order,
+    });
+  };
   const setPeculiarities = (value: string) => {
     setIncidentsState({
       pagination,
@@ -645,6 +668,8 @@ const useIncidentFeed = (): Return => {
     fetchMoreScroll,
     setCompactView,
     isUser,
+    setTableView,
+    tableView,
   };
 };
 
