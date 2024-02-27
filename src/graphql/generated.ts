@@ -21973,6 +21973,17 @@ export type ListOffendersRelayQueryVariables = Exact<{
 
 export type ListOffendersRelayQuery = { __typename?: 'Query', listOffendersRelay: { __typename?: 'QueryListOffendersRelayConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'QueryListOffendersRelayConnectionEdge', node: { __typename?: 'Offender', id: string, name?: string | null, totalIncidents: number, reference?: number | null, totalImages: number, approved?: boolean | null, knownFor: Array<string>, targetedGoods: Array<string>, totalValue: number, comment?: string | null, createdByUser: boolean, latestIncident?: { __typename?: 'Incident', id: string, dateAgo: number, reportedBusinessName: string } | null, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, images: Array<{ __typename?: 'Image', id: string, rotation: number, position: ImagePosition, optimised?: string | null, primary?: boolean | null, policeImage?: boolean | null }> } }> } };
 
+export type SearchOffenderReportsQueryVariables = Exact<{
+  scheme: SchemeWhereUniqueInput;
+  where?: InputMaybe<OffenderWhereInput>;
+  order?: InputMaybe<OffenderOrderByWithRelationInput>;
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type SearchOffenderReportsQuery = { __typename?: 'Query', listOffenders: { __typename?: 'ListOffenders', total: number, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, totalIncidents: number, totalValue: number, latestIncident?: { __typename?: 'Incident', id: string, dayTime: string } | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, primary?: boolean | null, policeImage?: boolean | null, card?: string | null }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }> }> } };
+
 export type UpsertPermissionMutationVariables = Exact<{
   data: UpsertRole;
 }>;
@@ -33137,6 +33148,47 @@ export function useListOffendersRelayLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type ListOffendersRelayQueryHookResult = ReturnType<typeof useListOffendersRelayQuery>;
 export type ListOffendersRelayLazyQueryHookResult = ReturnType<typeof useListOffendersRelayLazyQuery>;
 export type ListOffendersRelayQueryResult = Apollo.QueryResult<ListOffendersRelayQuery, ListOffendersRelayQueryVariables>;
+export const SearchOffenderReportsDocument = gql`
+    query searchOffenderReports($scheme: SchemeWhereUniqueInput!, $where: OffenderWhereInput, $order: OffenderOrderByWithRelationInput, $take: Int, $skip: Int) {
+  listOffenders(
+    scheme: $scheme
+    where: $where
+    order: $order
+    take: $take
+    skip: $skip
+  ) {
+    offenders {
+      id
+      name
+      totalIncidents
+      totalValue
+      latestIncident {
+        id
+        dayTime
+      }
+      images {
+        ...Images
+      }
+      tags {
+        id
+        name
+      }
+    }
+    total
+  }
+}
+    ${ImagesFragmentDoc}`;
+export function useSearchOffenderReportsQuery(baseOptions: Apollo.QueryHookOptions<SearchOffenderReportsQuery, SearchOffenderReportsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchOffenderReportsQuery, SearchOffenderReportsQueryVariables>(SearchOffenderReportsDocument, options);
+      }
+export function useSearchOffenderReportsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchOffenderReportsQuery, SearchOffenderReportsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchOffenderReportsQuery, SearchOffenderReportsQueryVariables>(SearchOffenderReportsDocument, options);
+        }
+export type SearchOffenderReportsQueryHookResult = ReturnType<typeof useSearchOffenderReportsQuery>;
+export type SearchOffenderReportsLazyQueryHookResult = ReturnType<typeof useSearchOffenderReportsLazyQuery>;
+export type SearchOffenderReportsQueryResult = Apollo.QueryResult<SearchOffenderReportsQuery, SearchOffenderReportsQueryVariables>;
 export const UpsertPermissionDocument = gql`
     mutation UpsertPermission($data: UpsertRole!) {
   upsertPermission(data: $data) {
