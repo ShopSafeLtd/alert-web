@@ -14,10 +14,11 @@ const useStyles = createUseStyles({
   },
   selectBox: {
     // border: `1px solid ${theme.borderColor}`,
-    padding: '5px 15px ',
+    padding: '5px 10px ',
     borderRadius: 100,
     cursor: 'pointer',
     position: 'relative',
+    height: 'auto',
   },
 });
 

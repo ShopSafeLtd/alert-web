@@ -3,29 +3,18 @@ fragment OffenderCard on Offender {
   name
   totalIncidents
   reference
-  build
-  height
-  gender
-  dateOfBirth
-  age
-  race
-  updatedAt
   totalImages
-  createdByUser
   approved
-  infoSource
   knownFor
   targetedGoods
+  totalValue
+  comment
   latestIncident {
     id
     dateAgo
     reportedBusinessName
   }
   tags {
-    id
-    name
-  }
-  groups {
     id
     name
   }

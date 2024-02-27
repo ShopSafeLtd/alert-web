@@ -155,8 +155,8 @@ export const getLastOffence = (
     return {
       message: (
         <FormattedMessage
-          id="G5QTki"
-          defaultMessage="{reference} days ago {reference2}"
+          id="UXMnah"
+          defaultMessage="{reference} days {reference2}"
           values={{
             reference: latestIncident.dateAgo.toFixed(0),
             reference2: short ? (
@@ -202,8 +202,8 @@ export const getLastOffence = (
     return {
       message: (
         <FormattedMessage
-          id="G5QTki"
-          defaultMessage="{reference} days ago {reference2}"
+          id="UXMnah"
+          defaultMessage="{reference} days {reference2}"
           values={{
             reference: ((now - incident) / 1000 / 60 / 60 / 24).toFixed(0),
             reference2: short ? '' : text,
