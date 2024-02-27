@@ -18,6 +18,7 @@ const BarGraph = ({
 }) => {
   const darkMode =
     useStoreState((state) => state.theme.currentTheme) === 'dark';
+  console.log(data);
   return (
     <div
       style={{ height: '100%', width: '100%%', marginLeft: 15 }}
@@ -32,7 +33,10 @@ const BarGraph = ({
             })) || []
           }
           theme={{
-            textColor: darkMode ? '#ffffff' : '#000',
+            text: {
+              color: darkMode ? '#fff' : '#000',
+              fill: darkMode ? '#fff' : '#000',
+            },
           }}
           indexBy="label"
           margin={{ top: 10, right: 20, bottom: 40, left: 60 }}
