@@ -1,10 +1,5 @@
 import React from 'react';
-import type {
-  FeedItemsQuery,
-  ListOffendersFeedQuery,
-  Model,
-  SortOrder,
-} from 'graphql/generated';
+import type { FeedItemsQuery, ListOffendersFeedQuery } from 'graphql/generated';
 import { FeedItemType } from 'graphql/generated';
 import {
   Button,
@@ -17,6 +12,7 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
+import Marquee from 'react-fast-marquee';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -31,7 +27,6 @@ import { Link } from 'react-router-dom';
 import IncidentFeed from 'components/feedItems/FeedItemSection/IncidentFeed';
 import OffenderFeed from 'components/feedItems/FeedItemSection/OffenderFeed';
 import ArticleFeed from 'components/feedItems/FeedItemSection/ArticleFeed';
-import type { DateType } from 'types/DataType';
 import InvestigationFeed from 'components/feedItems/FeedItemSection/investigationFeed';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import FeedItemFilter from 'components/feedItems/FeedItemFilter';
@@ -44,11 +39,11 @@ import BanFeed from 'components/feedItems/FeedItemSection/BanFeed';
 import ArticlesSection from 'components/feedItems/Articles/ArticlesSection';
 import { useIntl } from 'react-intl';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import type { FeedItemFilters } from 'state/data-model';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
+import { useDashboardContext } from '#/views/dashboard/Dashboard.context';
 import useStyles from './FeedItem.styles';
 import Loading from '../../components/shared-components/AntD/Loading';
 import DebouncedInput from '../../utils/debounced-input';
@@ -60,58 +55,40 @@ interface Props {
   loading: boolean;
   recentOffenderData: ListOffendersFeedQuery | undefined;
   recentOffenderLoading: boolean;
-  setOrder: (value: SortOrder) => void;
-  setSearch: (value: string) => void;
-  groups: { value: string; label: string }[];
   groupsLoading: boolean;
-  // updateIncidentList: MutationUpdaterFn<RecycleIncidentMutation>;
   onDeleteFeedItem: (value: string) => void;
   saving: boolean;
-  adminRights: boolean;
-  sortFilter: boolean;
-  toggleSortFilter: () => void;
-  setGroupsFilter: (value: string[]) => void;
-  setTypesFilter: (value: Model[]) => void;
-  clearFilters: () => void;
-  setGallery: (values: string[]) => void;
-  setCreatedAtFilter: (value: DateType | undefined) => void;
   fetchMoreScroll: () => void;
-  variables: FeedItemFilters;
-  lightboxElements: {
-    src: string;
-  }[];
-  openLightbox: (elements: { src: string }[], index: number) => void;
-  lightBoxOpen: {
-    open: boolean;
-    index: number;
-  };
 }
 
 const FeedItem = ({
   data,
   loading,
+  fetchMoreScroll,
   recentOffenderData,
   recentOffenderLoading,
-  setOrder,
-  setSearch,
-  groups,
   groupsLoading,
-  variables,
   onDeleteFeedItem,
   saving,
-  adminRights,
-  setTypesFilter,
-  setGroupsFilter,
-  sortFilter,
-  toggleSortFilter,
-  clearFilters,
-  setGallery,
-  setCreatedAtFilter,
-  fetchMoreScroll,
-  lightboxElements,
-  openLightbox,
-  lightBoxOpen,
 }: Props): JSX.Element => {
+  const {
+    setOrder,
+    setSearch,
+    groups,
+    variables,
+    adminRights,
+    setTypesFilter,
+    setGroupsFilter,
+    sortFilter,
+    toggleSortFilter,
+    clearFilters,
+    setGallery,
+    setCreatedAtFilter,
+    lightboxElements,
+    openLightbox,
+    lightBoxOpen,
+  } = useDashboardContext();
+
   const classes = useStyles();
   const intl = useIntl();
   const total = data?.listFeedItems?.total || 0;
@@ -122,11 +99,20 @@ const FeedItem = ({
     groups: groupsFilter,
     createdAt: createdAtFilter,
   } = variables;
+
+  console.log(groups);
   return (
     <div
       className="feed-container"
       style={{ height: '100vh', padding: 15, overflow: 'hidden' }}
     >
+      <Marquee autoFill style={{ marginBottom: 10 }}>
+        {intl.formatMessage({
+          id: 'w7HJ2H',
+          defaultMessage: ' Back to work 😠 time is money 😠',
+        })}
+        <div style={{ width: 200 }} />
+      </Marquee>
       <Card bodyStyle={{ padding: 10 }} style={{ marginBottom: 10 }}>
         <Row align="middle" gutter={12}>
           <Col span={4} xxl={6}>

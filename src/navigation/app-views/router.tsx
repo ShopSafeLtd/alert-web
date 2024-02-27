@@ -27,7 +27,7 @@ const Investigations = lazy(() => import(`./investigations/router`));
 const Documents = lazy(() => import(`./documents/router`));
 const Vehicles = lazy(() => import(`./vehicles/router`));
 const CrimeGroups = lazy(() => import(`./crime-groups/router`));
-const FeedItems = lazy(() => import(`./feedItems/router`));
+const FeedItems = lazy(() => import(`./dashboard/router`));
 const Tasks = lazy(() => import(`./tasks/router`));
 const Notifications = lazy(() => import(`./notifications/router`));
 const Mg11 = lazy(() => import(`./mg11/router`));

@@ -20,9 +20,38 @@
     "sourceType": "module",
     "project": "./tsconfig.json"
   },
+  "settings": {
+    "import/extensions": [".js", ".jsx", ".ts", ".tsx"],
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    "import/resolver": {
+      "typescript": {
+        "directory": "./tsconfig.json"
+      },
+      "alias": {
+        "map": [["#", "./src"]],
+        "extensions": [".ts", ".tsx", ".js", ".jsx"]
+      },
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  },
   "plugins": ["react", "@typescript-eslint", "sonarjs", "unicorn", "formatjs"],
   "ignorePatterns": [".eslintrc.js", ".postInstall.js"],
   "rules": {
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "mjs": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+    ],
     "formatjs/no-offset": "error",
     "formatjs/enforce-default-message": ["error", "literal"],
     "formatjs/no-literal-string-in-jsx": [

@@ -1,8 +1,8 @@
 import React from 'react';
-import View from './FeedItems.view';
+import View from './Dashboard.view';
 import useFeedItems from './useFeedItems';
 
-const FeedItems = (): JSX.Element => {
+const Dashboard = (): JSX.Element => {
   const {
     data,
     loading,
@@ -58,4 +58,4 @@ const FeedItems = (): JSX.Element => {
   );
 };
 
-export default FeedItems;
+export default Dashboard;
