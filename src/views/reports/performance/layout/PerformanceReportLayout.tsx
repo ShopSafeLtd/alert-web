@@ -382,9 +382,10 @@ const PerformanceReportLayout = ({
               })}
               value={
                 data?.performanceReport?.lossTotals?.totalLostValue
-                  ? `£${data?.performanceReport?.lossTotals?.totalLostValue.toFixed(
-                      2
-                    )}`
+                  ? intl.formatNumber(
+                      data?.performanceReport?.lossTotals?.totalLostValue || 0,
+                      { style: 'currency', currency: 'GBP' }
+                    )
                   : intl.formatMessage({
                       defaultMessage: 'No Losses',
                       id: '9RLqIM',
@@ -406,9 +407,11 @@ const PerformanceReportLayout = ({
               })}
               value={
                 data?.performanceReport?.lossTotals?.totalRecoveredValue
-                  ? `£${data?.performanceReport?.lossTotals?.totalRecoveredValue.toFixed(
-                      2
-                    )}`
+                  ? intl.formatNumber(
+                      data?.performanceReport?.lossTotals
+                        ?.totalRecoveredValue || 0,
+                      { style: 'currency', currency: 'GBP' }
+                    )
                   : intl.formatMessage({
                       defaultMessage: 'No Recoveries',
                       id: 'i7IHf9',
@@ -425,8 +428,9 @@ const PerformanceReportLayout = ({
             <Statistic
               className={classes.stats}
               title={intl.formatMessage({
-                defaultMessage: 'Average Success Rate',
-                id: 'G+JbdY',
+                defaultMessage: 'Average Loss Rate',
+
+                id: 'VSxLGp',
               })}
               value={`${(
                 (data?.performanceReport?.lossTotals?.averageSuccessRate || 0) *

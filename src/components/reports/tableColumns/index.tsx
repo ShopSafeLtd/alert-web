@@ -160,6 +160,11 @@ export const OffenderColumns: ColumnsType<OffenderTableData> = [
     sorter: (a: OffenderTableData, b: OffenderTableData) =>
       Number.parseInt(a.lostValue || '0', 10) -
       Number.parseInt(b.lostValue || '0', 10),
+    render: (text: string) => (
+      <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
+        0
+      )}`}</Typography.Text>
+    ),
   },
   {
     key: 'recoveredValue',
@@ -168,11 +173,16 @@ export const OffenderColumns: ColumnsType<OffenderTableData> = [
     sorter: (a: OffenderTableData, b: OffenderTableData) =>
       Number.parseInt(a.recoveredValue || '0', 10) -
       Number.parseInt(b.recoveredValue || '0', 10),
+    render: (text: string) => (
+      <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
+        0
+      )}`}</Typography.Text>
+    ),
   },
   {
     key: 'successRate',
     dataIndex: 'successRate',
-    title: <FormattedMessage id="abhK2u" defaultMessage="SuccessRate" />,
+    title: <FormattedMessage id="mQPFSj" defaultMessage="Loss Rate" />,
     sorter: (a: OffenderTableData, b: OffenderTableData) =>
       Number.parseInt(a.successRate || '0', 10) -
       Number.parseInt(b.successRate || '0', 10),
@@ -241,6 +251,11 @@ export const CrimeGroupPerformanceColumns: ColumnsType<CrimeGroupPerformanceTabl
       ) =>
         Number.parseInt(a.lostValue || '0', 10) -
         Number.parseInt(b.lostValue || '0', 10),
+      render: (text: string) => (
+        <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
+          0
+        )}`}</Typography.Text>
+      ),
     },
     {
       key: 'recoveredValue',
@@ -252,11 +267,16 @@ export const CrimeGroupPerformanceColumns: ColumnsType<CrimeGroupPerformanceTabl
       ) =>
         Number.parseInt(a.recoveredValue || '0', 10) -
         Number.parseInt(b.recoveredValue || '0', 10),
+      render: (text: string) => (
+        <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
+          0
+        )}`}</Typography.Text>
+      ),
     },
     {
       key: 'successRate',
       dataIndex: 'successRate',
-      title: <FormattedMessage id="abhK2u" defaultMessage="SuccessRate" />,
+      title: <FormattedMessage id="SbhgH8" defaultMessage="Sucesses Rate" />,
       sorter: (
         a: CrimeGroupPerformanceTableData,
         b: CrimeGroupPerformanceTableData
@@ -307,6 +327,11 @@ export const TargetedBusinessColumns: ColumnsType<TargetedBusinessTableData> = [
     sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
       Number.parseInt(a.lostValue || '0', 10) -
       Number.parseInt(b.lostValue || '0', 10),
+    render: (text: string) => (
+      <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
+        0
+      )}`}</Typography.Text>
+    ),
   },
   {
     key: 'recoveredValue',
@@ -315,11 +340,16 @@ export const TargetedBusinessColumns: ColumnsType<TargetedBusinessTableData> = [
     sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
       Number.parseInt(a.recoveredValue || '0', 10) -
       Number.parseInt(b.recoveredValue || '0', 10),
+    render: (text: string) => (
+      <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
+        0
+      )}`}</Typography.Text>
+    ),
   },
   {
     key: 'successRate',
     dataIndex: 'successRate',
-    title: <FormattedMessage id="abhK2u" defaultMessage="SuccessRate" />,
+    title: <FormattedMessage id="RFylPz" defaultMessage="Succcess Rate" />,
     sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
       Number.parseInt(a.successRate || '0', 10) -
       Number.parseInt(b.successRate || '0', 10),
@@ -338,6 +368,7 @@ export const TargetedBusinessColumns: ColumnsType<TargetedBusinessTableData> = [
     title: <FormattedMessage id="MLZWwC" defaultMessage="Highest Value Lost" />,
     sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
       a.highestValueLost - b.highestValueLost,
+    render: (text: number) => <Typography.Text>{`£${text}`}</Typography.Text>,
   },
   {
     key: 'avgLost',
@@ -346,6 +377,11 @@ export const TargetedBusinessColumns: ColumnsType<TargetedBusinessTableData> = [
     sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
       Number.parseInt(a.avgLost || '0', 10) -
       Number.parseInt(b.avgLost || '0', 10),
+    render: (text: string) => (
+      <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
+        0
+      )}`}</Typography.Text>
+    ),
   },
 ];
 
@@ -387,6 +423,11 @@ export const TargetGoodsColumns: ColumnsType<TargetedGoodsTableData> = [
     sorter: (a: TargetedGoodsTableData, b: TargetedGoodsTableData) =>
       Number.parseInt(a.lostValue || '0', 10) -
       Number.parseInt(b.lostValue || '0', 10),
+    render: (text: string) => (
+      <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
+        0
+      )}`}</Typography.Text>
+    ),
   },
   {
     key: 'recoveredValue',
@@ -395,11 +436,16 @@ export const TargetGoodsColumns: ColumnsType<TargetedGoodsTableData> = [
     sorter: (a: TargetedGoodsTableData, b: TargetedGoodsTableData) =>
       Number.parseInt(a.recoveredValue || '0', 10) -
       Number.parseInt(b.recoveredValue || '0', 10),
+    render: (text: string) => (
+      <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
+        0
+      )}`}</Typography.Text>
+    ),
   },
   {
     key: 'successRate',
     dataIndex: 'successRate',
-    title: <FormattedMessage id="abhK2u" defaultMessage="SuccessRate" />,
+    title: <FormattedMessage id="IaZkrc" defaultMessage="Success Rate" />,
     sorter: (a: TargetedGoodsTableData, b: TargetedGoodsTableData) =>
       Number.parseInt(a.successRate || '0', 10) -
       Number.parseInt(b.successRate || '0', 10),
@@ -412,6 +458,11 @@ export const TargetGoodsColumns: ColumnsType<TargetedGoodsTableData> = [
     sorter: (a: TargetedGoodsTableData, b: TargetedGoodsTableData) =>
       Number.parseInt(a.avgLost || '0', 10) -
       Number.parseInt(b.avgLost || '0', 10),
+    render: (text: string) => (
+      <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
+        0
+      )}`}</Typography.Text>
+    ),
   },
 ];
 
@@ -448,12 +499,22 @@ export const IncidentsColumns: ColumnsType<IncidentsTableData> = [
     dataIndex: 'value',
     title: <FormattedMessage defaultMessage="Value Lost" id="uPmWKm" />,
     sorter: (a, b) => a.value.localeCompare(b.value),
+    render: (text: string) => (
+      <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
+        0
+      )}`}</Typography.Text>
+    ),
   },
   {
     key: 'valueRec',
     dataIndex: 'valueRec',
     title: <FormattedMessage defaultMessage="Value Recovered" id="FqEGSY" />,
     sorter: (a, b) => a.valueRec.localeCompare(b.valueRec),
+    render: (text: string) => (
+      <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
+        0
+      )}`}</Typography.Text>
+    ),
   },
   {
     key: 'location',
