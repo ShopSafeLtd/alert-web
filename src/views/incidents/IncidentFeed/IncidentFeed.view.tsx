@@ -117,7 +117,7 @@ const IncidentFeed = ({
         bodyStyle={{ padding: 10 }}
         style={{ marginBottom: 5, marginRight: 10 }}
       >
-        <Row align="middle" gutter={12}>
+        <Row align="middle" gutter={[12, 12]}>
           <Col span={8} xxl={6}>
             <DebouncedInput
               size="small"
@@ -163,7 +163,7 @@ const IncidentFeed = ({
               ]}
             />
           </Col>
-          <Col>
+          <Col style={{ display: 'flex', alignItems: 'center' }}>
             <Tooltip
               // placement="topLeft"
               title={
@@ -180,6 +180,11 @@ const IncidentFeed = ({
             >
               <Button
                 onClick={setCompactView}
+                style={{
+                  borderTopRightRadius: 0,
+                  borderBottomRightRadius: 0,
+                  borderRight: '0px solid #000',
+                }}
                 icon={
                   <FontAwesomeIcon
                     icon={compactView ? faGrid2 : faGrid}
@@ -188,25 +193,6 @@ const IncidentFeed = ({
                 }
               />
             </Tooltip>
-          </Col>
-          {/* <Col>
-            <CheckTag
-              option={{
-                label: intl.formatMessage({
-                  defaultMessage: 'Compact View',
-                  id: '9P0/Y7',
-                }),
-                value: 'Compact',
-                tooltip: intl.formatMessage({
-                  defaultMessage: 'Present incidents in compact card',
-                  id: 'tga/q5',
-                }),
-              }}
-              active={compactView}
-              onClick={setCompactView}
-            />
-          </Col> */}
-          <Col>
             <Tooltip
               title={intl.formatMessage({
                 defaultMessage: 'Sort & Filter',
@@ -215,27 +201,40 @@ const IncidentFeed = ({
             >
               <Button
                 onClick={toggleSortFilter}
+                style={{
+                  borderRadius: 0,
+                }}
                 icon={<FontAwesomeIcon icon={faFilter} size="lg" />}
               />
             </Tooltip>
-          </Col>
-          <Col>
-            <Button
-              type="primary"
-              onClick={onNavigate}
-              icon={
-                <FontAwesomeIcon
-                  icon={faPlus}
-                  size="lg"
-                  style={{ marginRight: 5 }}
-                />
-              }
-            >
-              {intl.formatMessage({
-                defaultMessage: 'Add Incident',
-                id: 'kG1p3q',
+            <Tooltip
+              title={intl.formatMessage({
+                defaultMessage: 'Add new incident',
+                id: 'zd2wAz',
               })}
-            </Button>
+            >
+              <Button
+                type="primary"
+                onClick={onNavigate}
+                style={{
+                  borderTopLeftRadius: 0,
+                  borderBottomLeftRadius: 0,
+                  borderLeftWidth: 0,
+                }}
+                icon={
+                  <FontAwesomeIcon
+                    icon={faPlus}
+                    size="lg"
+                    style={{ marginRight: 5 }}
+                  />
+                }
+              >
+                {intl.formatMessage({
+                  defaultMessage: 'Incident',
+                  id: 'zaYxwd',
+                })}
+              </Button>
+            </Tooltip>
           </Col>
         </Row>
       </Card>

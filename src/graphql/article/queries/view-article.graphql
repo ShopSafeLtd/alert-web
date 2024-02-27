@@ -48,51 +48,7 @@ query Article($where: ArticleWhereUniqueInput!) {
       columns {
         text
         incidents {
-          id
-          subject
-          description
-          dayTime
-          reference
-          policeRef
-          createdByUser
-          crimeTypes {
-            id
-            name
-          }
-          approved
-          uploaded
-          location {
-            id
-            full
-          }
-          createdBy {
-            id
-            fullName
-            businesses {
-              fullName
-              id
-              name
-            }
-          }
-          images {
-            id
-            url
-            position
-            rotation
-            optimised
-            card
-            offenders {
-              id
-            }
-          }
-          groups {
-            id
-            name
-          }
-          offenders {
-            id
-            name
-          }
+          ...IncidentCard
         }
         offenders {
           ...OffenderCard

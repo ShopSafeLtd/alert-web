@@ -116,12 +116,14 @@ import type { ViewAssociate } from './useViewOffender';
 import TranslateButton from '../../../../components/util-components/TranslateButton';
 
 const { Title, Text, Paragraph } = Typography;
+
 interface TableItem {
   description: string | null | undefined;
   endDate: Date;
   location?: string | undefined;
   activeDay?: string | undefined;
 }
+
 interface Props {
   data: ViewOffenderQuery | undefined;
   loading: boolean;
@@ -650,9 +652,9 @@ const ViewOffender = ({
                       <Skeleton />
                     ) : (
                       <div>
-                        <Card loading={loading}>
-                          <Row gutter={[8, 8]}>
-                            <Col span={12}>
+                        <Row gutter={[8, 8]}>
+                          <Col span={12}>
+                            <Card loading={loading} style={{ marginBottom: 0 }}>
                               <Row gutter={10} align="middle">
                                 <Col>
                                   <Title style={{ margin: 0 }} level={3}>
@@ -913,47 +915,10 @@ const ViewOffender = ({
                                   )}
                                 </Descriptions>
                               </Descriptions>
-                            </Col>
-                            <Col span={12}>
-                              {data?.offender?.incidents &&
-                              data?.offender?.incidents.length > 0 ? (
-                                <MapCard
-                                  width="100%"
-                                  height={301}
-                                  markers={
-                                    data?.offender?.incidents.map(
-                                      (incident) => ({
-                                        geoLat: incident.location?.geoLat,
-                                        geoLng: incident.location?.geoLng,
-                                      })
-                                    ) || []
-                                  }
-                                />
-                              ) : (
-                                <Card
-                                  loading={loading}
-                                  style={{
-                                    height: 'calc(100% - 20px)',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                  }}
-                                >
-                                  <Empty
-                                    image={Empty.PRESENTED_IMAGE_SIMPLE}
-                                    description={intl.formatMessage({
-                                      defaultMessage: 'No incidents found',
-                                      id: '312q4w',
-                                    })}
-                                  />
-                                </Card>
-                              )}
-                            </Col>
-                          </Row>
-                        </Card>
-                        <Row gutter={16}>
-                          <Col span={24}>
-                            <Card loading={loading}>
+                            </Card>
+                          </Col>
+                          <Col span={12}>
+                            <Card loading={loading} style={{ marginBottom: 0 }}>
                               <Title level={4} style={{ marginBottom: 10 }}>
                                 {intl.formatMessage({
                                   defaultMessage: 'Physical Description',
@@ -1070,73 +1035,84 @@ const ViewOffender = ({
                                   </Descriptions.Item>
                                 )}
                               </Descriptions>
-                              <Descriptions column={1}>
-                                {data?.offender?.peculiarities && (
-                                  <Descriptions.Item
-                                    className={classes.descItem}
-                                    label={
-                                      <span>
-                                        <FontAwesomeIcon
-                                          className={classes.descIcon}
-                                          icon={faCircleInfo}
-                                        />
-                                        {intl.formatMessage({
-                                          defaultMessage:
-                                            'Additional information',
-                                          id: 'gh/lBJ',
-                                        })}
-                                      </span>
-                                    }
-                                  >
-                                    <TranslateButton
-                                      text={data?.offender?.peculiarities || ''}
-                                    />
-                                    {/* {isTranslated ?? */}
-                                    {/*   data?.offender?.peculiarities} */}
-                                    {/* {languageCount > 1 && ( */}
-                                    {/*   <Tooltip */}
-                                    {/*     title={intl.formatMessage({ */}
-                                    {/*       defaultMessage: 'Translate', */}
-                                    {/*       id: 'wCy/Tc', */}
-                                    {/*     })} */}
-                                    {/*   > */}
-                                    {/*     <FontAwesomeIcon */}
-                                    {/*       icon={faLanguage} */}
-                                    {/*       color="lightblue" */}
-                                    {/*       // eslint-disable-next-line no-void */}
-                                    {/*       onClick={() => void translateText()} */}
-                                    {/*       style={{ */}
-                                    {/*         marginLeft: '10px', */}
-                                    {/*         cursor: 'pointer', */}
-                                    {/*       }} */}
-                                    {/*     /> */}
-                                    {/*   </Tooltip> */}
-                                    {/* )} */}
-                                  </Descriptions.Item>
-                                )}
-                              </Descriptions>
-                              <Descriptions column={1}>
+                              {data?.offender?.peculiarities && (
+                                <div style={{ marginBottom: 10 }}>
+                                  <div>
+                                    <Text>
+                                      <FontAwesomeIcon
+                                        className={classes.descIcon}
+                                        icon={faCircleInfo}
+                                      />
+                                      {intl.formatMessage({
+                                        defaultMessage: 'Characteristics:',
+                                        id: 'BxC/6v',
+                                      })}
+                                    </Text>
+                                  </div>
+                                  <TranslateButton
+                                    text={data?.offender?.peculiarities || ''}
+                                  />
+                                </div>
+                              )}
+                            </Card>
+                          </Col>
+                          {data?.offender?.comment ? (
+                            <Col span={24}>
+                              <Card>
                                 {data?.offender?.comment && (
-                                  <Descriptions.Item
-                                    className={classes.descItem}
-                                    label={
-                                      <span>
+                                  <div>
+                                    <div>
+                                      <Text>
                                         <FontAwesomeIcon
                                           className={classes.descIcon}
                                           icon={faComment}
                                         />
                                         {intl.formatMessage({
-                                          defaultMessage: 'Comment',
-                                          id: 'LgbKvU',
+                                          defaultMessage: 'Comment:',
+                                          id: '4FQrdH',
                                         })}
-                                      </span>
-                                    }
-                                  >
-                                    {data?.offender?.comment}
-                                  </Descriptions.Item>
+                                      </Text>
+                                    </div>
+                                    <TranslateButton
+                                      text={data?.offender?.comment || ''}
+                                    />
+                                  </div>
                                 )}
-                              </Descriptions>
-                            </Card>
+                              </Card>
+                            </Col>
+                          ) : undefined}
+                          <Col span={24}>
+                            {data?.offender?.incidents &&
+                            data?.offender?.incidents.length > 0 ? (
+                              <MapCard
+                                width="100%"
+                                height={301}
+                                markers={
+                                  data?.offender?.incidents.map((incident) => ({
+                                    geoLat: incident.location?.geoLat,
+                                    geoLng: incident.location?.geoLng,
+                                  })) || []
+                                }
+                              />
+                            ) : (
+                              <Card
+                                loading={loading}
+                                style={{
+                                  height: 'calc(100% - 20px)',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                }}
+                              >
+                                <Empty
+                                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                                  description={intl.formatMessage({
+                                    defaultMessage: 'No incidents found',
+                                    id: '312q4w',
+                                  })}
+                                />
+                              </Card>
+                            )}
                           </Col>
                         </Row>
                         <Card loading={loading}>

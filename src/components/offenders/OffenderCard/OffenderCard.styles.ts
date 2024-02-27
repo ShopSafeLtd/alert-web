@@ -24,13 +24,18 @@ const useStyles = createUseStyles((theme: Theme) => ({
     justifyContent: 'center',
     borderRadius: 10,
   },
-
+  cardIcon: {
+    color: theme.secondaryText,
+  },
+  descriptionRow: {
+    marginBottom: 6,
+  },
   menuButton: {
     margin: 0,
     padding: 0,
     minWidth: 35,
     height: 35,
-    marginTop: -20,
+    marginTop: -12,
     marginRight: -6,
     zIndex: 100,
     borderRadius: 0,
@@ -93,7 +98,6 @@ const useStyles = createUseStyles((theme: Theme) => ({
     display: 'flex',
     flexDirection: 'column',
   },
-
   imageExpand: {
     position: 'absolute',
     right: 0,
@@ -104,12 +108,11 @@ const useStyles = createUseStyles((theme: Theme) => ({
     transition: 'all 0.2s ease',
     zIndex: 100,
   },
-
   alertId: {
     marginTop: -10,
   },
-  icon: { marginRight: 5, color: theme.primary },
-  bottomRow: { marginTop: 'auto' },
+  icon: { color: theme.secondaryText },
+  bottomRow: { marginTop: 6 },
   bottomContainer: { marginTop: 10, height: 85 },
   tagRow: { overflowX: 'auto', marginTop: 5 },
 }));

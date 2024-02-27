@@ -12,6 +12,7 @@ export interface Theme {
   colorScheme: string;
   hoverBackground: string;
   headerColor: string;
+  secondaryText: string;
 }
 
 const theme: {
@@ -32,6 +33,7 @@ const theme: {
     colorScheme: 'dark',
     hoverBackground: 'rgb(92, 102, 123)',
     headerColor: '#FFF',
+    secondaryText: 'rgb(114, 132, 154)',
   },
   light: {
     primary: 'rgb(222, 68, 54)',
@@ -47,6 +49,7 @@ const theme: {
     colorScheme: 'light',
     hoverBackground: 'rgba(0, 0, 0, 0.018)',
     headerColor: '#1a3353',
+    secondaryText: 'rgb(114, 132, 154)',
   },
 };
 

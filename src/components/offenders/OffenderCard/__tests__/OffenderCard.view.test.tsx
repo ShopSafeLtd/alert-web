@@ -19,6 +19,7 @@ describe('Detail Officer View', () => {
     race: null,
     peculiarities: null,
     approved: null,
+    totalValue: 0,
     active: null,
     createdBy: {
       fullName: 'aaa',
