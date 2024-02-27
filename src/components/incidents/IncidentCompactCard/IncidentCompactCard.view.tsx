@@ -404,32 +404,6 @@ const IncidentCard = ({
                   })}
                 </Text>
               </Col>
-              {incident.groups.slice(0, 1).map((group) => (
-                <Col key={group.id}>
-                  <Tag>{group.name}</Tag>
-                </Col>
-              ))}
-              {incident.groups.length > 1 && (
-                <Col>
-                  <Tooltip
-                    title={incident.groups
-                      .map((item) => ` ${item.name}`)
-                      .toString()}
-                  >
-                    <Tag>
-                      {intl.formatMessage(
-                        {
-                          defaultMessage: '+ {num} more',
-                          id: 'fi2Xie',
-                        },
-                        {
-                          num: incident.groups.length - 1,
-                        }
-                      )}
-                    </Tag>
-                  </Tooltip>
-                </Col>
-              )}
             </Row>
           </Link>
         </Space>
