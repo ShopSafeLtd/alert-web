@@ -24,12 +24,7 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import React, { useMemo } from 'react';
 import type RGL from 'react-grid-layout';
-import {
-  BarGraph,
-  DonutGraph,
-  HeatMapGoogle,
-  LineGraph,
-} from 'components/reports/graphs';
+import { BarGraph, DonutGraph, HeatMapGoogle } from 'components/reports/graphs';
 import { getAge, getBuild, getEthnicity, getSex, shouldPrint } from 'utils';
 import type {
   IncidentsTableData,
@@ -417,9 +412,10 @@ const OffenderReportLayout = ({
               })}
               value={
                 data?.offenderReport?.lossTotals?.totalLostValue
-                  ? `£${data?.offenderReport?.lossTotals?.totalLostValue.toFixed(
-                      2
-                    )}`
+                  ? intl.formatNumber(
+                      data?.offenderReport?.lossTotals?.totalLostValue || 0,
+                      { style: 'currency', currency: 'GBP' }
+                    )
                   : intl.formatMessage({
                       defaultMessage: 'No Losses',
                       id: '9RLqIM',
@@ -441,9 +437,11 @@ const OffenderReportLayout = ({
               })}
               value={
                 data?.offenderReport?.lossTotals?.totalRecoveredValue
-                  ? `£${data?.offenderReport?.lossTotals?.totalRecoveredValue.toFixed(
-                      2
-                    )}`
+                  ? intl.formatNumber(
+                      data?.offenderReport?.lossTotals?.totalRecoveredValue ||
+                        0,
+                      { style: 'currency', currency: 'GBP' }
+                    )
                   : intl.formatMessage({
                       defaultMessage: 'No Recoveries',
                       id: 'i7IHf9',
@@ -840,16 +838,12 @@ const OffenderReportLayout = ({
           size="small"
           onClick={() => removeItem('incidentsDayOfWeekGraph')}
         />
-        <LineGraph
-          label={intl.formatMessage({
+        <BarGraph
+          labelFormat={intl.formatMessage({
             defaultMessage: 'Incidents by Day of Week',
             id: 'B9s5+4',
           })}
           data={data?.offenderReport?.incidentDayOfWeekGraph}
-          dataLabel={intl.formatMessage({
-            defaultMessage: 'Incidents',
-            id: 'mtr3R4',
-          })}
           emptyLabel={intl.formatMessage({
             defaultMessage: 'No Incidents',
             id: '+nJOH5',
