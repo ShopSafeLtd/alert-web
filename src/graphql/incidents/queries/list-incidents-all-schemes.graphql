@@ -11,27 +11,7 @@ query listIncidentsAllSchemes(
     skip: $skip
   ) {
     incidents {
-      id
-      subject
-      description
-      dayTime
-      reference
-      policeRef
-      priority
-      date
-      approved
-      business {
-        id
-        name
-      }
-      location {
-        id
-        full
-      }
-      offenders {
-        id
-        name
-      }
+      ...IncidentCard
     }
     total
   }

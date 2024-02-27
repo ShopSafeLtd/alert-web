@@ -23,6 +23,8 @@ describe('Detail Officer View', () => {
         peculiarities: null,
         approved: null,
         active: null,
+        totalValue: 0,
+        totalIncidents: 0,
         createdBy: {
           fullName: 'aaa',
           id: 'cl4pe3eu91312371op4c4k2lih2',
@@ -58,6 +60,8 @@ describe('Detail Officer View', () => {
     peculiarities: null,
     approved: null,
     active: null,
+    totalValue: 0,
+    totalIncidents: 0,
     createdBy: {
       fullName: 'aaa',
       id: 'cl4pe3eu91312371op4c4k2lih2',
