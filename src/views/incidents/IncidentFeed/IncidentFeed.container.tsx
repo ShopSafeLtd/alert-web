@@ -36,6 +36,8 @@ const IncidentFeed = (): JSX.Element => {
     fetchMoreScroll,
     variables,
     setCompactView,
+    setTableView,
+    tableView,
   } = useIncidentFeed();
 
   return (
@@ -72,6 +74,8 @@ const IncidentFeed = (): JSX.Element => {
       setIncidentDateFilter={setIncidentDateFilter}
       setCreatedAtFilter={setCreatedAtFilter}
       setCompactView={setCompactView}
+      setTableView={setTableView}
+      tableView={tableView}
     />
   );
 };

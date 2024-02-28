@@ -3687,6 +3687,7 @@ export type Dashboard = {
   layout: Array<DashboardLayout>;
   name?: Maybe<Scalars['String']>;
   roles: Array<CustomRole>;
+  runningBanner?: Maybe<Scalars['String']>;
   scheme: Scheme;
   updatedAt: Scalars['Date'];
 };
@@ -19903,7 +19904,7 @@ export type CreateArticleMutationVariables = Exact<{
 }>;
 
 
-export type CreateArticleMutation = { __typename?: 'Mutation', createArticle: { __typename?: 'Article', id: string, createdAt: Date, priority: ArticlePriority, title: string, groups: Array<{ __typename?: 'Group', id: string, name: string }>, documents: Array<{ __typename?: 'Document', id: string, name: string, url: string }>, createdBy: { __typename?: 'User', fullName: string }, tags: Array<{ __typename?: 'Tag', name: string }>, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null, position: ImagePosition }>, image?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null } | null, rows: Array<{ __typename?: 'ArticleRow', columns: Array<{ __typename?: 'ArticleColumn', text?: string | null, incidents: Array<{ __typename?: 'Incident', approved?: boolean | null, id: string, totalImages: number, priority: IncidentPriority, customerRef?: string | null, subject?: string | null, reference?: number | null, policeRef?: string | null, dayTime: string, description: string, createdByUser: boolean, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, images: Array<{ __typename?: 'Image', low?: string | null, id: string, rotation: number, position: ImagePosition, primary?: boolean | null }>, offenders: Array<{ __typename?: 'Offender', name?: string | null, id: string }>, business?: { __typename?: 'Business', name: string } | null, location?: { __typename?: 'Address', full: string } | null }>, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, totalIncidents: number, reference?: number | null, totalImages: number, approved?: boolean | null, knownFor: Array<string>, targetedGoods: Array<string>, totalValue: number, comment?: string | null, createdByUser: boolean, latestIncident?: { __typename?: 'Incident', id: string, dateAgo: number, reportedBusinessName: string } | null, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, images: Array<{ __typename?: 'Image', id: string, rotation: number, position: ImagePosition, optimised?: string | null, primary?: boolean | null, policeImage?: boolean | null }> }> }> }> } };
+export type CreateArticleMutation = { __typename?: 'Mutation', createArticle: { __typename?: 'Article', id: string, createdAt: Date, priority: ArticlePriority, title: string, groups: Array<{ __typename?: 'Group', id: string, name: string }>, documents: Array<{ __typename?: 'Document', id: string, name: string, url: string }>, createdBy: { __typename?: 'User', fullName: string }, tags: Array<{ __typename?: 'Tag', name: string }>, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null, position: ImagePosition }>, image?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null } | null, rows: Array<{ __typename?: 'ArticleRow', columns: Array<{ __typename?: 'ArticleColumn', text?: string | null, incidents: Array<{ __typename?: 'Incident', approved?: boolean | null, id: string, totalImages: number, priority: IncidentPriority, customerRef?: string | null, subject?: string | null, reference?: number | null, policeRef?: string | null, dayTime: string, description: string, createdByUser: boolean, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, images: Array<{ __typename?: 'Image', low?: string | null, id: string, rotation: number, position: ImagePosition, primary?: boolean | null }>, offenders: Array<{ __typename?: 'Offender', name?: string | null, id: string }>, business?: { __typename?: 'Business', name: string } | null, location?: { __typename?: 'Address', full: string } | null }>, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, totalIncidents: number, reference?: number | null, totalImages: number, approved?: boolean | null, knownFor: Array<string>, targetedGoods: Array<string>, totalValue: number, comment?: string | null, createdByUser: boolean, latestIncident?: { __typename?: 'Incident', id: string, dateAgo: number, reportedBusinessName: string, dayTime: string } | null, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, images: Array<{ __typename?: 'Image', id: string, rotation: number, position: ImagePosition, optimised?: string | null, primary?: boolean | null, policeImage?: boolean | null }> }> }> }> } };
 
 export type DeleteArticleMutationVariables = Exact<{
   where: UniqueId;
@@ -19918,7 +19919,7 @@ export type EditArticleMutationVariables = Exact<{
 }>;
 
 
-export type EditArticleMutation = { __typename?: 'Mutation', editArticle: { __typename?: 'Article', id: string, createdAt: Date, priority: ArticlePriority, title: string, groups: Array<{ __typename?: 'Group', id: string, name: string }>, documents: Array<{ __typename?: 'Document', id: string, name: string, url: string }>, createdBy: { __typename?: 'User', fullName: string }, tags: Array<{ __typename?: 'Tag', name: string }>, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null, position: ImagePosition }>, image?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null } | null, rows: Array<{ __typename?: 'ArticleRow', columns: Array<{ __typename?: 'ArticleColumn', text?: string | null, incidents: Array<{ __typename?: 'Incident', id: string, subject?: string | null, description: string, dayTime: string, reference?: number | null, policeRef?: string | null, approved?: boolean | null, uploaded?: boolean | null, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, location?: { __typename?: 'Address', id: string, full: string } | null, createdBy: { __typename?: 'User', id: string, fullName: string, businesses: Array<{ __typename?: 'Business', fullName: string, id: string, name: string }> }, images: Array<{ __typename?: 'Image', id: string, url?: string | null, position: ImagePosition, optimised?: string | null, card?: string | null, offenders: Array<{ __typename?: 'Offender', id: string }> }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null }> }>, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, totalIncidents: number, reference?: number | null, totalImages: number, approved?: boolean | null, knownFor: Array<string>, targetedGoods: Array<string>, totalValue: number, comment?: string | null, createdByUser: boolean, latestIncident?: { __typename?: 'Incident', id: string, dateAgo: number, reportedBusinessName: string } | null, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, images: Array<{ __typename?: 'Image', id: string, rotation: number, position: ImagePosition, optimised?: string | null, primary?: boolean | null, policeImage?: boolean | null }> }> }> }> } };
+export type EditArticleMutation = { __typename?: 'Mutation', editArticle: { __typename?: 'Article', id: string, createdAt: Date, priority: ArticlePriority, title: string, groups: Array<{ __typename?: 'Group', id: string, name: string }>, documents: Array<{ __typename?: 'Document', id: string, name: string, url: string }>, createdBy: { __typename?: 'User', fullName: string }, tags: Array<{ __typename?: 'Tag', name: string }>, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null, position: ImagePosition }>, image?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null } | null, rows: Array<{ __typename?: 'ArticleRow', columns: Array<{ __typename?: 'ArticleColumn', text?: string | null, incidents: Array<{ __typename?: 'Incident', id: string, subject?: string | null, description: string, dayTime: string, reference?: number | null, policeRef?: string | null, approved?: boolean | null, uploaded?: boolean | null, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, location?: { __typename?: 'Address', id: string, full: string } | null, createdBy: { __typename?: 'User', id: string, fullName: string, businesses: Array<{ __typename?: 'Business', fullName: string, id: string, name: string }> }, images: Array<{ __typename?: 'Image', id: string, url?: string | null, position: ImagePosition, optimised?: string | null, card?: string | null, offenders: Array<{ __typename?: 'Offender', id: string }> }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null }> }>, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, totalIncidents: number, reference?: number | null, totalImages: number, approved?: boolean | null, knownFor: Array<string>, targetedGoods: Array<string>, totalValue: number, comment?: string | null, createdByUser: boolean, latestIncident?: { __typename?: 'Incident', id: string, dateAgo: number, reportedBusinessName: string, dayTime: string } | null, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, images: Array<{ __typename?: 'Image', id: string, rotation: number, position: ImagePosition, optimised?: string | null, primary?: boolean | null, policeImage?: boolean | null }> }> }> }> } };
 
 export type ArticlesQueryVariables = Exact<{
   where?: InputMaybe<ArticleWhereInput>;
@@ -19945,7 +19946,7 @@ export type ArticleQueryVariables = Exact<{
 }>;
 
 
-export type ArticleQuery = { __typename?: 'Query', article: { __typename?: 'Article', id: string, watermarkImage: boolean, createdAt: Date, updatedAt: Date, priority: ArticlePriority, title: string, groups: Array<{ __typename?: 'Group', id: string, name: string, scheme: { __typename?: 'Scheme', id: string, name: string } }>, documents: Array<{ __typename?: 'Document', id: string, name: string, url: string }>, createdBy: { __typename?: 'User', fullName: string }, tags: Array<{ __typename?: 'Tag', name: string, id: string }>, schemes: Array<{ __typename?: 'Scheme', id: string, name: string }>, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null, position: ImagePosition, rotation: number }>, image?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null } | null, rows: Array<{ __typename?: 'ArticleRow', columns: Array<{ __typename?: 'ArticleColumn', text?: string | null, incidents: Array<{ __typename?: 'Incident', approved?: boolean | null, id: string, totalImages: number, priority: IncidentPriority, customerRef?: string | null, subject?: string | null, reference?: number | null, policeRef?: string | null, dayTime: string, description: string, createdByUser: boolean, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, images: Array<{ __typename?: 'Image', low?: string | null, id: string, rotation: number, position: ImagePosition, primary?: boolean | null }>, offenders: Array<{ __typename?: 'Offender', name?: string | null, id: string }>, business?: { __typename?: 'Business', name: string } | null, location?: { __typename?: 'Address', full: string } | null }>, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, totalIncidents: number, reference?: number | null, totalImages: number, approved?: boolean | null, knownFor: Array<string>, targetedGoods: Array<string>, totalValue: number, comment?: string | null, createdByUser: boolean, lastActive?: { __typename?: 'Incident', id: string, dayTime: string } | null, latestIncident?: { __typename?: 'Incident', id: string, dateAgo: number, reportedBusinessName: string } | null, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, images: Array<{ __typename?: 'Image', id: string, rotation: number, position: ImagePosition, optimised?: string | null, primary?: boolean | null, policeImage?: boolean | null }> }> }> }> } };
+export type ArticleQuery = { __typename?: 'Query', article: { __typename?: 'Article', id: string, watermarkImage: boolean, createdAt: Date, updatedAt: Date, priority: ArticlePriority, title: string, groups: Array<{ __typename?: 'Group', id: string, name: string, scheme: { __typename?: 'Scheme', id: string, name: string } }>, documents: Array<{ __typename?: 'Document', id: string, name: string, url: string }>, createdBy: { __typename?: 'User', fullName: string }, tags: Array<{ __typename?: 'Tag', name: string, id: string }>, schemes: Array<{ __typename?: 'Scheme', id: string, name: string }>, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null, position: ImagePosition, rotation: number }>, image?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null } | null, rows: Array<{ __typename?: 'ArticleRow', columns: Array<{ __typename?: 'ArticleColumn', text?: string | null, incidents: Array<{ __typename?: 'Incident', approved?: boolean | null, id: string, totalImages: number, priority: IncidentPriority, customerRef?: string | null, subject?: string | null, reference?: number | null, policeRef?: string | null, dayTime: string, description: string, createdByUser: boolean, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, images: Array<{ __typename?: 'Image', low?: string | null, id: string, rotation: number, position: ImagePosition, primary?: boolean | null }>, offenders: Array<{ __typename?: 'Offender', name?: string | null, id: string }>, business?: { __typename?: 'Business', name: string } | null, location?: { __typename?: 'Address', full: string } | null }>, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, totalIncidents: number, reference?: number | null, totalImages: number, approved?: boolean | null, knownFor: Array<string>, targetedGoods: Array<string>, totalValue: number, comment?: string | null, createdByUser: boolean, lastActive?: { __typename?: 'Incident', id: string, dayTime: string } | null, latestIncident?: { __typename?: 'Incident', id: string, dateAgo: number, reportedBusinessName: string, dayTime: string } | null, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, images: Array<{ __typename?: 'Image', id: string, rotation: number, position: ImagePosition, optimised?: string | null, primary?: boolean | null, policeImage?: boolean | null }> }> }> }> } };
 
 export type CreateUserinAuth0MutationVariables = Exact<{
   id: Scalars['String'];
@@ -20401,7 +20402,7 @@ export type InvestigationsFragment = { __typename?: 'Investigation', id: string,
 
 export type LocationsFragment = { __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, geoLat?: number | null, geoLng?: number | null, full: string, alias?: string | null };
 
-export type OffenderCardFragment = { __typename?: 'Offender', id: string, name?: string | null, totalIncidents: number, reference?: number | null, totalImages: number, approved?: boolean | null, knownFor: Array<string>, targetedGoods: Array<string>, totalValue: number, comment?: string | null, createdByUser: boolean, latestIncident?: { __typename?: 'Incident', id: string, dateAgo: number, reportedBusinessName: string } | null, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, images: Array<{ __typename?: 'Image', id: string, rotation: number, position: ImagePosition, optimised?: string | null, primary?: boolean | null, policeImage?: boolean | null }> };
+export type OffenderCardFragment = { __typename?: 'Offender', id: string, name?: string | null, totalIncidents: number, reference?: number | null, totalImages: number, approved?: boolean | null, knownFor: Array<string>, targetedGoods: Array<string>, totalValue: number, comment?: string | null, createdByUser: boolean, latestIncident?: { __typename?: 'Incident', id: string, dateAgo: number, reportedBusinessName: string, dayTime: string } | null, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, images: Array<{ __typename?: 'Image', id: string, rotation: number, position: ImagePosition, optimised?: string | null, primary?: boolean | null, policeImage?: boolean | null }> };
 
 export type OffendersFragment = { __typename?: 'Offender', id: string, name?: string | null, alias: Array<string>, age?: Age | null, gender?: Gender | null, race?: Race | null, build?: Build | null, height?: Height | null, hair?: string | null, peculiarities?: string | null, comment?: string | null, dateSource?: string | null, dateOfBirth?: Date | null, idVerified: boolean, idSource?: IdSource | null, knownFor: Array<string>, targetedGoods: Array<string> };
 
@@ -21960,7 +21961,7 @@ export type OffenderFeedListQueryVariables = Exact<{
 }>;
 
 
-export type OffenderFeedListQuery = { __typename?: 'Query', listOffenders: { __typename?: 'ListOffenders', total: number, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, totalIncidents: number, reference?: number | null, totalImages: number, approved?: boolean | null, knownFor: Array<string>, targetedGoods: Array<string>, totalValue: number, comment?: string | null, createdByUser: boolean, latestIncident?: { __typename?: 'Incident', id: string, dateAgo: number, reportedBusinessName: string } | null, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, images: Array<{ __typename?: 'Image', id: string, rotation: number, position: ImagePosition, optimised?: string | null, primary?: boolean | null, policeImage?: boolean | null }> }> } };
+export type OffenderFeedListQuery = { __typename?: 'Query', listOffenders: { __typename?: 'ListOffenders', total: number, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, totalIncidents: number, reference?: number | null, totalImages: number, approved?: boolean | null, knownFor: Array<string>, targetedGoods: Array<string>, totalValue: number, comment?: string | null, createdByUser: boolean, latestIncident?: { __typename?: 'Incident', id: string, dateAgo: number, reportedBusinessName: string, dayTime: string } | null, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, images: Array<{ __typename?: 'Image', id: string, rotation: number, position: ImagePosition, optimised?: string | null, primary?: boolean | null, policeImage?: boolean | null }> }> } };
 
 export type ListOffendersRelayQueryVariables = Exact<{
   after?: InputMaybe<Scalars['String']>;
@@ -21971,7 +21972,18 @@ export type ListOffendersRelayQueryVariables = Exact<{
 }>;
 
 
-export type ListOffendersRelayQuery = { __typename?: 'Query', listOffendersRelay: { __typename?: 'QueryListOffendersRelayConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'QueryListOffendersRelayConnectionEdge', node: { __typename?: 'Offender', id: string, name?: string | null, totalIncidents: number, reference?: number | null, totalImages: number, approved?: boolean | null, knownFor: Array<string>, targetedGoods: Array<string>, totalValue: number, comment?: string | null, createdByUser: boolean, latestIncident?: { __typename?: 'Incident', id: string, dateAgo: number, reportedBusinessName: string } | null, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, images: Array<{ __typename?: 'Image', id: string, rotation: number, position: ImagePosition, optimised?: string | null, primary?: boolean | null, policeImage?: boolean | null }> } }> } };
+export type ListOffendersRelayQuery = { __typename?: 'Query', listOffendersRelay: { __typename?: 'QueryListOffendersRelayConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'QueryListOffendersRelayConnectionEdge', node: { __typename?: 'Offender', id: string, name?: string | null, totalIncidents: number, reference?: number | null, totalImages: number, approved?: boolean | null, knownFor: Array<string>, targetedGoods: Array<string>, totalValue: number, comment?: string | null, createdByUser: boolean, latestIncident?: { __typename?: 'Incident', id: string, dateAgo: number, reportedBusinessName: string, dayTime: string } | null, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, images: Array<{ __typename?: 'Image', id: string, rotation: number, position: ImagePosition, optimised?: string | null, primary?: boolean | null, policeImage?: boolean | null }> } }> } };
+
+export type SearchOffenderReportsQueryVariables = Exact<{
+  scheme: SchemeWhereUniqueInput;
+  where?: InputMaybe<OffenderWhereInput>;
+  order?: InputMaybe<OffenderOrderByWithRelationInput>;
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type SearchOffenderReportsQuery = { __typename?: 'Query', listOffenders: { __typename?: 'ListOffenders', total: number, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, totalIncidents: number, totalValue: number, latestIncident?: { __typename?: 'Incident', id: string, dayTime: string } | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, primary?: boolean | null, policeImage?: boolean | null, card?: string | null }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }> }> } };
 
 export type UpsertPermissionMutationVariables = Exact<{
   data: UpsertRole;
@@ -22376,6 +22388,7 @@ export const OffenderCardFragmentDoc = gql`
     id
     dateAgo
     reportedBusinessName
+    dayTime
   }
   tags {
     id
@@ -33137,6 +33150,47 @@ export function useListOffendersRelayLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type ListOffendersRelayQueryHookResult = ReturnType<typeof useListOffendersRelayQuery>;
 export type ListOffendersRelayLazyQueryHookResult = ReturnType<typeof useListOffendersRelayLazyQuery>;
 export type ListOffendersRelayQueryResult = Apollo.QueryResult<ListOffendersRelayQuery, ListOffendersRelayQueryVariables>;
+export const SearchOffenderReportsDocument = gql`
+    query searchOffenderReports($scheme: SchemeWhereUniqueInput!, $where: OffenderWhereInput, $order: OffenderOrderByWithRelationInput, $take: Int, $skip: Int) {
+  listOffenders(
+    scheme: $scheme
+    where: $where
+    order: $order
+    take: $take
+    skip: $skip
+  ) {
+    offenders {
+      id
+      name
+      totalIncidents
+      totalValue
+      latestIncident {
+        id
+        dayTime
+      }
+      images {
+        ...Images
+      }
+      tags {
+        id
+        name
+      }
+    }
+    total
+  }
+}
+    ${ImagesFragmentDoc}`;
+export function useSearchOffenderReportsQuery(baseOptions: Apollo.QueryHookOptions<SearchOffenderReportsQuery, SearchOffenderReportsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchOffenderReportsQuery, SearchOffenderReportsQueryVariables>(SearchOffenderReportsDocument, options);
+      }
+export function useSearchOffenderReportsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchOffenderReportsQuery, SearchOffenderReportsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchOffenderReportsQuery, SearchOffenderReportsQueryVariables>(SearchOffenderReportsDocument, options);
+        }
+export type SearchOffenderReportsQueryHookResult = ReturnType<typeof useSearchOffenderReportsQuery>;
+export type SearchOffenderReportsLazyQueryHookResult = ReturnType<typeof useSearchOffenderReportsLazyQuery>;
+export type SearchOffenderReportsQueryResult = Apollo.QueryResult<SearchOffenderReportsQuery, SearchOffenderReportsQueryVariables>;
 export const UpsertPermissionDocument = gql`
     mutation UpsertPermission($data: UpsertRole!) {
   upsertPermission(data: $data) {

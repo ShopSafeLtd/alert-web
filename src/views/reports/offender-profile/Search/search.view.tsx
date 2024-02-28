@@ -9,8 +9,7 @@ import {
   Tag,
   Typography,
 } from 'antd';
-import type { SearchOffendersQuery } from 'graphql/generated';
-import { getAge, getBuild, getEthnicity, getSex } from 'utils';
+import type { SearchOffenderReportsQuery } from 'graphql/generated';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import { useIntl } from 'react-intl';
 import useStyles from './search.styles';
@@ -18,7 +17,7 @@ import useStyles from './search.styles';
 const { Title } = Typography;
 
 interface Props {
-  searchOffendersData: SearchOffendersQuery | undefined;
+  searchOffendersData: SearchOffenderReportsQuery | undefined;
   searchOffenderLoading: boolean;
   searchValue: string;
   handleSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -38,10 +37,6 @@ const OffenderProfile = ({
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
-  const unknown = intl.formatMessage({
-    defaultMessage: 'Unknown',
-    id: '5jeq8P',
-  });
   return (
     <div className={classes.searchPage}>
       <Title level={3}>
@@ -90,29 +85,44 @@ const OffenderProfile = ({
               defaultMessage: 'Name',
               id: 'HAlOn1',
             }),
+            render: (value) => (
+              <Typography.Text style={{ fontSize: 14 }} strong>
+                {value}
+              </Typography.Text>
+            ),
           },
           {
-            key: 'age',
-            dataIndex: 'age',
+            key: 'totalIncidents',
+            dataIndex: 'totalIncidents',
             title: intl.formatMessage({
-              defaultMessage: 'Age',
-              id: '9oNQSC',
+              defaultMessage: 'Incident Count',
+              id: 'otC1Ao',
             }),
           },
           {
-            key: 'build',
-            dataIndex: 'build',
+            key: 'totalValue',
+            dataIndex: 'totalValue',
             title: intl.formatMessage({
-              defaultMessage: 'Build',
-              id: 'RSctv1',
+              defaultMessage: 'Total Loss',
+              id: 'LPr3Nh',
             }),
+            render: (value: number) =>
+              intl.formatMessage(
+                {
+                  defaultMessage: '£{value}',
+                  id: 'pCmP/V',
+                },
+                {
+                  value: value.toFixed(0),
+                }
+              ),
           },
           {
-            key: 'gender',
-            dataIndex: 'gender',
+            key: 'lastIncident',
+            dataIndex: 'lastIncident',
             title: intl.formatMessage({
-              defaultMessage: 'gender',
-              id: 'D1GrfQ',
+              defaultMessage: 'Last Incident',
+              id: 'kJuP0b',
             }),
           },
           {
@@ -130,10 +140,13 @@ const OffenderProfile = ({
             dataIndex: 'action',
             title: '',
             render: (_, item) => (
-              <Button onClick={() => setSelectedOffender(item.key)}>
+              <Button
+                style={{ marginRight: 20 }}
+                onClick={() => setSelectedOffender(item.key)}
+              >
                 {intl.formatMessage({
-                  defaultMessage: 'Select',
-                  id: 'kQAf2d',
+                  defaultMessage: 'View Report',
+                  id: '9KJQ2Y',
                 })}
               </Button>
             ),
@@ -148,11 +161,10 @@ const OffenderProfile = ({
             key: offender.id,
             name: offender.name,
             images: offender.images,
-            age: offender.age ? getAge(offender.age) : unknown,
-            build: offender.build ? getBuild(offender.build) : unknown,
-            race: offender.race ? getEthnicity(offender.race) : unknown,
-            gender: offender.gender ? getSex(offender.gender) : unknown,
             tags: offender.tags,
+            totalIncidents: offender.totalIncidents,
+            totalValue: offender.totalValue,
+            lastIncident: offender.latestIncident?.dayTime,
           })
         )}
         pagination={{

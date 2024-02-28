@@ -14,6 +14,7 @@ fragment OffenderCard on Offender {
     id
     dateAgo
     reportedBusinessName
+    dayTime
   }
   tags {
     id

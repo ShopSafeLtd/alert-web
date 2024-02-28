@@ -3,7 +3,18 @@ import type {
   IncidentsFeedQuery,
   RecycleIncidentMutation,
 } from 'graphql/generated';
-import { Button, Card, Col, Drawer, Empty, Row, Tooltip } from 'antd';
+import {
+  Button,
+  Card,
+  Col,
+  Drawer,
+  Empty,
+  Row,
+  Tooltip,
+  Table,
+  Typography,
+  Tag,
+} from 'antd';
 import IncidentCard from 'components/incidents/IncidentCard';
 import IncidentSkeletonCard from 'components/incidents/IncidentSkeletonCard';
 import type { IncidentSort } from 'state';
@@ -13,6 +24,7 @@ import {
   faGrid,
   faGrid2,
   faPlus,
+  faTable,
 } from '@fortawesome/pro-light-svg-icons';
 import type { MutationUpdaterFn } from '@apollo/client';
 import Lightbox from 'yet-another-react-lightbox';
@@ -26,8 +38,16 @@ import type { DateType } from 'types/DataType';
 import type { IncidentFilters } from 'state/data-model';
 import CompactSkeletonCard from 'components/offenders/OffenderCard/OffenderSkeletonCard.view';
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
+import { useNavigate } from 'react-router';
+import { createUseStyles } from 'react-jss';
 import Loading from '../../../components/shared-components/AntD/Loading';
 import DebouncedInput from '../../../utils/debounced-input';
+
+const useStyles = createUseStyles({
+  row: {
+    cursor: 'pointer',
+  },
+});
 
 interface Props {
   data: IncidentsFeedQuery | undefined;
@@ -67,6 +87,8 @@ interface Props {
   fetchMoreScroll: () => void;
   variables: IncidentFilters;
   setCompactView: () => void;
+  setTableView: () => void;
+  tableView: boolean;
 }
 
 const IncidentFeed = ({
@@ -104,9 +126,13 @@ const IncidentFeed = ({
   fetchMoreScroll,
   variables,
   setCompactView,
+  setTableView,
+  tableView,
 }: Props): JSX.Element => {
   const intl = useIntl();
+  const navigate = useNavigate();
   const { search, gallery, compactView } = variables;
+  const classes = useStyles();
 
   return (
     <div
@@ -195,6 +221,21 @@ const IncidentFeed = ({
             </Tooltip>
             <Tooltip
               title={intl.formatMessage({
+                defaultMessage: 'Switch to table view',
+                id: 'hSNkxw',
+              })}
+            >
+              <Button
+                onClick={setTableView}
+                style={{
+                  borderRadius: 0,
+                  borderRightWidth: 0,
+                }}
+                icon={<FontAwesomeIcon icon={faTable} size="lg" />}
+              />
+            </Tooltip>
+            <Tooltip
+              title={intl.formatMessage({
                 defaultMessage: 'Sort & Filter',
                 id: 'f2g3SM',
               })}
@@ -239,38 +280,111 @@ const IncidentFeed = ({
         </Row>
       </Card>
 
-      <div>
-        {loading ? (
-          <Row
-            gutter={24}
-            align="stretch"
-            style={{
-              alignItems: 'stretch',
-              padding: 10,
-              overflowX: 'hidden',
-            }}
-          >
-            {Array.from({ length: compactView ? 48 : 24 }).map((_, index) => (
-              <Col
-                // eslint-disable-next-line react/no-array-index-key
-                key={index}
-                style={{ marginBottom: compactView ? 0 : 20 }}
-                span={compactView ? 6 : 8}
-                xxl={compactView ? 4 : 6}
+      {!tableView && (
+        <div>
+          {loading ? (
+            <Row
+              gutter={24}
+              align="stretch"
+              style={{
+                alignItems: 'stretch',
+                padding: 10,
+                overflowX: 'hidden',
+              }}
+            >
+              {Array.from({ length: compactView ? 48 : 24 }).map((_, index) => (
+                <Col
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={index}
+                  style={{ marginBottom: compactView ? 0 : 20 }}
+                  span={compactView ? 6 : 8}
+                  xxl={compactView ? 4 : 6}
+                >
+                  {compactView ? (
+                    <CompactSkeletonCard />
+                  ) : (
+                    <IncidentSkeletonCard />
+                  )}
+                </Col>
+              ))}
+            </Row>
+          ) : data?.incidentsRelay && data.incidentsRelay.edges.length > 0 ? (
+            <InfiniteScroll
+              dataLength={data?.incidentsRelay.edges.length}
+              next={() => fetchMoreScroll()}
+              hasMore={data?.incidentsRelay.pageInfo.hasNextPage}
+              loader={<Loading />}
+              height="calc(100vh - 78px)"
+              style={{ overflowX: 'hidden' }}
+              endMessage={
+                <p style={{ textAlign: 'center' }}>
+                  {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                  <b>-----------</b>
+                </p>
+              }
+            >
+              <Row
+                gutter={compactView ? [10, 10] : [8, 16]}
+                align="stretch"
+                style={{
+                  alignItems: 'stretch',
+                  padding: 10,
+                  overflowX: 'hidden',
+                }}
               >
-                {compactView ? (
-                  <CompactSkeletonCard />
-                ) : (
-                  <IncidentSkeletonCard />
-                )}
-              </Col>
-            ))}
-          </Row>
-        ) : data?.incidentsRelay && data.incidentsRelay.edges.length > 0 ? (
+                {data.incidentsRelay.edges.map(({ node }) => (
+                  <Col
+                    span={compactView ? 6 : 8}
+                    xxl={compactView ? 4 : 6}
+                    key={node?.id}
+                  >
+                    <IncidentCard
+                      key={node?.id}
+                      incident={node}
+                      openLightbox={openLightbox}
+                      update={updateIncidentList}
+                      compactView={compactView}
+                    />
+                  </Col>
+                ))}
+              </Row>
+            </InfiniteScroll>
+          ) : (
+            <Row gutter={8}>
+              <div
+                style={{
+                  display: 'flex',
+                  flex: 1,
+                  height: 'calc(100vh - 100px)',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Empty
+                  description={
+                    search === ''
+                      ? intl.formatMessage({
+                          defaultMessage: 'No Incidents',
+                          id: '+nJOH5',
+                        })
+                      : intl.formatMessage({
+                          defaultMessage:
+                            'No incidents match your search criteria',
+                          id: '3vA0/l',
+                        })
+                  }
+                />
+              </div>
+            </Row>
+          )}
+        </div>
+      )}
+      {tableView && (
+        <div style={{ marginRight: 10 }}>
           <InfiniteScroll
-            dataLength={data?.incidentsRelay.edges.length}
+            dataLength={data?.incidentsRelay.edges.length || 0}
             next={() => fetchMoreScroll()}
-            hasMore={data?.incidentsRelay.pageInfo.hasNextPage}
+            hasMore={data?.incidentsRelay.pageInfo.hasNextPage || false}
             loader={<Loading />}
             height="calc(100vh - 78px)"
             style={{ overflowX: 'hidden' }}
@@ -281,61 +395,100 @@ const IncidentFeed = ({
               </p>
             }
           >
-            <Row
-              gutter={compactView ? [10, 10] : [8, 16]}
-              align="stretch"
-              style={{
-                alignItems: 'stretch',
-                padding: 10,
-                overflowX: 'hidden',
-              }}
-            >
-              {data.incidentsRelay.edges.map(({ node }) => (
-                <Col
-                  span={compactView ? 6 : 8}
-                  xxl={compactView ? 4 : 6}
-                  key={node?.id}
-                >
-                  <IncidentCard
-                    key={node?.id}
-                    incident={node}
-                    openLightbox={openLightbox}
-                    update={updateIncidentList}
-                    compactView={compactView}
-                  />
-                </Col>
-              ))}
-            </Row>
+            <Table
+              style={{ marginBottom: 20 }}
+              columns={[
+                {
+                  key: 'alertId',
+                  dataIndex: 'alertId',
+                  title: (
+                    <Typography.Text ellipsis>
+                      {intl.formatMessage({
+                        defaultMessage: 'Alert ID',
+                        id: 'k8ZNgH',
+                      })}
+                    </Typography.Text>
+                  ),
+                },
+                {
+                  key: 'type',
+                  dataIndex: 'type',
+                  title: (
+                    <Typography.Text ellipsis>
+                      {intl.formatMessage({
+                        defaultMessage: 'Type',
+                        id: '+U6ozc',
+                      })}
+                    </Typography.Text>
+                  ),
+                },
+                {
+                  key: 'dayTime',
+                  dataIndex: 'dayTime',
+                  title: (
+                    <Typography.Text ellipsis>
+                      {intl.formatMessage({
+                        defaultMessage: 'Time & Date',
+                        id: 'rXTgTq',
+                      })}
+                    </Typography.Text>
+                  ),
+                },
+                {
+                  key: 'offenders',
+                  dataIndex: 'offenders',
+                  title: (
+                    <Typography.Text ellipsis>
+                      {intl.formatMessage({
+                        defaultMessage: 'Offenders',
+                        id: 'xb54TN',
+                      })}
+                    </Typography.Text>
+                  ),
+                  render: (value: { id: string; name: string }[]) =>
+                    value.map((offender) => (
+                      <Tag style={{ marginBottom: 5 }} key={offender.id}>
+                        {offender.name}
+                      </Tag>
+                    )),
+                },
+                {
+                  key: 'description',
+                  dataIndex: 'description',
+                  title: intl.formatMessage({
+                    defaultMessage: 'Description',
+                    id: 'Q8Qw5B',
+                  }),
+                  render: (value: string) => (
+                    <Tooltip title={value}>
+                      <Typography.Paragraph
+                        style={{ marginBottom: 0 }}
+                        ellipsis={{ rows: 3 }}
+                      >
+                        {value}
+                      </Typography.Paragraph>
+                    </Tooltip>
+                  ),
+                },
+              ]}
+              dataSource={data?.incidentsRelay.edges.map((item) => ({
+                key: item.node.id,
+                alertId: item.node.reference,
+                type: item.node.crimeTypes.map((type) => type.name).toString(),
+                dayTime: item.node.dayTime,
+                description: item.node.description,
+                offenders: item.node.offenders,
+              }))}
+              pagination={false}
+              rowClassName={classes.row}
+              onRow={(record) => ({
+                onClick: () => navigate(`/app/incidents/view/${record.key}`),
+              })}
+            />
           </InfiniteScroll>
-        ) : (
-          <Row gutter={8}>
-            <div
-              style={{
-                display: 'flex',
-                flex: 1,
-                height: 'calc(100vh - 100px)',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <Empty
-                description={
-                  search === ''
-                    ? intl.formatMessage({
-                        defaultMessage: 'No Incidents',
-                        id: '+nJOH5',
-                      })
-                    : intl.formatMessage({
-                        defaultMessage:
-                          'No incidents match your search criteria',
-                        id: '3vA0/l',
-                      })
-                }
-              />
-            </div>
-          </Row>
-        )}
-      </div>
+        </div>
+      )}
+
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Incident Filters',
