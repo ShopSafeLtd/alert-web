@@ -27,6 +27,19 @@ const DebouncedInput = ({ onChange, ...props }: InputProps): JSX.Element => {
     [] // Empty dependency array because debounce and handleChange won't change
   );
 
-  return <Input {...props} onChange={(e) => changeHandler(e)} />;
+  return (
+    <Input
+      {...props}
+      onChange={(e) => {
+        console.log(e.target.value);
+        if (!e.target.value) {
+          changeHandler.cancel();
+          handleChange(e);
+          return;
+        }
+        changeHandler(e);
+      }}
+    />
+  );
 };
 export default DebouncedInput;
