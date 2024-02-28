@@ -471,7 +471,6 @@ const IncidentFeed = ({
                   ),
                 },
               ]}
-              rowClassName={classes.row}
               dataSource={data?.incidentsRelay.edges.map((item) => ({
                 key: item.node.id,
                 alertId: item.node.reference,
@@ -481,6 +480,7 @@ const IncidentFeed = ({
                 offenders: item.node.offenders,
               }))}
               pagination={false}
+              rowClassName={classes.row}
               onRow={(record) => ({
                 onClick: () => navigate(`/app/incidents/view/${record.key}`),
               })}

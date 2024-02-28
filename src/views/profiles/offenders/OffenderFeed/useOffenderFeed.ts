@@ -42,6 +42,8 @@ interface Return {
   variables: OffenderFilters;
   fetchMoreScroll: () => void;
   setCompactView: () => void;
+  setTableView: () => void;
+  tableView: boolean;
 }
 
 const useOffenderFeed = (): Return => {
@@ -89,6 +91,7 @@ const useOffenderFeed = (): Return => {
     build,
     sex,
     compactView,
+    tableView,
   } = filterVariables;
   const variables = {
     scheme: {
@@ -406,6 +409,16 @@ const useOffenderFeed = (): Return => {
       order,
     });
   };
+  const setTableView = () => {
+    setOffendersState({
+      pagination,
+      variables: {
+        ...filterVariables,
+        tableView: !tableView,
+      },
+      order,
+    });
+  };
 
   const fetchMoreScroll = () => {
     void fetchMore({
@@ -450,6 +463,8 @@ const useOffenderFeed = (): Return => {
     onSelectCustomGalleries,
     onSelectGallery,
     setCompactView,
+    tableView,
+    setTableView,
   };
 };
 
