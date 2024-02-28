@@ -15,6 +15,8 @@ import {
   Menu,
   Row,
   Tooltip,
+  Table,
+  Typography,
 } from 'antd';
 import OffenderCard from 'components/offenders/OffenderCard';
 import OffenderSkeletonCard from 'components/offenders/OffenderSkeletonCard/OffenderSkeletonCard.view';
@@ -25,6 +27,7 @@ import {
   faGrid,
   faGrid2,
   faPlus,
+  faTable,
 } from '@fortawesome/pro-light-svg-icons';
 import type { MutationUpdaterFn } from '@apollo/client';
 import Lightbox from 'yet-another-react-lightbox';
@@ -38,6 +41,7 @@ import type { OffenderFilters } from 'state/data-model';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import CompactSkeletonCard from 'components/offenders/OffenderCard/OffenderSkeletonCard.view';
 import DebouncedInput from 'utils/debounced-input';
+import { useNavigate } from 'react-router';
 import useStyles from './OffenderFeed.styles';
 import Loading from '../../../../components/shared-components/AntD/Loading';
 
@@ -63,6 +67,8 @@ interface Props {
   variables: OffenderFilters;
   fetchMoreScroll: () => void;
   setCompactView: () => void;
+  setTableView: () => void;
+  tableView: boolean;
 }
 
 const OffenderFeed = ({
@@ -78,15 +84,17 @@ const OffenderFeed = ({
   toggleSortFilter,
   setGallery,
   customGalleriesData,
-
   onSelectCustomGalleries,
   variables,
   fetchMoreScroll,
   setCompactView,
+  setTableView,
+  tableView,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const classes = useStyles();
   const { search, gallery, customGalleries, compactView } = variables;
+  const navigate = useNavigate();
 
   const galleryOptions = [
     {
@@ -271,6 +279,21 @@ const OffenderFeed = ({
             </Tooltip>
             <Tooltip
               title={intl.formatMessage({
+                defaultMessage: 'Present offenders in a table view',
+                id: 'Ydmrau',
+              })}
+            >
+              <Button
+                onClick={setTableView}
+                icon={<FontAwesomeIcon icon={faTable} size="lg" />}
+                style={{
+                  borderRadius: 0,
+                  borderRightWidth: 0,
+                }}
+              />
+            </Tooltip>
+            <Tooltip
+              title={intl.formatMessage({
                 defaultMessage: 'Sort & Filter',
                 id: 'f2g3SM',
               })}
@@ -315,39 +338,113 @@ const OffenderFeed = ({
         </Row>
       </Card>
 
-      <div>
-        {loading ? (
-          <Row
-            gutter={24}
-            align="stretch"
-            style={{
-              alignItems: 'stretch',
-              padding: 10,
-              overflowX: 'hidden',
-            }}
-          >
-            {Array.from({ length: compactView ? 48 : 24 }).map((_, index) => (
-              <Col
-                style={{ marginBottom: compactView ? 0 : 20 }}
-                // eslint-disable-next-line react/no-array-index-key
-                key={index}
-                span={compactView ? 6 : 8}
-                xxl={compactView ? 4 : 6}
+      {!tableView && (
+        <div>
+          {loading ? (
+            <Row
+              gutter={24}
+              align="stretch"
+              style={{
+                alignItems: 'stretch',
+                padding: 10,
+                overflowX: 'hidden',
+              }}
+            >
+              {Array.from({ length: compactView ? 48 : 24 }).map((_, index) => (
+                <Col
+                  style={{ marginBottom: compactView ? 0 : 20 }}
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={index}
+                  span={compactView ? 6 : 8}
+                  xxl={compactView ? 4 : 6}
+                >
+                  {compactView ? (
+                    <CompactSkeletonCard />
+                  ) : (
+                    <OffenderSkeletonCard />
+                  )}
+                </Col>
+              ))}
+            </Row>
+          ) : data?.listOffendersRelay?.edges &&
+            data?.listOffendersRelay?.edges.length > 0 ? (
+            <InfiniteScroll
+              dataLength={data?.listOffendersRelay?.edges.length}
+              next={() => fetchMoreScroll()}
+              hasMore={data.listOffendersRelay.pageInfo.hasNextPage}
+              loader={<Loading />}
+              height="calc(100vh - 78px)"
+              style={{ overflowX: 'hidden' }}
+              endMessage={
+                <p style={{ textAlign: 'center' }}>
+                  {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                  <b>-----------</b>
+                </p>
+              }
+            >
+              <Row
+                gutter={[8, 8]}
+                align="stretch"
+                style={{
+                  alignItems: 'stretch',
+                  padding: 10,
+                  overflowX: 'hidden',
+                }}
               >
-                {compactView ? (
-                  <CompactSkeletonCard />
-                ) : (
-                  <OffenderSkeletonCard />
-                )}
-              </Col>
-            ))}
-          </Row>
-        ) : data?.listOffendersRelay?.edges &&
-          data?.listOffendersRelay?.edges.length > 0 ? (
+                {data?.listOffendersRelay?.edges?.map((t) => {
+                  if (!t?.node?.id) return null;
+                  return (
+                    <Col
+                      span={compactView ? 6 : 8}
+                      xxl={compactView ? 4 : 6}
+                      key={t?.node?.id}
+                    >
+                      <OffenderCard
+                        offender={t?.node}
+                        openLightbox={openLightbox}
+                        update={updateOffenderList}
+                        compactView={compactView}
+                      />
+                    </Col>
+                  );
+                })}
+              </Row>
+            </InfiniteScroll>
+          ) : (
+            <div
+              style={{
+                display: 'flex',
+                flex: 1,
+                height: 'calc(100vh - 100px)',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Empty
+                description={
+                  search === ''
+                    ? intl.formatMessage({
+                        defaultMessage: 'No Offenders',
+                        id: 'hO5g1p',
+                      })
+                    : intl.formatMessage({
+                        defaultMessage:
+                          'No offenders match your search criteria',
+                        id: 'i7eap9',
+                      })
+                }
+              />
+            </div>
+          )}
+        </div>
+      )}
+
+      {tableView && (
+        <div>
           <InfiniteScroll
-            dataLength={data?.listOffendersRelay?.edges.length}
+            dataLength={data?.listOffendersRelay?.edges.length || 0}
             next={() => fetchMoreScroll()}
-            hasMore={data.listOffendersRelay.pageInfo.hasNextPage}
+            hasMore={data?.listOffendersRelay.pageInfo.hasNextPage || false}
             loader={<Loading />}
             height="calc(100vh - 78px)"
             style={{ overflowX: 'hidden' }}
@@ -358,60 +455,96 @@ const OffenderFeed = ({
               </p>
             }
           >
-            <Row
-              gutter={[8, 8]}
-              align="stretch"
-              style={{
-                alignItems: 'stretch',
-                padding: 10,
-                overflowX: 'hidden',
-              }}
-            >
-              {data?.listOffendersRelay?.edges?.map((t) => {
-                if (!t?.node?.id) return null;
-                return (
-                  <Col
-                    span={compactView ? 6 : 8}
-                    xxl={compactView ? 4 : 6}
-                    key={t?.node?.id}
-                  >
-                    <OffenderCard
-                      offender={t?.node}
-                      openLightbox={openLightbox}
-                      update={updateOffenderList}
-                      compactView={compactView}
-                    />
-                  </Col>
-                );
+            <Table
+              pagination={false}
+              rowClassName={classes.row}
+              onRow={(record) => ({
+                onClick: () => navigate(`/app/incidents/view/${record.key}`),
               })}
-            </Row>
-          </InfiniteScroll>
-        ) : (
-          <div
-            style={{
-              display: 'flex',
-              flex: 1,
-              height: 'calc(100vh - 100px)',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Empty
-              description={
-                search === ''
-                  ? intl.formatMessage({
-                      defaultMessage: 'No Offenders',
-                      id: 'hO5g1p',
-                    })
-                  : intl.formatMessage({
-                      defaultMessage: 'No offenders match your search criteria',
-                      id: 'i7eap9',
-                    })
-              }
+              style={{ marginBottom: 20 }}
+              columns={[
+                {
+                  key: 'alertId',
+                  dataIndex: 'alertId',
+                  title: (
+                    <Typography.Text ellipsis>
+                      {intl.formatMessage({
+                        defaultMessage: 'Alert ID',
+                        id: 'k8ZNgH',
+                      })}
+                    </Typography.Text>
+                  ),
+                },
+                {
+                  key: 'name',
+                  dataIndex: 'name',
+                  title: (
+                    <Typography.Text ellipsis>
+                      {intl.formatMessage({
+                        defaultMessage: 'Name',
+                        id: 'HAlOn1',
+                      })}
+                    </Typography.Text>
+                  ),
+                },
+                {
+                  key: 'totalIncidents',
+                  dataIndex: 'totalIncidents',
+                  title: (
+                    <Typography.Text ellipsis>
+                      {intl.formatMessage({
+                        defaultMessage: 'Incident Count',
+                        id: 'otC1Ao',
+                      })}
+                    </Typography.Text>
+                  ),
+                },
+                {
+                  key: 'totalValue',
+                  dataIndex: 'totalValue',
+                  title: (
+                    <Typography.Text ellipsis>
+                      {intl.formatMessage({
+                        defaultMessage: 'Total Loss',
+                        id: 'LPr3Nh',
+                      })}
+                    </Typography.Text>
+                  ),
+                  render: (value: number) => (
+                    <Typography.Text ellipsis>
+                      {intl.formatMessage(
+                        {
+                          defaultMessage: '£{value}',
+                          id: 'pCmP/V',
+                        },
+                        {
+                          value: value.toFixed(0),
+                        }
+                      )}
+                    </Typography.Text>
+                  ),
+                },
+                {
+                  key: 'lastIncident',
+                  dataIndex: 'lastIncident',
+                  title: intl.formatMessage({
+                    defaultMessage: 'Last Incident',
+                    id: 'kJuP0b',
+                  }),
+                },
+              ]}
+              dataSource={data?.listOffendersRelay.edges.map(({ node }) => ({
+                key: node.id,
+                alertId: node.reference,
+                name: node.name,
+                totalIncidents: node.totalIncidents,
+                totalValue: node.totalValue,
+                lastIncident: node.latestIncident?.dayTime,
+              }))}
             />
-          </div>
-        )}
-      </div>
+          </InfiniteScroll>
+        </div>
+      )}
 
       <Drawer
         title={intl.formatMessage({

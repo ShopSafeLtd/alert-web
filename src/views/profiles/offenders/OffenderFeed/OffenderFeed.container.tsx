@@ -22,6 +22,8 @@ const OffenderFeed = (): JSX.Element => {
     variables,
     fetchMoreScroll,
     setCompactView,
+    setTableView,
+    tableView,
   } = useOffenderFeed();
 
   return (
@@ -44,6 +46,8 @@ const OffenderFeed = (): JSX.Element => {
       onSelectCustomGalleries={onSelectCustomGalleries}
       variables={variables}
       setCompactView={setCompactView}
+      setTableView={setTableView}
+      tableView={tableView}
     />
   );
 };

@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import { useStoreState } from 'state';
 import { useNavigate } from 'react-router-dom';
-import type { SearchOffendersQuery } from 'graphql/generated';
+import type { SearchOffenderReportsQuery } from 'graphql/generated';
 import {
-  useSearchOffendersQuery,
+  useSearchOffenderReportsQuery,
   SortOrder,
   QueryMode,
 } from 'graphql/generated';
 
 interface Return {
-  searchOffendersData: SearchOffendersQuery | undefined;
+  searchOffendersData: SearchOffenderReportsQuery | undefined;
   searchOffenderLoading: boolean;
   searchValue: string;
   handleSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -28,7 +28,7 @@ const useOffenderProfile = (): Return => {
   const currentScheme = useStoreState((state) => state.scheme.id);
 
   const { data: searchOffendersData, loading: searchOffenderLoading } =
-    useSearchOffendersQuery({
+    useSearchOffenderReportsQuery({
       fetchPolicy: 'cache-and-network',
       variables: {
         scheme: {

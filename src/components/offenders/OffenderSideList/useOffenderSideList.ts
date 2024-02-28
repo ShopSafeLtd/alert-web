@@ -198,8 +198,7 @@ const useOffenderSideList = (): Return => {
       updatedAt:
         order === OffenderSort.updatedAtDesc ? SortOrder.Desc : SortOrder.Asc,
     },
-    take: 12,
-    skip: 0,
+    first: 12,
   };
   const { data, loading, fetchMore } = useListOffendersRelayQuery({
     variables,
@@ -211,7 +210,7 @@ const useOffenderSideList = (): Return => {
     void fetchMore({
       variables: {
         ...variables,
-        skip: data?.listOffendersRelay?.edges?.length || 0,
+        after: data?.listOffendersRelay?.pageInfo?.endCursor,
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;

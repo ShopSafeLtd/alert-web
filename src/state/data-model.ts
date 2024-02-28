@@ -38,6 +38,7 @@ export interface IncidentFilters {
   gallery: string[];
   peculiarities: string;
   compactView: boolean;
+  tableView: boolean;
   priority: IncidentPriority[];
 }
 
@@ -61,6 +62,7 @@ export interface OffenderFilters {
       }
     | undefined;
   compactView: boolean;
+  tableView: boolean;
 }
 
 export interface FeedItemFilters {
@@ -242,6 +244,7 @@ const dataModel: DataModel = {
       gallery: [],
       peculiarities: '',
       compactView: false,
+      tableView: false,
       priority: [],
     },
     order: IncidentSort.createdAtDesc,
@@ -276,6 +279,7 @@ const dataModel: DataModel = {
       age: [],
       sex: [],
       compactView: false,
+      tableView: false,
     },
     order: OffenderSort.updatedAtDesc,
   },

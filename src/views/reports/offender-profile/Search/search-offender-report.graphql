@@ -1,0 +1,34 @@
+query searchOffenderReports(
+    $scheme: SchemeWhereUniqueInput!
+    $where: OffenderWhereInput
+    $order: OffenderOrderByWithRelationInput
+    $take: Int
+    $skip: Int
+) {
+    listOffenders(
+        scheme: $scheme
+        where: $where
+        order: $order
+        take: $take
+        skip: $skip
+    ) {
+        offenders {
+            id
+            name
+            totalIncidents
+            totalValue
+            latestIncident {
+                id
+                dayTime
+            }
+            images {
+                ...Images
+            }
+            tags {
+                id
+                name
+            }
+        }
+        total
+    }
+}

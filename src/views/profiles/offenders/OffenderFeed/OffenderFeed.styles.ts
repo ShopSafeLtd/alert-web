@@ -20,6 +20,9 @@ const useStyles = createUseStyles({
     position: 'relative',
     height: 'auto',
   },
+  row: {
+    cursor: 'pointer',
+  },
 });
 
 export default useStyles;
