@@ -51,6 +51,7 @@ describe('Detail Officer View', () => {
     gallery: [],
     peculiarities: '',
     compactView: false,
+    tableView: false,
   };
   it('renders the page', () => {
     const { getByText } = render(

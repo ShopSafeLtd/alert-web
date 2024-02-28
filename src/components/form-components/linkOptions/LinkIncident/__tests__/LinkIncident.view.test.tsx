@@ -70,6 +70,7 @@ describe('Detail Officer View', () => {
             gallery: [],
             peculiarities: '',
             compactView: false,
+            tableView: false,
           }}
           clearFilters={function (): void {
             throw new Error('Function not implemented.');
