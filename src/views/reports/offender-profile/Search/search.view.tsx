@@ -1,17 +1,9 @@
 import React from 'react';
-import {
-  Button,
-  Col,
-  Input,
-  Row,
-  Skeleton,
-  Table,
-  Tag,
-  Typography,
-} from 'antd';
+import { Button, Col, Row, Skeleton, Table, Tag, Typography } from 'antd';
 import type { SearchOffenderReportsQuery } from 'graphql/generated';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import { useIntl } from 'react-intl';
+import DebouncedInput from 'utils/debounced-input';
 import useStyles from './search.styles';
 
 const { Title } = Typography;
@@ -29,7 +21,7 @@ interface Props {
 const OffenderProfile = ({
   searchOffenderLoading,
   searchOffendersData,
-  searchValue,
+  searchValue: _,
   handleSearchChange,
   setSelectedOffender,
   currentSearchPage,
@@ -47,12 +39,12 @@ const OffenderProfile = ({
       </Title>
       <Row className={classes.toolbar}>
         <Col span={8}>
-          <Input
+          <DebouncedInput
             placeholder={intl.formatMessage({
               defaultMessage: 'Search for an offender...',
               id: 'KBPSuo',
             })}
-            value={searchValue}
+            allowClear
             onChange={handleSearchChange}
           />
         </Col>
@@ -139,7 +131,7 @@ const OffenderProfile = ({
             key: 'action',
             dataIndex: 'action',
             title: '',
-            render: (_, item) => (
+            render: (__, item) => (
               <Button
                 style={{ marginRight: 20 }}
                 onClick={() => setSelectedOffender(item.key)}
