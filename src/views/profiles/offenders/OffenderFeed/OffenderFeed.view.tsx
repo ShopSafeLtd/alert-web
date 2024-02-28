@@ -459,7 +459,7 @@ const OffenderFeed = ({
               pagination={false}
               rowClassName={classes.row}
               onRow={(record) => ({
-                onClick: () => navigate(`/app/incidents/view/${record.key}`),
+                onClick: () => navigate(`/app/offenders/view/${record.key}`),
               })}
               style={{ marginBottom: 20 }}
               columns={[
