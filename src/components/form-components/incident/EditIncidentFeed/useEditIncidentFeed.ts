@@ -206,7 +206,9 @@ const useEditIncidentFeed = ({ onClose, incidentId }: Props): Return => {
             description: { set: data.description },
             date: { set: data.date },
             time: { set: data.date },
-            customerRef: { set: data.customerRef },
+            customerRef: data.customerRef
+              ? { set: data.customerRef }
+              : undefined,
             priority: { set: data.priority },
             groups: {
               set: data.groups.map((id) => ({ id })),
