@@ -2816,7 +2816,7 @@ const ViewOffender = ({
         {addInvestigation ? (
           <AddInvestigation
             update={updateInvestigationList}
-            incidentId={data?.offender?.id || ''}
+            offenderId={data?.offender?.id || ''}
             onClose={toggleAddInvestigation}
           />
         ) : (
