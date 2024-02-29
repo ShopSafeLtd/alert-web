@@ -5,6 +5,7 @@ import type {
   Role,
   UpdateUserNotificationsMutation,
   UserNotificationsQuery,
+  UserNotificationsQueryVariables,
 } from 'graphql/generated';
 import {
   Model,
@@ -114,7 +115,7 @@ const useNotificationLists = (): Return => {
   const [pageSize, setPageSize] = useState(20);
   const [page, setPage] = useState(1);
 
-  const variables = {
+  const variables: UserNotificationsQueryVariables = {
     skip: (page - 1) * pageSize,
     take: pageSize,
     where: {
