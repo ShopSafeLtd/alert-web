@@ -216,7 +216,20 @@ const PerformanceReportLayout = ({
                 <FontAwesomeIcon className={classes.prefixIcon} icon={faCar} />
               }
             />
-
+            <Statistic
+              className={classes.stats}
+              title={intl.formatMessage({
+                defaultMessage: 'Bulletins Created',
+                id: 'd5dcOZ',
+              })}
+              value={data?.performanceReport?.createdDataCounts?.bulletins || 0}
+              prefix={
+                <FontAwesomeIcon
+                  className={classes.prefixIcon}
+                  icon={faUsers}
+                />
+              }
+            />
             <Statistic
               className={classes.stats}
               title={intl.formatMessage({
