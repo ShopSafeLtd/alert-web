@@ -33,12 +33,13 @@ const useAddExclusion = ({ update, onClose }: Props): Return => {
 
     update({
       id: Math.floor(Math.random() * 1000).toString(),
-      title: data.title || null,
-      startDate: data.startDate || null,
-      endDate: data.endDate || null,
+      startDate: data.startDate,
+      endDate: data.endDate,
       location: data.location || '',
       description: data.description || '',
       type: data.type || null,
+      months: data.months,
+      fineValue: data.fineValue,
     });
     onClose();
     setSaving(false);

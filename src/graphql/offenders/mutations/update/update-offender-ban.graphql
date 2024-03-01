@@ -8,6 +8,9 @@ mutation UpdateOffenderBans($id: String!, $bans: BansOnOffenderUpdate) {
       location
       description
       title
+      months
+      fineValue
+      type
     }
   }
 }

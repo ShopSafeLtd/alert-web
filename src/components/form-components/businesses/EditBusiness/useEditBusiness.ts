@@ -14,6 +14,7 @@ import {
   SearchBusinessesDocument,
   useEditBusinessQuery,
   useUpdateBusinessMutation,
+  useBrandsQuery,
 } from 'graphql/generated';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -35,6 +36,7 @@ export interface OnSubmitValues {
   publicName: boolean;
   tags?: Array<string | { value: string; label: string }>;
   groups?: string[];
+  brands?: string[];
   siteNumber: string;
 }
 
@@ -60,6 +62,8 @@ interface Return {
   updateNewTagData: (values: TagData) => void;
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
+  brands: { value: string; label: string }[];
+  brandsLoading: boolean;
 }
 
 const useEditBusiness = ({ onClose, businessId }: Props): Return => {
@@ -90,6 +94,7 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
         siteNumber: res.business?.siteNumber || '',
         publicName: res.business?.publicName,
         groups: res.business?.groups.map(({ id }) => id),
+        brands: res.business?.brands,
         tags: res.business?.tags.map((el) => ({
           label: el.name,
           value: el.id,
@@ -153,6 +158,19 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
     },
     fetchPolicy: 'cache-and-network',
   });
+
+  const { data: brandsData, loading: brandsLoading } = useBrandsQuery({
+    variables: {
+      where: {
+        scheme: {
+          id: {
+            equals: currentScheme,
+          },
+        },
+      },
+    },
+  });
+
   const onSetLocation = (value: LocationData) => {
     if (value) {
       setLocation(value);
@@ -269,6 +287,9 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
           tags: getTags(),
           groups: {
             set: values.groups?.map((id: string) => ({ id })) || [],
+          },
+          brands: {
+            set: values.brands?.map((id: string) => ({ id })) || [],
           },
           locations: {
             update: [
@@ -409,7 +430,13 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
         value: group.id,
         label: group.name,
       })) || [],
+    brands:
+      brandsData?.brands.map((group) => ({
+        value: group.id,
+        label: group.name,
+      })) || [],
     groupsLoading,
+    brandsLoading,
   };
 };
 

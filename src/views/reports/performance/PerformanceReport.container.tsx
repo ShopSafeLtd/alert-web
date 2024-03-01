@@ -42,6 +42,10 @@ const PerformanceReport = (): JSX.Element => {
     selectedTemplate,
     setSaveAsDrawer,
     saveAsDrawer,
+    brandsLoading,
+    brands,
+    selectedBrands,
+    setSelectedBrands,
   } = usePerformanceReport();
   return (
     <View
@@ -83,6 +87,10 @@ const PerformanceReport = (): JSX.Element => {
       dateRange={dateRange}
       groups={groups}
       groupsLoading={groupsLoading}
+      brandsLoading={brandsLoading}
+      brands={brands}
+      selectedBrands={selectedBrands}
+      setSelectedBrands={setSelectedBrands}
     />
   );
 };

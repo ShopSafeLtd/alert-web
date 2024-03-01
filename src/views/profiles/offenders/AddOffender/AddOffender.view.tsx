@@ -345,8 +345,8 @@ const AddOffender = ({
             titleOrder={4}
             emptyDescription={intl.formatMessage({
               defaultMessage:
-                "You haven't added any exclusion for this offender yet.",
-              id: 'dE8QLQ',
+                "You haven't added any outcomes for this offender yet.",
+              id: '3pprLx',
             })}
           />
         )}

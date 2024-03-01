@@ -7,6 +7,7 @@ query PerformanceReport($where: UserContributionWhereInput!) {
       offenders
       updates
       vehicles
+      bulletins
     }
     incidentSummary {
       totalIncidents
@@ -14,6 +15,16 @@ query PerformanceReport($where: UserContributionWhereInput!) {
       incidentsReportedToPolice
       incidentsWherePoliceAttended
       mostCommonCrimeType
+    }
+    outcomeSummary {
+      totalArrests
+      totalCBOYears
+      totalCBOCount
+      totalFinesCount
+      totalFinesValue
+      totalPrisonSentenceCount
+      totalPrisonSentenceMonths
+      totalRehabOrders
     }
     crimeTypeDonut {
       label
@@ -41,6 +52,12 @@ query PerformanceReport($where: UserContributionWhereInput!) {
     goodsTypeValueDonut {
       label
       value
+    }
+    policeSummary {
+      totalAttendedIncidents
+      totalReportedIncidents
+      totalPoliceImages
+      totalVerifiedOffenders
     }
   }
   offendersPerformance(where: $where) {

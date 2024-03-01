@@ -1,5 +1,7 @@
 import {
   ReportType,
+  SortOrder,
+  useBrandsQuery,
   usePerformanceReportQuery,
   useSchemeReportDetailsQuery,
 } from 'graphql/generated';
@@ -44,6 +46,10 @@ const usePerformanceReport = (): Return => {
     addLogo,
     selectTemplate,
     saveTemplate: saveTemplateState,
+    setSelectedBrands,
+    selectedBrands,
+    brands,
+    setBrands,
   } = useReportState({
     InitLayout: PerformanceLayout,
     InitMetaData: PerformanceMetaData,
@@ -60,6 +66,9 @@ const usePerformanceReport = (): Return => {
             },
           },
         },
+        orderBy: {
+          name: SortOrder.Asc,
+        },
         schemeWhere: {
           id: currentScheme,
         },
@@ -75,7 +84,6 @@ const usePerformanceReport = (): Return => {
           value: group.id,
         }));
         setGroups(groupsFormatted);
-        setSelectedGroups(groupsFormatted.map((item) => item.value));
         setLogos([
           ...logos,
           ...(groupsData.scheme?.reportIcons?.map(
@@ -113,18 +121,38 @@ const usePerformanceReport = (): Return => {
 
   const { data, loading } = usePerformanceReportQuery({
     fetchPolicy: 'cache-and-network',
-    skip:
-      !currentScheme ||
-      !groups ||
-      groupsLoading ||
-      !selectedGroups ||
-      selectedGroups.filter(Boolean).length === 0,
+    skip: !currentScheme || !groups || groupsLoading || !selectedGroups,
     variables: {
       where: {
         dateRange,
         schemeIds: [currentScheme],
-        groupIds: selectedGroups,
+        groupIds:
+          selectedGroups.length > 0
+            ? selectedGroups
+            : groups.map(({ value }) => value),
+        brandsIds:
+          selectedBrands.length > 0
+            ? selectedBrands
+            : brands.map(({ value }) => value),
       },
+    },
+  });
+
+  const { loading: brandsLoading } = useBrandsQuery({
+    variables: {
+      where: {
+        scheme: {
+          id: { equals: currentScheme },
+        },
+      },
+    },
+    onCompleted: (brandsData) => {
+      setBrands(
+        brandsData.brands?.map(({ id, name }) => ({
+          value: id,
+          label: name,
+        })) || []
+      );
     },
   });
 
@@ -254,6 +282,10 @@ const usePerformanceReport = (): Return => {
     targetedGoodsData,
     templates,
     userContributionTableData,
+    brandsLoading,
+    setSelectedBrands,
+    selectedBrands,
+    brands,
   };
 };
 

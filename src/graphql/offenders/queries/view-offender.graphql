@@ -74,6 +74,8 @@ query ViewOffender(
       startDate
       endDate
       type
+      months
+      fineValue
     }
     createdBy {
       ...CreatedBy

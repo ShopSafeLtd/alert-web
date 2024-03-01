@@ -56,14 +56,18 @@ interface Return {
   setSelectedBusiness: (businesses: string[]) => void;
   businesses: { name: string; id: string; demId?: string | null | undefined }[];
   groups: SelectOptions[];
+  brands: SelectOptions[];
   dateRange: { startDate: Date; endDate: Date };
   setDateRange: (dateRange: { startDate: Date; endDate: Date }) => void;
   setSelectedGroups: (groups: string[]) => void;
   setGroups: (groups: SelectOptions[]) => void;
+  setBrands: (brands: SelectOptions[]) => void;
   currentScheme: string;
   setTemplates: (templates: IReportTemplate[]) => void;
   defaultTemplate: IReportTemplate;
   setLogos: (logos: string[]) => void;
+  selectedBrands: string[];
+  setSelectedBrands: (value: string[]) => void;
 }
 
 const useReportState = ({
@@ -103,6 +107,8 @@ const useReportState = ({
   const [selectedBusiness, setSelectedBusiness] = useState<string[]>([]);
   const [groups, setGroups] = useState<SelectOptions[]>([]);
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
+  const [brands, setBrands] = useState<SelectOptions[]>([]);
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [dateRange, setDateRangeState] = useState<{
     startDate: Date;
     endDate: Date;
@@ -584,6 +590,10 @@ const useReportState = ({
     setTemplates,
     defaultTemplate,
     setLogos,
+    selectedBrands,
+    setSelectedBrands,
+    brands,
+    setBrands,
   };
 };
 
