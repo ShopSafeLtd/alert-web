@@ -14,7 +14,7 @@ import { useIntl } from 'react-intl';
 import AddLogo from '../../../components/reports/addLogo';
 
 import PerformanceReportLayout from './layout/PerformanceReportLayout';
-import PerformanceLayout from './hooks/initLayout';
+import PerformanceLayout, { PerformanceDrawerLayout } from './hooks/initLayout';
 import SaveAs from '../../../components/reports/saveAs';
 import type { Props } from './hooks/types';
 import { layoutMap } from '../types';
@@ -62,6 +62,10 @@ const PerformanceReport = ({
   selectedTemplate,
   setSaveAsDrawer,
   saveAsDrawer,
+  brandsLoading,
+  brands,
+  setSelectedBrands,
+  selectedBrands,
 }: Props) => {
   const ReactGridLayout = useMemo(() => WidthProvider(RGL), []);
   const handleMenuClick: MenuProps['onClick'] = (e) => {
@@ -245,8 +249,9 @@ const PerformanceReport = ({
         <Row
           className="no-print"
           style={{ marginBottom: 10, justifyContent: 'center' }}
+          gutter={8}
         >
-          <Col span={6}>
+          <Col span={4}>
             <Select
               placeholder={intl.formatMessage({
                 defaultMessage: 'Select Groups',
@@ -272,9 +277,35 @@ const PerformanceReport = ({
               ))}
             </Select>
           </Col>
-          <Col span={6}>
+          <Col span={4}>
+            <Select
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Select Brands',
+                id: 'XfiiaU',
+              })}
+              mode="multiple"
+              maxTagCount="responsive"
+              onChange={(value) => {
+                setSelectedBrands(value || []);
+              }}
+              value={selectedBrands}
+              defaultValue={brands.map((group) => group.value)}
+              style={{ width: '100%' }}
+            >
+              {brands?.map((brand) => (
+                <Select.Option
+                  loading={brandsLoading}
+                  key={brand.value}
+                  value={brand.value}
+                >
+                  {brand.label}
+                </Select.Option>
+              ))}
+            </Select>
+          </Col>
+          <Col span={4}>
             <DatePicker.RangePicker
-              style={{ width: '100%', marginLeft: 10 }}
+              style={{ width: '100%' }}
               defaultValue={[dateRange.startDate, dateRange.endDate]}
               value={[dateRange.startDate, dateRange.endDate]}
               onChange={(value) => {
@@ -355,7 +386,7 @@ const PerformanceReport = ({
         onClose={() => setMinDrawer(!minDrawer)}
       >
         <Row gutter={[6, 6]}>
-          {PerformanceLayout.filter(
+          {PerformanceDrawerLayout.filter(
             (item) => !layout.some((i) => i.i === item.i)
           ).map((item) => (
             <Col key={item.i}>

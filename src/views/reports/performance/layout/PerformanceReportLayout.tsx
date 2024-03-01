@@ -15,6 +15,14 @@ import {
   faUserPolice,
   faUserPoliceTie,
   faUsers,
+  faImages,
+  faUserPlus,
+  faHandcuffs,
+  faBan,
+  faCalendarWeek,
+  faStarOfLife,
+  faReceipt,
+  faMoneyBills,
 } from '@fortawesome/pro-light-svg-icons';
 import React, { useMemo } from 'react';
 import type RGL from 'react-grid-layout';
@@ -77,6 +85,7 @@ interface Props {
   metadata: MetaData[];
   setMetadata: (arg0: MetaData[]) => void;
 }
+
 const PerformanceReportLayout = ({
   loading,
   data,
@@ -104,6 +113,7 @@ const PerformanceReportLayout = ({
       rowHeight * targetH + margin[1] * (targetH - 1) - (offset || 0)
     }px`;
   };
+
   const intl = useIntl();
   const components: Elements = {
     createdSummary: (
@@ -277,45 +287,17 @@ const PerformanceReportLayout = ({
             <Statistic
               className={classes.stats}
               title={intl.formatMessage({
-                defaultMessage: 'Reported to Police',
-                id: 'LhTpVN',
-              })}
-              value={
-                data?.performanceReport?.incidentSummary
-                  ?.incidentsReportedToPolice || 0
-              }
-              prefix={
-                <FontAwesomeIcon
-                  className={classes.prefixIcon}
-                  icon={faUserPolice}
-                />
-              }
-            />
-
-            <Statistic
-              className={classes.stats}
-              title={intl.formatMessage({
-                defaultMessage: 'Police Attended',
-                id: 'ES0Nc8',
-              })}
-              value={
-                data?.performanceReport?.incidentSummary
-                  ?.incidentsWherePoliceAttended || 0
-              }
-              prefix={
-                <FontAwesomeIcon
-                  className={classes.prefixIcon}
-                  icon={faUserPoliceTie}
-                />
-              }
-            />
-
-            <Statistic
-              className={classes.stats}
-              title={intl.formatMessage({
                 defaultMessage: 'Most Common Crime Type',
                 id: 'jbbNOa',
               })}
+              valueRender={(node) => (
+                <Typography.Text
+                  ellipsis
+                  style={{ maxWidth: 150, overflow: 'hidden' }}
+                >
+                  {node}
+                </Typography.Text>
+              )}
               value={
                 data?.performanceReport?.incidentSummary?.mostCommonCrimeType ||
                 ''
@@ -341,6 +323,269 @@ const PerformanceReportLayout = ({
                 <FontAwesomeIcon
                   className={classes.prefixIcon}
                   icon={faUsers}
+                />
+              }
+            />
+          </Row>
+        </Row>
+      </Card>
+    ),
+    policeSummary: (
+      <Card
+        style={{ width: '100%' }}
+        bodyStyle={{ width: '100%' }}
+        loading={loading}
+        key="policeSummary"
+      >
+        <Button
+          type="text"
+          shape="circle"
+          className="card-remove no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
+          size="small"
+          onClick={() => removeItem('incidentsSummary')}
+        />
+        <Row>
+          <Col span={12}>
+            <Title level={4}>
+              {intl.formatMessage({
+                defaultMessage: 'Police Engagement Summary',
+                id: 'ue8y5S',
+              })}
+            </Title>
+          </Col>
+          <Row className="stats-row">
+            <Statistic
+              className={classes.stats}
+              title={intl.formatMessage({
+                defaultMessage: 'Reported to Police',
+                id: 'LhTpVN',
+              })}
+              value={
+                data?.performanceReport?.policeSummary
+                  ?.totalReportedIncidents || 0
+              }
+              prefix={
+                <FontAwesomeIcon
+                  className={classes.prefixIcon}
+                  icon={faUserPolice}
+                />
+              }
+            />
+
+            <Statistic
+              className={classes.stats}
+              title={intl.formatMessage({
+                defaultMessage: 'Police Attended',
+                id: 'ES0Nc8',
+              })}
+              value={
+                data?.performanceReport?.policeSummary
+                  ?.totalAttendedIncidents || 0
+              }
+              prefix={
+                <FontAwesomeIcon
+                  className={classes.prefixIcon}
+                  icon={faUserPoliceTie}
+                />
+              }
+            />
+
+            <Statistic
+              className={classes.stats}
+              title={intl.formatMessage({
+                defaultMessage: 'Custody Images',
+                id: 'eSwB1J',
+              })}
+              value={
+                data?.performanceReport?.policeSummary?.totalPoliceImages || 0
+              }
+              prefix={
+                <FontAwesomeIcon
+                  className={classes.prefixIcon}
+                  icon={faImages}
+                />
+              }
+            />
+
+            <Statistic
+              className={classes.stats}
+              title={intl.formatMessage({
+                defaultMessage: 'Verified IDs',
+                id: '+YBMvu',
+              })}
+              value={
+                data?.performanceReport?.policeSummary
+                  ?.totalVerifiedOffenders || 0
+              }
+              prefix={
+                <FontAwesomeIcon
+                  className={classes.prefixIcon}
+                  icon={faUserPlus}
+                />
+              }
+            />
+          </Row>
+        </Row>
+      </Card>
+    ),
+    outcomeSummary: (
+      <Card
+        style={{ width: '100%' }}
+        bodyStyle={{ width: '100%' }}
+        loading={loading}
+        key="outcomeSummary"
+      >
+        <Button
+          type="text"
+          shape="circle"
+          className="card-remove no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
+          size="small"
+          onClick={() => removeItem('incidentsSummary')}
+        />
+        <Row>
+          <Col span={12}>
+            <Title level={4}>
+              {intl.formatMessage({
+                defaultMessage: 'Outcomes Summary',
+                id: 'hHUmrO',
+              })}
+            </Title>
+          </Col>
+          <Row className="stats-row">
+            <Statistic
+              className={classes.stats}
+              title={intl.formatMessage({
+                defaultMessage: 'Arrests',
+                id: 'uyYgh0',
+              })}
+              value={
+                data?.performanceReport?.policeSummary
+                  ?.totalReportedIncidents || 0
+              }
+              prefix={
+                <FontAwesomeIcon
+                  className={classes.prefixIcon}
+                  icon={faHandcuffs}
+                />
+              }
+            />
+
+            <Statistic
+              className={classes.stats}
+              title={intl.formatMessage({
+                defaultMessage: 'CBO Count',
+                id: 'cQmqi4',
+              })}
+              value={
+                data?.performanceReport?.policeSummary
+                  ?.totalAttendedIncidents || 0
+              }
+              prefix={
+                <FontAwesomeIcon className={classes.prefixIcon} icon={faBan} />
+              }
+            />
+
+            <Statistic
+              className={classes.stats}
+              title={intl.formatMessage({
+                defaultMessage: 'CBO Durations',
+                id: 'E/Ctgr',
+              })}
+              value={intl.formatMessage(
+                {
+                  defaultMessage: '{value} years',
+                  id: '0tCt48',
+                },
+                {
+                  value:
+                    data?.performanceReport?.policeSummary
+                      ?.totalVerifiedOffenders || 0,
+                }
+              )}
+              prefix={
+                <FontAwesomeIcon
+                  className={classes.prefixIcon}
+                  icon={faCalendarWeek}
+                />
+              }
+            />
+
+            <Statistic
+              className={classes.stats}
+              title={intl.formatMessage({
+                defaultMessage: 'Prison Sentences',
+                id: 'JBWog3',
+              })}
+              value={intl.formatMessage(
+                {
+                  defaultMessage: '{value} months',
+                  id: 'Cc1A8J',
+                },
+                {
+                  value:
+                    data?.performanceReport?.policeSummary
+                      ?.totalVerifiedOffenders || 0,
+                }
+              )}
+              prefix={
+                <FontAwesomeIcon
+                  className={classes.prefixIcon}
+                  icon={faUserPolice}
+                />
+              }
+            />
+            <Statistic
+              className={classes.stats}
+              title={intl.formatMessage({
+                defaultMessage: 'Rehabilitation Orders',
+                id: '+KMkeb',
+              })}
+              value={
+                data?.performanceReport?.policeSummary
+                  ?.totalVerifiedOffenders || 0
+              }
+              prefix={
+                <FontAwesomeIcon
+                  className={classes.prefixIcon}
+                  icon={faStarOfLife}
+                />
+              }
+            />
+            <Statistic
+              className={classes.stats}
+              title={intl.formatMessage({
+                defaultMessage: 'Fines Issued',
+                id: '/mIqOm',
+              })}
+              value={
+                data?.performanceReport?.policeSummary
+                  ?.totalVerifiedOffenders || 0
+              }
+              prefix={
+                <FontAwesomeIcon
+                  className={classes.prefixIcon}
+                  icon={faReceipt}
+                />
+              }
+            />
+            <Statistic
+              className={classes.stats}
+              title={intl.formatMessage({
+                defaultMessage: 'Fines Value',
+                id: 'JXR8hB',
+              })}
+              value={
+                data?.performanceReport?.policeSummary
+                  ?.totalVerifiedOffenders || 0
+              }
+              prefix={
+                <FontAwesomeIcon
+                  className={classes.prefixIcon}
+                  icon={faMoneyBills}
                 />
               }
             />

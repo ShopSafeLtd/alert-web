@@ -523,6 +523,20 @@ const useViewOffender = (offenderId: string): Return => {
       const findPrimaryId = data?.offender?.images.find(
         ({ primary }) => primary
       )?.id;
+
+      const primaryImage = findPrimaryId
+        ? [
+            {
+              where: {
+                id: findPrimaryId,
+              },
+              data: {
+                primary: { set: !value.primary },
+              },
+            },
+          ]
+        : [];
+
       void updateOffenderImages({
         variables: {
           id: offenderId,
@@ -539,14 +553,7 @@ const useViewOffender = (offenderId: string): Return => {
                   rotation: { set: value.rotation || 0 },
                 },
               },
-              {
-                where: {
-                  id: findPrimaryId,
-                },
-                data: {
-                  primary: { set: !value.primary },
-                },
-              },
+              ...primaryImage,
             ],
           },
         },
@@ -1233,11 +1240,21 @@ const useViewOffender = (offenderId: string): Return => {
                   id: value.id,
                 },
                 data: {
-                  endDate: { set: value.endDate },
-                  location: { set: value.location },
-                  startDate: { set: value.startDate },
-                  description: { set: value.description },
-                  type: { set: value.type },
+                  endDate: value.endDate ? { set: value.endDate } : undefined,
+                  location: value.location
+                    ? { set: value.location }
+                    : undefined,
+                  startDate: value.startDate
+                    ? { set: value.startDate }
+                    : undefined,
+                  description: value.description
+                    ? { set: value.description }
+                    : undefined,
+                  type: value.type ? { set: value.type } : undefined,
+                  fineValue: value.fineValue
+                    ? { set: value.fineValue }
+                    : undefined,
+                  months: value.months ? { set: value.months } : undefined,
                 },
               },
             ],
@@ -1275,16 +1292,18 @@ const useViewOffender = (offenderId: string): Return => {
                     id: userId,
                   },
                 },
-                endDate: value.endDate,
-                location: value.location,
+                endDate: value.endDate || new Date(),
+                location: value.location || '',
                 scheme: {
                   connect: {
                     id: schemeId,
                   },
                 },
-                startDate: value.startDate,
+                startDate: value.startDate || new Date(),
                 description: value.description,
                 type: value.type,
+                months: value.months,
+                fineValue: value.fineValue,
               },
             ],
           },

@@ -1,15 +1,5 @@
 import React from 'react';
-import {
-  Button,
-  Card,
-  Col,
-  Drawer,
-  Empty,
-  Row,
-  Table,
-  Tag,
-  Typography,
-} from 'antd';
+import { Button, Card, Col, Drawer, Empty, Row, Table, Typography } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faPenToSquare,
@@ -18,12 +8,10 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import { useIntl } from 'react-intl';
 
-import { calcDuration } from 'utils';
 import EditExclusion from 'components/form-components/offender/exclusion/EditExclusion';
 import AddExclusion from 'components/form-components/offender/exclusion/AddExclusion';
 import type { BanData } from 'types/DataType';
-import calcExpired from 'utils/calc-expire';
-import moment from 'moment';
+import type { Moment } from 'moment';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -36,10 +24,11 @@ interface BanType extends BanData {
 interface TableItem {
   key: string;
   description: string | null | undefined;
-  endDate: Date;
-  location?: string | undefined;
-  activeDay?: string | undefined;
   item: BanType;
+  months?: number | null;
+  startDate?: Date;
+  endDate?: Date;
+  fineValue?: number | null;
 }
 
 interface Props {
@@ -86,6 +75,8 @@ const OffenderExclusions = ({
     </Text>
   );
 
+  console.log(bansData);
+
   return (
     <>
       <Card>
@@ -99,8 +90,8 @@ const OffenderExclusions = ({
           <Col>
             <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
               {intl.formatMessage({
-                defaultMessage: 'Exclusions',
-                id: 'jjBvFh',
+                defaultMessage: 'Outcomes',
+                id: 'h5J5Su',
               })}
             </Title>
           </Col>
@@ -112,8 +103,8 @@ const OffenderExclusions = ({
             >
               {intl.formatMessage({
                 defaultMessage:
-                  '- Create exclusions for this offender to exclude them from areas or premises.',
-                id: 'lrbcIG',
+                  '- Create outcomes for this offender to exclude them from areas or premises.',
+                id: 'AIeJUP',
               })}
             </Paragraph>
           </Col>
@@ -127,137 +118,119 @@ const OffenderExclusions = ({
               }
             >
               {intl.formatMessage({
-                defaultMessage: 'Add Exclusion',
-                id: 'QPeZMN',
+                defaultMessage: 'Add Outcome',
+                id: 'HQnZ2l',
               })}
             </Button>
           </Col>
         </Row>
 
         {bansData && bansData.length > 0 ? (
-          <Row gutter={20}>
-            <Col>
-              <Table
-                size="small"
-                pagination={{
-                  hideOnSinglePage: true,
-                  defaultPageSize: 20,
-                  pageSize: 20,
-                }}
-                expandable={{
-                  expandedRowRender,
-                  rowExpandable: (record) => !!record.description,
-                }}
-                columns={[
-                  {
-                    key: 'duration',
-                    title: intl.formatMessage({
-                      defaultMessage: 'Duration',
-                      id: 'IuFETn',
-                    }),
-                    dataIndex: 'duration',
-                    width: 350,
-                    render: (value, record) => (
-                      <>
-                        <Text>{value}</Text>
-                        {calcExpired(new Date(record.endDate)) && (
-                          <Tag
-                            color="red"
-                            style={{
-                              marginLeft: 10,
-                            }}
-                          >
-                            {intl.formatMessage({
-                              defaultMessage: 'EXPIRED',
-                              id: 'GftNg3',
-                            })}
-                          </Tag>
-                        )}
-                      </>
-                    ),
-                  },
-                  {
-                    key: 'activeDay',
-                    title: intl.formatMessage({
-                      defaultMessage: 'Active Days',
-                      id: 'YEneNi',
-                    }),
-                    dataIndex: 'activeDay',
-                    width: 150,
-                  },
-                  {
-                    key: 'location',
-                    title: intl.formatMessage({
-                      defaultMessage: 'Location',
-                      id: 'rvirM2',
-                    }),
-                    dataIndex: 'location',
-                    ellipsis: true,
-                  },
-                  {
-                    key: 'type',
-                    title: intl.formatMessage({
-                      defaultMessage: 'Type',
-                      id: '+U6ozc',
-                    }),
-                    dataIndex: 'type',
-                  },
-                  {
-                    key: 'Edit',
-                    title: intl.formatMessage({
-                      defaultMessage: 'Edit',
-                      id: 'wEQDC6',
-                    }),
-                    width: 50,
-                    dataIndex: 'Edit',
-                    render: (_, record) => (
-                      <Button
-                        disabled={saving}
-                        onClick={() => {
-                          setBanData(record.item);
-                          toggleEditExclusion();
-                        }}
-                        icon={<FontAwesomeIcon icon={faPenToSquare} />}
-                      />
-                    ),
-                  },
-                  {
-                    key: 'Delete',
-                    title: intl.formatMessage({
-                      defaultMessage: 'Delete',
-                      id: 'K3r6DQ',
-                    }),
-                    dataIndex: 'Delete',
-                    width: 60,
-                    render: (_, record) => (
-                      <Button
-                        disabled={saving}
-                        onClick={() => {
-                          deleteConfirm(record.key || '');
-                        }}
-                        icon={<FontAwesomeIcon icon={faTrash} />}
-                      />
-                    ),
-                  },
-                ]}
-                dataSource={bansData.map((ban) => ({
-                  endDate: ban.endDate,
-                  key: ban.id,
-                  item: ban,
-                  duration: `${moment(ban?.startDate).format(
-                    'DD/MM/YYYY'
-                  )}  -->  ${moment(ban?.endDate).format('DD/MM/YYYY')}`,
-                  activeDay: calcDuration(
-                    new Date(ban?.startDate),
-                    new Date(ban?.endDate)
-                  ),
-                  location: ban.location,
-                  description: ban.description,
-                  type: ban.type,
-                }))}
-              />
-            </Col>
-          </Row>
+          <Table
+            size="small"
+            pagination={{
+              hideOnSinglePage: true,
+              defaultPageSize: 20,
+              pageSize: 20,
+            }}
+            expandable={{
+              expandedRowRender,
+              rowExpandable: (record) => !!record.description,
+            }}
+            columns={[
+              {
+                key: 'type',
+                title: intl.formatMessage({
+                  defaultMessage: 'Type',
+                  id: '+U6ozc',
+                }),
+                dataIndex: 'type',
+              },
+              {
+                key: 'months',
+                title: intl.formatMessage({
+                  defaultMessage: 'Months',
+                  id: 'AxDOiG',
+                }),
+                dataIndex: 'months',
+              },
+              {
+                key: 'startDate',
+                title: intl.formatMessage({
+                  defaultMessage: 'Start Date',
+                  id: 'QirE3M',
+                }),
+                dataIndex: 'startDate',
+                render: (value: Moment) =>
+                  value ? value.format('DD/MM/YYYY') : undefined,
+              },
+              {
+                key: 'endDate',
+                title: intl.formatMessage({
+                  defaultMessage: 'End Date',
+                  id: 'T4GOiX',
+                }),
+                dataIndex: 'endDate',
+                render: (value: Moment) =>
+                  value ? value.format('DD/MM/YYYY') : undefined,
+              },
+              {
+                key: 'fineValue',
+                title: intl.formatMessage({
+                  defaultMessage: 'Fine Value',
+                  id: 'l2lAwm',
+                }),
+                dataIndex: 'fineValue',
+              },
+              {
+                key: 'Edit',
+                title: intl.formatMessage({
+                  defaultMessage: 'Edit',
+                  id: 'wEQDC6',
+                }),
+                width: 50,
+                dataIndex: 'Edit',
+                render: (_, record) => (
+                  <Button
+                    disabled={saving}
+                    onClick={() => {
+                      setBanData(record.item);
+                      toggleEditExclusion();
+                    }}
+                    icon={<FontAwesomeIcon icon={faPenToSquare} />}
+                  />
+                ),
+              },
+              {
+                key: 'Delete',
+                title: intl.formatMessage({
+                  defaultMessage: 'Delete',
+                  id: 'K3r6DQ',
+                }),
+                dataIndex: 'Delete',
+                width: 60,
+                render: (_, record) => (
+                  <Button
+                    disabled={saving}
+                    onClick={() => {
+                      deleteConfirm(record.key || '');
+                    }}
+                    icon={<FontAwesomeIcon icon={faTrash} />}
+                  />
+                ),
+              },
+            ]}
+            dataSource={bansData.map((ban) => ({
+              key: ban.id,
+              item: ban,
+              description: ban.description,
+              type: ban.type,
+              months: ban.months,
+              endDate: ban.endDate,
+              fineValue: ban.fineValue,
+              startDate: ban.startDate,
+            }))}
+          />
         ) : (
           <Row justify="center">
             <Empty

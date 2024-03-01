@@ -98,10 +98,6 @@ const OffenderFeed = ({
 
   const galleryOptions = [
     {
-      label: intl.formatMessage({ defaultMessage: 'Active', id: '3a5wL8' }),
-      value: 'ACTIVE',
-    },
-    {
       label: intl.formatMessage({
         defaultMessage: 'Not Approved',
         id: 'VwMCyX',

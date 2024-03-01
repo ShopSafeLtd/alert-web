@@ -29,5 +29,21 @@ const BanTypeValues = [
     value: BanType.Wip,
     label: 'WIP',
   },
+  {
+    value: BanType.Arrest,
+    label: 'Arrest',
+  },
+  {
+    value: BanType.Fine,
+    label: 'Fine',
+  },
+  {
+    value: BanType.PrisonSentence,
+    label: 'Prison Sentence',
+  },
+  {
+    value: BanType.RehabilitationOrder,
+    label: 'Rehabilitation Order',
+  },
 ];
 export default BanTypeValues;

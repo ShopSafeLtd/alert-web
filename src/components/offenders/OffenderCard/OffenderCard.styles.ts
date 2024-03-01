@@ -97,6 +97,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
     padding: '10px 5px 5px 10px ',
     display: 'flex',
     flexDirection: 'column',
+    flex: 1,
   },
   imageExpand: {
     position: 'absolute',

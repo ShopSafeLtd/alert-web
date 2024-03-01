@@ -2,7 +2,15 @@ import type { ReactNode } from 'react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import type { Incident } from 'graphql/generated';
-import { Age, Build, Gender, Height, IdSource, Race } from 'graphql/generated';
+import {
+  Age,
+  Build,
+  Gender,
+  Height,
+  IdSource,
+  Race,
+  BanType,
+} from 'graphql/generated';
 
 export const getOffenderGender = (
   gender: Gender | undefined | null
@@ -71,6 +79,8 @@ export const getIdSource = (
     return <FormattedMessage id="/VnDMl" defaultMessage="Other" />;
   if (idSource === IdSource.Passport)
     return <FormattedMessage id="OSJSb9" defaultMessage="Passport" />;
+  if (idSource === IdSource.Police)
+    return <FormattedMessage id="rZEvPc" defaultMessage="Provided By Police" />;
 
   return <FormattedMessage id="r+TWun" defaultMessage="Not Verified" />;
 };
@@ -215,4 +225,30 @@ export const getLastOffence = (
   }
   // eslint-disable-next-line consistent-return
   return { message: 'No offense', id: undefined };
+};
+
+export const getBanType = (type: BanType | undefined | null): ReactNode => {
+  if (type === BanType.CommunityBan)
+    return <FormattedMessage id="r+lvQa" defaultMessage="Community Ban" />;
+  if (type === BanType.Cbo)
+    return <FormattedMessage id="m7K38U" defaultMessage="CBO" />;
+  if (type === BanType.Cpn)
+    return <FormattedMessage id="H3YXfH" defaultMessage="CPN" />;
+  if (type === BanType.Cpw)
+    return <FormattedMessage id="X8p8Hd" defaultMessage="CPW" />;
+  if (type === BanType.Wip)
+    return <FormattedMessage id="HvnBb5" defaultMessage="WIP" />;
+  if (type === BanType.Pspo)
+    return <FormattedMessage id="Wexw/H" defaultMessage="PSPO" />;
+  if (type === BanType.Fine)
+    return <FormattedMessage id="x4AKsM" defaultMessage="Fine" />;
+  if (type === BanType.PrisonSentence)
+    return <FormattedMessage id="an2/b4" defaultMessage="Prison Sentence" />;
+  if (type === BanType.RehabilitationOrder)
+    return (
+      <FormattedMessage id="DPZMqn" defaultMessage="Rehabilitation Order" />
+    );
+  if (type === BanType.Arrest)
+    return <FormattedMessage id="8w3wDa" defaultMessage="Arrest" />;
+  return <FormattedMessage id="/VnDMl" defaultMessage="Other" />;
 };

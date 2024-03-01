@@ -54,4 +54,8 @@ export interface Props {
   targetedGoodsData: TargetedGoodsTableData[] | [];
   templates: IReportTemplate[];
   userContributionTableData: ContributionTableData[] | [];
+  brandsLoading: boolean;
+  setSelectedBrands: (brands: string[]) => void;
+  selectedBrands: string[];
+  brands: SelectOptions[];
 }

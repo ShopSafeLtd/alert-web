@@ -39,6 +39,8 @@ interface Props {
   updateNewTagData: (values: TagData) => void;
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
+  brands: { value: string; label: string }[];
+  brandsLoading: boolean;
 }
 
 const EditBusiness = ({
@@ -57,6 +59,8 @@ const EditBusiness = ({
   updateNewTagData,
   groups,
   groupsLoading,
+  brandsLoading,
+  brands,
 }: Props) => {
   const intl = useIntl();
 
@@ -134,7 +138,36 @@ const EditBusiness = ({
           </Form.Item>
         </Col>
       </Row>
-
+      <Row gutter={16}>
+        <Col span={18}>
+          <Form.Item
+            name="brands"
+            label={intl.formatMessage({
+              defaultMessage: 'Brands',
+              id: 'jWfWEA',
+            })}
+            tooltip={intl.formatMessage({
+              defaultMessage:
+                'select the brands that are relevant to this shop.',
+              id: 'rs0Bek',
+            })}
+          >
+            <Select
+              loading={brandsLoading}
+              disabled={saving}
+              mode="multiple"
+              maxTagCount={3}
+              optionFilterProp="label"
+            >
+              {brands.map((el) => (
+                <Select.Option value={el.value} label={el.label}>
+                  {el.label}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+      </Row>
       <Row gutter={16}>
         <Col span={18}>
           <Form.Item

@@ -404,7 +404,8 @@ const useOffenderFeed = (): Return => {
       pagination,
       variables: {
         ...filterVariables,
-        compactView: !compactView,
+        tableView: false,
+        compactView: tableView ? compactView : !compactView,
       },
       order,
     });

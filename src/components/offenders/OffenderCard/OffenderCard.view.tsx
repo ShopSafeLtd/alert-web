@@ -100,7 +100,7 @@ const OffenderCard = ({
   const imagesRef = useRef<CarouselRef>(null);
   const intl = useIntl();
   return (
-    <div>
+    <div style={{ height: '100%' }}>
       {compactView ? (
         <Card
           key={offender.id || ''}
@@ -493,6 +493,11 @@ const OffenderCard = ({
           className="offender-card"
           key={offender.id || ''}
           style={{ overflow: 'hidden', marginBottom: 0 }}
+          bodyStyle={{
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
         >
           {!offender?.approved && (
             <div className="offender-card-overlay">
@@ -702,213 +707,222 @@ const OffenderCard = ({
           {/*  </Tooltip> */}
           {/* )} */}
           <div className={classes.cardContent}>
-            <Link
-              to={
-                isArticle
-                  ? `/app/offenders/view/${offender?.id}`
-                  : `view/${offender?.id}`
-              }
-            >
-              <div style={{ marginBottom: 10 }}>
-                <Title level={4} ellipsis style={{ marginBottom: 0 }}>
-                  {offender?.name}
-                </Title>
-                <Text type="secondary">
-                  {intl.formatMessage(
-                    { defaultMessage: 'Alert ID: {ref}', id: 'umL9sI' },
-                    { ref: offender?.reference }
-                  )}
-                </Text>
-              </div>
-
-              <Row gutter={16} className={classes.descriptionRow}>
-                <Col span={12}>
-                  <Row gutter={6} wrap={false}>
+            <div style={{ flex: 1 }}>
+              <Link
+                to={
+                  isArticle
+                    ? `/app/offenders/view/${offender?.id}`
+                    : `view/${offender?.id}`
+                }
+              >
+                <div style={{ marginBottom: 10 }}>
+                  <Row wrap={false} gutter={8} align="middle">
                     <Col>
-                      <FontAwesomeIcon
-                        className={classes.cardIcon}
-                        icon={faExclamationCircle}
-                      />
+                      <Title level={4} ellipsis style={{ marginBottom: 0 }}>
+                        {offender?.name}
+                      </Title>
                     </Col>
                     <Col>
-                      <Text type="secondary">
-                        {intl.formatMessage({
-                          defaultMessage: 'Incidents:',
-                          id: '+nRUf9',
-                        })}
+                      <Text type="success" ellipsis>
+                        {offender.idVerified
+                          ? intl.formatMessage({
+                              defaultMessage: 'Verified ID',
+                              id: '0lpcfx',
+                            })
+                          : ''}
                       </Text>
                     </Col>
-                    <Col>
-                      <Text>{offender.totalIncidents}</Text>
-                    </Col>
                   </Row>
-                </Col>
-                {offender.totalValue ? (
+
+                  <Text type="secondary">
+                    {intl.formatMessage(
+                      { defaultMessage: 'Alert ID: {ref}', id: 'umL9sI' },
+                      { ref: offender?.reference }
+                    )}
+                  </Text>
+                </div>
+
+                <Row gutter={16} className={classes.descriptionRow}>
                   <Col span={12}>
-                    <Row wrap={false} gutter={6}>
+                    <Row gutter={6} wrap={false}>
                       <Col>
                         <FontAwesomeIcon
                           className={classes.cardIcon}
-                          icon={faMoneyBill}
+                          icon={faExclamationCircle}
                         />
                       </Col>
                       <Col>
                         <Text type="secondary">
                           {intl.formatMessage({
-                            defaultMessage: 'Total Loss:',
-                            id: 'qc2QFx',
+                            defaultMessage: 'Incidents:',
+                            id: '+nRUf9',
                           })}
                         </Text>
                       </Col>
                       <Col>
-                        <Text>
-                          {intl.formatMessage(
-                            {
-                              defaultMessage: '£{total}',
-                              id: '5vPUPO',
-                            },
-                            {
-                              total: offender.totalValue
-                                ? offender.totalValue.toFixed(2)
-                                : 0,
-                            }
-                          )}
-                        </Text>
+                        <Text>{offender.totalIncidents}</Text>
                       </Col>
                     </Row>
                   </Col>
-                ) : undefined}
-              </Row>
-              {offender.knownFor.length > 0 ? (
-                <Row className={classes.descriptionRow} gutter={6} wrap={false}>
+                  {offender.totalValue ? (
+                    <Col span={12}>
+                      <Row wrap={false} gutter={6}>
+                        <Col>
+                          <FontAwesomeIcon
+                            className={classes.cardIcon}
+                            icon={faMoneyBill}
+                          />
+                        </Col>
+                        <Col>
+                          <Text type="secondary">
+                            {intl.formatMessage({
+                              defaultMessage: 'Total Loss:',
+                              id: 'qc2QFx',
+                            })}
+                          </Text>
+                        </Col>
+                        <Col>
+                          <Text>
+                            {intl.formatMessage(
+                              {
+                                defaultMessage: '£{total}',
+                                id: '5vPUPO',
+                              },
+                              {
+                                total: offender.totalValue
+                                  ? offender.totalValue.toFixed(2)
+                                  : 0,
+                              }
+                            )}
+                          </Text>
+                        </Col>
+                      </Row>
+                    </Col>
+                  ) : undefined}
+                </Row>
+                {offender.knownFor.length > 0 ? (
+                  <Row
+                    className={classes.descriptionRow}
+                    gutter={6}
+                    wrap={false}
+                  >
+                    <Col>
+                      <FontAwesomeIcon
+                        className={classes.cardIcon}
+                        icon={faTags}
+                      />
+                    </Col>
+                    <Col>
+                      <Text ellipsis type="secondary">
+                        {intl.formatMessage({
+                          defaultMessage: 'Known for: ',
+                          id: 'L+EzyI',
+                        })}
+                      </Text>
+                    </Col>
+                    <Col flex={1}>
+                      <Text ellipsis>
+                        {offender.knownFor.map(
+                          (item, index) => `${index > 0 ? ', ' : ''}${item}`
+                        )}
+                      </Text>
+                    </Col>
+                  </Row>
+                ) : (
+                  <div />
+                )}
+                {offender.targetedGoods.length > 0 ? (
+                  <Row
+                    className={classes.descriptionRow}
+                    gutter={6}
+                    wrap={false}
+                  >
+                    <Col>
+                      <FontAwesomeIcon
+                        className={classes.cardIcon}
+                        icon={faShirt}
+                      />
+                    </Col>
+                    <Col>
+                      <Text ellipsis type="secondary">
+                        {intl.formatMessage({
+                          defaultMessage: 'Targeted: ',
+                          id: 'bSKtXw',
+                        })}
+                      </Text>
+                    </Col>
+                    <Col flex={1}>
+                      <Text ellipsis>{offender.targetedGoods.toString()}</Text>
+                    </Col>
+                  </Row>
+                ) : (
+                  <div />
+                )}
+                {offender.comment && offender.knownFor.length === 0 ? (
+                  <Row
+                    className={classes.descriptionRow}
+                    gutter={6}
+                    wrap={false}
+                  >
+                    <Col flex={1}>
+                      <Paragraph
+                        style={{
+                          maxHeight:
+                            offender.targetedGoods.length === 0 ? 40 : 20,
+                          marginBottom: 2,
+                          overflow: 'hidden',
+                        }}
+                        ellipsis={{
+                          rows: 2,
+                        }}
+                      >
+                        {offender.comment}
+                      </Paragraph>
+                    </Col>
+                  </Row>
+                ) : (
+                  <div />
+                )}
+              </Link>
+              <Link
+                to={
+                  offender?.latestIncident
+                    ? // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+                      `/app/incidents/view/${offender.latestIncident.id}`
+                    : ''
+                }
+              >
+                <Row wrap={false} className={classes.descriptionRow} gutter={6}>
                   <Col>
                     <FontAwesomeIcon
                       className={classes.cardIcon}
-                      icon={faTags}
+                      icon={faLocationDot}
                     />
                   </Col>
                   <Col>
                     <Text ellipsis type="secondary">
                       {intl.formatMessage({
-                        defaultMessage: 'Known for: ',
-                        id: 'L+EzyI',
+                        defaultMessage: 'Last offence: ',
+                        id: 'ncfw94',
                       })}
                     </Text>
                   </Col>
                   <Col flex={1}>
                     <Text ellipsis>
-                      {offender.knownFor.map(
-                        (item, index) => `${index > 0 ? ', ' : ''}${item}`
-                      )}
+                      {getLastOffence(
+                        undefined,
+                        undefined,
+                        offender.latestIncident ?? undefined
+                      ).message ||
+                        intl.formatMessage({
+                          defaultMessage: 'Unknown',
+                          id: '5jeq8P',
+                        })}
                     </Text>
                   </Col>
                 </Row>
-              ) : (
-                <div />
-              )}
-              {offender.targetedGoods.length > 0 ? (
-                <Row className={classes.descriptionRow} gutter={6} wrap={false}>
-                  <Col>
-                    <FontAwesomeIcon
-                      className={classes.cardIcon}
-                      icon={faShirt}
-                    />
-                  </Col>
-                  <Col>
-                    <Text ellipsis type="secondary">
-                      {intl.formatMessage({
-                        defaultMessage: 'Targeted: ',
-                        id: 'bSKtXw',
-                      })}
-                    </Text>
-                  </Col>
-                  <Col flex={1}>
-                    <Text ellipsis>{offender.targetedGoods.toString()}</Text>
-                  </Col>
-                </Row>
-              ) : (
-                <div />
-              )}
-              {offender.comment && offender.knownFor.length === 0 ? (
-                <Row className={classes.descriptionRow} gutter={6} wrap={false}>
-                  <Col flex={1}>
-                    <Paragraph
-                      style={{
-                        maxHeight:
-                          offender.targetedGoods.length === 0 ? 40 : 20,
-                        marginBottom: 2,
-                        overflow: 'hidden',
-                      }}
-                      ellipsis={{
-                        rows: 2,
-                      }}
-                    >
-                      {offender.comment}
-                    </Paragraph>
-                  </Col>
-                </Row>
-              ) : (
-                <div />
-              )}
-            </Link>
-            <Link
-              to={
-                offender?.latestIncident
-                  ? // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-                    `/app/incidents/view/${offender.latestIncident.id}`
-                  : ''
-              }
-            >
-              <Row wrap={false} className={classes.descriptionRow} gutter={6}>
-                <Col>
-                  <FontAwesomeIcon
-                    className={classes.cardIcon}
-                    icon={faLocationDot}
-                  />
-                </Col>
-                <Col>
-                  <Text ellipsis type="secondary">
-                    {intl.formatMessage({
-                      defaultMessage: 'Last offence: ',
-                      id: 'ncfw94',
-                    })}
-                  </Text>
-                </Col>
-                <Col flex={1}>
-                  <Text ellipsis>
-                    {getLastOffence(
-                      undefined,
-                      undefined,
-                      offender.latestIncident ?? undefined
-                    ).message ||
-                      intl.formatMessage({
-                        defaultMessage: 'Unknown',
-                        id: '5jeq8P',
-                      })}
-                  </Text>
-                </Col>
-              </Row>
-            </Link>
-
-            {!offender.comment && offender.targetedGoods.length === 0 ? (
-              <div
-                style={{
-                  height: 27,
-                }}
-              />
-            ) : (
-              <div />
-            )}
-            {offender.targetedGoods.length === 0 ? (
-              <div
-                style={{
-                  height:
-                    offender.comment && offender.knownFor.length === 0 ? 0 : 27,
-                }}
-              />
-            ) : (
-              <div />
-            )}
+              </Link>
+            </div>
 
             <Row justify="center">
               <Col>
