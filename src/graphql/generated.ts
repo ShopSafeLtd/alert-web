@@ -21631,6 +21631,8 @@ export type UserNotificationsQueryVariables = Exact<{
   where: UserWhereUniqueInput;
   orderBy?: InputMaybe<Array<UserNotificationOrderByWithRelationInput> | UserNotificationOrderByWithRelationInput>;
   notificationWhere?: InputMaybe<UserNotificationWhereInput>;
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
 }>;
 
 
@@ -31794,12 +31796,17 @@ export type ListUserNotificationsQueryHookResult = ReturnType<typeof useListUser
 export type ListUserNotificationsLazyQueryHookResult = ReturnType<typeof useListUserNotificationsLazyQuery>;
 export type ListUserNotificationsQueryResult = Apollo.QueryResult<ListUserNotificationsQuery, ListUserNotificationsQueryVariables>;
 export const UserNotificationsDocument = gql`
-    query userNotifications($where: UserWhereUniqueInput!, $orderBy: [UserNotificationOrderByWithRelationInput!], $notificationWhere: UserNotificationWhereInput) {
+    query userNotifications($where: UserWhereUniqueInput!, $orderBy: [UserNotificationOrderByWithRelationInput!], $notificationWhere: UserNotificationWhereInput, $take: Int, $skip: Int) {
   user(where: $where) {
     id
     totalNotifications
     totalUnreadNotifications
-    notifications(where: $notificationWhere, orderBy: $orderBy) {
+    notifications(
+      where: $notificationWhere
+      orderBy: $orderBy
+      take: $take
+      skip: $skip
+    ) {
       id
       read
       createdAt

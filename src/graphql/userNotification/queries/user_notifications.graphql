@@ -2,13 +2,15 @@ query userNotifications(
   $where: UserWhereUniqueInput!
   $orderBy: [UserNotificationOrderByWithRelationInput!]
   $notificationWhere: UserNotificationWhereInput
+  $take: Int
+  $skip: Int
 ) {
   user(where: $where) {
     id
     totalNotifications
     totalUnreadNotifications
 
-    notifications(where: $notificationWhere, orderBy: $orderBy) {
+    notifications(where: $notificationWhere, orderBy: $orderBy, take: $take, skip: $skip) {
       id
       read
       createdAt
