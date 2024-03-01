@@ -5,6 +5,8 @@ export type ExtendedLayout = RGL.Layout;
 export type AllowedValue =
   | 'createdSummary'
   | 'incidentsSummary'
+  | 'policeSummary'
+  | 'outcomeSummary'
   | 'lossSummary'
   | 'crimeTypesDonut'
   | 'involvedTagsDonut'
@@ -53,6 +55,14 @@ export const LayoutToReadable: {
   {
     i: 'incidentsSummary',
     readable: 'Incidents Summary',
+  },
+  {
+    i: 'policeSummary',
+    readable: 'Police Summary',
+  },
+  {
+    i: 'outcomeSummary',
+    readable: 'Outcome Summary',
   },
   {
     i: 'lossSummary',
