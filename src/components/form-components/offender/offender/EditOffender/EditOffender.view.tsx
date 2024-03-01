@@ -1,5 +1,5 @@
 import React from 'react';
-import type { ViewOffenderQuery } from 'graphql/generated';
+import type { ViewOffenderQuery, BanType } from 'graphql/generated';
 
 import type { FormInstance } from 'antd';
 import {
@@ -15,17 +15,12 @@ import {
   Skeleton,
   Switch,
   Table,
-  Tag,
   Typography,
   Upload,
 } from 'antd';
 
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { ageValues, buildValues, genderValues, raceValues } from 'types/enums';
-import {
-  calcDuration,
-  calcExpired,
-} from 'utils/offender/get-offender-exclusion';
 
 import AddExclusion from 'components/form-components/offender/exclusion/AddExclusion';
 import EditExclusion from 'components/form-components/offender/exclusion/EditExclusion';
@@ -45,7 +40,7 @@ import { useIntl } from 'react-intl';
 import type { FormData } from './useEditOffender';
 import customRequest from '../../../../../utils/custom-request';
 
-const { Title, Text, Paragraph } = Typography;
+const { Title, Paragraph } = Typography;
 
 // interface FormData {
 //   name: string;
@@ -64,11 +59,13 @@ const { Title, Text, Paragraph } = Typography;
 
 interface BanData {
   id: string;
-  title?: string | null | undefined;
-  endDate: Date;
-  startDate: Date;
-  location: string;
+  type?: BanType | null;
+  endDate?: Date;
+  startDate?: Date;
+  location?: string;
   description?: string | null | undefined;
+  months?: number | null | undefined;
+  fineValue?: number | null | undefined;
 }
 
 interface Props {
@@ -545,42 +542,6 @@ const EditOffender = ({
                     }}
                     columns={[
                       {
-                        key: 'duration',
-                        title: intl.formatMessage({
-                          defaultMessage: 'Duration',
-                          id: 'IuFETn',
-                        }),
-                        dataIndex: 'duration',
-                        width: 350,
-                        render: (value, record) => (
-                          <>
-                            <Text>{value}</Text>
-                            {calcExpired(new Date(record.endDate)) && (
-                              <Tag
-                                color="red"
-                                style={{
-                                  marginLeft: 10,
-                                }}
-                              >
-                                {intl.formatMessage({
-                                  defaultMessage: 'EXPIRED',
-                                  id: 'GftNg3',
-                                })}
-                              </Tag>
-                            )}
-                          </>
-                        ),
-                      },
-                      {
-                        key: 'activeDay',
-                        title: intl.formatMessage({
-                          defaultMessage: 'Active Days',
-                          id: 'YEneNi',
-                        }),
-                        dataIndex: 'activeDay',
-                        width: 150,
-                      },
-                      {
                         key: 'location',
                         title: intl.formatMessage({
                           defaultMessage: 'Location',
@@ -641,15 +602,6 @@ const EditOffender = ({
                       endDate: ban.endDate,
                       key: ban.id,
                       item: ban,
-                      duration: `${new Date(
-                        ban?.startDate
-                      ).toDateString()}  -->  ${new Date(
-                        ban?.endDate
-                      ).toDateString()}`,
-                      activeDay: calcDuration(
-                        new Date(ban?.startDate),
-                        new Date(ban?.endDate)
-                      ),
                       location: ban.location,
                       description: ban.description,
                     }))}

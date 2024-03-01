@@ -7,6 +7,7 @@ import type {
   OffenderUpdateInput,
   Race,
   ViewOffenderQuery,
+  BanType,
 } from 'graphql/generated';
 import {
   Model,
@@ -64,11 +65,13 @@ interface Props {
 
 interface BanData {
   id: string;
-  title?: string | null | undefined;
-  endDate: Date;
-  startDate: Date;
-  location: string;
+  type?: BanType | null;
+  endDate?: Date;
+  startDate?: Date;
+  location?: string;
   description?: string | null | undefined;
+  months?: number | null | undefined;
+  fineValue?: number | null | undefined;
 }
 
 export interface FormData {
@@ -281,9 +284,9 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
           create:
             newBans.length > 0
               ? newBans.map((ban) => ({
-                  startDate: ban?.startDate,
-                  endDate: ban?.endDate,
-                  location: ban?.location,
+                  startDate: ban?.startDate || new Date(),
+                  endDate: ban?.endDate || new Date(),
+                  location: ban?.location || '',
                   description: ban?.description || null,
                   scheme: {
                     connect: {
