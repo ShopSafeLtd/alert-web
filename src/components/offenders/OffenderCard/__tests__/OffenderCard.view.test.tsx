@@ -21,6 +21,7 @@ describe('Detail Officer View', () => {
     approved: null,
     totalValue: 0,
     active: null,
+    idVerified: false,
     createdBy: {
       fullName: 'aaa',
       id: 'cl4pe3eu91312371op4c4k2lih2',

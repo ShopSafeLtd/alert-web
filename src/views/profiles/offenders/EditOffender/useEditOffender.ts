@@ -517,14 +517,14 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
                   id: userId,
                 },
               },
-              endDate: ban.endDate,
-              location: ban.location,
+              endDate: ban.endDate || new Date(),
+              location: ban.location || '',
               scheme: {
                 connect: {
                   id: schemeId,
                 },
               },
-              startDate: ban.startDate,
+              startDate: ban.startDate || new Date(),
               description: ban.description,
               type: ban.type,
             }))
