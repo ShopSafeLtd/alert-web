@@ -14,7 +14,7 @@ import { useIntl } from 'react-intl';
 import AddLogo from '../../../components/reports/addLogo';
 
 import PerformanceReportLayout from './layout/PerformanceReportLayout';
-import PerformanceLayout from './hooks/initLayout';
+import PerformanceLayout, { PerformanceDrawerLayout } from './hooks/initLayout';
 import SaveAs from '../../../components/reports/saveAs';
 import type { Props } from './hooks/types';
 import { layoutMap } from '../types';
@@ -386,7 +386,7 @@ const PerformanceReport = ({
         onClose={() => setMinDrawer(!minDrawer)}
       >
         <Row gutter={[6, 6]}>
-          {PerformanceLayout.filter(
+          {PerformanceDrawerLayout.filter(
             (item) => !layout.some((i) => i.i === item.i)
           ).map((item) => (
             <Col key={item.i}>
