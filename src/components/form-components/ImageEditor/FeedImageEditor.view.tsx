@@ -70,6 +70,13 @@ const FeedImageEditor = ({ open, image, submitImage, onClose }: Props) => {
 
   const handleSubmit = () => {
     if (image) {
+      console.log({
+        ...image,
+        position,
+        primary,
+        policeImage,
+        rotation,
+      });
       submitImage({
         ...image,
         position,

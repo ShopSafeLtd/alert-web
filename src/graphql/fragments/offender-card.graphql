@@ -10,6 +10,7 @@ fragment OffenderCard on Offender {
   totalValue
   comment
   createdByUser
+  idVerified
   latestIncident {
     id
     dateAgo

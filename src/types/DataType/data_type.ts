@@ -18,12 +18,13 @@ import type { Moment } from 'moment';
 // BanData
 export interface BanData {
   id: string;
-  title?: string | null | undefined;
   type?: BanType | null;
-  endDate: Date;
-  startDate: Date;
-  location: string;
+  endDate?: Date;
+  startDate?: Date;
+  location?: string;
   description?: string | null | undefined;
+  months?: number | null | undefined;
+  fineValue?: number | null | undefined;
 }
 // Offender
 export interface OffenderData {

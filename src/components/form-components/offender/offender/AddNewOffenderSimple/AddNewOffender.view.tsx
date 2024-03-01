@@ -342,6 +342,13 @@ const AddNewOffender = ({
                   },
                   {
                     label: intl.formatMessage({
+                      defaultMessage: 'Provided By Police',
+                      id: 'rZEvPc',
+                    }),
+                    value: IdSource.Police,
+                  },
+                  {
+                    label: intl.formatMessage({
                       defaultMessage: 'Other',
                       id: '/VnDMl',
                     }),

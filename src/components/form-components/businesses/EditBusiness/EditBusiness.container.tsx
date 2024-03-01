@@ -23,6 +23,8 @@ const EditBusiness = ({ onClose, businessId }: Props) => {
     updateNewTagData,
     groups,
     groupsLoading,
+    brands,
+    brandsLoading,
   } = useEditBusiness({ onClose, businessId });
 
   return (
@@ -42,6 +44,8 @@ const EditBusiness = ({ onClose, businessId }: Props) => {
       updateNewTagData={updateNewTagData}
       groups={groups}
       groupsLoading={groupsLoading}
+      brands={brands}
+      brandsLoading={brandsLoading}
     />
   );
 };

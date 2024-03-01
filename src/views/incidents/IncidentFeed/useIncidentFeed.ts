@@ -536,7 +536,8 @@ const useIncidentFeed = (): Return => {
       pagination,
       variables: {
         ...variables,
-        compactView: !compactView,
+        tableView: false,
+        compactView: tableView ? compactView : !compactView,
       },
       order,
     });

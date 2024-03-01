@@ -644,9 +644,9 @@ const useAddOffender = (): Return => {
           bans:
             bansData && bansData.length > 0
               ? bansData.map((ban) => ({
-                  startDate: ban?.startDate,
-                  endDate: ban?.endDate,
-                  location: ban?.location,
+                  startDate: ban?.startDate || new Date(),
+                  endDate: ban?.endDate || new Date(),
+                  location: ban?.location || '',
                   description: ban?.description || null,
                   type: ban.type || null,
                   scheme: {
@@ -655,6 +655,8 @@ const useAddOffender = (): Return => {
                     },
                   },
                   createdBy: { connect: { id: userId } },
+                  months: ban?.months,
+                  fineValue: ban?.fineValue,
                 }))
               : undefined,
           idVerified: data.idVerified,

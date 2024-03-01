@@ -18,6 +18,7 @@ query EditBusiness($where: BusinessWhereUniqueInput!) {
       id
       name
     }
+    brands
     locations {
       id
       building

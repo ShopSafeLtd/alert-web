@@ -6,6 +6,7 @@ import type {
   DeleteDocumentMutation,
   ViewOffenderQuery,
 } from 'graphql/generated';
+import { BanType } from 'graphql/generated';
 import {
   Badge,
   Button,
@@ -59,6 +60,7 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import {
   calcAge,
+  getBanType,
   getIdSource,
   getOffenderAge,
   getOffenderBuild,
@@ -521,21 +523,21 @@ const ViewOffender = ({
                         </Dropdown>
                       </Col>
                     )}
-                    {!editRights &&
-                      data?.offender.name === 'Unidentified Offender' && (
-                        <Col>
-                          <Button type="ghost" onClick={toggleKnowOffender}>
-                            <FontAwesomeIcon
-                              className={classes.icon}
-                              icon={faEdit}
-                            />
-                            {intl.formatMessage({
-                              defaultMessage: 'Know this offender?',
-                              id: 'SvQc4C',
-                            })}
-                          </Button>
-                        </Col>
-                      )}
+                    {/* {!editRights && */}
+                    {/*  data?.offender.name === 'Unidentified Offender' && ( */}
+                    {/*    <Col> */}
+                    {/*      <Button type="ghost" onClick={toggleKnowOffender}> */}
+                    {/*        <FontAwesomeIcon */}
+                    {/*          className={classes.icon} */}
+                    {/*          icon={faEdit} */}
+                    {/*        /> */}
+                    {/*        {intl.formatMessage({ */}
+                    {/*          defaultMessage: 'Know this offender?', */}
+                    {/*          id: 'SvQc4C', */}
+                    {/*        })} */}
+                    {/*      </Button> */}
+                    {/*    </Col> */}
+                    {/*  )} */}
 
                     <Col>
                       <Dropdown
@@ -747,8 +749,8 @@ const ViewOffender = ({
                                         icon={faPassport}
                                       />
                                       {intl.formatMessage({
-                                        defaultMessage: 'Verified',
-                                        id: 'Z8971h',
+                                        defaultMessage: 'Verified ID',
+                                        id: '0lpcfx',
                                       })}
                                     </span>
                                   }
@@ -852,18 +854,23 @@ const ViewOffender = ({
                                             icon={faCartShopping}
                                           />
                                           {intl.formatMessage({
-                                            defaultMessage: 'Goods',
-                                            id: 'u5dS1t',
+                                            defaultMessage: 'Targeted Goods',
+                                            id: 'dLBbg0',
                                           })}
                                         </span>
                                       }
                                     >
                                       <Row>
-                                        {data?.offender?.knownFor?.map((el) => (
-                                          <Tag key={el} className={classes.tag}>
-                                            {el}
-                                          </Tag>
-                                        ))}
+                                        {data?.offender?.targetedGoods?.map(
+                                          (el) => (
+                                            <Tag
+                                              key={el}
+                                              className={classes.tag}
+                                            >
+                                              {el}
+                                            </Tag>
+                                          )
+                                        )}
                                       </Row>
                                     </Descriptions.Item>
                                   )}
@@ -878,8 +885,8 @@ const ViewOffender = ({
                                             icon={faSirenOn}
                                           />
                                           {intl.formatMessage({
-                                            defaultMessage: 'Crime Types',
-                                            id: 'Piba4q',
+                                            defaultMessage: 'Known For',
+                                            id: 'aHKuCI',
                                           })}
                                         </span>
                                       }
@@ -1294,29 +1301,6 @@ const ViewOffender = ({
                           </Row>
                         </Card>
                         <Card loading={loading}>
-                          <Title level={4}>
-                            {intl.formatMessage({
-                              defaultMessage: 'Incidents',
-                              id: 'mtr3R4',
-                            })}
-                          </Title>
-                          {data?.offender?.incidents.length && !loading ? (
-                            <IncidentTable
-                              incidents={data?.offender?.incidents || []}
-                              hasNavigation
-                            />
-                          ) : (
-                            <Empty
-                              description={intl.formatMessage({
-                                defaultMessage:
-                                  'No incidents for this offender',
-                                id: 'wOpY6l',
-                              })}
-                              image={Empty.PRESENTED_IMAGE_SIMPLE}
-                            />
-                          )}
-                        </Card>
-                        <Card loading={loading}>
                           <Row
                             gutter={8}
                             align="middle"
@@ -1325,8 +1309,8 @@ const ViewOffender = ({
                             <Col flex={1}>
                               <Title level={4}>
                                 {intl.formatMessage({
-                                  defaultMessage: 'Exclusions',
-                                  id: 'jjBvFh',
+                                  defaultMessage: 'Outcomes',
+                                  id: 'h5J5Su',
                                 })}
                               </Title>
                             </Col>
@@ -1343,8 +1327,8 @@ const ViewOffender = ({
                                   }
                                 >
                                   {intl.formatMessage({
-                                    defaultMessage: 'Add Exclusion',
-                                    id: 'QPeZMN',
+                                    defaultMessage: 'Add Outcome',
+                                    id: 'HQnZ2l',
                                   })}
                                 </Button>
                               </Col>
@@ -1368,6 +1352,15 @@ const ViewOffender = ({
                               }}
                               columns={[
                                 {
+                                  key: 'type',
+                                  title: intl.formatMessage({
+                                    defaultMessage: 'Type',
+                                    id: '+U6ozc',
+                                  }),
+                                  dataIndex: 'type',
+                                  ellipsis: true,
+                                },
+                                {
                                   key: 'duration',
                                   title: intl.formatMessage({
                                     defaultMessage: 'Duration',
@@ -1375,15 +1368,19 @@ const ViewOffender = ({
                                   }),
                                   dataIndex: 'duration',
                                   width: 110,
-                                  render: (value) => <Text>{value}</Text>,
-                                },
-                                {
-                                  key: 'activeDay',
-                                  title: intl.formatMessage({
-                                    defaultMessage: 'Active Days',
-                                    id: 'YEneNi',
-                                  }),
-                                  dataIndex: 'activeDay',
+                                  render: (value, row) =>
+                                    [
+                                      BanType.Wip,
+                                      BanType.Cpw,
+                                      BanType.Cpn,
+                                      BanType.Pspo,
+                                      BanType.CommunityBan,
+                                      BanType.Other,
+                                      BanType.Cbo,
+                                      BanType.PrisonSentence,
+                                    ].includes(row.typeEnum as BanType) && (
+                                      <Text>{value}</Text>
+                                    ),
                                 },
                                 {
                                   key: 'status',
@@ -1393,39 +1390,43 @@ const ViewOffender = ({
                                   }),
                                   dataIndex: 'status',
                                   render: (value, record) =>
-                                    calcExpired(new Date(record.endDate)) ? (
-                                      <Tag color="red">
-                                        {intl.formatMessage({
-                                          defaultMessage: 'EXPIRED',
-                                          id: 'GftNg3',
-                                        })}
-                                      </Tag>
-                                    ) : (
-                                      <Tag color="success">
-                                        {intl.formatMessage({
-                                          defaultMessage: 'ACTIVE',
-                                          id: 'LQPOVs',
-                                        })}
-                                      </Tag>
+                                    [
+                                      BanType.Wip,
+                                      BanType.Cpw,
+                                      BanType.Cpn,
+                                      BanType.Pspo,
+                                      BanType.CommunityBan,
+                                      BanType.Other,
+                                      BanType.Cbo,
+                                    ].includes(record.typeEnum as BanType) && (
+                                      <div>
+                                        {calcExpired(
+                                          new Date(record.endDate)
+                                        ) ? (
+                                          <Tag color="red">
+                                            {intl.formatMessage({
+                                              defaultMessage: 'EXPIRED',
+                                              id: 'GftNg3',
+                                            })}
+                                          </Tag>
+                                        ) : (
+                                          <Tag color="success">
+                                            {intl.formatMessage({
+                                              defaultMessage: 'ACTIVE',
+                                              id: 'LQPOVs',
+                                            })}
+                                          </Tag>
+                                        )}
+                                      </div>
                                     ),
                                 },
                                 {
-                                  key: 'location',
+                                  key: 'fineValue',
                                   title: intl.formatMessage({
-                                    defaultMessage: 'Location',
-                                    id: 'rvirM2',
+                                    defaultMessage: 'Fine Value',
+                                    id: 'l2lAwm',
                                   }),
-                                  dataIndex: 'location',
-                                  ellipsis: true,
-                                },
-
-                                {
-                                  key: 'type',
-                                  title: intl.formatMessage({
-                                    defaultMessage: 'Type',
-                                    id: '+U6ozc',
-                                  }),
-                                  dataIndex: 'type',
+                                  dataIndex: 'fineValue',
                                   ellipsis: true,
                                 },
                                 {
@@ -1510,10 +1511,38 @@ const ViewOffender = ({
                               dataSource={data?.offender?.bans.map((ban) => ({
                                 key: ban.id,
                                 endDate: ban.endDate,
-                                duration: `${FormatCalendar(
-                                  ban?.startDate,
-                                  true
-                                )}  ->  ${FormatCalendar(ban?.endDate, true)}`,
+                                fineValue:
+                                  ban.fineValue === 0
+                                    ? ''
+                                    : intl.formatMessage(
+                                        {
+                                          defaultMessage: '£{value}',
+                                          id: 'pCmP/V',
+                                        },
+                                        {
+                                          value: ban.fineValue,
+                                        }
+                                      ),
+                                duration: [
+                                  BanType.Cbo,
+                                  BanType.PrisonSentence,
+                                ].includes(ban.type as BanType)
+                                  ? intl.formatMessage(
+                                      {
+                                        defaultMessage: '{months} months',
+                                        id: 'GM3YzV',
+                                      },
+                                      {
+                                        months: ban.months,
+                                      }
+                                    )
+                                  : `${FormatCalendar(
+                                      ban?.startDate,
+                                      true
+                                    )}  ->  ${FormatCalendar(
+                                      ban?.endDate,
+                                      true
+                                    )}`,
                                 activeDay: calcDuration(
                                   new Date(ban?.startDate),
                                   new Date(ban?.endDate)
@@ -1525,7 +1554,8 @@ const ViewOffender = ({
                                 ).toDateString()}`,
                                 location: ban.location,
                                 description: ban.description,
-                                type: ban.type,
+                                type: getBanType(ban.type),
+                                typeEnum: ban.type,
                                 ban,
                               }))}
                             />
@@ -1540,6 +1570,30 @@ const ViewOffender = ({
                             />
                           )}
                         </Card>
+                        <Card loading={loading}>
+                          <Title level={4}>
+                            {intl.formatMessage({
+                              defaultMessage: 'Incidents',
+                              id: 'mtr3R4',
+                            })}
+                          </Title>
+                          {data?.offender?.incidents.length && !loading ? (
+                            <IncidentTable
+                              incidents={data?.offender?.incidents || []}
+                              hasNavigation
+                            />
+                          ) : (
+                            <Empty
+                              description={intl.formatMessage({
+                                defaultMessage:
+                                  'No incidents for this offender',
+                                id: 'wOpY6l',
+                              })}
+                              image={Empty.PRESENTED_IMAGE_SIMPLE}
+                            />
+                          )}
+                        </Card>
+
                         {editRights && (
                           <Card loading={loading}>
                             <Row
@@ -2750,8 +2804,8 @@ const ViewOffender = ({
       {/* exclusion */}
       <Drawer
         title={intl.formatMessage({
-          defaultMessage: 'Add Exclusion',
-          id: 'QPeZMN',
+          defaultMessage: 'Add Outcome',
+          id: 'HQnZ2l',
         })}
         open={addBan}
         width="400"
@@ -2765,8 +2819,8 @@ const ViewOffender = ({
       </Drawer>
       <Drawer
         title={intl.formatMessage({
-          defaultMessage: 'Edit Exclusion',
-          id: '22olP0',
+          defaultMessage: 'Edit Outcome',
+          id: '8FYJTj',
         })}
         open={!!editBanData}
         width="400"
