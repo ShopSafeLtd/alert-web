@@ -457,7 +457,7 @@ const PerformanceReportLayout = ({
           hidden={!editMode}
           icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
           size="small"
-          onClick={() => removeItem('incidentsSummary')}
+          onClick={() => removeItem('outcomeSummary')}
         />
         <Row>
           <Col span={12}>
@@ -475,10 +475,7 @@ const PerformanceReportLayout = ({
                 defaultMessage: 'Arrests',
                 id: 'uyYgh0',
               })}
-              value={
-                data?.performanceReport?.policeSummary
-                  ?.totalReportedIncidents || 0
-              }
+              value={data?.performanceReport?.outcomeSummary?.totalArrests || 0}
               prefix={
                 <FontAwesomeIcon
                   className={classes.prefixIcon}
@@ -494,8 +491,7 @@ const PerformanceReportLayout = ({
                 id: 'cQmqi4',
               })}
               value={
-                data?.performanceReport?.policeSummary
-                  ?.totalAttendedIncidents || 0
+                data?.performanceReport?.outcomeSummary?.totalCBOCount || 0
               }
               prefix={
                 <FontAwesomeIcon className={classes.prefixIcon} icon={faBan} />
@@ -515,8 +511,7 @@ const PerformanceReportLayout = ({
                 },
                 {
                   value:
-                    data?.performanceReport?.policeSummary
-                      ?.totalVerifiedOffenders || 0,
+                    data?.performanceReport?.outcomeSummary?.totalCBOYears || 0,
                 }
               )}
               prefix={
@@ -540,8 +535,8 @@ const PerformanceReportLayout = ({
                 },
                 {
                   value:
-                    data?.performanceReport?.policeSummary
-                      ?.totalVerifiedOffenders || 0,
+                    data?.performanceReport?.outcomeSummary
+                      ?.totalPrisonSentenceMonths || 0,
                 }
               )}
               prefix={
@@ -558,8 +553,7 @@ const PerformanceReportLayout = ({
                 id: '+KMkeb',
               })}
               value={
-                data?.performanceReport?.policeSummary
-                  ?.totalVerifiedOffenders || 0
+                data?.performanceReport?.outcomeSummary?.totalRehabOrders || 0
               }
               prefix={
                 <FontAwesomeIcon
@@ -575,8 +569,7 @@ const PerformanceReportLayout = ({
                 id: '/mIqOm',
               })}
               value={
-                data?.performanceReport?.policeSummary
-                  ?.totalVerifiedOffenders || 0
+                data?.performanceReport?.outcomeSummary?.totalFinesCount || 0
               }
               prefix={
                 <FontAwesomeIcon
@@ -592,8 +585,7 @@ const PerformanceReportLayout = ({
                 id: 'JXR8hB',
               })}
               value={
-                data?.performanceReport?.policeSummary
-                  ?.totalVerifiedOffenders || 0
+                data?.performanceReport?.outcomeSummary?.totalFinesValue || 0
               }
               prefix={
                 <FontAwesomeIcon
