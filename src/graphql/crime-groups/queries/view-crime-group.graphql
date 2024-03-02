@@ -24,6 +24,19 @@ query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
     }
     offenders {
       ...Offenders
+      alias
+      totalIncidents
+      totalValue
+      latestIncident {
+        id
+        date
+      }
+      knownFor
+      targetedBusinesses {
+        id
+        name
+      }
+      targetedGoods
       images {
         ...Images
       }
