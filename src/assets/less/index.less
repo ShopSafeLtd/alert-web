@@ -99,8 +99,10 @@
 }
 
 .no-break {
-  page-break-inside: avoid;
-  break-inside: avoid;
+  page-break-before: auto !important;
+  page-break-inside: avoid !important;
+  break-inside: avoid !important;
+  display: block !important;
 }
 
 .print-body {
@@ -150,11 +152,22 @@
   z-index: 1;
 }
 
+
+
 @media print {
   .no-print,
   .no-print * {
     display: none !important;
   }
+  .page-break {
+    display: block;
+    page-break-before: always;
+  }
+  @import '~antd/lib/style/color/colorPalette.less';
+  @import '~antd/dist/antd.less';
+  @import '~antd/lib/style/themes/default.less';
+  @import './styles/styles.less';
+  @import './styles/themes/light.less';
 
   @page {
     size: A4;
@@ -162,6 +175,15 @@
     background: white;
   }
 
+  .pagebreak {
+    margin-top: 1rem;
+    display: block;
+    page-break-before: always;
+  }
+  .ant-card {
+    break-inside: avoid !important;
+
+  }
   .ant-card-bordered {
     border: 0 solid #000;
   }
@@ -192,6 +214,10 @@
     //transform-origin: 0 0;
 
   }
+    .no-break {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
 
   .ant-table-body {
     overflow-y: unset !important;

@@ -380,6 +380,7 @@ const OffenderReportLayout = ({
     ),
     lossSummary: (
       <Card
+        className="no-break"
         style={{ width: '100%' }}
         bodyStyle={{ width: '100%' }}
         loading={loading}
@@ -555,6 +556,7 @@ const OffenderReportLayout = ({
         metadata.find((item) => item.key === 'crimeTypesDonut')?.type ===
           'pie' ? (
           <DonutGraph
+            isPrinting={isPrinting}
             data={data?.offenderReport?.crimeTypeDonut}
             emptyLabel={intl.formatMessage({
               defaultMessage: 'No Crime Types',
@@ -568,6 +570,7 @@ const OffenderReportLayout = ({
           />
         ) : (
           <BarGraph
+            isPrinting={isPrinting}
             data={data?.offenderReport?.crimeTypeDonut}
             emptyLabel={intl.formatMessage({
               defaultMessage: 'No Crime Types',
@@ -603,6 +606,7 @@ const OffenderReportLayout = ({
           onClick={() => removeItem('crimeTypesByBusinessRadial')}
         />
         <RadialGraph
+          isPrinting={isPrinting}
           data={data?.offenderReport?.crimeTypeBusinessRadial}
           emptyLabel={intl.formatMessage({
             defaultMessage: 'No Crime Types',
@@ -621,7 +625,6 @@ const OffenderReportLayout = ({
         loading={loading}
         style={{
           height: calculateHeight('goodsTypeLossRecoveredRadial'),
-          pageBreakBefore: 'always',
         }}
         bodyStyle={{ height: '90%' }}
         key="goodsTypeLossRecoveredRadial"
@@ -636,6 +639,7 @@ const OffenderReportLayout = ({
           onClick={() => removeItem('goodsTypeLossRecoveredRadial')}
         />
         <RadialGraph
+          isPrinting={isPrinting}
           data={data?.offenderReport?.goodsTypeLossRecovered}
           emptyLabel={intl.formatMessage({
             defaultMessage: 'No Crime Types',
@@ -707,6 +711,7 @@ const OffenderReportLayout = ({
           'pie' ? (
           <DonutGraph
             data={data?.offenderReport?.incidentTimeOfDayDonut}
+            isPrinting={isPrinting}
             emptyLabel={intl.formatMessage({
               defaultMessage: 'No Incidents',
               id: '+nJOH5',
@@ -720,6 +725,7 @@ const OffenderReportLayout = ({
         ) : (
           <BarGraph
             data={data?.offenderReport?.incidentTimeOfDayDonut}
+            isPrinting={isPrinting}
             emptyLabel={intl.formatMessage({
               defaultMessage: 'No Incidents',
               id: '+nJOH5',
@@ -795,6 +801,7 @@ const OffenderReportLayout = ({
           'pie' ? (
           <DonutGraph
             data={data?.offenderReport?.incidentMonthGraph}
+            isPrinting={isPrinting}
             emptyLabel={intl.formatMessage({
               defaultMessage: 'No Incidents',
               id: '+nJOH5',
@@ -812,6 +819,7 @@ const OffenderReportLayout = ({
               defaultMessage: 'No Incidents',
               id: '+nJOH5',
             })}
+            isPrinting={isPrinting}
             labelFormat={intl.formatMessage({
               defaultMessage: 'Incidents',
               id: 'mtr3R4',
@@ -844,6 +852,7 @@ const OffenderReportLayout = ({
             id: 'B9s5+4',
           })}
           data={data?.offenderReport?.incidentDayOfWeekGraph}
+          isPrinting={isPrinting}
           emptyLabel={intl.formatMessage({
             defaultMessage: 'No Incidents',
             id: '+nJOH5',
@@ -940,7 +949,7 @@ const OffenderReportLayout = ({
     targetedGoodsTable: (
       <Card
         loading={loading}
-        className="no-break"
+        className="no-break pagebreak "
         style={{ height: calculateHeight('targetedGoodsTable') }}
         bodyStyle={{ overflow: 'auto' }}
         key="targetedGoodsTable"
@@ -1001,6 +1010,7 @@ const OffenderReportLayout = ({
         />
         <HeatMapGoogle
           height={calculateHeight('incidentsHeatMap', 80)}
+          isPrinting={isPrinting}
           label={intl.formatMessage({
             defaultMessage: 'Incidents Heat Map',
             id: 'q7E1ai',
@@ -1040,7 +1050,7 @@ const OffenderReportLayout = ({
     ),
     pageBreak: (
       <div
-        className="page-break"
+        className="page-break pagebreak"
         key="pageBreak"
         style={{
           borderBottom: '1px solid grey',
@@ -1059,7 +1069,7 @@ const OffenderReportLayout = ({
     ),
     pageBreak2: (
       <div
-        className="page-break"
+        className="page-break pagebreak"
         key="pageBreak2"
         style={{
           borderBottom: '1px solid grey',
@@ -1073,6 +1083,38 @@ const OffenderReportLayout = ({
             defaultMessage: 'Page 2',
             id: 'Q3p9d3',
           })}
+        </Typography.Paragraph>
+      </div>
+    ),
+    pageBreak3: (
+      <div
+        className="page-break"
+        key="pageBreak3"
+        style={{
+          borderBottom: '1px solid grey',
+          height: '100%',
+          display: isPrinting ? 'none' : 'block',
+          zIndex: 100,
+        }}
+      >
+        <Typography.Paragraph>
+          {intl.formatMessage({ defaultMessage: 'Page 3', id: '4GDn7Z' })}
+        </Typography.Paragraph>
+      </div>
+    ),
+    pageBreak4: (
+      <div
+        className="page-break"
+        key="pageBreak4"
+        style={{
+          borderBottom: '1px solid grey',
+          height: '100%',
+          display: isPrinting ? 'none' : 'block',
+          zIndex: 100,
+        }}
+      >
+        <Typography.Paragraph>
+          {intl.formatMessage({ defaultMessage: 'Page 4', id: 'DSruLZ' })}
         </Typography.Paragraph>
       </div>
     ),
