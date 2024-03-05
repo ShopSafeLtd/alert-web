@@ -9,7 +9,9 @@ import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
+import type { IntlShape } from 'react-intl';
 import { useIntl } from 'react-intl';
+import GeneratePrintPage from '#/views/reports/GeneratePrintPage';
 import BusinessReport from './layout/BusinessReportLayout';
 import BusinessReportLayout from './hooks/initLayout';
 import type { Return as Props } from './hooks/types';
@@ -18,6 +20,156 @@ import SaveAs from '../../../../components/reports/saveAs';
 import { layoutMap } from '../../types';
 
 const { Title } = Typography;
+
+type FilterProps = Pick<
+  Props,
+  | 'setDateRange'
+  | 'dateRange'
+  | 'groups'
+  | 'setSelectedGroups'
+  | 'groupsLoading'
+  | 'selectedGroups'
+  | 'crimeGroups'
+  | 'setSelectedCrimeGroups'
+  | 'selectedCrimeGroups'
+  | 'offenders'
+  | 'setSelectedOffenders'
+  | 'selectedOffenders'
+> & {
+  intl: IntlShape;
+};
+
+const FilterOptions = ({
+  setDateRange,
+  dateRange,
+  groups,
+  setSelectedGroups,
+  groupsLoading,
+  selectedGroups,
+  intl,
+  crimeGroups,
+  setSelectedCrimeGroups,
+  selectedCrimeGroups,
+  offenders,
+  setSelectedOffenders,
+  selectedOffenders,
+}: FilterProps) => (
+  <Row
+    className="no-print"
+    style={{ marginBottom: 10, justifyContent: 'center' }}
+    gutter={10}
+  >
+    <Col span={6}>
+      <Select
+        placeholder={intl.formatMessage({
+          defaultMessage: 'Select Content Groups',
+          id: '5D6XJu',
+        })}
+        mode="multiple"
+        maxTagCount="responsive"
+        onChange={(value) => {
+          setSelectedGroups(value || []);
+        }}
+        value={selectedGroups}
+        defaultValue={groups.map((group) => group.value)}
+        style={{ width: '100%' }}
+      >
+        {groups?.map((group) => (
+          <Select.Option
+            loading={groupsLoading}
+            key={group.value}
+            value={group.value}
+          >
+            {group.label}
+          </Select.Option>
+        ))}
+      </Select>
+    </Col>
+    <Col span={6}>
+      <Select
+        placeholder={intl.formatMessage({
+          defaultMessage: 'Select Crime Groups',
+          id: 'Ze/CG9',
+        })}
+        mode="multiple"
+        allowClear
+        maxTagCount="responsive"
+        onChange={(value) => {
+          setSelectedCrimeGroups(value || []);
+        }}
+        value={selectedCrimeGroups}
+        defaultValue={crimeGroups.map((group) => group.value)}
+        style={{ width: '100%' }}
+      >
+        {crimeGroups?.map((group) => (
+          <Select.Option
+            loading={groupsLoading}
+            key={group.value}
+            value={group.value}
+          >
+            {group.label}
+          </Select.Option>
+        ))}
+      </Select>
+    </Col>
+    <Col span={6}>
+      <Select
+        placeholder={intl.formatMessage({
+          defaultMessage: 'Select Offenders',
+          id: 'nNFHrE',
+        })}
+        mode="multiple"
+        maxTagCount="responsive"
+        onChange={(value) => {
+          setSelectedOffenders(value || []);
+        }}
+        value={selectedOffenders}
+        style={{ width: '100%' }}
+      >
+        {offenders?.map((offender) => (
+          <Select.Option
+            loading={groupsLoading}
+            key={offender.value}
+            value={offender.value}
+          >
+            {offender.label}
+          </Select.Option>
+        ))}
+      </Select>
+    </Col>
+    <Col span={6}>
+      <DatePicker.RangePicker
+        style={{ marginLeft: 10, width: '100%' }}
+        defaultValue={[dateRange.startDate, dateRange.endDate]}
+        value={[dateRange.startDate, dateRange.endDate]}
+        onChange={(value) => {
+          setDateRange(
+            value
+              ? {
+                  startDate:
+                    value?.[0] ||
+                    new Date(
+                      new Date(
+                        new Date().setMonth(new Date().getMonth() - 1)
+                      ).setHours(0, 0, 59)
+                    ),
+                  endDate:
+                    value?.[1] || new Date(new Date().setHours(23, 59, 59)),
+                }
+              : {
+                  startDate: new Date(
+                    new Date(
+                      new Date().setMonth(new Date().getMonth() - 1)
+                    ).setHours(0, 0, 59)
+                  ),
+                  endDate: new Date(new Date().setHours(23, 59, 59)),
+                }
+          );
+        }}
+      />
+    </Col>
+  </Row>
+);
 
 const BusinessReportView = ({
   removeItem,
@@ -187,209 +339,199 @@ const BusinessReportView = ({
           </Button>
         </Dropdown>
       </div>
-      <div ref={componentRef} className="print-page">
-        <div className="logo">
-          {metadata
-            ?.find((item) => item.key === 'logo')
-            ?.urls?.map((url, _i, array) => (
-              <>
-                <Button
-                  type="text"
-                  className="no-print"
-                  hidden={!editMode}
-                  icon={
-                    <FontAwesomeIcon icon={faTrash} color="red" size="lg" />
-                  }
-                  onClick={() => removeLogo(_i)}
-                />
-                <img
-                  style={{
-                    height: '100%',
-                    width: '25 %',
-                    marginRight: array.length - 1 === _i ? 0 : 10,
-                  }}
-                  src={url || ''}
-                  // eslint-disable-next-line formatjs/no-literal-string-in-jsx
-                  alt="logo"
-                />
-              </>
-            ))}
-          <Button
-            className="no-print"
-            hidden={!editMode}
-            onClick={() => setAddLogoDrawer(true)}
-            type="primary"
-            style={{ marginLeft: 10 }}
-          >
-            {intl.formatMessage({
-              defaultMessage: 'Add Logo',
-              id: 'pn9DSF',
-            })}
-          </Button>
-        </div>
-        <Title level={2} className="print-title">
-          {intl.formatMessage(
-            {
-              defaultMessage:
-                'Business Report: {businessName} {startDate} - {endDate}',
-              id: 'URt/QV',
-            },
-            {
-              businessName,
-              startDate: dateRange.startDate.toLocaleDateString(),
-              endDate: dateRange.endDate.toLocaleDateString(),
-            }
-          )}
-        </Title>
-        <Row
-          className="no-print"
-          style={{ marginBottom: 10, justifyContent: 'center' }}
-          gutter={10}
-        >
-          <Col span={6}>
-            <Select
-              placeholder={intl.formatMessage({
-                defaultMessage: 'Select Content Groups',
-                id: '5D6XJu',
-              })}
-              mode="multiple"
-              maxTagCount="responsive"
-              onChange={(value) => {
-                setSelectedGroups(value || []);
-              }}
-              value={selectedGroups}
-              defaultValue={groups.map((group) => group.value)}
-              style={{ width: '100%' }}
-            >
-              {groups?.map((group) => (
-                <Select.Option
-                  loading={groupsLoading}
-                  key={group.value}
-                  value={group.value}
-                >
-                  {group.label}
-                </Select.Option>
+      {editMode ? (
+        <div className="print-page">
+          <div className="logo">
+            {metadata
+              ?.find((item) => item.key === 'logo')
+              ?.urls?.map((url, _i, array) => (
+                <>
+                  <Button
+                    type="text"
+                    className="no-print"
+                    hidden={!editMode}
+                    icon={
+                      <FontAwesomeIcon icon={faTrash} color="red" size="lg" />
+                    }
+                    onClick={() => removeLogo(_i)}
+                  />
+                  <img
+                    style={{
+                      height: '100%',
+                      width: '25 %',
+                      marginRight: array.length - 1 === _i ? 0 : 10,
+                    }}
+                    src={url || ''}
+                    // eslint-disable-next-line formatjs/no-literal-string-in-jsx
+                    alt="logo"
+                  />
+                </>
               ))}
-            </Select>
-          </Col>
-          <Col span={6}>
-            <Select
-              placeholder={intl.formatMessage({
-                defaultMessage: 'Select Crime Groups',
-                id: 'Ze/CG9',
-              })}
-              mode="multiple"
-              allowClear
-              maxTagCount="responsive"
-              onChange={(value) => {
-                setSelectedCrimeGroups(value || []);
-              }}
-              value={selectedCrimeGroups}
-              defaultValue={crimeGroups.map((group) => group.value)}
-              style={{ width: '100%' }}
+            <Button
+              className="no-print"
+              hidden={!editMode}
+              onClick={() => setAddLogoDrawer(true)}
+              type="primary"
+              style={{ marginLeft: 10 }}
             >
-              {crimeGroups?.map((group) => (
-                <Select.Option
-                  loading={groupsLoading}
-                  key={group.value}
-                  value={group.value}
-                >
-                  {group.label}
-                </Select.Option>
-              ))}
-            </Select>
-          </Col>
-          <Col span={6}>
-            <Select
-              placeholder={intl.formatMessage({
-                defaultMessage: 'Select Offenders',
-                id: 'nNFHrE',
+              {intl.formatMessage({
+                defaultMessage: 'Add Logo',
+                id: 'pn9DSF',
               })}
-              mode="multiple"
-              maxTagCount="responsive"
-              onChange={(value) => {
-                setSelectedOffenders(value || []);
-              }}
-              value={selectedOffenders}
-              style={{ width: '100%' }}
-            >
-              {offenders?.map((offender) => (
-                <Select.Option
-                  loading={groupsLoading}
-                  key={offender.value}
-                  value={offender.value}
-                >
-                  {offender.label}
-                </Select.Option>
-              ))}
-            </Select>
-          </Col>
-          <Col span={6}>
-            <DatePicker.RangePicker
-              style={{ marginLeft: 10, width: '100%' }}
-              defaultValue={[dateRange.startDate, dateRange.endDate]}
-              value={[dateRange.startDate, dateRange.endDate]}
-              onChange={(value) => {
-                setDateRange(
-                  value
-                    ? {
-                        startDate:
-                          value?.[0] ||
-                          new Date(
-                            new Date(
-                              new Date().setMonth(new Date().getMonth() - 1)
-                            ).setHours(0, 0, 59)
-                          ),
-                        endDate:
-                          value?.[1] ||
-                          new Date(new Date().setHours(23, 59, 59)),
-                      }
-                    : {
-                        startDate: new Date(
-                          new Date(
-                            new Date().setMonth(new Date().getMonth() - 1)
-                          ).setHours(0, 0, 59)
-                        ),
-                        endDate: new Date(new Date().setHours(23, 59, 59)),
-                      }
-                );
-              }}
-            />
-          </Col>
-        </Row>
-        <div className="print-container">
-          <div className="print-body">
-            <ReactGridLayout
-              layout={layout}
-              cols={2}
-              rowHeight={rowHeight}
-              width={400}
-              isDraggable={editMode}
-              isResizable={editMode}
-              autoSize
-              margin={margin}
-              onLayoutChange={(newLayout) => setLayout(newLayout)}
-              useCSSTransforms={!isPrinting}
-            >
-              {...BusinessReport({
-                data,
-                loading,
-                targetedGoodsData,
-                removeItem,
-                layout,
-                margin,
-                rowHeight,
-                editMode,
-                changeSize,
-                isPrinting,
-                incidentsTableData,
-                metadata,
-                setMetadata,
-              })}
-            </ReactGridLayout>
+            </Button>
+          </div>
+          <Title level={2} className="print-title">
+            {intl.formatMessage(
+              {
+                defaultMessage:
+                  'Business Report: {businessName} {startDate} - {endDate}',
+                id: 'URt/QV',
+              },
+              {
+                businessName,
+                startDate: dateRange.startDate.toLocaleDateString(),
+                endDate: dateRange.endDate.toLocaleDateString(),
+              }
+            )}
+          </Title>
+          <FilterOptions
+            setDateRange={setDateRange}
+            dateRange={dateRange}
+            groups={groups}
+            setSelectedGroups={setSelectedGroups}
+            groupsLoading={groupsLoading}
+            selectedGroups={selectedGroups}
+            intl={intl}
+            crimeGroups={crimeGroups}
+            setSelectedCrimeGroups={setSelectedCrimeGroups}
+            selectedCrimeGroups={selectedCrimeGroups}
+            offenders={offenders}
+            setSelectedOffenders={setSelectedOffenders}
+            selectedOffenders={selectedOffenders}
+          />
+          <div className="print-container">
+            <div className="print-body">
+              <ReactGridLayout
+                layout={layout}
+                cols={2}
+                rowHeight={rowHeight}
+                width={400}
+                isDraggable={editMode}
+                isResizable={editMode}
+                autoSize
+                margin={margin}
+                onLayoutChange={(newLayout) => setLayout(newLayout)}
+                useCSSTransforms={!isPrinting}
+              >
+                {...BusinessReport({
+                  data,
+                  loading,
+                  targetedGoodsData,
+                  removeItem,
+                  layout,
+                  margin,
+                  rowHeight,
+                  editMode,
+                  changeSize,
+                  isPrinting,
+                  incidentsTableData,
+                  metadata,
+                  setMetadata,
+                })}
+              </ReactGridLayout>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div>
+          <GeneratePrintPage
+            componentRef={componentRef}
+            logo={
+              <>
+                <div className="logo">
+                  {metadata
+                    ?.find((item) => item.key === 'logo')
+                    ?.urls?.map((url, _i, array) => (
+                      <>
+                        <Button
+                          type="text"
+                          className="no-print"
+                          hidden={!editMode}
+                          icon={
+                            <FontAwesomeIcon
+                              icon={faTrash}
+                              color="red"
+                              size="lg"
+                            />
+                          }
+                          onClick={() => removeLogo(_i)}
+                        />
+                        <img
+                          style={{
+                            height: '100%',
+                            width: '25 %',
+                            marginRight: array.length - 1 === _i ? 0 : 10,
+                          }}
+                          src={url || ''}
+                          // eslint-disable-next-line formatjs/no-literal-string-in-jsx
+                          alt="logo"
+                        />
+                      </>
+                    ))}
+                </div>
+                <FilterOptions
+                  setDateRange={setDateRange}
+                  dateRange={dateRange}
+                  groups={groups}
+                  setSelectedGroups={setSelectedGroups}
+                  groupsLoading={groupsLoading}
+                  selectedGroups={selectedGroups}
+                  intl={intl}
+                  crimeGroups={crimeGroups}
+                  setSelectedCrimeGroups={setSelectedCrimeGroups}
+                  selectedCrimeGroups={selectedCrimeGroups}
+                  offenders={offenders}
+                  setSelectedOffenders={setSelectedOffenders}
+                  selectedOffenders={selectedOffenders}
+                />
+              </>
+            }
+            title={
+              <Title level={2} className="print-title">
+                {intl.formatMessage(
+                  {
+                    defaultMessage:
+                      'Business Report: {businessName} {startDate} - {endDate}',
+                    id: 'URt/QV',
+                  },
+                  {
+                    businessName,
+                    startDate: dateRange.startDate.toLocaleDateString(),
+                    endDate: dateRange.endDate.toLocaleDateString(),
+                  }
+                )}
+              </Title>
+            }
+            elements={BusinessReport({
+              data,
+              loading,
+              targetedGoodsData,
+              removeItem,
+              layout,
+              margin,
+              rowHeight,
+              editMode,
+              changeSize,
+              isPrinting,
+              incidentsTableData,
+              metadata,
+              setMetadata,
+            })}
+            layout={layout}
+          />
+        </div>
+      )}
+
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Charts available to add',

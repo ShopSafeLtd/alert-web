@@ -97,51 +97,50 @@ const useReportState = ({
           59
         )
       );
-  const fixedPages = [
-    {
-      w: 2,
-      h: 1,
-      x: 0,
-      y: 30,
-      i: 'pageBreak',
-      moved: false,
-      static: true,
-    },
-    {
-      w: 2,
-      h: 1,
-      x: 0,
-      y: 60,
-      i: 'pageBreak2',
-      moved: false,
-      static: true,
-    },
-    {
-      w: 2,
-      h: 1,
-      x: 0,
-      y: 80,
-      i: 'pageBreak3',
-      moved: false,
-      static: true,
-    },
-  ];
+  // const fixedPages = [
+  //   {
+  //     w: 2,
+  //     h: 1,
+  //     x: 0,
+  //     y: 30,
+  //     i: 'pageBreak',
+  //     moved: false,
+  //     static: true,
+  //   },
+  //   {
+  //     w: 2,
+  //     h: 1,
+  //     x: 0,
+  //     y: 60,
+  //     i: 'pageBreak2',
+  //     moved: false,
+  //     static: true,
+  //   },
+  //   {
+  //     w: 2,
+  //     h: 1,
+  //     x: 0,
+  //     y: 80,
+  //     i: 'pageBreak3',
+  //     moved: false,
+  //     static: true,
+  //   },
+  // ];
 
   const businesses = useStoreState((state) => state.user.businesses);
   const [addLogoDrawer, setAddLogoDrawer] = useState(false);
 
   const [editMode, setEditMode] = useState(false);
   const [minDrawer, setMinDrawer] = useState(false);
-  const [layout, setLayout] = useState<RGL.Layout[]>([
-    ...fixedPages,
-    ...InitLayout.filter(
+  const [layout, setLayout] = useState<RGL.Layout[]>(
+    InitLayout.filter(
       (item) =>
         item.i !== 'pageBreak' &&
         item.i !== 'pageBreak2' &&
         item.i !== 'pageBreak3' &&
         item.i !== 'pageBreak4'
-    ),
-  ]);
+    )
+  );
   const [selectedBusiness, setSelectedBusiness] = useState<string[]>([]);
   const [groups, setGroups] = useState<SelectOptions[]>([]);
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
@@ -167,16 +166,13 @@ const useReportState = ({
         urls: logo ? [logo] : [],
       },
     ],
-    layout: [
-      ...fixedPages,
-      ...InitLayout.filter(
-        (item) =>
-          item.i !== 'pageBreak' &&
-          item.i !== 'pageBreak2' &&
-          item.i !== 'pageBreak3' &&
-          item.i !== 'pageBreak4'
-      ),
-    ],
+    layout: InitLayout.filter(
+      (item) =>
+        item.i !== 'pageBreak' &&
+        item.i !== 'pageBreak2' &&
+        item.i !== 'pageBreak3' &&
+        item.i !== 'pageBreak4'
+    ),
   };
 
   const [logos, setLogos] = useState<string[]>(logo ? [logo] : []);
@@ -255,12 +251,11 @@ const useReportState = ({
   const selectTemplate = (arg0: string) => {
     const newTemplate = templates.find((item) => item.id === arg0);
     if (newTemplate) {
-      setLayout([
-        ...fixedPages,
-        ...newTemplate.layout.filter(
+      setLayout(
+        newTemplate.layout.filter(
           (item) => item.i !== 'pageBreak' && item.i !== 'pageBreak2'
-        ),
-      ]);
+        )
+      );
       setMetadata(newTemplate.metaData);
       setSelectedTemplate(newTemplate.id);
     }

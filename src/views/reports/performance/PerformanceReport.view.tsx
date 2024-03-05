@@ -10,7 +10,9 @@ import { margin, rowHeight } from 'components/reports/utils/utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
 import 'react-resizable/css/styles.css';
+import type { IntlShape } from 'react-intl';
 import { useIntl } from 'react-intl';
+import GeneratePrintPage from '#/views/reports/GeneratePrintPage';
 import AddLogo from '../../../components/reports/addLogo';
 
 import PerformanceReportLayout from './layout/PerformanceReportLayout';
@@ -22,6 +24,126 @@ import { layoutMap } from '../types';
 // const ReactGridLayout = WidthProvider(RGL);
 
 const { Title } = Typography;
+
+type FilterProps = Pick<
+  Props,
+  | 'groups'
+  | 'setSelectedGroups'
+  | 'selectedGroups'
+  | 'selectedBrands'
+  | 'brands'
+  | 'dateRange'
+  | 'setDateRange'
+  | 'groupsLoading'
+  | 'setSelectedBrands'
+  | 'brandsLoading'
+> & {
+  intl: IntlShape;
+};
+
+const FilterOptions = ({
+  groups,
+  intl,
+  setSelectedGroups,
+  selectedGroups,
+  selectedBrands,
+  brands,
+  dateRange,
+  setDateRange,
+  groupsLoading,
+  setSelectedBrands,
+  brandsLoading,
+}: FilterProps) => (
+  <Row
+    className="no-print"
+    style={{ marginBottom: 10, justifyContent: 'center' }}
+    gutter={8}
+  >
+    <Col span={4}>
+      <Select
+        placeholder={intl.formatMessage({
+          defaultMessage: 'Select Groups',
+          id: 'q2cuIU',
+        })}
+        mode="multiple"
+        maxTagCount="responsive"
+        onChange={(value) => {
+          setSelectedGroups(value || []);
+        }}
+        value={selectedGroups}
+        defaultValue={groups.map((group) => group.value)}
+        style={{ width: '100%' }}
+      >
+        {groups?.map((group) => (
+          <Select.Option
+            loading={groupsLoading}
+            key={group.value}
+            value={group.value}
+          >
+            {group.label}
+          </Select.Option>
+        ))}
+      </Select>
+    </Col>
+    <Col span={4}>
+      <Select
+        placeholder={intl.formatMessage({
+          defaultMessage: 'Select Brands',
+          id: 'XfiiaU',
+        })}
+        mode="multiple"
+        maxTagCount="responsive"
+        onChange={(value) => {
+          setSelectedBrands(value || []);
+        }}
+        value={selectedBrands}
+        defaultValue={brands.map((group) => group.value)}
+        style={{ width: '100%' }}
+      >
+        {brands?.map((brand) => (
+          <Select.Option
+            loading={brandsLoading}
+            key={brand.value}
+            value={brand.value}
+          >
+            {brand.label}
+          </Select.Option>
+        ))}
+      </Select>
+    </Col>
+    <Col span={4}>
+      <DatePicker.RangePicker
+        style={{ width: '100%' }}
+        defaultValue={[dateRange.startDate, dateRange.endDate]}
+        value={[dateRange.startDate, dateRange.endDate]}
+        onChange={(value) => {
+          setDateRange(
+            value
+              ? {
+                  startDate:
+                    value?.[0] ||
+                    new Date(
+                      new Date(
+                        new Date().setMonth(new Date().getMonth() - 1)
+                      ).setHours(0, 0, 59)
+                    ),
+                  endDate:
+                    value?.[1] || new Date(new Date().setHours(23, 59, 59)),
+                }
+              : {
+                  startDate: new Date(
+                    new Date(
+                      new Date().setMonth(new Date().getMonth() - 1)
+                    ).setHours(0, 0, 59)
+                  ),
+                  endDate: new Date(new Date().setHours(23, 59, 59)),
+                }
+          );
+        }}
+      />
+    </Col>
+  </Row>
+);
 
 const PerformanceReport = ({
   data,
@@ -142,7 +264,7 @@ const PerformanceReport = ({
                 id: 'wEQDC6',
               })}
         </Button>
-        <Button type="primary" onClick={handlePrint}>
+        <Button type="primary" onClick={handlePrint} disabled={editMode}>
           {intl.formatMessage({
             defaultMessage: 'Print',
             id: 'CXRlIo',
@@ -194,185 +316,200 @@ const PerformanceReport = ({
           </Button>
         </Dropdown>
       </div>
-      <div ref={componentRef} className="print-page">
-        <div className="logo">
-          {metadata
-            ?.find((item) => item.key === 'logo')
-            ?.urls?.map((url, _i, array) => (
-              <>
-                <Button
-                  type="text"
-                  className="no-print"
-                  hidden={!editMode}
-                  icon={
-                    <FontAwesomeIcon icon={faTrash} color="red" size="lg" />
-                  }
-                  onClick={() => removeLogo(_i)}
-                />
-                <img
-                  style={{
-                    height: '100%',
-                    width: '25 %',
-                    marginRight: array.length - 1 === _i ? 0 : 10,
-                  }}
-                  src={url || ''}
-                  // eslint-disable-next-line formatjs/no-literal-string-in-jsx
-                  alt="logo"
-                />
-              </>
-            ))}
-          <Button
-            className="no-print"
-            hidden={!editMode}
-            onClick={() => setAddLogoDrawer(true)}
-            type="primary"
-            style={{ marginLeft: 10 }}
-          >
-            {intl.formatMessage({
-              defaultMessage: 'Add Logo',
-              id: 'pn9DSF',
-            })}
-          </Button>
-        </div>
-        <Title level={2} className="print-title">
-          {intl.formatMessage(
-            {
-              defaultMessage: 'Summary Report: {startDate} - {endDate}',
-              id: 'CT8UPX',
-            },
-            {
-              startDate: dateRange.startDate.toLocaleDateString(),
-              endDate: dateRange.endDate.toLocaleDateString(),
-            }
-          )}
-        </Title>
-        <Row
-          className="no-print"
-          style={{ marginBottom: 10, justifyContent: 'center' }}
-          gutter={8}
-        >
-          <Col span={4}>
-            <Select
-              placeholder={intl.formatMessage({
-                defaultMessage: 'Select Groups',
-                id: 'q2cuIU',
-              })}
-              mode="multiple"
-              maxTagCount="responsive"
-              onChange={(value) => {
-                setSelectedGroups(value || []);
-              }}
-              value={selectedGroups}
-              defaultValue={groups.map((group) => group.value)}
-              style={{ width: '100%' }}
-            >
-              {groups?.map((group) => (
-                <Select.Option
-                  loading={groupsLoading}
-                  key={group.value}
-                  value={group.value}
-                >
-                  {group.label}
-                </Select.Option>
+
+      {editMode ? (
+        <div className="print-page">
+          <div className="logo">
+            {metadata
+              ?.find((item) => item.key === 'logo')
+              ?.urls?.map((url, _i, array) => (
+                <>
+                  <Button
+                    type="text"
+                    className="no-print"
+                    hidden={!editMode}
+                    icon={
+                      <FontAwesomeIcon icon={faTrash} color="red" size="lg" />
+                    }
+                    onClick={() => removeLogo(_i)}
+                  />
+                  <img
+                    style={{
+                      height: '100%',
+                      width: '25 %',
+                      marginRight: array.length - 1 === _i ? 0 : 10,
+                    }}
+                    src={url || ''}
+                    // eslint-disable-next-line formatjs/no-literal-string-in-jsx
+                    alt="logo"
+                  />
+                </>
               ))}
-            </Select>
-          </Col>
-          <Col span={4}>
-            <Select
-              placeholder={intl.formatMessage({
-                defaultMessage: 'Select Brands',
-                id: 'XfiiaU',
-              })}
-              mode="multiple"
-              maxTagCount="responsive"
-              onChange={(value) => {
-                setSelectedBrands(value || []);
-              }}
-              value={selectedBrands}
-              defaultValue={brands.map((group) => group.value)}
-              style={{ width: '100%' }}
+            <Button
+              className="no-print"
+              hidden={!editMode}
+              onClick={() => setAddLogoDrawer(true)}
+              type="primary"
+              style={{ marginLeft: 10 }}
             >
-              {brands?.map((brand) => (
-                <Select.Option
-                  loading={brandsLoading}
-                  key={brand.value}
-                  value={brand.value}
-                >
-                  {brand.label}
-                </Select.Option>
-              ))}
-            </Select>
-          </Col>
-          <Col span={4}>
-            <DatePicker.RangePicker
-              style={{ width: '100%' }}
-              defaultValue={[dateRange.startDate, dateRange.endDate]}
-              value={[dateRange.startDate, dateRange.endDate]}
-              onChange={(value) => {
-                setDateRange(
-                  value
-                    ? {
-                        startDate:
-                          value?.[0] ||
-                          new Date(
-                            new Date(
-                              new Date().setMonth(new Date().getMonth() - 1)
-                            ).setHours(0, 0, 59)
-                          ),
-                        endDate:
-                          value?.[1] ||
-                          new Date(new Date().setHours(23, 59, 59)),
-                      }
-                    : {
-                        startDate: new Date(
-                          new Date(
-                            new Date().setMonth(new Date().getMonth() - 1)
-                          ).setHours(0, 0, 59)
-                        ),
-                        endDate: new Date(new Date().setHours(23, 59, 59)),
-                      }
-                );
-              }}
-            />
-          </Col>
-        </Row>
-        <div className="print-container">
-          <div className="print-body">
-            <ReactGridLayout
-              layout={layout}
-              cols={2}
-              rowHeight={rowHeight}
-              width={400}
-              isDraggable={editMode}
-              isResizable={editMode}
-              autoSize
-              margin={margin}
-              onLayoutChange={(newLayout) => setLayout(newLayout)}
-              useCSSTransforms={!isPrinting}
-            >
-              {...PerformanceReportLayout({
-                data,
-                loading,
-                offendersTableData,
-                businessContributionTableData,
-                userContributionTableData,
-                crimeGroupPerformanceTableData,
-                targetedBusinessData,
-                targetedGoodsData,
-                removeItem,
-                layout,
-                margin,
-                rowHeight,
-                editMode,
-                changeSize,
-                isPrinting,
-                metadata,
-                setMetadata,
+              {intl.formatMessage({
+                defaultMessage: 'Add Logo',
+                id: 'pn9DSF',
               })}
-            </ReactGridLayout>
+            </Button>
+          </div>
+          <Title level={2} className="print-title">
+            {intl.formatMessage(
+              {
+                defaultMessage: 'Summary Report: {startDate} - {endDate}',
+                id: 'CT8UPX',
+              },
+              {
+                startDate: dateRange.startDate.toLocaleDateString(),
+                endDate: dateRange.endDate.toLocaleDateString(),
+              }
+            )}
+          </Title>
+          <FilterOptions
+            groups={groups}
+            intl={intl}
+            setSelectedGroups={setSelectedGroups}
+            selectedGroups={selectedGroups}
+            selectedBrands={selectedBrands}
+            brands={brands}
+            dateRange={dateRange}
+            setDateRange={setDateRange}
+            groupsLoading={groupsLoading}
+            setSelectedBrands={setSelectedBrands}
+            brandsLoading={brandsLoading}
+          />
+
+          <div className="print-container">
+            <div className="print-body">
+              <ReactGridLayout
+                layout={layout}
+                cols={2}
+                rowHeight={rowHeight}
+                width={400}
+                isDraggable={editMode}
+                isResizable={editMode}
+                autoSize
+                margin={margin}
+                onLayoutChange={(newLayout) => setLayout(newLayout)}
+                useCSSTransforms={!isPrinting}
+              >
+                {...PerformanceReportLayout({
+                  data,
+                  loading,
+                  offendersTableData,
+                  businessContributionTableData,
+                  userContributionTableData,
+                  crimeGroupPerformanceTableData,
+                  targetedBusinessData,
+                  targetedGoodsData,
+                  removeItem,
+                  layout,
+                  margin,
+                  rowHeight,
+                  editMode,
+                  changeSize,
+                  isPrinting,
+                  metadata,
+                  setMetadata,
+                })}
+              </ReactGridLayout>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div>
+          <GeneratePrintPage
+            componentRef={componentRef}
+            logo={
+              <>
+                <div className="logo">
+                  {metadata
+                    ?.find((item) => item.key === 'logo')
+                    ?.urls?.map((url, _i, array) => (
+                      <>
+                        <Button
+                          type="text"
+                          className="no-print"
+                          hidden={!editMode}
+                          icon={
+                            <FontAwesomeIcon
+                              icon={faTrash}
+                              color="red"
+                              size="lg"
+                            />
+                          }
+                          onClick={() => removeLogo(_i)}
+                        />
+                        <img
+                          style={{
+                            height: '100%',
+                            width: '25 %',
+                            marginRight: array.length - 1 === _i ? 0 : 10,
+                          }}
+                          src={url || ''}
+                          // eslint-disable-next-line formatjs/no-literal-string-in-jsx
+                          alt="logo"
+                        />
+                      </>
+                    ))}
+                </div>
+                <FilterOptions
+                  groups={groups}
+                  intl={intl}
+                  setSelectedGroups={setSelectedGroups}
+                  selectedGroups={selectedGroups}
+                  selectedBrands={selectedBrands}
+                  brands={brands}
+                  dateRange={dateRange}
+                  setDateRange={setDateRange}
+                  groupsLoading={groupsLoading}
+                  setSelectedBrands={setSelectedBrands}
+                  brandsLoading={brandsLoading}
+                />
+              </>
+            }
+            title={
+              <Title level={2} className="print-title">
+                {intl.formatMessage(
+                  {
+                    defaultMessage: 'Summary Report: {startDate} - {endDate}',
+                    id: 'CT8UPX',
+                  },
+                  {
+                    startDate: dateRange.startDate.toLocaleDateString(),
+                    endDate: dateRange.endDate.toLocaleDateString(),
+                  }
+                )}
+              </Title>
+            }
+            elements={PerformanceReportLayout({
+              data,
+              loading,
+              offendersTableData,
+              businessContributionTableData,
+              userContributionTableData,
+              crimeGroupPerformanceTableData,
+              targetedBusinessData,
+              targetedGoodsData,
+              removeItem,
+              layout,
+              margin,
+              rowHeight,
+              editMode,
+              changeSize,
+              isPrinting,
+              metadata,
+              setMetadata,
+            })}
+            layout={layout}
+          />
+        </div>
+      )}
       <Drawer
         title={intl.formatMessage({
           defaultMessage: 'Charts available to add',

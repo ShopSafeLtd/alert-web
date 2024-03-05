@@ -33870,6 +33870,9 @@
     margin: 10mm;
     background: white;
   }
+  .ant-table-column-sorter {
+    display: none;
+  }
   .pagebreak {
     margin-top: 1rem;
     display: block;
