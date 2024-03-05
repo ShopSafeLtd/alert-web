@@ -108,7 +108,7 @@ const Apollo = ({ children }: Props): JSX.Element => {
         connected: (socket) => (activeSocket = socket as WebSocket),
         ping: (received) => {
           if (!received) {
-            timedOut = setTimeout(() => {
+            timedOut = window.setTimeout(() => {
               if (activeSocket.readyState === WebSocket.OPEN) {
                 // Graceful disconnection
                 activeSocket.close(4408, 'Request Timeout');
