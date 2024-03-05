@@ -21,6 +21,7 @@
       "es2017.intl",
       "es2018.intl"
     ],
+=
     "module": "ESNext",
     "moduleResolution": "node",
     "noEmit": true,
@@ -32,7 +33,8 @@
     "sourceRoot": "/",
     "strict": true,
     "target": "ESNext",
-    "types": ["vite/client", "vite-plugin-svgr/client"],
+    "types": ["vite/client", "vite-plugin-svgr/client",      "node"
+    ],
     "noImplicitAny": false,
     "declaration": true,
     "incremental": true,
