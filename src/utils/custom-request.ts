@@ -84,11 +84,7 @@ const customRequest = ({
   const getRequestUrl = (): Promise<string> =>
     new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
-      xhr.open(
-        'POST',
-        'https://util-server-go-595137580681.herokuapp.com/get-upload-url',
-        true
-      );
+      xhr.open('POST', import.meta.env.IMAGE_UPLOAD_URL_FETCH, true);
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.send(JSON.stringify({ filename }));
 
