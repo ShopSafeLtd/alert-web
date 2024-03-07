@@ -12,7 +12,7 @@ interface ImportMetaEnv {
   readonly VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT_GO: string;
   readonly VITE_APP_IMAGE_UPLOAD_ENDPOINT_GO: string;
   readonly VITE_APP_CHECKLIST_UPLOAD_ENDPOINT: string;
-  readonly IMAGE_UPLOAD_URL_FETCH: string;
+  readonly VITE_IMAGE_UPLOAD_URL_FETCH: string;
 }
 
 interface ImportMeta {

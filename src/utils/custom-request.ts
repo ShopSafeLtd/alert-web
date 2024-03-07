@@ -84,8 +84,7 @@ const customRequest = ({
   const getRequestUrl = (): Promise<string> =>
     new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
-      console.log(import.meta.env.IMAGE_UPLOAD_URL_FETCH);
-      xhr.open('POST', import.meta.env.IMAGE_UPLOAD_URL_FETCH, true);
+      xhr.open('POST', import.meta.env.VITE_IMAGE_UPLOAD_URL_FETCH, true);
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.send(JSON.stringify({ filename }));
 
