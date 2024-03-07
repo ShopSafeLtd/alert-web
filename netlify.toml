@@ -1,0 +1,3 @@
+[[redirects]]
+from = "/util-api/*"
+to = "https://util-server-go-595137580681.herokuapp.com/:splat"
