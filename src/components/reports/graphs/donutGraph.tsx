@@ -8,6 +8,7 @@ const DonutGraph = ({
   emptyLabel,
   labelFormat,
   type,
+  isPrinting,
 }: {
   data:
     | Array<{ __typename?: 'Graph'; label: string; value: number } | null>
@@ -16,9 +17,12 @@ const DonutGraph = ({
   emptyLabel: string;
   labelFormat?: string;
   type?: 'donut' | 'pie';
+  isPrinting: boolean;
 }) => {
   const darkMode =
     useStoreState((state) => state.theme.currentTheme) === 'dark';
+  const isDark = darkMode && !isPrinting;
+
   return (
     <div
       style={{ height: '100%', width: '100%%', marginLeft: 15 }}
@@ -29,7 +33,7 @@ const DonutGraph = ({
           fit
           theme={{
             text: {
-              color: darkMode ? '#fff' : '#000',
+              color: isDark ? '#fff' : '#000',
             },
           }}
           innerRadius={type === 'donut' || !type ? 0.5 : 0}
@@ -42,7 +46,7 @@ const DonutGraph = ({
             modifiers: [['darker', 0.2]],
           }}
           margin={{ top: 20, right: 0, bottom: 20, left: -120 }}
-          colors={{ scheme: darkMode ? 'dark2' : 'set2' }}
+          colors={{ scheme: isDark ? 'dark2' : 'set2' }}
           legends={[
             {
               anchor: 'top-right',
@@ -55,7 +59,7 @@ const DonutGraph = ({
               itemsSpacing: 1,
               symbolSize: 20,
               itemDirection: 'left-to-right',
-              itemTextColor: darkMode ? '#fff' : '#3a3a3a',
+              itemTextColor: isDark ? '#fff' : '#3a3a3a',
             },
           ]}
           arcLinkLabelsSkipAngle={10}

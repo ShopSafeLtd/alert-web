@@ -30,6 +30,8 @@ export type AllowedValue =
   | 'incidentsTable'
   | 'pageBreak'
   | 'pageBreak2'
+  | 'pageBreak3'
+  | 'pageBreak4'
   | 'logo';
 
 type ReportItemTypes =

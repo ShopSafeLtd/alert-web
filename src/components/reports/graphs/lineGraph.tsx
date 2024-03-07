@@ -9,6 +9,7 @@ const LineGraph = ({
   label,
   emptyLabel,
   dataLabel,
+  isPrinting,
 }: {
   data:
     | Array<{ __typename?: 'Graph'; label: string; value: number } | null>
@@ -17,9 +18,10 @@ const LineGraph = ({
   label: string;
   emptyLabel: string;
   dataLabel: string;
+  isPrinting: boolean;
 }) => {
   const theme = useStoreState((state) => state.theme.currentTheme);
-  const darkMode = theme === 'dark';
+  const darkMode = theme === 'dark' && !isPrinting;
 
   const tooltip = ({ point }: PointTooltipProps) => (
     <div

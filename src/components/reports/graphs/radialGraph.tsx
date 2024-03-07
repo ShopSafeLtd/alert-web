@@ -6,6 +6,7 @@ import { useStoreState } from '../../../state';
 const RadialGraph = ({
   data,
   emptyLabel,
+  isPrinting,
 }: {
   data:
     | Array<{
@@ -18,9 +19,10 @@ const RadialGraph = ({
     | null
     | undefined;
   emptyLabel: string;
+  isPrinting: boolean;
 }) => {
   const theme = useStoreState((state) => state.theme.currentTheme);
-  const darkMode = theme === 'dark';
+  const darkMode = theme === 'dark' && !isPrinting;
   return (
     <div
       style={{ height: '100%', width: '100%%', marginLeft: 15 }}
