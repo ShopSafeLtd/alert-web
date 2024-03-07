@@ -21,6 +21,7 @@ const GeneratePrintPage = ({
     { element: logo, x: 0, y: 0, w: 2 },
     { element: title, x: 0, y: 1, w: 2 },
     ...layout
+      .sort((a, b) => a.x - b.x)
       .sort((a, b) => a.y - b.y)
       .filter((item) => !item.i.includes('pageBreak'))
       .map((item) => ({

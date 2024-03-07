@@ -1,9 +1,10 @@
 import React from 'react';
 import { Route, Routes } from 'react-router';
 import { PermissionMethod, PermissionModel } from 'graphql/generated';
-import Dashboard from '#/views/dashboard/FeedItems.container';
-import { DashboardProvider } from '#/views/dashboard/Dashboard.context';
+// import Dashboard from '#/views/dashboard/FeedItems.container';
+// import { DashboardProvider } from '#/views/dashboard/Dashboard.context';
 import PermissionCheckWrapper from '#/components/PermissionCheck/PermissionCheckWrapper';
+import FeedItem from '../../../views/originalDashboard/OrigDashboard.container';
 
 // import ReviewIncident from 'views/incidents/ReviewIncident ';
 
@@ -19,9 +20,9 @@ const DashboardRouter = (): JSX.Element => (
           }}
           unauthorizedElement={<div />}
         >
-          <DashboardProvider>
-            <Dashboard />
-          </DashboardProvider>
+          {/* <DashboardProvider> */}
+          <FeedItem />
+          {/* </DashboardProvider> */}
         </PermissionCheckWrapper>
       }
     />
