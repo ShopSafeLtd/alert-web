@@ -1,7 +1,9 @@
 import { Button, Card, Col, Row, Statistic, Table, Typography } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+  faBan,
   faCalendar,
+  faCalendarWeek,
   faCar,
   faChartBar,
   faChartLineDown,
@@ -9,20 +11,18 @@ import {
   faClipboard,
   faComments,
   faExclamationCircle,
+  faHandcuffs,
+  faImages,
   faMoneyBill,
+  faMoneyBills,
   faPenToSquare,
+  faReceipt,
+  faStarOfLife,
   faTrash,
+  faUserPlus,
   faUserPolice,
   faUserPoliceTie,
   faUsers,
-  faImages,
-  faUserPlus,
-  faHandcuffs,
-  faBan,
-  faCalendarWeek,
-  faStarOfLife,
-  faReceipt,
-  faMoneyBills,
 } from '@fortawesome/pro-light-svg-icons';
 import React, { useMemo } from 'react';
 import type RGL from 'react-grid-layout';
@@ -776,6 +776,7 @@ const PerformanceReportLayout = ({
         metadata.find((item) => item.key === 'crimeTypesDonut')?.type ===
           'pie' ? (
           <DonutGraph
+            isPrinting={isPrinting}
             data={data?.performanceReport?.crimeTypeDonut}
             emptyLabel="No Crime Types"
             type={
@@ -786,6 +787,7 @@ const PerformanceReportLayout = ({
           />
         ) : (
           <BarGraph
+            isPrinting={isPrinting}
             data={data?.performanceReport?.crimeTypeDonut}
             emptyLabel={intl.formatMessage({
               defaultMessage: 'No Crime Types',
@@ -861,6 +863,7 @@ const PerformanceReportLayout = ({
         metadata.find((item) => item.key === 'involvedTagsDonut')?.type ===
           'pie' ? (
           <DonutGraph
+            isPrinting={isPrinting}
             data={data?.performanceReport?.involvedTagCountDonut}
             emptyLabel="No Involved Tags"
             type={
@@ -870,6 +873,7 @@ const PerformanceReportLayout = ({
           />
         ) : (
           <BarGraph
+            isPrinting={isPrinting}
             data={data?.performanceReport?.involvedTagCountDonut}
             emptyLabel={intl.formatMessage({
               defaultMessage: 'No Involved Tags',
@@ -946,6 +950,7 @@ const PerformanceReportLayout = ({
         metadata.find((item) => item.key === 'goodsTypeDonut')?.type ===
           'pie' ? (
           <DonutGraph
+            isPrinting={isPrinting}
             data={data?.performanceReport?.goodsTypeCountDonut}
             emptyLabel={intl.formatMessage({
               defaultMessage: 'No goods count',
@@ -959,6 +964,7 @@ const PerformanceReportLayout = ({
           />
         ) : (
           <BarGraph
+            isPrinting={isPrinting}
             data={data?.performanceReport?.goodsTypeCountDonut}
             emptyLabel={intl.formatMessage({
               defaultMessage: 'No goods count',
@@ -1034,6 +1040,7 @@ const PerformanceReportLayout = ({
         metadata.find((item) => item.key === 'goodsValueDonut')?.type ===
           'pie' ? (
           <DonutGraph
+            isPrinting={isPrinting}
             labelFormat="£"
             data={data?.performanceReport?.goodsTypeValueDonut}
             emptyLabel={intl.formatMessage({
@@ -1048,6 +1055,7 @@ const PerformanceReportLayout = ({
           />
         ) : (
           <BarGraph
+            isPrinting={isPrinting}
             data={data?.performanceReport?.goodsTypeValueDonut}
             emptyLabel={intl.formatMessage({
               defaultMessage: 'No goods values',
@@ -1076,6 +1084,7 @@ const PerformanceReportLayout = ({
           onClick={() => removeItem('incidentsDayOfWeekGraph')}
         />
         <LineGraph
+          isPrinting={isPrinting}
           label={intl.formatMessage({
             defaultMessage: 'Incidents by day of week',
             id: 'LPtzWr',
@@ -1104,6 +1113,7 @@ const PerformanceReportLayout = ({
           onClick={() => removeItem('incidentsHeatMap')}
         />
         <HeatMapGoogle
+          isPrinting={isPrinting}
           label={intl.formatMessage({
             defaultMessage: 'Incidents heatmap',
             id: 'UTvOxQ',
@@ -1411,6 +1421,38 @@ const PerformanceReportLayout = ({
             defaultMessage: 'Page 2',
             id: 'Q3p9d3',
           })}
+        </Typography.Paragraph>
+      </div>
+    ),
+    pageBreak3: (
+      <div
+        className="page-break"
+        key="pageBreak3"
+        style={{
+          borderBottom: '1px solid grey',
+          height: '100%',
+          display: isPrinting ? 'none' : 'block',
+          zIndex: 100,
+        }}
+      >
+        <Typography.Paragraph>
+          {intl.formatMessage({ defaultMessage: 'Page 3', id: '4GDn7Z' })}
+        </Typography.Paragraph>
+      </div>
+    ),
+    pageBreak4: (
+      <div
+        className="page-break"
+        key="pageBreak4"
+        style={{
+          borderBottom: '1px solid grey',
+          height: '100%',
+          display: isPrinting ? 'none' : 'block',
+          zIndex: 100,
+        }}
+      >
+        <Typography.Paragraph>
+          {intl.formatMessage({ defaultMessage: 'Page 4', id: 'DSruLZ' })}
         </Typography.Paragraph>
       </div>
     ),

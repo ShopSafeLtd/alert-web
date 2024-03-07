@@ -3,6 +3,10 @@
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": "src",
+    "paths": {
+      "#/*": ["./*"],
+      "graphql/*": ["./graphql/*"]
+    },
     "downlevelIteration": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -28,13 +32,17 @@
     "sourceRoot": "/",
     "strict": true,
     "target": "ESNext",
-    "types": ["vite/client", "vite-plugin-svgr/client"],
-    "noImplicitAny": false
+    "types": ["vite/client", "vite-plugin-svgr/client", "node"],
+    "noImplicitAny": false,
+    "declaration": true,
+    "incremental": true,
+    "assumeChangesOnlyAffectDirectDependencies": true
   },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "build"],
   "references": [
     {
       "path": "./tsconfig.node.json"
     }
-  ],
-  "include": ["src", "node_modules/@types/node/globals.global.d.ts"]
+  ]
 }

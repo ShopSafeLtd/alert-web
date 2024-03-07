@@ -430,6 +430,7 @@ const CrimeGroupReport = ({
           onClick={() => removeItem('goodsTypeLossRecoveredRadial')}
         />
         <RadialGraph
+          isPrinting={isPrinting}
           data={data?.crimeGroupReport?.goodsTypeLossRecovered}
           emptyLabel={intl.formatMessage({
             defaultMessage: 'No Crime Types or Offenders',
@@ -499,6 +500,7 @@ const CrimeGroupReport = ({
         metadata.find((item) => item.key === 'incidentTimeOfDayDonut')?.type ===
           'pie' ? (
           <DonutGraph
+            isPrinting={isPrinting}
             data={data?.crimeGroupReport?.incidentTimeOfDayDonut}
             emptyLabel={intl.formatMessage({
               defaultMessage: 'No goods count',
@@ -512,6 +514,7 @@ const CrimeGroupReport = ({
           />
         ) : (
           <BarGraph
+            isPrinting={isPrinting}
             data={data?.crimeGroupReport?.incidentTimeOfDayDonut}
             emptyLabel={intl.formatMessage({
               defaultMessage: 'No goods count',
@@ -587,6 +590,7 @@ const CrimeGroupReport = ({
           'pie' ? (
           <DonutGraph
             data={data?.crimeGroupReport?.incidentMonthGraph}
+            isPrinting={isPrinting}
             emptyLabel={intl.formatMessage({
               defaultMessage: 'No incidents',
               id: '7UNuAl',
@@ -600,6 +604,7 @@ const CrimeGroupReport = ({
         ) : (
           <BarGraph
             data={data?.crimeGroupReport?.incidentMonthGraph}
+            isPrinting={isPrinting}
             emptyLabel={intl.formatMessage({
               defaultMessage: 'No incidents',
               id: '7UNuAl',
@@ -631,6 +636,7 @@ const CrimeGroupReport = ({
           onClick={() => removeItem('incidentsDayOfWeekGraph')}
         />
         <LineGraph
+          isPrinting={isPrinting}
           label={intl.formatMessage({
             defaultMessage: 'Incidents by Day of Week',
             id: 'B9s5+4',
@@ -794,6 +800,7 @@ const CrimeGroupReport = ({
           onClick={() => removeItem('incidentsHeatMap')}
         />
         <HeatMapGoogle
+          isPrinting={isPrinting}
           label={intl.formatMessage({
             defaultMessage: 'Incidents Heat Map',
             id: 'q7E1ai',
@@ -863,6 +870,38 @@ const CrimeGroupReport = ({
             defaultMessage: 'Page 2',
             id: 'Q3p9d3',
           })}
+        </Typography.Paragraph>
+      </div>
+    ),
+    pageBreak3: (
+      <div
+        className="page-break"
+        key="pageBreak3"
+        style={{
+          borderBottom: '1px solid grey',
+          height: '100%',
+          display: isPrinting ? 'none' : 'block',
+          zIndex: 100,
+        }}
+      >
+        <Typography.Paragraph>
+          {intl.formatMessage({ defaultMessage: 'Page 3', id: '4GDn7Z' })}
+        </Typography.Paragraph>
+      </div>
+    ),
+    pageBreak4: (
+      <div
+        className="page-break"
+        key="pageBreak4"
+        style={{
+          borderBottom: '1px solid grey',
+          height: '100%',
+          display: isPrinting ? 'none' : 'block',
+          zIndex: 100,
+        }}
+      >
+        <Typography.Paragraph>
+          {intl.formatMessage({ defaultMessage: 'Page 4', id: 'DSruLZ' })}
         </Typography.Paragraph>
       </div>
     ),

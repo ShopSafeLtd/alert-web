@@ -91,6 +91,7 @@ const HeatMapGoogle = ({
   emptyLabel,
   markers: _,
   height,
+  isPrinting,
 }: {
   data:
     | Array<{
@@ -110,10 +111,12 @@ const HeatMapGoogle = ({
     };
   }>;
   height?: string;
+  isPrinting: boolean;
 }) => {
   const mapRef = useRef<MapRef>(null);
 
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
+  const isDark = currentTheme === 'dark' && !isPrinting;
   const [showHeatmap] = useState(true);
   const [showMarkers] = useState(true);
   // const [image, setImage] = useState<string | null | undefined>(null);
@@ -144,7 +147,7 @@ const HeatMapGoogle = ({
           mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}
           style={{ width: '100%', height }} // will need to dynamically work out based on container size
           mapStyle={
-            currentTheme === 'dark'
+            isDark
               ? 'mapbox://styles/wgarrod/clgkseekj009o01qz193sacyp'
               : 'mapbox://styles/wgarrod/clgkn5gb7007u01qmahuhbi6o'
           }
