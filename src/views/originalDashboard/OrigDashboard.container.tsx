@@ -1,5 +1,5 @@
 import React from 'react';
-import View from './FeedItems.view';
+import View from './OrigDashboard.view';
 import useFeedItems from './useFeedItems';
 
 const FeedItems = (): JSX.Element => {
