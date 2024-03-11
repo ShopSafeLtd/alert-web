@@ -91,6 +91,8 @@ interface Return {
   toggleAddInvestigation: () => void;
   addInvestigation: boolean;
   updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
+  showIntel: boolean;
+  toggleShowIntel: () => void;
 }
 
 const useViewCrimeGroup = (crimeGroupId: string): Return => {
@@ -111,6 +113,7 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
   const [editUpdateInput, setEditUpdateInput] = useState('');
   const [addDocument, setAddDocument] = useState(false);
   const [addInvestigation, setAddInvestigation] = useState(false);
+  const [showIntel, setShowIntel] = useState(false);
   const [editUpdate, setEditUpdate] = useState<{
     id: string;
     text: string;
@@ -763,6 +766,10 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
   const toggleAddInvestigation = () => {
     setAddInvestigation(() => !addInvestigation);
   };
+  const toggleShowIntel = () => {
+    setShowIntel(!showIntel);
+  };
+
   return {
     data: crimeGroupsData,
     loading:
@@ -811,6 +818,8 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
     addInvestigation,
     toggleAddInvestigation,
     updateInvestigationList,
+    showIntel,
+    toggleShowIntel,
   };
 };
 
