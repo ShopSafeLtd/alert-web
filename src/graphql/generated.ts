@@ -6082,6 +6082,7 @@ export type Image = {
   id: Scalars['ID'];
   incident?: Maybe<Incident>;
   incidentId?: Maybe<Scalars['String']>;
+  indexFaces: Scalars['Boolean'];
   intel?: Maybe<Intel>;
   intelId?: Maybe<Scalars['String']>;
   low?: Maybe<Scalars['String']>;
@@ -17700,6 +17701,7 @@ export type UploadIncidentImage = {
 };
 
 export type UploadIncidentOffenderImage = {
+  indexFaces?: InputMaybe<Scalars['Boolean']>;
   url?: InputMaybe<UrlImage>;
 };
 

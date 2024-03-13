@@ -180,6 +180,9 @@ const useAddIncident = ({ investigationId }: Props): Return => {
   const pagination = useStoreState((state) => state.data.incidents.pagination);
   const variables = useStoreState((state) => state.data.incidents.variables);
   const order = useStoreState((state) => state.data.incidents.order);
+  const facialRecognition = useStoreState(
+    (state) => state.scheme.facialRecognition
+  );
   const goodsMode = useStoreState((state) => state.scheme.goodsMode);
   const setIncidentsState = useStoreActions(
     (actions) => actions.data.setIncidents
@@ -478,6 +481,8 @@ const useAddIncident = ({ investigationId }: Props): Return => {
           const newOffenders = data.offenders.filter((item) => item.new);
           const editedOffenders = data.offenders.filter((item) => item.edited);
 
+          console.log(data.offenders);
+
           return {
             connect:
               existingOffenders.length > 0
@@ -512,6 +517,18 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                     peculiarities: offender.peculiarities || null,
                     race: offender.race || null,
                     scheme: { connect: { id: schemeId } },
+                    images: {
+                      create: offender.images
+                        ? offender.images.map((item) => ({
+                            url: {
+                              url: item.url || '',
+                              mimetype: 'image/jpg',
+                              filename: item.url || '',
+                            },
+                            indexFaces: facialRecognition,
+                          }))
+                        : undefined,
+                    },
                     address:
                       offender?.address?.street &&
                       offender?.address?.townCity &&
@@ -683,6 +700,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
         }
         return undefined;
       };
+
       void createIncident({
         variables: {
           data: {
