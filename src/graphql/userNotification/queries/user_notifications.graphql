@@ -54,6 +54,7 @@ query userNotifications(
           imagesRequiredOnOffenders
           goodsMode
           facialRecognition
+          facialDetection
           taskTimeTracking
         }
         title

@@ -54,6 +54,7 @@ query currentUser($scheme: UniqueId) {
         restrictIncidentAccess
         reportOnly
         facialRecognition
+        facialDetection
         imagesRequiredOnOffenders
         taskTimeTracking
         languageCount

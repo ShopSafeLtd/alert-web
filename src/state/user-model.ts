@@ -17,7 +17,6 @@ export interface SetUserPayload {
   reference: string;
   onboarded: boolean;
   reportToAllBusinesses: boolean;
-
   businesses: {
     name: string;
     fullName: string;
@@ -119,6 +118,7 @@ export interface Scheme {
       | undefined;
     goodsMode: GoodsMode;
     facialRecognition: boolean;
+    facialDetection: boolean;
     taskTimeTracking: boolean;
     imagesRequiredOnOffenders: boolean;
     autoPopulateDescription: boolean;
