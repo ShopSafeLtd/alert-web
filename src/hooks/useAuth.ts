@@ -111,6 +111,7 @@ const useAuth = (): Return => {
         translations: schemeDetails?.customTranslations as Translations[],
         goodsMode: schemeDetails?.goodsMode || GoodsMode.Generic,
         facialRecognition: schemeDetails?.facialRecognition,
+        facialDetection: schemeDetails?.facialDetection,
         imagesRequiredOnOffenders: schemeDetails?.imagesRequiredOnOffenders,
         taskTimeTracking: schemeDetails?.taskTimeTracking,
         languageCount: schemeDetails?.languageCount || 0,
@@ -159,6 +160,7 @@ const useAuth = (): Return => {
             .customTranslations as Translations[],
           goodsMode: schemeDetails.scheme.goodsMode,
           facialRecognition: schemeDetails.scheme.facialRecognition,
+          facialDetection: schemeDetails.scheme.facialDetection,
           imagesRequiredOnOffenders:
             schemeDetails.scheme.imagesRequiredOnOffenders,
           taskTimeTracking: schemeDetails.scheme.taskTimeTracking,

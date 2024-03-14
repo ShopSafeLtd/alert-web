@@ -21,6 +21,7 @@ query scheme($where: SchemeWhereUniqueInput!) {
     autoPopulateDescription
     needJustification
     facialRecognition
+    facialDetection
     imagesRequiredOnOffenders
     requireSiteNumberForUsers
     oneSelectedIncidentTypeOnly

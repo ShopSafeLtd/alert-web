@@ -50,6 +50,7 @@ query listUserNotifications(
           imagesRequiredOnOffenders
           goodsMode
           facialRecognition
+          facialDetection
           taskTimeTracking
         }
         title
