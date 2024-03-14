@@ -31,7 +31,7 @@ const RadialGraph = ({
       {data && data.length > 0 ? (
         <ResponsiveRadialBar
           theme={{
-            textColor: darkMode ? '#ffffff' : '#000',
+            text: { color: darkMode ? '#ffffff' : '#000' },
           }}
           valueFormat=">-.2f"
           padding={0.6}

@@ -30,6 +30,7 @@ import {
   faPlus,
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
+import { faMessages } from '@fortawesome/pro-solid-svg-icons';
 import AddOffender from 'components/form-components/offender/offender/AddNewOffender';
 import AddAlias from 'components/form-components/crimeGroup/Alias';
 import UpdateBar from 'components/MessageInput/UpdateBar';
@@ -37,7 +38,6 @@ import type { OffenderData, VehicleData } from 'types/DataType';
 import AddVehicle from 'components/form-components/Vehicle/AddVehicle';
 
 import VehicleTable from 'components/tables/VehicleTable';
-import OffenderTable from 'components/tables/OffenderTable';
 import IncidentTable from 'components/tables/IncidentTable';
 import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
 import CrimeGroupSideList from 'components/crimeGroups/sidelist';
@@ -52,6 +52,7 @@ import InvestigationTable from 'components/tables/InvestigationTable';
 import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
 import SelectedOffenders from 'components/form-components/linkOptions/SelectOffenders';
 import IntelSection from 'components/ViewPage/IntelSection';
+import OffenderGrid from '../../../../components/offenders/OffenderGrid';
 import useStyles from './ViewCrimeGroup.styles';
 
 const { Title } = Typography;
@@ -117,6 +118,8 @@ interface Props {
   toggleAddInvestigation: () => void;
   addInvestigation: boolean;
   updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
+  showIntel: boolean;
+  toggleShowIntel: () => void;
 }
 
 const ViewCrimeGroup = ({
@@ -167,6 +170,8 @@ const ViewCrimeGroup = ({
   addInvestigation,
   toggleAddInvestigation,
   updateInvestigationList,
+  showIntel,
+  toggleShowIntel,
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
@@ -385,10 +390,15 @@ const ViewCrimeGroup = ({
                 <Row gutter={8} align="middle" style={{ marginBottom: 10 }}>
                   <Col flex={1}>
                     <Title level={4}>
-                      {intl.formatMessage({
-                        defaultMessage: 'Offenders',
-                        id: 'xb54TN',
-                      })}
+                      {intl.formatMessage(
+                        {
+                          defaultMessage: 'Offenders ({offenders})',
+                          id: 'lVaHn1',
+                        },
+                        {
+                          offenders: data?.crimeGroup.totalOffenders || 0,
+                        }
+                      )}
                     </Title>
                   </Col>
                   {suggestedData?.crimeGroup?.suggestedMembers &&
@@ -402,8 +412,8 @@ const ViewCrimeGroup = ({
                         >
                           {suggestedData.crimeGroup.suggestedMembers.length}
                           {intl.formatMessage({
-                            defaultMessage: ' Suggested Members',
-                            id: 'H5II3L',
+                            defaultMessage: 'Suggested Members',
+                            id: 'TxnvVF',
                           })}
                         </Button>
                       </Col>
@@ -464,10 +474,7 @@ const ViewCrimeGroup = ({
                 </Row>
 
                 {data?.crimeGroup?.offenders.length && !loading ? (
-                  <OffenderTable
-                    offenders={data?.crimeGroup?.offenders}
-                    hasNavigation
-                  />
+                  <OffenderGrid offenders={data?.crimeGroup?.offenders} />
                 ) : (
                   <Empty
                     description={intl.formatMessage({
@@ -715,7 +722,22 @@ const ViewCrimeGroup = ({
             </Modal>
           </div>
         </Col>
-        <Col span={6}>
+        <Col style={{ position: 'relative' }}>
+          <Row className={classes.intelToggleButton} onClick={toggleShowIntel}>
+            {/* <div className={classes.intelToggleButtonSection}> */}
+            {/*  <FontAwesomeIcon icon={faSparkles} /> */}
+            {/*  <div className={classes.intelToggleButtonBadge}>5</div> */}
+            {/* </div> */}
+            <div
+              className={classes.intelToggleButtonSection}
+              style={{ borderBottom: 0 }}
+            >
+              <FontAwesomeIcon icon={faMessages} />
+              {/* <div className={classes.intelToggleButtonBadgeRead}>10</div> */}
+            </div>
+          </Row>
+        </Col>
+        <Col span={showIntel ? 6 : 0}>
           <div className={classes.updatesContainer}>
             <IntelSection
               updates={data?.crimeGroup?.updates}

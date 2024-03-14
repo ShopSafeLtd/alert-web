@@ -53,6 +53,8 @@ const ViewCrimeGroup = () => {
     addInvestigation,
     toggleAddInvestigation,
     updateInvestigationList,
+    toggleShowIntel,
+    showIntel,
   } = useViewCrimeGroup(crimeGroupId);
 
   return (
@@ -104,6 +106,8 @@ const ViewCrimeGroup = () => {
       addInvestigation={addInvestigation}
       toggleAddInvestigation={toggleAddInvestigation}
       updateInvestigationList={updateInvestigationList}
+      showIntel={showIntel}
+      toggleShowIntel={toggleShowIntel}
     />
   );
 };
