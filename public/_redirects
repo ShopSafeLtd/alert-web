@@ -1,3 +1,4 @@
-/api/*          https://gotalk-api.azurewebsites.net/:splat   200
-/downloads/*    https://gotalk-api.azurewebsites.net          200
-/*              /index.html                                   200
+/api/*          https://gotalk-api.azurewebsites.net/:splat                200
+/downloads/*    https://gotalk-api.azurewebsites.net                       200
+/util-api/*     https://util-server-go.azurewebsites.net/:splat            200!
+/*              /index.html                                                200

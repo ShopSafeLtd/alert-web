@@ -3717,14 +3717,6 @@ export type DashboardCreateInput = {
   scheme: ConnectHelper;
 };
 
-export type DashboardInput = {
-  approvedOnly?: InputMaybe<Scalars['Boolean']>;
-  dateRange: DateRangeInput;
-  following?: InputMaybe<Scalars['Boolean']>;
-  groupIds?: InputMaybe<Array<Scalars['String']>>;
-  myData?: InputMaybe<Scalars['Boolean']>;
-};
-
 export type DashboardLayout = {
   __typename?: 'DashboardLayout';
   createdAt: Scalars['Date'];
@@ -6090,6 +6082,7 @@ export type Image = {
   id: Scalars['ID'];
   incident?: Maybe<Incident>;
   incidentId?: Maybe<Scalars['String']>;
+  indexFaces: Scalars['Boolean'];
   intel?: Maybe<Intel>;
   intelId?: Maybe<Scalars['String']>;
   low?: Maybe<Scalars['String']>;
@@ -10985,6 +10978,12 @@ export type NestedStringWithAggregatesFilter = {
   startsWith?: InputMaybe<Scalars['String']>;
 };
 
+export type NodePosition = {
+  __typename?: 'NodePosition';
+  x: Scalars['Float'];
+  y: Scalars['Float'];
+};
+
 export type Notification = {
   __typename?: 'Notification';
   articleId?: Maybe<Scalars['String']>;
@@ -11746,6 +11745,41 @@ export type OffenderCreateWithoutIncidentsInput = {
   scheme: ConnectHelper;
 };
 
+export type OffenderLinkEdge = {
+  __typename?: 'OffenderLinkEdge';
+  count: Scalars['Int'];
+  id: Scalars['String'];
+  label: Scalars['String'];
+  source: Scalars['String'];
+  target: Scalars['String'];
+};
+
+export type OffenderLinkMap = {
+  __typename?: 'OffenderLinkMap';
+  edges: Array<OffenderLinkEdge>;
+  nodes: Array<OffenderLinkMapNode>;
+};
+
+export type OffenderLinkMapNode = {
+  __typename?: 'OffenderLinkMapNode';
+  data: OffenderLinkMapNodeData;
+  id: Scalars['String'];
+  position: NodePosition;
+};
+
+export type OffenderLinkMapNodeData = {
+  __typename?: 'OffenderLinkMapNodeData';
+  imageUrl?: Maybe<Scalars['String']>;
+  incidentCount: Scalars['Int'];
+  label: Scalars['String'];
+  totalLoss: Scalars['Float'];
+};
+
+export type OffenderLinkMapWhere = {
+  crimeGroup?: InputMaybe<UniqueId>;
+  investigation?: InputMaybe<UniqueId>;
+};
+
 export type OffenderListRelationFilter = {
   every?: InputMaybe<OffenderWhereInput>;
   none?: InputMaybe<OffenderWhereInput>;
@@ -12389,7 +12423,6 @@ export type Query = {
   incidentFeed: Array<Incident>;
   incidentHeatPerformance: ListIncidents;
   incidents: Array<Incident>;
-  incidentsDayOfWeek: Array<Graph>;
   incidentsRelay: QueryIncidentsRelayConnection;
   investigation: Investigation;
   investigations: Array<Investigation>;
@@ -12432,6 +12465,7 @@ export type Query = {
   offender: Offender;
   offenderByName: ListOffenders;
   offenderFeed: Array<Offender>;
+  offenderLinkMap: OffenderLinkMap;
   offenderReport: OffenderReport;
   offenders: Array<Offender>;
   offendersPerformance: ListOffenderPerformance;
@@ -12755,11 +12789,6 @@ export type QueryIncidentsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<IncidentWhereInput>;
-};
-
-
-export type QueryIncidentsDayOfWeekArgs = {
-  where: DashboardInput;
 };
 
 
@@ -13095,6 +13124,11 @@ export type QueryOffenderFeedArgs = {
   sex?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   tags?: InputMaybe<Array<Scalars['String']>>;
   userId: Scalars['String'];
+};
+
+
+export type QueryOffenderLinkMapArgs = {
+  where: OffenderLinkMapWhere;
 };
 
 
@@ -17667,6 +17701,7 @@ export type UploadIncidentImage = {
 };
 
 export type UploadIncidentOffenderImage = {
+  indexFaces?: InputMaybe<Scalars['Boolean']>;
   url?: InputMaybe<UrlImage>;
 };
 
@@ -21965,33 +22000,6 @@ export type ChecklistQueryVariables = Exact<{
 
 
 export type ChecklistQuery = { __typename?: 'Query', checklist: { __typename?: 'Checklist', id: string, title: string, description?: string | null, sections: Array<{ __typename?: 'ChecklistSection', order: number, title: string, subsections: Array<{ __typename?: 'ChecklistSubsection', title: string, order: number, questions: Array<{ __typename?: 'ChecklistQuestion', order: number, question: { [key: string]: any }, type: ChecklistAnswerType, weight: Array<{ __typename?: 'AnswerWeight', weight: number, answer: string }> }> }> }>, users: Array<{ __typename?: 'User', id: string }>, business: Array<{ __typename?: 'Business', id: string }> } };
-
-export type DashboardTemplateQueryVariables = Exact<{
-  where: DashboardWhereUniqueInput;
-}>;
-
-
-export type DashboardTemplateQuery = { __typename?: 'Query', dashboard: { __typename?: 'Dashboard', id: string, name?: string | null, layout: Array<{ __typename?: 'DashboardLayout', h: number, i: string, id: string, maxH?: number | null, maxW?: number | null, minH?: number | null, minW?: number | null, moved: boolean, static: boolean, w: number, x: number, y: number }>, roles: Array<{ __typename?: 'CustomRole', id: string, name: string }> } };
-
-export type DashboardTemplatesQueryVariables = Exact<{
-  scheme: SchemeWhereUniqueInput;
-  after?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  roles?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-}>;
-
-
-export type DashboardTemplatesQuery = { __typename?: 'Query', dashboards: { __typename?: 'QueryDashboardsConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'QueryDashboardsConnectionEdge', node: { __typename?: 'Dashboard', id: string, name?: string | null, scheme: { __typename?: 'Scheme', id: string, name: string }, roles: Array<{ __typename?: 'CustomRole', id: string, name: string }> } }> } };
-
-export type IncidentsDayOfWeekQueryVariables = Exact<{
-  where: DashboardInput;
-}>;
-
-
-export type IncidentsDayOfWeekQuery = { __typename?: 'Query', incidentsDayOfWeek: Array<{ __typename?: 'Graph', value: number, label: string }> };
 
 export type CreateCsvZipMutationVariables = Exact<{
   where: IncidentExportInput;
@@ -33088,106 +33096,6 @@ export function useChecklistLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type ChecklistQueryHookResult = ReturnType<typeof useChecklistQuery>;
 export type ChecklistLazyQueryHookResult = ReturnType<typeof useChecklistLazyQuery>;
 export type ChecklistQueryResult = Apollo.QueryResult<ChecklistQuery, ChecklistQueryVariables>;
-export const DashboardTemplateDocument = gql`
-    query DashboardTemplate($where: DashboardWhereUniqueInput!) {
-  dashboard(where: $where) {
-    id
-    layout {
-      h
-      i
-      id
-      maxH
-      maxW
-      minH
-      minW
-      moved
-      static
-      w
-      x
-      y
-    }
-    name
-    roles {
-      id
-      name
-    }
-  }
-}
-    `;
-export function useDashboardTemplateQuery(baseOptions: Apollo.QueryHookOptions<DashboardTemplateQuery, DashboardTemplateQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<DashboardTemplateQuery, DashboardTemplateQueryVariables>(DashboardTemplateDocument, options);
-      }
-export function useDashboardTemplateLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DashboardTemplateQuery, DashboardTemplateQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<DashboardTemplateQuery, DashboardTemplateQueryVariables>(DashboardTemplateDocument, options);
-        }
-export type DashboardTemplateQueryHookResult = ReturnType<typeof useDashboardTemplateQuery>;
-export type DashboardTemplateLazyQueryHookResult = ReturnType<typeof useDashboardTemplateLazyQuery>;
-export type DashboardTemplateQueryResult = Apollo.QueryResult<DashboardTemplateQuery, DashboardTemplateQueryVariables>;
-export const DashboardTemplatesDocument = gql`
-    query DashboardTemplates($scheme: SchemeWhereUniqueInput!, $after: String, $first: Int, $last: Int, $roles: [String!], $skip: Int, $take: Int) {
-  dashboards(
-    scheme: $scheme
-    after: $after
-    first: $first
-    last: $last
-    roles: $roles
-    skip: $skip
-    take: $take
-  ) {
-    pageInfo {
-      hasNextPage
-      endCursor
-    }
-    edges {
-      node {
-        id
-        name
-        scheme {
-          id
-          name
-        }
-        roles {
-          id
-          name
-        }
-      }
-    }
-    totalCount
-  }
-}
-    `;
-export function useDashboardTemplatesQuery(baseOptions: Apollo.QueryHookOptions<DashboardTemplatesQuery, DashboardTemplatesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<DashboardTemplatesQuery, DashboardTemplatesQueryVariables>(DashboardTemplatesDocument, options);
-      }
-export function useDashboardTemplatesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DashboardTemplatesQuery, DashboardTemplatesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<DashboardTemplatesQuery, DashboardTemplatesQueryVariables>(DashboardTemplatesDocument, options);
-        }
-export type DashboardTemplatesQueryHookResult = ReturnType<typeof useDashboardTemplatesQuery>;
-export type DashboardTemplatesLazyQueryHookResult = ReturnType<typeof useDashboardTemplatesLazyQuery>;
-export type DashboardTemplatesQueryResult = Apollo.QueryResult<DashboardTemplatesQuery, DashboardTemplatesQueryVariables>;
-export const IncidentsDayOfWeekDocument = gql`
-    query IncidentsDayOfWeek($where: DashboardInput!) {
-  incidentsDayOfWeek(where: $where) {
-    value
-    label
-  }
-}
-    `;
-export function useIncidentsDayOfWeekQuery(baseOptions: Apollo.QueryHookOptions<IncidentsDayOfWeekQuery, IncidentsDayOfWeekQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<IncidentsDayOfWeekQuery, IncidentsDayOfWeekQueryVariables>(IncidentsDayOfWeekDocument, options);
-      }
-export function useIncidentsDayOfWeekLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IncidentsDayOfWeekQuery, IncidentsDayOfWeekQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<IncidentsDayOfWeekQuery, IncidentsDayOfWeekQueryVariables>(IncidentsDayOfWeekDocument, options);
-        }
-export type IncidentsDayOfWeekQueryHookResult = ReturnType<typeof useIncidentsDayOfWeekQuery>;
-export type IncidentsDayOfWeekLazyQueryHookResult = ReturnType<typeof useIncidentsDayOfWeekLazyQuery>;
-export type IncidentsDayOfWeekQueryResult = Apollo.QueryResult<IncidentsDayOfWeekQuery, IncidentsDayOfWeekQueryVariables>;
 export const CreateCsvZipDocument = gql`
     mutation CreateCsvZip($where: IncidentExportInput!) {
   createCsvZip(where: $where)

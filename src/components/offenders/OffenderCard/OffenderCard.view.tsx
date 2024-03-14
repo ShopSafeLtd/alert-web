@@ -27,6 +27,7 @@ import {
   faPeople,
   faPlus,
   faTrash,
+  faShieldCheck,
 } from '@fortawesome/pro-light-svg-icons';
 import {
   faAngleLeft,
@@ -722,16 +723,18 @@ const OffenderCard = ({
                         {offender?.name}
                       </Title>
                     </Col>
-                    <Col>
-                      <Text type="success" ellipsis>
-                        {offender.idVerified
-                          ? intl.formatMessage({
-                              defaultMessage: 'Verified ID',
-                              id: '0lpcfx',
-                            })
-                          : ''}
-                      </Text>
-                    </Col>
+                    {offender?.idVerified && (
+                      <Col>
+                        <Tooltip
+                          title={intl.formatMessage({
+                            defaultMessage: 'Verified ID',
+                            id: '0lpcfx',
+                          })}
+                        >
+                          <FontAwesomeIcon size="xl" icon={faShieldCheck} />
+                        </Tooltip>
+                      </Col>
+                    )}
                   </Row>
 
                   <Text type="secondary">
