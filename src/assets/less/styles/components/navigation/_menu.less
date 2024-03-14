@@ -2,7 +2,6 @@
     font-weight: @font-weight-semibold;
 }
 
-
 .ant-menu-horizontal {
 
     > .ant-menu-item-active,
@@ -56,4 +55,16 @@
     font-weight: 700;
     text-transform: uppercase;
     margin-top: 15px;
+}
+
+
+.ant-menu-inline .ant-menu-item:not(:last-child), .ant-menu-vertical .ant-menu-item:not(:last-child), .ant-menu-vertical-left .ant-menu-item:not(:last-child), .ant-menu-vertical-right .ant-menu-item:not(:last-child) {
+    margin-bottom: 1px;
+    margin-top: 1px;
+}
+
+.ant-menu-inline .ant-menu-item, .ant-menu-inline .ant-menu-submenu-title, .ant-menu-vertical .ant-menu-item, .ant-menu-vertical .ant-menu-submenu-title, .ant-menu-vertical-left .ant-menu-item, .ant-menu-vertical-left .ant-menu-submenu-title, .ant-menu-vertical-right .ant-menu-item, .ant-menu-vertical-right .ant-menu-submenu-title {
+    margin-bottom: 1px;
+    margin-top: 1px;
+    font-size: 14px;
 }

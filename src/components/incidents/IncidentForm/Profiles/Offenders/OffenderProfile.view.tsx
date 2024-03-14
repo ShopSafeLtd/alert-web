@@ -73,7 +73,9 @@ const OffenderProfile = ({
   const imagesRequired = useStoreState(
     (state) => state.scheme.imagesRequiredOnOffenders
   );
-  const facialRec = useStoreState((state) => state.scheme.facialRecognition);
+  const facialDetection = useStoreState(
+    (state) => state.scheme.facialDetection
+  );
   const role = useStoreState((state) => state.user.role);
   const publicOffenderDOB =
     useStoreState((state) => state.scheme.defaultPublicOffenderDOB) ||
@@ -430,7 +432,7 @@ const OffenderProfile = ({
                         onChangeOffenderImage(info, offender.id)
                       }
                       action={
-                        facialRec
+                        facialDetection
                           ? import.meta.env
                               .VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT_GO
                           : import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT

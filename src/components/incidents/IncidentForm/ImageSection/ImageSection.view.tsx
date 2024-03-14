@@ -69,7 +69,9 @@ const ImageSection = ({
     form,
     onChange,
   });
-  const facialRec = useStoreState((state) => state.scheme.facialRecognition);
+  const facialDetection = useStoreState(
+    (state) => state.scheme.facialDetection
+  );
 
   return (
     <div>
@@ -100,7 +102,7 @@ const ImageSection = ({
             fileList={images}
             onChange={onImageChange}
             action={
-              facialRec
+              facialDetection
                 ? import.meta.env.VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT_GO
                 : import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT
             }
@@ -201,7 +203,7 @@ const ImageSection = ({
           fileList={images}
           onChange={onImageChange}
           action={
-            facialRec
+            facialDetection
               ? import.meta.env.VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT_GO
               : import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT
           }

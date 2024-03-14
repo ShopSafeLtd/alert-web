@@ -138,8 +138,8 @@ interface Return {
 
 const useOffenders = ({ value, onChange, form }: Props): Return => {
   const images = Form.useWatch('images', form);
-  const facialRecognition = useStoreState(
-    (state) => state.scheme.facialRecognition
+  const facialDetection = useStoreState(
+    (state) => state.scheme.facialDetection
   );
   const imagesRequiredOnOffenders = useStoreState(
     (state) => state.scheme.imagesRequiredOnOffenders
@@ -425,7 +425,7 @@ const useOffenders = ({ value, onChange, form }: Props): Return => {
 
           // if there are faces and facialRec is enabled open modal
           if (
-            facialRecognition &&
+            facialDetection &&
             info.file.response[0].faces &&
             info.file.response[0].faces.length > 0
           ) {

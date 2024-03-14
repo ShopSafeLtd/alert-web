@@ -53,6 +53,7 @@ interface Scheme {
   needJustification: boolean;
   requireSiteNumberForUsers: boolean;
   oneSelectedIncidentTypeOnly: boolean;
+  facialDetection: boolean;
   logo?:
     | {
         optimisedPersisted?: string | null | undefined;
@@ -346,6 +347,7 @@ const useNotificationLists = (): Return => {
       facialRecognition: scheme.facialRecognition,
       imagesRequiredOnOffenders: scheme.imagesRequiredOnOffenders,
       taskTimeTracking: scheme.taskTimeTracking,
+      facialDetection: scheme.facialDetection,
     });
     setFilterDefaultGroup({
       filterDefaultGroups: defaultGroups.filter(

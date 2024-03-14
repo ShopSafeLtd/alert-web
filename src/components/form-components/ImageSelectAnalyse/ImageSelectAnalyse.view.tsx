@@ -107,7 +107,9 @@ const ImageSelectAnalyse = ({
 }: Props) => {
   const intl = useIntl();
   const classes = useStyles();
-  const facialRec = useStoreState((state) => state.scheme.facialRecognition);
+  const facialDetection = useStoreState(
+    (state) => state.scheme.facialDetection
+  );
   const [localUpload, setLocalUpload] = useState(uploading);
   const [selected, setSelected] = useState<ImageValue[]>([]);
   const [images, setImages] = useState<ImageData[]>([]);
@@ -190,7 +192,7 @@ const ImageSelectAnalyse = ({
         onChange={onImageChange}
         showUploadList={false}
         action={
-          facialRec
+          facialDetection
             ? import.meta.env.VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT_GO
             : import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT
         }

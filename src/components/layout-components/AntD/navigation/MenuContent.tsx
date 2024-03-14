@@ -60,7 +60,7 @@ const Icon = ({ icon }: { icon: any }) => (
   <FontAwesomeIcon
     fixedWidth
     icon={icon}
-    style={{ fontSize: 22, marginRight: 10, marginBottom: -3 }}
+    style={{ fontSize: 18, marginRight: 10, marginBottom: -3 }}
   />
 );
 const SubIcon = ({ icon }: { icon: any }) => (
@@ -331,7 +331,7 @@ const SideNavContent = (props: SideNavContentProps) => {
             width: 100,
             marginLeft: 20,
             marginTop: 15,
-            marginBottom: 10,
+            marginBottom: 15,
           }}
         />
       )}

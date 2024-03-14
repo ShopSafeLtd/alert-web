@@ -98,8 +98,8 @@ const useImageSection = ({ incidentForm, form, onChange }: Props): Return => {
   const formImages = Form.useWatch('images', form);
   const [images, setImages] = useState<StateImageData[]>([]);
   const [editImage, setEditImage] = useState<StateImageData | null>(null);
-  const facialRecognition = useStoreState(
-    (state) => state.scheme.facialRecognition
+  const facialDetection = useStoreState(
+    (state) => state.scheme.facialDetection
   );
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
@@ -144,7 +144,7 @@ const useImageSection = ({ incidentForm, form, onChange }: Props): Return => {
       const image = info.file.response[0];
       if (
         image &&
-        facialRecognition &&
+        facialDetection &&
         incidentForm.includes(IncidentFormField.Offenders) &&
         image.faces &&
         image.faces.length > 0
