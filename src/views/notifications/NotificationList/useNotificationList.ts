@@ -69,6 +69,7 @@ interface Scheme {
   }[];
   goodsMode: GoodsMode;
   facialRecognition: boolean;
+  facialDetection: boolean;
   imagesRequiredOnOffenders: boolean;
   taskTimeTracking: boolean;
   languageCount: number;
@@ -361,6 +362,7 @@ const useNotificationLists = (): Return => {
       imagesRequiredOnOffenders: scheme.imagesRequiredOnOffenders,
       taskTimeTracking: scheme.taskTimeTracking,
       reportOnly: scheme.reportOnly,
+      facialDetection: scheme.facialDetection,
     });
     setFilterDefaultGroup({
       filterDefaultGroups: defaultGroups.filter(

@@ -24,6 +24,7 @@ export interface SetSchemePayload {
   translations?: Translations[];
   goodsMode: GoodsMode;
   facialRecognition: boolean;
+  facialDetection: boolean;
   imagesRequiredOnOffenders: boolean;
   taskTimeTracking: boolean;
   languageCount: number;
@@ -50,6 +51,7 @@ export interface SchemeModel {
   translations?: Translations[];
   goodsMode: GoodsMode;
   facialRecognition: boolean;
+  facialDetection: boolean;
   imagesRequiredOnOffenders: boolean;
   taskTimeTracking: boolean;
   languageCount: number;
@@ -74,6 +76,7 @@ const userModel: SchemeModel = {
   translations: [],
   goodsMode: GoodsMode.Generic,
   facialRecognition: false,
+  facialDetection: false,
   imagesRequiredOnOffenders: false,
   taskTimeTracking: false,
   languageCount: 0,
@@ -103,6 +106,7 @@ const userModel: SchemeModel = {
     state.needJustification = payload.needJustification;
     state.requireSiteNumberForUsers = payload.requireSiteNumberForUsers;
     state.oneSelectedIncidentTypeOnly = payload.oneSelectedIncidentTypeOnly;
+    state.facialDetection = payload.facialDetection;
   }),
   clearScheme: action((state) => {
     state.id = '';
@@ -126,6 +130,7 @@ const userModel: SchemeModel = {
     state.needJustification = false;
     state.requireSiteNumberForUsers = false;
     state.oneSelectedIncidentTypeOnly = false;
+    state.facialDetection = false;
   }),
 };
 

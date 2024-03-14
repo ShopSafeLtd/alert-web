@@ -97,6 +97,7 @@ export const NavScheme = () => {
       taskTimeTracking: scheme.scheme.taskTimeTracking,
       restrictIncidentAccess: scheme.scheme.restrictIncidentAccess,
       reportOnly: scheme.scheme.reportOnly,
+      facialDetection: scheme.scheme.facialDetection,
     });
     setFilterDefaultGroup({
       filterDefaultGroups: defaultGroups.filter(
