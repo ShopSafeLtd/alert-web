@@ -12,7 +12,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
     height: '100vh',
     overflow: 'auto',
     backgroundColor: theme.componentBackground,
-    minWidth: 190,
+    minWidth: 182,
   },
   section: {
     marginBottom: 15,

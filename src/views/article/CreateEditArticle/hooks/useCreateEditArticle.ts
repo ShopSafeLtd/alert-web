@@ -209,7 +209,7 @@ const useCreateEditArticle = (): Props => {
                     },
                     {
                       role: {
-                        equals: Role.SchemeAdmin,
+                        not: Role.User,
                       },
                     },
                   ],
