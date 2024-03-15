@@ -375,7 +375,7 @@ const Dashboards = ({
             })}
             name="roles"
           >
-            <Select mode="multiple" onChange={(e, a) => console.log(e, a)}>
+            <Select mode="multiple">
               {rolesData?.roles?.edges?.map(({ node: role }) => (
                 <Select.Option key={role.id} value={role.id}>
                   {role.name}
