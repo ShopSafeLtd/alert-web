@@ -3701,6 +3701,8 @@ export type CustomRoleWhereUniqueInput = {
 export type Dashboard = {
   __typename?: 'Dashboard';
   createdAt: Scalars['Date'];
+  defaultAdmin: Scalars['Boolean'];
+  defaultUser: Scalars['Boolean'];
   id: Scalars['String'];
   layout: Array<DashboardLayout>;
   name?: Maybe<Scalars['String']>;
@@ -3711,10 +3713,21 @@ export type Dashboard = {
 };
 
 export type DashboardCreateInput = {
-  layout: DashboardTemplateInput;
+  defaultAdmin: Scalars['Boolean'];
+  defaultUser: Scalars['Boolean'];
+  layout?: InputMaybe<DashboardTemplateInput>;
   name: Scalars['String'];
   roles?: ConnectOnlyArrayHelper;
+  runningBanner: Scalars['String'];
   scheme: ConnectHelper;
+};
+
+export type DashboardInput = {
+  approvedOnly?: InputMaybe<Scalars['Boolean']>;
+  dateRange: DateRangeInput;
+  following?: InputMaybe<Scalars['Boolean']>;
+  groupIds?: InputMaybe<Array<Scalars['String']>>;
+  myData?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type DashboardLayout = {
@@ -3797,9 +3810,12 @@ export type DashboardTemplateInput = {
 };
 
 export type DashboardTemplateUpdateInput = {
+  defaultAdmin?: InputMaybe<Scalars['Boolean']>;
+  defaultUser?: InputMaybe<Scalars['Boolean']>;
   layout?: InputMaybe<DashboardLayoutUpdateManyWithoutTemplateNestedInput>;
   name?: InputMaybe<NullableSetStringHelper>;
   roles?: InputMaybe<NullableConnectArrayHelper>;
+  runningBanner?: InputMaybe<NullableSetStringHelper>;
   schemes?: InputMaybe<NullableConnectArrayHelper>;
 };
 
@@ -3809,6 +3825,8 @@ export type DashboardUpdateManyTemplateInput = {
 };
 
 export type DashboardWhereInput = {
+  defaultAdmin?: InputMaybe<BoolFilter>;
+  defaultUser?: InputMaybe<BoolFilter>;
   id?: InputMaybe<StringFilter>;
   scheme?: InputMaybe<SchemeWhereInput>;
 };
@@ -8285,6 +8303,12 @@ export type LanguageWhereUniqueInput = {
   updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
+export type LatestIncident = {
+  __typename?: 'LatestIncident';
+  date: Scalars['DateTime'];
+  id: Scalars['String'];
+};
+
 export type ListActions = {
   __typename?: 'ListActions';
   actions: Array<Action>;
@@ -12420,12 +12444,18 @@ export type Query = {
   image: Image;
   images: Array<Image>;
   incident: Incident;
+  incidentCount: Scalars['Int'];
   incidentFeed: Array<Incident>;
   incidentHeatPerformance: ListIncidents;
   incidents: Array<Incident>;
+  incidentsDayOfWeek: Array<Graph>;
   incidentsRelay: QueryIncidentsRelayConnection;
+  incidentsTimeOfDay: Array<Graph>;
   investigation: Investigation;
   investigations: Array<Investigation>;
+  latestIncident?: Maybe<LatestIncident>;
+  latestIncidents: QueryLatestIncidentsConnection;
+  latestVehicles: QueryLatestVehiclesConnection;
   listActions: ListActions;
   listArticles: ListArticles;
   listArticlesRelay: QueryListArticlesRelayConnection;
@@ -12486,8 +12516,11 @@ export type Query = {
   tag: Tag;
   tags: Array<Tag>;
   targetedGoods: ListTargetedGoods;
+  targetedGoodsDashboard: Array<Graph>;
+  test: Scalars['String'];
   todo: Todo;
   todos: Array<Todo>;
+  totalLoss: Scalars['Float'];
   translateText: Array<TranslatedText>;
   updates: Array<Update>;
   user: User;
@@ -12765,6 +12798,11 @@ export type QueryIncidentArgs = {
 };
 
 
+export type QueryIncidentCountArgs = {
+  where: DashboardInput;
+};
+
+
 export type QueryIncidentFeedArgs = {
   after?: InputMaybe<Scalars['String']>;
   approved?: InputMaybe<Scalars['Boolean']>;
@@ -12792,6 +12830,11 @@ export type QueryIncidentsArgs = {
 };
 
 
+export type QueryIncidentsDayOfWeekArgs = {
+  where: DashboardInput;
+};
+
+
 export type QueryIncidentsRelayArgs = {
   after?: InputMaybe<Scalars['String']>;
   approved?: InputMaybe<Scalars['Boolean']>;
@@ -12807,6 +12850,11 @@ export type QueryIncidentsRelayArgs = {
 };
 
 
+export type QueryIncidentsTimeOfDayArgs = {
+  where: DashboardInput;
+};
+
+
 export type QueryInvestigationArgs = {
   where: InvestigationWhereUniqueInput;
 };
@@ -12819,6 +12867,29 @@ export type QueryInvestigationsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<InvestigationWhereInput>;
+};
+
+
+export type QueryLatestIncidentArgs = {
+  where: DashboardInput;
+};
+
+
+export type QueryLatestIncidentsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where: DashboardInput;
+};
+
+
+export type QueryLatestVehiclesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where: DashboardInput;
 };
 
 
@@ -13271,6 +13342,11 @@ export type QueryTargetedGoodsArgs = {
 };
 
 
+export type QueryTargetedGoodsDashboardArgs = {
+  where: DashboardInput;
+};
+
+
 export type QueryTodoArgs = {
   where: TodoWhereUniqueInput;
 };
@@ -13283,6 +13359,11 @@ export type QueryTodosArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<TodoWhereInput>;
+};
+
+
+export type QueryTotalLossArgs = {
+  where: DashboardInput;
 };
 
 
@@ -13428,6 +13509,30 @@ export type QueryIncidentsRelayConnectionEdge = {
   __typename?: 'QueryIncidentsRelayConnectionEdge';
   cursor: Scalars['String'];
   node: Incident;
+};
+
+export type QueryLatestIncidentsConnection = {
+  __typename?: 'QueryLatestIncidentsConnection';
+  edges: Array<QueryLatestIncidentsConnectionEdge>;
+  pageInfo: PageInfo;
+};
+
+export type QueryLatestIncidentsConnectionEdge = {
+  __typename?: 'QueryLatestIncidentsConnectionEdge';
+  cursor: Scalars['String'];
+  node: Incident;
+};
+
+export type QueryLatestVehiclesConnection = {
+  __typename?: 'QueryLatestVehiclesConnection';
+  edges: Array<QueryLatestVehiclesConnectionEdge>;
+  pageInfo: PageInfo;
+};
+
+export type QueryLatestVehiclesConnectionEdge = {
+  __typename?: 'QueryLatestVehiclesConnectionEdge';
+  cursor: Scalars['String'];
+  node: Vehicle;
 };
 
 export type QueryListArticlesRelayConnection = {
@@ -21635,7 +21740,7 @@ export type CurrentUserQueryVariables = Exact<{
 }>;
 
 
-export type CurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: string, fullName: string, origName: string, email: string, reference?: number | null, demId?: string | null, publicName: boolean, reportToAllBusinesses: boolean, notificationCount: number, messageCount: number, defaultScheme?: string | null, newUser: boolean, incidentEmail: boolean, incidentPush: boolean, offenderEmail: boolean, offenderPush: boolean, bulletinEmails: boolean, bulletinPush: boolean, messagePush: boolean, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string, demId?: string | null, brands: Array<string> }>, groups: Array<{ __typename?: 'Group', id: string, name: string, scheme: { __typename?: 'Scheme', id: string } }>, defaultGroups: Array<{ __typename?: 'Group', id: string, name: string, scheme: { __typename?: 'Scheme', id: string } }>, schemes: Array<{ __typename?: 'UserScheme', id: string, role: Role, scheme: { __typename?: 'Scheme', customTranslations: Array<{ [key: string]: any }>, userTodos: number, id: string, name: string, goodsMode: GoodsMode, autoApproveIncidents: boolean, autoApproveOffenders: boolean, defaultPublicOffenderDOB: boolean, restrictIncidentAccess: boolean, reportOnly: boolean, facialRecognition: boolean, facialDetection: boolean, imagesRequiredOnOffenders: boolean, taskTimeTracking: boolean, languageCount: number, autoPopulateDescription: boolean, needJustification: boolean, requireSiteNumberForUsers: boolean, oneSelectedIncidentTypeOnly: boolean, logo?: { __typename?: 'Image', optimisedPersisted?: string | null } | null, darkLogo?: { __typename?: 'Image', optimisedPersisted?: string | null } | null }, permissions: Array<{ __typename?: 'Permissions', model: PermissionModel, allowedMethods: Array<PermissionMethod> }> }> } | null };
+export type CurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: string, fullName: string, origName: string, email: string, reference?: number | null, demId?: string | null, publicName: boolean, reportToAllBusinesses: boolean, notificationCount: number, messageCount: number, defaultScheme?: string | null, newUser: boolean, incidentEmail: boolean, incidentPush: boolean, offenderEmail: boolean, offenderPush: boolean, bulletinEmails: boolean, bulletinPush: boolean, messagePush: boolean, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string, demId?: string | null, brands: Array<string> }>, groups: Array<{ __typename?: 'Group', id: string, name: string, scheme: { __typename?: 'Scheme', id: string } }>, defaultGroups: Array<{ __typename?: 'Group', id: string, name: string, scheme: { __typename?: 'Scheme', id: string } }>, schemes: Array<{ __typename?: 'UserScheme', id: string, role: Role, isAdmin: boolean, scheme: { __typename?: 'Scheme', customTranslations: Array<{ [key: string]: any }>, userTodos: number, id: string, name: string, goodsMode: GoodsMode, autoApproveIncidents: boolean, autoApproveOffenders: boolean, defaultPublicOffenderDOB: boolean, restrictIncidentAccess: boolean, reportOnly: boolean, facialRecognition: boolean, facialDetection: boolean, imagesRequiredOnOffenders: boolean, taskTimeTracking: boolean, languageCount: number, autoPopulateDescription: boolean, needJustification: boolean, requireSiteNumberForUsers: boolean, oneSelectedIncidentTypeOnly: boolean, logo?: { __typename?: 'Image', optimisedPersisted?: string | null } | null, darkLogo?: { __typename?: 'Image', optimisedPersisted?: string | null } | null }, permissions: Array<{ __typename?: 'Permissions', model: PermissionModel, allowedMethods: Array<PermissionMethod> }>, dashboard?: { __typename?: 'Dashboard', runningBanner?: string | null, layout: Array<{ __typename?: 'DashboardLayout', h: number, i: string, maxH?: number | null, maxW?: number | null, minH?: number | null, minW?: number | null, moved: boolean, static: boolean, w: number, x: number, y: number }> } | null }> } | null };
 
 export type UserQueryVariables = Exact<{
   where: UserWhereUniqueInput;
@@ -22003,6 +22108,116 @@ export type ChecklistQueryVariables = Exact<{
 
 
 export type ChecklistQuery = { __typename?: 'Query', checklist: { __typename?: 'Checklist', id: string, title: string, description?: string | null, sections: Array<{ __typename?: 'ChecklistSection', order: number, title: string, subsections: Array<{ __typename?: 'ChecklistSubsection', title: string, order: number, questions: Array<{ __typename?: 'ChecklistQuestion', order: number, question: { [key: string]: any }, type: ChecklistAnswerType, weight: Array<{ __typename?: 'AnswerWeight', weight: number, answer: string }> }> }> }>, users: Array<{ __typename?: 'User', id: string }>, business: Array<{ __typename?: 'Business', id: string }> } };
+
+export type CreateDashboardMutationVariables = Exact<{
+  data: DashboardCreateInput;
+}>;
+
+
+export type CreateDashboardMutation = { __typename?: 'Mutation', createDashboard: { __typename?: 'Dashboard', id: string, name?: string | null, roles: Array<{ __typename?: 'CustomRole', name: string, id: string }> } };
+
+export type DeleteDashboardMutationVariables = Exact<{
+  where: DashboardWhereUniqueInput;
+}>;
+
+
+export type DeleteDashboardMutation = { __typename?: 'Mutation', deleteDashboardTemplate?: { __typename?: 'Dashboard', id: string } | null };
+
+export type UpdateDashboardTemplateMutationVariables = Exact<{
+  data: DashboardTemplateUpdateInput;
+  where: DashboardWhereUniqueInput;
+}>;
+
+
+export type UpdateDashboardTemplateMutation = { __typename?: 'Mutation', updateDashboardTemplate: { __typename?: 'Dashboard', name?: string | null, id: string, roles: Array<{ __typename?: 'CustomRole', name: string, id: string }> } };
+
+export type AvailRolesQueryVariables = Exact<{
+  schemeId: Scalars['String'];
+}>;
+
+
+export type AvailRolesQuery = { __typename?: 'Query', roles: { __typename?: 'QueryRolesConnection', totalCount: number, edges: Array<{ __typename?: 'QueryRolesConnectionEdge', node: { __typename?: 'CustomRole', id: string, name: string } }> } };
+
+export type DashboardTemplateQueryVariables = Exact<{
+  where: DashboardWhereUniqueInput;
+}>;
+
+
+export type DashboardTemplateQuery = { __typename?: 'Query', dashboard: { __typename?: 'Dashboard', id: string, runningBanner?: string | null, name?: string | null, layout: Array<{ __typename?: 'DashboardLayout', h: number, i: string, id: string, maxH?: number | null, maxW?: number | null, minH?: number | null, minW?: number | null, moved: boolean, static: boolean, w: number, x: number, y: number }>, roles: Array<{ __typename?: 'CustomRole', id: string, name: string }> } };
+
+export type DashboardTemplatesQueryVariables = Exact<{
+  scheme: SchemeWhereUniqueInput;
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  roles?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type DashboardTemplatesQuery = { __typename?: 'Query', dashboards: { __typename?: 'QueryDashboardsConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'QueryDashboardsConnectionEdge', node: { __typename?: 'Dashboard', defaultAdmin: boolean, defaultUser: boolean, id: string, name?: string | null, scheme: { __typename?: 'Scheme', id: string, name: string }, roles: Array<{ __typename?: 'CustomRole', id: string, name: string }> } }> } };
+
+export type LatestVehiclesQueryVariables = Exact<{
+  where: DashboardInput;
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type LatestVehiclesQuery = { __typename?: 'Query', latestVehicles: { __typename?: 'QueryLatestVehiclesConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'QueryLatestVehiclesConnectionEdge', node: { __typename?: 'Vehicle', id: string, registration?: string | null, model?: string | null, make?: string | null, images: Array<{ __typename?: 'Image', low?: string | null }> } }> } };
+
+export type IncidentsDayOfWeekQueryVariables = Exact<{
+  where: DashboardInput;
+}>;
+
+
+export type IncidentsDayOfWeekQuery = { __typename?: 'Query', incidentsDayOfWeek: Array<{ __typename?: 'Graph', value: number, label: string }> };
+
+export type IncidentCountQueryVariables = Exact<{
+  where: DashboardInput;
+}>;
+
+
+export type IncidentCountQuery = { __typename?: 'Query', incidentCount: number };
+
+export type LatestIncidentQueryVariables = Exact<{
+  where: DashboardInput;
+}>;
+
+
+export type LatestIncidentQuery = { __typename?: 'Query', latestIncident?: { __typename?: 'LatestIncident', id: string, date: Date } | null };
+
+export type LatestIncidentsQueryVariables = Exact<{
+  where: DashboardInput;
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type LatestIncidentsQuery = { __typename?: 'Query', latestIncidents: { __typename?: 'QueryLatestIncidentsConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'QueryLatestIncidentsConnectionEdge', node: { __typename?: 'Incident', date: Date, id: string, description: string } }> } };
+
+export type TargetedGoodsDashboardQueryVariables = Exact<{
+  where: DashboardInput;
+}>;
+
+
+export type TargetedGoodsDashboardQuery = { __typename?: 'Query', targetedGoodsDashboard: Array<{ __typename?: 'Graph', value: number, label: string }> };
+
+export type IncidentsTimeOfDayQueryVariables = Exact<{
+  where: DashboardInput;
+}>;
+
+
+export type IncidentsTimeOfDayQuery = { __typename?: 'Query', incidentsTimeOfDay: Array<{ __typename?: 'Graph', value: number, label: string }> };
+
+export type TotalLossQueryVariables = Exact<{
+  where: DashboardInput;
+}>;
+
+
+export type TotalLossQuery = { __typename?: 'Query', totalLoss: number };
 
 export type CreateCsvZipMutationVariables = Exact<{
   where: IncidentExportInput;
@@ -31522,9 +31737,26 @@ export const CurrentUserDocument = gql`
         requireSiteNumberForUsers
         oneSelectedIncidentTypeOnly
       }
+      isAdmin
       permissions {
         model
         allowedMethods
+      }
+      dashboard {
+        runningBanner
+        layout {
+          h
+          i
+          maxH
+          maxW
+          minH
+          minW
+          moved
+          static
+          w
+          x
+          y
+        }
       }
     }
     incidentEmail
@@ -33105,6 +33337,337 @@ export function useChecklistLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type ChecklistQueryHookResult = ReturnType<typeof useChecklistQuery>;
 export type ChecklistLazyQueryHookResult = ReturnType<typeof useChecklistLazyQuery>;
 export type ChecklistQueryResult = Apollo.QueryResult<ChecklistQuery, ChecklistQueryVariables>;
+export const CreateDashboardDocument = gql`
+    mutation CreateDashboard($data: DashboardCreateInput!) {
+  createDashboard(data: $data) {
+    id
+    name
+    roles {
+      name
+      id
+    }
+  }
+}
+    `;
+export type CreateDashboardMutationFn = Apollo.MutationFunction<CreateDashboardMutation, CreateDashboardMutationVariables>;
+export function useCreateDashboardMutation(baseOptions?: Apollo.MutationHookOptions<CreateDashboardMutation, CreateDashboardMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateDashboardMutation, CreateDashboardMutationVariables>(CreateDashboardDocument, options);
+      }
+export type CreateDashboardMutationHookResult = ReturnType<typeof useCreateDashboardMutation>;
+export type CreateDashboardMutationResult = Apollo.MutationResult<CreateDashboardMutation>;
+export type CreateDashboardMutationOptions = Apollo.BaseMutationOptions<CreateDashboardMutation, CreateDashboardMutationVariables>;
+export const DeleteDashboardDocument = gql`
+    mutation DeleteDashboard($where: DashboardWhereUniqueInput!) {
+  deleteDashboardTemplate(where: $where) {
+    id
+  }
+}
+    `;
+export type DeleteDashboardMutationFn = Apollo.MutationFunction<DeleteDashboardMutation, DeleteDashboardMutationVariables>;
+export function useDeleteDashboardMutation(baseOptions?: Apollo.MutationHookOptions<DeleteDashboardMutation, DeleteDashboardMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteDashboardMutation, DeleteDashboardMutationVariables>(DeleteDashboardDocument, options);
+      }
+export type DeleteDashboardMutationHookResult = ReturnType<typeof useDeleteDashboardMutation>;
+export type DeleteDashboardMutationResult = Apollo.MutationResult<DeleteDashboardMutation>;
+export type DeleteDashboardMutationOptions = Apollo.BaseMutationOptions<DeleteDashboardMutation, DeleteDashboardMutationVariables>;
+export const UpdateDashboardTemplateDocument = gql`
+    mutation updateDashboardTemplate($data: DashboardTemplateUpdateInput!, $where: DashboardWhereUniqueInput!) {
+  updateDashboardTemplate(data: $data, where: $where) {
+    name
+    roles {
+      name
+      id
+    }
+    id
+  }
+}
+    `;
+export type UpdateDashboardTemplateMutationFn = Apollo.MutationFunction<UpdateDashboardTemplateMutation, UpdateDashboardTemplateMutationVariables>;
+export function useUpdateDashboardTemplateMutation(baseOptions?: Apollo.MutationHookOptions<UpdateDashboardTemplateMutation, UpdateDashboardTemplateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateDashboardTemplateMutation, UpdateDashboardTemplateMutationVariables>(UpdateDashboardTemplateDocument, options);
+      }
+export type UpdateDashboardTemplateMutationHookResult = ReturnType<typeof useUpdateDashboardTemplateMutation>;
+export type UpdateDashboardTemplateMutationResult = Apollo.MutationResult<UpdateDashboardTemplateMutation>;
+export type UpdateDashboardTemplateMutationOptions = Apollo.BaseMutationOptions<UpdateDashboardTemplateMutation, UpdateDashboardTemplateMutationVariables>;
+export const AvailRolesDocument = gql`
+    query AvailRoles($schemeId: String!) {
+  roles(schemeId: $schemeId) {
+    totalCount
+    edges {
+      node {
+        id
+        name
+      }
+    }
+  }
+}
+    `;
+export function useAvailRolesQuery(baseOptions: Apollo.QueryHookOptions<AvailRolesQuery, AvailRolesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AvailRolesQuery, AvailRolesQueryVariables>(AvailRolesDocument, options);
+      }
+export function useAvailRolesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AvailRolesQuery, AvailRolesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AvailRolesQuery, AvailRolesQueryVariables>(AvailRolesDocument, options);
+        }
+export type AvailRolesQueryHookResult = ReturnType<typeof useAvailRolesQuery>;
+export type AvailRolesLazyQueryHookResult = ReturnType<typeof useAvailRolesLazyQuery>;
+export type AvailRolesQueryResult = Apollo.QueryResult<AvailRolesQuery, AvailRolesQueryVariables>;
+export const DashboardTemplateDocument = gql`
+    query DashboardTemplate($where: DashboardWhereUniqueInput!) {
+  dashboard(where: $where) {
+    id
+    runningBanner
+    layout {
+      h
+      i
+      id
+      maxH
+      maxW
+      minH
+      minW
+      moved
+      static
+      w
+      x
+      y
+    }
+    name
+    roles {
+      id
+      name
+    }
+  }
+}
+    `;
+export function useDashboardTemplateQuery(baseOptions: Apollo.QueryHookOptions<DashboardTemplateQuery, DashboardTemplateQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<DashboardTemplateQuery, DashboardTemplateQueryVariables>(DashboardTemplateDocument, options);
+      }
+export function useDashboardTemplateLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DashboardTemplateQuery, DashboardTemplateQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<DashboardTemplateQuery, DashboardTemplateQueryVariables>(DashboardTemplateDocument, options);
+        }
+export type DashboardTemplateQueryHookResult = ReturnType<typeof useDashboardTemplateQuery>;
+export type DashboardTemplateLazyQueryHookResult = ReturnType<typeof useDashboardTemplateLazyQuery>;
+export type DashboardTemplateQueryResult = Apollo.QueryResult<DashboardTemplateQuery, DashboardTemplateQueryVariables>;
+export const DashboardTemplatesDocument = gql`
+    query DashboardTemplates($scheme: SchemeWhereUniqueInput!, $after: String, $first: Int, $last: Int, $roles: [String!], $skip: Int, $take: Int) {
+  dashboards(
+    scheme: $scheme
+    after: $after
+    first: $first
+    last: $last
+    roles: $roles
+    skip: $skip
+    take: $take
+  ) {
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    edges {
+      node {
+        defaultAdmin
+        defaultUser
+        id
+        name
+        scheme {
+          id
+          name
+        }
+        roles {
+          id
+          name
+        }
+      }
+    }
+    totalCount
+  }
+}
+    `;
+export function useDashboardTemplatesQuery(baseOptions: Apollo.QueryHookOptions<DashboardTemplatesQuery, DashboardTemplatesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<DashboardTemplatesQuery, DashboardTemplatesQueryVariables>(DashboardTemplatesDocument, options);
+      }
+export function useDashboardTemplatesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DashboardTemplatesQuery, DashboardTemplatesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<DashboardTemplatesQuery, DashboardTemplatesQueryVariables>(DashboardTemplatesDocument, options);
+        }
+export type DashboardTemplatesQueryHookResult = ReturnType<typeof useDashboardTemplatesQuery>;
+export type DashboardTemplatesLazyQueryHookResult = ReturnType<typeof useDashboardTemplatesLazyQuery>;
+export type DashboardTemplatesQueryResult = Apollo.QueryResult<DashboardTemplatesQuery, DashboardTemplatesQueryVariables>;
+export const LatestVehiclesDocument = gql`
+    query LatestVehicles($where: DashboardInput!, $after: String, $first: Int, $take: Int) {
+  latestVehicles(where: $where, after: $after, first: $first) {
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    edges {
+      node {
+        id
+        registration
+        model
+        make
+        images(take: 1) {
+          low
+        }
+      }
+    }
+  }
+}
+    `;
+export function useLatestVehiclesQuery(baseOptions: Apollo.QueryHookOptions<LatestVehiclesQuery, LatestVehiclesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<LatestVehiclesQuery, LatestVehiclesQueryVariables>(LatestVehiclesDocument, options);
+      }
+export function useLatestVehiclesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LatestVehiclesQuery, LatestVehiclesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<LatestVehiclesQuery, LatestVehiclesQueryVariables>(LatestVehiclesDocument, options);
+        }
+export type LatestVehiclesQueryHookResult = ReturnType<typeof useLatestVehiclesQuery>;
+export type LatestVehiclesLazyQueryHookResult = ReturnType<typeof useLatestVehiclesLazyQuery>;
+export type LatestVehiclesQueryResult = Apollo.QueryResult<LatestVehiclesQuery, LatestVehiclesQueryVariables>;
+export const IncidentsDayOfWeekDocument = gql`
+    query IncidentsDayOfWeek($where: DashboardInput!) {
+  incidentsDayOfWeek(where: $where) {
+    value
+    label
+  }
+}
+    `;
+export function useIncidentsDayOfWeekQuery(baseOptions: Apollo.QueryHookOptions<IncidentsDayOfWeekQuery, IncidentsDayOfWeekQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<IncidentsDayOfWeekQuery, IncidentsDayOfWeekQueryVariables>(IncidentsDayOfWeekDocument, options);
+      }
+export function useIncidentsDayOfWeekLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IncidentsDayOfWeekQuery, IncidentsDayOfWeekQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<IncidentsDayOfWeekQuery, IncidentsDayOfWeekQueryVariables>(IncidentsDayOfWeekDocument, options);
+        }
+export type IncidentsDayOfWeekQueryHookResult = ReturnType<typeof useIncidentsDayOfWeekQuery>;
+export type IncidentsDayOfWeekLazyQueryHookResult = ReturnType<typeof useIncidentsDayOfWeekLazyQuery>;
+export type IncidentsDayOfWeekQueryResult = Apollo.QueryResult<IncidentsDayOfWeekQuery, IncidentsDayOfWeekQueryVariables>;
+export const IncidentCountDocument = gql`
+    query IncidentCount($where: DashboardInput!) {
+  incidentCount(where: $where)
+}
+    `;
+export function useIncidentCountQuery(baseOptions: Apollo.QueryHookOptions<IncidentCountQuery, IncidentCountQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<IncidentCountQuery, IncidentCountQueryVariables>(IncidentCountDocument, options);
+      }
+export function useIncidentCountLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IncidentCountQuery, IncidentCountQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<IncidentCountQuery, IncidentCountQueryVariables>(IncidentCountDocument, options);
+        }
+export type IncidentCountQueryHookResult = ReturnType<typeof useIncidentCountQuery>;
+export type IncidentCountLazyQueryHookResult = ReturnType<typeof useIncidentCountLazyQuery>;
+export type IncidentCountQueryResult = Apollo.QueryResult<IncidentCountQuery, IncidentCountQueryVariables>;
+export const LatestIncidentDocument = gql`
+    query LatestIncident($where: DashboardInput!) {
+  latestIncident(where: $where) {
+    id
+    date
+  }
+}
+    `;
+export function useLatestIncidentQuery(baseOptions: Apollo.QueryHookOptions<LatestIncidentQuery, LatestIncidentQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<LatestIncidentQuery, LatestIncidentQueryVariables>(LatestIncidentDocument, options);
+      }
+export function useLatestIncidentLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LatestIncidentQuery, LatestIncidentQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<LatestIncidentQuery, LatestIncidentQueryVariables>(LatestIncidentDocument, options);
+        }
+export type LatestIncidentQueryHookResult = ReturnType<typeof useLatestIncidentQuery>;
+export type LatestIncidentLazyQueryHookResult = ReturnType<typeof useLatestIncidentLazyQuery>;
+export type LatestIncidentQueryResult = Apollo.QueryResult<LatestIncidentQuery, LatestIncidentQueryVariables>;
+export const LatestIncidentsDocument = gql`
+    query LatestIncidents($where: DashboardInput!, $after: String, $first: Int) {
+  latestIncidents(where: $where, after: $after, first: $first) {
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    edges {
+      node {
+        date
+        id
+        description
+      }
+    }
+  }
+}
+    `;
+export function useLatestIncidentsQuery(baseOptions: Apollo.QueryHookOptions<LatestIncidentsQuery, LatestIncidentsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<LatestIncidentsQuery, LatestIncidentsQueryVariables>(LatestIncidentsDocument, options);
+      }
+export function useLatestIncidentsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LatestIncidentsQuery, LatestIncidentsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<LatestIncidentsQuery, LatestIncidentsQueryVariables>(LatestIncidentsDocument, options);
+        }
+export type LatestIncidentsQueryHookResult = ReturnType<typeof useLatestIncidentsQuery>;
+export type LatestIncidentsLazyQueryHookResult = ReturnType<typeof useLatestIncidentsLazyQuery>;
+export type LatestIncidentsQueryResult = Apollo.QueryResult<LatestIncidentsQuery, LatestIncidentsQueryVariables>;
+export const TargetedGoodsDashboardDocument = gql`
+    query TargetedGoodsDashboard($where: DashboardInput!) {
+  targetedGoodsDashboard(where: $where) {
+    value
+    label
+  }
+}
+    `;
+export function useTargetedGoodsDashboardQuery(baseOptions: Apollo.QueryHookOptions<TargetedGoodsDashboardQuery, TargetedGoodsDashboardQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<TargetedGoodsDashboardQuery, TargetedGoodsDashboardQueryVariables>(TargetedGoodsDashboardDocument, options);
+      }
+export function useTargetedGoodsDashboardLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TargetedGoodsDashboardQuery, TargetedGoodsDashboardQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<TargetedGoodsDashboardQuery, TargetedGoodsDashboardQueryVariables>(TargetedGoodsDashboardDocument, options);
+        }
+export type TargetedGoodsDashboardQueryHookResult = ReturnType<typeof useTargetedGoodsDashboardQuery>;
+export type TargetedGoodsDashboardLazyQueryHookResult = ReturnType<typeof useTargetedGoodsDashboardLazyQuery>;
+export type TargetedGoodsDashboardQueryResult = Apollo.QueryResult<TargetedGoodsDashboardQuery, TargetedGoodsDashboardQueryVariables>;
+export const IncidentsTimeOfDayDocument = gql`
+    query IncidentsTimeOfDay($where: DashboardInput!) {
+  incidentsTimeOfDay(where: $where) {
+    value
+    label
+  }
+}
+    `;
+export function useIncidentsTimeOfDayQuery(baseOptions: Apollo.QueryHookOptions<IncidentsTimeOfDayQuery, IncidentsTimeOfDayQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<IncidentsTimeOfDayQuery, IncidentsTimeOfDayQueryVariables>(IncidentsTimeOfDayDocument, options);
+      }
+export function useIncidentsTimeOfDayLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IncidentsTimeOfDayQuery, IncidentsTimeOfDayQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<IncidentsTimeOfDayQuery, IncidentsTimeOfDayQueryVariables>(IncidentsTimeOfDayDocument, options);
+        }
+export type IncidentsTimeOfDayQueryHookResult = ReturnType<typeof useIncidentsTimeOfDayQuery>;
+export type IncidentsTimeOfDayLazyQueryHookResult = ReturnType<typeof useIncidentsTimeOfDayLazyQuery>;
+export type IncidentsTimeOfDayQueryResult = Apollo.QueryResult<IncidentsTimeOfDayQuery, IncidentsTimeOfDayQueryVariables>;
+export const TotalLossDocument = gql`
+    query TotalLoss($where: DashboardInput!) {
+  totalLoss(where: $where)
+}
+    `;
+export function useTotalLossQuery(baseOptions: Apollo.QueryHookOptions<TotalLossQuery, TotalLossQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<TotalLossQuery, TotalLossQueryVariables>(TotalLossDocument, options);
+      }
+export function useTotalLossLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TotalLossQuery, TotalLossQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<TotalLossQuery, TotalLossQueryVariables>(TotalLossDocument, options);
+        }
+export type TotalLossQueryHookResult = ReturnType<typeof useTotalLossQuery>;
+export type TotalLossLazyQueryHookResult = ReturnType<typeof useTotalLossLazyQuery>;
+export type TotalLossQueryResult = Apollo.QueryResult<TotalLossQuery, TotalLossQueryVariables>;
 export const CreateCsvZipDocument = gql`
     mutation CreateCsvZip($where: IncidentExportInput!) {
   createCsvZip(where: $where)

@@ -50,7 +50,6 @@ const BanFeed = ({
   } = feedItem?.ban || {};
   const intl = useIntl();
   const classes = useStyles();
-  console.log('lo', location);
 
   return (
     // <Link to={`/app/offenders/view/${offender?.id}`}>

@@ -1,0 +1,33 @@
+mutation CreateDashboard($data: DashboardCreateInput!) {
+  createDashboard(data: $data) {
+    id
+    name
+    roles {
+      name
+      id
+    }
+  }
+}
+
+mutation DeleteDashboard($where: DashboardWhereUniqueInput!) {
+  deleteDashboardTemplate(where: $where) {
+    id
+  }
+}
+
+mutation updateDashboardTemplate(
+  $data: DashboardTemplateUpdateInput!,
+  $where: DashboardWhereUniqueInput!
+) {
+  updateDashboardTemplate(
+    data: $data
+    where: $where
+  ) {
+    name
+    roles {
+      name
+      id
+    }
+    id
+  }
+}

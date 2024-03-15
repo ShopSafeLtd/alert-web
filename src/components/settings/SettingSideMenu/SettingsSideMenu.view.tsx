@@ -18,6 +18,11 @@ const SettingsSideMenu = () => {
 
   const settings = [
     {
+      title: intl.formatMessage({ id: 'nwqt7T', defaultMessage: 'Dashboards' }),
+      to: '/app/manage-dashboard/',
+      permissions: [PermissionModel.Settings],
+    },
+    {
       title: intl.formatMessage({ id: 'YDMrKK', defaultMessage: 'Users' }),
       to: '/app/scheme-settings/users',
       permissions: [PermissionModel.Settings, PermissionModel.Users],

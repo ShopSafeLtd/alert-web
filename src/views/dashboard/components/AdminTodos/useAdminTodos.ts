@@ -1,10 +1,10 @@
-import { useStoreActions, useStoreState } from 'state';
+import { useStoreActions, useStoreState } from '#/state';
 import type { CreateTodoMutation, FeedTodosQuery } from 'graphql/generated';
 import {
-  useFeedTodosQuery,
   FeedTodosDocument,
   QueryMode,
   SortOrder,
+  useFeedTodosQuery,
   useUpdateTodoMutation,
 } from 'graphql/generated';
 import { useState } from 'react';

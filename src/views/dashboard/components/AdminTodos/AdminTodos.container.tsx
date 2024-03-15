@@ -1,12 +1,13 @@
 import React from 'react';
 
+import { useDashboardContext } from '#/views/dashboard/Dashboard.context';
 import View from './AdminTodos.view';
 import useAdminTodos from './useAdminTodos';
 
-interface Props {
-  fullSearch: string;
-}
-const AdminTodos = ({ fullSearch }: Props): JSX.Element => {
+const AdminTodos = (): JSX.Element => {
+  const {
+    variables: { search: fullSearch },
+  } = useDashboardContext();
   const {
     data,
     loading,

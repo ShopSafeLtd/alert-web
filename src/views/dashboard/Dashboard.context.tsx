@@ -4,6 +4,7 @@ import React, {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from 'react';
@@ -12,6 +13,10 @@ import type { Model } from 'graphql/generated';
 import { Role, SortOrder, useSchemeGroupsQuery } from 'graphql/generated';
 import type { DateType } from '#/types/DataType';
 import type { FeedItemFilters } from '#/state/data-model';
+import type { IntlShape } from 'react-intl';
+import { useIntl } from 'react-intl';
+import type RGL from 'react-grid-layout';
+import type { AvailableDashboardElements } from '#/state/dashboard-model';
 
 interface DashboardContextT {
   children?: ReactNode;
@@ -36,11 +41,24 @@ interface DashboardContextT {
     index: number;
   };
   variables: FeedItemFilters;
+  intl: IntlShape;
+  saving: boolean;
+  setSaving: (value: boolean) => void;
+  userId: string;
+  marqueeString?: string | null;
+  groupsLoading: boolean;
+  layout: DashboardLayout[];
+  rowOrCol: (arg0: AvailableDashboardElements) => 'row' | 'col';
+  getWidth: (arg0: AvailableDashboardElements) => number;
+  getHeight: (arg0: AvailableDashboardElements) => number;
 }
+
 const DashboardContext = createContext<DashboardContextT | undefined>(
   undefined
 );
-
+export type DashboardLayout = RGL.Layout & {
+  i: AvailableDashboardElements;
+};
 // Create a custom hook to use the context
 export const useDashboardContext = () => {
   const context = useContext(DashboardContext);
@@ -50,6 +68,21 @@ export const useDashboardContext = () => {
     );
   }
   return context;
+};
+export const generateHeight = () => {
+  const windowHeight = window.innerHeight;
+  if (windowHeight <= 920) {
+    return Number.parseInt((windowHeight / 35).toFixed(0), 10) + 1;
+  }
+  if (windowHeight > 920 && windowHeight <= 1200) {
+    return Number.parseInt((windowHeight / 29).toFixed(0), 10) + 1;
+  }
+  if (windowHeight > 1200) {
+    return Number.parseInt((windowHeight / 27).toFixed(0), 10) + 1;
+  }
+
+  // Default value for any other window height
+  return 30; // Default value for small screens
 };
 
 export const DashboardProvider: React.FC<{
@@ -67,9 +100,29 @@ export const DashboardProvider: React.FC<{
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
     []
   );
+  const { isSet, schemeLayouts, initialLayout } = useStoreState(
+    (state) => state.dashboard
+  );
+
+  const dashboardLayout = useMemo(
+    () =>
+      isSet
+        ? schemeLayouts[schemeId] ?? initialLayout
+        : { marquee: null, layout: [] },
+    [schemeId, isSet]
+  );
+
+  const [saving, setSaving] = useState(false);
+  const [marqueeString, setMarqueeString] = useState<string | null>(
+    dashboardLayout.marquee
+  );
+
+  useEffect(() => {
+    setMarqueeString(dashboardLayout?.marquee);
+  }, [dashboardLayout]);
 
   const adminRights = role !== Role.User;
-
+  const intl = useIntl();
   // Handlers
   const setOrder = useCallback(
     (value: SortOrder) => {
@@ -154,7 +207,7 @@ export const DashboardProvider: React.FC<{
     setLightBoxOpen({ open: true, index });
   };
 
-  const { data: groupsData } = useSchemeGroupsQuery({
+  const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
     variables: {
       where: {
         scheme: {
@@ -186,6 +239,29 @@ export const DashboardProvider: React.FC<{
     [groupsData]
   );
 
+  const getWidth = useCallback(
+    (itemId: AvailableDashboardElements) =>
+      dashboardLayout.layout.find(({ i }) => i === itemId)?.w ?? 0,
+    [dashboardLayout]
+  );
+  const getHeight = useCallback(
+    (itemId: AvailableDashboardElements) =>
+      (dashboardLayout.layout.find(({ i }) => i === itemId)?.h ?? 0) *
+      generateHeight(),
+    [dashboardLayout]
+  );
+  const rowOrCol = useCallback(
+    (itemId: AvailableDashboardElements) => {
+      const layoutI = dashboardLayout.layout.find(({ i }) => i === itemId);
+      if (layoutI) {
+        // return layoutI.h / 2 >= layoutI.w ? 'col' : 'row';
+        return layoutI.h > 5 ? 'col' : 'row';
+      }
+      return 'col';
+    },
+    [dashboardLayout]
+  );
+
   // Value to be provided through context
   const value = useMemo(
     () => ({
@@ -205,6 +281,16 @@ export const DashboardProvider: React.FC<{
       openLightbox,
       lightBoxOpen,
       variables,
+      intl,
+      saving,
+      setSaving,
+      userId,
+      marqueeString,
+      groupsLoading,
+      layout: dashboardLayout.layout,
+      getWidth,
+      rowOrCol,
+      getHeight,
     }),
     [
       schemeId,
@@ -222,6 +308,16 @@ export const DashboardProvider: React.FC<{
       lightBoxOpen,
       variables,
       groups,
+      intl,
+      saving,
+      setSaving,
+      marqueeString,
+      userId,
+      groupsLoading,
+      dashboardLayout,
+      rowOrCol,
+      getWidth,
+      getHeight,
     ]
   );
 

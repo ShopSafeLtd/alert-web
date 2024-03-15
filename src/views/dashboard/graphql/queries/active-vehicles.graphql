@@ -1,0 +1,19 @@
+query LatestVehicles($where: DashboardInput!, $after: String, $first: Int, $take: Int) {
+  latestVehicles(where: $where, after: $after, first: $first){
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    edges {
+      node {
+        id
+        registration
+        model
+        make
+        images(take: 1) {
+          low
+        }
+      }
+    }
+  }
+}

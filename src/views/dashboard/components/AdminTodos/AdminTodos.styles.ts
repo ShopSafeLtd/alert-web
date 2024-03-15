@@ -1,5 +1,5 @@
 import { createUseStyles } from 'react-jss';
-import type { Theme } from 'configs/ThemeConfig';
+import type { Theme } from '#/configs/ThemeConfig';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   title: { marginTop: 8, fontSize: 16 },

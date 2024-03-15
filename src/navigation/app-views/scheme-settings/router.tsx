@@ -31,6 +31,7 @@ import CSVImport from 'views/settings/data-import/csv/data-import/ImportData.con
 import CustomGalleries from 'views/settings/customGallery';
 import { Col, Row } from 'antd';
 import SettingsSideMenu from '#/components/settings/SettingSideMenu/SettingsSideMenu.view';
+import { PermissionMethod, PermissionModel } from 'graphql/generated';
 import CustomSchemeTerms from '../../../views/settings/terms/ViewCustomTerms/ViewTermsContainer';
 import ListStatements from '../../../views/settings/statements/ListStatements';
 import TagView from '../../../views/settings/tags/ViewTag/ViewTag.container';
@@ -41,7 +42,7 @@ import Role from '../../../views/roles/role/ViewRole.container';
 import MySafety from '../../../views/settings/data-import/mysafety/MySafety.view';
 import IntelOne from '../../../views/settings/data-import/intel-one/IntelOne.view';
 import PermissionCheckWrapper from '../../../components/PermissionCheck/PermissionCheckWrapper';
-import { PermissionMethod, PermissionModel } from '../../../graphql/generated';
+import DashboardManagement from '../dashboard-management/router';
 
 const SchemeSettings = (): JSX.Element => (
   <Row wrap={false}>
@@ -514,6 +515,19 @@ const SchemeSettings = (): JSX.Element => (
               }}
             >
               <ListStatements />
+            </PermissionCheckWrapper>
+          }
+        />
+        <Route
+          path="manage-dashboard/*"
+          element={
+            <PermissionCheckWrapper
+              permission={{
+                model: PermissionModel.Settings,
+                method: PermissionMethod.Read,
+              }}
+            >
+              <DashboardManagement />
             </PermissionCheckWrapper>
           }
         />
