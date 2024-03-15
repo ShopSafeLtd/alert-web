@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { useStoreState } from '#/state';
 import { PermissionModel } from '#/graphql/generated';
 import Sider from 'antd/lib/layout/Sider';
-import { LeftCircleOutlined, RightCircleOutlined } from '@ant-design/icons';
+import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import useStyles from './SettingsSideMenu.style';
 
 const SettingsSideMenu = ({
@@ -150,7 +150,7 @@ const SettingsSideMenu = ({
     <Sider trigger={null} collapsible collapsed={collapsed}>
       <Button
         type="default"
-        icon={collapsed ? <RightCircleOutlined /> : <LeftCircleOutlined />}
+        icon={collapsed ? <RightOutlined /> : <LeftOutlined />}
         onClick={() => setCollapsed(!collapsed)}
         shape="circle"
         size="small"
