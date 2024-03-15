@@ -166,7 +166,53 @@ const useDashboards = (): Return => {
           roles: rolesFormatted ?? undefined,
         },
       },
+      update: (store, { data: res }) => {
+        if (
+          res?.updateDashboardTemplate === null ||
+          res?.updateDashboardTemplate === undefined
+        )
+          return;
+        const existingData = store.readQuery<DashboardTemplatesQuery>({
+          query: DashboardTemplatesDocument,
+          variables: {
+            scheme: {
+              id: schemeId,
+            },
+          },
+        });
+
+        if (!existingData?.dashboards) return;
+        store.writeQuery<DashboardTemplatesQuery>({
+          query: DashboardTemplatesDocument,
+          data: {
+            dashboards: {
+              ...existingData.dashboards,
+              edges: existingData.dashboards.edges.map(({ node }) => {
+                if (node.id === res.updateDashboardTemplate.id) {
+                  const { roles: newRoles, name: newName } =
+                    res.updateDashboardTemplate;
+                  return {
+                    node: {
+                      ...node,
+                      name: newName,
+                      roles: newRoles,
+                    },
+                  };
+                }
+                return { node };
+              }),
+            },
+            __typename: 'Query',
+          },
+          variables: {
+            scheme: {
+              id: schemeId,
+            },
+          },
+        });
+      },
     });
+    toggleEditDashboard(undefined);
   };
 
   const { data: rolesData } = useAvailRolesQuery({
