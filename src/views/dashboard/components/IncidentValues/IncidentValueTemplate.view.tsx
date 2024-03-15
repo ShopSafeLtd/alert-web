@@ -3,6 +3,7 @@ import React from 'react';
 import { useIntl } from 'react-intl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
+import type { AvailableDashboardElements } from '#/state/dashboard-model';
 
 const IncidentValue = ({
   removeItem,

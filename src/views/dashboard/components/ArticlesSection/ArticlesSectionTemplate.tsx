@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { useIntl } from 'react-intl';
 import ArticleSkeletonCard from '#/components/Articles/ArticleSkeletonCard';
+import type { AvailableDashboardElements } from '#/state/dashboard-model';
 import useStyles from './ArticlesSection.styles';
 
 const { Title } = Typography;

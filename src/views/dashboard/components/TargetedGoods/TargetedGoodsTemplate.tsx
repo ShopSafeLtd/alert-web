@@ -3,6 +3,7 @@ import { Button, Card } from 'antd';
 import { useIntl } from 'react-intl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
+import type { AvailableDashboardElements } from '#/state/dashboard-model';
 import BarGraph from '../../../../components/reports/graphs/barGraph';
 
 const TargetedGoodsGraph = ({

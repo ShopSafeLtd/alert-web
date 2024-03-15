@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
 import useStyles from '#/views/dashboard/components/AdminTodos/AdminTodos.styles';
 import { useIntl } from 'react-intl';
+import type { AvailableDashboardElements } from '#/state/dashboard-model';
 
 const { Title } = Typography;
 
