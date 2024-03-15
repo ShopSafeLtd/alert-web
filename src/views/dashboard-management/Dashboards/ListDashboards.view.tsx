@@ -294,11 +294,7 @@ const Dashboards = ({
               ))}
             </Select>
           </Form.Item>
-          <Form.Item
-            name="defaultAdmin"
-            valuePropName="checked"
-            wrapperCol={{ offset: 6, span: 12 }}
-          >
+          <Form.Item name="defaultAdmin" valuePropName="checked">
             <Checkbox name="defaultAdmin">
               {intl.formatMessage({
                 defaultMessage: 'Default for admins',
@@ -306,11 +302,7 @@ const Dashboards = ({
               })}
             </Checkbox>
           </Form.Item>
-          <Form.Item
-            name="defaultUser"
-            valuePropName="checked"
-            wrapperCol={{ offset: 6, span: 12 }}
-          >
+          <Form.Item name="defaultUser" valuePropName="checked">
             <Checkbox name="defaultUser">
               {intl.formatMessage({
                 defaultMessage: 'Default for users',
@@ -318,7 +310,7 @@ const Dashboards = ({
               })}
             </Checkbox>
           </Form.Item>
-          <Form.Item wrapperCol={{ offset: 6, span: 12 }}>
+          <Form.Item wrapperCol={{ offset: 20, span: 4 }}>
             <Button type="primary" htmlType="submit">
               {intl.formatMessage({
                 defaultMessage: 'Submit',
@@ -354,8 +346,6 @@ const Dashboards = ({
               id: editDashboard || '',
             })
           }
-          labelCol={{ span: 6 }}
-          wrapperCol={{ span: 12 }}
           initialValues={getInitForForm()}
         >
           <Form.Item
@@ -383,11 +373,7 @@ const Dashboards = ({
               ))}
             </Select>
           </Form.Item>
-          <Form.Item
-            name="defaultAdmin"
-            valuePropName="checked"
-            wrapperCol={{ offset: 6, span: 12 }}
-          >
+          <Form.Item name="defaultAdmin" valuePropName="checked">
             <Checkbox name="defaultAdmin">
               {intl.formatMessage({
                 defaultMessage: 'Default for admins',
@@ -395,11 +381,7 @@ const Dashboards = ({
               })}
             </Checkbox>
           </Form.Item>
-          <Form.Item
-            name="defaultUser"
-            valuePropName="checked"
-            wrapperCol={{ offset: 6, span: 12 }}
-          >
+          <Form.Item name="defaultUser" valuePropName="checked">
             <Checkbox name="defaultUser">
               {intl.formatMessage({
                 defaultMessage: 'Default for users',
@@ -407,7 +389,7 @@ const Dashboards = ({
               })}
             </Checkbox>
           </Form.Item>
-          <Form.Item wrapperCol={{ offset: 6, span: 12 }}>
+          <Form.Item wrapperCol={{ offset: 20, span: 4 }}>
             <Button type="primary" htmlType="submit">
               {intl.formatMessage({
                 defaultMessage: 'Submit',
