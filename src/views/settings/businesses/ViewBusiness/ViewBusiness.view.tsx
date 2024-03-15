@@ -464,55 +464,58 @@ const ViewBusiness = ({
             </Card>
           </div>
         </Col>
-        <Col span={6} className={classes.updatesContainer}>
-          <Card>
-            <Typography.Title level={4} style={{ marginBottom: 30 }}>
-              {intl.formatMessage({
-                defaultMessage: 'Recent Activity',
-                id: 'nc8QpJ',
-              })}
-            </Typography.Title>
-
-            {actionsData?.listActions.actions &&
-            actionsData?.listActions.actions.length > 0 ? (
-              <Timeline>
-                {actionsData.listActions.actions.map((action) => (
-                  <Timeline.Item key={action.id}>
-                    <Typography.Text>{action.description}</Typography.Text>
-                    <Row gutter={32}>
-                      <Col>
-                        <Typography.Paragraph
-                          type="secondary"
-                          style={{ fontSize: 12, marginBottom: 0 }}
-                        >
-                          {moment(action.createdAt).format('HH:mm DD/MM/YY')}
-                        </Typography.Paragraph>
-                      </Col>
-                      <Col>
-                        <Typography.Paragraph
-                          type="secondary"
-                          style={{ fontSize: 12, marginBottom: 0 }}
-                        >
-                          {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                          {action.byUser.fullName} -{' '}
-                          {action.byUser.businesses[0]?.name}
-                        </Typography.Paragraph>
-                      </Col>
-                    </Row>
-                  </Timeline.Item>
-                ))}
-              </Timeline>
-            ) : (
-              <Empty
-                description={intl.formatMessage({
-                  defaultMessage: 'No Recent Activity',
-                  id: 'oN/glA',
+        {actionsData?.listActions.actions &&
+        actionsData?.listActions.actions.length > 0 ? (
+          <Col span={6} className={classes.updatesContainer}>
+            <Card>
+              <Typography.Title level={4} style={{ marginBottom: 30 }}>
+                {intl.formatMessage({
+                  defaultMessage: 'Recent Activity',
+                  id: 'nc8QpJ',
                 })}
-                image={Empty.PRESENTED_IMAGE_SIMPLE}
-              />
-            )}
-          </Card>
-        </Col>
+              </Typography.Title>
+
+              {actionsData?.listActions.actions &&
+              actionsData?.listActions.actions.length > 0 ? (
+                <Timeline>
+                  {actionsData.listActions.actions.map((action) => (
+                    <Timeline.Item key={action.id}>
+                      <Typography.Text>{action.description}</Typography.Text>
+                      <Row gutter={32}>
+                        <Col>
+                          <Typography.Paragraph
+                            type="secondary"
+                            style={{ fontSize: 12, marginBottom: 0 }}
+                          >
+                            {moment(action.createdAt).format('HH:mm DD/MM/YY')}
+                          </Typography.Paragraph>
+                        </Col>
+                        <Col>
+                          <Typography.Paragraph
+                            type="secondary"
+                            style={{ fontSize: 12, marginBottom: 0 }}
+                          >
+                            {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                            {action.byUser.fullName} -{' '}
+                            {action.byUser.businesses[0]?.name}
+                          </Typography.Paragraph>
+                        </Col>
+                      </Row>
+                    </Timeline.Item>
+                  ))}
+                </Timeline>
+              ) : (
+                <Empty
+                  description={intl.formatMessage({
+                    defaultMessage: 'No Recent Activity',
+                    id: 'oN/glA',
+                  })}
+                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                />
+              )}
+            </Card>
+          </Col>
+        ) : undefined}
       </Row>
 
       <Drawer

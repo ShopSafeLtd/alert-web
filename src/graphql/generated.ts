@@ -21631,6 +21631,7 @@ export type UpdateUserDisableMutation = { __typename?: 'Mutation', updateUser: {
 
 export type CurrentUserQueryVariables = Exact<{
   scheme?: InputMaybe<UniqueId>;
+  orderBy?: InputMaybe<Array<UserSchemeOrderByWithRelationInput> | UserSchemeOrderByWithRelationInput>;
 }>;
 
 
@@ -31456,7 +31457,7 @@ export type UpdateUserDisableMutationHookResult = ReturnType<typeof useUpdateUse
 export type UpdateUserDisableMutationResult = Apollo.MutationResult<UpdateUserDisableMutation>;
 export type UpdateUserDisableMutationOptions = Apollo.BaseMutationOptions<UpdateUserDisableMutation, UpdateUserDisableMutationVariables>;
 export const CurrentUserDocument = gql`
-    query currentUser($scheme: UniqueId) {
+    query currentUser($scheme: UniqueId, $orderBy: [UserSchemeOrderByWithRelationInput!]) {
   currentUser {
     id
     fullName
@@ -31491,7 +31492,7 @@ export const CurrentUserDocument = gql`
         id
       }
     }
-    schemes {
+    schemes(orderBy: $orderBy) {
       id
       role
       scheme {
