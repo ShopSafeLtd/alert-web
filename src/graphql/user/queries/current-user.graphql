@@ -1,4 +1,4 @@
-query currentUser($scheme: UniqueId) {
+query currentUser($scheme: UniqueId, $orderBy: [UserSchemeOrderByWithRelationInput!]) {
   currentUser {
     id
     fullName
@@ -33,7 +33,7 @@ query currentUser($scheme: UniqueId) {
         id
       }
     }
-    schemes {
+    schemes(orderBy: $orderBy) {
       id
       role
       scheme {

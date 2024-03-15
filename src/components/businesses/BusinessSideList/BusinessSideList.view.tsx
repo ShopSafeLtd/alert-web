@@ -1,6 +1,6 @@
 import React from 'react';
 import type { ListBusinessesQuery } from 'graphql/generated';
-import { Divider, Typography } from 'antd';
+import { Typography } from 'antd';
 import { Link } from 'react-router-dom';
 import useStyles from './BusinessSideList.styles';
 import InfiniteSideScrollList from '../../side-list/InfiniteSideList';
@@ -52,7 +52,6 @@ const BusinessSideList = ({
             </Paragraph>
           )}
         </div>
-        <Divider className={classes.divider} />
       </div>
     </Link>
   ));
