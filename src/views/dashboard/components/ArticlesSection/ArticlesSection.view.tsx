@@ -118,7 +118,8 @@ const ArticlesSection = ({
           >
             {data?.articles.map((article) => (
               <Col
-                span={4 % width === 0 ? 24 : 24 / (4 % width)}
+                xxl={4 % width === 0 ? 24 : 24 / (4 % width)}
+                sm={2 % width === 0 ? 24 : 24 / (2 % width)}
                 style={{ marginBottom: 10 }}
               >
                 <ArticleCard key={article.id} article={article} />
