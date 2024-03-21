@@ -2,10 +2,10 @@
 import { useEffect, useState } from 'react';
 import type { AnswerType, ViewTagQuery } from 'graphql/generated';
 import {
-  useRecycleTagMutation,
   IncidentFormField,
   Model,
   TagType,
+  useRecycleTagMutation,
   useRemoveQuestionFromTagMutation,
   useUpdateTagMutation,
   useUpdateTagQsMutation,
@@ -108,7 +108,7 @@ const useViewTag = (): Return => {
       y: 0,
       i: 'tags',
       moved: false,
-      static: false,
+      static: true,
     },
     {
       w: 1,
@@ -350,41 +350,62 @@ const useViewTag = (): Return => {
 
   const [updateTag] = useUpdateTagMutation();
 
-  const setParentTag = (value: string) => {
-    setPTag(value);
-    void updateTag({
-      variables: {
-        where: {
-          id: id || '',
-        },
-        data: {
-          parentTag: {
-            connect: {
-              id: value,
-            },
-          },
-        },
-      },
-    });
+  const checkTag = (tagId: string, parentTagId: string) => {
+    // get all children of the tag
+    const children = data?.listTags?.tags.filter(
+      (tag) => tag?.parentTag?.id === tagId
+    );
+    // if there are no children, return true
+    if (!children) return true;
+    // if there are children, check each child
+    // eslint-disable-next-line no-restricted-syntax
+    for (const child of children) {
+      // if the parentTagId is the same as the tagId, return false
+      if (child?.id === parentTagId) return false;
+      // if the parentTagId is not the same as the tagId, check the children of the child
+      if (!checkTag(child?.id, parentTagId)) return false;
+    }
+    return true;
   };
 
-  const updateTagParent = (tagId: string, parentTagId: string | null) => {
-    if (tagId === id) setPTag(parentTagId);
-    if (parentTagId) {
+  const setParentTag = (value: string) => {
+    if (checkTag(id ?? '', value)) {
+      setPTag(value);
       void updateTag({
         variables: {
           where: {
-            id: tagId,
+            id: id || '',
           },
           data: {
             parentTag: {
               connect: {
-                id: parentTagId,
+                id: value,
               },
             },
           },
         },
       });
+    }
+  };
+
+  const updateTagParent = (tagId: string, parentTagId: string | null) => {
+    if (tagId === id) setPTag(parentTagId);
+    if (parentTagId) {
+      if (checkTag(tagId, parentTagId))
+        void updateTag({
+          variables: {
+            where: {
+              id: tagId,
+            },
+            data: {
+              parentTag: {
+                connect: {
+                  id: parentTagId,
+                },
+              },
+            },
+          },
+        });
     } else {
       void updateTag({
         variables: {
@@ -614,11 +635,19 @@ const useViewTag = (): Return => {
       .flatMap((key) => fieldToLayoutSet[key].map((t) => ({ type: t })))
       .filter((item) => incidentFormFields[item.type]);
 
+    // move tags to the top
+
+    const movedTop = getTypeArray.filter(
+      (t) => t.type === IncidentFormField.Types
+    );
+    const rest = getTypeArray.filter((t) => t.type !== IncidentFormField.Types);
+    const getTypeArrayWithTagsFirst = [...movedTop, ...rest];
+
     void saveIncidentFormLayout({
       variables: {
         data: {
           tagId: id || '',
-          formFields: getTypeArray.map((t, index) => ({
+          formFields: getTypeArrayWithTagsFirst.map((t, index) => ({
             type: t.type,
             position: 1000 - index,
           })),
