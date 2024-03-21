@@ -35,6 +35,7 @@ const FaceAi = lazy(() => import(`./face-ai/router`));
 const DataManagement = lazy(() => import(`./data-management/router`));
 const Evidence = lazy(() => import(`./evidence/router`));
 const Checklists = lazy(() => import(`./checklist/router`));
+const DashboardManagement = lazy(() => import(`./dashboard-management/router`));
 
 // Define the interface for your navigation items
 interface NavItem {
@@ -125,6 +126,13 @@ export const AppViews = (): JSX.Element => {
             element={<Onboarding />}
           />
         )}
+        {/* // TODO change */}
+        <Route
+          key="manage-dashboard"
+          path="manage-dashboard/*"
+          element={<DashboardManagement />}
+        />
+
         <Route key="dashboard" path="dashboard/*" element={<FeedItems />} />
         {role !== 'USER' && (
           <Route key="tasks" path="tasks/*" element={<Tasks />} />

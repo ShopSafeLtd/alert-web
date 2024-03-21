@@ -2,8 +2,9 @@ import { ImagePosition } from 'graphql/generated';
 import React from 'react';
 import { createUseStyles } from 'react-jss';
 import { useStoreState } from 'state';
+import type { Theme } from '#/configs/ThemeConfig';
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles((theme: Theme) => ({
   container: {
     position: 'relative',
     width: '100%',
@@ -52,11 +53,12 @@ const useStyles = createUseStyles({
     backgroundSize: 'cover',
     backgroundPosition: 'center center',
     color: '#fff',
+    backgroundColor: theme.imageBackgroundColor,
   },
   standardImage: {
     maxHeight: '100vh',
   },
-});
+}));
 
 const getPosition = (position?: ImagePosition): string => {
   switch (position) {

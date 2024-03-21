@@ -1,0 +1,3 @@
+query IncidentCount($where: DashboardInput!) {
+  incidentCount(where: $where)
+}

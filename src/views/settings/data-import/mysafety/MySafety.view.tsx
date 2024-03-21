@@ -1,11 +1,13 @@
 import React from 'react';
-import CSVReader from 'components/CSVReader/CSVReader';
-import { Button, Card, Typography } from 'antd';
-import { FormattedMessage } from 'react-intl';
+import { Button, Card, Typography, Form } from 'antd';
+import { FormattedMessage, useIntl } from 'react-intl';
+import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
+import MySafetyCSV from '#/components/form-components/MySafetyCSV/MySafetyCSV';
 import useMySafety from './useMySafety';
 
 const MySafety = () => {
-  const { onFileLoad, saving, onSubmit, valid } = useMySafety();
+  const intl = useIntl();
+  const { saving, onSubmit } = useMySafety();
   return (
     <div style={{ padding: 20 }}>
       <Card>
@@ -18,15 +20,46 @@ const MySafety = () => {
             defaultMessage="Select a csv file from mysafety to import it."
           />
         </Typography.Text>
-        <CSVReader onFileLoaded={onFileLoad} />
-        <Button
-          style={{ marginTop: 20 }}
-          onClick={onSubmit}
-          loading={saving}
-          disabled={saving || valid}
-        >
-          <FormattedMessage id="cTiCAi" defaultMessage="Import Data" />
-        </Button>
+        <Form onFinish={onSubmit} layout="vertical">
+          <Form.Item
+            label={intl.formatMessage({
+              id: '6FC4x9',
+              defaultMessage: 'CSV Data',
+            })}
+            tooltip={intl.formatMessage({
+              id: 'jm97uJ',
+              defaultMessage: 'Upload the CSV file from MySafety.',
+            })}
+            name="mySafety"
+            required
+          >
+            <MySafetyCSV />
+          </Form.Item>
+          <Form.Item
+            label={intl.formatMessage({
+              id: 'hzmswI',
+              defaultMessage: 'Groups',
+            })}
+            tooltip={intl.formatMessage({
+              id: 'dh1Etf',
+              defaultMessage: 'Select the groups to import the data into.',
+            })}
+            name="groups"
+            required
+          >
+            <GroupsSelect mode="multiple" style={{ width: 250 }} />
+          </Form.Item>
+          <Form.Item>
+            <Button
+              htmlType="submit"
+              style={{ marginTop: 20 }}
+              loading={saving}
+              disabled={saving}
+            >
+              <FormattedMessage id="cTiCAi" defaultMessage="Import Data" />
+            </Button>
+          </Form.Item>
+        </Form>
       </Card>
     </div>
   );

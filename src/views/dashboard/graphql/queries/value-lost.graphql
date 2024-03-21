@@ -1,0 +1,3 @@
+query TotalLoss($where: DashboardInput!) {
+  totalLoss(where: $where)
+}

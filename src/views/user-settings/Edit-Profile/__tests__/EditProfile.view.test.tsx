@@ -50,6 +50,7 @@ describe('Detail Officer View', () => {
       ],
       schemes: [
         {
+          isAdmin: false,
           id: 'schemeId',
           role: Role.ContentAdmin,
           scheme: {

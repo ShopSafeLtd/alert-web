@@ -1,0 +1,6 @@
+query TargetedGoodsDashboard($where: DashboardInput!) {
+  targetedGoodsDashboard(where: $where) {
+    value
+    label
+  }
+}

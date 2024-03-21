@@ -14,6 +14,8 @@ import type { DataModel } from './data-model';
 import dataModel from './data-model';
 import type { FilterModel } from './filter-model';
 import filterModel from './filter-model';
+import type { DashboardModel } from './dashboard-model';
+import dashboardModel from './dashboard-model';
 
 interface StoreModel {
   auth: AuthModel;
@@ -22,6 +24,7 @@ interface StoreModel {
   scheme: SchemeModel;
   data: DataModel;
   filter: FilterModel;
+  dashboard: DashboardModel;
 }
 
 const typedHooks = createTypedHooks<StoreModel>();
@@ -40,6 +43,7 @@ export const storeModel: StoreModel = {
   scheme: schemeModel,
   data: dataModel,
   filter: filterModel,
+  dashboard: dashboardModel,
 };
 
 export const Store = ({ children }: GlobalStoreProps): JSX.Element => {

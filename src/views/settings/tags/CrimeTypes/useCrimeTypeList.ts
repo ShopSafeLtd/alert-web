@@ -426,22 +426,43 @@ const useCrimeTypeList = (): Return => {
 
   const [updateTag] = useUpdateTagMutation();
 
+  const checkTag = (tagId: string, parentTagId: string) => {
+    // get all children of the tag
+    const children = data?.tags?.filter((tag) => tag?.parentTag?.id === tagId);
+    // if there are no children, return true
+    if (!children) return true;
+    // if there are children, check each child
+    // eslint-disable-next-line no-restricted-syntax
+    for (const child of children) {
+      // if the parentTagId is the same as the tagId, return false
+      if (child?.id === parentTagId) return false;
+      // if the parentTagId is not the same as the tagId, check the children of the child
+      if (!checkTag(child?.id, parentTagId)) return false;
+    }
+    console.log('valid');
+    return true;
+  };
+
   const updateTagParent = (tagId: string, parentTagId: string | null) => {
     if (parentTagId) {
-      void updateTag({
-        variables: {
-          where: {
-            id: tagId,
-          },
-          data: {
-            parentTag: {
-              connect: {
-                id: parentTagId,
+      if (checkTag(tagId, parentTagId)) {
+        console.log(checkTag(tagId, parentTagId));
+
+        void updateTag({
+          variables: {
+            where: {
+              id: tagId,
+            },
+            data: {
+              parentTag: {
+                connect: {
+                  id: parentTagId,
+                },
               },
             },
           },
-        },
-      });
+        });
+      }
     } else {
       void updateTag({
         variables: {

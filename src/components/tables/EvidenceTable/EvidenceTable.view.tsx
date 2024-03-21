@@ -6,6 +6,7 @@ import {
   Popconfirm,
   Row,
   Table,
+  Tag,
   Tooltip,
 } from 'antd';
 import { createUseStyles } from 'react-jss';
@@ -31,6 +32,11 @@ interface Props {
         name?: string;
         url?: string;
         fileType?: FileType | null | undefined;
+        tags?:
+          | {
+              name: string;
+            }[]
+          | null;
       }[]
     | undefined;
   saving?: boolean;
@@ -99,6 +105,40 @@ const EvidenceTable = ({
             defaultMessage: 'Name',
           }),
           // width: '80%',
+        },
+        {
+          key: 'tags',
+          dataIndex: 'tags',
+          title: intl.formatMessage({
+            id: '1EYCdR',
+            defaultMessage: 'Tags',
+          }),
+
+          render: (value: string[]) => {
+            if (value.length > 2) {
+              return (
+                <>
+                  {value?.slice(0, 2).map((el) => (
+                    <Tag>{el}</Tag>
+                  ))}
+                  <Tooltip title={value.slice(2).join(', ')}>
+                    <Tag>
+                      {intl.formatMessage(
+                        {
+                          defaultMessage: '+ {num} more',
+                          id: 'fi2Xie',
+                        },
+                        {
+                          num: value.length - 2,
+                        }
+                      )}
+                    </Tag>
+                  </Tooltip>
+                </>
+              );
+            }
+            return value?.map((el) => <Tag>{el}</Tag>);
+          },
         },
         {
           title: '',
@@ -182,6 +222,7 @@ const EvidenceTable = ({
           key: e.id,
           fileUrl: e.url,
           name: e.name || 'File',
+          tags: e.tags?.map((t) => t.name) || [],
         })) || []
       }
     />

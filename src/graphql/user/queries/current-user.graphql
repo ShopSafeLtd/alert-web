@@ -63,9 +63,26 @@ query currentUser($scheme: UniqueId, $orderBy: [UserSchemeOrderByWithRelationInp
         requireSiteNumberForUsers
         oneSelectedIncidentTypeOnly
       }
+      isAdmin
       permissions {
         model
         allowedMethods
+      }
+      dashboard {
+        runningBanner
+        layout {
+          h
+          i
+          maxH
+          maxW
+          minH
+          minW
+          moved
+          static
+          w
+          x
+          y
+        }
       }
     }
     incidentEmail

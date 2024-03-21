@@ -1,0 +1,6 @@
+query IncidentsDayOfWeek($where: DashboardInput!) {
+  incidentsDayOfWeek(where: $where) {
+    value
+    label
+  }
+}
