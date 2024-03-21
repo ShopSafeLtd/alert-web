@@ -1,6 +1,9 @@
 import { createUseStyles } from 'react-jss';
 
 const styles = createUseStyles({
+  layout: {
+    height: '100%',
+  },
   offenderRow: {
     overflow: 'auto',
     flexWrap: 'nowrap',

@@ -5,7 +5,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
   card: {
     outline: `1px solid ${theme.borderColor}`,
     borderRadius: 10,
-    marginBottom: 5,
+    margin: 10,
     overflow: 'hidden',
     minHeight: 'min-content',
     height: '100%',

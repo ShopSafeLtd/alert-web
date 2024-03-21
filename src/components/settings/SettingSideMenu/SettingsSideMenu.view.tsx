@@ -1,12 +1,20 @@
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Typography } from 'antd';
+import { Button, Typography } from 'antd';
 import { Link } from 'react-router-dom';
 import { useStoreState } from '#/state';
 import { PermissionModel } from '#/graphql/generated';
+import Sider from 'antd/lib/layout/Sider';
+import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import useStyles from './SettingsSideMenu.style';
 
-const SettingsSideMenu = () => {
+const SettingsSideMenu = ({
+  collapsed,
+  setCollapsed,
+}: {
+  collapsed: boolean;
+  setCollapsed: (i: boolean) => void;
+}) => {
   const intl = useIntl();
   const classes = useStyles();
   const currentSchemeId = useStoreState((state) => state.scheme.id);
@@ -17,6 +25,11 @@ const SettingsSideMenu = () => {
       ?.permissions.map(({ model }) => model) || [];
 
   const settings = [
+    {
+      title: intl.formatMessage({ id: 'nwqt7T', defaultMessage: 'Dashboards' }),
+      to: '/app/manage-dashboard/',
+      permissions: [PermissionModel.Settings],
+    },
     {
       title: intl.formatMessage({ id: 'YDMrKK', defaultMessage: 'Users' }),
       to: '/app/scheme-settings/users',
@@ -134,26 +147,48 @@ const SettingsSideMenu = () => {
   ];
 
   return (
-    <div className={classes.container}>
-      <Typography.Paragraph className={classes.menuTitle}>
-        <FormattedMessage id="D3idYv" defaultMessage="Settings" />
-      </Typography.Paragraph>
-      {settings
-        .filter(
-          (item) =>
-            item.permissions &&
-            permissions.some((perm) => item.permissions.includes(perm))
-        )
-        .map((item) => (
-          <Link to={item.to}>
-            <div className={classes.item}>
-              <Typography.Text className={classes.text}>
-                {item.title}
-              </Typography.Text>
-            </div>
-          </Link>
-        ))}
-    </div>
+    <Sider trigger={null} collapsible collapsed={collapsed}>
+      <Button
+        type="default"
+        icon={collapsed ? <RightOutlined /> : <LeftOutlined />}
+        onClick={() => setCollapsed(!collapsed)}
+        shape="circle"
+        size="small"
+        style={{
+          position: 'absolute',
+          top: 400,
+          left: collapsed ? -18 : undefined,
+          right: collapsed ? undefined : -18,
+          fontSize: '16px',
+          zIndex: 99_999,
+        }}
+      />
+      {collapsed ? (
+        <div style={{ width: 20 }} />
+      ) : (
+        <div className={classes.container}>
+          <Typography.Paragraph className={classes.menuTitle}>
+            <FormattedMessage id="D3idYv" defaultMessage="Settings" />
+          </Typography.Paragraph>
+
+          {settings
+            .filter(
+              (item) =>
+                item.permissions &&
+                permissions.some((perm) => item.permissions.includes(perm))
+            )
+            .map((item) => (
+              <Link to={item.to}>
+                <div className={classes.item}>
+                  <Typography.Text className={classes.text}>
+                    {item.title}
+                  </Typography.Text>
+                </div>
+              </Link>
+            ))}
+        </div>
+      )}
+    </Sider>
   );
 };
 

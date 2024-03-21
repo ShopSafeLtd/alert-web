@@ -1,7 +1,7 @@
 import React from 'react';
-import { Col, Row, Tag, Tooltip, Typography } from 'antd';
+import { Col, Row, Typography } from 'antd';
 import type { ListArticlesQuery } from 'graphql/generated';
-import { ArticlePriority, Role } from 'graphql/generated';
+import { ArticlePriority } from 'graphql/generated';
 import { Link } from 'react-router-dom';
 import SkeletonImage from 'components/images/SkeletonImage.view';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -14,8 +14,6 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import FormatCalendar from 'utils/format-calendar-24h';
-import { useStoreState } from 'state';
-import { useIntl } from 'react-intl';
 import moment from 'moment';
 import useStyles from './ArticleCard.styles';
 
@@ -34,20 +32,9 @@ interface Props {
 
 const ArticleCard = ({ article, openLightbox }: Props): JSX.Element => {
   // const imagesRef = useRef<CarouselRef>(null);
-  const {
-    id,
-    title,
-    groups,
-    images,
-    previewText,
-    updatedAt,
-    priority,
-    createdBy,
-  } = article || {};
+  const { id, title, images, previewText, updatedAt, priority, createdBy } =
+    article || {};
   const classes = useStyles();
-  const userGroups = useStoreState((state) => state.user.groups);
-  const role = useStoreState((state) => state.user.role);
-  const intl = useIntl();
   return (
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     <Link to={`/app/article/view/${id}`}>
@@ -56,7 +43,7 @@ const ArticleCard = ({ article, openLightbox }: Props): JSX.Element => {
           <div
             style={{
               width: '100%',
-              height: 200,
+              height: 250,
             }}
             key={id}
           >
@@ -66,7 +53,7 @@ const ArticleCard = ({ article, openLightbox }: Props): JSX.Element => {
             />
           </div>
         ) : (
-          <SkeletonImage height={200} />
+          <SkeletonImage height={250} />
         )}
         {openLightbox && images && images.length > 0 && (
           <FontAwesomeIcon
@@ -125,40 +112,6 @@ const ArticleCard = ({ article, openLightbox }: Props): JSX.Element => {
               <Text>{FormatCalendar(updatedAt || moment())}</Text>
             </Col>
           </Row>
-          {userGroups.length > 0 &&
-          role !== Role.User &&
-          groups &&
-          groups.length > 0 ? (
-            <Row wrap={false} className={classes.tagRow}>
-              <Col key={groups[0].id}>
-                <Tag key={groups[0].id}>{groups[0].name}</Tag>
-              </Col>
-              {groups.length > 1 && (
-                <Col>
-                  <Tag>
-                    <Tooltip
-                      title={groups
-                        .slice(1)
-                        .map((group) => group.name)
-                        .join(', ')}
-                    >
-                      {intl.formatMessage(
-                        {
-                          defaultMessage: '+ {num} more',
-                          id: 'fi2Xie',
-                        },
-                        {
-                          num: groups.length - 1,
-                        }
-                      )}
-                    </Tooltip>
-                  </Tag>
-                </Col>
-              )}
-            </Row>
-          ) : (
-            <div style={{ marginBottom: 5 }} />
-          )}
         </div>
       </div>
     </Link>

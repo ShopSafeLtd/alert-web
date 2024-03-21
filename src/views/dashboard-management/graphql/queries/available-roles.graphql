@@ -1,0 +1,11 @@
+query AvailRoles($schemeId: String!) {
+  roles(schemeId: $schemeId) {
+    totalCount
+    edges {
+      node {
+        id
+        name
+      }
+    }
+  }
+}

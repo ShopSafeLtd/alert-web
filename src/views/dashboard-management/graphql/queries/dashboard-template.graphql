@@ -1,0 +1,25 @@
+query DashboardTemplate($where: DashboardWhereUniqueInput!) {
+  dashboard(where: $where) {
+    id
+    runningBanner
+    layout {
+      h
+      i
+      id
+      maxH
+      maxW
+      minH
+      minW
+      moved
+      static
+      w
+      x
+      y
+    }
+    name
+    roles {
+      id
+      name
+    }
+  }
+}

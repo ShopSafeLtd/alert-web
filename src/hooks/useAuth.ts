@@ -7,6 +7,11 @@ import { useEffect } from 'react';
 import * as Sentry from '@sentry/react';
 import Mixpanel from 'utils/mixpanel';
 import { useNavigate } from 'react-router';
+import type {
+  AvailableDashboardElements,
+  DashboardLayout,
+} from '#/state/dashboard-model';
+import { defaultAdminLayout, defaultUserLayout } from '#/state/dashboard-model';
 import type { Translations } from '../state/scheme-model';
 
 // import OneSignal from 'react-onesignal';
@@ -50,6 +55,9 @@ const useAuth = (): Return => {
   );
   const currentScheme = useStoreState((state) => state.scheme.id);
 
+  const setDashboard = useStoreActions(
+    (actions) => actions.dashboard.setSchemeLayouts
+  );
   interface HandleSuccessArgs extends SetUserPayload {
     accessToken: string;
     defaultScheme?: string;
@@ -267,6 +275,38 @@ const useAuth = (): Return => {
           );
         }
       }
+
+      const result: { [key: string]: DashboardLayout } = {};
+
+      if (currentUser?.schemes)
+        // eslint-disable-next-line no-unsafe-optional-chaining,no-restricted-syntax
+        for (const item of currentUser?.schemes) {
+          result[item.scheme.id] = {
+            marquee:
+              item.dashboard?.runningBanner ??
+              (item.isAdmin
+                ? defaultAdminLayout.marquee
+                : defaultUserLayout.marquee),
+            layout: item.dashboard?.layout
+              ? item.dashboard?.layout.map((lay) => ({
+                  ...lay,
+                  i: lay.i as AvailableDashboardElements,
+                  static: !!lay.static,
+                  isBounded: true,
+                  isDraggable: false,
+                  isResizable: false,
+                  maxH: lay.maxH ?? undefined,
+                  maxW: lay.maxW ?? undefined,
+                  minH: lay.minH ?? undefined,
+                  minW: lay.minW ?? undefined,
+                }))
+              : item.isAdmin
+              ? defaultAdminLayout.layout
+              : defaultUserLayout.layout,
+          };
+        }
+
+      setDashboard(result);
 
       await handleSuccess({
         id: currentUser?.id || '',

@@ -1,0 +1,6 @@
+query LatestIncident($where: DashboardInput!) {
+  latestIncident(where: $where){
+    id
+    date
+  }
+}
