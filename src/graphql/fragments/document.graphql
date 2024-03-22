@@ -3,4 +3,7 @@ fragment Documents on Document {
   name
   url
   fileType
+  tags {
+    name
+  }
 }

@@ -655,8 +655,8 @@ const PerformanceReportLayout = ({
             <Statistic
               className={classes.stats}
               title={intl.formatMessage({
-                defaultMessage: 'Total recovered value',
-                id: 'OorvGS',
+                defaultMessage: 'Total recovered',
+                id: '3A1IaB',
               })}
               value={
                 data?.performanceReport?.lossTotals?.totalRecoveredValue
@@ -675,6 +675,34 @@ const PerformanceReportLayout = ({
                   className={classes.prefixIcon}
                   icon={faMoneyBill}
                   color="green"
+                />
+              }
+            />
+            <Statistic
+              className={classes.stats}
+              title={intl.formatMessage({
+                defaultMessage: 'Total Loss',
+                id: 'LPr3Nh',
+              })}
+              value={
+                data?.performanceReport?.lossTotals?.totalRecoveredValue
+                  ? intl.formatNumber(
+                      (data?.performanceReport?.lossTotals?.totalLostValue ||
+                        0) -
+                        (data?.performanceReport?.lossTotals
+                          ?.totalRecoveredValue || 0),
+                      { style: 'currency', currency: 'GBP' }
+                    )
+                  : intl.formatMessage({
+                      defaultMessage: 'No Loss',
+                      id: '4z5NxE',
+                    })
+              }
+              prefix={
+                <FontAwesomeIcon
+                  className={classes.prefixIcon}
+                  icon={faMoneyBill}
+                  color="red"
                 />
               }
             />
