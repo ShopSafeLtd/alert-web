@@ -139,4 +139,16 @@ query PerformanceReport($where: UserContributionWhereInput!) {
       }
     }
   }
+  investigationPerformance(where: $where) {
+    total
+    investigationPerformance {
+      id
+      alertId
+      name
+      status
+      totalIncidents
+      totalOffenders
+      totalValue
+    }
+  }
 }

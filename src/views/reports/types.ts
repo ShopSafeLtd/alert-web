@@ -20,6 +20,7 @@ export type AllowedValue =
   | 'crimeGroupTable'
   | 'targetedBusinessTable'
   | 'targetedGoodsTable'
+  | 'investigationsTable'
   | 'offenderSummary'
   | 'crimeTypesByBusinessRadial'
   | 'goodsTypeLossRecoveredRadial'
@@ -169,6 +170,10 @@ export const LayoutToReadable: {
   {
     i: 'incidentsTable',
     readable: 'Incidents Table',
+  },
+  {
+    i: 'investigationsTable',
+    readable: 'Investigations Table',
   },
 ];
 

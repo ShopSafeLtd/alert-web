@@ -7,6 +7,7 @@ import {
 } from 'graphql/generated';
 import type RGL from 'react-grid-layout';
 import useReportPrint from 'utils/reportPrint/usePrintReports';
+import type { InvestigationsTableData } from '#/components/reports/tableColumns';
 import PerformanceLayout, { PerformanceMetaData } from './initLayout';
 import type { IReportTemplate } from '../../types';
 import type { Props as Return } from './types';
@@ -243,6 +244,19 @@ const usePerformanceReport = (): Return => {
         avgLost: good?.averageLossValue?.toFixed(2),
       })) || [];
 
+  const investigationsData: InvestigationsTableData[] =
+    data?.investigationPerformance?.investigationPerformance.map(
+      (investigation) => ({
+        key: investigation.id,
+        name: investigation.name,
+        alertId: investigation.alertId,
+        totalIncidents: investigation.totalIncidents,
+        totalOffenders: investigation.totalOffenders,
+        status: investigation.status,
+        totalValue: investigation.totalValue,
+      })
+    ) || [];
+
   return {
     addLogo,
     addLogoDrawer,
@@ -286,6 +300,7 @@ const usePerformanceReport = (): Return => {
     setSelectedBrands,
     selectedBrands,
     brands,
+    investigationsData,
   };
 };
 

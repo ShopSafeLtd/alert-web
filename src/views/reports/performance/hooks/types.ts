@@ -6,6 +6,7 @@ import type {
   OffenderTableData,
   TargetedBusinessTableData,
   TargetedGoodsTableData,
+  InvestigationsTableData,
 } from '../../../../components/reports/tableColumns';
 import type { PerformanceReportQuery } from '../../../../graphql/generated';
 import type {
@@ -52,6 +53,7 @@ export interface Props {
   setSelectedGroups: (groups: string[]) => void;
   targetedBusinessData: TargetedBusinessTableData[] | [];
   targetedGoodsData: TargetedGoodsTableData[] | [];
+  investigationsData: InvestigationsTableData[] | [];
   templates: IReportTemplate[];
   userContributionTableData: ContributionTableData[] | [];
   brandsLoading: boolean;

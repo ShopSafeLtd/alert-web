@@ -188,6 +188,7 @@ const PerformanceReport = ({
   brands,
   setSelectedBrands,
   selectedBrands,
+  investigationsData,
 }: Props) => {
   const ReactGridLayout = useMemo(() => WidthProvider(RGL), []);
   const handleMenuClick: MenuProps['onClick'] = (e) => {
@@ -416,6 +417,7 @@ const PerformanceReport = ({
                   isPrinting,
                   metadata,
                   setMetadata,
+                  investigationsData,
                 })}
               </ReactGridLayout>
             </div>
@@ -505,6 +507,7 @@ const PerformanceReport = ({
               isPrinting,
               metadata,
               setMetadata,
+              investigationsData,
             })}
             layout={layout}
           />

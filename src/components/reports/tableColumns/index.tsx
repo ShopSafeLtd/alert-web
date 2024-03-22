@@ -3,6 +3,8 @@ import type { ColumnsType, SortOrder } from 'antd/es/table/interface';
 import { Typography } from 'antd';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+import type { InvestigationStatus } from 'graphql/generated';
+import { Link } from 'react-router-dom';
 
 export interface BusinessTableData {
   fullName: string;
@@ -462,6 +464,67 @@ export const TargetGoodsColumns: ColumnsType<TargetedGoodsTableData> = [
       <Typography.Text>{`£${Number.parseInt(text || '0', 10).toFixed(
         0
       )}`}</Typography.Text>
+    ),
+  },
+];
+
+export interface InvestigationsTableData {
+  key: string;
+  alertId: string;
+  name: string;
+  status: InvestigationStatus;
+  totalIncidents: number;
+  totalOffenders: number;
+  totalValue: number;
+}
+
+export const InvestigationsColumns: ColumnsType<InvestigationsTableData> = [
+  {
+    key: 'alertId',
+    dataIndex: 'alertId',
+    title: <FormattedMessage id="k8ZNgH" defaultMessage="Alert ID" />,
+    render: (text, item) => (
+      <Link to={`/app/investigations/view/${item.key}`}>{text}</Link>
+    ),
+  },
+  {
+    key: 'name',
+    dataIndex: 'name',
+    title: <FormattedMessage id="HAlOn1" defaultMessage="Name" />,
+  },
+  {
+    key: 'status',
+    dataIndex: 'status',
+    title: <FormattedMessage id="tzMNF3" defaultMessage="Status" />,
+  },
+  {
+    key: 'totalIncidents',
+    dataIndex: 'totalIncidents',
+    title: <FormattedMessage id="pUlxda" defaultMessage="Total Incidents" />,
+    sorter: (a: InvestigationsTableData, b: InvestigationsTableData) =>
+      a.totalIncidents - b.totalIncidents,
+    render: (text: number) => (
+      <Typography.Text>{text.toFixed(0)}</Typography.Text>
+    ),
+  },
+  {
+    key: 'totalOffenders',
+    dataIndex: 'totalOffenders',
+    title: <FormattedMessage id="Pyo0l3" defaultMessage="Total Offenders" />,
+    sorter: (a: InvestigationsTableData, b: InvestigationsTableData) =>
+      a.totalOffenders - b.totalOffenders,
+    render: (text: number) => (
+      <Typography.Text>{text.toFixed(0)}</Typography.Text>
+    ),
+  },
+  {
+    key: 'totalValue',
+    dataIndex: 'totalValue',
+    title: <FormattedMessage id="MoJx/h" defaultMessage="Total Value" />,
+    sorter: (a: InvestigationsTableData, b: InvestigationsTableData) =>
+      a.totalValue - b.totalValue,
+    render: (text: number) => (
+      <Typography.Text>{`£${text.toFixed(0)}`}</Typography.Text>
     ),
   },
 ];

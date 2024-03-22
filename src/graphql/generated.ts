@@ -7998,6 +7998,17 @@ export type InvestigationOrderByWithRelationInput = {
   vehicles?: InputMaybe<VehicleOrderByRelationAggregateInput>;
 };
 
+export type InvestigationPerformance = {
+  __typename?: 'InvestigationPerformance';
+  alertId: Scalars['String'];
+  id: Scalars['String'];
+  name: Scalars['String'];
+  status: InvestigationStatus;
+  totalIncidents: Scalars['Int'];
+  totalOffenders: Scalars['Int'];
+  totalValue: Scalars['Float'];
+};
+
 export enum InvestigationScalarFieldEnum {
   CreatedAt = 'createdAt',
   CreatedById = 'createdById',
@@ -8394,6 +8405,12 @@ export type ListGoodsTypes = {
 export type ListIncidents = {
   __typename?: 'ListIncidents';
   incidents: Array<Incident>;
+  total: Scalars['Int'];
+};
+
+export type ListInvestigationPerformance = {
+  __typename?: 'ListInvestigationPerformance';
+  investigationPerformance: Array<InvestigationPerformance>;
   total: Scalars['Int'];
 };
 
@@ -12452,6 +12469,7 @@ export type Query = {
   incidentsRelay: QueryIncidentsRelayConnection;
   incidentsTimeOfDay: Array<Graph>;
   investigation: Investigation;
+  investigationPerformance: ListInvestigationPerformance;
   investigations: Array<Investigation>;
   latestIncident?: Maybe<LatestIncident>;
   latestIncidents: QueryLatestIncidentsConnection;
@@ -12517,7 +12535,6 @@ export type Query = {
   tags: Array<Tag>;
   targetedGoods: ListTargetedGoods;
   targetedGoodsDashboard: Array<Graph>;
-  test: Scalars['String'];
   todo: Todo;
   todos: Array<Todo>;
   totalLoss: Scalars['Float'];
@@ -12857,6 +12874,11 @@ export type QueryIncidentsTimeOfDayArgs = {
 
 export type QueryInvestigationArgs = {
   where: InvestigationWhereUniqueInput;
+};
+
+
+export type QueryInvestigationPerformanceArgs = {
+  where: UserContributionWhereInput;
 };
 
 
@@ -21502,7 +21524,7 @@ export type PerformanceReportQueryVariables = Exact<{
 }>;
 
 
-export type PerformanceReportQuery = { __typename?: 'Query', performanceReport: { __typename?: 'PerformanceReport', createdDataCounts: { __typename?: 'CreatedDataCounts', crimeGroups: number, incidents: number, messages: number, offenders: number, updates: number, vehicles: number, bulletins: number }, incidentSummary: { __typename?: 'IncidentSummary', totalIncidents: number, lastIncidentDate?: Date | null, incidentsReportedToPolice: number, incidentsWherePoliceAttended: number, mostCommonCrimeType: string }, outcomeSummary: { __typename?: 'OutcomeSummary', totalArrests: number, totalCBOYears: number, totalCBOCount: number, totalFinesCount: number, totalFinesValue: number, totalPrisonSentenceCount: number, totalPrisonSentenceMonths: number, totalRehabOrders: number }, crimeTypeDonut: Array<{ __typename?: 'Graph', label: string, value: number }>, involvedTagCountDonut: Array<{ __typename?: 'Graph', label: string, value: number }>, incidentDayOfWeekLine: Array<{ __typename?: 'Graph', label: string, value: number }>, lossTotals: { __typename?: 'LossTotals', totalIncidents: number, totalLostValue: number, totalRecoveredValue: number, averagePerIncident: number, averageSuccessRate: number }, goodsTypeCountDonut: Array<{ __typename?: 'Graph', label: string, value: number }>, goodsTypeValueDonut: Array<{ __typename?: 'Graph', label: string, value: number }>, policeSummary: { __typename?: 'PoliceSummary', totalAttendedIncidents: number, totalReportedIncidents: number, totalPoliceImages: number, totalVerifiedOffenders: number } }, offendersPerformance: { __typename?: 'ListOffenderPerformance', total: number, offenderPerformance: Array<{ __typename?: 'OffenderPerformance', primaryPhoto?: string | null, alertId: string, name: string, totalIncidents: number, totalLostValue: number, totalRecoveredValue: number, totalSuccessRate: number, lastIncidentDate?: Date | null }> }, businessContribution: { __typename?: 'ListBusinessContribution', total: number, businessContributions: Array<{ __typename?: 'BusinessContributions', name: string, totalUsers: number, totalIncidents: number, totalOffenders: number, totalUpdates: number, totalMessages: number, totalLogins: number, totalSuccessRate: number, totalRecoveredValue: number, totalLostValue: number, mostCommonGoodLost?: string | null, highestTotalValueGoodLost?: number | null, averageLossValue?: number | null }> }, crimeGroupPerformance: { __typename?: 'ListCrimeGroupPerformance', total: number, crimeGroupPerformance: Array<{ __typename?: 'CrimeGroupPerformance', totalSuccessRate: number, totalRecoveredValue: number, totalOffenders: number, totalLostValue: number, totalIncidents: number, lastIncident?: Date | null, alias: string, alertId: string }> }, userContributions: { __typename?: 'ListUserContribution', total: number, userContributions: Array<{ __typename?: 'UserContribution', name: string, totalIncidents: number, totalOffenders: number, totalUpdates: number, totalMessages: number, totalLogins: number }> }, targetedGoods: { __typename?: 'ListTargetedGoods', total: number, targetedGoods: Array<{ __typename?: 'TargetedGood', alertId: string, name: string, totalIncidents: number, totalOffenders: number, totalLostValue: number, totalRecoveredValue: number, totalSuccessRate: number, averageLossValue: number }> }, incidentHeatPerformance: { __typename?: 'ListIncidents', total: number, incidents: Array<{ __typename?: 'Incident', id: string, location?: { __typename?: 'Address', id: string, geoLat?: number | null, geoLng?: number | null } | null }> } };
+export type PerformanceReportQuery = { __typename?: 'Query', performanceReport: { __typename?: 'PerformanceReport', createdDataCounts: { __typename?: 'CreatedDataCounts', crimeGroups: number, incidents: number, messages: number, offenders: number, updates: number, vehicles: number, bulletins: number }, incidentSummary: { __typename?: 'IncidentSummary', totalIncidents: number, lastIncidentDate?: Date | null, incidentsReportedToPolice: number, incidentsWherePoliceAttended: number, mostCommonCrimeType: string }, outcomeSummary: { __typename?: 'OutcomeSummary', totalArrests: number, totalCBOYears: number, totalCBOCount: number, totalFinesCount: number, totalFinesValue: number, totalPrisonSentenceCount: number, totalPrisonSentenceMonths: number, totalRehabOrders: number }, crimeTypeDonut: Array<{ __typename?: 'Graph', label: string, value: number }>, involvedTagCountDonut: Array<{ __typename?: 'Graph', label: string, value: number }>, incidentDayOfWeekLine: Array<{ __typename?: 'Graph', label: string, value: number }>, lossTotals: { __typename?: 'LossTotals', totalIncidents: number, totalLostValue: number, totalRecoveredValue: number, averagePerIncident: number, averageSuccessRate: number }, goodsTypeCountDonut: Array<{ __typename?: 'Graph', label: string, value: number }>, goodsTypeValueDonut: Array<{ __typename?: 'Graph', label: string, value: number }>, policeSummary: { __typename?: 'PoliceSummary', totalAttendedIncidents: number, totalReportedIncidents: number, totalPoliceImages: number, totalVerifiedOffenders: number } }, offendersPerformance: { __typename?: 'ListOffenderPerformance', total: number, offenderPerformance: Array<{ __typename?: 'OffenderPerformance', primaryPhoto?: string | null, alertId: string, name: string, totalIncidents: number, totalLostValue: number, totalRecoveredValue: number, totalSuccessRate: number, lastIncidentDate?: Date | null }> }, businessContribution: { __typename?: 'ListBusinessContribution', total: number, businessContributions: Array<{ __typename?: 'BusinessContributions', name: string, totalUsers: number, totalIncidents: number, totalOffenders: number, totalUpdates: number, totalMessages: number, totalLogins: number, totalSuccessRate: number, totalRecoveredValue: number, totalLostValue: number, mostCommonGoodLost?: string | null, highestTotalValueGoodLost?: number | null, averageLossValue?: number | null }> }, crimeGroupPerformance: { __typename?: 'ListCrimeGroupPerformance', total: number, crimeGroupPerformance: Array<{ __typename?: 'CrimeGroupPerformance', totalSuccessRate: number, totalRecoveredValue: number, totalOffenders: number, totalLostValue: number, totalIncidents: number, lastIncident?: Date | null, alias: string, alertId: string }> }, userContributions: { __typename?: 'ListUserContribution', total: number, userContributions: Array<{ __typename?: 'UserContribution', name: string, totalIncidents: number, totalOffenders: number, totalUpdates: number, totalMessages: number, totalLogins: number }> }, targetedGoods: { __typename?: 'ListTargetedGoods', total: number, targetedGoods: Array<{ __typename?: 'TargetedGood', alertId: string, name: string, totalIncidents: number, totalOffenders: number, totalLostValue: number, totalRecoveredValue: number, totalSuccessRate: number, averageLossValue: number }> }, incidentHeatPerformance: { __typename?: 'ListIncidents', total: number, incidents: Array<{ __typename?: 'Incident', id: string, location?: { __typename?: 'Address', id: string, geoLat?: number | null, geoLng?: number | null } | null }> }, investigationPerformance: { __typename?: 'ListInvestigationPerformance', total: number, investigationPerformance: Array<{ __typename?: 'InvestigationPerformance', id: string, alertId: string, name: string, status: InvestigationStatus, totalIncidents: number, totalOffenders: number, totalValue: number }> } };
 
 export type SchemeReportDetailsQueryVariables = Exact<{
   where?: InputMaybe<GroupWhereInput>;
@@ -30836,6 +30858,18 @@ export const PerformanceReportDocument = gql`
         geoLat
         geoLng
       }
+    }
+  }
+  investigationPerformance(where: $where) {
+    total
+    investigationPerformance {
+      id
+      alertId
+      name
+      status
+      totalIncidents
+      totalOffenders
+      totalValue
     }
   }
 }
