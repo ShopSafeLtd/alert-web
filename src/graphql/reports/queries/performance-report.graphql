@@ -59,6 +59,11 @@ query PerformanceReport($where: UserContributionWhereInput!) {
       totalPoliceImages
       totalVerifiedOffenders
     }
+    investigationSummary {
+      closed
+      open
+      opened
+    }
   }
   offendersPerformance(where: $where) {
     total
@@ -71,6 +76,8 @@ query PerformanceReport($where: UserContributionWhereInput!) {
       totalRecoveredValue
       totalSuccessRate
       lastIncidentDate
+      id
+      totalBulletins
     }
   }
   businessContribution(where: $where) {
@@ -149,6 +156,7 @@ query PerformanceReport($where: UserContributionWhereInput!) {
       totalIncidents
       totalOffenders
       totalValue
+      createdAt
     }
   }
 }

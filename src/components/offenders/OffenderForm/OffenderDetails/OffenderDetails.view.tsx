@@ -507,6 +507,13 @@ const OffenderDetails = ({
                   },
                   {
                     label: intl.formatMessage({
+                      defaultMessage: 'By BCRP',
+                      id: 'poNXPu',
+                    }),
+                    value: IdSource.Bcrp,
+                  },
+                  {
+                    label: intl.formatMessage({
                       defaultMessage: 'Known Offender',
                       id: 'he2Vcw',
                     }),

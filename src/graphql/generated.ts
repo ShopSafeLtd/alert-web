@@ -1667,6 +1667,7 @@ export type Brand = {
   businesses: Array<Business>;
   description?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
+  industry: Industry;
   name: Scalars['String'];
   recycled: Scalars['Boolean'];
   scheme: Scheme;
@@ -6662,6 +6663,7 @@ export type Incident = {
   reportedBusinessName: Scalars['String'];
   scheme: Scheme;
   schemeId: Scalars['String'];
+  schemes: Array<Scheme>;
   skipFeedItem: Scalars['Boolean'];
   skipNotification: Scalars['Boolean'];
   subject?: Maybe<Scalars['String']>;
@@ -7577,6 +7579,12 @@ export type IncidentsByType = {
   types: Array<Scalars['String']>;
 };
 
+export type Industry = {
+  __typename?: 'Industry';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+};
+
 export type IntFilter = {
   equals?: InputMaybe<Scalars['Int']>;
   gt?: InputMaybe<Scalars['Int']>;
@@ -8017,6 +8025,7 @@ export type InvestigationOrderByWithRelationInput = {
 export type InvestigationPerformance = {
   __typename?: 'InvestigationPerformance';
   alertId: Scalars['String'];
+  createdAt: Scalars['Date'];
   id: Scalars['String'];
   name: Scalars['String'];
   status: InvestigationStatus;
@@ -8078,6 +8087,13 @@ export enum InvestigationStatus {
   Open = 'OPEN',
   Paused = 'PAUSED'
 }
+
+export type InvestigationSummary = {
+  __typename?: 'InvestigationSummary';
+  closed: Scalars['Int'];
+  open: Scalars['Int'];
+  opened: Scalars['Int'];
+};
 
 export type InvestigationWhereInput = {
   AND?: InputMaybe<Array<InvestigationWhereInput>>;
@@ -9546,6 +9562,7 @@ export type Mutation = {
   syncFeedItems: SystemTask;
   syncGeoCodes: Array<Address>;
   syncIncidentLocations: SystemTask;
+  syncIncidentSchemes: SystemTask;
   syncNewSchemeTags: SystemTask;
   syncRekImages: SystemTask;
   toggleUser: User;
@@ -11430,6 +11447,7 @@ export type Offender = {
   rekFaces: Array<RekFace>;
   scheme: Scheme;
   schemeId: Scalars['String'];
+  schemes: Array<Scheme>;
   searchedMatches: Array<RekMatch>;
   skipNotification: Scalars['Boolean'];
   subscribed: Scalars['Boolean'];
@@ -11917,9 +11935,11 @@ export type OffenderOrderByWithRelationInput = {
 export type OffenderPerformance = {
   __typename?: 'OffenderPerformance';
   alertId: Scalars['String'];
+  id: Scalars['String'];
   lastIncidentDate?: Maybe<Scalars['Date']>;
   name: Scalars['String'];
   primaryPhoto?: Maybe<Scalars['String']>;
+  totalBulletins: Scalars['Float'];
   totalIncidents: Scalars['Int'];
   totalLostValue: Scalars['Float'];
   totalRecoveredValue: Scalars['Float'];
@@ -12366,6 +12386,7 @@ export type PerformanceReport = {
   goodsTypeValueDonut: Array<Graph>;
   incidentDayOfWeekLine: Array<Graph>;
   incidentSummary: IncidentSummary;
+  investigationSummary: InvestigationSummary;
   involvedTagCountDonut: Array<Graph>;
   lossTotals: LossTotals;
   outcomeSummary: OutcomeSummary;
@@ -12484,6 +12505,7 @@ export type Query = {
   incidentsDayOfWeek: Array<Graph>;
   incidentsRelay: QueryIncidentsRelayConnection;
   incidentsTimeOfDay: Array<Graph>;
+  industries: Array<Industry>;
   investigation: Investigation;
   investigationPerformance: ListInvestigationPerformance;
   investigations: Array<Investigation>;
@@ -14693,6 +14715,7 @@ export type Scheme = {
   chats: Array<Chat>;
   checklistFeatureActive: Scalars['Boolean'];
   checklists: Array<Checklist>;
+  connectedToSchemes: Array<Scheme>;
   contacts: Array<Contact>;
   createdAt: Scalars['Date'];
   creationBreakdown: CreationBreakdown;
@@ -18580,6 +18603,7 @@ export type UserContributionWhereInput = {
   crimeGroupId?: InputMaybe<Scalars['String']>;
   dateRange: DateRangeInput;
   groupIds: Array<Scalars['String']>;
+  industryIds?: InputMaybe<Array<Scalars['String']>>;
   offenderId?: InputMaybe<Scalars['String']>;
   schemeIds: Array<Scalars['String']>;
 };
@@ -20896,6 +20920,11 @@ export type ViewIncidentQueryVariables = Exact<{
 
 export type ViewIncidentQuery = { __typename?: 'Query', incident: { __typename?: 'Incident', id: string, subject?: string | null, totalImages: number, description: string, dayTime: string, date: Date, time: Date, reference?: number | null, ref: string, policeReported: boolean, policeRef?: string | null, policeNo?: string | null, policeInvolved: boolean, priority: IncidentPriority, customerRef?: string | null, subscribed: boolean, totalValue: number, totalRecoveredValue: number, approved?: boolean | null, answers: Array<{ __typename?: 'Answer', id: string, answer: string, type: AnswerType, tagQuestion?: { __typename?: 'TagQuestion', id: string, priority: number, question: { __typename?: 'Question', id: string, question: string } } | null }>, scheme: { __typename?: 'Scheme', mg11Available: boolean, restrictIncidentAccess: boolean }, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string, crimeType?: CrimeType | null }>, involvedTags: Array<{ __typename?: 'Tag', id: string, name: string }>, impactTags: Array<{ __typename?: 'Tag', id: string, name: string }>, incidentItems: Array<{ __typename?: 'IncidentItem', id: string, name?: string | null, value?: number | null, recoveredValue?: number | null, sku?: string | null, quantity?: number | null, recoveredQuantity?: number | null, goodsType: { __typename?: 'GoodsType', id: string } }>, business?: { __typename?: 'Business', id: string, name: string } | null, groups: Array<{ __typename?: 'Group', id: string, name: string }>, createdBy: { __typename?: 'User', id: string, fullName: string, businesses: Array<{ __typename?: 'Business', id: string, name: string }> }, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, primary?: boolean | null, policeImage?: boolean | null, card?: string | null }>, crimeGroups: Array<{ __typename?: 'CrimeGroup', id: string, reference?: number | null, alias?: string | null, totalIncidents: number, totalOffenders: number, totalRecoveredValue: number, totalTheftSuccess: number, totalValue: number }>, vehicles: Array<{ __typename?: 'Vehicle', id: string, reference?: number | null, colour?: string | null, model?: string | null, make?: string | null, registration?: string | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, primary?: boolean | null, policeImage?: boolean | null, card?: string | null }> }>, todos: Array<{ __typename?: 'Todo', id: string, name?: string | null, description?: string | null, dueDate?: Date | null, completed?: boolean | null, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }> }>, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, alias: Array<string>, age?: Age | null, gender?: Gender | null, race?: Race | null, build?: Build | null, height?: Height | null, hair?: string | null, peculiarities?: string | null, comment?: string | null, dateSource?: string | null, dateOfBirth?: Date | null, idVerified: boolean, idSource?: IdSource | null, knownFor: Array<string>, targetedGoods: Array<string>, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, primary?: boolean | null, policeImage?: boolean | null, card?: string | null }> }>, evidence: Array<{ __typename?: 'Document', id: string, name: string, url: string, fileType?: FileType | null, tags: Array<{ __typename?: 'Tag', name: string }> }>, investigations: Array<{ __typename?: 'Investigation', id: string, name: string, description?: string | null, status: InvestigationStatus }>, updates: Array<{ __typename?: 'Update', id: string, text?: string | null, type: UpdateType, createdAt: Date, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }>, linkedCrimeGroups: Array<{ __typename?: 'CrimeGroup', id: string, reference?: number | null, alias?: string | null, totalIncidents: number, totalOffenders: number, totalRecoveredValue: number, totalTheftSuccess: number, totalValue: number }>, linkedVehicles: Array<{ __typename?: 'Vehicle', id: string, reference?: number | null, colour?: string | null, model?: string | null, make?: string | null, registration?: string | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }> }>, linkedIncidents: Array<{ __typename?: 'Incident', id: string, reference?: number | null, dayTime: string, policeRef?: string | null, subject?: string | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }> }>, linkedOffenders: Array<{ __typename?: 'Offender', id: string, reference?: number | null, name?: string | null, gender?: Gender | null, build?: Build | null, height?: Height | null, race?: Race | null, age?: Age | null, dateOfBirth?: Date | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }> }>, linkedArticles: Array<{ __typename?: 'Article', id: string, title: string, updatedAt: Date, watermarkImage: boolean, previewImage?: string | null, previewText?: string | null, priority: ArticlePriority, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null, position: ImagePosition, rotation: number }>, createdBy: { __typename?: 'User', fullName: string, id: string } }>, createdBy: { __typename?: 'User', origName: string, id: string, fullName: string, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string }> }, replies: Array<{ __typename?: 'Update', id: string, text?: string | null, type: UpdateType, createdAt: Date, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }>, linkedCrimeGroups: Array<{ __typename?: 'CrimeGroup', id: string, reference?: number | null, alias?: string | null, totalIncidents: number, totalOffenders: number, totalRecoveredValue: number, totalTheftSuccess: number, totalValue: number }>, linkedVehicles: Array<{ __typename?: 'Vehicle', id: string, reference?: number | null, colour?: string | null, model?: string | null, make?: string | null, registration?: string | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }> }>, linkedIncidents: Array<{ __typename?: 'Incident', id: string, reference?: number | null, dayTime: string, policeRef?: string | null, subject?: string | null, location?: { __typename?: 'Address', id: string, full: string, geoLat?: number | null, geoLng?: number | null } | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }> }>, linkedOffenders: Array<{ __typename?: 'Offender', id: string, reference?: number | null, name?: string | null, gender?: Gender | null, build?: Build | null, height?: Height | null, race?: Race | null, age?: Age | null, dateOfBirth?: Date | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }> }>, linkedArticles: Array<{ __typename?: 'Article', id: string, title: string, updatedAt: Date, watermarkImage: boolean, previewImage?: string | null, previewText?: string | null, priority: ArticlePriority, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null, position: ImagePosition, rotation: number }>, createdBy: { __typename?: 'User', fullName: string, id: string } }>, createdBy: { __typename?: 'User', origName: string, id: string, fullName: string, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string }> } }> }>, location?: { __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, geoLat?: number | null, geoLng?: number | null, full: string, alias?: string | null } | null } };
 
+export type IndustriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type IndustriesQuery = { __typename?: 'Query', industries: Array<{ __typename?: 'Industry', name: string, id: string }> };
+
 export type CreateFlowMutationVariables = Exact<{
   data: CreateFlowInput;
 }>;
@@ -21546,7 +21575,7 @@ export type PerformanceReportQueryVariables = Exact<{
 }>;
 
 
-export type PerformanceReportQuery = { __typename?: 'Query', performanceReport: { __typename?: 'PerformanceReport', createdDataCounts: { __typename?: 'CreatedDataCounts', crimeGroups: number, incidents: number, messages: number, offenders: number, updates: number, vehicles: number, bulletins: number }, incidentSummary: { __typename?: 'IncidentSummary', totalIncidents: number, lastIncidentDate?: Date | null, incidentsReportedToPolice: number, incidentsWherePoliceAttended: number, mostCommonCrimeType: string }, outcomeSummary: { __typename?: 'OutcomeSummary', totalArrests: number, totalCBOYears: number, totalCBOCount: number, totalFinesCount: number, totalFinesValue: number, totalPrisonSentenceCount: number, totalPrisonSentenceMonths: number, totalRehabOrders: number }, crimeTypeDonut: Array<{ __typename?: 'Graph', label: string, value: number }>, involvedTagCountDonut: Array<{ __typename?: 'Graph', label: string, value: number }>, incidentDayOfWeekLine: Array<{ __typename?: 'Graph', label: string, value: number }>, lossTotals: { __typename?: 'LossTotals', totalIncidents: number, totalLostValue: number, totalRecoveredValue: number, averagePerIncident: number, averageSuccessRate: number }, goodsTypeCountDonut: Array<{ __typename?: 'Graph', label: string, value: number }>, goodsTypeValueDonut: Array<{ __typename?: 'Graph', label: string, value: number }>, policeSummary: { __typename?: 'PoliceSummary', totalAttendedIncidents: number, totalReportedIncidents: number, totalPoliceImages: number, totalVerifiedOffenders: number } }, offendersPerformance: { __typename?: 'ListOffenderPerformance', total: number, offenderPerformance: Array<{ __typename?: 'OffenderPerformance', primaryPhoto?: string | null, alertId: string, name: string, totalIncidents: number, totalLostValue: number, totalRecoveredValue: number, totalSuccessRate: number, lastIncidentDate?: Date | null }> }, businessContribution: { __typename?: 'ListBusinessContribution', total: number, businessContributions: Array<{ __typename?: 'BusinessContributions', name: string, totalUsers: number, totalIncidents: number, totalOffenders: number, totalUpdates: number, totalMessages: number, totalLogins: number, totalSuccessRate: number, totalRecoveredValue: number, totalLostValue: number, mostCommonGoodLost?: string | null, highestTotalValueGoodLost?: number | null, averageLossValue?: number | null }> }, crimeGroupPerformance: { __typename?: 'ListCrimeGroupPerformance', total: number, crimeGroupPerformance: Array<{ __typename?: 'CrimeGroupPerformance', totalSuccessRate: number, totalRecoveredValue: number, totalOffenders: number, totalLostValue: number, totalIncidents: number, lastIncident?: Date | null, alias: string, alertId: string }> }, userContributions: { __typename?: 'ListUserContribution', total: number, userContributions: Array<{ __typename?: 'UserContribution', name: string, totalIncidents: number, totalOffenders: number, totalUpdates: number, totalMessages: number, totalLogins: number }> }, targetedGoods: { __typename?: 'ListTargetedGoods', total: number, targetedGoods: Array<{ __typename?: 'TargetedGood', alertId: string, name: string, totalIncidents: number, totalOffenders: number, totalLostValue: number, totalRecoveredValue: number, totalSuccessRate: number, averageLossValue: number }> }, incidentHeatPerformance: { __typename?: 'ListIncidents', total: number, incidents: Array<{ __typename?: 'Incident', id: string, location?: { __typename?: 'Address', id: string, geoLat?: number | null, geoLng?: number | null } | null }> }, investigationPerformance: { __typename?: 'ListInvestigationPerformance', total: number, investigationPerformance: Array<{ __typename?: 'InvestigationPerformance', id: string, alertId: string, name: string, status: InvestigationStatus, totalIncidents: number, totalOffenders: number, totalValue: number }> } };
+export type PerformanceReportQuery = { __typename?: 'Query', performanceReport: { __typename?: 'PerformanceReport', createdDataCounts: { __typename?: 'CreatedDataCounts', crimeGroups: number, incidents: number, messages: number, offenders: number, updates: number, vehicles: number, bulletins: number }, incidentSummary: { __typename?: 'IncidentSummary', totalIncidents: number, lastIncidentDate?: Date | null, incidentsReportedToPolice: number, incidentsWherePoliceAttended: number, mostCommonCrimeType: string }, outcomeSummary: { __typename?: 'OutcomeSummary', totalArrests: number, totalCBOYears: number, totalCBOCount: number, totalFinesCount: number, totalFinesValue: number, totalPrisonSentenceCount: number, totalPrisonSentenceMonths: number, totalRehabOrders: number }, crimeTypeDonut: Array<{ __typename?: 'Graph', label: string, value: number }>, involvedTagCountDonut: Array<{ __typename?: 'Graph', label: string, value: number }>, incidentDayOfWeekLine: Array<{ __typename?: 'Graph', label: string, value: number }>, lossTotals: { __typename?: 'LossTotals', totalIncidents: number, totalLostValue: number, totalRecoveredValue: number, averagePerIncident: number, averageSuccessRate: number }, goodsTypeCountDonut: Array<{ __typename?: 'Graph', label: string, value: number }>, goodsTypeValueDonut: Array<{ __typename?: 'Graph', label: string, value: number }>, policeSummary: { __typename?: 'PoliceSummary', totalAttendedIncidents: number, totalReportedIncidents: number, totalPoliceImages: number, totalVerifiedOffenders: number }, investigationSummary: { __typename?: 'InvestigationSummary', closed: number, open: number, opened: number } }, offendersPerformance: { __typename?: 'ListOffenderPerformance', total: number, offenderPerformance: Array<{ __typename?: 'OffenderPerformance', primaryPhoto?: string | null, alertId: string, name: string, totalIncidents: number, totalLostValue: number, totalRecoveredValue: number, totalSuccessRate: number, lastIncidentDate?: Date | null, id: string, totalBulletins: number }> }, businessContribution: { __typename?: 'ListBusinessContribution', total: number, businessContributions: Array<{ __typename?: 'BusinessContributions', name: string, totalUsers: number, totalIncidents: number, totalOffenders: number, totalUpdates: number, totalMessages: number, totalLogins: number, totalSuccessRate: number, totalRecoveredValue: number, totalLostValue: number, mostCommonGoodLost?: string | null, highestTotalValueGoodLost?: number | null, averageLossValue?: number | null }> }, crimeGroupPerformance: { __typename?: 'ListCrimeGroupPerformance', total: number, crimeGroupPerformance: Array<{ __typename?: 'CrimeGroupPerformance', totalSuccessRate: number, totalRecoveredValue: number, totalOffenders: number, totalLostValue: number, totalIncidents: number, lastIncident?: Date | null, alias: string, alertId: string }> }, userContributions: { __typename?: 'ListUserContribution', total: number, userContributions: Array<{ __typename?: 'UserContribution', name: string, totalIncidents: number, totalOffenders: number, totalUpdates: number, totalMessages: number, totalLogins: number }> }, targetedGoods: { __typename?: 'ListTargetedGoods', total: number, targetedGoods: Array<{ __typename?: 'TargetedGood', alertId: string, name: string, totalIncidents: number, totalOffenders: number, totalLostValue: number, totalRecoveredValue: number, totalSuccessRate: number, averageLossValue: number }> }, incidentHeatPerformance: { __typename?: 'ListIncidents', total: number, incidents: Array<{ __typename?: 'Incident', id: string, location?: { __typename?: 'Address', id: string, geoLat?: number | null, geoLng?: number | null } | null }> }, investigationPerformance: { __typename?: 'ListInvestigationPerformance', total: number, investigationPerformance: Array<{ __typename?: 'InvestigationPerformance', id: string, alertId: string, name: string, status: InvestigationStatus, totalIncidents: number, totalOffenders: number, totalValue: number, createdAt: Date }> } };
 
 export type SchemeReportDetailsQueryVariables = Exact<{
   where?: InputMaybe<GroupWhereInput>;
@@ -22384,6 +22413,13 @@ export type ListSchemeTagsQueryVariables = Exact<{
 
 
 export type ListSchemeTagsQuery = { __typename?: 'Query', listTags: { __typename?: 'ListTags', tags: Array<{ __typename?: 'Tag', id: string, name: string, parentTag?: { __typename?: 'Tag', id: string } | null }> } };
+
+export type SchemeSharingQueryVariables = Exact<{
+  where: SchemeWhereUniqueInput;
+}>;
+
+
+export type SchemeSharingQuery = { __typename?: 'Query', scheme: { __typename?: 'Scheme', id: string, connectedToSchemes: Array<{ __typename?: 'Scheme', id: string, name: string }> } };
 
 export type RemoveQuestionFromTagMutationVariables = Exact<{
   where?: InputMaybe<UniqueId>;
@@ -27361,6 +27397,25 @@ export function useViewIncidentLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type ViewIncidentQueryHookResult = ReturnType<typeof useViewIncidentQuery>;
 export type ViewIncidentLazyQueryHookResult = ReturnType<typeof useViewIncidentLazyQuery>;
 export type ViewIncidentQueryResult = Apollo.QueryResult<ViewIncidentQuery, ViewIncidentQueryVariables>;
+export const IndustriesDocument = gql`
+    query Industries {
+  industries {
+    name
+    id
+  }
+}
+    `;
+export function useIndustriesQuery(baseOptions?: Apollo.QueryHookOptions<IndustriesQuery, IndustriesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<IndustriesQuery, IndustriesQueryVariables>(IndustriesDocument, options);
+      }
+export function useIndustriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IndustriesQuery, IndustriesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<IndustriesQuery, IndustriesQueryVariables>(IndustriesDocument, options);
+        }
+export type IndustriesQueryHookResult = ReturnType<typeof useIndustriesQuery>;
+export type IndustriesLazyQueryHookResult = ReturnType<typeof useIndustriesLazyQuery>;
+export type IndustriesQueryResult = Apollo.QueryResult<IndustriesQuery, IndustriesQueryVariables>;
 export const CreateFlowDocument = gql`
     mutation CreateFlow($data: CreateFlowInput!) {
   createFlow(data: $data) {
@@ -30805,6 +30860,11 @@ export const PerformanceReportDocument = gql`
       totalPoliceImages
       totalVerifiedOffenders
     }
+    investigationSummary {
+      closed
+      open
+      opened
+    }
   }
   offendersPerformance(where: $where) {
     total
@@ -30817,6 +30877,8 @@ export const PerformanceReportDocument = gql`
       totalRecoveredValue
       totalSuccessRate
       lastIncidentDate
+      id
+      totalBulletins
     }
   }
   businessContribution(where: $where) {
@@ -30895,6 +30957,7 @@ export const PerformanceReportDocument = gql`
       totalIncidents
       totalOffenders
       totalValue
+      createdAt
     }
   }
 }
@@ -34099,6 +34162,28 @@ export function useListSchemeTagsLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type ListSchemeTagsQueryHookResult = ReturnType<typeof useListSchemeTagsQuery>;
 export type ListSchemeTagsLazyQueryHookResult = ReturnType<typeof useListSchemeTagsLazyQuery>;
 export type ListSchemeTagsQueryResult = Apollo.QueryResult<ListSchemeTagsQuery, ListSchemeTagsQueryVariables>;
+export const SchemeSharingDocument = gql`
+    query SchemeSharing($where: SchemeWhereUniqueInput!) {
+  scheme(where: $where) {
+    id
+    connectedToSchemes {
+      id
+      name
+    }
+  }
+}
+    `;
+export function useSchemeSharingQuery(baseOptions: Apollo.QueryHookOptions<SchemeSharingQuery, SchemeSharingQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SchemeSharingQuery, SchemeSharingQueryVariables>(SchemeSharingDocument, options);
+      }
+export function useSchemeSharingLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SchemeSharingQuery, SchemeSharingQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SchemeSharingQuery, SchemeSharingQueryVariables>(SchemeSharingDocument, options);
+        }
+export type SchemeSharingQueryHookResult = ReturnType<typeof useSchemeSharingQuery>;
+export type SchemeSharingLazyQueryHookResult = ReturnType<typeof useSchemeSharingLazyQuery>;
+export type SchemeSharingQueryResult = Apollo.QueryResult<SchemeSharingQuery, SchemeSharingQueryVariables>;
 export const RemoveQuestionFromTagDocument = gql`
     mutation RemoveQuestionFromTag($where: UniqueId) {
   removeQuestionFromTag(where: $where) {

@@ -23,6 +23,8 @@ import {
   faUserPolice,
   faUserPoliceTie,
   faUsers,
+  faClipboardCheck,
+  faClipboardMedical,
 } from '@fortawesome/pro-light-svg-icons';
 import React, { useMemo } from 'react';
 import type RGL from 'react-grid-layout';
@@ -422,6 +424,80 @@ const PerformanceReportLayout = ({
                 <FontAwesomeIcon
                   className={classes.prefixIcon}
                   icon={faImages}
+                />
+              }
+            />
+          </Row>
+        </Row>
+      </Card>
+    ),
+    investigationSummary: (
+      <Card
+        style={{ width: '100%' }}
+        bodyStyle={{ width: '100%' }}
+        loading={loading}
+        key="investigationSummary"
+      >
+        <Button
+          type="text"
+          shape="circle"
+          className="card-remove no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
+          size="small"
+          onClick={() => removeItem('incidentsSummary')}
+        />
+        <Row>
+          <Col span={12}>
+            <Title level={4}>
+              {intl.formatMessage({
+                defaultMessage: 'Investigation Summary',
+                id: '6uUMrA',
+              })}
+            </Title>
+          </Col>
+          <Row className="stats-row">
+            <Statistic
+              className={classes.stats}
+              title={intl.formatMessage({
+                defaultMessage: 'Currently Open',
+                id: 'KeeTbC',
+              })}
+              value={data?.performanceReport?.investigationSummary.open || 0}
+              prefix={
+                <FontAwesomeIcon
+                  className={classes.prefixIcon}
+                  icon={faClipboard}
+                />
+              }
+            />
+
+            <Statistic
+              className={classes.stats}
+              title={intl.formatMessage({
+                defaultMessage: 'Opened',
+                id: 'ADKsID',
+              })}
+              value={data?.performanceReport?.investigationSummary.opened || 0}
+              prefix={
+                <FontAwesomeIcon
+                  className={classes.prefixIcon}
+                  icon={faClipboardMedical}
+                />
+              }
+            />
+
+            <Statistic
+              className={classes.stats}
+              title={intl.formatMessage({
+                defaultMessage: 'Closed',
+                id: 'Fv1ZSz',
+              })}
+              value={data?.performanceReport?.investigationSummary.closed || 0}
+              prefix={
+                <FontAwesomeIcon
+                  className={classes.prefixIcon}
+                  icon={faClipboardCheck}
                 />
               }
             />

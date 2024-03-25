@@ -60,4 +60,6 @@ export interface Props {
   setSelectedBrands: (brands: string[]) => void;
   selectedBrands: string[];
   brands: SelectOptions[];
+  selectedIndustries: string[];
+  setSelectedIndustries: (brands: string[]) => void;
 }

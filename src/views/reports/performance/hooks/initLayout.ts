@@ -4,7 +4,7 @@ export const PerformanceMetaData: MetaData[] = [
   { key: 'createdSummary', type: 'summary' },
   { key: 'incidentsSummary', type: 'summary' },
   { key: 'policeSummary', type: 'summary' },
-  { key: 'outcomeSummary', type: 'summary' },
+  { key: 'investigationSummary', type: 'summary' },
   { key: 'lossSummary', type: 'summary' },
   { key: 'pageBreak', type: 'pageBreak' },
   { key: 'pageBreak2', type: 'pageBreak' },
@@ -198,16 +198,6 @@ const PerformanceLayout: ExtendedLayout[] = [
     moved: false,
     static: false,
   },
-  {
-    w: 2,
-    h: 15,
-    x: 0,
-    y: 175,
-    i: 'investigationsTable',
-    minH: 4,
-    moved: false,
-    static: false,
-  },
 ];
 
 export const PerformanceDrawerLayout: ExtendedLayout[] = [
@@ -391,6 +381,16 @@ export const PerformanceDrawerLayout: ExtendedLayout[] = [
     x: 0,
     y: 8,
     i: 'investigationsTable',
+    minH: 4,
+    moved: false,
+    static: false,
+  },
+  {
+    w: 2,
+    h: 4,
+    x: 0,
+    y: 8,
+    i: 'investigationSummary',
     minH: 4,
     moved: false,
     static: false,

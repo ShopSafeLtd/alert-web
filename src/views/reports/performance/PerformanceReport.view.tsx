@@ -13,6 +13,7 @@ import 'react-resizable/css/styles.css';
 import type { IntlShape } from 'react-intl';
 import { useIntl } from 'react-intl';
 import GeneratePrintPage from '#/views/reports/GeneratePrintPage';
+import IndustrySelect from '#/components/industry/IndustrySelect';
 import AddLogo from '../../../components/reports/addLogo';
 
 import PerformanceReportLayout from './layout/PerformanceReportLayout';
@@ -37,6 +38,8 @@ type FilterProps = Pick<
   | 'groupsLoading'
   | 'setSelectedBrands'
   | 'brandsLoading'
+  | 'setSelectedIndustries'
+  | 'selectedIndustries'
 > & {
   intl: IntlShape;
 };
@@ -53,6 +56,8 @@ const FilterOptions = ({
   groupsLoading,
   setSelectedBrands,
   brandsLoading,
+  selectedIndustries,
+  setSelectedIndustries,
 }: FilterProps) => (
   <Row
     className="no-print"
@@ -110,6 +115,14 @@ const FilterOptions = ({
           </Select.Option>
         ))}
       </Select>
+    </Col>
+    <Col span={4}>
+      <IndustrySelect
+        value={selectedIndustries}
+        onChange={(value) => {
+          setSelectedIndustries(value || []);
+        }}
+      />
     </Col>
     <Col span={4}>
       <DatePicker.RangePicker
@@ -189,6 +202,8 @@ const PerformanceReport = ({
   setSelectedBrands,
   selectedBrands,
   investigationsData,
+  setSelectedIndustries,
+  selectedIndustries,
 }: Props) => {
   const ReactGridLayout = useMemo(() => WidthProvider(RGL), []);
   const handleMenuClick: MenuProps['onClick'] = (e) => {
@@ -383,6 +398,8 @@ const PerformanceReport = ({
             groupsLoading={groupsLoading}
             setSelectedBrands={setSelectedBrands}
             brandsLoading={brandsLoading}
+            setSelectedIndustries={setSelectedIndustries}
+            selectedIndustries={selectedIndustries}
           />
 
           <div className="print-container">
@@ -472,6 +489,8 @@ const PerformanceReport = ({
                   groupsLoading={groupsLoading}
                   setSelectedBrands={setSelectedBrands}
                   brandsLoading={brandsLoading}
+                  setSelectedIndustries={setSelectedIndustries}
+                  selectedIndustries={selectedIndustries}
                 />
               </>
             }

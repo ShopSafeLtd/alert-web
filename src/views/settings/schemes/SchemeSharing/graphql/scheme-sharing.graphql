@@ -1,0 +1,9 @@
+query SchemeSharing($where: SchemeWhereUniqueInput!) {
+    scheme(where: $where) {
+        id
+        connectedToSchemes {
+            id
+            name
+        }
+    }
+}

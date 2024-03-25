@@ -109,10 +109,10 @@ const OffenderFeed = ({
       label: intl.formatMessage({ defaultMessage: 'Following', id: 'cPIKU2' }),
       value: 'FOLLOWING',
     },
-    {
-      label: intl.formatMessage({ defaultMessage: 'My Data', id: 'dr0ueW' }),
-      value: 'MYDATA',
-    },
+    // {
+    //   label: intl.formatMessage({ defaultMessage: 'My Data', id: 'dr0ueW' }),
+    //   value: 'MYDATA',
+    // },
     {
       label: intl.formatMessage({ defaultMessage: 'Banned', id: 'xerM7K' }),
       value: 'BANNED',
@@ -120,6 +120,13 @@ const OffenderFeed = ({
     {
       label: intl.formatMessage({ defaultMessage: 'Seeking ID', id: '1zVxRE' }),
       value: 'ID',
+    },
+    {
+      label: intl.formatMessage({
+        defaultMessage: 'Verified ID',
+        id: '0lpcfx',
+      }),
+      value: 'VERIFIED_ID',
     },
   ];
   const menu = () => (

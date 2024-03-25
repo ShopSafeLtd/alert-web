@@ -73,7 +73,7 @@ const AddExclusion = ({
           </Form.Item>
         </Col>
       </Row>
-      {[BanType.PrisonSentence].includes(type) && (
+      {[BanType.PrisonSentence, BanType.SuspendedSentence].includes(type) && (
         <Col span={11}>
           <Row gutter={16}>
             <Col span={21}>
@@ -115,6 +115,7 @@ const AddExclusion = ({
         BanType.Pspo,
         BanType.Wip,
         BanType.Other,
+        BanType.CourtData,
       ].includes(type) && (
         <Row gutter={16}>
           {[BanType.Cbo].includes(type) && (
@@ -141,14 +142,22 @@ const AddExclusion = ({
             BanType.Pspo,
             BanType.Wip,
             BanType.Other,
+            BanType.CourtData,
           ].includes(type) && (
             <Col span={11}>
               <Form.Item
                 name="startDate"
-                label={intl.formatMessage({
-                  defaultMessage: 'Start Date',
-                  id: 'QirE3M',
-                })}
+                label={
+                  BanType.CourtData === type
+                    ? intl.formatMessage({
+                        defaultMessage: 'Date',
+                        id: 'P7PLVj',
+                      })
+                    : intl.formatMessage({
+                        defaultMessage: 'Start Date',
+                        id: 'QirE3M',
+                      })
+                }
                 dependencies={['endDate']}
                 rules={[
                   {
@@ -186,26 +195,29 @@ const AddExclusion = ({
             </Col>
           )}
 
-          <Col span={11}>
-            <Form.Item
-              name="endDate"
-              label={intl.formatMessage({
-                defaultMessage: 'End Date',
-                id: 'T4GOiX',
-              })}
-              rules={[
-                {
-                  required: true,
-                  message: intl.formatMessage({
-                    defaultMessage: 'Please select a end date for the outcome.',
-                    id: 'r/aQ+Q',
-                  }),
-                },
-              ]}
-            >
-              <DatePicker disabled={saving} disabledDate={disabledDate} />
-            </Form.Item>
-          </Col>
+          {type !== BanType.CourtData && (
+            <Col span={11}>
+              <Form.Item
+                name="endDate"
+                label={intl.formatMessage({
+                  defaultMessage: 'End Date',
+                  id: 'T4GOiX',
+                })}
+                rules={[
+                  {
+                    required: true,
+                    message: intl.formatMessage({
+                      defaultMessage:
+                        'Please select a end date for the outcome.',
+                      id: 'r/aQ+Q',
+                    }),
+                  },
+                ]}
+              >
+                <DatePicker disabled={saving} disabledDate={disabledDate} />
+              </Form.Item>
+            </Col>
+          )}
         </Row>
       )}
 

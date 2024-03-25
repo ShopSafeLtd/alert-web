@@ -5,6 +5,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import type { InvestigationStatus } from 'graphql/generated';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 
 export interface BusinessTableData {
   fullName: string;
@@ -127,6 +128,8 @@ export interface OffenderTableData {
   lostValue: string;
   recoveredValue: string;
   successRate: string;
+  id: string;
+  totalBulletins: number;
 }
 
 export const OffenderColumns: ColumnsType<OffenderTableData> = [
@@ -136,6 +139,9 @@ export const OffenderColumns: ColumnsType<OffenderTableData> = [
     title: <FormattedMessage id="HAlOn1" defaultMessage="Name" />,
     sorter: (a: OffenderTableData, b: OffenderTableData) =>
       a.fullName.localeCompare(b.fullName),
+    render: (name: string, item: OffenderTableData) => (
+      <Link to={`/app/offenders/view/${item.id}`}>{name}</Link>
+    ),
   },
   {
     key: 'totalIncidents',
@@ -148,12 +154,17 @@ export const OffenderColumns: ColumnsType<OffenderTableData> = [
   {
     key: 'alertId',
     dataIndex: 'alertId',
-    title: 'AlertId',
+    title: 'Alert ID',
   },
   {
     key: 'lastIncident',
     dataIndex: 'lastIncident',
     title: 'Last Incident',
+  },
+  {
+    key: 'totalBulletins',
+    dataIndex: 'totalBulletins',
+    title: 'Bulletins',
   },
   {
     key: 'lostValue',
@@ -476,6 +487,7 @@ export interface InvestigationsTableData {
   totalIncidents: number;
   totalOffenders: number;
   totalValue: number;
+  createdAt: Date;
 }
 
 export const InvestigationsColumns: ColumnsType<InvestigationsTableData> = [
@@ -496,6 +508,12 @@ export const InvestigationsColumns: ColumnsType<InvestigationsTableData> = [
     key: 'status',
     dataIndex: 'status',
     title: <FormattedMessage id="tzMNF3" defaultMessage="Status" />,
+  },
+  {
+    key: 'createdAt',
+    dataIndex: 'createdAt',
+    title: <FormattedMessage id="zQ9i1N" defaultMessage="Date Opened" />,
+    render: (date: string) => moment(date).format('DD/MM/YYYY'),
   },
   {
     key: 'totalIncidents',

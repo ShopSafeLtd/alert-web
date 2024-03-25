@@ -51,6 +51,8 @@ const usePerformanceReport = (): Return => {
     selectedBrands,
     brands,
     setBrands,
+    selectedIndustries,
+    setSelectedIndustries,
   } = useReportState({
     InitLayout: PerformanceLayout,
     InitMetaData: PerformanceMetaData,
@@ -131,10 +133,9 @@ const usePerformanceReport = (): Return => {
           selectedGroups.length > 0
             ? selectedGroups
             : groups.map(({ value }) => value),
-        brandsIds:
-          selectedBrands.length > 0
-            ? selectedBrands
-            : brands.map(({ value }) => value),
+        brandsIds: selectedBrands.length > 0 ? selectedBrands : undefined,
+        industryIds:
+          selectedIndustries.length > 0 ? selectedIndustries : undefined,
       },
     },
   });
@@ -193,6 +194,8 @@ const usePerformanceReport = (): Return => {
       lostValue: offender.totalLostValue.toFixed(2),
       recoveredValue: offender.totalRecoveredValue.toFixed(2),
       successRate: ((offender.totalSuccessRate || 0) * 100).toFixed(2),
+      id: offender.id,
+      totalBulletins: offender.totalBulletins,
     })) || [];
 
   const crimeGroupPerformanceTableData =
@@ -254,6 +257,7 @@ const usePerformanceReport = (): Return => {
         totalOffenders: investigation.totalOffenders,
         status: investigation.status,
         totalValue: investigation.totalValue,
+        createdAt: investigation.createdAt,
       })
     ) || [];
 
@@ -301,6 +305,8 @@ const usePerformanceReport = (): Return => {
     selectedBrands,
     brands,
     investigationsData,
+    selectedIndustries,
+    setSelectedIndustries,
   };
 };
 
