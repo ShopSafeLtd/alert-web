@@ -1,5 +1,6 @@
 import type {
   IncidentsFeedQuery,
+  IncidentsFeedQueryVariables,
   RecycleIncidentMutation,
 } from 'graphql/generated';
 import {
@@ -126,7 +127,7 @@ const useIncidentFeed = (): Return => {
     index: 0,
   });
 
-  const queryVariables = {
+  const queryVariables: IncidentsFeedQueryVariables = {
     schemeId,
     order: {
       date:
@@ -230,65 +231,66 @@ const useIncidentFeed = (): Return => {
             equals: true,
           }
         : undefined,
-      AND: [
-        {
-          OR: [
+      AND: search
+        ? [
             {
-              subject: {
-                contains: search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-            {
-              referenceStr: {
-                contains: search,
-              },
-            },
-            {
-              createdBy: {
-                OR: [
-                  {
-                    fullName: {
-                      contains: search,
-                      mode: QueryMode.Insensitive,
-                    },
-                  },
-
-                  {
-                    businesses: {
-                      some: {
-                        name: {
-                          contains: search,
-                          mode: QueryMode.Insensitive,
-                        },
-                      },
-                    },
-                  },
-                ],
-              },
-            },
-            {
-              offenders: {
-                some: {
-                  name: {
+              OR: [
+                {
+                  subject: {
                     contains: search,
                     mode: QueryMode.Insensitive,
                   },
                 },
-              },
-            },
-          ],
-        },
-        {
-          createdBy: gallery.includes('MYDATA')
-            ? {
-                id: {
-                  equals: userId,
+                {
+                  referenceStr: {
+                    contains: search,
+                  },
                 },
-              }
-            : undefined,
-        },
-      ],
+                {
+                  createdBy: {
+                    OR: [
+                      {
+                        fullName: {
+                          contains: search,
+                          mode: QueryMode.Insensitive,
+                        },
+                      },
+
+                      {
+                        businesses: {
+                          some: {
+                            name: {
+                              contains: search,
+                              mode: QueryMode.Insensitive,
+                            },
+                          },
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  offenders: {
+                    some: {
+                      name: {
+                        contains: search,
+                        mode: QueryMode.Insensitive,
+                      },
+                    },
+                  },
+                },
+              ],
+            },
+          ]
+        : undefined,
+
+      createdBy: gallery.includes('MYDATA')
+        ? {
+            id: {
+              equals: userId,
+            },
+          }
+        : undefined,
     },
     first: compactView ? 48 : 12,
   };
