@@ -1,0 +1,10 @@
+mutation SetSchemeSharing($data: SetSchemeSharingInput!) {
+    setSchemeSharing(data: $data) {
+        id
+        name
+        connectedToSchemes {
+            id
+            name
+        }
+    }
+}

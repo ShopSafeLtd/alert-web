@@ -1,1 +1,1 @@
-export { default } from './SchemeDetail.container';
+export { default } from './SchemeSharing.container';

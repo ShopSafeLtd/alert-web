@@ -54,6 +54,7 @@ import {
   faUsers,
   faUserTag,
   faExclamationCircle,
+  faShareNodes,
 } from '@fortawesome/pro-light-svg-icons';
 import { Link, useNavigate } from 'react-router-dom';
 import IncidentSideList from 'components/incidents/IncidentSideList';
@@ -92,6 +93,7 @@ import LocatingCard from 'components/map/LocatingCard';
 import ImagesList from 'components/ViewPage/ImagesList';
 import IntelSection from 'components/ViewPage/IntelSection';
 import OffenderTile from 'components/form-components/linkOptions/SelectOffenders/OffenderTile';
+import ShareData from '#/components/form-components/ShareData/ShareData';
 import useStyles from './ViewIncident.styles';
 import EvidenceTable from '../../../components/tables/EvidenceTable';
 import formatAnswer from '../../../utils/format-answer';
@@ -234,6 +236,9 @@ interface Props {
   onCompletedEditOffender: () => void;
   updateAddOffenderList: MutationUpdaterFn<CreateSimpleOffenderMutation>;
   onCompletedAddOffender: () => void;
+  hasConnectedSchemes: boolean;
+  shareOpen: boolean;
+  toggleShareOpen: () => void;
 }
 
 const ViewIncident = ({
@@ -344,6 +349,9 @@ const ViewIncident = ({
   onCompletedEditOffender,
   updateAddOffenderList,
   onCompletedAddOffender,
+  hasConnectedSchemes,
+  toggleShareOpen,
+  shareOpen,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const intl = useIntl();
@@ -442,6 +450,21 @@ const ViewIncident = ({
                         </Button>
                       </Tooltip>
                     </Col>
+                    {editRights && hasConnectedSchemes && (
+                      <Col>
+                        <Button onClick={toggleShareOpen}>
+                          <FontAwesomeIcon
+                            size="1x"
+                            style={{ marginRight: 8 }}
+                            icon={faShareNodes}
+                          />
+                          <FormattedMessage
+                            id="OKhRC6"
+                            defaultMessage="Share"
+                          />
+                        </Button>
+                      </Col>
+                    )}
                     {editRights && (
                       <Col>
                         <Dropdown
@@ -2108,6 +2131,21 @@ const ViewIncident = ({
           />
         ) : (
           <div />
+        )}
+      </Drawer>
+
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Share Incident',
+          id: 'zaEkJH',
+        })}
+        bodyStyle={{ padding: 0 }}
+        visible={shareOpen}
+        width={700}
+        onClose={toggleShareOpen}
+      >
+        {shareOpen && (
+          <ShareData incidentId={incidentId} onClose={toggleShareOpen} />
         )}
       </Drawer>
     </div>

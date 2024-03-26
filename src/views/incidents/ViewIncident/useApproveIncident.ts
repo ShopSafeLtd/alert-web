@@ -23,7 +23,6 @@ interface Return {
 const useApproveIncident = ({ incidentId }: Props): Return => {
   const intl = useIntl();
   const navigate = useNavigate();
-
   const [approving, setApproving] = useState(false);
 
   const [updateIncident] = useUpdateIncidentMutation({
