@@ -23,6 +23,8 @@ import {
   faUserPolice,
   faUserPoliceTie,
   faUsers,
+  faClipboardCheck,
+  faClipboardMedical,
 } from '@fortawesome/pro-light-svg-icons';
 import React, { useMemo } from 'react';
 import type RGL from 'react-grid-layout';
@@ -37,6 +39,7 @@ import type {
   BusinessTableData,
   ContributionTableData,
   CrimeGroupPerformanceTableData,
+  InvestigationsTableData,
   OffenderTableData,
   TargetedBusinessTableData,
   TargetedGoodsTableData,
@@ -45,6 +48,7 @@ import {
   BusinessColumns,
   ContributionColumns,
   CrimeGroupPerformanceColumns,
+  InvestigationsColumns,
   OffenderColumns,
   TargetedBusinessColumns,
   TargetGoodsColumns,
@@ -75,6 +79,7 @@ interface Props {
   crimeGroupPerformanceTableData: CrimeGroupPerformanceTableData[] | [];
   targetedBusinessData: TargetedBusinessTableData[] | [];
   targetedGoodsData: TargetedGoodsTableData[] | [];
+  investigationsData: InvestigationsTableData[] | [];
   removeItem: (arg0: string) => void;
   layout: RGL.Layout[];
   margin: [number, number];
@@ -95,6 +100,7 @@ const PerformanceReportLayout = ({
   crimeGroupPerformanceTableData,
   targetedBusinessData,
   targetedGoodsData,
+  investigationsData,
   removeItem,
   changeSize,
   layout,
@@ -421,21 +427,77 @@ const PerformanceReportLayout = ({
                 />
               }
             />
+          </Row>
+        </Row>
+      </Card>
+    ),
+    investigationSummary: (
+      <Card
+        style={{ width: '100%' }}
+        bodyStyle={{ width: '100%' }}
+        loading={loading}
+        key="investigationSummary"
+      >
+        <Button
+          type="text"
+          shape="circle"
+          className="card-remove no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
+          size="small"
+          onClick={() => removeItem('incidentsSummary')}
+        />
+        <Row>
+          <Col span={12}>
+            <Title level={4}>
+              {intl.formatMessage({
+                defaultMessage: 'Investigation Summary',
+                id: '6uUMrA',
+              })}
+            </Title>
+          </Col>
+          <Row className="stats-row">
+            <Statistic
+              className={classes.stats}
+              title={intl.formatMessage({
+                defaultMessage: 'Currently Open',
+                id: 'KeeTbC',
+              })}
+              value={data?.performanceReport?.investigationSummary.open || 0}
+              prefix={
+                <FontAwesomeIcon
+                  className={classes.prefixIcon}
+                  icon={faClipboard}
+                />
+              }
+            />
 
             <Statistic
               className={classes.stats}
               title={intl.formatMessage({
-                defaultMessage: 'Verified IDs',
-                id: '+YBMvu',
+                defaultMessage: 'Opened',
+                id: 'ADKsID',
               })}
-              value={
-                data?.performanceReport?.policeSummary
-                  ?.totalVerifiedOffenders || 0
-              }
+              value={data?.performanceReport?.investigationSummary.opened || 0}
               prefix={
                 <FontAwesomeIcon
                   className={classes.prefixIcon}
-                  icon={faUserPlus}
+                  icon={faClipboardMedical}
+                />
+              }
+            />
+
+            <Statistic
+              className={classes.stats}
+              title={intl.formatMessage({
+                defaultMessage: 'Closed',
+                id: 'Fv1ZSz',
+              })}
+              value={data?.performanceReport?.investigationSummary.closed || 0}
+              prefix={
+                <FontAwesomeIcon
+                  className={classes.prefixIcon}
+                  icon={faClipboardCheck}
                 />
               }
             />
@@ -469,6 +531,23 @@ const PerformanceReportLayout = ({
             </Title>
           </Col>
           <Row className="stats-row">
+            <Statistic
+              className={classes.stats}
+              title={intl.formatMessage({
+                defaultMessage: 'Verified IDs',
+                id: '+YBMvu',
+              })}
+              value={
+                data?.performanceReport?.policeSummary
+                  ?.totalVerifiedOffenders || 0
+              }
+              prefix={
+                <FontAwesomeIcon
+                  className={classes.prefixIcon}
+                  icon={faUserPlus}
+                />
+              }
+            />
             <Statistic
               className={classes.stats}
               title={intl.formatMessage({
@@ -1411,6 +1490,50 @@ const PerformanceReportLayout = ({
           }}
           columns={TargetGoodsColumns}
           dataSource={targetedGoodsData}
+        />
+      </Card>
+    ),
+    investigationsTable: (
+      <Card
+        loading={loading}
+        className="no-break"
+        style={{ height: calculateHeight('investigationsTable') }}
+        bodyStyle={{ overflow: 'auto' }}
+        key="investigationsTable"
+      >
+        <Button
+          type="text"
+          shape="circle"
+          className="card-remove no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
+          size="small"
+          onClick={() => removeItem('investigationsTable')}
+        />
+        <Title level={4}>
+          {intl.formatMessage({
+            defaultMessage: 'Investigations',
+            id: 'juQ8mz',
+          })}
+        </Title>
+        <Table
+          size="small"
+          className="no-break"
+          pagination={{
+            hideOnSinglePage: true,
+            onChange: (_, pageSize) => {
+              changeSize('investigationsTable', pageSize);
+            },
+            total:
+              data?.targetedGoods?.targetedGoods?.filter(
+                (business) => business.totalIncidents > 0
+              ).length || 0,
+            defaultPageSize: 10,
+            showSizeChanger: true,
+            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
+          }}
+          columns={InvestigationsColumns}
+          dataSource={investigationsData}
         />
       </Card>
     ),

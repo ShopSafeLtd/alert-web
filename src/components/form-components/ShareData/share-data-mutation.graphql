@@ -1,0 +1,5 @@
+mutation ShareData($data: ShareDataInput!) {
+    shareData(data: $data) {
+        success
+    }
+}

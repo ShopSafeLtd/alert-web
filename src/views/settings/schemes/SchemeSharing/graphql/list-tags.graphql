@@ -1,0 +1,11 @@
+query ListSchemeTags($listWhere: TagWhereInput!) {
+  listTags(where: $listWhere) {
+    tags {
+      id
+      name
+      parentTag {
+        id
+      }
+    }
+  }
+}

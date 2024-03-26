@@ -45,5 +45,13 @@ const BanTypeValues = [
     value: BanType.RehabilitationOrder,
     label: 'Rehabilitation Order',
   },
+  {
+    value: BanType.CourtData,
+    label: 'Court Date',
+  },
+  {
+    value: BanType.SuspendedSentence,
+    label: 'Suspended Sentence',
+  },
 ];
 export default BanTypeValues;

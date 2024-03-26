@@ -370,6 +370,13 @@ const EditOffender = ({
                     },
                     {
                       label: intl.formatMessage({
+                        defaultMessage: 'by BCRP',
+                        id: 'qo2ORQ',
+                      }),
+                      value: IdSource.Bcrp,
+                    },
+                    {
+                      label: intl.formatMessage({
                         defaultMessage: 'Known Offender',
                         id: 'he2Vcw',
                       }),

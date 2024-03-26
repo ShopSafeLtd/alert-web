@@ -22,7 +22,7 @@ import UserTerms from 'views/settings/terms/UserTerms';
 import SchemeTerms from 'views/settings/terms/SchemeTerms';
 import CreateTermsContainer from 'views/settings/terms/CreateTerms/CreateTerms.container';
 import RecycleBin from 'views/settings/recycled/RecycleBin';
-
+import SchemeSharing from 'views/settings/schemes/SchemeSharing';
 import ListBusinesses from 'views/settings/businesses/ListBusinesses';
 import ViewBusiness from 'views/settings/businesses/ViewBusiness';
 import DiscMenu from 'views/settings/data-import/menu/Menu.view';
@@ -77,6 +77,19 @@ const SchemeSettings = (): JSX.Element => {
                 }}
               >
                 <SchemeDetails />
+              </PermissionCheckWrapper>
+            }
+          />
+          <Route
+            path="scheme-sharing"
+            element={
+              <PermissionCheckWrapper
+                permission={{
+                  model: PermissionModel.Settings,
+                  method: PermissionMethod.Read,
+                }}
+              >
+                <SchemeSharing />
               </PermissionCheckWrapper>
             }
           />

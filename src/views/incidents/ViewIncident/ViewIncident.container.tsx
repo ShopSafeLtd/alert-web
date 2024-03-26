@@ -110,11 +110,15 @@ const ViewIncident = (): JSX.Element => {
     onCompletedEditOffender,
     onCompletedAddOffender,
     updateAddOffenderList,
+    hasConnectedSchemes,
+    toggleShareOpen,
+    shareOpen,
   } = useViewIncident(incidentId);
   const { onApprove, onReject, approving } = useApproveIncident({ incidentId });
 
   return (
     <View
+      hasConnectedSchemes={hasConnectedSchemes}
       languageCount={languageCount}
       isTranslated={isTranslated}
       translateText={translateText}
@@ -222,6 +226,8 @@ const ViewIncident = (): JSX.Element => {
       onCompletedEditOffender={onCompletedEditOffender}
       updateAddOffenderList={updateAddOffenderList}
       onCompletedAddOffender={onCompletedAddOffender}
+      shareOpen={shareOpen}
+      toggleShareOpen={toggleShareOpen}
     />
   );
 };

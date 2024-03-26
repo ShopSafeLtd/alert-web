@@ -158,6 +158,11 @@ const useOffenderFeed = (): Return => {
             mode: QueryMode.Insensitive,
           }
         : undefined,
+      idVerified: gallery.includes('VERIFIED_ID')
+        ? {
+            equals: true,
+          }
+        : undefined,
       peculiarities: peculiarities
         ? {
             mode: QueryMode.Insensitive,

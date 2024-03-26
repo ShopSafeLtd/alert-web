@@ -62,6 +62,10 @@ query currentUser($scheme: UniqueId, $orderBy: [UserSchemeOrderByWithRelationInp
         needJustification
         requireSiteNumberForUsers
         oneSelectedIncidentTypeOnly
+        connectedToSchemes {
+          id
+          name
+        }
       }
       isAdmin
       permissions {

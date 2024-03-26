@@ -26,11 +26,6 @@ const SettingsSideMenu = ({
 
   const settings = [
     {
-      title: intl.formatMessage({ id: 'nwqt7T', defaultMessage: 'Dashboards' }),
-      to: '/app/manage-dashboard/',
-      permissions: [PermissionModel.Settings],
-    },
-    {
       title: intl.formatMessage({ id: 'YDMrKK', defaultMessage: 'Users' }),
       to: '/app/scheme-settings/users',
       permissions: [PermissionModel.Settings, PermissionModel.Users],
@@ -70,6 +65,19 @@ const SettingsSideMenu = ({
         defaultMessage: 'General Settings',
       }),
       to: '/app/scheme-settings/scheme-settings',
+      permissions: [PermissionModel.Settings],
+    },
+    {
+      title: intl.formatMessage({
+        id: '0yyHLp',
+        defaultMessage: 'Sharing Settings',
+      }),
+      to: '/app/scheme-settings/scheme-sharing',
+      permissions: [PermissionModel.Settings],
+    },
+    {
+      title: intl.formatMessage({ id: 'nwqt7T', defaultMessage: 'Dashboards' }),
+      to: '/app/manage-dashboard/',
       permissions: [PermissionModel.Settings],
     },
     {

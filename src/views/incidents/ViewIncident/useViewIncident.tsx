@@ -150,7 +150,6 @@ interface Return {
   onEditVehicle: (value: VehicleData) => void;
   onAddVehicle: (value: VehicleData) => void;
   onAddExistingVehicle: (id: string) => void;
-
   onAddExistingOffender: (id: string) => void;
   onEditGoods: (value: GoodsData) => void;
   onAddGoods: (value: GoodsData) => void;
@@ -194,6 +193,9 @@ interface Return {
   onCompletedEditOffender: () => void;
   updateAddOffenderList: MutationUpdaterFn<CreateSimpleOffenderMutation>;
   onCompletedAddOffender: () => void;
+  hasConnectedSchemes: boolean;
+  shareOpen: boolean;
+  toggleShareOpen: () => void;
 }
 
 const useViewIncident = (incidentId: string): Return => {
@@ -211,6 +213,11 @@ const useViewIncident = (incidentId: string): Return => {
     id: schemeId,
     goodsMode,
   } = useStoreState((state) => state.scheme);
+  const hasConnectedSchemes = useStoreState(
+    (state) => state.scheme.hasConnectedSchemes
+  );
+
+  const [shareOpen, setShareOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [linkOffender, setLinkOffender] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
@@ -1980,6 +1987,10 @@ const useViewIncident = (incidentId: string): Return => {
     );
   };
 
+  const toggleShareOpen = () => {
+    setShareOpen(!shareOpen);
+  };
+
   return {
     addImages,
     addOffenderRights: role !== Role.User,
@@ -2084,6 +2095,9 @@ const useViewIncident = (incidentId: string): Return => {
     onCompletedEditOffender,
     onCompletedAddOffender,
     updateAddOffenderList,
+    hasConnectedSchemes,
+    shareOpen,
+    toggleShareOpen,
   };
 };
 

@@ -123,6 +123,7 @@ const useAuth = (): Return => {
         imagesRequiredOnOffenders: schemeDetails?.imagesRequiredOnOffenders,
         taskTimeTracking: schemeDetails?.taskTimeTracking,
         languageCount: schemeDetails?.languageCount || 0,
+        connectedToSchemes: schemeDetails?.connectedToSchemes || [],
       });
       setFilterDefaultGroup({
         filterDefaultGroups: defaultGroups.filter(
@@ -173,6 +174,7 @@ const useAuth = (): Return => {
             schemeDetails.scheme.imagesRequiredOnOffenders,
           taskTimeTracking: schemeDetails.scheme.taskTimeTracking,
           languageCount: schemeDetails.scheme.languageCount || 0,
+          connectedToSchemes: schemeDetails.scheme.connectedToSchemes || [],
         });
         setFilterDefaultGroup({
           filterDefaultGroups: defaultGroups.filter(
@@ -411,7 +413,6 @@ const useAuth = (): Return => {
       userMessages: data.userMessages,
       defaultGroups: data.defaultGroups,
       reportToAllBusinesses: data.reportToAllBusinesses,
-
       filterDefaultGroups: data.defaultGroups.filter(
         (el) => el.scheme.id === scheme
       ),
@@ -512,7 +513,6 @@ const useAuth = (): Return => {
     window.localStorage.clear();
     window.localStorage.setItem('logo', logo || '');
     window.localStorage.setItem('logo-dark', dLogo || '');
-
     window.sessionStorage.clear();
   };
 
