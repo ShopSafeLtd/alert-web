@@ -191,6 +191,8 @@ const useCrimeGroupReport = (): Return => {
       lostValue: offender.totalLostValue.toFixed(2),
       recoveredValue: offender.totalRecoveredValue.toFixed(2),
       successRate: ((offender.totalSuccessRate || 0) * 100).toFixed(2),
+      totalBulletins: 0,
+      id: '',
     })) || [];
 
   const incidentsTableData =
