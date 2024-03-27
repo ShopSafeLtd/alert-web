@@ -77,6 +77,10 @@ interface Scheme {
   needJustification: boolean;
   requireSiteNumberForUsers: boolean;
   oneSelectedIncidentTypeOnly: boolean;
+  connectedToSchemes: {
+    id: string;
+    name: string;
+  }[];
 }
 interface Return {
   data:
@@ -363,6 +367,7 @@ const useNotificationLists = (): Return => {
       taskTimeTracking: scheme.taskTimeTracking,
       reportOnly: scheme.reportOnly,
       facialDetection: scheme.facialDetection,
+      connectedToSchemes: scheme.connectedToSchemes,
     });
     setFilterDefaultGroup({
       filterDefaultGroups: defaultGroups.filter(

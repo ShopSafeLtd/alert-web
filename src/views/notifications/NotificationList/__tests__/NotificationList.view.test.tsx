@@ -43,6 +43,12 @@ describe('List Officer View', () => {
               goodsMode: GoodsMode.Generic,
               taskTimeTracking: false,
               languageCount: 0,
+              connectedToSchemes: [
+                {
+                  id: '',
+                  name: '',
+                },
+              ],
             },
           ],
         },
