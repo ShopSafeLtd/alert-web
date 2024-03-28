@@ -52,6 +52,9 @@ interface ImageType {
   id: string;
   url?: string | null | undefined;
   optimised?: string | null | undefined;
+  fileName?: string | null;
+  type?: string | null;
+  new?: boolean;
   boundingBox?: {
     height: string;
     left: string;
@@ -184,12 +187,15 @@ const useOffenders = ({ value, onChange, form }: Props): Return => {
         imageConfirmed: imagesRequiredOnOffenders ? !blank : true,
       })
     );
+    console.log('onAddOffenders', formattedOffenders);
 
     setOffenders([...offenders, ...formattedOffenders]);
     setPristine(false);
   };
 
   const onUpdateOffender = (newData: AddOffenderData) => {
+    console.log('onUpdateOffender', newData);
+
     const currentData = offenders.find(({ id }) => id === newData.id);
     if (currentData)
       setOffenders(
@@ -442,9 +448,9 @@ const useOffenders = ({ value, onChange, form }: Props): Return => {
                   high: face.AgeRange.High,
                   low: face.AgeRange.Low,
                 },
-                gender: face.Gender.Value,
-                beard: face.Beard.Value,
-                mustache: face.Beard.Value,
+                gender: face.Gender,
+                beard: face.Beard,
+                mustache: face.Beard,
               })),
               url: info.file.response[0].url,
               id: info.file.uid,

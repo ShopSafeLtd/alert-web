@@ -38,6 +38,7 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
         optimisedPersisted
         position
         rotation
+        isFace
       }
     }
     incidents {

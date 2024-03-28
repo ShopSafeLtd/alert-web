@@ -19,8 +19,8 @@ import { heightValues } from 'types/enums/height';
 import { IdSource } from 'graphql/generated';
 import { useStoreState } from 'state';
 import type { FormData, OffenderData } from './useEditOffender';
-import type { ImageData } from '../../../ImageSelect/ImageSelect.view';
-import ImageSelect from '../../../ImageSelectAnalyse/ImageSelectAnalyse.view';
+import type { ImageData } from '../../../ImageSelect/ImageSelectAnalyse.view';
+import ImageSelectAnalyse from '../../../ImageSelect/ImageSelectAnalyse.view';
 
 interface Props {
   onSubmit: (value: FormData) => void;
@@ -571,11 +571,12 @@ const EditOffender = ({
             },
           ]}
         >
-          <ImageSelect
+          <ImageSelectAnalyse
             images={allImages}
             value={data.images}
             setUploading={setUploading}
             uploading={uploading}
+            form={form}
           />
         </Form.Item>
         <Form.Item>

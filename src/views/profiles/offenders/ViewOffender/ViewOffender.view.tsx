@@ -92,7 +92,6 @@ import type {
   LocationData,
   VehicleData,
 } from 'types/DataType';
-import EditImageList from 'components/images/EditImageList';
 
 import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
 import EditExclusion from 'components/form-components/offender/exclusion/EditExclusion';
@@ -113,6 +112,7 @@ import AddLocation from 'components/form-components/addresses/AddLocation';
 import ImagesList from 'components/ViewPage/ImagesList';
 import KnowOffender from 'components/form-components/offender/KnowOffender';
 import IntelSection from 'components/ViewPage/IntelSection';
+import EditImageAnalyseList from 'components/images/EditImageAnalyseList';
 import useStyles from './ViewOffender.styles';
 import type { ViewAssociate } from './useViewOffender';
 import TranslateButton from '../../../../components/util-components/TranslateButton';
@@ -2637,7 +2637,7 @@ const ViewOffender = ({
         onClose={toggleEditImages}
       >
         {editImages ? (
-          <EditImageList
+          <EditImageAnalyseList
             update={onUpdateImages}
             onClose={toggleEditImages}
             images={data?.offender?.images}

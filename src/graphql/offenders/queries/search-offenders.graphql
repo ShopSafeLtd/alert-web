@@ -16,6 +16,7 @@ query searchOffenders(
       ...Offenders
       images {
         ...Images
+        isFace
       }
       tags {
         id

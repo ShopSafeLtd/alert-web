@@ -147,14 +147,25 @@ const useEditOffender = ({
       id: item.id || '',
       url: item.url,
       optimised: item.optimised,
-      fileName: item.file?.response && item.file.response[0].blobName,
-      type: item.file?.response && item.file.response[0].mimetype,
+      // fileName: ,
+      // type: item.file?.response && item.file.response[0].mimetype,
+      // fileName: item.file
+      //   ? item.file?.response && item.file.response[0].blobName
+      //   : item.fileName,
+      // type: item.file
+      //   ? item.file?.response && item.file.response[0].mimetype
+      //   : item.type,
+      fileName: item.fileName,
+      type: item.type,
       position: item.position,
-      primary: false,
+      primary: item.primary || false,
       policeImage: item.policeImage || false,
       rotation: item.rotation,
-      new: !!item.file,
+      new: !!item.file || item.new,
+      isFace: item.isFace || false,
     }));
+    console.log('updateOffender', imageData);
+
     const existingImageIds = data?.images?.map(({ id }) => id);
     const deleteIds = existingImageIds?.filter(
       (id) => !imageData?.map((el) => el.id).includes(id)
@@ -249,6 +260,7 @@ const useEditOffender = ({
                         primary: item.primary,
                         policeImage: item.policeImage,
                         rotation: item.rotation || 0,
+                        isFace: item.isFace,
                       }))
                       .filter((obj) => obj.url !== undefined),
                   }
@@ -275,6 +287,7 @@ const useEditOffender = ({
               type: image.file?.response && image.file.response[0].mimetype,
               policeImage: false,
               primary: false,
+              isFace: image.isFace || false,
               rotation: 0,
               position: ImagePosition.CenterCenter,
             } as StateImageData)

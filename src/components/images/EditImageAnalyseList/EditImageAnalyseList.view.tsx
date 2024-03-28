@@ -2,7 +2,8 @@ import React from 'react';
 import { Button, Col, Row } from 'antd';
 import type { RcFile, UploadProps } from 'antd/es/upload/interface';
 import { useIntl } from 'react-intl';
-import type { Image } from 'types/DataType';
+import type { Image, ImageFaceType } from 'types/DataType';
+import FacesSelect from '#/components/form-components/FacesSelect/FacesSelect.view';
 import UploadImage from '../UploadImage.view';
 
 interface Props {
@@ -19,9 +20,13 @@ interface Props {
   onRemoveImage: (imageId: string) => void;
   toggleEditImage: (value?: Image) => void;
   title: string;
+  onSelectFace: (value: ImageFaceType) => void;
+  setUploadFaces: (value: ImageFaceType[]) => void;
+  uploadFaces: ImageFaceType[];
+  facialRec: boolean;
 }
 
-const EditImageList = ({
+const EditImageAnalyseList = ({
   onSubmit,
   saving,
   imgChange,
@@ -35,6 +40,10 @@ const EditImageList = ({
   setPrimaryImage,
   onClose,
   title,
+  onSelectFace,
+  setUploadFaces,
+  uploadFaces,
+  facialRec,
 }: Props): JSX.Element => {
   const intl = useIntl();
 
@@ -51,6 +60,7 @@ const EditImageList = ({
         primaryImage={primaryImage}
         setPrimaryImage={setPrimaryImage}
         title={title}
+        facialRec={facialRec}
       />
 
       <Row style={{ marginTop: 30 }} gutter={16} justify="end">
@@ -71,8 +81,14 @@ const EditImageList = ({
           </Button>
         </Col>
       </Row>
+      <FacesSelect
+        submitFace={onSelectFace}
+        onClose={() => setUploadFaces([])}
+        open={!!(uploadFaces && uploadFaces.length > 0)}
+        faces={uploadFaces}
+      />
     </>
   );
 };
 
-export default EditImageList;
+export default EditImageAnalyseList;

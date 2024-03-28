@@ -26,6 +26,7 @@ mutation updateOffender($where: UniqueId!, $data: OffenderUpdateInput!) {
       rotation
       primary
       policeImage
+      isFace
     }
     groups {
       id
