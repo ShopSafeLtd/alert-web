@@ -35,6 +35,7 @@ pipelines:
 
             # Switch to the translations branch
             - git checkout translations
+            - git remote set-url origin "https://x-token-auth:${access_token}@bitbucket.org/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}"
 
             # Merge changes from your current branch into translations
             - git merge $BITBUCKET_BRANCH
