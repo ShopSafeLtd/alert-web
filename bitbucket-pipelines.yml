@@ -29,13 +29,18 @@ pipelines:
             # Configure git to use the oauth token.
             - git remote set-url origin "https://x-token-auth:${access_token}@bitbucket.org/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}"
 
-            - export NEW_VERSION="${BITBUCKET_BUILD_NUMBER}"
-            - jq ".version = \"${NEW_VERSION}\"" package.json > temp.json && mv temp.json package.json
-
             # Make changes and commit back.
             - git add .
             - git commit -m "[skip ci] Updating translations"
-            - git push origin translations --force
+
+            # Switch to the translations branch
+            - git checkout translations
+
+            # Merge changes from your current branch into translations
+            - git merge <your-branch-name>
+
+            # Push changes to translations branch
+            - git push origin translations
     translations:
       - step:
           script:
