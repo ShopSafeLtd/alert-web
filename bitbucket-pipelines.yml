@@ -1,3 +1,6 @@
+image: node:20
+clone:
+  depth: full
 pipelines:
   custom: # Pipelines that can only be triggered manually
     translations:
