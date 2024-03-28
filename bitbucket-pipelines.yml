@@ -4,8 +4,34 @@ pipelines:
       - step:
           script:
             - echo "translations trigger activated!"
-  default:
-    - step:
-        name: Hello world example
-        script:
-          - echo "Hello, World!"
+  branches:
+    dev:
+      - step:
+          caches:
+            - node
+          name: Build and get translations
+          script:
+            - export NODE_OPTIONS=--max-old-space-size=8192
+            - yarn
+            - yarn build
+            - yarn upload-i18n
+            - apt-get update && apt-get install -y curl jq
+            - >
+              export access_token=$(curl -s -X POST -u "${CLIENT_ID}:${CLIENT_SECRET}" \
+              https://bitbucket.org/site/oauth2/access_token \
+              -d grant_type=client_credentials -d scopes="repository"| jq --raw-output '.access_token')
+
+            # Configure git to use the oauth token.
+            - git remote set-url origin "https://x-token-auth:${access_token}@bitbucket.org/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}"
+
+            - export NEW_VERSION="${BITBUCKET_BUILD_NUMBER}"
+            - jq ".version = \"${NEW_VERSION}\"" package.json > temp.json && mv temp.json package.json
+
+            # Make changes and commit back.
+            - git add .
+            - git commit -m "[skip ci] Updating translations"
+            - git push origin translations
+    translations:
+      - step:
+          script:
+            - echo "translations trigger activated!"
