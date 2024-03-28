@@ -16,7 +16,6 @@ pipelines:
           script:
             - export NODE_OPTIONS=--max-old-space-size=8192
             - yarn
-            - yarn build
             - yarn upload-i18n
             - apt-get update && apt-get install -y curl jq
             - >
