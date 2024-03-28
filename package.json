@@ -184,7 +184,7 @@
     "extract": "formatjs extract 'src/**/*.ts*' --ignore='**/*.d.ts' --out-file en/lang.json",
     "compile": "formatjs compile",
     "extract-compile": "formatjs extract 'src/**/*.ts*' --ignore='**/*.d.ts' --out-file temp.json --flatten --id-interpolation-pattern '[sha512:contenthash:base64:6]' && formatjs compile 'temp.json' --out-file ./src/lang/locales/en_US.json && rm temp.json",
-    "upload-i18n": "formatjs extract 'src/**/*.ts*' --ignore='**/*.d.ts' --out-file en/lang.json && simplelocalize upload --apiKey e79c3F36e902c75AD5dDdddc9c4FaCF48804d6fd8Dc25Ba5  --uploadPath en/lang.json --uploadFormat simplelocalize-json --languageKey en_US",
+    "upload-i18n": "formatjs extract 'src/**/*.ts*' --ignore='**/*.d.ts' --out-file en/lang.json && npx simplelocalize upload --apiKey e79c3F36e902c75AD5dDdddc9c4FaCF48804d6fd8Dc25Ba5  --uploadPath en/lang.json --uploadFormat simplelocalize-json --languageKey en_US",
     "download-i18n": "simplelocalize download --apiKey e79c3F36e902c75AD5dDdddc9c4FaCF48804d6fd8Dc25Ba5  --downloadPath ./src/lang/locales/{lang}.json  --downloadFormat single-language-json",
     "e": "npx eslint ."
   },
