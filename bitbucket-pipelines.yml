@@ -35,7 +35,7 @@ pipelines:
             # Make changes and commit back.
             - git add .
             - git commit -m "[skip ci] Updating translations"
-            - git push origin translations
+            - git push origin translations --force
     translations:
       - step:
           script:
