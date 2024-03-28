@@ -17,8 +17,9 @@ pipelines:
             - export NODE_OPTIONS=--max-old-space-size=8192
             - yarn
             - apt-get update && apt-get install -y curl jq
-            - curl -s https://get.simplelocalize.io/2.5/install
-            - yarn upload-i18n
+            - yarn extract-compile
+            - curl -s https://get.simplelocalize.io/2.5/install | bash && simplelocalize upload --apiKey e79c3F36e902c75AD5dDdddc9c4FaCF48804d6fd8Dc25Ba5  --uploadPath en/lang.json --uploadFormat simplelocalize-json --languageKey en_US
+
             - >
               export access_token=$(curl -s -X POST -u "${CLIENT_ID}:${CLIENT_SECRET}" \
               https://bitbucket.org/site/oauth2/access_token \
