@@ -4,3 +4,8 @@ pipelines:
       - step:
           script:
             - echo "translations trigger activated!"
+  default:
+    - step:
+        name: Hello world example
+        script:
+          - echo "Hello, World!"
