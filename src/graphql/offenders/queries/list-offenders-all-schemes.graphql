@@ -42,6 +42,7 @@ query listOffendersAllSchemes(
         rotation
         primary
         policeImage
+        isFace
         optimisedPersisted
       }
     }

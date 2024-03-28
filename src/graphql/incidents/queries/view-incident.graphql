@@ -92,6 +92,7 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
       ...Offenders
       images {
         ...Images
+        isFace
       }
     }
     evidence {

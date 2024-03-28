@@ -30,7 +30,6 @@ const AddLocation = ({
   const intl = useIntl();
 
   // const businesses = useStoreState((state) => state.user.businesses);
-  console.log('location', location);
 
   return (
     <Form

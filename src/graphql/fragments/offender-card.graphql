@@ -28,5 +28,6 @@ fragment OffenderCard on Offender {
     optimised
     primary
     policeImage
+    isFace
   }
 }

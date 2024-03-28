@@ -36,6 +36,7 @@ subscription MessagesSubscription($chat: ID!, $user: ID!) {
       ...Offenders
       images {
         ...SimpleImages
+        isFace
       }
     }
     articles {
