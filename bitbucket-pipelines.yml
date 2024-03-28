@@ -8,7 +8,7 @@ pipelines:
           script:
             - echo "translations trigger activated!"
   branches:
-    dev:
+    master:
       - step:
           caches:
             - node
@@ -32,16 +32,7 @@ pipelines:
             # Make changes and commit back.
             - git add .
             - git commit -m "[skip ci] Updating translations"
-
-            # Switch to the translations branch
-            - git checkout translations
-            - git remote set-url origin "https://x-token-auth:${access_token}@bitbucket.org/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}"
-
-            # Merge changes from your current branch into translations
-            - git merge $BITBUCKET_BRANCH
-
-            # Push changes to translations branch
-            - git push origin translations
+            - git push origin translations --force
     translations:
       - step:
           script:
