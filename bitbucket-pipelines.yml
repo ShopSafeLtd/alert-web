@@ -1,0 +1,6 @@
+pipelines:
+  custom: # Pipelines that can only be triggered manually
+    translations:
+      - step:
+          script:
+            - echo "translations trigger activated!"
