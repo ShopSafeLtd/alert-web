@@ -54,6 +54,7 @@ describe('Detail Officer View', () => {
           id: 'schemeId',
           role: Role.ContentAdmin,
           scheme: {
+            connectedToSchemes: [],
             userTodos: 0,
             logo: null,
             darkLogo: null,

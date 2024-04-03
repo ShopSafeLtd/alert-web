@@ -542,19 +542,20 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                             postcode: offender?.address?.postcode,
                           }
                         : undefined,
-                    images:
-                      offender?.images && offender?.images.length > 0
-                        ? {
-                            create: offender.images.map((image) => ({
-                              url: {
-                                filename: image.fileName || '',
-                                mimetype: image.type || '',
-                                url: image.url || image.optimised || '',
-                                id: image.id || '',
-                              },
-                            })),
-                          }
-                        : undefined,
+                    // TODO don't know which one to use so keeping above, may need to change??
+                    // images:
+                    //   offender?.images && offender?.images.length > 0
+                    //     ? {
+                    //         create: offender.images.map((image) => ({
+                    //           url: {
+                    //             filename: image.fileName || '',
+                    //             mimetype: image.type || '',
+                    //             url: image.url || image.optimised || '',
+                    //             id: image.id || '',
+                    //           },
+                    //         })),
+                    //       }
+                    //     : undefined,
                   }))
                 : undefined,
 

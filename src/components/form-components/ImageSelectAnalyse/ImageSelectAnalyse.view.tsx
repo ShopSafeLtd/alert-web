@@ -118,6 +118,8 @@ const ImageSelectAnalyse = ({
   const facialDetection = useStoreState(
     (state) => state.scheme.facialDetection
   );
+  const facialRec = useStoreState((state) => state.scheme.facialRecognition);
+
   const [localUpload, setLocalUpload] = useState(uploading);
   const [selected, setSelected] = useState<ImageValue[]>([]);
   const [images, setImages] = useState<ImageData[]>([]);
