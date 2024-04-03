@@ -55,6 +55,10 @@ query userNotifications(
           goodsMode
           facialRecognition
           facialDetection
+          connectedToSchemes {
+            id
+            name
+          }
           taskTimeTracking
         }
         title

@@ -125,6 +125,10 @@ export interface Scheme {
     needJustification: boolean;
     requireSiteNumberForUsers: boolean;
     oneSelectedIncidentTypeOnly: boolean;
+    connectedToSchemes: {
+      id: string;
+      name: string;
+    }[];
   };
 }
 

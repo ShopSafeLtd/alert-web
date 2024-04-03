@@ -20,6 +20,7 @@ interface Props {
   onEditImage: (value: Image) => void;
   setPrimaryImage: (value: string) => void;
   title: string;
+  facialRec?: boolean;
 }
 
 const UploadImage = ({
@@ -33,6 +34,7 @@ const UploadImage = ({
   primaryImage,
   setPrimaryImage,
   title,
+  facialRec,
 }: Props): JSX.Element => {
   const intl = useIntl();
 
@@ -57,7 +59,12 @@ const UploadImage = ({
             <Upload
               accept=".png,.jpeg,.webp"
               className="upload-images"
-              customRequest={customRequest}
+              action={
+                facialRec
+                  ? import.meta.env.VITE_APP_IMAGE_ANALYSE_UPLOAD_ENDPOINT_GO
+                  : undefined
+              }
+              customRequest={facialRec ? undefined : customRequest}
               listType="picture-card"
               fileList={fileList}
               onChange={imgChange}

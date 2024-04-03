@@ -49,6 +49,7 @@ import {
   faPassport,
   faPenToSquare,
   faPlus,
+  faShareNodes,
   faSirenOn,
   faTrash,
   faUser,
@@ -84,7 +85,7 @@ import { calcDuration } from 'utils';
 import LightBox from 'components/images/LightBox/LightBox.container';
 import OffenderMatches from 'components/rekognition/OffenderMatches/OffenderMatches.container';
 import FormatCalendar from 'utils/format-calendar-24h';
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import type {
   BanData,
   EditFeedImage,
@@ -92,7 +93,6 @@ import type {
   LocationData,
   VehicleData,
 } from 'types/DataType';
-import EditImageList from 'components/images/EditImageList';
 
 import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
 import EditExclusion from 'components/form-components/offender/exclusion/EditExclusion';
@@ -113,6 +113,8 @@ import AddLocation from 'components/form-components/addresses/AddLocation';
 import ImagesList from 'components/ViewPage/ImagesList';
 import KnowOffender from 'components/form-components/offender/KnowOffender';
 import IntelSection from 'components/ViewPage/IntelSection';
+import EditImageAnalyseList from 'components/images/EditImageAnalyseList';
+import ShareData from '#/components/form-components/ShareData/ShareData';
 import useStyles from './ViewOffender.styles';
 import type { ViewAssociate } from './useViewOffender';
 import TranslateButton from '../../../../components/util-components/TranslateButton';
@@ -248,6 +250,9 @@ interface Props {
   onAddUpdateImagesToIncident: (id: string) => void;
   selectedIncidentId: string;
   onSelect: (item: { key: string }) => void;
+  hasConnectedSchemes: boolean;
+  shareOpen: boolean;
+  toggleShareOpen: () => void;
 }
 
 const ViewOffender = ({
@@ -348,6 +353,9 @@ const ViewOffender = ({
   onAddUpdateImagesToIncident,
   selectedIncidentId,
   onSelect,
+  hasConnectedSchemes,
+  toggleShareOpen,
+  shareOpen,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const classes = useStyles();
@@ -472,6 +480,21 @@ const ViewOffender = ({
                         </Button>
                       </Tooltip>
                     </Col>
+                    {editRights && hasConnectedSchemes && (
+                      <Col>
+                        <Button onClick={toggleShareOpen}>
+                          <FontAwesomeIcon
+                            size="1x"
+                            style={{ marginRight: 8 }}
+                            icon={faShareNodes}
+                          />
+                          <FormattedMessage
+                            id="OKhRC6"
+                            defaultMessage="Share"
+                          />
+                        </Button>
+                      </Col>
+                    )}
                     {editRights && (
                       <Col>
                         <Dropdown
@@ -2637,7 +2660,7 @@ const ViewOffender = ({
         onClose={toggleEditImages}
       >
         {editImages ? (
-          <EditImageList
+          <EditImageAnalyseList
             update={onUpdateImages}
             onClose={toggleEditImages}
             images={data?.offender?.images}
@@ -2875,6 +2898,21 @@ const ViewOffender = ({
           />
         ) : (
           <div />
+        )}
+      </Drawer>
+
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Share Incident',
+          id: 'zaEkJH',
+        })}
+        bodyStyle={{ padding: 0 }}
+        visible={shareOpen}
+        width={700}
+        onClose={toggleShareOpen}
+      >
+        {shareOpen && (
+          <ShareData offenderId={offenderId} onClose={toggleShareOpen} />
         )}
       </Drawer>
     </div>

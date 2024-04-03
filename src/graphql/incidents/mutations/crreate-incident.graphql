@@ -50,6 +50,7 @@ mutation createIncident($data: CreateIncidentData!) {
       ...Offenders
       images {
         ...Images
+        isFace
       }
       tags {
         id

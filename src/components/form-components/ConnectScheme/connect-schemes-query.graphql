@@ -1,0 +1,6 @@
+query ConnectSchemes($where: SchemeWhereInput) {
+    schemes(where: $where) {
+        id
+        name
+    }
+}

@@ -42,6 +42,7 @@ mutation createMessage($data: MessageCreateInput!) {
       ...Offenders
       images {
         ...SimpleImages
+        isFace
       }
     }
     articles {

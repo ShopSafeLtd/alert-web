@@ -72,6 +72,10 @@ interface Scheme {
   taskTimeTracking: boolean;
   restrictIncidentAccess: boolean;
   reportOnly: boolean;
+  connectedToSchemes: {
+    id: string;
+    name: string;
+  }[];
 }
 interface Return {
   data:
@@ -348,6 +352,7 @@ const useNotificationLists = (): Return => {
       imagesRequiredOnOffenders: scheme.imagesRequiredOnOffenders,
       taskTimeTracking: scheme.taskTimeTracking,
       facialDetection: scheme.facialDetection,
+      connectedToSchemes: scheme.connectedToSchemes,
     });
     setFilterDefaultGroup({
       filterDefaultGroups: defaultGroups.filter(

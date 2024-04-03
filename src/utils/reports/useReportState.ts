@@ -68,6 +68,8 @@ interface Return {
   setLogos: (logos: string[]) => void;
   selectedBrands: string[];
   setSelectedBrands: (value: string[]) => void;
+  selectedIndustries: string[];
+  setSelectedIndustries: (value: string[]) => void;
 }
 
 const useReportState = ({
@@ -146,6 +148,7 @@ const useReportState = ({
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
   const [brands, setBrands] = useState<SelectOptions[]>([]);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  const [selectedIndustries, setSelectedIndustries] = useState<string[]>([]);
   const [dateRange, setDateRangeState] = useState<{
     startDate: Date;
     endDate: Date;
@@ -641,6 +644,8 @@ const useReportState = ({
     setSelectedBrands,
     brands,
     setBrands,
+    selectedIndustries,
+    setSelectedIndustries,
   };
 };
 

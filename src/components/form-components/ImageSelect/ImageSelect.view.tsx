@@ -76,6 +76,7 @@ export interface ImageValue {
   fileName?: string | null;
   type?: string | null;
   new?: boolean;
+  isFace?: boolean | null;
   position?: ImagePosition;
   primary?: boolean | null | undefined;
   policeImage?: boolean | null | undefined;
@@ -110,7 +111,6 @@ const ImageSelect = ({
   const [selected, setSelected] = useState<ImageValue[]>([]);
   const [images, setImages] = useState<ImageData[]>([]);
 
-  // console.log(imagesProp, 'value', onChange);
   useEffect(() => {
     if (value) setSelected(value);
   }, []);
@@ -150,7 +150,6 @@ const ImageSelect = ({
       info.file.response &&
       info.file.response[0]
     ) {
-      console.log('setImage');
       setImages([
         ...images,
         {

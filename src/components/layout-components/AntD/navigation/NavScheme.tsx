@@ -98,6 +98,7 @@ export const NavScheme = () => {
       restrictIncidentAccess: scheme.scheme.restrictIncidentAccess,
       reportOnly: scheme.scheme.reportOnly,
       facialDetection: scheme.scheme.facialDetection,
+      connectedToSchemes: scheme.scheme.connectedToSchemes,
     });
     setFilterDefaultGroup({
       filterDefaultGroups: defaultGroups.filter(

@@ -103,6 +103,9 @@ const ViewOffender = (): JSX.Element => {
     onAddUpdateImagesToIncident,
     selectedIncidentId,
     onSelect,
+    hasConnectedSchemes,
+    shareOpen,
+    toggleShareOpen,
   } = useViewOffender(offenderId);
   const { onApprove, onReject, approving } = useApproveOffender({ offenderId });
   return (
@@ -204,6 +207,9 @@ const ViewOffender = (): JSX.Element => {
       onAddUpdateImagesToIncident={onAddUpdateImagesToIncident}
       selectedIncidentId={selectedIncidentId}
       onSelect={onSelect}
+      hasConnectedSchemes={hasConnectedSchemes}
+      shareOpen={shareOpen}
+      toggleShareOpen={toggleShareOpen}
     />
   );
 };

@@ -171,13 +171,13 @@ const IncidentFeed = ({
                   }),
                   value: 'FOLLOWING',
                 },
-                {
-                  label: intl.formatMessage({
-                    defaultMessage: 'My Data',
-                    id: 'dr0ueW',
-                  }),
-                  value: 'MYDATA',
-                },
+                // {
+                //   label: intl.formatMessage({
+                //     defaultMessage: 'My Data',
+                //     id: 'dr0ueW',
+                //   }),
+                //   value: 'MYDATA',
+                // },
                 {
                   label: intl.formatMessage({
                     defaultMessage: 'Not Approved',

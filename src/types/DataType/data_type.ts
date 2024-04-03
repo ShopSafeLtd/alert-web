@@ -188,6 +188,7 @@ export interface ImageCardData {
   deleted?: boolean;
   position?: ImagePosition;
   primary?: boolean | null | undefined;
+  isFace?: boolean | null | undefined;
   policeImage?: boolean | null | undefined;
   rotation?: number;
   offenders?: {
@@ -205,6 +206,23 @@ export interface Image extends UploadFile {
   edited?: boolean;
   new?: boolean;
   deleted?: boolean;
+  isFace?: boolean;
+}
+export interface ImageFaceType {
+  imageURL: string;
+  Gender: 'Male' | 'Female';
+  AgeRange: {
+    High: number;
+    Low: number;
+  };
+  Beard: boolean;
+  Mustache: boolean;
+  BoundingBox: {
+    Height: string;
+    Left: string;
+    Top: string;
+    Width: string;
+  };
 }
 export interface EditFeedImage {
   id: string;

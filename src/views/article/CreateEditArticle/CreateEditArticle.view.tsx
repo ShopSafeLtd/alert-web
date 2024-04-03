@@ -37,10 +37,8 @@ const CreateEditArticleView = ({
   // previewImage,
   // imgSrcs,
   groups,
-  groupsLoading,
   onGroupsChange,
   categories,
-  categoriesLoading,
   categoriesChange,
   filePickerCallback,
   form,
@@ -154,6 +152,7 @@ const CreateEditArticleView = ({
         <Card style={{ marginLeft: 20, marginRight: 20, minHeight: 600 }}>
           <Form<FormData>
             form={form}
+            layout="vertical"
             initialValues={
               data || {
                 title: '',

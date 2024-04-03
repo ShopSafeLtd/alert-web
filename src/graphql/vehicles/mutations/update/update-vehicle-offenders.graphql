@@ -12,6 +12,7 @@ mutation updateVehicleOffenders($where: UniqueId!, $data: VehicleUpdateInput!) {
         rotation
         primary
         policeImage
+        isFace
         offenders {
           id
           name

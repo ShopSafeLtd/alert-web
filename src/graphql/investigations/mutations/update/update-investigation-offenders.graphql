@@ -15,6 +15,7 @@ mutation UpdateInvestigationOffenders(
       ...Offenders
       images {
         ...Images
+        isFace
       }
     }
   }

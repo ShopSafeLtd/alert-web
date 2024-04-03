@@ -26,6 +26,7 @@ mutation copyOffender($where: UniqueId!, $data: CreateOffenderData!) {
       rotation
       primary
       policeImage
+      isFace
     }
     groups {
       id

@@ -41,32 +41,27 @@ export const getPeculiaritiesFromFace = (beard: boolean, mustache: boolean) => {
   return undefined;
 };
 
+export interface ImageFaceType {
+  imageURL: string;
+  Gender: 'Male' | 'Female';
+  AgeRange: {
+    High: number;
+    Low: number;
+  };
+  Beard: boolean;
+  Mustache: boolean;
+  BoundingBox: {
+    Height: string;
+    Left: string;
+    Top: string;
+    Width: string;
+  };
+}
 export interface ImageResponseType {
   url?: string;
   blobName?: string;
   mimetype?: string;
-  faces?: {
-    imageURL: string;
-    Gender: {
-      Value: 'Male' | 'Female';
-    };
-    AgeRange: {
-      High: number;
-      Low: number;
-    };
-    Beard: {
-      Value: boolean;
-    };
-    Mustache: {
-      Value: boolean;
-    };
-    BoundingBox: {
-      Height: string;
-      Left: string;
-      Top: string;
-      Width: string;
-    };
-  }[];
+  faces?: ImageFaceType[];
 }
 
 export interface StateImageData extends UploadFile<ImageResponseType[]> {
@@ -74,6 +69,7 @@ export interface StateImageData extends UploadFile<ImageResponseType[]> {
   primary?: boolean;
   policeImage?: boolean;
   rotation?: number;
+  isFace?: boolean;
 }
 
 interface Props {
@@ -110,7 +106,9 @@ const useImageSection = ({ incidentForm, form, onChange }: Props): Return => {
   }, [formImages]);
 
   useEffect(() => {
-    if (onChange && formImages?.length !== images.length) onChange(images);
+    if (onChange && formImages?.length !== images.length) {
+      onChange(images);
+    }
   }, [images]);
 
   useEffect(() => {
@@ -124,7 +122,6 @@ const useImageSection = ({ incidentForm, form, onChange }: Props): Return => {
     newFileList = newFileList.map((file) => {
       if (file.response && file.response[0]) {
         const image = file.response[0];
-
         file.url = image.url;
         file.fileName = image.blobName;
         file.type = image.mimetype;
@@ -142,6 +139,7 @@ const useImageSection = ({ incidentForm, form, onChange }: Props): Return => {
 
     if (info.file.response) {
       const image = info.file.response[0];
+
       if (
         image &&
         facialDetection &&
@@ -163,14 +161,14 @@ const useImageSection = ({ incidentForm, form, onChange }: Props): Return => {
               id: Math.floor(Math.random() * 1000).toString(),
               name: 'Unidentified Offender',
               confirmedInIncident: false,
-              gender: getGenderFromFace(face.Gender.Value),
+              gender: getGenderFromFace(face.Gender),
               age: getClosestAgeRange(face.AgeRange.High, face.AgeRange.Low),
               race: Race.Unknown,
               height: Height.Unknown,
               build: Build.Unknown,
               peculiarities: getPeculiaritiesFromFace(
-                face.Beard.Value,
-                face.Mustache.Value
+                face.Beard,
+                face.Mustache
               ),
               images: [
                 {

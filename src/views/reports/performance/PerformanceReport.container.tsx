@@ -46,6 +46,9 @@ const PerformanceReport = (): JSX.Element => {
     brands,
     selectedBrands,
     setSelectedBrands,
+    investigationsData,
+    setSelectedIndustries,
+    selectedIndustries,
   } = usePerformanceReport();
   return (
     <View
@@ -91,6 +94,9 @@ const PerformanceReport = (): JSX.Element => {
       brands={brands}
       selectedBrands={selectedBrands}
       setSelectedBrands={setSelectedBrands}
+      investigationsData={investigationsData}
+      setSelectedIndustries={setSelectedIndustries}
+      selectedIndustries={selectedIndustries}
     />
   );
 };

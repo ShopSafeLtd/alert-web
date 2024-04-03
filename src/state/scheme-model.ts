@@ -32,6 +32,10 @@ export interface SetSchemePayload {
   needJustification: boolean;
   requireSiteNumberForUsers: boolean;
   oneSelectedIncidentTypeOnly: boolean;
+  connectedToSchemes: {
+    id: string;
+    name: string;
+  }[];
 }
 
 export interface SchemeModel {
@@ -59,6 +63,11 @@ export interface SchemeModel {
   needJustification: boolean;
   requireSiteNumberForUsers: boolean;
   oneSelectedIncidentTypeOnly: boolean;
+  connectedToSchemes: {
+    id: string;
+    name: string;
+  }[];
+  hasConnectedSchemes: boolean;
 }
 
 const userModel: SchemeModel = {
@@ -84,6 +93,8 @@ const userModel: SchemeModel = {
   needJustification: false,
   requireSiteNumberForUsers: false,
   oneSelectedIncidentTypeOnly: false,
+  connectedToSchemes: [],
+  hasConnectedSchemes: false,
   setScheme: action((state, payload) => {
     state.id = payload.id;
     state.autoApproveIncidents = payload.autoApproveIncidents;
@@ -107,6 +118,9 @@ const userModel: SchemeModel = {
     state.requireSiteNumberForUsers = payload.requireSiteNumberForUsers;
     state.oneSelectedIncidentTypeOnly = payload.oneSelectedIncidentTypeOnly;
     state.facialDetection = payload.facialDetection;
+    state.connectedToSchemes = payload.connectedToSchemes;
+    state.hasConnectedSchemes =
+      payload.connectedToSchemes && payload.connectedToSchemes.length > 0;
   }),
   clearScheme: action((state) => {
     state.id = '';
@@ -131,6 +145,8 @@ const userModel: SchemeModel = {
     state.requireSiteNumberForUsers = false;
     state.oneSelectedIncidentTypeOnly = false;
     state.facialDetection = false;
+    state.connectedToSchemes = [];
+    state.hasConnectedSchemes = false;
   }),
 };
 

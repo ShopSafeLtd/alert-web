@@ -4,7 +4,7 @@ export const PerformanceMetaData: MetaData[] = [
   { key: 'createdSummary', type: 'summary' },
   { key: 'incidentsSummary', type: 'summary' },
   { key: 'policeSummary', type: 'summary' },
-  { key: 'outcomeSummary', type: 'summary' },
+  { key: 'investigationSummary', type: 'summary' },
   { key: 'lossSummary', type: 'summary' },
   { key: 'pageBreak', type: 'pageBreak' },
   { key: 'pageBreak2', type: 'pageBreak' },
@@ -20,6 +20,7 @@ export const PerformanceMetaData: MetaData[] = [
   { key: 'crimeGroupTable', type: 'table' },
   { key: 'targetedBusinessTable', type: 'table' },
   { key: 'targetedGoodsTable', type: 'table' },
+  { key: 'investigationsTable', type: 'table' },
 ];
 
 const PerformanceLayout: ExtendedLayout[] = [
@@ -370,6 +371,26 @@ export const PerformanceDrawerLayout: ExtendedLayout[] = [
     x: 0,
     y: 8,
     i: 'outcomeSummary',
+    minH: 4,
+    moved: false,
+    static: false,
+  },
+  {
+    w: 2,
+    h: 4,
+    x: 0,
+    y: 8,
+    i: 'investigationsTable',
+    minH: 4,
+    moved: false,
+    static: false,
+  },
+  {
+    w: 2,
+    h: 4,
+    x: 0,
+    y: 8,
+    i: 'investigationSummary',
     minH: 4,
     moved: false,
     static: false,

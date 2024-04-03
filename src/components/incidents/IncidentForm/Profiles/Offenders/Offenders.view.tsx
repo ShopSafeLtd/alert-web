@@ -8,7 +8,7 @@ import useOffenders from './useOffenders';
 import CountButton from '../../../../form-components/count-buttons/CountButton.view';
 import CounterButton from '../../../../form-components/count-buttons/CounterButton.view';
 import OffenderProfile from './OffenderProfile.view';
-import AddOffender from '../../../../form-components/offender/offender/AddNewOffenderSimple/AddNewOffender.container';
+import AddOffender from '../../../../form-components/offender/offender/AddNewOffenderSimple';
 import AddExistingOffender from '../../../../form-components/offender/offender/AddExistingOffender';
 import EditOffender from '../../../../form-components/offender/offender/AddIncidentEditOffender';
 import type { FormData } from '../../../../../views/incidents/AddIncident/useAddIncident';

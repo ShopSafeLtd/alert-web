@@ -1,0 +1,6 @@
+query Industries {
+    industries {
+        name
+        id
+    }
+}
