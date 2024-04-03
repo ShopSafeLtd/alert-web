@@ -150,13 +150,16 @@ const useEditOffender = ({
       id: item.id || '',
       url: item.url,
       optimised: item.optimised,
-      fileName: item.file?.response && item.file.response[0].blobName,
-      type: item.file?.response && item.file.response[0].mimetype,
+      // fileName: item.file?.response && item.file.response[0].blobName,
+      // type: item.file?.response && item.file.response[0].mimetype,
+      fileName: item.fileName,
+      type: item.type,
       position: item.position,
-      primary: false,
+      primary: item.primary || false,
       policeImage: item.policeImage || false,
       rotation: item.rotation,
-      new: !!item.file,
+      new: !!item.file || item.new,
+      isFace: item.isFace || false,
     }));
     const existingImageIds = data?.images?.map(({ id }) => id);
     const deleteIds = existingImageIds?.filter(
@@ -252,6 +255,7 @@ const useEditOffender = ({
                         primary: item.primary,
                         policeImage: item.policeImage,
                         rotation: item.rotation || 0,
+                        isFace: item.isFace,
                       }))
                       .filter((obj) => obj.url !== undefined),
                   }

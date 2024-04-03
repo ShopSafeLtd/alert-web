@@ -125,6 +125,21 @@ const useAddNewOffender = ({
   });
   const onSubmit = (data: FormData) => {
     setSaving(true);
+    const imageData = data.images.map((item) => ({
+      id: item.id || '',
+      url: item.url,
+      optimised: item.optimised,
+      // fileName: item.file?.response && item.file.response[0].blobName,
+      // type: item.file?.response && item.file.response[0].mimetype,
+      fileName: item.fileName,
+      type: item.type,
+      position: item.position,
+      primary: item.primary || false,
+      policeImage: item.policeImage || false,
+      rotation: item.rotation,
+      new: !!item.file || item.new,
+      isFace: item.isFace || false,
+    }));
     if (onAddOffender) {
       onAddOffender({
         id: Math.floor(Math.random() * 1000).toString(),
@@ -145,17 +160,7 @@ const useAddNewOffender = ({
         dateOfBirth: ageCheck ? data.dateOfBirth || null : null,
         idVerified: data.idVerified,
         idSource: data.idSource,
-        images: data.images.map((item) => ({
-          id: item.id || `${Math.random()}`,
-          fileName: item.file?.response && item.file.response[0].blobName,
-          type: item.file?.response && item.file.response[0].mimetype,
-          url: item.url || '',
-          position: item.position,
-          primary: false,
-          policeImage: item.policeImage || false,
-          rotation: item.rotation,
-          new: !!item.file,
-        })),
+        images: imageData,
         address:
           data.street && data.townCity && data.postcode
             ? {
@@ -214,29 +219,24 @@ const useAddNewOffender = ({
             image:
               data.images && data.images.length > 0
                 ? {
-                    connect: data.images
-                      ?.filter((image) => !image.file)
+                    connect: imageData
+                      ?.filter((image) => !image.new)
                       .map((image) => ({
                         id: image.id,
                       })),
-                    upload: data.images
-                      ?.filter((image) => !!image.file)
+                    upload: imageData
+                      ?.filter((image) => image.new)
                       .map((item) => ({
                         url: {
-                          filename:
-                            (item.file?.response &&
-                              item.file.response[0].blobName) ||
-                            '',
-                          mimetype:
-                            (item.file?.response &&
-                              item.file.response[0].mimetype) ||
-                            '',
+                          filename: item.fileName || '',
+                          mimetype: item.type || '',
                           url: item.url || '',
                         },
                         position: item.position,
-                        primary: false,
-                        policeImage: item.policeImage || false,
+                        primary: item.primary,
+                        policeImage: item.policeImage,
                         rotation: item.rotation || 0,
+                        isFace: item.isFace,
                       }))
                       .filter((obj) => obj.url !== undefined),
                   }
@@ -259,6 +259,7 @@ const useAddNewOffender = ({
               type: image.file?.response && image.file.response[0].mimetype,
               policeImage: false,
               primary: false,
+              isFace: image.isFace || false,
               rotation: 0,
               position: ImagePosition.CenterCenter,
             } as StateImageData)

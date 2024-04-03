@@ -191,6 +191,9 @@ interface Return {
   onAddUpdateImagesToIncident: (id: string) => void;
   selectedIncidentId: string;
   onSelect: (item: { key: string }) => void;
+  hasConnectedSchemes: boolean;
+  shareOpen: boolean;
+  toggleShareOpen: () => void;
 }
 
 const useViewOffender = (offenderId: string): Return => {
@@ -200,9 +203,14 @@ const useViewOffender = (offenderId: string): Return => {
   const { id: schemeId, defaultPublicOffenderDOB } = useStoreState(
     (state) => state.scheme
   );
+  const hasConnectedSchemes = useStoreState(
+    (state) => state.scheme.hasConnectedSchemes
+  );
 
   const { role, id: userId, groups } = useStoreState((state) => state.user);
   const intl = useIntl();
+
+  const [shareOpen, setShareOpen] = useState(false);
   const [saving, setSaving] = useState(false);
 
   const [viewMatches, toggleViewMatches] = useState<string | null>(null);
@@ -1860,6 +1868,10 @@ const useViewOffender = (offenderId: string): Return => {
     );
   };
 
+  const toggleShareOpen = () => {
+    setShareOpen(!shareOpen);
+  };
+
   return {
     data,
     loading: data?.offender ? false : loading,
@@ -1963,6 +1975,9 @@ const useViewOffender = (offenderId: string): Return => {
     onAddUpdateImagesToIncident,
     selectedIncidentId,
     onSelect,
+    hasConnectedSchemes,
+    toggleShareOpen,
+    shareOpen,
   };
 };
 

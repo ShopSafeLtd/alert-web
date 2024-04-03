@@ -32,6 +32,7 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
       ...Offenders
       images {
         ...Images
+        isFace
       }
     }
     incidents {

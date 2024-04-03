@@ -52,6 +52,7 @@ const EditImageList = ({
         setPrimaryImage={setPrimaryImage}
         title={title}
       />
+
       <Row style={{ marginTop: 30 }} gutter={16} justify="end">
         <Col>
           <Button disabled={saving} onClick={onClose}>

@@ -21,8 +21,8 @@ import { IdSource } from 'graphql/generated';
 import { FormattedMessage, useIntl } from 'react-intl';
 import useStyles from './AddNewOffender.style';
 import type { FormData } from './useAddNewOffender';
-import type { ImageData } from '../../../ImageSelect/ImageSelect.view';
-import ImageSelect from '../../../ImageSelect/ImageSelect.view';
+import type { ImageData } from '../../../ImageSelect/ImageSelectAnalyse.view';
+import ImageSelectAnalyse from '../../../ImageSelect/ImageSelectAnalyse.view';
 import { useStoreState } from '../../../../../state';
 
 const { Title } = Typography;
@@ -480,10 +480,11 @@ const AddNewOffender = ({
           },
         ]}
       >
-        <ImageSelect
+        <ImageSelectAnalyse
           setUploading={setUploading}
           uploading={uploading}
           images={images}
+          form={form}
         />
       </Form.Item>
 

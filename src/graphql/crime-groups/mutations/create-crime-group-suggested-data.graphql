@@ -19,6 +19,7 @@ mutation CreateCrimeGroupSuggestedData($data: CreateCrimeGroupDataInput!) {
         optimised
         position
         rotation
+        isFace
       }
     }
   }

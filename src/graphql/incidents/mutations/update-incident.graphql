@@ -47,6 +47,7 @@ mutation updateIncident($where: UniqueId!, $data: IncidentUpdateInput!) {
       ...Offenders
       images {
         ...SimpleImages
+        isFace
       }
       tags {
         id

@@ -47,6 +47,7 @@ query listOffendersSelect(
         rotation
         primary
         policeImage
+        isFace
       }
       groups {
         id

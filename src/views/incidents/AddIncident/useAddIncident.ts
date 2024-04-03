@@ -454,7 +454,6 @@ const useAddIncident = ({ investigationId }: Props): Return => {
         placement: 'bottomRight',
       });
     },
-
     update: investigationId ? updateInvestigation : updateIncident,
   });
 
@@ -468,6 +467,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
+    console.log('addIncindent', data.offenders);
 
     const allOffendersConfirmed = !data.offenders
       ?.map((offender) => offender.confirmedInIncident)
@@ -542,6 +542,19 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                             postcode: offender?.address?.postcode,
                           }
                         : undefined,
+                    images:
+                      offender?.images && offender?.images.length > 0
+                        ? {
+                            create: offender.images.map((image) => ({
+                              url: {
+                                filename: image.fileName || '',
+                                mimetype: image.type || '',
+                                url: image.url || image.optimised || '',
+                                id: image.id || '',
+                              },
+                            })),
+                          }
+                        : undefined,
                   }))
                 : undefined,
 
@@ -571,6 +584,19 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                 infoSource: { set: offender.infoSource || '' },
                 knownFor: offender.knownFor,
                 targetedGoods: offender.targetedGoods,
+                images:
+                  offender?.images && offender?.images.length > 0
+                    ? {
+                        create: offender.images.map((image) => ({
+                          url: {
+                            filename: image.fileName || '',
+                            mimetype: image.type || '',
+                            url: image.url || image.optimised || '',
+                            id: image.id,
+                          },
+                        })),
+                      }
+                    : undefined,
               },
               where: { id: offender.id },
             })),
@@ -779,7 +805,6 @@ const useAddIncident = ({ investigationId }: Props): Return => {
             policeResponse: data.policeResponse,
             scheme: schemeId,
             subject: data.subject,
-
             time: data.date,
             vehicles: getVehicles(),
           },

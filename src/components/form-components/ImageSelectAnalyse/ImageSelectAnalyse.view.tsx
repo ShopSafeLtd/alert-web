@@ -11,9 +11,14 @@ import { useIntl } from 'react-intl';
 import type { UploadChangeParam } from 'antd/lib/upload';
 import type { ImagePosition } from 'graphql/generated';
 import WatermarkImage from '../../images/WatermarkImage.view';
-import type { StateImageData } from '../../incidents/IncidentForm/ImageSection/useImageSection';
+import type {
+  ImageFaceType,
+  ImageResponseType,
+  StateImageData,
+} from '../../incidents/IncidentForm/ImageSection/useImageSection';
 import { useStoreState } from '../../../state';
 import compressImage from '../../../utils/compress-images';
+import FacesSelect from '../FacesSelect/FacesSelect.view';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   image: {
@@ -48,7 +53,10 @@ const useStyles = createUseStyles((theme: Theme) => ({
   },
   row: { marginTop: 10 },
 }));
-
+interface ImageResponse extends ImageResponseType {
+  uid: string;
+  file?: StateImageData;
+}
 export interface ImageData {
   uid: string;
   id?: string;
@@ -113,8 +121,8 @@ const ImageSelectAnalyse = ({
   const [localUpload, setLocalUpload] = useState(uploading);
   const [selected, setSelected] = useState<ImageValue[]>([]);
   const [images, setImages] = useState<ImageData[]>([]);
+  const [uploadImage, setUploadImage] = useState<ImageResponse>();
 
-  // console.log(imagesProp, 'value', onChange);
   useEffect(() => {
     if (value) setSelected(value);
   }, []);
@@ -155,6 +163,13 @@ const ImageSelectAnalyse = ({
       info.file.response &&
       info.file.response[0]
     ) {
+      if (facialRec) {
+        setUploadImage({
+          ...info.file.response[0],
+          uid: info.file.uid,
+          file: info.file,
+        });
+      }
       setImages([
         ...images,
         {
@@ -184,6 +199,29 @@ const ImageSelectAnalyse = ({
       setLocalUpload(false);
       void message.error('Image upload failed');
     }
+  };
+  const onSelectFace = (face: ImageFaceType) => {
+    setImages([
+      ...images,
+      {
+        url: face.imageURL,
+        fileName: uploadImage?.blobName,
+        type: uploadImage?.mimetype,
+        uid: `${uploadImage?.blobName || ''}`,
+        file: uploadImage?.file,
+        optimised: face.imageURL,
+      },
+    ]);
+    setSelected([
+      ...selected,
+      {
+        url: face.imageURL,
+        id: `${uploadImage?.blobName || ''}`,
+        file: uploadImage?.file,
+        optimised: face.imageURL,
+      },
+    ]);
+    setUploadImage(undefined);
   };
 
   return (
@@ -228,6 +266,12 @@ const ImageSelectAnalyse = ({
           </Col>
         ))}
       </Row>
+      <FacesSelect
+        submitFace={onSelectFace}
+        onClose={() => setUploadImage(undefined)}
+        open={!!(uploadImage?.faces && uploadImage.faces.length > 0)}
+        faces={uploadImage?.faces}
+      />
     </div>
   );
 };
