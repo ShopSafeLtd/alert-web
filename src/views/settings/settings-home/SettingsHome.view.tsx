@@ -3,6 +3,7 @@ import { Typography, Row, Col, Card, Button } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/pro-light-svg-icons';
+import { Link } from 'react-router-dom';
 import useStyles from './SettingsHome.styles';
 
 const SettingsHome = () => {
@@ -37,9 +38,14 @@ const SettingsHome = () => {
             </div>
             <Row justify="end">
               <Col>
-                <Button size="small">
-                  <FormattedMessage id="mJk+ls" defaultMessage="Manage users" />
-                </Button>
+                <Link to="/app/scheme-settings/users">
+                  <Button size="small">
+                    <FormattedMessage
+                      id="mJk+ls"
+                      defaultMessage="Manage users"
+                    />
+                  </Button>
+                </Link>
               </Col>
             </Row>
           </Card>
@@ -71,12 +77,14 @@ const SettingsHome = () => {
             </div>
             <Row justify="end">
               <Col>
-                <Button size="small">
-                  <FormattedMessage
-                    id="iubKfx"
-                    defaultMessage="Open settings"
-                  />
-                </Button>
+                <Link to="/app/scheme-settings/crime-types">
+                  <Button size="small">
+                    <FormattedMessage
+                      id="iubKfx"
+                      defaultMessage="Open settings"
+                    />
+                  </Button>
+                </Link>
               </Col>
             </Row>
           </Card>
@@ -108,12 +116,14 @@ const SettingsHome = () => {
             </div>
             <Row justify="end">
               <Col>
-                <Button size="small">
-                  <FormattedMessage
-                    id="4s+f7f"
-                    defaultMessage="Create workflow"
-                  />
-                </Button>
+                <Link to="/app/scheme-settings/workflow">
+                  <Button size="small">
+                    <FormattedMessage
+                      id="4s+f7f"
+                      defaultMessage="Create workflow"
+                    />
+                  </Button>
+                </Link>
               </Col>
             </Row>
           </Card>
