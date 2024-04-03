@@ -1,5 +1,38 @@
+image: node:20
+clone:
+  depth: full
 pipelines:
   custom: # Pipelines that can only be triggered manually
+    translations:
+      - step:
+          script:
+            - echo "translations trigger activated!"
+  branches:
+    master:
+      - step:
+          caches:
+            - node
+          name: Build and get translations
+          script:
+            - export NODE_OPTIONS=--max-old-space-size=8192
+            - yarn
+            - apt-get update && apt-get install -y curl jq
+            - yarn extract-compile
+            - chmod +x ./simplelocalize-cli
+            - ./simplelocalize-cli upload --apiKey e79c3F36e902c75AD5dDdddc9c4FaCF48804d6fd8Dc25Ba5  --uploadPath ./en/lang.json --uploadFormat simplelocalize-json --languageKey en_US
+
+            - >
+              export access_token=$(curl -s -X POST -u "${CLIENT_ID}:${CLIENT_SECRET}" \
+              https://bitbucket.org/site/oauth2/access_token \
+              -d grant_type=client_credentials -d scopes="repository"| jq --raw-output '.access_token')
+
+            # Configure git to use the oauth token.
+            - git remote set-url origin "https://x-token-auth:${access_token}@bitbucket.org/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}"
+
+            # Make changes and commit back.
+            - git add .
+            - git commit -m "[skip ci] Updating translations"
+            - git push origin translations --force
     translations:
       - step:
           script:
