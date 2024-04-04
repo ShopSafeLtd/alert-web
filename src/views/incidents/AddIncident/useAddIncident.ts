@@ -114,8 +114,30 @@ export interface FormData {
   }[];
   offenders: StateOffenderData[] | null;
   vehicles: StateVehicleData[] | null;
+  witnessesInvolved: boolean;
+  witnessDetails?: {
+    name: string;
+    phone?: string;
+    email?: string;
+    description?: string;
+  }[];
+  hasVictims: boolean;
+  victimsDetails?: {
+    name: string;
+    phone?: string;
+    email?: string;
+    description?: string;
+  }[];
   involvedTags?: [];
   fellingTags?: [];
+  cctvAvailable?: boolean;
+  cctv?: {
+    cameraNumber: string;
+    showIncident: boolean;
+    showFace: boolean;
+    startTime: Date;
+    endTime: Date;
+  }[];
 }
 
 export interface NewImage extends Image {
@@ -808,6 +830,31 @@ const useAddIncident = ({ investigationId }: Props): Return => {
             subject: data.subject,
             time: data.date,
             vehicles: getVehicles(),
+            cctvRecords: {
+              create: data.cctv?.map((item) => ({
+                cameraNumber: item.cameraNumber,
+                endTime: item.endTime,
+                showIncident: item.showIncident,
+                showFace: item.showFace,
+                startTime: item.startTime,
+              })),
+            },
+            witnesses: {
+              create: data.witnessDetails?.map((item) => ({
+                name: item.name,
+                description: item.description,
+                email: item.email,
+                phone: item.phone,
+              })),
+            },
+            victims: {
+              create: data.victimsDetails?.map((item) => ({
+                name: item.name,
+                phone: item.phone,
+                description: item.description,
+                email: item.email,
+              })),
+            },
           },
         },
       });
@@ -972,6 +1019,21 @@ const useAddIncident = ({ investigationId }: Props): Return => {
         ],
       });
   };
+
+  const cctvAvailable = Form.useWatch('cctvAvailable', form);
+  useEffect(() => {
+    form.setFieldValue('cctv', [{ cameraNumber: '' }]);
+  }, [cctvAvailable]);
+
+  const witnessesInvolved = Form.useWatch('witnessesInvolved', form);
+  useEffect(() => {
+    form.setFieldValue('witnessDetails', [{ name: '' }]);
+  }, [witnessesInvolved]);
+
+  const victimInvolved = Form.useWatch('victimInvolved', form);
+  useEffect(() => {
+    form.setFieldValue('victimsDetails', [{ name: '' }]);
+  }, [victimInvolved]);
 
   const formTags = Form.useWatch('tags', form);
   useEffect(() => {
