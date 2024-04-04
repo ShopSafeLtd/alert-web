@@ -81,10 +81,16 @@ const fieldToLayoutSet: Record<string, IncidentFormField[]> = {
   when: [IncidentFormField.Where],
   goods: [IncidentFormField.Goods],
   images: [IncidentFormField.Images],
-  profiles: [IncidentFormField.Offenders],
+  profiles: [
+    IncidentFormField.Offenders,
+    IncidentFormField.Vehicles,
+    IncidentFormField.Victims,
+    IncidentFormField.Witnesses,
+  ],
   police: [IncidentFormField.Police, IncidentFormField.Details],
   groups: [IncidentFormField.Groups],
   custom: [IncidentFormField.Custom],
+  cctv: [IncidentFormField.Cctv],
 };
 export type FieldLayout =
   | 'tags'
@@ -94,6 +100,7 @@ export type FieldLayout =
   | 'profiles'
   | 'police'
   | 'groups'
+  | 'cctv'
   | 'custom';
 
 export type Elements = {
@@ -130,7 +137,7 @@ const useViewTag = (): Return => {
     },
     {
       w: 1,
-      h: 3,
+      h: 5,
       x: 0,
       y: 3,
       i: 'profiles',
@@ -173,6 +180,15 @@ const useViewTag = (): Return => {
       moved: false,
       static: false,
     },
+    {
+      w: 1,
+      h: 3,
+      x: 0,
+      y: 8,
+      i: 'cctv',
+      moved: false,
+      static: false,
+    },
   ];
 
   function getOrderedKeys(
@@ -204,6 +220,10 @@ const useViewTag = (): Return => {
     [IncidentFormField.Police]: true,
     [IncidentFormField.Types]: true,
     [IncidentFormField.Where]: true,
+    [IncidentFormField.Cctv]: false,
+    [IncidentFormField.Vehicles]: false,
+    [IncidentFormField.Victims]: false,
+    [IncidentFormField.Witnesses]: false,
   };
 
   const { id } = useParams();
