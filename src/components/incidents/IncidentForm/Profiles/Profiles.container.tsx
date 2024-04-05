@@ -7,9 +7,18 @@ import useProfiles from './useProfiles';
 interface Props {
   saving: boolean;
   form: FormInstance<FormData>;
+  hasVehicles?: boolean;
+  hasWitnesses?: boolean;
+  hasVictims?: boolean;
 }
 
-const Profiles = ({ saving, form }: Props) => {
+const Profiles = ({
+  saving,
+  form,
+  hasVehicles = true,
+  hasWitnesses = false,
+  hasVictims = false,
+}: Props) => {
   const {
     addExistingOffenderOpen,
     addExistingVehicleOpen,
@@ -33,6 +42,9 @@ const Profiles = ({ saving, form }: Props) => {
       toggleAddExistingOffenderOpen={toggleAddExistingOffenderOpen}
       toggleAddNewOffenderOpen={toggleAddNewOffenderOpen}
       toggleAddNewVehicleOpen={toggleAddNewVehicleOpen}
+      hasVehicles={hasVehicles}
+      hasWitnesses={hasWitnesses}
+      hasVictims={hasVictims}
     />
   );
 };
