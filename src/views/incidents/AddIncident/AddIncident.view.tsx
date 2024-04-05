@@ -12,6 +12,7 @@ import Profiles from 'components/incidents/IncidentForm/Profiles';
 import ImageSection from 'components/incidents/IncidentForm/ImageSection';
 import AddLocation from 'components/form-components/addresses/AddLocation';
 import { useIntl } from 'react-intl';
+import IncidentCCTV from '#/views/incidents/AddIncident/components/IncidentCCTV/IncidentCCTV.view';
 import useStyles from './AddIncident.styles';
 import type { FormData } from './useAddIncident';
 import IncidentTypes from './components/IncidentTypes/IncidentTypes.container';
@@ -127,7 +128,19 @@ const AddIncident = ({
             case IncidentFormField.Offenders: {
               return (
                 <Card className={classes.card}>
-                  <Profiles form={form} saving={saving} />
+                  <Profiles
+                    form={form}
+                    saving={saving}
+                    // hasVehicles={incidentForm.includes(
+                    //   IncidentFormField.Vehicles
+                    // )}
+                    hasWitnesses={incidentForm.includes(
+                      IncidentFormField.Witnesses
+                    )}
+                    hasVictims={incidentForm.includes(
+                      IncidentFormField.Victims
+                    )}
+                  />
                 </Card>
               );
             }
@@ -161,6 +174,9 @@ const AddIncident = ({
               return (
                 <IncidentCustom questions={customQuestions} saving={saving} />
               );
+            }
+            case IncidentFormField.Cctv: {
+              return <IncidentCCTV saving={saving} form={form} />;
             }
             default: {
               return <div />;

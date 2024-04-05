@@ -252,6 +252,12 @@ export type ActionWhereUniqueInput = {
   vehicleId?: InputMaybe<StringNullableFilter>;
 };
 
+export enum ActionableLevelEnum {
+  High = 'HIGH',
+  Low = 'LOW',
+  Medium = 'MEDIUM'
+}
+
 export type ActiveChecklist = {
   __typename?: 'ActiveChecklist';
   business?: Maybe<Business>;
@@ -894,6 +900,11 @@ export type AnswersInput = {
   tagQuestionId: Scalars['String'];
   type: AnswerType;
 };
+
+export enum AnyAll {
+  All = 'all',
+  Any = 'any'
+}
 
 export type ApproveGroupsData = {
   connect?: InputMaybe<Array<UniqueId>>;
@@ -2089,6 +2100,19 @@ export type BusinessWhereUniqueInput = {
   users?: InputMaybe<UserListRelationFilter>;
 };
 
+export type CctvRecord = {
+  __typename?: 'CctvRecord';
+  cameraNumber: Scalars['String'];
+  createdAt: Scalars['Date'];
+  endTime: Scalars['Date'];
+  id: Scalars['String'];
+  incident: Incident;
+  showFace: Scalars['Boolean'];
+  showIncident: Scalars['Boolean'];
+  startTime: Scalars['Date'];
+  updatedAt: Scalars['Date'];
+};
+
 export type ChangePositionAndReqInput = {
   tags: Array<UpdateTagQuestionInput>;
 };
@@ -2727,6 +2751,18 @@ export type CreateImageOptimistic = {
   uri: Scalars['String'];
 };
 
+export type CreateIncidentCctvRecord = {
+  cameraNumber: Scalars['String'];
+  endTime: Scalars['Date'];
+  showFace: Scalars['Boolean'];
+  showIncident: Scalars['Boolean'];
+  startTime: Scalars['Date'];
+};
+
+export type CreateIncidentCctvRecords = {
+  create?: InputMaybe<Array<CreateIncidentCctvRecord>>;
+};
+
 export type CreateIncidentCrimeGroups = {
   connect?: InputMaybe<Array<UniqueId>>;
 };
@@ -2734,6 +2770,7 @@ export type CreateIncidentCrimeGroups = {
 export type CreateIncidentData = {
   answers?: InputMaybe<Array<AnswersInput>>;
   business?: InputMaybe<UniqueId>;
+  cctvRecords?: InputMaybe<CreateIncidentCctvRecords>;
   crimeGroups: CreateIncidentCrimeGroups;
   crimeTypes?: InputMaybe<Array<UniqueId>>;
   date: Scalars['Date'];
@@ -2756,6 +2793,8 @@ export type CreateIncidentData = {
   time: Scalars['Date'];
   value?: InputMaybe<Scalars['Float']>;
   vehicles: CreateIncidentVehicles;
+  victims?: InputMaybe<CreateIncidentVictims>;
+  witnesses?: InputMaybe<CreateIncidentWitnesses>;
 };
 
 export type CreateIncidentImages = {
@@ -2828,6 +2867,28 @@ export type CreateIncidentVehicles = {
   connect?: InputMaybe<Array<UniqueId>>;
   create?: InputMaybe<Array<VehicleCreateWithoutIncidentsInput>>;
   update?: InputMaybe<Array<CreateIncidentUpdateVehicles>>;
+};
+
+export type CreateIncidentVictim = {
+  description?: InputMaybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+  phone?: InputMaybe<Scalars['String']>;
+};
+
+export type CreateIncidentVictims = {
+  create?: InputMaybe<Array<CreateIncidentVictim>>;
+};
+
+export type CreateIncidentWitness = {
+  description?: InputMaybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+  phone?: InputMaybe<Scalars['String']>;
+};
+
+export type CreateIncidentWitnesses = {
+  create?: InputMaybe<Array<CreateIncidentWitness>>;
 };
 
 export type CreateInvestigationInput = {
@@ -5937,6 +5998,7 @@ export type GroupCreateInput = {
   approver?: InputMaybe<ConnectOnlyArrayHelper>;
   description?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
+  offenderSettings?: InputMaybe<OffenderSettingsCreateInput>;
   scheme: ConnectHelper;
   users?: InputMaybe<ConnectOnlyArrayHelper>;
 };
@@ -5990,6 +6052,7 @@ export type GroupUpdateInput = {
   approver?: InputMaybe<SetArrayHelper>;
   description?: InputMaybe<SetStringHelper>;
   name?: InputMaybe<SetStringHelper>;
+  offenderSettings?: InputMaybe<OffenderSettingsUpdateInput>;
   users?: InputMaybe<UserUpdateManyWithoutGroups>;
 };
 
@@ -6608,6 +6671,7 @@ export type ImpressionWhereUniqueInput = {
 
 export type Incident = {
   __typename?: 'Incident';
+  actionableScore: Scalars['Int'];
   actions: Array<Action>;
   answers: Array<Answer>;
   approved?: Maybe<Scalars['Boolean']>;
@@ -6969,6 +7033,7 @@ export type IncidentForm = {
 };
 
 export enum IncidentFormField {
+  Cctv = 'CCTV',
   Custom = 'CUSTOM',
   Details = 'DETAILS',
   Goods = 'GOODS',
@@ -6979,7 +7044,10 @@ export enum IncidentFormField {
   Offenders = 'OFFENDERS',
   Police = 'POLICE',
   Types = 'TYPES',
-  Where = 'WHERE'
+  Vehicles = 'VEHICLES',
+  Victims = 'VICTIMS',
+  Where = 'WHERE',
+  Witnesses = 'WITNESSES'
 }
 
 export type IncidentFormFieldsInput = {
@@ -9480,6 +9548,7 @@ export type Mutation = {
   createOneWorkflow: Workflow;
   createReportTemplate: ReportTemplate;
   createScheme: Scheme;
+  createSharingConfig: SharingConfig;
   createTag: Tag;
   createTermsAndConditions: TermsAndCondition;
   createTimes: Array<Incident>;
@@ -9515,6 +9584,7 @@ export type Mutation = {
   deleteOneWorkflow?: Maybe<Workflow>;
   deleteRecycleTag: Tag;
   deleteReportTemplate?: Maybe<ReportTemplate>;
+  deleteSharingConfig: SharingConfig;
   deleteTag: Tag;
   deleteUpdate: Update;
   deleteUser: User;
@@ -9601,6 +9671,7 @@ export type Mutation = {
   updateQuestionOnTag: TagQuestion;
   updateReportTemplate: ReportTemplate;
   updateScheme: Scheme;
+  updateSharingConfig: SharingConfig;
   updateTag: Tag;
   updateTagQs: Array<TagQuestion>;
   updateTodo: Todo;
@@ -9842,6 +9913,11 @@ export type MutationCreateSchemeArgs = {
 };
 
 
+export type MutationCreateSharingConfigArgs = {
+  data: SharingConfigCreateInput;
+};
+
+
 export type MutationCreateTagArgs = {
   data: TagCreateInput;
 };
@@ -10018,6 +10094,11 @@ export type MutationDeleteRecycleTagArgs = {
 
 export type MutationDeleteReportTemplateArgs = {
   where: ReportTemplateWhereUniqueInput;
+};
+
+
+export type MutationDeleteSharingConfigArgs = {
+  where: UniqueId;
 };
 
 
@@ -10418,6 +10499,12 @@ export type MutationUpdateReportTemplateArgs = {
 export type MutationUpdateSchemeArgs = {
   data: SchemeUpdateInput;
   where: UniqueId;
+};
+
+
+export type MutationUpdateSharingConfigArgs = {
+  data: SharingConfigUpdateInput;
+  where: SharingConfigWhereUniqueInput;
 };
 
 
@@ -11397,6 +11484,8 @@ export type NullableStringFieldUpdateOperationsInput = {
 
 export type Offender = {
   __typename?: 'Offender';
+  actionableLevel: ActionableLevelEnum;
+  actionableScore: Scalars['Int'];
   actions: Array<Action>;
   active?: Maybe<Scalars['Boolean']>;
   addresses: Array<Address>;
@@ -12110,6 +12199,30 @@ export type OffenderScalarWhereWithAggregatesInput = {
   uploaded?: InputMaybe<BoolNullableWithAggregatesFilter>;
 };
 
+export type OffenderSettingsCreateInput = {
+  create: OffenderSettingsInput;
+};
+
+export type OffenderSettingsInput = {
+  age?: InputMaybe<Scalars['Boolean']>;
+  alias?: InputMaybe<Scalars['Boolean']>;
+  build?: InputMaybe<Scalars['Boolean']>;
+  comment?: InputMaybe<Scalars['Boolean']>;
+  dateOfBirth?: InputMaybe<Scalars['Boolean']>;
+  dateOfBirthSource?: InputMaybe<Scalars['Boolean']>;
+  ethnicity?: InputMaybe<Scalars['Boolean']>;
+  hair?: InputMaybe<Scalars['Boolean']>;
+  height?: InputMaybe<Scalars['Boolean']>;
+  idVerified?: InputMaybe<Scalars['Boolean']>;
+  images?: InputMaybe<Scalars['Boolean']>;
+  name?: InputMaybe<Scalars['Boolean']>;
+  peculiarities?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type OffenderSettingsUpdateInput = {
+  update: OffenderSettingsInput;
+};
+
 export type OffenderUpdateInput = {
   addresses?: InputMaybe<UpdateSimpleLocationOnOffender>;
   age?: InputMaybe<NullableEnumAgeFieldUpdateOperationsInput>;
@@ -12586,6 +12699,8 @@ export type Query = {
   roles: QueryRolesConnection;
   scheme: Scheme;
   schemes: Array<Scheme>;
+  sharingConfig: SharingConfig;
+  sharingConfigs: Array<SharingConfig>;
   statementTemplate: StatementTemplate;
   statementTemplates: Array<StatementTemplate>;
   tag: Tag;
@@ -13384,6 +13499,19 @@ export type QuerySchemesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<SchemeWhereInput>;
+};
+
+
+export type QuerySharingConfigArgs = {
+  where: SharingConfigWhereUniqueInput;
+};
+
+
+export type QuerySharingConfigsArgs = {
+  cursor?: InputMaybe<SharingConfigWhereUniqueInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<SharingConfigWhereInput>;
 };
 
 
@@ -15712,22 +15840,66 @@ export type SetStringHelper = {
 
 export type ShareDataInput = {
   connectGroups: Array<UniqueId>;
-  connectScheme: UniqueId;
+  connectSchemes: Array<UniqueId>;
   incident?: InputMaybe<UniqueId>;
   offender?: InputMaybe<UniqueId>;
 };
 
 export type SharingConfig = {
   __typename?: 'SharingConfig';
+  businessMap: Scalars['JSON'];
   conditions: Scalars['JSON'];
   createdAt: Scalars['Date'];
   id: Scalars['ID'];
   mode: SharingMode;
   schemeFrom: Scheme;
   schemeTo: Scheme;
-  tags: Array<Tag>;
+  tagMap: Scalars['JSON'];
   type: SharingType;
   updatedAt: Scalars['Date'];
+};
+
+export type SharingConfigConditionsInput = {
+  anyAll: AnyAll;
+  businesses: StringArrayConditionInput;
+  groups: StringArrayConditionInput;
+  tags: StringArrayConditionInput;
+};
+
+export type SharingConfigCreateInput = {
+  businessMap?: InputMaybe<Array<SharingConfigMapInput>>;
+  conditions?: InputMaybe<SharingConfigConditionsInput>;
+  groupsTo?: InputMaybe<Array<UniqueId>>;
+  mode: SharingMode;
+  schemeFrom: UniqueId;
+  schemeTo: UniqueId;
+  tagMap?: InputMaybe<Array<SharingConfigMapInput>>;
+  type: SharingType;
+};
+
+export type SharingConfigMapInput = {
+  fromId: Scalars['String'];
+  toId: Scalars['String'];
+};
+
+export type SharingConfigUpdateInput = {
+  businessMap?: InputMaybe<SharingConfigMapInput>;
+  conditions: SharingConfigConditionsInput;
+  groupsTo: Array<UniqueId>;
+  mode: SharingMode;
+  tagMap?: InputMaybe<SharingConfigMapInput>;
+  type: SharingType;
+};
+
+export type SharingConfigWhereInput = {
+  createdAt?: InputMaybe<DateTimeFilter>;
+  id?: InputMaybe<StringFilter>;
+  schemeFrom?: InputMaybe<SchemeWhereInput>;
+  schemeTo?: InputMaybe<SchemeWhereInput>;
+};
+
+export type SharingConfigWhereUniqueInput = {
+  id: Scalars['String'];
 };
 
 export enum SharingMode {
@@ -16090,6 +16262,11 @@ export type StockItemsWhereInput = {
   schemeId?: InputMaybe<StringNullableFilter>;
   sku?: InputMaybe<StringNullableFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type StringArrayConditionInput = {
+  anyAll: AnyAll;
+  ids: Array<Scalars['String']>;
 };
 
 export type StringFieldUpdateOperationsInput = {
@@ -19837,11 +20014,35 @@ export type VehicleWhereUniqueInput = {
   updates?: InputMaybe<UpdateListRelationFilter>;
 };
 
+export type Victim = {
+  __typename?: 'Victim';
+  createdAt: Scalars['Date'];
+  description?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  incident: Incident;
+  name?: Maybe<Scalars['String']>;
+  phone?: Maybe<Scalars['String']>;
+  updatedAt: Scalars['Date'];
+};
+
 export enum When {
   Month = 'MONTH',
   Week = 'WEEK',
   Year = 'YEAR'
 }
+
+export type Witness = {
+  __typename?: 'Witness';
+  createdAt: Scalars['Date'];
+  description?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  incident: Incident;
+  name?: Maybe<Scalars['String']>;
+  phone?: Maybe<Scalars['String']>;
+  updatedAt: Scalars['Date'];
+};
 
 export type Workflow = {
   __typename?: 'Workflow';

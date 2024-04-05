@@ -1,9 +1,24 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import type { FormInstance } from 'antd';
-import { Button, Col, Dropdown, Menu, Row, Typography, Form } from 'antd';
+import {
+  Button,
+  Col,
+  Dropdown,
+  Menu,
+  Row,
+  Typography,
+  Form,
+  Radio,
+  Input,
+} from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass, faPlus } from '@fortawesome/pro-light-svg-icons';
-import { useIntl } from 'react-intl';
+import {
+  faMagnifyingGlass,
+  faPlus,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
+import { FormattedMessage, useIntl } from 'react-intl';
 import type { FormData } from 'views/incidents/AddIncident/useAddIncident';
 import useStyles from './Profiles.styles';
 import Offenders from './Offenders/Offenders.view';
@@ -24,6 +39,9 @@ interface Props {
   toggleAddExisingVehicleOpen: () => void;
   saving: boolean;
   form: FormInstance<FormData>;
+  // hasVehicles: boolean;
+  hasWitnesses: boolean;
+  hasVictims: boolean;
 }
 
 const Profiles = ({
@@ -37,11 +55,16 @@ const Profiles = ({
   addNewOffenderOpen,
   addExistingOffenderOpen,
   form,
+  hasWitnesses,
+  // hasVehicles,
+  hasVictims,
 }: Props): JSX.Element => {
   const intl = useIntl();
   const classes = useStyles();
   const offenders = Form.useWatch<StateOffenderData[]>('offenders', form);
   const vehicles = Form.useWatch<StateVehicleData[]>('vehicles', form);
+  const witnessesInvolved = Form.useWatch<boolean>('witnessesInvolved', form);
+  const victimInvolved = Form.useWatch<boolean>('victimInvolved', form);
 
   return (
     <>
@@ -226,6 +249,268 @@ const Profiles = ({
           form={form}
         />
       </Form.Item>
+      {hasWitnesses && (
+        <Form.Item
+          name="witnessesInvolved"
+          tooltip={intl.formatMessage({
+            defaultMessage: 'Were there any witnesses of the incident?',
+            id: 'U2hv4S',
+          })}
+          label={
+            <Typography.Text>
+              {intl.formatMessage({
+                defaultMessage: 'Were any witnesses available?',
+                id: 'skNn/T',
+              })}
+            </Typography.Text>
+          }
+          required
+        >
+          <Radio.Group
+            options={[
+              {
+                label: intl.formatMessage({
+                  defaultMessage: 'Yes',
+                  id: 'a5msuh',
+                }),
+                value: true,
+              },
+              {
+                label: intl.formatMessage({
+                  defaultMessage: 'No',
+                  id: 'oUWADl',
+                }),
+                value: false,
+              },
+            ]}
+            optionType="button"
+            disabled={saving}
+          />
+        </Form.Item>
+      )}
+      {witnessesInvolved && (
+        <Form.List name="witnessDetails">
+          {(fields, { add, remove }) => (
+            <>
+              {fields.map(({ key, name, ...restField }, i) => (
+                <Row gutter={32}>
+                  <Col key={key}>
+                    <Form.Item
+                      {...restField}
+                      name={[name, 'name']}
+                      rules={[{ required: true, message: 'Enter a name.' }]}
+                      label={
+                        i === 0 &&
+                        intl.formatMessage({
+                          defaultMessage: 'Full Name',
+                          id: 'TemVby',
+                        })
+                      }
+                    >
+                      <Input style={{ width: '100%' }} />
+                    </Form.Item>
+                  </Col>
+                  <Col span={3}>
+                    <Form.Item
+                      name={[name, 'phone']}
+                      label={
+                        i === 0 &&
+                        intl.formatMessage({
+                          defaultMessage: 'Phone Number',
+                          id: 'mXiD5u',
+                        })
+                      }
+                    >
+                      <Input style={{ width: '100%' }} />
+                    </Form.Item>
+                  </Col>
+                  <Col span={4}>
+                    <Form.Item
+                      name={[name, 'email']}
+                      label={
+                        i === 0 &&
+                        intl.formatMessage({
+                          defaultMessage: 'Email Address',
+                          id: 'xxQxLE',
+                        })
+                      }
+                    >
+                      <Input style={{ width: '100%' }} />
+                    </Form.Item>
+                  </Col>
+                  <Col flex={1}>
+                    <Form.Item
+                      name={[name, 'description']}
+                      label={
+                        i === 0 &&
+                        intl.formatMessage({
+                          defaultMessage: 'Additional Information',
+                          id: 'laUK3e',
+                        })
+                      }
+                    >
+                      <Input style={{ width: '100%' }} />
+                    </Form.Item>
+                  </Col>
+                  <Col>
+                    <Button
+                      style={{
+                        marginTop: i === 0 ? 30 : 0,
+                      }}
+                      onClick={() => remove(name)}
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </Button>
+                  </Col>
+                </Row>
+              ))}
+              <Form.Item>
+                <Row justify="center">
+                  <Col>
+                    <Button onClick={() => add()} block>
+                      <FormattedMessage
+                        id="cvzCJ9"
+                        defaultMessage="Add Witness"
+                      />
+                    </Button>
+                  </Col>
+                </Row>
+              </Form.Item>
+            </>
+          )}
+        </Form.List>
+      )}
+      {hasVictims && (
+        <Form.Item
+          name="victimInvolved"
+          tooltip={intl.formatMessage({
+            defaultMessage: 'Were the any victims involved in the incident',
+            id: 'FfmoZL',
+          })}
+          label={
+            <Typography.Text>
+              {intl.formatMessage({
+                defaultMessage: 'Where there any victims?',
+                id: '17YFkp',
+              })}
+            </Typography.Text>
+          }
+          required
+        >
+          <Radio.Group
+            options={[
+              {
+                label: intl.formatMessage({
+                  defaultMessage: 'Yes',
+                  id: 'a5msuh',
+                }),
+                value: true,
+              },
+              {
+                label: intl.formatMessage({
+                  defaultMessage: 'No',
+                  id: 'oUWADl',
+                }),
+                value: false,
+              },
+            ]}
+            optionType="button"
+            disabled={saving}
+          />
+        </Form.Item>
+      )}
+      {victimInvolved && (
+        <Form.List name="victimsDetails">
+          {(fields, { add, remove }) => (
+            <>
+              {fields.map(({ key, name, ...restField }, i) => (
+                <Row gutter={32}>
+                  <Col key={key}>
+                    <Form.Item
+                      {...restField}
+                      name={[name, 'name']}
+                      rules={[{ required: true, message: 'Enter a name.' }]}
+                      label={
+                        i === 0 &&
+                        intl.formatMessage({
+                          defaultMessage: 'Full Name',
+                          id: 'TemVby',
+                        })
+                      }
+                    >
+                      <Input style={{ width: '100%' }} />
+                    </Form.Item>
+                  </Col>
+                  <Col span={3}>
+                    <Form.Item
+                      name={[name, 'phone']}
+                      label={
+                        i === 0 &&
+                        intl.formatMessage({
+                          defaultMessage: 'Phone Number',
+                          id: 'mXiD5u',
+                        })
+                      }
+                    >
+                      <Input style={{ width: '100%' }} />
+                    </Form.Item>
+                  </Col>
+                  <Col span={4}>
+                    <Form.Item
+                      name={[name, 'email']}
+                      label={
+                        i === 0 &&
+                        intl.formatMessage({
+                          defaultMessage: 'Email Address',
+                          id: 'xxQxLE',
+                        })
+                      }
+                    >
+                      <Input style={{ width: '100%' }} />
+                    </Form.Item>
+                  </Col>
+                  <Col flex={1}>
+                    <Form.Item
+                      name={[name, 'description']}
+                      label={
+                        i === 0 &&
+                        intl.formatMessage({
+                          defaultMessage: 'Additional Information',
+                          id: 'laUK3e',
+                        })
+                      }
+                    >
+                      <Input style={{ width: '100%' }} />
+                    </Form.Item>
+                  </Col>
+                  <Col>
+                    <Button
+                      style={{
+                        marginTop: i === 0 ? 30 : 0,
+                      }}
+                      onClick={() => remove(name)}
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </Button>
+                  </Col>
+                </Row>
+              ))}
+              <Form.Item>
+                <Row justify="center">
+                  <Col>
+                    <Button onClick={() => add()} block>
+                      <FormattedMessage
+                        id="7oOoJb"
+                        defaultMessage="Add Victim"
+                      />
+                    </Button>
+                  </Col>
+                </Row>
+              </Form.Item>
+            </>
+          )}
+        </Form.List>
+      )}
     </>
   );
 };

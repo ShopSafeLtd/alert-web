@@ -63,7 +63,7 @@ const Vehicles = ({
     <>
       {vehicles.length === 0 && (
         <div>
-          <Paragraph className={classes.subHeader} style={{ marginTop: 40 }}>
+          <Paragraph className={classes.subHeader}>
             {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
             <span className={classes.subHeaderRequired}>*</span>
             <FormattedMessage

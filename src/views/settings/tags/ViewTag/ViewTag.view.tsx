@@ -313,6 +313,67 @@ const ViewTag = ({
               </Tooltip>
             </Col>
           </Row>
+          {/* TODO Put back when native form is updated */}
+          {/* <Row> */}
+          {/*  <Col flex={1}> */}
+          {/*    <FormattedMessage defaultMessage="Vehicles" id="r6wuJ3" /> */}
+          {/*  </Col> */}
+          {/*  <Col> */}
+          {/*    <Tooltip */}
+          {/*      title={intl.formatMessage({ */}
+          {/*        defaultMessage: 'Hide/Show field on form', */}
+          {/*        id: '+AMnGS', */}
+          {/*      })} */}
+          {/*    > */}
+          {/*      <Checkbox */}
+          {/*        checked={incidentFormFields.VEHICLES} */}
+          {/*        onChange={() => { */}
+          {/*          toggleField(IncidentFormField.Vehicles); */}
+          {/*        }} */}
+          {/*      /> */}
+          {/*    </Tooltip> */}
+          {/*  </Col> */}
+          {/* </Row> */}
+          <Row>
+            <Col flex={1}>
+              <FormattedMessage defaultMessage="Witnesses" id="sjTqbX" />
+            </Col>
+            <Col>
+              <Tooltip
+                title={intl.formatMessage({
+                  defaultMessage: 'Hide/Show field on form',
+                  id: '+AMnGS',
+                })}
+              >
+                <Checkbox
+                  checked={incidentFormFields.WITNESSES}
+                  onChange={() => {
+                    toggleField(IncidentFormField.Witnesses);
+                  }}
+                />
+              </Tooltip>
+            </Col>
+          </Row>
+          <Row>
+            <Col flex={1}>
+              <FormattedMessage defaultMessage="Victims" id="PAMKVQ" />
+            </Col>
+            <Col>
+              <Tooltip
+                title={intl.formatMessage({
+                  defaultMessage: 'Hide/Show field on form',
+                  id: '+AMnGS',
+                })}
+              >
+                <Checkbox
+                  checked={incidentFormFields.VICTIMS}
+                  onChange={() => {
+                    toggleField(IncidentFormField.Victims);
+                  }}
+                />
+              </Tooltip>
+            </Col>
+          </Row>
         </Card>
       </div>
     ),
@@ -460,6 +521,40 @@ const ViewTag = ({
                   checked={incidentFormFields.CUSTOM}
                   onChange={() => {
                     toggleField(IncidentFormField.Custom);
+                  }}
+                />
+              </Tooltip>
+            </Col>
+          </Row>
+        </Card>
+      </div>
+    ),
+    cctv: (
+      <div
+        key="cctv"
+        style={{
+          cursor: 'grab',
+        }}
+      >
+        <Card
+          style={{ marginBottom: 0, outline: '1px solid #ccc' }}
+          title={<FormattedMessage defaultMessage="CCTV" id="r9rHbW" />}
+        >
+          <Row>
+            <Col flex={1}>
+              <FormattedMessage defaultMessage="CCTV" id="r9rHbW" />
+            </Col>
+            <Col>
+              <Tooltip
+                title={intl.formatMessage({
+                  defaultMessage: 'Hide/Show field on form',
+                  id: '+AMnGS',
+                })}
+              >
+                <Checkbox
+                  checked={incidentFormFields.CCTV}
+                  onChange={() => {
+                    toggleField(IncidentFormField.Cctv);
                   }}
                 />
               </Tooltip>

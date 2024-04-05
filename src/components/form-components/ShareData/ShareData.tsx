@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import React, { useState } from 'react';
-import { useIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { useStoreState } from 'state';
 import {
   Button,
   Checkbox,
   Col,
   Form,
+  notification,
   Row,
   Typography,
-  notification,
 } from 'antd';
 import { createUseStyles } from 'react-jss';
 import type { Theme } from 'configs/ThemeConfig';
@@ -95,9 +95,11 @@ const ShareData = ({ onClose, offenderId, incidentId }: Props) => {
         variables: {
           data: {
             connectGroups: formData.groups.map((id) => ({ id })),
-            connectScheme: {
-              id: selectedScheme,
-            },
+            connectSchemes: [
+              {
+                id: selectedScheme,
+              },
+            ],
             incident: incidentId
               ? {
                   id: incidentId,
