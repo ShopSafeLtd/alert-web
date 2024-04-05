@@ -310,6 +310,11 @@ const IncidentMap = ({
                 ? 'mapbox://styles/wgarrod/clua60bxj016401qse8vj1qfu'
                 : 'mapbox://styles/wgarrod/clgkn5gb7007u01qmahuhbi6o'
             }
+            initialViewState={{
+              longitude: 3.43,
+              latitude: 55.37,
+              zoom: 5,
+            }}
           >
             {showPolice && (
               <Source id="police-data" type="geojson" data={policeJSON}>
