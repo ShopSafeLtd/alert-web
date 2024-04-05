@@ -131,9 +131,9 @@ const AddIncident = ({
                   <Profiles
                     form={form}
                     saving={saving}
-                    hasVehicles={incidentForm.includes(
-                      IncidentFormField.Vehicles
-                    )}
+                    // hasVehicles={incidentForm.includes(
+                    //   IncidentFormField.Vehicles
+                    // )}
                     hasWitnesses={incidentForm.includes(
                       IncidentFormField.Witnesses
                     )}

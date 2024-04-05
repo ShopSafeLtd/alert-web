@@ -39,7 +39,7 @@ interface Props {
   toggleAddExisingVehicleOpen: () => void;
   saving: boolean;
   form: FormInstance<FormData>;
-  hasVehicles: boolean;
+  // hasVehicles: boolean;
   hasWitnesses: boolean;
   hasVictims: boolean;
 }
@@ -56,7 +56,7 @@ const Profiles = ({
   addExistingOffenderOpen,
   form,
   hasWitnesses,
-  hasVehicles,
+  // hasVehicles,
   hasVictims,
 }: Props): JSX.Element => {
   const intl = useIntl();
@@ -221,36 +221,34 @@ const Profiles = ({
           form={form}
         />
       </Form.Item>
-      {hasVehicles && (
-        <Form.Item
-          name="vehicles"
-          rules={[
-            {
-              validator: (_, value) =>
-                value
-                  ? Promise.resolve()
-                  : Promise.reject(
-                      new Error(
-                        intl.formatMessage({
-                          defaultMessage:
-                            'Select how many vehicles were involved',
-                          id: 'KEkfC4',
-                        })
-                      )
-                    ),
-            },
-          ]}
-        >
-          <Vehicles
-            addExistingOpen={addExistingVehicleOpen}
-            addNewOpen={addNewVehicleOpen}
-            toggleAddNewOpen={toggleAddNewVehicleOpen}
-            toggleAddExistingOpen={toggleAddExisingVehicleOpen}
-            saving={saving}
-            form={form}
-          />
-        </Form.Item>
-      )}
+      <Form.Item
+        name="vehicles"
+        rules={[
+          {
+            validator: (_, value) =>
+              value
+                ? Promise.resolve()
+                : Promise.reject(
+                    new Error(
+                      intl.formatMessage({
+                        defaultMessage:
+                          'Select how many vehicles were involved',
+                        id: 'KEkfC4',
+                      })
+                    )
+                  ),
+          },
+        ]}
+      >
+        <Vehicles
+          addExistingOpen={addExistingVehicleOpen}
+          addNewOpen={addNewVehicleOpen}
+          toggleAddNewOpen={toggleAddNewVehicleOpen}
+          toggleAddExistingOpen={toggleAddExisingVehicleOpen}
+          saving={saving}
+          form={form}
+        />
+      </Form.Item>
       {hasWitnesses && (
         <Form.Item
           name="witnessesInvolved"

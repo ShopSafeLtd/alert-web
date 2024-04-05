@@ -313,26 +313,27 @@ const ViewTag = ({
               </Tooltip>
             </Col>
           </Row>
-          <Row>
-            <Col flex={1}>
-              <FormattedMessage defaultMessage="Vehicles" id="r6wuJ3" />
-            </Col>
-            <Col>
-              <Tooltip
-                title={intl.formatMessage({
-                  defaultMessage: 'Hide/Show field on form',
-                  id: '+AMnGS',
-                })}
-              >
-                <Checkbox
-                  checked={incidentFormFields.VEHICLES}
-                  onChange={() => {
-                    toggleField(IncidentFormField.Vehicles);
-                  }}
-                />
-              </Tooltip>
-            </Col>
-          </Row>
+          {/* TODO Put back when native form is updated */}
+          {/* <Row> */}
+          {/*  <Col flex={1}> */}
+          {/*    <FormattedMessage defaultMessage="Vehicles" id="r6wuJ3" /> */}
+          {/*  </Col> */}
+          {/*  <Col> */}
+          {/*    <Tooltip */}
+          {/*      title={intl.formatMessage({ */}
+          {/*        defaultMessage: 'Hide/Show field on form', */}
+          {/*        id: '+AMnGS', */}
+          {/*      })} */}
+          {/*    > */}
+          {/*      <Checkbox */}
+          {/*        checked={incidentFormFields.VEHICLES} */}
+          {/*        onChange={() => { */}
+          {/*          toggleField(IncidentFormField.Vehicles); */}
+          {/*        }} */}
+          {/*      /> */}
+          {/*    </Tooltip> */}
+          {/*  </Col> */}
+          {/* </Row> */}
           <Row>
             <Col flex={1}>
               <FormattedMessage defaultMessage="Witnesses" id="sjTqbX" />
