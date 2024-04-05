@@ -124,13 +124,14 @@ const useIncidentMap = (): Return => {
                           in: selectedBrands,
                         }
                       : undefined,
-                  industry: selectedIndustries
-                    ? {
-                        id: {
-                          in: selectedIndustries,
-                        },
-                      }
-                    : undefined,
+                  industry:
+                    selectedIndustries.length > 0
+                      ? {
+                          id: {
+                            in: selectedIndustries,
+                          },
+                        }
+                      : undefined,
                 },
               }
             : undefined,
