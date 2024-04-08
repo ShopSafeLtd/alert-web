@@ -4,8 +4,8 @@ interface PoliceArea {
     type: 'Feature';
     id: number;
     geometry: {
-      type: 'Polygon';
-      coordinates: number[][][];
+      type: 'Polygon' | 'MultiPolygon';
+      coordinates: number[][][] | number[][][][];
     };
     properties: {
       name: string;

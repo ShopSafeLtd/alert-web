@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import type {
+  BrandsQuery,
   BusinessLocationsQuery,
   IncidentMapQuery,
-  SchemeGroupsQuery,
-  BrandsQuery,
   IndustriesQuery,
+  SchemeGroupsQuery,
 } from 'graphql/generated';
 import {
   Button,
@@ -18,7 +18,7 @@ import {
   Switch,
   Typography,
 } from 'antd';
-import type { FillLayer, MapRef, LineLayer } from 'react-map-gl';
+import type { FillLayer, LineLayer, MapRef } from 'react-map-gl';
 import { Layer, Map, Source } from 'react-map-gl';
 import type { Scheme } from 'state';
 import { useStoreState } from 'state';
@@ -317,6 +317,8 @@ const IncidentMap = ({
             }}
           >
             {showPolice && (
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore Polygon / multipolygon issue
               <Source id="police-data" type="geojson" data={policeJSON}>
                 {PoliceDataLayer}
                 {PoliceLineLayer}
