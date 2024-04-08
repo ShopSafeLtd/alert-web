@@ -9,6 +9,7 @@ interface PoliceArea {
     };
     properties: {
       name: string;
+      OBJECTID?: number;
     };
   }[];
 }
