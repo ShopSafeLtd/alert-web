@@ -15,6 +15,14 @@ const IncidentMap = () => {
     onChangeGroups,
     selectedGroups,
     onChangeDateRange,
+    onChangeBrands,
+    onChangeIndustries,
+    brandsData,
+    brandsLoading,
+    industriesLoading,
+    selectedIndustries,
+    selectedBrands,
+    industriesData,
   } = useIncidentMap();
 
   return (
@@ -30,6 +38,14 @@ const IncidentMap = () => {
       onChangeGroups={onChangeGroups}
       selectedGroups={selectedGroups}
       onChangeDateRange={onChangeDateRange}
+      onChangeBrands={onChangeBrands}
+      onChangeIndustries={onChangeIndustries}
+      brandsData={brandsData}
+      brandsLoading={brandsLoading}
+      industriesLoading={industriesLoading}
+      selectedIndustries={selectedIndustries}
+      selectedBrands={selectedBrands}
+      industriesData={industriesData}
     />
   );
 };

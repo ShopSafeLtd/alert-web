@@ -1685,6 +1685,12 @@ export type Brand = {
   schemeId: Scalars['String'];
 };
 
+export type BrandListRelationFilter = {
+  every?: InputMaybe<BrandWhereInput>;
+  none?: InputMaybe<BrandWhereInput>;
+  some?: InputMaybe<BrandWhereInput>;
+};
+
 export type BrandOrderBy = {
   name?: InputMaybe<SortOrder>;
 };
@@ -1705,6 +1711,7 @@ export type BrandWhereInput = {
   createdAt?: InputMaybe<DateTimeFilter>;
   description?: InputMaybe<StringNullableFilter>;
   id?: InputMaybe<StringFilter>;
+  industry?: InputMaybe<IndustryWhereInput>;
   name?: InputMaybe<StringFilter>;
   recycled?: InputMaybe<BoolFilter>;
   scheme?: InputMaybe<SchemeWhereInput>;
@@ -2052,6 +2059,7 @@ export type BusinessWhereInput = {
   NOT?: InputMaybe<Array<BusinessWhereInput>>;
   OR?: InputMaybe<Array<BusinessWhereInput>>;
   actions?: InputMaybe<ActionListRelationFilter>;
+  brands?: InputMaybe<BrandListRelationFilter>;
   children?: InputMaybe<BusinessListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   demId?: InputMaybe<StringNullableFilter>;
@@ -7658,6 +7666,14 @@ export type Industry = {
   __typename?: 'Industry';
   id: Scalars['ID'];
   name: Scalars['String'];
+};
+
+export type IndustryWhereInput = {
+  id?: InputMaybe<StringFilter>;
+};
+
+export type IndustryWhereUniqueInput = {
+  id?: InputMaybe<Scalars['String']>;
 };
 
 export type IntFilter = {
