@@ -229,8 +229,8 @@ const IncidentTable = ({
         })) || []
       }
       pagination={{
-        hideOnSinglePage: true,
-        pageSize: pageSize || 5,
+        showSizeChanger: true,
+        defaultPageSize: 5 || pageSize,
       }}
     />
   );
