@@ -3,13 +3,14 @@ import { useEffect, useState } from 'react';
 import type { FormInstance } from 'antd';
 import { Form } from 'antd';
 import { useNavigate, useParams } from 'react-router';
-import type { ChecklistAnswerType } from '../../../graphql/generated';
+import type { ChecklistAnswerType } from 'graphql/generated';
 import {
+  useBrandsQuery,
   useChecklistQuery,
   useCreateUpdateChecklistMutation,
   useListBusinessesChecklistQuery,
   useUserListChecklistQuery,
-} from '../../../graphql/generated';
+} from 'graphql/generated';
 import { useStoreState } from '../../../state';
 
 export interface SelectOption {
@@ -33,10 +34,25 @@ interface Subsection {
 interface Question {
   order: number;
   title: string;
-  type: 'PASS_FAIL' | 'YES_NO' | 'GOOD_BAD' | 'TEXT';
+  type:
+    | 'PASS_FAIL_NA'
+    | 'YES_NO_NA'
+    | 'GOOD_BAD_NA'
+    | 'PASS_FAIL'
+    | 'YES_NO'
+    | 'GOOD_BAD'
+    | 'TEXT';
   weighted: boolean;
   passWeight?: number;
   failWeight?: number;
+  dependentCheck: boolean;
+  dependent?: {
+    question: string;
+    answer: string;
+  } | null;
+  dependentQuestion?: string;
+  dependentAnswer?: string;
+  brandIds?: string[];
   // Add other question properties here
 }
 
@@ -81,6 +97,7 @@ interface Return {
   loading: boolean;
   businesses: SelectOption[];
   users: SelectOption[];
+  brands: SelectOption[];
 }
 
 // create a funciton that gets an object of the following shape and an language code
@@ -147,23 +164,33 @@ const getWeight = (
 };
 
 const createAnswerWeight = (
-  type: 'PASS_FAIL' | 'YES_NO' | 'GOOD_BAD' | 'TEXT',
+  type:
+    | 'PASS_FAIL_NA'
+    | 'YES_NO_NA'
+    | 'GOOD_BAD_NA'
+    | 'PASS_FAIL'
+    | 'YES_NO'
+    | 'GOOD_BAD'
+    | 'TEXT',
   passWeight: number,
   failWeight: number
 ) => {
   switch (type) {
+    case 'PASS_FAIL_NA':
     case 'PASS_FAIL': {
       return [
         { answer: 'PASS', weight: passWeight },
         { answer: 'FAIL', weight: failWeight },
       ];
     }
+    case 'YES_NO_NA':
     case 'YES_NO': {
       return [
         { answer: 'YES', weight: passWeight },
         { answer: 'NO', weight: failWeight },
       ];
     }
+    case 'GOOD_BAD_NA':
     case 'GOOD_BAD': {
       return [
         { answer: 'GOOD', weight: passWeight },
@@ -255,6 +282,11 @@ export function useCreateChecklist(): Return {
               weighted: question.weight.length > 0,
               passWeight: getWeight(question.type, question.weight).passWeight,
               failWeight: getWeight(question.type, question.weight).failWeight,
+              brandIds: question.brandIds,
+              dependent: question.dependent,
+              dependentQuestion: (question.dependent?.question as string) ?? '',
+              dependentAnswer: (question.dependent?.answer as string) ?? '',
+              dependentCheck: !!question.dependent,
             })),
           })),
         })),
@@ -281,6 +313,14 @@ export function useCreateChecklist(): Return {
                 order: question.order,
                 question: question.title,
                 type: question.type as ChecklistAnswerType,
+                brandIds: question.brandIds ?? [],
+                dependOn: question.dependentCheck
+                  ? {
+                      question: question.dependentQuestion ?? '',
+                      answer: question.dependentAnswer ?? '',
+                    }
+                  : null,
+
                 weight: question.weighted
                   ? createAnswerWeight(
                       question.type,
@@ -482,6 +522,9 @@ export function useCreateChecklist(): Return {
       title: '',
       type: 'PASS_FAIL',
       weighted: false,
+      brandIds: [],
+      dependent: null,
+      dependentCheck: false,
     });
     setSections(newSections);
   };
@@ -562,6 +605,27 @@ export function useCreateChecklist(): Return {
   useEffect(() => {
     form.setFieldsValue({ sections });
   }, [sections, form]);
+
+  const { id: currentSchemeId } = useStoreState((state) => state.scheme);
+
+  const { data: BrandsData } = useBrandsQuery({
+    variables: {
+      where: {
+        scheme: {
+          id: {
+            equals: currentSchemeId,
+          },
+        },
+      },
+    },
+  });
+
+  const brandsFormatted =
+    BrandsData?.brands?.map((brand) => ({
+      label: brand.name || '',
+      value: brand.id || '',
+    })) || [];
+
   return {
     form,
     loading: loading || businessLoading || usersLoading,
@@ -575,5 +639,6 @@ export function useCreateChecklist(): Return {
     handleRemoveQuestion,
     businesses,
     users,
+    brands: brandsFormatted,
   };
 }

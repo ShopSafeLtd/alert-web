@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call,  @typescript-eslint/no-unsafe-member-access, no-return-assign */
 import { PlusOutlined } from '@ant-design/icons';
 import type { FormInstance } from 'antd';
 import {
@@ -47,8 +48,42 @@ interface Props {
   loading: boolean;
   businesses: SelectOption[];
   users: SelectOption[];
+  brands: SelectOption[];
 }
 const indexToLetter = (num: number) => (num + 10).toString(36).toUpperCase();
+
+const typeToAvail = (ty: string) => {
+  switch (ty) {
+    case 'PASS_FAIL':
+    case 'PASS_FAIL_NA': {
+      return [
+        { label: 'PASS', value: 'PASS' },
+        { label: 'FAIL', value: 'FAIL' },
+      ];
+    }
+    case 'YES_NO':
+    case 'YES_NO_NA': {
+      return [
+        { label: 'YES', value: 'YES' },
+        { label: 'NO', value: 'NO' },
+      ];
+    }
+    case 'GOOD_BAD':
+    case 'GOOD_BAD_NA': {
+      return [
+        { label: 'GOOD', value: 'GOOD' },
+        { label: 'BAD', value: 'BAD' },
+      ];
+    }
+    case 'TEXT': {
+      return [];
+    }
+    default: {
+      return [];
+    }
+  }
+};
+
 const CreateChecklistView: React.FC<Props> = ({
   form,
   onFinish,
@@ -62,6 +97,7 @@ const CreateChecklistView: React.FC<Props> = ({
   loading,
   businesses,
   users,
+  brands,
 }) => {
   const intl = useIntl();
   const { id } = useParams();
@@ -476,6 +512,33 @@ const CreateChecklistView: React.FC<Props> = ({
                                                       {
                                                         label:
                                                           intl.formatMessage({
+                                                            id: '25m6b6',
+                                                            defaultMessage:
+                                                              'Pass/Fail (NA)',
+                                                          }),
+                                                        value: 'PASS_FAIL_NA',
+                                                      },
+                                                      {
+                                                        label:
+                                                          intl.formatMessage({
+                                                            id: 'Ugy0Wc',
+                                                            defaultMessage:
+                                                              'Yes/No (NA)',
+                                                          }),
+                                                        value: 'YES_NO_NA',
+                                                      },
+                                                      {
+                                                        label:
+                                                          intl.formatMessage({
+                                                            id: '6AjeNu',
+                                                            defaultMessage:
+                                                              'Good/Bad (NA)',
+                                                          }),
+                                                        value: 'GOOD_BAD_NA',
+                                                      },
+                                                      {
+                                                        label:
+                                                          intl.formatMessage({
                                                             id: 'aA8bDw',
                                                             defaultMessage:
                                                               'Text',
@@ -572,6 +635,7 @@ const CreateChecklistView: React.FC<Props> = ({
                                                     const renderFormItems =
                                                       () => {
                                                         switch (type) {
+                                                          case 'PASS_FAIL_NA':
                                                           case 'PASS_FAIL': {
                                                             return (
                                                               <Space>
@@ -663,6 +727,7 @@ const CreateChecklistView: React.FC<Props> = ({
                                                               </Space>
                                                             );
                                                           }
+                                                          case 'YES_NO_NA':
                                                           case 'YES_NO': {
                                                             return (
                                                               <Space>
@@ -754,7 +819,7 @@ const CreateChecklistView: React.FC<Props> = ({
                                                               </Space>
                                                             );
                                                           }
-
+                                                          case 'GOOD_BAD_NA':
                                                           case 'GOOD_BAD': {
                                                             return (
                                                               <Space>
@@ -846,7 +911,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                               </Space>
                                                             );
                                                           }
-
                                                           case 'TEXT': {
                                                             return (
                                                               <Space>
@@ -896,7 +960,6 @@ const CreateChecklistView: React.FC<Props> = ({
                                                               </Space>
                                                             );
                                                           }
-
                                                           default: {
                                                             return null;
                                                           }
@@ -907,6 +970,307 @@ const CreateChecklistView: React.FC<Props> = ({
                                                   }}
                                                 </Form.Item>
                                               </Space>
+                                            </Col>
+                                            <Col span={2} />
+                                            <Col span={22}>
+                                              <Form.Item
+                                                label={intl.formatMessage({
+                                                  id: 'jWfWEA',
+                                                  defaultMessage: 'Brands',
+                                                })}
+                                                name={[
+                                                  questionField.name,
+                                                  'brandIds',
+                                                ]}
+                                                rules={[
+                                                  {
+                                                    required: false,
+                                                  },
+                                                ]}
+                                              >
+                                                <Select
+                                                  style={{ width: 250 }}
+                                                  optionFilterProp="label"
+                                                  options={brands}
+                                                  mode="multiple"
+                                                  allowClear
+                                                />
+                                              </Form.Item>
+                                            </Col>
+                                            <Col span={2} />
+                                            <Col span={20}>
+                                              <Form.Item
+                                                label={intl.formatMessage({
+                                                  id: 'R1OkyM',
+                                                  defaultMessage: 'Dependent',
+                                                })}
+                                                name={[
+                                                  questionField.name,
+                                                  'dependentCheck',
+                                                ]}
+                                                rules={[
+                                                  {
+                                                    required: false,
+                                                  },
+                                                ]}
+                                                valuePropName="checked"
+                                              >
+                                                <Checkbox />
+                                              </Form.Item>
+                                              <Form.Item
+                                                shouldUpdate={(
+                                                  prevValues,
+                                                  currentValues
+                                                ) => {
+                                                  const currentQs =
+                                                    currentValues.sections[
+                                                      name
+                                                    ].subsections[
+                                                      subsectionField.name
+                                                    ].questions.map(
+                                                      ({ title }) => title
+                                                    );
+
+                                                  const prevQs =
+                                                    currentValues.sections[
+                                                      name
+                                                    ].subsections[
+                                                      subsectionField.name
+                                                    ].questions.map(
+                                                      ({ title }) => title
+                                                    );
+                                                  if (!currentQs !== prevQs)
+                                                    return true;
+
+                                                  return (
+                                                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                                                    prevValues.sections[name]
+                                                      .subsections[
+                                                      subsectionField.name
+                                                    ].questions[
+                                                      questionField.name
+                                                    ].dependentCheck !==
+                                                      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                                                      currentValues.sections[
+                                                        name
+                                                      ].subsections[
+                                                        subsectionField.name
+                                                      ].questions[
+                                                        questionField.name
+                                                      ].dependentCheck || // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                                                    prevValues.sections[name]
+                                                      .subsections[
+                                                      subsectionField.name
+                                                    ].questions[
+                                                      questionField.name
+                                                    ].dependentQuestion !==
+                                                      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                                                      currentValues.sections[
+                                                        name
+                                                      ].subsections[
+                                                        subsectionField.name
+                                                      ].questions[
+                                                        questionField.name
+                                                      ].dependentQuestion || // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                                                    prevValues.sections[name]
+                                                      .subsections[
+                                                      subsectionField.name
+                                                    ].questions.length !==
+                                                      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                                                      currentValues.sections[
+                                                        name
+                                                      ].subsections[
+                                                        subsectionField.name
+                                                      ].questions.length
+                                                  );
+                                                }}
+                                              >
+                                                {({
+                                                  getFieldValue,
+                                                  setFieldValue,
+                                                }) => {
+                                                  const isDependentCheck =
+                                                    getFieldValue([
+                                                      'sections',
+                                                      name,
+                                                      'subsections',
+                                                      subsectionField.name,
+                                                      'questions',
+                                                      questionField.name,
+                                                      'dependentCheck',
+                                                    ]) as boolean;
+
+                                                  if (!isDependentCheck) {
+                                                    return null;
+                                                  }
+
+                                                  const formValues =
+                                                    form.getFieldsValue();
+                                                  const qs =
+                                                    formValues.sections[
+                                                      sectionIndex
+                                                    ].subsections[
+                                                      subsectionIndex
+                                                    ].questions.map(
+                                                      (q, index) => {
+                                                        if (
+                                                          index !==
+                                                          questionIndex
+                                                        ) {
+                                                          return {
+                                                            question: q.title,
+                                                            type: q.type,
+                                                          };
+                                                        }
+                                                        return null;
+                                                      }
+                                                    );
+
+                                                  let selectedQ = qs.find(
+                                                    (qQuestion) =>
+                                                      qQuestion?.question ===
+                                                      getFieldValue([
+                                                        'sections',
+                                                        name,
+                                                        'subsections',
+                                                        subsectionField.name,
+                                                        'questions',
+                                                        questionField.name,
+                                                        'dependentQuestion',
+                                                      ])
+                                                  );
+
+                                                  if (
+                                                    getFieldValue([
+                                                      'sections',
+                                                      name,
+                                                      'subsections',
+                                                      subsectionField.name,
+                                                      'questions',
+                                                      questionField.name,
+                                                      'dependentQuestion',
+                                                    ]) &&
+                                                    !qs
+                                                      .map(
+                                                        (qQuestion) =>
+                                                          qQuestion?.question ||
+                                                          ''
+                                                      )
+                                                      .includes(
+                                                        getFieldValue([
+                                                          'sections',
+                                                          name,
+                                                          'subsections',
+                                                          subsectionField.name,
+                                                          'questions',
+                                                          questionField.name,
+                                                          'dependentQuestion',
+                                                        ]) ?? ''
+                                                      )
+                                                  )
+                                                    setFieldValue(
+                                                      [
+                                                        'sections',
+                                                        name,
+                                                        'subsections',
+                                                        subsectionField.name,
+                                                        'questions',
+                                                        questionField.name,
+                                                        'dependentQuestion',
+                                                      ],
+                                                      null
+                                                    );
+                                                  return (
+                                                    <Space>
+                                                      <Row>
+                                                        <Form.Item
+                                                          name={[
+                                                            questionField.name,
+                                                            'dependentQuestion',
+                                                          ]}
+                                                          label={intl.formatMessage(
+                                                            {
+                                                              id: 'GH/JnG',
+                                                              defaultMessage:
+                                                                'Dependent Question',
+                                                            }
+                                                          )}
+                                                          rules={[
+                                                            {
+                                                              required: true,
+                                                            },
+                                                          ]}
+                                                          style={{
+                                                            marginBottom: 0,
+                                                          }}
+                                                        >
+                                                          <Select
+                                                            options={qs
+                                                              .map((qItem) => ({
+                                                                label: `${
+                                                                  qItem?.question ||
+                                                                  ''
+                                                                }`,
+                                                                value:
+                                                                  qItem?.question ||
+                                                                  '',
+                                                              }))
+                                                              .filter(
+                                                                ({ label }) =>
+                                                                  label !== ''
+                                                              )}
+                                                            onSelect={(value) =>
+                                                              (selectedQ =
+                                                                qs.find(
+                                                                  (qQuestion) =>
+                                                                    qQuestion?.question ===
+                                                                    value
+                                                                ))
+                                                            }
+                                                            style={{
+                                                              width: 250,
+                                                              marginRight: 10,
+                                                            }}
+                                                          />
+                                                        </Form.Item>
+
+                                                        <Form.Item
+                                                          name={[
+                                                            questionField.name,
+                                                            'dependentAnswer',
+                                                          ]}
+                                                          label={intl.formatMessage(
+                                                            {
+                                                              id: 'uVG0Go',
+                                                              defaultMessage:
+                                                                'Dependent Answer',
+                                                            }
+                                                          )}
+                                                          rules={[
+                                                            {
+                                                              required: true,
+                                                            },
+                                                          ]}
+                                                          style={{
+                                                            marginBottom: 0,
+                                                          }}
+                                                        >
+                                                          <Select
+                                                            options={typeToAvail(
+                                                              selectedQ?.type ||
+                                                                'TEXT'
+                                                            )}
+                                                            style={{
+                                                              width: 250,
+                                                              marginRight: 10,
+                                                            }}
+                                                          />
+                                                        </Form.Item>
+                                                      </Row>
+                                                    </Space>
+                                                  );
+                                                }}
+                                              </Form.Item>
                                             </Col>
                                           </Row>
                                         </Card>

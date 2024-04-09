@@ -1,3 +1,4 @@
+import React from 'react';
 import View from './CreateChecklist.view';
 import { useCreateChecklist } from './useCreateChecklist';
 
@@ -15,9 +16,11 @@ const CreateChecklistContainer = () => {
     loading,
     businesses,
     users,
+    brands,
   } = useCreateChecklist();
   return (
     <View
+      brands={brands}
       businesses={businesses}
       users={users}
       loading={loading}
