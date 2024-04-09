@@ -81,7 +81,8 @@ const CompletedChecklistView = ({
   }[] = [];
 
   // eslint-disable-next-line no-restricted-syntax
-  // eslint-disable-next-line @typescript-eslint/no-loop-func
+  // eslint-disable-next-line @typescript-eslint/no-loop-func,no-restricted-syntax
+  // eslint-disable-next-line @typescript-eslint/no-loop-func,no-restricted-syntax
   for (const section of checklistSections)
     section.subsections.flatMap((subsection) =>
       subsection.questions.flatMap((question) => {
@@ -198,6 +199,8 @@ const CompletedChecklistView = ({
     },
   });
 
+  const percentage = Math.round((total / maxTotal) * 100);
+
   if (generating)
     return (
       <div ref={componentRef} className="page">
@@ -227,7 +230,8 @@ const CompletedChecklistView = ({
               level={3}
               style={{ margin: 0, textAlign: 'center' }}
             >
-              {total}/{maxTotal} ({Math.round((total / maxTotal) * 100)}%)
+              {total}/{maxTotal} ({Number.isNaN(percentage) ? 0 : percentage}
+              %)
             </Typography.Title>
           </Space>
 
@@ -662,7 +666,8 @@ const CompletedChecklistView = ({
                 level={3}
                 style={{ margin: 0, textAlign: 'center' }}
               >
-                {total}/{maxTotal} ({Math.round((total / maxTotal) * 100)}%)
+                {total}/{maxTotal} ({Number.isNaN(percentage) ? 0 : percentage}
+                %)
               </Typography.Title>
             </Space>
 

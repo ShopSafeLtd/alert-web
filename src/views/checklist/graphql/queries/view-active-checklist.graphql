@@ -16,6 +16,8 @@ query ActiveChecklist($where: ActiveChecklistWhereUniqueInput!) {
       question
       type
       availableAnswers
+                dependent
+
       answer {
         answer
         additionalComments

@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-argument,no-restricted-syntax */
 import React from 'react';
 import type { FormInstance } from 'antd';
 import {
@@ -25,7 +25,6 @@ import FONT_FAMILIES from 'components/onboarding/Onboarding/SchemeTerms/utils/Fo
 import {
   type ActiveChecklistSection,
   type FormData,
-  successArray,
 } from './useActiveChecklist';
 import type { ActiveChecklistQuery } from '../../../graphql/generated';
 import useStyles from './ActiveChecklist.styles';
@@ -55,7 +54,7 @@ interface Props {
   submitting: boolean;
 }
 
-const indexToLetter = (num: number) => (num + 10).toString(36).toUpperCase();
+// const indexToLetter = (num: number) => (num + 10).toString(36).toUpperCase();
 
 const normFile = (e: { fileList: never | never[] }) => {
   if (Array.isArray(e)) {
@@ -89,6 +88,8 @@ const ActiveChecklistView = ({
   const navigate = useNavigate();
   const classes = useStyles();
   const theme = useStoreState((state) => state.theme.currentTheme);
+
+  const watching = Form.useWatch('sections', form);
 
   localStorage.setItem(
     'data',
@@ -146,6 +147,7 @@ const ActiveChecklistView = ({
         form={form}
         className={classes.form}
         colon={false}
+        preserve
       >
         <Card
           loading={loading}
@@ -184,243 +186,247 @@ const ActiveChecklistView = ({
                                       (
                                         { name: questionName },
                                         questionIndex
-                                      ) => (
-                                        <>
-                                          <h4 className={classes.sideMargin}>
-                                            {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                                            {indexToLetter(questionIndex)}){' '}
-                                            {
-                                              sections[sectionIndex]
-                                                ?.subsections[subsectionIndex]
-                                                ?.questions[questionIndex]
-                                                ?.question.en
-                                            }
-                                          </h4>
-                                          {/* Question Fields */}
-                                          <Col span={13}>
+                                      ) => {
+                                        const depend =
+                                          sections[sectionIndex]?.subsections[
+                                            subsectionIndex
+                                          ]?.questions[questionIndex]
+                                            ?.dependent;
+                                        if (depend) {
+                                          let shouldShow = false;
+                                          if (watching.length === 0)
+                                            return null;
+                                          for (const subFields of watching)
+                                            for (const qFields of subFields.subsections)
+                                              for (const ques of qFields.questions) {
+                                                if (
+                                                  ques.ogName &&
+                                                  ques.ogName ===
+                                                    depend.question &&
+                                                  ques.answer === depend.answer
+                                                ) {
+                                                  shouldShow = true;
+                                                }
+                                              }
+
+                                          if (!shouldShow) return null;
+                                        }
+                                        return (
+                                          <>
+                                            <h4 className={classes.sideMargin}>
+                                              {/* /!* eslint-disable-next-line formatjs/no-literal-string-in-jsx *!/ */}
+                                              {/* {indexToLetter(questionIndex)}){' '} */}
+                                              {
+                                                sections[sectionIndex]
+                                                  ?.subsections[subsectionIndex]
+                                                  ?.questions[questionIndex]
+                                                  ?.question.en
+                                              }
+                                            </h4>
+                                            {/* Question Fields */}
+                                            <Col span={13}>
+                                              <Form.Item
+                                                shouldUpdate
+                                                className={classes.sideMargin}
+                                                name={[questionName, 'answer']}
+                                              >
+                                                {sections[sectionIndex]
+                                                  ?.subsections[subsectionIndex]
+                                                  ?.questions[questionIndex]
+                                                  ?.type === 'TEXT' ? (
+                                                  <Input.TextArea
+                                                    placeholder={intl.formatMessage(
+                                                      {
+                                                        id: 'oo/ava',
+                                                        defaultMessage:
+                                                          'Enter your answer here...',
+                                                      }
+                                                    )}
+                                                    autoSize={{ minRows: 3 }}
+                                                  />
+                                                ) : (
+                                                  <Radio.Group
+                                                    options={sections[
+                                                      sectionIndex
+                                                    ]?.subsections[
+                                                      subsectionIndex
+                                                    ]?.questions[
+                                                      questionIndex
+                                                    ]?.availableAnswers.map(
+                                                      (answer) => ({
+                                                        label:
+                                                          // eslint-disable-next-line formatjs/enforce-id
+                                                          intl.formatMessage({
+                                                            id: answer.answer,
+                                                            defaultMessage:
+                                                              // eslint-disable-next-line formatjs/enforce-default-message
+                                                              answer.answer,
+                                                          }),
+                                                        value: answer.answer,
+                                                      })
+                                                    )}
+                                                    optionType="button"
+                                                    buttonStyle="solid"
+                                                  />
+                                                )}
+                                              </Form.Item>
+                                            </Col>
                                             <Form.Item
-                                              shouldUpdate
-                                              className={classes.sideMargin}
-                                              name={[questionName, 'answer']}
-                                            >
-                                              {sections[sectionIndex]
-                                                ?.subsections[subsectionIndex]
-                                                ?.questions[questionIndex]
-                                                ?.type === 'TEXT' ? (
-                                                <Input.TextArea
-                                                  placeholder={intl.formatMessage(
-                                                    {
-                                                      id: 'oo/ava',
-                                                      defaultMessage:
-                                                        'Enter your answer here...',
-                                                    }
-                                                  )}
-                                                  autoSize={{ minRows: 3 }}
-                                                />
-                                              ) : (
-                                                <Radio.Group
-                                                  options={sections[
+                                              shouldUpdate={(
+                                                prevValues,
+                                                curValues
+                                              ) => {
+                                                const {
+                                                  answer: oldAnswer,
+                                                  type: oldType,
+                                                } =
+                                                  prevValues.sections[
                                                     sectionIndex
-                                                  ]?.subsections[
-                                                    subsectionIndex
-                                                  ]?.questions[
-                                                    questionIndex
-                                                  ]?.availableAnswers.map(
-                                                    (answer) => ({
-                                                      // eslint-disable-next-line formatjs/enforce-id
-                                                      label: intl.formatMessage(
+                                                  ].subsections[subsectionIndex]
+                                                    .questions[questionIndex];
+                                                const { answer, type } =
+                                                  curValues.sections[
+                                                    sectionIndex
+                                                  ].subsections[subsectionIndex]
+                                                    .questions[questionIndex];
+
+                                                if (
+                                                  oldAnswer !== answer ||
+                                                  oldType !== type
+                                                ) {
+                                                  return type !== 'TEXT';
+                                                }
+                                                return false;
+                                              }}
+                                            >
+                                              {({ getFieldValue }) => {
+                                                const type = getFieldValue([
+                                                  'sections',
+                                                  name,
+                                                  'subsections',
+                                                  subsectionName,
+                                                  'questions',
+                                                  questionName,
+                                                  'type',
+                                                ]);
+
+                                                if (type === 'TEXT') {
+                                                  return null;
+                                                }
+
+                                                return (
+                                                  <Col span={12}>
+                                                    <Form.Item
+                                                      className={
+                                                        classes.sideMargin
+                                                      }
+                                                      name={[
+                                                        questionName,
+                                                        'additionalComments',
+                                                      ]}
+                                                      label={intl.formatMessage(
                                                         {
-                                                          id: answer.answer,
+                                                          id: '3XOciw',
                                                           defaultMessage:
-                                                            // eslint-disable-next-line formatjs/enforce-default-message
-                                                            answer.answer,
+                                                            'Additional Info',
                                                         }
-                                                      ),
-                                                      value: answer.answer,
-                                                    })
-                                                  )}
-                                                  optionType="button"
-                                                  buttonStyle="solid"
-                                                />
-                                              )}
+                                                      )}
+                                                    >
+                                                      <Input.TextArea
+                                                        placeholder={intl.formatMessage(
+                                                          {
+                                                            id: 'JGkmCI',
+                                                            defaultMessage:
+                                                              'Enter your comment here...',
+                                                          }
+                                                        )}
+                                                      />
+                                                    </Form.Item>
+                                                  </Col>
+                                                );
+                                              }}
                                             </Form.Item>
-                                          </Col>
-                                          <Form.Item
-                                            shouldUpdate={(
-                                              prevValues,
-                                              curValues
-                                            ) => {
-                                              const {
-                                                answer: oldAnswer,
-                                                type: oldType,
-                                              } =
-                                                prevValues.sections[
-                                                  sectionIndex
-                                                ].subsections[subsectionIndex]
-                                                  .questions[questionIndex];
-                                              const { answer, type } =
-                                                curValues.sections[sectionIndex]
-                                                  .subsections[subsectionIndex]
-                                                  .questions[questionIndex];
+                                            <Form.Item
+                                              shouldUpdate={(
+                                                prevValues,
+                                                curValues
+                                              ) => {
+                                                const {
+                                                  answer: oldAnswer,
+                                                  type: oldType,
+                                                } =
+                                                  prevValues.sections[
+                                                    sectionIndex
+                                                  ].subsections[subsectionIndex]
+                                                    .questions[questionIndex];
+                                                const { answer, type } =
+                                                  curValues.sections[
+                                                    sectionIndex
+                                                  ].subsections[subsectionIndex]
+                                                    .questions[questionIndex];
 
-                                              if (
-                                                oldAnswer !== answer ||
-                                                oldType !== type
-                                              ) {
-                                                return type !== 'TEXT';
-                                              }
-                                              return false;
-                                            }}
-                                          >
-                                            {({ getFieldValue }) => {
-                                              const answer = getFieldValue([
-                                                'sections',
-                                                name,
-                                                'subsections',
-                                                subsectionName,
-                                                'questions',
-                                                questionName,
-                                                'answer',
-                                              ]);
+                                                if (
+                                                  oldAnswer !== answer ||
+                                                  oldType !== type
+                                                ) {
+                                                  return type !== 'TEXT';
+                                                }
+                                                return false;
+                                              }}
+                                            >
+                                              {({ getFieldValue }) => {
+                                                const type = getFieldValue([
+                                                  'sections',
+                                                  name,
+                                                  'subsections',
+                                                  subsectionName,
+                                                  'questions',
+                                                  questionName,
+                                                  'type',
+                                                ]) as string;
 
-                                              const type = getFieldValue([
-                                                'sections',
-                                                name,
-                                                'subsections',
-                                                subsectionName,
-                                                'questions',
-                                                questionName,
-                                                'type',
-                                              ]);
-
-                                              if (
-                                                successArray.has(answer) ||
-                                                type === 'TEXT'
-                                              ) {
-                                                return null;
-                                              }
-
-                                              return (
-                                                <Col span={12}>
+                                                if (type === 'TEXT') {
+                                                  return null;
+                                                }
+                                                return (
                                                   <Form.Item
+                                                    name={[
+                                                      questionName,
+                                                      'images',
+                                                    ]}
+                                                    label={intl.formatMessage({
+                                                      id: 'Fip4H8',
+                                                      defaultMessage: 'Images',
+                                                    })}
                                                     className={
                                                       classes.sideMargin
                                                     }
-                                                    name={[
-                                                      questionName,
-                                                      'additionalComments',
-                                                    ]}
-                                                    label={intl.formatMessage({
-                                                      id: '3XOciw',
-                                                      defaultMessage:
-                                                        'Additional Info',
-                                                    })}
+                                                    valuePropName="fileList"
+                                                    getValueFromEvent={normFile}
                                                   >
-                                                    <Input.TextArea
-                                                      placeholder={intl.formatMessage(
-                                                        {
-                                                          id: 'JGkmCI',
+                                                    <Upload
+                                                      action={
+                                                        import.meta.env
+                                                          .VITE_APP_CHECKLIST_UPLOAD_ENDPOINT
+                                                      }
+                                                      listType="picture-card"
+                                                    >
+                                                      <Button type="ghost">
+                                                        <PlusOutlined />
+                                                        {intl.formatMessage({
                                                           defaultMessage:
-                                                            'Enter your comment here...',
-                                                        }
-                                                      )}
-                                                    />
+                                                            'Upload',
+                                                          id: 'p4N05H',
+                                                        })}
+                                                      </Button>
+                                                    </Upload>
                                                   </Form.Item>
-                                                </Col>
-                                              );
-                                            }}
-                                          </Form.Item>
-                                          <Form.Item
-                                            shouldUpdate={(
-                                              prevValues,
-                                              curValues
-                                            ) => {
-                                              const {
-                                                answer: oldAnswer,
-                                                type: oldType,
-                                              } =
-                                                prevValues.sections[
-                                                  sectionIndex
-                                                ].subsections[subsectionIndex]
-                                                  .questions[questionIndex];
-                                              const { answer, type } =
-                                                curValues.sections[sectionIndex]
-                                                  .subsections[subsectionIndex]
-                                                  .questions[questionIndex];
-
-                                              if (
-                                                oldAnswer !== answer ||
-                                                oldType !== type
-                                              ) {
-                                                return type !== 'TEXT';
-                                              }
-                                              return false;
-                                            }}
-                                          >
-                                            {({ getFieldValue }) => {
-                                              const answer = getFieldValue([
-                                                'sections',
-                                                name,
-                                                'subsections',
-                                                subsectionName,
-                                                'questions',
-                                                questionName,
-                                                'answer',
-                                              ]) as string | null | undefined;
-                                              const type = getFieldValue([
-                                                'sections',
-                                                name,
-                                                'subsections',
-                                                subsectionName,
-                                                'questions',
-                                                questionName,
-                                                'type',
-                                              ]) as string;
-
-                                              if (
-                                                successArray.has(
-                                                  answer || null
-                                                ) ||
-                                                type === 'TEXT'
-                                              ) {
-                                                return null;
-                                              }
-                                              return (
-                                                <Form.Item
-                                                  name={[
-                                                    questionName,
-                                                    'images',
-                                                  ]}
-                                                  label={intl.formatMessage({
-                                                    id: 'Fip4H8',
-                                                    defaultMessage: 'Images',
-                                                  })}
-                                                  className={classes.sideMargin}
-                                                  valuePropName="fileList"
-                                                  getValueFromEvent={normFile}
-                                                >
-                                                  <Upload
-                                                    action={
-                                                      import.meta.env
-                                                        .VITE_APP_CHECKLIST_UPLOAD_ENDPOINT
-                                                    }
-                                                    listType="picture-card"
-                                                  >
-                                                    <Button type="ghost">
-                                                      <PlusOutlined />
-                                                      {intl.formatMessage({
-                                                        defaultMessage:
-                                                          'Upload',
-                                                        id: 'p4N05H',
-                                                      })}
-                                                    </Button>
-                                                  </Upload>
-                                                </Form.Item>
-                                              );
-                                            }}
-                                          </Form.Item>
-                                        </>
-                                      )
+                                                );
+                                              }}
+                                            </Form.Item>
+                                          </>
+                                        );
+                                      }
                                     )}
                                   </>
                                 )}

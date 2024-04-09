@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import { Form, type FormInstance } from 'antd';
 import { useParams } from 'react-router';
 import { useState } from 'react';
@@ -66,6 +67,11 @@ interface ActiveChecklistField {
   order: number;
   weights: Weight[];
   additionalComments?: string | null;
+  dependent?: {
+    question: string;
+    answer: string;
+  } | null;
+  ogName: string;
   images?:
     | {
         uid: string;
@@ -165,11 +171,22 @@ const useActiveChecklist = (): Return => {
                 const questionsForSection =
                   questToArray[section.section - 1][
                     (subsection.subsection || 0) - 1
-                  ]?.sort((a, b) => a.order - b.order) || [];
+                  ]
+                    ?.sort((a, b) => a.order - b.order)
+                    .filter(
+                      (ques) =>
+                        !(
+                          initData.activeChecklist.status === 'COMPLETED' &&
+                          ques.dependent &&
+                          !ques.answer?.answer
+                        )
+                    ) || [];
                 return {
                   ...subsection,
                   questions: questionsForSection.map((question) => ({
                     ...question,
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                    ogName: question.question.og || '',
                     weights:
                       question.availableAnswers?.map((weight) => ({
                         answer: (weight.answer as string) || '',
@@ -269,9 +286,18 @@ const useActiveChecklist = (): Return => {
 
     // eslint-disable-next-line no-restricted-syntax
     // eslint-disable-next-line @typescript-eslint/no-loop-func
+    // eslint-disable-next-line @typescript-eslint/no-loop-func
     for (const section of completedData.sections)
       section.subsections.flatMap((subsection) =>
-        subsection.questions.flatMap((question) => {
+        subsection.questions.flatMap((question, _, ogArray) => {
+          const isDepend = question.dependent;
+          let unusedDep = false;
+          if (isDepend) {
+            const dependOn = ogArray.find(
+              (q) => q.ogName === isDepend.question
+            );
+            if (dependOn?.answer !== isDepend.answer) unusedDep = true;
+          }
           const questionFormatted = {
             section: section.section,
             subsection: subsection.subsection || 0,
@@ -282,8 +308,8 @@ const useActiveChecklist = (): Return => {
               question.weights.find(
                 (weight) => weight.answer === question.answer
               )?.weight || 0,
-            na: question.answer === 'N/A',
-            flagged: question.answer === 'FAIL',
+            na: question.answer === 'N/A' || unusedDep,
+            flagged: unusedDep ? false : question.answer === 'FAIL',
             answer: question.answer || '',
             id: question.id,
           };
