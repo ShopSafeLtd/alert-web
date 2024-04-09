@@ -13,6 +13,8 @@ query Checklist($where: ChecklistWhereUniqueInput!) {
           order
           question
           type
+          dependent
+          brandIds
           weight {
             weight
             answer
