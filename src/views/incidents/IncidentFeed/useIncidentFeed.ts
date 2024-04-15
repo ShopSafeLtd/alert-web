@@ -352,6 +352,7 @@ const useIncidentFeed = (): Return => {
     useListBusinessesQuery({
       variables: {
         orderBy: { name: SortOrder.Asc },
+        take: 1000,
         where: {
           schemes: {
             some: {
