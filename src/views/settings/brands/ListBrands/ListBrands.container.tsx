@@ -8,7 +8,6 @@ const BrandList = (): JSX.Element => {
     loading,
     search,
     setSearch,
-
     addBrand,
     toggleAddBrand,
     updateNewBrandList,

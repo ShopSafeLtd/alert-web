@@ -1,22 +1,9 @@
 import React from 'react';
 import type { BrandQuery } from 'graphql/generated';
 import type { FormInstance } from 'antd';
-import {
-  Button,
-  Col,
-  Drawer,
-  Form,
-  Input,
-  Row,
-  Skeleton,
-  Typography,
-} from 'antd';
+import { Button, Col, Form, Input, Row, Skeleton, Typography } from 'antd';
 import { useIntl } from 'react-intl';
-import { faPlus } from '@fortawesome/pro-light-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { BusinessData } from '#/types/DataType';
 import DebounceSelect from '../../DebounceSelect';
-import AddBusiness from '../../businesses/AddBusiness';
 import type { FormData } from './useEditBrand';
 
 interface Props {
@@ -26,9 +13,6 @@ interface Props {
   loading: boolean;
   saving: boolean;
   form: FormInstance<FormData>;
-  addBusinessVisible: boolean;
-  toggleAddBusinessVisible: () => void;
-  updateNewBusinessData: (values: BusinessData) => void;
   onSearchBusiness: (
     value: string
   ) => Promise<{ label: string; value: string; location?: string }[]>;
@@ -41,9 +25,6 @@ const EditOffenderWarning = ({
   loading,
   saving,
   form,
-  addBusinessVisible,
-  toggleAddBusinessVisible,
-  updateNewBusinessData,
   onSearchBusiness,
 }: Props): JSX.Element => {
   const intl = useIntl();
@@ -132,22 +113,6 @@ const EditOffenderWarning = ({
                 />
               </Form.Item>
             </Col>
-
-            <Col>
-              <Button
-                disabled={saving}
-                style={{ color: 'red', padding: 8, marginTop: 3 }}
-                onClick={toggleAddBusinessVisible}
-                icon={
-                  <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
-                }
-              >
-                {intl.formatMessage({
-                  defaultMessage: 'New Business',
-                  id: 'KepKya',
-                })}
-              </Button>
-            </Col>
           </Row>
         </Col>
       </Row>
@@ -171,23 +136,6 @@ const EditOffenderWarning = ({
           </Col>
         </Row>
       </Form.Item>
-      <Drawer
-        open={addBusinessVisible}
-        onClose={toggleAddBusinessVisible}
-        title={intl.formatMessage({
-          defaultMessage: 'Add New Business',
-          id: 'p47asT',
-        })}
-        width={600}
-      >
-        {addBusinessVisible && (
-          <AddBusiness
-            onClose={toggleAddBusinessVisible}
-            saving={saving}
-            update={updateNewBusinessData}
-          />
-        )}
-      </Drawer>
     </Form>
   );
 };

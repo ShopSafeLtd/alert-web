@@ -10,15 +10,7 @@ interface Props {
 }
 
 const AddBrand = ({ onClose, update }: Props): JSX.Element => {
-  const {
-    onSubmit,
-    form,
-    addBusinessVisible,
-    toggleAddBusinessVisible,
-    updateNewBusinessData,
-    onSearchBusiness,
-    saving,
-  } = useAddBrand({
+  const { onSubmit, form, onSearchBusiness, saving } = useAddBrand({
     update,
     onClose,
   });
@@ -29,9 +21,6 @@ const AddBrand = ({ onClose, update }: Props): JSX.Element => {
       onClose={onClose}
       saving={saving}
       form={form}
-      addBusinessVisible={addBusinessVisible}
-      toggleAddBusinessVisible={toggleAddBusinessVisible}
-      updateNewBusinessData={updateNewBusinessData}
       onSearchBusiness={onSearchBusiness}
     />
   );

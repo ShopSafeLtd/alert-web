@@ -690,6 +690,12 @@ export type Answer = {
   updatedAt: Scalars['Date'];
 };
 
+export type AnswerCount = {
+  __typename?: 'AnswerCount';
+  answer: Scalars['String'];
+  count: Scalars['Int'];
+};
+
 export type AnswerListRelationFilter = {
   every?: InputMaybe<AnswerWhereInput>;
   none?: InputMaybe<AnswerWhereInput>;
@@ -1705,13 +1711,6 @@ export type BrandOrderByWithRelationInput = {
   updatedAt?: InputMaybe<SortOrder>;
 };
 
-export type BrandUpdateInput = {
-  businesses?: InputMaybe<BusinessCreateNestedManyRelationInput>;
-  description?: InputMaybe<Scalars['String']>;
-  name?: InputMaybe<Scalars['String']>;
-  schemeId?: InputMaybe<Scalars['String']>;
-};
-
 export type BrandWhereInput = {
   AND?: InputMaybe<Array<BrandWhereInput>>;
   NOT?: InputMaybe<Array<BrandWhereInput>>;
@@ -2673,13 +2672,6 @@ export type CreateBanOnOffender = {
   scheme: ConnectHelper;
   startDate: Scalars['Date'];
   type?: InputMaybe<BanType>;
-};
-
-export type CreateBrandInput = {
-  businesses: BusinessCreateNestedManyRelationInput;
-  description?: InputMaybe<Scalars['String']>;
-  name: Scalars['String'];
-  schemeId: Scalars['String'];
 };
 
 export type CreateBusinessDataInput = {
@@ -8502,12 +8494,6 @@ export type ListArticles = {
   total: Scalars['Int'];
 };
 
-export type ListBrands = {
-  __typename?: 'ListBrands';
-  brands: Array<Brand>;
-  total: Scalars['Int'];
-};
-
 export type ListBusinessContribution = {
   __typename?: 'ListBusinessContribution';
   businessContributions: Array<BusinessContributions>;
@@ -9590,7 +9576,6 @@ export type Mutation = {
   createActiveChecklist: ActiveChecklist;
   createArticle: Article;
   createBlankImage: Image;
-  createBrand: Brand;
   createBusiness: Business;
   createChat: Chat;
   createCollection: RekCollection;
@@ -9723,7 +9708,6 @@ export type Mutation = {
   unsubscribeToCrimeGroup: CrimeGroup;
   unsubscribeToInvestigation: Investigation;
   unsubscribeToVehicle: Vehicle;
-  updateBrand: Brand;
   updateBusiness: Business;
   updateChat: Chat;
   updateCrimeGroup: CrimeGroup;
@@ -9853,11 +9837,6 @@ export type MutationCreateBlankImageArgs = {
   incident?: InputMaybe<IncidentWhereUniqueInput>;
   offenders?: InputMaybe<Array<OffenderWhereUniqueInput>>;
   scheme: Scalars['String'];
-};
-
-
-export type MutationCreateBrandArgs = {
-  data: CreateBrandInput;
 };
 
 
@@ -10475,12 +10454,6 @@ export type MutationUnsubscribeToInvestigationArgs = {
 
 export type MutationUnsubscribeToVehicleArgs = {
   where: UniqueId;
-};
-
-
-export type MutationUpdateBrandArgs = {
-  data: BrandUpdateInput;
-  where: BrandWhereUniqueInput;
 };
 
 
@@ -12723,7 +12696,7 @@ export type Query = {
   ban: Ban;
   bans: Array<Ban>;
   brand: Brand;
-  brands: Array<Brand>;
+  brands: QueryBrandsConnection;
   business: Business;
   businessContribution: ListBusinessContribution;
   businessImpact: BusinessImpact;
@@ -12732,6 +12705,7 @@ export type Query = {
   chatMessages: Array<MessageItem>;
   chats: Array<Chat>;
   checklist: Checklist;
+  checklistQuestionCounts: Array<QuestionAnswerCount>;
   checklists: Array<Checklist>;
   compareFaces: SystemTask;
   crimeGroup: CrimeGroup;
@@ -12766,7 +12740,6 @@ export type Query = {
   listActions: ListActions;
   listArticles: ListArticles;
   listArticlesRelay: QueryListArticlesRelayConnection;
-  listBrands: ListBrands;
   listBusinesses: ListBusinesses;
   listCrimeGroups: ListCrimeGroups;
   listCustomGalleries: ListCustomGalleries;
@@ -12945,7 +12918,11 @@ export type QueryBrandArgs = {
 
 
 export type QueryBrandsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
   cursor?: InputMaybe<BrandWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<BrandOrderByWithRelationInput>>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
@@ -12998,6 +12975,11 @@ export type QueryChatsArgs = {
 
 export type QueryChecklistArgs = {
   where: ChecklistWhereUniqueInput;
+};
+
+
+export type QueryChecklistQuestionCountsArgs = {
+  where: ActiveChecklistWhereInput;
 };
 
 
@@ -13232,14 +13214,6 @@ export type QueryListArticlesRelayArgs = {
   order?: InputMaybe<ArticleOrderByWithRelationInput>;
   scheme: SchemeWhereUniqueInput;
   where?: InputMaybe<ArticleWhereInput>;
-};
-
-
-export type QueryListBrandsArgs = {
-  orderBy?: InputMaybe<Array<BrandOrderBy>>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<BrandWhereInput>;
 };
 
 
@@ -13821,6 +13795,19 @@ export type QueryActiveChecklistsConnectionEdge = {
   node: ActiveChecklist;
 };
 
+export type QueryBrandsConnection = {
+  __typename?: 'QueryBrandsConnection';
+  edges: Array<QueryBrandsConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryBrandsConnectionEdge = {
+  __typename?: 'QueryBrandsConnectionEdge';
+  cursor: Scalars['String'];
+  node: Brand;
+};
+
 export type QueryDashboardsConnection = {
   __typename?: 'QueryDashboardsConnection';
   edges: Array<QueryDashboardsConnectionEdge>;
@@ -13929,6 +13916,12 @@ export type Question = {
   tags: Array<TagQuestion>;
   type: AnswerType;
   updatedAt: Scalars['Date'];
+};
+
+export type QuestionAnswerCount = {
+  __typename?: 'QuestionAnswerCount';
+  answers: Array<AnswerCount>;
+  question: Scalars['String'];
 };
 
 export type QuestionGroup = {
@@ -22811,28 +22804,6 @@ export type RolesQueryVariables = Exact<{
 
 export type RolesQuery = { __typename?: 'Query', roles: { __typename?: 'QueryRolesConnection', totalCount: number, edges: Array<{ __typename?: 'QueryRolesConnectionEdge', node: { __typename?: 'CustomRole', id: string, name: string, type: Role, usersCount: number } }>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean } } };
 
-export type BrandQueryVariables = Exact<{
-  where: BrandWhereUniqueInput;
-}>;
-
-
-export type BrandQuery = { __typename?: 'Query', brand: { __typename?: 'Brand', name: string, id: string, description?: string | null, businesses: Array<{ __typename?: 'Business', id: string, name: string }> } };
-
-export type BrandsQueryVariables = Exact<{
-  where?: InputMaybe<BrandWhereInput>;
-  orderBy?: InputMaybe<Array<BrandOrderByWithRelationInput> | BrandOrderByWithRelationInput>;
-}>;
-
-
-export type BrandsQuery = { __typename?: 'Query', brands: Array<{ __typename?: 'Brand', id: string, name: string, description?: string | null, businesses: Array<{ __typename?: 'Business', id: string, name: string }>, scheme: { __typename?: 'Scheme', id: string, name: string } }> };
-
-export type CreateBrandMutationVariables = Exact<{
-  data: CreateBrandInput;
-}>;
-
-
-export type CreateBrandMutation = { __typename?: 'Mutation', createBrand: { __typename?: 'Brand', id: string, name: string, description?: string | null, businesses: Array<{ __typename?: 'Business', id: string, name: string, siteNumber?: string | null, fullName: string }>, scheme: { __typename?: 'Scheme', id: string, name: string } } };
-
 export type DeleteBrandMutationVariables = Exact<{
   id: Scalars['String'];
 }>;
@@ -22840,21 +22811,29 @@ export type DeleteBrandMutationVariables = Exact<{
 
 export type DeleteBrandMutation = { __typename?: 'Mutation', deleteBrand: { __typename?: 'Brand', id: string } };
 
-export type UpdateBrandBrandMutationVariables = Exact<{
-  data: BrandUpdateInput;
+export type UpsertBrandMutationVariables = Exact<{
+  data: UpsertBrand;
+}>;
+
+
+export type UpsertBrandMutation = { __typename?: 'Mutation', upsertBrand: { __typename?: 'Brand', id: string, name: string, description?: string | null, businesses: Array<{ __typename?: 'Business', name: string, id: string }> } };
+
+export type BrandQueryVariables = Exact<{
   where: BrandWhereUniqueInput;
 }>;
 
 
-export type UpdateBrandBrandMutation = { __typename?: 'Mutation', updateBrand: { __typename?: 'Brand', id: string, businesses: Array<{ __typename?: 'Business', id: string, name: string, siteNumber?: string | null, fullName: string }> } };
+export type BrandQuery = { __typename?: 'Query', brand: { __typename?: 'Brand', name: string, id: string, description?: string | null, businesses: Array<{ __typename?: 'Business', id: string, name: string }>, scheme: { __typename?: 'Scheme', id: string } } };
 
-export type UpdateBrandMutationVariables = Exact<{
-  data: BrandUpdateInput;
-  where: BrandWhereUniqueInput;
+export type BrandsQueryVariables = Exact<{
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<BrandOrderByWithRelationInput> | BrandOrderByWithRelationInput>;
+  where?: InputMaybe<BrandWhereInput>;
 }>;
 
 
-export type UpdateBrandMutation = { __typename?: 'Mutation', updateBrand: { __typename?: 'Brand', id: string, name: string, description?: string | null, businesses: Array<{ __typename?: 'Business', id: string, name: string, siteNumber?: string | null, fullName: string }>, scheme: { __typename?: 'Scheme', id: string, name: string } } };
+export type BrandsQuery = { __typename?: 'Query', brands: { __typename?: 'QueryBrandsConnection', totalCount: number, edges: Array<{ __typename?: 'QueryBrandsConnectionEdge', node: { __typename?: 'Brand', id: string, name: string, description?: string | null, businesses: Array<{ __typename?: 'Business', id: string, name: string }> } }> } };
 
 export type CreateCsvImportMutationVariables = Exact<{
   data: CsvImportCreateInput;
@@ -34670,6 +34649,42 @@ export function useRolesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Role
 export type RolesQueryHookResult = ReturnType<typeof useRolesQuery>;
 export type RolesLazyQueryHookResult = ReturnType<typeof useRolesLazyQuery>;
 export type RolesQueryResult = Apollo.QueryResult<RolesQuery, RolesQueryVariables>;
+export const DeleteBrandDocument = gql`
+    mutation deleteBrand($id: String!) {
+  deleteBrand(where: {id: $id}) {
+    id
+  }
+}
+    `;
+export type DeleteBrandMutationFn = Apollo.MutationFunction<DeleteBrandMutation, DeleteBrandMutationVariables>;
+export function useDeleteBrandMutation(baseOptions?: Apollo.MutationHookOptions<DeleteBrandMutation, DeleteBrandMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteBrandMutation, DeleteBrandMutationVariables>(DeleteBrandDocument, options);
+      }
+export type DeleteBrandMutationHookResult = ReturnType<typeof useDeleteBrandMutation>;
+export type DeleteBrandMutationResult = Apollo.MutationResult<DeleteBrandMutation>;
+export type DeleteBrandMutationOptions = Apollo.BaseMutationOptions<DeleteBrandMutation, DeleteBrandMutationVariables>;
+export const UpsertBrandDocument = gql`
+    mutation UpsertBrand($data: UpsertBrand!) {
+  upsertBrand(data: $data) {
+    id
+    name
+    businesses {
+      name
+      id
+    }
+    description
+  }
+}
+    `;
+export type UpsertBrandMutationFn = Apollo.MutationFunction<UpsertBrandMutation, UpsertBrandMutationVariables>;
+export function useUpsertBrandMutation(baseOptions?: Apollo.MutationHookOptions<UpsertBrandMutation, UpsertBrandMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpsertBrandMutation, UpsertBrandMutationVariables>(UpsertBrandDocument, options);
+      }
+export type UpsertBrandMutationHookResult = ReturnType<typeof useUpsertBrandMutation>;
+export type UpsertBrandMutationResult = Apollo.MutationResult<UpsertBrandMutation>;
+export type UpsertBrandMutationOptions = Apollo.BaseMutationOptions<UpsertBrandMutation, UpsertBrandMutationVariables>;
 export const BrandDocument = gql`
     query Brand($where: BrandWhereUniqueInput!) {
   brand(where: $where) {
@@ -34679,6 +34694,9 @@ export const BrandDocument = gql`
     businesses {
       id
       name
+    }
+    scheme {
+      id
     }
   }
 }
@@ -34695,18 +34713,19 @@ export type BrandQueryHookResult = ReturnType<typeof useBrandQuery>;
 export type BrandLazyQueryHookResult = ReturnType<typeof useBrandLazyQuery>;
 export type BrandQueryResult = Apollo.QueryResult<BrandQuery, BrandQueryVariables>;
 export const BrandsDocument = gql`
-    query Brands($where: BrandWhereInput, $orderBy: [BrandOrderByWithRelationInput!]) {
-  brands(where: $where, orderBy: $orderBy) {
-    id
-    name
-    description
-    businesses {
-      id
-      name
-    }
-    scheme {
-      id
-      name
+    query Brands($skip: Int, $take: Int, $orderBy: [BrandOrderByWithRelationInput!], $where: BrandWhereInput) {
+  brands(skip: $skip, take: $take, orderBy: $orderBy, where: $where) {
+    totalCount
+    edges {
+      node {
+        id
+        name
+        description
+        businesses {
+          id
+          name
+        }
+      }
     }
   }
 }
@@ -34722,96 +34741,6 @@ export function useBrandsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Bra
 export type BrandsQueryHookResult = ReturnType<typeof useBrandsQuery>;
 export type BrandsLazyQueryHookResult = ReturnType<typeof useBrandsLazyQuery>;
 export type BrandsQueryResult = Apollo.QueryResult<BrandsQuery, BrandsQueryVariables>;
-export const CreateBrandDocument = gql`
-    mutation CreateBrand($data: CreateBrandInput!) {
-  createBrand(data: $data) {
-    id
-    name
-    description
-    businesses {
-      id
-      name
-      siteNumber
-      fullName
-    }
-    scheme {
-      id
-      name
-    }
-  }
-}
-    `;
-export type CreateBrandMutationFn = Apollo.MutationFunction<CreateBrandMutation, CreateBrandMutationVariables>;
-export function useCreateBrandMutation(baseOptions?: Apollo.MutationHookOptions<CreateBrandMutation, CreateBrandMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateBrandMutation, CreateBrandMutationVariables>(CreateBrandDocument, options);
-      }
-export type CreateBrandMutationHookResult = ReturnType<typeof useCreateBrandMutation>;
-export type CreateBrandMutationResult = Apollo.MutationResult<CreateBrandMutation>;
-export type CreateBrandMutationOptions = Apollo.BaseMutationOptions<CreateBrandMutation, CreateBrandMutationVariables>;
-export const DeleteBrandDocument = gql`
-    mutation deleteBrand($id: String!) {
-  deleteBrand(where: {id: $id}) {
-    id
-  }
-}
-    `;
-export type DeleteBrandMutationFn = Apollo.MutationFunction<DeleteBrandMutation, DeleteBrandMutationVariables>;
-export function useDeleteBrandMutation(baseOptions?: Apollo.MutationHookOptions<DeleteBrandMutation, DeleteBrandMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteBrandMutation, DeleteBrandMutationVariables>(DeleteBrandDocument, options);
-      }
-export type DeleteBrandMutationHookResult = ReturnType<typeof useDeleteBrandMutation>;
-export type DeleteBrandMutationResult = Apollo.MutationResult<DeleteBrandMutation>;
-export type DeleteBrandMutationOptions = Apollo.BaseMutationOptions<DeleteBrandMutation, DeleteBrandMutationVariables>;
-export const UpdateBrandBrandDocument = gql`
-    mutation UpdateBrandBrand($data: BrandUpdateInput!, $where: BrandWhereUniqueInput!) {
-  updateBrand(data: $data, where: $where) {
-    id
-    businesses {
-      id
-      name
-      siteNumber
-      fullName
-    }
-  }
-}
-    `;
-export type UpdateBrandBrandMutationFn = Apollo.MutationFunction<UpdateBrandBrandMutation, UpdateBrandBrandMutationVariables>;
-export function useUpdateBrandBrandMutation(baseOptions?: Apollo.MutationHookOptions<UpdateBrandBrandMutation, UpdateBrandBrandMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateBrandBrandMutation, UpdateBrandBrandMutationVariables>(UpdateBrandBrandDocument, options);
-      }
-export type UpdateBrandBrandMutationHookResult = ReturnType<typeof useUpdateBrandBrandMutation>;
-export type UpdateBrandBrandMutationResult = Apollo.MutationResult<UpdateBrandBrandMutation>;
-export type UpdateBrandBrandMutationOptions = Apollo.BaseMutationOptions<UpdateBrandBrandMutation, UpdateBrandBrandMutationVariables>;
-export const UpdateBrandDocument = gql`
-    mutation UpdateBrand($data: BrandUpdateInput!, $where: BrandWhereUniqueInput!) {
-  updateBrand(data: $data, where: $where) {
-    id
-    name
-    description
-    businesses {
-      id
-      name
-      siteNumber
-      fullName
-    }
-    scheme {
-      id
-      name
-    }
-  }
-}
-    `;
-export type UpdateBrandMutationFn = Apollo.MutationFunction<UpdateBrandMutation, UpdateBrandMutationVariables>;
-export function useUpdateBrandMutation(baseOptions?: Apollo.MutationHookOptions<UpdateBrandMutation, UpdateBrandMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateBrandMutation, UpdateBrandMutationVariables>(UpdateBrandDocument, options);
-      }
-export type UpdateBrandMutationHookResult = ReturnType<typeof useUpdateBrandMutation>;
-export type UpdateBrandMutationResult = Apollo.MutationResult<UpdateBrandMutation>;
-export type UpdateBrandMutationOptions = Apollo.BaseMutationOptions<UpdateBrandMutation, UpdateBrandMutationVariables>;
 export const CreateCsvImportDocument = gql`
     mutation CreateCsvImport($data: CsvImportCreateInput!) {
   createOneCsvImport(data: $data) {
