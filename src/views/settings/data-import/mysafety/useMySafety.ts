@@ -23,45 +23,49 @@ const useMySafety = (): Return => {
       notification.success({
         description: 'Import has been completed successfully',
         message: 'Import Completed',
-        placement: 'bottomLeft',
+        placement: 'bottomRight',
       });
     },
     onError: () => {
       notification.error({
         description: 'Import could not be completed for data.',
         message: 'Import Failed',
-        placement: 'bottomLeft',
+        placement: 'bottomRight',
       });
     },
   });
 
   const onSubmit = async ({ groups, mySafety }: FormData) => {
-    setSaving(true);
-    await importData({
-      variables: {
-        data: {
-          scheme: {
-            id: schemeId,
+    try {
+      setSaving(true);
+      await importData({
+        variables: {
+          data: {
+            scheme: {
+              id: schemeId,
+            },
+            groups: groups.map((id) => ({ id })) || [],
+            incidents: mySafety.map((item) => ({
+              site: item.site,
+              actualValue: item.actualValue,
+              createdByName: item.createdByName,
+              crimeReferenceNumber: item.crimeReferenceNumber,
+              crimeType: item.crimeType,
+              incidentID: item.incidentID,
+              dateOccurred: item.dateOccurred,
+              description: item.description,
+              emergencyServicesAttend: item.emergencyServicesAttend,
+              estimatedValue: item.estimatedValue,
+              specificArea: item.specificArea,
+              wereWeaponsUsed: item.wereWeaponsUsed,
+            })),
           },
-          groups: groups.map((id) => ({ id })) || [],
-          incidents: mySafety.map((item) => ({
-            site: item.site,
-            actualValue: item.actualValue,
-            createdByName: item.createdByName,
-            crimeReferenceNumber: item.crimeReferenceNumber,
-            crimeType: item.crimeType,
-            incidentID: item.incidentID,
-            dateOccurred: item.dateOccurred,
-            description: item.description,
-            emergencyServicesAttend: item.emergencyServicesAttend,
-            estimatedValue: item.estimatedValue,
-            specificArea: item.specificArea,
-            wereWeaponsUsed: item.wereWeaponsUsed,
-          })),
         },
-      },
-    });
-    setSaving(false);
+      });
+      setSaving(false);
+    } catch {
+      setSaving(false);
+    }
   };
 
   return {

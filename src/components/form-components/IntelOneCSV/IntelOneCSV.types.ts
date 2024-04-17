@@ -5,8 +5,9 @@ export interface IntelOneCSVData {
   type: string;
   offenderName: string[];
   value: number;
-  postcode: string;
-  lng: string;
-  lat: string;
+  postcode?: string;
+  lng?: string;
+  lat?: string;
   description: string;
+  crimeRef?: string;
 }
