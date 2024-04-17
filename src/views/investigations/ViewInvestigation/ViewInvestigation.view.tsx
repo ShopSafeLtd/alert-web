@@ -47,7 +47,8 @@ import type {
   UpdateSimpleOffenderMutation,
   UpdateTaskMutation,
   ViewInvestigationQuery,
-} from '../../../graphql/generated';
+} from 'graphql/generated';
+import { InvestigationStatus } from 'graphql/generated';
 import Flow from './views/Flow/Flow.container';
 import ViewDetails from './views/Details';
 import DocumentsContainer from './views/Documents/Documents.container';
@@ -268,8 +269,14 @@ const ViewInvestigation = ({
               <Col>
                 <Button
                   style={{
-                    borderBottomRightRadius: 0,
-                    borderTopRightRadius: 0,
+                    borderBottomRightRadius:
+                      data?.investigation.status === InvestigationStatus.Open
+                        ? 0
+                        : '.625rem',
+                    borderTopRightRadius:
+                      data?.investigation.status === InvestigationStatus.Open
+                        ? 0
+                        : '.625rem',
                     borderBottomLeftRadius: 0,
                     borderTopLeftRadius: 0,
                   }}
@@ -293,36 +300,38 @@ const ViewInvestigation = ({
                   <FontAwesomeIcon size="1x" icon={faTrash} />
                 </Button>
               </Col>
-              <Col>
-                <Button
-                  onClick={() => {
-                    confirm({
-                      title: intl.formatMessage({
-                        defaultMessage:
-                          'Do you want to close the investigation?',
-                        id: '0EE9W/',
-                      }),
-                      onOk() {
-                        onCloseInvestigation();
-                      },
-                    });
-                  }}
-                  style={{
-                    borderBottomLeftRadius: 0,
-                    borderTopLeftRadius: 0,
-                  }}
-                >
-                  <FontAwesomeIcon
-                    size="1x"
-                    style={{ marginRight: 8 }}
-                    icon={faCheckCircle}
-                  />
-                  {intl.formatMessage({
-                    defaultMessage: 'Close Investigation',
-                    id: 'x/TlDy',
-                  })}
-                </Button>
-              </Col>
+              {data?.investigation.status === InvestigationStatus.Open && (
+                <Col>
+                  <Button
+                    onClick={() => {
+                      confirm({
+                        title: intl.formatMessage({
+                          defaultMessage:
+                            'Do you want to close the investigation?',
+                          id: '0EE9W/',
+                        }),
+                        onOk() {
+                          onCloseInvestigation();
+                        },
+                      });
+                    }}
+                    style={{
+                      borderBottomLeftRadius: 0,
+                      borderTopLeftRadius: 0,
+                    }}
+                  >
+                    <FontAwesomeIcon
+                      size="1x"
+                      style={{ marginRight: 8 }}
+                      icon={faCheckCircle}
+                    />
+                    {intl.formatMessage({
+                      defaultMessage: 'Close Investigation',
+                      id: 'x/TlDy',
+                    })}
+                  </Button>
+                </Col>
+              )}
             </Row>
           }
         >
