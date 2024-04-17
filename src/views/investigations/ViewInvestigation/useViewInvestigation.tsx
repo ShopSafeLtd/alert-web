@@ -24,6 +24,7 @@ import {
   useUpdateSimpleVehicleMutation,
   useViewInvestigationQuery,
   ViewInvestigationDocument,
+  useCloseInvestigationMutation,
 } from 'graphql/generated';
 import { useState } from 'react';
 import errorNotification from 'types/mutation_notifications/error_notification';
@@ -119,6 +120,7 @@ interface Return {
   onCompletedEditOffender: () => void;
   updateAddOffenderList: MutationUpdaterFn<CreateSimpleOffenderMutation>;
   onCompletedAddOffender: () => void;
+  onCloseInvestigation: () => void;
 }
 
 const onCompletedEditOffender = () => {
@@ -668,6 +670,10 @@ const useViewInvestigation = (investigationId: string): Return => {
         setSaving(false);
       });
   };
+
+  const [closeInvestigation] = useCloseInvestigationMutation({
+    onError: errorNotification,
+  });
 
   // vehicle
   const [updateInvestigationVehicles] = useUpdateInvestigationVehiclesMutation({
@@ -1497,6 +1503,16 @@ const useViewInvestigation = (investigationId: string): Return => {
     }
   };
 
+  const onCloseInvestigation = () => {
+    void closeInvestigation({
+      variables: {
+        where: {
+          id: investigationId,
+        },
+      },
+    });
+  };
+
   return {
     data,
     loading,
@@ -1573,6 +1589,7 @@ const useViewInvestigation = (investigationId: string): Return => {
     onCompletedEditOffender,
     onCompletedAddOffender,
     updateAddOffenderList,
+    onCloseInvestigation,
   };
 };
 

@@ -80,6 +80,7 @@ const ViewCustomer: React.FC = () => {
     updateEditOffenderList,
     onCompletedEditOffender,
     onCompletedAddOffender,
+    onCloseInvestigation,
     updateAddOffenderList,
   } = useViewCustomer(id || '');
 
@@ -158,6 +159,7 @@ const ViewCustomer: React.FC = () => {
       onCompletedEditOffender={onCompletedEditOffender}
       updateAddOffenderList={updateAddOffenderList}
       onCompletedAddOffender={onCompletedAddOffender}
+      onCloseInvestigation={onCloseInvestigation}
     />
   );
 };
