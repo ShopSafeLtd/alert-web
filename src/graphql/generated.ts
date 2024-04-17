@@ -312,7 +312,7 @@ export type ActiveChecklistFields = {
   availableAnswers: Array<Scalars['JSON']>;
   brandIds: Array<Scalars['String']>;
   createdAt: Scalars['Date'];
-  dependent: Scalars['JSON'];
+  dependent?: Maybe<Scalars['JSON']>;
   id: Scalars['ID'];
   order: Scalars['Int'];
   question: Scalars['JSON'];
@@ -2388,7 +2388,7 @@ export type ChecklistQuestion = {
   checklistSubsection?: Maybe<ChecklistSubsection>;
   checklistSubsectionId?: Maybe<Scalars['String']>;
   createdAt: Scalars['Date'];
-  dependent: Scalars['JSON'];
+  dependent?: Maybe<Scalars['JSON']>;
   id: Scalars['ID'];
   maxWeight: Scalars['Int'];
   order: Scalars['Int'];
@@ -7776,11 +7776,12 @@ export type IntelOneImportDataInput = {
 };
 
 export type IntelOneImportIncidents = {
+  crimeRef?: InputMaybe<Scalars['String']>;
   description: Scalars['String'];
   lat?: InputMaybe<Scalars['String']>;
   lng?: InputMaybe<Scalars['String']>;
   offenderName: Array<Scalars['String']>;
-  postcode: Scalars['String'];
+  postcode?: InputMaybe<Scalars['String']>;
   reference: Scalars['String'];
   reportDate: Scalars['Date'];
   siteName: Scalars['String'];
@@ -22504,14 +22505,14 @@ export type ActiveChecklistQueryVariables = Exact<{
 }>;
 
 
-export type ActiveChecklistQuery = { __typename?: 'Query', activeChecklist: { __typename?: 'ActiveChecklist', id: string, name?: string | null, comments?: string | null, signature?: string | null, status: ChecklistStatus, completedAt?: Date | null, percentageScore: string, percentComplete: number, completedBy?: { __typename?: 'User', origName: string } | null, fields: Array<{ __typename?: 'ActiveChecklistFields', id: string, question: { [key: string]: any }, type: ChecklistAnswerType, availableAnswers: Array<{ [key: string]: any }>, dependent: { [key: string]: any }, section: number, subsection: number, order: number, answer?: { __typename?: 'ChecklistAnswer', answer: string, additionalComments?: string | null, images: Array<string> } | null }>, checklistSection: Array<{ __typename?: 'ActiveChecklistSections', sub: boolean, section: number, subsection?: number | null, titleLocaled: string }> } };
+export type ActiveChecklistQuery = { __typename?: 'Query', activeChecklist: { __typename?: 'ActiveChecklist', id: string, name?: string | null, comments?: string | null, signature?: string | null, status: ChecklistStatus, completedAt?: Date | null, percentageScore: string, percentComplete: number, completedBy?: { __typename?: 'User', origName: string } | null, fields: Array<{ __typename?: 'ActiveChecklistFields', id: string, question: { [key: string]: any }, type: ChecklistAnswerType, availableAnswers: Array<{ [key: string]: any }>, dependent?: { [key: string]: any } | null, section: number, subsection: number, order: number, answer?: { __typename?: 'ChecklistAnswer', answer: string, additionalComments?: string | null, images: Array<string> } | null }>, checklistSection: Array<{ __typename?: 'ActiveChecklistSections', sub: boolean, section: number, subsection?: number | null, titleLocaled: string }> } };
 
 export type ChecklistQueryVariables = Exact<{
   where: ChecklistWhereUniqueInput;
 }>;
 
 
-export type ChecklistQuery = { __typename?: 'Query', checklist: { __typename?: 'Checklist', id: string, title: string, description?: string | null, sections: Array<{ __typename?: 'ChecklistSection', order: number, title: string, subsections: Array<{ __typename?: 'ChecklistSubsection', title: string, order: number, questions: Array<{ __typename?: 'ChecklistQuestion', order: number, question: { [key: string]: any }, type: ChecklistAnswerType, dependent: { [key: string]: any }, brandIds: Array<string>, weight: Array<{ __typename?: 'AnswerWeight', weight: number, answer: string }> }> }> }>, users: Array<{ __typename?: 'User', id: string }>, business: Array<{ __typename?: 'Business', id: string }> } };
+export type ChecklistQuery = { __typename?: 'Query', checklist: { __typename?: 'Checklist', id: string, title: string, description?: string | null, sections: Array<{ __typename?: 'ChecklistSection', order: number, title: string, subsections: Array<{ __typename?: 'ChecklistSubsection', title: string, order: number, questions: Array<{ __typename?: 'ChecklistQuestion', order: number, question: { [key: string]: any }, type: ChecklistAnswerType, dependent?: { [key: string]: any } | null, brandIds: Array<string>, weight: Array<{ __typename?: 'AnswerWeight', weight: number, answer: string }> }> }> }>, users: Array<{ __typename?: 'User', id: string }>, business: Array<{ __typename?: 'Business', id: string }> } };
 
 export type CreateDashboardMutationVariables = Exact<{
   data: DashboardCreateInput;
