@@ -312,7 +312,7 @@ export type ActiveChecklistFields = {
   availableAnswers: Array<Scalars['JSON']>;
   brandIds: Array<Scalars['String']>;
   createdAt: Scalars['Date'];
-  dependent: Scalars['JSON'];
+  dependent?: Maybe<Scalars['JSON']>;
   id: Scalars['ID'];
   order: Scalars['Int'];
   question: Scalars['JSON'];
@@ -2388,7 +2388,7 @@ export type ChecklistQuestion = {
   checklistSubsection?: Maybe<ChecklistSubsection>;
   checklistSubsectionId?: Maybe<Scalars['String']>;
   createdAt: Scalars['Date'];
-  dependent: Scalars['JSON'];
+  dependent?: Maybe<Scalars['JSON']>;
   id: Scalars['ID'];
   maxWeight: Scalars['Int'];
   order: Scalars['Int'];
@@ -7776,11 +7776,12 @@ export type IntelOneImportDataInput = {
 };
 
 export type IntelOneImportIncidents = {
+  crimeRef?: InputMaybe<Scalars['String']>;
   description: Scalars['String'];
   lat?: InputMaybe<Scalars['String']>;
   lng?: InputMaybe<Scalars['String']>;
   offenderName: Array<Scalars['String']>;
-  postcode: Scalars['String'];
+  postcode?: InputMaybe<Scalars['String']>;
   reference: Scalars['String'];
   reportDate: Scalars['Date'];
   siteName: Scalars['String'];
@@ -9545,6 +9546,7 @@ export type Mutation = {
   addUsersToBusiness: Business;
   approveIncident: Incident;
   approveOffender: Offender;
+  closeInvestigation: Investigation;
   completeChecklist: ActiveChecklist;
   copyEvidenceOnInvestigation: Document;
   copyOffender: Offender;
@@ -9649,6 +9651,7 @@ export type Mutation = {
   registerPushToken: ExpoPushToken;
   removeQuestionFromTag: TagQuestion;
   removeUserFromBusiness: Business;
+  reopenwInvestigation: Investigation;
   resetPassword: ResetPassword;
   restoreAllRecycledItems: SystemTask;
   restoreIncident: Incident;
@@ -9769,6 +9772,11 @@ export type MutationApproveIncidentArgs = {
 
 export type MutationApproveOffenderArgs = {
   data: ApproveIncidentData;
+  where: UniqueId;
+};
+
+
+export type MutationCloseInvestigationArgs = {
   where: UniqueId;
 };
 
@@ -10290,6 +10298,11 @@ export type MutationRemoveUserFromBusinessArgs = {
   data: UserWhereUniqueInput;
   schemeWhere: SchemeWhereUniqueInput;
   where: BusinessWhereUniqueInput;
+};
+
+
+export type MutationReopenwInvestigationArgs = {
+  where: UniqueId;
 };
 
 
@@ -22504,14 +22517,14 @@ export type ActiveChecklistQueryVariables = Exact<{
 }>;
 
 
-export type ActiveChecklistQuery = { __typename?: 'Query', activeChecklist: { __typename?: 'ActiveChecklist', id: string, name?: string | null, comments?: string | null, signature?: string | null, status: ChecklistStatus, completedAt?: Date | null, percentageScore: string, percentComplete: number, completedBy?: { __typename?: 'User', origName: string } | null, fields: Array<{ __typename?: 'ActiveChecklistFields', id: string, question: { [key: string]: any }, type: ChecklistAnswerType, availableAnswers: Array<{ [key: string]: any }>, dependent: { [key: string]: any }, section: number, subsection: number, order: number, answer?: { __typename?: 'ChecklistAnswer', answer: string, additionalComments?: string | null, images: Array<string> } | null }>, checklistSection: Array<{ __typename?: 'ActiveChecklistSections', sub: boolean, section: number, subsection?: number | null, titleLocaled: string }> } };
+export type ActiveChecklistQuery = { __typename?: 'Query', activeChecklist: { __typename?: 'ActiveChecklist', id: string, name?: string | null, comments?: string | null, signature?: string | null, status: ChecklistStatus, completedAt?: Date | null, percentageScore: string, percentComplete: number, completedBy?: { __typename?: 'User', origName: string } | null, fields: Array<{ __typename?: 'ActiveChecklistFields', id: string, question: { [key: string]: any }, type: ChecklistAnswerType, availableAnswers: Array<{ [key: string]: any }>, dependent?: { [key: string]: any } | null, section: number, subsection: number, order: number, answer?: { __typename?: 'ChecklistAnswer', answer: string, additionalComments?: string | null, images: Array<string> } | null }>, checklistSection: Array<{ __typename?: 'ActiveChecklistSections', sub: boolean, section: number, subsection?: number | null, titleLocaled: string }> } };
 
 export type ChecklistQueryVariables = Exact<{
   where: ChecklistWhereUniqueInput;
 }>;
 
 
-export type ChecklistQuery = { __typename?: 'Query', checklist: { __typename?: 'Checklist', id: string, title: string, description?: string | null, sections: Array<{ __typename?: 'ChecklistSection', order: number, title: string, subsections: Array<{ __typename?: 'ChecklistSubsection', title: string, order: number, questions: Array<{ __typename?: 'ChecklistQuestion', order: number, question: { [key: string]: any }, type: ChecklistAnswerType, dependent: { [key: string]: any }, brandIds: Array<string>, weight: Array<{ __typename?: 'AnswerWeight', weight: number, answer: string }> }> }> }>, users: Array<{ __typename?: 'User', id: string }>, business: Array<{ __typename?: 'Business', id: string }> } };
+export type ChecklistQuery = { __typename?: 'Query', checklist: { __typename?: 'Checklist', id: string, title: string, description?: string | null, sections: Array<{ __typename?: 'ChecklistSection', order: number, title: string, subsections: Array<{ __typename?: 'ChecklistSubsection', title: string, order: number, questions: Array<{ __typename?: 'ChecklistQuestion', order: number, question: { [key: string]: any }, type: ChecklistAnswerType, dependent?: { [key: string]: any } | null, brandIds: Array<string>, weight: Array<{ __typename?: 'AnswerWeight', weight: number, answer: string }> }> }> }>, users: Array<{ __typename?: 'User', id: string }>, business: Array<{ __typename?: 'Business', id: string }> } };
 
 export type CreateDashboardMutationVariables = Exact<{
   data: DashboardCreateInput;
@@ -22667,6 +22680,13 @@ export type IncidentsFeedQueryVariables = Exact<{
 
 
 export type IncidentsFeedQuery = { __typename?: 'Query', incidentsRelay: { __typename?: 'QueryIncidentsRelayConnection', edges: Array<{ __typename?: 'QueryIncidentsRelayConnectionEdge', node: { __typename?: 'Incident', approved?: boolean | null, id: string, totalImages: number, priority: IncidentPriority, customerRef?: string | null, subject?: string | null, reference?: number | null, policeRef?: string | null, dayTime: string, description: string, createdByUser: boolean, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, images: Array<{ __typename?: 'Image', low?: string | null, id: string, rotation: number, position: ImagePosition, primary?: boolean | null }>, offenders: Array<{ __typename?: 'Offender', name?: string | null, id: string }>, business?: { __typename?: 'Business', name: string } | null, location?: { __typename?: 'Address', full: string } | null } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null } } };
+
+export type CloseInvestigationMutationVariables = Exact<{
+  where: UniqueId;
+}>;
+
+
+export type CloseInvestigationMutation = { __typename?: 'Mutation', closeInvestigation: { __typename?: 'Investigation', id: string, status: InvestigationStatus } };
 
 export type OffenderFeedListQueryVariables = Exact<{
   scheme: SchemeWhereUniqueInput;
@@ -34340,6 +34360,22 @@ export function useIncidentsFeedLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type IncidentsFeedQueryHookResult = ReturnType<typeof useIncidentsFeedQuery>;
 export type IncidentsFeedLazyQueryHookResult = ReturnType<typeof useIncidentsFeedLazyQuery>;
 export type IncidentsFeedQueryResult = Apollo.QueryResult<IncidentsFeedQuery, IncidentsFeedQueryVariables>;
+export const CloseInvestigationDocument = gql`
+    mutation CloseInvestigation($where: UniqueId!) {
+  closeInvestigation(where: $where) {
+    id
+    status
+  }
+}
+    `;
+export type CloseInvestigationMutationFn = Apollo.MutationFunction<CloseInvestigationMutation, CloseInvestigationMutationVariables>;
+export function useCloseInvestigationMutation(baseOptions?: Apollo.MutationHookOptions<CloseInvestigationMutation, CloseInvestigationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CloseInvestigationMutation, CloseInvestigationMutationVariables>(CloseInvestigationDocument, options);
+      }
+export type CloseInvestigationMutationHookResult = ReturnType<typeof useCloseInvestigationMutation>;
+export type CloseInvestigationMutationResult = Apollo.MutationResult<CloseInvestigationMutation>;
+export type CloseInvestigationMutationOptions = Apollo.BaseMutationOptions<CloseInvestigationMutation, CloseInvestigationMutationVariables>;
 export const OffenderFeedListDocument = gql`
     query offenderFeedList($scheme: SchemeWhereUniqueInput!, $where: OffenderWhereInput, $order: OffenderOrderByWithRelationInput, $take: Int, $skip: Int) {
   listOffenders(
