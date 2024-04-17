@@ -621,7 +621,7 @@ export function useCreateChecklist(): Return {
   });
 
   const brandsFormatted =
-    BrandsData?.brands?.map((brand) => ({
+    BrandsData?.brands?.edges?.map(({ node: brand }) => ({
       label: brand.name || '',
       value: brand.id || '',
     })) || [];

@@ -245,103 +245,107 @@ const useAuth = (): Return => {
     authenticated(accessToken);
   };
 
-  const [getCurrentUser, { loading }] = useCurrentUserLazyQuery({
-    nextFetchPolicy: 'cache-and-network',
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    onCompleted: async ({ currentUser }) => {
-      if (!currentUser) {
-        if (!isLoading && isAuthenticated) {
-          expired();
-        } else if (!isLoading && !isAuthenticated) {
-          loginRoute();
-        }
-      }
-      const scheme =
-        currentScheme || window.localStorage.getItem('currentScheme');
-
-      if (scheme) {
-        const currentS =
-          currentUser &&
-          currentUser.schemes.find((s) => s.scheme.id === scheme);
-        if (currentS) {
-          window.localStorage.setItem(
-            'logo',
-            currentS?.scheme?.logo?.optimisedPersisted || ''
-          );
-          if (!currentS?.scheme?.logo?.optimisedPersisted) {
-            window.localStorage.setItem('logo', '');
+  const [getCurrentUserQuery, { loading, data: CurrentUserData }] =
+    useCurrentUserLazyQuery({
+      fetchPolicy: 'cache-first',
+      canonizeResults: true,
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+      onCompleted: async ({ currentUser }) => {
+        if (!currentUser) {
+          if (!isLoading && isAuthenticated) {
+            expired();
+          } else if (!isLoading && !isAuthenticated) {
+            loginRoute();
           }
-          window.localStorage.setItem(
-            'logo-dark',
-            currentS?.scheme?.darkLogo?.optimisedPersisted || ''
-          );
         }
-      }
+        const scheme =
+          currentScheme || window.localStorage.getItem('currentScheme');
 
-      const result: { [key: string]: DashboardLayout } = {};
-
-      if (currentUser?.schemes)
-        // eslint-disable-next-line no-unsafe-optional-chaining,no-restricted-syntax
-        for (const item of currentUser?.schemes) {
-          result[item.scheme.id] = {
-            marquee:
-              item.dashboard?.runningBanner ??
-              (item.isAdmin
-                ? defaultAdminLayout.marquee
-                : defaultUserLayout.marquee),
-            layout: item.dashboard?.layout
-              ? item.dashboard?.layout.map((lay) => ({
-                  ...lay,
-                  i: lay.i as AvailableDashboardElements,
-                  static: !!lay.static,
-                  isBounded: true,
-                  isDraggable: false,
-                  isResizable: false,
-                  maxH: lay.maxH ?? undefined,
-                  maxW: lay.maxW ?? undefined,
-                  minH: lay.minH ?? undefined,
-                  minW: lay.minW ?? undefined,
-                }))
-              : item.isAdmin
-              ? defaultAdminLayout.layout
-              : defaultUserLayout.layout,
-          };
+        if (scheme) {
+          const currentS =
+            currentUser &&
+            currentUser.schemes.find((s) => s.scheme.id === scheme);
+          if (currentS) {
+            window.localStorage.setItem(
+              'logo',
+              currentS?.scheme?.logo?.optimisedPersisted || ''
+            );
+            if (!currentS?.scheme?.logo?.optimisedPersisted) {
+              window.localStorage.setItem('logo', '');
+            }
+            window.localStorage.setItem(
+              'logo-dark',
+              currentS?.scheme?.darkLogo?.optimisedPersisted || ''
+            );
+          }
         }
 
-      setDashboard(result);
+        const result: { [key: string]: DashboardLayout } = {};
 
-      await handleSuccess({
-        id: currentUser?.id || '',
-        email: currentUser?.email || '',
-        fullName: currentUser?.fullName || '',
-        origName: currentUser?.origName || '',
-        accessToken: window.localStorage.getItem('access_token') || '',
-        businesses: currentUser?.businesses || [],
-        onboarded: !currentUser?.newUser,
-        schemes: currentUser?.schemes || [],
-        groups: currentUser?.groups || [],
-        demId: currentUser?.demId || '',
-        isSet: true,
-        reportToAllBusinesses: currentUser?.reportToAllBusinesses || false,
+        if (currentUser?.schemes)
+          // eslint-disable-next-line no-unsafe-optional-chaining,no-restricted-syntax
+          for (const item of currentUser?.schemes) {
+            result[item.scheme.id] = {
+              marquee:
+                item.dashboard?.runningBanner ??
+                (item.isAdmin
+                  ? defaultAdminLayout.marquee
+                  : defaultUserLayout.marquee),
+              layout: item.dashboard?.layout
+                ? item.dashboard?.layout.map((lay) => ({
+                    ...lay,
+                    i: lay.i as AvailableDashboardElements,
+                    static: !!lay.static,
+                    isBounded: true,
+                    isDraggable: false,
+                    isResizable: false,
+                    maxH: lay.maxH ?? undefined,
+                    maxW: lay.maxW ?? undefined,
+                    minH: lay.minH ?? undefined,
+                    minW: lay.minW ?? undefined,
+                  }))
+                : item.isAdmin
+                ? defaultAdminLayout.layout
+                : defaultUserLayout.layout,
+            };
+          }
 
-        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-        reference: `${currentUser?.reference}` || '',
-        userNotifications: currentUser?.notificationCount || 0,
-        userMessages: currentUser?.messageCount || 0,
-        defaultGroups: currentUser?.defaultGroups || [],
-        defaultScheme: currentUser?.defaultScheme || undefined,
-        filterDefaultGroups:
-          currentUser?.defaultGroups.filter((el) => el.scheme.id === scheme) ||
-          [],
-      });
-      if (currentUser?.newUser) {
-        navigate('/app/onboarding');
-      }
-    },
-    onError: () => expired(),
-    fetchPolicy: 'cache-and-network',
-  });
+        setDashboard(result);
 
+        await handleSuccess({
+          id: currentUser?.id || '',
+          email: currentUser?.email || '',
+          fullName: currentUser?.fullName || '',
+          origName: currentUser?.origName || '',
+          accessToken: window.localStorage.getItem('access_token') || '',
+          businesses: currentUser?.businesses || [],
+          onboarded: !currentUser?.newUser,
+          schemes: currentUser?.schemes || [],
+          groups: currentUser?.groups || [],
+          demId: currentUser?.demId || '',
+          isSet: true,
+          reportToAllBusinesses: currentUser?.reportToAllBusinesses || false,
+
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+          reference: `${currentUser?.reference}` || '',
+          userNotifications: currentUser?.notificationCount || 0,
+          userMessages: currentUser?.messageCount || 0,
+          defaultGroups: currentUser?.defaultGroups || [],
+          defaultScheme: currentUser?.defaultScheme || undefined,
+          filterDefaultGroups:
+            currentUser?.defaultGroups.filter(
+              (el) => el.scheme.id === scheme
+            ) || [],
+        });
+        if (currentUser?.newUser) {
+          navigate('/app/onboarding');
+        }
+      },
+      onError: () => expired(),
+    });
+  const getCurrentUser = () => {
+    if (!CurrentUserData) void getCurrentUserQuery();
+  };
   const rehydrateAuth = () => {
     if (user !== undefined) {
       if (Date.now() < user.exp * 1000) {
