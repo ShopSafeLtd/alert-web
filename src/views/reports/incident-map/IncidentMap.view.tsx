@@ -552,7 +552,7 @@ const IncidentMap = ({
               maxTagCount={1}
               loading={brandsLoading}
             >
-              {brandsData?.brands.map((group) => (
+              {brandsData?.brands.edges.map(({ node: group }) => (
                 <Select.Option key={group.id} value={group.id}>
                   {group.name}
                 </Select.Option>

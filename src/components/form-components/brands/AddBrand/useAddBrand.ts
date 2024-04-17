@@ -1,7 +1,7 @@
 import type {
-  CreateBrandMutation,
   SearchBusinessesQuery,
   SearchBusinessesQueryVariables,
+  UpsertBrandMutation,
 } from '#/graphql/generated';
 import {
   QueryMode,
@@ -28,7 +28,7 @@ export interface FormData {
 
 interface Props {
   onClose: () => void;
-  update: MutationUpdaterFn<CreateBrandMutation>;
+  update: MutationUpdaterFn<UpsertBrandMutation>;
 }
 
 interface Return {
