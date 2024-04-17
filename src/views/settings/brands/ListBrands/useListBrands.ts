@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import type {
-  CreateBrandMutation,
   BrandsQuery,
   BrandsQueryVariables,
+  UpsertBrandMutation,
 } from 'graphql/generated';
 import {
-  useDeleteBrandMutation,
   BrandsDocument,
-  useBrandsQuery,
   QueryMode,
+  useBrandsQuery,
+  useDeleteBrandMutation,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
 import { notification } from 'antd';
@@ -16,7 +16,21 @@ import errorNotification from 'types/mutation_notifications/error_notification';
 import type { MutationUpdaterFn } from '@apollo/client';
 
 interface Return {
-  data: Exclude<BrandsQuery['brands'], undefined | null> | null | undefined;
+  data:
+    | {
+        node: {
+          id: string;
+          name: string;
+          description?: string | null;
+          businesses: Array<{
+            __typename?: 'Business';
+            id: string;
+            name: string;
+          }>;
+        };
+      }[]
+    | null
+    | undefined;
   loading: boolean;
   search: string;
   setSearch: (value: string) => void;
@@ -24,7 +38,7 @@ interface Return {
   toggleAddBrand: () => void;
   saving: boolean;
   onDelete: (value: string) => void;
-  updateNewBrandList: MutationUpdaterFn<CreateBrandMutation>;
+  updateNewBrandList: MutationUpdaterFn<UpsertBrandMutation>;
   brandId: string;
   setBrandId: (value: string) => void;
 }
@@ -43,20 +57,22 @@ const useBrandList = (): Return => {
         equals: schemeId,
       },
 
-      OR: [
-        {
-          name: {
-            contains: search,
-            mode: QueryMode.Insensitive,
-          },
-        },
-        {
-          description: {
-            contains: search,
-            mode: QueryMode.Insensitive,
-          },
-        },
-      ],
+      OR: search
+        ? [
+            {
+              name: {
+                contains: search,
+                mode: QueryMode.Insensitive,
+              },
+            },
+            {
+              description: {
+                contains: search,
+                mode: QueryMode.Insensitive,
+              },
+            },
+          ]
+        : [],
     },
   };
   const { data, loading } = useBrandsQuery({
@@ -85,14 +101,17 @@ const useBrandList = (): Return => {
       });
 
       if (existingData === null) return;
-
+      let count = existingData?.brands?.totalCount || 1;
+      count -= 1;
       store.writeQuery<BrandsQuery>({
         query: BrandsDocument,
         data: {
-          brands: existingData?.brands?.filter(
-            (brand) => brand?.id !== res?.deleteBrand?.id
-          ),
-          __typename: 'Query',
+          brands: {
+            totalCount: count,
+            edges: existingData?.brands?.edges.filter(
+              ({ node: brand }) => brand?.id !== res?.deleteBrand?.id
+            ),
+          },
         },
 
         variables,
@@ -109,7 +128,7 @@ const useBrandList = (): Return => {
   };
 
   // createBrand
-  const updateNewBrandList: MutationUpdaterFn<CreateBrandMutation> = (
+  const updateNewBrandList: MutationUpdaterFn<UpsertBrandMutation> = (
     store,
     { data: res }
   ) => {
@@ -122,10 +141,15 @@ const useBrandList = (): Return => {
 
     if (existingData === null) return;
 
+    let count = existingData?.brands?.totalCount || 0;
+    count += 1;
     store.writeQuery<BrandsQuery, BrandsQueryVariables>({
       query: BrandsDocument,
       data: {
-        brands: [...existingData.brands, res.createBrand],
+        brands: {
+          totalCount: count,
+          edges: [...existingData.brands.edges, { node: res.upsertBrand }],
+        },
       },
       variables,
     });
@@ -136,7 +160,7 @@ const useBrandList = (): Return => {
   };
 
   return {
-    data: data?.brands,
+    data: data?.brands?.edges,
     loading: (data === null || data === undefined) && loading,
     search,
     setSearch,

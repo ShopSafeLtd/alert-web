@@ -12,7 +12,7 @@ import {
   Tooltip,
 } from 'antd';
 
-import type { CreateBrandMutation, BrandsQuery } from 'graphql/generated';
+import type { UpsertBrandMutation } from 'graphql/generated';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -29,7 +29,21 @@ import { Link } from 'react-router-dom';
 const { confirm } = Modal;
 
 interface Props {
-  data: Exclude<BrandsQuery['brands'], undefined | null> | null | undefined;
+  data:
+    | {
+        node: {
+          id: string;
+          name: string;
+          description?: string | null;
+          businesses: Array<{
+            __typename?: 'Business';
+            id: string;
+            name: string;
+          }>;
+        };
+      }[]
+    | null
+    | undefined;
   loading: boolean;
   search: string;
   setSearch: (value: string) => void;
@@ -37,7 +51,7 @@ interface Props {
   toggleAddBrand: () => void;
   saving: boolean;
   onDelete: (value: string) => void;
-  updateNewBrandList: MutationUpdaterFn<CreateBrandMutation>;
+  updateNewBrandList: MutationUpdaterFn<UpsertBrandMutation>;
   brandId: string;
   setBrandId: (value: string) => void;
 }
@@ -57,12 +71,15 @@ const BrandList = ({
 }: Props): JSX.Element => {
   const intl = useIntl();
   const businessIds = new Set(
-    data?.flatMap((el) => el.businesses.map(({ id }) => id))
+    data?.flatMap(({ node: el }) => el.businesses.map(({ id }) => id))
   );
-  const businessData = data?.flatMap((el) => el.businesses);
+  const businessData = data?.flatMap(({ node: el }) => ({
+    text: el?.name || '',
+    value: el?.id || '',
+  }));
   const businessFilter = [...businessIds]
-    .map((id) => businessData?.find((el) => el.id === id))
-    .map((el) => ({ text: el?.name || '', value: el?.id || '' }));
+    .map((id) => businessData?.find(({ value: el }) => el === id))
+    .map((el) => ({ text: el?.text || '', value: el?.value || '' }));
 
   return (
     <div className="list-view">
@@ -230,7 +247,7 @@ const BrandList = ({
             ),
           },
         ]}
-        dataSource={data?.map((brand) => ({
+        dataSource={data?.map(({ node: brand }) => ({
           key: brand.id || '',
           name: brand.name || '',
           description: brand.description || '',
