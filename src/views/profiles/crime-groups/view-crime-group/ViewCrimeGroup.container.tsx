@@ -41,7 +41,6 @@ const ViewCrimeGroup = () => {
     submitNewVehicle,
     submitOffender,
     submitVehicle,
-    submitNewOffender,
     suggestedData,
     viewSuggestedOpen,
     toggleViewSuggested,
@@ -55,6 +54,8 @@ const ViewCrimeGroup = () => {
     updateInvestigationList,
     toggleShowIntel,
     showIntel,
+    updateAddOffenderList,
+    onCompletedAddOffender,
   } = useViewCrimeGroup(crimeGroupId);
 
   return (
@@ -94,7 +95,6 @@ const ViewCrimeGroup = () => {
       submitNewVehicle={submitNewVehicle}
       submitOffender={submitOffender}
       submitVehicle={submitVehicle}
-      submitNewOffender={submitNewOffender}
       suggestedData={suggestedData}
       viewSuggestedOpen={viewSuggestedOpen}
       toggleViewSuggested={toggleViewSuggested}
@@ -108,6 +108,8 @@ const ViewCrimeGroup = () => {
       updateInvestigationList={updateInvestigationList}
       showIntel={showIntel}
       toggleShowIntel={toggleShowIntel}
+      updateAddOffenderList={updateAddOffenderList}
+      onCompletedAddOffender={onCompletedAddOffender}
     />
   );
 };

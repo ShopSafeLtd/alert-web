@@ -18,6 +18,20 @@ export interface FormData {
   description: string;
   users: string[];
   approvers: string[];
+  showName: boolean;
+  showAlias: boolean;
+  showEthnicity: boolean;
+  showGender: boolean;
+  showBuild: boolean;
+  showHeight: boolean;
+  showHair: boolean;
+  showAge: boolean;
+  showDateOfBirth: boolean;
+  showDateOfBirthSource: boolean;
+  showIdVerified: boolean;
+  showPeculiarities: boolean;
+  showComment: boolean;
+  showImages: boolean;
 }
 interface Props {
   onClose: () => void;
@@ -33,6 +47,8 @@ interface Return {
   saving: boolean;
   selectedUsers: string[] | undefined;
   setSelectedUsers: (value: string[]) => void;
+  showOffenderSettings: boolean;
+  setShowOffenderSettings: (value: boolean) => void;
 }
 
 const useEditGroup = ({ onClose, groupId }: Props): Return => {
@@ -40,6 +56,7 @@ const useEditGroup = ({ onClose, groupId }: Props): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState<string[]>();
+  const [showOffenderSettings, setShowOffenderSettings] = useState(false);
 
   const { data: groupData, loading } = useGroupQuery({
     variables: {
@@ -127,6 +144,26 @@ const useEditGroup = ({ onClose, groupId }: Props): Return => {
                     set: data.approvers.map((id) => ({ id })),
                   }
                 : undefined,
+            offenderSettings: showOffenderSettings
+              ? {
+                  update: {
+                    name: data.showName,
+                    alias: data.showAlias,
+                    ethnicity: data.showEthnicity,
+                    gender: data.showGender,
+                    build: data.showBuild,
+                    height: data.showHeight,
+                    hair: data.showHair,
+                    age: data.showAge,
+                    dateOfBirth: data.showDateOfBirth,
+                    dateOfBirthSource: data.showDateOfBirthSource,
+                    idVerified: data.showIdVerified,
+                    peculiarities: data.showPeculiarities,
+                    comment: data.showComment,
+                    images: data.showImages,
+                  },
+                }
+              : undefined,
           },
         },
       });
@@ -150,6 +187,8 @@ const useEditGroup = ({ onClose, groupId }: Props): Return => {
     saving,
     selectedUsers,
     setSelectedUsers,
+    showOffenderSettings,
+    setShowOffenderSettings,
   };
 };
 

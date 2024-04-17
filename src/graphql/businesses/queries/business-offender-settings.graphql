@@ -1,0 +1,8 @@
+query BusinessOffenderSettings($where: BusinessWhereUniqueInput!) {
+  business(where: $where) {
+    id
+    offenderSettings {
+      ...OffenderSettings
+    }
+  }
+}

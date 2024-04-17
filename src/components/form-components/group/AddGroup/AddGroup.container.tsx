@@ -18,6 +18,8 @@ const AddGroup = ({ onClose, update }: Props): JSX.Element => {
     saving,
     selectedUsers,
     setSelectedUsers,
+    showOffenderSettings,
+    setShowOffenderSettings,
   } = useAddGroup({
     onClose,
     update,
@@ -33,6 +35,8 @@ const AddGroup = ({ onClose, update }: Props): JSX.Element => {
       saving={saving}
       selectedUsers={selectedUsers}
       setSelectedUsers={setSelectedUsers}
+      showOffenderSettings={showOffenderSettings}
+      setShowOffenderSettings={setShowOffenderSettings}
     />
   );
 };

@@ -4,8 +4,8 @@ import type { MutationUpdaterFn } from '@apollo/client';
 import type { UpdateSimpleOffenderMutation } from 'graphql/generated';
 import type { AddOffenderData } from 'components/incidents/IncidentForm/Profiles/Offenders/useOffenders';
 import View from './SimpleEditOffender.view';
-import type { OffenderData } from './useEditOffender';
-import useEditOffender from './useEditOffender';
+import type { OffenderData } from './useSimpleEditOffender';
+import useEditOffender from './useSimpleEditOffender';
 import type { StateImageData } from '../../../../incidents/IncidentForm/ImageSection/useImageSection';
 
 interface Props {
@@ -16,6 +16,7 @@ interface Props {
   onEditOffender?: (value: AddOffenderData) => void;
   images?: ImageValue[];
   onImagesUploaded?: (values: StateImageData[]) => void;
+  incidentBusinessId?: string;
 }
 
 const EditOffender = ({
@@ -26,14 +27,28 @@ const EditOffender = ({
   onCompleted,
   images,
   onImagesUploaded,
+  incidentBusinessId,
 }: Props): JSX.Element => {
-  const { onSubmit, ageCheck, form, idVerified } = useEditOffender({
+  const {
+    onSubmit,
+    ageCheck,
+    saving,
+    needJustification,
+    form,
+    idVerified,
+    offenderSettings,
+    loading,
+    uploading,
+    setUploading,
+    knowAddress,
+  } = useEditOffender({
     data,
     onClose,
     update,
     onEditOffender,
     onImagesUploaded,
     onCompleted,
+    incidentBusinessId,
   });
   return (
     <div>
@@ -47,8 +62,15 @@ const EditOffender = ({
         images={images?.map((el) => ({
           ...el,
           uid: el.id,
-          isFace: !!el.isFace,
+          isFace: el.isFace || false,
         }))}
+        offenderSettings={offenderSettings}
+        loading={loading}
+        needJustification={needJustification}
+        saving={saving}
+        setUploading={setUploading}
+        uploading={uploading}
+        knowAddress={knowAddress}
       />
     </div>
   );

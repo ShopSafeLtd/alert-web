@@ -1,0 +1,5 @@
+mutation deleteBrand($id: String!) {
+  deleteBrand(where: { id: $id }) {
+    id
+  }
+}

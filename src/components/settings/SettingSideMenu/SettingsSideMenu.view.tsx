@@ -39,6 +39,14 @@ const SettingsSideMenu = ({
       permissions: [PermissionModel.Settings, PermissionModel.Businesses],
     },
     {
+      title: intl.formatMessage({
+        id: 'jWfWEA',
+        defaultMessage: 'Brands',
+      }),
+      to: '/app/scheme-settings/brands',
+      permissions: [PermissionModel.Settings, PermissionModel.Businesses],
+    },
+    {
       title: intl.formatMessage({ id: 'c35gM5', defaultMessage: 'Roles' }),
       to: '/app/scheme-settings/roles',
       permissions: [PermissionModel.Settings, PermissionModel.Groups],

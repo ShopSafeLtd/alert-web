@@ -193,6 +193,7 @@ interface Return {
 
 const useAddIncident = ({ investigationId }: Props): Return => {
   const [form] = useForm<FormData>();
+
   const intl = useIntl();
   const userId = useStoreState((state) => state.user.id);
   const businesses = useStoreState((state) => state.user.businesses);
@@ -202,9 +203,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
   const pagination = useStoreState((state) => state.data.incidents.pagination);
   const variables = useStoreState((state) => state.data.incidents.variables);
   const order = useStoreState((state) => state.data.incidents.order);
-  const facialRecognition = useStoreState(
-    (state) => state.scheme.facialRecognition
-  );
+
   const goodsMode = useStoreState((state) => state.scheme.goodsMode);
   const setIncidentsState = useStoreActions(
     (actions) => actions.data.setIncidents
@@ -539,18 +538,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                     peculiarities: offender.peculiarities || null,
                     race: offender.race || null,
                     scheme: { connect: { id: schemeId } },
-                    images: {
-                      create: offender.images
-                        ? offender.images.map((item) => ({
-                            url: {
-                              url: item.url || '',
-                              mimetype: 'image/jpg',
-                              filename: item.url || '',
-                            },
-                            indexFaces: facialRecognition,
-                          }))
-                        : undefined,
-                    },
+
                     address:
                       offender?.address?.street &&
                       offender?.address?.townCity &&

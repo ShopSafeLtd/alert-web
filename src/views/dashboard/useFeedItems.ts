@@ -116,11 +116,14 @@ const useFeedItems = (): Return => {
           },
         }
       : undefined,
-    reference: search
-      ? {
-          equals: Number(search),
-        }
-      : undefined,
+    referenceStr: {
+      contains: search,
+    },
+    // reference: search
+    //   ? {
+    //       equals: Number(search),
+    //     }
+    //   : undefined,
   };
   const queryVariables = {
     search,
@@ -182,7 +185,14 @@ const useFeedItems = (): Return => {
               offender: itemVariables,
             },
             {
-              incident: itemVariables,
+              incident: {
+                ...itemVariables,
+                business: {
+                  name: {
+                    contains: null,
+                  },
+                },
+              },
             },
             {
               vehicle: itemVariables,
