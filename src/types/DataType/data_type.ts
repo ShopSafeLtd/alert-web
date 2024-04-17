@@ -327,6 +327,15 @@ export interface BusinessData {
   isConnected?: boolean;
   isNew?: boolean;
 }
+
+export interface BrandData {
+  id: string;
+  name: string;
+  description?: string | null;
+  schemeId?: string;
+  businesses: string[];
+  // newBusinesses?: BusinessData[];
+}
 export interface CustomGalleryData {
   id: string;
   name: string;
@@ -432,4 +441,20 @@ export interface Update {
 }
 export interface UpdateData extends Update {
   replies: Update[];
+}
+export interface OffenderSettingsType {
+  name: boolean;
+  alias: boolean;
+  ethnicity: boolean;
+  gender: boolean;
+  build: boolean;
+  height: boolean;
+  hair: boolean;
+  age: boolean;
+  dateOfBirth: boolean;
+  dateOfBirthSource: boolean;
+  idVerified: boolean;
+  peculiarities: boolean;
+  comment: boolean;
+  images: boolean;
 }

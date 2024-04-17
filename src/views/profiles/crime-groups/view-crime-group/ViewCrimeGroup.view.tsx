@@ -17,6 +17,7 @@ import {
 import type {
   CreateDocumentMutation,
   CreateInvestigationMutation,
+  CreateSimpleOffenderMutation,
   CrimeGroupQuery,
   DeleteDocumentMutation,
   SuggestedCrimeGroupMembersQuery,
@@ -31,12 +32,10 @@ import {
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
 import { faMessages } from '@fortawesome/pro-solid-svg-icons';
-import AddOffender from 'components/form-components/offender/offender/AddNewOffender';
 import AddAlias from 'components/form-components/crimeGroup/Alias';
 import UpdateBar from 'components/MessageInput/UpdateBar';
-import type { OffenderData, VehicleData } from 'types/DataType';
+import type { VehicleData } from 'types/DataType';
 import AddVehicle from 'components/form-components/Vehicle/AddVehicle';
-
 import VehicleTable from 'components/tables/VehicleTable';
 import IncidentTable from 'components/tables/IncidentTable';
 import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
@@ -52,6 +51,7 @@ import InvestigationTable from 'components/tables/InvestigationTable';
 import AddInvestigation from 'components/form-components/Investigation/AddInvestigation';
 import SelectedOffenders from 'components/form-components/linkOptions/SelectOffenders';
 import IntelSection from 'components/ViewPage/IntelSection';
+import AddNewOffenderSimple from '#/components/form-components/offender/offender/AddNewOffenderSimple';
 import OffenderGrid from '../../../../components/offenders/OffenderGrid';
 import useStyles from './ViewCrimeGroup.styles';
 
@@ -106,7 +106,6 @@ interface Props {
   submitNewVehicle: (value: VehicleData) => void;
   submitOffender: (value: string[]) => void;
   submitVehicle: (value: string) => void;
-  submitNewOffender: (value: OffenderData) => void;
   suggestedData: SuggestedCrimeGroupMembersQuery | undefined;
   viewSuggestedOpen: boolean;
   toggleViewSuggested: () => void;
@@ -120,6 +119,8 @@ interface Props {
   updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
   showIntel: boolean;
   toggleShowIntel: () => void;
+  updateAddOffenderList: MutationUpdaterFn<CreateSimpleOffenderMutation>;
+  onCompletedAddOffender: () => void;
 }
 
 const ViewCrimeGroup = ({
@@ -158,7 +159,6 @@ const ViewCrimeGroup = ({
   submitNewVehicle,
   submitOffender,
   submitVehicle,
-  submitNewOffender,
   suggestedData,
   toggleViewSuggested,
   viewSuggestedOpen,
@@ -172,6 +172,8 @@ const ViewCrimeGroup = ({
   updateInvestigationList,
   showIntel,
   toggleShowIntel,
+  updateAddOffenderList,
+  onCompletedAddOffender,
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
@@ -773,10 +775,13 @@ const ViewCrimeGroup = ({
         zIndex={999}
       >
         {addOffender ? (
-          <AddOffender
-            update={submitNewOffender}
+          <AddNewOffenderSimple
+            onCompleted={onCompletedAddOffender}
+            update={updateAddOffenderList}
+            crimeGroupId={data?.crimeGroup.id}
+            groupsIds={data?.crimeGroup.groups.map(({ id }) => id)}
             onClose={toggleAddOffender}
-            // saving={saving}
+            images={[]}
           />
         ) : (
           <div />

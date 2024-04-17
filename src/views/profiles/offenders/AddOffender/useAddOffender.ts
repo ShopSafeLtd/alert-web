@@ -13,6 +13,7 @@ import type {
   Race,
 } from 'graphql/generated';
 import {
+  useBusinessOffenderSettingsQuery,
   ImagePosition,
   ListOffendersDocument,
   Model,
@@ -37,6 +38,7 @@ import type {
   CustomGalleryData,
   Image,
   OffenderData,
+  OffenderSettingsType,
   SelectOptions,
   TagData,
   VehicleData,
@@ -140,6 +142,8 @@ interface Return {
   toggleViewPotentialOffenders: () => void;
   onSearchOffender: () => void;
   needJustification: boolean;
+  offenderSettings: OffenderSettingsType;
+  loading: boolean;
 }
 
 // const onPreview = async (file: UploadFile) => {
@@ -160,7 +164,12 @@ interface Return {
 const useAddOffender = (): Return => {
   const intl = useIntl();
   const [form] = Form.useForm<FormData>();
-  const { role, id: userId } = useStoreState((state) => state.user);
+  const {
+    role,
+    id: userId,
+    businesses: userBusinesses,
+  } = useStoreState((state) => state.user);
+
   const { needJustification, id: schemeId } = useStoreState(
     (state) => state.scheme
   );
@@ -213,6 +222,14 @@ const useAddOffender = (): Return => {
     //   setSearch(changedValues.name);
     // }
   };
+  const { data: businessData, loading } = useBusinessOffenderSettingsQuery({
+    fetchPolicy: 'network-only',
+    variables: {
+      where: {
+        id: userBusinesses[0].id,
+      },
+    },
+  });
   const [queryOffenders] = useSearchOffendersLazyQuery();
 
   const onSearchOffender = () => {
@@ -946,6 +963,23 @@ const useAddOffender = (): Return => {
     onSearchOffender,
     viewPotentialOffenders,
     needJustification,
+    offenderSettings: businessData?.business.offenderSettings || {
+      name: true,
+      alias: true,
+      ethnicity: true,
+      gender: true,
+      build: true,
+      height: true,
+      hair: true,
+      age: true,
+      dateOfBirth: true,
+      dateOfBirthSource: true,
+      idVerified: true,
+      peculiarities: true,
+      comment: true,
+      images: true,
+    },
+    loading,
   };
 };
 

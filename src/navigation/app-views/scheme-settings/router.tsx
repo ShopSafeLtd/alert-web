@@ -32,6 +32,7 @@ import CustomGalleries from 'views/settings/customGallery';
 import { Col, Row } from 'antd';
 import SettingsSideMenu from '#/components/settings/SettingSideMenu/SettingsSideMenu.view';
 import { PermissionMethod, PermissionModel } from 'graphql/generated';
+import BrandList from '#/views/settings/brands/ListBrands';
 import CustomSchemeTerms from '../../../views/settings/terms/ViewCustomTerms/ViewTermsContainer';
 import ListStatements from '../../../views/settings/statements/ListStatements';
 import TagView from '../../../views/settings/tags/ViewTag/ViewTag.container';
@@ -373,6 +374,25 @@ const SchemeSettings = (): JSX.Element => {
                 }}
               >
                 <ViewBusiness />
+              </PermissionCheckWrapper>
+            }
+          />
+          <Route
+            path="brands/*"
+            element={
+              <PermissionCheckWrapper
+                permission={[
+                  {
+                    model: PermissionModel.Settings,
+                    method: PermissionMethod.Read,
+                  },
+                  {
+                    model: PermissionModel.Businesses,
+                    method: PermissionMethod.Read,
+                  },
+                ]}
+              >
+                <BrandList />
               </PermissionCheckWrapper>
             }
           />

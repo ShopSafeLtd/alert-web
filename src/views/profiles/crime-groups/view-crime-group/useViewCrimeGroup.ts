@@ -2,6 +2,7 @@ import { Modal, notification } from 'antd';
 import type {
   CreateDocumentMutation,
   CreateInvestigationMutation,
+  CreateSimpleOffenderMutation,
   CrimeGroupQuery,
   CrimeGroupQueryVariables,
   DeleteDocumentMutation,
@@ -26,10 +27,15 @@ import {
 import { useEffect, useState } from 'react';
 import update from 'immutability-helper';
 import { useStoreState } from 'state';
-import type { OffenderData, VehicleData } from 'types/DataType';
+import type { VehicleData } from 'types/DataType';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 import type { MutationUpdaterFn } from '@apollo/client';
+import successNotification from '#/types/mutation_notifications/success_notification';
+import {
+  ProfileUpdatedModel,
+  ProfileUpdatedType,
+} from '#/types/enums/profile-update-type';
 
 const { confirm } = Modal;
 interface Return {
@@ -79,7 +85,7 @@ interface Return {
   submitNewVehicle: (value: VehicleData) => void;
   submitOffender: (value: string[]) => void;
   submitVehicle: (value: string) => void;
-  submitNewOffender: (value: OffenderData) => void;
+  // submitNewOffender: (value: OffenderData) => void;
   suggestedData: SuggestedCrimeGroupMembersQuery | undefined;
   viewSuggestedOpen: boolean;
   toggleViewSuggested: () => void;
@@ -93,8 +99,16 @@ interface Return {
   updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
   showIntel: boolean;
   toggleShowIntel: () => void;
+  updateAddOffenderList: MutationUpdaterFn<CreateSimpleOffenderMutation>;
+  onCompletedAddOffender: () => void;
 }
-
+const onCompletedAddOffender = () => {
+  successNotification(
+    ProfileUpdatedModel.Offender,
+    ProfileUpdatedModel.Crime_Group,
+    ProfileUpdatedType.added
+  );
+};
 const useViewCrimeGroup = (crimeGroupId: string): Return => {
   const intl = useIntl();
   const { id: userId, groups, role } = useStoreState((state) => state.user);
@@ -199,59 +213,59 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
       errorNotification();
     },
   });
-  const submitNewOffender = (data: OffenderData) => {
-    setSaving(true);
-    void updateCrimeGroup({
-      variables: {
-        where: {
-          id: crimeGroupId,
-        },
-        data: {
-          offenders: {
-            create: [
-              {
-                name: data.name,
-                gender: data.gender || null,
-                race: data.race || null,
-                build: data.build || null,
-                height: data.height || null,
-                hair: data.hair || null,
-                peculiarities: data.peculiarities || null,
-                comment: data.comment || null,
-                age: data.age || null,
-                dateSource: data.dateSource || null,
-                dateOfBirth: data.dateOfBirth || null,
-                createdBy: { connect: { id: userId } },
-                scheme: { connect: { id: schemeId } },
-                groups: {
-                  connect:
-                    crimeGroupsData?.crimeGroup?.groups.map(({ id }) => ({
-                      id,
-                    })) || [],
-                },
-                images: {
-                  upload:
-                    data.images && data.images.length > 0
-                      ? data.images.map((item) => ({
-                          url: {
-                            filename: item.fileName || '',
-                            mimetype: item.type || '',
-                            url: item.url || '',
-                          },
-                          position: item.position,
-                          primary: item.primary,
-                          policeImage: item.policeImage,
-                          rotation: item.rotation || 0,
-                        }))
-                      : undefined,
-                },
-              },
-            ],
-          },
-        },
-      },
-    });
-  };
+  // const submitNewOffender = (data: OffenderData) => {
+  //   setSaving(true);
+  //   void updateCrimeGroup({
+  //     variables: {
+  //       where: {
+  //         id: crimeGroupId,
+  //       },
+  //       data: {
+  //         offenders: {
+  //           create: [
+  //             {
+  //               name: data.name,
+  //               gender: data.gender || null,
+  //               race: data.race || null,
+  //               build: data.build || null,
+  //               height: data.height || null,
+  //               hair: data.hair || null,
+  //               peculiarities: data.peculiarities || null,
+  //               comment: data.comment || null,
+  //               age: data.age || null,
+  //               dateSource: data.dateSource || null,
+  //               dateOfBirth: data.dateOfBirth || null,
+  //               createdBy: { connect: { id: userId } },
+  //               scheme: { connect: { id: schemeId } },
+  //               groups: {
+  //                 connect:
+  //                   crimeGroupsData?.crimeGroup?.groups.map(({ id }) => ({
+  //                     id,
+  //                   })) || [],
+  //               },
+  //               images: {
+  //                 upload:
+  //                   data.images && data.images.length > 0
+  //                     ? data.images.map((item) => ({
+  //                         url: {
+  //                           filename: item.fileName || '',
+  //                           mimetype: item.type || '',
+  //                           url: item.url || '',
+  //                         },
+  //                         position: item.position,
+  //                         primary: item.primary,
+  //                         policeImage: item.policeImage,
+  //                         rotation: item.rotation || 0,
+  //                       }))
+  //                     : undefined,
+  //               },
+  //             },
+  //           ],
+  //         },
+  //       },
+  //     },
+  //   });
+  // };
   const submitOffender = (values: string[]) => {
     setSaving(true);
     if (values) {
@@ -404,6 +418,30 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
           },
         },
       },
+    });
+  };
+
+  const updateAddOffenderList: MutationUpdaterFn<
+    CreateSimpleOffenderMutation
+  > = (store, { data: res }) => {
+    if (res?.createOffender === null || res?.createOffender === undefined)
+      return;
+    const existingData = store.readQuery<CrimeGroupQuery>({
+      query: CrimeGroupDocument,
+      variables,
+    });
+
+    if (!existingData?.crimeGroup) return;
+    store.writeQuery<CrimeGroupQuery>({
+      query: CrimeGroupDocument,
+      data: {
+        crimeGroup: {
+          ...existingData.crimeGroup,
+          offenders: [...existingData.crimeGroup.offenders, res.createOffender],
+        },
+        __typename: 'Query',
+      },
+      variables,
     });
   };
 
@@ -806,7 +844,6 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
     submitNewVehicle,
     submitOffender,
     submitVehicle,
-    submitNewOffender,
     suggestedData,
     viewSuggestedOpen,
     toggleViewSuggested,
@@ -820,6 +857,8 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
     updateInvestigationList,
     showIntel,
     toggleShowIntel,
+    updateAddOffenderList,
+    onCompletedAddOffender,
   };
 };
 

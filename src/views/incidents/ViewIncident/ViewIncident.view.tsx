@@ -1848,6 +1848,7 @@ const ViewIncident = ({
             update={updateEditOffenderList}
             images={data?.incident?.images}
             onCompleted={onCompletedEditOffender}
+            incidentBusinessId={data?.incident.business?.id}
           />
         ) : (
           <div />
@@ -1871,6 +1872,7 @@ const ViewIncident = ({
             groupsIds={data?.incident.groups.map(({ id }) => id)}
             onClose={toggleAddOffender}
             images={data?.incident?.images.map((el) => ({ ...el, uid: el.id }))}
+            incidentBusinessId={data?.incident.business?.id}
           />
         ) : (
           <div />

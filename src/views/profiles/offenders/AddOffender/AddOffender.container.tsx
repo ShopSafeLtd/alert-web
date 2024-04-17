@@ -58,6 +58,8 @@ const AddOffender = (): JSX.Element => {
     onSearchOffender,
     viewPotentialOffenders,
     needJustification,
+    offenderSettings,
+    loading,
   } = useAddOffender();
 
   return (
@@ -116,6 +118,8 @@ const AddOffender = (): JSX.Element => {
         toggleViewPotentialOffenders={toggleViewPotentialOffenders}
         onSearchOffender={onSearchOffender}
         needJustification={needJustification}
+        offenderSettings={offenderSettings}
+        loading={loading}
       />
     </div>
   );

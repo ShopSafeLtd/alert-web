@@ -153,6 +153,20 @@ const UseEditGroupTest = () => {
             description: 'new description',
             users: ['1'],
             approvers: [],
+            showName: true,
+            showAlias: true,
+            showEthnicity: true,
+            showGender: true,
+            showBuild: true,
+            showHeight: true,
+            showHair: true,
+            showAge: true,
+            showDateOfBirth: true,
+            showDateOfBirthSource: true,
+            showIdVerified: true,
+            showPeculiarities: true,
+            showComment: true,
+            showImages: true,
           })
         }
       >

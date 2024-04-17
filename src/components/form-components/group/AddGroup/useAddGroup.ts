@@ -18,6 +18,20 @@ export interface FormData {
   description: string;
   users: string[];
   approvers: string[];
+  showName: boolean;
+  showAlias: boolean;
+  showEthnicity: boolean;
+  showGender: boolean;
+  showBuild: boolean;
+  showHeight: boolean;
+  showHair: boolean;
+  showAge: boolean;
+  showDateOfBirth: boolean;
+  showDateOfBirthSource: boolean;
+  showIdVerified: boolean;
+  showPeculiarities: boolean;
+  showComment: boolean;
+  showImages: boolean;
 }
 
 interface Props {
@@ -33,12 +47,15 @@ interface Return {
   saving: boolean;
   selectedUsers: string[] | undefined;
   setSelectedUsers: (value: string[]) => void;
+  showOffenderSettings: boolean;
+  setShowOffenderSettings: (value: boolean) => void;
 }
 
 const useAddGroup = ({ onClose, update }: Props): Return => {
   const intl = useIntl();
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
+  const [showOffenderSettings, setShowOffenderSettings] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState<string[]>();
 
   const { data: usersData, loading: usersLoading } = useListSchemeUsersQuery({
@@ -115,6 +132,26 @@ const useAddGroup = ({ onClose, update }: Props): Return => {
               id: schemeId,
             },
           },
+          offenderSettings: showOffenderSettings
+            ? {
+                create: {
+                  name: data.showName,
+                  alias: data.showAlias,
+                  ethnicity: data.showEthnicity,
+                  gender: data.showGender,
+                  build: data.showBuild,
+                  height: data.showHeight,
+                  hair: data.showHair,
+                  age: data.showAge,
+                  dateOfBirth: data.showDateOfBirth,
+                  dateOfBirthSource: data.showDateOfBirthSource,
+                  idVerified: data.showIdVerified,
+                  peculiarities: data.showPeculiarities,
+                  comment: data.showComment,
+                  images: data.showImages,
+                },
+              }
+            : undefined,
         },
       },
     });
@@ -136,6 +173,8 @@ const useAddGroup = ({ onClose, update }: Props): Return => {
     saving,
     selectedUsers,
     setSelectedUsers,
+    showOffenderSettings,
+    setShowOffenderSettings,
   };
 };
 export default useAddGroup;

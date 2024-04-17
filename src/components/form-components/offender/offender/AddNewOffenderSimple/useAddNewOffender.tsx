@@ -10,6 +10,7 @@ import type {
   Race,
 } from 'graphql/generated';
 import {
+  useBusinessOffenderSettingsQuery,
   ImagePosition,
   useCreateSimpleOffenderMutation,
 } from 'graphql/generated';
@@ -19,6 +20,7 @@ import type { MutationUpdaterFn } from '@apollo/client';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useStoreState } from 'state';
 import type { AddOffenderData } from 'components/incidents/IncidentForm/Profiles/Offenders/useOffenders';
+import type { OffenderSettingsType } from '#/types/DataType';
 import type { StateImageData } from '../../../../incidents/IncidentForm/ImageSection/useImageSection';
 import type { ImageValue } from '../../../ImageSelect/ImageSelect.view';
 
@@ -70,6 +72,7 @@ export interface FormData {
   ageCheck?: boolean;
   idSource?: IdSource;
   images: ImageValue[];
+  knowAddress?: boolean;
   addressAlias?: string;
   building?: string;
   street?: string;
@@ -87,7 +90,9 @@ interface Props {
   incidentId?: string;
   investigationId?: string;
   vehicleId?: string;
+  crimeGroupId?: string;
   groupsIds?: string[];
+  incidentBusinessId?: string;
 }
 interface Return {
   onSubmit: (value: FormData) => void;
@@ -97,6 +102,9 @@ interface Return {
   form: FormInstance<FormData>;
   uploading: boolean;
   setUploading: (value: boolean) => void;
+  offenderSettings: OffenderSettingsType | undefined;
+  loading: boolean;
+  knowAddress: boolean | undefined;
 }
 
 const useAddNewOffender = ({
@@ -108,14 +116,29 @@ const useAddNewOffender = ({
   incidentId,
   investigationId,
   vehicleId,
+  crimeGroupId,
   groupsIds,
+  incidentBusinessId,
 }: Props): Return => {
   const [uploading, setUploading] = useState(false);
   const [form] = Form.useForm<FormData>();
   const schemeId = useStoreState((state) => state.scheme.id);
+  const userBusinessId = useStoreState((state) => state.user.businesses[0].id);
+  const businessId = incidentBusinessId || userBusinessId;
   const [saving, setSaving] = useState(false);
+
   const ageCheck = Form.useWatch('ageCheck', form);
   const idVerified = Form.useWatch('idVerified', form);
+  const knowAddress = Form.useWatch('knowAddress', form);
+
+  const { data: businessData, loading } = useBusinessOffenderSettingsQuery({
+    fetchPolicy: 'network-only',
+    variables: {
+      where: {
+        id: businessId,
+      },
+    },
+  });
   const [createOffender] = useCreateSimpleOffenderMutation({
     onCompleted,
     onError: () => {
@@ -161,17 +184,16 @@ const useAddNewOffender = ({
         idVerified: data.idVerified,
         idSource: data.idSource,
         images: imageData,
-        address:
-          data.street && data.townCity && data.postcode
-            ? {
-                alias: data.addressAlias,
-                building: data.building,
-                street: data.street,
-                townCity: data.townCity,
-                county: data.county,
-                postcode: data.postcode,
-              }
-            : undefined,
+        address: data.knowAddress
+          ? {
+              alias: data.addressAlias,
+              building: data.building,
+              street: data.street || '',
+              townCity: data.townCity || '',
+              county: data.county,
+              postcode: data.postcode || '',
+            }
+          : undefined,
         // groupIds: data.groups || [],
       });
     } else {
@@ -205,17 +227,19 @@ const useAddNewOffender = ({
             incidentId: incidentId || null,
             investigationId: investigationId || null,
             vehicles: vehicleId ? { connect: [{ id: vehicleId }] } : undefined,
-            address:
-              data.street && data.townCity && data.postcode
-                ? {
-                    alias: data.addressAlias,
-                    building: data.building,
-                    street: data.street,
-                    townCity: data.townCity,
-                    county: data.county,
-                    postcode: data.postcode,
-                  }
-                : undefined,
+            crimeGroups: crimeGroupId
+              ? { connect: [{ id: crimeGroupId }] }
+              : undefined,
+            address: data.knowAddress
+              ? {
+                  alias: data.addressAlias,
+                  building: data.building,
+                  street: data.street,
+                  townCity: data.townCity,
+                  county: data.county,
+                  postcode: data.postcode,
+                }
+              : undefined,
             image:
               data.images && data.images.length > 0
                 ? {
@@ -276,6 +300,9 @@ const useAddNewOffender = ({
     form,
     uploading,
     setUploading,
+    offenderSettings: businessData?.business.offenderSettings,
+    loading,
+    knowAddress,
   };
 };
 

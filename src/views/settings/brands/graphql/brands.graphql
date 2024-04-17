@@ -1,0 +1,18 @@
+query Brands(
+  $where: BrandWhereInput
+  $orderBy: [BrandOrderByWithRelationInput!]
+) {
+  brands(where: $where, orderBy: $orderBy) {
+    id
+    name
+    description
+    businesses {
+      id
+      name
+    }
+    scheme {
+      id
+      name
+    }
+  }
+}

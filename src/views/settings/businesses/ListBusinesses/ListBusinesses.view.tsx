@@ -82,7 +82,7 @@ const ListBusinesses = ({
     data?.listBusinesses.businesses?.map((el) => el.parent?.id)
   );
   const parentData = data?.listBusinesses.businesses?.filter(
-    (el) => !!el.parent
+    (el) => !!el.parent && el.parent.name !== undefined
   );
   const parentFilter = [...parentIds]
     .filter((el) => !!el)

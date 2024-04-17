@@ -1,6 +1,8 @@
 mutation CreateSimpleOffender($data: CreateOffenderData!) {
   createOffender(data: $data) {
     ...Offenders
+    totalIncidents
+    totalValue
     images(take: 1) {
       ...SimpleImages
     }
