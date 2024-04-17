@@ -13,7 +13,12 @@ import {
 import { createUseStyles } from 'react-jss';
 import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
 import LinkCrimeGroup from 'components/form-components/linkOptions/LinkCrimeGroup';
-import { faBell, faBellSlash, faTrash } from '@fortawesome/pro-light-svg-icons';
+import {
+  faBell,
+  faBellSlash,
+  faTrash,
+  faCheckCircle,
+} from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormattedMessage, useIntl } from 'react-intl';
 import ViewTodo from 'components/form-components/Todos/ViewTodo/Todo.container';
@@ -101,7 +106,7 @@ interface Props {
   onAddExistingVehicle: (value: string) => void;
   onAddExistingCrimeGroup: (value: string) => void;
   onAddExistingIncident: (value: string[]) => void;
-
+  onCloseInvestigation: () => void;
   onAddVehicle: (value: VehicleData) => void;
   onEditVehicle: (value: VehicleData) => void;
   onAddCrimeGroup: (value: CrimeGroupCardData) => void;
@@ -194,7 +199,7 @@ const ViewInvestigation = ({
   onAddExistingVehicle,
   onAddExistingCrimeGroup,
   onAddExistingIncident,
-
+  onCloseInvestigation,
   onAddVehicle,
   onEditVehicle,
   onAddCrimeGroup,
@@ -228,7 +233,7 @@ const ViewInvestigation = ({
       <div className={classes.sideListContent}>
         <Tabs
           tabBarExtraContent={
-            <Row gutter={8} style={{ margin: 3 }}>
+            <Row style={{ margin: 6 }}>
               <Col>
                 <Tooltip
                   title={
@@ -246,34 +251,28 @@ const ViewInvestigation = ({
                 >
                   <Button
                     onClick={toggleSubscribe}
-                    type="ghost"
-                    // type="text"
-                    color={
-                      data?.investigation?.subscribed ? undefined : 'danger'
-                    }
+                    style={{
+                      borderBottomRightRadius: 0,
+                      borderTopRightRadius: 0,
+                    }}
                   >
                     <FontAwesomeIcon
                       size="1x"
-                      style={{ marginRight: 8 }}
                       icon={
                         data?.investigation?.subscribed ? faBellSlash : faBell
                       }
                     />
-                    {data?.investigation?.subscribed
-                      ? intl.formatMessage({
-                          defaultMessage: 'Un-follow Updates',
-                          id: '45gIlS',
-                        })
-                      : intl.formatMessage({
-                          defaultMessage: 'Follow Updates',
-                          id: 'gBN+ok',
-                        })}
                   </Button>
                 </Tooltip>
               </Col>
               <Col>
                 <Button
-                  type="primary"
+                  style={{
+                    borderBottomRightRadius: 0,
+                    borderTopRightRadius: 0,
+                    borderBottomLeftRadius: 0,
+                    borderTopLeftRadius: 0,
+                  }}
                   onClick={() => {
                     confirm({
                       title: intl.formatMessage({
@@ -291,14 +290,36 @@ const ViewInvestigation = ({
                     });
                   }}
                 >
+                  <FontAwesomeIcon size="1x" icon={faTrash} />
+                </Button>
+              </Col>
+              <Col>
+                <Button
+                  onClick={() => {
+                    confirm({
+                      title: intl.formatMessage({
+                        defaultMessage:
+                          'Do you want to close the investigation?',
+                        id: '0EE9W/',
+                      }),
+                      onOk() {
+                        onCloseInvestigation();
+                      },
+                    });
+                  }}
+                  style={{
+                    borderBottomLeftRadius: 0,
+                    borderTopLeftRadius: 0,
+                  }}
+                >
                   <FontAwesomeIcon
                     size="1x"
                     style={{ marginRight: 8 }}
-                    icon={faTrash}
+                    icon={faCheckCircle}
                   />
                   {intl.formatMessage({
-                    defaultMessage: 'Delete Investigation',
-                    id: 'ONMazI',
+                    defaultMessage: 'Close Investigation',
+                    id: 'x/TlDy',
                   })}
                 </Button>
               </Col>

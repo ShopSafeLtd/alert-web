@@ -9546,6 +9546,7 @@ export type Mutation = {
   addUsersToBusiness: Business;
   approveIncident: Incident;
   approveOffender: Offender;
+  closeInvestigation: Investigation;
   completeChecklist: ActiveChecklist;
   copyEvidenceOnInvestigation: Document;
   copyOffender: Offender;
@@ -9650,6 +9651,7 @@ export type Mutation = {
   registerPushToken: ExpoPushToken;
   removeQuestionFromTag: TagQuestion;
   removeUserFromBusiness: Business;
+  reopenwInvestigation: Investigation;
   resetPassword: ResetPassword;
   restoreAllRecycledItems: SystemTask;
   restoreIncident: Incident;
@@ -9770,6 +9772,11 @@ export type MutationApproveIncidentArgs = {
 
 export type MutationApproveOffenderArgs = {
   data: ApproveIncidentData;
+  where: UniqueId;
+};
+
+
+export type MutationCloseInvestigationArgs = {
   where: UniqueId;
 };
 
@@ -10291,6 +10298,11 @@ export type MutationRemoveUserFromBusinessArgs = {
   data: UserWhereUniqueInput;
   schemeWhere: SchemeWhereUniqueInput;
   where: BusinessWhereUniqueInput;
+};
+
+
+export type MutationReopenwInvestigationArgs = {
+  where: UniqueId;
 };
 
 
@@ -22669,6 +22681,13 @@ export type IncidentsFeedQueryVariables = Exact<{
 
 export type IncidentsFeedQuery = { __typename?: 'Query', incidentsRelay: { __typename?: 'QueryIncidentsRelayConnection', edges: Array<{ __typename?: 'QueryIncidentsRelayConnectionEdge', node: { __typename?: 'Incident', approved?: boolean | null, id: string, totalImages: number, priority: IncidentPriority, customerRef?: string | null, subject?: string | null, reference?: number | null, policeRef?: string | null, dayTime: string, description: string, createdByUser: boolean, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, images: Array<{ __typename?: 'Image', low?: string | null, id: string, rotation: number, position: ImagePosition, primary?: boolean | null }>, offenders: Array<{ __typename?: 'Offender', name?: string | null, id: string }>, business?: { __typename?: 'Business', name: string } | null, location?: { __typename?: 'Address', full: string } | null } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null } } };
 
+export type CloseInvestigationMutationVariables = Exact<{
+  where: UniqueId;
+}>;
+
+
+export type CloseInvestigationMutation = { __typename?: 'Mutation', closeInvestigation: { __typename?: 'Investigation', id: string, status: InvestigationStatus } };
+
 export type OffenderFeedListQueryVariables = Exact<{
   scheme: SchemeWhereUniqueInput;
   where?: InputMaybe<OffenderWhereInput>;
@@ -34341,6 +34360,22 @@ export function useIncidentsFeedLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type IncidentsFeedQueryHookResult = ReturnType<typeof useIncidentsFeedQuery>;
 export type IncidentsFeedLazyQueryHookResult = ReturnType<typeof useIncidentsFeedLazyQuery>;
 export type IncidentsFeedQueryResult = Apollo.QueryResult<IncidentsFeedQuery, IncidentsFeedQueryVariables>;
+export const CloseInvestigationDocument = gql`
+    mutation CloseInvestigation($where: UniqueId!) {
+  closeInvestigation(where: $where) {
+    id
+    status
+  }
+}
+    `;
+export type CloseInvestigationMutationFn = Apollo.MutationFunction<CloseInvestigationMutation, CloseInvestigationMutationVariables>;
+export function useCloseInvestigationMutation(baseOptions?: Apollo.MutationHookOptions<CloseInvestigationMutation, CloseInvestigationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CloseInvestigationMutation, CloseInvestigationMutationVariables>(CloseInvestigationDocument, options);
+      }
+export type CloseInvestigationMutationHookResult = ReturnType<typeof useCloseInvestigationMutation>;
+export type CloseInvestigationMutationResult = Apollo.MutationResult<CloseInvestigationMutation>;
+export type CloseInvestigationMutationOptions = Apollo.BaseMutationOptions<CloseInvestigationMutation, CloseInvestigationMutationVariables>;
 export const OffenderFeedListDocument = gql`
     query offenderFeedList($scheme: SchemeWhereUniqueInput!, $where: OffenderWhereInput, $order: OffenderOrderByWithRelationInput, $take: Int, $skip: Int) {
   listOffenders(

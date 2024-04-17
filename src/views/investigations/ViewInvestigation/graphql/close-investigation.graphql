@@ -1,0 +1,6 @@
+mutation CloseInvestigation($where: UniqueId!) {
+    closeInvestigation(where: $where) {
+        id
+        status
+    }
+}
