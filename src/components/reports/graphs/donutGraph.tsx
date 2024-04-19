@@ -1,6 +1,7 @@
 import { Empty } from 'antd';
 import { ResponsivePie } from '@nivo/pie';
 import React from 'react';
+import colours from '#/components/reports/graphs/colours';
 import { useStoreState } from '../../../state';
 
 const DonutGraph = ({
@@ -46,7 +47,7 @@ const DonutGraph = ({
             modifiers: [['darker', 0.2]],
           }}
           margin={{ top: 20, right: 0, bottom: 20, left: -120 }}
-          colors={{ scheme: isDark ? 'dark2' : 'set2' }}
+          colors={colours}
           legends={[
             {
               anchor: 'top-right',
