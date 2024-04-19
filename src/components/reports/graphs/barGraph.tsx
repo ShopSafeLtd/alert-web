@@ -3,6 +3,7 @@ import { ResponsiveBar } from '@nivo/bar';
 import { Empty } from 'antd';
 import React from 'react';
 import { useStoreState } from '#/state';
+import colours from '#/components/reports/graphs/colours';
 
 const BarGraph = ({
   data,
@@ -75,7 +76,7 @@ const BarGraph = ({
           padding={0.3}
           valueScale={{ type: 'linear' }}
           indexScale={{ type: 'band', round: true }}
-          colors={{ scheme: isDark ? 'dark2' : 'set2' }}
+          colors={colours}
           borderColor={{
             from: 'color',
             modifiers: [['darker', 1.6]],
