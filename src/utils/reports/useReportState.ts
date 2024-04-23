@@ -471,7 +471,23 @@ const useReportState = ({
             type: ReportType,
             layout: {
               createMany: {
-                data: layout,
+                data: layout.map((item) => {
+                  const { i, x, y, w, h, minW, minH, maxW, maxH, moved } = item;
+
+                  return {
+                    i,
+                    x,
+                    y,
+                    w,
+                    h,
+                    minW,
+                    minH,
+                    maxW,
+                    maxH,
+                    static: true,
+                    moved,
+                  };
+                }),
               },
             },
           },
