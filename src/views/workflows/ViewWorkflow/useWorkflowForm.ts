@@ -624,7 +624,7 @@ const useWorkflowForm = (): Return => {
       lessThanValue: lessThanSelected
         ? values.lessThanPrice.toString()
         : undefined,
-      incidentWhileBan: values.incidentWhileBanCheck ? true : undefined,
+      incidentWhileBan: values.incidentWhileBanCheck ? 'true' : undefined,
       goodsType: goodsTypeCheck
         ? {
             anyAll: values.goodsTypeCondition,
