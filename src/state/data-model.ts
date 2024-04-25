@@ -9,12 +9,8 @@ import type {
   Model,
   Race,
   Role,
-  IncidentPriority,
 } from 'graphql/generated';
-import {
-  SortOrder,
-  // UserStatus,
-} from 'graphql/generated';
+import { IncidentPriority, SortOrder } from 'graphql/generated';
 import type { DateType } from 'types/DataType';
 
 export enum IncidentSort {
@@ -245,7 +241,11 @@ const dataModel: DataModel = {
       peculiarities: '',
       compactView: false,
       tableView: false,
-      priority: [],
+      priority: [
+        IncidentPriority.High,
+        IncidentPriority.Medium,
+        IncidentPriority.Normal,
+      ],
     },
     order: IncidentSort.createdAtDesc,
     // gallery: []
