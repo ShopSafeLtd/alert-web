@@ -8,7 +8,7 @@ import {
   useBrandsQuery,
   useQuestionDetailsQuery,
   useUpdateQuestionOnTagMutation,
-} from '../../../graphql/generated';
+} from 'graphql/generated';
 import errorNotification from '../../../types/mutation_notifications/error_notification';
 import type { TagQuestion } from './UpdateQuestion.container';
 

@@ -1294,7 +1294,7 @@ const useViewIncident = (incidentId: string): Return => {
       });
   };
 
-  // goodså
+  // goods
   const [updateIncidentGoods] = useUpdateIncidentGoodsMutation({
     onError: () => {
       errorNotification();

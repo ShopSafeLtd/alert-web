@@ -6193,6 +6193,12 @@ export enum Height {
   Unknown = 'UNKNOWN'
 }
 
+export type HourCountXy = {
+  __typename?: 'HourCountXY';
+  x: Scalars['String'];
+  y: Scalars['Int'];
+};
+
 export enum IdSource {
   Bcrp = 'BCRP',
   DrivingLicence = 'DRIVING_LICENCE',
@@ -7441,6 +7447,7 @@ export type IncidentOrderByWithRelationInput = {
 
 export enum IncidentPriority {
   High = 'HIGH',
+  Low = 'LOW',
   Medium = 'MEDIUM',
   Normal = 'NORMAL'
 }
@@ -12615,6 +12622,7 @@ export type PerformanceReport = {
   lossTotals: LossTotals;
   outcomeSummary: OutcomeSummary;
   policeSummary: PoliceSummary;
+  timeHeatMap: Array<TimeHeatMap>;
 };
 
 export type Permission = {
@@ -17327,6 +17335,12 @@ export type TermsAndConditionWhereUniqueInput = {
   version?: InputMaybe<IntFilter>;
 };
 
+export type TimeHeatMap = {
+  __typename?: 'TimeHeatMap';
+  data: Array<HourCountXy>;
+  id: Scalars['String'];
+};
+
 export type TimeTaken = {
   __typename?: 'TimeTaken';
   createdAt: Scalars['Date'];
@@ -20247,9 +20261,11 @@ export type WorkflowActionScalarWhereWithAggregatesInput = {
 };
 
 export enum WorkflowActionType {
+  AutoApprove = 'AUTO_APPROVE',
   Create = 'CREATE',
   SendEmail = 'SEND_EMAIL',
-  SendNotification = 'SEND_NOTIFICATION'
+  SendNotification = 'SEND_NOTIFICATION',
+  SetPriority = 'SET_PRIORITY'
 }
 
 export type WorkflowActionUpdateManyWithoutWorkflowNestedInput = {
@@ -22930,7 +22946,7 @@ export type ViewWorkflowQueryVariables = Exact<{
 }>;
 
 
-export type ViewWorkflowQuery = { __typename?: 'Query', workflow?: { __typename?: 'Workflow', name: string, conditions: { [key: string]: any }, actions: Array<{ __typename?: 'WorkflowAction', data: { [key: string]: any }, id: string }> } | null };
+export type ViewWorkflowQuery = { __typename?: 'Query', workflow?: { __typename?: 'Workflow', name: string, conditions: { [key: string]: any }, triggerModels: Model, actions: Array<{ __typename?: 'WorkflowAction', data: { [key: string]: any }, id: string }> } | null };
 
 export type WorkflowDataQueryVariables = Exact<{
   where: SchemeWhereUniqueInput;
@@ -35031,6 +35047,7 @@ export const ViewWorkflowDocument = gql`
   workflow(where: $where) {
     name
     conditions
+    triggerModels
     actions {
       data
       id

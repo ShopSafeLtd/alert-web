@@ -29,10 +29,28 @@ const WorkflowFormContainer = () => {
     loading,
     setNewQuestion,
     saving,
+    modelSelected,
+    lessThanSelected,
+    goodsTypeCheck,
+    goods,
+    descriptionCheck,
+    incidentTimeCountCheck,
+    taskOutcome,
+    sendEmailCheck,
+    sendNotificationCheck,
   } = useWorkflowForm();
 
   return (
     <View
+      sendNotificationCheck={sendNotificationCheck}
+      sendEmailCheck={sendEmailCheck}
+      taskOutcome={taskOutcome}
+      incidentTimeCountCheck={incidentTimeCountCheck}
+      descriptionCheck={descriptionCheck}
+      goodsTypeCheck={goodsTypeCheck}
+      goods={goods}
+      lessThanSelected={lessThanSelected}
+      modelSelected={modelSelected}
       setNewQuestion={setNewQuestion}
       loading={loading}
       newQuestion={newQuestion}
