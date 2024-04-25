@@ -14,8 +14,12 @@ import type { DateType } from 'types/DataType';
 import { FormattedMessage, useIntl } from 'react-intl';
 import type { IncidentFilters } from 'state/data-model';
 import moment from 'moment';
+import { IncidentPriority } from 'graphql/generated';
+import {
+  sortPrios,
+  tagRender,
+} from '#/components/incidents/IncidentFilter/PrioFilter';
 import useStyles from './IncidentFilter.styles';
-import { IncidentPriority } from '../../../graphql/generated';
 
 const { RangePicker } = DatePicker;
 const { useForm } = Form;
@@ -211,11 +215,15 @@ const IncidentFilter = ({
             })}
             mode="multiple"
             size="small"
-            maxTagCount={2}
+            maxTagCount={4}
             allowClear
             onChange={setIncidentPriority}
-            value={priority}
+            value={priority.sort(sortPrios)}
+            tagRender={tagRender}
           >
+            <Select.Option value={IncidentPriority.Low}>
+              <FormattedMessage id="477I0g" defaultMessage="Low" />
+            </Select.Option>
             <Select.Option value={IncidentPriority.Normal}>
               <FormattedMessage id="myq2ZL" defaultMessage="Normal" />
             </Select.Option>
