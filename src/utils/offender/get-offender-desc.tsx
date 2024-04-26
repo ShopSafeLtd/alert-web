@@ -4,12 +4,12 @@ import { FormattedMessage } from 'react-intl';
 import type { Incident } from 'graphql/generated';
 import {
   Age,
+  BanType,
   Build,
   Gender,
   Height,
   IdSource,
   Race,
-  BanType,
 } from 'graphql/generated';
 
 export const getOffenderGender = (
@@ -70,19 +70,21 @@ export const getIdSource = (
   idSource: IdSource | undefined | null
 ): ReactNode => {
   if (idSource === IdSource.DrivingLicence)
-    return <FormattedMessage id="wstpvP" defaultMessage="Driving Licence" />;
+    return <FormattedMessage id="a1BjTw" defaultMessage=": Driving Licence" />;
   if (idSource === IdSource.IdCard)
-    return <FormattedMessage id="KlfRFL" defaultMessage="IdCard" />;
+    return <FormattedMessage id="2Gk5d1" defaultMessage=": Id" />;
   if (idSource === IdSource.Known)
-    return <FormattedMessage id="he2Vcw" defaultMessage="Known Offender" />;
+    return <FormattedMessage id="XpA2Nc" defaultMessage=": Known Offender" />;
   if (idSource === IdSource.Other)
-    return <FormattedMessage id="/VnDMl" defaultMessage="Other" />;
+    return <FormattedMessage id="zujLfW" defaultMessage=": Other" />;
   if (idSource === IdSource.Passport)
-    return <FormattedMessage id="OSJSb9" defaultMessage="Passport" />;
+    return <FormattedMessage id="1r75im" defaultMessage=": Passport" />;
   if (idSource === IdSource.Police)
-    return <FormattedMessage id="rZEvPc" defaultMessage="Provided By Police" />;
-
-  return <FormattedMessage id="r+TWun" defaultMessage="Not Verified" />;
+    return (
+      <FormattedMessage id="WxgJ1s" defaultMessage=": Provided By Police" />
+    );
+  // TODO change if used other than view offender
+  return '';
 };
 
 export const getOffenderBuild = (

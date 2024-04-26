@@ -782,8 +782,8 @@ const ViewOffender = ({
                                     <Typography.Text type="success">
                                       {intl.formatMessage(
                                         {
-                                          defaultMessage: 'Verified {source}',
-                                          id: 'OBOA6I',
+                                          defaultMessage: 'Verified{source}',
+                                          id: 'ZdZaQ7',
                                         },
                                         {
                                           source: getIdSource(
@@ -948,7 +948,10 @@ const ViewOffender = ({
                             </Card>
                           </Col>
                           <Col span={12}>
-                            <Card loading={loading} style={{ marginBottom: 0 }}>
+                            <Card
+                              loading={loading}
+                              style={{ marginBottom: 0, height: '100%' }}
+                            >
                               <Title level={4} style={{ marginBottom: 10 }}>
                                 {intl.formatMessage({
                                   defaultMessage: 'Physical Description',
@@ -1186,24 +1189,21 @@ const ViewOffender = ({
                             className={classes.offenderRow}
                             wrap={false}
                           >
-                            {associatesLoading && (
-                              <Row gutter={8} className={classes.offenderRow}>
-                                {Array.from({ length: 4 }).map((_, index) => (
-                                  // eslint-disable-next-line react/no-array-index-key
-                                  <Col key={index}>
-                                    <Skeleton.Avatar
-                                      active
-                                      shape="square"
-                                      style={{
-                                        height: 200,
-                                        width: 150,
-                                        borderRadius: '0.625rem',
-                                      }}
-                                    />
-                                  </Col>
-                                ))}
-                              </Row>
-                            )}
+                            {associatesLoading &&
+                              Array.from({ length: 12 }).map((_, index) => (
+                                // eslint-disable-next-line react/no-array-index-key
+                                <Col key={index}>
+                                  <Skeleton.Avatar
+                                    active
+                                    shape="square"
+                                    style={{
+                                      height: 200,
+                                      width: 150,
+                                      borderRadius: '0.625rem',
+                                    }}
+                                  />
+                                </Col>
+                              ))}
                             {associatesData?.offender?.knownAssociates &&
                               associatesData.offender.knownAssociates.length ===
                                 0 && (
