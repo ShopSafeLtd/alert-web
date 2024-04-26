@@ -272,6 +272,8 @@ const useWorkflowForm = (): Return => {
             assigneeGroups: action?.task?.assignToGroups,
             taskDueDays: action?.task?.dueDays,
             taskQuestions: action?.task?.questions,
+            taskOutcome: !!action?.task?.name,
+
             option: conditions?.anyAll,
             tags: !!conditions?.tags?.tags,
             tagMethod: conditions?.tags?.anyAll,
