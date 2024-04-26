@@ -13,9 +13,9 @@ import type {
   ViewOffenderQueryVariables,
 } from 'graphql/generated';
 import {
-  useAddImagesToIncidentMutation,
   Role,
   TagType,
+  useAddImagesToIncidentMutation,
   useAddImagesToOffenderMutation,
   useAssociatedOffendersQuery,
   useCreateSimpleVehicleMutation,
@@ -327,6 +327,8 @@ const useViewOffender = (offenderId: string): Return => {
 
   const { data: associatesData, loading: associatesLoading } =
     useAssociatedOffendersQuery({
+      skip: !data,
+      fetchPolicy: 'cache-first',
       variables: {
         linkedCrimeGroup: associateFilters.includes(LINKED_OCG),
         linkedIncidents: associateFilters.includes(LINKED_INCIDENTS),
@@ -1911,7 +1913,7 @@ const useViewOffender = (offenderId: string): Return => {
     publicOffenderDOB: defaultPublicOffenderDOB && role !== Role.User,
     onDelete,
     associatesData,
-    associatesLoading,
+    associatesLoading: data?.offender ? associatesLoading : true,
     onAssociateFilterChange,
     associateFilters,
     viewAssociate,
