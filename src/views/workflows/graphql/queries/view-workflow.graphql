@@ -2,6 +2,7 @@ query ViewWorkflow($where: WorkflowWhereUniqueInput!) {
   workflow(where: $where) {
     name
     conditions
+    triggerModels
     actions {
       data
       id

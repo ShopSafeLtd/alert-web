@@ -1,20 +1,20 @@
 import { useApolloClient } from '@apollo/client';
 import type { FormInstance } from 'antd';
-import { notification, Form } from 'antd';
+import { Form, notification } from 'antd';
 import type {
+  BusinessUpdateInput,
   SearchBusinessesQuery,
   SearchBusinessesQueryVariables,
-  BusinessUpdateInput,
 } from 'graphql/generated';
 import {
   Model,
-  useSchemeGroupsQuery,
-  useTagsQuery,
   QueryMode,
   SearchBusinessesDocument,
-  useEditBusinessQuery,
-  useUpdateBusinessMutation,
   useBrandsQuery,
+  useEditBusinessQuery,
+  useSchemeGroupsQuery,
+  useTagsQuery,
+  useUpdateBusinessMutation,
 } from 'graphql/generated';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -431,7 +431,7 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
         label: group.name,
       })) || [],
     brands:
-      brandsData?.brands.map((group) => ({
+      brandsData?.brands.edges.map(({ node: group }) => ({
         value: group.id,
         label: group.name,
       })) || [],

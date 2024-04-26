@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router';
 import OffenderFeed from 'views/profiles/offenders/OffenderFeed';
 import ViewOffender from 'views/profiles/offenders/ViewOffender';
 import AddOffender from 'views/profiles/offenders/AddOffender';
-import EditOffender from 'views/profiles/offenders/EditOffender';
+// import EditOffender from 'views/profiles/offenders/EditOffender';
 import CompareOffender from 'views/profiles/offenders/CompareOffender';
 import PermissionCheckWrapper from '../../../components/PermissionCheck/PermissionCheckWrapper';
 import { PermissionMethod, PermissionModel } from '../../../graphql/generated';
@@ -49,7 +49,7 @@ const Offenders = (): JSX.Element => (
         </PermissionCheckWrapper>
       }
     />
-    <Route
+    {/* <Route
       path="edit/:id"
       element={
         <PermissionCheckWrapper
@@ -61,8 +61,8 @@ const Offenders = (): JSX.Element => (
           <EditOffender reviewed={false} />
         </PermissionCheckWrapper>
       }
-    />
-    <Route
+    /> */}
+    {/* <Route
       path="review/:id"
       element={
         <PermissionCheckWrapper
@@ -75,7 +75,7 @@ const Offenders = (): JSX.Element => (
           <EditOffender reviewed />
         </PermissionCheckWrapper>
       }
-    />
+    /> */}
     <Route
       path="compare/:id"
       element={

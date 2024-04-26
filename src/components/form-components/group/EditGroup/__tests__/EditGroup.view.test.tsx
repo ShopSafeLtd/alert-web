@@ -40,6 +40,8 @@ describe('Detail Officer View', () => {
           usersData={usersData}
           usersLoading={false}
           saving={false}
+          showOffenderSettings={false}
+          setShowOffenderSettings={jest.fn()}
         />
       </MemoryRouter>
     );

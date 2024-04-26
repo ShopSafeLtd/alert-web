@@ -1,0 +1,16 @@
+query Brands($skip: Int, $take: Int, $orderBy: [BrandOrderByWithRelationInput!], $where: BrandWhereInput) {
+  brands(skip: $skip, take: $take, orderBy: $orderBy, where: $where) {
+    totalCount
+    edges {
+      node {
+        id
+        name
+        description
+        businesses {
+          id
+          name
+        }
+      }
+    }
+  }
+}

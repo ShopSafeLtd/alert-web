@@ -20,6 +20,8 @@ const EditGroup = ({ onClose }: Props): JSX.Element => {
     selectedUsers,
     setSelectedUsers,
     adminUsersData,
+    showOffenderSettings,
+    setShowOffenderSettings,
   } = useEditGroup({
     onClose,
     groupId,
@@ -37,6 +39,8 @@ const EditGroup = ({ onClose }: Props): JSX.Element => {
       selectedUsers={selectedUsers}
       setSelectedUsers={setSelectedUsers}
       adminUsersData={adminUsersData}
+      showOffenderSettings={showOffenderSettings}
+      setShowOffenderSettings={setShowOffenderSettings}
     />
   );
 };

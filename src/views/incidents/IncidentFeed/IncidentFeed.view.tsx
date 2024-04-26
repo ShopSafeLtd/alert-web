@@ -10,10 +10,10 @@ import {
   Drawer,
   Empty,
   Row,
-  Tooltip,
   Table,
-  Typography,
   Tag,
+  Tooltip,
+  Typography,
 } from 'antd';
 import IncidentCard from 'components/incidents/IncidentCard';
 import IncidentSkeletonCard from 'components/incidents/IncidentSkeletonCard';
@@ -40,6 +40,7 @@ import CompactSkeletonCard from 'components/offenders/OffenderCard/OffenderSkele
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
 import { useNavigate } from 'react-router';
 import { createUseStyles } from 'react-jss';
+import { PrioButtonFilter } from '#/components/incidents/IncidentFilter/PrioFilter';
 import Loading from '../../../components/shared-components/AntD/Loading';
 import DebouncedInput from '../../../utils/debounced-input';
 
@@ -131,7 +132,7 @@ const IncidentFeed = ({
 }: Props): JSX.Element => {
   const intl = useIntl();
   const navigate = useNavigate();
-  const { search, gallery, compactView } = variables;
+  const { search, gallery, compactView, priority } = variables;
   const classes = useStyles();
 
   return (
@@ -157,7 +158,7 @@ const IncidentFeed = ({
               onChange={(e) => setSearch(e.target.value)}
             />
           </Col>
-          <Col flex={1}>
+          <Col>
             <CheckTags
               mode="check"
               noGutter
@@ -188,6 +189,9 @@ const IncidentFeed = ({
                 },
               ]}
             />
+          </Col>
+          <Col flex={1}>
+            <PrioButtonFilter intl={intl} selected={priority} />
           </Col>
           <Col style={{ display: 'flex', alignItems: 'center' }}>
             <Tooltip

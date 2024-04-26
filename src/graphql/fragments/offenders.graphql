@@ -16,4 +16,6 @@ fragment Offenders on Offender {
   idSource
   knownFor
   targetedGoods
+  justification
+  infoSource
 }

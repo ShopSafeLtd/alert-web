@@ -33,6 +33,10 @@ const useFeedItems = (): Return => {
     intl,
   } = useDashboardContext();
 
+  function areAllValuesUndefined(obj: { [key: string]: unknown }): boolean {
+    return Object.values(obj).every((value) => value === undefined);
+  }
+
   const itemVariables = {
     createdAt: createdAtFilter
       ? {
@@ -88,55 +92,58 @@ const useFeedItems = (): Return => {
               in: typesFilter,
             }
           : undefined,
-
-      AND: [
-        {
-          offender: {
-            approved: gallery.includes('NOT APPROVED')
-              ? {
-                  equals: false,
-                }
-              : undefined,
-          },
-        },
-        {
-          incident: {
-            approved: gallery.includes('NOT APPROVED')
-              ? {
-                  equals: false,
-                }
-              : undefined,
-          },
-        },
-        {
-          OR: [
-            {
-              createdBy: gallery.includes('MYDATA')
+      AND:
+        gallery.includes('NOT APPROVED') ||
+        gallery.includes('MYDATA') ||
+        !areAllValuesUndefined(itemVariables)
+          ? [
+              gallery.includes('NOT APPROVED')
                 ? {
-                    id: {
-                      equals: userId,
+                    offender: {
+                      approved: {
+                        equals: false,
+                      },
+                    },
+                    incident: {
+                      approved: {
+                        equals: false,
+                      },
                     },
                   }
-                : undefined,
-            },
-            {
-              offender: itemVariables,
-            },
-            {
-              incident: itemVariables,
-            },
-            {
-              vehicle: itemVariables,
-            },
-            {
-              crimeGroup: itemVariables,
-            },
-            {
-              investigation: itemVariables,
-            },
-          ],
-        },
-      ],
+                : {},
+              gallery.includes('MYDATA') ||
+              !areAllValuesUndefined(itemVariables)
+                ? {
+                    OR: [
+                      {
+                        createdBy: gallery.includes('MYDATA')
+                          ? {
+                              id: {
+                                equals: userId,
+                              },
+                            }
+                          : undefined,
+                      },
+                      {
+                        offender: itemVariables,
+                      },
+                      {
+                        incident: itemVariables,
+                      },
+                      {
+                        vehicle: itemVariables,
+                      },
+                      {
+                        crimeGroup: itemVariables,
+                      },
+                      {
+                        investigation: itemVariables,
+                      },
+                    ],
+                  }
+                : {},
+            ]
+          : undefined,
     },
     groupsWhere2: {
       users: {
@@ -149,6 +156,7 @@ const useFeedItems = (): Return => {
     },
   };
 
+  console.log(gallery.includes('MYDATA'), areAllValuesUndefined(itemVariables));
   const { data, loading, fetchMore } = useFeedItemsQuery({
     variables: queryVariables,
     fetchPolicy: 'cache-and-network',

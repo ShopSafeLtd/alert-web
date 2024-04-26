@@ -16,5 +16,8 @@ query Group($where: GroupWhereUniqueInput!) {
       id
       fullName
     }
+    offenderSettings {
+      ...OffenderSettings
+    }
   }
 }

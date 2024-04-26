@@ -144,11 +144,19 @@ const useAddQuestion = ({ onClose, tagQuestions }: Props): Return => {
     });
   };
   const brands =
-    BrandsData?.brands?.map((brand) => ({
+    BrandsData?.brands?.edges.map(({ node: brand }) => ({
       label: brand?.name || '',
       value: brand?.id || '',
     })) || [];
-  return { data, loading:loading||brandsLoading, form, questionData, onSubmit, saving, brands };
+  return {
+    data,
+    loading: loading || brandsLoading,
+    form,
+    questionData,
+    onSubmit,
+    saving,
+    brands,
+  };
 };
 
 export default useAddQuestion;

@@ -19,6 +19,24 @@ describe('Detail Officer View', () => {
         form={form}
         uploading={false}
         setUploading={jest.fn()}
+        offenderSettings={{
+          name: true,
+          alias: true,
+          ethnicity: true,
+          gender: true,
+          build: true,
+          height: true,
+          hair: true,
+          age: true,
+          dateOfBirth: true,
+          dateOfBirthSource: true,
+          idVerified: true,
+          peculiarities: true,
+          comment: true,
+          images: true,
+        }}
+        loading={false}
+        knowAddress={false}
         // onSearchOffender={jest.fn()}
       />
     );

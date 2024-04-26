@@ -115,7 +115,20 @@ interface Return {
   updateAddOffenderList: MutationUpdaterFn<CreateSimpleOffenderMutation>;
   onCompletedAddOffender: () => void;
 }
-
+const onCompletedEditOffender = () => {
+  successNotification(
+    ProfileUpdatedModel.Offender,
+    ProfileUpdatedModel.Vehicle,
+    ProfileUpdatedType.updated
+  );
+};
+const onCompletedAddOffender = () => {
+  successNotification(
+    ProfileUpdatedModel.Offender,
+    ProfileUpdatedModel.Vehicle,
+    ProfileUpdatedType.added
+  );
+};
 const useViewVehicle = (vehicleId: string): Return => {
   const intl = useIntl();
   const userId = useStoreState((state) => state.user.id);
@@ -565,13 +578,6 @@ const useViewVehicle = (vehicleId: string): Return => {
     });
   };
 
-  const onCompletedEditOffender = () => {
-    successNotification(
-      ProfileUpdatedModel.Offender,
-      ProfileUpdatedModel.Vehicle,
-      ProfileUpdatedType.updated
-    );
-  };
   // const [updateOffender] = useUpdateSimpleOffenderMutation({
   //   onError: () => {
   //     errorNotification();
@@ -707,13 +713,6 @@ const useViewVehicle = (vehicleId: string): Return => {
     });
   };
 
-  const onCompletedAddOffender = () => {
-    successNotification(
-      ProfileUpdatedModel.Offender,
-      ProfileUpdatedModel.Vehicle,
-      ProfileUpdatedType.added
-    );
-  };
   // const [createOffender] = useCreateSimpleOffenderMutation({
   //   onCompleted: () => {
   //     successNotification(

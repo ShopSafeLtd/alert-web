@@ -150,7 +150,7 @@ const usePerformanceReport = (): Return => {
     },
     onCompleted: (brandsData) => {
       setBrands(
-        brandsData.brands?.map(({ id, name }) => ({
+        brandsData.brands?.edges?.map(({ node: { id, name } }) => ({
           value: id,
           label: name,
         })) || []

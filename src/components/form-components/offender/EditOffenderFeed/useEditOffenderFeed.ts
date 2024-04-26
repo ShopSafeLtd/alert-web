@@ -9,6 +9,7 @@ import type {
   EditOffenderQuery,
 } from 'graphql/generated';
 import {
+  useBusinessOffenderSettingsQuery,
   useEditOffenderQuery,
   useListCustomGalleriesQuery,
   Model,
@@ -17,11 +18,11 @@ import {
   useTagsQuery,
   useUpdateOffenderMutation,
 } from 'graphql/generated';
-import { notification } from 'antd';
+import { notification, Form } from 'antd';
 import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
-
 import { useIntl } from 'react-intl';
+import type { OffenderSettingsType } from '#/types/DataType';
 
 interface Props {
   onClose: () => void;
@@ -30,6 +31,7 @@ interface Props {
 export interface FormData {
   name: string;
   alias?: string[];
+  ageCheck: boolean;
   age: Age;
   gender: Gender;
   race: Race;
@@ -62,27 +64,30 @@ interface Return {
   tagsLoading: boolean;
   customGalleries: { value: string; label: string }[];
   customGalleriesLoading: boolean;
-  ageCheck: boolean;
-  setAgeCheck: (value: boolean) => void;
-  idVerified: boolean;
-  onValuesChange?: (changedValues: FormData, values: FormData) => void;
+  ageCheck: boolean | undefined;
+  idVerified: boolean | undefined;
   adminRights: boolean;
   needJustification: boolean;
+  offenderSettings: OffenderSettingsType | undefined;
 }
 
 const useEditOffender = ({ offenderId, onClose }: Props): Return => {
   const intl = useIntl();
+  const [form] = Form.useForm<FormData>();
+  const ageCheck = Form.useWatch('ageCheck', form);
+  const idVerified = Form.useWatch('idVerified', form);
   const { needJustification, id: schemeId } = useStoreState(
     (state) => state.scheme
   );
-  const userId = useStoreState((state) => state.user.id);
-  const userGroups = useStoreState((state) => state.user.groups).filter(
-    ({ scheme }) => scheme.id === schemeId
-  );
-  const role = useStoreState((state) => state.user.role);
+  const {
+    id: userId,
+    groups: userGroups,
+    role,
+  } = useStoreState((state) => state.user);
+
+  const businessId = useStoreState((state) => state.user.businesses[0].id);
+
   const [saving, setSaving] = useState(false);
-  const [ageCheck, setAgeCheck] = useState(false);
-  const [idVerified, setIDVerified] = useState(false);
 
   const { data: offenderData, loading } = useEditOffenderQuery({
     variables: {
@@ -90,12 +95,16 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
         id: offenderId,
       },
     },
-
-    onCompleted: ({ offender }) => {
-      setAgeCheck(!!offender?.dateOfBirth);
-      if (offender?.idVerified) setIDVerified(true);
-    },
   });
+  const { data: businessData, loading: businessLoading } =
+    useBusinessOffenderSettingsQuery({
+      fetchPolicy: 'network-only',
+      variables: {
+        where: {
+          id: businessId,
+        },
+      },
+    });
   const { data: groupData, loading: groupsLoading } = useSchemeGroupsQuery({
     variables: {
       where: {
@@ -202,9 +211,9 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
           peculiarities: { set: data.peculiarities || '' },
           age: { set: ageCheck ? null : data.age || null },
           dateSource: { set: ageCheck ? data.dateSource || null : null },
+          dateOfBirth: { set: ageCheck ? data.dateOfBirth || null : null },
           idSource: data.idSource ? { set: data.idSource } : undefined,
           idVerified: data.idVerified ? { set: data.idVerified } : undefined,
-          dateOfBirth: { set: ageCheck ? data.dateOfBirth || null : null },
           groups: {
             set:
               userGroups.length > 1
@@ -228,16 +237,10 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
     });
   };
 
-  // function
-  const onValuesChange = (changedValues: FormData) => {
-    if (changedValues.idVerified !== undefined) {
-      setIDVerified(changedValues.idVerified);
-    }
-  };
   return {
     onSubmit,
     data: offenderData,
-    loading,
+    loading: loading || businessLoading,
     saving,
     groups:
       groupData?.groups.map((group) => ({
@@ -255,11 +258,10 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
       })) || [],
     customGalleriesLoading,
     ageCheck,
-    setAgeCheck,
     idVerified,
-    onValuesChange,
     adminRights: role !== Role.User,
     needJustification,
+    offenderSettings: businessData?.business.offenderSettings,
   };
 };
 
