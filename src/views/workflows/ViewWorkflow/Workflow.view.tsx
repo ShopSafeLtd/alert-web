@@ -1484,17 +1484,17 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                         id: 'ROm47+',
                       })}
                     >
-                      <Form.Item
-                        label={
-                          <FormattedMessage
-                            defaultMessage="Select an priority to set the incident to"
-                            id="d+Gqof"
-                          />
-                        }
-                        name="setPriority"
-                      >
-                        <Row gutter={[8, 8]}>
-                          <Col span={10}>
+                      <Row gutter={[8, 8]}>
+                        <Col span={10}>
+                          <Form.Item
+                            label={
+                              <FormattedMessage
+                                defaultMessage="Select an priority to set the incident to"
+                                id="d+Gqof"
+                              />
+                            }
+                            name="setPriority"
+                          >
                             <Select
                               options={Object.keys(IncidentPriority).map(
                                 (key) => ({
@@ -1503,9 +1503,9 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                 })
                               )}
                             />
-                          </Col>
-                        </Row>
-                      </Form.Item>
+                          </Form.Item>
+                        </Col>
+                      </Row>
                       <Form.Item
                         label={
                           <FormattedMessage
