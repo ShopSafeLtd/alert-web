@@ -184,6 +184,10 @@ const RoleView = ({
       id: 'D0tMhW',
       defaultMessage: 'Businesses',
     }),
+    EVIDENCE: formatMessage({
+      id: '6g7+6N',
+      defaultMessage: 'Evidence',
+    }),
   };
 
   const createFormItem = (dataType: DataType) => (

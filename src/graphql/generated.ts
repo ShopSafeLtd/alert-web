@@ -12622,6 +12622,7 @@ export type PerformanceReport = {
   lossTotals: LossTotals;
   outcomeSummary: OutcomeSummary;
   policeSummary: PoliceSummary;
+  priorityGraph: Array<Graph>;
   timeHeatMap: Array<TimeHeatMap>;
 };
 
@@ -12654,6 +12655,7 @@ export enum PermissionModel {
   CrimeGroups = 'CRIME_GROUPS',
   Dashboard = 'DASHBOARD',
   Documents = 'DOCUMENTS',
+  Evidence = 'EVIDENCE',
   Groups = 'GROUPS',
   Incidents = 'INCIDENTS',
   Investigations = 'INVESTIGATIONS',
