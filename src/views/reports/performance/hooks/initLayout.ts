@@ -356,6 +356,16 @@ export const PerformanceDrawerLayout: ExtendedLayout[] = [
     static: false,
   },
   {
+    w: 2,
+    h: 15,
+    x: 0,
+    y: 8,
+    i: 'investigationsTable',
+    minH: 5,
+    moved: false,
+    static: false,
+  },
+  {
     w: 1,
     h: 4,
     x: 1,
@@ -375,16 +385,7 @@ export const PerformanceDrawerLayout: ExtendedLayout[] = [
     moved: false,
     static: false,
   },
-  {
-    w: 2,
-    h: 4,
-    x: 0,
-    y: 8,
-    i: 'investigationsTable',
-    minH: 4,
-    moved: false,
-    static: false,
-  },
+
   {
     w: 2,
     h: 4,

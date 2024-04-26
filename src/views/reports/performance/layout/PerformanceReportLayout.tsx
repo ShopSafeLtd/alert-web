@@ -9,6 +9,8 @@ import {
   faChartLineDown,
   faChartPie,
   faClipboard,
+  faClipboardCheck,
+  faClipboardMedical,
   faComments,
   faExclamationCircle,
   faHandcuffs,
@@ -23,8 +25,6 @@ import {
   faUserPolice,
   faUserPoliceTie,
   faUsers,
-  faClipboardCheck,
-  faClipboardMedical,
 } from '@fortawesome/pro-light-svg-icons';
 import React, { useMemo } from 'react';
 import type RGL from 'react-grid-layout';
@@ -1524,10 +1524,7 @@ const PerformanceReportLayout = ({
             onChange: (_, pageSize) => {
               changeSize('investigationsTable', pageSize);
             },
-            total:
-              data?.targetedGoods?.targetedGoods?.filter(
-                (business) => business.totalIncidents > 0
-              ).length || 0,
+            total: data?.investigationPerformance?.total || 0,
             defaultPageSize: 10,
             showSizeChanger: true,
             showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
