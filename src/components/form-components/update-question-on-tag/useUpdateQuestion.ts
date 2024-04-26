@@ -8,7 +8,7 @@ import {
   useBrandsQuery,
   useQuestionDetailsQuery,
   useUpdateQuestionOnTagMutation,
-} from '../../../graphql/generated';
+} from 'graphql/generated';
 import errorNotification from '../../../types/mutation_notifications/error_notification';
 import type { TagQuestion } from './UpdateQuestion.container';
 
@@ -219,11 +219,18 @@ const useUpdateQuestion = ({
   };
 
   const brands =
-    BrandsData?.brands?.map((brand) => ({
+    BrandsData?.brands?.edges?.map(({ node: brand }) => ({
       label: brand?.name || '',
       value: brand?.id || '',
     })) || [];
-  return { data, loading, form, onSubmit, saving, brands };
+  return {
+    data,
+    loading: loading || brandsLoading,
+    form,
+    onSubmit,
+    saving,
+    brands,
+  };
 };
 
 export default useUpdateQuestion;

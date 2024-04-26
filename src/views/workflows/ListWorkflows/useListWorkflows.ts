@@ -19,6 +19,11 @@ const worflowTriggerToReadable = ({
   triggerModels: Model;
   intl: IntlShape;
 }) => {
+  if (triggerModels === 'OFFENDER')
+    return intl.formatMessage({
+      defaultMessage: 'When an offender is added to an incident',
+      id: 'MYTuQh',
+    });
   switch (trigger) {
     case WorkflowTrigger.Created: {
       return intl.formatMessage(

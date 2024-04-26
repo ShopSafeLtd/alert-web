@@ -8,9 +8,9 @@ import useOffenders from './useOffenders';
 import CountButton from '../../../../form-components/count-buttons/CountButton.view';
 import CounterButton from '../../../../form-components/count-buttons/CounterButton.view';
 import OffenderProfile from './OffenderProfile.view';
-import AddOffender from '../../../../form-components/offender/offender/AddNewOffenderSimple';
+import AddNewOffenderSimple from '../../../../form-components/offender/offender/AddNewOffenderSimple';
 import AddExistingOffender from '../../../../form-components/offender/offender/AddExistingOffender';
-import EditOffender from '../../../../form-components/offender/offender/AddIncidentEditOffender';
+import SimpleEditOffender from '../../../../form-components/offender/offender/SimpleEditOffender';
 import type { FormData } from '../../../../../views/incidents/AddIncident/useAddIncident';
 import FacesColumn from './FacesColumn.view';
 
@@ -39,6 +39,8 @@ const Offenders = ({
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
+  const incidentBusinessId = Form.useWatch('business', form)?.value;
+
   const {
     offenders,
     onRemoveOffender,
@@ -183,11 +185,12 @@ const Offenders = ({
         onClose={toggleAddNewOpen}
       >
         {addNewOpen ? (
-          <AddOffender
+          <AddNewOffenderSimple
             onAddOffender={(data) => onAddOffenders([data], false, false)}
             onClose={toggleAddNewOpen}
             images={images}
             onImagesUploaded={onImagesUploadedInForm}
+            incidentBusinessId={incidentBusinessId}
           />
         ) : (
           <div />
@@ -247,7 +250,7 @@ const Offenders = ({
         onClose={() => setUpdateOpen(null)}
       >
         {updateOpen ? (
-          <EditOffender
+          <SimpleEditOffender
             data={updateOpen}
             onClose={() => setUpdateOpen(null)}
             onEditOffender={(values) => onUpdateOffender(values)}

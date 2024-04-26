@@ -272,6 +272,22 @@ const EditOffender = ({
                 onSearchOffender={() => {}}
                 potentialOffenders={0}
                 toggleViewPotentialOffenders={() => {}}
+                offenderSettings={{
+                  name: true,
+                  alias: true,
+                  ethnicity: true,
+                  gender: true,
+                  build: true,
+                  height: true,
+                  hair: true,
+                  age: true,
+                  dateOfBirth: true,
+                  dateOfBirthSource: true,
+                  idVerified: true,
+                  peculiarities: true,
+                  comment: true,
+                  images: true,
+                }}
               />
             </Card>
             {adminRights && (

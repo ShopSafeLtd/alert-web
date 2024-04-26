@@ -109,7 +109,7 @@ export const DashboardProvider: React.FC<{
       isSet
         ? schemeLayouts[schemeId] ?? initialLayout
         : { marquee: null, layout: [] },
-    [schemeId, isSet]
+    [isSet, schemeLayouts, schemeId, initialLayout]
   );
 
   const [saving, setSaving] = useState(false);

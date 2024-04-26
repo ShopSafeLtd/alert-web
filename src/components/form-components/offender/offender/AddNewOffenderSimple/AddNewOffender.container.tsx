@@ -16,8 +16,10 @@ interface Props {
   incidentId?: string;
   investigationId?: string;
   vehicleId?: string;
+  crimeGroupId?: string;
   groupsIds?: string[];
   onImagesUploaded?: (values: StateImageData[]) => void;
+  incidentBusinessId?: string;
 }
 
 const AddNewOffender = ({
@@ -30,7 +32,9 @@ const AddNewOffender = ({
   incidentId,
   investigationId,
   vehicleId,
+  crimeGroupId,
   groupsIds,
+  incidentBusinessId,
 }: Props): JSX.Element => {
   const {
     onSubmit,
@@ -40,6 +44,9 @@ const AddNewOffender = ({
     form,
     uploading,
     setUploading,
+    offenderSettings,
+    loading,
+    knowAddress,
   } = useAddNewOffender({
     onClose,
     update,
@@ -49,8 +56,11 @@ const AddNewOffender = ({
     incidentId,
     investigationId,
     vehicleId,
+    crimeGroupId,
     groupsIds,
+    incidentBusinessId,
   });
+
   return (
     <div>
       <View
@@ -63,6 +73,9 @@ const AddNewOffender = ({
         form={form}
         idVerified={idVerified}
         ageCheck={ageCheck}
+        offenderSettings={offenderSettings}
+        loading={loading}
+        knowAddress={knowAddress}
       />
     </div>
   );

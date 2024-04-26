@@ -247,26 +247,19 @@ const useIncidentFeed = (): Return => {
                   },
                 },
                 {
+                  business: {
+                    name: {
+                      contains: search,
+                      mode: QueryMode.Insensitive,
+                    },
+                  },
+                },
+                {
                   createdBy: {
-                    OR: [
-                      {
-                        fullName: {
-                          contains: search,
-                          mode: QueryMode.Insensitive,
-                        },
-                      },
-
-                      {
-                        businesses: {
-                          some: {
-                            name: {
-                              contains: search,
-                              mode: QueryMode.Insensitive,
-                            },
-                          },
-                        },
-                      },
-                    ],
+                    fullName: {
+                      contains: search,
+                      mode: QueryMode.Insensitive,
+                    },
                   },
                 },
                 {

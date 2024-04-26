@@ -3,6 +3,7 @@ import { ResponsiveBar } from '@nivo/bar';
 import { Empty } from 'antd';
 import React from 'react';
 import { useIntl } from 'react-intl';
+import colours from '#/components/reports/graphs/colours';
 import { useStoreState } from '../../../state';
 import filteredBarData from '../../../views/reports/crime-groups/crime-group-report/utils/FilteredBarData';
 
@@ -64,7 +65,7 @@ const MultiBarGraph = ({
           groupMode="grouped"
           valueScale={{ type: 'linear' }}
           indexScale={{ type: 'band', round: true }}
-          colors={{ scheme: darkMode ? 'dark2' : 'set2' }}
+          colors={colours}
           theme={{
             textColor: darkMode ? '#ffffff' : '#000',
           }}

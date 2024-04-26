@@ -20,11 +20,10 @@ const EditOffender = ({ offenderId, onClose }: Props): JSX.Element => {
     customGalleries,
     customGalleriesLoading,
     ageCheck,
-    setAgeCheck,
     idVerified,
-    onValuesChange,
     adminRights,
     needJustification,
+    offenderSettings,
   } = useEditOffender({ offenderId, onClose });
   return (
     <div>
@@ -38,14 +37,13 @@ const EditOffender = ({ offenderId, onClose }: Props): JSX.Element => {
         tags={tags}
         tagsLoading={tagsLoading}
         ageCheck={ageCheck}
-        setAgeCheck={setAgeCheck}
         onClose={onClose}
         idVerified={idVerified}
-        onValuesChange={onValuesChange}
         customGalleries={customGalleries}
         customGalleriesLoading={customGalleriesLoading}
         adminRights={adminRights}
         needJustification={needJustification}
+        offenderSettings={offenderSettings}
       />
     </div>
   );

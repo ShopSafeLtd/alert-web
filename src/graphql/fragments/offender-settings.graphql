@@ -1,0 +1,16 @@
+fragment OffenderSettings on OffenderSettings {
+  name
+  alias
+  ethnicity
+  gender
+  build
+  height
+  hair
+  age
+  dateOfBirth
+  dateOfBirthSource
+  idVerified
+  peculiarities
+  comment
+  images
+}

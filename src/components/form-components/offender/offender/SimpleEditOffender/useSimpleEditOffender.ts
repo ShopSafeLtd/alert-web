@@ -9,6 +9,7 @@ import type {
   UpdateSimpleOffenderMutation,
 } from 'graphql/generated';
 import {
+  useBusinessOffenderSettingsQuery,
   useUpdateSimpleOffenderMutation,
   ImagePosition,
 } from 'graphql/generated';
@@ -17,6 +18,9 @@ import { Form } from 'antd';
 import type { MutationUpdaterFn } from '@apollo/client';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import type { AddOffenderData } from 'components/incidents/IncidentForm/Profiles/Offenders/useOffenders';
+import { useStoreState } from '#/state';
+import type { OffenderSettingsType } from '#/types/DataType';
+import { useState } from 'react';
 import type { ImageValue } from '../../../ImageSelect/ImageSelect.view';
 import type { StateImageData } from '../../../../incidents/IncidentForm/ImageSection/useImageSection';
 
@@ -45,6 +49,8 @@ export interface OffenderData {
   images?: OffenderImage[] | null;
   knownFor?: string[] | null;
   targetedGoods?: string[] | null;
+  infoSource?: string | null;
+  justification?: string | null;
 }
 
 interface Props {
@@ -54,6 +60,7 @@ interface Props {
   update?: MutationUpdaterFn<UpdateSimpleOffenderMutation>;
   onEditOffender?: (value: AddOffenderData) => void;
   onImagesUploaded?: (value: StateImageData[]) => void;
+  incidentBusinessId?: string;
 }
 
 export interface FormData {
@@ -78,12 +85,13 @@ export interface FormData {
   targetedGoods: string[];
   justification: string;
   infoSource: string;
-  // addressAlias?: string;
-  // building?: string;
-  // street?: string;
-  // townCity?: string;
-  // county?: string;
-  // postcode?: string;
+  knowAddress?: boolean;
+  addressAlias?: string;
+  building?: string;
+  street?: string;
+  townCity?: string;
+  county?: string;
+  postcode?: string;
 }
 
 interface Return {
@@ -91,6 +99,13 @@ interface Return {
   form: FormInstance<FormData>;
   ageCheck: boolean | undefined;
   idVerified: boolean | undefined;
+  offenderSettings: OffenderSettingsType | undefined;
+  loading: boolean;
+  saving: boolean;
+  needJustification: boolean;
+  uploading: boolean;
+  setUploading: (value: boolean) => void;
+  knowAddress: boolean | undefined;
 }
 
 const useEditOffender = ({
@@ -100,11 +115,29 @@ const useEditOffender = ({
   update,
   onImagesUploaded,
   onCompleted,
+  incidentBusinessId,
 }: Props): Return => {
   const [form] = Form.useForm<FormData>();
-
   const ageCheck = Form.useWatch('ageCheck', form);
   const idVerified = Form.useWatch('idVerified', form);
+  const knowAddress = Form.useWatch('knowAddress', form);
+  const userBusinessId = useStoreState((state) => state.user.businesses[0].id);
+  const businessId = incidentBusinessId || userBusinessId;
+  const needJustification = useStoreState(
+    (state) => state.scheme.needJustification
+  );
+
+  const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+
+  const { data: businessData, loading } = useBusinessOffenderSettingsQuery({
+    fetchPolicy: 'network-only',
+    variables: {
+      where: {
+        id: businessId,
+      },
+    },
+  });
   const [updateOffender] = useUpdateSimpleOffenderMutation({
     onCompleted,
     onError: () => {
@@ -113,35 +146,7 @@ const useEditOffender = ({
     update,
   });
   const onSubmit = (value: FormData) => {
-    // update({
-    //   ...data,
-    //   name: value.name || 'Unidentified Offender',
-    //   alias: value.alias || [],
-    //   knownFor: value.knownFor || [],
-    //   targetedGoods: value.targetedGoods || [],
-    //   gender: value.gender || null,
-    //   race: value.race || null,
-    //   build: value.build || null,
-    //   hair: value.hair || null,
-    //   peculiarities: value.peculiarities || null,
-    //   age: ageCheck ? null : value.age || null,
-    //   dateSource: ageCheck ? value.dateSource || null : null,
-    //   dateOfBirth: ageCheck ? value.dateOfBirth || null : null,
-    //   idVerified: value.idVerified,
-    //   idSource: value.idSource,
-    //   images: value.images.map((item) => ({
-    //     id: item.id || '',
-    //     url: item.url,
-    //     optimised: item.optimised,
-    //     fileName: item.file?.response && item.file.response[0].blobName,
-    //     type: item.file?.response && item.file.response[0].mimetype,
-    //     position: item.position,
-    //     primary: false,
-    //     policeImage: item.policeImage || false,
-    //     rotation: item.rotation,
-    //     new: !!item.file,
-    //   })),
-    // });
+    setSaving(true);
 
     const imageData = value.images.map((item) => ({
       id: item.id || '',
@@ -164,7 +169,6 @@ const useEditOffender = ({
       new: !!item.file || item.new,
       isFace: item.isFace || false,
     }));
-    console.log('updateOffender', imageData);
 
     const existingImageIds = data?.images?.map(({ id }) => id);
     const deleteIds = existingImageIds?.filter(
@@ -196,6 +200,16 @@ const useEditOffender = ({
         infoSource: value.infoSource || null,
         knownFor: value.knownFor,
         targetedGoods: value.targetedGoods,
+        address: value.knowAddress
+          ? {
+              alias: value.addressAlias,
+              building: value.building,
+              street: value.street || '',
+              townCity: value.townCity || '',
+              county: value.county,
+              postcode: value.postcode || '',
+            }
+          : undefined,
       });
     } else {
       void updateOffender({
@@ -219,23 +233,30 @@ const useEditOffender = ({
             knownFor: { set: value.knownFor },
             targetedGoods: { set: value.targetedGoods },
             alias: { set: alias },
-            // addresses: {
-            //   update: [
-            //     {
-            //       where: {
-            //         id: data.,
-            //       },
-            //       data: {
-            //         postcode: { set: value.postcode },
-            //         street: { set: value.street },
-            //         townCity: { set: value.townCity },
-            //         alias: { set: value.addressAlias || '' },
-            //         building: { set: value.building },
-            //         county: { set: value.county },
-            //       },
-            //     },
-            //   ],
-            // },
+            addresses: {
+              upsert: [
+                {
+                  update: {
+                    alias: {
+                      set: value.addressAlias,
+                    },
+                    building: { set: value.building },
+                    street: { set: value.street },
+                    townCity: { set: value.townCity },
+                    county: { set: value.county },
+                    postcode: { set: value.postcode },
+                  },
+                  create: {
+                    alias: value.addressAlias,
+                    building: value.building,
+                    street: value.street,
+                    townCity: value.townCity,
+                    county: value.county,
+                    postcode: value.postcode,
+                  },
+                },
+              ],
+            },
             images:
               value.images && value.images.length > 0
                 ? {
@@ -275,6 +296,8 @@ const useEditOffender = ({
       });
     }
     onClose();
+    setSaving(false);
+
     const uploadedImages = value.images?.filter((image) => image.file) || [];
     if (uploadedImages.length > 0 && onImagesUploaded) {
       onImagesUploaded(
@@ -301,6 +324,13 @@ const useEditOffender = ({
     form,
     ageCheck,
     idVerified,
+    offenderSettings: businessData?.business.offenderSettings,
+    loading,
+    saving,
+    needJustification,
+    uploading,
+    setUploading,
+    knowAddress,
   };
 };
 

@@ -16,5 +16,8 @@ mutation updateGroup($where: UniqueId!, $data: GroupUpdateInput!) {
       id
       fullName
     }
+    offenderSettings {
+      ...OffenderSettings
+    }
   }
 }

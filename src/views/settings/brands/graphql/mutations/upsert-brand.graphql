@@ -1,0 +1,11 @@
+mutation UpsertBrand($data: UpsertBrand!) {
+  upsertBrand(data: $data) {
+    id
+    name
+    businesses {
+      name
+      id
+    }
+    description
+  }
+}
