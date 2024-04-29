@@ -33,6 +33,7 @@ import {
   DonutGraph,
   HeatMapGoogle,
   LineGraph,
+  TimeHeatMap,
 } from 'components/reports/graphs';
 import { shouldPrint } from 'utils';
 import type {
@@ -1603,6 +1604,73 @@ const PerformanceReportLayout = ({
           {intl.formatMessage({ defaultMessage: 'Page 4', id: 'DSruLZ' })}
         </Typography.Paragraph>
       </div>
+    ),
+    timeHeatMap: (
+      <Card
+        className="no-break"
+        loading={loading}
+        key="timeHeatMap"
+        style={{ height: calculateHeight('timeHeatMap') }}
+        bodyStyle={{ height: '90%' }}
+        title={intl.formatMessage({
+          defaultMessage: 'Incidents by time',
+          id: '+YmxWP',
+        })}
+      >
+        <Button
+          type="text"
+          shape="circle"
+          className="card-remove no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
+          size="small"
+          onClick={() => removeItem('timeHeatMap')}
+        />
+        <TimeHeatMap
+          isPrinting={isPrinting}
+          label={intl.formatMessage({
+            defaultMessage: 'Incidents by Time',
+            id: '/G6eOJ',
+          })}
+          data={data?.performanceReport?.timeHeatMap}
+          dataLabel="incidents"
+          emptyLabel="No incidents"
+          bottomLabel="time"
+        />
+      </Card>
+    ),
+    priorityGraph: (
+      <Card
+        title={intl.formatMessage({
+          defaultMessage: 'Priorty Graph',
+          id: '6qZYxN',
+        })}
+        className="no-break"
+        loading={loading}
+        key="priorityGraph"
+        style={{ height: calculateHeight('priorityGraph') }}
+        bodyStyle={{ height: '90%' }}
+      >
+        <Button
+          type="text"
+          shape="circle"
+          className="card-remove no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
+          size="small"
+          onClick={() => removeItem('priorityGraph')}
+        />
+        <BarGraph
+          isPrinting={isPrinting}
+          label={intl.formatMessage({
+            defaultMessage: 'Priority Graph',
+            id: 'vZ/a8V',
+          })}
+          data={data?.performanceReport?.priorityGraph}
+          dataLabel="incidents"
+          emptyLabel="No incidents"
+        />
+      </Card>
     ),
   };
 
