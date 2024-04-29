@@ -47,16 +47,20 @@ const useIntelOne = (): Return => {
             groups: data.groups.map((id) => ({
               id,
             })),
-            incidents: data.intelOne.map((item) => ({
-              description: item.description,
-              offenderName: item.offenderName,
-              crimeRef: item.crimeRef,
-              reference: item.reference,
-              reportDate: item.reportDate,
-              siteName: item.siteName,
-              value: item.value,
-              type: item.type,
-            })),
+            incidents: data.intelOne
+              .map((item) => ({
+                description: item.description,
+                offenderName: item.offenderName,
+                crimeRef: item.crimeRef,
+                reference: item.reference,
+                reportDate: item.reportDate,
+                siteName: item.siteName,
+                value: item.value,
+                type: item.type,
+              }))
+              .filter(
+                (item) => item.description && item.type && item.reportDate
+              ),
           },
         },
       });
