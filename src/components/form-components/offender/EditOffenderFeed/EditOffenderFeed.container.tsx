@@ -19,8 +19,6 @@ const EditOffender = ({ offenderId, onClose }: Props): JSX.Element => {
     tagsLoading,
     customGalleries,
     customGalleriesLoading,
-    ageCheck,
-    idVerified,
     adminRights,
     needJustification,
     offenderSettings,
@@ -36,9 +34,7 @@ const EditOffender = ({ offenderId, onClose }: Props): JSX.Element => {
         groupsLoading={groupsLoading}
         tags={tags}
         tagsLoading={tagsLoading}
-        ageCheck={ageCheck}
         onClose={onClose}
-        idVerified={idVerified}
         customGalleries={customGalleries}
         customGalleriesLoading={customGalleriesLoading}
         adminRights={adminRights}
