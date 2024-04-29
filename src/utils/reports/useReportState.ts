@@ -70,6 +70,8 @@ interface Return {
   setSelectedBrands: (value: string[]) => void;
   selectedIndustries: string[];
   setSelectedIndustries: (value: string[]) => void;
+  redactOnPrint: boolean;
+  setRedactOnPrint: (arg0: boolean) => void;
 }
 
 const useReportState = ({
@@ -131,7 +133,7 @@ const useReportState = ({
 
   const businesses = useStoreState((state) => state.user.businesses);
   const [addLogoDrawer, setAddLogoDrawer] = useState(false);
-
+  const [redactOnPrint, setRedactOnPrint] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [minDrawer, setMinDrawer] = useState(false);
   const [layout, setLayout] = useState<RGL.Layout[]>(
@@ -662,6 +664,8 @@ const useReportState = ({
     setBrands,
     selectedIndustries,
     setSelectedIndustries,
+    redactOnPrint,
+    setRedactOnPrint,
   };
 };
 

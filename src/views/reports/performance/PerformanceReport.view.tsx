@@ -1,6 +1,15 @@
 import React, { useMemo } from 'react';
 import type { MenuProps } from 'antd';
-import { Button, Col, Drawer, Dropdown, Row, Select, Typography } from 'antd';
+import {
+  Button,
+  Col,
+  Drawer,
+  Dropdown,
+  Row,
+  Select,
+  Switch,
+  Typography,
+} from 'antd';
 import DatePicker from 'components/util-components/DatePicker';
 import { Page } from 'components/shared-components/AntD/Page/Page';
 import RGL, { WidthProvider } from 'react-grid-layout';
@@ -17,7 +26,7 @@ import IndustrySelect from '#/components/industry/IndustrySelect';
 import AddLogo from '../../../components/reports/addLogo';
 
 import PerformanceReportLayout from './layout/PerformanceReportLayout';
-import PerformanceLayout, { PerformanceDrawerLayout } from './hooks/initLayout';
+import { PerformanceDrawerLayout } from './hooks/initLayout';
 import SaveAs from '../../../components/reports/saveAs';
 import type { Props } from './hooks/types';
 import { layoutMap } from '../types';
@@ -204,6 +213,8 @@ const PerformanceReport = ({
   investigationsData,
   setSelectedIndustries,
   selectedIndustries,
+  setRedactOnPrint,
+  redactOnPrint,
 }: Props) => {
   const ReactGridLayout = useMemo(() => WidthProvider(RGL), []);
   const handleMenuClick: MenuProps['onClick'] = (e) => {
@@ -247,6 +258,29 @@ const PerformanceReport = ({
           right: 20,
         }}
       >
+        <div
+          style={{
+            display: editMode ? 'block' : 'none',
+            zIndex: 1000,
+          }}
+        >
+          {intl.formatMessage({
+            defaultMessage: 'Redact on print?',
+            id: '7D0dTR',
+          })}
+        </div>
+
+        <Switch
+          style={{
+            marginRight: 10,
+            marginLeft: 10,
+            zIndex: 1000,
+            display: editMode ? 'block' : 'none',
+          }}
+          key="3"
+          checked={redactOnPrint}
+          onChange={(checked) => setRedactOnPrint(checked)}
+        />
         <Button
           style={{ marginRight: 10, zIndex: 1000 }}
           key="2"
@@ -560,7 +594,7 @@ const PerformanceReport = ({
               </Button>
             </Col>
           ))}
-          {layout.length === PerformanceLayout.length && (
+          {layout.length === PerformanceDrawerLayout.length && (
             <Col>
               <Typography.Title level={5}>
                 {intl.formatMessage({

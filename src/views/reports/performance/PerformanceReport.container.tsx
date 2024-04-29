@@ -49,9 +49,13 @@ const PerformanceReport = (): JSX.Element => {
     investigationsData,
     setSelectedIndustries,
     selectedIndustries,
+    setRedactOnPrint,
+    redactOnPrint,
   } = usePerformanceReport();
   return (
     <View
+      redactOnPrint={redactOnPrint}
+      setRedactOnPrint={setRedactOnPrint}
       selectedTemplate={selectedTemplate}
       selectTemplate={selectTemplate}
       saveTemplate={saveTemplate}
