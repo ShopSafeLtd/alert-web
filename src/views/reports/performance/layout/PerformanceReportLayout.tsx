@@ -1628,12 +1628,11 @@ const PerformanceReportLayout = ({
         />
         <TimeHeatMap
           isPrinting={isPrinting}
-          label={intl.formatMessage({
+          labelFormat={intl.formatMessage({
             defaultMessage: 'Incidents by Time',
             id: '/G6eOJ',
           })}
           data={data?.performanceReport?.timeHeatMap}
-          dataLabel="incidents"
           emptyLabel="No incidents"
           bottomLabel="time"
         />
@@ -1662,12 +1661,11 @@ const PerformanceReportLayout = ({
         />
         <BarGraph
           isPrinting={isPrinting}
-          label={intl.formatMessage({
+          labelFormat={intl.formatMessage({
             defaultMessage: 'Priority Graph',
             id: 'vZ/a8V',
           })}
           data={data?.performanceReport?.priorityGraph}
-          dataLabel="incidents"
           emptyLabel="No incidents"
         />
       </Card>
