@@ -1283,7 +1283,11 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                 />
                               }
                             >
-                              <Select mode="multiple" options={groups} />
+                              <Select
+                                mode="multiple"
+                                options={groups}
+                                optionFilterProp="label"
+                              />
                             </Form.Item>
                           </Col>
                           <Col span={12}>
@@ -1296,7 +1300,11 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                 />
                               }
                             >
-                              <Select mode="multiple" options={users} />
+                              <Select
+                                mode="multiple"
+                                options={users}
+                                optionFilterProp="label"
+                              />
                             </Form.Item>
                           </Col>
                         </Row>
@@ -1377,12 +1385,16 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                               name="sendNotificationUsers"
                               label={
                                 <FormattedMessage
-                                  defaultMessage="Additional users to send notification to"
-                                  id="DVHT54"
+                                  defaultMessage="Additional users to send notification to. If none selected will use scheme users"
+                                  id="GgFNnc"
                                 />
                               }
                             >
-                              <Select mode="multiple" options={users} />
+                              <Select
+                                mode="multiple"
+                                options={users}
+                                optionFilterProp="label"
+                              />
                             </Form.Item>
                           </Col>
                         </Row>
@@ -1468,7 +1480,11 @@ const WorkflowView: React.FC<WorkflowProps> = ({
                                 />
                               }
                             >
-                              <Select mode="multiple" options={users} />
+                              <Select
+                                mode="multiple"
+                                options={users}
+                                optionFilterProp="label"
+                              />
                             </Form.Item>
                           </Col>
                         </Row>

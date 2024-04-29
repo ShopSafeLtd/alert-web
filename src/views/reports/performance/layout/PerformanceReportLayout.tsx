@@ -1628,10 +1628,7 @@ const PerformanceReportLayout = ({
         />
         <TimeHeatMap
           isPrinting={isPrinting}
-          labelFormat={intl.formatMessage({
-            defaultMessage: 'Incidents by Time',
-            id: '/G6eOJ',
-          })}
+          labelFormat=""
           data={data?.performanceReport?.timeHeatMap}
           emptyLabel="No incidents"
           bottomLabel="time"
