@@ -1171,7 +1171,7 @@ const ViewIncident = ({
                                 id: 'Imc8gS',
                               })}
                             </Title>
-                            <Descriptions>
+                            <Descriptions column={1}>
                               {data.incident.answers.map((answer) => (
                                 <Descriptions.Item
                                   label={answer.tagQuestion?.question.question}

@@ -61,6 +61,25 @@ interface Props {
   selectTemplate: (id: string | null) => void;
 }
 
+const getLinkedItemId = (todo: ListTodosQuery['listTodos']['todos'][0]) => {
+  if (todo.incident) return todo.incident.reference;
+  if (todo.offender) return todo.offender.reference;
+  if (todo.crimeGroup) return todo.crimeGroup.reference;
+  if (todo.vehicle) return todo.vehicle.reference;
+  if (todo.investigation) return todo.investigation.reference;
+  return undefined;
+};
+
+const getLinkedItemTo = (todo?: ListTodosQuery['listTodos']['todos'][0]) => {
+  if (todo.incidentId) return `/app/incidents/view/${todo.incidentId}`;
+  if (todo.offenderId) return `/app/offenders/view/${todo.offenderId}`;
+  if (todo.crimeGroupId) return `/app/crime-groups/view/${todo.crimeGroupId}`;
+  if (todo.vehicleId) return `/app/vehicles/view/${todo.vehicleId}`;
+  if (todo.investigationId)
+    return `/app/investigations/view/${todo.investigationId}`;
+  return '#';
+};
+
 const AdminTodos = ({
   data,
   loading,
@@ -143,6 +162,7 @@ const AdminTodos = ({
       onCompletedTodo(id);
     }
   };
+
   return (
     <div className="list-view">
       <Row gutter={8} style={{ marginBottom: 15 }}>
@@ -246,6 +266,7 @@ const AdminTodos = ({
               completed: todo.completed,
               assignedUsers: todo.assignedUsers,
               todo,
+              linkedItem: getLinkedItemId(todo),
             }))}
             // onRow={(record) =>
             //   record.type !== undefined && record.type !== null
@@ -335,6 +356,23 @@ const AdminTodos = ({
                       </Col>
                     ))}
                   </Row>
+                ),
+              },
+              {
+                key: 'linkedItem',
+                dataIndex: 'linkedItem',
+                title: intl.formatMessage({
+                  defaultMessage: 'Linked Item',
+                  id: 'NkD6oV',
+                }),
+                render: (value, todo) => (
+                  <Link
+                    to={getLinkedItemTo(
+                      data?.todos.find(({ id }) => id === todo.key)
+                    )}
+                  >
+                    {value}
+                  </Link>
                 ),
               },
               {

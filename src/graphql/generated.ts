@@ -690,12 +690,6 @@ export type Answer = {
   updatedAt: Scalars['Date'];
 };
 
-export type AnswerCount = {
-  __typename?: 'AnswerCount';
-  answer: Scalars['String'];
-  count: Scalars['Int'];
-};
-
 export type AnswerListRelationFilter = {
   every?: InputMaybe<AnswerWhereInput>;
   none?: InputMaybe<AnswerWhereInput>;
@@ -12715,7 +12709,6 @@ export type Query = {
   chatMessages: Array<MessageItem>;
   chats: Array<Chat>;
   checklist: Checklist;
-  checklistQuestionCounts: Array<QuestionAnswerCount>;
   checklists: Array<Checklist>;
   compareFaces: SystemTask;
   crimeGroup: CrimeGroup;
@@ -12985,11 +12978,6 @@ export type QueryChatsArgs = {
 
 export type QueryChecklistArgs = {
   where: ChecklistWhereUniqueInput;
-};
-
-
-export type QueryChecklistQuestionCountsArgs = {
-  where: ActiveChecklistWhereInput;
 };
 
 
@@ -13926,12 +13914,6 @@ export type Question = {
   tags: Array<TagQuestion>;
   type: AnswerType;
   updatedAt: Scalars['Date'];
-};
-
-export type QuestionAnswerCount = {
-  __typename?: 'QuestionAnswerCount';
-  answers: Array<AnswerCount>;
-  question: Scalars['String'];
 };
 
 export type QuestionGroup = {
@@ -17477,14 +17459,18 @@ export type Todo = {
   createdAt: Scalars['Date'];
   createdBy?: Maybe<User>;
   createdById?: Maybe<Scalars['String']>;
+  crimeGroup?: Maybe<CrimeGroup>;
   crimeGroupId?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   dueDate?: Maybe<Scalars['Date']>;
   evidence: Array<Document>;
   id: Scalars['ID'];
+  incident?: Maybe<Incident>;
   incidentId?: Maybe<Scalars['String']>;
+  investigation?: Maybe<Investigation>;
   investigationId?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
+  offender?: Maybe<Offender>;
   offenderId?: Maybe<Scalars['String']>;
   questions: Array<TaskQuestion>;
   schemes: Array<Scheme>;
@@ -17492,6 +17478,7 @@ export type Todo = {
   timeTaken: Array<TimeTaken>;
   type?: Maybe<TodoType>;
   updatedAt: Scalars['Date'];
+  vehicle?: Maybe<Vehicle>;
   vehicleId?: Maybe<Scalars['String']>;
 };
 
@@ -20489,6 +20476,16 @@ export type TodoQueryVariables = Exact<{
 
 export type TodoQuery = { __typename?: 'Query', todo: { __typename?: 'Todo', name?: string | null, createdAt: Date, dueDate?: Date | null, description?: string | null, id: string, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }>, answers?: Array<{ __typename?: 'Answer', id: string, answer: string, taskQuestion?: { __typename?: 'TaskQuestion', id: string } | null }> | null, evidence: Array<{ __typename?: 'Document', id: string, name: string, url: string, fileType?: FileType | null }>, timeTaken: Array<{ __typename?: 'TimeTaken', timeTaken: number, user: { __typename?: 'User', id: string } }>, questions: Array<{ __typename?: 'TaskQuestion', id: string, question: { __typename?: 'Question', id: string, optionsFormatted?: Array<string> | null, questionFormatted: string, type: AnswerType, optionsFormFormatted?: Array<{ __typename?: 'AnswerOption', label: string, value: string }> | null } }> } };
 
+export type UsersSelectQueryVariables = Exact<{
+  where?: InputMaybe<UserWhereInput>;
+  orderBy?: InputMaybe<Array<UserOrderByWithRelationInput> | UserOrderByWithRelationInput>;
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type UsersSelectQuery = { __typename?: 'Query', listUsers: { __typename?: 'ListUsers', total: number, users: Array<{ __typename?: 'User', id: string, fullName: string }> } };
+
 export type CreateOrAddQuestionMutationVariables = Exact<{
   data: CreateQuestionInput;
   where?: InputMaybe<UniqueId>;
@@ -22184,7 +22181,7 @@ export type ListTodosQueryVariables = Exact<{
 }>;
 
 
-export type ListTodosQuery = { __typename?: 'Query', listTodos: { __typename?: 'ListTodos', total: number, uncompletedTotal: number, totalUserTodos: number, todos: Array<{ __typename?: 'Todo', description?: string | null, id: string, name?: string | null, dueDate?: Date | null, completed?: boolean | null, type?: TodoType | null, vehicleId?: string | null, offenderId?: string | null, crimeGroupId?: string | null, incidentId?: string | null, investigationId?: string | null, chatId?: string | null, similarOffenderIds: Array<string>, completedDate?: Date | null, createdBy?: { __typename?: 'User', id: string, fullName: string } | null, completedBy?: { __typename?: 'User', id: string, fullName: string } | null, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }> }> } };
+export type ListTodosQuery = { __typename?: 'Query', listTodos: { __typename?: 'ListTodos', total: number, uncompletedTotal: number, totalUserTodos: number, todos: Array<{ __typename?: 'Todo', description?: string | null, id: string, name?: string | null, dueDate?: Date | null, completed?: boolean | null, type?: TodoType | null, vehicleId?: string | null, offenderId?: string | null, crimeGroupId?: string | null, incidentId?: string | null, investigationId?: string | null, chatId?: string | null, similarOffenderIds: Array<string>, completedDate?: Date | null, vehicle?: { __typename?: 'Vehicle', id: string, reference?: number | null } | null, offender?: { __typename?: 'Offender', id: string, reference?: number | null } | null, crimeGroup?: { __typename?: 'CrimeGroup', id: string, reference?: number | null } | null, incident?: { __typename?: 'Incident', id: string, reference?: number | null } | null, investigation?: { __typename?: 'Investigation', id: string, reference?: number | null } | null, createdBy?: { __typename?: 'User', id: string, fullName: string } | null, completedBy?: { __typename?: 'User', id: string, fullName: string } | null, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }> }> } };
 
 export type TranslateQueryVariables = Exact<{
   data: TranslateTextInput;
@@ -23799,6 +23796,28 @@ export function useTodoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TodoQ
 export type TodoQueryHookResult = ReturnType<typeof useTodoQuery>;
 export type TodoLazyQueryHookResult = ReturnType<typeof useTodoLazyQuery>;
 export type TodoQueryResult = Apollo.QueryResult<TodoQuery, TodoQueryVariables>;
+export const UsersSelectDocument = gql`
+    query usersSelect($where: UserWhereInput, $orderBy: [UserOrderByWithRelationInput!], $take: Int, $skip: Int) {
+  listUsers(where: $where, orderBy: $orderBy, take: $take, skip: $skip) {
+    users {
+      id
+      fullName
+    }
+    total
+  }
+}
+    `;
+export function useUsersSelectQuery(baseOptions?: Apollo.QueryHookOptions<UsersSelectQuery, UsersSelectQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UsersSelectQuery, UsersSelectQueryVariables>(UsersSelectDocument, options);
+      }
+export function useUsersSelectLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UsersSelectQuery, UsersSelectQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UsersSelectQuery, UsersSelectQueryVariables>(UsersSelectDocument, options);
+        }
+export type UsersSelectQueryHookResult = ReturnType<typeof useUsersSelectQuery>;
+export type UsersSelectLazyQueryHookResult = ReturnType<typeof useUsersSelectLazyQuery>;
+export type UsersSelectQueryResult = Apollo.QueryResult<UsersSelectQuery, UsersSelectQueryVariables>;
 export const CreateOrAddQuestionDocument = gql`
     mutation CreateOrAddQuestion($data: CreateQuestionInput!, $where: UniqueId) {
   addQuestion(data: $data, where: $where) {
@@ -32184,10 +32203,30 @@ export const ListTodosDocument = gql`
       completed
       type
       vehicleId
+      vehicle {
+        id
+        reference
+      }
       offenderId
+      offender {
+        id
+        reference
+      }
       crimeGroupId
+      crimeGroup {
+        id
+        reference
+      }
       incidentId
+      incident {
+        id
+        reference
+      }
       investigationId
+      investigation {
+        id
+        reference
+      }
       chatId
       similarOffenderIds
       completedDate

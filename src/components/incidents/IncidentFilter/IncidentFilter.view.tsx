@@ -9,61 +9,42 @@ import {
   Select,
   Typography,
 } from 'antd';
-import { IncidentSort } from 'state';
+import { IncidentSort, useStoreActions, useStoreState } from 'state';
 import type { DateType } from 'types/DataType';
 import { useIntl } from 'react-intl';
-import type { IncidentFilters } from 'state/data-model';
 import moment from 'moment';
+import UsersSelect from '#/components/form-components/UsersSelect/UsersSelect.view';
+import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
 import useStyles from './IncidentFilter.styles';
 
 const { RangePicker } = DatePicker;
 const { useForm } = Form;
+
 interface FormData {
   date: Date;
   createdAt: Date;
 }
+
 interface Props {
-  order: IncidentSort;
-  setOrder: (value: IncidentSort) => void;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
   crimeTypes: { value: string; label: string }[];
   tagsLoading: boolean;
-  setCrimeTypesFilter: (value: string[]) => void;
   setPeculiarities: (value: string) => void;
   clearFilters: () => void;
-  setGroupsFilter: (value: string[]) => void;
-  setBusinessesFilter: (value: string[]) => void;
   businesses: { value: string; label: string; location: string }[];
   goods: { value: string; label: string }[];
-  setGoodsFilter: (value: string[]) => void;
   businessesLoading: boolean;
   goodsLoading: boolean;
-  setIncidentDateFilter: (value: DateType | undefined) => void;
-  setCreatedAtFilter: (value: DateType | undefined) => void;
-  variables: IncidentFilters;
 }
 
 const IncidentFilter = ({
-  order,
-  setOrder,
-  groups,
-  groupsLoading,
   crimeTypes,
   tagsLoading,
   clearFilters,
-  setGroupsFilter,
   setPeculiarities,
   goods,
-  setGoodsFilter,
   businesses,
-  setBusinessesFilter,
-  setCrimeTypesFilter,
   goodsLoading,
   businessesLoading,
-  setCreatedAtFilter,
-  setIncidentDateFilter,
-  variables,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const [form] = useForm<FormData>();
@@ -72,14 +53,103 @@ const IncidentFilter = ({
   //   (actions) => actions.data.setIncidentPriority
   // );
 
+  const order = useStoreState((state) => state.data.incidents.order);
+  const variables = useStoreState((state) => state.data.incidents.variables);
+  const pagination = useStoreState((state) => state.data.incidents.pagination);
+  const setIncidentsState = useStoreActions(
+    (actions) => actions.data.setIncidents
+  );
+
+  const setOrder = (value: IncidentSort) => {
+    setIncidentsState({
+      pagination,
+      variables,
+      order: value,
+    });
+  };
+
+  const setGroupsFilter = (values: string[]) => {
+    setIncidentsState({
+      pagination,
+      variables: {
+        ...variables,
+        groups: values,
+      },
+      order,
+    });
+  };
+  const setBusinessesFilter = (values: string[]) => {
+    setIncidentsState({
+      pagination,
+      variables: {
+        ...variables,
+        businesses: values,
+      },
+      order,
+    });
+  };
+  const setGoodsFilter = (values: string[]) => {
+    setIncidentsState({
+      pagination,
+      variables: {
+        ...variables,
+        goods: values,
+      },
+      order,
+    });
+  };
+
+  const setCrimeTypesFilter = (values: string[]) => {
+    setIncidentsState({
+      pagination,
+      variables: {
+        ...variables,
+        crimeTypes: values,
+      },
+      order,
+    });
+  };
+  const setIncidentDateFilter = (values: DateType | undefined) => {
+    setIncidentsState({
+      pagination,
+      variables: {
+        ...variables,
+        incidentDate: values,
+      },
+      order,
+    });
+  };
+  const setCreatedAtFilter = (values: DateType | undefined) => {
+    setIncidentsState({
+      pagination,
+      variables: {
+        ...variables,
+        createdAt: values,
+      },
+      order,
+    });
+  };
+
+  const setCreatedByFilter = (values: string[]) => {
+    setIncidentsState({
+      pagination,
+      variables: {
+        ...variables,
+        createdBy: values,
+      },
+      order,
+    });
+  };
+
   const {
-    crimeTypes: crimeTypesFilter,
-    groups: groupsFilter,
-    businesses: businessesFilter,
-    goods: goodsFilter,
     createdAt: createdAtFilter,
     incidentDate: incidentDateFilter,
     peculiarities,
+    createdBy,
+    crimeTypes: crimeTypesValue,
+    businesses: businessesValue,
+    goods: goodsValue,
+    groups,
     // priority,
   } = variables;
 
@@ -238,7 +308,7 @@ const IncidentFilter = ({
             {intl.formatMessage({ defaultMessage: 'Groups', id: 'hzmswI' })}
           </Typography.Paragraph>
 
-          <Select
+          <GroupsSelect
             className={classes.select}
             placeholder={intl.formatMessage({
               defaultMessage: 'Groups',
@@ -248,14 +318,9 @@ const IncidentFilter = ({
             size="small"
             maxTagCount={2}
             allowClear
-            loading={groupsLoading}
             onChange={setGroupsFilter}
-            value={groupsFilter}
-          >
-            {groups.map((group) => (
-              <Select.Option value={group.value}>{group.label}</Select.Option>
-            ))}
-          </Select>
+            value={groups}
+          />
         </Col>
       </Row>
       <Row>
@@ -277,7 +342,7 @@ const IncidentFilter = ({
             allowClear
             maxTagCount={2}
             onChange={setCrimeTypesFilter}
-            value={crimeTypesFilter}
+            value={crimeTypesValue}
             loading={tagsLoading}
           >
             {crimeTypes.map((tag) => (
@@ -308,7 +373,7 @@ const IncidentFilter = ({
             allowClear
             maxTagCount={2}
             onChange={setGoodsFilter}
-            value={goodsFilter}
+            value={goodsValue}
             loading={goodsLoading}
           >
             {goods.map((good) => (
@@ -340,8 +405,8 @@ const IncidentFilter = ({
         <Col span={24}>
           <Typography.Paragraph className={classes.selectTitle}>
             {intl.formatMessage({
-              defaultMessage: 'Incident has happened at...',
-              id: 'ZNawcf',
+              defaultMessage: 'Incident has happened at:',
+              id: 'KxEpX9',
             })}
           </Typography.Paragraph>
           <Select
@@ -352,7 +417,7 @@ const IncidentFilter = ({
               id: 'MZynHZ',
             })}
             className={classes.select}
-            value={businessesFilter}
+            value={businessesValue}
             onChange={setBusinessesFilter}
             loading={businessesLoading}
             optionLabelProp="textLabel"
@@ -368,6 +433,31 @@ const IncidentFilter = ({
               ),
               value: item.value,
             }))}
+          />
+        </Col>
+      </Row>
+
+      <Typography.Paragraph className={classes.filtersTitle}>
+        {intl.formatMessage({ defaultMessage: 'Created By', id: 'uAfuJA' })}
+      </Typography.Paragraph>
+      <Row gutter={16}>
+        <Col span={24}>
+          <Typography.Paragraph className={classes.selectTitle}>
+            {intl.formatMessage({
+              defaultMessage: 'Incident created by:',
+              id: 'bbk5UD',
+            })}
+          </Typography.Paragraph>
+          <UsersSelect
+            mode="multiple"
+            allowClear
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Select Users',
+              id: 'yKXPeG',
+            })}
+            className={classes.select}
+            value={createdBy}
+            onChange={setCreatedByFilter}
           />
         </Col>
       </Row>

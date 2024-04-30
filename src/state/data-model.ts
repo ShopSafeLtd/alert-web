@@ -27,6 +27,7 @@ export interface IncidentFilters {
   search: string;
   crimeTypes: string[];
   groups: string[];
+  createdBy: string[];
   businesses: string[];
   goods: string[];
   createdAt: DateType | undefined;
@@ -47,6 +48,7 @@ export interface OffenderFilters {
   businesses: string[];
   warnings: string[];
   groups: string[];
+  createdBy: string[];
   ethnicity: Race[];
   build: Build[];
   age: Age[];
@@ -233,6 +235,7 @@ const dataModel: DataModel = {
       search: '',
       crimeTypes: [],
       groups: [],
+      createdBy: [],
       businesses: [],
       createdAt: undefined,
       incidentDate: undefined,
@@ -268,6 +271,7 @@ const dataModel: DataModel = {
       search: '',
       warnings: [],
       groups: [],
+      createdBy: [],
       businesses: [],
       createdAt: undefined,
       gallery: [],
