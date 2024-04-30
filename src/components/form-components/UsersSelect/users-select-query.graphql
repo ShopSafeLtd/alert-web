@@ -1,0 +1,14 @@
+query usersSelect(
+    $where: UserWhereInput
+    $orderBy: [UserOrderByWithRelationInput!]
+    $take: Int
+    $skip: Int
+) {
+    listUsers(where: $where, orderBy: $orderBy, take: $take, skip: $skip) {
+        users {
+            id
+            fullName
+        }
+        total
+    }
+}

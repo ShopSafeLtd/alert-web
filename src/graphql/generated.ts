@@ -690,12 +690,6 @@ export type Answer = {
   updatedAt: Scalars['Date'];
 };
 
-export type AnswerCount = {
-  __typename?: 'AnswerCount';
-  answer: Scalars['String'];
-  count: Scalars['Int'];
-};
-
 export type AnswerListRelationFilter = {
   every?: InputMaybe<AnswerWhereInput>;
   none?: InputMaybe<AnswerWhereInput>;
@@ -12715,7 +12709,6 @@ export type Query = {
   chatMessages: Array<MessageItem>;
   chats: Array<Chat>;
   checklist: Checklist;
-  checklistQuestionCounts: Array<QuestionAnswerCount>;
   checklists: Array<Checklist>;
   compareFaces: SystemTask;
   crimeGroup: CrimeGroup;
@@ -12985,11 +12978,6 @@ export type QueryChatsArgs = {
 
 export type QueryChecklistArgs = {
   where: ChecklistWhereUniqueInput;
-};
-
-
-export type QueryChecklistQuestionCountsArgs = {
-  where: ActiveChecklistWhereInput;
 };
 
 
@@ -13926,12 +13914,6 @@ export type Question = {
   tags: Array<TagQuestion>;
   type: AnswerType;
   updatedAt: Scalars['Date'];
-};
-
-export type QuestionAnswerCount = {
-  __typename?: 'QuestionAnswerCount';
-  answers: Array<AnswerCount>;
-  question: Scalars['String'];
 };
 
 export type QuestionGroup = {
@@ -20489,6 +20471,16 @@ export type TodoQueryVariables = Exact<{
 
 export type TodoQuery = { __typename?: 'Query', todo: { __typename?: 'Todo', name?: string | null, createdAt: Date, dueDate?: Date | null, description?: string | null, id: string, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }>, answers?: Array<{ __typename?: 'Answer', id: string, answer: string, taskQuestion?: { __typename?: 'TaskQuestion', id: string } | null }> | null, evidence: Array<{ __typename?: 'Document', id: string, name: string, url: string, fileType?: FileType | null }>, timeTaken: Array<{ __typename?: 'TimeTaken', timeTaken: number, user: { __typename?: 'User', id: string } }>, questions: Array<{ __typename?: 'TaskQuestion', id: string, question: { __typename?: 'Question', id: string, optionsFormatted?: Array<string> | null, questionFormatted: string, type: AnswerType, optionsFormFormatted?: Array<{ __typename?: 'AnswerOption', label: string, value: string }> | null } }> } };
 
+export type UsersSelectQueryVariables = Exact<{
+  where?: InputMaybe<UserWhereInput>;
+  orderBy?: InputMaybe<Array<UserOrderByWithRelationInput> | UserOrderByWithRelationInput>;
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type UsersSelectQuery = { __typename?: 'Query', listUsers: { __typename?: 'ListUsers', total: number, users: Array<{ __typename?: 'User', id: string, fullName: string }> } };
+
 export type CreateOrAddQuestionMutationVariables = Exact<{
   data: CreateQuestionInput;
   where?: InputMaybe<UniqueId>;
@@ -23799,6 +23791,28 @@ export function useTodoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TodoQ
 export type TodoQueryHookResult = ReturnType<typeof useTodoQuery>;
 export type TodoLazyQueryHookResult = ReturnType<typeof useTodoLazyQuery>;
 export type TodoQueryResult = Apollo.QueryResult<TodoQuery, TodoQueryVariables>;
+export const UsersSelectDocument = gql`
+    query usersSelect($where: UserWhereInput, $orderBy: [UserOrderByWithRelationInput!], $take: Int, $skip: Int) {
+  listUsers(where: $where, orderBy: $orderBy, take: $take, skip: $skip) {
+    users {
+      id
+      fullName
+    }
+    total
+  }
+}
+    `;
+export function useUsersSelectQuery(baseOptions?: Apollo.QueryHookOptions<UsersSelectQuery, UsersSelectQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UsersSelectQuery, UsersSelectQueryVariables>(UsersSelectDocument, options);
+      }
+export function useUsersSelectLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UsersSelectQuery, UsersSelectQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UsersSelectQuery, UsersSelectQueryVariables>(UsersSelectDocument, options);
+        }
+export type UsersSelectQueryHookResult = ReturnType<typeof useUsersSelectQuery>;
+export type UsersSelectLazyQueryHookResult = ReturnType<typeof useUsersSelectLazyQuery>;
+export type UsersSelectQueryResult = Apollo.QueryResult<UsersSelectQuery, UsersSelectQueryVariables>;
 export const CreateOrAddQuestionDocument = gql`
     mutation CreateOrAddQuestion($data: CreateQuestionInput!, $where: UniqueId) {
   addQuestion(data: $data, where: $where) {
