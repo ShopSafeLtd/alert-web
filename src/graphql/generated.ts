@@ -17459,14 +17459,18 @@ export type Todo = {
   createdAt: Scalars['Date'];
   createdBy?: Maybe<User>;
   createdById?: Maybe<Scalars['String']>;
+  crimeGroup?: Maybe<CrimeGroup>;
   crimeGroupId?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   dueDate?: Maybe<Scalars['Date']>;
   evidence: Array<Document>;
   id: Scalars['ID'];
+  incident?: Maybe<Incident>;
   incidentId?: Maybe<Scalars['String']>;
+  investigation?: Maybe<Investigation>;
   investigationId?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
+  offender?: Maybe<Offender>;
   offenderId?: Maybe<Scalars['String']>;
   questions: Array<TaskQuestion>;
   schemes: Array<Scheme>;
@@ -17474,6 +17478,7 @@ export type Todo = {
   timeTaken: Array<TimeTaken>;
   type?: Maybe<TodoType>;
   updatedAt: Scalars['Date'];
+  vehicle?: Maybe<Vehicle>;
   vehicleId?: Maybe<Scalars['String']>;
 };
 
@@ -22176,7 +22181,7 @@ export type ListTodosQueryVariables = Exact<{
 }>;
 
 
-export type ListTodosQuery = { __typename?: 'Query', listTodos: { __typename?: 'ListTodos', total: number, uncompletedTotal: number, totalUserTodos: number, todos: Array<{ __typename?: 'Todo', description?: string | null, id: string, name?: string | null, dueDate?: Date | null, completed?: boolean | null, type?: TodoType | null, vehicleId?: string | null, offenderId?: string | null, crimeGroupId?: string | null, incidentId?: string | null, investigationId?: string | null, chatId?: string | null, similarOffenderIds: Array<string>, completedDate?: Date | null, createdBy?: { __typename?: 'User', id: string, fullName: string } | null, completedBy?: { __typename?: 'User', id: string, fullName: string } | null, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }> }> } };
+export type ListTodosQuery = { __typename?: 'Query', listTodos: { __typename?: 'ListTodos', total: number, uncompletedTotal: number, totalUserTodos: number, todos: Array<{ __typename?: 'Todo', description?: string | null, id: string, name?: string | null, dueDate?: Date | null, completed?: boolean | null, type?: TodoType | null, vehicleId?: string | null, offenderId?: string | null, crimeGroupId?: string | null, incidentId?: string | null, investigationId?: string | null, chatId?: string | null, similarOffenderIds: Array<string>, completedDate?: Date | null, vehicle?: { __typename?: 'Vehicle', id: string, reference?: number | null } | null, offender?: { __typename?: 'Offender', id: string, reference?: number | null } | null, crimeGroup?: { __typename?: 'CrimeGroup', id: string, reference?: number | null } | null, incident?: { __typename?: 'Incident', id: string, reference?: number | null } | null, investigation?: { __typename?: 'Investigation', id: string, reference?: number | null } | null, createdBy?: { __typename?: 'User', id: string, fullName: string } | null, completedBy?: { __typename?: 'User', id: string, fullName: string } | null, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }> }> } };
 
 export type TranslateQueryVariables = Exact<{
   data: TranslateTextInput;
@@ -32198,10 +32203,30 @@ export const ListTodosDocument = gql`
       completed
       type
       vehicleId
+      vehicle {
+        id
+        reference
+      }
       offenderId
+      offender {
+        id
+        reference
+      }
       crimeGroupId
+      crimeGroup {
+        id
+        reference
+      }
       incidentId
+      incident {
+        id
+        reference
+      }
       investigationId
+      investigation {
+        id
+        reference
+      }
       chatId
       similarOffenderIds
       completedDate
