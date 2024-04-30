@@ -18,7 +18,7 @@ import {
   useTagsQuery,
   useUpdateOffenderMutation,
 } from 'graphql/generated';
-import { notification, Form } from 'antd';
+import { notification } from 'antd';
 import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
@@ -64,8 +64,6 @@ interface Return {
   tagsLoading: boolean;
   customGalleries: { value: string; label: string }[];
   customGalleriesLoading: boolean;
-  ageCheck: boolean | undefined;
-  idVerified: boolean | undefined;
   adminRights: boolean;
   needJustification: boolean;
   offenderSettings: OffenderSettingsType | undefined;
@@ -73,9 +71,6 @@ interface Return {
 
 const useEditOffender = ({ offenderId, onClose }: Props): Return => {
   const intl = useIntl();
-  const [form] = Form.useForm<FormData>();
-  const ageCheck = Form.useWatch('ageCheck', form);
-  const idVerified = Form.useWatch('idVerified', form);
   const { needJustification, id: schemeId } = useStoreState(
     (state) => state.scheme
   );
@@ -257,8 +252,6 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
         label: tag.name,
       })) || [],
     customGalleriesLoading,
-    ageCheck,
-    idVerified,
     adminRights: role !== Role.User,
     needJustification,
     offenderSettings: businessData?.business.offenderSettings,
