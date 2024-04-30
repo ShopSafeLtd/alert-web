@@ -2,18 +2,18 @@ import { useState } from 'react';
 import type {
   Age,
   Build,
+  EditOffenderQuery,
   Gender,
   Height,
   IdSource,
   Race,
-  EditOffenderQuery,
 } from 'graphql/generated';
 import {
+  Model,
+  Role,
   useBusinessOffenderSettingsQuery,
   useEditOffenderQuery,
   useListCustomGalleriesQuery,
-  Model,
-  Role,
   useSchemeGroupsQuery,
   useTagsQuery,
   useUpdateOffenderMutation,
@@ -204,9 +204,11 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
           },
           comment: { set: data.comment || '' },
           peculiarities: { set: data.peculiarities || '' },
-          age: { set: ageCheck ? null : data.age || null },
-          dateSource: { set: ageCheck ? data.dateSource || null : null },
-          dateOfBirth: { set: ageCheck ? data.dateOfBirth || null : null },
+          age: { set: data.age ? null : data.age || null },
+          dateSource: { set: data.dateSource ? data.dateSource || null : null },
+          dateOfBirth: {
+            set: data.dateOfBirth ? data.dateOfBirth || null : null,
+          },
           idSource: data.idSource ? { set: data.idSource } : undefined,
           idVerified: data.idVerified ? { set: data.idVerified } : undefined,
           groups: {
