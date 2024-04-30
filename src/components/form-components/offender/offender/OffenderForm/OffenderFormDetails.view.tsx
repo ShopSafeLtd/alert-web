@@ -1,15 +1,5 @@
 import React from 'react';
-import {
-  Col,
-  DatePicker,
-  Form,
-  Input,
-  Radio,
-  Row,
-  Select,
-  Switch,
-  Typography,
-} from 'antd';
+import { Col, DatePicker, Form, Input, Radio, Row, Select } from 'antd';
 
 import { ageValues, buildValues, genderValues, raceValues } from 'types/enums';
 import { heightValues } from 'types/enums/height';
@@ -201,26 +191,7 @@ const OffenderFormDetails = ({
       {offenderSettings?.age && (
         <Row gutter={20} wrap>
           <Col span={12}>
-            <Typography.Text>
-              {intl.formatMessage({
-                defaultMessage: "Do you know the offender's date of birth?",
-                id: 'nRYjxK',
-              })}
-            </Typography.Text>
-            <Form.Item name="ageCheck" valuePropName="checked">
-              <Switch
-                style={{ marginLeft: 10, marginTop: 10 }}
-                checkedChildren={intl.formatMessage({
-                  defaultMessage: 'Yes',
-                  id: 'a5msuh',
-                })}
-                unCheckedChildren={intl.formatMessage({
-                  defaultMessage: 'No',
-                  id: 'oUWADl',
-                })}
-              />
-            </Form.Item>
-            {/* <Form.Item
+            <Form.Item
               name="ageCheck"
               label={intl.formatMessage({
                 defaultMessage: "Do you know the offender's date of birth?",
@@ -238,7 +209,7 @@ const OffenderFormDetails = ({
                   {intl.formatMessage({ defaultMessage: 'No', id: 'oUWADl' })}
                 </Radio.Button>
               </Radio.Group>
-            </Form.Item> */}
+            </Form.Item>
           </Col>
 
           {ageCheck ? (

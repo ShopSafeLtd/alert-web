@@ -35,7 +35,7 @@ const IntelOneCSV = ({ onChange }: Props) => {
             reportDate: moment(item[1], 'DD/MM/YYYY HH:mm').toDate(),
             reference: item[2],
             type: item[4],
-            offenderName: item[5].split(','),
+            offenderName: item[5] && item[5] !== '' ? item[5]?.split(',') : [],
             value: Number(item[6]),
             crimeRef: item[7],
             description: item[8],

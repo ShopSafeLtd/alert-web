@@ -3,10 +3,10 @@ import type {
   BusinessTableData,
   ContributionTableData,
   CrimeGroupPerformanceTableData,
+  InvestigationsTableData,
   OffenderTableData,
   TargetedBusinessTableData,
   TargetedGoodsTableData,
-  InvestigationsTableData,
 } from '../../../../components/reports/tableColumns';
 import type { PerformanceReportQuery } from '../../../../graphql/generated';
 import type {
@@ -62,4 +62,6 @@ export interface Props {
   brands: SelectOptions[];
   selectedIndustries: string[];
   setSelectedIndustries: (brands: string[]) => void;
+  redactOnPrint: boolean;
+  setRedactOnPrint: (arg0: boolean) => void;
 }

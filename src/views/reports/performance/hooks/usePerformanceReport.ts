@@ -10,6 +10,7 @@ import useReportPrint from 'utils/reportPrint/usePrintReports';
 import type { InvestigationsTableData } from '#/components/reports/tableColumns';
 import PerformanceLayout, { PerformanceMetaData } from './initLayout';
 import type { IReportTemplate } from '../../types';
+import { redactedText } from '../../types';
 import type { Props as Return } from './types';
 import useReportState from '../../../../utils/reports/useReportState';
 
@@ -53,6 +54,8 @@ const usePerformanceReport = (): Return => {
     setBrands,
     selectedIndustries,
     setSelectedIndustries,
+    setRedactOnPrint,
+    redactOnPrint,
   } = useReportState({
     InitLayout: PerformanceLayout,
     InitMetaData: PerformanceMetaData,
@@ -158,6 +161,7 @@ const usePerformanceReport = (): Return => {
     },
   });
 
+  const shouldRedact = isPrinting && redactOnPrint;
   const businessContributionTableData =
     data?.businessContribution?.businessContributions?.map((business, i) => ({
       key: business.name + i.toString(),
@@ -173,7 +177,7 @@ const usePerformanceReport = (): Return => {
   const userContributionTableData =
     data?.userContributions?.userContributions?.map((user, index) => ({
       key: user.name + index.toString(),
-      fullName: user.name,
+      fullName: shouldRedact ? redactedText : user.name,
       incidentsCreated: user.totalIncidents,
       offendersCreated: user.totalOffenders,
       updatesCreated: user.totalUpdates,
@@ -186,7 +190,7 @@ const usePerformanceReport = (): Return => {
       totalIncidents: offender.totalIncidents,
       key: offender.name + i.toString(),
       alertId: offender.alertId,
-      fullName: offender.name,
+      fullName: shouldRedact ? redactedText : offender.name,
       image: offender.primaryPhoto,
       lastIncident: offender.lastIncidentDate
         ? new Date(offender.lastIncidentDate).toLocaleDateString()
@@ -307,6 +311,8 @@ const usePerformanceReport = (): Return => {
     investigationsData,
     selectedIndustries,
     setSelectedIndustries,
+    setRedactOnPrint,
+    redactOnPrint,
   };
 };
 

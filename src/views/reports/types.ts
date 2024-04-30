@@ -34,7 +34,9 @@ export type AllowedValue =
   | 'pageBreak2'
   | 'pageBreak3'
   | 'pageBreak4'
-  | 'logo';
+  | 'logo'
+  | 'timeHeatMap'
+  | 'priorityGraph';
 
 type ReportItemTypes =
   | 'summary'
@@ -180,6 +182,14 @@ export const LayoutToReadable: {
     i: 'investigationsTable',
     readable: 'Investigations Table',
   },
+  {
+    i: 'priorityGraph',
+    readable: 'Priority Graph',
+  },
+  {
+    i: 'timeHeatMap',
+    readable: 'Time Heat Map',
+  },
 ];
 
 const layoutMap = new Map<string, string>(
@@ -208,3 +218,5 @@ export interface IReportTemplate {
   metaData: MetaData[];
   layout: RGL.Layout[];
 }
+
+export const redactedText = '██████████';

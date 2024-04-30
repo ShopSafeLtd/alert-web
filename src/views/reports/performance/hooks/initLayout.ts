@@ -21,6 +21,16 @@ export const PerformanceMetaData: MetaData[] = [
   { key: 'targetedBusinessTable', type: 'table' },
   { key: 'targetedGoodsTable', type: 'table' },
   { key: 'investigationsTable', type: 'table' },
+  { key: 'incidentsDayOfWeekGraph', type: 'graph' },
+  { key: 'incidentsDayOfWeekGraph', type: 'graph' },
+  {
+    key: 'timeHeatMap',
+    type: 'heatmap',
+  },
+  {
+    key: 'priorityGraph',
+    type: 'bar',
+  },
 ];
 
 const PerformanceLayout: ExtendedLayout[] = [
@@ -104,6 +114,7 @@ const PerformanceLayout: ExtendedLayout[] = [
     moved: false,
     static: false,
   },
+
   {
     w: 2,
     h: 17,
@@ -392,6 +403,26 @@ export const PerformanceDrawerLayout: ExtendedLayout[] = [
     x: 0,
     y: 8,
     i: 'investigationSummary',
+    minH: 4,
+    moved: false,
+    static: false,
+  },
+  {
+    w: 2,
+    h: 12,
+    x: 0,
+    y: 45,
+    i: 'priorityGraph',
+    minH: 4,
+    moved: false,
+    static: false,
+  },
+  {
+    w: 2,
+    h: 12,
+    x: 0,
+    y: 45,
+    i: 'timeHeatMap',
     minH: 4,
     moved: false,
     static: false,

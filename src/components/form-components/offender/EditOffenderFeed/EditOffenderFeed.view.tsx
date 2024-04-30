@@ -19,8 +19,6 @@ interface Props {
   tagsLoading: boolean;
   customGalleries: { value: string; label: string }[];
   customGalleriesLoading: boolean;
-  ageCheck: boolean | undefined;
-  idVerified: boolean | undefined;
   adminRights: boolean;
   needJustification: boolean;
   offenderSettings: OffenderSettingsType | undefined;
@@ -37,15 +35,16 @@ const EditOffender = ({
   tagsLoading,
   customGalleries,
   customGalleriesLoading,
-  ageCheck,
   onClose,
-  idVerified,
-
   adminRights,
   needJustification,
   offenderSettings,
 }: Props): JSX.Element => {
   const intl = useIntl();
+
+  const [form] = Form.useForm<FormData>();
+  const ageCheck = Form.useWatch('ageCheck', form);
+  const idVerified = Form.useWatch('idVerified', form);
 
   return (
     <div className="list-view">
@@ -55,6 +54,7 @@ const EditOffender = ({
         <Form
           onFinish={onSubmit}
           layout="vertical"
+          form={form}
           initialValues={{
             name: data?.offender?.name || null,
             alias: data?.offender?.alias || [],
