@@ -96,4 +96,9 @@ export const availableCheckBoxes: {
     PermissionMethod.Edit,
     PermissionMethod.Delete,
   ],
+  EVIDENCE: [
+    PermissionMethod.Read,
+    PermissionMethod.Write,
+    PermissionMethod.Delete,
+  ],
 };

@@ -2,23 +2,23 @@ import { useState } from 'react';
 import type {
   Age,
   Build,
+  EditOffenderQuery,
   Gender,
   Height,
   IdSource,
   Race,
-  EditOffenderQuery,
 } from 'graphql/generated';
 import {
+  Model,
+  Role,
   useBusinessOffenderSettingsQuery,
   useEditOffenderQuery,
   useListCustomGalleriesQuery,
-  Model,
-  Role,
   useSchemeGroupsQuery,
   useTagsQuery,
   useUpdateOffenderMutation,
 } from 'graphql/generated';
-import { notification, Form } from 'antd';
+import { notification } from 'antd';
 import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
@@ -64,8 +64,6 @@ interface Return {
   tagsLoading: boolean;
   customGalleries: { value: string; label: string }[];
   customGalleriesLoading: boolean;
-  ageCheck: boolean | undefined;
-  idVerified: boolean | undefined;
   adminRights: boolean;
   needJustification: boolean;
   offenderSettings: OffenderSettingsType | undefined;
@@ -73,9 +71,6 @@ interface Return {
 
 const useEditOffender = ({ offenderId, onClose }: Props): Return => {
   const intl = useIntl();
-  const [form] = Form.useForm<FormData>();
-  const ageCheck = Form.useWatch('ageCheck', form);
-  const idVerified = Form.useWatch('idVerified', form);
   const { needJustification, id: schemeId } = useStoreState(
     (state) => state.scheme
   );
@@ -209,9 +204,11 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
           },
           comment: { set: data.comment || '' },
           peculiarities: { set: data.peculiarities || '' },
-          age: { set: ageCheck ? null : data.age || null },
-          dateSource: { set: ageCheck ? data.dateSource || null : null },
-          dateOfBirth: { set: ageCheck ? data.dateOfBirth || null : null },
+          age: { set: data.age ? null : data.age || null },
+          dateSource: { set: data.dateSource ? data.dateSource || null : null },
+          dateOfBirth: {
+            set: data.dateOfBirth ? data.dateOfBirth || null : null,
+          },
           idSource: data.idSource ? { set: data.idSource } : undefined,
           idVerified: data.idVerified ? { set: data.idVerified } : undefined,
           groups: {
@@ -257,8 +254,6 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
         label: tag.name,
       })) || [],
     customGalleriesLoading,
-    ageCheck,
-    idVerified,
     adminRights: role !== Role.User,
     needJustification,
     offenderSettings: businessData?.business.offenderSettings,

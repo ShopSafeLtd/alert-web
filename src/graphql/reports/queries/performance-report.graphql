@@ -64,6 +64,17 @@ query PerformanceReport($where: UserContributionWhereInput!) {
       open
       opened
     }
+    timeHeatMap {
+      id
+      data {
+        x
+        y
+      }
+    }
+    priorityGraph {
+      value
+      label
+    }
   }
   offendersPerformance(where: $where) {
     total

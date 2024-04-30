@@ -36,10 +36,8 @@ import {
   faCircleInfo,
   faClock,
   faComment,
-  faCopy,
   faEarth,
   faEdit,
-  faEye,
   faHeadSide,
   faImage,
   faMagnifyingGlass,
@@ -55,12 +53,10 @@ import {
   faUser,
   faUserClock,
   faUserHair,
-  faUserPen,
   faUsers,
   faUserTag,
 } from '@fortawesome/pro-light-svg-icons';
 import {
-  calcAge,
   getBanType,
   getIdSource,
   getOffenderAge,
@@ -85,7 +81,7 @@ import { calcDuration } from 'utils';
 import LightBox from 'components/images/LightBox/LightBox.container';
 import OffenderMatches from 'components/rekognition/OffenderMatches/OffenderMatches.container';
 import FormatCalendar from 'utils/format-calendar-24h';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 import type {
   BanData,
   EditFeedImage,
@@ -360,7 +356,6 @@ const ViewOffender = ({
   const intl = useIntl();
   const classes = useStyles();
   const navigate = useNavigate();
-
   const expandedRowRender = (record: TableItem) => (
     <Text style={{ fontSize: 14, padding: 0, margin: 0 }}>
       {intl.formatMessage(
@@ -438,219 +433,188 @@ const ViewOffender = ({
                         </Col>
                       )}
                     <Col>
-                      <Tooltip
-                        title={
-                          data?.offender?.subscribed
-                            ? intl.formatMessage({
-                                defaultMessage:
-                                  'Stop getting notified about updates.',
-                                id: 'WpTY6U',
-                              })
-                            : intl.formatMessage({
-                                defaultMessage: 'Get notified about updates.',
-                                id: 'icr+Hj',
-                              })
-                        }
-                      >
-                        <Button
-                          onClick={toggleSubscribe}
-                          disabled={saving}
-                          loading={saving}
-                          type="ghost"
-                          color={
-                            data?.offender?.subscribed ? undefined : 'danger'
-                          }
-                        >
-                          <FontAwesomeIcon
-                            size="1x"
-                            className={classes.icon}
-                            icon={
-                              data?.offender?.subscribed ? faBellSlash : faBell
+                      <Row>
+                        <Col>
+                          <Tooltip
+                            title={
+                              data?.offender?.subscribed
+                                ? intl.formatMessage({
+                                    defaultMessage:
+                                      'Stop getting notified about updates.',
+                                    id: 'WpTY6U',
+                                  })
+                                : intl.formatMessage({
+                                    defaultMessage:
+                                      'Get notified about updates.',
+                                    id: 'icr+Hj',
+                                  })
                             }
-                          />
-                          {data?.offender?.subscribed
-                            ? intl.formatMessage({
-                                defaultMessage: 'Un-follow',
-                                id: 'U9yypY',
-                              })
-                            : intl.formatMessage({
-                                defaultMessage: 'Follow',
-                                id: 'ieGrWo',
+                          >
+                            <Button
+                              onClick={toggleSubscribe}
+                              disabled={saving}
+                              loading={saving}
+                              type="ghost"
+                              color={
+                                data?.offender?.subscribed
+                                  ? undefined
+                                  : 'danger'
+                              }
+                              style={{
+                                borderTopRightRadius:
+                                  deleteRights || editRights ? 0 : 10,
+                                borderBottomRightRadius:
+                                  deleteRights || editRights ? 0 : 10,
+                                padding: '8.5px .9rem',
+                              }}
+                            >
+                              <FontAwesomeIcon
+                                size="1x"
+                                icon={
+                                  data?.offender?.subscribed
+                                    ? faBellSlash
+                                    : faBell
+                                }
+                              />
+                            </Button>
+                          </Tooltip>
+                        </Col>
+                        {editRights && hasConnectedSchemes && (
+                          <Col>
+                            <Tooltip
+                              title={intl.formatMessage({
+                                defaultMessage: 'Share offender with a scheme',
+                                id: '9GJrnj',
                               })}
-                        </Button>
-                      </Tooltip>
-                    </Col>
-                    {editRights && hasConnectedSchemes && (
-                      <Col>
-                        <Button onClick={toggleShareOpen}>
-                          <FontAwesomeIcon
-                            size="1x"
-                            style={{ marginRight: 8 }}
-                            icon={faShareNodes}
-                          />
-                          <FormattedMessage
-                            id="OKhRC6"
-                            defaultMessage="Share"
-                          />
-                        </Button>
-                      </Col>
-                    )}
-                    {editRights && (
-                      <Col>
-                        <Dropdown
-                          overlay={
-                            <Menu
-                              items={[
-                                {
-                                  key: 0,
-                                  label: intl.formatMessage({
-                                    defaultMessage: 'Edit Details',
-                                    id: 'A2fHI3',
-                                  }),
-                                  onClick: () => toggleEditOffender(),
-                                  icon: <FontAwesomeIcon icon={faEdit} />,
-                                },
-                                {
-                                  key: 1,
-                                  label:
-                                    data?.offender?.totalImages &&
-                                    data?.offender.totalImages > 0
-                                      ? intl.formatMessage({
-                                          defaultMessage: 'Edit Images',
-                                          id: 'Cs6iOM',
-                                        })
-                                      : intl.formatMessage({
-                                          defaultMessage: 'Add Images',
-                                          id: 'b4GGYZ',
-                                        }),
-                                  onClick: () => toggleEditImages(),
-                                  icon: <FontAwesomeIcon icon={faImage} />,
-                                },
-                              ]}
-                            />
-                          }
-                          placement="bottomRight"
-                          arrow={{ pointAtCenter: true }}
-                        >
-                          <Button type="ghost">
-                            <FontAwesomeIcon
-                              size="1x"
-                              className={classes.icon}
-                              icon={faEdit}
-                            />
-                            {intl.formatMessage({
-                              defaultMessage: 'Edit',
-                              id: 'wEQDC6',
-                            })}
-                          </Button>
-                        </Dropdown>
-                      </Col>
-                    )}
-                    {/* {!editRights && */}
-                    {/*  data?.offender.name === 'Unidentified Offender' && ( */}
-                    {/*    <Col> */}
-                    {/*      <Button type="ghost" onClick={toggleKnowOffender}> */}
-                    {/*        <FontAwesomeIcon */}
-                    {/*          className={classes.icon} */}
-                    {/*          icon={faEdit} */}
-                    {/*        /> */}
-                    {/*        {intl.formatMessage({ */}
-                    {/*          defaultMessage: 'Know this offender?', */}
-                    {/*          id: 'SvQc4C', */}
-                    {/*        })} */}
-                    {/*      </Button> */}
-                    {/*    </Col> */}
-                    {/*  )} */}
+                            >
+                              <Button
+                                onClick={toggleShareOpen}
+                                type="ghost"
+                                style={{
+                                  borderRadius: 0,
+                                  padding: '8.5px .9rem',
+                                  borderLeft: 'none',
+                                }}
+                              >
+                                <FontAwesomeIcon
+                                  size="1x"
+                                  icon={faShareNodes}
+                                />
+                              </Button>
+                            </Tooltip>
+                          </Col>
+                        )}
 
-                    <Col>
-                      <Dropdown
-                        overlay={
-                          <Menu
-                            items={[
-                              {
-                                key: 0,
-                                label: intl.formatMessage({
-                                  defaultMessage: 'Copy Offender',
-                                  id: 'rtuqfd',
-                                }),
-                                onClick: () => toggleCopyOffender(),
-                                icon: <FontAwesomeIcon icon={faCopy} />,
-                              },
-
-                              {
-                                key: 1,
-                                label: intl.formatMessage({
-                                  defaultMessage: 'Compare Offender',
-                                  id: 'Y64oGy',
-                                }),
-                                onClick: () =>
+                        {editRights && (
+                          <Col>
+                            <Tooltip
+                              title={intl.formatMessage({
+                                defaultMessage: 'Compare offender',
+                                id: 'TODim8',
+                              })}
+                            >
+                              <Button
+                                type="ghost"
+                                onClick={() =>
                                   navigate(
                                     `/app/offenders/compare/${
                                       data?.offender?.id || ''
                                     }`
-                                  ),
-                                icon: (
-                                  <FontAwesomeIcon size="lg" icon={faUsers} />
-                                ),
-                              },
-                              {
-                                key: 2,
-                                label: intl.formatMessage({
-                                  defaultMessage: 'View Original',
-                                  id: 'rcByoO',
-                                }),
-                                onClick: () =>
-                                  navigate(
-                                    `/app/offenders/view/${
-                                      data?.offender?.origOffenderId || ''
-                                    }`
-                                  ),
-                                icon: (
-                                  <FontAwesomeIcon size="lg" icon={faEye} />
-                                ),
-                              },
-                            ].filter(
-                              (item) =>
-                                (item.key !== 0 || editRights) &&
-                                (item.key !== 2 ||
-                                  data?.offender?.origOffenderId)
-                            )}
-                          />
-                        }
-                        placement="bottomRight"
-                        arrow={{ pointAtCenter: true }}
-                      >
-                        <Button type="ghost">
-                          <FontAwesomeIcon
-                            size="1x"
-                            className={classes.icon}
-                            icon={faUserPen}
-                          />
-                          {intl.formatMessage({
-                            defaultMessage: 'Offenders',
-                            id: 'xb54TN',
-                          })}
-                        </Button>
-                      </Dropdown>
+                                  )
+                                }
+                                style={{
+                                  borderTopLeftRadius: 0,
+                                  borderBottomLeftRadius: 0,
+                                  borderTopRightRadius: deleteRights ? 0 : 10,
+                                  borderBottomRightRadius: deleteRights
+                                    ? 0
+                                    : 10,
+                                  padding: '8.5px .9rem',
+                                  marginRight: deleteRights ? 0 : 10,
+                                  borderLeft: 'none',
+                                }}
+                              >
+                                <FontAwesomeIcon size="1x" icon={faUsers} />
+                              </Button>
+                            </Tooltip>
+                          </Col>
+                        )}
+                        {editRights && (
+                          <Col>
+                            <Dropdown
+                              overlay={
+                                <Menu
+                                  items={[
+                                    {
+                                      key: 0,
+                                      label: intl.formatMessage({
+                                        defaultMessage: 'Edit Details',
+                                        id: 'A2fHI3',
+                                      }),
+                                      onClick: () => toggleEditOffender(),
+                                      icon: <FontAwesomeIcon icon={faEdit} />,
+                                    },
+                                    {
+                                      key: 1,
+                                      label:
+                                        data?.offender?.totalImages &&
+                                        data?.offender.totalImages > 0
+                                          ? intl.formatMessage({
+                                              defaultMessage: 'Edit Images',
+                                              id: 'Cs6iOM',
+                                            })
+                                          : intl.formatMessage({
+                                              defaultMessage: 'Add Images',
+                                              id: 'b4GGYZ',
+                                            }),
+                                      onClick: () => toggleEditImages(),
+                                      icon: <FontAwesomeIcon icon={faImage} />,
+                                    },
+                                  ]}
+                                />
+                              }
+                              placement="bottomRight"
+                              arrow={{ pointAtCenter: true }}
+                            >
+                              <Button
+                                type="ghost"
+                                style={{
+                                  borderRadius: 0,
+                                  padding: '8.5px .9rem',
+                                  borderLeft: 'none',
+                                }}
+                              >
+                                <FontAwesomeIcon size="1x" icon={faEdit} />
+                              </Button>
+                            </Dropdown>
+                          </Col>
+                        )}
+                        {deleteRights && (
+                          <Col>
+                            <Tooltip
+                              title={intl.formatMessage({
+                                defaultMessage: 'Recycle offender',
+                                id: 'qFx1KB',
+                              })}
+                            >
+                              <Button
+                                type="ghost"
+                                onClick={() => onDelete(offenderId)}
+                                style={{
+                                  borderTopLeftRadius: 0,
+                                  borderBottomLeftRadius: 0,
+                                  padding: '8.5px .9rem',
+                                  marginRight: 10,
+                                  borderLeft: 'none',
+                                }}
+                              >
+                                <FontAwesomeIcon size="1x" icon={faTrash} />
+                              </Button>
+                            </Tooltip>
+                          </Col>
+                        )}
+                      </Row>
                     </Col>
-                    {deleteRights && (
-                      <Col>
-                        <Button
-                          type="ghost"
-                          onClick={() => onDelete(offenderId)}
-                        >
-                          <FontAwesomeIcon
-                            size="1x"
-                            className={classes.icon}
-                            icon={faTrash}
-                          />
-                          {intl.formatMessage({
-                            defaultMessage: 'Delete',
-                            id: 'K3r6DQ',
-                          })}
-                        </Button>
-                      </Col>
-                    )}
                   </Row>
                   <ImagesList
                     imagesData={data?.offender?.images}
@@ -959,7 +923,7 @@ const ViewOffender = ({
                                 })}
                               </Title>
                               <Descriptions column={1}>
-                                {publicOffenderDOB && (
+                                {!data?.offender?.dateOfBirth && (
                                   <Descriptions.Item
                                     className={classes.descItem}
                                     label={
@@ -975,11 +939,31 @@ const ViewOffender = ({
                                       </span>
                                     }
                                   >
-                                    {data?.offender?.dateOfBirth
-                                      ? calcAge(data?.offender?.dateOfBirth)
-                                      : getOffenderAge(data?.offender?.age)}
+                                    {getOffenderAge(data?.offender?.age)}
                                   </Descriptions.Item>
                                 )}
+                                {(publicOffenderDOB || editRights) &&
+                                  data?.offender?.dateOfBirth && (
+                                    <Descriptions.Item
+                                      className={classes.descItem}
+                                      label={
+                                        <span>
+                                          <FontAwesomeIcon
+                                            className={classes.descIcon}
+                                            icon={faUserClock}
+                                          />
+                                          {intl.formatMessage({
+                                            defaultMessage: 'Date of Birth',
+                                            id: 'e9Z+tg',
+                                          })}
+                                        </span>
+                                      }
+                                    >
+                                      {moment(
+                                        data?.offender?.dateOfBirth
+                                      ).format('DD/MM/YYYY')}
+                                    </Descriptions.Item>
+                                  )}
                                 <Descriptions.Item
                                   className={classes.descItem}
                                   label={
