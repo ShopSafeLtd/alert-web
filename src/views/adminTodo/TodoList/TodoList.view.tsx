@@ -4,9 +4,7 @@ import {
   Avatar,
   Button,
   Card,
-  // Checkbox,
   Col,
-  // Collapse,
   Drawer,
   Empty,
   Input,
@@ -71,6 +69,7 @@ const getLinkedItemId = (todo: ListTodosQuery['listTodos']['todos'][0]) => {
 };
 
 const getLinkedItemTo = (todo?: ListTodosQuery['listTodos']['todos'][0]) => {
+  if (!todo) return '#';
   if (todo.incidentId) return `/app/incidents/view/${todo.incidentId}`;
   if (todo.offenderId) return `/app/offenders/view/${todo.offenderId}`;
   if (todo.crimeGroupId) return `/app/crime-groups/view/${todo.crimeGroupId}`;

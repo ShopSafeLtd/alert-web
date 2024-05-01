@@ -59,6 +59,7 @@ describe('Detail Officer View', () => {
             sizeOptions: [],
           }}
           variables={{
+            createdBy: [''],
             search: '',
             priority: [IncidentPriority.Normal],
             crimeTypes: [],

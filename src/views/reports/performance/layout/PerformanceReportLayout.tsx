@@ -804,12 +804,31 @@ const PerformanceReportLayout = ({
             <Statistic
               className={classes.stats}
               title={intl.formatMessage({
+                defaultMessage: 'Average Value per Incident',
+                id: 'l2JCkH',
+              })}
+              value={
+                `£${(
+                  data?.performanceReport?.lossTotals?.averagePerIncident || 0
+                ).toFixed(2)}` || ''
+              }
+              prefix={
+                <FontAwesomeIcon
+                  className={classes.prefixIcon}
+                  icon={faMoneyBill}
+                />
+              }
+            />
+            <Statistic
+              className={classes.stats}
+              title={intl.formatMessage({
                 defaultMessage: 'Average Loss per Incident',
                 id: 'k62cVY',
               })}
               value={
                 `£${(
-                  data?.performanceReport?.lossTotals?.averagePerIncident || 0
+                  data?.performanceReport?.lossTotals?.averageLossPerIncident ||
+                  0
                 ).toFixed(2)}` || ''
               }
               prefix={
