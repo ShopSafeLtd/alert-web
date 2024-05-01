@@ -9,9 +9,9 @@ import type {
   Race,
 } from 'graphql/generated';
 import {
-  useListOffendersAllSchemesQuery,
   QueryMode,
   SortOrder,
+  useListOffendersAllSchemesQuery,
 } from 'graphql/generated';
 import { OffenderSort, useStoreActions, useStoreState } from 'state';
 
@@ -351,6 +351,7 @@ const useAddExistingOffender = ({
     setOffendersState({
       pagination,
       variables: {
+        createdBy: [],
         search: '',
         warnings: [],
         groups: [],
