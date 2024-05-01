@@ -100,6 +100,7 @@ const ListInvestigations = ({
             name: investigation.name,
             description: investigation.description || '',
             status: investigation.status || InvestigationStatus.Open,
+            groups: investigation.groups || [],
           })
         )}
         loading={loading}
@@ -139,6 +140,18 @@ const ListInvestigations = ({
               <Typography.Text type={getTextStatus(value)}>
                 {GetInvestigationStatusValues[value]}
               </Typography.Text>
+            ),
+          },
+          {
+            key: 'groups',
+            dataIndex: 'groups',
+            title: <FormattedMessage defaultMessage="Groups" id="hzmswI" />,
+            render: (value, item) => (
+              <div>
+                {item.groups.map((group) => (
+                  <Typography.Text key={group.id}>{group.name}</Typography.Text>
+                ))}
+              </div>
             ),
           },
           {
