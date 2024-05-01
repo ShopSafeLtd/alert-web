@@ -5,6 +5,7 @@ import type { InvestigationStatus } from 'graphql/generated';
 import GetInvestigationStatusValues from 'types/enums/investigation-status';
 import { useNavigate } from 'react-router';
 import { createUseStyles } from 'react-jss';
+import moment from 'moment';
 
 const useStyles = createUseStyles({
   row: {
@@ -18,6 +19,8 @@ interface Props {
         name?: string | null | undefined;
         description?: string | null | undefined;
         status?: InvestigationStatus;
+        createdAt: Date;
+        reference?: string | null | undefined;
       }[]
     | undefined;
 }
@@ -50,6 +53,14 @@ const InvestigationTable = ({ investigations }: Props): JSX.Element => {
           dataIndex: 'name',
         },
         {
+          key: 'reference',
+          dataIndex: 'reference',
+          title: intl.formatMessage({
+            defaultMessage: 'Alert ID',
+            id: 'k8ZNgH',
+          }),
+        },
+        {
           key: 'status',
           dataIndex: 'status',
           title: intl.formatMessage({
@@ -61,6 +72,15 @@ const InvestigationTable = ({ investigations }: Props): JSX.Element => {
               {GetInvestigationStatusValues[value]}
             </Typography.Text>
           ),
+        },
+        {
+          key: 'createdAt',
+          dataIndex: 'createdAt',
+          title: intl.formatMessage({
+            defaultMessage: 'Date Opened',
+            id: 'zQ9i1N',
+          }),
+          render: (value: string) => moment(value).format('DD/MM/YYYY'),
         },
         {
           key: 'description',
@@ -76,6 +96,9 @@ const InvestigationTable = ({ investigations }: Props): JSX.Element => {
           key: investigation.id,
           name: investigation.name || '',
           description: investigation.description,
+          status: investigation.status,
+          createdAt: investigation.createdAt,
+          reference: investigation.reference,
         })) || []
       }
     />

@@ -3,4 +3,6 @@ fragment Investigations on Investigation {
   name
   description
   status
+  createdAt
+  reference
 }
