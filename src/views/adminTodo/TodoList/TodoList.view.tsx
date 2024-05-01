@@ -21,7 +21,7 @@ import type { MutationUpdaterFn } from '@apollo/client';
 import AddTodo from 'components/form-components/Todos/AddTodo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import FormatCalendar from 'utils/format-calendar-24h';
 import { useStoreState } from 'state';
 import { Link } from 'react-router-dom';
@@ -60,11 +60,46 @@ interface Props {
 }
 
 const getLinkedItemId = (todo: ListTodosQuery['listTodos']['todos'][0]) => {
-  if (todo.incident) return todo.incident.reference;
-  if (todo.offender) return todo.offender.reference;
-  if (todo.crimeGroup) return todo.crimeGroup.reference;
-  if (todo.vehicle) return todo.vehicle.reference;
-  if (todo.investigation) return todo.investigation.reference;
+  if (todo.incident)
+    return (
+      <FormattedMessage
+        id="T3r1oP"
+        defaultMessage="Incident: {var1}"
+        values={{ var1: todo.incident.reference }}
+      />
+    );
+  if (todo.offender)
+    return (
+      <FormattedMessage
+        id="1FqkCb"
+        defaultMessage="Offender: {var1}"
+        values={{ var1: todo.offender.reference }}
+      />
+    );
+  if (todo.crimeGroup)
+    return (
+      <FormattedMessage
+        id="FwiSHz"
+        defaultMessage="Crime Group: {var1}"
+        values={{ var1: todo.crimeGroup.reference }}
+      />
+    );
+  if (todo.vehicle)
+    return (
+      <FormattedMessage
+        id="6aXXS8"
+        defaultMessage="Vehicle: {var1}"
+        values={{ var1: todo.vehicle.reference }}
+      />
+    );
+  if (todo.investigation)
+    return (
+      <FormattedMessage
+        id="a2mKeV"
+        defaultMessage="Investigation: {var1}"
+        values={{ var1: todo.investigation.reference }}
+      />
+    );
   return undefined;
 };
 
