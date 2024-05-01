@@ -3,9 +3,10 @@ import type { ColumnsType, SortOrder } from 'antd/es/table/interface';
 import { Typography } from 'antd';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import type { InvestigationStatus } from 'graphql/generated';
+import { InvestigationStatus } from 'graphql/generated';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+import GetInvestigationStatusValues from '#/types/enums/investigation-status';
 
 export interface BusinessTableData {
   fullName: string;
@@ -508,6 +509,22 @@ export const InvestigationsColumns: ColumnsType<InvestigationsTableData> = [
     key: 'status',
     dataIndex: 'status',
     title: <FormattedMessage id="tzMNF3" defaultMessage="Status" />,
+    filters: [
+      {
+        text: <FormattedMessage id="JfG49w" defaultMessage="Open" />,
+        value: InvestigationStatus.Open,
+      },
+      {
+        text: <FormattedMessage id="Fv1ZSz" defaultMessage="Closed" />,
+        value: InvestigationStatus.Closed,
+      },
+    ],
+    defaultFilteredValue: [InvestigationStatus.Open],
+    onFilter: (value: string | number | boolean, record) =>
+      value === record.status,
+    render: (value: InvestigationStatus) => (
+      <Typography.Text>{GetInvestigationStatusValues[value]}</Typography.Text>
+    ),
   },
   {
     key: 'createdAt',

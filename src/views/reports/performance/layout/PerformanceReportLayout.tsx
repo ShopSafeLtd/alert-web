@@ -112,6 +112,7 @@ const PerformanceReportLayout = ({
   metadata,
   setMetadata,
 }: Props) => {
+  console.log(layout);
   const classes = useStyles();
   const calculateHeight = (key: string, offset?: number) => {
     const targetElement = layout.find((element) => element.i === key);
@@ -717,8 +718,8 @@ const PerformanceReportLayout = ({
                       { style: 'currency', currency: 'GBP' }
                     )
                   : intl.formatMessage({
-                      defaultMessage: 'No Losses',
-                      id: '9RLqIM',
+                      defaultMessage: '--',
+                      id: 'thiOfy',
                     })
               }
               prefix={
@@ -743,8 +744,8 @@ const PerformanceReportLayout = ({
                       { style: 'currency', currency: 'GBP' }
                     )
                   : intl.formatMessage({
-                      defaultMessage: 'No Recoveries',
-                      id: 'i7IHf9',
+                      defaultMessage: '--',
+                      id: 'thiOfy',
                     })
               }
               prefix={
@@ -771,8 +772,8 @@ const PerformanceReportLayout = ({
                       { style: 'currency', currency: 'GBP' }
                     )
                   : intl.formatMessage({
-                      defaultMessage: 'No Loss',
-                      id: '4z5NxE',
+                      defaultMessage: '--',
+                      id: 'thiOfy',
                     })
               }
               prefix={
@@ -804,8 +805,8 @@ const PerformanceReportLayout = ({
             <Statistic
               className={classes.stats}
               title={intl.formatMessage({
-                defaultMessage: 'Average Value per Incident',
-                id: 'l2JCkH',
+                defaultMessage: 'Average Incident Value',
+                id: '8Q52ae',
               })}
               value={
                 `£${(
@@ -822,8 +823,8 @@ const PerformanceReportLayout = ({
             <Statistic
               className={classes.stats}
               title={intl.formatMessage({
-                defaultMessage: 'Average Loss per Incident',
-                id: 'k62cVY',
+                defaultMessage: 'Average Loss Value',
+                id: 'QZKPMa',
               })}
               value={
                 `£${(
