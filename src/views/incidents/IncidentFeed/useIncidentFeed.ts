@@ -112,6 +112,7 @@ const useIncidentFeed = (): Return => {
     compactView,
     priority,
     tableView,
+    createdBy,
   } = variables;
 
   // filter initial state
@@ -276,14 +277,14 @@ const useIncidentFeed = (): Return => {
             },
           ]
         : undefined,
-
-      createdBy: gallery.includes('MYDATA')
-        ? {
-            id: {
-              equals: userId,
-            },
-          }
-        : undefined,
+      createdBy:
+        gallery.includes('MYDATA') || createdBy.length > 0
+          ? {
+              id: {
+                in: gallery.includes('MYDATA') ? [userId] : createdBy,
+              },
+            }
+          : undefined,
     },
     first: compactView ? 48 : 12,
   };

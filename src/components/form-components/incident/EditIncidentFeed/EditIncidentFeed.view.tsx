@@ -193,6 +193,9 @@ const EditGroup = ({
             })}
           >
             <Select disabled={saving}>
+              <Select.Option value={IncidentPriority.Low}>
+                <FormattedMessage id="477I0g" defaultMessage="Low" />
+              </Select.Option>
               <Select.Option value={IncidentPriority.Normal}>
                 <FormattedMessage id="myq2ZL" defaultMessage="Normal" />
               </Select.Option>

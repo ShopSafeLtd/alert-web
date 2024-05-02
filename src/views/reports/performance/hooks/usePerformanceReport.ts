@@ -262,6 +262,7 @@ const usePerformanceReport = (): Return => {
         status: investigation.status,
         totalValue: investigation.totalValue,
         createdAt: investigation.createdAt,
+        closedAt: investigation.closedAt,
       })
     ) || [];
 

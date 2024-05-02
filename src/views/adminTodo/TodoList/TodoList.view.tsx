@@ -4,9 +4,7 @@ import {
   Avatar,
   Button,
   Card,
-  // Checkbox,
   Col,
-  // Collapse,
   Drawer,
   Empty,
   Input,
@@ -23,7 +21,7 @@ import type { MutationUpdaterFn } from '@apollo/client';
 import AddTodo from 'components/form-components/Todos/AddTodo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import FormatCalendar from 'utils/format-calendar-24h';
 import { useStoreState } from 'state';
 import { Link } from 'react-router-dom';
@@ -60,6 +58,61 @@ interface Props {
   selectedTemplate: TemplateData | null;
   selectTemplate: (id: string | null) => void;
 }
+
+const getLinkedItemId = (todo: ListTodosQuery['listTodos']['todos'][0]) => {
+  if (todo.incident)
+    return (
+      <FormattedMessage
+        id="T3r1oP"
+        defaultMessage="Incident: {var1}"
+        values={{ var1: todo.incident.reference }}
+      />
+    );
+  if (todo.offender)
+    return (
+      <FormattedMessage
+        id="1FqkCb"
+        defaultMessage="Offender: {var1}"
+        values={{ var1: todo.offender.reference }}
+      />
+    );
+  if (todo.crimeGroup)
+    return (
+      <FormattedMessage
+        id="FwiSHz"
+        defaultMessage="Crime Group: {var1}"
+        values={{ var1: todo.crimeGroup.reference }}
+      />
+    );
+  if (todo.vehicle)
+    return (
+      <FormattedMessage
+        id="6aXXS8"
+        defaultMessage="Vehicle: {var1}"
+        values={{ var1: todo.vehicle.reference }}
+      />
+    );
+  if (todo.investigation)
+    return (
+      <FormattedMessage
+        id="a2mKeV"
+        defaultMessage="Investigation: {var1}"
+        values={{ var1: todo.investigation.reference }}
+      />
+    );
+  return undefined;
+};
+
+const getLinkedItemTo = (todo?: ListTodosQuery['listTodos']['todos'][0]) => {
+  if (!todo) return '#';
+  if (todo.incidentId) return `/app/incidents/view/${todo.incidentId}`;
+  if (todo.offenderId) return `/app/offenders/view/${todo.offenderId}`;
+  if (todo.crimeGroupId) return `/app/crime-groups/view/${todo.crimeGroupId}`;
+  if (todo.vehicleId) return `/app/vehicles/view/${todo.vehicleId}`;
+  if (todo.investigationId)
+    return `/app/investigations/view/${todo.investigationId}`;
+  return '#';
+};
 
 const AdminTodos = ({
   data,
@@ -143,6 +196,7 @@ const AdminTodos = ({
       onCompletedTodo(id);
     }
   };
+
   return (
     <div className="list-view">
       <Row gutter={8} style={{ marginBottom: 15 }}>
@@ -246,6 +300,7 @@ const AdminTodos = ({
               completed: todo.completed,
               assignedUsers: todo.assignedUsers,
               todo,
+              linkedItem: getLinkedItemId(todo),
             }))}
             // onRow={(record) =>
             //   record.type !== undefined && record.type !== null
@@ -335,6 +390,23 @@ const AdminTodos = ({
                       </Col>
                     ))}
                   </Row>
+                ),
+              },
+              {
+                key: 'linkedItem',
+                dataIndex: 'linkedItem',
+                title: intl.formatMessage({
+                  defaultMessage: 'Linked Item',
+                  id: 'NkD6oV',
+                }),
+                render: (value, todo) => (
+                  <Link
+                    to={getLinkedItemTo(
+                      data?.todos.find(({ id }) => id === todo.key)
+                    )}
+                  >
+                    {value}
+                  </Link>
                 ),
               },
               {

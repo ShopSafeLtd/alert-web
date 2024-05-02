@@ -6,6 +6,10 @@ mutation UpdateInvestigation(
     id
     description
     name
+    groups {
+      id
+      name
+    }
     createdBy {
       id
       fullName

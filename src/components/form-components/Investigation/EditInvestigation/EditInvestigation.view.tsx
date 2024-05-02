@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Col, Form, Input, Row } from 'antd';
 import { useIntl } from 'react-intl';
 import type { InvestigationDetails } from 'types/DataType';
+import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
 import type { InvestigationData } from './useEditInvestigation';
 
 interface Props {
@@ -52,7 +53,19 @@ const AddInvestigation = ({
             </Form.Item>
           </Col>
         </Row>
-
+        <Row>
+          <Col span={24}>
+            <Form.Item
+              name="groupIds"
+              label={intl.formatMessage({
+                id: 'hzmswI',
+                defaultMessage: 'Groups',
+              })}
+            >
+              <GroupsSelect disabled={saving} mode="multiple" />
+            </Form.Item>
+          </Col>
+        </Row>
         <Form.Item>
           <Row style={{ marginTop: 30 }} gutter={16} justify="end">
             <Col>

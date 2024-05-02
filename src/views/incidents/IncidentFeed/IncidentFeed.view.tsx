@@ -17,7 +17,6 @@ import {
 } from 'antd';
 import IncidentCard from 'components/incidents/IncidentCard';
 import IncidentSkeletonCard from 'components/incidents/IncidentSkeletonCard';
-import type { IncidentSort } from 'state';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faFilter,
@@ -34,7 +33,6 @@ import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import IncidentFilter from 'components/incidents/IncidentFilter';
 import { useIntl } from 'react-intl';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import type { DateType } from 'types/DataType';
 import type { IncidentFilters } from 'state/data-model';
 import CompactSkeletonCard from 'components/offenders/OffenderCard/OffenderSkeletonCard.view';
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
@@ -61,11 +59,7 @@ interface Props {
     open: boolean;
     index: number;
   };
-  order: IncidentSort;
-  setOrder: (value: IncidentSort) => void;
   setSearch: (value: string) => void;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
   crimeTypes: { value: string; label: string }[];
   tagsLoading: boolean;
   updateIncidentList: MutationUpdaterFn<RecycleIncidentMutation>;
@@ -75,16 +69,10 @@ interface Props {
   setPeculiarities: (value: string) => void;
   clearFilters: () => void;
   setGallery: (values: string[]) => void;
-  setGroupsFilter: (value: string[]) => void;
-  setCrimeTypesFilter: (value: string[]) => void;
   goods: { value: string; label: string }[];
-  setGoodsFilter: (value: string[]) => void;
   businesses: { value: string; label: string; location: string }[];
-  setBusinessesFilter: (value: string[]) => void;
   goodsLoading: boolean;
   businessesLoading: boolean;
-  setIncidentDateFilter: (value: DateType | undefined) => void;
-  setCreatedAtFilter: (value: DateType | undefined) => void;
   fetchMoreScroll: () => void;
   variables: IncidentFilters;
   setCompactView: () => void;
@@ -99,11 +87,7 @@ const IncidentFeed = ({
   openLightbox,
   // onPaginationChange,
   // pagination,
-  order,
-  setOrder,
   setSearch,
-  groups,
-  groupsLoading,
   crimeTypes,
   tagsLoading,
   updateIncidentList,
@@ -114,16 +98,10 @@ const IncidentFeed = ({
   clearFilters,
   setGallery,
   setPeculiarities,
-  setGroupsFilter,
   businesses,
   goods,
-  setGoodsFilter,
-  setBusinessesFilter,
   goodsLoading,
   businessesLoading,
-  setCrimeTypesFilter,
-  setIncidentDateFilter,
-  setCreatedAtFilter,
   fetchMoreScroll,
   variables,
   setCompactView,
@@ -503,25 +481,14 @@ const IncidentFeed = ({
         width={500}
       >
         <IncidentFilter
-          order={order}
-          setOrder={setOrder}
-          groups={groups}
-          groupsLoading={groupsLoading}
-          setGroupsFilter={setGroupsFilter}
           crimeTypes={crimeTypes}
           tagsLoading={tagsLoading}
-          setCrimeTypesFilter={setCrimeTypesFilter}
           clearFilters={clearFilters}
           setPeculiarities={setPeculiarities}
           goods={goods}
-          setGoodsFilter={setGoodsFilter}
           businesses={businesses}
-          setBusinessesFilter={setBusinessesFilter}
           goodsLoading={goodsLoading}
           businessesLoading={businessesLoading}
-          setIncidentDateFilter={setIncidentDateFilter}
-          setCreatedAtFilter={setCreatedAtFilter}
-          variables={variables}
         />
       </Drawer>
       <Lightbox
