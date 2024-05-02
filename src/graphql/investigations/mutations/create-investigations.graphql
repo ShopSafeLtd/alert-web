@@ -4,6 +4,7 @@ mutation CreateInvestigation($data: CreateInvestigationInput!) {
     name
     description
     status
+    ...Investigations
     groups {
       id
       name

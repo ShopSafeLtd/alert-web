@@ -21413,7 +21413,7 @@ export type CreateInvestigationMutationVariables = Exact<{
 }>;
 
 
-export type CreateInvestigationMutation = { __typename?: 'Mutation', createInvestigation: { __typename?: 'Investigation', id: string, name: string, description?: string | null, status: InvestigationStatus, groups: Array<{ __typename?: 'Group', id: string, name: string }> } };
+export type CreateInvestigationMutation = { __typename?: 'Mutation', createInvestigation: { __typename?: 'Investigation', id: string, name: string, description?: string | null, status: InvestigationStatus, createdAt: Date, closedAt?: Date | null, reference?: number | null, groups: Array<{ __typename?: 'Group', id: string, name: string }> } };
 
 export type DeleteInvestigationMutationVariables = Exact<{
   id: Scalars['String'];
@@ -28078,13 +28078,14 @@ export const CreateInvestigationDocument = gql`
     name
     description
     status
+    ...Investigations
     groups {
       id
       name
     }
   }
 }
-    `;
+    ${InvestigationsFragmentDoc}`;
 export type CreateInvestigationMutationFn = Apollo.MutationFunction<CreateInvestigationMutation, CreateInvestigationMutationVariables>;
 export function useCreateInvestigationMutation(baseOptions?: Apollo.MutationHookOptions<CreateInvestigationMutation, CreateInvestigationMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
