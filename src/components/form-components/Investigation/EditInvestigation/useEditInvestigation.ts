@@ -5,13 +5,6 @@ import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 import type { InvestigationDetails } from 'types/DataType';
 
-export interface InvestigationData {
-  id?: string;
-  name?: string;
-  description?: string;
-  groupIds?: string[];
-}
-
 interface Props {
   onClose: () => void;
   investigationData: InvestigationDetails;
@@ -20,6 +13,13 @@ interface Props {
 interface Return {
   onSubmit: (value: InvestigationData) => void;
   saving: boolean;
+}
+
+export interface InvestigationData {
+  id?: string;
+  name?: string;
+  description?: string;
+  groupIds?: string[];
 }
 
 const useAddInvestigation = ({ onClose, investigationData }: Props): Return => {
