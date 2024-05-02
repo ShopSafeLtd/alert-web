@@ -9,6 +9,7 @@ export interface InvestigationData {
   id?: string;
   name?: string;
   description?: string;
+  groupIds?: string[];
 }
 
 interface Props {
@@ -49,12 +50,24 @@ const useAddInvestigation = ({ onClose, investigationData }: Props): Return => {
 
   const onSubmit = (data: InvestigationData) => {
     setSaving(true);
+
+    const initGroupIds = investigationData.groupIds || [];
+    const allGroupIds = data.groupIds || [];
+    const addedGroupIds = allGroupIds.filter(
+      (id) => !initGroupIds.includes(id)
+    );
+    const removedGroupIds = initGroupIds.filter(
+      (id) => !allGroupIds.includes(id)
+    );
+
     void updateInvestigation({
       variables: {
         where: { id: investigationData.id },
         data: {
           name: data.name || '',
           description: data.description,
+          groupIds: addedGroupIds,
+          groupIdsToRemove: removedGroupIds,
         },
       },
     });

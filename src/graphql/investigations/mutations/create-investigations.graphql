@@ -4,5 +4,9 @@ mutation CreateInvestigation($data: CreateInvestigationInput!) {
     name
     description
     status
+    groups {
+      id
+      name
+    }
   }
 }

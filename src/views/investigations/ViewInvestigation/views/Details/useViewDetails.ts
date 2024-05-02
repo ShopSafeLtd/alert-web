@@ -18,7 +18,7 @@ import { useEffect, useState } from 'react';
 import update from 'immutability-helper';
 import { Modal } from 'antd';
 import { useIntl } from 'react-intl';
-import { useStoreState } from '../../../../../state';
+import { useStoreState } from '#/state';
 
 const { confirm } = Modal;
 

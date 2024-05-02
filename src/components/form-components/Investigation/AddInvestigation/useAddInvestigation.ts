@@ -11,6 +11,7 @@ export interface InvestigationData {
   id?: string;
   name?: string;
   description?: string;
+  groupIds?: string[];
 }
 
 interface Props {
@@ -73,6 +74,7 @@ const useAddInvestigation = ({
           offenderId: offenderId || null,
           vehicleId: vehicleId || null,
           crimeGroupId: crimeGroupId || null,
+          groupIds: data.groupIds || [],
         },
       },
     });
