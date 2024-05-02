@@ -13,10 +13,30 @@ query listTodos(
       completed
       type
       vehicleId
+      vehicle {
+        id
+        reference
+      }
       offenderId
+      offender {
+        id
+        reference
+      }
       crimeGroupId
+      crimeGroup {
+        id
+        reference
+      }
       incidentId
+      incident {
+        id
+        reference
+      }
       investigationId
+      investigation {
+        id
+        reference
+      }
       chatId
       similarOffenderIds
       completedDate

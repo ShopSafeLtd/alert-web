@@ -52,6 +52,7 @@ describe('Detail Officer View', () => {
     peculiarities: '',
     compactView: false,
     tableView: false,
+    createdBy: [''],
   };
   it('renders the page', () => {
     const { getByText } = render(
