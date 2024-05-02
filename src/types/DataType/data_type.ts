@@ -175,6 +175,7 @@ export interface InvestigationDetails {
   id: string;
   name?: string;
   description?: string | null;
+  groupIds?: string[];
 }
 // image
 export interface ImageCardData {
