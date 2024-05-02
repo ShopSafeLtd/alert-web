@@ -10,6 +10,9 @@ query listInvestigationsAllSchemes(
       name
       description
       status
+      createdAt
+      closedAt
+      reference
       groups {
         id
         name

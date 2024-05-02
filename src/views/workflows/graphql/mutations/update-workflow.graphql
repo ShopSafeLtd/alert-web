@@ -3,6 +3,7 @@ mutation UpdateOneWorkflow(
   $where: WorkflowWhereUniqueInput!
 ) {
   updateOneWorkflow(data: $data, where: $where) {
+
     id
     name
     trigger

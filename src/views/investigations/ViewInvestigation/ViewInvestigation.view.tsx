@@ -132,6 +132,7 @@ interface Props {
   onCompletedEditOffender: () => void;
   updateAddOffenderList: MutationUpdaterFn<CreateSimpleOffenderMutation>;
   onCompletedAddOffender: () => void;
+  onReopenInvestigation: () => void;
 }
 
 const useStyles = createUseStyles({
@@ -225,6 +226,7 @@ const ViewInvestigation = ({
   onCompletedEditOffender,
   onCompletedAddOffender,
   updateAddOffenderList,
+  onReopenInvestigation,
 }: Props) => {
   const classes = useStyles();
   const intl = useIntl();
@@ -269,14 +271,8 @@ const ViewInvestigation = ({
               <Col>
                 <Button
                   style={{
-                    borderBottomRightRadius:
-                      data?.investigation.status === InvestigationStatus.Open
-                        ? 0
-                        : '.625rem',
-                    borderTopRightRadius:
-                      data?.investigation.status === InvestigationStatus.Open
-                        ? 0
-                        : '.625rem',
+                    borderBottomRightRadius: 0,
+                    borderTopRightRadius: 0,
                     borderBottomLeftRadius: 0,
                     borderTopLeftRadius: 0,
                   }}
@@ -328,6 +324,38 @@ const ViewInvestigation = ({
                     {intl.formatMessage({
                       defaultMessage: 'Close Investigation',
                       id: 'x/TlDy',
+                    })}
+                  </Button>
+                </Col>
+              )}
+              {data?.investigation.status === InvestigationStatus.Closed && (
+                <Col>
+                  <Button
+                    onClick={() => {
+                      confirm({
+                        title: intl.formatMessage({
+                          defaultMessage:
+                            'Do you want to reopen the investigation?',
+                          id: 'gDEfW1',
+                        }),
+                        onOk() {
+                          onReopenInvestigation();
+                        },
+                      });
+                    }}
+                    style={{
+                      borderBottomLeftRadius: 0,
+                      borderTopLeftRadius: 0,
+                    }}
+                  >
+                    <FontAwesomeIcon
+                      size="1x"
+                      style={{ marginRight: 8 }}
+                      icon={faCheckCircle}
+                    />
+                    {intl.formatMessage({
+                      defaultMessage: 'Reopen',
+                      id: '8ujEro',
                     })}
                   </Button>
                 </Col>

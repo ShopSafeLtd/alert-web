@@ -1,5 +1,14 @@
 import React from 'react';
-import { Button, Col, Drawer, Row, Table, Typography } from 'antd';
+import {
+  Button,
+  Col,
+  Drawer,
+  Row,
+  Table,
+  Typography,
+  Select,
+  Input,
+} from 'antd';
 import type {
   CreateInvestigationMutation,
   ListInvestigationsAllSchemesQuery,
@@ -10,6 +19,9 @@ import type { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router';
 import { FormattedMessage, useIntl } from 'react-intl';
 import GetInvestigationStatusValues from 'types/enums/investigation-status';
+import moment from 'moment';
+import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
+import { useStoreActions, useStoreState } from '#/state';
 import useStyles from './ListInvestigations.styles';
 import AddInvestigation from '../../../components/form-components/Investigation/AddInvestigation';
 
@@ -19,9 +31,8 @@ interface Props {
   addInvestigation: boolean;
   toggleAddInvestigation: () => void;
   updateInvestigationList: MutationUpdaterFn<CreateInvestigationMutation>;
-  takeAllSchemes: boolean;
-  setTakeAllSchemes: (value: boolean) => void;
 }
+
 const getTextStatus = (value: InvestigationStatus) => {
   if (value === InvestigationStatus.Open) return 'success';
   if (value === InvestigationStatus.Closed) return 'danger';
@@ -34,37 +45,108 @@ const ListInvestigations = ({
   addInvestigation,
   toggleAddInvestigation,
   updateInvestigationList,
-  takeAllSchemes,
-  setTakeAllSchemes,
 }: Props) => {
   const classes = useStyles();
   const navigate = useNavigate();
   const intl = useIntl();
+  const groupsFilter = useStoreState(
+    (state) => state.data.investigations.variables.groups
+  );
+  const statusFilter = useStoreState(
+    (state) => state.data.investigations.variables.status
+  );
+  const search = useStoreState(
+    (state) => state.data.investigations.variables.search
+  );
+  const setInvestigationGroupsFilter = useStoreActions(
+    (actions) => actions.data.setInvestigationGroupsFilter
+  );
+  const setInvestigationStatusFilter = useStoreActions(
+    (actions) => actions.data.setInvestigationStatusFilter
+  );
+  const setInvestigationSearch = useStoreActions(
+    (actions) => actions.data.setInvestigationSearch
+  );
 
   return (
     <div className={classes.page}>
-      <Row className={classes.headerRow}>
+      <Row className={classes.headerRow} gutter={8}>
         <Col>
-          <Button type="primary" onClick={toggleAddInvestigation}>
-            <FormattedMessage
-              defaultMessage="Add New Investigation"
-              id="QaKS9A"
-            />
-          </Button>
+          <Input
+            placeholder={intl.formatMessage({
+              id: 'l9jnOx',
+              defaultMessage: 'Search investigations...',
+            })}
+            style={{ width: 400 }}
+            value={search}
+            onChange={(e) => setInvestigationSearch(e.target.value)}
+            allowClear
+          />
+        </Col>
+        <Col>
+          <GroupsSelect
+            value={groupsFilter}
+            onChange={setInvestigationGroupsFilter}
+            allowClear
+            style={{ minWidth: 200, maxWidth: 400 }}
+            placeholder={intl.formatMessage({
+              id: 'aVKXev',
+              defaultMessage: 'Select groups...',
+            })}
+            mode="multiple"
+            maxTagCount={1}
+          />
+        </Col>
+        <Col>
+          <Select
+            allowClear
+            value={statusFilter}
+            onChange={setInvestigationStatusFilter}
+            mode="multiple"
+            style={{ width: 200 }}
+            placeholder={intl.formatMessage({
+              id: 'j79nzi',
+              defaultMessage: 'Select status...',
+            })}
+            options={[
+              {
+                value: InvestigationStatus.Open,
+                label: intl.formatMessage({
+                  defaultMessage: 'Open',
+                  id: 'JfG49w',
+                }),
+              },
+              {
+                value: InvestigationStatus.Closed,
+                label: intl.formatMessage({
+                  defaultMessage: 'Closed',
+                  id: 'Fv1ZSz',
+                }),
+              },
+            ]}
+          />
         </Col>
         <Col flex={1} />
         <Col>
-          <Button
-            type={takeAllSchemes ? 'text' : 'primary'}
-            onClick={() => setTakeAllSchemes(false)}
-            // disabled={saving}
-          >
-            {intl.formatMessage({
-              defaultMessage: 'Current Scheme',
-              id: 'qWFImB',
-            })}
+          <Button type="primary" onClick={toggleAddInvestigation}>
+            <FormattedMessage
+              defaultMessage="Create Investigation"
+              id="cihgU6"
+            />
           </Button>
         </Col>
+        {/* <Col> */}
+        {/*  <Button */}
+        {/*    type={takeAllSchemes ? 'text' : 'primary'} */}
+        {/*    onClick={() => setTakeAllSchemes(false)} */}
+        {/*    // disabled={saving} */}
+        {/*  > */}
+        {/*    {intl.formatMessage({ */}
+        {/*      defaultMessage: 'Current Scheme', */}
+        {/*      id: 'qWFImB', */}
+        {/*    })} */}
+        {/*  </Button> */}
+        {/* </Col> */}
         {/* <Col> */}
         {/*   <Button */}
         {/*     type={takeAllSchemes ? 'primary' : 'text'} */}
@@ -101,6 +183,9 @@ const ListInvestigations = ({
             description: investigation.description || '',
             status: investigation.status || InvestigationStatus.Open,
             groups: investigation.groups || [],
+            reference: investigation.reference,
+            createdAt: investigation.createdAt,
+            closedAt: investigation.closedAt,
           })
         )}
         loading={loading}
@@ -128,19 +213,36 @@ const ListInvestigations = ({
             ),
           },
           {
+            key: 'reference',
+            dataIndex: 'reference',
+            title: <FormattedMessage defaultMessage="Alert ID" id="k8ZNgH" />,
+          },
+          {
             key: 'status',
             dataIndex: 'status',
-            // width: 100,
-            // title: intl.formatMessage({
-            //   defaultMessage: 'Status',
-            //   id: 'tzMNF3',
-            // }),
             title: <FormattedMessage defaultMessage="Status" id="tzMNF3" />,
             render: (value: InvestigationStatus) => (
               <Typography.Text type={getTextStatus(value)}>
                 {GetInvestigationStatusValues[value]}
               </Typography.Text>
             ),
+          },
+          {
+            key: 'createdAt',
+            dataIndex: 'createdAt',
+            title: (
+              <FormattedMessage defaultMessage="Date Opened" id="zQ9i1N" />
+            ),
+            render: (value: string) => moment(value).format('DD/MM/YYYY'),
+          },
+          {
+            key: 'closedAt',
+            dataIndex: 'closedAt',
+            title: (
+              <FormattedMessage defaultMessage="Date Closed" id="CkpoSI" />
+            ),
+            render: (value: string) =>
+              value ? moment(value).format('DD/MM/YYYY') : undefined,
           },
           {
             key: 'groups',

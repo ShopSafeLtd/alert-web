@@ -9,8 +9,6 @@ const ListInvestigations = () => {
     addInvestigation,
     toggleAddInvestigation,
     updateInvestigationList,
-    takeAllSchemes,
-    setTakeAllSchemes,
   } = useListInvestigations();
 
   return (
@@ -20,8 +18,6 @@ const ListInvestigations = () => {
       addInvestigation={addInvestigation}
       toggleAddInvestigation={toggleAddInvestigation}
       updateInvestigationList={updateInvestigationList}
-      takeAllSchemes={takeAllSchemes}
-      setTakeAllSchemes={setTakeAllSchemes}
     />
   );
 };

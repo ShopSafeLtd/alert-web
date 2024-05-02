@@ -9,6 +9,7 @@ import type {
   Model,
   Race,
   Role,
+  InvestigationStatus,
 } from 'graphql/generated';
 import { IncidentPriority, SortOrder } from 'graphql/generated';
 import type { DateType } from 'types/DataType';
@@ -204,6 +205,11 @@ interface CrimeGroups {
 
 interface Investigations {
   takeAllSchemes: boolean;
+  variables: {
+    groups: string[];
+    status: InvestigationStatus[];
+    search: string;
+  };
 }
 
 export interface DataModel {
@@ -222,6 +228,10 @@ export interface DataModel {
   setVehicles: Action<DataModel, Vehicles>;
   setCrimeGroups: Action<DataModel, CrimeGroups>;
   setInvestigations: Action<DataModel, Investigations>;
+  setInvestigationGroupsFilter: Action<DataModel, string[]>;
+  setInvestigationStatusFilter: Action<DataModel, InvestigationStatus[]>;
+  setInvestigationSearch: Action<DataModel, string>;
+  setInvestigationTakeAllSchemes: Action<DataModel, boolean>;
 }
 
 const dataModel: DataModel = {
@@ -364,10 +374,25 @@ const dataModel: DataModel = {
     state.crimeGroups = payload;
   }),
 
-  investigations: { takeAllSchemes: false },
+  investigations: {
+    takeAllSchemes: false,
+    variables: { groups: [], status: [], search: '' },
+  },
 
   setInvestigations: action((state, payload) => {
     state.investigations = payload;
+  }),
+  setInvestigationTakeAllSchemes: action((state, payload) => {
+    state.investigations.takeAllSchemes = payload;
+  }),
+  setInvestigationSearch: action((state, payload) => {
+    state.investigations.variables.search = payload || '';
+  }),
+  setInvestigationGroupsFilter: action((state, payload) => {
+    state.investigations.variables.groups = payload || [];
+  }),
+  setInvestigationStatusFilter: action((state, payload) => {
+    state.investigations.variables.status = payload || [];
   }),
 };
 
