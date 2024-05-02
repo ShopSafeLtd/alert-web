@@ -690,12 +690,6 @@ export type Answer = {
   updatedAt: Scalars['Date'];
 };
 
-export type AnswerCount = {
-  __typename?: 'AnswerCount';
-  answer: Scalars['String'];
-  count: Scalars['Int'];
-};
-
 export type AnswerListRelationFilter = {
   every?: InputMaybe<AnswerWhereInput>;
   none?: InputMaybe<AnswerWhereInput>;
@@ -4361,6 +4355,7 @@ export type DocumentWhereInput = {
   tags?: InputMaybe<TagListRelationFilter>;
   thumbnailUrl?: InputMaybe<StringNullableFilter>;
   todos?: InputMaybe<TodoListRelationFilter>;
+  type?: InputMaybe<EnumDocumentTypeFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   url?: InputMaybe<StringFilter>;
   vehicles?: InputMaybe<VehicleListRelationFilter>;
@@ -4634,6 +4629,13 @@ export type EnumCsvTypeWithAggregatesFilter = {
   in?: InputMaybe<Array<CsvType>>;
   not?: InputMaybe<CsvType>;
   notIn?: InputMaybe<Array<CsvType>>;
+};
+
+export type EnumDocumentTypeFilter = {
+  equals?: InputMaybe<DocumentType>;
+  in?: InputMaybe<Array<DocumentType>>;
+  not?: InputMaybe<DocumentType>;
+  notIn?: InputMaybe<Array<DocumentType>>;
 };
 
 export type EnumFeedItemTypeFieldUpdateOperationsInput = {
@@ -12740,7 +12742,6 @@ export type Query = {
   chatMessages: Array<MessageItem>;
   chats: Array<Chat>;
   checklist: Checklist;
-  checklistQuestionCounts: Array<QuestionAnswerCount>;
   checklists: Array<Checklist>;
   compareFaces: SystemTask;
   crimeGroup: CrimeGroup;
@@ -12750,6 +12751,7 @@ export type Query = {
   customGallery: CustomGallery;
   dashboard: Dashboard;
   dashboards: QueryDashboardsConnection;
+  documents: QueryDocumentsConnection;
   feedItem: FeedItem;
   feedItems: Array<FeedItem>;
   goodsTypes: Array<GoodsType>;
@@ -13013,11 +13015,6 @@ export type QueryChecklistArgs = {
 };
 
 
-export type QueryChecklistQuestionCountsArgs = {
-  where: ActiveChecklistWhereInput;
-};
-
-
 export type QueryChecklistsArgs = {
   order?: InputMaybe<ChecklistOrderByWithRelationInput>;
   skip?: InputMaybe<Scalars['Int']>;
@@ -13060,6 +13057,19 @@ export type QueryDashboardsArgs = {
   scheme: SchemeWhereUniqueInput;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type QueryDocumentsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  cursor?: InputMaybe<DocumentWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<DocumentOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<DocumentWhereInput>;
 };
 
 
@@ -13856,6 +13866,19 @@ export type QueryDashboardsConnectionEdge = {
   node: Dashboard;
 };
 
+export type QueryDocumentsConnection = {
+  __typename?: 'QueryDocumentsConnection';
+  edges: Array<QueryDocumentsConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryDocumentsConnectionEdge = {
+  __typename?: 'QueryDocumentsConnectionEdge';
+  cursor: Scalars['String'];
+  node: Document;
+};
+
 export type QueryIncidentsRelayConnection = {
   __typename?: 'QueryIncidentsRelayConnection';
   edges: Array<QueryIncidentsRelayConnectionEdge>;
@@ -13951,12 +13974,6 @@ export type Question = {
   tags: Array<TagQuestion>;
   type: AnswerType;
   updatedAt: Scalars['Date'];
-};
-
-export type QuestionAnswerCount = {
-  __typename?: 'QuestionAnswerCount';
-  answers: Array<AnswerCount>;
-  question: Scalars['String'];
 };
 
 export type QuestionGroup = {
@@ -15755,6 +15772,7 @@ export type SchemeUpdateInput = {
   defaultPublicOffenderDOB?: InputMaybe<SetBooleanHelper>;
   defaultSubscribedIncidentOnly?: InputMaybe<SetBooleanHelper>;
   defaultSubscribedOffenderOnly?: InputMaybe<SetBooleanHelper>;
+  facialDetection?: InputMaybe<SetBooleanHelper>;
   facialRecognition?: InputMaybe<SetBooleanHelper>;
   goodsMode?: InputMaybe<EnumGoodsModeFieldUpdateOperationsInput>;
   imagesRequiredOnOffenders?: InputMaybe<SetBooleanHelper>;
@@ -15806,6 +15824,7 @@ export type SchemeWhereInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFilter>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFilter>;
   documents?: InputMaybe<DocumentListRelationFilter>;
+  facialDetection?: InputMaybe<BoolFilter>;
   facialRecognition?: InputMaybe<BoolFilter>;
   feedItems?: InputMaybe<FeedItemListRelationFilter>;
   goodsMode?: InputMaybe<EnumGoodsModeFilter>;
@@ -22776,6 +22795,16 @@ export type ExportFiltersQueryVariables = Exact<{
 
 
 export type ExportFiltersQuery = { __typename?: 'Query', scheme: { __typename?: 'Scheme', groups: Array<{ __typename?: 'Group', id: string, name: string }>, businesses: Array<{ __typename?: 'Business', id: string, name: string }>, schemeTags: Array<{ __typename?: 'Tag', id: string, name: string }> } };
+
+export type DocumentsQueryVariables = Exact<{
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<DocumentOrderByWithRelationInput> | DocumentOrderByWithRelationInput>;
+  where?: InputMaybe<DocumentWhereInput>;
+}>;
+
+
+export type DocumentsQuery = { __typename?: 'Query', documents: { __typename?: 'QueryDocumentsConnection', totalCount: number, edges: Array<{ __typename?: 'QueryDocumentsConnectionEdge', node: { __typename?: 'Document', id: string, name: string, url: string, fileType?: FileType | null, tags: Array<{ __typename?: 'Tag', id: string, name: string }> } }> } };
 
 export type ListDemEvidenceExtendedWithoutUserQueryVariables = Exact<{
   where: Scalars['String'];
@@ -34534,6 +34563,36 @@ export function useExportFiltersLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type ExportFiltersQueryHookResult = ReturnType<typeof useExportFiltersQuery>;
 export type ExportFiltersLazyQueryHookResult = ReturnType<typeof useExportFiltersLazyQuery>;
 export type ExportFiltersQueryResult = Apollo.QueryResult<ExportFiltersQuery, ExportFiltersQueryVariables>;
+export const DocumentsDocument = gql`
+    query Documents($skip: Int, $take: Int, $orderBy: [DocumentOrderByWithRelationInput!], $where: DocumentWhereInput) {
+  documents(skip: $skip, take: $take, orderBy: $orderBy, where: $where) {
+    totalCount
+    edges {
+      node {
+        id
+        name
+        url
+        fileType
+        tags {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+    `;
+export function useDocumentsQuery(baseOptions?: Apollo.QueryHookOptions<DocumentsQuery, DocumentsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<DocumentsQuery, DocumentsQueryVariables>(DocumentsDocument, options);
+      }
+export function useDocumentsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DocumentsQuery, DocumentsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<DocumentsQuery, DocumentsQueryVariables>(DocumentsDocument, options);
+        }
+export type DocumentsQueryHookResult = ReturnType<typeof useDocumentsQuery>;
+export type DocumentsLazyQueryHookResult = ReturnType<typeof useDocumentsLazyQuery>;
+export type DocumentsQueryResult = Apollo.QueryResult<DocumentsQuery, DocumentsQueryVariables>;
 export const ListDemEvidenceExtendedWithoutUserDocument = gql`
     query listDemEvidenceExtendedWithoutUser($where: String!, $skip: Int, $take: Int) {
   listDemEvidenceExtendedWithoutUser(where: $where, skip: $skip, take: $take) {

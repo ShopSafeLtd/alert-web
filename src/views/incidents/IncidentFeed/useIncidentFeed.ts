@@ -242,6 +242,7 @@ const useIncidentFeed = (): Return => {
                     mode: QueryMode.Insensitive,
                   },
                 },
+
                 {
                   referenceStr: {
                     contains: search,

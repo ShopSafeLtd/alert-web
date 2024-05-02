@@ -12,6 +12,7 @@ interface Props {
   vehicleId?: string | null;
   crimeGroupId?: string | null;
   update?: MutationUpdaterFn<CreateDocumentMutation> | undefined;
+  isEvidence?: boolean;
 }
 
 const AddDocument = memo(
@@ -23,6 +24,7 @@ const AddDocument = memo(
     vehicleId,
     crimeGroupId,
     update,
+    isEvidence,
   }: Props) => {
     const {
       onSubmit,
@@ -40,6 +42,7 @@ const AddDocument = memo(
       vehicleId,
       crimeGroupId,
       update,
+      isEvidence,
     });
 
     return (

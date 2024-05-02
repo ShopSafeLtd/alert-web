@@ -136,7 +136,6 @@ const ListVehicles = ({
             <Dropdown
               overlay={menu}
               placement="bottom"
-              trigger={['contextMenu']}
               arrow={{ pointAtCenter: true }}
             >
               <Button className={classes.selectBox}>

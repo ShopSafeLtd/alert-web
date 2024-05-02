@@ -8,6 +8,7 @@ import type {
   ViewInvestigationQueryVariables,
 } from 'graphql/generated';
 import {
+  DocumentType,
   ListDocumentsOnSchemeDocument,
   Model,
   useCreateDocumentMutation,
@@ -34,6 +35,7 @@ interface Props {
   vehicleId?: string | null;
   crimeGroupId?: string | null;
   update?: MutationUpdaterFn<CreateDocumentMutation> | undefined;
+  isEvidence?: boolean;
 }
 
 interface Return {
@@ -54,6 +56,7 @@ const useAddDocument = ({
   vehicleId,
   crimeGroupId,
   update,
+  isEvidence,
 }: Props): Return => {
   const currentScheme = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
@@ -265,6 +268,7 @@ const useAddDocument = ({
               crimeGroupId
                 ? undefined
                 : currentScheme,
+            type: isEvidence ? DocumentType.Evidence : undefined,
             name: values.name,
             url: fileList[0].url || '',
             tags: selectedCategoryIds,
@@ -293,7 +297,6 @@ const useAddDocument = ({
     });
 
     setFileList(newFileList);
-    console.log('fi', fileList);
   };
 
   const documentUploadProps: UploadProps = {

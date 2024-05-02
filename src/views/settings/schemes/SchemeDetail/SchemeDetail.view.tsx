@@ -8,6 +8,7 @@ import {
   Col,
   Form,
   Input,
+  Radio,
   Row,
   Select,
   Skeleton,
@@ -250,40 +251,36 @@ const SchemeDetail = ({
               </Col>
             </Row>
 
-            <Row>
-              <Col span={15}>
-                <Form.Item
-                  label={intl.formatMessage({
-                    defaultMessage: 'Auto Approve Incident',
-                    id: 'Qym1cU',
-                  })}
-                  name="autoApproveIncidents"
-                  valuePropName="checked"
-                  style={{ marginBottom: 0 }}
-                >
-                  <Switch
-                    disabled={saving}
-                    style={{ marginLeft: 5 }}
-                    className="scheme-detail-switch"
-                  />
-                </Form.Item>
-                <Form.Item
-                  name="autoApproveOffenders"
-                  label={intl.formatMessage({
-                    defaultMessage: 'Auto Approve Offenders',
-                    id: 'FID+qO',
-                  })}
-                  valuePropName="checked"
-                  style={{ marginBottom: 0 }}
-                >
-                  <Switch
-                    disabled={saving}
-                    style={{ marginLeft: 5 }}
-                    className="scheme-detail-switch"
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Auto Approve Incident',
+                id: 'Qym1cU',
+              })}
+              name="autoApproveIncidents"
+              valuePropName="checked"
+              style={{ marginBottom: 0 }}
+            >
+              <Switch
+                disabled={saving}
+                style={{ marginLeft: 5 }}
+                className="scheme-detail-switch"
+              />
+            </Form.Item>
+            <Form.Item
+              name="autoApproveOffenders"
+              label={intl.formatMessage({
+                defaultMessage: 'Auto Approve Offenders',
+                id: 'FID+qO',
+              })}
+              valuePropName="checked"
+              style={{ marginBottom: 0 }}
+            >
+              <Switch
+                disabled={saving}
+                style={{ marginLeft: 5 }}
+                className="scheme-detail-switch"
+              />
+            </Form.Item>
           </Card>
 
           <Card>
@@ -311,8 +308,8 @@ const SchemeDetail = ({
               </Col>
             </Row>
 
-            <Row>
-              <Col span={6}>
+            <Row gutter={16} wrap={false}>
+              <Col span={7}>
                 <Form.Item
                   name="incidentRetention"
                   label={intl.formatMessage({
@@ -348,7 +345,7 @@ const SchemeDetail = ({
                   <Select options={options} disabled={saving} />
                 </Form.Item>
               </Col>
-              <Col span={16} style={{ marginLeft: 10 }}>
+              <Col span={16}>
                 <Space direction="vertical">
                   <Text>
                     <ExclamationCircleOutlined
@@ -385,26 +382,22 @@ const SchemeDetail = ({
                 </Space>
               </Col>
             </Row>
-            <Row>
-              <Col span={24}>
-                <Text>
-                  {intl.formatMessage({
-                    defaultMessage:
-                      'In accordance with your data protection obligations, data must only be retained for as long as it is relevant. It is your responsibility to determine that period of time.',
-                    id: 'wBeTSd',
-                  })}
-                </Text>
-              </Col>
-              <Col span={24}>
-                <Text strong>
-                  {intl.formatMessage({
-                    defaultMessage:
-                      'If you elect to disable auto-deletion, you must manually remove data which is no longer relevant.',
-                    id: 'rOMPXq',
-                  })}
-                </Text>
-              </Col>
-            </Row>
+
+            <Paragraph style={{ marginBottom: 5 }}>
+              {intl.formatMessage({
+                defaultMessage:
+                  'In accordance with your data protection obligations, data must only be retained for as long as it is relevant. It is your responsibility to determine that period of time.',
+                id: 'wBeTSd',
+              })}
+            </Paragraph>
+
+            <Paragraph strong style={{ marginBottom: 0 }}>
+              {intl.formatMessage({
+                defaultMessage:
+                  'If you elect to disable auto-deletion, you must manually remove data which is no longer relevant.',
+                id: 'rOMPXq',
+              })}
+            </Paragraph>
           </Card>
 
           <Card>
@@ -432,180 +425,175 @@ const SchemeDetail = ({
               </Col>
             </Row>
 
-            <Row>
-              <Col span={15}>
-                <Form.Item
-                  label={intl.formatMessage({
-                    defaultMessage:
-                      'Allow users to search for business by site number.',
-                    id: 'yUl6L3',
-                  })}
-                  name="requireSiteNumberForUsers"
-                  valuePropName="checked"
-                  style={{ marginBottom: 0 }}
-                >
-                  <Switch
-                    disabled={saving}
-                    style={{ marginLeft: 5 }}
-                    className="scheme-detail-switch"
-                  />
-                </Form.Item>
-                <Form.Item
-                  label={intl.formatMessage({
-                    defaultMessage:
-                      'Only one incident type can be selected when creating a new incident.',
-                    id: 'x6f2Vl',
-                  })}
-                  name="oneSelectedIncidentTypeOnly"
-                  valuePropName="checked"
-                  style={{ marginBottom: 0 }}
-                >
-                  <Switch
-                    disabled={saving}
-                    style={{ marginLeft: 5 }}
-                    className="scheme-detail-switch"
-                  />
-                </Form.Item>
-                <Form.Item
-                  label={intl.formatMessage({
-                    defaultMessage:
-                      'Only notify users for their own and subscribed incidents',
-                    id: 'ycBHr2',
-                  })}
-                  name="defaultSubscribedIncidentOnly"
-                  valuePropName="checked"
-                  style={{ marginBottom: 0 }}
-                >
-                  <Switch
-                    disabled={saving}
-                    style={{ marginLeft: 5 }}
-                    className="scheme-detail-switch"
-                  />
-                </Form.Item>
-                <Form.Item
-                  label={intl.formatMessage({
-                    defaultMessage: 'Send app notifications for incidents',
-                    id: 'BX6Fot',
-                  })}
-                  name="defaultIncidentPush"
-                  valuePropName="checked"
-                  style={{ marginBottom: 0 }}
-                >
-                  <Switch
-                    disabled={saving}
-                    style={{ marginLeft: 5 }}
-                    className="scheme-detail-switch"
-                  />
-                </Form.Item>
-                <Form.Item
-                  label={intl.formatMessage({
-                    defaultMessage: 'Send emails for incidents',
-                    id: 'n0Vms/',
-                  })}
-                  name="defaultIncidentEmail"
-                  valuePropName="checked"
-                  style={{ marginBottom: 0 }}
-                >
-                  <Switch
-                    disabled={saving}
-                    style={{ marginLeft: 5 }}
-                    className="scheme-detail-switch"
-                  />
-                </Form.Item>
-                <Form.Item
-                  name="defaultSubscribedOffenderOnly"
-                  label={intl.formatMessage({
-                    defaultMessage:
-                      'Only notify users for their own and subscribed offenders',
-                    id: '++aMeS',
-                  })}
-                  valuePropName="checked"
-                  style={{ marginBottom: 0 }}
-                >
-                  <Switch
-                    disabled={saving}
-                    style={{ marginLeft: 5 }}
-                    className="scheme-detail-switch"
-                  />
-                </Form.Item>
-                <Form.Item
-                  name="defaultOffenderPush"
-                  label={intl.formatMessage({
-                    defaultMessage: 'Send app notifications for offenders',
-                    id: 'G0RzJg',
-                  })}
-                  valuePropName="checked"
-                  style={{ marginBottom: 0 }}
-                >
-                  <Switch
-                    disabled={saving}
-                    style={{ marginLeft: 5 }}
-                    className="scheme-detail-switch"
-                  />
-                </Form.Item>
-                <Form.Item
-                  name="defaultOffenderEmail"
-                  label={intl.formatMessage({
-                    defaultMessage: 'Send emails for offenders',
-                    id: 'nsomX/',
-                  })}
-                  valuePropName="checked"
-                  style={{ marginBottom: 0 }}
-                >
-                  <Switch
-                    disabled={saving}
-                    style={{ marginLeft: 5 }}
-                    className="scheme-detail-switch"
-                  />
-                </Form.Item>
-                <Form.Item
-                  label={intl.formatMessage({
-                    defaultMessage: 'Send app notifications for bulletins',
-                    id: 'Bxzk3Z',
-                  })}
-                  name="defaultBulletinPush"
-                  valuePropName="checked"
-                  style={{ marginBottom: 0 }}
-                >
-                  <Switch
-                    disabled={saving}
-                    style={{ marginLeft: 5 }}
-                    className="scheme-detail-switch"
-                  />
-                </Form.Item>
-                <Form.Item
-                  label={intl.formatMessage({
-                    defaultMessage: 'Send emails for bulletins',
-                    id: 'q0g/bf',
-                  })}
-                  name="defaultBulletinEmails"
-                  valuePropName="checked"
-                  style={{ marginBottom: 0 }}
-                >
-                  <Switch
-                    disabled={saving}
-                    style={{ marginLeft: 5 }}
-                    className="scheme-detail-switch"
-                  />
-                </Form.Item>
-                <Form.Item
-                  name="defaultMessagePush"
-                  label={intl.formatMessage({
-                    defaultMessage:
-                      'Send app notifications for new chat messages',
-                    id: '0UFWIV',
-                  })}
-                  valuePropName="checked"
-                  style={{ marginBottom: 0 }}
-                >
-                  <Switch
-                    disabled={saving}
-                    style={{ marginLeft: 5 }}
-                    className="scheme-detail-switch"
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage:
+                  'Allow users to search for business by site number.',
+                id: 'yUl6L3',
+              })}
+              name="requireSiteNumberForUsers"
+              valuePropName="checked"
+              style={{ marginBottom: 0 }}
+            >
+              <Switch
+                disabled={saving}
+                style={{ marginLeft: 5 }}
+                className="scheme-detail-switch"
+              />
+            </Form.Item>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage:
+                  'Only one incident type can be selected when creating a new incident.',
+                id: 'x6f2Vl',
+              })}
+              name="oneSelectedIncidentTypeOnly"
+              valuePropName="checked"
+              style={{ marginBottom: 0 }}
+            >
+              <Switch
+                disabled={saving}
+                style={{ marginLeft: 5 }}
+                className="scheme-detail-switch"
+              />
+            </Form.Item>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage:
+                  'Only notify users for their own and subscribed incidents',
+                id: 'ycBHr2',
+              })}
+              name="defaultSubscribedIncidentOnly"
+              valuePropName="checked"
+              style={{ marginBottom: 0 }}
+            >
+              <Switch
+                disabled={saving}
+                style={{ marginLeft: 5 }}
+                className="scheme-detail-switch"
+              />
+            </Form.Item>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Send app notifications for incidents',
+                id: 'BX6Fot',
+              })}
+              name="defaultIncidentPush"
+              valuePropName="checked"
+              style={{ marginBottom: 0 }}
+            >
+              <Switch
+                disabled={saving}
+                style={{ marginLeft: 5 }}
+                className="scheme-detail-switch"
+              />
+            </Form.Item>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Send emails for incidents',
+                id: 'n0Vms/',
+              })}
+              name="defaultIncidentEmail"
+              valuePropName="checked"
+              style={{ marginBottom: 0 }}
+            >
+              <Switch
+                disabled={saving}
+                style={{ marginLeft: 5 }}
+                className="scheme-detail-switch"
+              />
+            </Form.Item>
+            <Form.Item
+              name="defaultSubscribedOffenderOnly"
+              label={intl.formatMessage({
+                defaultMessage:
+                  'Only notify users for their own and subscribed offenders',
+                id: '++aMeS',
+              })}
+              valuePropName="checked"
+              style={{ marginBottom: 0 }}
+            >
+              <Switch
+                disabled={saving}
+                style={{ marginLeft: 5 }}
+                className="scheme-detail-switch"
+              />
+            </Form.Item>
+            <Form.Item
+              name="defaultOffenderPush"
+              label={intl.formatMessage({
+                defaultMessage: 'Send app notifications for offenders',
+                id: 'G0RzJg',
+              })}
+              valuePropName="checked"
+              style={{ marginBottom: 0 }}
+            >
+              <Switch
+                disabled={saving}
+                style={{ marginLeft: 5 }}
+                className="scheme-detail-switch"
+              />
+            </Form.Item>
+            <Form.Item
+              name="defaultOffenderEmail"
+              label={intl.formatMessage({
+                defaultMessage: 'Send emails for offenders',
+                id: 'nsomX/',
+              })}
+              valuePropName="checked"
+              style={{ marginBottom: 0 }}
+            >
+              <Switch
+                disabled={saving}
+                style={{ marginLeft: 5 }}
+                className="scheme-detail-switch"
+              />
+            </Form.Item>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Send app notifications for bulletins',
+                id: 'Bxzk3Z',
+              })}
+              name="defaultBulletinPush"
+              valuePropName="checked"
+              style={{ marginBottom: 0 }}
+            >
+              <Switch
+                disabled={saving}
+                style={{ marginLeft: 5 }}
+                className="scheme-detail-switch"
+              />
+            </Form.Item>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Send emails for bulletins',
+                id: 'q0g/bf',
+              })}
+              name="defaultBulletinEmails"
+              valuePropName="checked"
+              style={{ marginBottom: 0 }}
+            >
+              <Switch
+                disabled={saving}
+                style={{ marginLeft: 5 }}
+                className="scheme-detail-switch"
+              />
+            </Form.Item>
+            <Form.Item
+              name="defaultMessagePush"
+              label={intl.formatMessage({
+                defaultMessage: 'Send app notifications for new chat messages',
+                id: '0UFWIV',
+              })}
+              valuePropName="checked"
+              style={{ marginBottom: 0 }}
+            >
+              <Switch
+                disabled={saving}
+                style={{ marginLeft: 5 }}
+                className="scheme-detail-switch"
+              />
+            </Form.Item>
           </Card>
 
           <Card>
@@ -615,44 +603,40 @@ const SchemeDetail = ({
                 id: '0f4k8n',
               })}
             </Title>
-            <Row>
-              <Col span={15}>
-                <Form.Item
-                  label={intl.formatMessage({
-                    defaultMessage:
-                      'Allow users to report(no access to view any content)',
-                    id: '4N0N30',
-                  })}
-                  name="reportOnly"
-                  valuePropName="checked"
-                  style={{ marginBottom: 0 }}
-                >
-                  <Switch
-                    disabled={saving}
-                    style={{ marginLeft: 5 }}
-                    className="scheme-detail-switch"
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={15}>
-                <Form.Item
-                  label={intl.formatMessage({
-                    defaultMessage:
-                      'Allow users to search for business by site number',
-                    id: '5m2FVN',
-                  })}
-                  name="reportOnly"
-                  valuePropName="checked"
-                  style={{ marginBottom: 0 }}
-                >
-                  <Switch
-                    disabled={saving}
-                    style={{ marginLeft: 5 }}
-                    className="scheme-detail-switch"
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
+
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage:
+                  'Allow users to report(no access to view any content)',
+                id: '4N0N30',
+              })}
+              name="reportOnly"
+              valuePropName="checked"
+              style={{ marginBottom: 0 }}
+            >
+              <Switch
+                disabled={saving}
+                style={{ marginLeft: 5 }}
+                className="scheme-detail-switch"
+              />
+            </Form.Item>
+
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage:
+                  'Allow users to search for business by site number',
+                id: '5m2FVN',
+              })}
+              name="reportOnly"
+              valuePropName="checked"
+              style={{ marginBottom: 0 }}
+            >
+              <Switch
+                disabled={saving}
+                style={{ marginLeft: 5 }}
+                className="scheme-detail-switch"
+              />
+            </Form.Item>
           </Card>
           <Card>
             <Title level={4}>
@@ -666,79 +650,72 @@ const SchemeDetail = ({
                 created in the scheme.
               </Text> */}
 
-            <Row>
-              <Col span={15}>
-                <Form.Item
-                  label={intl.formatMessage({
-                    defaultMessage: 'Date of birth of offenders are visible',
-                    id: '0rgxT7',
-                  })}
-                  name="defaultPublicOffenderDOB"
-                  valuePropName="checked"
-                  style={{ marginBottom: 0 }}
-                >
-                  <Switch
-                    disabled={saving}
-                    style={{ marginLeft: 5 }}
-                    className="scheme-detail-switch"
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={15}>
-                <Form.Item
-                  label={intl.formatMessage({
-                    defaultMessage:
-                      'Faces of offenders are available for recognition',
-                    id: 'tFYz4Z',
-                  })}
-                  name="facialRecognition"
-                  valuePropName="checked"
-                  style={{ marginBottom: 0 }}
-                >
-                  <Switch
-                    disabled={saving}
-                    style={{ marginLeft: 5 }}
-                    className="scheme-detail-switch"
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={15}>
-                <Form.Item
-                  label={intl.formatMessage({
-                    defaultMessage:
-                      'Images of offenders are required for identification',
-                    id: 'dOQCOj',
-                  })}
-                  name="imagesRequiredOnOffenders"
-                  valuePropName="checked"
-                  style={{ marginBottom: 0 }}
-                >
-                  <Switch
-                    disabled={saving}
-                    style={{ marginLeft: 5 }}
-                    className="scheme-detail-switch"
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={15}>
-                <Form.Item
-                  label={intl.formatMessage({
-                    defaultMessage:
-                      'Justification is required for offenders without an incident',
-                    id: 'XOl7FF',
-                  })}
-                  name="needJustification"
-                  valuePropName="checked"
-                  style={{ marginBottom: 0 }}
-                >
-                  <Switch
-                    disabled={saving}
-                    style={{ marginLeft: 5 }}
-                    className="scheme-detail-switch"
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Date of birth of offenders are visible',
+                id: '0rgxT7',
+              })}
+              name="defaultPublicOffenderDOB"
+              valuePropName="checked"
+              style={{ marginBottom: 0 }}
+            >
+              <Switch
+                disabled={saving}
+                style={{ marginLeft: 5 }}
+                className="scheme-detail-switch"
+              />
+            </Form.Item>
+
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage:
+                  'Faces of offenders are available for recognition',
+                id: 'tFYz4Z',
+              })}
+              name="facialRecognition"
+              valuePropName="checked"
+              style={{ marginBottom: 0 }}
+            >
+              <Switch
+                disabled={saving}
+                style={{ marginLeft: 5 }}
+                className="scheme-detail-switch"
+              />
+            </Form.Item>
+
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage:
+                  'Images of offenders are required for identification',
+                id: 'dOQCOj',
+              })}
+              name="imagesRequiredOnOffenders"
+              valuePropName="checked"
+              style={{ marginBottom: 0 }}
+            >
+              <Switch
+                disabled={saving}
+                style={{ marginLeft: 5 }}
+                className="scheme-detail-switch"
+              />
+            </Form.Item>
+
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage:
+                  'Justification is required for offenders without an incident',
+                id: 'XOl7FF',
+              })}
+              name="needJustification"
+              valuePropName="checked"
+              style={{ marginBottom: 0 }}
+            >
+              <Switch
+                disabled={saving}
+                style={{ marginLeft: 5 }}
+                className="scheme-detail-switch"
+              />
+            </Form.Item>
           </Card>
           <Card>
             <Title level={4}>
@@ -752,47 +729,80 @@ const SchemeDetail = ({
                 created in the scheme.
               </Text> */}
 
-            <Row>
-              <Col span={6}>
-                <Form.Item
-                  label={intl.formatMessage({
-                    defaultMessage: 'Restrict users access to Incidents',
-                    id: 'FnEGyH',
+            {/* <Row>
+              <Col span={6}> */}
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Restrict users access to Incidents',
+                id: 'FnEGyH',
+              })}
+              name="restrictIncidentAccess"
+              valuePropName="checked"
+              style={{ marginBottom: 0 }}
+            >
+              <Switch
+                disabled={saving}
+                style={{ marginLeft: 5 }}
+                className="scheme-detail-switch"
+              />
+            </Form.Item>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Auto populate description',
+                id: '3BrT8L',
+              })}
+              name="autoPopulateDescription"
+              valuePropName="checked"
+              style={{ marginBottom: 0 }}
+            >
+              <Switch
+                disabled={saving}
+                style={{ marginLeft: 5 }}
+                className="scheme-detail-switch"
+              />
+            </Form.Item>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: `Images of incident are available for offenders' faces detection`,
+                id: 'C9IU0k',
+              })}
+              name="facialDetection"
+              valuePropName="checked"
+              style={{ marginBottom: 0 }}
+            >
+              <Switch
+                disabled={saving}
+                style={{ marginLeft: 5 }}
+                className="scheme-detail-switch"
+              />
+            </Form.Item>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Goods Mode',
+                id: '1Hqwa+',
+              })}
+              name="goodsMode"
+              style={{ marginBottom: 0 }}
+            >
+              <Radio.Group disabled={saving}>
+                <Radio.Button key={GoodsMode.Generic} value={GoodsMode.Generic}>
+                  {intl.formatMessage({
+                    defaultMessage: 'Generic',
+                    id: 'IL4EQo',
                   })}
-                  name="restrictIncidentAccess"
-                  valuePropName="checked"
-                  style={{ marginBottom: 0 }}
+                </Radio.Button>
+                <Radio.Button
+                  key={GoodsMode.Specific}
+                  value={GoodsMode.Specific}
                 >
-                  <Switch
-                    disabled={saving}
-                    style={{ marginLeft: 5 }}
-                    className="scheme-detail-switch"
-                  />
-                </Form.Item>
-                <Form.Item
-                  label={intl.formatMessage({
-                    defaultMessage: 'Auto populate description',
-                    id: '3BrT8L',
+                  {intl.formatMessage({
+                    defaultMessage: 'Specific',
+                    id: 'Ky5YNj',
                   })}
-                  name="autoPopulateDescription"
-                  valuePropName="checked"
-                  style={{ marginBottom: 0 }}
-                >
-                  <Switch
-                    disabled={saving}
-                    style={{ marginLeft: 5 }}
-                    className="scheme-detail-switch"
-                  />
-                </Form.Item>
-                <Form.Item
-                  label={intl.formatMessage({
-                    defaultMessage: 'Goods Mode',
-                    id: '1Hqwa+',
-                  })}
-                  name="goodsMode"
-                  style={{ marginBottom: 0 }}
-                >
-                  <Select disabled={saving}>
+                </Radio.Button>
+              </Radio.Group>
+
+              {/* <Select disabled={saving}>
                     <Select.Option
                       key={GoodsMode.Generic}
                       value={GoodsMode.Generic}
@@ -811,10 +821,8 @@ const SchemeDetail = ({
                         id: 'Ky5YNj',
                       })}
                     </Select.Option>
-                  </Select>
-                </Form.Item>
-              </Col>
-            </Row>
+                  </Select> */}
+            </Form.Item>
           </Card>
 
           <Form.Item>

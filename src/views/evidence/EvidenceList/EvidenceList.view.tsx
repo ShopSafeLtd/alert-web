@@ -3,6 +3,7 @@ import {
   Col,
   Descriptions,
   Image,
+  Input,
   Modal,
   Row,
   Select,
@@ -15,7 +16,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import ReactPlayer from 'react-player';
 import Loading from 'components/shared-components/AntD/Loading';
 import type { ListDemEvidenceExtendedWithoutUserQuery } from '../../../graphql/generated';
-import { PageHeader } from '../../../components/layout-components/AntD';
+
 import useStyles from '../../profiles/crime-groups/list-crime-groups/ListCrimeGroups.styles';
 
 interface ViewEvidenceListProps {
@@ -56,124 +57,16 @@ const EvidenceList: React.FC<ViewEvidenceListProps> = ({
 
   return (
     <div className={classes.page}>
-      <Modal
-        open={!!selectedData}
-        title={intl.formatMessage({
-          defaultMessage: 'View Evidence',
-          id: '0jDp2T',
-        })}
-        width="80%"
-        onCancel={() => setSelectedData(undefined)}
-        footer={[
-          <Button
-            key="submit"
-            type="ghost"
-            loading={loading}
-            onClick={() => setSelectedData(undefined)}
-          >
-            {intl.formatMessage({
-              defaultMessage: 'Close',
-              id: 'rbrahO',
+      <Row className={classes.headerRow}>
+        <Col span={8}>
+          <Input
+            // value={search}
+            // onChange={(event) => setSearch(event.target.value)}
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Search Evidences...',
+              id: 'UWCkbC',
             })}
-          </Button>,
-          <Button key="download" type="primary" loading={loading}>
-            <a href={selectedData?.playbackUrl} download>
-              {intl.formatMessage({
-                defaultMessage: 'Download',
-                id: '5q3qC0',
-              })}
-            </a>
-          </Button>,
-        ]}
-      >
-        <div>
-          <Row gutter={16}>
-            <Col span={10}>
-              <Descriptions column={1} bordered>
-                <Descriptions.Item
-                  label={intl.formatMessage({
-                    id: 'q4mEG7',
-                    defaultMessage: 'Officer',
-                  })}
-                >
-                  {selectedData?.name}
-                </Descriptions.Item>
-                <Descriptions.Item
-                  label={intl.formatMessage({
-                    id: 'IuFETn',
-                    defaultMessage: 'Duration',
-                  })}
-                >
-                  {selectedData?.duration}
-                </Descriptions.Item>
-                <Descriptions.Item
-                  label={intl.formatMessage({
-                    id: 'DBZGY7',
-                    defaultMessage: 'Importance',
-                  })}
-                >
-                  {selectedData?.importance}
-                </Descriptions.Item>
-                <Descriptions.Item
-                  label={intl.formatMessage({
-                    id: '+U6ozc',
-                    defaultMessage: 'Type',
-                  })}
-                >
-                  {selectedData?.type}
-                </Descriptions.Item>
-              </Descriptions>
-            </Col>
-
-            <Col>
-              {selectedData && selectedData.type === 'IMAGE' ? (
-                <Image
-                  width="100%"
-                  height="100%"
-                  alt={intl.formatMessage({
-                    id: 'EqkwlK',
-                    defaultMessage: 'evidence',
-                  })}
-                  src={selectedData?.playbackUrl || ' '}
-                />
-              ) : (
-                <div>
-                  {selectedData?.type === 'AUDIO' ? (
-                    <ReactPlayer
-                      url={selectedData?.playbackUrl || ' '}
-                      config={{
-                        file: {
-                          forceVideo: true,
-                        },
-                      }}
-                      controls
-                    />
-                  ) : (
-                    <ReactPlayer
-                      config={{
-                        file: {
-                          forceVideo: true,
-                        },
-                      }}
-                      width="100%"
-                      url={selectedData?.playbackUrl || ' '}
-                      controls
-                    />
-                  )}
-                </div>
-              )}
-            </Col>
-          </Row>
-        </div>
-      </Modal>
-      <Row align="middle" gutter={16} className={classes.headerRow}>
-        <Col span={8} xxl={6}>
-          <PageHeader
-            title={intl.formatMessage({
-              id: 'V+XtFv',
-              defaultMessage: 'Evidence List',
-            })}
-            display
+            allowClear
           />
         </Col>
         <Col flex={1} />
@@ -346,6 +239,116 @@ const EvidenceList: React.FC<ViewEvidenceListProps> = ({
             : []
         }
       />
+      <Modal
+        open={!!selectedData}
+        title={intl.formatMessage({
+          defaultMessage: 'View Evidence',
+          id: '0jDp2T',
+        })}
+        width="80%"
+        onCancel={() => setSelectedData(undefined)}
+        footer={[
+          <Button
+            key="submit"
+            type="ghost"
+            loading={loading}
+            onClick={() => setSelectedData(undefined)}
+          >
+            {intl.formatMessage({
+              defaultMessage: 'Close',
+              id: 'rbrahO',
+            })}
+          </Button>,
+          <Button key="download" type="primary" loading={loading}>
+            <a href={selectedData?.playbackUrl} download>
+              {intl.formatMessage({
+                defaultMessage: 'Download',
+                id: '5q3qC0',
+              })}
+            </a>
+          </Button>,
+        ]}
+      >
+        <div>
+          <Row gutter={16}>
+            <Col span={10}>
+              <Descriptions column={1} bordered>
+                <Descriptions.Item
+                  label={intl.formatMessage({
+                    id: 'q4mEG7',
+                    defaultMessage: 'Officer',
+                  })}
+                >
+                  {selectedData?.name}
+                </Descriptions.Item>
+                <Descriptions.Item
+                  label={intl.formatMessage({
+                    id: 'IuFETn',
+                    defaultMessage: 'Duration',
+                  })}
+                >
+                  {selectedData?.duration}
+                </Descriptions.Item>
+                <Descriptions.Item
+                  label={intl.formatMessage({
+                    id: 'DBZGY7',
+                    defaultMessage: 'Importance',
+                  })}
+                >
+                  {selectedData?.importance}
+                </Descriptions.Item>
+                <Descriptions.Item
+                  label={intl.formatMessage({
+                    id: '+U6ozc',
+                    defaultMessage: 'Type',
+                  })}
+                >
+                  {selectedData?.type}
+                </Descriptions.Item>
+              </Descriptions>
+            </Col>
+
+            <Col>
+              {selectedData && selectedData.type === 'IMAGE' ? (
+                <Image
+                  width="100%"
+                  height="100%"
+                  alt={intl.formatMessage({
+                    id: 'EqkwlK',
+                    defaultMessage: 'evidence',
+                  })}
+                  src={selectedData?.playbackUrl || ' '}
+                />
+              ) : (
+                <div>
+                  {selectedData?.type === 'AUDIO' ? (
+                    <ReactPlayer
+                      url={selectedData?.playbackUrl || ' '}
+                      config={{
+                        file: {
+                          forceVideo: true,
+                        },
+                      }}
+                      controls
+                    />
+                  ) : (
+                    <ReactPlayer
+                      config={{
+                        file: {
+                          forceVideo: true,
+                        },
+                      }}
+                      width="100%"
+                      url={selectedData?.playbackUrl || ' '}
+                      controls
+                    />
+                  )}
+                </div>
+              )}
+            </Col>
+          </Row>
+        </div>
+      </Modal>
     </div>
   );
 };

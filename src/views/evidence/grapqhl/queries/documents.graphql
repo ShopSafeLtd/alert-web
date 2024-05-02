@@ -1,0 +1,22 @@
+query Documents(
+  $skip: Int
+  $take: Int
+  $orderBy: [DocumentOrderByWithRelationInput!]
+  $where: DocumentWhereInput
+) {
+  documents(skip: $skip, take: $take, orderBy: $orderBy, where: $where) {
+    totalCount
+    edges {
+      node {
+        id
+        name
+        url
+        fileType
+        tags {
+          id
+          name
+        }
+      }
+    }
+  }
+}
