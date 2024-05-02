@@ -208,6 +208,7 @@ interface Investigations {
   variables: {
     groups: string[];
     status: InvestigationStatus[];
+    search: string;
   };
 }
 
@@ -229,6 +230,7 @@ export interface DataModel {
   setInvestigations: Action<DataModel, Investigations>;
   setInvestigationGroupsFilter: Action<DataModel, string[]>;
   setInvestigationStatusFilter: Action<DataModel, InvestigationStatus[]>;
+  setInvestigationSearch: Action<DataModel, string>;
   setInvestigationTakeAllSchemes: Action<DataModel, boolean>;
 }
 
@@ -374,7 +376,7 @@ const dataModel: DataModel = {
 
   investigations: {
     takeAllSchemes: false,
-    variables: { groups: [], status: [] },
+    variables: { groups: [], status: [], search: '' },
   },
 
   setInvestigations: action((state, payload) => {
@@ -382,6 +384,9 @@ const dataModel: DataModel = {
   }),
   setInvestigationTakeAllSchemes: action((state, payload) => {
     state.investigations.takeAllSchemes = payload;
+  }),
+  setInvestigationSearch: action((state, payload) => {
+    state.investigations.variables.search = payload || '';
   }),
   setInvestigationGroupsFilter: action((state, payload) => {
     state.investigations.variables.groups = payload || [];

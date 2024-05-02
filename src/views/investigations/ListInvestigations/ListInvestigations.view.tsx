@@ -1,5 +1,14 @@
 import React from 'react';
-import { Button, Col, Drawer, Row, Table, Typography, Select } from 'antd';
+import {
+  Button,
+  Col,
+  Drawer,
+  Row,
+  Table,
+  Typography,
+  Select,
+  Input,
+} from 'antd';
 import type {
   CreateInvestigationMutation,
   ListInvestigationsAllSchemesQuery,
@@ -46,31 +55,40 @@ const ListInvestigations = ({
   const statusFilter = useStoreState(
     (state) => state.data.investigations.variables.status
   );
+  const search = useStoreState(
+    (state) => state.data.investigations.variables.search
+  );
   const setInvestigationGroupsFilter = useStoreActions(
     (actions) => actions.data.setInvestigationGroupsFilter
   );
   const setInvestigationStatusFilter = useStoreActions(
     (actions) => actions.data.setInvestigationStatusFilter
   );
+  const setInvestigationSearch = useStoreActions(
+    (actions) => actions.data.setInvestigationSearch
+  );
 
   return (
     <div className={classes.page}>
-      <Row className={classes.headerRow} gutter={16}>
+      <Row className={classes.headerRow} gutter={8}>
         <Col>
-          <Button type="primary" onClick={toggleAddInvestigation}>
-            <FormattedMessage
-              defaultMessage="Add New Investigation"
-              id="QaKS9A"
-            />
-          </Button>
+          <Input
+            placeholder={intl.formatMessage({
+              id: 'l9jnOx',
+              defaultMessage: 'Search investigations...',
+            })}
+            style={{ width: 400 }}
+            value={search}
+            onChange={(e) => setInvestigationSearch(e.target.value)}
+            allowClear
+          />
         </Col>
-        <Col flex={1} />
         <Col>
           <GroupsSelect
             value={groupsFilter}
             onChange={setInvestigationGroupsFilter}
             allowClear
-            style={{ width: 250 }}
+            style={{ minWidth: 200, maxWidth: 400 }}
             placeholder={intl.formatMessage({
               id: 'aVKXev',
               defaultMessage: 'Select groups...',
@@ -107,6 +125,15 @@ const ListInvestigations = ({
               },
             ]}
           />
+        </Col>
+        <Col flex={1} />
+        <Col>
+          <Button type="primary" onClick={toggleAddInvestigation}>
+            <FormattedMessage
+              defaultMessage="Create Investigation"
+              id="cihgU6"
+            />
+          </Button>
         </Col>
         {/* <Col> */}
         {/*  <Button */}
@@ -158,6 +185,7 @@ const ListInvestigations = ({
             groups: investigation.groups || [],
             reference: investigation.reference,
             createdAt: investigation.createdAt,
+            closedAt: investigation.closedAt,
           })
         )}
         loading={loading}
@@ -206,6 +234,15 @@ const ListInvestigations = ({
               <FormattedMessage defaultMessage="Date Opened" id="zQ9i1N" />
             ),
             render: (value: string) => moment(value).format('DD/MM/YYYY'),
+          },
+          {
+            key: 'closedAt',
+            dataIndex: 'closedAt',
+            title: (
+              <FormattedMessage defaultMessage="Date Closed" id="CkpoSI" />
+            ),
+            render: (value: string) =>
+              value ? moment(value).format('DD/MM/YYYY') : undefined,
           },
           {
             key: 'groups',

@@ -9,6 +9,7 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
     totalValue
     totalRecoveredValue
     totalTheftSuccess
+    closedAt
     createdBy {
       id
       fullName

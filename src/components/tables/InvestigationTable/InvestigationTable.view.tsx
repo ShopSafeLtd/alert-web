@@ -21,6 +21,7 @@ interface Props {
         status?: InvestigationStatus;
         createdAt: Date;
         reference?: string | null | undefined;
+        closedAt?: Date | null;
       }[]
     | undefined;
 }
@@ -81,6 +82,16 @@ const InvestigationTable = ({ investigations }: Props): JSX.Element => {
             id: 'zQ9i1N',
           }),
           render: (value: string) => moment(value).format('DD/MM/YYYY'),
+        },
+        {
+          key: 'closedAt',
+          dataIndex: 'closedAt',
+          title: intl.formatMessage({
+            defaultMessage: 'Date Closed',
+            id: 'CkpoSI',
+          }),
+          render: (value: string) =>
+            value ? moment(value).format('DD/MM/YYYY') : undefined,
         },
         {
           key: 'description',

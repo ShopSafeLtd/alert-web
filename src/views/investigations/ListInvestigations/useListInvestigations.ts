@@ -33,6 +33,9 @@ const useListInvestigations = (): Return => {
   const statusFilter = useStoreState(
     (state) => state.data.investigations.variables.status
   );
+  const search = useStoreState(
+    (state) => state.data.investigations.variables.search
+  );
   const takeAllSchemes = useStoreState(
     (state) => state.data.investigations.takeAllSchemes
   );
@@ -65,6 +68,43 @@ const useListInvestigations = (): Return => {
               in: statusFilter,
             }
           : undefined,
+      OR: search
+        ? [
+            {
+              name: {
+                contains: search,
+              },
+            },
+            {
+              referenceStr: {
+                contains: search,
+              },
+            },
+            {
+              description: {
+                contains: search,
+              },
+            },
+            {
+              offenders: {
+                some: {
+                  OR: [
+                    {
+                      name: {
+                        contains: search,
+                      },
+                    },
+                    {
+                      referenceStr: {
+                        contains: search,
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          ]
+        : undefined,
     },
   };
   const { data, loading } = useListInvestigationsAllSchemesQuery({

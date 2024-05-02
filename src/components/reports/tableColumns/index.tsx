@@ -533,6 +533,13 @@ export const InvestigationsColumns: ColumnsType<InvestigationsTableData> = [
     render: (date: string) => moment(date).format('DD/MM/YYYY'),
   },
   {
+    key: 'closedAt',
+    dataIndex: 'closedAt',
+    title: <FormattedMessage id="CkpoSI" defaultMessage="Date Closed" />,
+    render: (value: string) =>
+      value ? moment(value).format('DD/MM/YYYY') : undefined,
+  },
+  {
     key: 'totalIncidents',
     dataIndex: 'totalIncidents',
     title: <FormattedMessage id="pUlxda" defaultMessage="Total Incidents" />,

@@ -169,6 +169,7 @@ query PerformanceReport($where: UserContributionWhereInput!) {
       totalOffenders
       totalValue
       createdAt
+      closedAt
     }
   }
 }

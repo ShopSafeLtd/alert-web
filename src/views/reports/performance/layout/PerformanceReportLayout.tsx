@@ -112,7 +112,6 @@ const PerformanceReportLayout = ({
   metadata,
   setMetadata,
 }: Props) => {
-  console.log(layout);
   const classes = useStyles();
   const calculateHeight = (key: string, offset?: number) => {
     const targetElement = layout.find((element) => element.i === key);

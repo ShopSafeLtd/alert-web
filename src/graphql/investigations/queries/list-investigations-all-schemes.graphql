@@ -11,6 +11,7 @@ query listInvestigationsAllSchemes(
       description
       status
       createdAt
+      closedAt
       reference
       groups {
         id

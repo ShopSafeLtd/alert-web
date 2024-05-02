@@ -4,5 +4,6 @@ fragment Investigations on Investigation {
   description
   status
   createdAt
+  closedAt
   reference
 }
