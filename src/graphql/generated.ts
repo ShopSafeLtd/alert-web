@@ -690,12 +690,6 @@ export type Answer = {
   updatedAt: Scalars['Date'];
 };
 
-export type AnswerCount = {
-  __typename?: 'AnswerCount';
-  answer: Scalars['String'];
-  count: Scalars['Int'];
-};
-
 export type AnswerListRelationFilter = {
   every?: InputMaybe<AnswerWhereInput>;
   none?: InputMaybe<AnswerWhereInput>;
@@ -8251,6 +8245,7 @@ export type InvestigationWhereInput = {
   createdBy?: InputMaybe<UserWhereInput>;
   createdById?: InputMaybe<StringFilter>;
   crimeGroups?: InputMaybe<CrimeGroupListRelationFilter>;
+  deleted?: InputMaybe<BoolNullableFilter>;
   description?: InputMaybe<StringNullableFilter>;
   documents?: InputMaybe<DocumentListRelationFilter>;
   feedItems?: InputMaybe<FeedItemListRelationFilter>;
@@ -8264,6 +8259,7 @@ export type InvestigationWhereInput = {
   name?: InputMaybe<StringFilter>;
   notifications?: InputMaybe<NotificationListRelationFilter>;
   offenders?: InputMaybe<OffenderListRelationFilter>;
+  recycled?: InputMaybe<BoolNullableFilter>;
   ref?: InputMaybe<StringNullableFilter>;
   reference?: InputMaybe<IntNullableFilter>;
   referenceStr?: InputMaybe<StringNullableFilter>;
@@ -12728,7 +12724,6 @@ export type Query = {
   chatMessages: Array<MessageItem>;
   chats: Array<Chat>;
   checklist: Checklist;
-  checklistQuestionCounts: Array<QuestionAnswerCount>;
   checklists: Array<Checklist>;
   compareFaces: SystemTask;
   crimeGroup: CrimeGroup;
@@ -12998,11 +12993,6 @@ export type QueryChatsArgs = {
 
 export type QueryChecklistArgs = {
   where: ChecklistWhereUniqueInput;
-};
-
-
-export type QueryChecklistQuestionCountsArgs = {
-  where: ActiveChecklistWhereInput;
 };
 
 
@@ -13939,12 +13929,6 @@ export type Question = {
   tags: Array<TagQuestion>;
   type: AnswerType;
   updatedAt: Scalars['Date'];
-};
-
-export type QuestionAnswerCount = {
-  __typename?: 'QuestionAnswerCount';
-  answers: Array<AnswerCount>;
-  question: Scalars['String'];
 };
 
 export type QuestionGroup = {
@@ -21500,7 +21484,7 @@ export type ListInvestigationsAllSchemesQueryVariables = Exact<{
 }>;
 
 
-export type ListInvestigationsAllSchemesQuery = { __typename?: 'Query', listInvestigationsAllSchemes: { __typename?: 'ListInvestigations', total: number, investigations: Array<{ __typename?: 'Investigation', id: string, name: string, description?: string | null, status: InvestigationStatus, groups: Array<{ __typename?: 'Group', id: string, name: string }> }> } };
+export type ListInvestigationsAllSchemesQuery = { __typename?: 'Query', listInvestigationsAllSchemes: { __typename?: 'ListInvestigations', total: number, investigations: Array<{ __typename?: 'Investigation', id: string, name: string, description?: string | null, status: InvestigationStatus, createdAt: Date, reference?: number | null, groups: Array<{ __typename?: 'Group', id: string, name: string }> }> } };
 
 export type ListInvestigationsQueryVariables = Exact<{
   scheme: SchemeWhereUniqueInput;
@@ -28574,6 +28558,8 @@ export const ListInvestigationsAllSchemesDocument = gql`
       name
       description
       status
+      createdAt
+      reference
       groups {
         id
         name

@@ -2,6 +2,7 @@ import type { MutationUpdaterFn } from '@apollo/client';
 import type {
   CreateInvestigationMutation,
   ListInvestigationsAllSchemesQuery,
+  ListInvestigationsAllSchemesQueryVariables,
 } from 'graphql/generated';
 import {
   ListInvestigationsAllSchemesDocument,
@@ -23,16 +24,23 @@ interface Return {
 const useListInvestigations = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const userSchemes = useStoreState((state) => state.user.schemes);
-  const setInvestigations = useStoreActions(
-    (actions) => actions.data.setInvestigations
+  const setTakeAllSchemes = useStoreActions(
+    (actions) => actions.data.setInvestigationTakeAllSchemes
+  );
+  const groupsFilter = useStoreState(
+    (state) => state.data.investigations.variables.groups
+  );
+  const statusFilter = useStoreState(
+    (state) => state.data.investigations.variables.status
   );
   const takeAllSchemes = useStoreState(
     (state) => state.data.investigations.takeAllSchemes
   );
   const userSchemeIds = userSchemes.map((el) => el.scheme.id);
   const [addInvestigation, setAddInvestigation] = useState(false);
+
   // const [takeAllSchemes, setTakeAllSchemes] = useState(investigationAllSchemes);
-  const variables = {
+  const variables: ListInvestigationsAllSchemesQueryVariables = {
     where: {
       schemes: {
         some: {
@@ -41,6 +49,22 @@ const useListInvestigations = (): Return => {
           },
         },
       },
+      groups:
+        groupsFilter.length > 0
+          ? {
+              some: {
+                id: {
+                  in: groupsFilter,
+                },
+              },
+            }
+          : undefined,
+      status:
+        statusFilter.length > 0
+          ? {
+              in: statusFilter,
+            }
+          : undefined,
     },
   };
   const { data, loading } = useListInvestigationsAllSchemesQuery({
@@ -86,11 +110,7 @@ const useListInvestigations = (): Return => {
       variables,
     });
   };
-  const setTakeAllSchemes = (value: boolean) => {
-    setInvestigations({
-      takeAllSchemes: value,
-    });
-  };
+
   // const toggleTakeAllSchemes = () => {
   //   setInvestigationAllSchemes({ takeAllSchemes: !takeAllSchemes });
   // };
