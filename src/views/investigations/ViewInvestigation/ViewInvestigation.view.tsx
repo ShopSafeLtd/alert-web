@@ -16,8 +16,8 @@ import LinkCrimeGroup from 'components/form-components/linkOptions/LinkCrimeGrou
 import {
   faBell,
   faBellSlash,
-  faTrash,
   faCheckCircle,
+  faTrash,
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -446,6 +446,8 @@ const ViewInvestigation = ({
               id: data?.investigation?.id || '',
               name: data?.investigation?.name,
               description: data?.investigation?.description,
+              groupIds:
+                data?.investigation?.groups.map((group) => group.id) || [],
             }}
           />
         ) : (

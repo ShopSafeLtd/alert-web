@@ -3,11 +3,11 @@ import {
   Button,
   Col,
   Drawer,
+  Input,
   Row,
+  Select,
   Table,
   Typography,
-  Select,
-  Input,
 } from 'antd';
 import type {
   CreateInvestigationMutation,
@@ -22,6 +22,7 @@ import GetInvestigationStatusValues from 'types/enums/investigation-status';
 import moment from 'moment';
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
 import { useStoreActions, useStoreState } from '#/state';
+import { FormattedList } from 'react-intl/lib';
 import useStyles from './ListInvestigations.styles';
 import AddInvestigation from '../../../components/form-components/Investigation/AddInvestigation';
 
@@ -250,9 +251,10 @@ const ListInvestigations = ({
             title: <FormattedMessage defaultMessage="Groups" id="hzmswI" />,
             render: (value, item) => (
               <div>
-                {item.groups.map((group) => (
-                  <Typography.Text key={group.id}>{group.name}</Typography.Text>
-                ))}
+                <FormattedList
+                  value={item.groups.map((group) => group.name)}
+                  type="unit"
+                />
               </div>
             ),
           },

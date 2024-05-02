@@ -20,7 +20,7 @@ interface Props {
         description?: string | null | undefined;
         status?: InvestigationStatus;
         createdAt: Date;
-        reference?: string | null | undefined;
+        reference?: string | null | undefined | number;
         closedAt?: Date | null;
       }[]
     | undefined;

@@ -690,6 +690,12 @@ export type Answer = {
   updatedAt: Scalars['Date'];
 };
 
+export type AnswerCount = {
+  __typename?: 'AnswerCount';
+  answer: Scalars['String'];
+  count: Scalars['Int'];
+};
+
 export type AnswerListRelationFilter = {
   every?: InputMaybe<AnswerWhereInput>;
   none?: InputMaybe<AnswerWhereInput>;
@@ -2764,6 +2770,7 @@ export type CreateDocument = {
   tags?: InputMaybe<Array<Scalars['String']>>;
   thumbnailUrl?: InputMaybe<Scalars['String']>;
   todoId?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<DocumentType>;
   url: Scalars['String'];
   vehicleId?: InputMaybe<Scalars['String']>;
 };
@@ -2927,6 +2934,7 @@ export type CreateIncidentWitnesses = {
 export type CreateInvestigationInput = {
   crimeGroupId?: InputMaybe<Scalars['String']>;
   description?: InputMaybe<Scalars['String']>;
+  groupIds?: InputMaybe<Array<Scalars['String']>>;
   incidentId?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   offenderId?: InputMaybe<Scalars['String']>;
@@ -4184,6 +4192,7 @@ export type Document = {
   tags: Array<Tag>;
   thumbnailUrl?: Maybe<Scalars['String']>;
   todos: Array<Todo>;
+  type?: Maybe<DocumentType>;
   updatedAt: Scalars['Date'];
   url: Scalars['String'];
   vehicles: Array<Vehicle>;
@@ -4320,6 +4329,11 @@ export enum DocumentScalarFieldEnum {
   ThumbnailUrl = 'thumbnailUrl',
   UpdatedAt = 'updatedAt',
   Url = 'url'
+}
+
+export enum DocumentType {
+  Document = 'DOCUMENT',
+  Evidence = 'EVIDENCE'
 }
 
 export type DocumentWhereInput = {
@@ -12726,6 +12740,7 @@ export type Query = {
   chatMessages: Array<MessageItem>;
   chats: Array<Chat>;
   checklist: Checklist;
+  checklistQuestionCounts: Array<QuestionAnswerCount>;
   checklists: Array<Checklist>;
   compareFaces: SystemTask;
   crimeGroup: CrimeGroup;
@@ -12995,6 +13010,11 @@ export type QueryChatsArgs = {
 
 export type QueryChecklistArgs = {
   where: ChecklistWhereUniqueInput;
+};
+
+
+export type QueryChecklistQuestionCountsArgs = {
+  where: ActiveChecklistWhereInput;
 };
 
 
@@ -13931,6 +13951,12 @@ export type Question = {
   tags: Array<TagQuestion>;
   type: AnswerType;
   updatedAt: Scalars['Date'];
+};
+
+export type QuestionAnswerCount = {
+  __typename?: 'QuestionAnswerCount';
+  answers: Array<AnswerCount>;
+  question: Scalars['String'];
 };
 
 export type QuestionGroup = {
@@ -21387,7 +21413,7 @@ export type CreateInvestigationMutationVariables = Exact<{
 }>;
 
 
-export type CreateInvestigationMutation = { __typename?: 'Mutation', createInvestigation: { __typename?: 'Investigation', id: string, name: string, description?: string | null, status: InvestigationStatus } };
+export type CreateInvestigationMutation = { __typename?: 'Mutation', createInvestigation: { __typename?: 'Investigation', id: string, name: string, description?: string | null, status: InvestigationStatus, createdAt: Date, closedAt?: Date | null, reference?: number | null, groups: Array<{ __typename?: 'Group', id: string, name: string }> } };
 
 export type DeleteInvestigationMutationVariables = Exact<{
   id: Scalars['String'];
@@ -21503,7 +21529,7 @@ export type ViewInvestigationQueryVariables = Exact<{
 }>;
 
 
-export type ViewInvestigationQuery = { __typename?: 'Query', investigation: { __typename?: 'Investigation', id: string, description?: string | null, name: string, status: InvestigationStatus, totalOffenders: number, totalIncidents: number, totalValue: number, totalRecoveredValue: number, totalTheftSuccess: number, closedAt?: Date | null, subscribed: boolean, createdBy: { __typename?: 'User', id: string, fullName: string }, documents: Array<{ __typename?: 'Document', id: string, name: string, url: string, thumbnailUrl?: string | null, tags: Array<{ __typename?: 'Tag', name: string, id: string }> }>, todos: Array<{ __typename?: 'Todo', id: string, name?: string | null, description?: string | null, dueDate?: Date | null, completed?: boolean | null, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }> }>, vehicles: Array<{ __typename?: 'Vehicle', id: string, reference?: number | null, colour?: string | null, model?: string | null, make?: string | null, registration?: string | null }>, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, alias: Array<string>, age?: Age | null, gender?: Gender | null, race?: Race | null, build?: Build | null, height?: Height | null, hair?: string | null, peculiarities?: string | null, comment?: string | null, dateSource?: string | null, dateOfBirth?: Date | null, idVerified: boolean, idSource?: IdSource | null, knownFor: Array<string>, targetedGoods: Array<string>, justification?: string | null, infoSource?: string | null, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null, optimisedPersisted?: string | null, position: ImagePosition, rotation: number, isFace?: boolean | null }> }>, incidents: Array<{ __typename?: 'Incident', id: string, reference?: number | null, dayTime: string, policeRef?: string | null, subject?: string | null, totalValue: number, totalRecoveredValue: number, vehicles: Array<{ __typename?: 'Vehicle', id: string, reference?: number | null, colour?: string | null, model?: string | null, make?: string | null, registration?: string | null }>, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, alias: Array<string>, age?: Age | null, gender?: Gender | null, race?: Race | null, build?: Build | null, height?: Height | null, hair?: string | null, peculiarities?: string | null, comment?: string | null, dateSource?: string | null, dateOfBirth?: Date | null, idVerified: boolean, idSource?: IdSource | null, knownFor: Array<string>, targetedGoods: Array<string>, justification?: string | null, infoSource?: string | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, primary?: boolean | null, policeImage?: boolean | null, card?: string | null }> }>, location?: { __typename?: 'Address', id: string, full: string, geoLat?: number | null, geoLng?: number | null } | null }>, updates: Array<{ __typename?: 'Update', id: string, text?: string | null, type: UpdateType, createdAt: Date, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }>, linkedCrimeGroups: Array<{ __typename?: 'CrimeGroup', id: string, reference?: number | null, alias?: string | null, totalIncidents: number, totalOffenders: number, totalRecoveredValue: number, totalTheftSuccess: number, totalValue: number }>, linkedVehicles: Array<{ __typename?: 'Vehicle', id: string, reference?: number | null, colour?: string | null, model?: string | null, make?: string | null, registration?: string | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }> }>, linkedIncidents: Array<{ __typename?: 'Incident', id: string, reference?: number | null, dayTime: string, policeRef?: string | null, subject?: string | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }> }>, linkedOffenders: Array<{ __typename?: 'Offender', id: string, reference?: number | null, name?: string | null, gender?: Gender | null, build?: Build | null, height?: Height | null, race?: Race | null, age?: Age | null, dateOfBirth?: Date | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }> }>, linkedArticles: Array<{ __typename?: 'Article', id: string, title: string, updatedAt: Date, watermarkImage: boolean, previewImage?: string | null, previewText?: string | null, priority: ArticlePriority, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null, position: ImagePosition, rotation: number }>, createdBy: { __typename?: 'User', fullName: string, id: string } }>, createdBy: { __typename?: 'User', origName: string, id: string, fullName: string, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string }> }, replies: Array<{ __typename?: 'Update', id: string, text?: string | null, type: UpdateType, createdAt: Date, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }>, linkedCrimeGroups: Array<{ __typename?: 'CrimeGroup', id: string, reference?: number | null, alias?: string | null, totalIncidents: number, totalOffenders: number, totalRecoveredValue: number, totalTheftSuccess: number, totalValue: number }>, linkedVehicles: Array<{ __typename?: 'Vehicle', id: string, reference?: number | null, colour?: string | null, model?: string | null, make?: string | null, registration?: string | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }> }>, linkedIncidents: Array<{ __typename?: 'Incident', id: string, reference?: number | null, dayTime: string, policeRef?: string | null, subject?: string | null, location?: { __typename?: 'Address', id: string, full: string, geoLat?: number | null, geoLng?: number | null } | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }> }>, linkedOffenders: Array<{ __typename?: 'Offender', id: string, reference?: number | null, name?: string | null, gender?: Gender | null, build?: Build | null, height?: Height | null, race?: Race | null, age?: Age | null, dateOfBirth?: Date | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }> }>, linkedArticles: Array<{ __typename?: 'Article', id: string, title: string, updatedAt: Date, watermarkImage: boolean, previewImage?: string | null, previewText?: string | null, priority: ArticlePriority, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null, position: ImagePosition, rotation: number }>, createdBy: { __typename?: 'User', fullName: string, id: string } }>, createdBy: { __typename?: 'User', origName: string, id: string, fullName: string, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string }> } }> }>, crimeGroups: Array<{ __typename?: 'CrimeGroup', id: string, reference?: number | null, alias?: string | null, totalIncidents: number, totalOffenders: number, totalRecoveredValue: number, totalTheftSuccess: number, totalValue: number, vehicles: Array<{ __typename?: 'Vehicle', id: string, reference?: number | null, colour?: string | null, model?: string | null, make?: string | null, registration?: string | null }>, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, alias: Array<string>, age?: Age | null, gender?: Gender | null, race?: Race | null, build?: Build | null, height?: Height | null, hair?: string | null, peculiarities?: string | null, comment?: string | null, dateSource?: string | null, dateOfBirth?: Date | null, idVerified: boolean, idSource?: IdSource | null, knownFor: Array<string>, targetedGoods: Array<string>, justification?: string | null, infoSource?: string | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, primary?: boolean | null, policeImage?: boolean | null, card?: string | null }> }> }>, flows: Array<{ __typename?: 'Flow', updatedAt: Date, name: string, id: string, description?: string | null, edges: Array<{ __typename?: 'FlowEdge', id: string, type: string, markerEnd: { [key: string]: any }, source: string, sourceHandle?: string | null, target: string, targetHandle?: string | null }>, nodes: Array<{ __typename?: 'FlowNode', id: string, type: string, data: { [key: string]: any }, height: number, width: number, style: { __typename?: 'Style', height: number, width: number }, position: { __typename?: 'XY', x: number, y: number }, positionAbsolute: { __typename?: 'XY', x: number, y: number } }> }> } };
+export type ViewInvestigationQuery = { __typename?: 'Query', investigation: { __typename?: 'Investigation', id: string, description?: string | null, name: string, status: InvestigationStatus, totalOffenders: number, totalIncidents: number, totalValue: number, totalRecoveredValue: number, totalTheftSuccess: number, closedAt?: Date | null, subscribed: boolean, createdBy: { __typename?: 'User', id: string, fullName: string }, documents: Array<{ __typename?: 'Document', id: string, name: string, url: string, thumbnailUrl?: string | null, tags: Array<{ __typename?: 'Tag', name: string, id: string }> }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, todos: Array<{ __typename?: 'Todo', id: string, name?: string | null, description?: string | null, dueDate?: Date | null, completed?: boolean | null, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }> }>, vehicles: Array<{ __typename?: 'Vehicle', id: string, reference?: number | null, colour?: string | null, model?: string | null, make?: string | null, registration?: string | null }>, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, alias: Array<string>, age?: Age | null, gender?: Gender | null, race?: Race | null, build?: Build | null, height?: Height | null, hair?: string | null, peculiarities?: string | null, comment?: string | null, dateSource?: string | null, dateOfBirth?: Date | null, idVerified: boolean, idSource?: IdSource | null, knownFor: Array<string>, targetedGoods: Array<string>, justification?: string | null, infoSource?: string | null, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null, optimisedPersisted?: string | null, position: ImagePosition, rotation: number, isFace?: boolean | null }> }>, incidents: Array<{ __typename?: 'Incident', id: string, reference?: number | null, dayTime: string, policeRef?: string | null, subject?: string | null, totalValue: number, totalRecoveredValue: number, vehicles: Array<{ __typename?: 'Vehicle', id: string, reference?: number | null, colour?: string | null, model?: string | null, make?: string | null, registration?: string | null }>, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, alias: Array<string>, age?: Age | null, gender?: Gender | null, race?: Race | null, build?: Build | null, height?: Height | null, hair?: string | null, peculiarities?: string | null, comment?: string | null, dateSource?: string | null, dateOfBirth?: Date | null, idVerified: boolean, idSource?: IdSource | null, knownFor: Array<string>, targetedGoods: Array<string>, justification?: string | null, infoSource?: string | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, primary?: boolean | null, policeImage?: boolean | null, card?: string | null }> }>, location?: { __typename?: 'Address', id: string, full: string, geoLat?: number | null, geoLng?: number | null } | null }>, updates: Array<{ __typename?: 'Update', id: string, text?: string | null, type: UpdateType, createdAt: Date, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }>, linkedCrimeGroups: Array<{ __typename?: 'CrimeGroup', id: string, reference?: number | null, alias?: string | null, totalIncidents: number, totalOffenders: number, totalRecoveredValue: number, totalTheftSuccess: number, totalValue: number }>, linkedVehicles: Array<{ __typename?: 'Vehicle', id: string, reference?: number | null, colour?: string | null, model?: string | null, make?: string | null, registration?: string | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }> }>, linkedIncidents: Array<{ __typename?: 'Incident', id: string, reference?: number | null, dayTime: string, policeRef?: string | null, subject?: string | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }> }>, linkedOffenders: Array<{ __typename?: 'Offender', id: string, reference?: number | null, name?: string | null, gender?: Gender | null, build?: Build | null, height?: Height | null, race?: Race | null, age?: Age | null, dateOfBirth?: Date | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }> }>, linkedArticles: Array<{ __typename?: 'Article', id: string, title: string, updatedAt: Date, watermarkImage: boolean, previewImage?: string | null, previewText?: string | null, priority: ArticlePriority, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null, position: ImagePosition, rotation: number }>, createdBy: { __typename?: 'User', fullName: string, id: string } }>, createdBy: { __typename?: 'User', origName: string, id: string, fullName: string, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string }> }, replies: Array<{ __typename?: 'Update', id: string, text?: string | null, type: UpdateType, createdAt: Date, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }>, linkedCrimeGroups: Array<{ __typename?: 'CrimeGroup', id: string, reference?: number | null, alias?: string | null, totalIncidents: number, totalOffenders: number, totalRecoveredValue: number, totalTheftSuccess: number, totalValue: number }>, linkedVehicles: Array<{ __typename?: 'Vehicle', id: string, reference?: number | null, colour?: string | null, model?: string | null, make?: string | null, registration?: string | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }> }>, linkedIncidents: Array<{ __typename?: 'Incident', id: string, reference?: number | null, dayTime: string, policeRef?: string | null, subject?: string | null, location?: { __typename?: 'Address', id: string, full: string, geoLat?: number | null, geoLng?: number | null } | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }> }>, linkedOffenders: Array<{ __typename?: 'Offender', id: string, reference?: number | null, name?: string | null, gender?: Gender | null, build?: Build | null, height?: Height | null, race?: Race | null, age?: Age | null, dateOfBirth?: Date | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }> }>, linkedArticles: Array<{ __typename?: 'Article', id: string, title: string, updatedAt: Date, watermarkImage: boolean, previewImage?: string | null, previewText?: string | null, priority: ArticlePriority, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null, position: ImagePosition, rotation: number }>, createdBy: { __typename?: 'User', fullName: string, id: string } }>, createdBy: { __typename?: 'User', origName: string, id: string, fullName: string, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string }> } }> }>, crimeGroups: Array<{ __typename?: 'CrimeGroup', id: string, reference?: number | null, alias?: string | null, totalIncidents: number, totalOffenders: number, totalRecoveredValue: number, totalTheftSuccess: number, totalValue: number, vehicles: Array<{ __typename?: 'Vehicle', id: string, reference?: number | null, colour?: string | null, model?: string | null, make?: string | null, registration?: string | null }>, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, alias: Array<string>, age?: Age | null, gender?: Gender | null, race?: Race | null, build?: Build | null, height?: Height | null, hair?: string | null, peculiarities?: string | null, comment?: string | null, dateSource?: string | null, dateOfBirth?: Date | null, idVerified: boolean, idSource?: IdSource | null, knownFor: Array<string>, targetedGoods: Array<string>, justification?: string | null, infoSource?: string | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, primary?: boolean | null, policeImage?: boolean | null, card?: string | null }> }> }>, flows: Array<{ __typename?: 'Flow', updatedAt: Date, name: string, id: string, description?: string | null, edges: Array<{ __typename?: 'FlowEdge', id: string, type: string, markerEnd: { [key: string]: any }, source: string, sourceHandle?: string | null, target: string, targetHandle?: string | null }>, nodes: Array<{ __typename?: 'FlowNode', id: string, type: string, data: { [key: string]: any }, height: number, width: number, style: { __typename?: 'Style', height: number, width: number }, position: { __typename?: 'XY', x: number, y: number }, positionAbsolute: { __typename?: 'XY', x: number, y: number } }> }> } };
 
 export type CreateMessageMutationVariables = Exact<{
   data: MessageCreateInput;
@@ -28052,9 +28078,14 @@ export const CreateInvestigationDocument = gql`
     name
     description
     status
+    ...Investigations
+    groups {
+      id
+      name
+    }
   }
 }
-    `;
+    ${InvestigationsFragmentDoc}`;
 export type CreateInvestigationMutationFn = Apollo.MutationFunction<CreateInvestigationMutation, CreateInvestigationMutationVariables>;
 export function useCreateInvestigationMutation(baseOptions?: Apollo.MutationHookOptions<CreateInvestigationMutation, CreateInvestigationMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
@@ -28640,6 +28671,10 @@ export const ViewInvestigationDocument = gql`
         name
         id
       }
+    }
+    groups {
+      id
+      name
     }
     subscribed
     todos {

@@ -24,6 +24,10 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
         id
       }
     }
+    groups {
+      id
+      name
+    }
     subscribed
     todos {
       ...Todos

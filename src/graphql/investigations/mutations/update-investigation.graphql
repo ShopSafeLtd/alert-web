@@ -7,9 +7,9 @@ mutation UpdateInvestigation(
     description
     name
     groups {
-            id
-            name
-          }
+      id
+      name
+    }
     createdBy {
       id
       fullName
