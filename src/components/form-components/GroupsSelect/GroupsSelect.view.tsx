@@ -1,8 +1,10 @@
 import React from 'react';
+import type { SchemeGroupsQueryVariables } from 'graphql/generated';
 import { SortOrder, useSchemeGroupsQuery } from 'graphql/generated';
 import { Select } from 'antd';
 import { useStoreState } from 'state';
 import type { SizeType } from 'antd/lib/config-provider/SizeContext';
+import type { SelectProps } from 'antd/lib/select';
 
 interface Props {
   value?: string[];
@@ -13,10 +15,11 @@ interface Props {
   placeholder?: string;
   className?: string;
   size?: SizeType;
-  maxTagCount?: number;
+  maxTagCount?: number | 'responsive';
+  groupsQueryVars?: SchemeGroupsQueryVariables;
 }
 
-const GroupsSelect = ({
+const GroupsSelect: React.FC<Props & Omit<SelectProps, keyof Props>> = ({
   onChange,
   value,
   mode,
@@ -26,11 +29,13 @@ const GroupsSelect = ({
   placeholder,
   allowClear,
   maxTagCount,
-}: Props) => {
+  groupsQueryVars,
+  ...props
+}) => {
   const currentSchemeId = useStoreState((state) => state.scheme.id);
 
   const { data, loading } = useSchemeGroupsQuery({
-    variables: {
+    variables: groupsQueryVars ?? {
       orderBy: {
         name: SortOrder.Asc,
       },
@@ -63,6 +68,9 @@ const GroupsSelect = ({
       placeholder={placeholder}
       allowClear={allowClear}
       maxTagCount={maxTagCount}
+      optionFilterProp="label"
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      {...props}
     />
   );
 };
