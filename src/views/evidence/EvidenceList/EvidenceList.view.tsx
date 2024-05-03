@@ -63,8 +63,8 @@ const EvidenceList: React.FC<ViewEvidenceListProps> = ({
             // value={search}
             // onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
-              defaultMessage: 'Search Evidences...',
-              id: 'UWCkbC',
+              defaultMessage: 'Search Evidence...',
+              id: 'zWBZ1p',
             })}
             allowClear
           />

@@ -94,8 +94,8 @@ const EvidenceList = ({
             value={search}
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
-              defaultMessage: 'Search Evidences...',
-              id: 'UWCkbC',
+              defaultMessage: 'Search Evidence...',
+              id: 'zWBZ1p',
             })}
             allowClear
           />
@@ -257,16 +257,13 @@ const EvidenceList = ({
         open={addEvidence}
         width="600"
         onClose={toggleAddEvidence}
+        destroyOnClose
       >
-        {addEvidence ? (
-          <AddDocument
-            update={updateNewEvidenceList}
-            onClose={toggleAddEvidence}
-            isEvidence
-          />
-        ) : (
-          <div />
-        )}
+        <AddDocument
+          update={updateNewEvidenceList}
+          onClose={toggleAddEvidence}
+          isEvidence
+        />
       </Drawer>
     </div>
   );

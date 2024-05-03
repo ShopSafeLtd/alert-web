@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { createUseStyles } from 'react-jss';
 import { Tabs } from 'antd';
@@ -26,11 +26,10 @@ const Evidence = () => {
   const classes = useStyles();
   const demIds = useStoreState((state) => state.user.dem);
 
-  return (
-    <div style={{ height: '100vh' }}>
-      <div className={classes.sideListContent}>
-        <Tabs
-          items={[
+  const tabItems = useMemo(() => {
+    const demTab =
+      demIds.length > 0
+        ? [
             {
               key: 'Body Cameras',
               label: (
@@ -38,15 +37,23 @@ const Evidence = () => {
               ),
               children: <EvidenceList />,
             },
-            {
-              key: 'Evidence Files',
-              label: (
-                <FormattedMessage defaultMessage="Evidence Files" id="AHxroc" />
-              ),
-              children: <ListDocuments />,
-            },
-          ].filter((item) => !(item.key === 'Body Cameras' && demIds))}
-        />
+          ]
+        : [];
+
+    const generalTabs = [
+      {
+        key: 'Evidence Files',
+        label: <FormattedMessage defaultMessage="Evidence Files" id="AHxroc" />,
+        children: <ListDocuments />,
+      },
+    ];
+    return [...demTab, ...generalTabs];
+  }, [demIds]);
+
+  return (
+    <div style={{ height: '100vh' }}>
+      <div className={classes.sideListContent}>
+        <Tabs items={tabItems} />
       </div>
     </div>
   );
