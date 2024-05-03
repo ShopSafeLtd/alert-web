@@ -153,8 +153,8 @@ const AddGroup = ({
             style={{ fontSize: 15, marginBottom: 20 }}
           >
             {intl.formatMessage({
-              defaultMessage: 'Control Offender Settings',
-              id: 'WXhNrv',
+              defaultMessage: 'Show Control Offender Settings?',
+              id: 'NBYcPg',
             })}
           </Typography.Title>
         </Col>

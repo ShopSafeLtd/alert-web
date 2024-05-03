@@ -85,6 +85,7 @@ export interface AddOffenderData {
   targetedGoods?: string[] | null;
   infoSource?: string | null;
   justification?: string | null;
+  knowAddress?: boolean;
   address?: AddressData;
   // groupIds?: string[];
 }

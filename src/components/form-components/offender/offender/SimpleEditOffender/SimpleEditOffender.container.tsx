@@ -17,6 +17,7 @@ interface Props {
   images?: ImageValue[];
   onImagesUploaded?: (values: StateImageData[]) => void;
   incidentBusinessId?: string;
+  showAddress?: boolean;
 }
 
 const EditOffender = ({
@@ -28,6 +29,7 @@ const EditOffender = ({
   images,
   onImagesUploaded,
   incidentBusinessId,
+  showAddress,
 }: Props): JSX.Element => {
   const {
     onSubmit,
@@ -71,6 +73,7 @@ const EditOffender = ({
         setUploading={setUploading}
         uploading={uploading}
         knowAddress={knowAddress}
+        showAddress={showAddress}
       />
     </div>
   );

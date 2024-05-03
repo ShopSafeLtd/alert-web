@@ -1,9 +1,12 @@
 import {
-  type DeleteFeedItemMutation,
   FeedItemsDocument,
-  type FeedItemsQuery,
   useDeleteFeedItemMutation,
   useFeedItemsQuery,
+} from 'graphql/generated';
+import type {
+  FeedItemsQueryVariables,
+  DeleteFeedItemMutation,
+  FeedItemsQuery,
 } from 'graphql/generated';
 import { useDashboardContext } from '#/views/dashboard/Dashboard.context';
 import errorNotification from '#/types/mutation_notifications/error_notification';
@@ -67,7 +70,7 @@ const useFeedItems = (): Return => {
       : undefined,
   };
 
-  const queryVariables = {
+  const queryVariables: FeedItemsQueryVariables = {
     search,
     schemeId,
     order: {
@@ -112,7 +115,8 @@ const useFeedItems = (): Return => {
                   }
                 : {},
               gallery.includes('MYDATA') ||
-              !areAllValuesUndefined(itemVariables)
+              !areAllValuesUndefined(itemVariables) ||
+              search
                 ? {
                     OR: [
                       {
@@ -128,7 +132,16 @@ const useFeedItems = (): Return => {
                         offender: itemVariables,
                       },
                       {
-                        incident: itemVariables,
+                        incident: {
+                          ...itemVariables,
+                          business: search
+                            ? {
+                                name: {
+                                  contains: search,
+                                },
+                              }
+                            : undefined,
+                        },
                       },
                       {
                         vehicle: itemVariables,
@@ -156,7 +169,6 @@ const useFeedItems = (): Return => {
     },
   };
 
-  console.log(gallery.includes('MYDATA'), areAllValuesUndefined(itemVariables));
   const { data, loading, fetchMore } = useFeedItemsQuery({
     variables: queryVariables,
     fetchPolicy: 'cache-and-network',

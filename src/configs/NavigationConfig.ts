@@ -318,7 +318,7 @@ const userOnlyItems: NavItem[] = [
     icon: faPlayCircle,
     breadcrumb: false,
     submenu: [],
-    requireDemId: true,
+
     intl: defineMessage({
       id: 'evidence',
       defaultMessage: 'Evidence',
@@ -330,6 +330,11 @@ const userOnlyItems: NavItem[] = [
       Role.ShopsafeAdmin,
       Role.GroupAdmin,
     ],
+    permission: [
+      {
+        model: PermissionModel.Evidence,
+      },
+    ],
   },
   {
     key: 'checklists',
@@ -338,7 +343,7 @@ const userOnlyItems: NavItem[] = [
     icon: faClipboardListCheck,
     breadcrumb: false,
     submenu: [],
-    requireDemId: true,
+
     intl: defineMessage({
       id: 'checklists',
       defaultMessage: 'Checklists',
