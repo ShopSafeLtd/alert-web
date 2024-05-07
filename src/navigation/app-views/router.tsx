@@ -10,6 +10,7 @@ import Loading from 'components/shared-components/AntD/Loading';
 import { useAuth } from 'hooks';
 import { useStoreState } from 'state';
 import { useAuth0 } from '@auth0/auth0-react';
+import useManageSession from 'hooks/useManageSession';
 import type { Role } from '../../graphql/generated';
 import type { NavItem as ConfigNavItem } from '../../configs/NavigationConfig';
 import navigationConfig from '../../configs/NavigationConfig';
@@ -86,6 +87,8 @@ export const AppViews = (): JSX.Element => {
   const { isLoading } = useAuth0();
   const { getCurrentUser, loading } = useAuth();
   const { role, onboarded, isSet } = useStoreState((state) => state.user);
+  useManageSession();
+
   useEffect(() => {
     getCurrentUser();
   }, []);

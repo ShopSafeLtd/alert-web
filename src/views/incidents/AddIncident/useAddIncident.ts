@@ -203,7 +203,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
   const pagination = useStoreState((state) => state.data.incidents.pagination);
   const variables = useStoreState((state) => state.data.incidents.variables);
   const order = useStoreState((state) => state.data.incidents.order);
-
+  const sessionId = useStoreState((state) => state.user.sessionId);
   const goodsMode = useStoreState((state) => state.scheme.goodsMode);
   const setIncidentsState = useStoreActions(
     (actions) => actions.data.setIncidents
@@ -816,6 +816,7 @@ const useAddIncident = ({ investigationId }: Props): Return => {
             policeResponse: data.policeResponse,
             scheme: schemeId,
             subject: data.subject,
+            sessionId,
             time: data.date,
             vehicles: getVehicles(),
             cctvRecords: {
