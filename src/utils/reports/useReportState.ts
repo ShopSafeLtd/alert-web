@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type RGL from 'react-grid-layout';
 import { useStoreState } from '../../state';
 import type {
@@ -56,12 +56,10 @@ interface Return {
   setSelectedBusiness: (businesses: string[]) => void;
   businesses: { name: string; id: string; demId?: string | null | undefined }[];
   groups: SelectOptions[];
-  brands: SelectOptions[];
   dateRange: { startDate: Date; endDate: Date };
   setDateRange: (dateRange: { startDate: Date; endDate: Date }) => void;
   setSelectedGroups: (groups: string[]) => void;
   setGroups: (groups: SelectOptions[]) => void;
-  setBrands: (brands: SelectOptions[]) => void;
   currentScheme: string;
   setTemplates: (templates: IReportTemplate[]) => void;
   defaultTemplate: IReportTemplate;
@@ -72,6 +70,11 @@ interface Return {
   setSelectedIndustries: (value: string[]) => void;
   redactOnPrint: boolean;
   setRedactOnPrint: (arg0: boolean) => void;
+  filtersOpen: boolean;
+  toggleFiltersOpen: () => void;
+  selectedRoles: string[];
+  setSelectedRoles: (arg: string[]) => void;
+  filterCount: number;
 }
 
 const useReportState = ({
@@ -132,6 +135,7 @@ const useReportState = ({
   // ];
 
   const businesses = useStoreState((state) => state.user.businesses);
+  const [filtersOpen, setFilterOpen] = useState(false);
   const [addLogoDrawer, setAddLogoDrawer] = useState(false);
   const [redactOnPrint, setRedactOnPrint] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -148,8 +152,8 @@ const useReportState = ({
   const [selectedBusiness, setSelectedBusiness] = useState<string[]>([]);
   const [groups, setGroups] = useState<SelectOptions[]>([]);
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
-  const [brands, setBrands] = useState<SelectOptions[]>([]);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
   const [selectedIndustries, setSelectedIndustries] = useState<string[]>([]);
   const [dateRange, setDateRangeState] = useState<{
     startDate: Date;
@@ -159,6 +163,17 @@ const useReportState = ({
     // today at 23:59:59
     endDate: new Date(new Date().setHours(23, 59, 59)),
   });
+  const [filterCount, setFilterCount] = useState(0);
+
+  useEffect(() => {
+    let count = 0;
+    if (selectedRoles.length > 0) count += 1;
+    if (selectedIndustries.length > 0) count += 1;
+    if (selectedBrands.length > 0) count += 1;
+    if (selectedBusiness.length > 0) count += 1;
+
+    setFilterCount(count);
+  }, [selectedRoles, selectedIndustries, selectedBrands, selectedBusiness]);
 
   const defaultTemplate: IReportTemplate = {
     id: 'default',
@@ -621,6 +636,11 @@ const useReportState = ({
       });
     }
   };
+
+  const toggleFiltersOpen = () => {
+    setFilterOpen(!filtersOpen);
+  };
+
   return {
     addLogo,
     addLogoDrawer,
@@ -660,12 +680,15 @@ const useReportState = ({
     setLogos,
     selectedBrands,
     setSelectedBrands,
-    brands,
-    setBrands,
     selectedIndustries,
     setSelectedIndustries,
     redactOnPrint,
     setRedactOnPrint,
+    filtersOpen,
+    toggleFiltersOpen,
+    setSelectedRoles,
+    selectedRoles,
+    filterCount,
   };
 };
 

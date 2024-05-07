@@ -19029,12 +19029,15 @@ export type UserContribution = {
 
 export type UserContributionWhereInput = {
   brandsIds?: InputMaybe<Array<Scalars['String']>>;
+  businessesIds?: InputMaybe<Array<Scalars['String']>>;
   crimeGroupId?: InputMaybe<Scalars['String']>;
   dateRange: DateRangeInput;
   groupIds: Array<Scalars['String']>;
   industryIds?: InputMaybe<Array<Scalars['String']>>;
   offenderId?: InputMaybe<Scalars['String']>;
+  rolesIds?: InputMaybe<Array<Scalars['String']>>;
   schemeIds: Array<Scalars['String']>;
+  search?: InputMaybe<Scalars['String']>;
 };
 
 export type UserListRelationFilter = {
@@ -20496,6 +20499,16 @@ export type MentionableUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type MentionableUsersQuery = { __typename?: 'Query', mentionableUsers: Array<{ __typename?: 'MentionableUser', businessesName: string, firstLetter: string, fullName: string, id: string, oldFullName: string }> };
+
+export type BusinessesSelectQueryVariables = Exact<{
+  where?: InputMaybe<BusinessWhereInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<BusinessOrderBy> | BusinessOrderBy>;
+}>;
+
+
+export type BusinessesSelectQuery = { __typename?: 'Query', listBusinesses: { __typename?: 'ListBusinesses', total: number, businesses: Array<{ __typename?: 'Business', id: string, name: string, siteNumber?: string | null }> } };
 
 export type SetSchemeSharingMutationVariables = Exact<{
   data: SetSchemeSharingInput;
@@ -23724,6 +23737,29 @@ export function useMentionableUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookO
 export type MentionableUsersQueryHookResult = ReturnType<typeof useMentionableUsersQuery>;
 export type MentionableUsersLazyQueryHookResult = ReturnType<typeof useMentionableUsersLazyQuery>;
 export type MentionableUsersQueryResult = Apollo.QueryResult<MentionableUsersQuery, MentionableUsersQueryVariables>;
+export const BusinessesSelectDocument = gql`
+    query BusinessesSelect($where: BusinessWhereInput, $skip: Int, $take: Int, $orderBy: [BusinessOrderBy!]) {
+  listBusinesses(where: $where, skip: $skip, take: $take, orderBy: $orderBy) {
+    total
+    businesses {
+      id
+      name
+      siteNumber
+    }
+  }
+}
+    `;
+export function useBusinessesSelectQuery(baseOptions?: Apollo.QueryHookOptions<BusinessesSelectQuery, BusinessesSelectQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BusinessesSelectQuery, BusinessesSelectQueryVariables>(BusinessesSelectDocument, options);
+      }
+export function useBusinessesSelectLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BusinessesSelectQuery, BusinessesSelectQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BusinessesSelectQuery, BusinessesSelectQueryVariables>(BusinessesSelectDocument, options);
+        }
+export type BusinessesSelectQueryHookResult = ReturnType<typeof useBusinessesSelectQuery>;
+export type BusinessesSelectLazyQueryHookResult = ReturnType<typeof useBusinessesSelectLazyQuery>;
+export type BusinessesSelectQueryResult = Apollo.QueryResult<BusinessesSelectQuery, BusinessesSelectQueryVariables>;
 export const SetSchemeSharingDocument = gql`
     mutation SetSchemeSharing($data: SetSchemeSharingInput!) {
   setSchemeSharing(data: $data) {

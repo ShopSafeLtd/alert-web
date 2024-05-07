@@ -42,8 +42,6 @@ const PerformanceReport = (): JSX.Element => {
     selectedTemplate,
     setSaveAsDrawer,
     saveAsDrawer,
-    brandsLoading,
-    brands,
     selectedBrands,
     setSelectedBrands,
     investigationsData,
@@ -51,6 +49,11 @@ const PerformanceReport = (): JSX.Element => {
     selectedIndustries,
     setRedactOnPrint,
     redactOnPrint,
+    filtersOpen,
+    toggleFiltersOpen,
+    setSelectedRoles,
+    selectedRoles,
+    filterCount,
   } = usePerformanceReport();
   return (
     <View
@@ -94,13 +97,16 @@ const PerformanceReport = (): JSX.Element => {
       dateRange={dateRange}
       groups={groups}
       groupsLoading={groupsLoading}
-      brandsLoading={brandsLoading}
-      brands={brands}
       selectedBrands={selectedBrands}
       setSelectedBrands={setSelectedBrands}
       investigationsData={investigationsData}
       setSelectedIndustries={setSelectedIndustries}
       selectedIndustries={selectedIndustries}
+      filtersOpen={filtersOpen}
+      toggleFiltersOpen={toggleFiltersOpen}
+      setSelectedRoles={setSelectedRoles}
+      selectedRoles={selectedRoles}
+      filterCount={filterCount}
     />
   );
 };
