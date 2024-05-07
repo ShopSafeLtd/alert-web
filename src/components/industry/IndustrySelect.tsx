@@ -2,13 +2,17 @@ import React from 'react';
 import { useIndustriesQuery } from 'graphql/generated';
 import { Select } from 'antd';
 import { useIntl } from 'react-intl';
+import type { SelectProps } from 'antd/lib/select';
 
 interface Props {
-  value: string[];
-  onChange: (value: string[]) => void;
+  value?: string[];
+  onChange?: (value: string[]) => void;
 }
 
-const IndustrySelect = ({ value, onChange }: Props) => {
+const IndustrySelect: React.FC<Props & Omit<SelectProps, keyof Props>> = ({
+  value,
+  onChange,
+}) => {
   const intl = useIntl();
   const { data, loading } = useIndustriesQuery();
 

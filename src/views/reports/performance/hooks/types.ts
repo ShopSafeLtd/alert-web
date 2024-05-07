@@ -56,12 +56,15 @@ export interface Props {
   investigationsData: InvestigationsTableData[] | [];
   templates: IReportTemplate[];
   userContributionTableData: ContributionTableData[] | [];
-  brandsLoading: boolean;
   setSelectedBrands: (brands: string[]) => void;
   selectedBrands: string[];
-  brands: SelectOptions[];
   selectedIndustries: string[];
   setSelectedIndustries: (brands: string[]) => void;
   redactOnPrint: boolean;
   setRedactOnPrint: (arg0: boolean) => void;
+  filtersOpen: boolean;
+  toggleFiltersOpen: () => void;
+  selectedRoles: string[];
+  setSelectedRoles: (roles: string[]) => void;
+  filterCount: number;
 }

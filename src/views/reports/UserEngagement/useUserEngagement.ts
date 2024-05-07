@@ -14,14 +14,20 @@ interface Return {
     | Exclude<UserEngagementQuery['listUserContribution'], undefined | null>
     | null
     | undefined;
-  groups: SelectOptions[];
   dateRange: { startDate: Date; endDate: Date };
   setDateRange: (dateRange: { startDate: Date; endDate: Date }) => void;
   setSelectedGroups: (groups: string[]) => void;
-  groupsLoading: boolean;
   selectedGroups: string[];
   componentRef: RefObject<HTMLDivElement>;
   handlePrint: () => void;
+  filtersOpen: boolean;
+  toggleFiltersOpen: () => void;
+  selectedRoles: string[];
+  setSelectedRoles: (value: string[]) => void;
+  selectedBusinesses: string[];
+  setSelectedBusinesses: (value: string[]) => void;
+  search: string;
+  setSearch: (value: string) => void;
 }
 
 export interface SelectOptions {
@@ -31,8 +37,11 @@ export interface SelectOptions {
 
 const useUserEngagement = (): Return => {
   const currentScheme = useStoreState((state) => state.scheme.id);
-  const [groups, setGroups] = useState<SelectOptions[]>([]);
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [search, setSearch] = useState<string>('');
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
+  const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
+  const [selectedBusinesses, setSelectedBusinesses] = useState<string[]>([]);
   const [dateRange, setDateRangeState] = useState<{
     startDate: Date;
     endDate: Date;
@@ -60,30 +69,16 @@ const useUserEngagement = (): Return => {
     },
   });
 
-  useEffect(() => {
-    if (groupsData) {
-      const groupsFormatted = groupsData.groups.map((group) => ({
-        label: group.name,
-        value: group.id,
-      }));
-      setGroups(groupsFormatted);
-      setSelectedGroups(groupsFormatted.map((item) => item.value));
-    }
-  }, [groupsData]);
-
   const { data, loading } = useUserEngagementQuery({
     fetchPolicy: 'cache-and-network',
-    skip:
-      !currentScheme ||
-      !groups ||
-      groupsLoading ||
-      !selectedGroups ||
-      selectedGroups.filter(Boolean).length === 0,
+    skip: !currentScheme || groupsLoading || !selectedGroups,
     variables: {
       where: {
         dateRange,
         schemeIds: [currentScheme],
-        groupIds: selectedGroups,
+        groupIds: selectedGroups ?? groupsData?.groups.map(({ id }) => id),
+        businessesIds: selectedBusinesses ?? [],
+        rolesIds: selectedRoles ?? [],
       },
     },
   });
@@ -131,17 +126,27 @@ const useUserEngagement = (): Return => {
     },
   });
 
+  const toggleFiltersOpen = () => {
+    setFiltersOpen(!filtersOpen);
+  };
+
   return {
     data: data?.listUserContribution,
     loading,
     setDateRange,
     dateRange,
-    groups,
     setSelectedGroups,
-    groupsLoading,
     selectedGroups,
     handlePrint,
     componentRef,
+    filtersOpen,
+    toggleFiltersOpen,
+    selectedRoles,
+    setSelectedBusinesses,
+    setSelectedRoles,
+    selectedBusinesses,
+    search,
+    setSearch,
   };
 };
 
