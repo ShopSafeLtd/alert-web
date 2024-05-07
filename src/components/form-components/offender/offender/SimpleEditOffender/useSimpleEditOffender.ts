@@ -19,7 +19,7 @@ import type { MutationUpdaterFn } from '@apollo/client';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import type { AddOffenderData } from 'components/incidents/IncidentForm/Profiles/Offenders/useOffenders';
 import { useStoreState } from '#/state';
-import type { OffenderSettingsType } from '#/types/DataType';
+import type { AddressData, OffenderSettingsType } from '#/types/DataType';
 import { useState } from 'react';
 import type { ImageValue } from '../../../ImageSelect/ImageSelect.view';
 import type { StateImageData } from '../../../../incidents/IncidentForm/ImageSection/useImageSection';
@@ -51,6 +51,8 @@ export interface OffenderData {
   targetedGoods?: string[] | null;
   infoSource?: string | null;
   justification?: string | null;
+  knowAddress?: boolean;
+  address?: AddressData;
 }
 
 interface Props {
@@ -200,6 +202,7 @@ const useEditOffender = ({
         infoSource: value.infoSource || null,
         knownFor: value.knownFor,
         targetedGoods: value.targetedGoods,
+        knowAddress: value.knowAddress,
         address: value.knowAddress
           ? {
               alias: value.addressAlias,
@@ -233,30 +236,32 @@ const useEditOffender = ({
             knownFor: { set: value.knownFor },
             targetedGoods: { set: value.targetedGoods },
             alias: { set: alias },
-            addresses: {
-              upsert: [
-                {
-                  update: {
-                    alias: {
-                      set: value.addressAlias,
-                    },
-                    building: { set: value.building },
-                    street: { set: value.street },
-                    townCity: { set: value.townCity },
-                    county: { set: value.county },
-                    postcode: { set: value.postcode },
-                  },
-                  create: {
-                    alias: value.addressAlias,
-                    building: value.building,
-                    street: value.street,
-                    townCity: value.townCity,
-                    county: value.county,
-                    postcode: value.postcode,
-                  },
-                },
-              ],
-            },
+            // addresses: value.knowAddress
+            //   ? {
+            //       upsert: [
+            //         {
+            //           update: {
+            //             alias: {
+            //               set: value.addressAlias,
+            //             },
+            //             building: { set: value.building },
+            //             street: { set: value.street },
+            //             townCity: { set: value.townCity },
+            //             county: { set: value.county },
+            //             postcode: { set: value.postcode },
+            //           },
+            //           create: {
+            //             alias: value.addressAlias,
+            //             building: value.building,
+            //             street: value.street,
+            //             townCity: value.townCity,
+            //             county: value.county,
+            //             postcode: value.postcode,
+            //           },
+            //         },
+            //       ],
+            //     }
+            //   : undefined,
             images:
               value.images && value.images.length > 0
                 ? {

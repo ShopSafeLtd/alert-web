@@ -184,6 +184,7 @@ const useAddNewOffender = ({
         idVerified: data.idVerified,
         idSource: data.idSource,
         images: imageData,
+        knowAddress: data.knowAddress,
         address: data.knowAddress
           ? {
               alias: data.addressAlias,

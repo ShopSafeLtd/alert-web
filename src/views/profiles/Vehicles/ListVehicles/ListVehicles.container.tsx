@@ -23,6 +23,7 @@ const ListVehicles = () => {
     variables,
     onNavigate,
   } = useListVehicles();
+  console.log('customGalleriesData', customGalleriesData);
 
   return (
     <View

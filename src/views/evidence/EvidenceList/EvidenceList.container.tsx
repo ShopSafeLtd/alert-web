@@ -1,5 +1,5 @@
 import React from 'react';
-import useViewEvidenceList from './hooks/useListEvidence';
+import useViewEvidenceList from './hooks/useEvidenceList';
 import View from './EvidenceList.view';
 
 const EvidenceList = (): JSX.Element => {

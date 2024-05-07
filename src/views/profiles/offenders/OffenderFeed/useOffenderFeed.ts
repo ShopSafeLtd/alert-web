@@ -284,7 +284,7 @@ const useOffenderFeed = (): Return => {
     fetchPolicy: 'cache-and-network',
     variables: {
       order: {
-        updatedAt: SortOrder.Desc,
+        name: SortOrder.Asc,
       },
       where: {
         schemes: {

@@ -26,6 +26,7 @@ interface Props {
   uploading: boolean;
   setUploading: (value: boolean) => void;
   knowAddress: boolean | undefined;
+  showAddress?: boolean;
 }
 
 const EditOffender = ({
@@ -42,7 +43,7 @@ const EditOffender = ({
   needJustification,
   uploading,
   setUploading,
-
+  showAddress,
   knowAddress,
 }: Props): JSX.Element => {
   const intl = useIntl();
@@ -89,6 +90,13 @@ const EditOffender = ({
             targetedGoods: data.targetedGoods || [],
             justification: data.justification || '',
             infoSource: data.infoSource || '',
+            knowAddress: data.knowAddress || false,
+            addressAlias: data.address?.alias || '',
+            building: data.address?.building || '',
+            street: data.address?.street || '',
+            townCity: data.address?.townCity || '',
+            county: data.address?.county || '',
+            postcode: data.address?.postcode || '',
           }}
         >
           <OffenderFormDetails
@@ -196,7 +204,9 @@ const EditOffender = ({
               </Col>
             )}
           </Row>
-          <OffenderFormAddress knowAddress={knowAddress} saving={saving} />
+          {showAddress && (
+            <OffenderFormAddress knowAddress={knowAddress} saving={saving} />
+          )}
 
           {offenderSettings?.images && (
             <Form.Item
