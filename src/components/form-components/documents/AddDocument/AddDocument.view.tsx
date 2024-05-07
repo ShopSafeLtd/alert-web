@@ -1,8 +1,9 @@
 import React from 'react';
 import type { SelectProps, UploadProps } from 'antd';
-import { Button, Card, Col, Form, Input, Row, Select, Upload } from 'antd';
+import { Button, Col, Form, Input, Row, Select, Upload } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { useIntl } from 'react-intl';
+import useStyles from './AddDocument.styles';
 
 interface OnSubmitValues {
   name: string;
@@ -22,7 +23,7 @@ interface Props {
   providedId: boolean;
 }
 
-const AddBusiness = ({
+const AddDocument = ({
   onSubmit,
   saving,
   selectedCategories,
@@ -34,121 +35,120 @@ const AddBusiness = ({
   providedId,
 }: Props) => {
   const intl = useIntl();
+  const classes = useStyles();
 
   return (
-    <Card style={{ marginLeft: 20, marginRight: 20 }}>
-      <Form<OnSubmitValues>
-        initialValues={{
-          name: '',
-          url: '',
-          categories: [],
-        }}
-        onFinish={onSubmit}
-      >
-        <Row gutter={16} style={{ marginLeft: 10, marginRight: 10 }}>
-          <Col span={24}>
-            <Form.Item
-              name="name"
-              label={intl.formatMessage({
+    <Form<OnSubmitValues>
+      initialValues={{
+        name: '',
+        url: '',
+        categories: [],
+      }}
+      onFinish={onSubmit}
+    >
+      <Row gutter={16} style={{ marginLeft: 10, marginRight: 10 }}>
+        <Col span={24}>
+          <Form.Item
+            name="name"
+            label={intl.formatMessage({
+              defaultMessage: 'Name',
+              id: 'HAlOn1',
+            })}
+            rules={[
+              {
+                required: true,
+                message: intl.formatMessage({
+                  defaultMessage: 'Please input a name!',
+                  id: '705XBo',
+                }),
+              },
+            ]}
+          >
+            <Input
+              placeholder={intl.formatMessage({
                 defaultMessage: 'Name',
                 id: 'HAlOn1',
               })}
-              rules={[
-                {
-                  required: true,
-                  message: intl.formatMessage({
-                    defaultMessage: 'Please input a name!',
-                    id: '705XBo',
-                  }),
-                },
-              ]}
-            >
-              <Input
-                placeholder={intl.formatMessage({
-                  defaultMessage: 'Name',
-                  id: 'HAlOn1',
-                })}
-              />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={16} style={{ marginLeft: 10, marginRight: 10 }}>
-          <Col span={24}>
-            <Form.Item
-              name="category"
-              label={intl.formatMessage({
+            />
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row gutter={16} style={{ marginLeft: 10, marginRight: 10 }}>
+        <Col span={24}>
+          <Form.Item
+            name="category"
+            label={intl.formatMessage({
+              defaultMessage: 'Category',
+              id: 'ccXLVi',
+            })}
+          >
+            <Select
+              placeholder={intl.formatMessage({
                 defaultMessage: 'Category',
                 id: 'ccXLVi',
               })}
-            >
-              <Select
-                placeholder={intl.formatMessage({
-                  defaultMessage: 'Category',
-                  id: 'ccXLVi',
-                })}
-                mode="tags"
-                size="small"
-                maxTagCount={2}
-                style={{ minWidth: 200 }}
-                loading={categoriesLoading}
-                onChange={categoriesChange}
-                options={categories}
-                optionFilterProp="value"
-                labelInValue
-                value={selectedCategories}
-              />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row style={{ marginLeft: 20, marginTop: 20 }}>
-          <Upload
-            // eslint-disable-next-line react/jsx-props-no-spreading
-            {...documentUploadProps}
-            listType="picture"
-            style={{ display: 'flex' }}
-            maxCount={1}
-          >
-            <Button icon={<UploadOutlined />}>
+              mode="tags"
+              size="small"
+              maxTagCount={2}
+              style={{ minWidth: 200 }}
+              loading={categoriesLoading}
+              onChange={categoriesChange}
+              options={categories}
+              optionFilterProp="value"
+              labelInValue
+              value={selectedCategories}
+            />
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row className={classes.btn}>
+        <Upload
+          // eslint-disable-next-line react/jsx-props-no-spreading
+          {...documentUploadProps}
+          listType="picture"
+          style={{ display: 'flex' }}
+          maxCount={1}
+        >
+          <Button icon={<UploadOutlined />}>
+            {intl.formatMessage({
+              defaultMessage: 'Upload Document',
+              id: 'Kc9MAV',
+            })}
+          </Button>
+        </Upload>
+      </Row>
+      <Form.Item>
+        <Row style={{ marginTop: 30 }} gutter={10} justify="end">
+          <Col>
+            <Button disabled={saving} onClick={onClose}>
               {intl.formatMessage({
-                defaultMessage: 'Upload Document',
-                id: 'Kc9MAV',
+                defaultMessage: 'Cancel',
+                id: '47FYwb',
               })}
             </Button>
-          </Upload>
+          </Col>
+          <Col>
+            <Button
+              loading={saving}
+              disabled={saving}
+              type="primary"
+              htmlType="submit"
+            >
+              {providedId
+                ? intl.formatMessage({
+                    defaultMessage: 'Create Evidence',
+                    id: '5RJkQZ',
+                  })
+                : intl.formatMessage({
+                    defaultMessage: 'Create Document',
+                    id: 'JxpaMx',
+                  })}
+            </Button>
+          </Col>
         </Row>
-        <Form.Item>
-          <Row style={{ marginTop: 30 }} gutter={10} justify="end">
-            <Col>
-              <Button disabled={saving} onClick={onClose}>
-                {intl.formatMessage({
-                  defaultMessage: 'Cancel',
-                  id: '47FYwb',
-                })}
-              </Button>
-            </Col>
-            <Col>
-              <Button
-                loading={saving}
-                disabled={saving}
-                type="primary"
-                htmlType="submit"
-              >
-                {providedId
-                  ? intl.formatMessage({
-                      defaultMessage: 'Create Evidence',
-                      id: '5RJkQZ',
-                    })
-                  : intl.formatMessage({
-                      defaultMessage: 'Create Document',
-                      id: 'JxpaMx',
-                    })}
-              </Button>
-            </Col>
-          </Row>
-        </Form.Item>
-      </Form>
-    </Card>
+      </Form.Item>
+    </Form>
   );
 };
 
-export default AddBusiness;
+export default AddDocument;

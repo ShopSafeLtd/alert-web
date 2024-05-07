@@ -349,9 +349,9 @@ const useNotificationLists = (): Return => {
       userNotifications: scheme.userNotifications,
       goodsMode: scheme.goodsMode,
       facialRecognition: scheme.facialRecognition,
+      facialDetection: scheme.facialRecognition,
       imagesRequiredOnOffenders: scheme.imagesRequiredOnOffenders,
       taskTimeTracking: scheme.taskTimeTracking,
-      facialDetection: scheme.facialDetection,
       connectedToSchemes: scheme.connectedToSchemes,
     });
     setFilterDefaultGroup({

@@ -82,6 +82,7 @@ const useOffenderFilter = (): Return => {
   // Fetch scheme tags
   const { data: tagsData, loading: tagsLoading } = useTagsQuery({
     variables: {
+      orderBy: { name: SortOrder.Asc },
       where: {
         schemes: {
           some: {

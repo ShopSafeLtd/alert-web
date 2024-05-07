@@ -103,6 +103,12 @@ const UseRecycledItemListTest = () => {
             facialRecognition: true,
             imagesRequiredOnOffenders: true,
             goodsMode: GoodsMode.Generic,
+            logo: {
+              id: 'logoId',
+              optimised: 's',
+              url: 's',
+            },
+            facialDetection: true,
           })
         }
       >

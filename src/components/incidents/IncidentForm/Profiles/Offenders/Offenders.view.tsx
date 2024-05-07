@@ -256,6 +256,7 @@ const Offenders = ({
             onEditOffender={(values) => onUpdateOffender(values)}
             images={images?.map((el) => ({ ...el, id: `${Math.random()}` }))}
             onImagesUploaded={onImagesUploadedInForm}
+            showAddress
           />
         ) : (
           <div />
