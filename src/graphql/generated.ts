@@ -908,6 +908,11 @@ export enum AnyAll {
   Any = 'any'
 }
 
+export enum AppType {
+  Native = 'NATIVE',
+  Web = 'WEB'
+}
+
 export type ApproveGroupsData = {
   connect?: InputMaybe<Array<UniqueId>>;
   disconnect?: InputMaybe<Array<UniqueId>>;
@@ -2823,6 +2828,7 @@ export type CreateIncidentData = {
   policeResponse?: InputMaybe<PoliceResponseTime>;
   recoveredValue?: InputMaybe<Scalars['Float']>;
   scheme: Scalars['String'];
+  sessionId?: InputMaybe<Scalars['String']>;
   subject?: InputMaybe<Scalars['String']>;
   time: Scalars['Date'];
   value?: InputMaybe<Scalars['Float']>;
@@ -2971,6 +2977,7 @@ export type CreateOffenderData = {
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
   scheme: Scalars['String'];
+  sessionId?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<TagCreateNestedManyWithoutOffenders>;
   targetedGoods?: InputMaybe<Array<Scalars['String']>>;
   vehicles?: InputMaybe<CreateOffenderVehicles>;
@@ -2999,6 +3006,14 @@ export type CreateQuestionInput = {
   tagId?: InputMaybe<Scalars['String']>;
   taskId?: InputMaybe<Scalars['String']>;
   type: AnswerType;
+};
+
+export type CreateSessionInput = {
+  app: AppType;
+  locationLat?: InputMaybe<Scalars['Float']>;
+  locationLng?: InputMaybe<Scalars['Float']>;
+  scheme?: InputMaybe<UniqueId>;
+  user: UniqueId;
 };
 
 export type CreateSimpleLocationEnvelope = {
@@ -4186,7 +4201,7 @@ export type Document = {
   tags: Array<Tag>;
   thumbnailUrl?: Maybe<Scalars['String']>;
   todos: Array<Todo>;
-  type?: Maybe<DocumentType>;
+  type: DocumentType;
   updatedAt: Scalars['Date'];
   url: Scalars['String'];
   vehicles: Array<Vehicle>;
@@ -9638,6 +9653,7 @@ export type Mutation = {
   createOneWorkflow: Workflow;
   createReportTemplate: ReportTemplate;
   createScheme: Scheme;
+  createSession: Session;
   createSharingConfig: SharingConfig;
   createTag: Tag;
   createTermsAndConditions: TermsAndCondition;
@@ -10007,6 +10023,11 @@ export type MutationCreateReportTemplateArgs = {
 
 export type MutationCreateSchemeArgs = {
   data: SchemeCreateInput;
+};
+
+
+export type MutationCreateSessionArgs = {
+  data: CreateSessionInput;
 };
 
 
@@ -15970,6 +15991,19 @@ export type SectionInput = {
   order: Scalars['Int'];
   subsections: Array<SubsectionInput>;
   title: Scalars['String'];
+};
+
+export type Session = {
+  __typename?: 'Session';
+  actions: Array<Action>;
+  app: AppType;
+  createdAt: Scalars['Date'];
+  id: Scalars['ID'];
+  locationLat?: Maybe<Scalars['Float']>;
+  locationLng?: Maybe<Scalars['Float']>;
+  scheme?: Maybe<Scheme>;
+  updatedAt: Scalars['Date'];
+  user: User;
 };
 
 export type SetArrayHelper = {
@@ -22130,6 +22164,13 @@ export type SchemeQueryVariables = Exact<{
 
 
 export type SchemeQuery = { __typename?: 'Query', scheme: { __typename?: 'Scheme', id: string, name: string, restrictIncidentAccess: boolean, reportOnly: boolean, autoApproveIncidents: boolean, autoApproveOffenders: boolean, defaultIncidentEmail: boolean, defaultIncidentPush: boolean, defaultBulletinEmails: boolean, defaultBulletinPush: boolean, defaultSubscribedIncidentOnly: boolean, defaultSubscribedOffenderOnly: boolean, defaultMessagePush: boolean, defaultOffenderEmail: boolean, defaultOffenderPush: boolean, defaultPublicOffenderDOB: boolean, incidentRetention?: number | null, offenderRetention?: number | null, autoPopulateDescription: boolean, needJustification: boolean, facialRecognition: boolean, facialDetection: boolean, imagesRequiredOnOffenders: boolean, requireSiteNumberForUsers: boolean, oneSelectedIncidentTypeOnly: boolean, goodsMode: GoodsMode, darkLogo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null } | null, logo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null } | null } };
+
+export type CreateSessionMutationVariables = Exact<{
+  data: CreateSessionInput;
+}>;
+
+
+export type CreateSessionMutation = { __typename?: 'Mutation', createSession: { __typename?: 'Session', id: string } };
 
 export type CreateOneStatementTemplateMutationVariables = Exact<{
   data: StatementTemplateCreateInput;
@@ -31940,6 +31981,21 @@ export function useSchemeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Sch
 export type SchemeQueryHookResult = ReturnType<typeof useSchemeQuery>;
 export type SchemeLazyQueryHookResult = ReturnType<typeof useSchemeLazyQuery>;
 export type SchemeQueryResult = Apollo.QueryResult<SchemeQuery, SchemeQueryVariables>;
+export const CreateSessionDocument = gql`
+    mutation CreateSession($data: CreateSessionInput!) {
+  createSession(data: $data) {
+    id
+  }
+}
+    `;
+export type CreateSessionMutationFn = Apollo.MutationFunction<CreateSessionMutation, CreateSessionMutationVariables>;
+export function useCreateSessionMutation(baseOptions?: Apollo.MutationHookOptions<CreateSessionMutation, CreateSessionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateSessionMutation, CreateSessionMutationVariables>(CreateSessionDocument, options);
+      }
+export type CreateSessionMutationHookResult = ReturnType<typeof useCreateSessionMutation>;
+export type CreateSessionMutationResult = Apollo.MutationResult<CreateSessionMutation>;
+export type CreateSessionMutationOptions = Apollo.BaseMutationOptions<CreateSessionMutation, CreateSessionMutationVariables>;
 export const CreateOneStatementTemplateDocument = gql`
     mutation CreateOneStatementTemplate($data: StatementTemplateCreateInput!) {
   createOneStatementTemplate(data: $data) {

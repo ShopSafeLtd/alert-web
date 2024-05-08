@@ -184,6 +184,8 @@ const useAddOffender = (): Return => {
   const setOffendersState = useStoreActions(
     (actions) => actions.data.setOffenders
   );
+  const sessionId = useStoreState((state) => state.user.sessionId);
+
   const [saving, setSaving] = useState(false);
   const [idVerified, setIDVerified] = useState(false);
   const [ageCheck, setAgeCheck] = useState(false);
@@ -608,6 +610,7 @@ const useAddOffender = (): Return => {
     void createOffender({
       variables: {
         data: {
+          sessionId,
           name: data.name,
           alias:
             data.alias && data.alias.length > 0
