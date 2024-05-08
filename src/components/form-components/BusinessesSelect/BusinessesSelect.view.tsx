@@ -1,22 +1,16 @@
-import React from 'react';
-import type {
-  BusinessesSelectQueryVariables,
-  SearchBusinessesQuery,
-  SearchBusinessesQueryVariables,
-} from 'graphql/generated';
+import React, { useCallback } from 'react';
+import type { BusinessesSelectQueryVariables } from 'graphql/generated';
 import {
-  useBusinessesSelectQuery,
-  SortOrder,
-  SearchBusinessesDocument,
   QueryMode,
+  SortOrder,
+  useBusinessesSideListQuery,
 } from 'graphql/generated';
-import { Select } from 'antd';
+import { Select, Typography } from 'antd';
 import { useStoreState } from 'state';
 import type { SizeType } from 'antd/lib/config-provider/SizeContext';
 import type { SelectProps } from 'antd/lib/select';
-import DebounceSelect from '#/components/form-components/DebounceSelect';
 import { useIntl } from 'react-intl';
-import { useApolloClient } from '@apollo/client';
+import debounce from 'lodash/debounce';
 
 interface Props {
   value?: string[];
@@ -39,23 +33,39 @@ const BusinessesSelect: React.FC<Props & Omit<SelectProps, keyof Props>> = ({
   size,
   className,
   placeholder,
-  allowClear,
+  allowClear = true,
   maxTagCount,
   queryVars,
   ...props
 }) => {
   const intl = useIntl();
-  const client = useApolloClient();
-
   const take = 1000;
   const currentSchemeId = useStoreState((state) => state.scheme.id);
 
-  const { data, loading } = useBusinessesSelectQuery({
-    variables: queryVars ?? {
+  // const { data, loading } = useBusinessesSelectQuery({
+  //   variables: queryVars ?? {
+  //     orderBy: {
+  //       name: SortOrder.Asc,
+  //     },
+  //     take,
+  //     where: {
+  //       schemes: {
+  //         some: {
+  //           id: {
+  //             equals: currentSchemeId,
+  //           },
+  //         },
+  //       },
+  //     },
+  //   },
+  // });
+
+  const { data, loading, fetchMore } = useBusinessesSideListQuery({
+    variables: {
       orderBy: {
         name: SortOrder.Asc,
       },
-      take,
+      first: take,
       where: {
         schemes: {
           some: {
@@ -65,72 +75,152 @@ const BusinessesSelect: React.FC<Props & Omit<SelectProps, keyof Props>> = ({
           },
         },
       },
+      ...queryVars,
     },
   });
 
-  const onSearchBusiness = async (searchValue: string) =>
-    client
-      .query<SearchBusinessesQuery, SearchBusinessesQueryVariables>({
-        query: SearchBusinessesDocument,
-        variables: {
-          where: {
-            schemes: {
-              some: {
-                id: {
-                  equals: currentSchemeId,
-                },
+  const next = () => {
+    void fetchMore({
+      variables: {
+        where: {
+          schemes: {
+            some: {
+              id: {
+                equals: currentSchemeId,
               },
-            },
-            name: {
-              contains: searchValue,
-              mode: QueryMode.Insensitive,
             },
           },
         },
-      })
-      .then((response) =>
-        response.data.listBusinesses.businesses.length > 0
-          ? [...response.data.listBusinesses.businesses].map((item) => ({
-              label: item.name || '',
-              value: item?.id || '',
-              location: item?.locations[0].full || '',
-            }))
-          : [
-              {
-                label: 'No results found',
-                value: '',
-                disabled: true,
-              },
-            ]
-      );
+        orderBy: { name: SortOrder.Asc },
+        first: 30,
+        after: data?.businessRelay.pageInfo.endCursor,
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        return {
+          businessRelay: {
+            ...fetchMoreResult.businessRelay,
+            edges: [
+              ...(prev.businessRelay?.edges || []),
+              ...(fetchMoreResult.businessRelay?.edges || []),
+            ],
+          },
+        };
+      },
+    });
+  };
 
-  return !loading && data && data?.listBusinesses.total > take ? (
-    <DebounceSelect
-      showSearch
-      allowClear
-      mode="multiple"
-      maxTagCount={3}
-      disabled={loading}
-      placeholder={intl.formatMessage({
-        defaultMessage: 'Search for a business...',
-        id: 'qaJxSS',
-      })}
-      fetchOptions={onSearchBusiness}
-      style={{ width: '100%' }}
-    />
-  ) : (
+  const onScroll = (event: React.UIEvent<HTMLDivElement>): void => {
+    const target = event.target as HTMLDivElement;
+    if (
+      !loading &&
+      target.scrollTop + target.offsetHeight === target.scrollHeight &&
+      data?.businessRelay.pageInfo.hasNextPage
+    ) {
+      next();
+      target.scrollTo({ top: target.scrollHeight });
+    }
+  };
+
+  // const onSearchBusiness = async (s: string) =>
+  //   client
+  //     .query<SearchBusinessesQuery, SearchBusinessesQueryVariables>({
+  //       query: SearchBusinessesDocument,
+  //       variables: {
+  //         where: {
+  //           schemes: {
+  //             some: {
+  //               id: {
+  //                 equals: currentSchemeId,
+  //               },
+  //             },
+  //           },
+  //           name: {
+  //             contains: s,
+  //             mode: QueryMode.Insensitive,
+  //           },
+  //         },
+  //       },
+  //     })
+  //     .then((response) =>
+  //       response.data.listBusinesses.businesses.length > 0
+  //         ? [...response.data.listBusinesses.businesses].map((item) => ({
+  //             label: item.name || '',
+  //             value: item?.id || '',
+  //             location: item?.locations[0].full || '',
+  //           }))
+  //         : [
+  //             {
+  //               label: 'No results found',
+  //               value: '',
+  //               disabled: true,
+  //             },
+  //           ]
+  //     );
+
+  const handleChange = (searchValueInput: string) => {
+    const searchedIds = data?.businessRelay?.edges?.map(({ node }) => node.id);
+    void fetchMore({
+      variables: {
+        where: {
+          id: {
+            notIn: searchedIds,
+          },
+          schemes: {
+            some: {
+              id: {
+                equals: currentSchemeId,
+              },
+            },
+          },
+          name: {
+            contains: searchValueInput,
+            mode: QueryMode.Insensitive,
+          },
+        },
+        orderBy: { name: SortOrder.Asc },
+        first: 100,
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        return {
+          businessRelay: {
+            ...prev.businessRelay,
+            edges: [
+              ...(prev.businessRelay?.edges || []),
+              ...(fetchMoreResult.businessRelay?.edges || []),
+            ],
+          },
+        };
+      },
+    });
+  };
+
+  // Use useCallback to memoize the debounced function
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const changeHandler = useCallback(
+    debounce(handleChange, 500), // 500ms delay
+    [] // Empty dependency array because debounce and handleChange won't change
+  );
+  const sortedData = [...(data?.businessRelay?.edges || [])].sort((a, b) => {
+    if (!value) return 0;
+    if (value?.includes(a.node.id) && !value?.includes(b.node.id)) {
+      return -1;
+    }
+    if (value?.includes(b.node.id) && !value?.includes(a.node.id)) {
+      return 1;
+    }
+    return 0;
+  });
+  return (
     <Select
       value={value}
-      onChange={onChange}
+      onChange={(selected: string[]) => {
+        if (onChange) onChange(selected);
+      }}
       mode={mode}
-      options={
-        data?.listBusinesses.businesses.map((business) => ({
-          value: business.id,
-          label: business.name,
-        })) || []
-      }
+      onPopupScroll={onScroll}
       loading={loading}
-      disabled={loading}
       style={style}
       size={size}
       className={className}
@@ -138,10 +228,48 @@ const BusinessesSelect: React.FC<Props & Omit<SelectProps, keyof Props>> = ({
       allowClear={allowClear}
       maxTagCount={maxTagCount}
       optionFilterProp="label"
+      onSearch={(v: string) => {
+        if (data?.businessRelay?.pageInfo?.hasNextPage) {
+          if (!v) {
+            changeHandler.cancel();
+            handleChange(v);
+            return;
+          }
+          changeHandler(v);
+        }
+      }}
+      notFoundContent={
+        loading
+          ? intl.formatMessage({ defaultMessage: 'loading', id: '8LHz4z' })
+          : null
+      }
+      onClear={() => {
+        if (onChange) onChange([]);
+      }}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
-    />
+    >
+      {sortedData.map(({ node: option }) => (
+        <Select.Option key={option.id} value={option.id} label={option.name}>
+          <Typography.Text>{option.name}</Typography.Text>
+          {option.siteNumber && (
+            // eslint-disable-next-line formatjs/no-literal-string-in-jsx
+            <Typography.Text>({option.siteNumber})</Typography.Text>
+          )}
+
+          {option.locations && option.locations.length > 0 && (
+            <Typography.Paragraph
+              type="secondary"
+              style={{ fontSize: 13, margin: 0 }}
+            >
+              {option.locations[0].full}
+            </Typography.Paragraph>
+          )}
+        </Select.Option>
+      ))}
+    </Select>
   );
+  // );
 };
 
 export default BusinessesSelect;

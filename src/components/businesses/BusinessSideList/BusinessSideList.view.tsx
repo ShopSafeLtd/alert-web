@@ -1,5 +1,5 @@
 import React from 'react';
-import type { ListBusinessesQuery } from 'graphql/generated';
+import type { BusinessesSideListQuery } from 'graphql/generated';
 import { Typography } from 'antd';
 import { Link } from 'react-router-dom';
 import useStyles from './BusinessSideList.styles';
@@ -8,7 +8,10 @@ import InfiniteSideScrollList from '../../side-list/InfiniteSideList';
 const { Text, Paragraph } = Typography;
 
 interface Props {
-  data: ListBusinessesQuery | undefined;
+  data:
+    | Exclude<BusinessesSideListQuery['businessRelay'], undefined | null>
+    | null
+    | undefined;
   loading: boolean;
   current?: string;
   to?: string;
@@ -22,12 +25,10 @@ const BusinessSideList = ({
   to,
   next,
 }: Props): JSX.Element => {
-  const { listBusinesses } = data || {};
-  const { businesses, total } = listBusinesses || {};
   const classes = useStyles();
-  const isLoading = loading && !data?.listBusinesses?.businesses.length;
+  const isLoading = loading && !data?.pageInfo.hasNextPage;
 
-  const businessItems = businesses?.map((business) => (
+  const businessItems = data?.edges?.map(({ node: business }) => (
     <Link
       to={`${to || '/app/scheme-settings/businesses/view/'}${business.id}`}
       key={business.id}
@@ -58,9 +59,9 @@ const BusinessSideList = ({
 
   return (
     <InfiniteSideScrollList
-      dataLength={businesses?.length}
+      dataLength={data?.edges?.length}
       next={next}
-      hasMore={(businesses?.length || 0) < (total || 0)}
+      hasMore={data?.pageInfo.hasNextPage}
       isLoading={isLoading}
       items={businessItems}
     />

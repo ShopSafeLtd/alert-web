@@ -1,9 +1,12 @@
-import type { ListBusinessesQuery } from 'graphql/generated';
-import { SortOrder, useListBusinessesQuery } from 'graphql/generated';
+import type { BusinessesSideListQuery } from 'graphql/generated';
+import { SortOrder, useBusinessesSideListQuery } from 'graphql/generated';
 import { useStoreState } from 'state';
 
 interface Return {
-  data: ListBusinessesQuery | undefined;
+  data:
+    | Exclude<BusinessesSideListQuery['businessRelay'], undefined | null>
+    | null
+    | undefined;
   loading: boolean;
   next: () => void;
 }
@@ -11,7 +14,7 @@ interface Return {
 const useBusinessSideList = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
 
-  const { data, loading, fetchMore } = useListBusinessesQuery({
+  const { data, loading, fetchMore } = useBusinessesSideListQuery({
     variables: {
       where: {
         schemes: {
@@ -23,43 +26,43 @@ const useBusinessSideList = (): Return => {
         },
       },
       orderBy: { name: SortOrder.Asc },
-      take: 12,
+      first: 24,
     },
-    fetchPolicy: 'cache-and-network',
   });
 
   const next = () => {
     void fetchMore({
       variables: {
-        scheme: {
-          id: schemeId,
+        where: {
+          schemes: {
+            some: {
+              id: {
+                equals: schemeId,
+              },
+            },
+          },
         },
         orderBy: { name: SortOrder.Asc },
-        take: 12,
-        skip: data?.listBusinesses.businesses?.length || 0,
+        first: 24,
+        after: data?.businessRelay.pageInfo.endCursor,
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return {
-          listBusinesses: {
-            ...fetchMoreResult.listBusinesses,
-            total:
-              fetchMoreResult.listBusinesses?.total ||
-              prev.listBusinesses?.total ||
-              0,
-            businesses: [
-              ...(prev.listBusinesses?.businesses || []),
-              ...(fetchMoreResult.listBusinesses?.businesses || []),
+          businessRelay: {
+            ...fetchMoreResult.businessRelay,
+            edges: [
+              ...(prev.businessRelay?.edges || []),
+              ...(fetchMoreResult.businessRelay?.edges || []),
             ],
           },
         };
       },
     });
   };
-
   return {
-    data,
-    loading: data?.listBusinesses ? false : loading,
+    data: data?.businessRelay,
+    loading: data?.businessRelay ? false : loading,
     next,
   };
 };

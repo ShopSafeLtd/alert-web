@@ -1,11 +1,11 @@
 import React from 'react';
-import type { ListBusinessesQuery } from 'graphql/generated';
+import type { BusinessesListQuery } from 'graphql/generated';
 import {
   Button,
   Col,
   Drawer,
-  Input,
   Row,
+  Select,
   Table,
   Tag,
   Tooltip,
@@ -18,6 +18,8 @@ import AddBusiness from 'components/form-components/businesses/AddBusiness';
 import LinkBusiness from 'components/form-components/businesses/LinkBusiness';
 import type { BusinessData } from 'types/DataType';
 import { useIntl } from 'react-intl';
+import type { FilterLabels } from '#/views/settings/businesses/ListBusinesses/useListBusinesses';
+import DebouncedInput from '#/utils/debounced-input';
 import useStyles from './ListBusinesses.styles';
 
 interface TableData {
@@ -30,7 +32,7 @@ interface TableData {
 }
 
 interface Props {
-  data: ListBusinessesQuery | undefined;
+  data: BusinessesListQuery | undefined;
   loading: boolean;
   searchValue: string;
   onSearchChange: (value: string) => void;
@@ -41,6 +43,17 @@ interface Props {
   onSubmit: (value: BusinessData) => void;
   saving: boolean;
   deleteConfirm: (value: string) => void;
+  pagination: { page: number; pageSize: number };
+  setPagination: (value: { page: number; pageSize: number }) => void;
+  parentFilter: string[];
+  parentData: FilterLabels[];
+  setParentFilter: (value: string[]) => void;
+  groupFilter: string[];
+  groupData: FilterLabels[];
+  setGroupFilter: (value: string[]) => void;
+  tagFilter: string[];
+  tags: FilterLabels[];
+  setTagFilter: (value: string[]) => void;
 }
 
 const ListBusinesses = ({
@@ -55,60 +68,31 @@ const ListBusinesses = ({
   onSubmit,
   saving,
   deleteConfirm,
+  groupData,
+  parentData,
+  parentFilter,
+  setParentFilter,
+  setGroupFilter,
+  groupFilter,
+  tagFilter,
+  setTagFilter,
+  tags,
+  pagination,
+  setPagination,
 }: Props) => {
   const classNames = useStyles();
   const intl = useIntl();
-  // const tagIds = new Set(
-  //   data?.listBusinesses.businesses?.flatMap((el) =>
-  //     el.tags.map(({ id }) => id)
-  //   )
-  // );
-  // const tagData = data?.listBusinesses.businesses?.flatMap(({ tags }) => tags);
-  // const tagFilter = [...tagIds]
-  //   .map((id) => tagData?.find((el) => el.id === id))
-  //   .map((el) => ({ text: el?.name || '', value: el?.id || '' }));
-  const groupIds = new Set(
-    data?.listBusinesses.businesses?.flatMap((el) =>
-      el.groups.map(({ id }) => id)
-    )
-  );
-  const groupData = data?.listBusinesses.businesses?.flatMap(
-    ({ groups }) => groups
-  );
-  const groupFilter = [...groupIds]
-    .map((id) => groupData?.find((el) => el.id === id))
-    .map((el) => ({ text: el?.name || '', value: el?.id || '' }));
-  const parentIds = new Set(
-    data?.listBusinesses.businesses?.map((el) => el.parent?.id)
-  );
-  const parentData = data?.listBusinesses.businesses?.filter(
-    (el) => !!el.parent && el.parent.name !== undefined
-  );
-  const parentFilter = [...parentIds]
-    .filter((el) => !!el)
-    .map((id) => parentData?.find((el) => el?.id === id))
-    .map((el) => ({ text: el?.name, value: el?.id || '' }));
-  const tags = new Set(
-    data?.listBusinesses.businesses?.flatMap((business) =>
-      business.tags.map((tag) => tag.name)
-    ) || []
-  );
-  const tagsArray = [...tags];
+
+  const resetPage = () => {
+    if (pagination.page !== 1)
+      setPagination({ page: 1, pageSize: pagination.pageSize });
+  };
+
   return (
     <div className={classNames.page}>
       <Row gutter={8} className={classNames.actions}>
-        <Col span={8}>
-          <Input
-            placeholder={intl.formatMessage({
-              defaultMessage: 'Search for a business...',
-              id: 'qaJxSS',
-            })}
-            onChange={(e) => onSearchChange(e.target.value)}
-            value={searchValue}
-          />
-        </Col>
-        <Col flex={1} />
-        <Col>
+        <Col span={20} />
+        <Col span={2}>
           <Button
             icon={
               <FontAwesomeIcon
@@ -126,7 +110,7 @@ const ListBusinesses = ({
             })}
           </Button>
         </Col>
-        <Col>
+        <Col span={1}>
           <Button
             icon={
               <FontAwesomeIcon
@@ -143,6 +127,106 @@ const ListBusinesses = ({
               id: 'KepKya',
             })}
           </Button>
+        </Col>
+
+        <Col span={6}>
+          <Tag color="red">
+            {intl.formatMessage({
+              defaultMessage: 'Search',
+              id: 'xmcVZ0',
+            })}
+          </Tag>
+          <DebouncedInput
+            size="small"
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Search for a business...',
+              id: 'qaJxSS',
+            })}
+            allowClear
+            defaultValue={searchValue || ''}
+            onChange={(e) => {
+              resetPage();
+              onSearchChange(e.target.value);
+            }}
+          />
+        </Col>
+        <Col span={6}>
+          <Tag color="red">
+            {intl.formatMessage({
+              defaultMessage: 'Select Parent',
+              id: '5hxiFS',
+            })}
+          </Tag>
+          <Select
+            mode="multiple"
+            style={{ width: '100%' }}
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Select Parent',
+              id: '5hxiFS',
+            })}
+            value={parentFilter}
+            onChange={(value: string[]) => {
+              resetPage();
+
+              setParentFilter(value);
+            }}
+            maxTagCount={4}
+            options={parentData}
+            optionFilterProp="label"
+            allowClear
+          />
+        </Col>
+        <Col span={6}>
+          <Tag color="red">
+            {intl.formatMessage({
+              defaultMessage: 'Select Group',
+              id: 'UHsAfL',
+            })}
+          </Tag>
+          <Select
+            mode="multiple"
+            style={{ width: '100%' }}
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Select Group',
+              id: 'UHsAfL',
+            })}
+            value={groupFilter}
+            maxTagCount={4}
+            onChange={(value: string[]) => {
+              resetPage();
+
+              setGroupFilter(value);
+            }}
+            options={groupData}
+            optionFilterProp="label"
+            allowClear
+          />
+        </Col>
+        <Col span={6}>
+          <Tag color="red">
+            {intl.formatMessage({
+              defaultMessage: 'Select Tag',
+              id: 'npEBoK',
+            })}
+          </Tag>
+          <Select
+            mode="multiple"
+            style={{ width: '100%' }}
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Select Tag',
+              id: 'npEBoK',
+            })}
+            maxTagCount={4}
+            value={tagFilter}
+            onChange={(value: string[]) => {
+              resetPage();
+
+              setTagFilter(value);
+            }}
+            options={tags}
+            optionFilterProp="label"
+            allowClear
+          />
         </Col>
       </Row>
       <Table<TableData>
@@ -173,13 +257,6 @@ const ListBusinesses = ({
               defaultMessage: 'Parent',
               id: 'zTbLfn',
             }),
-            filters: parentFilter,
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            onFilter: (
-              value: string | number | boolean,
-              record: { parent: string; parentId: string }
-            ) => record.parentId === value,
             render: (value, item) =>
               value ? <Link to={`/${item.parentId || ''}`}>{value}</Link> : '',
           },
@@ -199,14 +276,6 @@ const ListBusinesses = ({
             }),
             dataIndex: 'tags',
             // filters: tagFilter,
-            filters: tagsArray.map((tag) => ({
-              text: tag,
-              value: tag,
-            })),
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            onFilter: (value: string, record: { tags: string[] }) =>
-              record.tags.includes(value),
             render: (value: string[]) => (
               <Tag color="red">
                 {value
@@ -222,13 +291,6 @@ const ListBusinesses = ({
               id: '3lRewT',
             }),
             dataIndex: 'groups',
-            filters: groupFilter,
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            onFilter: (
-              value: string | number | boolean,
-              record: { groups: { id: string; name: string }[] }
-            ) => record.groups.some(({ id }) => id === value),
             render: (value: { id: string; name: string }[]) => (
               <Typography.Text>
                 {value
@@ -260,7 +322,7 @@ const ListBusinesses = ({
             ),
           },
         ]}
-        dataSource={data?.listBusinesses.businesses.map((item) => ({
+        dataSource={data?.businessRelay.edges.map(({ node: item }) => ({
           key: item.id,
           name: item.name,
           totalUsers: item.totalUsers,
@@ -273,8 +335,12 @@ const ListBusinesses = ({
         loading={loading}
         size="small"
         pagination={{
-          hideOnSinglePage: true,
-          pageSize: 30,
+          pageSize: pagination.pageSize,
+          current: pagination.page,
+          onChange: (page, pageSize) => {
+            setPagination({ page, pageSize });
+          },
+          total: data?.businessRelay.totalCount,
         }}
       />
 

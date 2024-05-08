@@ -1,0 +1,17 @@
+query ParentBusinessesList(
+  $where: BusinessWhereInput
+  $skip: Int
+  $take: Int
+  $orderBy: [BusinessOrderBy!]
+  $hasChildrenOnly: Boolean
+) {
+  businessRelay(where: $where, skip: $skip, take: $take, orderBy: $orderBy, hasChildrenOnly: $hasChildrenOnly) {
+    totalCount
+    edges {
+      node {
+        id
+        name
+      }
+    }
+  }
+}
