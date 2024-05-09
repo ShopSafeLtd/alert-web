@@ -24,14 +24,9 @@ query FeedItems(
       ban {
         endDate
         startDate
-        updatedAt
         title
-        type
-        active
         expired
-        id
         location
-        description
         feedImage {
           ...FeedImage
         }
@@ -43,19 +38,8 @@ query FeedItems(
       article {
         id
         title
-        updatedAt
-        tags {
-          id
-          name
-        }
         createdBy {
-          id
           fullName
-          businesses {
-            id
-            name
-            fullName
-          }
         }
         image {
           id
@@ -63,9 +47,7 @@ query FeedItems(
           optimised
           position
           rotation
-          card
         }
-        previewImage
         previewText
         priority
       }
@@ -78,23 +60,16 @@ query FeedItems(
       crimeGroup {
         totalOffenders
         totalIncidents
-        totalUpdates
         alias
         id
         reference
-        totalRecoveredValue
-        totalTheftSuccess
-        totalValue
-        updatedAt
         latestUpdate {
           ...FeedUpdate
         }
       }
       vehicleId
       vehicle {
-        updatedAt
         totalOffenders
-        totalUpdates
         registration
         reference
         model
@@ -115,20 +90,8 @@ query FeedItems(
         reference
         totalOffenders
         totalIncidents
-
-        totalCrimeGroups
-        totalUpdates
         description
         updatedAt
-        createdBy {
-          id
-          fullName
-          businesses {
-            fullName
-            id
-            name
-          }
-        }
         latestUpdate {
           ...FeedUpdate
         }
@@ -166,24 +129,9 @@ query FeedItems(
         }
         reference
         updatedAt
-        age
-        tags {
-          id
-          name
-        }
-        bans {
-          id
-          title
-          location
-          description
-          startDate
-          endDate
-        }
-        build
         height
         dateOfBirth
         dateSource
-        gender
         hair
         name
         peculiarities
@@ -192,72 +140,12 @@ query FeedItems(
         subscribed
         uploaded
         active
-        lastActive {
-          id
-          dayTime
-        }
         latestUpdate {
           ...FeedUpdate
         }
 
         feedImage {
           ...FeedImage
-        }
-        tags {
-          id
-          name
-        }
-        groups {
-          id
-          name
-        }
-        tags {
-          id
-          name
-        }
-        createdBy {
-          id
-          fullName
-          businesses {
-            fullName
-            id
-            name
-          }
-        }
-        bans {
-          id
-          title
-          location
-          description
-          startDate
-          endDate
-        }
-        incidents(where: { recycled: { equals: false } }) {
-          id
-          subject
-          description
-          dayTime
-          crimeTypes {
-            id
-            name
-          }
-          approved
-          location {
-            id
-            full
-          }
-          createdBy {
-            id
-            fullName
-            businesses {
-              fullName
-              id
-              name
-            }
-          }
-          feedImage {
-            ...FeedImage
-          }
         }
       }
       offenderId
