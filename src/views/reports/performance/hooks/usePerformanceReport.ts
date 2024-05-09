@@ -4,11 +4,10 @@ import {
   usePerformanceReportQuery,
   useSchemeReportDetailsQuery,
 } from 'graphql/generated';
-import type RGL from 'react-grid-layout';
 import useReportPrint from 'utils/reportPrint/usePrintReports';
 import type { InvestigationsTableData } from '#/components/reports/tableColumns';
+import arrangeTemplates from '#/utils/reports/setTemplates';
 import PerformanceLayout, { PerformanceMetaData } from './initLayout';
-import type { IReportTemplate } from '../../types';
 import { redactedText } from '../../types';
 import type { Props as Return } from './types';
 import useReportState from '../../../../utils/reports/useReportState';
@@ -58,6 +57,7 @@ const usePerformanceReport = (): Return => {
     selectedRoles,
     setSelectedRoles,
     filterCount,
+    setAsDefault,
   } = useReportState({
     InitLayout: PerformanceLayout,
     InitMetaData: PerformanceMetaData,
@@ -98,22 +98,12 @@ const usePerformanceReport = (): Return => {
             (icon) => icon.optimisedPersisted ?? ''
           ) || []),
         ]);
-        const importedTemplates: IReportTemplate[] =
-          (groupsData.scheme?.reportTemplates.map((template) => ({
-            id: template.id || '',
-            name: template.name || '',
-            metaData: template.metaData || [],
-            layout:
-              (template.layout.map((item) => ({
-                ...item,
-                maxH: item.maxH ?? undefined,
-                maxW: item.maxW ?? undefined,
-                minH: item.minH ?? undefined,
-                minW: item.minW ?? undefined,
-              })) as RGL.Layout[]) || [],
-          })) as IReportTemplate[]) || [];
 
-        setTemplates([defaultTemplate, ...importedTemplates]);
+        arrangeTemplates(
+          groupsData?.scheme?.reportTemplates || [],
+          defaultTemplate,
+          setTemplates
+        );
       },
     });
 
@@ -302,6 +292,7 @@ const usePerformanceReport = (): Return => {
     selectedRoles,
     setSelectedRoles,
     filterCount,
+    setAsDefault,
   };
 };
 

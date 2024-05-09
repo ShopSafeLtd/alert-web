@@ -215,6 +215,7 @@ export interface SelectOptions {
 export interface IReportTemplate {
   id: string;
   name: string;
+  default: boolean;
   metaData: MetaData[];
   layout: RGL.Layout[];
 }

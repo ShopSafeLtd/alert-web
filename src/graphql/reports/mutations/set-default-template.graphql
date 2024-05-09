@@ -1,0 +1,6 @@
+mutation SetDefaultTemplate($data: SetDefaultTemplateInput!) {
+  setDefaultTemplate(data: $data) {
+    id
+    default
+  }
+}
