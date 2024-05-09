@@ -139,6 +139,7 @@ export interface UserModel {
   origName: string;
   reference: string;
   picture: string;
+  sessionId: string | null;
   dem: { id: string; name: string }[];
   businesses: {
     name: string;
@@ -153,7 +154,6 @@ export interface UserModel {
   }[];
   onboarded: boolean;
   reportToAllBusinesses: boolean;
-
   schemes: Scheme[];
   demId: string | null | undefined;
   userTodos?: number | null | undefined;
@@ -192,6 +192,7 @@ export interface UserModel {
   setMessages: Action<UserModel, SetUserMessages>;
   clearUser: Action<UserModel>;
   setDem: Action<UserModel, SetDemPayload>;
+  setSession: Action<UserModel, string>;
 }
 
 const userModel: UserModel = {
@@ -202,6 +203,7 @@ const userModel: UserModel = {
   reference: '',
   picture: '',
   businesses: [],
+  sessionId: null,
   onboarded: false,
   isSet: false,
   role: Role.User,
@@ -273,6 +275,10 @@ const userModel: UserModel = {
     state.investigationAllSchemes = false;
     state.dem = [];
     state.reportToAllBusinesses = false;
+    state.sessionId = null;
+  }),
+  setSession: action((state, payload) => {
+    state.sessionId = payload;
   }),
 };
 

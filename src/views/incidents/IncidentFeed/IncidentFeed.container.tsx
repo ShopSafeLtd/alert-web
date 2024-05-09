@@ -19,10 +19,10 @@ const IncidentFeed = (): JSX.Element => {
     clearFilters,
     setGallery,
     setPeculiarities,
-    businesses,
+
     goods,
     goodsLoading,
-    businessesLoading,
+
     fetchMoreScroll,
     variables,
     setCompactView,
@@ -50,9 +50,7 @@ const IncidentFeed = (): JSX.Element => {
       goods={goods}
       setGallery={setGallery}
       setPeculiarities={setPeculiarities}
-      businesses={businesses}
       goodsLoading={goodsLoading}
-      businessesLoading={businessesLoading}
       setCompactView={setCompactView}
       setTableView={setTableView}
       tableView={tableView}

@@ -690,6 +690,12 @@ export type Answer = {
   updatedAt: Scalars['Date'];
 };
 
+export type AnswerCount = {
+  __typename?: 'AnswerCount';
+  answer: Scalars['String'];
+  count: Scalars['Int'];
+};
+
 export type AnswerListRelationFilter = {
   every?: InputMaybe<AnswerWhereInput>;
   none?: InputMaybe<AnswerWhereInput>;
@@ -906,6 +912,11 @@ export type AnswersInput = {
 export enum AnyAll {
   All = 'all',
   Any = 'any'
+}
+
+export enum AppType {
+  Native = 'NATIVE',
+  Web = 'WEB'
 }
 
 export type ApproveGroupsData = {
@@ -2823,6 +2834,7 @@ export type CreateIncidentData = {
   policeResponse?: InputMaybe<PoliceResponseTime>;
   recoveredValue?: InputMaybe<Scalars['Float']>;
   scheme: Scalars['String'];
+  sessionId?: InputMaybe<Scalars['String']>;
   subject?: InputMaybe<Scalars['String']>;
   time: Scalars['Date'];
   value?: InputMaybe<Scalars['Float']>;
@@ -2971,6 +2983,7 @@ export type CreateOffenderData = {
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
   scheme: Scalars['String'];
+  sessionId?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<TagCreateNestedManyWithoutOffenders>;
   targetedGoods?: InputMaybe<Array<Scalars['String']>>;
   vehicles?: InputMaybe<CreateOffenderVehicles>;
@@ -2999,6 +3012,14 @@ export type CreateQuestionInput = {
   tagId?: InputMaybe<Scalars['String']>;
   taskId?: InputMaybe<Scalars['String']>;
   type: AnswerType;
+};
+
+export type CreateSessionInput = {
+  app: AppType;
+  locationLat?: InputMaybe<Scalars['Float']>;
+  locationLng?: InputMaybe<Scalars['Float']>;
+  scheme?: InputMaybe<UniqueId>;
+  user: UniqueId;
 };
 
 export type CreateSimpleLocationEnvelope = {
@@ -4186,7 +4207,7 @@ export type Document = {
   tags: Array<Tag>;
   thumbnailUrl?: Maybe<Scalars['String']>;
   todos: Array<Todo>;
-  type?: Maybe<DocumentType>;
+  type: DocumentType;
   updatedAt: Scalars['Date'];
   url: Scalars['String'];
   vehicles: Array<Vehicle>;
@@ -9638,6 +9659,7 @@ export type Mutation = {
   createOneWorkflow: Workflow;
   createReportTemplate: ReportTemplate;
   createScheme: Scheme;
+  createSession: Session;
   createSharingConfig: SharingConfig;
   createTag: Tag;
   createTermsAndConditions: TermsAndCondition;
@@ -10007,6 +10029,11 @@ export type MutationCreateReportTemplateArgs = {
 
 export type MutationCreateSchemeArgs = {
   data: SchemeCreateInput;
+};
+
+
+export type MutationCreateSessionArgs = {
+  data: CreateSessionInput;
 };
 
 
@@ -12737,11 +12764,13 @@ export type Query = {
   business: Business;
   businessContribution: ListBusinessContribution;
   businessImpact: BusinessImpact;
+  businessRelay: QueryBusinessRelayConnection;
   businessReport: BusinessReport;
   chat: Chat;
   chatMessages: Array<MessageItem>;
   chats: Array<Chat>;
   checklist: Checklist;
+  checklistQuestionCounts: Array<QuestionAnswerCount>;
   checklists: Array<Checklist>;
   compareFaces: SystemTask;
   crimeGroup: CrimeGroup;
@@ -12982,6 +13011,19 @@ export type QueryBusinessImpactArgs = {
 };
 
 
+export type QueryBusinessRelayArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  hasChildrenOnly?: InputMaybe<Scalars['Boolean']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<BusinessOrderBy>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<BusinessWhereInput>;
+};
+
+
 export type QueryBusinessReportArgs = {
   where: BusinessReportInput;
 };
@@ -13012,6 +13054,11 @@ export type QueryChatsArgs = {
 
 export type QueryChecklistArgs = {
   where: ChecklistWhereUniqueInput;
+};
+
+
+export type QueryChecklistQuestionCountsArgs = {
+  where: ActiveChecklistWhereInput;
 };
 
 
@@ -13853,6 +13900,19 @@ export type QueryBrandsConnectionEdge = {
   node: Brand;
 };
 
+export type QueryBusinessRelayConnection = {
+  __typename?: 'QueryBusinessRelayConnection';
+  edges: Array<QueryBusinessRelayConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryBusinessRelayConnectionEdge = {
+  __typename?: 'QueryBusinessRelayConnectionEdge';
+  cursor: Scalars['String'];
+  node: Business;
+};
+
 export type QueryDashboardsConnection = {
   __typename?: 'QueryDashboardsConnection';
   edges: Array<QueryDashboardsConnectionEdge>;
@@ -13974,6 +14034,12 @@ export type Question = {
   tags: Array<TagQuestion>;
   type: AnswerType;
   updatedAt: Scalars['Date'];
+};
+
+export type QuestionAnswerCount = {
+  __typename?: 'QuestionAnswerCount';
+  answers: Array<AnswerCount>;
+  question: Scalars['String'];
 };
 
 export type QuestionGroup = {
@@ -15970,6 +16036,19 @@ export type SectionInput = {
   order: Scalars['Int'];
   subsections: Array<SubsectionInput>;
   title: Scalars['String'];
+};
+
+export type Session = {
+  __typename?: 'Session';
+  actions: Array<Action>;
+  app: AppType;
+  createdAt: Scalars['Date'];
+  id: Scalars['ID'];
+  locationLat?: Maybe<Scalars['Float']>;
+  locationLng?: Maybe<Scalars['Float']>;
+  scheme?: Maybe<Scheme>;
+  updatedAt: Scalars['Date'];
+  user: User;
 };
 
 export type SetArrayHelper = {
@@ -19029,12 +19108,15 @@ export type UserContribution = {
 
 export type UserContributionWhereInput = {
   brandsIds?: InputMaybe<Array<Scalars['String']>>;
+  businessesIds?: InputMaybe<Array<Scalars['String']>>;
   crimeGroupId?: InputMaybe<Scalars['String']>;
   dateRange: DateRangeInput;
   groupIds: Array<Scalars['String']>;
   industryIds?: InputMaybe<Array<Scalars['String']>>;
   offenderId?: InputMaybe<Scalars['String']>;
+  rolesIds?: InputMaybe<Array<Scalars['String']>>;
   schemeIds: Array<Scalars['String']>;
+  search?: InputMaybe<Scalars['String']>;
 };
 
 export type UserListRelationFilter = {
@@ -20496,6 +20578,26 @@ export type MentionableUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type MentionableUsersQuery = { __typename?: 'Query', mentionableUsers: Array<{ __typename?: 'MentionableUser', businessesName: string, firstLetter: string, fullName: string, id: string, oldFullName: string }> };
+
+export type BusinessesSideListQueryVariables = Exact<{
+  where?: InputMaybe<BusinessWhereInput>;
+  orderBy?: InputMaybe<Array<BusinessOrderBy> | BusinessOrderBy>;
+  first?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type BusinessesSideListQuery = { __typename?: 'Query', businessRelay: { __typename?: 'QueryBusinessRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryBusinessRelayConnectionEdge', node: { __typename?: 'Business', id: string, name: string, siteNumber?: string | null, locations: Array<{ __typename?: 'Address', full: string }> } }>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean } } };
+
+export type BusinessesSelectQueryVariables = Exact<{
+  where?: InputMaybe<BusinessWhereInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<BusinessOrderBy> | BusinessOrderBy>;
+}>;
+
+
+export type BusinessesSelectQuery = { __typename?: 'Query', listBusinesses: { __typename?: 'ListBusinesses', total: number, businesses: Array<{ __typename?: 'Business', id: string, name: string, siteNumber?: string | null }> } };
 
 export type SetSchemeSharingMutationVariables = Exact<{
   data: SetSchemeSharingInput;
@@ -22118,6 +22220,13 @@ export type SchemeQueryVariables = Exact<{
 
 export type SchemeQuery = { __typename?: 'Query', scheme: { __typename?: 'Scheme', id: string, name: string, restrictIncidentAccess: boolean, reportOnly: boolean, autoApproveIncidents: boolean, autoApproveOffenders: boolean, defaultIncidentEmail: boolean, defaultIncidentPush: boolean, defaultBulletinEmails: boolean, defaultBulletinPush: boolean, defaultSubscribedIncidentOnly: boolean, defaultSubscribedOffenderOnly: boolean, defaultMessagePush: boolean, defaultOffenderEmail: boolean, defaultOffenderPush: boolean, defaultPublicOffenderDOB: boolean, incidentRetention?: number | null, offenderRetention?: number | null, autoPopulateDescription: boolean, needJustification: boolean, facialRecognition: boolean, facialDetection: boolean, imagesRequiredOnOffenders: boolean, requireSiteNumberForUsers: boolean, oneSelectedIncidentTypeOnly: boolean, goodsMode: GoodsMode, darkLogo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null } | null, logo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null } | null } };
 
+export type CreateSessionMutationVariables = Exact<{
+  data: CreateSessionInput;
+}>;
+
+
+export type CreateSessionMutation = { __typename?: 'Mutation', createSession: { __typename?: 'Session', id: string } };
+
 export type CreateOneStatementTemplateMutationVariables = Exact<{
   data: StatementTemplateCreateInput;
 }>;
@@ -22931,6 +23040,43 @@ export type BrandsQueryVariables = Exact<{
 
 export type BrandsQuery = { __typename?: 'Query', brands: { __typename?: 'QueryBrandsConnection', totalCount: number, edges: Array<{ __typename?: 'QueryBrandsConnectionEdge', node: { __typename?: 'Brand', id: string, name: string, description?: string | null, businesses: Array<{ __typename?: 'Business', id: string, name: string }> } }> } };
 
+export type BusinessTagsQueryVariables = Exact<{
+  where: TagWhereInput;
+  orderBy?: InputMaybe<Array<TagOrderByWithRelationInput> | TagOrderByWithRelationInput>;
+}>;
+
+
+export type BusinessTagsQuery = { __typename?: 'Query', tags: Array<{ __typename?: 'Tag', id: string, name: string }> };
+
+export type BusinessesListQueryVariables = Exact<{
+  where?: InputMaybe<BusinessWhereInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<BusinessOrderBy> | BusinessOrderBy>;
+}>;
+
+
+export type BusinessesListQuery = { __typename?: 'Query', businessRelay: { __typename?: 'QueryBusinessRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryBusinessRelayConnectionEdge', node: { __typename?: 'Business', id: string, name: string, siteNumber?: string | null, fullName: string, publicName: boolean, demId?: string | null, totalUsers: number, parent?: { __typename?: 'Business', id: string, name: string } | null, locations: Array<{ __typename?: 'Address', id: string, full: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }> } }> } };
+
+export type ListGroupsQueryVariables = Exact<{
+  where?: InputMaybe<GroupWhereInput>;
+  orderBy?: InputMaybe<Array<GroupOrderByWithRelationInput> | GroupOrderByWithRelationInput>;
+}>;
+
+
+export type ListGroupsQuery = { __typename?: 'Query', groups: Array<{ __typename?: 'Group', id: string, name: string }> };
+
+export type ParentBusinessesListQueryVariables = Exact<{
+  where?: InputMaybe<BusinessWhereInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<BusinessOrderBy> | BusinessOrderBy>;
+  hasChildrenOnly?: InputMaybe<Scalars['Boolean']>;
+}>;
+
+
+export type ParentBusinessesListQuery = { __typename?: 'Query', businessRelay: { __typename?: 'QueryBusinessRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryBusinessRelayConnectionEdge', node: { __typename?: 'Business', id: string, name: string } }> } };
+
 export type CreateCsvImportMutationVariables = Exact<{
   data: CsvImportCreateInput;
 }>;
@@ -23724,6 +23870,61 @@ export function useMentionableUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookO
 export type MentionableUsersQueryHookResult = ReturnType<typeof useMentionableUsersQuery>;
 export type MentionableUsersLazyQueryHookResult = ReturnType<typeof useMentionableUsersLazyQuery>;
 export type MentionableUsersQueryResult = Apollo.QueryResult<MentionableUsersQuery, MentionableUsersQueryVariables>;
+export const BusinessesSideListDocument = gql`
+    query BusinessesSideList($where: BusinessWhereInput, $orderBy: [BusinessOrderBy!], $first: Int, $after: String) {
+  businessRelay(where: $where, orderBy: $orderBy, first: $first, after: $after) {
+    totalCount
+    edges {
+      node {
+        id
+        name
+        siteNumber
+        locations {
+          full
+        }
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}
+    `;
+export function useBusinessesSideListQuery(baseOptions?: Apollo.QueryHookOptions<BusinessesSideListQuery, BusinessesSideListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BusinessesSideListQuery, BusinessesSideListQueryVariables>(BusinessesSideListDocument, options);
+      }
+export function useBusinessesSideListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BusinessesSideListQuery, BusinessesSideListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BusinessesSideListQuery, BusinessesSideListQueryVariables>(BusinessesSideListDocument, options);
+        }
+export type BusinessesSideListQueryHookResult = ReturnType<typeof useBusinessesSideListQuery>;
+export type BusinessesSideListLazyQueryHookResult = ReturnType<typeof useBusinessesSideListLazyQuery>;
+export type BusinessesSideListQueryResult = Apollo.QueryResult<BusinessesSideListQuery, BusinessesSideListQueryVariables>;
+export const BusinessesSelectDocument = gql`
+    query BusinessesSelect($where: BusinessWhereInput, $skip: Int, $take: Int, $orderBy: [BusinessOrderBy!]) {
+  listBusinesses(where: $where, skip: $skip, take: $take, orderBy: $orderBy) {
+    total
+    businesses {
+      id
+      name
+      siteNumber
+    }
+  }
+}
+    `;
+export function useBusinessesSelectQuery(baseOptions?: Apollo.QueryHookOptions<BusinessesSelectQuery, BusinessesSelectQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BusinessesSelectQuery, BusinessesSelectQueryVariables>(BusinessesSelectDocument, options);
+      }
+export function useBusinessesSelectLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BusinessesSelectQuery, BusinessesSelectQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BusinessesSelectQuery, BusinessesSelectQueryVariables>(BusinessesSelectDocument, options);
+        }
+export type BusinessesSelectQueryHookResult = ReturnType<typeof useBusinessesSelectQuery>;
+export type BusinessesSelectLazyQueryHookResult = ReturnType<typeof useBusinessesSelectLazyQuery>;
+export type BusinessesSelectQueryResult = Apollo.QueryResult<BusinessesSelectQuery, BusinessesSelectQueryVariables>;
 export const SetSchemeSharingDocument = gql`
     mutation SetSchemeSharing($data: SetSchemeSharingInput!) {
   setSchemeSharing(data: $data) {
@@ -31904,6 +32105,21 @@ export function useSchemeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Sch
 export type SchemeQueryHookResult = ReturnType<typeof useSchemeQuery>;
 export type SchemeLazyQueryHookResult = ReturnType<typeof useSchemeLazyQuery>;
 export type SchemeQueryResult = Apollo.QueryResult<SchemeQuery, SchemeQueryVariables>;
+export const CreateSessionDocument = gql`
+    mutation CreateSession($data: CreateSessionInput!) {
+  createSession(data: $data) {
+    id
+  }
+}
+    `;
+export type CreateSessionMutationFn = Apollo.MutationFunction<CreateSessionMutation, CreateSessionMutationVariables>;
+export function useCreateSessionMutation(baseOptions?: Apollo.MutationHookOptions<CreateSessionMutation, CreateSessionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateSessionMutation, CreateSessionMutationVariables>(CreateSessionDocument, options);
+      }
+export type CreateSessionMutationHookResult = ReturnType<typeof useCreateSessionMutation>;
+export type CreateSessionMutationResult = Apollo.MutationResult<CreateSessionMutation>;
+export type CreateSessionMutationOptions = Apollo.BaseMutationOptions<CreateSessionMutation, CreateSessionMutationVariables>;
 export const CreateOneStatementTemplateDocument = gql`
     mutation CreateOneStatementTemplate($data: StatementTemplateCreateInput!) {
   createOneStatementTemplate(data: $data) {
@@ -34962,6 +35178,119 @@ export function useBrandsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Bra
 export type BrandsQueryHookResult = ReturnType<typeof useBrandsQuery>;
 export type BrandsLazyQueryHookResult = ReturnType<typeof useBrandsLazyQuery>;
 export type BrandsQueryResult = Apollo.QueryResult<BrandsQuery, BrandsQueryVariables>;
+export const BusinessTagsDocument = gql`
+    query businessTags($where: TagWhereInput!, $orderBy: [TagOrderByWithRelationInput!]) {
+  tags(where: $where, orderBy: $orderBy) {
+    id
+    name
+  }
+}
+    `;
+export function useBusinessTagsQuery(baseOptions: Apollo.QueryHookOptions<BusinessTagsQuery, BusinessTagsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BusinessTagsQuery, BusinessTagsQueryVariables>(BusinessTagsDocument, options);
+      }
+export function useBusinessTagsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BusinessTagsQuery, BusinessTagsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BusinessTagsQuery, BusinessTagsQueryVariables>(BusinessTagsDocument, options);
+        }
+export type BusinessTagsQueryHookResult = ReturnType<typeof useBusinessTagsQuery>;
+export type BusinessTagsLazyQueryHookResult = ReturnType<typeof useBusinessTagsLazyQuery>;
+export type BusinessTagsQueryResult = Apollo.QueryResult<BusinessTagsQuery, BusinessTagsQueryVariables>;
+export const BusinessesListDocument = gql`
+    query BusinessesList($where: BusinessWhereInput, $skip: Int, $take: Int, $orderBy: [BusinessOrderBy!]) {
+  businessRelay(where: $where, skip: $skip, take: $take, orderBy: $orderBy) {
+    totalCount
+    edges {
+      node {
+        id
+        name
+        siteNumber
+        fullName
+        publicName
+        demId
+        parent {
+          id
+          name
+        }
+        locations {
+          id
+          full
+        }
+        groups {
+          id
+          name
+        }
+        tags {
+          id
+          name
+        }
+        totalUsers
+      }
+    }
+  }
+}
+    `;
+export function useBusinessesListQuery(baseOptions?: Apollo.QueryHookOptions<BusinessesListQuery, BusinessesListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BusinessesListQuery, BusinessesListQueryVariables>(BusinessesListDocument, options);
+      }
+export function useBusinessesListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BusinessesListQuery, BusinessesListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BusinessesListQuery, BusinessesListQueryVariables>(BusinessesListDocument, options);
+        }
+export type BusinessesListQueryHookResult = ReturnType<typeof useBusinessesListQuery>;
+export type BusinessesListLazyQueryHookResult = ReturnType<typeof useBusinessesListLazyQuery>;
+export type BusinessesListQueryResult = Apollo.QueryResult<BusinessesListQuery, BusinessesListQueryVariables>;
+export const ListGroupsDocument = gql`
+    query listGroups($where: GroupWhereInput, $orderBy: [GroupOrderByWithRelationInput!]) {
+  groups(where: $where, orderBy: $orderBy) {
+    id
+    name
+  }
+}
+    `;
+export function useListGroupsQuery(baseOptions?: Apollo.QueryHookOptions<ListGroupsQuery, ListGroupsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ListGroupsQuery, ListGroupsQueryVariables>(ListGroupsDocument, options);
+      }
+export function useListGroupsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListGroupsQuery, ListGroupsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ListGroupsQuery, ListGroupsQueryVariables>(ListGroupsDocument, options);
+        }
+export type ListGroupsQueryHookResult = ReturnType<typeof useListGroupsQuery>;
+export type ListGroupsLazyQueryHookResult = ReturnType<typeof useListGroupsLazyQuery>;
+export type ListGroupsQueryResult = Apollo.QueryResult<ListGroupsQuery, ListGroupsQueryVariables>;
+export const ParentBusinessesListDocument = gql`
+    query ParentBusinessesList($where: BusinessWhereInput, $skip: Int, $take: Int, $orderBy: [BusinessOrderBy!], $hasChildrenOnly: Boolean) {
+  businessRelay(
+    where: $where
+    skip: $skip
+    take: $take
+    orderBy: $orderBy
+    hasChildrenOnly: $hasChildrenOnly
+  ) {
+    totalCount
+    edges {
+      node {
+        id
+        name
+      }
+    }
+  }
+}
+    `;
+export function useParentBusinessesListQuery(baseOptions?: Apollo.QueryHookOptions<ParentBusinessesListQuery, ParentBusinessesListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ParentBusinessesListQuery, ParentBusinessesListQueryVariables>(ParentBusinessesListDocument, options);
+      }
+export function useParentBusinessesListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ParentBusinessesListQuery, ParentBusinessesListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ParentBusinessesListQuery, ParentBusinessesListQueryVariables>(ParentBusinessesListDocument, options);
+        }
+export type ParentBusinessesListQueryHookResult = ReturnType<typeof useParentBusinessesListQuery>;
+export type ParentBusinessesListLazyQueryHookResult = ReturnType<typeof useParentBusinessesListLazyQuery>;
+export type ParentBusinessesListQueryResult = Apollo.QueryResult<ParentBusinessesListQuery, ParentBusinessesListQueryVariables>;
 export const CreateCsvImportDocument = gql`
     mutation CreateCsvImport($data: CsvImportCreateInput!) {
   createOneCsvImport(data: $data) {

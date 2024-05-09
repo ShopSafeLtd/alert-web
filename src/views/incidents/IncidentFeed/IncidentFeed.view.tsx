@@ -70,9 +70,9 @@ interface Props {
   clearFilters: () => void;
   setGallery: (values: string[]) => void;
   goods: { value: string; label: string }[];
-  businesses: { value: string; label: string; location: string }[];
+
   goodsLoading: boolean;
-  businessesLoading: boolean;
+
   fetchMoreScroll: () => void;
   variables: IncidentFilters;
   setCompactView: () => void;
@@ -98,10 +98,10 @@ const IncidentFeed = ({
   clearFilters,
   setGallery,
   setPeculiarities,
-  businesses,
+
   goods,
   goodsLoading,
-  businessesLoading,
+
   fetchMoreScroll,
   variables,
   setCompactView,
@@ -486,9 +486,7 @@ const IncidentFeed = ({
           clearFilters={clearFilters}
           setPeculiarities={setPeculiarities}
           goods={goods}
-          businesses={businesses}
           goodsLoading={goodsLoading}
-          businessesLoading={businessesLoading}
         />
       </Drawer>
       <Lightbox

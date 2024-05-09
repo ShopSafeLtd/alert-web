@@ -9,6 +9,8 @@ import {
   Select,
   Switch,
   Typography,
+  Form,
+  Badge,
 } from 'antd';
 import DatePicker from 'components/util-components/DatePicker';
 import { Page } from 'components/shared-components/AntD/Page/Page';
@@ -17,14 +19,16 @@ import 'react-grid-layout/css/styles.css';
 
 import { margin, rowHeight } from 'components/reports/utils/utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/pro-light-svg-icons';
+import { faFilters, faTrash } from '@fortawesome/pro-light-svg-icons';
 import 'react-resizable/css/styles.css';
 import type { IntlShape } from 'react-intl';
 import { useIntl } from 'react-intl';
 import GeneratePrintPage from '#/views/reports/GeneratePrintPage';
 import IndustrySelect from '#/components/industry/IndustrySelect';
+import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
+import BrandsSelect from '#/components/form-components/BrandsSelect/BrandsSelect.view';
+import RolesSelect from '#/components/form-components/RolesSelect/RolesSelect.view';
 import AddLogo from '../../../components/reports/addLogo';
-
 import PerformanceReportLayout from './layout/PerformanceReportLayout';
 import { PerformanceDrawerLayout } from './hooks/initLayout';
 import SaveAs from '../../../components/reports/saveAs';
@@ -40,15 +44,11 @@ type FilterProps = Pick<
   | 'groups'
   | 'setSelectedGroups'
   | 'selectedGroups'
-  | 'selectedBrands'
-  | 'brands'
   | 'dateRange'
   | 'setDateRange'
   | 'groupsLoading'
-  | 'setSelectedBrands'
-  | 'brandsLoading'
-  | 'setSelectedIndustries'
-  | 'selectedIndustries'
+  | 'toggleFiltersOpen'
+  | 'filterCount'
 > & {
   intl: IntlShape;
 };
@@ -58,113 +58,91 @@ const FilterOptions = ({
   intl,
   setSelectedGroups,
   selectedGroups,
-  selectedBrands,
-  brands,
   dateRange,
   setDateRange,
-  groupsLoading,
-  setSelectedBrands,
-  brandsLoading,
-  selectedIndustries,
-  setSelectedIndustries,
+  toggleFiltersOpen,
+  filterCount,
 }: FilterProps) => (
-  <Row
-    className="no-print"
-    style={{ marginBottom: 10, justifyContent: 'center' }}
-    gutter={8}
-  >
-    <Col span={4}>
-      <Select
-        placeholder={intl.formatMessage({
-          defaultMessage: 'Select Groups',
-          id: 'q2cuIU',
-        })}
-        mode="multiple"
-        maxTagCount="responsive"
-        onChange={(value) => {
-          setSelectedGroups(value || []);
-        }}
-        value={selectedGroups}
-        defaultValue={groups.map((group) => group.value)}
-        style={{ width: '100%' }}
-      >
-        {groups?.map((group) => (
-          <Select.Option
-            loading={groupsLoading}
-            key={group.value}
-            value={group.value}
-          >
-            {group.label}
-          </Select.Option>
-        ))}
-      </Select>
-    </Col>
-    <Col span={4}>
-      <Select
-        placeholder={intl.formatMessage({
-          defaultMessage: 'Select Brands',
-          id: 'XfiiaU',
-        })}
-        mode="multiple"
-        maxTagCount="responsive"
-        onChange={(value) => {
-          setSelectedBrands(value || []);
-        }}
-        value={selectedBrands}
-        defaultValue={brands.map((group) => group.value)}
-        style={{ width: '100%' }}
-      >
-        {brands?.map((brand) => (
-          <Select.Option
-            loading={brandsLoading}
-            key={brand.value}
-            value={brand.value}
-          >
-            {brand.label}
-          </Select.Option>
-        ))}
-      </Select>
-    </Col>
-    <Col span={4}>
-      <IndustrySelect
-        value={selectedIndustries}
-        onChange={(value) => {
-          setSelectedIndustries(value || []);
-        }}
-      />
-    </Col>
-    <Col span={4}>
-      <DatePicker.RangePicker
-        style={{ width: '100%' }}
-        defaultValue={[dateRange.startDate, dateRange.endDate]}
-        value={[dateRange.startDate, dateRange.endDate]}
-        onChange={(value) => {
-          setDateRange(
-            value
-              ? {
-                  startDate:
-                    value?.[0] ||
-                    new Date(
-                      new Date(
-                        new Date().setMonth(new Date().getMonth() - 1)
-                      ).setHours(0, 0, 59)
-                    ),
-                  endDate:
-                    value?.[1] || new Date(new Date().setHours(23, 59, 59)),
-                }
-              : {
-                  startDate: new Date(
-                    new Date(
-                      new Date().setMonth(new Date().getMonth() - 1)
-                    ).setHours(0, 0, 59)
-                  ),
-                  endDate: new Date(new Date().setHours(23, 59, 59)),
-                }
-          );
-        }}
-      />
-    </Col>
-  </Row>
+  <Form layout="vertical">
+    <Row
+      className="no-print"
+      style={{ marginBottom: 10, justifyContent: 'center' }}
+      gutter={8}
+    >
+      <Col span={6}>
+        <Form.Item
+          label={intl.formatMessage({
+            defaultMessage: 'Groups',
+            id: 'hzmswI',
+          })}
+        >
+          <GroupsSelect
+            placeholder={intl.formatMessage({
+              defaultMessage: 'Select Groups',
+              id: 'q2cuIU',
+            })}
+            mode="multiple"
+            maxTagCount="responsive"
+            onChange={(value) => {
+              setSelectedGroups(value || []);
+            }}
+            value={selectedGroups}
+            defaultValue={groups.map((group) => group.value)}
+            style={{ width: '100%' }}
+          />
+        </Form.Item>
+      </Col>
+      <Col span={4}>
+        <Form.Item
+          label={intl.formatMessage({
+            defaultMessage: 'Date Range',
+            id: '52QtMe',
+          })}
+        >
+          <DatePicker.RangePicker
+            style={{ width: '100%' }}
+            defaultValue={[dateRange.startDate, dateRange.endDate]}
+            value={[dateRange.startDate, dateRange.endDate]}
+            onChange={(value) => {
+              setDateRange(
+                value
+                  ? {
+                      startDate:
+                        value?.[0] ||
+                        new Date(
+                          new Date(
+                            new Date().setMonth(new Date().getMonth() - 1)
+                          ).setHours(0, 0, 59)
+                        ),
+                      endDate:
+                        value?.[1] || new Date(new Date().setHours(23, 59, 59)),
+                    }
+                  : {
+                      startDate: new Date(
+                        new Date(
+                          new Date().setMonth(new Date().getMonth() - 1)
+                        ).setHours(0, 0, 59)
+                      ),
+                      endDate: new Date(new Date().setHours(23, 59, 59)),
+                    }
+              );
+            }}
+          />
+        </Form.Item>
+      </Col>
+      <Col>
+        <Button onClick={toggleFiltersOpen} style={{ marginTop: 29 }}>
+          <FontAwesomeIcon icon={faFilters} style={{ marginRight: 10 }} />
+          <Badge count={filterCount} showZero={false} offset={[8, 0]}>
+            {intl.formatMessage({
+              defaultMessage: 'More Filters',
+              id: 'stWNQ/',
+            })}
+          </Badge>
+        </Button>
+      </Col>
+    </Row>
+  </Form>
 );
 
 const PerformanceReport = ({
@@ -206,8 +184,6 @@ const PerformanceReport = ({
   selectedTemplate,
   setSaveAsDrawer,
   saveAsDrawer,
-  brandsLoading,
-  brands,
   setSelectedBrands,
   selectedBrands,
   investigationsData,
@@ -215,6 +191,11 @@ const PerformanceReport = ({
   selectedIndustries,
   setRedactOnPrint,
   redactOnPrint,
+  filtersOpen,
+  toggleFiltersOpen,
+  setSelectedRoles,
+  selectedRoles,
+  filterCount,
 }: Props) => {
   const ReactGridLayout = useMemo(() => WidthProvider(RGL), []);
   const handleMenuClick: MenuProps['onClick'] = (e) => {
@@ -425,15 +406,11 @@ const PerformanceReport = ({
             intl={intl}
             setSelectedGroups={setSelectedGroups}
             selectedGroups={selectedGroups}
-            selectedBrands={selectedBrands}
-            brands={brands}
             dateRange={dateRange}
             setDateRange={setDateRange}
             groupsLoading={groupsLoading}
-            setSelectedBrands={setSelectedBrands}
-            brandsLoading={brandsLoading}
-            setSelectedIndustries={setSelectedIndustries}
-            selectedIndustries={selectedIndustries}
+            toggleFiltersOpen={toggleFiltersOpen}
+            filterCount={filterCount}
           />
 
           <div className="print-container">
@@ -516,15 +493,11 @@ const PerformanceReport = ({
                   intl={intl}
                   setSelectedGroups={setSelectedGroups}
                   selectedGroups={selectedGroups}
-                  selectedBrands={selectedBrands}
-                  brands={brands}
                   dateRange={dateRange}
                   setDateRange={setDateRange}
                   groupsLoading={groupsLoading}
-                  setSelectedBrands={setSelectedBrands}
-                  brandsLoading={brandsLoading}
-                  setSelectedIndustries={setSelectedIndustries}
-                  selectedIndustries={selectedIndustries}
+                  toggleFiltersOpen={toggleFiltersOpen}
+                  filterCount={filterCount}
                 />
               </>
             }
@@ -642,6 +615,74 @@ const PerformanceReport = ({
             onClose={() => setSaveAsDrawer(false)}
           />
         </div>
+      </Drawer>
+
+      <Drawer
+        title={intl.formatMessage({
+          defaultMessage: 'Report Filters',
+          id: 'QxpB9+',
+        })}
+        open={filtersOpen}
+        onClose={toggleFiltersOpen}
+      >
+        <Form layout="vertical">
+          <Form.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Brands',
+              id: 'jWfWEA',
+            })}
+          >
+            <BrandsSelect
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Select Brands',
+                id: 'XfiiaU',
+              })}
+              mode="multiple"
+              maxTagCount="responsive"
+              onChange={(value) => {
+                setSelectedBrands(value || []);
+              }}
+              value={selectedBrands}
+              style={{ width: '100%' }}
+            />
+          </Form.Item>
+          <Form.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Industries',
+              id: 'lINmqu',
+            })}
+          >
+            <IndustrySelect
+              value={selectedIndustries}
+              onChange={(value) => {
+                setSelectedIndustries(value || []);
+              }}
+              mode="multiple"
+              maxTagCount="responsive"
+              style={{ width: '100%' }}
+            />
+          </Form.Item>
+          <Form.Item
+            label={intl.formatMessage({
+              defaultMessage: 'User Role',
+              id: 'lBxkBr',
+            })}
+          >
+            <RolesSelect
+              value={selectedRoles}
+              onChange={(value) => {
+                setSelectedRoles(value || []);
+              }}
+              mode="multiple"
+              maxTagCount="responsive"
+              style={{ width: '100%' }}
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Select User Roles',
+                id: 'q0cO2B',
+              })}
+            />
+          </Form.Item>
+        </Form>
       </Drawer>
     </Page>
   );
