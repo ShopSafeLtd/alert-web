@@ -812,7 +812,7 @@ const useReportState = ({
     templates,
     editMode,
     setEditMode,
-    layout,
+    layout: selectedTemplate ? layout : [],
     setLayout,
     minDrawer,
     setMinDrawer,

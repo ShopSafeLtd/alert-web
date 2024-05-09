@@ -46,6 +46,7 @@ const OffenderReport = () => {
     setAddLogoDrawer,
     setSaveAsDrawer,
     templates,
+    setAsDefault,
   } = useOffenderReport();
   return (
     <Row wrap={false}>
@@ -57,6 +58,7 @@ const OffenderReport = () => {
       </Col>
       <Col flex={1}>
         <View
+          setAsDefault={setAsDefault}
           editMode={editMode}
           setEditMode={setEditMode}
           targetedGoodsData={targetedGoodsData}

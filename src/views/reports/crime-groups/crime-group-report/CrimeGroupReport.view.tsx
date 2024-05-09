@@ -9,6 +9,7 @@ import RGL, { WidthProvider } from 'react-grid-layout';
 import type { IntlShape } from 'react-intl';
 import { useIntl } from 'react-intl';
 import GeneratePrintPage from '#/views/reports/GeneratePrintPage';
+import { ReportType } from 'graphql/generated';
 import { margin, rowHeight } from '../../../../components/reports/utils/utils';
 import AddLogo from '../../../../components/reports/addLogo';
 import SaveAs from '../../../../components/reports/saveAs';
@@ -174,6 +175,7 @@ const CrimeGroupReportView = ({
   targetedGoodsData,
   incidentsTableData,
   targetedBusinessData,
+  setAsDefault,
 }: Props) => {
   const ReactGridLayout = useMemo(() => WidthProvider(RGL), []);
   const intl = useIntl();
@@ -183,6 +185,13 @@ const CrimeGroupReportView = ({
     }
     if (e.key === '2') {
       saveTemplate('', 'update');
+    }
+    if (e.key === '3') {
+      setAsDefault({
+        templateId: selectedTemplate,
+        type: ReportType.CrimeGroup,
+        default: true,
+      });
     }
   };
   const items: MenuProps['items'] = [
@@ -198,93 +207,122 @@ const CrimeGroupReportView = ({
         id: 'ej3o9X',
       }),
     },
+    {
+      key: '3',
+      label: intl.formatMessage({
+        defaultMessage: 'Set as default',
+        id: 'z+Zrln',
+      }),
+      disabled:
+        templates.find((template) => template.id === selectedTemplate)
+          ?.default ||
+        selectedTemplate === 'default' ||
+        false,
+    },
   ];
 
   return (
     <Page>
-      <div
-        style={{
-          position: 'absolute',
-          display: 'flex',
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-          top: 20,
-          right: 20,
-        }}
-      >
-        <Button
-          style={{ marginRight: 10, zIndex: 1000 }}
-          key="2"
-          onClick={() => setMinDrawer(!minDrawer)}
-          type="default"
-          hidden={!editMode}
-        >
-          {minDrawer
-            ? intl.formatMessage({
-                defaultMessage: 'Hide Drawer',
-                id: 'bfZEmd',
-              })
-            : intl.formatMessage({
-                defaultMessage: 'Show Drawer',
-                id: 'Ri86Tj',
-              })}
-        </Button>
-        <Button
-          style={{ marginRight: 10 }}
-          key="1"
-          onClick={() => setEditMode(!editMode)}
-          type={editMode ? 'primary' : 'default'}
-        >
-          {editMode
-            ? intl.formatMessage({ defaultMessage: 'Lock', id: 'Zl4/y9' })
-            : intl.formatMessage({ defaultMessage: 'Edit', id: 'wEQDC6' })}
-        </Button>
-        <Button type="primary" onClick={handlePrint}>
-          {intl.formatMessage({ defaultMessage: 'Print', id: 'CXRlIo' })}
-        </Button>
-      </div>
-      <div
-        style={{
-          position: 'absolute',
-          display: 'flex',
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-          top: 80,
-          right: 20,
-        }}
-      >
-        <Select
-          style={{ width: 200, marginLeft: 10, marginRight: 10, zIndex: 1000 }}
-          onChange={(value) => selectTemplate(value)}
-          defaultValue={templates[0]?.id}
-          value={selectedTemplate}
-        >
-          {templates.map((template) => (
-            <Select.Option value={template.id}>{template.name}</Select.Option>
-          ))}
-        </Select>
-      </div>
-      <div
-        style={{
-          position: 'absolute',
-          display: 'flex',
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-          top: 130,
-          right: 20,
-        }}
-      >
-        <Dropdown
-          menu={{ items, onClick: handleMenuClick }}
-          placement="bottomLeft"
-          overlayStyle={{ zIndex: 1000 }}
-          className="no-print overlay"
-        >
-          <Button>
-            {intl.formatMessage({ defaultMessage: 'Save', id: 'jvo0vs' })}
-          </Button>
-        </Dropdown>
-      </div>
+      {!groupsLoading && selectedTemplate !== '' && (
+        <>
+          <div
+            style={{
+              position: 'absolute',
+              display: 'flex',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+              top: 20,
+              right: 20,
+            }}
+          >
+            <Button
+              style={{ marginRight: 10, zIndex: 1000 }}
+              key="2"
+              onClick={() => setMinDrawer(!minDrawer)}
+              type="default"
+              hidden={!editMode}
+            >
+              {minDrawer
+                ? intl.formatMessage({
+                    defaultMessage: 'Hide Drawer',
+                    id: 'bfZEmd',
+                  })
+                : intl.formatMessage({
+                    defaultMessage: 'Show Drawer',
+                    id: 'Ri86Tj',
+                  })}
+            </Button>
+            <Button
+              style={{ marginRight: 10 }}
+              key="1"
+              onClick={() => setEditMode(!editMode)}
+              type={editMode ? 'primary' : 'default'}
+            >
+              {editMode
+                ? intl.formatMessage({ defaultMessage: 'Lock', id: 'Zl4/y9' })
+                : intl.formatMessage({ defaultMessage: 'Edit', id: 'wEQDC6' })}
+            </Button>
+            <Button type="primary" onClick={handlePrint}>
+              {intl.formatMessage({ defaultMessage: 'Print', id: 'CXRlIo' })}
+            </Button>
+          </div>
+          <div
+            style={{
+              position: 'absolute',
+              display: 'flex',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+              top: 80,
+              right: 20,
+            }}
+          >
+            <Select
+              style={{
+                width: 200,
+                marginLeft: 10,
+                marginRight: 10,
+                zIndex: 1000,
+              }}
+              onChange={(value) => selectTemplate(value)}
+              defaultValue={templates[0]?.id}
+              value={selectedTemplate}
+            >
+              {templates.map((template) => (
+                <Select.Option value={template.id}>
+                  {template.name}
+                  {template.default
+                    ? intl.formatMessage({
+                        defaultMessage: ' (Default)',
+                        id: 'G16X1c',
+                      })
+                    : ''}
+                </Select.Option>
+              ))}
+            </Select>
+          </div>
+          <div
+            style={{
+              position: 'absolute',
+              display: 'flex',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+              top: 130,
+              right: 20,
+            }}
+          >
+            <Dropdown
+              menu={{ items, onClick: handleMenuClick }}
+              placement="bottomLeft"
+              overlayStyle={{ zIndex: 1000 }}
+              className="no-print overlay"
+            >
+              <Button>
+                {intl.formatMessage({ defaultMessage: 'Save', id: 'jvo0vs' })}
+              </Button>
+            </Dropdown>
+          </div>
+        </>
+      )}
       {editMode ? (
         <div className="print-page">
           <div className="logo">
