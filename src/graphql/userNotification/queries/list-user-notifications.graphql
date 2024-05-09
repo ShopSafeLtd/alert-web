@@ -26,36 +26,6 @@ query listUserNotifications(
         offenderId
         schemes {
           id
-          name
-          autoApproveIncidents
-          autoApproveOffenders
-          restrictIncidentAccess
-          reportOnly
-          defaultPublicOffenderDOB
-          userTodos
-          userNotifications
-          languageCount
-          autoPopulateDescription
-          needJustification
-          requireSiteNumberForUsers
-          oneSelectedIncidentTypeOnly
-          logo {
-            optimisedPersisted
-            id
-          }
-          darkLogo {
-            id
-            optimisedPersisted
-          }
-          imagesRequiredOnOffenders
-          goodsMode
-          facialRecognition
-          facialDetection
-          connectedToSchemes {
-            id
-            name
-          }
-          taskTimeTracking
         }
         title
         type

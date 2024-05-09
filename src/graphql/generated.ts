@@ -22460,7 +22460,7 @@ export type ListUserNotificationsQueryVariables = Exact<{
 }>;
 
 
-export type ListUserNotificationsQuery = { __typename?: 'Query', listUserNotifications: { __typename?: 'ListUserNotifications', total: number, notifications: Array<{ __typename?: 'UserNotification', id: string, read: boolean, createdAt: Date, notification: { __typename?: 'Notification', id: string, crimeGroupId?: string | null, createdAt: Date, chatId?: string | null, body?: string | null, articleId?: string | null, incidentId?: string | null, investigationId?: string | null, offenderId?: string | null, title?: string | null, type?: Model | null, vehicleId?: string | null, userId?: string | null, schemes: Array<{ __typename?: 'Scheme', id: string, name: string, autoApproveIncidents: boolean, autoApproveOffenders: boolean, restrictIncidentAccess: boolean, reportOnly: boolean, defaultPublicOffenderDOB: boolean, userTodos: number, userNotifications: number, languageCount: number, autoPopulateDescription: boolean, needJustification: boolean, requireSiteNumberForUsers: boolean, oneSelectedIncidentTypeOnly: boolean, imagesRequiredOnOffenders: boolean, goodsMode: GoodsMode, facialRecognition: boolean, facialDetection: boolean, taskTimeTracking: boolean, logo?: { __typename?: 'Image', optimisedPersisted?: string | null, id: string } | null, darkLogo?: { __typename?: 'Image', id: string, optimisedPersisted?: string | null } | null, connectedToSchemes: Array<{ __typename?: 'Scheme', id: string, name: string }> }>, ban?: { __typename?: 'Ban', id: string, offender: { __typename?: 'Offender', id: string } } | null } }> } };
+export type ListUserNotificationsQuery = { __typename?: 'Query', listUserNotifications: { __typename?: 'ListUserNotifications', total: number, notifications: Array<{ __typename?: 'UserNotification', id: string, read: boolean, createdAt: Date, notification: { __typename?: 'Notification', id: string, crimeGroupId?: string | null, createdAt: Date, chatId?: string | null, body?: string | null, articleId?: string | null, incidentId?: string | null, investigationId?: string | null, offenderId?: string | null, title?: string | null, type?: Model | null, vehicleId?: string | null, userId?: string | null, schemes: Array<{ __typename?: 'Scheme', id: string }>, ban?: { __typename?: 'Ban', id: string, offender: { __typename?: 'Offender', id: string } } | null } }> } };
 
 export type UserNotificationsQueryVariables = Exact<{
   where: UserWhereUniqueInput;
@@ -22471,7 +22471,7 @@ export type UserNotificationsQueryVariables = Exact<{
 }>;
 
 
-export type UserNotificationsQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, totalNotifications: number, totalUnreadNotifications: number, notifications: Array<{ __typename?: 'UserNotification', id: string, read: boolean, createdAt: Date, notification: { __typename?: 'Notification', id: string, crimeGroupId?: string | null, createdAt: Date, chatId?: string | null, body?: string | null, articleId?: string | null, incidentId?: string | null, investigationId?: string | null, offenderId?: string | null, title?: string | null, type?: Model | null, vehicleId?: string | null, userId?: string | null, schemes: Array<{ __typename?: 'Scheme', id: string, name: string, autoApproveIncidents: boolean, autoApproveOffenders: boolean, restrictIncidentAccess: boolean, reportOnly: boolean, defaultPublicOffenderDOB: boolean, userTodos: number, userNotifications: number, languageCount: number, autoPopulateDescription: boolean, needJustification: boolean, requireSiteNumberForUsers: boolean, oneSelectedIncidentTypeOnly: boolean, imagesRequiredOnOffenders: boolean, goodsMode: GoodsMode, facialRecognition: boolean, facialDetection: boolean, taskTimeTracking: boolean, logo?: { __typename?: 'Image', optimisedPersisted?: string | null, id: string } | null, darkLogo?: { __typename?: 'Image', id: string, optimisedPersisted?: string | null } | null, members: Array<{ __typename?: 'UserScheme', id: string, role: Role }>, connectedToSchemes: Array<{ __typename?: 'Scheme', id: string, name: string }> }>, ban?: { __typename?: 'Ban', id: string, offender: { __typename?: 'Offender', id: string } } | null } }> } };
+export type UserNotificationsQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, totalNotifications: number, totalUnreadNotifications: number, notifications: Array<{ __typename?: 'UserNotification', id: string, read: boolean, createdAt: Date, notification: { __typename?: 'Notification', id: string, crimeGroupId?: string | null, createdAt: Date, chatId?: string | null, body?: string | null, articleId?: string | null, incidentId?: string | null, investigationId?: string | null, offenderId?: string | null, title?: string | null, type?: Model | null, vehicleId?: string | null, userId?: string | null, schemes: Array<{ __typename?: 'Scheme', id: string, name: string }>, ban?: { __typename?: 'Ban', id: string, offender: { __typename?: 'Offender', id: string } } | null } }> } };
 
 export type CreateUserInDatabaseMutationVariables = Exact<{
   data: CreateUserData;
@@ -33027,36 +33027,6 @@ export const ListUserNotificationsDocument = gql`
         offenderId
         schemes {
           id
-          name
-          autoApproveIncidents
-          autoApproveOffenders
-          restrictIncidentAccess
-          reportOnly
-          defaultPublicOffenderDOB
-          userTodos
-          userNotifications
-          languageCount
-          autoPopulateDescription
-          needJustification
-          requireSiteNumberForUsers
-          oneSelectedIncidentTypeOnly
-          logo {
-            optimisedPersisted
-            id
-          }
-          darkLogo {
-            id
-            optimisedPersisted
-          }
-          imagesRequiredOnOffenders
-          goodsMode
-          facialRecognition
-          facialDetection
-          connectedToSchemes {
-            id
-            name
-          }
-          taskTimeTracking
         }
         title
         type
@@ -33113,39 +33083,6 @@ export const UserNotificationsDocument = gql`
         schemes {
           id
           name
-          autoApproveIncidents
-          autoApproveOffenders
-          restrictIncidentAccess
-          reportOnly
-          defaultPublicOffenderDOB
-          userTodos
-          userNotifications
-          languageCount
-          autoPopulateDescription
-          needJustification
-          requireSiteNumberForUsers
-          oneSelectedIncidentTypeOnly
-          logo {
-            optimisedPersisted
-            id
-          }
-          darkLogo {
-            id
-            optimisedPersisted
-          }
-          members {
-            id
-            role
-          }
-          imagesRequiredOnOffenders
-          goodsMode
-          facialRecognition
-          facialDetection
-          connectedToSchemes {
-            id
-            name
-          }
-          taskTimeTracking
         }
         title
         type
