@@ -1,21 +1,23 @@
 import { useEffect, useState } from 'react';
 import type RGL from 'react-grid-layout';
-import { useStoreState } from '../../state';
+import arrangeTemplates from '#/utils/reports/setTemplates';
+import { useStoreState } from '#/state';
 import type {
   IReportTemplate,
   MetaData,
   SelectOptions,
-} from '../../views/reports/types';
-import { tableLengthToHeight } from '../../components/reports/utils/utils';
+} from '#/views/reports/types';
+import { tableLengthToHeight } from '#/components/reports/utils/utils';
+import {
+  SchemeReportDetailsDocument,
+  useCreateReportTemplateMutation,
+  useSetDefaultTemplateMutation,
+  useUpdateReportTemplateMutation,
+} from 'graphql/generated';
 import type {
   ReportType as IReportType,
   SchemeReportDetailsQuery,
   SchemeReportDetailsQueryVariables,
-} from '../../graphql/generated';
-import {
-  SchemeReportDetailsDocument,
-  useCreateReportTemplateMutation,
-  useUpdateReportTemplateMutation,
 } from '../../graphql/generated';
 
 interface Props {
@@ -75,6 +77,11 @@ interface Return {
   selectedRoles: string[];
   setSelectedRoles: (arg: string[]) => void;
   filterCount: number;
+  setAsDefault: (arg0: {
+    templateId: string;
+    type: IReportType;
+    default: boolean;
+  }) => void;
 }
 
 const useReportState = ({
@@ -178,6 +185,7 @@ const useReportState = ({
   const defaultTemplate: IReportTemplate = {
     id: 'default',
     name: 'Default',
+    default: true,
     metaData: [
       ...InitMetaData,
       {
@@ -199,10 +207,10 @@ const useReportState = ({
   const [metadata, setMetadata] = useState<MetaData[]>(
     defaultTemplate.metaData
   );
-  const [templates, setTemplates] = useState<IReportTemplate[]>([
-    defaultTemplate,
+  const [templates, setTemplatesState] = useState<IReportTemplate[]>([
+    // defaultTemplate,
   ]);
-  const [selectedTemplate, setSelectedTemplate] = useState<string>('default');
+  const [selectedTemplate, setSelectedTemplate] = useState<string>('');
 
   const setDateRange = (dateRangeInput: {
     startDate: Date;
@@ -281,6 +289,22 @@ const useReportState = ({
     }
   };
 
+  const setTemplates = (input: IReportTemplate[]) => {
+    setTemplatesState(input);
+    if (!selectedTemplate && input.length > 0) {
+      const newTemplate = input[0];
+      if (newTemplate) {
+        setLayout(
+          newTemplate.layout.filter(
+            (item) => item.i !== 'pageBreak' && item.i !== 'pageBreak2'
+          )
+        );
+        setMetadata(newTemplate.metaData);
+        setSelectedTemplate(newTemplate.id);
+      }
+    }
+  };
+
   const [createReportTemplate] = useCreateReportTemplateMutation({
     onCompleted: (d) => {
       if (d.createReportTemplate) {
@@ -290,6 +314,7 @@ const useReportState = ({
             id: d.createReportTemplate.id || '',
             name: d.createReportTemplate.name || '',
             metaData: (d.createReportTemplate.metaData as MetaData[]) || [],
+            default: false,
             layout:
               (d.createReportTemplate.layout.map((item) => ({
                 ...item,
@@ -340,7 +365,11 @@ const useReportState = ({
               reportIcons: [...(existingTemplates.scheme?.reportIcons || [])],
               reportTemplates: [
                 ...(existingTemplates?.scheme?.reportTemplates || []),
-                d.createReportTemplate,
+                {
+                  ...d.createReportTemplate,
+
+                  default: false,
+                },
               ],
             },
           },
@@ -366,6 +395,123 @@ const useReportState = ({
     },
   });
 
+  const [setAsDefaultMutation] = useSetDefaultTemplateMutation({
+    onCompleted: (d) => {
+      const updatedTemps = [
+        ...(templates?.map((template) => {
+          const isNew = template.id === d?.setDefaultTemplate?.id;
+          return {
+            ...template,
+            id: template.id || '',
+            name: template.name || '',
+            metaData: template.metaData || [],
+            default: isNew ? !!d?.setDefaultTemplate?.default : false,
+            type: ReportType,
+            layout:
+              template.layout.map((item) => ({
+                ...item,
+                maxH: item.maxH ?? undefined,
+                maxW: item.maxW ?? undefined,
+                minH: item.minH ?? undefined,
+                minW: item.minW ?? undefined,
+              })) || [],
+          };
+        }) || []),
+      ];
+      arrangeTemplates(updatedTemps, defaultTemplate, setTemplates);
+    },
+    update: (cache, { data: d }) => {
+      const existingTemplates = cache.readQuery<
+        SchemeReportDetailsQuery,
+        SchemeReportDetailsQueryVariables
+      >({
+        query: SchemeReportDetailsDocument,
+        variables: {
+          where: {
+            scheme: {
+              id: {
+                equals: currentScheme,
+              },
+            },
+          },
+          schemeWhere: {
+            id: currentScheme,
+          },
+          reportTemplatesWhere: {
+            type: {
+              equals: ReportType,
+            },
+          },
+        },
+      });
+      if (existingTemplates && d?.setDefaultTemplate) {
+        const updatedTemps = [
+          ...(existingTemplates?.scheme?.reportTemplates.map((template) => {
+            const isNew = template.id === d?.setDefaultTemplate?.id;
+            return {
+              ...template,
+              id: template.id || '',
+              name: template.name || '',
+              metaData: (template.metaData as MetaData[]) || [],
+              default: isNew ? !!d?.setDefaultTemplate?.default : false,
+              type: template.type,
+              layout:
+                template.layout.map((item) => ({
+                  ...item,
+                  maxH: item.maxH ?? undefined,
+                  maxW: item.maxW ?? undefined,
+                  minH: item.minH ?? undefined,
+                  minW: item.minW ?? undefined,
+                })) || [],
+            };
+          }) || []),
+        ];
+
+        cache.writeQuery<
+          SchemeReportDetailsQuery,
+          SchemeReportDetailsQueryVariables
+        >({
+          query: SchemeReportDetailsDocument,
+          data: {
+            groups: existingTemplates.groups,
+            scheme: {
+              ...existingTemplates.scheme,
+              reportIcons: [...(existingTemplates.scheme?.reportIcons || [])],
+              reportTemplates: updatedTemps,
+            },
+          },
+          variables: {
+            where: {
+              scheme: {
+                id: {
+                  equals: currentScheme,
+                },
+              },
+            },
+            schemeWhere: {
+              id: currentScheme,
+            },
+            reportTemplatesWhere: {
+              type: {
+                equals: ReportType,
+              },
+            },
+          },
+        });
+      }
+    },
+  });
+  const setAsDefault = (arg0: {
+    templateId: string;
+    type: IReportType;
+    default: boolean;
+  }) => {
+    void setAsDefaultMutation({
+      variables: {
+        data: arg0,
+      },
+    });
+  };
   const [updateReportTemplate] = useUpdateReportTemplateMutation({
     update: (cache, { data: d }) => {
       const existingTemplates = cache.readQuery<
@@ -392,39 +538,47 @@ const useReportState = ({
         },
       });
       if (existingTemplates && d?.updateReportTemplate) {
-        setTemplates([
-          defaultTemplate,
-          ...(existingTemplates?.scheme?.reportTemplates
-            .filter((item) => item.id !== d.updateReportTemplate?.id)
-            .map((template) => ({
-              id: template.id || '',
-              name: template.name || '',
-              metaData: (template.metaData as MetaData[]) || [],
+        arrangeTemplates(
+          [
+            ...(existingTemplates?.scheme?.reportTemplates
+              .filter((item) => item.id !== d.updateReportTemplate?.id)
+              .map((template) => ({
+                id: template.id || '',
+                name: template.name || '',
+                metaData: (template.metaData as MetaData[]) || [],
+                default: template.default,
+                type: template.type,
+                layout:
+                  (template.layout.map((item) => ({
+                    ...item,
+                    maxH: item.maxH ?? undefined,
+                    maxW: item.maxW ?? undefined,
+                    minH: item.minH ?? undefined,
+                    minW: item.minW ?? undefined,
+                  })) as RGL.Layout[]) || [],
+              })) || []),
+            {
+              id: d.updateReportTemplate.id || '',
+              name: d.updateReportTemplate.name || '',
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              metaData: (d.updateReportTemplate.metaData as MetaData[]) || [],
+              default: d.updateReportTemplate.default,
+              type: d.updateReportTemplate.type,
               layout:
-                (template.layout.map((item) => ({
+                (d.updateReportTemplate.layout.map((item) => ({
                   ...item,
                   maxH: item.maxH ?? undefined,
                   maxW: item.maxW ?? undefined,
                   minH: item.minH ?? undefined,
                   minW: item.minW ?? undefined,
                 })) as RGL.Layout[]) || [],
-            })) || []),
-          {
-            id: d.updateReportTemplate.id || '',
-            name: d.updateReportTemplate.name || '',
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            metaData: (d.updateReportTemplate.metaData as MetaData[]) || [],
-            layout:
-              (d.updateReportTemplate.layout.map((item) => ({
-                ...item,
-                maxH: item.maxH ?? undefined,
-                maxW: item.maxW ?? undefined,
-                minH: item.minH ?? undefined,
-                minW: item.minW ?? undefined,
-              })) as RGL.Layout[]) || [],
-          },
-        ]);
+            },
+          ],
+          defaultTemplate,
+          setTemplates
+        );
+
         cache.writeQuery<
           SchemeReportDetailsQuery,
           SchemeReportDetailsQueryVariables
@@ -689,6 +843,7 @@ const useReportState = ({
     setSelectedRoles,
     selectedRoles,
     filterCount,
+    setAsDefault,
   };
 };
 

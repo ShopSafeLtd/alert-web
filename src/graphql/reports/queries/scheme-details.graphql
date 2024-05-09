@@ -14,27 +14,12 @@ query SchemeReportDetails(
     }
   }
   scheme(where: $schemeWhere) {
-    reportIcons{
-    optimisedPersisted
+    reportIcons {
+      optimisedPersisted
     }
     reportTemplates(where: $reportTemplatesWhere) {
-      id
-      metaData
-      name
-      layout {
-        h
-        id
-        i
-        maxH
-        maxW
-        minW
-        minH
-        static
-        moved
-        w
-        x
-        y
-      }
+    ...ReportTemplates
+
     }
   }
 }

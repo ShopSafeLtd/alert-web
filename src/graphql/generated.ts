@@ -1984,6 +1984,18 @@ export type BusinessImpactInput = {
   telephone: Scalars['String'];
 };
 
+export type BusinessIncidentsCountGraphInput = {
+  brandIds?: InputMaybe<Array<Scalars['String']>>;
+  businessIds?: InputMaybe<Array<Scalars['String']>>;
+  crimeGroupId?: InputMaybe<Scalars['String']>;
+  dateRange: DateRangeInput;
+  groupIds?: InputMaybe<Array<Scalars['String']>>;
+  industryIds?: InputMaybe<Array<Scalars['String']>>;
+  offenderId?: InputMaybe<Scalars['String']>;
+  roleIds?: InputMaybe<Array<Scalars['String']>>;
+  schemeIds: Array<Scalars['String']>;
+};
+
 export type BusinessListRelationFilter = {
   every?: InputMaybe<BusinessWhereInput>;
   none?: InputMaybe<BusinessWhereInput>;
@@ -3783,6 +3795,26 @@ export type CustomGalleryWhereUniqueInput = {
   schemes?: InputMaybe<SchemeListRelationFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   vehicles?: InputMaybe<VehicleListRelationFilter>;
+};
+
+export type CustomQuestionsCountGraphInput = {
+  brandIds?: InputMaybe<Array<Scalars['String']>>;
+  businessIds?: InputMaybe<Array<Scalars['String']>>;
+  crimeGroupId?: InputMaybe<Scalars['String']>;
+  dateRange: DateRangeInput;
+  groupIds?: InputMaybe<Array<Scalars['String']>>;
+  industryIds?: InputMaybe<Array<Scalars['String']>>;
+  languageCode: LanguageCode;
+  offenderId?: InputMaybe<Scalars['String']>;
+  questionId: Scalars['String'];
+  roleIds?: InputMaybe<Array<Scalars['String']>>;
+  schemeIds: Array<Scalars['String']>;
+};
+
+export type CustomQuestionsGraph = {
+  __typename?: 'CustomQuestionsGraph';
+  data: Array<Graph>;
+  title: Scalars['String'];
 };
 
 export type CustomRole = {
@@ -9741,6 +9773,7 @@ export type Mutation = {
   searchExistingImages: Array<RekMatch>;
   searchFaces: SystemTask;
   sendInvite: User;
+  setDefaultTemplate?: Maybe<ReportTemplate>;
   setPassword: User;
   setSchemeSharing: Scheme;
   shareData: SystemTask;
@@ -10430,6 +10463,11 @@ export type MutationScanIncidentArgs = {
 
 export type MutationSendInviteArgs = {
   user: Scalars['String'];
+};
+
+
+export type MutationSetDefaultTemplateArgs = {
+  data: SetDefaultTemplateInput;
 };
 
 
@@ -12764,6 +12802,7 @@ export type Query = {
   business: Business;
   businessContribution: ListBusinessContribution;
   businessImpact: BusinessImpact;
+  businessIncidentCountGraph: Array<Graph>;
   businessRelay: QueryBusinessRelayConnection;
   businessReport: BusinessReport;
   chat: Chat;
@@ -12778,6 +12817,7 @@ export type Query = {
   crimeGroupReport: CrimeGroupReport;
   currentUser?: Maybe<User>;
   customGallery: CustomGallery;
+  customQuestionsCountGraph: CustomQuestionsGraph;
   dashboard: Dashboard;
   dashboards: QueryDashboardsConnection;
   documents: QueryDocumentsConnection;
@@ -13011,6 +13051,12 @@ export type QueryBusinessImpactArgs = {
 };
 
 
+export type QueryBusinessIncidentCountGraphArgs = {
+  take?: InputMaybe<Scalars['Int']>;
+  where: BusinessIncidentsCountGraphInput;
+};
+
+
 export type QueryBusinessRelayArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
@@ -13087,6 +13133,11 @@ export type QueryCrimeGroupReportArgs = {
 
 export type QueryCustomGalleryArgs = {
   where: CustomGalleryWhereUniqueInput;
+};
+
+
+export type QueryCustomQuestionsCountGraphArgs = {
+  where: CustomQuestionsCountGraphInput;
 };
 
 
@@ -14820,6 +14871,7 @@ export type ReportLayout = {
 
 export type ReportLayoutCreateManyTemplateInput = {
   createdAt?: InputMaybe<Scalars['Date']>;
+  default?: InputMaybe<Scalars['Boolean']>;
   h: Scalars['Int'];
   i: Scalars['String'];
   id?: InputMaybe<Scalars['String']>;
@@ -14949,6 +15001,7 @@ export type ReportLayoutWhereUniqueInput = {
 export type ReportTemplate = {
   __typename?: 'ReportTemplate';
   createdAt: Scalars['Date'];
+  default: Scalars['Boolean'];
   id: Scalars['String'];
   layout: Array<ReportLayout>;
   metaData: Array<Scalars['JSON']>;
@@ -14960,6 +15013,7 @@ export type ReportTemplate = {
 
 export type ReportTemplateCreateInput = {
   createdAt?: InputMaybe<Scalars['Date']>;
+  default?: InputMaybe<Scalars['Boolean']>;
   id?: InputMaybe<Scalars['String']>;
   layout?: InputMaybe<ReportLayoutCreateNestedManyWithoutTemplateInput>;
   metaData?: InputMaybe<Array<Scalars['JSON']>>;
@@ -15024,6 +15078,7 @@ export type ReportTemplateScalarWhereWithAggregatesInput = {
 };
 
 export type ReportTemplateUpdateInput = {
+  default?: InputMaybe<SetBooleanHelper>;
   layout?: InputMaybe<ReportLayoutUpdateManyWithoutTemplateNestedInput>;
   metaData?: InputMaybe<Array<Scalars['JSON']>>;
   name?: InputMaybe<NullableSetStringHelper>;
@@ -16061,6 +16116,12 @@ export type SetBooleanHelper = {
 
 export type SetDateHelper = {
   set: Scalars['Date'];
+};
+
+export type SetDefaultTemplateInput = {
+  default: Scalars['Boolean'];
+  templateId: Scalars['String'];
+  type: ReportType;
 };
 
 export type SetFloatHelper = {
@@ -22084,7 +22145,16 @@ export type CreateReportTemplateMutationVariables = Exact<{
 }>;
 
 
-export type CreateReportTemplateMutation = { __typename?: 'Mutation', createReportTemplate: { __typename?: 'ReportTemplate', id: string, metaData: Array<{ [key: string]: any }>, name?: string | null, type: ReportType, layout: Array<{ __typename?: 'ReportLayout', id: string, createdAt: Date, updatedAt: Date, h: number, w: number, x: number, y: number, maxW?: number | null, maxH?: number | null, minW?: number | null, minH?: number | null, static: boolean, moved: boolean, i: string }> } };
+export type CreateReportTemplateMutation = { __typename?: 'Mutation', createReportTemplate: { __typename?: 'ReportTemplate', id: string, metaData: Array<{ [key: string]: any }>, default: boolean, name?: string | null, type: ReportType, layout: Array<{ __typename?: 'ReportLayout', id: string, createdAt: Date, updatedAt: Date, h: number, w: number, x: number, y: number, maxW?: number | null, maxH?: number | null, minW?: number | null, minH?: number | null, static: boolean, moved: boolean, i: string }> } };
+
+export type ReportTemplatesFragment = { __typename?: 'ReportTemplate', id: string, metaData: Array<{ [key: string]: any }>, default: boolean, name?: string | null, type: ReportType, layout: Array<{ __typename?: 'ReportLayout', id: string, createdAt: Date, updatedAt: Date, h: number, w: number, x: number, y: number, maxW?: number | null, maxH?: number | null, minW?: number | null, minH?: number | null, static: boolean, moved: boolean, i: string }> };
+
+export type SetDefaultTemplateMutationVariables = Exact<{
+  data: SetDefaultTemplateInput;
+}>;
+
+
+export type SetDefaultTemplateMutation = { __typename?: 'Mutation', setDefaultTemplate?: { __typename?: 'ReportTemplate', id: string, default: boolean } | null };
 
 export type UpdateReportTemplateMutationVariables = Exact<{
   data: ReportTemplateUpdateInput;
@@ -22092,7 +22162,7 @@ export type UpdateReportTemplateMutationVariables = Exact<{
 }>;
 
 
-export type UpdateReportTemplateMutation = { __typename?: 'Mutation', updateReportTemplate: { __typename?: 'ReportTemplate', id: string, name?: string | null, metaData: Array<{ [key: string]: any }>, type: ReportType, layout: Array<{ __typename?: 'ReportLayout', id: string, createdAt: Date, updatedAt: Date, h: number, w: number, x: number, y: number, maxW?: number | null, maxH?: number | null, minW?: number | null, minH?: number | null, static: boolean, i: string, moved: boolean }> } };
+export type UpdateReportTemplateMutation = { __typename?: 'Mutation', updateReportTemplate: { __typename?: 'ReportTemplate', id: string, metaData: Array<{ [key: string]: any }>, default: boolean, name?: string | null, type: ReportType, layout: Array<{ __typename?: 'ReportLayout', id: string, createdAt: Date, updatedAt: Date, h: number, w: number, x: number, y: number, maxW?: number | null, maxH?: number | null, minW?: number | null, minH?: number | null, static: boolean, moved: boolean, i: string }> } };
 
 export type BusinessEngagementQueryVariables = Exact<{
   where: UserContributionWhereInput;
@@ -22182,7 +22252,7 @@ export type SchemeReportDetailsQueryVariables = Exact<{
 }>;
 
 
-export type SchemeReportDetailsQuery = { __typename?: 'Query', groups: Array<{ __typename?: 'Group', id: string, name: string, description?: string | null, approver: Array<{ __typename?: 'User', id: string, fullName: string }> }>, scheme: { __typename?: 'Scheme', reportIcons: Array<{ __typename?: 'Image', optimisedPersisted?: string | null }>, reportTemplates: Array<{ __typename?: 'ReportTemplate', id: string, metaData: Array<{ [key: string]: any }>, name?: string | null, layout: Array<{ __typename?: 'ReportLayout', h: number, id: string, i: string, maxH?: number | null, maxW?: number | null, minW?: number | null, minH?: number | null, static: boolean, moved: boolean, w: number, x: number, y: number }> }> } };
+export type SchemeReportDetailsQuery = { __typename?: 'Query', groups: Array<{ __typename?: 'Group', id: string, name: string, description?: string | null, approver: Array<{ __typename?: 'User', id: string, fullName: string }> }>, scheme: { __typename?: 'Scheme', reportIcons: Array<{ __typename?: 'Image', optimisedPersisted?: string | null }>, reportTemplates: Array<{ __typename?: 'ReportTemplate', id: string, metaData: Array<{ [key: string]: any }>, default: boolean, name?: string | null, type: ReportType, layout: Array<{ __typename?: 'ReportLayout', id: string, createdAt: Date, updatedAt: Date, h: number, w: number, x: number, y: number, maxW?: number | null, maxH?: number | null, minW?: number | null, minH?: number | null, static: boolean, moved: boolean, i: string }> }> } };
 
 export type SchemeReportFiltersQueryVariables = Exact<{
   where?: InputMaybe<SchemeWhereInput>;
@@ -23805,6 +23875,31 @@ export const VehiclesFragmentDoc = gql`
   model
   make
   registration
+}
+    `;
+export const ReportTemplatesFragmentDoc = gql`
+    fragment ReportTemplates on ReportTemplate {
+  id
+  metaData
+  default
+  layout {
+    id
+    createdAt
+    updatedAt
+    h
+    w
+    x
+    y
+    maxW
+    maxH
+    minW
+    minH
+    static
+    moved
+    i
+  }
+  name
+  type
 }
     `;
 export const ArticlePreviewFragmentDoc = gql`
@@ -30855,29 +30950,10 @@ export type CreateOneBusinessImpactMutationOptions = Apollo.BaseMutationOptions<
 export const CreateReportTemplateDocument = gql`
     mutation CreateReportTemplate($data: ReportTemplateCreateInput!) {
   createReportTemplate(data: $data) {
-    id
-    metaData
-    layout {
-      id
-      createdAt
-      updatedAt
-      h
-      w
-      x
-      y
-      maxW
-      maxH
-      minW
-      minH
-      static
-      moved
-      i
-    }
-    name
-    type
+    ...ReportTemplates
   }
 }
-    `;
+    ${ReportTemplatesFragmentDoc}`;
 export type CreateReportTemplateMutationFn = Apollo.MutationFunction<CreateReportTemplateMutation, CreateReportTemplateMutationVariables>;
 export function useCreateReportTemplateMutation(baseOptions?: Apollo.MutationHookOptions<CreateReportTemplateMutation, CreateReportTemplateMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
@@ -30886,32 +30962,29 @@ export function useCreateReportTemplateMutation(baseOptions?: Apollo.MutationHoo
 export type CreateReportTemplateMutationHookResult = ReturnType<typeof useCreateReportTemplateMutation>;
 export type CreateReportTemplateMutationResult = Apollo.MutationResult<CreateReportTemplateMutation>;
 export type CreateReportTemplateMutationOptions = Apollo.BaseMutationOptions<CreateReportTemplateMutation, CreateReportTemplateMutationVariables>;
-export const UpdateReportTemplateDocument = gql`
-    mutation UpdateReportTemplate($data: ReportTemplateUpdateInput!, $where: ReportTemplateWhereUniqueInput!) {
-  updateReportTemplate(data: $data, where: $where) {
+export const SetDefaultTemplateDocument = gql`
+    mutation SetDefaultTemplate($data: SetDefaultTemplateInput!) {
+  setDefaultTemplate(data: $data) {
     id
-    name
-    layout {
-      id
-      createdAt
-      updatedAt
-      h
-      w
-      x
-      y
-      maxW
-      maxH
-      minW
-      minH
-      static
-      i
-      moved
-    }
-    metaData
-    type
+    default
   }
 }
     `;
+export type SetDefaultTemplateMutationFn = Apollo.MutationFunction<SetDefaultTemplateMutation, SetDefaultTemplateMutationVariables>;
+export function useSetDefaultTemplateMutation(baseOptions?: Apollo.MutationHookOptions<SetDefaultTemplateMutation, SetDefaultTemplateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetDefaultTemplateMutation, SetDefaultTemplateMutationVariables>(SetDefaultTemplateDocument, options);
+      }
+export type SetDefaultTemplateMutationHookResult = ReturnType<typeof useSetDefaultTemplateMutation>;
+export type SetDefaultTemplateMutationResult = Apollo.MutationResult<SetDefaultTemplateMutation>;
+export type SetDefaultTemplateMutationOptions = Apollo.BaseMutationOptions<SetDefaultTemplateMutation, SetDefaultTemplateMutationVariables>;
+export const UpdateReportTemplateDocument = gql`
+    mutation UpdateReportTemplate($data: ReportTemplateUpdateInput!, $where: ReportTemplateWhereUniqueInput!) {
+  updateReportTemplate(data: $data, where: $where) {
+    ...ReportTemplates
+  }
+}
+    ${ReportTemplatesFragmentDoc}`;
 export type UpdateReportTemplateMutationFn = Apollo.MutationFunction<UpdateReportTemplateMutation, UpdateReportTemplateMutationVariables>;
 export function useUpdateReportTemplateMutation(baseOptions?: Apollo.MutationHookOptions<UpdateReportTemplateMutation, UpdateReportTemplateMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
@@ -31794,27 +31867,11 @@ export const SchemeReportDetailsDocument = gql`
       optimisedPersisted
     }
     reportTemplates(where: $reportTemplatesWhere) {
-      id
-      metaData
-      name
-      layout {
-        h
-        id
-        i
-        maxH
-        maxW
-        minW
-        minH
-        static
-        moved
-        w
-        x
-        y
-      }
+      ...ReportTemplates
     }
   }
 }
-    `;
+    ${ReportTemplatesFragmentDoc}`;
 export function useSchemeReportDetailsQuery(baseOptions: Apollo.QueryHookOptions<SchemeReportDetailsQuery, SchemeReportDetailsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<SchemeReportDetailsQuery, SchemeReportDetailsQueryVariables>(SchemeReportDetailsDocument, options);
