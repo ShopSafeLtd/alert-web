@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { useStoreActions, useStoreState } from 'state';
 import type {
-  GoodsMode,
-  Role,
   UpdateUserNotificationsMutation,
   UserNotificationsQuery,
   UserNotificationsQueryVariables,
@@ -38,50 +36,10 @@ export interface NotificationData {
     offender: { id: string | null };
   } | null;
   userId?: string | null;
-  schemes: Scheme[];
+  schemes: { id: string }[];
   read: boolean;
 }
-interface Scheme {
-  reportOnly: boolean;
-  id: string;
-  name: string;
-  autoApproveIncidents: boolean;
-  autoApproveOffenders: boolean;
-  restrictIncidentAccess: boolean;
-  defaultPublicOffenderDOB: boolean;
-  userTodos?: number | null | undefined;
-  userNotifications?: number | null | undefined;
-  logo?:
-    | {
-        optimisedPersisted?: string | null | undefined;
-      }
-    | null
-    | undefined;
-  darkLogo?:
-    | {
-        optimisedPersisted?: string | null | undefined;
-      }
-    | null
-    | undefined;
-  members: {
-    id: string;
-    role: Role;
-  }[];
-  goodsMode: GoodsMode;
-  facialRecognition: boolean;
-  facialDetection: boolean;
-  imagesRequiredOnOffenders: boolean;
-  taskTimeTracking: boolean;
-  languageCount: number;
-  autoPopulateDescription: boolean;
-  needJustification: boolean;
-  requireSiteNumberForUsers: boolean;
-  oneSelectedIncidentTypeOnly: boolean;
-  connectedToSchemes: {
-    id: string;
-    name: string;
-  }[];
-}
+
 interface Return {
   data:
     | Exclude<UserNotificationsQuery['user'], undefined | null>
@@ -129,24 +87,26 @@ const useNotificationLists = (): Return => {
     notificationWhere: {
       AND: [
         {
-          OR: [
-            {
-              notification: {
-                title: {
-                  contains: search,
-                  mode: QueryMode.Insensitive,
+          OR: search
+            ? [
+                {
+                  notification: {
+                    title: {
+                      contains: search,
+                      mode: QueryMode.Insensitive,
+                    },
+                  },
                 },
-              },
-            },
-            {
-              notification: {
-                body: {
-                  contains: search,
-                  mode: QueryMode.Insensitive,
+                {
+                  notification: {
+                    body: {
+                      contains: search,
+                      mode: QueryMode.Insensitive,
+                    },
+                  },
                 },
-              },
-            },
-          ],
+              ]
+            : undefined,
           notification: {
             schemes: {
               some: {
@@ -335,9 +295,14 @@ const useNotificationLists = (): Return => {
       }
     }
   };
-  const handleSchemeChange = (scheme: Scheme) => {
+  const handleSchemeChange = (notificationSchemeId: string) => {
     window.localStorage.removeItem(LocalStorageKeys.INCIDENT_FILTER);
     window.localStorage.removeItem(LocalStorageKeys.OFFENDER_FILTER);
+    const userScheme = userSchemes.find(
+      (el) => el.scheme.id === notificationSchemeId
+    );
+    if (!userScheme) return;
+    const { scheme } = userScheme;
     window.localStorage.setItem('currentScheme', scheme.id);
     window.localStorage.setItem('logo', scheme.logo?.optimisedPersisted || '');
     window.localStorage.setItem(
@@ -350,11 +315,12 @@ const useNotificationLists = (): Return => {
       needJustification: scheme.needJustification,
       requireSiteNumberForUsers: scheme.requireSiteNumberForUsers,
       oneSelectedIncidentTypeOnly: scheme.oneSelectedIncidentTypeOnly,
+      reportOnly: scheme.reportOnly,
       languageCount: scheme.languageCount,
       autoApproveIncidents: scheme.autoApproveIncidents,
       autoApproveOffenders: scheme.autoApproveOffenders,
-      restrictIncidentAccess: scheme.restrictIncidentAccess,
       defaultPublicOffenderDOB: scheme.defaultPublicOffenderDOB,
+      restrictIncidentAccess: scheme.restrictIncidentAccess,
       id: scheme.id,
       name: scheme.name,
       logo: scheme.logo?.optimisedPersisted,
@@ -363,10 +329,9 @@ const useNotificationLists = (): Return => {
       userNotifications: scheme.userNotifications,
       goodsMode: scheme.goodsMode,
       facialRecognition: scheme.facialRecognition,
+      facialDetection: scheme.facialRecognition,
       imagesRequiredOnOffenders: scheme.imagesRequiredOnOffenders,
       taskTimeTracking: scheme.taskTimeTracking,
-      reportOnly: scheme.reportOnly,
-      facialDetection: scheme.facialDetection,
       connectedToSchemes: scheme.connectedToSchemes,
     });
     setFilterDefaultGroup({
@@ -384,7 +349,7 @@ const useNotificationLists = (): Return => {
       setSaving(true);
 
       if (schemeId !== value.schemes[0].id) {
-        handleSchemeChange(value.schemes[0]);
+        handleSchemeChange(value.schemes[0].id);
       }
       void updateUserNotification({
         variables: {
