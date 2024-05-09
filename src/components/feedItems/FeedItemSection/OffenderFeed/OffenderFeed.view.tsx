@@ -8,14 +8,7 @@ import {
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
 
-import {
-  // calcAge,
-  getLastOffence,
-  // getOffenderAge,
-  // getOffenderBuild,
-  // getOffenderGender,
-  // getOffenderRace,
-} from 'utils/offender/get-offender-desc';
+import { getLastOffence } from 'utils/offender/get-offender-desc';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import FormatCalendar from 'utils/format-calendar-24h';
@@ -194,7 +187,6 @@ const OffenderFeed = ({
                     </Text>
                   </Col>
                 </Row>
-                {/* <div style={hasImage ? { height: 35 } : undefined}> */}
                 <Paragraph
                   type="secondary"
                   style={{
@@ -222,107 +214,6 @@ const OffenderFeed = ({
                     }
                   )}
                 </Paragraph>
-                {/* </div> */}
-
-                {/* <Row style={{ marginTop: 5 }}>
-                  <Col className={classes.icon}>
-                    <FontAwesomeIcon
-                      size="sm"
-                      className={classes.icon}
-                      icon={faLocationDot}
-                    />
-                    <Text type="secondary">
-                      {intl.formatMessage({
-                        defaultMessage: 'Last Offence: ',
-                        id: 'GxIpv7',
-                      })}
-                    </Text>
-                  </Col>
-                  <Col>
-                    <Text type="secondary" ellipsis>
-                      {getLastOffence(
-                        undefined,
-                        undefined,
-                        latestIncident ?? undefined
-                      ).message ||
-                        intl.formatMessage({
-                          defaultMessage: 'Unknown',
-                          id: '5jeq8P',
-                        })}
-                    </Text>
-                  </Col>
-                </Row> */}
-                {/* 
-            {publicOffenderDOB && (
-              <Row>
-                <Col>
-                  <FontAwesomeIcon
-                    size="sm"
-                    className={classes.icon}
-                    
-                    icon={faUserClock}
-                  />
-                  <Text style={{ fontSize: 14 }} type="secondary">
-                    {intl.formatMessage({
-                      defaultMessage: 'Age: ',
-                      id: 'anqdpr',
-                    })}
-                    {dateOfBirth ? calcAge(dateOfBirth) : getOffenderAge(age)}
-                  </Text>
-                </Col>
-              </Row>
-            )}
-            <Row>
-              <Col>
-                <FontAwesomeIcon
-                  size="sm"
-                  className={classes.icon}
-                  
-                  icon={faUserTag}
-                />
-                <Text style={{ fontSize: 14 }} type="secondary">
-                  {intl.formatMessage({
-                    defaultMessage: 'Build: ',
-                    id: 'iXQkAi',
-                  })}
-                  {getOffenderBuild(build)}
-                </Text>
-              </Col>
-            </Row>
-            <Row>
-              <Col flex={1}>
-                <FontAwesomeIcon
-                  size="sm"
-                  className={classes.icon}
-                  
-                  icon={faMarsAndVenus}
-                />
-                <Text style={{ fontSize: 14 }} type="secondary">
-                  {intl.formatMessage({
-                    defaultMessage: 'Sex: ',
-                    id: 'j3ULId',
-                  })}
-                  {getOffenderGender(gender)}
-                </Text>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <FontAwesomeIcon
-                  size="sm"
-                  className={classes.icon}
-                  
-                  icon={faEarth}
-                />
-                <Text style={{ fontSize: 14 }} type="secondary">
-                  {intl.formatMessage({
-                    defaultMessage: 'Ethnicity: ',
-                    id: 'H+Sv5C',
-                  })}
-                  {getOffenderRace(race, false)}
-                </Text>
-              </Col>
-            </Row> */}
               </>
             )}
             <Row wrap={false} className={classes.bottomRow}>

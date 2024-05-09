@@ -55,6 +55,7 @@ const IncidentFeed = ({
   const hasImage =
     (!isNewImage && latestUpdate && latestUpdate.feedImage) ||
     ((isNewIncident || isNewImage) && feedImage);
+
   return (
     <Row wrap={false} key={id || ''}>
       <div style={{ cursor: 'pointer', zIndex: 2 }}>
