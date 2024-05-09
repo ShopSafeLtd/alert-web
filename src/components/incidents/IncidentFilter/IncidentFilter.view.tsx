@@ -15,6 +15,7 @@ import { useIntl } from 'react-intl';
 import moment from 'moment';
 import UsersSelect from '#/components/form-components/UsersSelect/UsersSelect.view';
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
+import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
 import useStyles from './IncidentFilter.styles';
 
 const { RangePicker } = DatePicker;
@@ -30,9 +31,9 @@ interface Props {
   tagsLoading: boolean;
   setPeculiarities: (value: string) => void;
   clearFilters: () => void;
-  businesses: { value: string; label: string; location: string }[];
+
   goods: { value: string; label: string }[];
-  businessesLoading: boolean;
+
   goodsLoading: boolean;
 }
 
@@ -42,9 +43,8 @@ const IncidentFilter = ({
   clearFilters,
   setPeculiarities,
   goods,
-  businesses,
+
   goodsLoading,
-  businessesLoading,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const [form] = useForm<FormData>();
@@ -409,30 +409,17 @@ const IncidentFilter = ({
               id: 'KxEpX9',
             })}
           </Typography.Paragraph>
-          <Select
+          <BusinessesSelect
             mode="multiple"
-            allowClear
+            maxTagCount="responsive"
+            onChange={setBusinessesFilter}
+            value={businessesValue}
+            style={{ width: '100%' }}
             placeholder={intl.formatMessage({
               defaultMessage: 'Select Businesses',
               id: 'MZynHZ',
             })}
             className={classes.select}
-            value={businessesValue}
-            onChange={setBusinessesFilter}
-            loading={businessesLoading}
-            optionLabelProp="textLabel"
-            options={businesses.map((item) => ({
-              textLabel: item.label,
-              label: (
-                <div style={{ display: 'inline-block' }} key={item.value}>
-                  <Typography.Text>{item.label}</Typography.Text>
-                  <div>
-                    <Typography.Text>{item.location}</Typography.Text>
-                  </div>
-                </div>
-              ),
-              value: item.value,
-            }))}
           />
         </Col>
       </Row>

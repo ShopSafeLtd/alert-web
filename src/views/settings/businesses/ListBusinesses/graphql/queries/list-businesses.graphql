@@ -1,0 +1,37 @@
+query BusinessesList(
+  $where: BusinessWhereInput
+  $skip: Int
+  $take: Int
+  $orderBy: [BusinessOrderBy!]
+) {
+  businessRelay(where: $where, skip: $skip, take: $take, orderBy: $orderBy) {
+    totalCount
+    edges {
+      node {
+        id
+        name
+        siteNumber
+        fullName
+        publicName
+        demId
+        parent {
+          id
+          name
+        }
+        locations {
+          id
+          full
+        }
+        groups {
+          id
+          name
+        }
+        tags {
+          id
+          name
+        }
+        totalUsers
+      }
+    }
+  }
+}

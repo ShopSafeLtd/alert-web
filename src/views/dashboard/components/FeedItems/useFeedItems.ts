@@ -1,12 +1,12 @@
+import type {
+  DeleteFeedItemMutation,
+  FeedItemsQuery,
+  FeedItemsQueryVariables,
+} from 'graphql/generated';
 import {
   FeedItemsDocument,
   useDeleteFeedItemMutation,
   useFeedItemsQuery,
-} from 'graphql/generated';
-import type {
-  FeedItemsQueryVariables,
-  DeleteFeedItemMutation,
-  FeedItemsQuery,
 } from 'graphql/generated';
 import { useDashboardContext } from '#/views/dashboard/Dashboard.context';
 import errorNotification from '#/types/mutation_notifications/error_notification';

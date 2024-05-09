@@ -1,0 +1,25 @@
+query BusinessesSideList(
+  $where: BusinessWhereInput
+  $orderBy: [BusinessOrderBy!]
+  $first: Int
+  $after: String
+) {
+  businessRelay(where: $where, orderBy: $orderBy, first: $first, after: $after) {
+      totalCount
+
+    edges {
+      node {
+        id
+        name
+                    siteNumber
+        locations {
+          full
+        }
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}
