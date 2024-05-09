@@ -1,11 +1,26 @@
 import type { RefObject } from 'react';
 import React from 'react';
-import { Button, Card, Col, Row, Select, Table, Tag, Typography } from 'antd';
+import {
+  Button,
+  Card,
+  Col,
+  Drawer,
+  Row,
+  Table,
+  Tag,
+  Typography,
+  Form,
+  Input,
+} from 'antd';
 import type { UserEngagementQuery } from 'graphql/generated';
 import DatePicker from 'components/util-components/DatePicker';
 import { useIntl } from 'react-intl';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFilters } from '@fortawesome/pro-light-svg-icons';
+import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
+import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
+import RolesSelect from '#/components/form-components/RolesSelect/RolesSelect.view';
 import useStyles from './UserEngagement.styles';
-import type { SelectOptions } from './useUserEngagement';
 
 const { Title } = Typography;
 
@@ -15,14 +30,20 @@ interface Props {
     | Exclude<UserEngagementQuery['listUserContribution'], undefined | null>
     | null
     | undefined;
-  groups: SelectOptions[];
-  groupsLoading: boolean;
   dateRange: { startDate: Date; endDate: Date };
   setDateRange: (dateRange: { startDate: Date; endDate: Date }) => void;
   setSelectedGroups: (groups: string[]) => void;
   selectedGroups: string[];
   componentRef: RefObject<HTMLDivElement>;
   handlePrint: () => void;
+  filtersOpen: boolean;
+  toggleFiltersOpen: () => void;
+  selectedRoles: string[];
+  setSelectedRoles: (value: string[]) => void;
+  selectedBusinesses: string[];
+  setSelectedBusinesses: (value: string[]) => void;
+  search: string;
+  setSearch: (value: string) => void;
 }
 
 const PerformanceReport = ({
@@ -30,12 +51,18 @@ const PerformanceReport = ({
   loading,
   setDateRange,
   dateRange,
-  groups,
   setSelectedGroups,
-  groupsLoading,
   selectedGroups,
   handlePrint,
   componentRef,
+  toggleFiltersOpen,
+  filtersOpen,
+  selectedBusinesses,
+  setSelectedBusinesses,
+  setSelectedRoles,
+  selectedRoles,
+  search,
+  setSearch,
 }: Props) => {
   const classes = useStyles();
   const logo = localStorage.getItem('logo');
@@ -62,66 +89,13 @@ const PerformanceReport = ({
           }
         )}
       </Title>
-      <Row className="no-print" style={{ marginBottom: 10 }}>
-        <Col span={6}>
-          <Select
-            placeholder={intl.formatMessage({
-              defaultMessage: 'Select Groups',
-              id: 'q2cuIU',
-            })}
-            mode="multiple"
-            maxTagCount="responsive"
-            onChange={(value) => {
-              setSelectedGroups(value || []);
-            }}
-            value={selectedGroups}
-            defaultValue={groups.map((group) => group.value)}
-            style={{ width: '100%' }}
-          >
-            {groups?.map((group) => (
-              <Select.Option
-                loading={groupsLoading}
-                key={group.value}
-                value={group.value}
-              >
-                {group.label}
-              </Select.Option>
-            ))}
-          </Select>
-        </Col>
-        <Col span={12}>
-          <DatePicker.RangePicker
-            style={{ marginLeft: 10 }}
-            defaultValue={[dateRange.startDate, dateRange.endDate]}
-            value={[dateRange.startDate, dateRange.endDate]}
-            onChange={(value) => {
-              setDateRange(
-                value
-                  ? {
-                      startDate:
-                        value?.[0] ||
-                        new Date(
-                          new Date(
-                            new Date().setMonth(new Date().getMonth() - 1)
-                          ).setHours(0, 0, 59)
-                        ),
-                      endDate:
-                        value?.[1] || new Date(new Date().setHours(23, 59, 59)),
-                    }
-                  : {
-                      startDate: new Date(
-                        new Date(
-                          new Date().setMonth(new Date().getMonth() - 1)
-                        ).setHours(0, 0, 59)
-                      ),
-                      endDate: new Date(new Date().setHours(23, 59, 59)),
-                    }
-              );
-            }}
-          />
-        </Col>
+      <Row
+        style={{ position: 'absolute', top: 20, right: 20 }}
+        className="no-print"
+        gutter={8}
+      >
         <Col>
-          <Button type="primary" onClick={handlePrint}>
+          <Button onClick={handlePrint}>
             {intl.formatMessage({
               defaultMessage: 'Print',
               id: 'CXRlIo',
@@ -129,6 +103,76 @@ const PerformanceReport = ({
           </Button>
         </Col>
       </Row>
+      <Form layout="vertical">
+        <Row gutter={8}>
+          <Col>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Search',
+                id: 'xmcVZ0',
+              })}
+            >
+              <Input
+                style={{ width: 350 }}
+                placeholder={intl.formatMessage({
+                  defaultMessage: 'Search for users...',
+                  id: 'nS06zC',
+                })}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </Form.Item>
+          </Col>
+          <Col flex={1} />
+          <Col>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Date Range',
+                id: '52QtMe',
+              })}
+            >
+              <DatePicker.RangePicker
+                defaultValue={[dateRange.startDate, dateRange.endDate]}
+                value={[dateRange.startDate, dateRange.endDate]}
+                onChange={(value) => {
+                  setDateRange(
+                    value
+                      ? {
+                          startDate:
+                            value?.[0] ||
+                            new Date(
+                              new Date(
+                                new Date().setMonth(new Date().getMonth() - 1)
+                              ).setHours(0, 0, 59)
+                            ),
+                          endDate:
+                            value?.[1] ||
+                            new Date(new Date().setHours(23, 59, 59)),
+                        }
+                      : {
+                          startDate: new Date(
+                            new Date(
+                              new Date().setMonth(new Date().getMonth() - 1)
+                            ).setHours(0, 0, 59)
+                          ),
+                          endDate: new Date(new Date().setHours(23, 59, 59)),
+                        }
+                  );
+                }}
+              />
+            </Form.Item>
+          </Col>
+          <Col>
+            <Button onClick={toggleFiltersOpen} style={{ marginTop: 29 }}>
+              <FontAwesomeIcon icon={faFilters} style={{ marginRight: 10 }} />
+              {intl.formatMessage({
+                defaultMessage: 'More Filters',
+                id: 'stWNQ/',
+              })}
+            </Button>
+          </Col>
+        </Row>
+      </Form>
       <Row gutter={16}>
         <Col span={24}>
           <Card loading={loading} style={{ height: '100%' }}>
@@ -259,6 +303,67 @@ const PerformanceReport = ({
           </Card>
         </Col>
       </Row>
+
+      <Drawer
+        title={intl.formatMessage({
+          id: 'QxpB9+',
+          defaultMessage: 'Report Filters',
+        })}
+        onClose={toggleFiltersOpen}
+        visible={filtersOpen}
+        width={700}
+      >
+        <Form layout="vertical">
+          <Form.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Groups',
+              id: 'hzmswI',
+            })}
+          >
+            <GroupsSelect
+              mode="multiple"
+              maxTagCount="responsive"
+              onChange={(value) => {
+                setSelectedGroups(value || []);
+              }}
+              value={selectedGroups}
+              style={{ width: '100%' }}
+            />
+          </Form.Item>
+          <Form.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Businesses',
+              id: 'D0tMhW',
+            })}
+          >
+            <BusinessesSelect
+              mode="multiple"
+              maxTagCount="responsive"
+              onChange={(value) => {
+                setSelectedBusinesses(value || []);
+              }}
+              value={selectedBusinesses}
+              style={{ width: '100%' }}
+            />
+          </Form.Item>
+          <Form.Item
+            label={intl.formatMessage({
+              defaultMessage: 'Roles',
+              id: 'c35gM5',
+            })}
+          >
+            <RolesSelect
+              mode="multiple"
+              maxTagCount="responsive"
+              onChange={(value) => {
+                setSelectedRoles(value || []);
+              }}
+              value={selectedRoles}
+              style={{ width: '100%' }}
+            />
+          </Form.Item>
+        </Form>
+      </Drawer>
     </div>
   );
 };

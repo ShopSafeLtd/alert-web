@@ -11,7 +11,6 @@ import {
   SortOrder,
   TagType,
   useIncidentsFeedQuery,
-  useListBusinessesQuery,
   useListGoodsTypesQuery,
   useSchemeGroupsQuery,
   useTagsQuery,
@@ -53,9 +52,9 @@ interface Return {
   setCrimeTypesFilter: (value: string[]) => void;
   goods: { value: string; label: string }[];
   setGoodsFilter: (value: string[]) => void;
-  businesses: { value: string; label: string; location: string }[];
+
   setBusinessesFilter: (value: string[]) => void;
-  businessesLoading: boolean;
+
   goodsLoading: boolean;
   setIncidentDateFilter: (
     value:
@@ -343,37 +342,6 @@ const useIncidentFeed = (): Return => {
     },
   });
 
-  const { data: businessesData, loading: businessesLoading } =
-    useListBusinessesQuery({
-      variables: {
-        orderBy: { name: SortOrder.Asc },
-        take: 1000,
-        where: {
-          schemes: {
-            some: {
-              id: {
-                equals: schemeId,
-              },
-            },
-          },
-          users:
-            role === Role.SchemeAdmin
-              ? undefined
-              : {
-                  some: {
-                    groups: {
-                      some: {
-                        id: {
-                          in: groups.map((id) => id),
-                        },
-                      },
-                    },
-                  },
-                },
-        },
-      },
-    });
-
   const { data: goodsData, loading: goodsLoading } = useListGoodsTypesQuery({
     variables: {
       where: {
@@ -646,12 +614,7 @@ const useIncidentFeed = (): Return => {
     setGallery,
     setPeculiarities,
     setGroupsFilter,
-    businesses:
-      businessesData?.listBusinesses.businesses.map((item) => ({
-        value: item.id,
-        label: item.name,
-        location: item.locations[0]?.full || '',
-      })) || [],
+
     goods:
       goodsData?.listGoodsTypes.goodsTypes.map((item) => ({
         value: item.id,
@@ -661,7 +624,6 @@ const useIncidentFeed = (): Return => {
     setBusinessesFilter,
     setCrimeTypesFilter,
     goodsLoading,
-    businessesLoading,
     setCreatedAtFilter,
     setIncidentDateFilter,
     fetchMoreScroll,

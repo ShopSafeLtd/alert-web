@@ -1,7 +1,6 @@
 import {
   ReportType,
   SortOrder,
-  useBrandsQuery,
   usePerformanceReportQuery,
   useSchemeReportDetailsQuery,
 } from 'graphql/generated';
@@ -50,12 +49,15 @@ const usePerformanceReport = (): Return => {
     saveTemplate: saveTemplateState,
     setSelectedBrands,
     selectedBrands,
-    brands,
-    setBrands,
     selectedIndustries,
     setSelectedIndustries,
     setRedactOnPrint,
     redactOnPrint,
+    filtersOpen,
+    toggleFiltersOpen,
+    selectedRoles,
+    setSelectedRoles,
+    filterCount,
   } = useReportState({
     InitLayout: PerformanceLayout,
     InitMetaData: PerformanceMetaData,
@@ -139,25 +141,8 @@ const usePerformanceReport = (): Return => {
         brandsIds: selectedBrands.length > 0 ? selectedBrands : undefined,
         industryIds:
           selectedIndustries.length > 0 ? selectedIndustries : undefined,
+        rolesIds: selectedRoles.length > 0 ? selectedRoles : undefined,
       },
-    },
-  });
-
-  const { loading: brandsLoading } = useBrandsQuery({
-    variables: {
-      where: {
-        scheme: {
-          id: { equals: currentScheme },
-        },
-      },
-    },
-    onCompleted: (brandsData) => {
-      setBrands(
-        brandsData.brands?.edges?.map(({ node: { id, name } }) => ({
-          value: id,
-          label: name,
-        })) || []
-      );
     },
   });
 
@@ -305,15 +290,18 @@ const usePerformanceReport = (): Return => {
     targetedGoodsData,
     templates,
     userContributionTableData,
-    brandsLoading,
     setSelectedBrands,
     selectedBrands,
-    brands,
     investigationsData,
     selectedIndustries,
     setSelectedIndustries,
     setRedactOnPrint,
     redactOnPrint,
+    filtersOpen,
+    toggleFiltersOpen,
+    selectedRoles,
+    setSelectedRoles,
+    filterCount,
   };
 };
 
