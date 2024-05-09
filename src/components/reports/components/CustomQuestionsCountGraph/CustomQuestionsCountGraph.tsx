@@ -67,7 +67,7 @@ const CustomQuestionsCountGraph = ({
         size="small"
         onClick={removeItem}
       />
-      {metaData?.id ? (
+      {metaData?.propId ? (
         <DonutGraph
           isPrinting={isPrinting}
           data={data?.customQuestionsCountGraph.data}

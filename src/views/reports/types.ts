@@ -1,6 +1,8 @@
 import type RGL from 'react-grid-layout';
 
-export type ExtendedLayout = RGL.Layout;
+export interface ExtendedLayout extends RGL.Layout {
+  allowDuplicates?: boolean;
+}
 
 export type AllowedValue =
   | 'createdSummary'
@@ -210,7 +212,7 @@ export interface MetaData {
   key: AllowedValue;
   type: ReportItemTypes;
   urls?: string[];
-  id: string;
+  propId?: string;
 }
 
 export interface SelectOptions {
