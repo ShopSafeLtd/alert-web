@@ -5,13 +5,13 @@ import {
   useTargetedBusinessReportQuery,
 } from 'graphql/generated';
 import { useEffect, useState } from 'react';
-import type RGL from 'react-grid-layout';
 import useReportPrint from 'utils/reportPrint/usePrintReports';
 import { useParams } from 'react-router-dom';
 import moment from 'moment/moment';
+import arrangeTemplates from '#/utils/reports/setTemplates';
 import BusinessReportLayout, { BusinessReportMetaData } from './initLayout';
 import type { Return } from './types';
-import type { IReportTemplate, SelectOptions } from '../../../types';
+import type { SelectOptions } from '../../../types';
 import useReportState from '../../../../../utils/reports/useReportState';
 
 const useBusinessReport = (): Return => {
@@ -48,6 +48,7 @@ const useBusinessReport = (): Return => {
     changeSize,
     addLogo,
     selectTemplate,
+    setAsDefault,
     saveTemplate: saveTemplateState,
   } = useReportState({
     InitLayout: BusinessReportLayout,
@@ -92,22 +93,11 @@ const useBusinessReport = (): Return => {
             (icon) => icon.optimisedPersisted ?? ''
           ) || []),
         ]);
-        const importedTemplates: IReportTemplate[] =
-          (groupsData.scheme?.reportTemplates.map((template) => ({
-            id: template.id || '',
-            name: template.name || '',
-            metaData: template.metaData || [],
-            layout:
-              (template.layout.map((item) => ({
-                ...item,
-                maxH: item.maxH ?? undefined,
-                maxW: item.maxW ?? undefined,
-                minH: item.minH ?? undefined,
-                minW: item.minW ?? undefined,
-              })) as RGL.Layout[]) || [],
-          })) as IReportTemplate[]) || [];
-
-        setTemplates([defaultTemplate, ...importedTemplates]);
+        arrangeTemplates(
+          groupsData?.scheme?.reportTemplates || [],
+          defaultTemplate,
+          setTemplates
+        );
       },
     });
 
@@ -254,6 +244,7 @@ const useBusinessReport = (): Return => {
     selectTemplate,
     setAddLogoDrawer,
     setSaveAsDrawer,
+    setAsDefault,
   };
 };
 

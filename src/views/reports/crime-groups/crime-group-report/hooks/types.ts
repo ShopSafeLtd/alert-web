@@ -1,6 +1,9 @@
 import type { RefObject } from 'react';
 import type RGL from 'react-grid-layout';
-import type { CrimeGroupReportQuery } from '../../../../../graphql/generated';
+import type {
+  CrimeGroupReportQuery,
+  ReportType as IReportType,
+} from '../../../../../graphql/generated';
 import type { IReportTemplate, MetaData, SelectOptions } from '../../../types';
 import type {
   IncidentsTableData,
@@ -53,4 +56,9 @@ export interface Return {
   setSelectedBusiness: (businesses: string[]) => void;
   setSelectedGroups: (groups: string[]) => void;
   templates: IReportTemplate[];
+  setAsDefault: (arg0: {
+    templateId: string;
+    type: IReportType;
+    default: boolean;
+  }) => void;
 }
