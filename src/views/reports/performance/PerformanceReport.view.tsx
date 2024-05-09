@@ -196,6 +196,7 @@ const PerformanceReport = ({
   setSelectedRoles,
   selectedRoles,
   filterCount,
+  schemeId,
 }: Props) => {
   const ReactGridLayout = useMemo(() => WidthProvider(RGL), []);
   const handleMenuClick: MenuProps['onClick'] = (e) => {
@@ -446,6 +447,14 @@ const PerformanceReport = ({
                   metadata,
                   setMetadata,
                   investigationsData,
+                  filters: {
+                    selectedBrands,
+                    selectedIndustries,
+                    selectedRoles,
+                    dateRange,
+                    selectedGroups,
+                    schemeId,
+                  },
                 })}
               </ReactGridLayout>
             </div>
@@ -534,6 +543,14 @@ const PerformanceReport = ({
               metadata,
               setMetadata,
               investigationsData,
+              filters: {
+                selectedBrands,
+                selectedIndustries,
+                selectedRoles,
+                dateRange,
+                selectedGroups,
+                schemeId,
+              },
             })}
             layout={layout}
           />

@@ -55,9 +55,11 @@ import {
   TargetGoodsColumns,
 } from 'components/reports/tableColumns';
 import { useIntl } from 'react-intl';
+import CustomQuestionsCountGraph from 'components/reports/components/CustomQuestionsCountGraph/CustomQuestionsCountGraph';
 import type { PerformanceReportQuery } from '../../../../graphql/generated';
 import useStyles from '../../styles/report.styles';
 import type { AllowedValue, Elements, MetaData } from '../../types';
+import type { Props as HookProps } from '../hooks/types';
 
 interface ContributorTable {
   key: string;
@@ -70,6 +72,16 @@ interface ContributorTable {
 }
 
 const { Title } = Typography;
+
+type FilterProps = Pick<
+  HookProps,
+  | 'dateRange'
+  | 'selectedRoles'
+  | 'selectedIndustries'
+  | 'selectedBrands'
+  | 'selectedGroups'
+  | 'schemeId'
+>;
 
 interface Props {
   loading: boolean;
@@ -90,6 +102,7 @@ interface Props {
   isPrinting: boolean;
   metadata: MetaData[];
   setMetadata: (arg0: MetaData[]) => void;
+  filters: FilterProps;
 }
 
 const PerformanceReportLayout = ({
@@ -111,6 +124,7 @@ const PerformanceReportLayout = ({
   editMode,
   metadata,
   setMetadata,
+  filters,
 }: Props) => {
   const classes = useStyles();
   const calculateHeight = (key: string, offset?: number) => {
@@ -364,7 +378,7 @@ const PerformanceReportLayout = ({
           hidden={!editMode}
           icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
           size="small"
-          onClick={() => removeItem('incidentsSummary')}
+          onClick={() => removeItem('policeSummary')}
         />
         <Row>
           <Col span={12}>
@@ -1686,6 +1700,46 @@ const PerformanceReportLayout = ({
         />
       </Card>
     ),
+    customQuestionsCountGraph: (
+      <Card
+        className="no-break"
+        loading={loading}
+        key="customQuestionsCountGraph"
+        style={{ height: calculateHeight('customQuestionsCountGraph') }}
+        bodyStyle={{ height: '90%' }}
+      >
+        <CustomQuestionsCountGraph
+          variables={{
+            where: {
+              brandIds: filters.selectedBrands,
+              questionId: metadata.find(
+                (item) => item.key === 'customQuestionsCountGraph'
+              )?.id,
+              dateRange: filters.dateRange,
+              groupIds: filters.selectedGroups,
+              industryIds: filters.selectedIndustries,
+              languageCode: 'en',
+              roleIds: filters.selectedRoles,
+              schemeIds: [filters.schemeId],
+            },
+          }}
+          editMode={editMode}
+          isPrinting={isPrinting}
+          updateQuestionId={(value: string) => {
+            const updatedMetadata = metadata.map((item) => {
+              if (item.key === 'customQuestionsCountGraph') {
+                return { ...item, id: value };
+              }
+              return item;
+            }) satisfies MetaData[];
+            setMetadata(updatedMetadata);
+          }}
+          metaData={metadata.find(
+            (item) => item.key === 'customQuestionsCountGraph'
+          )}
+        />
+      </Card>
+    ),
   };
 
   return useMemo(
@@ -1701,6 +1755,7 @@ const PerformanceReportLayout = ({
       targetedBusinessData,
       targetedGoodsData,
       metadata,
+      filters,
     ]
   );
 };

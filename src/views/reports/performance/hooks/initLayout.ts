@@ -12,6 +12,7 @@ export const PerformanceMetaData: MetaData[] = [
   { key: 'involvedTagsDonut', type: 'donut' },
   { key: 'goodsTypeDonut', type: 'donut' },
   { key: 'goodsValueDonut', type: 'donut' },
+  { key: 'customQuestionsCountGraph', type: 'donut' },
   { key: 'incidentsDayOfWeekGraph', type: 'graph' },
   { key: 'incidentsHeatMap', type: 'heatmap' },
   { key: 'businessContributionTable', type: 'table' },
@@ -23,14 +24,8 @@ export const PerformanceMetaData: MetaData[] = [
   { key: 'investigationsTable', type: 'table' },
   { key: 'incidentsDayOfWeekGraph', type: 'graph' },
   { key: 'incidentsDayOfWeekGraph', type: 'graph' },
-  {
-    key: 'timeHeatMap',
-    type: 'heatmap',
-  },
-  {
-    key: 'priorityGraph',
-    type: 'bar',
-  },
+  { key: 'timeHeatMap', type: 'heatmap' },
+  { key: 'priorityGraph', type: 'bar' },
 ];
 
 const PerformanceLayout: ExtendedLayout[] = [
@@ -114,7 +109,6 @@ const PerformanceLayout: ExtendedLayout[] = [
     moved: false,
     static: false,
   },
-
   {
     w: 2,
     h: 17,
@@ -278,6 +272,16 @@ export const PerformanceDrawerLayout: ExtendedLayout[] = [
     x: 0,
     y: 36,
     i: 'goodsValueDonut',
+    maxH: 11,
+    moved: false,
+    static: false,
+  },
+  {
+    w: 1,
+    h: 9,
+    x: 0,
+    y: 36,
+    i: 'customQuestionsCountGraph',
     maxH: 11,
     moved: false,
     static: false,

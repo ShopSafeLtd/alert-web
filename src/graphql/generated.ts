@@ -1978,6 +1978,18 @@ export type BusinessImpactInput = {
   telephone: Scalars['String'];
 };
 
+export type BusinessIncidentsCountGraphInput = {
+  brandIds?: InputMaybe<Array<Scalars['String']>>;
+  businessIds?: InputMaybe<Array<Scalars['String']>>;
+  crimeGroupId?: InputMaybe<Scalars['String']>;
+  dateRange: DateRangeInput;
+  groupIds?: InputMaybe<Array<Scalars['String']>>;
+  industryIds?: InputMaybe<Array<Scalars['String']>>;
+  offenderId?: InputMaybe<Scalars['String']>;
+  roleIds?: InputMaybe<Array<Scalars['String']>>;
+  schemeIds: Array<Scalars['String']>;
+};
+
 export type BusinessListRelationFilter = {
   every?: InputMaybe<BusinessWhereInput>;
   none?: InputMaybe<BusinessWhereInput>;
@@ -3777,6 +3789,26 @@ export type CustomGalleryWhereUniqueInput = {
   schemes?: InputMaybe<SchemeListRelationFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   vehicles?: InputMaybe<VehicleListRelationFilter>;
+};
+
+export type CustomQuestionsCountGraphInput = {
+  brandIds?: InputMaybe<Array<Scalars['String']>>;
+  businessIds?: InputMaybe<Array<Scalars['String']>>;
+  crimeGroupId?: InputMaybe<Scalars['String']>;
+  dateRange: DateRangeInput;
+  groupIds?: InputMaybe<Array<Scalars['String']>>;
+  industryIds?: InputMaybe<Array<Scalars['String']>>;
+  languageCode: LanguageCode;
+  offenderId?: InputMaybe<Scalars['String']>;
+  questionId: Scalars['String'];
+  roleIds?: InputMaybe<Array<Scalars['String']>>;
+  schemeIds: Array<Scalars['String']>;
+};
+
+export type CustomQuestionsGraph = {
+  __typename?: 'CustomQuestionsGraph';
+  data: Array<Graph>;
+  title: Scalars['String'];
 };
 
 export type CustomRole = {
@@ -12758,6 +12790,7 @@ export type Query = {
   business: Business;
   businessContribution: ListBusinessContribution;
   businessImpact: BusinessImpact;
+  businessIncidentCountGraph: Array<Graph>;
   businessReport: BusinessReport;
   chat: Chat;
   chatMessages: Array<MessageItem>;
@@ -12770,6 +12803,7 @@ export type Query = {
   crimeGroupReport: CrimeGroupReport;
   currentUser?: Maybe<User>;
   customGallery: CustomGallery;
+  customQuestionsCountGraph: CustomQuestionsGraph;
   dashboard: Dashboard;
   dashboards: QueryDashboardsConnection;
   documents: QueryDocumentsConnection;
@@ -13003,6 +13037,12 @@ export type QueryBusinessImpactArgs = {
 };
 
 
+export type QueryBusinessIncidentCountGraphArgs = {
+  take?: InputMaybe<Scalars['Int']>;
+  where: BusinessIncidentsCountGraphInput;
+};
+
+
 export type QueryBusinessReportArgs = {
   where: BusinessReportInput;
 };
@@ -13061,6 +13101,11 @@ export type QueryCrimeGroupReportArgs = {
 
 export type QueryCustomGalleryArgs = {
   where: CustomGalleryWhereUniqueInput;
+};
+
+
+export type QueryCustomQuestionsCountGraphArgs = {
+  where: CustomQuestionsCountGraphInput;
 };
 
 
@@ -20689,6 +20734,13 @@ export type UserRolesQueryVariables = Exact<{
 
 export type UserRolesQuery = { __typename?: 'Query', roles: { __typename?: 'QueryRolesConnection', edges: Array<{ __typename?: 'QueryRolesConnectionEdge', node: { __typename?: 'CustomRole', type: Role, id: string, name: string } }> } };
 
+export type CustomQuestionsCountGraphQueryVariables = Exact<{
+  where: CustomQuestionsCountGraphInput;
+}>;
+
+
+export type CustomQuestionsCountGraphQuery = { __typename?: 'Query', customQuestionsCountGraph: { __typename?: 'CustomQuestionsGraph', title: string, data: Array<{ __typename?: 'Graph', label: string, value: number }> } };
+
 export type ListActionsQueryVariables = Exact<{
   take?: InputMaybe<Scalars['Int']>;
   skip?: InputMaybe<Scalars['Int']>;
@@ -24289,6 +24341,28 @@ export function useUserRolesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type UserRolesQueryHookResult = ReturnType<typeof useUserRolesQuery>;
 export type UserRolesLazyQueryHookResult = ReturnType<typeof useUserRolesLazyQuery>;
 export type UserRolesQueryResult = Apollo.QueryResult<UserRolesQuery, UserRolesQueryVariables>;
+export const CustomQuestionsCountGraphDocument = gql`
+    query CustomQuestionsCountGraph($where: CustomQuestionsCountGraphInput!) {
+  customQuestionsCountGraph(where: $where) {
+    data {
+      label
+      value
+    }
+    title
+  }
+}
+    `;
+export function useCustomQuestionsCountGraphQuery(baseOptions: Apollo.QueryHookOptions<CustomQuestionsCountGraphQuery, CustomQuestionsCountGraphQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CustomQuestionsCountGraphQuery, CustomQuestionsCountGraphQueryVariables>(CustomQuestionsCountGraphDocument, options);
+      }
+export function useCustomQuestionsCountGraphLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CustomQuestionsCountGraphQuery, CustomQuestionsCountGraphQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CustomQuestionsCountGraphQuery, CustomQuestionsCountGraphQueryVariables>(CustomQuestionsCountGraphDocument, options);
+        }
+export type CustomQuestionsCountGraphQueryHookResult = ReturnType<typeof useCustomQuestionsCountGraphQuery>;
+export type CustomQuestionsCountGraphLazyQueryHookResult = ReturnType<typeof useCustomQuestionsCountGraphLazyQuery>;
+export type CustomQuestionsCountGraphQueryResult = Apollo.QueryResult<CustomQuestionsCountGraphQuery, CustomQuestionsCountGraphQueryVariables>;
 export const ListActionsDocument = gql`
     query ListActions($take: Int, $skip: Int, $where: ActionWhereInput, $orderBy: [ActionOrderByWithRelationInput!]) {
   listActions(take: $take, skip: $skip, where: $where, orderBy: $orderBy) {

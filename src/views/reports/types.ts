@@ -36,7 +36,8 @@ export type AllowedValue =
   | 'pageBreak4'
   | 'logo'
   | 'timeHeatMap'
-  | 'priorityGraph';
+  | 'priorityGraph'
+  | 'customQuestionsCountGraph';
 
 type ReportItemTypes =
   | 'summary'
@@ -190,6 +191,10 @@ export const LayoutToReadable: {
     i: 'timeHeatMap',
     readable: 'Time Heat Map',
   },
+  {
+    i: 'customQuestionsCountGraph',
+    readable: 'Incident Answer Count',
+  },
 ];
 
 const layoutMap = new Map<string, string>(
@@ -205,6 +210,7 @@ export interface MetaData {
   key: AllowedValue;
   type: ReportItemTypes;
   urls?: string[];
+  id: string;
 }
 
 export interface SelectOptions {
