@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Card, Col, Empty, Input, Row, Skeleton, Table } from 'antd';
+import { Button, Card, Col, Empty, Row, Skeleton, Table } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBellOn,
@@ -10,6 +10,7 @@ import {
 import type { UserNotificationsQuery } from 'graphql/generated';
 import { useIntl } from 'react-intl';
 import FormatCalendar from 'utils/format-calendar-24h';
+import DebouncedInput from '#/utils/debounced-input';
 import useStyles from './NotificationList.styles';
 import type { NotificationData } from './useNotificationList';
 
@@ -49,7 +50,7 @@ const NotificationLists = ({
     <div className="list-view">
       <Row gutter={8} className={classes.head}>
         <Col span={8}>
-          <Input
+          <DebouncedInput
             onChange={(event) => setSearch(event.target.value)}
             placeholder={intl.formatMessage({
               defaultMessage: 'Search for a notification...',

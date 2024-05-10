@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { useStoreActions, useStoreState } from 'state';
 import type {
-  GoodsMode,
   ListUserNotificationsQuery,
   ListUserNotificationsQueryVariables,
   UpdateUserNotificationsMutation,
@@ -38,45 +37,9 @@ export interface NotificationData {
     offender: { id: string | null };
   } | null;
   userId?: string | null;
-  schemes: Scheme[];
+  schemes: { id: string }[];
 }
-interface Scheme {
-  id: string;
-  name: string;
-  autoApproveIncidents: boolean;
-  autoApproveOffenders: boolean;
-  defaultPublicOffenderDOB: boolean;
-  userTodos?: number | null | undefined;
-  userNotifications?: number | null | undefined;
-  languageCount: number;
-  autoPopulateDescription: boolean;
-  needJustification: boolean;
-  requireSiteNumberForUsers: boolean;
-  oneSelectedIncidentTypeOnly: boolean;
-  facialDetection: boolean;
-  logo?:
-    | {
-        optimisedPersisted?: string | null | undefined;
-      }
-    | null
-    | undefined;
-  darkLogo?:
-    | {
-        optimisedPersisted?: string | null | undefined;
-      }
-    | null
-    | undefined;
-  goodsMode: GoodsMode;
-  facialRecognition: boolean;
-  imagesRequiredOnOffenders: boolean;
-  taskTimeTracking: boolean;
-  restrictIncidentAccess: boolean;
-  reportOnly: boolean;
-  connectedToSchemes: {
-    id: string;
-    name: string;
-  }[];
-}
+
 interface Return {
   data:
     | Exclude<
@@ -320,9 +283,14 @@ const useNotificationLists = (): Return => {
     },
     update,
   });
-  const handleSchemeChange = (scheme: Scheme) => {
+  const handleSchemeChange = (notificationSchemeId: string) => {
     window.localStorage.removeItem(LocalStorageKeys.INCIDENT_FILTER);
     window.localStorage.removeItem(LocalStorageKeys.OFFENDER_FILTER);
+    const userScheme = userSchemes.find(
+      (el) => el.scheme.id === notificationSchemeId
+    );
+    if (!userScheme) return;
+    const { scheme } = userScheme;
     window.localStorage.setItem('currentScheme', scheme.id);
     window.localStorage.setItem('logo', scheme.logo?.optimisedPersisted || '');
     window.localStorage.setItem(
@@ -368,7 +336,7 @@ const useNotificationLists = (): Return => {
     if (value) {
       setSaving(true);
       if (schemeId !== value.schemes[0].id) {
-        handleSchemeChange(value.schemes[0]);
+        handleSchemeChange(value.schemes[0].id);
       }
       void updateUserNotification({
         variables: {
