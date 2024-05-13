@@ -1,7 +1,5 @@
 import type { ListCrimeGroupsQuery } from 'graphql/generated';
 import {
-  Role,
-  useSchemeGroupsQuery,
   QueryMode,
   SortOrder,
   useListCrimeGroupsQuery,
@@ -10,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { useStoreActions, useStoreState } from 'state';
 import type { CrimeGroupFilters } from 'state/data-model';
 import type { DateType } from 'types/DataType';
+import { useGroupsContext } from '#/context/groups-context';
 
 interface Return {
   data: ListCrimeGroupsQuery | undefined;
@@ -39,11 +38,9 @@ const getSizeOptions = () => {
 };
 const useListCrimeGroups = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
-  const {
-    role,
-    id: userId,
-    filterDefaultGroups: defaultGroups,
-  } = useStoreState((state) => state.user);
+  const { id: userId, filterDefaultGroups: defaultGroups } = useStoreState(
+    (state) => state.user
+  );
 
   const pagination = useStoreState(
     (state) => state.data.crimeGroups.pagination
@@ -171,29 +168,8 @@ const useListCrimeGroups = (): Return => {
     fetchPolicy: 'cache-and-network',
     variables,
   });
-  const { data: groupData, loading: groupsLoading } = useSchemeGroupsQuery({
-    variables: {
-      where: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
-        users:
-          role === Role.User
-            ? {
-                some: {
-                  id: {
-                    equals: userId,
-                  },
-                },
-              }
-            : undefined,
-      },
-    },
-    fetchPolicy: 'cache-and-network',
-    skip: role !== Role.SchemeAdmin,
-  });
+  const { groups, groupsLoading } = useGroupsContext();
+
   const setGallery = (values: string[]) => {
     setFilterState({
       pagination,
@@ -263,11 +239,7 @@ const useListCrimeGroups = (): Return => {
     data,
     loading,
     setSearch,
-    groups:
-      groupData?.groups.map((group) => ({
-        value: group.id,
-        label: group.name,
-      })) || [],
+    groups,
     groupsLoading,
     setGroupsFilter,
     setCreatedAtFilter,

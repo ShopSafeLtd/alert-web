@@ -1,12 +1,10 @@
 import type { BusinessEngagementQuery } from 'graphql/generated';
-import {
-  useBusinessEngagementQuery,
-  useSchemeGroupsQuery,
-} from 'graphql/generated';
+import { useBusinessEngagementQuery } from 'graphql/generated';
 import { useStoreState } from 'state';
 import type { RefObject } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { useReactToPrint } from 'react-to-print';
+import { useGroupsContext } from '#/context/groups-context';
 
 interface Return {
   loading: boolean;
@@ -46,24 +44,11 @@ const useBusinessEngagement = (): Return => {
     // today at 23:59:59
     endDate: new Date(new Date().setHours(23, 59, 59)),
   });
-  const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
-    variables: {
-      where: {
-        scheme: {
-          id: {
-            equals: currentScheme,
-          },
-        },
-      },
-    },
-  });
+  const { groups: groupsData, groupsLoading } = useGroupsContext();
 
   useEffect(() => {
     if (groupsData) {
-      const groupsFormatted = groupsData.groups.map((group) => ({
-        label: group.name,
-        value: group.id,
-      }));
+      const groupsFormatted = groupsData;
       setGroups(groupsFormatted);
       setSelectedGroups(groupsFormatted.map((item) => item.value));
     }

@@ -23,14 +23,10 @@ export const PerformanceMetaData: MetaData[] = [
   { key: 'investigationsTable', type: 'table' },
   { key: 'incidentsDayOfWeekGraph', type: 'graph' },
   { key: 'incidentsDayOfWeekGraph', type: 'graph' },
-  {
-    key: 'timeHeatMap',
-    type: 'heatmap',
-  },
-  {
-    key: 'priorityGraph',
-    type: 'bar',
-  },
+  { key: 'timeHeatMap', type: 'heatmap' },
+  { key: 'priorityGraph', type: 'bar' },
+  { key: 'businessIncidentCountGraph', type: 'bar' },
+  { key: 'userIncidentCountGraph', type: 'bar' },
 ];
 
 const PerformanceLayout: ExtendedLayout[] = [
@@ -114,7 +110,6 @@ const PerformanceLayout: ExtendedLayout[] = [
     moved: false,
     static: false,
   },
-
   {
     w: 2,
     h: 17,
@@ -221,6 +216,7 @@ export const PerformanceDrawerLayout: ExtendedLayout[] = [
     minH: 4,
     moved: false,
     static: false,
+    allowDuplicates: false,
   },
   {
     w: 1,
@@ -231,6 +227,7 @@ export const PerformanceDrawerLayout: ExtendedLayout[] = [
     minH: 4,
     moved: false,
     static: false,
+    allowDuplicates: false,
   },
   {
     w: 2,
@@ -241,8 +238,18 @@ export const PerformanceDrawerLayout: ExtendedLayout[] = [
     minH: 4,
     moved: false,
     static: false,
+    allowDuplicates: false,
   },
-  { w: 2, h: 1, x: 0, y: 35, i: 'pageBreak', moved: false, static: true },
+  {
+    w: 2,
+    h: 1,
+    x: 0,
+    y: 35,
+    i: 'pageBreak',
+    moved: false,
+    static: true,
+    allowDuplicates: false,
+  },
   {
     w: 2,
     h: 1,
@@ -251,6 +258,7 @@ export const PerformanceDrawerLayout: ExtendedLayout[] = [
     i: 'pageBreak2',
     moved: false,
     static: true,
+    allowDuplicates: false,
   },
   {
     w: 1,
@@ -261,6 +269,7 @@ export const PerformanceDrawerLayout: ExtendedLayout[] = [
     maxH: 11,
     moved: false,
     static: false,
+    allowDuplicates: false,
   },
   {
     w: 1,
@@ -271,6 +280,7 @@ export const PerformanceDrawerLayout: ExtendedLayout[] = [
     maxH: 11,
     moved: false,
     static: false,
+    allowDuplicates: false,
   },
   {
     w: 1,
@@ -281,6 +291,74 @@ export const PerformanceDrawerLayout: ExtendedLayout[] = [
     maxH: 11,
     moved: false,
     static: false,
+    allowDuplicates: false,
+  },
+  {
+    w: 1,
+    h: 9,
+    x: 0,
+    y: 36,
+    i: 'customQuestionsCountGraph',
+    maxH: 11,
+    moved: false,
+    static: false,
+    allowDuplicates: true,
+  },
+  {
+    w: 1,
+    h: 9,
+    x: 0,
+    y: 36,
+    i: 'userSessionDonut',
+    maxH: 11,
+    moved: false,
+    static: false,
+    allowDuplicates: false,
+  },
+  {
+    w: 2,
+    h: 12,
+    x: 0,
+    y: 45,
+    i: 'userIncidentCountGraph',
+    maxH: 11,
+    moved: false,
+    static: false,
+    allowDuplicates: false,
+  },
+  {
+    w: 2,
+    h: 12,
+    x: 0,
+    y: 45,
+    i: 'businessIncidentCountGraph',
+    maxH: 11,
+    moved: false,
+    static: false,
+    allowDuplicates: false,
+  },
+
+  {
+    w: 2,
+    h: 12,
+    x: 0,
+    y: 45,
+    i: 'businessLossRecoveredGraph',
+    maxH: 11,
+    moved: false,
+    static: false,
+    allowDuplicates: false,
+  },
+  {
+    w: 2,
+    h: 12,
+    x: 0,
+    y: 45,
+    i: 'businessCrimeTypeGraph',
+    maxH: 11,
+    moved: false,
+    static: false,
+    allowDuplicates: false,
   },
   {
     w: 2,
@@ -291,6 +369,7 @@ export const PerformanceDrawerLayout: ExtendedLayout[] = [
     minH: 4,
     moved: false,
     static: false,
+    allowDuplicates: false,
   },
   {
     w: 2,
@@ -300,6 +379,7 @@ export const PerformanceDrawerLayout: ExtendedLayout[] = [
     i: 'incidentsHeatMap',
     moved: false,
     static: false,
+    allowDuplicates: false,
   },
   {
     w: 2,
@@ -311,6 +391,7 @@ export const PerformanceDrawerLayout: ExtendedLayout[] = [
     minH: 5,
     moved: false,
     static: false,
+    allowDuplicates: false,
   },
   {
     w: 2,
@@ -321,6 +402,7 @@ export const PerformanceDrawerLayout: ExtendedLayout[] = [
     minW: 2,
     moved: false,
     static: false,
+    allowDuplicates: false,
   },
   {
     w: 2,
@@ -332,6 +414,7 @@ export const PerformanceDrawerLayout: ExtendedLayout[] = [
     minH: 5,
     moved: false,
     static: false,
+    allowDuplicates: false,
   },
   {
     w: 2,
@@ -343,6 +426,7 @@ export const PerformanceDrawerLayout: ExtendedLayout[] = [
     minH: 5,
     moved: false,
     static: false,
+    allowDuplicates: false,
   },
   {
     w: 2,
@@ -354,6 +438,7 @@ export const PerformanceDrawerLayout: ExtendedLayout[] = [
     minH: 5,
     moved: false,
     static: false,
+    allowDuplicates: false,
   },
   {
     w: 2,
@@ -365,6 +450,7 @@ export const PerformanceDrawerLayout: ExtendedLayout[] = [
     minH: 5,
     moved: false,
     static: false,
+    allowDuplicates: false,
   },
   {
     w: 2,
@@ -375,6 +461,7 @@ export const PerformanceDrawerLayout: ExtendedLayout[] = [
     minH: 5,
     moved: false,
     static: false,
+    allowDuplicates: false,
   },
   {
     w: 1,
@@ -385,6 +472,7 @@ export const PerformanceDrawerLayout: ExtendedLayout[] = [
     minH: 4,
     moved: false,
     static: false,
+    allowDuplicates: false,
   },
   {
     w: 2,
@@ -395,6 +483,7 @@ export const PerformanceDrawerLayout: ExtendedLayout[] = [
     minH: 4,
     moved: false,
     static: false,
+    allowDuplicates: false,
   },
 
   {
@@ -406,6 +495,7 @@ export const PerformanceDrawerLayout: ExtendedLayout[] = [
     minH: 4,
     moved: false,
     static: false,
+    allowDuplicates: false,
   },
   {
     w: 2,
@@ -416,6 +506,7 @@ export const PerformanceDrawerLayout: ExtendedLayout[] = [
     minH: 4,
     moved: false,
     static: false,
+    allowDuplicates: false,
   },
   {
     w: 2,
@@ -426,6 +517,7 @@ export const PerformanceDrawerLayout: ExtendedLayout[] = [
     minH: 4,
     moved: false,
     static: false,
+    allowDuplicates: false,
   },
 ];
 

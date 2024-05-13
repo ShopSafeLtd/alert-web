@@ -4,10 +4,8 @@ import type { ListCrimeGroupsQuery } from 'graphql/generated';
 import {
   ImagePosition,
   Role,
-  SortOrder,
   useListCrimeGroupsQuery,
   useListCustomGalleriesQuery,
-  useSchemeGroupsQuery,
 } from 'graphql/generated';
 import type { FormInstance } from 'antd';
 import { Form, message } from 'antd';
@@ -21,6 +19,7 @@ import type {
   VehicleData,
 } from 'types/DataType';
 import update from 'immutability-helper';
+import { useGroupsContext } from '#/context/groups-context';
 import { compressImage } from '../../../../utils/compress-images';
 
 interface Props {
@@ -74,7 +73,7 @@ const useEditVehicle = ({
   editData,
 }: Props): Return => {
   const [form] = Form.useForm<FormData>();
-  const { role, id: userId } = useStoreState((state) => state.user);
+  const { role } = useStoreState((state) => state.user);
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
 
@@ -112,32 +111,8 @@ const useEditVehicle = ({
     }
   }, [editData]);
 
-  const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
-    fetchPolicy: 'cache-and-network',
-    variables: {
-      where: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
-        users:
-          role === Role.User
-            ? {
-                some: {
-                  id: {
-                    equals: userId,
-                  },
-                },
-              }
-            : undefined,
-      },
+  const { groups, groupsLoading } = useGroupsContext();
 
-      orderBy: {
-        name: SortOrder.Asc,
-      },
-    },
-  });
   // custom galleries
   const { data: customGalleriesData, loading: customGalleriesLoading } =
     useListCustomGalleriesQuery({
@@ -334,11 +309,7 @@ const useEditVehicle = ({
     editImage,
     primaryImage,
     setPrimaryImage,
-    groups:
-      groupsData?.groups.map((group) => ({
-        value: group.id,
-        label: group.name,
-      })) || [],
+    groups,
     groupsLoading,
     customGalleries:
       customGalleriesData?.listCustomGalleries.customGalleries.map((tag) => ({

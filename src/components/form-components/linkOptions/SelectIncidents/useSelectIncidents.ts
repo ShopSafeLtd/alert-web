@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react';
 import type { ListIncidentsAllSchemesQuery } from 'graphql/generated';
 import {
-  TagType,
-  Role,
   Model,
+  QueryMode,
+  Role,
+  SortOrder,
+  TagType,
   useListBusinessesQuery,
   useListGoodsTypesQuery,
-  useSchemeGroupsQuery,
-  useTagsQuery,
   useListIncidentsAllSchemesQuery,
-  QueryMode,
-  SortOrder,
+  useTagsQuery,
 } from 'graphql/generated';
 import { useStoreActions, useStoreState } from 'state';
 import type { IncidentFilters } from 'state/data-model';
+import { useGroupsContext } from '#/context/groups-context';
 
 interface Props {
   onClose: () => void;
@@ -75,7 +75,6 @@ const useSelectIncidents = ({
 
   const {
     role,
-    id: userId,
     schemes: userSchemes,
     filterDefaultGroups: defaultGroups,
   } = useStoreState((state) => state.user);
@@ -196,29 +195,7 @@ const useSelectIncidents = ({
     fetchPolicy: 'cache-and-network',
   });
   // Fetch scheme groups if scheme admin
-  const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
-    variables: {
-      where: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
-        users:
-          role === Role.User
-            ? {
-                some: {
-                  id: {
-                    equals: userId,
-                  },
-                },
-              }
-            : undefined,
-      },
-    },
-    fetchPolicy: 'cache-and-network',
-    skip: role !== Role.SchemeAdmin,
-  });
+  const { groups: groupsData, groupsLoading } = useGroupsContext();
 
   // Fetch scheme tags
   const { data: tagsData, loading: tagsLoading } = useTagsQuery({
@@ -448,11 +425,7 @@ const useSelectIncidents = ({
     setCrimeTypesFilter,
     goodsLoading,
     businessesLoading,
-    groups:
-      groupsData?.groups.map((group) => ({
-        value: group.id,
-        label: group.name,
-      })) || [],
+    groups: groupsData,
     groupsLoading,
     variables,
     crimeTypes:

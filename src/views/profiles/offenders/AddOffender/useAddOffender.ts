@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type {
   Age,
   Build,
@@ -13,16 +13,15 @@ import type {
   Race,
 } from 'graphql/generated';
 import {
-  useBusinessOffenderSettingsQuery,
   ImagePosition,
   ListOffendersDocument,
   Model,
   QueryMode,
   Role,
+  useBusinessOffenderSettingsQuery,
   useCreateOffenderMutation,
   useListCustomGalleriesQuery,
   useListVehiclesQuery,
-  useSchemeGroupsQuery,
   useSearchOffendersLazyQuery,
   useTagsQuery,
 } from 'graphql/generated';
@@ -47,6 +46,7 @@ import update from 'immutability-helper';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 import compressImage from 'utils/compress-images';
+import { useGroupsContext } from '#/context/groups-context';
 import customRequest from '../../../../utils/custom-request';
 
 const { confirm } = Modal;
@@ -290,38 +290,20 @@ const useAddOffender = (): Return => {
       },
     },
   });
-  const { data: groupData, loading: groupsLoading } = useSchemeGroupsQuery({
-    fetchPolicy: 'cache-and-network',
-    variables: {
-      where: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
-        users:
-          role === Role.User
-            ? {
-                some: {
-                  id: {
-                    equals: userId,
-                  },
-                },
-              }
-            : undefined,
-      },
-    },
-    onCompleted: (result) => {
+
+  const { groups, groupsLoading } = useGroupsContext();
+
+  useEffect(() => {
+    if (groups)
       setOffendersState({
         pagination,
         variables: {
           ...variables,
-          groups: result.groups.map((group) => group.id),
+          groups: groups.map((group) => group.value),
         },
         order,
       });
-    },
-  });
+  }, [groups]);
   const { data: tagsData, loading: tagsLoading } = useTagsQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
@@ -478,8 +460,8 @@ const useAddOffender = (): Return => {
                 : undefined,
             groups: {
               connect:
-                groupData?.groups && groupData.groups.length === 1
-                  ? groupData?.groups.map(({ id }) => ({ id }))
+                groups && groups.length === 1
+                  ? groups.map(({ value: id }) => ({ id }))
                   : data.groups.map((id) => ({ id })),
             },
           },
@@ -500,8 +482,8 @@ const useAddOffender = (): Return => {
                   : undefined,
                 groups: {
                   connect:
-                    groupData?.groups && groupData.groups.length === 1
-                      ? groupData?.groups.map(({ id }) => ({ id }))
+                    groups && groups.length === 1
+                      ? groups.map(({ value: id }) => ({ id }))
                       : data.groups.map((id) => ({ id })),
                 },
                 schemes: { connect: [{ id: schemeId }] },
@@ -543,8 +525,8 @@ const useAddOffender = (): Return => {
                   schemes: { connect: [{ id: schemeId }] },
                   groups: {
                     connect:
-                      groupData?.groups && groupData.groups.length === 1
-                        ? groupData?.groups.map(({ id }) => ({ id }))
+                      groups && groups.length === 1
+                        ? groups.map(({ value: id }) => ({ id }))
                         : data.groups.map((id) => ({ id })),
                   },
                 }))
@@ -629,8 +611,8 @@ const useAddOffender = (): Return => {
           dateOfBirth: ageCheck ? data.dateOfBirth || null : null,
           groups: {
             connect:
-              groupData?.groups && groupData.groups.length === 1
-                ? groupData?.groups.map(({ id }) => ({ id }))
+              groups && groups.length === 1
+                ? groups.map(({ value: id }) => ({ id }))
                 : data.groups.map((id) => ({ id })),
           },
           scheme: schemeId,
@@ -896,11 +878,7 @@ const useAddOffender = (): Return => {
   return {
     onSubmit,
     saving,
-    groups:
-      groupData?.groups.map((group) => ({
-        value: group.id,
-        label: group.name,
-      })) || [],
+    groups,
     // role === Role.SchemeAdmin
     //   ? groupData?.groups.map((group) => ({
     //       value: group.id,

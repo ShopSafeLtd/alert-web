@@ -12,7 +12,6 @@ import {
   SearchBusinessesDocument,
   SortOrder,
   useSchemeChatsQuery,
-  useSchemeGroupsQuery,
   useUpdateUserMutation,
   useUserQuery,
   useUserRolesQuery,
@@ -23,6 +22,7 @@ import { useApolloClient } from '@apollo/client';
 import type { BusinessData, SelectOptions } from 'types/DataType';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
+import { useGroupsContext } from '#/context/groups-context';
 
 export interface FormData {
   fullName: string;
@@ -135,21 +135,7 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
     },
   });
 
-  const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
-    fetchPolicy: 'cache-and-network',
-    variables: {
-      where: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
-      },
-      orderBy: {
-        name: SortOrder.Asc,
-      },
-    },
-  });
+  const { groups, groupsLoading } = useGroupsContext();
 
   const { data: chatsData, loading: chatsLoading } = useSchemeChatsQuery({
     fetchPolicy: 'cache-and-network',
@@ -489,10 +475,7 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
     onSubmit,
     data: userData,
     loading: loading || rolesLoading,
-    groupsData: groupsData?.groups.map((group) => ({
-      value: group.id,
-      label: group.name,
-    })),
+    groupsData: groups,
     groupsLoading,
     chatsData: chatsData?.chats.map((chat) => ({
       value: chat.id,

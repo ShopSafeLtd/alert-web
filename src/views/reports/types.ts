@@ -1,6 +1,8 @@
 import type RGL from 'react-grid-layout';
 
-export type ExtendedLayout = RGL.Layout;
+export interface ExtendedLayout extends RGL.Layout {
+  allowDuplicates?: boolean;
+}
 
 export type AllowedValue =
   | 'createdSummary'
@@ -36,9 +38,15 @@ export type AllowedValue =
   | 'pageBreak4'
   | 'logo'
   | 'timeHeatMap'
-  | 'priorityGraph';
+  | 'priorityGraph'
+  | 'customQuestionsCountGraph'
+  | 'userIncidentCountGraph'
+  | 'businessIncidentCountGraph'
+  | 'businessLossRecoveredGraph'
+  | 'businessCrimeTypeGraph'
+  | 'userSessionDonut';
 
-type ReportItemTypes =
+export type ReportItemTypes =
   | 'summary'
   | 'pageBreak'
   | 'donut'
@@ -190,6 +198,31 @@ export const LayoutToReadable: {
     i: 'timeHeatMap',
     readable: 'Time Heat Map',
   },
+  {
+    i: 'customQuestionsCountGraph',
+    readable: 'Incident Answer Count',
+  },
+  // {
+  //   i: 'userSessionDonut',
+  //   readable: 'User Session Graph',
+  // },
+  {
+    i: 'userIncidentCountGraph',
+    readable: 'User Incidents Count',
+  },
+  {
+    i: 'businessIncidentCountGraph',
+    readable: 'Business Incidents Count',
+  },
+  {
+    i: 'businessLossRecoveredGraph',
+    readable: 'Businesses Loss Recovered Graph',
+  },
+
+  {
+    i: 'businessCrimeTypeGraph',
+    readable: 'Business Crime Type Graph',
+  },
 ];
 
 const layoutMap = new Map<string, string>(
@@ -205,6 +238,7 @@ export interface MetaData {
   key: AllowedValue;
   type: ReportItemTypes;
   urls?: string[];
+  propId?: string;
 }
 
 export interface SelectOptions {
@@ -215,6 +249,7 @@ export interface SelectOptions {
 export interface IReportTemplate {
   id: string;
   name: string;
+  default: boolean;
   metaData: MetaData[];
   layout: RGL.Layout[];
 }

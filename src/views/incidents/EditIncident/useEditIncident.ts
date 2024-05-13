@@ -23,7 +23,6 @@ import {
   useListGoodsTypesQuery,
   useListOffendersQuery,
   useRecycleIncidentMutation,
-  useSchemeGroupsQuery,
   useTagsQuery,
   useUpdateIncidentMutation,
 } from 'graphql/generated';
@@ -42,6 +41,7 @@ import type {
 } from 'types/DataType';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
+import { useGroupsContext } from '#/context/groups-context';
 
 const { confirm } = Modal;
 
@@ -275,39 +275,19 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     },
   });
 
-  const { data: groupData, loading: groupsLoading } = useSchemeGroupsQuery({
-    variables: {
-      where: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
-        users:
-          role === Role.User
-            ? {
-                some: {
-                  id: {
-                    equals: userId,
-                  },
-                },
-              }
-            : undefined,
-      },
-    },
-    fetchPolicy: 'cache-and-network',
-    skip: role !== Role.SchemeAdmin,
-    onCompleted: (result) => {
+  const { groups, groupsLoading } = useGroupsContext();
+
+  useEffect(() => {
+    if (groups)
       setIncidentsState({
         pagination,
         variables: {
           ...variables,
-          groups: result.groups.map((group) => group.id),
+          groups: groups.map((group) => group.value),
         },
         order,
       });
-    },
-  });
+  }, [groups]);
 
   const { data: tagsData, loading: tagsLoading } = useTagsQuery({
     fetchPolicy: 'cache-and-network',
@@ -926,8 +906,8 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
                   : undefined,
               groups: {
                 connect:
-                  groupData?.groups && groupData.groups.length === 1
-                    ? groupData?.groups.map(({ id }) => ({ id }))
+                  groups && groups.length === 1
+                    ? groups.map(({ value: id }) => ({ id }))
                     : data.groups.map((id) => ({ id })),
               },
             },
@@ -950,8 +930,8 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
                       : undefined,
                   groups: {
                     connect:
-                      groupData?.groups && groupData.groups.length === 1
-                        ? groupData?.groups.map(({ id }) => ({ id }))
+                      groups && groups.length === 1
+                        ? groups.map(({ value: id }) => ({ id }))
                         : data.groups.map((id) => ({ id })),
                   },
                 }))
@@ -1206,11 +1186,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     data: incidentData,
     fileList,
     goodsTypesData,
-    groups:
-      groupData?.groups.map((group) => ({
-        value: group.id,
-        label: group.name,
-      })) || [],
+    groups,
     groupsLoading,
     imgChange,
     loading,

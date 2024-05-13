@@ -1,0 +1,12 @@
+query BusinessLossRecoveredGraph(
+  $where: BusinessIncidentsCountGraphInput!
+  $take: Int
+) {
+  businessLossRecoveredGraph(where: $where, take: $take) {
+    label
+    data {
+      label
+      value
+    }
+  }
+}

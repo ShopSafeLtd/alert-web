@@ -11,6 +11,7 @@ import { useAuth } from 'hooks';
 import { useStoreState } from 'state';
 import { useAuth0 } from '@auth0/auth0-react';
 import useManageSession from 'hooks/useManageSession';
+import { GroupsProvider } from '#/context/groups-context';
 import type { Role } from '../../graphql/generated';
 import type { NavItem as ConfigNavItem } from '../../configs/NavigationConfig';
 import navigationConfig from '../../configs/NavigationConfig';
@@ -116,67 +117,73 @@ export const AppViews = (): JSX.Element => {
 
   if (loading || isLoading || !isSet) return <Loading cover="content" />;
   return (
-    <Suspense fallback={<Loading cover="content" />}>
-      <Routes>
-        <Route
-          index
-          element={<Navigate to={onboarded ? 'dashboard' : 'onboarding'} />}
-        />
-        {!onboarded && (
+    <GroupsProvider>
+      <Suspense fallback={<Loading cover="content" />}>
+        <Routes>
           <Route
-            key="onboarding"
-            path="onboarding/*"
-            element={<Onboarding />}
+            index
+            element={<Navigate to={onboarded ? 'dashboard' : 'onboarding'} />}
           />
-        )}
-        {/* // TODO change */}
-        <Route
-          key="manage-dashboard"
-          path="manage-dashboard/*"
-          element={<DashboardManagement />}
-        />
+          {!onboarded && (
+            <Route
+              key="onboarding"
+              path="onboarding/*"
+              element={<Onboarding />}
+            />
+          )}
+          {/* // TODO change */}
+          <Route
+            key="manage-dashboard"
+            path="manage-dashboard/*"
+            element={<DashboardManagement />}
+          />
 
-        <Route key="dashboard" path="dashboard/*" element={<FeedItems />} />
-        {role !== 'USER' && (
-          <Route key="tasks" path="tasks/*" element={<Tasks />} />
-        )}
-        <Route key="incidents" path="incidents/*" element={<Incidents />} />
-        <Route
-          key="crime-groups"
-          path="crime-groups/*"
-          element={<CrimeGroups />}
-        />
-        <Route key="vehicles" path="vehicles/*" element={<Vehicles />} />
-        <Route key="offenders" path="offenders/*" element={<Offenders />} />
-        <Route key="chat" path="chat/*" element={<Chat />} />
-        <Route
-          key="notifications"
-          path="notifications/*"
-          element={<Notifications />}
-        />
-        <Route key="user" path="user-settings/*" element={<User />} />
-        {(role === 'SCHEME_ADMIN' || role === 'GROUP_ADMIN') && (
-          <Route key="scheme" path="scheme-settings/*" element={<Scheme />} />
-        )}
-        <Route key="article" path="article/*" element={<Article />} />
-        <Route key="evidence" path="evidence/*" element={<Evidence />} />
-        <Route key="checklists" path="checklists/*" element={<Checklists />} />
-        <Route key="reports" path="reports/*" element={<Reports />} />
-        <Route
-          key="investigations"
-          path="investigations/*"
-          element={<Investigations />}
-        />
-        <Route key="resources" path="resources/*" element={<Documents />} />
-        <Route key="mg11" path="mg11/*" element={<Mg11 />} />
-        <Route key="face-ai" path="face-ai/*" element={<FaceAi />} />
-        <Route
-          key="data-management"
-          path="data-management/*"
-          element={<DataManagement />}
-        />
-      </Routes>
-    </Suspense>
+          <Route key="dashboard" path="dashboard/*" element={<FeedItems />} />
+          {role !== 'USER' && (
+            <Route key="tasks" path="tasks/*" element={<Tasks />} />
+          )}
+          <Route key="incidents" path="incidents/*" element={<Incidents />} />
+          <Route
+            key="crime-groups"
+            path="crime-groups/*"
+            element={<CrimeGroups />}
+          />
+          <Route key="vehicles" path="vehicles/*" element={<Vehicles />} />
+          <Route key="offenders" path="offenders/*" element={<Offenders />} />
+          <Route key="chat" path="chat/*" element={<Chat />} />
+          <Route
+            key="notifications"
+            path="notifications/*"
+            element={<Notifications />}
+          />
+          <Route key="user" path="user-settings/*" element={<User />} />
+          {(role === 'SCHEME_ADMIN' || role === 'GROUP_ADMIN') && (
+            <Route key="scheme" path="scheme-settings/*" element={<Scheme />} />
+          )}
+          <Route key="article" path="article/*" element={<Article />} />
+          <Route key="evidence" path="evidence/*" element={<Evidence />} />
+          <Route
+            key="checklists"
+            path="checklists/*"
+            element={<Checklists />}
+          />
+          <Route key="reports" path="reports/*" element={<Reports />} />
+          <Route
+            key="investigations"
+            path="investigations/*"
+            element={<Investigations />}
+          />
+          <Route key="resources" path="resources/*" element={<Documents />} />
+          <Route key="mg11" path="mg11/*" element={<Mg11 />} />
+          <Route key="face-ai" path="face-ai/*" element={<FaceAi />} />
+          <Route
+            key="data-management"
+            path="data-management/*"
+            element={<DataManagement />}
+          />
+        </Routes>
+      </Suspense>
+    </GroupsProvider>
   );
 };
 

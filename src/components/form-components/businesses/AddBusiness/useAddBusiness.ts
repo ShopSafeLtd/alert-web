@@ -7,17 +7,17 @@ import type {
   SearchBusinessesQueryVariables,
 } from 'graphql/generated';
 import {
-  useSchemeGroupsQuery,
   Model,
-  useTagsQuery,
   QueryMode,
   SearchBusinessesDocument,
+  useTagsQuery,
 } from 'graphql/generated';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 
 import { useStoreState } from 'state';
 import type { BusinessData, LocationData, TagData } from 'types/DataType';
+import { useGroupsContext } from '#/context/groups-context';
 
 export interface FormData {
   name: string;
@@ -62,7 +62,6 @@ const useAddBusiness = ({ update }: Props): Return => {
   const intl = useIntl();
   const client = useApolloClient();
   const currentScheme = useStoreState((state) => state.scheme.id);
-  const userId = useStoreState((state) => state.user.id);
 
   const [form] = Form.useForm<FormData>();
   const [location, setLocation] = useState<LocationData>();
@@ -87,25 +86,8 @@ const useAddBusiness = ({ update }: Props): Return => {
     },
   });
 
-  const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
-    variables: {
-      where: {
-        scheme: {
-          id: {
-            equals: currentScheme,
-          },
-        },
-        users: {
-          some: {
-            id: {
-              equals: userId,
-            },
-          },
-        },
-      },
-    },
-    fetchPolicy: 'cache-and-network',
-  });
+  const { groups, groupsLoading } = useGroupsContext();
+
   const onSetLocation = (value: LocationData) => {
     if (value) {
       setLocation(value);
@@ -233,11 +215,7 @@ const useAddBusiness = ({ update }: Props): Return => {
     addTag,
     toggleAddTag,
     updateNewTagData,
-    groups:
-      groupsData?.groups.map((group) => ({
-        value: group.id,
-        label: group.name,
-      })) || [],
+    groups,
     groupsLoading,
   };
 };

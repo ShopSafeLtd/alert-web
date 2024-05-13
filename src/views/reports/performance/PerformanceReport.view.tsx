@@ -1,16 +1,16 @@
 import React, { useMemo } from 'react';
 import type { MenuProps } from 'antd';
 import {
+  Badge,
   Button,
   Col,
   Drawer,
   Dropdown,
+  Form,
   Row,
   Select,
   Switch,
   Typography,
-  Form,
-  Badge,
 } from 'antd';
 import DatePicker from 'components/util-components/DatePicker';
 import { Page } from 'components/shared-components/AntD/Page/Page';
@@ -28,6 +28,7 @@ import IndustrySelect from '#/components/industry/IndustrySelect';
 import GroupsSelect from '#/components/form-components/GroupsSelect/GroupsSelect.view';
 import BrandsSelect from '#/components/form-components/BrandsSelect/BrandsSelect.view';
 import RolesSelect from '#/components/form-components/RolesSelect/RolesSelect.view';
+import { ReportType } from 'graphql/generated';
 import AddLogo from '../../../components/reports/addLogo';
 import PerformanceReportLayout from './layout/PerformanceReportLayout';
 import { PerformanceDrawerLayout } from './hooks/initLayout';
@@ -196,6 +197,8 @@ const PerformanceReport = ({
   setSelectedRoles,
   selectedRoles,
   filterCount,
+  schemeId,
+  setAsDefault,
 }: Props) => {
   const ReactGridLayout = useMemo(() => WidthProvider(RGL), []);
   const handleMenuClick: MenuProps['onClick'] = (e) => {
@@ -204,6 +207,13 @@ const PerformanceReport = ({
     }
     if (e.key === '2') {
       saveTemplate('', 'update');
+    }
+    if (e.key === '3') {
+      setAsDefault({
+        templateId: selectedTemplate,
+        type: ReportType.Performance,
+        default: true,
+      });
     }
   };
 
@@ -225,128 +235,162 @@ const PerformanceReport = ({
         id: 'jS/UOn',
       }),
     },
+    {
+      key: '3',
+      label: intl.formatMessage({
+        defaultMessage: 'Set as default',
+        id: 'z+Zrln',
+      }),
+      disabled:
+        templates.find((template) => template.id === selectedTemplate)
+          ?.default ||
+        selectedTemplate === 'default' ||
+        false,
+    },
   ];
 
   return (
     <Page>
-      <div
-        style={{
-          position: 'absolute',
-          display: 'flex',
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-          top: 20,
-          right: 20,
-        }}
-      >
-        <div
-          style={{
-            display: editMode ? 'block' : 'none',
-            zIndex: 1000,
-          }}
-        >
-          {intl.formatMessage({
-            defaultMessage: 'Redact on print?',
-            id: '7D0dTR',
-          })}
-        </div>
+      {!groupsLoading && selectedTemplate !== '' && (
+        <>
+          <div
+            style={{
+              position: 'absolute',
+              display: 'flex',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+              top: 20,
+              right: 20,
+            }}
+          >
+            <div
+              style={{
+                display: editMode ? 'block' : 'none',
+                zIndex: 1000,
+              }}
+            >
+              {intl.formatMessage({
+                defaultMessage: 'Redact on print?',
+                id: '7D0dTR',
+              })}
+            </div>
 
-        <Switch
-          style={{
-            marginRight: 10,
-            marginLeft: 10,
-            zIndex: 1000,
-            display: editMode ? 'block' : 'none',
-          }}
-          key="3"
-          checked={redactOnPrint}
-          onChange={(checked) => setRedactOnPrint(checked)}
-        />
-        <Button
-          style={{ marginRight: 10, zIndex: 1000 }}
-          key="2"
-          onClick={() => setMinDrawer(!minDrawer)}
-          type="default"
-          hidden={!editMode}
-        >
-          {minDrawer
-            ? intl.formatMessage({
-                defaultMessage: 'Hide Drawer',
-                id: 'bfZEmd',
-              })
-            : intl.formatMessage({
-                defaultMessage: 'Show Drawer',
-                id: 'Ri86Tj',
+            <Switch
+              style={{
+                marginRight: 10,
+                marginLeft: 10,
+                zIndex: 1000,
+                display: editMode ? 'block' : 'none',
+              }}
+              key="3"
+              checked={redactOnPrint}
+              onChange={(checked) => setRedactOnPrint(checked)}
+            />
+            <Button
+              style={{ marginRight: 10, zIndex: 1000 }}
+              key="2"
+              onClick={() => setMinDrawer(!minDrawer)}
+              type="default"
+              hidden={!editMode}
+            >
+              {minDrawer
+                ? intl.formatMessage({
+                    defaultMessage: 'Hide Drawer',
+                    id: 'bfZEmd',
+                  })
+                : intl.formatMessage({
+                    defaultMessage: 'Show Drawer',
+                    id: 'Ri86Tj',
+                  })}
+            </Button>
+            <Button
+              style={{ marginRight: 10, zIndex: 1000 }}
+              key="1"
+              onClick={() => setEditMode(!editMode)}
+              type={editMode ? 'primary' : 'default'}
+            >
+              {editMode
+                ? intl.formatMessage({
+                    defaultMessage: 'Lock',
+                    id: 'Zl4/y9',
+                  })
+                : intl.formatMessage({
+                    defaultMessage: 'Edit',
+                    id: 'wEQDC6',
+                  })}
+            </Button>
+            <Button
+              style={{ zIndex: 1000 }}
+              type="primary"
+              onClick={handlePrint}
+              disabled={editMode}
+            >
+              {intl.formatMessage({
+                defaultMessage: 'Print',
+                id: 'CXRlIo',
               })}
-        </Button>
-        <Button
-          style={{ marginRight: 10, zIndex: 1000 }}
-          key="1"
-          onClick={() => setEditMode(!editMode)}
-          type={editMode ? 'primary' : 'default'}
-        >
-          {editMode
-            ? intl.formatMessage({
-                defaultMessage: 'Lock',
-                id: 'Zl4/y9',
-              })
-            : intl.formatMessage({
-                defaultMessage: 'Edit',
-                id: 'wEQDC6',
-              })}
-        </Button>
-        <Button type="primary" onClick={handlePrint} disabled={editMode}>
-          {intl.formatMessage({
-            defaultMessage: 'Print',
-            id: 'CXRlIo',
-          })}
-        </Button>
-      </div>
-      <div
-        style={{
-          position: 'absolute',
-          display: 'flex',
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-          top: 80,
-          right: 20,
-        }}
-      >
-        <Select
-          style={{ width: 200, marginLeft: 10, marginRight: 10, zIndex: 1000 }}
-          onChange={(value) => selectTemplate(value)}
-          defaultValue={templates[0]?.id}
-          value={selectedTemplate}
-        >
-          {templates.map((template) => (
-            <Select.Option value={template.id}>{template.name}</Select.Option>
-          ))}
-        </Select>
-      </div>
-      <div
-        style={{
-          position: 'absolute',
-          display: 'flex',
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-          top: 130,
-          right: 20,
-        }}
-      >
-        <Dropdown
-          menu={{ items, onClick: handleMenuClick }}
-          placement="bottomLeft"
-          overlayStyle={{ zIndex: 1000 }}
-          className="no-print overlay"
-        >
-          <Button>
-            {intl.formatMessage({
-              defaultMessage: 'Save',
-              id: 'jvo0vs',
-            })}
-          </Button>
-        </Dropdown>
-      </div>
+            </Button>
+          </div>
+          <div
+            style={{
+              position: 'absolute',
+              display: 'flex',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+              top: 80,
+              right: 20,
+            }}
+          >
+            <Select
+              style={{
+                width: 200,
+                marginLeft: 10,
+                marginRight: 10,
+                zIndex: 1000,
+              }}
+              onChange={(value) => selectTemplate(value)}
+              defaultValue={templates[0]?.id}
+              value={selectedTemplate}
+            >
+              {templates.map((template) => (
+                <Select.Option value={template.id}>
+                  {template.name}
+                  {template.default
+                    ? intl.formatMessage({
+                        defaultMessage: ' (Default)',
+                        id: 'G16X1c',
+                      })
+                    : ''}
+                </Select.Option>
+              ))}
+            </Select>
+          </div>
+          <div
+            style={{
+              position: 'absolute',
+              display: 'flex',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+              top: 130,
+              right: 20,
+            }}
+          >
+            <Dropdown
+              menu={{ items, onClick: handleMenuClick }}
+              placement="bottomLeft"
+              overlayStyle={{ zIndex: 1000 }}
+              className="no-print overlay"
+            >
+              <Button>
+                {intl.formatMessage({
+                  defaultMessage: 'Save',
+                  id: 'jvo0vs',
+                })}
+              </Button>
+            </Dropdown>
+          </div>
+        </>
+      )}
 
       {editMode ? (
         <div className="print-page">
@@ -446,6 +490,14 @@ const PerformanceReport = ({
                   metadata,
                   setMetadata,
                   investigationsData,
+                  filters: {
+                    selectedBrands,
+                    selectedIndustries,
+                    selectedRoles,
+                    dateRange,
+                    selectedGroups,
+                    schemeId,
+                  },
                 })}
               </ReactGridLayout>
             </div>
@@ -534,6 +586,14 @@ const PerformanceReport = ({
               metadata,
               setMetadata,
               investigationsData,
+              filters: {
+                selectedBrands,
+                selectedIndustries,
+                selectedRoles,
+                dateRange,
+                selectedGroups,
+                schemeId,
+              },
             })}
             layout={layout}
           />
@@ -544,23 +604,36 @@ const PerformanceReport = ({
           defaultMessage: 'Charts available to add',
           id: 'zNsljc',
         })}
-        placement="bottom"
+        placement="right"
         mask={false}
         closable
         open={editMode && minDrawer}
-        height={200}
+        width={400}
         onClose={() => setMinDrawer(!minDrawer)}
       >
-        <Row gutter={[6, 6]}>
+        <Row gutter={[6, 6]} wrap>
           {PerformanceDrawerLayout.filter(
-            (item) => !layout.some((i) => i.i === item.i)
+            (item) =>
+              !layout.some((i) => i.i === item.i) || item.allowDuplicates
           ).map((item) => (
             <Col key={item.i}>
               <Button
                 type="primary"
                 style={{ width: 'min-content' }}
                 onClick={() => {
-                  setLayout([...layout, item]);
+                  setLayout([
+                    ...layout,
+                    {
+                      ...item,
+                      i: item.allowDuplicates
+                        ? `${item.i}_${
+                            layout
+                              .map(({ i }) => i)
+                              .filter((i) => i.includes(item.i)).length
+                          }`
+                        : item.i,
+                    },
+                  ]);
                 }}
               >
                 {layoutMap.get(item.i) || ''}

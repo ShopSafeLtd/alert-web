@@ -1984,6 +1984,18 @@ export type BusinessImpactInput = {
   telephone: Scalars['String'];
 };
 
+export type BusinessIncidentsCountGraphInput = {
+  brandIds?: InputMaybe<Array<Scalars['String']>>;
+  businessIds?: InputMaybe<Array<Scalars['String']>>;
+  crimeGroupId?: InputMaybe<Scalars['String']>;
+  dateRange: DateRangeInput;
+  groupIds?: InputMaybe<Array<Scalars['String']>>;
+  industryIds?: InputMaybe<Array<Scalars['String']>>;
+  offenderId?: InputMaybe<Scalars['String']>;
+  roleIds?: InputMaybe<Array<Scalars['String']>>;
+  schemeIds: Array<Scalars['String']>;
+};
+
 export type BusinessListRelationFilter = {
   every?: InputMaybe<BusinessWhereInput>;
   none?: InputMaybe<BusinessWhereInput>;
@@ -3783,6 +3795,26 @@ export type CustomGalleryWhereUniqueInput = {
   schemes?: InputMaybe<SchemeListRelationFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   vehicles?: InputMaybe<VehicleListRelationFilter>;
+};
+
+export type CustomQuestionsCountGraphInput = {
+  brandIds?: InputMaybe<Array<Scalars['String']>>;
+  businessIds?: InputMaybe<Array<Scalars['String']>>;
+  crimeGroupId?: InputMaybe<Scalars['String']>;
+  dateRange: DateRangeInput;
+  groupIds?: InputMaybe<Array<Scalars['String']>>;
+  industryIds?: InputMaybe<Array<Scalars['String']>>;
+  languageCode: LanguageCode;
+  offenderId?: InputMaybe<Scalars['String']>;
+  questionId: Scalars['String'];
+  roleIds?: InputMaybe<Array<Scalars['String']>>;
+  schemeIds: Array<Scalars['String']>;
+};
+
+export type CustomQuestionsGraph = {
+  __typename?: 'CustomQuestionsGraph';
+  data: Array<Graph>;
+  title: Scalars['String'];
 };
 
 export type CustomRole = {
@@ -6217,6 +6249,12 @@ export type HeatMapLatLng = {
   lng: Scalars['Float'];
 };
 
+export type HeatMapLocations = {
+  __typename?: 'HeatMapLocations';
+  id: Scalars['String'];
+  location?: Maybe<LatLngId>;
+};
+
 export enum Height {
   Average = 'AVERAGE',
   Short = 'SHORT',
@@ -8530,6 +8568,13 @@ export type LanguageWhereUniqueInput = {
   updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
+export type LatLngId = {
+  __typename?: 'LatLngId';
+  geoLat?: Maybe<Scalars['Float']>;
+  geoLng?: Maybe<Scalars['Float']>;
+  id: Scalars['String'];
+};
+
 export type LatestIncident = {
   __typename?: 'LatestIncident';
   date: Scalars['DateTime'];
@@ -8621,6 +8666,12 @@ export type ListGoodsTypes = {
 export type ListIncidents = {
   __typename?: 'ListIncidents';
   incidents: Array<Incident>;
+  total: Scalars['Int'];
+};
+
+export type ListIncidentsHeatPerformance = {
+  __typename?: 'ListIncidentsHeatPerformance';
+  incidents: Array<HeatMapLocations>;
   total: Scalars['Int'];
 };
 
@@ -9741,6 +9792,7 @@ export type Mutation = {
   searchExistingImages: Array<RekMatch>;
   searchFaces: SystemTask;
   sendInvite: User;
+  setDefaultTemplate?: Maybe<ReportTemplate>;
   setPassword: User;
   setSchemeSharing: Scheme;
   shareData: SystemTask;
@@ -10430,6 +10482,11 @@ export type MutationScanIncidentArgs = {
 
 export type MutationSendInviteArgs = {
   user: Scalars['String'];
+};
+
+
+export type MutationSetDefaultTemplateArgs = {
+  data: SetDefaultTemplateInput;
 };
 
 
@@ -12763,7 +12820,10 @@ export type Query = {
   brands: QueryBrandsConnection;
   business: Business;
   businessContribution: ListBusinessContribution;
+  businessCrimeTypeGraph: Array<RadialValueGraph>;
   businessImpact: BusinessImpact;
+  businessIncidentCountGraph: Array<Graph>;
+  businessLossRecoveredGraph: Array<RadialGraph>;
   businessRelay: QueryBusinessRelayConnection;
   businessReport: BusinessReport;
   chat: Chat;
@@ -12778,6 +12838,7 @@ export type Query = {
   crimeGroupReport: CrimeGroupReport;
   currentUser?: Maybe<User>;
   customGallery: CustomGallery;
+  customQuestionsCountGraph: CustomQuestionsGraph;
   dashboard: Dashboard;
   dashboards: QueryDashboardsConnection;
   documents: QueryDocumentsConnection;
@@ -12791,7 +12852,7 @@ export type Query = {
   incident: Incident;
   incidentCount: Scalars['Int'];
   incidentFeed: Array<Incident>;
-  incidentHeatPerformance: ListIncidents;
+  incidentHeatPerformance: ListIncidentsHeatPerformance;
   incidents: Array<Incident>;
   incidentsDayOfWeek: Array<Graph>;
   incidentsRelay: QueryIncidentsRelayConnection;
@@ -12876,6 +12937,7 @@ export type Query = {
   userChat: UserChat;
   userChats: Array<UserChat>;
   userContributions: ListUserContribution;
+  userIncidentCountGraph: Array<Graph>;
   userNew: UserNew;
   userNotification: UserNotification;
   userNotifications: Array<UserNotification>;
@@ -13006,8 +13068,26 @@ export type QueryBusinessContributionArgs = {
 };
 
 
+export type QueryBusinessCrimeTypeGraphArgs = {
+  take?: InputMaybe<Scalars['Int']>;
+  where: BusinessIncidentsCountGraphInput;
+};
+
+
 export type QueryBusinessImpactArgs = {
   where: UniqueId;
+};
+
+
+export type QueryBusinessIncidentCountGraphArgs = {
+  take?: InputMaybe<Scalars['Int']>;
+  where: BusinessIncidentsCountGraphInput;
+};
+
+
+export type QueryBusinessLossRecoveredGraphArgs = {
+  take?: InputMaybe<Scalars['Int']>;
+  where: BusinessIncidentsCountGraphInput;
 };
 
 
@@ -13087,6 +13167,11 @@ export type QueryCrimeGroupReportArgs = {
 
 export type QueryCustomGalleryArgs = {
   where: CustomGalleryWhereUniqueInput;
+};
+
+
+export type QueryCustomQuestionsCountGraphArgs = {
+  where: CustomQuestionsCountGraphInput;
 };
 
 
@@ -13809,6 +13894,12 @@ export type QueryUserContributionsArgs = {
 };
 
 
+export type QueryUserIncidentCountGraphArgs = {
+  take?: InputMaybe<Scalars['Int']>;
+  where: UserIncidentsCountGraphInput;
+};
+
+
 export type QueryUserNewArgs = {
   id: Scalars['String'];
 };
@@ -14242,6 +14333,13 @@ export type RadialGraph = {
   __typename?: 'RadialGraph';
   data: Array<Graph>;
   label: Scalars['String'];
+};
+
+export type RadialValueGraph = {
+  __typename?: 'RadialValueGraph';
+  data: Array<Graph>;
+  label: Scalars['String'];
+  value: Scalars['Float'];
 };
 
 export type RecycledItem = {
@@ -14820,6 +14918,7 @@ export type ReportLayout = {
 
 export type ReportLayoutCreateManyTemplateInput = {
   createdAt?: InputMaybe<Scalars['Date']>;
+  default?: InputMaybe<Scalars['Boolean']>;
   h: Scalars['Int'];
   i: Scalars['String'];
   id?: InputMaybe<Scalars['String']>;
@@ -14949,6 +15048,7 @@ export type ReportLayoutWhereUniqueInput = {
 export type ReportTemplate = {
   __typename?: 'ReportTemplate';
   createdAt: Scalars['Date'];
+  default: Scalars['Boolean'];
   id: Scalars['String'];
   layout: Array<ReportLayout>;
   metaData: Array<Scalars['JSON']>;
@@ -14960,6 +15060,7 @@ export type ReportTemplate = {
 
 export type ReportTemplateCreateInput = {
   createdAt?: InputMaybe<Scalars['Date']>;
+  default?: InputMaybe<Scalars['Boolean']>;
   id?: InputMaybe<Scalars['String']>;
   layout?: InputMaybe<ReportLayoutCreateNestedManyWithoutTemplateInput>;
   metaData?: InputMaybe<Array<Scalars['JSON']>>;
@@ -15024,6 +15125,7 @@ export type ReportTemplateScalarWhereWithAggregatesInput = {
 };
 
 export type ReportTemplateUpdateInput = {
+  default?: InputMaybe<SetBooleanHelper>;
   layout?: InputMaybe<ReportLayoutUpdateManyWithoutTemplateNestedInput>;
   metaData?: InputMaybe<Array<Scalars['JSON']>>;
   name?: InputMaybe<NullableSetStringHelper>;
@@ -16061,6 +16163,12 @@ export type SetBooleanHelper = {
 
 export type SetDateHelper = {
   set: Scalars['Date'];
+};
+
+export type SetDefaultTemplateInput = {
+  default: Scalars['Boolean'];
+  templateId: Scalars['String'];
+  type: ReportType;
 };
 
 export type SetFloatHelper = {
@@ -19119,6 +19227,19 @@ export type UserContributionWhereInput = {
   search?: InputMaybe<Scalars['String']>;
 };
 
+export type UserIncidentsCountGraphInput = {
+  brandIds?: InputMaybe<Array<Scalars['String']>>;
+  businessesIds?: InputMaybe<Array<Scalars['String']>>;
+  crimeGroupId?: InputMaybe<Scalars['String']>;
+  dateRange: DateRangeInput;
+  groupIds: Array<Scalars['String']>;
+  industryIds?: InputMaybe<Array<Scalars['String']>>;
+  offenderId?: InputMaybe<Scalars['String']>;
+  roleIds?: InputMaybe<Array<Scalars['String']>>;
+  schemeIds: Array<Scalars['String']>;
+  userIds?: InputMaybe<Array<Scalars['String']>>;
+};
+
 export type UserListRelationFilter = {
   every?: InputMaybe<UserWhereInput>;
   none?: InputMaybe<UserWhereInput>;
@@ -20613,6 +20734,14 @@ export type ConnectSchemesQueryVariables = Exact<{
 
 export type ConnectSchemesQuery = { __typename?: 'Query', schemes: Array<{ __typename?: 'Scheme', id: string, name: string }> };
 
+export type SchemeGroupsSelectQueryVariables = Exact<{
+  where?: InputMaybe<GroupWhereInput>;
+  orderBy?: InputMaybe<Array<GroupOrderByWithRelationInput> | GroupOrderByWithRelationInput>;
+}>;
+
+
+export type SchemeGroupsSelectQuery = { __typename?: 'Query', groups: Array<{ __typename?: 'Group', id: string, name: string }> };
+
 export type SetPasswordMutationVariables = Exact<{
   data: SetPasswordData;
 }>;
@@ -20743,6 +20872,45 @@ export type UserRolesQueryVariables = Exact<{
 
 
 export type UserRolesQuery = { __typename?: 'Query', roles: { __typename?: 'QueryRolesConnection', edges: Array<{ __typename?: 'QueryRolesConnectionEdge', node: { __typename?: 'CustomRole', type: Role, id: string, name: string } }> } };
+
+export type BusinessLossRecoveredGraphQueryVariables = Exact<{
+  where: BusinessIncidentsCountGraphInput;
+  take?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type BusinessLossRecoveredGraphQuery = { __typename?: 'Query', businessLossRecoveredGraph: Array<{ __typename?: 'RadialGraph', label: string, data: Array<{ __typename?: 'Graph', label: string, value: number }> }> };
+
+export type CustomQuestionsCountGraphQueryVariables = Exact<{
+  where: CustomQuestionsCountGraphInput;
+}>;
+
+
+export type CustomQuestionsCountGraphQuery = { __typename?: 'Query', customQuestionsCountGraph: { __typename?: 'CustomQuestionsGraph', title: string, data: Array<{ __typename?: 'Graph', label: string, value: number }> } };
+
+export type UserIncidentCountGraphQueryVariables = Exact<{
+  where: UserIncidentsCountGraphInput;
+  take?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type UserIncidentCountGraphQuery = { __typename?: 'Query', userIncidentCountGraph: Array<{ __typename?: 'Graph', label: string, value: number }> };
+
+export type BusinessCrimeTypeGraphQueryVariables = Exact<{
+  where: BusinessIncidentsCountGraphInput;
+  take?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type BusinessCrimeTypeGraphQuery = { __typename?: 'Query', businessCrimeTypeGraph: Array<{ __typename?: 'RadialValueGraph', label: string, data: Array<{ __typename?: 'Graph', label: string, value: number }> }> };
+
+export type BusinessIncidentCountGraphQueryVariables = Exact<{
+  where: BusinessIncidentsCountGraphInput;
+  take?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type BusinessIncidentCountGraphQuery = { __typename?: 'Query', businessIncidentCountGraph: Array<{ __typename?: 'Graph', label: string, value: number }> };
 
 export type ListActionsQueryVariables = Exact<{
   take?: InputMaybe<Scalars['Int']>;
@@ -22084,7 +22252,16 @@ export type CreateReportTemplateMutationVariables = Exact<{
 }>;
 
 
-export type CreateReportTemplateMutation = { __typename?: 'Mutation', createReportTemplate: { __typename?: 'ReportTemplate', id: string, metaData: Array<{ [key: string]: any }>, name?: string | null, type: ReportType, layout: Array<{ __typename?: 'ReportLayout', id: string, createdAt: Date, updatedAt: Date, h: number, w: number, x: number, y: number, maxW?: number | null, maxH?: number | null, minW?: number | null, minH?: number | null, static: boolean, moved: boolean, i: string }> } };
+export type CreateReportTemplateMutation = { __typename?: 'Mutation', createReportTemplate: { __typename?: 'ReportTemplate', id: string, metaData: Array<{ [key: string]: any }>, default: boolean, name?: string | null, type: ReportType, layout: Array<{ __typename?: 'ReportLayout', id: string, createdAt: Date, updatedAt: Date, h: number, w: number, x: number, y: number, maxW?: number | null, maxH?: number | null, minW?: number | null, minH?: number | null, static: boolean, moved: boolean, i: string }> } };
+
+export type ReportTemplatesFragment = { __typename?: 'ReportTemplate', id: string, metaData: Array<{ [key: string]: any }>, default: boolean, name?: string | null, type: ReportType, layout: Array<{ __typename?: 'ReportLayout', id: string, createdAt: Date, updatedAt: Date, h: number, w: number, x: number, y: number, maxW?: number | null, maxH?: number | null, minW?: number | null, minH?: number | null, static: boolean, moved: boolean, i: string }> };
+
+export type SetDefaultTemplateMutationVariables = Exact<{
+  data: SetDefaultTemplateInput;
+}>;
+
+
+export type SetDefaultTemplateMutation = { __typename?: 'Mutation', setDefaultTemplate?: { __typename?: 'ReportTemplate', id: string, default: boolean } | null };
 
 export type UpdateReportTemplateMutationVariables = Exact<{
   data: ReportTemplateUpdateInput;
@@ -22092,7 +22269,7 @@ export type UpdateReportTemplateMutationVariables = Exact<{
 }>;
 
 
-export type UpdateReportTemplateMutation = { __typename?: 'Mutation', updateReportTemplate: { __typename?: 'ReportTemplate', id: string, name?: string | null, metaData: Array<{ [key: string]: any }>, type: ReportType, layout: Array<{ __typename?: 'ReportLayout', id: string, createdAt: Date, updatedAt: Date, h: number, w: number, x: number, y: number, maxW?: number | null, maxH?: number | null, minW?: number | null, minH?: number | null, static: boolean, i: string, moved: boolean }> } };
+export type UpdateReportTemplateMutation = { __typename?: 'Mutation', updateReportTemplate: { __typename?: 'ReportTemplate', id: string, metaData: Array<{ [key: string]: any }>, default: boolean, name?: string | null, type: ReportType, layout: Array<{ __typename?: 'ReportLayout', id: string, createdAt: Date, updatedAt: Date, h: number, w: number, x: number, y: number, maxW?: number | null, maxH?: number | null, minW?: number | null, minH?: number | null, static: boolean, moved: boolean, i: string }> } };
 
 export type BusinessEngagementQueryVariables = Exact<{
   where: UserContributionWhereInput;
@@ -22172,7 +22349,7 @@ export type PerformanceReportQueryVariables = Exact<{
 }>;
 
 
-export type PerformanceReportQuery = { __typename?: 'Query', performanceReport: { __typename?: 'PerformanceReport', createdDataCounts: { __typename?: 'CreatedDataCounts', crimeGroups: number, incidents: number, messages: number, offenders: number, updates: number, vehicles: number, bulletins: number }, incidentSummary: { __typename?: 'IncidentSummary', totalIncidents: number, lastIncidentDate?: Date | null, incidentsReportedToPolice: number, incidentsWherePoliceAttended: number, mostCommonCrimeType: string }, outcomeSummary: { __typename?: 'OutcomeSummary', totalArrests: number, totalCBOYears: number, totalCBOCount: number, totalFinesCount: number, totalFinesValue: number, totalPrisonSentenceCount: number, totalPrisonSentenceMonths: number, totalRehabOrders: number }, crimeTypeDonut: Array<{ __typename?: 'Graph', label: string, value: number }>, involvedTagCountDonut: Array<{ __typename?: 'Graph', label: string, value: number }>, incidentDayOfWeekLine: Array<{ __typename?: 'Graph', label: string, value: number }>, lossTotals: { __typename?: 'LossTotals', totalIncidents: number, totalLostValue: number, totalRecoveredValue: number, averagePerIncident: number, averageSuccessRate: number, averageLossPerIncident: number }, goodsTypeCountDonut: Array<{ __typename?: 'Graph', label: string, value: number }>, goodsTypeValueDonut: Array<{ __typename?: 'Graph', label: string, value: number }>, policeSummary: { __typename?: 'PoliceSummary', totalAttendedIncidents: number, totalReportedIncidents: number, totalPoliceImages: number, totalVerifiedOffenders: number }, investigationSummary: { __typename?: 'InvestigationSummary', closed: number, open: number, opened: number }, timeHeatMap: Array<{ __typename?: 'TimeHeatMap', id: string, data: Array<{ __typename?: 'HourCountXY', x: string, y: number }> }>, priorityGraph: Array<{ __typename?: 'Graph', value: number, label: string }> }, offendersPerformance: { __typename?: 'ListOffenderPerformance', total: number, offenderPerformance: Array<{ __typename?: 'OffenderPerformance', primaryPhoto?: string | null, alertId: string, name: string, totalIncidents: number, totalLostValue: number, totalRecoveredValue: number, totalSuccessRate: number, lastIncidentDate?: Date | null, id: string, totalBulletins: number }> }, businessContribution: { __typename?: 'ListBusinessContribution', total: number, businessContributions: Array<{ __typename?: 'BusinessContributions', name: string, totalUsers: number, totalIncidents: number, totalOffenders: number, totalUpdates: number, totalMessages: number, totalLogins: number, totalSuccessRate: number, totalRecoveredValue: number, totalLostValue: number, mostCommonGoodLost?: string | null, highestTotalValueGoodLost?: number | null, averageLossValue?: number | null }> }, crimeGroupPerformance: { __typename?: 'ListCrimeGroupPerformance', total: number, crimeGroupPerformance: Array<{ __typename?: 'CrimeGroupPerformance', totalSuccessRate: number, totalRecoveredValue: number, totalOffenders: number, totalLostValue: number, totalIncidents: number, lastIncident?: Date | null, alias: string, alertId: string }> }, userContributions: { __typename?: 'ListUserContribution', total: number, userContributions: Array<{ __typename?: 'UserContribution', name: string, totalIncidents: number, totalOffenders: number, totalUpdates: number, totalMessages: number, totalLogins: number }> }, targetedGoods: { __typename?: 'ListTargetedGoods', total: number, targetedGoods: Array<{ __typename?: 'TargetedGood', alertId: string, name: string, totalIncidents: number, totalOffenders: number, totalLostValue: number, totalRecoveredValue: number, totalSuccessRate: number, averageLossValue: number }> }, incidentHeatPerformance: { __typename?: 'ListIncidents', total: number, incidents: Array<{ __typename?: 'Incident', id: string, location?: { __typename?: 'Address', id: string, geoLat?: number | null, geoLng?: number | null } | null }> }, investigationPerformance: { __typename?: 'ListInvestigationPerformance', total: number, investigationPerformance: Array<{ __typename?: 'InvestigationPerformance', id: string, alertId: string, name: string, status: InvestigationStatus, totalIncidents: number, totalOffenders: number, totalValue: number, createdAt: Date, closedAt?: Date | null }> } };
+export type PerformanceReportQuery = { __typename?: 'Query', performanceReport: { __typename?: 'PerformanceReport', createdDataCounts: { __typename?: 'CreatedDataCounts', crimeGroups: number, incidents: number, messages: number, offenders: number, updates: number, vehicles: number, bulletins: number }, incidentSummary: { __typename?: 'IncidentSummary', totalIncidents: number, lastIncidentDate?: Date | null, incidentsReportedToPolice: number, incidentsWherePoliceAttended: number, mostCommonCrimeType: string }, outcomeSummary: { __typename?: 'OutcomeSummary', totalArrests: number, totalCBOYears: number, totalCBOCount: number, totalFinesCount: number, totalFinesValue: number, totalPrisonSentenceCount: number, totalPrisonSentenceMonths: number, totalRehabOrders: number }, crimeTypeDonut: Array<{ __typename?: 'Graph', label: string, value: number }>, involvedTagCountDonut: Array<{ __typename?: 'Graph', label: string, value: number }>, incidentDayOfWeekLine: Array<{ __typename?: 'Graph', label: string, value: number }>, lossTotals: { __typename?: 'LossTotals', totalIncidents: number, totalLostValue: number, totalRecoveredValue: number, averagePerIncident: number, averageSuccessRate: number, averageLossPerIncident: number }, goodsTypeCountDonut: Array<{ __typename?: 'Graph', label: string, value: number }>, goodsTypeValueDonut: Array<{ __typename?: 'Graph', label: string, value: number }>, policeSummary: { __typename?: 'PoliceSummary', totalAttendedIncidents: number, totalReportedIncidents: number, totalPoliceImages: number, totalVerifiedOffenders: number }, investigationSummary: { __typename?: 'InvestigationSummary', closed: number, open: number, opened: number }, timeHeatMap: Array<{ __typename?: 'TimeHeatMap', id: string, data: Array<{ __typename?: 'HourCountXY', x: string, y: number }> }>, priorityGraph: Array<{ __typename?: 'Graph', value: number, label: string }> }, offendersPerformance: { __typename?: 'ListOffenderPerformance', total: number, offenderPerformance: Array<{ __typename?: 'OffenderPerformance', primaryPhoto?: string | null, alertId: string, name: string, totalIncidents: number, totalLostValue: number, totalRecoveredValue: number, totalSuccessRate: number, lastIncidentDate?: Date | null, id: string, totalBulletins: number }> }, businessContribution: { __typename?: 'ListBusinessContribution', total: number, businessContributions: Array<{ __typename?: 'BusinessContributions', name: string, totalUsers: number, totalIncidents: number, totalOffenders: number, totalUpdates: number, totalMessages: number, totalLogins: number, totalSuccessRate: number, totalRecoveredValue: number, totalLostValue: number, mostCommonGoodLost?: string | null, highestTotalValueGoodLost?: number | null, averageLossValue?: number | null }> }, crimeGroupPerformance: { __typename?: 'ListCrimeGroupPerformance', total: number, crimeGroupPerformance: Array<{ __typename?: 'CrimeGroupPerformance', totalSuccessRate: number, totalRecoveredValue: number, totalOffenders: number, totalLostValue: number, totalIncidents: number, lastIncident?: Date | null, alias: string, alertId: string }> }, userContributions: { __typename?: 'ListUserContribution', total: number, userContributions: Array<{ __typename?: 'UserContribution', name: string, totalIncidents: number, totalOffenders: number, totalUpdates: number, totalMessages: number, totalLogins: number }> }, targetedGoods: { __typename?: 'ListTargetedGoods', total: number, targetedGoods: Array<{ __typename?: 'TargetedGood', alertId: string, name: string, totalIncidents: number, totalOffenders: number, totalLostValue: number, totalRecoveredValue: number, totalSuccessRate: number, averageLossValue: number }> }, incidentHeatPerformance: { __typename?: 'ListIncidentsHeatPerformance', total: number, incidents: Array<{ __typename?: 'HeatMapLocations', id: string, location?: { __typename?: 'LatLngId', id: string, geoLat?: number | null, geoLng?: number | null } | null }> }, investigationPerformance: { __typename?: 'ListInvestigationPerformance', total: number, investigationPerformance: Array<{ __typename?: 'InvestigationPerformance', id: string, alertId: string, name: string, status: InvestigationStatus, totalIncidents: number, totalOffenders: number, totalValue: number, createdAt: Date, closedAt?: Date | null }> } };
 
 export type SchemeReportDetailsQueryVariables = Exact<{
   where?: InputMaybe<GroupWhereInput>;
@@ -22182,7 +22359,7 @@ export type SchemeReportDetailsQueryVariables = Exact<{
 }>;
 
 
-export type SchemeReportDetailsQuery = { __typename?: 'Query', groups: Array<{ __typename?: 'Group', id: string, name: string, description?: string | null, approver: Array<{ __typename?: 'User', id: string, fullName: string }> }>, scheme: { __typename?: 'Scheme', reportIcons: Array<{ __typename?: 'Image', optimisedPersisted?: string | null }>, reportTemplates: Array<{ __typename?: 'ReportTemplate', id: string, metaData: Array<{ [key: string]: any }>, name?: string | null, layout: Array<{ __typename?: 'ReportLayout', h: number, id: string, i: string, maxH?: number | null, maxW?: number | null, minW?: number | null, minH?: number | null, static: boolean, moved: boolean, w: number, x: number, y: number }> }> } };
+export type SchemeReportDetailsQuery = { __typename?: 'Query', groups: Array<{ __typename?: 'Group', id: string, name: string, description?: string | null, approver: Array<{ __typename?: 'User', id: string, fullName: string }> }>, scheme: { __typename?: 'Scheme', reportIcons: Array<{ __typename?: 'Image', optimisedPersisted?: string | null }>, reportTemplates: Array<{ __typename?: 'ReportTemplate', id: string, metaData: Array<{ [key: string]: any }>, default: boolean, name?: string | null, type: ReportType, layout: Array<{ __typename?: 'ReportLayout', id: string, createdAt: Date, updatedAt: Date, h: number, w: number, x: number, y: number, maxW?: number | null, maxH?: number | null, minW?: number | null, minH?: number | null, static: boolean, moved: boolean, i: string }> }> } };
 
 export type SchemeReportFiltersQueryVariables = Exact<{
   where?: InputMaybe<SchemeWhereInput>;
@@ -22354,7 +22531,7 @@ export type ListTodosQueryVariables = Exact<{
 }>;
 
 
-export type ListTodosQuery = { __typename?: 'Query', listTodos: { __typename?: 'ListTodos', total: number, uncompletedTotal: number, totalUserTodos: number, todos: Array<{ __typename?: 'Todo', description?: string | null, id: string, name?: string | null, dueDate?: Date | null, completed?: boolean | null, type?: TodoType | null, vehicleId?: string | null, offenderId?: string | null, crimeGroupId?: string | null, incidentId?: string | null, investigationId?: string | null, chatId?: string | null, similarOffenderIds: Array<string>, completedDate?: Date | null, vehicle?: { __typename?: 'Vehicle', id: string, reference?: number | null } | null, offender?: { __typename?: 'Offender', id: string, reference?: number | null } | null, crimeGroup?: { __typename?: 'CrimeGroup', id: string, reference?: number | null } | null, incident?: { __typename?: 'Incident', id: string, reference?: number | null } | null, investigation?: { __typename?: 'Investigation', id: string, reference?: number | null } | null, createdBy?: { __typename?: 'User', id: string, fullName: string } | null, completedBy?: { __typename?: 'User', id: string, fullName: string } | null, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }> }> } };
+export type ListTodosQuery = { __typename?: 'Query', listTodos: { __typename?: 'ListTodos', total: number, uncompletedTotal: number, totalUserTodos: number, todos: Array<{ __typename?: 'Todo', description?: string | null, id: string, name?: string | null, dueDate?: Date | null, completed?: boolean | null, type?: TodoType | null, vehicleId?: string | null, offenderId?: string | null, crimeGroupId?: string | null, incidentId?: string | null, investigationId?: string | null, chatId?: string | null, completedDate?: Date | null, vehicle?: { __typename?: 'Vehicle', id: string, reference?: number | null } | null, offender?: { __typename?: 'Offender', id: string, reference?: number | null } | null, crimeGroup?: { __typename?: 'CrimeGroup', id: string, reference?: number | null } | null, incident?: { __typename?: 'Incident', id: string, reference?: number | null } | null, investigation?: { __typename?: 'Investigation', id: string, reference?: number | null } | null, createdBy?: { __typename?: 'User', id: string, fullName: string } | null, completedBy?: { __typename?: 'User', id: string, fullName: string } | null, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }> }> } };
 
 export type TranslateQueryVariables = Exact<{
   data: TranslateTextInput;
@@ -23807,6 +23984,31 @@ export const VehiclesFragmentDoc = gql`
   registration
 }
     `;
+export const ReportTemplatesFragmentDoc = gql`
+    fragment ReportTemplates on ReportTemplate {
+  id
+  metaData
+  default
+  layout {
+    id
+    createdAt
+    updatedAt
+    h
+    w
+    x
+    y
+    maxW
+    maxH
+    minW
+    minH
+    static
+    moved
+    i
+  }
+  name
+  type
+}
+    `;
 export const ArticlePreviewFragmentDoc = gql`
     fragment ArticlePreview on Article {
   previewText
@@ -23964,6 +24166,25 @@ export function useConnectSchemesLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type ConnectSchemesQueryHookResult = ReturnType<typeof useConnectSchemesQuery>;
 export type ConnectSchemesLazyQueryHookResult = ReturnType<typeof useConnectSchemesLazyQuery>;
 export type ConnectSchemesQueryResult = Apollo.QueryResult<ConnectSchemesQuery, ConnectSchemesQueryVariables>;
+export const SchemeGroupsSelectDocument = gql`
+    query schemeGroupsSelect($where: GroupWhereInput, $orderBy: [GroupOrderByWithRelationInput!]) {
+  groups(where: $where, orderBy: $orderBy) {
+    id
+    name
+  }
+}
+    `;
+export function useSchemeGroupsSelectQuery(baseOptions?: Apollo.QueryHookOptions<SchemeGroupsSelectQuery, SchemeGroupsSelectQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SchemeGroupsSelectQuery, SchemeGroupsSelectQueryVariables>(SchemeGroupsSelectDocument, options);
+      }
+export function useSchemeGroupsSelectLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SchemeGroupsSelectQuery, SchemeGroupsSelectQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SchemeGroupsSelectQuery, SchemeGroupsSelectQueryVariables>(SchemeGroupsSelectDocument, options);
+        }
+export type SchemeGroupsSelectQueryHookResult = ReturnType<typeof useSchemeGroupsSelectQuery>;
+export type SchemeGroupsSelectLazyQueryHookResult = ReturnType<typeof useSchemeGroupsSelectLazyQuery>;
+export type SchemeGroupsSelectQueryResult = Apollo.QueryResult<SchemeGroupsSelectQuery, SchemeGroupsSelectQueryVariables>;
 export const SetPasswordDocument = gql`
     mutation SetPassword($data: SetPasswordData!) {
   setPassword(data: $data) {
@@ -24413,6 +24634,110 @@ export function useUserRolesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type UserRolesQueryHookResult = ReturnType<typeof useUserRolesQuery>;
 export type UserRolesLazyQueryHookResult = ReturnType<typeof useUserRolesLazyQuery>;
 export type UserRolesQueryResult = Apollo.QueryResult<UserRolesQuery, UserRolesQueryVariables>;
+export const BusinessLossRecoveredGraphDocument = gql`
+    query BusinessLossRecoveredGraph($where: BusinessIncidentsCountGraphInput!, $take: Int) {
+  businessLossRecoveredGraph(where: $where, take: $take) {
+    label
+    data {
+      label
+      value
+    }
+  }
+}
+    `;
+export function useBusinessLossRecoveredGraphQuery(baseOptions: Apollo.QueryHookOptions<BusinessLossRecoveredGraphQuery, BusinessLossRecoveredGraphQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BusinessLossRecoveredGraphQuery, BusinessLossRecoveredGraphQueryVariables>(BusinessLossRecoveredGraphDocument, options);
+      }
+export function useBusinessLossRecoveredGraphLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BusinessLossRecoveredGraphQuery, BusinessLossRecoveredGraphQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BusinessLossRecoveredGraphQuery, BusinessLossRecoveredGraphQueryVariables>(BusinessLossRecoveredGraphDocument, options);
+        }
+export type BusinessLossRecoveredGraphQueryHookResult = ReturnType<typeof useBusinessLossRecoveredGraphQuery>;
+export type BusinessLossRecoveredGraphLazyQueryHookResult = ReturnType<typeof useBusinessLossRecoveredGraphLazyQuery>;
+export type BusinessLossRecoveredGraphQueryResult = Apollo.QueryResult<BusinessLossRecoveredGraphQuery, BusinessLossRecoveredGraphQueryVariables>;
+export const CustomQuestionsCountGraphDocument = gql`
+    query CustomQuestionsCountGraph($where: CustomQuestionsCountGraphInput!) {
+  customQuestionsCountGraph(where: $where) {
+    data {
+      label
+      value
+    }
+    title
+  }
+}
+    `;
+export function useCustomQuestionsCountGraphQuery(baseOptions: Apollo.QueryHookOptions<CustomQuestionsCountGraphQuery, CustomQuestionsCountGraphQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CustomQuestionsCountGraphQuery, CustomQuestionsCountGraphQueryVariables>(CustomQuestionsCountGraphDocument, options);
+      }
+export function useCustomQuestionsCountGraphLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CustomQuestionsCountGraphQuery, CustomQuestionsCountGraphQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CustomQuestionsCountGraphQuery, CustomQuestionsCountGraphQueryVariables>(CustomQuestionsCountGraphDocument, options);
+        }
+export type CustomQuestionsCountGraphQueryHookResult = ReturnType<typeof useCustomQuestionsCountGraphQuery>;
+export type CustomQuestionsCountGraphLazyQueryHookResult = ReturnType<typeof useCustomQuestionsCountGraphLazyQuery>;
+export type CustomQuestionsCountGraphQueryResult = Apollo.QueryResult<CustomQuestionsCountGraphQuery, CustomQuestionsCountGraphQueryVariables>;
+export const UserIncidentCountGraphDocument = gql`
+    query UserIncidentCountGraph($where: UserIncidentsCountGraphInput!, $take: Int) {
+  userIncidentCountGraph(where: $where, take: $take) {
+    label
+    value
+  }
+}
+    `;
+export function useUserIncidentCountGraphQuery(baseOptions: Apollo.QueryHookOptions<UserIncidentCountGraphQuery, UserIncidentCountGraphQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserIncidentCountGraphQuery, UserIncidentCountGraphQueryVariables>(UserIncidentCountGraphDocument, options);
+      }
+export function useUserIncidentCountGraphLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserIncidentCountGraphQuery, UserIncidentCountGraphQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserIncidentCountGraphQuery, UserIncidentCountGraphQueryVariables>(UserIncidentCountGraphDocument, options);
+        }
+export type UserIncidentCountGraphQueryHookResult = ReturnType<typeof useUserIncidentCountGraphQuery>;
+export type UserIncidentCountGraphLazyQueryHookResult = ReturnType<typeof useUserIncidentCountGraphLazyQuery>;
+export type UserIncidentCountGraphQueryResult = Apollo.QueryResult<UserIncidentCountGraphQuery, UserIncidentCountGraphQueryVariables>;
+export const BusinessCrimeTypeGraphDocument = gql`
+    query BusinessCrimeTypeGraph($where: BusinessIncidentsCountGraphInput!, $take: Int) {
+  businessCrimeTypeGraph(where: $where, take: $take) {
+    label
+    data {
+      label
+      value
+    }
+  }
+}
+    `;
+export function useBusinessCrimeTypeGraphQuery(baseOptions: Apollo.QueryHookOptions<BusinessCrimeTypeGraphQuery, BusinessCrimeTypeGraphQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BusinessCrimeTypeGraphQuery, BusinessCrimeTypeGraphQueryVariables>(BusinessCrimeTypeGraphDocument, options);
+      }
+export function useBusinessCrimeTypeGraphLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BusinessCrimeTypeGraphQuery, BusinessCrimeTypeGraphQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BusinessCrimeTypeGraphQuery, BusinessCrimeTypeGraphQueryVariables>(BusinessCrimeTypeGraphDocument, options);
+        }
+export type BusinessCrimeTypeGraphQueryHookResult = ReturnType<typeof useBusinessCrimeTypeGraphQuery>;
+export type BusinessCrimeTypeGraphLazyQueryHookResult = ReturnType<typeof useBusinessCrimeTypeGraphLazyQuery>;
+export type BusinessCrimeTypeGraphQueryResult = Apollo.QueryResult<BusinessCrimeTypeGraphQuery, BusinessCrimeTypeGraphQueryVariables>;
+export const BusinessIncidentCountGraphDocument = gql`
+    query BusinessIncidentCountGraph($where: BusinessIncidentsCountGraphInput!, $take: Int) {
+  businessIncidentCountGraph(where: $where, take: $take) {
+    label
+    value
+  }
+}
+    `;
+export function useBusinessIncidentCountGraphQuery(baseOptions: Apollo.QueryHookOptions<BusinessIncidentCountGraphQuery, BusinessIncidentCountGraphQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BusinessIncidentCountGraphQuery, BusinessIncidentCountGraphQueryVariables>(BusinessIncidentCountGraphDocument, options);
+      }
+export function useBusinessIncidentCountGraphLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BusinessIncidentCountGraphQuery, BusinessIncidentCountGraphQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BusinessIncidentCountGraphQuery, BusinessIncidentCountGraphQueryVariables>(BusinessIncidentCountGraphDocument, options);
+        }
+export type BusinessIncidentCountGraphQueryHookResult = ReturnType<typeof useBusinessIncidentCountGraphQuery>;
+export type BusinessIncidentCountGraphLazyQueryHookResult = ReturnType<typeof useBusinessIncidentCountGraphLazyQuery>;
+export type BusinessIncidentCountGraphQueryResult = Apollo.QueryResult<BusinessIncidentCountGraphQuery, BusinessIncidentCountGraphQueryVariables>;
 export const ListActionsDocument = gql`
     query ListActions($take: Int, $skip: Int, $where: ActionWhereInput, $orderBy: [ActionOrderByWithRelationInput!]) {
   listActions(take: $take, skip: $skip, where: $where, orderBy: $orderBy) {
@@ -30855,29 +31180,10 @@ export type CreateOneBusinessImpactMutationOptions = Apollo.BaseMutationOptions<
 export const CreateReportTemplateDocument = gql`
     mutation CreateReportTemplate($data: ReportTemplateCreateInput!) {
   createReportTemplate(data: $data) {
-    id
-    metaData
-    layout {
-      id
-      createdAt
-      updatedAt
-      h
-      w
-      x
-      y
-      maxW
-      maxH
-      minW
-      minH
-      static
-      moved
-      i
-    }
-    name
-    type
+    ...ReportTemplates
   }
 }
-    `;
+    ${ReportTemplatesFragmentDoc}`;
 export type CreateReportTemplateMutationFn = Apollo.MutationFunction<CreateReportTemplateMutation, CreateReportTemplateMutationVariables>;
 export function useCreateReportTemplateMutation(baseOptions?: Apollo.MutationHookOptions<CreateReportTemplateMutation, CreateReportTemplateMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
@@ -30886,32 +31192,29 @@ export function useCreateReportTemplateMutation(baseOptions?: Apollo.MutationHoo
 export type CreateReportTemplateMutationHookResult = ReturnType<typeof useCreateReportTemplateMutation>;
 export type CreateReportTemplateMutationResult = Apollo.MutationResult<CreateReportTemplateMutation>;
 export type CreateReportTemplateMutationOptions = Apollo.BaseMutationOptions<CreateReportTemplateMutation, CreateReportTemplateMutationVariables>;
-export const UpdateReportTemplateDocument = gql`
-    mutation UpdateReportTemplate($data: ReportTemplateUpdateInput!, $where: ReportTemplateWhereUniqueInput!) {
-  updateReportTemplate(data: $data, where: $where) {
+export const SetDefaultTemplateDocument = gql`
+    mutation SetDefaultTemplate($data: SetDefaultTemplateInput!) {
+  setDefaultTemplate(data: $data) {
     id
-    name
-    layout {
-      id
-      createdAt
-      updatedAt
-      h
-      w
-      x
-      y
-      maxW
-      maxH
-      minW
-      minH
-      static
-      i
-      moved
-    }
-    metaData
-    type
+    default
   }
 }
     `;
+export type SetDefaultTemplateMutationFn = Apollo.MutationFunction<SetDefaultTemplateMutation, SetDefaultTemplateMutationVariables>;
+export function useSetDefaultTemplateMutation(baseOptions?: Apollo.MutationHookOptions<SetDefaultTemplateMutation, SetDefaultTemplateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetDefaultTemplateMutation, SetDefaultTemplateMutationVariables>(SetDefaultTemplateDocument, options);
+      }
+export type SetDefaultTemplateMutationHookResult = ReturnType<typeof useSetDefaultTemplateMutation>;
+export type SetDefaultTemplateMutationResult = Apollo.MutationResult<SetDefaultTemplateMutation>;
+export type SetDefaultTemplateMutationOptions = Apollo.BaseMutationOptions<SetDefaultTemplateMutation, SetDefaultTemplateMutationVariables>;
+export const UpdateReportTemplateDocument = gql`
+    mutation UpdateReportTemplate($data: ReportTemplateUpdateInput!, $where: ReportTemplateWhereUniqueInput!) {
+  updateReportTemplate(data: $data, where: $where) {
+    ...ReportTemplates
+  }
+}
+    ${ReportTemplatesFragmentDoc}`;
 export type UpdateReportTemplateMutationFn = Apollo.MutationFunction<UpdateReportTemplateMutation, UpdateReportTemplateMutationVariables>;
 export function useUpdateReportTemplateMutation(baseOptions?: Apollo.MutationHookOptions<UpdateReportTemplateMutation, UpdateReportTemplateMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
@@ -31794,27 +32097,11 @@ export const SchemeReportDetailsDocument = gql`
       optimisedPersisted
     }
     reportTemplates(where: $reportTemplatesWhere) {
-      id
-      metaData
-      name
-      layout {
-        h
-        id
-        i
-        maxH
-        maxW
-        minW
-        minH
-        static
-        moved
-        w
-        x
-        y
-      }
+      ...ReportTemplates
     }
   }
 }
-    `;
+    ${ReportTemplatesFragmentDoc}`;
 export function useSchemeReportDetailsQuery(baseOptions: Apollo.QueryHookOptions<SchemeReportDetailsQuery, SchemeReportDetailsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<SchemeReportDetailsQuery, SchemeReportDetailsQueryVariables>(SchemeReportDetailsDocument, options);
@@ -32440,7 +32727,6 @@ export const ListTodosDocument = gql`
         reference
       }
       chatId
-      similarOffenderIds
       completedDate
       createdBy {
         id
