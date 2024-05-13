@@ -105,7 +105,7 @@ const BarGraph = ({
             format: (value) => (Number.isInteger(value) ? value : ''), // Display only whole numbers
           }}
           labelSkipWidth={12}
-          labelSkipHeight={12}
+          labelSkipHeight={7}
           colorBy="indexValue"
         />
       ) : (

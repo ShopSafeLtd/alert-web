@@ -1,0 +1,12 @@
+query BusinessCrimeTypeGraph(
+  $where: BusinessIncidentsCountGraphInput!
+  $take: Int
+) {
+  businessCrimeTypeGraph(where: $where, take: $take) {
+    label
+    data {
+      label
+      value
+    }
+  }
+}

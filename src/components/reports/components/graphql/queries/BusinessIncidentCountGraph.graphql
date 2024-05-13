@@ -1,0 +1,9 @@
+query BusinessIncidentCountGraph(
+  $where: BusinessIncidentsCountGraphInput!
+  $take: Int
+) {
+  businessIncidentCountGraph(where: $where, take: $take) {
+    label
+    value
+  }
+}
