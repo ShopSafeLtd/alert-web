@@ -94,7 +94,7 @@ const MultiBarGraph = ({
           axisTop={null}
           axisRight={null}
           axisBottom={{
-            legendOffset: 32,
+            tickRotation: 39,
           }}
           labelSkipWidth={12}
           labelSkipHeight={7}
