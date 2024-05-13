@@ -56,6 +56,11 @@ import {
 } from 'components/reports/tableColumns';
 import { useIntl } from 'react-intl';
 import CustomQuestionsCountGraph from 'components/reports/components/CustomQuestionsCountGraph/CustomQuestionsCountGraph';
+import BusinessIncidentCountGraph from '#/components/reports/components/BusinessIncidentCountGraph/BusinessIncidentCountGraph';
+import UserIncidentCountGraph from '#/components/reports/components/UserIncidentCountGraph/UserIncidentCountGraph';
+import BusinessCrimeTypeGraph from '#/components/reports/components/BusinessCrimeTypeGraph/BusinessCrimeTypeGraph';
+import { useNavigate } from 'react-router';
+import BusinessLossRecoveredGraph from '#/components/reports/components/BusinessLossRecoveredGraph/BusinessCrimeTypeGraph';
 import type { PerformanceReportQuery } from '../../../../graphql/generated';
 import { LanguageCode } from '../../../../graphql/generated';
 import useStyles from '../../styles/report.styles';
@@ -137,6 +142,7 @@ const PerformanceReportLayout = ({
   };
 
   const intl = useIntl();
+  const navigate = useNavigate();
 
   interface GetComponentArgs {
     key: AllowedValue;
@@ -1845,6 +1851,158 @@ const PerformanceReportLayout = ({
           </Card>
         );
       }
+      case 'userIncidentCountGraph': {
+        return (
+          <Card
+            className="no-break"
+            loading={loading}
+            style={{ height: calculateHeight(key) }}
+            bodyStyle={{ height: '90%' }}
+            key={key}
+          >
+            <UserIncidentCountGraph
+              variables={{
+                where: {
+                  brandIds: filters.selectedBrands,
+                  dateRange: filters.dateRange,
+                  groupIds: filters.selectedGroups,
+                  industryIds: filters.selectedIndustries,
+                  // languageCode: LanguageCode.En,
+                  roleIds: filters.selectedRoles,
+                  schemeIds: [filters.schemeId],
+                },
+                take: 10,
+              }}
+              editMode={editMode}
+              isPrinting={isPrinting}
+              removeItem={() => removeItem(key)}
+              metaData={metadata.find((item) => item.key === key)}
+              setMetaData={(value: MetaData) => {
+                const updatedMetadata = metadata.map((item) => {
+                  if (item.key === key) {
+                    return value;
+                  }
+                  return item;
+                }) satisfies MetaData[];
+                setMetadata(updatedMetadata);
+              }}
+              onNavigate={() => navigate(`/app/reports/user-engagement`)}
+            />
+          </Card>
+        );
+      }
+      case 'businessIncidentCountGraph': {
+        return (
+          <Card
+            className="no-break"
+            loading={loading}
+            style={{ height: calculateHeight(key) }}
+            bodyStyle={{ height: '90%' }}
+            key={key}
+          >
+            <BusinessIncidentCountGraph
+              variables={{
+                where: {
+                  brandIds: filters.selectedBrands,
+                  dateRange: filters.dateRange,
+                  groupIds: filters.selectedGroups,
+                  industryIds: filters.selectedIndustries,
+                  // languageCode: LanguageCode.En,
+                  roleIds: filters.selectedRoles,
+                  schemeIds: [filters.schemeId],
+                },
+                take: 10,
+              }}
+              editMode={editMode}
+              isPrinting={isPrinting}
+              removeItem={() => removeItem(key)}
+              metaData={metadata.find((item) => item.key === key)}
+              setMetaData={(value: MetaData) => {
+                const updatedMetadata = metadata.map((item) => {
+                  if (item.key === key) {
+                    return value;
+                  }
+                  return item;
+                }) satisfies MetaData[];
+                setMetadata(updatedMetadata);
+              }}
+              onNavigate={() => navigate(`/app/reports/business-engagement`)}
+              // metadata={metadata}
+              // setMetadata={setMetadata}
+              // key={key}
+            />
+          </Card>
+        );
+      }
+      case 'businessCrimeTypeGraph': {
+        return (
+          <Card
+            className="no-break"
+            loading={loading}
+            style={{ height: calculateHeight(key) }}
+            bodyStyle={{ height: '90%' }}
+            key={key}
+          >
+            <BusinessCrimeTypeGraph
+              variables={{
+                where: {
+                  brandIds: filters.selectedBrands,
+                  dateRange: filters.dateRange,
+                  groupIds: filters.selectedGroups,
+                  industryIds: filters.selectedIndustries,
+                  // languageCode: LanguageCode.En,
+                  roleIds: filters.selectedRoles,
+                  schemeIds: [filters.schemeId],
+                },
+                take: 10,
+              }}
+              editMode={editMode}
+              removeItem={() => removeItem(key)}
+              onNavigate={() => navigate(`/app/reports/business-engagement`)}
+
+              // metaData={metadata.find((item) => item.key === key)}
+              // setMetaData={(value: MetaData) => {
+              //   const updatedMetadata = metadata.map((item) => {
+              //     if (item.key === key) {
+              //       return value;
+              //     }
+              //     return item;
+              //   }) satisfies MetaData[];
+              //   setMetadata(updatedMetadata);
+              // }}
+            />
+          </Card>
+        );
+      }
+      case 'businessLossRecoveredGraph': {
+        return (
+          <Card
+            className="no-break"
+            loading={loading}
+            style={{ height: calculateHeight(key) }}
+            bodyStyle={{ height: '90%' }}
+            key={key}
+          >
+            <BusinessLossRecoveredGraph
+              variables={{
+                where: {
+                  brandIds: filters.selectedBrands,
+                  dateRange: filters.dateRange,
+                  groupIds: filters.selectedGroups,
+                  industryIds: filters.selectedIndustries,
+                  // languageCode: LanguageCode.En,
+                  roleIds: filters.selectedRoles,
+                  schemeIds: [filters.schemeId],
+                },
+                take: 10,
+              }}
+              editMode={editMode}
+              removeItem={() => removeItem(key)}
+              onNavigate={() => navigate(`/app/reports/business-engagement`)}
+            />
+          </Card>
+        );
+      }
       default: {
         return <div />;
       }
@@ -1852,6 +2010,7 @@ const PerformanceReportLayout = ({
   };
 
   console.log(layout);
+  console.log('metadata', metadata);
 
   return useMemo(
     () =>

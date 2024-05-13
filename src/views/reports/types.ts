@@ -39,7 +39,12 @@ export type AllowedValue =
   | 'logo'
   | 'timeHeatMap'
   | 'priorityGraph'
-  | 'customQuestionsCountGraph';
+  | 'customQuestionsCountGraph'
+  | 'userIncidentCountGraph'
+  | 'businessIncidentCountGraph'
+  | 'businessLossRecoveredGraph'
+  | 'businessCrimeTypeGraph'
+  | 'userSessionDonut';
 
 type ReportItemTypes =
   | 'summary'
@@ -196,6 +201,27 @@ export const LayoutToReadable: {
   {
     i: 'customQuestionsCountGraph',
     readable: 'Incident Answer Count',
+  },
+  // {
+  //   i: 'userSessionDonut',
+  //   readable: 'User Session Graph',
+  // },
+  {
+    i: 'userIncidentCountGraph',
+    readable: 'User Incidents Count',
+  },
+  {
+    i: 'businessIncidentCountGraph',
+    readable: 'Business Incidents Count',
+  },
+  {
+    i: 'businessLossRecoveredGraph',
+    readable: 'Businesses Loss Recovered Graph',
+  },
+
+  {
+    i: 'businessCrimeTypeGraph',
+    readable: 'Business Crime Type Graph',
   },
 ];
 

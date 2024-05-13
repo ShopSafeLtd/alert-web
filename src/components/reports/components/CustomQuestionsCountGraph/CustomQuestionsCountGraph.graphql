@@ -1,9 +1,9 @@
 query CustomQuestionsCountGraph($where: CustomQuestionsCountGraphInput!) {
-    customQuestionsCountGraph(where: $where) {
-        data {
-            label
-            value
-        }
-        title
+  customQuestionsCountGraph(where: $where) {
+    data {
+      label
+      value
     }
+    title
+  }
 }
