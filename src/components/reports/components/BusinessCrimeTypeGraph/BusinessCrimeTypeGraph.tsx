@@ -12,6 +12,7 @@ interface Props {
   variables: BusinessCrimeTypeGraphQueryVariables;
   removeItem: () => void;
   onNavigate: () => void;
+  isPrinting: boolean;
 }
 
 const BusinessCrimeTypeGraph = ({
@@ -19,6 +20,7 @@ const BusinessCrimeTypeGraph = ({
   editMode,
   removeItem,
   onNavigate,
+  isPrinting,
 }: Props) => {
   const intl = useIntl();
 
@@ -61,6 +63,8 @@ const BusinessCrimeTypeGraph = ({
         </Button>
       )}
       <MultiBarGraph
+        isPrinting={isPrinting}
+        tooltip
         data={data?.businessCrimeTypeGraph}
         emptyLabel={intl.formatMessage({
           defaultMessage: 'No Crime Types or Incidents',

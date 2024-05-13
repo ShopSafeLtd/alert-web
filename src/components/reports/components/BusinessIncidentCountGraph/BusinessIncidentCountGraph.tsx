@@ -16,10 +16,11 @@ interface Props {
   isPrinting: boolean;
   editMode: boolean;
   variables: BusinessIncidentCountGraphQueryVariables;
-  metaData?: MetaData;
-  setMetaData: (arg0: MetaData) => void;
+  metaData: MetaData;
+  allMeta: MetaData[];
   removeItem: () => void;
   onNavigate: () => void;
+  setMetaData: (arg0: MetaData[]) => void;
 }
 
 const BusinessIncidentCountGraph = ({
@@ -30,12 +31,17 @@ const BusinessIncidentCountGraph = ({
   setMetaData,
   removeItem,
   onNavigate,
+  allMeta,
 }: Props) => {
   const intl = useIntl();
 
   const { data } = useBusinessIncidentCountGraphQuery({
     variables,
   });
+
+  const foundOrNew = allMeta.find(
+    (item) => item.key === 'businessIncidentCountGraph'
+  );
 
   return (
     <>
@@ -55,8 +61,20 @@ const BusinessIncidentCountGraph = ({
             icon={<FontAwesomeIcon icon={faChartBar} size="lg" />}
             size="small"
             onClick={() => {
-              if (metaData && setMetaData) {
-                setMetaData({ ...metaData, type: 'bar' });
+              if (foundOrNew) {
+                const updatedMetadata = allMeta.map((item) => {
+                  if (item.key === 'businessIncidentCountGraph') {
+                    if (item.type === 'donut') return { ...item, type: 'bar' };
+                    return { ...item, type: 'donut' };
+                  }
+                  return item;
+                }) satisfies MetaData[];
+                setMetaData(updatedMetadata);
+              } else {
+                setMetaData([
+                  ...allMeta,
+                  { key: 'businessIncidentCountGraph', type: 'bar' },
+                ]);
               }
             }}
           />
@@ -68,12 +86,20 @@ const BusinessIncidentCountGraph = ({
             icon={<FontAwesomeIcon icon={faChartPie} size="lg" />}
             size="small"
             onClick={() => {
-              if (metaData && setMetaData) {
-                if (metaData?.type === 'donut') {
-                  setMetaData({ ...metaData, type: 'pie' });
-                } else {
-                  setMetaData({ ...metaData, type: 'donut' });
-                }
+              if (foundOrNew) {
+                const updatedMetadata = allMeta.map((item) => {
+                  if (item.key === 'businessIncidentCountGraph') {
+                    if (item.type === 'bar') return { ...item, type: 'donut' };
+                    return { ...item, type: 'donut' };
+                  }
+                  return item;
+                }) satisfies MetaData[];
+                setMetaData(updatedMetadata);
+              } else {
+                setMetaData([
+                  ...allMeta,
+                  { key: 'businessIncidentCountGraph', type: 'donut' },
+                ]);
               }
             }}
           />

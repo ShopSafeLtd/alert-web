@@ -46,7 +46,7 @@ export type AllowedValue =
   | 'businessCrimeTypeGraph'
   | 'userSessionDonut';
 
-type ReportItemTypes =
+export type ReportItemTypes =
   | 'summary'
   | 'pageBreak'
   | 'donut'

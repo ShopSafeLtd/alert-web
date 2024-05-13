@@ -64,7 +64,7 @@ import BusinessLossRecoveredGraph from '#/components/reports/components/Business
 import type { PerformanceReportQuery } from '../../../../graphql/generated';
 import { LanguageCode } from '../../../../graphql/generated';
 import useStyles from '../../styles/report.styles';
-import type { AllowedValue, MetaData } from '../../types';
+import type { AllowedValue, MetaData, ReportItemTypes } from '../../types';
 import type { Props as HookProps } from '../hooks/types';
 
 interface ContributorTable {
@@ -110,6 +110,21 @@ interface Props {
   setMetadata: (arg0: MetaData[]) => void;
   filters: FilterProps;
 }
+
+const generateDefaultMetaData = (
+  key: AllowedValue,
+  type: ReportItemTypes,
+  metaData: MetaData[]
+) => {
+  const found = metaData.find((item) => item.key === key);
+  if (found) {
+    return found;
+  }
+  return {
+    key,
+    type,
+  };
+};
 
 const PerformanceReportLayout = ({
   loading,
@@ -1876,11 +1891,13 @@ const PerformanceReportLayout = ({
               editMode={editMode}
               isPrinting={isPrinting}
               removeItem={() => removeItem(key)}
-              metaData={metadata.find((item) => item.key === key)}
+              metaData={generateDefaultMetaData(key, 'bar', metadata)}
               setMetaData={(value: MetaData) => {
                 const updatedMetadata = metadata.map((item) => {
                   if (item.key === key) {
-                    return value;
+                    return (
+                      value || generateDefaultMetaData(key, 'bar', metadata)
+                    );
                   }
                   return item;
                 }) satisfies MetaData[];
@@ -1916,16 +1933,9 @@ const PerformanceReportLayout = ({
               editMode={editMode}
               isPrinting={isPrinting}
               removeItem={() => removeItem(key)}
-              metaData={metadata.find((item) => item.key === key)}
-              setMetaData={(value: MetaData) => {
-                const updatedMetadata = metadata.map((item) => {
-                  if (item.key === key) {
-                    return value;
-                  }
-                  return item;
-                }) satisfies MetaData[];
-                setMetadata(updatedMetadata);
-              }}
+              metaData={generateDefaultMetaData(key, 'donut', metadata)}
+              setMetaData={setMetadata}
+              allMeta={metadata}
               onNavigate={() => navigate(`/app/reports/business-engagement`)}
               // metadata={metadata}
               // setMetadata={setMetadata}
@@ -1956,6 +1966,7 @@ const PerformanceReportLayout = ({
                 },
                 take: 10,
               }}
+              isPrinting={isPrinting}
               editMode={editMode}
               removeItem={() => removeItem(key)}
               onNavigate={() => navigate(`/app/reports/business-engagement`)}
@@ -1999,6 +2010,7 @@ const PerformanceReportLayout = ({
               editMode={editMode}
               removeItem={() => removeItem(key)}
               onNavigate={() => navigate(`/app/reports/business-engagement`)}
+              isPrinting={isPrinting}
             />
           </Card>
         );
@@ -2008,9 +2020,6 @@ const PerformanceReportLayout = ({
       }
     }
   };
-
-  console.log(layout);
-  console.log('metadata', metadata);
 
   return useMemo(
     () =>

@@ -11,6 +11,9 @@ const MultiBarGraph = ({
   data,
   emptyLabel,
   isStacked,
+  tooltip,
+  isPrinting,
+  valueSymbol,
 }: {
   data:
     | Array<{
@@ -21,9 +24,13 @@ const MultiBarGraph = ({
     | undefined;
   emptyLabel: string;
   isStacked?: boolean;
+  isPrinting?: boolean; // required if printing to make it light mode
+  tooltip?: boolean;
+  valueSymbol?: string;
 }) => {
   const darkMode =
     useStoreState((state) => state.theme.currentTheme) === 'dark';
+  const isDark = darkMode && !isPrinting;
   const intl = useIntl();
 
   return (
@@ -62,6 +69,12 @@ const MultiBarGraph = ({
               )
             ).filter((key) => key !== 'label') || []
           }
+          valueFormat={(value) =>
+            `${valueSymbol ?? ''}${Number(value).toLocaleString('en-GB', {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 2,
+            })}`
+          }
           margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
           padding={0.3}
           groupMode={isStacked ? 'stacked' : 'grouped'}
@@ -69,7 +82,10 @@ const MultiBarGraph = ({
           indexScale={{ type: 'band', round: true }}
           colors={colours}
           theme={{
-            textColor: darkMode ? '#ffffff' : '#000',
+            text: {
+              color: isDark ? '#fff' : '#000',
+              fill: isDark ? '#fff' : '#000',
+            },
           }}
           borderColor={{
             from: 'color',
@@ -79,11 +95,7 @@ const MultiBarGraph = ({
           axisRight={null}
           labelSkipWidth={12}
           labelSkipHeight={7}
-          labelTextColor={{
-            from: 'color',
-            modifiers: [['darker', 1.6]],
-          }}
-          tooltip
+          tooltip={tooltip}
           legends={[
             {
               dataFrom: 'keys',
@@ -98,6 +110,7 @@ const MultiBarGraph = ({
               itemDirection: 'left-to-right',
               itemOpacity: 0.85,
               symbolSize: 20,
+              itemTextColor: isDark ? '#fff' : '#3a3a3a',
               effects: [
                 {
                   on: 'hover',

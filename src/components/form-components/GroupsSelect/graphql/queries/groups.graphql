@@ -1,0 +1,9 @@
+query schemeGroupsSelect(
+  $where: GroupWhereInput
+  $orderBy: [GroupOrderByWithRelationInput!]
+) {
+  groups(where: $where, orderBy: $orderBy) {
+    id
+    name
+  }
+}

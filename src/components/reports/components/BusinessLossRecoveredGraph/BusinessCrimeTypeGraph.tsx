@@ -8,7 +8,7 @@ import { faTrash } from '@fortawesome/pro-light-svg-icons';
 import MultiBarGraph from '../../graphs/multiBarGraph';
 
 interface Props {
-  // isPrinting: boolean;
+  isPrinting: boolean;
   editMode: boolean;
   variables: BusinessLossRecoveredGraphQueryVariables;
   removeItem: () => void;
@@ -16,7 +16,7 @@ interface Props {
 }
 
 const BusinessLossRecoveredGraph = ({
-  // isPrinting,
+  isPrinting,
   variables,
   editMode,
   removeItem,
@@ -63,12 +63,13 @@ const BusinessLossRecoveredGraph = ({
         </Button>
       )}
       <MultiBarGraph
+        isPrinting={isPrinting}
         data={data?.businessLossRecoveredGraph}
         emptyLabel={intl.formatMessage({
           defaultMessage: 'No Incidents',
           id: '+nJOH5',
         })}
-        isStacked
+        valueSymbol="£"
       />
     </>
   );
