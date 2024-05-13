@@ -16,8 +16,9 @@
   height: 30px;
 }
 
-.react-resizable-handle{
-  filter: invert(37%) sepia(94%) saturate(2786%) hue-rotate(346deg) brightness(97%) contrast(92%);
+.react-resizable-handle {
+  filter: invert(37%) sepia(94%) saturate(2786%) hue-rotate(346deg)
+    brightness(97%) contrast(92%);
 }
 .loading.cover-content {
   position: absolute;
@@ -79,7 +80,7 @@
 //}
 
 .overlay {
-  z-index: 1000
+  z-index: 1000;
 }
 
 .logo {
@@ -118,7 +119,6 @@
   width: 100%;
   justify-content: center;
   align-items: center;
-
 }
 
 .stats-row {
@@ -154,8 +154,12 @@
   top: 5px;
   z-index: 1;
 }
-
-
+.change-graph1-view-more {
+  position: absolute;
+  right: 5px;
+  top: 15px;
+  z-index: 1;
+}
 
 @media print {
   .no-print,
@@ -178,7 +182,7 @@
     background: white;
   }
 
-  .ant-table-column-sorter{
+  .ant-table-column-sorter {
     display: none;
   }
   .pagebreak {
@@ -188,7 +192,6 @@
   }
   .ant-card {
     break-inside: avoid !important;
-
   }
   .ant-card-bordered {
     border: 0 solid #000;
@@ -218,12 +221,11 @@
     // scale it down 10%
     //transform: scale(0.9);
     //transform-origin: 0 0;
-
   }
-    .no-break {
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
+  .no-break {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
 
   .ant-table-body {
     overflow-y: unset !important;
@@ -252,12 +254,9 @@
     display: none;
   }
 
-
   .page {
     overflow-y: unset !important;
     height: unset !important;
     page-break-inside: avoid;
   }
-
 }
-

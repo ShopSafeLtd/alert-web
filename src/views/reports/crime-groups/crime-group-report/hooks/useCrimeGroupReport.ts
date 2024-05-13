@@ -4,10 +4,9 @@ import {
   useSchemeReportDetailsQuery,
 } from 'graphql/generated';
 import { useParams } from 'react-router-dom';
-import type RGL from 'react-grid-layout';
 import moment from 'moment';
+import arrangeTemplates from '#/utils/reports/setTemplates';
 import type { Return } from './types';
-import type { IReportTemplate } from '../../../types';
 import CrimeGroupLayout, { CrimeGroupMetaData } from './initLayout';
 import useReportPrint from '../../../../../utils/reportPrint/usePrintReports';
 import useReportState from '../../../../../utils/reports/useReportState';
@@ -52,6 +51,7 @@ const useCrimeGroupReport = (): Return => {
     addLogo,
     selectTemplate,
     saveTemplate: saveTemplateState,
+    setAsDefault,
   } = useReportState({
     InitLayout: CrimeGroupLayout,
     InitMetaData: CrimeGroupMetaData,
@@ -90,22 +90,11 @@ const useCrimeGroupReport = (): Return => {
             (icon) => icon.optimisedPersisted ?? ''
           ) || []),
         ]);
-        const importedTemplates: IReportTemplate[] =
-          (groupsData.scheme?.reportTemplates.map((template) => ({
-            id: template.id || '',
-            name: template.name || '',
-            metaData: template.metaData || [],
-            layout:
-              (template.layout.map((item) => ({
-                ...item,
-                maxH: item.maxH ?? undefined,
-                maxW: item.maxW ?? undefined,
-                minH: item.minH ?? undefined,
-                minW: item.minW ?? undefined,
-              })) as RGL.Layout[]) || [],
-          })) as IReportTemplate[]) || [];
-
-        setTemplates([defaultTemplate, ...importedTemplates]);
+        arrangeTemplates(
+          groupsData?.scheme?.reportTemplates || [],
+          defaultTemplate,
+          setTemplates
+        );
       },
     });
   const saveTemplate = (name: string, method: 'create' | 'update') => {
@@ -260,6 +249,7 @@ const useCrimeGroupReport = (): Return => {
     targetedGoodsData,
     offendersTableData,
     incidentsTableData,
+    setAsDefault,
   };
 };
 

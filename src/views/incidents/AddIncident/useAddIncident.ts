@@ -27,7 +27,6 @@ import {
   useCreateIncidentMutation,
   useListGoodsTypesQuery,
   useListIncidentTagsQuery,
-  useSchemeGroupsQuery,
   useTagsQuery,
   ViewInvestigationDocument,
 } from 'graphql/generated';
@@ -42,6 +41,7 @@ import { useIntl } from 'react-intl';
 import type { StateOffenderData } from 'components/incidents/IncidentForm/Profiles/Offenders/useOffenders';
 import type { StateVehicleData } from 'components/incidents/IncidentForm/Profiles/Vehicles/useVehicles';
 import type { StateImageData } from 'components/incidents/IncidentForm/ImageSection/useImageSection';
+import { useGroupsContext } from '#/context/groups-context';
 
 const { useForm } = Form;
 const { confirm } = Modal;
@@ -249,39 +249,20 @@ const useAddIncident = ({ investigationId }: Props): Return => {
 
   const navigate = useNavigate();
 
-  // Query
-  const { data: groupData } = useSchemeGroupsQuery({
-    variables: {
-      where: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
-        users:
-          role === Role.User
-            ? {
-                some: {
-                  id: {
-                    equals: userId,
-                  },
-                },
-              }
-            : undefined,
-      },
-    },
-    fetchPolicy: 'cache-and-network',
-    onCompleted: (result) => {
+  const { groups } = useGroupsContext();
+
+  useEffect(() => {
+    if (groups) {
       setIncidentsState({
         pagination,
         variables: {
           ...variables,
-          groups: result.groups.map((group) => group.id),
+          groups: groups.map((group) => group.value),
         },
         order,
       });
-    },
-  });
+    }
+  }, [groups]);
 
   const { data: goodsTypesData } = useListGoodsTypesQuery({
     variables: {
@@ -522,8 +503,8 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                     gender: offender.gender || null,
                     groups: {
                       connect:
-                        groupData?.groups && groupData.groups.length === 1
-                          ? groupData?.groups.map(({ id }) => ({ id }))
+                        groups && groups.length === 1
+                          ? groups.map(({ value: id }) => ({ id }))
                           : data.groups.map((id) => ({ id })),
                     },
                     hair: offender.hair || null,
@@ -637,8 +618,8 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                     colour: { set: vehicle.colour },
                     groups: {
                       connect:
-                        groupData?.groups && groupData.groups.length === 1
-                          ? groupData?.groups.map(({ id }) => ({ id }))
+                        groups && groups.length === 1
+                          ? groups.map(({ value: id }) => ({ id }))
                           : data.groups.map((id) => ({ id })),
                     },
                     make: { set: vehicle.make },
@@ -653,8 +634,8 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                   colour: vehicle.colour,
                   groups: {
                     connect:
-                      groupData?.groups && groupData.groups.length === 1
-                        ? groupData?.groups.map(({ id }) => ({ id }))
+                      groups && groups.length === 1
+                        ? groups.map(({ value: id }) => ({ id }))
                         : data.groups.map((id) => ({ id })),
                   },
                   localId: vehicle.id,
@@ -765,8 +746,8 @@ const useAddIncident = ({ investigationId }: Props): Return => {
             description: data.description,
             documents: getDocuments(),
             groups:
-              groupData?.groups && groupData.groups.length === 1
-                ? groupData?.groups.map(({ id }) => ({ id }))
+              groups && groups.length === 1
+                ? groups.map(({ value: id }) => ({ id }))
                 : data.groups.map((id) => ({ id })),
             images: getImages(),
             investigationId: investigationId || null,

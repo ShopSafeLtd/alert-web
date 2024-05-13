@@ -1,9 +1,10 @@
 import type { ArticlePriority } from 'graphql/generated';
-import { SortOrder, Role, useSchemeGroupsQuery } from 'graphql/generated';
+import { SortOrder } from 'graphql/generated';
 import { useEffect } from 'react';
 import { useStoreActions, useStoreState } from 'state';
 import type { DateType } from 'types/DataType';
 import type { ArticleFilters } from 'state/data-model';
+import { useGroupsContext } from '#/context/groups-context';
 
 interface Return {
   clearFilters: () => void;
@@ -19,11 +20,9 @@ interface Return {
 const useArticleFilter = (): Return => {
   // Global State
   const schemeId = useStoreState((state) => state.scheme.id);
-  const {
-    role,
-    id: userId,
-    filterDefaultGroups: defaultGroups,
-  } = useStoreState((state) => state.user);
+  const { filterDefaultGroups: defaultGroups } = useStoreState(
+    (state) => state.user
+  );
   const filterVariables = useStoreState(
     (state) => state.data.articles.variables
   );
@@ -44,30 +43,7 @@ const useArticleFilter = (): Return => {
     }
   }, []);
 
-  // Fetch scheme groups if scheme admin
-  const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
-    variables: {
-      where: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
-        users:
-          role === Role.User
-            ? {
-                some: {
-                  id: {
-                    equals: userId,
-                  },
-                },
-              }
-            : undefined,
-      },
-    },
-    fetchPolicy: 'cache-and-network',
-    skip: role !== Role.SchemeAdmin,
-  });
+  const { groups, groupsLoading } = useGroupsContext();
 
   const setCreatedAtFilter = (values: DateType | undefined) => {
     setFilterState({
@@ -118,11 +94,7 @@ const useArticleFilter = (): Return => {
   return {
     setOrder,
     setPriorityFilter,
-    groups:
-      groupsData?.groups.map((group) => ({
-        value: group.id,
-        label: group.name,
-      })) || [],
+    groups,
     groupsLoading,
     clearFilters,
     setGroupsFilter,

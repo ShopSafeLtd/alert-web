@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react';
 import type { ListVehiclesCardQuery } from 'graphql/generated';
 import {
-  Role,
-  useListVehiclesCardQuery,
-  useSchemeGroupsQuery,
   QueryMode,
   SortOrder,
+  useListVehiclesCardQuery,
 } from 'graphql/generated';
 import { useStoreActions, useStoreState } from 'state';
 import type { DateType, VehicleData } from 'types/DataType';
 import type { VehicleFilters } from 'state/data-model';
+import { useGroupsContext } from '#/context/groups-context';
 
 interface Props {
   onClose: () => void;
@@ -49,11 +48,9 @@ const useLinkVehicle = ({
   vehicleIds,
   takeAllSchemes,
 }: Props): Return => {
-  const {
-    role,
-    id: userId,
-    filterDefaultGroups: defaultGroups,
-  } = useStoreState((state) => state.user);
+  const { filterDefaultGroups: defaultGroups } = useStoreState(
+    (state) => state.user
+  );
   const schemeId = useStoreState((state) => state.scheme.id);
   const userSchemeIds = useStoreState((state) => state.user.schemes).map(
     (el) => el.scheme.id
@@ -180,29 +177,7 @@ const useLinkVehicle = ({
       },
     });
   };
-  const { data: groupData, loading: groupsLoading } = useSchemeGroupsQuery({
-    variables: {
-      where: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
-        users:
-          role === Role.User
-            ? {
-                some: {
-                  id: {
-                    equals: userId,
-                  },
-                },
-              }
-            : undefined,
-      },
-    },
-    fetchPolicy: 'cache-and-network',
-    skip: role !== Role.SchemeAdmin,
-  });
+  const { groups, groupsLoading } = useGroupsContext();
 
   // function
   const onSubmit = () => {
@@ -272,11 +247,7 @@ const useLinkVehicle = ({
     onSubmit,
     data: data?.listVehicles,
     loading: data?.listVehicles ? false : loading,
-    groups:
-      groupData?.groups.map((group) => ({
-        value: group.id,
-        label: group.name,
-      })) || [],
+    groups,
     groupsLoading,
     setSearch,
     openLightbox,

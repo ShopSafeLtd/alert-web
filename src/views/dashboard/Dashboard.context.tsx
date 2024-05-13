@@ -10,13 +10,14 @@ import React, {
 } from 'react';
 import { useStoreActions, useStoreState } from '#/state';
 import type { Model } from 'graphql/generated';
-import { Role, SortOrder, useSchemeGroupsQuery } from 'graphql/generated';
+import { Role, SortOrder } from 'graphql/generated';
 import type { DateType } from '#/types/DataType';
 import type { FeedItemFilters } from '#/state/data-model';
 import type { IntlShape } from 'react-intl';
 import { useIntl } from 'react-intl';
 import type RGL from 'react-grid-layout';
 import type { AvailableDashboardElements } from '#/state/dashboard-model';
+import { useGroupsContext } from '#/context/groups-context';
 
 interface DashboardContextT {
   children?: ReactNode;
@@ -207,37 +208,7 @@ export const DashboardProvider: React.FC<{
     setLightBoxOpen({ open: true, index });
   };
 
-  const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
-    variables: {
-      where: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
-        users:
-          role === Role.SchemeAdmin
-            ? undefined
-            : {
-                some: {
-                  id: {
-                    equals: userId,
-                  },
-                },
-              },
-      },
-    },
-    fetchPolicy: 'cache-and-network',
-  });
-
-  const groups = useMemo(
-    () =>
-      groupsData?.groups.map((group) => ({
-        value: group.id,
-        label: group.name,
-      })) || [],
-    [groupsData]
-  );
+  const { groups, groupsLoading } = useGroupsContext();
 
   const getWidth = useCallback(
     (itemId: AvailableDashboardElements) =>

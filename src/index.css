@@ -140,6 +140,12 @@
   top: 5px;
   z-index: 1;
 }
+.change-graph1-view-more {
+  position: absolute;
+  right: 5px;
+  top: 15px;
+  z-index: 1;
+}
 @media print {
   .no-print,
   .no-print * {

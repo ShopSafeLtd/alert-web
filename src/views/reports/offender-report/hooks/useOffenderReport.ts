@@ -4,11 +4,10 @@ import {
   useSchemeReportDetailsQuery,
 } from 'graphql/generated';
 import { useParams } from 'react-router-dom';
-import type RGL from 'react-grid-layout';
 import moment from 'moment';
+import arrangeTemplates from '#/utils/reports/setTemplates';
 import useReportPrint from '../../../../utils/reportPrint/usePrintReports';
 import type { Props as Return } from './types';
-import type { IReportTemplate } from '../../types';
 
 import OffenderLayout, { OffenderMetaData } from './initLayout';
 import useReportState from '../../../../utils/reports/useReportState';
@@ -51,6 +50,7 @@ const useOffenderReport = (): Return => {
     changeSize,
     addLogo,
     selectTemplate,
+    setAsDefault,
     saveTemplate: saveTemplateState,
   } = useReportState({
     InitLayout: OffenderLayout,
@@ -90,22 +90,11 @@ const useOffenderReport = (): Return => {
             (icon) => icon.optimisedPersisted ?? ''
           ) || []),
         ]);
-        const importedTemplates: IReportTemplate[] =
-          (groupsData.scheme?.reportTemplates.map((template) => ({
-            id: template.id || '',
-            name: template.name || '',
-            metaData: template.metaData || [],
-            layout:
-              (template.layout.map((item) => ({
-                ...item,
-                maxH: item.maxH ?? undefined,
-                maxW: item.maxW ?? undefined,
-                minH: item.minH ?? undefined,
-                minW: item.minW ?? undefined,
-              })) as RGL.Layout[]) || [],
-          })) as IReportTemplate[]) || [];
-
-        setTemplates([defaultTemplate, ...importedTemplates]);
+        arrangeTemplates(
+          groupsData?.scheme?.reportTemplates || [],
+          defaultTemplate,
+          setTemplates
+        );
       },
     });
 
@@ -244,6 +233,7 @@ const useOffenderReport = (): Return => {
     setAddLogoDrawer,
     setSaveAsDrawer,
     templates,
+    setAsDefault,
   };
 };
 

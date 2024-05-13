@@ -47,6 +47,7 @@ const CrimeGroupReport = () => {
     targetedGoodsData,
     offendersTableData,
     incidentsTableData,
+    setAsDefault,
   } = useCrimeGroupReport();
   return (
     <Row wrap={false}>
@@ -58,6 +59,7 @@ const CrimeGroupReport = () => {
       </Col>
       <Col flex={1}>
         <View
+          setAsDefault={setAsDefault}
           targetedBusinessData={targetedBusinessData}
           targetedGoodsData={targetedGoodsData}
           offendersTableData={offendersTableData}

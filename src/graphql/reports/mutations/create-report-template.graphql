@@ -1,24 +1,29 @@
 mutation CreateReportTemplate($data: ReportTemplateCreateInput!) {
   createReportTemplate(data: $data) {
-    id
-    metaData
-    layout {
-      id
-      createdAt
-      updatedAt
-      h
-      w
-      x
-      y
-      maxW
-      maxH
-      minW
-      minH
-      static
-      moved
-      i
-    }
-    name
-    type
+    ...ReportTemplates
   }
+}
+
+fragment ReportTemplates on ReportTemplate {
+ id
+     metaData
+     default
+     layout {
+       id
+       createdAt
+       updatedAt
+       h
+       w
+       x
+       y
+       maxW
+       maxH
+       minW
+       minH
+       static
+       moved
+       i
+     }
+     name
+     type
 }
