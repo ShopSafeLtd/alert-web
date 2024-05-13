@@ -72,7 +72,7 @@ const BarGraph = ({
           }}
           gridYValues={simplifyGrid ? generateNumberArray() : undefined}
           indexBy="label"
-          margin={margin ?? { top: 10, right: 20, bottom: 40, left: 80 }}
+          margin={margin ?? { top: 10, right: 20, bottom: 60, left: 80 }}
           padding={0.3}
           valueScale={{ type: 'linear' }}
           indexScale={{ type: 'band', round: true }}
@@ -88,7 +88,9 @@ const BarGraph = ({
                   legendPosition: 'middle',
                   legendOffset: 32,
                 }
-              : undefined
+              : {
+                  tickRotation: 8,
+                }
           }
           maxValue={findHighestValue()}
           axisTop={null}
