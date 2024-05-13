@@ -6,10 +6,8 @@ import type {
 import {
   ListArticlesFeedDocument,
   QueryMode,
-  Role,
   SortOrder,
   useListArticlesFeedQuery,
-  useSchemeGroupsQuery,
 } from 'graphql/generated';
 import { useEffect, useState } from 'react';
 import { useStoreActions, useStoreState } from 'state';
@@ -17,6 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import type { DateType } from 'types/DataType';
 import type { MutationUpdaterFn } from '@apollo/client';
 import type { ArticleFilters } from 'state/data-model';
+import { useGroupsContext } from '#/context/groups-context';
 
 interface Return {
   data:
@@ -185,30 +184,7 @@ const useArticleFeed = (): Return => {
     });
   };
 
-  // Fetch scheme groups if scheme admin
-  const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
-    variables: {
-      where: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
-        users:
-          role === Role.User
-            ? {
-                some: {
-                  id: {
-                    equals: userId,
-                  },
-                },
-              }
-            : undefined,
-      },
-    },
-    fetchPolicy: 'cache-and-network',
-    skip: role !== Role.SchemeAdmin,
-  });
+  const { groups, groupsLoading } = useGroupsContext();
 
   // Functions
   const triggerLightbox = (elements: { src: string }[], index: number) => {
@@ -324,11 +300,7 @@ const useArticleFeed = (): Return => {
     setGallery,
     setSearch,
     setPriorityFilter,
-    groups:
-      groupsData?.groups.map((group) => ({
-        value: group.id,
-        label: group.name,
-      })) || [],
+    groups,
     groupsLoading,
     onNavigate,
     lightboxElements,

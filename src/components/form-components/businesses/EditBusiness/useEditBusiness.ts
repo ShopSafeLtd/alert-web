@@ -12,7 +12,6 @@ import {
   SearchBusinessesDocument,
   useBrandsQuery,
   useEditBusinessQuery,
-  useSchemeGroupsQuery,
   useTagsQuery,
   useUpdateBusinessMutation,
 } from 'graphql/generated';
@@ -21,6 +20,7 @@ import { useIntl } from 'react-intl';
 import { useStoreState } from 'state';
 import type { LocationData, TagData } from 'types/DataType';
 import errorNotification from 'types/mutation_notifications/error_notification';
+import { useGroupsContext } from '#/context/groups-context';
 
 export interface OnSubmitValues {
   name: string;
@@ -68,7 +68,6 @@ interface Return {
 
 const useEditBusiness = ({ onClose, businessId }: Props): Return => {
   const client = useApolloClient();
-  const userId = useStoreState((state) => state.user.id);
   const currentScheme = useStoreState((state) => state.scheme.id);
   const intl = useIntl();
   const [form] = Form.useForm<OnSubmitValues>();
@@ -139,25 +138,7 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
     },
   });
 
-  const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
-    variables: {
-      where: {
-        scheme: {
-          id: {
-            equals: currentScheme,
-          },
-        },
-        users: {
-          some: {
-            id: {
-              equals: userId,
-            },
-          },
-        },
-      },
-    },
-    fetchPolicy: 'cache-and-network',
-  });
+  const { groups, groupsLoading } = useGroupsContext();
 
   const { data: brandsData, loading: brandsLoading } = useBrandsQuery({
     variables: {
@@ -425,11 +406,7 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
     addTag,
     toggleAddTag,
     updateNewTagData,
-    groups:
-      groupsData?.groups.map((group) => ({
-        value: group.id,
-        label: group.name,
-      })) || [],
+    groups,
     brands:
       brandsData?.brands.edges.map(({ node: group }) => ({
         value: group.id,

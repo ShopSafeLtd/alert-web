@@ -16,7 +16,6 @@ import {
   useCreateUserInDatabaseMutation,
   useInviteExistingUserMutation,
   useSchemeChatsQuery,
-  useSchemeGroupsQuery,
   useSchemeQuery,
   useSearchUserQuery,
   useUserRolesQuery,
@@ -28,6 +27,7 @@ import type { FormInstance } from 'antd';
 import { Form, Modal, notification } from 'antd';
 import type { BusinessData, SelectOptions } from 'types/DataType';
 import errorNotification from 'types/mutation_notifications/error_notification';
+import { useGroupsContext } from '#/context/groups-context';
 
 const { confirm } = Modal;
 const { useForm } = Form;
@@ -190,21 +190,7 @@ const useAddUser = ({
     },
   });
 
-  const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
-    fetchPolicy: 'cache-and-network',
-    variables: {
-      where: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
-      },
-      orderBy: {
-        name: SortOrder.Asc,
-      },
-    },
-  });
+  const { groups, groupsLoading } = useGroupsContext();
 
   const { data: chatsData, loading: chatsLoading } = useSchemeChatsQuery({
     fetchPolicy: 'cache-and-network',
@@ -571,10 +557,7 @@ const useAddUser = ({
   };
   return {
     onSubmit,
-    groupsData: groupsData?.groups.map((group) => ({
-      value: group.id,
-      label: group.name,
-    })),
+    groupsData: groups,
     groupsLoading,
     chatsData: chatsData?.chats.map((chat) => ({
       value: chat.id,

@@ -35,6 +35,7 @@ const GroupsSelect: React.FC<Props & Omit<SelectProps, keyof Props>> = ({
   const currentSchemeId = useStoreState((state) => state.scheme.id);
 
   const { data, loading } = useSchemeGroupsQuery({
+    fetchPolicy: 'cache-first',
     variables: groupsQueryVars ?? {
       orderBy: {
         name: SortOrder.Asc,
