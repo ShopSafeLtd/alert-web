@@ -10,6 +10,7 @@ import filteredBarData from '../../../views/reports/crime-groups/crime-group-rep
 const MultiBarGraph = ({
   data,
   emptyLabel,
+  isStacked,
 }: {
   data:
     | Array<{
@@ -19,6 +20,7 @@ const MultiBarGraph = ({
     | null
     | undefined;
   emptyLabel: string;
+  isStacked?: boolean;
 }) => {
   const darkMode =
     useStoreState((state) => state.theme.currentTheme) === 'dark';
@@ -62,7 +64,7 @@ const MultiBarGraph = ({
           }
           margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
           padding={0.3}
-          groupMode="grouped"
+          groupMode={isStacked ? 'stacked' : 'grouped'}
           valueScale={{ type: 'linear' }}
           indexScale={{ type: 'band', round: true }}
           colors={colours}
@@ -76,11 +78,12 @@ const MultiBarGraph = ({
           axisTop={null}
           axisRight={null}
           labelSkipWidth={12}
-          labelSkipHeight={12}
+          labelSkipHeight={7}
           labelTextColor={{
             from: 'color',
             modifiers: [['darker', 1.6]],
           }}
+          tooltip
           legends={[
             {
               dataFrom: 'keys',

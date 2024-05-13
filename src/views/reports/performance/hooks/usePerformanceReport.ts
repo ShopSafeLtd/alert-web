@@ -292,6 +292,7 @@ const usePerformanceReport = (): Return => {
     selectedRoles,
     setSelectedRoles,
     filterCount,
+    schemeId: currentScheme,
     setAsDefault,
   };
 };

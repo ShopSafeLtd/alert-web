@@ -70,6 +70,7 @@ export interface Props {
   selectedRoles: string[];
   setSelectedRoles: (roles: string[]) => void;
   filterCount: number;
+  schemeId: string;
   setAsDefault: (arg0: {
     templateId: string;
     type: IReportType;

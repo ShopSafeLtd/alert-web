@@ -12820,6 +12820,7 @@ export type Query = {
   brands: QueryBrandsConnection;
   business: Business;
   businessContribution: ListBusinessContribution;
+  businessCrimeTypeGraph: Array<RadialGraph>;
   businessImpact: BusinessImpact;
   businessIncidentCountGraph: Array<Graph>;
   businessRelay: QueryBusinessRelayConnection;
@@ -12935,6 +12936,7 @@ export type Query = {
   userChat: UserChat;
   userChats: Array<UserChat>;
   userContributions: ListUserContribution;
+  userIncidentCountGraph: Array<Graph>;
   userNew: UserNew;
   userNotification: UserNotification;
   userNotifications: Array<UserNotification>;
@@ -13062,6 +13064,12 @@ export type QueryBusinessArgs = {
 
 export type QueryBusinessContributionArgs = {
   where: UserContributionWhereInput;
+};
+
+
+export type QueryBusinessCrimeTypeGraphArgs = {
+  take?: InputMaybe<Scalars['Int']>;
+  where: BusinessIncidentsCountGraphInput;
 };
 
 
@@ -13876,6 +13884,12 @@ export type QueryUserChatsArgs = {
 
 export type QueryUserContributionsArgs = {
   where: UserContributionWhereInput;
+};
+
+
+export type QueryUserIncidentCountGraphArgs = {
+  take?: InputMaybe<Scalars['Int']>;
+  where: UserIncidentsCountGraphInput;
 };
 
 
@@ -19199,6 +19213,19 @@ export type UserContributionWhereInput = {
   search?: InputMaybe<Scalars['String']>;
 };
 
+export type UserIncidentsCountGraphInput = {
+  brandIds?: InputMaybe<Array<Scalars['String']>>;
+  businessesIds?: InputMaybe<Array<Scalars['String']>>;
+  crimeGroupId?: InputMaybe<Scalars['String']>;
+  dateRange: DateRangeInput;
+  groupIds: Array<Scalars['String']>;
+  industryIds?: InputMaybe<Array<Scalars['String']>>;
+  offenderId?: InputMaybe<Scalars['String']>;
+  roleIds?: InputMaybe<Array<Scalars['String']>>;
+  schemeIds: Array<Scalars['String']>;
+  userIds?: InputMaybe<Array<Scalars['String']>>;
+};
+
 export type UserListRelationFilter = {
   every?: InputMaybe<UserWhereInput>;
   none?: InputMaybe<UserWhereInput>;
@@ -20823,6 +20850,45 @@ export type UserRolesQueryVariables = Exact<{
 
 
 export type UserRolesQuery = { __typename?: 'Query', roles: { __typename?: 'QueryRolesConnection', edges: Array<{ __typename?: 'QueryRolesConnectionEdge', node: { __typename?: 'CustomRole', type: Role, id: string, name: string } }> } };
+
+export type BusinessCrimeTypeGraphQueryVariables = Exact<{
+  where: BusinessIncidentsCountGraphInput;
+  take?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type BusinessCrimeTypeGraphQuery = { __typename?: 'Query', businessCrimeTypeGraph: Array<{ __typename?: 'RadialGraph', label: string, data: Array<{ __typename?: 'Graph', label: string, value: number }> }> };
+
+export type BusinessIncidentCountGraphQueryVariables = Exact<{
+  where: BusinessIncidentsCountGraphInput;
+  take?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type BusinessIncidentCountGraphQuery = { __typename?: 'Query', businessIncidentCountGraph: Array<{ __typename?: 'Graph', label: string, value: number }> };
+
+export type BusinessLossRecoveredGraphQueryVariables = Exact<{
+  where: BusinessIncidentsCountGraphInput;
+  take?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type BusinessLossRecoveredGraphQuery = { __typename?: 'Query', businessLossRecoveredGraph: Array<{ __typename?: 'RadialGraph', label: string, data: Array<{ __typename?: 'Graph', label: string, value: number }> }> };
+
+export type CustomQuestionsCountGraphQueryVariables = Exact<{
+  where: CustomQuestionsCountGraphInput;
+}>;
+
+
+export type CustomQuestionsCountGraphQuery = { __typename?: 'Query', customQuestionsCountGraph: { __typename?: 'CustomQuestionsGraph', title: string, data: Array<{ __typename?: 'Graph', label: string, value: number }> } };
+
+export type UserIncidentCountGraphQueryVariables = Exact<{
+  where: UserIncidentsCountGraphInput;
+  take?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type UserIncidentCountGraphQuery = { __typename?: 'Query', userIncidentCountGraph: Array<{ __typename?: 'Graph', label: string, value: number }> };
 
 export type ListActionsQueryVariables = Exact<{
   take?: InputMaybe<Scalars['Int']>;
@@ -24527,6 +24593,110 @@ export function useUserRolesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type UserRolesQueryHookResult = ReturnType<typeof useUserRolesQuery>;
 export type UserRolesLazyQueryHookResult = ReturnType<typeof useUserRolesLazyQuery>;
 export type UserRolesQueryResult = Apollo.QueryResult<UserRolesQuery, UserRolesQueryVariables>;
+export const BusinessCrimeTypeGraphDocument = gql`
+    query BusinessCrimeTypeGraph($where: BusinessIncidentsCountGraphInput!, $take: Int) {
+  businessCrimeTypeGraph(where: $where, take: $take) {
+    label
+    data {
+      label
+      value
+    }
+  }
+}
+    `;
+export function useBusinessCrimeTypeGraphQuery(baseOptions: Apollo.QueryHookOptions<BusinessCrimeTypeGraphQuery, BusinessCrimeTypeGraphQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BusinessCrimeTypeGraphQuery, BusinessCrimeTypeGraphQueryVariables>(BusinessCrimeTypeGraphDocument, options);
+      }
+export function useBusinessCrimeTypeGraphLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BusinessCrimeTypeGraphQuery, BusinessCrimeTypeGraphQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BusinessCrimeTypeGraphQuery, BusinessCrimeTypeGraphQueryVariables>(BusinessCrimeTypeGraphDocument, options);
+        }
+export type BusinessCrimeTypeGraphQueryHookResult = ReturnType<typeof useBusinessCrimeTypeGraphQuery>;
+export type BusinessCrimeTypeGraphLazyQueryHookResult = ReturnType<typeof useBusinessCrimeTypeGraphLazyQuery>;
+export type BusinessCrimeTypeGraphQueryResult = Apollo.QueryResult<BusinessCrimeTypeGraphQuery, BusinessCrimeTypeGraphQueryVariables>;
+export const BusinessIncidentCountGraphDocument = gql`
+    query BusinessIncidentCountGraph($where: BusinessIncidentsCountGraphInput!, $take: Int) {
+  businessIncidentCountGraph(where: $where, take: $take) {
+    label
+    value
+  }
+}
+    `;
+export function useBusinessIncidentCountGraphQuery(baseOptions: Apollo.QueryHookOptions<BusinessIncidentCountGraphQuery, BusinessIncidentCountGraphQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BusinessIncidentCountGraphQuery, BusinessIncidentCountGraphQueryVariables>(BusinessIncidentCountGraphDocument, options);
+      }
+export function useBusinessIncidentCountGraphLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BusinessIncidentCountGraphQuery, BusinessIncidentCountGraphQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BusinessIncidentCountGraphQuery, BusinessIncidentCountGraphQueryVariables>(BusinessIncidentCountGraphDocument, options);
+        }
+export type BusinessIncidentCountGraphQueryHookResult = ReturnType<typeof useBusinessIncidentCountGraphQuery>;
+export type BusinessIncidentCountGraphLazyQueryHookResult = ReturnType<typeof useBusinessIncidentCountGraphLazyQuery>;
+export type BusinessIncidentCountGraphQueryResult = Apollo.QueryResult<BusinessIncidentCountGraphQuery, BusinessIncidentCountGraphQueryVariables>;
+export const BusinessLossRecoveredGraphDocument = gql`
+    query BusinessLossRecoveredGraph($where: BusinessIncidentsCountGraphInput!, $take: Int) {
+  businessLossRecoveredGraph(where: $where, take: $take) {
+    label
+    data {
+      label
+      value
+    }
+  }
+}
+    `;
+export function useBusinessLossRecoveredGraphQuery(baseOptions: Apollo.QueryHookOptions<BusinessLossRecoveredGraphQuery, BusinessLossRecoveredGraphQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BusinessLossRecoveredGraphQuery, BusinessLossRecoveredGraphQueryVariables>(BusinessLossRecoveredGraphDocument, options);
+      }
+export function useBusinessLossRecoveredGraphLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BusinessLossRecoveredGraphQuery, BusinessLossRecoveredGraphQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BusinessLossRecoveredGraphQuery, BusinessLossRecoveredGraphQueryVariables>(BusinessLossRecoveredGraphDocument, options);
+        }
+export type BusinessLossRecoveredGraphQueryHookResult = ReturnType<typeof useBusinessLossRecoveredGraphQuery>;
+export type BusinessLossRecoveredGraphLazyQueryHookResult = ReturnType<typeof useBusinessLossRecoveredGraphLazyQuery>;
+export type BusinessLossRecoveredGraphQueryResult = Apollo.QueryResult<BusinessLossRecoveredGraphQuery, BusinessLossRecoveredGraphQueryVariables>;
+export const CustomQuestionsCountGraphDocument = gql`
+    query CustomQuestionsCountGraph($where: CustomQuestionsCountGraphInput!) {
+  customQuestionsCountGraph(where: $where) {
+    data {
+      label
+      value
+    }
+    title
+  }
+}
+    `;
+export function useCustomQuestionsCountGraphQuery(baseOptions: Apollo.QueryHookOptions<CustomQuestionsCountGraphQuery, CustomQuestionsCountGraphQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CustomQuestionsCountGraphQuery, CustomQuestionsCountGraphQueryVariables>(CustomQuestionsCountGraphDocument, options);
+      }
+export function useCustomQuestionsCountGraphLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CustomQuestionsCountGraphQuery, CustomQuestionsCountGraphQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CustomQuestionsCountGraphQuery, CustomQuestionsCountGraphQueryVariables>(CustomQuestionsCountGraphDocument, options);
+        }
+export type CustomQuestionsCountGraphQueryHookResult = ReturnType<typeof useCustomQuestionsCountGraphQuery>;
+export type CustomQuestionsCountGraphLazyQueryHookResult = ReturnType<typeof useCustomQuestionsCountGraphLazyQuery>;
+export type CustomQuestionsCountGraphQueryResult = Apollo.QueryResult<CustomQuestionsCountGraphQuery, CustomQuestionsCountGraphQueryVariables>;
+export const UserIncidentCountGraphDocument = gql`
+    query UserIncidentCountGraph($where: UserIncidentsCountGraphInput!, $take: Int) {
+  userIncidentCountGraph(where: $where, take: $take) {
+    label
+    value
+  }
+}
+    `;
+export function useUserIncidentCountGraphQuery(baseOptions: Apollo.QueryHookOptions<UserIncidentCountGraphQuery, UserIncidentCountGraphQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserIncidentCountGraphQuery, UserIncidentCountGraphQueryVariables>(UserIncidentCountGraphDocument, options);
+      }
+export function useUserIncidentCountGraphLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserIncidentCountGraphQuery, UserIncidentCountGraphQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserIncidentCountGraphQuery, UserIncidentCountGraphQueryVariables>(UserIncidentCountGraphDocument, options);
+        }
+export type UserIncidentCountGraphQueryHookResult = ReturnType<typeof useUserIncidentCountGraphQuery>;
+export type UserIncidentCountGraphLazyQueryHookResult = ReturnType<typeof useUserIncidentCountGraphLazyQuery>;
+export type UserIncidentCountGraphQueryResult = Apollo.QueryResult<UserIncidentCountGraphQuery, UserIncidentCountGraphQueryVariables>;
 export const ListActionsDocument = gql`
     query ListActions($take: Int, $skip: Int, $where: ActionWhereInput, $orderBy: [ActionOrderByWithRelationInput!]) {
   listActions(take: $take, skip: $skip, where: $where, orderBy: $orderBy) {

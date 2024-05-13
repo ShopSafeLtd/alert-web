@@ -197,6 +197,7 @@ const PerformanceReport = ({
   setSelectedRoles,
   selectedRoles,
   filterCount,
+  schemeId,
   setAsDefault,
 }: Props) => {
   const ReactGridLayout = useMemo(() => WidthProvider(RGL), []);
@@ -489,6 +490,14 @@ const PerformanceReport = ({
                   metadata,
                   setMetadata,
                   investigationsData,
+                  filters: {
+                    selectedBrands,
+                    selectedIndustries,
+                    selectedRoles,
+                    dateRange,
+                    selectedGroups,
+                    schemeId,
+                  },
                 })}
               </ReactGridLayout>
             </div>
@@ -577,6 +586,14 @@ const PerformanceReport = ({
               metadata,
               setMetadata,
               investigationsData,
+              filters: {
+                selectedBrands,
+                selectedIndustries,
+                selectedRoles,
+                dateRange,
+                selectedGroups,
+                schemeId,
+              },
             })}
             layout={layout}
           />
@@ -587,23 +604,36 @@ const PerformanceReport = ({
           defaultMessage: 'Charts available to add',
           id: 'zNsljc',
         })}
-        placement="bottom"
+        placement="right"
         mask={false}
         closable
         open={editMode && minDrawer}
-        height={200}
+        width={400}
         onClose={() => setMinDrawer(!minDrawer)}
       >
-        <Row gutter={[6, 6]}>
+        <Row gutter={[6, 6]} wrap>
           {PerformanceDrawerLayout.filter(
-            (item) => !layout.some((i) => i.i === item.i)
+            (item) =>
+              !layout.some((i) => i.i === item.i) || item.allowDuplicates
           ).map((item) => (
             <Col key={item.i}>
               <Button
                 type="primary"
                 style={{ width: 'min-content' }}
                 onClick={() => {
-                  setLayout([...layout, item]);
+                  setLayout([
+                    ...layout,
+                    {
+                      ...item,
+                      i: item.allowDuplicates
+                        ? `${item.i}_${
+                            layout
+                              .map(({ i }) => i)
+                              .filter((i) => i.includes(item.i)).length
+                          }`
+                        : item.i,
+                    },
+                  ]);
                 }}
               >
                 {layoutMap.get(item.i) || ''}

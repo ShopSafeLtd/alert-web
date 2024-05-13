@@ -55,6 +55,7 @@ const PerformanceReport = (): JSX.Element => {
     selectedRoles,
     setAsDefault,
     filterCount,
+    schemeId,
   } = usePerformanceReport();
   return (
     <View
@@ -109,6 +110,7 @@ const PerformanceReport = (): JSX.Element => {
       setSelectedRoles={setSelectedRoles}
       selectedRoles={selectedRoles}
       filterCount={filterCount}
+      schemeId={schemeId}
     />
   );
 };
