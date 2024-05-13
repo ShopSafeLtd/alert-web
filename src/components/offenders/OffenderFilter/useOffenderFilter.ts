@@ -9,13 +9,13 @@ import {
   Model,
   Role,
   SortOrder,
-  useSchemeGroupsQuery,
   useSearchBusinessesQuery,
   useTagsQuery,
 } from 'graphql/generated';
 import { OffenderSort, useStoreActions, useStoreState } from 'state';
 import type { DateType } from 'types/DataType';
 import type { OffenderFilters } from 'state/data-model';
+import { useGroupsContext } from '#/context/groups-context';
 
 interface Return {
   order: OffenderSort;
@@ -44,7 +44,7 @@ interface Return {
 const useOffenderFilter = (): Return => {
   // Global State
   const schemeId = useStoreState((state) => state.scheme.id);
-  const { role, id: userId } = useStoreState((state) => state.user);
+  const { role } = useStoreState((state) => state.user);
   const pagination = useStoreState((state) => state.data.offenders.pagination);
   const variables = useStoreState((state) => state.data.offenders.variables);
   const order = useStoreState((state) => state.data.offenders.order);
@@ -56,29 +56,8 @@ const useOffenderFilter = (): Return => {
     role !== Role.User;
   // Queries
   // Fetch scheme groups if scheme admin
-  const { data: groupData, loading: groupsLoading } = useSchemeGroupsQuery({
-    variables: {
-      where: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
-        users:
-          role === Role.User
-            ? {
-                some: {
-                  id: {
-                    equals: userId,
-                  },
-                },
-              }
-            : undefined,
-      },
-    },
-    fetchPolicy: 'cache-and-network',
-    skip: role !== Role.SchemeAdmin,
-  });
+  const { groups, groupsLoading } = useGroupsContext();
+
   // Fetch scheme tags
   const { data: tagsData, loading: tagsLoading } = useTagsQuery({
     variables: {
@@ -253,11 +232,7 @@ const useOffenderFilter = (): Return => {
   return {
     order,
     setOrder,
-    groups:
-      groupData?.groups.map((group) => ({
-        value: group.id,
-        label: group.name,
-      })) || [],
+    groups,
     groupsLoading,
     variables,
     tags:

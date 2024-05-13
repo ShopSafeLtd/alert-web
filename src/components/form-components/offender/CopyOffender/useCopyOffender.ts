@@ -1,13 +1,11 @@
-import {
-  useCopyOffenderMutation,
-  useSchemeGroupsQuery,
-} from 'graphql/generated';
+import { useCopyOffenderMutation } from 'graphql/generated';
 import { useState } from 'react';
-import { notification, Form } from 'antd';
 import type { FormInstance } from 'antd';
+import { Form, notification } from 'antd';
 import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
+import { useGroupsContext } from '#/context/groups-context';
 
 const { useForm } = Form;
 
@@ -41,18 +39,8 @@ const useCopyOffender = ({ offenderId, onClose }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [form] = useForm<FormData>();
 
-  const { data: groupData, loading: groupsLoading } = useSchemeGroupsQuery({
-    variables: {
-      where: {
-        scheme: {
-          id: {
-            equals: selectSchemeId,
-          },
-        },
-      },
-    },
-    fetchPolicy: 'cache-and-network',
-  });
+  const { groups, groupsLoading } = useGroupsContext();
+
   const [copyOffender] = useCopyOffenderMutation({
     onCompleted: () => {
       setSaving(false);
@@ -93,8 +81,8 @@ const useCopyOffender = ({ offenderId, onClose }: Props): Return => {
         data: {
           groups: {
             connect:
-              groupData?.groups && groupData.groups.length === 1
-                ? groupData?.groups.map(({ id }) => ({ id }))
+              groups && groups.length === 1
+                ? groups.map(({ value: id }) => ({ id }))
                 : data.groups.map((id) => ({ id })),
           },
           scheme: data.scheme,
@@ -112,11 +100,7 @@ const useCopyOffender = ({ offenderId, onClose }: Props): Return => {
           value: scheme.scheme.id,
           label: scheme.scheme.name,
         })) || [],
-    groups:
-      groupData?.groups.map((group) => ({
-        value: group.id,
-        label: group.name,
-      })) || [],
+    groups,
     groupsLoading,
     saving,
     selectSchemeId,

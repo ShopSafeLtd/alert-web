@@ -1,19 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-misused-promises,@typescript-eslint/no-unsafe-member-access */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type {
   Age,
+  BanType,
   Build,
   Gender,
   OffenderUpdateInput,
   Race,
   ViewOffenderQuery,
-  BanType,
 } from 'graphql/generated';
 import {
   Model,
   Role,
   useRecycleOffenderMutation,
-  useSchemeGroupsQuery,
   useTagsQuery,
   useUpdateOffenderMutation,
   useViewOffenderQuery,
@@ -27,6 +26,7 @@ import { useNavigate } from 'react-router';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import type { TagData } from 'types/DataType';
 import { useIntl } from 'react-intl';
+import { useGroupsContext } from '#/context/groups-context';
 
 export interface OffenderData {
   id: string;
@@ -182,29 +182,21 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
       }
     },
   });
-  const { data: groupData, loading: groupsLoading } = useSchemeGroupsQuery({
-    variables: {
-      where: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
-      },
-    },
-    fetchPolicy: 'cache-and-network',
-    skip: role !== Role.SchemeAdmin,
-    onCompleted: (result) => {
+
+  const { groups, groupsLoading } = useGroupsContext();
+
+  useEffect(() => {
+    if (groups) {
       setOffendersState({
         pagination,
         variables: {
           ...variables,
-          groups: result.groups.map((group) => group.id),
+          groups: groups.map((group) => group.value),
         },
         order,
       });
-    },
-  });
+    }
+  }, [groups]);
 
   const { data: tagsData, loading: tagsLoading } = useTagsQuery({
     variables: {
@@ -504,11 +496,7 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
     data: offenderData,
     loading,
     saving,
-    groups:
-      groupData?.groups.map((group) => ({
-        value: group.id,
-        label: group.name,
-      })) || [],
+    groups,
     groupsLoading,
     tags:
       tagsData?.tags.map((tag) => ({ value: tag.id, label: tag.name })) || [],

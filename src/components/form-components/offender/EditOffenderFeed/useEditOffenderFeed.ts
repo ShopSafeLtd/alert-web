@@ -14,7 +14,6 @@ import {
   useBusinessOffenderSettingsQuery,
   useEditOffenderQuery,
   useListCustomGalleriesQuery,
-  useSchemeGroupsQuery,
   useTagsQuery,
   useUpdateOffenderMutation,
 } from 'graphql/generated';
@@ -23,6 +22,7 @@ import { useStoreState } from 'state';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 import type { OffenderSettingsType } from '#/types/DataType';
+import { useGroupsContext } from '#/context/groups-context';
 
 interface Props {
   onClose: () => void;
@@ -74,11 +74,7 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
   const { needJustification, id: schemeId } = useStoreState(
     (state) => state.scheme
   );
-  const {
-    id: userId,
-    groups: userGroups,
-    role,
-  } = useStoreState((state) => state.user);
+  const { groups: userGroups, role } = useStoreState((state) => state.user);
 
   const businessId = useStoreState((state) => state.user.businesses[0].id);
 
@@ -100,28 +96,8 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
         },
       },
     });
-  const { data: groupData, loading: groupsLoading } = useSchemeGroupsQuery({
-    variables: {
-      where: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
-        users:
-          role === Role.User
-            ? {
-                some: {
-                  id: {
-                    equals: userId,
-                  },
-                },
-              }
-            : undefined,
-      },
-    },
-    fetchPolicy: 'cache-and-network',
-  });
+  const { groups, groupsLoading } = useGroupsContext();
+
   const { data: customGalleriesData, loading: customGalleriesLoading } =
     useListCustomGalleriesQuery({
       fetchPolicy: 'cache-and-network',
@@ -239,11 +215,7 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
     data: offenderData,
     loading: loading || businessLoading,
     saving,
-    groups:
-      groupData?.groups.map((group) => ({
-        value: group.id,
-        label: group.name,
-      })) || [],
+    groups,
     groupsLoading,
     tags:
       tagsData?.tags.map((tag) => ({ value: tag.id, label: tag.name })) || [],

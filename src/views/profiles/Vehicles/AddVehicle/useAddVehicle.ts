@@ -4,10 +4,8 @@ import type { CreateVehicleDataInput } from 'graphql/generated';
 import {
   ImagePosition,
   Role,
-  SortOrder,
   useCreateVehicleMutation,
   useListCustomGalleriesQuery,
-  useSchemeGroupsQuery,
 } from 'graphql/generated';
 import type { FormInstance, UploadFile } from 'antd';
 import { Form, message, notification } from 'antd';
@@ -26,6 +24,7 @@ import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
 import { compressImage } from 'utils/compress-images';
 import customRequest from 'utils/custom-request';
+import { useGroupsContext } from '#/context/groups-context';
 
 export interface FormData {
   name: string;
@@ -87,7 +86,7 @@ const useAddVehicle = (): Return => {
   const intl = useIntl();
   const navigate = useNavigate();
   const [form] = Form.useForm<FormData>();
-  const { role, id: userId } = useStoreState((state) => state.user);
+  const { role } = useStoreState((state) => state.user);
   const { id: schemeId, reportOnly } = useStoreState((state) => state.scheme);
   const [saving, setSaving] = useState(false);
   const [linkIncident, setLinkIncident] = useState(false);
@@ -106,32 +105,8 @@ const useAddVehicle = (): Return => {
   const [editImage, setEditImage] = useState<Image | null>(null);
   const [primaryImage, setPrimaryImage] = useState<string>('');
   // query
+  const { groups, groupsLoading } = useGroupsContext();
 
-  const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
-    fetchPolicy: 'cache-and-network',
-    variables: {
-      where: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
-        users:
-          role === Role.User
-            ? {
-                some: {
-                  id: {
-                    equals: userId,
-                  },
-                },
-              }
-            : undefined,
-      },
-      orderBy: {
-        name: SortOrder.Asc,
-      },
-    },
-  });
   // custom galleries
   const { data: customGalleriesData, loading: customGalleriesLoading } =
     useListCustomGalleriesQuery({
@@ -204,8 +179,8 @@ const useAddVehicle = (): Return => {
                     schemes: { connect: [{ id: schemeId }] },
                     groups: {
                       connect:
-                        groupsData?.groups && groupsData.groups.length === 1
-                          ? groupsData?.groups.map(({ id }) => ({ id }))
+                        groups && groups.length === 1
+                          ? groups.map(({ value: id }) => ({ id }))
                           : data.groups?.map((id) => ({ id })) || [],
                     },
                   }))
@@ -225,9 +200,9 @@ const useAddVehicle = (): Return => {
           colour: data.colour || '',
           registration: data.registration || '',
           groups:
-            groupsData?.groups && groupsData.groups.length === 1
-              ? groupsData?.groups.map(({ id }) => ({ id }))
-              : data.groups?.map((id) => ({ id })),
+            groups && groups.length === 1
+              ? groups.map(({ value: id }) => ({ id }))
+              : data.groups?.map((id) => ({ id })) || [],
           customGalleries: getCustomGalleries(),
           crimeGroup:
             data?.crimeGroup && data.crimeGroup.length > 0
@@ -428,11 +403,7 @@ const useAddVehicle = (): Return => {
     editImage,
     primaryImage,
     setPrimaryImage,
-    groups:
-      groupsData?.groups.map((group) => ({
-        value: group.id,
-        label: group.name,
-      })) || [],
+    groups,
     groupsLoading,
     customGalleries:
       customGalleriesData?.listCustomGalleries.customGalleries.map((tag) => ({

@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react';
 import type { ArticlePriority, ListArticlesFeedQuery } from 'graphql/generated';
 import {
-  useListArticlesFeedQuery,
-  Role,
-  useSchemeGroupsQuery,
   QueryMode,
   SortOrder,
+  useListArticlesFeedQuery,
 } from 'graphql/generated';
 import { useStoreActions, useStoreState } from 'state';
-import type { DateType, ArticleData } from 'types/DataType';
+import type { ArticleData, DateType } from 'types/DataType';
 import type { ArticleFilters } from 'state/data-model';
+import { useGroupsContext } from '#/context/groups-context';
 
 interface Props {
   onClose: () => void;
@@ -44,11 +43,9 @@ interface Return {
 }
 
 const useLinkArticle = ({ onClose, update, articleIds }: Props): Return => {
-  const {
-    role,
-    id: userId,
-    filterDefaultGroups: defaultGroups,
-  } = useStoreState((state) => state.user);
+  const { filterDefaultGroups: defaultGroups } = useStoreState(
+    (state) => state.user
+  );
   const schemeId = useStoreState((state) => state.scheme.id);
   const filterVariables = useStoreState(
     (state) => state.data.articles.variables
@@ -155,29 +152,7 @@ const useLinkArticle = ({ onClose, update, articleIds }: Props): Return => {
       },
     });
   };
-  const { data: groupData, loading: groupsLoading } = useSchemeGroupsQuery({
-    variables: {
-      where: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
-        users:
-          role === Role.User
-            ? {
-                some: {
-                  id: {
-                    equals: userId,
-                  },
-                },
-              }
-            : undefined,
-      },
-    },
-    fetchPolicy: 'cache-and-network',
-    skip: role !== Role.SchemeAdmin,
-  });
+  const { groups, groupsLoading } = useGroupsContext();
 
   // function
   const onSubmit = () => {
@@ -249,11 +224,7 @@ const useLinkArticle = ({ onClose, update, articleIds }: Props): Return => {
     onSubmit,
     data: data?.listArticlesRelay,
     loading: data?.listArticlesRelay ? false : loading,
-    groups:
-      groupData?.groups.map((group) => ({
-        value: group.id,
-        label: group.name,
-      })) || [],
+    groups,
     groupsLoading,
     setSearch,
     openLightbox,

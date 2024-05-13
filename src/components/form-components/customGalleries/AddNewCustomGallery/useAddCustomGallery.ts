@@ -1,6 +1,5 @@
-import { SortOrder, useSchemeGroupsQuery } from 'graphql/generated';
-import { useStoreState } from 'state';
 import type { CustomGalleryData } from 'types/DataType';
+import { useGroupsContext } from '#/context/groups-context';
 
 export interface FormData {
   name: string;
@@ -25,23 +24,8 @@ interface Return {
 }
 
 const useAddCustomGallery = ({ update, data }: Props): Return => {
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const { groups, groupsLoading } = useGroupsContext();
 
-  const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
-    fetchPolicy: 'cache-and-network',
-    variables: {
-      where: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
-      },
-      orderBy: {
-        name: SortOrder.Asc,
-      },
-    },
-  });
   const onSubmit = (value: FormData) => {
     update({
       id: data?.id || Math.floor(Math.random() * 1000).toString(),
@@ -53,10 +37,7 @@ const useAddCustomGallery = ({ update, data }: Props): Return => {
 
   return {
     onSubmit,
-    groupsData: groupsData?.groups.map((group) => ({
-      value: group.id,
-      label: group.name,
-    })),
+    groupsData: groups,
     groupsLoading,
   };
 };

@@ -3,24 +3,23 @@ import { useStoreState } from 'state';
 import { useApolloClient } from '@apollo/client';
 import type {
   EditIncidentFeedQuery,
+  IncidentPriority,
   SearchBusinessesQuery,
   SearchBusinessesQueryVariables,
-  IncidentPriority,
 } from 'graphql/generated';
 import {
   Model,
   QueryMode,
-  Role,
   SearchBusinessesDocument,
   TagType,
   useEditIncidentFeedQuery,
-  useSchemeGroupsQuery,
   useTagsQuery,
   useUpdateIncidentMutation,
 } from 'graphql/generated';
 import { notification } from 'antd';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
+import { useGroupsContext } from '#/context/groups-context';
 
 export interface FormData {
   subject: string;
@@ -76,8 +75,6 @@ const useEditIncidentFeed = ({ onClose, incidentId }: Props): Return => {
   const intl = useIntl();
   const client = useApolloClient();
   const schemeId = useStoreState((state) => state.scheme.id);
-  const userId = useStoreState((state) => state.user.id);
-  const role = useStoreState((state) => state.user.role);
   const [saving, setSaving] = useState(false);
 
   const { data: incidentData, loading } = useEditIncidentFeedQuery({
@@ -88,29 +85,7 @@ const useEditIncidentFeed = ({ onClose, incidentId }: Props): Return => {
       },
     },
   });
-  const { data: groupData, loading: groupsLoading } = useSchemeGroupsQuery({
-    variables: {
-      where: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
-        users:
-          role === Role.User
-            ? {
-                some: {
-                  id: {
-                    equals: userId,
-                  },
-                },
-              }
-            : undefined,
-      },
-    },
-    fetchPolicy: 'cache-and-network',
-    skip: role !== Role.SchemeAdmin,
-  });
+  const { groups, groupsLoading } = useGroupsContext();
 
   const { data: tagsData, loading: tagsLoading } = useTagsQuery({
     fetchPolicy: 'cache-and-network',
@@ -263,11 +238,7 @@ const useEditIncidentFeed = ({ onClose, incidentId }: Props): Return => {
         .filter((item) => item.type === TagType.IncidentInvolved)
         .map((tag) => ({ value: tag.id, label: tag.name })) || [],
     tagsLoading,
-    groups:
-      groupData?.groups.map((group) => ({
-        value: group.id,
-        label: group.name,
-      })) || [],
+    groups,
     groupsLoading,
     saving,
     onSearchBusiness,

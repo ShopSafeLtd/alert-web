@@ -8,12 +8,10 @@ import type {
 import {
   ListVehiclesDocument,
   QueryMode,
-  Role,
   SortOrder,
   useCreateVehicleMutation,
   useListCustomGalleriesQuery,
   useListVehiclesQuery,
-  useSchemeGroupsQuery,
 } from 'graphql/generated';
 import { useEffect, useState } from 'react';
 import { useStoreActions, useStoreState } from 'state';
@@ -22,6 +20,7 @@ import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 import type { VehicleFilters } from 'state/data-model';
 import { useNavigate } from 'react-router';
+import { useGroupsContext } from '#/context/groups-context';
 
 interface Return {
   data: ListVehiclesQuery | undefined;
@@ -58,11 +57,9 @@ const useListVehicles = (): Return => {
   const navigate = useNavigate();
   const onNavigate = () => navigate(`/app/vehicles/add`);
   const schemeId = useStoreState((state) => state.scheme.id);
-  const {
-    role,
-    id: userId,
-    filterDefaultGroups: defaultGroups,
-  } = useStoreState((state) => state.user);
+  const { id: userId, filterDefaultGroups: defaultGroups } = useStoreState(
+    (state) => state.user
+  );
   const pagination = useStoreState((state) => state.data.vehicles.pagination);
   const filterVariables = useStoreState(
     (state) => state.data.vehicles.variables
@@ -195,29 +192,7 @@ const useListVehicles = (): Return => {
     fetchPolicy: 'cache-and-network',
     variables,
   });
-  const { data: groupData, loading: groupsLoading } = useSchemeGroupsQuery({
-    variables: {
-      where: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
-        users:
-          role === Role.User
-            ? {
-                some: {
-                  id: {
-                    equals: userId,
-                  },
-                },
-              }
-            : undefined,
-      },
-    },
-    fetchPolicy: 'cache-and-network',
-    skip: role !== Role.SchemeAdmin,
-  });
+  const { groups, groupsLoading } = useGroupsContext();
 
   // custom galleries
   const { data: customGalleriesData } = useListCustomGalleriesQuery({
@@ -322,9 +297,9 @@ const useListVehicles = (): Return => {
                     schemes: { connect: [{ id: schemeId }] },
                     groups: {
                       connect:
-                        groupData?.groups && groupData.groups.length === 1
-                          ? groupData?.groups.map(({ id }) => ({ id }))
-                          : data.groups?.map((id) => ({ id })) || [],
+                        groups && groups.length === 1
+                          ? groups.map(({ value: id }) => ({ id }))
+                          : data?.groups?.map((id) => ({ id })) || [],
                     },
                   }))
                 : undefined,
@@ -462,11 +437,7 @@ const useListVehicles = (): Return => {
 
     // updateVehicleList,
     onSubmit,
-    groups:
-      groupData?.groups.map((group) => ({
-        value: group.id,
-        label: group.name,
-      })) || [],
+    groups,
     groupsLoading,
     setGroupsFilter,
     setCreatedAtFilter,

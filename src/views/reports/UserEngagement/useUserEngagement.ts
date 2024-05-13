@@ -1,12 +1,10 @@
 import type { UserEngagementQuery } from 'graphql/generated';
-import {
-  useUserEngagementQuery,
-  useSchemeGroupsQuery,
-} from 'graphql/generated';
+import { useUserEngagementQuery } from 'graphql/generated';
 import { useStoreState } from 'state';
 import type { RefObject } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { useReactToPrint } from 'react-to-print';
+import { useGroupsContext } from '#/context/groups-context';
 
 interface Return {
   loading: boolean;
@@ -57,17 +55,7 @@ const useUserEngagement = (): Return => {
     // today at 23:59:59
     endDate: new Date(new Date().setHours(23, 59, 59)),
   });
-  const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
-    variables: {
-      where: {
-        scheme: {
-          id: {
-            equals: currentScheme,
-          },
-        },
-      },
-    },
-  });
+  const { groups, groupsLoading } = useGroupsContext();
 
   const { data, loading } = useUserEngagementQuery({
     fetchPolicy: 'cache-and-network',
@@ -76,7 +64,7 @@ const useUserEngagement = (): Return => {
       where: {
         dateRange,
         schemeIds: [currentScheme],
-        groupIds: selectedGroups ?? groupsData?.groups.map(({ id }) => id),
+        groupIds: selectedGroups ?? groups.map(({ value: id }) => id),
         businessesIds: selectedBusinesses ?? [],
         rolesIds: selectedRoles ?? [],
       },
