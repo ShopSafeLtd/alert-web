@@ -1,6 +1,6 @@
 import React from 'react';
-import type { SchemeGroupsQueryVariables } from 'graphql/generated';
-import { Role, SortOrder, useSchemeGroupsQuery } from 'graphql/generated';
+import type { SchemeGroupsSelectQueryVariables } from 'graphql/generated';
+import { Role, SortOrder, useSchemeGroupsSelectQuery } from 'graphql/generated';
 import { Select } from 'antd';
 import { useStoreState } from 'state';
 import type { SizeType } from 'antd/lib/config-provider/SizeContext';
@@ -16,7 +16,7 @@ interface Props {
   className?: string;
   size?: SizeType;
   maxTagCount?: number | 'responsive';
-  groupsQueryVars?: SchemeGroupsQueryVariables;
+  groupsQueryVars?: SchemeGroupsSelectQueryVariables;
 }
 
 const GroupsSelect: React.FC<Props & Omit<SelectProps, keyof Props>> = ({
@@ -35,7 +35,7 @@ const GroupsSelect: React.FC<Props & Omit<SelectProps, keyof Props>> = ({
   const currentSchemeId = useStoreState((state) => state.scheme.id);
   const { id: userId, role } = useStoreState((state) => state.user);
 
-  const { data, loading } = useSchemeGroupsQuery({
+  const { data, loading } = useSchemeGroupsSelectQuery({
     fetchPolicy: 'cache-first',
     variables: groupsQueryVars ?? {
       orderBy: {
