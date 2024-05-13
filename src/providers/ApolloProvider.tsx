@@ -178,6 +178,7 @@ const Apollo = ({ children }: Props): JSX.Element => {
           }
           if (
             !message.startsWith('Not Auth') &&
+            !message.startsWith('Not auth') &&
             !message.startsWith('USER_CONTEXT_ERROR')
           ) {
             Sentry.captureMessage(
