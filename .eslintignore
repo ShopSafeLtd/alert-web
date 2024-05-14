@@ -18,7 +18,7 @@ src/serviceWorker.js
 src/graphql/*
 src/graphql-src/*
 src/configs/*
-vite.config.ts
+vite.config.mts
 jest.config.js
 src/vite-env.d.ts
 dist
