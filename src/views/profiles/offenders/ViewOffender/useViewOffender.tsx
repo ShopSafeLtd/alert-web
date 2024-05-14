@@ -53,6 +53,7 @@ import type {
 } from 'types/DataType';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import type { MutationUpdaterFn } from '@apollo/client';
+import { useGroupsContext } from '#/context/groups-context';
 
 const { confirm } = Modal;
 
@@ -207,7 +208,7 @@ const useViewOffender = (offenderId: string): Return => {
     (state) => state.scheme.hasConnectedSchemes
   );
 
-  const { role, id: userId, groups } = useStoreState((state) => state.user);
+  const { role, id: userId } = useStoreState((state) => state.user);
   const intl = useIntl();
 
   const [shareOpen, setShareOpen] = useState(false);
@@ -258,7 +259,8 @@ const useViewOffender = (offenderId: string): Return => {
   const openLightbox = (index: number) => {
     setLightBoxOpen({ open: !lightBoxOpen.open, index });
   };
-  const groupsId = groups.map((group) => group.id);
+  const { groups } = useGroupsContext();
+  const groupsId = groups.map((group) => group.value);
   const [loadMore, setLoadMore] = useState(false);
   const [replyTo, setReplyTo] = useState<{
     id: string;
@@ -347,7 +349,7 @@ const useViewOffender = (offenderId: string): Return => {
           role === Role.SchemeAdmin
             ? undefined
             : groups.map((g) => ({
-                id: g.id,
+                id: g.value,
               })),
       },
     });

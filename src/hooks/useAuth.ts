@@ -83,7 +83,7 @@ const useAuth = (): Return => {
     onboarded,
     schemes,
     demId,
-    groups,
+
     reference,
     userNotifications,
     userMessages,
@@ -225,7 +225,7 @@ const useAuth = (): Return => {
       businesses,
       onboarded,
       schemes,
-      groups,
+
       isSet: true,
       demId,
       reference,
@@ -321,7 +321,7 @@ const useAuth = (): Return => {
           businesses: currentUser?.businesses || [],
           onboarded: !currentUser?.newUser,
           schemes: currentUser?.schemes || [],
-          groups: currentUser?.groups || [],
+
           demId: currentUser?.demId || '',
           isSet: true,
           reportToAllBusinesses: currentUser?.reportToAllBusinesses || false,
@@ -409,7 +409,7 @@ const useAuth = (): Return => {
       onboarded: data.onboarded,
       businesses: data.businesses,
       schemes: data.schemes,
-      groups: data.groups,
+
       isSet: true,
       demId: data.demId,
       reference: data.reference,

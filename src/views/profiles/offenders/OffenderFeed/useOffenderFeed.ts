@@ -17,6 +17,7 @@ import type { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import type { OffenderFilters } from 'state/data-model';
 import cacheOrLoading from 'utils/cache-or-loading';
+import { useGroupsContext } from '#/context/groups-context';
 
 interface Return {
   data: ListOffendersRelayQuery | undefined;
@@ -76,6 +77,7 @@ const useOffenderFeed = (): Return => {
     index: 0,
   });
   const isUser = role === Role.User;
+  const { groups: defaultGroupsOnScheme } = useGroupsContext();
   const {
     search,
     groups,
@@ -127,7 +129,14 @@ const useOffenderFeed = (): Return => {
                 },
               },
             }
-          : undefined,
+          : {
+              // TODO check this is right, it will fallback to all scheme groups available to user, i.e if admin all if not then whatever they have
+              some: {
+                id: {
+                  in: defaultGroupsOnScheme.map(({ value: id }) => id),
+                },
+              },
+            },
       gender:
         sex.length > 0
           ? {
