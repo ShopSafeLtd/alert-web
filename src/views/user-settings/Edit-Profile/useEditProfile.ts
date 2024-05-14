@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 import type { SelectOptions } from 'types/DataType';
+import { useGroupsContext } from '#/context/groups-context';
 
 const { confirm } = Modal;
 
@@ -41,11 +42,9 @@ interface Return {
 const useEditProfile = (): Return => {
   const intl = useIntl();
   const navigate = useNavigate();
-  const {
-    id: userId,
-    groups: userGroups,
-    filterDefaultGroups: defaultGroups,
-  } = useStoreState((state) => state.user);
+  const { id: userId, filterDefaultGroups: defaultGroups } = useStoreState(
+    (state) => state.user
+  );
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
   const onClose = () => navigate('/app/incidents');
@@ -56,6 +55,8 @@ const useEditProfile = (): Return => {
   const userDefaultGroups = userData?.currentUser?.defaultGroups.filter(
     ({ scheme }) => scheme.id === schemeId
   );
+
+  const { groups } = useGroupsContext();
 
   const [updateUser] = useUpdateUserMutation({
     onCompleted: () => {
@@ -165,12 +166,7 @@ const useEditProfile = (): Return => {
     data: userData,
     loading,
     saving,
-    groups: userGroups
-      .filter(({ scheme }) => scheme.id === schemeId)
-      .map((group) => ({
-        value: group.id,
-        label: group.name,
-      })),
+    groups,
     userDefaultGroups: (userDefaultGroups || defaultGroups).map(({ id }) => id),
   };
 };

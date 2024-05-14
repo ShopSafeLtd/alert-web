@@ -30,15 +30,7 @@ describe('Detail Officer View', () => {
       offenderPush: true,
       publicName: true,
       origName: 'test user',
-      groups: [
-        {
-          id: 'test',
-          name: 'test group',
-          scheme: {
-            id: 'id',
-          },
-        },
-      ],
+
       defaultGroups: [
         {
           id: 'test',
