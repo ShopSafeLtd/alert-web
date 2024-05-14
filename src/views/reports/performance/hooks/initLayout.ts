@@ -80,6 +80,7 @@ const PerformanceLayout: ExtendedLayout[] = [
     moved: false,
     static: false,
   },
+
   {
     w: 1,
     h: 10,
@@ -96,6 +97,16 @@ const PerformanceLayout: ExtendedLayout[] = [
     x: 0,
     y: 36,
     i: 'goodsValueDonut',
+    maxH: 11,
+    moved: false,
+    static: false,
+  },
+  {
+    w: 1,
+    h: 9,
+    x: 1,
+    y: 36,
+    i: 'crimeTypesDonut',
     maxH: 11,
     moved: false,
     static: false,
@@ -292,6 +303,16 @@ export const PerformanceDrawerLayout: ExtendedLayout[] = [
     moved: false,
     static: false,
     allowDuplicates: false,
+  },
+  {
+    w: 1,
+    h: 9,
+    x: 1,
+    y: 36,
+    i: 'crimeTypesDonut',
+    maxH: 11,
+    moved: false,
+    static: false,
   },
   {
     w: 1,
