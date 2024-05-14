@@ -19,13 +19,6 @@ query currentUser($scheme: UniqueId, $orderBy: [UserSchemeOrderByWithRelationInp
       brands
     }
     newUser
-    groups {
-      id
-      name
-      scheme {
-        id
-      }
-    }
     defaultGroups {
       id
       name
