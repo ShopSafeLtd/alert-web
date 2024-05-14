@@ -1,20 +1,10 @@
 import React from 'react';
 import type { EditIncidentFeedQuery } from 'graphql/generated';
-import {
-  Button,
-  Col,
-  DatePicker,
-  Form,
-  Input,
-  Radio,
-  Row,
-  Select,
-  Skeleton,
-} from 'antd';
-import { FormattedMessage, useIntl } from 'react-intl';
-import moment from 'moment';
-import DebounceSelect from 'components/form-components/DebounceSelect';
 import { IncidentPriority } from 'graphql/generated';
+import { Button, Col, Form, Input, Radio, Row, Select, Skeleton } from 'antd';
+import { FormattedMessage, useIntl } from 'react-intl';
+import DebounceSelect from 'components/form-components/DebounceSelect';
+import DatePicker from 'components/util-components/DatePicker';
 import type { FormData } from './useEditIncidentFeed';
 
 interface Props {
@@ -61,7 +51,9 @@ const EditGroup = ({
         subject: data?.subject,
         customerRef: data?.customerRef,
         description: data?.description,
-        date: moment(data?.date, 'YYYY-MM-DD,HH:mm:ss'),
+        date: data?.date ? new Date(data?.date) : '',
+
+        // moment(data?.date, 'YYYY-MM-DD,HH:mm:ss'),
         business: {
           label: data?.business?.name,
           value: data?.business?.id,
@@ -235,7 +227,7 @@ const EditGroup = ({
               style={{ width: '100%' }}
               disabled={saving}
               disabledDate={(current) =>
-                current && current.valueOf() > Date.now()
+                current && current.getTime() > Date.now()
               }
               format="HH:mm - DD/MM/YY"
               showTime={{ showSecond: false, showNow: true }}
@@ -361,8 +353,8 @@ const EditGroup = ({
         </Col>
       </Row>
 
-      <Row gutter={50}>
-        <Col>
+      <Row>
+        <Col span={12}>
           <Form.Item
             name="policeReported"
             tooltip={intl.formatMessage({
@@ -396,7 +388,8 @@ const EditGroup = ({
             />
           </Form.Item>
         </Col>
-        <Col>
+        <Col span={1} />
+        <Col span={11}>
           <Form.Item
             name="policeRef"
             label={intl.formatMessage({
@@ -412,7 +405,8 @@ const EditGroup = ({
             <Input disabled={saving} style={{ width: 200 }} />
           </Form.Item>
         </Col>
-        <Col>
+
+        <Col span={12}>
           <Form.Item
             name="policeInvolved"
             tooltip={intl.formatMessage({
@@ -446,8 +440,8 @@ const EditGroup = ({
             />
           </Form.Item>
         </Col>
-
-        <Col>
+        <Col span={1} />
+        <Col span={11}>
           <Form.Item
             name="policeNo"
             label={intl.formatMessage({
