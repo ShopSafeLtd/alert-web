@@ -1,6 +1,9 @@
 import type {
+  InputMaybe,
   ListCustomGalleriesQuery,
   ListOffendersRelayQuery,
+  ListOffendersRelayQueryVariables,
+  OffenderOrderByWithRelationInput,
   RecycleOffenderMutation,
 } from 'graphql/generated';
 import {
@@ -95,14 +98,57 @@ const useOffenderFeed = (): Return => {
     compactView,
     tableView,
   } = filterVariables;
-  const variables = {
+
+  const generateSorted = (): {
+    order: InputMaybe<OffenderOrderByWithRelationInput>;
+    orderByValue: InputMaybe<SortOrder>;
+  } => {
+    switch (order) {
+      case OffenderSort.updatedAtAsc: {
+        return {
+          order: { updatedAt: SortOrder.Asc },
+          orderByValue: null,
+        };
+      }
+      case OffenderSort.noIncidentAsc: {
+        return {
+          order: { incidents: { _count: SortOrder.Asc } },
+          orderByValue: null,
+        };
+      }
+      case OffenderSort.noIncidentDesc: {
+        return {
+          order: { incidents: { _count: SortOrder.Desc } },
+          orderByValue: null,
+        };
+      }
+      case OffenderSort.incidentValueAsc: {
+        return {
+          order: null,
+          orderByValue: SortOrder.Asc,
+        };
+      }
+      case OffenderSort.incidentValueDesc: {
+        return {
+          order: null,
+          orderByValue: SortOrder.Desc,
+        };
+      }
+
+      default: {
+        return {
+          order: { updatedAt: SortOrder.Desc },
+          orderByValue: null,
+        };
+      }
+    }
+  };
+
+  const variables: ListOffendersRelayQueryVariables = {
     scheme: {
       id: schemeId,
     },
-    order: {
-      updatedAt:
-        order === OffenderSort.updatedAtDesc ? SortOrder.Desc : SortOrder.Asc,
-    },
+    ...generateSorted(),
     where: {
       createdAt: createdAt
         ? {
