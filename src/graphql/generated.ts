@@ -22588,14 +22588,6 @@ export type UpdateUserDisableMutationVariables = Exact<{
 
 export type UpdateUserDisableMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, disabled: boolean } };
 
-export type CurrentUserQueryVariables = Exact<{
-  scheme?: InputMaybe<UniqueId>;
-  orderBy?: InputMaybe<Array<UserSchemeOrderByWithRelationInput> | UserSchemeOrderByWithRelationInput>;
-}>;
-
-
-export type CurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: string, fullName: string, origName: string, email: string, reference?: number | null, demId?: string | null, publicName: boolean, reportToAllBusinesses: boolean, notificationCount: number, messageCount: number, defaultScheme?: string | null, newUser: boolean, incidentEmail: boolean, incidentPush: boolean, offenderEmail: boolean, offenderPush: boolean, bulletinEmails: boolean, bulletinPush: boolean, messagePush: boolean, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string, demId?: string | null, brands: Array<string> }>, groups: Array<{ __typename?: 'Group', id: string, name: string, scheme: { __typename?: 'Scheme', id: string } }>, defaultGroups: Array<{ __typename?: 'Group', id: string, name: string, scheme: { __typename?: 'Scheme', id: string } }>, schemes: Array<{ __typename?: 'UserScheme', id: string, role: Role, isAdmin: boolean, scheme: { __typename?: 'Scheme', customTranslations: Array<{ [key: string]: any }>, userTodos: number, id: string, name: string, goodsMode: GoodsMode, autoApproveIncidents: boolean, autoApproveOffenders: boolean, defaultPublicOffenderDOB: boolean, restrictIncidentAccess: boolean, reportOnly: boolean, facialRecognition: boolean, facialDetection: boolean, imagesRequiredOnOffenders: boolean, taskTimeTracking: boolean, languageCount: number, autoPopulateDescription: boolean, needJustification: boolean, requireSiteNumberForUsers: boolean, oneSelectedIncidentTypeOnly: boolean, logo?: { __typename?: 'Image', optimisedPersisted?: string | null } | null, darkLogo?: { __typename?: 'Image', optimisedPersisted?: string | null } | null, connectedToSchemes: Array<{ __typename?: 'Scheme', id: string, name: string }> }, permissions: Array<{ __typename?: 'Permissions', model: PermissionModel, allowedMethods: Array<PermissionMethod> }>, dashboard?: { __typename?: 'Dashboard', runningBanner?: string | null, layout: Array<{ __typename?: 'DashboardLayout', h: number, i: string, maxH?: number | null, maxW?: number | null, minH?: number | null, minW?: number | null, moved: boolean, static: boolean, w: number, x: number, y: number }> } | null }> } | null };
-
 export type UserQueryVariables = Exact<{
   where: UserWhereUniqueInput;
   groupWhere?: InputMaybe<GroupWhereInput>;
@@ -22818,6 +22810,14 @@ export type VehicleQueryVariables = Exact<{
 
 
 export type VehicleQuery = { __typename?: 'Query', vehicle: { __typename?: 'Vehicle', id: string, make?: string | null, model?: string | null, registration?: string | null, totalOffenders: number, totalIncidents: number, totalCrimeGroups: number, reference?: number | null, subscribed: boolean, totalImages: number, updatedAt: Date, colour?: string | null, customGalleries: Array<{ __typename?: 'CustomGallery', id: string, name: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, primary?: boolean | null, policeImage?: boolean | null, card?: string | null }>, crimeGroup: Array<{ __typename?: 'CrimeGroup', id: string, reference?: number | null, alias?: string | null, totalIncidents: number, totalOffenders: number, totalRecoveredValue: number, totalTheftSuccess: number, totalValue: number }>, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, alias: Array<string>, age?: Age | null, gender?: Gender | null, race?: Race | null, build?: Build | null, height?: Height | null, hair?: string | null, peculiarities?: string | null, comment?: string | null, dateSource?: string | null, dateOfBirth?: Date | null, idVerified: boolean, idSource?: IdSource | null, knownFor: Array<string>, targetedGoods: Array<string>, justification?: string | null, infoSource?: string | null, images: Array<{ __typename?: 'Image', isFace?: boolean | null, id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, primary?: boolean | null, policeImage?: boolean | null, card?: string | null }> }>, incidents: Array<{ __typename?: 'Incident', id: string, reference?: number | null, dayTime: string, policeRef?: string | null, subject?: string | null, totalValue: number, totalRecoveredValue: number, location?: { __typename?: 'Address', id: string, full: string, geoLat?: number | null, geoLng?: number | null } | null }>, evidence: Array<{ __typename?: 'Document', id: string, name: string, url: string, fileType?: FileType | null, tags: Array<{ __typename?: 'Tag', name: string }> }>, investigations: Array<{ __typename?: 'Investigation', id: string, name: string, description?: string | null, status: InvestigationStatus, createdAt: Date, closedAt?: Date | null, reference?: number | null }>, updates: Array<{ __typename?: 'Update', id: string, text?: string | null, type: UpdateType, createdAt: Date, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }>, linkedCrimeGroups: Array<{ __typename?: 'CrimeGroup', id: string, reference?: number | null, alias?: string | null, totalIncidents: number, totalOffenders: number, totalRecoveredValue: number, totalTheftSuccess: number, totalValue: number }>, linkedVehicles: Array<{ __typename?: 'Vehicle', id: string, reference?: number | null, colour?: string | null, model?: string | null, make?: string | null, registration?: string | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }> }>, linkedIncidents: Array<{ __typename?: 'Incident', id: string, reference?: number | null, dayTime: string, policeRef?: string | null, subject?: string | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }> }>, linkedOffenders: Array<{ __typename?: 'Offender', id: string, reference?: number | null, name?: string | null, gender?: Gender | null, build?: Build | null, height?: Height | null, race?: Race | null, age?: Age | null, dateOfBirth?: Date | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }> }>, linkedArticles: Array<{ __typename?: 'Article', id: string, title: string, updatedAt: Date, watermarkImage: boolean, previewImage?: string | null, previewText?: string | null, priority: ArticlePriority, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null, position: ImagePosition, rotation: number }>, createdBy: { __typename?: 'User', fullName: string, id: string } }>, createdBy: { __typename?: 'User', origName: string, id: string, fullName: string, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string }> }, replies: Array<{ __typename?: 'Update', id: string, text?: string | null, type: UpdateType, createdAt: Date, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }>, linkedCrimeGroups: Array<{ __typename?: 'CrimeGroup', id: string, reference?: number | null, alias?: string | null, totalIncidents: number, totalOffenders: number, totalRecoveredValue: number, totalTheftSuccess: number, totalValue: number }>, linkedVehicles: Array<{ __typename?: 'Vehicle', id: string, reference?: number | null, colour?: string | null, model?: string | null, make?: string | null, registration?: string | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }> }>, linkedIncidents: Array<{ __typename?: 'Incident', id: string, reference?: number | null, dayTime: string, policeRef?: string | null, subject?: string | null, location?: { __typename?: 'Address', id: string, full: string, geoLat?: number | null, geoLng?: number | null } | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }> }>, linkedOffenders: Array<{ __typename?: 'Offender', id: string, reference?: number | null, name?: string | null, gender?: Gender | null, build?: Build | null, height?: Height | null, race?: Race | null, age?: Age | null, dateOfBirth?: Date | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }> }>, linkedArticles: Array<{ __typename?: 'Article', id: string, title: string, updatedAt: Date, watermarkImage: boolean, previewImage?: string | null, previewText?: string | null, priority: ArticlePriority, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null, position: ImagePosition, rotation: number }>, createdBy: { __typename?: 'User', fullName: string, id: string } }>, createdBy: { __typename?: 'User', origName: string, id: string, fullName: string, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string }> } }> }> } };
+
+export type CurrentUserQueryVariables = Exact<{
+  scheme?: InputMaybe<UniqueId>;
+  orderBy?: InputMaybe<Array<UserSchemeOrderByWithRelationInput> | UserSchemeOrderByWithRelationInput>;
+}>;
+
+
+export type CurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: string, fullName: string, origName: string, email: string, reference?: number | null, demId?: string | null, publicName: boolean, reportToAllBusinesses: boolean, notificationCount: number, messageCount: number, defaultScheme?: string | null, newUser: boolean, incidentEmail: boolean, incidentPush: boolean, offenderEmail: boolean, offenderPush: boolean, bulletinEmails: boolean, bulletinPush: boolean, messagePush: boolean, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string, demId?: string | null, brands: Array<string> }>, defaultGroups: Array<{ __typename?: 'Group', id: string, name: string, scheme: { __typename?: 'Scheme', id: string } }>, schemes: Array<{ __typename?: 'UserScheme', id: string, role: Role, isAdmin: boolean, scheme: { __typename?: 'Scheme', customTranslations: Array<{ [key: string]: any }>, userTodos: number, id: string, name: string, goodsMode: GoodsMode, autoApproveIncidents: boolean, autoApproveOffenders: boolean, defaultPublicOffenderDOB: boolean, restrictIncidentAccess: boolean, reportOnly: boolean, facialRecognition: boolean, facialDetection: boolean, imagesRequiredOnOffenders: boolean, taskTimeTracking: boolean, languageCount: number, autoPopulateDescription: boolean, needJustification: boolean, requireSiteNumberForUsers: boolean, oneSelectedIncidentTypeOnly: boolean, logo?: { __typename?: 'Image', optimisedPersisted?: string | null } | null, darkLogo?: { __typename?: 'Image', optimisedPersisted?: string | null } | null, connectedToSchemes: Array<{ __typename?: 'Scheme', id: string, name: string }> }, permissions: Array<{ __typename?: 'Permissions', model: PermissionModel, allowedMethods: Array<PermissionMethod> }>, dashboard?: { __typename?: 'Dashboard', runningBanner?: string | null, layout: Array<{ __typename?: 'DashboardLayout', h: number, i: string, maxH?: number | null, maxW?: number | null, minH?: number | null, minW?: number | null, moved: boolean, static: boolean, w: number, x: number, y: number }> } | null }> } | null };
 
 export type CreateOneQuestionGroupMutationVariables = Exact<{
   data: QuestionGroupCreateInput;
@@ -32919,119 +32919,6 @@ export function useUpdateUserDisableMutation(baseOptions?: Apollo.MutationHookOp
 export type UpdateUserDisableMutationHookResult = ReturnType<typeof useUpdateUserDisableMutation>;
 export type UpdateUserDisableMutationResult = Apollo.MutationResult<UpdateUserDisableMutation>;
 export type UpdateUserDisableMutationOptions = Apollo.BaseMutationOptions<UpdateUserDisableMutation, UpdateUserDisableMutationVariables>;
-export const CurrentUserDocument = gql`
-    query currentUser($scheme: UniqueId, $orderBy: [UserSchemeOrderByWithRelationInput!]) {
-  currentUser {
-    id
-    fullName
-    origName
-    email
-    reference
-    demId
-    publicName
-    reportToAllBusinesses
-    notificationCount(scheme: $scheme)
-    messageCount
-    defaultScheme
-    businesses {
-      id
-      name
-      fullName
-      demId
-      brands
-    }
-    newUser
-    groups {
-      id
-      name
-      scheme {
-        id
-      }
-    }
-    defaultGroups {
-      id
-      name
-      scheme {
-        id
-      }
-    }
-    schemes(orderBy: $orderBy) {
-      id
-      role
-      scheme {
-        customTranslations
-        logo {
-          optimisedPersisted
-        }
-        darkLogo {
-          optimisedPersisted
-        }
-        userTodos
-        id
-        name
-        goodsMode
-        autoApproveIncidents
-        autoApproveOffenders
-        defaultPublicOffenderDOB
-        restrictIncidentAccess
-        reportOnly
-        facialRecognition
-        facialDetection
-        imagesRequiredOnOffenders
-        taskTimeTracking
-        languageCount
-        autoPopulateDescription
-        needJustification
-        requireSiteNumberForUsers
-        oneSelectedIncidentTypeOnly
-        connectedToSchemes {
-          id
-          name
-        }
-      }
-      isAdmin
-      permissions {
-        model
-        allowedMethods
-      }
-      dashboard {
-        runningBanner
-        layout {
-          h
-          i
-          maxH
-          maxW
-          minH
-          minW
-          moved
-          static
-          w
-          x
-          y
-        }
-      }
-    }
-    incidentEmail
-    incidentPush
-    offenderEmail
-    offenderPush
-    bulletinEmails
-    bulletinPush
-    messagePush
-  }
-}
-    `;
-export function useCurrentUserQuery(baseOptions?: Apollo.QueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, options);
-      }
-export function useCurrentUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, options);
-        }
-export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
-export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
-export type CurrentUserQueryResult = Apollo.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
 export const UserDocument = gql`
     query User($where: UserWhereUniqueInput!, $groupWhere: GroupWhereInput, $chatWhere: UserChatWhereInput, $schemeWhere: UserSchemeWhereInput) {
   user(where: $where) {
@@ -34083,6 +33970,112 @@ export function useVehicleLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ve
 export type VehicleQueryHookResult = ReturnType<typeof useVehicleQuery>;
 export type VehicleLazyQueryHookResult = ReturnType<typeof useVehicleLazyQuery>;
 export type VehicleQueryResult = Apollo.QueryResult<VehicleQuery, VehicleQueryVariables>;
+export const CurrentUserDocument = gql`
+    query currentUser($scheme: UniqueId, $orderBy: [UserSchemeOrderByWithRelationInput!]) {
+  currentUser {
+    id
+    fullName
+    origName
+    email
+    reference
+    demId
+    publicName
+    reportToAllBusinesses
+    notificationCount(scheme: $scheme)
+    messageCount
+    defaultScheme
+    businesses {
+      id
+      name
+      fullName
+      demId
+      brands
+    }
+    newUser
+    defaultGroups {
+      id
+      name
+      scheme {
+        id
+      }
+    }
+    schemes(orderBy: $orderBy) {
+      id
+      role
+      scheme {
+        customTranslations
+        logo {
+          optimisedPersisted
+        }
+        darkLogo {
+          optimisedPersisted
+        }
+        userTodos
+        id
+        name
+        goodsMode
+        autoApproveIncidents
+        autoApproveOffenders
+        defaultPublicOffenderDOB
+        restrictIncidentAccess
+        reportOnly
+        facialRecognition
+        facialDetection
+        imagesRequiredOnOffenders
+        taskTimeTracking
+        languageCount
+        autoPopulateDescription
+        needJustification
+        requireSiteNumberForUsers
+        oneSelectedIncidentTypeOnly
+        connectedToSchemes {
+          id
+          name
+        }
+      }
+      isAdmin
+      permissions {
+        model
+        allowedMethods
+      }
+      dashboard {
+        runningBanner
+        layout {
+          h
+          i
+          maxH
+          maxW
+          minH
+          minW
+          moved
+          static
+          w
+          x
+          y
+        }
+      }
+    }
+    incidentEmail
+    incidentPush
+    offenderEmail
+    offenderPush
+    bulletinEmails
+    bulletinPush
+    messagePush
+  }
+}
+    `;
+export function useCurrentUserQuery(baseOptions?: Apollo.QueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, options);
+      }
+export function useCurrentUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, options);
+        }
+export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
+export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
+export type CurrentUserQueryResult = Apollo.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
 export const CreateOneQuestionGroupDocument = gql`
     mutation CreateOneQuestionGroup($data: QuestionGroupCreateInput!) {
   createOneQuestionGroup(data: $data) {
