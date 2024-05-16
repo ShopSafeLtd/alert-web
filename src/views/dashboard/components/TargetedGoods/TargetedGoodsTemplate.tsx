@@ -36,7 +36,10 @@ const TargetedGoodsGraph = ({
       />
       <BarGraph
         data={data}
-        emptyLabel="No Targeted Goods"
+        emptyLabel={intl.formatMessage({
+          defaultMessage: 'No Targeted Goods',
+          id: 'ZWF2ZV',
+        })}
         margin={{
           bottom: 30,
           top: 10,

@@ -55,7 +55,10 @@ const TimeOfDay = ({
       />
       <BarGraph
         data={data}
-        emptyLabel="No incidents"
+        emptyLabel={intl.formatMessage({
+          defaultMessage: 'No incidents',
+          id: '7UNuAl',
+        })}
         margin={{
           bottom: 40,
           top: 10,

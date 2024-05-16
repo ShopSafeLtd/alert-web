@@ -71,7 +71,10 @@ const CustomQuestionsCountGraph = ({
         <DonutGraph
           isPrinting={isPrinting}
           data={data?.customQuestionsCountGraph.data}
-          emptyLabel="No Data"
+          emptyLabel={intl.formatMessage({
+            defaultMessage: 'No Data',
+            id: 'D3rOMr',
+          })}
           type="donut"
         />
       ) : (

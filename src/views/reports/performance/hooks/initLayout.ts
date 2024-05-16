@@ -330,7 +330,7 @@ export const PerformanceDrawerLayout: ExtendedLayout[] = [
     h: 9,
     x: 0,
     y: 36,
-    i: 'userSessionDonut',
+    i: 'userSessionsDonut',
     maxH: 11,
     moved: false,
     static: false,

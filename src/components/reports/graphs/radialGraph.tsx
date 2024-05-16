@@ -10,7 +10,7 @@ const RadialGraph = ({
 }: {
   data:
     | Array<{
-        __typename?: 'RadialGraph' | undefined;
+        __typename?: 'RadialGraph' | 'RadialValueGraph' | undefined;
         label: string;
         data:
           | { __typename?: 'Graph' | undefined; value: number; label: string }[]

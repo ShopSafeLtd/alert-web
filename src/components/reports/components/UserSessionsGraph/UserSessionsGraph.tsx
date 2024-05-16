@@ -1,30 +1,30 @@
 import React from 'react';
 import { Button, Typography } from 'antd';
-import type { BusinessLossRecoveredGraphQueryVariables } from 'graphql/generated';
-import { useBusinessLossRecoveredGraphQuery } from 'graphql/generated';
+import type { UserSessionsGraphQueryVariables } from 'graphql/generated';
+import { useUserSessionsGraphQuery } from 'graphql/generated';
 import { useIntl } from 'react-intl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
-import MultiBarGraph from '../../graphs/multiBarGraph';
+import RadialGraph from '../../graphs/radialGraph';
 
 interface Props {
-  isPrinting: boolean;
   editMode: boolean;
-  variables: BusinessLossRecoveredGraphQueryVariables;
+  variables: UserSessionsGraphQueryVariables;
   removeItem: () => void;
   onNavigate: () => void;
+  isPrinting: boolean;
 }
 
-const BusinessLossRecoveredGraph = ({
-  isPrinting,
+const UserSessionsGraph = ({
   variables,
   editMode,
   removeItem,
   onNavigate,
+  isPrinting,
 }: Props) => {
   const intl = useIntl();
 
-  const { data } = useBusinessLossRecoveredGraphQuery({
+  const { data } = useUserSessionsGraphQuery({
     variables,
   });
 
@@ -32,8 +32,8 @@ const BusinessLossRecoveredGraph = ({
     <>
       <Typography.Title level={4} style={{ fontWeight: 700 }}>
         {intl.formatMessage({
-          defaultMessage: 'Business Loss Recovered Graph',
-          id: 'O7e2dP',
+          defaultMessage: 'User Sessions',
+          id: 'IS4S3Y',
         })}
       </Typography.Title>
 
@@ -62,17 +62,17 @@ const BusinessLossRecoveredGraph = ({
           })}
         </Button>
       )}
-      <MultiBarGraph
+
+      <RadialGraph
         isPrinting={isPrinting}
-        data={data?.businessLossRecoveredGraph}
+        data={data?.userSessionsGraph}
         emptyLabel={intl.formatMessage({
-          defaultMessage: 'No Crime Types',
-          id: 'BbTEjZ',
+          defaultMessage: 'No Users',
+          id: 'XisWAX',
         })}
-        valueSymbol="£"
       />
     </>
   );
 };
 
-export default BusinessLossRecoveredGraph;
+export default UserSessionsGraph;

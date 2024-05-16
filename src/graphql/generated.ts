@@ -12943,6 +12943,7 @@ export type Query = {
   userNotifications: Array<UserNotification>;
   userScheme: UserScheme;
   userSchemes: Array<UserScheme>;
+  userSessionsGraph: Array<RadialValueGraph>;
   users: Array<User>;
   vehicle: Vehicle;
   workflow?: Maybe<Workflow>;
@@ -13933,6 +13934,12 @@ export type QueryUserSchemesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<UserSchemeWhereInput>;
+};
+
+
+export type QueryUserSessionsGraphArgs = {
+  take?: InputMaybe<Scalars['Int']>;
+  where: UserIncidentsCountGraphInput;
 };
 
 
@@ -20873,6 +20880,22 @@ export type UserRolesQueryVariables = Exact<{
 
 export type UserRolesQuery = { __typename?: 'Query', roles: { __typename?: 'QueryRolesConnection', edges: Array<{ __typename?: 'QueryRolesConnectionEdge', node: { __typename?: 'CustomRole', type: Role, id: string, name: string } }> } };
 
+export type BusinessCrimeTypeGraphQueryVariables = Exact<{
+  where: BusinessIncidentsCountGraphInput;
+  take?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type BusinessCrimeTypeGraphQuery = { __typename?: 'Query', businessCrimeTypeGraph: Array<{ __typename?: 'RadialValueGraph', label: string, data: Array<{ __typename?: 'Graph', label: string, value: number }> }> };
+
+export type BusinessIncidentCountGraphQueryVariables = Exact<{
+  where: BusinessIncidentsCountGraphInput;
+  take?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type BusinessIncidentCountGraphQuery = { __typename?: 'Query', businessIncidentCountGraph: Array<{ __typename?: 'Graph', label: string, value: number }> };
+
 export type BusinessLossRecoveredGraphQueryVariables = Exact<{
   where: BusinessIncidentsCountGraphInput;
   take?: InputMaybe<Scalars['Int']>;
@@ -20896,21 +20919,13 @@ export type UserIncidentCountGraphQueryVariables = Exact<{
 
 export type UserIncidentCountGraphQuery = { __typename?: 'Query', userIncidentCountGraph: Array<{ __typename?: 'Graph', label: string, value: number }> };
 
-export type BusinessCrimeTypeGraphQueryVariables = Exact<{
-  where: BusinessIncidentsCountGraphInput;
+export type UserSessionsGraphQueryVariables = Exact<{
+  where: UserIncidentsCountGraphInput;
   take?: InputMaybe<Scalars['Int']>;
 }>;
 
 
-export type BusinessCrimeTypeGraphQuery = { __typename?: 'Query', businessCrimeTypeGraph: Array<{ __typename?: 'RadialValueGraph', label: string, data: Array<{ __typename?: 'Graph', label: string, value: number }> }> };
-
-export type BusinessIncidentCountGraphQueryVariables = Exact<{
-  where: BusinessIncidentsCountGraphInput;
-  take?: InputMaybe<Scalars['Int']>;
-}>;
-
-
-export type BusinessIncidentCountGraphQuery = { __typename?: 'Query', businessIncidentCountGraph: Array<{ __typename?: 'Graph', label: string, value: number }> };
+export type UserSessionsGraphQuery = { __typename?: 'Query', userSessionsGraph: Array<{ __typename?: 'RadialValueGraph', label: string, data: Array<{ __typename?: 'Graph', label: string, value: number }> }> };
 
 export type ListActionsQueryVariables = Exact<{
   take?: InputMaybe<Scalars['Int']>;
@@ -21063,7 +21078,7 @@ export type UpdateBusinessLocationMutationVariables = Exact<{
 }>;
 
 
-export type UpdateBusinessLocationMutation = { __typename?: 'Mutation', updateBusiness: { __typename?: 'Business', id: string, locations: Array<{ __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, geoLng?: number | null, geoLat?: number | null }> } };
+export type UpdateBusinessLocationMutation = { __typename?: 'Mutation', updateBusiness: { __typename?: 'Business', id: string, locations: Array<{ __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, geoLng?: number | null, geoLat?: number | null, full: string }> } };
 
 export type UpdateBusinessMutationVariables = Exact<{
   data: BusinessUpdateInput;
@@ -21071,7 +21086,7 @@ export type UpdateBusinessMutationVariables = Exact<{
 }>;
 
 
-export type UpdateBusinessMutation = { __typename?: 'Mutation', updateBusiness: { __typename?: 'Business', id: string, name: string, siteNumber?: string | null, fullName: string, publicName: boolean, demId?: string | null, totalUsers: number, parent?: { __typename?: 'Business', id: string, name: string, fullName: string, publicName: boolean } | null, locations: Array<{ __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, geoLng?: number | null, geoLat?: number | null }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }> } };
+export type UpdateBusinessMutation = { __typename?: 'Mutation', updateBusiness: { __typename?: 'Business', id: string, name: string, siteNumber?: string | null, fullName: string, publicName: boolean, demId?: string | null, totalUsers: number, parent?: { __typename?: 'Business', id: string, name: string, fullName: string, publicName: boolean } | null, locations: Array<{ __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, geoLng?: number | null, geoLat?: number | null, full: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }> } };
 
 export type BusinessBrandsQueryVariables = Exact<{
   where: BusinessWhereUniqueInput;
@@ -21112,7 +21127,7 @@ export type BusinessQueryVariables = Exact<{
 }>;
 
 
-export type BusinessQuery = { __typename?: 'Query', business: { __typename?: 'Business', id: string, name: string, fullName: string, publicName: boolean, demId?: string | null, siteNumber?: string | null, groups: Array<{ __typename?: 'Group', id: string, name: string }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, incidents: Array<{ __typename?: 'Incident', id: string, reference?: number | null, dayTime: string, date: Date, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, createdBy: { __typename?: 'User', id: string, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string }> }, location?: { __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, geoLat?: number | null, geoLng?: number | null, full: string, alias?: string | null } | null }>, todos: Array<{ __typename?: 'Todo', id: string, name?: string | null, description?: string | null, dueDate?: Date | null, completed?: boolean | null, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }> }>, parent?: { __typename?: 'Business', id: string, name: string, fullName: string } | null, locations: Array<{ __typename?: 'Address', id: string, full: string, geoLat?: number | null, geoLng?: number | null }> } };
+export type BusinessQuery = { __typename?: 'Query', business: { __typename?: 'Business', id: string, name: string, fullName: string, publicName: boolean, demId?: string | null, siteNumber?: string | null, brands: Array<string>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, incidents: Array<{ __typename?: 'Incident', id: string, reference?: number | null, dayTime: string, date: Date, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, createdBy: { __typename?: 'User', id: string, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string }> }, location?: { __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, geoLat?: number | null, geoLng?: number | null, full: string, alias?: string | null } | null }>, todos: Array<{ __typename?: 'Todo', id: string, name?: string | null, description?: string | null, dueDate?: Date | null, completed?: boolean | null, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }> }>, parent?: { __typename?: 'Business', id: string, name: string, fullName: string } | null, locations: Array<{ __typename?: 'Address', id: string, full: string, geoLat?: number | null, geoLng?: number | null }> } };
 
 export type EditBusinessQueryVariables = Exact<{
   where: BusinessWhereUniqueInput;
@@ -24635,6 +24650,47 @@ export function useUserRolesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type UserRolesQueryHookResult = ReturnType<typeof useUserRolesQuery>;
 export type UserRolesLazyQueryHookResult = ReturnType<typeof useUserRolesLazyQuery>;
 export type UserRolesQueryResult = Apollo.QueryResult<UserRolesQuery, UserRolesQueryVariables>;
+export const BusinessCrimeTypeGraphDocument = gql`
+    query BusinessCrimeTypeGraph($where: BusinessIncidentsCountGraphInput!, $take: Int) {
+  businessCrimeTypeGraph(where: $where, take: $take) {
+    label
+    data {
+      label
+      value
+    }
+  }
+}
+    `;
+export function useBusinessCrimeTypeGraphQuery(baseOptions: Apollo.QueryHookOptions<BusinessCrimeTypeGraphQuery, BusinessCrimeTypeGraphQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BusinessCrimeTypeGraphQuery, BusinessCrimeTypeGraphQueryVariables>(BusinessCrimeTypeGraphDocument, options);
+      }
+export function useBusinessCrimeTypeGraphLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BusinessCrimeTypeGraphQuery, BusinessCrimeTypeGraphQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BusinessCrimeTypeGraphQuery, BusinessCrimeTypeGraphQueryVariables>(BusinessCrimeTypeGraphDocument, options);
+        }
+export type BusinessCrimeTypeGraphQueryHookResult = ReturnType<typeof useBusinessCrimeTypeGraphQuery>;
+export type BusinessCrimeTypeGraphLazyQueryHookResult = ReturnType<typeof useBusinessCrimeTypeGraphLazyQuery>;
+export type BusinessCrimeTypeGraphQueryResult = Apollo.QueryResult<BusinessCrimeTypeGraphQuery, BusinessCrimeTypeGraphQueryVariables>;
+export const BusinessIncidentCountGraphDocument = gql`
+    query BusinessIncidentCountGraph($where: BusinessIncidentsCountGraphInput!, $take: Int) {
+  businessIncidentCountGraph(where: $where, take: $take) {
+    label
+    value
+  }
+}
+    `;
+export function useBusinessIncidentCountGraphQuery(baseOptions: Apollo.QueryHookOptions<BusinessIncidentCountGraphQuery, BusinessIncidentCountGraphQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BusinessIncidentCountGraphQuery, BusinessIncidentCountGraphQueryVariables>(BusinessIncidentCountGraphDocument, options);
+      }
+export function useBusinessIncidentCountGraphLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BusinessIncidentCountGraphQuery, BusinessIncidentCountGraphQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BusinessIncidentCountGraphQuery, BusinessIncidentCountGraphQueryVariables>(BusinessIncidentCountGraphDocument, options);
+        }
+export type BusinessIncidentCountGraphQueryHookResult = ReturnType<typeof useBusinessIncidentCountGraphQuery>;
+export type BusinessIncidentCountGraphLazyQueryHookResult = ReturnType<typeof useBusinessIncidentCountGraphLazyQuery>;
+export type BusinessIncidentCountGraphQueryResult = Apollo.QueryResult<BusinessIncidentCountGraphQuery, BusinessIncidentCountGraphQueryVariables>;
 export const BusinessLossRecoveredGraphDocument = gql`
     query BusinessLossRecoveredGraph($where: BusinessIncidentsCountGraphInput!, $take: Int) {
   businessLossRecoveredGraph(where: $where, take: $take) {
@@ -24698,9 +24754,9 @@ export function useUserIncidentCountGraphLazyQuery(baseOptions?: Apollo.LazyQuer
 export type UserIncidentCountGraphQueryHookResult = ReturnType<typeof useUserIncidentCountGraphQuery>;
 export type UserIncidentCountGraphLazyQueryHookResult = ReturnType<typeof useUserIncidentCountGraphLazyQuery>;
 export type UserIncidentCountGraphQueryResult = Apollo.QueryResult<UserIncidentCountGraphQuery, UserIncidentCountGraphQueryVariables>;
-export const BusinessCrimeTypeGraphDocument = gql`
-    query BusinessCrimeTypeGraph($where: BusinessIncidentsCountGraphInput!, $take: Int) {
-  businessCrimeTypeGraph(where: $where, take: $take) {
+export const UserSessionsGraphDocument = gql`
+    query UserSessionsGraph($where: UserIncidentsCountGraphInput!, $take: Int) {
+  userSessionsGraph(where: $where, take: $take) {
     label
     data {
       label
@@ -24709,36 +24765,17 @@ export const BusinessCrimeTypeGraphDocument = gql`
   }
 }
     `;
-export function useBusinessCrimeTypeGraphQuery(baseOptions: Apollo.QueryHookOptions<BusinessCrimeTypeGraphQuery, BusinessCrimeTypeGraphQueryVariables>) {
+export function useUserSessionsGraphQuery(baseOptions: Apollo.QueryHookOptions<UserSessionsGraphQuery, UserSessionsGraphQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<BusinessCrimeTypeGraphQuery, BusinessCrimeTypeGraphQueryVariables>(BusinessCrimeTypeGraphDocument, options);
+        return Apollo.useQuery<UserSessionsGraphQuery, UserSessionsGraphQueryVariables>(UserSessionsGraphDocument, options);
       }
-export function useBusinessCrimeTypeGraphLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BusinessCrimeTypeGraphQuery, BusinessCrimeTypeGraphQueryVariables>) {
+export function useUserSessionsGraphLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserSessionsGraphQuery, UserSessionsGraphQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<BusinessCrimeTypeGraphQuery, BusinessCrimeTypeGraphQueryVariables>(BusinessCrimeTypeGraphDocument, options);
+          return Apollo.useLazyQuery<UserSessionsGraphQuery, UserSessionsGraphQueryVariables>(UserSessionsGraphDocument, options);
         }
-export type BusinessCrimeTypeGraphQueryHookResult = ReturnType<typeof useBusinessCrimeTypeGraphQuery>;
-export type BusinessCrimeTypeGraphLazyQueryHookResult = ReturnType<typeof useBusinessCrimeTypeGraphLazyQuery>;
-export type BusinessCrimeTypeGraphQueryResult = Apollo.QueryResult<BusinessCrimeTypeGraphQuery, BusinessCrimeTypeGraphQueryVariables>;
-export const BusinessIncidentCountGraphDocument = gql`
-    query BusinessIncidentCountGraph($where: BusinessIncidentsCountGraphInput!, $take: Int) {
-  businessIncidentCountGraph(where: $where, take: $take) {
-    label
-    value
-  }
-}
-    `;
-export function useBusinessIncidentCountGraphQuery(baseOptions: Apollo.QueryHookOptions<BusinessIncidentCountGraphQuery, BusinessIncidentCountGraphQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<BusinessIncidentCountGraphQuery, BusinessIncidentCountGraphQueryVariables>(BusinessIncidentCountGraphDocument, options);
-      }
-export function useBusinessIncidentCountGraphLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BusinessIncidentCountGraphQuery, BusinessIncidentCountGraphQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<BusinessIncidentCountGraphQuery, BusinessIncidentCountGraphQueryVariables>(BusinessIncidentCountGraphDocument, options);
-        }
-export type BusinessIncidentCountGraphQueryHookResult = ReturnType<typeof useBusinessIncidentCountGraphQuery>;
-export type BusinessIncidentCountGraphLazyQueryHookResult = ReturnType<typeof useBusinessIncidentCountGraphLazyQuery>;
-export type BusinessIncidentCountGraphQueryResult = Apollo.QueryResult<BusinessIncidentCountGraphQuery, BusinessIncidentCountGraphQueryVariables>;
+export type UserSessionsGraphQueryHookResult = ReturnType<typeof useUserSessionsGraphQuery>;
+export type UserSessionsGraphLazyQueryHookResult = ReturnType<typeof useUserSessionsGraphLazyQuery>;
+export type UserSessionsGraphQueryResult = Apollo.QueryResult<UserSessionsGraphQuery, UserSessionsGraphQueryVariables>;
 export const ListActionsDocument = gql`
     query ListActions($take: Int, $skip: Int, $where: ActionWhereInput, $orderBy: [ActionOrderByWithRelationInput!]) {
   listActions(take: $take, skip: $skip, where: $where, orderBy: $orderBy) {
@@ -25408,6 +25445,7 @@ export const UpdateBusinessLocationDocument = gql`
       postcode
       geoLng
       geoLat
+      full
     }
   }
 }
@@ -25444,6 +25482,7 @@ export const UpdateBusinessDocument = gql`
       postcode
       geoLng
       geoLat
+      full
     }
     groups {
       id
@@ -25612,6 +25651,7 @@ export const BusinessDocument = gql`
     publicName
     demId
     siteNumber
+    brands
     groups {
       id
       name

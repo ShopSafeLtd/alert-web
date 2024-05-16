@@ -43,7 +43,7 @@ import EditBusiness from 'components/form-components/businesses/EditBusiness';
 import AddUser from 'components/form-components/user/AddUser';
 import AddUserToBusiness from 'components/form-components/user/AddUserToBusiness';
 import type { MutationUpdaterFn } from '@apollo/client';
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import AddTodo from 'components/form-components/Todos/AddTodo';
 import ViewTodo from 'components/form-components/Todos/ViewTodo/Todo.container';
 import ActivityTable from 'components/tables/ActivityTable';
@@ -182,15 +182,50 @@ const ViewBusiness = ({
             </Col>
           </Row>
           <div className={classes.details}>
-            {data?.business?.parent?.name && (
-              <Card>
-                <Typography.Title level={4}>
-                  {intl.formatMessage({
-                    defaultMessage: 'Details',
-                    id: 'Lv0zJu',
+            <Card loading={loading}>
+              <Typography.Title level={4}>
+                {intl.formatMessage({
+                  defaultMessage: 'Details',
+                  id: 'Lv0zJu',
+                })}
+              </Typography.Title>
+
+              <Descriptions column={1}>
+                <Descriptions.Item
+                  label={intl.formatMessage({
+                    defaultMessage: 'Name',
+                    id: 'HAlOn1',
                   })}
-                </Typography.Title>
-                <Descriptions column={1}>
+                  // style={{ paddingBottom: 8 }}
+                >
+                  {data?.business?.name}
+                </Descriptions.Item>
+                <Descriptions.Item
+                  label={intl.formatMessage({
+                    defaultMessage: 'Site Number',
+                    id: 'rAGVXn',
+                  })}
+                >
+                  {loading ? (
+                    <Skeleton.Input style={{ height: 20 }} />
+                  ) : (
+                    data?.business?.siteNumber ||
+                    intl.formatMessage({
+                      defaultMessage: 'None',
+                      id: '450Fty',
+                    })
+                  )}
+                </Descriptions.Item>
+                {/* <Descriptions.Item
+                label={intl.formatMessage({
+                  defaultMessage: 'Show Name',
+                  id: 'LxDnoc',
+                })}
+                style={{ paddingBottom: 8 }}
+              >
+                {data?.business.}
+              </Descriptions.Item> */}
+                {data?.business?.parent?.name && (
                   <Descriptions.Item
                     label={intl.formatMessage({
                       defaultMessage: 'Parent',
@@ -213,37 +248,90 @@ const ViewBusiness = ({
                       )}
                     </Link>
                   </Descriptions.Item>
-                  {data?.business?.siteNumber && (
-                    <Descriptions.Item
-                      label={intl.formatMessage({
-                        defaultMessage: 'Site Number',
-                        id: 'rAGVXn',
-                      })}
-                    >
-                      {loading ? (
-                        <Skeleton.Input style={{ height: 20 }} />
-                      ) : (
-                        data?.business?.siteNumber
-                      )}
-                    </Descriptions.Item>
-                  )}
-                </Descriptions>
-              </Card>
-            )}
-            <Card>
-              <Typography.Title level={4}>
-                {intl.formatMessage({
-                  defaultMessage: 'Location',
-                  id: 'rvirM2',
-                })}
-              </Typography.Title>
-              <LocatingCard
-                width="100%"
-                height={194}
-                location={data?.business?.locations[0]}
-                setLocation={onEditAddress}
-              />
+                )}
+
+                <Descriptions.Item
+                  label={intl.formatMessage({
+                    defaultMessage: 'Brands',
+                    id: 'jWfWEA',
+                  })}
+                >
+                  <Row>
+                    {data?.business?.brands &&
+                    data?.business?.brands.length > 0 ? (
+                      data?.business?.brands.map((el, i) => (
+                        // eslint-disable-next-line react/no-array-index-key
+                        <Tag key={i} className={classes.tag}>
+                          {el}
+                        </Tag>
+                      ))
+                    ) : (
+                      <FormattedMessage
+                        defaultMessage="No Brands"
+                        id="ZEz/PB"
+                      />
+                    )}
+                  </Row>
+                </Descriptions.Item>
+
+                <Descriptions.Item
+                  label={intl.formatMessage({
+                    defaultMessage: 'Groups',
+                    id: 'hzmswI',
+                  })}
+                >
+                  <Row gutter={[0, 8]}>
+                    {data?.business?.groups &&
+                    data?.business?.groups.length > 0 ? (
+                      data?.business?.groups.map(({ name, id }) => (
+                        <Col key={id}>
+                          <Tag color="blue">{name}</Tag>
+                        </Col>
+                      ))
+                    ) : (
+                      <FormattedMessage
+                        defaultMessage="No Groups"
+                        id="xt8fV1"
+                      />
+                    )}
+                  </Row>
+                </Descriptions.Item>
+                <Descriptions.Item
+                  label={intl.formatMessage({
+                    defaultMessage: 'Tags',
+                    id: '1EYCdR',
+                  })}
+                >
+                  <Row gutter={[0, 8]}>
+                    {data?.business?.tags && data?.business?.tags.length > 0 ? (
+                      data?.business?.tags.map(({ name, id }) => (
+                        <Col key={id}>
+                          <Tag>{name}</Tag>
+                        </Col>
+                      ))
+                    ) : (
+                      <FormattedMessage defaultMessage="No Tag" id="hRci4c" />
+                    )}
+                  </Row>
+                </Descriptions.Item>
+                <Descriptions.Item
+                  label={intl.formatMessage({
+                    defaultMessage: 'Address',
+                    id: 'e6Ph5+',
+                  })}
+                  style={{ paddingBottom: 8 }}
+                >
+                  {data?.business.locations[0].full}
+                </Descriptions.Item>
+              </Descriptions>
             </Card>
+
+            <LocatingCard
+              width="100%"
+              height={194}
+              location={data?.business?.locations[0]}
+              setLocation={onEditAddress}
+            />
             <Card>
               <Row align="middle" className={classes.cardHeader}>
                 <Col flex={1}>
