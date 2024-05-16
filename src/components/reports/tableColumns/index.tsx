@@ -363,7 +363,7 @@ export const TargetedBusinessColumns: ColumnsType<TargetedBusinessTableData> = [
   {
     key: 'successRate',
     dataIndex: 'successRate',
-    title: <FormattedMessage id="RFylPz" defaultMessage="Succcess Rate" />,
+    title: <FormattedMessage id="qKkLk4" defaultMessage="Recovery Rate" />,
     sorter: (a: TargetedBusinessTableData, b: TargetedBusinessTableData) =>
       Number.parseInt(a.successRate || '0', 10) -
       Number.parseInt(b.successRate || '0', 10),
@@ -459,7 +459,7 @@ export const TargetGoodsColumns: ColumnsType<TargetedGoodsTableData> = [
   {
     key: 'successRate',
     dataIndex: 'successRate',
-    title: <FormattedMessage id="IaZkrc" defaultMessage="Success Rate" />,
+    title: <FormattedMessage id="qKkLk4" defaultMessage="Recovery Rate" />,
     sorter: (a: TargetedGoodsTableData, b: TargetedGoodsTableData) =>
       Number.parseInt(a.successRate || '0', 10) -
       Number.parseInt(b.successRate || '0', 10),

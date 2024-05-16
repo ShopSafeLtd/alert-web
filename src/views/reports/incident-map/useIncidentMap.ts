@@ -39,6 +39,7 @@ interface Return {
 }
 
 const useIncidentMap = (): Return => {
+  const userId = useStoreState((state) => state.user.id);
   const currentScheme = useStoreState((state) => state.scheme.id);
   const schemes = useStoreState((state) => state.user.schemes);
   const [selectedSchemes, setSchemes] = useState<string[]>([currentScheme]);
@@ -58,6 +59,13 @@ const useIncidentMap = (): Return => {
             in: selectedSchemes,
           },
         },
+        users: {
+          some: {
+            id: {
+              equals: userId,
+            },
+          },
+        },
       },
     },
   });
@@ -70,16 +78,16 @@ const useIncidentMap = (): Return => {
             in: selectedSchemes,
           },
         },
-        groups:
-          selectedGroups.length > 0
-            ? {
-                some: {
-                  id: {
-                    in: selectedGroups,
-                  },
-                },
-              }
-            : undefined,
+        groups: {
+          some: {
+            id: {
+              in:
+                selectedGroups.length > 0
+                  ? selectedGroups
+                  : groupsData?.groups.map(({ id }) => id),
+            },
+          },
+        },
         date: dateRange
           ? {
               gte: dateRange.startDate,

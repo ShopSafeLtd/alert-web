@@ -9,6 +9,7 @@ import useReportPrint from 'utils/reportPrint/usePrintReports';
 import { useParams } from 'react-router-dom';
 import moment from 'moment/moment';
 import arrangeTemplates from '#/utils/reports/setTemplates';
+import { useStoreState } from '#/state';
 import BusinessReportLayout, { BusinessReportMetaData } from './initLayout';
 import type { Return } from './types';
 import type { SelectOptions } from '../../../types';
@@ -56,6 +57,8 @@ const useBusinessReport = (): Return => {
     ReportType: ReportType.Business,
   });
 
+  const userId = useStoreState((state) => state.user.id);
+
   const [crimeGroups, setCrimeGroups] = useState<SelectOptions[]>([]);
   const [selectedCrimeGroups, setSelectedCrimeGroups] = useState<string[]>([]);
   const [offenders, setOffenders] = useState<SelectOptions[]>([]);
@@ -68,6 +71,13 @@ const useBusinessReport = (): Return => {
           scheme: {
             id: {
               equals: currentScheme,
+            },
+          },
+          users: {
+            some: {
+              id: {
+                equals: userId,
+              },
             },
           },
         },
