@@ -13544,6 +13544,7 @@ export type QueryListOffendersRelayArgs = {
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<OffenderOrderByWithRelationInput>;
+  orderByValue?: InputMaybe<SortOrder>;
   scheme?: InputMaybe<SchemeWhereUniqueInput>;
   where?: InputMaybe<OffenderWhereInput>;
 };
@@ -16067,7 +16068,6 @@ export type SchemeWhereUniqueInput = {
   crimeGroups?: InputMaybe<CrimeGroupListRelationFilter>;
   csvImports?: InputMaybe<CsvImportListRelationFilter>;
   customGalleries?: InputMaybe<CustomGalleryListRelationFilter>;
-  customTranslations?: InputMaybe<JsonNullableListFilter>;
   darkLogo?: InputMaybe<ImageWhereInput>;
   darkLogoId?: InputMaybe<StringNullableFilter>;
   defaultBulletinEmails?: InputMaybe<BoolFilter>;
@@ -19479,7 +19479,6 @@ export type UserScheme = {
   dashboard?: Maybe<Dashboard>;
   id: Scalars['String'];
   isAdmin: Scalars['Boolean'];
-  notificationCount: Scalars['Int'];
   orignalPermissions: CustomRole;
   permissions: Array<Permissions>;
   recycled: Scalars['Boolean'];
@@ -20729,6 +20728,7 @@ export type SetSchemeSharingMutation = { __typename?: 'Mutation', setSchemeShari
 
 export type ConnectSchemesQueryVariables = Exact<{
   where?: InputMaybe<SchemeWhereInput>;
+  orderBy?: InputMaybe<Array<SchemeOrderByWithRelationInput> | SchemeOrderByWithRelationInput>;
 }>;
 
 
@@ -23145,6 +23145,7 @@ export type ListOffendersRelayQueryVariables = Exact<{
   order?: InputMaybe<OffenderOrderByWithRelationInput>;
   scheme?: InputMaybe<SchemeWhereUniqueInput>;
   where?: InputMaybe<OffenderWhereInput>;
+  orderByValue?: InputMaybe<SortOrder>;
 }>;
 
 
@@ -24148,8 +24149,8 @@ export type SetSchemeSharingMutationHookResult = ReturnType<typeof useSetSchemeS
 export type SetSchemeSharingMutationResult = Apollo.MutationResult<SetSchemeSharingMutation>;
 export type SetSchemeSharingMutationOptions = Apollo.BaseMutationOptions<SetSchemeSharingMutation, SetSchemeSharingMutationVariables>;
 export const ConnectSchemesDocument = gql`
-    query ConnectSchemes($where: SchemeWhereInput) {
-  schemes(where: $where) {
+    query ConnectSchemes($where: SchemeWhereInput, $orderBy: [SchemeOrderByWithRelationInput!]) {
+  schemes(where: $where, orderBy: $orderBy) {
     id
     name
   }
@@ -35036,13 +35037,14 @@ export type OffenderFeedListQueryHookResult = ReturnType<typeof useOffenderFeedL
 export type OffenderFeedListLazyQueryHookResult = ReturnType<typeof useOffenderFeedListLazyQuery>;
 export type OffenderFeedListQueryResult = Apollo.QueryResult<OffenderFeedListQuery, OffenderFeedListQueryVariables>;
 export const ListOffendersRelayDocument = gql`
-    query ListOffendersRelay($after: String, $first: Int, $order: OffenderOrderByWithRelationInput, $scheme: SchemeWhereUniqueInput, $where: OffenderWhereInput) {
+    query ListOffendersRelay($after: String, $first: Int, $order: OffenderOrderByWithRelationInput, $scheme: SchemeWhereUniqueInput, $where: OffenderWhereInput, $orderByValue: SortOrder) {
   listOffendersRelay(
     after: $after
     first: $first
     order: $order
     scheme: $scheme
     where: $where
+    orderByValue: $orderByValue
   ) {
     pageInfo {
       hasNextPage
