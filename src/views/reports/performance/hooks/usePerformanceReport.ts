@@ -58,6 +58,7 @@ const usePerformanceReport = (): Return => {
     setSelectedRoles,
     filterCount,
     setAsDefault,
+    userId,
   } = useReportState({
     InitLayout: PerformanceLayout,
     InitMetaData: PerformanceMetaData,
@@ -71,6 +72,13 @@ const usePerformanceReport = (): Return => {
           scheme: {
             id: {
               equals: currentScheme,
+            },
+          },
+          users: {
+            some: {
+              id: {
+                equals: userId,
+              },
             },
           },
         },
@@ -205,7 +213,10 @@ const usePerformanceReport = (): Return => {
         offendersCreated: business.totalOffenders,
         lostValue: business.totalLostValue.toFixed(2),
         recoveredValue: business.totalRecoveredValue.toFixed(2),
-        successRate: ((business.totalSuccessRate || 0) * 100).toFixed(2),
+        successRate: ((business.totalSuccessRate || 0) * 100 > 100
+          ? 100
+          : (business.totalSuccessRate || 0) * 100
+        ).toFixed(2),
         commonLost: business.mostCommonGoodLost || 'unknown',
         highestValueLost: business.highestTotalValueGoodLost || 0,
         avgLost: business?.averageLossValue?.toFixed(2) || '',
@@ -222,7 +233,10 @@ const usePerformanceReport = (): Return => {
         offendersCreated: good.totalOffenders,
         lostValue: good.totalLostValue.toFixed(2),
         recoveredValue: good.totalRecoveredValue.toFixed(2),
-        successRate: ((good.totalSuccessRate || 0) * 100).toFixed(2),
+        successRate: ((good.totalSuccessRate || 0) * 100 > 100
+          ? 100
+          : (good.totalSuccessRate || 0) * 100
+        ).toFixed(2),
         avgLost: good?.averageLossValue?.toFixed(2),
       })) || [];
 

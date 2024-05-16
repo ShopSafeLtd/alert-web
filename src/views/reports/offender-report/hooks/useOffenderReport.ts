@@ -6,6 +6,7 @@ import {
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
 import arrangeTemplates from '#/utils/reports/setTemplates';
+import { useStoreState } from '#/state';
 import useReportPrint from '../../../../utils/reportPrint/usePrintReports';
 import type { Props as Return } from './types';
 
@@ -57,6 +58,7 @@ const useOffenderReport = (): Return => {
     InitMetaData: OffenderMetaData,
     ReportType: ReportType.Offender,
   });
+  const userId = useStoreState((state) => state.user.id);
 
   const { data: reportData, loading: groupsLoading } =
     useSchemeReportDetailsQuery({
@@ -65,6 +67,13 @@ const useOffenderReport = (): Return => {
           scheme: {
             id: {
               equals: currentScheme,
+            },
+          },
+          users: {
+            some: {
+              id: {
+                equals: userId,
+              },
             },
           },
         },

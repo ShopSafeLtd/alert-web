@@ -82,6 +82,7 @@ interface Return {
     type: IReportType;
     default: boolean;
   }) => void;
+  userId: string;
 }
 
 const useReportState = ({
@@ -89,6 +90,7 @@ const useReportState = ({
   InitMetaData,
   ReportType,
 }: Props): Return => {
+  const userId = useStoreState((state) => state.user.id);
   const { id: currentScheme, logo } = useStoreState((state) => state.scheme);
   const isDemo =
     currentScheme === 'ckdhbosuv01028oiblmjgeuii' ||
@@ -844,6 +846,7 @@ const useReportState = ({
     selectedRoles,
     filterCount,
     setAsDefault,
+    userId,
   };
 };
 
