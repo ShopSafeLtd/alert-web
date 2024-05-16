@@ -364,7 +364,6 @@ const ListBusinesses = ({
         loading={loading}
         size="small"
         pagination={{
-          hideOnSinglePage: true,
           pageSize: pagination.pageSize,
           current: pagination.page,
           onChange: (page, pageSize) => {
