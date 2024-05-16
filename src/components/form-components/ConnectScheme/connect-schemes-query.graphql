@@ -1,5 +1,5 @@
-query ConnectSchemes($where: SchemeWhereInput) {
-    schemes(where: $where) {
+query ConnectSchemes($where: SchemeWhereInput, $orderBy: [SchemeOrderByWithRelationInput!]) {
+    schemes(where: $where, orderBy: $orderBy) {
         id
         name
     }

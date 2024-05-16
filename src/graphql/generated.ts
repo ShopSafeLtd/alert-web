@@ -20728,6 +20728,7 @@ export type SetSchemeSharingMutation = { __typename?: 'Mutation', setSchemeShari
 
 export type ConnectSchemesQueryVariables = Exact<{
   where?: InputMaybe<SchemeWhereInput>;
+  orderBy?: InputMaybe<Array<SchemeOrderByWithRelationInput> | SchemeOrderByWithRelationInput>;
 }>;
 
 
@@ -24148,8 +24149,8 @@ export type SetSchemeSharingMutationHookResult = ReturnType<typeof useSetSchemeS
 export type SetSchemeSharingMutationResult = Apollo.MutationResult<SetSchemeSharingMutation>;
 export type SetSchemeSharingMutationOptions = Apollo.BaseMutationOptions<SetSchemeSharingMutation, SetSchemeSharingMutationVariables>;
 export const ConnectSchemesDocument = gql`
-    query ConnectSchemes($where: SchemeWhereInput) {
-  schemes(where: $where) {
+    query ConnectSchemes($where: SchemeWhereInput, $orderBy: [SchemeOrderByWithRelationInput!]) {
+  schemes(where: $where, orderBy: $orderBy) {
     id
     name
   }
