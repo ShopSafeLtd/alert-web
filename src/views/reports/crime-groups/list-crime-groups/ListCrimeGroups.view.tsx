@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Col, Input, Row, Table } from 'antd';
+import { Col, Input, Row, Table } from 'antd';
 import type { ListCrimeGroupsQuery } from 'graphql/generated';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
@@ -29,16 +29,6 @@ const ListCrimeGroups = ({ data, loading, search, setSearch }: Props) => {
               id: 'q5vT3Z',
             })}
           />
-        </Col>
-        <Col>
-          <Link to="create">
-            <Button type="primary">
-              {intl.formatMessage({
-                defaultMessage: 'Create Crime Group',
-                id: 'Bju8fW',
-              })}
-            </Button>
-          </Link>
         </Col>
       </Row>
       <Table
