@@ -213,6 +213,9 @@ const useAddIncident = ({ investigationId }: Props): Return => {
     restrictIncidentAccess,
     requireSiteNumberForUsers,
   } = useStoreState((state) => state.scheme);
+  const facialRecognition = useStoreState(
+    (state) => state.scheme.facialRecognition
+  );
 
   const [goodsVisible, setGoodsVisible] = useState(false);
   const [addNewAddress, setAddNewAddress] = useState(false);
@@ -534,19 +537,20 @@ const useAddIncident = ({ investigationId }: Props): Return => {
                           }
                         : undefined,
                     // TODO don't know which one to use so keeping above, may need to change??
-                    // images:
-                    //   offender?.images && offender?.images.length > 0
-                    //     ? {
-                    //         create: offender.images.map((image) => ({
-                    //           url: {
-                    //             filename: image.fileName || '',
-                    //             mimetype: image.type || '',
-                    //             url: image.url || image.optimised || '',
-                    //             id: image.id || '',
-                    //           },
-                    //         })),
-                    //       }
-                    //     : undefined,
+                    images:
+                      offender?.images && offender?.images.length > 0
+                        ? {
+                            create: offender.images.map((image) => ({
+                              url: {
+                                filename: image.fileName || '',
+                                mimetype: image.type || '',
+                                url: image.url || image.optimised || '',
+                                id: image.id || '',
+                              },
+                              indexFaces: facialRecognition,
+                            })),
+                          }
+                        : undefined,
                   }))
                 : undefined,
 
