@@ -64,7 +64,10 @@ const useUserEngagement = (): Return => {
       where: {
         dateRange,
         schemeIds: [currentScheme],
-        groupIds: selectedGroups ?? groups.map(({ value: id }) => id),
+        groupIds:
+          selectedGroups.length > 0
+            ? selectedGroups
+            : groups.map(({ value: id }) => id),
         businessesIds: selectedBusinesses ?? [],
         rolesIds: selectedRoles ?? [],
       },
