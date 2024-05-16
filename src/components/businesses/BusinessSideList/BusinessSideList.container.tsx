@@ -10,6 +10,7 @@ interface Props {
 
 const BusinessSideList = ({ current, to }: Props): JSX.Element => {
   const { data, loading, next } = useBusinessSideList();
+  console.log('BusinessSideList', data);
 
   return (
     <View data={data} loading={loading} current={current} next={next} to={to} />

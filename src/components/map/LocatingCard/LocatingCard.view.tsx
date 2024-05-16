@@ -119,7 +119,6 @@ const LocatingCard = ({ height, width, location, setLocation }: Props) => {
   const toggleLargeOpen = () => setLargeOpen(!largeOpen);
   const onSubmit = async (value: ViewportData) => {
     if (value) {
-      console.log('onSubmit');
       const result = await getAddressFromLatLng({
         lat: value.latitude,
         lng: value.longitude,

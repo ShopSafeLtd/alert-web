@@ -13,6 +13,7 @@ mutation UpdateBusinessLocation(
       postcode
       geoLng
       geoLat
+      full
     }
   }
 }

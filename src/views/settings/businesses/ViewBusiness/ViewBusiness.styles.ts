@@ -37,6 +37,9 @@ const useStyles = createUseStyles((theme: Theme) => ({
     height: '100%',
     overflow: 'auto',
   },
+  tag: {
+    marginBottom: 3,
+  },
 }));
 
 export default useStyles;

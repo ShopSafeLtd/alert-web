@@ -132,13 +132,19 @@ const BusinessIncidentCountGraph = ({
         <BarGraph
           isPrinting={isPrinting}
           data={data?.businessIncidentCountGraph}
-          emptyLabel="No incidents"
+          emptyLabel={intl.formatMessage({
+            defaultMessage: 'No incidents',
+            id: '7UNuAl',
+          })}
         />
       ) : (
         <DonutGraph
           isPrinting={isPrinting}
           data={data?.businessIncidentCountGraph}
-          emptyLabel="No incidents"
+          emptyLabel={intl.formatMessage({
+            defaultMessage: 'No incidents',
+            id: '7UNuAl',
+          })}
           type={metaData?.type as 'donut' | 'pie'}
         />
       )}

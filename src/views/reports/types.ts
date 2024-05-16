@@ -40,11 +40,11 @@ export type AllowedValue =
   | 'timeHeatMap'
   | 'priorityGraph'
   | 'customQuestionsCountGraph'
+  | 'userSessionsDonut'
   | 'userIncidentCountGraph'
   | 'businessIncidentCountGraph'
   | 'businessLossRecoveredGraph'
-  | 'businessCrimeTypeGraph'
-  | 'userSessionDonut';
+  | 'businessCrimeTypeGraph';
 
 export type ReportItemTypes =
   | 'summary'
@@ -202,10 +202,10 @@ export const LayoutToReadable: {
     i: 'customQuestionsCountGraph',
     readable: 'Incident Answer Count',
   },
-  // {
-  //   i: 'userSessionDonut',
-  //   readable: 'User Session Graph',
-  // },
+  {
+    i: 'userSessionsDonut',
+    readable: 'User Session Graph',
+  },
   {
     i: 'userIncidentCountGraph',
     readable: 'User Incidents Count',
