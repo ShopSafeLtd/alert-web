@@ -29,6 +29,16 @@ function checkLang(l: string): l is AvailableLanguages {
 const Views = () => {
   const { isLoading } = useAuth0();
   const location = useLocation();
+
+  // check if current url is staging. If so, redirect to  https://app.shopsafealert.co.uk/ unless localstorage has been set with staging:true
+
+  if (
+    window?.location?.href?.includes('staging.shopsafealert') &&
+    !localStorage.getItem('staging')
+  ) {
+    window.location.replace('https://app.shopsafealert.co.uk/');
+  }
+
   const locale = useStoreState((state) => state.theme.locale);
   const lang =
     checkLang(
