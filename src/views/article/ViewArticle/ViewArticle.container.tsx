@@ -17,6 +17,9 @@ const ViewArticleContainer = () => {
     onDeleteArticle,
     role,
     editArticle,
+    componentRef,
+    handlePrint,
+    isPrinting,
   } = useViewArticle({ id });
 
   return (
@@ -28,6 +31,9 @@ const ViewArticleContainer = () => {
 
         <Col flex={1} style={{ overflowY: 'scroll' }}>
           <View
+            handlePrint={handlePrint}
+            isPrinting={isPrinting}
+            componentRef={componentRef}
             data={data}
             loading={loading}
             lightboxElements={lightboxElements}

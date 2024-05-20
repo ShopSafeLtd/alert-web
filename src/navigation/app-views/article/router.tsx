@@ -13,8 +13,8 @@ const Article = (): JSX.Element => {
   return (
     <RouteWrapper
       title={intl.formatMessage({
-        defaultMessage: 'Articles',
-        id: '3KNMbJ',
+        defaultMessage: 'Bulletins',
+        id: 'tgD5sa',
       })}
     >
       <Routes>

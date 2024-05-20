@@ -15,8 +15,11 @@ import {
   useDeleteArticleMutation,
 } from '../../../../graphql/generated';
 import type { Props, ReturnProps } from '../types/ViewArticle';
+import useReportPrint from '#/utils/reportPrint/usePrintReports';
 
 const useViewArticle = ({ id }: Props): ReturnProps => {
+  const { componentRef, handlePrint, isPrinting } = useReportPrint();
+
   const intl = useIntl();
   const navigation = useNavigate();
   const schemeId = useStoreState((state) => state.scheme.id);
@@ -66,7 +69,7 @@ const useViewArticle = ({ id }: Props): ReturnProps => {
         variables: listArticlesVars,
       });
 
-      if (existingData && result.data)
+      if (existingData && result.data) {
         store.writeQuery<ListArticlesQuery, ListArticlesQueryVariables>({
           query: ListArticlesDocument,
           variables: listArticlesVars,
@@ -79,6 +82,7 @@ const useViewArticle = ({ id }: Props): ReturnProps => {
             },
           },
         });
+      }
     },
   });
 
@@ -140,6 +144,9 @@ const useViewArticle = ({ id }: Props): ReturnProps => {
     onDeleteArticle,
     role,
     editArticle,
+    componentRef,
+    handlePrint,
+    isPrinting,
   };
 };
 
