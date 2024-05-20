@@ -107,10 +107,6 @@
       "error",
       "never"
     ],
-    "implicit-arrow-linebreak": [
-      "error",
-      "beside"
-    ],
     "key-spacing": [
       "error",
       {
@@ -126,10 +122,7 @@
         "after": true
       }
     ],
-    "multiline-comment-style": [
-      "error",
-      "starred-block"
-    ],
+
     "no-array-constructor": "error",
     "no-lonely-if": "error",
     "no-multi-assign": "error",
