@@ -19,10 +19,11 @@ import 'react-resizable/css/styles.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 import { Store, ThemeConfig } from './state';
+import RouteWrapper from './navigation/utils/route-wrapper';
 
 const themes = {
-  dark: `/css/dark-theme.css`,
-  light: `/css/light-theme.css`,
+  dark: '/css/dark-theme.css',
+  light: '/css/light-theme.css',
 };
 
 if (import.meta.env.PROD) {
@@ -80,7 +81,9 @@ const App = (): JSX.Element => (
       >
         <Store>
           <ApolloProvider>
-            <Views />
+            <RouteWrapper title={undefined}>
+              <Views />
+            </RouteWrapper>
           </ApolloProvider>
         </Store>
       </LoadScript>
