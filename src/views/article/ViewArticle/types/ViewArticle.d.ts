@@ -1,4 +1,5 @@
 import type { ArticleQuery, Role } from '../../../../graphql/generated';
+import type { RefObject } from 'react';
 
 export interface Props {
   id: string;
@@ -18,4 +19,8 @@ export interface ReturnProps {
   onDeleteArticle: () => void;
   role: Role;
   editArticle: () => void;
+
+  componentRef: RefObject<HTMLDivElement>;
+  handlePrint: () => void;
+  isPrinting: boolean;
 }
