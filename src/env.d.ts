@@ -14,6 +14,7 @@ interface ImportMetaEnv {
   readonly VITE_APP_CHECKLIST_UPLOAD_ENDPOINT: string;
   readonly VITE_IMAGE_UPLOAD_URL_FETCH: string;
   readonly VITE_APP_FACE_URL: string;
+  readonly VITE_CLERK_PUBLISHABLE_KEY: string;
 }
 
 interface ImportMeta {
