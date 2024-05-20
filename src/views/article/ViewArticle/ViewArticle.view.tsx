@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faClock,
   faEdit,
+  faPrint,
   faTrash,
   faUser,
 } from '@fortawesome/pro-light-svg-icons';
@@ -47,6 +48,9 @@ const ViewArticleView = ({
   onDeleteArticle,
   role,
   editArticle,
+  componentRef,
+  handlePrint,
+  isPrinting,
 }: Props) => {
   const classes = useStyles();
 
@@ -58,6 +62,18 @@ const ViewArticleView = ({
           <Col span={24} className={classes.detailsContainer}>
             {role === Role.SchemeAdmin && (
               <Row style={{ padding: '10px 20px 15px' }} justify="end">
+                <Col style={{ marginRight: 10 }}>
+                  <Button onClick={handlePrint}>
+                    <FontAwesomeIcon
+                      style={{ marginRight: 10 }}
+                      icon={faPrint}
+                    />
+                    {intl.formatMessage({
+                      id: 'CXRlIo',
+                      defaultMessage: 'Print',
+                    })}
+                  </Button>
+                </Col>
                 <Col style={{ marginRight: 10 }}>
                   <Button onClick={editArticle}>
                     <FontAwesomeIcon
@@ -84,7 +100,13 @@ const ViewArticleView = ({
                 </Col>
               </Row>
             )}
-            <Card style={{ marginLeft: 20, marginRight: 20 }} loading={loading}>
+            <Card
+              style={{
+                marginLeft: 20,
+                marginRight: 20,
+              }}
+              loading={loading}
+            >
               <Title level={2}>{data?.article?.title}</Title>
               <Row style={{ marginBottom: 5 }} gutter={60}>
                 <Col>
@@ -94,7 +116,12 @@ const ViewArticleView = ({
                     icon={faUser}
                     style={{ marginRight: 5 }}
                   />
-                  <Text style={{ fontSize: 16, fontWeight: 400 }}>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      fontWeight: 400,
+                    }}
+                  >
                     {intl.formatMessage({
                       id: 'Q8XddZ',
                       defaultMessage: 'Author:',
@@ -108,7 +135,12 @@ const ViewArticleView = ({
                     icon={faClock}
                     style={{ marginRight: 5 }}
                   />
-                  <Text style={{ fontSize: 16, fontWeight: 400 }}>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      fontWeight: 400,
+                    }}
+                  >
                     {intl.formatMessage({
                       id: '7iDdU4',
                       defaultMessage: 'Published:',
@@ -119,7 +151,12 @@ const ViewArticleView = ({
                   </Text>
                   {data?.article?.createdAt !== data?.article?.updatedAt && (
                     <>
-                      <Text style={{ fontSize: 16, fontWeight: 400 }}>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: 400,
+                        }}
+                      >
                         {intl.formatMessage({
                           id: '9apQnO',
                           defaultMessage: '| Updated:',
@@ -135,11 +172,16 @@ const ViewArticleView = ({
               <Row style={{ marginBottom: 5 }} gutter={60}>
                 <Col>
                   <div
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      marginTop: 20,
-                    }}
+                    ref={componentRef}
+                    style={
+                      isPrinting
+                        ? undefined
+                        : {
+                            width: '100%',
+                            height: '100%',
+                            marginTop: 20,
+                          }
+                    }
                     // eslint-disable-next-line react/no-danger
                     dangerouslySetInnerHTML={{
                       __html: data?.article?.rows[0].columns[0].text || '',
@@ -150,7 +192,12 @@ const ViewArticleView = ({
             </Card>
             {data?.article?.rows[0].columns[0].incidents &&
               data?.article?.rows[0].columns[0].incidents.length > 0 && (
-                <Card style={{ marginLeft: 20, marginRight: 20 }}>
+                <Card
+                  style={{
+                    marginLeft: 20,
+                    marginRight: 20,
+                  }}
+                >
                   <Typography.Title level={2}>
                     {intl.formatMessage({
                       id: 'mtr3R4',
@@ -174,7 +221,12 @@ const ViewArticleView = ({
               )}
             {data?.article?.rows[0].columns[0].offenders &&
               data?.article?.rows[0].columns[0].offenders.length > 0 && (
-                <Card style={{ marginLeft: 20, marginRight: 20 }}>
+                <Card
+                  style={{
+                    marginLeft: 20,
+                    marginRight: 20,
+                  }}
+                >
                   <Typography.Title level={2}>
                     {intl.formatMessage({
                       id: 'xb54TN',
@@ -197,8 +249,14 @@ const ViewArticleView = ({
             {data?.article?.documents &&
               data?.article?.documents.length > 0 && (
                 <List
-                  style={{ marginLeft: 20, marginRight: 20 }}
-                  grid={{ gutter: 16, column: 4 }}
+                  style={{
+                    marginLeft: 20,
+                    marginRight: 20,
+                  }}
+                  grid={{
+                    gutter: 16,
+                    column: 4,
+                  }}
                   dataSource={data?.article?.documents}
                   renderItem={(item) => (
                     <List.Item>
