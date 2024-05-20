@@ -4,24 +4,36 @@ import ListDocuments from '../../../views/resources/documents/ListDocuments/Docu
 import ListVideos from '../../../views/resources/training/ListVideos/ListVideos.view';
 import PermissionCheckWrapper from '../../../components/PermissionCheck/PermissionCheckWrapper';
 import { PermissionMethod, PermissionModel } from '../../../graphql/generated';
+import { useIntl } from 'react-intl';
+import RouteWrapper from '#/navigation/utils/route-wrapper';
 
-const Documents = (): JSX.Element => (
-  <Routes>
-    <Route
-      path="documents/*"
-      element={
-        <PermissionCheckWrapper
-          permission={{
-            model: PermissionModel.Documents,
-            method: PermissionMethod.Read,
-          }}
-        >
-          <ListDocuments />
-        </PermissionCheckWrapper>
-      }
-    />
-    <Route path="training/*" element={<ListVideos />} />
-  </Routes>
-);
+const Documents = (): JSX.Element => {
+  const intl = useIntl();
+  return (
+    <RouteWrapper
+      title={intl.formatMessage({
+        defaultMessage: 'Documents',
+        id: 'vBlT6y',
+      })}
+    >
+      <Routes>
+        <Route
+          path="documents/*"
+          element={
+            <PermissionCheckWrapper
+              permission={{
+                model: PermissionModel.Documents,
+                method: PermissionMethod.Read,
+              }}
+            >
+              <ListDocuments />
+            </PermissionCheckWrapper>
+          }
+        />
+        <Route path="training/*" element={<ListVideos />} />
+      </Routes>
+    </RouteWrapper>
+  );
+};
 
 export default Documents;
