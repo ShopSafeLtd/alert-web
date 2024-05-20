@@ -15,10 +15,11 @@ import { useAuth0 } from '@auth0/auth0-react';
 import theme from 'configs/ThemeConfig';
 
 import { ErrorBoundary, withSentryReactRouterV6Routing } from '@sentry/react';
+import SignInPage from '#/navigation/sign-in/router';
 import PrimaryOnboarding from '../views/onboard/SetPassword';
 import Loading from '../components/loading';
-import { GuestLayout } from '../layouts/guest-layout';
-import { LocalStorageKeys, typedLocalStorage } from '../utils';
+import { GuestLayout } from '#/layouts/guest-layout';
+import { LocalStorageKeys, typedLocalStorage } from '#/utils';
 
 const SentryRoutes = withSentryReactRouterV6Routing(Routes);
 
@@ -143,6 +144,8 @@ const Views = () => {
       <div style={{ colorScheme: currentTheme }}>
         <ThemeProvider theme={theme[currentTheme]}>
           <Routes>
+            <Route path="sign-in/*" element={<SignInPage />} />
+
             <Route path="ext/*" element={<GuestLayout />} />
           </Routes>
         </ThemeProvider>
@@ -162,6 +165,8 @@ const Views = () => {
               {isSet ? (
                 <SentryRoutes>
                   <Route path="/">
+                    <Route path="sign-in/*" element={<SignInPage />} />
+
                     <Route index element={<Navigate to="app" />} />
                     <Route path="auth/*" element={<AuthLayout />} />
                     <Route
