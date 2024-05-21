@@ -26,13 +26,13 @@ export interface SetUserPayload {
   }[];
   schemes: Scheme[];
   demId: string | null | undefined;
-  groups: {
-    id: string;
-    name: string;
-    scheme: {
-      id: string;
-    };
-  }[];
+  // groups: {
+  //   id: string;
+  //   name: string;
+  //   scheme: {
+  //     id: string;
+  //   };
+  // }[];
   defaultGroups: {
     id: string;
     name: string;
@@ -227,7 +227,7 @@ const userModel: UserModel = {
     state.onboarded = payload.onboarded;
     state.businesses = payload.businesses;
     state.schemes = payload.schemes;
-    state.groups = payload.groups;
+    // state.groups = payload.groups;
     state.defaultGroups = payload.defaultGroups || [];
     state.filterDefaultGroups = payload.filterDefaultGroups || [];
     state.isSet = payload.isSet;

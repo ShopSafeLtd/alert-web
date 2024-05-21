@@ -11,8 +11,11 @@ import type {
   ListBusinessUsersQueryVariables,
   QuestionGroupOnSchemeQuery,
   UpdateTaskMutation,
+  BusinessesSideListQuery,
+  BusinessesSideListQueryVariables,
 } from 'graphql/generated';
 import {
+  BusinessesSideListDocument,
   BusinessDocument,
   ListBusinessUsersDocument,
   SortOrder,
@@ -184,8 +187,79 @@ const useViewBusiness = (): Return => {
       setSaving(false);
       errorNotification();
     },
+    update: (store, { data: res }) => {
+      if (res === null || res === undefined) return;
+
+      const existingData = store.readQuery<
+        BusinessesSideListQuery,
+        BusinessesSideListQueryVariables
+      >({
+        query: BusinessesSideListDocument,
+        variables: {
+          where: {
+            schemes: {
+              some: {
+                id: {
+                  equals: currentScheme,
+                },
+              },
+            },
+          },
+          orderBy: { name: SortOrder.Asc },
+          first: 24,
+        },
+      });
+
+      if (existingData === null) return;
+      if (existingData.businessRelay.edges === undefined) return;
+
+      const index = existingData?.businessRelay?.edges?.findIndex(
+        ({ node: business }) => business.id === res.updateBusiness.id
+      );
+      if (index === -1) return;
+
+      store.writeQuery<
+        BusinessesSideListQuery,
+        BusinessesSideListQueryVariables
+      >({
+        query: BusinessesSideListDocument,
+        data: {
+          businessRelay: {
+            ...existingData.businessRelay,
+            edges: existingData?.businessRelay?.edges?.map(
+              ({ node: business }) => {
+                if (business.id === res.updateBusiness.id) {
+                  return {
+                    node: {
+                      ...business,
+                      locations: res.updateBusiness.locations,
+                    },
+                  };
+                }
+                return { node: { ...business } };
+              }
+            ),
+          },
+          __typename: 'Query',
+        },
+        variables: {
+          where: {
+            schemes: {
+              some: {
+                id: {
+                  equals: currentScheme,
+                },
+              },
+            },
+          },
+          orderBy: { name: SortOrder.Asc },
+          first: 24,
+        },
+      });
+    },
   });
   const onEditAddress = (values: LocationData) => {
+    setSaving(true);
     void updateBusinessLocation({
       variables: {
         where: {

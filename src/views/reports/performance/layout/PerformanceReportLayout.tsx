@@ -61,6 +61,7 @@ import UserIncidentCountGraph from '#/components/reports/components/UserIncident
 import BusinessCrimeTypeGraph from '#/components/reports/components/BusinessCrimeTypeGraph/BusinessCrimeTypeGraph';
 import { useNavigate } from 'react-router';
 import BusinessLossRecoveredGraph from '#/components/reports/components/BusinessLossRecoveredGraph/BusinessCrimeTypeGraph';
+import UserSessionsGraph from '#/components/reports/components/UserSessionsGraph/UserSessionsGraph';
 import type { PerformanceReportQuery } from '../../../../graphql/generated';
 import { LanguageCode } from '../../../../graphql/generated';
 import useStyles from '../../styles/report.styles';
@@ -165,6 +166,7 @@ const PerformanceReportLayout = ({
   }
 
   const getComponent = ({ key, component }: GetComponentArgs) => {
+    // eslint-disable-next-line sonarjs/max-switch-cases
     switch (component) {
       case 'createdSummary': {
         return (
@@ -994,7 +996,10 @@ const PerformanceReportLayout = ({
               <DonutGraph
                 isPrinting={isPrinting}
                 data={data?.performanceReport?.crimeTypeDonut}
-                emptyLabel="No Crime Types"
+                emptyLabel={intl.formatMessage({
+                  defaultMessage: 'No Crime Types',
+                  id: 'BbTEjZ',
+                })}
                 type={
                   metadata.find((item) => item.key === 'crimeTypesDonut')
                     ?.type as 'donut' | 'pie'
@@ -1082,7 +1087,10 @@ const PerformanceReportLayout = ({
               <DonutGraph
                 isPrinting={isPrinting}
                 data={data?.performanceReport?.involvedTagCountDonut}
-                emptyLabel="No Involved Tags"
+                emptyLabel={intl.formatMessage({
+                  defaultMessage: 'No Involved Tags',
+                  id: 'N26vgU',
+                })}
                 type={
                   metadata.find((item) => item.key === 'involvedTagsDonut')
                     ?.type as 'donut' | 'pie'
@@ -1311,7 +1319,10 @@ const PerformanceReportLayout = ({
               })}
               data={data?.performanceReport?.incidentDayOfWeekLine}
               dataLabel="incidents"
-              emptyLabel="No incidents"
+              emptyLabel={intl.formatMessage({
+                defaultMessage: 'No incidents',
+                id: '7UNuAl',
+              })}
             />
           </Card>
         );
@@ -1352,7 +1363,10 @@ const PerformanceReportLayout = ({
                     geoLng: incident?.location?.geoLng || 0,
                   })) || []
               }
-              emptyLabel="No incidents"
+              emptyLabel={intl.formatMessage({
+                defaultMessage: 'No incidents',
+                id: '7UNuAl',
+              })}
             />
           </Card>
         );
@@ -1775,7 +1789,10 @@ const PerformanceReportLayout = ({
               isPrinting={isPrinting}
               labelFormat=""
               data={data?.performanceReport?.timeHeatMap}
-              emptyLabel="No incidents"
+              emptyLabel={intl.formatMessage({
+                defaultMessage: 'No incidents',
+                id: '7UNuAl',
+              })}
               bottomLabel="time"
             />
           </Card>
@@ -1810,7 +1827,10 @@ const PerformanceReportLayout = ({
                 id: 'vZ/a8V',
               })}
               data={data?.performanceReport?.priorityGraph}
-              emptyLabel="No incidents"
+              emptyLabel={intl.formatMessage({
+                defaultMessage: 'No incidents',
+                id: '7UNuAl',
+              })}
             />
           </Card>
         );
@@ -1866,6 +1886,35 @@ const PerformanceReportLayout = ({
           </Card>
         );
       }
+      case 'userSessionsDonut': {
+        return (
+          <Card
+            className="no-break"
+            loading={loading}
+            style={{ height: calculateHeight(key) }}
+            bodyStyle={{ height: '90%' }}
+            key={key}
+          >
+            <UserSessionsGraph
+              variables={{
+                where: {
+                  brandIds: filters.selectedBrands,
+                  dateRange: filters.dateRange,
+                  groupIds: filters.selectedGroups,
+                  industryIds: filters.selectedIndustries,
+                  roleIds: filters.selectedRoles,
+                  schemeIds: [filters.schemeId],
+                },
+                take: 10,
+              }}
+              editMode={editMode}
+              isPrinting={isPrinting}
+              removeItem={() => removeItem(key)}
+              onNavigate={() => navigate(`/app/reports/user-engagement`)}
+            />
+          </Card>
+        );
+      }
       case 'userIncidentCountGraph': {
         return (
           <Card
@@ -1882,7 +1931,6 @@ const PerformanceReportLayout = ({
                   dateRange: filters.dateRange,
                   groupIds: filters.selectedGroups,
                   industryIds: filters.selectedIndustries,
-                  // languageCode: LanguageCode.En,
                   roleIds: filters.selectedRoles,
                   schemeIds: [filters.schemeId],
                 },
@@ -1924,7 +1972,6 @@ const PerformanceReportLayout = ({
                   dateRange: filters.dateRange,
                   groupIds: filters.selectedGroups,
                   industryIds: filters.selectedIndustries,
-                  // languageCode: LanguageCode.En,
                   roleIds: filters.selectedRoles,
                   schemeIds: [filters.schemeId],
                 },
@@ -1937,9 +1984,6 @@ const PerformanceReportLayout = ({
               setMetaData={setMetadata}
               allMeta={metadata}
               onNavigate={() => navigate(`/app/reports/business-engagement`)}
-              // metadata={metadata}
-              // setMetadata={setMetadata}
-              // key={key}
             />
           </Card>
         );
@@ -1960,7 +2004,6 @@ const PerformanceReportLayout = ({
                   dateRange: filters.dateRange,
                   groupIds: filters.selectedGroups,
                   industryIds: filters.selectedIndustries,
-                  // languageCode: LanguageCode.En,
                   roleIds: filters.selectedRoles,
                   schemeIds: [filters.schemeId],
                 },
@@ -1970,17 +2013,6 @@ const PerformanceReportLayout = ({
               editMode={editMode}
               removeItem={() => removeItem(key)}
               onNavigate={() => navigate(`/app/reports/business-engagement`)}
-
-              // metaData={metadata.find((item) => item.key === key)}
-              // setMetaData={(value: MetaData) => {
-              //   const updatedMetadata = metadata.map((item) => {
-              //     if (item.key === key) {
-              //       return value;
-              //     }
-              //     return item;
-              //   }) satisfies MetaData[];
-              //   setMetadata(updatedMetadata);
-              // }}
             />
           </Card>
         );
@@ -2001,7 +2033,7 @@ const PerformanceReportLayout = ({
                   dateRange: filters.dateRange,
                   groupIds: filters.selectedGroups,
                   industryIds: filters.selectedIndustries,
-                  // languageCode: LanguageCode.En,
+
                   roleIds: filters.selectedRoles,
                   schemeIds: [filters.schemeId],
                 },

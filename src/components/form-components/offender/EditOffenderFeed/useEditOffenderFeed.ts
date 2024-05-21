@@ -74,7 +74,7 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
   const { needJustification, id: schemeId } = useStoreState(
     (state) => state.scheme
   );
-  const { groups: userGroups, role } = useStoreState((state) => state.user);
+  const { role } = useStoreState((state) => state.user);
 
   const businessId = useStoreState((state) => state.user.businesses[0].id);
 
@@ -189,9 +189,9 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
           idVerified: data.idVerified ? { set: data.idVerified } : undefined,
           groups: {
             set:
-              userGroups.length > 1
+              groups.length > 1
                 ? data.groups.map((id) => ({ id }))
-                : userGroups.map(({ id }) => ({ id })),
+                : groups.map(({ value: id }) => ({ id })),
           },
           tags: {
             set: data.tags.map((id) => ({ id })) || undefined,

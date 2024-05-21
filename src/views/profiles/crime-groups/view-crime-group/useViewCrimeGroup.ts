@@ -36,6 +36,7 @@ import {
   ProfileUpdatedModel,
   ProfileUpdatedType,
 } from '#/types/enums/profile-update-type';
+import { useGroupsContext } from '#/context/groups-context';
 
 const { confirm } = Modal;
 interface Return {
@@ -111,7 +112,7 @@ const onCompletedAddOffender = () => {
 };
 const useViewCrimeGroup = (crimeGroupId: string): Return => {
   const intl = useIntl();
-  const { id: userId, groups, role } = useStoreState((state) => state.user);
+  const { id: userId, role } = useStoreState((state) => state.user);
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
   const [addOffender, setAddOffender] = useState(false);
@@ -138,7 +139,7 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
     createdAt: string;
     createdBy: string;
   } | null>(null);
-
+  const { groups } = useGroupsContext();
   useEffect(() => {
     if (editUpdate) setEditUpdateInput(editUpdate.text);
   }, [editUpdate]);
@@ -331,7 +332,7 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
                                 id,
                               })
                             )
-                          : groups.map(({ id }) => ({ id })),
+                          : groups.map(({ value: id }) => ({ id })),
                     },
                   }))
                 : undefined,
@@ -374,7 +375,7 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
                       ? crimeGroupsData?.crimeGroup?.groups.map(({ id }) => ({
                           id,
                         }))
-                      : groups.map(({ id }) => ({ id })),
+                      : groups.map(({ value: id }) => ({ id })),
                 },
                 customGalleries: getCustomGalleries(),
                 schemes: { connect: [{ id: schemeId }] },

@@ -7,11 +7,12 @@ import type {
 import {
   Role,
   SchemeSharingDocument,
+  SortOrder,
   useConnectSchemesQuery,
   useSetSchemeSharingMutation,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
-import { Button, Typography, Row, Col, Skeleton } from 'antd';
+import { Button, Col, Row, Skeleton, Typography } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { createUseStyles } from 'react-jss';
 import type { Theme } from 'configs/ThemeConfig';
@@ -57,6 +58,9 @@ const ConnectScheme = ({ connectedScheme, onClose }: Props) => {
             },
           },
         },
+      },
+      orderBy: {
+        name: SortOrder.Asc,
       },
     },
   });

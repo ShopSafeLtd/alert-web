@@ -2,11 +2,15 @@ import { useApolloClient } from '@apollo/client';
 import type { FormInstance } from 'antd';
 import { Form, notification } from 'antd';
 import type {
+  BusinessesSideListQuery,
+  BusinessesSideListQueryVariables,
   BusinessUpdateInput,
   SearchBusinessesQuery,
   SearchBusinessesQueryVariables,
 } from 'graphql/generated';
 import {
+  BusinessesSideListDocument,
+  SortOrder,
   Model,
   QueryMode,
   SearchBusinessesDocument,
@@ -153,6 +157,8 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
   });
 
   const onSetLocation = (value: LocationData) => {
+    setSaving(true);
+
     if (value) {
       setLocation(value);
       form.setFieldsValue({
@@ -161,6 +167,7 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
         postcode: value.postcode || '',
       });
     }
+    setSaving(false);
   };
 
   const [updateBusiness] = useUpdateBusinessMutation({
@@ -180,9 +187,108 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
       setSaving(false);
       errorNotification();
     },
+    update: (store, { data: res }) => {
+      if (res === null || res === undefined) return;
+
+      const existingData = store.readQuery<
+        BusinessesSideListQuery,
+        BusinessesSideListQueryVariables
+      >({
+        query: BusinessesSideListDocument,
+        variables: {
+          where: {
+            schemes: {
+              some: {
+                id: {
+                  equals: currentScheme,
+                },
+              },
+            },
+          },
+          orderBy: { name: SortOrder.Asc },
+          first: 24,
+        },
+      });
+
+      if (existingData === null) return;
+      if (existingData.businessRelay.edges === undefined) return;
+
+      const index = existingData?.businessRelay?.edges?.findIndex(
+        ({ node: business }) => business.id === res.updateBusiness.id
+      );
+      if (index === -1) return;
+
+      store.writeQuery<
+        BusinessesSideListQuery,
+        BusinessesSideListQueryVariables
+      >({
+        query: BusinessesSideListDocument,
+        data: {
+          businessRelay: {
+            ...existingData.businessRelay,
+            edges: existingData?.businessRelay?.edges?.map(
+              ({ node: business }) => {
+                if (business.id === res.updateBusiness.id) {
+                  return {
+                    node: {
+                      ...business,
+                      locations: res.updateBusiness.locations,
+                      name: res.updateBusiness.name,
+                      siteNumber: res.updateBusiness.siteNumber,
+                    },
+                  };
+                }
+                return { node: { ...business } };
+              }
+            ),
+            //   update(existingData.businessRelay.edges, {
+            //   [index]: {
+            //     $set: {
+            //       node: {
+            //         id: res.updateBusiness.id,
+            //         locations: res.updateBusiness.locations,
+            //         name: res.updateBusiness.name,
+            //         siteNumber: res.updateBusiness.siteNumber,
+            //       },
+            //     },
+            //   },
+            // }),
+            // [...existingData.businessRelay.edges,],
+            //   existingData?.businessRelay?.edges?.forEach(
+            //   ({ node: business }) => {
+            //     if (business.id === res.updateBusiness.id) {
+            //       // node = {
+            //       //   ...business,
+            //       //   locations: res.updateBusiness.locations,
+            //       //   name: res.updateBusiness.name,
+            //       //   siteNumber: res.updateBusiness.siteNumber,
+            //       // };
+            //       business.name = res.updateBusiness.name;
+            //     }
+            //   }
+            // ),
+          },
+          __typename: 'Query',
+        },
+        variables: {
+          where: {
+            schemes: {
+              some: {
+                id: {
+                  equals: currentScheme,
+                },
+              },
+            },
+          },
+          orderBy: { name: SortOrder.Asc },
+          first: 24,
+        },
+      });
+    },
   });
 
   const onSubmit = (values: OnSubmitValues) => {
+    setSaving(true);
     const getParent = () => {
       if (values.parent.value)
         return {

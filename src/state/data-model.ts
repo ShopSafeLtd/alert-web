@@ -6,10 +6,10 @@ import type {
   ArticlePriority,
   Build,
   Gender,
+  InvestigationStatus,
   Model,
   Race,
   Role,
-  InvestigationStatus,
 } from 'graphql/generated';
 import { IncidentPriority, SortOrder } from 'graphql/generated';
 import type { DateType } from 'types/DataType';
@@ -22,6 +22,10 @@ export enum IncidentSort {
 export enum OffenderSort {
   updatedAtDesc = 'UPDATED_AT_DESC',
   updatedAtAsc = 'UPDATED_AT_ASC',
+  incidentValueDesc = 'INCIDENT_VALUE_DESC',
+  incidentValueAsc = 'INCIDENT_VALUE_ASC',
+  noIncidentDesc = 'NO_INCIDENT_DESC',
+  noIncidentAsc = 'NO_INCIDENT_ASC',
 }
 
 export interface IncidentFilters {

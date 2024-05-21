@@ -91,42 +91,71 @@ const ListBusinesses = ({
   return (
     <div className={classNames.page}>
       <Row gutter={8} className={classNames.actions}>
-        <Col span={20} />
-        <Col span={2}>
-          <Button
-            icon={
-              <FontAwesomeIcon
-                icon={faPlus}
-                size="lg"
-                style={{ marginRight: 5 }}
-              />
-            }
-            danger
-            onClick={toggleLinkVisible}
-          >
-            {intl.formatMessage({
+        <Col span={19} />
+        <Col
+          span={4}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            marginBottom: 5,
+          }}
+        >
+          <Tooltip
+            title={intl.formatMessage({
               defaultMessage: 'Link Existing Business',
               id: '50iYmp',
             })}
-          </Button>
-        </Col>
-        <Col span={1}>
-          <Button
-            icon={
-              <FontAwesomeIcon
-                icon={faPlus}
-                size="lg"
-                style={{ marginRight: 5 }}
-              />
-            }
-            danger
-            onClick={toggleAddVisible}
           >
-            {intl.formatMessage({
-              defaultMessage: 'New Business',
-              id: 'KepKya',
+            <Button
+              icon={
+                <FontAwesomeIcon
+                  icon={faPlus}
+                  size="lg"
+                  style={{ marginRight: 5 }}
+                />
+              }
+              style={{
+                borderTopRightRadius: 0,
+                borderBottomRightRadius: 0,
+              }}
+              danger
+              onClick={toggleLinkVisible}
+            >
+              {intl.formatMessage({
+                defaultMessage: 'Existing',
+                id: 'LHF3Za',
+              })}
+            </Button>
+          </Tooltip>
+
+          <Tooltip
+            title={intl.formatMessage({
+              defaultMessage: 'Add New Business',
+              id: 'p47asT',
             })}
-          </Button>
+          >
+            <Button
+              style={{
+                borderTopLeftRadius: 0,
+                borderBottomLeftRadius: 0,
+                borderLeftWidth: 0,
+              }}
+              icon={
+                <FontAwesomeIcon
+                  icon={faPlus}
+                  size="lg"
+                  style={{ marginRight: 5 }}
+                />
+              }
+              danger
+              onClick={toggleAddVisible}
+            >
+              {intl.formatMessage({
+                defaultMessage: 'New',
+                id: 'bW7B87',
+              })}
+            </Button>
+          </Tooltip>
         </Col>
 
         <Col span={6}>

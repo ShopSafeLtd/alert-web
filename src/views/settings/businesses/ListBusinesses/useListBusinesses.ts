@@ -264,6 +264,7 @@ const useListBusinesses = (): Return => {
     });
   };
   const onSubmit = (values: BusinessData) => {
+    setSaving(true);
     void createBusiness({
       variables: {
         data: {

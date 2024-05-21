@@ -9,6 +9,7 @@ query Business(
     publicName
     demId
     siteNumber
+    brands
     groups {
       id
       name

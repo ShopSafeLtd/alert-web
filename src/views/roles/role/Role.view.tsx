@@ -121,8 +121,8 @@ const RoleView = ({
 
   const labels: Labels = {
     ARTICLES: formatMessage({
-      id: '3KNMbJ',
-      defaultMessage: 'Articles',
+      id: 'tgD5sa',
+      defaultMessage: 'Bulletins',
     }),
     CRIME_GROUPS: formatMessage({
       id: 'a0aLil',
@@ -236,7 +236,7 @@ const RoleView = ({
         </Col>
         <Col flex={1} className={classes.borderLeft}>
           <PageHeader
-            onBack={() => navigate(`/app/scheme-settings/roles`)}
+            onBack={() => navigate('/app/scheme-settings/roles')}
             title={
               roleName ||
               formatMessage({
@@ -326,7 +326,10 @@ const RoleView = ({
                                       </Typography.Text>
                                       <Typography.Paragraph
                                         type="secondary"
-                                        style={{ fontSize: 13, margin: 0 }}
+                                        style={{
+                                          fontSize: 13,
+                                          margin: 0,
+                                        }}
                                       >
                                         {intl.formatMessage({
                                           defaultMessage:
@@ -398,7 +401,10 @@ const RoleView = ({
                                       </Typography.Text>
                                       <Typography.Paragraph
                                         type="secondary"
-                                        style={{ fontSize: 13, margin: 0 }}
+                                        style={{
+                                          fontSize: 13,
+                                          margin: 0,
+                                        }}
                                       >
                                         {intl.formatMessage({
                                           defaultMessage:
