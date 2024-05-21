@@ -2,12 +2,12 @@ import React from 'react';
 import {
   Button,
   Col,
+  DatePicker,
+  Form,
   Input,
   Row,
   Select,
   Typography,
-  DatePicker,
-  Form,
 } from 'antd';
 import type { SearchBusinessesQuery } from 'graphql/generated';
 import { Age, Build, Gender, Race } from 'graphql/generated';
@@ -138,6 +138,32 @@ const OffenderFilter = ({
               {intl.formatMessage({
                 defaultMessage: 'Oldest First',
                 id: 'FqI37D',
+              })}
+            </Select.Option>
+            <Select.Option value={OffenderSort.incidentValueDesc}>
+              {intl.formatMessage({
+                defaultMessage: 'Most Incidents First',
+                id: 't7yodd',
+              })}
+            </Select.Option>
+            <Select.Option value={OffenderSort.incidentValueAsc}>
+              {intl.formatMessage({
+                defaultMessage: 'Least Incidents First',
+                id: 'xLxcIT',
+              })}
+            </Select.Option>
+
+            <Select.Option value={OffenderSort.noIncidentDesc}>
+              {intl.formatMessage({
+                defaultMessage: 'Highest Loss First',
+                id: 'o7pS/n',
+              })}
+            </Select.Option>
+
+            <Select.Option value={OffenderSort.noIncidentAsc}>
+              {intl.formatMessage({
+                defaultMessage: 'Lowest Loss First',
+                id: 'FhEjF7',
               })}
             </Select.Option>
           </Select>

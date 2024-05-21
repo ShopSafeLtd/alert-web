@@ -1,6 +1,9 @@
 import type {
+  InputMaybe,
   ListCustomGalleriesQuery,
   ListOffendersRelayQuery,
+  ListOffendersRelayQueryVariables,
+  OffenderOrderByWithRelationInput,
   RecycleOffenderMutation,
 } from 'graphql/generated';
 import {
@@ -17,6 +20,7 @@ import type { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import type { OffenderFilters } from 'state/data-model';
 import cacheOrLoading from 'utils/cache-or-loading';
+import { useGroupsContext } from '#/context/groups-context';
 
 interface Return {
   data: ListOffendersRelayQuery | undefined;
@@ -76,6 +80,7 @@ const useOffenderFeed = (): Return => {
     index: 0,
   });
   const isUser = role === Role.User;
+  const { groups: defaultGroupsOnScheme } = useGroupsContext();
   const {
     search,
     groups,
@@ -93,14 +98,57 @@ const useOffenderFeed = (): Return => {
     compactView,
     tableView,
   } = filterVariables;
-  const variables = {
+
+  const generateSorted = (): {
+    order: InputMaybe<OffenderOrderByWithRelationInput>;
+    orderByValue: InputMaybe<SortOrder>;
+  } => {
+    switch (order) {
+      case OffenderSort.updatedAtAsc: {
+        return {
+          order: { updatedAt: SortOrder.Asc },
+          orderByValue: null,
+        };
+      }
+      case OffenderSort.noIncidentAsc: {
+        return {
+          order: { incidents: { _count: SortOrder.Asc } },
+          orderByValue: null,
+        };
+      }
+      case OffenderSort.noIncidentDesc: {
+        return {
+          order: { incidents: { _count: SortOrder.Desc } },
+          orderByValue: null,
+        };
+      }
+      case OffenderSort.incidentValueAsc: {
+        return {
+          order: null,
+          orderByValue: SortOrder.Asc,
+        };
+      }
+      case OffenderSort.incidentValueDesc: {
+        return {
+          order: null,
+          orderByValue: SortOrder.Desc,
+        };
+      }
+
+      default: {
+        return {
+          order: { updatedAt: SortOrder.Desc },
+          orderByValue: null,
+        };
+      }
+    }
+  };
+
+  const variables: ListOffendersRelayQueryVariables = {
     scheme: {
       id: schemeId,
     },
-    order: {
-      updatedAt:
-        order === OffenderSort.updatedAtDesc ? SortOrder.Desc : SortOrder.Asc,
-    },
+    ...generateSorted(),
     where: {
       createdAt: createdAt
         ? {
@@ -127,7 +175,14 @@ const useOffenderFeed = (): Return => {
                 },
               },
             }
-          : undefined,
+          : {
+              // TODO check this is right, it will fallback to all scheme groups available to user, i.e if admin all if not then whatever they have
+              some: {
+                id: {
+                  in: defaultGroupsOnScheme.map(({ value: id }) => id),
+                },
+              },
+            },
       gender:
         sex.length > 0
           ? {

@@ -66,8 +66,8 @@ const BusinessLossRecoveredGraph = ({
         isPrinting={isPrinting}
         data={data?.businessLossRecoveredGraph}
         emptyLabel={intl.formatMessage({
-          defaultMessage: 'No Incidents',
-          id: '+nJOH5',
+          defaultMessage: 'No Crime Types',
+          id: 'BbTEjZ',
         })}
         valueSymbol="£"
       />

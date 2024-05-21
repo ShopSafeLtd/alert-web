@@ -12943,6 +12943,7 @@ export type Query = {
   userNotifications: Array<UserNotification>;
   userScheme: UserScheme;
   userSchemes: Array<UserScheme>;
+  userSessionsGraph: Array<RadialValueGraph>;
   users: Array<User>;
   vehicle: Vehicle;
   workflow?: Maybe<Workflow>;
@@ -13544,6 +13545,7 @@ export type QueryListOffendersRelayArgs = {
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<OffenderOrderByWithRelationInput>;
+  orderByValue?: InputMaybe<SortOrder>;
   scheme?: InputMaybe<SchemeWhereUniqueInput>;
   where?: InputMaybe<OffenderWhereInput>;
 };
@@ -13932,6 +13934,12 @@ export type QueryUserSchemesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<UserSchemeWhereInput>;
+};
+
+
+export type QueryUserSessionsGraphArgs = {
+  take?: InputMaybe<Scalars['Int']>;
+  where: UserIncidentsCountGraphInput;
 };
 
 
@@ -16067,7 +16075,6 @@ export type SchemeWhereUniqueInput = {
   crimeGroups?: InputMaybe<CrimeGroupListRelationFilter>;
   csvImports?: InputMaybe<CsvImportListRelationFilter>;
   customGalleries?: InputMaybe<CustomGalleryListRelationFilter>;
-  customTranslations?: InputMaybe<JsonNullableListFilter>;
   darkLogo?: InputMaybe<ImageWhereInput>;
   darkLogoId?: InputMaybe<StringNullableFilter>;
   defaultBulletinEmails?: InputMaybe<BoolFilter>;
@@ -19479,7 +19486,6 @@ export type UserScheme = {
   dashboard?: Maybe<Dashboard>;
   id: Scalars['String'];
   isAdmin: Scalars['Boolean'];
-  notificationCount: Scalars['Int'];
   orignalPermissions: CustomRole;
   permissions: Array<Permissions>;
   recycled: Scalars['Boolean'];
@@ -20729,6 +20735,7 @@ export type SetSchemeSharingMutation = { __typename?: 'Mutation', setSchemeShari
 
 export type ConnectSchemesQueryVariables = Exact<{
   where?: InputMaybe<SchemeWhereInput>;
+  orderBy?: InputMaybe<Array<SchemeOrderByWithRelationInput> | SchemeOrderByWithRelationInput>;
 }>;
 
 
@@ -20873,6 +20880,22 @@ export type UserRolesQueryVariables = Exact<{
 
 export type UserRolesQuery = { __typename?: 'Query', roles: { __typename?: 'QueryRolesConnection', edges: Array<{ __typename?: 'QueryRolesConnectionEdge', node: { __typename?: 'CustomRole', type: Role, id: string, name: string } }> } };
 
+export type BusinessCrimeTypeGraphQueryVariables = Exact<{
+  where: BusinessIncidentsCountGraphInput;
+  take?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type BusinessCrimeTypeGraphQuery = { __typename?: 'Query', businessCrimeTypeGraph: Array<{ __typename?: 'RadialValueGraph', label: string, data: Array<{ __typename?: 'Graph', label: string, value: number }> }> };
+
+export type BusinessIncidentCountGraphQueryVariables = Exact<{
+  where: BusinessIncidentsCountGraphInput;
+  take?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type BusinessIncidentCountGraphQuery = { __typename?: 'Query', businessIncidentCountGraph: Array<{ __typename?: 'Graph', label: string, value: number }> };
+
 export type BusinessLossRecoveredGraphQueryVariables = Exact<{
   where: BusinessIncidentsCountGraphInput;
   take?: InputMaybe<Scalars['Int']>;
@@ -20896,21 +20919,13 @@ export type UserIncidentCountGraphQueryVariables = Exact<{
 
 export type UserIncidentCountGraphQuery = { __typename?: 'Query', userIncidentCountGraph: Array<{ __typename?: 'Graph', label: string, value: number }> };
 
-export type BusinessCrimeTypeGraphQueryVariables = Exact<{
-  where: BusinessIncidentsCountGraphInput;
+export type UserSessionsGraphQueryVariables = Exact<{
+  where: UserIncidentsCountGraphInput;
   take?: InputMaybe<Scalars['Int']>;
 }>;
 
 
-export type BusinessCrimeTypeGraphQuery = { __typename?: 'Query', businessCrimeTypeGraph: Array<{ __typename?: 'RadialValueGraph', label: string, data: Array<{ __typename?: 'Graph', label: string, value: number }> }> };
-
-export type BusinessIncidentCountGraphQueryVariables = Exact<{
-  where: BusinessIncidentsCountGraphInput;
-  take?: InputMaybe<Scalars['Int']>;
-}>;
-
-
-export type BusinessIncidentCountGraphQuery = { __typename?: 'Query', businessIncidentCountGraph: Array<{ __typename?: 'Graph', label: string, value: number }> };
+export type UserSessionsGraphQuery = { __typename?: 'Query', userSessionsGraph: Array<{ __typename?: 'RadialValueGraph', label: string, data: Array<{ __typename?: 'Graph', label: string, value: number }> }> };
 
 export type ListActionsQueryVariables = Exact<{
   take?: InputMaybe<Scalars['Int']>;
@@ -21063,7 +21078,7 @@ export type UpdateBusinessLocationMutationVariables = Exact<{
 }>;
 
 
-export type UpdateBusinessLocationMutation = { __typename?: 'Mutation', updateBusiness: { __typename?: 'Business', id: string, locations: Array<{ __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, geoLng?: number | null, geoLat?: number | null }> } };
+export type UpdateBusinessLocationMutation = { __typename?: 'Mutation', updateBusiness: { __typename?: 'Business', id: string, locations: Array<{ __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, geoLng?: number | null, geoLat?: number | null, full: string }> } };
 
 export type UpdateBusinessMutationVariables = Exact<{
   data: BusinessUpdateInput;
@@ -21071,7 +21086,7 @@ export type UpdateBusinessMutationVariables = Exact<{
 }>;
 
 
-export type UpdateBusinessMutation = { __typename?: 'Mutation', updateBusiness: { __typename?: 'Business', id: string, name: string, siteNumber?: string | null, fullName: string, publicName: boolean, demId?: string | null, totalUsers: number, parent?: { __typename?: 'Business', id: string, name: string, fullName: string, publicName: boolean } | null, locations: Array<{ __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, geoLng?: number | null, geoLat?: number | null }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }> } };
+export type UpdateBusinessMutation = { __typename?: 'Mutation', updateBusiness: { __typename?: 'Business', id: string, name: string, siteNumber?: string | null, fullName: string, publicName: boolean, demId?: string | null, totalUsers: number, parent?: { __typename?: 'Business', id: string, name: string, fullName: string, publicName: boolean } | null, locations: Array<{ __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, geoLng?: number | null, geoLat?: number | null, full: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }> } };
 
 export type BusinessBrandsQueryVariables = Exact<{
   where: BusinessWhereUniqueInput;
@@ -21112,7 +21127,7 @@ export type BusinessQueryVariables = Exact<{
 }>;
 
 
-export type BusinessQuery = { __typename?: 'Query', business: { __typename?: 'Business', id: string, name: string, fullName: string, publicName: boolean, demId?: string | null, siteNumber?: string | null, groups: Array<{ __typename?: 'Group', id: string, name: string }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, incidents: Array<{ __typename?: 'Incident', id: string, reference?: number | null, dayTime: string, date: Date, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, createdBy: { __typename?: 'User', id: string, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string }> }, location?: { __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, geoLat?: number | null, geoLng?: number | null, full: string, alias?: string | null } | null }>, todos: Array<{ __typename?: 'Todo', id: string, name?: string | null, description?: string | null, dueDate?: Date | null, completed?: boolean | null, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }> }>, parent?: { __typename?: 'Business', id: string, name: string, fullName: string } | null, locations: Array<{ __typename?: 'Address', id: string, full: string, geoLat?: number | null, geoLng?: number | null }> } };
+export type BusinessQuery = { __typename?: 'Query', business: { __typename?: 'Business', id: string, name: string, fullName: string, publicName: boolean, demId?: string | null, siteNumber?: string | null, brands: Array<string>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, incidents: Array<{ __typename?: 'Incident', id: string, reference?: number | null, dayTime: string, date: Date, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, createdBy: { __typename?: 'User', id: string, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string }> }, location?: { __typename?: 'Address', id: string, building?: string | null, street?: string | null, townCity?: string | null, county?: string | null, postcode?: string | null, geoLat?: number | null, geoLng?: number | null, full: string, alias?: string | null } | null }>, todos: Array<{ __typename?: 'Todo', id: string, name?: string | null, description?: string | null, dueDate?: Date | null, completed?: boolean | null, assignedUsers: Array<{ __typename?: 'User', id: string, fullName: string }> }>, parent?: { __typename?: 'Business', id: string, name: string, fullName: string } | null, locations: Array<{ __typename?: 'Address', id: string, full: string, geoLat?: number | null, geoLng?: number | null }> } };
 
 export type EditBusinessQueryVariables = Exact<{
   where: BusinessWhereUniqueInput;
@@ -22588,14 +22603,6 @@ export type UpdateUserDisableMutationVariables = Exact<{
 
 export type UpdateUserDisableMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, disabled: boolean } };
 
-export type CurrentUserQueryVariables = Exact<{
-  scheme?: InputMaybe<UniqueId>;
-  orderBy?: InputMaybe<Array<UserSchemeOrderByWithRelationInput> | UserSchemeOrderByWithRelationInput>;
-}>;
-
-
-export type CurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: string, fullName: string, origName: string, email: string, reference?: number | null, demId?: string | null, publicName: boolean, reportToAllBusinesses: boolean, notificationCount: number, messageCount: number, defaultScheme?: string | null, newUser: boolean, incidentEmail: boolean, incidentPush: boolean, offenderEmail: boolean, offenderPush: boolean, bulletinEmails: boolean, bulletinPush: boolean, messagePush: boolean, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string, demId?: string | null, brands: Array<string> }>, groups: Array<{ __typename?: 'Group', id: string, name: string, scheme: { __typename?: 'Scheme', id: string } }>, defaultGroups: Array<{ __typename?: 'Group', id: string, name: string, scheme: { __typename?: 'Scheme', id: string } }>, schemes: Array<{ __typename?: 'UserScheme', id: string, role: Role, isAdmin: boolean, scheme: { __typename?: 'Scheme', customTranslations: Array<{ [key: string]: any }>, userTodos: number, id: string, name: string, goodsMode: GoodsMode, autoApproveIncidents: boolean, autoApproveOffenders: boolean, defaultPublicOffenderDOB: boolean, restrictIncidentAccess: boolean, reportOnly: boolean, facialRecognition: boolean, facialDetection: boolean, imagesRequiredOnOffenders: boolean, taskTimeTracking: boolean, languageCount: number, autoPopulateDescription: boolean, needJustification: boolean, requireSiteNumberForUsers: boolean, oneSelectedIncidentTypeOnly: boolean, logo?: { __typename?: 'Image', optimisedPersisted?: string | null } | null, darkLogo?: { __typename?: 'Image', optimisedPersisted?: string | null } | null, connectedToSchemes: Array<{ __typename?: 'Scheme', id: string, name: string }> }, permissions: Array<{ __typename?: 'Permissions', model: PermissionModel, allowedMethods: Array<PermissionMethod> }>, dashboard?: { __typename?: 'Dashboard', runningBanner?: string | null, layout: Array<{ __typename?: 'DashboardLayout', h: number, i: string, maxH?: number | null, maxW?: number | null, minH?: number | null, minW?: number | null, moved: boolean, static: boolean, w: number, x: number, y: number }> } | null }> } | null };
-
 export type UserQueryVariables = Exact<{
   where: UserWhereUniqueInput;
   groupWhere?: InputMaybe<GroupWhereInput>;
@@ -22818,6 +22825,14 @@ export type VehicleQueryVariables = Exact<{
 
 
 export type VehicleQuery = { __typename?: 'Query', vehicle: { __typename?: 'Vehicle', id: string, make?: string | null, model?: string | null, registration?: string | null, totalOffenders: number, totalIncidents: number, totalCrimeGroups: number, reference?: number | null, subscribed: boolean, totalImages: number, updatedAt: Date, colour?: string | null, customGalleries: Array<{ __typename?: 'CustomGallery', id: string, name: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, primary?: boolean | null, policeImage?: boolean | null, card?: string | null }>, crimeGroup: Array<{ __typename?: 'CrimeGroup', id: string, reference?: number | null, alias?: string | null, totalIncidents: number, totalOffenders: number, totalRecoveredValue: number, totalTheftSuccess: number, totalValue: number }>, offenders: Array<{ __typename?: 'Offender', id: string, name?: string | null, alias: Array<string>, age?: Age | null, gender?: Gender | null, race?: Race | null, build?: Build | null, height?: Height | null, hair?: string | null, peculiarities?: string | null, comment?: string | null, dateSource?: string | null, dateOfBirth?: Date | null, idVerified: boolean, idSource?: IdSource | null, knownFor: Array<string>, targetedGoods: Array<string>, justification?: string | null, infoSource?: string | null, images: Array<{ __typename?: 'Image', isFace?: boolean | null, id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, primary?: boolean | null, policeImage?: boolean | null, card?: string | null }> }>, incidents: Array<{ __typename?: 'Incident', id: string, reference?: number | null, dayTime: string, policeRef?: string | null, subject?: string | null, totalValue: number, totalRecoveredValue: number, location?: { __typename?: 'Address', id: string, full: string, geoLat?: number | null, geoLng?: number | null } | null }>, evidence: Array<{ __typename?: 'Document', id: string, name: string, url: string, fileType?: FileType | null, tags: Array<{ __typename?: 'Tag', name: string }> }>, investigations: Array<{ __typename?: 'Investigation', id: string, name: string, description?: string | null, status: InvestigationStatus, createdAt: Date, closedAt?: Date | null, reference?: number | null }>, updates: Array<{ __typename?: 'Update', id: string, text?: string | null, type: UpdateType, createdAt: Date, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }>, linkedCrimeGroups: Array<{ __typename?: 'CrimeGroup', id: string, reference?: number | null, alias?: string | null, totalIncidents: number, totalOffenders: number, totalRecoveredValue: number, totalTheftSuccess: number, totalValue: number }>, linkedVehicles: Array<{ __typename?: 'Vehicle', id: string, reference?: number | null, colour?: string | null, model?: string | null, make?: string | null, registration?: string | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }> }>, linkedIncidents: Array<{ __typename?: 'Incident', id: string, reference?: number | null, dayTime: string, policeRef?: string | null, subject?: string | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }> }>, linkedOffenders: Array<{ __typename?: 'Offender', id: string, reference?: number | null, name?: string | null, gender?: Gender | null, build?: Build | null, height?: Height | null, race?: Race | null, age?: Age | null, dateOfBirth?: Date | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }> }>, linkedArticles: Array<{ __typename?: 'Article', id: string, title: string, updatedAt: Date, watermarkImage: boolean, previewImage?: string | null, previewText?: string | null, priority: ArticlePriority, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null, position: ImagePosition, rotation: number }>, createdBy: { __typename?: 'User', fullName: string, id: string } }>, createdBy: { __typename?: 'User', origName: string, id: string, fullName: string, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string }> }, replies: Array<{ __typename?: 'Update', id: string, text?: string | null, type: UpdateType, createdAt: Date, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }>, linkedCrimeGroups: Array<{ __typename?: 'CrimeGroup', id: string, reference?: number | null, alias?: string | null, totalIncidents: number, totalOffenders: number, totalRecoveredValue: number, totalTheftSuccess: number, totalValue: number }>, linkedVehicles: Array<{ __typename?: 'Vehicle', id: string, reference?: number | null, colour?: string | null, model?: string | null, make?: string | null, registration?: string | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }> }>, linkedIncidents: Array<{ __typename?: 'Incident', id: string, reference?: number | null, dayTime: string, policeRef?: string | null, subject?: string | null, location?: { __typename?: 'Address', id: string, full: string, geoLat?: number | null, geoLng?: number | null } | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }> }>, linkedOffenders: Array<{ __typename?: 'Offender', id: string, reference?: number | null, name?: string | null, gender?: Gender | null, build?: Build | null, height?: Height | null, race?: Race | null, age?: Age | null, dateOfBirth?: Date | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, position: ImagePosition, rotation: number, card?: string | null }> }>, linkedArticles: Array<{ __typename?: 'Article', id: string, title: string, updatedAt: Date, watermarkImage: boolean, previewImage?: string | null, previewText?: string | null, priority: ArticlePriority, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null, position: ImagePosition, rotation: number }>, createdBy: { __typename?: 'User', fullName: string, id: string } }>, createdBy: { __typename?: 'User', origName: string, id: string, fullName: string, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string }> } }> }> } };
+
+export type CurrentUserQueryVariables = Exact<{
+  scheme?: InputMaybe<UniqueId>;
+  orderBy?: InputMaybe<Array<UserSchemeOrderByWithRelationInput> | UserSchemeOrderByWithRelationInput>;
+}>;
+
+
+export type CurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: string, fullName: string, origName: string, email: string, reference?: number | null, demId?: string | null, publicName: boolean, reportToAllBusinesses: boolean, notificationCount: number, messageCount: number, defaultScheme?: string | null, newUser: boolean, incidentEmail: boolean, incidentPush: boolean, offenderEmail: boolean, offenderPush: boolean, bulletinEmails: boolean, bulletinPush: boolean, messagePush: boolean, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string, demId?: string | null, brands: Array<string> }>, defaultGroups: Array<{ __typename?: 'Group', id: string, name: string, scheme: { __typename?: 'Scheme', id: string } }>, schemes: Array<{ __typename?: 'UserScheme', id: string, role: Role, isAdmin: boolean, scheme: { __typename?: 'Scheme', customTranslations: Array<{ [key: string]: any }>, userTodos: number, id: string, name: string, goodsMode: GoodsMode, autoApproveIncidents: boolean, autoApproveOffenders: boolean, defaultPublicOffenderDOB: boolean, restrictIncidentAccess: boolean, reportOnly: boolean, facialRecognition: boolean, facialDetection: boolean, imagesRequiredOnOffenders: boolean, taskTimeTracking: boolean, languageCount: number, autoPopulateDescription: boolean, needJustification: boolean, requireSiteNumberForUsers: boolean, oneSelectedIncidentTypeOnly: boolean, logo?: { __typename?: 'Image', optimisedPersisted?: string | null } | null, darkLogo?: { __typename?: 'Image', optimisedPersisted?: string | null } | null, connectedToSchemes: Array<{ __typename?: 'Scheme', id: string, name: string }> }, permissions: Array<{ __typename?: 'Permissions', model: PermissionModel, allowedMethods: Array<PermissionMethod> }>, dashboard?: { __typename?: 'Dashboard', runningBanner?: string | null, layout: Array<{ __typename?: 'DashboardLayout', h: number, i: string, maxH?: number | null, maxW?: number | null, minH?: number | null, minW?: number | null, moved: boolean, static: boolean, w: number, x: number, y: number }> } | null }> } | null };
 
 export type CreateOneQuestionGroupMutationVariables = Exact<{
   data: QuestionGroupCreateInput;
@@ -23145,6 +23160,7 @@ export type ListOffendersRelayQueryVariables = Exact<{
   order?: InputMaybe<OffenderOrderByWithRelationInput>;
   scheme?: InputMaybe<SchemeWhereUniqueInput>;
   where?: InputMaybe<OffenderWhereInput>;
+  orderByValue?: InputMaybe<SortOrder>;
 }>;
 
 
@@ -24148,8 +24164,8 @@ export type SetSchemeSharingMutationHookResult = ReturnType<typeof useSetSchemeS
 export type SetSchemeSharingMutationResult = Apollo.MutationResult<SetSchemeSharingMutation>;
 export type SetSchemeSharingMutationOptions = Apollo.BaseMutationOptions<SetSchemeSharingMutation, SetSchemeSharingMutationVariables>;
 export const ConnectSchemesDocument = gql`
-    query ConnectSchemes($where: SchemeWhereInput) {
-  schemes(where: $where) {
+    query ConnectSchemes($where: SchemeWhereInput, $orderBy: [SchemeOrderByWithRelationInput!]) {
+  schemes(where: $where, orderBy: $orderBy) {
     id
     name
   }
@@ -24634,6 +24650,47 @@ export function useUserRolesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type UserRolesQueryHookResult = ReturnType<typeof useUserRolesQuery>;
 export type UserRolesLazyQueryHookResult = ReturnType<typeof useUserRolesLazyQuery>;
 export type UserRolesQueryResult = Apollo.QueryResult<UserRolesQuery, UserRolesQueryVariables>;
+export const BusinessCrimeTypeGraphDocument = gql`
+    query BusinessCrimeTypeGraph($where: BusinessIncidentsCountGraphInput!, $take: Int) {
+  businessCrimeTypeGraph(where: $where, take: $take) {
+    label
+    data {
+      label
+      value
+    }
+  }
+}
+    `;
+export function useBusinessCrimeTypeGraphQuery(baseOptions: Apollo.QueryHookOptions<BusinessCrimeTypeGraphQuery, BusinessCrimeTypeGraphQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BusinessCrimeTypeGraphQuery, BusinessCrimeTypeGraphQueryVariables>(BusinessCrimeTypeGraphDocument, options);
+      }
+export function useBusinessCrimeTypeGraphLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BusinessCrimeTypeGraphQuery, BusinessCrimeTypeGraphQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BusinessCrimeTypeGraphQuery, BusinessCrimeTypeGraphQueryVariables>(BusinessCrimeTypeGraphDocument, options);
+        }
+export type BusinessCrimeTypeGraphQueryHookResult = ReturnType<typeof useBusinessCrimeTypeGraphQuery>;
+export type BusinessCrimeTypeGraphLazyQueryHookResult = ReturnType<typeof useBusinessCrimeTypeGraphLazyQuery>;
+export type BusinessCrimeTypeGraphQueryResult = Apollo.QueryResult<BusinessCrimeTypeGraphQuery, BusinessCrimeTypeGraphQueryVariables>;
+export const BusinessIncidentCountGraphDocument = gql`
+    query BusinessIncidentCountGraph($where: BusinessIncidentsCountGraphInput!, $take: Int) {
+  businessIncidentCountGraph(where: $where, take: $take) {
+    label
+    value
+  }
+}
+    `;
+export function useBusinessIncidentCountGraphQuery(baseOptions: Apollo.QueryHookOptions<BusinessIncidentCountGraphQuery, BusinessIncidentCountGraphQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BusinessIncidentCountGraphQuery, BusinessIncidentCountGraphQueryVariables>(BusinessIncidentCountGraphDocument, options);
+      }
+export function useBusinessIncidentCountGraphLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BusinessIncidentCountGraphQuery, BusinessIncidentCountGraphQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BusinessIncidentCountGraphQuery, BusinessIncidentCountGraphQueryVariables>(BusinessIncidentCountGraphDocument, options);
+        }
+export type BusinessIncidentCountGraphQueryHookResult = ReturnType<typeof useBusinessIncidentCountGraphQuery>;
+export type BusinessIncidentCountGraphLazyQueryHookResult = ReturnType<typeof useBusinessIncidentCountGraphLazyQuery>;
+export type BusinessIncidentCountGraphQueryResult = Apollo.QueryResult<BusinessIncidentCountGraphQuery, BusinessIncidentCountGraphQueryVariables>;
 export const BusinessLossRecoveredGraphDocument = gql`
     query BusinessLossRecoveredGraph($where: BusinessIncidentsCountGraphInput!, $take: Int) {
   businessLossRecoveredGraph(where: $where, take: $take) {
@@ -24697,9 +24754,9 @@ export function useUserIncidentCountGraphLazyQuery(baseOptions?: Apollo.LazyQuer
 export type UserIncidentCountGraphQueryHookResult = ReturnType<typeof useUserIncidentCountGraphQuery>;
 export type UserIncidentCountGraphLazyQueryHookResult = ReturnType<typeof useUserIncidentCountGraphLazyQuery>;
 export type UserIncidentCountGraphQueryResult = Apollo.QueryResult<UserIncidentCountGraphQuery, UserIncidentCountGraphQueryVariables>;
-export const BusinessCrimeTypeGraphDocument = gql`
-    query BusinessCrimeTypeGraph($where: BusinessIncidentsCountGraphInput!, $take: Int) {
-  businessCrimeTypeGraph(where: $where, take: $take) {
+export const UserSessionsGraphDocument = gql`
+    query UserSessionsGraph($where: UserIncidentsCountGraphInput!, $take: Int) {
+  userSessionsGraph(where: $where, take: $take) {
     label
     data {
       label
@@ -24708,36 +24765,17 @@ export const BusinessCrimeTypeGraphDocument = gql`
   }
 }
     `;
-export function useBusinessCrimeTypeGraphQuery(baseOptions: Apollo.QueryHookOptions<BusinessCrimeTypeGraphQuery, BusinessCrimeTypeGraphQueryVariables>) {
+export function useUserSessionsGraphQuery(baseOptions: Apollo.QueryHookOptions<UserSessionsGraphQuery, UserSessionsGraphQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<BusinessCrimeTypeGraphQuery, BusinessCrimeTypeGraphQueryVariables>(BusinessCrimeTypeGraphDocument, options);
+        return Apollo.useQuery<UserSessionsGraphQuery, UserSessionsGraphQueryVariables>(UserSessionsGraphDocument, options);
       }
-export function useBusinessCrimeTypeGraphLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BusinessCrimeTypeGraphQuery, BusinessCrimeTypeGraphQueryVariables>) {
+export function useUserSessionsGraphLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserSessionsGraphQuery, UserSessionsGraphQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<BusinessCrimeTypeGraphQuery, BusinessCrimeTypeGraphQueryVariables>(BusinessCrimeTypeGraphDocument, options);
+          return Apollo.useLazyQuery<UserSessionsGraphQuery, UserSessionsGraphQueryVariables>(UserSessionsGraphDocument, options);
         }
-export type BusinessCrimeTypeGraphQueryHookResult = ReturnType<typeof useBusinessCrimeTypeGraphQuery>;
-export type BusinessCrimeTypeGraphLazyQueryHookResult = ReturnType<typeof useBusinessCrimeTypeGraphLazyQuery>;
-export type BusinessCrimeTypeGraphQueryResult = Apollo.QueryResult<BusinessCrimeTypeGraphQuery, BusinessCrimeTypeGraphQueryVariables>;
-export const BusinessIncidentCountGraphDocument = gql`
-    query BusinessIncidentCountGraph($where: BusinessIncidentsCountGraphInput!, $take: Int) {
-  businessIncidentCountGraph(where: $where, take: $take) {
-    label
-    value
-  }
-}
-    `;
-export function useBusinessIncidentCountGraphQuery(baseOptions: Apollo.QueryHookOptions<BusinessIncidentCountGraphQuery, BusinessIncidentCountGraphQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<BusinessIncidentCountGraphQuery, BusinessIncidentCountGraphQueryVariables>(BusinessIncidentCountGraphDocument, options);
-      }
-export function useBusinessIncidentCountGraphLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BusinessIncidentCountGraphQuery, BusinessIncidentCountGraphQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<BusinessIncidentCountGraphQuery, BusinessIncidentCountGraphQueryVariables>(BusinessIncidentCountGraphDocument, options);
-        }
-export type BusinessIncidentCountGraphQueryHookResult = ReturnType<typeof useBusinessIncidentCountGraphQuery>;
-export type BusinessIncidentCountGraphLazyQueryHookResult = ReturnType<typeof useBusinessIncidentCountGraphLazyQuery>;
-export type BusinessIncidentCountGraphQueryResult = Apollo.QueryResult<BusinessIncidentCountGraphQuery, BusinessIncidentCountGraphQueryVariables>;
+export type UserSessionsGraphQueryHookResult = ReturnType<typeof useUserSessionsGraphQuery>;
+export type UserSessionsGraphLazyQueryHookResult = ReturnType<typeof useUserSessionsGraphLazyQuery>;
+export type UserSessionsGraphQueryResult = Apollo.QueryResult<UserSessionsGraphQuery, UserSessionsGraphQueryVariables>;
 export const ListActionsDocument = gql`
     query ListActions($take: Int, $skip: Int, $where: ActionWhereInput, $orderBy: [ActionOrderByWithRelationInput!]) {
   listActions(take: $take, skip: $skip, where: $where, orderBy: $orderBy) {
@@ -25407,6 +25445,7 @@ export const UpdateBusinessLocationDocument = gql`
       postcode
       geoLng
       geoLat
+      full
     }
   }
 }
@@ -25443,6 +25482,7 @@ export const UpdateBusinessDocument = gql`
       postcode
       geoLng
       geoLat
+      full
     }
     groups {
       id
@@ -25611,6 +25651,7 @@ export const BusinessDocument = gql`
     publicName
     demId
     siteNumber
+    brands
     groups {
       id
       name
@@ -32919,119 +32960,6 @@ export function useUpdateUserDisableMutation(baseOptions?: Apollo.MutationHookOp
 export type UpdateUserDisableMutationHookResult = ReturnType<typeof useUpdateUserDisableMutation>;
 export type UpdateUserDisableMutationResult = Apollo.MutationResult<UpdateUserDisableMutation>;
 export type UpdateUserDisableMutationOptions = Apollo.BaseMutationOptions<UpdateUserDisableMutation, UpdateUserDisableMutationVariables>;
-export const CurrentUserDocument = gql`
-    query currentUser($scheme: UniqueId, $orderBy: [UserSchemeOrderByWithRelationInput!]) {
-  currentUser {
-    id
-    fullName
-    origName
-    email
-    reference
-    demId
-    publicName
-    reportToAllBusinesses
-    notificationCount(scheme: $scheme)
-    messageCount
-    defaultScheme
-    businesses {
-      id
-      name
-      fullName
-      demId
-      brands
-    }
-    newUser
-    groups {
-      id
-      name
-      scheme {
-        id
-      }
-    }
-    defaultGroups {
-      id
-      name
-      scheme {
-        id
-      }
-    }
-    schemes(orderBy: $orderBy) {
-      id
-      role
-      scheme {
-        customTranslations
-        logo {
-          optimisedPersisted
-        }
-        darkLogo {
-          optimisedPersisted
-        }
-        userTodos
-        id
-        name
-        goodsMode
-        autoApproveIncidents
-        autoApproveOffenders
-        defaultPublicOffenderDOB
-        restrictIncidentAccess
-        reportOnly
-        facialRecognition
-        facialDetection
-        imagesRequiredOnOffenders
-        taskTimeTracking
-        languageCount
-        autoPopulateDescription
-        needJustification
-        requireSiteNumberForUsers
-        oneSelectedIncidentTypeOnly
-        connectedToSchemes {
-          id
-          name
-        }
-      }
-      isAdmin
-      permissions {
-        model
-        allowedMethods
-      }
-      dashboard {
-        runningBanner
-        layout {
-          h
-          i
-          maxH
-          maxW
-          minH
-          minW
-          moved
-          static
-          w
-          x
-          y
-        }
-      }
-    }
-    incidentEmail
-    incidentPush
-    offenderEmail
-    offenderPush
-    bulletinEmails
-    bulletinPush
-    messagePush
-  }
-}
-    `;
-export function useCurrentUserQuery(baseOptions?: Apollo.QueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, options);
-      }
-export function useCurrentUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, options);
-        }
-export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
-export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
-export type CurrentUserQueryResult = Apollo.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
 export const UserDocument = gql`
     query User($where: UserWhereUniqueInput!, $groupWhere: GroupWhereInput, $chatWhere: UserChatWhereInput, $schemeWhere: UserSchemeWhereInput) {
   user(where: $where) {
@@ -34083,6 +34011,112 @@ export function useVehicleLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ve
 export type VehicleQueryHookResult = ReturnType<typeof useVehicleQuery>;
 export type VehicleLazyQueryHookResult = ReturnType<typeof useVehicleLazyQuery>;
 export type VehicleQueryResult = Apollo.QueryResult<VehicleQuery, VehicleQueryVariables>;
+export const CurrentUserDocument = gql`
+    query currentUser($scheme: UniqueId, $orderBy: [UserSchemeOrderByWithRelationInput!]) {
+  currentUser {
+    id
+    fullName
+    origName
+    email
+    reference
+    demId
+    publicName
+    reportToAllBusinesses
+    notificationCount(scheme: $scheme)
+    messageCount
+    defaultScheme
+    businesses {
+      id
+      name
+      fullName
+      demId
+      brands
+    }
+    newUser
+    defaultGroups {
+      id
+      name
+      scheme {
+        id
+      }
+    }
+    schemes(orderBy: $orderBy) {
+      id
+      role
+      scheme {
+        customTranslations
+        logo {
+          optimisedPersisted
+        }
+        darkLogo {
+          optimisedPersisted
+        }
+        userTodos
+        id
+        name
+        goodsMode
+        autoApproveIncidents
+        autoApproveOffenders
+        defaultPublicOffenderDOB
+        restrictIncidentAccess
+        reportOnly
+        facialRecognition
+        facialDetection
+        imagesRequiredOnOffenders
+        taskTimeTracking
+        languageCount
+        autoPopulateDescription
+        needJustification
+        requireSiteNumberForUsers
+        oneSelectedIncidentTypeOnly
+        connectedToSchemes {
+          id
+          name
+        }
+      }
+      isAdmin
+      permissions {
+        model
+        allowedMethods
+      }
+      dashboard {
+        runningBanner
+        layout {
+          h
+          i
+          maxH
+          maxW
+          minH
+          minW
+          moved
+          static
+          w
+          x
+          y
+        }
+      }
+    }
+    incidentEmail
+    incidentPush
+    offenderEmail
+    offenderPush
+    bulletinEmails
+    bulletinPush
+    messagePush
+  }
+}
+    `;
+export function useCurrentUserQuery(baseOptions?: Apollo.QueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, options);
+      }
+export function useCurrentUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, options);
+        }
+export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
+export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
+export type CurrentUserQueryResult = Apollo.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
 export const CreateOneQuestionGroupDocument = gql`
     mutation CreateOneQuestionGroup($data: QuestionGroupCreateInput!) {
   createOneQuestionGroup(data: $data) {
@@ -35043,13 +35077,14 @@ export type OffenderFeedListQueryHookResult = ReturnType<typeof useOffenderFeedL
 export type OffenderFeedListLazyQueryHookResult = ReturnType<typeof useOffenderFeedListLazyQuery>;
 export type OffenderFeedListQueryResult = Apollo.QueryResult<OffenderFeedListQuery, OffenderFeedListQueryVariables>;
 export const ListOffendersRelayDocument = gql`
-    query ListOffendersRelay($after: String, $first: Int, $order: OffenderOrderByWithRelationInput, $scheme: SchemeWhereUniqueInput, $where: OffenderWhereInput) {
+    query ListOffendersRelay($after: String, $first: Int, $order: OffenderOrderByWithRelationInput, $scheme: SchemeWhereUniqueInput, $where: OffenderWhereInput, $orderByValue: SortOrder) {
   listOffendersRelay(
     after: $after
     first: $first
     order: $order
     scheme: $scheme
     where: $where
+    orderByValue: $orderByValue
   ) {
     pageInfo {
       hasNextPage

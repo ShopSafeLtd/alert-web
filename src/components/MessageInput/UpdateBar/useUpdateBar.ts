@@ -53,6 +53,7 @@ import type {
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 import { getText } from 'utils/getMentions/get-mention-text';
+import { useGroupsContext } from '#/context/groups-context';
 
 interface Return {
   beforeUpdateImageUpload: (value: RcFile) => void;
@@ -137,12 +138,9 @@ const useUpdateBar = ({
   const [updateForm] = Form.useForm<FormData>();
   const [formTouched, setFormTouched] = useState(false);
   const { restrictIncidentAccess } = useStoreState((state) => state.scheme);
-  const {
-    role: userRole,
-    id: userId,
-    groups: userGroups,
-  } = useStoreState((state) => state.user);
-  const groupsId = userGroups.map((group) => group.id);
+  const { role: userRole, id: userId } = useStoreState((state) => state.user);
+  const { groups } = useGroupsContext();
+  const groupsId = groups.map((group) => group.value);
   const [saving, setSaving] = useState(false);
   const [showUpdatePicker, setShowUpdatePicker] = useState(false);
   const [linkIncident, setLinkIncident] = useState(false);

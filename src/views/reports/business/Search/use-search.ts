@@ -22,6 +22,7 @@ const useOffenderProfile = (): Return => {
   const [searchPageSize, setSearchPageSize] = useState(20);
 
   const currentScheme = useStoreState((state) => state.scheme.id);
+  const userId = useStoreState((state) => state.user.id);
 
   const { data: searchBusinessData, loading: searchBusinessLoading } =
     useSearchBusinessesQuery({
@@ -38,6 +39,17 @@ const useOffenderProfile = (): Return => {
           name: {
             contains: searchValue,
             mode: QueryMode.Insensitive,
+          },
+          groups: {
+            some: {
+              users: {
+                some: {
+                  id: {
+                    equals: userId,
+                  },
+                },
+              },
+            },
           },
         },
         skip: searchPageSize * (searchPage - 1),

@@ -26,7 +26,7 @@ const filteredBarData = ({ data }: FilteredBarDataParams) => {
     label: item?.label || '',
     ...dataFormatToBar({ item: item || { data: null } }),
   }));
-  const filteredData = initData?.filter((item) => Object.keys(item).length > 2);
+  const filteredData = initData?.filter((item) => Object.keys(item).length > 1);
   if (!filteredData)
     return [
       {

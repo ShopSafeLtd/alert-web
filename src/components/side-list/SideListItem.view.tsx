@@ -28,15 +28,17 @@ const useStyles = createUseStyles((theme: Theme) => ({
 interface Props {
   children: ReactNode;
   current: boolean;
+  noCard?: boolean;
   loading?: boolean;
   style?: React.CSSProperties;
 }
 
-const SideList = ({ children, current, loading, style }: Props) => {
+const SideList = ({ children, current, loading, style, noCard }: Props) => {
   const classes = useStyles();
 
   return (
     <Card
+      bordered={!noCard}
       loading={loading || false}
       className={`${classes.item} ${current ? 'current' : undefined} ${
         loading ? 'loading' : undefined

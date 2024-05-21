@@ -12,7 +12,7 @@ const MySafetyCSV = ({ onChange }: Props) => {
     if (onChange)
       onChange(
         data
-          .filter((_, i) => i > 40)
+          .filter((_, i) => i > 41)
           .map((item) => ({
             site: item[0],
             dateCreated: new Date(item[1]),

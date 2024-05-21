@@ -14,6 +14,7 @@ type InfiniteScrollListProps = {
   items?: JSX.Element[];
   loader?: JSX.Element;
   endMessage?: JSX.Element;
+  filters?: JSX.Element;
 };
 
 interface ItemsLoadingProps {
@@ -43,6 +44,7 @@ const InfiniteSideScrollList: React.FC<InfiniteScrollListProps> = ({
   hasMore = false,
   isLoading,
   loadingItems,
+  filters,
   items = [],
   loader = <Loading />,
   endMessage = (
@@ -56,6 +58,7 @@ const InfiniteSideScrollList: React.FC<InfiniteScrollListProps> = ({
 
   return (
     <div className={classes.sideList}>
+      {filters || null}
       <InfiniteScroll
         dataLength={dataLength}
         next={next}

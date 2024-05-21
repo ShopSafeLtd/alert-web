@@ -15,6 +15,7 @@ interface Return {
 }
 
 const useListCrimeGroups = (): Return => {
+  const userId = useStoreState((state) => state.user.id);
   const schemeId = useStoreState((state) => state.scheme.id);
   const [search, setSearch] = useState('');
 
@@ -29,6 +30,17 @@ const useListCrimeGroups = (): Return => {
           some: {
             id: {
               equals: schemeId,
+            },
+          },
+        },
+        groups: {
+          some: {
+            users: {
+              some: {
+                id: {
+                  equals: userId,
+                },
+              },
             },
           },
         },

@@ -20,6 +20,7 @@ interface Return {
 
 const useOffenderProfile = (): Return => {
   const navigate = useNavigate();
+  const userId = useStoreState((state) => state.user.id);
 
   const [searchValue, setSearchValue] = useState('');
   const [searchPage, setSearchPage] = useState(1);
@@ -41,6 +42,17 @@ const useOffenderProfile = (): Return => {
           name: {
             contains: searchValue,
             mode: QueryMode.Insensitive,
+          },
+          groups: {
+            some: {
+              users: {
+                some: {
+                  id: {
+                    equals: userId,
+                  },
+                },
+              },
+            },
           },
         },
         skip: searchPageSize * (searchPage - 1),
