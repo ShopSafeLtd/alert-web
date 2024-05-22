@@ -137,7 +137,6 @@
     "no-underscore-dangle": "error",
     "no-unneeded-ternary": "error",
     "no-whitespace-before-property": "error",
-    "object-property-newline": "error",
     "operator-assignment": [
       "error",
       "always"
