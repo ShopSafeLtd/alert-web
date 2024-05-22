@@ -223,6 +223,8 @@
     "@graphql-codegen/typescript-operations": "2.3.2",
     "@graphql-codegen/typescript-react-apollo": "3.2.8",
     "@sentry/vite-plugin": "^0.7.2",
+    "@stylistic/eslint-plugin": "^2.1.0",
+    "@stylistic/eslint-plugin-migrate": "^2.1.0",
     "@types/react": "^17.0.34",
     "@types/react-helmet": "^6.1.11",
     "@types/react-swipeable-views": "^0.13.1",
