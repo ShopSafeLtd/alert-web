@@ -39,7 +39,11 @@
     "assumeChangesOnlyAffectDirectDependencies": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "build"],
+  "exclude": [
+    "node_modules",
+    "build",
+    "src/components/util-components/DatePicker.tsx"
+  ],
   "references": [
     {
       "path": "./tsconfig.node.json"

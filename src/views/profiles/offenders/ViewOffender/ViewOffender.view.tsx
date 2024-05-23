@@ -2418,8 +2418,9 @@ const ViewOffender = ({
         })}
         open={addImages !== null}
         onOk={() => {
-          if (selectedImages && selectedImages.length > 0)
+          if (selectedImages && selectedImages.length > 0) {
             onSelectUpdateImages();
+          }
         }}
         onCancel={closeAddImages}
         width={addImages ? addImages.length * 250 : 400}
@@ -2450,8 +2451,9 @@ const ViewOffender = ({
         })}
         open={showIncidentOptions}
         onOk={() => {
-          if (selectedIncidentId)
+          if (selectedIncidentId) {
             onAddUpdateImagesToIncident(selectedIncidentId);
+          }
         }}
         onCancel={() => {
           toggleShowIncidentOptions();

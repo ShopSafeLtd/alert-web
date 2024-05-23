@@ -1,18 +1,12 @@
-query listCustomGalleries(
-  $take: Int
-  $skip: Int
-  $where: CustomGalleryWhereInput
-  $order: CustomGalleryOrderByWithRelationInput
-) {
-  listCustomGalleries(take: $take, skip: $skip, where: $where, order: $order) {
-    customGalleries {
-      description
-      groups {
-        id
-      }
+query listCustomGalleries($where: CustomGalleryWhereInput, $take: Int, $skip: Int, $order: CustomGalleryOrderByWithRelationInput) {
+  customGalleriesRelay(where: $where, take: $take, skip: $skip, order: $order) {
+    edges {
+      node {
+         description
       id
       name
+      }
     }
-    total
+    totalCount
   }
 }
