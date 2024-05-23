@@ -2,6 +2,7 @@ import React from 'react';
 import { SortOrder, useUsersSelectQuery } from 'graphql/generated';
 import { Select } from 'antd';
 import { useStoreState } from 'state';
+import { useGroupsContext } from '#/context/groups-context';
 
 interface Props {
   value?: string[];
@@ -23,8 +24,8 @@ const UsersSelect = ({
   className,
 }: Props) => {
   const currentSchemeId = useStoreState((state) => state.scheme.id);
-  const groups = useStoreState((state) => state.user.groups);
 
+  const { groups } = useGroupsContext();
   const { data, loading } = useUsersSelectQuery({
     variables: {
       orderBy: {
@@ -47,7 +48,7 @@ const UsersSelect = ({
             groups: {
               some: {
                 id: {
-                  in: groups.map(({ id }) => id),
+                  in: groups.map(({ value: id }) => id),
                 },
               },
             },
