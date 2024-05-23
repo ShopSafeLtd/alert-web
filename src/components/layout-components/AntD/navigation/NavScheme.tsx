@@ -120,9 +120,6 @@ export const NavScheme = () => {
 
   return schemes.length > 1 ? (
     <Dropdown
-      style={{
-        minWidth: 200,
-      }}
       open={visible || !!search}
       onOpenChange={handleVisibleChange}
       menu={{
