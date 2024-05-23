@@ -159,13 +159,6 @@ export interface UserModel {
   userTodos?: number | null | undefined;
   userNotifications?: number | null | undefined;
   userMessages?: number | null | undefined;
-  groups: {
-    id: string;
-    name: string;
-    scheme: {
-      id: string;
-    };
-  }[];
   defaultGroups: {
     id: string;
     name: string;
@@ -208,7 +201,6 @@ const userModel: UserModel = {
   isSet: false,
   role: Role.User,
   schemes: [],
-  groups: [],
   defaultGroups: [],
   filterDefaultGroups: [],
   reportToAllBusinesses: false,
@@ -227,7 +219,6 @@ const userModel: UserModel = {
     state.onboarded = payload.onboarded;
     state.businesses = payload.businesses;
     state.schemes = payload.schemes;
-    // state.groups = payload.groups;
     state.defaultGroups = payload.defaultGroups || [];
     state.filterDefaultGroups = payload.filterDefaultGroups || [];
     state.isSet = payload.isSet;
