@@ -109,6 +109,7 @@ const SchemeDetail = ({
             defaultOffenderPush: data?.scheme?.defaultOffenderPush,
             defaultPublicOffenderDOB: data?.scheme?.defaultPublicOffenderDOB,
             facialRecognition: data?.scheme?.facialRecognition,
+            activityAssignToUser: data?.scheme?.activityAssignToUser,
             imagesRequiredOnOffenders: data?.scheme?.imagesRequiredOnOffenders,
             goodsMode: data?.scheme?.goodsMode,
           }}
@@ -637,6 +638,21 @@ const SchemeDetail = ({
                 className="scheme-detail-switch"
               />
             </Form.Item>
+            <Form.Item
+              label={intl.formatMessage({
+                defaultMessage: 'Allow activities to be assigned to users',
+                id: 'yuU93B',
+              })}
+              name="activityAssignToUser"
+              valuePropName="checked"
+              style={{ marginBottom: 0 }}
+            >
+              <Switch
+                disabled={saving}
+                style={{ marginLeft: 5 }}
+                className="scheme-detail-switch"
+              />
+            </Form.Item>
           </Card>
           <Card>
             <Title level={4}>
@@ -763,7 +779,8 @@ const SchemeDetail = ({
             </Form.Item>
             <Form.Item
               label={intl.formatMessage({
-                defaultMessage: `Images of incident are available for offenders' faces detection`,
+                defaultMessage:
+                  "Images of incident are available for offenders' faces detection",
                 id: 'C9IU0k',
               })}
               name="facialDetection"
