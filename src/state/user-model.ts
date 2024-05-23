@@ -129,6 +129,7 @@ export interface Scheme {
       id: string;
       name: string;
     }[];
+    activityAssignToUser: boolean;
   };
 }
 

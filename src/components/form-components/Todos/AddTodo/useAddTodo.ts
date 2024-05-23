@@ -85,6 +85,9 @@ const useAddTodo = ({
   const [form] = useForm<FormData>();
   const intl = useIntl();
   const schemeId = useStoreState((state) => state.scheme.id);
+  const activityAssignToUser = useStoreState(
+    (state) => state.scheme.activityAssignToUser
+  );
   const userId = useStoreState((state) => state.user.id);
   const [saving, setSaving] = useState(false);
   const [addQuestion, setAddQuestion] = useState(false);
@@ -186,9 +189,11 @@ const useAddTodo = ({
                 },
               },
               {
-                role: {
-                  in: [Role.SchemeAdmin, Role.ShopsafeAdmin],
-                },
+                role: activityAssignToUser
+                  ? undefined
+                  : {
+                      in: [Role.SchemeAdmin, Role.ShopsafeAdmin],
+                    },
               },
             ],
           },

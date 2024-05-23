@@ -93,6 +93,7 @@ export const NavScheme = () => {
       userNotifications: scheme.scheme.userNotifications,
       goodsMode: scheme.scheme.goodsMode,
       facialRecognition: scheme.scheme.facialRecognition,
+      activityAssignToUser: scheme.scheme.activityAssignToUser,
       imagesRequiredOnOffenders: scheme.scheme.imagesRequiredOnOffenders,
       taskTimeTracking: scheme.scheme.taskTimeTracking,
       restrictIncidentAccess: scheme.scheme.restrictIncidentAccess,
