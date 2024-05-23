@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Dropdown, Row, Typography } from 'antd';
+import { Col, Dropdown, Input, Row, Typography } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/pro-light-svg-icons';
 import { faCaretDown } from '@fortawesome/pro-solid-svg-icons';
@@ -42,7 +42,6 @@ export const NavScheme = () => {
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
   const activeSchemeName = useStoreState((state) => state.scheme.name);
   const setScheme = useStoreActions((actions) => actions.scheme.setScheme);
-
   const setTodos = useStoreActions((actions) => actions.user.setTodos);
   const setNotifications = useStoreActions(
     (actions) => actions.user.setNotifications
@@ -65,6 +64,7 @@ export const NavScheme = () => {
   }, [activeScheme]);
 
   const handleSchemeChange = (scheme: Scheme) => {
+    setSearch('');
     window.localStorage.removeItem(LocalStorageKeys.INCIDENT_FILTER);
     window.localStorage.removeItem(LocalStorageKeys.OFFENDER_FILTER);
     window.localStorage.setItem('currentScheme', scheme.scheme.id);
@@ -113,9 +113,17 @@ export const NavScheme = () => {
     handleVisibleChange(false);
   };
 
+  const [search, setSearch] = useState('');
+  const filteredSchemes = schemes.filter((scheme) =>
+    scheme.scheme.name.toLowerCase().includes(search.toLowerCase())
+  );
+
   return schemes.length > 1 ? (
     <Dropdown
-      open={visible}
+      style={{
+        minWidth: 200,
+      }}
+      open={visible || !!search}
       onOpenChange={handleVisibleChange}
       menu={{
         style: {
@@ -123,55 +131,112 @@ export const NavScheme = () => {
           overflowY: 'auto',
           colorScheme: currentTheme,
         },
-        items: schemes.map((scheme) => ({
-          key: scheme.id,
-          className:
-            activeScheme === scheme.scheme.id ? classes.active : undefined,
-          label: (
-            <Row
-              align="middle"
-              style={{
-                width: '100%',
-                paddingRight: 10,
-                paddingLeft: 10,
-                paddingTop: 4,
-                paddingBottom: 4,
-              }}
-              onClick={() => handleSchemeChange(scheme)}
-              wrap={false}
-            >
-              <Col flex={1}>
-                <Text
-                  ellipsis
-                  style={{ maxWidth: 180, marginRight: 20 }}
-                  className="text-dark"
-                >
-                  {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
-                  {scheme.scheme.name}{' '}
-                </Text>
-              </Col>
-              {activeScheme === scheme.scheme.id ? (
-                <Col>
-                  <Text type="success">
-                    {intl.formatMessage({
-                      defaultMessage: 'Selected',
-                      id: 'byP6IC',
-                    })}
-                  </Text>
-                </Col>
-              ) : (
-                <Col>
-                  <FontAwesomeIcon
-                    icon={faArrowRight}
-                    style={{ fontSize: 16, marginLeft: 10 }}
-                  />
-                </Col>
-              )}
-            </Row>
-          ),
-        })),
+        items:
+          filteredSchemes.length > 0
+            ? filteredSchemes.map((scheme) => ({
+                key: scheme.id,
+                className:
+                  activeScheme === scheme.scheme.id
+                    ? classes.active
+                    : undefined,
+                label: (
+                  <Row
+                    align="middle"
+                    style={{
+                      width: '100%',
+                      paddingRight: 10,
+                      paddingLeft: 10,
+                      paddingTop: 4,
+                      paddingBottom: 4,
+                    }}
+                    onClick={() => handleSchemeChange(scheme)}
+                    wrap={false}
+                  >
+                    <Col flex={1}>
+                      <Text
+                        ellipsis
+                        style={{ maxWidth: 180, marginRight: 20 }}
+                        className="text-dark"
+                      >
+                        {/* eslint-disable-next-line formatjs/no-literal-string-in-jsx */}
+                        {scheme.scheme.name}{' '}
+                      </Text>
+                    </Col>
+                    {activeScheme === scheme.scheme.id ? (
+                      <Col>
+                        <Text type="success">
+                          {intl.formatMessage({
+                            defaultMessage: 'Selected',
+                            id: 'byP6IC',
+                          })}
+                        </Text>
+                      </Col>
+                    ) : (
+                      <Col>
+                        <FontAwesomeIcon
+                          icon={faArrowRight}
+                          style={{ fontSize: 16, marginLeft: 10 }}
+                        />
+                      </Col>
+                    )}
+                  </Row>
+                ),
+              }))
+            : [
+                {
+                  key: 'no-schemes',
+                  label: (
+                    <Row
+                      align="middle"
+                      style={{
+                        width: '100%',
+                        paddingRight: 10,
+                        paddingLeft: 10,
+                        paddingTop: 4,
+                        paddingBottom: 4,
+                      }}
+                      wrap={false}
+                    >
+                      <Col flex={1}>
+                        <Text
+                          ellipsis
+                          style={{ maxWidth: 180, marginRight: 20 }}
+                          className="text-dark"
+                        >
+                          {intl.formatMessage({
+                            defaultMessage: 'No schemes found',
+                            id: 'ym1dBk',
+                          })}
+                        </Text>
+                      </Col>
+                    </Row>
+                  ),
+                },
+              ],
       }}
       placement="topRight"
+      dropdownRender={(menu) => (
+        <div className="dropdown-content">
+          <div>
+            {menu}
+
+            {schemes.length > 5 && (
+              <Input
+                allowClear
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder={intl.formatMessage({
+                  defaultMessage: 'Search',
+                  id: 'xmcVZ0',
+                })}
+                style={{
+                  width: '100%',
+                }}
+              />
+            )}
+          </div>
+        </div>
+      )}
     >
       <div className={classes.notificationCol}>
         <Text style={{ maxWidth: 120 }} ellipsis>

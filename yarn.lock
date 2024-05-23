@@ -1095,6 +1095,11 @@
     "@clerk/types" "4.2.1"
     tslib "2.4.1"
 
+"@clerk/localizations@^2.4.2":
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/@clerk/localizations/-/localizations-2.4.2.tgz#4206d4f46bc16d021c494bed8d76a11b9607583f"
+  integrity sha512-bDxHZ6YG+oHB03h0fl7jlOmwTwwtsrB9KFVepwI9L7vJixPNFRdnGcCgAcOFZ+E+dn6EBY/W2RgP3hbVRdWV8g==
+
 "@clerk/shared@2.0.2":
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/@clerk/shared/-/shared-2.0.2.tgz#19423474fa7ab5a601f73fb10d2e678ce12d8f49"
@@ -6273,14 +6278,14 @@ camelize@^1.0.0:
   integrity sha1-FkpUg+Yw+kMh5a8HAg5TGDGyYJs=
 
 caniuse-lite@^1.0.30001109, caniuse-lite@^1.0.30001251, caniuse-lite@^1.0.30001332, caniuse-lite@^1.0.30001400:
-  version "1.0.30001517"
-  resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001517.tgz"
-  integrity sha512-Vdhm5S11DaFVLlyiKu4hiUTkpZu+y1KA/rZZqVQfOD5YdDT/eQKlkt7NaE0WGOFgX32diqt9MiP9CAiFeRklaA==
+  version "1.0.30001621"
+  resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001621.tgz"
+  integrity sha512-+NLXZiviFFKX0fk8Piwv3PfLPGtRqJeq2TiNoUff/qB5KJgwecJTvCXDpmlyP/eCI/GUEmp/h/y5j0yckiiZrA==
 
 caniuse-lite@^1.0.30001587:
-  version "1.0.30001620"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001620.tgz#78bb6f35b8fe315b96b8590597094145d0b146b4"
-  integrity sha512-WJvYsOjd1/BYUY6SNGUosK9DUidBPDTnOARHp3fSmFO1ekdxaY6nKRttEVrfMmYi80ctS0kz1wiWmm14fVc3ew==
+  version "1.0.30001621"
+  resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001621.tgz"
+  integrity sha512-+NLXZiviFFKX0fk8Piwv3PfLPGtRqJeq2TiNoUff/qB5KJgwecJTvCXDpmlyP/eCI/GUEmp/h/y5j0yckiiZrA==
 
 canvg@^3.0.6:
   version "3.0.10"

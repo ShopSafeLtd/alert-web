@@ -135,9 +135,7 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
   const [form] = Form.useForm<FormData>();
   const schemeId = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
-  const userGroups = useStoreState((state) => state.user.groups).filter(
-    ({ scheme }) => scheme.id === schemeId
-  );
+
   const role = useStoreState((state) => state.user.role);
   const pagination = useStoreState((state) => state.data.offenders.pagination);
   const variables = useStoreState((state) => state.data.offenders.variables);
@@ -184,7 +182,7 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
   });
 
   const { groups, groupsLoading } = useGroupsContext();
-
+  const userGroups = groups;
   useEffect(() => {
     if (groups) {
       setOffendersState({
@@ -320,7 +318,7 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
             set:
               userGroups.length > 1
                 ? data.groups.map((id) => ({ id }))
-                : userGroups.map(({ id }) => ({ id })),
+                : userGroups.map(({ value: id }) => ({ id })),
           },
           tags: {
             set: data.tags.map((id) => ({ id })) || undefined,
@@ -364,7 +362,7 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
   // delete incident
   const [recycleOffender] = useRecycleOffenderMutation({
     onCompleted: () => {
-      navigate(`/app/offenders`);
+      navigate('/app/offenders');
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Rejected!',

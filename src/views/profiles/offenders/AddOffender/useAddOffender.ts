@@ -390,7 +390,7 @@ const useAddOffender = (): Return => {
     });
   };
   const [createOffender] = useCreateOffenderMutation({
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises,@typescript-eslint/require-await
     onCompleted: async () => {
       setSaving(false);
       notification.success({
@@ -890,10 +890,12 @@ const useAddOffender = (): Return => {
       tagsData?.tags.map((tag) => ({ value: tag.id, label: tag.name })) || [],
     tagsLoading,
     customGalleries:
-      customGalleriesData?.listCustomGalleries.customGalleries.map((tag) => ({
-        value: tag.id,
-        label: tag.name,
-      })) || [],
+      customGalleriesData?.customGalleriesRelay?.edges?.map(
+        ({ node: tag }) => ({
+          value: tag.id,
+          label: tag.name,
+        })
+      ) || [],
     customGalleriesLoading,
     imgChange,
     // eslint-disable-next-line @typescript-eslint/no-misused-promises

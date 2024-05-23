@@ -247,7 +247,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     const index = addressesData.map(({ id }) => id).indexOf(data.id);
     const existingData = addressesData.find(({ id }) => id === data.id);
 
-    if (existingData)
+    if (existingData) {
       setAddressesData(
         update(addressesData, {
           [index]: {
@@ -259,6 +259,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
           },
         })
       );
+    }
     toggleEditAddress(null);
   };
 
@@ -403,7 +404,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
   const { groups, groupsLoading } = useGroupsContext();
 
   useEffect(() => {
-    if (groups)
+    if (groups) {
       setOffendersState({
         pagination,
         variables: {
@@ -412,6 +413,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
         },
         order,
       });
+    }
   }, [groups]);
 
   const { data: tagsData, loading: tagsLoading } = useTagsQuery({
@@ -433,7 +435,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
   });
 
   const [updateOffender] = useUpdateOffenderMutation({
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises,@typescript-eslint/require-await
     onCompleted: async () => {
       setSaving(false);
       navigate(`/app/offenders/view/${offenderId}`);
@@ -818,7 +820,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
   // delete incident
   const [recycleOffender] = useRecycleOffenderMutation({
     onCompleted: () => {
-      navigate(`/app/offenders`);
+      navigate('/app/offenders');
       notification.success({
         message: intl.formatMessage({
           defaultMessage: 'Successfully Rejected!',
@@ -1211,10 +1213,12 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     primaryImage,
     setPrimaryImage,
     customGalleries:
-      customGalleriesData?.listCustomGalleries.customGalleries.map((tag) => ({
-        value: tag.id,
-        label: tag.name,
-      })) || [],
+      customGalleriesData?.customGalleriesRelay?.edges?.map(
+        ({ node: tag }) => ({
+          value: tag.id,
+          label: tag.name,
+        })
+      ) || [],
     customGalleriesLoading,
     toggleAddCustomGallery,
     updateNewOffenderTagData,

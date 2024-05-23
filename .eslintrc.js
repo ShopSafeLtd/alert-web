@@ -56,7 +56,6 @@ module.exports = {
     quotes: ['error', 'single'],
     semi: ['error', 'always'],
     'block-scoped-var': 'error',
-    curly: ['error', 'multi-line'],
     eqeqeq: 'error',
     'guard-for-in': 'error',
     'no-alert': 'error',
@@ -153,7 +152,6 @@ module.exports = {
     'semi-spacing': 'error',
     'semi-style': ['error', 'last'],
     'space-before-blocks': ['error', 'always'],
-    'space-before-function-paren': ['error', 'never'],
     'space-in-parens': ['error', 'never'],
     'import/extensions': [
       'error',

@@ -12837,6 +12837,7 @@ export type Query = {
   crimeGroupPerformance: ListCrimeGroupPerformance;
   crimeGroupReport: CrimeGroupReport;
   currentUser?: Maybe<User>;
+  customGalleriesRelay: QueryCustomGalleriesRelayConnection;
   customGallery: CustomGallery;
   customQuestionsCountGraph: CustomQuestionsGraph;
   dashboard: Dashboard;
@@ -13163,6 +13164,18 @@ export type QueryCrimeGroupPerformanceArgs = {
 
 export type QueryCrimeGroupReportArgs = {
   where: CrimeGroupReportInput;
+};
+
+
+export type QueryCustomGalleriesRelayArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<CustomGalleryOrderByWithRelationInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<CustomGalleryWhereInput>;
 };
 
 
@@ -14010,6 +14023,19 @@ export type QueryBusinessRelayConnectionEdge = {
   __typename?: 'QueryBusinessRelayConnectionEdge';
   cursor: Scalars['String'];
   node: Business;
+};
+
+export type QueryCustomGalleriesRelayConnection = {
+  __typename?: 'QueryCustomGalleriesRelayConnection';
+  edges: Array<QueryCustomGalleriesRelayConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryCustomGalleriesRelayConnectionEdge = {
+  __typename?: 'QueryCustomGalleriesRelayConnectionEdge';
+  cursor: Scalars['String'];
+  node: CustomGallery;
 };
 
 export type QueryDashboardsConnection = {
@@ -19486,6 +19512,7 @@ export type UserScheme = {
   dashboard?: Maybe<Dashboard>;
   id: Scalars['String'];
   isAdmin: Scalars['Boolean'];
+  notificationCount: Scalars['Int'];
   orignalPermissions: CustomRole;
   permissions: Array<Permissions>;
   recycled: Scalars['Boolean'];
@@ -21305,14 +21332,14 @@ export type UpdateCustomGalleryMutationVariables = Exact<{
 export type UpdateCustomGalleryMutation = { __typename?: 'Mutation', updateCustomGallery: { __typename?: 'CustomGallery', id: string, name: string, description?: string | null, groups: Array<{ __typename?: 'Group', id: string }> } };
 
 export type ListCustomGalleriesQueryVariables = Exact<{
+  where?: InputMaybe<CustomGalleryWhereInput>;
   take?: InputMaybe<Scalars['Int']>;
   skip?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<CustomGalleryWhereInput>;
   order?: InputMaybe<CustomGalleryOrderByWithRelationInput>;
 }>;
 
 
-export type ListCustomGalleriesQuery = { __typename?: 'Query', listCustomGalleries: { __typename?: 'ListCustomGalleries', total: number, customGalleries: Array<{ __typename?: 'CustomGallery', description?: string | null, id: string, name: string, groups: Array<{ __typename?: 'Group', id: string }> }> } };
+export type ListCustomGalleriesQuery = { __typename?: 'Query', customGalleriesRelay: { __typename?: 'QueryCustomGalleriesRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryCustomGalleriesRelayConnectionEdge', node: { __typename?: 'CustomGallery', description?: string | null, id: string, name: string } }> } };
 
 export type CopyEvidenceMutationVariables = Exact<{
   data: ImportDemEvidence;
@@ -23269,6 +23296,16 @@ export type ParentBusinessesListQueryVariables = Exact<{
 
 
 export type ParentBusinessesListQuery = { __typename?: 'Query', businessRelay: { __typename?: 'QueryBusinessRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryBusinessRelayConnectionEdge', node: { __typename?: 'Business', id: string, name: string } }> } };
+
+export type CustomGalleriesQueryVariables = Exact<{
+  where?: InputMaybe<CustomGalleryWhereInput>;
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<CustomGalleryOrderByWithRelationInput>;
+}>;
+
+
+export type CustomGalleriesQuery = { __typename?: 'Query', customGalleriesRelay: { __typename?: 'QueryCustomGalleriesRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryCustomGalleriesRelayConnectionEdge', node: { __typename?: 'CustomGallery', description?: string | null, id: string, name: string, groups: Array<{ __typename?: 'Group', id: string }> } }> } };
 
 export type CreateCsvImportMutationVariables = Exact<{
   data: CsvImportCreateInput;
@@ -26439,17 +26476,16 @@ export type UpdateCustomGalleryMutationHookResult = ReturnType<typeof useUpdateC
 export type UpdateCustomGalleryMutationResult = Apollo.MutationResult<UpdateCustomGalleryMutation>;
 export type UpdateCustomGalleryMutationOptions = Apollo.BaseMutationOptions<UpdateCustomGalleryMutation, UpdateCustomGalleryMutationVariables>;
 export const ListCustomGalleriesDocument = gql`
-    query listCustomGalleries($take: Int, $skip: Int, $where: CustomGalleryWhereInput, $order: CustomGalleryOrderByWithRelationInput) {
-  listCustomGalleries(take: $take, skip: $skip, where: $where, order: $order) {
-    customGalleries {
-      description
-      groups {
+    query listCustomGalleries($where: CustomGalleryWhereInput, $take: Int, $skip: Int, $order: CustomGalleryOrderByWithRelationInput) {
+  customGalleriesRelay(where: $where, take: $take, skip: $skip, order: $order) {
+    edges {
+      node {
+        description
         id
+        name
       }
-      id
-      name
     }
-    total
+    totalCount
   }
 }
     `;
@@ -35438,6 +35474,34 @@ export function useParentBusinessesListLazyQuery(baseOptions?: Apollo.LazyQueryH
 export type ParentBusinessesListQueryHookResult = ReturnType<typeof useParentBusinessesListQuery>;
 export type ParentBusinessesListLazyQueryHookResult = ReturnType<typeof useParentBusinessesListLazyQuery>;
 export type ParentBusinessesListQueryResult = Apollo.QueryResult<ParentBusinessesListQuery, ParentBusinessesListQueryVariables>;
+export const CustomGalleriesDocument = gql`
+    query customGalleries($where: CustomGalleryWhereInput, $take: Int, $skip: Int, $order: CustomGalleryOrderByWithRelationInput) {
+  customGalleriesRelay(where: $where, take: $take, skip: $skip, order: $order) {
+    edges {
+      node {
+        description
+        id
+        name
+        groups {
+          id
+        }
+      }
+    }
+    totalCount
+  }
+}
+    `;
+export function useCustomGalleriesQuery(baseOptions?: Apollo.QueryHookOptions<CustomGalleriesQuery, CustomGalleriesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CustomGalleriesQuery, CustomGalleriesQueryVariables>(CustomGalleriesDocument, options);
+      }
+export function useCustomGalleriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CustomGalleriesQuery, CustomGalleriesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CustomGalleriesQuery, CustomGalleriesQueryVariables>(CustomGalleriesDocument, options);
+        }
+export type CustomGalleriesQueryHookResult = ReturnType<typeof useCustomGalleriesQuery>;
+export type CustomGalleriesLazyQueryHookResult = ReturnType<typeof useCustomGalleriesLazyQuery>;
+export type CustomGalleriesQueryResult = Apollo.QueryResult<CustomGalleriesQuery, CustomGalleriesQueryVariables>;
 export const CreateCsvImportDocument = gql`
     mutation CreateCsvImport($data: CsvImportCreateInput!) {
   createOneCsvImport(data: $data) {
