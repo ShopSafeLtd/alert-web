@@ -45,6 +45,7 @@ export interface FormData {
   offenderRetention: number | null;
   facialRecognition: boolean;
   facialDetection: boolean;
+  activityAssignToUser: boolean;
   imagesRequiredOnOffenders: boolean;
   goodsMode: GoodsMode;
 }
@@ -195,6 +196,7 @@ const useSchemeDetail = (): Return => {
           defaultPublicOffenderDOB: { set: data.defaultPublicOffenderDOB },
           facialRecognition: { set: data.facialRecognition },
           facialDetection: { set: data.facialDetection },
+          activityAssignToUser: { set: data.activityAssignToUser },
           imagesRequiredOnOffenders: { set: data.imagesRequiredOnOffenders },
           goodsMode: data.goodsMode ? { set: data.goodsMode } : undefined,
           // ???

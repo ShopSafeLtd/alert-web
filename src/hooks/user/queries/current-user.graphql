@@ -1,4 +1,7 @@
-query currentUser($scheme: UniqueId, $orderBy: [UserSchemeOrderByWithRelationInput!]) {
+query currentUser(
+  $scheme: UniqueId
+  $orderBy: [UserSchemeOrderByWithRelationInput!]
+) {
   currentUser {
     id
     fullName
@@ -48,6 +51,7 @@ query currentUser($scheme: UniqueId, $orderBy: [UserSchemeOrderByWithRelationInp
         reportOnly
         facialRecognition
         facialDetection
+        activityAssignToUser
         imagesRequiredOnOffenders
         taskTimeTracking
         languageCount

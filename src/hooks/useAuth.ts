@@ -90,7 +90,8 @@ const useAuth = (): Return => {
     defaultGroups,
     reportToAllBusinesses,
     defaultScheme,
-  }: HandleSuccessArgs) => {
+  }: // eslint-disable-next-line @typescript-eslint/require-await
+  HandleSuccessArgs) => {
     // const color = `hsl(${Math.random() * 360}, 70%, 30%)`;
 
     const handleNoValidScheme = () => {
@@ -124,6 +125,7 @@ const useAuth = (): Return => {
         taskTimeTracking: schemeDetails?.taskTimeTracking,
         languageCount: schemeDetails?.languageCount || 0,
         connectedToSchemes: schemeDetails?.connectedToSchemes || [],
+        activityAssignToUser: schemeDetails?.activityAssignToUser,
       });
       setFilterDefaultGroup({
         filterDefaultGroups: defaultGroups.filter(
@@ -175,6 +177,7 @@ const useAuth = (): Return => {
           taskTimeTracking: schemeDetails.scheme.taskTimeTracking,
           languageCount: schemeDetails.scheme.languageCount || 0,
           connectedToSchemes: schemeDetails.scheme.connectedToSchemes || [],
+          activityAssignToUser: schemeDetails.scheme.activityAssignToUser,
         });
         setFilterDefaultGroup({
           filterDefaultGroups: defaultGroups.filter(
@@ -237,6 +240,7 @@ const useAuth = (): Return => {
     });
 
     const businessToDem = (businesses
+      // eslint-disable-next-line no-confusing-arrow
       .map((business) =>
         business.demId ? { name: business.name, id: business.demId } : null
       )

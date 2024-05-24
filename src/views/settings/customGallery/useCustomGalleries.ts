@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import type { ListCustomGalleriesQuery } from 'graphql/generated';
+import type { CustomGalleriesQuery } from 'graphql/generated';
 import {
-  ListCustomGalleriesDocument,
+  CustomGalleriesDocument,
   QueryMode,
   useCreateCustomGalleryMutation,
+  useCustomGalleriesQuery,
   useDeleteCustomGalleryMutation,
-  useListCustomGalleriesQuery,
   useUpdateCustomGalleryMutation,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
@@ -18,7 +18,7 @@ import { useIntl } from 'react-intl';
 const { confirm } = Modal;
 
 interface Return {
-  data: ListCustomGalleriesQuery | undefined;
+  data: CustomGalleriesQuery | undefined;
   loading: boolean;
   search: string;
   setSearch: (value: string) => void;
@@ -70,7 +70,7 @@ const useCustomGalleries = (): Return => {
       ],
     },
   };
-  const { data, loading } = useListCustomGalleriesQuery({
+  const { data, loading } = useCustomGalleriesQuery({
     fetchPolicy: 'cache-and-network',
     variables,
   });
@@ -96,21 +96,21 @@ const useCustomGalleries = (): Return => {
     },
     update: (store, { data: res }) => {
       if (res === null || res === undefined) return;
-      const existingData = store.readQuery<ListCustomGalleriesQuery>({
-        query: ListCustomGalleriesDocument,
+      const existingData = store.readQuery<CustomGalleriesQuery>({
+        query: CustomGalleriesDocument,
         variables,
       });
 
       if (existingData === null) return;
 
-      store.writeQuery<ListCustomGalleriesQuery>({
-        query: ListCustomGalleriesDocument,
+      store.writeQuery<CustomGalleriesQuery>({
+        query: CustomGalleriesDocument,
         data: {
-          listCustomGalleries: {
-            total: existingData.listCustomGalleries.total + 1,
-            customGalleries: [
-              ...existingData.listCustomGalleries.customGalleries,
-              res.createCustomGallery,
+          customGalleriesRelay: {
+            totalCount: existingData.customGalleriesRelay.totalCount + 1,
+            edges: [
+              ...existingData.customGalleriesRelay.edges,
+              { node: res.createCustomGallery },
             ],
           },
           __typename: 'Query',
@@ -158,23 +158,22 @@ const useCustomGalleries = (): Return => {
     },
     update: (store, { data: res }) => {
       if (res === null || res === undefined) return;
-      const existingData = store.readQuery<ListCustomGalleriesQuery>({
-        query: ListCustomGalleriesDocument,
+      const existingData = store.readQuery<CustomGalleriesQuery>({
+        query: CustomGalleriesDocument,
         variables,
       });
 
       if (existingData === null) return;
 
-      store.writeQuery<ListCustomGalleriesQuery>({
-        query: ListCustomGalleriesDocument,
+      store.writeQuery<CustomGalleriesQuery>({
+        query: CustomGalleriesDocument,
         data: {
-          listCustomGalleries: {
-            total: existingData.listCustomGalleries.total - 1,
-            customGalleries:
-              existingData?.listCustomGalleries.customGalleries?.filter(
-                (customGallery) =>
-                  customGallery?.id !== res?.deleteCustomGallery?.id
-              ),
+          customGalleriesRelay: {
+            totalCount: existingData.customGalleriesRelay.totalCount - 1,
+            edges: existingData.customGalleriesRelay.edges.filter(
+              ({ node: customGallery }) =>
+                customGallery?.id !== res?.deleteCustomGallery?.id
+            ),
           },
           __typename: 'Query',
         },

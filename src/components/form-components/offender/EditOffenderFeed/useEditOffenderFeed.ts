@@ -221,10 +221,12 @@ const useEditOffender = ({ offenderId, onClose }: Props): Return => {
       tagsData?.tags.map((tag) => ({ value: tag.id, label: tag.name })) || [],
     tagsLoading,
     customGalleries:
-      customGalleriesData?.listCustomGalleries.customGalleries.map((tag) => ({
-        value: tag.id,
-        label: tag.name,
-      })) || [],
+      customGalleriesData?.customGalleriesRelay?.edges?.map(
+        ({ node: tag }) => ({
+          value: tag.id,
+          label: tag.name,
+        })
+      ) || [],
     customGalleriesLoading,
     adminRights: role !== Role.User,
     needJustification,

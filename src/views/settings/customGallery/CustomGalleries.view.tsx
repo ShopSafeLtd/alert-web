@@ -17,11 +17,11 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import type { CustomGalleryData } from 'types/DataType';
 import { FormattedMessage, useIntl } from 'react-intl';
-import type { ListCustomGalleriesQuery } from 'graphql/generated';
+import type { CustomGalleriesQuery } from 'graphql/generated';
 import AddNewCustomGallery from 'components/form-components/customGalleries/AddNewCustomGallery';
 
 interface Props {
-  data: ListCustomGalleriesQuery | undefined;
+  data: CustomGalleriesQuery | undefined;
   loading: boolean;
   search: string;
   setSearch: (value: string) => void;
@@ -173,8 +173,8 @@ const CustomGalleries = ({
             ),
           },
         ]}
-        dataSource={data?.listCustomGalleries.customGalleries.map(
-          (customGallery) => ({
+        dataSource={data?.customGalleriesRelay?.edges?.map(
+          ({ node: customGallery }) => ({
             key: customGallery.id,
             name: customGallery.name,
             description: customGallery.description,

@@ -283,7 +283,7 @@ const useNotificationLists = (): Return => {
         };
       }
       case Model.User: {
-        navigate(`/app/dashboard`);
+        navigate('/app/dashboard');
         return {
           id: {
             equals: value.id,
@@ -329,10 +329,11 @@ const useNotificationLists = (): Return => {
       userNotifications: scheme.userNotifications,
       goodsMode: scheme.goodsMode,
       facialRecognition: scheme.facialRecognition,
-      facialDetection: scheme.facialRecognition,
+      facialDetection: scheme.facialDetection,
       imagesRequiredOnOffenders: scheme.imagesRequiredOnOffenders,
       taskTimeTracking: scheme.taskTimeTracking,
       connectedToSchemes: scheme.connectedToSchemes,
+      activityAssignToUser: scheme.activityAssignToUser,
     });
     setFilterDefaultGroup({
       filterDefaultGroups: defaultGroups.filter(

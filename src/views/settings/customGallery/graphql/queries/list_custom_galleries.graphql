@@ -1,0 +1,15 @@
+query customGalleries($where: CustomGalleryWhereInput, $take: Int, $skip: Int, $order: CustomGalleryOrderByWithRelationInput) {
+  customGalleriesRelay(where: $where, take: $take, skip: $skip, order: $order) {
+    edges {
+      node {
+      description
+      id
+      name
+      groups {
+              id
+            }
+      }
+    }
+    totalCount
+  }
+}

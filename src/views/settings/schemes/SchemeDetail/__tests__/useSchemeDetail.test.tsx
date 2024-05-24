@@ -108,6 +108,7 @@ const UseRecycledItemListTest = () => {
               optimised: 's',
               url: 's',
             },
+            activityAssignToUser: true,
             facialDetection: true,
           })
         }

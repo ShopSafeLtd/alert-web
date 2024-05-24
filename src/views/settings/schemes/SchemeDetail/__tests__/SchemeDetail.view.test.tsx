@@ -32,6 +32,7 @@ describe('List Officer View', () => {
       reportOnly: true,
       facialRecognition: true,
       facialDetection: false,
+      activityAssignToUser: true,
       imagesRequiredOnOffenders: true,
       goodsMode: GoodsMode.Generic,
     },

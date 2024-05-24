@@ -22,6 +22,7 @@ query scheme($where: SchemeWhereUniqueInput!) {
     needJustification
     facialRecognition
     facialDetection
+    activityAssignToUser
     imagesRequiredOnOffenders
     requireSiteNumberForUsers
     oneSelectedIncidentTypeOnly
