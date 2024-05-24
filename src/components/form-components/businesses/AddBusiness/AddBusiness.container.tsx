@@ -12,7 +12,6 @@ interface Props {
 const AddBusiness = ({ onClose, update, saving }: Props) => {
   const {
     onSubmit,
-    onSearchBusiness,
     form,
     location,
     setLocation,
@@ -31,7 +30,6 @@ const AddBusiness = ({ onClose, update, saving }: Props) => {
     <View
       onSubmit={onSubmit}
       onClose={onClose}
-      onSearchBusiness={onSearchBusiness}
       saving={saving}
       form={form}
       location={location}

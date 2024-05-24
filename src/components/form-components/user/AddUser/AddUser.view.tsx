@@ -14,13 +14,14 @@ import {
   Switch,
   Typography,
 } from 'antd';
-import DebounceSelect from 'components/form-components/DebounceSelect';
+
 import type { BusinessData, SelectOptions } from 'types/DataType';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import AddBusiness from 'components/form-components/businesses/AddBusiness';
 import { useIntl } from 'react-intl';
 import type { FormData } from './useAddUser';
+import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
 
 const { Title } = Typography;
 
@@ -36,9 +37,6 @@ interface Props {
   onValuesChange: (changedValues: any, values: FormData) => void;
   form: FormInstance<FormData>;
   existingUser: boolean;
-  onSearchBusiness: (
-    value: string
-  ) => Promise<{ label: string; value: string; location?: string }[]>;
   businessProvided: boolean;
   schemeLoading: boolean;
   selectedRole: string | undefined;
@@ -61,7 +59,6 @@ const AddUser = ({
   chatsLoading,
   saving,
   onValuesChange,
-  onSearchBusiness,
   existingUser,
   businessProvided,
   schemeLoading,
@@ -145,7 +142,6 @@ const AddUser = ({
           </Form.Item>
         </Col>
       </Row>
-      {/* TODO REMOVE */}
       {businessProvided ? (
         <Row gutter={16}>
           <Col span={12}>
@@ -166,7 +162,7 @@ const AddUser = ({
                 },
               ]}
             >
-              <DebounceSelect
+              <BusinessesSelect
                 showSearch
                 allowClear
                 mode="multiple"
@@ -176,7 +172,6 @@ const AddUser = ({
                   defaultMessage: 'Search for a business...',
                   id: 'qaJxSS',
                 })}
-                fetchOptions={onSearchBusiness}
                 style={{ width: '100%' }}
               />
             </Form.Item>
@@ -230,7 +225,7 @@ const AddUser = ({
                       },
                     ]}
                   >
-                    <DebounceSelect
+                    <BusinessesSelect
                       showSearch
                       allowClear
                       mode="multiple"
@@ -240,7 +235,6 @@ const AddUser = ({
                         defaultMessage: 'Search for a business...',
                         id: 'qaJxSS',
                       })}
-                      fetchOptions={onSearchBusiness}
                       style={{ width: '100%' }}
                     />
                   </Form.Item>

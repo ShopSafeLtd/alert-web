@@ -1,15 +1,8 @@
 import { useState } from 'react';
 import { useStoreState } from 'state';
-import type {
-  SearchBusinessesQuery,
-  SearchBusinessesQueryVariables,
-  UserQuery,
-  UserUpdateInput,
-} from 'graphql/generated';
+import type { UserQuery, UserUpdateInput } from 'graphql/generated';
 import {
   Model,
-  QueryMode,
-  SearchBusinessesDocument,
   SortOrder,
   useSchemeChatsQuery,
   useUpdateUserMutation,
@@ -18,16 +11,16 @@ import {
 } from 'graphql/generated';
 import type { FormInstance } from 'antd';
 import { Form, notification } from 'antd';
-import { useApolloClient } from '@apollo/client';
 import type { BusinessData, SelectOptions } from 'types/DataType';
 import errorNotification from 'types/mutation_notifications/error_notification';
 import { useIntl } from 'react-intl';
 import { useGroupsContext } from '#/context/groups-context';
+import { stringOrOption } from '#/components/form-components/user/AddUser/useAddUser';
 
 export interface FormData {
   fullName: string;
   email: string;
-  businesses: SelectOptions[];
+  businesses: string[] | SelectOptions[];
   role: string;
   groups: string[];
   approverGroups: string[];
@@ -58,9 +51,7 @@ interface Return {
   chatsData: SelectOptions[] | undefined;
   chatsLoading: boolean;
   saving: boolean;
-  onSearchBusiness: (
-    value: string
-  ) => Promise<{ label: string; value: string; location?: string }[]>;
+
   selectedRole: string | undefined;
   setSelectedRole: (value: string) => void;
   availableRoles: SelectOptions[];
@@ -75,7 +66,6 @@ interface Return {
 const { useForm } = Form;
 
 const useEditUser = ({ onClose, userId }: Props): Return => {
-  const client = useApolloClient();
   const intl = useIntl();
   const [form] = useForm<FormData>();
   const schemeId = useStoreState((state) => state.scheme.id);
@@ -185,7 +175,9 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
       const getBusiness = (): UserUpdateInput['businesses'] => {
         if (data.businesses) {
           const businessIds = new Set(
-            data.businesses.map(({ value }) => value)
+            data.businesses.map((value: string | SelectOptions) =>
+              stringOrOption(value)
+            )
           );
 
           const newBusinesses = businessesData
@@ -193,9 +185,10 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
             .filter(({ id }) => businessIds.has(id));
 
           const connectedBusinesses = data.businesses.filter(
-            ({ value }) =>
+            (value) =>
               !newBusinesses?.some(
-                ({ id: newBusinessId }) => newBusinessId === value
+                ({ id: newBusinessId }) =>
+                  newBusinessId === stringOrOption(value)
               )
           );
           const disconnectedBusinesses = userData?.user?.businesses.filter(
@@ -208,7 +201,9 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
                 : undefined,
             connect:
               connectedBusinesses && connectedBusinesses.length > 0
-                ? connectedBusinesses.map(({ value }) => ({ id: value }))
+                ? connectedBusinesses.map((value) => ({
+                    id: stringOrOption(value),
+                  }))
                 : undefined,
             create:
               newBusinesses && newBusinesses.length > 0
@@ -413,46 +408,6 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
     }
   };
 
-  const onSearchBusiness = async (value: string) =>
-    client
-      .query<SearchBusinessesQuery, SearchBusinessesQueryVariables>({
-        query: SearchBusinessesDocument,
-        variables: {
-          where: {
-            name: {
-              contains: value,
-              mode: QueryMode.Insensitive,
-            },
-            schemes: {
-              some: {
-                id: {
-                  equals: schemeId,
-                },
-              },
-            },
-          },
-        },
-      })
-      .then((response) =>
-        response.data.listBusinesses.businesses.length > 0
-          ? [...response.data.listBusinesses.businesses, ...businessesData].map(
-              (item) => ({
-                label: item.name || '',
-                value: item?.id || '',
-                location: item?.locations[0].full || '',
-              })
-            )
-          : [
-              {
-                label: intl.formatMessage({
-                  defaultMessage: 'No results found',
-                  id: 'hX5PAb',
-                }),
-                value: '',
-                disabled: true,
-              },
-            ]
-      );
   const toggleAddBusinessVisible = () => {
     setAddBusinessVisible(!addBusinessVisible);
   };
@@ -483,7 +438,7 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
     })),
     chatsLoading,
     saving,
-    onSearchBusiness,
+
     selectedRole,
     setSelectedRole,
     selectedGroups,

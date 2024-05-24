@@ -1,30 +1,27 @@
 /* eslint-disable sonarjs/no-nested-template-literals */
-import { useApolloClient } from '@apollo/client';
+
 import type { FormInstance } from 'antd';
 import { Form } from 'antd';
-import type {
-  SearchBusinessesQuery,
-  SearchBusinessesQueryVariables,
-} from 'graphql/generated';
-import {
-  Model,
-  QueryMode,
-  SearchBusinessesDocument,
-  useTagsQuery,
-} from 'graphql/generated';
+import { Model, useTagsQuery } from 'graphql/generated';
 import { useState } from 'react';
-import { useIntl } from 'react-intl';
 
 import { useStoreState } from 'state';
-import type { BusinessData, LocationData, TagData } from 'types/DataType';
+import type {
+  BusinessData,
+  LocationData,
+  SelectOptions,
+  TagData,
+} from 'types/DataType';
 import { useGroupsContext } from '#/context/groups-context';
 
 export interface FormData {
   name: string;
-  parent: {
-    label: string;
-    value: string;
-  };
+  parent:
+    | {
+        label: string;
+        value: string;
+      }
+    | string;
   tags?: Array<string | { value: string; label: string }>;
   groups?: string[];
   building: string;
@@ -41,11 +38,15 @@ interface Props {
   update: (value: BusinessData) => void;
 }
 
+const stringOrOption = (inputOb: string | SelectOptions) => {
+  if (typeof inputOb === 'string') {
+    return inputOb;
+  }
+  return inputOb.value;
+};
+
 interface Return {
   onSubmit: (values: FormData) => void;
-  onSearchBusiness: (
-    value: string
-  ) => Promise<{ label: string; value: string }[]>;
   form: FormInstance<FormData>;
   location: LocationData | undefined;
   setLocation: (value: LocationData) => void;
@@ -59,8 +60,6 @@ interface Return {
 }
 
 const useAddBusiness = ({ update }: Props): Return => {
-  const intl = useIntl();
-  const client = useApolloClient();
   const currentScheme = useStoreState((state) => state.scheme.id);
 
   const [form] = Form.useForm<FormData>();
@@ -112,12 +111,13 @@ const useAddBusiness = ({ update }: Props): Return => {
       (id) => !newTags.map((el) => el.id).includes(id)
     );
 
+    console.log('values', values);
     update({
       id: Math.floor(Math.random() * 1000).toString(),
       name: values.name,
       publicName: values.publicName,
       parent: values.parent
-        ? { id: values.parent.value, name: values.parent.label }
+        ? { id: stringOrOption(values.parent), name: '' }
         : undefined,
       tags: connectTagIds || [],
       newTags: newTags || [],
@@ -142,44 +142,6 @@ const useAddBusiness = ({ update }: Props): Return => {
     });
   };
 
-  const onSearchBusiness = async (value: string) =>
-    client
-      .query<SearchBusinessesQuery, SearchBusinessesQueryVariables>({
-        query: SearchBusinessesDocument,
-        variables: {
-          where: {
-            name: {
-              contains: value,
-              mode: QueryMode.Insensitive,
-            },
-            schemes: {
-              some: {
-                id: {
-                  equals: currentScheme,
-                },
-              },
-            },
-          },
-        },
-      })
-      .then((response) =>
-        response.data.listBusinesses.businesses.length > 0
-          ? response.data.listBusinesses.businesses.map((item) => ({
-              label: item?.name || '',
-              value: item?.id || '',
-              location: item?.locations[0].full || '',
-            }))
-          : [
-              {
-                label: intl.formatMessage({
-                  defaultMessage: 'No results found',
-                  id: 'hX5PAb',
-                }),
-                value: '',
-                disabled: true,
-              },
-            ]
-      );
   const updateNewTagData = (values: TagData) => {
     setAddTag(false);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -202,7 +164,6 @@ const useAddBusiness = ({ update }: Props): Return => {
 
   return {
     onSubmit,
-    onSearchBusiness,
     form,
     location,
     setLocation: onSetLocation,

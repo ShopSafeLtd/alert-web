@@ -214,7 +214,7 @@ const BusinessesSelect: React.FC<Props & Omit<SelectProps, keyof Props>> = ({
   });
   return (
     <Select
-      value={value}
+      value={value || undefined}
       onChange={(selected: string[]) => {
         if (onChange) onChange(selected);
       }}
@@ -251,20 +251,19 @@ const BusinessesSelect: React.FC<Props & Omit<SelectProps, keyof Props>> = ({
     >
       {sortedData.map(({ node: option }) => (
         <Select.Option key={option.id} value={option.id} label={option.name}>
-          <Typography.Text>{option.name}</Typography.Text>
-          {option.siteNumber && (
+          {option.name}
+          {option.siteNumber &&
             // eslint-disable-next-line formatjs/no-literal-string-in-jsx
-            <Typography.Text>({option.siteNumber})</Typography.Text>
-          )}
+            `(${option.siteNumber})`}
 
-          {option.locations && option.locations.length > 0 && (
+          {option.locations && option.locations.length > 0 ? (
             <Typography.Paragraph
               type="secondary"
               style={{ fontSize: 13, margin: 0 }}
             >
               {option.locations[0].full}
             </Typography.Paragraph>
-          )}
+          ) : null}
         </Select.Option>
       ))}
     </Select>
