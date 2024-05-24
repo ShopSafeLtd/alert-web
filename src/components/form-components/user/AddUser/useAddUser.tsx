@@ -4,14 +4,10 @@ import type {
   CreateUserData,
   CreateUserInDatabaseMutation,
   InviteExistingUserMutation,
-  SearchBusinessesQuery,
-  SearchBusinessesQueryVariables,
   UserUpdateInput,
 } from 'graphql/generated';
 import {
   Model,
-  QueryMode,
-  SearchBusinessesDocument,
   SortOrder,
   useCreateUserInDatabaseMutation,
   useInviteExistingUserMutation,
@@ -22,7 +18,6 @@ import {
 } from 'graphql/generated';
 import { useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
-import { useApolloClient } from '@apollo/client';
 import type { FormInstance } from 'antd';
 import { Form, Modal, notification } from 'antd';
 import type { BusinessData, SelectOptions } from 'types/DataType';
@@ -35,7 +30,7 @@ const { useForm } = Form;
 export interface FormData {
   fullName: string;
   email: string;
-  businesses: SelectOptions[];
+  businesses: string[] | SelectOptions[];
   role: string;
   groups: string[];
   chats: string[];
@@ -76,12 +71,6 @@ interface Return {
   onValuesChange: (changedValues: any, values: FormData) => void;
   form: FormInstance<FormData>;
   existingUser: boolean;
-  // onSearchBusiness: (
-  //   value: string
-  // ) => Promise<{ label: React.ReactNode; value: string }[]>;
-  onSearchBusiness: (
-    value: string
-  ) => Promise<{ label: string; value: string; location?: string }[]>;
   selectedRole: string | undefined;
   setSelectedRole: (value: string) => void;
   selectedGroups: string[] | undefined;
@@ -92,13 +81,19 @@ interface Return {
   availableRoles: SelectOptions[];
 }
 
+export const stringOrOption = (inputOb: string | SelectOptions) => {
+  if (typeof inputOb === 'string') {
+    return inputOb;
+  }
+  return inputOb.value;
+};
+
 const useAddUser = ({
   onClose,
   update,
   updateSearch,
   business,
 }: Props): Return => {
-  const client = useApolloClient();
   const [form] = useForm<FormData>();
   const schemeId = useStoreState((state) => state.scheme.id);
   const [existingUser, setExistingUser] = useState(false);
@@ -126,10 +121,11 @@ const useAddUser = ({
   });
 
   useEffect(() => {
-    if (business)
+    if (business) {
       form.setFieldsValue({
         businesses: [business],
       });
+    }
   }, [business]);
 
   const { data: userData } = useSearchUserQuery({
@@ -243,7 +239,9 @@ const useAddUser = ({
   const onSubmit = (data: FormData) => {
     setSaving(true);
 
-    const businessIds = new Set(data.businesses.map(({ value }) => value));
+    const businessIds = new Set(
+      data.businesses.map((value) => stringOrOption(value))
+    );
     const newBusinesses = businessesData
       ?.filter(({ isNew }) => isNew)
       .filter(({ id }) => [...businessIds].includes(id));
@@ -251,18 +249,19 @@ const useAddUser = ({
       ?.filter(({ isConnected }) => isConnected)
       .filter(({ id }) => [...businessIds].includes(id));
     const connectedBusinesses = data.businesses.filter(
-      ({ value }) =>
+      (value) =>
         !newBusinesses?.some(
-          ({ id: newBusinessId }) => newBusinessId === value
+          ({ id: newBusinessId }) => newBusinessId === stringOrOption(value)
         ) &&
         !updatedBusinesses?.some(
-          ({ id: updatedBusinessId }) => updatedBusinessId === value
+          ({ id: updatedBusinessId }) =>
+            updatedBusinessId === stringOrOption(value)
         )
     );
     const getExistingUserBusiness = (): UserUpdateInput['businesses'] => ({
       connect:
         connectedBusinesses && connectedBusinesses.length > 0
-          ? connectedBusinesses.map(({ value }) => ({ id: value }))
+          ? connectedBusinesses.map((value) => ({ id: stringOrOption(value) }))
           : undefined,
       // ?????
       // update:
@@ -354,7 +353,7 @@ const useAddUser = ({
     const getBusiness = (): CreateUserData['businesses'] => ({
       connect:
         connectedBusinesses && connectedBusinesses.length > 0
-          ? connectedBusinesses.map(({ value }) => ({ id: value }))
+          ? connectedBusinesses.map((value) => ({ id: stringOrOption(value) }))
           : undefined,
       create:
         newBusinesses && newBusinesses.length > 0
@@ -504,43 +503,6 @@ const useAddUser = ({
     // if(changedValues.business)
   };
 
-  const onSearchBusiness = async (value: string) =>
-    client
-      .query<SearchBusinessesQuery, SearchBusinessesQueryVariables>({
-        query: SearchBusinessesDocument,
-        variables: {
-          where: {
-            schemes: {
-              some: {
-                id: {
-                  equals: schemeId,
-                },
-              },
-            },
-            name: {
-              contains: value,
-              mode: QueryMode.Insensitive,
-            },
-          },
-        },
-      })
-      .then((response) =>
-        response.data.listBusinesses.businesses.length > 0
-          ? [...response.data.listBusinesses.businesses, ...businessesData].map(
-              (item) => ({
-                label: item.name || '',
-                value: item?.id || '',
-                location: item?.locations[0].full || '',
-              })
-            )
-          : [
-              {
-                label: 'No results found',
-                value: '',
-                disabled: true,
-              },
-            ]
-      );
   const toggleAddBusinessVisible = () => {
     setAddBusinessVisible(!addBusinessVisible);
   };
@@ -568,7 +530,6 @@ const useAddUser = ({
     onValuesChange,
     form,
     existingUser,
-    onSearchBusiness,
     schemeLoading: schemeLoading || rolesLoading,
     selectedRole,
     setSelectedRole,

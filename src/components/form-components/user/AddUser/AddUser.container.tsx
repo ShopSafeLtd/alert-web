@@ -33,7 +33,6 @@ const AddUser = ({
     onValuesChange,
     form,
     existingUser,
-    onSearchBusiness,
     schemeLoading,
     selectedRole,
     setSelectedRole,
@@ -59,7 +58,6 @@ const AddUser = ({
       onValuesChange={onValuesChange}
       form={form}
       existingUser={existingUser}
-      onSearchBusiness={onSearchBusiness}
       businessProvided={!!business}
       selectedRole={selectedRole}
       setSelectedRole={setSelectedRole}

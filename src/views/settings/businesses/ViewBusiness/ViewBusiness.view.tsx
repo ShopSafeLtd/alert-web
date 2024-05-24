@@ -321,7 +321,9 @@ const ViewBusiness = ({
                   })}
                   style={{ paddingBottom: 8 }}
                 >
-                  {data?.business.locations[0].full}
+                  {data?.business.locations.length
+                    ? data?.business.locations[0]?.full
+                    : ''}
                 </Descriptions.Item>
               </Descriptions>
             </Card>

@@ -19,7 +19,7 @@ const EditUser = ({ onClose, id }: Props): JSX.Element => {
     chatsData,
     chatsLoading,
     saving,
-    onSearchBusiness,
+
     selectedRole,
     setSelectedRole,
     selectedGroups,
@@ -28,7 +28,7 @@ const EditUser = ({ onClose, id }: Props): JSX.Element => {
     toggleAddBusinessVisible,
     updateNewBusinessData,
     form,
-    availableRoles
+    availableRoles,
   } = useEditUser({
     onClose,
     userId,
@@ -44,7 +44,6 @@ const EditUser = ({ onClose, id }: Props): JSX.Element => {
       chatsData={chatsData}
       chatsLoading={chatsLoading}
       saving={saving}
-      onSearchBusiness={onSearchBusiness}
       selectedRole={selectedRole}
       setSelectedRole={setSelectedRole}
       selectedGroups={selectedGroups}
