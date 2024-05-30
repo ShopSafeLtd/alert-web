@@ -15,13 +15,13 @@ import {
   Switch,
   Typography,
 } from 'antd';
-import DebounceSelect from 'components/form-components/DebounceSelect';
 import type { BusinessData, SelectOptions } from 'types/DataType';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import AddBusiness from 'components/form-components/businesses/AddBusiness';
 import { useIntl } from 'react-intl';
 import type { FormData } from './useEditUser';
+import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
 
 const { Title } = Typography;
 
@@ -35,9 +35,7 @@ interface Props {
   chatsData: SelectOptions[] | undefined;
   chatsLoading: boolean;
   saving: boolean;
-  onSearchBusiness: (
-    value: string
-  ) => Promise<{ label: string; value: string; location?: string }[]>;
+
   selectedRole: string | undefined;
   setSelectedRole: (value: string) => void;
   availableRoles: SelectOptions[];
@@ -60,7 +58,7 @@ const EditUser = ({
   chatsData,
   chatsLoading,
   saving,
-  onSearchBusiness,
+
   selectedRole,
   setSelectedRole,
   selectedGroups,
@@ -187,7 +185,7 @@ const EditUser = ({
                   },
                 ]}
               >
-                <DebounceSelect
+                <BusinessesSelect
                   showSearch
                   allowClear
                   mode="multiple"
@@ -197,7 +195,6 @@ const EditUser = ({
                     defaultMessage: 'Search for a business...',
                     id: 'qaJxSS',
                   })}
-                  fetchOptions={onSearchBusiness}
                   style={{ width: '100%' }}
                 />
               </Form.Item>

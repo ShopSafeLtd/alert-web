@@ -12837,6 +12837,7 @@ export type Query = {
   crimeGroupPerformance: ListCrimeGroupPerformance;
   crimeGroupReport: CrimeGroupReport;
   currentUser?: Maybe<User>;
+  customGalleriesRelay: QueryCustomGalleriesRelayConnection;
   customGallery: CustomGallery;
   customQuestionsCountGraph: CustomQuestionsGraph;
   dashboard: Dashboard;
@@ -13163,6 +13164,18 @@ export type QueryCrimeGroupPerformanceArgs = {
 
 export type QueryCrimeGroupReportArgs = {
   where: CrimeGroupReportInput;
+};
+
+
+export type QueryCustomGalleriesRelayArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<CustomGalleryOrderByWithRelationInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<CustomGalleryWhereInput>;
 };
 
 
@@ -14010,6 +14023,19 @@ export type QueryBusinessRelayConnectionEdge = {
   __typename?: 'QueryBusinessRelayConnectionEdge';
   cursor: Scalars['String'];
   node: Business;
+};
+
+export type QueryCustomGalleriesRelayConnection = {
+  __typename?: 'QueryCustomGalleriesRelayConnection';
+  edges: Array<QueryCustomGalleriesRelayConnectionEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type QueryCustomGalleriesRelayConnectionEdge = {
+  __typename?: 'QueryCustomGalleriesRelayConnectionEdge';
+  cursor: Scalars['String'];
+  node: CustomGallery;
 };
 
 export type QueryDashboardsConnection = {
@@ -15203,6 +15229,7 @@ export type Scheme = {
   actions: Array<Action>;
   actionsInScheme: Array<Action>;
   activeChecklists: Array<ActiveChecklist>;
+  activityAssignToUser: Scalars['Boolean'];
   approvalDueDays?: Maybe<Scalars['Int']>;
   articles: Array<Article>;
   autoApproveIncidents: Scalars['Boolean'];
@@ -15753,6 +15780,7 @@ export type SchemeWorkflowsArgs = {
 };
 
 export type SchemeCreateInput = {
+  activityAssignToUser?: InputMaybe<Scalars['Boolean']>;
   approvalDueDays?: InputMaybe<Scalars['Int']>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
@@ -15894,6 +15922,7 @@ export type SchemeRekognotionCollectionsInput = {
 };
 
 export enum SchemeScalarFieldEnum {
+  ActivityAssignToUser = 'activityAssignToUser',
   ApprovalDueDays = 'approvalDueDays',
   AutoApproveIncidents = 'autoApproveIncidents',
   AutoApproveOffenders = 'autoApproveOffenders',
@@ -15934,6 +15963,7 @@ export enum SchemeScalarFieldEnum {
 }
 
 export type SchemeUpdateInput = {
+  activityAssignToUser?: InputMaybe<SetBooleanHelper>;
   autoApproveIncidents?: InputMaybe<SetBooleanHelper>;
   autoApproveOffenders?: InputMaybe<SetBooleanHelper>;
   autoPopulateDescription?: InputMaybe<SetBooleanHelper>;
@@ -15970,6 +16000,7 @@ export type SchemeWhereInput = {
   OR?: InputMaybe<Array<SchemeWhereInput>>;
   actions?: InputMaybe<ActionListRelationFilter>;
   actionsInScheme?: InputMaybe<ActionListRelationFilter>;
+  activityAssignToUser?: InputMaybe<BoolFilter>;
   approvalDueDays?: InputMaybe<IntNullableFilter>;
   articles?: InputMaybe<ArticleListRelationFilter>;
   autoApproveIncidents?: InputMaybe<BoolFilter>;
@@ -19486,6 +19517,7 @@ export type UserScheme = {
   dashboard?: Maybe<Dashboard>;
   id: Scalars['String'];
   isAdmin: Scalars['Boolean'];
+  notificationCount: Scalars['Int'];
   orignalPermissions: CustomRole;
   permissions: Array<Permissions>;
   recycled: Scalars['Boolean'];
@@ -21305,14 +21337,14 @@ export type UpdateCustomGalleryMutationVariables = Exact<{
 export type UpdateCustomGalleryMutation = { __typename?: 'Mutation', updateCustomGallery: { __typename?: 'CustomGallery', id: string, name: string, description?: string | null, groups: Array<{ __typename?: 'Group', id: string }> } };
 
 export type ListCustomGalleriesQueryVariables = Exact<{
+  where?: InputMaybe<CustomGalleryWhereInput>;
   take?: InputMaybe<Scalars['Int']>;
   skip?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<CustomGalleryWhereInput>;
   order?: InputMaybe<CustomGalleryOrderByWithRelationInput>;
 }>;
 
 
-export type ListCustomGalleriesQuery = { __typename?: 'Query', listCustomGalleries: { __typename?: 'ListCustomGalleries', total: number, customGalleries: Array<{ __typename?: 'CustomGallery', description?: string | null, id: string, name: string, groups: Array<{ __typename?: 'Group', id: string }> }> } };
+export type ListCustomGalleriesQuery = { __typename?: 'Query', customGalleriesRelay: { __typename?: 'QueryCustomGalleriesRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryCustomGalleriesRelayConnectionEdge', node: { __typename?: 'CustomGallery', description?: string | null, id: string, name: string } }> } };
 
 export type CopyEvidenceMutationVariables = Exact<{
   data: ImportDemEvidence;
@@ -22396,7 +22428,7 @@ export type UpdateSchemeMutationVariables = Exact<{
 }>;
 
 
-export type UpdateSchemeMutation = { __typename?: 'Mutation', updateScheme: { __typename?: 'Scheme', id: string, name: string, restrictIncidentAccess: boolean, reportOnly: boolean, autoApproveIncidents: boolean, autoApproveOffenders: boolean, defaultPublicOffenderDOB: boolean, defaultIncidentEmail: boolean, defaultIncidentPush: boolean, defaultBulletinEmails: boolean, defaultBulletinPush: boolean, defaultSubscribedIncidentOnly: boolean, defaultSubscribedOffenderOnly: boolean, defaultMessagePush: boolean, defaultOffenderEmail: boolean, defaultOffenderPush: boolean, autoPopulateDescription: boolean, needJustification: boolean, requireSiteNumberForUsers: boolean, facialRecognition: boolean, facialDetection: boolean, imagesRequiredOnOffenders: boolean, incidentRetention?: number | null, offenderRetention?: number | null, oneSelectedIncidentTypeOnly: boolean, logo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, optimisedPersisted?: string | null } | null, darkLogo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, optimisedPersisted?: string | null } | null } };
+export type UpdateSchemeMutation = { __typename?: 'Mutation', updateScheme: { __typename?: 'Scheme', id: string, name: string, restrictIncidentAccess: boolean, reportOnly: boolean, autoApproveIncidents: boolean, autoApproveOffenders: boolean, defaultPublicOffenderDOB: boolean, defaultIncidentEmail: boolean, defaultIncidentPush: boolean, defaultBulletinEmails: boolean, defaultBulletinPush: boolean, defaultSubscribedIncidentOnly: boolean, defaultSubscribedOffenderOnly: boolean, defaultMessagePush: boolean, defaultOffenderEmail: boolean, defaultOffenderPush: boolean, autoPopulateDescription: boolean, needJustification: boolean, requireSiteNumberForUsers: boolean, facialRecognition: boolean, facialDetection: boolean, activityAssignToUser: boolean, imagesRequiredOnOffenders: boolean, incidentRetention?: number | null, offenderRetention?: number | null, oneSelectedIncidentTypeOnly: boolean, logo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, optimisedPersisted?: string | null } | null, darkLogo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, optimisedPersisted?: string | null } | null } };
 
 export type CurrentSchemeTermsQueryVariables = Exact<{
   where: SchemeWhereUniqueInput;
@@ -22410,7 +22442,7 @@ export type SchemeQueryVariables = Exact<{
 }>;
 
 
-export type SchemeQuery = { __typename?: 'Query', scheme: { __typename?: 'Scheme', id: string, name: string, restrictIncidentAccess: boolean, reportOnly: boolean, autoApproveIncidents: boolean, autoApproveOffenders: boolean, defaultIncidentEmail: boolean, defaultIncidentPush: boolean, defaultBulletinEmails: boolean, defaultBulletinPush: boolean, defaultSubscribedIncidentOnly: boolean, defaultSubscribedOffenderOnly: boolean, defaultMessagePush: boolean, defaultOffenderEmail: boolean, defaultOffenderPush: boolean, defaultPublicOffenderDOB: boolean, incidentRetention?: number | null, offenderRetention?: number | null, autoPopulateDescription: boolean, needJustification: boolean, facialRecognition: boolean, facialDetection: boolean, imagesRequiredOnOffenders: boolean, requireSiteNumberForUsers: boolean, oneSelectedIncidentTypeOnly: boolean, goodsMode: GoodsMode, darkLogo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null } | null, logo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null } | null } };
+export type SchemeQuery = { __typename?: 'Query', scheme: { __typename?: 'Scheme', id: string, name: string, restrictIncidentAccess: boolean, reportOnly: boolean, autoApproveIncidents: boolean, autoApproveOffenders: boolean, defaultIncidentEmail: boolean, defaultIncidentPush: boolean, defaultBulletinEmails: boolean, defaultBulletinPush: boolean, defaultSubscribedIncidentOnly: boolean, defaultSubscribedOffenderOnly: boolean, defaultMessagePush: boolean, defaultOffenderEmail: boolean, defaultOffenderPush: boolean, defaultPublicOffenderDOB: boolean, incidentRetention?: number | null, offenderRetention?: number | null, autoPopulateDescription: boolean, needJustification: boolean, facialRecognition: boolean, facialDetection: boolean, activityAssignToUser: boolean, imagesRequiredOnOffenders: boolean, requireSiteNumberForUsers: boolean, oneSelectedIncidentTypeOnly: boolean, goodsMode: GoodsMode, darkLogo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null } | null, logo?: { __typename?: 'Image', id: string, url?: string | null, optimised?: string | null } | null } };
 
 export type CreateSessionMutationVariables = Exact<{
   data: CreateSessionInput;
@@ -22832,7 +22864,7 @@ export type CurrentUserQueryVariables = Exact<{
 }>;
 
 
-export type CurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: string, fullName: string, origName: string, email: string, reference?: number | null, demId?: string | null, publicName: boolean, reportToAllBusinesses: boolean, notificationCount: number, messageCount: number, defaultScheme?: string | null, newUser: boolean, incidentEmail: boolean, incidentPush: boolean, offenderEmail: boolean, offenderPush: boolean, bulletinEmails: boolean, bulletinPush: boolean, messagePush: boolean, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string, demId?: string | null, brands: Array<string> }>, defaultGroups: Array<{ __typename?: 'Group', id: string, name: string, scheme: { __typename?: 'Scheme', id: string } }>, schemes: Array<{ __typename?: 'UserScheme', id: string, role: Role, isAdmin: boolean, scheme: { __typename?: 'Scheme', customTranslations: Array<{ [key: string]: any }>, userTodos: number, id: string, name: string, goodsMode: GoodsMode, autoApproveIncidents: boolean, autoApproveOffenders: boolean, defaultPublicOffenderDOB: boolean, restrictIncidentAccess: boolean, reportOnly: boolean, facialRecognition: boolean, facialDetection: boolean, imagesRequiredOnOffenders: boolean, taskTimeTracking: boolean, languageCount: number, autoPopulateDescription: boolean, needJustification: boolean, requireSiteNumberForUsers: boolean, oneSelectedIncidentTypeOnly: boolean, logo?: { __typename?: 'Image', optimisedPersisted?: string | null } | null, darkLogo?: { __typename?: 'Image', optimisedPersisted?: string | null } | null, connectedToSchemes: Array<{ __typename?: 'Scheme', id: string, name: string }> }, permissions: Array<{ __typename?: 'Permissions', model: PermissionModel, allowedMethods: Array<PermissionMethod> }>, dashboard?: { __typename?: 'Dashboard', runningBanner?: string | null, layout: Array<{ __typename?: 'DashboardLayout', h: number, i: string, maxH?: number | null, maxW?: number | null, minH?: number | null, minW?: number | null, moved: boolean, static: boolean, w: number, x: number, y: number }> } | null }> } | null };
+export type CurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: string, fullName: string, origName: string, email: string, reference?: number | null, demId?: string | null, publicName: boolean, reportToAllBusinesses: boolean, notificationCount: number, messageCount: number, defaultScheme?: string | null, newUser: boolean, incidentEmail: boolean, incidentPush: boolean, offenderEmail: boolean, offenderPush: boolean, bulletinEmails: boolean, bulletinPush: boolean, messagePush: boolean, businesses: Array<{ __typename?: 'Business', id: string, name: string, fullName: string, demId?: string | null, brands: Array<string> }>, defaultGroups: Array<{ __typename?: 'Group', id: string, name: string, scheme: { __typename?: 'Scheme', id: string } }>, schemes: Array<{ __typename?: 'UserScheme', id: string, role: Role, isAdmin: boolean, scheme: { __typename?: 'Scheme', customTranslations: Array<{ [key: string]: any }>, userTodos: number, id: string, name: string, goodsMode: GoodsMode, autoApproveIncidents: boolean, autoApproveOffenders: boolean, defaultPublicOffenderDOB: boolean, restrictIncidentAccess: boolean, reportOnly: boolean, facialRecognition: boolean, facialDetection: boolean, activityAssignToUser: boolean, imagesRequiredOnOffenders: boolean, taskTimeTracking: boolean, languageCount: number, autoPopulateDescription: boolean, needJustification: boolean, requireSiteNumberForUsers: boolean, oneSelectedIncidentTypeOnly: boolean, logo?: { __typename?: 'Image', optimisedPersisted?: string | null } | null, darkLogo?: { __typename?: 'Image', optimisedPersisted?: string | null } | null, connectedToSchemes: Array<{ __typename?: 'Scheme', id: string, name: string }> }, permissions: Array<{ __typename?: 'Permissions', model: PermissionModel, allowedMethods: Array<PermissionMethod> }>, dashboard?: { __typename?: 'Dashboard', runningBanner?: string | null, layout: Array<{ __typename?: 'DashboardLayout', h: number, i: string, maxH?: number | null, maxW?: number | null, minH?: number | null, minW?: number | null, moved: boolean, static: boolean, w: number, x: number, y: number }> } | null }> } | null };
 
 export type CreateOneQuestionGroupMutationVariables = Exact<{
   data: QuestionGroupCreateInput;
@@ -23269,6 +23301,16 @@ export type ParentBusinessesListQueryVariables = Exact<{
 
 
 export type ParentBusinessesListQuery = { __typename?: 'Query', businessRelay: { __typename?: 'QueryBusinessRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryBusinessRelayConnectionEdge', node: { __typename?: 'Business', id: string, name: string } }> } };
+
+export type CustomGalleriesQueryVariables = Exact<{
+  where?: InputMaybe<CustomGalleryWhereInput>;
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<CustomGalleryOrderByWithRelationInput>;
+}>;
+
+
+export type CustomGalleriesQuery = { __typename?: 'Query', customGalleriesRelay: { __typename?: 'QueryCustomGalleriesRelayConnection', totalCount: number, edges: Array<{ __typename?: 'QueryCustomGalleriesRelayConnectionEdge', node: { __typename?: 'CustomGallery', description?: string | null, id: string, name: string, groups: Array<{ __typename?: 'Group', id: string }> } }> } };
 
 export type CreateCsvImportMutationVariables = Exact<{
   data: CsvImportCreateInput;
@@ -26439,17 +26481,16 @@ export type UpdateCustomGalleryMutationHookResult = ReturnType<typeof useUpdateC
 export type UpdateCustomGalleryMutationResult = Apollo.MutationResult<UpdateCustomGalleryMutation>;
 export type UpdateCustomGalleryMutationOptions = Apollo.BaseMutationOptions<UpdateCustomGalleryMutation, UpdateCustomGalleryMutationVariables>;
 export const ListCustomGalleriesDocument = gql`
-    query listCustomGalleries($take: Int, $skip: Int, $where: CustomGalleryWhereInput, $order: CustomGalleryOrderByWithRelationInput) {
-  listCustomGalleries(take: $take, skip: $skip, where: $where, order: $order) {
-    customGalleries {
-      description
-      groups {
+    query listCustomGalleries($where: CustomGalleryWhereInput, $take: Int, $skip: Int, $order: CustomGalleryOrderByWithRelationInput) {
+  customGalleriesRelay(where: $where, take: $take, skip: $skip, order: $order) {
+    edges {
+      node {
+        description
         id
+        name
       }
-      id
-      name
     }
-    total
+    totalCount
   }
 }
     `;
@@ -32221,6 +32262,7 @@ export const UpdateSchemeDocument = gql`
     requireSiteNumberForUsers
     facialRecognition
     facialDetection
+    activityAssignToUser
     imagesRequiredOnOffenders
     incidentRetention
     offenderRetention
@@ -32294,6 +32336,7 @@ export const SchemeDocument = gql`
     needJustification
     facialRecognition
     facialDetection
+    activityAssignToUser
     imagesRequiredOnOffenders
     requireSiteNumberForUsers
     oneSelectedIncidentTypeOnly
@@ -34062,6 +34105,7 @@ export const CurrentUserDocument = gql`
         reportOnly
         facialRecognition
         facialDetection
+        activityAssignToUser
         imagesRequiredOnOffenders
         taskTimeTracking
         languageCount
@@ -35438,6 +35482,34 @@ export function useParentBusinessesListLazyQuery(baseOptions?: Apollo.LazyQueryH
 export type ParentBusinessesListQueryHookResult = ReturnType<typeof useParentBusinessesListQuery>;
 export type ParentBusinessesListLazyQueryHookResult = ReturnType<typeof useParentBusinessesListLazyQuery>;
 export type ParentBusinessesListQueryResult = Apollo.QueryResult<ParentBusinessesListQuery, ParentBusinessesListQueryVariables>;
+export const CustomGalleriesDocument = gql`
+    query customGalleries($where: CustomGalleryWhereInput, $take: Int, $skip: Int, $order: CustomGalleryOrderByWithRelationInput) {
+  customGalleriesRelay(where: $where, take: $take, skip: $skip, order: $order) {
+    edges {
+      node {
+        description
+        id
+        name
+        groups {
+          id
+        }
+      }
+    }
+    totalCount
+  }
+}
+    `;
+export function useCustomGalleriesQuery(baseOptions?: Apollo.QueryHookOptions<CustomGalleriesQuery, CustomGalleriesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CustomGalleriesQuery, CustomGalleriesQueryVariables>(CustomGalleriesDocument, options);
+      }
+export function useCustomGalleriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CustomGalleriesQuery, CustomGalleriesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CustomGalleriesQuery, CustomGalleriesQueryVariables>(CustomGalleriesDocument, options);
+        }
+export type CustomGalleriesQueryHookResult = ReturnType<typeof useCustomGalleriesQuery>;
+export type CustomGalleriesLazyQueryHookResult = ReturnType<typeof useCustomGalleriesLazyQuery>;
+export type CustomGalleriesQueryResult = Apollo.QueryResult<CustomGalleriesQuery, CustomGalleriesQueryVariables>;
 export const CreateCsvImportDocument = gql`
     mutation CreateCsvImport($data: CsvImportCreateInput!) {
   createOneCsvImport(data: $data) {

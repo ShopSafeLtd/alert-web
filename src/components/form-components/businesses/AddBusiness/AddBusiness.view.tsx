@@ -1,17 +1,17 @@
 import React from 'react';
 import type { FormInstance } from 'antd';
 import {
-  Drawer,
-  Select,
   Button,
   Col,
+  Drawer,
   Form,
   Input,
   Row,
+  Select,
   Switch,
   Typography,
 } from 'antd';
-import DebounceSelect from 'components/form-components/DebounceSelect';
+
 import { useIntl } from 'react-intl';
 import type { LocationData, TagData } from 'types/DataType';
 import LocatingCard from 'components/map/LocatingCard';
@@ -19,13 +19,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import AddTag from 'components/form-components/tags/AddTag';
 import type { FormData } from './useAddBusiness';
+import BusinessesSelect from '#/components/form-components/BusinessesSelect/BusinessesSelect.view';
 
 interface Props {
   onSubmit: (values: FormData) => void;
   onClose: () => void;
-  onSearchBusiness: (
-    value: string
-  ) => Promise<{ label: string; value: string }[]>;
+
   saving: boolean;
   form: FormInstance<FormData>;
   location: LocationData | undefined;
@@ -42,7 +41,6 @@ interface Props {
 const AddBusiness = ({
   onSubmit,
   onClose,
-  onSearchBusiness,
   saving,
   form,
   location,
@@ -118,7 +116,7 @@ const AddBusiness = ({
               id: 'Av/UtY',
             })}
           >
-            <DebounceSelect
+            <BusinessesSelect
               showSearch
               allowClear
               disabled={saving}
@@ -126,7 +124,6 @@ const AddBusiness = ({
                 defaultMessage: 'Search for a business...',
                 id: 'qaJxSS',
               })}
-              fetchOptions={onSearchBusiness}
             />
           </Form.Item>
         </Col>
@@ -153,7 +150,7 @@ const AddBusiness = ({
               optionFilterProp="label"
             >
               {groups.map((el) => (
-                <Select.Option value={el.value} label={el.label}>
+                <Select.Option value={el.value} label={el.label} key={el.value}>
                   {el.label}
                 </Select.Option>
               ))}
@@ -187,7 +184,11 @@ const AddBusiness = ({
                   // onChange={onSelectCustomGallery}
                 >
                   {tags.map((el) => (
-                    <Select.Option value={el.value} label={el.label}>
+                    <Select.Option
+                      value={el.value}
+                      label={el.label}
+                      key={el.value}
+                    >
                       {el.label}
                     </Select.Option>
                   ))}

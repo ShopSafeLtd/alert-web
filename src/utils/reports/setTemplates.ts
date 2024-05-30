@@ -34,6 +34,7 @@ const arrangeTemplates = (
           maxW: item.maxW ?? undefined,
           minH: item.minH ?? undefined,
           minW: item.minW ?? undefined,
+          static: false,
         })) as RGL.Layout[]) || [],
     })) as IReportTemplate[]) || []
   ).sort((a) => (a.default ? -1 : 1));

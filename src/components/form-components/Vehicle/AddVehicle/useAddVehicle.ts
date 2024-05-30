@@ -316,10 +316,12 @@ const useAddVehicle = ({ update: updateVehicle }: Props): Return => {
     groups,
     groupsLoading,
     customGalleries:
-      customGalleriesData?.listCustomGalleries.customGalleries.map((tag) => ({
-        value: tag.id,
-        label: tag.name,
-      })) || [],
+      customGalleriesData?.customGalleriesRelay?.edges?.map(
+        ({ node: tag }) => ({
+          value: tag.id,
+          label: tag.name,
+        })
+      ) || [],
     customGalleriesLoading,
     addCustomGallery,
     toggleAddCustomGallery,

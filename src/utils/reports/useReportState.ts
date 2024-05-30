@@ -657,7 +657,7 @@ const useReportState = ({
                     minH,
                     maxW,
                     maxH,
-                    static: true,
+                    static: false,
                     moved,
                   };
                 }),
@@ -758,7 +758,6 @@ const useReportState = ({
                     minH,
                     maxW,
                     maxH,
-                    static: staticVal,
                     moved,
                   } = item;
 
@@ -772,7 +771,7 @@ const useReportState = ({
                     minH,
                     maxW,
                     maxH,
-                    static: staticVal,
+                    static: false,
                     moved,
                   };
                 }),

@@ -88,10 +88,11 @@ const ListVehicles = ({
       value: 'MYDATA',
     },
   ];
+
   const menu = () => (
     <Menu>
-      {customGalleriesData?.listCustomGalleries.customGalleries.map(
-        ({ id, name }) => (
+      {customGalleriesData?.customGalleriesRelay?.edges?.map(
+        ({ node: { id, name } }) => (
           <Menu.Item key={id}>
             <Checkbox
               key={id}
@@ -132,7 +133,8 @@ const ListVehicles = ({
           />
         </Col>
         <Col flex={1}>
-          {customGalleriesData?.listCustomGalleries.total ? (
+          {customGalleriesData?.customGalleriesRelay?.totalCount &&
+          customGalleriesData?.customGalleriesRelay?.totalCount > 0 ? (
             <Dropdown
               overlay={menu}
               placement="bottom"
