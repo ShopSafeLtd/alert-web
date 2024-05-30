@@ -160,6 +160,7 @@ const useAddNewOffender = ({
       primary: item.primary || false,
       policeImage: item.policeImage || false,
       rotation: item.rotation,
+      totalFaces: item.totalFaces,
       new: !!item.file || item.new,
       isFace: item.isFace || false,
     }));
@@ -261,6 +262,7 @@ const useAddNewOffender = ({
                         primary: item.primary,
                         policeImage: item.policeImage,
                         rotation: item.rotation || 0,
+                        totalFaces: item.totalFaces || 0,
                         isFace: item.isFace,
                       }))
                       .filter((obj) => obj.url !== undefined),

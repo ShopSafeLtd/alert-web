@@ -180,7 +180,9 @@ const LinkArticle = ({
               value={groupsFilter}
             >
               {groups.map((group) => (
-                <Select.Option value={group.value}>{group.label}</Select.Option>
+                <Select.Option key={group.value} value={group.value}>
+                  {group.label}
+                </Select.Option>
               ))}
             </Select>
           </div>

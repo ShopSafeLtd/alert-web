@@ -196,15 +196,19 @@ interface Return {
   hasConnectedSchemes: boolean;
   shareOpen: boolean;
   toggleShareOpen: () => void;
+  facialDetection: boolean;
 }
 
 const useViewIncident = (incidentId: string): Return => {
   const intl = useIntl();
   const role = useStoreState((state) => state.user.role);
-  const { languageCount } = useStoreState((state) => state.scheme);
+  const { languageCount, facialDetection } = useStoreState(
+    (state) => state.scheme
+  );
   const filterVariables = useStoreState(
     (state) => state.data.incidents.variables
   );
+
   const order = useStoreState((state) => state.data.incidents.order);
 
   const userId = useStoreState((state) => state.user.id);
@@ -437,7 +441,7 @@ const useViewIncident = (incidentId: string): Return => {
           }
         : undefined,
       approved:
-        role === 'USER'
+        role === Role.User
           ? {
               equals: true,
             }
@@ -622,6 +626,7 @@ const useViewIncident = (incidentId: string): Return => {
                     primary: item.primary,
                     policeImage: item.policeImage,
                     rotation: item.rotation || 0,
+                    totalFaces: item.totalFaces || 0,
                   }))
                   .filter((obj) => obj.url !== undefined)
               : undefined,
@@ -636,6 +641,7 @@ const useViewIncident = (incidentId: string): Return => {
                     primary: { set: item.primary },
                     policeImage: { set: item.policeImage },
                     rotation: { set: item.rotation },
+                    totalFaces: { set: item.totalFaces },
                   },
                 }))
               : undefined,
@@ -2098,6 +2104,7 @@ const useViewIncident = (incidentId: string): Return => {
     hasConnectedSchemes,
     shareOpen,
     toggleShareOpen,
+    facialDetection,
   };
 };
 

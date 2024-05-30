@@ -113,6 +113,7 @@ const ViewIncident = (): JSX.Element => {
     hasConnectedSchemes,
     toggleShareOpen,
     shareOpen,
+    facialDetection,
   } = useViewIncident(incidentId);
   const { onApprove, onReject, approving } = useApproveIncident({ incidentId });
 
@@ -228,6 +229,7 @@ const ViewIncident = (): JSX.Element => {
       onCompletedAddOffender={onCompletedAddOffender}
       shareOpen={shareOpen}
       toggleShareOpen={toggleShareOpen}
+      facialDetection={facialDetection}
     />
   );
 };

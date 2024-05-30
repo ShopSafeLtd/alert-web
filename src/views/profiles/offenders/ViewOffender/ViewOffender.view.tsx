@@ -942,7 +942,7 @@ const ViewOffender = ({
                                     {getOffenderAge(data?.offender?.age)}
                                   </Descriptions.Item>
                                 )}
-                                {(publicOffenderDOB || editRights) &&
+                                {publicOffenderDOB &&
                                   data?.offender?.dateOfBirth && (
                                     <Descriptions.Item
                                       className={classes.descItem}
@@ -2654,6 +2654,7 @@ const ViewOffender = ({
               defaultMessage: 'offender',
               id: 'ZkfGxM',
             })}
+            saving={saving}
           />
         ) : (
           <div />

@@ -192,6 +192,7 @@ export interface ImageCardData {
   isFace?: boolean | null | undefined;
   policeImage?: boolean | null | undefined;
   rotation?: number;
+  totalFaces?: number;
   offenders?: {
     id: string;
     images: { id: string; optimised?: string | undefined | null }[];
@@ -204,6 +205,7 @@ export interface Image extends UploadFile {
   primary?: boolean;
   policeImage?: boolean;
   rotation?: number;
+  totalFaces?: number;
   edited?: boolean;
   new?: boolean;
   deleted?: boolean;

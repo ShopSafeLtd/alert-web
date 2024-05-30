@@ -196,7 +196,9 @@ const LinkIncident = ({
               value={groupsFilter}
             >
               {groups.map((group) => (
-                <Select.Option value={group.value}>{group.label}</Select.Option>
+                <Select.Option key={group.value} value={group.value}>
+                  {group.label}
+                </Select.Option>
               ))}
             </Select>
           </div>
@@ -222,7 +224,9 @@ const LinkIncident = ({
               onChange={setCrimeTypesFilter}
             >
               {crimeTypes.map((tag) => (
-                <Select.Option value={tag.value}>{tag.label}</Select.Option>
+                <Select.Option key={tag.value} value={tag.value}>
+                  {tag.label}
+                </Select.Option>
               ))}
             </Select>
             {/* <Select
@@ -266,7 +270,9 @@ const LinkIncident = ({
               loading={goodsLoading}
             >
               {goods.map((good) => (
-                <Select.Option value={good.value}>{good.label}</Select.Option>
+                <Select.Option key={good.value} value={good.value}>
+                  {good.label}
+                </Select.Option>
               ))}
             </Select>
           </div>

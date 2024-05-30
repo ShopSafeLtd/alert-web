@@ -233,7 +233,7 @@ const AddVehicle = ({
                       value: crimeGroup.id,
                       label: intl.formatMessage(
                         {
-                          defaultMessage: `CG-{ref}`,
+                          defaultMessage: 'CG-{ref}',
                           id: 'h/qDZq',
                         },
                         {
@@ -275,7 +275,11 @@ const AddVehicle = ({
                       // onChange={onSelectCustomGallery}
                     >
                       {customGalleries.map((el) => (
-                        <Select.Option value={el.value} label={el.label}>
+                        <Select.Option
+                          key={el.value}
+                          value={el.value}
+                          label={el.label}
+                        >
                           {el.label}
                         </Select.Option>
                       ))}
@@ -479,8 +483,8 @@ const AddVehicle = ({
                     defaultMessage: 'Image',
                     id: '+0zv6g',
                   }),
+                  // eslint-disable-next-line no-confusing-arrow
                   render: (images: { id: string; optimised: string }[]) =>
-                    // eslint-disable-next-line
                     images.length > 0 ? (
                       <div className={classes.searchImageContainer}>
                         <div className={classes.searchImage}>

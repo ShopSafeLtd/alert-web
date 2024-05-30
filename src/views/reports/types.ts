@@ -8,6 +8,7 @@ export type AllowedValue =
   | 'createdSummary'
   | 'incidentsSummary'
   | 'policeSummary'
+  | 'basicPoliceSummary'
   | 'investigationSummary'
   | 'outcomeSummary'
   | 'lossSummary'
@@ -69,6 +70,10 @@ export const LayoutToReadable: {
   {
     i: 'incidentsSummary',
     readable: 'Incidents Summary',
+  },
+  {
+    i: 'basicPoliceSummary',
+    readable: 'Basic Police Summary',
   },
   {
     i: 'policeSummary',

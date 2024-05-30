@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 import React from 'react';
 import type { FormInstance } from 'antd';
 import { Input, Skeleton, Button, Col, Form, Row, Select } from 'antd';
@@ -167,7 +168,8 @@ const EditOffender = ({
                     id: 'LUqHSz',
                   })}
                   tooltip={intl.formatMessage({
-                    defaultMessage: `Enter the information source of the offender's name`,
+                    defaultMessage:
+                      "Enter the information source of the offender's name",
                     id: 'WYJoK2',
                   })}
                 >
@@ -185,7 +187,8 @@ const EditOffender = ({
                     id: 'i0xkcf',
                   })}
                   tooltip={intl.formatMessage({
-                    defaultMessage: `Enter a justification to explain why this offender doesn't connect with an incident.`,
+                    defaultMessage:
+                      "Enter a justification to explain why this offender doesn't connect with an incident.",
                     id: 'P7rUrU',
                   })}
                   rules={[

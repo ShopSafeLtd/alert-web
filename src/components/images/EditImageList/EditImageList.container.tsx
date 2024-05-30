@@ -8,6 +8,8 @@ interface Props {
   update: (value: ImageCardData[]) => void;
   images: ImageCardData[] | undefined | null;
   title: string;
+  saving: boolean;
+  facialDet?: boolean;
 }
 
 const EditImageList = ({
@@ -15,6 +17,8 @@ const EditImageList = ({
   update,
   images,
   title,
+  saving: origSaving,
+  facialDet,
 }: Props): JSX.Element => {
   const {
     onSubmit,
@@ -32,13 +36,14 @@ const EditImageList = ({
     onClose,
     update,
     images,
+    facialDet,
   });
 
   return (
     <View
       onSubmit={onSubmit}
       onClose={onClose}
-      saving={saving}
+      saving={saving || origSaving}
       imgChange={imgChange}
       beforeUpload={beforeUpload}
       fileList={fileList}
@@ -49,6 +54,7 @@ const EditImageList = ({
       primaryImage={primaryImage}
       setPrimaryImage={setPrimaryImage}
       title={title}
+      facialDet={facialDet || false}
     />
   );
 };
